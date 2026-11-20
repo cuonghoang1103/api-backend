@@ -1,0 +1,4 @@
+toasts on screen after closing 50: 0
+JS heap:            0.6 MB → 4.4 MB
+event listeners:    1 → 51
+DOM nodes:          24 → 124

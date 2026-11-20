@@ -1,0 +1,5 @@
+"👍🏽".length = 4, [..."👍🏽"].length = 2
+ệ NFC: length 1, code points 1
+ệ NFD: length 3, code points 3
+NFC === NFD → false  (yet they look identical on screen)
+what a person counts (graphemes): 👍🏽 → 1, ệ NFD → 1

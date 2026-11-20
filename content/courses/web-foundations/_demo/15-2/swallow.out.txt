@@ -1,0 +1,2 @@
+swallowed → UI: "You have no orders yet."   ← wrong, the server is down
+honest    → UI: "Could not load your orders. Try again." and the team gets: 500 Internal Server Error from /api/orders

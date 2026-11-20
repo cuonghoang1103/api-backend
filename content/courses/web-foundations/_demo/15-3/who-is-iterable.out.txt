@@ -1,0 +1,6 @@
+array  → ['a', 'b']
+string → ['h', 'i']
+Set    → [1, 2]
+Map    → [['vn', 'Việt Nam'], ['jp', 'Japan']]
+TypeError: user is not iterable
+use Object.entries → [['name', 'Lan'], ['age', 20]]

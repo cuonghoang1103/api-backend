@@ -1,0 +1,3 @@
+events fired:            200
+direct DOM updates:      200
+rAF-batched DOM updates: 1 (it showed the latest event, #200)

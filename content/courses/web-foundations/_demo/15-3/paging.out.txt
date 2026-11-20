@@ -1,0 +1,4 @@
+all products → [1, 2, 3, 4, 5, 6, 7, 8, 9] | requests: 3
+found product 5 — stop
+requests made before stopping: 2 (page 3 was never downloaded)
+Stopped after 10 pages — is the "next" link looping? | requests: 10

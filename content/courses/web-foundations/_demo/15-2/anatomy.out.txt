@@ -1,0 +1,5 @@
+name:    TypeError
+message: Cannot read properties of null (reading 'items')
+instanceof TypeError: true, instanceof Error: true
+stack points at: anatomy.js:3:8
+thrown a string → typeof string, err.message: undefined, err.stack: undefined

@@ -1,0 +1,5 @@
+Uncaught TypeError: Cannot read properties of null (reading 'name')
+[report] error → TypeError: Cannot read properties of null (reading 'name')
+Uncaught (in promise) Error: avatar service timed out
+[report] unhandledrejection → Error: avatar service timed out
+the page is still running — one broken handler does not stop the others

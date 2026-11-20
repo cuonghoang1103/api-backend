@@ -1,0 +1,8 @@
+[computer time zone: America/New_York]
+new Date(2026, 11, 20) → Sun Dec 20 2026
+new Date(2026, 10, 20) → Fri Nov 20 2026
+getMonth() of 20 Nov   → 10
+getDay() of 20 Nov     → 5  (day of the WEEK, 0 = Sunday)
+31 Feb 2026 rolls to   → Tue Mar 03 2026
+isRealDate(2026, 2, 31) → false
+isRealDate(2028, 2, 29) → true  (2028 is a leap year)

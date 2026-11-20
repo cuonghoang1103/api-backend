@@ -1,0 +1,3 @@
+Could not read saved settings
+  cause → SyntaxError: Expected double-quoted property name in JSON at position 17 (line 1 column 18)
+lossy version → cause: undefined

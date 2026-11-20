@@ -1,0 +1,7 @@
+[computer time zone: America/New_York]
+vi-VN, Asia/Ho_Chi_Minh  → 08:30:00 20/11/2026
+en-US, America/New_York  → 11/19/2026, 8:30:00 PM
+dd/MM/yyyy with Intl     → 20/11/2026
+dd/MM/yyyy by hand       → 19/11/2026  (uses THIS computer's zone)
+toISOString().slice(0,10) → 2026-11-19  ← trap
+local yyyy-MM-dd         → 2026-11-19

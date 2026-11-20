@@ -1,0 +1,5 @@
+ok → 12000
+form error on "price": Price must be a number, got "12k"
+form error on "price": Price cannot be negative
+NotFoundError: No product with id 7 → show the "not found" page
+unexpected TypeError → report it, show "Something went wrong"

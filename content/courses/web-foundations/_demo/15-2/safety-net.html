@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>global safety net</title>
+<meta name="cho-xong">
+</head>
+<body>
+<button id="profile">Open profile</button>
+<script>
+// The LAST line of defence: errors nobody caught. Report them; do not use this for normal control flow.
+function report(kind, error) {
+  // A real app sends this to the server, e.g. navigator.sendBeacon('/api/client-errors', ...)
+  console.log('[report] ' + kind + ' → ' + error.name + ': ' + error.message);
+}
+window.addEventListener('error', (event) => report('error', event.error));
+window.addEventListener('unhandledrejection', (event) => report('unhandledrejection', event.reason));
+
+// Bug 1: a click handler reads a property of null
+document.getElementById('profile').addEventListener('click', () => {
+  const user = null;
+  document.title = user.name;
+});
+document.getElementById('profile').click();
+
+// Bug 2: an async function rejects and nobody catches it
+async function loadAvatar() {
+  throw new Error('avatar service timed out');
+}
+loadAvatar();
+
+setTimeout(() => {
+  console.log('the page is still running — one broken handler does not stop the others');
+  window.__xong = true;
+}, 300);
+</script>
+</body>
+</html>

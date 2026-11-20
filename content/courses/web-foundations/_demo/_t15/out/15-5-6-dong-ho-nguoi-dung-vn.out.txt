@@ -1,0 +1,4 @@
+[computer time zone: Asia/Ho_Chi_Minh]
+now (browser clock): 2026-12-05T03:00:00.000Z
+canUseCoupon()     → false
+after redefining Date.now → true

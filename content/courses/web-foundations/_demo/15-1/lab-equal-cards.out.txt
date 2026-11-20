@@ -1,0 +1,3 @@
+equalizeRows, page load:          35.5 ms
+equalizeRows, again (on resize):  141.3 ms
+row 1 heights: 136, 136, 136, 136, 136, 136

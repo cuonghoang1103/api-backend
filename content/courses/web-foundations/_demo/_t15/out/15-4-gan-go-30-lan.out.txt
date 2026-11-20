@@ -1,0 +1,9 @@
+30 × mount + unmount, then garbage collection:
+listener (never removed)           heap + 28.6 MB   DOM nodes    14 →    44   listeners 0 → 30
+listener + AbortController         heap +  0.0 MB   DOM nodes    14 →    14   listeners 0 → 0
+setInterval (never cleared)        heap + 28.6 MB   DOM nodes    14 →    44   listeners 0 → 0
+setInterval + clearInterval        heap +  0.0 MB   DOM nodes    14 →    14   listeners 0 → 0
+detached tables kept in an array   heap +  0.3 MB   DOM nodes    14 → 33074   listeners 0 → 0
+tables removed, nothing kept       heap +  0.0 MB   DOM nodes    14 →    14   listeners 0 → 0
+metadata in a Map                  heap + 28.6 MB   DOM nodes    14 →    44   listeners 0 → 0
+metadata in a WeakMap              heap +  0.0 MB   DOM nodes    14 →    14   listeners 0 → 0

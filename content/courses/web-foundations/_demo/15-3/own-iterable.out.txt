@@ -1,0 +1,5 @@
+for...of      → [1, 2, 3, 4, 5]
+spread        → [1, 2, 3, 4, 5]
+destructuring → first 1, second 2
+Array.from    → [10, 20, 30, 40, 50]
+Math.max      → 5

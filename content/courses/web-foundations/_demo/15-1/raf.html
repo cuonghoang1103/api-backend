@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>one update per frame</title>
+<meta name="cho-xong">
+</head>
+<body>
+<p id="direct">direct: 0</p>
+<p id="framed">framed: 0</p>
+<script>
+const direct = document.getElementById('direct');
+const framed = document.getElementById('framed');
+let directUpdates = 0;
+let framedUpdates = 0;
+let pending = false;
+let lastEvent = 0;
+
+// Handler 1: touches the DOM on EVERY event
+window.addEventListener('scroll', () => {
+  directUpdates++;
+  direct.textContent = 'direct: ' + directUpdates;
+});
+
+// Handler 2: remembers the latest value, updates the DOM at most once per frame
+window.addEventListener('scroll', () => {
+  lastEvent++;
+  if (pending) return;
+  pending = true;
+  requestAnimationFrame(() => {
+    pending = false;
+    framedUpdates++;
+    framed.textContent = 'framed: saw event #' + lastEvent;
+  });
+});
+
+// A fast scroll or mouse move can fire many events between two frames.
+for (let i = 0; i < 200; i++) window.dispatchEvent(new Event('scroll'));
+
+requestAnimationFrame(() => requestAnimationFrame(() => {
+  console.log('events fired:            200');
+  console.log('direct DOM updates:      ' + directUpdates);
+  console.log('rAF-batched DOM updates: ' + framedUpdates + ' (it showed the latest event, #' + lastEvent + ')');
+  window.__xong = true;
+}));
+</script>
+</body>
+</html>

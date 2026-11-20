@@ -1,0 +1,6 @@
+a-fast-css       first paint ≈   20 ms   DOMContentLoaded ≈    0 ms   fast stylesheet
+b-slow-css       first paint ≈ 1020 ms   DOMContentLoaded ≈    0 ms   stylesheet that takes 1 s
+c-print-css      first paint ≈   20 ms   DOMContentLoaded ≈    0 ms   same slow stylesheet, media="print"
+d-import-chain   first paint ≈ 1520 ms   DOMContentLoaded ≈    0 ms   chain.css (0.5 s) that @imports slow.css (1 s)
+e-sync-script    first paint ≈ 1020 ms   DOMContentLoaded ≈ 1010 ms   <script src> that takes 1 s, in <head>
+f-defer-script   first paint ≈   20 ms   DOMContentLoaded ≈ 1010 ms   same script with defer

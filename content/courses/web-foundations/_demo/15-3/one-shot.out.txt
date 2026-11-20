@@ -1,0 +1,4 @@
+first pass  → [101, 102, 103]
+second pass → [] ← already used up
+fresh each time → [101, 102, 103] [101, 102, 103]
+arrays restart every time → [1, 2] [1, 2]

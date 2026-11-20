@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lab 15.4 — toasts that leak</title>
+<style>
+  #toasts { position: fixed; right: 16px; bottom: 16px; display: grid; gap: 8px; }
+  .toast { padding: 12px 16px; background: #1e293b; color: #fff; border-radius: 8px; font: 14px sans-serif; }
+</style>
+</head>
+<body>
+<button id="save">Save</button>
+<div id="toasts"></div>
+<script>
+const box = document.getElementById('toasts');
+
+// TODO (lab): every toast closes on screen, but something stays behind. Find it, fix it.
+function showToast(message, seconds = 5) {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  const log = { message, shownAt: Date.now(), trace: new Array(20000).fill(message) };   // debug data
+  let left = seconds;
+  el.textContent = message + ' (' + left + ')';
+
+  function close() {
+    el.remove();
+  }
+  function onKey(event) {
+    if (event.key === 'Escape') {
+      log.closedBy = 'Escape';
+      close();
+    }
+  }
+  document.addEventListener('keydown', onKey);
+  const timer = setInterval(() => {
+    left--;
+    el.textContent = message + ' (' + left + ')';
+    if (left === 0) close();
+  }, 1000);
+
+  box.append(el);
+  return close;
+}
+
+document.getElementById('save').addEventListener('click', () => showToast('Saved!'));
+window.showToast = showToast;
+</script>
+</body>
+</html>

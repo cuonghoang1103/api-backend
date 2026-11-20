@@ -1,0 +1,8 @@
+[computer time zone: Asia/Ho_Chi_Minh]
+start          → Sat Oct 31 2026 12:00
++ 86 400 000 ms → Sun Nov 01 2026 12:00
+setDate(+1)    → Sun Nov 01 2026 12:00
+a === b → false;  a.getTime() === b.getTime() → true
+a < b + 1 ms → true
+sorted → Wed Nov 25 2026 | Tue Dec 01 2026 | Tue Jan 05 2027
+days from 20/11/2026 to 01/01/2027 → 42

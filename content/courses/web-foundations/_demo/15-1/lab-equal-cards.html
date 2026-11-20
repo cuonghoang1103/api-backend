@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lab 15.1 — equal-height cards (slow on purpose)</title>
+<meta name="cho-xong">
+<style>
+  .grid { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; width: 1060px; }
+  .card { box-sizing: border-box; width: 166px; padding: 8px; border: 1px solid #ccc; font: 14px/1.4 sans-serif; }
+</style>
+</head>
+<body>
+<div class="grid" id="grid"></div>
+<script>
+// 600 product cards with descriptions of different lengths
+const grid = document.getElementById('grid');
+for (let i = 0; i < 600; i++) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.textContent = 'Product ' + i + ' — ' + 'nice '.repeat(3 + (i * 7) % 25);
+  grid.append(card);
+}
+const cards = [...grid.children];
+
+// The designer wants every card in a row of 6 to be as tall as the tallest one.
+// TODO (lab): this works, but it is slow. Make it fast without changing the result.
+function equalizeRows() {
+  for (let start = 0; start < cards.length; start += 6) {
+    const row = cards.slice(start, start + 6);
+    let tallest = 0;
+    for (const card of row) {
+      card.style.minHeight = '';                                     // reset this card...
+      tallest = Math.max(tallest, card.offsetHeight);                // ...and measure it
+    }
+    for (const card of row) card.style.minHeight = tallest + 'px';
+  }
+}
+
+function timed(label) {
+  const t0 = performance.now();
+  equalizeRows();
+  grid.offsetHeight;                                                 // include the final layout
+  console.log(label + (performance.now() - t0).toFixed(1) + ' ms');
+}
+timed('equalizeRows, page load:          ');
+timed('equalizeRows, again (on resize):  ');                         // it runs on every resize
+console.log('row 1 heights: ' + cards.slice(0, 6).map((c) => c.offsetHeight).join(', '));
+window.__xong = true;
+</script>
+</body>
+</html>

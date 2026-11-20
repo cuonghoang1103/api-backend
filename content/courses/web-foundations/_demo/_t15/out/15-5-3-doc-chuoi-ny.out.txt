@@ -1,0 +1,8 @@
+[computer time zone: America/New_York]
+new Date('2026-11-20')              Thu Nov 19 2026 19:00:00  | UTC 2026-11-20T00:00:00.000Z
+new Date('2026-11-20T00:00')        Fri Nov 20 2026 00:00:00  | UTC 2026-11-20T05:00:00.000Z
+new Date('2026-11-20T00:00Z')       Thu Nov 19 2026 19:00:00  | UTC 2026-11-20T00:00:00.000Z
+new Date('2026-11-20T00:00+07:00')  Thu Nov 19 2026 12:00:00  | UTC 2026-11-19T17:00:00.000Z
+new Date('20/11/2026')              Invalid Date
+parseVN('20/11/2026')               Fri Nov 20 2026 00:00:00  | UTC 2026-11-20T05:00:00.000Z
+parseVN('31/02/2026')               null (rejected)

@@ -1,0 +1,5 @@
+[computer time zone: America/New_York]
+getTime():     1795138200000
+toISOString(): 2026-11-20T01:30:00.000Z
+toString():    Thu Nov 19 2026 20:30:00 GMT-0500 (Eastern Standard Time)
+back from the number: 2026-11-20T01:30:00.000Z

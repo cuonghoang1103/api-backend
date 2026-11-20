@@ -1,0 +1,11 @@
+created — nothing has run yet
+  (generator starts)
+  (about to yield 1)
+{value: 1, done: false}
+...the caller can do other work here...
+  (about to yield 2)
+{value: 2, done: false}
+  (about to yield 3)
+  (generator ends)
+[3]
+a generator is an iterator: true

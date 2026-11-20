@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>layout thrashing, measured</title>
+<meta name="cho-xong">
+<style>
+  #list { width: 600px; }
+  .item { height: 4px; margin: 1px 0; background: #4f46e5; }
+</style>
+</head>
+<body>
+<div id="list"></div>
+<script>
+const list = document.getElementById('list');
+for (let i = 0; i < 1000; i++) {
+  const row = document.createElement('div');
+  row.className = 'item';
+  list.append(row);
+}
+const items = [...list.children];
+
+// A: read, write, read, write... (every read must wait for a fresh layout)
+function interleaved(round) {
+  for (const el of items) {
+    const w = list.offsetWidth;                    // READ
+    el.style.width = (w / 2 + round) + 'px';       // WRITE: layout is dirty again
+  }
+}
+
+// B: read once, then only write (the browser lays out once, at the end)
+function batched(round) {
+  const w = list.offsetWidth;                      // one READ
+  for (const el of items) el.style.width = (w / 2 + round) + 'px';   // WRITES
+}
+
+function time(fn) {
+  const runs = [];
+  for (let round = 0; round < 7; round++) {
+    const t0 = performance.now();
+    fn(round);
+    list.offsetWidth;                              // finish the pending layout inside the timing
+    runs.push(performance.now() - t0);
+  }
+  runs.sort((a, b) => a - b);
+  return runs[3];                                  // median of 7
+}
+
+const a = time(interleaved);
+const b = time(batched);
+console.log('A interleaved (read, write, read, write...): ' + a.toFixed(1) + ' ms for 1000 rows');
+console.log('B batched (one read, then 1000 writes):     ' + b.toFixed(1) + ' ms for 1000 rows');
+console.log('A is about ' + Math.round(a / b) + 'x slower — same result on screen: ' +
+  (items[0].style.width === items[999].style.width));
+window.__xong = true;
+</script>
+</body>
+</html>

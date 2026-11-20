@@ -1,0 +1,5 @@
+1. try block finished — nothing was thrown YET
+2. try block finished again
+3. caught, because of await → rejected promise, awaited
+Uncaught Error: thrown later, inside a timer
+Uncaught (in promise) Error: rejected promise, nobody awaited it

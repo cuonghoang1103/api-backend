@@ -59,8 +59,8 @@ export default {
     'pv-9-4-tong-ket': { yt: 'PpbhaVjV2QI', credit: 'CareerVidz — TOP 10 VIRTUAL JOB INTERVIEW TIPS! (How to PASS an Online Zoom, Skype, or HireVue Job Interview!)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/interview-prep/09-phong-van-thu-offer/09-04-tong-ket-f4afa824.mp4' }, defaultVideoTrack: 'VI'},
     'pv-9-5-lab-email-offer': { yt: 'd-SUf-I8fXo', credit: 'Self Made Millennial — Thank You Email After Interview 3 Step Template [With Subject Line & Example!]', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/interview-prep/09-phong-van-thu-offer/09-05-lab-email-offer-92816405.mp4' }, defaultVideoTrack: 'VI'},
     'pv-10-1-de-bai': { yt: 'ZU9x1vFx5lI', credit: 'Harvard Business Review — Stand Out in a Job Interview | The Harvard Business Review Guide', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/interview-prep/10-du-an-cuoi-khoa/10-01-de-bai-c9954d10.mp4' }, defaultVideoTrack: 'VI'},
-    'pv-10-2-ho-so': { yt: 'QDfLou004iE', credit: 'Keith Galli — How to make your GitHub more impressive to Employers! (5 simple tips)' },
-    'pv-10-3-nam-cau-chuyen': { yt: 'p8JTbk5UoFM', credit: 'Aced (formerly Exponent) — The best stories to tell in behavioral interviews: Creating a story bank' },
-    'pv-10-4-mock-cuoi': { yt: 'V8DGdPkBBxg', credit: 'Jane Street — A Jane Street Software Engineering Mock Interview with Grace and Nolen' },
+    'pv-10-2-ho-so': { yt: 'QDfLou004iE', credit: 'Keith Galli — How to make your GitHub more impressive to Employers! (5 simple tips)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/interview-prep/10-du-an-cuoi-khoa/10-02-ho-so-b1b76ea4.mp4' }, defaultVideoTrack: 'VI'},
+    'pv-10-3-nam-cau-chuyen': { yt: 'p8JTbk5UoFM', credit: 'Aced (formerly Exponent) — The best stories to tell in behavioral interviews: Creating a story bank', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/interview-prep/10-du-an-cuoi-khoa/10-03-nam-cau-chuyen-d686f50e.mp4' }, defaultVideoTrack: 'VI'},
+    'pv-10-4-mock-cuoi': { yt: 'V8DGdPkBBxg', credit: 'Jane Street — A Jane Street Software Engineering Mock Interview with Grace and Nolen', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/interview-prep/10-du-an-cuoi-khoa/10-04-mock-cuoi-2f238386.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

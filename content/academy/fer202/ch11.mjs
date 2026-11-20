@@ -6,6 +6,7 @@
  * Chapter 11 before its quiz; existing 11.1 / 11.2 lessons untouched.
  */
 import { walk, walkHead, bi, books } from './_slides.mjs';
+import FORM_PE from './ch11Form.mjs';
 
 const REF = '?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202';
 const CODELAB = `/code-lab/react${REF}`;
@@ -219,4 +220,4 @@ const EX27 = {
   ),
 };
 
-export default [HTTP, FETCHING, EX26, EX27];
+export default [HTTP, FETCHING, EX26, EX27, FORM_PE];

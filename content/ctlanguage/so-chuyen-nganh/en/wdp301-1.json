@@ -1,0 +1,775 @@
+{
+ "ma": "wdp301-1",
+ "nn": "en",
+ "ten": "WDP301 · Dự án phát triển Web",
+ "moTa": "Môn Web Development Project (WDP301): dự án web MERN — GitLab, SRS/SDS, chấm LOC, API Node/Express, React, triển khai, CI, tài liệu. Soạn từ syllabus FLM + tài liệu dự án (không phải từ đề thi); câu ví dụ là câu viết tài liệu hoặc nói khi demo.",
+ "bieuTuong": "globe",
+ "thuTu": -935,
+ "tu": [
+  {
+   "chu": "GitLab",
+   "doc": "/ˈɡɪtlæb/",
+   "nghia": "nền tảng quản lý mã + issue mà môn yêu cầu dùng",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "Every team must manage code and issues on GitLab.",
+   "viDuNghia": "Mỗi nhóm phải quản lý mã và issue trên GitLab."
+  },
+  {
+   "chu": "issue tracker",
+   "doc": "/ˈɪʃuː ˈtrækər/",
+   "nghia": "nơi ghi và theo dõi việc / lỗi (issue)",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "Log every bug in the issue tracker, not in the chat group.",
+   "viDuNghia": "Ghi mọi lỗi vào trình theo dõi issue, đừng ghi trong nhóm chat."
+  },
+  {
+   "chu": "issues log",
+   "doc": "/ˈɪʃuːz lɔːɡ/",
+   "nghia": "nhật ký việc / vấn đề nộp kèm mỗi lần đánh giá",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "The lecturer grades our SRS, SDS, code and issues log.",
+   "viDuNghia": "Giảng viên chấm SRS, SDS, mã và nhật ký issue của nhóm."
+  },
+  {
+   "chu": "merge request",
+   "doc": "/mɜːrdʒ rɪˈkwest/",
+   "nghia": "yêu cầu gộp nhánh (tên gọi trên GitLab, tương đương pull request)",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "Open a merge request and ask the team leader to review it.",
+   "viDuNghia": "Mở merge request rồi nhờ trưởng nhóm review."
+  },
+  {
+   "chu": "assignee",
+   "doc": "/ˌæsaɪˈniː/",
+   "nghia": "người được giao một issue",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "Each issue must have one assignee and a due date.",
+   "viDuNghia": "Mỗi issue phải có một người được giao và hạn chót."
+  },
+  {
+   "chu": "issue label",
+   "doc": "/ˈɪʃuː ˈleɪbl/",
+   "nghia": "nhãn phân loại issue (bug, feature, frontend…)",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "Add the issue label \"backend\" to API tasks.",
+   "viDuNghia": "Gắn nhãn \"backend\" cho các việc làm API."
+  },
+  {
+   "chu": "protected branch",
+   "doc": "/prəˈtektɪd bræntʃ/",
+   "nghia": "nhánh được bảo vệ: không ai đẩy thẳng, phải qua merge request",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "The main branch is a protected branch, so nobody can push to it directly.",
+   "viDuNghia": "Nhánh main được bảo vệ nên không ai đẩy thẳng lên được."
+  },
+  {
+   "chu": "initiation phase",
+   "doc": "/ɪˌnɪʃiˈeɪʃn feɪz/",
+   "nghia": "giai đoạn khởi động (lập nhóm, chọn đề tài, chuẩn bị môi trường)",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "In the initiation phase, we set up GitLab and OneDrive.",
+   "viDuNghia": "Ở giai đoạn khởi động, nhóm dựng GitLab và OneDrive."
+  },
+  {
+   "chu": "construction phase",
+   "doc": "/kənˈstrʌkʃn feɪz/",
+   "nghia": "giai đoạn xây dựng (các vòng lặp code – test – tích hợp)",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "The construction phase has three development iterations.",
+   "viDuNghia": "Giai đoạn xây dựng gồm ba vòng lặp phát triển."
+  },
+  {
+   "chu": "iteration plan",
+   "doc": "/ˌɪtəˈreɪʃn plæn/",
+   "nghia": "kế hoạch cho một vòng lặp: làm chức năng nào, ai làm",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "Our iteration plan has twelve issues for four members.",
+   "viDuNghia": "Kế hoạch vòng lặp của nhóm có mười hai issue cho bốn thành viên."
+  },
+  {
+   "chu": "iteration review",
+   "doc": "/ˌɪtəˈreɪʃn rɪˈvjuː/",
+   "nghia": "buổi đánh giá cuối vòng lặp (demo + chấm)",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "At the iteration review, we demo all finished screens.",
+   "viDuNghia": "Ở buổi đánh giá vòng lặp, nhóm demo mọi màn hình đã xong."
+  },
+  {
+   "chu": "document management",
+   "doc": "/ˈdɑːkjumənt ˈmænɪdʒmənt/",
+   "nghia": "quản lý tài liệu dự án (thư mục chung, phiên bản)",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "We use OneDrive for document management.",
+   "viDuNghia": "Nhóm dùng OneDrive để quản lý tài liệu."
+  },
+  {
+   "chu": "self-test",
+   "doc": "/ˌself ˈtest/",
+   "nghia": "lập trình viên tự kiểm chức năng mình làm trước khi tích hợp",
+   "nhom": "Môi trường & quy trình dự án",
+   "viDu": "Self-test your function before you create a merge request.",
+   "viDuNghia": "Tự kiểm chức năng của mình trước khi tạo merge request."
+  },
+  {
+   "chu": "software design specification",
+   "doc": "/ˈsɔːftwer dɪˈzaɪn ˌspesɪfɪˈkeɪʃn/",
+   "nghia": "SDS: tài liệu đặc tả thiết kế (kiến trúc, lớp, CSDL, API)",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "The software design specification explains how each screen is built.",
+   "viDuNghia": "Tài liệu đặc tả thiết kế giải thích từng màn hình được làm thế nào."
+  },
+  {
+   "chu": "rated LOC",
+   "doc": "/ˈreɪtɪd ˌel oʊ ˈsiː/",
+   "nghia": "LOC quy đổi: số dòng mã được tính theo độ phức tạp chức năng, không phải đếm dòng thật",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "A complex screen counts as more rated LOC than a simple one.",
+   "viDuNghia": "Màn hình phức tạp được tính nhiều LOC quy đổi hơn màn hình đơn giản."
+  },
+  {
+   "chu": "LOC evaluation",
+   "doc": "/ˌel oʊ ˈsiː ɪˌvæljuˈeɪʃn/",
+   "nghia": "chấm điểm theo LOC quy đổi từ độ phức tạp màn hình / chức năng",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "Each student needs 180 LOC to get full marks in LOC evaluation.",
+   "viDuNghia": "Mỗi sinh viên cần 180 LOC quy đổi để đạt điểm tối đa phần chấm LOC."
+  },
+  {
+   "chu": "screen list",
+   "doc": "/skriːn lɪst/",
+   "nghia": "danh sách màn hình của hệ thống",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "The screen list shows who is responsible for each screen.",
+   "viDuNghia": "Danh sách màn hình ghi ai phụ trách từng màn hình."
+  },
+  {
+   "chu": "function list",
+   "doc": "/ˈfʌŋkʃn lɪst/",
+   "nghia": "danh sách chức năng (kèm độ phức tạp)",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "Our function list has 25 functions grouped by user role.",
+   "viDuNghia": "Danh sách chức năng của nhóm có 25 chức năng chia theo vai trò."
+  },
+  {
+   "chu": "simple, medium, complex",
+   "doc": "/ˈsɪmpl ˈmiːdiəm ˈkɑːmpleks/",
+   "nghia": "ba mức độ phức tạp dùng để quy đổi LOC",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "The checkout screen is complex, but the profile screen is simple.",
+   "viDuNghia": "Màn hình thanh toán thuộc mức phức tạp, còn màn hình hồ sơ ở mức đơn giản."
+  },
+  {
+   "chu": "submitted materials",
+   "doc": "/səbˈmɪtɪd məˈtɪriəlz/",
+   "nghia": "các thứ phải nộp (tài liệu, mã, nhật ký)",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "Submitted materials must be uploaded before the review day.",
+   "viDuNghia": "Hồ sơ nộp phải tải lên trước ngày review."
+  },
+  {
+   "chu": "API specification",
+   "doc": "/ˌeɪ piː ˈaɪ ˌspesɪfɪˈkeɪʃn/",
+   "nghia": "đặc tả API: đường dẫn, phương thức, dữ liệu vào / ra, mã lỗi",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "The API specification lists the URL, method, request and response for each API.",
+   "viDuNghia": "Đặc tả API ghi đường dẫn, phương thức, dữ liệu gửi và nhận của từng API."
+  },
+  {
+   "chu": "request payload",
+   "doc": "/rɪˈkwest ˈpeɪloʊd/",
+   "nghia": "dữ liệu gửi kèm request",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "The request payload contains the product name and price.",
+   "viDuNghia": "Dữ liệu gửi kèm có tên và giá sản phẩm."
+  },
+  {
+   "chu": "response body",
+   "doc": "/rɪˈspɑːns ˈbɑːdi/",
+   "nghia": "phần dữ liệu server trả về",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "The response body returns the new order ID.",
+   "viDuNghia": "Phần dữ liệu trả về chứa mã đơn hàng mới."
+  },
+  {
+   "chu": "sample response",
+   "doc": "/ˈsæmpl rɪˈspɑːns/",
+   "nghia": "ví dụ dữ liệu trả về để đội frontend làm trước",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "Put a sample response in the SDS so the frontend team can start early.",
+   "viDuNghia": "Đưa ví dụ dữ liệu trả về vào SDS để đội frontend làm sớm."
+  },
+  {
+   "chu": "collection design",
+   "doc": "/kəˈlekʃn dɪˈzaɪn/",
+   "nghia": "thiết kế các collection MongoDB (trường, kiểu, tham chiếu)",
+   "nhom": "SRS, SDS & chấm LOC",
+   "viDu": "Our collection design has users, products, orders and reviews.",
+   "viDuNghia": "Mô hình dữ liệu của nhóm có người dùng, sản phẩm, đơn hàng và đánh giá."
+  },
+  {
+   "chu": "MERN stack",
+   "doc": "/mɜːrn stæk/",
+   "nghia": "bộ công nghệ MongoDB – Express – React – Node.js",
+   "nhom": "Backend Node.js & API",
+   "viDu": "We built our web app with the MERN stack.",
+   "viDuNghia": "Nhóm làm ứng dụng web bằng bộ MERN."
+  },
+  {
+   "chu": "Express router",
+   "doc": "/ɪkˈspres ˈruːtər/",
+   "nghia": "bộ định tuyến Express: gom các route của một nhóm API",
+   "nhom": "Backend Node.js & API",
+   "viDu": "We split the routes into a user router and a product router.",
+   "viDuNghia": "Nhóm tách route thành router người dùng và router sản phẩm."
+  },
+  {
+   "chu": "base URL",
+   "doc": "/beɪs ˌjuː ɑːr ˈel/",
+   "nghia": "địa chỉ gốc của API",
+   "nhom": "Backend Node.js & API",
+   "viDu": "The base URL of our API is stored in a config file.",
+   "viDuNghia": "Địa chỉ gốc của API được lưu trong tệp cấu hình."
+  },
+  {
+   "chu": "server-side validation",
+   "doc": "/ˈsɜːrvər saɪd ˌvælɪˈdeɪʃn/",
+   "nghia": "kiểm tra dữ liệu ở máy chủ (không tin dữ liệu từ trình duyệt)",
+   "nhom": "Backend Node.js & API",
+   "viDu": "Server-side validation is required even if the form already checks input.",
+   "viDuNghia": "Vẫn phải kiểm tra ở máy chủ dù form đã kiểm dữ liệu nhập."
+  },
+  {
+   "chu": "error response",
+   "doc": "/ˈerər rɪˈspɑːns/",
+   "nghia": "phản hồi lỗi có mã trạng thái và thông báo rõ",
+   "nhom": "Backend Node.js & API",
+   "viDu": "Every error response has a status code and a message.",
+   "viDuNghia": "Mọi phản hồi lỗi đều có mã trạng thái và thông báo."
+  },
+  {
+   "chu": "refresh token",
+   "doc": "/rɪˈfreʃ ˈtoʊkən/",
+   "nghia": "token dùng để xin access token mới khi hết hạn",
+   "nhom": "Backend Node.js & API",
+   "viDu": "When the access token expires, the app uses the refresh token.",
+   "viDuNghia": "Khi access token hết hạn, ứng dụng dùng refresh token."
+  },
+  {
+   "chu": "protected API",
+   "doc": "/prəˈtektɪd ˌeɪ piː ˈaɪ/",
+   "nghia": "API chỉ gọi được khi đã đăng nhập / đủ quyền",
+   "nhom": "Backend Node.js & API",
+   "viDu": "The order API is a protected API that needs a valid token.",
+   "viDuNghia": "API đơn hàng là API bảo vệ, cần token hợp lệ."
+  },
+  {
+   "chu": "image upload",
+   "doc": "/ˈɪmɪdʒ ˈʌploʊd/",
+   "nghia": "tải ảnh lên máy chủ / kho ảnh",
+   "nhom": "Backend Node.js & API",
+   "viDu": "Image upload is limited to 2 MB per file.",
+   "viDuNghia": "Tải ảnh lên giới hạn 2 MB mỗi tệp."
+  },
+  {
+   "chu": "cloud storage",
+   "doc": "/klaʊd ˈstɔːrɪdʒ/",
+   "nghia": "kho lưu tệp trên đám mây (Cloudinary, S3…)",
+   "nhom": "Backend Node.js & API",
+   "viDu": "We save product images in cloud storage, not in the database.",
+   "viDuNghia": "Nhóm lưu ảnh sản phẩm trên kho đám mây, không lưu trong cơ sở dữ liệu."
+  },
+  {
+   "chu": "MongoDB Atlas",
+   "doc": "/ˈmɑːŋɡoʊ diː biː ˈætləs/",
+   "nghia": "dịch vụ MongoDB trên mây",
+   "nhom": "Backend Node.js & API",
+   "viDu": "Our database runs on MongoDB Atlas.",
+   "viDuNghia": "Cơ sở dữ liệu của nhóm chạy trên MongoDB Atlas."
+  },
+  {
+   "chu": "seed script",
+   "doc": "/siːd skrɪpt/",
+   "nghia": "script nạp dữ liệu ban đầu vào CSDL",
+   "nhom": "Backend Node.js & API",
+   "viDu": "Run the seed script to create sample products and an admin account.",
+   "viDuNghia": "Chạy script nạp dữ liệu để tạo sản phẩm mẫu và tài khoản quản trị."
+  },
+  {
+   "chu": "npm script",
+   "doc": "/ˌen piː ˈem skrɪpt/",
+   "nghia": "lệnh khai trong package.json (npm run dev…)",
+   "nhom": "Backend Node.js & API",
+   "viDu": "Use the npm script \"npm run dev\" to start the server.",
+   "viDuNghia": "Dùng lệnh \"npm run dev\" để chạy server."
+  },
+  {
+   "chu": "env file",
+   "doc": "/ˈenv faɪl/",
+   "nghia": "tệp .env chứa khoá bí mật và cấu hình, không đưa lên Git",
+   "nhom": "Backend Node.js & API",
+   "viDu": "Never commit the env file to GitLab.",
+   "viDuNghia": "Đừng bao giờ commit tệp .env lên GitLab."
+  },
+  {
+   "chu": "nodemon",
+   "doc": "/ˈnoʊdmɑːn/",
+   "nghia": "công cụ tự khởi động lại server khi sửa mã",
+   "nhom": "Backend Node.js & API",
+   "viDu": "Nodemon restarts the server every time we save a file.",
+   "viDuNghia": "Nodemon khởi động lại server mỗi lần lưu tệp."
+  },
+  {
+   "chu": "soft delete",
+   "doc": "/ˌsɔːft dɪˈliːt/",
+   "nghia": "xoá mềm: chỉ đánh dấu đã xoá, không xoá khỏi CSDL",
+   "nhom": "Backend Node.js & API",
+   "viDu": "We use soft delete so admins can restore a product.",
+   "viDuNghia": "Nhóm dùng xoá mềm để quản trị viên khôi phục được sản phẩm."
+  },
+  {
+   "chu": "unique index",
+   "doc": "/juˈniːk ˈɪndeks/",
+   "nghia": "chỉ mục duy nhất: chặn trùng giá trị (vd email)",
+   "nhom": "Backend Node.js & API",
+   "viDu": "A unique index on email stops duplicate accounts.",
+   "viDuNghia": "Chỉ mục duy nhất trên email chặn tài khoản trùng."
+  },
+  {
+   "chu": "auth middleware",
+   "doc": "/ɔːθ ˈmɪdlwer/",
+   "nghia": "middleware kiểm token trước khi vào API",
+   "nhom": "Backend Node.js & API",
+   "viDu": "The auth middleware returns 401 if the token is missing.",
+   "viDuNghia": "Middleware xác thực trả 401 nếu thiếu token."
+  },
+  {
+   "chu": "role check",
+   "doc": "/roʊl tʃek/",
+   "nghia": "bước kiểm vai trò (admin, staff…) trước khi cho làm",
+   "nhom": "Backend Node.js & API",
+   "viDu": "The role check blocks customers from the admin API.",
+   "viDuNghia": "Bước kiểm vai trò chặn khách hàng gọi API quản trị."
+  },
+  {
+   "chu": "API integration",
+   "doc": "/ˌeɪ piː ˈaɪ ˌɪntɪˈɡreɪʃn/",
+   "nghia": "ghép giao diện với API thật",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "API integration took longer than we expected.",
+   "viDuNghia": "Ghép giao diện với API mất nhiều thời gian hơn nhóm nghĩ."
+  },
+  {
+   "chu": "protected route",
+   "doc": "/prəˈtektɪd ruːt/",
+   "nghia": "trang chỉ mở được khi đã đăng nhập",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "The cart page is a protected route.",
+   "viDuNghia": "Trang giỏ hàng là trang bảo vệ, phải đăng nhập."
+  },
+  {
+   "chu": "loading spinner",
+   "doc": "/ˈloʊdɪŋ ˈspɪnər/",
+   "nghia": "vòng xoay báo đang tải",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "Show a loading spinner while the API is running.",
+   "viDuNghia": "Hiện vòng xoay khi API đang chạy."
+  },
+  {
+   "chu": "toast message",
+   "doc": "/toʊst ˈmesɪdʒ/",
+   "nghia": "thông báo nhỏ hiện góc màn hình rồi tự tắt",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "A toast message says \"Saved successfully\".",
+   "viDuNghia": "Thông báo nhỏ hiện \"Lưu thành công\"."
+  },
+  {
+   "chu": "client-side validation",
+   "doc": "/ˈklaɪənt saɪd ˌvælɪˈdeɪʃn/",
+   "nghia": "kiểm tra dữ liệu ngay trên trình duyệt trước khi gửi",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "Client-side validation shows a red message under the email field.",
+   "viDuNghia": "Kiểm tra form hiện dòng đỏ dưới ô email."
+  },
+  {
+   "chu": "mock data",
+   "doc": "/mɑːk ˈdeɪtə/",
+   "nghia": "dữ liệu giả để làm giao diện khi API chưa xong",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "We used mock data until the backend was ready.",
+   "viDuNghia": "Nhóm dùng dữ liệu giả cho tới khi backend xong."
+  },
+  {
+   "chu": "CORS error",
+   "doc": "/kɔːrz ˈerər/",
+   "nghia": "lỗi trình duyệt chặn gọi API khác nguồn",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "We fixed the CORS error by allowing our frontend domain.",
+   "viDuNghia": "Nhóm sửa lỗi CORS bằng cách cho phép tên miền frontend."
+  },
+  {
+   "chu": "browser console",
+   "doc": "/ˈbraʊzər ˈkɑːnsoʊl/",
+   "nghia": "cửa sổ console của trình duyệt (xem lỗi JS)",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "Open the browser console to see the error.",
+   "viDuNghia": "Mở console của trình duyệt để xem lỗi."
+  },
+  {
+   "chu": "network tab",
+   "doc": "/ˈnetwɜːrk tæb/",
+   "nghia": "thẻ Network trong DevTools: xem request / response",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "The network tab shows the API returned 401.",
+   "viDuNghia": "Thẻ Network cho thấy API trả về 401."
+  },
+  {
+   "chu": "cross-browser",
+   "doc": "/ˌkrɔːs ˈbraʊzər/",
+   "nghia": "chạy đúng trên nhiều trình duyệt",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "We did cross-browser testing on Chrome, Firefox and Safari.",
+   "viDuNghia": "Nhóm kiểm thử trên nhiều trình duyệt: Chrome, Firefox và Safari."
+  },
+  {
+   "chu": "empty state",
+   "doc": "/ˈempti steɪt/",
+   "nghia": "giao diện khi chưa có dữ liệu (vd giỏ hàng trống)",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "The empty state says \"Your cart is empty\" with a Shop now button.",
+   "viDuNghia": "Màn hình trống ghi \"Giỏ hàng trống\" kèm nút Mua ngay."
+  },
+  {
+   "chu": "404 page",
+   "doc": "/ˌfɔːr oʊ ˈfɔːr peɪdʒ/",
+   "nghia": "trang \"không tìm thấy\" khi đường dẫn sai",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "We added a friendly 404 page for broken links.",
+   "viDuNghia": "Nhóm thêm trang báo lỗi thân thiện cho đường dẫn hỏng."
+  },
+  {
+   "chu": "search bar",
+   "doc": "/ˈsɜːrtʃ bɑːr/",
+   "nghia": "ô tìm kiếm",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "The search bar suggests products as you type.",
+   "viDuNghia": "Ô tìm kiếm gợi ý sản phẩm khi bạn gõ."
+  },
+  {
+   "chu": "image preview",
+   "doc": "/ˈɪmɪdʒ ˈpriːvjuː/",
+   "nghia": "xem trước ảnh trước khi tải lên",
+   "nhom": "Frontend React & tích hợp",
+   "viDu": "The image preview appears before the user clicks Upload.",
+   "viDuNghia": "Ảnh xem trước hiện ra trước khi người dùng bấm Tải lên."
+  },
+  {
+   "chu": "continuous integration",
+   "doc": "/kənˈtɪnjuəs ˌɪntɪˈɡreɪʃn/",
+   "nghia": "tích hợp liên tục: mỗi lần đẩy mã là tự build + test",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "With continuous integration, every merge request is tested automatically.",
+   "viDuNghia": "Nhờ tích hợp liên tục, mỗi merge request đều được tự động kiểm thử."
+  },
+  {
+   "chu": "CI job",
+   "doc": "/ˌsiː ˈaɪ dʒɑːb/",
+   "nghia": "một bước chạy tự động trong pipeline (lint, test, build)",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "The CI job failed because one unit test did not pass.",
+   "viDuNghia": "Bước CI thất bại vì một unit test không qua."
+  },
+  {
+   "chu": "lint check",
+   "doc": "/lɪnt tʃek/",
+   "nghia": "kiểm tra kiểu viết mã tự động",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "The lint check found an unused variable.",
+   "viDuNghia": "Bước kiểm lint phát hiện một biến không dùng."
+  },
+  {
+   "chu": "production build",
+   "doc": "/prəˈdʌkʃn bɪld/",
+   "nghia": "bản dựng tối ưu để chạy thật",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "Run the production build before you deploy.",
+   "viDuNghia": "Chạy bản dựng production trước khi triển khai."
+  },
+  {
+   "chu": "hosting",
+   "doc": "/ˈhoʊstɪŋ/",
+   "nghia": "dịch vụ chạy web trên mạng",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "We chose free hosting for the student demo.",
+   "viDuNghia": "Nhóm chọn dịch vụ chạy web miễn phí cho bản demo."
+  },
+  {
+   "chu": "live URL",
+   "doc": "/ˌlaɪv ˌjuː ɑːr ˈel/",
+   "nghia": "đường dẫn web đang chạy thật",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "Please put the live URL at the top of the report.",
+   "viDuNghia": "Hãy để đường dẫn web đang chạy ở đầu báo cáo."
+  },
+  {
+   "chu": "server log",
+   "doc": "/ˈsɜːrvər lɔːɡ/",
+   "nghia": "nhật ký của máy chủ",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "The server log shows the database connection timed out.",
+   "viDuNghia": "Nhật ký máy chủ cho thấy kết nối cơ sở dữ liệu bị quá thời gian."
+  },
+  {
+   "chu": "health check",
+   "doc": "/ˈhelθ tʃek/",
+   "nghia": "đường dẫn kiểm máy chủ còn sống",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "The health check returns 200 when the server is running.",
+   "viDuNghia": "Đường kiểm sức khoẻ trả 200 khi máy chủ đang chạy."
+  },
+  {
+   "chu": "Docker image",
+   "doc": "/ˈdɑːkər ˈɪmɪdʒ/",
+   "nghia": "ảnh Docker đóng gói ứng dụng để chạy ở đâu cũng giống nhau",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "We built a Docker image for the backend.",
+   "viDuNghia": "Nhóm dựng một ảnh Docker cho backend."
+  },
+  {
+   "chu": "Docker container",
+   "doc": "/ˈdɑːkər kənˈteɪnər/",
+   "nghia": "tiến trình chạy từ một ảnh, tách biệt với máy",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "The backend and the database run in two containers.",
+   "viDuNghia": "Backend và cơ sở dữ liệu chạy trong hai container."
+  },
+  {
+   "chu": "reverse proxy",
+   "doc": "/rɪˈvɜːrs ˈprɑːksi/",
+   "nghia": "máy chủ đứng trước nhận request rồi chuyển vào app (Nginx)",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "Nginx works as a reverse proxy in front of our Node server.",
+   "viDuNghia": "Nginx làm reverse proxy đứng trước server Node của nhóm."
+  },
+  {
+   "chu": "release tag",
+   "doc": "/rɪˈliːs tæɡ/",
+   "nghia": "thẻ đánh dấu phiên bản trên Git (v1.0)",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "We created the release tag v1.0 after the final review.",
+   "viDuNghia": "Nhóm tạo thẻ phiên bản v1.0 sau buổi review cuối."
+  },
+  {
+   "chu": "README file",
+   "doc": "/ˈriːdmiː faɪl/",
+   "nghia": "tệp hướng dẫn ở gốc kho mã",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "The README file explains how to install and run the project.",
+   "viDuNghia": "Tệp README hướng dẫn cài và chạy dự án."
+  },
+  {
+   "chu": "installation steps",
+   "doc": "/ˌɪnstəˈleɪʃn steps/",
+   "nghia": "các bước cài đặt",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "The installation steps are tested on a clean computer.",
+   "viDuNghia": "Các bước cài đặt đã được thử trên một máy sạch."
+  },
+  {
+   "chu": "API documentation",
+   "doc": "/ˌeɪ piː ˈaɪ ˌdɑːkjumenˈteɪʃn/",
+   "nghia": "tài liệu mô tả API cho người dùng API",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "Our API documentation is generated with Swagger.",
+   "viDuNghia": "Tài liệu API của nhóm được sinh bằng Swagger."
+  },
+  {
+   "chu": "Swagger",
+   "doc": "/ˈswæɡər/",
+   "nghia": "công cụ mô tả + thử API trên trình duyệt",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "Open Swagger to try the login API.",
+   "viDuNghia": "Mở Swagger để thử API đăng nhập."
+  },
+  {
+   "chu": "build failure",
+   "doc": "/bɪld ˈfeɪljər/",
+   "nghia": "lần dựng bị lỗi",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "The build failure was caused by a missing package.",
+   "viDuNghia": "Lần dựng lỗi do thiếu một gói."
+  },
+  {
+   "chu": "free tier",
+   "doc": "/friː tɪr/",
+   "nghia": "gói miễn phí của dịch vụ đám mây",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "The free tier is enough for our class demo.",
+   "viDuNghia": "Gói miễn phí đủ cho buổi demo trên lớp."
+  },
+  {
+   "chu": "cold start",
+   "doc": "/koʊld stɑːrt/",
+   "nghia": "lần gọi đầu chậm vì máy chủ miễn phí vừa \"thức dậy\"",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "The first request is slow because of a cold start.",
+   "viDuNghia": "Request đầu tiên chậm vì máy chủ vừa khởi động lại."
+  },
+  {
+   "chu": "custom domain",
+   "doc": "/ˈkʌstəm doʊˈmeɪn/",
+   "nghia": "tên miền riêng gắn vào web",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "We connected a custom domain to our frontend.",
+   "viDuNghia": "Nhóm gắn một tên miền riêng cho frontend."
+  },
+  {
+   "chu": "environment setup",
+   "doc": "/ɪnˈvaɪrənmənt ˈsetʌp/",
+   "nghia": "dựng môi trường làm việc (cài Node, CSDL, khoá…)",
+   "nhom": "Triển khai, CI & tài liệu",
+   "viDu": "Environment setup took one full day for new members.",
+   "viDuNghia": "Dựng môi trường mất trọn một ngày với thành viên mới."
+  },
+  {
+   "chu": "professional attitude",
+   "doc": "/prəˈfeʃənl ˈætɪtuːd/",
+   "nghia": "thái độ làm việc chuyên nghiệp (đúng hạn, rõ ràng, có trách nhiệm)",
+   "nhom": "Làm việc chuyên nghiệp & thuyết trình",
+   "viDu": "A professional attitude is part of the grade.",
+   "viDuNghia": "Thái độ làm việc chuyên nghiệp cũng được tính điểm."
+  },
+  {
+   "chu": "late submission",
+   "doc": "/leɪt səbˈmɪʃn/",
+   "nghia": "nộp muộn",
+   "nhom": "Làm việc chuyên nghiệp & thuyết trình",
+   "viDu": "Late submission loses 20 percent of the mark.",
+   "viDuNghia": "Nộp muộn bị trừ 20% điểm."
+  },
+  {
+   "chu": "team presentation",
+   "doc": "/tiːm ˌpriːzenˈteɪʃn/",
+   "nghia": "buổi thuyết trình của cả nhóm",
+   "nhom": "Làm việc chuyên nghiệp & thuyết trình",
+   "viDu": "Each team presentation lasts 45 minutes.",
+   "viDuNghia": "Mỗi buổi thuyết trình của nhóm kéo dài 45 phút."
+  },
+  {
+   "chu": "technical question",
+   "doc": "/ˈteknɪkl ˈkwestʃən/",
+   "nghia": "câu hỏi kỹ thuật của giảng viên (hỏi về mã, thiết kế)",
+   "nhom": "Làm việc chuyên nghiệp & thuyết trình",
+   "viDu": "The lecturer asked a technical question about our token flow.",
+   "viDuNghia": "Giảng viên hỏi một câu kỹ thuật về luồng token của nhóm."
+  },
+  {
+   "chu": "explain your code",
+   "doc": "/ɪkˈspleɪn jʊər koʊd/",
+   "nghia": "giải thích mã của chính mình (để chứng minh tự làm)",
+   "nhom": "Làm việc chuyên nghiệp & thuyết trình",
+   "viDu": "The lecturer said: \"Please explain your code line by line.\"",
+   "viDuNghia": "Giảng viên nói: \"Em hãy giải thích mã của mình từng dòng.\""
+  },
+  {
+   "chu": "interpersonal skills",
+   "doc": "/ˌɪntərˈpɜːrsənl skɪlz/",
+   "nghia": "kỹ năng giao tiếp giữa người với người",
+   "nhom": "Làm việc chuyên nghiệp & thuyết trình",
+   "viDu": "Good interpersonal skills help the team solve conflicts.",
+   "viDuNghia": "Kỹ năng giao tiếp tốt giúp nhóm giải quyết bất đồng."
+  },
+  {
+   "chu": "clarification question",
+   "doc": "/ˌklærəfɪˈkeɪʃn ˈkwestʃən/",
+   "nghia": "câu hỏi làm rõ yêu cầu",
+   "nhom": "Làm việc chuyên nghiệp & thuyết trình",
+   "viDu": "We sent the lecturer three clarification questions about the refund rule.",
+   "viDuNghia": "Nhóm gửi giảng viên ba câu hỏi làm rõ quy tắc hoàn tiền."
+  },
+  {
+   "chu": "on-time delivery",
+   "doc": "/ˌɑːn taɪm dɪˈlɪvəri/",
+   "nghia": "giao đúng hạn",
+   "nhom": "Làm việc chuyên nghiệp & thuyết trình",
+   "viDu": "On-time delivery matters more than extra features.",
+   "viDuNghia": "Giao đúng hạn quan trọng hơn thêm chức năng."
+  },
+  {
+   "chu": "Our stack is MongoDB, Express, React and Node.js",
+   "nghia": "Bộ công nghệ của nhóm là MongoDB, Express, React và Node.js",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Our stack is MongoDB, Express, React and Node.js, and we deploy on Render.",
+   "viDuNghia": "Bộ công nghệ của nhóm là MongoDB, Express, React, Node.js, triển khai trên Render."
+  },
+  {
+   "chu": "This endpoint returns",
+   "nghia": "API này trả về …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "This endpoint returns a list of products with pagination.",
+   "viDuNghia": "API này trả về danh sách sản phẩm có phân trang."
+  },
+  {
+   "chu": "Let me show you the API in Postman",
+   "nghia": "Để em cho thầy/cô xem API trong Postman",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Let me show you the API in Postman before the user interface.",
+   "viDuNghia": "Để em cho thầy/cô xem API trong Postman trước khi xem giao diện."
+  },
+  {
+   "chu": "When the user clicks Save, the front end calls",
+   "nghia": "Khi người dùng bấm Lưu, giao diện gọi …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "When the user clicks Save, the front end calls the update API.",
+   "viDuNghia": "Khi người dùng bấm Lưu, giao diện gọi API cập nhật."
+  },
+  {
+   "chu": "You can try it at this link",
+   "nghia": "Thầy/cô có thể thử tại đường dẫn này",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "You can try it at this link with the demo account.",
+   "viDuNghia": "Thầy/cô có thể thử tại đường dẫn này bằng tài khoản demo."
+  },
+  {
+   "chu": "This bug only happens when",
+   "nghia": "Lỗi này chỉ xảy ra khi …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "This bug only happens when two users pay for the same item.",
+   "viDuNghia": "Lỗi này chỉ xảy ra khi hai người cùng trả tiền cho một món."
+  },
+  {
+   "chu": "We fixed it by",
+   "nghia": "Nhóm đã sửa bằng cách …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "We fixed it by checking the stock again before saving the order.",
+   "viDuNghia": "Nhóm sửa bằng cách kiểm tồn kho lần nữa trước khi lưu đơn."
+  },
+  {
+   "chu": "Let me check the log",
+   "nghia": "Để em xem nhật ký lỗi",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Let me check the log to see why the request failed.",
+   "viDuNghia": "Để em xem nhật ký xem vì sao request lỗi."
+  },
+  {
+   "chu": "In the next iteration, we plan to",
+   "nghia": "Ở vòng lặp tới, nhóm dự định …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "In the next iteration, we plan to add online payment.",
+   "viDuNghia": "Ở vòng lặp tới, nhóm dự định thêm thanh toán trực tuyến."
+  },
+  {
+   "chu": "If we had more time, we would",
+   "nghia": "Nếu có thêm thời gian, nhóm sẽ …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "If we had more time, we would add real-time notifications.",
+   "viDuNghia": "Nếu có thêm thời gian, nhóm sẽ thêm thông báo thời gian thực."
+  },
+  {
+   "chu": "Are there any questions",
+   "nghia": "Thầy/cô có câu hỏi nào không ạ",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "That is all for our demo. Are there any questions?",
+   "viDuNghia": "Phần demo của nhóm đến đây là hết. Thầy/cô có câu hỏi gì không ạ?"
+  }
+ ]
+}

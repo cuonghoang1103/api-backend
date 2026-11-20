@@ -1,0 +1,744 @@
+{
+ "ma": "exe201-1",
+ "nn": "en",
+ "ten": "EXE201 · Trải nghiệm khởi nghiệp 2",
+ "moTa": "Môn Experiential Entrepreneurship 2 (EXE201): dựng và tung sản phẩm, tìm khách, marketing, bán hàng, doanh thu và chỉ số tăng trưởng, gọi vốn, pitch. Soạn từ syllabus FLM + tài liệu khởi nghiệp (không phải từ đề thi); câu ví dụ là câu nói khi báo cáo kết quả hoặc gọi vốn.",
+ "bieuTuong": "chart.line.uptrend.xyaxis",
+ "thuTu": -933,
+ "tu": [
+  {
+   "chu": "market-ready",
+   "doc": "/ˈmɑːrkɪt ˈredi/",
+   "nghia": "sẵn sàng bán ra thị trường",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "The product must run well and be market-ready for Outcome 1.",
+   "viDuNghia": "Sản phẩm phải chạy tốt và sẵn sàng bán cho Outcome 1."
+  },
+  {
+   "chu": "product demonstration",
+   "doc": "/ˈprɑːdʌkt ˌdemənˈstreɪʃn/",
+   "nghia": "buổi trình diễn sản phẩm / dịch vụ trước lớp",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "Our product demonstration took ten minutes.",
+   "viDuNghia": "Buổi trình diễn sản phẩm của nhóm mất mười phút."
+  },
+  {
+   "chu": "physical product",
+   "doc": "/ˈfɪzɪkl ˈprɑːdʌkt/",
+   "nghia": "sản phẩm vật lý (cầm nắm được)",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "Our physical product is a handmade notebook with a QR code.",
+   "viDuNghia": "Sản phẩm vật lý của nhóm là sổ tay làm thủ công có mã QR."
+  },
+  {
+   "chu": "product roadmap",
+   "doc": "/ˈprɑːdʌkt ˈroʊdmæp/",
+   "nghia": "lộ trình sản phẩm: tính năng nào ra lúc nào",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "The product roadmap shows online payment in month two.",
+   "viDuNghia": "Lộ trình sản phẩm có thanh toán trực tuyến vào tháng thứ hai."
+  },
+  {
+   "chu": "beta version",
+   "doc": "/ˈbeɪtə ˈvɜːrʒn/",
+   "nghia": "bản thử nghiệm cho một nhóm người dùng đầu",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "Fifty students joined our beta version.",
+   "viDuNghia": "Năm mươi sinh viên tham gia bản thử nghiệm."
+  },
+  {
+   "chu": "product launch",
+   "doc": "/ˈprɑːdʌkt lɔːntʃ/",
+   "nghia": "buổi / đợt tung sản phẩm",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "Our product launch is on the first day of the semester.",
+   "viDuNghia": "Nhóm tung sản phẩm vào ngày đầu học kỳ."
+  },
+  {
+   "chu": "launch channel",
+   "doc": "/lɔːntʃ ˈtʃænl/",
+   "nghia": "nơi tung sản phẩm (Facebook, TikTok, Shopee, hội chợ…)",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "We tested three launch channels: TikTok, Shopee and a campus booth.",
+   "viDuNghia": "Nhóm thử ba kênh tung sản phẩm: TikTok, Shopee và gian hàng ở trường."
+  },
+  {
+   "chu": "relaunch",
+   "doc": "/ˌriːˈlɔːntʃ/",
+   "nghia": "tung lại sản phẩm sau khi chỉnh sửa",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "After poor sales, we changed the price and relaunched.",
+   "viDuNghia": "Sau khi bán kém, nhóm đổi giá và tung lại."
+  },
+  {
+   "chu": "feature request",
+   "doc": "/ˈfiːtʃər rɪˈkwest/",
+   "nghia": "đề nghị thêm tính năng từ khách",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "The most common feature request was dark mode.",
+   "viDuNghia": "Đề nghị tính năng phổ biến nhất là chế độ tối."
+  },
+  {
+   "chu": "design for startups",
+   "doc": "/dɪˈzaɪn fər ˈstɑːrtʌps/",
+   "nghia": "thiết kế cho startup: đẹp vừa đủ, rõ, dễ dùng",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "Design for startups means simple, clear and fast to change.",
+   "viDuNghia": "Thiết kế cho startup nghĩa là đơn giản, rõ ràng, dễ đổi nhanh."
+  },
+  {
+   "chu": "user onboarding",
+   "doc": "/ˈjuːzər ˈɑːnbɔːrdɪŋ/",
+   "nghia": "dẫn người dùng mới làm quen sản phẩm",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "Better user onboarding doubled our sign-ups.",
+   "viDuNghia": "Phần làm quen tốt hơn giúp số đăng ký tăng gấp đôi."
+  },
+  {
+   "chu": "launch event",
+   "doc": "/lɔːntʃ ɪˈvent/",
+   "nghia": "sự kiện ra mắt sản phẩm",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "Our launch event at the campus hall had 150 visitors.",
+   "viDuNghia": "Sự kiện ra mắt ở hội trường trường có 150 người ghé."
+  },
+  {
+   "chu": "launch date",
+   "doc": "/lɔːntʃ deɪt/",
+   "nghia": "ngày ra mắt",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "We moved the launch date one week later to fix bugs.",
+   "viDuNghia": "Nhóm lùi ngày ra mắt một tuần để sửa lỗi."
+  },
+  {
+   "chu": "pilot customer",
+   "doc": "/ˈpaɪlət ˈkʌstəmər/",
+   "nghia": "khách dùng thí điểm (dùng trước, góp ý để sửa)",
+   "nhom": "Dựng & tung sản phẩm",
+   "viDu": "A coffee shop near campus is our first pilot customer.",
+   "viDuNghia": "Một quán cà phê gần trường là khách thí điểm đầu tiên."
+  },
+  {
+   "chu": "customer acquisition",
+   "doc": "/ˈkʌstəmər ˌækwɪˈzɪʃn/",
+   "nghia": "thu hút khách hàng mới",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "Our customer acquisition plan focuses on campus events.",
+   "viDuNghia": "Kế hoạch thu hút khách tập trung vào sự kiện ở trường."
+  },
+  {
+   "chu": "customer acquisition plan",
+   "doc": "/ˈkʌstəmər ˌækwɪˈzɪʃn plæn/",
+   "nghia": "kế hoạch tìm khách (kênh, ngân sách, mục tiêu)",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "Outcome 2 asks for a customer acquisition plan.",
+   "viDuNghia": "Outcome 2 yêu cầu kế hoạch tìm khách hàng."
+  },
+  {
+   "chu": "first ten customers",
+   "doc": "/fɜːrst ten ˈkʌstəmərz/",
+   "nghia": "mười khách đầu tiên (thường tự đi tìm, làm tay)",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "We got our first ten customers from friends of friends.",
+   "viDuNghia": "Nhóm có mười khách đầu tiên từ bạn của bạn."
+  },
+  {
+   "chu": "go-to-market strategy",
+   "doc": "/ˌɡoʊ tə ˈmɑːrkɪt ˈstrætədʒi/",
+   "nghia": "chiến lược đưa sản phẩm ra thị trường",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "Our go-to-market strategy starts with one university.",
+   "viDuNghia": "Chiến lược ra thị trường bắt đầu từ một trường đại học."
+  },
+  {
+   "chu": "target audience",
+   "doc": "/ˈtɑːrɡɪt ˈɔːdiəns/",
+   "nghia": "nhóm người xem quảng cáo / nội dung mục tiêu",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "The target audience of our ads is students aged 18 to 22.",
+   "viDuNghia": "Đối tượng mục tiêu của quảng cáo là sinh viên 18–22 tuổi."
+  },
+  {
+   "chu": "content marketing",
+   "doc": "/ˈkɑːntent ˈmɑːrkɪtɪŋ/",
+   "nghia": "marketing bằng nội dung hữu ích (bài, video)",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "Our content marketing is short study tips on TikTok.",
+   "viDuNghia": "Marketing nội dung của nhóm là mẹo học ngắn trên TikTok."
+  },
+  {
+   "chu": "influencer",
+   "doc": "/ˈɪnfluənsər/",
+   "nghia": "người có ảnh hưởng trên mạng xã hội",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "A local influencer reviewed our product for free.",
+   "viDuNghia": "Một người có ảnh hưởng ở địa phương review sản phẩm miễn phí."
+  },
+  {
+   "chu": "paid ads",
+   "doc": "/peɪd ædz/",
+   "nghia": "quảng cáo trả tiền",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "We spent 500,000 dong on paid ads and got 40 orders.",
+   "viDuNghia": "Nhóm chi 500.000 đồng quảng cáo và được 40 đơn."
+  },
+  {
+   "chu": "organic reach",
+   "doc": "/ɔːrˈɡænɪk riːtʃ/",
+   "nghia": "lượt tiếp cận tự nhiên (không trả tiền)",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "Organic reach on our page dropped after two weeks.",
+   "viDuNghia": "Lượt tiếp cận tự nhiên của trang giảm sau hai tuần."
+  },
+  {
+   "chu": "engagement rate",
+   "doc": "/ɪnˈɡeɪdʒmənt reɪt/",
+   "nghia": "tỉ lệ tương tác (thích, bình luận, chia sẻ / lượt xem)",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "The video had an engagement rate of 8 percent.",
+   "viDuNghia": "Video có tỉ lệ tương tác 8%."
+  },
+  {
+   "chu": "call to action",
+   "doc": "/ˌkɔːl tə ˈækʃn/",
+   "nghia": "lời kêu gọi hành động (\"Đặt ngay\", \"Đăng ký\")",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "Every post ends with a clear call to action.",
+   "viDuNghia": "Mỗi bài đăng kết thúc bằng một lời kêu gọi hành động rõ ràng."
+  },
+  {
+   "chu": "word of mouth",
+   "doc": "/ˌwɜːrd əv ˈmaʊθ/",
+   "nghia": "truyền miệng",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "Most new customers came from word of mouth.",
+   "viDuNghia": "Phần lớn khách mới đến từ truyền miệng."
+  },
+  {
+   "chu": "referral program",
+   "doc": "/rɪˈfɜːrəl ˈproʊɡræm/",
+   "nghia": "chương trình giới thiệu bạn bè có thưởng",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "Our referral program gives both users a free drink.",
+   "viDuNghia": "Chương trình giới thiệu tặng cả hai người một ly nước."
+  },
+  {
+   "chu": "brand awareness",
+   "doc": "/brænd əˈwernəs/",
+   "nghia": "mức độ khách biết tới thương hiệu",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "The campus event increased brand awareness.",
+   "viDuNghia": "Sự kiện ở trường giúp nhiều người biết tới thương hiệu hơn."
+  },
+  {
+   "chu": "sales funnel",
+   "doc": "/seɪlz ˈfʌnl/",
+   "nghia": "phễu bán hàng: biết → quan tâm → mua → quay lại",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "Our sales funnel loses most people at the payment step.",
+   "viDuNghia": "Phễu bán hàng rơi nhiều người nhất ở bước thanh toán."
+  },
+  {
+   "chu": "lead",
+   "doc": "/liːd/",
+   "nghia": "khách tiềm năng (đã để lại thông tin liên hệ)",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "The booth gave us 200 leads in one day.",
+   "viDuNghia": "Gian hàng đem về 200 khách tiềm năng trong một ngày."
+  },
+  {
+   "chu": "key opinion leader",
+   "doc": "/kiː əˈpɪnjən ˈliːdər/",
+   "nghia": "KOL: người có tiếng nói, được cộng đồng tin theo",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "We sent free samples to two key opinion leaders.",
+   "viDuNghia": "Nhóm gửi mẫu miễn phí cho hai KOL."
+  },
+  {
+   "chu": "fanpage",
+   "doc": "/ˈfænpeɪdʒ/",
+   "nghia": "trang Facebook của thương hiệu",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "Our fanpage reached 1,000 followers in a month.",
+   "viDuNghia": "Fanpage của nhóm đạt 1.000 người theo dõi trong một tháng."
+  },
+  {
+   "chu": "flyer",
+   "doc": "/ˈflaɪər/",
+   "nghia": "tờ rơi",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "We handed out flyers with a QR code at the canteen.",
+   "viDuNghia": "Nhóm phát tờ rơi có mã QR ở căng tin."
+  },
+  {
+   "chu": "giveaway",
+   "doc": "/ˈɡɪvəweɪ/",
+   "nghia": "chương trình tặng quà để kéo tương tác",
+   "nhom": "Tìm khách & marketing",
+   "viDu": "The giveaway brought 300 new followers.",
+   "viDuNghia": "Chương trình tặng quà đem về 300 người theo dõi mới."
+  },
+  {
+   "chu": "sales target",
+   "doc": "/seɪlz ˈtɑːrɡɪt/",
+   "nghia": "chỉ tiêu bán hàng",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "Our sales target is 100 orders this month.",
+   "viDuNghia": "Chỉ tiêu bán hàng tháng này là 100 đơn."
+  },
+  {
+   "chu": "sales result",
+   "doc": "/seɪlz rɪˈzʌlt/",
+   "nghia": "kết quả bán hàng",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "Submit the sales result with all proof to the instructor.",
+   "viDuNghia": "Nộp kết quả bán hàng kèm đầy đủ bằng chứng cho giảng viên."
+  },
+  {
+   "chu": "proof of sales",
+   "doc": "/pruːf əv seɪlz/",
+   "nghia": "bằng chứng bán hàng (hoá đơn, chuyển khoản, ảnh giao hàng)",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "Bank transfer screenshots are our proof of sales.",
+   "viDuNghia": "Ảnh chụp chuyển khoản là bằng chứng bán hàng của nhóm."
+  },
+  {
+   "chu": "paying customer",
+   "doc": "/ˈpeɪɪŋ ˈkʌstəmər/",
+   "nghia": "khách đã trả tiền thật",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "We now have 35 paying customers.",
+   "viDuNghia": "Nhóm hiện có 35 khách đã trả tiền."
+  },
+  {
+   "chu": "repeat customer",
+   "doc": "/rɪˈpiːt ˈkʌstəmər/",
+   "nghia": "khách quay lại mua lần nữa",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "Twelve of them are repeat customers.",
+   "viDuNghia": "Mười hai người trong số đó là khách quay lại."
+  },
+  {
+   "chu": "free trial",
+   "doc": "/friː ˈtraɪəl/",
+   "nghia": "dùng thử miễn phí",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "We offer a seven-day free trial.",
+   "viDuNghia": "Nhóm cho dùng thử miễn phí bảy ngày."
+  },
+  {
+   "chu": "pricing tier",
+   "doc": "/ˈpraɪsɪŋ tɪr/",
+   "nghia": "mức gói giá (Cơ bản, Nâng cao…)",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "We have two pricing tiers: Basic and Premium.",
+   "viDuNghia": "Nhóm có hai gói giá: Cơ bản và Cao cấp."
+  },
+  {
+   "chu": "sales pitch",
+   "doc": "/seɪlz pɪtʃ/",
+   "nghia": "lời chào bán ngắn với khách",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "Practice your sales pitch before the campus fair.",
+   "viDuNghia": "Tập lời chào bán trước hội chợ ở trường."
+  },
+  {
+   "chu": "objection",
+   "doc": "/əbˈdʒekʃn/",
+   "nghia": "lời từ chối / lăn tăn của khách (\"đắt quá\")",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "The most common objection was \"It's too expensive\".",
+   "viDuNghia": "Lời từ chối hay gặp nhất là \"Đắt quá\"."
+  },
+  {
+   "chu": "upsell",
+   "doc": "/ˈʌpsel/",
+   "nghia": "mời khách mua bản / gói đắt hơn",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "We upsell a bigger size for only 5,000 dong more.",
+   "viDuNghia": "Nhóm mời khách lấy cỡ lớn hơn chỉ thêm 5.000 đồng."
+  },
+  {
+   "chu": "testimonial",
+   "doc": "/ˌtestɪˈmoʊniəl/",
+   "nghia": "lời chứng thực của khách hàng",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "We put three customer testimonials on our page.",
+   "viDuNghia": "Nhóm đăng ba lời chứng thực của khách lên trang."
+  },
+  {
+   "chu": "customer feedback",
+   "doc": "/ˈkʌstəmər ˈfiːdbæk/",
+   "nghia": "phản hồi của khách",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "Customer feedback told us the delivery was too slow.",
+   "viDuNghia": "Phản hồi của khách cho biết giao hàng quá chậm."
+  },
+  {
+   "chu": "feedback analysis",
+   "doc": "/ˈfiːdbæk əˈnæləsɪs/",
+   "nghia": "phân tích phản hồi (gom, phân loại, tìm điều cần sửa)",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "Our feedback analysis grouped 60 comments into four problems.",
+   "viDuNghia": "Phân tích phản hồi gom 60 bình luận thành bốn vấn đề."
+  },
+  {
+   "chu": "after-sales service",
+   "doc": "/ˌæftər ˈseɪlz ˈsɜːrvɪs/",
+   "nghia": "dịch vụ sau bán (đổi trả, hỗ trợ)",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "Good after-sales service brings repeat customers.",
+   "viDuNghia": "Dịch vụ sau bán tốt đem lại khách quay lại."
+  },
+  {
+   "chu": "bundle offer",
+   "doc": "/ˈbʌndl ˈɔːfər/",
+   "nghia": "ưu đãi mua theo combo",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "Our bundle offer: three notebooks for the price of two.",
+   "viDuNghia": "Ưu đãi combo: ba cuốn sổ giá bằng hai."
+  },
+  {
+   "chu": "loyal customer",
+   "doc": "/ˈlɔɪəl ˈkʌstəmər/",
+   "nghia": "khách trung thành",
+   "nhom": "Bán hàng & phản hồi khách",
+   "viDu": "Loyal customers get a free gift every fifth order.",
+   "viDuNghia": "Khách trung thành được quà ở mỗi đơn thứ năm."
+  },
+  {
+   "chu": "revenue model",
+   "doc": "/ˈrevənuː ˈmɑːdl/",
+   "nghia": "cách startup thu tiền (bán lẻ, thuê bao, hoa hồng…)",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "We changed our revenue model from one-time sales to subscriptions.",
+   "viDuNghia": "Nhóm đổi cách thu tiền từ bán một lần sang thuê bao."
+  },
+  {
+   "chu": "unit economics",
+   "doc": "/ˈjuːnɪt ˌekəˈnɑːmɪks/",
+   "nghia": "lãi / lỗ tính trên một đơn vị (một đơn, một khách)",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "Our unit economics are positive: we earn 12,000 dong per order.",
+   "viDuNghia": "Lãi trên mỗi đơn vị dương: lời 12.000 đồng mỗi đơn."
+  },
+  {
+   "chu": "customer acquisition cost",
+   "doc": "/ˈkʌstəmər ˌækwɪˈzɪʃn kɔːst/",
+   "nghia": "CAC: chi phí để có một khách mới",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "Our customer acquisition cost is about 20,000 dong.",
+   "viDuNghia": "Chi phí có một khách mới khoảng 20.000 đồng."
+  },
+  {
+   "chu": "customer lifetime value",
+   "doc": "/ˈkʌstəmər ˈlaɪftaɪm ˈvæljuː/",
+   "nghia": "LTV: tổng tiền một khách mang lại suốt thời gian dùng",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "Customer lifetime value must be higher than acquisition cost.",
+   "viDuNghia": "Giá trị vòng đời khách phải lớn hơn chi phí có khách."
+  },
+  {
+   "chu": "gross margin",
+   "doc": "/ɡroʊs ˈmɑːrdʒɪn/",
+   "nghia": "biên lợi nhuận gộp",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "Our gross margin is 40 percent.",
+   "viDuNghia": "Biên lợi nhuận gộp của nhóm là 40%."
+  },
+  {
+   "chu": "break-even point",
+   "doc": "/ˌbreɪk ˈiːvn pɔɪnt/",
+   "nghia": "điểm hoà vốn",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "We will reach the break-even point after 300 orders.",
+   "viDuNghia": "Nhóm sẽ hoà vốn sau 300 đơn."
+  },
+  {
+   "chu": "cost of goods sold",
+   "doc": "/kɔːst əv ɡʊdz soʊld/",
+   "nghia": "giá vốn hàng bán",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "Cost of goods sold includes materials and packaging.",
+   "viDuNghia": "Giá vốn gồm nguyên liệu và bao bì."
+  },
+  {
+   "chu": "monthly recurring revenue",
+   "doc": "/ˈmʌnθli rɪˈkɜːrɪŋ ˈrevənuː/",
+   "nghia": "MRR: doanh thu định kỳ mỗi tháng (thuê bao)",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "Our monthly recurring revenue is 3 million dong.",
+   "viDuNghia": "Doanh thu định kỳ hằng tháng là 3 triệu đồng."
+  },
+  {
+   "chu": "growth rate",
+   "doc": "/ɡroʊθ reɪt/",
+   "nghia": "tốc độ tăng trưởng",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "Our weekly growth rate is 15 percent.",
+   "viDuNghia": "Tốc độ tăng trưởng mỗi tuần là 15%."
+  },
+  {
+   "chu": "retention rate",
+   "doc": "/rɪˈtenʃn reɪt/",
+   "nghia": "tỉ lệ giữ chân khách",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "The retention rate after one month is 45 percent.",
+   "viDuNghia": "Tỉ lệ giữ chân khách sau một tháng là 45%."
+  },
+  {
+   "chu": "churn rate",
+   "doc": "/tʃɜːrn reɪt/",
+   "nghia": "tỉ lệ khách rời bỏ",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "A high churn rate means customers are not happy.",
+   "viDuNghia": "Tỉ lệ rời bỏ cao nghĩa là khách không hài lòng."
+  },
+  {
+   "chu": "active user",
+   "doc": "/ˈæktɪv ˈjuːzər/",
+   "nghia": "người dùng hoạt động (có dùng trong kỳ đo)",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "We have 300 active users every week.",
+   "viDuNghia": "Nhóm có 300 người dùng hoạt động mỗi tuần."
+  },
+  {
+   "chu": "north star metric",
+   "doc": "/ˌnɔːrθ ˈstɑːr ˈmetrɪk/",
+   "nghia": "chỉ số kim chỉ nam cả đội cùng theo",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "Our north star metric is books exchanged per week.",
+   "viDuNghia": "Chỉ số kim chỉ nam là số sách trao đổi mỗi tuần."
+  },
+  {
+   "chu": "OKR",
+   "doc": "/ˌoʊ keɪ ˈɑːr/",
+   "nghia": "mục tiêu và kết quả then chốt (Objectives and Key Results)",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "Our OKR this month: reach 500 users and 50 orders.",
+   "viDuNghia": "OKR tháng này: đạt 500 người dùng và 50 đơn."
+  },
+  {
+   "chu": "growth hacking",
+   "doc": "/ˈɡroʊθ ˌhækɪŋ/",
+   "nghia": "thử nhanh nhiều mẹo rẻ để tăng trưởng",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "Growth hacking helped us get users without a big budget.",
+   "viDuNghia": "Mẹo tăng trưởng giúp nhóm có người dùng mà không tốn nhiều tiền."
+  },
+  {
+   "chu": "scale up",
+   "doc": "/ˌskeɪl ˈʌp/",
+   "nghia": "mở rộng quy mô",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "We will scale up to two more campuses next semester.",
+   "viDuNghia": "Kỳ tới nhóm sẽ mở rộng ra thêm hai cơ sở."
+  },
+  {
+   "chu": "market expansion",
+   "doc": "/ˈmɑːrkɪt ɪkˈspænʃn/",
+   "nghia": "mở rộng sang thị trường / nhóm khách mới",
+   "nhom": "Doanh thu & chỉ số tăng trưởng",
+   "viDu": "Market expansion to high school students is our next step.",
+   "viDuNghia": "Mở rộng sang học sinh cấp ba là bước tiếp theo của nhóm."
+  },
+  {
+   "chu": "seed funding",
+   "doc": "/siːd ˈfʌndɪŋ/",
+   "nghia": "vốn hạt giống (vòng gọi vốn đầu)",
+   "nhom": "Gọi vốn",
+   "viDu": "We are raising 200 million dong in seed funding.",
+   "viDuNghia": "Nhóm đang gọi 200 triệu đồng vốn hạt giống."
+  },
+  {
+   "chu": "funding round",
+   "doc": "/ˈfʌndɪŋ raʊnd/",
+   "nghia": "vòng gọi vốn",
+   "nhom": "Gọi vốn",
+   "viDu": "A startup may go through several funding rounds.",
+   "viDuNghia": "Một startup có thể qua nhiều vòng gọi vốn."
+  },
+  {
+   "chu": "valuation",
+   "doc": "/ˌvæljuˈeɪʃn/",
+   "nghia": "định giá công ty",
+   "nhom": "Gọi vốn",
+   "viDu": "The investor's valuation of our startup is 2 billion dong.",
+   "viDuNghia": "Nhà đầu tư định giá startup 2 tỉ đồng."
+  },
+  {
+   "chu": "dilution",
+   "doc": "/daɪˈluːʃn/",
+   "nghia": "pha loãng cổ phần (phần trăm sở hữu giảm sau khi gọi vốn)",
+   "nhom": "Gọi vốn",
+   "viDu": "Selling 20% of shares causes dilution for the founders.",
+   "viDuNghia": "Bán 20% cổ phần làm pha loãng phần sở hữu của nhà sáng lập."
+  },
+  {
+   "chu": "cap table",
+   "doc": "/ˈkæp ˌteɪbl/",
+   "nghia": "bảng cơ cấu sở hữu cổ phần",
+   "nhom": "Gọi vốn",
+   "viDu": "The cap table shows who owns what percentage.",
+   "viDuNghia": "Bảng cơ cấu cổ phần cho thấy ai sở hữu bao nhiêu phần trăm."
+  },
+  {
+   "chu": "term sheet",
+   "doc": "/ˈtɜːrm ʃiːt/",
+   "nghia": "bản điều khoản đầu tư sơ bộ",
+   "nhom": "Gọi vốn",
+   "viDu": "The term sheet lists the amount, valuation and investor rights.",
+   "viDuNghia": "Bản điều khoản ghi số tiền, định giá và quyền nhà đầu tư."
+  },
+  {
+   "chu": "due diligence",
+   "doc": "/ˌduː ˈdɪlɪdʒəns/",
+   "nghia": "thẩm định (nhà đầu tư kiểm tra kỹ startup trước khi rót vốn)",
+   "nhom": "Gọi vốn",
+   "viDu": "During due diligence, the investor checked our sales records.",
+   "viDuNghia": "Trong lúc thẩm định, nhà đầu tư kiểm sổ bán hàng của nhóm."
+  },
+  {
+   "chu": "use of funds",
+   "doc": "/juːs əv fʌndz/",
+   "nghia": "kế hoạch dùng tiền gọi được",
+   "nhom": "Gọi vốn",
+   "viDu": "Our use of funds: 50% marketing, 30% product, 20% operations.",
+   "viDuNghia": "Kế hoạch dùng vốn: 50% marketing, 30% sản phẩm, 20% vận hành."
+  },
+  {
+   "chu": "traction",
+   "doc": "/ˈtrækʃn/",
+   "nghia": "đà tăng trưởng thật (số khách, doanh thu) chứng minh startup chạy được",
+   "nhom": "Gọi vốn",
+   "viDu": "Investors care about traction more than slides.",
+   "viDuNghia": "Nhà đầu tư quan tâm đà tăng trưởng thật hơn slide."
+  },
+  {
+   "chu": "burn rate",
+   "doc": "/ˈbɜːrn reɪt/",
+   "nghia": "tốc độ \"đốt tiền\" mỗi tháng",
+   "nhom": "Gọi vốn",
+   "viDu": "Our burn rate is 10 million dong per month.",
+   "viDuNghia": "Mỗi tháng nhóm đốt 10 triệu đồng."
+  },
+  {
+   "chu": "runway",
+   "doc": "/ˈrʌnweɪ/",
+   "nghia": "số tháng còn sống được với tiền hiện có",
+   "nhom": "Gọi vốn",
+   "viDu": "With this burn rate, we have six months of runway.",
+   "viDuNghia": "Với tốc độ chi này, nhóm còn sống được sáu tháng."
+  },
+  {
+   "chu": "financial projection",
+   "doc": "/faɪˈnænʃl prəˈdʒekʃn/",
+   "nghia": "dự phóng tài chính (doanh thu, chi phí vài năm tới)",
+   "nhom": "Gọi vốn",
+   "viDu": "Our financial projection covers the next three years.",
+   "viDuNghia": "Dự phóng tài chính của nhóm cho ba năm tới."
+  },
+  {
+   "chu": "return on investment",
+   "doc": "/rɪˈtɜːrn ɑːn ɪnˈvestmənt/",
+   "nghia": "ROI: lợi nhuận trên vốn bỏ ra",
+   "nhom": "Gọi vốn",
+   "viDu": "The investor asked about the expected return on investment.",
+   "viDuNghia": "Nhà đầu tư hỏi về lợi nhuận kỳ vọng trên vốn bỏ ra."
+  },
+  {
+   "chu": "shareholder",
+   "doc": "/ˈʃerhoʊldər/",
+   "nghia": "cổ đông",
+   "nhom": "Gọi vốn",
+   "viDu": "Each co-founder is a shareholder with 25 percent.",
+   "viDuNghia": "Mỗi người đồng sáng lập là cổ đông nắm 25%."
+  },
+  {
+   "chu": "demo day",
+   "doc": "/ˈdemoʊ deɪ/",
+   "nghia": "ngày các startup trình bày trước nhà đầu tư",
+   "nhom": "Gọi vốn",
+   "viDu": "We will pitch at the demo day of the university incubator.",
+   "viDuNghia": "Nhóm sẽ thuyết trình ở ngày demo của vườn ươm trường."
+  },
+  {
+   "chu": "pitch competition",
+   "doc": "/pɪtʃ ˌkɑːmpəˈtɪʃn/",
+   "nghia": "cuộc thi thuyết trình gọi vốn",
+   "nhom": "Gọi vốn",
+   "viDu": "Our team won second prize in a pitch competition.",
+   "viDuNghia": "Nhóm đoạt giải nhì một cuộc thi gọi vốn."
+  },
+  {
+   "chu": "Since our launch, we have",
+   "nghia": "Từ khi ra mắt, chúng em đã …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Since our launch, we have sold 230 products to 180 customers.",
+   "viDuNghia": "Từ khi ra mắt, chúng em đã bán 230 sản phẩm cho 180 khách."
+  },
+  {
+   "chu": "Our revenue this month is",
+   "nghia": "Doanh thu tháng này của chúng em là …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Our revenue this month is 12 million dong, up 30% from last month.",
+   "viDuNghia": "Doanh thu tháng này là 12 triệu đồng, tăng 30% so với tháng trước."
+  },
+  {
+   "chu": "Here is the proof of our sales",
+   "nghia": "Đây là bằng chứng bán hàng của chúng em",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Here is the proof of our sales: invoices and bank transfers.",
+   "viDuNghia": "Đây là bằng chứng bán hàng: hoá đơn và chuyển khoản."
+  },
+  {
+   "chu": "Our best channel was",
+   "nghia": "Kênh hiệu quả nhất của chúng em là …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Our best channel was TikTok, with 60% of all orders.",
+   "viDuNghia": "Kênh hiệu quả nhất là TikTok, chiếm 60% số đơn."
+  },
+  {
+   "chu": "This did not work, so we changed",
+   "nghia": "Cách này không hiệu quả nên chúng em đã đổi …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "This did not work, so we changed our price and target customers.",
+   "viDuNghia": "Cách này không hiệu quả nên chúng em đổi giá và khách mục tiêu."
+  },
+  {
+   "chu": "Customers told us that",
+   "nghia": "Khách hàng nói với chúng em rằng …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Customers told us that the delivery time was the biggest problem.",
+   "viDuNghia": "Khách nói thời gian giao hàng là vấn đề lớn nhất."
+  },
+  {
+   "chu": "We are raising",
+   "nghia": "Chúng em đang gọi (số vốn) …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "We are raising 300 million dong for 10% of the company.",
+   "viDuNghia": "Chúng em đang gọi 300 triệu đồng cho 10% cổ phần."
+  },
+  {
+   "chu": "The money will be used for",
+   "nghia": "Số tiền sẽ được dùng cho …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "The money will be used for marketing and hiring one developer.",
+   "viDuNghia": "Số tiền sẽ dùng cho marketing và tuyển một lập trình viên."
+  },
+  {
+   "chu": "Our goal for the next three months is",
+   "nghia": "Mục tiêu ba tháng tới của chúng em là …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Our goal for the next three months is 1,000 paying customers.",
+   "viDuNghia": "Mục tiêu ba tháng tới là 1.000 khách trả tiền."
+  },
+  {
+   "chu": "Thank you, we are happy to take your questions",
+   "nghia": "Xin cảm ơn, chúng em sẵn sàng nhận câu hỏi",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Thank you, we are happy to take your questions now.",
+   "viDuNghia": "Xin cảm ơn, giờ chúng em xin nhận câu hỏi."
+  }
+ ]
+}

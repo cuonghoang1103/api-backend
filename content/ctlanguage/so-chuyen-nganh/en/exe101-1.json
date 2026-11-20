@@ -1,0 +1,736 @@
+{
+ "ma": "exe101-1",
+ "nn": "en",
+ "ten": "EXE101 · Trải nghiệm khởi nghiệp 1",
+ "moTa": "Môn Experiential Entrepreneurship 1 (EXE101): ý tưởng khởi nghiệp, đội sáng lập, khách hàng, khảo sát – nghiên cứu thị trường, MVP, mô hình kinh doanh, pitch deck. Soạn từ syllabus FLM + tài liệu khởi nghiệp (không phải từ đề thi); câu ví dụ là câu nói khi thuyết trình checkpoint.",
+ "bieuTuong": "lightbulb.fill",
+ "thuTu": -934,
+ "tu": [
+  {
+   "chu": "startup",
+   "doc": "/ˈstɑːrtʌp/",
+   "nghia": "công ty khởi nghiệp: doanh nghiệp mới, tìm mô hình tăng trưởng nhanh",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "A startup is a company designed to grow fast.",
+   "viDuNghia": "Startup là công ty được thiết kế để tăng trưởng nhanh."
+  },
+  {
+   "chu": "entrepreneur",
+   "doc": "/ˌɑːntrəprəˈnɜːr/",
+   "nghia": "người khởi nghiệp, doanh nhân dám làm",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "Our guest speaker is an entrepreneur who started three companies.",
+   "viDuNghia": "Diễn giả khách mời là một doanh nhân đã lập ba công ty."
+  },
+  {
+   "chu": "entrepreneurship",
+   "doc": "/ˌɑːntrəprəˈnɜːrʃɪp/",
+   "nghia": "tinh thần / hoạt động khởi nghiệp",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "This course teaches entrepreneurship by doing a real project.",
+   "viDuNghia": "Môn này dạy khởi nghiệp bằng cách làm một dự án thật."
+  },
+  {
+   "chu": "entrepreneurial spirit",
+   "doc": "/ˌɑːntrəprəˈnɜːriəl ˈspɪrɪt/",
+   "nghia": "tinh thần dám nghĩ dám làm, chịu rủi ro",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "Week 1 is about building an entrepreneurial spirit.",
+   "viDuNghia": "Tuần 1 nói về việc nuôi tinh thần khởi nghiệp."
+  },
+  {
+   "chu": "founder",
+   "doc": "/ˈfaʊndər/",
+   "nghia": "nhà sáng lập",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "The founder explained why she quit her job to start the company.",
+   "viDuNghia": "Nhà sáng lập kể vì sao cô ấy bỏ việc để lập công ty."
+  },
+  {
+   "chu": "co-founder",
+   "doc": "/ˌkoʊ ˈfaʊndər/",
+   "nghia": "người đồng sáng lập",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "We have four co-founders from two different majors.",
+   "viDuNghia": "Nhóm có bốn người đồng sáng lập từ hai ngành khác nhau."
+  },
+  {
+   "chu": "founding team",
+   "doc": "/ˈfaʊndɪŋ tiːm/",
+   "nghia": "đội sáng lập ban đầu",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "Investors look at the founding team first.",
+   "viDuNghia": "Nhà đầu tư nhìn vào đội sáng lập trước tiên."
+  },
+  {
+   "chu": "CEO",
+   "doc": "/ˌsiː iː ˈoʊ/",
+   "nghia": "giám đốc điều hành (thường là trưởng nhóm)",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "As CEO, Nam manages the plan and speaks to mentors.",
+   "viDuNghia": "Là CEO, Nam quản lý kế hoạch và làm việc với mentor."
+  },
+  {
+   "chu": "CTO",
+   "doc": "/ˌsiː tiː ˈoʊ/",
+   "nghia": "giám đốc công nghệ (phụ trách làm sản phẩm)",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "Our CTO builds the app and the website.",
+   "viDuNghia": "CTO của nhóm làm ứng dụng và website."
+  },
+  {
+   "chu": "CMO",
+   "doc": "/ˌsiː em ˈoʊ/",
+   "nghia": "giám đốc marketing",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "The CMO runs our Facebook page and the survey.",
+   "viDuNghia": "CMO phụ trách trang Facebook và khảo sát."
+  },
+  {
+   "chu": "cross-functional team",
+   "doc": "/ˌkrɔːs ˈfʌŋkʃənl tiːm/",
+   "nghia": "đội đa chức năng (nhiều ngành, nhiều kỹ năng)",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "Each team must be cross-functional, with at least two majors.",
+   "viDuNghia": "Mỗi nhóm phải đa chức năng, ít nhất hai ngành."
+  },
+  {
+   "chu": "mentor",
+   "doc": "/ˈmentɔːr/",
+   "nghia": "người cố vấn (doanh nhân / chuyên gia kèm nhóm)",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "Our mentor told us to talk to more customers.",
+   "viDuNghia": "Mentor bảo nhóm nói chuyện với nhiều khách hàng hơn."
+  },
+  {
+   "chu": "guest speaker",
+   "doc": "/ˌɡest ˈspiːkər/",
+   "nghia": "diễn giả khách mời ở buổi seminar",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "The guest speaker shared how he found his first customers.",
+   "viDuNghia": "Diễn giả khách mời chia sẻ cách anh tìm khách hàng đầu tiên."
+  },
+  {
+   "chu": "checkpoint",
+   "doc": "/ˈtʃekpɔɪnt/",
+   "nghia": "mốc kiểm tra trong môn (nộp + thuyết trình nhóm)",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "At Checkpoint 1, we present our idea and team roles.",
+   "viDuNghia": "Ở Checkpoint 1, nhóm trình bày ý tưởng và vai trò thành viên."
+  },
+  {
+   "chu": "coaching session",
+   "doc": "/ˈkoʊtʃɪŋ ˈseʃn/",
+   "nghia": "buổi giảng viên hướng dẫn trên lớp",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "In the coaching session, the instructor reviewed our survey questions.",
+   "viDuNghia": "Trong buổi hướng dẫn, giảng viên xem lại câu hỏi khảo sát của nhóm."
+  },
+  {
+   "chu": "risk-taking",
+   "doc": "/ˈrɪsk teɪkɪŋ/",
+   "nghia": "dám chấp nhận rủi ro",
+   "nhom": "Tinh thần khởi nghiệp & đội ngũ",
+   "viDu": "Startups need risk-taking, but smart risk-taking.",
+   "viDuNghia": "Khởi nghiệp cần dám chấp nhận rủi ro, nhưng phải có tính toán."
+  },
+  {
+   "chu": "startup idea",
+   "doc": "/ˈstɑːrtʌp aɪˈdiːə/",
+   "nghia": "ý tưởng khởi nghiệp",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "Our startup idea is a second-hand textbook exchange for students.",
+   "viDuNghia": "Ý tưởng khởi nghiệp của nhóm là sàn trao đổi giáo trình cũ cho sinh viên."
+  },
+  {
+   "chu": "business idea",
+   "doc": "/ˈbɪznəs aɪˈdiːə/",
+   "nghia": "ý tưởng kinh doanh",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "A good business idea solves a problem people will pay for.",
+   "viDuNghia": "Ý tưởng kinh doanh tốt giải quyết vấn đề người ta chịu trả tiền."
+  },
+  {
+   "chu": "idea generation",
+   "doc": "/aɪˈdiːə ˌdʒenəˈreɪʃn/",
+   "nghia": "giai đoạn nghĩ ra nhiều ý tưởng",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "During idea generation, every member suggested five ideas.",
+   "viDuNghia": "Ở giai đoạn nghĩ ý tưởng, mỗi thành viên đề xuất năm ý."
+  },
+  {
+   "chu": "idea validation",
+   "doc": "/aɪˈdiːə ˌvælɪˈdeɪʃn/",
+   "nghia": "kiểm chứng ý tưởng có người cần thật không",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "Idea validation comes before writing any code.",
+   "viDuNghia": "Kiểm chứng ý tưởng phải làm trước khi viết dòng mã nào."
+  },
+  {
+   "chu": "customer problem",
+   "doc": "/ˈkʌstəmər ˈprɑːbləm/",
+   "nghia": "vấn đề của khách hàng mà sản phẩm giải quyết",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "The customer problem is that students waste time finding part-time jobs.",
+   "viDuNghia": "Vấn đề của khách là sinh viên mất thời gian tìm việc làm thêm."
+  },
+  {
+   "chu": "problem-solution fit",
+   "doc": "/ˈprɑːbləm səˈluːʃn fɪt/",
+   "nghia": "giải pháp khớp đúng vấn đề khách đang gặp",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "We reached problem-solution fit after twenty interviews.",
+   "viDuNghia": "Nhóm đạt độ khớp vấn đề – giải pháp sau hai mươi buổi phỏng vấn."
+  },
+  {
+   "chu": "painkiller product",
+   "doc": "/ˈpeɪnkɪlər ˈprɑːdʌkt/",
+   "nghia": "sản phẩm \"thuốc giảm đau\": giải quyết nỗi đau thật, khách cần ngay",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "Investors prefer a painkiller to a vitamin.",
+   "viDuNghia": "Nhà đầu tư thích sản phẩm giải quyết nỗi đau thật hơn sản phẩm \"có thì tốt\"."
+  },
+  {
+   "chu": "nice-to-have product",
+   "doc": "/ˌnaɪs tə ˈhæv ˈprɑːdʌkt/",
+   "nghia": "sản phẩm \"có cũng được\", khách không thấy cần",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "Our first idea was a nice-to-have product, so we changed it.",
+   "viDuNghia": "Ý tưởng đầu là sản phẩm có cũng được nên nhóm đã đổi."
+  },
+  {
+   "chu": "insight",
+   "doc": "/ˈɪnsaɪt/",
+   "nghia": "phát hiện sâu về khách hàng (điều họ thật sự nghĩ / làm)",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "A key insight: students trust reviews from seniors more than ads.",
+   "viDuNghia": "Phát hiện quan trọng: sinh viên tin đánh giá của đàn anh hơn quảng cáo."
+  },
+  {
+   "chu": "business area",
+   "doc": "/ˈbɪznəs ˈeriə/",
+   "nghia": "lĩnh vực kinh doanh của ý tưởng",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "Our business area is education technology.",
+   "viDuNghia": "Lĩnh vực kinh doanh của nhóm là công nghệ giáo dục."
+  },
+  {
+   "chu": "EdTech",
+   "doc": "/ˈedtek/",
+   "nghia": "công nghệ giáo dục",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "EdTech startups are growing fast in Vietnam.",
+   "viDuNghia": "Các startup công nghệ giáo dục đang phát triển nhanh ở Việt Nam."
+  },
+  {
+   "chu": "niche market",
+   "doc": "/niːʃ ˈmɑːrkɪt/",
+   "nghia": "thị trường ngách (nhóm khách nhỏ, rõ ràng)",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "We start with a niche market: FPT students in Hanoi.",
+   "viDuNghia": "Nhóm bắt đầu từ thị trường ngách: sinh viên FPT ở Hà Nội."
+  },
+  {
+   "chu": "existing alternative",
+   "doc": "/ɪɡˈzɪstɪŋ ɔːlˈtɜːrnətɪv/",
+   "nghia": "cách khách đang dùng để giải vấn đề hiện nay",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "The existing alternative is buying books in Facebook groups.",
+   "viDuNghia": "Cách khách đang dùng là mua sách trong các nhóm Facebook."
+  },
+  {
+   "chu": "market gap",
+   "doc": "/ˈmɑːrkɪt ɡæp/",
+   "nghia": "khoảng trống thị trường: nhu cầu chưa ai đáp ứng tốt",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "We found a market gap: no one delivers textbooks inside the campus.",
+   "viDuNghia": "Nhóm thấy một khoảng trống: chưa ai giao giáo trình trong khuôn viên trường."
+  },
+  {
+   "chu": "startup ecosystem",
+   "doc": "/ˈstɑːrtʌp ˈiːkoʊsɪstəm/",
+   "nghia": "hệ sinh thái khởi nghiệp (quỹ, vườn ươm, cố vấn, cộng đồng)",
+   "nhom": "Ý tưởng & vấn đề",
+   "viDu": "Ho Chi Minh City has the biggest startup ecosystem in Vietnam.",
+   "viDuNghia": "TP.HCM có hệ sinh thái khởi nghiệp lớn nhất Việt Nam."
+  },
+  {
+   "chu": "target customer",
+   "doc": "/ˈtɑːrɡɪt ˈkʌstəmər/",
+   "nghia": "khách hàng mục tiêu",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "Our target customers are first-year students living in dormitories.",
+   "viDuNghia": "Khách hàng mục tiêu là sinh viên năm nhất ở ký túc xá."
+  },
+  {
+   "chu": "customer segment",
+   "doc": "/ˈkʌstəmər ˈseɡmənt/",
+   "nghia": "phân khúc khách hàng",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "We found two customer segments: students and parents.",
+   "viDuNghia": "Nhóm tìm ra hai phân khúc khách hàng: sinh viên và phụ huynh."
+  },
+  {
+   "chu": "early adopter",
+   "doc": "/ˈɜːrli əˈdɑːptər/",
+   "nghia": "khách dùng sớm: sẵn lòng thử sản phẩm khi còn thô",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "Early adopters will forgive bugs if the product solves their problem.",
+   "viDuNghia": "Khách dùng sớm sẵn lòng bỏ qua lỗi nếu sản phẩm giải được vấn đề của họ."
+  },
+  {
+   "chu": "market research",
+   "doc": "/ˈmɑːrkɪt rɪˈsɜːrtʃ/",
+   "nghia": "nghiên cứu thị trường",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "Our market research shows 70% of students buy used books.",
+   "viDuNghia": "Nghiên cứu thị trường cho thấy 70% sinh viên mua sách cũ."
+  },
+  {
+   "chu": "primary research",
+   "doc": "/ˈpraɪmeri rɪˈsɜːrtʃ/",
+   "nghia": "nghiên cứu sơ cấp: tự khảo sát, phỏng vấn",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "Primary research means we collect the data ourselves.",
+   "viDuNghia": "Nghiên cứu sơ cấp nghĩa là nhóm tự thu thập dữ liệu."
+  },
+  {
+   "chu": "secondary research",
+   "doc": "/ˈsekənderi rɪˈsɜːrtʃ/",
+   "nghia": "nghiên cứu thứ cấp: dùng số liệu có sẵn (báo cáo, thống kê)",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "For secondary research, we used reports from Statista.",
+   "viDuNghia": "Với nghiên cứu thứ cấp, nhóm dùng báo cáo của Statista."
+  },
+  {
+   "chu": "survey questionnaire",
+   "doc": "/ˈsɜːrveɪ ˌkwestʃəˈner/",
+   "nghia": "bảng câu hỏi khảo sát",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "Our survey questionnaire has twelve short questions.",
+   "viDuNghia": "Bảng câu hỏi khảo sát của nhóm có mười hai câu ngắn."
+  },
+  {
+   "chu": "survey result",
+   "doc": "/ˈsɜːrveɪ rɪˈzʌlt/",
+   "nghia": "kết quả khảo sát",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "The survey result came from 120 respondents.",
+   "viDuNghia": "Kết quả khảo sát đến từ 120 người trả lời."
+  },
+  {
+   "chu": "customer interview",
+   "doc": "/ˈkʌstəmər ˈɪntərvjuː/",
+   "nghia": "phỏng vấn khách hàng",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "In each customer interview, ask about their last real experience.",
+   "viDuNghia": "Mỗi buổi phỏng vấn khách, hãy hỏi về trải nghiệm thật gần nhất của họ."
+  },
+  {
+   "chu": "market size",
+   "doc": "/ˈmɑːrkɪt saɪz/",
+   "nghia": "quy mô thị trường",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "We estimate the market size at 2 million students.",
+   "viDuNghia": "Nhóm ước tính quy mô thị trường là 2 triệu sinh viên."
+  },
+  {
+   "chu": "total addressable market",
+   "doc": "/ˈtoʊtl əˈdresəbl ˈmɑːrkɪt/",
+   "nghia": "TAM: toàn bộ thị trường có thể phục vụ",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "Our total addressable market is every university student in Vietnam.",
+   "viDuNghia": "Tổng thị trường của nhóm là mọi sinh viên đại học ở Việt Nam."
+  },
+  {
+   "chu": "competitor analysis",
+   "doc": "/kəmˈpetɪtər əˈnæləsɪs/",
+   "nghia": "phân tích đối thủ",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "Our competitor analysis compares price, features and service.",
+   "viDuNghia": "Phân tích đối thủ của nhóm so giá, tính năng và dịch vụ."
+  },
+  {
+   "chu": "competitive advantage",
+   "doc": "/kəmˈpetətɪv ədˈvæntɪdʒ/",
+   "nghia": "lợi thế cạnh tranh",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "Our competitive advantage is free delivery inside the campus.",
+   "viDuNghia": "Lợi thế cạnh tranh của nhóm là giao miễn phí trong khuôn viên trường."
+  },
+  {
+   "chu": "willingness to pay",
+   "doc": "/ˈwɪlɪŋnəs tə peɪ/",
+   "nghia": "mức sẵn lòng chi trả của khách",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "We asked about willingness to pay: most said 30,000 dong a month.",
+   "viDuNghia": "Nhóm hỏi mức sẵn lòng chi trả: phần lớn nói 30.000 đồng một tháng."
+  },
+  {
+   "chu": "customer journey",
+   "doc": "/ˈkʌstəmər ˈdʒɜːrni/",
+   "nghia": "hành trình khách hàng: từ biết tới, thử, mua tới quay lại",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "We drew the customer journey from first visit to second order.",
+   "viDuNghia": "Nhóm vẽ hành trình khách từ lần ghé đầu đến đơn hàng thứ hai."
+  },
+  {
+   "chu": "market demand",
+   "doc": "/ˈmɑːrkɪt dɪˈmænd/",
+   "nghia": "nhu cầu thị trường",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "There is strong market demand for cheap healthy lunches.",
+   "viDuNghia": "Có nhu cầu lớn về bữa trưa lành mạnh giá rẻ."
+  },
+  {
+   "chu": "customer discovery",
+   "doc": "/ˈkʌstəmər dɪˈskʌvəri/",
+   "nghia": "giai đoạn đi tìm hiểu khách hàng thật trước khi làm sản phẩm",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "Customer discovery means getting out of the classroom and talking to people.",
+   "viDuNghia": "Tìm hiểu khách hàng nghĩa là ra khỏi lớp học và nói chuyện với mọi người."
+  },
+  {
+   "chu": "interview script",
+   "doc": "/ˈɪntərvjuː skrɪpt/",
+   "nghia": "kịch bản câu hỏi phỏng vấn",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "Our interview script has eight questions and takes fifteen minutes.",
+   "viDuNghia": "Kịch bản phỏng vấn có tám câu, mất mười lăm phút."
+  },
+  {
+   "chu": "five whys",
+   "doc": "/faɪv waɪz/",
+   "nghia": "kỹ thuật hỏi \"tại sao\" năm lần để tìm gốc vấn đề của khách",
+   "nhom": "Khách hàng & nghiên cứu thị trường",
+   "viDu": "Use the five whys to find the real reason customers stop buying.",
+   "viDuNghia": "Dùng kỹ thuật năm lần tại sao để tìm lý do thật khiến khách ngừng mua."
+  },
+  {
+   "chu": "minimum viable product",
+   "doc": "/ˈmɪnɪməm ˈvaɪəbl ˈprɑːdʌkt/",
+   "nghia": "MVP: sản phẩm khả dụng tối thiểu, chỉ đủ để thử với khách thật",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "Our minimum viable product is a simple web form plus a Zalo group.",
+   "viDuNghia": "Sản phẩm tối thiểu của nhóm là một form web đơn giản cùng nhóm Zalo."
+  },
+  {
+   "chu": "MVP",
+   "doc": "/ˌem viː ˈpiː/",
+   "nghia": "viết tắt minimum viable product",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "We launched the MVP in two weeks.",
+   "viDuNghia": "Nhóm tung MVP trong hai tuần."
+  },
+  {
+   "chu": "core feature",
+   "doc": "/kɔːr ˈfiːtʃər/",
+   "nghia": "tính năng lõi, không có thì sản phẩm vô nghĩa",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "The core feature is matching buyers and sellers.",
+   "viDuNghia": "Tính năng lõi là ghép người mua và người bán."
+  },
+  {
+   "chu": "landing page",
+   "doc": "/ˈlændɪŋ peɪdʒ/",
+   "nghia": "trang giới thiệu một trang để thu khách đăng ký",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "150 people signed up on our landing page in one week.",
+   "viDuNghia": "150 người đăng ký trên trang giới thiệu trong một tuần."
+  },
+  {
+   "chu": "build-measure-learn",
+   "doc": "/bɪld ˈmeʒər lɜːrn/",
+   "nghia": "vòng Lean: làm – đo – học rồi làm tiếp",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "We ran three build-measure-learn loops this month.",
+   "viDuNghia": "Tháng này nhóm chạy ba vòng làm – đo – học."
+  },
+  {
+   "chu": "validated learning",
+   "doc": "/ˈvælɪdeɪtɪd ˈlɜːrnɪŋ/",
+   "nghia": "điều học được đã kiểm chứng bằng số liệu thật",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "Validated learning is more useful than opinions.",
+   "viDuNghia": "Điều học được có kiểm chứng hữu ích hơn ý kiến suông."
+  },
+  {
+   "chu": "lean startup",
+   "doc": "/liːn ˈstɑːrtʌp/",
+   "nghia": "phương pháp khởi nghiệp tinh gọn (Eric Ries)",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "The lean startup method says: test ideas cheaply and quickly.",
+   "viDuNghia": "Phương pháp khởi nghiệp tinh gọn nói: thử ý tưởng rẻ và nhanh."
+  },
+  {
+   "chu": "product-market fit",
+   "doc": "/ˈprɑːdʌkt ˈmɑːrkɪt fɪt/",
+   "nghia": "sản phẩm khớp thị trường: khách tự tìm đến, quay lại, giới thiệu",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "We have not reached product-market fit yet.",
+   "viDuNghia": "Nhóm chưa đạt độ khớp sản phẩm – thị trường."
+  },
+  {
+   "chu": "time to market",
+   "doc": "/taɪm tə ˈmɑːrkɪt/",
+   "nghia": "thời gian từ ý tưởng tới khi ra thị trường",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "An MVP helps shorten time to market.",
+   "viDuNghia": "MVP giúp rút ngắn thời gian ra thị trường."
+  },
+  {
+   "chu": "user test",
+   "doc": "/ˈjuːzər test/",
+   "nghia": "cho người dùng thật thử sản phẩm rồi quan sát",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "In the user test, three people could not find the Buy button.",
+   "viDuNghia": "Trong buổi thử với người dùng, ba người không tìm thấy nút Mua."
+  },
+  {
+   "chu": "concierge MVP",
+   "doc": "/ˌkɑːnsiˈerʒ ˌem viː ˈpiː/",
+   "nghia": "MVP làm tay: nhóm tự phục vụ khách thay cho phần mềm",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "We started with a concierge MVP and matched orders by hand.",
+   "viDuNghia": "Nhóm bắt đầu bằng MVP làm tay, tự ghép đơn bằng tay."
+  },
+  {
+   "chu": "first version",
+   "doc": "/fɜːrst ˈvɜːrʒn/",
+   "nghia": "phiên bản đầu tiên",
+   "nhom": "Sản phẩm & MVP",
+   "viDu": "The first version only works on mobile.",
+   "viDuNghia": "Phiên bản đầu chỉ chạy trên điện thoại."
+  },
+  {
+   "chu": "business model",
+   "doc": "/ˈbɪznəs ˈmɑːdl/",
+   "nghia": "mô hình kinh doanh: tạo giá trị và kiếm tiền thế nào",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Our business model is a 10% commission on each sale.",
+   "viDuNghia": "Mô hình kinh doanh của nhóm là hoa hồng 10% mỗi giao dịch."
+  },
+  {
+   "chu": "business model canvas",
+   "doc": "/ˈbɪznəs ˈmɑːdl ˈkænvəs/",
+   "nghia": "khung mô hình kinh doanh 9 ô",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "We filled in all nine blocks of the business model canvas.",
+   "viDuNghia": "Nhóm điền đủ chín ô của khung mô hình kinh doanh."
+  },
+  {
+   "chu": "lean canvas",
+   "doc": "/liːn ˈkænvəs/",
+   "nghia": "khung mô hình tinh gọn một trang cho startup",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "The lean canvas starts with the problem block.",
+   "viDuNghia": "Khung lean canvas bắt đầu từ ô vấn đề."
+  },
+  {
+   "chu": "value proposition",
+   "doc": "/ˈvæljuː ˌprɑːpəˈzɪʃn/",
+   "nghia": "giá trị cốt lõi mang lại cho khách (vì sao chọn mình)",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Our value proposition: textbooks at half price, delivered in one day.",
+   "viDuNghia": "Giá trị mang lại: giáo trình nửa giá, giao trong một ngày."
+  },
+  {
+   "chu": "revenue stream",
+   "doc": "/ˈrevənuː striːm/",
+   "nghia": "nguồn doanh thu",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "We have two revenue streams: commission and ads.",
+   "viDuNghia": "Nhóm có hai nguồn doanh thu: hoa hồng và quảng cáo."
+  },
+  {
+   "chu": "cost structure",
+   "doc": "/kɔːst ˈstrʌktʃər/",
+   "nghia": "cơ cấu chi phí",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Our biggest item in the cost structure is delivery.",
+   "viDuNghia": "Khoản lớn nhất trong cơ cấu chi phí là giao hàng."
+  },
+  {
+   "chu": "key partner",
+   "doc": "/kiː ˈpɑːrtnər/",
+   "nghia": "đối tác chính",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "The student union is our key partner.",
+   "viDuNghia": "Hội sinh viên là đối tác chính của nhóm."
+  },
+  {
+   "chu": "key resource",
+   "doc": "/kiː ˈriːsɔːrs/",
+   "nghia": "nguồn lực chính",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Our key resource is a list of 500 active sellers.",
+   "viDuNghia": "Nguồn lực chính là danh sách 500 người bán đang hoạt động."
+  },
+  {
+   "chu": "customer relationship",
+   "doc": "/ˈkʌstəmər rɪˈleɪʃnʃɪp/",
+   "nghia": "cách giữ quan hệ với khách",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "We build customer relationships through a Zalo community.",
+   "viDuNghia": "Nhóm giữ quan hệ khách hàng qua cộng đồng Zalo."
+  },
+  {
+   "chu": "sales channel",
+   "doc": "/seɪlz ˈtʃænl/",
+   "nghia": "kênh bán hàng",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Our main sales channel is Facebook groups.",
+   "viDuNghia": "Kênh bán chính của nhóm là các nhóm Facebook."
+  },
+  {
+   "chu": "fundraising",
+   "doc": "/ˈfʌndreɪzɪŋ/",
+   "nghia": "gọi vốn",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Fundraising is not needed at this early stage.",
+   "viDuNghia": "Ở giai đoạn sớm này chưa cần gọi vốn."
+  },
+  {
+   "chu": "investor",
+   "doc": "/ɪnˈvestər/",
+   "nghia": "nhà đầu tư",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Investors want to see real customers, not only ideas.",
+   "viDuNghia": "Nhà đầu tư muốn thấy khách thật, không chỉ ý tưởng."
+  },
+  {
+   "chu": "angel investor",
+   "doc": "/ˈeɪndʒl ɪnˈvestər/",
+   "nghia": "nhà đầu tư thiên thần (cá nhân rót vốn sớm)",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "An angel investor often gives the first money to a startup.",
+   "viDuNghia": "Nhà đầu tư thiên thần thường rót khoản tiền đầu tiên cho startup."
+  },
+  {
+   "chu": "venture capital",
+   "doc": "/ˈventʃər ˈkæpɪtl/",
+   "nghia": "vốn đầu tư mạo hiểm (VC)",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Venture capital funds invest in startups that can grow very big.",
+   "viDuNghia": "Quỹ đầu tư mạo hiểm rót vốn vào startup có thể lớn rất mạnh."
+  },
+  {
+   "chu": "accelerator",
+   "doc": "/əkˈseləreɪtər/",
+   "nghia": "chương trình tăng tốc khởi nghiệp (Y Combinator…)",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Y Combinator is a famous startup accelerator.",
+   "viDuNghia": "Y Combinator là chương trình tăng tốc khởi nghiệp nổi tiếng."
+  },
+  {
+   "chu": "incubator",
+   "doc": "/ˈɪŋkjubeɪtər/",
+   "nghia": "vườn ươm khởi nghiệp",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "The university incubator gives us free office space.",
+   "viDuNghia": "Vườn ươm của trường cho nhóm chỗ làm việc miễn phí."
+  },
+  {
+   "chu": "pitch deck",
+   "doc": "/pɪtʃ dek/",
+   "nghia": "bộ slide gọi vốn / giới thiệu startup (10–15 trang)",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Our preliminary pitch deck has twelve slides.",
+   "viDuNghia": "Bộ slide gọi vốn sơ bộ của nhóm có mười hai trang."
+  },
+  {
+   "chu": "elevator pitch",
+   "doc": "/ˈelɪveɪtər pɪtʃ/",
+   "nghia": "phần giới thiệu startup trong 30–60 giây",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Every member should be able to give our elevator pitch.",
+   "viDuNghia": "Thành viên nào cũng phải nói được phần giới thiệu 30 giây của nhóm."
+  },
+  {
+   "chu": "key metric",
+   "doc": "/kiː ˈmetrɪk/",
+   "nghia": "chỉ số chính để biết startup có tiến lên không (ô trong lean canvas)",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "Our key metric is the number of weekly orders.",
+   "viDuNghia": "Chỉ số chính của nhóm là số đơn mỗi tuần."
+  },
+  {
+   "chu": "bootstrapping",
+   "doc": "/ˈbuːtstræpɪŋ/",
+   "nghia": "tự bỏ vốn, tự nuôi startup bằng doanh thu, không gọi vốn ngoài",
+   "nhom": "Mô hình kinh doanh & gọi vốn ban đầu",
+   "viDu": "We are bootstrapping with 5 million dong from the team.",
+   "viDuNghia": "Nhóm tự bỏ vốn 5 triệu đồng, chưa gọi vốn ngoài."
+  },
+  {
+   "chu": "We are solving the problem of",
+   "nghia": "Chúng em đang giải quyết vấn đề …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "We are solving the problem of expensive textbooks for students.",
+   "viDuNghia": "Chúng em đang giải quyết vấn đề giáo trình đắt cho sinh viên."
+  },
+  {
+   "chu": "Our target customers are",
+   "nghia": "Khách hàng mục tiêu của chúng em là …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Our target customers are first-year students who live far from home.",
+   "viDuNghia": "Khách hàng mục tiêu là sinh viên năm nhất sống xa nhà."
+  },
+  {
+   "chu": "We surveyed 120 students and found that",
+   "nghia": "Chúng em đã khảo sát 120 sinh viên và thấy rằng …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "We surveyed 120 students and found that 68% buy used books.",
+   "viDuNghia": "Chúng em khảo sát 120 sinh viên và thấy 68% mua sách cũ."
+  },
+  {
+   "chu": "Unlike our competitors",
+   "nghia": "Khác với đối thủ …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Unlike our competitors, we check the quality of every book.",
+   "viDuNghia": "Khác với đối thủ, chúng em kiểm chất lượng từng cuốn sách."
+  },
+  {
+   "chu": "Our solution is",
+   "nghia": "Giải pháp của chúng em là …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Our solution is a campus marketplace with same-day delivery.",
+   "viDuNghia": "Giải pháp là một chợ trong trường, giao trong ngày."
+  },
+  {
+   "chu": "We make money by",
+   "nghia": "Chúng em kiếm tiền bằng cách …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "We make money by taking a small fee from each order.",
+   "viDuNghia": "Chúng em kiếm tiền bằng cách thu phí nhỏ trên mỗi đơn."
+  },
+  {
+   "chu": "Our team has",
+   "nghia": "Đội của chúng em có …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Our team has a developer, a designer and two business students.",
+   "viDuNghia": "Đội có một lập trình viên, một thiết kế và hai bạn ngành kinh doanh."
+  },
+  {
+   "chu": "What we learned from customers is",
+   "nghia": "Điều chúng em học được từ khách hàng là …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "What we learned from customers is that price matters less than speed.",
+   "viDuNghia": "Điều học được từ khách là giá ít quan trọng hơn tốc độ."
+  },
+  {
+   "chu": "Our next step is",
+   "nghia": "Bước tiếp theo của chúng em là …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Our next step is to test the MVP with 30 real users.",
+   "viDuNghia": "Bước tiếp theo là thử MVP với 30 người dùng thật."
+  },
+  {
+   "chu": "We would love your advice on",
+   "nghia": "Chúng em rất mong được góp ý về …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "We would love your advice on how to price the service.",
+   "viDuNghia": "Chúng em mong được góp ý về cách định giá dịch vụ."
+  }
+ ]
+}

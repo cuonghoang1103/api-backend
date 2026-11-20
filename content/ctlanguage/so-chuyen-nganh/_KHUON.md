@@ -50,6 +50,6 @@ Từ chuyên ngành rút từ đề FE/PE/PT THẬT của từng môn FPT (`cont
 - `viDu` ưu tiên câu hỏi THẬT trong đề (cắt gọn ≤ 200 ký tự, sửa lỗi ngữ pháp hiển nhiên), `viDuNghia` = bản Việt đúng câu đó.
 - `thuTu` âm, xếp theo học kỳ ngành SE: đọc đề → CSI104, PRF192, MAE101, CEA201, SSL101c → PRO192, MAD101, OSG202, NWC203c,
   SSG104 → CSD201, DBI202, WED201c, IOT102 → PRJ301, MAS291, SWR302, SWT301 → SWD392, ITE302c, WDU203c, FER202, SDN302 →
-  PMG201c, PRM392, MMA301 → ENW492c. Bộ nghề giữ `thuTu` 1–8 (đứng sau).
+  PMG201c, PRM392, MMA301 → ENW492c → SWP391, WDP301, EXE101, EXE201, SEP490 (bộ dự án, soạn từ syllabus). Bộ nghề giữ `thuTu` 1–8 (đứng sau).
 - Môn mới: thêm tệp + thêm mã vào thứ tự trên, chạy kiểm `scripts/ctlanguage-kiem-so-chuyen-nganh.mts en` và
   `npx tsx --test src/services/ctlanguage/soChuyenNganh.test.ts`.

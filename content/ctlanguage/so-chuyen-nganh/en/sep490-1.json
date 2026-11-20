@@ -1,0 +1,766 @@
+{
+ "ma": "sep490-1",
+ "nn": "en",
+ "ten": "SEP490 · Đồ án tốt nghiệp",
+ "moTa": "Môn SE Capstone Project (SEP490): đồ án tốt nghiệp — giới thiệu đề tài, kế hoạch, SDD, kiểm thử, hướng dẫn sử dụng, báo cáo cuối, bảo vệ trước hội đồng. Soạn từ syllabus FLM + mẫu báo cáo đồ án (không phải từ đề thi); câu ví dụ là câu viết báo cáo hoặc nói khi bảo vệ.",
+ "bieuTuong": "graduationcap.fill",
+ "thuTu": -932,
+ "tu": [
+  {
+   "chu": "capstone project",
+   "doc": "/ˈkæpstoʊn ˈprɑːdʒekt/",
+   "nghia": "đồ án tốt nghiệp (dự án nhóm cuối khoá)",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "Our capstone project is a clinic management system for private dentists.",
+   "viDuNghia": "Đồ án tốt nghiệp của nhóm là hệ thống quản lý phòng khám nha khoa tư."
+  },
+  {
+   "chu": "project introduction",
+   "doc": "/ˈprɑːdʒekt ˌɪntrəˈdʌkʃn/",
+   "nghia": "Report 1: giới thiệu dự án (bối cảnh, vấn đề, giải pháp, phạm vi)",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "Report 1 is the project introduction.",
+   "viDuNghia": "Báo cáo 1 là phần giới thiệu dự án."
+  },
+  {
+   "chu": "contemporary issue",
+   "doc": "/kənˈtempəreri ˈɪʃuː/",
+   "nghia": "vấn đề thời sự của xã hội cần công nghệ giải quyết",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "Our topic addresses a contemporary issue: food waste in restaurants.",
+   "viDuNghia": "Đề tài giải quyết một vấn đề thời sự: lãng phí thực phẩm ở nhà hàng."
+  },
+  {
+   "chu": "proposed solution",
+   "doc": "/prəˈpoʊzd səˈluːʃn/",
+   "nghia": "giải pháp nhóm đề xuất",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "Our proposed solution connects restaurants with charity kitchens.",
+   "viDuNghia": "Giải pháp đề xuất kết nối nhà hàng với bếp ăn từ thiện."
+  },
+  {
+   "chu": "proposed system",
+   "doc": "/prəˈpoʊzd ˈsɪstəm/",
+   "nghia": "hệ thống nhóm đề xuất xây dựng (khác hệ thống hiện có)",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "The proposed system has a web portal and a mobile app.",
+   "viDuNghia": "Hệ thống đề xuất gồm cổng web và ứng dụng di động."
+  },
+  {
+   "chu": "scope of work",
+   "doc": "/skoʊp əv wɜːrk/",
+   "nghia": "phạm vi công việc nhóm cam kết làm",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "The scope of work does not include online payment.",
+   "viDuNghia": "Phạm vi công việc không gồm thanh toán trực tuyến."
+  },
+  {
+   "chu": "feasibility study",
+   "doc": "/ˌfiːzəˈbɪləti ˈstʌdi/",
+   "nghia": "nghiên cứu khả thi (kỹ thuật, thời gian, chi phí)",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "Our feasibility study shows the project can be done in 14 weeks.",
+   "viDuNghia": "Nghiên cứu khả thi cho thấy dự án làm được trong 14 tuần."
+  },
+  {
+   "chu": "product size",
+   "doc": "/ˈprɑːdʌkt saɪz/",
+   "nghia": "quy mô sản phẩm (đo bằng số use case)",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "The product size must equal 20 to 25 medium use cases.",
+   "viDuNghia": "Quy mô sản phẩm phải tương đương 20–25 use case trung bình."
+  },
+  {
+   "chu": "medium use case",
+   "doc": "/ˈmiːdiəm juːs keɪs/",
+   "nghia": "use case cỡ trung bình (3–7 giao dịch)",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "Each medium use case has three to seven transactions.",
+   "viDuNghia": "Mỗi use case trung bình có 3–7 giao dịch."
+  },
+  {
+   "chu": "target platform",
+   "doc": "/ˈtɑːrɡɪt ˈplætfɔːrm/",
+   "nghia": "nền tảng đích (web, Android, iOS)",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "Our target platforms are web and Android.",
+   "viDuNghia": "Nền tảng đích của nhóm là web và Android."
+  },
+  {
+   "chu": "industry partner",
+   "doc": "/ˈɪndəstri ˈpɑːrtnər/",
+   "nghia": "doanh nghiệp đối tác đặt đề tài / cho dữ liệu thật",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "Our industry partner gave us real data from three branches.",
+   "viDuNghia": "Đối tác doanh nghiệp cho nhóm dữ liệu thật từ ba chi nhánh."
+  },
+  {
+   "chu": "domain knowledge",
+   "doc": "/doʊˈmeɪn ˈnɑːlɪdʒ/",
+   "nghia": "hiểu biết nghiệp vụ của lĩnh vực đề tài",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "We spent two weeks learning domain knowledge about dental clinics.",
+   "viDuNghia": "Nhóm mất hai tuần tìm hiểu nghiệp vụ phòng khám nha."
+  },
+  {
+   "chu": "end-user",
+   "doc": "/ˌend ˈjuːzər/",
+   "nghia": "người dùng cuối thật sự dùng phần mềm",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "We invited five end-users to try the beta.",
+   "viDuNghia": "Nhóm mời năm người dùng cuối thử bản beta."
+  },
+  {
+   "chu": "current workflow",
+   "doc": "/ˈkɜːrənt ˈwɜːrkfloʊ/",
+   "nghia": "cách khách đang làm việc hiện nay (trước khi có phần mềm)",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "In the current workflow, receptionists write appointments on paper.",
+   "viDuNghia": "Hiện nay lễ tân ghi lịch hẹn ra giấy."
+  },
+  {
+   "chu": "problem definition",
+   "doc": "/ˈprɑːbləm ˌdefɪˈnɪʃn/",
+   "nghia": "phần xác định rõ vấn đề",
+   "nhom": "Đề tài & giới thiệu dự án",
+   "viDu": "A clear problem definition makes the rest of the report easier.",
+   "viDuNghia": "Xác định vấn đề rõ ràng giúp phần còn lại của báo cáo dễ viết hơn."
+  },
+  {
+   "chu": "supervisor meeting",
+   "doc": "/ˈsuːpərvaɪzər ˈmiːtɪŋ/",
+   "nghia": "buổi họp với giảng viên hướng dẫn",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "We have a supervisor meeting every Wednesday morning.",
+   "viDuNghia": "Nhóm họp với giảng viên hướng dẫn mỗi sáng thứ Tư."
+  },
+  {
+   "chu": "team weekly meeting",
+   "doc": "/tiːm ˈwiːkli ˈmiːtɪŋ/",
+   "nghia": "họp nhóm hằng tuần có giảng viên (theo lịch môn)",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "In the team weekly meeting, each member reports what they did.",
+   "viDuNghia": "Trong buổi họp tuần, mỗi thành viên báo cáo việc đã làm."
+  },
+  {
+   "chu": "meeting log",
+   "doc": "/ˈmiːtɪŋ lɔːɡ/",
+   "nghia": "sổ ghi các buổi họp (ngày, người dự, quyết định)",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "Keep a meeting log and attach it to the final report.",
+   "viDuNghia": "Ghi sổ các buổi họp và đính kèm vào báo cáo cuối."
+  },
+  {
+   "chu": "work share",
+   "doc": "/ˈwɜːrk ʃer/",
+   "nghia": "bảng phân công: ai làm phần nào",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "The work share table shows each member's tasks and percentage.",
+   "viDuNghia": "Bảng phân công ghi việc và phần trăm của từng thành viên."
+  },
+  {
+   "chu": "task allocation",
+   "doc": "/tæsk ˌæləˈkeɪʃn/",
+   "nghia": "việc phân bổ nhiệm vụ",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "Task allocation is based on each member's skills.",
+   "viDuNghia": "Việc phân bổ nhiệm vụ dựa trên kỹ năng từng người."
+  },
+  {
+   "chu": "Gantt chart",
+   "doc": "/ˈɡænt tʃɑːrt/",
+   "nghia": "biểu đồ Gantt: thanh thời gian các việc",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "The Gantt chart shows that testing starts in week 11.",
+   "viDuNghia": "Biểu đồ Gantt cho thấy kiểm thử bắt đầu từ tuần 11."
+  },
+  {
+   "chu": "risk list",
+   "doc": "/rɪsk lɪst/",
+   "nghia": "danh sách rủi ro kèm cách xử lý",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "A member leaving the team is the top item in our risk list.",
+   "viDuNghia": "Thành viên bỏ nhóm là mục đầu trong danh sách rủi ro."
+  },
+  {
+   "chu": "project tracking",
+   "doc": "/ˈprɑːdʒekt ˈtrækɪŋ/",
+   "nghia": "theo dõi dự án (tiến độ, công sức, lỗi)",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "We use Jira for project tracking.",
+   "viDuNghia": "Nhóm dùng Jira để theo dõi dự án."
+  },
+  {
+   "chu": "code iteration",
+   "doc": "/koʊd ˌɪtəˈreɪʃn/",
+   "nghia": "vòng lặp viết mã (Iteration 1, 2, 3) kết thúc bằng demo",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "Code Iteration 2 ends with a product demo to the supervisor.",
+   "viDuNghia": "Vòng lặp mã 2 kết thúc bằng buổi demo cho giảng viên hướng dẫn."
+  },
+  {
+   "chu": "change log",
+   "doc": "/ˈtʃeɪndʒ lɔːɡ/",
+   "nghia": "nhật ký thay đổi (yêu cầu, thiết kế, phiên bản)",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "Every requirement change is recorded in the change log.",
+   "viDuNghia": "Mọi thay đổi yêu cầu được ghi vào nhật ký thay đổi."
+  },
+  {
+   "chu": "on-going assessment",
+   "doc": "/ˈɑːn ɡoʊɪŋ əˈsesmənt/",
+   "nghia": "điểm quá trình (chấm các báo cáo trong kỳ)",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "You need at least 5 in the on-going assessment to join the defense.",
+   "viDuNghia": "Cần ít nhất 5 điểm quá trình mới được bảo vệ."
+  },
+  {
+   "chu": "progress demo",
+   "doc": "/ˈprɑːɡres ˈdemoʊ/",
+   "nghia": "buổi demo tiến độ cho giảng viên hướng dẫn",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "At the progress demo, we showed the booking and payment flows.",
+   "viDuNghia": "Ở buổi demo tiến độ, nhóm trình bày luồng đặt lịch và thanh toán."
+  },
+  {
+   "chu": "use case list",
+   "doc": "/juːs keɪs lɪst/",
+   "nghia": "danh sách use case (đếm quy mô, chia người làm)",
+   "nhom": "Kế hoạch & làm việc với giảng viên hướng dẫn",
+   "viDu": "Our use case list has 24 use cases, six per member.",
+   "viDuNghia": "Danh sách use case có 24 use case, mỗi người sáu cái."
+  },
+  {
+   "chu": "software design document",
+   "doc": "/ˈsɔːftwer dɪˈzaɪn ˈdɑːkjumənt/",
+   "nghia": "SDD: tài liệu thiết kế phần mềm (Report 4)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "The software design document describes the architecture, database and classes.",
+   "viDuNghia": "Tài liệu thiết kế mô tả kiến trúc, cơ sở dữ liệu và các lớp."
+  },
+  {
+   "chu": "high-level design",
+   "doc": "/ˌhaɪ ˌlevl dɪˈzaɪn/",
+   "nghia": "thiết kế tổng thể (các khối lớn, cách nối nhau)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "The high-level design shows four main subsystems.",
+   "viDuNghia": "Thiết kế tổng thể cho thấy bốn phân hệ chính."
+  },
+  {
+   "chu": "detailed design",
+   "doc": "/ˈdiːteɪld dɪˈzaɪn/",
+   "nghia": "thiết kế chi tiết (lớp, hàm, luồng từng chức năng)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "The detailed design includes a sequence diagram for each use case.",
+   "viDuNghia": "Thiết kế chi tiết có sơ đồ tuần tự cho mỗi use case."
+  },
+  {
+   "chu": "system test plan",
+   "doc": "/ˈsɪstəm test plæn/",
+   "nghia": "kế hoạch kiểm thử hệ thống (Report 5)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "Our system test plan covers 180 test cases in three rounds.",
+   "viDuNghia": "Kế hoạch kiểm thử hệ thống gồm 180 test case trong ba vòng."
+  },
+  {
+   "chu": "user guide",
+   "doc": "/ˈjuːzər ɡaɪd/",
+   "nghia": "hướng dẫn sử dụng (Report 6)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "The user guide has step-by-step screenshots for each role.",
+   "viDuNghia": "Hướng dẫn sử dụng có ảnh từng bước cho mỗi vai trò."
+  },
+  {
+   "chu": "installation guide",
+   "doc": "/ˌɪnstəˈleɪʃn ɡaɪd/",
+   "nghia": "hướng dẫn cài đặt",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "The installation guide explains how to set up the server and database.",
+   "viDuNghia": "Hướng dẫn cài đặt giải thích cách dựng máy chủ và cơ sở dữ liệu."
+  },
+  {
+   "chu": "final project report",
+   "doc": "/ˈfaɪnl ˈprɑːdʒekt rɪˈpɔːrt/",
+   "nghia": "báo cáo cuối (gộp Reports 1–6 + sản phẩm + slide)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "The final project report is submitted in both soft copy and hard copy.",
+   "viDuNghia": "Báo cáo cuối nộp cả bản mềm lẫn bản cứng."
+  },
+  {
+   "chu": "soft copy",
+   "doc": "/ˈsɔːft ˌkɑːpi/",
+   "nghia": "bản mềm (tệp)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "Send the soft copy to the supervisor by email.",
+   "viDuNghia": "Gửi bản mềm cho giảng viên hướng dẫn qua email."
+  },
+  {
+   "chu": "hard copy",
+   "doc": "/ˈhɑːrd ˌkɑːpi/",
+   "nghia": "bản in giấy",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "Bring two hard copies to the defense room.",
+   "viDuNghia": "Mang hai bản in vào phòng bảo vệ."
+  },
+  {
+   "chu": "software package",
+   "doc": "/ˈsɔːftwer ˈpækɪdʒ/",
+   "nghia": "gói phần mềm bàn giao (mã, bản cài, hướng dẫn)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "The software package includes source code, a build and user manuals.",
+   "viDuNghia": "Gói phần mềm gồm mã nguồn, bản dựng và hướng dẫn sử dụng."
+  },
+  {
+   "chu": "related work",
+   "doc": "/rɪˈleɪtɪd wɜːrk/",
+   "nghia": "các sản phẩm / nghiên cứu tương tự đã có",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "In the related work section, we compare three similar apps.",
+   "viDuNghia": "Ở phần sản phẩm liên quan, nhóm so sánh ba ứng dụng tương tự."
+  },
+  {
+   "chu": "future work",
+   "doc": "/ˈfjuːtʃər wɜːrk/",
+   "nghia": "hướng phát triển tiếp theo",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "Future work includes an AI chatbot for patients.",
+   "viDuNghia": "Hướng phát triển tiếp theo gồm chatbot AI cho bệnh nhân."
+  },
+  {
+   "chu": "list of figures",
+   "doc": "/lɪst əv ˈfɪɡjərz/",
+   "nghia": "danh mục hình",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "The list of figures comes after the table of contents.",
+   "viDuNghia": "Danh mục hình đứng sau mục lục."
+  },
+  {
+   "chu": "abbreviation",
+   "doc": "/əˌbriːviˈeɪʃn/",
+   "nghia": "chữ viết tắt (có bảng giải thích đầu báo cáo)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "Define each abbreviation the first time you use it.",
+   "viDuNghia": "Giải thích mỗi chữ viết tắt ở lần dùng đầu tiên."
+  },
+  {
+   "chu": "plagiarism check",
+   "doc": "/ˈpleɪdʒərɪzəm tʃek/",
+   "nghia": "kiểm tra đạo văn (tỉ lệ trùng)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "The report must pass the plagiarism check before submission.",
+   "viDuNghia": "Báo cáo phải qua bước kiểm tra đạo văn trước khi nộp."
+  },
+  {
+   "chu": "similarity index",
+   "doc": "/ˌsɪməˈlærəti ˈɪndeks/",
+   "nghia": "tỉ lệ trùng lặp (Turnitin…)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "Our similarity index is 9 percent.",
+   "viDuNghia": "Tỉ lệ trùng lặp của nhóm là 9%."
+  },
+  {
+   "chu": "page limit",
+   "doc": "/peɪdʒ ˈlɪmɪt/",
+   "nghia": "số trang tối đa / tối thiểu cho phép",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "The page limit for the main report is 120 pages.",
+   "viDuNghia": "Giới hạn số trang báo cáo chính là 120 trang."
+  },
+  {
+   "chu": "final package",
+   "doc": "/ˈfaɪnl ˈpækɪdʒ/",
+   "nghia": "bộ bàn giao cuối (tài liệu + sản phẩm + slide)",
+   "nhom": "Báo cáo & tài liệu dự án",
+   "viDu": "The final package must be submitted one week before the defense.",
+   "viDuNghia": "Bộ bàn giao cuối phải nộp trước buổi bảo vệ một tuần."
+  },
+  {
+   "chu": "system overview",
+   "doc": "/ˈsɪstəm ˈoʊvərvjuː/",
+   "nghia": "phần tổng quan hệ thống",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The system overview diagram is on page 12.",
+   "viDuNghia": "Sơ đồ tổng quan hệ thống ở trang 12."
+  },
+  {
+   "chu": "architecture diagram",
+   "doc": "/ˈɑːrkɪtektʃər ˈdaɪəɡræm/",
+   "nghia": "sơ đồ kiến trúc",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The architecture diagram shows the client, the API server and the database.",
+   "viDuNghia": "Sơ đồ kiến trúc thể hiện client, máy chủ API và cơ sở dữ liệu."
+  },
+  {
+   "chu": "database diagram",
+   "doc": "/ˈdeɪtəbeɪs ˈdaɪəɡræm/",
+   "nghia": "sơ đồ cơ sở dữ liệu (bảng, khoá, quan hệ)",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The database diagram has 35 tables.",
+   "viDuNghia": "Sơ đồ cơ sở dữ liệu có 35 bảng."
+  },
+  {
+   "chu": "class specification",
+   "doc": "/klæs ˌspesɪfɪˈkeɪʃn/",
+   "nghia": "đặc tả lớp (thuộc tính, phương thức)",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "Each class specification lists attributes and methods.",
+   "viDuNghia": "Mỗi đặc tả lớp liệt kê thuộc tính và phương thức."
+  },
+  {
+   "chu": "screen design",
+   "doc": "/skriːn dɪˈzaɪn/",
+   "nghia": "thiết kế màn hình (bố cục, trường, nút)",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The screen design follows the mockups approved by the supervisor.",
+   "viDuNghia": "Thiết kế màn hình theo bản mẫu giảng viên đã duyệt."
+  },
+  {
+   "chu": "API design",
+   "doc": "/ˌeɪ piː ˈaɪ dɪˈzaɪn/",
+   "nghia": "thiết kế API",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "We followed REST rules in our API design.",
+   "viDuNghia": "Nhóm theo luật REST khi thiết kế API."
+  },
+  {
+   "chu": "security design",
+   "doc": "/sɪˈkjʊrəti dɪˈzaɪn/",
+   "nghia": "thiết kế bảo mật (xác thực, phân quyền, mã hoá)",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The security design explains how we protect patient data.",
+   "viDuNghia": "Thiết kế bảo mật giải thích cách bảo vệ dữ liệu bệnh nhân."
+  },
+  {
+   "chu": "technology choice",
+   "doc": "/tekˈnɑːlədʒi tʃɔɪs/",
+   "nghia": "lựa chọn công nghệ (kèm lý do)",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "Explain each technology choice in the design document.",
+   "viDuNghia": "Giải thích từng lựa chọn công nghệ trong tài liệu thiết kế."
+  },
+  {
+   "chu": "third-party service",
+   "doc": "/ˌθɜːrd ˈpɑːrti ˈsɜːrvɪs/",
+   "nghia": "dịch vụ bên thứ ba (thanh toán, bản đồ, gửi SMS)",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "We use a third-party service to send SMS reminders.",
+   "viDuNghia": "Nhóm dùng dịch vụ bên thứ ba để gửi tin nhắn nhắc lịch."
+  },
+  {
+   "chu": "open-source library",
+   "doc": "/ˌoʊpən ˈsɔːrs ˈlaɪbreri/",
+   "nghia": "thư viện mã nguồn mở",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "List every open-source library and its license.",
+   "viDuNghia": "Liệt kê mọi thư viện mã nguồn mở và giấy phép của nó."
+  },
+  {
+   "chu": "system integration",
+   "doc": "/ˈsɪstəm ˌɪntɪˈɡreɪʃn/",
+   "nghia": "tích hợp các phần của hệ thống lại với nhau",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "System integration took the whole of week 10.",
+   "viDuNghia": "Tích hợp hệ thống chiếm trọn tuần 10."
+  },
+  {
+   "chu": "code quality",
+   "doc": "/koʊd ˈkwɑːləti/",
+   "nghia": "chất lượng mã",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "We used SonarQube to measure code quality.",
+   "viDuNghia": "Nhóm dùng SonarQube để đo chất lượng mã."
+  },
+  {
+   "chu": "test round",
+   "doc": "/test raʊnd/",
+   "nghia": "vòng kiểm thử",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "In the second test round, 95% of test cases passed.",
+   "viDuNghia": "Ở vòng kiểm thử thứ hai, 95% test case đạt."
+  },
+  {
+   "chu": "defect log",
+   "doc": "/ˈdiːfekt lɔːɡ/",
+   "nghia": "sổ lỗi (mã lỗi, mức độ, người sửa, trạng thái)",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The defect log has 64 bugs, and 60 are closed.",
+   "viDuNghia": "Sổ lỗi có 64 lỗi, đã đóng 60."
+  },
+  {
+   "chu": "load test",
+   "doc": "/ˈloʊd test/",
+   "nghia": "bài kiểm thử tải",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The load test ran with 500 concurrent users.",
+   "viDuNghia": "Bài kiểm thử tải chạy với 500 người dùng đồng thời."
+  },
+  {
+   "chu": "concurrent users",
+   "doc": "/kənˈkɜːrənt ˈjuːzərz/",
+   "nghia": "số người dùng cùng lúc",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The system supports 500 concurrent users without errors.",
+   "viDuNghia": "Hệ thống chịu 500 người dùng cùng lúc mà không lỗi."
+  },
+  {
+   "chu": "known bug",
+   "doc": "/noʊn bʌɡ/",
+   "nghia": "lỗi đã biết, chưa sửa (ghi rõ trong báo cáo)",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "There is one known bug in the export feature.",
+   "viDuNghia": "Có một lỗi đã biết ở chức năng xuất tệp."
+  },
+  {
+   "chu": "deployment guide",
+   "doc": "/dɪˈplɔɪmənt ɡaɪd/",
+   "nghia": "hướng dẫn triển khai lên máy chủ",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The deployment guide lists every environment variable.",
+   "viDuNghia": "Hướng dẫn triển khai liệt kê mọi biến môi trường."
+  },
+  {
+   "chu": "server specification",
+   "doc": "/ˈsɜːrvər ˌspesɪfɪˈkeɪʃn/",
+   "nghia": "cấu hình máy chủ cần (CPU, RAM, ổ đĩa)",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The server specification is 2 CPUs and 4 GB of RAM.",
+   "viDuNghia": "Cấu hình máy chủ là 2 CPU và 4 GB RAM."
+  },
+  {
+   "chu": "troubleshooting",
+   "doc": "/ˈtrʌblʃuːtɪŋ/",
+   "nghia": "dò và xử lý sự cố",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The troubleshooting section lists common errors and fixes.",
+   "viDuNghia": "Phần xử lý sự cố liệt kê lỗi thường gặp và cách sửa."
+  },
+  {
+   "chu": "release package",
+   "doc": "/rɪˈliːs ˈpækɪdʒ/",
+   "nghia": "gói phát hành bản cuối",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "The release package was tested on a fresh server.",
+   "viDuNghia": "Gói phát hành đã được thử trên một máy chủ mới."
+  },
+  {
+   "chu": "data privacy",
+   "doc": "/ˈdeɪtə ˈpraɪvəsi/",
+   "nghia": "quyền riêng tư dữ liệu",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "We hide phone numbers to protect data privacy.",
+   "viDuNghia": "Nhóm che số điện thoại để bảo vệ quyền riêng tư dữ liệu."
+  },
+  {
+   "chu": "backup and restore",
+   "doc": "/ˈbækʌp ənd rɪˈstɔːr/",
+   "nghia": "sao lưu và khôi phục dữ liệu",
+   "nhom": "Thiết kế, cài đặt & kiểm thử",
+   "viDu": "We tested backup and restore of the database every week.",
+   "viDuNghia": "Nhóm thử sao lưu và khôi phục cơ sở dữ liệu mỗi tuần."
+  },
+  {
+   "chu": "thesis defense",
+   "doc": "/ˈθiːsɪs dɪˈfens/",
+   "nghia": "buổi bảo vệ đồ án tốt nghiệp",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "The thesis defense lasts 90 minutes: presentation, demo and Q&A.",
+   "viDuNghia": "Buổi bảo vệ kéo dài 90 phút: trình bày, demo và hỏi đáp."
+  },
+  {
+   "chu": "defense committee",
+   "doc": "/dɪˈfens kəˈmɪti/",
+   "nghia": "hội đồng bảo vệ",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "The defense committee has three lecturers and one secretary.",
+   "viDuNghia": "Hội đồng bảo vệ gồm ba giảng viên và một thư ký."
+  },
+  {
+   "chu": "examination board",
+   "doc": "/ɪɡˌzæmɪˈneɪʃn bɔːrd/",
+   "nghia": "hội đồng chấm (cách gọi trong đề cương)",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "Students defend their work in front of the examination board.",
+   "viDuNghia": "Sinh viên bảo vệ kết quả trước hội đồng chấm."
+  },
+  {
+   "chu": "committee member",
+   "doc": "/kəˈmɪti ˈmembər/",
+   "nghia": "thành viên hội đồng",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "Each committee member gives a mark to each student.",
+   "viDuNghia": "Mỗi thành viên hội đồng cho điểm từng sinh viên."
+  },
+  {
+   "chu": "defense slide",
+   "doc": "/dɪˈfens slaɪd/",
+   "nghia": "slide bảo vệ",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "Keep the defense slides under 30 pages.",
+   "viDuNghia": "Giữ slide bảo vệ dưới 30 trang."
+  },
+  {
+   "chu": "demo scenario",
+   "doc": "/ˈdemoʊ səˈnærioʊ/",
+   "nghia": "kịch bản demo theo luồng nghiệp vụ thật",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "Our demo scenario follows a patient from booking to payment.",
+   "viDuNghia": "Kịch bản demo đi theo một bệnh nhân từ đặt lịch tới thanh toán."
+  },
+  {
+   "chu": "individual responsibility",
+   "doc": "/ˌɪndɪˈvɪdʒuəl rɪˌspɑːnsəˈbɪləti/",
+   "nghia": "trách nhiệm cá nhân (phần mỗi người tự làm và phải giải thích được)",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "The committee checks individual responsibility by asking each member.",
+   "viDuNghia": "Hội đồng kiểm trách nhiệm cá nhân bằng cách hỏi từng thành viên."
+  },
+  {
+   "chu": "oral presentation",
+   "doc": "/ˈɔːrəl ˌpriːzenˈteɪʃn/",
+   "nghia": "thuyết trình nói",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "Oral presentation skills are 5% of the defense mark.",
+   "viDuNghia": "Kỹ năng thuyết trình chiếm 5% điểm bảo vệ."
+  },
+  {
+   "chu": "presentation skills",
+   "doc": "/ˌpriːzenˈteɪʃn skɪlz/",
+   "nghia": "kỹ năng thuyết trình",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "Good presentation skills help the committee follow your ideas.",
+   "viDuNghia": "Kỹ năng thuyết trình tốt giúp hội đồng theo kịp ý của bạn."
+  },
+  {
+   "chu": "dress code",
+   "doc": "/ˈdres koʊd/",
+   "nghia": "quy định trang phục",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "The dress code for the defense is formal.",
+   "viDuNghia": "Trang phục buổi bảo vệ là trang trọng."
+  },
+  {
+   "chu": "graduation requirement",
+   "doc": "/ˌɡrædʒuˈeɪʃn rɪˈkwaɪərmənt/",
+   "nghia": "điều kiện tốt nghiệp",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "Passing the capstone project is a graduation requirement.",
+   "viDuNghia": "Qua đồ án tốt nghiệp là điều kiện để tốt nghiệp."
+  },
+  {
+   "chu": "mock defense",
+   "doc": "/mɑːk dɪˈfens/",
+   "nghia": "buổi bảo vệ thử",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "We did a mock defense with our supervisor one week before.",
+   "viDuNghia": "Nhóm bảo vệ thử với giảng viên hướng dẫn trước một tuần."
+  },
+  {
+   "chu": "committee secretary",
+   "doc": "/kəˈmɪti ˈsekrəteri/",
+   "nghia": "thư ký hội đồng (ghi biên bản, giữ giờ)",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "The committee secretary records every question and answer.",
+   "viDuNghia": "Thư ký hội đồng ghi lại mọi câu hỏi và câu trả lời."
+  },
+  {
+   "chu": "personal mark",
+   "doc": "/ˈpɜːrsənl mɑːrk/",
+   "nghia": "điểm cá nhân (trung bình điểm các thành viên hội đồng cho)",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "Your personal mark is the average of all committee members' marks.",
+   "viDuNghia": "Điểm cá nhân là trung bình điểm các thành viên hội đồng cho."
+  },
+  {
+   "chu": "defense schedule",
+   "doc": "/dɪˈfens ˈskedʒuːl/",
+   "nghia": "lịch bảo vệ",
+   "nhom": "Bảo vệ trước hội đồng",
+   "viDu": "Check the defense schedule for your room and time slot.",
+   "viDuNghia": "Xem lịch bảo vệ để biết phòng và giờ của nhóm."
+  },
+  {
+   "chu": "Good afternoon, members of the committee",
+   "nghia": "Kính chào các thầy cô trong hội đồng",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Good afternoon, members of the committee. We are Group 5.",
+   "viDuNghia": "Kính chào các thầy cô trong hội đồng. Chúng em là Nhóm 5."
+  },
+  {
+   "chu": "Our capstone project is called",
+   "nghia": "Đồ án của chúng em có tên là …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Our capstone project is called DentaCare, a clinic management system.",
+   "viDuNghia": "Đồ án của chúng em tên là DentaCare, hệ thống quản lý phòng khám."
+  },
+  {
+   "chu": "The problem we address is",
+   "nghia": "Vấn đề chúng em giải quyết là …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "The problem we address is long waiting times at small clinics.",
+   "viDuNghia": "Vấn đề chúng em giải quyết là thời gian chờ lâu ở phòng khám nhỏ."
+  },
+  {
+   "chu": "We chose this technology because",
+   "nghia": "Chúng em chọn công nghệ này vì …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "We chose this technology because it supports real-time updates.",
+   "viDuNghia": "Chúng em chọn công nghệ này vì nó hỗ trợ cập nhật thời gian thực."
+  },
+  {
+   "chu": "Our system consists of",
+   "nghia": "Hệ thống của chúng em gồm …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Our system consists of a web portal, a mobile app and an API server.",
+   "viDuNghia": "Hệ thống gồm cổng web, ứng dụng di động và máy chủ API."
+  },
+  {
+   "chu": "My main responsibility was",
+   "nghia": "Phần việc chính của em là …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "My main responsibility was the booking module and its test cases.",
+   "viDuNghia": "Phần việc chính của em là mô-đun đặt lịch và test case của nó."
+  },
+  {
+   "chu": "We tested the system with",
+   "nghia": "Chúng em đã kiểm thử hệ thống với …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "We tested the system with 180 test cases and real clinic data.",
+   "viDuNghia": "Chúng em kiểm thử hệ thống với 180 test case và dữ liệu thật của phòng khám."
+  },
+  {
+   "chu": "One limitation of our system is",
+   "nghia": "Một hạn chế của hệ thống là …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "One limitation of our system is that it does not support offline mode.",
+   "viDuNghia": "Một hạn chế là hệ thống chưa chạy được khi mất mạng."
+  },
+  {
+   "chu": "In the future, we plan to",
+   "nghia": "Trong tương lai, chúng em dự định …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "In the future, we plan to integrate online payment.",
+   "viDuNghia": "Trong tương lai, chúng em dự định tích hợp thanh toán trực tuyến."
+  },
+  {
+   "chu": "Let me answer with a quick demo",
+   "nghia": "Em xin trả lời bằng một demo nhanh",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "Let me answer with a quick demo of the cancel flow.",
+   "viDuNghia": "Em xin trả lời bằng một demo nhanh luồng huỷ lịch."
+  },
+  {
+   "chu": "If I understand correctly, you are asking about",
+   "nghia": "Nếu em hiểu đúng thì thầy/cô đang hỏi về …",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "If I understand correctly, you are asking about how we handle double booking.",
+   "viDuNghia": "Nếu em hiểu đúng, thầy/cô đang hỏi cách xử lý đặt trùng lịch."
+  },
+  {
+   "chu": "We sincerely thank our supervisor",
+   "nghia": "Chúng em chân thành cảm ơn giảng viên hướng dẫn",
+   "nhom": "Câu nói khi thuyết trình/review",
+   "viDu": "We sincerely thank our supervisor for guiding us this semester.",
+   "viDuNghia": "Chúng em chân thành cảm ơn giảng viên hướng dẫn đã dẫn dắt suốt kỳ."
+  }
+ ]
+}

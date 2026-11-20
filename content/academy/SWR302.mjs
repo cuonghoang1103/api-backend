@@ -7,6 +7,7 @@
  * Công cụ mô hình hoá → Exp Hub (draw.io / Jira / Visual Paradigm). Tiên quyết: SWE201c.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/SWR302.mjs --apply
  */
+import { baiMauAssignmentSection } from './swr302/baiMauAssignment.mjs';
 import ch1Extra from './swr302/ch1.mjs';
 import ch2Extra from './swr302/ch2.mjs';
 import ch3Section from './swr302/ch3.mjs';
@@ -1993,5 +1994,7 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
     pe25Section,
     /* ══════════ CHỮA TRỌN ĐỀ FE (video, tách riêng khỏi PE) — swr302/chuaDeFe.mjs ══════════ */
     chuaDeFeSection,
+    /* ══════════ BÀI MẪU ASSIGNMENT NHÓM (21/11/2026) — để cuối, không làm lệch sortOrder các mục trên ══════════ */
+    baiMauAssignmentSection,
   ],
 };

@@ -27,6 +27,7 @@ import s07 from './cloud-aws/s07-container.mjs';
 import s08 from './cloud-aws/s08-serverless.mjs';
 import s09 from './cloud-aws/s09-su-kien.mjs';
 import s10 from './cloud-aws/s10-quan-sat.mjs';
+import s11 from './cloud-aws/s11-terraform.mjs';
 
 const CHUONG = [
   ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', '(đã soạn — cloud-aws/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -40,13 +41,7 @@ const CHUONG = [
   ['Chapter 8 — Serverless: Lambda and API Gateway', 'Chương 8 — Serverless: Lambda và API Gateway', '(đã soạn — cloud-aws/s08-serverless.mjs)', [['lambda', '-', '-', '-']]],
   ['Chapter 9 — Event-driven: SQS, SNS and EventBridge', 'Chương 9 — Hướng sự kiện: SQS, SNS và EventBridge', '(đã soạn — cloud-aws/s09-su-kien.mjs)', [['sqs', '-', '-', '-']]],
   ['Chapter 10 — Observability: CloudWatch', 'Chương 10 — Quan sát: CloudWatch', '(đã soạn — cloud-aws/s10-quan-sat.mjs)', [['logs', '-', '-', '-']]],
-  ['Chapter 11 — Infrastructure as code with Terraform', 'Chương 11 — Hạ tầng dưới dạng mã với Terraform', 'Dựng lại bằng mã mọi thứ đã bấm tay: provider, state, biến, module; học bài bản ở khoá Infrastructure as Code.', [
-    ['vi-sao', 'Why click-ops does not scale', 'Vì sao bấm tay không mở rộng được', 'Không tái lập được · Quên dọn = hoá đơn bất ngờ · IaC là gì · Terraform vs CloudFormation vs CDK'],
-    ['terraform', 'Terraform basics on AWS: init, plan, apply, destroy', 'Terraform cơ bản trên AWS: init, plan, apply, destroy', 'Provider AWS và xác thực an toàn · Resource, data source · Đồ thị phụ thuộc · Chạy thật với LocalStack'],
-    ['bien-module', 'Variables, outputs and modules', 'Biến, output và module', 'variable/locals/output · Module VPC dùng lại · Module của cộng đồng · Môi trường dev/prod'],
-    ['state', 'State: S3 backend, locking and drift', 'State: backend S3, khoá và lệch cấu hình', 'State chứa gì (cả bí mật) · Backend S3 + khoá · Drift khi ai đó bấm tay · import'],
-    ['lab-11', 'Chapter 11 lab + interview questions', 'Lab chương 11 + câu hỏi phỏng vấn', 'VPC + S3 + DynamoDB của LabFlow bằng Terraform · Rubric · Câu phỏng vấn IaC'],
-  ]],
+  ['Chapter 11 — Infrastructure as code with Terraform', 'Chương 11 — Hạ tầng dưới dạng mã với Terraform', '(đã soạn — cloud-aws/s11-terraform.mjs)', [['vi-sao', '-', '-', '-']]],
   ['Chapter 12 — CI/CD: GitHub Actions → ECR → ECS', 'Chương 12 — CI/CD: GitHub Actions → ECR → ECS', 'Đẩy mã là có bản mới chạy trên AWS: OIDC, build ảnh, deploy cuốn chiếu, terraform plan trên PR.', [
     ['pipeline', 'The pipeline: build, test, push to ECR', 'Đường ống: build, test, đẩy lên ECR', 'Workflow từng bước · OIDC thay khoá · Gắn tag theo SHA · Cache build'],
     ['deploy-ecs', 'Deploying to ECS: rolling and blue/green', 'Deploy lên ECS: cuốn chiếu và blue/green', 'Cập nhật task definition · Circuit breaker tự quay lui · Blue/green với CodeDeploy · So với deploy-nha.sh'],
@@ -96,6 +91,7 @@ sections[7] = s07;
 sections[8] = s08;
 sections[9] = s09;
 sections[10] = s10;
+sections[11] = s11;
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },

@@ -691,6 +691,10 @@ const OUT63_CASCADE = out("=== 6. cascade ALL đặt ở @ManyToOne: xoá một 
 const OUT63_LO = out("$ curl -s localhost:41880/labs/1/bookings\n[{\"student\":{\"email\":\"an@fpt.edu.vn\",\"phone\":\"0901234567\",\"id\":1},\"startAt\":\"2026-12-01T08:00:00\",\"id\":1}]");
 const MA63_PRISMA = bash("model LabR {\n  id       Int        @id @default(autoincrement())\n  code     String     @unique\n  bookings BookingR[]\n  @@map(\"labs_r\")\n}\nmodel BookingR {\n  id    Int    @id @default(autoincrement())\n  who   String\n  lab   LabR   @relation(fields: [labId], references: [id], onDelete: Cascade)\n  labId Int\n  @@map(\"bookings_r\")\n}");
 const OUT63_PRISMA = out("=== findUnique KHÔNG include\nSQL  : SELECT \"labs_r\".\"id\", \"labs_r\".\"code\" FROM \"labs_r\" WHERE (\"labs_r\".\"code\" = $1 AND 1=1) LIMIT $2 OFFSET $3\n{ id: 2, code: 'IOT-01' } — không có field bookings, cũng không có lazy loading\n\n=== findUnique có include: { bookings: true }\nSQL  : SELECT \"labs_r\".\"id\", \"labs_r\".\"code\" FROM \"labs_r\" WHERE (\"labs_r\".\"code\" = $1 AND 1=1) LIMIT $2 OFFSET $3\nSQL  : SELECT \"bookings_r\".\"id\", \"bookings_r\".\"who\", \"bookings_r\".\"labId\" FROM \"bookings_r\" WHERE \"bookings_r\".\"labId\" = $1 OFFSET $2\n{\"id\":2,\"code\":\"IOT-01\",\"bookings\":[{\"id\":3,\"who\":\"an\",\"labId\":2},{\"id\":4,\"who\":\"binh\",\"labId\":2}]}");
+const MA63_YT = java("/** A. @OneToMany MỘT CHIỀU (không mappedBy), có @JoinColumn: khoá ngoại nằm ở notes nhưng Note không biết Lab. */\n@OneToMany(cascade = CascadeType.ALL) @JoinColumn(name = \"lab_id\")\nprivate List<Note> notes = new ArrayList<>();\n\n/** A2. @OneToMany MỘT CHIỀU, KHÔNG @JoinColumn ⇒ Hibernate tự tạo bảng nối. */\n@OneToMany(cascade = CascadeType.ALL)\nprivate List<Rule> rules = new ArrayList<>();\n\n/** C. cascade REMOVE trên @ManyToMany — điều Vlad Mihalcea cảnh báo. */\n@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })\n@JoinTable(name = \"lab_tools\", joinColumns = @JoinColumn(name = \"lab_id\"), inverseJoinColumns = @JoinColumn(name = \"tool_id\"))\nprivate Set<Tool> tools = new HashSet<>();\n\n/** D. hai chiều, mappedBy, KHÔNG orphanRemoval. */\n@OneToMany(mappedBy = \"lab\")\nprivate List<Booking> bookings = new ArrayList<>();");
+const OUT63_YT_A = out("=== A. @OneToMany MỘT CHIỀU + @JoinColumn: persist 1 lab + 2 ghi chú\nDEBUG SQL : insert into labs (code) values (?)\nDEBUG SQL : insert into notes (text) values (?)\nDEBUG SQL : insert into notes (text) values (?)\nDEBUG SQL : update notes set lab_id=? where id=?\nDEBUG SQL : update notes set lab_id=? where id=?\n\n=== A2. @OneToMany MỘT CHIỀU, KHÔNG @JoinColumn: persist 1 lab + 2 nội quy\nDEBUG SQL : insert into labs (code) values (?)\nDEBUG SQL : insert into rules (text) values (?)\nDEBUG SQL : insert into rules (text) values (?)\nDEBUG SQL : insert into labs_rules (lab_id,rules_id) values (?,?)\nDEBUG SQL : insert into labs_rules (lab_id,rules_id) values (?,?)\nDEBUG SQL : select string_agg(table_name, ', ' order by table_name) from information_schema.tables where table_schema = 'public'\nbảng có trong CSDL: bookings, lab_tools, labs, labs_rules, notes, rules, tools");
+const OUT63_YT_D = out("=== D. mappedBy: chỉ gỡ khỏi danh sách, KHÔNG setLab(null)\nDEBUG SQL : select l1_0.id,l1_0.code from labs l1_0 where l1_0.id=?\nDEBUG SQL : insert into bookings (lab_id,who) values (?,?)\nDEBUG SQL : select l1_0.id,l1_0.code from labs l1_0 where l1_0.id=?\nDEBUG SQL : select b1_0.lab_id,b1_0.id,b1_0.who from bookings b1_0 where b1_0.lab_id=?\nđã gỡ khỏi lab.getBookings() — sắp commit\nDEBUG SQL : select coalesce(lab_id::text, 'null') from bookings where id = 1\nlab_id trong CSDL: 1\n\n=== D2. gỡ khỏi danh sách VÀ setLab(null) (helper của Vlad)\nDEBUG SQL : select l1_0.id,l1_0.code from labs l1_0 where l1_0.id=?\nDEBUG SQL : select b1_0.id,b1_0.lab_id,b1_0.who from bookings b1_0 where b1_0.id=?\nDEBUG SQL : select b1_0.lab_id,b1_0.id,b1_0.who from bookings b1_0 where b1_0.lab_id=?\nđã gỡ + setLab(null) — sắp commit\nDEBUG SQL : update bookings set lab_id=?,who=? where id=?\nDEBUG SQL : select coalesce(lab_id::text, 'null') from bookings where id = 1\nlab_id trong CSDL: null");
+const OUT63_YT_C = out("=== C. cascade REMOVE trên @ManyToMany: hai lab dùng chung Arduino\nDEBUG SQL : insert into labs (code) values (?)\nDEBUG SQL : insert into tools (name) values (?)\nDEBUG SQL : insert into tools (name) values (?)\nDEBUG SQL : insert into labs (code) values (?)\nDEBUG SQL : insert into tools (name) values (?)\nDEBUG SQL : insert into lab_tools (lab_id,tool_id) values (?,?)\nDEBUG SQL : insert into lab_tools (lab_id,tool_id) values (?,?)\nDEBUG SQL : insert into lab_tools (lab_id,tool_id) values (?,?)\nDEBUG SQL : insert into lab_tools (lab_id,tool_id) values (?,?)\nC1. xoá lab AI-03\nDEBUG SQL : select l1_0.id,l1_0.code from labs l1_0 where l1_0.id=?\nDEBUG SQL : select n1_0.lab_id,n1_0.id,n1_0.text from notes n1_0 where n1_0.lab_id=?\nDEBUG SQL : select r1_0.lab_id,r1_1.id,r1_1.text from labs_rules r1_0 join rules r1_1 on r1_1.id=r1_0.rules_id where r1_0.lab_id=?\nDEBUG SQL : select t1_0.lab_id,t1_1.id,t1_1.name from lab_tools t1_0 join tools t1_1 on t1_1.id=t1_0.tool_id where t1_0.lab_id=?\nDEBUG SQL : delete from lab_tools where lab_id=?\nDEBUG SQL : delete from tools where id=?\nDEBUG SQL : delete from tools where id=?\nWARN error : HHH000247: ErrorCode: 0, SQLState: 23503\nWARN error : ERROR: update or delete on table \"tools\" violates foreign key constraint \"fkrbpt927x8g86snbghy6jw9rt5\" on table \"lab_tools\"\n  Detail: Key (id)=(2) is still referenced from table \"lab_tools\".\nLỖI: DataIntegrityViolationException\nDEBUG SQL : select string_agg(code, ', ' order by id) from labs\nDEBUG SQL : select string_agg(name, ', ' order by id) from tools\nlabs: IOT-01, NET-02, AI-03, SEC-04 · tools: ESP32, Arduino, Oscilloscope\nC2. gỡ Arduino khỏi SEC-04 trước, rồi xoá AI-03\nDEBUG SQL : select l1_0.id,l1_0.code from labs l1_0 where l1_0.id=?\nDEBUG SQL : select t1_0.lab_id,t1_1.id,t1_1.name from lab_tools t1_0 join tools t1_1 on t1_1.id=t1_0.tool_id where t1_0.lab_id=?\nDEBUG SQL : delete from lab_tools where lab_id=? and tool_id=?\nDEBUG SQL : select l1_0.id,l1_0.code from labs l1_0 where l1_0.id=?\nDEBUG SQL : select n1_0.lab_id,n1_0.id,n1_0.text from notes n1_0 where n1_0.lab_id=?\nDEBUG SQL : select r1_0.lab_id,r1_1.id,r1_1.text from labs_rules r1_0 join rules r1_1 on r1_1.id=r1_0.rules_id where r1_0.lab_id=?\nDEBUG SQL : select t1_0.lab_id,t1_1.id,t1_1.name from lab_tools t1_0 join tools t1_1 on t1_1.id=t1_0.tool_id where t1_0.lab_id=?\nDEBUG SQL : delete from lab_tools where lab_id=?\nDEBUG SQL : delete from tools where id=?\nDEBUG SQL : delete from tools where id=?\nDEBUG SQL : delete from labs where id=?\nDEBUG SQL : select string_agg(code, ', ' order by id) from labs\nDEBUG SQL : select string_agg(name, ', ' order by id) from tools\nlabs: IOT-01, NET-02, SEC-04 · tools: Oscilloscope");
 
 const L63_EN = `
 <div class="ml-en">
@@ -736,6 +740,23 @@ ${OUT63_CHAY}
 ${MA63_FB}
 ${OUT63_CASCADE}
 <p>Deleting the only feedback of AI-03 also deleted <strong>the lab AI-03</strong> — and before that its equipment links and (had there been any) its bookings, because the lab's own cascades ran too. No error, no warning. For NET-02, which still had another feedback, PostgreSQL's foreign key stopped the delete and the whole transaction failed. The constraint name <code>fke9nk3u65bob3cc7l00q5tg1mx</code> is Hibernate's invention again (lesson 6.1). Rule: <strong>never cascade REMOVE (or ALL) from a <code>@ManyToOne</code></strong>.</p>
+
+<h3>7. Three more experiments: one-way @OneToMany, the inverse side, cascade REMOVE on @ManyToMany</h3>
+<p>Added on 20/11/2026 after two videos by Vlad Mihalcea on <code>@OneToMany</code> and <code>@ManyToMany</code>. Same stack, package <code>e63yt</code>; the mappings under test:</p>
+${MA63_YT}
+<p><strong>A — a one-way <code>@OneToMany</code> costs extra statements.</strong> One lab, two notes, one <code>persist</code>:</p>
+${OUT63_YT_A}
+<ul>
+  <li>With <code>@JoinColumn</code> the foreign key lives in <code>notes</code>, but <code>Note</code> does not know its lab. Hibernate inserts the notes <em>without</em> <code>lab_id</code>, then sends two <code>UPDATE</code>s to fill it in: 5 statements where a bidirectional mapping needs 3 (one INSERT per row).</li>
+  <li>Without <code>@JoinColumn</code> it is worse: Hibernate invents a join table <code>labs_rules</code> (look at the table list) and inserts a link row per child, exactly like a many-to-many.</li>
+  <li>Rule: map the child side with <code>@ManyToOne</code>; add <code>@OneToMany(mappedBy = …)</code> only when you really need the collection.</li>
+</ul>
+<p><strong>D — removing only from the <code>mappedBy</code> list does nothing.</strong></p>
+${OUT63_YT_D}
+<p>In D, <code>lab.getBookings().remove(b)</code> produced no SQL at all: the list is the inverse side, and Hibernate only writes what the owning side (<code>Booking.lab</code>) says — <code>lab_id</code> is still <code>1</code>. In D2 the helper method also calls <code>b.setLab(null)</code>, and the <code>UPDATE</code> appears. Keep both sides in sync with <code>addBooking</code>/<code>removeBooking</code> helpers on the parent.</p>
+<p><strong>C — <code>CascadeType.REMOVE</code> on <code>@ManyToMany</code> deletes the other "parent".</strong> AI-03 and SEC-04 share the Arduino.</p>
+${OUT63_YT_C}
+<p>Deleting AI-03 cascaded to its <em>tools</em>, so Hibernate tried <code>delete from tools</code> for the shared Arduino — PostgreSQL refused because SEC-04 still references it (SQLState 23503), and the whole transaction rolled back. In C2 we first removed the Arduino from SEC-04; this time nothing stopped the cascade and the Arduino disappeared from the catalogue together with ESP32. In a many-to-many both sides are independent entities: cascade <code>PERSIST</code>/<code>MERGE</code> at most, never <code>REMOVE</code>.</p>
 
 <h3>🕵️ Hacker corner — the relationship that leaks phone numbers</h3>
 <p>A "public lab schedule" endpoint returns the entities directly. To stop the infinite JSON recursion (Lab → bookings → lab → …) the developer put <code>@JsonIgnore</code> on <code>booking.lab</code> and moved on:</p>
@@ -825,6 +846,7 @@ ${tl('https://www.pentestpartners.com/security-blog/tour-de-peloton-exposed-user
 <ul>
   <li>Outputs above: E63App on Spring Boot 4.1.2, Hibernate ORM 7.4.13.Final, PostgreSQL 16.15; Prisma 7.10.1 on Node 22 (19/11/2026).</li>
   <li>Pen Test Partners, 5/5/2021, "Tour de Peloton: Exposed user data"; TechCrunch, 5/5/2021, "Peloton's leaky API let anyone grab riders' private account data".</li>
+  <li>Experiment 7: E63YtApp (package e63yt), same stack, 20/11/2026 — idea from Vlad Mihalcea, "The best way to map a @OneToMany relationship with JPA and Hibernate" (YouTube fuLaCgzzMBA) and "The best way to use the @ManyToMany annotation with JPA and Hibernate" (YouTube bVLsHPfYerk).</li>
 </ul>
 </div>
 `;
@@ -873,6 +895,23 @@ ${OUT63_CHAY}
 ${MA63_FB}
 ${OUT63_CASCADE}
 <p>Xoá góp ý duy nhất của AI-03 cũng xoá luôn <strong>phòng AI-03</strong> — và trước đó là các liên kết thiết bị và (nếu có) các lượt đặt của phòng, vì cascade của chính lab cũng chạy theo. Không lỗi, không cảnh báo. Với NET-02, phòng còn một góp ý khác, khoá ngoại của PostgreSQL chặn lệnh xoá và cả giao dịch thất bại. Tên ràng buộc <code>fke9nk3u65bob3cc7l00q5tg1mx</code> lại là do Hibernate tự đặt (bài 6.1). Luật: <strong>không bao giờ cascade REMOVE (hay ALL) từ một <code>@ManyToOne</code></strong>.</p>
+
+<h3>7. Thêm ba thí nghiệm: @OneToMany một chiều, phía nghịch đảo, cascade REMOVE trên @ManyToMany</h3>
+<p>Bổ sung ngày 20/11/2026 sau hai video của Vlad Mihalcea về <code>@OneToMany</code> và <code>@ManyToMany</code>. Cùng bộ công nghệ, gói <code>e63yt</code>; các ánh xạ được thử:</p>
+${MA63_YT}
+<p><strong>A — <code>@OneToMany</code> một chiều tốn thêm câu lệnh.</strong> Một phòng, hai ghi chú, một lần <code>persist</code>:</p>
+${OUT63_YT_A}
+<ul>
+  <li>Có <code>@JoinColumn</code> thì khoá ngoại nằm ở bảng <code>notes</code>, nhưng <code>Note</code> không biết mình thuộc phòng nào. Hibernate chèn ghi chú <em>chưa có</em> <code>lab_id</code>, rồi gửi thêm hai câu <code>UPDATE</code> để điền vào: 5 câu, trong khi ánh xạ hai chiều chỉ cần 3 (mỗi dòng một INSERT).</li>
+  <li>Không có <code>@JoinColumn</code> còn tệ hơn: Hibernate tự đặt ra bảng nối <code>labs_rules</code> (xem danh sách bảng) và chèn một dòng liên kết cho mỗi con, y như quan hệ nhiều-nhiều.</li>
+  <li>Quy tắc: ánh xạ phía con bằng <code>@ManyToOne</code>; chỉ thêm <code>@OneToMany(mappedBy = …)</code> khi thật sự cần danh sách.</li>
+</ul>
+<p><strong>D — chỉ gỡ khỏi danh sách <code>mappedBy</code> thì không có gì xảy ra.</strong></p>
+${OUT63_YT_D}
+<p>Ở D, <code>lab.getBookings().remove(b)</code> không sinh câu SQL nào: danh sách là phía nghịch đảo, Hibernate chỉ ghi theo phía sở hữu (<code>Booking.lab</code>) — <code>lab_id</code> vẫn là <code>1</code>. Ở D2, hàm tiện ích gọi thêm <code>b.setLab(null)</code>, và câu <code>UPDATE</code> xuất hiện. Hãy giữ hai phía đồng bộ bằng hàm <code>addBooking</code>/<code>removeBooking</code> đặt ở phía cha.</p>
+<p><strong>C — <code>CascadeType.REMOVE</code> trên <code>@ManyToMany</code> xoá luôn "phía cha" bên kia.</strong> AI-03 và SEC-04 dùng chung bo Arduino.</p>
+${OUT63_YT_C}
+<p>Xoá AI-03 thì cascade lan sang <em>dụng cụ</em> của nó, nên Hibernate thử <code>delete from tools</code> cả bo Arduino dùng chung — PostgreSQL từ chối vì SEC-04 còn tham chiếu (SQLState 23503), và cả giao dịch rollback. Ở C2 ta gỡ Arduino khỏi SEC-04 trước; lần này không gì cản cascade, và Arduino biến khỏi danh mục cùng với ESP32. Trong quan hệ nhiều-nhiều, hai phía là hai entity độc lập: cascade tối đa <code>PERSIST</code>/<code>MERGE</code>, không bao giờ <code>REMOVE</code>.</p>
 
 <h3>🕵️ Góc hacker — quan hệ làm lộ số điện thoại</h3>
 <p>Một endpoint "lịch phòng công khai" trả thẳng entity. Để chặn JSON đệ quy vô tận (Lab → bookings → lab → …), lập trình viên gắn <code>@JsonIgnore</code> lên <code>booking.lab</code> rồi đi tiếp:</p>
@@ -962,6 +1001,7 @@ ${tl('https://www.pentestpartners.com/security-blog/tour-de-peloton-exposed-user
 <ul>
   <li>Output ở trên: E63App chạy Spring Boot 4.1.2, Hibernate ORM 7.4.13.Final, PostgreSQL 16.15; Prisma 7.10.1 trên Node 22 (19/11/2026).</li>
   <li>Pen Test Partners, 05/05/2021, "Tour de Peloton: Exposed user data"; TechCrunch, 05/05/2021, "Peloton's leaky API let anyone grab riders' private account data".</li>
+  <li>Thí nghiệm 7: E63YtApp (gói e63yt), cùng bộ công nghệ, 20/11/2026 — ý tưởng từ Vlad Mihalcea, "The best way to map a @OneToMany relationship with JPA and Hibernate" (YouTube fuLaCgzzMBA) và "The best way to use the @ManyToMany annotation with JPA and Hibernate" (YouTube bVLsHPfYerk).</li>
 </ul>
 </div>
 `;
@@ -977,6 +1017,9 @@ const OUT64_HACK = out("$ curl -s 'localhost:41880/bookings/cua-toi?email=an1@fp
 const OUT64_HACKLOG = out("DEBUG SQL                          : select b1_0.id,l1_0.code,b1_0.start_at from bookings b1_0 join labs l1_0 on l1_0.id=b1_0.lab_id where b1_0.student_email='an1@fpt.edu.vn' fetch first ? rows only\nDEBUG SQL                          : select b1_0.id,l1_0.code,b1_0.start_at from bookings b1_0 join labs l1_0 on l1_0.id=b1_0.lab_id where b1_0.student_email='x' or '1'='1' fetch first ? rows only\nDEBUG SQL                          : select b1_0.id,l1_0.code,b1_0.start_at from bookings b1_0 join labs l1_0 on l1_0.id=b1_0.lab_id where b1_0.student_email='x' or substr((select a1_0.password_hash from accounts a1_0 where a1_0.id=1),1,4)='$2a$' fetch first ? rows only\nDEBUG SQL                          : select b1_0.id,l1_0.code,b1_0.start_at from bookings b1_0 join labs l1_0 on l1_0.id=b1_0.lab_id where b1_0.student_email='x' or substr((select a1_0.password_hash from accounts a1_0 where a1_0.id=1),1,4)='$2b$' fetch first ? rows only\nDEBUG SQL                          : select b1_0.id,l1_0.code,b1_0.start_at from bookings b1_0 join labs l1_0 on l1_0.id=b1_0.lab_id where b1_0.student_email=? fetch first ? rows only\nDEBUG SQL                          : select b1_0.id,b1_0.lab_id,b1_0.start_at,b1_0.status,b1_0.student_email from bookings b1_0 order by b1_0.start_at desc offset ? rows fetch first ? rows only\nDEBUG SQL                          : select count(b1_0.id) from bookings b1_0\nERROR [dispatcherServlet]          : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.data.core.PropertyReferenceException: No property 'passwordHash' found for type 'Booking'] with root cause\nERROR [dispatcherServlet]          : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.dao.InvalidDataAccessApiUsageException: Sort expression '(select 1): ASC' must only contain property references or aliases used in the select clause; If yo");
 const OUT64_PRISMA = out("email = \"x' or '1'='1\"\n$queryRawUnsafe (nối chuỗi): [ { id: 1n }, { id: 2n }, { id: 3n } ]\n$queryRaw (tagged template): []");
 const MA64_PRISMA = js("const email = \"x' or '1'='1\";\nconsole.log('email =', JSON.stringify(email));\nconst sai = await prisma.$queryRawUnsafe(`select id from bookings where student_email = '${email}' limit 3`);\nconsole.log('$queryRawUnsafe (nối chuỗi):', sai);\nconst dung = await prisma.$queryRaw`select id from bookings where student_email = ${email} limit 3`;\nconsole.log('$queryRaw (tagged template):', dung);");
+const MA64_YT_V = java("/** A. record trong phương thức dẫn xuất — KHÔNG viết constructor expression. */\nrecord BookingDerived(Long id, String studentEmail, LocalDateTime startAt) { }\n\n/** B. interface ĐÓNG: chỉ getter trùng tên field. */\ninterface ClosedView { String getStudentEmail(); String getStatus(); }\n\n/** C. interface MỞ: @Value + SpEL ⇒ Spring Data cần cả entity. */\ninterface OpenView { @Value(\"#{target.studentEmail + ' · ' + target.status}\") String getMoTa(); }\n\n/** D. interface có quan hệ lồng nhau. */\ninterface NestedView { String getStudentEmail(); LabView getLab(); interface LabView { String getCode(); } }");
+const MA64_YT_R = java("public interface BookingRepo extends JpaRepository<Booking, Long> {\n    /** Projection ĐỘNG: kiểu trả về do người gọi chọn (Thorben Janssen — \"Spring Data JPA: Query Projections\"). */\n    <T> List<T> findTop3ByStatusOrderByIdAsc(String status, Class<T> type);\n}");
+const OUT64_YT = out("=== A. record BookingDerived trong phương thức dẫn xuất\nDEBUG SQL : select b1_0.id,b1_0.student_email,b1_0.start_at from bookings b1_0 where b1_0.status=? order by b1_0.id fetch first ? rows only\nBookingDerived[id=1, studentEmail=an1@fpt.edu.vn, startAt=2026-12-02T07:00]\nBookingDerived[id=2, studentEmail=an2@fpt.edu.vn, startAt=2026-12-03T07:00]\nBookingDerived[id=5, studentEmail=an5@fpt.edu.vn, startAt=2026-12-06T07:00]\n\n=== B. interface ĐÓNG ClosedView\nDEBUG SQL : select b1_0.student_email,b1_0.status from bookings b1_0 where b1_0.status=? order by b1_0.id fetch first ? rows only\nan1@fpt.edu.vn APPROVED\nan2@fpt.edu.vn APPROVED\nan5@fpt.edu.vn APPROVED\n\n=== C. interface MỞ OpenView (@Value SpEL)\nDEBUG SQL : select b1_0.id,b1_0.lab_id,b1_0.start_at,b1_0.status,b1_0.student_email from bookings b1_0 where b1_0.status=? order by b1_0.id fetch first ? rows only\nan1@fpt.edu.vn · APPROVED\nan2@fpt.edu.vn · APPROVED\nan5@fpt.edu.vn · APPROVED\n\n=== D. interface lồng NestedView (getLab().getCode())\nDEBUG SQL : select b1_0.student_email,l1_0.id,l1_0.capacity,l1_0.code from bookings b1_0 left join labs l1_0 on l1_0.id=b1_0.lab_id where b1_0.status=? order by b1_0.id fetch first ? rows only\nan1@fpt.edu.vn @ NET-02\nan2@fpt.edu.vn @ AI-03\nan5@fpt.edu.vn @ AI-03\n\n=== E. entity Booking (để so)\nDEBUG SQL : select b1_0.id,b1_0.lab_id,b1_0.start_at,b1_0.status,b1_0.student_email from bookings b1_0 where b1_0.status=? order by b1_0.id fetch first ? rows only\nBooking#1\nBooking#2\nBooking#5");
 
 const L64_EN = `
 <div class="ml-en">
@@ -1015,6 +1058,19 @@ ${MA64_SPEC}
 
 <h3>7. @Modifying bulk updates skip the persistence context</h3>
 <p>A bulk <code>update … set status = 'CANCELLED'</code> changed 100 rows in one statement — far better than loading 100 entities. But it goes straight to the database: the booking we had already loaded still said <code>PENDING</code> in memory until <code>refresh</code>. If you continue working with entities after a bulk statement, use <code>@Modifying(clearAutomatically = true, flushAutomatically = true)</code> or start a new transaction.</p>
+
+<h3>8. Projections without writing JPQL — and which ones really save columns</h3>
+<p>Added on 20/11/2026 after Thorben Janssen's video on Spring Data JPA query projections. Sections 2–3 wrote <code>select new …</code> by hand. Spring Data can also project a <em>derived</em> query, and even let the caller choose the type (a dynamic projection). Package <code>e64yt</code>:</p>
+${MA64_YT_V}
+${MA64_YT_R}
+${OUT64_YT}
+<ul>
+  <li><strong>A — a record works directly in a derived query</strong>: no constructor expression, and only the three columns of the record were selected.</li>
+  <li><strong>B — a closed interface</strong> (getters that match fields) selected exactly two columns.</li>
+  <li><strong>C — an open interface with <code>@Value</code> SpEL</strong> cannot be analysed in advance, so Spring Data loads the <em>whole entity</em> (all five columns, like E) and evaluates the expression in Java. It looks like a projection but saves nothing.</li>
+  <li><strong>D — a nested interface</strong> (<code>getLab().getCode()</code>) became one query with a <code>left join labs</code>; no N+1 on Spring Data JPA 4.1.2 (older tutorials show one extra query per row — measure on your version). It still selected every column of <code>labs</code>, not only <code>code</code>.</li>
+  <li>The dynamic form <code>&lt;T&gt; List&lt;T&gt; find…(…, Class&lt;T&gt; type)</code> lets one repository method serve a list page (closed view) and an export (record) without duplicating the query.</li>
+</ul>
 
 <h3>🕵️ Hacker corner — JPQL is not immune to injection</h3>
 <p>"We use JPA, so SQL injection is impossible" is a myth. Parameters protect you; strings do not.</p>
@@ -1113,6 +1169,7 @@ ${tl('https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2016/10/talkt
   <li>Outputs above: E64App on Spring Boot 4.1.2, Spring Data JPA 4.1.2, Hibernate ORM 7.4.13.Final, PostgreSQL 16.15 (schema64.sql, 3 000 rows); Prisma 7.10.1 on Node 22 (19/11/2026).</li>
   <li>ICO, 5/10/2016, "TalkTalk gets record £400,000 fine for failing to prevent October 2015 attack".</li>
   <li>CVE-2016-6652 (NVD): Spring Data JPA sort-based JPQL injection, fixed in 1.9.6 and 1.10.4.</li>
+  <li>Experiment 8: E64YtApp (package e64yt), same stack, 20/11/2026 — idea from Thorben Janssen, "Spring Data JPA: Query Projections" (YouTube sLo6if5puC8).</li>
 </ul>
 </div>
 `;
@@ -1154,6 +1211,19 @@ ${MA64_SPEC}
 
 <h3>7. Cập nhật hàng loạt @Modifying đi vòng persistence context</h3>
 <p>Một câu <code>update … set status = 'CANCELLED'</code> hàng loạt đổi 100 dòng trong một lệnh — tốt hơn hẳn nạp 100 entity. Nhưng nó đi thẳng xuống CSDL: lượt đặt ta đã nạp trước đó vẫn là <code>PENDING</code> trong bộ nhớ cho tới khi <code>refresh</code>. Nếu còn làm việc với entity sau câu hàng loạt, dùng <code>@Modifying(clearAutomatically = true, flushAutomatically = true)</code> hoặc mở giao dịch mới.</p>
+
+<h3>8. Projection không cần viết JPQL — và loại nào thật sự bớt cột</h3>
+<p>Bổ sung ngày 20/11/2026 sau video của Thorben Janssen về projection trong Spring Data JPA. Mục 2–3 viết <code>select new …</code> bằng tay. Spring Data còn chiếu được kết quả của truy vấn <em>suy từ tên</em>, thậm chí để người gọi tự chọn kiểu (projection động). Gói <code>e64yt</code>:</p>
+${MA64_YT_V}
+${MA64_YT_R}
+${OUT64_YT}
+<ul>
+  <li><strong>A — record dùng thẳng trong truy vấn suy từ tên</strong>: không cần constructor expression, và chỉ ba cột của record được chọn.</li>
+  <li><strong>B — interface đóng</strong> (getter trùng tên field) chọn đúng hai cột.</li>
+  <li><strong>C — interface mở có <code>@Value</code> SpEL</strong> không phân tích trước được, nên Spring Data nạp <em>cả entity</em> (đủ năm cột, như E) rồi tính biểu thức trong Java. Trông như projection mà không tiết kiệm được gì.</li>
+  <li><strong>D — interface lồng</strong> (<code>getLab().getCode()</code>) thành một câu duy nhất có <code>left join labs</code>; không N+1 trên Spring Data JPA 4.1.2 (hướng dẫn cũ cho thấy mỗi dòng thêm một câu — hãy đo trên phiên bản của bạn). Nó vẫn chọn mọi cột của <code>labs</code>, không chỉ <code>code</code>.</li>
+  <li>Dạng động <code>&lt;T&gt; List&lt;T&gt; find…(…, Class&lt;T&gt; type)</code> cho một phương thức repository phục vụ cả trang danh sách (view đóng) lẫn xuất tệp (record) mà không lặp truy vấn.</li>
+</ul>
 
 <h3>🕵️ Góc hacker — JPQL không miễn nhiễm injection</h3>
 <p>"Dùng JPA thì không thể bị SQL injection" là chuyện hoang đường. Tham số bảo vệ bạn; chuỗi thì không.</p>
@@ -1252,6 +1322,7 @@ ${tl('https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2016/10/talkt
   <li>Output ở trên: E64App chạy Spring Boot 4.1.2, Spring Data JPA 4.1.2, Hibernate ORM 7.4.13.Final, PostgreSQL 16.15 (schema64.sql, 3 000 dòng); Prisma 7.10.1 trên Node 22 (19/11/2026).</li>
   <li>ICO, 05/10/2016, "TalkTalk gets record £400,000 fine for failing to prevent October 2015 attack".</li>
   <li>CVE-2016-6652 (NVD): injection JPQL qua tham số sắp xếp trong Spring Data JPA, vá ở 1.9.6 và 1.10.4.</li>
+  <li>Thí nghiệm 8: E64YtApp (gói e64yt), cùng bộ công nghệ, 20/11/2026 — ý tưởng từ Thorben Janssen, "Spring Data JPA: Query Projections" (YouTube sLo6if5puC8).</li>
 </ul>
 </div>
 `;
@@ -1267,6 +1338,8 @@ const OUT65_POOLLOI = out("WARN  error                        : HikariPool-1 - C
 const OUT65_POOLNHANH = out("$ seq 30 | xargs -P 30 -I{} curl -s -o /dev/null -w '%{http_code}\\n' -X POST localhost:41880/pay/nhanh | sort | uniq -c\n     30 200\ntổng thời gian: 2.09 s");
 const MA65_PRISMA = js("class HetPhong extends Error {}\ntry {\n  await prisma.$transaction(async (tx) => {\n    await tx.lab.create({ data: { code: 'AI-03', name: 'Phòng AI', capacity: 16 } });\n    throw new HetPhong('phòng AI-03 hết chỗ');   // JS không có checked/unchecked\n  });\n} catch (e) { console.log('bắt được:', (e as Error).message); }\nconsole.log('số lab trong CSDL:', await prisma.lab.count());");
 const OUT65_PRISMA = out("bắt được: phòng AI-03 hết chỗ\nsố lab trong CSDL: 0");
+const MA65_YT = java("/** Bổ sung từ YouTube gDpmbUoEpPQ (Laur Spilca — vì sao @Transactional không chạy khi gọi trong cùng lớp) + 4BD6pF7dkkc (Marco Behler). */\n@Service\npublic class DatService {\n    private final BookingRepository bookings;\n    @Autowired @Lazy private DatService self;          // tự tiêm: Spring đưa PROXY vào đây\n    public DatService(BookingRepository b) { this.bookings = b; }\n\n    public void soSanh() {\n        System.out.println(\"this.getClass() = \" + this.getClass().getSimpleName());\n        System.out.println(\"self.getClass() = \" + self.getClass().getSimpleName());\n    }\n    /** A. gọi qua this ⇒ bỏ qua proxy. */\n    public void quaThis(String email) { datCap(email); }\n    /** B. gọi qua self (proxy) ⇒ có giao dịch. */\n    public void quaSelf(String email) { self.datCap(email); }\n\n    @Transactional\n    public void datCap(String email) {\n        System.out.println(\"datCap: có giao dịch? \" + isActualTransactionActive());\n        bookings.save(new Booking(\"LAB-YT\", email));\n        throw new IllegalStateException(\"buổi 2 trùng lịch\");\n    }\n}");
+const OUT65_YT = out("=== 0. Ai mở/đóng giao dịch? PlatformTransactionManager = JpaTransactionManager\n\n=== 1. this vs self (tự tiêm @Lazy)\nthis.getClass() = DatService\nself.getClass() = DatService$$SpringCGLIB$$0\n\n=== A. gọi datCap() qua this\ndatCap: có giao dịch? false\n   bắt được: buổi 2 trùng lịch\n   bảng bookings: a@fpt.edu.vn\n\n=== B. gọi datCap() qua self (proxy)\ndatCap: có giao dịch? true\n   bắt được: buổi 2 trùng lịch\n   bảng bookings: a@fpt.edu.vn\n\n=== C. tự new DatService(repo) rồi gọi datCap()\nlớp: DatService\ndatCap: có giao dịch? false\n   bắt được: buổi 2 trùng lịch\n   bảng bookings: a@fpt.edu.vn, c@fpt.edu.vn\n\n--- log PostgreSQL (lượt A, B, C)\n23:35:10.829 LOG:  statement: BEGIN\n23:35:10.829 LOG:  execute <unnamed>: insert into bookings (lab_code,student_email) values ($1,$2)\n23:35:10.845 LOG:  execute S_1: COMMIT\n23:35:10.858 LOG:  statement: BEGIN\n23:35:10.858 LOG:  execute <unnamed>: insert into bookings (lab_code,student_email) values ($1,$2)\n23:35:10.860 LOG:  execute S_2: ROLLBACK\n23:35:10.862 LOG:  statement: BEGIN\n23:35:10.862 LOG:  execute <unnamed>: insert into bookings (lab_code,student_email) values ($1,$2)\n23:35:10.863 LOG:  execute S_1: COMMIT");
 
 const L65_EN = `
 <div class="ml-en">
@@ -1309,6 +1382,18 @@ ${OUT65_POOLCHAM}
 ${OUT65_POOLLOI}
 ${OUT65_POOLNHANH}
 <p>The first 10 requests held all connections for 2 s, the next 10 waited 2 s and got through, the last 10 waited more than 3 s and failed with 500 — while the database itself was idle. Moving the slow call out of the transaction: 30 × 200 in 2.09 s. Rule: <strong>no HTTP calls, emails, file uploads or <code>sleep</code> inside a transaction</strong>; read, call outside, then open a short transaction to write.</p>
+
+<h3>7. One method, three callers: this, the proxy, and new</h3>
+<p>Added on 20/11/2026 after Laur Spilca's video on why <code>@Transactional</code> does not work inside the same class, and Marco Behler's "Spring Transaction Management: Finally Understandable". The same annotated method <code>datCap</code> inserts a row and then throws; we call it three ways (package <code>e65yt</code>):</p>
+${MA65_YT}
+${OUT65_YT}
+<ul>
+  <li><strong>Who runs the transaction:</strong> the <code>PlatformTransactionManager</code> bean is a <code>JpaTransactionManager</code>. The annotation only marks the method; the proxy asks this manager to begin, commit or roll back.</li>
+  <li><strong>A — through <code>this</code></strong>: <code>this</code> is the plain <code>DatService</code>, no transaction, the row of <code>a@…</code> was committed (PostgreSQL: <code>BEGIN</code> … <code>COMMIT</code> from <code>save</code>'s own small transaction).</li>
+  <li><strong>B — through <code>self</code></strong>, a field where Spring injected <em>itself</em> with <code>@Lazy</code>: the class is <code>DatService$$SpringCGLIB$$0</code>, the method ran in a transaction and the insert was rolled back (<code>ROLLBACK</code> in the log, no <code>b@…</code> in the table).</li>
+  <li><strong>C — <code>new DatService(repo)</code></strong>: an object Spring never saw has no proxy at all; the row <code>c@…</code> stayed.</li>
+  <li>Self-injection works but hides the design problem. The cleaner fixes: move the transactional method to another bean, put <code>@Transactional</code> on the public entry method, or use <code>TransactionTemplate</code> explicitly.</li>
+</ul>
 
 <h3>🕵️ Hacker corner — @Transactional does not stop a race</h3>
 <p>The most common misunderstanding in interviews and in code: "the method is <code>@Transactional</code>, so two requests cannot both spend the same points". Here is the method: read the wallet, check ≥ 100, (a 50 ms pause stands for real work), subtract 100, record a booking.</p>
@@ -1391,6 +1476,7 @@ ${tl('https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing', '📙
 <ul>
   <li>Outputs above: E65App on Spring Boot 4.1.2, Hibernate ORM 7.4.13.Final, HikariCP 7.0.2, PostgreSQL 16.15 with <code>log_statement=all</code>; Prisma 7.10.1 on Node 22 (19/11/2026).</li>
   <li>Flexcoin announcement (3/3/2014) and press coverage (e.g. The Guardian, 4/3/2014, "Bitcoin bank Flexcoin closes after hack attack").</li>
+  <li>Experiment 7: E65YtApp (package e65yt), same stack, PostgreSQL log_statement=all, 20/11/2026 — ideas from Laur Spilca, "Why doesn't @Transactional work when called within the same class?" (YouTube gDpmbUoEpPQ) and Marco Behler, "Spring Transaction Management: Finally Understandable" (YouTube 4BD6pF7dkkc).</li>
 </ul>
 </div>
 `;
@@ -1436,6 +1522,18 @@ ${OUT65_POOLCHAM}
 ${OUT65_POOLLOI}
 ${OUT65_POOLNHANH}
 <p>10 request đầu giữ hết kết nối trong 2 giây, 10 request kế chờ 2 giây rồi qua được, 10 request cuối chờ quá 3 giây và thất bại với 500 — trong khi bản thân CSDL đang rảnh. Đưa lời gọi chậm ra ngoài giao dịch: 30 × 200 trong 2,09 giây. Luật: <strong>không gọi HTTP, gửi email, tải tệp hay <code>sleep</code> bên trong giao dịch</strong>; đọc, gọi bên ngoài, rồi mở một giao dịch ngắn để ghi.</p>
+
+<h3>7. Một phương thức, ba cách gọi: this, proxy và new</h3>
+<p>Bổ sung ngày 20/11/2026 sau video của Laur Spilca giải thích vì sao <code>@Transactional</code> không chạy khi gọi trong cùng lớp, và video "Spring Transaction Management: Finally Understandable" của Marco Behler. Cùng một phương thức có annotation <code>datCap</code> chèn một dòng rồi ném lỗi; ta gọi nó theo ba cách (gói <code>e65yt</code>):</p>
+${MA65_YT}
+${OUT65_YT}
+<ul>
+  <li><strong>Ai thực sự chạy giao dịch:</strong> bean <code>PlatformTransactionManager</code> là một <code>JpaTransactionManager</code>. Annotation chỉ đánh dấu phương thức; proxy nhờ trình quản lý này bắt đầu, commit hoặc rollback.</li>
+  <li><strong>A — qua <code>this</code></strong>: <code>this</code> là <code>DatService</code> trần, không có giao dịch, dòng của <code>a@…</code> đã được commit (PostgreSQL: <code>BEGIN</code> … <code>COMMIT</code> từ giao dịch nhỏ riêng của <code>save</code>).</li>
+  <li><strong>B — qua <code>self</code></strong>, một field mà Spring tiêm <em>chính nó</em> vào bằng <code>@Lazy</code>: lớp là <code>DatService$$SpringCGLIB$$0</code>, phương thức chạy trong giao dịch và câu insert bị rollback (log có <code>ROLLBACK</code>, bảng không có <code>b@…</code>).</li>
+  <li><strong>C — <code>new DatService(repo)</code></strong>: đối tượng Spring chưa từng thấy thì không có proxy nào cả; dòng <code>c@…</code> ở lại.</li>
+  <li>Tự tiêm chạy được nhưng che đi vấn đề thiết kế. Cách sạch hơn: chuyển phương thức giao dịch sang bean khác, đặt <code>@Transactional</code> ở phương thức public đầu vào, hoặc dùng <code>TransactionTemplate</code> tường minh.</li>
+</ul>
 
 <h3>🕵️ Góc hacker — @Transactional không chặn được cuộc đua</h3>
 <p>Hiểu lầm phổ biến nhất trong phỏng vấn và trong mã: "phương thức có <code>@Transactional</code> rồi, nên hai request không thể cùng tiêu một số điểm". Đây là phương thức: đọc ví, kiểm ≥ 100, (khoảng nghỉ 50 ms thay cho việc thật), trừ 100, ghi một lượt đặt.</p>
@@ -1518,6 +1616,7 @@ ${tl('https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing', '📙
 <ul>
   <li>Output ở trên: E65App chạy Spring Boot 4.1.2, Hibernate ORM 7.4.13.Final, HikariCP 7.0.2, PostgreSQL 16.15 với <code>log_statement=all</code>; Prisma 7.10.1 trên Node 22 (19/11/2026).</li>
   <li>Thông báo của Flexcoin (03/03/2014) và báo chí (ví dụ The Guardian, 04/03/2014, "Bitcoin bank Flexcoin closes after hack attack").</li>
+  <li>Thí nghiệm 7: E65YtApp (gói e65yt), cùng bộ công nghệ, PostgreSQL log_statement=all, 20/11/2026 — ý tưởng từ Laur Spilca, "Why doesn't @Transactional work when called within the same class?" (YouTube gDpmbUoEpPQ) và Marco Behler, "Spring Transaction Management: Finally Understandable" (YouTube 4BD6pF7dkkc).</li>
 </ul>
 </div>
 `;
@@ -1534,6 +1633,8 @@ const MA66_SVC = java("@Service\npublic class BookingService {\n    private fina
 const MA66_REPO = java("public interface BookingRepository extends JpaRepository<Booking, Long> {\n\n    String VIEW = \"select new labflow.BookingView(b.id, l.code, s.studentCode, b.startAt, b.endAt, b.status) \"\n                + \"from Booking b join b.lab l join b.student s \";\n\n    @Query(VIEW + \"where l.code = :code and b.startAt >= :from and b.startAt < :to order by b.startAt, b.id\")\n    List<BookingView> lichNgay(@Param(\"code\") String code, @Param(\"from\") LocalDateTime from, @Param(\"to\") LocalDateTime to);\n\n    @Query(value = VIEW + \"where s.studentCode = :sc\",\n           countQuery = \"select count(b) from Booking b where b.student.studentCode = :sc\")\n    Page<BookingView> cuaSinhVien(@Param(\"sc\") String studentCode, Pageable p);\n\n    @Query(VIEW + \"where b.id = :id\")\n    BookingView view(@Param(\"id\") Long id);\n\n    @Query(\"\"\"\n           select b.id from Booking b where b.lab = :lab and b.status <> 'CANCELLED'\n           and b.startAt < :end and b.endAt > :start order by b.id\"\"\")\n    List<Long> trung(@Param(\"lab\") Lab lab, @Param(\"start\") LocalDateTime start, @Param(\"end\") LocalDateTime end, Limit limit);\n}");
 const MA66_BOOKING = java("@Entity\n@Table(name = \"bookings\")\npublic class Booking {\n    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;\n    @ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = \"lab_id\") private Lab lab;\n    @ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = \"student_id\") private Student student;\n    @Column(name = \"start_at\", nullable = false) private LocalDateTime startAt;\n    @Column(name = \"end_at\", nullable = false) private LocalDateTime endAt;\n    @Column(nullable = false, length = 20) private String status = \"PENDING\";\n\n    protected Booking() { }\n    public Booking(Lab lab, Student student, LocalDateTime startAt, LocalDateTime endAt) {\n        this.lab = lab; this.student = student; this.startAt = startAt; this.endAt = endAt;\n    }\n    public Long getId() { return id; }\n    public String getStatus() { return status; }\n    public void cancel() { this.status = \"CANCELLED\"; }\n}");
 const MA66_CTRLG = java("@RestController\nclass BookingController {\n    record LabView(Long id, String code, String name, int capacity) { }\n    record Trang(List<BookingView> items, long total) { }\n\n    private final LabRepository labs; private final BookingService svc;\n    BookingController(LabRepository labs, BookingService svc) { this.labs = labs; this.svc = svc; }\n\n    @GetMapping(\"/labs\")\n    List<LabView> labs() {\n        return labs.findAllByOrderByCodeAsc().stream().map(l -> new LabView(l.getId(), l.getCode(), l.getName(), l.getCapacity())).toList();\n    }\n\n    @GetMapping(\"/labs/{code}/bookings\")\n    List<BookingView> lich(@PathVariable String code, @RequestParam LocalDate date) { return svc.lichNgay(code, date); }\n\n    @PostMapping(\"/bookings\") @ResponseStatus(HttpStatus.CREATED)\n    BookingView dat(@RequestBody BookingRequest r) { return svc.dat(r); }\n\n    @PostMapping(\"/bookings/batch\") @ResponseStatus(HttpStatus.CREATED)\n    List<BookingView> datLo(@RequestBody List<BookingRequest> ds) { return svc.datLo(ds); }\n\n    @PatchMapping(\"/bookings/{id}/cancel\")\n    BookingView huy(@PathVariable Long id) { return svc.huy(id); }\n\n    @GetMapping(\"/bookings\")\n    Trang cuaSinhVien(@RequestParam String studentCode, @RequestParam(defaultValue = \"0\") int page,\n                      @RequestParam(defaultValue = \"10\") int size) {\n        Page<BookingView> p = svc.cuaSinhVien(studentCode,\n                PageRequest.of(page, Math.min(size, 50), Sort.by(\"startAt\").and(Sort.by(\"id\"))));\n        return new Trang(p.getContent(), p.getTotalElements());\n    }\n}");
+const MA66_YT = java("public interface BookingRepo extends JpaRepository<Booking, Long> {\n    /** N+1: lab LAZY, chạm getLab().getCode() từng dòng. */\n    List<Booking> findTop10ByStatusOrderByIdAsc(String status);\n\n    /** Sửa 1: @EntityGraph ⇒ Spring Data thêm left join fetch. */\n    @EntityGraph(attributePaths = \"lab\")\n    List<Booking> findTop10ByStudentEmailNotNullAndStatusOrderByIdAsc(String status);\n\n    /** Sửa 2: JOIN FETCH trong JPQL. */\n    @Query(\"select b from Booking b join fetch b.lab where b.status = :st order by b.id limit 10\")\n    List<Booking> joinFetch(String st);\n}");
+const OUT66_YT = out("=== A. findTop10…: lab LAZY, chạm getLab().getCode() từng dòng\nDEBUG SQL : select b1_0.id,b1_0.lab_id,b1_0.start_at,b1_0.status,b1_0.student_email from bookings b1_0 where b1_0.status=? order by b1_0.id fetch first ? rows only\nDEBUG SQL : select l1_0.id,l1_0.capacity,l1_0.code from labs l1_0 where l1_0.id=?\nDEBUG SQL : select l1_0.id,l1_0.capacity,l1_0.code from labs l1_0 where l1_0.id=?\nDEBUG SQL : select l1_0.id,l1_0.capacity,l1_0.code from labs l1_0 where l1_0.id=?\nmã phòng: [NET-02, AI-03, AI-03, IOT-01, IOT-01, NET-02, NET-02, AI-03, AI-03, IOT-01]\nsố câu SQL (Statistics.getPrepareStatementCount) = 4\n\n=== B. @EntityGraph(attributePaths = \"lab\")\nDEBUG SQL : select b1_0.id,l1_0.id,l1_0.capacity,l1_0.code,b1_0.start_at,b1_0.status,b1_0.student_email from bookings b1_0 left join labs l1_0 on l1_0.id=b1_0.lab_id where b1_0.student_email is not null and b1_0.status=? order by b1_0.id fe\nmã phòng: [NET-02, AI-03, AI-03, IOT-01, IOT-01, NET-02, NET-02, AI-03, AI-03, IOT-01]\nsố câu SQL (Statistics.getPrepareStatementCount) = 1\n\n=== C. JPQL join fetch\nDEBUG SQL : select b1_0.id,l1_0.id,l1_0.capacity,l1_0.code,b1_0.start_at,b1_0.status,b1_0.student_email from bookings b1_0 join labs l1_0 on l1_0.id=b1_0.lab_id where b1_0.status=? order by b1_0.id fetch first 10 rows only\nmã phòng: [NET-02, AI-03, AI-03, IOT-01, IOT-01, NET-02, NET-02, AI-03, AI-03, IOT-01]\nsố câu SQL (Statistics.getPrepareStatementCount) = 1");
 
 const L66_EN = `
 <div class="ml-en">
@@ -1597,6 +1698,16 @@ ${OUT66_BAY2}
   <li><strong><code>&lt;=</code> instead of <code>&lt;</code></strong> in the overlap query makes the adjacent 10:00 booking a 409 (check 3).</li>
 </ul>
 
+<h3>Measure, don't guess: count statements with Hibernate Statistics</h3>
+<p>Added on 20/11/2026 after Java Techie's interview video on the N+1 problem. Item 8 of the grader counts statements in the PostgreSQL log; inside the application you can count them with Hibernate's own statistics (<code>spring.jpa.properties.hibernate.generate_statistics=true</code>, then <code>Statistics.getPrepareStatementCount()</code>). Ten APPROVED bookings, lab is <code>LAZY</code> (package <code>e66yt</code>):</p>
+${MA66_YT}
+${OUT66_YT}
+<ul>
+  <li><strong>A</strong> is the N+1 shape, but the count is <strong>4</strong>, not 11: the ten bookings use only three different labs, and the first-level cache returns a lab already loaded. N is the number of <em>distinct</em> parents — which is why N+1 hides in a small test database and explodes in production.</li>
+  <li><strong>B</strong> <code>@EntityGraph(attributePaths = "lab")</code> and <strong>C</strong> <code>join fetch</code>: <strong>1</strong> statement each, same result.</li>
+  <li>Use the counter in tests (Chapter 11) to fail a build when a page suddenly needs more statements. Chapter 7 starts exactly here.</li>
+</ul>
+
 <h3>Stretch (optional)</h3>
 <ul>
   <li>Ten students booking the same slot at the same time: the overlap SELECT + INSERT races exactly like lesson 6.5's wallet. Write a script that fires 10 parallel requests and count the rows — then read Chapter 7.</li>
@@ -1623,6 +1734,7 @@ ${OUT66_GIAI}
 <h3>Sources</h3>
 <ul>
   <li>Lab run: Lab6App on Spring Boot 4.1.2, Hibernate ORM 7.4.13.Final, PostgreSQL 16.15 with <code>log_statement=all</code>; starter 1/8 ×3, solution 8/8 ×3, two traps 7/8 (19/11/2026).</li>
+  <li>Statistics experiment: E66YtApp (package e66yt), same stack, 20/11/2026 — idea from Java Techie, "Interview Q&amp;A | Hibernate N+1 Problem &amp; Fix" (YouTube zwF5ADW6eKs).</li>
 </ul>
 </div>
 `;
@@ -1689,6 +1801,16 @@ ${OUT66_BAY2}
   <li><strong><code>&lt;=</code> thay vì <code>&lt;</code></strong> trong truy vấn trùng giờ làm lượt 10:00 sát giờ thành 409 (mục 3).</li>
 </ul>
 
+<h3>Đo, đừng đoán: đếm câu lệnh bằng Hibernate Statistics</h3>
+<p>Bổ sung ngày 20/11/2026 sau video phỏng vấn về N+1 của Java Techie. Mục 8 của bộ chấm đếm câu lệnh trong log PostgreSQL; ngay trong ứng dụng bạn đếm được bằng thống kê của chính Hibernate (<code>spring.jpa.properties.hibernate.generate_statistics=true</code>, rồi <code>Statistics.getPrepareStatementCount()</code>). Mười lượt đặt APPROVED, lab là <code>LAZY</code> (gói <code>e66yt</code>):</p>
+${MA66_YT}
+${OUT66_YT}
+<ul>
+  <li><strong>A</strong> có hình dạng N+1, nhưng số đếm là <strong>4</strong>, không phải 11: mười lượt đặt chỉ dùng ba phòng khác nhau, và cache cấp 1 trả lại phòng đã nạp. N là số phía cha <em>khác nhau</em> — vì thế N+1 trốn kỹ trong CSDL thử nhỏ rồi bùng nổ ở production.</li>
+  <li><strong>B</strong> <code>@EntityGraph(attributePaths = "lab")</code> và <strong>C</strong> <code>join fetch</code>: mỗi cách đúng <strong>1</strong> câu, cùng kết quả.</li>
+  <li>Dùng bộ đếm này trong test (Chương 11) để làm đỏ bản build khi một trang bỗng cần thêm câu lệnh. Chương 7 bắt đầu đúng từ đây.</li>
+</ul>
+
 <h3>Nâng cao (không bắt buộc)</h3>
 <ul>
   <li>Mười sinh viên cùng đặt một khung giờ cùng lúc: SELECT kiểm trùng + INSERT đua nhau y như cái ví ở bài 6.5. Viết script bắn 10 request song song rồi đếm số dòng — sau đó đọc Chương 7.</li>
@@ -1715,6 +1837,7 @@ ${OUT66_GIAI}
 <h3>Nguồn</h3>
 <ul>
   <li>Chạy lab: Lab6App trên Spring Boot 4.1.2, Hibernate ORM 7.4.13.Final, PostgreSQL 16.15 với <code>log_statement=all</code>; bản khởi đầu 1/8 ×3, lời giải 8/8 ×3, hai bẫy 7/8 (19/11/2026).</li>
+  <li>Thí nghiệm Statistics: E66YtApp (gói e66yt), cùng bộ công nghệ, 20/11/2026 — ý tưởng từ Java Techie, "Interview Q&amp;A | Hibernate N+1 Problem &amp; Fix" (YouTube zwF5ADW6eKs).</li>
 </ul>
 </div>
 `;

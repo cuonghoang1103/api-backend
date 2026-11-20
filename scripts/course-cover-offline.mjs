@@ -101,6 +101,11 @@ const KHOA = [
   ['huong-dan-ct-work', 'ctwork', '8B8BF5', 'CT Work Tutorial', 'Team Projects by Role · Board → Reports'],
   // 20/11/2026 — khoá khung "Đọc & làm chủ log từ A–Z"; logo tự vẽ (scripts/icons/log-lines.svg: dòng log + kính lúp), không dùng logo hãng.
   ['log-tu-a-den-z', 'log-lines', 'F59E0B', 'Reading Logs A–Z', 'Windows · Linux · Web · Network · SIEM'],
+  // 20/11/2026 — 4 khoá khung P0 cho OJT (bảng soát khoảng trống); logo tự vẽ trong scripts/icons/ (bug, code-refactor, chat-bubbles, terminal-window), không dùng logo hãng.
+  ['debug-co-phuong-phap', 'bug', 'EF4444', 'Debugging Methodically', 'Reproduce → Isolate → Fix · Java · Node · DevTools'],
+  ['doc-code-cu-va-refactor', 'code-refactor', 'A78BFA', 'Legacy Code', 'Read · Test · Refactor · Upgrade'],
+  ['tieng-anh-ky-thuat-di-lam', 'chat-bubbles', '38BDF8', 'English at Work', 'Tickets · PRs · Emails · Stand-ups'],
+  ['ide-va-do-nghe-dev', 'terminal-window', '10B981', 'IDE & Dev Toolbox', 'VS Code · IntelliJ · Terminal · Regex'],
 ];
 
 const esc = (s) => String(s)

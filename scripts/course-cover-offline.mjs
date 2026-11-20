@@ -99,6 +99,8 @@ const KHOA = [
   ['smart-contracts-solidity', 'solidity', 'FFFFFF', 'Smart Contracts', 'Solidity · Foundry · Audits · DeFi'],
   // 17/10/2026 — khoá video "Hướng dẫn CT Work"; logo = bảng Kanban tự vẽ (scripts/icons/ctwork.svg), không dùng logo hãng khác.
   ['huong-dan-ct-work', 'ctwork', '8B8BF5', 'CT Work Tutorial', 'Team Projects by Role · Board → Reports'],
+  // 20/11/2026 — khoá khung "Đọc & làm chủ log từ A–Z"; logo tự vẽ (scripts/icons/log-lines.svg: dòng log + kính lúp), không dùng logo hãng.
+  ['log-tu-a-den-z', 'log-lines', 'F59E0B', 'Reading Logs A–Z', 'Windows · Linux · Web · Network · SIEM'],
 ];
 
 const esc = (s) => String(s)

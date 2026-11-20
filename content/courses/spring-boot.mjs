@@ -21,6 +21,7 @@ import s07 from './spring-boot/s07-jpa-chuyen-sau.mjs';
 import s08 from './spring-boot/s08-flyway.mjs';
 import s09 from './spring-boot/s09-security-jwt.mjs';
 import s10 from './spring-boot/s10-hacker.mjs';
+import s11 from './spring-boot/s11-test.mjs';
 
 const CHUONG = [
   ['Section 0 — Why Spring Boot', 'Mục 0 — Vì sao Spring Boot', '(đã soạn — spring-boot/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -176,6 +177,7 @@ sections[7] = s07;
 sections[8] = s08;
 sections[9] = s09;
 sections[10] = s10;
+sections[11] = s11;
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },

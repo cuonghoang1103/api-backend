@@ -387,6 +387,8 @@ const OUT62_999 = out("$ curl -s localhost:41880/accounts -H 'Content-Type: appl
 const MA62_V2 = java("@RestController\n@RequestMapping(\"/v2/accounts\")\nclass AccountV2Controller {\n    record SignUpRequest(String email) { }          // chỉ những gì người dùng ĐƯỢC gửi\n    record AccountView(Long id, String email) { }\n\n    private final AccountRepository repo;\n    AccountV2Controller(AccountRepository repo) { this.repo = repo; }\n\n    @PostMapping\n    AccountView signUp(@RequestBody SignUpRequest req) {\n        Account a = new Account();                    // luôn là entity MỚI ⇒ luôn INSERT\n        a.setEmail(req.email());\n        Account luu = repo.save(a);\n        return new AccountView(luu.getId(), luu.getEmail());\n    }\n}");
 const OUT62_V2 = out("$ curl -s localhost:41880/v2/accounts -H 'Content-Type: application/json' -d '{\"id\":2,\"email\":\"hacker@evil.vn\",\"role\":\"ADMIN\"}'\n{\"id\":3,\"email\":\"hacker@evil.vn\"}\n\n$ curl -s localhost:41880/accounts\n[{\"email\":\"an@fpt.edu.vn\",\"id\":1,\"role\":\"STUDENT\"},{\"email\":\"hacker@evil.vn\",\"id\":2,\"role\":\"ADMIN\"},{\"email\":\"hacker@evil.vn\",\"id\":3,\"role\":\"STUDENT\"}]");
 const OUT61_PRISMA2 = out("=== findUnique 2 lần cùng id (Prisma không có cache cấp 1)\nSQL  : SELECT \"labs_node\".\"id\", \"labs_node\".\"code\", \"labs_node\".\"name\", \"labs_node\".\"capacity\" FROM \"labs_node\" WHERE (\"labs_node\".\"code\" = $1 AND 1=1) LIMIT $2 OFFSET $3\nSQL  : SELECT \"labs_node\".\"id\", \"labs_node\".\"code\", \"labs_node\".\"name\", \"labs_node\".\"capacity\" FROM \"labs_node\" WHERE (\"labs_node\".\"code\" = $1 AND 1=1) LIMIT $2 OFFSET $3\na === b ? false\n\n=== đổi capacity trên đối tượng JS rồi không gọi update\nSQL  : SELECT \"labs_node\".\"id\", \"labs_node\".\"code\", \"labs_node\".\"name\", \"labs_node\".\"capacity\" FROM \"labs_node\" WHERE (\"labs_node\".\"code\" = $1 AND 1=1) LIMIT $2 OFFSET $3\ntrong CSDL: 30\n\n=== update tường minh\nSQL  : UPDATE \"labs_node\" SET \"capacity\" = $1 WHERE (\"labs_node\".\"code\" = $2 AND 1=1) RETURNING \"labs_node\".\"id\", \"labs_node\".\"code\", \"labs_node\".\"name\", \"labs_node\".\"capacity\"");
+const MA62_YT = java("buoc(\"A. setCapacity(77) rồi detach — KHÔNG flush trước\");\ntx.executeWithoutResult(s -> {\n    Lab l = em.find(Lab.class, id);\n    l.setCapacity(77);\n    em.detach(l);\n    System.out.println(\"đã detach, contains=\" + em.contains(l));\n});\ntx.executeWithoutResult(s -> System.out.println(\"trong CSDL: \" + em.find(Lab.class, id).getCapacity()));\n\nbuoc(\"B. setCapacity(77) rồi flush() TRƯỚC khi detach\");\ntx.executeWithoutResult(s -> {\n    Lab l = em.find(Lab.class, id);\n    l.setCapacity(77);\n    em.flush();\n    em.detach(l);\n});\ntx.executeWithoutResult(s -> System.out.println(\"trong CSDL: \" + em.find(Lab.class, id).getCapacity()));\n\nbuoc(\"C. Kết quả native query cũng là MANAGED\");\ntx.executeWithoutResult(s -> {\n    Lab l = (Lab) em.createNativeQuery(\"select * from labs where code = :c\", Lab.class)\n            .setParameter(\"c\", \"IOT-01\").getSingleResult();\n    System.out.println(\"contains=\" + em.contains(l));\n    l.setCapacity(35);\n    System.out.println(\"đã setCapacity(35), không save — sắp commit\");\n});\ntx.executeWithoutResult(s -> System.out.println(\"trong CSDL: \" + em.find(Lab.class, id).getCapacity()));");
+const OUT62_YT = out("=== A. setCapacity(77) rồi detach — KHÔNG flush trước\nDEBUG SQL : select l1_0.id,l1_0.capacity,l1_0.code,l1_0.name from labs l1_0 where l1_0.id=?\nđã detach, contains=false\nDEBUG SQL : select l1_0.id,l1_0.capacity,l1_0.code,l1_0.name from labs l1_0 where l1_0.id=?\ntrong CSDL: 30\n\n=== B. setCapacity(77) rồi flush() TRƯỚC khi detach\nDEBUG SQL : select l1_0.id,l1_0.capacity,l1_0.code,l1_0.name from labs l1_0 where l1_0.id=?\nDEBUG SQL : update labs set capacity=?,code=?,name=? where id=?\nDEBUG SQL : select l1_0.id,l1_0.capacity,l1_0.code,l1_0.name from labs l1_0 where l1_0.id=?\ntrong CSDL: 77\n\n=== C. Kết quả native query cũng là MANAGED\nDEBUG SQL : select * from labs where code = ?\ncontains=true\nđã setCapacity(35), không save — sắp commit\nDEBUG SQL : update labs set capacity=?,code=?,name=? where id=?\nDEBUG SQL : select l1_0.id,l1_0.capacity,l1_0.code,l1_0.name from labs l1_0 where l1_0.id=?\ntrong CSDL: 35");
 
 const L62_EN = `
 <div class="ml-en">
@@ -434,6 +436,16 @@ ${OUT62_CHAY}
 
 <h3>7. Removed</h3>
 <p><code>em.remove(l)</code> marks the entity; <code>DELETE</code> is sent at flush, after the line we printed.</p>
+
+<h3>8. Two more experiments: detach without flush, and native queries</h3>
+<p>Added on 20/11/2026 after Thorben Janssen's video on the entity lifecycle. The JPA specification defines a persistence context as a set of entity instances in which, for any persistent identity, there is <strong>one</strong> instance — and <em>every</em> way of loading an entity puts it there: <code>persist</code>, <code>find</code>, JPQL, Criteria, a native query mapped to the entity, and <code>merge</code>. Two consequences, run for real (package <code>e62yt</code>):</p>
+${MA62_YT}
+${OUT62_YT}
+<ul>
+  <li><strong>A — detach before flush loses the change.</strong> <code>setCapacity(77)</code> was only a pending change in the persistence context; <code>detach</code> threw it away together with the entity. The database still says <code>30</code>, and nothing warned us.</li>
+  <li><strong>B — flush first.</strong> <code>em.flush()</code> sent the <code>UPDATE</code> while the entity was still managed; after <code>detach</code> the database says <code>77</code>. You rarely need <code>detach</code>; if you do, flush first.</li>
+  <li><strong>C — native SQL is not a back door.</strong> <code>createNativeQuery("select * from labs …", Lab.class)</code> returned a <em>managed</em> entity (<code>contains=true</code>): setting the capacity to 35 without any <code>save()</code> produced an <code>UPDATE</code> at commit. "I used native SQL, so Hibernate won't touch it" is wrong as soon as the result is mapped to an entity.</li>
+</ul>
 
 <h3>🕵️ Hacker corner — "sign up" that overwrites the admin</h3>
 <p>Combine rule 5 with a lazy shortcut: a controller that accepts the <em>entity</em> as the request body and calls <code>save</code>.</p>
@@ -519,6 +531,7 @@ ${tl('https://github.blog/news-insights/the-library/public-key-security-vulnerab
   <li>Outputs above: E62App on Spring Boot 4.1.2, Hibernate ORM 7.4.13.Final, PostgreSQL 16.15; Prisma 7.10.1 on Node 22 (19/11/2026).</li>
   <li>GitHub Blog, 4/3/2012, "Public Key Security Vulnerability and Mitigation".</li>
   <li>OWASP API Security Top 10 (2023), API3 — Broken Object Property Level Authorization.</li>
+  <li>Experiment 8: E62YtApp (package e62yt), same stack, 20/11/2026 — idea from Thorben Janssen, "JPA &amp; Hibernate: Entity Lifecycle Model" (YouTube Y7PpjerZkc0).</li>
 </ul>
 </div>
 `;
@@ -569,6 +582,16 @@ ${OUT62_CHAY}
 
 <h3>7. Removed</h3>
 <p><code>em.remove(l)</code> đánh dấu entity; câu <code>DELETE</code> được gửi lúc flush, sau dòng ta in ra.</p>
+
+<h3>8. Thêm hai thí nghiệm: detach khi chưa flush, và truy vấn SQL gốc</h3>
+<p>Bổ sung ngày 20/11/2026 sau video của Thorben Janssen về vòng đời entity. Đặc tả JPA định nghĩa persistence context là tập các đối tượng entity mà mỗi danh tính chỉ có <strong>một</strong> đối tượng — và <em>mọi</em> đường nạp entity đều đưa nó vào đó: <code>persist</code>, <code>find</code>, JPQL, Criteria, truy vấn SQL gốc ánh xạ sang entity, và <code>merge</code>. Hai hệ quả, chạy thật (gói <code>e62yt</code>):</p>
+${MA62_YT}
+${OUT62_YT}
+<ul>
+  <li><strong>A — detach trước khi flush làm mất thay đổi.</strong> <code>setCapacity(77)</code> mới chỉ là thay đổi đang chờ trong persistence context; <code>detach</code> vứt nó đi cùng entity. CSDL vẫn là <code>30</code>, và không có cảnh báo nào.</li>
+  <li><strong>B — flush trước.</strong> <code>em.flush()</code> gửi câu <code>UPDATE</code> khi entity còn managed; sau <code>detach</code> CSDL là <code>77</code>. Hiếm khi bạn cần <code>detach</code>; nếu cần, hãy flush trước.</li>
+  <li><strong>C — SQL gốc không phải cửa sau.</strong> <code>createNativeQuery("select * from labs …", Lab.class)</code> trả về entity <em>managed</em> (<code>contains=true</code>): đặt sức chứa 35 mà không gọi <code>save()</code> vẫn sinh <code>UPDATE</code> lúc commit. "Mình dùng SQL gốc nên Hibernate không đụng tới" là sai ngay khi kết quả được ánh xạ sang entity.</li>
+</ul>
 
 <h3>🕵️ Góc hacker — "đăng ký" mà ghi đè admin</h3>
 <p>Ghép luật 5 với một lối tắt lười biếng: controller nhận thẳng <em>entity</em> làm body request rồi gọi <code>save</code>.</p>
@@ -654,6 +677,7 @@ ${tl('https://github.blog/news-insights/the-library/public-key-security-vulnerab
   <li>Output ở trên: E62App chạy Spring Boot 4.1.2, Hibernate ORM 7.4.13.Final, PostgreSQL 16.15; Prisma 7.10.1 trên Node 22 (19/11/2026).</li>
   <li>GitHub Blog, 04/03/2012, "Public Key Security Vulnerability and Mitigation".</li>
   <li>OWASP API Security Top 10 (2023), API3 — Broken Object Property Level Authorization.</li>
+  <li>Thí nghiệm 8: E62YtApp (gói e62yt), cùng phiên bản, 20/11/2026 — ý tưởng từ Thorben Janssen, "JPA &amp; Hibernate: Entity Lifecycle Model" (YouTube Y7PpjerZkc0).</li>
 </ul>
 </div>
 `;

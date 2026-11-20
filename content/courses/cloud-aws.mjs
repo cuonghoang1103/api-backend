@@ -26,6 +26,7 @@ import s06 from './cloud-aws/s06-du-lieu.mjs';
 import s07 from './cloud-aws/s07-container.mjs';
 import s08 from './cloud-aws/s08-serverless.mjs';
 import s09 from './cloud-aws/s09-su-kien.mjs';
+import s10 from './cloud-aws/s10-quan-sat.mjs';
 
 const CHUONG = [
   ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', '(đã soạn — cloud-aws/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -38,13 +39,7 @@ const CHUONG = [
   ['Chapter 7 — Containers: ECR and ECS Fargate', 'Chương 7 — Container: ECR và ECS Fargate', '(đã soạn — cloud-aws/s07-container.mjs)', [['ecr', '-', '-', '-']]],
   ['Chapter 8 — Serverless: Lambda and API Gateway', 'Chương 8 — Serverless: Lambda và API Gateway', '(đã soạn — cloud-aws/s08-serverless.mjs)', [['lambda', '-', '-', '-']]],
   ['Chapter 9 — Event-driven: SQS, SNS and EventBridge', 'Chương 9 — Hướng sự kiện: SQS, SNS và EventBridge', '(đã soạn — cloud-aws/s09-su-kien.mjs)', [['sqs', '-', '-', '-']]],
-  ['Chapter 10 — Observability: CloudWatch', 'Chương 10 — Quan sát: CloudWatch', 'Log, chỉ số, cảnh báo và dashboard — thay cho log + bot Telegram của VPS.', [
-    ['logs', 'CloudWatch Logs and Logs Insights', 'CloudWatch Logs và Logs Insights', 'Log group/stream · Thời gian giữ log và tiền · Truy vấn Logs Insights · Log JSON có cấu trúc'],
-    ['metrics', 'Metrics, custom metrics and dashboards', 'Chỉ số, chỉ số tự định nghĩa và dashboard', 'Namespace, dimension · Chỉ số EC2/ALB/RDS có sẵn · Đẩy chỉ số riêng · Dashboard'],
-    ['alarms', 'Alarms that matter, routed to SNS', 'Cảnh báo đáng có, gửi qua SNS', 'Ngưỡng và số chu kỳ · Cảnh báo lỗi 5xx, độ trễ, CPU, hoá đơn · SNS → email/chat · Tránh báo động giả'],
-    ['tracing', 'Tracing and auditing: X-Ray, CloudTrail, Config', 'Truy vết và kiểm toán: X-Ray, CloudTrail, Config', 'X-Ray/OpenTelemetry theo request · CloudTrail ai gọi API gì · AWS Config ghi lịch sử cấu hình · Câu thi hay nhầm'],
-    ['lab-10', 'Chapter 10 lab + interview questions', 'Lab chương 10 + câu hỏi phỏng vấn', 'Log + chỉ số + cảnh báo cho API LabFlow · Rubric · Câu phỏng vấn vận hành'],
-  ]],
+  ['Chapter 10 — Observability: CloudWatch', 'Chương 10 — Quan sát: CloudWatch', '(đã soạn — cloud-aws/s10-quan-sat.mjs)', [['logs', '-', '-', '-']]],
   ['Chapter 11 — Infrastructure as code with Terraform', 'Chương 11 — Hạ tầng dưới dạng mã với Terraform', 'Dựng lại bằng mã mọi thứ đã bấm tay: provider, state, biến, module; học bài bản ở khoá Infrastructure as Code.', [
     ['vi-sao', 'Why click-ops does not scale', 'Vì sao bấm tay không mở rộng được', 'Không tái lập được · Quên dọn = hoá đơn bất ngờ · IaC là gì · Terraform vs CloudFormation vs CDK'],
     ['terraform', 'Terraform basics on AWS: init, plan, apply, destroy', 'Terraform cơ bản trên AWS: init, plan, apply, destroy', 'Provider AWS và xác thực an toàn · Resource, data source · Đồ thị phụ thuộc · Chạy thật với LocalStack'],
@@ -100,6 +95,7 @@ sections[6] = s06;
 sections[7] = s07;
 sections[8] = s08;
 sections[9] = s09;
+sections[10] = s10;
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },

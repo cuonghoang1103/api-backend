@@ -25,6 +25,7 @@ import s05 from './cloud-aws/s05-ra-internet.mjs';
 import s06 from './cloud-aws/s06-du-lieu.mjs';
 import s07 from './cloud-aws/s07-container.mjs';
 import s08 from './cloud-aws/s08-serverless.mjs';
+import s09 from './cloud-aws/s09-su-kien.mjs';
 
 const CHUONG = [
   ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', '(đã soạn — cloud-aws/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -36,13 +37,7 @@ const CHUONG = [
   ['Chapter 6 — Databases and secrets', 'Chương 6 — Cơ sở dữ liệu và bí mật', '(đã soạn — cloud-aws/s06-du-lieu.mjs)', [['rds', '-', '-', '-']]],
   ['Chapter 7 — Containers: ECR and ECS Fargate', 'Chương 7 — Container: ECR và ECS Fargate', '(đã soạn — cloud-aws/s07-container.mjs)', [['ecr', '-', '-', '-']]],
   ['Chapter 8 — Serverless: Lambda and API Gateway', 'Chương 8 — Serverless: Lambda và API Gateway', '(đã soạn — cloud-aws/s08-serverless.mjs)', [['lambda', '-', '-', '-']]],
-  ['Chapter 9 — Event-driven: SQS, SNS and EventBridge', 'Chương 9 — Hướng sự kiện: SQS, SNS và EventBridge', 'Hàng đợi, phát tán và lịch — tách hệ thống để chịu tải và chịu lỗi.', [
-    ['sqs', 'SQS queues: standard, FIFO and dead-letter', 'Hàng đợi SQS: standard, FIFO và dead-letter', 'Visibility timeout · Ít nhất một lần ⇒ xử lý idempotent · FIFO và nhóm · DLQ · Long polling'],
-    ['sns', 'SNS fan-out and notifications', 'SNS phát tán và thông báo', 'Topic + subscription · Fan-out SNS → nhiều SQS · Email/SMS · Lọc theo thuộc tính · So với bot Telegram'],
-    ['eventbridge', 'EventBridge: event bus and schedules', 'EventBridge: bus sự kiện và lịch', 'Luật khớp mẫu sự kiện · Scheduler thay cron · Sự kiện từ dịch vụ AWS · Nhắc lịch đặt phòng'],
-    ['s3-trigger', 'Triggers: S3 → Lambda image pipeline', 'Kích hoạt: S3 → Lambda xử lý ảnh', 'Thông báo sự kiện S3 · Lambda tạo ảnh thu nhỏ · Vòng lặp tự kích hoạt tốn tiền · Thử lại và DLQ'],
-    ['lab-9', 'Chapter 9 lab + interview questions', 'Lab chương 9 + câu hỏi phỏng vấn', 'Hàng đợi gửi thông báo đặt phòng LabFlow · Rubric · Câu phỏng vấn hệ phân tán'],
-  ]],
+  ['Chapter 9 — Event-driven: SQS, SNS and EventBridge', 'Chương 9 — Hướng sự kiện: SQS, SNS và EventBridge', '(đã soạn — cloud-aws/s09-su-kien.mjs)', [['sqs', '-', '-', '-']]],
   ['Chapter 10 — Observability: CloudWatch', 'Chương 10 — Quan sát: CloudWatch', 'Log, chỉ số, cảnh báo và dashboard — thay cho log + bot Telegram của VPS.', [
     ['logs', 'CloudWatch Logs and Logs Insights', 'CloudWatch Logs và Logs Insights', 'Log group/stream · Thời gian giữ log và tiền · Truy vấn Logs Insights · Log JSON có cấu trúc'],
     ['metrics', 'Metrics, custom metrics and dashboards', 'Chỉ số, chỉ số tự định nghĩa và dashboard', 'Namespace, dimension · Chỉ số EC2/ALB/RDS có sẵn · Đẩy chỉ số riêng · Dashboard'],
@@ -104,6 +99,7 @@ sections[5] = s05;
 sections[6] = s06;
 sections[7] = s07;
 sections[8] = s08;
+sections[9] = s09;
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },

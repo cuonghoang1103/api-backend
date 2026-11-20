@@ -16,6 +16,7 @@ export default {
     "fer202-pefa26-6-bootstrap": { vi: { url: 'https://media.cuongthai.com/files/exam-attachments/rieng-7fe311a5ae83a9eacded6b8a/fer202-tham-dinh-V6.mp4' }, defaultVideoTrack: 'VI'},
     "fer202-pefa26-7-cau-1": { vi: { url: 'https://media.cuongthai.com/files/exam-attachments/rieng-7fe311a5ae83a9eacded6b8a/fer202-tham-dinh-V7.mp4' }, defaultVideoTrack: 'VI'},
     "fer202-pefa26-8-cau-2": { vi: { url: 'https://media.cuongthai.com/files/exam-attachments/rieng-7fe311a5ae83a9eacded6b8a/fer202-tham-dinh-V8.mp4' }, defaultVideoTrack: 'VI'},
+    "fer202-pefa26-10-hoi-dap": { vi: { url: 'https://media.cuongthai.com/files/exam-attachments/rieng-7fe311a5ae83a9eacded6b8a/fer202-tham-dinh-V10.mp4' }, defaultVideoTrack: 'VI'},
     "fer202-pefa26-9-sua-code": { vi: { url: 'https://media.cuongthai.com/files/exam-attachments/rieng-7fe311a5ae83a9eacded6b8a/fer202-tham-dinh-V9.mp4' }, defaultVideoTrack: 'VI'},
     "fer202-0-1-gioi-thieu": { yt: "SqcY0GlETPk", credit: "Programming with Mosh — React Tutorial for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/00-gioi-thieu-mon-hoc/00-01-gioi-thieu-fer202-9c5bc90e.mp4' }, defaultVideoTrack: 'VI'},
     "fer202-1-1-fullstack-react": { yt: "N3AkSS5hXMA", credit: "Programming with Mosh — What Is React (React js) & Why Is It So Popular?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/01-tong-quan-cai-dat/01-01-fullstack-va-vi-sao-react-891e2fe6.mp4' }, defaultVideoTrack: 'VI'},

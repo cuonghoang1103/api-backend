@@ -663,6 +663,7 @@ function ChatWindow({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 30, scale: 0.92 }}
       transition={{ type: 'spring', stiffness: 280, damping: 26 }}
+      data-mini-chat-window=""
       className="absolute flex flex-col overflow-hidden rounded-t-xl shadow-[0_12px_28px_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.12)]"
       style={{
         width: WINDOW_WIDTH,
@@ -878,6 +879,36 @@ function MiniComposer({
   const hienNut = !coChu || moRong;
   useEffect(() => { if (!coChu) setMoRong(false); }, [coChu]);
 
+  // Kéo tệp từ Finder/Explorer thả vào BẤT KỲ chỗ nào trong khung chat ⇒ gửi như bấm nút đính kèm.
+  // (Trước 20/11/2026 không có ⇒ trình duyệt mở tệp / chỉ chèn tên tệp.)
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const guiTepRef = useRef<(files: FileList | null) => void>(() => {});
+  const [keoTep, setKeoTep] = useState(false);
+  useEffect(() => {
+    const khung = rootRef.current?.closest<HTMLElement>('[data-mini-chat-window]');
+    if (!khung) return;
+    const coTep = (e: DragEvent) => Array.from(e.dataTransfer?.types ?? []).includes('Files');
+    let dem = 0;
+    const vao = (e: DragEvent) => { if (!coTep(e)) return; e.preventDefault(); dem += 1; setKeoTep(true); };
+    const tren = (e: DragEvent) => { if (!coTep(e)) return; e.preventDefault(); if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy'; };
+    const ra = (e: DragEvent) => { if (!coTep(e)) return; dem = Math.max(0, dem - 1); if (!dem) setKeoTep(false); };
+    const tha = (e: DragEvent) => {
+      if (!coTep(e)) return;
+      e.preventDefault(); dem = 0; setKeoTep(false);
+      guiTepRef.current(e.dataTransfer?.files ?? null);
+    };
+    khung.addEventListener('dragenter', vao);
+    khung.addEventListener('dragover', tren);
+    khung.addEventListener('dragleave', ra);
+    khung.addEventListener('drop', tha);
+    return () => {
+      khung.removeEventListener('dragenter', vao);
+      khung.removeEventListener('dragover', tren);
+      khung.removeEventListener('dragleave', ra);
+      khung.removeEventListener('drop', tha);
+    };
+  }, []);
+
   const guiNhanh = async (fn: () => Promise<void>, loi: string) => {
     if (!threadId) return;
     setBusy(true);
@@ -897,6 +928,7 @@ function MiniComposer({
       if (ids.length) await useMessagingStore.getState().sendMessage(threadId, '', ids);
     }, 'Gửi tệp thất bại');
   };
+  guiTepRef.current = guiTep;
 
   const guiMedia = (url: string, kind: 'gif' | 'sticker') => {
     setPicker(null);
@@ -940,7 +972,12 @@ function MiniComposer({
   }
 
   return (
-    <div className="relative px-1.5 py-2">
+    <div ref={rootRef} className="relative px-1.5 py-2">
+      {keoTep && (
+        <div className="pointer-events-none absolute inset-x-1.5 bottom-full mb-1 rounded-lg border-2 border-dashed border-[var(--accent-color)] bg-[var(--bg-card)] px-3 py-2 text-center text-[13px] font-semibold text-[var(--accent-color)]">
+          Thả tệp vào đây để gửi (tối đa 10 tệp, mỗi tệp ≤ 25MB)
+        </div>
+      )}
       <EmojiPickerPopover open={picker === 'emoji'} anchorRef={emojiRef} onClose={() => setPicker(null)} onPick={chenEmoji} />
       <GifPicker open={picker === 'gif'} anchorRef={gifRef} onClose={() => setPicker(null)} onPick={(u) => guiMedia(u, 'gif')} />
       <StickerPicker open={picker === 'sticker'} anchorRef={stickerRef} onClose={() => setPicker(null)} onPick={(u) => guiMedia(u, 'sticker')} />
@@ -970,6 +1007,11 @@ function MiniComposer({
             value={draft}
             onChange={(e) => onUpdateDraft(e.target.value)}
             onFocus={() => coChu && setMoRong(false)}
+            onPaste={(e) => {
+              // Dán ảnh chụp màn hình hoặc tệp đã Copy trong Finder/Explorer ⇒ gửi tệp thật, không chèn tên tệp.
+              const tep = e.clipboardData?.files;
+              if (tep && tep.length > 0) { e.preventDefault(); guiTep(tep); }
+            }}
             onKeyDown={(e) => {
               // Bộ gõ Nhật/Trung/Hàn đang dựng chữ thì Enter là phím CHỐT chữ — đừng để form gửi tin dở.
               if (e.key === 'Enter' && e.nativeEvent.isComposing) { e.preventDefault(); e.stopPropagation(); }

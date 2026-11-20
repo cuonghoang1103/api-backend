@@ -1067,3 +1067,10 @@ Mẫu một mục:
 - **Cách sửa:** lấy `const f = useCurrentFrame()` một lần ở đầu component rồi dùng `f`; quét mọi dsi-* + khung/dsi không còn chỗ khác; `dp-lam-lai.sh dsi-9-5|dsi-4-1 render`.
 - **Ảnh hưởng:** 2 tập trễ vài giờ; không lên web bản hỏng (render chết thì không có video).
 - **Bài học:** luật hook trong cảnh Remotion: KHÔNG gọi hook trong điều kiện/&&/?:/map/sau return sớm — đã thêm vào prompt agent dsi; nên có bước lint `react-hooks/rules-of-hooks` trước render cho mọi khoá.
+
+### 20/11/2026 — web (chat mini góc phải) — dán / kéo tệp vào ô chat chỉ ra TÊN tệp
+- **Triệu chứng:** Copy tệp trong Finder rồi dán (⌘V) vào ô "Aa" của khung chat mini ⇒ ô chỉ chèn chữ `FER202-PE-ON-THI.txt`; kéo tệp thả vào khung ⇒ không gửi gì. Phải bấm nút đính kèm mới gửi được.
+- **Nguyên nhân:** `frontend/src/components/social/MiniChatDock.tsx` › `MiniComposer` chỉ có `<input type="file">` cho nút đính kèm; ô chữ không có `onPaste`, khung không có `drop` ⇒ trình duyệt dán phần chữ (tên tệp) của clipboard. Trang /messages (`MessageInput.tsx`) thì có sẵn.
+- **Cách sửa:** `onPaste` lấy `clipboardData.files` ⇒ `guiTep()`; khung có `data-mini-chat-window`, `MiniComposer` gắn dragenter/over/leave/drop lên khung (thả bất kỳ đâu trong khung) + dải "Thả tệp vào đây"; cùng đường `guiTep` (≤10 tệp, ≤25MB).
+- **Ảnh hưởng:** chỉ tiện dụng — chưa mất tin nào; người dùng tưởng gửi tệp nhưng thật ra gửi tên tệp.
+- **Bài học:** mọi ô soạn tin có đính kèm phải hỗ trợ đủ 3 lối: nút, dán, kéo thả; thêm ô chat mới thì grep `onPaste|drop` so với `MessageInput.tsx`.

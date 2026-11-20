@@ -96,4 +96,9 @@ export default [
     '8 yêu cầu sửa nhỏ kiểu giám khảo hay bắt sửa tại chỗ — mỗi bài: yêu cầu, sửa dòng nào, kết quả trên app.',
     ['Search "contains" instead of "starts with" (startsWith → includes)|||Tìm "có chứa" thay vì "bắt đầu bằng" (startsWith → includes)', 'Add a "Total Dropped Students" line to each card|||Thêm dòng "Total Dropped Students" vào thẻ', '3 cards per row instead of 4; sort lecturers A→Z|||Lưới 3 thẻ/hàng thay vì 4; sắp giảng viên theo tên A→Z', 'Send the PATCHes in parallel with Promise.all; add a Back button|||Gửi PATCH song song bằng Promise.all; thêm nút Back', 'Move json-server to port 9000 via one API constant|||Đổi json-server sang cổng 9000 bằng một hằng API', 'Rewrite from an empty file: useState + useEffect + axios.get + table|||Viết lại từ file trống: useState + useEffect + axios.get + bảng'],
     [ON.hk, ON.rt, ON.ax]),
+  v('fer202-pefa26-10-hoi-dap', 'PE Fall26 · V10 — Oral defence Q&A: what the examiners ask about this exam|||Đề PE Fall26 · V10 — Hỏi–đáp vấn đáp: hội đồng hay hỏi gì về bài này',
+    'The questions a review panel asks about this PE — why each line exists, how the data flows, what changes if a requirement changes — and how to answer honestly in your own words.',
+    'Những câu hội đồng hay hỏi khi vấn đáp bài PE này — vì sao có dòng này, dữ liệu đi thế nào, đổi yêu cầu thì sửa ở đâu — và cách trả lời trung thực bằng lời của chính mình.',
+    ['Explain the data flow from database.json to the screen|||Giải thích luồng dữ liệu từ database.json lên màn hình', 'Why useEffect, useSearchParams, PATCH here|||Vì sao dùng useEffect, useSearchParams, PATCH ở đây', 'What-if questions: change a rule, add a field|||Câu hỏi "nếu đổi…": đổi luật, thêm trường', 'Answering about how you worked: always the truth|||Trả lời về quá trình làm bài: luôn nói đúng sự thật'],
+    [ON.hk, ON.rt, ON.ax]),
 ];

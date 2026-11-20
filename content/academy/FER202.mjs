@@ -3212,7 +3212,7 @@ npx create-next-app@latest my-app
     },
     {
       title: '📝 PE Fall26 exam — solved line by line|||📝 Đề PE Fall26 — chữa trọn đề từng dòng',
-      description: 'Phần TỰ THÊM: đề PE thật Fall 2026 (FA26 PE NO2 — Lecturer Workload & Subject Curriculum) chữa trọn trong 10 video: chạy project, đọc đề + 3 bẫy, nền JS mảng / API / React / Router / Bootstrap dùng trong bài, Câu 1 và Câu 2 từng dòng, 8 bài sửa code tại chỗ. Xem xong luyện ở Code Lab → FER202 Practice và Phòng thi → FER202.',
+      description: 'Phần TỰ THÊM: đề PE thật Fall 2026 (FA26 PE NO2 — Lecturer Workload & Subject Curriculum) chữa trọn trong 10 video: chạy project, đọc đề + 3 bẫy, nền JS mảng / API / React / Router / Bootstrap dùng trong bài, Câu 1 và Câu 2 từng dòng, 8 bài sửa code tại chỗ, hỏi–đáp vấn đáp. Xem xong luyện ở Code Lab → FER202 Practice và Phòng thi → FER202.',
       lessons: dePeFall26,
     },
     {

@@ -86,7 +86,7 @@ ${OUT_71_ECR_THAT}
 <ul>
   <li><code>id</code> prints <code>uid=1000(node)</code>: the process does not run as root (the <code>USER node</code> line). If an attacker breaks the app, they land as an unprivileged user.</li>
   <li>The push prints the <strong>digest</strong>. That digest is what you should deploy.</li>
-  <li>Then someone rebuilt the image with <code>BAN=2</code> and pushed it <strong>to the same tag</strong>. The registry accepted it silently (this repository is mutable). Pulling <code>:v1</code> now runs version 2 — the same tag means different code yesterday and today. Pulling <code>@sha256:9ea1…</code> still runs version 1, because a digest cannot lie.</li>
+  <li>Then someone rebuilt the image with <code>BAN=2</code> and pushed it <strong>to the same tag</strong>. The registry accepted it silently (this repository is mutable). Pulling <code>:v1</code> now runs version 2 — the same tag means different code yesterday and today. Pulling <code>@sha256:7c18…</code> still runs version 1, because a digest cannot lie.</li>
 </ul>
 <p>Rule for production: <strong>repositories immutable, deployments by digest</strong> (or by a tag that is unique per build, such as the Git commit SHA). Then "what is running" always has one answer, and rollback means pointing back at an old digest that still exists.</p>
 
@@ -221,7 +221,7 @@ ${OUT_71_ECR_THAT}
 <ul>
   <li><code>id</code> in <code>uid=1000(node)</code>: tiến trình không chạy bằng root (dòng <code>USER node</code>). Kẻ tấn công phá được ứng dụng cũng chỉ đứng ở một user không đặc quyền.</li>
   <li>Lệnh push in ra <strong>digest</strong>. Digest đó mới là thứ bạn nên deploy.</li>
-  <li>Rồi có người build lại ảnh với <code>BAN=2</code> và đẩy <strong>đè đúng tag cũ</strong>. Registry nhận im lặng (repository này cho ghi đè). Kéo <code>:v1</code> giờ chạy bản 2 — cùng một tag mà hôm qua với hôm nay là hai bộ mã khác nhau. Kéo <code>@sha256:9ea1…</code> vẫn chạy bản 1, vì digest không nói dối được.</li>
+  <li>Rồi có người build lại ảnh với <code>BAN=2</code> và đẩy <strong>đè đúng tag cũ</strong>. Registry nhận im lặng (repository này cho ghi đè). Kéo <code>:v1</code> giờ chạy bản 2 — cùng một tag mà hôm qua với hôm nay là hai bộ mã khác nhau. Kéo <code>@sha256:7c18…</code> vẫn chạy bản 1, vì digest không nói dối được.</li>
 </ul>
 <p>Luật cho production: <strong>repository bất biến, deploy theo digest</strong> (hoặc theo tag duy nhất cho mỗi lần build, như mã SHA của commit Git). Khi đó câu hỏi "đang chạy cái gì" chỉ có một đáp án, và rollback chỉ là trỏ lại một digest cũ vẫn còn đó.</p>
 

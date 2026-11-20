@@ -1173,7 +1173,7 @@ const L65_EN = `
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 5</span>
 <h2>6.5 — ElastiCache and choosing a database: memory in front of the disk</h2>
-<p class="lead">Some questions are asked thousands of times a minute and change rarely: “what is A101's schedule this week?”. Asking PostgreSQL every time wastes its CPU and your users' time. A <strong>cache</strong> keeps the answer in memory, a few hundred microseconds away. <strong>Amazon ElastiCache</strong> runs Valkey, Redis OSS or Memcached for you, inside your VPC, with replicas and failover. This lesson measures cache-aside on real Valkey and PostgreSQL (357 ms ⇒ 0.5 ms), shows what an exposed cache gives an attacker, and ends with the table every architecture interview and the SAA exam expect you to know: which AWS database for which job.</p>
+<p class="lead">Some questions are asked thousands of times a minute and change rarely: “what is A101's schedule this week?”. Asking PostgreSQL every time wastes its CPU and your users' time. A <strong>cache</strong> keeps the answer in memory, a few hundred microseconds away. <strong>Amazon ElastiCache</strong> runs Valkey, Redis OSS or Memcached for you, inside your VPC, with replicas and failover. This lesson measures cache-aside on real Valkey and PostgreSQL (357 ms ⇒ under 1 ms), shows what an exposed cache gives an attacker, and ends with the table every architecture interview and the SAA exam expect you to know: which AWS database for which job.</p>
 
 <h3>The picture: the front desk keeps copies</h3>
 <p>Students keep asking the lab front desk for this week's A101 schedule. The first time, the clerk walks to the archive (database), prints it, and keeps a copy on the desk with a sticky note “valid until 10:00” (TTL). Everyone else gets the copy instantly. When someone books a new slot, the clerk throws the copy away (invalidation); the next person triggers a fresh print.</p>
@@ -1201,7 +1201,7 @@ ${MA_CACHE}
 ${OUT_65_CACHE_THAT}
 <ol>
   <li>First call: <strong>MISS</strong> — 357 ms, the full report query (the <code>pg_sleep(0.3)</code> stands in for a heavy join).</li>
-  <li>Calls 2–3: <strong>HIT</strong> — 0.5 ms and 0.3 ms, roughly a thousand times faster, and PostgreSQL did no work.</li>
+  <li>Calls 2–3: <strong>HIT</strong> — 1.0 ms and 0.2 ms, hundreds of times times faster, and PostgreSQL did no work.</li>
   <li>A new booking is written to the database <em>and the cache key is deleted</em>. The next call misses and sees 41 rows — fresh data.</li>
   <li>Without any write, the 5-second TTL expires and call 6 misses again. TTL is the safety net for every invalidation you forgot.</li>
 </ol>
@@ -1277,7 +1277,7 @@ function lichPhongMotLan(phong) {
 
 <h3>📌 Summary</h3>
 <ul>
-  <li>A cache answers repeated reads from memory: 357 ms ⇒ 0.5 ms in this lab.</li>
+  <li>A cache answers repeated reads from memory: 357 ms ⇒ under 1 ms in this lab.</li>
   <li>Cache-aside + delete-on-write + TTL; watch for stampedes on hot keys.</li>
   <li>ElastiCache lives inside the VPC with TLS and AUTH/RBAC; never expose a cache.</li>
   <li>Valkey is the cheapest ElastiCache engine and a drop-in for Redis clients.</li>
@@ -1306,7 +1306,7 @@ const L65_VI = `
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 5</span>
 <h2>6.5 — ElastiCache và chọn cơ sở dữ liệu: bộ nhớ đứng trước ổ đĩa</h2>
-<p class="lead">Có những câu hỏi được hỏi hàng nghìn lần mỗi phút mà hiếm khi đổi: “tuần này lịch phòng A101 thế nào?”. Lần nào cũng hỏi PostgreSQL là phí CPU của nó và phí thời gian của người dùng. <strong>Cache</strong> giữ sẵn câu trả lời trong bộ nhớ, cách vài trăm micro giây. <strong>Amazon ElastiCache</strong> chạy Valkey, Redis OSS hoặc Memcached thay bạn, bên trong VPC, có bản sao và chuyển dự phòng. Bài này đo cache-aside trên Valkey và PostgreSQL thật (357 ms ⇒ 0,5 ms), cho thấy một cache để hở đưa kẻ tấn công những gì, và kết thúc bằng bảng mà mọi buổi phỏng vấn kiến trúc lẫn đề SAA đều chờ bạn thuộc: dịch vụ cơ sở dữ liệu nào của AWS cho việc nào.</p>
+<p class="lead">Có những câu hỏi được hỏi hàng nghìn lần mỗi phút mà hiếm khi đổi: “tuần này lịch phòng A101 thế nào?”. Lần nào cũng hỏi PostgreSQL là phí CPU của nó và phí thời gian của người dùng. <strong>Cache</strong> giữ sẵn câu trả lời trong bộ nhớ, cách vài trăm micro giây. <strong>Amazon ElastiCache</strong> chạy Valkey, Redis OSS hoặc Memcached thay bạn, bên trong VPC, có bản sao và chuyển dự phòng. Bài này đo cache-aside trên Valkey và PostgreSQL thật (357 ms ⇒ dưới 1 ms), cho thấy một cache để hở đưa kẻ tấn công những gì, và kết thúc bằng bảng mà mọi buổi phỏng vấn kiến trúc lẫn đề SAA đều chờ bạn thuộc: dịch vụ cơ sở dữ liệu nào của AWS cho việc nào.</p>
 
 <h3>Hình dung: quầy lễ tân giữ sẵn bản in</h3>
 <p>Sinh viên cứ hỏi quầy lễ tân phòng lab về lịch A101 tuần này. Lần đầu, nhân viên xuống kho lưu trữ (cơ sở dữ liệu), in ra, rồi để một bản trên quầy kèm tờ giấy nhớ “dùng tới 10:00” (TTL). Ai tới sau cũng nhận bản đó ngay. Khi có người đặt thêm khung giờ, nhân viên bỏ bản in cũ đi (vô hiệu hoá); người kế tiếp sẽ khiến nhân viên in bản mới.</p>
@@ -1334,7 +1334,7 @@ ${MA_CACHE}
 ${OUT_65_CACHE_THAT}
 <ol>
   <li>Lần gọi đầu: <strong>MISS</strong> — 357 ms, chạy trọn truy vấn báo cáo (<code>pg_sleep(0.3)</code> đứng thay cho một phép join nặng).</li>
-  <li>Lần 2–3: <strong>HIT</strong> — 0,5 ms và 0,3 ms, nhanh hơn chừng một nghìn lần, và PostgreSQL không phải làm gì.</li>
+  <li>Lần 2–3: <strong>HIT</strong> — 1,0 ms và 0,2 ms, nhanh hơn hàng trăm lần, và PostgreSQL không phải làm gì.</li>
   <li>Một lượt đặt mới được ghi vào cơ sở dữ liệu <em>và khoá cache bị xoá</em>. Lần gọi kế tiếp trượt cache và thấy 41 dòng — dữ liệu mới.</li>
   <li>Không có lệnh ghi nào, TTL 5 giây hết hạn và lần 6 lại trượt. TTL là tấm lưới đỡ mọi lần vô hiệu hoá bạn lỡ quên.</li>
 </ol>
@@ -1410,7 +1410,7 @@ function lichPhongMotLan(phong) {
 
 <h3>📌 Tóm tắt</h3>
 <ul>
-  <li>Cache trả lời các lần đọc lặp lại từ bộ nhớ: 357 ms ⇒ 0,5 ms trong lab này.</li>
+  <li>Cache trả lời các lần đọc lặp lại từ bộ nhớ: 357 ms ⇒ dưới 1 ms trong lab này.</li>
   <li>Cache-aside + xoá khoá khi ghi + TTL; coi chừng dồn ứ ở khoá nóng.</li>
   <li>ElastiCache nằm trong VPC, có TLS và AUTH/RBAC; không bao giờ để cache hở.</li>
   <li>Valkey là engine rẻ nhất của ElastiCache và thay thẳng được cho client Redis.</li>
@@ -1709,7 +1709,7 @@ export default {
       slug: 'aws-6-5-elasticache',
       type: 'LESSON',
       isFreePreview: true,
-      description: 'Valkey/Redis OSS/Memcached; replication group; cache-aside thật trên Valkey + PostgreSQL: MISS 357 ms ⇒ HIT 0,5 ms, xoá khoá khi ghi, TTL, dồn ứ; cache để hở bị đọc phiên + FLUSHALL; P2PInfect 2023; bảng chọn RDS/Aurora/DynamoDB/ElastiCache + tín hiệu đề thi.',
+      description: 'Valkey/Redis OSS/Memcached; replication group; cache-aside thật trên Valkey + PostgreSQL: MISS 357 ms ⇒ HIT dưới 1 ms, xoá khoá khi ghi, TTL, dồn ứ; cache để hở bị đọc phiên + FLUSHALL; P2PInfect 2023; bảng chọn RDS/Aurora/DynamoDB/ElastiCache + tín hiệu đề thi.',
       content: L65_EN + L65_VI,
     },
     {

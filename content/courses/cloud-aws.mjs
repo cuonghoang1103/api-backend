@@ -24,6 +24,7 @@ import s04 from './cloud-aws/s04-ec2.mjs';
 import s05 from './cloud-aws/s05-ra-internet.mjs';
 import s06 from './cloud-aws/s06-du-lieu.mjs';
 import s07 from './cloud-aws/s07-container.mjs';
+import s08 from './cloud-aws/s08-serverless.mjs';
 
 const CHUONG = [
   ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', '(đã soạn — cloud-aws/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -34,13 +35,7 @@ const CHUONG = [
   ['Chapter 5 — Going public: load balancers, scaling, DNS and CDN', 'Chương 5 — Ra Internet: load balancer, co giãn, DNS và CDN', '(đã soạn — cloud-aws/s05-ra-internet.mjs)', [['alb', '-', '-', '-']]],
   ['Chapter 6 — Databases and secrets', 'Chương 6 — Cơ sở dữ liệu và bí mật', '(đã soạn — cloud-aws/s06-du-lieu.mjs)', [['rds', '-', '-', '-']]],
   ['Chapter 7 — Containers: ECR and ECS Fargate', 'Chương 7 — Container: ECR và ECS Fargate', '(đã soạn — cloud-aws/s07-container.mjs)', [['ecr', '-', '-', '-']]],
-  ['Chapter 8 — Serverless: Lambda and API Gateway', 'Chương 8 — Serverless: Lambda và API Gateway', 'Hàm chạy theo sự kiện, API HTTP trả tiền theo request, và khi nào serverless (không) hợp.', [
-    ['lambda', 'Lambda functions in Node.js', 'Hàm Lambda bằng Node.js', 'Handler, event, context · Cold start đo thật · Bộ nhớ = CPU · Giới hạn 15 phút · Gói và layer'],
-    ['api-gateway', 'HTTP APIs with API Gateway', 'API HTTP với API Gateway', 'HTTP API vs REST API · Route → Lambda · Xác thực JWT · Throttling · Chi phí theo triệu request'],
-    ['lambda-java', 'Lambda with Java/Spring and SnapStart', 'Lambda bằng Java/Spring và SnapStart', 'Cold start Java · SnapStart · Spring Cloud Function · Khi nào nên dùng Node.js thay Java'],
-    ['khi-nao', 'When serverless is (not) a good idea', 'Khi nào serverless (không) hợp', 'Tải thấp/đột biến · Vòng lặp vô hạn tốn tiền · Khoá nhà cung cấp · Tính chi phí so với Fargate'],
-    ['lab-8', 'Chapter 8 lab + interview questions', 'Lab chương 8 + câu hỏi phỏng vấn', 'API tra cứu phòng lab bằng Lambda + API Gateway · Rubric · Câu phỏng vấn serverless'],
-  ]],
+  ['Chapter 8 — Serverless: Lambda and API Gateway', 'Chương 8 — Serverless: Lambda và API Gateway', '(đã soạn — cloud-aws/s08-serverless.mjs)', [['lambda', '-', '-', '-']]],
   ['Chapter 9 — Event-driven: SQS, SNS and EventBridge', 'Chương 9 — Hướng sự kiện: SQS, SNS và EventBridge', 'Hàng đợi, phát tán và lịch — tách hệ thống để chịu tải và chịu lỗi.', [
     ['sqs', 'SQS queues: standard, FIFO and dead-letter', 'Hàng đợi SQS: standard, FIFO và dead-letter', 'Visibility timeout · Ít nhất một lần ⇒ xử lý idempotent · FIFO và nhóm · DLQ · Long polling'],
     ['sns', 'SNS fan-out and notifications', 'SNS phát tán và thông báo', 'Topic + subscription · Fan-out SNS → nhiều SQS · Email/SMS · Lọc theo thuộc tính · So với bot Telegram'],
@@ -108,6 +103,7 @@ sections[4] = s04;
 sections[5] = s05;
 sections[6] = s06;
 sections[7] = s07;
+sections[8] = s08;
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },

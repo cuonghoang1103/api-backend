@@ -22,7 +22,15 @@ từng chương bằng đúng kiến thức chương đó, tới bài cuối th�
    hội đồng về chính dự án (vì sao làm vậy, luồng dữ liệu, đổi yêu cầu thì sửa đâu), chấm theo rubric, trả nhận xét.
    Tái dùng hạ tầng "luyện bảo vệ" sẵn có (CT Work AI / phòng thi) — xem `src/services/work/aiCong.ts`, `src/services/exam/`.
 
-Khoá đã có lab theo bài vẫn giữ nguyên; mốc dự án là THÊM, không thay.
+Khoá đã có lab theo bài vẫn giữ nguyên; mốc dự án là THÊM, không thay. **Dự án cuối khoá là dự án LỚN, BẮT BUỘC —
+KHÔNG phải một bài lab.** Lab/bài luyện ở từng bài, từng chương GIỮ NGUYÊN; chương/bài nào thiếu lab thì BỔ SUNG (user 21/11).
+
+**Áp cho MỌI môn, kể cả môn không code** — theo đúng dạng assignment/PE của môn ở trường, ví dụ:
+- SWR302: assignment nhóm phân tích yêu cầu (D1 Vision & Scope → D2 Use Case → D3 Business Rules → D4 SRS → D5 Data Dictionary
+  → D6 Mockups → D7 Prioritization → D8 Estimation), thuyết trình bảo vệ. Có bài mẫu thật của nhóm user (9,6 điểm).
+- SWT301: project kiểm thử (test plan, test case Excel, thực thi, báo cáo lỗi, test tự động…), PE kiểm thử.
+- Môn code (FER202, SDN302, MMA301, WDP301, PRM392…): sản phẩm chạy được + bảo vệ; môn PE thì thêm luyện đề PE.
+Mốc dự án của môn không code = từng deliverable (vd SWR302: mỗi chương ra một tài liệu D1…D8 cho đề tài đã chọn).
 
 ## 2. Dữ liệu nội dung (trong tệp khoá, không cần DB để hiển thị)
 ```js

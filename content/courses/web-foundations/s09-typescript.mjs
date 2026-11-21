@@ -12,6 +12,8 @@ import L93 from './s09/wf-9-3-interfaces.mjs';
 import L92 from './s09/wf-9-2-basic-types.mjs';
 import L91 from './s09/wf-9-1-why-typescript.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 
 export default {
   title: 'Chapter 9 — TypeScript basics|||Chương 9 — TypeScript cơ bản',
@@ -64,12 +66,15 @@ ${galleryGiang('wf-ts', [
     L95,
 
     /* ─────────────────────────── 9.6 quiz ─────────────────────────── */
+    /* ─────────────── mốc dự án 9 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(9),
+
     {
       title: '9.6 — Chapter 9 quiz|||9.6 — Kiểm tra chương 9',
       slug: 'wf-9-6-quiz',
       type: 'QUIZ',
       isFreePreview: false,
-      description: 'Mười câu về vì sao dùng TypeScript, kiểu cơ bản, union/any, interface, gắn kiểu hàm và generic cơ bản, và tsc/tsconfig.',
+      description: 'Mười câu về vì sao dùng TypeScript, kiểu cơ bản, union/any, interface, gắn kiểu hàm và generic cơ bản, và tsc/tsconfig — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 9: why TypeScript, basic types and annotations, union types and any, interfaces, typing functions, a gentle intro to generics, and how tsc/tsconfig fit into a real project.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> Reading about types only gets you so far. On Code Lab, annotate real variables and functions, define interfaces, and watch the compiler catch mistakes on the TypeScript track.</p>
@@ -96,9 +101,10 @@ ${galleryGiang('wf-ts', [
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-9-0-slides&khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 9 (30 bài, máy chấm tự động)</a></div>
 <div class="link-card"><a href="/code-lab/typescript">Học sâu hơn → track TypeScript đầy đủ</a></div></div>
 ${onTapBai('wf-9-6-quiz')}
+${phanFE(9)}
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 1320,
         questions: [
           {
             question: 'What does TypeScript add on top of JavaScript?|||TypeScript thêm gì lên trên JavaScript?',
@@ -210,6 +216,7 @@ ${onTapBai('wf-9-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[9],
         ],
       },
     },

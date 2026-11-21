@@ -15,7 +15,7 @@
 
 | File | Vai trò |
 |---|---|
-| `content/courses/web-foundations.mjs` | Khoá, import 15 chương `sNN-*.mjs`. |
+| `content/courses/web-foundations.mjs` | Khoá, import 16 phần `sNN-*.mjs` (Mục 0 + Ch1–15) + `duAn` (dự án xuyên suốt khoá, nguồn `_du-an/`). |
 | `web-foundations/sNN-*.mjs` | Chương (một file). Bài nâng cấp có thể tách ra `web-foundations/sNN/<bai>.mjs` rồi import vào chương. |
 | `web-foundations/_slides.mjs` | `gallery()` (deck CHƯƠNG cũ `wf-html`…), **`walkWf()`** (deck BÀI `wf-N-M` + lời giảng EN/VI), `ma()`, `ra()`, `lienKet()`, `nguon()`, bảng `VER`. |
 | `web-foundations/_demo/<N-M>/…` | Mã ví dụ của bài (`.js` script cổ điển, `.mjs` module, `.html` trang) + output đã chụp `*.out.txt`. |
@@ -88,6 +88,8 @@ Commit theo nhóm chương bằng index riêng (`GIT_INDEX_FILE=$(mktemp)`), kh�
 
 | Ch15 | 15.1–15.6 | ✅ 20/11 (soạn, CHƯA seed/commit) — chương MỚI sau đợt soát phủ (bảng phủ: scratchpad wf-soat/bang-phu.md): 15.1 đường hiển thị (CSS/JS chặn lần vẽ đầu đo bằng máy chủ chậm 1 s, layout thrashing ~170–190×, rAF, góc hacker polyfill.io 2024 + SRI; lab thẻ cao bằng nhau), 15.2 thiết kế lỗi (lớp lỗi, cause, finally, thứ try/catch không bắt, window error/unhandledrejection, nuốt lỗi; lab loadSettings), 15.3 iterable/generator (giao thức lặp, function*, lười, one-shot, code point/Intl.Segmenter, async generator phân trang + trần trang), 15.4 bộ nhớ (vòng tham chiếu, 4 rò rỉ đo bằng CDP HeapProfiler.collectGarbage + Runtime.getHeapUsage + Memory.getDOMCounters; lab toast), 15.5 ngày giờ (chạy 2 múi giờ Asia/Ho_Chi_Minh + America/New_York, page.clock cố định; Temporal có trong Chromium 149), 15.6 quiz 10 câu + tờ ôn. Demo `_demo/15-1…15-3` (chay-demo) + `_demo/_t15/chay.mjs` (tự chạy: `node content/courses/web-foundations/_demo/_t15/chay.mjs` ⇒ `_t15/out/`). ⏳ CHƯA có deck slide wf-15-N, CHƯA có Code Lab wf-15-*, CHƯA thêm hàng vào `content/_LIEN-KET-CHEO/web-foundations.md` |
 
+| Dự án + FE | toàn khoá | ✅ 21/11 (soạn, CHƯA seed/commit) — **dự án xuyên suốt khoá** theo `docs/du-an-hop-dong.md` v1: `duAn` ở cấp gốc `web-foundations.mjs`, nguồn `_du-an/` (`de-tai.mjs` 8 đề tài × 15 dòng bản đồ mốc, `moc.mjs` 15 mốc, `index.mjs` gioiThieu/tuChon/baoVe + dựng bài). Bài mốc `wf-moc-1…15` (EXERCISE, `mocDuAn`) chèn trước quiz mỗi chương bằng `baiMoc(N)`; `wf-bao-ve-du-an` (`baoVeDuAn`) + `wf-final-exam` cuối Ch15; bài 0.1 có `dangKyDuAn: true` + `moiDangKy()`. Khung mẫu mỗi mốc chạy thật, đề tài mẫu “Recipe notebook” (cố ý KHÔNG thuộc danh sách đề tài): `_demo/moc-2,3,4,5,11,12,15` (chay-demo) + `_demo/_moc/m1,6,7,8,9,10,13,14/chay.sh` (Node 22.23, Git 2.51, node:sqlite, tsc 5.9; cổng 3471/3472) ⇒ `_demo/_moc/out/`. **Quiz kiểu FE**: `_on-tap/fe-c01-05/c06-10/c11-15.mjs` (10 câu/chương, NỐI SAU câu cũ — giữ id q1…) + `fe-cuoi-khoa.mjs` (45 câu) qua `_on-tap/fe.mjs`; câu tiếng Anh “EN|||EN”, giải thích song ngữ, đáp án đúng viết đầu và được xoay vị trí theo id; trường `chay` (bị bỏ khi xuất) = đặc tả chạy thật — 76/76 câu có mã/đo đã chạy thật (Node 22, Chromium, SQLite, tsc, semver). Lab: 3.5b thêm “Done when/Xong khi”. |
+
 ## ✅ HOÀN TẤT ĐỢT NÂNG CẤP 02/11/2026
 
 - Code Lab Ch1: `nguon/wf-1-2-vscode.mjs` (Ctrl+/, Alt+↑↓, Ctrl+D, Ctrl+P fuzzy, JSONC, đổi tên định danh) và
@@ -103,3 +105,9 @@ Commit theo nhóm chương bằng index riêng (`GIT_INDEX_FILE=$(mktemp)`), kh�
 - Ch2–Ch10: bài nội dung 6–10k chữ (không "mỏng" theo ngưỡng 6000 nhưng dưới khung 15–35k của bài nâng cấp) — nâng như Ch11–14
   (demo chạy thật trong `_demo/`, deck bài `wf-N-M`, Code Lab theo bài) khi có thời gian; mỗi bài nâng xong thêm lienKet + hàng vào bảng liên kết chéo.
 - Bài nâng cấp đo 36–42k chữ (gộp EN+VI + lời giảng slide; mỗi ngôn ngữ ~20k) — chấp nhận, ghi lại để không ai "cắt cho vừa".
+
+## Dự án xuyên suốt khoá + quiz kiểu FE (21/11/2026) — quy ước
+- Sửa yêu cầu/đề tài ⇒ sửa `_du-an/moc.mjs` / `_du-an/de-tai.mjs` (chữ THUẦN "EN|||VI", không thẻ HTML, không dấu < >) — bài mốc tự dựng lại. `banDoChuong` đúng 15 dòng (ném lỗi nếu thiếu).
+- Đổi mã mẫu của mốc ⇒ sửa `_demo/moc-N` hoặc `_demo/_moc/mN`, chạy lại `chay-demo.mjs moc-N` hoặc `bash _demo/_moc/mN/chay.sh`, rồi `sinh-ma.mjs`. `baiMoc()` ném lỗi khi thiếu CODE/OUT.
+- Thêm câu FE: viết đáp án đúng ĐẦU TIÊN, câu về mã phải có `chay` và chạy lại bộ kiểm (`node scripts/wf/kiem-fe.mjs` — chạy code bằng Node 22 với TZ, Chromium qua Playwright, node:sqlite, tsc --strict trong thư mục tạm). Chỉ NỐI câu mới vào cuối mảng questions (id mặc định theo vị trí).
+- Mã trong câu hỏi không được chứa chuỗi gạch-chéo-n / gạch-chéo-t (LessonQuizPlayer đổi thành xuống dòng).

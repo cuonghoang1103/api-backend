@@ -1,0 +1,2 @@
+theme attr: (none) | prefers dark: true | reduced motion: false
+--color-bg = #111418 | button background = rgb(251, 146, 60) | transition = 0.2s

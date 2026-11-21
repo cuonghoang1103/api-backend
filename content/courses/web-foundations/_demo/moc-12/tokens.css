@@ -1,0 +1,35 @@
+/* Milestone 12 starter: design tokens. Components use ONLY these variables, never raw colours. */
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #f5f7fa;
+  --color-text: #1f2933;
+  --color-primary: #c2410c;
+  --color-on-primary: #ffffff;
+  --radius-md: 10px;
+  --space-2: 8px;
+  --space-4: 16px;
+  --duration: 200ms;
+  --z-dropdown: 100;
+  --z-modal: 1000;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #111418; --color-surface: #1c2128; --color-text: #e6e9ee;
+    --color-primary: #fb923c; --color-on-primary: #111418; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --color-bg: #111418; --color-surface: #1c2128; --color-text: #e6e9ee;
+  --color-primary: #fb923c; --color-on-primary: #111418; color-scheme: dark;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --duration: 0ms; }
+}
+
+body { background: var(--color-bg); color: var(--color-text); font: 16px/1.5 system-ui, sans-serif; margin: 0; padding: var(--space-4); }
+.btn { background: var(--color-primary); color: var(--color-on-primary); border: 0; border-radius: var(--radius-md);
+       padding: var(--space-2) var(--space-4); transition: transform var(--duration) ease; }
+.btn:hover { transform: translateY(-2px); }
+.modal { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; background: rgb(0 0 0 / 0.5); }
+.modal__box { background: var(--color-surface); border-radius: var(--radius-md); padding: var(--space-4); }

@@ -6,6 +6,8 @@
 
 import { gallery, galleryGiang } from './_slides.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 import L144 from './s14/wf-14-4-performance.mjs';
 import L143 from './s14/wf-14-3-deploy.mjs';
 import L142 from './s14/wf-14-2-env-secrets.mjs';
@@ -54,11 +56,14 @@ ${galleryGiang('wf-ship', [
 
     L144,
 
+    /* ─────────────── mốc dự án 14 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(14),
+
     {
       title: '14.5 — Chapter 14 quiz|||14.5 — Kiểm tra chương 14',
       slug: 'wf-14-5-quiz',
       type: 'QUIZ',
-      description: 'Sáu câu về build, biến môi trường, deploy SPA và đo hiệu năng.',
+      description: 'Sáu câu về build, biến môi trường, deploy SPA và đo hiệu năng — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Six questions on builds, environment variables, deploying a single-page app, and measuring performance.</p>
 <h3>The chapter in four points</h3>
@@ -77,9 +82,10 @@ ${galleryGiang('wf-ship', [
 <div class="lz-node"><span class="lz-k">Đo trước khi tối ưu</span><span class="lz-t">tab Network, sắp theo Size</span><span class="lz-d">Dòng to nhất thường là toàn bộ vấn đề. Ngồi đoán thì tốn ngày mà không đổi gì.</span></div>
 </div></div>
 ${onTapBai('wf-14-5-quiz')}
+${phanFE(14)}
 `,
       quiz: {
-        timeLimitSeconds: 480,
+        timeLimitSeconds: 1080,
         questions: [
           {
             question: 'Where is it safe to keep a third-party API key?|||Để khoá API của bên thứ ba ở đâu là an toàn?',
@@ -142,6 +148,7 @@ ${onTapBai('wf-14-5-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[14],
         ],
       },
     },

@@ -1,0 +1,7 @@
+start -> 2 of 2 recipes | Pho bo · 90 min / Banh flan · 40 min
+add "X" -> 2 of 2 recipes | Pho bo · 90 min / Banh flan · 40 min | error: Name needs 2+ characters and minutes a whole number above 0.
+add HTML text -> 3 of 3 recipes | Pho bo · 90 min / Banh flan · 40 min / <img src=x onerror=alert(1)> · 5 min
+add "Goi cuon" -> 4 of 4 recipes | Pho bo · 90 min / Banh flan · 40 min / <img src=x onerror=alert(1)> · 5 min / Goi cuon · 25 min
+delete Pho bo -> 3 of 3 recipes | Banh flan · 40 min / <img src=x onerror=alert(1)> · 5 min / Goi cuon · 25 min
+search "zzz" -> 0 of 3 recipes | No recipe matches.
+images created by the HTML text: 0

@@ -1,0 +1,36 @@
+$ git switch -c fix/page-one-skips-items
+Switched to a new branch 'fix/page-one-skips-items'
+
+$ node --test paging.test.mjs | grep -E '^(not ok|ok) [0-9]|^# (pass|fail)'
+not ok 1 - page 1 shows the first items
+not ok 2 - page 2 shows the rest
+# pass 0
+# fail 2
+
+$ git add paging.test.mjs && git commit -q -m 'test: reproduce #3 (page 1 skips the first items)' && echo committed
+committed
+
+$ node --test paging.test.mjs | grep -E '^(not ok|ok) [0-9]|^# (pass|fail)'
+ok 1 - page 1 shows the first items
+ok 2 - page 2 shows the rest
+# pass 2
+# fail 0
+
+$ git commit -q -am 'fix: 1-based page numbers (closes #3)' && git push -q -u origin fix/page-one-skips-items 2>&1 | grep -v '^remote' ; echo pushed
+pushed
+
+$ git log --oneline main..fix/page-one-skips-items
+2975908 fix: 1-based page numbers (closes #3)
+5aac981 test: reproduce #3 (page 1 skips the first items)
+
+$ git switch -q main && git merge -q --no-ff fix/page-one-skips-items -m 'Merge PR #4: fix/page-one-skips-items' && git push -q origin main && git tag v0.2.0 && echo merged
+merged
+
+$ git log --graph --oneline --format='%h %s'
+*   1712119 Merge PR #4: fix/page-one-skips-items
+|\  
+| * 2975908 fix: 1-based page numbers (closes #3)
+| * 5aac981 test: reproduce #3 (page 1 skips the first items)
+|/  
+* 8d3fd0c feat: paging helper
+

@@ -13,6 +13,8 @@ import L103 from './s10/wf-10-3-git-workflow.mjs';
 import L102 from './s10/wf-10-2-reading-errors-debugging.mjs';
 import L101 from './s10/wf-10-1-think-like-a-programmer.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 
 export default {
   title: 'Chapter 10 — Thinking, debugging & Git workflow|||Chương 10 — Tư duy lập trình, gỡ lỗi & quy trình Git',
@@ -65,12 +67,15 @@ ${galleryGiang('wf-think', [
     L105,
 
     /* ─────────────────────────── 10.6 quiz ─────────────────────────── */
+    /* ─────────────── mốc dự án 10 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(10),
+
     {
       title: '10.6 — Chapter 10 quiz (capstone)|||10.6 — Kiểm tra chương 10 (khép khoá)',
       slug: 'wf-10-6-quiz',
       type: 'QUIZ',
       isFreePreview: false,
-      description: 'Mười câu về chia nhỏ vấn đề, đọc lỗi, quy trình Git (branch/PR/merge/xung đột), và thói quen tự học — khép lại toàn khoá Web Foundations.',
+      description: 'Mười câu về chia nhỏ vấn đề, đọc lỗi, quy trình Git (branch/PR/merge/xung đột), và thói quen tự học — khép lại toàn khoá Web Foundations — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Ten questions covering the whole capstone chapter: problem decomposition, reading errors and the debugging loop, the Git branch/PR/merge/conflict workflow, and habits for learning after the course ends.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> Reading about Git workflow is not the same as living it. On Code Lab, create branches, commit, open pull requests and resolve a real merge conflict on the Git track.</p>
@@ -97,9 +102,10 @@ ${galleryGiang('wf-think', [
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-10-0-slides&khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 10 (30 bài, máy chấm tự động)</a></div>
 <div class="link-card"><a href="/code-lab/git">Học sâu hơn → track Git</a></div></div>
 ${onTapBai('wf-10-6-quiz')}
+${phanFE(10)}
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 1320,
         questions: [
           {
             question: 'What should you do BEFORE writing real code to solve a new problem?|||Bạn nên làm gì TRƯỚC KHI viết code thật để giải một vấn đề mới?',
@@ -211,6 +217,7 @@ ${onTapBai('wf-10-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[10],
         ],
       },
     },

@@ -6,6 +6,8 @@
 
 import { gallery, galleryGiang } from './_slides.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 import L115 from './s11/wf-11-5-regex.mjs';
 import L114 from './s11/wf-11-4-map-set-immutable.mjs';
 import L113 from './s11/wf-11-3-prototype-class.mjs';
@@ -57,11 +59,14 @@ ${galleryGiang('wf-js3', [
 
     L115,
 
+    /* ─────────────── mốc dự án 11 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(11),
+
     {
       title: '11.6 — Chapter 11 quiz|||11.6 — Kiểm tra chương 11',
       slug: 'wf-11-6-quiz',
       type: 'QUIZ',
-      description: 'Tám câu về closure, this, prototype/class, Map/Set, bất biến và regex — gồm câu "in ra gì" đã chạy thật.',
+      description: 'Tám câu về closure, this, prototype/class, Map/Set, bất biến và regex — gồm câu "in ra gì" đã chạy thật — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Eight questions covering closures, <code>this</code>, prototypes and classes, Map/Set, immutability and regex. The "what does this print" answers were verified by running the code.</p>
 <h3>The chapter in four points</h3>
@@ -82,9 +87,10 @@ ${galleryGiang('wf-js3', [
 </div>
 <p class="note-ct">Câu "in ra gì" nào bạn đoán sai thì dán đoạn code vào Console và đổi từng thứ một cho tới khi hiểu vì sao. Đọc đáp án dạy được ít hơn nhiều so với tự nhìn nó xảy ra.</p></div>
 ${onTapBai('wf-11-6-quiz')}
+${phanFE(11)}
 `,
       quiz: {
-        timeLimitSeconds: 600,
+        timeLimitSeconds: 1200,
         questions: [
           {
             question: 'What does this print?  for (var i = 0; i < 3; i++) setTimeout(() => console.log(i), 0);|||Đoạn này in ra gì?  for (var i = 0; i < 3; i++) setTimeout(() => console.log(i), 0);',
@@ -159,6 +165,7 @@ ${onTapBai('wf-11-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[11],
         ],
       },
     },

@@ -1,0 +1,46 @@
+$ curl -s 'http://localhost:3471/api/recipes?q=pho'
+{"items":[{"id":1,"name":"Pho bo","minutes":90,"category":"main"}],"total":1}
+
+
+$ curl -s -i http://localhost:3471/api/recipes/99
+HTTP/1.1 404 Not Found
+Content-Type: application/json; charset=utf-8
+
+{"error":"recipe 99 not found"}
+
+
+$ curl -s -i -X POST http://localhost:3471/api/recipes -H 'Content-Type: application/json' -d '{"name":"X","minutes":-5}'
+HTTP/1.1 400 Bad Request
+Content-Type: application/json; charset=utf-8
+
+{"errors":{"name":"at least 2 characters","minutes":"a positive whole number"}}
+
+
+$ curl -s -i -X POST http://localhost:3471/api/recipes -H 'Content-Type: application/json' -d '{"name":"Goi cuon","minutes":25}'
+HTTP/1.1 201 Created
+Content-Type: application/json; charset=utf-8
+
+{"id":3,"name":"Goi cuon","minutes":25,"category":"main"}
+
+
+$ curl -s -X PATCH http://localhost:3471/api/recipes/3 -H 'Content-Type: application/json' -d '{"minutes":20}'
+{"id":3,"name":"Goi cuon","minutes":20,"category":"main"}
+
+
+$ curl -s -i -X DELETE http://localhost:3471/api/recipes/3
+HTTP/1.1 204 No Content
+Content-Type: application/json; charset=utf-8
+
+
+
+$ curl -s -X PATCH http://localhost:3471/api/recipes/1 -H 'Content-Type: application/json' -d '{"id":42,"minutes":80}'
+{"id":1,"name":"Pho bo","minutes":80,"category":"main"}
+
+
+$ curl -s -i -X PUT http://localhost:3471/api/recipes/1
+HTTP/1.1 405 Method Not Allowed
+Content-Type: application/json; charset=utf-8
+
+{"error":"PUT not allowed here"}
+
+

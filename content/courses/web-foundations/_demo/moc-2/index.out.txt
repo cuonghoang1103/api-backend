@@ -1,0 +1,4 @@
+landmarks: header=1 nav=1 main=1 footer=1
+headings: h1 > h2 > h3 > h3
+PROBLEMS (1):
+- img without alt: flan.jpg

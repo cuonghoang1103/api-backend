@@ -8,6 +8,8 @@
  */
 
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc, baiBaoVe } from './_du-an/index.mjs';
+import { FE, phanFE, baiThiCuoi } from './_on-tap/fe.mjs';
 import L151 from './s15/wf-15-1-rendering-pipeline.mjs';
 import L152 from './s15/wf-15-2-error-handling.mjs';
 import L153 from './s15/wf-15-3-iterables-generators.mjs';
@@ -28,11 +30,14 @@ export default {
 
     L155,
 
+    /* ─────────────── mốc dự án 15 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(15),
+
     {
       title: '15.6 — Chapter 15 quiz|||15.6 — Kiểm tra chương 15',
       slug: 'wf-15-6-quiz',
       type: 'QUIZ',
-      description: 'Mười câu về đường hiển thị, layout thrashing, thiết kế lỗi, iterable/generator, rò rỉ bộ nhớ và ngày giờ — câu "in ra gì" đều đã chạy thật trong Chromium.',
+      description: 'Mười câu về đường hiển thị, layout thrashing, thiết kế lỗi, iterable/generator, rò rỉ bộ nhớ và ngày giờ — câu "in ra gì" đều đã chạy thật trong Chromium — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Ten questions covering the rendering pipeline, layout thrashing, error design, iterables and generators, memory leaks, and dates. Every "what does this print" answer was verified by running the code in Chromium.</p>
 <h3>The chapter in five points</h3>
@@ -55,9 +60,10 @@ export default {
 </div>
 <p class="note-ct">Câu "in ra gì" nào bạn sai thì chạy lại ví dụ của bài đó và đổi từng thứ một. Tự nhìn nó xảy ra dạy được nhiều hơn đọc đáp án.</p></div>
 ${onTapBai('wf-15-6-quiz')}
+${phanFE(15)}
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 1320,
         questions: [
           {
             question: 'A page has <link rel="stylesheet" href="/big.css"> in its head and the file takes 2 s to download. What does the user see during those 2 s?|||Trang có <link rel="stylesheet" href="/big.css"> trong head và tệp mất 2 giây để tải. Trong 2 giây đó người dùng thấy gì?',
@@ -159,8 +165,13 @@ ${onTapBai('wf-15-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[15],
         ],
       },
     },
+
+    /* ─────────────── đề tổng hợp cuối khoá + bảo vệ dự án ─────────────── */
+    baiThiCuoi(),
+    baiBaoVe(),
   ],
 };

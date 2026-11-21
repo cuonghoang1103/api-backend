@@ -1,0 +1,19 @@
+$ node config.mjs
+Refusing to start: Missing environment variables: DATABASE_URL, SESSION_SECRET (see .env.example)
+exit code: 1
+
+$ DATABASE_URL=file:./prod.db SESSION_SECRET=<short> NODE_ENV=production node config.mjs
+Refusing to start: SESSION_SECRET is too short for production
+exit code: 1
+
+$ DATABASE_URL=file:./dev.db SESSION_SECRET=<anything> node config.mjs
+config ok: port 3000 | production: false
+exit code: 0
+
+$ node smoke.mjs http://localhost:3471
+PASS  GET /api/recipes  -> 200
+PASS  GET /api/recipes/1  -> 200
+PASS  GET /api/recipes/99999  -> 404
+FAIL  GET /api/health  -> 404 (expected 200)
+1 check(s) failed
+exit code: 1

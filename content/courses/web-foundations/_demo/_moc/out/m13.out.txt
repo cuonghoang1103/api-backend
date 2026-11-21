@@ -1,0 +1,28 @@
+$ node --test
+▶ validateRecipe
+  ✔ accepts a valid recipe
+  ✔ rejects a 1-letter name
+  ✔ rejects a name of only spaces
+  ✔ rejects 0, negative and decimal minutes
+✔ validateRecipe
+▶ filterRecipes
+  ✔ empty query returns everything
+  ✔ search ignores case and spaces
+  ✔ category and query combine
+  ✔ does not change the original array
+✔ filterRecipes
+▶ slugify
+  ✔ Vietnamese text becomes a URL slug
+  ✔ đ becomes d, symbols collapse
+✔ slugify
+▶ loadRecipes with a fake fetch
+  ✔ returns the items on 200
+  ✔ throws a readable error on 500
+✔ loadRecipes with a fake fetch
+ℹ tests 12
+ℹ suites 4
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0

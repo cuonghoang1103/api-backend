@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="cho-xong">
+  <title>Milestone 5 — modules and fetch</title>
+</head>
+<body>
+  <main>
+    <h1>Recipes</h1>
+    <div id="recipes" aria-live="polite"></div>
+  </main>
+  <script type="module">
+    import { load } from './main.mjs';
+    // Self-check: the three outcomes every data screen must handle.
+    const box = document.querySelector('#recipes');
+    const seen = () => box.querySelector('li') ? [...box.querySelectorAll('li')].map((li) => li.textContent).join(' / ') : box.textContent;
+    for (const url of ['data/recipes.json', 'data/empty.json', 'data/missing.json']) {
+      const pending = load(url);
+      console.log(url + ' while waiting: ' + seen());
+      await pending;
+      console.log(url + ' after: ' + seen());
+    }
+    window.__xong = true;
+  </script>
+</body>
+</html>

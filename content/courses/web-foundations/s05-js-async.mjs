@@ -12,6 +12,8 @@ import L53 from './s05/wf-5-3-async-await.mjs';
 import L52 from './s05/wf-5-2-promises.mjs';
 import L51 from './s05/wf-5-1-event-loop.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 
 export default {
   title: 'Chapter 5 — Asynchronous JavaScript & modules|||Chương 5 — JavaScript bất đồng bộ & modules',
@@ -67,12 +69,15 @@ ${galleryGiang('wf-js2', [
     L55,
 
     /* ─────────────────────────── 5.6 quiz ─────────────────────────── */
+    /* ─────────────── mốc dự án 5 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(5),
+
     {
       title: '5.6 — Chapter 5 quiz|||5.6 — Kiểm tra chương 5',
       slug: 'wf-5-6-quiz',
       type: 'QUIZ',
       isFreePreview: false,
-      description: 'Mười câu về event loop, Promise, async/await, fetch và ES modules — có câu thứ tự in ra đã chạy thật.',
+      description: 'Mười câu về event loop, Promise, async/await, fetch và ES modules — có câu thứ tự in ra đã chạy thật — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 5: synchronous vs asynchronous, the event loop and print order, Promise states, async/await and try/catch, fetch and response.ok, and ES module import/export. The ordering answers were verified by running the code.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> Async is best learned hands-on. On Code Lab, write Promises, async/await and fetch-style tasks — run your code to check the output, then mark the exercise solved yourself (automatic grading is still being built).</p>
@@ -97,9 +102,10 @@ ${galleryGiang('wf-js2', [
 <p class="note-ct"><strong>Lỗi bất đồng bộ là lỗi thứ tự.</strong> Khi một thứ đang là <code>undefined</code> mà lẽ ra phải có giá trị, hãy thêm một <code>console.log</code> có nhãn ở từng bước rồi đọc thứ tự chúng in ra — nó gần như chẳng bao giờ là thứ tự bạn đã giả định.</p>
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-5-0-slides&khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 5</a></div></div>
 ${onTapBai('wf-5-6-quiz')}
+${phanFE(5)}
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 1320,
         questions: [
           {
             question: 'JavaScript is single-threaded. How does it stay responsive while waiting?|||JavaScript đơn luồng. Làm sao nó vẫn mượt khi đang chờ?',
@@ -211,6 +217,7 @@ ${onTapBai('wf-5-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[5],
         ],
       },
     },

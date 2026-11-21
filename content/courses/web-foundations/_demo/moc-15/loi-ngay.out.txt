@@ -1,0 +1,12 @@
+OK /moc-5/data/recipes.json -> 3 recipes
+HttpError: HTTP 404 for /moc-5/data/missing.json
+  user sees: This recipe no longer exists.
+NetworkError: Cannot reach http://127.0.0.1:9/recipes | cause: TypeError: Failed to fetch
+  user sees: You seem to be offline. Check your connection.
+stored: 2026-11-21T17:30:00Z
+Hanoi user sees: 22/11/2026, 00:30
+New York user sees: 21/11/2026, 12:30
+WRONG "date" via toISOString().slice(0, 10): 2026-11-21 (the Hanoi calendar already says 22/11)
+clicks counted: 3 (3 listeners x 1 click before abort, 0 after)
+Uncaught (in promise) HttpError: HTTP 404 for /moc-5/data/nope.json
+safety net caught: HTTP 404 for /moc-5/data/nope.json

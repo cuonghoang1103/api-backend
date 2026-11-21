@@ -4,6 +4,10 @@
  * 16 chương (Mục 0 + Ch1-15). Sections tách theo file ./web-foundations/sNN-*.mjs.
  * Ch15 (20/11/2026) lấp chỗ trống sau đợt soát phủ: đường hiển thị, thiết kế lỗi, iterable/generator, rò rỉ bộ nhớ, ngày giờ.
  *
+ * Dự án xuyên suốt khoá (21/11/2026, docs/du-an-hop-dong.md v1): `duAn` ở cấp gốc (8 đề tài, 15 mốc wf-moc-1…15 cuối mỗi
+ * chương, bảo vệ wf-bao-ve-du-an) — nguồn ./web-foundations/_du-an/. Quiz chương + 10 câu tiếng Anh kiểu FE; đề cuối khoá
+ * wf-final-exam 45 câu (./web-foundations/_on-tap/fe*.mjs, đáp án mã đã chạy thật).
+ *
  * Seed: node scripts/course-seed.mjs --file ./content/courses/web-foundations.mjs --apply
  * Kiểm:  node scripts/course-content-check.mjs ./content/courses/web-foundations.mjs
  */
@@ -23,6 +27,7 @@ import s12 from './web-foundations/s12-css-advanced.mjs';
 import s13 from './web-foundations/s13-testing.mjs';
 import s14 from './web-foundations/s14-ship.mjs';
 import s15 from './web-foundations/s15-browser-internals.mjs';
+import { duAn } from './web-foundations/_du-an/index.mjs';
 
 export default {
   category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
@@ -66,4 +71,6 @@ export default {
     s14,
     s15,
   ],
+  // Dự án xuyên suốt khoá — hợp đồng docs/du-an-hop-dong.md §1 (đề tài, mốc, tiêu chí tự chọn, bảo vệ).
+  duAn,
 };

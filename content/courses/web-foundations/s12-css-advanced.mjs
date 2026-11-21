@@ -6,6 +6,8 @@
 
 import { gallery, galleryGiang } from './_slides.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 import L124 from './s12/wf-12-4-tokens-theming.mjs';
 import L123 from './s12/wf-12-3-css-architecture.mjs';
 import L122 from './s12/wf-12-2-transition-animation.mjs';
@@ -54,11 +56,14 @@ ${galleryGiang('wf-css2', [
 
     L124,
 
+    /* ─────────────── mốc dự án 12 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(12),
+
     {
       title: '12.5 — Chapter 12 quiz|||12.5 — Kiểm tra chương 12',
       slug: 'wf-12-5-quiz',
       type: 'QUIZ',
-      description: 'Sáu câu về position, stacking context, hiệu năng hoạt hình, BEM và token.',
+      description: 'Sáu câu về position, stacking context, hiệu năng hoạt hình, BEM và token — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Six questions on positioning, stacking contexts, animation performance, naming and theming.</p>
 <h3>The chapter in four points</h3>
@@ -77,9 +82,10 @@ ${galleryGiang('wf-css2', [
 <div class="lz-node"><span class="lz-k">Tên toàn cục sẽ đụng nhau</span><span class="lz-t">khoanh vùng hoặc gắn tiền tố</span><span class="lz-d">.card và button ở phạm vi toàn cục sẽ đánh nhau với framework CSS, trên những trang bạn chưa từng đụng tới.</span></div>
 </div></div>
 ${onTapBai('wf-12-5-quiz')}
+${phanFE(12)}
 `,
       quiz: {
-        timeLimitSeconds: 480,
+        timeLimitSeconds: 1080,
         questions: [
           {
             question: 'An element with position: absolute jumps to the top-left of the page. Why?|||Một phần tử position: absolute bay lên góc trên bên trái của trang. Vì sao?',
@@ -147,6 +153,7 @@ ${onTapBai('wf-12-5-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[12],
         ],
       },
     },

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="cho-xong">
+  <title>Milestone 3 self-check: three widths</title>
+</head>
+<body>
+  <script>
+    // Open your page in three iframes of fixed width and measure it from the inside.
+    const widths = [375, 768, 1280];
+    const results = {};
+    for (const w of widths) {
+      const frame = document.createElement('iframe');
+      frame.style.cssText = 'width:' + w + 'px;height:600px;border:0';
+      frame.src = 'trang.html';
+      frame.onload = () => {
+        const doc = frame.contentDocument;
+        const cards = doc.getElementById('cards');
+        const cols = frame.contentWindow.getComputedStyle(cards).gridTemplateColumns.split(' ').length;
+        const sideScroll = doc.documentElement.scrollWidth > doc.documentElement.clientWidth;
+        const heights = [...cards.querySelectorAll('.card')].map((c) => c.offsetHeight);
+        const rowOneEqual = new Set(heights.slice(0, cols)).size === 1;
+        results[w] = (w + 'px: ' + cols + ' column(s), horizontal scroll: ' + (sideScroll ? 'YES (fix it)' : 'no') + ', first-row cards equal height: ' + rowOneEqual);
+        if (Object.keys(results).length === widths.length) {
+          widths.forEach((x) => console.log(results[x]));   // print in width order, whatever loaded first
+          window.__xong = true;
+        }
+      };
+      document.body.append(frame);
+    }
+  </script>
+</body>
+</html>

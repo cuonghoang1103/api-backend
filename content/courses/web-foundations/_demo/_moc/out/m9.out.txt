@@ -1,0 +1,14 @@
+$ npx tsc --noEmit --strict --target es2022 --module nodenext --allowImportingTsExtensions --lib es2022 types.ts api.ts
+(no errors)
+
+$ node --experimental-strip-types api.ts
+ok, total minutes = 90
+failed: item 0 is not a Recipe
+failed: HTTP 500
+
+$ npx tsc --noEmit --strict --target es2022 --module nodenext --allowImportingTsExtensions --lib es2022 sai.ts
+sai.ts(4,44): error TS2322: Type 'string' is not assignable to type 'number'.
+sai.ts(5,55): error TS2820: Type '"desert"' is not assignable to type 'Category'. Did you mean '"dessert"'?
+sai.ts(8,22): error TS2339: Property 'data' does not exist on type 'ApiResult<Recipe[]>'.
+  Property 'data' does not exist on type '{ ok: false; status: number; message: string; }'.
+sai.ts(12,10): error TS18048: 'recipe.note' is possibly 'undefined'.

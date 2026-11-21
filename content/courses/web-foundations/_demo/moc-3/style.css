@@ -1,0 +1,23 @@
+/* Milestone 3 starter: one stylesheet, mobile first. */
+*, *::before, *::after { box-sizing: border-box; }
+:root { --space: 8px; --radius: 10px; --text: #1f2933; --muted: #616e7c; --line: #d9e2ec; --brand: #c2410c; }
+body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: var(--text); }
+img { max-width: 100%; height: auto; display: block; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 calc(var(--space) * 2); }
+
+/* Header: a flex row that wraps on small screens. */
+.site-header .container { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space); padding-block: calc(var(--space) * 2); }
+.site-header ul { display: flex; gap: calc(var(--space) * 2); list-style: none; margin: 0; padding: 0; }
+a { color: var(--brand); }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+
+/* Cards: as many 240px+ columns as fit — 1 on a phone, 2 on a tablet, 4 on a laptop. */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: calc(var(--space) * 2); list-style: none; padding: 0; }
+.card { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; height: 100%; display: flex; flex-direction: column; }
+.card__body { padding: calc(var(--space) * 2); display: flex; flex-direction: column; gap: var(--space); flex: 1; }
+.card__meta { color: var(--muted); margin: 0; margin-top: auto; }
+
+@media (min-width: 768px) {
+  body { font-size: 17px; }
+}

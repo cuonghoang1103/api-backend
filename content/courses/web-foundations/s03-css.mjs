@@ -11,6 +11,8 @@ import L33 from './s03/wf-3-3-flexbox.mjs';
 import L32 from './s03/wf-3-2-box-model.mjs';
 import L31 from './s03/wf-3-1-css-basics.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 
 export default {
   title: 'Chapter 3 — CSS & responsive design|||Chương 3 — CSS & thiết kế responsive',
@@ -289,6 +291,7 @@ Mark each numbered element from the wireframe with an HTML comment (1)…(7).</c
 <li>☐ For every box you can say where its data comes from.</li>
 <li>☐ A classmate can explain the page from your drawing without you talking.</li>
 </ul>
+<p><strong>Done when:</strong> both wireframes pass every box above; page 1 is built in HTML and CSS with each numbered element marked by its comment (1)…(7) in the source; at a 375&nbsp;px wide window it shows one column of recipe cards and at 1280&nbsp;px at least three; typing a name that matches nothing shows the empty-state text you drew; and the "Save to favourites" button does not appear in the list page at all (it belongs to page 2).</p>
 
 <h3>Going further</h3>
 <p>This lesson is the developer's minimum. The UX/UI for Developers course goes deeper — sketching techniques, low- and high-fidelity wireframes, Figma, prototypes and testing them with users — in Chapter 4. Note: that course is still an outline; its lessons are being written.</p>
@@ -511,6 +514,7 @@ CHỈ dựng bộ khung HTML + một file CSS:
 <li>☐ Với mỗi hộp, bạn nói được dữ liệu của nó lấy từ đâu.</li>
 <li>☐ Một bạn cùng lớp nhìn hình của bạn là giải thích được trang, không cần bạn nói.</li>
 </ul>
+<p><strong>Xong khi:</strong> cả hai wireframe qua hết các ô ở trên; trang 1 dựng bằng HTML và CSS, mỗi phần tử có số được đánh dấu bằng chú thích (1)…(7) trong mã nguồn; ở cửa sổ rộng 375&nbsp;px trang hiện một cột thẻ công thức, ở 1280&nbsp;px ít nhất ba cột; gõ một tên không khớp gì thì hiện đúng câu trạng thái rỗng bạn đã vẽ; và nút "Lưu vào yêu thích" hoàn toàn không xuất hiện ở trang danh sách (nó thuộc trang 2).</p>
 
 <h3>Đi xa hơn</h3>
 <p>Bài này là mức tối thiểu cho lập trình viên. Khoá UX/UI cho lập trình viên đi sâu hơn — kỹ thuật phác thảo, wireframe độ trung thực thấp và cao, Figma, prototype và thử với người dùng — ở Chương 4. Lưu ý: khoá đó hiện mới có đề cương, các bài đang được soạn.</p>
@@ -522,12 +526,15 @@ CHỈ dựng bộ khung HTML + một file CSS:
     },
 
     /* ─────────────────────────── 3.6 quiz ─────────────────────────── */
+    /* ─────────────── mốc dự án 3 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(3),
+
     {
       title: '3.6 — Chapter 3 quiz|||3.6 — Kiểm tra chương 3',
       slug: 'wf-3-6-quiz',
       type: 'QUIZ',
       isFreePreview: false,
-      description: 'Mười câu về bộ chọn và cascade, box model, Flexbox, Grid và thiết kế responsive.',
+      description: 'Mười câu về bộ chọn và cascade, box model, Flexbox, Grid và thiết kế responsive — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 3: selectors and the cascade, the box model and box-sizing, Flexbox axes, CSS Grid, relative units and media queries.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> CSS layout only clicks once you push pixels yourself. On Code Lab, style and lay out real elements — box model, Flexbox, Grid and responsive — with instant feedback.</p>
@@ -552,9 +559,10 @@ CHỈ dựng bộ khung HTML + một file CSS:
 <p class="note-ct"><strong>Đừng học thuộc các thuộc tính CSS.</strong> Chẳng ai làm thế. Hãy học bốn mô hình ở trên — cascade, hộp, trục flex, rãnh grid — rồi tra thuộc tính khi cần. Chính các mô hình mới là thứ giúp bạn đọc được bảng kiểu của người khác.</p>
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-3-0-slides&amp;khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 3, từ dễ đến khó</a></div></div>
 ${onTapBai('wf-3-6-quiz')}
+${phanFE(3)}
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 1320,
         questions: [
           {
             question: 'Which selector matches every element with class="card"?|||Bộ chọn nào khớp mọi phần tử có class="card"?',
@@ -666,6 +674,7 @@ ${onTapBai('wf-3-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[3],
         ],
       },
     },

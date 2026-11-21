@@ -12,6 +12,8 @@ import L63 from './s06/wf-6-3-status-codes.mjs';
 import L62 from './s06/wf-6-2-http-methods.mjs';
 import L61 from './s06/wf-6-1-request-response.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 
 export default {
   title: 'Chapter 6 — HTTP & APIs|||Chương 6 — HTTP & API',
@@ -64,12 +66,15 @@ ${galleryGiang('wf-http', [
     L65,
 
     /* ─────────────────────────── 6.6 quiz ─────────────────────────── */
+    /* ─────────────── mốc dự án 6 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(6),
+
     {
       title: '6.6 — Chapter 6 quiz|||6.6 — Kiểm tra chương 6',
       slug: 'wf-6-6-quiz',
       type: 'QUIZ',
       isFreePreview: false,
-      description: 'Mười câu về chu trình request/response, method, mã trạng thái, headers/JSON, REST và tham số route/query.',
+      description: 'Mười câu về chu trình request/response, method, mã trạng thái, headers/JSON, REST và tham số route/query — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 6: the request/response cycle, HTTP methods, status codes, headers and JSON, and REST with route params vs query strings.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> The best way to internalise HTTP is to build a real API. On Code Lab, implement routes, methods, status codes and JSON responses on the Node.js (Express) track.</p>
@@ -94,9 +99,10 @@ ${galleryGiang('wf-http', [
 <p class="note-ct"><strong>Hãy luyện trên một endpoint thật.</strong> Chĩa <code>curl -i</code> vào một API công khai bất kỳ rồi đọc cả phản hồi: dòng trạng thái, từng header, rồi mới tới thân. Mười phút như thế làm phần còn lại của khoá học dễ gỡ lỗi hơn hẳn.</p>
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-6-0-slides&khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 6 (34 bài, máy chấm tự động)</a></div></div>
 ${onTapBai('wf-6-6-quiz')}
+${phanFE(6)}
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 1320,
         questions: [
           {
             question: 'Which HTTP method should you use to READ data without changing anything?|||Method HTTP nào nên dùng để ĐỌC dữ liệu mà không thay đổi gì?',
@@ -208,6 +214,7 @@ ${onTapBai('wf-6-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[6],
         ],
       },
     },

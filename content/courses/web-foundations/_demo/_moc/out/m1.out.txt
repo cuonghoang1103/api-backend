@@ -1,0 +1,36 @@
+$ mkdir recipe-notebook && cd recipe-notebook && git init -q -b main
+
+$ git status --short --untracked-files=all
+?? .env.example
+?? .gitignore
+?? README.md
+?? package.json
+?? src/index.html
+
+$ git check-ignore -v .env node_modules/some-lib/index.js
+.gitignore:2:.env	.env
+.gitignore:1:node_modules/	node_modules/some-lib/index.js
+
+$ git add README.md .gitignore .env.example && git commit -q -m 'chore: README, .gitignore and .env.example' && echo committed
+committed
+
+$ git add package.json && git commit -q -m 'chore: package.json with dev and test scripts' && echo committed
+committed
+
+$ git add src/index.html && git commit -q -m 'feat: first page skeleton' && echo committed
+committed
+
+$ git status --short
+
+$ git log --oneline --format='%h %ad %s' --date=format:'%H:%M'
+9e53d01 10:00 feat: first page skeleton
+f38dd36 09:00 chore: package.json with dev and test scripts
+a29bc4a 08:00 chore: README, .gitignore and .env.example
+
+$ git ls-files
+.env.example
+.gitignore
+README.md
+package.json
+src/index.html
+

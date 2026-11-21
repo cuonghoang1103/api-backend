@@ -1,0 +1,3 @@
+375px: 1 column(s), horizontal scroll: no, first-row cards equal height: true
+768px: 2 column(s), horizontal scroll: no, first-row cards equal height: true
+1280px: 4 column(s), horizontal scroll: no, first-row cards equal height: true

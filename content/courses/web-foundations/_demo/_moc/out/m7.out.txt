@@ -1,0 +1,64 @@
+$ curl -s -i -X POST http://localhost:3472/api/recipes -H 'Content-Type: application/json' -d '{"name":"Bun cha"}'
+HTTP/1.1 401 Unauthorized
+
+{"error":"log in first"}
+
+
+$ curl -s -X POST http://localhost:3472/api/register -H 'Content-Type: application/json' -d '{"email":"an@example.com","password":"short"}'
+{"error":"valid email and a password of 8+ characters"}
+
+
+$ curl -s -X POST http://localhost:3472/api/register -H 'Content-Type: application/json' -d '{"email":"an@example.com","password":"correct-horse-1"}'
+{"id":1,"email":"an@example.com"}
+
+
+$ curl -s -X POST http://localhost:3472/api/register -H 'Content-Type: application/json' -d '{"email":"binh@example.com","password":"battery-staple-2"}'
+{"id":2,"email":"binh@example.com"}
+
+
+$ curl -s -i -X POST http://localhost:3472/api/login -H 'Content-Type: application/json' -d '{"email":"an@example.com","password":"wrong-pass"}'
+HTTP/1.1 401 Unauthorized
+
+{"error":"wrong email or password"}
+
+
+$ curl -s -i -b an.txt -c an.txt -X POST http://localhost:3472/api/login -H 'Content-Type: application/json' -d '{"email":"an@example.com","password":"correct-horse-1"}' | sed -E 's/sid=[0-9a-f]+/sid=<random>/'
+HTTP/1.1 200 OK
+Set-Cookie: sid=<random>; HttpOnly; SameSite=Lax; Path=/; Max-Age=3600
+
+{"email":"an@example.com"}
+
+
+$ curl -s -b an.txt -c an.txt http://localhost:3472/api/me
+{"email":"an@example.com"}
+
+
+$ curl -s -b an.txt -c an.txt -X POST http://localhost:3472/api/recipes -H 'Content-Type: application/json' -d '{"name":"Bun cha","ownerId":999}'
+{"id":2,"name":"Bun cha","ownerId":1}
+
+
+$ curl -s -b binh.txt -c binh.txt -X POST http://localhost:3472/api/login -H 'Content-Type: application/json' -d '{"email":"binh@example.com","password":"battery-staple-2"}'
+{"email":"binh@example.com"}
+
+
+$ curl -s -i -b binh.txt -c binh.txt -X DELETE http://localhost:3472/api/recipes/2
+HTTP/1.1 403 Forbidden
+
+{"error":"not your recipe"}
+
+
+$ curl -s -i -b an.txt -c an.txt -X DELETE http://localhost:3472/api/recipes/2
+HTTP/1.1 204 No Content
+
+
+
+$ curl -s -i -b an.txt -c an.txt -X POST http://localhost:3472/api/logout
+HTTP/1.1 204 No Content
+Set-Cookie: sid=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0
+
+
+
+$ curl -s -b an.txt -c an.txt http://localhost:3472/api/me
+{"error":"not logged in"}
+
+

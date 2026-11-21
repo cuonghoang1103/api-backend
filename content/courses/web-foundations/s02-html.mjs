@@ -11,6 +11,8 @@ import L23 from './s02/wf-2-3-semantic-html.mjs';
 import L22 from './s02/wf-2-2-text-links-images.mjs';
 import L21 from './s02/wf-2-1-html-basics.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 
 export default {
   title: 'Chapter 2 — HTML: the structure of every web page|||Chương 2 — HTML: cấu trúc của mọi trang web',
@@ -63,12 +65,15 @@ ${galleryGiang('wf-html', [
     L25,
 
     /* ─────────────────────────── 2.6 quiz ─────────────────────────── */
+    /* ─────────────── mốc dự án 2 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(2),
+
     {
       title: '2.6 — Chapter 2 quiz|||2.6 — Kiểm tra chương 2',
       slug: 'wf-2-6-quiz',
       type: 'QUIZ',
       isFreePreview: false,
-      description: 'Mười câu về phần tử và thuộc tính, tiêu đề và liên kết, HTML ngữ nghĩa, biểu mẫu, bảng và khả năng tiếp cận.',
+      description: 'Mười câu về phần tử và thuộc tính, tiêu đề và liên kết, HTML ngữ nghĩa, biểu mẫu, bảng và khả năng tiếp cận — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 2: element anatomy and attributes, headings and links, semantic structure, forms and inputs, tables, and accessibility.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> Reading HTML is not the same as writing it. Head to Code Lab and build real markup — run your code to see the result, then mark the exercise solved yourself (automatic grading is still being built).</p>
@@ -93,9 +98,10 @@ ${galleryGiang('wf-html', [
 <p class="note-ct"><strong>Một phép kiểm năm phút hơn mọi bài kiểm tra:</strong> mở một trang bạn tự viết, cất con chuột đi, rồi đi khắp trang bằng phím Tab. Nếu bạn không tới được mọi điều khiển và không thấy mình đang ở đâu thì HTML còn thứ cần sửa.</p>
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-2-0-slides&amp;khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 2, từ dễ đến khó</a></div></div>
 ${onTapBai('wf-2-6-quiz')}
+${phanFE(2)}
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 1320,
         questions: [
           {
             question: 'What is an HTML attribute?|||Một thuộc tính (attribute) HTML là gì?',
@@ -207,6 +213,7 @@ ${onTapBai('wf-2-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[2],
         ],
       },
     },

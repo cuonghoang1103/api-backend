@@ -9,6 +9,8 @@ import L15 from './s01/wf-1-5-node-npm.mjs';
 import L13 from './s01/wf-1-3-git.mjs';
 import L11 from './s01/wf-1-1-terminal.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 import L14 from './s01/wf-1-4-github.mjs';
 import L12 from './s01/wf-1-2-vscode.mjs';
 
@@ -64,12 +66,15 @@ ${galleryGiang('wf-tools', [
     L15,
 
     /* ─────────────────────────── 1.6 quiz ─────────────────────────── */
+    /* ─────────────── mốc dự án 1 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(1),
+
     {
       title: '1.6 — Chapter 1 quiz|||1.6 — Kiểm tra chương 1',
       slug: 'wf-1-6-quiz',
       type: 'QUIZ',
       isFreePreview: false,
-      description: 'Mười câu về terminal, đường dẫn, VS Code, Git, GitHub và npm.',
+      description: 'Mười câu về terminal, đường dẫn, VS Code, Git, GitHub và npm — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 1: terminal navigation, absolute vs relative paths, VS Code, the Git snapshot model, GitHub remotes, and npm/package.json.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> These tools stick only through repetition. Drill real terminal and Git commands on Code Lab until they are muscle memory.</p>
@@ -98,9 +103,10 @@ ${galleryGiang('wf-tools', [
 <div class="link-card"><a href="/code-lab/git">Luyện tập ở Code Lab → track Git</a></div>
 <div class="link-card"><a href="/code-lab/linux-bash">Luyện tập ở Code Lab → track Linux &amp; Bash (terminal)</a></div></div>
 ${onTapBai('wf-1-6-quiz')}
+${phanFE(1)}
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 1320,
         questions: [
           {
             question: 'Which command prints the folder you are currently in?|||Lệnh nào in ra thư mục bạn đang đứng?',
@@ -207,6 +213,7 @@ ${onTapBai('wf-1-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[1],
         ],
       },
     },

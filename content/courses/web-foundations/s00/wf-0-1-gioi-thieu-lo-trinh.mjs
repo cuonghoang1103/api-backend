@@ -5,6 +5,7 @@
  */
 import { walkWf, ma, ra, nguon, lienKet } from '../_slides.mjs';
 import { CODE, OUT } from '../_ma.mjs';
+import { moiDangKy } from '../_du-an/index.mjs';
 
 const G = walkWf('wf-0-1', 'Start here: the map of the course', 'Bắt đầu: bản đồ toàn khoá', [
   [1, 'Start here',
@@ -42,6 +43,8 @@ const G = walkWf('wf-0-1', 'Start here: the map of the course', 'Bắt đầu: b
 export default {
   title: '0.1 — Who this course is for & the full roadmap|||0.1 — Khoá này cho ai & lộ trình toàn khoá',
   slug: 'wf-0-1-gioi-thieu-lo-trinh',
+  // Dự án xuyên suốt khoá (docs/du-an-hop-dong.md §2): frontend vẽ khối "🎯 Đăng ký đề tài" dưới bài có cờ này.
+  dangKyDuAn: true,
   type: 'VIDEO',
   isFreePreview: true,
   // "100+ Web Development Things you Should Know" — Fireship (tổng quan nghề web).
@@ -187,7 +190,7 @@ ${ra(OUT['0-1/bi-mat'])}
 ${nguon('📗', 'MDN — Learn web development', 'The free, official-quality curriculum this course uses as its reference', 'https://developer.mozilla.org/en-US/docs/Learn_web_development')}
 ${nguon('🗺️', 'roadmap.sh — Frontend and Backend roadmaps', 'A visual map of what comes after the foundation', 'https://roadmap.sh/frontend')}
 ${lienKet({ khoa: 'nodejs', bai: 'nodejs-0-1-gioi-thieu', title: 'Node.js 0.1 — where this course leads', sub: 'The backend course that assumes Chapters 0–8 of this one', cta: 'Open lesson' })}
-</div>
+${moiDangKy('en')}</div>
 
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.1</span>
@@ -327,6 +330,6 @@ ${ra(OUT['0-1/bi-mat'])}
 ${nguon('📗', 'MDN — Learn web development', 'Giáo trình miễn phí, chất lượng chuẩn mà khoá này dùng làm tài liệu tham chiếu', 'https://developer.mozilla.org/en-US/docs/Learn_web_development')}
 ${nguon('🗺️', 'roadmap.sh — lộ trình Frontend và Backend', 'Bản đồ trực quan những gì đến sau phần nền', 'https://roadmap.sh/frontend')}
 ${lienKet({ khoa: 'nodejs', bai: 'nodejs-0-1-gioi-thieu', title: 'Node.js 0.1 — khoá này dẫn tới đâu', sub: 'Khoá backend mặc định bạn đã học Chương 0–8 của khoá này', cta: 'Mở bài' })}
-</div>
+${moiDangKy('vi')}</div>
 `,
 };

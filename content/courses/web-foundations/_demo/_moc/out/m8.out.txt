@@ -1,0 +1,8 @@
+$ node db.mjs recipes.db
+could not save recipe "Bad flan" -> NOT NULL constraint failed: ingredients.name
+recipes after the failed save: 1
+search "pho": [ { id: 1, name: 'Pho bo' } ]
+search "' OR 1=1 --": []
+list page: [ { recipe: 'Pho bo', owner: 'an@example.com', ingredients: 2 } ]
+owner 42 does not exist -> FOREIGN KEY constraint failed
+after reopening the file: [ { name: 'Pho bo' } ]

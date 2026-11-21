@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Milestone 4 — interactive list</title>
+</head>
+<body>
+  <main>
+    <h1>Recipes</h1>
+    <label for="search">Search</label> <input id="search" type="search">
+    <p id="count" aria-live="polite"></p>
+    <ul id="list"></ul>
+    <form id="add-form" novalidate>
+      <label for="name">Name</label> <input id="name" name="name">
+      <label for="minutes">Minutes</label> <input id="minutes" name="minutes" type="number">
+      <button>Add</button>
+      <p id="form-error" role="alert"></p>
+    </form>
+  </main>
+  <script src="app.js"></script>
+  <script>
+    // Self-check: act like a user, then print what the page shows.
+    const $ = (s) => document.querySelector(s);
+    const show = (step) => console.log(step + ' -> ' + $('#count').textContent + ' | ' + [...document.querySelectorAll('#list li')].map((li) => li.firstChild.textContent).join(' / ') + ($('#form-error').textContent ? ' | error: ' + $('#form-error').textContent : ''));
+    show('start');
+    $('#name').value = 'X'; $('#minutes').value = '10'; $('#add-form').requestSubmit(); show('add "X"');
+    $('#name').value = '<img src=x onerror=alert(1)>'; $('#minutes').value = '5'; $('#add-form').requestSubmit(); show('add HTML text');
+    $('#name').value = 'Goi cuon'; $('#minutes').value = '25'; $('#add-form').requestSubmit(); show('add "Goi cuon"');
+    $('#list li[data-id="1"] button').click(); show('delete Pho bo');
+    $('#search').value = 'zzz'; $('#search').dispatchEvent(new Event('input')); show('search "zzz"');
+    console.log('images created by the HTML text: ' + document.querySelectorAll('#list img').length);
+  </script>
+</body>
+</html>

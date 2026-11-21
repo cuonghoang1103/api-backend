@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recipes — Recipe notebook</title>
+</head>
+<body>
+  <header>
+    <a href="index.html">Recipe notebook</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="index.html" aria-current="page">Recipes</a></li>
+        <li><a href="new.html">Add a recipe</a></li>
+        <li><a href="login.html">Log in</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>All recipes</h1>
+
+    <form role="search" action="index.html" method="get">
+      <label for="q">Search by name</label>
+      <input id="q" name="q" type="search" placeholder="e.g. pho">
+      <label for="category">Category</label>
+      <select id="category" name="category">
+        <option value="all">All</option>
+        <option value="main">Main</option>
+        <option value="dessert">Dessert</option>
+      </select>
+      <button type="submit">Search</button>
+    </form>
+
+    <section aria-labelledby="list-title">
+      <h2 id="list-title">3 recipes</h2>
+      <ul class="cards">
+        <li>
+          <article>
+            <img src="pho.jpg" alt="A bowl of pho with herbs" width="320" height="200">
+            <h3><a href="recipe.html?id=1">Pho bo</a></h3>
+            <p>90 minutes · Main</p>
+          </article>
+        </li>
+        <li>
+          <article>
+            <img src="flan.jpg" width="320" height="200">
+            <h3><a href="recipe.html?id=2">Banh flan</a></h3>
+            <p>40 minutes · Dessert</p>
+          </article>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 Recipe notebook · <a href="about.html">About</a></p>
+  </footer>
+  <script src="kiem-khung.js"></script>
+</body>
+</html>

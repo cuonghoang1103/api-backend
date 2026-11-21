@@ -13,6 +13,8 @@ import L73 from './s07/wf-7-3-jwt.mjs';
 import L72 from './s07/wf-7-2-cookies-sessions.mjs';
 import L71 from './s07/wf-7-1-auth-basics.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 
 export default {
   title: 'Chapter 7 — Authentication & security|||Chương 7 — Xác thực & bảo mật',
@@ -65,12 +67,15 @@ ${galleryGiang('wf-auth', [
     L75,
 
     /* ─────────────────────────── 7.6 quiz ─────────────────────────── */
+    /* ─────────────── mốc dự án 7 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(7),
+
     {
       title: '7.6 — Chapter 7 quiz|||7.6 — Kiểm tra chương 7',
       slug: 'wf-7-6-quiz',
       type: 'QUIZ',
       isFreePreview: false,
-      description: 'Mười câu về authentication vs authorization, cookie/session, JWT, bảo mật mật khẩu, và HTTPS/CORS.',
+      description: 'Mười câu về authentication vs authorization, cookie/session, JWT, bảo mật mật khẩu, và HTTPS/CORS — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 7: authentication vs authorization, cookies and sessions, JWT, password security, and HTTPS/CORS.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> The best way to internalise auth is to build real login and protected routes. The Chapter 7 set on Code Lab has you rebuild each piece — route rules, session store, SameSite and CSRF checks, JWT claims, refresh-token rotation, password rules, CORS preflight — then the Node.js (Express) track wires them into a real app.</p>
@@ -95,9 +100,10 @@ ${galleryGiang('wf-auth', [
 <p class="note-ct"><strong>An toàn là lĩnh vực duy nhất mà "nó chạy được" chẳng chứng minh gì.</strong> Một phép kiểm quyền bị hỏng vẫn chạy hoàn hảo với người dùng ngay thẳng đang thử nó. Với mỗi endpoint bạn viết, hãy hỏi chuyện gì xảy ra khi có người gọi nó bằng một id khác, không có token, hoặc một token hết hạn — rồi thử thật.</p>
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-7-0-slides&khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 7 (31 bài, máy chấm tự động)</a></div></div>
 ${onTapBai('wf-7-6-quiz')}
+${phanFE(7)}
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 1320,
         questions: [
           {
             question: 'What is the difference between authentication and authorization?|||Khác biệt giữa xác thực (authentication) và phân quyền (authorization) là gì?',
@@ -209,6 +215,7 @@ ${onTapBai('wf-7-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[7],
         ],
       },
     },

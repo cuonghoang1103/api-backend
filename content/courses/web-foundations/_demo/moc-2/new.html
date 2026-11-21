@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add a recipe — Recipe notebook</title>
+</head>
+<body>
+  <header>
+    <a href="index.html">Recipe notebook</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="index.html">Recipes</a></li>
+        <li><a href="new.html" aria-current="page">Add a recipe</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <h1>Add a recipe</h1>
+    <form action="index.html" method="post">
+      <p>
+        <label for="name">Name</label>
+        <input id="name" name="name" required minlength="2" maxlength="80">
+      </p>
+      <p>
+        <label for="minutes">Cooking time (minutes)</label>
+        <input id="minutes" name="minutes" type="number" required min="1" max="1440">
+      </p>
+      <fieldset>
+        <legend>Category</legend>
+        <label><input type="radio" name="category" value="main" checked> Main</label>
+        <label><input type="radio" name="category" value="dessert"> Dessert</label>
+      </fieldset>
+      <p>
+        <label for="steps">Steps</label>
+        <textarea id="steps" name="steps" rows="6" required></textarea>
+      </p>
+      <button type="submit">Save recipe</button>
+    </form>
+  </main>
+  <footer><p>© 2026 Recipe notebook</p></footer>
+  <script src="kiem-khung.js"></script>
+</body>
+</html>

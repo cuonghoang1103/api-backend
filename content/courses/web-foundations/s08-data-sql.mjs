@@ -12,6 +12,8 @@ import L83 from './s08/wf-8-3-crud.mjs';
 import L82 from './s08/wf-8-2-select.mjs';
 import L81 from './s08/wf-8-1-databases.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 
 export default {
   title: 'Chapter 8 — Data & SQL|||Chương 8 — Dữ liệu & SQL',
@@ -65,12 +67,15 @@ ${galleryGiang('wf-sql', [
     L85,
 
     /* ─────────────────────────── 8.6 quiz ─────────────────────────── */
+    /* ─────────────── mốc dự án 8 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(8),
+
     {
       title: '8.6 — Chapter 8 quiz|||8.6 — Kiểm tra chương 8',
       slug: 'wf-8-6-quiz',
       type: 'QUIZ',
       isFreePreview: false,
-      description: 'Mười câu về database quan hệ, SELECT, INSERT/UPDATE/DELETE, khoá chính/khoá ngoại, JOIN và ORM/Prisma.',
+      description: 'Mười câu về database quan hệ, SELECT, INSERT/UPDATE/DELETE, khoá chính/khoá ngoại, JOIN và ORM/Prisma — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 8: what a database is, reading data with SELECT, changing data with INSERT/UPDATE/DELETE, primary/foreign keys and JOINs, and how an ORM like Prisma maps to the SQL you learned.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> The best way to internalise SQL is to write real queries against real tables. The Chapter 8 set on Code Lab has you rebuild what the database does — constraints, NULL logic, GROUP BY, joins, safe query builders, N+1 detection, Prisma-style filters — and the SQL track lets you run real queries.</p>
@@ -95,9 +100,10 @@ ${galleryGiang('wf-sql', [
 <p class="note-ct"><strong>Hãy bật ghi log truy vấn trong lúc học.</strong> Dùng ORM nào cũng được, hãy bắt nó in ra đoạn SQL mà nó sinh ra. Nhìn thấy một N+1 dưới dạng năm mươi dòng y hệt nhau chạy qua màn hình dạy bài học đó nhanh hơn mọi lời giải thích.</p>
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-8-0-slides&khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 8 (30 bài, máy chấm tự động)</a></div></div>
 ${onTapBai('wf-8-6-quiz')}
+${phanFE(8)}
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 1320,
         questions: [
           {
             question: 'Why do applications need a database instead of just keeping data in memory?|||Vì sao ứng dụng cần một database thay vì chỉ giữ dữ liệu trong bộ nhớ?',
@@ -209,6 +215,7 @@ ${onTapBai('wf-8-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[8],
         ],
       },
     },

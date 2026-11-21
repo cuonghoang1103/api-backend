@@ -6,6 +6,8 @@
 
 import { gallery, galleryGiang } from './_slides.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 import L134 from './s13/wf-13-4-mocking-ci.mjs';
 import L133 from './s13/wf-13-3-testing-library.mjs';
 import L132 from './s13/wf-13-2-unit-tests.mjs';
@@ -54,11 +56,14 @@ ${galleryGiang('wf-test', [
 
     L134,
 
+    /* ─────────────── mốc dự án 13 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(13),
+
     {
       title: '13.5 — Chapter 13 quiz|||13.5 — Kiểm tra chương 13',
       slug: 'wf-13-5-quiz',
       type: 'QUIZ',
-      description: 'Sáu câu về tháp kiểm thử, matcher, Testing Library, mocking và CI.',
+      description: 'Sáu câu về tháp kiểm thử, matcher, Testing Library, mocking và CI — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Six questions on the test pyramid, matchers, queries, mocking and CI.</p>
 <h3>The chapter in four points</h3>
@@ -77,9 +82,10 @@ ${galleryGiang('wf-test', [
 <div class="lz-node"><span class="lz-k">Cố ý làm hỏng</span><span class="lz-t">để chứng minh test BIẾT đỏ</span><span class="lz-d">Test xanh trên mã hỏng còn tệ hơn không có — nó bán cho bạn sự yên tâm bạn chưa xứng đáng có.</span></div>
 </div></div>
 ${onTapBai('wf-13-5-quiz')}
+${phanFE(13)}
 `,
       quiz: {
-        timeLimitSeconds: 480,
+        timeLimitSeconds: 1080,
         questions: [
           {
             question: 'Which level should you have the MOST of?|||Tầng nào nên có NHIỀU NHẤT?',
@@ -137,6 +143,7 @@ ${onTapBai('wf-13-5-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[13],
         ],
       },
     },

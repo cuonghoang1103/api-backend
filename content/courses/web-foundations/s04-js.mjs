@@ -12,6 +12,8 @@ import L43 from './s04/wf-4-3-functions.mjs';
 import L42 from './s04/wf-4-2-conditions-loops.mjs';
 import L41 from './s04/wf-4-1-variables-types.mjs';
 import { onTapBai } from './_on-tap/index.mjs';
+import { baiMoc } from './_du-an/index.mjs';
+import { FE, phanFE } from './_on-tap/fe.mjs';
 
 export default {
   title: 'Chapter 4 — JavaScript fundamentals|||Chương 4 — JavaScript nền tảng',
@@ -74,12 +76,15 @@ ${galleryGiang('wf-js1', [
     L45,
 
     /* ─────────────────────────── 4.6 quiz ─────────────────────────── */
+    /* ─────────────── mốc dự án 4 (dự án xuyên suốt khoá) ─────────────── */
+    baiMoc(4),
+
     {
       title: '4.6 — Chapter 4 quiz|||4.6 — Kiểm tra chương 4',
       slug: 'wf-4-6-quiz',
       type: 'QUIZ',
       isFreePreview: false,
-      description: 'Mười câu về biến và kiểu, so sánh, vòng lặp, hàm, mảng/đối tượng và DOM — có câu "in ra gì" đã chạy thật.',
+      description: 'Mười câu về biến và kiểu, so sánh, vòng lặp, hàm, mảng/đối tượng và DOM — có câu "in ra gì" đã chạy thật — kèm 10 câu tiếng Anh kiểu đề FE (Phần B).',
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 4: variables and types, strict equality, loops, functions, array methods, objects, and the DOM. Several ask what a snippet prints — the answers were verified by running the code.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> JavaScript only sticks when you write it. Head to Code Lab and solve real problems — variables, loops, functions and array methods — run your code to check the output, then mark the exercise solved yourself (automatic grading is still being built).</p>
@@ -104,9 +109,10 @@ ${galleryGiang('wf-js1', [
 <p class="note-ct"><strong>Những câu hỏi "đoạn này in ra gì" mới là câu quan trọng.</strong> Nếu bạn đoán sai, đừng chỉ đọc đáp án — hãy dán đoạn đó vào Node REPL hoặc console của trình duyệt rồi đổi từng thứ một cho tới khi hành vi của nó trở nên có lý.</p>
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-4-0-slides&khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 4</a></div></div>
 ${onTapBai('wf-4-6-quiz')}
+${phanFE(4)}
 `,
       quiz: {
-        timeLimitSeconds: 720,
+        timeLimitSeconds: 1320,
         questions: [
           {
             question: 'Which keyword should be your default for a value that will NOT be reassigned?|||Từ khoá nào nên là mặc định cho một giá trị SẼ KHÔNG bị gán lại?',
@@ -218,6 +224,7 @@ ${onTapBai('wf-4-6-quiz')}
             correctIndex: 0,
             points: 1,
           },
+          ...FE[4],
         ],
       },
     },

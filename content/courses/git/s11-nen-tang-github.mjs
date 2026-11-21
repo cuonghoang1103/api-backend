@@ -8,8 +8,93 @@
  * gh 2.93 --help — không gọi GitHub), 🧪/🗂/📌 mỗi bài, bài mới 11.3 Bảo mật & quản trị kho, quiz 10 câu có giải thích.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
+
+// Lượt chạy THẬT cho mốc dự án 12 (repo nháp /tmp/git-moc-12, git 2.51, 11/2026) — dùng chung cho hai khối ngôn ngữ.
+const DEMO_MOC_12 = `
+<pre><code class="language-bash"><span class="tok-comment"># the workflow file and the two scripts it runs (kept in the repo, so CI and you run the same thing)</span>
+git init -q shop
+cd shop
+git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+mkdir -p .github/workflows scripts &amp;&amp; cat &gt; .github/workflows/ci.yml &lt;&lt;'YAML'
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sh scripts/lint.sh
+      - run: sh scripts/build.sh
+YAML
+cat &gt; scripts/lint.sh &lt;&lt;'SH'
+if grep -n "console.log" src/*.js; then echo "lint: remove console.log"; exit 1; fi
+echo "lint: ok"
+SH
+cat &gt; scripts/build.sh &lt;&lt;'SH'
+mkdir -p dist &amp;&amp; cat src/*.js &gt; dist/app.js &amp;&amp; echo "build: dist/app.js $(wc -c &lt; dist/app.js) bytes"
+SH
+mkdir -p src &amp;&amp; echo "export const total = 0;" &gt; src/cart.js &amp;&amp; echo "dist/" &gt; .gitignore
+actionlint .github/workflows/ci.yml &amp;&amp; echo "actionlint: no problems"
+git add . &amp;&amp; git commit -qm "ci: lint and build on every PR" &amp;&amp; git log --oneline</code></pre>
+<div class="out">$ git init -q shop
+$ cd shop
+$ git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+$ mkdir -p .github/workflows scripts &amp;&amp; cat &gt; .github/workflows/ci.yml &lt;&lt;'YAML'
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sh scripts/lint.sh
+      - run: sh scripts/build.sh
+YAML
+$ cat &gt; scripts/lint.sh &lt;&lt;'SH'
+if grep -n "console.log" src/*.js; then echo "lint: remove console.log"; exit 1; fi
+echo "lint: ok"
+SH
+cat &gt; scripts/build.sh &lt;&lt;'SH'
+mkdir -p dist &amp;&amp; cat src/*.js &gt; dist/app.js &amp;&amp; echo "build: dist/app.js $(wc -c &lt; dist/app.js) bytes"
+SH
+$ mkdir -p src &amp;&amp; echo "export const total = 0;" &gt; src/cart.js &amp;&amp; echo "dist/" &gt; .gitignore
+$ actionlint .github/workflows/ci.yml &amp;&amp; echo "actionlint: no problems"
+actionlint: no problems
+$ git add . &amp;&amp; git commit -qm "ci: lint and build on every PR" &amp;&amp; git log --oneline
+ce44c5d ci: lint and build on every PR</div>
+<pre><code class="language-bash"><span class="tok-comment"># run the CI steps locally before pushing: a console.log makes the "check" job fail</span>
+git switch -q -c fix/12-cart-total
+echo "console.log(\\"debug\\")" &gt;&gt; src/cart.js
+sh scripts/lint.sh; echo "exit code: $?"
+sed -i.bak "/console.log/d" src/cart.js &amp;&amp; rm src/cart.js.bak &amp;&amp; echo "export const fee = 15000;" &gt;&gt; src/cart.js
+sh scripts/lint.sh &amp;&amp; sh scripts/build.sh; echo "exit code: $?"</code></pre>
+<div class="out">$ git switch -q -c fix/12-cart-total
+$ echo "console.log(\\"debug\\")" &gt;&gt; src/cart.js
+$ sh scripts/lint.sh; echo "exit code: $?"
+2:console.log("debug")
+lint: remove console.log
+exit code: 1
+$ sed -i.bak "/console.log/d" src/cart.js &amp;&amp; rm src/cart.js.bak &amp;&amp; echo "export const fee = 15000;" &gt;&gt; src/cart.js
+$ sh scripts/lint.sh &amp;&amp; sh scripts/build.sh; echo "exit code: $?"
+lint: ok
+build: dist/app.js       50 bytes
+exit code: 0</div>
+<pre><code class="language-bash"><span class="tok-comment"># "Closes #12" in the PR description (or a commit that lands on the default branch) closes the issue on merge</span>
+git commit -qam "fix(cart): add delivery fee to total" -m "Closes #12" &amp;&amp; git log -1 --format="%h %s%n%n%b"</code></pre>
+<div class="out">$ git commit -qam "fix(cart): add delivery fee to total" -m "Closes #12" &amp;&amp; git log -1 --format="%h %s%n%n%b"
+b7b0aaa fix(cart): add delivery fee to total
+
+Closes #12</div>
+`;
 
 export default {
   title: 'Chapter 11 — The GitHub platform|||Chương 11 — Nền tảng GitHub',
@@ -926,13 +1011,27 @@ e4ef3c3 chore: bật Dependabot và thêm SECURITY.md
 `,
     },
 
+    /* ─────────────────── Mốc dự án 12 (dự án xuyên suốt khoá) ─────────────────── */
+    baiMoc(12, {
+      demoEn: `
+<p>The CI workflow only calls two scripts that live in the repository, so you can run exactly what CI runs before you push. The run on GitHub, adding the check as a required status check, the Projects board, issue templates, Dependabot and secret scanning are switched on in the web UI and evidenced with links and screenshots — no Actions log is shown here because none was produced.</p>
+${DEMO_MOC_12}
+<p>What to notice: <code>actionlint</code> validates the YAML before GitHub ever sees it. The <code>console.log</code> makes <code>lint.sh</code> exit 1 — on GitHub that is the red "check" job that blocks the merge once "check" is a required status check (it appears in the ruleset’s list only after it has run at least once). After the fix both steps exit 0. "Closes #12" sits in the commit body here; it closes the issue only when that commit reaches the default branch, which is why the PR description is the more reliable place for it.</p>
+`,
+      demoVi: `
+<p>Workflow CI chỉ gọi hai script nằm ngay trong repo, nên bạn chạy được đúng thứ CI chạy trước khi push. Lượt chạy trên GitHub, việc đặt check thành status check bắt buộc, bảng Projects, mẫu issue, Dependabot và secret scanning được bật trên giao diện web và nộp bằng link và ảnh chụp — ở đây không có log Actions nào vì không có lượt chạy nào được tạo ra.</p>
+${DEMO_MOC_12}
+<p>Để ý: <code>actionlint</code> kiểm YAML trước khi GitHub nhìn thấy nó. Dòng <code>console.log</code> làm <code>lint.sh</code> thoát với mã 1 — trên GitHub đó là job "check" màu đỏ chặn nút merge một khi "check" là status check bắt buộc (nó chỉ hiện trong danh sách của ruleset sau khi đã chạy ít nhất một lần). Sửa xong thì cả hai bước thoát với mã 0. "Closes #12" ở đây nằm trong thân commit; nó chỉ đóng issue khi commit đó tới nhánh mặc định, vì vậy phần mô tả PR là chỗ chắc chắn hơn.</p>
+`,
+    }),
+
     /* ─────────────────────────── 11.4 Quiz ─────────────────────────── */
     {
       title: '11.4 — Chapter 11 quiz|||11.4 — Kiểm tra Chương 11',
       slug: 'git-11-3-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật của nhóm đồ án trên GitHub: issue không tự đóng, bảng Projects, job chạy song song, actionlint, matrix fail-fast, secret lọt log, check bắt buộc Pending, vai trò Triage, Dependabot và khoá API đã bị push.',
+      description: 'Mười tình huống thật của nhóm đồ án trên GitHub: issue không tự đóng, bảng Projects, job chạy song song, actionlint, matrix fail-fast, secret lọt log, check bắt buộc Pending, vai trò Triage, Dependabot và khoá API đã bị push. Thêm 10 câu tiếng Anh kiểu đề FE (câu 11–20).',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Check</span>
@@ -946,6 +1045,7 @@ e4ef3c3 chore: bật Dependabot và thêm SECURITY.md
 <li>I can make a CI job a required check, and explain why renaming the job leaves pull requests waiting.</li>
 <li>I have 2FA and a passkey on my account, and I know which roles, Dependabot settings and secret protections a team repository needs.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-11', 17, 'Bảng tra nhanh Chương 11')}
 </div>
 <div class="ml-vi">
@@ -960,11 +1060,12 @@ ${slide('git-11', 17, 'Bảng tra nhanh Chương 11')}
 <li>Tôi biến được một job CI thành check bắt buộc, và giải thích được vì sao đổi tên job làm pull request đứng chờ.</li>
 <li>Tài khoản của tôi có 2FA và passkey, và tôi biết một kho nhóm cần vai trò, cài đặt Dependabot và lớp bảo vệ bí mật nào.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-11', 17, 'Bảng tra nhanh Chương 11')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'Your team works on a develop branch and only merges develop into main at the end of each sprint. You committed "Closes #12" on fix/12-gio-am and merged that PR into develop yesterday. Issue #12 is still open. Why?|||Nhóm bạn làm trên nhánh develop và chỉ merge develop vào main cuối mỗi sprint. Bạn commit "Closes #12" trên fix/12-gio-am và hôm qua đã merge PR đó vào develop. Issue #12 vẫn mở. Vì sao?',
@@ -1075,6 +1176,76 @@ ${slide('git-11', 17, 'Bảng tra nhanh Chương 11')}
             ],
             correctIndex: 2, points: 1,
             explanation: 'EN: The key is still in the earlier commit, and a public push is scanned by bots within minutes — assume it is copied. Only revoking it at the provider stops it working. Rewriting history is the tempting answer and still worth doing afterwards, but it cannot un-copy the key; going private hides it from future visitors only; push protection prevents new pushes and does nothing about a secret already on GitHub.|||VI: Khoá vẫn nằm ở commit trước đó, và một lần push công khai bị bot quét trong vài phút — hãy coi như nó đã bị chép. Chỉ thu hồi ở nhà cung cấp mới làm nó thôi dùng được. Viết lại lịch sử là phương án hấp dẫn và vẫn nên làm sau đó, nhưng nó không "bỏ chép" được khoá; chuyển riêng tư chỉ giấu với người xem về sau; push protection chặn các lần push mới và không làm gì được với bí mật đã nằm trên GitHub.',
+          },
+          /* FE 11 */
+          {
+            question: 'Where must GitHub Actions workflow files be stored?|||Where must GitHub Actions workflow files be stored?',
+            options: ['.github/actions/', 'workflows/ at the repository root', '.github/workflows/', '.git/hooks/'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: GitHub only reads .yml/.yaml files in .github/workflows/. .git/hooks is local and never pushed.|||VI: GitHub chỉ đọc file .yml/.yaml trong .github/workflows/. .git/hooks là cục bộ và không bao giờ được push.',
+          },
+          /* FE 12 */
+          {
+            question: 'A workflow has "on: pull_request" with no types. When does it run?|||A workflow has "on: pull_request" with no types. When does it run?',
+            options: ['When a PR is opened, synchronized (new commits pushed) or reopened', 'Only when the PR is merged', 'Only when the PR is first opened', 'On every new comment on the PR'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: docs.github.com: by default a pull_request workflow runs for the opened, synchronize and reopened activity types.|||VI: docs.github.com: mặc định workflow pull_request chạy với các loại hoạt động opened, synchronize và reopened.',
+          },
+          /* FE 13 */
+          {
+            question: 'A PR comes from a fork, and the workflow uses secrets.DEPLOY_KEY. What happens?|||A PR comes from a fork, and the workflow uses secrets.DEPLOY_KEY. What happens?',
+            options: ['The secret is passed to the fork’s runner as usual', 'Secrets are not passed to the runner; GITHUB_TOKEN is read-only', 'The workflow is skipped entirely', 'The fork owner is asked to type the secret'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: docs.github.com: secrets are not passed to the runner when a workflow is triggered from a forked repository; GITHUB_TOKEN has read-only permissions there.|||VI: docs.github.com: bí mật không được chuyển cho runner khi workflow được kích hoạt từ một repo fork; GITHUB_TOKEN ở đó chỉ có quyền đọc.',
+          },
+          /* FE 14 */
+          {
+            question: 'Which phrase in a PR description does NOT close issue #5 when the PR is merged into the default branch?|||Which phrase in a PR description does NOT close issue #5 when the PR is merged into the default branch?',
+            options: ['Closes #5', 'Fixed #5', 'Resolved #5', 'Refs #5'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: The keywords are close/closes/closed, fix/fixes/fixed, resolve/resolves/resolved. "Refs" only creates a mention.|||VI: Các từ khoá là close/closes/closed, fix/fixes/fixed, resolve/resolves/resolved. "Refs" chỉ tạo một lần nhắc.',
+          },
+          /* FE 15 */
+          {
+            question: 'Which trigger lets you start a workflow by hand from the Actions tab (or gh workflow run)?|||Which trigger lets you start a workflow by hand from the Actions tab (or gh workflow run)?',
+            options: ['on: manual', 'on: workflow_dispatch', 'on: run', 'on: push: manual: true'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: workflow_dispatch adds the "Run workflow" button. The other three are not valid events.|||VI: workflow_dispatch thêm nút "Run workflow". Ba lựa chọn còn lại không phải sự kiện hợp lệ.',
+          },
+          /* FE 16 */
+          {
+            question: 'In a job, what does "runs-on: ubuntu-latest" specify?|||In a job, what does "runs-on: ubuntu-latest" specify?',
+            options: ['The OS your laptop must have to push', 'The Docker image built by the job', 'The type of runner machine the job executes on', 'The branch the job is allowed to run on'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: runs-on picks the runner (here a GitHub-hosted Ubuntu VM). Branches are chosen by the on: filters.|||VI: runs-on chọn runner (ở đây là máy ảo Ubuntu do GitHub cấp). Nhánh được chọn bởi bộ lọc on:.',
+          },
+          /* FE 17 */
+          {
+            question: 'Which file configures Dependabot version updates?|||Which file configures Dependabot version updates?',
+            options: ['.github/dependabot.yml', 'a "dependabot" field in package.json', '.dependabot/config.ini', '.github/workflows/dependabot.yml'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Version updates are configured in .github/dependabot.yml (ecosystem, directory, schedule). It is not a workflow file.|||VI: Cập nhật phiên bản được cấu hình trong .github/dependabot.yml (hệ sinh thái, thư mục, lịch). Nó không phải file workflow.',
+          },
+          /* FE 18 */
+          {
+            question: 'Which repository role is needed to change rulesets / branch protection and other repository settings?|||Which repository role is needed to change rulesets / branch protection and other repository settings?',
+            options: ['Triage', 'Write', 'Read', 'Admin'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Read sees, Triage manages issues and PRs, Write pushes; changing protection rules and settings needs Admin.|||VI: Read xem, Triage quản lý issue và PR, Write push được; đổi luật bảo vệ và cài đặt repo cần Admin.',
+          },
+          /* FE 19 */
+          {
+            question: 'How does a workflow step read a repository secret named DB_URL?|||How does a workflow step read a repository secret named DB_URL?',
+            options: ['${{ secrets.DB_URL }}', '$DB_URL, with no configuration', '${{ env.secrets.DB_URL }}', '${{ github.DB_URL }}'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Secrets are exposed through the secrets context; to use $DB_URL in a shell you first map it with env: DB_URL: ${{ secrets.DB_URL }}.|||VI: Bí mật được đưa ra qua context secrets; muốn dùng $DB_URL trong shell thì trước hết phải gán env: DB_URL: ${{ secrets.DB_URL }}.',
+          },
+          /* FE 20 */
+          {
+            question: 'Push protection is enabled. You try to push a commit containing a supported live token. What happens?|||Push protection is enabled. You try to push a commit containing a supported live token. What happens?',
+            options: ['The push succeeds and an alert arrives a week later', 'GitHub rewrites the commit to remove the token', 'The push is blocked; you remove the secret or explicitly bypass with a reason', 'The token is revoked automatically and the push succeeds'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: Push protection blocks the push before it lands; you fix the commit or bypass (recorded). It never rewrites your commits and never revokes keys for you — rotation is still your job.|||VI: Push protection chặn lần push trước khi nó vào repo; bạn sửa commit hoặc bỏ qua (có ghi lại). Nó không bao giờ viết lại commit và không thu hồi khoá giúp bạn — đổi khoá vẫn là việc của bạn.',
           },
         ],
       },

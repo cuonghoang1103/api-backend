@@ -6,8 +6,130 @@
  * & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
+
+// Mốc dự án 4: lượt chạy mẫu THẬT trong /tmp/git-moc-4 (git 2.51.1, 11/2026) — dùng chung cho khối EN/VI.
+const MOC_4 = [
+  `
+<pre><code class="language-bash"><span class="tok-comment"># rule in README: feat/&lt;card&gt;-&lt;name&gt;; nothing is written on main directly</span>
+git switch -c feat/SWP-3-room-list
+echo "- Room B" &gt;&gt; README.md &amp;&amp; git commit -qam "docs(rooms): add Room B"
+git switch main
+git merge feat/SWP-3-room-list</code></pre>
+<div class="out">$ git switch -c feat/SWP-3-room-list
+Switched to a new branch 'feat/SWP-3-room-list'
+$ git switch main
+Switched to branch 'main'
+$ git merge feat/SWP-3-room-list
+Updating 4351445..876684b
+Fast-forward
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># two branches change the SAME line ⇒ a real conflict</span>
+git switch -c feat/SWP-4-run-tomcat
+sed -i '' 's/^mvn package$/mvn package \\&amp;\\&amp; deploy to Tomcat 10/' README.md &amp;&amp; git commit -qam "docs(run): explain Tomcat deploy"
+git switch main
+git switch -c feat/SWP-5-run-jetty
+sed -i '' 's/^mvn package$/mvn jetty:run/' README.md &amp;&amp; git commit -qam "docs(run): use the Jetty plugin"
+git switch main
+git merge --no-ff feat/SWP-4-run-tomcat -m "Merge branch 'feat/SWP-4-run-tomcat'"
+git merge feat/SWP-5-run-jetty
+sed -n '3,11p' README.md</code></pre>
+<div class="out">$ git switch -c feat/SWP-4-run-tomcat
+Switched to a new branch 'feat/SWP-4-run-tomcat'
+$ git switch main
+Switched to branch 'main'
+$ git switch -c feat/SWP-5-run-jetty
+Switched to a new branch 'feat/SWP-5-run-jetty'
+$ git switch main
+Switched to branch 'main'
+$ git merge --no-ff feat/SWP-4-run-tomcat -m "Merge branch 'feat/SWP-4-run-tomcat'"
+Merge made by the 'ort' strategy.
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git merge feat/SWP-5-run-jetty
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Automatic merge failed; fix conflicts and then commit the result.
+$ sed -n '3,11p' README.md
+## How to run
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+mvn package &amp;&amp; deploy to Tomcat 10
+||||||| 876684b
+mvn package
+=======
+mvn jetty:run
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feat/SWP-5-run-jetty</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># edit README.md by hand: delete the markers and keep BOTH ways of running (decide by meaning)</span>
+<span class="tok-comment"># then write WHY in the merge commit body</span>
+git add README.md
+git commit -m "Merge branch 'feat/SWP-5-run-jetty'" -m "Conflict in README 'How to run': SWP-4 wanted Tomcat deploy, SWP-5 wanted mvn jetty:run. Kept both: Jetty for local, Tomcat matches the lab server."
+git grep -n "^&lt;&lt;&lt;&lt;&lt;&lt;&lt;"; echo "markers left: exit $?"</code></pre>
+<div class="out">$ git commit -m "Merge branch 'feat/SWP-5-run-jetty'" -m "Conflict in README 'How to run': SWP-4 wanted Tomcat deploy, SWP-5 wanted mvn jetty:run. Kept both: Jetty for local, Tomcat matches the lab server."
+[main 7dce030] Merge branch 'feat/SWP-5-run-jetty'
+$ git grep -n "^&lt;&lt;&lt;&lt;&lt;&lt;&lt;"; echo "markers left: exit $?"
+markers left: exit 1</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># a messy personal branch, tidied with rebase -i before merging</span>
+git switch -c feat/SWP-6-hours
+echo "Open 7:00-21:00" &gt;&gt; README.md &amp;&amp; git commit -qam "wip"
+sed -i '' 's/21:00/21:30/' README.md &amp;&amp; git commit -qam "oops typo"
+git log --oneline main..
+GIT_SEQUENCE_EDITOR="sed -i '' -e '2s/^pick/fixup/'" git rebase -i main
+git commit --amend -m "docs: add opening hours"
+git switch main &amp;&amp; git merge feat/SWP-6-hours</code></pre>
+<div class="out">$ git switch -c feat/SWP-6-hours
+Switched to a new branch 'feat/SWP-6-hours'
+$ git log --oneline main..
+d1355a0 oops typo
+040a890 wip
+$ GIT_SEQUENCE_EDITOR="sed -i '' -e '2s/^pick/fixup/'" git rebase -i main
+Rebasing (2/2)
+Successfully rebased and updated refs/heads/feat/SWP-6-hours.
+$ git commit --amend -m "docs: add opening hours"
+[feat/SWP-6-hours 699cebc] docs: add opening hours
+ Date: Sat Nov 21 16:51:31 2026 +0700
+ 1 file changed, 1 insertion(+)
+$ git switch main &amp;&amp; git merge feat/SWP-6-hours
+Switched to branch 'main'
+Updating 7dce030..699cebc
+Fast-forward
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)</div>
+`,
+  `
+<pre><code class="language-bash">git branch -d feat/SWP-3-room-list feat/SWP-4-run-tomcat feat/SWP-5-run-jetty feat/SWP-6-hours
+git log --graph --oneline --all
+git branch --merged main</code></pre>
+<div class="out">$ git branch -d feat/SWP-3-room-list feat/SWP-4-run-tomcat feat/SWP-5-run-jetty feat/SWP-6-hours
+Deleted branch feat/SWP-3-room-list (was 876684b).
+Deleted branch feat/SWP-4-run-tomcat (was 7ca8dee).
+Deleted branch feat/SWP-5-run-jetty (was e34242a).
+Deleted branch feat/SWP-6-hours (was 699cebc).
+$ git log --graph --oneline --all
+* 699cebc docs: add opening hours
+*   7dce030 Merge branch 'feat/SWP-5-run-jetty'
+|\\  
+| * e34242a docs(run): use the Jetty plugin
+* |   ed45581 Merge branch 'feat/SWP-4-run-tomcat'
+|\\ \\  
+| |/  
+|/|   
+| * 7ca8dee docs(run): explain Tomcat deploy
+|/  
+* 876684b docs(rooms): add Room B
+* 4351445 docs: add README
+$ git branch --merged main
+* main</div>
+`,
+];
 
 export default {
   title: 'Chapter 3 — Branching & merging|||Chương 3 — Nhánh & hợp nhất',
@@ -1367,13 +1489,43 @@ git reflog -6
 `,
     },
 
+    /* ─────────────────── 🛠 Mốc dự án 4 ─────────────────── */
+    baiMoc(4, {
+      demoEn: `
+<p>Three task cards, three branches, with <code>merge.conflictstyle zdiff3</code> turned on. Watch the kinds of merge the milestone asks for appear one by one.</p>
+<p>1. Fast-forward (tua thẳng): main had not moved, so Git only moved the pointer.</p>
+${MOC_4[0]}
+<p>2. Two branches change the same line <code>mvn package</code>. The first merge becomes a real merge commit (<code>--no-ff</code>); the second conflicts. zdiff3 shows the base (<code>|||||||</code>) between the two sides, so you can see what each side changed FROM.</p>
+${MOC_4[1]}
+<p>3. Resolved by meaning — both ways of running are useful, so both stay — and the merge commit body records what each side wanted. <code>git grep</code> confirms no marker is left (exit 1 = nothing found).</p>
+${MOC_4[2]}
+<p>4. Tidying a messy personal branch. In real life <code>git rebase -i main</code> opens the todo list in your editor; here <code>GIT_SEQUENCE_EDITOR</code> edits it by script, changing line 2 to <code>fixup</code>. Two commits become one, then amend gives it a proper message. Only for branches nobody else has pulled.</p>
+${MOC_4[3]}
+<p>5. Merged branches are deleted; the graph shows the fast-forwards and the two merge commits; <code>branch --merged</code> lists only main.</p>
+${MOC_4[4]}
+`,
+      demoVi: `
+<p>Ba thẻ việc, ba nhánh, đã bật <code>merge.conflictstyle zdiff3</code>. Xem lần lượt từng kiểu merge mà mốc này yêu cầu xuất hiện.</p>
+<p>1. Fast-forward (tua thẳng): main chưa đi tiếp, nên Git chỉ dời con trỏ.</p>
+${MOC_4[0]}
+<p>2. Hai nhánh sửa cùng một dòng <code>mvn package</code>. Lần merge đầu thành một merge commit thật (<code>--no-ff</code>); lần thứ hai xung đột. zdiff3 hiện phần base (<code>|||||||</code>) giữa hai bên, nên bạn thấy mỗi bên đã sửa TỪ cái gì.</p>
+${MOC_4[1]}
+<p>3. Giải theo ý nghĩa — cả hai cách chạy đều có ích nên giữ cả hai — và thân merge commit ghi lại mỗi bên muốn gì. <code>git grep</code> xác nhận không còn dấu xung đột (mã thoát 1 = không tìm thấy).</p>
+${MOC_4[2]}
+<p>4. Dọn một nhánh cá nhân lộn xộn. Ngoài đời <code>git rebase -i main</code> mở danh sách việc trong trình soạn thảo; ở đây <code>GIT_SEQUENCE_EDITOR</code> sửa nó bằng script, đổi dòng 2 thành <code>fixup</code>. Hai commit thành một, rồi amend đặt lời nhắn tử tế. Chỉ dùng cho nhánh chưa ai khác kéo về.</p>
+${MOC_4[3]}
+<p>5. Nhánh đã merge được xoá; đồ thị cho thấy các lần fast-forward và hai merge commit; <code>branch --merged</code> chỉ còn main.</p>
+${MOC_4[4]}
+`,
+    }),
+
     /* ─────────────────────────── 3.6 Quiz ─────────────────────────── */
     {
       title: '3.6 — Chapter 3 quiz|||3.6 — Kiểm tra Chương 3',
       slug: 'git-3-6-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống về nhánh là con trỏ, HEAD lìa cành, fast-forward vs ba chiều, đọc và giải xung đột (kể cả nhãn đảo khi rebase), luật vàng của rebase, rebase tương tác và cứu bằng reflog.',
+      description: 'Mười tình huống về nhánh là con trỏ, HEAD lìa cành, fast-forward vs ba chiều, đọc và giải xung đột (kể cả nhãn đảo khi rebase), luật vàng của rebase, rebase tương tác và cứu bằng reflog. Thêm 10 câu tiếng Anh kiểu đề thi FE (câu 11–20) có giải thích.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Check</span>
@@ -1387,6 +1539,7 @@ git reflog -6
 <li>I know why rebase changes hashes and which branches I must never rebase.</li>
 <li>I can squash messy commits with <code>git rebase -i</code> and undo a bad rebase with <code>git reflog</code>.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-03', 17, 'Bảng tra nhanh Chương 3')}
 </div>
 <div class="ml-vi">
@@ -1401,11 +1554,12 @@ ${slide('git-03', 17, 'Bảng tra nhanh Chương 3')}
 <li>Tôi biết vì sao rebase đổi mã băm và những nhánh nào tuyệt đối không được rebase.</li>
 <li>Tôi gộp được commit lộn xộn bằng <code>git rebase -i</code> và huỷ một lần rebase hỏng bằng <code>git reflog</code>.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-03', 17, 'Bảng tra nhanh Chương 3')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'Your SWP391 repo has 2 GB of history. You run git branch feature/cart. What does Git actually write to disk?|||Kho SWP391 của bạn có 2 GB lịch sử. Bạn chạy git branch feature/cart. Git thật sự ghi gì xuống đĩa?',
@@ -1516,6 +1670,117 @@ ${slide('git-03', 17, 'Bảng tra nhanh Chương 3')}
             ],
             correctIndex: 0, points: 1,
             explanation: 'EN: The line just BELOW "rebase (start)" is where your branch pointed before the rebase began — here the "add tests" commit. HEAD@{5} is the tempting answer, but that entry is the base the rebase started from, so resetting there loses your work again. git rebase --abort only works mid-rebase; afterwards it prints "fatal: no rebase in progress".|||VI: Dòng nằm ngay DƯỚI "rebase (start)" là chỗ nhánh bạn trỏ tới trước khi rebase bắt đầu — ở đây là commit "add tests". HEAD@{5} là phương án hấp dẫn, nhưng dòng đó là cái gốc mà rebase xuất phát, reset về đó là lại mất việc. git rebase --abort chỉ chạy được khi đang giữa chừng; xong rồi thì nó báo "fatal: no rebase in progress".',
+          },
+          // ── Câu 11–20: tiếng Anh kiểu đề thi FE (11/2026), hành vi lệnh đã chạy thử trên git 2.51.1 ──
+          {
+            question: "main and feature have diverged (each has a commit the other lacks). You run git merge --ff-only feature on main. What happens?|||main and feature have diverged (each has a commit the other lacks). You run git merge --ff-only feature on main. What happens?",
+            options: [
+              "Git creates a merge commit anyway",
+              "Git rebases feature onto main",
+              "Git refuses with \"fatal: Not possible to fast-forward, aborting.\"",
+              "Git fast-forwards and drops the main-only commits",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: --ff-only allows only a pointer move. With diverged branches that is impossible, so Git aborts and changes nothing (verified on Git 2.51). It never drops commits.|||VI: --ff-only chỉ cho phép dời con trỏ. Hai nhánh đã phân ly thì không thể, nên Git huỷ và không đổi gì (đã kiểm trên Git 2.51). Nó không bao giờ bỏ commit.",
+          },
+          {
+            question: "git branch -d feature fails with an error saying the branch is not fully merged. What does that tell you?|||git branch -d feature fails with an error saying the branch is not fully merged. What does that tell you?",
+            options: [
+              "feature has commits that are not reachable from the current branch; -D would delete it anyway",
+              "feature is checked out in another folder",
+              "The remote branch must be deleted first",
+              "feature has uncommitted changes",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: -d is the safe delete: it refuses when deleting would leave commits unreachable. -D forces it (the commits then survive only in the reflog). Uncommitted changes belong to the working tree, not to a branch.|||VI: -d là lệnh xoá an toàn: nó từ chối khi xoá sẽ làm commit không còn tới được. -D ép xoá (khi đó commit chỉ còn trong reflog). Thay đổi chưa commit thuộc về thư mục làm việc, không thuộc về nhánh.",
+          },
+          {
+            question: "You are in the middle of a conflicted merge and decide to start over. Which command puts the branch and the files back to how they were before git merge?|||You are in the middle of a conflicted merge and decide to start over. Which command puts the branch and the files back to how they were before git merge?",
+            options: [
+              "git reset --soft HEAD",
+              "git merge --abort",
+              "git restore .",
+              "git commit --amend",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: git merge --abort restores the pre-merge state and clears MERGE_HEAD. git restore . rewrites files but leaves the merge in progress; amend would rewrite your last commit.|||VI: git merge --abort khôi phục trạng thái trước merge và xoá MERGE_HEAD. git restore . ghi lại file nhưng phiên merge vẫn dang dở; amend thì viết lại commit cuối của bạn.",
+          },
+          {
+            question: "During git merge feature on main, config.json conflicts and you want to keep FEATURE’s version of the whole file. Which command?|||During git merge feature on main, config.json conflicts and you want to keep FEATURE’s version of the whole file. Which command?",
+            options: [
+              "git checkout --ours config.json",
+              "git restore --staged config.json",
+              "git merge --theirs",
+              "git checkout --theirs config.json",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: In a merge, ours = the branch you are on (main), theirs = the branch being merged (feature). checkout --theirs writes feature’s version (then git add). git merge --theirs is not an option.|||VI: Khi merge, ours = nhánh bạn đang đứng (main), theirs = nhánh được merge vào (feature). checkout --theirs ghi ra bản của feature (rồi git add). git merge --theirs không phải một tuỳ chọn.",
+          },
+          {
+            question: "Which command prints the commit where main and feature last shared history?|||Which command prints the commit where main and feature last shared history?",
+            options: [
+              "git merge-base main feature",
+              "git log main...feature -1",
+              "git diff main feature",
+              "git rev-parse main^feature",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: merge-base returns the best common ancestor — the base of a three-way merge. The three-dot log lists commits on either side, not the ancestor.|||VI: merge-base trả về tổ tiên chung tốt nhất — chính là base của hợp nhất ba chiều. log ba chấm liệt kê commit ở hai phía, không phải tổ tiên.",
+          },
+          {
+            question: "You rebase feature (3 commits) onto the new main. What happens to those 3 commits?|||You rebase feature (3 commits) onto the new main. What happens to those 3 commits?",
+            options: [
+              "They keep their hashes and only move",
+              "They are squashed into one commit",
+              "They are replaced by 3 new commits with new hashes; the old ones remain reachable only through the reflog",
+              "They are deleted together with their changes",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: Rebase replays each change on a new parent, so every replayed commit gets a new hash. Nothing is squashed unless you ask in rebase -i.|||VI: Rebase phát lại từng thay đổi trên một cha mới, nên mỗi commit được phát lại có mã băm mới. Không có gì bị gộp trừ khi bạn yêu cầu trong rebase -i.",
+          },
+          {
+            question: "A rebase stops on a conflict. You have fixed the file. What is the correct next step?|||A rebase stops on a conflict. You have fixed the file. What is the correct next step?",
+            options: [
+              "git commit -m \"fix conflict\" then git rebase --skip",
+              "git add <file> then git rebase --continue",
+              "git rebase --abort then git push",
+              "git merge --continue",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: Mark the file resolved with git add, then git rebase --continue. --skip would DROP the commit being replayed; --abort throws the whole rebase away.|||VI: Đánh dấu đã giải bằng git add, rồi git rebase --continue. --skip sẽ BỎ commit đang được phát lại; --abort vứt cả lượt rebase.",
+          },
+          {
+            question: "In a rebase -i todo list, which command keeps the commit’s changes AND lets you write a message that combines it with the previous commit’s message?|||In a rebase -i todo list, which command keeps the commit’s changes AND lets you write a message that combines it with the previous commit’s message?",
+            options: [
+              "fixup",
+              "reword",
+              "drop",
+              "squash",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: squash melds the commit into the previous one and opens the editor with both messages. fixup melds but discards its message; reword only edits a message; drop removes the commit.|||VI: squash gộp commit vào commit trước và mở trình soạn thảo với cả hai lời nhắn. fixup gộp nhưng bỏ lời nhắn của nó; reword chỉ sửa lời nhắn; drop xoá commit.",
+          },
+          {
+            question: "You are on feature/cart and need a new branch hotfix/login that starts from main. Which single command does it?|||You are on feature/cart and need a new branch hotfix/login that starts from main. Which single command does it?",
+            options: [
+              "git switch -c hotfix/login main",
+              "git branch hotfix/login && git merge main",
+              "git checkout hotfix/login main",
+              "git switch hotfix/login --from main",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: git switch -c <new> <start-point> creates the branch at main and switches to it. git checkout hotfix/login main treats both words as paths and fails; the second option creates the branch at feature/cart.|||VI: git switch -c <tên-mới> <điểm-bắt-đầu> tạo nhánh tại main và chuyển sang nó. git checkout hotfix/login main coi hai từ là đường dẫn và báo lỗi; phương án thứ hai tạo nhánh tại feature/cart.",
+          },
+          {
+            question: "Right after git switch feature, what does the file .git/HEAD contain?|||Right after git switch feature, what does the file .git/HEAD contain?",
+            options: [
+              "The hash of the latest commit on main",
+              "ref: refs/heads/feature — the branch name, which in turn points to a commit",
+              "The URL of origin/feature",
+              "The hash of the first commit on feature",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: HEAD normally holds a symbolic ref to the current branch (cat .git/HEAD prints ref: refs/heads/feature). Only in detached HEAD does it hold a raw hash.|||VI: HEAD bình thường chứa một tham chiếu tượng trưng tới nhánh hiện tại (cat .git/HEAD in ref: refs/heads/feature). Chỉ khi HEAD lìa cành nó mới chứa mã băm trần.",
           },
         ],
       },

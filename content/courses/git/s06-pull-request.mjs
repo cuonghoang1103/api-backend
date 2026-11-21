@@ -7,8 +7,78 @@
  * Nâng cấp 09/2026: slide deck git-06 (output thật trong kho thử), 🧪/🗂/📌 mỗi bài, quiz 10 câu có giải thích.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
+
+// Lượt chạy THẬT cho mốc dự án 7 (repo nháp /tmp/git-moc-7, git 2.51, 11/2026) — dùng chung cho hai khối ngôn ngữ.
+const DEMO_MOC_7 = `
+<pre><code class="language-bash"><span class="tok-comment"># github.git plays the role of GitHub; "an" is the author, "binh" the reviewer</span>
+git init --bare -q github.git &amp;&amp; git clone -q github.git an 2&gt;/dev/null; ls
+cd an
+git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+mkdir -p .github &amp;&amp; printf "## What\\n\\n## Why\\n\\n## How to test\\n\\nCloses #\\n" &gt; .github/pull_request_template.md
+echo "&lt;h1&gt;Shop&lt;/h1&gt;" &gt; index.html &amp;&amp; git add . &amp;&amp; git commit -qm "chore: add PR template and home page" &amp;&amp; git push -q origin main &amp;&amp; git log --oneline</code></pre>
+<div class="out">$ git init --bare -q github.git &amp;&amp; git clone -q github.git an 2&gt;/dev/null; ls
+an
+github.git
+$ cd an
+$ git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+$ mkdir -p .github &amp;&amp; printf "## What\\n\\n## Why\\n\\n## How to test\\n\\nCloses #\\n" &gt; .github/pull_request_template.md
+$ echo "&lt;h1&gt;Shop&lt;/h1&gt;" &gt; index.html &amp;&amp; git add . &amp;&amp; git commit -qm "chore: add PR template and home page" &amp;&amp; git push -q origin main &amp;&amp; git log --oneline
+af7858a chore: add PR template and home page</div>
+<pre><code class="language-bash"><span class="tok-comment"># one issue = one branch; push it with -u so it tracks origin</span>
+git switch -c feat/12-cart
+echo "&lt;a href=cart.html&gt;Cart&lt;/a&gt;" &gt;&gt; index.html &amp;&amp; git commit -qam "feat(cart): link cart from home page"
+echo "&lt;h1&gt;Cart&lt;/h1&gt;" &gt; cart.html &amp;&amp; git add cart.html &amp;&amp; git commit -qm "feat(cart): add empty cart page"
+git push -u origin feat/12-cart</code></pre>
+<div class="out">$ git switch -c feat/12-cart
+Switched to a new branch 'feat/12-cart'
+$ echo "&lt;a href=cart.html&gt;Cart&lt;/a&gt;" &gt;&gt; index.html &amp;&amp; git commit -qam "feat(cart): link cart from home page"
+$ echo "&lt;h1&gt;Cart&lt;/h1&gt;" &gt; cart.html &amp;&amp; git add cart.html &amp;&amp; git commit -qm "feat(cart): add empty cart page"
+$ git push -u origin feat/12-cart
+To /private/tmp/git-moc-7/github.git
+ * [new branch]      feat/12-cart -&gt; feat/12-cart
+branch 'feat/12-cart' set up to track 'origin/feat/12-cart'.</div>
+<pre><code class="language-bash"><span class="tok-comment"># the reviewer sees exactly what GitHub shows in Commits and Files changed</span>
+git clone -q /tmp/git-moc-7/github.git /tmp/git-moc-7/binh
+cd /tmp/git-moc-7/binh
+git config user.name "Binh Tran" &amp;&amp; git config user.email binh@example.com
+git log --oneline main..origin/feat/12-cart
+git diff --stat main...origin/feat/12-cart
+git switch feat/12-cart</code></pre>
+<div class="out">$ git clone -q /tmp/git-moc-7/github.git /tmp/git-moc-7/binh
+$ cd /tmp/git-moc-7/binh
+$ git config user.name "Binh Tran" &amp;&amp; git config user.email binh@example.com
+$ git log --oneline main..origin/feat/12-cart
+af82689 feat(cart): add empty cart page
+ca5710e feat(cart): link cart from home page
+$ git diff --stat main...origin/feat/12-cart
+ cart.html  | 1 +
+ index.html | 1 +
+ 2 files changed, 2 insertions(+)
+$ git switch feat/12-cart
+Switched to a new branch 'feat/12-cart'
+branch 'feat/12-cart' set up to track 'origin/feat/12-cart'.</div>
+<pre><code class="language-bash"><span class="tok-comment"># what main would look like: "Create a merge commit" vs "Squash and merge"</span>
+git switch -q -c try-merge main &amp;&amp; git merge -q --no-ff feat/12-cart -m "Merge pull request #12 from an/feat/12-cart" &amp;&amp; git log --graph --oneline
+git switch -q -c try-squash main &amp;&amp; git merge -q --squash feat/12-cart &amp;&amp; git commit -qm "feat(cart): cart page and home link (#12)" &amp;&amp; git log --graph --oneline
+git diff --stat try-merge try-squash; echo "tree of merge:  $(git rev-parse try-merge^{tree})"; echo "tree of squash: $(git rev-parse try-squash^{tree})"</code></pre>
+<div class="out">$ git switch -q -c try-merge main &amp;&amp; git merge -q --no-ff feat/12-cart -m "Merge pull request #12 from an/feat/12-cart" &amp;&amp; git log --graph --oneline
+*   b121b51 Merge pull request #12 from an/feat/12-cart
+|\\  
+| * af82689 feat(cart): add empty cart page
+| * ca5710e feat(cart): link cart from home page
+|/  
+* af7858a chore: add PR template and home page
+$ git switch -q -c try-squash main &amp;&amp; git merge -q --squash feat/12-cart &amp;&amp; git commit -qm "feat(cart): cart page and home link (#12)" &amp;&amp; git log --graph --oneline
+Squash commit -- not updating HEAD
+* 3e00c2d feat(cart): cart page and home link (#12)
+* af7858a chore: add PR template and home page
+$ git diff --stat try-merge try-squash; echo "tree of merge:  $(git rev-parse try-merge^{tree})"; echo "tree of squash: $(git rev-parse try-squash^{tree})"
+tree of merge:  c66ee1cbef796f41851947dfe120d360dd633798
+tree of squash: c66ee1cbef796f41851947dfe120d360dd633798</div>
+`;
 
 export default {
   title: 'Chapter 6 — Pull requests & code review|||Chương 6 — Pull request & code review',
@@ -1081,13 +1151,27 @@ jobs:
 `,
     },
 
+    /* ─────────────────── Mốc dự án 7 (dự án xuyên suốt khoá) ─────────────────── */
+    baiMoc(7, {
+      demoEn: `
+<p>Everything that happens on github.com — opening the PR, line comments, "Request changes", approving, the ruleset that rejects a direct push to main — cannot be run in a terminal, so none of it is imitated here. What you can rehearse locally is the Git half: a branch per issue, the push, exactly what the reviewer sees, and what main will look like after each merge button. <code>github.git</code> is a bare repository playing the part of GitHub; <code>an</code> is the author’s clone and <code>binh</code> the reviewer’s.</p>
+${DEMO_MOC_7}
+<p>What to notice: <code>git log main..origin/feat/12-cart</code> is the PR’s <em>Commits</em> tab and <code>git diff --stat main...origin/feat/12-cart</code> (three dots) is its <em>Files changed</em> tab. "Create a merge commit" keeps both commits on a side line under a merge commit; "Squash and merge" writes one new commit on main — yet both end with the same tree <code>c66ee1c…</code>: identical files, different history. That difference is what you justify in CONTRIBUTING.md. The template, the review, the approval and the rejected direct push are done on GitHub and go into your evidence as links and screenshots.</p>
+`,
+      demoVi: `
+<p>Mọi thứ diễn ra trên github.com — mở PR, bình luận theo dòng, "Request changes", approve, ruleset từ chối push thẳng lên main — không chạy được trong terminal, nên ở đây không giả lập thứ nào. Thứ tập được ở máy là nửa Git: mỗi issue một nhánh, lần push, đúng những gì người review nhìn thấy, và main sẽ trông thế nào sau mỗi nút merge. <code>github.git</code> là một repo trần (bare) đóng vai GitHub; <code>an</code> là bản clone của tác giả, <code>binh</code> là của người review.</p>
+${DEMO_MOC_7}
+<p>Để ý: <code>git log main..origin/feat/12-cart</code> chính là tab <em>Commits</em> của PR, còn <code>git diff --stat main...origin/feat/12-cart</code> (ba chấm) là tab <em>Files changed</em>. "Create a merge commit" giữ cả hai commit trên một nhánh phụ dưới một merge commit; "Squash and merge" ghi một commit mới trên main — nhưng cả hai cùng ra một tree <code>c66ee1c…</code>: file y hệt, lịch sử khác nhau. Khác biệt đó là thứ bạn giải thích trong CONTRIBUTING.md. Mẫu PR, review, approve và lần push thẳng bị từ chối làm trên GitHub, nộp dưới dạng link và ảnh chụp.</p>
+`,
+    }),
+
     /* ─────────────────────────── 6.5 Quiz ─────────────────────────── */
     {
       title: '6.5 — Chapter 6 quiz|||6.5 — Kiểm tra Chương 6',
       slug: 'git-6-5-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật của nhóm đồ án: chẻ PR, từ khoá đóng issue, cách review và gỡ "request changes", ba nút merge và hệ quả (revert -m 1, branch -d, bisect), CODEOWNERS và kiểm tra bắt buộc bị Pending.',
+      description: 'Mười tình huống thật của nhóm đồ án: chẻ PR, từ khoá đóng issue, cách review và gỡ "request changes", ba nút merge và hệ quả (revert -m 1, branch -d, bisect), CODEOWNERS và kiểm tra bắt buộc bị Pending. Thêm 10 câu tiếng Anh kiểu đề FE (câu 11–20).',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Check</span>
@@ -1101,6 +1185,7 @@ jobs:
 <li>I know why <code>git branch -d</code> refuses after a squash merge, and what to check before using <code>-D</code>.</li>
 <li>I can protect <code>main</code> with a ruleset, route review with CODEOWNERS, and explain why a skipped required check blocks a PR.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-06', 16, 'Bảng tra nhanh Chương 6')}
 </div>
 <div class="ml-vi">
@@ -1115,11 +1200,12 @@ ${slide('git-06', 16, 'Bảng tra nhanh Chương 6')}
 <li>Tôi biết vì sao <code>git branch -d</code> từ chối sau một lần squash merge, và phải kiểm gì trước khi dùng <code>-D</code>.</li>
 <li>Tôi bảo vệ được <code>main</code> bằng ruleset, định tuyến review bằng CODEOWNERS, và giải thích được vì sao một kiểm tra bắt buộc bị bỏ qua lại chặn PR.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-06', 16, 'Bảng tra nhanh Chương 6')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'Your SWP391 cart feature branch contains a Prisma migration, a refactor of the price helper and the cart UI — 900 changed lines. It is Thursday and the demo is next week. What do you do?|||Nhánh tính năng giỏ hàng SWP391 của bạn gồm một migration Prisma, một lần refactor helper tính tiền và giao diện giỏ hàng — 900 dòng thay đổi. Hôm nay thứ Năm, tuần sau demo. Bạn làm gì?',
@@ -1230,6 +1316,76 @@ ${slide('git-06', 16, 'Bảng tra nhanh Chương 6')}
             ],
             correctIndex: 2, points: 1,
             explanation: 'EN: CODEOWNERS follows gitignore-like precedence: the last matching pattern decides the owners of a file, and the earlier matches are ignored for it. So src/auth.ts belongs to @minh alone, and without his approval the PR cannot merge. "First line wins" and "all matches combine" are the two natural guesses and both are wrong — which is why broad defaults go at the top and specific paths below.|||VI: CODEOWNERS theo thứ tự ưu tiên kiểu gitignore: mẫu khớp cuối cùng quyết định chủ của một file, các dòng khớp trước đó bị bỏ qua với file ấy. Nên src/auth.ts chỉ thuộc về @minh, và thiếu lượt duyệt của Minh thì PR không merge được. "Dòng đầu thắng" và "mọi dòng khớp cộng dồn" là hai cách đoán tự nhiên và đều sai — vì thế dòng mặc định rộng đặt trên cùng, đường dẫn cụ thể đặt bên dưới.',
+          },
+          /* FE 11 */
+          {
+            question: 'Your PR merges feat/cart into main. Which command lists exactly the commits the PR will add to main?|||Your PR merges feat/cart into main. Which command lists exactly the commits the PR will add to main?',
+            options: ['git log feat/cart..main', 'git log main..feat/cart', 'git log --all feat/cart', 'git diff main feat/cart'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: A..B means "reachable from B but not from A", so main..feat/cart is the PR’s Commits tab. The reversed range lists commits main has that the branch lacks; git diff shows file changes, not commits.|||VI: A..B nghĩa là "tới được từ B nhưng không tới được từ A", nên main..feat/cart chính là tab Commits của PR. Đảo ngược thì ra commit main có mà nhánh thiếu; git diff cho thấy thay đổi file, không phải commit.',
+          },
+          /* FE 12 */
+          {
+            question: 'Since you branched, a commit on main deleted m.txt. Which command shows the same file list as the PR’s "Files changed" tab?|||Since you branched, a commit on main deleted m.txt. Which command shows the same file list as the PR’s "Files changed" tab?',
+            options: ['git diff --stat main feat/cart', 'git diff --stat feat/cart main', 'git diff --stat main...feat/cart', 'git log --stat feat/cart..main'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: Three dots compare the branch tip with the merge base, which is what GitHub shows. Tested: the two-dot form also listed "m | 1 -", a change made on main that is not part of the PR.|||VI: Ba chấm so đầu nhánh với điểm tách nhánh (merge base), đúng thứ GitHub hiển thị. Đã chạy thử: dạng hai chấm còn liệt kê "m | 1 -", một thay đổi làm trên main chứ không thuộc PR.',
+          },
+          /* FE 13 */
+          {
+            question: 'A PR with 5 commits is merged with "Squash and merge". What appears on main?|||A PR with 5 commits is merged with "Squash and merge". What appears on main?',
+            options: ['One new commit with a single parent containing all 5 changes', 'The same 5 commits with their original hashes', 'A merge commit with two parents', 'Five new commits with new hashes and no merge commit'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Squash writes one new commit whose only parent is the old main tip (tested: one "parent" line). Two parents is "Create a merge commit"; five replayed commits is "Rebase and merge".|||VI: Squash ghi một commit mới có đúng một cha là đầu main cũ (đã thử: một dòng "parent"). Hai cha là "Create a merge commit"; năm commit được phát lại là "Rebase and merge".',
+          },
+          /* FE 14 */
+          {
+            question: 'Which line in the description of a PR that targets the default branch closes issue #7 when the PR is merged?|||Which line in the description of a PR that targets the default branch closes issue #7 when the PR is merged?',
+            options: ['Related to #7', 'Issue: #7 (done)', 'See #7 for details', 'Resolves #7'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Only the closing keywords (close/closes/closed, fix/fixes/fixed, resolve/resolves/resolved) followed by the issue number create a closing link. The other lines only mention the issue.|||VI: Chỉ các từ khoá đóng (close/closes/closed, fix/fixes/fixed, resolve/resolves/resolved) theo sau là số issue mới tạo liên kết đóng. Các dòng còn lại chỉ nhắc tới issue.',
+          },
+          /* FE 15 */
+          {
+            question: 'You open your pull request as a draft. Which statement is true?|||You open your pull request as a draft. Which statement is true?',
+            options: ['CI runs and people can comment, but it cannot be merged until marked ready', 'CI is skipped until the PR is marked ready for review', 'Reviewers are requested automatically, but nobody can comment', 'It is merged automatically as soon as CI is green'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: A draft PR runs CI and accepts comments; it just cannot be merged and does not request review until you mark it ready (gh pr ready).|||VI: PR nháp vẫn chạy CI và nhận bình luận; chỉ là không merge được và không yêu cầu review cho tới khi bạn đánh dấu sẵn sàng (gh pr ready).',
+          },
+          /* FE 16 */
+          {
+            question: 'The ruleset on main requires 1 approving review. A teammate submits a review of type "Comment" that says "LGTM". Can you merge?|||The ruleset on main requires 1 approving review. A teammate submits a review of type "Comment" that says "LGTM". Can you merge?',
+            options: ['Yes, any submitted review counts as an approval', 'No, only an "Approve" review counts toward required approvals', 'Yes, as long as the comment contains the word LGTM', 'No, a Comment review blocks merging like Request changes'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Comment is feedback without a verdict. Only Approve counts toward the required number; Request changes is the one that actively blocks.|||VI: Comment là phản hồi không kèm phán quyết. Chỉ Approve được tính vào số lượt duyệt bắt buộc; Request changes mới là thứ chủ động chặn.',
+          },
+          /* FE 17 */
+          {
+            question: 'A repository has a CODEOWNERS file in both .github/ and docs/. Which one does GitHub use?|||A repository has a CODEOWNERS file in both .github/ and docs/. Which one does GitHub use?',
+            options: ['docs/CODEOWNERS, because it is the most specific path', 'Both files, merged line by line', '.github/CODEOWNERS, the first location GitHub searches', 'Neither; two files is treated as a configuration error'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: GitHub looks in .github/, then the root, then docs/, and uses the first file it finds (docs.github.com, About code owners). Files are never merged.|||VI: GitHub tìm ở .github/, rồi thư mục gốc, rồi docs/, và dùng file đầu tiên tìm thấy (docs.github.com, About code owners). Các file không bao giờ được gộp.',
+          },
+          /* FE 18 */
+          {
+            question: 'Your team merges every PR with "Create a merge commit". Which command prints one line per merged PR on main (plus any direct commits)?|||Your team merges every PR with "Create a merge commit". Which command prints one line per merged PR on main (plus any direct commits)?',
+            options: ['git log --oneline main', 'git log --oneline --first-parent main', 'git log --oneline --no-merges main', 'git shortlog main'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: --first-parent follows only the main line, so each merged PR appears as its merge commit and the branch commits are hidden (tested). --no-merges does the opposite: it hides exactly those merge commits.|||VI: --first-parent chỉ đi theo đường chính, nên mỗi PR hiện ra dưới dạng merge commit của nó và commit trong nhánh bị ẩn (đã thử). --no-merges làm ngược lại: ẩn đúng những merge commit đó.',
+          },
+          /* FE 19 */
+          {
+            question: 'Main moved since you opened your PR. Which local commands do the same as GitHub’s "Update branch" (merge) button?|||Main moved since you opened your PR. Which local commands do the same as GitHub’s "Update branch" (merge) button?',
+            options: ['git pull --rebase origin feat/cart', 'git reset --hard origin/main, then push', 'git rebase feat/cart main', 'git fetch origin, git merge origin/main, then push'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Update branch merges the base branch into your PR branch. Fetch + merge origin/main + push does exactly that. reset --hard throws your work away; "git rebase feat/cart main" rebases main, not your branch.|||VI: Update branch merge nhánh đích vào nhánh PR của bạn. Fetch + merge origin/main + push làm đúng việc đó. reset --hard vứt việc của bạn đi; "git rebase feat/cart main" rebase main chứ không phải nhánh của bạn.',
+          },
+          /* FE 20 */
+          {
+            question: 'In a review you write a suggestion block for a one-line typo fix. What can the author do with it?|||In a review you write a suggestion block for a one-line typo fix. What can the author do with it?',
+            options: ['Apply it with one click, which creates a real commit on the PR branch', 'Nothing until the PR is merged; suggestions are only notes', 'Apply it, which rewrites their last commit without a new commit', 'Copy it by hand, because suggestions cannot be applied from the UI'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: A suggested change renders as a diff with an apply button, and applying it creates a commit on the branch — ideal for typos, not for changes the author should think about.|||VI: Suggested change hiện thành một diff có nút áp dụng, và áp dụng nó tạo một commit trên nhánh — hợp với lỗi gõ, không hợp với thay đổi mà tác giả cần tự suy nghĩ.',
           },
         ],
       },

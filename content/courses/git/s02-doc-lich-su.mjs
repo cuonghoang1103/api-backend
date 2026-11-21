@@ -6,8 +6,87 @@
  * & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
+
+// Mốc dự án 3: lượt chạy mẫu THẬT trong /tmp/git-moc-3 (git 2.51.1, 11/2026) — dùng chung cho khối EN/VI.
+const MOC_3 = [
+  `
+<pre><code class="language-bash"><span class="tok-comment"># Q1 — who touched what?</span>
+git shortlog -sn HEAD
+git shortlog -sn HEAD -- rules.js</code></pre>
+<div class="out">$ git shortlog -sn HEAD
+     3	Binh Tran
+     2	An Nguyen
+$ git shortlog -sn HEAD -- rules.js
+     2	An Nguyen
+     1	Binh Tran</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># Q2 — who wrote the MAX_HOURS line, and in which commit?</span>
+git blame -L 1,1 rules.js</code></pre>
+<div class="out">$ git blame -L 1,1 rules.js
+8a84803d (An Nguyen 2026-11-21 16:51:30 +0700 1) const MAX_HOURS = 3;</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># Q3 — when did the string "MAX_HOURS = 3" appear?</span>
+git log -S "MAX_HOURS = 3" --oneline</code></pre>
+<div class="out">$ git log -S "MAX_HOURS = 3" --oneline
+8a84803 feat(rules): allow 3-hour bookings for exam week</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># Q4 — what changed since the first tag?</span>
+git diff v0.1.0..HEAD --stat</code></pre>
+<div class="out">$ git diff v0.1.0..HEAD --stat
+ README.md | 1 +
+ rules.js  | 1 +
+ 2 files changed, 2 insertions(+)</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># Q5 — bisect drill on a THROW-AWAY branch: plant a bug a few commits back</span>
+git switch -c tmp/bisect-drill
+sed -i '' 's/hours &lt;= MAX_HOURS/hours &lt; MAX_HOURS/' rules.js
+git commit -qam "refactor: tidy comparison"
+echo "- room list" &gt;&gt; README.md &amp;&amp; git commit -qam "docs: list rooms"
+echo "- rules" &gt;&gt; README.md &amp;&amp; git commit -qam "docs: list rules"
+<span class="tok-comment"># the test: exit 0 = good, non-zero = bad</span>
+echo 'node -e "process.exit(require(\\"./rules\\").canBook(3) ? 0 : 1)"' &gt; ../test.sh
+git bisect start HEAD v0.1.0
+git bisect run sh ../test.sh
+git bisect reset
+git switch main
+git branch -D tmp/bisect-drill</code></pre>
+<div class="out">$ git switch -c tmp/bisect-drill
+Switched to a new branch 'tmp/bisect-drill'
+$ git bisect start HEAD v0.1.0
+Bisecting: 2 revisions left to test after this (roughly 1 step)
+[d13dc014c3a8c225121194d48fcf5ef63c4d090b] docs: document opening hours
+$ git bisect run sh ../test.sh
+running 'sh' '../test.sh'
+Bisecting: 0 revisions left to test after this (roughly 1 step)
+[08ce8d7a5414104071a2574070a000fbed6ad72d] docs: list rooms
+running 'sh' '../test.sh'
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[4258281c4a8b43f17799ab6ead805e18af9a20f5] refactor: tidy comparison
+running 'sh' '../test.sh'
+4258281c4a8b43f17799ab6ead805e18af9a20f5 is the first bad commit
+commit 4258281c4a8b43f17799ab6ead805e18af9a20f5
+Author: An Nguyen &lt;an@example.com&gt;
+Date:   Sat Nov 21 16:51:30 2026 +0700
+    refactor: tidy comparison
+ rules.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+bisect found first bad commit
+$ git bisect reset
+Previous HEAD position was 4258281 refactor: tidy comparison
+Switched to branch 'tmp/bisect-drill'
+$ git switch main
+Switched to branch 'main'
+$ git branch -D tmp/bisect-drill
+Deleted branch tmp/bisect-drill (was 22c58e3).</div>
+`,
+];
 
 export default {
   title: 'Chapter 2 — Reading history: archaeology on your own code|||Chương 2 — Đọc lịch sử: khảo cổ trên chính mã của bạn',
@@ -1290,13 +1369,43 @@ done</code></pre>
 `,
     },
 
+    /* ─────────────────── 🛠 Mốc dự án 3 ─────────────────── */
+    baiMoc(3, {
+      demoEn: `
+<p>A small booking repository with five commits by two people and a tag v0.1.0 (prepared before the first command). Each block answers one question of HISTORY-NOTES.md — in your file, paste the command AND its output exactly like this.</p>
+<p>Q1. Pass <code>HEAD</code> explicitly: without a revision and without a terminal (in a script), shortlog reads standard input instead.</p>
+${MOC_3[0]}
+<p>Q2. blame names the commit, the author and the date of the line.</p>
+${MOC_3[1]}
+<p>Q3. The pickaxe (<code>-S</code>, cái cuốc chim) finds the commit that ADDED the string.</p>
+${MOC_3[2]}
+<p>Q4. What moved since the first release, file by file.</p>
+${MOC_3[3]}
+<p>Q5. On a throw-away branch, a bug is planted (<code>&lt;</code> instead of <code>&lt;=</code>, so a 3-hour booking is refused), then two harmless commits follow. The one-line test exits 0 when good and 1 when bad; <code>bisect run</code> names the planted commit by itself. Finish with <code>bisect reset</code> and delete the drill branch.</p>
+${MOC_3[4]}
+`,
+      demoVi: `
+<p>Một repo đặt phòng nhỏ có năm commit của hai người và một tag v0.1.0 (chuẩn bị trước lệnh đầu tiên). Mỗi khối trả lời một câu của HISTORY-NOTES.md — trong file của bạn, dán cả lệnh LẪN output đúng như thế này.</p>
+<p>Câu 1. Truyền <code>HEAD</code> tường minh: không có revision và không có terminal (trong script) thì shortlog đọc đầu vào chuẩn.</p>
+${MOC_3[0]}
+<p>Câu 2. blame cho biết commit, tác giả và ngày của dòng đó.</p>
+${MOC_3[1]}
+<p>Câu 3. Cái cuốc chim (<code>-S</code>) tìm ra commit đã THÊM chuỗi đó.</p>
+${MOC_3[2]}
+<p>Câu 4. Từ bản phát hành đầu tới giờ đã đổi gì, theo từng file.</p>
+${MOC_3[3]}
+<p>Câu 5. Trên một nhánh nháp, gieo một lỗi (<code>&lt;</code> thay cho <code>&lt;=</code>, nên đặt phòng 3 giờ bị từ chối), rồi thêm hai commit vô hại. Phép thử một dòng trả 0 khi tốt và 1 khi hỏng; <code>bisect run</code> tự chỉ ra đúng commit đã gieo lỗi. Kết thúc bằng <code>bisect reset</code> và xoá nhánh diễn tập.</p>
+${MOC_3[4]}
+`,
+    }),
+
     /* ─────────────────────────── 2.6 Quiz ─────────────────────────── */
     {
       title: '2.6 — Chapter 2 quiz|||2.6 — Kiểm tra Chương 2',
       slug: 'git-2-6-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật về đọc lịch sử: khoảng hai chấm/ba chấm, lọc git log, đọc file ở quá khứ, blame qua commit định dạng lại, cái cuốc chim, --follow và bisect (kể cả mã thoát 125) — có giải thích từng câu.',
+      description: 'Mười tình huống thật về đọc lịch sử: khoảng hai chấm/ba chấm, lọc git log, đọc file ở quá khứ, blame qua commit định dạng lại, cái cuốc chim, --follow và bisect (kể cả mã thoát 125) — có giải thích từng câu. Thêm 10 câu tiếng Anh kiểu đề thi FE (câu 11–20) có giải thích.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Check</span>
@@ -1310,6 +1419,7 @@ done</code></pre>
 <li>I can get past a formatting commit in blame, and find code that no longer exists.</li>
 <li>I can run <code>git bisect run</code> with a script and know what exit codes 0, 1 and 125 mean.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-02', 17, 'Bảng tra nhanh Chương 2')}
 </div>
 <div class="ml-vi">
@@ -1324,11 +1434,12 @@ ${slide('git-02', 17, 'Bảng tra nhanh Chương 2')}
 <li>Tôi vượt qua được commit định dạng lại khi blame, và tìm được mã đã không còn tồn tại.</li>
 <li>Tôi chạy được <code>git bisect run</code> với một script và biết mã thoát 0, 1 và 125 nghĩa là gì.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-02', 17, 'Bảng tra nhanh Chương 2')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'You are about to push to main and want to see exactly which of your commits will go up. Which command?|||Bạn sắp push lên main và muốn xem chính xác những commit nào của mình sẽ được đẩy lên. Lệnh nào?',
@@ -1439,6 +1550,117 @@ ${slide('git-02', 17, 'Bảng tra nhanh Chương 2')}
             ],
             correctIndex: 2, points: 1,
             explanation: 'EN: 125 means "cannot test this commit": Git skips it instead of judging it. exit 1 would mark it bad and can make bisect blame a commit that merely broke the build; exit 0 would wrongly call it good. Codes above 127 (like 128) do not mean skip — they abort the whole bisect run.|||VI: 125 nghĩa là "không kiểm được commit này": Git bỏ qua nó thay vì phán xét. exit 1 sẽ đánh dấu nó hỏng và có thể khiến bisect đổ oan cho một commit chỉ làm hỏng bản build; exit 0 lại gọi sai nó là tốt. Mã trên 127 (như 128) không có nghĩa là bỏ qua — chúng dừng hẳn cả phiên bisect run.',
+          },
+          // ── Câu 11–20: tiếng Anh kiểu đề thi FE (11/2026), hành vi lệnh đã chạy thử trên git 2.51.1 ──
+          {
+            question: "A commit with the message \"chore: tune config\" changed config.txt from \"timeout=30\" to \"timeout=60\". Which command lists THAT commit?|||A commit with the message \"chore: tune config\" changed config.txt from \"timeout=30\" to \"timeout=60\". Which command lists THAT commit?",
+            options: [
+              "git log -S timeout --oneline",
+              "git log -G timeout --oneline",
+              "git log --grep=timeout --oneline",
+              "git blame --since timeout",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: -G matches commits whose diff adds or removes a line matching the regex. -S only reports commits where the NUMBER of occurrences of the string changes; here “timeout” appears once before and once after, so -S misses it (verified). --grep searches messages, and this message has no “timeout”.|||VI: -G khớp commit có diff thêm hoặc xoá một dòng khớp regex. -S chỉ báo commit làm SỐ LẦN xuất hiện của chuỗi thay đổi; ở đây “timeout” có một lần trước và một lần sau, nên -S bỏ sót (đã kiểm). --grep tìm trong lời nhắn, mà lời nhắn này không có “timeout”.",
+          },
+          {
+            question: "HEAD is a merge commit created by running git merge feature on main. What does HEAD^2 point to?|||HEAD is a merge commit created by running git merge feature on main. What does HEAD^2 point to?",
+            options: [
+              "The commit two steps back on main",
+              "The previous commit on main",
+              "The tip of feature that was merged in",
+              "The merge base of main and feature",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: ^n picks the n-th parent: HEAD^1 is the main side, HEAD^2 the merged branch. Two steps back along first parents is HEAD~2, a different thing.|||VI: ^n chọn cha thứ n: HEAD^1 là phía main, HEAD^2 là nhánh được merge vào. Lùi hai bước theo cha thứ nhất là HEAD~2, một thứ khác.",
+          },
+          {
+            question: "Which command lists the files changed between v1.0.0 and HEAD with a letter A, M or D for each?|||Which command lists the files changed between v1.0.0 and HEAD with a letter A, M or D for each?",
+            options: [
+              "git diff --name-status v1.0.0 HEAD",
+              "git diff --name-only v1.0.0 HEAD",
+              "git log --stat v1.0.0",
+              "git show --summary v1.0.0",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: --name-status prints the status letter and the path. --name-only prints paths without the letter; the other two describe single commits rather than the difference between two points.|||VI: --name-status in chữ cái trạng thái và đường dẫn. --name-only chỉ in đường dẫn không có chữ cái; hai lệnh còn lại mô tả từng commit chứ không phải khác biệt giữa hai thời điểm.",
+          },
+          {
+            question: "Which command shows only the merge commits?|||Which command shows only the merge commits?",
+            options: [
+              "git log --first-parent",
+              "git log --no-merges",
+              "git log --graph",
+              "git log --merges",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: --merges keeps commits with more than one parent. --no-merges does the opposite, --first-parent follows only the first parent (merges still appear, along with normal commits), --graph only draws.|||VI: --merges giữ các commit có hơn một cha. --no-merges làm ngược lại, --first-parent chỉ đi theo cha thứ nhất (merge vẫn hiện cùng commit thường), --graph chỉ vẽ.",
+          },
+          {
+            question: "Your team writes card keys in commit messages. Which command finds every commit about card SWP-12?|||Your team writes card keys in commit messages. Which command finds every commit about card SWP-12?",
+            options: [
+              "git log -S SWP-12",
+              "git log --grep=\"SWP-12\"",
+              "git blame SWP-12",
+              "git log --author=SWP-12",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: --grep searches commit messages. -S searches the CONTENT of diffs, so it finds code that mentions SWP-12, not messages; --author matches the author name.|||VI: --grep tìm trong lời nhắn commit. -S tìm trong NỘI DUNG diff, nên nó tìm mã có nhắc SWP-12 chứ không tìm lời nhắn; --author khớp tên tác giả.",
+          },
+          {
+            question: "Which command answers \"how many commits has each person made on this branch?\"|||Which command answers \"how many commits has each person made on this branch?\"",
+            options: [
+              "git shortlog -sn HEAD",
+              "git log --count",
+              "git blame --stat",
+              "git rev-list --authors",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: shortlog -s gives counts, -n sorts them. Passing HEAD matters in scripts: with no revision and no terminal, shortlog reads standard input. The other options do not exist.|||VI: shortlog -s cho số lượng, -n sắp xếp. Truyền HEAD rất quan trọng trong script: không có revision và không có terminal thì shortlog đọc đầu vào chuẩn. Các tuỳ chọn còn lại không tồn tại.",
+          },
+          {
+            question: "You run git bisect start HEAD v1.2.0. How does Git read the two arguments?|||You run git bisect start HEAD v1.2.0. How does Git read the two arguments?",
+            options: [
+              "HEAD is good and v1.2.0 is bad",
+              "Both are good; Git asks for a bad one",
+              "HEAD is bad and v1.2.0 is good",
+              "v1.2.0 is the first commit to test",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: The first revision is the bad one, the rest are good (git bisect log shows “# bad: … # good: …”). Reversing them makes bisect search the wrong direction.|||VI: Revision đầu tiên là bản hỏng, các revision sau là bản tốt (git bisect log hiện “# bad: … # good: …”). Đảo ngược thì bisect tìm sai hướng.",
+          },
+          {
+            question: "Bisect has found the first bad commit. Which command returns you to the branch you were on before bisecting?|||Bisect has found the first bad commit. Which command returns you to the branch you were on before bisecting?",
+            options: [
+              "git bisect stop",
+              "git switch -",
+              "git bisect skip",
+              "git bisect reset",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: git bisect reset ends the session and checks out the original branch. git bisect stop does not exist, and skip only marks the current commit as untestable.|||VI: git bisect reset kết thúc phiên và checkout lại nhánh ban đầu. git bisect stop không tồn tại, còn skip chỉ đánh dấu commit hiện tại là không thử được.",
+          },
+          {
+            question: "You only care about lines 40–60 of OrderService.java. Which command shows who last changed those lines?|||You only care about lines 40–60 of OrderService.java. Which command shows who last changed those lines?",
+            options: [
+              "git log -L 40 OrderService.java",
+              "git blame -L 40,60 OrderService.java",
+              "git show 40..60 OrderService.java",
+              "git diff -U40 OrderService.java",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: blame -L start,end limits blame to a line range. git log -L needs start,end:file and shows history rather than the last author; -U40 only widens diff context.|||VI: blame -L đầu,cuối giới hạn blame vào một khoảng dòng. git log -L cần đầu,cuối:file và cho thấy lịch sử chứ không phải tác giả cuối; -U40 chỉ nới rộng ngữ cảnh diff.",
+          },
+          {
+            question: "Which command shows the full patch (the diff) of each of the last two commits?|||Which command shows the full patch (the diff) of each of the last two commits?",
+            options: [
+              "git log -p -2",
+              "git show -2 --stat",
+              "git diff HEAD~2",
+              "git log --oneline -2",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: -p adds the patch to every commit listed, -2 limits to two. git diff HEAD~2 is ONE combined diff against your working tree, not per commit; --stat and --oneline hide the lines.|||VI: -p thêm bản vá vào mỗi commit được liệt kê, -2 giới hạn còn hai. git diff HEAD~2 là MỘT diff gộp so với thư mục làm việc, không theo từng commit; --stat và --oneline giấu các dòng.",
           },
         ],
       },

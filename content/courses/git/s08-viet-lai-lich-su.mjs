@@ -6,8 +6,86 @@
  * Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
+
+// Lượt chạy THẬT cho mốc dự án 9 (repo nháp /tmp/git-moc-9, git 2.51, 11/2026) — dùng chung cho hai khối ngôn ngữ.
+const DEMO_MOC_9 = `
+<pre><code class="language-bash"><span class="tok-comment"># setup: github.git stands in for GitHub</span>
+git init --bare -q github.git &amp;&amp; git clone -q github.git an 2&gt;/dev/null
+cd an
+git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+echo "home" &gt; app.js &amp;&amp; git add . &amp;&amp; git commit -qm "chore: init" &amp;&amp; git push -q origin main</code></pre>
+<div class="out">$ git init --bare -q github.git &amp;&amp; git clone -q github.git an 2&gt;/dev/null
+$ cd an
+$ git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+$ echo "home" &gt; app.js &amp;&amp; git add . &amp;&amp; git commit -qm "chore: init" &amp;&amp; git push -q origin main</div>
+<pre><code class="language-bash"><span class="tok-comment"># a messy PR branch, already pushed for CI</span>
+git switch -q -c feat/search
+echo "search box" &gt; search.js &amp;&amp; git add search.js &amp;&amp; git commit -qm "feat(search): add search box"
+echo "results list" &gt; results.js &amp;&amp; git add results.js &amp;&amp; git commit -qm "feat(search): show results list"
+echo "placeholder: Search..." &gt;&gt; search.js &amp;&amp; git commit -q -a --fixup HEAD~1
+git push -q -u origin feat/search &amp;&amp; git log --oneline main..</code></pre>
+<div class="out">$ git switch -q -c feat/search
+$ echo "search box" &gt; search.js &amp;&amp; git add search.js &amp;&amp; git commit -qm "feat(search): add search box"
+$ echo "results list" &gt; results.js &amp;&amp; git add results.js &amp;&amp; git commit -qm "feat(search): show results list"
+$ echo "placeholder: Search..." &gt;&gt; search.js &amp;&amp; git commit -q -a --fixup HEAD~1
+$ git push -q -u origin feat/search &amp;&amp; git log --oneline main..
+7426d77 fixup! feat(search): add search box
+f0596b3 feat(search): show results list
+4a0bc97 feat(search): add search box</div>
+<pre><code class="language-bash"><span class="tok-comment"># tidy BEFORE asking for review (GIT_SEQUENCE_EDITOR=: accepts the todo list without opening an editor)</span>
+GIT_SEQUENCE_EDITOR=: git rebase -q -i --autosquash main &amp;&amp; git log --oneline main..
+git push
+git push --force-with-lease</code></pre>
+<div class="out">$ GIT_SEQUENCE_EDITOR=: git rebase -q -i --autosquash main &amp;&amp; git log --oneline main..
+b49f217 feat(search): show results list
+2d3052e feat(search): add search box
+$ git push
+To /private/tmp/git-moc-9/github.git
+ ! [rejected]        feat/search -&gt; feat/search (non-fast-forward)
+error: failed to push some refs to '/private/tmp/git-moc-9/github.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+$ git push --force-with-lease
+To /private/tmp/git-moc-9/github.git
+ + 7426d77...b49f217 feat/search -&gt; feat/search (forced update)</div>
+<pre><code class="language-bash"><span class="tok-comment"># leaked-secret drill: NEVER on the real clone — make a fresh one with --no-local</span>
+git switch -q main &amp;&amp; echo "PAYMENT_TOKEN=FAKE-DEMO-TOKEN-0000" &gt; config.env &amp;&amp; git add config.env &amp;&amp; git commit -qm "chore: add payment config" &amp;&amp; echo "more" &gt;&gt; app.js &amp;&amp; git commit -qam "feat: footer"
+git log --oneline -3
+git clone -q --no-local /tmp/git-moc-9/an /tmp/git-moc-9/drill
+cd /tmp/git-moc-9/drill
+git log --oneline --all -S FAKE-DEMO-TOKEN-0000
+git filter-repo --path config.env --invert-paths
+git log --oneline --all -S FAKE-DEMO-TOKEN-0000 | wc -l
+git log --oneline -3</code></pre>
+<div class="out">$ git switch -q main &amp;&amp; echo "PAYMENT_TOKEN=FAKE-DEMO-TOKEN-0000" &gt; config.env &amp;&amp; git add config.env &amp;&amp; git commit -qm "chore: add payment config" &amp;&amp; echo "more" &gt;&gt; app.js &amp;&amp; git commit -qam "feat: footer"
+$ git log --oneline -3
+043d106 feat: footer
+5296bf5 chore: add payment config
+2657150 chore: init
+$ git clone -q --no-local /tmp/git-moc-9/an /tmp/git-moc-9/drill
+$ cd /tmp/git-moc-9/drill
+$ git log --oneline --all -S FAKE-DEMO-TOKEN-0000
+5296bf5 chore: add payment config
+$ git filter-repo --path config.env --invert-paths
+NOTICE: Removing 'origin' remote; see 'Why is my origin removed?'
+        in the manual if you want to push back there.
+        (was /tmp/git-moc-9/an)
+Parsed 1 commitsParsed 5 commitsHEAD is now at d887c86 feat: footer
+
+New history written in 0.12 seconds; now repacking/cleaning...
+Repacking your repo and cleaning out old unneeded objects
+Completely finished after 0.22 seconds.
+$ git log --oneline --all -S FAKE-DEMO-TOKEN-0000 | wc -l
+       0
+$ git log --oneline -3
+d887c86 feat: footer
+2657150 chore: init</div>
+`;
 
 export default {
   title: 'Chapter 8 — Rewriting history safely|||Chương 8 — Viết lại lịch sử an toàn',
@@ -771,13 +849,27 @@ fatal: Need to specify how to reconcile divergent branches.</code></pre>
 `,
     },
 
+    /* ─────────────────── Mốc dự án 9 (dự án xuyên suốt khoá) ─────────────────── */
+    baiMoc(9, {
+      demoEn: `
+<p>Two parts. First, a PR branch that was already pushed for CI is tidied before review with <code>--fixup</code> + <code>--autosquash</code> and updated with <code>--force-with-lease</code>. Second, the leaked-secret drill — on a fresh clone made with <code>--no-local</code>, never on the clone you work in. The token is fake on purpose. On a real leak you rotate the key FIRST; rewriting history comes after.</p>
+${DEMO_MOC_9}
+<p>What to notice: the <code>fixup!</code> commit melted into "add search box" and both commits got new hashes, so a plain <code>git push</code> is rejected as non-fast-forward and <code>--force-with-lease</code> succeeds only because <code>origin/feat/search</code> was still where we last saw it. In the drill, filter-repo removed config.env from every commit and dropped the commit that became empty; "feat: footer" got a new hash (<code>043d106</code> → <code>d887c86</code>) while "chore: init", made before the leak, kept <code>2657150</code>. <code>git log -S</code> then finds 0 commits. filter-repo also removed the <code>origin</code> remote so the rewritten history cannot be pushed by accident.</p>
+`,
+      demoVi: `
+<p>Hai phần. Thứ nhất, một nhánh PR đã push để chạy CI được dọn trước khi xin review bằng <code>--fixup</code> + <code>--autosquash</code> rồi cập nhật bằng <code>--force-with-lease</code>. Thứ hai, buổi diễn tập lộ bí mật — trên một bản clone mới tạo bằng <code>--no-local</code>, không bao giờ trên bản clone bạn đang làm việc. Token cố tình là giả. Khi lộ thật, việc đầu tiên là ĐỔI KHOÁ; viết lại lịch sử làm sau.</p>
+${DEMO_MOC_9}
+<p>Để ý: commit <code>fixup!</code> đã tan vào "add search box" và cả hai commit đều có mã băm mới, nên <code>git push</code> trần bị từ chối vì không phải fast-forward, còn <code>--force-with-lease</code> thành công chỉ vì <code>origin/feat/search</code> vẫn ở đúng chỗ ta thấy lần cuối. Trong buổi diễn tập, filter-repo gỡ config.env khỏi mọi commit và bỏ luôn commit đã thành rỗng; "feat: footer" có mã băm mới (<code>043d106</code> → <code>d887c86</code>) còn "chore: init", làm trước lúc lộ, giữ nguyên <code>2657150</code>. Sau đó <code>git log -S</code> tìm thấy 0 commit. filter-repo cũng gỡ remote <code>origin</code> để lịch sử đã viết lại không bị push nhầm.</p>
+`,
+    }),
+
     /* ─────────────────────────── 8.4 Quiz ─────────────────────────── */
     {
       title: '8.4 — Chapter 8 quiz|||8.4 — Kiểm tra Chương 8',
       slug: 'git-8-4-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật về viết lại lịch sử: amend chưa push và đã push, stale info, bẫy IDE tự fetch và --force-if-includes, cứu commit bị force-push đè, khoá API bị lộ, git grep thiếu -E, và bạn cùng nhóm có bản clone cũ sau filter-repo.',
+      description: 'Mười tình huống thật về viết lại lịch sử: amend chưa push và đã push, stale info, bẫy IDE tự fetch và --force-if-includes, cứu commit bị force-push đè, khoá API bị lộ, git grep thiếu -E, và bạn cùng nhóm có bản clone cũ sau filter-repo. Thêm 10 câu tiếng Anh kiểu đề FE (câu 11–20).',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Check</span>
@@ -792,6 +884,7 @@ fatal: Need to specify how to reconcile divergent branches.</code></pre>
 <li>I can list the six steps for a leaked key in order, starting with rotation.</li>
 <li>I have removed a fake <code>.env</code> from every commit with <code>git filter-repo</code> and confirmed it with <code>git log -S</code>.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-08', 17, 'Bảng tra nhanh Chương 8')}
 </div>
 <div class="ml-vi">
@@ -807,11 +900,12 @@ ${slide('git-08', 17, 'Bảng tra nhanh Chương 8')}
 <li>Tôi kể được sáu bước xử lý khoá bị lộ theo đúng thứ tự, bắt đầu bằng xoay khoá.</li>
 <li>Tôi đã gỡ một file <code>.env</code> giả khỏi mọi commit bằng <code>git filter-repo</code> và xác nhận bằng <code>git log -S</code>.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-08', 17, 'Bảng tra nhanh Chương 8')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'You fixed a typo with git commit --amend (not pushed yet). git log now shows 986cfd4 where you remember b9e574e. What happened to b9e574e?|||Bạn sửa lỗi chính tả bằng git commit --amend (chưa push). git log giờ hiện 986cfd4 chỗ bạn nhớ là b9e574e. Chuyện gì đã xảy ra với b9e574e?',
@@ -922,6 +1016,76 @@ ${slide('git-08', 17, 'Bảng tra nhanh Chương 8')}
             ],
             correctIndex: 0, points: 1,
             explanation: 'EN: Bình’s clone still contains the old commits with the key, so anything that joins it to the server puts the key back — GitHub’s guide calls this recontamination. We tried the merge: git pull --no-rebase stopped on a conflict in s3.js, and finishing it would make the old commits (723ea29 included) ancestors of whatever he pushes next. The --force-with-lease option is the tempting one, but his pull has just fetched, so the lease passes and uploads the dirty history over the clean one. Re-cloning and moving only his own commit is the safe path, and the rescue branch must be deleted afterwards: in our test it made git log -S find 723ea29 in the new clone. (GitHub’s guide also allows rebasing, not merging, branches made from the old history — slower to get right for a beginner.)|||VI: Bản clone của Bình vẫn chứa các commit cũ có khoá, nên mọi thứ nối nó với máy chủ đều đưa khoá trở lại — hướng dẫn của GitHub gọi đây là “tái nhiễm”. Kho thử đã thử merge: git pull --no-rebase dừng ở xung đột trong s3.js, và merge xong thì các commit cũ (có cả 723ea29) thành tổ tiên của mọi thứ bạn ấy push tiếp theo. Phương án --force-with-lease là cái bẫy hấp dẫn nhất: lệnh pull vừa fetch xong, nên lease đi qua và đẩy lịch sử bẩn đè lên bản đã dọn. Clone lại và chỉ chuyển commit của riêng mình là đường an toàn, và nhánh cứu hộ phải xoá ngay sau đó: trong kho thử nó vẫn khiến git log -S tìm ra 723ea29 trong bản clone mới. (Hướng dẫn của GitHub cũng cho phép rebase, không merge, các nhánh dựng từ lịch sử cũ — khó làm đúng hơn với người mới.)',
+          },
+          /* FE 11 */
+          {
+            question: 'You staged a forgotten file and run git commit --amend --no-edit on an unpushed commit. What happens?|||You staged a forgotten file and run git commit --amend --no-edit on an unpushed commit. What happens?',
+            options: ['A new commit is added on top with the same message', 'The old commit is edited in place and keeps its hash', 'The file is added and the message editor opens', 'The last commit is replaced by a new one with a new hash and the same message'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Commits are immutable: amend builds a new commit from the index and moves the branch to it, so the hash changes. --no-edit keeps the message and skips the editor.|||VI: Commit là bất biến: amend dựng một commit mới từ index và dời nhánh sang đó, nên mã băm đổi. --no-edit giữ lời nhắn và bỏ qua trình soạn thảo.',
+          },
+          /* FE 12 */
+          {
+            question: 'In git rebase -i, what is the difference between fixup and squash?|||In git rebase -i, what is the difference between fixup and squash?',
+            options: ['fixup keeps both messages; squash drops the message', 'Both meld into the previous commit; fixup discards its message, squash keeps it for editing', 'fixup moves the commit to the end; squash deletes it', 'They are aliases with identical behaviour'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Tested: after "fixup c3" and "squash c4" the combined commit kept c2 and c4 in its message, and c3’s message was gone.|||VI: Đã thử: sau "fixup c3" và "squash c4", commit gộp giữ lời nhắn c2 và c4, còn lời nhắn của c3 biến mất.',
+          },
+          /* FE 13 */
+          {
+            question: 'You want a small correction to be melded into commit 4a0bc97 automatically at the next rebase. Which pair of commands?|||You want a small correction to be melded into commit 4a0bc97 automatically at the next rebase. Which pair of commands?',
+            options: ['git commit --fixup 4a0bc97, then git rebase -i --autosquash main', 'git commit --amend 4a0bc97, then git push', 'git cherry-pick 4a0bc97, then git rebase --continue', 'git revert 4a0bc97, then git rebase -i main'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: --fixup creates a "fixup! <subject>" commit; --autosquash moves it under its target and marks it fixup. --amend only ever changes the LAST commit.|||VI: --fixup tạo một commit "fixup! <tiêu đề>"; --autosquash dời nó xuống dưới commit đích và đánh dấu fixup. --amend chỉ sửa được commit CUỐI.',
+          },
+          /* FE 14 */
+          {
+            question: 'Right after a rebase you realise it was a mistake. Which ref points to the branch tip from before the rebase?|||Right after a rebase you realise it was a mistake. Which ref points to the branch tip from before the rebase?',
+            options: ['FETCH_HEAD', 'HEAD~1', 'ORIG_HEAD', 'MERGE_HEAD'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: Rebase saves the old tip in ORIG_HEAD (tested: ORIG_HEAD equalled the old tip), so git reset --hard ORIG_HEAD undoes it. The reflog has it too. HEAD~1 is just the parent of the new tip.|||VI: Rebase lưu đầu nhánh cũ vào ORIG_HEAD (đã thử: ORIG_HEAD bằng đầu nhánh cũ), nên git reset --hard ORIG_HEAD gỡ được nó. Reflog cũng có. HEAD~1 chỉ là cha của đầu nhánh mới.',
+          },
+          /* FE 15 */
+          {
+            question: 'On an unpushed branch you run git reset --soft HEAD~3, then git commit -m "feat: search". What is the result?|||On an unpushed branch you run git reset --soft HEAD~3, then git commit -m "feat: search". What is the result?',
+            options: ['The three commits and their changes are deleted', 'The last three commits are replaced by one commit containing all their changes', 'A fourth commit is added and the three remain', 'Only the message of HEAD~3 changes'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: --soft moves the branch back but keeps index and files, so all three commits’ changes are staged (tested: three "A" files) and one commit captures them — a squash without rebase.|||VI: --soft dời nhánh lùi nhưng giữ index và file, nên thay đổi của cả ba commit đều đang staging (đã thử: ba file "A") và một commit gom tất cả — squash mà không cần rebase.',
+          },
+          /* FE 16 */
+          {
+            question: 'You use reword on the 2nd of 5 commits in git rebase -i. Which commit hashes change?|||You use reword on the 2nd of 5 commits in git rebase -i. Which commit hashes change?',
+            options: ['Only the reworded commit', 'None, because messages are not hashed', 'All five commits', 'The reworded commit and every commit after it'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: The message is hashed, and each later commit stores its parent’s hash, so the change ripples forward. The first commit keeps its hash (tested: 71495ce stayed, the other four changed).|||VI: Lời nhắn được băm, và mỗi commit sau lưu mã băm của cha, nên thay đổi lan về phía sau. Commit đầu giữ nguyên mã băm (đã thử: 71495ce giữ nguyên, bốn commit kia đổi).',
+          },
+          /* FE 17 */
+          {
+            question: 'Why does git push --force-with-lease protect a teammate’s work better than --force?|||Why does git push --force-with-lease protect a teammate’s work better than --force?',
+            options: ['It refuses if the remote branch is not where your remote-tracking ref says it was', 'It merges the remote changes before overwriting them', 'It only works on protected branches', 'It asks the teammate to confirm before overwriting'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: The lease is "origin/x must still be at the commit I last fetched". If someone pushed since, the push is rejected (stale info) instead of silently deleting their commit.|||VI: Điều kiện thuê là "origin/x vẫn phải ở đúng commit tôi fetch lần cuối". Nếu có người push sau đó, lần push bị từ chối (stale info) thay vì lặng lẽ xoá commit của họ.',
+          },
+          /* FE 18 */
+          {
+            question: 'git filter-repo prints "Refusing to destructively overwrite repo history since this does not look like a fresh clone". What is the best action?|||git filter-repo prints "Refusing to destructively overwrite repo history since this does not look like a fresh clone". What is the best action?',
+            options: ['Rerun it with --force in your daily working clone', 'Delete the .git/logs folder and rerun', 'Make a fresh clone (e.g. git clone --no-local) and run it there', 'Run git gc first, then rerun'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: The check is a safety net: a fresh clone means a mistake costs nothing. Forcing it in your working clone, or deleting the reflog to fool it, removes exactly that safety net.|||VI: Phép kiểm này là lưới an toàn: trên bản clone mới thì làm sai cũng không mất gì. Ép --force trong bản đang làm việc, hay xoá reflog để lừa nó, là gỡ chính lưới an toàn đó.',
+          },
+          /* FE 19 */
+          {
+            question: 'After git filter-repo finishes, git remote -v prints nothing. Why?|||After git filter-repo finishes, git remote -v prints nothing. Why?',
+            options: ['filter-repo failed and rolled back the remotes', 'filter-repo removes origin on purpose so rewritten history is not pushed by accident', 'Remotes are stored in the objects that were rewritten', 'The clone was shallow, so it has no remotes'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Its own output says "NOTICE: Removing origin remote". You add the remote back deliberately when you are ready to force-push the cleaned history.|||VI: Chính output của nó ghi "NOTICE: Removing origin remote". Bạn thêm lại remote một cách có chủ đích khi đã sẵn sàng force-push lịch sử đã dọn.',
+          },
+          /* FE 20 */
+          {
+            question: 'Which undo is safe on a branch that teammates have already pulled?|||Which undo is safe on a branch that teammates have already pulled?',
+            options: ['git revert <commit>', 'git commit --amend', 'git rebase -i', 'git reset --hard HEAD~1, then git push --force'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: revert adds a new commit and rewrites nothing, so everyone can pull it normally. The other three rewrite shared history.|||VI: revert thêm một commit mới và không viết lại gì, nên mọi người pull bình thường. Ba cách còn lại đều viết lại lịch sử chung.',
           },
         ],
       },

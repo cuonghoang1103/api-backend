@@ -5,6 +5,7 @@
  * Khối .out đóng bằng </div> (KHÔNG </code></pre>). KHÔNG dùng <svg>.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
 
@@ -912,13 +913,137 @@ To ../thu-git-server.git
 `,
     },
 
+    /* ─────────────────────────── Mốc dự án 13 (dự án xuyên suốt khoá) ─────────────────────────── */
+    baiMoc(13, {
+      demoEn: `
+<p>A fresh repository <code>shop</code> in <code>/tmp/git-moc-13</code>. The hooks live in a normal folder <code>.githooks/</code> that is committed like any other file — that is what makes them shareable.</p>
+<pre><code class="language-bash">git init -q -b main shop &amp;&amp; cd shop
+mkdir .githooks</code></pre>
+<p><code>.githooks/pre-commit</code> — refuses a staged <code>.env</code> and any added line that looks like a key (the demo looks for the fake marker <code>FAKE-DEMO-TOKEN</code> and the AWS key shape). It skips <code>.githooks/</code> itself: in the first run of this demo the hook blocked its own commit because its own pattern matched — a real trap worth knowing.</p>
+<pre><code class="language-bash">#!/bin/sh
+# Chặn .env và chuỗi trông như khoá trong phần đã staging
+bad=$(git diff --cached --name-only --diff-filter=ACM | grep -E '(^|/)\\.env$')
+if [ -n "$bad" ]; then
+  echo "pre-commit: refusing to commit $bad (use .env.example)" &gt;&amp;2
+  exit 1
+fi
+if git diff --cached -U0 -- . ':!.githooks' | grep -nE '^\\+.*(FAKE-DEMO-TOKEN|AKIA[0-9A-Z]{16})' &gt;/dev/null; then
+  echo "pre-commit: staged change looks like a secret" &gt;&amp;2
+  exit 1
+fi</code></pre>
+<p><code>.githooks/commit-msg</code> — Git passes the path of the message file as <code>$1</code>; the hook reads the first line and rejects anything that is not <code>type(scope): summary</code>.</p>
+<pre><code class="language-bash">#!/bin/sh
+subject=$(head -n1 "$1")
+if ! echo "$subject" | grep -qE '^(feat|fix|docs|chore|refactor|test|ci|style|perf)(\\([a-z0-9-]+\\))?!?: .{1,72}$'; then
+  echo "commit-msg: \\"$subject\\" is not Conventional Commits (type(scope): summary)" &gt;&amp;2
+  exit 1
+fi</code></pre>
+<p>Make them executable and point Git at the folder. Each member runs the same <code>git config core.hooksPath .githooks</code> once after cloning — put that line in CONTRIBUTING.md.</p>
+<pre><code class="language-bash">chmod +x .githooks/pre-commit .githooks/commit-msg
+git config core.hooksPath .githooks</code></pre>
+<p>Now the three mistakes. A staged <code>.env</code>, a message "update stuff", and a fake token in a config file — each refused before a commit object exists. Only the clean commits make it into the log.</p>
+<pre><code class="language-bash">echo "DB_PASS=FAKE-DEMO-TOKEN-0000" &gt; .env &amp;&amp; git add .env &amp;&amp; git commit -m "chore: add env"
+git rm -q --cached .env &amp;&amp; echo ".env" &gt; .gitignore &amp;&amp; echo "DB_PASS=" &gt; .env.example
+git add .gitignore .env.example .githooks &amp;&amp; git commit -m "update stuff"
+git commit -q -m "chore: add shared hooks, ignore .env" &amp;&amp; git log --oneline
+echo "API_URL=http://localhost:8080" &gt;&gt; .env.example &amp;&amp; echo "PAY_TOKEN=FAKE-DEMO-TOKEN-0000" &gt; config.txt &amp;&amp; git add . &amp;&amp; git commit -m "feat: add config"
+git restore --staged config.txt &amp;&amp; rm config.txt &amp;&amp; git commit -q -m "feat(config): add API_URL example" &amp;&amp; git log --oneline</code></pre>
+<div class="out">pre-commit: refusing to commit .env (use .env.example)
+commit-msg: "update stuff" is not Conventional Commits (type(scope): summary)
+738642f chore: add shared hooks, ignore .env
+pre-commit: staged change looks like a secret
+52e173f feat(config): add API_URL example
+738642f chore: add shared hooks, ignore .env</div>
+<p>Signing with SSH. The key here is a THROW-AWAY key generated only for this demo (and deleted afterwards). On your machine use your real key, and add its <code>.pub</code> on GitHub a second time as a <strong>Signing key</strong> — that step happens on github.com and has no terminal output. <code>allowedSignersFile</code> is what lets Git itself say "Good" locally.</p>
+<pre><code class="language-bash">ssh-keygen -q -t ed25519 -N "" -C "an@example.com" -f /tmp/git-moc-13/demo_signing_key
+git config gpg.format ssh &amp;&amp; git config user.signingkey /tmp/git-moc-13/demo_signing_key.pub &amp;&amp; git config commit.gpgsign true
+echo "an@example.com $(cat /tmp/git-moc-13/demo_signing_key.pub)" &gt; /tmp/git-moc-13/allowed_signers &amp;&amp; git config gpg.ssh.allowedSignersFile /tmp/git-moc-13/allowed_signers
+echo "# Shop" &gt; README.md &amp;&amp; git add README.md &amp;&amp; git commit -q -m "docs: add README"</code></pre>
+<p><code>%G?</code> prints <code>G</code> for the signed commit and <code>N</code> for the two made before signing was turned on. The key fingerprint printed by Git was replaced here by <code>SHA256:&lt;fingerprint&gt;</code> — the rest is the real output.</p>
+<pre><code class="language-bash">git log --format="%h %G? %an %s"
+git log -1 --show-signature</code></pre>
+<div class="out">1d7f184 G An Nguyen docs: add README
+52e173f N An Nguyen feat(config): add API_URL example
+738642f N An Nguyen chore: add shared hooks, ignore .env
+commit 1d7f18460560233d23f8d5eab063c7f6a50bc4ea
+Good "git" signature for an@example.com with ED25519 key SHA256:&lt;fingerprint&gt;
+Author: An Nguyen &lt;an@example.com&gt;
+Date:   Sat Nov 21 16:49:26 2026 +0700
+
+    docs: add README</div>
+<p>And the reason the milestone also asks for CI or a ruleset: anyone can skip client-side hooks with <code>--no-verify</code>. The "wip lol" commit went straight in. Only a check that runs where the push lands (Actions as a required check, a ruleset) can stop it reaching <code>main</code>.</p>
+<pre><code class="language-bash">git commit --no-verify --allow-empty -q -m "wip lol" &amp;&amp; git log --oneline -1</code></pre>
+<div class="out">f8773b2 wip lol</div>
+`,
+      demoVi: `
+<p>Một repo mới <code>shop</code> trong <code>/tmp/git-moc-13</code>. Hook nằm trong một thư mục bình thường <code>.githooks/</code> được commit như mọi file khác — chính điều đó làm chúng chia sẻ được cho cả nhóm.</p>
+<pre><code class="language-bash">git init -q -b main shop &amp;&amp; cd shop
+mkdir .githooks</code></pre>
+<p><code>.githooks/pre-commit</code> — từ chối <code>.env</code> đã staging và mọi dòng thêm vào trông giống khoá (bản demo tìm dấu giả <code>FAKE-DEMO-TOKEN</code> và hình dạng khoá AWS). Nó bỏ qua chính <code>.githooks/</code>: ở lần chạy đầu của demo này, hook chặn luôn commit của chính nó vì mẫu tìm kiếm của nó khớp với chính nó — một cái bẫy thật đáng biết.</p>
+<pre><code class="language-bash">#!/bin/sh
+# Chặn .env và chuỗi trông như khoá trong phần đã staging
+bad=$(git diff --cached --name-only --diff-filter=ACM | grep -E '(^|/)\\.env$')
+if [ -n "$bad" ]; then
+  echo "pre-commit: refusing to commit $bad (use .env.example)" &gt;&amp;2
+  exit 1
+fi
+if git diff --cached -U0 -- . ':!.githooks' | grep -nE '^\\+.*(FAKE-DEMO-TOKEN|AKIA[0-9A-Z]{16})' &gt;/dev/null; then
+  echo "pre-commit: staged change looks like a secret" &gt;&amp;2
+  exit 1
+fi</code></pre>
+<p><code>.githooks/commit-msg</code> — Git truyền đường dẫn file lời nhắn vào <code>$1</code>; hook đọc dòng đầu và từ chối mọi thứ không có dạng <code>type(scope): tóm tắt</code>.</p>
+<pre><code class="language-bash">#!/bin/sh
+subject=$(head -n1 "$1")
+if ! echo "$subject" | grep -qE '^(feat|fix|docs|chore|refactor|test|ci|style|perf)(\\([a-z0-9-]+\\))?!?: .{1,72}$'; then
+  echo "commit-msg: \\"$subject\\" is not Conventional Commits (type(scope): summary)" &gt;&amp;2
+  exit 1
+fi</code></pre>
+<p>Cho chúng quyền chạy và trỏ Git vào thư mục đó. Mỗi thành viên chạy đúng lệnh <code>git config core.hooksPath .githooks</code> một lần sau khi clone — ghi dòng đó vào CONTRIBUTING.md.</p>
+<pre><code class="language-bash">chmod +x .githooks/pre-commit .githooks/commit-msg
+git config core.hooksPath .githooks</code></pre>
+<p>Giờ là ba lỗi. Một <code>.env</code> đã staging, một lời nhắn "update stuff", và một token giả trong file cấu hình — cái nào cũng bị từ chối trước khi đối tượng commit kịp tồn tại. Chỉ các commit sạch mới vào được log.</p>
+<pre><code class="language-bash">echo "DB_PASS=FAKE-DEMO-TOKEN-0000" &gt; .env &amp;&amp; git add .env &amp;&amp; git commit -m "chore: add env"
+git rm -q --cached .env &amp;&amp; echo ".env" &gt; .gitignore &amp;&amp; echo "DB_PASS=" &gt; .env.example
+git add .gitignore .env.example .githooks &amp;&amp; git commit -m "update stuff"
+git commit -q -m "chore: add shared hooks, ignore .env" &amp;&amp; git log --oneline
+echo "API_URL=http://localhost:8080" &gt;&gt; .env.example &amp;&amp; echo "PAY_TOKEN=FAKE-DEMO-TOKEN-0000" &gt; config.txt &amp;&amp; git add . &amp;&amp; git commit -m "feat: add config"
+git restore --staged config.txt &amp;&amp; rm config.txt &amp;&amp; git commit -q -m "feat(config): add API_URL example" &amp;&amp; git log --oneline</code></pre>
+<div class="out">pre-commit: refusing to commit .env (use .env.example)
+commit-msg: "update stuff" is not Conventional Commits (type(scope): summary)
+738642f chore: add shared hooks, ignore .env
+pre-commit: staged change looks like a secret
+52e173f feat(config): add API_URL example
+738642f chore: add shared hooks, ignore .env</div>
+<p>Ký bằng SSH. Khoá ở đây là khoá DÙNG MỘT LẦN sinh ra chỉ cho demo này (và đã xoá sau đó). Trên máy bạn hãy dùng khoá thật, và thêm file <code>.pub</code> của nó lên GitHub lần thứ hai với loại <strong>Signing key</strong> (khoá ký) — bước đó làm trên github.com, không có output terminal. <code>allowedSignersFile</code> (file người ký được phép) là thứ giúp chính Git nói "Good" ở máy.</p>
+<pre><code class="language-bash">ssh-keygen -q -t ed25519 -N "" -C "an@example.com" -f /tmp/git-moc-13/demo_signing_key
+git config gpg.format ssh &amp;&amp; git config user.signingkey /tmp/git-moc-13/demo_signing_key.pub &amp;&amp; git config commit.gpgsign true
+echo "an@example.com $(cat /tmp/git-moc-13/demo_signing_key.pub)" &gt; /tmp/git-moc-13/allowed_signers &amp;&amp; git config gpg.ssh.allowedSignersFile /tmp/git-moc-13/allowed_signers
+echo "# Shop" &gt; README.md &amp;&amp; git add README.md &amp;&amp; git commit -q -m "docs: add README"</code></pre>
+<p><code>%G?</code> in <code>G</code> cho commit đã ký và <code>N</code> cho hai commit làm trước khi bật ký. Vân tay khoá Git in ra đã được thay bằng <code>SHA256:&lt;fingerprint&gt;</code> ở đây — phần còn lại là output thật.</p>
+<pre><code class="language-bash">git log --format="%h %G? %an %s"
+git log -1 --show-signature</code></pre>
+<div class="out">1d7f184 G An Nguyen docs: add README
+52e173f N An Nguyen feat(config): add API_URL example
+738642f N An Nguyen chore: add shared hooks, ignore .env
+commit 1d7f18460560233d23f8d5eab063c7f6a50bc4ea
+Good "git" signature for an@example.com with ED25519 key SHA256:&lt;fingerprint&gt;
+Author: An Nguyen &lt;an@example.com&gt;
+Date:   Sat Nov 21 16:49:26 2026 +0700
+
+    docs: add README</div>
+<p>Và lý do mốc này còn đòi CI hoặc ruleset: ai cũng bỏ qua được hook phía máy khách bằng <code>--no-verify</code>. Commit "wip lol" lọt thẳng vào. Chỉ một phép kiểm chạy ở nơi lần push hạ cánh (Actions là kiểm tra bắt buộc, ruleset) mới chặn được nó tới <code>main</code>.</p>
+<pre><code class="language-bash">git commit --no-verify --allow-empty -q -m "wip lol" &amp;&amp; git log --oneline -1</code></pre>
+<div class="out">f8773b2 wip lol</div>
+`,
+    }),
+
     /* ─────────────────────────── 12.4 Quiz (slug cũ git-12-3-quiz) ─────────────────────────── */
     {
       title: '12.4 — Chapter 12 quiz|||12.4 — Kiểm tra Chương 12',
       slug: 'git-12-3-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật: hook bị bỏ qua vì thiếu chmod +x, bản clone mới không có hook, lint-staged, commitlint, --no-verify và CI, pre-receive trên máy chủ, ruleset trên github.com, %G? ra U, khoá Signing và vigilant mode.',
+      description: 'Mười tình huống thật: hook bị bỏ qua vì thiếu chmod +x, bản clone mới không có hook, lint-staged, commitlint, --no-verify và CI, pre-receive trên máy chủ, ruleset trên github.com, %G? ra U, khoá Signing và vigilant mode. Thêm 10 câu tiếng Anh kiểu đề FE (câu 11–20) về Chương 12.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Check</span>
@@ -933,6 +1058,7 @@ To ../thu-git-server.git
 <li>I sign commits with an SSH key and can read <code>%G?</code>: G, U, N, B.</li>
 <li>I know why GitHub needs my key a second time as a Signing Key, and what vigilant mode changes.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-12', 17, 'Bảng tra nhanh Chương 12')}
 </div>
 <div class="ml-vi">
@@ -948,11 +1074,12 @@ ${slide('git-12', 17, 'Bảng tra nhanh Chương 12')}
 <li>Tôi ký commit bằng khoá SSH và đọc được <code>%G?</code>: G, U, N, B.</li>
 <li>Tôi biết vì sao GitHub cần khoá của tôi lần thứ hai với loại Signing Key, và vigilant mode thay đổi điều gì.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-12', 17, 'Bảng tra nhanh Chương 12')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'Minh wrote .git/hooks/pre-commit to block conflict markers, yet a file with <<<<<<< was committed. The only extra line Git printed was a hint saying the hook "was ignored because it’s not set as executable". What fixes it?|||Minh viết .git/hooks/pre-commit để chặn ký hiệu xung đột, thế mà một file có <<<<<<< vẫn được commit. Dòng duy nhất Git in thêm là một dòng hint nói hook "was ignored because it’s not set as executable". Sửa bằng gì?',
@@ -1063,6 +1190,116 @@ ${slide('git-12', 17, 'Bảng tra nhanh Chương 12')}
             ],
             correctIndex: 3, points: 1,
             explanation: 'EN: Vigilant mode exists precisely to stop an unsigned commit looking like an honest one: with it on, commits with your identity that are not signed show Unverified. That is why GitHub advises enabling it only if you sign everything, from every machine. "No badge" is the behaviour with vigilant mode off. Partially verified is a different case — a valid signature on a commit whose other author has vigilant mode on — and pushing with your credentials says nothing about who created the commit.|||VI: Vigilant mode sinh ra đúng để một commit không ký thôi trông giống một commit trung thực: bật lên thì commit mang danh tính của bạn mà không ký sẽ hiện Unverified. Vì thế GitHub khuyên chỉ bật khi bạn ký mọi thứ, từ mọi máy. "Không có huy hiệu" là hành vi khi TẮT vigilant mode. Partially verified là trường hợp khác — chữ ký hợp lệ trên một commit mà tác giả còn lại đang bật vigilant — còn push bằng tài khoản của bạn chẳng nói gì về việc ai đã tạo ra commit.',
+          },
+          {
+            question: 'You run git commit --no-verify -m "feat: quick fix". Which client-side hooks are skipped?|||You run git commit --no-verify -m "feat: quick fix". Which client-side hooks are skipped?',
+            options: [
+              'Only pre-commit',
+              'pre-commit and commit-msg',
+              'Every hook, including prepare-commit-msg and post-commit',
+              'None of them; --no-verify only skips commit signing',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: --no-verify bypasses exactly pre-commit and commit-msg. In a real run with all four hooks installed, prepare-commit-msg and post-commit still printed their messages. That is why a message rule enforced only by commit-msg is as easy to skip as a lint rule in pre-commit.|||VI: --no-verify bỏ qua đúng hai hook pre-commit và commit-msg. Chạy thật với cả bốn hook được cài, prepare-commit-msg và post-commit vẫn in thông báo. Vì vậy một luật lời nhắn chỉ dựa vào commit-msg cũng dễ lách như luật lint trong pre-commit.',
+          },
+          {
+            question: 'Inside a commit-msg hook, what does Git pass as the first argument ($1)?|||Inside a commit-msg hook, what does Git pass as the first argument ($1)?',
+            options: [
+              'The proposed message text itself',
+              'The hash of the commit that is about to be created',
+              'The path of a file holding the proposed message, such as .git/COMMIT_EDITMSG',
+              'The name of the branch being committed to',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: The hook gets a file path (a real run printed arg=.git/COMMIT_EDITMSG) so it can read the message and even rewrite it. There is no commit hash yet — the commit object does not exist until the hook says yes.|||VI: Hook nhận một đường dẫn file (chạy thật in ra arg=.git/COMMIT_EDITMSG) để đọc lời nhắn, thậm chí sửa nó. Lúc đó chưa có mã băm commit — đối tượng commit chỉ ra đời sau khi hook đồng ý.',
+          },
+          {
+            question: 'A pre-commit hook prints "warning: console.log found" to stderr and then ends with exit 0. What happens to the commit?|||A pre-commit hook prints "warning: console.log found" to stderr and then ends with exit 0. What happens to the commit?',
+            options: [
+              'It is created: only a non-zero exit status aborts the commit',
+              'It is aborted, because the hook wrote to stderr',
+              'Git pauses and asks the user to confirm with y/n',
+              'It is created but marked as unverified in git log',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Git looks only at the exit status. Printing a warning is just text; a real run with exit 0 produced the commit anyway. To block, the hook must exit with a non-zero code.|||VI: Git chỉ nhìn mã thoát. In cảnh báo chỉ là chữ; chạy thật với exit 0 thì commit vẫn được tạo. Muốn chặn, hook phải thoát với mã khác 0.',
+          },
+          {
+            question: 'A pre-receive hook on the server reads its standard input. What does each line contain?|||A pre-receive hook on the server reads its standard input. What does each line contain?',
+            options: [
+              'The full diff of every pushed commit',
+              'The list of file names changed by the push',
+              'The message of each pushed commit',
+              '<old-sha> <new-sha> <refname> for every ref being updated',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: One line per ref: old value, new value, ref name. A real push of a new branch printed old=0000000000000000000000000000000000000000 (forty zeros = the ref did not exist yet). The hook then runs git commands on those ranges itself.|||VI: Mỗi ref một dòng: giá trị cũ, giá trị mới, tên ref. Một lần push nhánh mới chạy thật in ra old=0000000000000000000000000000000000000000 (bốn mươi số 0 = ref chưa tồn tại). Hook tự chạy lệnh git trên các khoảng đó.',
+          },
+          {
+            question: 'You signed a commit with an SSH key, but gpg.ssh.allowedSignersFile is not configured. What does git log --format="%G?" show for it?|||You signed a commit with an SSH key, but gpg.ssh.allowedSignersFile is not configured. What does git log --format="%G?" show for it?',
+            options: [
+              'N, together with an error that allowedSignersFile needs to be configured',
+              'G, because the signature itself is valid',
+              'U, because the key is unknown to GitHub',
+              'B, because the signature is considered bad',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Real run: Git printed "error: gpg.ssh.allowedSignersFile needs to be configured and exist for ssh signature verification" and %G? gave N. Without that file Git cannot check SSH signatures at all. After adding "email key" lines to the file, the same commit showed G.|||VI: Chạy thật: Git in "error: gpg.ssh.allowedSignersFile needs to be configured and exist for ssh signature verification" và %G? ra N. Thiếu file đó Git không kiểm được chữ ký SSH nào. Thêm dòng "email khoá" vào file thì chính commit đó hiện G.',
+          },
+          {
+            question: 'Which configuration makes Git sign every new commit automatically with your SSH key?|||Which configuration makes Git sign every new commit automatically with your SSH key?',
+            options: [
+              'gpg.format=ssh alone',
+              'gpg.format=ssh, user.signingkey=<path to .pub>, commit.gpgsign=true',
+              'commit.verify=true and push.signed=true',
+              'user.signingkey=<path to .pub> alone',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: You need all three: the format (ssh instead of openpgp), which key to use, and commit.gpgsign=true to sign without typing -S. commit.verify does not exist; push.signed is about signed pushes, a different feature.|||VI: Cần đủ ba: định dạng (ssh thay cho openpgp), dùng khoá nào, và commit.gpgsign=true để ký mà không phải gõ -S. commit.verify không tồn tại; push.signed là chuyện push có ký, một tính năng khác.',
+          },
+          {
+            question: 'For a release you want a signed annotated tag, and your teammate wants to verify it. Which pair of commands is correct?|||For a release you want a signed annotated tag, and your teammate wants to verify it. Which pair of commands is correct?',
+            options: [
+              'git tag -a v1.0.0 -m "v1.0.0" and git tag -l v1.0.0',
+              'git tag -f v1.0.0 and git show --verify v1.0.0',
+              'git tag -s v1.0.0 -m "v1.0.0" and git tag -v v1.0.0',
+              'git commit -S -m "v1.0.0" and git verify-commit v1.0.0',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: -s creates an annotated tag carrying a signature (git cat-file -t prints "tag"); git tag -v prints the tag object and "Good ... signature". -a alone is annotated but unsigned, and -l only lists names.|||VI: -s tạo tag có chú thích kèm chữ ký (git cat-file -t in "tag"); git tag -v in nội dung đối tượng tag và "Good ... signature". -a đơn thuần có chú thích nhưng không ký, còn -l chỉ liệt kê tên.',
+          },
+          {
+            question: 'Three signed commits are on your branch. With commit.gpgsign unset, you run git rebase -i and reword the oldest one. What does %G? show for the three commits afterwards?|||Three signed commits are on your branch. With commit.gpgsign unset, you run git rebase -i and reword the oldest one. What does %G? show for the three commits afterwards?',
+            options: [
+              'G for all three, because signatures are copied',
+              'G for the two you did not touch, N for the reworded one',
+              'B for all three, because their content changed',
+              'N for all three, because rebase created new, unsigned commits',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Rewording the oldest commit forces new commits for it and every commit after it, and a signature belongs to one exact commit object, so nothing is copied. A real forced rebase turned G G into N N. Set commit.gpgsign=true (or pass -S) before rewriting signed history.|||VI: Sửa lời nhắn commit cũ nhất buộc tạo commit mới cho nó và mọi commit sau nó, mà chữ ký gắn với đúng một đối tượng commit nên không được chép sang. Rebase thật biến G G thành N N. Đặt commit.gpgsign=true (hoặc thêm -S) trước khi viết lại lịch sử đã ký.',
+          },
+          {
+            question: 'Can a Git hook be written in Python instead of shell?|||Can a Git hook be written in Python instead of shell?',
+            options: [
+              'Yes: any executable file with the hook’s name works, e.g. with #!/usr/bin/env python3',
+              'No: Git only runs hooks written in POSIX sh',
+              'Only on Windows, where Git for Windows bundles Python',
+              'Only after registering the interpreter in .git/config',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Git just executes the file. A real pre-commit written in Python that called sys.exit(1) blocked the commit and its message was shown. What matters is the executable bit and a correct shebang — and that every teammate has that interpreter.|||VI: Git chỉ việc chạy file đó. Một pre-commit thật viết bằng Python gọi sys.exit(1) đã chặn commit và thông báo của nó được in ra. Điều quan trọng là quyền chạy và dòng shebang đúng — và mọi bạn cùng nhóm đều có trình thông dịch đó.',
+          },
+          {
+            question: 'Your SWP391 repository is on github.com. You want a rule enforced on the server: no conflict markers may reach main. What is the realistic setup?|||Your SWP391 repository is on github.com. You want a rule enforced on the server: no conflict markers may reach main. What is the realistic setup?',
+            options: [
+              'Upload a pre-receive hook under Settings → Hooks',
+              'Commit .githooks/pre-receive so GitHub runs it',
+              'Ask every member to set core.hooksPath',
+              'A GitHub Actions check made a required status check on main',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: github.com does not run custom server hooks — custom pre-receive hooks exist only on GitHub Enterprise Server (lesson 12.3). Settings → Hooks is for webhooks, and core.hooksPath is client-side and skippable. A CI job that fails on markers, required by a ruleset, is the server-side equivalent.|||VI: github.com không chạy hook máy chủ tự viết — pre-receive tự viết chỉ có trên GitHub Enterprise Server (bài 12.3). Settings → Hooks là webhook, còn core.hooksPath chạy phía máy khách và lách được. Một job CI báo đỏ khi gặp dấu xung đột, được ruleset đặt bắt buộc, chính là bản tương đương phía máy chủ.',
           },
         ],
       },

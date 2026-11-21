@@ -6,6 +6,7 @@
  * LUẬT: backtick → &#96;; ${ trong mã mẫu → \${; < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 export default {
   title: 'Chapter 18 — Real team accidents: build folders, conflicts, bad merges and the rescue|||Chương 18 — Tai nạn Git thật của nhóm: thư mục build, xung đột, merge hỏng và cách cứu',
@@ -2745,13 +2746,101 @@ echo "Lab o: $LAB   (cd vao an, binh, chi)   Xoa: rm -rf $LAB"</code></pre>
 `,
     },
 
+    /* ─────────────────────────── Mốc dự án 18 (dự án xuyên suốt khoá) ─────────────────────────── */
+    baiMoc(18, {
+      demoEn: `
+<p><code>/tmp/git-moc-18/origin.git</code> is the team’s real remote (one commit, identity An Nguyen). The drill must not hurt it, so we mirror it to <code>drill-origin.git</code> and work in a clone of the MIRROR — pushes land on the copy.</p>
+<pre><code class="language-bash">git clone -q --mirror origin.git drill-origin.git &amp;&amp; git clone -q drill-origin.git drill &amp;&amp; cd drill</code></pre>
+<p><strong>Accident 1 — <code>build/</code> committed.</strong> Untrack it (the files stay on disk), ignore it, and prove the rule with <code>check-ignore -v</code>. The ignore line IS the prevention that the postmortem links to.</p>
+<pre><code class="language-bash">mkdir -p build/classes &amp;&amp; echo bin &gt; build/classes/Home.class &amp;&amp; git add . &amp;&amp; git commit -q -m "feat: add search" &amp;&amp; git show --stat --format="%h %s" HEAD
+git rm -r -q --cached build &amp;&amp; echo "build/" &gt;&gt; .gitignore &amp;&amp; git add .gitignore &amp;&amp; git commit -q -m "chore: stop tracking build/, ignore it"
+git ls-files &amp;&amp; git check-ignore -v build/classes/Home.class</code></pre>
+<div class="out">2fd44ea feat: add search
+
+ build/classes/Home.class | 1 +
+ 1 file changed, 1 insertion(+)
+.gitignore
+src/java/Home.java
+web.xml
+.gitignore:1:build/	build/classes/Home.class</div>
+<p><strong>Accident 2 — a broken merge already pushed.</strong> Shared history is never reset: <code>revert -m 1</code> makes a new commit that undoes the merge (parent 1 = main’s side).</p>
+<pre><code class="language-bash">git switch -q -c feat/report &amp;&amp; echo "&lt;servlet&gt;broken&lt;/servlet&gt;" &gt; web.xml &amp;&amp; git commit -qam "feat(report): add report servlet" &amp;&amp; git switch -q main
+git merge -q --no-ff -m "Merge branch feat/report" feat/report &amp;&amp; git push -q origin main
+git revert -m 1 --no-edit HEAD &amp;&amp; git push -q origin main &amp;&amp; git log --oneline -4</code></pre>
+<div class="out">[main d9453ce] Revert "Merge branch feat/report"
+ Date: Sat Nov 21 16:49:25 2026 +0700
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+d9453ce Revert "Merge branch feat/report"
+c44e4ad Merge branch feat/report
+4209d53 chore: stop tracking build/, ignore it
+d843e76 feat(report): add report servlet</div>
+<p>The trap from lesson 18.6: merging the branch again says "Already up to date" because its commits are already in history. To re-land the work later, revert the revert — Git 2.51 names that commit "Reapply".</p>
+<pre><code class="language-bash">cat web.xml &amp;&amp; git merge feat/report
+git revert --no-edit HEAD &amp;&amp; cat web.xml &amp;&amp; git log --oneline -3</code></pre>
+<div class="out">&lt;web-app/&gt;
+Already up to date.
+[main 3b9aad2] Reapply "Merge branch feat/report"
+ Date: Sat Nov 21 16:49:25 2026 +0700
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+&lt;servlet&gt;broken&lt;/servlet&gt;
+3b9aad2 Reapply "Merge branch feat/report"
+d9453ce Revert "Merge branch feat/report"
+c44e4ad Merge branch feat/report</div>
+<p>And the real remote never moved — the whole drill happened on the copy. In POSTMORTEM.md write the timeline, these commands with YOUR output, the root cause as a process gap ("PRs could be merged without CI"), and link the prevention (ignore rule, ruleset with required check).</p>
+<pre><code class="language-bash">git -C /tmp/git-moc-18/origin.git log --oneline main</code></pre>
+<div class="out">97f8ded feat: home page</div>
+`,
+      demoVi: `
+<p><code>/tmp/git-moc-18/origin.git</code> là remote thật của nhóm (một commit, danh tính An Nguyen). Buổi diễn tập không được làm hại nó, nên ta mirror nó sang <code>drill-origin.git</code> và làm việc trong một bản clone của BẢN MIRROR — mọi lần push đều rơi vào bản sao.</p>
+<pre><code class="language-bash">git clone -q --mirror origin.git drill-origin.git &amp;&amp; git clone -q drill-origin.git drill &amp;&amp; cd drill</code></pre>
+<p><strong>Tai nạn 1 — lỡ commit <code>build/</code>.</strong> Gỡ theo dõi (file vẫn ở trên đĩa), thêm vào ignore, và chứng minh luật bằng <code>check-ignore -v</code>. Chính dòng ignore đó là cách phòng mà bản hậu kiểm dẫn link tới.</p>
+<pre><code class="language-bash">mkdir -p build/classes &amp;&amp; echo bin &gt; build/classes/Home.class &amp;&amp; git add . &amp;&amp; git commit -q -m "feat: add search" &amp;&amp; git show --stat --format="%h %s" HEAD
+git rm -r -q --cached build &amp;&amp; echo "build/" &gt;&gt; .gitignore &amp;&amp; git add .gitignore &amp;&amp; git commit -q -m "chore: stop tracking build/, ignore it"
+git ls-files &amp;&amp; git check-ignore -v build/classes/Home.class</code></pre>
+<div class="out">2fd44ea feat: add search
+
+ build/classes/Home.class | 1 +
+ 1 file changed, 1 insertion(+)
+.gitignore
+src/java/Home.java
+web.xml
+.gitignore:1:build/	build/classes/Home.class</div>
+<p><strong>Tai nạn 2 — một merge hỏng đã push.</strong> Lịch sử chung không bao giờ bị reset: <code>revert -m 1</code> tạo commit mới hoàn tác lần merge (cha 1 = phía main).</p>
+<pre><code class="language-bash">git switch -q -c feat/report &amp;&amp; echo "&lt;servlet&gt;broken&lt;/servlet&gt;" &gt; web.xml &amp;&amp; git commit -qam "feat(report): add report servlet" &amp;&amp; git switch -q main
+git merge -q --no-ff -m "Merge branch feat/report" feat/report &amp;&amp; git push -q origin main
+git revert -m 1 --no-edit HEAD &amp;&amp; git push -q origin main &amp;&amp; git log --oneline -4</code></pre>
+<div class="out">[main d9453ce] Revert "Merge branch feat/report"
+ Date: Sat Nov 21 16:49:25 2026 +0700
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+d9453ce Revert "Merge branch feat/report"
+c44e4ad Merge branch feat/report
+4209d53 chore: stop tracking build/, ignore it
+d843e76 feat(report): add report servlet</div>
+<p>Cái bẫy của bài 18.6: merge lại nhánh báo "Already up to date" vì commit của nó đã nằm trong lịch sử. Muốn đưa việc đó lại sau này thì revert cái revert — Git 2.51 đặt tên commit đó là "Reapply".</p>
+<pre><code class="language-bash">cat web.xml &amp;&amp; git merge feat/report
+git revert --no-edit HEAD &amp;&amp; cat web.xml &amp;&amp; git log --oneline -3</code></pre>
+<div class="out">&lt;web-app/&gt;
+Already up to date.
+[main 3b9aad2] Reapply "Merge branch feat/report"
+ Date: Sat Nov 21 16:49:25 2026 +0700
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+&lt;servlet&gt;broken&lt;/servlet&gt;
+3b9aad2 Reapply "Merge branch feat/report"
+d9453ce Revert "Merge branch feat/report"
+c44e4ad Merge branch feat/report</div>
+<p>Và remote thật không hề nhúc nhích — cả buổi diễn tập diễn ra trên bản sao. Trong POSTMORTEM.md hãy viết dòng thời gian, các lệnh này với output CỦA BẠN, nguyên nhân gốc dưới dạng lỗ hổng quy trình ("PR merge được mà không cần CI"), và dẫn link cách phòng (luật ignore, ruleset có kiểm tra bắt buộc).</p>
+<pre><code class="language-bash">git -C /tmp/git-moc-18/origin.git log --oneline main</code></pre>
+<div class="out">97f8ded feat: home page</div>
+`,
+    }),
+
     /* ─────────────────────────── 18.8 ─────────────────────────── */
     {
       title: '18.8 — Chapter 18 quiz|||18.8 — Kiểm tra Chương 18',
       slug: 'git-18-8-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười câu tình huống về bảy tai nạn của nhóm: build/ lọt vào kho, xung đột web.xml, ba thông báo đồng bộ, làm nhầm trên main, tự merge không review, hoàn tác merge.',
+      description: 'Mười câu tình huống về bảy tai nạn của nhóm: build/ lọt vào kho, xung đột web.xml, ba thông báo đồng bộ, làm nhầm trên main, tự merge không review, hoàn tác merge. Thêm 10 câu tiếng Anh kiểu đề FE (câu 11–20) về Chương 18.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 18 · Quiz</span>
@@ -2766,6 +2855,7 @@ echo "Lab o: $LAB   (cd vao an, binh, chi)   Xoa: rm -rf $LAB"</code></pre>
 <li>I can choose between <code>reset</code> and <code>revert</code> by asking whether the commit has left my laptop.</li>
 <li>I know why re-merging a branch after <code>revert -m 1</code> says "Already up to date".</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-18', 16, 'Bảng tra nhanh Chương 18')}
 </div>
 <div class="ml-vi">
@@ -2781,11 +2871,12 @@ ${slide('git-18', 16, 'Bảng tra nhanh Chương 18')}
 <li>Tôi chọn được giữa <code>reset</code> và <code>revert</code> bằng cách hỏi commit đã rời laptop chưa.</li>
 <li>Tôi biết vì sao merge lại một nhánh sau <code>revert -m 1</code> báo "Already up to date".</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-18', 16, 'Bảng tra nhanh Chương 18')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'Bình runs git pull and Git lists build/…/HomeServlet.class and dist/QuanLyPhongKham.war as "local changes … would be overwritten". An committed them last week with git add . after a NetBeans build. What is the right repair?|||Bình chạy git pull và Git liệt kê build/…/HomeServlet.class và dist/QuanLyPhongKham.war là "local changes … would be overwritten". An đã commit chúng tuần trước bằng git add . sau một lần build NetBeans. Cách sửa đúng là gì?',
@@ -2906,6 +2997,116 @@ ${slide('git-18', 16, 'Bảng tra nhanh Chương 18')}
             correctIndex: 2,
             points: 1,
             explanation: 'Git merges only commits that are not yet ancestors. The original merge made them ancestors, and the revert is just another commit on top, so re-merging does nothing; merging a fixed branch without undoing the revert gives a confusing conflict instead. Reverting the revert restores the merged content, after which merging the fixed branch applies only the fix. Nothing is lost (A), caching is irrelevant (B), and git merge has no --force (D).|||Git chỉ merge các commit chưa là tổ tiên. Lần merge gốc đã biến chúng thành tổ tiên, và revert chỉ là một commit nữa nằm trên, nên merge lại không làm gì; merge nhánh đã sửa mà không huỷ revert thì cho một xung đột khó hiểu. Revert cái revert khôi phục nội dung đã merge, sau đó merge nhánh đã sửa chỉ áp bản sửa. Không mất gì (A), lưu đệm không liên quan (B), và git merge không có --force (D).',
+          },
+          {
+            question: 'build/ was committed weeks ago. You want Git to stop tracking it but keep the files on your disk. Which command, before adding build/ to .gitignore?|||build/ was committed weeks ago. You want Git to stop tracking it but keep the files on your disk. Which command, before adding build/ to .gitignore?',
+            options: [
+              'git rm -r --cached build',
+              'git rm -r build',
+              'git reset build',
+              'git clean -fd build',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: --cached removes the paths from the index only; the next commit stops tracking them and the files stay on disk (real run: git ls-files no longer listed build/, check-ignore -v showed ".gitignore:1:build/"). git rm without --cached deletes the files too; git clean only touches untracked files.|||VI: --cached chỉ gỡ các đường dẫn khỏi index; commit kế tiếp ngừng theo dõi chúng và file vẫn ở trên đĩa (chạy thật: git ls-files không còn build/, check-ignore -v hiện ".gitignore:1:build/"). git rm không có --cached xoá luôn file; git clean chỉ đụng file chưa theo dõi.',
+          },
+          {
+            question: 'git push fails with "! [rejected] main -> main (fetch first)". What does it mean?|||git push fails with "! [rejected] main -> main (fetch first)". What does it mean?',
+            options: [
+              'Your credentials have expired',
+              'The remote has commits you do not have locally yet; fetch and integrate them before pushing',
+              'main is protected and needs a pull request',
+              'Your branch has no upstream configured',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Real hint: "Updates were rejected because the remote contains work that you do not have locally". Someone pushed first. Fetch, merge or rebase onto origin/main, test, then push — never --force on a shared branch.|||VI: Dòng hint thật: "Updates were rejected because the remote contains work that you do not have locally". Có người đã push trước. Fetch, merge hoặc rebase lên origin/main, chạy thử, rồi mới push — không bao giờ --force trên nhánh chung.',
+          },
+          {
+            question: 'After fetching, git push still fails with "(non-fast-forward)". What is true?|||After fetching, git push still fails with "(non-fast-forward)". What is true?',
+            options: [
+              'The remote repository is corrupted',
+              'You must delete the remote branch first',
+              'Your branch tip is behind or has diverged from origin/main; integrate origin/main first',
+              'Git requires the --set-upstream option',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: non-fast-forward = the remote tip is not an ancestor of what you push, so accepting it would drop commits. Git prints this instead of "fetch first" when it already knows the remote commits (both messages verified). The fix is the same: integrate, then push.|||VI: non-fast-forward = đầu nhánh remote không phải tổ tiên của thứ bạn push, nên nhận vào sẽ làm rơi commit. Git in thông báo này thay cho "fetch first" khi nó đã biết các commit trên remote (đã kiểm cả hai). Cách sửa giống nhau: tích hợp rồi mới push.',
+          },
+          {
+            question: 'A teammate created a project folder with its own git init and a commit, then tried to merge the team repo. Git says "fatal: refusing to merge unrelated histories". What happened?|||A teammate created a project folder with its own git init and a commit, then tried to merge the team repo. Git says "fatal: refusing to merge unrelated histories". What happened?',
+            options: [
+              'The two repositories share no common commit',
+              'There is a conflict in web.xml',
+              'The team repository is private',
+              'The local branch is named master instead of main',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Two independent git init histories have no merge base. Usually the fix is to clone the team repository and copy the files in, not to force the merge with --allow-unrelated-histories.|||VI: Hai lịch sử git init độc lập không có điểm chung (merge base). Thường cách sửa là clone repo của nhóm rồi chép file vào, không phải ép merge bằng --allow-unrelated-histories.',
+          },
+          {
+            question: 'You are in the middle of a conflicted merge of main into your branch and want to go back to exactly the state before you ran git merge. Which command?|||You are in the middle of a conflicted merge of main into your branch and want to go back to exactly the state before you ran git merge. Which command?',
+            options: [
+              'git reset --soft HEAD~1',
+              'git revert -m 1 HEAD',
+              'git merge --abort',
+              'git checkout --theirs .',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: merge --abort restores the pre-merge state while the merge is in progress. Once the merge is committed it no longer applies ("There is no merge to abort"); then you use reset --hard ORIG_HEAD (unpushed) or revert -m 1 (pushed).|||VI: merge --abort trả về trạng thái trước merge khi merge còn đang dở. Merge đã commit rồi thì nó không còn tác dụng ("There is no merge to abort"); khi đó dùng reset --hard ORIG_HEAD (chưa push) hoặc revert -m 1 (đã push).',
+          },
+          {
+            question: 'A broken merge commit M is already on the shared main. Which command undoes its effect without rewriting history?|||A broken merge commit M is already on the shared main. Which command undoes its effect without rewriting history?',
+            options: [
+              'git reset --hard M^1 && git push --force',
+              'git revert M',
+              'git rebase -i M~1 and drop M',
+              'git revert -m 1 M',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: A merge has two parents, so revert needs -m to know which side to keep: -m 1 = the main line. Plain git revert M fails for a merge, and reset plus force push rewrites history everyone else already has.|||VI: Merge có hai cha, nên revert cần -m để biết giữ phía nào: -m 1 = nhánh chính. git revert M trần sẽ báo lỗi với merge, còn reset rồi force push viết lại lịch sử mà mọi người khác đã có.',
+          },
+          {
+            question: 'After reverting a merge of feat/report, the bug is fixed and you run git merge feat/report again. Git says "Already up to date". Why, and what re-lands the work?|||After reverting a merge of feat/report, the bug is fixed and you run git merge feat/report again. Git says "Already up to date". Why, and what re-lands the work?',
+            options: [
+              'The branch was deleted; recreate it from reflog',
+              'Its commits are already in main’s history; revert the revert commit',
+              'Git caches merges; run git gc first',
+              'The merge must be done with --no-ff',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: The revert undid the changes, not the history: the branch commits are still ancestors of main, so there is nothing to merge. Reverting the revert brings them back — Git 2.51 titles that commit "Reapply ..." (verified in the milestone 18 demo).|||VI: Revert hoàn tác thay đổi, không hoàn tác lịch sử: commit của nhánh vẫn là tổ tiên của main, nên không còn gì để merge. Revert cái revert sẽ đưa chúng lại — Git 2.51 đặt tiêu đề commit đó là "Reapply ..." (đã kiểm trong demo mốc 18).',
+          },
+          {
+            question: 'You worked two hours directly on local main; three commits, nothing pushed. The team rule is "never commit on main". What is the cleanest fix?|||You worked two hours directly on local main; three commits, nothing pushed. The team rule is "never commit on main". What is the cleanest fix?',
+            options: [
+              'git branch feat/x, then git reset --hard origin/main, then git switch feat/x',
+              'git push origin main and open a PR from main',
+              'git revert the three commits on main',
+              'git stash, then git stash pop on a new branch',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: The new branch keeps the three commits; resetting main to origin/main makes it match the team again. Nothing was pushed, so rewriting local main is safe. stash cannot hold commits, and reverting adds six commits of noise.|||VI: Nhánh mới giữ ba commit; reset main về origin/main làm nó khớp lại với nhóm. Chưa push gì nên viết lại main cục bộ là an toàn. stash không chứa được commit, còn revert thêm sáu commit nhiễu.',
+          },
+          {
+            question: 'A member merged his own PR into main without any review. Which setting stops this from happening again?|||A member merged his own PR into main without any review. Which setting stops this from happening again?',
+            options: [
+              'A .gitignore rule for main',
+              'A pre-commit hook on the leader’s machine',
+              'A ruleset on main requiring a pull request with at least 1 approving review (authors cannot approve their own PR)',
+              'Making the repository private',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: The rule has to live on the server: a ruleset or branch protection that requires an approval. GitHub does not count the author’s own approval, so self-merging becomes impossible. Hooks on one laptop protect nobody else.|||VI: Luật phải nằm trên máy chủ: ruleset hoặc branch protection bắt buộc có approval. GitHub không tính approval của chính tác giả, nên tự merge trở thành bất khả. Hook trên một laptop không bảo vệ được ai khác.',
+          },
+          {
+            question: 'Before rehearsing an accident, you want a throw-away copy of the team remote so that pushes in the drill cannot reach the real one. Which command creates it?|||Before rehearsing an accident, you want a throw-away copy of the team remote so that pushes in the drill cannot reach the real one. Which command creates it?',
+            options: [
+              'git clone --depth 1 origin.git drill',
+              'git worktree add ../drill main',
+              'git remote add drill origin.git',
+              'git clone --mirror origin.git drill-origin.git',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: A mirror is a bare copy of every ref; clones of it push to the copy. In the milestone 18 demo the real origin.git still showed only its single commit after the whole drill. A worktree or an extra remote name still points at the same repository.|||VI: Mirror là bản sao trần của mọi ref; bản clone của nó push vào bản sao. Trong demo mốc 18, origin.git thật vẫn chỉ có đúng một commit sau cả buổi diễn tập. Worktree hay một tên remote mới vẫn trỏ vào cùng một repo.',
           },
         ],
       },

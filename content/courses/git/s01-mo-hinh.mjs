@@ -7,8 +7,109 @@
  * & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg> (sanitizeHtml xoá sạch).
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
+
+// Mốc dự án 2: lượt chạy mẫu THẬT trong /tmp/git-moc-2 (git 2.51.1, 11/2026) — dùng chung cho khối EN/VI.
+const MOC_2 = [
+  `
+<pre><code class="language-bash"><span class="tok-comment"># a fresh project: some source, a fake node_modules, a build output, a real .env</span>
+git init -b main shop
+cd shop
+git config user.name "An Nguyen"
+git config user.email an@example.com
+<span class="tok-comment"># mistake: dist/ committed before any .gitignore existed</span>
+git add src dist
+git commit -m "feat: add price formatter"</code></pre>
+<div class="out">$ git init -b main shop
+Initialized empty Git repository in /private/tmp/git-moc-2/shop/.git/
+$ git commit -m "feat: add price formatter"
+[main (root-commit) 589d5c0] feat: add price formatter
+ 2 files changed, 12 insertions(+)
+ create mode 100644 dist/app.js
+ create mode 100644 src/price.js</div>
+`,
+  `
+<pre><code class="language-bash">git status --short
+printf 'node_modules/\\ndist/\\n.env\\n.DS_Store\\n' &gt; .gitignore
+printf 'PORT=3000\\nDB_PASSWORD=change-me\\n' &gt; .env.example
+git status --short
+git check-ignore -v .env node_modules/express/index.js
+git rm -r --cached dist
+git add .gitignore .env.example
+git commit -m "chore: ignore build output, deps and .env; add .env.example"</code></pre>
+<div class="out">$ git status --short
+?? .env
+?? node_modules/
+$ git status --short
+?? .env.example
+?? .gitignore
+$ git check-ignore -v .env node_modules/express/index.js
+.gitignore:3:.env	.env
+.gitignore:1:node_modules/	node_modules/express/index.js
+$ git rm -r --cached dist
+rm 'dist/app.js'
+$ git commit -m "chore: ignore build output, deps and .env; add .env.example"
+[main e124586] chore: ignore build output, deps and .env; add .env.example
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+ create mode 100644 .env.example
+ create mode 100644 .gitignore
+ delete mode 100644 dist/app.js</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># one file now holds TWO unrelated changes: a bug fix (top) and a new function (bottom)</span>
+git diff --stat
+<span class="tok-comment"># stage only the first hunk (y), leave the second (n)</span>
+printf 'y\\nn\\n' | git add -p src/price.js
+git commit -m "fix(price): format thousands with vi-VN separators"
+git add src/price.js
+git commit -m "feat(price): add formatDiscount helper"</code></pre>
+<div class="out">$ git diff --stat
+ src/price.js | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+$ printf 'y\\nn\\n' | git add -p src/price.js
+diff --git a/src/price.js b/src/price.js
+index a08fce1..10bf6ed 100644
+--- a/src/price.js
++++ b/src/price.js
+@@ -1,5 +1,5 @@
+ export function formatPrice(n) {
+-  return n + " VND";
++  return n.toLocaleString("vi-VN") + " VND";
+ }
+ 
+ export function formatDate(d) {
+(1/2) Stage this hunk [y,n,q,a,d,j,J,g,/,e,p,?]? @@ -9,3 +9,7 @@ export function formatDate(d) {
+ export function formatName(s) {
+   return s.trim();
+ }
++
++export function formatDiscount(p) {
++  return "-" + p + "%";
++}
+(2/2) Stage this hunk [y,n,q,a,d,K,g,/,e,p,?]? 
+$ git commit -m "fix(price): format thousands with vi-VN separators"
+[main bd5f4e8] fix(price): format thousands with vi-VN separators
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git commit -m "feat(price): add formatDiscount helper"
+[main 083f348] feat(price): add formatDiscount helper
+ 1 file changed, 4 insertions(+)</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># the checks of "Done when"</span>
+git ls-files | grep -E "(^|/)(node_modules|build|target|dist)/|\\.env$"; echo "grep exit code: $?"
+git status --short
+git log --oneline</code></pre>
+<div class="out">$ git ls-files | grep -E "(^|/)(node_modules|build|target|dist)/|\\.env$"; echo "grep exit code: $?"
+grep exit code: 1
+$ git log --oneline
+083f348 feat(price): add formatDiscount helper
+bd5f4e8 fix(price): format thousands with vi-VN separators
+e124586 chore: ignore build output, deps and .env; add .env.example
+589d5c0 feat: add price formatter</div>
+`,
+];
 
 export default {
   title: 'Chapter 1 — The model: snapshots, not diffs|||Chương 1 — Mô hình: ảnh chụp, không phải bản khác biệt',
@@ -1231,13 +1332,39 @@ git check-ignore -v .env
 `,
     },
 
+    /* ─────────────────── 🛠 Mốc dự án 2 ─────────────────── */
+    baiMoc(2, {
+      demoEn: `
+<p>A small Node project (the files are created by hand before the first command: <code>src/price.js</code>, a fake <code>node_modules/</code>, a build output <code>dist/app.js</code> and a real <code>.env</code>). The first commit already contains the mistake student teams make all the time.</p>
+<p>1. <code>dist/</code> goes in together with the source, because no .gitignore exists yet.</p>
+${MOC_2[0]}
+<p>2. <code>git status</code> shows what running the project produced — that is your ignore list. <code>check-ignore -v</code> proves which line ignores which file. <code>git rm -r --cached</code> takes dist/ out of the index (the files stay on disk), and the same commit adds <code>.env.example</code> with placeholder values only.</p>
+${MOC_2[1]}
+<p>3. <code>src/price.js</code> now holds two unrelated changes (edited by hand: a fix on line 2 and a new function at the end). <code>git add -p</code> shows them as two hunks (khúc thay đổi); answering <code>y</code> then <code>n</code> puts only the fix into the first commit, and the new function goes into the second.</p>
+${MOC_2[2]}
+<p>4. The checks of “Done when”: the grep finds nothing (exit code 1 = no match), <code>git status --short</code> prints nothing (clean), and every subject has a type.</p>
+${MOC_2[3]}
+`,
+      demoVi: `
+<p>Một dự án Node nhỏ (các file được tạo tay trước lệnh đầu tiên: <code>src/price.js</code>, một <code>node_modules/</code> giả, kết quả build <code>dist/app.js</code> và một <code>.env</code> thật). Commit đầu tiên đã chứa đúng lỗi mà các nhóm sinh viên mắc liên tục.</p>
+<p>1. <code>dist/</code> đi vào cùng mã nguồn, vì chưa có .gitignore nào.</p>
+${MOC_2[0]}
+<p>2. <code>git status</code> cho thấy việc chạy dự án đã sinh ra gì — đó chính là danh sách cần ignore. <code>check-ignore -v</code> chứng minh dòng nào ignore file nào. <code>git rm -r --cached</code> đưa dist/ ra khỏi index (file vẫn trên đĩa), và cùng commit đó thêm <code>.env.example</code> chỉ chứa giá trị giữ chỗ.</p>
+${MOC_2[1]}
+<p>3. <code>src/price.js</code> giờ chứa hai thay đổi không liên quan (sửa tay: một chỗ sửa lỗi ở dòng 2 và một hàm mới ở cuối). <code>git add -p</code> tách chúng thành hai hunk (khúc thay đổi); trả lời <code>y</code> rồi <code>n</code> thì chỉ phần sửa lỗi vào commit thứ nhất, hàm mới vào commit thứ hai.</p>
+${MOC_2[2]}
+<p>4. Các phép kiểm của “Đạt khi”: grep không tìm thấy gì (mã thoát 1 = không khớp), <code>git status --short</code> không in gì (sạch), và tiêu đề nào cũng có type.</p>
+${MOC_2[3]}
+`,
+    }),
+
     /* ─────────────────────────── 1.6 Quiz ─────────────────────────── */
     {
       title: '1.6 — Chapter 1 quiz|||1.6 — Kiểm tra Chương 1',
       slug: 'git-1-6-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Tám câu về ba cái cây, commit là ảnh chụp, mã băm và commit cha, ba dạng của git diff, và luật ignore chỉ tác dụng với file chưa theo dõi.',
+      description: 'Tám câu về ba cái cây, commit là ảnh chụp, mã băm và commit cha, ba dạng của git diff, và luật ignore chỉ tác dụng với file chưa theo dõi. Thêm 10 câu tiếng Anh kiểu đề thi FE (câu 11–20) có giải thích.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Check</span>
@@ -1251,6 +1378,7 @@ git check-ignore -v .env
 <li>I can split one file into two commits with <code>git add -p</code>.</li>
 <li>I know why adding an already-committed <code>.env</code> to .gitignore does nothing, and what to run instead.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-01', 15, 'Bảng tra nhanh Chương 1')}
 </div>
 <div class="ml-vi">
@@ -1265,11 +1393,12 @@ ${slide('git-01', 15, 'Bảng tra nhanh Chương 1')}
 <li>Tôi tách được một file thành hai commit bằng <code>git add -p</code>.</li>
 <li>Tôi biết vì sao thêm <code>.env</code> đã commit vào .gitignore là vô tác dụng, và phải chạy gì thay vào.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-01', 15, 'Bảng tra nhanh Chương 1')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'You run git add app.js, keep editing app.js, then git commit. What ends up in the commit?|||Bạn chạy git add app.js, sửa tiếp app.js, rồi git commit. Commit chứa phiên bản nào?',
@@ -1370,6 +1499,117 @@ ${slide('git-01', 15, 'Bảng tra nhanh Chương 1')}
             options: ['git restore --staged config.js', 'git restore config.js', 'git rm config.js', 'git reset --hard'],
             correctIndex: 0, points: 1,
             explanation: 'EN: --staged copies HEAD’s version back into the index only; your working file is untouched. Plain git restore overwrites the working file (edits lost), git rm deletes it, and reset --hard wipes every uncommitted change.|||VI: --staged chép bản của HEAD trở lại index thôi; file đang sửa không bị đụng. git restore trần ghi đè file đang sửa (mất công), git rm xoá file, còn reset --hard xoá sạch mọi thay đổi chưa commit.',
+          },
+          // ── Câu 11–20: tiếng Anh kiểu đề thi FE (11/2026), hành vi lệnh đã chạy thử trên git 2.51.1 ──
+          {
+            question: "git status -s prints \"A  notes.txt\". What does it mean?|||git status -s prints \"A  notes.txt\". What does it mean?",
+            options: [
+              "notes.txt is new and staged, with no further edits since staging",
+              "notes.txt is untracked and ignored",
+              "notes.txt was added in the last commit",
+              "notes.txt has a merge conflict",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: Left column A = added to the index; the empty right column = the working file equals the index. Untracked files show ??, conflicts show UU, and status never describes past commits.|||VI: Cột trái A = đã thêm vào index; cột phải trống = file đang sửa giống index. File chưa theo dõi hiện ??, xung đột hiện UU, và status không bao giờ mô tả commit cũ.",
+          },
+          {
+            question: "A .gitignore contains only the line \"logs/\". Which path is ignored?|||A .gitignore contains only the line \"logs/\". Which path is ignored?",
+            options: [
+              "A file named logs in the project root",
+              "a/logs/x.txt, a file inside a folder named logs",
+              "Every file whose name ends in .logs",
+              "Nothing, because the pattern must start with /",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: A trailing slash matches directories only, at any depth. A FILE named logs is not matched (checked with git status: it stays untracked). A leading / would anchor it to the root, but it is not required.|||VI: Dấu gạch chéo ở cuối chỉ khớp thư mục, ở mọi độ sâu. FILE tên logs không bị khớp (đã kiểm bằng git status: nó vẫn hiện là chưa theo dõi). Dấu / ở đầu sẽ neo mẫu vào gốc, nhưng không bắt buộc.",
+          },
+          {
+            question: ".gitignore has \"*.log\" on line 1 and \"!keep.log\" on line 2. Which file does git status still show as untracked?|||.gitignore has \"*.log\" on line 1 and \"!keep.log\" on line 2. Which file does git status still show as untracked?",
+            options: [
+              "a.log",
+              "debug.log",
+              "keep.log",
+              "none of them",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: The ! line re-includes keep.log after *.log excluded it, so keep.log appears as ??. a.log and debug.log stay ignored. Order matters: a later line wins.|||VI: Dòng ! đưa keep.log trở lại sau khi *.log đã loại nó, nên keep.log hiện là ??. a.log và debug.log vẫn bị ignore. Thứ tự quan trọng: dòng sau thắng.",
+          },
+          {
+            question: "You modified app.js (tracked) and created new.js (untracked), then ran git commit -am \"wip\". What is in the commit?|||You modified app.js (tracked) and created new.js (untracked), then ran git commit -am \"wip\". What is in the commit?",
+            options: [
+              "Both files",
+              "Only new.js",
+              "Nothing, because -a needs git add first",
+              "Only app.js; new.js stays untracked",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: -a stages modifications and deletions of TRACKED files only. New files still need git add; after the commit git status still shows ?? new.js.|||VI: -a chỉ staging thay đổi và xoá của file ĐÃ ĐƯỢC THEO DÕI. File mới vẫn cần git add; sau commit git status vẫn hiện ?? new.js.",
+          },
+          {
+            question: "You staged every change with git add . and then ran git diff (no options). What do you see?|||You staged every change with git add . and then ran git diff (no options). What do you see?",
+            options: [
+              "Nothing, because the working tree equals the index",
+              "All the staged changes",
+              "Only the changes of the last commit",
+              "An error: nothing to compare",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: Plain git diff compares the working tree with the index. After git add . they are equal, so the output is empty. Use git diff --staged to see what will be committed.|||VI: git diff trần so thư mục làm việc với index. Sau git add . hai bên bằng nhau nên output trống. Dùng git diff --staged để xem thứ sẽ được commit.",
+          },
+          {
+            question: "secret.txt is tracked. You run git rm --cached secret.txt. What is true right after?|||secret.txt is tracked. You run git rm --cached secret.txt. What is true right after?",
+            options: [
+              "The file is deleted from disk and from the index",
+              "It is removed from the index only; status shows \"D  secret.txt\" and \"?? secret.txt\"",
+              "It is removed from every past commit",
+              "Nothing changes until you push",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: --cached touches the index, not the disk. Status shows a staged deletion plus the same file as untracked. Old commits still contain it; cleaning history is Chapter 8.|||VI: --cached chỉ đụng index, không đụng đĩa. Status hiện một lần xoá đã staging cộng chính file đó ở dạng chưa theo dõi. Commit cũ vẫn chứa nó; dọn lịch sử là Chương 8.",
+          },
+          {
+            question: "You staged v2 of app.js, then edited it to v3 without staging. You run git restore app.js. What does the file contain now?|||You staged v2 of app.js, then edited it to v3 without staging. You run git restore app.js. What does the file contain now?",
+            options: [
+              "v3",
+              "The version from HEAD",
+              "v2, the staged version",
+              "An empty file",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: Without --source, git restore copies from the INDEX into the working tree, so the staged v2 comes back and v3 is lost. To restore from HEAD use git restore --source=HEAD.|||VI: Không có --source, git restore chép từ INDEX ra thư mục làm việc, nên bản v2 đã staging quay lại và v3 mất. Muốn lấy từ HEAD thì dùng git restore --source=HEAD.",
+          },
+          {
+            question: "Which command prints the tree hash and the parent hash stored inside the latest commit object?|||Which command prints the tree hash and the parent hash stored inside the latest commit object?",
+            options: [
+              "git show --stat HEAD",
+              "git ls-files -s",
+              "git log --oneline -1",
+              "git cat-file -p HEAD",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: cat-file -p prints the raw commit: tree, parent, author, committer, message. --stat shows changed files, ls-files -s shows the index, --oneline shows only a short hash and subject.|||VI: cat-file -p in commit dạng thô: tree, parent, author, committer, lời nhắn. --stat cho thấy file đổi, ls-files -s cho thấy index, --oneline chỉ có mã băm ngắn và tiêu đề.",
+          },
+          {
+            question: "Which Conventional Commits subject is right for a change that only edits README.md?|||Which Conventional Commits subject is right for a change that only edits README.md?",
+            options: [
+              "docs: explain how to run the app locally",
+              "feat: README updated.",
+              "fix(readme): Updated readme file",
+              "chore - docs readme",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: docs is the type for documentation-only changes; the summary is imperative, lowercase after the colon, with no final period. feat claims a new feature, and “chore -” breaks the type: format.|||VI: docs là type cho thay đổi chỉ về tài liệu; phần tóm tắt ở thể mệnh lệnh, không viết hoa sau dấu hai chấm, không chấm cuối. feat là nhận có tính năng mới, còn “chore -” sai định dạng type:.",
+          },
+          {
+            question: "Which command tells you exactly which .gitignore line makes Git ignore dist/app.js?|||Which command tells you exactly which .gitignore line makes Git ignore dist/app.js?",
+            options: [
+              "git status --ignored",
+              "git ls-files --others",
+              "git check-ignore -v dist/app.js",
+              "git config --get core.excludesFile",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: check-ignore -v prints source:line:pattern next to the path (e.g. .gitignore:2:dist/). status --ignored only lists ignored files, without the reason.|||VI: check-ignore -v in nguồn:dòng:mẫu cạnh đường dẫn (vd .gitignore:2:dist/). status --ignored chỉ liệt kê file bị ignore, không nói lý do.",
           },
         ],
       },

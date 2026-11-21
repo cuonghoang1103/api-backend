@@ -9,6 +9,7 @@
  * Khối .out đóng bằng </div> (KHÔNG </code></pre>). KHÔNG dùng <svg>.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
 
@@ -745,13 +746,103 @@ dat-lich.js:3: trailing whitespace.
 `,
     },
 
+    /* ─────────────────────────── Mốc dự án 14 (dự án xuyên suốt khoá) ─────────────────────────── */
+    baiMoc(14, {
+      demoEn: `
+<p>The "real" repository is <code>/tmp/git-moc-14/real</code> (two commits, identity An Nguyen &lt;an@example.com&gt;). The drill never touches it: we clone a throw-away copy <code>drill</code> and, first of all, take a full backup with <code>git bundle</code> — one file that contains every ref and object.</p>
+<pre><code class="language-bash">git clone -q real drill &amp;&amp; cd drill
+git bundle create ../before-drill.bundle --all</code></pre>
+<p><strong>Drill 1 — an unmerged branch deleted with <code>-D</code>.</strong> Git prints the tip hash as it deletes (<em>was …</em>) — that line alone is enough. If it scrolled away, the HEAD reflog still remembers the commit you made on the branch.</p>
+<pre><code class="language-bash">git switch -q -c feat/cart &amp;&amp; echo cart &gt; cart.txt &amp;&amp; git add cart.txt &amp;&amp; git commit -q -m "feat(cart): add cart" &amp;&amp; git switch -q main
+git branch -D feat/cart
+git reflog -3
+git branch feat/cart HEAD@{1} &amp;&amp; git log --oneline -1 feat/cart</code></pre>
+<div class="out">Deleted branch feat/cart (was c5bc351).
+5fb3804 HEAD@{0}: checkout: moving from feat/cart to main
+c5bc351 HEAD@{1}: commit: feat(cart): add cart
+5fb3804 HEAD@{2}: checkout: moving from main to feat/cart
+c5bc351 feat(cart): add cart</div>
+<p><strong>Drill 2 — <code>reset --hard</code> over two commits.</strong> The commits are not deleted, only unreferenced. <code>HEAD@{1}</code> is "where HEAD was one move ago" — before the reset.</p>
+<pre><code class="language-bash">echo c &gt;&gt; app.txt &amp;&amp; git commit -qam "fix(login): trim email" &amp;&amp; echo d &gt;&gt; app.txt &amp;&amp; git commit -qam "feat(login): remember me"
+git reset --hard HEAD~2
+git reflog -4
+git reset --hard HEAD@{1} &amp;&amp; git log --oneline -3</code></pre>
+<div class="out">HEAD is now at 5fb3804 feat: add login
+5fb3804 HEAD@{0}: reset: moving to HEAD~2
+988ef81 HEAD@{1}: commit: feat(login): remember me
+936d24c HEAD@{2}: commit: fix(login): trim email
+5fb3804 HEAD@{3}: checkout: moving from feat/cart to main
+HEAD is now at 988ef81 feat(login): remember me
+988ef81 feat(login): remember me
+936d24c fix(login): trim email
+5fb3804 feat: add login</div>
+<p><strong>Drill 3 — a wrong merge, not pushed yet.</strong> Every merge saves the previous tip in <code>ORIG_HEAD</code>, so undoing it is one command. (Already pushed? Then it is <code>git revert -m 1</code> — milestone 18.) The final <code>status</code> confirms we are back to exactly the two recovered commits ahead of origin.</p>
+<pre><code class="language-bash">git merge --no-ff -q -m "Merge branch feat/cart" feat/cart &amp;&amp; git log --oneline --graph -4
+git reset --hard ORIG_HEAD &amp;&amp; git log --oneline -1
+git status -sb</code></pre>
+<div class="out">*   b2da704 Merge branch feat/cart
+|\\  
+| * c5bc351 feat(cart): add cart
+* | 988ef81 feat(login): remember me
+* | 936d24c fix(login): trim email
+|/  
+HEAD is now at 988ef81 feat(login): remember me
+988ef81 feat(login): remember me
+## main...origin/main [ahead 2]</div>
+<p>In your RUNBOOK.md each drill becomes one recipe: <em>symptom</em> ("my branch is gone"), <em>first safe command</em> (<code>git reflog</code>), <em>fix</em>, <em>prevention</em>. Paste the real output of YOUR drill, not this one.</p>
+`,
+      demoVi: `
+<p>Repo "thật" là <code>/tmp/git-moc-14/real</code> (hai commit, danh tính An Nguyen &lt;an@example.com&gt;). Buổi diễn tập không bao giờ đụng vào nó: ta clone một bản nháp <code>drill</code> và việc đầu tiên là sao lưu trọn bằng <code>git bundle</code> — một file chứa mọi ref và mọi đối tượng.</p>
+<pre><code class="language-bash">git clone -q real drill &amp;&amp; cd drill
+git bundle create ../before-drill.bundle --all</code></pre>
+<p><strong>Diễn tập 1 — xoá nhánh chưa merge bằng <code>-D</code>.</strong> Git in mã băm đầu nhánh ngay lúc xoá (<em>was …</em>) — chỉ dòng đó là đủ. Lỡ trôi mất thì reflog của HEAD vẫn nhớ commit bạn đã làm trên nhánh.</p>
+<pre><code class="language-bash">git switch -q -c feat/cart &amp;&amp; echo cart &gt; cart.txt &amp;&amp; git add cart.txt &amp;&amp; git commit -q -m "feat(cart): add cart" &amp;&amp; git switch -q main
+git branch -D feat/cart
+git reflog -3
+git branch feat/cart HEAD@{1} &amp;&amp; git log --oneline -1 feat/cart</code></pre>
+<div class="out">Deleted branch feat/cart (was c5bc351).
+5fb3804 HEAD@{0}: checkout: moving from feat/cart to main
+c5bc351 HEAD@{1}: commit: feat(cart): add cart
+5fb3804 HEAD@{2}: checkout: moving from main to feat/cart
+c5bc351 feat(cart): add cart</div>
+<p><strong>Diễn tập 2 — <code>reset --hard</code> đè mất hai commit.</strong> Commit không bị xoá, chỉ không còn ai trỏ tới. <code>HEAD@{1}</code> là "HEAD ở đâu một bước di chuyển trước" — tức là trước lần reset.</p>
+<pre><code class="language-bash">echo c &gt;&gt; app.txt &amp;&amp; git commit -qam "fix(login): trim email" &amp;&amp; echo d &gt;&gt; app.txt &amp;&amp; git commit -qam "feat(login): remember me"
+git reset --hard HEAD~2
+git reflog -4
+git reset --hard HEAD@{1} &amp;&amp; git log --oneline -3</code></pre>
+<div class="out">HEAD is now at 5fb3804 feat: add login
+5fb3804 HEAD@{0}: reset: moving to HEAD~2
+988ef81 HEAD@{1}: commit: feat(login): remember me
+936d24c HEAD@{2}: commit: fix(login): trim email
+5fb3804 HEAD@{3}: checkout: moving from feat/cart to main
+HEAD is now at 988ef81 feat(login): remember me
+988ef81 feat(login): remember me
+936d24c fix(login): trim email
+5fb3804 feat: add login</div>
+<p><strong>Diễn tập 3 — merge nhầm, chưa push.</strong> Mỗi lần merge Git lưu đầu nhánh cũ vào <code>ORIG_HEAD</code>, nên hoàn tác chỉ một lệnh. (Đã push rồi? Khi đó là <code>git revert -m 1</code> — mốc 18.) Lệnh <code>status</code> cuối xác nhận ta đã về đúng hai commit vừa cứu, đi trước origin.</p>
+<pre><code class="language-bash">git merge --no-ff -q -m "Merge branch feat/cart" feat/cart &amp;&amp; git log --oneline --graph -4
+git reset --hard ORIG_HEAD &amp;&amp; git log --oneline -1
+git status -sb</code></pre>
+<div class="out">*   b2da704 Merge branch feat/cart
+|\\  
+| * c5bc351 feat(cart): add cart
+* | 988ef81 feat(login): remember me
+* | 936d24c fix(login): trim email
+|/  
+HEAD is now at 988ef81 feat(login): remember me
+988ef81 feat(login): remember me
+## main...origin/main [ahead 2]</div>
+<p>Trong RUNBOOK.md mỗi buổi diễn tập thành một công thức: <em>triệu chứng</em> ("nhánh của tôi biến mất"), <em>lệnh an toàn đầu tiên</em> (<code>git reflog</code>), <em>cách sửa</em>, <em>cách phòng</em>. Dán output thật của buổi diễn tập CỦA BẠN, không phải của bản này.</p>
+`,
+    }),
+
     /* ─────────────────────────── 13.3 Kiểm tra Chương 13 ─────────────────────────── */
     {
       title: '13.3 — Chapter 13 check|||13.3 — Kiểm tra Chương 13',
       slug: 'git-13-3-kiem-tra-cuoi-khoa',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống cứu hộ và quy trình thật của Chương 13: commit nhầm nhánh, reflog sau reset --hard, merge nhầm, HEAD lìa cành, stash đã drop, bị force-push đè, lộ khoá, push không deploy, tự review diff và worktree cho agent AI.',
+      description: 'Mười tình huống cứu hộ và quy trình thật của Chương 13: commit nhầm nhánh, reflog sau reset --hard, merge nhầm, HEAD lìa cành, stash đã drop, bị force-push đè, lộ khoá, push không deploy, tự review diff và worktree cho agent AI. Thêm 10 câu tiếng Anh kiểu đề FE (câu 11–20) về Chương 13.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Check</span>
@@ -767,6 +858,7 @@ dat-lich.js:3: trailing whitespace.
 <li>I know why pushed mistakes are fixed with <code>revert</code>, and that a leaked key is rotated before anything else.</li>
 <li>I run a self-review before every push, and I finished the disaster lab with six ✅.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-13', 17, 'Bảng tra nhanh Chương 13')}
 </div>
 <div class="ml-vi">
@@ -783,11 +875,12 @@ ${slide('git-13', 17, 'Bảng tra nhanh Chương 13')}
 <li>Tôi biết vì sao sai lầm đã push phải sửa bằng <code>revert</code>, và khoá bị lộ thì xoay trước mọi việc khác.</li>
 <li>Tôi tự review trước mỗi lần push, và đã làm xong phòng thí nghiệm thảm hoạ với đủ sáu ✅.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-13', 17, 'Bảng tra nhanh Chương 13')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'You are on main and just committed "feat(cart): nút thêm vào giỏ" (a48c3cd). Nothing is pushed, and it belonged on a new branch feature/cart. Which sequence fixes it without losing the commit?|||Bạn đang ở main và vừa commit "feat(cart): nút thêm vào giỏ" (a48c3cd). Chưa push gì, và commit đó đáng ra thuộc nhánh mới feature/cart. Chuỗi lệnh nào sửa được mà không mất commit?',
@@ -898,6 +991,116 @@ ${slide('git-13', 17, 'Bảng tra nhanh Chương 13')}
             ],
             correctIndex: 2, points: 1,
             explanation: 'EN: A worktree gives each session its own folder, index and HEAD while sharing the object database, so one session physically cannot stage another’s files (real output: "Preparing worktree (new branch ’agent/refactor-auth’)"). Stashing before each task is tempting, but it hides your work from yourself and only helps if you remember every time. git add . at the top of the repo stages the same files as -A, and ignoring your own work-in-progress means you have to un-ignore it before you can commit it.|||VI: Worktree cho mỗi phiên một thư mục, index và HEAD riêng trong khi dùng chung kho đối tượng, nên về mặt vật lý phiên này không thể staging file của phiên kia (output thật: "Preparing worktree (new branch ’agent/refactor-auth’)"). Stash trước mỗi việc nghe hấp dẫn, nhưng nó giấu việc của chính bạn khỏi bạn và chỉ có tác dụng nếu lần nào bạn cũng nhớ. git add . ở gốc kho staging đúng những file như -A, còn ignore chính phần việc dở của mình thì phải gỡ ignore ra mới commit được.',
+          },
+          {
+            question: 'You made two commits on a detached HEAD, then ran git switch main. Git warned that you are leaving 2 commits behind. What is the simplest safe way to keep them?|||You made two commits on a detached HEAD, then ran git switch main. Git warned that you are leaving 2 commits behind. What is the simplest safe way to keep them?',
+            options: [
+              'git stash, then git stash pop on a new branch',
+              'git branch rescue <hash printed in the warning>',
+              'git reset --hard <hash printed in the warning> on main',
+              'Nothing: detached commits are pushed automatically',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: The warning itself suggests it: "git branch <new-branch-name> a9bdacd" (real output). A branch name is all those commits lack. stash only saves uncommitted changes, and resetting main would move main onto the experiment.|||VI: Chính lời cảnh báo gợi ý: "git branch <new-branch-name> a9bdacd" (output thật). Thứ duy nhất các commit đó thiếu là một cái tên nhánh. stash chỉ cất thay đổi chưa commit, còn reset main sẽ kéo main sang nhánh thử nghiệm.',
+          },
+          {
+            question: 'git stash drop printed "Dropped refs/stash@{0} (d56a484...)". You realise you still needed that work. What brings it back?|||git stash drop printed "Dropped refs/stash@{0} (d56a484...)". You realise you still needed that work. What brings it back?',
+            options: [
+              'git reflog stash@{0}',
+              'git stash pop --undo',
+              'git stash apply d56a484',
+              'It is gone; dropped stashes are deleted at once',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: A stash is a commit object; drop only removes the reference and prints the hash. In a real run git stash apply <that hash> restored " M f". If the line has scrolled away, git fsck --unreachable lists the orphaned commit. There is no --undo option.|||VI: Stash là một đối tượng commit; drop chỉ gỡ tham chiếu và in mã băm. Chạy thật, git stash apply <mã đó> trả lại " M f". Lỡ trôi mất dòng đó thì git fsck --unreachable liệt kê commit mồ côi. Không có tuỳ chọn --undo.',
+          },
+          {
+            question: 'You committed on local main by mistake (not pushed). The commit belongs on a feature branch. Which sequence fixes it?|||You committed on local main by mistake (not pushed). The commit belongs on a feature branch. Which sequence fixes it?',
+            options: [
+              'git branch feat/x, then git reset --hard origin/main while still on main',
+              'git revert HEAD, then git switch -c feat/x',
+              'git switch -c feat/x, then git push --force origin main',
+              'git checkout origin/main, then git commit --amend',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: The new branch keeps the commit; moving main back to origin/main removes it from main. Revert would add a second, useless commit to main, and force-pushing main is never part of fixing an unpushed mistake.|||VI: Nhánh mới giữ commit lại; kéo main về origin/main gỡ nó khỏi main. Revert sẽ thêm một commit thứ hai vô ích lên main, còn force-push main không bao giờ là một phần của việc sửa lỗi chưa push.',
+          },
+          {
+            question: 'You merged the wrong branch into main a minute ago and have not pushed. Which command undoes exactly that merge?|||You merged the wrong branch into main a minute ago and have not pushed. Which command undoes exactly that merge?',
+            options: [
+              'git revert HEAD',
+              'git merge --abort',
+              'git reset --hard HEAD@{2}',
+              'git reset --hard ORIG_HEAD',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: A merge records the previous tip in ORIG_HEAD, so reset --hard ORIG_HEAD restores main exactly (real run: back to the pre-merge commit). merge --abort only works while a conflicted merge is still in progress — after it finished Git says "There is no merge to abort". HEAD@{2} is a guess about reflog positions.|||VI: Mỗi lần merge Git ghi đầu cũ vào ORIG_HEAD, nên reset --hard ORIG_HEAD trả main về đúng chỗ (chạy thật: về commit trước merge). merge --abort chỉ dùng được khi một merge có xung đột còn đang dở — merge xong rồi thì Git báo "There is no merge to abort". HEAD@{2} là đoán mò vị trí trong reflog.',
+          },
+          {
+            question: 'Which loss can git reflog NOT help you recover?|||Which loss can git reflog NOT help you recover?',
+            options: [
+              'A branch deleted with git branch -D',
+              'Commits removed from a branch by git reset --hard HEAD~3',
+              'Edits that were never staged or committed, wiped by git reset --hard',
+              'The previous position of main before a wrong merge',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: The reflog records where refs pointed, so it reaches every commit that ever existed locally. Changes that never became an object (never added, never committed) were only in the working directory; reset --hard overwrote them and no Git command can bring them back.|||VI: Reflog ghi các ref đã từng trỏ đi đâu, nên với tới mọi commit từng tồn tại ở máy. Thay đổi chưa bao giờ thành đối tượng (chưa add, chưa commit) chỉ nằm trong thư mục làm việc; reset --hard đã ghi đè lên chúng và không lệnh Git nào lấy lại được.',
+          },
+          {
+            question: 'Binh force-pushed main and your commit disappeared from GitHub. You had fetched before his push. Where is your commit most likely still recorded?|||Binh force-pushed main and your commit disappeared from GitHub. You had fetched before his push. Where is your commit most likely still recorded?',
+            options: [
+              'Nowhere; a force push deletes it from every clone',
+              'In your local reflog of origin/main (git reflog show origin/main)',
+              'Only in GitHub’s trash folder for 30 days',
+              'In Binh’s stash list',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Remote-tracking branches have a reflog too. A real run showed "refs/remotes/origin/main@{1}: update by push" (your commit) and "@{0}: fetch: forced-update". Your local main may also still contain it. Push it back on a branch and talk before anyone force-pushes again.|||VI: Nhánh theo dõi remote cũng có reflog. Chạy thật hiện "refs/remotes/origin/main@{1}: update by push" (commit của bạn) và "@{0}: fetch: forced-update". main ở máy bạn cũng có thể vẫn chứa nó. Đẩy nó lên lại trên một nhánh và nói chuyện trước khi ai force-push lần nữa.',
+          },
+          {
+            question: 'Before a risky history rewrite you run git bundle create ../backup.bundle --all. What did you get?|||Before a risky history rewrite you run git bundle create ../backup.bundle --all. What did you get?',
+            options: [
+              'A ZIP of the working directory without the .git folder',
+              'A patch file that git apply can replay',
+              'A list of commit hashes to use with git reset',
+              'A single file containing all refs and objects that you can clone from',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: A bundle is a portable repository in one file: in a real run git clone ../b.bundle produced a working clone with the full history. It is the cheapest "undo everything" before filter-repo or a big rebase.|||VI: Bundle là cả một kho mã đóng trong một file: chạy thật, git clone ../b.bundle cho ra một bản clone đầy đủ lịch sử. Đó là cách "hoàn tác tất cả" rẻ nhất trước filter-repo hay một lần rebase lớn.',
+          },
+          {
+            question: 'A real API key was pushed to a public repository an hour ago. What must you do FIRST?|||A real API key was pushed to a public repository an hour ago. What must you do FIRST?',
+            options: [
+              'Revoke or rotate the key at the provider',
+              'Run git filter-repo to remove it from history',
+              'Make the repository private',
+              'Delete the commit with git reset and force-push',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Assume the key is already copied — bots scan public pushes within minutes. Only revoking it makes the leak harmless. Cleaning history (Chapter 8) comes after, and making the repo private does not un-leak what was already public.|||VI: Hãy coi như khoá đã bị chép — bot quét các lần push công khai trong vài phút. Chỉ thu hồi khoá mới làm vụ lộ vô hại. Dọn lịch sử (Chương 8) làm sau, còn chuyển repo sang private không lấy lại được thứ đã công khai.',
+          },
+          {
+            question: 'Before opening a PR you want to see only what YOUR branch feat changed since it left main, ignoring commits added to main meanwhile. Which command?|||Before opening a PR you want to see only what YOUR branch feat changed since it left main, ignoring commits added to main meanwhile. Which command?',
+            options: [
+              'git diff main..feat',
+              'git diff main...feat',
+              'git diff feat main',
+              'git log main feat',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Three dots compares feat with the merge base of main and feat — exactly what a PR shows. In a real repo where main had moved on, main...feat showed only "h | 1 +", while main..feat also showed main’s own change to f as a deletion.|||VI: Ba chấm so feat với điểm chung (merge base) của main và feat — đúng thứ PR hiển thị. Trong repo thật khi main đã đi tiếp, main...feat chỉ hiện "h | 1 +", còn main..feat hiện thêm thay đổi của chính main ở file f như một phần bị xoá.',
+          },
+          {
+            question: 'An AI agent works in a second worktree created with git worktree add ../agent -b agent/task. Inside it you try git switch main. What happens?|||An AI agent works in a second worktree created with git worktree add ../agent -b agent/task. Inside it you try git switch main. What happens?',
+            options: [
+              'It switches; worktrees share the same checkout',
+              'The agent’s worktree is deleted',
+              'Git moves main into the agent worktree and detaches the first one',
+              'fatal: main is already used by the worktree at the original folder',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: One branch can be checked out in only one worktree at a time. The real output starts with "fatal:" and says main "is already used by worktree at" the path of the first folder. That rule is what keeps the agent from silently changing the branch you are working on.|||VI: Một nhánh chỉ được checkout ở một worktree mỗi lúc. Output thật bắt đầu bằng "fatal:" và nói main "is already used by worktree at" đường dẫn của thư mục đầu tiên. Chính luật đó giữ cho agent không âm thầm đổi nhánh bạn đang làm.',
           },
         ],
       },

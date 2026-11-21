@@ -6,8 +6,102 @@
  * & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
+
+// Mốc dự án 5: lượt chạy mẫu THẬT trong /tmp/git-moc-5 (git 2.51.1, 11/2026) — dùng chung cho khối EN/VI.
+const MOC_5 = [
+  `
+<pre><code class="language-bash"><span class="tok-comment"># drill on a throw-away branch: the three resets</span>
+git switch -c tmp/undo-drill
+git log --oneline
+git reset --soft HEAD~1
+git status --short
+git reset --mixed HEAD
+git status --short
+git reset --hard HEAD
+git status --short; git log --oneline -1</code></pre>
+<div class="out">$ git switch -c tmp/undo-drill
+Switched to a new branch 'tmp/undo-drill'
+$ git log --oneline
+d9f9c64 feat: room filter
+61f7ed5 feat: booking form
+d83239c feat: first screen
+$ git status --short
+M  app.txt
+$ git reset --mixed HEAD
+Unstaged changes after reset:
+M	app.txt
+$ git status --short
+ M app.txt
+$ git reset --hard HEAD
+HEAD is now at 61f7ed5 feat: booking form
+$ git status --short; git log --oneline -1
+61f7ed5 feat: booking form</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># "lost" commit? reflog still knows where HEAD was</span>
+git reflog -4
+git reset --hard HEAD@{3}
+git log --oneline -1</code></pre>
+<div class="out">$ git reflog -4
+61f7ed5 HEAD@{0}: reset: moving to HEAD
+61f7ed5 HEAD@{1}: reset: moving to HEAD
+61f7ed5 HEAD@{2}: reset: moving to HEAD~1
+d9f9c64 HEAD@{3}: checkout: moving from main to tmp/undo-drill
+$ git reset --hard HEAD@{3}
+HEAD is now at d9f9c64 feat: room filter
+$ git log --oneline -1
+d9f9c64 feat: room filter</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># a mistake that is already on (pushed) main ⇒ revert, never reset</span>
+git switch main
+printf 'DEBUG=true\\n' &gt;&gt; app.txt &amp;&amp; git commit -qam "chore: enable debug mode"
+git revert --no-edit HEAD
+git log --oneline -3</code></pre>
+<div class="out">$ git switch main
+Switched to branch 'main'
+$ git revert --no-edit HEAD
+[main ec910db] Revert "chore: enable debug mode"
+ Date: Sat Nov 21 16:51:31 2026 +0700
+ 1 file changed, 1 deletion(-)
+$ git log --oneline -3
+ec910db Revert "chore: enable debug mode"
+8b51f0c chore: enable debug mode
+d9f9c64 feat: room filter</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># stash with a message when you must switch branches mid-work</span>
+echo "half-done search" &gt;&gt; app.txt
+git stash push -m "SWP-7 search: half done"
+git switch tmp/undo-drill &amp;&amp; git switch main
+git stash list
+git stash pop
+git status --short
+git branch -D tmp/undo-drill</code></pre>
+<div class="out">$ git stash push -m "SWP-7 search: half done"
+Saved working directory and index state On main: SWP-7 search: half done
+$ git switch tmp/undo-drill &amp;&amp; git switch main
+Switched to branch 'tmp/undo-drill'
+Switched to branch 'main'
+$ git stash list
+stash@{0}: On main: SWP-7 search: half done
+$ git stash pop
+On branch main
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+  (use "git restore &lt;file&gt;..." to discard changes in working directory)
+	modified:   app.txt
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (ca7bb40f10ef27a53a81bc2b0900d91ba9cf35b7)
+$ git status --short
+ M app.txt
+$ git branch -D tmp/undo-drill
+Deleted branch tmp/undo-drill (was d9f9c64).</div>
+`,
+];
 
 export default {
   title: 'Chapter 4 — Undo: the safety net|||Chương 4 — Hoàn tác: lưới an toàn',
@@ -1205,13 +1299,39 @@ git stash pop --index      <span class="tok-comment"># output thật; pop --inde
 `,
     },
 
+    /* ─────────────────── 🛠 Mốc dự án 5 ─────────────────── */
+    baiMoc(5, {
+      demoEn: `
+<p>A repository with three commits on main (prepared before the first command). Every dangerous move happens on a throw-away branch <code>tmp/undo-drill</code> — never on your real work.</p>
+<p>1. The three resets. <code>--soft</code> moves the branch back and leaves the change staged (M in the first column); <code>--mixed</code> unstages it (M in the second column); <code>--hard</code> throws it away — the branch is now one commit behind and the commit looks lost.</p>
+${MOC_5[0]}
+<p>2. The reflog (nhật ký HEAD) remembers every move. <code>HEAD@{3}</code> is where HEAD was before the resets, so the “lost” commit comes back. Paste lines like these into UNDO.md.</p>
+${MOC_5[1]}
+<p>3. On main (imagine it is already pushed) a bad commit is undone with <code>revert</code>: a NEW commit, nobody’s history rewritten.</p>
+${MOC_5[2]}
+<p>4. Parking half-done work with a message, switching away and back, then bringing it back. Finally the drill branch is deleted.</p>
+${MOC_5[3]}
+`,
+      demoVi: `
+<p>Một repo có ba commit trên main (chuẩn bị trước lệnh đầu tiên). Mọi thao tác nguy hiểm đều làm trên nhánh nháp <code>tmp/undo-drill</code> — không bao giờ trên việc thật của bạn.</p>
+<p>1. Ba kiểu reset. <code>--soft</code> lùi nhánh và để thay đổi ở dạng đã staging (M ở cột đầu); <code>--mixed</code> gỡ khỏi staging (M ở cột hai); <code>--hard</code> vứt nó đi — nhánh giờ lùi một commit và commit kia trông như đã mất.</p>
+${MOC_5[0]}
+<p>2. Reflog (nhật ký HEAD) nhớ mọi lần di chuyển. <code>HEAD@{3}</code> là chỗ HEAD đứng trước các lần reset, nên commit “đã mất” quay lại. Dán những dòng như thế này vào UNDO.md.</p>
+${MOC_5[1]}
+<p>3. Trên main (giả sử đã push) một commit hỏng được hoàn tác bằng <code>revert</code>: một commit MỚI, lịch sử của không ai bị viết lại.</p>
+${MOC_5[2]}
+<p>4. Cất việc dở kèm lời nhắn, chuyển nhánh đi rồi quay lại, rồi lấy việc ra. Cuối cùng xoá nhánh diễn tập.</p>
+${MOC_5[3]}
+`,
+    }),
+
     /* ─────────────────────────── 4.6 Quiz ─────────────────────────── */
     {
       title: '4.6 — Chapter 4 quiz|||4.6 — Kiểm tra Chương 4',
       slug: 'git-4-6-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật về hoàn tác: làm lại commit cuối, ba chế độ reset, revert trên nhánh chung và revert một merge, cứu commit và nhánh bằng reflog, stash pop --index, và git clean.',
+      description: 'Mười tình huống thật về hoàn tác: làm lại commit cuối, ba chế độ reset, revert trên nhánh chung và revert một merge, cứu commit và nhánh bằng reflog, stash pop --index, và git clean. Thêm 10 câu tiếng Anh kiểu đề thi FE (câu 11–20) có giải thích.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Check</span>
@@ -1226,6 +1346,7 @@ git stash pop --index      <span class="tok-comment"># output thật; pop --inde
 <li>I can find a deleted branch in the reflog without picking the wrong line.</li>
 <li>I know when to add <code>-u</code> to <code>git stash</code> and <code>--index</code> to <code>git stash pop</code>.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-04', 17, 'Bảng tra nhanh Chương 4')}
 </div>
 <div class="ml-vi">
@@ -1241,11 +1362,12 @@ ${slide('git-04', 17, 'Bảng tra nhanh Chương 4')}
 <li>Tôi tìm được một nhánh đã xoá trong reflog mà không chọn nhầm dòng.</li>
 <li>Tôi biết khi nào thêm <code>-u</code> cho <code>git stash</code> và <code>--index</code> cho <code>git stash pop</code>.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-04', 17, 'Bảng tra nhanh Chương 4')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'You just committed (not pushed) and notice you forgot to add validate.js and the message is badly worded. What is the cleanest fix that loses nothing?|||Bạn vừa commit (chưa push) thì thấy quên add validate.js và lời nhắn viết dở tệ. Cách sửa gọn nhất mà không mất gì?',
@@ -1351,6 +1473,117 @@ ${slide('git-04', 17, 'Bảng tra nhanh Chương 4')}
             ],
             correctIndex: 0, points: 1,
             explanation: 'EN: -f deletes untracked files, -d adds untracked directories, and ignored files are only touched with -x — so -fd removes the junk and leaves .env (checked in a test repo). -n is the dry run; add -d to it too, or the preview does not list scratch/. reset --hard never touches untracked files, -fdx deletes .env, and stash -a would pack .env away along with the junk.|||VI: -f xoá file chưa theo dõi, -d thêm thư mục chưa theo dõi, còn file bị ignore chỉ bị đụng khi có -x — nên -fd xoá rác và để nguyên .env (đã thử trong kho thử). -n là chạy thử; nhớ thêm -d cho nó, không thì bản xem trước không liệt kê scratch/. reset --hard không bao giờ đụng file chưa theo dõi, -fdx xoá luôn .env, còn stash -a sẽ cất .env đi cùng đống rác.',
+          },
+          // ── Câu 11–20: tiếng Anh kiểu đề thi FE (11/2026), hành vi lệnh đã chạy thử trên git 2.51.1 ──
+          {
+            question: "You run git reset --soft HEAD~2. What is the state afterwards?|||You run git reset --soft HEAD~2. What is the state afterwards?",
+            options: [
+              "The two commits are gone and their changes are lost",
+              "The branch moves back two commits; their changes stay staged in the index",
+              "The branch moves back and the changes are unstaged in the working tree",
+              "Nothing moves; only the index is cleared",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: --soft moves only the branch pointer; index and working tree are untouched, so the combined changes appear as staged (verified: status shows “M  app.js”). --mixed would also unstage them.|||VI: --soft chỉ dời con trỏ nhánh; index và thư mục làm việc không đổi, nên thay đổi gộp hiện ở dạng đã staging (đã kiểm: status hiện “M  app.js”). --mixed thì còn gỡ chúng khỏi staging.",
+          },
+          {
+            question: "You have a modified tracked file and a new untracked file. You run git stash with no options. What happens to the untracked file?|||You have a modified tracked file and a new untracked file. You run git stash with no options. What happens to the untracked file?",
+            options: [
+              "It is stashed together with the tracked changes",
+              "It is deleted",
+              "It is staged automatically",
+              "It stays in the working directory, not stashed; git stash -u would include it",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: By default stash saves only tracked changes; the untracked file remains (verified: status still shows ?? new.js). -u (--include-untracked) stashes it too.|||VI: Mặc định stash chỉ cất thay đổi của file đã theo dõi; file chưa theo dõi vẫn nằm lại (đã kiểm: status vẫn hiện ?? new.js). -u (--include-untracked) mới cất cả nó.",
+          },
+          {
+            question: "What is the difference between git stash apply and git stash pop?|||What is the difference between git stash apply and git stash pop?",
+            options: [
+              "apply keeps the entry in the stash list; pop removes it after applying successfully",
+              "apply restores only staged changes",
+              "pop works only on the newest stash, apply only on older ones",
+              "There is no difference",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: Both re-apply the changes. pop then drops the entry (unless a conflict stops it); apply leaves it in git stash list, useful when you want the same changes on two branches.|||VI: Cả hai đều áp lại thay đổi. pop rồi xoá mục đó (trừ khi xung đột chặn lại); apply để nguyên trong git stash list, có ích khi muốn áp cùng thay đổi cho hai nhánh.",
+          },
+          {
+            question: "You want app.js exactly as it was three commits ago, in your working tree only, without moving the branch. Which command?|||You want app.js exactly as it was three commits ago, in your working tree only, without moving the branch. Which command?",
+            options: [
+              "git reset --hard HEAD~3 app.js",
+              "git revert HEAD~3",
+              "git restore --source=HEAD~3 app.js",
+              "git switch HEAD~3",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: restore --source writes that version of the file into the working tree (status: “ M app.js”). reset --hard with a path fails (“Cannot do hard reset with paths”); revert makes a commit; switching to a commit detaches HEAD.|||VI: restore --source ghi phiên bản đó của file ra thư mục làm việc (status: “ M app.js”). reset --hard kèm đường dẫn báo lỗi (“Cannot do hard reset with paths”); revert tạo commit; switch sang một commit làm HEAD lìa cành.",
+          },
+          {
+            question: "You run git reset --hard. Which of these survives?|||You run git reset --hard. Which of these survives?",
+            options: [
+              "Staged changes to app.js",
+              "Untracked files such as notes.txt",
+              "Unstaged edits to README.md",
+              "A file you staged for deletion with git rm",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: reset --hard resets the index and tracked files to the commit, but it does not touch untracked files (verified). Staged and unstaged edits to tracked files are gone, and the deleted file comes back.|||VI: reset --hard đặt lại index và file đã theo dõi theo commit, nhưng không đụng file chưa theo dõi (đã kiểm). Thay đổi đã và chưa staging của file đã theo dõi đều mất, còn file đã git rm thì quay lại.",
+          },
+          {
+            question: "Which statement about HEAD~2 and HEAD@{2} is correct?|||Which statement about HEAD~2 and HEAD@{2} is correct?",
+            options: [
+              "They are always the same commit",
+              "HEAD~2 is the grandparent commit; HEAD@{2} is where HEAD was two moves ago, read from the reflog",
+              "HEAD@{2} is the second parent of a merge",
+              "HEAD~2 reads the reflog and HEAD@{2} walks parents",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: ~ walks the commit graph; @{n} walks your local history of HEAD movements (commits, resets, switches). After a reset they usually differ. The second parent of a merge is HEAD^2.|||VI: ~ đi trên đồ thị commit; @{n} đi trên lịch sử dịch chuyển HEAD ở máy bạn (commit, reset, switch). Sau một lần reset chúng thường khác nhau. Cha thứ hai của merge là HEAD^2.",
+          },
+          {
+            question: "By default, how long does Git keep reflog entries that are no longer reachable from any branch?|||By default, how long does Git keep reflog entries that are no longer reachable from any branch?",
+            options: [
+              "Forever",
+              "7 days",
+              "90 days",
+              "30 days",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: gc.reflogExpireUnreachable defaults to 30 days; entries still reachable are kept 90 days (gc.reflogExpire). That is why “recover it soon” is part of every rescue.|||VI: gc.reflogExpireUnreachable mặc định 30 ngày; mục vẫn tới được thì giữ 90 ngày (gc.reflogExpire). Vì vậy “cứu sớm” là một phần của mọi lần cứu hộ.",
+          },
+          {
+            question: "Which command unstages app.js but keeps your edits, exactly like git restore --staged app.js?|||Which command unstages app.js but keeps your edits, exactly like git restore --staged app.js?",
+            options: [
+              "git reset -- app.js",
+              "git checkout -- app.js",
+              "git rm app.js",
+              "git stash app.js",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: git reset with a path copies HEAD’s version into the index only (status changes from “M ” to “ M”). checkout -- app.js overwrites the file on disk, losing the edits.|||VI: git reset kèm đường dẫn chỉ chép bản của HEAD vào index (status đổi từ “M ” sang “ M”). checkout -- app.js ghi đè file trên đĩa, mất phần đã sửa.",
+          },
+          {
+            question: "You amended a commit that you had ALREADY pushed. Now git push is rejected as non-fast-forward. Why?|||You amended a commit that you had ALREADY pushed. Now git push is rejected as non-fast-forward. Why?",
+            options: [
+              "The remote does not allow amend",
+              "Your credentials expired during the amend",
+              "Amend created a new commit with a new hash; the remote still has the old one, so the histories diverged",
+              "Amend deleted the remote branch",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: An amended commit is a new object. Your branch no longer contains the pushed commit, so a normal push would discard it. On a shared branch, revert or a follow-up commit is the safe choice.|||VI: Commit đã amend là một đối tượng mới. Nhánh của bạn không còn chứa commit đã push, nên push bình thường sẽ vứt nó đi. Trên nhánh chung, revert hoặc một commit tiếp theo là lựa chọn an toàn.",
+          },
+          {
+            question: "What does git revert <hash> do to history?|||What does git revert <hash> do to history?",
+            options: [
+              "Deletes the commit from history",
+              "Moves the branch back to before <hash>",
+              "Edits the commit in place",
+              "Adds a new commit that applies the inverse of <hash>; existing history is kept",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: revert only adds. That is why it is safe on pushed branches: nobody’s history is rewritten. Deleting or moving the branch is what reset does.|||VI: revert chỉ thêm vào. Vì vậy nó an toàn trên nhánh đã push: lịch sử của không ai bị viết lại. Xoá hay dời nhánh là việc của reset.",
           },
         ],
       },

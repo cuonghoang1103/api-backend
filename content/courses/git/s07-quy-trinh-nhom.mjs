@@ -6,8 +6,79 @@
  * Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
+
+// Lượt chạy THẬT cho mốc dự án 8 (repo nháp /tmp/git-moc-8, git 2.51, 11/2026) — dùng chung cho hai khối ngôn ngữ.
+const DEMO_MOC_8 = `
+<pre><code class="language-bash"><span class="tok-comment"># a repo with a few commits on main (GitHub flow: main is always releasable)</span>
+git init -q app
+cd app
+git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+echo "login" &gt; app.txt &amp;&amp; git add . &amp;&amp; git commit -qm "feat(auth): add login page"
+echo "cart" &gt;&gt; app.txt &amp;&amp; git commit -qam "feat(cart): add cart page"
+echo "fix price" &gt;&gt; app.txt &amp;&amp; git commit -qam "fix(cart): round prices to 1000 VND"
+git log --oneline</code></pre>
+<div class="out">$ git init -q app
+$ cd app
+$ git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+$ echo "login" &gt; app.txt &amp;&amp; git add . &amp;&amp; git commit -qm "feat(auth): add login page"
+$ echo "cart" &gt;&gt; app.txt &amp;&amp; git commit -qam "feat(cart): add cart page"
+$ echo "fix price" &gt;&gt; app.txt &amp;&amp; git commit -qam "fix(cart): round prices to 1000 VND"
+$ git log --oneline
+880ad18 fix(cart): round prices to 1000 VND
+bbd0afc feat(cart): add cart page
+02caf3f feat(auth): add login page</div>
+<pre><code class="language-bash"><span class="tok-comment"># release v0.1.0: an ANNOTATED tag is its own object</span>
+git tag -a v0.1.0 -m "v0.1.0: login + cart (iteration 1)"
+git cat-file -t v0.1.0
+git tag -n
+git log --format="- %s" v0.1.0</code></pre>
+<div class="out">$ git tag -a v0.1.0 -m "v0.1.0: login + cart (iteration 1)"
+$ git cat-file -t v0.1.0
+tag
+$ git tag -n
+v0.1.0          v0.1.0: login + cart (iteration 1)
+$ git log --format="- %s" v0.1.0
+- fix(cart): round prices to 1000 VND
+- feat(cart): add cart page
+- feat(auth): add login page</div>
+<pre><code class="language-bash"><span class="tok-comment"># main moves on with an unreleased feature…</span>
+echo "profile (unreleased)" &gt;&gt; app.txt &amp;&amp; git commit -qam "feat(profile): add profile page"
+git describe --tags</code></pre>
+<div class="out">$ echo "profile (unreleased)" &gt;&gt; app.txt &amp;&amp; git commit -qam "feat(profile): add profile page"
+$ git describe --tags
+v0.1.0-1-gb0cc09b</div>
+<pre><code class="language-bash"><span class="tok-comment"># …then a bug is reported in v0.1.0: hotfix starts from the TAG, not from main</span>
+git switch -c hotfix/0.1.1 v0.1.0
+sed -i.bak "s/login/login (fixed redirect)/" app.txt &amp;&amp; rm app.txt.bak &amp;&amp; git commit -qam "fix(auth): redirect to home after login"
+git tag -a v0.1.1 -m "v0.1.1: hotfix login redirect"
+git switch -q main &amp;&amp; git merge --no-edit hotfix/0.1.1
+git log --graph --oneline --decorate
+git branch --contains $(git rev-parse v0.1.1^{commit})</code></pre>
+<div class="out">$ git switch -c hotfix/0.1.1 v0.1.0
+Switched to a new branch 'hotfix/0.1.1'
+$ sed -i.bak "s/login/login (fixed redirect)/" app.txt &amp;&amp; rm app.txt.bak &amp;&amp; git commit -qam "fix(auth): redirect to home after login"
+$ git tag -a v0.1.1 -m "v0.1.1: hotfix login redirect"
+$ git switch -q main &amp;&amp; git merge --no-edit hotfix/0.1.1
+Auto-merging app.txt
+Merge made by the 'ort' strategy.
+ app.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git log --graph --oneline --decorate
+*   cf184b2 (HEAD -&gt; main) Merge branch 'hotfix/0.1.1'
+|\\  
+| * e40311b (tag: v0.1.1, hotfix/0.1.1) fix(auth): redirect to home after login
+* | b0cc09b feat(profile): add profile page
+|/  
+* 880ad18 (tag: v0.1.0) fix(cart): round prices to 1000 VND
+* bbd0afc feat(cart): add cart page
+* 02caf3f feat(auth): add login page
+$ git branch --contains $(git rev-parse v0.1.1^{commit})
+  hotfix/0.1.1
+* main</div>
+`;
 
 export default {
   title: 'Chapter 7 — Team workflows, tags & releases|||Chương 7 — Quy trình nhóm, tag & phát hành',
@@ -814,13 +885,27 @@ fix: sua loi trong a.txt
 `,
     },
 
+    /* ─────────────────── Mốc dự án 8 (dự án xuyên suốt khoá) ─────────────────── */
+    baiMoc(8, {
+      demoEn: `
+<p>A tiny project with three commits on main. The demo cuts v0.1.0, lets main move on with an unreleased feature, then ships a hotfix v0.1.1 from the tag. Creating the GitHub Release page itself happens on github.com from the pushed tag.</p>
+${DEMO_MOC_8}
+<p>What to notice: <code>git cat-file -t v0.1.0</code> prints <code>tag</code> — an annotated tag is its own object with a message, which is what a release should point to. <code>git log --format="- %s" v0.1.0</code> is the raw material for the release notes. <code>git describe --tags</code> says <code>v0.1.0-1-gb0cc09b</code>: one unreleased commit after v0.1.0. Because the hotfix branch starts from the TAG, v0.1.1 is v0.1.0 plus one fix and none of the unreleased profile work; merging it back puts the fix on main too (<code>git branch --contains</code> lists main).</p>
+`,
+      demoVi: `
+<p>Một dự án nhỏ có ba commit trên main. Demo cắt bản v0.1.0, để main chạy tiếp với một tính năng chưa phát hành, rồi ra bản hotfix v0.1.1 từ tag. Bản thân trang GitHub Release được tạo trên github.com từ tag đã push.</p>
+${DEMO_MOC_8}
+<p>Để ý: <code>git cat-file -t v0.1.0</code> in <code>tag</code> — tag có chú thích là một đối tượng riêng có lời nhắn, đúng thứ một bản phát hành nên trỏ tới. <code>git log --format="- %s" v0.1.0</code> là nguyên liệu thô cho release notes. <code>git describe --tags</code> báo <code>v0.1.0-1-gb0cc09b</code>: một commit chưa phát hành sau v0.1.0. Vì nhánh hotfix bắt đầu từ TAG, v0.1.1 là v0.1.0 cộng đúng một bản sửa, không dính phần hồ sơ chưa phát hành; merge ngược về thì main cũng có bản sửa (<code>git branch --contains</code> có main).</p>
+`,
+    }),
+
     /* ─────────────────────────── 7.4 Quiz ─────────────────────────── */
     {
       title: '7.4 — Chapter 7 quiz|||7.4 — Kiểm tra Chương 7',
       slug: 'git-7-4-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống về chọn chiến lược nhánh, cờ tính năng, merge ngược trong git-flow, tag nhẹ vs có chú thích, semver, sắp tag có bản -rc, đẩy tag, dời tag đã công bố, hotfix từ tag và cherry-pick -x.',
+      description: 'Mười tình huống về chọn chiến lược nhánh, cờ tính năng, merge ngược trong git-flow, tag nhẹ vs có chú thích, semver, sắp tag có bản -rc, đẩy tag, dời tag đã công bố, hotfix từ tag và cherry-pick -x. Thêm 10 câu tiếng Anh kiểu đề FE (câu 11–20).',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Check</span>
@@ -835,6 +920,7 @@ fix: sua loi trong a.txt
 <li>I know why a pushed tag did not trigger a release workflow, and why moving a published tag is worse than publishing a patch.</li>
 <li>I can branch a hotfix from the live tag and bring the fix back to <code>main</code> with <code>cherry-pick -x</code>.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-07', 17, 'Bảng tra nhanh Chương 7')}
 </div>
 <div class="ml-vi">
@@ -850,11 +936,12 @@ ${slide('git-07', 17, 'Bảng tra nhanh Chương 7')}
 <li>Tôi biết vì sao đã push mà tag không kích hoạt workflow phát hành, và vì sao dời một tag đã công bố tệ hơn ra một bản patch.</li>
 <li>Tôi rẽ được nhánh hotfix từ tag đang chạy và mang bản vá về <code>main</code> bằng <code>cherry-pick -x</code>.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-07', 17, 'Bảng tra nhanh Chương 7')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'Your SWP391 team (5 people) builds one web app with one live deployment, and you can deploy whenever main is green. Which branching strategy fits best?|||Nhóm SWP391 của bạn (5 người) làm một web app, chỉ có một bản đang chạy, và deploy được bất cứ lúc nào main xanh. Chiến lược nhánh nào hợp nhất?',
@@ -965,6 +1052,76 @@ ${slide('git-07', 17, 'Bảng tra nhanh Chương 7')}
             ],
             correctIndex: 2, points: 1,
             explanation: 'EN: cherry-pick re-applies the change on top of main, so the parent differs and the hash differs — in the lesson run a3cd15c became 13e7314 — and -x appends the "(cherry picked from commit …)" line. It does not move main to the original commit (that would drop main’s own work), it does not create a two-parent merge (that is git merge), and it never deletes branches.|||VI: cherry-pick áp lại thay đổi lên đầu main, nên cha khác và mã băm khác — trong lần chạy của bài, a3cd15c thành 13e7314 — còn -x nối thêm dòng "(cherry picked from commit …)". Nó không dời main về commit gốc (làm vậy là vứt việc riêng của main), không tạo commit merge hai cha (đó là git merge), và không bao giờ xoá nhánh.',
+          },
+          /* FE 11 */
+          {
+            question: 'The current version is 1.4.2. The next release removes a public API endpoint and adds a new one. What is the next version under semver?|||The current version is 1.4.2. The next release removes a public API endpoint and adds a new one. What is the next version under semver?',
+            options: ['1.5.0', '1.4.3', '2.0.0', '1.5.0-breaking'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: Removing a public API is a breaking change, so MAJOR goes up and MINOR/PATCH reset: 2.0.0. Adding a feature alone would be 1.5.0.|||VI: Gỡ một API công khai là thay đổi phá vỡ, nên MAJOR tăng và MINOR/PATCH về 0: 2.0.0. Chỉ thêm tính năng thì mới là 1.5.0.',
+          },
+          /* FE 12 */
+          {
+            question: 'The current version is 1.4.2. The next release adds one backward-compatible feature and two bug fixes. Next version?|||The current version is 1.4.2. The next release adds one backward-compatible feature and two bug fixes. Next version?',
+            options: ['1.5.0', '1.4.4', '2.0.0', '1.4.3'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Any new backward-compatible feature bumps MINOR and resets PATCH: 1.5.0. Bug fixes do not add up into PATCH numbers.|||VI: Có tính năng mới tương thích ngược là tăng MINOR và PATCH về 0: 1.5.0. Các bản sửa lỗi không cộng dồn vào số PATCH.',
+          },
+          /* FE 13 */
+          {
+            question: 'Which ordering follows semver precedence, lowest first?|||Which ordering follows semver precedence, lowest first?',
+            options: ['1.0.0 < 1.0.0-rc.1 < 1.0.0-beta', '1.0.0-rc.1 < 1.0.0-beta < 1.0.0', '1.0.0-beta < 1.0.0 < 1.0.0-rc.1', '1.0.0-beta < 1.0.0-rc.1 < 1.0.0'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: A pre-release is lower than the normal version, and pre-release identifiers compare alphabetically ("beta" < "rc"). So beta < rc.1 < 1.0.0.|||VI: Bản tiền phát hành thấp hơn bản chính thức, và định danh tiền phát hành so theo chữ cái ("beta" < "rc"). Vậy beta < rc.1 < 1.0.0.',
+          },
+          /* FE 14 */
+          {
+            question: 'You created light1 with "git tag light1" and v1.0.0 with "git tag -a". Then you run git push --follow-tags origin main. Which tags reach the remote?|||You created light1 with "git tag light1" and v1.0.0 with "git tag -a". Then you run git push --follow-tags origin main. Which tags reach the remote?',
+            options: ['Both tags', 'Only v1.0.0', 'Only light1', 'Neither; tags need git push --tags'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: --follow-tags pushes annotated tags that point to pushed commits, never lightweight ones (tested: only v1.0.0 appeared in git ls-remote --tags).|||VI: --follow-tags đẩy các tag có chú thích trỏ tới commit được push, không bao giờ đẩy tag nhẹ (đã thử: chỉ v1.0.0 hiện trong git ls-remote --tags).',
+          },
+          /* FE 15 */
+          {
+            question: 'Which command deletes the tag v1.0.0 from the remote origin?|||Which command deletes the tag v1.0.0 from the remote origin?',
+            options: ['git push origin --delete v1.0.0', 'git tag -d v1.0.0', 'git push --prune origin', 'git fetch --prune origin'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: git push origin --delete v1.0.0 removes the remote ref (tested: "- [deleted] v1.0.0"). git tag -d only deletes your local tag; the prune options clean up local refs.|||VI: git push origin --delete v1.0.0 xoá ref ở remote (đã thử: "- [deleted] v1.0.0"). git tag -d chỉ xoá tag ở máy bạn; các tuỳ chọn prune dọn ref cục bộ.',
+          },
+          /* FE 16 */
+          {
+            question: 'A bug fix is commit a1b2c3d. Which command lists every release tag that already contains the fix?|||A bug fix is commit a1b2c3d. Which command lists every release tag that already contains the fix?',
+            options: ['git describe a1b2c3d', 'git log --tags a1b2c3d', 'git tag --contains a1b2c3d', 'git branch --contains a1b2c3d'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: git tag --contains lists the tags whose history includes the commit (tested). git branch --contains answers the same question for branches, not releases.|||VI: git tag --contains liệt kê các tag mà lịch sử có chứa commit đó (đã thử). git branch --contains trả lời cùng câu hỏi cho nhánh, không phải cho bản phát hành.',
+          },
+          /* FE 17 */
+          {
+            question: 'In git-flow, where does a hotfix branch start, and where is it merged?|||In git-flow, where does a hotfix branch start, and where is it merged?',
+            options: ['From develop; merged into develop only', 'From main; merged into main and develop', 'From the release branch; merged into main only', 'From main; merged into main only'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: A hotfix fixes what is in production, so it starts from main and must also go back into develop — otherwise the next release brings the bug back.|||VI: Hotfix sửa thứ đang chạy production, nên bắt đầu từ main và phải đưa cả về develop — nếu không bản phát hành sau sẽ mang lỗi quay lại.',
+          },
+          /* FE 18 */
+          {
+            question: 'Which statement describes GitHub flow?|||Which statement describes GitHub flow?',
+            options: ['Two long-lived branches, main and develop, plus release branches', 'Everyone commits directly to main without pull requests', 'A new long-lived branch is created for every release', 'One long-lived branch, main; short-lived branches merged through pull requests'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: GitHub flow has one long-lived branch and short-lived topic branches that go through PRs. Two long-lived branches plus release branches is git-flow.|||VI: GitHub flow có một nhánh sống lâu và các nhánh chủ đề ngắn hạn đi qua PR. Hai nhánh sống lâu cộng nhánh release là git-flow.',
+          },
+          /* FE 19 */
+          {
+            question: 'To draft release notes for v1.1.0, which command lists the commits that are in v1.1.0 but not in v1.0.0?|||To draft release notes for v1.1.0, which command lists the commits that are in v1.1.0 but not in v1.0.0?',
+            options: ['git log --oneline v1.1.0..v1.0.0', 'git diff v1.0.0 v1.1.0', 'git log --oneline v1.0.0..v1.1.0', 'git show v1.1.0'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: v1.0.0..v1.1.0 = reachable from v1.1.0 but not from v1.0.0. The reversed range is (normally) empty; git diff shows lines, not commits.|||VI: v1.0.0..v1.1.0 = tới được từ v1.1.0 nhưng không từ v1.0.0. Đảo ngược thì (thường) rỗng; git diff cho thấy dòng, không phải commit.',
+          },
+          /* FE 20 */
+          {
+            question: 'What is true about an annotated tag compared with a lightweight tag?|||What is true about an annotated tag compared with a lightweight tag?',
+            options: ['It is a separate object that stores the tagger, date and message', 'It can only be created on the latest commit', 'It is pushed automatically by a plain git push', 'It cannot be deleted once it is created'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: An annotated tag is a tag object (git cat-file -t prints "tag") with tagger, date and message; a lightweight tag is just a ref to a commit. Neither is pushed by a plain git push.|||VI: Tag có chú thích là một đối tượng tag (git cat-file -t in "tag") có người gắn, ngày và lời nhắn; tag nhẹ chỉ là một ref trỏ tới commit. Cả hai đều không được đẩy bởi git push trần.',
           },
         ],
       },

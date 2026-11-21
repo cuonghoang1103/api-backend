@@ -6,8 +6,96 @@
  * & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
+
+// Mốc dự án 6: lượt chạy mẫu THẬT trong /tmp/git-moc-6 (git 2.51.1, 11/2026) — dùng chung cho khối EN/VI.
+const MOC_6 = [
+  `
+<pre><code class="language-bash">cd an
+<span class="tok-comment"># no token or password inside any URL</span>
+git remote -v
+<span class="tok-comment"># a working branch gets its upstream once, with -u</span>
+git switch -c feat/SWP-8-login
+echo "login" &gt; login.txt &amp;&amp; git add . &amp;&amp; git commit -qm "feat(auth): add login page"
+git push -u origin feat/SWP-8-login
+git branch -vv</code></pre>
+<div class="out">$ git remote -v
+origin	/tmp/git-moc-6/github.git (fetch)
+origin	/tmp/git-moc-6/github.git (push)
+$ git switch -c feat/SWP-8-login
+Switched to a new branch 'feat/SWP-8-login'
+$ git push -u origin feat/SWP-8-login
+To /tmp/git-moc-6/github.git
+ * [new branch]      feat/SWP-8-login -&gt; feat/SWP-8-login
+branch 'feat/SWP-8-login' set up to track 'origin/feat/SWP-8-login'.
+$ git branch -vv
+* feat/SWP-8-login 846524b [origin/feat/SWP-8-login] feat(auth): add login page
+  main             038ed50 [origin/main] docs: add README</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># meanwhile Binh pushes to main; An fetches and LOOKS before integrating</span>
+git fetch
+git log --oneline HEAD..origin/main
+git log --oneline main..origin/main</code></pre>
+<div class="out">$ git fetch
+From /tmp/git-moc-6/github
+   038ed50..1e7e7ca  main       -&gt; origin/main
+$ git log --oneline HEAD..origin/main
+1e7e7ca feat(rooms): add room list
+$ git log --oneline main..origin/main
+1e7e7ca feat(rooms): add room list</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># an annotated tag is NOT sent by a plain git push</span>
+git switch main &amp;&amp; git merge -q --ff-only origin/main
+git tag -a v0.1.0 -m "First usable version"
+git push
+git push origin v0.1.0
+git ls-remote --tags origin</code></pre>
+<div class="out">$ git switch main &amp;&amp; git merge -q --ff-only origin/main
+Switched to branch 'main'
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+$ git push
+Everything up-to-date
+$ git push origin v0.1.0
+To /tmp/git-moc-6/github.git
+ * [new tag]         v0.1.0 -&gt; v0.1.0
+$ git ls-remote --tags origin
+e0228440e6f9f76a630a3427d3fd04a22a85786f	refs/tags/v0.1.0
+1e7e7ca58a857e9adacd5b44278472d28616a67a	refs/tags/v0.1.0^{}</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># feature merged ⇒ delete it on the remote, then prune locally</span>
+git merge -q --no-ff feat/SWP-8-login -m "Merge branch 'feat/SWP-8-login'"
+git push -q
+git push origin --delete feat/SWP-8-login
+cd ../binh
+git fetch
+git branch -r
+git fetch --prune
+git branch -r</code></pre>
+<div class="out">$ git push origin --delete feat/SWP-8-login
+To /tmp/git-moc-6/github.git
+ - [deleted]         feat/SWP-8-login
+$ git fetch
+From /tmp/git-moc-6/github
+   1e7e7ca..e325828  main       -&gt; origin/main
+ * [new tag]         v0.1.0     -&gt; v0.1.0
+$ git branch -r
+  origin/HEAD -&gt; origin/main
+  origin/feat/SWP-8-login
+  origin/main
+$ git fetch --prune
+From /tmp/git-moc-6/github
+ - [deleted]         (none)     -&gt; origin/feat/SWP-8-login
+$ git branch -r
+  origin/HEAD -&gt; origin/main
+  origin/main</div>
+`,
+];
 
 export default {
   title: 'Chapter 5 — Remotes & GitHub|||Chương 5 — Remote & GitHub',
@@ -1099,13 +1187,39 @@ fatal: Could not read from remote repository.</div>
 `,
     },
 
+    /* ─────────────────── 🛠 Mốc dự án 6 ─────────────────── */
+    baiMoc(6, {
+      demoEn: `
+<p>Two clones, An and Binh, share a bare repository <code>github.git</code> that plays the role of GitHub (prepared before the first command, with one README commit). With the real GitHub the URL would be <code>https://github.com/…</code> or <code>git@github.com:…</code>.</p>
+<p>1. <code>remote -v</code> must never show a token or password in the URL. <code>push -u</code> links the new branch to its upstream once; <code>branch -vv</code> shows <code>[origin/…]</code> for every branch.</p>
+${MOC_6[0]}
+<p>2. Binh pushed to main meanwhile. <code>fetch</code> only updates origin/main; <code>log HEAD..origin/main</code> lists exactly what you are about to integrate — look before you merge.</p>
+${MOC_6[1]}
+<p>3. The switch warns that main is behind; <code>merge --ff-only</code> catches up. A plain <code>git push</code> says “Everything up-to-date” — the tag stays local until it is pushed by name. <code>ls-remote</code> then shows the tag object and, with <code>^{}</code>, the commit it points to.</p>
+${MOC_6[2]}
+<p>4. After merging, the feature branch is deleted on the remote. Binh still sees <code>origin/feat/SWP-8-login</code> after a plain fetch; <code>fetch --prune</code> removes it.</p>
+${MOC_6[3]}
+`,
+      demoVi: `
+<p>Hai bản clone của An và Bình dùng chung một repo trần <code>github.git</code> đóng vai GitHub (chuẩn bị trước lệnh đầu tiên, có một commit README). Với GitHub thật thì URL sẽ là <code>https://github.com/…</code> hoặc <code>git@github.com:…</code>.</p>
+<p>1. <code>remote -v</code> không bao giờ được hiện token hay mật khẩu trong URL. <code>push -u</code> nối nhánh mới với upstream một lần; <code>branch -vv</code> hiện <code>[origin/…]</code> cho mọi nhánh.</p>
+${MOC_6[0]}
+<p>2. Trong lúc đó Bình đã push lên main. <code>fetch</code> chỉ cập nhật origin/main; <code>log HEAD..origin/main</code> liệt kê đúng thứ bạn sắp tích hợp — xem trước rồi mới merge.</p>
+${MOC_6[1]}
+<p>3. Lệnh switch cảnh báo main đang tụt sau; <code>merge --ff-only</code> đuổi kịp. <code>git push</code> trần báo “Everything up-to-date” — tag vẫn nằm ở máy cho tới khi được push đích danh. <code>ls-remote</code> sau đó hiện đối tượng tag và, với <code>^{}</code>, commit nó trỏ tới.</p>
+${MOC_6[2]}
+<p>4. Merge xong, nhánh tính năng được xoá trên remote. Bình vẫn thấy <code>origin/feat/SWP-8-login</code> sau một lần fetch thường; <code>fetch --prune</code> mới gỡ nó đi.</p>
+${MOC_6[3]}
+`,
+    }),
+
     /* ─────────────────────────── 5.5 Quiz ─────────────────────────── */
     {
       title: '5.5 — Chapter 5 quiz|||5.5 — Kiểm tra Chương 5',
       slug: 'git-5-5-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật về remote: origin/main là ảnh chụp, fetch an toàn, git pull khi hai bên phân ly, token thay mật khẩu, credential helper, push -u, lời từ chối fetch first, tag không tự đi theo, và quy trình fork/upstream.',
+      description: 'Mười tình huống thật về remote: origin/main là ảnh chụp, fetch an toàn, git pull khi hai bên phân ly, token thay mật khẩu, credential helper, push -u, lời từ chối fetch first, tag không tự đi theo, và quy trình fork/upstream. Thêm 10 câu tiếng Anh kiểu đề thi FE (câu 11–20) có giải thích.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Check</span>
@@ -1120,6 +1234,7 @@ fatal: Could not read from remote repository.</div>
 <li>I can read "(fetch first)" and "(non-fast-forward)" and respond without <code>--force</code>.</li>
 <li>I can set up <code>origin</code> + <code>upstream</code> for a fork and bring a stale fork up to date.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-05', 17, 'Bảng tra nhanh Chương 5')}
 </div>
 <div class="ml-vi">
@@ -1135,11 +1250,12 @@ ${slide('git-05', 17, 'Bảng tra nhanh Chương 5')}
 <li>Tôi đọc được "(fetch first)" và "(non-fast-forward)" và xử lý mà không cần <code>--force</code>.</li>
 <li>Tôi dựng được <code>origin</code> + <code>upstream</code> cho một fork và đưa một fork cũ lên bằng dự án gốc.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-05', 17, 'Bảng tra nhanh Chương 5')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'Back after a week off, you run git log --oneline origin/main and see nothing new. An says he pushed three commits to main yesterday. What is going on?|||Nghỉ một tuần quay lại, bạn chạy git log --oneline origin/main và không thấy gì mới. An bảo hôm qua cậu ấy đã push ba commit lên main. Chuyện gì đang xảy ra?',
@@ -1250,6 +1366,117 @@ ${slide('git-05', 17, 'Bảng tra nhanh Chương 5')}
             ],
             correctIndex: 0, points: 1,
             explanation: 'EN: git status compares main with origin/main — your fork, which is just as stale as you are (the chapter’s test fork showed "## main...origin/main" while two upstream commits were missing). Only upstream/main, after git fetch upstream, tells the truth. Plain git pull is the tempting answer, but main tracks origin (your fork), so it fetches from the fork and brings nothing new. Re-forking works but throws away your branches and pull-request history; the Sync fork button on GitHub is the web equivalent of the correct answer.|||VI: git status so main với origin/main — tức là fork của bạn, thứ cũ đúng bằng bạn (fork thử của chương hiện "## main...origin/main" trong khi đang thiếu hai commit của upstream). Chỉ upstream/main, sau git fetch upstream, mới nói thật. git pull trần là đáp án hấp dẫn, nhưng main theo dõi origin (fork của bạn), nên nó kéo từ fork về và chẳng mang gì mới. Fork lại thì được nhưng vứt mất nhánh và lịch sử pull request; nút Sync fork trên GitHub là bản web của đáp án đúng.',
+          },
+          // ── Câu 11–20: tiếng Anh kiểu đề thi FE (11/2026), hành vi lệnh đã chạy thử trên git 2.51.1 ──
+          {
+            question: "What does git remote add upstream https://github.com/org/lib.git do?|||What does git remote add upstream https://github.com/org/lib.git do?",
+            options: [
+              "Clones the repository into a folder named upstream",
+              "Fetches all branches of the original project",
+              "Replaces origin with the new URL",
+              "Only records a new remote named upstream; nothing is downloaded until you fetch",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: remote add writes a [remote] section in .git/config. git branch -r shows no upstream/ branches until git fetch upstream (verified).|||VI: remote add ghi một mục [remote] vào .git/config. git branch -r chưa có nhánh upstream/ nào cho tới khi git fetch upstream (đã kiểm).",
+          },
+          {
+            question: "Which command deletes the branch feature/login on GitHub (the remote)?|||Which command deletes the branch feature/login on GitHub (the remote)?",
+            options: [
+              "git push origin --delete feature/login",
+              "git branch -d origin/feature/login",
+              "git remote remove feature/login",
+              "git fetch --delete feature/login",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: Deleting on the server is a push of a deletion (git push origin --delete, or git push origin :feature/login). git branch -d works on local branches; git remote remove deletes a whole remote entry.|||VI: Xoá trên máy chủ là push một lần xoá (git push origin --delete, hoặc git push origin :feature/login). git branch -d làm việc với nhánh cục bộ; git remote remove xoá cả một remote.",
+          },
+          {
+            question: "Teammates deleted several merged branches on GitHub, but git branch -r on your machine still lists them. Which command cleans them up?|||Teammates deleted several merged branches on GitHub, but git branch -r on your machine still lists them. Which command cleans them up?",
+            options: [
+              "git pull --all",
+              "git fetch --prune",
+              "git remote rename origin",
+              "git remote update --force",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: --prune removes remote-tracking refs whose branch no longer exists on the remote. A plain fetch or pull keeps them (verified: origin/feat stays until --prune).|||VI: --prune xoá các nhánh theo dõi remote mà nhánh gốc không còn trên remote. fetch hay pull thường vẫn giữ chúng (đã kiểm: origin/feat còn cho tới khi --prune).",
+          },
+          {
+            question: "You created a lightweight tag \"light\" and an annotated tag v1.0.0 on pushed commits, then ran git push --follow-tags. Which tags reach the remote?|||You created a lightweight tag \"light\" and an annotated tag v1.0.0 on pushed commits, then ran git push --follow-tags. Which tags reach the remote?",
+            options: [
+              "Both tags",
+              "Only light",
+              "Only v1.0.0",
+              "Neither; tags need git push --tags",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: --follow-tags pushes ANNOTATED tags that point at pushed commits; lightweight tags are skipped (verified with git ls-remote --tags). --tags would push both.|||VI: --follow-tags đẩy tag CÓ CHÚ THÍCH trỏ tới commit đã push; tag nhẹ bị bỏ qua (đã kiểm bằng git ls-remote --tags). --tags thì đẩy cả hai.",
+          },
+          {
+            question: "git branch -vv shows \"[origin/main: ahead 1, behind 1]\". What does it mean?|||git branch -vv shows \"[origin/main: ahead 1, behind 1]\". What does it mean?",
+            options: [
+              "You have 1 local commit that origin/main lacks, and origin/main has 1 commit you do not have yet",
+              "You must run git push --force",
+              "Your last push failed one time",
+              "origin/main is one branch ahead of main",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: ahead/behind compares your branch with its last-fetched upstream: the branches have diverged. Integrate first (pull with merge or rebase), then push; force-pushing would throw away the teammate’s commit.|||VI: ahead/behind so nhánh của bạn với upstream ở lần fetch gần nhất: hai nhánh đã phân ly. Tích hợp trước (pull bằng merge hoặc rebase) rồi mới push; force-push sẽ vứt commit của bạn cùng nhóm.",
+          },
+          {
+            question: "Which command checks that your SSH key is accepted by GitHub?|||Which command checks that your SSH key is accepted by GitHub?",
+            options: [
+              "ssh-keygen -T github.com",
+              "git remote -v --ssh",
+              "ssh -T git@github.com",
+              "git push --dry-run --ssh",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: ssh -T git@github.com answers \"Hi <user>! You've successfully authenticated, but GitHub does not provide shell access.\" ssh-keygen creates keys; the other options do not exist.|||VI: ssh -T git@github.com trả lời \"Hi <user>! You've successfully authenticated, but GitHub does not provide shell access.\" ssh-keygen dùng để tạo khoá; các lệnh còn lại không tồn tại.",
+          },
+          {
+            question: "You want an existing clone to use SSH instead of HTTPS. Which command?|||You want an existing clone to use SSH instead of HTTPS. Which command?",
+            options: [
+              "git remote set-url origin git@github.com:team3/booking.git",
+              "git clone --ssh origin",
+              "git config remote.ssh true",
+              "git remote add origin git@github.com:team3/booking.git",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: set-url changes the URL of the existing remote. remote add origin fails because origin already exists; the other two are not real options.|||VI: set-url đổi URL của remote đang có. remote add origin báo lỗi vì origin đã tồn tại; hai phương án còn lại không phải tuỳ chọn thật.",
+          },
+          {
+            question: "You run git push origin main:release. What happens on the remote?|||You run git push origin main:release. What happens on the remote?",
+            options: [
+              "main is renamed to release",
+              "The remote branch release is created or updated to point at your local main",
+              "Your local branch release is pushed to main",
+              "Git pushes main and creates a tag named release",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: The refspec is <local>:<remote>. Verified: the remote now has refs/heads/release at the same commit as main; main itself is untouched.|||VI: Refspec có dạng <cục-bộ>:<remote>. Đã kiểm: remote có thêm refs/heads/release ở cùng commit với main; bản thân main không đổi.",
+          },
+          {
+            question: "git branch -vv shows \"[origin/feat: gone]\" next to your local branch feat. What does it mean?|||git branch -vv shows \"[origin/feat: gone]\" next to your local branch feat. What does it mean?",
+            options: [
+              "Your local branch feat was deleted",
+              "feat was merged into main",
+              "The branch was deleted on the remote and the remote-tracking ref was pruned; your local branch still exists",
+              "Your network connection to origin is down",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: gone = the upstream recorded in your config no longer exists (verified after push --delete and fetch --prune). If feat is merged, delete it with git branch -d.|||VI: gone = upstream ghi trong cấu hình của bạn không còn tồn tại (đã kiểm sau push --delete và fetch --prune). Nếu feat đã merge thì xoá bằng git branch -d.",
+          },
+          {
+            question: "Why would a team member choose a fine-grained personal access token over a classic token for pushing over HTTPS?|||Why would a team member choose a fine-grained personal access token over a classic token for pushing over HTTPS?",
+            options: [
+              "It never expires",
+              "It works without HTTPS",
+              "It is the only kind of token that can push",
+              "It can be limited to selected repositories and specific permissions",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: Fine-grained tokens are scoped to chosen repositories and permissions and given a short expiry, so a leaked token can do far less. Classic tokens can also push, with broad scopes.|||VI: Token fine-grained được giới hạn theo repo và quyền bạn chọn, kèm thời hạn ngắn, nên lộ ra thì làm hại ít hơn nhiều. Token classic cũng push được, nhưng phạm vi rộng.",
           },
         ],
       },

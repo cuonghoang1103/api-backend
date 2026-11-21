@@ -10,6 +10,7 @@
  * chính thức, tính đến 09/2026.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 export default {
   title: 'Chapter 14 — Everyday Git in your tools: VS Code, GUIs & config|||Chương 14 — Git hằng ngày trong công cụ: VS Code, giao diện đồ hoạ & cấu hình',
@@ -1143,13 +1144,113 @@ new mode 100755</div>
 </div>
 `,
     },
+    /* ─────────────────────────── Mốc dự án 15 (dự án xuyên suốt khoá) ─────────────────────────── */
+    baiMoc(15, {
+      demoEn: `
+<p>To leave the real <code>~/.gitconfig</code> alone, this demo ran with <code>HOME=/tmp/git-moc-15/home</code>, so every <code>--global</code> and every <code>~</code> below points into the scratch folder. Personal default: <code>user.email an.personal@example.com</code>. First, simulate a Windows teammate who committed with CRLF line endings (<code>autocrlf</code> off).</p>
+<pre><code class="language-bash">git init -q -b main shop &amp;&amp; cd shop
+git config --global core.autocrlf false
+printf "line one\\r\\nline two\\r\\n" &gt; notes.txt &amp;&amp; printf "#!/bin/sh\\r\\necho run\\r\\n" &gt; run.sh &amp;&amp; git add . &amp;&amp; git commit -q -m "chore: files from a Windows laptop"
+git ls-files --eol</code></pre>
+<div class="out">i/crlf  w/crlf  attr/                 	notes.txt
+i/crlf  w/crlf  attr/                 	run.sh</div>
+<p><code>i/crlf</code> = the index (what is committed) holds CRLF. The team-wide fix is a <code>.gitattributes</code> — it is committed, so it beats every member’s own <code>core.autocrlf</code>.</p>
+<pre><code class="language-bash">cat .gitattributes</code></pre>
+<div class="out">* text=auto
+*.sh text eol=lf
+*.bat text eol=crlf
+*.png binary
+*.jar binary</div>
+<p>Renormalize in ONE dedicated commit. Right after it the index is <code>i/lf</code> but the files on disk are still <code>w/crlf</code>; refreshing the working tree fixes that.</p>
+<pre><code class="language-bash">git add --renormalize . &amp;&amp; git add .gitattributes &amp;&amp; git status -s
+git commit -q -m "chore: normalize line endings via .gitattributes" &amp;&amp; git ls-files --eol
+git rm -q --cached -r . &amp;&amp; git reset -q --hard &amp;&amp; git ls-files --eol</code></pre>
+<div class="out">A  .gitattributes
+M  notes.txt
+M  run.sh
+i/lf    w/lf    attr/text=auto        	.gitattributes
+i/lf    w/crlf  attr/text=auto        	notes.txt
+i/lf    w/crlf  attr/text eol=lf      	run.sh
+i/lf    w/lf    attr/text=auto        	.gitattributes
+i/lf    w/lf    attr/text=auto        	notes.txt
+i/lf    w/lf    attr/text eol=lf      	run.sh</div>
+<p>An <code>.editorconfig</code> so every editor (VS Code, NetBeans, IntelliJ) agrees on indentation and the final newline:</p>
+<pre><code class="language-ini">root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 2</code></pre>
+<pre><code class="language-bash">git add .editorconfig &amp;&amp; git commit -q -m "chore: add .editorconfig" &amp;&amp; git log --oneline</code></pre>
+<div class="out">de423eb chore: add .editorconfig
+026ea9a chore: normalize line endings via .gitattributes
+4efd612 chore: files from a Windows laptop</div>
+<p>Two identities without thinking about it: everything under <code>~/school/</code> uses the school email, everything else the personal one. <code>--show-origin</code> proves WHICH file won.</p>
+<pre><code class="language-bash">printf "[user]\\n\\temail = an.nguyen@school.example\\n" &gt; ~/.gitconfig-school
+git config --global includeIf."gitdir:~/school/".path ~/.gitconfig-school
+git config --show-origin user.email
+cd /tmp/git-moc-15 &amp;&amp; git init -q personal &amp;&amp; cd personal &amp;&amp; git config --show-origin user.email</code></pre>
+<div class="out">file:/tmp/git-moc-15/home/.gitconfig-school	an.nguyen@school.example
+file:/tmp/git-moc-15/home/.gitconfig	an.personal@example.com</div>
+`,
+      demoVi: `
+<p>Để không đụng vào <code>~/.gitconfig</code> thật, demo này chạy với <code>HOME=/tmp/git-moc-15/home</code>, nên mọi <code>--global</code> và mọi <code>~</code> dưới đây đều trỏ vào thư mục nháp. Mặc định cá nhân: <code>user.email an.personal@example.com</code>. Trước hết, mô phỏng một bạn dùng Windows đã commit với ký tự xuống dòng CRLF (tắt <code>autocrlf</code>).</p>
+<pre><code class="language-bash">git init -q -b main shop &amp;&amp; cd shop
+git config --global core.autocrlf false
+printf "line one\\r\\nline two\\r\\n" &gt; notes.txt &amp;&amp; printf "#!/bin/sh\\r\\necho run\\r\\n" &gt; run.sh &amp;&amp; git add . &amp;&amp; git commit -q -m "chore: files from a Windows laptop"
+git ls-files --eol</code></pre>
+<div class="out">i/crlf  w/crlf  attr/                 	notes.txt
+i/crlf  w/crlf  attr/                 	run.sh</div>
+<p><code>i/crlf</code> = index (thứ đã commit) đang chứa CRLF. Cách sửa cho cả nhóm là <code>.gitattributes</code> — nó được commit, nên thắng <code>core.autocrlf</code> riêng của từng người.</p>
+<pre><code class="language-bash">cat .gitattributes</code></pre>
+<div class="out">* text=auto
+*.sh text eol=lf
+*.bat text eol=crlf
+*.png binary
+*.jar binary</div>
+<p>Chuẩn hoá lại trong MỘT commit riêng. Ngay sau đó index đã là <code>i/lf</code> nhưng file trên đĩa vẫn <code>w/crlf</code>; làm mới thư mục làm việc là xong.</p>
+<pre><code class="language-bash">git add --renormalize . &amp;&amp; git add .gitattributes &amp;&amp; git status -s
+git commit -q -m "chore: normalize line endings via .gitattributes" &amp;&amp; git ls-files --eol
+git rm -q --cached -r . &amp;&amp; git reset -q --hard &amp;&amp; git ls-files --eol</code></pre>
+<div class="out">A  .gitattributes
+M  notes.txt
+M  run.sh
+i/lf    w/lf    attr/text=auto        	.gitattributes
+i/lf    w/crlf  attr/text=auto        	notes.txt
+i/lf    w/crlf  attr/text eol=lf      	run.sh
+i/lf    w/lf    attr/text=auto        	.gitattributes
+i/lf    w/lf    attr/text=auto        	notes.txt
+i/lf    w/lf    attr/text eol=lf      	run.sh</div>
+<p>Một file <code>.editorconfig</code> để mọi trình soạn thảo (VS Code, NetBeans, IntelliJ) thống nhất thụt lề và dòng trống cuối file:</p>
+<pre><code class="language-ini">root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 2</code></pre>
+<pre><code class="language-bash">git add .editorconfig &amp;&amp; git commit -q -m "chore: add .editorconfig" &amp;&amp; git log --oneline</code></pre>
+<div class="out">de423eb chore: add .editorconfig
+026ea9a chore: normalize line endings via .gitattributes
+4efd612 chore: files from a Windows laptop</div>
+<p>Hai danh tính mà không phải nhớ: mọi thứ dưới <code>~/school/</code> dùng email trường, phần còn lại dùng email cá nhân. <code>--show-origin</code> chứng minh file NÀO đã thắng.</p>
+<pre><code class="language-bash">printf "[user]\\n\\temail = an.nguyen@school.example\\n" &gt; ~/.gitconfig-school
+git config --global includeIf."gitdir:~/school/".path ~/.gitconfig-school
+git config --show-origin user.email
+cd /tmp/git-moc-15 &amp;&amp; git init -q personal &amp;&amp; cd personal &amp;&amp; git config --show-origin user.email</code></pre>
+<div class="out">file:/tmp/git-moc-15/home/.gitconfig-school	an.nguyen@school.example
+file:/tmp/git-moc-15/home/.gitconfig	an.personal@example.com</div>
+`,
+    }),
+
     /* ─────────────────────────── 14.5 Quiz ─────────────────────────── */
     {
       title: '14.5 — Chapter 14 quiz|||14.5 — Kiểm tra Chương 14',
       slug: 'git-14-5-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật: merge editor và Complete Merge, stage từng dòng, Discard không có đường lùi, Sync và pull.rebase, chọn công cụ cho Linux/SSH, hai bẫy includeIf, --show-origin, CRLF trong PR và trong Docker, đổi tên chỉ khác hoa/thường.',
+      description: 'Mười tình huống thật: merge editor và Complete Merge, stage từng dòng, Discard không có đường lùi, Sync và pull.rebase, chọn công cụ cho Linux/SSH, hai bẫy includeIf, --show-origin, CRLF trong PR và trong Docker, đổi tên chỉ khác hoa/thường. Thêm 10 câu tiếng Anh kiểu đề FE (câu 11–20) về Chương 14.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Check</span>
@@ -1163,6 +1264,7 @@ new mode 100755</div>
 <li>I can find where any setting comes from with <code>--show-origin</code>, and set up two identities with <code>includeIf</code> without falling into its two silent traps.</li>
 <li>I can fix a repository with mixed line endings using <code>.gitattributes</code> and <code>git add --renormalize .</code>, and rename a file by case only with <code>git mv</code>.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-14', 17, 'Bảng tra nhanh Chương 14')}
 </div>
 <div class="ml-vi">
@@ -1177,11 +1279,12 @@ ${slide('git-14', 17, 'Bảng tra nhanh Chương 14')}
 <li>Tôi tìm được bất kỳ thiết lập nào đến từ đâu bằng <code>--show-origin</code>, và dựng được hai danh tính bằng <code>includeIf</code> mà không rơi vào hai cái bẫy im lặng của nó.</li>
 <li>Tôi sửa được một kho lẫn lộn đuôi dòng bằng <code>.gitattributes</code> và <code>git add --renormalize .</code>, và đổi tên một file chỉ khác hoa/thường bằng <code>git mv</code>.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-14', 17, 'Bảng tra nhanh Chương 14')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'You resolved the only conflict in lich.js in VS Code’s merge editor and pressed "Complete Merge". The tab closed. What is the state of the repository now?|||Bạn giải xung đột duy nhất trong lich.js bằng merge editor của VS Code và bấm "Complete Merge". Tab đóng lại. Kho đang ở trạng thái nào?',
@@ -1292,6 +1395,116 @@ ${slide('git-14', 17, 'Bảng tra nhanh Chương 14')}
             ],
             correctIndex: 0, points: 1,
             explanation: 'EN: macOS is case-insensitive, so Git (core.ignorecase=true) sees no change and the repository still contains Header.tsx; Linux, being case-sensitive, has no header.tsx. git mv records the rename in the index: git status then shows R Header.tsx -> header.tsx. Setting core.ignorecase false on a case-insensitive disk makes Git see phantom duplicates; git add -A finds nothing to add; the CI cache is not the problem.|||VI: macOS không phân biệt hoa/thường, nên Git (core.ignorecase=true) không thấy thay đổi và kho vẫn chứa Header.tsx; Linux phân biệt hoa/thường nên không có header.tsx nào. git mv ghi lần đổi tên vào index: git status sau đó hiện R Header.tsx -> header.tsx. Đặt core.ignorecase false trên ổ đĩa không phân biệt hoa/thường khiến Git thấy các bản trùng ma; git add -A không tìm thấy gì để add; cache CI không phải là vấn đề.',
+          },
+          {
+            question: 'user.email is set in both ~/.gitconfig and the repository’s .git/config. Which value does a commit in that repository use?|||user.email is set in both ~/.gitconfig and the repository’s .git/config. Which value does a commit in that repository use?',
+            options: [
+              'The one in ~/.gitconfig, because global settings win',
+              'The one in .git/config, because the most specific level is read last and wins',
+              'Whichever was set most recently by time',
+              'Git refuses to commit until one of them is removed',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Git reads system, then global, then local (then worktree and command line); the last value read wins. git config --show-origin user.email tells you exactly which file supplied it.|||VI: Git đọc system, rồi global, rồi local (rồi worktree và dòng lệnh); giá trị đọc sau cùng thắng. git config --show-origin user.email cho biết chính xác file nào cung cấp giá trị đó.',
+          },
+          {
+            question: 'Your global config contains [includeIf "gitdir:~/school"] (no trailing slash). Inside ~/school/shop, git config user.email does not return the school email. Why?|||Your global config contains [includeIf "gitdir:~/school"] (no trailing slash). Inside ~/school/shop, git config user.email does not return the school email. Why?',
+            options: [
+              'includeIf only works with gitdir/i',
+              'includeIf is ignored unless the included file is inside the repository',
+              'Without the trailing slash the pattern matches only the exact path ~/school, not repositories below it',
+              'The included file must be named .gitconfig-school exactly',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: A pattern ending in "/" gets "**" appended, so it matches everything below. Real run: with "gitdir:~/school" the command printed nothing (exit 1); with "gitdir:~/school/" it printed the included email.|||VI: Mẫu kết thúc bằng "/" được tự thêm "**", nên khớp mọi thứ bên dưới. Chạy thật: với "gitdir:~/school" lệnh không in gì (thoát 1); với "gitdir:~/school/" nó in ra email của file được include.',
+          },
+          {
+            question: 'Which command lists every configuration value together with the file it came from?|||Which command lists every configuration value together with the file it came from?',
+            options: [
+              'git config --list --show-origin',
+              'git config --get-all --global',
+              'git var -l',
+              'git config --edit --system',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: --show-origin prefixes each value with file:<path> (or command line:), which is how you find the forgotten setting that overrides yours. git var -l mixes in computed variables without sources.|||VI: --show-origin thêm file:<đường dẫn> (hoặc command line:) trước mỗi giá trị, đó là cách tìm ra cài đặt bị quên đang đè lên cài đặt của bạn. git var -l trộn cả biến tính toán mà không cho nguồn.',
+          },
+          {
+            question: 'git ls-files --eol prints "i/crlf  w/crlf  attr/  notes.txt". What does i/crlf mean?|||git ls-files --eol prints "i/crlf  w/crlf  attr/  notes.txt". What does i/crlf mean?',
+            options: [
+              'The file in the working directory uses CRLF',
+              'The .gitattributes rule for the file is crlf',
+              'Git will convert the file to CRLF at the next checkout',
+              'The version stored in the index (what gets committed) contains CRLF line endings',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: i/ = index, w/ = working tree, attr/ = the attributes that apply. i/crlf means CRLF bytes are what is committed. After adding * text=auto and running git add --renormalize ., the same command showed i/lf.|||VI: i/ = index, w/ = thư mục làm việc, attr/ = thuộc tính đang áp dụng. i/crlf nghĩa là chính các byte CRLF đã được commit. Sau khi thêm * text=auto và chạy git add --renormalize ., cùng lệnh đó hiện i/lf.',
+          },
+          {
+            question: 'You just added "* text=auto" to .gitattributes in a repository that already has CRLF files committed. What do you run so the existing files are stored with LF?|||You just added "* text=auto" to .gitattributes in a repository that already has CRLF files committed. What do you run so the existing files are stored with LF?',
+            options: [
+              'git config core.autocrlf true',
+              'git add --renormalize . and commit',
+              'git reset --hard HEAD',
+              'git rm -r . and commit',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Attributes apply when content is next added; --renormalize re-adds every tracked file through the new rules (real run: notes.txt and run.sh showed as M, then i/lf). Do it in its own commit so blame can ignore it.|||VI: Thuộc tính áp dụng ở lần thêm nội dung kế tiếp; --renormalize thêm lại mọi file đã theo dõi qua luật mới (chạy thật: notes.txt và run.sh hiện M, rồi i/lf). Làm trong một commit riêng để blame bỏ qua được.',
+          },
+          {
+            question: 'core.autocrlf is set to input. What does Git do with a file containing CRLF when you git add it?|||core.autocrlf is set to input. What does Git do with a file containing CRLF when you git add it?',
+            options: [
+              'Converts CRLF to LF in the index and leaves checkout untouched',
+              'Converts LF to CRLF on checkout only',
+              'Refuses to add the file',
+              'Stores it unchanged and only warns on push',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: input = normalise to LF on the way in, never convert on the way out. A real git add printed "CRLF will be replaced by LF the next time Git touches it" and ls-files --eol showed i/lf w/crlf.|||VI: input = chuẩn hoá về LF khi đưa vào, không bao giờ đổi khi lấy ra. git add chạy thật in "CRLF will be replaced by LF the next time Git touches it" và ls-files --eol hiện i/lf w/crlf.',
+          },
+          {
+            question: 'On a Mac (case-insensitive file system, core.ignorecase=true) you rename Readme.md to README.md with mv. What does git status show?|||On a Mac (case-insensitive file system, core.ignorecase=true) you rename Readme.md to README.md with mv. What does git status show?',
+            options: [
+              'A rename Readme.md -> README.md',
+              'A deleted file and an untracked file',
+              'A merge conflict on README.md',
+              'Nothing at all; use git mv -f Readme.md README.md instead',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: With ignorecase on, Git sees the same path and reports a clean tree — the rename silently never reaches the repository, and a Linux CI later cannot find README.md. git mv -f records it: real status showed "R  Readme.md -> README.md".|||VI: Khi bật ignorecase, Git thấy cùng một đường dẫn và báo cây sạch — lần đổi tên âm thầm không bao giờ vào repo, rồi CI chạy Linux không tìm thấy README.md. git mv -f ghi nhận nó: status thật hiện "R  Readme.md -> README.md".',
+          },
+          {
+            question: 'A teammate on Windows needs run.sh to be executable for everyone. Which command records the executable bit in Git?|||A teammate on Windows needs run.sh to be executable for everyone. Which command records the executable bit in Git?',
+            options: [
+              'chmod +x run.sh on Windows',
+              'git config core.fileMode true',
+              'git update-index --chmod=+x run.sh, then commit',
+              'Add "run.sh executable" to .gitattributes',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: Windows has no Unix permission bits, so Git must be told directly. Real run: git ls-files -s changed from 100644 to 100755 for run.sh. core.fileMode only controls whether Git notices mode changes on disk.|||VI: Windows không có bit quyền kiểu Unix, nên phải báo thẳng cho Git. Chạy thật: git ls-files -s đổi từ 100644 sang 100755 cho run.sh. core.fileMode chỉ quyết định Git có để ý thay đổi quyền trên đĩa hay không.',
+          },
+          {
+            question: 'In VS Code’s Source Control view you click "Discard Changes" on a modified, unstaged file. What is the Git equivalent and the risk?|||In VS Code’s Source Control view you click "Discard Changes" on a modified, unstaged file. What is the Git equivalent and the risk?',
+            options: [
+              'git stash; the change can be popped later',
+              'git restore <file>; the edits are gone and the reflog cannot bring them back',
+              'git revert <file>; a new commit undoes it',
+              'git reset --soft; the edits move back to the index',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Discard on an unstaged change overwrites the file with the index version, exactly like git restore. The edits were never an object, so no reflog or fsck can recover them — the one button in the panel with no way back.|||VI: Discard trên thay đổi chưa staging ghi đè file bằng bản trong index, y như git restore. Phần sửa chưa bao giờ thành đối tượng, nên không reflog hay fsck nào cứu được — đây là nút duy nhất trong bảng không có đường lùi.',
+          },
+          {
+            question: 'You want git lg to print a compact graph of all branches. Which command creates that alias for your user?|||You want git lg to print a compact graph of all branches. Which command creates that alias for your user?',
+            options: [
+              'git config --global alias.lg "log --oneline --graph --all"',
+              'git alias lg "log --oneline --graph --all"',
+              'git config --local lg.alias "log --graph"',
+              'echo "lg = log --graph" >> .gitattributes',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Aliases live under alias.<name> in any config file; --global makes them follow you to every repository. There is no git alias subcommand, and .gitattributes is not configuration.|||VI: Alias nằm dưới alias.<tên> trong bất kỳ file cấu hình nào; --global giúp nó theo bạn tới mọi repo. Không có lệnh con git alias, và .gitattributes không phải file cấu hình.',
           },
         ],
       },

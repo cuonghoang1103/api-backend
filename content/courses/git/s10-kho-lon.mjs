@@ -7,8 +7,77 @@
  * trong kho thử scratchpad/ch10-lab (lab.sh, practice.sh).
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
+
+// Lượt chạy THẬT cho mốc dự án 11 (repo nháp /tmp/git-moc-11, git 2.51, 11/2026) — dùng chung cho hai khối ngôn ngữ.
+const DEMO_MOC_11 = `
+<pre><code class="language-bash"><span class="tok-comment"># setup: you are halfway through a feature, with uncommitted edits</span>
+git init -q shop
+cd shop
+git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+echo "login: redirect to /" &gt; login.js &amp;&amp; git add . &amp;&amp; git commit -qm "feat(auth): login page"
+git switch -q -c feat/cart &amp;&amp; echo "cart (half done)" &gt; cart.js &amp;&amp; git status -s</code></pre>
+<div class="out">$ git init -q shop
+$ cd shop
+$ git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+$ echo "login: redirect to /" &gt; login.js &amp;&amp; git add . &amp;&amp; git commit -qm "feat(auth): login page"
+$ git switch -q -c feat/cart &amp;&amp; echo "cart (half done)" &gt; cart.js &amp;&amp; git status -s
+?? cart.js</div>
+<pre><code class="language-bash"><span class="tok-comment"># urgent bug on main: open a SECOND working folder instead of stashing</span>
+git worktree add ../shop-hotfix -b hotfix/login main
+cd /tmp/git-moc-11/shop-hotfix
+echo "login: redirect to /home" &gt; login.js &amp;&amp; git commit -qam "fix(auth): redirect to /home after login" &amp;&amp; git log --oneline -1
+git worktree list</code></pre>
+<div class="out">$ git worktree add ../shop-hotfix -b hotfix/login main
+Preparing worktree (new branch 'hotfix/login')
+HEAD is now at cebc0ca feat(auth): login page
+$ cd /tmp/git-moc-11/shop-hotfix
+$ echo "login: redirect to /home" &gt; login.js &amp;&amp; git commit -qam "fix(auth): redirect to /home after login" &amp;&amp; git log --oneline -1
+0b2021b fix(auth): redirect to /home after login
+$ git worktree list
+/private/tmp/git-moc-11/shop         cebc0ca [feat/cart]
+/private/tmp/git-moc-11/shop-hotfix  0b2021b [hotfix/login]</div>
+<pre><code class="language-bash"><span class="tok-comment"># back in the feature folder: nothing was touched</span>
+cd /tmp/git-moc-11/shop
+git status -s
+git switch hotfix/login</code></pre>
+<div class="out">$ cd /tmp/git-moc-11/shop
+$ git status -s
+?? cart.js
+$ git switch hotfix/login
+fatal: 'hotfix/login' is already used by worktree at '/private/tmp/git-moc-11/shop-hotfix'</div>
+<pre><code class="language-bash"><span class="tok-comment"># merge the hotfix, then remove the extra worktree properly</span>
+cd /tmp/git-moc-11/shop-hotfix
+git switch -q main &amp;&amp; git merge --ff-only hotfix/login
+cd /tmp/git-moc-11/shop
+git worktree remove ../shop-hotfix &amp;&amp; git worktree list &amp;&amp; git log --oneline main</code></pre>
+<div class="out">$ cd /tmp/git-moc-11/shop-hotfix
+$ git switch -q main &amp;&amp; git merge --ff-only hotfix/login
+Updating cebc0ca..0b2021b
+Fast-forward
+ login.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ cd /tmp/git-moc-11/shop
+$ git worktree remove ../shop-hotfix &amp;&amp; git worktree list &amp;&amp; git log --oneline main
+/private/tmp/git-moc-11/shop  cebc0ca [feat/cart]
+0b2021b fix(auth): redirect to /home after login
+cebc0ca feat(auth): login page</div>
+<pre><code class="language-bash"><span class="tok-comment"># binary assets policy: these are the lines "git lfs track" writes; check-attr shows Git sees them</span>
+printf "*.psd filter=lfs diff=lfs merge=lfs -text\\n*.mp4 filter=lfs diff=lfs merge=lfs -text\\n" &gt; .gitattributes &amp;&amp; cat .gitattributes
+git check-attr filter diff -- design/hero.psd intro.mp4 login.js</code></pre>
+<div class="out">$ printf "*.psd filter=lfs diff=lfs merge=lfs -text\\n*.mp4 filter=lfs diff=lfs merge=lfs -text\\n" &gt; .gitattributes &amp;&amp; cat .gitattributes
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+$ git check-attr filter diff -- design/hero.psd intro.mp4 login.js
+design/hero.psd: filter: lfs
+design/hero.psd: diff: lfs
+intro.mp4: filter: lfs
+intro.mp4: diff: lfs
+login.js: filter: unspecified
+login.js: diff: unspecified</div>
+`;
 
 export default {
   title: 'Chapter 10 — Big repositories & advanced workflows|||Chương 10 — Kho mã lớn & quy trình nâng cao',
@@ -705,13 +774,27 @@ find . -type f -not -path <span class="tok-string">"./.git/*"</span></code></pre
 `,
     },
 
+    /* ─────────────────── Mốc dự án 11 (dự án xuyên suốt khoá) ─────────────────── */
+    baiMoc(11, {
+      demoEn: `
+<p>You are halfway through a cart feature (an untracked <code>cart.js</code>) when a login bug on main must be fixed now. Instead of stashing, the fix is made in a second worktree. The ADR is a Markdown file you write yourself and merge through a PR, so it is not part of the terminal run.</p>
+${DEMO_MOC_11}
+<p>What to notice: the feature folder kept its <code>?? cart.js</code> the whole time — no stash needed. Git refused to check out <code>hotfix/login</code> in a second place ("already used by worktree"), which stops you editing one branch from two folders. main was fast-forwarded inside the hotfix worktree because main was not checked out anywhere else, then the worktree was removed with <code>git worktree remove</code>. git-lfs was not installed on the machine that ran this demo, so the two <code>.gitattributes</code> lines were written by hand exactly as <code>git lfs track</code> writes them; <code>git check-attr</code> confirms Git applies the lfs filter to .psd/.mp4 and not to .js. With git-lfs installed you run <code>git lfs install</code> once and then <code>git lfs track</code>.</p>
+`,
+      demoVi: `
+<p>Bạn đang làm dở tính năng giỏ hàng (một <code>cart.js</code> chưa theo dõi) thì có lỗi đăng nhập trên main phải sửa ngay. Thay vì stash, bản sửa làm trong một worktree thứ hai. ADR là file Markdown bạn tự viết rồi merge qua PR, nên không nằm trong lượt chạy terminal.</p>
+${DEMO_MOC_11}
+<p>Để ý: thư mục tính năng giữ nguyên <code>?? cart.js</code> suốt quá trình — không cần stash. Git từ chối checkout <code>hotfix/login</code> ở chỗ thứ hai ("already used by worktree"), chặn việc sửa một nhánh từ hai thư mục. main được tua thẳng (fast-forward) ngay trong worktree hotfix vì main không được checkout ở đâu khác, rồi worktree được gỡ bằng <code>git worktree remove</code>. Máy chạy demo chưa cài git-lfs, nên hai dòng <code>.gitattributes</code> được viết tay đúng y như <code>git lfs track</code> sẽ ghi; <code>git check-attr</code> xác nhận Git áp bộ lọc lfs cho .psd/.mp4 và không áp cho .js. Đã cài git-lfs thì chạy <code>git lfs install</code> một lần rồi dùng <code>git lfs track</code>.</p>
+`,
+    }),
+
     /* ─────────────────────────── 10.4 Quiz ─────────────────────────── */
     {
       title: '10.4 — Chapter 10 quiz|||10.4 — Kiểm tra Chương 10',
       slug: 'git-10-4-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật: vá gấp bằng worktree, nhánh bị worktree ma giữ chặt, gitlink 160000, push submodule sai thứ tự, dời ghim chưa commit, chọn subtree cho nhóm đồ án, sparse-checkout và partial clone, con trỏ LFS và giới hạn của LFS.',
+      description: 'Mười tình huống thật: vá gấp bằng worktree, nhánh bị worktree ma giữ chặt, gitlink 160000, push submodule sai thứ tự, dời ghim chưa commit, chọn subtree cho nhóm đồ án, sparse-checkout và partial clone, con trỏ LFS và giới hạn của LFS. Thêm 10 câu tiếng Anh kiểu đề FE (câu 11–20).',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Check</span>
@@ -726,6 +809,7 @@ find . -type f -not -path <span class="tok-string">"./.git/*"</span></code></pre
 <li>I can explain the difference between partial clone and sparse-checkout in one sentence each.</li>
 <li>I know what a teammate without git-lfs gets, and why enabling LFS does not shrink existing history.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-10', 17, 'Bảng tra nhanh Chương 10')}
 </div>
 <div class="ml-vi">
@@ -741,11 +825,12 @@ ${slide('git-10', 17, 'Bảng tra nhanh Chương 10')}
 <li>Tôi giải thích được partial clone và sparse-checkout khác nhau thế nào, mỗi cái một câu.</li>
 <li>Tôi biết bạn cùng nhóm chưa cài git-lfs sẽ nhận được gì, và vì sao bật LFS không làm lịch sử cũ nhỏ lại.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-10', 17, 'Bảng tra nhanh Chương 10')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'You are halfway through feature/gio-hang: files edited, node_modules installed for this branch, dev server running. The team lead needs an urgent fix on main now. What keeps your current setup completely untouched?|||Bạn đang làm dở feature/gio-hang: file đang sửa, node_modules cài cho đúng nhánh này, dev server đang chạy. Trưởng nhóm cần vá gấp trên main ngay. Cách nào giữ nguyên hoàn toàn chỗ bạn đang làm?',
@@ -856,6 +941,76 @@ ${slide('git-10', 17, 'Bảng tra nhanh Chương 10')}
             ],
             correctIndex: 3, points: 1,
             explanation: 'EN: LFS only affects files added after track; the video already sits in history as a normal 3 MB blob (git cat-file -s HEAD:intro.mp4 prints 3145728, and git lfs migrate info shows it). Only rewriting history moves it into LFS, with the usual cost: new hashes and a re-clone for everyone (Chapter 8). gc cannot shrink random video bytes, lfs prune only deletes old local LFS copies, and re-running track changes nothing about commits that already exist.|||VI: LFS chỉ tác động tới file add sau track; video đã nằm trong lịch sử dưới dạng một blob 3 MB bình thường (git cat-file -s HEAD:intro.mp4 in 3145728, và git lfs migrate info cũng chỉ ra nó). Chỉ viết lại lịch sử mới chuyển được nó vào LFS, kèm cái giá quen thuộc: mã băm mới và ai cũng phải clone lại (Chương 8). gc không nén được các byte video vốn đã nén, lfs prune chỉ xoá bản LFS cũ trên máy, còn chạy lại track không đổi gì ở những commit đã có.',
+          },
+          /* FE 11 */
+          {
+            question: 'Which command creates a folder ../hotfix holding a new branch hotfix/login started from main?|||Which command creates a folder ../hotfix holding a new branch hotfix/login started from main?',
+            options: ['git clone . ../hotfix -b hotfix/login', 'git worktree add ../hotfix -b hotfix/login main', 'git switch -c hotfix/login ../hotfix', 'git branch hotfix/login ../hotfix main'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: worktree add <path> -b <new-branch> <start-point> adds a second working folder that shares the same .git — no second clone, no stash.|||VI: worktree add <đường-dẫn> -b <nhánh-mới> <điểm-bắt-đầu> thêm một thư mục làm việc thứ hai dùng chung .git — không cần clone lần hai, không cần stash.',
+          },
+          /* FE 12 */
+          {
+            question: 'git worktree remove ../hotfix prints "contains modified or untracked files, use --force to delete it". What is true?|||git worktree remove ../hotfix prints "contains modified or untracked files, use --force to delete it". What is true?',
+            options: ['The branch hotfix/login has been deleted', 'The folder was removed but the branch was kept', 'The worktree is locked by another user', 'Nothing was removed; Git protects uncommitted work unless you add --force'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Tested: exit code 128 and the folder was still there. Commit or discard the changes first; --force throws them away.|||VI: Đã thử: mã thoát 128 và thư mục vẫn còn. Commit hoặc bỏ thay đổi trước; --force sẽ vứt chúng đi.',
+          },
+          /* FE 13 */
+          {
+            question: 'A teammate ran a plain git clone of a repository with a submodule, and libs/ui is an empty folder. What fixes it?|||A teammate ran a plain git clone of a repository with a submodule, and libs/ui is an empty folder. What fixes it?',
+            options: ['git submodule update --init --recursive', 'git pull --all', 'git checkout libs/ui', 'git fetch --tags'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: A plain clone records the submodule but does not fetch it (tested: 0 entries). update --init clones it at the pinned commit; next time use git clone --recurse-submodules.|||VI: Clone trần ghi nhận submodule nhưng không tải nó (đã thử: 0 mục). update --init clone nó ở đúng commit đã ghim; lần sau dùng git clone --recurse-submodules.',
+          },
+          /* FE 14 */
+          {
+            question: 'Which file records the path and URL of each submodule?|||Which file records the path and URL of each submodule?',
+            options: ['.git/config only', '.gitattributes', '.gitmodules', '.git/modules.txt'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: git submodule add writes .gitmodules with path and url (tested) and you commit it; the pinned commit itself is the 160000 entry in the tree.|||VI: git submodule add ghi .gitmodules có path và url (đã thử) và bạn commit nó; commit được ghim nằm ở mục 160000 trong tree.',
+          },
+          /* FE 15 */
+          {
+            question: 'git clone --depth 1 gave you one commit. Which command downloads the full history later?|||git clone --depth 1 gave you one commit. Which command downloads the full history later?',
+            options: ['git pull --all', 'git fetch --depth=0', 'git clone --full', 'git fetch --unshallow'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Tested: log showed 1 commit and is-shallow-repository true; after git fetch --unshallow it showed 3 commits and false.|||VI: Đã thử: log có 1 commit và is-shallow-repository là true; sau git fetch --unshallow thì có 3 commit và false.',
+          },
+          /* FE 16 */
+          {
+            question: 'What does git clone --filter=blob:none download up front?|||What does git clone --filter=blob:none download up front?',
+            options: ['Only the latest commit and its files', 'All commits and trees; file contents are fetched when needed', 'All file contents but no commits', 'Only the folders listed in sparse-checkout'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: A blobless partial clone keeps full history (log, blame on demand) but fetches blobs lazily. "Only the latest commit" describes a shallow clone.|||VI: Partial clone không blob giữ đủ lịch sử (log, blame khi cần) nhưng tải blob khi dùng tới. "Chỉ commit mới nhất" là mô tả của shallow clone.',
+          },
+          /* FE 17 */
+          {
+            question: 'You work in a sparse checkout limited to apps/web. Which command brings back the whole working tree?|||You work in a sparse checkout limited to apps/web. Which command brings back the whole working tree?',
+            options: ['git sparse-checkout disable', 'git checkout --all', 'git clean -fd', 'git reset --hard'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Tested: 3 files with sparse-checkout set apps/web, 6 files after disable. reset --hard keeps the sparse rules; clean deletes untracked files.|||VI: Đã thử: 3 file với sparse-checkout set apps/web, 6 file sau disable. reset --hard vẫn giữ luật sparse; clean xoá file chưa theo dõi.',
+          },
+          /* FE 18 */
+          {
+            question: 'What does Git store in the repository for a file tracked by Git LFS?|||What does Git store in the repository for a file tracked by Git LFS?',
+            options: ['A compressed copy of the whole file', 'Only the file name', 'A small text pointer with the sha256 oid and the size', 'A delta against the previous version'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: The commit holds a pointer file (version / oid sha256:… / size …); the real bytes live on the LFS server. Without git-lfs installed you see that pointer instead of the file.|||VI: Commit chứa một file con trỏ (version / oid sha256:… / size …); dữ liệu thật nằm ở máy chủ LFS. Không cài git-lfs thì bạn thấy con trỏ đó thay vì file.',
+          },
+          /* FE 19 */
+          {
+            question: 'What is the main advantage of git subtree over submodules for a student team?|||What is the main advantage of git subtree over submodules for a student team?',
+            options: ['Teammates get the files with a normal clone and need no extra commands', 'It keeps the two histories completely separate', 'It downloads the other repository on demand', 'It only works together with Git LFS'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: A subtree copies the files into your own history, so clone/pull just work. Keeping histories separate and pinned is the submodule model, with its extra commands.|||VI: Subtree chép file vào chính lịch sử của bạn, nên clone/pull chạy như thường. Giữ lịch sử tách rời và ghim commit là mô hình submodule, kèm các lệnh phụ của nó.',
+          },
+          /* FE 20 */
+          {
+            question: 'A monorepo has apps/web and apps/api. Which workflow trigger runs the web CI only when web files change?|||A monorepo has apps/web and apps/api. Which workflow trigger runs the web CI only when web files change?',
+            options: ['on: push: branches: [ apps/web ]', 'on: push: paths: [ "apps/web/**" ]', 'on: changed: folder: apps/web', 'on: push: tags: [ apps/web ]'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: The paths filter limits the trigger to commits touching matching files. branches and tags filter by ref names, not by folders.|||VI: Bộ lọc paths giới hạn kích hoạt vào các commit có đụng file khớp mẫu. branches và tags lọc theo tên ref, không theo thư mục.',
           },
         ],
       },

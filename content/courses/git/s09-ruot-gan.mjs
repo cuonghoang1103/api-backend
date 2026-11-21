@@ -6,8 +6,74 @@
  * Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const REF = '?ref=%2Fcourses%2Fgit%2Flearn&reflabel=Git';
+
+// Lượt chạy THẬT cho mốc dự án 10 (repo nháp /tmp/git-moc-10, git 2.51, 11/2026) — dùng chung cho hai khối ngôn ngữ.
+const DEMO_MOC_10 = `
+<pre><code class="language-bash"><span class="tok-comment"># setup: a small project where someone once committed a 2 MB build bundle, then deleted it</span>
+git init -q shop
+cd shop
+git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+echo "console.log(1)" &gt; app.js &amp;&amp; cp app.js utils.js &amp;&amp; git add . &amp;&amp; git commit -qm "feat: init app"
+mkdir dist &amp;&amp; head -c 2000000 /dev/urandom &gt; dist/bundle.js &amp;&amp; git add dist &amp;&amp; git commit -qm "build: add bundle"
+git rm -q -r dist &amp;&amp; echo "dist/" &gt; .gitignore &amp;&amp; git add .gitignore &amp;&amp; git commit -qm "chore: stop tracking dist/"
+git tag -a v0.1.0 -m "first usable version"</code></pre>
+<div class="out">$ git init -q shop
+$ cd shop
+$ git config user.name "An Nguyen" &amp;&amp; git config user.email an@example.com
+$ echo "console.log(1)" &gt; app.js &amp;&amp; cp app.js utils.js &amp;&amp; git add . &amp;&amp; git commit -qm "feat: init app"
+$ mkdir dist &amp;&amp; head -c 2000000 /dev/urandom &gt; dist/bundle.js &amp;&amp; git add dist &amp;&amp; git commit -qm "build: add bundle"
+$ git rm -q -r dist &amp;&amp; echo "dist/" &gt; .gitignore &amp;&amp; git add .gitignore &amp;&amp; git commit -qm "chore: stop tracking dist/"
+$ git tag -a v0.1.0 -m "first usable version"</div>
+<pre><code class="language-bash"><span class="tok-comment"># health and size</span>
+git count-objects -vH
+git fsck
+git gc -q &amp;&amp; git count-objects -vH | grep -E "^(count|size-pack)"</code></pre>
+<div class="out">$ git count-objects -vH
+count: 11
+size: 1.95 MiB
+in-pack: 0
+packs: 0
+size-pack: 0 bytes
+prune-packable: 0
+garbage: 0
+size-garbage: 0 bytes
+$ git fsck
+$ git gc -q &amp;&amp; git count-objects -vH | grep -E "^(count|size-pack)"
+count: 0
+size-pack: 1.91 MiB</div>
+<pre><code class="language-bash"><span class="tok-comment"># the five largest blobs in ALL history (deleted files included)</span>
+git rev-list --objects --all | git cat-file --batch-check="%(objecttype) %(objectname) %(objectsize) %(rest)" | grep ^blob | sort -k3 -n | tail -5</code></pre>
+<div class="out">$ git rev-list --objects --all | git cat-file --batch-check="%(objecttype) %(objectname) %(objectsize) %(rest)" | grep ^blob | sort -k3 -n | tail -5
+blob 849ddff3b7ec917b5f4563e9a6d3ea63ea512a70 6 .gitignore
+blob e14c4f2a9561ade31986f9319d5c639094509905 15 app.js
+blob 5865148301d22d89f269406dac394c4540c2c9bf 2000000 dist/bundle.js</div>
+<pre><code class="language-bash"><span class="tok-comment"># walk one commit by hand: commit -&gt; tree -&gt; blob, then the annotated tag</span>
+git cat-file -p HEAD~2
+git cat-file -p HEAD~2^{tree}
+git cat-file -p HEAD~2:app.js
+git cat-file -p v0.1.0</code></pre>
+<div class="out">$ git cat-file -p HEAD~2
+tree 72d3526f7a482eb3401a5073124c33ccf82386c3
+author An Nguyen &lt;an@example.com&gt; 1795254475 +0700
+committer An Nguyen &lt;an@example.com&gt; 1795254475 +0700
+
+feat: init app
+$ git cat-file -p HEAD~2^{tree}
+100644 blob e14c4f2a9561ade31986f9319d5c639094509905	app.js
+100644 blob e14c4f2a9561ade31986f9319d5c639094509905	utils.js
+$ git cat-file -p HEAD~2:app.js
+console.log(1)
+$ git cat-file -p v0.1.0
+object 0f18b0bdcad751fd00aec98b59b27e3fd4360283
+type commit
+tag v0.1.0
+tagger An Nguyen &lt;an@example.com&gt; 1795254475 +0700
+
+first usable version</div>
+`;
 
 export default {
   title: 'Chapter 9 — Under the hood: the object database|||Chương 9 — Bên dưới nắp capo: kho đối tượng',
@@ -861,13 +927,27 @@ fatal: Not a valid object name 4098f32</code></pre>
 `,
     },
 
+    /* ─────────────────── Mốc dự án 10 (dự án xuyên suốt khoá) ─────────────────── */
+    baiMoc(10, {
+      demoEn: `
+<p>A small project where someone once committed a 2 MB build bundle and deleted it in the next commit — the most common thing a real audit finds. The same commands work unchanged on your own repository.</p>
+${DEMO_MOC_10}
+<p>What to notice: <code>git fsck</code> printed nothing, i.e. no errors. After <code>git gc</code> the loose objects are packed, but size-pack is still 1.91 MiB: the deleted <code>dist/bundle.js</code> lives on in history (and random bytes do not compress). The top-blob list finds it although no current file has that path. <code>app.js</code> and <code>utils.js</code> are byte-identical, so the tree lists the same blob <code>e14c4f2…</code> twice and rev-list prints it only once. <code>v0.1.0</code> is a separate tag object pointing to commit <code>0f18b0b…</code>. The verdict for REPO-HEALTH.md here: <code>dist/bundle.js</code> — remove it with the milestone 9 procedure, or accept it and write down why.</p>
+`,
+      demoVi: `
+<p>Một dự án nhỏ nơi có người từng commit một gói build 2 MB rồi xoá nó ở commit sau — thứ một cuộc kiểm toán thật hay tìm thấy nhất. Đúng các lệnh này chạy nguyên vẹn trên repo của bạn.</p>
+${DEMO_MOC_10}
+<p>Để ý: <code>git fsck</code> không in gì, tức là không có lỗi. Sau <code>git gc</code> các đối tượng rời đã được đóng gói, nhưng size-pack vẫn 1,91 MiB: <code>dist/bundle.js</code> đã xoá vẫn sống trong lịch sử (và byte ngẫu nhiên thì không nén được). Danh sách blob lớn nhất vẫn tìm ra nó dù không file hiện tại nào có đường dẫn đó. <code>app.js</code> và <code>utils.js</code> giống hệt từng byte, nên tree liệt kê cùng một blob <code>e14c4f2…</code> hai lần còn rev-list chỉ in một lần. <code>v0.1.0</code> là một đối tượng tag riêng trỏ tới commit <code>0f18b0b…</code>. Kết luận cho REPO-HEALTH.md ở đây: <code>dist/bundle.js</code> — gỡ bằng quy trình của mốc 9, hoặc chấp nhận và ghi rõ vì sao.</p>
+`,
+    }),
+
     /* ─────────────────────────── 9.4 Quiz ─────────────────────────── */
     {
       title: '9.4 — Chapter 9 quiz|||9.4 — Kiểm tra Chương 9',
       slug: 'git-9-4-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật về ruột gan của Git: nhánh "mất" vì packed-refs, HEAD lìa cành, xung đột trong index, đổi tên file và blob, số đối tượng một commit tạo ra, mã băm, commit dựng bằng tay, tag nhẹ và tag có chú thích, dòng delta trong verify-pack, và gc --prune=now với reflog.',
+      description: 'Mười tình huống thật về ruột gan của Git: nhánh "mất" vì packed-refs, HEAD lìa cành, xung đột trong index, đổi tên file và blob, số đối tượng một commit tạo ra, mã băm, commit dựng bằng tay, tag nhẹ và tag có chú thích, dòng delta trong verify-pack, và gc --prune=now với reflog. Thêm 10 câu tiếng Anh kiểu đề FE (câu 11–20).',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Check</span>
@@ -882,6 +962,7 @@ fatal: Not a valid object name 4098f32</code></pre>
 <li>I can read a <code>git verify-pack -v</code> line and tell a whole object from a delta.</li>
 <li>I know which objects <code>git gc --prune=now</code> can really delete — and what the reflog still protects.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-09', 17, 'Bảng tra nhanh Chương 9')}
 </div>
 <div class="ml-vi">
@@ -897,11 +978,12 @@ ${slide('git-09', 17, 'Bảng tra nhanh Chương 9')}
 <li>Tôi đọc được một dòng <code>git verify-pack -v</code> và phân biệt đối tượng lưu nguyên với delta.</li>
 <li>Tôi biết <code>git gc --prune=now</code> thật sự xoá được những đối tượng nào — và reflog vẫn che chắn được gì.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-09', 17, 'Bảng tra nhanh Chương 9')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'After someone ran git gc, a teammate in your SWP391 group panics: "cat .git/refs/heads/main says No such file — our branch is gone!" What is going on?|||Sau khi ai đó chạy git gc, một bạn trong nhóm SWP391 hoảng lên: "cat .git/refs/heads/main báo No such file — nhánh mất rồi!" Chuyện gì đang xảy ra?',
@@ -1012,6 +1094,76 @@ ${slide('git-09', 17, 'Bảng tra nhanh Chương 9')}
             ],
             correctIndex: 0, points: 1,
             explanation: 'EN: gc only prunes objects that nothing reaches, and a reflog line counts. We tested it: after reset --hard HEAD~1 and gc --prune=now, git cat-file -t still answered "commit"; only after git reflog expire --expire=now --all did a second gc make it "Not a valid object name". Option B is the tempting half-truth — true for objects NO reflog line names (a dropped stash, an expired entry). fsck --lost-found is for those dangling objects, not needed here.|||VI: gc chỉ tỉa đối tượng không gì với tới được, và một dòng reflog cũng tính. Đã thử thật: sau reset --hard HEAD~1 và gc --prune=now, git cat-file -t vẫn trả lời "commit"; phải sau git reflog expire --expire=now --all thì lần gc thứ hai mới biến nó thành "Not a valid object name". Phương án B là nửa sự thật hấp dẫn — đúng với đối tượng KHÔNG dòng reflog nào nhắc tới (một stash đã drop, một dòng đã hết hạn). fsck --lost-found dành cho những đối tượng lơ lửng đó, ở đây không cần.',
+          },
+          /* FE 11 */
+          {
+            question: 'Which four object types does Git store in its object database?|||Which four object types does Git store in its object database?',
+            options: ['blob, tree, commit, tag', 'file, folder, commit, branch', 'blob, diff, commit, ref', 'blob, tree, branch, tag'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Blobs (content), trees (directories), commits and annotated tags. Branches are refs (files in .git/refs or packed-refs), not objects, and Git stores no diff objects.|||VI: Blob (nội dung), tree (thư mục), commit và tag có chú thích. Nhánh là ref (file trong .git/refs hoặc packed-refs), không phải đối tượng, và Git không có đối tượng diff.',
+          },
+          /* FE 12 */
+          {
+            question: 'printf "hello\\n" > a.txt; git hash-object a.txt prints ce01362… What exactly was hashed?|||printf "hello\\n" > a.txt; git hash-object a.txt prints ce01362… What exactly was hashed?',
+            options: ['The file name plus its content', 'The content plus the file modification time', 'The header "blob 6", a NUL byte, then the content', 'The content only, with no header'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: Tested: printf "blob 6\\0hello\\n" | shasum gives the same ce013625… The name lives in the tree and the time in the commit, so identical content always has the same blob ID.|||VI: Đã thử: printf "blob 6\\0hello\\n" | shasum ra đúng ce013625… Tên nằm ở tree và thời gian nằm ở commit, nên nội dung giống nhau luôn có cùng ID blob.',
+          },
+          /* FE 13 */
+          {
+            question: 'git cat-file -p HEAD^{tree} shows a line starting with 100755. What is that entry?|||git cat-file -p HEAD^{tree} shows a line starting with 100755. What is that entry?',
+            options: ['A symbolic link', 'An executable file', 'A subdirectory', 'A submodule'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Tested: 100644 = normal file, 100755 = executable (run.sh after chmod +x), 040000 = tree, 120000 = symlink, 160000 = submodule.|||VI: Đã thử: 100644 = file thường, 100755 = file chạy được (run.sh sau chmod +x), 040000 = tree, 120000 = liên kết mềm, 160000 = submodule.',
+          },
+          /* FE 14 */
+          {
+            question: 'In the same listing, an entry starts with 120000. What is it?|||In the same listing, an entry starts with 120000. What is it?',
+            options: ['A submodule (gitlink)', 'A file larger than 120 KB', 'A file deleted in this commit', 'A symbolic link'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Mode 120000 is a symlink; its blob holds the link target text (tested with ln -s). A submodule is 160000. Deleted files simply do not appear in the tree.|||VI: Mode 120000 là liên kết mềm; blob của nó chứa chuỗi đích của liên kết (đã thử với ln -s). Submodule là 160000. File đã xoá đơn giản là không có trong tree.',
+          },
+          /* FE 15 */
+          {
+            question: 'You are on branch main. What does cat .git/HEAD print?|||You are on branch main. What does cat .git/HEAD print?',
+            options: ['The 40-character hash of the current commit', 'The name of the default remote', 'ref: refs/heads/main', 'The path of the working directory'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: On a branch, HEAD is a symbolic ref (tested). It contains a raw hash only when detached.|||VI: Khi đang ở trên nhánh, HEAD là một ref tượng trưng (đã thử). Nó chỉ chứa mã băm trần khi HEAD lìa cành (detached).',
+          },
+          /* FE 16 */
+          {
+            question: 'wc -c < .git/refs/heads/main prints 41. Why 41?|||wc -c < .git/refs/heads/main prints 41. Why 41?',
+            options: ['40 hexadecimal characters of the commit hash plus a newline', '40 bytes of binary hash plus one type byte', 'The branch name padded to 41 characters', 'The number of commits on main'],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: A loose branch file is the 40-hex SHA-1 followed by a newline — 41 bytes (tested). That is the "a branch is a 41-byte file" idea from Chapter 3.|||VI: File nhánh rời là SHA-1 40 ký tự hex cộng một dấu xuống dòng — 41 byte (đã thử). Đó là ý "một nhánh là một file 41 byte" của Chương 3.',
+          },
+          /* FE 17 */
+          {
+            question: 'HEAD is a merge commit. What does HEAD^2 refer to?|||HEAD is a merge commit. What does HEAD^2 refer to?',
+            options: ['The grandparent of HEAD on the first-parent line', 'The commit two steps back, the same as HEAD~2', 'The second commit ever made in the repository', 'The second parent, the tip of the branch that was merged in'],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Tested: HEAD^2 equalled the merged branch tip and HEAD^1 = HEAD~1 the previous main tip. ~ walks first parents; ^n picks the n-th parent.|||VI: Đã thử: HEAD^2 bằng đầu nhánh được merge vào, còn HEAD^1 = HEAD~1 là đầu main trước đó. ~ đi theo cha thứ nhất; ^n chọn cha thứ n.',
+          },
+          /* FE 18 */
+          {
+            question: 'After git gc, git count-objects -v shows "count: 0" and "in-pack: 22". What happened?|||After git gc, git count-objects -v shows "count: 0" and "in-pack: 22". What happened?',
+            options: ['All 22 objects were deleted', 'The loose objects were packed into a packfile', 'The repository became a shallow clone', 'Only unreachable objects remain'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: count is the number of loose objects; gc moved them into a .pack file (with .idx), tested. Nothing reachable is deleted.|||VI: count là số đối tượng rời; gc đã gom chúng vào một file .pack (kèm .idx), đã thử. Không có gì tới được bị xoá.',
+          },
+          /* FE 19 */
+          {
+            question: 'A repository was created with git init --object-format=sha256. How long is a full commit ID?|||A repository was created with git init --object-format=sha256. How long is a full commit ID?',
+            options: ['40 hexadecimal characters', '32 hexadecimal characters', '64 hexadecimal characters', '128 hexadecimal characters'],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: SHA-256 is 256 bits = 64 hex characters (tested: rev-parse HEAD printed 64). The default SHA-1 gives 40.|||VI: SHA-256 dài 256 bit = 64 ký tự hex (đã thử: rev-parse HEAD in 64 ký tự). SHA-1 mặc định cho 40.',
+          },
+          /* FE 20 */
+          {
+            question: 'git cat-file -p on the very first commit of a repository shows no "parent" line. Why?|||git cat-file -p on the very first commit of a repository shows no "parent" line. Why?',
+            options: ['The parent is stored in the tree object instead', 'A root commit has no parent', 'Parent lines are only written for merge commits', '-p hides the parent line'],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: The first commit is a root commit: nothing came before it. Normal commits have one parent line and merges have two or more.|||VI: Commit đầu tiên là commit gốc: trước nó không có gì. Commit thường có một dòng parent, merge có hai hoặc nhiều hơn.',
           },
         ],
       },

@@ -13,6 +13,7 @@
  * tính đến 09/2026. File mẫu YAML đã kiểm bằng actionlint 1.7.12 + js-yaml.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 export default {
   title: 'Chapter 16 — Capstone: running a team project on GitHub|||Chương 16 — Dự án nhóm cuối khoá: vận hành một dự án nhóm trên GitHub',
@@ -2025,13 +2026,133 @@ phong-kham@1.0.0 ~/phong-kham
 `,
     },
 
+    /* ─────────────────────────── Mốc dự án 17 (dự án xuyên suốt khoá) ─────────────────────────── */
+    baiMoc(17, {
+      demoEn: `
+<p>A bare repository <code>/tmp/git-moc-17/origin.git</code> plays GitHub; <code>an</code> and <code>binh</code> are two clones (identities An Nguyen and Binh Tran), starting from one commit with <code>app.conf</code>. Issues #2 and #3 each get a branch, and both branches touch the same file.</p>
+<pre><code class="language-bash">git switch -q -c feat/2-login &amp;&amp; echo "login=on" &gt;&gt; app.conf &amp;&amp; git commit -qam "feat(auth): enable login (#2)" &amp;&amp; git push -q -u origin feat/2-login
+git switch -q -c feat/3-slots &amp;&amp; echo "slots=30" &gt;&gt; app.conf &amp;&amp; git commit -qam "feat(booking): 30-minute slots (#3)" &amp;&amp; git push -q -u origin feat/3-slots</code></pre>
+<p>PR #1 is merged first. On GitHub you press <em>Merge pull request</em>; here the same merge commit is made with <code>--no-ff</code>. PR #2 now says "This branch has conflicts": Binh updates his branch with main and sees the conflict.</p>
+<pre><code class="language-bash">git switch -q main &amp;&amp; git merge -q --no-ff -m "Merge pull request #1 from feat/2-login" feat/2-login &amp;&amp; git push -q origin main
+git fetch -q &amp;&amp; git merge origin/main
+git diff --name-only --diff-filter=U &amp;&amp; cat app.conf</code></pre>
+<div class="out">Auto-merging app.conf
+CONFLICT (content): Merge conflict in app.conf
+Automatic merge failed; fix conflicts and then commit the result.
+app.conf
+title=Booking
+port=8080
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+slots=30
+=======
+login=on
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; origin/main</div>
+<p>Both lines are wanted, so the resolution keeps both (edited in the editor, markers removed). The merge commit message says what was kept — that is the "explained" part of the milestone. Then PR #2 merges cleanly.</p>
+<pre><code class="language-bash">cat app.conf &amp;&amp; git add app.conf &amp;&amp; git commit -q -m "Merge origin/main into feat/3-slots: keep login and slots" &amp;&amp; git push -q
+git fetch -q &amp;&amp; git merge -q --no-ff -m "Merge pull request #2 from feat/3-slots" origin/feat/3-slots &amp;&amp; git push -q origin main</code></pre>
+<div class="out">title=Booking
+port=8080
+login=on
+slots=30</div>
+<p>Release, then a bug: the hotfix branch starts from the TAG (what was shipped), not from main (which may already contain unfinished work). It is tagged <code>v1.0.1</code> and merged back so main does not lose the fix.</p>
+<pre><code class="language-bash">git tag -a v1.0.0 -m "v1.0.0 — sprint 1 submission" &amp;&amp; git push -q origin v1.0.0
+git switch -q -c hotfix/1.0.1 v1.0.0 &amp;&amp; sed -i "" "s/port=8080/port=8081/" app.conf &amp;&amp; git commit -qam "fix(config): use port 8081 on the lab server"
+git tag -a v1.0.1 -m "v1.0.1 — hotfix port" &amp;&amp; git switch -q main &amp;&amp; git merge -q --no-ff -m "Merge hotfix/1.0.1 into main" hotfix/1.0.1 &amp;&amp; git push -q origin main v1.0.1</code></pre>
+<p>The proof the milestone asks for: the graph, the commits on main after v1.0.0, and both tags on the remote (<code>^{}</code> = the commit an annotated tag points to). Releases notes, the milestone page and Insights → Contributors are on github.com.</p>
+<pre><code class="language-bash">git log --graph --oneline --decorate -9
+git log --oneline v1.0.0..main
+git ls-remote --tags origin</code></pre>
+<div class="out">*   01fcd18 (HEAD -&gt; main, origin/main, origin/HEAD) Merge hotfix/1.0.1 into main
+|\\  
+| * 89b9f36 (tag: v1.0.1, hotfix/1.0.1) fix(config): use port 8081 on the lab server
+|/  
+*   e266809 (tag: v1.0.0) Merge pull request #2 from feat/3-slots
+|\\  
+| *   9db6f72 (origin/feat/3-slots) Merge origin/main into feat/3-slots: keep login and slots
+| |\\  
+| |/  
+|/|   
+* |   7dee06c Merge pull request #1 from feat/2-login
+|\\ \\  
+| * | 7818dc3 (origin/feat/2-login, feat/2-login) feat(auth): enable login (#2)
+|/ /  
+| * 80047fd feat(booking): 30-minute slots (#3)
+|/  
+* d6cc9c7 chore: project skeleton
+01fcd18 Merge hotfix/1.0.1 into main
+89b9f36 fix(config): use port 8081 on the lab server
+f61e97abc0e22a36544869d958512261fe617e0f	refs/tags/v1.0.0
+e26680949622aa8c4e8082dd342af372a4e1a5fe	refs/tags/v1.0.0^{}
+7ec9fe3bc8b963f8be43e0c221409b01a6253a72	refs/tags/v1.0.1
+89b9f36f3233531ba989ab87b2b63e8a2ccd48c8	refs/tags/v1.0.1^{}</div>
+`,
+      demoVi: `
+<p>Một repo trần <code>/tmp/git-moc-17/origin.git</code> đóng vai GitHub; <code>an</code> và <code>binh</code> là hai bản clone (danh tính An Nguyen và Binh Tran), bắt đầu từ một commit có <code>app.conf</code>. Issue #2 và #3 mỗi cái một nhánh, và cả hai nhánh cùng sửa một file.</p>
+<pre><code class="language-bash">git switch -q -c feat/2-login &amp;&amp; echo "login=on" &gt;&gt; app.conf &amp;&amp; git commit -qam "feat(auth): enable login (#2)" &amp;&amp; git push -q -u origin feat/2-login
+git switch -q -c feat/3-slots &amp;&amp; echo "slots=30" &gt;&gt; app.conf &amp;&amp; git commit -qam "feat(booking): 30-minute slots (#3)" &amp;&amp; git push -q -u origin feat/3-slots</code></pre>
+<p>PR #1 được merge trước. Trên GitHub bạn bấm <em>Merge pull request</em>; ở đây merge commit tương đương được tạo bằng <code>--no-ff</code>. PR #2 lúc này báo "This branch has conflicts": Bình cập nhật nhánh của mình với main và thấy xung đột.</p>
+<pre><code class="language-bash">git switch -q main &amp;&amp; git merge -q --no-ff -m "Merge pull request #1 from feat/2-login" feat/2-login &amp;&amp; git push -q origin main
+git fetch -q &amp;&amp; git merge origin/main
+git diff --name-only --diff-filter=U &amp;&amp; cat app.conf</code></pre>
+<div class="out">Auto-merging app.conf
+CONFLICT (content): Merge conflict in app.conf
+Automatic merge failed; fix conflicts and then commit the result.
+app.conf
+title=Booking
+port=8080
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+slots=30
+=======
+login=on
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; origin/main</div>
+<p>Cả hai dòng đều cần, nên cách giải là giữ cả hai (sửa trong trình soạn thảo, xoá dấu xung đột). Lời nhắn merge commit nói rõ đã giữ gì — đó là phần "có giải thích" của mốc. Sau đó PR #2 merge sạch.</p>
+<pre><code class="language-bash">cat app.conf &amp;&amp; git add app.conf &amp;&amp; git commit -q -m "Merge origin/main into feat/3-slots: keep login and slots" &amp;&amp; git push -q
+git fetch -q &amp;&amp; git merge -q --no-ff -m "Merge pull request #2 from feat/3-slots" origin/feat/3-slots &amp;&amp; git push -q origin main</code></pre>
+<div class="out">title=Booking
+port=8080
+login=on
+slots=30</div>
+<p>Phát hành, rồi gặp lỗi: nhánh hotfix bắt đầu từ TAG (thứ đã giao), không từ main (có thể đã chứa việc dở). Nó được gắn tag <code>v1.0.1</code> và merge ngược về để main không mất bản sửa.</p>
+<pre><code class="language-bash">git tag -a v1.0.0 -m "v1.0.0 — sprint 1 submission" &amp;&amp; git push -q origin v1.0.0
+git switch -q -c hotfix/1.0.1 v1.0.0 &amp;&amp; sed -i "" "s/port=8080/port=8081/" app.conf &amp;&amp; git commit -qam "fix(config): use port 8081 on the lab server"
+git tag -a v1.0.1 -m "v1.0.1 — hotfix port" &amp;&amp; git switch -q main &amp;&amp; git merge -q --no-ff -m "Merge hotfix/1.0.1 into main" hotfix/1.0.1 &amp;&amp; git push -q origin main v1.0.1</code></pre>
+<p>Bằng chứng mốc yêu cầu: đồ thị, các commit trên main sau v1.0.0, và cả hai tag trên remote (<code>^{}</code> = commit mà tag có chú thích trỏ tới). Release notes, trang milestone và Insights → Contributors nằm trên github.com.</p>
+<pre><code class="language-bash">git log --graph --oneline --decorate -9
+git log --oneline v1.0.0..main
+git ls-remote --tags origin</code></pre>
+<div class="out">*   01fcd18 (HEAD -&gt; main, origin/main, origin/HEAD) Merge hotfix/1.0.1 into main
+|\\  
+| * 89b9f36 (tag: v1.0.1, hotfix/1.0.1) fix(config): use port 8081 on the lab server
+|/  
+*   e266809 (tag: v1.0.0) Merge pull request #2 from feat/3-slots
+|\\  
+| *   9db6f72 (origin/feat/3-slots) Merge origin/main into feat/3-slots: keep login and slots
+| |\\  
+| |/  
+|/|   
+* |   7dee06c Merge pull request #1 from feat/2-login
+|\\ \\  
+| * | 7818dc3 (origin/feat/2-login, feat/2-login) feat(auth): enable login (#2)
+|/ /  
+| * 80047fd feat(booking): 30-minute slots (#3)
+|/  
+* d6cc9c7 chore: project skeleton
+01fcd18 Merge hotfix/1.0.1 into main
+89b9f36 fix(config): use port 8081 on the lab server
+f61e97abc0e22a36544869d958512261fe617e0f	refs/tags/v1.0.0
+e26680949622aa8c4e8082dd342af372a4e1a5fe	refs/tags/v1.0.0^{}
+7ec9fe3bc8b963f8be43e0c221409b01a6253a72	refs/tags/v1.0.1
+89b9f36f3233531ba989ab87b2b63e8a2ccd48c8	refs/tags/v1.0.1^{}</div>
+`,
+    }),
+
     /* ─────────────────────────── 16.5 Bài thi cuối khoá ─────────────────────────── */
     {
       title: '16.5 — Final exam: the whole course in 20 situations|||16.5 — Bài thi cuối khoá: cả khoá học trong 20 tình huống',
       slug: 'git-16-5-kiem-tra-cuoi-khoa',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Bài thi cuối khoá Git & GitHub: 20 câu tình huống trải đều Chương 1–16, 30 phút, câu nào cũng có giải thích — kèm lời dặn trước khi làm và danh sách năng lực của cả khoá.',
+      description: 'Bài thi cuối khoá Git & GitHub: 20 câu tình huống trải đều Chương 1–16, 30 phút, câu nào cũng có giải thích — kèm lời dặn trước khi làm và danh sách năng lực của cả khoá. Thêm 10 câu tiếng Anh kiểu đề FE (câu 21–30) về Chương 16.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 16 · Final exam</span>
@@ -2054,6 +2175,7 @@ phong-kham@1.0.0 ~/phong-kham
 <li>I can work with remotes, pull requests, reviews, branch rules, tags and releases in a team (Ch 5, 6, 7, 11, 12, 16).</li>
 <li>I understand the object database well enough to explain why Git rarely loses anything (Ch 9), and I can handle big repositories, my tools, Windows teammates and my public profile (Ch 10, 14, 15).</li>
 </ul>
+<p><strong>Questions 21–30</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-16', 16, 'Bảng tra nhanh Chương 16')}
 ${slide('git-16', 17, 'Sau khoá này: học gì tiếp')}
 </div>
@@ -2078,12 +2200,13 @@ ${slide('git-16', 17, 'Sau khoá này: học gì tiếp')}
 <li>Tôi làm việc được với remote, pull request, review, luật nhánh, tag và bản phát hành trong một nhóm (Ch 5, 6, 7, 11, 12, 16).</li>
 <li>Tôi hiểu kho đối tượng đủ để giải thích vì sao Git hiếm khi làm mất gì (Ch 9), và xử lý được kho lớn, công cụ của mình, bạn dùng Windows và hồ sơ công khai của mình (Ch 10, 14, 15).</li>
 </ul>
+<p><strong>Câu 21–30</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-16', 16, 'Bảng tra nhanh Chương 16')}
 ${slide('git-16', 17, 'Sau khoá này: học gì tiếp')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 1800,
+        timeLimitSeconds: 2400,
         questions: [
           {
             question: 'You fix a bug in app.js and run git add app.js. Before committing, you add a console.log("debug") to the same file and save. You now run git commit -m "fix: …". What does the commit contain?|||Bạn sửa một lỗi trong app.js và chạy git add app.js. Trước khi commit, bạn thêm console.log("debug") vào đúng file đó và lưu. Giờ bạn chạy git commit -m "fix: …". Commit chứa gì?',
@@ -2304,6 +2427,116 @@ ${slide('git-16', 17, 'Sau khoá này: học gì tiếp')}
             ],
             correctIndex: 2, points: 1,
             explanation: 'EN: v1.0.1 must be v1.0.0 plus the fix and nothing else, so the hotfix starts from the tag; git log v1.0.0..v1.0.1 then proves it. Tagging main would ship the two ungraded features; moving v1.0.0 breaks the meaning of the submitted version for everyone who already fetched it; reverting and re-applying works in theory but churns main for no reason. Cherry-picking the fix onto main (through a PR) prevents the bug from returning in the next release. Revisit: Chapter 7.3; lesson 16.3.|||VI: v1.0.1 phải là v1.0.0 cộng bản sửa, không gì khác, nên hotfix bắt đầu từ tag; git log v1.0.0..v1.0.1 sau đó chứng minh điều ấy. Gắn tag cho main là nộp kèm hai tính năng chưa được chấm; dời v1.0.0 phá ý nghĩa của bản đã nộp với mọi người đã fetch nó; revert rồi áp lại về lý thuyết được nhưng làm main rối vô ích. Cherry-pick bản sửa về main (qua PR) để lỗi không quay lại ở bản phát hành sau. Xem lại: Chương 7.3; bài 16.3.',
+          },
+          {
+            question: 'Where must issue forms be stored for GitHub to offer them on the New issue page?|||Where must issue forms be stored for GitHub to offer them on the New issue page?',
+            options: [
+              'In .github/ISSUE_TEMPLATE/ as YAML files',
+              'In the repository root as ISSUE.md',
+              'In docs/templates/ as Markdown files',
+              'In the repository wiki',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Issue forms are YAML files in .github/ISSUE_TEMPLATE/ with the top-level keys name, description and body (lesson 16.1). The single pull request template is .github/pull_request_template.md.|||VI: Issue form là các file YAML trong .github/ISSUE_TEMPLATE/ với các khoá cấp đầu name, description và body (bài 16.1). Mẫu pull request duy nhất là .github/pull_request_template.md.',
+          },
+          {
+            question: 'A PR description contains "Closes #12". When is issue #12 closed automatically?|||A PR description contains "Closes #12". When is issue #12 closed automatically?',
+            options: [
+              'As soon as the PR is opened',
+              'When someone approves the PR',
+              'When the PR is merged into the default branch',
+              'When the branch is pushed for the first time',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: Closing keywords act on merge into the default branch. Merging into another branch, or just opening or approving the PR, only links the issue.|||VI: Từ khoá đóng issue có tác dụng khi PR được merge vào nhánh mặc định. Merge vào nhánh khác, hay chỉ mở hoặc duyệt PR, thì chỉ liên kết issue thôi.',
+          },
+          {
+            question: 'Your team uses Squash and merge. After merging feat/12 locally with git merge --squash and committing, git branch -d feat/12 says the branch is "not fully merged". Why?|||Your team uses Squash and merge. After merging feat/12 locally with git merge --squash and committing, git branch -d feat/12 says the branch is "not fully merged". Why?',
+            options: [
+              'The squash failed and nothing was merged',
+              'git branch -d only works on remote branches',
+              'The squash commit is still unpushed',
+              'The squash commit is new; feat/12’s own commits are not ancestors of main',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: A squash creates one new commit with the combined change and no link to the original commits, so Git cannot see feat/12 as merged (in a real run Git refused, saying the branch "is not fully merged"). After a squash merge you delete the branch with -D, or let GitHub delete it.|||VI: Squash tạo một commit mới chứa tổng thay đổi và không nối với các commit gốc, nên Git không thấy feat/12 đã được merge (chạy thật, Git từ chối và báo nhánh "is not fully merged"). Sau squash merge bạn xoá nhánh bằng -D, hoặc để GitHub tự xoá.',
+          },
+          {
+            question: 'Which command shows the type of the object that the tag v1.0.0 names, so you can tell an annotated tag from a lightweight one?|||Which command shows the type of the object that the tag v1.0.0 names, so you can tell an annotated tag from a lightweight one?',
+            options: [
+              'git show-ref v1.0.0',
+              'git cat-file -t v1.0.0',
+              'git tag --type v1.0.0',
+              'git describe --exact v1.0.0',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: An annotated tag is its own object: git cat-file -t prints "tag". A lightweight tag is only a name for a commit, so it prints "commit" (both verified). Releases should use annotated tags — they carry author, date and message.|||VI: Tag có chú thích là một đối tượng riêng: git cat-file -t in "tag". Tag nhẹ chỉ là cái tên cho một commit, nên in "commit" (đã kiểm cả hai). Bản phát hành nên dùng tag có chú thích — nó mang tác giả, ngày và lời nhắn.',
+          },
+          {
+            question: 'v1.0.0 was submitted, main already contains half-finished work, and a bug is found in the submitted version. Where should the hotfix branch start?|||v1.0.0 was submitted, main already contains half-finished work, and a bug is found in the submitted version. Where should the hotfix branch start?',
+            options: [
+              'From main, so the fix includes the newest code',
+              'From the bug’s original feature branch',
+              'From the tag: git switch -c hotfix/1.0.1 v1.0.0',
+              'From origin/HEAD after a git pull',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: The fix must be applied to exactly what was shipped, without dragging unfinished work into v1.0.1. Branch from the tag, fix, tag v1.0.1, then bring the fix to main (merge or cherry-pick -x).|||VI: Bản sửa phải áp lên đúng thứ đã giao, không kéo việc dở vào v1.0.1. Tạo nhánh từ tag, sửa, gắn tag v1.0.1, rồi đưa bản sửa về main (merge hoặc cherry-pick -x).',
+          },
+          {
+            question: 'You bring the hotfix to main with git cherry-pick -x <hash>. What does -x add?|||You bring the hotfix to main with git cherry-pick -x <hash>. What does -x add?',
+            options: [
+              'A line "(cherry picked from commit <hash>)" in the new commit message',
+              'A Signed-off-by trailer',
+              'An annotated tag on the picked commit',
+              'Nothing; -x only skips empty commits',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: -x records where the change came from (real output ended with "(cherry picked from commit addcecd...)"), so anyone reading main can trace the fix back to the release branch.|||VI: -x ghi lại thay đổi đến từ đâu (output thật kết thúc bằng "(cherry picked from commit addcecd...)"), để ai đọc main cũng lần ngược được bản sửa về nhánh phát hành.',
+          },
+          {
+            question: 'Which command lists the commits that will go into the release notes of v1.1.0, i.e. everything after v1.0.0 up to main?|||Which command lists the commits that will go into the release notes of v1.1.0, i.e. everything after v1.0.0 up to main?',
+            options: [
+              'git log v1.0.0 main',
+              'git log --oneline v1.0.0..main',
+              'git diff v1.0.0...main --stat',
+              'git show v1.0.0..main --tags',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: A..B = commits reachable from B but not from A. In the sprint demo, git log --oneline v1.0.0..main printed exactly the hotfix commit and its merge. git log v1.0.0 main lists the union of both histories.|||VI: A..B = commit tới được từ B mà không tới được từ A. Trong demo sprint, git log --oneline v1.0.0..main in đúng commit hotfix và merge của nó. git log v1.0.0 main liệt kê hợp của cả hai lịch sử.',
+          },
+          {
+            question: 'Trang committed a 200 MB video and the push to GitHub is rejected. What is the cause and the fix?|||Trang committed a 200 MB video and the push to GitHub is rejected. What is the cause and the fix?',
+            options: [
+              'The network timed out; retry with a better connection',
+              'GitHub only rejects files over 1 GB; the error is unrelated',
+              'The repository is private; make it public and push again',
+              'GitHub blocks files over 100 MiB; remove the file from the unpushed commits (or history) and host it elsewhere or in LFS',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: GitHub blocks any file over 100 MiB and warns above 50 MiB (lesson 16.4). Deleting it in a new commit is not enough — it is still in the earlier commit being pushed, so rewrite the unpushed commits first.|||VI: GitHub chặn mọi file trên 100 MiB và cảnh báo từ 50 MiB (bài 16.4). Xoá nó trong một commit mới là chưa đủ — nó vẫn nằm trong commit trước đang được push, nên phải viết lại các commit chưa push trước.',
+          },
+          {
+            question: 'Huy committed on the lab PC, which was still configured with Linh’s name and email. The commit is not pushed. How does he fix the author?|||Huy committed on the lab PC, which was still configured with Linh’s name and email. The commit is not pushed. How does he fix the author?',
+            options: [
+              'git config user.name/user.email to his own, then git commit --amend --no-edit --reset-author',
+              'git revert HEAD and commit again',
+              'git push and ask GitHub support to change it',
+              'Edit .git/COMMIT_EDITMSG',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: --reset-author takes the author from the current config (real run: "Wrong <wrong@example.com>" became "A <a@example.com>"). Several commits: git rebase -r origin/main --exec "git commit --amend --no-edit --reset-author" (lesson 16.4).|||VI: --reset-author lấy tác giả từ cấu hình hiện tại (chạy thật: "Wrong <wrong@example.com>" thành "A <a@example.com>"). Nhiều commit: git rebase -r origin/main --exec "git commit --amend --no-edit --reset-author" (bài 16.4).',
+          },
+          {
+            question: 'git describe --tags prints v1.0.0-1-g39579e1. What does it mean?|||git describe --tags prints v1.0.0-1-g39579e1. What does it mean?',
+            options: [
+              'Version 1.0.0, build number 1, branch g39579e1',
+              'The tag v1.0.0 was moved once',
+              'The current commit is 1 commit after tag v1.0.0, and its abbreviated hash is 39579e1',
+              'There is a newer tag named v1.0.0-1',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: Format: <nearest tag>-<commits since>-g<short hash>; the "g" stands for git. On the tagged commit itself it prints just v1.0.0. Handy for showing the exact build in an About page.|||VI: Định dạng: <tag gần nhất>-<số commit kể từ đó>-g<mã băm ngắn>; chữ "g" là git. Đứng đúng commit có tag thì nó chỉ in v1.0.0. Tiện để hiện đúng bản build trên trang Giới thiệu.',
           },
         ],
       },

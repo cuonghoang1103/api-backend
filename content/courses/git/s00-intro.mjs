@@ -20,6 +20,8 @@ export default {
       slug: 'git-0-5-bat-dau-tai-day',
       type: 'LESSON',
       isFreePreview: true,
+      // Dự án xuyên suốt khoá (docs/du-an-hop-dong.md): frontend vẽ khối "🎯 Đăng ký đề tài" dưới bài có cờ này.
+      dangKyDuAn: true,
       description: 'Bài mở cửa cho người chưa từng dùng Git: Git và GitHub là gì (bằng hình ảnh đời thường trước, định nghĩa sau), khác nhau ra sao, câu chuyện Linus Torvalds viết Git năm 2005, GitHub từ 2008 tới 180 triệu lập trình viên, và Git giúp gì cho đồ án, thực tập, đi làm của chính bạn.',
       content: `
 <div class="ml-en">
@@ -178,6 +180,11 @@ ${slide('git-00', 4, 'Lộ trình toàn khoá — 17 phần')}
   <span class="lc-body"><span class="lc-title">Stack Overflow Developer Survey 2022</span><span class="lc-sub">Section "Version control": Git 93.87% of all respondents, 96.65% of professional developers.</span></span>
 </a>
 <p class="note-ct"><strong>Next:</strong> lesson 2 of "Start here" — real disasters that happened without a safety net, the situations student teams hit every semester, and a study plan that keeps you going.</p>
+
+<h3>🎯 What you can do after this course — and your course project</h3>
+<p>By the last chapter you can run a repository the way a professional team does: a protected main, short-lived branches, reviewed pull requests, conflicts resolved calmly, any mistake undone without losing work, releases tagged with semantic versions, CI and hooks enforcing the boring rules, history rewritten only when it is safe, and a "broken" repository rescued from the reflog.</p>
+<p>Nobody learns that by reading, so this course has <strong>one project that runs through the whole course</strong>. Right now you choose ONE real repository — your SWP391 team repo, a course project (FER202, SDN302, PRJ301…), a small library of your own, a documentation repo, a front-end + back-end monorepo, or a contribution to a real open-source project — or propose your own. After the Quick start and after every chapter, a <strong>🛠 Project milestone</strong> lesson asks you to apply exactly that chapter to your repository (18 milestones). At the end, the repository’s own history, pull requests and releases are your evidence, and you defend them in front of a panel.</p>
+<p><strong>Register your course project topic in the box below.</strong></p>
 </div>
 
 <div class="ml-vi">
@@ -336,6 +343,11 @@ ${slide('git-00', 4, 'Lộ trình toàn khoá — 17 phần')}
   <span class="lc-body"><span class="lc-title">Stack Overflow Developer Survey 2022</span><span class="lc-sub">Mục “Version control”: Git 93,87% mọi người trả lời, 96,65% lập trình viên chuyên nghiệp.</span></span>
 </a>
 <p class="note-ct"><strong>Bài kế tiếp:</strong> “Bắt đầu tại đây” phần 2 — những sự cố có thật khi thiếu lưới an toàn, những tình huống nhóm sinh viên gặp mỗi học kỳ, và một kế hoạch học giúp bạn đi tới cùng.</p>
+
+<h3>🎯 Học xong khoá này bạn làm được gì — và dự án cuối khoá của bạn</h3>
+<p>Tới chương cuối, bạn tự vận hành được một repo theo đúng cách một nhóm chuyên nghiệp ở công ty làm: main được bảo vệ, nhánh ngắn hạn, pull request có review, xung đột giải bình tĩnh, lỡ tay gì cũng hoàn tác được mà không mất việc, bản phát hành gắn tag theo semver (đánh phiên bản ngữ nghĩa), CI và hook (móc tự động) giữ các luật nhàm chán, chỉ viết lại lịch sử khi an toàn, và cứu được một repo “hỏng” nhờ reflog (nhật ký tham chiếu).</p>
+<p>Không ai học được điều đó bằng cách đọc, nên khoá này có <strong>một dự án xuyên suốt khoá</strong>. Ngay bây giờ bạn chọn MỘT repo thật — repo nhóm SWP391, đồ án môn (FER202, SDN302, PRJ301…), một thư viện nhỏ của riêng bạn, một repo tài liệu, một monorepo frontend + backend, hay đóng góp vào một dự án mã nguồn mở thật — hoặc tự đề xuất đề tài. Sau Khởi động nhanh và sau mỗi chương sẽ có một bài <strong>🛠 Mốc dự án</strong> yêu cầu áp đúng kiến thức chương đó vào repo của bạn (18 mốc). Cuối khoá, chính lịch sử, các pull request và các bản phát hành của repo là bằng chứng, và bạn bảo vệ chúng trước hội đồng.</p>
+<p><strong>Hãy đăng ký đề tài dự án cuối khoá của bạn ở bên dưới.</strong></p>
 </div>
 `,
     },

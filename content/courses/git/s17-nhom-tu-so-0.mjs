@@ -13,12 +13,91 @@
  * LUẬT: backtick → &#96;; ${ → \${; \ → \\; < > & trong code → &lt; &gt; &amp;. KHÔNG <svg>.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 const D = 'git-17';
 /** Thẻ liên kết tới một bài khác của khoá (mở tại chỗ). */
 const LT = (slug, ico, title, sub) => '<a class="link-card" href="/courses/git/learn?lessonSlug=' + slug + '"><span class="lc-ico">' + ico + '</span><span class="lc-body"><span class="lc-title">' + title + '</span><span class="lc-sub">' + sub + '</span></span></a>';
 /** Thẻ liên kết ra ngoài. */
 const LX = (href, ico, title, sub) => '<a class="link-card" href="' + href + '" target="_blank" rel="noopener"><span class="lc-ico">' + ico + '</span><span class="lc-body"><span class="lc-title">' + title + '</span><span class="lc-sub">' + sub + '</span></span></a>';
+
+// Mốc dự án 1: lượt chạy mẫu THẬT trong /tmp/git-moc-1 (git 2.51.1, 11/2026) — dùng chung cho khối EN/VI.
+const MOC_1 = [
+  `
+<pre><code class="language-bash"><span class="tok-comment"># (stand-in for "New repository" on github.com: an empty bare repo)</span>
+git init --bare -b main github-repo.git</code></pre>
+<div class="out">$ git init --bare -b main github-repo.git
+Initialized empty Git repository in /private/tmp/git-moc-1/github-repo.git/</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># An (team leader) creates the first commit</span>
+git clone github-repo.git an-laptop
+cd an-laptop
+git config user.name "An Nguyen"
+git config user.email an@example.com
+printf '# Library Booking (SWP391 - Team 3)\\n\\nGoal: students book study rooms in the library.\\n\\n## Members\\n- An Nguyen - team leader\\n' &gt; README.md
+git add README.md
+git commit -m "docs: add README with topic, goal and members"
+git push -u origin main</code></pre>
+<div class="out">$ git clone github-repo.git an-laptop
+Cloning into 'an-laptop'...
+warning: You appear to have cloned an empty repository.
+done.
+$ git commit -m "docs: add README with topic, goal and members"
+[main (root-commit) 743a043] docs: add README with topic, goal and members
+ 1 file changed, 6 insertions(+)
+ create mode 100644 README.md
+$ git push -u origin main
+To /tmp/git-moc-1/github-repo.git
+ * [new branch]      main -&gt; main
+branch 'main' set up to track 'origin/main'.</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># Binh (member) clones with git clone, not the ZIP</span>
+cd ..
+git clone github-repo.git binh-laptop
+cd binh-laptop
+git config user.name "Binh Tran"
+git config user.email binh@exmaple.com
+echo '- Binh Tran - backend' &gt;&gt; README.md
+git commit -am "docs: add Binh Tran to members"
+git log -1 --format="%h %an &lt;%ae&gt;"
+<span class="tok-comment"># typo in the email! not pushed yet, so fix config and amend</span>
+git config user.email binh@example.com
+git commit --amend --no-edit --reset-author
+git push</code></pre>
+<div class="out">$ git clone github-repo.git binh-laptop
+Cloning into 'binh-laptop'...
+done.
+$ git commit -am "docs: add Binh Tran to members"
+[main 8f55561] docs: add Binh Tran to members
+ 1 file changed, 1 insertion(+)
+$ git log -1 --format="%h %an &lt;%ae&gt;"
+8f55561 Binh Tran &lt;binh@exmaple.com&gt;
+$ git commit --amend --no-edit --reset-author
+[main 7ffad9a] docs: add Binh Tran to members
+ 1 file changed, 1 insertion(+)
+$ git push
+To /tmp/git-moc-1/github-repo.git
+   743a043..7ffad9a  main -&gt; main</div>
+`,
+  `
+<pre><code class="language-bash"><span class="tok-comment"># check every author</span>
+cd ../an-laptop
+git pull
+git log --format="%h %an &lt;%ae&gt; %s"</code></pre>
+<div class="out">$ git pull
+From /tmp/git-moc-1/github-repo
+   743a043..7ffad9a  main       -&gt; origin/main
+Updating 743a043..7ffad9a
+Fast-forward
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
+$ git log --format="%h %an &lt;%ae&gt; %s"
+7ffad9a Binh Tran &lt;binh@example.com&gt; docs: add Binh Tran to members
+743a043 An Nguyen &lt;an@example.com&gt; docs: add README with topic, goal and members</div>
+`,
+];
 
 export default {
   title: 'Quick start — Team work on GitHub from zero (Windows + Mac)|||Khởi động nhanh — Làm việc nhóm trên GitHub từ số 0 (Windows + Mac)',
@@ -2443,13 +2522,39 @@ ${LT('git-16-1-khoi-tao-repo-nhom', '🏗️', 'Bài 16.1 — Ngày 0 của mộ
 `,
     },
 
+    /* ─────────────────── 🛠 Mốc dự án 1 ─────────────────── */
+    baiMoc(1, {
+      demoEn: `
+<p>Here GitHub is replaced by a bare repository (github-repo.git) so the whole Day 0 runs on one machine. On your real project, step 1 is <em>New repository</em> on github.com, and inviting members happens on <em>Settings → Collaborators</em> — web pages, so there is no terminal output to show for them.</p>
+<p>1. The stand-in for creating the empty repository on GitHub.</p>
+${MOC_1[0]}
+<p>2. The leader clones it, sets the identity for this repository, writes the README (topic, goal, members) and pushes. <code>-u</code> links local main to origin/main once.</p>
+${MOC_1[1]}
+<p>3. A member clones it — never the ZIP, which has no <code>.git</code>, so no history and no remote. The log line shows a typo in the email (<code>exmaple</code>): on GitHub that commit would have a grey avatar. The commit is not pushed yet, so fixing the config and amending with <code>--reset-author</code> is safe.</p>
+${MOC_1[2]}
+<p>4. The check from “Done when”: one commit per member, real names, the right emails.</p>
+${MOC_1[3]}
+`,
+      demoVi: `
+<p>Ở đây GitHub được thay bằng một repo trần (bare repository, github-repo.git) để cả Ngày 0 chạy được trên một máy. Với dự án thật, bước 1 là <em>New repository</em> trên github.com, còn mời thành viên làm ở <em>Settings → Collaborators</em> — đó là trang web nên không có output terminal để in ra.</p>
+<p>1. Thay cho việc tạo repo rỗng trên GitHub.</p>
+${MOC_1[0]}
+<p>2. Trưởng nhóm clone về, đặt danh tính cho repo này, viết README (đề tài, mục tiêu, thành viên) rồi push. <code>-u</code> nối main cục bộ với origin/main một lần là xong.</p>
+${MOC_1[1]}
+<p>3. Thành viên clone về — không bao giờ tải ZIP, vì ZIP không có <code>.git</code> nên không có lịch sử và không có remote. Dòng log cho thấy email gõ sai (<code>exmaple</code>): trên GitHub commit đó sẽ có avatar xám. Commit chưa push nên sửa cấu hình rồi amend kèm <code>--reset-author</code> là an toàn.</p>
+${MOC_1[2]}
+<p>4. Phép kiểm của mục “Đạt khi”: mỗi thành viên một commit, tên thật, email đúng.</p>
+${MOC_1[3]}
+`,
+    }),
+
     /* ─────────────────────────── KĐ.11 Quiz ─────────────────────────── */
     {
       title: 'KĐ.11 — Quick start check|||KĐ.11 — Kiểm tra Khởi động nhanh',
       slug: 'git-kd-11-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật của nhóm PRJ301: danh tính, đăng nhập 403, gh treo trong Git Bash, README + git init, thư mục rỗng, bản ZIP, upstream, lấy code của bạn, webhook CT Work, và việc nào phải làm lại khi sang dự án mới.',
+      description: 'Mười tình huống thật của nhóm PRJ301: danh tính, đăng nhập 403, gh treo trong Git Bash, README + git init, thư mục rỗng, bản ZIP, upstream, lấy code của bạn, webhook CT Work, và việc nào phải làm lại khi sang dự án mới. Thêm 10 câu tiếng Anh kiểu đề thi FE (câu 11–20) có giải thích.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Quick start · Check</span>
@@ -2464,6 +2569,7 @@ ${LT('git-16-1-khoi-tao-repo-nhom', '🏗️', 'Bài 16.1 — Ngày 0 của mộ
 <li>I can run the daily loop for one card, explain <code>origin</code>, <code>-u</code> and upstream, and bring teammates' work into my branch.</li>
 <li>I can connect the repository to CT Work and name branches, commits and PRs with the card key.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide(D, 34, 'Bảng tra nhanh Khởi động nhanh')}
 </div>
 <div class="ml-vi">
@@ -2479,11 +2585,12 @@ ${slide(D, 34, 'Bảng tra nhanh Khởi động nhanh')}
 <li>Tôi chạy được vòng lặp hằng ngày cho một thẻ, giải thích được <code>origin</code>, <code>-u</code> và upstream, và đem được việc của bạn vào nhánh mình.</li>
 <li>Tôi nối được repo với CT Work và đặt tên nhánh, commit, PR có mã thẻ.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide(D, 34, 'Bảng tra nhanh Khởi động nhanh')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'Long wants his commits to show his name. He types git config --global longbh2006 and gets "error: key does not contain a section". What should he run instead?|||Long muốn commit hiện tên mình. Long gõ git config --global longbh2006 và nhận "error: key does not contain a section". Long nên chạy gì?',
@@ -2594,6 +2701,117 @@ ${slide(D, 34, 'Bảng tra nhanh Khởi động nhanh')}
             ],
             correctIndex: 0, points: 1,
             explanation: 'EN: KĐ.1–3 are per machine and survive every project; KĐ.4–6 and KĐ.10 are per project. A webhook lives in one repository and its Payload URL contains one CT Work project’s id, so the old one cannot serve the new project. Pulling in an old clone only updates the old project.|||VI: KĐ.1–3 thuộc về máy và sống qua mọi dự án; KĐ.4–6 và KĐ.10 thuộc về từng dự án. Webhook sống trong một repo và Payload URL của nó chứa id của một dự án CT Work, nên cái cũ không phục vụ được dự án mới. Pull trong bản clone cũ chỉ cập nhật dự án cũ.',
+          },
+          // ── Câu 11–20: tiếng Anh kiểu đề thi FE (11/2026), hành vi lệnh đã chạy thử trên git 2.51.1 ──
+          {
+            question: "Which command prints the version of Git installed on your machine?|||Which command prints the version of Git installed on your machine?",
+            options: [
+              "git --version",
+              "git status --all",
+              "git log --version-info",
+              "git help --installed",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: Only git --version prints the version (e.g. git version 2.51.1). The others are not valid ways to ask for the version; check this first on every new machine.|||VI: Chỉ git --version in ra phiên bản (vd git version 2.51.1). Các lệnh còn lại không phải cách hỏi phiên bản; mỗi máy mới hãy kiểm lệnh này trước tiên.",
+          },
+          {
+            question: "You want your email to be used in EVERY repository of your user account on this laptop. Which command is correct?|||You want your email to be used in EVERY repository of your user account on this laptop. Which command is correct?",
+            options: [
+              "git config user.email \"an@example.com\"",
+              "git config --global user.email \"an@example.com\"",
+              "git config --global email \"an@example.com\"",
+              "git set --global user.email \"an@example.com\"",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: --global writes ~/.gitconfig, which applies to all your repositories. Without --global the value is saved only in the current repository’s .git/config. A key without a section (email) is rejected, and git set does not exist.|||VI: --global ghi vào ~/.gitconfig, áp cho mọi repo của bạn. Không có --global thì giá trị chỉ lưu trong .git/config của repo hiện tại. Khoá thiếu phần section (email) bị từ chối, còn git set không tồn tại.",
+          },
+          {
+            question: "Inside the project, your commits show the wrong email. Which command tells you WHICH config file the current value comes from?|||Inside the project, your commits show the wrong email. Which command tells you WHICH config file the current value comes from?",
+            options: [
+              "git config --list --global",
+              "git config --unset user.email",
+              "git log --format=%ae",
+              "git config --show-origin user.email",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: --show-origin prints the file next to the value (e.g. file:.git/config). --list --global only shows the global file, so a repository-level value that overrides it stays hidden; git log shows emails already recorded, not where the setting lives.|||VI: --show-origin in ra file nằm cạnh giá trị (vd file:.git/config). --list --global chỉ hiện file toàn cục, nên giá trị cấp repo đang đè lên nó vẫn bị giấu; git log cho thấy email đã ghi trong commit, không cho biết cài đặt nằm ở đâu.",
+          },
+          {
+            question: "A member downloads the project with Code → Download ZIP instead of git clone. What does the unzipped folder NOT have?|||A member downloads the project with Code → Download ZIP instead of git clone. What does the unzipped folder NOT have?",
+            options: [
+              "The source files of the default branch",
+              "The README.md file",
+              "The .git folder, so no history and no origin remote",
+              "The .gitignore file",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: A ZIP is a snapshot of the files only. Without .git there is no history, no branches and no remote, so the member cannot pull or push. Always git clone.|||VI: File ZIP chỉ là ảnh chụp các file. Không có .git thì không có lịch sử, không có nhánh, không có remote, nên thành viên không pull hay push được. Luôn dùng git clone.",
+          },
+          {
+            question: "The leader added Khoa as a collaborator, but Khoa still gets 403 on push and Settings → Collaborators shows “Pending invite”. What must happen?|||The leader added Khoa as a collaborator, but Khoa still gets 403 on push and Settings → Collaborators shows “Pending invite”. What must happen?",
+            options: [
+              "Khoa must accept the invitation (email link or the repository’s invitations page)",
+              "The leader must make the repository public",
+              "Khoa must create a new SSH key",
+              "The leader must run git init again",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: Access starts only when the invitation is accepted. Making the repository public gives read access, not push; keys and git init have nothing to do with a pending invitation.|||VI: Quyền chỉ có hiệu lực khi lời mời được chấp nhận. Đặt repo public chỉ cho quyền đọc, không cho push; khoá và git init không liên quan gì tới lời mời đang chờ.",
+          },
+          {
+            question: "You run git clone https://github.com/team3/library-booking.git inside C:/Projects. Which folder is created, and what is the remote called?|||You run git clone https://github.com/team3/library-booking.git inside C:/Projects. Which folder is created, and what is the remote called?",
+            options: [
+              "C:/Projects/team3, remote \"github\"",
+              "C:/Projects/library-booking.git, remote \"upstream\"",
+              "C:/Projects/library-booking, remote \"main\"",
+              "C:/Projects/library-booking, remote \"origin\"",
+            ],
+            correctIndex: 3, points: 1,
+            explanation: "EN: git clone names the folder after the repository without .git and calls the remote origin. upstream is a name you add yourself for a fork; main is a branch, not a remote.|||VI: git clone đặt tên thư mục theo tên repo bỏ đuôi .git và gọi remote là origin. upstream là tên bạn tự thêm khi làm với fork; main là nhánh, không phải remote.",
+          },
+          {
+            question: "Before starting a new task card in the morning, which order is right?|||Before starting a new task card in the morning, which order is right?",
+            options: [
+              "git switch -c card-12 ; git pull ; git switch main",
+              "git switch main ; git pull ; git switch -c card-12",
+              "git pull ; git switch -c card-12 ; git push --force",
+              "git switch -c card-12 ; git merge main ; git pull origin card-12",
+            ],
+            correctIndex: 1, points: 1,
+            explanation: "EN: Update main first, then branch from the fresh main. Branching first starts the card from yesterday’s main; force-pushing has no place in starting a card.|||VI: Cập nhật main trước, rồi tạo nhánh từ main mới. Tạo nhánh trước thì thẻ bắt đầu từ main của hôm qua; force-push không có chỗ nào trong việc bắt đầu một thẻ.",
+          },
+          {
+            question: "git commit -m \"add DAO\" prints “nothing added to commit but untracked files present”. What does it mean?|||git commit -m \"add DAO\" prints “nothing added to commit but untracked files present”. What does it mean?",
+            options: [
+              "The commit was created but not pushed",
+              "The files are ignored by .gitignore",
+              "The new files were never staged with git add",
+              "The repository has no remote yet",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: Untracked files are listed but not in the index, so the commit has nothing to record. Run git add first. Ignored files would not even be listed as untracked.|||VI: File chưa theo dõi được liệt kê nhưng không nằm trong index, nên commit không có gì để ghi. Chạy git add trước. File bị ignore thì thậm chí không hiện trong danh sách chưa theo dõi.",
+          },
+          {
+            question: "On Windows, every push uses an old GitHub account and fails with 403. Where is that saved login normally stored?|||On Windows, every push uses an old GitHub account and fails with 403. Where is that saved login normally stored?",
+            options: [
+              "In the .git/config file of the project",
+              "In the README of the repository",
+              "In Windows Credential Manager, as the entry git:https://github.com",
+              "In the SSH known_hosts file",
+            ],
+            correctIndex: 2, points: 1,
+            explanation: "EN: Git for Windows stores HTTPS logins in Windows Credential Manager (Windows Credentials → git:https://github.com). Remove that entry and the next push asks you to sign in again. .git/config holds the URL, not the password; known_hosts is for SSH host keys.|||VI: Git for Windows lưu đăng nhập HTTPS trong Windows Credential Manager (Windows Credentials → git:https://github.com). Xoá mục đó thì lần push sau sẽ hỏi đăng nhập lại. .git/config chứa URL, không chứa mật khẩu; known_hosts dành cho khoá máy chủ SSH.",
+          },
+          {
+            question: "Which commit message follows the team convention so CT Work links the commit to card NT-34?|||Which commit message follows the team convention so CT Work links the commit to card NT-34?",
+            options: [
+              "NT-34 add login servlet",
+              "add login servlet (card 34)",
+              "fix: login",
+              "#34 add login servlet",
+            ],
+            correctIndex: 0, points: 1,
+            explanation: "EN: CT Work recognises the card key as written on the card (NT-34). “card 34” and “#34” are not the key; #34 is a GitHub issue reference instead.|||VI: CT Work nhận ra mã thẻ đúng như ghi trên thẻ (NT-34). “card 34” và “#34” không phải mã thẻ; #34 là cách dẫn tới issue của GitHub.",
           },
         ],
       },

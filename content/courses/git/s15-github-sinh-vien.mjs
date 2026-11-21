@@ -10,6 +10,7 @@
  * Con số về Pages / Student Pack / Codespaces / Copilot kiểm trên docs.github.com và education.github.com — tính đến 09/2026.
  */
 import { gallery, slide } from './_slides.mjs';
+import { baiMoc } from './_du-an.mjs';
 
 export default {
   title: 'Chapter 15 — GitHub for students: profile, portfolio & open source|||Chương 15 — GitHub cho sinh viên: hồ sơ, portfolio & mã nguồn mở',
@@ -1270,13 +1271,71 @@ To ../oss-fork.git
 </div>
 `,
     },
+    /* ─────────────────────────── Mốc dự án 16 (dự án xuyên suốt khoá) ─────────────────────────── */
+    baiMoc(16, {
+      demoEn: `
+<p>The scratch repository <code>/tmp/git-moc-16/booking</code> was prepared with five commits by three people (An Nguyen, Binh Tran, Chi Le) and an annotated tag <code>v1.0.0</code>. The README’s "who did what" section must come from the history, not from memory.</p>
+<pre><code class="language-bash">git shortlog -sn --no-merges HEAD
+git log --author="Binh Tran" --format="- %s (%h)"
+git log --format="%an" -- src/auth.js | sort | uniq -c</code></pre>
+<div class="out">     2	An Nguyen
+     2	Binh Tran
+     1	Chi Le
+- feat(booking): book a slot (eb4cdde)
+- feat(booking): list free slots (f84c682)
+   1 An Nguyen
+   1 Chi Le</div>
+<p>Note the <code>HEAD</code> after <code>shortlog</code>: without a revision, and with no terminal attached (a script, a CI job), <code>git shortlog</code> reads a log from standard input and just waits — this demo hung exactly like that on its first run.</p>
+<p>Check what a visitor will see first: the version a build reports and the files a fresh clone gets. Then write the contribution section straight from <code>shortlog</code>.</p>
+<pre><code class="language-bash">git describe --tags
+git ls-files
+printf "\\n## Team\\n" &gt;&gt; README.md &amp;&amp; git shortlog -sn --no-merges HEAD | while read n name; do echo "- $name: $n commits"; done &gt;&gt; README.md &amp;&amp; cat README.md
+git add README.md &amp;&amp; git -c user.name="An Nguyen" -c user.email=an@example.com commit -q -m "docs(readme): add team contributions" &amp;&amp; git log --oneline -1 --stat</code></pre>
+<div class="out">v1.0.0
+README.md
+src/auth.js
+src/slots.js
+8b69f64 docs(readme): add team contributions
+ README.md | 5 +++++
+ 1 file changed, 5 insertions(+)</div>
+<p>The rest of this milestone happens on github.com and has no terminal output: Settings → Pages (source = GitHub Actions for a Vite build, lesson 15.2), the About box (description, website, topics), a LICENSE via <em>Add file → Create new file → LICENSE → Choose a license template</em>, and <em>Customize your pins</em> on your profile. Open the Pages URL in a private window as the final check.</p>
+`,
+      demoVi: `
+<p>Repo nháp <code>/tmp/git-moc-16/booking</code> được chuẩn bị với năm commit của ba người (An Nguyen, Binh Tran, Chi Le) và một tag có chú thích <code>v1.0.0</code>. Mục "ai làm gì" trong README phải lấy từ lịch sử, không lấy từ trí nhớ.</p>
+<pre><code class="language-bash">git shortlog -sn --no-merges HEAD
+git log --author="Binh Tran" --format="- %s (%h)"
+git log --format="%an" -- src/auth.js | sort | uniq -c</code></pre>
+<div class="out">     2	An Nguyen
+     2	Binh Tran
+     1	Chi Le
+- feat(booking): book a slot (eb4cdde)
+- feat(booking): list free slots (f84c682)
+   1 An Nguyen
+   1 Chi Le</div>
+<p>Để ý chữ <code>HEAD</code> sau <code>shortlog</code>: không có revision và không gắn với terminal (trong script, job CI), <code>git shortlog</code> đọc log từ đầu vào chuẩn và cứ thế chờ — demo này đã treo đúng như vậy ở lần chạy đầu.</p>
+<p>Kiểm thứ người xem thấy đầu tiên: phiên bản mà bản build báo và các file một bản clone mới nhận được. Rồi viết mục đóng góp thẳng từ <code>shortlog</code>.</p>
+<pre><code class="language-bash">git describe --tags
+git ls-files
+printf "\\n## Team\\n" &gt;&gt; README.md &amp;&amp; git shortlog -sn --no-merges HEAD | while read n name; do echo "- $name: $n commits"; done &gt;&gt; README.md &amp;&amp; cat README.md
+git add README.md &amp;&amp; git -c user.name="An Nguyen" -c user.email=an@example.com commit -q -m "docs(readme): add team contributions" &amp;&amp; git log --oneline -1 --stat</code></pre>
+<div class="out">v1.0.0
+README.md
+src/auth.js
+src/slots.js
+8b69f64 docs(readme): add team contributions
+ README.md | 5 +++++
+ 1 file changed, 5 insertions(+)</div>
+<p>Phần còn lại của mốc làm trên github.com và không có output terminal: Settings → Pages (nguồn = GitHub Actions cho bản build Vite, bài 15.2), ô About (mô tả, website, topics), LICENSE qua <em>Add file → Create new file → LICENSE → Choose a license template</em>, và <em>Customize your pins</em> trên hồ sơ. Bước kiểm cuối: mở link Pages trong cửa sổ ẩn danh.</p>
+`,
+    }),
+
     /* ─────────────────────────── 15.5 Quiz ─────────────────────────── */
     {
       title: '15.5 — Chapter 15 quiz|||15.5 — Kiểm tra Chương 15',
       slug: 'git-15-5-quiz',
       type: 'QUIZ',
       isFreePreview: true,
-      description: 'Mười tình huống thật khi dựng hồ sơ GitHub xin thực tập: profile README không hiện, trang portfolio trắng, link CV 404, Actions xanh mà site cũ, repo không license, hạn mức Codespaces, Copilot Student chưa kích hoạt, hồ sơ sinh viên bị từ chối, push sau rebase, và issue đã có người nhận.',
+      description: 'Mười tình huống thật khi dựng hồ sơ GitHub xin thực tập: profile README không hiện, trang portfolio trắng, link CV 404, Actions xanh mà site cũ, repo không license, hạn mức Codespaces, Copilot Student chưa kích hoạt, hồ sơ sinh viên bị từ chối, push sau rebase, và issue đã có người nhận. Thêm 10 câu tiếng Anh kiểu đề FE (câu 11–20) về Chương 15.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 15 · Check</span>
@@ -1290,6 +1349,7 @@ To ../oss-fork.git
 <li>I know what the Student Pack gives me, how to get verified, and how Codespaces counts core hours (as of 09/2026).</li>
 <li>I can fork a project, add <code>upstream</code>, sign off a commit, and sync my branch before pushing it again.</li>
 </ul>
+<p><strong>Questions 11–20</strong> are in English, in the style of an FPT final exam (FE): short, precise, one best answer.</p>
 ${slide('git-15', 17, 'Bảng tra nhanh Chương 15')}
 </div>
 <div class="ml-vi">
@@ -1304,11 +1364,12 @@ ${slide('git-15', 17, 'Bảng tra nhanh Chương 15')}
 <li>Tôi biết Student Pack cho mình những gì, cách được xác minh, và Codespaces tính giờ lõi ra sao (tính đến 09/2026).</li>
 <li>Tôi fork được một dự án, thêm <code>upstream</code>, ký sign-off cho commit, và đồng bộ nhánh trước khi push lại.</li>
 </ul>
+<p><strong>Câu 11–20</strong> viết bằng tiếng Anh theo kiểu đề thi cuối kỳ (FE) của FPT: ngắn, chính xác, một đáp án đúng nhất.</p>
 ${slide('git-15', 17, 'Bảng tra nhanh Chương 15')}
 </div>
 `,
       quiz: {
-        timeLimitSeconds: 900,
+        timeLimitSeconds: 1500,
         questions: [
           {
             question: 'You created the repository cuonghoang1103/cuonghoang1103 as private "until it looks good", with a README.md at the root full of text. Your profile page still shows no README. Why?|||Bạn tạo repo cuonghoang1103/cuonghoang1103 ở chế độ private "cho tới khi nó đẹp", có README.md ở gốc đầy chữ. Trang profile vẫn không hiện README nào. Vì sao?',
@@ -1419,6 +1480,116 @@ ${slide('git-15', 17, 'Bảng tra nhanh Chương 15')}
             ],
             correctIndex: 0, points: 1,
             explanation: 'EN: Three days is not abandoned. Asking on the issue is visible to the other contributor and the maintainers, and it is the same etiquette you want applied to your own claims; otherwise there are other good first issues. A racing PR is the tempting answer and it is how newcomers annoy maintainers — two people doing the same work, one of them wasted. A fix kept in your fork helps nobody, and a private email bypasses the public process the project uses.|||VI: Ba ngày chưa phải là bỏ dở. Hỏi ngay trên issue thì người đóng góp kia và các maintainer đều thấy, và đó là cùng phép lịch sự bạn muốn người khác dành cho việc mình đã nhận; nếu không thì còn nhiều good first issue khác. PR chạy đua là phương án hấp dẫn và chính là cách người mới làm maintainer khó chịu — hai người làm cùng một việc, một người phí công. Bản sửa để trong fork không giúp ai, còn email riêng là đi vòng qua quy trình công khai của dự án.',
+          },
+          {
+            question: 'Your GitHub username is nguyenvana. Where must README.md live for it to appear on your profile page?|||Your GitHub username is nguyenvana. Where must README.md live for it to appear on your profile page?',
+            options: [
+              'In any pinned repository',
+              'In a public repository named exactly nguyenvana',
+              'In a repository named profile, in the .github folder',
+              'In a private repository named nguyenvana.github.io',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: The special repository has the same name as your username and must be public; its root README.md is shown on the profile. A private repository’s README is never shown there, and username.github.io is the Pages user site, a different feature.|||VI: Repo đặc biệt có tên trùng tên người dùng và phải public; README.md ở gốc của nó được hiện lên profile. README của repo private không bao giờ hiện ở đó, còn username.github.io là user site của Pages, một tính năng khác.',
+          },
+          {
+            question: 'A Vite portfolio is deployed to https://nguyenvana.github.io/portfolio/. The HTML loads but every JavaScript file returns 404 and the page is white. What fixes it?|||A Vite portfolio is deployed to https://nguyenvana.github.io/portfolio/. The HTML loads but every JavaScript file returns 404 and the page is white. What fixes it?',
+            options: [
+              'Commit the dist/ folder',
+              'Enable HTTPS in Settings → Pages',
+              'Set base: "/portfolio/" in vite.config.js and rebuild',
+              'Rename index.html to 404.html',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: A project site is served under /portfolio/, but Vite builds with base "/" by default, so the page asks for /assets/... outside the site. Setting base to the repository path fixes every generated URL (lesson 15.2).|||VI: Project site được phục vụ dưới /portfolio/, nhưng mặc định Vite build với base "/", nên trang đòi /assets/... nằm ngoài site. Đặt base bằng đường dẫn repo là sửa được mọi URL sinh ra (bài 15.2).',
+          },
+          {
+            question: 'A public repository has no LICENSE file. What may other people legally do with the code by default?|||A public repository has no LICENSE file. What may other people legally do with the code by default?',
+            options: [
+              'View it on GitHub; copying, modifying or redistributing it is not granted',
+              'Anything, because public code is public domain',
+              'Use it for non-commercial purposes only',
+              'Use it freely as long as they credit the author',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: No license means all rights reserved: GitHub’s terms let people view and fork on the site, but no permission to reuse is granted. "Credit the author" or "non-commercial" are terms of specific licenses (MIT, CC BY-NC), not the default.|||VI: Không có giấy phép nghĩa là giữ mọi quyền: điều khoản GitHub cho người khác xem và fork trên trang, nhưng không cấp quyền dùng lại. "Ghi công tác giả" hay "phi thương mại" là điều khoản của giấy phép cụ thể (MIT, CC BY-NC), không phải mặc định.',
+          },
+          {
+            question: 'According to GitHub Docs (as of 09/2026), how many Codespaces core hours per month does a GitHub Pro account (included in the Student Pack) get?|||According to GitHub Docs (as of 09/2026), how many Codespaces core hours per month does a GitHub Pro account (included in the Student Pack) get?',
+            options: [
+              '60 core hours',
+              '120 core hours',
+              'Unlimited core hours for students',
+              '180 core hours',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Free accounts get 120 core hours and 15 GB-month of storage; Pro, which verified students receive, gets 180 core hours and 20 GB-month. A core hour is time × cores, so 180 is about 90 hours on a 2-core machine.|||VI: Tài khoản Free được 120 giờ lõi và 15 GB-tháng lưu trữ; Pro, thứ sinh viên đã xác minh nhận được, có 180 giờ lõi và 20 GB-tháng. Giờ lõi = thời gian × số lõi, nên 180 tương đương khoảng 90 giờ trên máy 2 lõi.',
+          },
+          {
+            question: 'A project requires a DCO sign-off on every commit. Which command adds it?|||A project requires a DCO sign-off on every commit. Which command adds it?',
+            options: [
+              'git commit -S -m "fix: typo"',
+              'git commit --signoff-dco -m "fix: typo"',
+              'git commit -s -m "fix: typo"',
+              'git tag -s dco',
+            ],
+            correctIndex: 2, points: 1,
+            explanation: 'EN: -s (--signoff) appends a trailer "Signed-off-by: Name <email>" from your config — a real commit ended with exactly that line. -S (capital) is a cryptographic signature, a different thing; a project may ask for either or both.|||VI: -s (--signoff) thêm dòng trailer "Signed-off-by: Tên <email>" lấy từ cấu hình — một commit thật kết thúc đúng bằng dòng đó. -S (viết hoa) là chữ ký mật mã, một chuyện khác; dự án có thể đòi một trong hai hoặc cả hai.',
+          },
+          {
+            question: 'Your fork’s main is behind the original project. You have the remotes origin (your fork) and upstream (the project). Which sequence updates your fork safely?|||Your fork’s main is behind the original project. You have the remotes origin (your fork) and upstream (the project). Which sequence updates your fork safely?',
+            options: [
+              'git pull origin main, then git push upstream main',
+              'git fetch upstream, git switch main, git merge --ff-only upstream/main, git push origin main',
+              'git reset --hard origin/main, then git push --force upstream main',
+              'git clone the project again and delete the fork',
+            ],
+            correctIndex: 1, points: 1,
+            explanation: 'EN: Fetch the project, fast-forward your main to it, push to YOUR fork. --ff-only guarantees no stray merge commit on your copy of their branch. You never push to upstream — you have no rights there, and that is what PRs are for.|||VI: Fetch dự án, tua thẳng main của bạn tới đó, push lên fork CỦA BẠN. --ff-only đảm bảo không có merge commit lạc trên bản sao nhánh của họ. Bạn không bao giờ push lên upstream — bạn không có quyền ở đó, và PR sinh ra là để làm việc ấy.',
+          },
+          {
+            question: 'You found an open issue labelled "good first issue". What should you do before writing code?|||You found an open issue labelled "good first issue". What should you do before writing code?',
+            options: [
+              'Comment on the issue asking whether you may work on it, after reading CONTRIBUTING.md',
+              'Open a pull request immediately so nobody else takes it',
+              'Fork the repository and push directly to their main',
+              'Email the maintainers privately with your plan',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: Many projects assign issues or have someone already on it; a short comment avoids duplicate work, and CONTRIBUTING.md tells you their branch, test and commit rules. An unrequested PR for a claimed issue is usually closed.|||VI: Nhiều dự án giao issue cho người cụ thể hoặc đã có người nhận; một bình luận ngắn tránh làm trùng, còn CONTRIBUTING.md cho biết luật nhánh, test và commit của họ. PR không ai yêu cầu cho một issue đã có người nhận thường bị đóng.',
+          },
+          {
+            question: 'What does gh repo sync do by default when run inside your local clone of a fork?|||What does gh repo sync do by default when run inside your local clone of a fork?',
+            options: [
+              'Force-resets your branch to the parent repository',
+              'Opens a pull request from upstream to your fork',
+              'Deletes branches that were merged upstream',
+              'Updates your local branch from the parent repository, only if it can fast-forward',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: By default gh repo sync only fast-forwards; with --force it hard-resets the destination and throws away commits that exist only on your branch (lesson 15.4, from gh repo sync --help).|||VI: Mặc định gh repo sync chỉ tua thẳng; với --force nó reset cứng nhánh đích và vứt các commit chỉ có trên nhánh của bạn (bài 15.4, theo gh repo sync --help).',
+          },
+          {
+            question: 'You rebased your open PR branch onto the latest upstream/main. git push now fails as non-fast-forward. What is the correct push?|||You rebased your open PR branch onto the latest upstream/main. git push now fails as non-fast-forward. What is the correct push?',
+            options: [
+              'git push --force-with-lease origin <your-branch>',
+              'git push --force upstream main',
+              'git pull and then git push',
+              'git push --tags',
+            ],
+            correctIndex: 0, points: 1,
+            explanation: 'EN: The rebase rewrote YOUR branch, so the push must replace it; --force-with-lease refuses if someone (a maintainer applying a suggestion) pushed to it meanwhile. git pull would merge the old copies back and double every commit.|||VI: Rebase đã viết lại nhánh CỦA BẠN, nên lần push phải thay nó; --force-with-lease từ chối nếu trong lúc đó có người (maintainer áp một suggestion) đã push lên. git pull sẽ merge các bản cũ trở lại và nhân đôi mọi commit.',
+          },
+          {
+            question: 'Per GitHub Docs (as of 09/2026), what is the maximum size of a published GitHub Pages site?|||Per GitHub Docs (as of 09/2026), what is the maximum size of a published GitHub Pages site?',
+            options: [
+              '100 MB',
+              '500 MB',
+              '10 GB',
+              '1 GB',
+            ],
+            correctIndex: 3, points: 1,
+            explanation: 'EN: Published sites may be at most 1 GB, the source repository has a recommended limit of 1 GB, and bandwidth has a soft limit of 100 GB per month (lesson 15.2). Videos belong on a video host, not in a Pages site.|||VI: Site đã xuất bản tối đa 1 GB, repo nguồn có giới hạn khuyến nghị 1 GB, và băng thông có giới hạn mềm 100 GB mỗi tháng (bài 15.2). Video nên đặt ở dịch vụ video, không đặt trong site Pages.',
           },
         ],
       },

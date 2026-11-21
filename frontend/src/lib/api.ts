@@ -3,6 +3,7 @@ import { lamMoiPhien, xuLyHetPhien } from '@/lib/hetPhien';
 import type { ApiResponse, AuthResponse, NoteFull, ChuongTrinhDaoTao } from '@/types';
 import type { ReactionType, ReactionBreakdown } from '@/types/social';
 import type { GopYKhoa, TrangGopYKhoa, GuiGopYKhoa, DoiChieuGopYKhoa } from '@/lib/gopYKhoa';
+import type { DuAnTraVe, PhienBaoVe } from '@/lib/duAn';
 
 const DEFAULT_UPLOAD_CATEGORY = 'images';
 
@@ -2190,6 +2191,29 @@ export const courseSuggestionsApi = {
   // Admin — đổi trạng thái / ghi kết quả đối chiếu (requireAdmin + MFA step-up như mọi tuyến admin).
   review: (id: number, data: DoiChieuGopYKhoa) =>
     api.patch<{ success: boolean; data: GopYKhoa }>(`/admin/course-suggestions/${id}`, data),
+};
+
+// Dự án xuyên suốt khoá (21/11/2026) — src/routes/courseProject.routes.ts. Mọi lệnh ghi trả lại toàn bộ `DuAnTraVe`.
+// Bản SSE của phòng bảo vệ đi `fetch` thẳng (xem components/courses/du-an/sse.ts); đây là bản JSON + đường lùi.
+export const duAnApi = {
+  get: (slug: string) =>
+    api.get<{ success: boolean; data: DuAnTraVe }>(`/courses/${encodeURIComponent(slug)}/du-an`),
+  chon: (slug: string, body: { deTaiSlug: string } | { tuChonDaDuyet: true }) =>
+    api.post<{ success: boolean; data: DuAnTraVe }>(`/courses/${encodeURIComponent(slug)}/du-an/chon`, body),
+  tuChon: (slug: string, body: { ten: string; moTa: string; tinhNang: string[]; ngonNgu?: 'vi' | 'en' }) =>
+    api.post<{ success: boolean; data: DuAnTraVe }>(`/courses/${encodeURIComponent(slug)}/du-an/tu-chon`, body, { timeout: 90_000 }),
+  nopMoc: (slug: string, mocSlug: string, body: { repoUrl?: string; demoUrl?: string; anhUrl?: string; ghiChu?: string; tuKiem: number[]; xong: boolean }) =>
+    api.post<{ success: boolean; data: DuAnTraVe }>(`/courses/${encodeURIComponent(slug)}/du-an/moc/${encodeURIComponent(mocSlug)}`, body),
+  batDauBaoVe: (slug: string, body: { ngonNgu?: 'vi' | 'en' }) =>
+    api.post<{ success: boolean; data: PhienBaoVe }>(`/courses/${encodeURIComponent(slug)}/du-an/bao-ve`, body, { timeout: 90_000 }),
+  layPhien: (slug: string, id: number) =>
+    api.get<{ success: boolean; data: PhienBaoVe }>(`/courses/${encodeURIComponent(slug)}/du-an/bao-ve/${id}`),
+  traLoi: (slug: string, id: number, traLoi: string) =>
+    api.post<{ success: boolean; data: PhienBaoVe }>(`/courses/${encodeURIComponent(slug)}/du-an/bao-ve/${id}/tra-loi`, { traLoi }, { timeout: 120_000 }),
+  hoiLai: (slug: string, id: number) =>
+    api.post<{ success: boolean; data: PhienBaoVe }>(`/courses/${encodeURIComponent(slug)}/du-an/bao-ve/${id}/hoi-lai`, {}, { timeout: 120_000 }),
+  ketThuc: (slug: string, id: number) =>
+    api.post<{ success: boolean; data: PhienBaoVe }>(`/courses/${encodeURIComponent(slug)}/du-an/bao-ve/${id}/ket-thuc`, {}, { timeout: 120_000 }),
 };
 
 // Admin Courses API

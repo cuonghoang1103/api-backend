@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 import { getPrerequisites, hasAcknowledgedPrereq, acknowledgePrereq } from '@/lib/coursePrerequisites';
 import { PrerequisiteModal, PrerequisiteBanner } from '@/components/courses/PrerequisiteGate';
 import CourseLabCard from '@/components/labs/CourseLabCard';
+import TienDoDuAn from '@/components/courses/du-an/TienDoDuAn';
 import { tachGachDauDong, nenMotCot } from '@/lib/courseBlurb';
 import { CourseDescription } from '@/components/courses/CourseDescription';
 import { tachCauDai } from '@/lib/courseDescription';
@@ -908,6 +909,12 @@ export default function CourseDetailPage({ initialCourse = null }: { initialCour
           <div className="min-w-0 space-y-6">
             <PrerequisiteBanner prerequisites={getPrerequisites(course.slug)} />
             <CourseLabCard slug={course.slug} locale={locale} />
+            {/* 🎯 Dự án cuối khoá (21/11/2026): đề tài đã chọn + mốc xong/còn + %. Khoá không có dự án ⇒ không vẽ gì. */}
+            <TienDoDuAn
+              courseSlug={course.slug}
+              locale={locale}
+              baiTheoSlug={Object.fromEntries((course.sections ?? []).flatMap((sec) => (sec.lessons ?? []).filter((l) => l.slug).map((l) => [l.slug as string, l.id])))}
+            />
 
             {whatYouLearnList.length > 0 && (
               <section aria-labelledby="hoc-duoc" className={`${s.the} rounded-2xl p-5 sm:p-6`}>

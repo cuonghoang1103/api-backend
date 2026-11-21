@@ -38,6 +38,7 @@ import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
 import { withSimulation } from './lib/simulation-block.mjs';
+import { inKetQuaKiem, kiemDuAn, layDuAn, moiBai, vanTayDuAn } from './lib/du-an.mjs';
 import { ganMuc0Flm } from './lib/academy-muc0-flm.mjs';
 import { readFileSync } from 'node:fs';
 
@@ -69,6 +70,11 @@ const normType = (t) => (TYPES.has(String(t || '').toUpperCase()) ? String(t).to
 // Mục 0 FLM (_muc0-flm/) + chương slide của trường (_slide-flm/) được ghép vào môn — xem lib.
 const spec = await ganMuc0Flm((await import(pathToFileURL(path.resolve(FILE)).href)).default, FILE);
 console.log(`── academy-seed ${spec.course.courseCode} : ${APPLY ? 'APPLY' : 'DRY'} ──`);
+
+/* Dự án xuyên suốt khoá (21/11/2026, docs/du-an-hop-dong.md): kiểm `duAn` + cờ bài trên spec ĐÃ ghép Mục 0 FLM.
+   Lỗi ⇒ KHÔNG ghi spec dự án nhưng VẪN seed phần còn lại của môn, rồi thoát mã 1 ở cuối (report_seed báo WARN). */
+const kqDuAn = kiemDuAn(layDuAn(spec), moiBai(spec), (l) => l.slug || slugify(l.title));
+const loiDuAn = inKetQuaKiem(kqDuAn);
 
 /* 1. Semester (by code) ---------------------------------------------------- */
 const sm = spec.semester;
@@ -292,6 +298,30 @@ if (APPLY && course) {
   await prisma.course.update({ where: { id: course.id }, data: { totalLessons, totalDurationSeconds } });
   console.log(`  ∑ stats: total_lessons=${totalLessons} · duration=${totalDurationSeconds}s`);
 }
+
+/* 6. Dự án xuyên suốt khoá → bảng course_project_specs (1:1 với khoá; cờ bài nằm trong noi_dung.bai).
+   Idempotent: so vân tay, không đổi thì không ghi. Tệp bỏ hẳn `duAn` mà CSDL còn ⇒ xoá bản spec — tiến độ người học
+   nằm ở bảng riêng (course_project_choices/milestones/defences) nên KHÔNG mất. */
+if (course && !loiDuAn) {
+  const moi = kqDuAn.duLieu; // null khi tệp không có duAn
+  const cu = await prisma.courseProjectSpec.findUnique({ where: { courseId: course.id }, select: { vanTay: true } });
+  if (moi) {
+    const vanTay = vanTayDuAn(moi);
+    if (cu?.vanTay === vanTay) console.log(`  = duAn: không đổi (${moi.deTai.length} đề tài · ${moi.moc.length} mốc)`);
+    else {
+      console.log(`  ⚑ duAn: ${moi.deTai.length} đề tài · ${moi.moc.length} mốc · rubric ${moi.baoVe.rubric.length} tiêu chí → ${cu ? 'cập nhật' : 'tạo'} spec`);
+      if (APPLY) await prisma.courseProjectSpec.upsert({
+        where: { courseId: course.id },
+        create: { courseId: course.id, noiDung: moi, vanTay },
+        update: { noiDung: moi, vanTay },
+      });
+    }
+  } else if (cu) {
+    console.log('  ⚑ duAn: tệp không còn khối duAn → xoá spec dự án (tiến độ người học giữ nguyên)');
+    if (APPLY) await prisma.courseProjectSpec.delete({ where: { courseId: course.id } });
+  }
+}
+if (loiDuAn) process.exitCode = 1;
 
 console.log(`\nsections +${secN} · lessons +${lesNew} ~${lesUpd}. ${APPLY ? 'Done.' : 'Dry-run — add --apply.'}`);
 await prisma.$disconnect();

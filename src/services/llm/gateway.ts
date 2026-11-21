@@ -353,7 +353,9 @@ export type LlmPurpose =
   | 'study_coach'         // /hoc-tap — diễn đạt lời cảnh báo từ tỷ lệ trượt MÃ đã tính
   | 'creator_script'      // Content Creator (/creator) — gói quay bài giảng/vlog: kịch bản, cảnh, lời thoại, hook, Shorts
   | 'long_tieng_dich'     // CT Lồng Tiếng (18/11/2026) — dịch lời video Trung/Anh sang tiếng Việt NÓI, vừa khe thời gian (JSON)
-  | 'video_lenh';         // "Lệnh & code trong video" (20/11/2026) — giải thích lệnh terminal/khối code đã TRÍCH từ video (JSON, chạy lô)
+  | 'video_lenh'          // "Lệnh & code trong video" (20/11/2026) — giải thích lệnh terminal/khối code đã TRÍCH từ video (JSON, chạy lô)
+  | 'du_an_duyet'         // Dự án xuyên suốt khoá (21/11/2026) — duyệt đề tài TỰ CHỌN của người học (1 lượt, JSON nhỏ)
+  | 'du_an_bao_ve';       // Dự án xuyên suốt khoá — hội đồng AI hỏi bảo vệ nhiều lượt + chấm theo rubric (JSON)
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -554,6 +556,17 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * script). Rẻ hơn ~4× nếu cần: `LLM_MODEL_VIDEO_LENH=gpt-5.6-luna` (chậm hơn, chưa đo độ đúng cờ lệnh trên cả kho).
    */
   video_lenh: 'gpt-6-luna',
+  /**
+   * Dự án xuyên suốt khoá (21/11/2026, docs/du-an-xuyen-suot-khoa.md §5 — "người dùng đang cần tiết kiệm").
+   * • `du_an_duyet`: MỘT lời gọi, vào ~1,5–2,5k token (tiêu chí khoá + mốc + đề tài người học), ra JSON ≤ 900 token.
+   *   `gpt-6-luna` (sổ ~0,85× 6-sol, đúng ngang trên bài thử). Ước ~0,004–0,006 $/lượt; trần 5 lượt/ngày/người.
+   * • `du_an_bao_ve`: hội thoại hỏi–đáp (mỗi lượt ≤ 450 token ra) + một lượt chấm JSON. `gpt-6-sol` (viết tiếng Việt
+   *   tốt, rẻ ~4× 5.6-sol). Ước ~0,03–0,06 $/phiên (6 câu); trần 2 phiên/ngày/người.
+   * Cả hai là GPT ⇒ không bao giờ đi gwai (viecDiRambo đòi `claude-*`); effort `low` (bảng SUY_LUAN_THEO_VIEC).
+   * Vặn không cần deploy: `LLM_MODEL_DU_AN_DUYET` / `LLM_MODEL_DU_AN_BAO_VE`, `LLM_EFFORT_DU_AN_*`.
+   */
+  du_an_duyet: 'gpt-6-luna',
+  du_an_bao_ve: 'gpt-6-sol',
 
   cv_critique: 'gpt-6-sol',
   cv_writing: 'gpt-6-sol',
@@ -1496,6 +1509,8 @@ const SUY_LUAN_THEO_VIEC: Partial<Record<LlmPurpose, MucSuyLuan>> = {
   exphub_doc: 'medium', news_bulletin: 'medium', plan_review: 'medium', video_lenh: 'medium',
   // Máy đọc / tra cứu nhỏ / độ trễ quan trọng.
   cv_parse: 'low', han_tra: 'low',
+  // Dự án xuyên suốt khoá: JSON nhỏ / câu hỏi ngắn — nghĩ ít để rẻ + chữ đầu sớm (người học ngồi chờ).
+  du_an_duyet: 'low', du_an_bao_ve: 'low',
   /* 19/10/2026: gia sư/trò chuyện ngoại ngữ là lượt NÓI ngắn — đo gpt-6-sol không gửi effort (cổng mặc định
      medium): 2,4–3,7 s/lượt, 30–86 token suy luận cho câu trả lời 25–190 ký tự. `low` cho chữ đầu sớm hơn. */
   language_tutor: 'low',

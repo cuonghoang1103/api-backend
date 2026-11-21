@@ -25,6 +25,7 @@ import MucLucVideo from '@/components/academy/giaSu/MucLucVideo';
 import LenhTrongVideo from '@/components/academy/giaSu/LenhTrongVideo';
 import { useNutHoiSlide } from '@/components/academy/giaSu/nutHoiSlide';
 import LuyenTapCodeLab from '@/components/courses/LuyenTapCodeLab';
+import DuAnTrongBai from '@/components/courses/du-an/DuAnTrongBai';
 import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
 import LessonPdfViewer from './LessonPdfViewer';
 import type { Course, LessonDto, LessonProgress, LessonDetail, LessonVideoTrack, VideoTrackKey } from '@/types';
@@ -1271,6 +1272,21 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   <div ref={khungNoiDungRef} data-ml={locale} className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: withLessonRef(sanitizeHtml(stripInlineColors(currentLesson.content || "")), currentLesson.id) }} />
                 </div>
               )}
+
+              {/* 🎯/🛠/🎓 Dự án xuyên suốt khoá (21/11/2026, docs/du-an-hop-dong.md): bài có vai trò trong dự án của khoá
+                  (đăng ký đề tài / mốc / bảo vệ — tra theo slug trong spec dự án) ⇒ vẽ đúng khối ngay dưới nội dung bài.
+                  Khoá không có dự án ⇒ không vẽ gì. */}
+              <DuAnTrongBai
+                courseSlug={slug}
+                lessonSlug={currentLesson.slug}
+                locale={locale}
+                daDangNhap={daDangNhap}
+                onXongMoc={() => { if (!isCompleted(currentLesson.id)) markComplete(); }}
+                denBai={(lessonSlug) => {
+                  const f = flatLessons.find((x) => x.lesson.slug === lessonSlug);
+                  if (f) { void selectLesson(f.lesson); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+                }}
+              />
 
               {/* Teaching notes — instructor's notes attached
                   to the lesson (LessonDetail.teachingNotes). Renders as

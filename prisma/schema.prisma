@@ -369,6 +369,10 @@ model User {
   // Góp ý & bổ sung cho khoá học (14/11/2026)
   gopYKhoaHoc             CourseSuggestion[]       @relation("GopYKhoaHocNguoiGui")
   phieuGopYKhoaHoc        CourseSuggestionVote[]   @relation("PhieuGopYKhoaHoc")
+  // Dự án xuyên suốt khoá (21/11/2026) — docs/du-an-hop-dong.md §4.
+  duAnLuaChon             CourseProjectChoice[]    @relation("DuAnLuaChonCuaNguoi")
+  duAnMoc                 CourseProjectMilestone[] @relation("DuAnMocCuaNguoi")
+  duAnBaoVe               CourseProjectDefence[]   @relation("DuAnBaoVeCuaNguoi")
   codeLabIncidentComments CodeLabIncidentComment[]
 
   // ─── My Language — learning progress (per-user, SRS) ─────────
@@ -1169,9 +1173,9 @@ model Course {
   createdAt              DateTime  @default(now()) @map("created_at")
   updatedAt              DateTime  @updatedAt @map("updated_at")
 
-  category     CourseCategory?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  instructor   User?              @relation("CourseInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
-  semester     Semester?          @relation(fields: [semesterId], references: [id], onDelete: SetNull)
+  category     CourseCategory?          @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  instructor   User?                    @relation("CourseInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
+  semester     Semester?                @relation(fields: [semesterId], references: [id], onDelete: SetNull)
   sections     CourseSection[]
   documents    CourseDocument[]
   enrollments  Enrollment[]
@@ -1183,6 +1187,11 @@ model Course {
   exams        Exam[]
   // Góp ý & bổ sung cho khoá (14/11/2026) — docs/gop-y-khoa-hoc.md.
   gopY         CourseSuggestion[]
+  // Dự án xuyên suốt khoá (21/11/2026) — docs/du-an-hop-dong.md §4.
+  duAn         CourseProjectSpec?
+  duAnLuaChon  CourseProjectChoice[]
+  duAnMoc      CourseProjectMilestone[]
+  duAnBaoVe    CourseProjectDefence[]
 
   @@index([categoryId], name: "idx_courses_category")
   @@index([instructorId], name: "idx_courses_instructor")
@@ -1270,6 +1279,121 @@ model CourseSuggestionVote {
   @@unique([suggestionId, userId], map: "uk_course_suggestion_vote")
   @@index([userId], map: "idx_course_suggestion_votes_user")
   @@map("course_suggestion_votes")
+}
+
+/// Dự án xuyên suốt khoá — khối `duAn` của TỆP KHOÁ (21/11/2026, docs/du-an-hop-dong.md §4). Seed ghi, web chỉ đọc.
+///
+/// Bảng 1:1 RIÊNG chứ không phải cột `courses.du_an`: Prisma trả MỌI cột vô hướng khi không `select`, nên một cột jsonb
+/// 50–150 KB trên `courses` sẽ đi kèm mọi truy vấn danh sách khoá/thẻ khoá. `noiDung` đã kiểm + chuẩn hoá bởi
+/// scripts/lib/du-an.mjs: { version, gioiThieu, deTai[], tuChon, moc[], baoVe, bai: { dangKy[], baoVe[] } } — cờ bài
+/// mốc/đăng ký/bảo vệ nằm trong đây theo slug, KHÔNG phải cột của `lessons`.
+model CourseProjectSpec {
+  id        Int      @id @default(autoincrement())
+  courseId  Int      @unique(map: "uk_course_project_spec_course") @map("course_id")
+  noiDung   Json     @map("noi_dung") @db.JsonB
+  /// sha256 của JSON ổn định (khoá sắp xếp) — seed so vân tay, không đổi thì không ghi
+  vanTay    String   @map("van_tay") @db.VarChar(64)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@map("course_project_specs")
+}
+
+/// Dự án xuyên suốt khoá — ĐỀ TÀI người học đang làm (21/11/2026, docs/du-an-hop-dong.md §4).
+///
+/// MỘT dòng / người / khoá = lựa chọn đang hiệu lực. Đổi đề tài ⇒ bản cũ đẩy vào `lichSu` (jsonb, giữ 30 bản gần nhất),
+/// không tạo dòng mới — nên không cần chỉ mục unique một phần (Prisma không diễn tả được ⇒ `migrate diff` sẽ báo lệch).
+/// Đề tài hiệu lực là MỘT trong hai: `deTaiSlug` (gợi ý của khoá) HOẶC `tuChon` (tự chọn, chỉ vào đây khi AI DUYỆT).
+model CourseProjectChoice {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  courseId  Int       @map("course_id")
+  /// slug trong `course_project_specs.noi_dung.deTai[]`; NULL khi đề tài tự chọn hoặc chưa chọn
+  deTaiSlug String?   @map("de_tai_slug") @db.VarChar(80)
+  /// Đề tài tự chọn ĐÃ DUYỆT đang hiệu lực: { ten, moTa, tinhNang[] }
+  tuChon    Json?     @map("tu_chon") @db.JsonB
+  /// Kết quả AI duyệt lần gần nhất (kể cả "Cần sửa"): { ketQua: DUYET|CAN_SUA, nhanXet, diemManh[], goiYSua[], quyMo,
+  /// ban: { ten, moTa, tinhNang[] }, luc, model }
+  aiDuyet   Json?     @map("ai_duyet") @db.JsonB
+  /// Lượt duyệt AI (đếm trần/ngày): [{ luc, ketQua, ten }] — 30 bản gần nhất
+  luotDuyet Json      @default("[]") @map("luot_duyet") @db.JsonB
+  /// Các đề tài đã bỏ: [{ loai: GOI_Y|TU_CHON, deTaiSlug?, ten, tuLuc, denLuc }] — 30 bản gần nhất
+  lichSu    Json      @default("[]") @map("lich_su") @db.JsonB
+  /// Lúc chốt đề tài đang hiệu lực
+  chotLuc   DateTime? @map("chot_luc")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  user   User   @relation("DuAnLuaChonCuaNguoi", fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId], map: "uk_course_project_choice")
+  @@index([courseId], map: "idx_course_project_choices_course")
+  @@map("course_project_choices")
+}
+
+/// Tiến độ MỐC dự án của người học — một dòng / người / khoá / mốc (slug bài mốc, KHÔNG phải lessonId: slug mốc
+/// sống trong `course_project_specs.noi_dung.moc[]` và bài mốc có thể được seed sau).
+model CourseProjectMilestone {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  courseId  Int       @map("course_id")
+  mocSlug   String    @map("moc_slug") @db.VarChar(120)
+  mocSo     Int       @map("moc_so")
+  /// DANG_LAM (lưu nháp) | XONG (đã nộp + đánh dấu xong)
+  trangThai String    @default("DANG_LAM") @map("trang_thai") @db.VarChar(16)
+  repoUrl   String?   @map("repo_url") @db.VarChar(500)
+  demoUrl   String?   @map("demo_url") @db.VarChar(500)
+  anhUrl    String?   @map("anh_url") @db.VarChar(500)
+  ghiChu    String?   @map("ghi_chu") @db.Text
+  /// Chỉ số các tiêu chí "Đạt khi" người học đã tự tick: [0, 2, …]
+  tuKiem    Json      @default("[]") @map("tu_kiem") @db.JsonB
+  /// Tên đề tài lúc nộp (đề tài có thể đổi về sau)
+  deTaiTen  String?   @map("de_tai_ten") @db.VarChar(255)
+  nopLuc    DateTime? @map("nop_luc")
+  xongLuc   DateTime? @map("xong_luc")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  user   User   @relation("DuAnMocCuaNguoi", fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId, mocSlug], map: "uk_course_project_milestone")
+  @@index([courseId, trangThai], map: "idx_course_project_milestones_course")
+  @@map("course_project_milestones")
+}
+
+/// Phiên BẢO VỆ dự án với hội đồng AI — hội thoại nhiều lượt rồi chấm theo rubric của khoá.
+model CourseProjectDefence {
+  id          Int       @id @default(autoincrement())
+  userId      Int       @map("user_id")
+  courseId    Int       @map("course_id")
+  /// DANG_HOI | DA_CHAM | BO_DO
+  trangThai   String    @default("DANG_HOI") @map("trang_thai") @db.VarChar(16)
+  /// Đề tài lúc bảo vệ: { loai, slug?, ten, moTa, tinhNang[] }
+  deTai       Json      @map("de_tai") @db.JsonB
+  /// Hội thoại: [{ role: 'assistant'|'user', content, luc }]
+  phien       Json      @default("[]") @db.JsonB
+  /// Số câu hội đồng sẽ hỏi trong phiên này (chốt lúc mở phiên)
+  soCau       Int       @default(6) @map("so_cau")
+  /// Tổng điểm /10 do MÃ cộng từ `diemChiTiet` (không tin tổng của model)
+  diem        Decimal?  @db.Decimal(4, 2)
+  /// [{ tieuChi, diemToiDa, diem, nhanXet }]
+  diemChiTiet Json?     @map("diem_chi_tiet") @db.JsonB
+  /// { chung, diemManh[], canCaiThien[] }
+  nhanXet     Json?     @map("nhan_xet") @db.JsonB
+  model       String?   @db.VarChar(80)
+  batDauLuc   DateTime  @default(now()) @map("bat_dau_luc")
+  ketThucLuc  DateTime? @map("ket_thuc_luc")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user   User   @relation("DuAnBaoVeCuaNguoi", fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([userId, courseId, batDauLuc(sort: Desc)], map: "idx_course_project_defences_user_course")
+  @@map("course_project_defences")
 }
 
 model CourseSection {

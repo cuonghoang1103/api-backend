@@ -49,7 +49,7 @@ export default {
     'sb-8-3-seed-data': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/08-flyway/08-03-seed-data-18082247.mp4' }, defaultVideoTrack: 'VI'},
     'sb-8-4-flyway-ci': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/08-flyway/08-04-flyway-ci-100a37a0.mp4' }, defaultVideoTrack: 'VI'},
     'sb-8-5-lab-8': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/08-flyway/08-05-lab-8-84685484.mp4' }, defaultVideoTrack: 'VI'},
-    'sb-9-2-password-encoder': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/09-security-jwt/09-02-password-encoder-8064125c.mp4' }, defaultVideoTrack: 'VI' },
-    'sb-9-3-dang-nhap-jwt': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/09-security-jwt/09-03-dang-nhap-jwt-01f7f61a.mp4' }, defaultVideoTrack: 'VI' },
+    'sb-9-2-password-encoder': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/09-security-jwt/09-02-password-encoder-8064125c.mp4' }, defaultVideoTrack: 'VI'},
+    'sb-9-3-dang-nhap-jwt': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/09-security-jwt/09-03-dang-nhap-jwt-01f7f61a.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

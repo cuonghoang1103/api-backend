@@ -27,6 +27,12 @@ import onThiPe from './fer202/onThiPe.mjs';
 import onThiFe from './fer202/onThiFe.mjs';
 import dePeFall26 from './fer202/dePeFall26.mjs';
 import chuaQuiz from './fer202/chuaQuiz.mjs';
+// Dự án xuyên suốt khoá + lab bổ sung + quiz FE tiếng Anh (21/11/2026) — xem docs/du-an-hop-dong.md
+import { duAn as duAnFer, mocBai, baoVeBai, moiDangKy } from './fer202/duAn.mjs';
+import labThem from './fer202/labThem.mjs';
+import quizFe1 from './fer202/quizFe1.mjs';
+import quizFe2 from './fer202/quizFe2.mjs';
+const QFE = { ...quizFe1, ...quizFe2 };
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -44,6 +50,7 @@ export default {
     requirements: 'Tiên quyết WED201c (HTML/CSS/JS cơ bản). Cần Node.js LTS, npm, Git và VS Code. Nắm JavaScript cơ bản là lợi thế lớn.',
     documentsNote: 'Tài liệu chính: React docs (react.dev/learn) • Bootstrap 5.3 docs • MDN JavaScript. Công cụ: VS Code, Node.js LTS, npm, Git (GitHub/Bitbucket). Kèm file syllabus gốc FER202.pdf.',
   },
+  duAn: duAnFer,
   sections: [
     /* ══════════════════ MỤC 0 — GIỚI THIỆU & HƯỚNG DẪN HỌC ══════════════════ */
     {
@@ -55,6 +62,7 @@ export default {
           slug: 'fer202-0-1-gioi-thieu',
           type: 'VIDEO',
           isFreePreview: true,
+          dangKyDuAn: true,
           description: 'Môn học này là gì, học xong làm được gì, và bản đồ toàn bộ hành trình React.',
           content: `
 <div class="ml-en">
@@ -143,7 +151,7 @@ export default {
   <span class="lc-cta">CODE LAB →</span>
 </a>
 </div>
-`,
+` + moiDangKy,
         },
         {
           title: '0.2 — Passing Requirements & Grading|||0.2 — Điều kiện qua môn & cấu trúc điểm',
@@ -533,19 +541,22 @@ npm run dev</code></pre>
 `,
         },
         ...ch1Extra,
+        ...(labThem.ch1 ?? []),
+        ...(mocBai.ch1 ?? []),
         {
           title: 'Chapter 1 Quiz|||Quiz chương 1',
           slug: 'fer202-1-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh kiến thức chương 1.',
           quiz: {
-            timeLimitSeconds: 420,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'What is React?|||React là gì?', options: ['A database|||Một cơ sở dữ liệu', 'A JavaScript library for building UIs|||Một thư viện JavaScript để dựng UI', 'A CSS framework|||Một framework CSS', 'A back-end server|||Một server back-end'], correctIndex: 1, points: 1 },
               { question: 'React describes the UI as a function of what?|||React mô tả UI như một hàm của gì?', options: ['The DOM|||DOM', 'State|||State', 'The server|||Server', 'CSS'], correctIndex: 1, points: 1 },
               { question: 'What does the virtual DOM enable?|||Virtual DOM cho phép điều gì?', options: ['Storing data on disk|||Lưu dữ liệu ra ổ đĩa', 'Diffing and minimal real-DOM updates|||So sánh và cập nhật DOM thật tối thiểu', 'Running SQL|||Chạy SQL', 'Compiling to machine code|||Biên dịch ra mã máy'], correctIndex: 1, points: 1 },
               { question: 'Which folder must NOT be committed to Git?|||Thư mục nào KHÔNG được commit lên Git?', options: ['src/', 'public/', 'node_modules/', 'components/'], correctIndex: 2, points: 1 },
               { question: 'In "^19.0.0", the caret ^ allows which updates?|||Trong "^19.0.0", dấu ^ cho phép cập nhật nào?', options: ['Any version|||Bất kỳ phiên bản', 'Only exactly 19.0.0|||Chỉ đúng 19.0.0', 'Minor and patch within 19.x|||Minor và patch trong 19.x', 'Major versions|||Các bản major'], correctIndex: 2, points: 1 },
+              ...QFE.ch1,
             ],
           },
         },
@@ -781,19 +792,22 @@ count = 1;              <span class="tok-comment">// ok</span>
 `,
         },
         ...ch2Extra,
+        ...(labThem.ch2 ?? []),
+        ...(mocBai.ch2 ?? []),
         {
           title: 'Chapter 2 Quiz|||Quiz chương 2',
           slug: 'fer202-2-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh ES6.',
           quiz: {
-            timeLimitSeconds: 420,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'Which keyword declares a value that cannot be reassigned?|||Từ khoá nào khai báo giá trị không gán lại được?', options: ['var', 'let', 'const', 'def'], correctIndex: 2, points: 1 },
               { question: 'What does const [a, b] = useState(0) use?|||const [a, b] = useState(0) dùng kỹ thuật gì?', options: ['Object destructuring|||Bóc tách object', 'Array destructuring|||Bóc tách mảng', 'Spread', 'A loop|||Vòng lặp'], correctIndex: 1, points: 1 },
               { question: 'What does { ...base, size: "lg" } produce?|||{ ...base, size: "lg" } tạo ra gì?', options: ['A mutated base|||base bị sửa tại chỗ', 'A new object copying base plus size|||Một object mới sao chép base và thêm size', 'An array|||Một mảng', 'null'], correctIndex: 1, points: 1 },
               { question: 'A file can have how many default exports?|||Một file có bao nhiêu export default?', options: ['Unlimited|||Không giới hạn', 'Exactly one|||Đúng một', 'Two', 'Zero only|||Chỉ zero'], correctIndex: 1, points: 1 },
               { question: 'Why avoid todos.push(...) when updating React state?|||Vì sao tránh todos.push(...) khi cập nhật state React?', options: ['It is slow|||Nó chậm', 'It mutates in place so the reference does not change|||Nó sửa tại chỗ nên tham chiếu không đổi', 'push does not exist|||push không tồn tại', 'It duplicates data|||Nó nhân đôi dữ liệu'], correctIndex: 1, points: 1 },
+              ...QFE.ch2,
             ],
           },
         },
@@ -1009,19 +1023,22 @@ count = 1;              <span class="tok-comment">// ok</span>
 `,
         },
         ...ch3Extra,
+        ...(labThem.ch3 ?? []),
+        ...(mocBai.ch3 ?? []),
         {
           title: 'Chapter 3 Quiz|||Quiz chương 3',
           slug: 'fer202-3-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh JSX.',
           quiz: {
-            timeLimitSeconds: 420,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'In JSX, the HTML class attribute is written as?|||Trong JSX, thuộc tính class của HTML viết là?', options: ['class', 'className', 'classNm', 'cssClass'], correctIndex: 1, points: 1 },
               { question: 'What goes inside JSX curly braces { }?|||Trong ngoặc nhọn { } của JSX chứa gì?', options: ['Statements|||Câu lệnh', 'JavaScript expressions|||Biểu thức JavaScript', 'Only strings|||Chỉ chuỗi', 'CSS'], correctIndex: 1, points: 1 },
               { question: 'How do you render a list from an array?|||Render danh sách từ mảng bằng cách nào?', options: ['for loop in JSX|||vòng for trong JSX', 'array.map returning JSX with a key|||array.map trả JSX có key', 'while loop|||vòng while', 'forEach'], correctIndex: 1, points: 1 },
               { question: 'What should a list item key be?|||Key của item danh sách nên là gì?', options: ['The array index always|||Luôn là index mảng', 'A stable unique id|||Một id duy nhất ổn định', 'A random number each render|||Số ngẫu nhiên mỗi render', 'The text content|||Nội dung text'], correctIndex: 1, points: 1 },
               { question: 'What does <>...</> mean?|||<>...</> nghĩa là gì?', options: ['An empty tag|||Thẻ rỗng', 'A Fragment (no extra DOM node)|||Một Fragment (không thêm node DOM)', 'A comment|||Chú thích', 'A div'], correctIndex: 1, points: 1 },
+              ...QFE.ch3,
             ],
           },
         },
@@ -1145,19 +1162,22 @@ count = 1;              <span class="tok-comment">// ok</span>
 `,
         },
         ...ch4Extra,
+        ...(labThem.ch4 ?? []),
+        ...(mocBai.ch4 ?? []),
         {
           title: 'Chapter 4 Quiz|||Quiz chương 4',
           slug: 'fer202-4-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh Bootstrap.',
           quiz: {
-            timeLimitSeconds: 360,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'How many columns does the Bootstrap grid have?|||Grid Bootstrap có bao nhiêu cột?', options: ['10', '12', '16', '24'], correctIndex: 1, points: 1 },
               { question: 'What does col-12 col-md-8 mean?|||col-12 col-md-8 nghĩa là gì?', options: ['Always 8 columns|||Luôn 8 cột', 'Full width on mobile, 8/12 from medium up|||Toàn rộng trên mobile, 8/12 từ medium trở lên', 'Hidden on mobile|||Ẩn trên mobile', '8 rows|||8 hàng'], correctIndex: 1, points: 1 },
               { question: 'What must you import once for styles to work?|||Phải import một lần cái gì để style hoạt động?', options: ['react-dom', 'bootstrap.min.css', 'jquery', 'index.html'], correctIndex: 1, points: 1 },
               { question: 'React-Bootstrap provides Bootstrap as what?|||React-Bootstrap cung cấp Bootstrap dưới dạng gì?', options: ['Raw class strings|||Chuỗi class thô', 'React components|||Component React', 'A CDN link|||Một link CDN', 'A CLI'], correctIndex: 1, points: 1 },
               { question: 'Card.Body and Card.Title are an example of?|||Card.Body và Card.Title là ví dụ của?', options: ['Hooks', 'Compound components|||Compound component', 'Redux actions|||Action Redux', 'Routes'], correctIndex: 1, points: 1 },
+              ...QFE.ch4,
             ],
           },
         },
@@ -1404,19 +1424,22 @@ count = 1;              <span class="tok-comment">// ok</span>
 `,
         },
         ...ch5Extra,
+        ...(labThem.ch5 ?? []),
+        ...(mocBai.ch5 ?? []),
         {
           title: 'Chapter 5 Quiz|||Quiz chương 5',
           slug: 'fer202-5-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh component & state.',
           quiz: {
-            timeLimitSeconds: 420,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'What are props?|||Props là gì?', options: ['A component internal memory|||Bộ nhớ trong của component', 'Inputs passed from parent to child|||Đầu vào truyền từ cha xuống con', 'A CSS file|||Một file CSS', 'A Redux store|||Một store Redux'], correctIndex: 1, points: 1 },
               { question: 'Can a component modify its own props?|||Component có được sửa props của chính nó?', options: ['Yes always|||Có, luôn', 'No, props are read-only|||Không, props chỉ đọc', 'Only in class components|||Chỉ trong class', 'Only with Redux|||Chỉ với Redux'], correctIndex: 1, points: 1 },
               { question: 'What does useState(0) return?|||useState(0) trả về gì?', options: ['A number|||Một số', 'A [value, setter] pair|||Cặp [value, setter]', 'An object|||Một object', 'undefined'], correctIndex: 1, points: 1 },
               { question: 'How to change state correctly?|||Cách đổi state đúng?', options: ['count = 5', 'Call the setter, e.g. setCount(5)|||Gọi setter, ví dụ setCount(5)', 'props.count = 5', 'render()'], correctIndex: 1, points: 1 },
               { question: 'Which safely updates based on the previous value?|||Cách nào cập nhật an toàn dựa trên giá trị trước?', options: ['setCount(count + 1)', 'setCount(c => c + 1)', 'count++', 'setState()'], correctIndex: 1, points: 1 },
+              ...QFE.ch5,
             ],
           },
         },
@@ -1548,19 +1571,22 @@ count = 1;              <span class="tok-comment">// ok</span>
 `,
         },
         ...ch6Extra,
+        ...(labThem.ch6 ?? []),
+        ...(mocBai.ch6 ?? []),
         {
           title: 'Chapter 6 Quiz|||Quiz chương 6',
           slug: 'fer202-6-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh xử lý sự kiện.',
           quiz: {
-            timeLimitSeconds: 360,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'What do you pass to onClick in JSX?|||Bạn truyền gì cho onClick trong JSX?', options: ['A string|||Một chuỗi', 'A function|||Một hàm', 'A number|||Một số', 'CSS'], correctIndex: 1, points: 1 },
               { question: 'onClick={handleClick()} is wrong because it?|||onClick={handleClick()} sai vì?', options: ['Is too slow|||Quá chậm', 'Calls the handler during render|||Gọi handler ngay lúc render', 'Needs Redux|||Cần Redux', 'Is invalid JSX|||JSX không hợp lệ'], correctIndex: 1, points: 1 },
               { question: 'What does e.preventDefault() do on a form submit?|||e.preventDefault() làm gì khi submit form?', options: ['Clears the form|||Xoá form', 'Stops the default page reload|||Chặn reload trang mặc định', 'Validates fields|||Kiểm tra field', 'Submits to a server|||Gửi lên server'], correctIndex: 1, points: 1 },
               { question: 'A controlled input gets its value from?|||Input controlled lấy value từ đâu?', options: ['The DOM|||DOM', 'React state|||State của React', 'A ref', 'localStorage'], correctIndex: 1, points: 1 },
               { question: 'React wraps native events in a?|||React bọc sự kiện gốc trong?', options: ['Promise', 'SyntheticEvent', 'Reducer', 'Context'], correctIndex: 1, points: 1 },
+              ...QFE.ch6,
             ],
           },
         },
@@ -1787,19 +1813,22 @@ count = 1;              <span class="tok-comment">// ok</span>
 `,
         },
         ...ch7Extra,
+        ...(labThem.ch7 ?? []),
+        ...(mocBai.ch7 ?? []),
         {
           title: 'Chapter 7 Quiz|||Quiz chương 7',
           slug: 'fer202-7-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh props & context.',
           quiz: {
-            timeLimitSeconds: 420,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'What is prop drilling?|||Prop drilling là gì?', options: ['A build error|||Lỗi build', 'Passing props through many intermediate components|||Truyền props qua nhiều component trung gian', 'A Redux action|||Một action Redux', 'A CSS technique|||Kỹ thuật CSS'], correctIndex: 1, points: 1 },
               { question: 'Which hook reads a context value?|||Hook nào đọc giá trị context?', options: ['useState', 'useContext', 'useEffect', 'useRef'], correctIndex: 1, points: 1 },
               { question: 'When does a context consumer re-render?|||Consumer của context render lại khi nào?', options: ['Never|||Không bao giờ', 'When the provider value changes|||Khi value của provider đổi', 'Only on mount|||Chỉ khi mount', 'When props change|||Khi props đổi'], correctIndex: 1, points: 1 },
               { question: 'The children prop contains?|||Prop children chứa gì?', options: ['The parent component|||Component cha', 'The content between the component tags|||Nội dung giữa hai thẻ component', 'CSS classes|||Class CSS', 'The state|||State'], correctIndex: 1, points: 1 },
               { question: 'The modern replacement for render props to share logic is?|||Bản thay thế hiện đại cho render props để chia sẻ logic là?', options: ['HOCs|||HOC', 'Custom hooks|||Custom hook', 'Mixins', 'Redux'], correctIndex: 1, points: 1 },
+              ...QFE.ch7,
             ],
           },
         },
@@ -2015,19 +2044,22 @@ count = 1;              <span class="tok-comment">// ok</span>
 `,
         },
         ...ch8Extra,
+        ...(labThem.ch8 ?? []),
+        ...(mocBai.ch8 ?? []),
         {
           title: 'Chapter 8 Quiz|||Quiz chương 8',
           slug: 'fer202-8-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh hooks.',
           quiz: {
-            timeLimitSeconds: 420,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'What is useEffect for?|||useEffect dùng để làm gì?', options: ['Styling|||Style', 'Running side effects after render|||Chạy side effect sau render', 'Creating context|||Tạo context', 'Routing'], correctIndex: 1, points: 1 },
               { question: 'useEffect(fn, []) runs when?|||useEffect(fn, []) chạy khi nào?', options: ['On every render|||Mỗi render', 'Once after mount|||Một lần sau mount', 'Never|||Không bao giờ', 'On unmount only|||Chỉ khi unmount'], correctIndex: 1, points: 1 },
               { question: 'What does the function returned from useEffect do?|||Hàm trả về từ useEffect làm gì?', options: ['Nothing|||Không gì', 'Cleanup (e.g. clearInterval)|||Dọn dẹp (vd clearInterval)', 'Re-render|||Render lại', 'Fetch data|||Fetch dữ liệu'], correctIndex: 1, points: 1 },
               { question: 'A reducer function signature is?|||Chữ ký hàm reducer là?', options: ['() => state', '(state, action) => newState', '(props) => JSX', '(action) => void'], correctIndex: 1, points: 1 },
               { question: 'Why must hooks be called at the top level (not in if)?|||Vì sao hook phải gọi ở cấp cao nhất (không trong if)?', options: ['For speed|||Cho nhanh', 'React tracks hooks by call order|||React theo dõi hook theo thứ tự gọi', 'if is not allowed in JS|||if không được phép trong JS', 'To save memory|||Tiết kiệm bộ nhớ'], correctIndex: 1, points: 1 },
+              ...QFE.ch8,
             ],
           },
         },
@@ -2181,19 +2213,22 @@ count = 1;              <span class="tok-comment">// ok</span>
 `,
         },
         ...ch9Extra,
+        ...(labThem.ch9 ?? []),
+        ...(mocBai.ch9 ?? []),
         {
           title: 'Chapter 9 Quiz|||Quiz chương 9',
           slug: 'fer202-9-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh routing.',
           quiz: {
-            timeLimitSeconds: 360,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'What does React Router do?|||React Router làm gì?', options: ['Fetches data|||Fetch dữ liệu', 'Maps URLs to components without reloading|||Ánh xạ URL tới component không reload', 'Styles the app|||Style app', 'Manages global state|||Quản lý state toàn cục'], correctIndex: 1, points: 1 },
               { question: 'For internal navigation you use?|||Điều hướng nội bộ bạn dùng?', options: ['<a href>', '<Link to>', 'window.location', 'fetch'], correctIndex: 1, points: 1 },
               { question: 'How do you read the :id in /users/:id?|||Đọc :id trong /users/:id bằng gì?', options: ['useState', 'useParams', 'useEffect', 'props.id'], correctIndex: 1, points: 1 },
               { question: 'To navigate from code (after login) you use?|||Điều hướng từ code (sau đăng nhập) dùng?', options: ['useNavigate', 'useContext', 'useRef', 'redirect()'], correctIndex: 0, points: 1 },
               { question: 'Why does a plain <a> break the SPA?|||Vì sao <a> thuần phá SPA?', options: ['It is invalid|||Không hợp lệ', 'It triggers a full page reload, losing state|||Gây reload toàn trang, mất state', 'It is slow|||Chậm', 'It needs Redux|||Cần Redux'], correctIndex: 1, points: 1 },
+              ...QFE.ch9,
             ],
           },
         },
@@ -2299,19 +2334,22 @@ count = 1;              <span class="tok-comment">// ok</span>
 `,
         },
         ...ch10Extra,
+        ...(labThem.ch10 ?? []),
+        ...(mocBai.ch10 ?? []),
         {
           title: 'Chapter 10 Quiz|||Quiz chương 10',
           slug: 'fer202-10-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh code splitting.',
           quiz: {
-            timeLimitSeconds: 300,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'What is code splitting?|||Code splitting là gì?', options: ['Formatting code|||Định dạng code', 'Breaking the bundle into chunks loaded on demand|||Chia bundle thành chunk tải theo nhu cầu', 'Deleting code|||Xoá code', 'Minifying|||Nén code'], correctIndex: 1, points: 1 },
               { question: 'React.lazy takes what?|||React.lazy nhận gì?', options: ['A component|||Một component', 'A function that returns a dynamic import()|||Một hàm trả về import() động', 'A URL', 'A reducer'], correctIndex: 1, points: 1 },
               { question: 'What does Suspense fallback show?|||fallback của Suspense hiện gì?', options: ['An error|||Lỗi', 'Placeholder UI while lazy code loads|||UI tạm trong lúc code lazy tải', 'The final component|||Component cuối', 'Nothing|||Không gì'], correctIndex: 1, points: 1 },
               { question: 'A lazy-loaded component must be a?|||Component lazy phải là?', options: ['Named export|||Named export', 'Default export|||Default export', 'Class', 'Hook'], correctIndex: 1, points: 1 },
               { question: 'Best candidates for lazy loading are?|||Ứng viên tốt nhất để lazy-load là?', options: ['Every tiny component|||Mọi component nhỏ', 'Large, rarely-visited pages|||Trang lớn, ít vào', 'The navbar|||Navbar', 'CSS files|||File CSS'], correctIndex: 1, points: 1 },
+              ...QFE.ch10,
             ],
           },
         },
@@ -2558,19 +2596,22 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 `,
         },
         ...ch11Extra,
+        ...(labThem.ch11 ?? []),
+        ...(mocBai.ch11 ?? []),
         {
           title: 'Chapter 11 Quiz|||Quiz chương 11',
           slug: 'fer202-11-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh client-server.',
           quiz: {
-            timeLimitSeconds: 420,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'fetch returns a?|||fetch trả về gì?', options: ['A value|||Một giá trị', 'A Promise', 'A component|||Component', 'An array|||Mảng'], correctIndex: 1, points: 1 },
               { question: 'Does fetch reject on a 404?|||fetch có reject khi 404 không?', options: ['Yes|||Có', 'No, you must check res.ok|||Không, phải kiểm res.ok', 'Only with await|||Chỉ với await', 'Only in React|||Chỉ trong React'], correctIndex: 1, points: 1 },
               { question: 'await must be used inside?|||await phải dùng bên trong?', options: ['Any function|||Hàm bất kỳ', 'An async function|||Một hàm async', 'A component|||Component', 'A loop|||Vòng lặp'], correctIndex: 1, points: 1 },
               { question: 'With axios, the parsed response body is at?|||Với axios, body response đã parse ở đâu?', options: ['res.json()', 'res.data', 'res.body', 'res.text'], correctIndex: 1, points: 1 },
               { question: 'What is json-server used for?|||json-server dùng để làm gì?', options: ['Deploying React|||Deploy React', 'A quick mock REST API|||REST API giả nhanh', 'Bundling code|||Đóng gói code', 'Testing|||Test'], correctIndex: 1, points: 1 },
+              ...QFE.ch11,
             ],
           },
         },
@@ -2776,19 +2817,22 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 `,
         },
         ...ch12Extra,
+        ...(labThem.ch12 ?? []),
+        ...(mocBai.ch12 ?? []),
         {
           title: 'Chapter 12 Quiz|||Quiz chương 12',
           slug: 'fer202-12-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh Redux.',
           quiz: {
-            timeLimitSeconds: 420,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'Redux implements which architecture?|||Redux hiện thực kiến trúc nào?', options: ['MVC', 'Flux (one-way data flow)|||Flux (luồng một chiều)', 'REST', 'MVVM'], correctIndex: 1, points: 1 },
               { question: 'How many stores does a Redux app have?|||App Redux có bao nhiêu store?', options: ['One per component|||Mỗi component một', 'One central store|||Một store trung tâm', 'One per route|||Mỗi route một', 'Zero'], correctIndex: 1, points: 1 },
               { question: 'Which hook reads state from the store?|||Hook nào đọc state từ store?', options: ['useDispatch', 'useSelector', 'useState', 'useStore'], correctIndex: 1, points: 1 },
               { question: 'Where does async work (fetch) belong in Redux?|||Việc async (fetch) thuộc về đâu trong Redux?', options: ['Inside reducers|||Trong reducer', 'In thunks/middleware|||Trong thunk/middleware', 'In selectors|||Trong selector', 'In the store config|||Trong cấu hình store'], correctIndex: 1, points: 1 },
               { question: 'RTK lets you write state.value += 1 safely because of?|||RTK cho viết state.value += 1 an toàn nhờ?', options: ['A copy|||Một bản sao', 'Immer under the hood|||Immer bên dưới', 'A proxy trick you write|||Một mẹo proxy bạn viết', 'It is not safe|||Không an toàn'], correctIndex: 1, points: 1 },
+              ...QFE.ch12,
             ],
           },
         },
@@ -2912,19 +2956,22 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 </div>
 `,
         },
+        ...(labThem.a1 ?? []),
+        ...(mocBai.a1 ?? []),
         {
           title: 'Advanced A1 Quiz|||Quiz nâng cao A1',
           slug: 'fer202-a1-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh hiệu năng.',
           quiz: {
-            timeLimitSeconds: 360,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'React.memo does what?|||React.memo làm gì?', options: ['Caches API calls|||Cache lời gọi API', 'Skips re-render when props are unchanged|||Bỏ render lại khi props không đổi', 'Fetches data|||Fetch dữ liệu', 'Splits code|||Chia code'], correctIndex: 1, points: 1 },
               { question: 'useMemo is for?|||useMemo dùng cho?', options: ['Caching an expensive computed value|||Cache một giá trị tính tốn kém', 'Routing', 'State|||State', 'Effects'], correctIndex: 0, points: 1 },
               { question: 'useCallback keeps what stable?|||useCallback giữ gì ổn định?', options: ['A value|||Một giá trị', 'A function reference|||Tham chiếu hàm', 'A component|||Component', 'The DOM'], correctIndex: 1, points: 1 },
               { question: 'Before optimizing you should?|||Trước khi tối ưu bạn nên?', options: ['Memoize everything|||Memo hoá mọi thứ', 'Measure with the Profiler|||Đo bằng Profiler', 'Remove state|||Bỏ state', 'Add Redux|||Thêm Redux'], correctIndex: 1, points: 1 },
               { question: 'A parent re-render by default causes children to?|||Cha render lại mặc định khiến con?', options: ['Stay|||Giữ nguyên', 'Also re-render|||Cũng render lại', 'Unmount', 'Error|||Lỗi'], correctIndex: 1, points: 1 },
+              ...QFE.a1,
             ],
           },
         },
@@ -3021,19 +3068,22 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 </div>
 `,
         },
+        ...(labThem.a2 ?? []),
+        ...(mocBai.a2 ?? []),
         {
           title: 'Advanced A2 Quiz|||Quiz nâng cao A2',
           slug: 'fer202-a2-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh testing.',
           quiz: {
-            timeLimitSeconds: 300,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'Jest is a?|||Jest là?', options: ['Router', 'Test runner|||Trình chạy test', 'State manager|||Quản lý state', 'Bundler|||Bộ đóng gói'], correctIndex: 1, points: 1 },
               { question: 'RTL encourages querying by?|||RTL khuyến khích truy vấn theo?', options: ['Internal state|||State nội bộ', 'What the user sees (role, text, label)|||Những gì người dùng thấy (role, text, label)', 'CSS classes|||Class CSS', 'Component names|||Tên component'], correctIndex: 1, points: 1 },
               { question: 'To simulate a real click you use?|||Mô phỏng cú click thật bằng?', options: ['click()', 'userEvent.click', 'dispatch', 'fetch'], correctIndex: 1, points: 1 },
               { question: 'The most preferred RTL query is?|||Truy vấn RTL được ưu tiên nhất là?', options: ['getByTestId', 'getByRole', 'querySelector', 'getById'], correctIndex: 1, points: 1 },
               { question: 'Tests tied to implementation details?|||Test gắn với chi tiết cài đặt?', options: ['Are the best|||Là tốt nhất', 'Break on refactors even when UI works|||Vỡ khi refactor dù UI chạy', 'Run faster|||Chạy nhanh hơn', 'Are required|||Là bắt buộc'], correctIndex: 1, points: 1 },
+              ...QFE.a2,
             ],
           },
         },
@@ -3130,19 +3180,22 @@ npx create-next-app@latest my-app
 `,
         },
         ...advExtra,
+        ...(labThem.a3 ?? []),
+        ...(mocBai.a3 ?? []),
         {
           title: 'Advanced A3 Quiz|||Quiz nâng cao A3',
           slug: 'fer202-a3-quiz',
           type: 'QUIZ',
           description: 'Kiểm tra nhanh TypeScript & Next.js.',
           quiz: {
-            timeLimitSeconds: 360,
+            timeLimitSeconds: 900,
             questions: [
               { question: 'TypeScript adds what to JavaScript?|||TypeScript thêm gì vào JavaScript?', options: ['Speed|||Tốc độ', 'Static types|||Kiểu tĩnh', 'Styling|||Style', 'Routing'], correctIndex: 1, points: 1 },
               { question: 'React is a library; Next.js is a?|||React là thư viện; Next.js là?', options: ['Library|||Thư viện', 'Framework', 'Database|||Cơ sở dữ liệu', 'Bundler|||Bộ đóng gói'], correctIndex: 1, points: 1 },
               { question: 'Next.js routing is based on?|||Routing của Next.js dựa trên?', options: ['A config file|||File cấu hình', 'The file system|||Hệ thống file', 'Redux', 'Context'], correctIndex: 1, points: 1 },
               { question: 'SSR helps mainly with?|||SSR giúp chủ yếu về?', options: ['State|||State', 'SEO &amp; first paint|||SEO &amp; hiển thị lần đầu', 'Testing|||Test', 'Styling|||Style'], correctIndex: 1, points: 1 },
               { question: 'Hydration is?|||Hydration là?', options: ['Fetching data|||Fetch dữ liệu', 'Client React adopting server-rendered HTML|||React client nhận nuôi HTML render từ server', 'A CSS trick|||Mẹo CSS', 'A Redux middleware|||Middleware Redux'], correctIndex: 1, points: 1 },
+              ...QFE.a3,
             ],
           },
         },
@@ -3205,6 +3258,7 @@ npx create-next-app@latest my-app
         },
       ],
     },
+    /* ══════════════════ DỰ ÁN CUỐI KHOÁ — HOÀN THIỆN & BẢO VỆ ══════════════════ */
     {
       title: '📝 PE review — real exams, question by question|||📝 Ôn thi PE — làm đề thật từng câu',
       description: 'Phần TỰ THÊM: video làm trọn đề thi thực hành thật (đọc đề tiếng Anh → phân tích → setup → code từng dòng → chạy → đối chiếu rubric), mỗi kiến thức chỉ về đúng chương FER202. Gồm Đề 4 (SP26 B3), Đề 1 + Đề 3 (SP26 B5, hai paper cùng ngày thi), Đề 7 (SU25 B1) và Đề 10 (SP25 Đề số 1). Chữa đề trắc nghiệm FE ở mục riêng ngay sau.',
@@ -3314,8 +3368,24 @@ npx create-next-app@latest my-app
               }
             ]
           }
-        }
+        },
+        {
+          title: 'FE mock exam — 45 English questions across the whole course|||Đề FE tổng hợp — 45 câu tiếng Anh toàn khoá',
+          slug: 'fer202-fe-tong-hop',
+          type: 'QUIZ',
+          description: 'Đề thi thử cuối kỳ kiểu FE thật: 45 câu trắc nghiệm tiếng Anh phủ mọi chương theo tỉ lệ đề thật (ES6, JSX, Bootstrap, component, sự kiện, Context, Hooks, Router, lazy, client-server, Redux, Next.js), 45 phút, có giải thích song ngữ.',
+          quiz: {
+            timeLimitSeconds: 2700,
+            questions: QFE.tongHop,
+          },
+        },
       ]
+    },
+    /* 21/11: mục dự án để CUỐI — exam_chapter_map lưu sortOrder section, chèn giữa làm lệch map câu đề */
+    {
+      title: '🎓 Course project — finish & defend|||🎓 Dự án cuối khoá — hoàn thiện & bảo vệ',
+      description: 'Bước cuối của dự án xuyên suốt khoá: hoàn thiện theo checklist, rubric 10 điểm, câu hội đồng hay hỏi và phòng bảo vệ AI.',
+      lessons: [baoVeBai],
     },
   ],
 };

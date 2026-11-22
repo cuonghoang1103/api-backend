@@ -6,7 +6,9 @@
  * Mục tiêu A1.1: kana thành thạo, 200 từ vựng, 23 cấu trúc ngữ pháp (CLO2), 35 kanji, tự giới thiệu.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/JPD113.mjs --apply
  */
-export default {
+import { ganBoSung } from './jpd113/boSung.mjs';
+// Bổ sung 22/11/2026 (lộ trình Block 5, bản đồ tài nguyên, thẻ dẫn sang khoá Dekiru, đính chính syllabus 14469) — xem jpd113/boSung.mjs.
+const SPEC = {
   semester: { code: 'FPTU_Hola3', name: 'Kỳ 3', ordinal: 5 },
   course: {
     courseCode: 'JPD113',
@@ -3734,3 +3736,5 @@ B1 (地下一階): スーパー · Tầng 1: ケーキや, トイレ · Tầng 2
     },
   ],
 };
+
+export default ganBoSung(SPEC);

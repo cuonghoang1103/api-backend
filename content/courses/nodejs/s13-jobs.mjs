@@ -125,11 +125,33 @@ app.post('/register', async (req, res) =&gt; {
   <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.5: a transactional outbox and a notification queue</span><span class="lc-sub">The same move on a two-instance API: email inside the booking request p50 311 ms and 5 × 500 while the provider is down; through an outbox + BullMQ p50 3.6 ms and the email retried later; a relay crash duplicated one event and still sent exactly 20 emails.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-1-hang-doi" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in API Design — lesson 10.1: 202 Accepted, job resources and polling</span><span class="lc-sub">The contract side of the UX bill: what a 202 promises, a job resource the client polls, and how to tell it when to come back. This lesson ran that status endpoint from Node: active → completed after 922 ms, or failed with its reason ("no such month") after 919 ms.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Take an endpoint that sends an email inline and move the send into a queued job, returning to the client immediately.</li>
+<li>Simulate 100 requests doing slow work inline and count how many complete versus time out; then repeat with the work queued.</li>
+<li>List which parts of a feature belong in the request (validate, enqueue, respond) and which belong in the worker (the slow work).</li>
+</ol>
+<p><strong>Done when:</strong> you moved slow work out of the request, saw more requests complete when queued, and can split request vs worker responsibilities.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Background job</span><span class="v">Work done outside the request/response cycle.</span></div>
+  <div class="kv"><span class="k">Queue</span><span class="v">A durable list of jobs waiting to be processed.</span></div>
+  <div class="kv"><span class="k">Worker</span><span class="v">A process that pulls jobs from the queue and runs them.</span></div>
+  <div class="kv"><span class="k">Enqueue</span><span class="v">Adding a job to the queue and returning quickly.</span></div>
+  <div class="kv"><span class="k">Latency</span><span class="v">How long the user waits for a response.</span></div>
+  <div class="kv"><span class="k">Fire-and-respond</span><span class="v">Accept, enqueue, respond — do the slow part later.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A request is not the place to do slow work — it blocks the user and risks timeouts.</li><li>Doing the work inline drops requests under load; queuing lets them all complete.</li><li>Keep validate-enqueue-respond in the request; put the slow work in a worker.</li><li>Queuing buys reliability but adds a UX bill: the result arrives later.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -225,11 +247,33 @@ app.post('/register', async (req, res) =&gt; {
   <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.5: transactional outbox và hàng đợi thông báo</span><span class="lc-sub">Cùng bước đó trên một API hai instance: gửi email trong request đặt chỗ p50 311 ms và 5 × 500 khi nhà cung cấp sập; qua outbox + BullMQ p50 3,6 ms và email được gửi lại sau; relay sập làm trùng một sự kiện mà vẫn đúng 20 email.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-1-hang-doi" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở API Design — bài 10.1: 202 Accepted, tài nguyên công việc và hỏi lại</span><span class="lc-sub">Phía hợp đồng của hoá đơn trải nghiệm: 202 hứa gì, một tài nguyên job để client hỏi lại, và cách bảo client khi nào quay lại. Bài này chạy thật endpoint trạng thái đó từ Node: active → completed sau 922 ms, hoặc failed kèm lý do ("no such month") sau 919 ms.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lấy một endpoint gửi email ngay trong request và đưa việc gửi vào một job xếp hàng, trả về client ngay lập tức.</li>
+<li>Mô phỏng 100 request làm việc chậm ngay tại chỗ và đếm bao nhiêu xong so với hết giờ; rồi lặp lại với việc được xếp hàng.</li>
+<li>Liệt kê phần nào của một tính năng thuộc về request (validate, enqueue, respond) và phần nào thuộc về worker (việc chậm).</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã đưa việc chậm ra khỏi request, thấy nhiều request xong hơn khi xếp hàng, và tách được trách nhiệm request vs worker.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Tác vụ nền</span><span class="v">Việc làm ngoài chu trình request/response.</span></div>
+  <div class="kv"><span class="k">Hàng đợi</span><span class="v">Một danh sách job bền chờ được xử lý.</span></div>
+  <div class="kv"><span class="k">Worker</span><span class="v">Một tiến trình kéo job từ hàng đợi và chạy chúng.</span></div>
+  <div class="kv"><span class="k">Enqueue</span><span class="v">Thêm một job vào hàng đợi và trả về nhanh.</span></div>
+  <div class="kv"><span class="k">Độ trễ</span><span class="v">Người dùng chờ phản hồi bao lâu.</span></div>
+  <div class="kv"><span class="k">Nhận-rồi-đáp</span><span class="v">Nhận, enqueue, đáp — làm phần chậm sau.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Request không phải chỗ làm việc chậm — nó chặn người dùng và dễ hết giờ.</li><li>Làm việc ngay tại chỗ làm rớt request khi tải cao; xếp hàng cho tất cả hoàn thành.</li><li>Giữ validate-enqueue-respond trong request; đưa việc chậm vào một worker.</li><li>Xếp hàng mua độ tin cậy nhưng thêm hoá đơn UX: kết quả tới sau.</li></ul>
 </div>
 `,
     },
@@ -333,11 +377,33 @@ await emailQueue.add('password-reset', { userId: 42, token });</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-735"><span class="lc-t">Code Lab · Redis Streams and Event-Driven Architecture</span><span class="lc-d">What underlies every Redis-based queue</span></a>
 </div>
+
 <a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-3-consumer-group" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">The mechanism underneath: Redis course 8.3 — consumer groups</span><span class="lc-sub">Competing workers done by hand on a stream: one entry to one consumer, pending lists, acknowledgements. BullMQ packages the same guarantee — measured here: two worker processes, 100 jobs, 50 + 50, zero duplicates.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Set up a BullMQ Queue and Worker, add a job, and watch the worker process it.</li>
+<li>Open the job in Redis and see it is a hash of fields plus an id in a waiting list.</li>
+<li>Measure concurrency: raise the worker concurrency for an I/O-bound job (big speedup) and a CPU-bound job (no speedup) and compare.</li>
+</ol>
+<p><strong>Done when:</strong> you ran a Queue/Worker, inspected a job in Redis, and measured concurrency helping I/O but not CPU work.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">BullMQ</span><span class="v">A Redis-backed job queue library for Node.</span></div>
+  <div class="kv"><span class="k">Queue</span><span class="v">Where jobs are added.</span></div>
+  <div class="kv"><span class="k">Worker</span><span class="v">What processes jobs from the queue.</span></div>
+  <div class="kv"><span class="k">Job</span><span class="v">A Redis hash plus an id in a list — the unit of work.</span></div>
+  <div class="kv"><span class="k">Concurrency</span><span class="v">How many jobs a worker runs at once.</span></div>
+  <div class="kv"><span class="k">addBulk</span><span class="v">Adding many jobs efficiently in one call.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>BullMQ is three objects: Queue, Worker, and the Job itself.</li><li>A job is just a Redis hash plus an id in a waiting list — no magic.</li><li>addBulk is far faster than adding jobs one at a time.</li><li>Concurrency helps I/O-bound work but does nothing for CPU-bound work.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -431,11 +497,33 @@ await emailQueue.add('password-reset', { userId: 42, token });</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-735"><span class="lc-t">Code Lab · Redis Streams and Event-Driven Architecture</span><span class="lc-d">Thứ nằm dưới mọi hàng đợi chạy trên Redis</span></a>
 </div>
+
 <a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-3-consumer-group" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Cơ chế bên dưới: khoá Redis bài 8.3 — nhóm tiêu thụ</span><span class="lc-sub">Các worker tranh việc, làm bằng tay trên stream: mỗi mục tới một consumer, danh sách pending, xác nhận. BullMQ đóng gói đúng bảo đảm đó — đo ở đây: hai tiến trình worker, 100 job, 50 + 50, trùng 0.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Dựng một Queue và Worker BullMQ, thêm một job, và xem worker xử lý nó.</li>
+<li>Mở job đó trong Redis và thấy nó là một hash các trường cộng một id trong danh sách chờ.</li>
+<li>Đo concurrency: nâng concurrency worker cho một job nặng I/O (tăng tốc nhiều) và một job nặng CPU (không tăng tốc) và so.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn chạy một Queue/Worker, soi một job trong Redis, và đo concurrency giúp I/O nhưng không giúp việc CPU.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">BullMQ</span><span class="v">Một thư viện hàng đợi job cho Node, dựa trên Redis.</span></div>
+  <div class="kv"><span class="k">Queue</span><span class="v">Nơi job được thêm vào.</span></div>
+  <div class="kv"><span class="k">Worker</span><span class="v">Thứ xử lý job từ hàng đợi.</span></div>
+  <div class="kv"><span class="k">Job</span><span class="v">Một hash Redis cộng một id trong một danh sách — đơn vị việc.</span></div>
+  <div class="kv"><span class="k">Concurrency</span><span class="v">Một worker chạy bao nhiêu job cùng lúc.</span></div>
+  <div class="kv"><span class="k">addBulk</span><span class="v">Thêm nhiều job hiệu quả trong một lời gọi.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>BullMQ là ba object: Queue, Worker, và chính Job.</li><li>Một job chỉ là một hash Redis cộng một id trong danh sách chờ — không phép màu.</li><li>addBulk nhanh hơn nhiều so với thêm từng job một.</li><li>Concurrency giúp việc nặng I/O nhưng không giúp gì việc nặng CPU.</li></ul>
 </div>
 `,
     },
@@ -572,16 +660,39 @@ new Worker('email', async (job) =&gt; {
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Back off exponentially, with jitter</span><span class="lz-d">Constant retries against a struggling service finish it off, and identical delays synchronise every worker into one wave.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Cap the attempts and record the failure</span><span class="lz-d">An unbounded retry is a job that never completes and never alerts. After the cap, move it to a dead-letter queue where a human can see it.</span></div>
 </div>
+
 <a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-4-xclaim" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 8.4: claiming, retries and dead letters</span><span class="lc-sub">The same failure policy written by hand on a stream: XPENDING, XAUTOCLAIM, delivery counts for poison messages. Here BullMQ does it for you — attempts + exponential backoff measured gap by gap (204 / 415 / 811 / 1,604 ms) and a whole failed set replayed in one loop.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-4-webhook" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 10.5: sending webhooks — signatures, retries and a delivery log</span><span class="lc-sub">The same retry rules where the "job" is an HTTP call to someone else's server: backoff, a cap, a delivery log a human can read — and a receiver that must be idempotent because you WILL deliver twice.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Show BullMQ does not retry by default, then enable retries with exponential backoff and watch the delays grow.</li>
+<li>Reproduce the triple charge: a non-idempotent payment job retried three times charges three times; then make the handler idempotent.</li>
+<li>Deduplicate at the door with a stable <code>jobId</code> so the same logical job is not enqueued twice.</li>
+</ol>
+<p><strong>Done when:</strong> you enabled backoff retries, made a charge idempotent, and deduped with a jobId.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Retry</span><span class="v">Re-running a failed job; off by default in BullMQ.</span></div>
+  <div class="kv"><span class="k">Exponential backoff</span><span class="v">Growing the wait between retries.</span></div>
+  <div class="kv"><span class="k">Idempotent handler</span><span class="v">Running it twice has the same effect as once.</span></div>
+  <div class="kv"><span class="k">Duplicate side effect</span><span class="v">A retry repeating a charge or email.</span></div>
+  <div class="kv"><span class="k">jobId</span><span class="v">A stable id that dedupes enqueues at the door.</span></div>
+  <div class="kv"><span class="k">Dead-letter</span><span class="v">The pile of jobs that failed all retries.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>BullMQ does not retry by default — you enable it, ideally with exponential backoff.</li><li>Retries create duplicate side effects: a non-idempotent charge runs three times.</li><li>Make handlers idempotent so a retry cannot repeat the effect.</li><li>A stable jobId dedupes at the door; failed jobs land in a dead-letter pile to work.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -702,16 +813,39 @@ new Worker('email', async (job) =&gt; {
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Lùi dần theo hàm mũ, có nhiễu ngẫu nhiên</span><span class="lz-d">Thử lại đều đặn nhắm vào một dịch vụ đang ngắc ngoải là kết liễu nó, và những độ trễ giống hệt nhau đồng bộ hoá mọi worker thành một đợt sóng.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Chặn số lần thử và ghi lại cú hỏng</span><span class="lz-d">Một phép thử lại không giới hạn là một công việc chẳng bao giờ xong và chẳng bao giờ báo động. Sau khi hết số lần, hãy chuyển nó sang một hàng đợi thư chết nơi con người nhìn thấy được.</span></div>
 </div>
+
 <a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-4-xclaim" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 8.4: đòi việc, thử lại và thư chết</span><span class="lc-sub">Cùng chính sách xử lý hỏng, viết tay trên stream: XPENDING, XAUTOCLAIM, đếm số lần giao để bắt tin độc. Ở đây BullMQ làm sẵn — attempts + backoff luỹ thừa đo từng khoảng (204 / 415 / 811 / 1.604 ms) và cả tập failed chạy lại bằng một vòng lặp.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-4-webhook" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 10.5: gửi webhook — chữ ký, thử lại và nhật ký giao</span><span class="lc-sub">Cùng luật thử lại khi "job" là một lời gọi HTTP tới máy chủ của người khác: backoff, giới hạn số lần, nhật ký giao người đọc được — và bên nhận phải idempotent vì bạn SẼ giao hai lần.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chỉ ra BullMQ không thử lại mặc định, rồi bật thử lại với backoff luỹ thừa và xem các độ trễ giãn ra.</li>
+<li>Tái hiện cú trừ tiền ba lần: một job trừ tiền không idempotent bị thử lại ba lần trừ ba lần; rồi làm handler idempotent.</li>
+<li>Khử trùng lặp ngay cửa bằng một <code>jobId</code> ổn định để cùng một job logic không bị enqueue hai lần.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn bật thử lại có backoff, làm một cú trừ tiền idempotent, và khử trùng lặp bằng jobId.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Thử lại</span><span class="v">Chạy lại một job thất bại; tắt mặc định trong BullMQ.</span></div>
+  <div class="kv"><span class="k">Backoff luỹ thừa</span><span class="v">Giãn thời gian chờ giữa các lần thử.</span></div>
+  <div class="kv"><span class="k">Handler idempotent</span><span class="v">Chạy hai lần cùng hiệu quả như một lần.</span></div>
+  <div class="kv"><span class="k">Tác dụng phụ trùng</span><span class="v">Một lần thử lại lặp một cú trừ tiền hay email.</span></div>
+  <div class="kv"><span class="k">jobId</span><span class="v">Một id ổn định khử trùng lặp enqueue ngay cửa.</span></div>
+  <div class="kv"><span class="k">Dead-letter</span><span class="v">Đống job thất bại hết các lần thử.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>BullMQ không thử lại mặc định — bạn bật nó, lý tưởng với backoff luỹ thừa.</li><li>Thử lại tạo tác dụng phụ trùng: một cú trừ tiền không idempotent chạy ba lần.</li><li>Làm handler idempotent để một lần thử lại không lặp hiệu quả.</li><li>Một jobId ổn định khử trùng lặp ngay cửa; job thất bại rơi vào đống dead-letter để xử lý.</li></ul>
 </div>
 `,
     },
@@ -826,11 +960,33 @@ new Worker('cron', async () =&gt; {
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Throttling — match someone else's limit</span><span class="lz-d">A rate limiter on the worker, not on the producer. The queue absorbs the burst; the limiter decides how fast it drains.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Repeat — cron, with one owner</span><span class="lz-d">A repeatable job in the queue, not a <code>cron</code> line per server — otherwise three instances run the same nightly job three times.</span></div>
 </div>
+
 <a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-4-3-zset" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">The structure underneath: Redis course 4.3 — sorted sets</span><span class="lc-sub">A delayed BullMQ job is a member of a sorted set scored by its run time (measured: TYPE bull:dz:delayed = zset), which is why a 24-hour delay costs the same as a 1-second one and nothing polls in a loop.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Add a delayed job and measure the gap between the requested time and when it actually runs ("not before", not "at").</li>
+<li>Give one job a higher priority (an OTP) so it jumps ahead of a bulk report, and confirm the order.</li>
+<li>Register a repeatable (cron) job from two processes and confirm only one schedule runs — not one per process.</li>
+</ol>
+<p><strong>Done when:</strong> you saw delay is "not before", prioritised an urgent job, and confirmed one cron schedule across processes.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Delayed job</span><span class="v">A job scheduled to run no earlier than a time.</span></div>
+  <div class="kv"><span class="k">Priority</span><span class="v">Letting urgent jobs jump ahead in the queue.</span></div>
+  <div class="kv"><span class="k">Throttling</span><span class="v">Pacing jobs to match an external rate limit.</span></div>
+  <div class="kv"><span class="k">Repeatable/cron job</span><span class="v">A job run on a schedule by the queue.</span></div>
+  <div class="kv"><span class="k">not before</span><span class="v">A delay is a lower bound, not an exact time.</span></div>
+  <div class="kv"><span class="k">Why not setInterval</span><span class="v">Multiple processes would each fire it; the queue runs one.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A delay means "not before" a time, not "exactly at" it — expect small drift.</li><li>Priority lets an urgent job (an OTP) jump ahead of a bulk report.</li><li>Throttling paces jobs to respect someone else's rate limit.</li><li>Use the queue's repeatable jobs, not setInterval, so only one schedule runs across processes.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -935,11 +1091,33 @@ new Worker('cron', async () =&gt; {
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Điều tiết — khớp với giới hạn của người khác</span><span class="lz-d">Một bộ giới hạn tần suất đặt ở worker, không đặt ở bên sản xuất. Hàng đợi hấp thụ cơn dồn dập; bộ giới hạn quyết định nó rút cạn nhanh tới đâu.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Lặp lại — cron, với đúng MỘT chủ sở hữu</span><span class="lz-d">Một job lặp lại nằm trong hàng đợi, đừng để một dòng <code>cron</code> trên mỗi máy chủ — không thì ba thực thể sẽ chạy cùng một công việc đêm ba lần.</span></div>
 </div>
+
 <a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-4-3-zset" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Cấu trúc bên dưới: khoá Redis bài 4.3 — sorted set</span><span class="lc-sub">Một job BullMQ hẹn giờ là một phần tử của sorted set, điểm là thời điểm chạy (đo: TYPE bull:dz:delayed = zset) — vì thế hẹn 24 giờ tốn y như hẹn 1 giây, và không ai thăm dò trong vòng lặp.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Thêm một job hẹn giờ và đo khoảng cách giữa thời điểm yêu cầu và lúc nó thật sự chạy ("không sớm hơn", không phải "đúng lúc").</li>
+<li>Cho một job độ ưu tiên cao hơn (một OTP) để nó vượt lên trước một báo cáo hàng loạt, và xác nhận thứ tự.</li>
+<li>Đăng ký một job định kỳ (cron) từ hai tiến trình và xác nhận chỉ một lịch chạy — không phải mỗi tiến trình một cái.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy hẹn giờ là "không sớm hơn", ưu tiên một job gấp, và xác nhận một lịch cron qua nhiều tiến trình.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Job hẹn giờ</span><span class="v">Một job lên lịch chạy không sớm hơn một thời điểm.</span></div>
+  <div class="kv"><span class="k">Ưu tiên</span><span class="v">Cho job gấp vượt lên trong hàng đợi.</span></div>
+  <div class="kv"><span class="k">Bóp tốc độ</span><span class="v">Điều nhịp job để khớp một giới hạn tần suất bên ngoài.</span></div>
+  <div class="kv"><span class="k">Job định kỳ/cron</span><span class="v">Một job chạy theo lịch do hàng đợi.</span></div>
+  <div class="kv"><span class="k">không sớm hơn</span><span class="v">Một hẹn giờ là cận dưới, không phải thời điểm chính xác.</span></div>
+  <div class="kv"><span class="k">Vì sao không setInterval</span><span class="v">Nhiều tiến trình sẽ mỗi cái tự chạy nó; hàng đợi chạy một.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một hẹn giờ nghĩa là "không sớm hơn" một thời điểm, không phải "đúng lúc" — có sai số nhỏ.</li><li>Ưu tiên cho một job gấp (một OTP) vượt lên trước một báo cáo hàng loạt.</li><li>Bóp tốc độ điều nhịp job để tôn trọng giới hạn tần suất của người khác.</li><li>Dùng job định kỳ của hàng đợi, không phải setInterval, để chỉ một lịch chạy qua các tiến trình.</li></ul>
 </div>
 `,
     },
@@ -1066,16 +1244,39 @@ app.get('/health/queues', async (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-990"><span class="lc-t">Code Lab · Metrics &amp; Dashboards</span><span class="lc-d">Đo và cảnh báo cho hàng đợi — nối tiếp chương 15</span></a>
 </div>
+
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-1-worker" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 10.2: queues and workers — where an asynchronous job really runs</span><span class="lc-sub">The API-contract side of the same queue: six exports with one worker vs three, every POST answered in about 60 ms either way. This lesson stays at the worker: SIGKILL rescued after 2,068 ms (60,070 ms with the defaults), a blocking job run twice, a deploy with and without SIGTERM.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-7-trien-khai" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.7: the deployment checklist</span><span class="lc-sub">Readiness, graceful shutdown, logs, backups and a smoke test for a whole API. The queue's share of that checklist is measured here: worker.close() on SIGTERM finished the job in 903 ms, no handler cut it after 2 ms, and stop_grace_period must outlast your longest job.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Kill a worker mid-job (SIGKILL) and confirm the job is not lost — another worker reclaims it after the stall timeout.</li>
+<li>Show a long but non-blocking job is fine, while a job that blocks the event loop is marked stalled and re-run.</li>
+<li>Implement graceful shutdown on deploy so the worker finishes the current job before exiting, and add cleanup of old completed/failed jobs.</li>
+</ol>
+<p><strong>Done when:</strong> you saw a killed job reclaimed, distinguished long vs blocking jobs, and added graceful shutdown plus cleanup.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Stalled job</span><span class="v">A job whose worker died or stopped renewing its lock.</span></div>
+  <div class="kv"><span class="k">Lock renewal</span><span class="v">A worker periodically proving a job is still running.</span></div>
+  <div class="kv"><span class="k">Blocking job</span><span class="v">One that stalls the event loop and looks dead.</span></div>
+  <div class="kv"><span class="k">Graceful shutdown</span><span class="v">Finishing the current job before the worker exits.</span></div>
+  <div class="kv"><span class="k">Cleanup</span><span class="v">Removing old completed/failed jobs so Redis does not fill.</span></div>
+  <div class="kv"><span class="k">SIGKILL vs SIGTERM</span><span class="v">A hard kill versus a request to stop gracefully.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A killed worker does not lose its job — another reclaims it after the stall timeout.</li><li>A long job is fine, but one that blocks the event loop is wrongly marked stalled and re-run.</li><li>Deploy with graceful shutdown so the current job finishes before exit.</li><li>Clean up completed/failed jobs or Redis fills with history.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1193,16 +1394,39 @@ app.get('/health/queues', async (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-990"><span class="lc-t">Code Lab · Metrics &amp; Dashboards</span><span class="lc-d">Đo và cảnh báo cho hàng đợi — nối tiếp chương 15</span></a>
 </div>
+
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-1-worker" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 10.2: hàng đợi và worker — việc bất đồng bộ thật sự chạy ở đâu</span><span class="lc-sub">Phía hợp đồng API của cùng hàng đợi: sáu lượt xuất với một worker so với ba, mọi POST đều được trả lời trong khoảng 60 ms. Bài này ở lại phía worker: SIGKILL được cứu sau 2.068 ms (60.070 ms với mặc định), job chặn chạy hai lần, deploy có và không có SIGTERM.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-7-trien-khai" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.7: checklist triển khai</span><span class="lc-sub">Readiness, tắt êm, log, sao lưu và kiểm khói cho cả một API. Phần của hàng đợi trong checklist đó được đo ở đây: worker.close() khi nhận SIGTERM làm xong job trong 903 ms, không có handler thì bị cắt sau 2 ms, và stop_grace_period phải dài hơn job lâu nhất.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Giết một worker giữa job (SIGKILL) và xác nhận job không mất — một worker khác đòi lại sau thời gian chờ treo.</li>
+<li>Chỉ ra một job dài nhưng không chặn thì ổn, còn một job chặn event loop bị đánh dấu treo và chạy lại.</li>
+<li>Hiện thực tắt êm khi deploy để worker kết thúc job hiện tại trước khi thoát, và thêm dọn các job completed/failed cũ.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy một job bị giết được đòi lại, phân biệt job dài vs chặn, và thêm tắt êm cùng dọn dẹp.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Job treo (stalled)</span><span class="v">Một job có worker chết hoặc ngừng gia hạn khoá.</span></div>
+  <div class="kv"><span class="k">Gia hạn khoá</span><span class="v">Một worker định kỳ chứng minh một job vẫn chạy.</span></div>
+  <div class="kv"><span class="k">Job chặn</span><span class="v">Một job làm treo event loop và trông như chết.</span></div>
+  <div class="kv"><span class="k">Tắt êm</span><span class="v">Kết thúc job hiện tại trước khi worker thoát.</span></div>
+  <div class="kv"><span class="k">Dọn dẹp</span><span class="v">Xoá job completed/failed cũ để Redis không đầy.</span></div>
+  <div class="kv"><span class="k">SIGKILL vs SIGTERM</span><span class="v">Giết thô so với yêu cầu dừng êm.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một worker bị giết không mất job — một cái khác đòi lại sau thời gian chờ treo.</li><li>Một job dài thì ổn, nhưng một job chặn event loop bị đánh dấu treo nhầm và chạy lại.</li><li>Deploy với tắt êm để job hiện tại kết thúc trước khi thoát.</li><li>Dọn job completed/failed hoặc Redis đầy lịch sử.</li></ul>
 </div>
 `,
     },

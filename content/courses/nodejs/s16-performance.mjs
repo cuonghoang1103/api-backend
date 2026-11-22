@@ -148,6 +148,27 @@ app.get('/notes', (req, res) =&gt; { res.type('json'); res.send(BODY); });</code
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-988"><span class="lc-t">Code Lab · Performance Monitoring &amp; Tracing</span><span class="lc-d">Finding the hot path with real data</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Take a CPU profile of a slow route with <code>node --cpu-prof</code> and read the hottest functions.</li>
+<li>Apply one fix suggested by the profile, re-measure throughput, and repeat so each change is validated by a number.</li>
+<li>Benchmark honestly: warm up first, run enough iterations, and compare like-for-like rather than trusting a single run.</li>
+</ol>
+<p><strong>Done when:</strong> you profiled a route, applied profile-driven fixes measured one at a time, and benchmarked without fooling yourself.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Profiling</span><span class="v">Measuring where CPU time is actually spent.</span></div>
+  <div class="kv"><span class="k">--cpu-prof</span><span class="v">Node's built-in CPU profiler flag, no install.</span></div>
+  <div class="kv"><span class="k">Hot function</span><span class="v">A function consuming a large share of CPU.</span></div>
+  <div class="kv"><span class="k">Throughput (req/s)</span><span class="v">Requests served per second — the headline number.</span></div>
+  <div class="kv"><span class="k">Measure one change</span><span class="v">Validate each fix separately with a number.</span></div>
+  <div class="kv"><span class="k">Honest benchmark</span><span class="v">Warm up, enough iterations, like-for-like comparison.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Profile before you guess — the slow part is rarely where you assume.</li><li>node --cpu-prof needs no install and points at the hottest functions.</li><li>Apply fixes one at a time and re-measure so each is validated.</li><li>Benchmark honestly: warm up, run enough, and compare like-for-like.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-2-trung-binh-noi-doi" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 4.2: the average is a lie</span><span class="lc-sub">This lesson benchmarks one route four ways and reports p50 and p97.5, never the mean: 276 → 3,395 req/s, p97.5 138 → 10 ms, median of 5 runs.</span></span>
@@ -277,6 +298,27 @@ app.get('/notes', (req, res) =&gt; { res.type('json'); res.send(BODY); });</code
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-988"><span class="lc-t">Code Lab · Performance Monitoring &amp; Tracing</span><span class="lc-d">Tìm đường nóng bằng dữ liệu thật</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lấy một CPU profile của một route chậm bằng <code>node --cpu-prof</code> và đọc các hàm tốn CPU nhất.</li>
+<li>Áp một bản sửa do profile gợi ý, đo lại throughput, và lặp lại để mỗi thay đổi được một con số xác nhận.</li>
+<li>Benchmark trung thực: khởi động làm nóng trước, chạy đủ số vòng, và so cùng-điều-kiện thay vì tin một lần chạy.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã profile một route, áp các bản sửa do profile dẫn dắt đo từng cái, và benchmark không tự lừa mình.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Profiling</span><span class="v">Đo thời gian CPU thật sự tiêu ở đâu.</span></div>
+  <div class="kv"><span class="k">--cpu-prof</span><span class="v">Cờ profiler CPU dựng sẵn của Node, không cần cài.</span></div>
+  <div class="kv"><span class="k">Hàm nóng</span><span class="v">Một hàm chiếm phần lớn CPU.</span></div>
+  <div class="kv"><span class="k">Throughput (req/giây)</span><span class="v">Số request phục vụ mỗi giây — con số tiêu đề.</span></div>
+  <div class="kv"><span class="k">Đo từng thay đổi</span><span class="v">Xác nhận mỗi bản sửa riêng bằng một con số.</span></div>
+  <div class="kv"><span class="k">Benchmark trung thực</span><span class="v">Làm nóng, đủ số vòng, so cùng-điều-kiện.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Đo trước khi đoán — phần chậm hiếm khi ở chỗ bạn tưởng.</li><li>node --cpu-prof không cần cài và chỉ ra các hàm nóng nhất.</li><li>Áp các bản sửa từng cái và đo lại để mỗi cái được xác nhận.</li><li>Benchmark trung thực: làm nóng, chạy đủ, và so cùng-điều-kiện.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-2-trung-binh-noi-doi" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 4.2: trung bình là một lời nói dối</span><span class="lc-sub">Bài này đo một route bốn bước và báo p50, p97,5 chứ không báo trung bình: 276 → 3.395 req/s, p97,5 138 → 10 ms, trung vị 5 lần chạy.</span></span>
@@ -395,6 +437,27 @@ SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-324"><span class="lc-t">Code Lab · Performance, Caching, and Scaling</span><span class="lc-d">Removing queries instead of speeding them up</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Time each part of a real route and find which single step dominates the total.</li>
+<li>Note that the DB query time measured in your app can far exceed what PostgreSQL itself reports — the gap is waiting, not work.</li>
+<li>Separate the wait from the work and decide which to attack (connection pool, concurrency, or the query itself).</li>
+</ol>
+<p><strong>Done when:</strong> you timed a route's parts, saw the wait-vs-work gap, and decided which to attack.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Bottleneck</span><span class="v">The one step dominating total time.</span></div>
+  <div class="kv"><span class="k">Wait vs work</span><span class="v">Time queued/waiting vs time actually computing.</span></div>
+  <div class="kv"><span class="k">Queue time</span><span class="v">Time a request spends waiting for a resource.</span></div>
+  <div class="kv"><span class="k">DB self-reported time</span><span class="v">What PostgreSQL says a query cost, excluding waiting.</span></div>
+  <div class="kv"><span class="k">Pool contention</span><span class="v">Requests waiting for a free connection.</span></div>
+  <div class="kv"><span class="k">Mental model</span><span class="v">Total = work + waiting; attack the bigger one.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Most of a route's time often sits in one step — measure to find it.</li><li>In-app DB time can far exceed PostgreSQL's own number; the gap is waiting.</li><li>Separate waiting from work before choosing a fix.</li><li>Queueing under load is a law, not a bug — attack whichever dominates.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-4-be-va-handle" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 5.4: pools and handles, what is waiting on what</span><span class="lc-sub">Measured here: EXPLAIN says 0.039 ms, the app sees 4.616 ms. Split the wait from the work: pool 1 waits 14.065 ms; pool 50 waits 0.010 ms but queries 6.5 ms.</span></span>
@@ -504,6 +567,27 @@ SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-324"><span class="lc-t">Code Lab · Performance, Caching, and Scaling</span><span class="lc-d">Bỏ bớt truy vấn thay vì làm truy vấn nhanh hơn</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Bấm giờ từng phần của một route thật và tìm bước nào chiếm phần lớn tổng thời gian.</li>
+<li>Ghi rằng thời gian truy vấn DB đo trong app có thể vượt xa thứ chính PostgreSQL báo — khoảng cách là chờ, không phải việc.</li>
+<li>Tách phần chờ khỏi phần việc và quyết tấn công cái nào (pool kết nối, concurrency, hay chính truy vấn).</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn bấm giờ các phần của một route, thấy khoảng cách chờ-vs-việc, và quyết tấn công cái nào.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Nút thắt</span><span class="v">Một bước chiếm phần lớn tổng thời gian.</span></div>
+  <div class="kv"><span class="k">Chờ vs việc</span><span class="v">Thời gian xếp hàng/chờ vs thời gian thật sự tính toán.</span></div>
+  <div class="kv"><span class="k">Thời gian hàng đợi</span><span class="v">Thời gian một request chờ một tài nguyên.</span></div>
+  <div class="kv"><span class="k">Thời gian DB tự báo</span><span class="v">Thứ PostgreSQL nói một truy vấn tốn, trừ phần chờ.</span></div>
+  <div class="kv"><span class="k">Tranh pool</span><span class="v">Request chờ một kết nối rảnh.</span></div>
+  <div class="kv"><span class="k">Mô hình tư duy</span><span class="v">Tổng = việc + chờ; tấn công cái lớn hơn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Phần lớn thời gian của một route thường nằm ở một bước — đo để tìm nó.</li><li>Thời gian DB trong app có thể vượt xa con số của chính PostgreSQL; khoảng cách là chờ.</li><li>Tách phần chờ khỏi phần việc trước khi chọn một bản sửa.</li><li>Xếp hàng khi tải cao là một luật, không phải lỗi — tấn công cái nào chiếm trội.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-4-be-va-handle" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 5.4: bể tài nguyên và handle, cái gì đang chờ cái gì</span><span class="lc-sub">Đo ở đây: EXPLAIN nói 0,039 ms, app thấy 4,616 ms. Tách chờ khỏi làm: pool 1 chờ 14,065 ms; pool 50 chờ 0,010 ms nhưng truy vấn 6,5 ms.</span></span>
@@ -620,6 +704,27 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-324"><span class="lc-t">Code Lab · Performance, Caching, and Scaling</span><span class="lc-d">Response size, keep-alive and connection reuse</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Compress a sample response with gzip and brotli at several levels and record ratio, CPU time and throughput for each.</li>
+<li>Find a level that is far slower for little or no size gain, and pick a sensible default.</li>
+<li>Decide where compression should happen (app vs a reverse proxy/CDN) and confirm keep-alive is on.</li>
+</ol>
+<p><strong>Done when:</strong> you measured compression levels, avoided a slow-for-nothing one, and chose where compression runs with keep-alive.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Compression</span><span class="v">Shrinking a response to save bandwidth.</span></div>
+  <div class="kv"><span class="k">gzip / brotli</span><span class="v">Two common compression algorithms.</span></div>
+  <div class="kv"><span class="k">Compression level</span><span class="v">A CPU-vs-size dial with diminishing returns.</span></div>
+  <div class="kv"><span class="k">Diminishing returns</span><span class="v">Higher levels cost far more CPU for little gain.</span></div>
+  <div class="kv"><span class="k">Where to compress</span><span class="v">App, reverse proxy, or CDN — usually not the app.</span></div>
+  <div class="kv"><span class="k">keep-alive</span><span class="v">Reusing a connection to avoid repeated handshakes.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Compression trades CPU for bandwidth, with sharply diminishing returns at high levels.</li><li>The highest level can be far slower and even produce a bigger file than a mid one.</li><li>Compression usually belongs at the proxy/CDN, not inside your app.</li><li>keep-alive reuses connections and is the other easy bandwidth win.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -722,6 +827,27 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-324"><span class="lc-t">Code Lab · Performance, Caching, and Scaling</span><span class="lc-d">Cỡ phản hồi, keep-alive và dùng lại kết nối</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Nén một response mẫu bằng gzip và brotli ở nhiều mức và ghi tỉ lệ, thời gian CPU và throughput cho từng cái.</li>
+<li>Tìm một mức chậm hơn nhiều mà gần như không lợi về kích thước, và chọn một mặc định hợp lý.</li>
+<li>Quyết định nén nên xảy ra ở đâu (app vs một reverse proxy/CDN) và xác nhận keep-alive đang bật.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đo các mức nén, tránh một mức chậm-mà-vô-ích, và chọn nơi nén chạy cùng keep-alive.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Nén</span><span class="v">Thu nhỏ một response để tiết kiệm băng thông.</span></div>
+  <div class="kv"><span class="k">gzip / brotli</span><span class="v">Hai thuật toán nén thông dụng.</span></div>
+  <div class="kv"><span class="k">Mức nén</span><span class="v">Một nút CPU-vs-kích-thước với lợi ích giảm dần.</span></div>
+  <div class="kv"><span class="k">Lợi ích giảm dần</span><span class="v">Mức cao hơn tốn nhiều CPU hơn mà lợi ít.</span></div>
+  <div class="kv"><span class="k">Nén ở đâu</span><span class="v">App, reverse proxy, hay CDN — thường không phải app.</span></div>
+  <div class="kv"><span class="k">keep-alive</span><span class="v">Tái dùng một kết nối để tránh bắt tay lặp lại.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Nén đổi CPU lấy băng thông, với lợi ích giảm mạnh ở mức cao.</li><li>Mức cao nhất có thể chậm hơn nhiều và thậm chí cho file to hơn một mức giữa.</li><li>Nén thường thuộc về proxy/CDN, không phải bên trong app của bạn.</li><li>keep-alive tái dùng kết nối và là thắng lợi băng thông dễ còn lại.</li></ul>
 </div>
 `,
     },
@@ -823,6 +949,27 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 <div class="link-card codelab">
   <a href="/code-lab/socket-io${REF}#module-942"><span class="lc-t">Code Lab · Redis adapter for Socket.IO</span><span class="lc-d">Making realtime survive multiple processes</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Run the same app with 1 to N cluster workers and benchmark both a CPU-bound and an I/O-bound route.</li>
+<li>Confirm cluster multiplies CPU-bound throughput but barely helps the I/O-bound route — and can make it worse past a point.</li>
+<li>List what breaks when you fork (in-memory state, sticky sessions, schedulers) and how you would handle each.</li>
+</ol>
+<p><strong>Done when:</strong> you measured cluster helping CPU work but not I/O, and can name what forking breaks.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">cluster</span><span class="v">Running multiple Node processes sharing a port.</span></div>
+  <div class="kv"><span class="k">CPU-bound</span><span class="v">Work limited by computation — scales with cores.</span></div>
+  <div class="kv"><span class="k">I/O-bound</span><span class="v">Work limited by waiting — cluster barely helps.</span></div>
+  <div class="kv"><span class="k">Worker count</span><span class="v">How many processes to fork; more is not always better.</span></div>
+  <div class="kv"><span class="k">Shared state</span><span class="v">In-memory data that does not survive forking.</span></div>
+  <div class="kv"><span class="k">PM2 / containers</span><span class="v">Alternatives to managing cluster yourself.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Cluster multiplies throughput for CPU-bound work but barely helps I/O-bound work.</li><li>Adding too many workers can make things worse, not better.</li><li>Forking breaks in-memory state, sticky sessions and single-schedule jobs.</li><li>Decide between cluster, PM2 and containers based on what you need to manage.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-1-tre-vong-lap" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 5.1: event loop lag, the metric that means "stuck"</span><span class="lc-sub">Lag (and a CPU profile's idle line) tells you whether you are CPU-bound — the only case where cluster helps: 3.4× on a CPU route, +6.7% on an I/O route.</span></span>
@@ -913,6 +1060,27 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 <div class="link-card codelab">
   <a href="/code-lab/socket-io${REF}#module-942"><span class="lc-t">Code Lab · Redis adapter cho Socket.IO</span><span class="lc-d">Giúp realtime sống sót qua nhiều tiến trình</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chạy cùng một app với 1 tới N worker cluster và benchmark cả một route nặng CPU và một route nặng I/O.</li>
+<li>Xác nhận cluster nhân throughput nặng-CPU nhưng gần như không giúp route nặng-I/O — và có thể tệ đi sau một điểm.</li>
+<li>Liệt kê cái gì vỡ khi fork (trạng thái trong RAM, sticky session, bộ lập lịch) và bạn xử lý từng cái thế nào.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đo cluster giúp việc CPU nhưng không giúp I/O, và gọi tên được cái gì fork làm vỡ.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">cluster</span><span class="v">Chạy nhiều tiến trình Node chung một cổng.</span></div>
+  <div class="kv"><span class="k">Nặng CPU</span><span class="v">Việc giới hạn bởi tính toán — mở rộng theo số nhân.</span></div>
+  <div class="kv"><span class="k">Nặng I/O</span><span class="v">Việc giới hạn bởi chờ — cluster gần như không giúp.</span></div>
+  <div class="kv"><span class="k">Số worker</span><span class="v">Fork bao nhiêu tiến trình; nhiều không phải lúc nào cũng tốt hơn.</span></div>
+  <div class="kv"><span class="k">Trạng thái chung</span><span class="v">Dữ liệu trong RAM không sống qua việc fork.</span></div>
+  <div class="kv"><span class="k">PM2 / container</span><span class="v">Các lựa chọn thay cho tự quản cluster.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cluster nhân throughput cho việc nặng-CPU nhưng gần như không giúp việc nặng-I/O.</li><li>Thêm quá nhiều worker có thể làm tệ đi, không tốt lên.</li><li>Fork làm vỡ trạng thái trong RAM, sticky session và job một-lịch.</li><li>Chọn giữa cluster, PM2 và container theo thứ bạn cần quản lý.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-1-tre-vong-lap" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 5.1: độ trễ vòng lặp, chỉ số nghĩa là "đang đơ"</span><span class="lc-sub">Độ trễ vòng lặp (và dòng idle của CPU profile) cho biết bạn có bị giới hạn bởi CPU — trường hợp duy nhất cluster giúp: 3,4× ở route CPU, +6,7 % ở route I/O.</span></span>
@@ -1038,6 +1206,27 @@ app.get('/__heap', (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-992"><span class="lc-t">Code Lab · Debugging Production Incidents</span><span class="lc-d">Reading a heap snapshot under pressure</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Reproduce a leak from an unbounded cache: keep adding entries and watch RSS climb over many requests; then cap it with an LRU.</li>
+<li>Reproduce a listener leak: attach a listener per request without removing it and watch memory grow.</li>
+<li>Take two heap snapshots under load and diff them to find what is retained.</li>
+</ol>
+<p><strong>Done when:</strong> you reproduced a cache leak and a listener leak, capped the cache, and diffed heap snapshots to find the retained objects.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Memory leak</span><span class="v">Memory that is retained and never released.</span></div>
+  <div class="kv"><span class="k">Unbounded cache</span><span class="v">A cache with no ceiling — a classic leak.</span></div>
+  <div class="kv"><span class="k">LRU cache</span><span class="v">A capped cache that evicts least-recently-used entries.</span></div>
+  <div class="kv"><span class="k">Listener leak</span><span class="v">Listeners added per request and never removed.</span></div>
+  <div class="kv"><span class="k">Heap snapshot</span><span class="v">A capture of live objects for diffing.</span></div>
+  <div class="kv"><span class="k">OOM kill</span><span class="v">The process killed when it exceeds the heap limit.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A leak is memory retained forever; growing heap is not always a leak.</li><li>An unbounded cache and un-removed listeners are the classic leaks.</li><li>Cap caches with an LRU and always remove listeners you add.</li><li>Diff heap snapshots to find retained objects before the OOM kill.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-2-bo-nho" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 5.2: RSS, heap, external — which number is the leak</span><span class="lc-sub">Measured here: 30 Buffers of 8 MB = RSS 282 MB with a 4 MB heap; in a 128 MB container that ends in exit 137 with no message, while a heap leak prints FATAL and exits 134.</span></span>
@@ -1152,6 +1341,27 @@ app.get('/__heap', (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-992"><span class="lc-t">Code Lab · Debugging Production Incidents</span><span class="lc-d">Đọc ảnh chụp heap trong lúc căng thẳng</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tái hiện một rò rỉ từ một cache không giới hạn: cứ thêm mục và xem RSS leo qua nhiều request; rồi chặn nó bằng một LRU.</li>
+<li>Tái hiện một rò rỉ listener: gắn một listener mỗi request mà không gỡ và xem bộ nhớ tăng.</li>
+<li>Chụp hai heap snapshot khi tải và diff chúng để tìm cái gì bị giữ lại.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tái hiện một rò rỉ cache và một rò rỉ listener, chặn cache, và diff heap snapshot để tìm các object bị giữ.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Rò rỉ bộ nhớ</span><span class="v">Bộ nhớ bị giữ lại và không bao giờ giải phóng.</span></div>
+  <div class="kv"><span class="k">Cache không giới hạn</span><span class="v">Một cache không có trần — một rò rỉ kinh điển.</span></div>
+  <div class="kv"><span class="k">Cache LRU</span><span class="v">Một cache có trần trục xuất mục ít-dùng-gần-nhất.</span></div>
+  <div class="kv"><span class="k">Rò rỉ listener</span><span class="v">Listener thêm mỗi request và không bao giờ gỡ.</span></div>
+  <div class="kv"><span class="k">Heap snapshot</span><span class="v">Một bản chụp object sống để diff.</span></div>
+  <div class="kv"><span class="k">OOM kill</span><span class="v">Tiến trình bị giết khi vượt giới hạn heap.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một rò rỉ là bộ nhớ bị giữ mãi; heap đang lớn không phải lúc nào cũng là rò rỉ.</li><li>Một cache không giới hạn và listener không gỡ là các rò rỉ kinh điển.</li><li>Chặn cache bằng một LRU và luôn gỡ listener bạn thêm.</li><li>Diff heap snapshot để tìm object bị giữ trước khi bị OOM kill.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-2-bo-nho" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 5.2: RSS, heap, external — con số nào là chỗ rò</span><span class="lc-sub">Đo ở đây: 30 Buffer 8 MB = RSS 282 MB với heap 4 MB; trong container 128 MB nó kết thúc bằng exit 137 không lời, còn rò heap in FATAL và exit 134.</span></span>
@@ -1266,6 +1476,27 @@ viết lại regex                                   1,005× LÀM NHANH HƠN</di
 <div class="pitfall">
 <p><strong>Trap — optimising the part of the request you can see, not the part that takes the time.</strong> The serialiser is in your code, so it is where attention goes; the 40 ms database round trip is behind a library call and reads as one line. That is how a 1.39× faster JSON encoder buys 0.3% of a request — the thing you improved was 2% of the total. Amdahl&#39;s law is the whole lesson, and it is measurable before you start: profile, find what fraction the candidate actually occupies, and compute the ceiling. If the ceiling is under a few percent, the honest answer is to not do the work — and to write down the number, so the next person does not re-propose it.</p>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Swap in a "faster" library (e.g. a JSON serialiser) that benchmarks ~1.4× faster in isolation, then measure its effect on the whole request — likely a fraction of a percent.</li>
+<li>For one proposed optimisation, ask the three questions: is this the bottleneck, how much will it buy, and what does it cost?</li>
+<li>List two popular optimisations this chapter's measurements already disproved for your workload.</li>
+</ol>
+<p><strong>Done when:</strong> you measured an in-isolation win vanish in the full request, and applied the three-question filter before optimising.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Micro-optimisation</span><span class="v">A local speedup with little end-to-end effect.</span></div>
+  <div class="kv"><span class="k">In-isolation benchmark</span><span class="v">A number that ignores the rest of the request.</span></div>
+  <div class="kv"><span class="k">End-to-end effect</span><span class="v">The change's impact on the whole request.</span></div>
+  <div class="kv"><span class="k">Is it the bottleneck</span><span class="v">The first question before optimising anything.</span></div>
+  <div class="kv"><span class="k">Opportunity cost</span><span class="v">Time spent here is time not spent on the real win.</span></div>
+  <div class="kv"><span class="k">Knowing when to stop</span><span class="v">Ending optimisation once gains go small.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A library 1.4× faster in isolation can add a fraction of a percent end-to-end.</li><li>Ask three questions first: is it the bottleneck, how much, at what cost.</li><li>Many popular optimisations do nothing for a real workload — measure.</li><li>The real wins came from the bottleneck, not from micro-optimisations.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-6-4-doc-bieu-do-thac" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 6.4: reading a waterfall</span><span class="lc-sub">A waterfall shows each part's share before you optimise it. Here: a serialiser 1.35× faster was 2.2% of the request — a ceiling of 0.6% (Amdahl).</span></span>
@@ -1366,6 +1597,27 @@ viết lại regex                                   1,005× LÀM NHANH HƠN</di
 <div class="pitfall">
 <p><strong>Bẫy — tối ưu cái phần của request mà bạn NHÌN THẤY, chứ không phải cái phần tốn thời gian.</strong> Bộ tuần tự hoá nằm trong mã của bạn, nên sự chú ý dồn vào đó; còn 40 ms đi về cơ sở dữ liệu thì nằm sau một lời gọi thư viện và đọc lên chỉ là một dòng. Đó là cách một bộ mã hoá JSON nhanh hơn 1,39 lần mua được 0,3% của một request — thứ bạn cải thiện chiếm có 2% tổng số. Định luật Amdahl chính là toàn bộ bài học, và nó đo được TRƯỚC khi bắt đầu: hãy chạy profiler, tìm xem ứng viên đó thật sự chiếm bao nhiêu phần, rồi tính ra cái trần. Nếu cái trần dưới vài phần trăm thì câu trả lời thành thật là ĐỪNG làm — và hãy ghi con số đó lại, để người sau không đề xuất lại nó.</p>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Thay vào một thư viện "nhanh hơn" (ví dụ một serialiser JSON) benchmark nhanh ~1,4 lần khi cô lập, rồi đo tác động của nó lên cả request — có lẽ một phần nhỏ của phần trăm.</li>
+<li>Với một phép tối ưu đề xuất, hỏi ba câu: đây có phải nút thắt không, nó mua được bao nhiêu, và nó tốn gì.</li>
+<li>Liệt kê hai phép tối ưu phổ biến mà số đo của chương này đã bác bỏ cho workload của bạn.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đo một thắng lợi khi cô lập biến mất trong cả request, và áp bộ lọc ba câu trước khi tối ưu.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Vi-tối-ưu</span><span class="v">Một tăng tốc cục bộ ít tác động đầu-cuối.</span></div>
+  <div class="kv"><span class="k">Benchmark cô lập</span><span class="v">Một con số bỏ qua phần còn lại của request.</span></div>
+  <div class="kv"><span class="k">Tác động đầu-cuối</span><span class="v">Ảnh hưởng của thay đổi lên cả request.</span></div>
+  <div class="kv"><span class="k">Có phải nút thắt</span><span class="v">Câu đầu tiên trước khi tối ưu bất cứ gì.</span></div>
+  <div class="kv"><span class="k">Chi phí cơ hội</span><span class="v">Thời gian ở đây là thời gian không dành cho thắng lợi thật.</span></div>
+  <div class="kv"><span class="k">Biết khi nào dừng</span><span class="v">Kết thúc tối ưu khi lợi ích đã nhỏ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một thư viện nhanh 1,4 lần khi cô lập có thể thêm một phần nhỏ phần trăm đầu-cuối.</li><li>Hỏi ba câu trước: có phải nút thắt, bao nhiêu, với giá nào.</li><li>Nhiều phép tối ưu phổ biến không làm gì cho một workload thật — hãy đo.</li><li>Thắng lợi thật đến từ nút thắt, không phải từ các vi-tối-ưu.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-6-4-doc-bieu-do-thac" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 6.4: đọc biểu đồ thác</span><span class="lc-sub">Biểu đồ thác cho thấy tỉ lệ của từng phần trước khi tối ưu. Ở đây: bộ tuần tự hoá nhanh hơn 1,35× chỉ là 2,2 % request — trần 0,6 % (Amdahl).</span></span>

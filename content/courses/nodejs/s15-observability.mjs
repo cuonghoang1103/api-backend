@@ -190,6 +190,27 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-985"><span class="lc-t">Code Lab · Structured Logging</span><span class="lc-d">Turning console.log into machine-readable evidence</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Replace a <code>console.log</code> with a structured logger (e.g. pino) emitting JSON, and compare throughput on a tight loop.</li>
+<li>Log an object that includes a request header and check whether anything sensitive (like Authorization) leaks into the output; then redact it.</li>
+<li>Set a log level and confirm that below-threshold lines cost almost nothing.</li>
+</ol>
+<p><strong>Done when:</strong> you switched to structured JSON logging, caught and redacted a sensitive field, and used levels to drop cheap lines.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Three pillars</span><span class="v">Logs, metrics, traces — three kinds of evidence.</span></div>
+  <div class="kv"><span class="k">Structured logging</span><span class="v">Emitting JSON records instead of free-text lines.</span></div>
+  <div class="kv"><span class="k">pino</span><span class="v">A fast, low-overhead JSON logger for Node.</span></div>
+  <div class="kv"><span class="k">Log level</span><span class="v">A threshold (info/warn/error) that cheaply drops noise.</span></div>
+  <div class="kv"><span class="k">Synchronous write</span><span class="v">A blocking write that hurts more than its raw cost.</span></div>
+  <div class="kv"><span class="k">Redaction</span><span class="v">Stripping secrets (like Authorization) before logging.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Logs, metrics and traces are three different kinds of evidence.</li><li>console.log is slow and unstructured; a JSON logger like pino is faster and queryable.</li><li>A synchronous log write blocks the event loop more than the raw number suggests.</li><li>Levels are the cheapest performance lever — and watch for secrets leaking into logs.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-1-tu-console-toi-json" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 1.1: from console.log to a machine-readable line</span><span class="lc-sub">The full course on structured logs. This lesson adds the Node measurements: pino 2.4× faster than console.log because of buffering, a sync burst freezing the loop 371 ms, 486 B per pino-http line.</span></span>
@@ -366,6 +387,27 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-985"><span class="lc-t">Code Lab · Structured Logging</span><span class="lc-d">Biến console.log thành bằng chứng máy đọc được</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Thay một <code>console.log</code> bằng một logger có cấu trúc (ví dụ pino) phát JSON, và so throughput trên một vòng lặp chặt.</li>
+<li>Log một object chứa một header request và kiểm xem có gì nhạy cảm (như Authorization) lọt ra output không; rồi che nó đi.</li>
+<li>Đặt một log level và xác nhận các dòng dưới ngưỡng gần như không tốn gì.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn chuyển sang log JSON có cấu trúc, bắt và che một trường nhạy cảm, và dùng level để bỏ các dòng rẻ.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ba trụ cột</span><span class="v">Log, metric, trace — ba loại bằng chứng.</span></div>
+  <div class="kv"><span class="k">Log có cấu trúc</span><span class="v">Phát các bản ghi JSON thay vì dòng chữ tự do.</span></div>
+  <div class="kv"><span class="k">pino</span><span class="v">Một logger JSON nhanh, phụ phí thấp cho Node.</span></div>
+  <div class="kv"><span class="k">Log level</span><span class="v">Một ngưỡng (info/warn/error) bỏ nhiễu rẻ tiền.</span></div>
+  <div class="kv"><span class="k">Ghi đồng bộ</span><span class="v">Một lần ghi chặn hại hơn chi phí thô của nó.</span></div>
+  <div class="kv"><span class="k">Che (redaction)</span><span class="v">Loại bí mật (như Authorization) trước khi log.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Log, metric và trace là ba loại bằng chứng khác nhau.</li><li>console.log chậm và không có cấu trúc; một logger JSON như pino nhanh hơn và truy vấn được.</li><li>Một lần ghi log đồng bộ chặn event loop nhiều hơn con số thô gợi ý.</li><li>Level là đòn bẩy hiệu năng rẻ nhất — và coi chừng bí mật lọt vào log.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-1-tu-console-toi-json" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 1.1: từ console.log tới một dòng máy đọc được</span><span class="lc-sub">Khoá chuyên về log có cấu trúc. Bài này thêm số đo Node: pino nhanh hơn console.log 2,4× nhờ bộ đệm, một loạt ghi đồng bộ đứng event loop 371 ms, 486 B mỗi dòng pino-http.</span></span>
@@ -559,6 +601,27 @@ RateLimit-Policy: 2000;w=900</div>
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-986"><span class="lc-t">Code Lab · Error Tracking with Sentry</span><span class="lc-d">Turning a stack trace into a tagged, searchable event</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Fire three concurrent requests that each log several lines and watch the lines interleave with no way to tell them apart.</li>
+<li>Add a request id to every log line using <code>AsyncLocalStorage</code> so each request's lines can be filtered out.</li>
+<li>Honour an incoming correlation header if present, otherwise generate one, and measure the overhead of the context.</li>
+</ol>
+<p><strong>Done when:</strong> you reproduced interleaved logs, attached a request id via AsyncLocalStorage, and honoured an incoming id.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Correlation id</span><span class="v">One id tying together all logs of a single request.</span></div>
+  <div class="kv"><span class="k">AsyncLocalStorage</span><span class="v">Ambient per-request context that survives await.</span></div>
+  <div class="kv"><span class="k">Interleaved logs</span><span class="v">Concurrent requests' lines mixed together.</span></div>
+  <div class="kv"><span class="k">Incoming header</span><span class="v">A correlation id supplied by an upstream caller.</span></div>
+  <div class="kv"><span class="k">Context propagation</span><span class="v">Carrying the id through every layer automatically.</span></div>
+  <div class="kv"><span class="k">Overhead</span><span class="v">The measured cost of maintaining the context.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Concurrent requests interleave their logs; one id per request untangles them.</li><li>AsyncLocalStorage carries that id through every layer, surviving await.</li><li>Honour an incoming correlation id, or generate one at the edge.</li><li>The context has a small, measurable cost worth paying.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-3-2-asynclocalstorage" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 3.2: AsyncLocalStorage, and what it really costs</span><span class="lc-sub">This lesson reproduces the problem (3 concurrent requests, 18 anonymous lines) and measures the global-variable shortcut: 6 of 18 lines carry another request’s id.</span></span>
@@ -738,6 +801,27 @@ RateLimit-Policy: 2000;w=900</div>
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-986"><span class="lc-t">Code Lab · Error Tracking with Sentry</span><span class="lc-d">Biến một stack trace thành sự kiện có tag, tìm kiếm được</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Bắn ba request đồng thời mà mỗi cái log vài dòng và xem các dòng trộn lẫn không cách nào phân biệt.</li>
+<li>Thêm một mã request vào mọi dòng log bằng <code>AsyncLocalStorage</code> để lọc riêng các dòng của mỗi request.</li>
+<li>Tôn trọng một header ngữ cảnh đến nếu có, nếu không thì sinh một cái, và đo phụ phí của context.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tái hiện log trộn lẫn, gắn một mã request qua AsyncLocalStorage, và tôn trọng một mã đến.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Mã ngữ cảnh</span><span class="v">Một mã buộc chung mọi log của một request.</span></div>
+  <div class="kv"><span class="k">AsyncLocalStorage</span><span class="v">Context theo-request ngầm sống sót qua await.</span></div>
+  <div class="kv"><span class="k">Log trộn lẫn</span><span class="v">Các dòng của request đồng thời bị trộn vào nhau.</span></div>
+  <div class="kv"><span class="k">Header đến</span><span class="v">Một mã ngữ cảnh do một bên gọi phía trên cung cấp.</span></div>
+  <div class="kv"><span class="k">Lan truyền context</span><span class="v">Mang mã qua mọi tầng một cách tự động.</span></div>
+  <div class="kv"><span class="k">Phụ phí</span><span class="v">Chi phí đo được của việc duy trì context.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Request đồng thời trộn log của chúng; một mã mỗi request gỡ rối chúng.</li><li>AsyncLocalStorage mang mã đó qua mọi tầng, sống sót qua await.</li><li>Tôn trọng một mã ngữ cảnh đến, hoặc sinh một cái ở rìa.</li><li>Context có một chi phí nhỏ, đo được, đáng trả.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-3-2-asynclocalstorage" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 3.2: AsyncLocalStorage, và nó thật sự tốn bao nhiêu</span><span class="lc-sub">Bài này tái hiện vấn đề (3 request cùng lúc, 18 dòng không tên) và đo lối tắt biến toàn cục: 6/18 dòng mang mã của request khác.</span></span>
@@ -881,6 +965,27 @@ request chậm  giữ 1/1 (100%)</div>
 <div class="link-card exphub">
   <a href="/exp-hub${REF}"><span class="lc-t">Exp Hub · Log-reading commands on a VPS</span><span class="lc-d">docker logs, journalctl, grep + jq in practice</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Estimate your daily log volume from one request's log size times your request rate, and see how a verbose default balloons it.</li>
+<li>grep a large log file for one request id and time it, feeling how slow unindexed search gets.</li>
+<li>Add sampling for high-volume success logs while keeping 100% of errors, and estimate the new volume.</li>
+</ol>
+<p><strong>Done when:</strong> you estimated daily log volume, timed a grep over a big file, and designed a sampling rule that keeps all errors.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Log volume</span><span class="v">Bytes/day — scales with request rate and log size.</span></div>
+  <div class="kv"><span class="k">Sampling</span><span class="v">Keeping a fraction of high-volume logs to cut cost.</span></div>
+  <div class="kv"><span class="k">Keep-all-errors</span><span class="v">Sampling successes but never dropping errors.</span></div>
+  <div class="kv"><span class="k">Log search</span><span class="v">Finding one line among millions — slow without indexing.</span></div>
+  <div class="kv"><span class="k">Rotation</span><span class="v">Rolling log files so disk does not fill and cause an outage.</span></div>
+  <div class="kv"><span class="k">Level discipline</span><span class="v">Using levels consistently so they stay useful.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Log volume is bytes-per-request times request rate — a verbose default is costly.</li><li>Searching unindexed logs for one line is slow at scale.</li><li>Sampling high-volume success logs cuts cost while keeping 100% of errors.</li><li>Rotate logs or a full disk becomes an outage.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-2-xoay-vong" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 2.2: rotate, or the disk fills</span><span class="lc-sub">Measured here with a real container: max-size 1m × 2 files kept only 12,492 of 100,000 lines — rotate AND ship.</span></span>
@@ -1015,6 +1120,27 @@ request chậm  giữ 1/1 (100%)</div>
 <div class="link-card exphub">
   <a href="/exp-hub${REF}"><span class="lc-t">Exp Hub · Lệnh đọc log trên VPS</span><span class="lc-d">docker logs, journalctl, grep + jq trong thực tế</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Ước lượng dung lượng log mỗi ngày từ cỡ log một request nhân tần suất request, và xem một mặc định dài dòng làm nó phình thế nào.</li>
+<li>grep một file log lớn tìm một mã request và đo giờ, cảm nhận tìm kiếm không-chỉ-mục chậm thế nào.</li>
+<li>Thêm lấy mẫu cho log thành công khối lượng lớn mà vẫn giữ 100% lỗi, và ước lượng dung lượng mới.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn ước lượng dung lượng log ngày, đo một grep trên file lớn, và thiết kế một luật lấy mẫu giữ mọi lỗi.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Dung lượng log</span><span class="v">Byte/ngày — tỉ lệ với tần suất request và cỡ log.</span></div>
+  <div class="kv"><span class="k">Lấy mẫu (sampling)</span><span class="v">Giữ một phần log khối lượng lớn để cắt chi phí.</span></div>
+  <div class="kv"><span class="k">Giữ-mọi-lỗi</span><span class="v">Lấy mẫu thành công nhưng không bao giờ bỏ lỗi.</span></div>
+  <div class="kv"><span class="k">Tìm kiếm log</span><span class="v">Tìm một dòng trong triệu — chậm nếu không chỉ mục.</span></div>
+  <div class="kv"><span class="k">Xoay vòng (rotation)</span><span class="v">Cuộn file log để đĩa không đầy và gây sự cố.</span></div>
+  <div class="kv"><span class="k">Kỷ luật level</span><span class="v">Dùng level nhất quán để chúng còn hữu ích.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Dung lượng log là byte-mỗi-request nhân tần suất — một mặc định dài dòng rất tốn.</li><li>Tìm một dòng trong log không-chỉ-mục chậm ở quy mô lớn.</li><li>Lấy mẫu log thành công khối lượng lớn cắt chi phí mà vẫn giữ 100% lỗi.</li><li>Xoay vòng log hoặc một đĩa đầy thành một sự cố.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-2-xoay-vong" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 2.2: xoay vòng, hoặc là đĩa đầy</span><span class="lc-sub">Đo ở đây bằng container thật: max-size 1m × 2 tệp chỉ giữ 12.492 trên 100.000 dòng — xoay vòng VÀ gửi đi.</span></span>
@@ -1178,6 +1304,27 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-618"><span class="lc-t">Code Lab · Advanced Observability and Distributed Tracing</span><span class="lc-d">Instrumenting a Node backend end to end</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Expose a <code>/metrics</code> endpoint with prom-client and scrape it to read a counter and a histogram.</li>
+<li>Instrument the RED metrics (Rate, Errors, Duration) for one route.</li>
+<li>Reproduce a cardinality explosion: put a high-cardinality value (like a user id or url with ids) in a label and watch the series count blow up; then move it out of the label.</li>
+</ol>
+<p><strong>Done when:</strong> you exposed /metrics, recorded RED metrics, and saw (then fixed) a cardinality explosion.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Metric</span><span class="v">A numeric time series describing system behaviour.</span></div>
+  <div class="kv"><span class="k">Counter / histogram</span><span class="v">A monotonic count vs a distribution of values.</span></div>
+  <div class="kv"><span class="k">prom-client</span><span class="v">The Node library exposing Prometheus metrics.</span></div>
+  <div class="kv"><span class="k">Label</span><span class="v">A dimension on a metric — must be low-cardinality.</span></div>
+  <div class="kv"><span class="k">Cardinality explosion</span><span class="v">Too many label values creating huge memory use.</span></div>
+  <div class="kv"><span class="k">RED method</span><span class="v">Rate, Errors, Duration — a small, useful metric set.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Metrics are numeric time series; counters count, histograms describe distributions.</li><li>The RED method (Rate, Errors, Duration) covers most of what you need.</li><li>Labels must be low-cardinality — an id in a label explodes memory.</li><li>Keep unbounded values out of labels; protect the /metrics endpoint.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-4-luc-luong-nhan" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 4.4: label cardinality</span><span class="lc-sub">Measured here with prom-client: a raw-URL label made /metrics 40× bigger for the same 300 requests; 100,000 user ids held 1,494 MB.</span></span>
@@ -1332,6 +1479,27 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-618"><span class="lc-t">Code Lab · Advanced Observability and Distributed Tracing</span><span class="lc-d">Gắn đo đạc cho một backend Node từ đầu tới cuối</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Phơi một endpoint <code>/metrics</code> bằng prom-client và scrape nó để đọc một counter và một histogram.</li>
+<li>Gắn đo các metric RED (Rate, Errors, Duration) cho một route.</li>
+<li>Tái hiện một vụ nổ cardinality: bỏ một giá trị cardinality cao (như một user id hay url chứa id) vào một nhãn và xem số chuỗi bùng nổ; rồi đưa nó ra khỏi nhãn.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn phơi /metrics, ghi các metric RED, và thấy (rồi sửa) một vụ nổ cardinality.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Metric</span><span class="v">Một chuỗi thời gian số mô tả hành vi hệ thống.</span></div>
+  <div class="kv"><span class="k">Counter / histogram</span><span class="v">Một đếm đơn điệu vs một phân bố giá trị.</span></div>
+  <div class="kv"><span class="k">prom-client</span><span class="v">Thư viện Node phơi metric Prometheus.</span></div>
+  <div class="kv"><span class="k">Nhãn (label)</span><span class="v">Một chiều trên một metric — phải cardinality thấp.</span></div>
+  <div class="kv"><span class="k">Nổ cardinality</span><span class="v">Quá nhiều giá trị nhãn tạo dùng bộ nhớ khổng lồ.</span></div>
+  <div class="kv"><span class="k">Phương pháp RED</span><span class="v">Rate, Errors, Duration — một bộ metric nhỏ, hữu ích.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Metric là chuỗi thời gian số; counter đếm, histogram mô tả phân bố.</li><li>Phương pháp RED (Rate, Errors, Duration) bao phần lớn thứ bạn cần.</li><li>Nhãn phải cardinality thấp — một id trong nhãn làm nổ bộ nhớ.</li><li>Giữ giá trị không giới hạn ngoài nhãn; bảo vệ endpoint /metrics.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-4-luc-luong-nhan" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 4.4: lực lượng nhãn</span><span class="lc-sub">Đo ở đây với prom-client: nhãn URL thô làm /metrics to gấp 40 lần cho cùng 300 request; 100.000 mã người dùng giữ 1.494 MB.</span></span>
@@ -1514,6 +1682,27 @@ span.end();</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-618"><span class="lc-t">Code Lab · Advanced Observability and Distributed Tracing</span><span class="lc-d">OpenTelemetry on a real Express + pg service</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Turn on OpenTelemetry auto-instrumentation for Express and pg and view one request as a span tree.</li>
+<li>Find an N+1 in the span tree that no single log line reveals.</li>
+<li>Add a manual span around a block auto-instrumentation does not cover, and measure the throughput cost of tracing.</li>
+</ol>
+<p><strong>Done when:</strong> you saw a request as spans, spotted an N+1 in the trace, added a manual span, and measured tracing overhead.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Trace</span><span class="v">The end-to-end record of one request across components.</span></div>
+  <div class="kv"><span class="k">Span</span><span class="v">One timed unit of work within a trace.</span></div>
+  <div class="kv"><span class="k">Auto-instrumentation</span><span class="v">Libraries patched to emit spans automatically.</span></div>
+  <div class="kv"><span class="k">OpenTelemetry</span><span class="v">A vendor-neutral tracing/metrics standard.</span></div>
+  <div class="kv"><span class="k">Span tree</span><span class="v">The nested spans showing where time went.</span></div>
+  <div class="kv"><span class="k">Trace-log correlation</span><span class="v">Linking logs to the trace they belong to.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A trace is the span tree of one request, showing where the time actually went.</li><li>Auto-instrumentation patches Express and pg to emit spans for free.</li><li>A trace reveals an N+1 that no single log line would show.</li><li>Tracing has a real throughput cost; add manual spans where auto stops.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-6-2-otel-trong-node" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 6.2: OpenTelemetry in Node</span><span class="lc-sub">This lesson runs it on today’s 3.x packages: one request = 33 spans with 12 pg.query (N+1 by shape), and three silent setup traps that give 0 spans.</span></span>
@@ -1692,6 +1881,27 @@ span.end();</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-618"><span class="lc-t">Code Lab · Advanced Observability and Distributed Tracing</span><span class="lc-d">OpenTelemetry trên một dịch vụ Express + pg thật</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Bật auto-instrumentation OpenTelemetry cho Express và pg và xem một request dưới dạng một cây span.</li>
+<li>Tìm một N+1 trong cây span mà không dòng log đơn lẻ nào tố cáo.</li>
+<li>Thêm một span thủ công quanh một khối mà auto-instrumentation không phủ, và đo chi phí throughput của trace.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy một request dưới dạng span, phát hiện một N+1 trong trace, thêm một span thủ công, và đo phụ phí trace.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Trace</span><span class="v">Bản ghi đầu-cuối của một request qua các thành phần.</span></div>
+  <div class="kv"><span class="k">Span</span><span class="v">Một đơn vị việc được bấm giờ trong một trace.</span></div>
+  <div class="kv"><span class="k">Auto-instrumentation</span><span class="v">Thư viện được vá để tự phát span.</span></div>
+  <div class="kv"><span class="k">OpenTelemetry</span><span class="v">Một chuẩn trace/metric trung lập nhà cung cấp.</span></div>
+  <div class="kv"><span class="k">Cây span</span><span class="v">Các span lồng nhau cho thấy thời gian đi đâu.</span></div>
+  <div class="kv"><span class="k">Nối trace-log</span><span class="v">Liên kết log với trace mà chúng thuộc về.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một trace là cây span của một request, cho thấy thời gian thật sự đi đâu.</li><li>Auto-instrumentation vá Express và pg để phát span miễn phí.</li><li>Một trace phơi bày một N+1 mà không dòng log đơn lẻ nào cho thấy.</li><li>Trace có một chi phí throughput thật; thêm span thủ công nơi auto dừng.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-6-2-otel-trong-node" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 6.2: OpenTelemetry trong Node</span><span class="lc-sub">Bài này chạy trên bộ gói 3.x hôm nay: một request = 33 span với 12 pg.query (N+1 qua hình dạng), và ba bẫy cài đặt im lặng cho 0 span.</span></span>
@@ -1828,6 +2038,27 @@ app.get('/health/ready', async (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-991"><span class="lc-t">Code Lab · Alerting &amp; On-Call</span><span class="lc-d">Thresholds, runbooks and keeping alerts trustworthy</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write separate liveness and readiness checks, and give the readiness DB check a timeout so a slow DB cannot hang it.</li>
+<li>Show how a readiness check that fails on a brief DB blip can take down a healthy app, and choose what belongs in each check.</li>
+<li>Define one alert tied to a user-facing symptom (from the golden signals) rather than a raw internal metric.</li>
+</ol>
+<p><strong>Done when:</strong> you have distinct liveness/readiness checks with a timeout, and one symptom-based alert.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Liveness</span><span class="v">Is the process alive and should it be restarted?</span></div>
+  <div class="kv"><span class="k">Readiness</span><span class="v">Is it ready to receive traffic right now?</span></div>
+  <div class="kv"><span class="k">Health-check timeout</span><span class="v">A bound so a slow dependency cannot hang the check.</span></div>
+  <div class="kv"><span class="k">Golden signals</span><span class="v">Latency, traffic, errors, saturation.</span></div>
+  <div class="kv"><span class="k">Alert fatigue</span><span class="v">Too many alerts, so responders stop trusting them.</span></div>
+  <div class="kv"><span class="k">Symptom-based alert</span><span class="v">Alerting on user-facing pain, not raw internals.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Liveness and readiness answer two different questions — do not merge them.</li><li>A readiness check that fails on a brief DB blip can take down a healthy app.</li><li>Give every health check a timeout so a slow dependency cannot hang it.</li><li>Alert on symptoms (the golden signals), and measure how many alerts you ignore.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-8-2-tu-ban-vao-chan" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 8.2: the liveness probe that restarts a healthy service</span><span class="lc-sub">Measured here: a database that accepts and never answers — 503 in 809 ms with connectionTimeoutMillis: 800, no answer at all without it.</span></span>
@@ -1955,6 +2186,27 @@ app.get('/health/ready', async (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-991"><span class="lc-t">Code Lab · Alerting &amp; On-Call</span><span class="lc-d">Ngưỡng, runbook và giữ cho cảnh báo còn đáng tin</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết kiểm liveness và readiness riêng, và cho phần kiểm DB của readiness một timeout để một DB chậm không treo nó.</li>
+<li>Chỉ ra một readiness check fail khi DB chớp nhoáng có thể hạ gục một app khoẻ mạnh, và chọn cái gì thuộc về mỗi kiểm.</li>
+<li>Định một cảnh báo gắn với một triệu chứng người dùng thấy (từ golden signals) thay vì một metric nội bộ thô.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có kiểm liveness/readiness riêng với một timeout, và một cảnh báo dựa trên triệu chứng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Liveness</span><span class="v">Tiến trình còn sống và có nên khởi động lại không?</span></div>
+  <div class="kv"><span class="k">Readiness</span><span class="v">Nó có sẵn sàng nhận lưu lượng ngay bây giờ không?</span></div>
+  <div class="kv"><span class="k">Timeout health-check</span><span class="v">Một chặn để một phụ thuộc chậm không treo kiểm.</span></div>
+  <div class="kv"><span class="k">Golden signals</span><span class="v">Độ trễ, lưu lượng, lỗi, bão hoà.</span></div>
+  <div class="kv"><span class="k">Mệt vì cảnh báo</span><span class="v">Quá nhiều cảnh báo, nên người trực thôi tin chúng.</span></div>
+  <div class="kv"><span class="k">Cảnh báo theo triệu chứng</span><span class="v">Báo theo nỗi đau người dùng thấy, không phải nội bộ thô.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Liveness và readiness trả lời hai câu khác nhau — đừng gộp chúng.</li><li>Một readiness check fail khi DB chớp nhoáng có thể hạ gục một app khoẻ.</li><li>Cho mọi health check một timeout để một phụ thuộc chậm không treo nó.</li><li>Cảnh báo theo triệu chứng (golden signals), và đo bạn bỏ qua bao nhiêu cảnh báo.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-8-2-tu-ban-vao-chan" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 8.2: liveness khởi động lại một dịch vụ khoẻ mạnh</span><span class="lc-sub">Đo ở đây: database nhận kết nối rồi im lặng — 503 sau 809 ms với connectionTimeoutMillis: 800, không có câu trả lời nào nếu thiếu nó.</span></span>

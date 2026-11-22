@@ -243,6 +243,27 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
   <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 2.5: moving off an old hash, without a reset</span><span class="lc-sub">Same: the parameters live in the stored string, so a successful login is the moment to rehash; bcrypt moves to argon2 the same way. Deeper: for broken hashes (unsalted MD5) waiting for logins is not enough — that lesson wraps all 1,003 rows in argon2id at once (17.1 s, no password needed), drops the old column in the same UPDATE, and shows how a leftover MD5 cost Ashley Madison 11 million passwords.</span></span>
   <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Hash a password with <code>argon2id</code> and verify it; then hash the same password twice and note the two hashes differ because of the salt.</li>
+<li>Measure timing: hash with a fast function (like a plain SHA) versus argon2id and compare how many guesses per second each would allow an attacker.</li>
+<li>Reproduce the account-enumeration leak: make login reply faster for an unknown email than a wrong password, then equalise the responses.</li>
+</ol>
+<p><strong>Done when:</strong> you can hash and verify with argon2id, explain why salts defeat rainbow tables, and have closed a timing leak on login.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Password hash</span><span class="v">A one-way transform stored instead of the password.</span></div>
+  <div class="kv"><span class="k">argon2id</span><span class="v">A slow, memory-hard hashing function recommended for passwords.</span></div>
+  <div class="kv"><span class="k">Salt</span><span class="v">Random per-password data that makes precomputed tables useless.</span></div>
+  <div class="kv"><span class="k">Work factor</span><span class="v">A tunable cost making each guess expensive.</span></div>
+  <div class="kv"><span class="k">Rainbow table</span><span class="v">A precomputed hash lookup defeated by salting.</span></div>
+  <div class="kv"><span class="k">Account enumeration</span><span class="v">Leaking whether an email exists via responses or timing.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Store a slow, salted hash (argon2id), never the password or a fast hash.</li><li>A salt makes two equal passwords hash differently and kills rainbow tables.</li><li>The work factor must be high enough to make bulk guessing impractical.</li><li>Keep login responses uniform so you do not leak whether an email exists.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -459,6 +480,27 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 2.5: chuyển khỏi hàm băm cũ, không bắt đặt lại mật khẩu</span><span class="lc-sub">Giống: tham số nằm trong chuỗi lưu, nên lượt đăng nhập thành công là lúc băm lại; bcrypt chuyển sang argon2 cũng vậy. Sâu hơn: với hàm băm đã hỏng (MD5 không muối) chờ đăng nhập là chưa đủ — bài đó bọc cả 1.003 dòng trong argon2id một lượt (17,1 s, không cần mật khẩu), xoá cột cũ trong cùng câu UPDATE, và cho thấy một MD5 sót lại đã làm Ashley Madison mất 11 triệu mật khẩu.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Băm một mật khẩu bằng <code>argon2id</code> và xác minh nó; rồi băm cùng mật khẩu hai lần và ghi rằng hai hash khác nhau vì muối.</li>
+<li>Đo thời gian: băm bằng một hàm nhanh (như SHA trần) so với argon2id và so mỗi cái cho kẻ tấn công bao nhiêu lần đoán mỗi giây.</li>
+<li>Tái hiện lỗ dò tài khoản: làm login trả nhanh hơn với email lạ so với mật khẩu sai, rồi làm hai phản hồi bằng nhau.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn băm và xác minh được bằng argon2id, giải thích vì sao muối đánh bại rainbow table, và đã bịt lỗ dò thời gian ở login.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Băm mật khẩu</span><span class="v">Một phép biến đổi một chiều lưu thay cho mật khẩu.</span></div>
+  <div class="kv"><span class="k">argon2id</span><span class="v">Một hàm băm chậm, nặng bộ nhớ, được khuyến nghị cho mật khẩu.</span></div>
+  <div class="kv"><span class="k">Muối (salt)</span><span class="v">Dữ liệu ngẫu nhiên theo từng mật khẩu làm bảng dựng sẵn vô dụng.</span></div>
+  <div class="kv"><span class="k">Hệ số công</span><span class="v">Một chi phí chỉnh được làm mỗi lần đoán trở nên đắt.</span></div>
+  <div class="kv"><span class="k">Rainbow table</span><span class="v">Một bảng tra hash dựng sẵn bị muối đánh bại.</span></div>
+  <div class="kv"><span class="k">Dò tài khoản</span><span class="v">Lộ việc một email có tồn tại không qua phản hồi hoặc thời gian.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Lưu một hash chậm, có muối (argon2id), không bao giờ lưu mật khẩu hay hash nhanh.</li><li>Muối làm hai mật khẩu giống nhau băm khác nhau và giết rainbow table.</li><li>Hệ số công phải đủ cao để việc đoán hàng loạt là bất khả thi.</li><li>Giữ phản hồi login đồng nhất để không lộ việc một email có tồn tại.</li></ul>
 </div>
 
 <div class="ml-en">
@@ -739,6 +781,27 @@ thử lại với token mới: HTTP 200  {"items":[{"id":1,"title":"Ghi chu cua 
   <span class="lc-body"><span class="lc-title">You met this in the API Design course — lesson 6.1 — Authentication: sessions, JWT, API keys, OAuth — built and attacked</span><span class="lc-sub">If you took the API Design course, this part will feel familiar. Same: an HS256 access token valid for 15 minutes (900 seconds), forged and alg-none tokens refused. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: the token taken apart by hand, decode vs verify, issuer/audience pinned, and refresh tokens with rotation stored as SHA-256 in PostgreSQL. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN API DESIGN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Decode a JWT by hand (base64 the header and payload) and confirm the payload is readable — not encrypted, only signed.</li>
+<li>Try three attacks: edit the payload, then <code>decode</code> instead of <code>verify</code>, then set the algorithm to <code>none</code> — and show verification rejects each.</li>
+<li>Issue an access + refresh pair, then rotate the refresh token on use so a reused old token is detected as theft.</li>
+</ol>
+<p><strong>Done when:</strong> you have taken a JWT apart, defeated three forgery attempts with verify, and implemented refresh rotation.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">JWT</span><span class="v">A signed token carrying claims the server can trust.</span></div>
+  <div class="kv"><span class="k">Signed, not encrypted</span><span class="v">Anyone can read a JWT payload; only the server can forge it.</span></div>
+  <div class="kv"><span class="k">verify vs decode</span><span class="v">verify checks the signature; decode just reads it.</span></div>
+  <div class="kv"><span class="k">alg: none attack</span><span class="v">A forged token claiming no signature — must be rejected.</span></div>
+  <div class="kv"><span class="k">Access token</span><span class="v">A short-lived token sent on every request.</span></div>
+  <div class="kv"><span class="k">Refresh token + rotation</span><span class="v">A longer-lived token, replaced on use to detect theft.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A JWT is signed, not encrypted — the payload is readable, so never put secrets in it.</li><li>Always verify the signature; decoding alone trusts a forgeable token.</li><li>Reject the alg:none trick and pin the expected algorithm.</li><li>Short access tokens plus rotating refresh tokens let you detect a stolen token.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -988,6 +1051,27 @@ thử lại với token mới: HTTP 200  {"items":[{"id":1,"title":"Ghi chu cua 
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá API Design — bài 6.1 — Xác thực: session, JWT, API key, OAuth — tự dựng rồi tự tấn công</span><span class="lc-sub">Nếu bạn đã học khoá API Design thì phần này không còn lạ. Giống: access token HS256 sống 15 phút (900 giây), token giả và token alg none bị từ chối. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: mổ token bằng tay, decode và verify, chốt issuer/audience, và refresh token xoay vòng lưu dạng SHA-256 trong PostgreSQL. Chưa học khoá API Design cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI API DESIGN →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Giải mã một JWT bằng tay (base64 phần header và payload) và xác nhận payload đọc được — không mã hoá, chỉ ký.</li>
+<li>Thử ba đòn: sửa payload, rồi <code>decode</code> thay vì <code>verify</code>, rồi đặt thuật toán thành <code>none</code> — và chỉ ra verify từ chối từng cái.</li>
+<li>Phát một cặp access + refresh, rồi xoay refresh token khi dùng để một token cũ bị dùng lại bị phát hiện là đánh cắp.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã mổ xẻ một JWT, đánh bại ba nỗ lực giả mạo bằng verify, và hiện thực xoay refresh.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">JWT</span><span class="v">Một token đã ký mang các claim mà server tin được.</span></div>
+  <div class="kv"><span class="k">Ký, không mã hoá</span><span class="v">Ai cũng đọc được payload JWT; chỉ server giả mạo được.</span></div>
+  <div class="kv"><span class="k">verify vs decode</span><span class="v">verify kiểm chữ ký; decode chỉ đọc.</span></div>
+  <div class="kv"><span class="k">Đòn alg: none</span><span class="v">Một token giả tự nhận không chữ ký — phải bị từ chối.</span></div>
+  <div class="kv"><span class="k">Access token</span><span class="v">Một token sống ngắn gửi theo mọi request.</span></div>
+  <div class="kv"><span class="k">Refresh token + xoay</span><span class="v">Một token sống lâu hơn, thay khi dùng để phát hiện đánh cắp.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>JWT được ký, không mã hoá — payload đọc được, nên đừng bao giờ bỏ bí mật vào đó.</li><li>Luôn verify chữ ký; chỉ decode là tin một token giả mạo được.</li><li>Từ chối trò alg:none và ghim thuật toán mong đợi.</li><li>Access token ngắn cộng refresh token xoay vòng giúp phát hiện token bị đánh cắp.</li></ul>
 </div>
 `,
     },
@@ -1194,6 +1278,27 @@ authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
   <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 9.5 — Where the check lives, and how to make forgetting impossible</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: putting the permission check in one place so that forgetting it is impossible. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: actor as the first parameter of every service function, one canTouch, the IDOR hole run for real and closed, and a test of the rule with no HTTP request. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a <code>requireAuth</code> middleware that extracts the token, verifies it, loads the user, and returns 401 on every failure path.</li>
+<li>Add a role check that returns <code>403</code> (authenticated but not allowed), keeping it separate from 401.</li>
+<li>Delete the hard-coded <code>AUTHOR_ID = 1</code> in the Notes API and use <code>req.user.id</code> so notes belong to the real caller.</li>
+</ol>
+<p><strong>Done when:</strong> requireAuth handles every failure with 401, role checks return 403, and notes now belong to the authenticated user.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">requireAuth</span><span class="v">Middleware that authenticates a request before the handler.</span></div>
+  <div class="kv"><span class="k">401 vs 403</span><span class="v">Not authenticated vs authenticated but not permitted.</span></div>
+  <div class="kv"><span class="k">Bearer token</span><span class="v">A token sent in the Authorization header.</span></div>
+  <div class="kv"><span class="k">Role check</span><span class="v">Authorizing an action based on the user's role.</span></div>
+  <div class="kv"><span class="k">req.user</span><span class="v">The authenticated user attached for handlers to use.</span></div>
+  <div class="kv"><span class="k">Ownership</span><span class="v">Acting on the caller's own data, not a hard-coded id.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>requireAuth extracts and verifies the token, loads the user, and 401s on any failure.</li><li>401 means not authenticated; a role/permission failure is 403 — keep them distinct.</li><li>Replacing the hard-coded AUTHOR_ID with req.user.id ties data to the real caller.</li><li>Put the authorization rule in one place so it cannot be forgotten on a route.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1384,6 +1489,27 @@ authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 9.5 — Phép kiểm nằm ở đâu, và làm sao để KHÔNG THỂ quên</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: đặt phép kiểm quyền ở một chỗ để không thể quên. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: actor là tham số đầu tiên của mọi hàm service, một canTouch, lỗ IDOR chạy thật rồi đóng, và test quy tắc không cần request HTTP nào. Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một middleware <code>requireAuth</code> rút token, verify nó, nạp user, và trả 401 ở mọi nhánh thất bại.</li>
+<li>Thêm một kiểm vai trò trả <code>403</code> (đã xác thực nhưng không được phép), giữ tách khỏi 401.</li>
+<li>Xoá <code>AUTHOR_ID = 1</code> cứng trong Notes API và dùng <code>req.user.id</code> để note thuộc về người gọi thật.</li>
+</ol>
+<p><strong>Đạt khi:</strong> requireAuth xử lý mọi thất bại bằng 401, kiểm vai trò trả 403, và note giờ thuộc về người dùng đã xác thực.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">requireAuth</span><span class="v">Middleware xác thực một request trước handler.</span></div>
+  <div class="kv"><span class="k">401 vs 403</span><span class="v">Chưa xác thực vs đã xác thực nhưng không được phép.</span></div>
+  <div class="kv"><span class="k">Bearer token</span><span class="v">Một token gửi trong header Authorization.</span></div>
+  <div class="kv"><span class="k">Kiểm vai trò</span><span class="v">Phân quyền một hành động theo vai trò người dùng.</span></div>
+  <div class="kv"><span class="k">req.user</span><span class="v">Người dùng đã xác thực gắn vào cho handler dùng.</span></div>
+  <div class="kv"><span class="k">Quyền sở hữu</span><span class="v">Tác động lên dữ liệu của chính người gọi, không phải một id cứng.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>requireAuth rút và verify token, nạp user, và trả 401 ở bất kỳ thất bại nào.</li><li>401 là chưa xác thực; thất bại vai trò/quyền là 403 — giữ chúng tách biệt.</li><li>Thay AUTHOR_ID cứng bằng req.user.id buộc dữ liệu vào người gọi thật.</li><li>Đặt luật phân quyền ở một chỗ để không thể quên trên một route.</li></ul>
 </div>
 `,
     },
@@ -1579,6 +1705,27 @@ email KHÁC từ cùng IP        : HTTP 200</div>
   <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 3.1: one sessions table, and what every column is for</span><span class="lc-sub">Same: a cookie the browser sends by itself, and the need to revoke. Deeper: the session is a row, so revocation is one DELETE (sign out everywhere ended 3 devices); idle 30 min and absolute 12 h measured with a fake clock; touching last_seen on every request cost 1,000 UPDATEs for 1,000 reads, once a minute cost 0. If you have not taken it, this lesson stands on its own.</span></span>
   <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Set an auth cookie with <code>httpOnly</code>, <code>Secure</code> and <code>SameSite</code> and explain what each flag stops.</li>
+<li>Demonstrate CSRF against a cookie-auth endpoint, then block it with SameSite and/or a CSRF token.</li>
+<li>Implement logout-everywhere with a <code>tokenVersion</code> counter, and rate-limit the login endpoint.</li>
+</ol>
+<p><strong>Done when:</strong> you set the three cookie flags correctly, blocked a CSRF demo, and revoked all sessions via tokenVersion.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">httpOnly / Secure / SameSite</span><span class="v">Cookie flags against XSS theft, plain HTTP, and CSRF.</span></div>
+  <div class="kv"><span class="k">CSRF</span><span class="v">Forcing a logged-in browser to make an unwanted request.</span></div>
+  <div class="kv"><span class="k">CSRF token</span><span class="v">A per-form secret that a forged request cannot know.</span></div>
+  <div class="kv"><span class="k">tokenVersion</span><span class="v">A counter bumped to invalidate all existing sessions.</span></div>
+  <div class="kv"><span class="k">Revocation</span><span class="v">Making issued tokens stop working (logout everywhere).</span></div>
+  <div class="kv"><span class="k">Rate limiting</span><span class="v">Capping attempts on sensitive endpoints like login.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Cookie flags matter: httpOnly blocks JS theft, Secure requires HTTPS, SameSite curbs CSRF.</li><li>CSRF makes a logged-in browser act unintentionally — stop it with SameSite or a token.</li><li>A tokenVersion counter lets you revoke all sessions (logout everywhere).</li><li>Rate-limit login so password guessing is throttled.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1758,6 +1905,27 @@ email KHÁC từ cùng IP        : HTTP 200</div>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 3.1: một bảng phiên, và mỗi cột để làm gì</span><span class="lc-sub">Giống: cookie trình duyệt tự gửi, và nhu cầu thu hồi. Sâu hơn: phiên là một dòng, nên thu hồi là một DELETE (đăng xuất mọi nơi kết thúc 3 thiết bị); nhàn rỗi 30 phút và tuyệt đối 12 giờ đo bằng đồng hồ giả; chạm last_seen ở mọi request tốn 1.000 UPDATE cho 1.000 lần đọc, mỗi phút một lần thì 0. Chưa học khoá đó thì bài này vẫn tự đứng được.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đặt một cookie xác thực với <code>httpOnly</code>, <code>Secure</code> và <code>SameSite</code> và giải thích mỗi cờ chặn gì.</li>
+<li>Trình diễn CSRF lên một endpoint xác thực bằng cookie, rồi chặn nó bằng SameSite và/hoặc một token CSRF.</li>
+<li>Hiện thực đăng-xuất-mọi-nơi bằng một bộ đếm <code>tokenVersion</code>, và chặn tần suất endpoint login.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đặt đúng ba cờ cookie, chặn một demo CSRF, và thu hồi mọi phiên qua tokenVersion.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">httpOnly / Secure / SameSite</span><span class="v">Các cờ cookie chống trộm qua XSS, HTTP trần, và CSRF.</span></div>
+  <div class="kv"><span class="k">CSRF</span><span class="v">Ép một trình duyệt đã đăng nhập gửi một request ngoài ý muốn.</span></div>
+  <div class="kv"><span class="k">Token CSRF</span><span class="v">Một bí mật theo từng form mà request giả không thể biết.</span></div>
+  <div class="kv"><span class="k">tokenVersion</span><span class="v">Một bộ đếm tăng để vô hiệu mọi phiên hiện có.</span></div>
+  <div class="kv"><span class="k">Thu hồi</span><span class="v">Làm các token đã phát ngừng hoạt động (đăng xuất mọi nơi).</span></div>
+  <div class="kv"><span class="k">Chặn tần suất</span><span class="v">Giới hạn số lần thử trên các endpoint nhạy cảm như login.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cờ cookie quan trọng: httpOnly chặn trộm bằng JS, Secure đòi HTTPS, SameSite ghìm CSRF.</li><li>CSRF làm một trình duyệt đã đăng nhập hành động ngoài ý — chặn bằng SameSite hoặc một token.</li><li>Một bộ đếm tokenVersion cho bạn thu hồi mọi phiên (đăng xuất mọi nơi).</li><li>Chặn tần suất login để việc dò mật khẩu bị ghìm lại.</li></ul>
 </div>
 
 <div class="ml-en">

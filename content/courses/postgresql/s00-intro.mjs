@@ -52,7 +52,7 @@ ${G001}
 <div class="kv-grid">
   <div class="kv"><span class="k">Who &amp; when</span><span class="v">Berkeley, Michael Stonebraker's POSTGRES from 1986; open-sourced as PostgreSQL in 1996. Free forever, no owner.</span></div>
   <div class="kv"><span class="k">What it is</span><span class="v">A relational database server (an "object-relational" one) that you talk to over the network using SQL.</span></div>
-  <div class="kv"><span class="k">Where it's used</span><span class="v">Apple, Instagram, Reddit, Spotify — and this site's entire backend. The default choice for new serious apps.</span></div>
+  <div class="kv"><span class="k">Where it's used</span><span class="v">ChatGPT, Notion, Figma, Instagram (sources below) — and this site's entire backend. The default choice for new serious apps.</span></div>
   <div class="kv"><span class="k">Why learn it</span><span class="v">"PostgreSQL" and "SQL" are near the top of nearly every backend job listing; and the skills transfer to every SQL database.</span></div>
 </div>
 
@@ -95,6 +95,47 @@ ${G001}
 <div class="callout ok">Time budget: roughly <strong>2–3 hours per chapter</strong> if you type every query and run it yourself. 16 chapters ≈ 40–50 hours to genuinely absorb. The goal is not to finish — it's to reach the point where you can look at a slow query, read its plan, and know exactly what to fix.</div>
 <div class="note-ct">This site (cuongthai.com) runs on PostgreSQL 16 in production: roughly 248 tables, 95 migrations, a 6,980-line schema, storing every user, post, message, course and note you see. When a chapter says "here's how it's done in production", it means <em>here</em> — including the real connection-pool math (12 clients × pool 10 = 120 &gt; the 100-connection limit) that Chapter 14 dissects.</div>
 <div class="pitfall"><p><strong>Trap — treating the database as a detail you can swap later.</strong> "We will start with SQLite and move to Postgres when we grow" sounds prudent and is usually the most expensive decision in the project. Chapter 18 of the Node.js course makes the point in one line: <em>data outlives code</em>. You can replace every service, every framework and every language while the schema stays; you cannot replace the schema while the data stays. Migrating a live database is a one-way door with downtime, dual writes and a backfill — measured in weeks. Choosing PostgreSQL on day one costs nothing extra, because the free tier of every host offers it and the SQL you write is more portable, not less.</p></div>
+<h3>Beyond MySQL and SQLite: SQL Server, Oracle and MongoDB</h3>
+<p>At an FPT university you meet <strong>SQL Server</strong> first (DBI202, PRJ301), and job ads also mention Oracle and MongoDB. How they relate to PostgreSQL:</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SQL Server</span><span class="v">Microsoft's commercial relational database. Same relational model and almost the same SQL; differences are in dialect (<code>TOP</code> vs <code>LIMIT</code>, <code>IDENTITY</code>, T-SQL vs PL/pgSQL), licensing and tooling. Lesson 0.5 maps your SQL Server habits one by one.</span></div>
+  <div class="kv"><span class="k">Oracle Database</span><span class="v">The long-time enterprise standard in banks and telecoms, commercial and expensive. PostgreSQL is the usual open-source destination when companies migrate off it, because its feature set (PL/pgSQL, sequences, rich types) is the closest.</span></div>
+  <div class="kv"><span class="k">MongoDB</span><span class="v">Not relational: it stores JSON-like documents without a fixed schema. PostgreSQL covers many of the same needs with <code>jsonb</code> plus real joins and transactions — Chapter 17 runs the same workload on both so you can decide with evidence, not slogans.</span></div>
+  <div class="kv"><span class="k">Prisma / ORM</span><span class="v">Not a database at all: a library in your Node.js app that writes SQL for you. It runs <em>on</em> PostgreSQL; when the ORM's query is slow, this course is what lets you see why.</span></div>
+</div>
+
+<h3>What you need before this course</h3>
+<ul>
+<li><strong>No database experience is required</strong> — Chapters 1–4 start from tables and <code>SELECT</code>. If you have taken <a href="/courses/introduction-to-databases">DBI202 on Academy</a> (SQL Server), you will move faster and lesson 0.5 translates what you know.</li>
+<li><strong>A terminal</strong> — you run <code>psql</code> and Docker commands in every chapter. <a href="/courses/linux-bash">Linux &amp; Bash</a> helps if the command line is new; <a href="/courses/docker">Docker</a> is optional (lesson 0.3 gives the one command you need).</li>
+<li><strong>A little code in any language</strong> — only for the application chapters (14, 16); <a href="/courses/nodejs">Node.js</a> is the language used there.</li>
+</ul>
+
+<h3>After this course: what you can do, and which jobs it opens</h3>
+<ul>
+<li>Design a schema with the right types and constraints so bad data cannot get in, and change it safely with migrations.</li>
+<li>Write the queries real products need — joins, aggregates, CTEs, window functions, JSONB and full-text search — and read <code>EXPLAIN ANALYZE</code> to make a slow one fast with the right index.</li>
+<li>Reason about transactions, isolation and locks so two users cannot double-book or double-spend; run backups, restores and a read replica; size a connection pool.</li>
+</ul>
+<p>Roles that ask for exactly this: <strong>Backend Developer</strong> (Node.js, Spring Boot, .NET — nearly every backend ad lists SQL and a relational database), <strong>Fullstack Developer</strong>, and later <strong>Database / Data Engineer</strong> or <strong>DevOps / SRE</strong> for the operating chapters. In technical interviews, "explain this query plan" and "which isolation level and why" separate a junior who memorised SQL from one who understands it.</p>
+
+<h3>Real systems that run on PostgreSQL — in the companies' own words</h3>
+<ul>
+<li><strong>OpenAI (ChatGPT)</strong> — engineering post <a href="https://openai.com/index/scaling-postgresql/" target="_blank" rel="noopener">"Scaling PostgreSQL to power 800 million ChatGPT users"</a> (22/01/2026): ChatGPT and the API run on PostgreSQL with a single primary and nearly 50 read replicas across regions.</li>
+<li><strong>Notion</strong> — <a href="https://www.notion.com/blog/sharding-postgres-at-notion" target="_blank" rel="noopener">"Herding elephants: Lessons learned from sharding Postgres at Notion"</a> (06/10/2021): the Postgres monolith split into 480 logical shards on 32 physical databases.</li>
+<li><strong>Figma</strong> — <a href="https://www.figma.com/blog/how-figmas-databases-team-lived-to-tell-the-scale/" target="_blank" rel="noopener">"How Figma's databases team lived to tell the scale"</a> (14/03/2024): RDS Postgres, a database stack that grew almost 100× since 2020, sharded horizontally in-house.</li>
+<li><strong>Instagram</strong> — Instagram Engineering, <a href="https://instagram-engineering.com/1cf5a71e5a5c" target="_blank" rel="noopener">"Sharding &amp; IDs at Instagram"</a> (2012): Django on PostgreSQL, thousands of logical shards, IDs generated inside PostgreSQL.</li>
+</ul>
+<p>Notice the pattern: all four began on one PostgreSQL server and stayed with PostgreSQL as they grew. Chapters 9–15 teach the same tools they describe — indexes, plans, pooling, replicas, partitioning — at the scale you will actually meet first.</p>
+
+<h3>Course map: before, alongside and after — for a Node.js major</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Before (optional)</span><span class="lz-d"><a href="/courses/introduction-to-databases">DBI202</a> · <a href="/courses/linux-bash">Linux &amp; Bash</a></span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Alongside</span><span class="lz-d"><a href="/courses/nodejs">Node.js</a> (Chapter 7 uses this database through Prisma) · <a href="/courses/prisma-orm">Prisma ORM</a></span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">After</span><span class="lz-d"><a href="/courses/redis">Redis</a> · <a href="/courses/api-design">API design</a> · <a href="/courses/spring-boot">Spring Boot</a> (JPA on the same PostgreSQL) · <a href="/courses/docker">Docker</a></span></div>
+</div>
+<p><strong>What it adds to a Node.js major.</strong> <a href="/courses/server-side-development-nodejs-express-mongodb">SDN302</a> teaches Node with MongoDB; most Node.js jobs and this site itself use Node with PostgreSQL. The Node.js course shows how to call the database; this course shows what happens inside it — why a Prisma query does N+1 round-trips, why a missing index turns 2 ms into 2 s, why two requests can both book the last seat. That is the knowledge that makes your WDP301/SWP391 backend correct under load, not just working on your laptop.</p>
+
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice track: PostgreSQL on Code Lab</span><span class="lc-sub">Hands-on SQL exercises with solutions — the companion drills for this course.</span></span>
@@ -130,7 +171,7 @@ ${G001}
 <div class="kv-grid">
   <div class="kv"><span class="k">Ai &amp; khi nào</span><span class="v">Berkeley, dự án POSTGRES của Michael Stonebraker từ 1986; mở nguồn thành PostgreSQL năm 1996. Miễn phí mãi mãi, không chủ sở hữu.</span></div>
   <div class="kv"><span class="k">Nó là gì</span><span class="v">Một máy chủ cơ sở dữ liệu quan hệ (chính xác là "đối tượng-quan hệ") mà bạn nói chuyện qua mạng bằng SQL.</span></div>
-  <div class="kv"><span class="k">Dùng ở đâu</span><span class="v">Apple, Instagram, Reddit, Spotify — và toàn bộ backend của trang này. Lựa chọn mặc định cho ứng dụng nghiêm túc mới.</span></div>
+  <div class="kv"><span class="k">Dùng ở đâu</span><span class="v">ChatGPT, Notion, Figma, Instagram (nguồn ở bên dưới) — và toàn bộ backend của trang này. Lựa chọn mặc định cho ứng dụng nghiêm túc mới.</span></div>
   <div class="kv"><span class="k">Vì sao học</span><span class="v">"PostgreSQL" và "SQL" nằm gần đầu hầu hết tin tuyển dụng backend; và kỹ năng chuyển được sang mọi cơ sở dữ liệu SQL khác.</span></div>
 </div>
 
@@ -173,6 +214,47 @@ ${G001}
 <div class="callout ok">Ngân sách thời gian: khoảng <strong>2–3 giờ mỗi chương</strong> nếu bạn gõ và tự chạy mọi truy vấn. 16 chương ≈ 40–50 giờ để thấm thật sự. Mục tiêu không phải "học cho xong" — mà là tới được điểm bạn nhìn một truy vấn chậm, đọc kế hoạch của nó, và biết chính xác cần sửa gì.</div>
 <div class="note-ct">Trang này (cuongthai.com) chạy trên PostgreSQL 16 ở production: khoảng 248 bảng, 95 migration, lược đồ 6.980 dòng, lưu mọi user, bài đăng, tin nhắn, khoá học và ghi chú bạn thấy. Khi một chương nói "đây là cách làm trong production", nghĩa là <em>ở đây</em> — kể cả bài toán connection-pool thật (12 client × pool 10 = 120 &gt; giới hạn 100 kết nối) mà Chương 14 mổ xẻ.</div>
 <div class="pitfall"><p><strong>Bẫy — coi cơ sở dữ liệu là một chi tiết có thể thay sau.</strong> "Cứ bắt đầu bằng SQLite rồi lớn lên thì chuyển sang Postgres" nghe thận trọng và thường là quyết định ĐẮT NHẤT của cả dự án. Chương 18 khoá Node.js nói gọn trong một dòng: <em>dữ liệu sống lâu hơn mã</em>. Bạn thay được mọi service, mọi framework và mọi ngôn ngữ trong khi lược đồ vẫn ở đó; bạn KHÔNG thay được lược đồ trong khi dữ liệu vẫn ở đó. Di chuyển một cơ sở dữ liệu đang sống là một cánh cửa MỘT CHIỀU kèm downtime, ghi kép và một đợt nạp lại — đo bằng TUẦN. Chọn PostgreSQL ngay ngày đầu không tốn thêm gì, vì gói miễn phí của mọi nhà cung cấp đều có nó và SQL bạn viết còn khả chuyển HƠN, chứ không kém.</p></div>
+<h3>Ngoài MySQL và SQLite: SQL Server, Oracle và MongoDB</h3>
+<p>Ở FPT bạn gặp <strong>SQL Server</strong> trước tiên (DBI202, PRJ301), còn tin tuyển dụng lại nhắc cả Oracle và MongoDB. Quan hệ của chúng với PostgreSQL:</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SQL Server</span><span class="v">Cơ sở dữ liệu quan hệ thương mại của Microsoft. Cùng mô hình quan hệ, SQL gần như y hệt; khác ở phương ngữ (<code>TOP</code> vs <code>LIMIT</code>, <code>IDENTITY</code>, T-SQL vs PL/pgSQL), giấy phép và công cụ. Bài 0.5 đối chiếu từng thói quen SQL Server của bạn.</span></div>
+  <div class="kv"><span class="k">Oracle Database</span><span class="v">Chuẩn doanh nghiệp lâu năm ở ngân hàng, viễn thông; thương mại và đắt. Khi công ty rời Oracle, đích mã nguồn mở thường là PostgreSQL vì bộ tính năng (PL/pgSQL, sequence, kiểu dữ liệu phong phú) gần nhất.</span></div>
+  <div class="kv"><span class="k">MongoDB</span><span class="v">Không phải cơ sở dữ liệu quan hệ: lưu tài liệu dạng JSON không cần lược đồ cố định. PostgreSQL đáp ứng nhiều nhu cầu tương tự bằng <code>jsonb</code> mà vẫn có JOIN và giao dịch thật — Chương 17 chạy cùng một tải trên cả hai để bạn chọn bằng số đo, không bằng khẩu hiệu.</span></div>
+  <div class="kv"><span class="k">Prisma / ORM</span><span class="v">Không phải cơ sở dữ liệu: là thư viện trong app Node.js viết SQL giúp bạn. Nó chạy <em>trên</em> PostgreSQL; khi câu truy vấn ORM sinh ra bị chậm, khoá này cho bạn nhìn thấy vì sao.</span></div>
+</div>
+
+<h3>Cần biết gì trước khi học khoá này</h3>
+<ul>
+<li><strong>Không cần kinh nghiệm cơ sở dữ liệu</strong> — Chương 1–4 bắt đầu từ bảng và <code>SELECT</code>. Nếu đã học <a href="/courses/introduction-to-databases">DBI202 trên Academy</a> (SQL Server) thì bạn đi nhanh hơn, và bài 0.5 chuyển những gì bạn biết sang PostgreSQL.</li>
+<li><strong>Terminal</strong> — chương nào cũng chạy lệnh <code>psql</code> và Docker. Nếu dòng lệnh còn lạ, khoá <a href="/courses/linux-bash">Linux &amp; Bash</a> sẽ giúp; <a href="/courses/docker">Docker</a> không bắt buộc (bài 0.3 cho đúng một lệnh cần dùng).</li>
+<li><strong>Viết được chút code ở ngôn ngữ bất kỳ</strong> — chỉ cần cho các chương ứng dụng (14, 16); ngôn ngữ dùng ở đó là <a href="/courses/nodejs">Node.js</a>.</li>
+</ul>
+
+<h3>Học xong làm được gì, và mở ra vị trí việc làm nào</h3>
+<ul>
+<li>Thiết kế lược đồ với kiểu dữ liệu và ràng buộc đúng để dữ liệu sai không lọt vào, và đổi lược đồ an toàn bằng migration.</li>
+<li>Viết những truy vấn sản phẩm thật cần — JOIN, gom nhóm, CTE, hàm cửa sổ, JSONB, tìm kiếm toàn văn — và đọc <code>EXPLAIN ANALYZE</code> để biến câu chậm thành nhanh bằng đúng chỉ mục.</li>
+<li>Suy luận về giao dịch, mức cô lập và khoá để hai người không đặt trùng hay trừ tiền hai lần; sao lưu, khôi phục, dựng bản sao đọc; tính kích thước pool kết nối.</li>
+</ul>
+<p>Vị trí đòi đúng những thứ này: <strong>Backend Developer</strong> (Node.js, Spring Boot, .NET — gần như tin backend nào cũng ghi SQL và một cơ sở dữ liệu quan hệ), <strong>Fullstack Developer</strong>, và về sau <strong>Database / Data Engineer</strong> hoặc <strong>DevOps / SRE</strong> cho các chương vận hành. Trong phỏng vấn kỹ thuật, "giải thích kế hoạch truy vấn này" và "chọn mức cô lập nào, vì sao" là câu phân biệt người học thuộc SQL với người hiểu nó.</p>
+
+<h3>Hệ thống lớn thật đang chạy PostgreSQL — theo lời chính các công ty</h3>
+<ul>
+<li><strong>OpenAI (ChatGPT)</strong> — bài kỹ thuật <a href="https://openai.com/index/scaling-postgresql/" target="_blank" rel="noopener">"Scaling PostgreSQL to power 800 million ChatGPT users"</a> (22/01/2026): ChatGPT và API chạy trên PostgreSQL với một máy chủ chính và gần 50 bản sao đọc ở nhiều vùng.</li>
+<li><strong>Notion</strong> — <a href="https://www.notion.com/blog/sharding-postgres-at-notion" target="_blank" rel="noopener">"Herding elephants: Lessons learned from sharding Postgres at Notion"</a> (06/10/2021): khối Postgres nguyên khối được chia thành 480 shard logic trên 32 cơ sở dữ liệu vật lý.</li>
+<li><strong>Figma</strong> — <a href="https://www.figma.com/blog/how-figmas-databases-team-lived-to-tell-the-scale/" target="_blank" rel="noopener">"How Figma's databases team lived to tell the scale"</a> (14/03/2024): RDS Postgres, hệ cơ sở dữ liệu lớn gần 100 lần kể từ 2020, tự chia shard theo chiều ngang.</li>
+<li><strong>Instagram</strong> — Instagram Engineering, <a href="https://instagram-engineering.com/1cf5a71e5a5c" target="_blank" rel="noopener">"Sharding &amp; IDs at Instagram"</a> (2012): Django chạy trên PostgreSQL, hàng nghìn shard logic, ID sinh ngay trong PostgreSQL.</li>
+</ul>
+<p>Để ý điểm chung: cả bốn đều bắt đầu từ một máy chủ PostgreSQL và ở lại với PostgreSQL khi lớn lên. Chương 9–15 dạy đúng những công cụ họ kể — chỉ mục, kế hoạch truy vấn, pool, bản sao, phân vùng — ở quy mô bạn sẽ gặp trước tiên.</p>
+
+<h3>Bản đồ học: trước, song song và sau — cho người học chuyên ngành Node.js</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Trước (không bắt buộc)</span><span class="lz-d"><a href="/courses/introduction-to-databases">DBI202</a> · <a href="/courses/linux-bash">Linux &amp; Bash</a></span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Song song</span><span class="lz-d"><a href="/courses/nodejs">Node.js</a> (Chương 7 dùng chính cơ sở dữ liệu này qua Prisma) · <a href="/courses/prisma-orm">Prisma ORM</a></span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Sau</span><span class="lz-d"><a href="/courses/redis">Redis</a> · <a href="/courses/api-design">Thiết kế API</a> · <a href="/courses/spring-boot">Spring Boot</a> (JPA trên cùng PostgreSQL) · <a href="/courses/docker">Docker</a></span></div>
+</div>
+<p><strong>Khoá này bổ sung gì cho chuyên ngành Node.js.</strong> <a href="/courses/server-side-development-nodejs-express-mongodb">SDN302</a> dạy Node với MongoDB; còn phần lớn việc làm Node.js và chính trang này dùng Node với PostgreSQL. Khoá Node.js chỉ cách gọi cơ sở dữ liệu; khoá này cho thấy chuyện gì xảy ra bên trong nó — vì sao một truy vấn Prisma đi N+1 lượt, vì sao thiếu một chỉ mục biến 2 ms thành 2 s, vì sao hai request cùng đặt được chỗ cuối cùng. Đó là thứ làm backend WDP301/SWP391 của bạn đúng khi có tải thật, chứ không chỉ chạy được trên laptop.</p>
+
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Track thực hành: PostgreSQL trên Code Lab</span><span class="lc-sub">Bài tập SQL thực hành có lời giải — phần luyện tập đi kèm khoá này.</span></span>

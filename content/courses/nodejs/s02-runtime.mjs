@@ -78,6 +78,27 @@ node -p <span class="tok-string">"process.versions.uv"</span></code></pre>
   <span class="lc-body"><span class="lc-title">libuv — design overview</span><span class="lc-sub">What actually runs the event loop, and which operations go to the pool rather than the OS.</span></span>
 </a>
 
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Run <code>node -p "process.versions"</code> and point to the three parts the lesson named: V8, uv (libuv), and the Node version wrapping them.</li>
+<li>Explain in one sentence what "single-threaded" means here — and what libuv still does on other threads.</li>
+<li>Trace, in words, where an incoming HTTP request actually goes: JS on the main thread, then I/O handed to libuv, then the callback back on the loop.</li>
+</ol>
+<p><strong>Done when:</strong> you can name V8, libuv and the C++ bindings, and say precisely what single-threaded does and does not mean.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">V8</span><span class="v">The engine that compiles and runs your JavaScript.</span></div>
+  <div class="kv"><span class="k">libuv</span><span class="v">The C library providing the event loop, async I/O and a thread pool.</span></div>
+  <div class="kv"><span class="k">C++ bindings</span><span class="v">The glue exposing libuv and OS features to JavaScript.</span></div>
+  <div class="kv"><span class="k">Single-threaded</span><span class="v">Your JS runs on one thread; I/O happens elsewhere.</span></div>
+  <div class="kv"><span class="k">Thread pool</span><span class="v">libuv worker threads that handle certain blocking operations.</span></div>
+  <div class="kv"><span class="k">Runtime</span><span class="v">The whole box: V8 + libuv + bindings that make Node.js.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Node.js is V8 plus libuv plus C++ bindings packaged as one runtime.</li><li>"Single-threaded" means your JavaScript runs on one thread — not that everything does.</li><li>libuv handles async I/O and keeps a thread pool for certain blocking work.</li><li>A request runs JS on the main thread, hands I/O to libuv, and resumes via a callback.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -136,6 +157,27 @@ node -p <span class="tok-string">"process.versions.uv"</span></code></pre>
   <span class="lc-body"><span class="lc-title">libuv — tổng quan thiết kế</span><span class="lc-sub">Thứ thật sự chạy vòng lặp sự kiện, và thao tác nào đi vào pool thay vì đi ra hệ điều hành.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chạy <code>node -p "process.versions"</code> và chỉ ra ba phần bài đã nêu: V8, uv (libuv), và phiên bản Node bọc chúng.</li>
+<li>Giải thích trong một câu "đơn luồng" ở đây nghĩa là gì — và libuv vẫn làm gì trên các luồng khác.</li>
+<li>Lần theo, bằng lời, một request HTTP thật ra đi đâu: JS trên luồng chính, rồi I/O giao cho libuv, rồi callback quay lại event loop.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn gọi tên được V8, libuv và lớp nối C++, và nói chính xác đơn luồng nghĩa là gì và không là gì.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">V8</span><span class="v">Engine biên dịch và chạy JavaScript của bạn.</span></div>
+  <div class="kv"><span class="k">libuv</span><span class="v">Thư viện C cung cấp event loop, I/O bất đồng bộ và một thread pool.</span></div>
+  <div class="kv"><span class="k">Lớp nối C++</span><span class="v">Chất keo mở libuv và tính năng hệ điều hành ra cho JavaScript.</span></div>
+  <div class="kv"><span class="k">Đơn luồng</span><span class="v">JS của bạn chạy trên một luồng; I/O xảy ra ở nơi khác.</span></div>
+  <div class="kv"><span class="k">Thread pool</span><span class="v">Các luồng worker của libuv xử lý vài thao tác chặn.</span></div>
+  <div class="kv"><span class="k">Runtime</span><span class="v">Cả cái hộp: V8 + libuv + lớp nối làm nên Node.js.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Node.js là V8 cộng libuv cộng lớp nối C++ đóng thành một runtime.</li><li>"Đơn luồng" nghĩa là JavaScript của bạn chạy trên một luồng — không phải mọi thứ.</li><li>libuv xử lý I/O bất đồng bộ và giữ một thread pool cho vài việc chặn.</li><li>Một request chạy JS trên luồng chính, giao I/O cho libuv, và tiếp tục qua callback.</li></ul>
 </div>
 `,
     },
@@ -223,6 +265,27 @@ immediate timeout</div>
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 1.1: Node.js, the event loop &amp; modules</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: the event loop and why Node does not block while waiting for I/O. Different: Academy explains the event loop in simplified form; Courses walks through its phases. In this lesson we add: six phases, proving the run order yourself, setTimeout(0) vs setImmediate, why timers are never exact; lesson 2.4 also measures event-loop blocking with real numbers. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a script mixing <code>setTimeout(fn, 0)</code>, <code>setImmediate(fn)</code>, a resolved Promise <code>.then</code>, and a synchronous log; predict the print order, then run it.</li>
+<li>Run the <code>setTimeout(0)</code> vs <code>setImmediate</code> race several times and observe the order is not stable.</li>
+<li>Explain why a timer set to 100 ms almost never fires at exactly 100 ms.</li>
+</ol>
+<p><strong>Done when:</strong> your predicted order matched the run for the deterministic parts, and you saw the timer-vs-immediate race flip.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Event loop</span><span class="v">The cycle that picks what runs next across its phases.</span></div>
+  <div class="kv"><span class="k">Phase</span><span class="v">One stage of the loop (timers, poll, check, close, ...).</span></div>
+  <div class="kv"><span class="k">Timers phase</span><span class="v">Where setTimeout/setInterval callbacks run.</span></div>
+  <div class="kv"><span class="k">Check phase</span><span class="v">Where setImmediate callbacks run.</span></div>
+  <div class="kv"><span class="k">Poll phase</span><span class="v">Where I/O callbacks are processed and the loop may wait.</span></div>
+  <div class="kv"><span class="k">Timer drift</span><span class="v">Timers fire at or after their delay, never earlier or exactly.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The event loop runs in fixed phases: timers, pending, poll, check, close.</li><li>setTimeout callbacks run in the timers phase; setImmediate in the check phase.</li><li>setTimeout(0) vs setImmediate ordering is genuinely unpredictable outside I/O.</li><li>Timers fire at or after their delay, so they are never exact.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -293,6 +356,27 @@ immediate timeout</div>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 1.1: Node.js, event loop &amp; module</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: event loop và vì sao Node không bị chặn khi chờ I/O. Khác: Academy giải thích event loop ở dạng đơn giản hoá; Courses đi qua từng pha của nó. Ở bài này mình học thêm: sáu pha, tự chứng minh thứ tự chạy, setTimeout(0) so với setImmediate, vì sao timer không bao giờ chính xác; bài 2.4 còn đo chuyện chặn event loop bằng số thật. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một script trộn <code>setTimeout(fn, 0)</code>, <code>setImmediate(fn)</code>, một Promise đã resolve <code>.then</code>, và một log đồng bộ; đoán thứ tự in, rồi chạy.</li>
+<li>Chạy cuộc đua <code>setTimeout(0)</code> vs <code>setImmediate</code> vài lần và thấy thứ tự không ổn định.</li>
+<li>Giải thích vì sao một timer đặt 100 ms gần như không bao giờ nổ đúng 100 ms.</li>
+</ol>
+<p><strong>Đạt khi:</strong> thứ tự bạn đoán khớp phần tất định, và bạn đã thấy cuộc đua timer-vs-immediate đảo chiều.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Event loop</span><span class="v">Vòng lặp chọn cái gì chạy tiếp qua các pha của nó.</span></div>
+  <div class="kv"><span class="k">Pha (phase)</span><span class="v">Một chặng của vòng lặp (timers, poll, check, close, ...).</span></div>
+  <div class="kv"><span class="k">Pha timers</span><span class="v">Nơi callback setTimeout/setInterval chạy.</span></div>
+  <div class="kv"><span class="k">Pha check</span><span class="v">Nơi callback setImmediate chạy.</span></div>
+  <div class="kv"><span class="k">Pha poll</span><span class="v">Nơi callback I/O được xử lý và vòng lặp có thể chờ.</span></div>
+  <div class="kv"><span class="k">Timer drift</span><span class="v">Timer nổ đúng hoặc sau độ trễ, không bao giờ sớm hay đúng khít.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Event loop chạy theo các pha cố định: timers, pending, poll, check, close.</li><li>Callback setTimeout chạy ở pha timers; setImmediate ở pha check.</li><li>Thứ tự setTimeout(0) vs setImmediate thật sự không đoán được ngoài ngữ cảnh I/O.</li><li>Timer nổ đúng hoặc sau độ trễ, nên không bao giờ chính xác.</li></ul>
 </div>
 
 <div class="ml-en">
@@ -372,6 +456,27 @@ nextTick ran: 1000000 times</div>
   <span class="lc-body"><span class="lc-title">MDN — Promise</span><span class="lc-sub">Where the microtask queue comes from, and why it drains before any timer.</span></span>
 </a>
 
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Schedule a <code>process.nextTick</code>, a <code>Promise.resolve().then</code>, and a <code>setTimeout(0)</code> in one tick; predict the order (nextTick, then microtask, then timer) and verify.</li>
+<li>Starve the loop: recursively schedule <code>process.nextTick</code> and show a <code>setTimeout</code> never gets to run.</li>
+<li>Explain when you would reach for a Promise over process.nextTick in application code.</li>
+</ol>
+<p><strong>Done when:</strong> you have confirmed the nextTick-then-microtask-then-timer order and reproduced starvation.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">process.nextTick</span><span class="v">A callback run before any other queue, after the current operation.</span></div>
+  <div class="kv"><span class="k">Microtask</span><span class="v">A Promise-reaction callback, drained before the next phase.</span></div>
+  <div class="kv"><span class="k">Microtask queue</span><span class="v">Where resolved-Promise callbacks wait their turn.</span></div>
+  <div class="kv"><span class="k">Priority order</span><span class="v">nextTick drains first, then microtasks, then the loop continues.</span></div>
+  <div class="kv"><span class="k">Starvation</span><span class="v">Endlessly refilling a high-priority queue so timers/I/O never run.</span></div>
+  <div class="kv"><span class="k">Drain</span><span class="v">Emptying a queue completely before moving on.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>nextTick and microtasks are two priority queues outside the six phases.</li><li>nextTick runs first, then the microtask (Promise) queue, before any timer.</li><li>Both queues fully drain between phases, which is why they can starve the loop.</li><li>Prefer Promises in application code; reserve nextTick for low-level needs.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -419,6 +524,27 @@ nextTick đã chạy: 1000000 lần</div>
   <span class="lc-body"><span class="lc-title">MDN — Promise</span><span class="lc-sub">Hàng đợi microtask từ đâu ra, và vì sao nó được rút cạn trước mọi timer.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lên lịch một <code>process.nextTick</code>, một <code>Promise.resolve().then</code>, và một <code>setTimeout(0)</code> trong một tick; đoán thứ tự (nextTick, rồi microtask, rồi timer) và kiểm chứng.</li>
+<li>Bỏ đói vòng lặp: đệ quy lên lịch <code>process.nextTick</code> và chỉ ra một <code>setTimeout</code> không bao giờ được chạy.</li>
+<li>Giải thích khi nào bạn chọn Promise thay vì process.nextTick trong code ứng dụng.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã xác nhận thứ tự nextTick-rồi-microtask-rồi-timer và tái hiện được chuyện bỏ đói.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">process.nextTick</span><span class="v">Callback chạy trước mọi hàng đợi khác, sau thao tác hiện tại.</span></div>
+  <div class="kv"><span class="k">Microtask</span><span class="v">Callback phản ứng Promise, được rút cạn trước pha kế tiếp.</span></div>
+  <div class="kv"><span class="k">Hàng đợi microtask</span><span class="v">Nơi callback Promise-đã-resolve chờ tới lượt.</span></div>
+  <div class="kv"><span class="k">Thứ tự ưu tiên</span><span class="v">nextTick rút trước, rồi microtask, rồi vòng lặp đi tiếp.</span></div>
+  <div class="kv"><span class="k">Bỏ đói (starvation)</span><span class="v">Liên tục nạp lại hàng đợi ưu tiên cao để timer/I/O không chạy.</span></div>
+  <div class="kv"><span class="k">Rút cạn (drain)</span><span class="v">Làm rỗng hoàn toàn một hàng đợi trước khi đi tiếp.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>nextTick và microtask là hai hàng đợi ưu tiên nằm ngoài sáu pha.</li><li>nextTick chạy trước, rồi hàng đợi microtask (Promise), trước mọi timer.</li><li>Cả hai hàng đợi rút cạn giữa các pha, nên chúng có thể bỏ đói vòng lặp.</li><li>Ưu tiên Promise trong code ứng dụng; dành nextTick cho nhu cầu cấp thấp.</li></ul>
 </div>
 `,
     },
@@ -528,6 +654,27 @@ h.<span class="tok-function">enable</span>();
   <span class="lc-body"><span class="lc-title">Node.js — monitorEventLoopDelay</span><span class="lc-sub">Measuring the lag directly, which turns &quot;it feels slow&quot; into a histogram.</span></span>
 </a>
 
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Block the loop on purpose: run a tight <code>while</code> loop for a couple of seconds and show that a pending HTTP request or timer is frozen until it finishes.</li>
+<li>Measure event-loop lag before and during the blocking work (e.g. with a repeating timer that prints how late it fires).</li>
+<li>Move one blocking operation (like synchronous crypto or a big JSON parse) off the main thread and re-measure the lag.</li>
+</ol>
+<p><strong>Done when:</strong> you measured loop lag spike while blocking and saw it fall after moving the work off the main thread.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Blocking</span><span class="v">Running synchronous CPU work that stops the event loop.</span></div>
+  <div class="kv"><span class="k">Event-loop lag</span><span class="v">How late scheduled callbacks fire — the blocking symptom.</span></div>
+  <div class="kv"><span class="k">Main thread</span><span class="v">The single thread your JavaScript runs on.</span></div>
+  <div class="kv"><span class="k">libuv thread pool</span><span class="v">Hidden threads that run certain async operations in parallel.</span></div>
+  <div class="kv"><span class="k">Synchronous API</span><span class="v">A fs/crypto call ending in <code>Sync</code> that blocks until done.</span></div>
+  <div class="kv"><span class="k">CPU-bound work</span><span class="v">Work limited by computation, not I/O — the thing that blocks.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Heavy synchronous work on the main thread freezes every pending request.</li><li>The symptom is event-loop lag — scheduled callbacks firing late.</li><li>libuv has a hidden thread pool, but your JS still runs on one thread.</li><li>Measure the lag in your own service before assuming where the stall is.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -620,6 +767,27 @@ h.<span class="tok-function">enable</span>();
   <span class="lc-body"><span class="lc-title">Node.js — monitorEventLoopDelay</span><span class="lc-sub">Đo trực tiếp độ trễ, thứ biến &quot;thấy chậm chậm&quot; thành một biểu đồ tần suất.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chặn vòng lặp có chủ đích: chạy một vòng <code>while</code> chặt trong vài giây và chỉ ra một request HTTP hay timer đang chờ bị đóng băng tới khi nó xong.</li>
+<li>Đo độ trễ event-loop trước và trong lúc việc chặn (ví dụ bằng một timer lặp in ra nó nổ muộn bao nhiêu).</li>
+<li>Đưa một thao tác chặn (như crypto đồng bộ hoặc parse JSON lớn) ra khỏi luồng chính và đo lại độ trễ.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã đo độ trễ vòng lặp vọt lên khi chặn và thấy nó giảm sau khi đưa việc ra khỏi luồng chính.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Chặn (blocking)</span><span class="v">Chạy việc CPU đồng bộ làm dừng event loop.</span></div>
+  <div class="kv"><span class="k">Độ trễ event-loop</span><span class="v">Callback đã lên lịch nổ muộn bao nhiêu — triệu chứng của chặn.</span></div>
+  <div class="kv"><span class="k">Luồng chính</span><span class="v">Luồng duy nhất JavaScript của bạn chạy trên đó.</span></div>
+  <div class="kv"><span class="k">Thread pool libuv</span><span class="v">Các luồng ẩn chạy vài thao tác async song song.</span></div>
+  <div class="kv"><span class="k">API đồng bộ</span><span class="v">Một lời gọi fs/crypto kết thúc bằng <code>Sync</code> chặn tới khi xong.</span></div>
+  <div class="kv"><span class="k">Việc nặng CPU</span><span class="v">Việc giới hạn bởi tính toán, không phải I/O — thứ gây chặn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Việc đồng bộ nặng trên luồng chính đóng băng mọi request đang chờ.</li><li>Triệu chứng là độ trễ event-loop — callback đã lên lịch nổ muộn.</li><li>libuv có thread pool ẩn, nhưng JS của bạn vẫn chạy trên một luồng.</li><li>Đo độ trễ trong chính dịch vụ của bạn trước khi đoán chỗ nào đang treo.</li></ul>
 </div>
 `,
     },
@@ -713,6 +881,27 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 324 — Performance, Caching and Scaling</span><span class="lc-sub">10 exercises on workers, clustering and keeping the loop free.</span></span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Take the blocking computation from 2.4 and move it into a <code>worker_threads</code> Worker; confirm the main loop stays responsive while it runs.</li>
+<li>Try the chunking approach instead: break the work into pieces that yield with <code>setImmediate</code> between them, and compare responsiveness.</li>
+<li>Note when cluster/more-processes is the right tool rather than a worker, and why.</li>
+</ol>
+<p><strong>Done when:</strong> you ran the heavy work in a worker thread without freezing the loop and can say when chunking or clustering fits better.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">worker_threads</span><span class="v">Real OS threads for CPU-bound work, with message passing.</span></div>
+  <div class="kv"><span class="k">Worker</span><span class="v">A separate thread running a script, isolated from the main one.</span></div>
+  <div class="kv"><span class="k">Chunking</span><span class="v">Splitting work so the loop runs between pieces.</span></div>
+  <div class="kv"><span class="k">cluster</span><span class="v">Multiple Node processes sharing a port for more CPU.</span></div>
+  <div class="kv"><span class="k">Message passing</span><span class="v">How main and worker exchange data (postMessage / events).</span></div>
+  <div class="kv"><span class="k">CPU-bound vs I/O-bound</span><span class="v">Computation-heavy work vs waiting-heavy work — different cures.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Worker threads are the real fix for CPU-bound work — they run it off the main loop.</li><li>Chunking keeps the loop alive by yielding between pieces, with less isolation.</li><li>Cluster adds more processes for throughput across CPU cores.</li><li>Choose by the shape of the work and measure the cost of each option.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -789,6 +978,27 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 324 — Hiệu năng, Cache và Mở rộng</span><span class="lc-sub">10 bài tập về worker, cluster và giữ cho event loop luôn rảnh.</span></span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lấy phép tính chặn từ 2.4 và đưa vào một Worker của <code>worker_threads</code>; xác nhận vòng lặp chính vẫn phản hồi trong lúc nó chạy.</li>
+<li>Thử cách chia nhỏ thay vào đó: tách việc thành từng mẩu nhường chỗ bằng <code>setImmediate</code> giữa các mẩu, và so độ phản hồi.</li>
+<li>Ghi chú khi nào cluster/nhiều-tiến-trình là công cụ đúng thay vì worker, và vì sao.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã chạy việc nặng trong worker thread không làm đóng băng vòng lặp và nói được khi nào chia nhỏ hay cluster hợp hơn.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">worker_threads</span><span class="v">Luồng hệ điều hành thật cho việc nặng CPU, trao đổi bằng tin nhắn.</span></div>
+  <div class="kv"><span class="k">Worker</span><span class="v">Một luồng riêng chạy một script, tách biệt khỏi luồng chính.</span></div>
+  <div class="kv"><span class="k">Chia nhỏ (chunking)</span><span class="v">Tách việc để vòng lặp chạy giữa các mẩu.</span></div>
+  <div class="kv"><span class="k">cluster</span><span class="v">Nhiều tiến trình Node chung một cổng để có thêm CPU.</span></div>
+  <div class="kv"><span class="k">Trao đổi tin nhắn</span><span class="v">Cách luồng chính và worker trao dữ liệu (postMessage / sự kiện).</span></div>
+  <div class="kv"><span class="k">Nặng CPU vs nặng I/O</span><span class="v">Việc nặng tính toán vs nặng chờ đợi — cách chữa khác nhau.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Worker threads là cách sửa thật cho việc nặng CPU — chạy nó ngoài vòng lặp chính.</li><li>Chia nhỏ giữ vòng lặp sống bằng cách nhường chỗ giữa các mẩu, ít cô lập hơn.</li><li>Cluster thêm tiến trình để tăng thông lượng trên các nhân CPU.</li><li>Chọn theo hình dạng việc và đo cái giá của mỗi phương án.</li></ul>
 </div>
 `,
     },

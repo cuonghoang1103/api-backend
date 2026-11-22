@@ -97,7 +97,7 @@ ${memVsDisk()}
 <li>A new major version <b>every year</b> (this course uses <b>17</b>)</li>
 </ul>`,
     cards([
-      ['Who uses it', 'Apple, Instagram, Reddit, Spotify — and the whole backend of cuongthai.com.'],
+      ['Who uses it', 'OpenAI (ChatGPT), Notion, Figma, Instagram — each on its own engineering blog — and the whole backend of cuongthai.com.'],
       ['Why learn it', '“PostgreSQL” and “SQL” sit near the top of most backend job posts; the skills transfer to every SQL database.'],
     ], 1)) },
 

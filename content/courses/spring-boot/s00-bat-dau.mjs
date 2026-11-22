@@ -94,6 +94,15 @@ ${OUT_KHOI_DONG}
   <li><strong>The JVM is fast once warm</strong> and has excellent tooling to look inside a running server (Chapter 2 and Chapter 16).</li>
 </ul>
 
+
+<h3 id="sb-6y-quy-mo">Where it runs at scale — only what the companies say themselves</h3>
+<p>“Big company X uses Spring” is the most copied sentence on the internet and the least checked. Below are only claims the companies published on their <em>own</em> engineering blog or project site. Read the source; do not repeat a claim you cannot point to.</p>
+<ul>
+  <li><strong>Netflix.</strong> In December 2018 the Netflix Technology Blog post “Netflix OSS and Spring Boot — Coming Full Circle” announced that Netflix was moving its Java services onto Spring Boot as the core framework, after years of building its own libraries (Eureka, Hystrix, Ribbon) that the Spring Cloud Netflix project had packaged for everyone else. Netflix later open-sourced its GraphQL framework, DGS; its official site says <em>“The DGS framework makes it easy to create GraphQL services with Spring Boot”</em> and <em>“At Netflix we build our GraphQL architecture on the DGS framework.”</em></li>
+  <li><strong>Allegro</strong> (a large Polish e-commerce marketplace). Its engineering blog wrote in 2021: <em>“At Allegro we run a few hundred microservices, most of which use Spring Framework.”</em> In 2024 the same blog said the platform is now <em>“well above a thousand services”</em>.</li>
+</ul>
+<p>What this means for you: Spring Boot is not a “school framework”. The annotations you meet in Chapter 3 are the same ones engineers at those companies read every day — and the problems in Chapters 7, 13 and 16 (N+1, caching, connection pools) are exactly the ones their blogs write about.</p>
+<p>For Vietnam we deliberately name no company: we found no public engineering source we could cite. Check for yourself — the practice task at the end of this lesson asks you to read real job postings and count how many ask for Spring Boot.</p>
 <h3>Spring Boot or Node.js? — the interview question you will get</h3>
 <p>You may have taken the Node.js course on this site. The honest answer is “both are good; they make different trade-offs”, and a good candidate can name the trade-offs:</p>
 <table>
@@ -119,6 +128,14 @@ ${OUT_KHOI_DONG}
 <h3>What you will be able to build by the end</h3>
 <p>A production-style <strong>LabFlow API</strong> — booking computer labs and their devices — with: modern Java 21; a clean controller/service/repository structure; validation and standard error responses (RFC 9457); PostgreSQL through Spring Data JPA without N+1 queries; schema history in Flyway; login with JWT and role-based permissions; tests against a real PostgreSQL in Testcontainers; OpenAPI docs; a Redis cache; background events; metrics; a Docker image and a CI pipeline — plus a written explanation of every design decision for your CV.</p>
 
+
+<h3>Jobs this leads to</h3>
+<ul>
+  <li><strong>Java Backend Intern / Fresher</strong> — the most common title in Vietnamese postings that list Spring Boot. Expect questions on Chapters 1–3 (Java core, collections, DI) and 6–9 (JPA, transactions, security).</li>
+  <li><strong>Spring Boot developer in an outsourcing or product team</strong> — building and maintaining REST services, often for Japanese or European clients, inside an existing codebase (Chapters 7, 8, 11 are what make you useful there in week one).</li>
+  <li><strong>Full-stack Java + React</strong> — Spring Boot API with a React front end; the same combination FPT University teaches in SBA301 (Chapter 12 and the React ↔ Spring chapter).</li>
+  <li><strong>Later:</strong> microservices / platform engineer (Redis, queues, observability, Docker and CI — Chapters 13–17), or a second backend stack next to Node.js, which is exactly the profile of a Node.js major who can also join a Java team.</li>
+</ul>
 <h3>The roadmap — 6 stages</h3>
 <div class="lz-map">
   <div class="lz-stage">Stage 1 · Foundations</div>
@@ -144,8 +161,48 @@ ${OUT_KHOI_DONG}
   <li>A computer that can run Docker (for PostgreSQL) — lesson 0.1 walks through it on Windows, macOS and Linux.</li>
   <li>You do <em>not</em> need PRJ301, Servlet/JSP or the Node.js course. When something from them helps, the lesson explains it in place.</li>
 </ul>
+
+<p>On this site, the shortest way to cover those prerequisites:</p>
+<a class="link-card lien-ket-cheo" href="/courses/object-oriented-programming">
+  <span class="lc-ico">☕</span>
+  <span class="lc-body"><span class="lc-title">PRO192 — Object-Oriented Programming (Academy)</span><span class="lc-sub">Class, interface, inheritance in Java — the only hard prerequisite</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">DBI202 — Introduction to Databases (Academy)</span><span class="lc-sub">SELECT, JOIN, keys — enough SQL for Chapter 6</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git">
+  <span class="lc-ico">🌿</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub</span><span class="lc-sub">Your course project lives in a Git repository from milestone 1</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker</span><span class="lc-sub">Lesson 0.1 runs PostgreSQL in a container; Chapter 17 packages your app</span></span>
+</a>
 <div class="callout">Time budget: about <strong>3–4 hours per chapter</strong> if you type every example and do the lab. Around 70 hours for the whole course. Speed is not the goal — being able to rebuild LabFlow from memory is.</div>
 
+
+<h3>Where this course sits on the site — before, alongside, after</h3>
+<table>
+<thead><tr><th>When</th><th>Course</th><th>What it adds to this one</th></tr></thead>
+<tbody>
+<tr><td>Before</td><td><a href="/courses/object-oriented-programming">PRO192</a> · <a href="/courses/introduction-to-databases">DBI202</a> · <a href="/courses/git">Git &amp; GitHub</a></td><td>Java OOP, SQL basics, a repository for your project</td></tr>
+<tr><td>Alongside</td><td><a href="/courses/postgresql">PostgreSQL</a></td><td>What Hibernate really sends: indexes, EXPLAIN, isolation — Chapters 6–8 lean on it</td></tr>
+<tr><td>Alongside</td><td><a href="/courses/authentication">Authentication</a> · <a href="/courses/api-design">API &amp; System Design</a></td><td>JWT, sessions, OAuth and REST design without the Spring layer — Chapters 4, 9, 10</td></tr>
+<tr><td>Alongside</td><td><a href="/courses/docker">Docker</a> · <a href="/courses/testing">Testing</a></td><td>Testcontainers and Chapter 17 assume containers; test strategy beyond JUnit</td></tr>
+<tr><td>After</td><td><a href="/courses/react">React</a></td><td>The front end for your API (Chapter 12 and the React ↔ Spring chapter)</td></tr>
+<tr><td>After</td><td><a href="/courses/redis">Redis</a> · <a href="/courses/kafka">Apache Kafka</a></td><td>Deeper caching and event streaming than Chapters 13–14</td></tr>
+<tr><td>After</td><td><a href="/courses/github-actions">GitHub Actions</a> · <a href="/courses/deploy-vps">Deploy to a VPS</a> · <a href="/courses/performance-load-testing">Performance &amp; Load Testing</a></td><td>CI/CD, real deployment and load tests for the app you built</td></tr>
+<tr><td>After</td><td><a href="/courses/interview-prep">IT Interview Prep</a></td><td>Turning the interview questions at the end of each chapter into answers</td></tr>
+</tbody>
+</table>
+<p><strong>Academy subjects it covers.</strong> FPT University teaches Spring in <a href="/courses/hsf302-working-with-spring-framework">HSF302</a> (Spring MVC, Thymeleaf, JPA) and <a href="/courses/sba301-integrate-single-page-application-with-spring-boot">SBA301</a> (Spring Boot API + a React single-page app). This course goes deeper than both and adds the chapters those subjects need at the end (server-rendered Thymeleaf views, Spring Data MongoDB, React ↔ Spring integration).</p>
+<p><strong>If your major is Node.js</strong> (SDN302, MMA301, WDP301), this is your second backend stack, not a replacement:</p>
+<ul>
+  <li>The same LabFlow project as the <a href="/courses/nodejs">Node.js course</a> — build it twice and you can answer “Node or Spring, and why?” with your own numbers (Chapter 16 measures both).</li>
+  <li>Dependency injection, transactions, validation and layered architecture are explicit in Spring. Once you know them here, NestJS, Prisma transactions and Express middleware read like a lighter version of the same ideas.</li>
+  <li>Many Vietnamese teams run Spring Boot services next to Node.js ones; being able to read, debug and call both makes you the person who connects them.</li>
+</ul>
 <h3>🎤 What interviewers ask about this lesson</h3>
 <ol>
   <li><strong>“What is the difference between Spring and Spring Boot?”</strong> — Spring Framework is the container and the modules (web, data, transactions). Spring Boot is an opinionated layer on top: auto-configuration based on what is on the classpath, starter dependencies, an embedded server and an executable jar. Boot does not replace Spring; it configures it.</li>
@@ -193,7 +250,15 @@ ${tl('https://docs.spring.io/spring-boot/reference/', '📘', 'Spring Boot refer
   <li>Spring Boot 3.0 release notes (Java 17, Jakarta EE 9+): <a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Release-Notes" target="_blank" rel="noopener">github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Release-Notes</a></li>
   <li>Spring Boot 4.0 release notes: <a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Release-Notes" target="_blank" rel="noopener">github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Release-Notes</a></li>
   <li>Broadcom completes acquisition of VMware (22 Nov 2023): <a href="https://investors.broadcom.com/news-releases/news-release-details/broadcom-completes-acquisition-vmware" target="_blank" rel="noopener">investors.broadcom.com</a></li>
+  <li>Netflix Technology Blog, “Netflix OSS and Spring Boot — Coming Full Circle” (Dec 2018): <a href="https://netflixtechblog.com/netflix-oss-and-spring-boot-coming-full-circle-4855947713a0" target="_blank" rel="noopener">netflixtechblog.com/netflix-oss-and-spring-boot-coming-full-circle</a></li>
+  <li>Netflix DGS framework, official site: <a href="https://netflix.github.io/dgs/" target="_blank" rel="noopener">netflix.github.io/dgs</a></li>
+  <li>Allegro Tech Blog (Nov 2021), post on Micronaut: <a href="https://blog.allegro.tech/2021/11/micronaut.html" target="_blank" rel="noopener">blog.allegro.tech/2021/11/micronaut.html</a></li>
+  <li>Allegro Tech Blog (Apr 2024), “Ten Years and Counting: My Affair with Microservices”: <a href="https://blog.allegro.tech/2024/04/ten-years-microservices.html" target="_blank" rel="noopener">blog.allegro.tech/2024/04/ten-years-microservices.html</a></li>
 </ul>
+
+<h3>🎯 Your course project</h3>
+<p>This course is not only lessons: you will build <strong>one real Spring Boot application of your own</strong> through the whole course. After Section 0 and after every chapter there is a <strong>project milestone</strong> that applies exactly that chapter to your topic — first a skeleton, then a domain model, a REST API, validation, a PostgreSQL schema with Flyway, JWT security, tests, caching, metrics, Docker and CI. At the end you finish it and defend it in front of an AI committee scored on a 10-point rubric. Pick one of the suggested topics (LabFlow follows the lessons step by step) or propose your own — the AI checks that it is the right size.</p>
+<p><strong>Register your course project topic below.</strong></p>
 </div>
 `;
 
@@ -247,6 +312,15 @@ ${OUT_KHOI_DONG}
   <li><strong>JVM chạy rất nhanh khi đã "nóng máy"</strong> và có công cụ tuyệt vời để nhìn vào bên trong một server đang chạy (Chương 2 và Chương 16).</li>
 </ul>
 
+
+<h3 id="sb-6y-quy-mo">Chạy ở quy mô lớn ở đâu — chỉ điều chính các công ty tự nói</h3>
+<p>“Công ty lớn X dùng Spring” là câu được chép nhiều nhất trên mạng và ít được kiểm nhất. Dưới đây chỉ có những điều chính công ty đó công bố trên blog kỹ thuật hoặc trang dự án <em>của họ</em>. Hãy đọc nguồn; đừng nhắc lại một câu mà bạn không chỉ ra được nguồn.</p>
+<ul>
+  <li><strong>Netflix.</strong> Tháng 12/2018, bài “Netflix OSS and Spring Boot — Coming Full Circle” trên Netflix Technology Blog thông báo Netflix chuyển các dịch vụ Java sang lấy Spring Boot làm framework lõi, sau nhiều năm tự viết thư viện riêng (Eureka, Hystrix, Ribbon) mà dự án Spring Cloud Netflix đã đóng gói lại cho cả cộng đồng dùng. Sau đó Netflix mở mã framework GraphQL của họ là DGS; trang chính thức ghi <em>“The DGS framework makes it easy to create GraphQL services with Spring Boot”</em> và <em>“At Netflix we build our GraphQL architecture on the DGS framework.”</em></li>
+  <li><strong>Allegro</strong> (sàn thương mại điện tử lớn của Ba Lan). Blog kỹ thuật của họ viết năm 2021: <em>“At Allegro we run a few hundred microservices, most of which use Spring Framework”</em> — vài trăm microservice, phần lớn dùng Spring. Năm 2024 cũng blog đó viết nền tảng đã <em>“well above a thousand services”</em> — hơn một nghìn dịch vụ.</li>
+</ul>
+<p>Điều này nghĩa là gì với bạn: Spring Boot không phải “framework để học ở trường”. Các annotation bạn gặp ở Chương 3 chính là thứ kỹ sư ở những công ty đó đọc mỗi ngày — và các bài toán ở Chương 7, 13, 16 (N+1, cache, pool kết nối) đúng là những chuyện blog của họ viết.</p>
+<p>Với Việt Nam, khoá này cố ý không nêu tên công ty nào: chúng tôi chưa tìm được nguồn kỹ thuật công khai để trích. Bạn tự kiểm — bài thực hành cuối bài yêu cầu bạn đọc tin tuyển dụng thật và đếm bao nhiêu tin đòi Spring Boot.</p>
 <h3>Spring Boot hay Node.js? — câu phỏng vấn chắc chắn gặp</h3>
 <p>Có thể bạn đã học khoá Node.js trên trang này. Câu trả lời trung thực là "cả hai đều tốt, mỗi bên đánh đổi một kiểu", và ứng viên giỏi gọi tên được những đánh đổi đó:</p>
 <table>
@@ -272,6 +346,14 @@ ${OUT_KHOI_DONG}
 <h3>Học xong bạn tự làm được gì</h3>
 <p>Một <strong>LabFlow API</strong> kiểu production — đặt phòng máy và thiết bị — có: Java 21 hiện đại; cấu trúc controller/service/repository sạch; validation và phản hồi lỗi chuẩn (RFC 9457); PostgreSQL qua Spring Data JPA không dính N+1; lịch sử schema bằng Flyway; đăng nhập JWT và phân quyền theo vai trò; test với PostgreSQL thật trong Testcontainers; tài liệu OpenAPI; cache Redis; sự kiện chạy nền; số đo vận hành; một image Docker và một pipeline CI — kèm bản giải thích từng quyết định thiết kế để đưa vào CV.</p>
 
+
+<h3>Học xong làm nghề gì</h3>
+<ul>
+  <li><strong>Java Backend Intern / Fresher</strong> — chức danh hay gặp nhất trong tin tuyển dụng Việt Nam có ghi Spring Boot. Sẽ bị hỏi phần Chương 1–3 (Java core, collections, DI) và 6–9 (JPA, giao dịch, bảo mật).</li>
+  <li><strong>Lập trình viên Spring Boot ở nhóm outsourcing hoặc sản phẩm</strong> — dựng và bảo trì dịch vụ REST, thường cho khách Nhật hoặc châu Âu, trong một codebase có sẵn (Chương 7, 8, 11 là thứ làm bạn dùng được ngay tuần đầu).</li>
+  <li><strong>Full-stack Java + React</strong> — API Spring Boot với giao diện React; đúng tổ hợp Đại học FPT dạy ở môn SBA301 (Chương 12 và chương nối React ↔ Spring).</li>
+  <li><strong>Về sau:</strong> kỹ sư microservice / nền tảng (Redis, hàng đợi, quan sát hệ thống, Docker và CI — Chương 13–17), hoặc làm “stack backend thứ hai” bên cạnh Node.js — đúng hồ sơ của một người học chuyên ngành Node.js mà vẫn vào được nhóm Java.</li>
+</ul>
 <h3>Lộ trình — 6 giai đoạn</h3>
 <div class="lz-map">
   <div class="lz-stage">Giai đoạn 1 · Nền tảng</div>
@@ -297,8 +379,48 @@ ${OUT_KHOI_DONG}
   <li>Một máy tính chạy được Docker (để có PostgreSQL) — bài 0.1 hướng dẫn trên Windows, macOS và Linux.</li>
   <li>Bạn <em>không</em> cần PRJ301, Servlet/JSP hay khoá Node.js. Chỗ nào kiến thức từ đó có ích, bài giải thích ngay tại chỗ.</li>
 </ul>
+
+<p>Trên trang này, đường ngắn nhất để có đủ nền đó:</p>
+<a class="link-card lien-ket-cheo" href="/courses/object-oriented-programming">
+  <span class="lc-ico">☕</span>
+  <span class="lc-body"><span class="lc-title">PRO192 — Lập trình hướng đối tượng (Academy)</span><span class="lc-sub">Class, interface, kế thừa bằng Java — điều kiện bắt buộc duy nhất</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">DBI202 — Nhập môn cơ sở dữ liệu (Academy)</span><span class="lc-sub">SELECT, JOIN, khoá — đủ SQL cho Chương 6</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git">
+  <span class="lc-ico">🌿</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub</span><span class="lc-sub">Dự án cuối khoá của bạn nằm trong một repo Git ngay từ mốc 1</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker</span><span class="lc-sub">Bài 0.1 chạy PostgreSQL trong container; Chương 17 đóng gói app của bạn</span></span>
+</a>
 <div class="callout">Ngân sách thời gian: khoảng <strong>3–4 giờ mỗi chương</strong> nếu bạn gõ lại mọi ví dụ và làm lab. Cả khoá chừng 70 giờ. Mục tiêu không phải nhanh — mà là tự dựng lại được LabFlow từ trí nhớ.</div>
 
+
+<h3>Khoá này nằm ở đâu trên trang — học trước, học kèm, học sau</h3>
+<table>
+<thead><tr><th>Lúc nào</th><th>Khoá</th><th>Bổ sung gì cho khoá này</th></tr></thead>
+<tbody>
+<tr><td>Trước</td><td><a href="/courses/object-oriented-programming">PRO192</a> · <a href="/courses/introduction-to-databases">DBI202</a> · <a href="/courses/git">Git &amp; GitHub</a></td><td>OOP bằng Java, SQL cơ bản, một repo cho dự án của bạn</td></tr>
+<tr><td>Kèm</td><td><a href="/courses/postgresql">PostgreSQL</a></td><td>Hibernate thật sự gửi gì xuống: chỉ mục, EXPLAIN, mức cô lập — Chương 6–8 dựa vào đây</td></tr>
+<tr><td>Kèm</td><td><a href="/courses/authentication">Authentication</a> · <a href="/courses/api-design">API &amp; System Design</a></td><td>JWT, session, OAuth và thiết kế REST khi bỏ lớp Spring đi — Chương 4, 9, 10</td></tr>
+<tr><td>Kèm</td><td><a href="/courses/docker">Docker</a> · <a href="/courses/testing">Testing</a></td><td>Testcontainers và Chương 17 cần container; chiến lược kiểm thử rộng hơn JUnit</td></tr>
+<tr><td>Sau</td><td><a href="/courses/react">React</a></td><td>Giao diện cho API của bạn (Chương 12 và chương nối React ↔ Spring)</td></tr>
+<tr><td>Sau</td><td><a href="/courses/redis">Redis</a> · <a href="/courses/kafka">Apache Kafka</a></td><td>Cache và luồng sự kiện sâu hơn Chương 13–14</td></tr>
+<tr><td>Sau</td><td><a href="/courses/github-actions">GitHub Actions</a> · <a href="/courses/deploy-vps">Deploy lên VPS</a> · <a href="/courses/performance-load-testing">Performance &amp; Load Testing</a></td><td>CI/CD, triển khai thật và đo tải cho chính app bạn dựng</td></tr>
+<tr><td>Sau</td><td><a href="/courses/interview-prep">IT Interview Prep</a></td><td>Biến câu hỏi phỏng vấn cuối mỗi chương thành câu trả lời</td></tr>
+</tbody>
+</table>
+<p><strong>Môn Academy mà khoá này phủ.</strong> Đại học FPT dạy Spring ở <a href="/courses/hsf302-working-with-spring-framework">HSF302</a> (Spring MVC, Thymeleaf, JPA) và <a href="/courses/sba301-integrate-single-page-application-with-spring-boot">SBA301</a> (API Spring Boot + ứng dụng một trang React). Khoá này đi sâu hơn cả hai và thêm ở cuối khoá những chương hai môn đó cần (giao diện Thymeleaf dựng ở server, Spring Data MongoDB, nối React ↔ Spring).</p>
+<p><strong>Nếu chuyên ngành của bạn là Node.js</strong> (SDN302, MMA301, WDP301), đây là stack backend thứ hai, không phải thứ thay thế:</p>
+<ul>
+  <li>Cùng dự án LabFlow với <a href="/courses/nodejs">khoá Node.js</a> — dựng hai lần là bạn trả lời được “Node hay Spring, vì sao?” bằng chính số đo của mình (Chương 16 đo cả hai).</li>
+  <li>Dependency injection, giao dịch, validation và kiến trúc phân tầng hiện rõ trong Spring. Hiểu ở đây rồi thì NestJS, transaction của Prisma và middleware Express đọc như phiên bản nhẹ của cùng những ý đó.</li>
+  <li>Nhiều nhóm ở Việt Nam chạy dịch vụ Spring Boot cạnh dịch vụ Node.js; đọc, gỡ lỗi và gọi được cả hai làm bạn thành người nối chúng lại.</li>
+</ul>
 <h3>🎤 Người phỏng vấn sẽ hỏi gì về bài này</h3>
 <ol>
   <li><strong>"Spring và Spring Boot khác nhau thế nào?"</strong> — Spring Framework là container và các mô-đun (web, dữ liệu, giao dịch). Spring Boot là lớp phủ có chính kiến bên trên: tự cấu hình theo những gì có trên classpath, dependency starter, server nhúng và tệp jar chạy thẳng. Boot không thay Spring; nó cấu hình Spring.</li>
@@ -346,7 +468,15 @@ ${tl('https://docs.spring.io/spring-boot/reference/', '📘', 'Tài liệu tham 
   <li>Ghi chú phát hành Spring Boot 3.0 (Java 17, Jakarta EE 9+): <a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Release-Notes" target="_blank" rel="noopener">github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Release-Notes</a></li>
   <li>Ghi chú phát hành Spring Boot 4.0: <a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Release-Notes" target="_blank" rel="noopener">github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Release-Notes</a></li>
   <li>Broadcom hoàn tất mua VMware (22/11/2023): <a href="https://investors.broadcom.com/news-releases/news-release-details/broadcom-completes-acquisition-vmware" target="_blank" rel="noopener">investors.broadcom.com</a></li>
+  <li>Netflix Technology Blog, “Netflix OSS and Spring Boot — Coming Full Circle” (12/2018): <a href="https://netflixtechblog.com/netflix-oss-and-spring-boot-coming-full-circle-4855947713a0" target="_blank" rel="noopener">netflixtechblog.com/netflix-oss-and-spring-boot-coming-full-circle</a></li>
+  <li>Trang chính thức Netflix DGS framework: <a href="https://netflix.github.io/dgs/" target="_blank" rel="noopener">netflix.github.io/dgs</a></li>
+  <li>Allegro Tech Blog (11/2021), bài về Micronaut: <a href="https://blog.allegro.tech/2021/11/micronaut.html" target="_blank" rel="noopener">blog.allegro.tech/2021/11/micronaut.html</a></li>
+  <li>Allegro Tech Blog (4/2024), “Ten Years and Counting: My Affair with Microservices”: <a href="https://blog.allegro.tech/2024/04/ten-years-microservices.html" target="_blank" rel="noopener">blog.allegro.tech/2024/04/ten-years-microservices.html</a></li>
 </ul>
+
+<h3>🎯 Dự án cuối khoá của bạn</h3>
+<p>Khoá này không chỉ có bài học: bạn sẽ tự dựng <strong>một ứng dụng Spring Boot thật của riêng mình</strong> xuyên suốt khoá. Sau Mục 0 và sau mỗi chương có một <strong>mốc dự án</strong> áp đúng kiến thức chương đó vào đề tài của bạn — đầu tiên là bộ khung, rồi mô hình domain, REST API, validation, schema PostgreSQL với Flyway, bảo mật JWT, test, cache, số đo, Docker và CI. Cuối khoá bạn hoàn thiện và bảo vệ trước hội đồng AI, chấm theo rubric 10 điểm. Chọn một đề tài gợi ý (LabFlow đi đúng theo từng bài học) hoặc tự đề xuất — AI sẽ xét đề tài có vừa sức không.</p>
+<p><strong>Hãy đăng ký đề tài dự án cuối khoá của bạn ở bên dưới.</strong></p>
 </div>
 `;
 
@@ -1559,6 +1689,8 @@ export default {
       title: 'Start here (1/2) — What Spring Boot is, its history, and why enterprise Vietnam still runs on it|||Bắt đầu tại đây (1/2) — Spring Boot là gì, lịch sử ra đời, và vì sao doanh nghiệp Việt Nam vẫn chạy trên nó',
       slug: 'sb-0-8-bat-dau-tai-day',
       type: 'LESSON',
+      // Dự án xuyên suốt khoá (docs/du-an-hop-dong.md): frontend vẽ khối "🎯 Đăng ký đề tài" dưới bài có cờ này.
+      dangKyDuAn: true,
       isFreePreview: true,
       description: 'Spring vs Spring Boot, lịch sử có nguồn 2002–2026, vì sao doanh nghiệp chọn Java, so sánh với Node.js và lộ trình cả khoá.',
       content: L08_EN + L08_VI,

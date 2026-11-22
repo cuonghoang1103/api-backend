@@ -22,6 +22,9 @@ import s08 from './spring-boot/s08-flyway.mjs';
 import s09 from './spring-boot/s09-security-jwt.mjs';
 import s10 from './spring-boot/s10-hacker.mjs';
 import s11 from './spring-boot/s11-test.mjs';
+import s19 from './spring-boot/s19-thymeleaf.mjs';
+// Dự án xuyên suốt khoá (docs/du-an-hop-dong.md v1, 22/11/2026): duAn + bài mốc sb-moc-N + bài bảo vệ sb-bao-ve-du-an.
+import duAn, { baiMoc, baiBaoVe, MOC_THEO_CHUONG } from './spring-boot/_du-an.mjs';
 
 const CHUONG = [
   ['Section 0 — Why Spring Boot', 'Mục 0 — Vì sao Spring Boot', '(đã soạn — spring-boot/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -163,6 +166,29 @@ const CHUONG = [
     ['tong-ket', 'Frontend, final checklist and Node.js comparison', 'Gắn frontend, checklist cuối khoá và so sánh Node.js', 'Trang React thật · Checklist năng lực · Khi nào chọn Spring Boot, khi nào chọn Node'],
     ['thi-thuc-hanh', 'Timed practical exam', 'Bài thi thực hành có giờ', 'Đề kiểu PE 3 giờ · Rubric chấm · Bài chữa'],
   ]],
+  /* ── Chương bổ sung 22/11/2026 (phủ HSF302/SBA301 — đặt CUỐI, không chèn giữa, không đánh số lại) ── */
+  ['Chapter 19 — Server-rendered pages: Spring MVC views and Thymeleaf', 'Chương 19 — Trang dựng ở server: Spring MVC trả view và Thymeleaf', 'HSF302: @Controller trả view, Thymeleaf, form có validation, layout, form đăng nhập + CSRF cạnh API JWT.', [
+    ['mvc-view', 'Spring MVC returning views: @Controller, Model and the view resolver', 'Spring MVC trả view: @Controller, Model và view resolver', '@Controller vs @RestController · Model và tên view · ViewResolver tìm templates/ · Khi nào trang server tốt hơn SPA'],
+    ['thymeleaf-co-ban', 'Thymeleaf basics: expressions, loops, conditions and safe output', 'Thymeleaf cơ bản: biểu thức, vòng lặp, điều kiện và xuất an toàn', 'th:text vs th:utext (XSS) · th:each, th:if · biểu thức biến, URL, i18n · Natural templates'],
+    ['form-validation', 'Forms: th:object, th:field, BindingResult and Post/Redirect/Get', 'Form: th:object, th:field, BindingResult và Post/Redirect/Get', 'Gắn form vào record · Lỗi cạnh ô nhập · BindingResult đứng ngay sau @ModelAttribute · Flash message'],
+    ['layout-fragment', 'Layouts, fragments and static resources', 'Layout, fragment và tài nguyên tĩnh', 'th:replace, th:insert · Header/menu dùng chung · static/ và cache · Phân trang trên trang server'],
+    ['form-login', 'Form login, sessions and CSRF next to a JWT API', 'Form đăng nhập, session và CSRF bên cạnh API JWT', 'Hai SecurityFilterChain với @Order · formLogin + UserDetailsService · CSRF token trong form · sec:authorize'],
+    ['lab-19', 'Chapter 19 lab + interview questions', 'Lab chương 19 + câu hỏi phỏng vấn', 'Trang quản trị cho tài nguyên chính · Rubric · Câu phỏng vấn MVC/Thymeleaf'],
+  ]],
+  ['Chapter 20 — Spring Data MongoDB', 'Chương 20 — Spring Data MongoDB', 'Khi nào dùng document store, @Document, MongoRepository, MongoTemplate, chỉ mục, aggregation, chạy cạnh PostgreSQL.', [
+    ['mongo-vi-sao', 'Documents vs tables: when MongoDB fits', 'Document và bảng: khi nào MongoDB hợp', 'Mô hình document · Nhúng vs tham chiếu · Không có khoá ngoại và JOIN · So với PostgreSQL JSONB'],
+    ['spring-data-mongo', '@Document, MongoRepository and MongoTemplate', '@Document, MongoRepository và MongoTemplate', 'spring.mongodb.uri (Boot 4) · Record làm document · Derived query · MongoTemplate cho cập nhật một phần'],
+    ['mongo-query-index', 'Queries, indexes and aggregation', 'Truy vấn, chỉ mục và aggregation', 'explain() · Chỉ mục kép và TTL · Aggregation pipeline cho báo cáo · Phân trang'],
+    ['mongo-ket-hop', 'MongoDB next to PostgreSQL in one app', 'MongoDB bên cạnh PostgreSQL trong một app', 'Ghi sau commit bằng sự kiện · Nhất quán cuối cùng · Testcontainers MongoDB · Health cho cả hai'],
+    ['lab-20', 'Chapter 20 lab + interview questions', 'Lab chương 20 + câu hỏi phỏng vấn', 'Nhật ký/đánh giá bằng MongoDB · Rubric · Câu phỏng vấn SQL vs NoSQL'],
+  ]],
+  ['Chapter 21 — React ↔ Spring Boot, end to end', 'Chương 21 — React ↔ Spring Boot trọn vẹn', 'SBA301: SPA gọi API Spring — đăng nhập, refresh token bằng cookie, CORS, lỗi ProblemDetail trong form, triển khai cả hai.', [
+    ['kien-truc-spa', 'SPA + API architecture: dev proxy, CORS or same origin', 'Kiến trúc SPA + API: dev proxy, CORS hay cùng origin', 'Vite proxy khi dev · Hai origin và CORS · Cùng origin sau nginx · Cấu hình base URL theo môi trường'],
+    ['jwt-refresh-cookie', 'Login, access token in memory, refresh token in an HttpOnly cookie', 'Đăng nhập, access token trong bộ nhớ, refresh token trong cookie HttpOnly', 'Xoay vòng refresh token · SameSite và CSRF cho endpoint refresh · Đăng xuất thu hồi · Tải lại trang vẫn đăng nhập'],
+    ['cors-loi', 'Errors and CORS end to end: ProblemDetail in React forms', 'Lỗi và CORS trọn tuyến: ProblemDetail trong form React', 'Một API client cho cả app · Lỗi từng trường cạnh ô nhập · 401/403 · Đọc lỗi CORS trong console'],
+    ['deploy-spa-api', 'Deploying the React app and the Spring API together', 'Triển khai app React và API Spring cùng nhau', 'Build tĩnh + nginx · compose ba service · HTTPS và cookie Secure · Smoke test cả hai'],
+    ['lab-21', 'Chapter 21 lab + interview questions', 'Lab chương 21 + câu hỏi phỏng vấn', 'Ba màn hình React cho đề tài · Rubric · Câu phỏng vấn full-stack'],
+  ]],
 ];
 
 const sections = khung('sb', CHUONG);
@@ -178,6 +204,20 @@ sections[8] = s08;
 sections[9] = s09;
 sections[10] = s10;
 sections[11] = s11;
+sections[19] = s19;   // chương bổ sung 22/11 (HSF302) — 20, 21 còn là khung
+
+/* Dự án xuyên suốt khoá: mỗi mục/chương có một bài mốc, đặt ngay TRƯỚC bài quiz của chương
+   (chương chưa có quiz ⇒ cuối chương). Tạo bản sao section, không sửa object của module chương. */
+for (let i = 0; i < sections.length; i++) {
+  const so = MOC_THEO_CHUONG[i];
+  if (!so) continue;
+  const lessons = [...sections[i].lessons];
+  const iQuiz = lessons.findIndex((l) => l.type === 'QUIZ');
+  lessons.splice(iQuiz >= 0 ? iQuiz : lessons.length, 0, baiMoc(so));
+  sections[i] = { ...sections[i], lessons };
+}
+// Bài bảo vệ: cuối chương cuối cùng của khoá.
+sections[sections.length - 1] = { ...sections[sections.length - 1], lessons: [...sections[sections.length - 1].lessons, baiBaoVe()] };
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -191,10 +231,11 @@ export default {
     syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/spring-boot.png?v=1',
     shortDescription: 'Production APIs with Spring Boot 4 + Java 21: modern Java, Spring internals, REST, JPA + PostgreSQL without N+1, Flyway, Security + JWT, Testcontainers, Redis, observability, Docker + CI.|||API production với Spring Boot 4 + Java 21: Java hiện đại, Spring từ bên trong, REST, JPA + PostgreSQL không N+1, Flyway, Security + JWT, Testcontainers, Redis, quan sát hệ thống, Docker + CI.',
-    description: 'Khoá Spring Boot từ số 0 tới production cho người đã biết lập trình hướng đối tượng. 19 mục: ⭐ Java hiện đại cho backend (record, sealed, pattern matching, Stream, Optional, collections, đồng thời, virtual thread, JVM và GC), lõi Spring nhìn từ bên trong (IoC, DI, vòng đời bean, proxy, auto-configuration), REST controller, validation và lỗi chuẩn RFC 9457, Spring Data JPA + PostgreSQL (persistence context, N+1, lazy/eager, propagation, isolation, khoá lạc quan), Flyway, Spring Security + JWT, góc nhìn hacker (mass assignment, IDOR, injection), kiểm thử (JUnit 5, Mockito, @WebMvcTest, Testcontainers), OpenAPI + React, Redis, việc nền và hàng đợi, Actuator/Micrometer, đo tải, Docker + CI, và dự án cuối khoá LabFlow (API đặt lịch phòng lab, cùng đề với khoá Node.js). Mọi ví dụ chạy thật trên Spring Boot 4.1.2 + Java 21, có lab chạy thật, câu hỏi phỏng vấn cuối mỗi chương và so sánh với Node.js/Express ở chỗ người phỏng vấn hay hỏi.',
+    description: 'Khoá Spring Boot từ số 0 tới production cho người đã biết lập trình hướng đối tượng. 22 mục: ⭐ Java hiện đại cho backend (record, sealed, pattern matching, Stream, Optional, collections, đồng thời, virtual thread, JVM và GC), lõi Spring nhìn từ bên trong (IoC, DI, vòng đời bean, proxy, auto-configuration), REST controller, validation và lỗi chuẩn RFC 9457, Spring Data JPA + PostgreSQL (persistence context, N+1, lazy/eager, propagation, isolation, khoá lạc quan), Flyway, Spring Security + JWT, góc nhìn hacker (mass assignment, IDOR, injection), kiểm thử (JUnit 5, Mockito, @WebMvcTest, Testcontainers), OpenAPI + React, Redis, việc nền và hàng đợi, Actuator/Micrometer, đo tải, Docker + CI, dự án cuối khoá LabFlow (API đặt lịch phòng lab, cùng đề với khoá Node.js), rồi ba chương phủ HSF302/SBA301: trang dựng ở server bằng Spring MVC + Thymeleaf, Spring Data MongoDB, nối React ↔ Spring trọn vẹn. Xuyên suốt khoá là một dự án của riêng bạn (6 đề tài gợi ý hoặc tự chọn, 22 mốc, bảo vệ trước hội đồng AI). Mọi ví dụ chạy thật trên Spring Boot 4.1.2 + Java 21, có lab chạy thật, câu hỏi phỏng vấn cuối mỗi chương và so sánh với Node.js/Express ở chỗ người phỏng vấn hay hỏi.',
     whatYouLearn: 'Viết Java 21 hiện đại và trả lời được câu hỏi phỏng vấn về collections, đồng thời, JVM/GC; hiểu container Spring tới tận bên trong (bean, vòng đời, proxy, auto-configuration); thiết kế REST API có validation và lỗi chuẩn ProblemDetail; làm chủ Spring Data JPA với PostgreSQL — không N+1, đúng giao dịch, chống đặt trùng bằng khoá; quản lý schema bằng Flyway; dựng xác thực JWT và phân quyền với Spring Security; tự tấn công và vá các lỗ hổng API phổ biến; viết test thật với Testcontainers; cache Redis, việc nền, hàng đợi; quan sát và đo tải ứng dụng; đóng gói Docker và CI; hoàn thành dự án LabFlow để đưa vào CV.',
     requirements: 'Biết lập trình hướng đối tượng cơ bản (class, kế thừa, interface) ở bất kỳ ngôn ngữ nào — học xong PRO192 là đủ; Chương 1–2 dựng lại Java hiện đại từ đó. Biết SQL cơ bản. Máy chạy được Docker (cho PostgreSQL) và biết Git cơ bản. Không cần PRJ301 hay khoá Node.js — nếu đã học thì phần REST/auth/test ở đây sẽ quen và có so sánh trực tiếp.',
     documentsNote: 'Tài liệu chính: docs.spring.io/spring-boot/reference • docs.spring.io/spring-framework/reference • docs.spring.io/spring-security/reference • docs.spring.io/spring-data/jpa/reference • documentation.red-gate.com/flyway • java.testcontainers.org • docs.oracle.com/en/java/javase/21.',
   },
   sections,
+  duAn,
 };

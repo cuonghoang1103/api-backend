@@ -137,6 +137,27 @@ server logs : [error handler] ERR_HTTP_HEADERS_SENT</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Express.js Core Concepts</span><span class="lc-sub">10 exercises on app setup, routing and responses.</span></span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Rebuild the 3.5 raw-http server in Express: a <code>GET /health</code> returning JSON and an automatic 404 — then count the lines against the raw version.</li>
+<li>Compare <code>res.json({...})</code> and <code>res.send("...")</code>: inspect the Content-Type header each sets.</li>
+<li>Install Express with <code>npm i express</code> and start the app with an npm script.</li>
+</ol>
+<p><strong>Done when:</strong> your Express version is shorter than the raw one and you can say what res.json sets that res.send does not.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Express</span><span class="v">A minimal web framework on top of the http module.</span></div>
+  <div class="kv"><span class="k">app</span><span class="v">The Express application object you attach routes to.</span></div>
+  <div class="kv"><span class="k">res.json</span><span class="v">Sends JSON and sets Content-Type: application/json.</span></div>
+  <div class="kv"><span class="k">res.send</span><span class="v">Sends a response, guessing the Content-Type from the body.</span></div>
+  <div class="kv"><span class="k">Automatic 404</span><span class="v">Express answers unmatched routes without you writing it.</span></div>
+  <div class="kv"><span class="k">app.listen</span><span class="v">Starts the server on a port.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Express sits on the http module and removes the four pains of raw http.</li><li>res.json sets the JSON Content-Type for you; res.send guesses from the body.</li><li>Unmatched routes get a 404 for free, no hand-written branch needed.</li><li>It genuinely cuts code — the same API is far shorter than the raw version.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -254,6 +275,27 @@ server log  : [error handler] ERR_HTTP_HEADERS_SENT</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Kiến thức cốt lõi Express.js</span><span class="lc-sub">10 bài tập về khởi tạo app, định tuyến và phản hồi.</span></span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Dựng lại server http trần của bài 3.5 bằng Express: một <code>GET /health</code> trả JSON và một 404 tự động — rồi đếm số dòng so với bản trần.</li>
+<li>So <code>res.json({...})</code> và <code>res.send("...")</code>: xem header Content-Type mỗi cái đặt.</li>
+<li>Cài Express bằng <code>npm i express</code> và khởi động app bằng một npm script.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bản Express ngắn hơn bản trần và bạn nói được res.json đặt gì mà res.send không.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Express</span><span class="v">Một framework web tối giản nằm trên module http.</span></div>
+  <div class="kv"><span class="k">app</span><span class="v">Object ứng dụng Express mà bạn gắn route vào.</span></div>
+  <div class="kv"><span class="k">res.json</span><span class="v">Gửi JSON và đặt Content-Type: application/json.</span></div>
+  <div class="kv"><span class="k">res.send</span><span class="v">Gửi một phản hồi, đoán Content-Type từ body.</span></div>
+  <div class="kv"><span class="k">404 tự động</span><span class="v">Express trả route không khớp mà bạn không phải viết.</span></div>
+  <div class="kv"><span class="k">app.listen</span><span class="v">Khởi động server trên một cổng.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Express nằm trên module http và bỏ bốn nỗi khổ của http trần.</li><li>res.json đặt Content-Type JSON giúp bạn; res.send đoán từ body.</li><li>Route không khớp được 404 miễn phí, không cần nhánh viết tay.</li><li>Nó thật sự cắt code — cùng một API ngắn hơn bản trần nhiều.</li></ul>
 </div>
 `,
     },
@@ -354,6 +396,27 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</sp
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 2.1: Express routing &amp; your first app</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: Express routing and organising routes with Router. Different: Courses uses Express 5 and shows real bugs rather than only stating rules. In this lesson we add: anatomy of a route, path parameters, the route-order bug seen first-hand, query strings, wildcards and the Express 5 change. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Add a route with a path parameter (<code>/notes/:id</code>) and read it from <code>req.params</code>.</li>
+<li>Reproduce the ordering bug: put a specific route after a broader one so the broad one shadows it, then fix it by reordering.</li>
+<li>Split a resource into its own file with <code>express.Router()</code> and mount it under a base path.</li>
+</ol>
+<p><strong>Done when:</strong> you read a path param, saw and fixed a route-ordering shadow, and mounted a Router.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Route</span><span class="v">A method + path paired with a handler.</span></div>
+  <div class="kv"><span class="k">Path parameter</span><span class="v">A named URL segment read from req.params.</span></div>
+  <div class="kv"><span class="k">Query string</span><span class="v">The <code>?key=value</code> part read from req.query.</span></div>
+  <div class="kv"><span class="k">Route ordering</span><span class="v">Express matches top-down; order can shadow routes.</span></div>
+  <div class="kv"><span class="k">express.Router()</span><span class="v">A mountable group of routes, usually one per resource.</span></div>
+  <div class="kv"><span class="k">Mounting</span><span class="v">Attaching a router under a base path with app.use.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A route is a method plus a path; params come from req.params, query from req.query.</li><li>Express matches routes top-down, so declaration order can shadow a route — a real bug.</li><li>express.Router() lets you keep one file per resource.</li><li>Mount routers under a base path to keep the app wiring tidy.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -444,6 +507,27 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</sp
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 2.1: Express routing &amp; app đầu tiên</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: định tuyến Express và tổ chức route bằng Router. Khác: Courses dùng Express 5 và đo lỗi thật thay vì chỉ nêu quy tắc. Ở bài này mình học thêm: giải phẫu một route, tham số trên đường dẫn, bug thứ tự route xem tận mắt, query string, ký tự đại diện và thay đổi ở Express 5. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Thêm một route có tham số đường dẫn (<code>/notes/:id</code>) và đọc nó từ <code>req.params</code>.</li>
+<li>Tái hiện bug thứ tự: đặt một route cụ thể sau một route rộng hơn để route rộng che nó, rồi sửa bằng cách sắp lại.</li>
+<li>Tách một tài nguyên ra file riêng bằng <code>express.Router()</code> và gắn nó dưới một đường dẫn gốc.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đọc được param đường dẫn, thấy và sửa được chuyện route bị che do thứ tự, và gắn được một Router.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Route</span><span class="v">Một method + đường dẫn ghép với một handler.</span></div>
+  <div class="kv"><span class="k">Tham số đường dẫn</span><span class="v">Một đoạn URL có tên đọc từ req.params.</span></div>
+  <div class="kv"><span class="k">Query string</span><span class="v">Phần <code>?key=value</code> đọc từ req.query.</span></div>
+  <div class="kv"><span class="k">Thứ tự route</span><span class="v">Express khớp từ trên xuống; thứ tự có thể che route.</span></div>
+  <div class="kv"><span class="k">express.Router()</span><span class="v">Một nhóm route gắn được, thường mỗi tài nguyên một cái.</span></div>
+  <div class="kv"><span class="k">Gắn (mount)</span><span class="v">Gắn một router dưới một đường dẫn gốc bằng app.use.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một route là method cộng đường dẫn; param từ req.params, query từ req.query.</li><li>Express khớp route từ trên xuống, nên thứ tự khai báo có thể che một route — bug thật.</li><li>express.Router() cho bạn giữ mỗi tài nguyên một file.</li><li>Gắn router dưới một đường dẫn gốc để giữ phần nối app gọn gàng.</li></ul>
 </div>
 
 <div class="ml-en">
@@ -620,6 +704,27 @@ curl exit=28   ← Operation timed out</div>
   <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 8.1: Filter: code that runs before every request</span><span class="lc-sub">If you took PRJ301 on Academy, this part will feel familiar. Same: a chain of links in front of the handler; calling chain.doFilter() / next() lets the request continue, otherwise it stops (the code there is Node.js, not Java — the ideas carry over). Different: A Servlet Filter and Express middleware are the same idea on two platforms. In this lesson we add: the chain in its exact run order, writing a real timing logger, scoped middleware — the shape of every guard. If you have not taken PRJ301, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN PRJ301 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a request-logger middleware that records the time at entry, calls <code>next()</code>, and logs method, path and duration after the response finishes.</li>
+<li>Add <code>express.json()</code> and read a POST body; then remove it and watch <code>req.body</code> become undefined.</li>
+<li>Forget <code>next()</code> in a middleware on purpose and watch the request hang forever.</li>
+</ol>
+<p><strong>Done when:</strong> you wrote a working logger, saw express.json populate req.body, and reproduced the forgotten-next() hang.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Middleware</span><span class="v">A function with (req, res, next) in the request chain.</span></div>
+  <div class="kv"><span class="k">next()</span><span class="v">Passes control to the next middleware; forgetting it hangs the request.</span></div>
+  <div class="kv"><span class="k">express.json()</span><span class="v">Built-in middleware that parses a JSON body into req.body.</span></div>
+  <div class="kv"><span class="k">express.static()</span><span class="v">Built-in middleware that serves files from a folder.</span></div>
+  <div class="kv"><span class="k">Scoped middleware</span><span class="v">Middleware applied to one route or router only.</span></div>
+  <div class="kv"><span class="k">Chain order</span><span class="v">Middleware runs in the order it is registered.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Middleware is a (req, res, next) function in the chain every request walks.</li><li>Call next() to continue; forgetting it leaves the request hanging.</li><li>express.json() fills req.body; express.static() serves files.</li><li>Scoped middleware is the shape of every guard — applied to one route or router.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -754,6 +859,27 @@ curl exit=28   ← Operation timed out</div>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở PRJ301 — bài 8.1: Filter: code chạy trước mọi request</span><span class="lc-sub">Nếu bạn đã học môn PRJ301 ở Academy thì phần này không còn lạ. Giống: một chuỗi mắt xích đứng trước handler, gọi chain.doFilter() / next() thì request đi tiếp, không gọi thì dừng (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Filter của Servlet và middleware của Express là cùng một ý tưởng ở hai nền tảng. Ở bài này mình học thêm: dây chuyền theo đúng thứ tự chạy, tự viết logger đo thời gian thật, middleware theo phạm vi — hình dạng của mọi chốt chặn. Chưa học PRJ301 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI PRJ301 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một middleware log-request ghi thời điểm vào, gọi <code>next()</code>, rồi log method, đường dẫn và thời lượng sau khi response xong.</li>
+<li>Thêm <code>express.json()</code> và đọc một body POST; rồi gỡ nó và thấy <code>req.body</code> thành undefined.</li>
+<li>Cố ý quên <code>next()</code> trong một middleware và xem request treo mãi.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn viết được một logger chạy, thấy express.json điền req.body, và tái hiện được cú treo vì quên next().</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Middleware</span><span class="v">Một hàm có (req, res, next) trong chuỗi request.</span></div>
+  <div class="kv"><span class="k">next()</span><span class="v">Chuyển quyền sang middleware kế; quên nó làm treo request.</span></div>
+  <div class="kv"><span class="k">express.json()</span><span class="v">Middleware dựng sẵn parse body JSON vào req.body.</span></div>
+  <div class="kv"><span class="k">express.static()</span><span class="v">Middleware dựng sẵn phục vụ file từ một thư mục.</span></div>
+  <div class="kv"><span class="k">Middleware theo phạm vi</span><span class="v">Middleware chỉ áp cho một route hoặc router.</span></div>
+  <div class="kv"><span class="k">Thứ tự chuỗi</span><span class="v">Middleware chạy theo thứ tự nó được đăng ký.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Middleware là một hàm (req, res, next) trong chuỗi mọi request đi qua.</li><li>Gọi next() để đi tiếp; quên nó để request treo lại.</li><li>express.json() điền req.body; express.static() phục vụ file.</li><li>Middleware theo phạm vi là hình dạng của mọi chốt chặn — áp cho một route hoặc router.</li></ul>
 </div>
 `,
     },
@@ -901,6 +1027,27 @@ process.<span class="tok-fn">on</span>(<span class="tok-string">'uncaughtExcepti
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 2.2: Middleware: the heart of Express</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: an error handler is a four-argument middleware. Different: Courses shows three ways an error reaches the handler and which one Express 4 misses. In this lesson we add: a throw inside async code (Express 5 catches it, Express 4 does not, with proof), an error class carrying an HTTP code, JSON 404s, two kinds of error that still kill the process. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a four-argument error handler <code>(err, req, res, next)</code> and mount it last; make a route throw and watch it respond with JSON.</li>
+<li>Create an <code>AppError</code> class carrying an HTTP status, throw it, and have the handler use <code>err.status</code>.</li>
+<li>In Express 4, throw inside an async handler with no try/catch and watch the request hang; fix it by forwarding the error to next.</li>
+</ol>
+<p><strong>Done when:</strong> you have one central error handler returning JSON, an AppError with a status, and a fixed async-throw hang.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Error handler</span><span class="v">Middleware with four args that catches errors.</span></div>
+  <div class="kv"><span class="k">AppError</span><span class="v">A custom error class carrying an HTTP status code.</span></div>
+  <div class="kv"><span class="k">next(err)</span><span class="v">Forwards an error to the error-handling middleware.</span></div>
+  <div class="kv"><span class="k">Async throw</span><span class="v">In Express 4, async rejections are not caught automatically.</span></div>
+  <div class="kv"><span class="k">JSON 404</span><span class="v">A not-found handler returning a consistent JSON body.</span></div>
+  <div class="kv"><span class="k">Order matters</span><span class="v">The error handler must be mounted after all routes.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The error handler is just middleware with four arguments, mounted last.</li><li>A custom AppError carries an HTTP status so the handler can respond correctly.</li><li>In Express 4 an async throw without try/catch hangs the request — forward it to next.</li><li>A JSON 404 and the error handler must sit after the routes; order matters again.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1031,6 +1178,27 @@ process.<span class="tok-fn">on</span>(<span class="tok-string">'uncaughtExcepti
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 2.2: Middleware: trái tim của Express</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: error handler là middleware nhận bốn tham số. Khác: Courses chỉ ra ba đường để lỗi tới handler và đường nào làm Express 4 bỏ sót. Ở bài này mình học thêm: lỗi throw trong code async (Express 5 bắt được, Express 4 thì không, kèm bằng chứng), lớp lỗi mang mã HTTP, 404 dạng JSON, hai loại lỗi vẫn giết được tiến trình. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một error handler bốn tham số <code>(err, req, res, next)</code> và gắn nó cuối cùng; cho một route ném lỗi và xem nó trả JSON.</li>
+<li>Tạo một lớp <code>AppError</code> mang mã trạng thái HTTP, ném nó, và cho handler dùng <code>err.status</code>.</li>
+<li>Trong Express 4, ném trong một handler async không try/catch và xem request treo; sửa bằng cách chuyển lỗi sang next.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một error handler tập trung trả JSON, một AppError mang status, và một cú treo async-throw đã sửa.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Error handler</span><span class="v">Middleware bốn tham số bắt lỗi.</span></div>
+  <div class="kv"><span class="k">AppError</span><span class="v">Một lớp lỗi tự định nghĩa mang mã trạng thái HTTP.</span></div>
+  <div class="kv"><span class="k">next(err)</span><span class="v">Chuyển một lỗi sang middleware xử lý lỗi.</span></div>
+  <div class="kv"><span class="k">Async throw</span><span class="v">Trong Express 4, rejection async không được bắt tự động.</span></div>
+  <div class="kv"><span class="k">JSON 404</span><span class="v">Một handler not-found trả một body JSON nhất quán.</span></div>
+  <div class="kv"><span class="k">Thứ tự quan trọng</span><span class="v">Error handler phải gắn sau mọi route.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Error handler chỉ là middleware bốn tham số, gắn cuối cùng.</li><li>Một AppError tự định nghĩa mang mã HTTP để handler trả lời đúng.</li><li>Trong Express 4 một throw async không try/catch làm treo request — chuyển nó sang next.</li><li>JSON 404 và error handler phải đứng sau các route; thứ tự lại quan trọng.</li></ul>
 </div>
 `,
     },
@@ -1187,6 +1355,27 @@ process: exited</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Express.js Core Concepts</span><span class="lc-sub">Build and structure a full Express application.</span></span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Lay out the app by layers (app, router, service) and wire the five CRUD routes for notes so they run end to end.</li>
+<li>Separate <code>app</code> from <code>server</code> (export the app, start the listener elsewhere) so the app is testable without a live port.</li>
+<li>Add a graceful shutdown on SIGTERM that stops accepting new requests and lets in-flight ones finish.</li>
+</ol>
+<p><strong>Done when:</strong> the five-route Notes API runs, the app is exported separately from the listener, and shutdown is graceful.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Layered structure</span><span class="v">Splitting app wiring, routing and business logic.</span></div>
+  <div class="kv"><span class="k">CRUD</span><span class="v">Create, Read, Update, Delete — the five core operations.</span></div>
+  <div class="kv"><span class="k">app vs server</span><span class="v">Export the app; start the HTTP listener separately for tests.</span></div>
+  <div class="kv"><span class="k">Router layer</span><span class="v">HTTP concerns only — no business logic.</span></div>
+  <div class="kv"><span class="k">Graceful shutdown</span><span class="v">Stop new requests, let in-flight ones finish on SIGTERM.</span></div>
+  <div class="kv"><span class="k">Separation of concerns</span><span class="v">Each layer has one job.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The Notes API comes together in layers: app wiring, router, and service.</li><li>Separating app from server makes the app testable without binding a port.</li><li>The router handles HTTP only; business logic lives in the service.</li><li>Graceful shutdown on SIGTERM avoids dropping in-flight requests.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1333,6 +1522,27 @@ tiến trình: đã thoát</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Kiến thức cốt lõi Express.js</span><span class="lc-sub">Dựng và tổ chức một ứng dụng Express đầy đủ.</span></span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Bố trí app theo tầng (app, router, service) và nối năm route CRUD cho notes để chạy end-to-end.</li>
+<li>Tách <code>app</code> khỏi <code>server</code> (xuất app, khởi động listener ở nơi khác) để app test được mà không cần cổng sống.</li>
+<li>Thêm tắt mềm khi SIGTERM: ngừng nhận request mới và để các request đang chạy kết thúc.</li>
+</ol>
+<p><strong>Đạt khi:</strong> Notes API năm route chạy được, app được xuất tách khỏi listener, và tắt máy diễn ra mềm.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cấu trúc theo tầng</span><span class="v">Tách phần nối app, định tuyến và logic nghiệp vụ.</span></div>
+  <div class="kv"><span class="k">CRUD</span><span class="v">Create, Read, Update, Delete — năm thao tác cốt lõi.</span></div>
+  <div class="kv"><span class="k">app vs server</span><span class="v">Xuất app; khởi động listener HTTP riêng để test.</span></div>
+  <div class="kv"><span class="k">Tầng router</span><span class="v">Chỉ lo HTTP — không logic nghiệp vụ.</span></div>
+  <div class="kv"><span class="k">Tắt mềm</span><span class="v">Ngừng request mới, để request đang chạy kết thúc khi SIGTERM.</span></div>
+  <div class="kv"><span class="k">Tách mối quan tâm</span><span class="v">Mỗi tầng một việc.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Notes API ráp lại theo tầng: nối app, router, và service.</li><li>Tách app khỏi server làm app test được mà không cần gắn cổng.</li><li>Router chỉ lo HTTP; logic nghiệp vụ nằm ở service.</li><li>Tắt mềm khi SIGTERM tránh làm rớt các request đang chạy.</li></ul>
 </div>
 `,
     },

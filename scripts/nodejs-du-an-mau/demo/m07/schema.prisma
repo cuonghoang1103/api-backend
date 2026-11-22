@@ -1,0 +1,30 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id     Int     @id @default(autoincrement())
+  email  String  @unique
+  plants Plant[]
+}
+
+model Plant {
+  id        Int        @id @default(autoincrement())
+  ownerId   Int
+  owner     User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  name      String     @db.VarChar(60)
+  everyDays Int
+  waterings Watering[]
+
+  @@unique([ownerId, name])
+}
+
+model Watering {
+  id        Int      @id @default(autoincrement())
+  plantId   Int
+  plant     Plant    @relation(fields: [plantId], references: [id], onDelete: Cascade)
+  wateredAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([plantId, wateredAt(sort: Desc)])
+}

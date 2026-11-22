@@ -99,6 +99,27 @@ npx &lt;tool&gt;                   <span class="tok-comment"># run a tool withou
   <span class="lc-body"><span class="lc-title">npm — scripts</span><span class="lc-sub">Lifecycle hooks, pre/post, and why an install script is a supply-chain concern.</span></span>
 </a>
 
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Run <code>npm init -y</code> in a scratch folder and read the generated package.json field by field.</li>
+<li>Install one runtime package and one dev-only package (e.g. <code>npm i express</code> and <code>npm i -D nodemon</code>) and confirm they land in <code>dependencies</code> vs <code>devDependencies</code>.</li>
+<li>Add a <code>"dev"</code> and a <code>"start"</code> script and run both with <code>npm run</code>.</li>
+</ol>
+<p><strong>Done when:</strong> you can explain what dependencies vs devDependencies means and run your own npm scripts.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">package.json</span><span class="v">The project manifest: metadata, dependencies and scripts.</span></div>
+  <div class="kv"><span class="k">dependencies</span><span class="v">Packages needed at runtime in production.</span></div>
+  <div class="kv"><span class="k">devDependencies</span><span class="v">Packages needed only for development/build/test.</span></div>
+  <div class="kv"><span class="k">npm scripts</span><span class="v">Named commands (<code>start</code>, <code>dev</code>, ...) run with npm run.</span></div>
+  <div class="kv"><span class="k">main / type</span><span class="v">Entry point and module system (CJS vs ESM) fields.</span></div>
+  <div class="kv"><span class="k">engines</span><span class="v">Declares the Node version the project expects.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>package.json is the project ID card: metadata, dependencies and scripts.</li><li>dependencies ship to production; devDependencies are for development only.</li><li>npm scripts give the project a named command list run with npm run.</li><li>Fields like main, type and engines actually change how Node treats the project.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -180,6 +201,27 @@ npx &lt;công cụ&gt;                <span class="tok-comment"># chạy công c
   <span class="lc-body"><span class="lc-title">npm — scripts</span><span class="lc-sub">Các hook vòng đời, pre/post, và vì sao một script cài đặt là mối lo về chuỗi cung ứng.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chạy <code>npm init -y</code> trong một thư mục nháp và đọc từng trường của package.json được tạo.</li>
+<li>Cài một gói runtime và một gói chỉ-dev (ví dụ <code>npm i express</code> và <code>npm i -D nodemon</code>) và xác nhận chúng rơi vào <code>dependencies</code> vs <code>devDependencies</code>.</li>
+<li>Thêm một script <code>"dev"</code> và một script <code>"start"</code> rồi chạy cả hai bằng <code>npm run</code>.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn giải thích được dependencies vs devDependencies nghĩa là gì và chạy được npm script của mình.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">package.json</span><span class="v">Bản kê dự án: metadata, phụ thuộc và scripts.</span></div>
+  <div class="kv"><span class="k">dependencies</span><span class="v">Gói cần lúc chạy trên production.</span></div>
+  <div class="kv"><span class="k">devDependencies</span><span class="v">Gói chỉ cần để phát triển/build/test.</span></div>
+  <div class="kv"><span class="k">npm scripts</span><span class="v">Lệnh có tên (<code>start</code>, <code>dev</code>, ...) chạy bằng npm run.</span></div>
+  <div class="kv"><span class="k">main / type</span><span class="v">Trường điểm vào và hệ module (CJS vs ESM).</span></div>
+  <div class="kv"><span class="k">engines</span><span class="v">Khai báo phiên bản Node dự án mong đợi.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>package.json là tấm căn cước dự án: metadata, phụ thuộc và scripts.</li><li>dependencies lên production; devDependencies chỉ để phát triển.</li><li>npm scripts cho dự án một danh sách lệnh có tên chạy bằng npm run.</li><li>Các trường như main, type và engines thật sự đổi cách Node đối xử với dự án.</li></ul>
 </div>
 
 <div class="ml-en">
@@ -275,6 +317,27 @@ npm i express@latest         <span class="tok-comment"># jump a major deliberate
   <span class="lc-body"><span class="lc-title">npm ci</span><span class="lc-sub">The command that installs strictly from the lockfile — the difference this lesson measures.</span></span>
 </a>
 
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Read a dependency version like <code>^4.18.2</code> and write down which future versions the caret allows and which it blocks.</li>
+<li>Compare <code>npm install</code> and <code>npm ci</code>: delete node_modules and run each, noting that ci installs exactly the lockfile.</li>
+<li>Open <code>package-lock.json</code>, find one package, and confirm it pins an exact resolved version and integrity hash.</li>
+</ol>
+<p><strong>Done when:</strong> you can read a semver range, explain install vs ci, and point to an exact pinned version in the lockfile.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Semver</span><span class="v">MAJOR.MINOR.PATCH versioning with defined meanings.</span></div>
+  <div class="kv"><span class="k">Caret (^)</span><span class="v">Allows minor and patch updates, not a new major.</span></div>
+  <div class="kv"><span class="k">Tilde (~)</span><span class="v">Allows patch updates only.</span></div>
+  <div class="kv"><span class="k">Lockfile</span><span class="v">package-lock.json pinning exact versions for reproducible installs.</span></div>
+  <div class="kv"><span class="k">npm ci</span><span class="v">Installs exactly the lockfile — used in CI and deploys.</span></div>
+  <div class="kv"><span class="k">Integrity hash</span><span class="v">A checksum verifying a downloaded package was not tampered with.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Semver is MAJOR.MINOR.PATCH; ^ allows minor+patch, ~ allows patch only.</li><li>Loose ranges are why two machines can end up on different versions.</li><li>The lockfile pins exact versions — commit it, always.</li><li>Use npm ci in CI/deploy to install exactly the lockfile, not npm install.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -338,6 +401,27 @@ npm i express@latest         <span class="tok-comment"># nhảy hẳn một majo
   <span class="lc-body"><span class="lc-title">npm ci</span><span class="lc-sub">Lệnh cài đặt nghiêm ngặt theo file lock — đúng cái khác biệt mà bài này đo.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đọc một phiên bản phụ thuộc như <code>^4.18.2</code> và ghi ra dấu caret cho phép những bản tương lai nào và chặn bản nào.</li>
+<li>So <code>npm install</code> và <code>npm ci</code>: xoá node_modules rồi chạy từng cái, ghi rằng ci cài đúng theo lockfile.</li>
+<li>Mở <code>package-lock.json</code>, tìm một gói, và xác nhận nó ghim một phiên bản resolved chính xác và một integrity hash.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đọc được một dải semver, giải thích install vs ci, và chỉ ra một phiên bản ghim chính xác trong lockfile.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Semver</span><span class="v">Đánh phiên bản MAJOR.MINOR.PATCH với ý nghĩa xác định.</span></div>
+  <div class="kv"><span class="k">Caret (^)</span><span class="v">Cho cập nhật minor và patch, không cho major mới.</span></div>
+  <div class="kv"><span class="k">Tilde (~)</span><span class="v">Chỉ cho cập nhật patch.</span></div>
+  <div class="kv"><span class="k">Lockfile</span><span class="v">package-lock.json ghim phiên bản chính xác để cài tái lập được.</span></div>
+  <div class="kv"><span class="k">npm ci</span><span class="v">Cài đúng theo lockfile — dùng trong CI và deploy.</span></div>
+  <div class="kv"><span class="k">Integrity hash</span><span class="v">Checksum xác minh gói tải về không bị sửa đổi.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Semver là MAJOR.MINOR.PATCH; ^ cho minor+patch, ~ chỉ cho patch.</li><li>Dải lỏng là lý do hai máy có thể kết thúc ở các phiên bản khác nhau.</li><li>Lockfile ghim phiên bản chính xác — luôn luôn commit nó.</li><li>Dùng npm ci trong CI/deploy để cài đúng lockfile, không phải npm install.</li></ul>
 </div>
 `,
     },
@@ -417,6 +501,27 @@ node_modules/send
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 319 — Core Modules and the npm Ecosystem</span><span class="lc-sub">10 exercises covering npm, packaging and module resolution.</span></span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Install one small package and run <code>npm ls --all</code> to count how many transitive packages came with it.</li>
+<li>Run <code>npm audit</code> on a project and read one reported advisory end to end.</li>
+<li>Before adding a new dependency, check its weekly downloads, last publish date, and whether it has install scripts — write a one-line go/no-go.</li>
+</ol>
+<p><strong>Done when:</strong> you have counted the transitive tree, read one audit advisory, and vetted one package before adding it.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Supply chain</span><span class="v">All the third-party code your install pulls in, directly or not.</span></div>
+  <div class="kv"><span class="k">Transitive dependency</span><span class="v">A package pulled in by one of your dependencies.</span></div>
+  <div class="kv"><span class="k">Install script</span><span class="v">Code a package runs at install time, before you import it.</span></div>
+  <div class="kv"><span class="k">npm audit</span><span class="v">Checks installed packages against a vulnerability database.</span></div>
+  <div class="kv"><span class="k">Typosquatting</span><span class="v">A malicious package named almost like a popular one.</span></div>
+  <div class="kv"><span class="k">--ignore-scripts</span><span class="v">Installing without running packages' install scripts.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>One npm install can pull dozens of packages written by strangers.</li><li>Install scripts run code on your machine before you import anything.</li><li>Pinning versions does not make a dependency trustworthy by itself.</li><li>Vet a package (downloads, recency, scripts) and run npm audit before you rely on it.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -486,6 +591,27 @@ node_modules/send
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 319 — Module lõi &amp; hệ sinh thái npm</span><span class="lc-sub">10 bài tập về npm, đóng gói và cách phân giải module.</span></span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Cài một gói nhỏ và chạy <code>npm ls --all</code> để đếm có bao nhiêu gói bắc cầu đi kèm.</li>
+<li>Chạy <code>npm audit</code> trên một dự án và đọc một cảnh báo được báo từ đầu tới cuối.</li>
+<li>Trước khi thêm một phụ thuộc mới, kiểm lượt tải mỗi tuần, ngày phát hành gần nhất, và nó có install script không — viết một dòng nên/không-nên.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã đếm cây bắc cầu, đọc một cảnh báo audit, và thẩm định một gói trước khi thêm.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Chuỗi cung ứng</span><span class="v">Toàn bộ code của bên thứ ba mà install kéo về, trực tiếp hay không.</span></div>
+  <div class="kv"><span class="k">Phụ thuộc bắc cầu</span><span class="v">Một gói do một phụ thuộc của bạn kéo theo.</span></div>
+  <div class="kv"><span class="k">Install script</span><span class="v">Code một gói chạy lúc cài, trước khi bạn import nó.</span></div>
+  <div class="kv"><span class="k">npm audit</span><span class="v">Đối chiếu gói đã cài với một cơ sở dữ liệu lỗ hổng.</span></div>
+  <div class="kv"><span class="k">Typosquatting</span><span class="v">Một gói độc hại đặt tên gần giống một gói nổi tiếng.</span></div>
+  <div class="kv"><span class="k">--ignore-scripts</span><span class="v">Cài mà không chạy install script của các gói.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một lần npm install có thể kéo về hàng chục gói do người lạ viết.</li><li>Install script chạy code trên máy bạn trước khi bạn import bất cứ gì.</li><li>Ghim phiên bản tự nó không làm một phụ thuộc đáng tin.</li><li>Thẩm định một gói (lượt tải, độ mới, script) và chạy npm audit trước khi dựa vào nó.</li></ul>
 </div>
 `,
     },

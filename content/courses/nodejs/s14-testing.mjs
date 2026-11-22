@@ -119,11 +119,33 @@ Tests:       12 passed, 12 total</div>
 <div class="link-card codelab">
   <a href="/code-lab/javascript${REF}#module-268"><span class="lc-t">Code Lab · JavaScript Patterns and Testing</span><span class="lc-d">Foundations of writing tests in JavaScript</span></a>
 </div>
+
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 0.1: the testing pyramid</span><span class="lc-sub">The course behind this chapter: what each level costs and catches, drawn as a pyramid. This lesson measured the price on one rule — 0.001 ms as a unit test, 2.398 ms through supertest and PostgreSQL, 2.110 ms end-to-end — so you can see where the textbook shape holds and where it does not.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write one test at each level — a pure unit test, an in-process HTTP test, and a DB-backed test — and time each.</li>
+<li>Run the same small suite under <code>node:test</code> and under one third-party runner and compare startup and run time.</li>
+<li>Write down, for a feature you know, which level of test would have caught its worst bug.</li>
+</ol>
+<p><strong>Done when:</strong> you timed a test at each level, compared two runners, and can say which level catches which kind of bug.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Unit test</span><span class="v">Tests one function in isolation — cheapest and fastest.</span></div>
+  <div class="kv"><span class="k">Integration/HTTP test</span><span class="v">Exercises several parts together through the API.</span></div>
+  <div class="kv"><span class="k">DB-backed test</span><span class="v">Runs against a real database — slower, more faithful.</span></div>
+  <div class="kv"><span class="k">Test runner</span><span class="v">The tool that finds and runs tests (node:test, vitest, jest).</span></div>
+  <div class="kv"><span class="k">node:test</span><span class="v">Node's built-in test runner, zero install.</span></div>
+  <div class="kv"><span class="k">Test cost</span><span class="v">The time each level takes to run.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The three levels (unit, HTTP, DB) cost very different amounts of time.</li><li>Pick a runner on measured startup/run time, not on opinion.</li><li>node:test is built in and fast; heavier runners can cost you setup time.</li><li>Spend most tests at the cheap levels and reserve the slow ones for what needs them.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -220,6 +242,33 @@ Tests:       12 passed, 12 total</div>
 <div class="link-card codelab">
   <a href="/code-lab/javascript${REF}#module-268"><span class="lc-t">Code Lab · JavaScript Patterns and Testing</span><span class="lc-d">Nền tảng viết test cho JavaScript</span></a>
 </div>
+
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Testing — bài 0.1: kim tự tháp kiểm thử</span><span class="lc-sub">Khoá học đứng sau chương này: mỗi tầng tốn bao nhiêu và bắt được gì, vẽ thành kim tự tháp. Bài này đo giá trên đúng một luật — 0,001 ms ở unit, 2,398 ms qua supertest và PostgreSQL, 2,110 ms end-to-end — để bạn thấy chỗ hình sách giáo khoa đúng và chỗ nó không đúng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một test ở mỗi tầng — một unit test thuần, một test HTTP trong-tiến-trình, và một test có DB — và đo từng cái.</li>
+<li>Chạy cùng một bộ nhỏ dưới <code>node:test</code> và dưới một runner bên thứ ba và so thời gian khởi động và chạy.</li>
+<li>Ghi lại, với một tính năng bạn biết, tầng test nào sẽ bắt được bug tệ nhất của nó.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đo một test ở mỗi tầng, so hai runner, và nói được tầng nào bắt loại bug nào.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Unit test</span><span class="v">Kiểm một hàm cô lập — rẻ và nhanh nhất.</span></div>
+  <div class="kv"><span class="k">Test tích hợp/HTTP</span><span class="v">Vận hành nhiều phần cùng nhau qua API.</span></div>
+  <div class="kv"><span class="k">Test có DB</span><span class="v">Chạy trên một database thật — chậm hơn, trung thực hơn.</span></div>
+  <div class="kv"><span class="k">Test runner</span><span class="v">Công cụ tìm và chạy test (node:test, vitest, jest).</span></div>
+  <div class="kv"><span class="k">node:test</span><span class="v">Runner test dựng sẵn của Node, không cần cài.</span></div>
+  <div class="kv"><span class="k">Giá của test</span><span class="v">Thời gian mỗi tầng tốn để chạy.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ba tầng (unit, HTTP, DB) tốn lượng thời gian rất khác nhau.</li><li>Chọn runner theo thời gian khởi động/chạy đo được, không theo ý kiến.</li><li>node:test dựng sẵn và nhanh; runner nặng hơn có thể tốn thời gian cài đặt.</li><li>Dồn phần lớn test ở tầng rẻ và dành tầng chậm cho thứ cần.</li></ul>
 </div>
 
 <div class="ml-en">
@@ -249,11 +298,6 @@ Tests:       12 passed, 12 total</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Nền tảng Web 10.1 — Tư duy như lập trình viên</span><span class="lc-sub">Lập kế hoạch, dò tay, rồi biến ca biên thành phép kiểm node --test: bản đầu đạt 1/5, sửa tới 5/5</span></span>
   <span class="lc-cta">Mở bài</span>
-</a>
-<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
-  <span class="lc-ico">🔗</span>
-  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Testing — bài 0.1: kim tự tháp kiểm thử</span><span class="lc-sub">Khoá học đứng sau chương này: mỗi tầng tốn bao nhiêu và bắt được gì, vẽ thành kim tự tháp. Bài này đo giá trên đúng một luật — 0,001 ms ở unit, 2,398 ms qua supertest và PostgreSQL, 2,110 ms end-to-end — để bạn thấy chỗ hình sách giáo khoa đúng và chỗ nó không đúng.</span></span>
-  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -441,11 +485,33 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
   <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 10.1: TDD, and the classicist vs mockist choice</span><span class="lc-sub">Same: inject what you replace, assert on the outcome rather than the calls. Deeper there: a feature built test-first in seven recorded red/green steps, and the same service tested both ways — a harmless refactor turns the mockist test red, a repository bug leaves it green.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-3-4-thiet-ke" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 3.4: designing for test doubles</span><span class="lc-sub">Why the Notes service could only be unit-tested after it took its repository as an argument — the course lesson turns that one-line change into a design rule, with the five kinds of double and when a call is the behaviour.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a unit test in Arrange-Act-Assert form for one pure function and make it fail once to prove it can.</li>
+<li>Inject a fake repository (a test double) into a service so you can test logic without a database.</li>
+<li>Use a fake clock to make a time-dependent branch run in milliseconds, and write one test that passes while asserting nothing to see how weak that is.</li>
+</ol>
+<p><strong>Done when:</strong> you wrote an AAA test that can fail, injected a fake repo, used a fake clock, and recognised an assert-nothing test.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">AAA</span><span class="v">Arrange, Act, Assert — the shape of a good test.</span></div>
+  <div class="kv"><span class="k">Test double</span><span class="v">A stand-in (stub, mock, fake) for a real dependency.</span></div>
+  <div class="kv"><span class="k">Dependency injection</span><span class="v">Passing dependencies in so they can be swapped in tests.</span></div>
+  <div class="kv"><span class="k">Fake clock</span><span class="v">A controllable time source for time-dependent logic.</span></div>
+  <div class="kv"><span class="k">Assert-nothing test</span><span class="v">A green test that checks nothing — false safety.</span></div>
+  <div class="kv"><span class="k">Authorization test</span><span class="v">The high-value test proving a forbidden action is blocked.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A good unit test follows Arrange-Act-Assert and must be able to fail.</li><li>Inject dependencies so you can swap in a test double instead of a real DB.</li><li>A fake clock makes time-dependent logic testable in milliseconds.</li><li>Watch for tests that pass while asserting nothing — they give false confidence.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -622,11 +688,33 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — 10.1: TDD, và chọn classicist hay mockist</span><span class="lc-sub">Giống: tiêm thứ cần thay, khẳng định kết cục thay vì các lời gọi. Sâu thêm ở đó: một tính năng viết test trước qua bảy bước đỏ/xanh có ghi lại, và cùng một service được test theo cả hai kiểu — refactor vô hại làm test mockist đỏ, bug ở repository lại để nó xanh.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-3-4-thiet-ke" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Testing — bài 3.4: thiết kế để dùng được hàng giả</span><span class="lc-sub">Vì sao service ghi chú chỉ unit test được sau khi nhận repository làm tham số — bài của khoá biến thay đổi một dòng đó thành một nguyên tắc thiết kế, kèm năm loại hàng giả và khi nào lời gọi chính là hành vi.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một unit test theo dạng Arrange-Act-Assert cho một hàm thuần và làm nó fail một lần để chứng minh nó có thể.</li>
+<li>Tiêm một repository giả (một test double) vào một service để test logic mà không cần database.</li>
+<li>Dùng một đồng hồ giả để một nhánh phụ thuộc thời gian chạy trong mili giây, và viết một test xanh mà không kiểm gì để thấy nó yếu thế nào.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn viết một test AAA có thể fail, tiêm một repo giả, dùng một đồng hồ giả, và nhận ra một test không-kiểm-gì.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">AAA</span><span class="v">Arrange, Act, Assert — hình dạng của một test tốt.</span></div>
+  <div class="kv"><span class="k">Test double</span><span class="v">Một thứ thay thế (stub, mock, fake) cho một phụ thuộc thật.</span></div>
+  <div class="kv"><span class="k">Tiêm phụ thuộc</span><span class="v">Truyền phụ thuộc vào để thay được trong test.</span></div>
+  <div class="kv"><span class="k">Đồng hồ giả</span><span class="v">Một nguồn thời gian điều khiển được cho logic phụ thuộc thời gian.</span></div>
+  <div class="kv"><span class="k">Test không-kiểm-gì</span><span class="v">Một test xanh mà không kiểm gì — an toàn giả.</span></div>
+  <div class="kv"><span class="k">Test phân quyền</span><span class="v">Test giá trị cao chứng minh một hành động cấm bị chặn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một unit test tốt theo Arrange-Act-Assert và phải có khả năng fail.</li><li>Tiêm phụ thuộc để thay được một test double thay vì một DB thật.</li><li>Một đồng hồ giả làm logic phụ thuộc thời gian test được trong mili giây.</li><li>Cảnh giác các test xanh mà không kiểm gì — chúng cho tự tin giả.</li></ul>
 </div>
 `,
     },
@@ -738,11 +826,33 @@ it('409 on a duplicate slug', async () =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/socket-io${REF}#module-946"><span class="lc-t">Code Lab · Testing &amp; Debugging Realtime</span><span class="lc-d">Testing authorisation per socket event — exactly the error class in the frame above</span></a>
 </div>
+
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-5-1-supertest" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 5.1: Supertest, requests without a running server</span><span class="lc-sub">The same createApp/listen split on a bigger API, with headers and bodies in the contract. This lesson ran six HTTP tests against PostgreSQL 17 in 147 ms and showed the 404 test that must also read the row back.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Refactor to an app factory (export the Express app without calling listen) so supertest can drive it without a port.</li>
+<li>Write a supertest test asserting the status code and body of one endpoint as a contract.</li>
+<li>Write a regression test for an IDOR fix: one user must get 404 (not 403) for another user's resource.</li>
+</ol>
+<p><strong>Done when:</strong> you have an app factory, an HTTP test asserting the contract, and a regression test pinning an IDOR fix.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">supertest</span><span class="v">A library sending HTTP requests to an app in-process.</span></div>
+  <div class="kv"><span class="k">App factory</span><span class="v">Exporting the app so tests run it without opening a port.</span></div>
+  <div class="kv"><span class="k">Contract assertion</span><span class="v">Asserting status and body as the endpoint's promise.</span></div>
+  <div class="kv"><span class="k">Regression test</span><span class="v">A test pinning a fixed bug so it cannot return.</span></div>
+  <div class="kv"><span class="k">IDOR</span><span class="v">Accessing another user's object by guessing its id.</span></div>
+  <div class="kv"><span class="k">404 vs 403</span><span class="v">Returning not-found instead of forbidden to avoid leaking existence.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>An app factory lets supertest drive Express in-process, no port needed.</li><li>Assert status and body as the endpoint's contract.</li><li>A regression test pins a fixed bug (like an IDOR) so it cannot silently return.</li><li>HTTP tests cannot see inside the DB — that trap is the next lesson.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -849,6 +959,27 @@ it('trả 409 khi slug trùng', async () =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/socket-io${REF}#module-946"><span class="lc-t">Code Lab · Testing &amp; Debugging Realtime</span><span class="lc-d">Kiểm phân quyền theo từng sự kiện socket — đúng lớp lỗi ở khung trên</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tái cấu trúc thành một app factory (xuất app Express mà không gọi listen) để supertest điều khiển nó mà không cần cổng.</li>
+<li>Viết một test supertest khẳng định mã trạng thái và body của một endpoint như một hợp đồng.</li>
+<li>Viết một test hồi quy cho một bản vá IDOR: một người dùng phải nhận 404 (không phải 403) cho tài nguyên của người khác.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một app factory, một test HTTP khẳng định hợp đồng, và một test hồi quy ghim một bản vá IDOR.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">supertest</span><span class="v">Một thư viện gửi request HTTP tới một app trong-tiến-trình.</span></div>
+  <div class="kv"><span class="k">App factory</span><span class="v">Xuất app để test chạy nó mà không mở cổng.</span></div>
+  <div class="kv"><span class="k">Khẳng định hợp đồng</span><span class="v">Khẳng định status và body như lời hứa của endpoint.</span></div>
+  <div class="kv"><span class="k">Test hồi quy</span><span class="v">Một test ghim một bug đã sửa để nó không quay lại.</span></div>
+  <div class="kv"><span class="k">IDOR</span><span class="v">Truy cập object của người khác bằng cách đoán id của nó.</span></div>
+  <div class="kv"><span class="k">404 vs 403</span><span class="v">Trả not-found thay vì forbidden để không lộ sự tồn tại.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một app factory cho supertest điều khiển Express trong-tiến-trình, không cần cổng.</li><li>Khẳng định status và body như hợp đồng của endpoint.</li><li>Một test hồi quy ghim một bug đã sửa (như một IDOR) để nó không âm thầm quay lại.</li><li>Test HTTP không nhìn được vào trong DB — cái bẫy đó là bài kế tiếp.</li></ul>
 </div>
 `,
     },
@@ -985,11 +1116,33 @@ AssertionError: expected 1 to be +0</div>
   <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 11.2: four bugs only PostgreSQL shows</span><span class="lc-sub">Same: tests against a real database, not a fake. Deeper there: one feature with a measured list of what the in-memory version cannot see — dates handed back as JS Dates at local midnight, an exclusion constraint that still blocks a cancelled slot, a non-atomic UPDATE that lets two cancels win, an id beyond int4 that becomes a 500 — every unit test green, every integration test red.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-4-1-vi-sao" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 4.1: why integration tests</span><span class="lc-sub">The case for a real database, made in general terms. This lesson made it with one measurement: five concurrent duplicates answer 201 five times against a fake and 500 four times against a real table (code 23505).</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Show a fake repo returns 201 five times for a duplicate insert while a real table rejects four with a unique-violation (23505).</li>
+<li>Isolate tests three ways — a rolled-back transaction, TRUNCATE between tests, and a fresh schema — and compare the speed.</li>
+<li>Spin up a disposable Postgres (e.g. a container) for the suite and measure its startup cost.</li>
+</ol>
+<p><strong>Done when:</strong> you saw a fake lie about uniqueness, tried three isolation strategies, and measured a disposable DB's cost.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Real-DB test</span><span class="v">A test against actual PostgreSQL, catching what fakes cannot.</span></div>
+  <div class="kv"><span class="k">Fake limitation</span><span class="v">A fake cannot enforce real constraints like uniqueness.</span></div>
+  <div class="kv"><span class="k">Isolation</span><span class="v">Keeping tests from leaking state into each other.</span></div>
+  <div class="kv"><span class="k">Transaction rollback</span><span class="v">Undo each test's writes — fast isolation.</span></div>
+  <div class="kv"><span class="k">TRUNCATE / fresh schema</span><span class="v">Other ways to reset state between tests.</span></div>
+  <div class="kv"><span class="k">Disposable database</span><span class="v">A throwaway DB (container) spun up for the suite.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A fake repo cannot enforce constraints, so it lies about things like uniqueness.</li><li>Only a real database catches a unique-violation (23505) your fake missed.</li><li>Isolate tests via transaction rollback, TRUNCATE, or a fresh schema — measure which fits.</li><li>A disposable Postgres container gives a faithful, clean DB per run.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1121,6 +1274,27 @@ AssertionError: expected 1 to be +0</div>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — 11.2: bốn bug chỉ PostgreSQL mới thấy</span><span class="lc-sub">Giống: test với CSDL thật, không phải đồ giả. Sâu hơn ở đó: một tính năng với danh sách đo được những gì bản bộ nhớ không thể thấy — ngày trả về thành JS Date lúc nửa đêm giờ máy, ràng buộc loại trừ vẫn chặn khung đã huỷ, UPDATE không nguyên tử để hai lượt huỷ cùng thắng, id vượt int4 thành lỗi 500 — mọi unit test xanh, mọi test tích hợp đỏ.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chỉ ra một repo giả trả 201 năm lần cho một chèn trùng trong khi một bảng thật từ chối bốn lần với vi-phạm-duy-nhất (23505).</li>
+<li>Cô lập test ba cách — một transaction cuộn ngược, TRUNCATE giữa các test, và một schema mới — và so tốc độ.</li>
+<li>Dựng một Postgres dùng-một-lần (ví dụ một container) cho bộ test và đo chi phí khởi động của nó.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy một repo giả nói dối về tính duy nhất, thử ba cách cô lập, và đo chi phí một DB dùng-một-lần.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Test DB thật</span><span class="v">Một test trên PostgreSQL thật, bắt được thứ repo giả không bắt.</span></div>
+  <div class="kv"><span class="k">Giới hạn của giả</span><span class="v">Một repo giả không ép được ràng buộc thật như duy nhất.</span></div>
+  <div class="kv"><span class="k">Cô lập</span><span class="v">Giữ các test không rò trạng thái vào nhau.</span></div>
+  <div class="kv"><span class="k">Transaction cuộn ngược</span><span class="v">Hoàn tác lệnh ghi của mỗi test — cô lập nhanh.</span></div>
+  <div class="kv"><span class="k">TRUNCATE / schema mới</span><span class="v">Các cách khác đặt lại trạng thái giữa test.</span></div>
+  <div class="kv"><span class="k">Database dùng-một-lần</span><span class="v">Một DB vứt đi (container) dựng cho bộ test.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một repo giả không ép được ràng buộc, nên nó nói dối về những thứ như tính duy nhất.</li><li>Chỉ một database thật mới bắt được vi-phạm-duy-nhất (23505) mà repo giả bỏ sót.</li><li>Cô lập test bằng transaction cuộn ngược, TRUNCATE, hoặc một schema mới — đo cái nào hợp.</li><li>Một container Postgres dùng-một-lần cho một DB trung thực, sạch mỗi lần chạy.</li></ul>
 </div>
 `,
     },
@@ -1271,16 +1445,39 @@ Backend Type Check: failure · 169 s    (TypeScript type-check 109 s · unit tes
   <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — Chapter 9: tests in CI, step by step</span><span class="lc-sub">Same: CI runs the suite on every push. Deeper there: the course project’s workflow rehearsed with act — a PostgreSQL service, Playwright, reports and artifacts, one required check, a Node matrix and shards.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-1-do-phu" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 8.1: coverage</span><span class="lc-sub">What the four columns of a coverage report count, and how to read the uncovered column. This lesson measured the trap: canEdit at 100 % in all four columns while any EDITOR can edit every note.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-3-flaky" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 8.3: flaky tests</span><span class="lc-sub">Hunting order dependence, shared state and real clocks. Every one of the four causes listed in this lesson was measured somewhere in chapter 14 — 0/10 on a shared table, "expected 2 to be 1" from one leftover row.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a feature with a privilege-escalation hole, then confirm a test suite at 100% coverage still passes — coverage is not correctness.</li>
+<li>Reproduce a flaky test (timing or shared state), then make it deterministic.</li>
+<li>Add a CI workflow that runs the suite on push and decide what should block a merge.</li>
+</ol>
+<p><strong>Done when:</strong> you saw 100% coverage miss a bug, fixed a flaky test, and set up CI with a merge gate.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Coverage</span><span class="v">Which lines/branches tests execute — not whether they assert correctly.</span></div>
+  <div class="kv"><span class="k">100% coverage trap</span><span class="v">Full coverage can still miss a real bug.</span></div>
+  <div class="kv"><span class="k">Flaky test</span><span class="v">A test that passes or fails nondeterministically.</span></div>
+  <div class="kv"><span class="k">Determinism</span><span class="v">Removing timing/order/shared-state causes of flakiness.</span></div>
+  <div class="kv"><span class="k">CI</span><span class="v">Running tests automatically on each push.</span></div>
+  <div class="kv"><span class="k">Merge gate</span><span class="v">The checks that must pass before merging.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Coverage measures executed lines, not correctness — 100% can still hide a bug.</li><li>Flaky tests come from timing, order or shared state; make them deterministic.</li><li>Run the suite in CI, not just on your laptop.</li><li>Decide deliberately what must block a merge.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1421,16 +1618,39 @@ Backend Type Check: failure · 169 s    (TypeScript type-check 109 s · unit tes
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — Chương 9: test trong CI, từng bước</span><span class="lc-sub">Giống: CI chạy bộ test ở mỗi lần push. Sâu thêm ở đó: workflow của dự án khoá học tổng duyệt bằng act — service PostgreSQL, Playwright, báo cáo và artifact, một check bắt buộc, matrix Node và shard.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-1-do-phu" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Testing — bài 8.1: độ phủ</span><span class="lc-sub">Bốn cột của báo cáo độ phủ đếm gì, và cách đọc cột chưa phủ. Bài này đo cái bẫy: canEdit đạt 100 % cả bốn cột trong khi mọi EDITOR sửa được mọi ghi chú.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-3-flaky" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Testing — bài 8.3: test chập chờn</span><span class="lc-sub">Săn phụ thuộc thứ tự, trạng thái dùng chung và đồng hồ thật. Cả bốn nguyên nhân trong bài này đều đã đo ở chương 14 — 0/10 trên một bảng chung, "expected 2 to be 1" từ một dòng sót.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một tính năng có lỗ leo thang quyền, rồi xác nhận một bộ test đạt 100% độ phủ vẫn pass — độ phủ không phải tính đúng.</li>
+<li>Tái hiện một test chập chờn (thời gian hoặc trạng thái chung), rồi làm nó tất định.</li>
+<li>Thêm một workflow CI chạy bộ test khi push và quyết định cái gì nên chặn một merge.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy 100% độ phủ bỏ sót một bug, sửa một test chập chờn, và dựng CI với một cổng merge.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Độ phủ</span><span class="v">Test chạy qua dòng/nhánh nào — không phải chúng kiểm có đúng không.</span></div>
+  <div class="kv"><span class="k">Bẫy 100% độ phủ</span><span class="v">Độ phủ đầy vẫn có thể bỏ sót một bug thật.</span></div>
+  <div class="kv"><span class="k">Test chập chờn</span><span class="v">Một test pass hoặc fail không tất định.</span></div>
+  <div class="kv"><span class="k">Tính tất định</span><span class="v">Loại các nguyên nhân thời gian/thứ tự/trạng thái chung gây chập chờn.</span></div>
+  <div class="kv"><span class="k">CI</span><span class="v">Chạy test tự động mỗi lần push.</span></div>
+  <div class="kv"><span class="k">Cổng merge</span><span class="v">Các phép kiểm phải pass trước khi merge.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Độ phủ đo dòng được chạy, không phải tính đúng — 100% vẫn giấu được một bug.</li><li>Test chập chờn đến từ thời gian, thứ tự hay trạng thái chung; làm chúng tất định.</li><li>Chạy bộ test trong CI, không chỉ trên máy bạn.</li><li>Quyết định có chủ đích cái gì phải chặn một merge.</li></ul>
 </div>
 `,
     },

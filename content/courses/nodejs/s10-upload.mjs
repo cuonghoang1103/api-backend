@@ -136,6 +136,27 @@ HTTP 413 | client đã gửi 7.183.298 byte</div>
   <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 9.1: File upload with @MultipartConfig</span><span class="lc-sub">If you took PRJ301 on Academy, this part will feel familiar. Same: an upload form must be multipart and the server must parse a multipart body (the code there is Node.js, not Java — the ideas carry over). Different: Academy uses the Servlet @MultipartConfig; Courses uses Multer and measures memory. In this lesson we add: what multipart really looks like, base64 is not free, memoryStorage vs diskStorage measured by RSS, size limits. If you have not taken PRJ301, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN PRJ301 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Accept a file upload with multer in two modes — memory storage and disk/stream — and measure process RSS after each with a few-MB file.</li>
+<li>Send the same file base64-encoded in a JSON body and compare the memory and payload size against multipart.</li>
+<li>Set a file-size and file-count limit on the upload and confirm an oversized file is rejected before it is fully buffered.</li>
+</ol>
+<p><strong>Done when:</strong> you measured RSS for memory vs stream uploads, saw base64 overhead, and enforced a size limit.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">multipart/form-data</span><span class="v">The standard encoding for file uploads over HTTP.</span></div>
+  <div class="kv"><span class="k">multer</span><span class="v">Express middleware that parses multipart uploads.</span></div>
+  <div class="kv"><span class="k">Memory storage</span><span class="v">Buffering the whole file in RAM — simple but costly.</span></div>
+  <div class="kv"><span class="k">Streaming to disk/storage</span><span class="v">Writing chunks through without holding the whole file.</span></div>
+  <div class="kv"><span class="k">base64 overhead</span><span class="v">Encoding inflates size ~33% and costs extra RAM.</span></div>
+  <div class="kv"><span class="k">Upload limits</span><span class="v">Caps on size and count to bound memory under load.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The same file costs very different RAM depending on how you receive it.</li><li>base64-in-JSON is the most expensive; streaming to storage is the cheapest.</li><li>Memory storage buffers the whole file — dangerous when several large uploads overlap.</li><li>Set size and count limits so concurrent uploads cannot exhaust memory.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.1</span>
@@ -242,6 +263,27 @@ HTTP 413 | client đã gửi 7.183.298 byte</div>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở PRJ301 — bài 9.1: Tải file lên với @MultipartConfig</span><span class="lc-sub">Nếu bạn đã học môn PRJ301 ở Academy thì phần này không còn lạ. Giống: form upload phải dùng multipart và server phải đọc phần thân dạng multipart (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Academy dùng @MultipartConfig của Servlet; Courses dùng Multer và đo bộ nhớ. Ở bài này mình học thêm: multipart thật ra trông thế nào, base64 không miễn phí, so memoryStorage với diskStorage bằng RSS, giới hạn kích cỡ. Chưa học PRJ301 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI PRJ301 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Nhận một upload bằng multer theo hai chế độ — memory storage và đĩa/stream — và đo RSS tiến trình sau mỗi cái với một file vài MB.</li>
+<li>Gửi cùng file đó mã hoá base64 trong một body JSON và so bộ nhớ cùng kích thước payload với multipart.</li>
+<li>Đặt giới hạn kích thước và số file cho upload và xác nhận một file quá cỡ bị từ chối trước khi được đệm hết.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã đo RSS cho upload memory vs stream, thấy phụ phí base64, và ép một giới hạn kích thước.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">multipart/form-data</span><span class="v">Mã hoá chuẩn cho upload file qua HTTP.</span></div>
+  <div class="kv"><span class="k">multer</span><span class="v">Middleware Express parse upload multipart.</span></div>
+  <div class="kv"><span class="k">Memory storage</span><span class="v">Đệm nguyên file trong RAM — đơn giản nhưng tốn.</span></div>
+  <div class="kv"><span class="k">Stream ra đĩa/storage</span><span class="v">Ghi theo mẩu mà không giữ cả file.</span></div>
+  <div class="kv"><span class="k">Phụ phí base64</span><span class="v">Mã hoá phình kích thước ~33% và tốn thêm RAM.</span></div>
+  <div class="kv"><span class="k">Giới hạn upload</span><span class="v">Trần kích thước và số lượng để chặn bộ nhớ khi tải cao.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cùng một file tốn RAM rất khác nhau tuỳ cách bạn nhận.</li><li>base64-trong-JSON đắt nhất; stream ra storage rẻ nhất.</li><li>Memory storage đệm cả file — nguy hiểm khi nhiều upload lớn chồng nhau.</li><li>Đặt giới hạn kích thước và số lượng để upload đồng thời không vét cạn bộ nhớ.</li></ul>
 </div>
 `,
     },
@@ -416,6 +458,27 @@ sau 7 giây    → HTTP 403
   <span class="lc-body"><span class="lc-title">Same rule in API Design — lesson 8.4: Designing APIs that scale out</span><span class="lc-sub">Same: once there are two instances, anything kept inside one instance breaks. API Design measures it for idempotency keys and limits on LabFlow; here the same rule applies to files — uploads go to object storage, never to one container&#39;s disk.</span></span>
   <span class="lc-cta">OPEN API DESIGN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Generate a presigned PUT URL for an object key and upload a file directly to storage with it, bypassing your server.</li>
+<li>Decode the presigned URL and name each query parameter (credential, expiry, signature, signed headers).</li>
+<li>Prove the signature does NOT bind Content-Type or size by default: upload a different type/size with a valid URL and watch it succeed.</li>
+</ol>
+<p><strong>Done when:</strong> you uploaded straight to storage via a presigned URL and saw that size and Content-Type are not bound unless you add them.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Object storage</span><span class="v">Bucket/key blob storage (S3, R2) — not a filesystem.</span></div>
+  <div class="kv"><span class="k">Bucket / key</span><span class="v">The container and the object identifier within it.</span></div>
+  <div class="kv"><span class="k">Presigned URL</span><span class="v">A temporary signed URL letting a client act directly on storage.</span></div>
+  <div class="kv"><span class="k">Key layout</span><span class="v">A deliberate naming scheme, not an accidental filename.</span></div>
+  <div class="kv"><span class="k">Signature scope</span><span class="v">What the signature actually binds — and what it does not.</span></div>
+  <div class="kv"><span class="k">Direct upload</span><span class="v">Client uploads to storage, bypassing your server.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Object storage is bucket + key + metadata, not a filesystem.</li><li>A presigned URL lets a client upload directly, taking load off your server.</li><li>By default the signature does not bind Content-Type or size — add conditions to constrain them.</li><li>Key layout is a design decision; plan it rather than reusing a filename.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.2</span>
@@ -573,6 +636,27 @@ sau 7 giây    → HTTP 403
   <span class="lc-body"><span class="lc-title">Cùng quy tắc ở API Design — bài 8.4: Thiết kế API để mở rộng ngang</span><span class="lc-sub">Giống: khi có hai instance, thứ gì nằm trong một instance đều hỏng. API Design đo điều đó với khoá idempotency và giới hạn trên LabFlow; ở đây cùng quy tắc áp cho file — upload vào object storage, không bao giờ vào đĩa của một container.</span></span>
   <span class="lc-cta">MỞ BÀI API DESIGN →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Sinh một URL PUT ký sẵn cho một key object và upload một file thẳng lên storage bằng nó, bỏ qua server của bạn.</li>
+<li>Giải mã URL ký sẵn và gọi tên từng query param (credential, hạn, chữ ký, header được ký).</li>
+<li>Chứng minh chữ ký KHÔNG ràng buộc Content-Type hay kích thước mặc định: upload một type/kích thước khác bằng một URL hợp lệ và xem nó thành công.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã upload thẳng lên storage qua URL ký sẵn và thấy kích thước và Content-Type không bị ràng buộc trừ khi bạn thêm.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Object storage</span><span class="v">Lưu trữ blob bucket/key (S3, R2) — không phải filesystem.</span></div>
+  <div class="kv"><span class="k">Bucket / key</span><span class="v">Container và định danh object bên trong nó.</span></div>
+  <div class="kv"><span class="k">URL ký sẵn</span><span class="v">Một URL ký tạm cho client tác động thẳng lên storage.</span></div>
+  <div class="kv"><span class="k">Bố cục key</span><span class="v">Một sơ đồ đặt tên có chủ đích, không phải tên file tình cờ.</span></div>
+  <div class="kv"><span class="k">Phạm vi chữ ký</span><span class="v">Chữ ký thật sự ràng buộc gì — và không ràng buộc gì.</span></div>
+  <div class="kv"><span class="k">Upload trực tiếp</span><span class="v">Client upload lên storage, bỏ qua server của bạn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Object storage là bucket + key + metadata, không phải filesystem.</li><li>URL ký sẵn cho client upload trực tiếp, giảm tải cho server.</li><li>Mặc định chữ ký không ràng buộc Content-Type hay kích thước — thêm điều kiện để ép chúng.</li><li>Bố cục key là một quyết định thiết kế; lên kế hoạch thay vì tái dùng tên file.</li></ul>
 </div>
 `,
     },
@@ -713,6 +797,27 @@ nếu gọi withMetadata()  : 12.136 byte | có EXIF: true</div>
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 5.2: JWT, HTTPS, CORS &amp; file upload/download</span><span class="lc-sub">If you took SDN302 on Academy, the upload part will feel familiar. Same: receiving files with Multer and serving them back. Different: here we stop trusting the file — the client&#39;s filename, extension and Content-Type are claims, so we read magic bytes, decode and re-encode with sharp, cap pixels, strip EXIF, and never put the original name in a path. If you have not taken SDN302, no problem — this lesson stands on its own.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Rename a non-image to <code>.png</code> and show the extension and declared MIME type both lie; then detect the real type from the magic bytes.</li>
+<li>Re-encode an accepted image through a library (e.g. sharp) instead of storing the original, neutralising any embedded payload.</li>
+<li>Guard against a decompression bomb by bounding decoded dimensions/pixels before fully processing the image.</li>
+</ol>
+<p><strong>Done when:</strong> you saw the client lies about type, verified via magic bytes, re-encoded on acceptance, and bounded a decompression bomb.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Magic bytes</span><span class="v">The leading bytes that identify a real file type.</span></div>
+  <div class="kv"><span class="k">MIME lie</span><span class="v">The client-declared Content-Type you cannot trust.</span></div>
+  <div class="kv"><span class="k">Polyglot file</span><span class="v">A file valid as two types, slipping past sniffing.</span></div>
+  <div class="kv"><span class="k">Decompression bomb</span><span class="v">A tiny file that decodes into enormous memory.</span></div>
+  <div class="kv"><span class="k">Re-encode</span><span class="v">Rebuilding the file so hidden payloads do not survive.</span></div>
+  <div class="kv"><span class="k">Active content</span><span class="v">Scriptable formats (e.g. SVG) that must never be served as-is.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The three things the client tells you about a file are all forgeable.</li><li>Sniffing magic bytes catches most lies but not a polyglot.</li><li>Re-encoding on acceptance is the real check — it discards hidden payloads.</li><li>Bound decoded size to stop a decompression bomb from exhausting memory.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.3</span>
@@ -836,6 +941,27 @@ nếu gọi withMetadata()  : 12.136 byte | có EXIF: true</div>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 5.2: JWT, HTTPS, CORS &amp; upload/download file</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần upload không còn lạ. Giống: nhận file bằng Multer và trả file về. Khác: ở đây ta thôi tin file — filename, phần đuôi và Content-Type của client chỉ là lời khai, nên ta đọc magic bytes, giải mã rồi mã hoá lại bằng sharp, giới hạn điểm ảnh, bỏ EXIF, và không bao giờ đưa tên gốc vào đường dẫn. Chưa học SDN302 cũng không sao — bài này tự đủ.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đổi tên một file không-ảnh thành <code>.png</code> và chỉ ra phần mở rộng lẫn MIME khai báo đều nói dối; rồi nhận diện kiểu thật từ magic bytes.</li>
+<li>Mã hoá lại một ảnh được chấp nhận qua một thư viện (ví dụ sharp) thay vì lưu bản gốc, vô hiệu mọi payload nhúng.</li>
+<li>Chốt chống bom giải nén bằng cách chặn kích thước/pixel giải mã trước khi xử lý ảnh hoàn toàn.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy client nói dối về kiểu, kiểm bằng magic bytes, mã hoá lại khi nhận, và chặn một bom giải nén.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Magic bytes</span><span class="v">Các byte đầu nhận diện kiểu file thật.</span></div>
+  <div class="kv"><span class="k">MIME nói dối</span><span class="v">Content-Type do client khai mà bạn không tin được.</span></div>
+  <div class="kv"><span class="k">File lai (polyglot)</span><span class="v">Một file hợp lệ như hai kiểu, lọt qua sniffing.</span></div>
+  <div class="kv"><span class="k">Bom giải nén</span><span class="v">Một file nhỏ xíu giải mã thành bộ nhớ khổng lồ.</span></div>
+  <div class="kv"><span class="k">Mã hoá lại</span><span class="v">Dựng lại file để payload ẩn không sống sót.</span></div>
+  <div class="kv"><span class="k">Nội dung động</span><span class="v">Các format chạy script được (ví dụ SVG) không được phục vụ nguyên.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ba thứ client nói về một file đều giả được.</li><li>Sniffing magic bytes bắt phần lớn lời dối nhưng không bắt file lai.</li><li>Mã hoá lại khi chấp nhận là phép kiểm thật — nó loại payload ẩn.</li><li>Chặn kích thước giải mã để một bom giải nén không vét cạn bộ nhớ.</li></ul>
 </div>
 `,
     },
@@ -958,6 +1084,27 @@ proxy stream thẳng (Body.pipe)   : 481ms cho 20 lần</div>
   <span class="lc-body"><span class="lc-title">Go deeper in Media Processing — lesson 0.1: The formats, and what each is good at</span><span class="lc-sub">Same: JPEG, WebP and AVIF trade size against encode time, and the answer depends on the image. Media Processing compares every format on one real photo; here a smooth and a grainy 4032×3024 source go through sharp (median of 3 runs): resizing removes 88–98% of the bytes before the format matters, WebP wins 2.8× on the smooth image but only 1.17× on the grainy one.</span></span>
   <span class="lc-cta">OPEN MEDIA PROCESSING LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Set a long, immutable <code>Cache-Control</code> at upload time on a static media object and read it back with <code>curl -I</code>.</li>
+<li>Compare serving the same image proxied through your API versus served straight from the CDN and note the cost difference.</li>
+<li>Pick a sensible format and size for a thumbnail and explain why you decide this once, at write time, not on every read.</li>
+</ol>
+<p><strong>Done when:</strong> you set an immutable cache header, saw the proxy-vs-CDN cost, and chose a format/size written once.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache-Control</span><span class="v">The header deciding how long clients/CDN may cache.</span></div>
+  <div class="kv"><span class="k">immutable</span><span class="v">Tells caches the object never changes under this URL.</span></div>
+  <div class="kv"><span class="k">CDN</span><span class="v">Edge network serving media close to the user.</span></div>
+  <div class="kv"><span class="k">Format/size choice</span><span class="v">Decided once at write time, reused on every read.</span></div>
+  <div class="kv"><span class="k">Proxying media</span><span class="v">Serving files through your API — avoid for static media.</span></div>
+  <div class="kv"><span class="k">Orphan object</span><span class="v">A stored object no record points at — must be cleaned up.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Media is written once and read many times — optimise the read path.</li><li>Set Cache-Control (long, immutable) at write time so the CDN can serve cheaply.</li><li>Serve static media from the CDN, not proxied through your API.</li><li>Deleting orphaned objects is the step everyone forgets.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.4</span>
@@ -1063,6 +1210,27 @@ proxy stream thẳng (Body.pipe)   : 481ms cho 20 lần</div>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Media Processing — bài 0.1: Các format, và mỗi cái làm gì tốt</span><span class="lc-sub">Giống: JPEG, WebP và AVIF đánh đổi kích thước với thời gian mã hoá, và câu trả lời tuỳ ảnh. Media Processing so mọi định dạng trên một ảnh thật; ở đây một ảnh mượt và một ảnh nhiễu 4032×3024 đi qua sharp (trung vị 3 lần): thu nhỏ bỏ 88–98 % số byte trước khi định dạng kịp có ý nghĩa, WebP thắng 2,8× ở ảnh mượt nhưng chỉ 1,17× ở ảnh nhiễu.</span></span>
   <span class="lc-cta">MỞ BÀI MEDIA PROCESSING →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đặt một <code>Cache-Control</code> dài, immutable lúc upload trên một object media tĩnh và đọc lại bằng <code>curl -I</code>.</li>
+<li>So phục vụ cùng một ảnh proxy qua API của bạn với phục vụ thẳng từ CDN và ghi chênh lệch chi phí.</li>
+<li>Chọn một format và kích thước hợp lý cho thumbnail và giải thích vì sao quyết định này một lần, lúc ghi, không phải mỗi lần đọc.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã đặt một header cache immutable, thấy chi phí proxy-vs-CDN, và chọn một format/kích thước ghi một lần.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache-Control</span><span class="v">Header quyết định client/CDN được cache bao lâu.</span></div>
+  <div class="kv"><span class="k">immutable</span><span class="v">Báo cho cache rằng object không bao giờ đổi dưới URL này.</span></div>
+  <div class="kv"><span class="k">CDN</span><span class="v">Mạng biên phục vụ media gần người dùng.</span></div>
+  <div class="kv"><span class="k">Chọn format/kích thước</span><span class="v">Quyết một lần lúc ghi, tái dùng mỗi lần đọc.</span></div>
+  <div class="kv"><span class="k">Proxy media</span><span class="v">Phục vụ file qua API của bạn — tránh với media tĩnh.</span></div>
+  <div class="kv"><span class="k">Object mồ côi</span><span class="v">Một object được lưu mà không bản ghi nào trỏ tới — phải dọn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Media ghi một lần và đọc nhiều lần — tối ưu đường đọc.</li><li>Đặt Cache-Control (dài, immutable) lúc ghi để CDN phục vụ rẻ.</li><li>Phục vụ media tĩnh từ CDN, không proxy qua API của bạn.</li><li>Xoá object mồ côi là bước ai cũng quên.</li></ul>
 </div>
 `,
     },

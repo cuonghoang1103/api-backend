@@ -132,6 +132,27 @@ export function getRedis() {
   <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 1.4: Pipelining: 100 round trips become one</span><span class="lc-sub">Same idea: a pipeline removes the waiting, not the work. The Redis course shows it from redis-cli and the protocol; this lesson measures it from Node: PING 0.481 ms a round trip while Redis itself spends 0.53 µs (INFO commandstats), 10,000 SETs 4,683.7 → 28.4 ms, batch size 1 → 10,000, MGET 510×.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Time 10,000 individual Redis <code>SET</code> commands, then the same 10,000 in one pipeline, and compute the speedup.</li>
+<li>Replace N separate GETs with one <code>MGET</code> and compare the time.</li>
+<li>Connect to Redis from Node with a single shared client and confirm you reuse it rather than connecting per request.</li>
+</ol>
+<p><strong>Done when:</strong> you measured the pipeline speedup, used MGET, and connect with one reused client.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Redis</span><span class="v">An in-memory key-value store used for cache, counters and more.</span></div>
+  <div class="kv"><span class="k">Round trip</span><span class="v">The network cost of one command — dominates for small ops.</span></div>
+  <div class="kv"><span class="k">Pipelining</span><span class="v">Sending many commands at once to amortise round trips.</span></div>
+  <div class="kv"><span class="k">MGET</span><span class="v">Fetch many keys in one command.</span></div>
+  <div class="kv"><span class="k">Client</span><span class="v">The Node Redis library, connected once and reused.</span></div>
+  <div class="kv"><span class="k">Throughput</span><span class="v">Operations per second, hugely raised by pipelining.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A single Redis command is dominated by the network round trip, not the work.</li><li>Pipelining many commands into one round trip is the biggest single win.</li><li>MGET is built-in pipelining for reads of many keys.</li><li>Connect once with a shared client; do not reconnect per request.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -233,6 +254,27 @@ export function getRedis() {
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 1.4: Pipeline: 100 vòng mạng thành một</span><span class="lc-sub">Cùng ý: pipeline bỏ đi phần chờ, không bỏ công việc. Khoá Redis cho thấy nó từ redis-cli và giao thức; bài này đo từ Node: mỗi vòng đi-về PING 0,481 ms trong khi Redis tự làm 0,53 µs (INFO commandstats), 10.000 SET 4.683,7 → 28,4 ms, lô 1 → 10.000, MGET nhanh 510×.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đo 10.000 lệnh Redis <code>SET</code> riêng lẻ, rồi cùng 10.000 cái trong một pipeline, và tính độ tăng tốc.</li>
+<li>Thay N lệnh GET riêng bằng một <code>MGET</code> và so thời gian.</li>
+<li>Kết nối tới Redis từ Node bằng một client dùng chung duy nhất và xác nhận bạn tái dùng nó thay vì kết nối mỗi request.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đo được độ tăng tốc của pipeline, dùng MGET, và kết nối bằng một client tái dùng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Redis</span><span class="v">Một kho key-value trong bộ nhớ dùng cho cache, bộ đếm và hơn thế.</span></div>
+  <div class="kv"><span class="k">Vòng đi-về</span><span class="v">Chi phí mạng của một lệnh — chiếm phần lớn với thao tác nhỏ.</span></div>
+  <div class="kv"><span class="k">Pipelining</span><span class="v">Gửi nhiều lệnh cùng lúc để chia nhỏ vòng đi-về.</span></div>
+  <div class="kv"><span class="k">MGET</span><span class="v">Lấy nhiều khoá trong một lệnh.</span></div>
+  <div class="kv"><span class="k">Client</span><span class="v">Thư viện Redis của Node, kết nối một lần và tái dùng.</span></div>
+  <div class="kv"><span class="k">Thông lượng</span><span class="v">Số thao tác mỗi giây, tăng cực lớn nhờ pipelining.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một lệnh Redis bị vòng đi-về chi phối, không phải phần việc.</li><li>Gộp nhiều lệnh vào một vòng đi-về là thắng lợi lớn nhất.</li><li>MGET là pipelining dựng sẵn cho việc đọc nhiều khoá.</li><li>Kết nối một lần bằng một client dùng chung; đừng kết nối lại mỗi request.</li></ul>
 </div>
 `,
     },
@@ -386,6 +428,27 @@ if (got) {
   <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 6.3: the stampede</span><span class="lc-sub">The Redis course explains why a single cache miss can take down the database and the families of fixes. This lesson reproduces it from Node against PostgreSQL: 200 queries in 4,178 ms, single-flight 1 query in 69.1 ms, a SET NX lock 1 query in 80.6 ms, and TTL jitter spreading 50 expiries over 26 seconds.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Implement cache-aside for one query (check cache, on miss read DB and SET with a TTL) and measure hit vs miss latency.</li>
+<li>Reproduce a cache stampede: expire a hot key while many requests hit at once and watch them all stampede the database; then add a lock or single-flight.</li>
+<li>Break and fix invalidation: update the source row and show stale cache, then invalidate the key on write.</li>
+</ol>
+<p><strong>Done when:</strong> you measured cache-aside latency, reproduced a stampede, and fixed invalidation on write.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache-aside</span><span class="v">App checks cache, falls back to DB, then populates the cache.</span></div>
+  <div class="kv"><span class="k">Hit rate</span><span class="v">The fraction served from cache — gains are non-linear near 100%.</span></div>
+  <div class="kv"><span class="k">TTL</span><span class="v">Time-to-live after which a cached entry expires.</span></div>
+  <div class="kv"><span class="k">Stampede</span><span class="v">Many requests rebuilding the same expired key at once.</span></div>
+  <div class="kv"><span class="k">Invalidation</span><span class="v">Removing/updating stale cache after a write.</span></div>
+  <div class="kv"><span class="k">Single-flight / lock</span><span class="v">Letting one request rebuild a key while others wait.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Cache-aside is four lines: check cache, miss to DB, set cache, return.</li><li>Cache can lose on very large payloads, and hit-rate gains are non-linear near 100%.</li><li>A SET without a TTL (or a wrong one) silently removes expiry.</li><li>A stampede points many requests at the DB at once — guard with a lock/single-flight, and invalidate on write.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -522,6 +585,27 @@ if (got) {
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 6.3: giẫm đạp</span><span class="lc-sub">Khoá Redis giải thích vì sao một lần trượt có thể hạ gục CSDL và các họ cách chữa. Bài này dựng lại từ Node với PostgreSQL: 200 truy vấn trong 4.178 ms, single-flight 1 truy vấn 69,1 ms, khoá SET NX 1 truy vấn 80,6 ms, và jitter rải 50 lần hết hạn ra 26 giây.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Hiện thực cache-aside cho một truy vấn (kiểm cache, miss thì đọc DB và SET có TTL) và đo độ trễ trúng vs trượt.</li>
+<li>Tái hiện một cơn giẫm đạp: cho một khoá nóng hết hạn trong khi nhiều request ập tới cùng lúc và xem chúng giẫm đạp database; rồi thêm một khoá hoặc single-flight.</li>
+<li>Phá và sửa invalidation: cập nhật dòng nguồn và chỉ ra cache lỗi thời, rồi vô hiệu khoá khi ghi.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đo độ trễ cache-aside, tái hiện một cơn giẫm đạp, và sửa invalidation khi ghi.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache-aside</span><span class="v">App kiểm cache, lùi về DB, rồi nạp vào cache.</span></div>
+  <div class="kv"><span class="k">Tỉ lệ trúng</span><span class="v">Phần được phục vụ từ cache — lợi ích phi tuyến gần 100%.</span></div>
+  <div class="kv"><span class="k">TTL</span><span class="v">Thời gian sống sau đó một mục cache hết hạn.</span></div>
+  <div class="kv"><span class="k">Giẫm đạp (stampede)</span><span class="v">Nhiều request cùng dựng lại một khoá hết hạn một lúc.</span></div>
+  <div class="kv"><span class="k">Invalidation</span><span class="v">Xoá/cập nhật cache lỗi thời sau một lần ghi.</span></div>
+  <div class="kv"><span class="k">Single-flight / khoá</span><span class="v">Cho một request dựng lại khoá trong khi các request khác chờ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cache-aside là bốn dòng: kiểm cache, miss về DB, set cache, trả về.</li><li>Cache có thể thua với payload rất lớn, và lợi ích tỉ lệ trúng phi tuyến gần 100%.</li><li>Một SET không TTL (hoặc sai) âm thầm bỏ hạn.</li><li>Một cơn giẫm đạp chĩa nhiều request vào DB cùng lúc — chốt bằng khoá/single-flight, và invalidate khi ghi.</li></ul>
 </div>
 `,
     },
@@ -627,6 +711,27 @@ hash-max-listpack-entries = 512</div>
   <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 5.2: encoding and memory</span><span class="lc-sub">The Redis course explains listpack, intset and the thresholds. This lesson measures the cliff from Node: 512 → 513 fields = 5,168 → 28,816 bytes (×5.6), the same 1,000 fields split into 8 × 125 = 10,368 bytes, ~50 bytes per key, and an HLL vs a Set (14.5 KB vs 3.68 MB).</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Store the same session data three ways (e.g. many string keys vs one hash) and compare memory with <code>MEMORY USAGE</code>/<code>INFO</code>.</li>
+<li>Count unique visitors with a Set and with HyperLogLog and compare the memory for the same data.</li>
+<li>Build a leaderboard with a sorted set (ZADD/ZRANGE) and read the top N.</li>
+</ol>
+<p><strong>Done when:</strong> you compared memory across structures, used HyperLogLog for counting, and built a sorted-set leaderboard.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Data structure fit</span><span class="v">Choosing the structure that matches the access pattern.</span></div>
+  <div class="kv"><span class="k">Hash</span><span class="v">A single key holding many fields, compact for grouped data.</span></div>
+  <div class="kv"><span class="k">HyperLogLog</span><span class="v">Approximate unique counting in tiny memory.</span></div>
+  <div class="kv"><span class="k">Sorted set</span><span class="v">A scored set, ideal for leaderboards and ranges.</span></div>
+  <div class="kv"><span class="k">Bitmap</span><span class="v">Membership over a dense id space in few bytes.</span></div>
+  <div class="kv"><span class="k">Encoding cliff</span><span class="v">A small threshold where Redis switches to a bigger encoding.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The right structure can save many times the RAM for the same data.</li><li>Hashes are compact for grouped fields but hit an encoding cliff past a threshold.</li><li>HyperLogLog counts unique items in tiny memory; Sets are exact but larger.</li><li>Sorted sets power leaderboards; bitmaps handle dense-id membership cheaply.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -723,6 +828,27 @@ hash-max-listpack-entries = 512</div>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 5.2: mã hoá và bộ nhớ</span><span class="lc-sub">Khoá Redis giải thích listpack, intset và các ngưỡng. Bài này đo vách đá từ Node: 512 → 513 trường = 5.168 → 28.816 byte (×5,6), cùng 1.000 trường chẻ 8 × 125 = 10.368 byte, ~50 byte mỗi khoá, và HLL so với Set (14,5 KB vs 3,68 MB).</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lưu cùng dữ liệu phiên ba cách (ví dụ nhiều khoá string vs một hash) và so bộ nhớ bằng <code>MEMORY USAGE</code>/<code>INFO</code>.</li>
+<li>Đếm khách duy nhất bằng một Set và bằng HyperLogLog và so bộ nhớ cho cùng dữ liệu.</li>
+<li>Dựng một bảng xếp hạng bằng một sorted set (ZADD/ZRANGE) và đọc top N.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn so bộ nhớ qua các cấu trúc, dùng HyperLogLog để đếm, và dựng một bảng xếp hạng sorted-set.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Chọn đúng cấu trúc</span><span class="v">Chọn cấu trúc khớp với kiểu truy cập.</span></div>
+  <div class="kv"><span class="k">Hash</span><span class="v">Một khoá giữ nhiều trường, gọn cho dữ liệu gom nhóm.</span></div>
+  <div class="kv"><span class="k">HyperLogLog</span><span class="v">Đếm duy nhất xấp xỉ trong bộ nhớ cực nhỏ.</span></div>
+  <div class="kv"><span class="k">Sorted set</span><span class="v">Một tập có điểm, lý tưởng cho bảng xếp hạng và khoảng.</span></div>
+  <div class="kv"><span class="k">Bitmap</span><span class="v">Thành viên trên một không gian id dày trong vài byte.</span></div>
+  <div class="kv"><span class="k">Vách đá mã hoá</span><span class="v">Một ngưỡng nhỏ nơi Redis chuyển sang mã hoá lớn hơn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cấu trúc đúng có thể tiết kiệm nhiều lần RAM cho cùng dữ liệu.</li><li>Hash gọn cho trường gom nhóm nhưng gặp vách đá mã hoá sau một ngưỡng.</li><li>HyperLogLog đếm mục duy nhất trong bộ nhớ nhỏ; Set chính xác nhưng lớn hơn.</li><li>Sorted set làm bảng xếp hạng; bitmap xử lý thành viên id-dày rẻ.</li></ul>
 </div>
 `,
     },
@@ -886,6 +1012,27 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
   <span class="lc-body"><span class="lc-title">Test it for real — Testing lesson 4.1: why a real database beats a mocked one</span><span class="lc-sub">The same kind of race, caught by a test: two bookings slip through without a constraint, an EXCLUDE constraint turns the second into 23P01. Here the race is in Redis — GET → check → SET lets 500 of 500 through a limit of 100 while every one-request-at-a-time test passes.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Reproduce the race: a GET-check-SET rate limiter lets far more than the limit through under concurrency; fix it with an atomic <code>INCR</code> plus expiry.</li>
+<li>Implement a sliding-window limiter with a sorted set and compare its fairness to a fixed window at the boundary.</li>
+<li>Write a distributed lock with a unique token and release it only if the token matches, so you cannot delete someone else's lock.</li>
+</ol>
+<p><strong>Done when:</strong> you fixed a rate-limit race atomically, built a sliding window, and wrote a safe lock release.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Atomicity</span><span class="v">An operation that cannot be interrupted mid-way.</span></div>
+  <div class="kv"><span class="k">Check-then-act race</span><span class="v">Reading then writing lets concurrent requests slip through.</span></div>
+  <div class="kv"><span class="k">Fixed window</span><span class="v">Counting per time bucket — leaks double at boundaries.</span></div>
+  <div class="kv"><span class="k">Sliding window</span><span class="v">A rolling count that avoids the boundary burst.</span></div>
+  <div class="kv"><span class="k">Token bucket</span><span class="v">Allows bursts up to a capacity, refilled over time.</span></div>
+  <div class="kv"><span class="k">Distributed lock</span><span class="v">A Redis key with a unique token, released only by its owner.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A GET-check-SET rate limiter races under load and lets too much through.</li><li>Make it atomic with INCR plus an expiry set correctly.</li><li>Fixed windows leak double at the boundary; sliding windows and token buckets fix that.</li><li>A distributed lock must carry a unique token and be released only by its owner.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1032,6 +1179,27 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
   <span class="lc-body"><span class="lc-title">Kiểm cho thật — Testing bài 4.1: vì sao CSDL thật hơn CSDL giả</span><span class="lc-sub">Cùng loại cuộc đua, bị một test bắt: không ràng buộc thì hai lượt đặt cùng lọt, có EXCLUDE thì lượt thứ hai thành 23P01. Ở đây cuộc đua nằm trong Redis — GET → kiểm → SET cho 500/500 lọt giới hạn 100 trong khi mọi test gửi từng request một đều xanh.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tái hiện cuộc đua: một rate limiter GET-kiểm-SET cho lọt nhiều hơn giới hạn rất nhiều khi đồng thời; sửa bằng một <code>INCR</code> nguyên tử cộng hạn.</li>
+<li>Hiện thực một limiter cửa sổ trượt bằng một sorted set và so độ công bằng với cửa sổ cố định ở ranh giới.</li>
+<li>Viết một khoá phân tán với một token duy nhất và chỉ nhả khi token khớp, để không xoá nhầm khoá của người khác.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn sửa một cuộc đua rate-limit một cách nguyên tử, dựng một cửa sổ trượt, và viết một lần nhả khoá an toàn.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Tính nguyên tử</span><span class="v">Một thao tác không thể bị ngắt giữa chừng.</span></div>
+  <div class="kv"><span class="k">Đua kiểm-rồi-làm</span><span class="v">Đọc rồi ghi cho các request đồng thời lọt qua.</span></div>
+  <div class="kv"><span class="k">Cửa sổ cố định</span><span class="v">Đếm theo khung thời gian — rò gấp đôi ở ranh giới.</span></div>
+  <div class="kv"><span class="k">Cửa sổ trượt</span><span class="v">Một đếm lăn tránh cú bùng ở ranh giới.</span></div>
+  <div class="kv"><span class="k">Token bucket</span><span class="v">Cho bùng tới một dung lượng, nạp lại theo thời gian.</span></div>
+  <div class="kv"><span class="k">Khoá phân tán</span><span class="v">Một khoá Redis với token duy nhất, chỉ chủ nó nhả.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một rate limiter GET-kiểm-SET đua khi tải cao và cho lọt quá nhiều.</li><li>Làm nó nguyên tử bằng INCR cộng một hạn đặt đúng.</li><li>Cửa sổ cố định rò gấp đôi ở ranh giới; cửa sổ trượt và token bucket sửa được.</li><li>Một khoá phân tán phải mang token duy nhất và chỉ được chủ nó nhả.</li></ul>
 </div>
 `,
     },
@@ -1160,6 +1328,27 @@ stream-node-max-entries = 100</div>
   <span class="lc-body"><span class="lc-title">Used in a real API — API Design 12.5: a transactional outbox and a notification queue</span><span class="lc-sub">The capstone relays outbox rows to a Redis Stream and moves e-mail to a queue with retries (sync: +300 ms and 500s; queued: ~4 ms, nothing lost). This lesson is the mechanism underneath: why Pub/Sub would lose those events, and how a consumer group proves no job is lost.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Reproduce the vanished message: PUBLISH to a channel with no subscriber (returns 0) and show the message is gone forever.</li>
+<li>Switch to a Stream (XADD/XREAD) and show the message persists and can be read later.</li>
+<li>Use a consumer group to split work across two workers and reclaim an unacked message with XAUTOCLAIM.</li>
+</ol>
+<p><strong>Done when:</strong> you saw Pub/Sub drop a message with no subscriber, persisted it in a Stream, and reclaimed an abandoned one.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Pub/Sub</span><span class="v">Fire-and-forget broadcast; no subscriber means the message is lost.</span></div>
+  <div class="kv"><span class="k">Stream</span><span class="v">An append-only log that remembers messages.</span></div>
+  <div class="kv"><span class="k">Consumer group</span><span class="v">Workers splitting a stream's messages between them.</span></div>
+  <div class="kv"><span class="k">XADD / XREAD</span><span class="v">Append to and read from a stream.</span></div>
+  <div class="kv"><span class="k">XAUTOCLAIM</span><span class="v">Reclaim messages a dead consumer never acked.</span></div>
+  <div class="kv"><span class="k">At-most-once vs at-least-once</span><span class="v">Delivery guarantees Pub/Sub vs Streams give.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Pub/Sub is a broadcast, not a mailbox — with no subscriber the message vanishes.</li><li>Streams are an append-only log that remembers messages for later readers.</li><li>Consumer groups split work and let you reclaim unacked messages (XAUTOCLAIM).</li><li>Choose by what you can afford to lose: Pub/Sub for ephemeral, Streams for durable.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1272,6 +1461,27 @@ stream-node-max-entries = 100</div>
   <span class="lc-body"><span class="lc-title">Dùng trong một API thật — API Design 12.5: transactional outbox và hàng đợi thông báo</span><span class="lc-sub">Dự án cuối khoá đẩy các dòng outbox sang một Redis Stream và chuyển email lên hàng đợi có thử lại (đồng bộ: +300 ms và lỗi 500; hàng đợi: ~4 ms, không mất gì). Bài này là cơ chế bên dưới: vì sao Pub/Sub sẽ làm mất các sự kiện đó, và consumer group chứng minh không mất job nào.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tái hiện tin nhắn biến mất: PUBLISH tới một kênh không có subscriber (trả 0) và chỉ ra tin nhắn mất vĩnh viễn.</li>
+<li>Chuyển sang một Stream (XADD/XREAD) và chỉ ra tin nhắn còn lại và đọc được sau.</li>
+<li>Dùng một consumer group để chia việc cho hai worker và đòi lại một tin nhắn chưa ack bằng XAUTOCLAIM.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy Pub/Sub rớt một tin nhắn khi không có subscriber, giữ nó trong một Stream, và đòi lại một cái bỏ dở.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Pub/Sub</span><span class="v">Phát rồi quên; không có subscriber nghĩa là tin nhắn mất.</span></div>
+  <div class="kv"><span class="k">Stream</span><span class="v">Một log chỉ-thêm nhớ các tin nhắn.</span></div>
+  <div class="kv"><span class="k">Consumer group</span><span class="v">Các worker chia nhau tin nhắn của một stream.</span></div>
+  <div class="kv"><span class="k">XADD / XREAD</span><span class="v">Thêm vào và đọc từ một stream.</span></div>
+  <div class="kv"><span class="k">XAUTOCLAIM</span><span class="v">Đòi lại tin nhắn mà một consumer chết chưa ack.</span></div>
+  <div class="kv"><span class="k">Tối-đa-một-lần vs ít-nhất-một-lần</span><span class="v">Bảo đảm giao mà Pub/Sub vs Streams cho.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Pub/Sub là một broadcast, không phải hộp thư — không có subscriber thì tin nhắn biến mất.</li><li>Streams là một log chỉ-thêm nhớ tin nhắn cho người đọc sau.</li><li>Consumer group chia việc và cho bạn đòi lại tin nhắn chưa ack (XAUTOCLAIM).</li><li>Chọn theo thứ bạn chịu mất được: Pub/Sub cho phù du, Streams cho bền.</li></ul>
 </div>
 `,
     },
@@ -1383,6 +1593,27 @@ stream-node-max-entries = 100</div>
   <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 2.3: finding and deleting keys safely</span><span class="lc-sub">The Redis course explains SCAN cursors, MATCH/COUNT and UNLINK. This lesson measures the damage from a second client on 1,000,000 keys: KEYS makes another PING wait 231.87 ms, SCAN 5.31 ms; DEL of a 1,000,000-field hash blocks 207 ms, UNLINK 0.54 ms; and a nightly cleanup job done both ways (80.8 vs 5.2 ms).</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Fill a test Redis with many keys, run <code>KEYS *</code>, and measure another client's latency spike; then do the same safely with <code>SCAN</code>.</li>
+<li>Delete a large key with <code>DEL</code> and then <code>UNLINK</code>, measuring the blocking difference.</li>
+<li>Set a <code>maxmemory</code> and an eviction policy, fill past it, and observe what gets evicted (or that writes start failing).</li>
+</ol>
+<p><strong>Done when:</strong> you saw KEYS and DEL block the server, used SCAN/UNLINK instead, and watched an eviction policy act.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Single-threaded Redis</span><span class="v">One slow command blocks all others.</span></div>
+  <div class="kv"><span class="k">KEYS vs SCAN</span><span class="v">KEYS blocks; SCAN iterates incrementally.</span></div>
+  <div class="kv"><span class="k">DEL vs UNLINK</span><span class="v">DEL frees synchronously; UNLINK frees in the background.</span></div>
+  <div class="kv"><span class="k">maxmemory</span><span class="v">The memory cap at which eviction or write errors begin.</span></div>
+  <div class="kv"><span class="k">Eviction policy</span><span class="v">Which keys Redis drops when full (or none, making it read-only).</span></div>
+  <div class="kv"><span class="k">Persistence</span><span class="v">RDB/AOF — Redis can save to disk but do not rely on it blindly.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Redis is single-threaded, so one slow command freezes everyone.</li><li>Use SCAN not KEYS, and UNLINK not DEL for large keys, to avoid blocking.</li><li>maxmemory plus an eviction policy decides what happens when Redis fills up.</li><li>Two eviction policies make Redis read-only when full — know which you set.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1484,6 +1715,27 @@ stream-node-max-entries = 100</div>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 2.3: tìm và xoá khoá an toàn</span><span class="lc-sub">Khoá Redis giải thích con trỏ SCAN, MATCH/COUNT và UNLINK. Bài này đo thiệt hại từ một client thứ hai trên 1.000.000 khoá: KEYS làm PING khác chờ 231,87 ms, SCAN 5,31 ms; DEL một hash 1.000.000 trường chặn 207 ms, UNLINK 0,54 ms; và job dọn phiên đêm làm hai cách (80,8 vs 5,2 ms).</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đổ nhiều khoá vào một Redis thử, chạy <code>KEYS *</code>, và đo độ trễ vọt của một client khác; rồi làm an toàn bằng <code>SCAN</code>.</li>
+<li>Xoá một khoá lớn bằng <code>DEL</code> rồi <code>UNLINK</code>, đo chênh lệch chặn.</li>
+<li>Đặt một <code>maxmemory</code> và một chính sách trục xuất, đổ quá nó, và quan sát cái gì bị trục xuất (hoặc ghi bắt đầu thất bại).</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy KEYS và DEL chặn server, dùng SCAN/UNLINK thay vào, và xem một chính sách trục xuất hoạt động.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Redis đơn luồng</span><span class="v">Một lệnh chậm chặn mọi lệnh khác.</span></div>
+  <div class="kv"><span class="k">KEYS vs SCAN</span><span class="v">KEYS chặn; SCAN duyệt từng phần.</span></div>
+  <div class="kv"><span class="k">DEL vs UNLINK</span><span class="v">DEL giải phóng đồng bộ; UNLINK giải phóng ở nền.</span></div>
+  <div class="kv"><span class="k">maxmemory</span><span class="v">Trần bộ nhớ nơi trục xuất hoặc lỗi ghi bắt đầu.</span></div>
+  <div class="kv"><span class="k">Chính sách trục xuất</span><span class="v">Redis bỏ khoá nào khi đầy (hoặc không, thành chỉ-đọc).</span></div>
+  <div class="kv"><span class="k">Bền hoá</span><span class="v">RDB/AOF — Redis lưu được ra đĩa nhưng đừng dựa mù quáng.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Redis đơn luồng, nên một lệnh chậm đóng băng tất cả.</li><li>Dùng SCAN không phải KEYS, và UNLINK không phải DEL cho khoá lớn, để tránh chặn.</li><li>maxmemory cộng một chính sách trục xuất quyết định chuyện gì khi Redis đầy.</li><li>Hai chính sách trục xuất làm Redis thành chỉ-đọc khi đầy — biết bạn đặt cái nào.</li></ul>
 </div>
 `,
     },

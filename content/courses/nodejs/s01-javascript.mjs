@@ -92,6 +92,27 @@ after freeze: { name: 'An' }</div>
   <span class="lc-body"><span class="lc-title">Next in the TypeScript course — 1.3: type inference</span><span class="lc-sub">Same: let can be reassigned, const cannot. Different: in TypeScript that difference also changes the TYPE — let x = "STUDENT" is a string, const x = "STUDENT" is exactly "STUDENT" — and object properties widen even under const, which is a classic compile error.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Reproduce the classic loop trap: write a <code>for</code> loop with <code>var i</code> that schedules three <code>setTimeout</code> callbacks printing <code>i</code>, see them all print the final value, then fix it by switching to <code>let</code>.</li>
+<li>Trigger the Temporal Dead Zone: reference a <code>let</code> variable one line before its declaration and read the exact <code>ReferenceError</code>.</li>
+<li>Prove <code>const</code> is not immutable: declare <code>const o = {}</code>, then successfully do <code>o.x = 1</code>, and explain why that is allowed.</li>
+</ol>
+<p><strong>Done when:</strong> you have seen the var-loop bug and its let fix, hit a TDZ error on purpose, and mutated a const object.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">var</span><span class="v">Function-scoped, hoisted declaration — avoided in modern code.</span></div>
+  <div class="kv"><span class="k">let</span><span class="v">Block-scoped, reassignable declaration.</span></div>
+  <div class="kv"><span class="k">const</span><span class="v">Block-scoped, non-reassignable binding — the value can still be mutated.</span></div>
+  <div class="kv"><span class="k">Scope</span><span class="v">The region of code where a name is visible; block vs function scope.</span></div>
+  <div class="kv"><span class="k">Hoisting</span><span class="v">Declarations being moved to the top of their scope at parse time.</span></div>
+  <div class="kv"><span class="k">Temporal Dead Zone</span><span class="v">The gap where a let/const name exists but cannot be used yet.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Prefer const by default, let when you must reassign, and never var in new code.</li><li>var is function-scoped and hoisted, which causes the classic loop-closure trap; let fixes it.</li><li>let and const are block-scoped and sit in a Temporal Dead Zone until their declaration runs.</li><li>const stops reassignment, not mutation — a const object or array can still change inside.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -163,6 +184,27 @@ sau freeze: { name: 'An' }</div>
   <span class="lc-body"><span class="lc-title">Học tiếp ở khoá TypeScript — 1.3: suy luận kiểu</span><span class="lc-sub">Giống: let gán lại được, const thì không. Khác: trong TypeScript khác biệt đó đổi luôn KIỂU — let x = "STUDENT" là string, const x = "STUDENT" đúng là "STUDENT" — và thuộc tính object vẫn bị nới kiểu dù khai const, một lỗi biên dịch kinh điển.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tái hiện cái bẫy vòng lặp kinh điển: viết một vòng <code>for</code> với <code>var i</code> lên lịch ba callback <code>setTimeout</code> in <code>i</code>, thấy cả ba in ra giá trị cuối, rồi sửa bằng cách đổi sang <code>let</code>.</li>
+<li>Kích hoạt Temporal Dead Zone: tham chiếu một biến <code>let</code> một dòng trước khai báo và đọc đúng <code>ReferenceError</code>.</li>
+<li>Chứng minh <code>const</code> không bất biến: khai <code>const o = {}</code>, rồi làm được <code>o.x = 1</code>, và giải thích vì sao được phép.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã thấy bug vòng lặp var và bản sửa bằng let, cố ý gặp lỗi TDZ, và sửa được một object const.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">var</span><span class="v">Khai báo phạm vi hàm, bị hoisting — tránh dùng trong code hiện đại.</span></div>
+  <div class="kv"><span class="k">let</span><span class="v">Khai báo phạm vi khối, gán lại được.</span></div>
+  <div class="kv"><span class="k">const</span><span class="v">Ràng buộc phạm vi khối, không gán lại được — nhưng giá trị vẫn sửa được.</span></div>
+  <div class="kv"><span class="k">Phạm vi (scope)</span><span class="v">Vùng code một tên nhìn thấy được; khối vs hàm.</span></div>
+  <div class="kv"><span class="k">Hoisting</span><span class="v">Khai báo bị đưa lên đầu phạm vi lúc phân tích cú pháp.</span></div>
+  <div class="kv"><span class="k">Temporal Dead Zone</span><span class="v">Khoảng mà tên let/const đã tồn tại nhưng chưa dùng được.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mặc định dùng const, dùng let khi phải gán lại, và không bao giờ var trong code mới.</li><li>var phạm vi hàm và bị hoisting, gây bẫy closure trong vòng lặp; let sửa được.</li><li>let và const phạm vi khối và nằm trong Temporal Dead Zone tới khi khai báo chạy.</li><li>const chặn gán lại, không chặn sửa — object hay mảng const vẫn đổi bên trong được.</li></ul>
 </div>
 `,
     },
@@ -248,6 +290,27 @@ rebound with bind: Hello from NotesAPI</div>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
 
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a <code>makeCounter()</code> that returns an increment function; call it twice to get two independent counters, proving each closure holds its own private state.</li>
+<li>Define an object with a method that uses <code>this</code>, then pass that method as a bare callback (e.g. to <code>setTimeout</code>) and watch <code>this</code> become undefined/global; fix it with an arrow or <code>bind</code>.</li>
+<li>Write the same logic once as a regular function and once as an arrow, and show how <code>this</code> differs between them.</li>
+</ol>
+<p><strong>Done when:</strong> you have two independent closures and have broken then fixed a lost-this bug.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Function</span><span class="v">A reusable block of logic; first-class value in JavaScript.</span></div>
+  <div class="kv"><span class="k">Closure</span><span class="v">A function that remembers variables from where it was defined.</span></div>
+  <div class="kv"><span class="k">Private state</span><span class="v">Data kept alive by a closure, reachable only through the returned function.</span></div>
+  <div class="kv"><span class="k">this</span><span class="v">The call-time receiver; depends on how a function is called, not where it is defined.</span></div>
+  <div class="kv"><span class="k">Arrow function</span><span class="v">A function with no own this — it inherits this from the surrounding scope.</span></div>
+  <div class="kv"><span class="k">bind / call / apply</span><span class="v">Ways to set this explicitly when calling a regular function.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Closures let a function keep private state from its defining scope — used everywhere on the backend.</li><li>this is decided by how a function is called, which is why bare callbacks lose it.</li><li>Regular functions get their own this; arrow functions inherit the surrounding this.</li><li>Use arrows for callbacks to keep this, and bind/call/apply when you need to set it explicitly.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -323,6 +386,27 @@ buộc lại bằng bind: Xin chào từ NotesAPI</div>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một <code>makeCounter()</code> trả về một hàm tăng; gọi nó hai lần để có hai bộ đếm độc lập, chứng minh mỗi closure giữ trạng thái riêng.</li>
+<li>Định nghĩa một object có method dùng <code>this</code>, rồi truyền method đó như một callback trần (ví dụ vào <code>setTimeout</code>) và thấy <code>this</code> thành undefined/global; sửa bằng arrow hoặc <code>bind</code>.</li>
+<li>Viết cùng một logic, một lần bằng hàm thường và một lần bằng arrow, và chỉ ra <code>this</code> khác nhau thế nào.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có hai closure độc lập và đã phá rồi sửa một bug mất-this.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hàm (function)</span><span class="v">Khối logic tái dùng; là giá trị hạng nhất trong JavaScript.</span></div>
+  <div class="kv"><span class="k">Closure</span><span class="v">Hàm nhớ được các biến ở nơi nó được định nghĩa.</span></div>
+  <div class="kv"><span class="k">Trạng thái riêng</span><span class="v">Dữ liệu được closure giữ sống, chỉ với tới qua hàm trả về.</span></div>
+  <div class="kv"><span class="k">this</span><span class="v">Người nhận lúc gọi; phụ thuộc cách gọi, không phải nơi định nghĩa.</span></div>
+  <div class="kv"><span class="k">Arrow function</span><span class="v">Hàm không có this riêng — kế thừa this từ phạm vi bao quanh.</span></div>
+  <div class="kv"><span class="k">bind / call / apply</span><span class="v">Cách đặt this tường minh khi gọi một hàm thường.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Closure cho một hàm giữ trạng thái riêng từ phạm vi định nghĩa — dùng khắp nơi ở backend.</li><li>this do cách gọi hàm quyết định, nên callback trần làm mất nó.</li><li>Hàm thường có this riêng; arrow kế thừa this bao quanh.</li><li>Dùng arrow cho callback để giữ this, và bind/call/apply khi cần đặt this tường minh.</li></ul>
 </div>
 
 <div class="ml-en">
@@ -440,6 +524,27 @@ the deep copy                      : {"name":"An","address":{"city":"Huế"},"ta
   <span class="lc-body"><span class="lc-title">MDN — structuredClone()</span><span class="lc-sub">A real deep copy, with the list of types it supports and the ones it throws on.</span></span>
 </a>
 
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Make a shallow copy with spread (<code>const b = {...a}</code>), then mutate a nested object inside <code>b</code> and watch <code>a</code> change too — proving the copy is one level deep.</li>
+<li>Destructure a fake request body (<code>const { name, email } = req.body</code>) with a default value for a missing field.</li>
+<li>Use optional chaining and nullish coalescing (<code>user?.profile?.city ?? "unknown"</code>) on an object where the middle level is missing.</li>
+</ol>
+<p><strong>Done when:</strong> you have seen a shallow copy leak a nested mutation, and read nested data safely with ?. and ??.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Value vs reference</span><span class="v">Primitives copy by value; objects and arrays copy the reference.</span></div>
+  <div class="kv"><span class="k">Shallow copy</span><span class="v">A copy one level deep — nested objects are still shared.</span></div>
+  <div class="kv"><span class="k">Deep copy</span><span class="v">A fully independent copy, e.g. via <code>structuredClone</code>.</span></div>
+  <div class="kv"><span class="k">Destructuring</span><span class="v">Pulling fields out of an object/array into variables.</span></div>
+  <div class="kv"><span class="k">Spread</span><span class="v">Copying/merging into a new object or array without mutating the old one.</span></div>
+  <div class="kv"><span class="k">Optional chaining / nullish coalescing</span><span class="v"><code>?.</code> stops on null/undefined; <code>??</code> supplies a fallback.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Objects and arrays are held by reference, so copying the variable does not copy the data.</li><li>Spread and Object.assign make shallow copies — nested objects stay shared.</li><li>Destructuring is how you read request data cleanly, with defaults for missing fields.</li><li>Spread updates without mutating; ?. and ?? read nested data safely.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -502,6 +607,27 @@ bản sao sâu                 : {"name":"An","address":{"city":"Huế"},"tags":
   <span class="lc-body"><span class="lc-title">MDN — structuredClone()</span><span class="lc-sub">Một bản chép sâu thật sự, kèm danh sách kiểu nó hỗ trợ và kiểu nó ném lỗi.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tạo một bản sao nông bằng spread (<code>const b = {...a}</code>), rồi sửa một object lồng bên trong <code>b</code> và thấy <code>a</code> cũng đổi — chứng minh bản sao chỉ sâu một tầng.</li>
+<li>Destructure một body request giả (<code>const { name, email } = req.body</code>) kèm giá trị mặc định cho một trường thiếu.</li>
+<li>Dùng optional chaining và nullish coalescing (<code>user?.profile?.city ?? "unknown"</code>) trên một object thiếu tầng giữa.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã thấy bản sao nông để lọt một mutation lồng, và đọc dữ liệu lồng an toàn bằng ?. và ??.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Giá trị vs tham chiếu</span><span class="v">Kiểu nguyên thuỷ sao theo giá trị; object và mảng sao theo tham chiếu.</span></div>
+  <div class="kv"><span class="k">Sao chép nông</span><span class="v">Bản sao sâu một tầng — object lồng vẫn dùng chung.</span></div>
+  <div class="kv"><span class="k">Sao chép sâu</span><span class="v">Bản sao độc lập hoàn toàn, ví dụ qua <code>structuredClone</code>.</span></div>
+  <div class="kv"><span class="k">Destructuring</span><span class="v">Rút các trường từ object/mảng ra biến.</span></div>
+  <div class="kv"><span class="k">Spread</span><span class="v">Sao/gộp vào object hay mảng mới mà không sửa cái cũ.</span></div>
+  <div class="kv"><span class="k">Optional chaining / nullish</span><span class="v"><code>?.</code> dừng khi null/undefined; <code>??</code> cho giá trị dự phòng.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Object và mảng giữ theo tham chiếu, nên sao biến không sao dữ liệu.</li><li>Spread và Object.assign tạo bản sao nông — object lồng vẫn chung.</li><li>Destructuring là cách đọc dữ liệu request gọn gàng, có mặc định cho trường thiếu.</li><li>Spread cập nhật không mutate; ?. và ?? đọc dữ liệu lồng an toàn.</li></ul>
 </div>
 `,
     },
@@ -606,6 +732,27 @@ Node.js v22.21.0
   <span class="lc-body"><span class="lc-title">Why TypeScript lets this crash through — TS 3.3: Overloads &amp; the void-return subtlety</span><span class="lc-sub">Same: an unhandled rejected Promise ends the Node process; forEach(async …) waits for nothing. Different: a <code>=&gt; void</code> callback slot accepts an async function with tsc 0 errors (measured: exit code 1); type the slot as a Promise you await, or lint with no-misused-promises.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Reproduce Mistake 1 (forgetting await): call an async function without <code>await</code>, log its return value, and see a pending Promise instead of the result.</li>
+<li>Reproduce Mistake 2: run two independent awaits in sequence, time it, then run them together with <code>Promise.all</code> and compare the times.</li>
+<li>Reproduce Mistake 4: throw inside an async handler with no try/catch and watch the unhandled rejection; then wrap it correctly.</li>
+</ol>
+<p><strong>Done when:</strong> you have triggered the forgotten-await, the needless-sequential, and the unhandled-rejection bugs, and fixed each.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Callback</span><span class="v">A function passed in to run when an async operation finishes — the oldest style.</span></div>
+  <div class="kv"><span class="k">Promise</span><span class="v">An object representing a future value: pending, fulfilled, or rejected.</span></div>
+  <div class="kv"><span class="k">async / await</span><span class="v">Syntax that lets you write Promise code as if it were sequential.</span></div>
+  <div class="kv"><span class="k">Promise.all</span><span class="v">Runs several Promises together and waits for all to resolve.</span></div>
+  <div class="kv"><span class="k">Unhandled rejection</span><span class="v">A rejected Promise with no catch — can crash the process.</span></div>
+  <div class="kv"><span class="k">Event loop</span><span class="v">What lets Node do other work while an async operation is pending.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Callbacks, Promises and async/await are three generations of the same waiting idea.</li><li>Forgetting await returns a pending Promise, not the value — a top bug source.</li><li>Independent awaits should run together with Promise.all, not one after another.</li><li>An async throw with no try/catch becomes an unhandled rejection that can kill the process.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -700,6 +847,27 @@ Node.js v22.21.0
   <span class="lc-body"><span class="lc-title">Vì sao TypeScript để lọt cú sập này — TS 3.3: Overload &amp; điều tinh tế của void</span><span class="lc-sub">Giống: Promise bị reject không ai xử lý làm tiến trình Node kết thúc; forEach(async …) không chờ gì. Khác: chỗ callback <code>=&gt; void</code> nhận hàm async mà tsc 0 lỗi (đo: thoát mã 1); gõ kiểu chỗ đó là Promise rồi await, hoặc bật lint no-misused-promises.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tái hiện Lỗi 1 (quên await): gọi một hàm async mà không <code>await</code>, log giá trị trả về, và thấy một Promise đang chờ thay vì kết quả.</li>
+<li>Tái hiện Lỗi 2: chạy hai await độc lập tuần tự, đo giờ, rồi chạy chúng cùng lúc bằng <code>Promise.all</code> và so thời gian.</li>
+<li>Tái hiện Lỗi 4: ném lỗi trong một handler async không try/catch và xem unhandled rejection; rồi bọc lại cho đúng.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã gây ra bug quên-await, bug tuần-tự-thừa, và bug unhandled-rejection, rồi sửa từng cái.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Callback</span><span class="v">Hàm truyền vào để chạy khi một thao tác async xong — kiểu cũ nhất.</span></div>
+  <div class="kv"><span class="k">Promise</span><span class="v">Object biểu diễn một giá trị tương lai: đang chờ, hoàn thành, hoặc bị từ chối.</span></div>
+  <div class="kv"><span class="k">async / await</span><span class="v">Cú pháp cho bạn viết code Promise như thể tuần tự.</span></div>
+  <div class="kv"><span class="k">Promise.all</span><span class="v">Chạy nhiều Promise cùng lúc và chờ tất cả hoàn thành.</span></div>
+  <div class="kv"><span class="k">Unhandled rejection</span><span class="v">Một Promise bị từ chối không có catch — có thể làm sập tiến trình.</span></div>
+  <div class="kv"><span class="k">Event loop</span><span class="v">Thứ cho Node làm việc khác trong khi một thao tác async còn chờ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Callback, Promise và async/await là ba thế hệ của cùng một ý tưởng chờ đợi.</li><li>Quên await trả về một Promise đang chờ, không phải giá trị — nguồn bug hàng đầu.</li><li>Các await độc lập nên chạy cùng lúc bằng Promise.all, không phải lần lượt.</li><li>Một throw async không try/catch thành unhandled rejection có thể giết tiến trình.</li></ul>
 </div>
 
 <div class="ml-en">
@@ -804,6 +972,27 @@ ESM  : top-level await works</div>
   <span class="lc-body"><span class="lc-title">Node.js — ESM and CommonJS interop</span><span class="lc-sub">What can import what, and the named-export limitation that trips people up.</span></span>
 </a>
 
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write the same small module twice: once with <code>module.exports</code> / <code>require</code> (CJS) and once with <code>export</code> / <code>import</code> (ESM).</li>
+<li>In an ESM file, get <code>__dirname</code> back using <code>import.meta.url</code> and <code>fileURLToPath</code>.</li>
+<li>Flip one project between modes by adding/removing <code>"type": "module"</code> in package.json and observe which syntax then works.</li>
+</ol>
+<p><strong>Done when:</strong> you have the same module in both systems and know which package.json setting selects each.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">CommonJS (CJS)</span><span class="v">The original Node module system: <code>require</code> and <code>module.exports</code>.</span></div>
+  <div class="kv"><span class="k">ES Modules (ESM)</span><span class="v">The standard system: <code>import</code> and <code>export</code>.</span></div>
+  <div class="kv"><span class="k">"type": "module"</span><span class="v">The package.json field that makes .js files ESM.</span></div>
+  <div class="kv"><span class="k">.mjs / .cjs</span><span class="v">Extensions that force ESM or CJS regardless of package.json.</span></div>
+  <div class="kv"><span class="k">import.meta.url</span><span class="v">The ESM way to find the current file path (no __dirname).</span></div>
+  <div class="kv"><span class="k">Named vs default export</span><span class="v">Export several bindings by name, or one default value.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Node supports two module systems: CommonJS (require) and ES Modules (import).</li><li>package.json "type" plus the .mjs/.cjs extensions decide which mode a file is in.</li><li>ESM has no __dirname — rebuild it from import.meta.url when needed.</li><li>Choose ESM for new projects; it is the standard and matches browser JavaScript.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -873,6 +1062,27 @@ ESM  : top-level await chạy được</div>
   <span class="lc-body"><span class="lc-title">Node.js — ESM và CommonJS phối hợp</span><span class="lc-sub">Cái gì import được cái gì, và cái giới hạn về named export hay làm người ta vấp.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết cùng một module nhỏ hai lần: một lần bằng <code>module.exports</code> / <code>require</code> (CJS) và một lần bằng <code>export</code> / <code>import</code> (ESM).</li>
+<li>Trong một file ESM, lấy lại <code>__dirname</code> bằng <code>import.meta.url</code> và <code>fileURLToPath</code>.</li>
+<li>Chuyển một dự án qua lại giữa hai chế độ bằng cách thêm/bỏ <code>"type": "module"</code> trong package.json và xem cú pháp nào khi đó chạy.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có cùng một module ở cả hai hệ và biết thiết lập package.json nào chọn từng cái.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">CommonJS (CJS)</span><span class="v">Hệ module gốc của Node: <code>require</code> và <code>module.exports</code>.</span></div>
+  <div class="kv"><span class="k">ES Modules (ESM)</span><span class="v">Hệ chuẩn: <code>import</code> và <code>export</code>.</span></div>
+  <div class="kv"><span class="k">"type": "module"</span><span class="v">Trường package.json làm cho file .js thành ESM.</span></div>
+  <div class="kv"><span class="k">.mjs / .cjs</span><span class="v">Phần mở rộng ép ESM hoặc CJS bất kể package.json.</span></div>
+  <div class="kv"><span class="k">import.meta.url</span><span class="v">Cách ESM tìm đường dẫn file hiện tại (không có __dirname).</span></div>
+  <div class="kv"><span class="k">Named vs default export</span><span class="v">Xuất nhiều ràng buộc theo tên, hoặc một giá trị mặc định.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Node hỗ trợ hai hệ module: CommonJS (require) và ES Modules (import).</li><li>"type" trong package.json cộng phần mở rộng .mjs/.cjs quyết định chế độ của file.</li><li>ESM không có __dirname — dựng lại từ import.meta.url khi cần.</li><li>Chọn ESM cho dự án mới; nó là chuẩn và khớp với JavaScript trình duyệt.</li></ul>
 </div>
 
 <div class="ml-en">

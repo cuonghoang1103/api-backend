@@ -108,6 +108,27 @@ join    : /var/www/uploads</div>
   <span class="lc-body"><span class="lc-title">Node.js — fs/promises</span><span class="lc-sub">The API this course uses: promise-based, awaitable, and no callback nesting.</span></span>
 </a>
 
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Build a path two ways: once with string concatenation using <code>/</code>, once with <code>path.join</code>; print both and note why only path.join is portable.</li>
+<li>Read a file three ways: <code>fs.readFileSync</code>, the callback <code>fs.readFile</code>, and <code>fs.promises.readFile</code> with await — see the same bytes via three APIs.</li>
+<li>Instead of checking existence before reading, just read inside a try/catch and handle <code>ENOENT</code> — avoiding the check-then-act race.</li>
+</ol>
+<p><strong>Done when:</strong> you built a portable path with path.join and read a file via all three fs styles, handling ENOENT instead of pre-checking.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">path.join</span><span class="v">Joins segments using the correct separator for the OS.</span></div>
+  <div class="kv"><span class="k">path.resolve</span><span class="v">Builds an absolute path from segments.</span></div>
+  <div class="kv"><span class="k">fs sync API</span><span class="v">Blocking calls ending in <code>Sync</code> — avoid in request handlers.</span></div>
+  <div class="kv"><span class="k">fs callback API</span><span class="v">The original async style with a callback.</span></div>
+  <div class="kv"><span class="k">fs.promises</span><span class="v">The promise-based fs API for async/await.</span></div>
+  <div class="kv"><span class="k">ENOENT</span><span class="v">The "no such file" error code — handle it instead of pre-checking.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Never build paths by concatenating strings — use path.join/path.resolve for portability.</li><li>fs comes in three flavours: sync, callback, and promises.</li><li>Prefer fs.promises with await in server code; avoid the Sync calls under load.</li><li>Do not check existence then act — just act and handle ENOENT to avoid a race.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -195,6 +216,27 @@ join    : /var/www/uploads</div>
   <span class="lc-body"><span class="lc-title">Node.js — fs/promises</span><span class="lc-sub">API mà khoá này dùng: dựa trên promise, await được, và không lồng callback.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Dựng một đường dẫn hai cách: một lần nối chuỗi bằng <code>/</code>, một lần bằng <code>path.join</code>; in cả hai và ghi vì sao chỉ path.join mới chạy mọi nền tảng.</li>
+<li>Đọc một file ba cách: <code>fs.readFileSync</code>, callback <code>fs.readFile</code>, và <code>fs.promises.readFile</code> với await — thấy cùng bộ byte qua ba API.</li>
+<li>Thay vì kiểm tồn tại trước khi đọc, cứ đọc trong try/catch và xử lý <code>ENOENT</code> — tránh cuộc đua kiểm-rồi-làm.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã dựng đường dẫn chạy mọi nền tảng bằng path.join và đọc file qua cả ba kiểu fs, xử lý ENOENT thay vì kiểm trước.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">path.join</span><span class="v">Nối các đoạn bằng dấu phân cách đúng cho hệ điều hành.</span></div>
+  <div class="kv"><span class="k">path.resolve</span><span class="v">Dựng một đường dẫn tuyệt đối từ các đoạn.</span></div>
+  <div class="kv"><span class="k">API fs đồng bộ</span><span class="v">Lời gọi chặn kết thúc bằng <code>Sync</code> — tránh trong handler request.</span></div>
+  <div class="kv"><span class="k">API fs callback</span><span class="v">Kiểu async gốc với một callback.</span></div>
+  <div class="kv"><span class="k">fs.promises</span><span class="v">API fs dựa trên promise cho async/await.</span></div>
+  <div class="kv"><span class="k">ENOENT</span><span class="v">Mã lỗi "không có file" — xử lý nó thay vì kiểm trước.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Đừng dựng đường dẫn bằng nối chuỗi — dùng path.join/path.resolve cho chạy mọi nền tảng.</li><li>fs có ba kiểu: đồng bộ, callback, và promises.</li><li>Ưu tiên fs.promises với await trong code server; tránh lời gọi Sync khi tải cao.</li><li>Đừng kiểm tồn tại rồi làm — cứ làm và xử lý ENOENT để tránh cuộc đua.</li></ul>
 </div>
 `,
     },
@@ -273,6 +315,27 @@ Buffer.<span class="tok-function">concat</span>([a, b]);                <span cl
   <span class="lc-body"><span class="lc-title">Node.js — StringDecoder</span><span class="lc-sub">The one-class answer to splitting multi-byte characters across chunk boundaries.</span></span>
 </a>
 
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Create a Buffer from a string containing a non-ASCII character (e.g. "é" or "ấ") and print <code>.length</code> — note it is more bytes than characters.</li>
+<li>Slice a multi-byte string buffer in the middle of a character and decode it, watching the text break into a replacement character.</li>
+<li>Build a Buffer with <code>Buffer.from</code> and read individual bytes to see the raw numbers.</li>
+</ol>
+<p><strong>Done when:</strong> you have seen byte count differ from character count and corrupted text by slicing a multi-byte character in half.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Buffer</span><span class="v">A fixed-length chunk of raw binary bytes in Node.</span></div>
+  <div class="kv"><span class="k">Byte vs character</span><span class="v">One character can be several bytes in UTF-8.</span></div>
+  <div class="kv"><span class="k">UTF-8</span><span class="v">The variable-width encoding most text uses on the web.</span></div>
+  <div class="kv"><span class="k">Buffer.from</span><span class="v">Creates a Buffer from a string, array or another buffer.</span></div>
+  <div class="kv"><span class="k">Encoding</span><span class="v">How bytes map to characters (utf8, base64, hex, ...).</span></div>
+  <div class="kv"><span class="k">Slice boundary</span><span class="v">Cutting between bytes of one character corrupts the text.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A Buffer is raw bytes — not characters — and length counts bytes.</li><li>In UTF-8 one character can be several bytes, so "8 chars" may be 9+ bytes.</li><li>Slicing in the middle of a multi-byte character breaks the text.</li><li>You meet Buffers in file reads, network data, crypto and streams.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -334,6 +397,27 @@ Buffer.<span class="tok-function">concat</span>([a, b]);                <span cl
   <span class="lc-body"><span class="lc-title">Node.js — StringDecoder</span><span class="lc-sub">Câu trả lời gọn trong một lớp cho việc ký tự nhiều byte bị xé qua ranh giới các mẩu.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tạo một Buffer từ một chuỗi chứa ký tự không-ASCII (ví dụ "é" hay "ấ") và in <code>.length</code> — ghi rằng nó nhiều byte hơn số ký tự.</li>
+<li>Cắt một buffer chuỗi nhiều byte ngay giữa một ký tự và giải mã nó, xem chữ vỡ thành ký tự thay thế.</li>
+<li>Dựng một Buffer bằng <code>Buffer.from</code> và đọc từng byte để thấy các con số thô.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã thấy số byte khác số ký tự và làm hỏng chữ khi cắt đôi một ký tự nhiều byte.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Buffer</span><span class="v">Một khối byte nhị phân thô dài cố định trong Node.</span></div>
+  <div class="kv"><span class="k">Byte vs ký tự</span><span class="v">Một ký tự có thể là nhiều byte trong UTF-8.</span></div>
+  <div class="kv"><span class="k">UTF-8</span><span class="v">Mã hoá độ rộng thay đổi mà phần lớn văn bản web dùng.</span></div>
+  <div class="kv"><span class="k">Buffer.from</span><span class="v">Tạo một Buffer từ chuỗi, mảng hoặc buffer khác.</span></div>
+  <div class="kv"><span class="k">Encoding</span><span class="v">Cách byte ánh xạ sang ký tự (utf8, base64, hex, ...).</span></div>
+  <div class="kv"><span class="k">Ranh giới cắt</span><span class="v">Cắt giữa các byte của một ký tự làm hỏng chữ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Buffer là byte thô — không phải ký tự — và length đếm byte.</li><li>Trong UTF-8 một ký tự có thể nhiều byte, nên "8 ký tự" có thể 9+ byte.</li><li>Cắt giữa một ký tự nhiều byte làm vỡ chữ.</li><li>Bạn gặp Buffer khi đọc file, dữ liệu mạng, crypto và stream.</li></ul>
 </div>
 `,
     },
@@ -433,6 +517,27 @@ compressed:  15.0 MB</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 319 — Core Modules and the npm Ecosystem</span><span class="lc-sub">10 exercises on fs, streams, buffers and events.</span></span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Count lines in a large file (make one if needed) two ways — read it all into memory, then via a read stream line by line — and compare peak RAM.</li>
+<li>Connect a read stream to a write stream with <code>pipeline()</code> and confirm errors propagate (break the destination and watch it fail cleanly).</li>
+<li>Describe backpressure in one sentence using what you saw: the writer telling the reader to slow down.</li>
+</ol>
+<p><strong>Done when:</strong> you measured much lower RAM with the streaming approach and used pipeline() with proper error handling.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Stream</span><span class="v">Data processed in chunks over time instead of all at once.</span></div>
+  <div class="kv"><span class="k">Readable / Writable</span><span class="v">Streams you read from and write to.</span></div>
+  <div class="kv"><span class="k">Transform / Duplex</span><span class="v">Streams that modify data or do both directions.</span></div>
+  <div class="kv"><span class="k">pipeline()</span><span class="v">Connects streams and handles errors and cleanup.</span></div>
+  <div class="kv"><span class="k">Backpressure</span><span class="v">The mechanism that slows a fast producer for a slow consumer.</span></div>
+  <div class="kv"><span class="k">Peak memory</span><span class="v">The highest RAM used — streams keep it bounded.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Streams process data in chunks, keeping memory bounded on huge inputs.</li><li>The four kinds are Readable, Writable, Duplex and Transform.</li><li>Use pipeline() to connect streams safely with error handling and cleanup.</li><li>Backpressure is what lets a slow consumer hold back a fast producer.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -515,6 +620,27 @@ nén :  15.0 MB</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 319 — Module lõi &amp; hệ sinh thái npm</span><span class="lc-sub">10 bài tập về fs, stream, buffer và event.</span></span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đếm số dòng trong một file lớn (tạo một cái nếu cần) hai cách — đọc hết vào bộ nhớ, rồi qua một read stream theo từng dòng — và so RAM đỉnh.</li>
+<li>Nối một read stream với một write stream bằng <code>pipeline()</code> và xác nhận lỗi lan ra (làm hỏng đích và xem nó fail sạch sẽ).</li>
+<li>Mô tả backpressure trong một câu dựa trên điều bạn thấy: bên ghi bảo bên đọc chậm lại.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã đo RAM thấp hơn nhiều với cách stream và dùng pipeline() có xử lý lỗi đúng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Stream</span><span class="v">Dữ liệu được xử lý theo từng mẩu qua thời gian thay vì một lần.</span></div>
+  <div class="kv"><span class="k">Readable / Writable</span><span class="v">Stream bạn đọc từ đó và ghi vào đó.</span></div>
+  <div class="kv"><span class="k">Transform / Duplex</span><span class="v">Stream biến đổi dữ liệu hoặc làm cả hai chiều.</span></div>
+  <div class="kv"><span class="k">pipeline()</span><span class="v">Nối các stream và lo lỗi cùng dọn dẹp.</span></div>
+  <div class="kv"><span class="k">Backpressure</span><span class="v">Cơ chế làm chậm bên sản xuất nhanh cho bên tiêu thụ chậm.</span></div>
+  <div class="kv"><span class="k">Bộ nhớ đỉnh</span><span class="v">RAM cao nhất đã dùng — stream giữ nó bị chặn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Stream xử lý dữ liệu theo mẩu, giữ bộ nhớ bị chặn trên đầu vào khổng lồ.</li><li>Bốn loại là Readable, Writable, Duplex và Transform.</li><li>Dùng pipeline() để nối stream an toàn với xử lý lỗi và dọn dẹp.</li><li>Backpressure là thứ cho một bên tiêu thụ chậm ghìm lại một bên sản xuất nhanh.</li></ul>
 </div>
 `,
     },
@@ -597,6 +723,27 @@ store.<span class="tok-function">off</span>(<span class="tok-string">'saved'</sp
   <span class="lc-body"><span class="lc-title">Node.js — setMaxListeners</span><span class="lc-sub">What the warning means, and when raising the limit is legitimate rather than a cover-up.</span></span>
 </a>
 
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Make an <code>EventEmitter</code>, register a listener with <code>.on</code>, and emit the event with a payload a few times.</li>
+<li>Emit an <code>error</code> event with no error listener and watch it throw and crash — then add a listener and see it handled.</li>
+<li>Add more than ten listeners to one event and trigger the MaxListenersExceededWarning, then raise the limit or remove listeners.</li>
+</ol>
+<p><strong>Done when:</strong> you have emitted and handled events, crashed on an unhandled error event, and seen the leak warning.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">EventEmitter</span><span class="v">The emit/listen building block under much of Node.</span></div>
+  <div class="kv"><span class="k">.on / .emit</span><span class="v">Register a listener; fire an event with a payload.</span></div>
+  <div class="kv"><span class="k">.once</span><span class="v">A listener that runs a single time then detaches.</span></div>
+  <div class="kv"><span class="k">'error' event</span><span class="v">A special event that throws if nobody is listening.</span></div>
+  <div class="kv"><span class="k">Listener leak</span><span class="v">Too many listeners on one emitter — a common memory bug.</span></div>
+  <div class="kv"><span class="k">removeListener / off</span><span class="v">Detach a listener so it can be garbage-collected.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>EventEmitter is the publish/subscribe pattern underpinning streams, HTTP and more.</li><li>Use .on to listen and .emit to fire; .once runs a listener a single time.</li><li>The error event is special — with no listener it throws and crashes the process.</li><li>Forgetting to remove listeners leaks memory; watch for the max-listeners warning.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -669,6 +816,27 @@ store.<span class="tok-function">off</span>(<span class="tok-string">'daLuu'</sp
   <span class="lc-body"><span class="lc-title">Node.js — setMaxListeners</span><span class="lc-sub">Cảnh báo đó nghĩa là gì, và khi nào nâng giới hạn là chính đáng chứ không phải che đậy.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tạo một <code>EventEmitter</code>, đăng ký một listener bằng <code>.on</code>, và emit sự kiện kèm payload vài lần.</li>
+<li>Emit một sự kiện <code>error</code> không có listener error và xem nó ném lỗi và sập — rồi thêm một listener và thấy nó được xử lý.</li>
+<li>Thêm hơn mười listener vào một sự kiện và kích hoạt cảnh báo MaxListenersExceeded, rồi nâng giới hạn hoặc gỡ listener.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã emit và xử lý sự kiện, sập vì sự kiện error không có listener, và thấy cảnh báo rò rỉ.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">EventEmitter</span><span class="v">Khối phát/nghe nằm dưới phần lớn Node.</span></div>
+  <div class="kv"><span class="k">.on / .emit</span><span class="v">Đăng ký một listener; phát một sự kiện kèm payload.</span></div>
+  <div class="kv"><span class="k">.once</span><span class="v">Một listener chạy đúng một lần rồi tự gỡ.</span></div>
+  <div class="kv"><span class="k">Sự kiện 'error'</span><span class="v">Một sự kiện đặc biệt ném lỗi nếu không ai nghe.</span></div>
+  <div class="kv"><span class="k">Rò rỉ listener</span><span class="v">Quá nhiều listener trên một emitter — bug bộ nhớ hay gặp.</span></div>
+  <div class="kv"><span class="k">removeListener / off</span><span class="v">Gỡ một listener để nó được thu gom rác.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>EventEmitter là mẫu publish/subscribe nằm dưới stream, HTTP và nhiều thứ.</li><li>Dùng .on để nghe và .emit để phát; .once chạy listener đúng một lần.</li><li>Sự kiện error đặc biệt — không có listener thì nó ném và làm sập tiến trình.</li><li>Quên gỡ listener gây rò rỉ bộ nhớ; để ý cảnh báo quá số listener.</li></ul>
 </div>
 `,
     },
@@ -766,6 +934,27 @@ Content-Type: application/json; charset=utf-8
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 1.2: APIs, HTTP &amp; your first Node server</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: building a server with Node's plain http module. Different: Courses uses that server to show the pain points and lead into Express. In this lesson we add: what the bare server makes you do by hand, streaming the response, and what the raw http module leaves to you. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Build a server with only the <code>http</code> module that returns JSON for <code>GET /health</code> and 404 for anything else — by hand, no framework.</li>
+<li>Add a <code>POST</code> route and collect the request body yourself from the data/end events, then parse the JSON.</li>
+<li>List three things you had to do manually (routing, body parsing, content-type) that Express will do for you in Chapter 5.</li>
+</ol>
+<p><strong>Done when:</strong> you have a raw http server handling GET and POST with hand-parsed bodies, and a list of what Express removes.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">http module</span><span class="v">Node's built-in HTTP server/client, with no framework.</span></div>
+  <div class="kv"><span class="k">createServer</span><span class="v">Starts an HTTP server with a request handler.</span></div>
+  <div class="kv"><span class="k">req / res</span><span class="v">The request and response objects — streams underneath.</span></div>
+  <div class="kv"><span class="k">Routing by hand</span><span class="v">Branching on method and URL yourself.</span></div>
+  <div class="kv"><span class="k">Body parsing</span><span class="v">Collecting request data chunks and parsing them yourself.</span></div>
+  <div class="kv"><span class="k">Content-Type</span><span class="v">The header telling the client how to read the response.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The raw http module can serve an API, but you do routing and parsing by hand.</li><li>req and res are streams, so request bodies arrive in chunks you must collect.</li><li>You set status codes and Content-Type manually on every response.</li><li>Seeing this pain is the point — it is exactly what Express removes in Chapter 5.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -853,6 +1042,27 @@ Content-Type: application/json; charset=utf-8
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 1.2: API, HTTP &amp; server Node đầu tiên</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: dựng server bằng module http thuần của Node. Khác: Courses dùng server đó để chỉ ra những chỗ khó chịu và dẫn sang Express. Ở bài này mình học thêm: những chỗ bắt bạn tự làm tay, trả phản hồi theo dòng chảy, module http trần bắt bạn tự làm những gì. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Dựng một server chỉ bằng module <code>http</code> trả JSON cho <code>GET /health</code> và 404 cho mọi thứ khác — bằng tay, không framework.</li>
+<li>Thêm một route <code>POST</code> và tự thu body request từ sự kiện data/end, rồi parse JSON.</li>
+<li>Liệt kê ba thứ bạn phải tự làm (routing, parse body, content-type) mà Express sẽ làm giúp ở Chương 5.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một server http trần xử lý GET và POST với body tự parse, và một danh sách thứ Express bỏ bớt.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">module http</span><span class="v">Server/client HTTP dựng sẵn của Node, không framework.</span></div>
+  <div class="kv"><span class="k">createServer</span><span class="v">Khởi động một server HTTP với một handler request.</span></div>
+  <div class="kv"><span class="k">req / res</span><span class="v">Object request và response — bên dưới là stream.</span></div>
+  <div class="kv"><span class="k">Routing bằng tay</span><span class="v">Tự rẽ nhánh theo method và URL.</span></div>
+  <div class="kv"><span class="k">Parse body</span><span class="v">Tự thu các mẩu dữ liệu request và parse chúng.</span></div>
+  <div class="kv"><span class="k">Content-Type</span><span class="v">Header nói cho client cách đọc response.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Module http trần phục vụ được một API, nhưng bạn tự làm routing và parse.</li><li>req và res là stream, nên body request về theo mẩu mà bạn phải tự thu.</li><li>Bạn tự đặt mã trạng thái và Content-Type trên mỗi response.</li><li>Thấy cái cực này mới là mục tiêu — đó đúng là thứ Express bỏ bớt ở Chương 5.</li></ul>
 </div>
 
 <div class="ml-en">

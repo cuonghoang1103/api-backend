@@ -113,6 +113,27 @@ src/utils         5 file      336 dòng
   <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 6.1: Model, View, Controller working together</span><span class="lc-sub">If you took PRJ301 on Academy, this part will feel familiar. Same: separating responsibilities: what each layer may know (the Model knows nothing about the web) (the code there is Node.js, not Java — the ideas carry over). Different: Academy teaches MVC with Servlet/JSP; Courses uses route – service – data layers and measures whether the boundaries hold. In this lesson we add: what each layer may and may not know, and why a service that does not know it was called over HTTP can be reused by workers and tests. If you have not taken PRJ301, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN PRJ301 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Draw the three layers (route, service, data) and write one rule for what each layer is allowed to know about the others.</li>
+<li>In a real codebase (or your own), find one route file that talks straight to the database, skipping the service layer.</li>
+<li>Refactor that one route to go through a service, and note what became testable.</li>
+</ol>
+<p><strong>Done when:</strong> you stated each layer's knowledge rule, found a layer-skipping route, and refactored it through the service.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Layered architecture</span><span class="v">Route, service, data — each with a clear job.</span></div>
+  <div class="kv"><span class="k">Route layer</span><span class="v">HTTP concerns only — parse, call service, respond.</span></div>
+  <div class="kv"><span class="k">Service layer</span><span class="v">Business logic, independent of HTTP.</span></div>
+  <div class="kv"><span class="k">Data layer</span><span class="v">Database access, independent of business rules.</span></div>
+  <div class="kv"><span class="k">Layer skipping</span><span class="v">A route reaching straight into the database.</span></div>
+  <div class="kv"><span class="k">Boundary</span><span class="v">The rule limiting what one layer knows about another.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Three layers — route, service, data — each with a clear, limited job.</li><li>The route handles HTTP; the service holds business logic; the data layer holds DB access.</li><li>Routes that talk straight to the database skip the service and erode the boundary.</li><li>Measure whether the boundary actually holds, rather than assuming it does.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -203,6 +224,27 @@ src/utils         5 file      336 dòng
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở PRJ301 — bài 6.1: Model, View, Controller phối hợp</span><span class="lc-sub">Nếu bạn đã học môn PRJ301 ở Academy thì phần này không còn lạ. Giống: tách trách nhiệm: tầng nào được biết gì (Model không biết gì về web) (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Academy dạy MVC với Servlet/JSP; Courses dùng ba tầng route – service – data và đo xem ranh giới có đứng vững không. Ở bài này mình học thêm: mỗi tầng được phép biết gì và không được biết gì, vì sao service không biết mình được gọi qua HTTP thì dùng lại được cho worker và test. Chưa học PRJ301 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI PRJ301 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Vẽ ba tầng (route, service, data) và viết một luật cho mỗi tầng được phép biết gì về các tầng khác.</li>
+<li>Trong một codebase thật (hoặc của bạn), tìm một file route nói thẳng với database, bỏ qua tầng service.</li>
+<li>Tái cấu trúc route đó đi qua một service, và ghi cái gì trở nên test được.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn nêu luật-biết của mỗi tầng, tìm một route bỏ qua tầng, và tái cấu trúc nó qua service.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Kiến trúc phân tầng</span><span class="v">Route, service, data — mỗi cái một việc rõ ràng.</span></div>
+  <div class="kv"><span class="k">Tầng route</span><span class="v">Chỉ lo HTTP — parse, gọi service, trả lời.</span></div>
+  <div class="kv"><span class="k">Tầng service</span><span class="v">Logic nghiệp vụ, độc lập với HTTP.</span></div>
+  <div class="kv"><span class="k">Tầng data</span><span class="v">Truy cập database, độc lập với luật nghiệp vụ.</span></div>
+  <div class="kv"><span class="k">Bỏ qua tầng</span><span class="v">Một route với thẳng vào database.</span></div>
+  <div class="kv"><span class="k">Ranh giới</span><span class="v">Luật giới hạn một tầng biết gì về tầng khác.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ba tầng — route, service, data — mỗi cái một việc rõ ràng, giới hạn.</li><li>Route lo HTTP; service giữ logic nghiệp vụ; tầng data giữ truy cập DB.</li><li>Route nói thẳng với database bỏ qua service và bào mòn ranh giới.</li><li>Đo xem ranh giới có thật sự giữ không, thay vì mặc định là có.</li></ul>
 </div>
 `,
     },
@@ -293,6 +335,27 @@ file to nhất:
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Project structure and module boundaries</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Take a small feature and sketch its files organised by type (controllers/, services/) versus by feature (notes/, users/).</li>
+<li>Look at the file-size distribution of a real project and decide a rough threshold for "too big".</li>
+<li>Argue whether one large but cohesive file is actually a problem — focus on what makes a file hard, not just its line count.</li>
+</ol>
+<p><strong>Done when:</strong> you compared by-type vs by-feature layout, set a size threshold, and can judge a file by cohesion not just length.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">By type</span><span class="v">Grouping files by role (all controllers together).</span></div>
+  <div class="kv"><span class="k">By feature</span><span class="v">Grouping files by feature (everything for notes together).</span></div>
+  <div class="kv"><span class="k">Cohesion</span><span class="v">How related the contents of a file/module are.</span></div>
+  <div class="kv"><span class="k">File-size distribution</span><span class="v">How file sizes spread across a codebase.</span></div>
+  <div class="kv"><span class="k">Too-big threshold</span><span class="v">A rough line where a file needs splitting.</span></div>
+  <div class="kv"><span class="k">Hard file</span><span class="v">One that is hard to change, not merely long.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Organise by type or by feature; by feature scales better as a project grows.</li><li>Look at the real file-size distribution before picking a split threshold.</li><li>A large but cohesive file can be fine — length is not the real problem.</li><li>What makes a file hard is low cohesion and many reasons to change, not line count.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -374,6 +437,27 @@ file to nhất:
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Cấu trúc dự án và ranh giới mô-đun</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lấy một tính năng nhỏ và phác các file của nó tổ chức theo loại (controllers/, services/) so với theo tính năng (notes/, users/).</li>
+<li>Nhìn phân bố cỡ file của một dự án thật và quyết một ngưỡng thô cho "quá to".</li>
+<li>Lập luận một file lớn nhưng gắn kết có thật sự là vấn đề không — tập trung vào cái gì làm một file khó, không chỉ số dòng.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn so bố cục theo-loại vs theo-tính-năng, đặt một ngưỡng cỡ, và đánh giá một file theo độ gắn kết không chỉ độ dài.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Theo loại</span><span class="v">Gom file theo vai trò (mọi controller chung chỗ).</span></div>
+  <div class="kv"><span class="k">Theo tính năng</span><span class="v">Gom file theo tính năng (mọi thứ của notes chung chỗ).</span></div>
+  <div class="kv"><span class="k">Độ gắn kết</span><span class="v">Nội dung một file/module liên quan tới nhau cỡ nào.</span></div>
+  <div class="kv"><span class="k">Phân bố cỡ file</span><span class="v">Cỡ file trải ra sao trong một codebase.</span></div>
+  <div class="kv"><span class="k">Ngưỡng quá-to</span><span class="v">Một ranh giới thô mà một file cần tách.</span></div>
+  <div class="kv"><span class="k">File khó</span><span class="v">Một file khó đổi, không đơn thuần là dài.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Tổ chức theo loại hoặc theo tính năng; theo tính năng mở rộng tốt hơn khi dự án lớn.</li><li>Nhìn phân bố cỡ file thật trước khi chọn một ngưỡng tách.</li><li>Một file lớn nhưng gắn kết có thể ổn — độ dài không phải vấn đề thật.</li><li>Cái làm một file khó là gắn kết thấp và nhiều lý do để đổi, không phải số dòng.</li></ul>
 </div>
 `,
     },
@@ -470,6 +554,27 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Decoupling by event instead of by call</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Build a rough import graph of a project and find the module the most others depend on.</li>
+<li>Note how a shared database schema (many models in one place) couples modules in a way the import graph does not show.</li>
+<li>Pick one boundary and decide whether it is real (enforced) or just a folder name.</li>
+</ol>
+<p><strong>Done when:</strong> you found the most-depended-on module, saw schema-level coupling, and judged one boundary as real or cosmetic.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Coupling</span><span class="v">How much one module depends on another.</span></div>
+  <div class="kv"><span class="k">Import graph</span><span class="v">Who imports whom across the codebase.</span></div>
+  <div class="kv"><span class="k">Hidden coupling</span><span class="v">Coupling via a shared schema the imports do not reveal.</span></div>
+  <div class="kv"><span class="k">Real boundary</span><span class="v">A boundary actually enforced, not just a folder.</span></div>
+  <div class="kv"><span class="k">Shared schema</span><span class="v">Many models in one place that bind modules together.</span></div>
+  <div class="kv"><span class="k">Decoupling</span><span class="v">Reducing coupling, sometimes without splitting anything.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Measure coupling instead of guessing — find the most-depended-on module.</li><li>A shared database schema couples modules invisibly to the import graph.</li><li>Some boundaries are real and enforced; others are just folder names.</li><li>You can reduce coupling without splitting anything apart.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -557,6 +662,27 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Gỡ ghép nối bằng sự kiện thay vì bằng lời gọi</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Dựng một đồ thị import thô của một dự án và tìm module mà nhiều cái khác phụ thuộc nhất.</li>
+<li>Ghi cách một lược đồ database dùng chung (nhiều model một chỗ) ghép nối các module theo kiểu đồ thị import không cho thấy.</li>
+<li>Chọn một ranh giới và quyết nó là thật (được ép) hay chỉ là một tên thư mục.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tìm module bị phụ thuộc nhiều nhất, thấy ghép nối cấp lược đồ, và đánh giá một ranh giới là thật hay hình thức.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ghép nối (coupling)</span><span class="v">Một module phụ thuộc vào module khác bao nhiêu.</span></div>
+  <div class="kv"><span class="k">Đồ thị import</span><span class="v">Ai import ai trong codebase.</span></div>
+  <div class="kv"><span class="k">Ghép nối ẩn</span><span class="v">Ghép nối qua một lược đồ chung mà import không phơi ra.</span></div>
+  <div class="kv"><span class="k">Ranh giới thật</span><span class="v">Một ranh giới thật sự được ép, không chỉ một thư mục.</span></div>
+  <div class="kv"><span class="k">Lược đồ dùng chung</span><span class="v">Nhiều model một chỗ buộc các module với nhau.</span></div>
+  <div class="kv"><span class="k">Giảm ghép nối</span><span class="v">Giảm coupling, đôi khi không cần tách gì.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Đo ghép nối thay vì đoán — tìm module bị phụ thuộc nhiều nhất.</li><li>Một lược đồ database dùng chung ghép nối các module theo cách vô hình với đồ thị import.</li><li>Vài ranh giới là thật và được ép; số khác chỉ là tên thư mục.</li><li>Bạn có thể giảm ghép nối mà không cần tách gì ra.</li></ul>
 </div>
 `,
     },
@@ -649,6 +775,27 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <div class="pitfall">
 <p><strong>Trap — splitting a monolith to fix a problem that splitting makes worse.</strong> &quot;Deploys are risky&quot; and &quot;the codebase is hard to understand&quot; are the two reasons people give, and services address neither: a deploy that was one artefact becomes several with an ordering requirement, and code that was confusing in one repository is confusing in six with network calls between the confusing parts. What splitting genuinely buys is independent scaling and independent failure — and it charges for both in latency, partial failure, and distributed transactions you now have to design around. The three signals in this lesson are the ones that survive measurement; team frustration is not one of them.</p>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Use the earlier chapters' numbers (latency, coupling, deploy risk) to argue whether one part should be split into a service.</li>
+<li>List three real signals that a split is warranted, and three reasons it usually is not yet.</li>
+<li>Identify one part of your system that is already service-shaped (a queue worker, a cron) without being a separate service.</li>
+</ol>
+<p><strong>Done when:</strong> you made a numbers-based split argument, listed the real signals, and spotted something already service-shaped.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Monolith</span><span class="v">One deployable holding the whole app.</span></div>
+  <div class="kv"><span class="k">Microservice</span><span class="v">A separately deployable piece of the system.</span></div>
+  <div class="kv"><span class="k">Split cost</span><span class="v">Network calls, deploys and data boundaries a split adds.</span></div>
+  <div class="kv"><span class="k">Real signal</span><span class="v">An actual reason to split (scaling, team, isolation).</span></div>
+  <div class="kv"><span class="k">Modular monolith</span><span class="v">A single deployable with strong internal boundaries.</span></div>
+  <div class="kv"><span class="k">Service-shaped</span><span class="v">A part already isolated like a service (e.g. a worker).</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Decide monolith vs services with numbers, not fashion.</li><li>A split buys isolation and independent scaling but costs network, deploy and data complexity.</li><li>Three real signals justify a split; a modular monolith is the under-named middle option.</li><li>Some parts (workers, cron) are already service-shaped without being separate services.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -725,6 +872,27 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <div class="pitfall">
 <p><strong>Bẫy — tách một monolith để chữa một vấn đề mà việc tách làm nó TỆ HƠN.</strong> &quot;Deploy rủi ro&quot; và &quot;kho mã khó hiểu&quot; là hai lý do người ta hay đưa ra, và các dịch vụ chẳng giải quyết được cái nào: một lần deploy vốn là một sản phẩm giờ thành nhiều sản phẩm kèm ràng buộc về thứ tự, còn đoạn mã vốn đã khó hiểu trong một kho thì vẫn khó hiểu trong sáu kho, cộng thêm các lời gọi mạng nằm giữa những phần khó hiểu ấy. Thứ mà việc tách thật sự mua được là mở rộng độc lập và hỏng hóc độc lập — và nó tính tiền cả hai bằng độ trễ, bằng hỏng hóc từng phần, và bằng những giao dịch phân tán mà giờ bạn phải thiết kế để né. Ba tín hiệu trong bài này là những tín hiệu sống sót qua phép đo; sự bực bội của cả đội không phải một trong số đó.</p>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Dùng số của các chương trước (độ trễ, ghép nối, rủi ro deploy) để lập luận một phần có nên tách thành một service không.</li>
+<li>Liệt kê ba dấu hiệu thật rằng một lần tách là chính đáng, và ba lý do thường thì chưa nên.</li>
+<li>Nhận ra một phần của hệ thống đã có hình-dạng-service (một worker hàng đợi, một cron) mà không phải một service riêng.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn lập luận tách dựa trên số, liệt kê các dấu hiệu thật, và phát hiện thứ đã có hình-dạng-service.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Monolith</span><span class="v">Một thứ deploy được giữ cả app.</span></div>
+  <div class="kv"><span class="k">Microservice</span><span class="v">Một mảnh của hệ thống deploy được riêng.</span></div>
+  <div class="kv"><span class="k">Giá của tách</span><span class="v">Lời gọi mạng, deploy và ranh giới dữ liệu mà tách thêm vào.</span></div>
+  <div class="kv"><span class="k">Dấu hiệu thật</span><span class="v">Một lý do thật để tách (mở rộng, nhóm, cô lập).</span></div>
+  <div class="kv"><span class="k">Monolith mô-đun</span><span class="v">Một thứ deploy được duy nhất với ranh giới nội bộ mạnh.</span></div>
+  <div class="kv"><span class="k">Hình-dạng-service</span><span class="v">Một phần đã cô lập như service (ví dụ một worker).</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Quyết monolith vs services bằng số, không theo mốt.</li><li>Một lần tách mua cô lập và mở rộng độc lập nhưng tốn phức tạp mạng, deploy và dữ liệu.</li><li>Ba dấu hiệu thật biện minh cho một lần tách; monolith mô-đun là lựa chọn giữa ít được gọi tên.</li><li>Vài phần (worker, cron) đã có hình-dạng-service mà không phải service riêng.</li></ul>
 </div>
 `,
     },
@@ -806,6 +974,27 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Reversible decisions, ADRs and debt</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>List three recent decisions in a project and mark each reversible ("two-way door") or hard to undo ("one-way door").</li>
+<li>Write a short record for one decision capturing WHY it was made, not just what — enough for a future reader.</li>
+<li>Name one piece of technical debt you are carrying and estimate the interest it charges each month.</li>
+</ol>
+<p><strong>Done when:</strong> you classified decisions by reversibility, recorded the why of one, and estimated the cost of one piece of debt.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Two-way door</span><span class="v">A reversible decision you can walk back cheaply.</span></div>
+  <div class="kv"><span class="k">One-way door</span><span class="v">A decision that is hard or costly to reverse.</span></div>
+  <div class="kv"><span class="k">Decision record</span><span class="v">A short note capturing why a choice was made.</span></div>
+  <div class="kv"><span class="k">Technical debt</span><span class="v">A shortcut that charges ongoing interest.</span></div>
+  <div class="kv"><span class="k">Interest</span><span class="v">The recurring cost of living with a shortcut.</span></div>
+  <div class="kv"><span class="k">Write down why</span><span class="v">Recording rationale, not just the outcome.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Separate reversible (two-way door) decisions from hard-to-undo (one-way door) ones.</li><li>Spend more care on one-way doors; move fast on two-way ones.</li><li>Record why a decision was made, not just what, for the next reader.</li><li>Technical debt charges interest every month until you pay it down.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-4-cua-mot-chieu" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Deploy to a VPS — lesson 6.4: one-way doors</span><span class="lc-sub">This lesson sorts decisions into two-way and one-way doors, reads the real "Why no BullMQ?" comment in this website's code, and names the line it is missing: when to revisit.</span></span>
@@ -883,6 +1072,27 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Quyết định đảo ngược được, ADR và nợ kỹ thuật</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Liệt kê ba quyết định gần đây trong một dự án và đánh dấu từng cái đảo ngược được ("cửa hai chiều") hay khó rút lại ("cửa một chiều").</li>
+<li>Viết một ghi chép ngắn cho một quyết định nắm bắt LÝ DO nó được đưa ra, không chỉ cái gì — đủ cho một người đọc tương lai.</li>
+<li>Gọi tên một khoản nợ kỹ thuật bạn đang gánh và ước lượng lãi nó tính mỗi tháng.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn phân loại quyết định theo khả năng đảo ngược, ghi lý-do của một cái, và ước lượng chi phí của một khoản nợ.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cửa hai chiều</span><span class="v">Một quyết định đảo ngược được, rút lại rẻ.</span></div>
+  <div class="kv"><span class="k">Cửa một chiều</span><span class="v">Một quyết định khó hoặc tốn để đảo ngược.</span></div>
+  <div class="kv"><span class="k">Ghi chép quyết định</span><span class="v">Một ghi chú ngắn nắm bắt vì sao một lựa chọn được đưa ra.</span></div>
+  <div class="kv"><span class="k">Nợ kỹ thuật</span><span class="v">Một lối tắt tính lãi liên tục.</span></div>
+  <div class="kv"><span class="k">Lãi</span><span class="v">Chi phí lặp lại của việc sống chung với một lối tắt.</span></div>
+  <div class="kv"><span class="k">Ghi lại vì sao</span><span class="v">Ghi lý do, không chỉ kết quả.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Tách quyết định đảo-ngược-được (cửa hai chiều) khỏi cái khó-rút-lại (cửa một chiều).</li><li>Dành nhiều cẩn trọng hơn cho cửa một chiều; đi nhanh với cửa hai chiều.</li><li>Ghi vì sao một quyết định được đưa ra, không chỉ cái gì, cho người đọc kế tiếp.</li><li>Nợ kỹ thuật tính lãi mỗi tháng tới khi bạn trả nó xuống.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-4-cua-mot-chieu" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Deploy lên VPS — bài 6.4: cửa một chiều</span><span class="lc-sub">Bài này chia quyết định thành cửa hai chiều và cửa một chiều, đọc chú thích thật "Why no BullMQ?" trong mã website, và chỉ ra dòng nó còn thiếu: khi nào nghĩ lại.</span></span>
@@ -978,6 +1188,27 @@ khởi động toàn bộ: 3,63 giây</div>
 <div class="pitfall">
 <p><strong>Trap — finishing the course and building the same thing again, but with more layers.</strong> Eighteen chapters of patterns is also eighteen chapters of things you can now apply prematurely: a queue for work that takes 8 ms, a cache in front of a query that runs in 2 ms, three services where one file would do. Every pattern here earns its place under a specific condition, and each lesson states that condition — the queue when the work outlives the request, the cache when the payload is small and the read rate is high, the split when scaling profiles genuinely diverge. The five recurring ideas are worth carrying; the implementations are worth carrying only along with the measurement that justified them.</p>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write the system's story chapter by chapter from memory: what each chapter added to the Notes API.</li>
+<li>Pick the five measurements across the course that changed how you would build, and say why.</li>
+<li>Run through the pre-production checklist against a project of yours and note what is missing.</li>
+</ol>
+<p><strong>Done when:</strong> you retold the system chapter by chapter, named five course measurements that stuck, and ran the pre-production checklist.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">System story</span><span class="v">How the Notes API grew across all 18 chapters.</span></div>
+  <div class="kv"><span class="k">Recurring ideas</span><span class="v">The few principles that returned in every chapter.</span></div>
+  <div class="kv"><span class="k">Measure, do not guess</span><span class="v">The course-long rule for knowing something works.</span></div>
+  <div class="kv"><span class="k">Pre-production checklist</span><span class="v">The checks before a first real deploy.</span></div>
+  <div class="kv"><span class="k">Boot sequence</span><span class="v">What a real Node backend does as it starts.</span></div>
+  <div class="kv"><span class="k">Keep going</span><span class="v">Where to take the skills next.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The Notes API grew chapter by chapter into a real, production-shaped system.</li><li>A few ideas recurred throughout: measure not guess, one door in, bound the work.</li><li>A pre-production checklist catches what each chapter warned about.</li><li>The course ends where your own first production deploy begins.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1059,6 +1290,27 @@ khởi động toàn bộ: 3,63 giây</div>
 <div class="pitfall">
 <p><strong>Bẫy — học xong khoá rồi dựng lại đúng thứ cũ, nhưng thêm nhiều tầng hơn.</strong> Mười tám chương đầy các mẫu thiết kế cũng là mười tám chương những thứ mà giờ bạn có thể áp dụng quá sớm: một hàng đợi cho công việc mất 8 ms, một bộ nhớ đệm đặt trước một truy vấn chạy 2 ms, ba dịch vụ cho thứ mà một file là đủ. Mọi mẫu ở đây đều xứng chỗ của nó dưới một điều kiện cụ thể, và mỗi bài đều nói rõ điều kiện đó — hàng đợi khi công việc sống lâu hơn cái request, bộ nhớ đệm khi dữ liệu nhỏ và tần suất đọc cao, việc tách khi hồ sơ mở rộng thật sự phân kỳ. Năm ý tưởng lặp đi lặp lại thì đáng mang theo; còn phần hiện thực thì chỉ đáng mang theo cùng với cái phép đo đã biện minh cho nó.</p>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết câu chuyện của hệ thống theo từng chương từ trí nhớ: mỗi chương đã thêm gì vào Notes API.</li>
+<li>Chọn năm phép đo xuyên khoá đã đổi cách bạn sẽ xây, và nói vì sao.</li>
+<li>Chạy qua checklist tiền-production đối chiếu một dự án của bạn và ghi cái gì còn thiếu.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn kể lại hệ thống theo từng chương, gọi tên năm phép đo đọng lại, và chạy checklist tiền-production.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Câu chuyện hệ thống</span><span class="v">Notes API lớn dần ra sao qua cả 18 chương.</span></div>
+  <div class="kv"><span class="k">Ý tưởng lặp lại</span><span class="v">Vài nguyên tắc trở lại ở mỗi chương.</span></div>
+  <div class="kv"><span class="k">Đo, đừng đoán</span><span class="v">Luật xuyên khoá để biết một thứ chạy được.</span></div>
+  <div class="kv"><span class="k">Checklist tiền-production</span><span class="v">Các phép kiểm trước một deploy thật đầu tiên.</span></div>
+  <div class="kv"><span class="k">Trình tự khởi động</span><span class="v">Một backend Node thật làm gì khi nó khởi động.</span></div>
+  <div class="kv"><span class="k">Đi tiếp</span><span class="v">Nơi mang các kỹ năng này tới tiếp theo.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Notes API lớn dần theo từng chương thành một hệ thống thật, có hình-dạng-production.</li><li>Vài ý tưởng lặp lại xuyên suốt: đo đừng đoán, một cửa vào, chặn khối lượng việc.</li><li>Một checklist tiền-production bắt những gì mỗi chương đã cảnh báo.</li><li>Khoá học kết thúc nơi deploy production đầu tiên của chính bạn bắt đầu.</li></ul>
 </div>
 `,
     },

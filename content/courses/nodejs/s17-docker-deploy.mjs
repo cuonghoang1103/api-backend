@@ -131,6 +131,27 @@ CMD ["node", "dist/index.js"]</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/docker${REF}"><span class="lc-t">Code Lab · Docker</span><span class="lc-d">Images, layers and multi-stage builds</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Build the app with a naive single-stage Dockerfile and record the image size with <code>docker images</code>.</li>
+<li>Rewrite it multi-stage so the build toolchain and devDependencies stay in a stage you throw away, and compare the final size.</li>
+<li>Add three non-size lines that matter: a non-root user, a pinned base image, and only production dependencies.</li>
+</ol>
+<p><strong>Done when:</strong> you shrank the image with a multi-stage build and added a non-root user, pinned base and prod-only deps.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Docker image</span><span class="v">The packaged filesystem your container runs from.</span></div>
+  <div class="kv"><span class="k">Multi-stage build</span><span class="v">Building in a stage you discard, copying only the result.</span></div>
+  <div class="kv"><span class="k">devDependencies</span><span class="v">Build/test-only packages that must not ship.</span></div>
+  <div class="kv"><span class="k">Base image</span><span class="v">The starting image (e.g. node:22-alpine) — pin it.</span></div>
+  <div class="kv"><span class="k">Non-root user</span><span class="v">Running the container as a least-privilege user.</span></div>
+  <div class="kv"><span class="k">Image size</span><span class="v">Smaller images ship and start faster.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A naive single-stage image carries the whole toolchain — far larger than needed.</li><li>Multi-stage builds keep the toolchain and devDependencies out of the final image.</li><li>Pin the base image and install only production dependencies.</li><li>Run as a non-root user — size is not the only thing the Dockerfile decides.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-6-1-multi-stage" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Docker — lesson 6.1: multi-stage builds, properly</span><span class="lc-sub">Measured here on one Node app: naive 430 MB, slim 84.3, alpine 65.5, multi-stage 81.7 MB; the naive image carries 121 packages, a 19 MB npm cache and the full toolchain.</span></span>
@@ -237,6 +258,27 @@ CMD ["node", "dist/index.js"]</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/docker${REF}"><span class="lc-t">Code Lab · Docker</span><span class="lc-d">Ảnh, tầng và build nhiều giai đoạn</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Build app bằng một Dockerfile một-tầng ngây thơ và ghi cỡ ảnh bằng <code>docker images</code>.</li>
+<li>Viết lại nó đa-tầng để toolchain build và devDependencies nằm ở một tầng bạn vứt đi, và so cỡ cuối.</li>
+<li>Thêm ba dòng không-về-cỡ mà quan trọng: một user không-root, một base image được ghim, và chỉ phụ thuộc production.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thu nhỏ ảnh bằng một build đa-tầng và thêm một user không-root, base ghim và phụ thuộc chỉ-production.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ảnh Docker</span><span class="v">Filesystem đóng gói mà container chạy từ đó.</span></div>
+  <div class="kv"><span class="k">Build đa-tầng</span><span class="v">Build ở một tầng bạn bỏ, chỉ chép kết quả ra.</span></div>
+  <div class="kv"><span class="k">devDependencies</span><span class="v">Gói chỉ build/test không được lên ảnh chạy.</span></div>
+  <div class="kv"><span class="k">Base image</span><span class="v">Ảnh khởi đầu (ví dụ node:22-alpine) — ghim nó.</span></div>
+  <div class="kv"><span class="k">User không-root</span><span class="v">Chạy container bằng một user ít-quyền-nhất.</span></div>
+  <div class="kv"><span class="k">Cỡ ảnh</span><span class="v">Ảnh nhỏ hơn đẩy và khởi động nhanh hơn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một ảnh một-tầng ngây thơ mang cả toolchain — lớn hơn cần nhiều.</li><li>Build đa-tầng giữ toolchain và devDependencies ngoài ảnh cuối.</li><li>Ghim base image và chỉ cài phụ thuộc production.</li><li>Chạy bằng user không-root — cỡ không phải thứ duy nhất Dockerfile quyết.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-6-1-multi-stage" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Docker — bài 6.1: multi-stage build, làm cho đúng</span><span class="lc-sub">Đo trên một app Node: naive 430 MB, slim 84,3, alpine 65,5, multi-stage 81,7 MB; ảnh naive mang 121 gói, 19 MB bộ nhớ đệm npm và cả bộ công cụ build.</span></span>
@@ -365,6 +407,27 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/me/app:1.4.2 -
 <div class="link-card codelab">
   <a href="/code-lab/github-actions${REF}#module-924"><span class="lc-t">Code Lab · Building &amp; Testing in CI</span><span class="lc-d">Caching Docker layers between CI runs</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Order the Dockerfile so dependency install happens before copying source; change one line of code and time the rebuild.</li>
+<li>Swap the order (copy source before install) and measure how much slower a code-only change rebuilds.</li>
+<li>Add a <code>.dockerignore</code> and measure how much the build context shrinks.</li>
+</ol>
+<p><strong>Done when:</strong> you saw correct layer ordering make rebuilds much faster, and shrank the build context with .dockerignore.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Layer cache</span><span class="v">Reusing unchanged image layers to skip work.</span></div>
+  <div class="kv"><span class="k">Layer order</span><span class="v">Put rarely-changing steps (deps) before source copy.</span></div>
+  <div class="kv"><span class="k">Cache invalidation</span><span class="v">A changed layer invalidates every layer after it.</span></div>
+  <div class="kv"><span class="k">.dockerignore</span><span class="v">Excludes files from the build context.</span></div>
+  <div class="kv"><span class="k">Build context</span><span class="v">The files sent to the Docker daemon to build.</span></div>
+  <div class="kv"><span class="k">Cross-platform build</span><span class="v">Building for an architecture other than yours.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Layer order decides cache reuse: install dependencies before copying source.</li><li>A changed layer invalidates every layer after it, so order matters.</li><li>.dockerignore shrinks the build context dramatically.</li><li>Build for the target machine's architecture, not just your own.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-5-2-thu-tu" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Docker — lesson 5.2: ordering, the four-minute rebuild made six seconds</span><span class="lc-sub">Measured here: one edited line rebuilds in 4.36 s with COPY . . first and 0.47 s with package*.json first (9.3×); .dockerignore cuts the context from 66.16 MB to 465 B.</span></span>
@@ -468,6 +531,27 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/me/app:1.4.2 -
 <div class="link-card codelab">
   <a href="/code-lab/github-actions${REF}#module-924"><span class="lc-t">Code Lab · Building &amp; Testing in CI</span><span class="lc-d">Cache tầng Docker giữa các lần chạy CI</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Sắp Dockerfile để cài phụ thuộc xảy ra trước khi chép source; đổi một dòng code và đo lại thời gian build.</li>
+<li>Đổi thứ tự (chép source trước khi cài) và đo một thay đổi chỉ-code build lại chậm hơn bao nhiêu.</li>
+<li>Thêm một <code>.dockerignore</code> và đo build context thu nhỏ bao nhiêu.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy thứ tự tầng đúng làm build lại nhanh hơn nhiều, và thu nhỏ build context bằng .dockerignore.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache tầng</span><span class="v">Tái dùng các tầng ảnh không đổi để bỏ việc.</span></div>
+  <div class="kv"><span class="k">Thứ tự tầng</span><span class="v">Đặt các bước ít-đổi (phụ thuộc) trước khi chép source.</span></div>
+  <div class="kv"><span class="k">Vô hiệu cache</span><span class="v">Một tầng đổi vô hiệu mọi tầng sau nó.</span></div>
+  <div class="kv"><span class="k">.dockerignore</span><span class="v">Loại file khỏi build context.</span></div>
+  <div class="kv"><span class="k">Build context</span><span class="v">Các file gửi tới Docker daemon để build.</span></div>
+  <div class="kv"><span class="k">Build đa-nền-tảng</span><span class="v">Build cho một kiến trúc khác của bạn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Thứ tự tầng quyết định tái dùng cache: cài phụ thuộc trước khi chép source.</li><li>Một tầng đổi vô hiệu mọi tầng sau nó, nên thứ tự quan trọng.</li><li>.dockerignore thu nhỏ build context rất nhiều.</li><li>Build cho kiến trúc của máy đích, không chỉ máy của bạn.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-5-2-thu-tu" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Docker — bài 5.2: thứ tự, bốn phút build lại thành sáu giây</span><span class="lc-sub">Đo ở đây: sửa một dòng, build lại 4,36 s khi COPY . . đứng trước và 0,47 s khi chép package*.json trước (9,3×); .dockerignore cắt context từ 66,16 MB xuống 465 B.</span></span>
@@ -588,6 +672,27 @@ exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất �
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-989"><span class="lc-t">Code Lab · Health Checks &amp; Uptime</span><span class="lc-d">Probes that an orchestrator can act on</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write CMD three ways (shell form, exec form, npm start) and check which process ends up as PID 1 and receives SIGTERM.</li>
+<li>Send a slow (few-second) request, then stop the container, and observe which CMD form lets the request finish versus cutting it off.</li>
+<li>Add a grace period and a health check the orchestrator can act on.</li>
+</ol>
+<p><strong>Done when:</strong> you saw which CMD form gets SIGTERM, preserved an in-flight request on shutdown, and set a grace period.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">PID 1</span><span class="v">The container's init process that receives signals.</span></div>
+  <div class="kv"><span class="k">SIGTERM</span><span class="v">The signal asking a process to stop gracefully.</span></div>
+  <div class="kv"><span class="k">Shell vs exec form</span><span class="v">CMD forms deciding whether your app is PID 1.</span></div>
+  <div class="kv"><span class="k">Grace period</span><span class="v">Time the orchestrator waits before SIGKILL.</span></div>
+  <div class="kv"><span class="k">Graceful shutdown</span><span class="v">Finishing in-flight requests before exit.</span></div>
+  <div class="kv"><span class="k">Health check</span><span class="v">A signal the orchestrator uses to route or restart.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The CMD form decides whether your app is PID 1 and gets SIGTERM.</li><li>The wrong form never receives SIGTERM, so in-flight requests are cut off.</li><li>Use the exec form, handle SIGTERM, and drain within the grace period.</li><li>Expose a health check the orchestrator can actually act on.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-3-cmd-entrypoint" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Docker — lesson 4.3: CMD, ENTRYPOINT and entrypoint scripts</span><span class="lc-sub">Measured here: npm start and the shell form never deliver SIGTERM to node (exit 1 / exit 137); the exec form does (exit 0); an entry script needs exec; --init reaps 12 zombies down to 0.</span></span>
@@ -692,6 +797,27 @@ exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất �
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-989"><span class="lc-t">Code Lab · Health Checks &amp; Uptime</span><span class="lc-d">Những probe mà bộ điều phối hành động được</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết CMD ba cách (dạng shell, dạng exec, npm start) và kiểm tiến trình nào thành PID 1 và nhận SIGTERM.</li>
+<li>Gửi một request chậm (vài giây), rồi dừng container, và quan sát dạng CMD nào cho request kết thúc so với cắt ngang.</li>
+<li>Thêm một thời gian ân hạn và một health check mà orchestrator hành động được.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy dạng CMD nào nhận SIGTERM, giữ được một request đang xử lý lúc tắt, và đặt một thời gian ân hạn.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">PID 1</span><span class="v">Tiến trình init của container nhận tín hiệu.</span></div>
+  <div class="kv"><span class="k">SIGTERM</span><span class="v">Tín hiệu yêu cầu một tiến trình dừng êm.</span></div>
+  <div class="kv"><span class="k">Dạng shell vs exec</span><span class="v">Các dạng CMD quyết định app bạn có là PID 1 không.</span></div>
+  <div class="kv"><span class="k">Thời gian ân hạn</span><span class="v">Thời gian orchestrator chờ trước SIGKILL.</span></div>
+  <div class="kv"><span class="k">Tắt êm</span><span class="v">Kết thúc request đang xử lý trước khi thoát.</span></div>
+  <div class="kv"><span class="k">Health check</span><span class="v">Một tín hiệu orchestrator dùng để định tuyến hay khởi động lại.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Dạng CMD quyết định app bạn có là PID 1 và nhận SIGTERM không.</li><li>Dạng sai không bao giờ nhận SIGTERM, nên request đang xử lý bị cắt.</li><li>Dùng dạng exec, xử lý SIGTERM, và xả nốt trong thời gian ân hạn.</li><li>Phơi một health check mà orchestrator thật sự hành động được.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-3-cmd-entrypoint" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Docker — bài 4.3: CMD, ENTRYPOINT và entrypoint script</span><span class="lc-sub">Đo ở đây: npm start và dạng shell không bao giờ đưa SIGTERM tới node (exit 1 / exit 137); dạng exec thì có (exit 0); script khởi động cần exec; --init dọn 12 zombie còn 0.</span></span>
@@ -806,6 +932,27 @@ if (missing.length) {
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 6.1: Connecting React, deploying &amp; BaaS</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: secrets and config travel through environment variables, never hard-coded. Different: Academy deploys to Render/Railway; Courses packages with Docker and shows how secrets leak into the image. In this lesson we add: docker history exposing a token you deleted, ENV writing a password into the image Config, mounting secrets at build time the right way. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a secret to a file during build and delete it in the same RUN, then run <code>docker history</code> and find the secret still in a layer.</li>
+<li>Use a BuildKit secret mount so the secret is never written into any layer.</li>
+<li>List which secrets are build-time versus runtime, and where runtime secrets should actually live.</li>
+</ol>
+<p><strong>Done when:</strong> you found a "deleted" secret in docker history, used a BuildKit secret mount, and separated build-time from runtime secrets.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Image layer</span><span class="v">An immutable build step — deletes do not erase earlier layers.</span></div>
+  <div class="kv"><span class="k">docker history</span><span class="v">Reveals each layer, including supposedly-deleted files.</span></div>
+  <div class="kv"><span class="k">BuildKit secret mount</span><span class="v">A secret available during build but never stored in a layer.</span></div>
+  <div class="kv"><span class="k">Build-time vs runtime</span><span class="v">Secrets needed to build vs secrets needed to run.</span></div>
+  <div class="kv"><span class="k">Runtime secret</span><span class="v">Injected as env at run time, not baked into the image.</span></div>
+  <div class="kv"><span class="k">Leaked secret</span><span class="v">A secret that shipped and must now be rotated.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Deleting a file in a later layer does not remove it from an earlier one.</li><li>docker history can reveal a secret you thought you deleted.</li><li>Use a BuildKit secret mount so build-time secrets never land in a layer.</li><li>Runtime secrets belong in env at run time; a shipped secret must be rotated.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-4-arg-env" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Docker — lesson 4.4: ARG and ENV, build time versus run time</span><span class="lc-sub">Measured here with fake secrets: a token in docker history, a password in Config.Env, an .env read back from a deleted layer — and 0 traces with a secret mount.</span></span>
@@ -911,6 +1058,27 @@ if (missing.length) {
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 6.1: Nối React, triển khai &amp; BaaS</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: bí mật và cấu hình đi qua biến môi trường, không hard-code. Khác: Academy deploy lên Render/Railway; Courses đóng gói bằng Docker và chỉ ra bí mật lọt vào ảnh thế nào. Ở bài này mình học thêm: docker history lộ token dù đã xoá, ENV ghi mật khẩu vào Config của ảnh, cách đúng là gắn bí mật lúc build. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Ghi một bí mật vào một file lúc build và xoá nó trong cùng lệnh RUN, rồi chạy <code>docker history</code> và tìm bí mật vẫn còn trong một tầng.</li>
+<li>Dùng một secret mount của BuildKit để bí mật không bao giờ được ghi vào tầng nào.</li>
+<li>Liệt kê bí mật nào là build-time so với runtime, và bí mật runtime thật ra nên nằm ở đâu.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tìm thấy một bí mật "đã xoá" trong docker history, dùng một secret mount BuildKit, và tách build-time khỏi runtime.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Tầng ảnh</span><span class="v">Một bước build bất biến — xoá không xoá các tầng trước.</span></div>
+  <div class="kv"><span class="k">docker history</span><span class="v">Phơi từng tầng, kể cả file tưởng đã xoá.</span></div>
+  <div class="kv"><span class="k">Secret mount BuildKit</span><span class="v">Một bí mật có lúc build nhưng không bao giờ lưu vào tầng.</span></div>
+  <div class="kv"><span class="k">Build-time vs runtime</span><span class="v">Bí mật cần để build vs bí mật cần để chạy.</span></div>
+  <div class="kv"><span class="k">Bí mật runtime</span><span class="v">Tiêm dưới dạng env lúc chạy, không nướng vào ảnh.</span></div>
+  <div class="kv"><span class="k">Bí mật bị lộ</span><span class="v">Một bí mật đã lên ảnh và giờ phải xoay.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Xoá một file ở một tầng sau không xoá nó khỏi một tầng trước.</li><li>docker history có thể phơi một bí mật bạn tưởng đã xoá.</li><li>Dùng secret mount BuildKit để bí mật build-time không bao giờ rơi vào một tầng.</li><li>Bí mật runtime thuộc về env lúc chạy; một bí mật đã lên ảnh phải được xoay.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-4-arg-env" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Docker — bài 4.4: ARG và ENV, lúc build và lúc chạy</span><span class="lc-sub">Đo ở đây với bí mật giả: token trong docker history, mật khẩu trong Config.Env, file .env đọc lại từ một tầng "đã xoá" — và 0 dấu vết với secret mount.</span></span>
@@ -1022,6 +1190,27 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/nginx${REF}#module-915"><span class="lc-t">Code Lab · nginx</span><span class="lc-d">Reverse proxy, upstreams and reloads</span></a>
 </div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Fire continuous requests during a stop-then-start deploy and count how many fail.</li>
+<li>Try a naive "blue-green" without a proxy and confirm it still drops requests at the switch.</li>
+<li>Put a proxy in front, gate traffic on the health check, and confirm zero requests are lost.</li>
+</ol>
+<p><strong>Done when:</strong> you measured losses for stop-start and proxy-less blue-green, and reached zero loss with a health-gated proxy.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Zero-downtime deploy</span><span class="v">Shipping a new version with no dropped requests.</span></div>
+  <div class="kv"><span class="k">Stop-then-start</span><span class="v">The naive deploy that drops in-flight requests.</span></div>
+  <div class="kv"><span class="k">Blue-green</span><span class="v">Running old and new side by side, then switching.</span></div>
+  <div class="kv"><span class="k">Reverse proxy</span><span class="v">The front door that can hold traffic during the switch.</span></div>
+  <div class="kv"><span class="k">Health gate</span><span class="v">Only routing to an instance once it reports ready.</span></div>
+  <div class="kv"><span class="k">Rolling deploy</span><span class="v">Replacing instances gradually behind the proxy.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Stop-then-start loses in-flight requests; so does blue-green with no proxy in front.</li><li>Only a proxy in front, gated on the health check, reaches zero loss.</li><li>The health check must be the gate that decides when traffic shifts.</li><li>Rolling and blue-green both work when something fronts the traffic.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-3-xanh-lam" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Deploy to a VPS — lesson 3.3: blue-green, the same deploy with zero failures</span><span class="lc-sub">Measured here with a probe every ~25 ms: stop-then-start lost 16 of 301 requests, "blue-green" without a proxy 35 of 291, nginx in front 0 — once the old workers were allowed to drain.</span></span>
@@ -1108,6 +1297,27 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/nginx${REF}#module-915"><span class="lc-t">Code Lab · nginx</span><span class="lc-d">Reverse proxy, upstream và nạp lại cấu hình</span></a>
 </div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Bắn request liên tục trong một deploy dừng-rồi-chạy-lại và đếm bao nhiêu cái hỏng.</li>
+<li>Thử một "blue-green" ngây thơ không có proxy và xác nhận nó vẫn rớt request lúc chuyển.</li>
+<li>Đặt một proxy đứng trước, chốt lưu lượng theo health check, và xác nhận không request nào mất.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đo tổn thất cho dừng-chạy và blue-green không-proxy, và đạt không-mất với một proxy chốt-theo-health.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Deploy không gián đoạn</span><span class="v">Lên phiên bản mới mà không rớt request.</span></div>
+  <div class="kv"><span class="k">Dừng-rồi-chạy</span><span class="v">Deploy ngây thơ làm rớt request đang xử lý.</span></div>
+  <div class="kv"><span class="k">Blue-green</span><span class="v">Chạy cũ và mới song song, rồi chuyển.</span></div>
+  <div class="kv"><span class="k">Reverse proxy</span><span class="v">Cửa trước có thể ghìm lưu lượng lúc chuyển.</span></div>
+  <div class="kv"><span class="k">Chốt health</span><span class="v">Chỉ định tuyến tới một instance khi nó báo sẵn sàng.</span></div>
+  <div class="kv"><span class="k">Rolling deploy</span><span class="v">Thay instance dần sau proxy.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Dừng-rồi-chạy mất request đang xử lý; blue-green không proxy cũng vậy.</li><li>Chỉ một proxy đứng trước, chốt theo health check, mới đạt không-mất.</li><li>Health check phải là cái chốt quyết định khi nào lưu lượng chuyển.</li><li>Rolling và blue-green đều chạy được khi có thứ đứng trước lưu lượng.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-3-xanh-lam" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Deploy lên VPS — bài 3.3: blue-green, cùng một lần deploy, không lỗi nào</span><span class="lc-sub">Đo ở đây với bộ dò ~25 ms một lần: dừng rồi chạy mất 16/301 request, "blue-green" không proxy mất 35/291, có nginx đứng trước mất 0 — khi để worker cũ xả xong.</span></span>
@@ -1250,6 +1460,27 @@ git revert &lt;sha_xau&gt;
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 6.1: Connecting React, deploying &amp; BaaS</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: "works locally, fails in production" is almost always a deploy problem. Different: Courses recounts a real deploy incident and a one-command diagnosis. In this lesson we add: why a green health check can hide a missing feature, unauthenticated curl to tell 401 from 404, smoke tests and rollback. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Diagnose a "successful" deploy where some routes 404: curl a param-less unauth route and read 401/200 (mounted) vs 404 (stale/partial build).</li>
+<li>Add a smoke test that hits core routes after deploy and fails if any returns 404.</li>
+<li>Practise a rollback: redeploy the previous image and confirm the routes return.</li>
+</ol>
+<p><strong>Done when:</strong> you diagnosed a stale build with curl, added a 404-catching smoke test, and rehearsed a rollback.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Stale build</span><span class="v">The container running an old image after a partial deploy.</span></div>
+  <div class="kv"><span class="k">Smoke test</span><span class="v">A post-deploy check that core routes are mounted.</span></div>
+  <div class="kv"><span class="k">404 = not mounted</span><span class="v">A route returning 404 means it is not live.</span></div>
+  <div class="kv"><span class="k">401/200 = mounted</span><span class="v">An unauth GET answering means the route is live.</span></div>
+  <div class="kv"><span class="k">Rollback</span><span class="v">Redeploying a known-good previous image.</span></div>
+  <div class="kv"><span class="k">Deploy lies</span><span class="v">A green deploy that is actually running old code.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A deploy can report success while the container runs a stale image.</li><li>Diagnose with an unauth curl: 401/200 means mounted, 404 means stale/partial.</li><li>A post-deploy smoke test that fails on 404 catches this automatically.</li><li>Roll back by redeploying the previous known-good image.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-1-lui-chay-duoc" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in Deploy to a VPS — lesson 6.1: the rollback that works</span><span class="lc-sub">Measured here: a stale build answers /health 200, /messages 401 and /gifs 404; a smoke test turns that into exit 1; rolling back by image took 0.82 s against 5.05 s to rebuild.</span></span>
@@ -1358,6 +1589,27 @@ git revert &lt;sha_xau&gt;
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 6.1: Nối React, triển khai &amp; BaaS</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: "chạy local nhưng lỗi ở production" gần như luôn là chuyện deploy. Khác: Courses kể một sự cố deploy thật và cách chẩn đoán bằng một lệnh. Ở bài này mình học thêm: vì sao health check xanh mà tính năng vẫn mất, curl không xác thực để phân biệt 401 với 404, smoke test và quay lui. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chẩn đoán một deploy "thành công" mà vài route trả 404: curl một route không-tham-số không-auth và đọc 401/200 (đã mount) vs 404 (build cũ/một phần).</li>
+<li>Thêm một smoke test gọi các route lõi sau deploy và fail nếu cái nào trả 404.</li>
+<li>Diễn tập một lần quay lui: deploy lại ảnh trước và xác nhận các route trở lại.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn chẩn đoán một build cũ bằng curl, thêm một smoke test bắt 404, và diễn tập một lần quay lui.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Build cũ</span><span class="v">Container chạy một ảnh cũ sau một deploy một phần.</span></div>
+  <div class="kv"><span class="k">Smoke test</span><span class="v">Một phép kiểm sau deploy rằng các route lõi đã mount.</span></div>
+  <div class="kv"><span class="k">404 = chưa mount</span><span class="v">Một route trả 404 nghĩa là nó chưa sống.</span></div>
+  <div class="kv"><span class="k">401/200 = đã mount</span><span class="v">Một GET không-auth trả lời nghĩa là route đã sống.</span></div>
+  <div class="kv"><span class="k">Quay lui (rollback)</span><span class="v">Deploy lại một ảnh trước đã biết tốt.</span></div>
+  <div class="kv"><span class="k">Deploy nói dối</span><span class="v">Một deploy xanh mà thật ra đang chạy code cũ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một deploy có thể báo thành công trong khi container chạy một ảnh cũ.</li><li>Chẩn đoán bằng một curl không-auth: 401/200 là đã mount, 404 là cũ/một phần.</li><li>Một smoke test sau deploy fail khi 404 bắt chuyện này tự động.</li><li>Quay lui bằng cách deploy lại ảnh trước đã biết tốt.</li></ul>
 <a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-1-lui-chay-duoc" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Deploy lên VPS — bài 6.1: lần quay lui chạy được</span><span class="lc-sub">Đo ở đây: build cũ trả /health 200, /messages 401 và /gifs 404; smoke test biến điều đó thành exit 1; quay lui bằng ảnh mất 0,82 s so với 5,05 s build lại.</span></span>

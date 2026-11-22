@@ -322,6 +322,46 @@ ${slide('rx-00', 7, 'Lộ trình khoá: Mục 0 → Chương 14')}
 <div class="callout"><p><strong>Common interview question.</strong> "Why did the React team deprecate Create React App?"</p>
 <p>Answer: CRA had no active maintainers, and as a plain build setup it could not solve problems real apps have — routing, data fetching, code splitting — without growing into a framework. In February 2025 the React team recommended frameworks, or build tools such as Vite, Parcel or Rsbuild for projects that do not need a framework. In practice new SPAs start with <code>npm create vite@latest</code>.</p></div>
 
+<h3>Where React sits among its neighbours: the DOM, Next.js, React Native and Node.js</h3>
+<p>The comparison above was React against other UI libraries. Just as often people mix React up with the things <em>around</em> it. Four relations worth getting right before Chapter 1:</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Plain DOM + JavaScript</span><span class="v">React does not replace the browser DOM — it writes to it for you. <code>react-dom</code> compares the new description of the UI with the old one and changes only what differs. Everything you learnt about HTML, CSS, events and the DOM still applies; React removes the hand-written "find the element and update it" code.</span></div>
+  <div class="kv"><span class="k">Next.js</span><span class="v">A framework built <strong>on top of</strong> React: file-based routing, rendering on the server, Server Components, API routes, image optimisation. React is the library inside Next.js; you learn React first, Next.js after (the React team itself recommends starting new full apps from a framework).</span></div>
+  <div class="kv"><span class="k">React Native</span><span class="v">The same components, props, state and hooks, but rendering native iOS/Android widgets instead of HTML. Learn React for the web first; the mental model carries over almost unchanged.</span></div>
+  <div class="kv"><span class="k">Node.js</span><span class="v">React runs in the browser, but its tooling — npm, Vite, TypeScript, Vitest — runs on Node.js on your machine. And in a real product the React app talks to an API server, which for a Node.js major is usually Express or NestJS on Node.</span></div>
+</div>
+
+<h3>What you need before this course</h3>
+<ul>
+<li><strong>HTML, CSS and JavaScript in the browser</strong> — the DOM, events, functions, arrays. Take <a href="/courses/web-foundations">Web Foundations</a> first if these still feel new. Lesson 0.3 of this course re-teaches only the JavaScript React leans on (destructuring, spread, <code>map/filter</code>, modules, <code>async/await</code>).</li>
+<li><strong>A terminal and Git</strong> — you will run <code>npm</code> commands and commit after every step. <a href="/courses/git">Git &amp; GitHub</a> covers it from zero.</li>
+<li><strong>Optional:</strong> <a href="/courses/front-end-web-development-with-react">FER202 on Academy</a> (same ideas, syllabus tools) and the basics of <a href="/courses/typescript">TypeScript</a> — this course explains types as it goes, so neither is required.</li>
+</ul>
+
+<h3>After this course: what you can do, and which jobs it opens</h3>
+<ul>
+<li>Build a single-page app with Vite + TypeScript that reads and writes a real API (TanStack Query), with validated forms (React Hook Form + Zod), routing, shared state, accessible markup and a test suite.</li>
+<li>Explain how rendering, reconciliation and hooks work well enough to debug a re-render storm or a stale closure — the questions interviews actually ask.</li>
+<li>Ship the app: production build, environment variables, CI and deployment (Chapter 14).</li>
+</ul>
+<p>Roles this skill set is asked for: <strong>Fresher / Junior Frontend Developer (React)</strong>, <strong>Fullstack Developer</strong> (React + a Node.js or Spring Boot API), and — after <a href="/courses/react-native">React Native</a> — <strong>Mobile Developer</strong>. It is also the frontend half of most OJT internship tests for web teams. The 🧪 exercise below asks you to check real job ads yourself rather than trust a number from us.</p>
+
+<h3>Real systems that run on React — only where the company says so itself</h3>
+<p>Many websites list "companies that use React" with no evidence. Here are only claims made by the companies or projects themselves:</p>
+<ul>
+<li><strong>Meta (Facebook)</strong> — React's own <a href="https://react.dev/community/versioning-policy" target="_blank" rel="noopener">versioning policy</a> states that "the Facebook codebase alone has over 50,000 React components", which is why every breaking change ships with an upgrade path.</li>
+<li><strong>Netflix</strong> — the Netflix TechBlog post <a href="https://netflixtechblog.com/crafting-a-high-performance-tv-user-interface-using-react-3350e5a6ad3b" target="_blank" rel="noopener">"Crafting a high-performance TV user interface using React"</a> (2017) describes rewriting the TV app UI in React from 2015, on their own renderer React-Gibbon for low-power TV devices. (That post is about 2015–2017; it does not say what the TV app runs today.)</li>
+<li><strong>Sites built with Next.js</strong> — the official <a href="https://nextjs.org/showcase" target="_blank" rel="noopener">Next.js showcase</a> lists production sites submitted by their owners (for example Nike, Sonos, OpenAI). Every Next.js site is a React app underneath.</li>
+</ul>
+
+<h3>Course map: what to take before, alongside and after — for a Node.js major</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Before</span><span class="lz-d"><a href="/courses/web-foundations">Web Foundations</a> · <a href="/courses/git">Git &amp; GitHub</a></span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Alongside</span><span class="lz-d"><a href="/courses/typescript">TypeScript</a> · <a href="/courses/tailwind-css">Tailwind CSS</a> · <a href="/courses/nodejs">Node.js</a> (the API your React app calls)</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">After</span><span class="lz-d"><a href="/courses/nextjs">Next.js</a> · <a href="/courses/testing">Testing</a> · <a href="/courses/react-native">React Native</a> · <a href="/courses/fullstack-project">Fullstack project</a></span></div>
+</div>
+<p><strong>Why this matters for a Node.js major.</strong> The FPT Node.js track — <a href="/courses/server-side-development-nodejs-express-mongodb">SDN302</a> (Node, Express, MongoDB), <a href="/courses/multiplatform-mobile-app-development">MMA301</a> (React Native) and <a href="/courses/web-development-project">WDP301</a> (a MERN team project) — assumes you can already build the frontend. React is the "R" in MERN: Node.js gives you the API, this course gives you the screen people use it through, and together they make you a fullstack JavaScript developer instead of half of one.</p>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Scenario:</strong> before writing any React, check the two claims of this lesson that you can verify yourself.</p><ol>
 <li>Open react.dev/blog and find the posts "Sunsetting Create React App" and "React Compiler v1.0". Write down their dates and compare them with the table above.</li>
@@ -473,6 +513,46 @@ ${slide('rx-00', 7, 'Lộ trình khoá: Mục 0 → Chương 14')}
 
 <div class="callout"><p><strong>Câu hỏi phỏng vấn hay gặp.</strong> "Vì sao đội React khai tử Create React App?"</p>
 <p>Ý trả lời: CRA không còn người bảo trì tích cực, và là một bộ build thuần nên nó không giải được những vấn đề app thật gặp — định tuyến, lấy dữ liệu, chia nhỏ code — nếu không phình thành framework. Tháng 2/2025 đội React khuyên dùng framework, hoặc công cụ build như Vite, Parcel, Rsbuild cho dự án không cần framework. Thực tế, SPA mới bắt đầu bằng <code>npm create vite@latest</code>.</p></div>
+
+<h3>React đứng ở đâu giữa các công nghệ lân cận: DOM, Next.js, React Native và Node.js</h3>
+<p>Phần so sánh ở trên là React với các thư viện giao diện khác. Nhưng người mới còn hay nhầm React với những thứ <em>xung quanh</em> nó. Bốn mối quan hệ nên hiểu đúng trước Chương 1:</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">DOM + JavaScript thuần</span><span class="v">React không thay DOM của trình duyệt — nó ghi vào DOM giúp bạn. <code>react-dom</code> so mô tả giao diện mới với bản cũ rồi chỉ sửa chỗ khác nhau. Mọi thứ bạn đã học về HTML, CSS, sự kiện và DOM vẫn đúng; React bỏ đi phần code tay "tìm phần tử rồi cập nhật nó".</span></div>
+  <div class="kv"><span class="k">Next.js</span><span class="v">Một framework dựng <strong>bên trên</strong> React: định tuyến theo thư mục, render (vẽ ra) ở máy chủ, Server Components, API route, tối ưu ảnh. React là thư viện nằm trong Next.js; học React trước, Next.js sau (chính đội React khuyên app đầy đủ mới nên bắt đầu từ một framework).</span></div>
+  <div class="kv"><span class="k">React Native</span><span class="v">Vẫn component, props, state và hook, nhưng vẽ ra widget gốc của iOS/Android thay vì HTML. Học React cho web trước; tư duy mang sang gần như nguyên vẹn.</span></div>
+  <div class="kv"><span class="k">Node.js</span><span class="v">React chạy trong trình duyệt, nhưng bộ đồ nghề của nó — npm, Vite, TypeScript, Vitest — chạy trên Node.js ở máy bạn. Và trong sản phẩm thật, app React gọi tới một máy chủ API, mà với người học chuyên ngành Node.js thì thường là Express hoặc NestJS chạy trên Node.</span></div>
+</div>
+
+<h3>Cần biết gì trước khi học khoá này</h3>
+<ul>
+<li><strong>HTML, CSS và JavaScript trên trình duyệt</strong> — DOM, sự kiện, hàm, mảng. Nếu còn lạ thì học <a href="/courses/web-foundations">Web Foundations</a> trước. Bài 0.3 của khoá này dạy lại đúng phần JavaScript React hay dùng (destructuring, spread, <code>map/filter</code>, module, <code>async/await</code>).</li>
+<li><strong>Terminal và Git</strong> — bạn sẽ chạy lệnh <code>npm</code> và commit sau mỗi bước. Khoá <a href="/courses/git">Git &amp; GitHub</a> dạy từ số 0.</li>
+<li><strong>Không bắt buộc:</strong> <a href="/courses/front-end-web-development-with-react">FER202 trên Academy</a> (cùng ý tưởng, công cụ theo syllabus) và nền <a href="/courses/typescript">TypeScript</a> — khoá này giải thích kiểu dữ liệu ngay khi gặp, nên thiếu cả hai vẫn học được.</li>
+</ul>
+
+<h3>Học xong làm được gì, và mở ra vị trí việc làm nào</h3>
+<ul>
+<li>Dựng một app một trang (SPA) bằng Vite + TypeScript đọc/ghi API thật (TanStack Query), có form kiểm lỗi (React Hook Form + Zod), định tuyến, state dùng chung, HTML dễ tiếp cận và một bộ test.</li>
+<li>Giải thích được render, reconciliation (đối chiếu) và hook đủ sâu để gỡ lỗi render lặp vô tận hay closure cũ — đúng loại câu phỏng vấn hay hỏi.</li>
+<li>Đưa app lên mạng: bản build production, biến môi trường, CI và deploy (Chương 14).</li>
+</ul>
+<p>Vị trí cần bộ kỹ năng này: <strong>Fresher / Junior Frontend Developer (React)</strong>, <strong>Fullstack Developer</strong> (React + API Node.js hoặc Spring Boot), và — sau khoá <a href="/courses/react-native">React Native</a> — <strong>Mobile Developer</strong>. Đây cũng là nửa frontend trong phần lớn bài test thực tập OJT của các đội web. Bài 🧪 bên dưới yêu cầu bạn tự đếm tin tuyển dụng thật thay vì tin một con số từ chúng tôi.</p>
+
+<h3>Hệ thống lớn thật đang chạy React — chỉ khi chính công ty nói ra</h3>
+<p>Rất nhiều trang liệt kê "các công ty dùng React" mà không có bằng chứng. Dưới đây chỉ là điều chính công ty hoặc dự án tự công bố:</p>
+<ul>
+<li><strong>Meta (Facebook)</strong> — <a href="https://react.dev/community/versioning-policy" target="_blank" rel="noopener">chính sách phiên bản</a> của React ghi "riêng mã nguồn Facebook đã có hơn 50.000 component React", vì thế mọi thay đổi phá vỡ đều đi kèm đường nâng cấp.</li>
+<li><strong>Netflix</strong> — bài trên Netflix TechBlog <a href="https://netflixtechblog.com/crafting-a-high-performance-tv-user-interface-using-react-3350e5a6ad3b" target="_blank" rel="noopener">"Crafting a high-performance TV user interface using React"</a> (2017) kể việc viết lại giao diện app TV bằng React từ 2015, trên bộ render riêng React-Gibbon cho TV cấu hình yếu. (Bài đó nói về giai đoạn 2015–2017; nó không cho biết app TV hôm nay chạy gì.)</li>
+<li><strong>Các trang dựng bằng Next.js</strong> — trang <a href="https://nextjs.org/showcase" target="_blank" rel="noopener">Next.js showcase</a> chính thức liệt kê các trang production do chủ của chúng gửi (ví dụ Nike, Sonos, OpenAI). Mọi trang Next.js bên dưới đều là app React.</li>
+</ul>
+
+<h3>Bản đồ học: trước, song song và sau khoá này — cho người học chuyên ngành Node.js</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Trước</span><span class="lz-d"><a href="/courses/web-foundations">Web Foundations</a> · <a href="/courses/git">Git &amp; GitHub</a></span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Song song</span><span class="lz-d"><a href="/courses/typescript">TypeScript</a> · <a href="/courses/tailwind-css">Tailwind CSS</a> · <a href="/courses/nodejs">Node.js</a> (API mà app React gọi tới)</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Sau</span><span class="lz-d"><a href="/courses/nextjs">Next.js</a> · <a href="/courses/testing">Testing</a> · <a href="/courses/react-native">React Native</a> · <a href="/courses/fullstack-project">Dự án fullstack</a></span></div>
+</div>
+<p><strong>Vì sao quan trọng với chuyên ngành Node.js.</strong> Combo Node.js ở FPT — <a href="/courses/server-side-development-nodejs-express-mongodb">SDN302</a> (Node, Express, MongoDB), <a href="/courses/multiplatform-mobile-app-development">MMA301</a> (React Native) và <a href="/courses/web-development-project">WDP301</a> (dự án nhóm MERN) — đều mặc định bạn đã tự dựng được frontend. React là chữ "R" trong MERN: Node.js cho bạn API, khoá này cho bạn màn hình người dùng chạm vào, ghép lại bạn là lập trình viên JavaScript fullstack chứ không phải một nửa.</p>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> trước khi viết dòng React nào, tự kiểm hai khẳng định của bài mà bạn kiểm được.</p><ol>

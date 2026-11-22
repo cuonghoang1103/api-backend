@@ -1,0 +1,6 @@
+[
+  { "name": "Monstera", "everyDays": 7, "lastWateredAt": "2026-11-12T08:00:00Z" },
+  { "name": "Cactus", "everyDays": 21, "lastWateredAt": "2026-11-12T08:00:00Z" },
+  { "name": "x", "everyDays": 3, "lastWateredAt": "2026-11-20T08:00:00Z" },
+  { "name": "Basil", "everyDays": 0, "lastWateredAt": "2026-11-21T08:00:00Z" }
+]

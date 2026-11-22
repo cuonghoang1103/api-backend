@@ -168,6 +168,27 @@ số dư sau   : 900  ← tiền đã đi rồi</div>
   <span class="lc-body"><span class="lc-title">Going further: the Web Security course (in preparation)</span><span class="lc-sub">The Web Security course will take the browser side of this chapter further — CSP in depth, the full XSS family, clickjacking and the rest of the OWASP Top 10 for web apps. Its lessons are not published yet; this chapter stands on its own.</span></span>
   <span class="lc-cta">OPEN WEB SECURITY →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Add <code>helmet</code> to an app and diff the response headers before and after with <code>curl -I</code>.</li>
+<li>Write a minimal Content-Security-Policy and read it one directive at a time, naming what each restricts.</li>
+<li>Prove CORS does not protect the server: call your API with curl (no Origin check applies) and confirm it still answers — CORS only governs browsers.</li>
+</ol>
+<p><strong>Done when:</strong> you can list the headers helmet adds, read a CSP directive by directive, and explain why CORS is a browser rule, not server protection.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Security headers</span><span class="v">Response headers that harden the browser's behaviour.</span></div>
+  <div class="kv"><span class="k">helmet</span><span class="v">Middleware that sets a sensible set of security headers.</span></div>
+  <div class="kv"><span class="k">CSP</span><span class="v">Content-Security-Policy — restricts what resources a page may load.</span></div>
+  <div class="kv"><span class="k">Same-Origin Policy</span><span class="v">The browser rule CORS selectively relaxes.</span></div>
+  <div class="kv"><span class="k">CORS</span><span class="v">Rules a browser enforces on cross-origin requests — not server-side protection.</span></div>
+  <div class="kv"><span class="k">Vary</span><span class="v">A header telling caches which request headers change the response.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>helmet sets a baseline of protective response headers — verify with curl -I.</li><li>CSP restricts what a page can load; read it one directive at a time.</li><li>CORS is enforced by the browser; it does not protect your server from direct calls.</li><li>Do not forget Vary when a response differs by Origin or other headers.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -315,6 +336,27 @@ số dư sau   : 900  ← tiền đã đi rồi</div>
   <span class="lc-body"><span class="lc-title">Đi xa hơn: khoá Web Security (đang soạn)</span><span class="lc-sub">Khoá Web Security sẽ đi sâu phía trình duyệt của chương này — CSP chi tiết, cả họ XSS, clickjacking và phần còn lại của OWASP Top 10 cho web. Các bài của khoá chưa lên; chương này tự đủ.</span></span>
   <span class="lc-cta">MỞ KHOÁ WEB SECURITY →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Thêm <code>helmet</code> vào một app và diff các header phản hồi trước và sau bằng <code>curl -I</code>.</li>
+<li>Viết một Content-Security-Policy tối thiểu và đọc nó từng chỉ thị một, gọi tên mỗi cái hạn chế gì.</li>
+<li>Chứng minh CORS không bảo vệ server: gọi API bằng curl (không áp kiểm Origin) và xác nhận nó vẫn trả lời — CORS chỉ quản trình duyệt.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn liệt kê được header helmet thêm, đọc một CSP từng chỉ thị, và giải thích vì sao CORS là luật của trình duyệt, không phải bảo vệ server.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Header bảo mật</span><span class="v">Header phản hồi làm cứng cáp hành vi của trình duyệt.</span></div>
+  <div class="kv"><span class="k">helmet</span><span class="v">Middleware đặt một bộ header bảo mật hợp lý.</span></div>
+  <div class="kv"><span class="k">CSP</span><span class="v">Content-Security-Policy — hạn chế tài nguyên một trang được tải.</span></div>
+  <div class="kv"><span class="k">Same-Origin Policy</span><span class="v">Luật trình duyệt mà CORS nới lỏng có chọn lọc.</span></div>
+  <div class="kv"><span class="k">CORS</span><span class="v">Luật trình duyệt áp lên request chéo-nguồn — không phải bảo vệ phía server.</span></div>
+  <div class="kv"><span class="k">Vary</span><span class="v">Header nói cho cache biết header request nào làm đổi phản hồi.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>helmet đặt một nền tảng header phản hồi bảo vệ — kiểm bằng curl -I.</li><li>CSP hạn chế thứ một trang tải được; đọc nó từng chỉ thị một.</li><li>CORS do trình duyệt áp; nó không bảo vệ server khỏi các lời gọi trực tiếp.</li><li>Đừng quên Vary khi một phản hồi khác nhau theo Origin hay header khác.</li></ul>
 </div>
 `,
     },
@@ -440,6 +482,27 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
   <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 4.5 — Where to keep a token in the browser</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: what an XSS actually gets: an injected script runs inside the user's session whether or not it can read the token. Different: that lesson looks at the idea on its own; this one runs it on a real Express 5 server — and in a real Chromium where a browser is involved — and measures it. In this lesson we add: a stored XSS end to end in a real Chromium (the session cookie reaches the attacker; with httpOnly the script still deletes the user's data; sanitising or CSP stops it), nine payloads judged by the browser, and what sanitising costs. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Reproduce a stored XSS end to end: save a note containing a <code>&lt;script&gt;</code> payload, render it unescaped, and watch it execute.</li>
+<li>Show that <code>httpOnly</code> alone does not stop XSS from acting on behalf of the user.</li>
+<li>Fix it by escaping on output (or sanitizing with a vetted library) and re-test the same payloads.</li>
+</ol>
+<p><strong>Done when:</strong> you triggered a stored XSS, saw httpOnly is not a fix, and neutralised the payloads by escaping/sanitizing.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">XSS</span><span class="v">Injecting script that runs in another user's browser.</span></div>
+  <div class="kv"><span class="k">Stored XSS</span><span class="v">A payload saved on the server and served to victims.</span></div>
+  <div class="kv"><span class="k">Escaping</span><span class="v">Rendering user text as data, not markup.</span></div>
+  <div class="kv"><span class="k">Sanitizing</span><span class="v">Stripping dangerous HTML with a vetted allowlist library.</span></div>
+  <div class="kv"><span class="k">Escape on output</span><span class="v">Neutralise at render time, where the context is known.</span></div>
+  <div class="kv"><span class="k">httpOnly limits</span><span class="v">Blocks cookie theft but not all XSS actions.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>XSS has three flavours but one root cause: untrusted text treated as markup.</li><li>A stored payload runs in every viewer's browser — demonstrated end to end.</li><li>httpOnly cookies help but do not stop XSS from acting as the user.</li><li>Escape on output for plain text; sanitize with a vetted library when HTML is allowed.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -556,6 +619,27 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 4.5 — Cất token ở đâu trong trình duyệt</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: một lỗ XSS thật sự mang lại gì: script chèn vào chạy bên trong phiên của người dùng, dù có đọc được token hay không. Khác: bài đó xem ý tưởng tự thân nó; bài này chạy nó trên một server Express 5 thật — và trong Chromium thật khi có trình duyệt — rồi đo. Ở bài này mình học thêm: một lỗ stored XSS đầu-cuối trong Chromium thật (cookie phiên tới tay kẻ tấn công; có httpOnly script vẫn xoá dữ liệu; sanitize hoặc CSP chặn được), chín payload do trình duyệt phán, và cái giá của sanitize. Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tái hiện một stored XSS end-to-end: lưu một note chứa payload <code>&lt;script&gt;</code>, render nó không escape, và xem nó chạy.</li>
+<li>Chỉ ra rằng <code>httpOnly</code> một mình không chặn XSS hành động thay mặt người dùng.</li>
+<li>Sửa bằng cách escape khi xuất (hoặc sanitize bằng một thư viện đã thẩm định) và kiểm lại cùng các payload.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã kích hoạt một stored XSS, thấy httpOnly không phải bản sửa, và vô hiệu các payload bằng escape/sanitize.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">XSS</span><span class="v">Chèn script chạy trong trình duyệt của người dùng khác.</span></div>
+  <div class="kv"><span class="k">Stored XSS</span><span class="v">Một payload lưu trên server và phục vụ tới nạn nhân.</span></div>
+  <div class="kv"><span class="k">Escape</span><span class="v">Render văn bản người dùng như dữ liệu, không phải markup.</span></div>
+  <div class="kv"><span class="k">Sanitize</span><span class="v">Loại HTML nguy hiểm bằng thư viện danh-sách-cho-phép đã thẩm định.</span></div>
+  <div class="kv"><span class="k">Escape khi xuất</span><span class="v">Vô hiệu lúc render, nơi đã biết ngữ cảnh.</span></div>
+  <div class="kv"><span class="k">Giới hạn httpOnly</span><span class="v">Chặn trộm cookie nhưng không chặn mọi hành động XSS.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>XSS có ba kiểu nhưng một gốc: văn bản không tin được bị coi là markup.</li><li>Một payload lưu trữ chạy trong trình duyệt mọi người xem — trình diễn end-to-end.</li><li>Cookie httpOnly giúp nhưng không chặn XSS hành động như người dùng.</li><li>Escape khi xuất cho văn bản thường; sanitize bằng thư viện đã thẩm định khi cho phép HTML.</li></ul>
 </div>
 `,
     },
@@ -705,6 +789,27 @@ RSS sau 1.5 giây      : 213 MB</div>
   <span class="lc-body"><span class="lc-title">You met this in the API Design course — lesson 6.3 — OWASP API Security Top 10 (2023) on LabFlow, as an automatic audit</span><span class="lc-sub">If you took the API Design course, this part will feel familiar. Same: SSRF: the server fetches a URL for the user and reaches what the attacker cannot; the fix is https only, check the resolved IP, never follow a redirect blindly. Different: that lesson looks at the idea on its own; this one runs it on a real Express 5 server — and in a real Chromium where a browser is involved — and measures it. In this lesson we add: internal secrets read through a preview route, an allow-list that a single 302 walks around, re-checking every hop with redirect: 'manual', and new URL() normalising 127.1 / 2130706433 / 0x7f.0.0.1 — plus ReDoS, prototype pollution and body limits measured. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN API DESIGN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Reproduce a ReDoS: feed a catastrophic-backtracking regex a crafted ~31-character string and watch CPU spike, then replace the regex with a safe one.</li>
+<li>Reproduce prototype pollution: POST a body with a <code>__proto__</code> key and show it affecting other objects; then guard the parser.</li>
+<li>Set a request body size limit and send an oversized body to confirm it is rejected before memory balloons.</li>
+</ol>
+<p><strong>Done when:</strong> you triggered ReDoS and prototype pollution and saw a body-size limit reject an oversized request.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ReDoS</span><span class="v">A regex that backtracks catastrophically on crafted input.</span></div>
+  <div class="kv"><span class="k">Prototype pollution</span><span class="v">Injecting __proto__ to alter all objects.</span></div>
+  <div class="kv"><span class="k">Body limit</span><span class="v">A cap on request body size to bound memory.</span></div>
+  <div class="kv"><span class="k">SSRF</span><span class="v">Tricking the server into fetching an internal URL.</span></div>
+  <div class="kv"><span class="k">Catastrophic backtracking</span><span class="v">Exponential regex work that freezes the loop.</span></div>
+  <div class="kv"><span class="k">Input is untrusted</span><span class="v">Every field is attacker-controlled until validated.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A tiny crafted string can freeze the server via ReDoS — avoid backtracking regexes.</li><li>Prototype pollution via __proto__ can make everyone an admin — guard the parser.</li><li>Set a body-size limit so one request cannot balloon memory.</li><li>SSRF can make the server read its own secrets — validate and restrict outbound URLs.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -838,6 +943,27 @@ RSS sau 1.5 giây      : 213 MB</div>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá API Design — bài 6.3 — OWASP API Security Top 10 (2023) trên LabFlow, thành bộ kiểm tự động</span><span class="lc-sub">Nếu bạn đã học khoá API Design thì phần này không còn lạ. Giống: SSRF: server đi lấy một URL giùm người dùng và với tới chỗ kẻ tấn công không với tới được; cách chặn là chỉ https, kiểm IP sau khi phân giải, không đi theo chuyển hướng mù quáng. Khác: bài đó xem ý tưởng tự thân nó; bài này chạy nó trên một server Express 5 thật — và trong Chromium thật khi có trình duyệt — rồi đo. Ở bài này mình học thêm: bí mật nội bộ bị đọc qua route xem trước, một danh sách trắng bị cú 302 đi vòng, kiểm lại từng chặng bằng redirect: 'manual', và new URL() chuẩn hoá 127.1 / 2130706433 / 0x7f.0.0.1 — cùng ReDoS, ô nhiễm nguyên mẫu và giới hạn thân request đo thật. Chưa học khoá API Design cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI API DESIGN →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tái hiện một ReDoS: đưa cho một regex backtracking thảm hoạ một chuỗi ~31 ký tự được dựng và xem CPU vọt, rồi thay regex bằng một cái an toàn.</li>
+<li>Tái hiện ô nhiễm nguyên mẫu: POST một body có khoá <code>__proto__</code> và chỉ ra nó ảnh hưởng các object khác; rồi chốt chặn ở parser.</li>
+<li>Đặt giới hạn kích thước body request và gửi một body quá cỡ để xác nhận nó bị từ chối trước khi bộ nhớ phình.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã gây ReDoS và ô nhiễm nguyên mẫu và thấy một giới hạn body từ chối một request quá cỡ.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ReDoS</span><span class="v">Một regex backtracking thảm hoạ trên đầu vào được dựng.</span></div>
+  <div class="kv"><span class="k">Ô nhiễm nguyên mẫu</span><span class="v">Chèn __proto__ để sửa mọi object.</span></div>
+  <div class="kv"><span class="k">Giới hạn body</span><span class="v">Trần kích thước body request để chặn bộ nhớ.</span></div>
+  <div class="kv"><span class="k">SSRF</span><span class="v">Lừa server đi lấy một URL nội bộ.</span></div>
+  <div class="kv"><span class="k">Backtracking thảm hoạ</span><span class="v">Việc regex theo hàm mũ đóng băng vòng lặp.</span></div>
+  <div class="kv"><span class="k">Đầu vào không tin được</span><span class="v">Mọi trường do kẻ tấn công kiểm soát tới khi được validate.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một chuỗi nhỏ được dựng có thể đóng băng server qua ReDoS — tránh regex backtracking.</li><li>Ô nhiễm nguyên mẫu qua __proto__ có thể cấp admin cho mọi người — chốt ở parser.</li><li>Đặt giới hạn kích thước body để một request không làm phình bộ nhớ.</li><li>SSRF có thể làm server tự đọc bí mật của mình — validate và hạn chế URL đi ra.</li></ul>
 </div>
 
 <div class="ml-en">
@@ -986,6 +1112,27 @@ file kẻ tấn công ghi ra: [["DATABASE_URL","postgres://prod:sieu-mat@db:5432
   <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 1.5: where secrets leak without anyone attacking</span><span class="lc-sub">Same: secrets reach the process at runtime, front-end build variables are public, gitleaks belongs in pre-commit. That lesson adds leaks measured on LabFlow ID: console.log and a pino deny-list that misses x-session and newPassword, an axios error whose 9,771-byte log line holds the API key five times, a .env “removed” but still in history (and a fixture default rules miss), and a VITE_ key inside the bundle.</span></span>
   <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Set a weak JWT secret and crack it with a dictionary attack to feel how fast a weak secret falls; then switch to a long random secret.</li>
+<li>Compare two secrets with a constant-time function instead of <code>===</code> and explain the timing risk of the naive compare.</li>
+<li>Trigger an error and check the response body leaks no stack trace, SQL, or file path — then fix the message.</li>
+</ol>
+<p><strong>Done when:</strong> you cracked a weak secret, used a constant-time compare, and made an error message reveal nothing.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">JWT secret strength</span><span class="v">A long random secret resists dictionary cracking.</span></div>
+  <div class="kv"><span class="k">Constant-time compare</span><span class="v">Comparing secrets without leaking length/position via timing.</span></div>
+  <div class="kv"><span class="k">Error leakage</span><span class="v">Stack traces or SQL in responses that help an attacker.</span></div>
+  <div class="kv"><span class="k">Dependency surface</span><span class="v">How much third-party code can read your env.</span></div>
+  <div class="kv"><span class="k">Secret storage</span><span class="v">Keeping secrets in env/secret managers, not in code.</span></div>
+  <div class="kv"><span class="k">Pre-production checklist</span><span class="v">A short list of checks before shipping.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A weak JWT secret falls to a dictionary in milliseconds — use a long random one.</li><li>Compare secrets in constant time to avoid leaking them through timing.</li><li>Error messages must not reveal stack traces, SQL or file paths.</li><li>Keep secrets out of code, and remember how much dependency code can read your env.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1110,6 +1257,27 @@ file kẻ tấn công ghi ra: [["DATABASE_URL","postgres://prod:sieu-mat@db:5432
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 1.5: chỗ bí mật rò ra mà không ai tấn công cả</span><span class="lc-sub">Giống: bí mật tới tiến trình lúc chạy, biến build của front-end là công khai, gitleaks thuộc về pre-commit. Bài đó thêm các chỗ rò đo trên LabFlow ID: console.log và deny-list của pino sót x-session và newPassword, lỗi axios với dòng log 9.771 byte chứa API key năm lần, .env đã "xoá" mà vẫn nằm trong lịch sử (kèm một fixture mà luật mặc định bỏ sót), và khoá VITE_ nằm trong bundle.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đặt một JWT secret yếu và bẻ nó bằng một đòn từ điển để cảm nhận một secret yếu đổ nhanh thế nào; rồi đổi sang một secret ngẫu nhiên dài.</li>
+<li>So hai secret bằng một hàm thời-gian-hằng thay vì <code>===</code> và giải thích rủi ro thời gian của phép so ngây thơ.</li>
+<li>Kích một lỗi và kiểm body phản hồi không lộ stack trace, SQL, hay đường dẫn file — rồi sửa thông báo.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã bẻ một secret yếu, dùng một phép so thời-gian-hằng, và làm một thông báo lỗi không lộ gì.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Độ mạnh JWT secret</span><span class="v">Một secret ngẫu nhiên dài chống được bẻ bằng từ điển.</span></div>
+  <div class="kv"><span class="k">So thời-gian-hằng</span><span class="v">So secret mà không lộ độ dài/vị trí qua thời gian.</span></div>
+  <div class="kv"><span class="k">Rò rỉ lỗi</span><span class="v">Stack trace hay SQL trong phản hồi giúp kẻ tấn công.</span></div>
+  <div class="kv"><span class="k">Bề mặt phụ thuộc</span><span class="v">Bao nhiêu code bên thứ ba đọc được biến môi trường của bạn.</span></div>
+  <div class="kv"><span class="k">Lưu bí mật</span><span class="v">Giữ bí mật trong env/trình quản lý bí mật, không trong code.</span></div>
+  <div class="kv"><span class="k">Checklist tiền-production</span><span class="v">Một danh sách ngắn các phép kiểm trước khi lên.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một JWT secret yếu đổ trước một từ điển trong mili giây — dùng một cái ngẫu nhiên dài.</li><li>So bí mật trong thời gian hằng để không lộ chúng qua thời gian.</li><li>Thông báo lỗi không được lộ stack trace, SQL hay đường dẫn file.</li><li>Giữ bí mật ngoài code, và nhớ bao nhiêu code phụ thuộc đọc được env của bạn.</li></ul>
 </div>
 `,
     },

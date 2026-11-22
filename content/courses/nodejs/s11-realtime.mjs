@@ -133,6 +133,27 @@ server.listen(<span class="tok-num">3001</span>);</code></pre>
   <span class="lc-body"><span class="lc-title">Go deeper in Socket.IO — lesson 2.1: Where the overhead really is</span><span class="lc-sub">Same conclusion from the other side: at the Socket.IO layer polling and websocket carry the same payload; the real cost lives one layer below. That layer is what this lesson counts at the TCP socket — HTTP headers and the cookie on every poll versus a 2-byte frame header.</span></span>
   <span class="lc-cta">OPEN SOCKET.IO LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Print the HTTP Upgrade handshake byte for byte (the request and the 101 response) and identify the Upgrade/Connection headers.</li>
+<li>Measure polling cost: hit an endpoint every second for a minute and sum the bytes, most of them answering "nothing new".</li>
+<li>Build the smallest useful WebSocket server with <code>ws</code> and push a message to a connected client without it asking.</li>
+</ol>
+<p><strong>Done when:</strong> you read the 101 handshake, measured polling overhead, and pushed a server-initiated message over a socket.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">WebSocket</span><span class="v">A persistent two-way connection over one TCP socket.</span></div>
+  <div class="kv"><span class="k">Upgrade handshake</span><span class="v">The HTTP request that switches a connection to WebSocket (101).</span></div>
+  <div class="kv"><span class="k">Polling</span><span class="v">Repeatedly asking the server for updates.</span></div>
+  <div class="kv"><span class="k">Server push</span><span class="v">The server sending data without a request.</span></div>
+  <div class="kv"><span class="k">ws</span><span class="v">A minimal WebSocket library for Node.</span></div>
+  <div class="kv"><span class="k">101 Switching Protocols</span><span class="v">The status that confirms the upgrade.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>WebSocket upgrades one HTTP connection into a persistent two-way channel.</li><li>Polling wastes bytes repeatedly asking when the usual answer is "nothing new".</li><li>A socket lets the server push updates the instant they happen.</li><li>The cost difference multiplies by your user count.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.1</span>
@@ -237,6 +258,27 @@ server.listen(<span class="tok-num">3001</span>);</code></pre>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Socket.IO — bài 2.1: Overhead thật sự nằm ở đâu</span><span class="lc-sub">Cùng kết luận nhìn từ phía kia: ở lớp Socket.IO, polling và websocket chở cùng một payload; giá thật nằm ở lớp bên dưới. Lớp đó chính là thứ bài này đếm ngay ở socket TCP — header HTTP và cookie đi theo mỗi lần hỏi so với 2 byte đầu khung.</span></span>
   <span class="lc-cta">MỞ BÀI SOCKET.IO →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>In cái bắt tay HTTP Upgrade từng byte (request và phản hồi 101) và chỉ ra header Upgrade/Connection.</li>
+<li>Đo chi phí polling: gọi một endpoint mỗi giây trong một phút và cộng số byte, phần lớn chỉ trả lời "không có gì mới".</li>
+<li>Dựng server WebSocket nhỏ nhất hữu ích bằng <code>ws</code> và đẩy một tin nhắn tới một client đã kết nối mà nó không hỏi.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đọc cái bắt tay 101, đo phụ phí polling, và đẩy một tin nhắn do server khởi xướng qua socket.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">WebSocket</span><span class="v">Một kết nối hai chiều bền trên một socket TCP.</span></div>
+  <div class="kv"><span class="k">Bắt tay Upgrade</span><span class="v">Request HTTP chuyển một kết nối sang WebSocket (101).</span></div>
+  <div class="kv"><span class="k">Polling</span><span class="v">Hỏi server cập nhật lặp đi lặp lại.</span></div>
+  <div class="kv"><span class="k">Server push</span><span class="v">Server gửi dữ liệu mà không cần request.</span></div>
+  <div class="kv"><span class="k">ws</span><span class="v">Một thư viện WebSocket tối giản cho Node.</span></div>
+  <div class="kv"><span class="k">101 Switching Protocols</span><span class="v">Mã trạng thái xác nhận việc nâng cấp.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>WebSocket nâng một kết nối HTTP thành một kênh hai chiều bền.</li><li>Polling phí byte khi hỏi lặp lại mà câu trả lời thường là "không có gì mới".</li><li>Một socket cho server đẩy cập nhật ngay khoảnh khắc chúng xảy ra.</li><li>Chênh lệch chi phí nhân lên theo số người dùng của bạn.</li></ul>
 </div>
 `,
     },
@@ -341,6 +383,27 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
   <span class="lc-body"><span class="lc-title">Go deeper in Socket.IO — lesson 3.4: Broadcast semantics: to, in, except, volatile</span><span class="lc-sub">Same: io.to(room) includes the sender, socket.to(room) excludes it — the typing-indicator bug. Socket.IO goes further with except() and volatile emits. Measured while writing these lessons: chaining io.to(A).to(B) is a UNION (a socket only in A, only in B or in both each received it once).</span></span>
   <span class="lc-cta">OPEN SOCKET.IO LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Run the same chat with raw <code>ws</code> and with Socket.IO and measure memory per connection at a few thousand sockets.</li>
+<li>Use rooms to broadcast only to a subset of clients, instead of every connection.</li>
+<li>Use an acknowledgement callback to confirm one message was received, and note when you actually need that.</li>
+</ol>
+<p><strong>Done when:</strong> you measured the per-connection memory of both, broadcast to a room, and used an ack.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Socket.IO</span><span class="v">A library adding rooms, reconnection and fallbacks over WebSocket.</span></div>
+  <div class="kv"><span class="k">Per-connection memory</span><span class="v">RAM each open socket costs — higher with Socket.IO.</span></div>
+  <div class="kv"><span class="k">Room</span><span class="v">A named group of sockets you can broadcast to.</span></div>
+  <div class="kv"><span class="k">Broadcast</span><span class="v">Sending one message to many sockets at once.</span></div>
+  <div class="kv"><span class="k">Acknowledgement</span><span class="v">A callback confirming a message was received.</span></div>
+  <div class="kv"><span class="k">Convenience cost</span><span class="v">The extra memory/overhead features add.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Socket.IO adds rooms, reconnection and fallbacks — at a measurable memory cost.</li><li>Rooms are the addressing model: broadcast to a subset, not everyone.</li><li>Acknowledgements tell you a message arrived, when that matters.</li><li>Choose raw ws for lean broadcasting, Socket.IO when you want its conveniences.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.2</span>
@@ -435,6 +498,27 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Socket.IO — bài 3.4: Ngữ nghĩa broadcast: to, in, except, volatile</span><span class="lc-sub">Giống: io.to(room) gồm cả người gửi, socket.to(room) bỏ người gửi — con bug chỉ báo đang gõ. Socket.IO đi xa hơn với except() và emit volatile. Đo khi soạn các bài này: nối io.to(A).to(B) là phép HỢP (socket chỉ ở A, chỉ ở B hay ở cả hai đều nhận đúng một lần).</span></span>
   <span class="lc-cta">MỞ BÀI SOCKET.IO →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chạy cùng một chat bằng <code>ws</code> trần và bằng Socket.IO và đo bộ nhớ mỗi kết nối ở vài nghìn socket.</li>
+<li>Dùng room để phát chỉ tới một nhóm con client, thay vì mọi kết nối.</li>
+<li>Dùng một callback xác nhận để biết một tin nhắn đã tới, và ghi khi nào bạn thật sự cần điều đó.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đo được bộ nhớ mỗi kết nối của cả hai, phát tới một room, và dùng một ack.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Socket.IO</span><span class="v">Thư viện thêm room, kết nối lại và dự phòng trên WebSocket.</span></div>
+  <div class="kv"><span class="k">Bộ nhớ mỗi kết nối</span><span class="v">RAM mỗi socket mở tốn — cao hơn với Socket.IO.</span></div>
+  <div class="kv"><span class="k">Room</span><span class="v">Một nhóm socket có tên mà bạn phát tới được.</span></div>
+  <div class="kv"><span class="k">Broadcast</span><span class="v">Gửi một tin nhắn tới nhiều socket cùng lúc.</span></div>
+  <div class="kv"><span class="k">Acknowledgement</span><span class="v">Một callback xác nhận một tin nhắn đã tới.</span></div>
+  <div class="kv"><span class="k">Giá của tiện nghi</span><span class="v">Phần bộ nhớ/phụ phí mà các tính năng thêm vào.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Socket.IO thêm room, kết nối lại và dự phòng — với một giá bộ nhớ đo được.</li><li>Room là mô hình định địa chỉ: phát tới một nhóm con, không phải tất cả.</li><li>Acknowledgement cho bạn biết một tin nhắn đã tới, khi điều đó quan trọng.</li><li>Chọn ws trần để phát gọn nhẹ, Socket.IO khi muốn các tiện nghi của nó.</li></ul>
 </div>
 `,
     },
@@ -547,6 +631,27 @@ tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
   <span class="lc-body"><span class="lc-title">Go deeper in Socket.IO — lesson 2.2: pingInterval and pingTimeout: two numbers, four modes</span><span class="lc-sub">Same: this site runs 25,000 + 60,000 ms, so a vanished client can stay "online" up to 85 s. Socket.IO 2.2 compares four settings and the proxy-timeout trap; this lesson measures detection with a TCP black hole: 3,003 ms right after a pong, 2,000 ms if the pong is lost too, 45,003 ms with defaults, 85,003 ms with this site's values.</span></span>
   <span class="lc-cta">OPEN SOCKET.IO LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Authenticate the socket at the handshake by validating a JWT, rejecting the connection if it is missing or invalid.</li>
+<li>Reproduce the hole: let an authenticated user subscribe to another user's private room because the handler never checks ownership; then add the per-event authorization.</li>
+<li>Add a heartbeat (ping/pong) so a dead connection that still looks open is detected and dropped.</li>
+</ol>
+<p><strong>Done when:</strong> you authenticate at the handshake, authorize each event, and detect a half-open connection with a heartbeat.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Handshake auth</span><span class="v">Validating credentials when the socket connects.</span></div>
+  <div class="kv"><span class="k">Authenticated vs authorized</span><span class="v">Who you are vs what you may do — check both.</span></div>
+  <div class="kv"><span class="k">Per-event authorization</span><span class="v">Checking permission on every message, not just at connect.</span></div>
+  <div class="kv"><span class="k">Private room</span><span class="v">A room only certain users may join.</span></div>
+  <div class="kv"><span class="k">Heartbeat</span><span class="v">Periodic ping/pong detecting dead connections.</span></div>
+  <div class="kv"><span class="k">Half-open connection</span><span class="v">A socket that looks alive but is gone.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Authenticate once at the handshake with a JWT, rejecting bad connections early.</li><li>Authenticated is not authorized — check permission on every event.</li><li>Missing per-event checks let a user read another user's private messages.</li><li>A heartbeat detects half-open connections that still look alive.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.3</span>
@@ -642,6 +747,27 @@ tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở Socket.IO — bài 2.2: pingInterval và pingTimeout: hai số, bốn mode</span><span class="lc-sub">Giống: website này chạy 25.000 + 60.000 ms, nên một client biến mất có thể vẫn "online" tới 85 giây. Socket.IO 2.2 so bốn cấu hình và bẫy timeout của proxy; bài này đo thời gian phát hiện bằng một "hố đen" TCP: 3.003 ms nếu vừa nhận pong, 2.000 ms nếu pong cũng mất, 45.003 ms với mặc định, 85.003 ms với cấu hình của website.</span></span>
   <span class="lc-cta">MỞ BÀI SOCKET.IO →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Xác thực socket lúc bắt tay bằng cách validate một JWT, từ chối kết nối nếu thiếu hoặc không hợp lệ.</li>
+<li>Tái hiện lỗ hổng: cho một người dùng đã xác thực đăng ký vào room riêng của người khác vì handler không kiểm quyền sở hữu; rồi thêm phân quyền theo từng sự kiện.</li>
+<li>Thêm một nhịp tim (ping/pong) để một kết nối chết mà vẫn trông còn mở bị phát hiện và loại bỏ.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn xác thực lúc bắt tay, phân quyền từng sự kiện, và phát hiện một kết nối nửa-mở bằng nhịp tim.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Xác thực lúc bắt tay</span><span class="v">Validate thông tin khi socket kết nối.</span></div>
+  <div class="kv"><span class="k">Đã xác thực vs được phép</span><span class="v">Bạn là ai vs bạn được làm gì — kiểm cả hai.</span></div>
+  <div class="kv"><span class="k">Phân quyền theo sự kiện</span><span class="v">Kiểm quyền trên mọi tin nhắn, không chỉ lúc kết nối.</span></div>
+  <div class="kv"><span class="k">Room riêng</span><span class="v">Một room chỉ một số người dùng được vào.</span></div>
+  <div class="kv"><span class="k">Nhịp tim</span><span class="v">Ping/pong định kỳ phát hiện kết nối chết.</span></div>
+  <div class="kv"><span class="k">Kết nối nửa-mở</span><span class="v">Một socket trông còn sống nhưng đã mất.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Xác thực một lần lúc bắt tay bằng JWT, từ chối kết nối xấu sớm.</li><li>Đã xác thực không phải được phép — kiểm quyền trên mọi sự kiện.</li><li>Thiếu kiểm theo sự kiện cho một người đọc tin nhắn riêng của người khác.</li><li>Một nhịp tim phát hiện kết nối nửa-mở vẫn trông còn sống.</li></ul>
 </div>
 `,
     },
@@ -752,6 +878,27 @@ ws.send(payload);</code></pre>
   <span class="lc-body"><span class="lc-title">Same problem in API Design — lesson 10.4: More than one server</span><span class="lc-sub">Same: with events in process memory, a dashboard on the second LabFlow instance saw 0 of 10 bookings; with a Redis Stream every instance reads, 10 of 10 — and the stream doubles as the replay log for Last-Event-ID. This lesson solves the same problem for Socket.IO with Redis Pub/Sub (the adapter), which delivers to live sockets but keeps nothing.</span></span>
   <span class="lc-cta">OPEN API DESIGN LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Reproduce the two-process bug: run two instances and show a message sent on one is not seen by clients on the other.</li>
+<li>Add the Redis adapter so broadcasts reach every process, and confirm the message now arrives.</li>
+<li>Simulate one slow client and watch the server's send buffer (and memory) grow — the backpressure problem.</li>
+</ol>
+<p><strong>Done when:</strong> you saw the silent two-process bug, fixed it with the Redis adapter, and observed backpressure from a slow client.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Horizontal scaling</span><span class="v">Running more than one server process.</span></div>
+  <div class="kv"><span class="k">Adapter</span><span class="v">A bridge (e.g. Redis) relaying events between processes.</span></div>
+  <div class="kv"><span class="k">Sticky sessions</span><span class="v">Routing a client to the same process each time.</span></div>
+  <div class="kv"><span class="k">Backpressure</span><span class="v">A slow consumer causing the server buffer to grow.</span></div>
+  <div class="kv"><span class="k">Silent bug</span><span class="v">A failure with no error — messages just do not arrive.</span></div>
+  <div class="kv"><span class="k">websocket-only</span><span class="v">Skipping polling fallback to avoid round-robin breakage.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>With more than one process, broadcasts do not cross processes — a silent bug.</li><li>A Redis adapter relays events so every process delivers the message.</li><li>Round-robin load balancing breaks long-polling; sticky sessions or websocket-only fix it.</li><li>One slow client creates backpressure that can eat server memory.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.4</span>
@@ -845,6 +992,27 @@ ws.send(payload);</code></pre>
   <span class="lc-body"><span class="lc-title">Cùng bài toán ở API Design — bài 10.4: Nhiều hơn một server</span><span class="lc-sub">Giống: sự kiện nằm trong bộ nhớ tiến trình thì dashboard ở instance LabFlow thứ hai thấy 0/10 lượt đặt; dùng Redis Stream mọi instance cùng đọc, 10/10 — và stream kiêm luôn nhật ký phát bù cho Last-Event-ID. Bài này giải cùng bài toán cho Socket.IO bằng Redis Pub/Sub (adapter), giao tới socket đang sống nhưng không giữ lại gì.</span></span>
   <span class="lc-cta">MỞ BÀI API DESIGN →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tái hiện bug hai-tiến-trình: chạy hai instance và chỉ ra một tin nhắn gửi ở một cái không được client ở cái kia thấy.</li>
+<li>Thêm adapter Redis để broadcast tới mọi tiến trình, và xác nhận tin nhắn giờ tới nơi.</li>
+<li>Mô phỏng một client chậm và xem bộ đệm gửi của server (và bộ nhớ) phình lên — bài toán áp lực ngược.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy bug hai-tiến-trình âm thầm, sửa bằng adapter Redis, và quan sát áp lực ngược từ một client chậm.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Mở rộng ngang</span><span class="v">Chạy nhiều hơn một tiến trình server.</span></div>
+  <div class="kv"><span class="k">Adapter</span><span class="v">Một cầu nối (ví dụ Redis) chuyển tiếp sự kiện giữa các tiến trình.</span></div>
+  <div class="kv"><span class="k">Sticky session</span><span class="v">Định tuyến một client về cùng một tiến trình mỗi lần.</span></div>
+  <div class="kv"><span class="k">Áp lực ngược</span><span class="v">Một bên tiêu thụ chậm làm bộ đệm server phình.</span></div>
+  <div class="kv"><span class="k">Bug âm thầm</span><span class="v">Một lỗi không có báo lỗi — tin nhắn chỉ là không tới.</span></div>
+  <div class="kv"><span class="k">websocket-only</span><span class="v">Bỏ dự phòng polling để tránh vỡ do luân phiên.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Với nhiều hơn một tiến trình, broadcast không qua được tiến trình — một bug âm thầm.</li><li>Một adapter Redis chuyển tiếp sự kiện để mọi tiến trình giao tin nhắn.</li><li>Cân bằng tải luân phiên làm vỡ long-polling; sticky session hoặc websocket-only sửa được.</li><li>Một client chậm tạo áp lực ngược có thể ăn bộ nhớ server.</li></ul>
 </div>
 `,
     },

@@ -184,6 +184,27 @@ prisma.config.ts
   <span class="lc-body"><span class="lc-title">You met this in the PostgreSQL course — lesson 14.2 — Pooling: in the app, and in front of it</span><span class="lc-sub">If you took the PostgreSQL course, this part will feel familiar. Same: a connection pool, how big it should be, and PgBouncer in front of PostgreSQL. Different: that lesson looks from the database side; this one from a Node API through Prisma. In this lesson we add: pool sizes 1/5/10/20 measured with the real backends counted in pg_stat_activity, one PrismaClient per process, and installing Prisma 7 as it really runs today. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN POSTGRESQL LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Prove in-memory data does not survive: store a note in a plain Map, restart the process, and watch it be gone.</li>
+<li>Measure what one fresh PostgreSQL connection costs (time to connect) versus reusing a pooled one.</li>
+<li>Create one PrismaClient per process and confirm you are NOT creating a new client per request.</li>
+</ol>
+<p><strong>Done when:</strong> you saw in-memory data vanish on restart, measured connection cost, and have one shared client per process.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Relational database</span><span class="v">Durable, queryable storage with constraints and transactions.</span></div>
+  <div class="kv"><span class="k">Connection</span><span class="v">A session to the database; expensive to open.</span></div>
+  <div class="kv"><span class="k">Connection pool</span><span class="v">A reused set of open connections shared by requests.</span></div>
+  <div class="kv"><span class="k">Pool size</span><span class="v">How many connections the pool keeps — bigger is not always better.</span></div>
+  <div class="kv"><span class="k">One client per process</span><span class="v">Create a single PrismaClient, not one per request.</span></div>
+  <div class="kv"><span class="k">Cold start</span><span class="v">The first request is slow while the pool warms up.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>In-memory data is lost on restart — you need a durable database.</li><li>Opening a connection is expensive, so a pool reuses a fixed set of them.</li><li>A bigger pool is not automatically faster and can overwhelm the database.</li><li>Create one PrismaClient per process, never one per request.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -339,6 +360,27 @@ prisma.config.ts
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá PostgreSQL — bài 14.2 — Pool: trong app, và đứng trước app</span><span class="lc-sub">Nếu bạn đã học khoá PostgreSQL thì phần này không còn lạ. Giống: connection pool, cỡ pool bao nhiêu là đủ, và PgBouncer đứng trước PostgreSQL. Khác: bài đó nhìn từ phía cơ sở dữ liệu; bài này nhìn từ một API Node qua Prisma. Ở bài này mình học thêm: cỡ pool 1/5/10/20 đo thật kèm số backend đếm từ pg_stat_activity, mỗi tiến trình một PrismaClient, và cài Prisma 7 đúng như nó chạy hôm nay. Chưa học khoá PostgreSQL cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI POSTGRESQL →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chứng minh dữ liệu trong RAM không sống qua restart: lưu một note trong một Map thường, khởi động lại tiến trình, và xem nó biến mất.</li>
+<li>Đo một kết nối PostgreSQL mới tốn gì (thời gian kết nối) so với dùng lại một kết nối trong pool.</li>
+<li>Tạo một PrismaClient cho mỗi tiến trình và xác nhận bạn KHÔNG tạo một client mới cho mỗi request.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy dữ liệu RAM biến mất khi restart, đo giá kết nối, và có một client chung cho mỗi tiến trình.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cơ sở dữ liệu quan hệ</span><span class="v">Lưu trữ bền, truy vấn được, có ràng buộc và transaction.</span></div>
+  <div class="kv"><span class="k">Kết nối</span><span class="v">Một phiên tới database; mở ra tốn kém.</span></div>
+  <div class="kv"><span class="k">Pool kết nối</span><span class="v">Một tập kết nối đã mở được dùng lại, chia sẻ giữa các request.</span></div>
+  <div class="kv"><span class="k">Kích thước pool</span><span class="v">Pool giữ bao nhiêu kết nối — lớn không phải lúc nào cũng tốt hơn.</span></div>
+  <div class="kv"><span class="k">Một client/tiến trình</span><span class="v">Tạo một PrismaClient duy nhất, không phải mỗi request một cái.</span></div>
+  <div class="kv"><span class="k">Cold start</span><span class="v">Request đầu tiên chậm trong lúc pool khởi động.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Dữ liệu trong RAM mất khi restart — bạn cần một database bền.</li><li>Mở một kết nối tốn kém, nên pool dùng lại một tập cố định.</li><li>Pool lớn hơn không tự nhiên nhanh hơn và có thể làm ngộp database.</li><li>Tạo một PrismaClient cho mỗi tiến trình, không bao giờ mỗi request một cái.</li></ul>
 </div>
 `,
     },
@@ -563,6 +605,27 @@ All migrations have been successfully applied.
   <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 5.3 — Constraints in SQL Server &amp; ALTER TABLE</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: changing a table that already has rows with ALTER TABLE, and constraints that protect the data. Different: Academy uses SQL Server; here it runs on PostgreSQL through Prisma. In this lesson we add: the same change shipped as a Prisma migration on PostgreSQL: a NOT NULL column without a default fails on existing rows (23502 ⇒ P3018), then nullable ⇒ backfill ⇒ tighten. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN DBI202 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a small Prisma schema (a Note model), run <code>migrate dev</code>, and read the generated SQL file.</li>
+<li>Add a field and run a second migration; look at how the migrations folder records history.</li>
+<li>Rehearse a failed migration on a throwaway database and practise checking which statements applied before deciding anything.</li>
+</ol>
+<p><strong>Done when:</strong> you have two migrations with readable SQL, understand where history lives, and have seen a half-applied migration.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Schema</span><span class="v">A declarative description of your models, not a script.</span></div>
+  <div class="kv"><span class="k">Migration</span><span class="v">A recorded SQL change that moves the DB from one state to the next.</span></div>
+  <div class="kv"><span class="k">migrate dev</span><span class="v">Creates and applies a migration in development.</span></div>
+  <div class="kv"><span class="k">migrate deploy</span><span class="v">Applies pending migrations in production, no shadow DB.</span></div>
+  <div class="kv"><span class="k">Migration history</span><span class="v">The ordered record the database checks against.</span></div>
+  <div class="kv"><span class="k">Drift</span><span class="v">When the database no longer matches the migration history.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The Prisma schema describes the desired state; migrations are the SQL to get there.</li><li>migrate dev creates migrations in development; migrate deploy applies them in production.</li><li>The migrations folder is the ordered history the database reconciles against.</li><li>A half-applied migration must be inspected, not blindly forced through.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -778,6 +841,27 @@ All migrations have been successfully applied.
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 5.3 — Ràng buộc trong SQL Server &amp; ALTER TABLE</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: sửa một bảng đã có dữ liệu bằng ALTER TABLE, và ràng buộc giữ dữ liệu đúng. Khác: Academy dùng SQL Server; ở đây chạy trên PostgreSQL qua Prisma. Ở bài này mình học thêm: cùng thay đổi đó đi ra bằng migration Prisma trên PostgreSQL: cột NOT NULL không có mặc định hỏng trên các dòng đang có (23502 ⇒ P3018), rồi cho null ⇒ điền ⇒ siết. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một schema Prisma nhỏ (một model Note), chạy <code>migrate dev</code>, và đọc file SQL được sinh ra.</li>
+<li>Thêm một trường và chạy một migration thứ hai; xem thư mục migrations ghi lại lịch sử thế nào.</li>
+<li>Diễn tập một migration hỏng trên một database vứt đi và tập kiểm những câu lệnh nào đã áp trước khi quyết định bất cứ gì.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có hai migration với SQL đọc được, hiểu lịch sử nằm ở đâu, và đã thấy một migration áp nửa chừng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Lược đồ (schema)</span><span class="v">Mô tả khai báo các model của bạn, không phải một script.</span></div>
+  <div class="kv"><span class="k">Migration</span><span class="v">Một thay đổi SQL được ghi lại đưa DB từ trạng thái này sang kế.</span></div>
+  <div class="kv"><span class="k">migrate dev</span><span class="v">Tạo và áp một migration khi phát triển.</span></div>
+  <div class="kv"><span class="k">migrate deploy</span><span class="v">Áp các migration còn chờ trên production, không shadow DB.</span></div>
+  <div class="kv"><span class="k">Lịch sử migration</span><span class="v">Bản ghi có thứ tự mà database đối chiếu.</span></div>
+  <div class="kv"><span class="k">Drift</span><span class="v">Khi database không còn khớp lịch sử migration.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Schema Prisma mô tả trạng thái mong muốn; migration là SQL để tới đó.</li><li>migrate dev tạo migration khi phát triển; migrate deploy áp chúng trên production.</li><li>Thư mục migrations là lịch sử có thứ tự mà database đối chiếu.</li><li>Một migration áp nửa chừng phải được soi, không ép qua một cách mù quáng.</li></ul>
 </div>
 `,
     },
@@ -966,6 +1050,27 @@ timeout or doing less work in the transaction.</div>
   <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 8.3 — Transactions, ACID &amp; isolation levels</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: ACID and what a transaction guarantees. Different: Academy uses SQL Server; here it runs on PostgreSQL through Prisma. In this lesson we add: the same guarantees from a Node API with Prisma on PostgreSQL: a half-written note without a transaction, rolled back inside one, and two buyers who both read 10 (only one subtracted). If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN DBI202 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Swap the Notes service from the in-memory Map to Prisma/PostgreSQL, keeping the same router and status codes.</li>
+<li>Decide deliberately how a missing row behaves: return null or throw — and apply it to findUnique.</li>
+<li>Wrap two writes in <code>prisma.$transaction</code>, force the second to fail, and confirm the first rolled back.</li>
+</ol>
+<p><strong>Done when:</strong> the Notes API now runs on PostgreSQL with the same contract, and you have proven a transaction rolls back on failure.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">CRUD operations</span><span class="v">create, findMany/findUnique, update, delete in Prisma.</span></div>
+  <div class="kv"><span class="k">Transaction</span><span class="v">A group of writes that all succeed or all roll back.</span></div>
+  <div class="kv"><span class="k">Rollback</span><span class="v">Undoing all writes in a transaction when one fails.</span></div>
+  <div class="kv"><span class="k">findUnique</span><span class="v">Fetch by a unique key; returns null if absent.</span></div>
+  <div class="kv"><span class="k">createMany / batching</span><span class="v">Insert many rows in one efficient call.</span></div>
+  <div class="kv"><span class="k">Holding a connection</span><span class="v">A transaction holds a connection — keep it short.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The same router and status codes stay; only the service swaps Map for PostgreSQL.</li><li>Decide deliberately whether a missing row returns null or throws.</li><li>A transaction makes several writes all-or-nothing, rolling back on any failure.</li><li>A transaction holds a connection, so keep it short; batch inserts with createMany.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1138,6 +1243,27 @@ timeout or doing less work in the transaction.</div>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 8.3 — Giao dịch, ACID &amp; mức cô lập</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: ACID và một giao dịch bảo đảm điều gì. Khác: Academy dùng SQL Server; ở đây chạy trên PostgreSQL qua Prisma. Ở bài này mình học thêm: cùng các bảo đảm đó từ một API Node qua Prisma trên PostgreSQL: ghi chú nửa vời khi không có giao dịch, cuộn ngược khi có, và hai người mua cùng đọc 10 (chỉ trừ một). Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đổi service Notes từ Map trong RAM sang Prisma/PostgreSQL, giữ nguyên router và mã trạng thái.</li>
+<li>Quyết định có chủ đích cách một dòng thiếu hành xử: trả null hay ném lỗi — và áp vào findUnique.</li>
+<li>Bọc hai lệnh ghi trong <code>prisma.$transaction</code>, ép lệnh thứ hai thất bại, và xác nhận lệnh đầu cuộn ngược.</li>
+</ol>
+<p><strong>Đạt khi:</strong> Notes API giờ chạy trên PostgreSQL với cùng hợp đồng, và bạn đã chứng minh một transaction cuộn ngược khi thất bại.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Thao tác CRUD</span><span class="v">create, findMany/findUnique, update, delete trong Prisma.</span></div>
+  <div class="kv"><span class="k">Transaction</span><span class="v">Một nhóm lệnh ghi hoặc cùng thành công hoặc cùng cuộn ngược.</span></div>
+  <div class="kv"><span class="k">Rollback</span><span class="v">Hoàn tác mọi lệnh ghi trong transaction khi một cái thất bại.</span></div>
+  <div class="kv"><span class="k">findUnique</span><span class="v">Lấy theo một khoá duy nhất; trả null nếu không có.</span></div>
+  <div class="kv"><span class="k">createMany / gộp</span><span class="v">Chèn nhiều dòng trong một lời gọi hiệu quả.</span></div>
+  <div class="kv"><span class="k">Giữ một kết nối</span><span class="v">Transaction giữ một kết nối — nên để ngắn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cùng router và mã trạng thái giữ nguyên; chỉ service đổi Map lấy PostgreSQL.</li><li>Quyết định có chủ đích một dòng thiếu trả null hay ném lỗi.</li><li>Transaction làm nhiều lệnh ghi được-ăn-cả-ngã-về-không, cuộn ngược khi có lỗi.</li><li>Transaction giữ một kết nối, nên để ngắn; gộp chèn bằng createMany.</li></ul>
 </div>
 `,
     },
@@ -1285,6 +1411,27 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
   <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 6.2 — Every join, with the result table</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: JOIN between two tables and the result table it produces. Different: Academy uses SQL Server; here it runs on PostgreSQL through Prisma. In this lesson we add: the same data loaded from Node through Prisma: include sends two queries with IN, a loop sends 51, measured; then groupBy and select to send less. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN DBI202 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Fetch users with their notes using <code>include</code>, turn on the query log, and read the SQL Prisma emits.</li>
+<li>Reproduce N+1: loop over users and query each one's notes separately, count the queries, then fix it with a single include/join.</li>
+<li>Replace a <code>include</code> you only count with a <code>_count</code> select and compare the data transferred.</li>
+</ol>
+<p><strong>Done when:</strong> you measured 51 queries vs 2, read the generated SQL, and avoided fetching rows you only needed to count.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Relation</span><span class="v">A link between models (one-to-many, many-to-many).</span></div>
+  <div class="kv"><span class="k">include</span><span class="v">Fetch related rows alongside the parent in one call.</span></div>
+  <div class="kv"><span class="k">select</span><span class="v">Pick only the columns you need — columns are bandwidth.</span></div>
+  <div class="kv"><span class="k">N+1 problem</span><span class="v">One query per parent row instead of a single join.</span></div>
+  <div class="kv"><span class="k">_count</span><span class="v">Count related rows without fetching them.</span></div>
+  <div class="kv"><span class="k">Query log</span><span class="v">Prisma output showing the SQL it actually ran.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Relations are read with include/select; include fetches related rows in one query.</li><li>The N+1 problem is one query per row — measurably far slower than a join.</li><li>Do not include rows you only need to count — use _count instead.</li><li>Select only the columns you need, and read the query log while developing.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1416,6 +1563,27 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 6.2 — Toàn bộ các phép JOIN, kèm bảng kết quả</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: JOIN giữa hai bảng và bảng kết quả nó tạo ra. Khác: Academy dùng SQL Server; ở đây chạy trên PostgreSQL qua Prisma. Ở bài này mình học thêm: cùng dữ liệu đó lấy từ Node qua Prisma: include gửi hai truy vấn dùng IN, vòng lặp gửi 51, đo thật; rồi groupBy và select để gửi ít hơn. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lấy user cùng note của họ bằng <code>include</code>, bật query log, và đọc SQL Prisma sinh ra.</li>
+<li>Tái hiện N+1: lặp qua các user và truy vấn note của từng người riêng, đếm số truy vấn, rồi sửa bằng một include/join duy nhất.</li>
+<li>Thay một <code>include</code> mà bạn chỉ đếm bằng một select <code>_count</code> và so dữ liệu truyền đi.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã đo 51 truy vấn vs 2, đọc SQL sinh ra, và tránh lấy các dòng chỉ để đếm.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Quan hệ</span><span class="v">Một liên kết giữa các model (một-nhiều, nhiều-nhiều).</span></div>
+  <div class="kv"><span class="k">include</span><span class="v">Lấy các dòng liên quan cùng cha trong một lời gọi.</span></div>
+  <div class="kv"><span class="k">select</span><span class="v">Chọn chỉ các cột bạn cần — cột là băng thông.</span></div>
+  <div class="kv"><span class="k">Bẫy N+1</span><span class="v">Một truy vấn cho mỗi dòng cha thay vì một join.</span></div>
+  <div class="kv"><span class="k">_count</span><span class="v">Đếm dòng liên quan mà không lấy chúng về.</span></div>
+  <div class="kv"><span class="k">Query log</span><span class="v">Output của Prisma cho thấy SQL nó thật sự chạy.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Quan hệ đọc bằng include/select; include lấy dòng liên quan trong một truy vấn.</li><li>Bẫy N+1 là một truy vấn cho mỗi dòng — đo được là chậm hơn join rất nhiều.</li><li>Đừng include các dòng chỉ để đếm — dùng _count thay vào.</li><li>Chỉ select cột bạn cần, và đọc query log khi phát triển.</li></ul>
 </div>
 `,
     },
@@ -1554,6 +1722,27 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
   <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 8.2 — Clustered vs nonclustered &amp; reading a plan</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: composite indexes, the leftmost-prefix rule, and reading an execution plan. Different: Academy uses SQL Server; here it runs on PostgreSQL through Prisma. In this lesson we add: the same rule on PostgreSQL with EXPLAIN ANALYZE: the reversed index still avoids the Sort, yet reads 3,844 pages for a rare author against 13 — measured; plus the write tax of every index. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN DBI202 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Run a filtering query on a large table and capture <code>EXPLAIN ANALYZE</code> before adding an index.</li>
+<li>Add an index on the filtered column and run the same query; compare the plan (seq scan vs index scan) and the time.</li>
+<li>Measure the write tax: time an insert-heavy loop before and after the index exists.</li>
+</ol>
+<p><strong>Done when:</strong> you read an EXPLAIN plan, saw a seq scan become an index scan, and measured the index's write cost.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Index</span><span class="v">A data structure that speeds lookups on a column.</span></div>
+  <div class="kv"><span class="k">EXPLAIN ANALYZE</span><span class="v">Shows the planner's chosen plan with real timings.</span></div>
+  <div class="kv"><span class="k">Sequential scan</span><span class="v">Reading every row — what you get with no useful index.</span></div>
+  <div class="kv"><span class="k">Index scan</span><span class="v">Using an index to jump to matching rows.</span></div>
+  <div class="kv"><span class="k">Write tax</span><span class="v">Indexes slow inserts/updates because they must be maintained.</span></div>
+  <div class="kv"><span class="k">Unused index</span><span class="v">An index the planner ignores (wrong column/order/type).</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>An index can turn a slow sequential scan into a fast index scan.</li><li>EXPLAIN ANALYZE shows the real plan and timing — read it, do not guess.</li><li>Indexes are not free: they add a write tax on every insert/update.</li><li>An index can silently do nothing if it does not match the query.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1676,6 +1865,27 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 8.2 — Chỉ mục gom cụm vs không gom cụm &amp; đọc kế hoạch</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: chỉ mục ghép, quy tắc tiền tố trái nhất, và đọc kế hoạch thực thi. Khác: Academy dùng SQL Server; ở đây chạy trên PostgreSQL qua Prisma. Ở bài này mình học thêm: cùng quy tắc trên PostgreSQL với EXPLAIN ANALYZE: chỉ mục đảo vẫn bỏ được Sort nhưng đọc 3.844 trang cho một tác giả hiếm so với 13 — đo thật; thêm thuế ghi của mỗi chỉ mục. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chạy một truy vấn lọc trên một bảng lớn và bắt <code>EXPLAIN ANALYZE</code> trước khi thêm chỉ mục.</li>
+<li>Thêm một chỉ mục trên cột được lọc và chạy lại cùng truy vấn; so kế hoạch (seq scan vs index scan) và thời gian.</li>
+<li>Đo thuế ghi: đo một vòng lặp chèn nhiều trước và sau khi có chỉ mục.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đọc được một kế hoạch EXPLAIN, thấy seq scan thành index scan, và đo được giá ghi của chỉ mục.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Chỉ mục (index)</span><span class="v">Một cấu trúc dữ liệu tăng tốc tra cứu trên một cột.</span></div>
+  <div class="kv"><span class="k">EXPLAIN ANALYZE</span><span class="v">Cho thấy kế hoạch planner chọn kèm thời gian thật.</span></div>
+  <div class="kv"><span class="k">Quét tuần tự</span><span class="v">Đọc mọi dòng — thứ bạn nhận khi không có chỉ mục hữu ích.</span></div>
+  <div class="kv"><span class="k">Quét chỉ mục</span><span class="v">Dùng một chỉ mục để nhảy tới các dòng khớp.</span></div>
+  <div class="kv"><span class="k">Thuế ghi</span><span class="v">Chỉ mục làm chậm chèn/cập nhật vì phải được duy trì.</span></div>
+  <div class="kv"><span class="k">Chỉ mục không dùng</span><span class="v">Chỉ mục planner bỏ qua (sai cột/thứ tự/kiểu).</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một chỉ mục có thể biến một quét tuần tự chậm thành một quét chỉ mục nhanh.</li><li>EXPLAIN ANALYZE cho thấy kế hoạch và thời gian thật — đọc nó, đừng đoán.</li><li>Chỉ mục không miễn phí: chúng thêm thuế ghi mỗi lần chèn/cập nhật.</li><li>Một chỉ mục có thể âm thầm vô dụng nếu không khớp truy vấn.</li></ul>
 </div>
 `,
     },
@@ -1823,6 +2033,27 @@ C. prisma.note.count({ where })    -&gt; 0 rows</div>
   <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson ⭐ CS.7 — 📑 Security &amp; operations (1): SQL injection, accounts, GRANT/REVOKE/DENY (slides 1–13)</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: SQL injection: one quote that makes the WHERE always true, and parameters as the fix. Different: Academy uses SQL Server; here it runs on PostgreSQL through Prisma. In this lesson we add: the same attack through Prisma: $queryRawUnsafe with string concatenation leaked 1,000,003 rows, the tagged template $queryRaw returned 0. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN DBI202 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Implement cursor pagination against a large table and confirm the response time stays flat as you page deep.</li>
+<li>Map Prisma's unique-violation error (<code>P2002</code>) to a <code>409</code> instead of a generic 500.</li>
+<li>Add a <code>version</code> column and reject a stale update (the lost-update problem) with the right status.</li>
+</ol>
+<p><strong>Done when:</strong> your list endpoint pages with a cursor, P2002 becomes 409, and a stale update is blocked by a version column.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cursor over real data</span><span class="v">Keyset pagination that stays fast on big tables.</span></div>
+  <div class="kv"><span class="k">P2002</span><span class="v">Prisma's unique-constraint violation error.</span></div>
+  <div class="kv"><span class="k">409 Conflict</span><span class="v">The status for a duplicate or conflicting write.</span></div>
+  <div class="kv"><span class="k">Lost update</span><span class="v">Two writers overwrite each other's changes.</span></div>
+  <div class="kv"><span class="k">version column</span><span class="v">A counter used to detect and reject stale updates.</span></div>
+  <div class="kv"><span class="k">$queryRawUnsafe</span><span class="v">Raw SQL that can leak data if inputs are interpolated.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The chapter-6 contract still holds with a real database — cursor pagination stays fast.</li><li>Translate Prisma P2002 into a 409, not a leaked 500.</li><li>A version column stops the lost-update problem by rejecting stale writes.</li><li>Avoid $queryRawUnsafe with interpolated input — it can leak the whole table.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1961,6 +2192,27 @@ C. prisma.note.count({ where }) -&gt; 0 dòng</div>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài ⭐ CS.7 — 📑 Bảo mật &amp; vận hành (1): SQL injection, tài khoản, GRANT/REVOKE/DENY (slide 1–13)</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: SQL injection: một dấu nháy biến WHERE thành luôn đúng, và tham số hoá là cách sửa. Khác: Academy dùng SQL Server; ở đây chạy trên PostgreSQL qua Prisma. Ở bài này mình học thêm: cùng đòn tấn công qua Prisma: $queryRawUnsafe nối chuỗi làm lộ 1.000.003 dòng, $queryRaw dạng tagged template trả 0. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Hiện thực phân trang cursor trên một bảng lớn và xác nhận thời gian phản hồi phẳng khi lật sâu.</li>
+<li>Ánh xạ lỗi vi phạm-duy-nhất của Prisma (<code>P2002</code>) thành một <code>409</code> thay vì 500 chung chung.</li>
+<li>Thêm một cột <code>version</code> và từ chối một cập nhật lỗi thời (bài toán lost-update) với đúng mã.</li>
+</ol>
+<p><strong>Đạt khi:</strong> endpoint danh sách lật bằng cursor, P2002 thành 409, và một cập nhật lỗi thời bị chặn bằng cột version.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cursor trên dữ liệu thật</span><span class="v">Phân trang theo khoá giữ nhanh trên bảng lớn.</span></div>
+  <div class="kv"><span class="k">P2002</span><span class="v">Lỗi vi phạm ràng buộc duy nhất của Prisma.</span></div>
+  <div class="kv"><span class="k">409 Conflict</span><span class="v">Mã cho một ghi trùng hoặc xung đột.</span></div>
+  <div class="kv"><span class="k">Lost update</span><span class="v">Hai bên ghi đè thay đổi của nhau.</span></div>
+  <div class="kv"><span class="k">Cột version</span><span class="v">Một bộ đếm dùng để phát hiện và từ chối cập nhật lỗi thời.</span></div>
+  <div class="kv"><span class="k">$queryRawUnsafe</span><span class="v">SQL thô có thể lộ dữ liệu nếu đầu vào bị nội suy.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Hợp đồng chương 6 vẫn giữ với database thật — phân trang cursor vẫn nhanh.</li><li>Dịch P2002 của Prisma thành một 409, không phải một 500 lộ thông tin.</li><li>Một cột version chặn bài toán lost-update bằng cách từ chối ghi lỗi thời.</li><li>Tránh $queryRawUnsafe với đầu vào nội suy — nó có thể lộ cả bảng.</li></ul>
 </div>
 `,
     },

@@ -858,7 +858,7 @@ ${OUT84_COND}
   <li><strong>Migrate the code</strong>: version 2 rolls out next to version 1. Writes from either version are visible to the other — SEC-04 written with <code>capacity=40</code> by v1 shows <code>seats=40</code> in v2, and the reverse.</li>
   <li><strong>Contract</strong> (V5, a later deploy, once no v1 instance is left): drop the trigger and the old column, make <code>seats</code> <code>NOT NULL</code>.</li>
 </ol>
-<p>Read the final <code>\d labs</code> carefully: the <code>CHECK (capacity &gt; 0)</code> from V1 is gone — dropping a column drops its constraints. The expand step should have added <code>check (seats &gt; 0)</code>; contract is the moment to verify nothing else disappeared with the old column.</p>
+<p>Read the final <code>\\d labs</code> carefully: the <code>CHECK (capacity &gt; 0)</code> from V1 is gone — dropping a column drops its constraints. The expand step should have added <code>check (seats &gt; 0)</code>; contract is the moment to verify nothing else disappeared with the old column.</p>
 
 <h3>🕵️ Hacker corner — old and new code running together</h3>
 <p>On 1 August 2012 Knight Capital deployed new trading code to eight servers. One server did not receive it. The new code reused a configuration flag that, on the old code, switched on a function retired years earlier. When the market opened, that one server sent millions of unintended orders; in about 45 minutes Knight lost roughly 460 million dollars (SEC order, October 2013) and needed a rescue. Not an attack — but it is the textbook case of the assumption expand/contract protects against: that every instance switches version at the same moment.</p>
@@ -885,7 +885,7 @@ ${OUT84_COND}
 <h3>🧪 Practice (20 minutes)</h3>
 <div class="callout ok"><ol>
   <li>Create a table with 2 000 000 rows (<code>generate_series</code>).</li>
-  <li>Add a <code>NOT NULL</code> timestamp column with <code>default now()</code>, and another with <code>default clock_timestamp()</code>, timing both with <code>\timing</code>.</li>
+  <li>Add a <code>NOT NULL</code> timestamp column with <code>default now()</code>, and another with <code>default clock_timestamp()</code>, timing both with <code>\\timing</code>.</li>
   <li>Explain the difference, and say which one you would let run during opening hours.</li>
 </ol>
 <p><strong>Done when:</strong> you have two timings that differ by orders of magnitude, measured twice, and an explanation that mentions table rewrite and the lock it holds.</p></div>
@@ -985,7 +985,7 @@ ${OUT84_COND}
   <li><strong>Chuyển mã</strong>: phiên bản 2 lên cạnh phiên bản 1. Thứ phiên bản này ghi, phiên bản kia thấy — SEC-04 do v1 ghi với <code>capacity=40</code> hiện <code>seats=40</code> ở v2, và ngược lại.</li>
   <li><strong>Contract</strong> (V5, một lần deploy sau, khi không còn bản v1 nào): xoá trigger và cột cũ, đặt <code>seats</code> thành <code>NOT NULL</code>.</li>
 </ol>
-<p>Đọc kỹ <code>\d labs</code> cuối cùng: <code>CHECK (capacity &gt; 0)</code> từ V1 đã biến mất — xoá cột là xoá luôn ràng buộc của nó. Bước expand lẽ ra phải thêm <code>check (seats &gt; 0)</code>; contract là lúc kiểm xem có gì khác biến mất theo cột cũ không.</p>
+<p>Đọc kỹ <code>\\d labs</code> cuối cùng: <code>CHECK (capacity &gt; 0)</code> từ V1 đã biến mất — xoá cột là xoá luôn ràng buộc của nó. Bước expand lẽ ra phải thêm <code>check (seats &gt; 0)</code>; contract là lúc kiểm xem có gì khác biến mất theo cột cũ không.</p>
 
 <h3>🕵️ Góc hacker — mã cũ và mã mới chạy cùng lúc</h3>
 <p>Ngày 01/08/2012, Knight Capital triển khai mã giao dịch mới lên tám máy chủ. Một máy không nhận được bản mới. Mã mới dùng lại một cờ cấu hình mà trên mã cũ lại bật một chức năng đã bỏ từ nhiều năm. Khi thị trường mở cửa, đúng máy đó gửi đi hàng triệu lệnh ngoài ý muốn; trong khoảng 45 phút Knight mất chừng 460 triệu đô la (quyết định của SEC, tháng 10/2013) và phải được giải cứu. Không phải một vụ tấn công — nhưng là ví dụ kinh điển cho giả định mà expand/contract bảo vệ bạn khỏi: rằng mọi bản ứng dụng đổi phiên bản cùng một khoảnh khắc.</p>
@@ -1012,7 +1012,7 @@ ${OUT84_COND}
 <h3>🧪 Thực hành (20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Tạo một bảng 2 000 000 dòng (<code>generate_series</code>).</li>
-  <li>Thêm một cột thời gian <code>NOT NULL</code> với <code>default now()</code>, và một cột khác với <code>default clock_timestamp()</code>, đo cả hai bằng <code>\timing</code>.</li>
+  <li>Thêm một cột thời gian <code>NOT NULL</code> với <code>default now()</code>, và một cột khác với <code>default clock_timestamp()</code>, đo cả hai bằng <code>\\timing</code>.</li>
   <li>Giải thích chỗ khác nhau, và nói lệnh nào bạn dám chạy trong giờ cao điểm.</li>
 </ol>
 <p><strong>Đạt khi:</strong> bạn có hai số đo chênh nhau nhiều bậc, đo hai lần, và lời giải thích có nhắc tới việc viết lại bảng và khoá nó giữ.</p></div>

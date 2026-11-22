@@ -4,6 +4,8 @@
  * (dùng &#96;), và mọi `${` trong code mẫu phải escape thành \${.
  */
 import G001 from './giang/node-00-1.mjs';
+// Mở đầu 6 ý (22/11/2026) — chuỗi HTML chèn vào hai bài Bắt đầu tại đây.
+import { BAI1_EN, BAI1_VI, BAI2_EN, BAI2_VI } from './_mo-dau.mjs';
 
 import G002 from './giang/node-00-2.mjs';
 import G003 from './giang/node-00-3.mjs';
@@ -14,6 +16,150 @@ export default {
   title: 'Section 0 — Introduction & How to Study|||Mục 0 — Giới thiệu khoá học & Hướng dẫn học',
   description: 'Đọc trước tiên: khoá học này dạy gì, học theo cách nào, cài đặt ra sao và dự án xuyên suốt là gì.',
   lessons: [
+    /* ─────────────────────── Bắt đầu tại đây 1/2 ─────────────────────── */
+    {
+      title: 'Start here (1/2) — What a backend is, and what Node.js does on it|||Bắt đầu tại đây (1/2) — Backend là gì, và Node.js làm gì trên đó',
+      slug: 'nodejs-0-0-start-here-1',
+      type: 'VIDEO',
+      isFreePreview: true,
+      description: 'Bài mở cửa cho người chưa từng viết backend: client và server ai làm gì, vòng request–response, vì sao chạy JavaScript trên server, và những gì bạn CHƯA cần biết.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>What a backend is, and what Node.js does on it</h2>
+<p class="lead">If you have only ever written code that runs in a browser, this is the on-ramp. A <strong>backend</strong> is a program that runs on a computer you control — a server — that holds the data and answers requests. The browser (the <strong>client</strong>) asks; the server answers. Node.js is simply what lets you write that server in JavaScript, the same language you may already use in the browser.</p>
+<h3>Client and server: who does what</h3>
+<p>The client is the part the user touches: a web page, a phone app. It <em>asks</em> — "give me this user's notes", "save this new note". The server is the part the user never sees: it checks who is asking, reads or writes the database, and sends back an answer. This back-and-forth is the <strong>request–response</strong> cycle, and almost everything in this course is one variation of it. The database and the real data live on the server because the client cannot be trusted — anyone can open the browser dev tools and change what the page sends.</p>
+<h3>Why JavaScript on the server</h3>
+<p>Before 2009 the server was written in PHP, Java, Ruby or Python, while the browser ran JavaScript — two languages, two mindsets. Node.js put JavaScript on the server too, so <strong>one language runs the whole stack</strong>. That is why learning Node pairs so well with a frontend you may already know: the skills carry across, and you stop translating ideas between two languages.</p>
+<h3>What you are NOT expected to know yet</h3>
+<p>You do not need prior JavaScript — Chapter 1 rebuilds exactly the parts a backend uses. You do not need prior backend experience, database knowledge, or any server to deploy to. You need only to be comfortable writing basic code in some language (variables, loops, functions) and willing to type every example by hand.</p>
+${BAI1_EN}
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Pick one app you use daily and name one thing its <strong>server</strong> must be doing that the browser alone could not (checking your password, storing other people's data, charging money).</li>
+<li>Describe one request–response pair in plain words: what the client asks, and what the server must do before it answers.</li>
+<li>Explain in one sentence why a check done only in the browser is a suggestion, not a guarantee.</li>
+</ol>
+<p><strong>Done when:</strong> you can state, for a real app, one job that belongs only to the server and why the client cannot be trusted with it.</p></div>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Backend / server</span><span class="v">The program that holds the data and answers requests; the user never sees it.</span></div>
+  <div class="kv"><span class="k">Client</span><span class="v">The part the user touches — a web page or app — that asks the server for things.</span></div>
+  <div class="kv"><span class="k">Request–response</span><span class="v">The ask-and-answer cycle that almost every feature is built from.</span></div>
+  <div class="kv"><span class="k">Node.js</span><span class="v">What lets you write the server in JavaScript instead of PHP, Java or Python.</span></div>
+  <div class="kv"><span class="k">Whole-stack one language</span><span class="v">With Node, browser and server share one language, so skills carry across.</span></div>
+  <div class="kv"><span class="k">Untrusted client</span><span class="v">Anyone can change what the browser sends — so real checks live on the server.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A backend is a server program that holds the data and answers requests the user never sees.</li><li>The client asks and the server answers — the request–response cycle underlies the whole course.</li><li>Node.js lets you write that server in JavaScript, so one language runs the whole stack.</li><li>Real checks live on the server because the client can never be trusted.</li><li>You need basic coding in any language — not prior JavaScript or backend experience.</li></ul>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Backend là gì, và Node.js làm gì trên đó</h2>
+<p class="lead">Nếu bạn mới chỉ viết code chạy trong trình duyệt, đây là đường dẫn vào. Một <strong>backend</strong> là chương trình chạy trên một máy bạn kiểm soát — một server — giữ dữ liệu và trả lời yêu cầu. Trình duyệt (phía <strong>client</strong>) hỏi; server trả lời. Node.js đơn giản là thứ cho bạn viết cái server đó bằng JavaScript, cùng ngôn ngữ bạn có thể đã dùng trong trình duyệt.</p>
+<h3>Client và server: ai làm gì</h3>
+<p>Client là phần người dùng chạm vào: một trang web, một app điện thoại. Nó <em>hỏi</em> — "cho tôi các note của người dùng này", "lưu note mới này". Server là phần người dùng không bao giờ thấy: nó kiểm ai đang hỏi, đọc hoặc ghi cơ sở dữ liệu, rồi gửi lại câu trả lời. Vòng qua lại này là chu trình <strong>request–response</strong>, và gần như mọi thứ trong khoá là một biến thể của nó. Dữ liệu thật và cơ sở dữ liệu nằm trên server vì client không tin được — ai cũng mở được dev tools của trình duyệt và sửa những gì trang gửi đi.</p>
+<h3>Vì sao chạy JavaScript trên server</h3>
+<p>Trước 2009, server viết bằng PHP, Java, Ruby hay Python, còn trình duyệt chạy JavaScript — hai ngôn ngữ, hai lối nghĩ. Node.js đưa JavaScript lên cả server, nên <strong>một ngôn ngữ chạy cả stack</strong>. Đó là lý do học Node ghép rất hợp với một frontend bạn có thể đã biết: kỹ năng mang qua được, và bạn thôi phải dịch ý tưởng giữa hai ngôn ngữ.</p>
+<h3>Những gì bạn CHƯA cần biết</h3>
+<p>Bạn không cần biết JavaScript trước — Chương 1 dựng lại đúng những phần một backend dùng. Bạn không cần kinh nghiệm backend, kiến thức cơ sở dữ liệu, hay bất kỳ server nào để deploy. Bạn chỉ cần viết được code cơ bản ở một ngôn ngữ nào đó (biến, vòng lặp, hàm) và sẵn lòng gõ lại mọi ví dụ bằng tay.</p>
+${BAI1_VI}
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chọn một app bạn dùng hằng ngày và nêu một việc mà <strong>server</strong> của nó phải làm còn trình duyệt một mình không làm được (kiểm mật khẩu, lưu dữ liệu của người khác, thu tiền).</li>
+<li>Mô tả một cặp request–response bằng lời thường: client hỏi gì, và server phải làm gì trước khi trả lời.</li>
+<li>Giải thích trong một câu vì sao một phép kiểm chỉ làm ở trình duyệt là một gợi ý, không phải một bảo đảm.</li>
+</ol>
+<p><strong>Đạt khi:</strong> với một app thật, bạn nêu được một việc chỉ thuộc về server và vì sao không thể giao nó cho client.</p></div>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Backend / server</span><span class="v">Chương trình giữ dữ liệu và trả lời request; người dùng không thấy nó.</span></div>
+  <div class="kv"><span class="k">Client</span><span class="v">Phần người dùng chạm vào — trang web hay app — hỏi server các thứ.</span></div>
+  <div class="kv"><span class="k">Request–response</span><span class="v">Chu trình hỏi-và-đáp mà gần như mọi tính năng dựng từ đó.</span></div>
+  <div class="kv"><span class="k">Node.js</span><span class="v">Thứ cho bạn viết server bằng JavaScript thay vì PHP, Java hay Python.</span></div>
+  <div class="kv"><span class="k">Một ngôn ngữ cả stack</span><span class="v">Với Node, trình duyệt và server chung một ngôn ngữ, kỹ năng mang qua được.</span></div>
+  <div class="kv"><span class="k">Client không tin được</span><span class="v">Ai cũng sửa được thứ trình duyệt gửi — nên phép kiểm thật nằm ở server.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Backend là chương trình server giữ dữ liệu và trả lời request mà người dùng không thấy.</li><li>Client hỏi và server đáp — chu trình request–response nằm dưới cả khoá học.</li><li>Node.js cho bạn viết server đó bằng JavaScript, nên một ngôn ngữ chạy cả stack.</li><li>Phép kiểm thật nằm ở server vì client không bao giờ tin được.</li><li>Bạn cần biết code cơ bản ở ngôn ngữ bất kỳ — không cần JavaScript hay kinh nghiệm backend trước.</li></ul>
+</div>
+`,
+    },
+
+    /* ─────────────────────── Bắt đầu tại đây 2/2 ─────────────────────── */
+    {
+      title: 'Start here (2/2) — How this course is built, and how to get the most from it|||Bắt đầu tại đây (2/2) — Khoá này được dựng thế nào, và học sao cho hiệu quả',
+      slug: 'nodejs-0-0-start-here-2',
+      // Dự án xuyên suốt khoá: frontend vẽ khối "🎯 Đăng ký đề tài" dưới bài có cờ này (docs/du-an-hop-dong.md §2).
+      dangKyDuAn: true,
+      type: 'VIDEO',
+      isFreePreview: true,
+      description: 'Bài thứ hai của cặp mở đầu: triết lý "ví dụ từ production, đo chứ không đoán", bản đồ 6 giai đoạn nhìn một lượt, và một luật học duy nhất — chạy code, đừng chỉ đọc.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>How this course is built, and how to get the most from it</h2>
+<p class="lead">Lesson 1 said what a backend is. This one is the shape every chapter plugs into: where the examples come from, the one rule that separates this course from a tutorial, and the single study habit that decides whether you can build anything at the end. The next lessons (0.1–0.4) then go deep on the roadmap, the study loop, setup, and the project.</p>
+<h3>The examples are from a system that is actually running</h3>
+<p>Most tutorials stop at three routes. The examples here are taken from a production Node.js backend — this website — including its outages, its bad decisions, and the fixes. Every chapter ends with the same question: <em>what does this look like in a system that is actually running?</em> That is why so many chapters finish with a measurement instead of a screenshot.</p>
+<h3>Measure, do not guess</h3>
+<p>A frontend mistake is visible on the next reload. A backend mistake is usually invisible until it is expensive — a leaked socket, a transaction that was not one, a query that is fine on fifty rows and dies on fifty thousand. "It works" is a weak signal on the server, so the course leans on numbers you run yourself rather than on things that merely look right.</p>
+<h3>The map at a glance</h3>
+<p>Six stages, eighteen chapters: Foundations (1–4), Building an API (5–7), Making it safe (8–10), Real systems (11–13), Trust and operations (14–16), Shipping (17–18). Each stage assumes the one before it — the fastest way to get stuck is to skip ahead.</p>
+${BAI2_EN}
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Commit to the one rule now: for the next example you meet, type it by hand and run it, instead of reading it. Note whether running it taught you something reading did not.</li>
+<li>From the map, write the six stage names in order from memory, then check.</li>
+<li>Pick one backend bug you have heard of (a site going down, data lost) and guess whether it would have been visible on screen or only in a measurement.</li>
+</ol>
+<p><strong>Done when:</strong> you have run one example by hand and can recite the six stages in order.</p></div>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Production example</span><span class="v">Code taken from a real running system, not a toy snippet.</span></div>
+  <div class="kv"><span class="k">Measure, do not guess</span><span class="v">Trust a number you ran over code that merely looks right.</span></div>
+  <div class="kv"><span class="k">Invisible failure</span><span class="v">A backend bug that shows nothing on screen until it is expensive.</span></div>
+  <div class="kv"><span class="k">Six stages</span><span class="v">Foundations, API, safety, real systems, operations, shipping.</span></div>
+  <div class="kv"><span class="k">Run, do not read</span><span class="v">The single study habit — typing and running beats reading.</span></div>
+  <div class="kv"><span class="k">Depends-on-previous</span><span class="v">Each stage assumes the one before it; skipping ahead gets you stuck.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Examples come from a real production backend — this site — outages and fixes included.</li><li>The guiding rule is measure, do not guess: a number you ran beats code that looks right.</li><li>Backend failures are often invisible until expensive, so "it works" is a weak signal.</li><li>Six stages, eighteen chapters, each assuming the previous — do not skip ahead.</li><li>The one study habit that matters: run the code, do not just read it.</li></ul>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Khoá này được dựng thế nào, và học sao cho hiệu quả</h2>
+<p class="lead">Bài 1 nói backend là gì. Bài này là cái khung mà mọi chương cắm vào: ví dụ đến từ đâu, một luật tách khoá này khỏi một tutorial, và thói quen học duy nhất quyết định cuối khoá bạn có xây được gì không. Các bài tiếp theo (0.1–0.4) sẽ đi sâu vào bản đồ, vòng lặp học, cài đặt, và dự án.</p>
+<h3>Ví dụ lấy từ một hệ thống đang chạy thật</h3>
+<p>Phần lớn tutorial dừng ở ba route. Ví dụ ở đây lấy từ một backend Node.js production — chính website này — kể cả những lần sập, những quyết định sai, và cách sửa. Chương nào cũng kết bằng đúng một câu hỏi: <em>thứ này trông ra sao trong một hệ thống đang chạy thật?</em> Đó là lý do nhiều chương kết thúc bằng một phép đo chứ không phải một ảnh chụp màn hình.</p>
+<h3>Đo, đừng đoán</h3>
+<p>Một lỗi frontend nhìn thấy ngay ở lần tải lại kế tiếp. Một lỗi backend thường vô hình cho tới lúc nó đắt — một socket bị rò, một giao dịch mà thật ra không phải giao dịch, một truy vấn chạy ngon với năm mươi dòng và chết với năm mươi nghìn. "Nó chạy được" là tín hiệu yếu trên server, nên khoá học dựa vào những con số bạn tự chạy hơn là những thứ chỉ trông có vẻ đúng.</p>
+<h3>Bản đồ nhìn một lượt</h3>
+<p>Sáu giai đoạn, mười tám chương: Nền tảng (1–4), Dựng API (5–7), Làm cho an toàn (8–10), Hệ thống thật (11–13), Tin cậy và vận hành (14–16), Đưa lên production (17–18). Mỗi giai đoạn dựa trên giai đoạn trước — cách nhanh nhất để mắc kẹt là nhảy cóc.</p>
+${BAI2_VI}
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Cam kết luật đó ngay bây giờ: với ví dụ tiếp theo bạn gặp, gõ bằng tay và chạy nó, thay vì chỉ đọc. Ghi lại xem việc chạy nó có dạy bạn điều gì mà đọc không dạy được.</li>
+<li>Từ bản đồ, viết tên sáu giai đoạn theo thứ tự từ trí nhớ, rồi kiểm lại.</li>
+<li>Chọn một lỗi backend bạn từng nghe (một site sập, mất dữ liệu) và đoán xem nó sẽ hiện trên màn hình hay chỉ hiện trong một phép đo.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã chạy một ví dụ bằng tay và đọc lại được sáu giai đoạn theo thứ tự.</p></div>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ví dụ production</span><span class="v">Code lấy từ một hệ thống đang chạy thật, không phải đoạn đồ chơi.</span></div>
+  <div class="kv"><span class="k">Đo, đừng đoán</span><span class="v">Tin con số bạn chạy hơn đoạn code chỉ trông có vẻ đúng.</span></div>
+  <div class="kv"><span class="k">Lỗi vô hình</span><span class="v">Một bug backend không hiện gì trên màn hình cho tới khi nó đắt.</span></div>
+  <div class="kv"><span class="k">Sáu giai đoạn</span><span class="v">Nền tảng, API, an toàn, hệ thống thật, vận hành, đưa lên production.</span></div>
+  <div class="kv"><span class="k">Chạy, đừng chỉ đọc</span><span class="v">Thói quen học duy nhất — gõ và chạy thắng đọc.</span></div>
+  <div class="kv"><span class="k">Dựa-trên-chương-trước</span><span class="v">Mỗi giai đoạn dựa trên giai đoạn trước; nhảy cóc là mắc kẹt.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ví dụ đến từ một backend production thật — chính site này — gồm cả những lần sập và cách sửa.</li><li>Luật dẫn đường là đo đừng đoán: một con số bạn chạy thắng đoạn code trông có vẻ đúng.</li><li>Lỗi backend thường vô hình cho tới khi đắt, nên "nó chạy được" là tín hiệu yếu.</li><li>Sáu giai đoạn, mười tám chương, mỗi cái dựa trên cái trước — đừng nhảy cóc.</li><li>Thói quen học quan trọng nhất: chạy code, đừng chỉ đọc.</li></ul>
+</div>
+`,
+    },
+
     /* ─────────────────────────── 0.1 ─────────────────────────── */
     {
       title: '0.1 — About this course & the full roadmap|||0.1 — Về khoá học này & bản đồ toàn khoá',
@@ -111,6 +257,27 @@ export default {
   <span class="lc-ico">🚂</span>
   <span class="lc-body"><span class="lc-title">expressjs.com — the Express framework</span><span class="lc-sub">The web framework this course builds on, from Chapter 5 onward.</span></span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Scroll the 18-chapter roadmap and mark where you are: which stage (1–6) can you already do a little of, and which chapter is the first that feels unfamiliar?</li>
+<li>Write one sentence answering the course question for a backend you have used: <em>what happens on the server when I click submit?</em></li>
+<li>Name the two things Node.js is built on (the JS engine and the async library) without scrolling back up.</li>
+</ol>
+<p><strong>Done when:</strong> you can place yourself on the roadmap and say, in one line, what Node.js is and the two pieces it is built from.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Node.js</span><span class="v">A runtime that runs JavaScript outside the browser, on a server — created by Ryan Dahl in 2009.</span></div>
+  <div class="kv"><span class="k">V8</span><span class="v">Chrome's JavaScript engine, the part that actually executes your code.</span></div>
+  <div class="kv"><span class="k">libuv</span><span class="v">The C library that gives Node its non-blocking event loop and async I/O.</span></div>
+  <div class="kv"><span class="k">Event loop</span><span class="v">The single-threaded scheduler that lets one process juggle thousands of connections.</span></div>
+  <div class="kv"><span class="k">LTS</span><span class="v">A long-term-support Node release (even majors) — what production should run.</span></div>
+  <div class="kv"><span class="k">Backend / API</span><span class="v">The server program that holds the data and answers requests from clients.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>This course builds a real backend — the 95% beyond "write three routes" — using examples from a production system.</li><li>Node.js (Ryan Dahl, 2009) runs JavaScript on the server, built on V8 plus libuv.</li><li>Its non-blocking event loop lets one process handle thousands of connections cheaply.</li><li>The path is 6 stages, 18 chapters, each assuming the one before it — do not skip ahead.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -198,6 +365,27 @@ export default {
   <span class="lc-ico">🚂</span>
   <span class="lc-body"><span class="lc-title">expressjs.com — framework Express</span><span class="lc-sub">Web framework khoá này dựng lên từ Chương 5 trở đi.</span></span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lướt bản đồ 18 chương và đánh dấu bạn đang ở đâu: giai đoạn nào (1–6) bạn đã làm được chút ít, và chương nào là chương đầu tiên thấy lạ?</li>
+<li>Viết một câu trả lời cho câu hỏi của khoá với một backend bạn từng dùng: <em>chuyện gì xảy ra trên server khi tôi bấm gửi?</em></li>
+<li>Gọi tên hai thứ Node.js được dựng trên (engine JS và thư viện bất đồng bộ) mà không cần kéo lên xem lại.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tự xếp được mình trên bản đồ và nói được, trong một dòng, Node.js là gì và hai mảnh nó được dựng từ đó.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Node.js</span><span class="v">Runtime chạy JavaScript bên ngoài trình duyệt, trên server — Ryan Dahl tạo năm 2009.</span></div>
+  <div class="kv"><span class="k">V8</span><span class="v">Engine JavaScript của Chrome, phần thật sự thực thi code của bạn.</span></div>
+  <div class="kv"><span class="k">libuv</span><span class="v">Thư viện C cho Node vòng lặp sự kiện không chặn và I/O bất đồng bộ.</span></div>
+  <div class="kv"><span class="k">Event loop</span><span class="v">Bộ lập lịch đơn luồng giúp một tiến trình tung hứng hàng nghìn kết nối.</span></div>
+  <div class="kv"><span class="k">LTS</span><span class="v">Bản Node hỗ trợ dài hạn (major số chẵn) — thứ production nên chạy.</span></div>
+  <div class="kv"><span class="k">Backend / API</span><span class="v">Chương trình server giữ dữ liệu và trả lời request từ client.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Khoá này xây một backend thật — phần 95% vượt qua "viết ba route" — với ví dụ từ một hệ thống production.</li><li>Node.js (Ryan Dahl, 2009) chạy JavaScript trên server, dựng trên V8 cộng libuv.</li><li>Vòng lặp sự kiện không chặn giúp một tiến trình xử lý hàng nghìn kết nối rẻ tiền.</li><li>Lộ trình gồm 6 giai đoạn, 18 chương, mỗi chương dựa trên chương trước — đừng nhảy cóc.</li></ul>
 </div>
 
 <div class="ml-en">
@@ -284,6 +472,27 @@ export default {
   <div class="kv"><span class="k">Commit small and often</span><span class="v">A working state you can return to is worth more than clever code you can't undo.</span></div>
 </div>
 <div class="note-ct">If you are recording lessons while you learn: record <em>after</em> step 4, never before. Explaining on camera something you only recognise produces confident-sounding wrong statements — and those are very hard to walk back once published.</div>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Take the very next code example you meet and run the full five-step loop on it: read, retype by hand, break it, explain it out loud, then do the matching Code Lab reps.</li>
+<li>In a scratch project, break one thing on purpose — delete an <code>await</code>, or return the wrong status — and write down the exact error message you got.</li>
+<li>Do the "explain test": close the page and say out loud what the lesson was about in three sentences. If you stall, you only recognised it.</li>
+</ol>
+<p><strong>Done when:</strong> you have run all five steps on one example and produced one real error message plus a spoken explanation with no notes.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Five-step loop</span><span class="v">Read, retype, break, explain, practise — the cycle for every lesson.</span></div>
+  <div class="kv"><span class="k">Retype (no copy-paste)</span><span class="v">Typing code by hand is what teaches you to read error messages.</span></div>
+  <div class="kv"><span class="k">Break it deliberately</span><span class="v">Remove a line and watch what dies, in a scratch project only.</span></div>
+  <div class="kv"><span class="k">The explain test</span><span class="v">If you cannot explain it out loud with no notes, you only recognised it.</span></div>
+  <div class="kv"><span class="k">Code Lab track</span><span class="v">The companion Node.js track: 16 modules, 160 exercises with solutions.</span></div>
+  <div class="kv"><span class="k">Scratch project</span><span class="v">A throwaway project where breaking things is safe.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Reading feels like learning but is not — you must type, not just read.</li><li>Every lesson gets the same five-step loop: read, retype, break, explain, practise.</li><li>Breaking code on purpose (in a scratch project) is how you learn to read errors.</li><li>The explain test separates real understanding from mere recognition.</li><li>Drill each chapter on the matching Code Lab module.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -344,6 +553,27 @@ export default {
   <div class="kv"><span class="k">Commit nhỏ và thường xuyên</span><span class="v">Một trạng thái chạy được để quay về đáng giá hơn đoạn code thông minh mà bạn không undo nổi.</span></div>
 </div>
 <div class="note-ct">Nếu bạn vừa học vừa quay bài giảng: hãy quay <em>sau</em> bước 4, đừng bao giờ quay trước. Giảng trước ống kính một thứ mình mới chỉ "thấy quen" sẽ đẻ ra những câu nói sai nhưng nghe rất tự tin — và loại đó cực khó rút lại sau khi đã đăng.</div>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lấy ngay ví dụ code tiếp theo bạn gặp và chạy đủ vòng lặp năm bước trên nó: đọc, gõ lại bằng tay, phá nó, giải thích thành tiếng, rồi làm các bài Code Lab tương ứng.</li>
+<li>Trong một dự án nháp, cố ý phá một thứ — xoá một <code>await</code>, hoặc trả sai mã trạng thái — và ghi lại đúng thông báo lỗi bạn nhận được.</li>
+<li>Làm "bài kiểm tra giải thích": đóng trang lại và nói to bài vừa học nói về gì trong ba câu. Nếu khựng, bạn mới chỉ nhận ra nó.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã chạy đủ năm bước trên một ví dụ và tạo ra một thông báo lỗi thật cùng một lời giải thích nói miệng không cần tài liệu.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Vòng lặp năm bước</span><span class="v">Đọc, gõ lại, phá, giải thích, luyện tập — chu trình cho mọi bài.</span></div>
+  <div class="kv"><span class="k">Gõ lại (không copy-paste)</span><span class="v">Gõ code bằng tay mới dạy bạn đọc thông báo lỗi.</span></div>
+  <div class="kv"><span class="k">Cố ý phá</span><span class="v">Xoá một dòng và xem cái gì chết, chỉ trong dự án nháp.</span></div>
+  <div class="kv"><span class="k">Bài kiểm tra giải thích</span><span class="v">Không giải thích nổi miệng, không nhìn tài liệu, nghĩa là mới chỉ nhận ra.</span></div>
+  <div class="kv"><span class="k">Track Code Lab</span><span class="v">Track Node.js đi kèm: 16 module, 160 bài tập có lời giải.</span></div>
+  <div class="kv"><span class="k">Dự án nháp</span><span class="v">Dự án vứt đi, nơi phá hỏng là an toàn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Đọc tạo cảm giác đang học nhưng không phải — phải gõ, không chỉ đọc.</li><li>Mọi bài đi theo cùng vòng lặp năm bước: đọc, gõ lại, phá, giải thích, luyện tập.</li><li>Cố ý phá code (trong dự án nháp) là cách bạn học đọc lỗi.</li><li>Bài kiểm tra giải thích tách hiểu thật khỏi chỉ nhận ra.</li><li>Luyện mỗi chương trên module Code Lab tương ứng.</li></ul>
 </div>
 
 <div class="ml-en">
@@ -469,6 +699,27 @@ Type ".help" for more information.
   <span class="lc-body"><span class="lc-title">Next in the TypeScript course — 0.3: Node 22, TypeScript 7 and VS Code</span><span class="lc-sub">Same: Node 22 installed with nvm, npm init, a project folder. Different: on top of it you pin typescript 7.0.2 and @types/node, write the course tsconfig, and let Node 22 run .ts files directly while tsc does the checking.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Install Node through a version manager (nvm on macOS/Linux, nvm-windows or fnm on Windows), then run <code>nvm install 22</code> and <code>nvm use 22</code>.</li>
+<li>Verify with the three commands <code>node -v</code>, <code>npm -v</code>, <code>node -p "process.versions.v8"</code> — confirm the major is 22.</li>
+<li>Write and run a one-file <code>hello.js</code> that prints <code>process.version</code> and your CPU core count, then open the REPL by typing <code>node</code> and evaluate <code>typeof null</code>.</li>
+</ol>
+<p><strong>Done when:</strong> a new terminal reports Node major 22, your hello.js runs, and you have evaluated one expression in the REPL.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Version manager</span><span class="v">nvm / fnm / volta — installs and switches Node versions per project.</span></div>
+  <div class="kv"><span class="k">LTS vs odd major</span><span class="v">Even majors (22, 24) are supported; odd ones are experimental, never in production.</span></div>
+  <div class="kv"><span class="k">node -v / npm -v</span><span class="v">The quickest check that Node and npm are installed and which version.</span></div>
+  <div class="kv"><span class="k">REPL</span><span class="v">The interactive <code>node</code> prompt for trying expressions instantly.</span></div>
+  <div class="kv"><span class="k">.nvmrc / engines</span><span class="v">Where a project pins its Node version so everyone matches.</span></div>
+  <div class="kv"><span class="k">node: prefix</span><span class="v">Writing <code>require('node:os')</code> marks a module as a built-in, not an npm package.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Install Node through a version manager, never the plain installer, so switching versions is one command.</li><li>Use the current LTS (Node 22 here); odd majors and end-of-life versions are off limits.</li><li>Verify with node -v, npm -v and process.versions.v8, checking the major matches.</li><li>Laptop, CI and server should run the same major to avoid deploy-only bugs.</li><li>The REPL is the fastest way to answer "what does this expression return?".</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -566,6 +817,27 @@ Type ".help" for more information.
   <span class="lc-body"><span class="lc-title">Học tiếp ở khoá TypeScript — 0.3: Node 22, TypeScript 7 và VS Code</span><span class="lc-sub">Giống: Node 22 cài bằng nvm, npm init, một thư mục dự án. Khác: trên nền đó bạn ghim typescript 7.0.2 và @types/node, viết tsconfig của khoá, và để Node 22 chạy thẳng tệp .ts còn tsc lo phần kiểm kiểu.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Cài Node qua trình quản lý phiên bản (nvm trên macOS/Linux, nvm-windows hoặc fnm trên Windows), rồi chạy <code>nvm install 22</code> và <code>nvm use 22</code>.</li>
+<li>Kiểm bằng ba lệnh <code>node -v</code>, <code>npm -v</code>, <code>node -p "process.versions.v8"</code> — xác nhận major là 22.</li>
+<li>Viết và chạy một file <code>hello.js</code> in <code>process.version</code> và số nhân CPU, rồi mở REPL bằng cách gõ <code>node</code> và tính <code>typeof null</code>.</li>
+</ol>
+<p><strong>Đạt khi:</strong> một terminal mới báo Node major 22, hello.js chạy, và bạn đã tính một biểu thức trong REPL.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Trình quản lý phiên bản</span><span class="v">nvm / fnm / volta — cài và đổi phiên bản Node theo từng dự án.</span></div>
+  <div class="kv"><span class="k">LTS vs major lẻ</span><span class="v">Major chẵn (22, 24) được hỗ trợ; major lẻ là thử nghiệm, không chạy production.</span></div>
+  <div class="kv"><span class="k">node -v / npm -v</span><span class="v">Cách nhanh nhất kiểm Node và npm đã cài và phiên bản nào.</span></div>
+  <div class="kv"><span class="k">REPL</span><span class="v">Dấu nhắc tương tác <code>node</code> để thử biểu thức tức thì.</span></div>
+  <div class="kv"><span class="k">.nvmrc / engines</span><span class="v">Nơi dự án ghim phiên bản Node để mọi người khớp nhau.</span></div>
+  <div class="kv"><span class="k">tiền tố node:</span><span class="v">Viết <code>require('node:os')</code> đánh dấu module là built-in, không phải gói npm.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cài Node qua trình quản lý phiên bản, đừng dùng bộ cài thường, để đổi phiên bản chỉ còn một câu lệnh.</li><li>Dùng LTS hiện hành (Node 22 ở đây); major lẻ và bản hết hạn thì tránh.</li><li>Kiểm bằng node -v, npm -v và process.versions.v8, soát major cho khớp.</li><li>Máy, CI và server nên chạy cùng một major để tránh bug chỉ hiện sau deploy.</li><li>REPL là cách nhanh nhất trả lời "biểu thức này trả về gì?".</li></ul>
 </div>
 
 <div class="ml-en">
@@ -649,6 +921,27 @@ git add . &amp;&amp; git commit -m "chore: empty project"</code></pre>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — RESTful API Design and Implementation</span><span class="lc-sub">10 exercises that drill the exact API shape we build from chapter 6 onward.</span></span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Create the project folder, run <code>git init</code>, and make your first commit with just a README and a .gitignore (ignore <code>node_modules</code>).</li>
+<li>Write down, in one line each, the Notes API endpoints you expect by the end of the course (create a note, list notes, update, delete).</li>
+<li>Sketch on paper the folder layout the course grows into (routes, services, config) so you recognise each piece when it appears.</li>
+</ol>
+<p><strong>Done when:</strong> you have a git-tracked project folder with a first commit and a one-line plan of the Notes API you will build.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Notes API</span><span class="v">The single project built incrementally across all 18 chapters.</span></div>
+  <div class="kv"><span class="k">Incremental build</span><span class="v">Each chapter adds one layer instead of starting a new toy app.</span></div>
+  <div class="kv"><span class="k">Folder structure</span><span class="v">routes / services / config — the shape the project grows into.</span></div>
+  <div class="kv"><span class="k">Git from lesson one</span><span class="v">Version control from the first commit, so you always have a state to return to.</span></div>
+  <div class="kv"><span class="k">.gitignore</span><span class="v">Lists files Git must not track, such as <code>node_modules</code> and <code>.env</code>.</span></div>
+  <div class="kv"><span class="k">Endpoint</span><span class="v">One URL + method the API answers, e.g. <code>POST /notes</code>.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>One project — a Notes API — is built across all 18 chapters, from 20 lines to a production build.</li><li>Each chapter adds a layer rather than starting over, so the whole thing stays coherent.</li><li>The folder grows into routes, services and config as features arrive.</li><li>Track it in Git from the first lesson so there is always a working state to return to.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -707,6 +1000,27 @@ git add . &amp;&amp; git commit -m "chore: empty project"</code></pre>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực RESTful API</span><span class="lc-sub">10 bài tập luyện đúng hình dạng API mà ta xây từ chương 6 trở đi.</span></span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tạo thư mục dự án, chạy <code>git init</code>, và tạo commit đầu tiên chỉ với một README và một .gitignore (bỏ qua <code>node_modules</code>).</li>
+<li>Ghi lại, mỗi dòng một ý, các endpoint Notes API bạn kỳ vọng có vào cuối khoá (tạo note, liệt kê note, sửa, xoá).</li>
+<li>Phác trên giấy bố cục thư mục mà khoá lớn dần tới (routes, services, config) để nhận ra từng mảnh khi nó xuất hiện.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một thư mục dự án được Git theo dõi với commit đầu tiên và một kế hoạch một dòng về Notes API sẽ xây.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Notes API</span><span class="v">Dự án duy nhất được xây dần qua cả 18 chương.</span></div>
+  <div class="kv"><span class="k">Xây dần</span><span class="v">Mỗi chương thêm một tầng thay vì mở một app đồ chơi mới.</span></div>
+  <div class="kv"><span class="k">Bố cục thư mục</span><span class="v">routes / services / config — hình dạng dự án lớn dần tới.</span></div>
+  <div class="kv"><span class="k">Git từ bài một</span><span class="v">Quản lý phiên bản từ commit đầu tiên, để luôn có trạng thái để quay về.</span></div>
+  <div class="kv"><span class="k">.gitignore</span><span class="v">Liệt kê file Git không được theo dõi, như <code>node_modules</code> và <code>.env</code>.</span></div>
+  <div class="kv"><span class="k">Endpoint</span><span class="v">Một URL + method mà API trả lời, ví dụ <code>POST /notes</code>.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một dự án — Notes API — được xây qua cả 18 chương, từ 20 dòng tới bản chạy production.</li><li>Mỗi chương thêm một tầng thay vì làm lại từ đầu, nên tổng thể luôn mạch lạc.</li><li>Thư mục lớn dần thành routes, services và config khi tính năng xuất hiện.</li><li>Theo dõi bằng Git từ bài đầu để luôn có một trạng thái chạy được để quay về.</li></ul>
 </div>
 
 <div class="ml-en">

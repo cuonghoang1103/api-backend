@@ -127,6 +127,27 @@ Allow: GET, HEAD</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — RESTful API Design and Implementation</span><span class="lc-sub">10 exercises on resources, methods and API structure.</span></span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Rewrite three verb-style URLs (e.g. <code>/getNotes</code>, <code>/createNote</code>) as noun resources with the right methods.</li>
+<li>Classify each of GET, POST, PUT, PATCH, DELETE as safe and/or idempotent, and test one: call a PUT twice and confirm the result is the same.</li>
+<li>Choose PATCH vs PUT for a partial update and explain why sending a partial body to PUT can wipe fields.</li>
+</ol>
+<p><strong>Done when:</strong> you have noun-based URLs with correct methods and can state which are safe, idempotent, and when to use PATCH over PUT.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Resource</span><span class="v">A noun the API exposes, addressed by a URL.</span></div>
+  <div class="kv"><span class="k">HTTP method</span><span class="v">The verb (GET/POST/PUT/PATCH/DELETE) acting on a resource.</span></div>
+  <div class="kv"><span class="k">Safe</span><span class="v">A method that does not change state (GET).</span></div>
+  <div class="kv"><span class="k">Idempotent</span><span class="v">Repeating it has the same effect as doing it once.</span></div>
+  <div class="kv"><span class="k">PUT vs PATCH</span><span class="v">Full replace vs partial update.</span></div>
+  <div class="kv"><span class="k">Collection vs item</span><span class="v"><code>/notes</code> vs <code>/notes/:id</code>.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>REST models nouns (resources) addressed by URLs, with methods as the verbs.</li><li>GET is safe; GET/PUT/DELETE are idempotent; POST and PATCH generally are not.</li><li>PUT replaces the whole resource; PATCH updates part of it.</li><li>Sending a partial body to PUT can erase the fields you left out.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -226,6 +247,27 @@ Allow: GET, HEAD</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực REST API</span><span class="lc-sub">10 bài tập về tài nguyên, phương thức và cấu trúc API.</span></span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết lại ba URL kiểu động từ (ví dụ <code>/getNotes</code>, <code>/createNote</code>) thành tài nguyên danh từ với đúng method.</li>
+<li>Phân loại từng GET, POST, PUT, PATCH, DELETE là safe và/hoặc idempotent, và kiểm một cái: gọi PUT hai lần và xác nhận kết quả như nhau.</li>
+<li>Chọn PATCH vs PUT cho một cập nhật một phần và giải thích vì sao gửi body một phần vào PUT có thể xoá trường.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có URL theo danh từ với method đúng và nói được cái nào safe, idempotent, và khi nào dùng PATCH thay PUT.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Tài nguyên</span><span class="v">Một danh từ API phơi ra, định địa chỉ bằng URL.</span></div>
+  <div class="kv"><span class="k">Phương thức HTTP</span><span class="v">Động từ (GET/PUT/POST/PATCH/DELETE) tác động lên tài nguyên.</span></div>
+  <div class="kv"><span class="k">Safe</span><span class="v">Phương thức không đổi trạng thái (GET).</span></div>
+  <div class="kv"><span class="k">Idempotent</span><span class="v">Lặp lại cho cùng kết quả như làm một lần.</span></div>
+  <div class="kv"><span class="k">PUT vs PATCH</span><span class="v">Thay toàn bộ vs cập nhật một phần.</span></div>
+  <div class="kv"><span class="k">Tập hợp vs mục</span><span class="v"><code>/notes</code> vs <code>/notes/:id</code>.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>REST mô hình hoá danh từ (tài nguyên) định địa chỉ bằng URL, method là động từ.</li><li>GET là safe; GET/PUT/DELETE idempotent; POST và PATCH thường thì không.</li><li>PUT thay nguyên tài nguyên; PATCH cập nhật một phần.</li><li>Gửi body một phần vào PUT có thể xoá các trường bạn bỏ sót.</li></ul>
 </div>
 `,
     },
@@ -336,6 +378,27 @@ Content-Type: application/json; charset=utf-8
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 4.1: A full REST API with Express, Mongoose &amp; MVC</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: the 200/201/400/401/403/404 status table and a consistent response shape. Different: Courses explains choosing a code by what happened, not just listing them. In this lesson we add: 204 and 409/422, three common mix-ups (such as 401 vs 403), returning 201 with a Location header, field-naming conventions to settle early. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>For a create endpoint, return <code>201</code> with a <code>Location</code> header pointing at the new resource.</li>
+<li>Write down the right code for each: not logged in, logged in but not allowed, validation failed, and a conflicting duplicate (401, 403, 422, 409).</li>
+<li>Design one JSON response envelope for errors (code, message, details) and use it for two different failures.</li>
+</ol>
+<p><strong>Done when:</strong> you return 201 correctly and can map 401/403/409/422 to the right situations with one error shape.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">2xx / 4xx / 5xx</span><span class="v">Success / client error / server error families.</span></div>
+  <div class="kv"><span class="k">201 Created</span><span class="v">Resource created; include a Location header.</span></div>
+  <div class="kv"><span class="k">401 vs 403</span><span class="v">Not authenticated vs authenticated but forbidden.</span></div>
+  <div class="kv"><span class="k">409 vs 422</span><span class="v">A state conflict vs invalid input data.</span></div>
+  <div class="kv"><span class="k">Response envelope</span><span class="v">A consistent JSON shape the frontend learns once.</span></div>
+  <div class="kv"><span class="k">Location header</span><span class="v">Points at the URL of a newly created resource.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Pick the status from what happened across the 2xx/4xx/5xx families.</li><li>401 means not authenticated; 403 means forbidden; do not confuse them.</li><li>409 is a state conflict; 422 is invalid input — different meanings.</li><li>Decide one response shape once so the frontend learns it a single time.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -429,6 +492,27 @@ Content-Type: application/json; charset=utf-8
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 4.1: REST API đầy đủ với Express, Mongoose &amp; MVC</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: bảng mã trạng thái 200/201/400/401/403/404 và một hình dạng phản hồi nhất quán. Khác: Courses lý giải chọn mã theo thứ đã xảy ra, không chỉ liệt kê. Ở bài này mình học thêm: 204 và 409/422, ba chỗ hay nhầm (như 401 với 403), trả 201 kèm header Location, quy ước đặt trường chốt sớm. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Với một endpoint tạo, trả <code>201</code> kèm một header <code>Location</code> trỏ tới tài nguyên mới.</li>
+<li>Ghi ra đúng mã cho từng cái: chưa đăng nhập, đã đăng nhập nhưng không được phép, validate thất bại, và một bản trùng xung đột (401, 403, 422, 409).</li>
+<li>Thiết kế một vỏ JSON cho lỗi (code, message, details) và dùng nó cho hai loại thất bại khác nhau.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn trả 201 đúng và ánh xạ được 401/403/409/422 vào đúng tình huống với một hình dạng lỗi.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">2xx / 4xx / 5xx</span><span class="v">Nhóm thành công / lỗi client / lỗi server.</span></div>
+  <div class="kv"><span class="k">201 Created</span><span class="v">Tài nguyên đã tạo; kèm một header Location.</span></div>
+  <div class="kv"><span class="k">401 vs 403</span><span class="v">Chưa xác thực vs đã xác thực nhưng bị cấm.</span></div>
+  <div class="kv"><span class="k">409 vs 422</span><span class="v">Xung đột trạng thái vs dữ liệu đầu vào sai.</span></div>
+  <div class="kv"><span class="k">Vỏ phản hồi</span><span class="v">Một hình dạng JSON nhất quán frontend học một lần.</span></div>
+  <div class="kv"><span class="k">Header Location</span><span class="v">Trỏ tới URL của một tài nguyên vừa tạo.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Chọn mã theo điều đã xảy ra trong các nhóm 2xx/4xx/5xx.</li><li>401 là chưa xác thực; 403 là bị cấm; đừng lẫn chúng.</li><li>409 là xung đột trạng thái; 422 là đầu vào sai — nghĩa khác nhau.</li><li>Quyết một hình dạng phản hồi một lần để frontend chỉ phải học một lần.</li></ul>
 </div>
 `,
     },
@@ -567,6 +651,27 @@ Content-Type: application/json; charset=utf-8
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 8.2: Production hardening: env, validation, rate limit &amp; index</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: validating input with Zod/Joi instead of a wall of ifs. Different: Courses turns the schema into middleware and inspects its output. In this lesson we add: one schema instead of a wall of ifs, real output, the query-string problem, the attack a schema silently blocks. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a zod schema for a note (title required, body optional with a max length) and parse a request body against it.</li>
+<li>Coerce a query param that arrives as a string (e.g. <code>limit</code>) into a number with the schema, and reject out-of-range values.</li>
+<li>Block mass-assignment: send an extra field like <code>isAdmin: true</code> and confirm the schema strips or rejects it.</li>
+</ol>
+<p><strong>Done when:</strong> your schema validates a body, coerces a query number, and silently blocks an unexpected field.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Schema validation</span><span class="v">Declaring input rules in one place instead of many ifs.</span></div>
+  <div class="kv"><span class="k">zod</span><span class="v">A schema library that parses and types input.</span></div>
+  <div class="kv"><span class="k">Coercion</span><span class="v">Turning a query string into the right type (e.g. number).</span></div>
+  <div class="kv"><span class="k">Mass assignment</span><span class="v">An attacker setting fields you did not intend to accept.</span></div>
+  <div class="kv"><span class="k">Validation middleware</span><span class="v">A reusable guard that validates before the handler.</span></div>
+  <div class="kv"><span class="k">Consistent error</span><span class="v">One uniform shape for all validation failures.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A schema replaces a wall of hand-written if-checks with one declaration.</li><li>zod can coerce query strings to the right types and reject bad ranges.</li><li>Schemas quietly block mass-assignment by only accepting known fields.</li><li>Wrap it as middleware so validation runs before every handler, consistently.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -695,6 +800,27 @@ Content-Type: application/json; charset=utf-8
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 8.2: Gia cố production: env, validation, rate limit &amp; index</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: validate đầu vào bằng Zod/Joi thay vì chuỗi if. Khác: Courses biến lược đồ thành middleware và xem dữ liệu đầu ra của nó. Ở bài này mình học thêm: một lược đồ thay cả bức tường if, output thật, bài toán query string, đòn tấn công mà lược đồ lặng lẽ chặn đứng. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một schema zod cho một note (title bắt buộc, body tuỳ chọn có độ dài tối đa) và parse một body request theo nó.</li>
+<li>Ép một query param về dưới dạng chuỗi (ví dụ <code>limit</code>) thành số bằng schema, và từ chối giá trị ngoài khoảng.</li>
+<li>Chặn mass-assignment: gửi thêm một trường như <code>isAdmin: true</code> và xác nhận schema loại hoặc từ chối nó.</li>
+</ol>
+<p><strong>Đạt khi:</strong> schema của bạn validate một body, ép một số từ query, và âm thầm chặn một trường ngoài dự kiến.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Validate bằng schema</span><span class="v">Khai luật đầu vào ở một chỗ thay vì nhiều if.</span></div>
+  <div class="kv"><span class="k">zod</span><span class="v">Một thư viện schema parse và gán kiểu đầu vào.</span></div>
+  <div class="kv"><span class="k">Ép kiểu (coercion)</span><span class="v">Biến một query string về đúng kiểu (ví dụ số).</span></div>
+  <div class="kv"><span class="k">Mass assignment</span><span class="v">Kẻ tấn công đặt các trường bạn không định nhận.</span></div>
+  <div class="kv"><span class="k">Middleware validate</span><span class="v">Một chốt tái dùng validate trước handler.</span></div>
+  <div class="kv"><span class="k">Lỗi nhất quán</span><span class="v">Một hình dạng đồng nhất cho mọi thất bại validate.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một schema thay một bức tường if viết tay bằng một khai báo.</li><li>zod ép được query string về đúng kiểu và từ chối khoảng xấu.</li><li>Schema âm thầm chặn mass-assignment bằng cách chỉ nhận trường đã biết.</li><li>Bọc nó thành middleware để validate chạy trước mọi handler, nhất quán.</li></ul>
 </div>
 
 <div class="ml-en">
@@ -820,6 +946,27 @@ SELECT reltuples FROM pg_class …        →   0.025 ms   (estimate from statis
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — RESTful API Design and Implementation</span><span class="lc-sub">Pagination, filtering and query design.</span></span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>Add a default and a maximum <code>limit</code> to a list endpoint so an unbounded list is impossible.</li>
+<li>Implement offset pagination, then cursor pagination, and compare the response time on a large table.</li>
+<li>Reproduce the offset duplicate/skip bug: insert a row between two page requests and watch a record appear twice or vanish.</li>
+</ol>
+<p><strong>Done when:</strong> your list endpoint has a capped limit, you have both pagination styles, and you have seen offset drift on inserts.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Pagination</span><span class="v">Returning a page of results instead of all of them.</span></div>
+  <div class="kv"><span class="k">Offset pagination</span><span class="v">LIMIT/OFFSET — simple but slow and drift-prone at scale.</span></div>
+  <div class="kv"><span class="k">Cursor pagination</span><span class="v">Ask for rows after a stable key — fast and stable.</span></div>
+  <div class="kv"><span class="k">limit cap</span><span class="v">A maximum page size so lists are always bounded.</span></div>
+  <div class="kv"><span class="k">Offset drift</span><span class="v">Inserts/deletes between pages duplicate or skip rows.</span></div>
+  <div class="kv"><span class="k">total cost</span><span class="v">Counting all matches is expensive — avoid when you can.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Every list endpoint needs a default and maximum limit.</li><li>Offset pagination is simple but slows down and drifts on a changing table.</li><li>Cursor pagination asks for what comes after a stable key — fast and stable.</li><li>Returning a total count is costly; skip it unless the UI truly needs it.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -913,6 +1060,27 @@ SELECT reltuples FROM pg_class …        →   0,025 ms   (ước lượng từ
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực REST API</span><span class="lc-sub">Phân trang, lọc và thiết kế truy vấn.</span></span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Thêm một <code>limit</code> mặc định và tối đa cho một endpoint danh sách để không thể có danh sách không giới hạn.</li>
+<li>Hiện thực phân trang offset, rồi phân trang cursor, và so thời gian phản hồi trên một bảng lớn.</li>
+<li>Tái hiện bug trùng/sót của offset: chèn một dòng giữa hai lần xin trang và xem một bản ghi hiện hai lần hoặc biến mất.</li>
+</ol>
+<p><strong>Đạt khi:</strong> endpoint danh sách có limit chặn trần, bạn có cả hai kiểu phân trang, và đã thấy offset trôi khi có chèn.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Phân trang</span><span class="v">Trả một trang kết quả thay vì tất cả.</span></div>
+  <div class="kv"><span class="k">Phân trang offset</span><span class="v">LIMIT/OFFSET — đơn giản nhưng chậm và dễ trôi ở quy mô lớn.</span></div>
+  <div class="kv"><span class="k">Phân trang cursor</span><span class="v">Xin các dòng sau một khoá ổn định — nhanh và ổn định.</span></div>
+  <div class="kv"><span class="k">Trần limit</span><span class="v">Kích thước trang tối đa để danh sách luôn bị chặn.</span></div>
+  <div class="kv"><span class="k">Offset trôi</span><span class="v">Chèn/xoá giữa các trang làm trùng hoặc sót dòng.</span></div>
+  <div class="kv"><span class="k">Giá của total</span><span class="v">Đếm mọi bản ghi khớp rất đắt — tránh khi có thể.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mọi endpoint danh sách cần một limit mặc định và tối đa.</li><li>Phân trang offset đơn giản nhưng chậm dần và trôi trên bảng đang đổi.</li><li>Phân trang cursor xin thứ đến sau một khoá ổn định — nhanh và ổn định.</li><li>Trả tổng số bản ghi rất tốn; bỏ qua trừ khi UI thật sự cần.</li></ul>
 </div>
 `,
     },
@@ -1040,6 +1208,27 @@ paths:
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — RESTful API Design and Implementation</span><span class="lc-sub">Versioning, caching headers and API contracts.</span></span>
 </a>
+
+<h3>🧪 Practice (10–15 min)</h3>
+<div class="callout ok"><ol>
+<li>List three changes to your API and mark each as breaking or non-breaking (e.g. adding a field vs removing one vs renaming one).</li>
+<li>Implement optimistic concurrency: return an <code>ETag</code>, require <code>If-Match</code> on update, and return <code>412</code> when it does not match.</li>
+<li>Add an <code>Idempotency-Key</code> to a create endpoint so a retried request does not create a second record.</li>
+</ol>
+<p><strong>Done when:</strong> you can classify breaking changes, enforce ETag/If-Match with 412, and make a create idempotent with a key.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">API contract</span><span class="v">What clients are allowed to depend on.</span></div>
+  <div class="kv"><span class="k">Breaking change</span><span class="v">A change that invalidates existing clients.</span></div>
+  <div class="kv"><span class="k">Versioning</span><span class="v">Serving old and new behaviour side by side.</span></div>
+  <div class="kv"><span class="k">ETag / If-Match</span><span class="v">A version tag + conditional update for concurrency.</span></div>
+  <div class="kv"><span class="k">412 Precondition Failed</span><span class="v">The update was rejected because the ETag did not match.</span></div>
+  <div class="kv"><span class="k">Idempotency-Key</span><span class="v">A client-supplied key that dedupes retried writes.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The contract is what clients may depend on; changing it can break them.</li><li>Version the API so old clients keep working while new behaviour ships.</li><li>ETag + If-Match gives optimistic concurrency, returning 412 on a stale update.</li><li>An Idempotency-Key stops a retried create from charging or inserting twice.</li></ul>
 </div>
 
 <div class="ml-vi">
@@ -1150,6 +1339,27 @@ paths:
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực REST API</span><span class="lc-sub">Đánh phiên bản, header cache và hợp đồng API.</span></span>
 </a>
+
+<h3>🧪 Thực hành (10–15 phút)</h3>
+<div class="callout ok"><ol>
+<li>Liệt kê ba thay đổi cho API của bạn và đánh dấu từng cái là phá vỡ hay không (ví dụ thêm một trường vs bỏ một trường vs đổi tên).</li>
+<li>Hiện thực tương tranh lạc quan: trả một <code>ETag</code>, yêu cầu <code>If-Match</code> khi cập nhật, và trả <code>412</code> khi không khớp.</li>
+<li>Thêm một <code>Idempotency-Key</code> cho endpoint tạo để một request thử lại không tạo bản ghi thứ hai.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn phân loại được thay đổi phá vỡ, ép ETag/If-Match với 412, và làm một create idempotent bằng key.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hợp đồng API</span><span class="v">Những gì client được phép dựa vào.</span></div>
+  <div class="kv"><span class="k">Thay đổi phá vỡ</span><span class="v">Một thay đổi làm vô hiệu client hiện có.</span></div>
+  <div class="kv"><span class="k">Đánh phiên bản</span><span class="v">Phục vụ hành vi cũ và mới song song.</span></div>
+  <div class="kv"><span class="k">ETag / If-Match</span><span class="v">Một thẻ phiên bản + cập nhật có điều kiện cho tương tranh.</span></div>
+  <div class="kv"><span class="k">412 Precondition Failed</span><span class="v">Cập nhật bị từ chối vì ETag không khớp.</span></div>
+  <div class="kv"><span class="k">Idempotency-Key</span><span class="v">Một khoá client cấp để khử trùng lặp ghi khi thử lại.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Hợp đồng là thứ client được dựa vào; đổi nó có thể làm vỡ client.</li><li>Đánh phiên bản API để client cũ vẫn chạy trong khi hành vi mới lên.</li><li>ETag + If-Match cho tương tranh lạc quan, trả 412 khi cập nhật lỗi thời.</li><li>Một Idempotency-Key chặn một create thử lại trừ tiền hoặc chèn hai lần.</li></ul>
 </div>
 `,
     },

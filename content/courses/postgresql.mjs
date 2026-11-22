@@ -25,6 +25,7 @@ import s15 from './postgresql/s15-sao-luu-nhan-ban.mjs';
 import s16 from './postgresql/s16-production-capstone.mjs';
 import { LAB_SAU } from './postgresql/lab/index.mjs';
 import { SAU_CH16 } from './postgresql/them.mjs';
+import { DU_AN, baiMoc, baiBaoVe, moiDangKy } from './postgresql/_du-an.mjs';
 
 /** Chèn lab của chương n vào sau bài học, trước quiz (*-quiz). */
 const coLab = (sec, n) => {
@@ -35,6 +36,31 @@ const coLab = (sec, n) => {
   ls.splice(q < 0 ? ls.length : q, 0, ...labs);
   return { ...sec, lessons: ls };
 };
+
+/**
+ * Dự án xuyên suốt khoá (docs/du-an-hop-dong.md v1, 22/11/2026) — nguồn: ./postgresql/_du-an.mjs.
+ *   · bài 0.1 nhận cờ dangKyDuAn + đoạn "Hãy đăng ký đề tài…" (chèn trước link Code Lab của mỗi khối ngôn ngữ);
+ *   · Chương 1–17: bài postgresql-moc-N chèn TRƯỚC quiz (sau lab, nếu chương có lab);
+ *   · phần Thi cuối khoá: bài postgresql-bao-ve-du-an ở cuối.
+ */
+const MOC_DANG_KY = '<a class="link-card codelab" href="/code-lab/postgresql';
+const coDangKy = (sec) => ({
+  ...sec,
+  lessons: sec.lessons.map((l) => {
+    if (l.slug !== 'postgresql-0-1-gioi-thieu') return l;
+    const phan = l.content.split(MOC_DANG_KY);
+    if (phan.length !== 3) throw new Error('postgresql: bài 0.1 phải có đúng 2 link Code Lab (EN + VI) để chèn lời mời đăng ký đề tài');
+    return { ...l, dangKyDuAn: true, content: phan[0] + moiDangKy('en') + MOC_DANG_KY + phan[1] + moiDangKy('vi') + MOC_DANG_KY + phan[2] };
+  }),
+});
+const coMoc = (sec, n) => {
+  if (n < 1 || n > 17) return sec;
+  const ls = [...sec.lessons];
+  const q = ls.findIndex((l) => /-quiz$/.test(l.slug));
+  ls.splice(q < 0 ? ls.length : q, 0, baiMoc(n));
+  return { ...sec, lessons: ls };
+};
+const coBaoVe = (sec) => ({ ...sec, lessons: [...sec.lessons, baiBaoVe()] });
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -56,8 +82,10 @@ export default {
     requirements: 'Không cần kinh nghiệm cơ sở dữ liệu trước — chương 1 bắt đầu từ vì sao PostgreSQL tồn tại. Biết dùng dòng lệnh (terminal) cơ bản là đủ. Máy cài được PostgreSQL 15+ hoặc chạy được Docker. Nếu bạn đã học khoá Node.js (chương 7 Prisma/PostgreSQL) thì đây là phần đào sâu về chính cơ sở dữ liệu đó.',
     documentsNote: 'Tài liệu tham chiếu chính: postgresql.org/docs (tài liệu chính thức, đầy đủ và chính xác nhất) • use-the-index-luke.com (giải thích chỉ mục và EXPLAIN cực rõ) • pgexercises.com (bài tập SQL tương tác). Phần thực hành đi kèm: track "PostgreSQL" trên Code Lab. Loạt bài "100 Ngày Database" trên trang chủ /feed bổ trợ phần lý thuyết quan hệ và chuẩn hoá.',
   },
+  duAn: DU_AN,
   sections: [
     s00, s01, s02, s03, s04, s05, s06, s07, s08,
     s09, s10, s11, s12, s13, s14, s15, s16,
-  ].map(coLab).concat(SAU_CH16),
+  ].map(coLab).concat(SAU_CH16)
+    .map((sec, i) => (i === 0 ? coDangKy(sec) : i === 18 ? coBaoVe(sec) : coMoc(sec, i))),
 };

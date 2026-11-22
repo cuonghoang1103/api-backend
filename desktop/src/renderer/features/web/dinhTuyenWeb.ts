@@ -138,6 +138,11 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
      `/code-lab/:trackSlug/:exerciseSlug`. Đảo thứ tự là "phong-lab" bị đọc
      thành slug track — trang mở ra rồi báo "không tìm thấy track", hỏng CÂM. */
   /* 28/10/2026 — phòng lab mô phỏng: CPU "Máy tính từ số 0", 3D hành trình vào máy tính, OS. Tĩnh `/cpu-lab/3d` trước. */
+  /* 22/11/2026 — Phòng thi mô phỏng (phần web của Exam Room; `/exam` còn lại là màn native PhongThiPage).
+     page.tsx web là server component ⇒ nạp thẳng component client. */
+  { mau: '/exam/mo-phong', nap: () => import('@/app/exam/mo-phong/MoPhongClient') },
+  { mau: '/exam/mo-phong/fe/:attemptId', nap: () => import('../exam/moPhongTuyen').then((m) => ({ default: m.ThiFeTuyen })) },
+  { mau: '/exam/mo-phong/pe/:attemptId', nap: () => import('../exam/moPhongTuyen').then((m) => ({ default: m.ThiPeTuyen })) },
   { mau: '/cpu-lab/3d', nap: () => import('@/app/cpu-lab/3d/page') },
   { mau: '/cpu-lab', nap: () => import('@/app/cpu-lab/page') },
   { mau: '/os-lab', nap: () => import('@/app/os-lab/page') },
@@ -403,6 +408,8 @@ export const GOC_WEB: readonly string[] = [
   '/tech-trends',
   /* Phòng lab mô phỏng (01/11/2026): `/cpu-lab` (+ `/cpu-lab/3d`), `/os-lab`, `/net-lab`. */
   '/cpu-lab', '/os-lab', '/net-lab',
+  /* Phòng thi mô phỏng (22/11/2026) — cây con web bên trong màn native `/exam`. */
+  '/exam/mo-phong',
   /* Học viện + Courses — cả cây là trang web từ 08/11/2026 (trước đó `/academy`, `/courses` là màn native). */
   '/academy', '/courses',
   /* CT Work — cả cây, gồm hai đường công khai `invite/*` và `share/*`. */

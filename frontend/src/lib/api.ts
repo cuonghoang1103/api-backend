@@ -1838,7 +1838,7 @@ export const examApi = {
   getForTaking: (examId: number) =>
     api.get<{ data: ExamHeader & { questions: ExamTakingQuestion[] } }>(`/exams/${examId}/take`),
   start: (examId: number, opts?: { aiAssisted?: boolean }) =>
-    api.post<{ data: { attemptId: number; startedAt: string; expiresAt: string | null; resumed: boolean; aiAssisted: boolean } }>(`/exams/${examId}/attempts`, opts),
+    api.post<{ data: { attemptId: number; startedAt: string; expiresAt: string | null; resumed: boolean; aiAssisted: boolean; saved?: { answers: Record<string, unknown>; flags: number[]; idx: number } } }>(`/exams/${examId}/attempts`, opts),
   // CuongMini — "Hiện đáp án" (không gọi AI) + hỏi AI (không stream, đường lùi).
   aiReveal: (attemptId: number, questionId: number) =>
     api.post<{ data: {
@@ -1923,6 +1923,96 @@ export const examApi = {
       : api.post(`/exams/admin/${examId}/questions`, data),
   adminDeleteQuestion: (examId: number, questionId: number) =>
     api.delete(`/exams/admin/${examId}/questions/${questionId}`),
+};
+
+// ── Phòng thi mô phỏng (Exam Room › /exam/mo-phong) — 22/11/2026 ──────────
+// Một phần của Exam Room: lượt mô phỏng là lượt thi thường (xem lại ở /exam/attempt/:id),
+// chỉ khác đề (trộn từ ngân hàng theo chương) và chế độ (thi thật / luyện).
+export interface MockNhom { nhom: string; ten: string; chuong: number | null; thuTu: number; deThat: number; nganHang: number; quiz: number }
+export interface MockDePe { nguon: 'CODELAB' | 'EXAM'; id: number; slug: string | null; tieuDe: string; phut: number; coGiven: boolean; coMayCham: boolean; soCau: number | null; code?: string | null }
+export interface MockOverview {
+  courseCode: string;
+  course: { id: number; title: string; slug: string };
+  fe: { soCau: number; phut: number; thangDiem: number; diemDat: number };
+  pe: { phut: number; thangDiem: number; diemDat: number };
+  cloTen: Record<string, string>;
+  cloTheoChuong: Record<string, string[]>;
+  huongDanMoiTruong: string[];
+  nganHang: { deThat: number; quiz: number; sauKhuTrung: number; nguonPhanBo: 'DE_THAT' | 'DEU'; nhom: MockNhom[] };
+  dePe: MockDePe[];
+  dangDo: Array<{ id: number; mode: string; loai: 'FE' | 'PE'; tieuDe: string; startedAt: string; expiresAt: string | null }>;
+}
+export interface MockThongKe { khoa: string; ten: string; dung: number; tong: number; tiLe: number; thuTu: number }
+export interface MockHistory {
+  courseCode: string; diemDatFe: number; diemDatPe: number; soLuotGop: number;
+  luot: Array<{ id: number; mode: string; kind: 'FE' | 'PE'; status: string; score: number | null; maxScore: number | null; passed: boolean | null; at: string | null; timeSpentSeconds: number; tieuDe: string; code: string | null }>;
+  theoChuong: MockThongKe[]; theoClo: MockThongKe[];
+}
+export interface MockFeQuestion {
+  id: number; prompt: string; imageUrl: string | null; options: { text: string }[];
+  selectCount: number; multiSelect: boolean; nhomTen: string; chuong: number | null;
+  correctIndexes?: number[]; explanation?: string | null;
+}
+export interface MockFeAttempt {
+  attempt: { id: number; mode: 'MOCK_EXAM' | 'MOCK_PRACTICE'; status: string; startedAt: string; expiresAt: string | null; serverNow: string };
+  paper: { courseCode: string; thangDiem: number; diemDat: number; phanBo: { nhom: string; ten: string; soCau: number }[]; nguonPhanBo: 'DE_THAT' | 'DEU'; nguonNganHang: string };
+  questions: MockFeQuestion[];
+  answers: Record<string, number[]>;
+  progress: { flags: number[]; idx: number };
+}
+export interface MockRubric { id: string; criterion: string; maxScore: number }
+export interface MockPeAttempt {
+  attempt: { id: number; mode: 'MOCK_EXAM' | 'MOCK_PRACTICE'; status: string; startedAt: string; expiresAt: string | null; submittedAt: string | null; serverNow: string; score: number | null; passed: boolean | null; gradingMode: string };
+  paper: {
+    nguon: 'CODELAB' | 'EXAM'; title: string; code: string | null; durationMinutes: number; thangDiem: number; diemDat: number;
+    attachmentUrl: string | null; attachmentName: string | null;
+    given: { files: { name: string; code: string }[]; db: unknown } | null;
+    coMayCham: boolean; exerciseId: number | null; exerciseSlug: string | null;
+    cau: Array<{ id: number; prompt: string; points: number; imageUrl: string | null; rubric: MockRubric[] | null; sampleSolution: string | null }>;
+  };
+  huongDanMoiTruong: string[];
+  nop: { tenTep: string; kichThuoc: number; soTep: number; tep: string[]; canhBao: string[]; luc: string } | null;
+  tuCham: { score: number; passed: boolean; chon: Record<string, Record<string, number>>; theoCau: { questionId: number; diem: number; toiDa: number }[] } | null;
+  chamTuDong: { score: number; maxScore: number; dat: number; tong: number; nhom: { ma: string; ten: string; diem: number; dat: number; tong: number; diemDat: number }[]; luc: string } | null;
+  aiNhanXet: MockAiReview | null;
+  aiConLuot: number;
+}
+export interface MockAiReview {
+  tomTat: string; ruiRo: string[]; diemUoc: number; model: string; inputTokens: number; outputTokens: number; catMa: boolean; luc: string;
+  theoCau: Array<{ questionId: number; diemUoc: number; toiDa: number; tomTat: string; tieuChi: Array<{ id: string; muc: 'dat' | 'mot_phan' | 'chua' | 'khong_ro'; nhanXet: string }> }>;
+}
+
+export const examMockApi = {
+  overview: (courseCode: string) => api.get<{ data: MockOverview }>(`/exams/mock/${courseCode}/overview`),
+  history: (courseCode: string) => api.get<{ data: MockHistory }>(`/exams/mock/${courseCode}/history`),
+  startFe: (courseCode: string, body: { soCau: number; phut: number; cheDo: 'thi' | 'luyen'; nguon: 'mix' | 'real' | 'quiz'; nhom?: string[] }) =>
+    api.post<{ data: { attemptId: number; soCau: number } }>(`/exams/mock/${courseCode}/fe`, body),
+  startPe: (courseCode: string, body: { examId?: number; exerciseId?: number; cheDo: 'thi' | 'luyen' }) =>
+    api.post<{ data: { attemptId: number } }>(`/exams/mock/${courseCode}/pe`, body),
+  getFe: (attemptId: number) => api.get<{ data: MockFeAttempt }>(`/exams/mock/attempts/${attemptId}/fe`),
+  checkFe: (attemptId: number, questionId: number, selected: number[]) =>
+    api.post<{ data: { questionId: number; selected: number[]; correct: boolean; correctIndexes: number[]; explanation: string | null } }>(`/exams/mock/attempts/${attemptId}/fe/check`, { questionId, selected }),
+  submitFe: (attemptId: number, body: { answers: Record<string, number[]>; timeSpentSeconds: number; integritySignals?: unknown }) =>
+    api.post<{ data: { attemptId: number } }>(`/exams/mock/attempts/${attemptId}/fe/submit`, body),
+  /** Tự lưu — dùng chung với lượt Exam Room thường. */
+  saveProgress: (attemptId: number, body: { answers?: Record<string, unknown>; codeAnswers?: Record<string, string>; flags?: number[]; idx?: number }) =>
+    api.put<{ data: { savedAt: string } }>(`/exams/attempts/${attemptId}/progress`, body),
+  getPe: (attemptId: number) => api.get<{ data: MockPeAttempt }>(`/exams/mock/attempts/${attemptId}/pe`),
+  submitPe: (attemptId: number, file: File, timeSpentSeconds: number, onProgress?: (pct: number) => void) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('timeSpentSeconds', String(timeSpentSeconds));
+    return api.post<{ data: { nop: MockPeAttempt['nop'] } }>(`/exams/mock/attempts/${attemptId}/pe/submit`, fd, {
+      headers: { 'Content-Type': 'multipart/form-data' }, timeout: 180000,
+      onUploadProgress: (e) => { if (onProgress && e.total) onProgress(Math.round((e.loaded / e.total) * 100)); },
+    });
+  },
+  selfCheck: (attemptId: number, chon: Record<string, Record<string, number>>) =>
+    api.post<{ data: { score: number; passed: boolean } }>(`/exams/mock/attempts/${attemptId}/pe/self-check`, { chon }),
+  autoGrade: (attemptId: number, ketQua: Array<{ dat: boolean; thay?: string; ms?: number }>) =>
+    api.post<{ data: NonNullable<MockPeAttempt['chamTuDong']> }>(`/exams/mock/attempts/${attemptId}/pe/auto-grade`, { ketQua }),
+  aiReview: (attemptId: number) =>
+    api.post<{ data: MockAiReview }>(`/exams/mock/attempts/${attemptId}/pe/ai-review`, {}, { timeout: 150000 }),
 };
 
 // Course Categories API

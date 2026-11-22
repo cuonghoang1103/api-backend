@@ -351,6 +351,24 @@ declare module '@/components/courses/gop-y/GopYKhoaClient' {
   export default GopYKhoaClient;
 }
 
+/* Phòng thi mô phỏng (Exam Room › /exam/mo-phong, 22/11/2026) — page.tsx là server component nên app
+   nạp thẳng component client (dinhTuyenWeb + features/exam/moPhongTuyen.tsx). */
+declare module '@/app/exam/mo-phong/MoPhongClient' {
+  import type { ComponentType } from 'react';
+  const MoPhongClient: ComponentType;
+  export default MoPhongClient;
+}
+declare module '@/app/exam/mo-phong/fe/[attemptId]/ThiFeClient' {
+  import type { ComponentType } from 'react';
+  const ThiFeClient: ComponentType<{ attemptId: number }>;
+  export default ThiFeClient;
+}
+declare module '@/app/exam/mo-phong/pe/[attemptId]/ThiPeClient' {
+  import type { ComponentType } from 'react';
+  const ThiPeClient: ComponentType<{ attemptId: number }>;
+  export default ThiPeClient;
+}
+
 declare module '@/app/*/page' {
   import type { ComponentType } from 'react';
   const Trang: ComponentType;

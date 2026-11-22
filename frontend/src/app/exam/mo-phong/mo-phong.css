@@ -1,0 +1,118 @@
+/* Phòng thi mô phỏng (Exam Room › /exam/mo-phong) — chỉ bổ sung cho exam.css.
+   Màu đi qua biến chủ đề (--text-*, --bg-*, --border-color, --exam-*) nên sáng/tối tự đúng;
+   chỗ cần màu riêng cho tối dùng html.theme-dark (KHÔNG dùng biến thể dark: của Tailwind). */
+
+.mo-ghi-chu {
+  display: flex; gap: 6px; align-items: flex-start;
+  font-size: 12px; line-height: 1.45; color: var(--text-muted);
+  padding: 8px 10px; border-radius: 10px;
+  border: 1px dashed var(--border-color); background: var(--bg-surface);
+}
+.mo-nhan { font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: .04em; }
+.mo-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 500;
+  border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary);
+  transition: border-color .15s, background .15s;
+}
+.mo-chip:hover { border-color: var(--exam-accent); }
+.mo-chip[data-on="true"] { border-color: var(--exam-accent); background: rgba(99,102,241,.12); color: var(--exam-accent); }
+html.theme-dark .mo-chip[data-on="true"] { color: #a5b4fc; }
+.mo-o {
+  padding: 6px 10px; border-radius: 10px; font-size: 14px;
+  border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary);
+}
+.mo-o:focus { outline: none; border-color: var(--exam-accent); }
+.mo-che-do {
+  display: flex; gap: 10px; align-items: flex-start; text-align: left;
+  padding: 12px 14px; border-radius: 14px; border: 1.5px solid var(--border-color); background: var(--bg-card);
+  color: var(--text-primary); transition: border-color .15s, background .15s;
+}
+.mo-che-do span { display: flex; flex-direction: column; gap: 2px; }
+.mo-che-do small { color: var(--text-muted); font-size: 12px; line-height: 1.35; }
+.mo-che-do svg { color: var(--exam-accent); margin-top: 2px; flex-shrink: 0; }
+.mo-che-do[data-on="true"] { border-color: var(--exam-accent); background: rgba(99,102,241,.08); }
+
+.mo-bang-cuon { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; border: 1px solid var(--border-color); }
+.mo-bang { width: 100%; border-collapse: collapse; font-size: 13px; }
+.mo-bang th { text-align: left; font-weight: 600; color: var(--text-secondary); background: var(--bg-surface); padding: 8px 10px; white-space: nowrap; }
+.mo-bang td { padding: 8px 10px; border-top: 1px solid var(--border-color); vertical-align: top; }
+.mo-ten-chuong { min-width: 180px; }
+.mo-clo { display: block; font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.mo-nut-chinh, .mo-nut-phu {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 16px; border-radius: 12px; font-weight: 600; font-size: 14px;
+  transition: transform .1s, opacity .15s;
+}
+.mo-nut-chinh { color: #fff; background: linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2)); }
+.mo-nut-phu { color: var(--text-primary); border: 1px solid var(--border-color); background: var(--bg-card); }
+.mo-nut-phu:hover { border-color: var(--exam-accent); }
+.mo-nut-chinh:active, .mo-nut-phu:active { transform: scale(.98); }
+.mo-nut-chinh:disabled, .mo-nut-phu:disabled { opacity: .55; cursor: not-allowed; }
+
+.mo-buoc { counter-reset: b; display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 1.5; }
+.mo-buoc li { counter-increment: b; position: relative; padding-left: 30px; }
+.mo-buoc li::before {
+  content: counter(b); position: absolute; left: 0; top: 1px; width: 21px; height: 21px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
+  background: rgba(99,102,241,.14); color: var(--exam-accent);
+}
+.mo-buoc code, .mo-pe-de code { font-size: .9em; padding: 1px 5px; border-radius: 6px; background: var(--bg-surface); border: 1px solid var(--border-color); }
+
+.mo-cham { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.mo-gach { width: 16px; border-top: 2px dashed var(--exam-danger); display: inline-block; }
+.mo-thanh { height: 7px; border-radius: 99px; background: var(--bg-surface); overflow: hidden; margin-top: 4px; border: 1px solid var(--border-color); }
+.mo-thanh > div { height: 100%; border-radius: 99px; transition: width .4s; }
+
+/* ── Phòng thi (runner) ───────────────────────────────────────────── */
+.mo-phong { --mo-co: 1; }
+.mo-phong .mo-noi-dung { font-size: calc(15px * var(--mo-co)); line-height: 1.6; }
+.mo-phong .mo-noi-dung .exam-opt { font-size: calc(14.5px * var(--mo-co)); }
+.mo-phong:fullscreen { overflow-y: auto; background: var(--bg-primary, var(--bg-card)); }
+
+.mo-cong-cu { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+/* :where() hạ độ ưu tiên ⇒ tiện ích Tailwind (lg:hidden, hidden sm:inline-flex) trên nút vẫn thắng. */
+:where(.mo-cong-cu) button {
+  min-width: 34px; height: 34px; padding: 0 8px; border-radius: 9px; font-size: 12px; font-weight: 600;
+  border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary);
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+}
+:where(.mo-cong-cu) button:hover { border-color: var(--exam-accent); }
+:where(.mo-cong-cu) button[data-on="true"] { border-color: var(--exam-accent); color: var(--exam-accent); }
+
+.mo-luu { font-size: 11px; color: var(--text-muted); }
+.mo-luu[data-loi="true"] { color: var(--exam-danger); }
+
+.mo-chu-giai { display: flex; flex-wrap: wrap; gap: 10px; font-size: 11px; color: var(--text-muted); margin-top: 10px; }
+.mo-chu-giai span { display: inline-flex; align-items: center; gap: 4px; }
+.mo-o-mau { width: 12px; height: 12px; border-radius: 4px; border: 1px solid var(--border-color); display: inline-block; }
+.exam-nav-cell[data-checked="true"][data-ok="true"] { background: rgba(16,185,129,.16); border-color: var(--exam-ok); color: var(--exam-ok); }
+.exam-nav-cell[data-checked="true"][data-ok="false"] { background: rgba(239,68,68,.14); border-color: var(--exam-danger); color: var(--exam-danger); }
+
+.mo-ket-qua-luyen { margin-top: 14px; padding: 12px 14px; border-radius: 12px; border: 1px solid; font-size: 14px; }
+.mo-ket-qua-luyen[data-ok="true"] { border-color: rgba(16,185,129,.4); background: rgba(16,185,129,.08); }
+.mo-ket-qua-luyen[data-ok="false"] { border-color: rgba(239,68,68,.4); background: rgba(239,68,68,.07); }
+
+/* Hộp xác nhận nộp bài */
+.mo-phu { position: fixed; inset: 0; z-index: 80; background: rgba(15,23,42,.55); display: flex; align-items: flex-end; justify-content: center; padding: 16px; }
+@media (min-width: 640px) { .mo-phu { align-items: center; } }
+.mo-hop { width: 100%; max-width: 460px; border-radius: 18px; padding: 20px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+
+/* PE */
+.mo-pe-de { font-size: calc(15px * var(--mo-co)); line-height: 1.6; }
+.mo-pe-de img { max-width: 100%; height: auto; border-radius: 8px; }
+.mo-pe-de pre { overflow-x: auto; max-width: 100%; }
+.mo-tha { border: 2px dashed var(--border-color); border-radius: 14px; padding: 18px; text-align: center; transition: border-color .15s, background .15s; }
+.mo-tha[data-keo="true"] { border-color: var(--exam-accent); background: rgba(99,102,241,.06); }
+.mo-loi { font-size: 13px; color: var(--exam-danger); }
+.mo-canh-bao { font-size: 13px; color: var(--exam-warn); }
+.mo-tc { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--border-color); }
+.mo-tc:first-child { border-top: 0; }
+.mo-ba-nut { display: inline-flex; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; }
+.mo-ba-nut button { padding: 6px 10px; font-size: 12px; font-weight: 600; color: var(--text-secondary); background: var(--bg-card); }
+.mo-ba-nut button + button { border-left: 1px solid var(--border-color); }
+.mo-ba-nut button[data-on="true"][data-v="1"] { background: rgba(16,185,129,.16); color: var(--exam-ok); }
+.mo-ba-nut button[data-on="true"][data-v="0.5"] { background: rgba(245,158,11,.16); color: var(--exam-warn); }
+.mo-ba-nut button[data-on="true"][data-v="0"] { background: rgba(239,68,68,.12); color: var(--exam-danger); }
+@media (max-width: 520px) { .mo-tc { grid-template-columns: 1fr; } }

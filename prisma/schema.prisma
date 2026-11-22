@@ -1889,6 +1889,18 @@ model ExamAttempt {
   // "Start Exam with CuongMini" (Pro only) — gates the live per-question AI
   // chat/reveal-answer routes. Set once at attempt creation, never after.
   aiAssisted       Boolean   @default(false) @map("ai_assisted")
+  // Phòng thi mô phỏng (22/11/2026). STANDARD = lượt thi một đề cố định như
+  // trước (mọi lượt cũ). MOCK_EXAM / MOCK_PRACTICE = lượt mô phỏng: FE trộn
+  // đề từ ngân hàng theo phân bố chương, hoặc PE mô phỏng quy trình (Given,
+  // giờ, nộp zip, tự chấm rubric). "Thi thật" ẩn đáp án tới khi nộp; "luyện"
+  // hiện đáp án ngay từng câu. Lượt STANDARD không bao giờ resume nhầm lượt
+  // mô phỏng (startAttempt lọc theo mode).
+  mode             String    @default("STANDARD") @db.VarChar(16)
+  // Ảnh chụp đề mô phỏng (câu + đáp án + chương/CLO) — tự chứa, sống sót
+  // qua mọi lần seed lại đề. Null với lượt STANDARD.
+  paper            Json?     @db.JsonB
+  // Tiến độ tự lưu giữa giờ: { flags: number[], idx, savedAt, … }.
+  progress         Json?     @db.JsonB
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
 
@@ -1897,6 +1909,7 @@ model ExamAttempt {
   @@index([userId, examId], name: "idx_exam_attempts_user_exam")
   @@index([examId], name: "idx_exam_attempts_exam")
   @@index([userId, status], name: "idx_exam_attempts_user_status")
+  @@index([userId, mode], name: "idx_exam_attempts_user_mode")
   @@map("exam_attempts")
 }
 

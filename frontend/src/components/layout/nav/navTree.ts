@@ -18,7 +18,7 @@
  */
 import type { LucideIcon } from 'lucide-react';
 import {
-  GraduationCap, BookMarked, Target, Map as MapIcon, PlayCircle, ClipboardCheck,
+  GraduationCap, BookMarked, Target, Map as MapIcon, PlayCircle, ClipboardCheck, Timer,
   Library, Award, Code2, Binary, Waypoints, CircuitBoard, Briefcase, FileText,
   Languages, Sparkles, AudioLines, Blocks, Puzzle, Terminal, KeyRound, Gauge,
   KanbanSquare, NotebookPen, Wallet, Music, Gamepad2, Wifi, Crown, ShoppingBag,
@@ -175,6 +175,10 @@ export const NAV_TREE: NavMenu[] = [
             title: { en: 'Code Lab', vi: 'Code Lab' },
             desc: { en: 'Exercises graded in the browser, chapter by chapter.', vi: 'Bài tập chấm ngay trong trình duyệt, theo từng chương.' },
             keywords: 'bai tap exercises' },
+          { href: '/exam/mo-phong', icon: Timer,
+            title: { en: 'Mock exam room', vi: 'Phòng thi mô phỏng' },
+            desc: { en: 'FE papers mixed by chapter, timed or practice; PE with Given, zip upload and a rubric checklist.', vi: 'Đề FE trộn theo chương, thi thật hoặc luyện; PE có Given, nộp zip và checklist rubric.' },
+            keywords: 'phong thi mo phong mock exam fe pe fer202 luyen thi' },
           { href: '/algorithms', icon: Binary,
             title: { en: 'Algorithms', vi: 'Thuật toán' },
             desc: { en: 'Watch sorting and searching run step by step, then edit the code.', vi: 'Xem sắp xếp, tìm kiếm chạy từng bước rồi tự sửa code.' } },

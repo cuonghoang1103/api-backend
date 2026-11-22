@@ -133,15 +133,21 @@ export const OPEN_PALETTE_EVENT = 'ct:open-palette';
  */
 export const MENU_PREFIXES: Record<MenuId, string[]> = {
   learn: ['/academy', '/courses', '/roadmap', '/hoc-tap', '/exam', '/books', '/my-courses', '/certificates'],
-  practice: ['/code-lab', '/algorithms', '/simulation', '/maker-lab', '/interview', '/cv', '/language'],
+  // `/exam/mo-phong` (Phòng thi mô phỏng) nằm ở menu Luyện tập dù là trang con của `/exam` (Học) —
+  // menuForPath chọn tiền tố DÀI NHẤT nên nó thắng `/exam`.
+  practice: ['/code-lab', '/exam/mo-phong', '/algorithms', '/simulation', '/maker-lab', '/interview', '/cv', '/language'],
   tools: ['/chat', '/voice-mini', '/ai-templates', '/ai-code', '/cli', '/llm-key', '/kiem-tra-key', '/work', '/notes', '/finance', '/music', '/games', '/toc-do-mang', '/pro', '/shop', '/download', '/ct-courses'],
   community: ['/feed', '/tech-trends', '/forum', '/friends', '/messages', '/projects', '/repos', '/exp-hub', '/hub'],
   about: ['/about'],
 };
 export function menuForPath(pathname: string | null): MenuId | null {
   if (!pathname) return null;
+  // Tiền tố khớp DÀI NHẤT thắng (vd `/exam/mo-phong` ⇒ practice, `/exam` ⇒ learn).
+  let best: { id: MenuId; len: number } | null = null;
   for (const id of MENU_ORDER) {
-    if (MENU_PREFIXES[id].some((p) => pathname === p || pathname.startsWith(`${p}/`))) return id;
+    for (const p of MENU_PREFIXES[id]) {
+      if ((pathname === p || pathname.startsWith(`${p}/`)) && (!best || p.length > best.len)) best = { id, len: p.length };
+    }
   }
-  return null;
+  return best?.id ?? null;
 }

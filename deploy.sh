@@ -1103,6 +1103,7 @@ for route in \
     code-lab/incidents \
     roadmaps \
     exams \
+    exams/mock/mon \
     maker-lab/projects \
     maker-lab/meta \
     doc-tools/presets \

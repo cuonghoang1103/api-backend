@@ -21,7 +21,7 @@ import { toast } from 'sonner';
 import {
   BookMarked, Bookmark, Bot, CheckCircle2, ChevronDown, ClipboardList, Clock, CloudOff,
   Download, Eye, FileCode2, Flag, History, Layers, ListChecks, Loader2, Mic, Play,
-  RefreshCw, RotateCw, Search, Trash2, Trophy, X, XCircle, BookOpenText, Languages,
+  RefreshCw, RotateCw, Search, Trash2, Trophy, X, XCircle, BookOpenText, Languages, Timer,
 } from 'lucide-react';
 import { examApi, type ExamHeader } from '@/lib/api';
 import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
@@ -276,6 +276,8 @@ export function Sanh() {
           <NutRay on={the === 'de'} onClick={() => datThe('de')} icon={<Layers size={15} />} nhan={t('Đề thi', 'Exams')} so={des.length} />
           <NutRay on={the === 'lichsu'} onClick={() => datThe('lichsu')} icon={<History size={15} />} nhan={t('Lịch sử', 'History')} so={luots.length} />
           <NutRay on={the === 'sotay'} onClick={() => datThe('sotay')} icon={<BookMarked size={15} />} nhan={t('Sổ tay ôn tập', 'Notebook')} so={soDangLuu} />
+          {/* Phòng thi mô phỏng (22/11/2026) — trang web dùng lại (MoPhongWebPage): đề FE trộn theo chương, PE nộp zip. */}
+          <NutRay on={false} onClick={() => navigate('/exam/mo-phong')} icon={<Timer size={15} />} nhan={t('Phòng thi mô phỏng', 'Mock exam room')} so={0} />
         </nav>
 
         {the === 'de' && (

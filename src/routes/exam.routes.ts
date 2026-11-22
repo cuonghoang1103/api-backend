@@ -22,6 +22,7 @@ import {
 import { askExamTutor, askExamTutorStream, revealAnswer, getRelatedLesson, docTutorMode, type TutorProvider } from '../services/examTutor.service.js';
 import { isProEffective, laAdmin } from '../services/pro.service.js';
 import { listComments, createComment, updateComment, deleteComment } from '../services/examComment.service.js';
+import { luuTienDo } from '../services/exam/moPhong.service.js';
 
 const router = Router();
 const zipUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 30 * 1024 * 1024 } });
@@ -426,6 +427,15 @@ router.get('/attempts/mine', authenticate, async (req, res: Response<ApiResponse
     // ?status=IN_PROGRESS ⇒ bài đang làm dở ở MỌI đề (app iOS hiện "Đang làm dở" kể cả bài bắt đầu trên web).
     const dangLam = String(req.query.status ?? '').toUpperCase() === 'IN_PROGRESS';
     const data = await examSvc.listMyAttempts(req.userId!, examId, dangLam);
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+// Tự lưu giữa giờ (22/11/2026): { answers, codeAnswers?, flags, idx } — lượt thường lẫn lượt mô phỏng FE.
+// Trước đây đáp án chỉ nằm trong bộ nhớ tab: tải lại trang / "Tiếp tục bài thi" là mất sạch.
+router.put('/attempts/:attemptId/progress', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await luuTienDo(Number(req.params.attemptId), req.userId!, req.body ?? {});
     res.json({ success: true, data });
   } catch (e) { next(e); }
 });

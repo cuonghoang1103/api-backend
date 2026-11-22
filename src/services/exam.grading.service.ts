@@ -299,3 +299,83 @@ export async function generateSpeakingQuestions(userId: number, prompt: string, 
     return [];
   }
 }
+
+// ── 4) PE mô phỏng — AI NHẬN XÉT TĨNH (22/11/2026) ─────────────────────
+// Đọc mã nộp, KHÔNG chạy gì cả (không có sandbox chạy code lạ trên máy chủ — xem
+// codeLab.cham.ts). Một lời gọi cho cả đề (chung phần mã ⇒ rẻ hơn gọi từng câu).
+// Đầu ra là ƯỚC LƯỢNG để ôn tập, không phải điểm; giao diện ghi rõ như vậy.
+export type MucTieuChiAi = 'dat' | 'mot_phan' | 'chua' | 'khong_ro';
+export interface NhanXetTinhPe {
+  tomTat: string;
+  ruiRo: string[];
+  diemUoc: number;
+  theoCau: Array<{
+    questionId: number; diemUoc: number; toiDa: number; tomTat: string;
+    tieuChi: Array<{ id: string; muc: MucTieuChiAi; nhanXet: string }>;
+  }>;
+}
+
+/** Trần ký tự mã gửi AI (≈ 10–12k token) — giữ chi phí một lượt dưới ~0,08 USD ở giá Sonnet. */
+export const NHAN_XET_TINH_TRAN_MA = 40_000;
+
+export function chuanHoaNhanXetTinh(
+  raw: unknown,
+  cau: Array<{ id: number; points: number; rubric: Array<{ id: string; maxScore: number }> }>,
+  thangDiem: number,
+): NhanXetTinhPe {
+  const r = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
+  const ds = Array.isArray(r.questions) ? (r.questions as Array<Record<string, unknown>>) : [];
+  const MUC: Record<string, MucTieuChiAi> = { yes: 'dat', met: 'dat', partial: 'mot_phan', no: 'chua', unmet: 'chua', unclear: 'khong_ro' };
+  const HE_SO: Record<MucTieuChiAi, number> = { dat: 1, mot_phan: 0.5, chua: 0, khong_ro: 0 };
+  let raw2 = 0; let max = 0;
+  const theoCau = cau.map((q, i) => {
+    const g = ds.find((x) => Number(x.id) === q.id) ?? ds[i] ?? {};
+    const tc = Array.isArray(g.criteria) ? (g.criteria as Array<Record<string, unknown>>) : [];
+    const rubric = q.rubric.length ? q.rubric : [{ id: 'all', maxScore: q.points }];
+    const tongTc = rubric.reduce((s, x) => s + x.maxScore, 0) || 1;
+    let dat = 0;
+    const tieuChi = rubric.map((rb, j) => {
+      const m = tc.find((x) => String(x.id) === rb.id) ?? tc[j] ?? {};
+      const muc = MUC[String(m.status ?? '').toLowerCase()] ?? 'khong_ro';
+      dat += HE_SO[muc] * rb.maxScore;
+      return { id: rb.id, muc, nhanXet: String(m.comment ?? '').slice(0, 600) };
+    });
+    const diemUoc = Math.round((dat / tongTc) * q.points * 100) / 100;
+    raw2 += diemUoc; max += q.points;
+    return { questionId: q.id, diemUoc, toiDa: q.points, tomTat: String(g.summary ?? '').slice(0, 800), tieuChi };
+  });
+  return {
+    tomTat: String(r.summary ?? '').slice(0, 1200),
+    ruiRo: (Array.isArray(r.risks) ? r.risks : []).slice(0, 8).map((x) => String(x).slice(0, 400)),
+    diemUoc: Math.round((raw2 / (max || 1)) * thangDiem * 100) / 100,
+    theoCau,
+  };
+}
+
+export async function nhanXetTinhPe(params: {
+  userId: number;
+  title: string;
+  cau: Array<{ id: number; points: number; prompt: string; rubric: Array<{ id: string; criterion: string; maxScore: number }> }>;
+  thangDiem: number;
+  ma: string;
+}): Promise<NhanXetTinhPe & { model: string; inputTokens: number; outputTokens: number }> {
+  ensureAi();
+  if (!(await checkTokenQuota(params.userId))) throw new AppError('Bạn đã đạt giới hạn AI trong ngày. Thử lại vào ngày mai nhé.', 429);
+  const strip = (s: string) => s.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+  const system =
+    'You review a student\'s React practical-exam project by READING the source code only. You cannot run it, so never claim something "works" — say what the code appears to do and what is missing or risky. ' +
+    'For every question, judge each rubric criterion as "yes" (clearly implemented), "partial", "no" (missing/wrong) or "unclear" (cannot tell from the code). ' +
+    'Watch for typical point-killers: wrong route path, json-server URL/port not 9999, state not updated after PATCH/POST, filters computed wrongly, missing required fields. ' +
+    'Return ONLY minified JSON: {"summary": string, "risks": [string], "questions": [{"id": number, "summary": string, "criteria": [{"id": string, "status": "yes"|"partial"|"no"|"unclear", "comment": string}]}]}. ' +
+    'EVERY human-readable string MUST be bilingual "English|||Tiếng Việt". Be concrete: name the file and the component/function.';
+  const deBai = params.cau.map((q, i) => [
+    `QUESTION id=${q.id} (#${i + 1}, ${q.points} points):`,
+    strip(q.prompt).slice(0, 4000),
+    q.rubric.length ? `RUBRIC:\n${q.rubric.map((r) => `- ${r.id} (max ${r.maxScore}): ${strip(r.criterion)}`).join('\n')}` : '',
+  ].filter(Boolean).join('\n')).join('\n\n');
+  const user = `PAPER: ${strip(params.title)}\n\n${deBai}\n\nSTUDENT PROJECT SOURCE (read-only, may be truncated):\n${params.ma.slice(0, NHAN_XET_TINH_TRAN_MA)}\n\nReview now.`;
+  const res = await goiChamThi({ system, messages: [{ role: 'user', content: user }], maxTokens: 2600, userId: params.userId, maxRetries: 1, timeoutMs: 60_000 });
+  let raw: unknown;
+  try { raw = extractJson(res.text); } catch { throw new AppError('AI trả kết quả không đọc được — thử lại sau ít phút.', 502); }
+  return { ...chuanHoaNhanXetTinh(raw, params.cau, params.thangDiem), model: res.model, inputTokens: res.inputTokens, outputTokens: res.outputTokens };
+}

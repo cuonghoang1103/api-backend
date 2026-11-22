@@ -37,6 +37,7 @@ import { NotesPage } from './features/notes/NotesPage';
 import { ProPage } from './features/pro/ProPage';
 import { TechTrendsWebPage } from './features/tech-trends/TechTrendsWebPage';
 import { PhongLabWebPage } from './features/phong-lab/PhongLabWebPage';
+import { MoPhongWebPage } from './features/exam/MoPhongWebPage';
 import { HocVienWebPage } from './features/academy/TuVanNganhPage';
 import { CodeLabPage } from './features/codelab/CodeLabPage';
 import { PhongThiPage } from './features/exam/PhongThiPage';
@@ -140,6 +141,7 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/cpu-lab', PhongLabWebPage],
   ['/os-lab', PhongLabWebPage],
   ['/net-lab', PhongLabWebPage],
+  ['/exam/mo-phong', MoPhongWebPage],
   /* Học viện + Courses — cả cây là trang web (08/11/2026): `/academy/so-do-mon-hoc`, `/courses/:slug/learn`… */
   ['/academy', HocVienWebPage],
   ['/courses', HocVienWebPage],
@@ -156,7 +158,8 @@ export function nativePageFor(path: string): ComponentType | undefined {
   /* Phòng thi là màn NATIVE (không thuộc cây web) nhưng có trang con:
      `/exam/:id` (đề / đang thi) và `/exam/attempt/:id` (kết quả) — 04/10/2026.
      `PhongThiPage` tự rẽ theo `route`. */
-  if (path.startsWith('/exam/')) return PhongThiPage;
+  // …trừ `/exam/mo-phong/**` (Phòng thi mô phỏng) — cây web, xem MoPhongWebPage.
+  if (path.startsWith('/exam/') && !thuocCayWeb(path)) return PhongThiPage;
   /* `/games/<slug>` — chơi một game (TroChoiPage tự rẽ theo route), 05/10/2026. */
   if (path.startsWith('/games/')) return TroChoiPage;
   /* Quản trị (05/10/2026) — `/quan-tri/<mục>`, QuanTriPage tự rẽ theo route. */

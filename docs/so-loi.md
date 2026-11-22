@@ -51,6 +51,14 @@ Mẫu một mục:
 - **Bài học:** điều mang theo lần sau
 ```
 
+### 22/11/2026 — web (Exam Room) — "Tiếp tục bài thi" mở lại tờ trắng, mất hết đáp án đã chọn
+- **Triệu chứng:** đang thi FE, tải lại trang / đóng tab rồi bấm "Tiếp tục bài thi" ⇒ đồng hồ vẫn chạy tiếp đúng giờ nhưng mọi câu đã chọn biến mất; nộp ra điểm thấp vô lý.
+- **Nguyên nhân:** `frontend/src/app/exam/[examId]/ExamRoomClient.tsx` giữ `answers`/`flags` chỉ trong state của tab; máy chủ không có tuyến lưu giữa giờ, `startAttempt` (`src/services/exam.service.ts`) resume chỉ trả `attemptId` + `expiresAt`.
+- **Cách sửa:** thêm `PUT /exams/attempts/:id/progress` (`luuTienDo` ở `src/services/exam/moPhong.service.ts`, lọc id câu + chỉ số hợp lệ, chặn sau giờ), ExamRoomClient tự lưu ~0,8 s sau mỗi thay đổi; `startAttempt` resume trả `saved` ⇒ nạp lại đáp án + cờ; test `src/routes/exam.moPhong.db.test.ts`. (Chưa commit — đợt Phòng thi mô phỏng 22/11.)
+- **Ảnh hưởng:** mọi lượt thi FE bị gián đoạn trước đó mất bài (đề PE upload file không dính).
+- **Bài học:** phòng thi có đồng hồ máy chủ thì bài làm cũng phải nằm ở máy chủ — "resume" mà chỉ resume đồng hồ là nửa tính năng.
+
+
 ---
 
 ### 18/11/2026 — Web CT Lồng Tiếng (/long-tieng) — tiêu đề bị header che, chủ kênh không thấy ô dán link

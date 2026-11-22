@@ -6,10 +6,11 @@
 // truyền vào. Bấm một bài → nhảy tới bài đó (dùng lại selectLesson của trang).
 
 import { useEffect, useMemo, useState } from 'react';
-import { CheckCircle2, Circle, ChevronDown, ChevronRight, Map as MapIcon, Target, PenLine } from 'lucide-react';
+import { CheckCircle2, Circle, ChevronDown, ChevronRight, Map as MapIcon, Target, PenLine, Timer } from 'lucide-react';
 import type { CourseSection, LessonDto } from '@/types';
 import { ChapterQuiz } from './ChapterQuiz';
 import { pickLang } from '@/lib/utils';
+import { coMoPhong, duongMoPhong } from '@/lib/examMoPhong';
 import { useTranslation } from '@/context/LocaleContext';
 
 type Goal = 'pass' | 'good';
@@ -131,6 +132,15 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
             className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-neon-indigo/15 px-3 py-1.5 text-xs font-semibold text-tone-indigo transition-colors hover:bg-neon-indigo/25"
           >
             <PenLine className="w-3.5 h-3.5" /> Luyện đề {courseCode} trên Phòng Thi
+          </a>
+        )}
+        {/* Phòng thi mô phỏng (Exam Room) — chỉ môn đã có cấu hình mô phỏng (thí điểm FER202). */}
+        {courseCode && coMoPhong(courseCode) && (
+          <a
+            href={duongMoPhong(courseCode)}
+            className="mt-3 ml-2 inline-flex items-center gap-1.5 rounded-lg border border-neon-indigo/40 px-3 py-1.5 text-xs font-semibold text-tone-indigo transition-colors hover:bg-neon-indigo/15"
+          >
+            <Timer className="w-3.5 h-3.5" /> Phòng thi mô phỏng {courseCode} (FE trộn đề · PE nộp zip)
           </a>
         )}
       </div>

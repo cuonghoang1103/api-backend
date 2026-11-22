@@ -20,7 +20,7 @@ import {
   Mic as MicrophoneIcon, Square as StopIcon, FileText as DocumentTextIcon,
   Eye as EyeIcon, EyeOff as EyeOffIcon, Bot as BotIcon,
 } from 'lucide-react';
-import { examApi, type ExamHeader, type ExamTakingQuestion } from '@/lib/api';
+import { examApi, examMockApi, type ExamHeader, type ExamTakingQuestion } from '@/lib/api';
 import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
 import ExamRichContent from '../ExamRichContent';
 import ExamQuestionComments from '../ExamQuestionComments';
@@ -122,8 +122,21 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
       setAiAssisted(!!r.data.data.aiAssisted);
       startedRef.current = Date.now();
       setNowMs(Date.now());
+      // Bài đã tự lưu (22/11/2026) — trước đây "Tiếp tục bài thi" mở lại một tờ trắng.
+      const saved = r.data.data.saved;
+      if (r.data.data.resumed && saved) {
+        const mcq: Record<number, number[]> = {};
+        const code: Record<number, string> = {};
+        for (const [k, v] of Object.entries(saved.answers || {})) {
+          if (Array.isArray(v)) mcq[Number(k)] = v.map(Number);
+          else if (typeof v === 'string') code[Number(k)] = v;
+        }
+        setAnswers(mcq);
+        setCodeAnswers(code);
+        setFlags(new Set(saved.flags || []));
+      }
       setPhase('taking');
-      if (r.data.data.resumed) toast(isVi ? 'Tiếp tục bài thi đang dở' : 'Resumed your in-progress attempt');
+      if (r.data.data.resumed) toast(isVi ? 'Tiếp tục bài thi đang dở — đáp án đã lưu được giữ nguyên' : 'Resumed — your saved answers are back');
     } catch (e) {
       toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Không bắt đầu được');
     }
@@ -197,6 +210,20 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
       void doSubmit(true);
     }
   }, [phase, expiresAt, remaining, doSubmit, isVi]);
+
+  // Tự lưu đề FE (trắc nghiệm + câu code trong Progress Test) ~0,8 s sau mỗi thay đổi.
+  // PE (zip / ghi âm / ảnh) không tự lưu được — file chỉ nằm trên máy người học.
+  useEffect(() => {
+    if (phase !== 'taking' || !attemptId || exam?.kind !== 'FE') return;
+    const h = setTimeout(() => {
+      const mcq: Record<string, number[]> = {};
+      for (const [k, v] of Object.entries(answers)) mcq[k] = v;
+      const code: Record<string, string> = {};
+      for (const [k, v] of Object.entries(codeAnswers)) code[k] = v;
+      examMockApi.saveProgress(attemptId, { answers: mcq, codeAnswers: code, flags: [...flags], idx }).catch(() => { /* lần sau lưu lại */ });
+    }, 800);
+    return () => clearTimeout(h);
+  }, [phase, attemptId, exam?.kind, answers, codeAnswers, flags, idx]);
 
   if (phase === 'loading' || !exam) {
     return <div className="min-h-[60vh] flex items-center justify-center text-text-muted">{isVi ? 'Đang tải…' : 'Loading…'}</div>;
@@ -434,7 +461,17 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
             </div>
           )}
 
-          <button onClick={() => doSubmit(false)} disabled={phase === 'submitting'}
+          <button onClick={() => {
+            // Xác nhận trước khi nộp tay (đề FE): báo số câu chưa làm / đang đánh dấu.
+            if (exam.kind === 'FE') {
+              const blank = exam.questions.filter((qq) => !isDone(qq)).length;
+              const msg = isVi
+                ? `Nộp bài?\n• Chưa làm: ${blank}/${exam.questions.length}\n• Đánh dấu xem lại: ${flags.size}`
+                : `Submit?\n• Blank: ${blank}/${exam.questions.length}\n• Flagged for review: ${flags.size}`;
+              if (!window.confirm(msg)) return;
+            }
+            void doSubmit(false);
+          }} disabled={phase === 'submitting'}
             className="w-full py-3 rounded-xl font-semibold text-white disabled:opacity-60 transition-transform active:scale-[.99]"
             style={{ background: 'linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2))' }}>
             {phase === 'submitting' ? (isVi ? 'Đang chấm…' : 'Grading…') : (isVi ? 'Nộp bài' : 'Submit')}

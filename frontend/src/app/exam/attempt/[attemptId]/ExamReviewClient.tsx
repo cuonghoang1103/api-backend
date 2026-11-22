@@ -24,7 +24,11 @@ interface ReviewQuestion {
   language: string | null; starterCode: string | null; sampleSolution: string | null;
   expectedOutput: string | null; rubric: unknown; speakingPrompts: { text: string }[] | null;
   myAnswer: unknown; bookmarked?: boolean; bookmarkNote?: string | null;
+  // false ⇒ câu quiz Academy trong đề mô phỏng (không có dòng ExamQuestion) — không lưu sổ tay/bình luận.
+  canSave?: boolean;
+  chapter?: { key: string; title: string; clo: string[] };
 }
+interface ThongKeMuc { khoa: string; ten: string; dung: number; tong: number; tiLe: number }
 interface PeGrade {
   score: number; maxScore: number; percent: number; verdict: string; summary: string;
   criteria: { id: string; name: string; score: number; maxScore: number; comment: string }[];
@@ -35,6 +39,10 @@ interface ReviewData {
   exam: { id: number; kind: string; peType: string | null; title: string; code: string | null; courseId: number; totalPoints: number; passMark: number };
   examBookmarked?: boolean;
   questions: ReviewQuestion[];
+  // Phòng thi mô phỏng (22/11/2026): lượt mô phỏng + thống kê theo chương/CLO.
+  mock?: { mode: string; loai: 'FE' | 'PE'; courseCode: string; cloTen: Record<string, string> } | null;
+  chapterStats?: { theoChuong: ThongKeMuc[]; theoClo: ThongKeMuc[] } | null;
+  cloTen?: Record<string, string>;
 }
 
 export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
@@ -83,7 +91,8 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
 
   if (!data) return <div className="min-h-[60vh] flex items-center justify-center text-text-muted">{isVi ? 'Đang tải…' : 'Loading…'}</div>;
 
-  const { attempt, exam, questions } = data;
+  const { attempt, exam, questions, mock, chapterStats } = data;
+  const thiLai = mock ? `/exam/mo-phong?course=${mock.courseCode}${mock.loai === 'PE' ? '&tab=pe' : ''}` : `/exam/${exam.id}`;
   const score = attempt.score ?? 0;
   const max = attempt.maxScore ?? exam.totalPoints;
   const pct = max ? Math.round((score / max) * 100) : 0;
@@ -101,9 +110,11 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
         <div className="flex items-center justify-between mb-6">
           <button onClick={() => router.push('/exam')} className="text-sm text-text-secondary hover:text-text-primary flex items-center gap-1"><ArrowLeftIcon className="w-4 h-4" />{isVi ? 'Phòng thi' : 'Exam Room'}</button>
           <div className="flex items-center gap-2">
-            <button onClick={toggleExamBm} className="exam-bm h-8 px-2.5 gap-1.5 text-xs font-semibold" data-on={examBm} title={isVi ? 'Lưu đề vào sổ tay' : 'Bookmark this exam'}>
-              <BookmarkIcon className="w-4 h-4" fill={examBm ? 'currentColor' : 'none'} />{examBm ? (isVi ? 'Đã lưu' : 'Saved') : (isVi ? 'Lưu đề' : 'Save exam')}
-            </button>
+            {!mock && (
+              <button onClick={toggleExamBm} className="exam-bm h-8 px-2.5 gap-1.5 text-xs font-semibold" data-on={examBm} title={isVi ? 'Lưu đề vào sổ tay' : 'Bookmark this exam'}>
+                <BookmarkIcon className="w-4 h-4" fill={examBm ? 'currentColor' : 'none'} />{examBm ? (isVi ? 'Đã lưu' : 'Saved') : (isVi ? 'Lưu đề' : 'Save exam')}
+              </button>
+            )}
             <button onClick={() => setL(isVi ? 'en' : 'vi')} className="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)]">{isVi ? 'EN' : 'VI'}</button>
           </div>
         </div>
@@ -123,6 +134,7 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
                 {passed ? (isVi ? 'ĐẠT' : 'PASSED') : (isVi ? 'CHƯA ĐẠT' : 'NOT PASSED')}
               </span>
               {exam.code && <span className="exam-badge" style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>{exam.code}</span>}
+              {mock && <span className="exam-badge exam-badge-fe">{mock.mode === 'MOCK_PRACTICE' ? (isVi ? 'Mô phỏng · luyện' : 'Mock · practice') : (isVi ? 'Mô phỏng · thi thật' : 'Mock · timed')}</span>}
             </div>
             <h1 className="text-xl font-bold mb-1">{pickLang(exam.title, L)}</h1>
             <div className="text-sm text-text-secondary flex items-center justify-center sm:justify-start gap-3 flex-wrap">
@@ -130,9 +142,13 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
               <span className="flex items-center gap-1"><ClockIcon className="w-4 h-4" />{mins}:{String(secs).padStart(2, '0')}</span>
               {exam.kind === 'FE' && feGrade.correctCount != null && <span>{feGrade.correctCount}/{feGrade.total} {isVi ? 'câu đúng' : 'correct'}</span>}
             </div>
-            <button onClick={() => router.push(`/exam/${exam.id}`)} className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--exam-accent)]"><ArrowPathIcon className="w-4 h-4" />{isVi ? 'Thi lại' : 'Retake'}</button>
+            <button onClick={() => router.push(thiLai)} className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--exam-accent)]"><ArrowPathIcon className="w-4 h-4" />{mock ? (isVi ? 'Đề mô phỏng mới' : 'New mock paper') : (isVi ? 'Thi lại' : 'Retake')}</button>
           </div>
         </div>
+
+        {chapterStats && chapterStats.theoChuong.length > 0 && (
+          <ThongKeChuong stats={chapterStats} cloTen={mock?.cloTen ?? data.cloTen ?? {}} L={L} />
+        )}
 
         {/* Per-question review */}
         <div className="space-y-4">
@@ -145,11 +161,14 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
               <div key={q.id} className="exam-card p-5">
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <div className="text-sm font-semibold text-text-secondary">{isVi ? 'Câu' : 'Question'} {i + 1} · {q.points}đ</div>
-                  <button onClick={() => toggleQBm(q.id)} className="exam-bm h-8 px-2.5 gap-1.5 text-xs font-semibold" data-on={qBm[q.id]?.on}
-                    title={qBm[q.id]?.on ? (isVi ? 'Bỏ lưu câu' : 'Remove from notebook') : (isVi ? 'Lưu câu vào sổ tay' : 'Save to notebook')}>
-                    <BookmarkIcon className="w-4 h-4" fill={qBm[q.id]?.on ? 'currentColor' : 'none'} />{qBm[q.id]?.on ? (isVi ? 'Đã lưu' : 'Saved') : (isVi ? 'Lưu câu' : 'Save')}
-                  </button>
+                  {q.canSave !== false && (
+                    <button onClick={() => toggleQBm(q.id)} className="exam-bm h-8 px-2.5 gap-1.5 text-xs font-semibold" data-on={qBm[q.id]?.on}
+                      title={qBm[q.id]?.on ? (isVi ? 'Bỏ lưu câu' : 'Remove from notebook') : (isVi ? 'Lưu câu vào sổ tay' : 'Save to notebook')}>
+                      <BookmarkIcon className="w-4 h-4" fill={qBm[q.id]?.on ? 'currentColor' : 'none'} />{qBm[q.id]?.on ? (isVi ? 'Đã lưu' : 'Saved') : (isVi ? 'Lưu câu' : 'Save')}
+                    </button>
+                  )}
                 </div>
+                {q.chapter && <div className="text-[11px] text-text-muted -mt-2 mb-2">{pickLang(q.chapter.title, L)}{q.chapter.clo.length ? ` · ${q.chapter.clo.join(', ')}` : ''}</div>}
                 <div className="text-[15px] leading-relaxed mb-3"><ExamRichContent html={q.prompt} L={L} /></div>
                 {q.imageUrl && <QuestionImageToggle url={q.imageUrl} isVi={isVi} />}
 
@@ -245,12 +264,38 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
                 {/* Personal note — appears once the question is saved */}
                 {qBm[q.id]?.on && <NoteEditor qid={q.id} initial={qBm[q.id]?.note || ''} isVi={isVi} onSave={saveQNote} />}
 
-                <ExamQuestionComments questionId={q.id} />
+                {q.canSave !== false && <ExamQuestionComments questionId={q.id} />}
               </div>
             );
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+// Thống kê theo chương / CLO (lượt FE) — chương yếu nhất lên đầu để biết ôn gì trước.
+function ThongKeChuong({ stats, cloTen, L }: { stats: { theoChuong: ThongKeMuc[]; theoClo: ThongKeMuc[] }; cloTen: Record<string, string>; L: 'en' | 'vi' }) {
+  const isVi = L === 'vi';
+  const mau = (p: number) => (p >= 70 ? 'var(--exam-ok)' : p >= 40 ? 'var(--exam-warn)' : 'var(--exam-danger)');
+  const Dong = ({ m, ten }: { m: ThongKeMuc; ten: string }) => (
+    <div>
+      <div className="flex justify-between gap-3 text-[13px]"><span className="truncate">{ten}</span><span className="tabular-nums text-text-secondary shrink-0">{m.dung}/{m.tong} · {m.tiLe}%</span></div>
+      <div className="h-1.5 rounded-full mt-1 overflow-hidden" style={{ background: 'var(--bg-surface)' }}><div className="h-full rounded-full" style={{ width: `${m.tiLe}%`, background: mau(m.tiLe) }} /></div>
+    </div>
+  );
+  return (
+    <div className="exam-card p-5 mb-6 grid sm:grid-cols-2 gap-5">
+      <div>
+        <div className="font-semibold mb-3">{isVi ? 'Theo chương' : 'By chapter'}</div>
+        <div className="space-y-2.5">{[...stats.theoChuong].sort((a, b) => a.tiLe - b.tiLe).map((m) => <Dong key={m.khoa} m={m} ten={pickLang(m.ten, L)} />)}</div>
+      </div>
+      {stats.theoClo.length > 0 && (
+        <div>
+          <div className="font-semibold mb-3">{isVi ? 'Theo CLO' : 'By CLO'}</div>
+          <div className="space-y-2.5">{stats.theoClo.map((m) => <Dong key={m.khoa} m={m} ten={`${m.khoa}${cloTen[m.khoa] ? ` — ${pickLang(cloTen[m.khoa], L)}` : ''}`} />)}</div>
+        </div>
+      )}
     </div>
   );
 }

@@ -14,6 +14,8 @@
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { gradeCode, type PeGradeResult } from './exam.grading.service.js';
+import { baiDaLuu, thongKeDeThat, xemLaiMoPhong, MODE_STANDARD } from './exam/moPhong.service.js';
+import { cauHinhMon } from './exam/moPhongConfig.js';
 
 // ── Shapes ────────────────────────────────────────────────────────────
 export type ExamKind = 'FE' | 'PE';
@@ -92,7 +94,8 @@ export async function listExamsForCourse(courseIdOrSlug: string | number, userId
   let attemptsByExam: Record<number, { attempts: number; bestScore: number | null; lastScore: number | null; passed: boolean; lastAttemptId: number | null; inProgressId: number | null; aiInProgressId: number | null }> = {};
   if (userId && exams.length) {
     const rows = await prisma.examAttempt.findMany({
-      where: { userId, examId: { in: exams.map((e) => e.id) } },
+      // Chỉ lượt STANDARD — lượt "Phòng thi mô phỏng" có lịch sử riêng (xem exam/moPhong.service.ts).
+      where: { userId, examId: { in: exams.map((e) => e.id) }, mode: MODE_STANDARD },
       orderBy: { id: 'desc' },
       select: { id: true, examId: true, status: true, score: true, passed: true, aiAssisted: true },
     });
@@ -134,7 +137,7 @@ export async function getExamForTaking(examId: number, userId?: number) {
   } | null = null;
   if (userId) {
     const rows = await prisma.examAttempt.findMany({
-      where: { userId, examId },
+      where: { userId, examId, mode: MODE_STANDARD },
       orderBy: { id: 'desc' },
       select: { id: true, status: true, score: true, passed: true, aiAssisted: true },
     });
@@ -174,12 +177,13 @@ export async function startAttempt(examId: number, userId: number, aiAssisted = 
   // resuming must never hand back the wrong one (a CuongMini click should
   // never silently resume a real ticking-clock attempt, or vice versa).
   const existing = await prisma.examAttempt.findFirst({
-    where: { userId, examId, status: 'IN_PROGRESS', aiAssisted },
+    where: { userId, examId, status: 'IN_PROGRESS', aiAssisted, mode: MODE_STANDARD },
     orderBy: { id: 'desc' },
   });
   const now = Date.now();
   if (existing && (!existing.expiresAt || existing.expiresAt.getTime() > now)) {
-    return { attemptId: existing.id, startedAt: existing.startedAt, expiresAt: existing.expiresAt, resumed: true, aiAssisted: existing.aiAssisted };
+    // `saved`: bài đã tự lưu (PUT /attempts/:id/progress) — "Tiếp tục bài thi" không còn mất đáp án.
+    return { attemptId: existing.id, startedAt: existing.startedAt, expiresAt: existing.expiresAt, resumed: true, aiAssisted: existing.aiAssisted, saved: await baiDaLuu(existing.id) };
   }
   // An expired in-progress attempt is auto-submitted (empty) before a new one.
   if (existing) {
@@ -335,6 +339,8 @@ export async function submitFinalExam(
 // ── Review (post-submit): answers + keys + explanations ───────────────
 export async function buildReview(attemptId: number, userId: number) {
   const attempt = await loadOwnedAttempt(attemptId, userId);
+  // Lượt "Phòng thi mô phỏng": đề nằm trong ảnh chụp `paper`, không phải exam.questions.
+  if (attempt.paper) return xemLaiMoPhong(attempt, examHeader(attempt.exam));
   const answers = (attempt.answers ?? {}) as Record<string, unknown>;
   const feedback = (attempt.feedback ?? {}) as Record<string, unknown>;
 
@@ -358,7 +364,15 @@ export async function buildReview(attemptId: number, userId: number) {
     myAnswer: answers[String(q.id)] ?? null,
     bookmarked: bmByQ.has(q.id),
     bookmarkNote: bmByQ.get(q.id) ?? null,
+    canSave: true,
   }));
+
+  // Thống kê theo chương/CLO cho đề FE thật đã nộp (câu đã được phân chương — sectionId).
+  let chapterStats: ReturnType<typeof thongKeDeThat> = null;
+  if (attempt.exam.kind === 'FE' && attempt.status !== 'IN_PROGRESS' && Array.isArray(feedback.perQuestion)) {
+    const sections = await prisma.courseSection.findMany({ where: { courseId: attempt.exam.courseId }, select: { id: true, title: true, sortOrder: true } });
+    chapterStats = thongKeDeThat(attempt.exam.questions, feedback.perQuestion as Array<{ questionId: number; correct?: boolean }>, sections, attempt.exam.course?.courseCode ?? null);
+  }
 
   return {
     attempt: {
@@ -370,6 +384,9 @@ export async function buildReview(attemptId: number, userId: number) {
       passed: attempt.passed, gradingMode: attempt.gradingMode,
       feedback,
     },
+    mock: null,
+    chapterStats,
+    cloTen: chapterStats ? cauHinhMon(attempt.exam.course?.courseCode)?.cloTen ?? {} : {},
     exam: examHeader(attempt.exam),
     examBookmarked: !!(await prisma.examBookmark.findUnique({ where: { uk_exam_bookmark: { userId, examId: attempt.examId } }, select: { id: true } })),
     questions,
@@ -379,7 +396,8 @@ export async function buildReview(attemptId: number, userId: number) {
 // ── Attempt history ───────────────────────────────────────────────────
 export async function listMyAttempts(userId: number, examId?: number, dangLam = false) {
   const rows = await prisma.examAttempt.findMany({
-    where: { userId, ...(examId ? { examId } : {}), status: dangLam ? 'IN_PROGRESS' : { in: ['SUBMITTED', 'GRADED', 'EXPIRED'] } },
+    // Bài đang dở: chỉ lượt STANDARD (app iOS/desktop "làm tiếp" bằng /exams/:id — lượt mô phỏng mở ở web /exam/mo-phong).
+    where: { userId, ...(examId ? { examId } : {}), status: dangLam ? 'IN_PROGRESS' : { in: ['SUBMITTED', 'GRADED', 'EXPIRED'] }, ...(dangLam ? { mode: MODE_STANDARD } : {}) },
     orderBy: { id: 'desc' },
     include: {
       exam: {
@@ -405,6 +423,8 @@ export async function listMyAttempts(userId: number, examId?: number, dangLam = 
     passed: r.passed, gradingMode: r.gradingMode,
     // aiAssisted: lượt luyện cùng CuongMini — app tách khỏi lịch sử thi thật. startedAt/expiresAt: để "làm tiếp".
     aiAssisted: r.aiAssisted, startedAt: r.startedAt, expiresAt: r.expiresAt,
+    // STANDARD | MOCK_EXAM | MOCK_PRACTICE — lượt mô phỏng mở bằng /exam/mo-phong/… khi còn dở.
+    mode: r.mode,
     bookmarked: marked.has(r.examId),
     exam: {
       id: r.exam.id, title: r.exam.title, kind: r.exam.kind, peType: r.exam.peType,

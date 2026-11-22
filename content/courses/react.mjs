@@ -18,6 +18,26 @@ import s11 from './react/s11-ben-trong.mjs';
 import s12 from './react/s12-react-19.mjs';
 import s13 from './react/s13-kien-truc.mjs';
 import s14 from './react/s14-production.mjs';
+// Dự án xuyên suốt khoá (docs/du-an-hop-dong.md v1, 22/11/2026): mốc rx-moc-N đặt TRƯỚC quiz chương N (N = 1..14),
+// bài rx-bao-ve-du-an cuối Chương 14 (sau đề thi cuối khoá); bài "Bắt đầu tại đây" rx-0-8 mang cờ dangKyDuAn + lời mời.
+// Dữ liệu + cách dựng bài ở ./react/_du-an.mjs (khung mẫu chạy thật ở ./react/_du-an-ma.mjs).
+import { DU_AN, MOI_DANG_KY, baiMoc, baiBaoVe } from './react/_du-an.mjs';
+
+const CHUONG = [s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14];
+const TIEU_DE = new Map([s00, ...CHUONG].flatMap((s) => s.lessons.map((l) => [l.slug, l.title])));
+const coMoc = CHUONG.map((s, i) => {
+  const cuoi = s.lessons[s.lessons.length - 1];
+  if (cuoi.type !== 'QUIZ') throw new Error('react: chương ' + (i + 1) + ' không kết thúc bằng QUIZ — xem lại chỗ chèn mốc dự án');
+  const lessons = [...s.lessons.slice(0, -1), baiMoc(i + 1, TIEU_DE), cuoi];
+  if (i === CHUONG.length - 1) lessons.push(baiBaoVe());
+  return { ...s, lessons };
+});
+const BAT_DAU = 'rx-0-8-bat-dau-tai-day';
+if (!s00.lessons.some((l) => l.slug === BAT_DAU)) throw new Error('react: không thấy bài ' + BAT_DAU + ' để gắn cờ đăng ký đề tài');
+const s00DangKy = {
+  ...s00,
+  lessons: s00.lessons.map((l) => (l.slug === BAT_DAU ? { ...l, dangKyDuAn: true, content: l.content + MOI_DANG_KY } : l)),
+};
 
 /*
  * KHUNG (24/09/2026) — giữ NGUYÊN để biết slug/tiêu đề gốc; chương nào đã soạn chi tiết thì thay phần tử
@@ -110,21 +130,6 @@ export default {
     requirements: 'HTML, CSS, JavaScript cơ bản (khoá Web Foundations là đủ). Nên biết TypeScript cơ bản (khoá TypeScript). Học xong khoá này thì học tiếp Next.js: The React Framework.',
     documentsNote: 'Tài liệu chính: react.dev • vite.dev • tanstack.com/query • react-hook-form.com • zustand docs • testing-library.com.',
   },
-  sections: [
-    s00,
-    s01,
-    s02,
-    s03,
-    s04,
-    s05,
-    s06,
-    s07,
-    s08,
-    s09,
-    s10,
-    s11,
-    s12,
-    s13,
-    s14,
-  ],
+  sections: [s00DangKy, ...coMoc],
+  duAn: DU_AN,
 };

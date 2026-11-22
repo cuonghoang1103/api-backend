@@ -27,7 +27,7 @@ export default {
     /* ── Mục 0 — Giới thiệu, Vì sao cần Git, Cài đặt & Cách học ── */
     'git-0-5-bat-dau-tai-day': { yt: 'sCr_gb8rdEI', credit: "GitHub — Two decades of Git: A conversation with creator Linus Torvalds", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-05-bat-dau-tai-day-4369ac28.mp4' }, defaultVideoTrack: 'VI'},
     'git-0-6-bat-dau-khi-khong-co-git': { yt: '1JuYQgpbrW0', credit: "Phạm Huy Hoàng — Từ gà tới pro Git và Github trong 20 phút - Tự học Git siêu tốc", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-06-khi-khong-co-git-e781b144.mp4' }, defaultVideoTrack: 'VI'},
-    'git-0-0-slides': { yt: 'r8jQ9hVA2qs', credit: "GitHub — A brief introduction to Git for beginners | GitHub", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-00-slide-muc-0-2b478792.mp4' }, defaultVideoTrack: 'VI'},
+    'git-0-0-slides': { yt: 'r8jQ9hVA2qs', credit: "GitHub — A brief introduction to Git for beginners | GitHub", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-00-slide-muc-0-4a70e2e2.mp4' }, defaultVideoTrack: 'VI'},
     'git-0-1-gioi-thieu-lo-trinh': { yt: 'zTjRZNkhiEU', credit: "freeCodeCamp.org — Learn Git – Full Course for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-01-gioi-thieu-lo-trinh-092463fe.mp4' }, defaultVideoTrack: 'VI'},
     'git-0-2-van-de-git-giai-quyet': { yt: 'lJu5xwbGgRk', credit: "Computerphile — Git Version Control _final_new_final.new - Computerphile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-02-van-de-git-giai-quyet-c6c4cb8c.mp4' }, defaultVideoTrack: 'VI'},
     'git-0-3-cai-dat-cau-hinh': { yt: 'AdzKzlp66sQ', credit: "ProgrammingKnowledge — How to Install and Configure Git and GitHub on Windows 11", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-03-cai-dat-cau-hinh-465686f7.mp4' }, defaultVideoTrack: 'VI'},
@@ -68,8 +68,8 @@ export default {
     /* ── Chương 5 — Remote & GitHub ── */
     'git-5-0-slides': { yt: 'Gg4bLk8cGNo', credit: "David Mahler — Introduction to Git - Remotes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-00-slide-chuong-5-58d06b46.mp4' }, defaultVideoTrack: 'VI'},
     'git-5-1-remote-fetch-pull': { yt: 'T13gDBXarj0', credit: "The Modern Coder — Git Pull vs Fetch: When To Use Each", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-01-remote-fetch-pull-feade100.mp4' }, defaultVideoTrack: 'VI'},
-    'git-5-2-xac-thuc': { yt: 'Lhyu_2iLO8w', credit: "HenrikM Dev — How to Git Clone From GitHub via HTTPS and SSH [2 Ways]", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-02-xac-thuc-28186923.mp4' }, defaultVideoTrack: 'VI'},
-    'git-5-3-push': { yt: 'wBc0WcyTtOA', credit: "Cameron McKenzie — Git Set Upstream Example | Learn Branch Management in Git", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-03-push-9d211b94.mp4' }, defaultVideoTrack: 'VI'},
+    'git-5-2-xac-thuc': { yt: 'Lhyu_2iLO8w', credit: "HenrikM Dev — How to Git Clone From GitHub via HTTPS and SSH [2 Ways]", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-02-xac-thuc-839e65ca.mp4' }, defaultVideoTrack: 'VI'},
+    'git-5-3-push': { yt: 'wBc0WcyTtOA', credit: "Cameron McKenzie — Git Set Upstream Example | Learn Branch Management in Git", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-03-push-cd60ef0a.mp4' }, defaultVideoTrack: 'VI'},
     'git-5-4-fork-upstream': { yt: 'deEYHVpE1c8', credit: "Faraday Academy — Git Forking & Fetch: How to Keep your Fork in Sync with an Upstream Repository", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-04-fork-upstream-7fe8375c.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 6 — Pull request & code review ── */
@@ -105,7 +105,7 @@ export default {
 
     /* ── Chương 11 — Nền tảng GitHub ── */
     'git-11-0-slides': { yt: 'NUELGzIHT-I', credit: "GitHub — The ultimate beginner's guide to GitHub in 2026", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-00-slide-chuong-11-26dd1dd9.mp4' }, defaultVideoTrack: 'VI'},
-    'git-11-1-issue-projects-gh': { yt: 'c67GaAkf1BE', credit: "GitHub — How to use GitHub issues and projects | GitHub for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-01-issue-projects-gh-f1bf49b3.mp4' }, defaultVideoTrack: 'VI'},
+    'git-11-1-issue-projects-gh': { yt: 'c67GaAkf1BE', credit: "GitHub — How to use GitHub issues and projects | GitHub for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-01-issue-projects-gh-dac189ff.mp4' }, defaultVideoTrack: 'VI'},
     'git-11-2-actions': { yt: 'R8_veQiYBjI', credit: "TechWorld with Nana — GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-02-actions-1270a31b.mp4' }, defaultVideoTrack: 'VI'},
     'git-11-4-bao-mat-kho': { yt: 'zhxXaFzzJYA', credit: "GitHub — Getting started with GitHub security | GitHub for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-03-bao-mat-kho-tron-5c9c5ad9.mp4' }, defaultVideoTrack: 'VI'},
 

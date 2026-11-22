@@ -23,6 +23,8 @@ import s09 from './spring-boot/s09-security-jwt.mjs';
 import s10 from './spring-boot/s10-hacker.mjs';
 import s11 from './spring-boot/s11-test.mjs';
 import s19 from './spring-boot/s19-thymeleaf.mjs';
+import s20 from './spring-boot/s20-mongodb.mjs';
+import s21 from './spring-boot/s21-react-spring.mjs';
 // Dự án xuyên suốt khoá (docs/du-an-hop-dong.md v1, 22/11/2026): duAn + bài mốc sb-moc-N + bài bảo vệ sb-bao-ve-du-an.
 import duAn, { baiMoc, baiBaoVe, MOC_THEO_CHUONG } from './spring-boot/_du-an.mjs';
 
@@ -204,7 +206,9 @@ sections[8] = s08;
 sections[9] = s09;
 sections[10] = s10;
 sections[11] = s11;
-sections[19] = s19;   // chương bổ sung 22/11 (HSF302) — 20, 21 còn là khung
+sections[19] = s19;   // chương bổ sung 22/11 (HSF302)
+sections[20] = s20;   // chương bổ sung 22/11 (MongoDB)
+sections[21] = s21;   // chương bổ sung 22/11 (SBA301: React ↔ Spring)
 
 /* Dự án xuyên suốt khoá: mỗi mục/chương có một bài mốc, đặt ngay TRƯỚC bài quiz của chương
    (chương chưa có quiz ⇒ cuối chương). Tạo bản sao section, không sửa object của module chương. */

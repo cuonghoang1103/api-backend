@@ -920,7 +920,7 @@ const MOC = [
       'Stopping MongoDB does not break the main action of your API|||Tắt MongoDB không làm hỏng thao tác chính của API',
     ],
     goiY: [
-      'Spring Boot 4 reads the connection string from spring.mongodb.uri (no longer spring.data.mongodb.uri) — if the log says localhost:27017, your setting was ignored (lesson 20.1)|||Spring Boot 4 đọc chuỗi kết nối từ spring.mongodb.uri (không còn spring.data.mongodb.uri) — log mà ghi localhost:27017 tức cấu hình của bạn bị bỏ qua (bài 20.1)',
+      'Spring Boot 4 reads the connection string from spring.mongodb.uri (no longer spring.data.mongodb.uri) — if the log says localhost:27017, your setting was ignored (lesson 20.2)|||Spring Boot 4 đọc chuỗi kết nối từ spring.mongodb.uri (không còn spring.data.mongodb.uri) — log mà ghi localhost:27017 tức cấu hình của bạn bị bỏ qua (bài 20.2)',
       'Use Long ids from PostgreSQL inside documents as plain references — there are no foreign keys here|||Dùng id Long từ PostgreSQL trong document như tham chiếu thường — ở đây không có khoá ngoại',
       'If the MongoDB 8 image refuses to start on your Docker host, read the first fatal log line — it names the reason; mongo:7 is a fine fallback for learning|||Nếu image MongoDB 8 không khởi động trên máy Docker của bạn, đọc dòng log fatal đầu tiên — nó nêu lý do; mongo:7 là phương án dự phòng ổn khi học',
     ],

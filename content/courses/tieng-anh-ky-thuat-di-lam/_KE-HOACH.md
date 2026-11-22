@@ -108,3 +108,9 @@ Luyện nói có thể dùng CuongMini/AI nói trong CT Language. Mẫu email/ch
 | | `tak-8-2-tuan-mo-phong` | 8.2 — Dự án cuối khoá — một tuần làm việc mô phỏng bằng tiếng Anh |
 | | `tak-8-3-tu-cham` | 8.3 — Tự chấm, nhận phản hồi và kế hoạch luyện 3 tháng tới |
 | | `tak-8-4-tong-ket` | 8.4 — Kiểm tra tổng kết |
+
+## 6. Tiến độ soạn
+
+- 22/11/2026: **Mục 0** (`s00-bat-dau.mjs`: tak-0-8, tak-0-9, tak-0-1) và **Chương 1** (`s01-doc-tieng-anh-ky-thuat.mjs`: tak-1-1 … tak-1-4 + quiz 10 câu tak-1-5, type QUIZ) đã soạn chi tiết.
+  Tiện ích chung: `_chung.mjs` (mau, saiDung, tuVung, Q). Tệp khoá ghép chương vào khung THEO SLUG (`ghep()`): bài đã soạn thay bài khung,
+  bài chưa có giữ "Đang soạn", slug lạ ⇒ ném lỗi lúc nạp. Chương 2–8 vẫn là khung.

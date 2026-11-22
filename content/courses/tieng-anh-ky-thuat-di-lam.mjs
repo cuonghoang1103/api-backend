@@ -9,6 +9,21 @@
  * Khi soạn một chương: thay phần tử trong `sections` bằng tệp chương thật, GIỮ NGUYÊN slug bài và title chương.
  */
 import { khung } from './_chung/khung.mjs';
+import s00 from './tieng-anh-ky-thuat-di-lam/s00-bat-dau.mjs';
+import s01 from './tieng-anh-ky-thuat-di-lam/s01-doc-tieng-anh-ky-thuat.mjs';
+
+/* Ghép chương đã soạn vào khung THEO SLUG: bài đã soạn thay bài khung, bài chưa soạn giữ nguyên "Đang soạn"; title chương giữ của khung. */
+function ghep(khungChuong, that) {
+  const m = new Map(that.lessons.map((l) => [l.slug, l]));
+  for (const slug of m.keys()) if (!khungChuong.lessons.some((l) => l.slug === slug)) throw new Error(`tak: slug ${slug} không có trong khung`);
+  return { ...khungChuong, description: that.description || khungChuong.description, lessons: khungChuong.lessons.map((l) => m.get(l.slug) ?? l) };
+}
+
+function ghepChuong(sections) {
+  sections[0] = ghep(sections[0], s00);
+  sections[1] = ghep(sections[1], s01);
+  return sections;
+}
 
 export default {
   category: { slug: 'career', name: 'Nghề nghiệp', icon: 'Briefcase', sortOrder: 7 },
@@ -27,7 +42,7 @@ export default {
     requirements: 'Tiếng Anh mức đọc hiểu cơ bản (khoảng A2–B1). Đã biết Git, ticket và quy trình nhóm cơ bản (khoá Agile & Teamwork) là lợi thế.',
     documentsNote: 'Tài liệu chính: Google Technical Writing One/Two (developers.google.com/tech-writing) • Google developer documentation style guide • Microsoft Writing Style Guide • RFC 2119 (MUST/SHOULD/MAY) • conventionalcommits.org • cbea.ms/git-commit ("How to Write a Git Commit Message") • Cambridge Dictionary và Oxford Learner\'s Dictionaries (phiên âm) • YouGlish (nghe phát âm thật) • sổ từ chuyên ngành trong CT Language.',
   },
-  sections: khung('tak', [
+  sections: ghepChuong(khung('tak', [
     ['Section 0 — English as a work tool', 'Mục 0 — Tiếng Anh như một công cụ làm việc', 'Học đúng thứ tiếng Anh bạn sẽ dùng ở tuần đầu đi làm.', [
       ['bat-dau-tai-day', 'Start here (1/2) — The English of your first month at work', 'Bắt đầu tại đây (1/2) — Thứ tiếng Anh bạn dùng trong tháng đầu đi làm', 'Bản đồ tình huống: đọc, viết, nói, nghe trong một tuần làm việc · Khách Nhật, Mỹ, Âu dùng tiếng Anh khác nhau ra sao · Học bằng mẫu câu theo tình huống, không học ngữ pháp từ đầu · Lộ trình 8 chương và tuần mô phỏng cuối khoá'],
       ['bat-dau-khi-khong-co', 'Start here (2/2) — When English goes wrong at work: silence, ambiguity, the wrong tone', 'Bắt đầu tại đây (2/2) — Khi tiếng Anh hỏng việc: im lặng, mơ hồ, sai giọng', 'Không dám hỏi lại nên làm sai cả sprint · "should" bị hiểu thành "must" · Email cộc lốc làm khách phật ý · Sự cố thật có nguồn: Mars Climate Orbiter 1999 (hai đội hiểu khác đơn vị — lỗi giao tiếp đặc tả) · Tình huống: khách hỏi trong cuộc họp mà bạn không nghe kịp'],
@@ -91,5 +106,5 @@ export default {
       ['tu-cham', 'Self-review, feedback and your next 3 months of practice', 'Tự chấm, nhận phản hồi và kế hoạch luyện 3 tháng tới', 'So bài đầu khoá và cuối khoá · Kế hoạch 15 phút/ngày · Liên kết interview-prep ch8 khi chuẩn bị phỏng vấn'],
       ['tong-ket', 'Final quiz', 'Kiểm tra tổng kết', '20 câu trộn cả khoá: đọc, viết, chọn câu phù hợp tình huống'],
     ]],
-  ]),
+  ])),
 };

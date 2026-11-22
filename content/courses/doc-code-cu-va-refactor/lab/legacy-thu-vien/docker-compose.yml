@@ -1,0 +1,31 @@
+# Stack lab "thư viện cũ": MySQL 8.0 nạp dump + Tomcat 9 chạy WAR.
+# Do khoá học thêm (Mục 0.1). Cổng máy: 18306 (MySQL), 18080 (web) — tránh đụng 3306/8080 đang dùng.
+name: lgc-thuvien
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_ROOT_HOST: "%"
+    ports:
+      - "18306:3306"
+    volumes:
+      - ./db/thuvien.sql:/docker-entrypoint-initdb.d/01-thuvien.sql:ro
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p123456"]
+      interval: 5s
+      retries: 20
+  web:
+    build: .
+    environment:
+      # allowPublicKeyRetrieval=true: driver 5.1 + MySQL 8 (caching_sha2_password) không có nó thì lỗi
+      # "Public Key Retrieval is not allowed" mỗi khi MySQL vừa khởi động lại — xem bài 1.4. CHỈ dùng cho lab.
+      DB_URL: "jdbc:mysql://db:3306/thuvien?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true"
+    ports:
+      - "18080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  mysql-data:

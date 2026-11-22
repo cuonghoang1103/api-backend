@@ -125,3 +125,24 @@ OWASP Dependency-Check, OWASP Top 10 • NVD CVE-2021-44228 • Node.js release 
 | | `lgc-9-3-ban-giao` | 9.3 — Bàn giao: README mới, bản đồ, ghi chú nâng cấp, rủi ro còn lại |
 | | `lgc-9-4-phong-van` | 9.4 — Câu hỏi phỏng vấn về code cũ và refactor |
 | | `lgc-9-5-tong-ket` | 9.5 — Kiểm tra tổng kết và checklist bảo trì |
+
+## 6. Tiến độ soạn chi tiết (22/11/2026)
+
+| Phần | Tệp | Trạng thái |
+|---|---|---|
+| Mục 0 (3 bài) | `s00-bat-dau.mjs` | ✅ soạn xong — 6 ý Bắt đầu (Feathers 2004, Opdyke 1990/92, Fowler 1999/2018, Spolsky 2000, GAO-16-468, SEC 34-70694, ESA Ariane 501) |
+| Chương 1 (7 bài, quiz 12 câu) | `s01-dung-chay.mjs` | ✅ soạn xong |
+| Chương 2 (7 bài, quiz 12 câu) | `s02-ban-do.mjs` | ✅ soạn xong |
+| Chương 3–9 | (khung) | ⏳ chưa soạn |
+
+Nối vào khoá bằng mảng `DA_SOAN` trong `../doc-code-cu-va-refactor.mjs` (thay phần tử khung cùng chỉ số; slug + title chương khớp khung — đã kiểm).
+Tiện ích chung: `_chung.mjs` (dùng lại bộ tô màu của khoá spring-boot + `ml()` song ngữ, `thuatNgu()`, `Q()`).
+
+**Repo lab** `lab/legacy-thu-vien/` (nguồn, commit cuối) + `lab/_tao-lich-su.py` (dựng lịch sử 13 commit 2016–2019, mã băm cố định
+— output git trong bài khớp khi dựng lại). Gói zip: `python3 lab/_tao-lich-su.py lab/legacy-thu-vien /tmp/x/legacy-thu-vien && (cd /tmp/x && zip -qr legacy-thu-vien-v1.zip legacy-thu-vien)`
+⇒ **CHƯA đẩy R2**: đường trong bài là `ZIP_LAB` (`files/courses/doc-code-cu-va-refactor/legacy-thu-vien-v1.zip`).
+Lỗi THẬT của lab dùng làm bài (đừng "sửa" trong nguồn lab): javax.xml.bind (JDK 11+), maven-war-plugin 2.2 (JDK mới), POM thiếu
+sourceEncoding, header.jsp thiếu pageEncoding (menu lỗi font — tự lộ ra khi chạy), `dangMuon > max` (SV mượn 4), CASCADE loans→readers,
+phí trong sp_overdue_report ≠ Java, available sách 7 lệch sẵn trong dump, commit `4780c81` "refactor" đổi hành vi tìm kiếm trống,
+11 chỗ SQL nối chuỗi (grep thấy 9), JSP mở được khi chưa đăng nhập + error.jsp in stack trace, driver 5.1.49 "Public Key Retrieval".
+Chưa có: repo `legacy-express` (Node 14) — cần cho bài 7.4; bài 1.2 dùng thư mục tạm với node-sass.

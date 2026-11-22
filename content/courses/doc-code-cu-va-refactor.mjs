@@ -9,6 +9,12 @@
  * Khi soạn một chương: thay phần tử trong `sections` bằng tệp chương thật, GIỮ NGUYÊN slug bài và title chương.
  */
 import { khung } from './_chung/khung.mjs';
+import s00 from './doc-code-cu-va-refactor/s00-bat-dau.mjs';
+import s01 from './doc-code-cu-va-refactor/s01-dung-chay.mjs';
+import s02 from './doc-code-cu-va-refactor/s02-ban-do.mjs';
+
+// Các chương đã soạn chi tiết thay phần tử tương ứng của khung (giữ nguyên slug bài + title chương).
+const DA_SOAN = [s00, s01, s02];
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -106,5 +112,5 @@ export default {
       ['phong-van', 'Interview questions on legacy code and refactoring', 'Câu hỏi phỏng vấn về code cũ và refactor', '"Bạn tiếp cận codebase lạ thế nào" · "Refactor khác viết lại ở đâu" · "Kể một code smell và cách sửa" · "Sửa code không có test thế nào" · Trả lời theo STAR bằng chính dự án này'],
       ['tong-ket', 'Final quiz and maintenance checklist', 'Kiểm tra tổng kết và checklist bảo trì', '20 câu trộn cả khoá · Checklist "trước khi sửa code người khác"'],
     ]],
-  ]),
+  ]).map((chuong, i) => DA_SOAN[i] || chuong),
 };

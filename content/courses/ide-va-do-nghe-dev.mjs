@@ -5,11 +5,15 @@
  * KHÔNG dạy debugger (thuộc debug-co-phuong-phap ch3–5). KHÔNG dạy lại: git ch14 (Git trong VS Code), linux-bash ch3 (grep),
  * web-foundations 1.2 (cài VS Code nhập môn) và 11.5 (regex vừa đủ), docker 13.2 (debugger trong container), log-tu-a-den-z ch2.
  * Kế hoạch + bảng phủ: content/courses/ide-va-do-nghe-dev/_KE-HOACH.md. Soạn theo content/courses/docker/_HOP-DONG.md.
+ * 22/11/2026: Mục 0 + Chương 1 đã soạn (ide-va-do-nghe-dev/s00, s01), ghép bằng ghep() cuối tệp.
+ * 22/11/2026: ĐÃ SOẠN Mục 0 + Chương 1 (ide-va-do-nghe-dev/s00-bat-dau.mjs, s01-vscode.mjs), ghép vào khung bằng ghep() cuối tệp.
  * Khi soạn một chương: thay phần tử trong `sections` bằng tệp chương thật, GIỮ NGUYÊN slug bài và title chương.
  */
 import { khung } from './_chung/khung.mjs';
+import s00 from './ide-va-do-nghe-dev/s00-bat-dau.mjs';
+import s01 from './ide-va-do-nghe-dev/s01-vscode.mjs';
 
-export default {
+const COURSE = {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
   course: {
     slug: 'ide-va-do-nghe-dev',
@@ -88,3 +92,14 @@ export default {
     ]],
   ]),
 };
+
+/** Ghép chương đã soạn vào khung: bài cùng slug thay bài khung; GIỮ title chương và thứ tự bài của khung. */
+function ghep(sec, soan) {
+  const theoSlug = new Map(soan.lessons.map((l) => [l.slug, l]));
+  for (const l of soan.lessons) if (!sec.lessons.some((k) => k.slug === l.slug)) throw new Error('ide: slug lạ ' + l.slug);
+  return { ...sec, description: soan.description || sec.description, lessons: sec.lessons.map((l) => theoSlug.get(l.slug) || l) };
+}
+COURSE.sections[0] = ghep(COURSE.sections[0], s00);   // Mục 0 soạn 22/11/2026
+COURSE.sections[1] = ghep(COURSE.sections[1], s01);   // Chương 1 soạn 22/11/2026 — chương 2–7 còn là khung
+
+export default COURSE;

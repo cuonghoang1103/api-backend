@@ -10,6 +10,13 @@
  * Khi soạn một chương: thay phần tử trong `sections` bằng tệp chương thật, GIỮ NGUYÊN slug bài và title chương.
  */
 import { khung } from './_chung/khung.mjs';
+import { ghep } from './debug-co-phuong-phap/_chung.mjs';
+import s00 from './debug-co-phuong-phap/s00-bat-dau.mjs';
+import s01 from './debug-co-phuong-phap/s01-tu-duy.mjs';
+import s02 from './debug-co-phuong-phap/s02-stack-trace.mjs';
+
+/** Bài ĐÃ SOẠN (debug-co-phuong-phap/sNN-*.mjs, cùng slug) thay bài khung; bài chưa soạn giữ khung. Tiêu đề chương giữ nguyên từ khung. */
+const DA_SOAN = [s00, s01, s02];
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -131,5 +138,5 @@ export default {
       ['phong-van', 'Interview questions on debugging (with model answers)', 'Câu hỏi phỏng vấn về gỡ lỗi (kèm gợi ý trả lời)', '"Kể lỗi khó nhất bạn từng sửa" theo STAR · "Lỗi chỉ xảy ra trên production thì làm gì" · "NullPointerException ở dòng này nghĩa là gì" · "Bạn dùng debugger thế nào" · Câu hỏi của trưởng nhóm khi review PR sửa lỗi'],
       ['tong-ket', 'Final quiz and checklist', 'Kiểm tra tổng kết và checklist', '20 câu trộn cả khoá · Checklist gỡ lỗi in ra dán cạnh màn hình'],
     ]],
-  ]),
+  ]).map((sec, i) => (DA_SOAN[i] ? ghep(sec, DA_SOAN[i]) : sec)),
 };

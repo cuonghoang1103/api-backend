@@ -7,6 +7,7 @@
  * Song ngữ EN/VN, mỗi trang tài liệu của thầy/cô có ảnh + lời giảng (khung .giang).
  * Rebuilt 12/09/2026 slide by slide from the teacher's full folder — modules in ./swp391/ (see _slides.mjs).
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/SWP391.mjs --apply
+ * 22/11/2026: + mục cuối "Dự án nhóm thật" (./swp391/playbook.mjs + ./swp391/duAn.mjs) — 5 mốc theo iteration, 7 đề tài, bảo vệ.
  */
 import sec0 from './swp391/sec0.mjs';
 import ch1 from './swp391/ch1.mjs';
@@ -20,6 +21,15 @@ import sample from './swp391/sample.mjs';
 import ch8 from './swp391/ch8.mjs';
 import ch9 from './swp391/ch9.mjs';
 import finalExam from './swp391/final.mjs';
+// Dự án xuyên suốt khoá (22/11/2026, docs/du-an-hop-dong.md): mục "Dự án nhóm thật" đặt CUỐI danh sách sections
+// (exam_chapter_map lưu sortOrder section — chèn giữa làm lệch). Bài 0.1 mang cờ dangKyDuAn + lời mời đăng ký.
+import playbook from './swp391/playbook.mjs';
+import { duAn, moiDangKy } from './swp391/duAn.mjs';
+
+const sec0DuAn = {
+  ...sec0,
+  lessons: sec0.lessons.map((l) => (l.slug === 'swp391-gioi-thieu' ? { ...l, dangKyDuAn: true, content: l.content + moiDangKy } : l)),
+};
 
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
@@ -39,5 +49,6 @@ export default {
     requirements: 'Tiên quyết: PRJ301 (Java web / MVC), SWE201c (Kỹ nghệ phần mềm), đã ĐẠT LAB211. Môi trường mặc định theo guide: Java JDK + NetBeans 13 + MySQL 8 (MySQL Workbench); .NET + SQL Server được phép nhưng không khuyến nghị. Tài khoản GitLab/GitHub (đăng nhập bằng email trường), OneDrive/Google Drive, Slack, MailTrap.',
     documentsNote: 'Tài liệu của môn (đều có ảnh từng trang + giải thích trong khoá): Slide1 Subject Guides, SWP391 Student Guides, Slide2 Software Requirement, Slide3 System Design, Slide4 Database Design, Slide5 GitLab Guides, Slide6 Presentation, GitLab Student Guides (PDF), Claude_Prompts.txt; Templates: SRS, SDS, System Test, AI Usage Report, Weekly Report, Project Presentation, Project Tracking, 7 UI themes; Sample: dự án G5 (RDS, tracking, SQL, slide) và một báo cáo capstone. Sách tham khảo: Sommerville — Software Engineering; Wiegers & Beatty — Software Requirements; Gomaa — Software Modeling and Design (COMET); Pro Git. Thông tin cá nhân của sinh viên trong tài liệu mẫu đã được loại bỏ.',
   },
-  sections: [sec0, ch1, ch2, ch3, ch4, ch5, ch6, ch7, sample, ch8, ch9, finalExam],
+  duAn,
+  sections: [sec0DuAn, ch1, ch2, ch3, ch4, ch5, ch6, ch7, sample, ch8, ch9, finalExam, playbook],
 };

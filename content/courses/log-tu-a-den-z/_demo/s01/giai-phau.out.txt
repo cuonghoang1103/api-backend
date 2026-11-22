@@ -1,0 +1,21 @@
+$ head -n 2 incident/windows-system.csv
+"TimeCreated","Id","ProviderName","Message"
+"11/20/2026 2:07:30 PM","12","Microsoft-Windows-Kernel-General","The operating system started at system time 2026-11-20T07:07:28.500000000Z."
+$ head -n 1 incident/journal-api01.txt
+2026-11-20T14:06:02+07:00 api-01 systemd[1]: ctw-api.service: Main process exited, code=exited, status=1/FAILURE
+$ head -n 1 incident/nginx-error.log
+2026/11/20 14:08:15 [error] 811#811: *48213 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 192.0.2.31, server: cuongthai.example, request: "GET /api/v1/feed HTTP/1.1", upstream: "http://10.0.0.30:4000/api/v1/feed", host: "cuongthai.example"
+$ head -n 1 incident/postgresql.log
+2026-11-20 07:03:58.114 UTC [1880] LOG:  checkpoint starting: time
+$ head -n 1 incident/app.jsonl | jq .
+{
+  "level": 50,
+  "time": 1795158253088,
+  "pid": 2318,
+  "hostname": "api-01",
+  "msg": "database query failed",
+  "err": {
+    "code": "ECONNREFUSED",
+    "message": "connect ECONNREFUSED 10.0.0.20:5432"
+  }
+}

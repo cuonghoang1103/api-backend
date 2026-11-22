@@ -1,0 +1,11 @@
+PS> [DateTimeOffset]::FromUnixTimeMilliseconds(1795158253088).ToString('o')
+2026-11-20T07:04:13.0880000+00:00
+PS> [DateTimeOffset]::FromUnixTimeMilliseconds(1795158253088).ToOffset([TimeSpan]::FromHours(7)).ToString('o')
+2026-11-20T14:04:13.0880000+07:00
+PS> $d = [datetime]::Parse('11/20/2026 2:07:41 PM', [cultureinfo]'en-US'); $d.Kind; $d.ToString('s')
+Unspecified
+2026-11-20T14:07:41
+PS> [TimeZoneInfo]::ConvertTimeToUtc([datetime]::Parse('11/20/2026 2:07:41 PM', [cultureinfo]'en-US'), [TimeZoneInfo]::FindSystemTimeZoneById('Asia/Ho_Chi_Minh')).ToString('s')
+2026-11-20T07:07:41
+PS> [datetime]::Parse('11/20/2026', [cultureinfo]'vi-VN').ToString('yyyy-MM-dd')
+MethodInvocationException: Exception calling "Parse" with "2" argument(s): "String '11/20/2026' was not recognized as a valid DateTime."

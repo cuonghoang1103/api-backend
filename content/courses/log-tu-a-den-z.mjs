@@ -15,9 +15,24 @@
  *   · network-security Ch2 (nftables/ufw), Ch4 (fail2ban), Ch5 (VPN) · networking-for-developers 11.1–11.2 (tcpdump/Wireshark)
  *   · blue-team-siem (VIẾT quy tắc Sigma, vận hành SIEM, điều tra số chuyên sâu) · incident-response (quy trình sự cố)
  *   · web-security 9.1 (log bảo mật không lộ dữ liệu) · privacy-data-law 5.2 · cloud-aws 10.1/10.4 · kubernetes 9.2.
+ * 22/11/2026: Mục 0 + Chương 1 + Chương 2 SOẠN CHI TIẾT (log-tu-a-den-z/s00-*.mjs, s01-*.mjs, s02-*.mjs; lệnh + output thật ở
+ *   log-tu-a-den-z/_ma.mjs do scripts/log-khoa/chay-demo.sh sinh; gói log mẫu tất định: log-tu-a-den-z/_demo/tao-goi-log.py).
  * Ảnh bìa: scripts/covers/log-tu-a-den-z.png (course-cover-offline.mjs, logo tự vẽ scripts/icons/log-lines.svg).
  */
 import { khung } from './_chung/khung.mjs';
+// Bài đã soạn chi tiết (22/11/2026): mỗi tệp chương xuất { lessons: [...] }; bài nào có ở đây thì THAY bài khung cùng slug
+// (giữ nguyên thứ tự + tiêu đề chương của khung — seeder neo bằng chúng). Bài chưa soạn vẫn hiện "Đang soạn".
+import S00 from './log-tu-a-den-z/s00-bat-dau.mjs';
+import S01 from './log-tu-a-den-z/s01-nen-tang.mjs';
+import S02 from './log-tu-a-den-z/s02-do-nghe.mjs';
+
+function thay(sections, chuong) {
+  const moi = new Map(chuong.flatMap((c) => c.lessons).map((l) => [l.slug, l]));
+  const conLai = new Set(moi.keys());
+  const kq = sections.map((sec) => ({ ...sec, lessons: sec.lessons.map((l) => { conLai.delete(l.slug); return moi.get(l.slug) ?? l; }) }));
+  if (conLai.size) throw new Error(`log-tu-a-den-z: bài soạn không khớp slug khung: ${[...conLai].join(', ')}`);
+  return kq;
+}
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -36,7 +51,7 @@ export default {
     requirements: 'Dùng máy tính thành thạo, có một máy Windows (quyền quản trị) và tạo được máy ảo Linux hoặc WSL2; biết mở terminal. Không cần kinh nghiệm đi làm. Học song song hoặc sau sẽ sâu hơn: Linux & Bash, Networking for Developers, Docker, Observability & Monitoring.',
     documentsNote: 'Tài liệu chính: Microsoft Learn — "Advanced security audit policy settings", trang từng sự kiện 4624/4625/4672/4720/4740/1102…, "Get-WinEvent", "wevtutil", Sysinternals Sysmon • JPCERT/CC "Detecting Lateral Movement through Tracking Event Logs" • Apple Developer — Logging (OSLog) và man log(1) • man7.org: journalctl(1), journald.conf(5), systemd.journal-fields(7), logrotate(8), auditctl(8), ausearch(8), rsyslog.conf • RFC 3164, RFC 5424 (syslog), RFC 3339 (thời gian) • nginx.org ngx_http_log_module, Apache httpd Log Files, IIS W3C logging • PostgreSQL docs "Error Reporting and Logging", pgAudit, pgBadger • docs.docker.com logging drivers, kubernetes.io Logging Architecture, AWS CloudWatch Logs • Grafana Loki/Alloy docs, Elastic docs • attack.mitre.org, SigmaHQ (github.com/SigmaHQ/sigma) • OWASP Logging Cheat Sheet • NIST SP 800-92 (Guide to Computer Security Log Management) và bản sửa đổi.',
   },
-  sections: khung('log', [
+  sections: thay(khung('log', [
     // ───────────────────────────── Mục 0
     ['Section 0 — Why logs are your superpower', 'Mục 0 — Vì sao log là siêu năng lực của bạn', 'Log là gì bằng lời đời thường, học xong làm được gì, và dựng lab an toàn trên máy thật.', [
       ['bat-dau-tai-day', 'Start here (1/2) — What logs are, where they came from, and why they matter to you', 'Bắt đầu tại đây (1/2) — Log là gì, ra đời thế nào, và vì sao nó quan trọng với bạn', 'Liên tưởng: hộp đen máy bay, sổ giao ca của bảo vệ, camera toà nhà · Lịch sử có mốc (kiểm nguồn): syslog của Eric Allman thời Sendmail (~1980), Windows NT Event Log (1993), RFC 3164 (2001) → RFC 5424 (2009), systemd-journald (2011), ELK, OpenTelemetry · Sự cố thật xoay quanh log: Target 2013 (cảnh báo có mà bị bỏ qua), Equifax 2017 (thiết bị giám sát hết chứng chỉ nên "mù"), SolarWinds 2020 (FireEye phát hiện từ một lần đăng nhập lạ) — ghi nguồn từng vụ · Giúp gì cho BẠN: gỡ lỗi đồ án SWP391, thực tập trực sự cố, phỏng vấn backend/DevOps/SOC'],
@@ -237,5 +252,5 @@ export default {
       ['tu-dung-kich-ban', 'Bonus — Generate your own incident dataset in your lab and swap it with a friend', 'Phần thêm — Tự dựng bộ dữ liệu sự cố trong lab của bạn rồi đổi cho bạn bè điều tra', 'Chỉ dùng máy của mình, mạng lab tách biệt · Atomic Red Team ở mức chạy test có sẵn · Viết đáp án trước, đổi cho người khác · ↪ Mô phỏng đối thủ chuyên sâu: /courses/blue-team-siem › siem-4-4-mo-phong'],
       ['thi-cuoi', 'Final exam', 'Bài thi cuối khoá', '30 câu tổng hợp mọi chương, có giải thích'],
     ]],
-  ]),
+  ]), [S00, S01, S02]),
 };

@@ -1,0 +1,29 @@
+$ date -u -d @1795158253
+Fri Nov 20 07:04:13 UTC 2026
+$ date -d @1795158253
+Fri Nov 20 14:04:13 +07 2026
+$ date -u -d @$((1795158253088 / 1000)) +%FT%TZ
+2026-11-20T07:04:13Z
+$ TZ=UTC date -d '2026-11-20 14:05:15 +0700' +%FT%TZ
+2026-11-20T07:05:15Z
+$ date -u -d '2026-11-20T14:06:02+07:00' +%FT%TZ
+2026-11-20T07:06:02Z
+$ date -u -d @$(( $(date -d 'TZ="Asia/Ho_Chi_Minh" 2026/11/20 14:09:02' +%s) - 180 )) +%FT%TZ
+2026-11-20T07:06:02Z
+$ jq -r '(.time / 1000 | floor | todate) + "  " + .msg' incident/app.jsonl
+2026-11-20T07:04:13Z  database query failed
+2026-11-20T07:05:59Z  pool exhausted, giving up
+2026-11-20T07:06:01Z  unhandled rejection, exiting
+2026-11-20T07:08:30Z  connected to database
+$ date -d '20 Nov 2026 14:05:31 +0700' +%s
+1795158331
+$ TZ=America/New_York date -d @1795158253
+Fri Nov 20 02:04:13 EST 2026
+$ date -u -d @1795158253088
+Wed Apr 19 14:18:08 UTC 58856
+$ date -u -d '2026/11/20 14:05:15' +%FT%TZ
+2026-11-20T14:05:15Z
+$ date -u -d 'TZ="Asia/Ho_Chi_Minh" 2026/11/20 14:05:15' +%FT%TZ
+2026-11-20T07:05:15Z
+$ date -u -d 'TZ="Asia/Ho_Chi_Minh" 11/20/2026 2:07:30 PM' +%FT%TZ
+2026-11-20T07:07:30Z

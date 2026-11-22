@@ -1,0 +1,5 @@
+[DateTimeOffset]::FromUnixTimeMilliseconds(1795158253088).ToString('o')
+[DateTimeOffset]::FromUnixTimeMilliseconds(1795158253088).ToOffset([TimeSpan]::FromHours(7)).ToString('o')
+$d = [datetime]::Parse('11/20/2026 2:07:41 PM', [cultureinfo]'en-US'); $d.Kind; $d.ToString('s')
+[TimeZoneInfo]::ConvertTimeToUtc([datetime]::Parse('11/20/2026 2:07:41 PM', [cultureinfo]'en-US'), [TimeZoneInfo]::FindSystemTimeZoneById('Asia/Ho_Chi_Minh')).ToString('s')
+[datetime]::Parse('11/20/2026', [cultureinfo]'vi-VN').ToString('yyyy-MM-dd')

@@ -1,0 +1,47 @@
+$ cd ~ && python3 tao-goi-log.py log-lab-thu
+Đã tạo gói log mẫu ở /root/log-lab-thu
+  app/app-hong.jsonl                    659 byte
+  app/app.jsonl                      152821 byte
+  formats/cef.log                       136 byte
+  formats/event-4625.xml                776 byte
+  formats/json.log                      197 byte
+  formats/logfmt.log                    161 byte
+  formats/rfc3164.log                    97 byte
+  formats/rfc5424.log                   137 byte
+  incident/app.jsonl                    499 byte
+  incident/journal-api01.txt            401 byte
+  incident/nginx-error.log              782 byte
+  incident/postgresql.log               446 byte
+  incident/windows-system.csv           605 byte
+  linux/auth.log                      17444 byte
+  web/access.log                     829422 byte
+  web/access.log.1.gz                 10529 byte
+  windows/pfirewall.log               17804 byte
+  windows/u_ex261120.log              37008 byte
+$ find . -type f | sort
+./app/app-hong.jsonl
+./app/app.jsonl
+./formats/cef.log
+./formats/event-4625.xml
+./formats/json.log
+./formats/logfmt.log
+./formats/rfc3164.log
+./formats/rfc5424.log
+./incident/app.jsonl
+./incident/journal-api01.txt
+./incident/nginx-error.log
+./incident/postgresql.log
+./incident/windows-system.csv
+./linux/auth.log
+./web/access.log
+./web/access.log.1.gz
+./windows/pfirewall.log
+./windows/u_ex261120.log
+$ wc -l web/access.log app/app.jsonl linux/auth.log
+  4105 web/access.log
+   742 app/app.jsonl
+   163 linux/auth.log
+  5010 total
+$ head -n 2 web/access.log
+192.0.2.15 - - [20/Nov/2026:00:00:04 +0700] "GET /static/app.js HTTP/1.1" 200 182000 "https://cuongthai.example/courses" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+192.0.2.28 - - [20/Nov/2026:00:00:20 +0700] "GET /api/v1/me HTTP/1.1" 200 380 "-" "Mozilla/5.0 (Linux; Android 16; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Mobile Safari/537.36"

@@ -1,0 +1,18 @@
+$ jq -r '.level' app/app.jsonl | sort | uniq -c
+    695 30
+     22 40
+     25 50
+$ jq -r 'select(.level >= 50) | .msg' app/app.jsonl | sort | uniq -c
+     25 database query failed
+$ grep -o '\[[a-z]*\]' incident/nginx-error.log | sort | uniq -c
+      3 [error]
+$ grep -o ' [A-Z]*:  ' incident/postgresql.log | sort | uniq -c
+      5  LOG:  
+$ jq -r '{"10":"trace","20":"debug","30":"info","40":"warn","50":"error","60":"fatal"}[.level | tostring]' app/app.jsonl | sort | uniq -c
+     25 error
+    695 info
+     22 warn
+$ echo "auth.info = <$(( 4 * 8 + 6 ))>   daemon.err = <$(( 3 * 8 + 3 ))>   local0.warning = <$(( 16 * 8 + 4 ))>"
+auth.info = <38>   daemon.err = <27>   local0.warning = <132>
+$ echo "<86> → facility $(( 86 / 8 )), severity $(( 86 % 8 ))"
+<86> → facility 10, severity 6

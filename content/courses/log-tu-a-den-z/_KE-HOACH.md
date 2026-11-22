@@ -206,3 +206,15 @@ Script sinh dữ liệu cho Ch18 (đề xuất `scripts/log-khoa/sinh-su-co.mjs`
 Mỗi đợt: kiểm `node -e "import('./content/courses/log-tu-a-den-z.mjs').then(m=>console.log(m.default.sections.length))"`, slug bài không đổi,
 gitleaks trên dữ liệu mẫu, rồi mới đề xuất deploy (theo luật deploy trong CLAUDE.md — người dùng duyệt). Ảnh bìa: đẩy
 `scripts/covers/log-tu-a-den-z.png` lên R2 `images/course-covers/` khi seed khoá lần đầu (phiên khung không đẩy).
+
+## 6. Tiến độ
+
+- **22/11/2026 — Mục 0, Chương 1, Chương 2 soạn chi tiết** (21 bài, song ngữ, mỗi bài có 🧪 "Đạt khi", 🗂, 📌; 3 quiz × 10 câu có giải thích).
+  Tệp: `s00-bat-dau.mjs` + `s00/`, `s01-nen-tang.mjs` + `s01/`, `s02-do-nghe.mjs` + `s02/`; tệp khoá thay bài khung theo slug (hàm `thay()`).
+- **Gói log mẫu (đã dựng):** `_demo/tao-goi-log.py` — tất định (LCG tự viết), chỉ IP RFC 5737/10.x; người học chép script từ bài 0.1.
+  Gồm `web/` (access log 20/11 + `.1.gz`), `app/` (JSON pino + bản hỏng), `linux/auth.log`, `incident/` (Lab 1: db-win01, api-01, proxy-01 —
+  đồng hồ proxy-01 nhanh 180 s), `windows/` (IIS W3C, pfirewall.log), `formats/` (một sự kiện, sáu định dạng).
+- **Output thật:** mọi lệnh trong bài nằm ở `_demo/sNN/*.sh|*.ps1`; `bash scripts/log-khoa/chay-demo.sh` chạy chúng trong container
+  `log00-lab:1` (Ubuntu 24.04: GNU grep 3.11, mawk 1.3.4, jq 1.7, ripgrep 14.1) và `log00-pwsh:1` (PowerShell 7.7 arm64/x64 native) rồi sinh `_ma.mjs`.
+  Sửa lệnh/dữ liệu ⇒ chạy lại script, KHÔNG sửa `_ma.mjs` tay.
+- Chưa có: slide/deck, Code Lab, video. Tiếp theo theo §5: Chương 3 → 4 → 5 (cần VM Windows).

@@ -1,0 +1,23 @@
+$ python3 ~/sql-log.py
+sql> SELECT count(*) FROM req
+    4105
+sql> SELECT status, count(*) AS n FROM req GROUP BY status ORDER BY n DESC
+    200 | 3184
+    401 | 420
+    304 | 293
+    502 | 80
+    404 | 71
+    504 | 57
+sql> SELECT substr(t, 13, 5) AS phut, count(*) AS n, sum(status >= 500) AS loi FROM req WHERE t LIKE '20/Nov/2026:14:0%' GROUP BY phut ORDER BY phut
+    14:00 | 2 | 0
+    14:01 | 9 | 0
+    14:02 | 2 | 0
+    14:03 | 4 | 0
+    14:04 | 30 | 27
+    14:05 | 31 | 29
+    14:06 | 34 | 31
+    14:07 | 36 | 34
+    14:08 | 17 | 16
+    14:09 | 3 | 0
+sql> SELECT ip, count(*) AS n, min(substr(t, 13, 8)), max(substr(t, 13, 8)) FROM req WHERE status = 401 GROUP BY ip
+    203.0.113.66 | 420 | 02:10:03 | 02:41:21

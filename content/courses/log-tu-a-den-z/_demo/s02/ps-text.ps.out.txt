@@ -1,0 +1,45 @@
+PS> (Select-String -Path web/access.log -Pattern ' 502 ').Count
+80
+PS> Select-String -Path linux/auth.log -Pattern 'Accepted' -Context 1,1 | ForEach-Object { $_.Context.PreContext; '> ' + $_.Line; $_.Context.PostContext } | ForEach-Object { $_.Substring(0, [Math]::Min(88, $_.Length)) }
+Nov 20 02:14:09 web-01 sshd[41443]: Failed password for invalid user git from 198.51.100
+> Nov 20 09:02:11 web-01 sshd[52001]: Accepted publickey for deploy from 192.0.2.10 port
+Nov 20 09:02:11 web-01 sshd[52001]: pam_unix(sshd:session): session opened for user depl
+PS> Select-String -Path web/access.log -Pattern '^\S+' | ForEach-Object { $_.Matches[0].Value } | Group-Object -NoElement | Sort-Object Count -Descending | Select-Object -First 3
+
+Count Name
+----- ----
+  422 203.0.113.66
+   76 192.0.2.12
+   74 192.0.2.31
+PS> Get-Content web/access.log -Tail 1
+198.51.100.103 - - [20/Nov/2026:23:57:07 +0700] "GET /static/app.js HTTP/1.1" 200 182000 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 19_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/19.1 Mobile/15E148 Safari/604.1"
+PS> Import-Csv incident/windows-system.csv | Format-Table Id, TimeCreated, ProviderName -AutoSize
+
+Id   TimeCreated           ProviderName
+--   -----------           ------------
+12   11/20/2026 2:07:30 PM Microsoft-Windows-Kernel-General
+41   11/20/2026 2:07:41 PM Microsoft-Windows-Kernel-Power
+6008 11/20/2026 2:07:55 PM EventLog
+6005 11/20/2026 2:07:55 PM EventLog
+PS> Get-Content app/app.jsonl | ConvertFrom-Json | Where-Object level -ge 50 | Group-Object msg -NoElement
+
+Count Name
+----- ----
+   25 database query failed
+PS> Get-Content app/app.jsonl | ConvertFrom-Json | Where-Object responseTime | Measure-Object responseTime -Average -Maximum | Select-Object Count, Average, Maximum
+
+Count Average Maximum
+----- ------- -------
+  695   81.59  139.00
+PS> $f = (Get-Content windows/u_ex261120.log | Where-Object { $_ -like '#Fields:*' }) -replace '^#Fields: ' -split ' '; Get-Content windows/u_ex261120.log | Where-Object { $_ -notlike '#*' } | ConvertFrom-Csv -Delimiter ' ' -Header $f | Where-Object { [int]$_.'sc-status' -ge 500 } | Select-Object -First 3 time, 'cs-uri-stem', 'sc-status', 'time-taken' | Format-Table -AutoSize
+
+time     cs-uri-stem         sc-status time-taken
+----     -----------         --------- ----------
+01:12:28 /portal/report.aspx 500       10362
+02:25:02 /portal/report.aspx 500       4653
+03:23:21 /portal/report.aspx 500       11000
+PS> $f = (Get-Content windows/pfirewall.log | Where-Object { $_ -like '#Fields:*' }) -replace '^#Fields: ' -split ' '; Get-Content windows/pfirewall.log | Where-Object { $_ -and $_ -notlike '#*' } | ConvertFrom-Csv -Delimiter ' ' -Header $f | Where-Object action -eq 'DROP' | Group-Object 'src-ip', 'dst-port' -NoElement
+
+Count Name
+----- ----
+   50 203.0.113.70, 3389

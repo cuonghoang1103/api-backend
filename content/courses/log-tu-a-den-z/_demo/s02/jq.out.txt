@@ -1,0 +1,32 @@
+$ head -n 1 app/app.jsonl | jq -c .
+{"level":30,"time":1795154401033,"pid":2318,"hostname":"web-01","reqId":"req-00001","req":{"method":"POST","url":"/api/v1/auth/login"},"res":{"statusCode":200},"responseTime":41,"msg":"request completed"}
+$ jq -c 'select(.level >= 50) | {time, msg, code: .err.code}' app/app.jsonl | head -n 2
+{"time":1795158265190,"msg":"database query failed","code":"ECONNREFUSED"}
+{"time":1795158277094,"msg":"database query failed","code":"ECONNREFUSED"}
+$ jq -r 'select(.level == 40) | [.reqId, .durationMs] | @tsv' app/app.jsonl | head -n 3
+req-00034	1327
+req-00056	3296
+req-00068	1766
+$ jq -r '.res.statusCode // "-"' app/app.jsonl | sort | uniq -c
+     47 -
+    671 200
+     24 404
+$ jq -s 'length' app/app.jsonl
+742
+$ jq -s 'group_by(.level) | map({level: .[0].level, count: length})' -c app/app.jsonl
+[{"level":30,"count":695},{"level":40,"count":22},{"level":50,"count":25}]
+$ jq -s '[.[] | select(.responseTime)] | (map(.responseTime) | add / length | floor)' app/app.jsonl
+81
+$ jq -s 'map(select(.level == 40)) | max_by(.durationMs) | {reqId, durationMs}' -c app/app.jsonl
+{"reqId":"req-00056","durationMs":3296}
+$ jq -r '[(.time / 1000 | floor | todate), .level, .msg] | @csv' app/app.jsonl | head -n 2
+"2026-11-20T06:00:01Z",30,"request completed"
+"2026-11-20T06:00:10Z",30,"request completed"
+$ jq -c . app/app-hong.jsonl
+jq: parse error: Invalid numeric literal at line 3, column 4
+{"level":30,"time":1795154401033,"pid":2318,"hostname":"web-01","reqId":"req-00001","req":{"method":"POST","url":"/api/v1/auth/login"},"res":{"statusCode":200},"responseTime":41,"msg":"request completed"}
+{"level":30,"time":1795154410065,"pid":2318,"hostname":"web-01","reqId":"req-00002","req":{"method":"GET","url":"/api/v1/feed"},"res":{"statusCode":200},"responseTime":112,"msg":"request completed"}
+$ jq -R -c 'fromjson? | {level, msg}' app/app-hong.jsonl
+{"level":30,"msg":"request completed"}
+{"level":30,"msg":"request completed"}
+{"level":30,"msg":"request completed"}

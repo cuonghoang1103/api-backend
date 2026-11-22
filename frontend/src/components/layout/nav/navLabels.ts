@@ -136,8 +136,10 @@ export const MENU_PREFIXES: Record<MenuId, string[]> = {
   // `/exam/mo-phong` (Phòng thi mô phỏng) nằm ở menu Luyện tập dù là trang con của `/exam` (Học) —
   // menuForPath chọn tiền tố DÀI NHẤT nên nó thắng `/exam`.
   practice: ['/code-lab', '/exam/mo-phong', '/algorithms', '/simulation', '/maker-lab', '/interview', '/cv', '/language'],
-  tools: ['/chat', '/voice-mini', '/ai-templates', '/ai-code', '/cli', '/llm-key', '/kiem-tra-key', '/work', '/notes', '/finance', '/music', '/games', '/toc-do-mang', '/pro', '/shop', '/download', '/ct-courses'],
-  community: ['/feed', '/tech-trends', '/forum', '/friends', '/messages', '/projects', '/repos', '/exp-hub', '/hub'],
+  // `/language/app` (trang chủ app CT Language) nằm ở "Gói & cửa hàng" của menu AI & Công cụ dù là trang con của
+  // `/language` (Luyện tập) — tiền tố dài hơn thắng, giống `/exam/mo-phong`.
+  tools: ['/chat', '/voice-mini', '/ai-templates', '/ai-code', '/cli', '/llm-key', '/kiem-tra-key', '/work', '/notes', '/finance', '/music', '/games', '/toc-do-mang', '/pro', '/shop', '/download', '/language/app', '/ct-work', '/ct-courses'],
+  community: ['/feed', '/tech-trends', '/forum', '/friends', '/messages', '/gop-y', '/projects', '/repos', '/exp-hub', '/hub'],
   about: ['/about'],
 };
 export function menuForPath(pathname: string | null): MenuId | null {

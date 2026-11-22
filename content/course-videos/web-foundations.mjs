@@ -116,7 +116,7 @@ export default {
     'wf-14-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-00-slide-tong-quan-chuong-14-fed3b777.mp4' }, defaultVideoTrack: 'VI'},
     'wf-14-2-env-secrets': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-02-bien-moi-truong-bi-mat-53e115ad.mp4' }, defaultVideoTrack: 'VI'},
     'wf-14-3-deploy': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-03-dua-len-hosting-d780c809.mp4' }, defaultVideoTrack: 'VI'},
-    'wf-3-5b-wireframes': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-05b-wireframes-37b711b5.mp4' }, defaultVideoTrack: 'VI'},
+    'wf-3-5b-wireframes': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-05b-wireframes-dac0c4ea.mp4' }, defaultVideoTrack: 'VI'},
     'wf-10-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-00-slide-tong-quan-chuong-10-5d382101.mp4' }, defaultVideoTrack: 'VI'},
     'wf-11-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-00-slide-tong-quan-0910d1e1.mp4' }, defaultVideoTrack: 'VI'},
     'wf-11-1-closure': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-01-closure-aa56587a.mp4' }, defaultVideoTrack: 'VI'},

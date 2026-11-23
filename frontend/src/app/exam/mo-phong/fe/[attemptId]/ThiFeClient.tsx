@@ -255,10 +255,10 @@ export default function ThiFeClient({ attemptId }: { attemptId: number }) {
       <div className="exam-bar">
         <div className="px-3 sm:px-4 py-2.5 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            <button onClick={() => { if (window.confirm(t('Thoát? Bài đã tự lưu, làm tiếp được ở sảnh mô phỏng.', 'Leave? Your work is saved — resume from the mock lobby.'))) router.push(`/exam/mo-phong?course=${data.paper.courseCode}`); }}
+            <button onClick={() => { if (window.confirm(t('Thoát? Bài đã tự lưu, làm tiếp được ở sảnh PEA + EOS.', 'Leave? Your work is saved — resume from the PEA + EOS lobby.'))) router.push(`/exam/mo-phong?course=${data.paper.courseCode}`); }}
               className="shrink-0 p-2 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)]" aria-label={t('Thoát', 'Leave')}><ArrowLeft className="w-4 h-4" /></button>
             <div className="min-w-0">
-              <div className="text-sm font-semibold truncate">{data.paper.courseCode} · FE {luyen ? t('luyện', 'practice') : t('mô phỏng', 'mock')}</div>
+              <div className="text-sm font-semibold truncate">{data.paper.courseCode} · FE {luyen ? t('luyện', 'practice') : t('thi', 'exam')}</div>
               <div className="text-[11px] text-text-muted flex items-center gap-2">
                 <span>{daLam}/{tong} {t('đã làm', 'done')}</span>
                 <span className="mo-luu" data-loi={luu.loi}>{luu.loi ? t('chưa lưu được — đang thử lại', 'not saved — retrying') : luu.luc ? `${t('đã lưu', 'saved')} ${luu.luc.toLocaleTimeString(isVi ? 'vi-VN' : 'en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}` : ''}</span>

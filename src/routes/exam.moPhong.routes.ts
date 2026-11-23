@@ -49,9 +49,11 @@ const id = (req: Request) => {
   return n;
 };
 
-router.get('/mon', (_req, res: Response<ApiResponse>) => {
-  res.set('Cache-Control', 'public, max-age=300');
-  res.json({ success: true, data: svc.danhSachMon() });
+router.get('/mon', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    res.set('Cache-Control', 'public, max-age=300');
+    res.json({ success: true, data: await svc.danhSachMon() });
+  } catch (e) { next(e); }
 });
 
 router.get('/:courseCode/overview', optionalAuth, async (req, res: Response<ApiResponse>, next) => {

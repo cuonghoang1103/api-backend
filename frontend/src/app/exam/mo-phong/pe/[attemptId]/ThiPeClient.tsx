@@ -81,8 +81,8 @@ export default function ThiPeClient({ attemptId }: { attemptId: number }) {
 
   const chonFile = useCallback(async (f: File | null) => {
     setFile(f); setKiem(null);
-    if (f) setKiem(await kiemFileZip(f));
-  }, []);
+    if (f) setKiem(await kiemFileZip(f, d?.loaiPe ?? 'node'));
+  }, [d?.loaiPe]);
 
   const nop = useCallback(async () => {
     if (!d || !file || !kiem || kiem.loi.length) return;

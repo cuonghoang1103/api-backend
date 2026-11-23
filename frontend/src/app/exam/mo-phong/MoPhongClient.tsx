@@ -1,7 +1,9 @@
 'use client';
 
 /**
- * Phòng thi mô phỏng — sảnh (Exam Room › /exam/mo-phong), 22/11/2026.
+ * PEA + EOS — sảnh (Exam Room › /exam/mo-phong), 22/11/2026. Đổi tên + chọn môn 23/11/2026 (user: tên
+ * "Phòng thi mô phỏng" trùng Phòng thi có sẵn; chữ ngắn gọn, không giải thích; chọn môn nào chỉ hiện môn đó).
+ * Không có `?course=` ⇒ lưới chọn môn (GET /exams/mock/mon); có ⇒ chỉ môn đó, đổi môn bằng ô chọn ở đầu trang.
  *
  * Mở rộng Exam Room chứ không phải trang riêng: đề thật từng đề vẫn thi ở /exam/:id; ở đây là phần
  * Exam Room còn thiếu — đề FE TRỘN theo phân bố chương như đề thật, chế độ "thi thật / luyện", PE mô
@@ -15,11 +17,11 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import {
-  ArrowLeft, ListChecks, Code2, LineChart, Play, Timer, BookOpenCheck, Download, Bot, CheckCircle2, Info, Layers,
+  ArrowLeft, ListChecks, Code2, LineChart, Play, Timer, BookOpenCheck, Download, CheckCircle2, Layers, Search,
 } from 'lucide-react';
-import { examMockApi, type MockHistory, type MockOverview } from '@/lib/api';
+import { examMockApi, type MockHistory, type MockMon, type MockOverview } from '@/lib/api';
 import { pickLang, sanitizeHtml } from '@/lib/utils';
-import { MO_PHONG_MON } from '@/lib/examMoPhong';
+import { TEN_PHONG } from '@/lib/examMoPhong';
 import '../exam.css';
 import './mo-phong.css';
 
@@ -32,7 +34,7 @@ const loiCua = (e: unknown, macDinh: string) =>
 export default function MoPhongClient() {
   const router = useRouter();
   const sp = useSearchParams();
-  const course = (sp.get('course') || MO_PHONG_MON[0]).toUpperCase();
+  const course = (sp.get('course') || '').toUpperCase();
   const tabDau = (sp.get('tab') as Tab) || 'fe';
 
   const [L, setL] = useState<L>('vi');
@@ -42,6 +44,13 @@ export default function MoPhongClient() {
   const [hist, setHist] = useState<MockHistory | null>(null);
   const [loi, setLoi] = useState<string | null>(null);
   const [dangTao, setDangTao] = useState(false);
+  const [dsMon, setDsMon] = useState<MockMon[] | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    examMockApi.mon().then((r) => { if (alive) setDsMon(r.data.data); }).catch(() => { if (alive) setDsMon([]); });
+    return () => { alive = false; };
+  }, []);
 
   // Cấu hình đề FE
   const [cheDo, setCheDo] = useState<'thi' | 'luyen'>('thi');
@@ -53,7 +62,8 @@ export default function MoPhongClient() {
 
   useEffect(() => {
     let alive = true;
-    setLoi(null);
+    setLoi(null); setOv(null); setHist(null); setNhomChon(new Set()); setPhutTay(false);
+    if (!course) return () => { alive = false; };
     examMockApi.overview(course)
       .then((r) => {
         if (!alive) return;
@@ -61,7 +71,7 @@ export default function MoPhongClient() {
         setSoCau(r.data.data.fe.soCau);
         setPhut(r.data.data.fe.phut);
       })
-      .catch((e) => { if (alive) setLoi(loiCua(e, 'Không tải được phòng thi mô phỏng')); });
+      .catch((e) => { if (alive) setLoi(loiCua(e, 'Không tải được môn này')); });
     examMockApi.history(course).then((r) => { if (alive) setHist(r.data.data); }).catch(() => {});
     return () => { alive = false; };
   }, [course]);
@@ -112,6 +122,40 @@ export default function MoPhongClient() {
     }
   }, [course, router, isVi]);
 
+  const t = (vi: string, en: string) => (isVi ? vi : en);
+  const doiMon = (ma: string) => router.push(ma ? `/exam/mo-phong?course=${encodeURIComponent(ma)}` : '/exam/mo-phong');
+  const thanh = (
+    <div className="flex items-center justify-between gap-3 mb-4">
+      <Link href={course ? '/exam/mo-phong' : '/exam'} className="text-sm text-text-secondary hover:text-text-primary flex items-center gap-1">
+        <ArrowLeft className="w-4 h-4" />{course ? t('Chọn môn', 'Courses') : t('Phòng thi', 'Exam Room')}
+      </Link>
+      <div className="flex items-center gap-2">
+        {course && dsMon && dsMon.length > 0 && (
+          <select value={course} onChange={(e) => doiMon(e.target.value)} aria-label={t('Đổi môn', 'Switch course')}
+            className="mo-o text-sm font-semibold max-w-[11rem]">
+            {!dsMon.some((m) => m.courseCode === course) && <option value={course}>{course}</option>}
+            {dsMon.map((m) => <option key={m.courseCode} value={m.courseCode}>{m.courseCode}</option>)}
+          </select>
+        )}
+        <button onClick={() => setL(isVi ? 'en' : 'vi')} className="text-xs font-semibold px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-[var(--exam-accent)]">
+          {isVi ? 'EN' : 'VI'}
+        </button>
+      </div>
+    </div>
+  );
+
+  if (!course) {
+    return (
+      <div className="exam-root exam-portal min-h-screen" data-ml={L}>
+        <div className="exam-portal-bg"><span className="exam-blob exam-blob-1" /><span className="exam-blob exam-blob-2" /><span className="exam-blob exam-blob-3" /></div>
+        <div className="max-w-5xl mx-auto px-4 py-6 sm:py-8">
+          {thanh}
+          <ChonMon ds={dsMon} L={L} onChon={doiMon} />
+        </div>
+      </div>
+    );
+  }
+
   if (loi) {
     return (
       <div className="exam-root min-h-[60vh] flex flex-col items-center justify-center gap-3 px-4 text-center" data-ml={L}>
@@ -122,34 +166,19 @@ export default function MoPhongClient() {
   }
   if (!ov) return <div className="exam-root min-h-[60vh] flex items-center justify-center text-text-muted">{isVi ? 'Đang tải…' : 'Loading…'}</div>;
 
-  const t = (vi: string, en: string) => (isVi ? vi : en);
-
   return (
     <div className="exam-root exam-portal min-h-screen" data-ml={L}>
       <div className="exam-portal-bg"><span className="exam-blob exam-blob-1" /><span className="exam-blob exam-blob-2" /><span className="exam-blob exam-blob-3" /></div>
       <div className="max-w-5xl mx-auto px-4 py-6 sm:py-8">
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <Link href={`/exam?course=${course}`} className="text-sm text-text-secondary hover:text-text-primary flex items-center gap-1">
-            <ArrowLeft className="w-4 h-4" />{t('Phòng thi', 'Exam Room')}
-          </Link>
-          <button onClick={() => setL(isVi ? 'en' : 'vi')} className="text-xs font-semibold px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-[var(--exam-accent)]">
-            {isVi ? 'EN' : 'VI'}
-          </button>
-        </div>
+        {thanh}
 
         <div className="exam-hero mb-5">
-          <div className="flex items-center gap-2 text-[var(--exam-accent)] mb-2"><Layers className="w-5 h-5" /><span className="text-sm font-semibold uppercase tracking-wide">{t('Phòng thi mô phỏng', 'Mock exam room')} · {ov.courseCode}</span></div>
+          <div className="flex items-center gap-2 text-[var(--exam-accent)] mb-2"><Layers className="w-5 h-5" /><span className="text-sm font-semibold uppercase tracking-wide">{TEN_PHONG} · {ov.courseCode}</span></div>
           <h1 className="text-2xl sm:text-3xl font-bold">{pickLang(ov.course.title, L)}</h1>
-          <p className="text-text-secondary mt-2 max-w-2xl text-sm sm:text-base">
-            {t(
-              `Tập đúng nhịp phòng thi: FE ${ov.fe.soCau} câu / ${ov.fe.phut} phút trộn theo phân bố chương của đề thật, PE ${ov.pe.phut} phút có Given, nộp zip và tự chấm theo rubric. Làm được trên Mac, Windows và điện thoại.`,
-              `Practise the exam rhythm: FE ${ov.fe.soCau} questions / ${ov.fe.phut} minutes mixed by the real papers' chapter spread, PE ${ov.pe.phut} minutes with the Given files, zip submission and rubric self-check. Works on Mac, Windows and phones.`,
-            )}
-          </p>
-          <p className="mo-ghi-chu mt-3"><Info className="w-3.5 h-3.5 shrink-0" />{t(
-            'Đây là phòng luyện của cuongthai.com để quen quy trình thi — không phải phần mềm thi của trường và không liên quan tới kỳ thi chính thức.',
-            'A cuongthai.com practice room to get used to the exam routine — not the school\'s exam software and not connected to any official exam.',
-          )}</p>
+          <div className="flex flex-wrap gap-2 mt-3 text-xs">
+            <span className="exam-badge exam-badge-fe">FE · {ov.fe.soCau} {t('câu', 'q')} · {ov.fe.phut}′</span>
+            <span className="exam-badge exam-badge-pe">PE · {ov.pe.phut}′</span>
+          </div>
         </div>
 
         {ov.dangDo.length > 0 && (
@@ -179,10 +208,10 @@ export default function MoPhongClient() {
                 <div className="mo-nhan">{t('Chế độ', 'Mode')}</div>
                 <div className="grid sm:grid-cols-2 gap-2">
                   <button className="mo-che-do" data-on={cheDo === 'thi'} onClick={() => setCheDo('thi')}>
-                    <Timer className="w-5 h-5" /><span><b>{t('Thi thật', 'Exam mode')}</b><small>{t('Có giờ, tự nộp khi hết giờ, đáp án ẩn tới lúc nộp', 'Timed, auto-submits, answers hidden until you submit')}</small></span>
+                    <Timer className="w-5 h-5" /><span><b>{t('Thi', 'Exam')}</b><small>{t('Tính giờ · tự nộp', 'Timed · auto-submit')}</small></span>
                   </button>
                   <button className="mo-che-do" data-on={cheDo === 'luyen'} onClick={() => setCheDo('luyen')}>
-                    <BookOpenCheck className="w-5 h-5" /><span><b>{t('Luyện', 'Practice')}</b><small>{t('Không giờ, bấm "Kiểm tra" là biết đúng/sai + giải thích ngay', 'Untimed, press "Check" to see right/wrong + explanation')}</small></span>
+                    <BookOpenCheck className="w-5 h-5" /><span><b>{t('Luyện', 'Practice')}</b><small>{t('Không giờ · xem đáp án từng câu', 'Untimed · per-question answers')}</small></span>
                   </button>
                 </div>
               </div>
@@ -192,7 +221,7 @@ export default function MoPhongClient() {
                   <div className="mo-nhan">{t('Số câu', 'Questions')}</div>
                   <div className="flex flex-wrap gap-2">
                     {[10, 25, ov.fe.soCau].filter((v, i, a) => a.indexOf(v) === i).map((n) => (
-                      <button key={n} className="mo-chip" data-on={soCau === n} onClick={() => setSoCau(n)}>{n}{n === ov.fe.soCau ? ` · ${t('như đề thật', 'like the real one')}` : ''}</button>
+                      <button key={n} className="mo-chip" data-on={soCau === n} onClick={() => setSoCau(n)}>{n}</button>
                     ))}
                     <input type="number" min={5} max={100} value={soCau} onChange={(e) => setSoCau(Math.max(5, Math.min(100, Number(e.target.value) || 5)))} className="mo-o w-20" aria-label={t('Số câu tuỳ chọn', 'Custom question count')} />
                   </div>
@@ -201,7 +230,6 @@ export default function MoPhongClient() {
                   <div>
                     <div className="mo-nhan">{t('Thời gian (phút)', 'Time (minutes)')}</div>
                     <input type="number" min={5} max={180} value={phut} onChange={(e) => { setPhutTay(true); setPhut(Math.max(5, Math.min(180, Number(e.target.value) || 5))); }} className="mo-o w-24" />
-                    <span className="text-xs text-text-muted ml-2">{t(`đề thật: ${ov.fe.soCau} câu / ${ov.fe.phut}′`, `real: ${ov.fe.soCau} q / ${ov.fe.phut}′`)}</span>
                   </div>
                 )}
               </div>
@@ -217,7 +245,7 @@ export default function MoPhongClient() {
 
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <div className="mo-nhan">{t('Chương (để trống = cả môn)', 'Chapters (none = whole course)')}</div>
+                  <div className="mo-nhan">{t('Chương', 'Chapters')}</div>
                   {nhomChon.size > 0 && <button className="text-xs text-[var(--exam-accent)]" onClick={() => setNhomChon(new Set())}>{t('Bỏ chọn', 'Clear')}</button>}
                 </div>
                 <div className="mo-bang-cuon">
@@ -237,11 +265,6 @@ export default function MoPhongClient() {
                     </tbody>
                   </table>
                 </div>
-                <p className="text-[11px] text-text-muted mt-2">
-                  {ov.nganHang.nguonPhanBo === 'DE_THAT'
-                    ? t('Phân bố theo số câu từng chương trong các đề FE thật đã phân chương. Cột "Trong đề" là ước lượng — máy chủ chia chính xác khi tạo đề.', 'Spread follows how many questions each chapter has in the classified real FE papers. "In paper" is an estimate — the server allocates exactly.')
-                    : t('Câu đề thật chưa được phân chương ⇒ chia theo số câu ngân hàng: các chương ngang nhau, câu đề thật thành một nhóm riêng.', 'Real-paper questions are not classified by chapter yet ⇒ spread by bank size: chapters equal, real-paper questions as their own group.')}
-                </p>
               </div>
             </div>
 
@@ -251,12 +274,7 @@ export default function MoPhongClient() {
                 <div className="text-3xl font-bold exam-timer mt-1">{soCau} <span className="text-base font-semibold text-text-secondary">{t('câu', 'questions')}</span></div>
                 <div className="text-sm text-text-secondary mt-1">{cheDo === 'thi' ? `${phut} ${t('phút · tự nộp khi hết giờ', 'min · auto-submit at time-up')}` : t('Không tính giờ', 'Untimed')}</div>
                 <div className="text-sm text-text-secondary">{t(`Thang ${ov.fe.thangDiem} · đạt ≥ ${ov.fe.diemDat}`, `Out of ${ov.fe.thangDiem} · pass ≥ ${ov.fe.diemDat}`)}</div>
-                <button disabled={dangTao} onClick={batDauFe} className="mo-nut-chinh mt-4 w-full"><Play className="w-4 h-4" />{dangTao ? t('Đang tạo đề…', 'Generating…') : t('Vào phòng thi', 'Enter the exam')}</button>
-                <ul className="text-[12px] text-text-muted mt-3 space-y-1 list-disc pl-4">
-                  <li>{t('Toàn màn hình, lưới câu (đã làm / đánh dấu / chưa làm), chỉnh cỡ chữ.', 'Full screen, question grid (done / flagged / blank), font size.')}</li>
-                  <li>{t('Tự lưu mỗi lần chọn — tải lại trang không mất bài.', 'Auto-saves on every pick — reloading loses nothing.')}</li>
-                  <li>{t('Nộp xong chấm ngay, xem lại từng câu + thống kê chương/CLO.', 'Graded instantly, per-question review + chapter/CLO stats.')}</li>
-                </ul>
+                <button disabled={dangTao} onClick={batDauFe} className="mo-nut-chinh mt-4 w-full"><Play className="w-4 h-4" />{dangTao ? t('Đang tạo đề…', 'Generating…') : t('Bắt đầu', 'Start')}</button>
               </div>
             </aside>
           </div>
@@ -265,28 +283,22 @@ export default function MoPhongClient() {
         {tab === 'pe' && (
           <div className="space-y-5">
             <div className="exam-card p-5">
-              <div className="font-semibold mb-2">{t('Chuẩn bị môi trường (làm trước giờ thi)', 'Set up your machine (before the timer)')}</div>
+              <div className="font-semibold mb-2">{t('Chuẩn bị', 'Setup')}</div>
               <ol className="mo-buoc">
                 {ov.huongDanMoiTruong.map((b, i) => <li key={i} dangerouslySetInnerHTML={{ __html: sanitizeHtml(pickLang(b, L)) }} />)}
               </ol>
-              <p className="text-[12px] text-text-muted mt-3">{t('Điện thoại: đọc đề + xem Given + tự chấm được; viết code và chạy json-server cần máy tính.', 'Phone: you can read the paper, view the Given and self-check; coding and json-server need a computer.')}</p>
             </div>
+            {ov.dePe.length === 0 && <div className="exam-card p-6 text-center text-text-secondary">{t('Môn này chưa có đề PE.', 'No PE papers for this course yet.')}</div>}
             <div className="grid sm:grid-cols-2 gap-4">
               {ov.dePe.map((p) => (
                 <div key={`${p.nguon}-${p.id}`} className="exam-card p-4 flex flex-col gap-3">
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span className="exam-badge exam-badge-pe">PE · {p.phut}′</span>
-                    {p.coMayCham && <span className="exam-badge exam-badge-pass"><CheckCircle2 className="w-3.5 h-3.5" />{t('máy chấm tự động', 'auto-grader')}</span>}
+                    {p.coMayCham && <span className="exam-badge exam-badge-pass"><CheckCircle2 className="w-3.5 h-3.5" />{t('tự chấm', 'auto-graded')}</span>}
                     {p.coGiven && <span className="exam-badge" style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}><Download className="w-3.5 h-3.5" />Given</span>}
                     {p.soCau ? <span className="exam-badge" style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>{p.soCau} {t('câu', 'q')}</span> : null}
                   </div>
                   <div className="font-semibold leading-snug">{pickLang(p.tieuDe, L)}</div>
-                  <div className="text-[12px] text-text-muted flex items-start gap-1.5">
-                    {p.coMayCham ? <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" /> : <Bot className="w-3.5 h-3.5 shrink-0 mt-0.5" />}
-                    {p.coMayCham
-                      ? t('Chấm bằng máy chấm Code Lab chạy ngay trong trình duyệt của bạn + checklist rubric.', 'Graded by the Code Lab grader inside your browser + rubric checklist.')
-                      : t('Checklist rubric tự chấm + AI nhận xét tĩnh (đọc mã, không chạy).', 'Rubric self-check + static AI review (reads code, never runs it).')}
-                  </div>
                   <div className="mt-auto flex gap-2">
                     <button disabled={dangTao} onClick={() => batDauPe(p.nguon === 'CODELAB' ? { exerciseId: p.id } : { examId: p.id }, 'thi')} className="mo-nut-chinh flex-1"><Timer className="w-4 h-4" />{t('Thi', 'Timed')} {p.phut}′</button>
                     <button disabled={dangTao} onClick={() => batDauPe(p.nguon === 'CODELAB' ? { exerciseId: p.id } : { examId: p.id }, 'luyen')} className="mo-nut-phu flex-1">{t('Luyện', 'Practice')}</button>
@@ -300,6 +312,48 @@ export default function MoPhongClient() {
         {tab === 'tien-bo' && <TienBo hist={hist} L={L} cloTen={ov.cloTen} />}
       </div>
     </div>
+  );
+}
+
+function ChonMon({ ds, L, onChon }: { ds: MockMon[] | null; L: L; onChon: (ma: string) => void }) {
+  const isVi = L === 'vi';
+  const t = (vi: string, en: string) => (isVi ? vi : en);
+  const [q, setQ] = useState('');
+  const loc = useMemo(() => {
+    const k = q.trim().toLowerCase();
+    return (ds ?? []).filter((m) => !k || m.courseCode.toLowerCase().includes(k) || m.title.toLowerCase().includes(k));
+  }, [ds, q]);
+  return (
+    <>
+      <div className="exam-hero mb-5">
+        <div className="flex items-center gap-2 text-[var(--exam-accent)] mb-2"><Layers className="w-5 h-5" /><span className="text-sm font-semibold uppercase tracking-wide">{TEN_PHONG}</span></div>
+        <h1 className="text-2xl sm:text-3xl font-bold">{t('Chọn môn thi', 'Choose a course')}</h1>
+        <label className="mt-4 flex items-center gap-2 max-w-md rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] px-3 py-2">
+          <Search className="w-4 h-4 text-text-muted shrink-0" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('Mã môn hoặc tên môn', 'Course code or name')}
+            className="bg-transparent outline-none text-sm flex-1 min-w-0" />
+        </label>
+      </div>
+      {!ds ? (
+        <div className="text-text-muted text-sm">{t('Đang tải…', 'Loading…')}</div>
+      ) : !loc.length ? (
+        <div className="exam-card p-6 text-center text-text-secondary">{t('Không có môn phù hợp.', 'No matching course.')}</div>
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {loc.map((m) => (
+            <button key={m.courseCode} onClick={() => onChon(m.courseCode)}
+              className="exam-card p-4 text-left hover:border-[var(--exam-accent)] transition-colors flex flex-col gap-2">
+              <span className="font-bold text-lg tracking-wide">{m.courseCode}</span>
+              <span className="text-sm text-text-secondary line-clamp-2 min-h-[2.5rem]">{pickLang(m.title, L)}</span>
+              <span className="flex flex-wrap gap-1.5 mt-auto">
+                {m.soDeFe > 0 && <span className="exam-badge exam-badge-fe">FE · {m.soDeFe} {t('đề', m.soDeFe > 1 ? 'papers' : 'paper')}</span>}
+                {m.soDePe > 0 && <span className="exam-badge exam-badge-pe">PE · {m.soDePe} {t('đề', m.soDePe > 1 ? 'papers' : 'paper')}</span>}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 

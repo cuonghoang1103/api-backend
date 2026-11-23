@@ -6,20 +6,22 @@
  */
 import { strToU8, unzipSync, zipSync } from 'fflate';
 
-/** Môn có phòng thi mô phỏng (khớp `MO_PHONG_MON` ở src/services/exam/moPhongConfig.ts). */
-export const MO_PHONG_MON = ['FER202'] as const;
-export const coMoPhong = (courseCode: string | null | undefined) =>
-  !!courseCode && (MO_PHONG_MON as readonly string[]).includes(courseCode.toUpperCase());
-export const duongMoPhong = (courseCode: string) => `/exam/mo-phong?course=${encodeURIComponent(courseCode.toUpperCase())}`;
+/** Tên hiển thị của phòng (user chốt 23/11/2026 — tránh trùng chữ "Phòng thi" của Exam Room). */
+export const TEN_PHONG = 'PEA + EOS';
+/** Từ 23/11/2026 mọi môn FPT có đề đều vào được (danh sách thật: GET /exams/mock/mon). */
+export const coMoPhong = (courseCode: string | null | undefined) => !!courseCode && /^[A-Za-z0-9]{3,12}$/.test(courseCode);
+export const duongMoPhong = (courseCode?: string | null) =>
+  courseCode ? `/exam/mo-phong?course=${encodeURIComponent(courseCode.toUpperCase())}` : '/exam/mo-phong';
 
 export const ZIP_TRAN_BYTE = 20 * 1024 * 1024;
 
 export interface KiemZip { loi: string[]; canhBao: string[]; goc: string | null; soTep: number }
 
-export function kiemTenTep(entries: string[]): KiemZip {
+export function kiemTenTep(entries: string[], loaiPe: 'node' | 'chung' = 'node'): KiemZip {
   const ten = entries.map((e) => e.replace(/\\/g, '/')).filter((e) => !e.endsWith('/'));
   const loi: string[] = [];
   const canhBao: string[] = [];
+  if (loaiPe === 'chung') return kiemZipChung(ten);
   const nm = ten.filter((e) => /(^|\/)node_modules\//.test(e));
   if (nm.length) loi.push(`The zip still contains node_modules (${nm.length} files). Delete node_modules and zip again.|||File zip còn thư mục node_modules (${nm.length} tệp). Xoá node_modules rồi nén lại.`);
   const pkg = ten.filter((e) => /(^|\/)package\.json$/.test(e) && !/(^|\/)node_modules\//.test(e))
@@ -33,7 +35,23 @@ export function kiemTenTep(entries: string[]): KiemZip {
 }
 
 /** Kiểm file người học chọn TRƯỚC khi tải lên: đuôi, kích thước, chữ ký ZIP, node_modules, package.json. */
-export async function kiemFileZip(file: File): Promise<KiemZip & { kichThuoc: number }> {
+/** BẢN SAO `kiemZipChung` ở src/services/exam/moPhong.ts — môn không phải Node (Java/C#/SQL…). */
+function kiemZipChung(ten: string[]): KiemZip {
+  const loi: string[] = [];
+  const canhBao: string[] = [];
+  const that = ten.filter((e) => !/(^|\/)(__MACOSX\/|\._)/.test(e));
+  if (!that.length) loi.push('The zip is empty.|||File zip rỗng.');
+  const nm = that.filter((e) => /(^|\/)node_modules\//.test(e));
+  if (nm.length) loi.push(`The zip still contains node_modules (${nm.length} files). Delete it and zip again.|||File zip còn thư mục node_modules (${nm.length} tệp). Xoá đi rồi nén lại.`);
+  if (that.some((e) => /(^|\/)(target|bin|obj|build|dist|out)\//.test(e))) canhBao.push('The zip includes build output (target/bin/obj/build/dist) — not needed, you can delete it.|||Zip có thư mục build (target/bin/obj/build/dist) — không cần, có thể xoá.');
+  if (that.some((e) => /(^|\/)\.git\//.test(e))) canhBao.push('The zip includes the .git folder — not needed.|||Zip có thư mục .git — không cần.');
+  const dau = that.map((e) => e.split('/'));
+  let goc = '';
+  if (dau.length && dau.every((p) => p.length > 1 && p[0] === dau[0][0])) goc = `${dau[0][0]}/`;
+  return { loi, canhBao, goc, soTep: that.length };
+}
+
+export async function kiemFileZip(file: File, loaiPe: 'node' | 'chung' = 'node'): Promise<KiemZip & { kichThuoc: number }> {
   const base = { loi: [] as string[], canhBao: [] as string[], goc: null, soTep: 0, kichThuoc: file.size };
   if (!/\.zip$/i.test(file.name)) return { ...base, loi: ['Only .zip is accepted (not .rar / .7z).|||Chỉ nhận file .zip (không nhận .rar / .7z).'] };
   if (file.size > ZIP_TRAN_BYTE) {
@@ -48,7 +66,7 @@ export async function kiemFileZip(file: File): Promise<KiemZip & { kichThuoc: nu
   } catch {
     return { ...base, loi: ['The zip could not be read — compress it again.|||Không đọc được file zip — hãy nén lại.'] };
   }
-  return { ...kiemTenTep(ten), kichThuoc: file.size };
+  return { ...kiemTenTep(ten, loaiPe), kichThuoc: file.size };
 }
 
 /** Lấy tệp mã nguồn (src/** + tệp gốc nhỏ) từ zip cho máy chấm Code Lab trong trình duyệt. */

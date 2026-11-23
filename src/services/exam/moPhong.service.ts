@@ -17,7 +17,7 @@ import { putObject } from '../../config/r2.js';
 import { AppError } from '../../middleware/errorHandler.js';
 import { chuanHoaKetQuaClient, coMayChamTrinhDuyet, testsDayDu, tinhDiem } from '../codeLab.cham.js';
 import { nhanXetTinhPe, NHAN_XET_TINH_TRAN_MA } from '../exam.grading.service.js';
-import { cauHinhMon, MO_PHONG_MON, type CauHinhMonMoPhong } from './moPhongConfig.js';
+import { cauHinhMon, MO_PHONG_MON } from './moPhongConfig.js';
 import {
   bocDe, chamPaperFe, chuongTuTieuDe, diemTuCham, idCauQuiz, khuTrung, kiemTenTepZip, locTraLoi, NHOM_KHAC,
   quizSangCau, thongKe, type CauNganHang, type CauPaper, type NguonNganHang, type PaperFe, type PaperPe,
@@ -41,14 +41,35 @@ const num = (v: unknown) => (v == null ? 0 : Number(v));
 const laMoPhong = (mode: string | null | undefined) => !!mode && MODES_MO_PHONG.includes(mode);
 
 // ── Môn & đề neo ──────────────────────────────────────────────────────
+const trungVi = (a: number[]) => {
+  const x = a.filter((v) => v > 0).sort((p, q) => p - q);
+  return x.length ? x[Math.floor((x.length - 1) / 2)] : 0;
+};
+
 async function layMon(courseCode: string) {
-  const cfg = cauHinhMon(courseCode);
-  if (!cfg) throw new AppError('Môn này chưa có phòng thi mô phỏng', 404);
+  const cfg0 = cauHinhMon(String(courseCode || '').replace(/[^a-z0-9]/gi, '').slice(0, 12));
+  if (!cfg0) throw new AppError('Thiếu mã môn', 400);
   const course = await prisma.course.findFirst({
-    where: { courseCode: cfg.courseCode, academyType: 'FPT' },
+    where: { courseCode: cfg0.courseCode, academyType: 'FPT' },
     select: { id: true, title: true, slug: true, courseCode: true },
   });
   if (!course) throw new AppError('Không tìm thấy môn học', 404);
+  if (cfg0.rieng) return { cfg: cfg0, course };
+  // Môn dùng cấu hình chung ⇒ số câu / phút lấy theo TRUNG VỊ các đề thật đã đăng của môn.
+  const de = await prisma.exam.findMany({
+    where: { courseId: course.id, isPublished: true, kind: { in: ['FE', 'PE'] } },
+    select: { kind: true, durationMinutes: true, _count: { select: { questions: { where: { kind: 'MCQ' } } } } },
+  });
+  const fe = de.filter((d) => d.kind === 'FE');
+  const pe = de.filter((d) => d.kind === 'PE');
+  const soCau = trungVi(fe.map((d) => d._count.questions));
+  const phutFe = trungVi(fe.map((d) => d.durationMinutes ?? 0));
+  const phutPe = trungVi(pe.map((d) => d.durationMinutes ?? 0));
+  const cfg = {
+    ...cfg0,
+    fe: { ...cfg0.fe, ...(soCau >= 10 ? { soCau: Math.min(soCau, 100) } : {}), ...(phutFe >= 10 ? { phut: Math.min(phutFe, 180) } : {}) },
+    pe: { ...cfg0.pe, ...(phutPe >= 10 ? { phut: Math.min(phutPe, 240) } : {}) },
+  };
   return { cfg, course };
 }
 
@@ -184,6 +205,7 @@ export async function tongQuan(courseCode: string, userId?: number) {
     cloTen: cfg.cloTen,
     cloTheoChuong: cfg.cloTheoChuong,
     huongDanMoiTruong: cfg.huongDanMoiTruong,
+    loaiPe: cfg.loaiPe,
     nganHang: {
       deThat: nh.cauThat.length,
       quiz: nh.cauQuiz.length,
@@ -591,6 +613,7 @@ export async function layDePe(attemptId: number, userId: number) {
       })),
     },
     huongDanMoiTruong: cfg?.huongDanMoiTruong ?? [],
+    loaiPe: cfg?.loaiPe ?? 'node',
     nop: daNop ? (a.answers as Record<string, unknown>)?.nop ?? null : null,
     tuCham: fb.tuCham ?? null,
     chamTuDong: fb.chamTuDong ?? null,
@@ -601,8 +624,8 @@ export async function layDePe(attemptId: number, userId: number) {
 
 /** Rút chữ mã nguồn từ zip (chỉ ĐỌC, không chạy) — để AI nhận xét tĩnh, trần 60k ký tự. */
 export function rutMaNguon(zip: AdmZip, goc: string): { tep: string[]; ma: string } {
-  const OK = /\.(js|jsx|ts|tsx|css|json|html|md)$/i;
-  const BO = /(^|\/)(node_modules|\.git|build|dist|__MACOSX|coverage)\//;
+  const OK = /\.(js|jsx|ts|tsx|css|scss|json|html|md|java|jsp|xml|properties|cs|cshtml|razor|sql|py|kt|c|cpp|h|php)$/i;
+  const BO = /(^|\/)(node_modules|\.git|build|dist|__MACOSX|coverage|target|bin|obj|out|\.idea|\.vs)\//;
   const tep: string[] = [];
   const phan: string[] = [];
   let tong = 0;
@@ -644,7 +667,7 @@ export async function nopPeZip(attemptId: number, userId: number, file: { buffer
   if (entries.length > ZIP_TRAN_TEP) throw new AppError(`Zip có ${entries.length} tệp — quá nhiều (thường là còn node_modules).`, 400);
   const giaiNen = entries.reduce((s, e) => s + (Number(e.header.size) || 0), 0);
   if (giaiNen > ZIP_TRAN_GIAI_NEN) throw new AppError('Zip giải nén ra quá lớn (> 60 MB).', 400);
-  const kiem = kiemTenTepZip(entries.map((e) => e.entryName));
+  const kiem = kiemTenTepZip(entries.map((e) => e.entryName), cauHinhMon(paper.courseCode)?.loaiPe ?? 'node');
   if (kiem.loi.length) throw new AppError(kiem.loi.map((l) => l.split('|||')[1] ?? l).join(' '), 400);
 
   const { tep, ma } = rutMaNguon(zip, kiem.goc ?? '');
@@ -740,6 +763,42 @@ export async function aiNhanXetPe(attemptId: number, userId: number) {
   return aiNhanXet;
 }
 
-export function danhSachMon(): Array<Pick<CauHinhMonMoPhong, 'courseCode' | 'fe' | 'pe'>> {
-  return Object.values(MO_PHONG_MON).map((m) => ({ courseCode: m.courseCode, fe: m.fe, pe: m.pe }));
+/**
+ * Môn chọn được ở sảnh PEA + EOS: mọi môn FPT có đề FE (câu MCQ) hoặc đề PE đã đăng, hoặc có PE Code Lab
+ * (track `<mã>-practice`), cộng các môn có cấu hình riêng. Đếm để hiện trên thẻ chọn môn.
+ */
+export async function danhSachMon(): Promise<Array<{ courseCode: string; title: string; soDeFe: number; soCauFe: number; soDePe: number }>> {
+  const de = await prisma.exam.findMany({
+    where: { isPublished: true, kind: { in: ['FE', 'PE'] }, course: { academyType: 'FPT', courseCode: { not: null } } },
+    select: { kind: true, course: { select: { courseCode: true, title: true } }, _count: { select: { questions: { where: { kind: 'MCQ' } } } } },
+  });
+  const m = new Map<string, { courseCode: string; title: string; soDeFe: number; soCauFe: number; soDePe: number }>();
+  const lay = (code: string, title: string) => {
+    const k = code.toUpperCase();
+    const a = m.get(k) ?? { courseCode: k, title, soDeFe: 0, soCauFe: 0, soDePe: 0 };
+    m.set(k, a);
+    return a;
+  };
+  for (const d of de) {
+    if (!d.course?.courseCode) continue;
+    const a = lay(d.course.courseCode, d.course.title);
+    if (d.kind === 'FE' && d._count.questions > 0) { a.soDeFe += 1; a.soCauFe += d._count.questions; }
+    if (d.kind === 'PE') a.soDePe += 1;
+  }
+  const peLab = await prisma.codeExercise.findMany({
+    where: { kind: 'pe', status: 'PUBLISHED', track: { status: 'PUBLISHED', slug: { endsWith: '-practice' } } },
+    select: { track: { select: { slug: true } } },
+  });
+  const maCo = new Map([...m.keys()].map((k) => [k.toLowerCase(), k]));
+  for (const e of peLab) {
+    const k = maCo.get(e.track.slug.replace(/-practice$/, ''));
+    if (k) m.get(k)!.soDePe += 1;
+  }
+  for (const r of Object.values(MO_PHONG_MON)) {
+    if (m.has(r.courseCode)) continue;
+    const c = await prisma.course.findFirst({ where: { courseCode: r.courseCode, academyType: 'FPT' }, select: { title: true } });
+    if (c) lay(r.courseCode, c.title);
+  }
+  return [...m.values()].filter((x) => x.soDeFe > 0 || x.soDePe > 0 || MO_PHONG_MON[x.courseCode])
+    .sort((a, b) => a.courseCode.localeCompare(b.courseCode));
 }

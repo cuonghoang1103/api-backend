@@ -34,10 +34,16 @@ export interface CauHinhMonMoPhong {
   cloTheoChuong: Record<number, string[]>;
   /** Hướng dẫn chuẩn bị môi trường PE — mỗi bước "EN|||VI". Có thể chứa <code>. */
   huongDanMoiTruong: string[];
+  /** Kiểu dự án PE: 'node' ⇒ zip bắt buộc package.json + cấm node_modules; 'chung' ⇒ chỉ kiểm rác build. */
+  loaiPe: 'node' | 'chung';
+  /** true = cấu hình soạn tay (FER202); false = cấu hình chung suy từ đề thật trong CSDL. */
+  rieng: boolean;
 }
 
 const FER202: CauHinhMonMoPhong = {
   courseCode: 'FER202',
+  loaiPe: 'node',
+  rieng: true,
   fe: { soCau: 50, phut: 60, thangDiem: 10, diemDat: 4 },
   pe: { phut: 85, thangDiem: 10, diemDat: 5 },
   cloTen: {
@@ -77,7 +83,32 @@ const FER202: CauHinhMonMoPhong = {
 
 export const MO_PHONG_MON: Record<string, CauHinhMonMoPhong> = { FER202 };
 
+/**
+ * Môn chưa soạn cấu hình riêng (23/11/2026 — user muốn chọn MỌI môn có đề): khung FE/PE theo mặc định
+ * phổ biến của FPTU (FE 50 câu / 60′, đạt ≥ 4; PE 85′, đạt ≥ 5) — `moPhong.service › layMon` ghi đè số câu/phút
+ * bằng trung vị các đề FE/PE thật của môn trong CSDL. Không CLO theo chương (chưa soạn) ⇒ thống kê chỉ theo chương.
+ */
+export function cauHinhChung(courseCode: string): CauHinhMonMoPhong {
+  return {
+    courseCode: courseCode.toUpperCase(),
+    fe: { soCau: 50, phut: 60, thangDiem: 10, diemDat: 4 },
+    pe: { phut: 85, thangDiem: 10, diemDat: 5 },
+    cloTen: {},
+    cloTheoChuong: {},
+    huongDanMoiTruong: [
+      'Install the tools the paper needs (IDE, JDK / Node.js / .NET SDK / SQL Server…) before the session starts.|||Cài sẵn công cụ đề cần (IDE, JDK / Node.js / .NET SDK / SQL Server…) trước giờ thi.',
+      'Download the Given file (if any), extract it and open the project folder in your IDE.|||Tải file Given (nếu có), giải nén và mở thư mục dự án bằng IDE.',
+      'Build and run once before coding so setup problems show up early.|||Build và chạy thử một lần trước khi code để lỗi cài đặt lộ ra sớm.',
+      'Before submitting: delete build output (<code>node_modules</code>, <code>target</code>, <code>bin</code>, <code>obj</code>, <code>build</code>, <code>dist</code>), then zip the project folder into ONE <code>.zip</code>.|||Trước khi nộp: xoá thư mục build (<code>node_modules</code>, <code>target</code>, <code>bin</code>, <code>obj</code>, <code>build</code>, <code>dist</code>), rồi nén thư mục dự án thành MỘT file <code>.zip</code>.',
+    ],
+    loaiPe: 'chung',
+    rieng: false,
+  };
+}
+
+/** Cấu hình môn: bản soạn riêng nếu có, không thì cấu hình chung. Mã rỗng ⇒ null. */
 export function cauHinhMon(courseCode: string | null | undefined): CauHinhMonMoPhong | null {
   if (!courseCode) return null;
-  return MO_PHONG_MON[String(courseCode).toUpperCase()] ?? null;
+  const ma = String(courseCode).toUpperCase();
+  return MO_PHONG_MON[ma] ?? cauHinhChung(ma);
 }

@@ -1938,6 +1938,7 @@ export interface MockOverview {
   cloTen: Record<string, string>;
   cloTheoChuong: Record<string, string[]>;
   huongDanMoiTruong: string[];
+  loaiPe: 'node' | 'chung';
   nganHang: { deThat: number; quiz: number; sauKhuTrung: number; nguonPhanBo: 'DE_THAT' | 'DEU'; nhom: MockNhom[] };
   dePe: MockDePe[];
   dangDo: Array<{ id: number; mode: string; loai: 'FE' | 'PE'; tieuDe: string; startedAt: string; expiresAt: string | null }>;
@@ -1971,6 +1972,7 @@ export interface MockPeAttempt {
     cau: Array<{ id: number; prompt: string; points: number; imageUrl: string | null; rubric: MockRubric[] | null; sampleSolution: string | null }>;
   };
   huongDanMoiTruong: string[];
+  loaiPe?: 'node' | 'chung';
   nop: { tenTep: string; kichThuoc: number; soTep: number; tep: string[]; canhBao: string[]; luc: string } | null;
   tuCham: { score: number; passed: boolean; chon: Record<string, Record<string, number>>; theoCau: { questionId: number; diem: number; toiDa: number }[] } | null;
   chamTuDong: { score: number; maxScore: number; dat: number; tong: number; nhom: { ma: string; ten: string; diem: number; dat: number; tong: number; diemDat: number }[]; luc: string } | null;
@@ -1982,7 +1984,10 @@ export interface MockAiReview {
   theoCau: Array<{ questionId: number; diemUoc: number; toiDa: number; tomTat: string; tieuChi: Array<{ id: string; muc: 'dat' | 'mot_phan' | 'chua' | 'khong_ro'; nhanXet: string }> }>;
 }
 
+export interface MockMon { courseCode: string; title: string; soDeFe: number; soCauFe: number; soDePe: number }
+
 export const examMockApi = {
+  mon: () => api.get<{ data: MockMon[] }>('/exams/mock/mon'),
   overview: (courseCode: string) => api.get<{ data: MockOverview }>(`/exams/mock/${courseCode}/overview`),
   history: (courseCode: string) => api.get<{ data: MockHistory }>(`/exams/mock/${courseCode}/history`),
   startFe: (courseCode: string, body: { soCau: number; phut: number; cheDo: 'thi' | 'luyen'; nguon: 'mix' | 'real' | 'quiz'; nhom?: string[] }) =>

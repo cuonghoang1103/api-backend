@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { examApi, type ExamPortalItem } from '@/lib/api';
 import { pickLang } from '@/lib/utils';
-import { MO_PHONG_MON, coMoPhong, duongMoPhong } from '@/lib/examMoPhong';
+import { TEN_PHONG } from '@/lib/examMoPhong';
 import ExamRichContent from './ExamRichContent';
 import './exam.css';
 
@@ -276,12 +276,12 @@ export default function ExamPortalClient() {
           </div>
         </div>
 
-        {/* Phòng thi mô phỏng (22/11/2026) — đề FE trộn theo chương, chế độ luyện, PE mô phỏng quy trình. */}
-        <Link href={duongMoPhong(coMoPhong(query.trim()) ? query.trim() : MO_PHONG_MON[0])} className="exam-card p-4 mb-6 flex items-center gap-3 hover:border-[var(--exam-accent)] transition-colors">
+        {/* PEA + EOS (22/11/2026, đổi tên 23/11) — FE trộn theo chương / PE nộp zip, chọn môn ở sảnh. */}
+        <Link href="/exam/mo-phong" className="exam-card p-4 mb-6 flex items-center gap-3 hover:border-[var(--exam-accent)] transition-colors">
           <span className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white" style={{ background: 'linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2))' }}><Timer className="w-5 h-5" /></span>
           <span className="min-w-0 flex-1">
-            <span className="block font-semibold">{isVi ? 'Phòng thi mô phỏng' : 'Mock exam room'} <span className="exam-badge exam-badge-fe ml-1">{MO_PHONG_MON.join(' · ')}</span></span>
-            <span className="block text-sm text-text-secondary">{isVi ? 'Đề FE trộn theo phân bố chương như đề thật, chế độ thi thật / luyện, PE có Given + nộp zip + checklist rubric, thống kê theo chương/CLO.' : 'FE papers mixed by the real chapter spread, timed or practice mode, PE with Given + zip submission + rubric checklist, chapter/CLO stats.'}</span>
+            <span className="block font-semibold">{TEN_PHONG}</span>
+            <span className="block text-sm text-text-secondary">{isVi ? 'Thi thử FE · PE theo môn' : 'FE · PE practice by course'}</span>
           </span>
           <ArrowRight className="w-4 h-4 shrink-0 text-[var(--exam-accent)]" />
         </Link>

@@ -134,7 +134,7 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
                 {passed ? (isVi ? 'ĐẠT' : 'PASSED') : (isVi ? 'CHƯA ĐẠT' : 'NOT PASSED')}
               </span>
               {exam.code && <span className="exam-badge" style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>{exam.code}</span>}
-              {mock && <span className="exam-badge exam-badge-fe">{mock.mode === 'MOCK_PRACTICE' ? (isVi ? 'Mô phỏng · luyện' : 'Mock · practice') : (isVi ? 'Mô phỏng · thi thật' : 'Mock · timed')}</span>}
+              {mock && <span className="exam-badge exam-badge-fe">{mock.mode === 'MOCK_PRACTICE' ? (isVi ? 'PEA + EOS · luyện' : 'PEA + EOS · practice') : (isVi ? 'PEA + EOS · thi' : 'PEA + EOS · exam')}</span>}
             </div>
             <h1 className="text-xl font-bold mb-1">{pickLang(exam.title, L)}</h1>
             <div className="text-sm text-text-secondary flex items-center justify-center sm:justify-start gap-3 flex-wrap">

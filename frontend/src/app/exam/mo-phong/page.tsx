@@ -5,8 +5,8 @@ import { redirect } from 'next/navigation';
 import MoPhongClient from './MoPhongClient';
 
 export const metadata: Metadata = {
-  title: 'Phòng thi mô phỏng — Exam Room',
-  description: 'Luyện quy trình thi FE/PE: đề trộn theo chương, đồng hồ, bảng câu, tự lưu, nộp zip, checklist rubric, thống kê theo chương/CLO.',
+  title: 'PEA + EOS — Exam Room',
+  description: 'Thi thử FE · PE theo môn.',
 };
 
 export const dynamic = 'force-dynamic';

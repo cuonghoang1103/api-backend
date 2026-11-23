@@ -289,10 +289,11 @@ export function thongKe(items: Array<{ nhom: string; nhomTen: string; thuTu: num
 export interface KiemZip { loi: string[]; canhBao: string[]; goc: string | null; soTep: number }
 
 /** `entries`: tên tệp trong zip. Lỗi/cảnh báo dạng "EN|||VI". */
-export function kiemTenTepZip(entries: string[]): KiemZip {
+export function kiemTenTepZip(entries: string[], loaiPe: 'node' | 'chung' = 'node'): KiemZip {
   const ten = entries.map((e) => e.replace(/\\/g, '/')).filter((e) => !e.endsWith('/'));
   const loi: string[] = [];
   const canhBao: string[] = [];
+  if (loaiPe === 'chung') return kiemZipChung(ten);
   const nm = ten.filter((e) => /(^|\/)node_modules\//.test(e));
   if (nm.length) loi.push(`The zip still contains node_modules (${nm.length} files). Delete node_modules and zip again.|||File zip còn thư mục node_modules (${nm.length} tệp). Xoá node_modules rồi nén lại.`);
   const pkg = ten.filter((e) => /(^|\/)package\.json$/.test(e) && !/(^|\/)node_modules\//.test(e))
@@ -303,6 +304,22 @@ export function kiemTenTepZip(entries: string[]): KiemZip {
   if (ten.some((e) => /(^|\/)(build|dist)\//.test(e))) canhBao.push('The zip includes build/ or dist/ output — not needed, you can delete it.|||Zip có thư mục build/ hoặc dist/ — không cần, có thể xoá.');
   if (ten.some((e) => /(^|\/)\.git\//.test(e))) canhBao.push('The zip includes the .git folder — not needed.|||Zip có thư mục .git — không cần.');
   return { loi, canhBao, goc, soTep: ten.length };
+}
+
+/** Zip PE môn không phải Node (Java/C#/SQL…): không bắt package.json; gốc = thư mục chung của mọi tệp. */
+function kiemZipChung(ten: string[]): KiemZip {
+  const loi: string[] = [];
+  const canhBao: string[] = [];
+  const that = ten.filter((e) => !/(^|\/)(__MACOSX\/|\._)/.test(e));
+  if (!that.length) loi.push('The zip is empty.|||File zip rỗng.');
+  const nm = that.filter((e) => /(^|\/)node_modules\//.test(e));
+  if (nm.length) loi.push(`The zip still contains node_modules (${nm.length} files). Delete it and zip again.|||File zip còn thư mục node_modules (${nm.length} tệp). Xoá đi rồi nén lại.`);
+  if (that.some((e) => /(^|\/)(target|bin|obj|build|dist|out)\//.test(e))) canhBao.push('The zip includes build output (target/bin/obj/build/dist) — not needed, you can delete it.|||Zip có thư mục build (target/bin/obj/build/dist) — không cần, có thể xoá.');
+  if (that.some((e) => /(^|\/)\.git\//.test(e))) canhBao.push('The zip includes the .git folder — not needed.|||Zip có thư mục .git — không cần.');
+  const dau = that.map((e) => e.split('/'));
+  let goc = '';
+  if (dau.length && dau.every((p) => p.length > 1 && p[0] === dau[0][0])) goc = `${dau[0][0]}/`;
+  return { loi, canhBao, goc, soTep: that.length };
 }
 
 /** Điểm tự chấm: mỗi tiêu chí 0 | 0.5 | 1 phần của maxScore; tổng quy về thang của đề. */

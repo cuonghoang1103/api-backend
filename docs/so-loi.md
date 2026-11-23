@@ -1089,3 +1089,10 @@ Mẫu một mục:
 - **Cách sửa:** thêm `AnhGocAn` (ẩn mặc định, `key={q.id}` tự gập khi đổi câu, giữ node trong DOM chỉ đổi `hidden`) như Phòng thi thường.
 - **Ảnh hưởng:** mọi câu FE có ảnh quét trong phòng mô phỏng đều bị ảnh chen vào (phần lớn ảnh vẫn đúng, chỉ rối mắt); câu q39 trông như lỗi trang.
 - **Bài học:** tính năng mới dựng lại màn hình có sẵn ⇒ đối chiếu từng khối với màn cũ (ở đây: ảnh đề gốc ẩn sau nút); ảnh quét đề nên có phép kiểm kích thước bất thường (rộng < 200 px) lúc soạn.
+
+### 23/11/2026 — web (Phòng thi /exam) — nút "Thi ở PEA + EOS" không hiện ở đề PE FER202
+- **Triệu chứng:** sau deploy 9ab258f2f, trang `/exam/<id>` của đề PE FER202 vẫn còn nút "Bắt đầu thi" cũ.
+- **Nguyên nhân:** `src/services/exam.service.ts › getExamForTaking` chỉ bật `peTaiPea` khi `peType === 'CODE'`, nhưng 25 đề PE FER202 trong `content/exams/FER202-PE*.mjs` lưu `peType: "WRITE"` (gõ code trên trình duyệt); PEA tự gán CODE cho đề neo riêng nên lúc viết tưởng đề thật cũng là CODE.
+- **Cách sửa:** bỏ điều kiện `peType`, chỉ cần `kind === 'PE'` + môn có cấu hình PEA riêng; nhánh chữ giới thiệu ở `ExamRoomClient.tsx` cũng xét `peTaiPea` trước.
+- **Ảnh hưởng:** không ai thấy lỗi (vừa deploy, kiểm ngay bằng API thì phát hiện); chỉ là tính năng chưa có hiệu lực ~20 phút.
+- **Bài học:** điều kiện theo giá trị enum ⇒ hỏi DỮ LIỆU thật trước (`curl /exams/course/<slug>` đếm theo `peType`), đừng suy từ mã của tính năng khác.

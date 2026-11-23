@@ -131,10 +131,10 @@ export async function getExamForTaking(examId: number, userId?: number) {
   });
   if (!exam || !exam.isPublished) throw new AppError('Không tìm thấy đề thi', 404);
 
-  // 23/11/2026 (user duyệt): đề PE CODE của môn có cấu hình PEA + EOS riêng (FER202) chỉ làm bài tính giờ ở
+  // 23/11/2026 (user duyệt): đề PE của môn có cấu hình PEA + EOS riêng (FER202) chỉ làm bài tính giờ ở
   // /exam/mo-phong — Phòng thi thường giữ phòng ôn CuongMini, nút "Bắt đầu thi" đổi thành lối sang PEA.
   const ma = exam.course?.academyType === 'FPT' ? (exam.course.courseCode || '').toUpperCase() : '';
-  const peTaiPea = exam.kind === 'PE' && exam.peType === 'CODE' && !!MO_PHONG_MON[ma]?.rieng ? ma : null;
+  const peTaiPea = exam.kind === 'PE' && !!MO_PHONG_MON[ma]?.rieng ? ma : null; // đề FER202 lưu peType WRITE (gõ code trên trình duyệt)
 
   // Timed real attempts and untimed CuongMini attempts are separate, parallel
   // attempts on the same exam (see startAttempt) — report BOTH in-progress

@@ -209,7 +209,7 @@ export default function ThiPeClient({ attemptId }: { attemptId: number }) {
                 </div>
                 <div className="exam-card p-4 sm:p-6 mo-pe-de">
                   {p.cau.length > 1 && <div className="text-sm font-semibold text-text-secondary mb-3">{t('Câu', 'Question')} {cauIdx + 1}/{p.cau.length} · {cau.points} {t('điểm', 'marks')}</div>}
-                  <ExamRichContent html={cau.prompt} L={L} />
+                  <ExamRichContent html={gapMayCham(cau.prompt, isVi)} L={L} />
                   {cau.imageUrl && <AnhDePhongTo url={cau.imageUrl} isVi={isVi} className="mt-4" />}
                 </div>
                 <button className="mo-nut-chinh" onClick={() => setTab('nop')}><Upload className="w-4 h-4" />{t('Xong — sang nộp bài', 'Done — go to submit')}</button>
@@ -392,4 +392,38 @@ function AiKetQua({ ai, d, L, t }: { ai: MockAiReview; d: MockPeAttempt; L: L; t
       <p className="text-[11px] text-text-muted">{ai.model} · {ai.inputTokens.toLocaleString()} in / {ai.outputTokens.toLocaleString()} out tokens</p>
     </div>
   );
+}
+
+/**
+ * Đề luyện Code Lab có mục "id / class máy chấm dùng" (h2 chứa "auto-grader" / "máy chấm") — tờ đề thật không có.
+ * Ở PEA + EOS gập mục đó vào <details> (Code Lab vẫn hiện đầy đủ vì máy chấm ở đó cần) để đề đọc như tờ đề thật.
+ */
+const boNhoGap = new Map<string, string>();
+function gapMayCham(html: string, isVi: boolean): string {
+  const k = `${isVi ? 'v' : 'e'}${html}`;
+  const co = boNhoGap.get(k);
+  if (co != null) return co;
+  const kq = gapMayChamTinh(html, isVi);
+  if (boNhoGap.size > 50) boNhoGap.clear();
+  boNhoGap.set(k, kq);
+  return kq;
+}
+function gapMayChamTinh(html: string, isVi: boolean): string {
+  // Đề tải ở client (useEffect) ⇒ luôn có DOMParser; phòng hờ môi trường không có thì trả nguyên.
+  if (typeof window === 'undefined' || typeof DOMParser === 'undefined' || !/auto-grader|máy chấm/i.test(html)) return html;
+  const doc = new DOMParser().parseFromString(`<div id="goc">${html}</div>`, 'text/html');
+  const nhan = isVi ? 'Ghi chú cho máy chấm (không thuộc tờ đề)' : 'Auto-grader notes (not part of the paper)';
+  doc.querySelectorAll('h2').forEach((h) => {
+    if (!/auto-grader|máy chấm/i.test(h.textContent || '')) return;
+    const det = doc.createElement('details');
+    det.className = 'mo-may-cham';
+    const sum = doc.createElement('summary');
+    sum.textContent = nhan;
+    det.appendChild(sum);
+    // Gom các anh em phía sau cho tới h2 kế tiếp (cùng cha) — giữ nguyên cấu trúc lồng, không cắt bằng regex.
+    let n = h.nextSibling;
+    while (n && !(n.nodeType === 1 && (n as Element).tagName === 'H2')) { const sau = n.nextSibling; det.appendChild(n); n = sau; }
+    h.replaceWith(det);
+  });
+  return doc.getElementById('goc')?.innerHTML ?? html;
 }

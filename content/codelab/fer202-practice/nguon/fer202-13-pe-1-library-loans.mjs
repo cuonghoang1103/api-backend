@@ -4,7 +4,14 @@
  * PE7 — form đặt + luật nghiệp vụ + POST/PATCH + chuyển trang). Không chép đề thật.
  * 85 phút · 10 điểm · 9 chức năng (nhom f1..f9) · json-server GIẢ có trạng thái (tests.jsonServer).
  */
+import fs from 'node:fs';
 import { doiDau, index, KHOA, NOP_BAI, tn } from './_chung.mjs';
+
+// Ảnh minh hoạ trong đề (như đề PE thật: "demo" màn hình mong đợi) — chụp từ Live demo của lời giải, ở ./_pe1-library/anh/*.webp,
+// nhúng data: URI như PE-8. dungBanIn bọc chucNang.moTa trong <p>…</p> ⇒ hinh(chữ, ảnh, alt) đóng đoạn chữ rồi mở đoạn ảnh riêng:
+// <p>chữ</p>\n<p><img …></p> (không có chữ ⇒ chỉ <p><img …></p>).
+const anhDemo = (ten) => `data:image/webp;base64,${fs.readFileSync(new URL(`./_pe1-library/anh/${ten}.webp`, import.meta.url)).toString('base64')}`;
+const hinh = (chu, ten, alt) => `${chu ? `${chu}</p>\n<p>` : ''}<img src="${anhDemo(ten)}" alt="${alt.replace(/"/g, '&quot;')}" style="max-width:100%;height:auto;border:1px solid #d1d5db;border-radius:4px">`;
 
 // ═════════════════════════════════════ DỮ LIỆU (database.json) ═════════════════════════════════════
 const DB = {
@@ -731,7 +738,10 @@ loans:      1 book 1 / member 1  2026-03-02 → 2026-03-16  returnDate null
   chucNang: [
     {
       ten: { en: 'Q1 · Book catalog page', vi: 'C1 · Trang danh mục sách' }, diem: 1.5,
-      moTa: { en: 'Route <code>/books</code> (and <code>/</code> redirects there). Fetch <code>GET /books</code> once.', vi: 'Route <code>/books</code> (và <code>/</code> chuyển sang đó). Gọi <code>GET /books</code> một lần.' },
+      moTa: {
+        en: hinh('Route <code>/books</code> (and <code>/</code> redirects there). Fetch <code>GET /books</code> once.', 'fig1-catalog', 'Book Catalog — /books, 8 books sorted A → Z, 3 cards per row'),
+        vi: hinh('Route <code>/books</code> (và <code>/</code> chuyển sang đó). Gọi <code>GET /books</code> một lần.', 'fig1-catalog', 'Danh mục sách — /books, 8 cuốn xếp A → Z, 3 thẻ một hàng'),
+      },
       yeuCau: [
         { en: 'Navbar with links <code>#nav-books</code> (Books) and <code>#nav-loans</code> (Loans).', vi: 'Navbar có link <code>#nav-books</code> (Books) và <code>#nav-loans</code> (Loans).' },
         { en: 'Cards in a grid, <b>3 per row</b> on medium screens, sorted by <code>title</code> A → Z.', vi: 'Thẻ trong lưới, <b>3 thẻ một hàng</b> ở màn hình vừa, sắp theo <code>title</code> A → Z.' },
@@ -751,6 +761,7 @@ loans:      1 book 1 / member 1  2026-03-02 → 2026-03-16  returnDate null
     },
     {
       ten: { en: 'Q1 · Category filter + query parameter', vi: 'C1 · Lọc thể loại + tham số URL' }, diem: 1,
+      moTa: { en: hinh('', 'fig2-filter-science', 'Book Catalog — /books?category=Science: Showing 3 of 8 books'), vi: hinh('', 'fig2-filter-science', 'Danh mục sách — /books?category=Science: Showing 3 of 8 books') },
       yeuCau: [
         { en: '<code>#category-filter</code>: first option <code>All categories</code> (value <code>All</code>), then the <b>unique categories from the data</b>, A → Z. Do not hard-code them.', vi: '<code>#category-filter</code>: lựa chọn đầu <code>All categories</code> (value <code>All</code>), rồi các <b>thể loại không trùng lấy từ dữ liệu</b>, A → Z. Không viết cứng.' },
         { en: 'Selecting a category updates the URL to <code>/books?category=Science</code>; "All" removes the parameter.', vi: 'Chọn thể loại ⇒ URL thành <code>/books?category=Science</code>; chọn "All" ⇒ bỏ tham số.' },
@@ -779,7 +790,10 @@ loans:      1 book 1 / member 1  2026-03-02 → 2026-03-16  returnDate null
     },
     {
       ten: { en: 'Q2 · Business rules', vi: 'C2 · Luật nghiệp vụ' }, diem: 1.5,
-      moTa: { en: 'On submit, check the rules <b>in this order</b> and show only the first message in <code>#form-error</code> (an <code>.alert-danger</code>). Nothing is sent while a rule fails; the page never reloads.', vi: 'Khi gửi, kiểm các luật <b>theo đúng thứ tự</b> và chỉ hiện câu lỗi đầu tiên trong <code>#form-error</code> (một <code>.alert-danger</code>). Còn lỗi thì không gửi gì; trang không bao giờ tải lại.' },
+      moTa: {
+        en: hinh('On submit, check the rules <b>in this order</b> and show only the first message in <code>#form-error</code> (an <code>.alert-danger</code>). Nothing is sent while a rule fails; the page never reloads.', 'fig3-borrow-error', 'Borrow page — /books/3/borrow: a 24-day loan is rejected with "A loan cannot exceed 14 days."'),
+        vi: hinh('Khi gửi, kiểm các luật <b>theo đúng thứ tự</b> và chỉ hiện câu lỗi đầu tiên trong <code>#form-error</code> (một <code>.alert-danger</code>). Còn lỗi thì không gửi gì; trang không bao giờ tải lại.', 'fig3-borrow-error', 'Trang mượn — /books/3/borrow: mượn 24 ngày bị từ chối "A loan cannot exceed 14 days."'),
+      },
       yeuCau: [
         { en: 'No member ⇒ <code>Please select a member.</code>', vi: 'Chưa chọn thành viên ⇒ <code>Please select a member.</code>' },
         { en: 'Empty date ⇒ <code>Please choose a borrow date.</code> / <code>Please choose a due date.</code>', vi: 'Thiếu ngày ⇒ <code>Please choose a borrow date.</code> / <code>Please choose a due date.</code>' },
@@ -803,7 +817,10 @@ loans:      1 book 1 / member 1  2026-03-02 → 2026-03-16  returnDate null
     },
     {
       ten: { en: 'Q3 · Loans table', vi: 'C3 · Bảng phiếu mượn' }, diem: 1.5,
-      moTa: { en: 'Route <code>/loans</code>.', vi: 'Route <code>/loans</code>.' },
+      moTa: {
+        en: hinh('Route <code>/loans</code>.', 'fig4-loans', 'Loans — /loans: titles and names joined, dd/MM/yyyy, newest borrow first, status badges'),
+        vi: hinh('Route <code>/loans</code>.', 'fig4-loans', 'Phiếu mượn — /loans: nối tên sách + họ tên, ngày dd/MM/yyyy, mượn mới nhất lên đầu, badge trạng thái'),
+      },
       yeuCau: [
         { en: 'Table <code>#loan-table</code>: <code>No | Book | Member | Borrow date | Due date | Status | Action</code>; row id <code>loan-row-{id}</code>; cells <code>.loan-book</code>, <code>.loan-member</code>, <code>.loan-borrow</code>, <code>.loan-due</code>, <code>.loan-status</code>.', vi: 'Bảng <code>#loan-table</code>: <code>No | Book | Member | Borrow date | Due date | Status | Action</code>; id hàng <code>loan-row-{id}</code>; ô <code>.loan-book</code>, <code>.loan-member</code>, <code>.loan-borrow</code>, <code>.loan-due</code>, <code>.loan-status</code>.' },
         { en: 'Show the book <b>title</b> and member <b>fullName</b> (not the ids). Newest <code>borrowDate</code> first.', vi: 'Hiện <b>tên sách</b> và <b>họ tên</b> thành viên (không hiện id). <code>borrowDate</code> mới nhất lên đầu.' },

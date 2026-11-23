@@ -103,8 +103,8 @@ export async function layNganHang(courseId: number) {
 
   const that = await prisma.examQuestion.findMany({
     where: { kind: 'MCQ', exam: { courseId, kind: 'FE', isPublished: true } },
-    select: { id: true, prompt: true, imageUrl: true, options: true, correctIndexes: true, explanation: true, sectionId: true },
-    orderBy: [{ examId: 'asc' }, { sortOrder: 'asc' }],
+    select: { id: true, examId: true, prompt: true, imageUrl: true, options: true, correctIndexes: true, explanation: true, sectionId: true },
+    orderBy: [{ examId: 'asc' }, { sortOrder: 'asc' }, { id: 'asc' }],
   });
   const cauThat: CauNganHang[] = [];
   const trongSo: Record<string, number> = {};
@@ -115,7 +115,7 @@ export async function layNganHang(courseId: number) {
     const m = nhomCua(q.sectionId);
     trongSo[m.nhom] = (trongSo[m.nhom] ?? 0) + 1;
     if (m.nhom !== NHOM_KHAC) daPhan += 1;
-    cauThat.push({ id: q.id, nguon: 'DE_THAT', prompt: q.prompt, imageUrl: q.imageUrl, options: opts, correctIndexes: q.correctIndexes, explanation: q.explanation, ...m });
+    cauThat.push({ id: q.id, nguon: 'DE_THAT', prompt: q.prompt, imageUrl: q.imageUrl, options: opts, correctIndexes: q.correctIndexes, explanation: q.explanation, ...m, deId: q.examId });
   }
 
   // Quiz chương Academy — chỉ chương đánh số ("Chapter N"): Mục 0, Progress Test, Nâng cao, ôn thi bỏ qua.
@@ -173,6 +173,11 @@ export async function tongQuan(courseCode: string, userId?: number) {
     nhom.set(c.nhom, a);
   }
 
+  const deFe = await prisma.exam.findMany({
+    where: { courseId: course.id, kind: 'FE', isPublished: true },
+    select: { id: true, code: true, title: true, durationMinutes: true, _count: { select: { questions: { where: { kind: 'MCQ' } } } } },
+    orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+  });
   const dePe = await prisma.exam.findMany({
     where: { courseId: course.id, kind: 'PE', isPublished: true },
     select: { id: true, code: true, title: true, durationMinutes: true, attachmentUrl: true, _count: { select: { questions: true } } },
@@ -192,8 +197,8 @@ export async function tongQuan(courseCode: string, userId?: number) {
       orderBy: { id: 'desc' }, take: 10,
     });
     dangDo = rows.map((r) => {
-      const p = r.paper as { loai?: string; title?: string; cau?: unknown[] } | null;
-      return { id: r.id, mode: r.mode, loai: p?.loai ?? 'FE', tieuDe: p?.loai === 'PE' ? String(p.title ?? '') : `FE · ${Array.isArray(p?.cau) ? p!.cau.length : 0}`, startedAt: r.startedAt, expiresAt: r.expiresAt };
+      const p = r.paper as { loai?: string; title?: string; cau?: unknown[]; deThat?: { title?: string } } | null;
+      return { id: r.id, mode: r.mode, loai: p?.loai ?? 'FE', tieuDe: p?.loai === 'PE' ? String(p.title ?? '') : p?.deThat?.title ? String(p.deThat.title) : `FE · ${Array.isArray(p?.cau) ? p!.cau.length : 0}`, startedAt: r.startedAt, expiresAt: r.expiresAt };
     });
   }
 
@@ -213,14 +218,17 @@ export async function tongQuan(courseCode: string, userId?: number) {
       nguonPhanBo: nh.nguonPhanBo,
       nhom: [...nhom.values()].sort((a, b) => a.thuTu - b.thuTu),
     },
+    deFe: deFe.filter((e) => e._count.questions > 0)
+      .map((e) => ({ id: e.id, code: e.code, tieuDe: e.title, soCau: e._count.questions, phut: e.durationMinutes || cfg.fe.phut })),
+    // Đề PE THẬT (Exam Room, có ảnh giao diện demo như tờ đề) đứng trước; đề luyện tự soạn (Code Lab) sau.
     dePe: [
-      ...peCodeLab.map((e) => ({
-        nguon: 'CODELAB' as const, id: e.id, slug: e.slug, tieuDe: e.title, phut: e.estimatedMinutes || cfg.pe.phut,
-        coGiven: true, coMayCham: coMayChamTrinhDuyet(e.testsJson, e.gradeKind), soCau: null as number | null,
-      })),
       ...dePe.map((e) => ({
         nguon: 'EXAM' as const, id: e.id, slug: null as string | null, tieuDe: e.title, phut: e.durationMinutes,
         coGiven: !!e.attachmentUrl, coMayCham: false, soCau: e._count.questions as number | null, code: e.code,
+      })),
+      ...peCodeLab.map((e) => ({
+        nguon: 'CODELAB' as const, id: e.id, slug: e.slug, tieuDe: e.title, phut: e.estimatedMinutes || cfg.pe.phut,
+        coGiven: true, coMayCham: coMayChamTrinhDuyet(e.testsJson, e.gradeKind), soCau: null as number | null, code: null as string | null,
       })),
     ],
     dangDo,
@@ -228,7 +236,7 @@ export async function tongQuan(courseCode: string, userId?: number) {
 }
 
 // ── FE: tạo đề trộn ───────────────────────────────────────────────────
-export interface TuyChonFe { soCau?: number; phut?: number; cheDo?: 'thi' | 'luyen'; nguon?: NguonNganHang; nhom?: string[] }
+export interface TuyChonFe { soCau?: number; phut?: number; cheDo?: 'thi' | 'luyen'; nguon?: NguonNganHang; nhom?: string[]; deId?: number }
 
 export async function batDauFe(userId: number, courseCode: string, o: TuyChonFe, rand: () => number = Math.random) {
   const { cfg, course } = await layMon(courseCode);
@@ -239,21 +247,43 @@ export async function batDauFe(userId: number, courseCode: string, o: TuyChonFe,
   const nhomChon = Array.isArray(o.nhom) ? o.nhom.map(String).filter((x) => /^(s\d+|khac)$/.test(x)).slice(0, 40) : undefined;
 
   const nh = await layNganHang(course.id);
-  const { cau, trongSo } = chonNganHang(nh, nguon, nhomChon);
-  if (cau.length < 3) throw new AppError('Ngân hàng chưa đủ câu cho lựa chọn này (cần ít nhất 3 câu).', 400);
-  const boc = bocDe(cau, trongSo, soCau, rand);
-  const paper: PaperFe = {
-    loai: 'FE', courseCode: cfg.courseCode, nguonNganHang: nguon,
-    nguonPhanBo: nh.nguonPhanBo, phanBo: boc.phanBo,
-    thangDiem: cfg.fe.thangDiem, diemDat: cfg.fe.diemDat,
-    cau: boc.cau.map((c): CauPaper => ({ ...c, clo: c.chuong != null ? (cfg.cloTheoChuong[c.chuong] ?? []) : [], points: 1 })),
-  };
+  let paper: PaperFe;
+  let phutDe = phut;
+  const deId = Number(o.deId);
+  if (Number.isInteger(deId) && deId > 0) {
+    // Nguyên MỘT đề FE thật, đúng thứ tự câu (không trộn). Thi có giờ thì vẫn nên vào /exam/:id — sảnh
+    // chỉ mở lối này cho chế độ LUYỆN; API vẫn nhận cả hai để không gãy nếu client gửi 'thi'.
+    const de = await prisma.exam.findFirst({ where: { id: deId, courseId: course.id, kind: 'FE', isPublished: true }, select: { id: true, code: true, title: true, durationMinutes: true } });
+    if (!de) throw new AppError('Không tìm thấy đề FE', 404);
+    const cauDe = nh.cauThat.filter((c) => c.deId === de.id);
+    if (!cauDe.length) throw new AppError('Đề này chưa có câu trắc nghiệm', 400);
+    const dem = new Map<string, { nhom: string; ten: string; thuTu: number; soCau: number }>();
+    for (const c of cauDe) { const x = dem.get(c.nhom) ?? { nhom: c.nhom, ten: c.nhomTen, thuTu: c.thuTu, soCau: 0 }; x.soCau += 1; dem.set(c.nhom, x); }
+    if (!o.phut) phutDe = de.durationMinutes || cfg.fe.phut;
+    paper = {
+      loai: 'FE', courseCode: cfg.courseCode, nguonNganHang: 'real', nguonPhanBo: nh.nguonPhanBo,
+      phanBo: [...dem.values()].sort((a, b) => a.thuTu - b.thuTu).map(({ nhom, ten, soCau: n }) => ({ nhom, ten, soCau: n })),
+      deThat: { id: de.id, code: de.code, title: de.title },
+      thangDiem: cfg.fe.thangDiem, diemDat: cfg.fe.diemDat,
+      cau: cauDe.map((c): CauPaper => ({ ...c, clo: c.chuong != null ? (cfg.cloTheoChuong[c.chuong] ?? []) : [], points: 1 })),
+    };
+  } else {
+    const { cau, trongSo } = chonNganHang(nh, nguon, nhomChon);
+    if (cau.length < 3) throw new AppError('Ngân hàng chưa đủ câu cho lựa chọn này (cần ít nhất 3 câu).', 400);
+    const boc = bocDe(cau, trongSo, soCau, rand);
+    paper = {
+      loai: 'FE', courseCode: cfg.courseCode, nguonNganHang: nguon,
+      nguonPhanBo: nh.nguonPhanBo, phanBo: boc.phanBo,
+      thangDiem: cfg.fe.thangDiem, diemDat: cfg.fe.diemDat,
+      cau: boc.cau.map((c): CauPaper => ({ ...c, clo: c.chuong != null ? (cfg.cloTheoChuong[c.chuong] ?? []) : [], points: 1 })),
+    };
+  }
   const examId = await layDeNeo(course.id, 'FE', cfg.courseCode);
   const now = Date.now();
   const a = await prisma.examAttempt.create({
     data: {
       userId, examId, status: 'IN_PROGRESS', startedAt: new Date(now),
-      expiresAt: cheDo === 'thi' ? new Date(now + phut * 60_000) : null,
+      expiresAt: cheDo === 'thi' ? new Date(now + phutDe * 60_000) : null,
       answers: {}, gradingMode: 'AUTO',
       mode: cheDo === 'thi' ? MODE_THI : MODE_LUYEN,
       paper: paper as object,
@@ -434,7 +464,7 @@ export function xemLaiMoPhong(attempt: {
   if (paper.loai === 'FE') {
     return {
       ...base,
-      exam: { ...examHeader, code: null, title: `${paper.courseCode} — Mock FE · ${paper.cau.length} questions|||${paper.courseCode} — FE mô phỏng · ${paper.cau.length} câu`, totalPoints: paper.thangDiem, passMark: paper.diemDat, kind: 'FE' },
+      exam: { ...examHeader, code: paper.deThat?.code ?? null, title: paper.deThat?.title ?? `${paper.courseCode} — FE mix · ${paper.cau.length} questions|||${paper.courseCode} — FE trộn · ${paper.cau.length} câu`, totalPoints: paper.thangDiem, passMark: paper.diemDat, kind: 'FE' },
       chapterStats: (feedback.thongKe as unknown) ?? null,
       questions: paper.cau.map((c, i) => ({
         id: c.id, kind: 'MCQ', sortOrder: i, points: c.points, prompt: c.prompt, imageUrl: c.imageUrl,
@@ -496,13 +526,13 @@ export async function lichSu(courseCode: string, userId: number) {
     orderBy: { id: 'desc' }, take: 60,
   });
   const luot = rows.map((r) => {
-    const p = r.paper as { loai?: string; title?: string; cau?: unknown[] } | null;
+    const p = r.paper as { loai?: string; title?: string; cau?: unknown[]; deThat?: { title?: string } } | null;
     const kind = p?.loai ?? r.exam.kind;
     return {
       id: r.id, mode: r.mode, kind, status: r.status,
       score: r.score == null ? null : num(r.score), maxScore: r.maxScore == null ? null : num(r.maxScore), passed: r.passed,
       at: r.submittedAt, timeSpentSeconds: r.timeSpentSeconds,
-      tieuDe: p ? (p.loai === 'PE' ? String(p.title ?? '') : `Mock FE · ${Array.isArray(p.cau) ? p.cau.length : 0}`) : r.exam.title,
+      tieuDe: p ? (p.loai === 'PE' ? String(p.title ?? '') : p.deThat?.title ? String(p.deThat.title) : `FE mix · ${Array.isArray(p.cau) ? p.cau.length : 0}|||FE trộn · ${Array.isArray(p.cau) ? p.cau.length : 0}`) : r.exam.title,
       code: r.exam.code,
     };
   }).reverse();

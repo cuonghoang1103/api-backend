@@ -31,6 +31,8 @@ export interface CauNganHang {
   chuong: number | null;
   /** Thứ tự chương để sắp bảng thống kê. */
   thuTu: number;
+  /** Câu đề thật: id đề (Exam) chứa câu — dùng cho chế độ "luyện nguyên một đề thật". */
+  deId?: number;
 }
 
 export interface CauPaper extends CauNganHang {
@@ -45,6 +47,8 @@ export interface PaperFe {
   /** DE_THAT = trọng số theo đề thật · DEU = chia đều (chưa có dữ liệu phân chương). */
   nguonPhanBo: 'DE_THAT' | 'DEU';
   phanBo: Array<{ nhom: string; ten: string; soCau: number }>;
+  /** Có ⇒ lượt luyện NGUYÊN một đề FE thật (giữ thứ tự câu), không trộn. */
+  deThat?: { id: number; code: string | null; title: string };
   thangDiem: number;
   diemDat: number;
   cau: CauPaper[];

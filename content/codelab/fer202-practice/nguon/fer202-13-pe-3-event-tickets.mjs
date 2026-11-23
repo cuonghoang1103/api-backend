@@ -4,7 +4,14 @@
  * giỏ hàng bằng Context, POST order, lịch sử dd/MM/yyyy + tổng tính) và PE1 (Accordion chi tiết).
  * 85 phút · 10 điểm · 9 chức năng · json-server GIẢ có trạng thái.
  */
+import fs from 'node:fs';
 import { doiDau, index, KHOA, NOP_BAI, tn } from './_chung.mjs';
+
+// Ảnh minh hoạ trong đề (như đề PE thật: "demo" màn hình mong đợi) — chụp từ Live demo của lời giải, ở ./_pe3-events/anh/*.webp,
+// nhúng data: URI như PE-8. dungBanIn bọc chucNang.moTa trong <p>…</p> ⇒ hinh(chữ, ảnh, alt) đóng đoạn chữ rồi mở đoạn ảnh riêng:
+// <p>chữ</p>\n<p><img …></p> (không có chữ ⇒ chỉ <p><img …></p>).
+const anhDemo = (ten) => `data:image/webp;base64,${fs.readFileSync(new URL(`./_pe3-events/anh/${ten}.webp`, import.meta.url)).toString('base64')}`;
+const hinh = (chu, ten, alt) => `${chu ? `${chu}</p>\n<p>` : ''}<img src="${anhDemo(ten)}" alt="${alt.replace(/"/g, '&quot;')}" style="max-width:100%;height:auto;border:1px solid #d1d5db;border-radius:4px">`;
 
 const DB = {
   events: [
@@ -658,6 +665,7 @@ orders: 1 Nguyen Thu Ha 2026-09-28 [Hanoi Jazz Night × 2 @450, V-League Final �
   chucNang: [
     {
       ten: { en: 'Q1 · Events table', vi: 'C1 · Bảng sự kiện' }, diem: 1.5,
+      moTa: { en: hinh('', 'fig1-events', 'Upcoming Events — /events: soonest first, VND prices, Sold out; navbar Cart badge = 3 tickets'), vi: hinh('', 'fig1-events', 'Upcoming Events — /events: gần nhất trước, giá VND, Sold out; badge Cart trên navbar = 3 vé') },
       yeuCau: [
         { en: 'Route <code>/events</code> (<code>/</code> redirects). Table <code>#event-table</code>: <code>No | Event | Date | City | Category | Price | Seats left | (button)</code>; rows <code>#event-row-{id}</code>.', vi: 'Route <code>/events</code> (<code>/</code> chuyển sang). Bảng <code>#event-table</code>: <code>No | Event | Date | City | Category | Price | Seats left | (nút)</code>; hàng <code>#event-row-{id}</code>.' },
         { en: 'Event cell: <code>.ev-title</code> (title) with <code>.ev-venue</code> (venue, small, below). Sorted by <code>date</code>, soonest first.', vi: 'Ô Event: <code>.ev-title</code> (tên) và <code>.ev-venue</code> (địa điểm, chữ nhỏ bên dưới). Sắp theo <code>date</code>, gần nhất trước.' },
@@ -667,6 +675,7 @@ orders: 1 Nguyen Thu Ha 2026-09-28 [Hanoi Jazz Night × 2 @450, V-League Final �
     },
     {
       ten: { en: 'Q1 · Filters & average price', vi: 'C1 · Bộ lọc & giá trung bình' }, diem: 1.5,
+      moTa: { en: hinh('', 'fig2-filter-hanoi', 'Upcoming Events — city Hanoi: 3 rows, average ticket price 260,000 VND'), vi: hinh('', 'fig2-filter-hanoi', 'Upcoming Events — thành phố Hanoi: 3 dòng, giá trung bình 260,000 VND') },
       yeuCau: [
         { en: '<code>#city-filter</code> (<code>All cities</code> + cities from the data, A → Z) and <code>#category-filter</code> (<code>All categories</code> + categories) — combined.', vi: '<code>#city-filter</code> (<code>All cities</code> + các thành phố trong dữ liệu, A → Z) và <code>#category-filter</code> (<code>All categories</code> + các loại) — kết hợp.' },
         { en: '<code>#summary</code>: <code>Average ticket price: X VND</code> over the <b>visible</b> rows (rounded to 1 VND); <code>N/A</code> when none.', vi: '<code>#summary</code>: <code>Average ticket price: X VND</code> trên các dòng <b>đang hiện</b> (làm tròn đồng); <code>N/A</code> khi không có dòng nào.' },
@@ -692,6 +701,7 @@ orders: 1 Nguyen Thu Ha 2026-09-28 [Hanoi Jazz Night × 2 @450, V-League Final �
     },
     {
       ten: { en: 'Q2 · Cart page', vi: 'C2 · Trang giỏ' }, diem: 1.5,
+      moTa: { en: hinh('', 'fig3-cart-checkout-error', 'Your Cart — /cart: quantities, subtotals, total; checkout rejected with "Please enter a valid email"'), vi: hinh('', 'fig3-cart-checkout-error', 'Your Cart — /cart: số lượng, thành tiền, tổng; thanh toán bị từ chối "Please enter a valid email"') },
       yeuCau: [
         { en: 'Route <code>/cart</code>. Table <code>#cart-table</code>, rows <code>#cart-row-{eventId}</code>: title, unit price, <code>.btn-dec</code> <code>.qty</code> <code>.btn-inc</code>, <code>.subtotal</code>, <code>.btn-remove</code>.', vi: 'Route <code>/cart</code>. Bảng <code>#cart-table</code>, hàng <code>#cart-row-{eventId}</code>: tên, đơn giá, <code>.btn-dec</code> <code>.qty</code> <code>.btn-inc</code>, <code>.subtotal</code>, <code>.btn-remove</code>.' },
         { en: '+ respects the same limits; − at 1 removes the line. <code>#cart-total</code>: <code>Total: X VND</code>.', vi: '+ theo cùng giới hạn; − khi còn 1 thì bỏ dòng. <code>#cart-total</code>: <code>Total: X VND</code>.' },
@@ -716,6 +726,7 @@ orders: 1 Nguyen Thu Ha 2026-09-28 [Hanoi Jazz Night × 2 @450, V-League Final �
     },
     {
       ten: { en: 'Q3 · Order history', vi: 'C3 · Lịch sử đơn' }, diem: 1.5,
+      moTa: { en: hinh('', 'fig4-orders', 'Order History — /orders: newest first, computed tickets/total, total revenue; order 1 details expanded'), vi: hinh('', 'fig4-orders', 'Order History — /orders: mới nhất trước, số vé/tổng tính từ dòng, tổng doanh thu; đơn 1 đang mở chi tiết') },
       yeuCau: [
         { en: 'Route <code>/orders</code>. Table <code>#order-table</code>: <code>Order # | Customer | Date | Tickets | Total</code>; rows <code>#order-row-{id}</code>, cells <code>.o-customer .o-date .o-tickets .o-total</code>; newest <code>orderDate</code> first.', vi: 'Route <code>/orders</code>. Bảng <code>#order-table</code>: <code>Order # | Customer | Date | Tickets | Total</code>; hàng <code>#order-row-{id}</code>, ô <code>.o-customer .o-date .o-tickets .o-total</code>; <code>orderDate</code> mới nhất trước.' },
         { en: 'Tickets = Σ quantity; Total = Σ quantity × priceK (VND format).', vi: 'Tickets = Σ quantity; Total = Σ quantity × priceK (định dạng VND).' },

@@ -1940,6 +1940,7 @@ export interface MockOverview {
   huongDanMoiTruong: string[];
   loaiPe: 'node' | 'chung';
   nganHang: { deThat: number; quiz: number; sauKhuTrung: number; nguonPhanBo: 'DE_THAT' | 'DEU'; nhom: MockNhom[] };
+  deFe: Array<{ id: number; code: string | null; tieuDe: string; soCau: number; phut: number }>;
   dePe: MockDePe[];
   dangDo: Array<{ id: number; mode: string; loai: 'FE' | 'PE'; tieuDe: string; startedAt: string; expiresAt: string | null }>;
 }
@@ -1990,7 +1991,7 @@ export const examMockApi = {
   mon: () => api.get<{ data: MockMon[] }>('/exams/mock/mon'),
   overview: (courseCode: string) => api.get<{ data: MockOverview }>(`/exams/mock/${courseCode}/overview`),
   history: (courseCode: string) => api.get<{ data: MockHistory }>(`/exams/mock/${courseCode}/history`),
-  startFe: (courseCode: string, body: { soCau: number; phut: number; cheDo: 'thi' | 'luyen'; nguon: 'mix' | 'real' | 'quiz'; nhom?: string[] }) =>
+  startFe: (courseCode: string, body: { soCau?: number; phut?: number; cheDo: 'thi' | 'luyen'; nguon?: 'mix' | 'real' | 'quiz'; nhom?: string[]; deId?: number }) =>
     api.post<{ data: { attemptId: number; soCau: number } }>(`/exams/mock/${courseCode}/fe`, body),
   startPe: (courseCode: string, body: { examId?: number; exerciseId?: number; cheDo: 'thi' | 'luyen' }) =>
     api.post<{ data: { attemptId: number } }>(`/exams/mock/${courseCode}/pe`, body),

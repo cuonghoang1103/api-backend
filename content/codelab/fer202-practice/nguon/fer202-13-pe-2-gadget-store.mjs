@@ -4,7 +4,14 @@
  * trang Management bảng + ảnh 70×70 + xoá có xác nhận, form Add/Edit dùng chung với luật kiểm từng ô.
  * 85 phút · 10 điểm · 9 chức năng · json-server GIẢ có trạng thái.
  */
+import fs from 'node:fs';
 import { doiDau, index, KHOA, NOP_BAI, tn } from './_chung.mjs';
+
+// Ảnh minh hoạ trong đề (như đề PE thật: "demo" màn hình mong đợi) — chụp từ Live demo của lời giải, ở ./_pe2-gadgets/anh/*.webp,
+// nhúng data: URI như PE-8. dungBanIn bọc chucNang.moTa trong <p>…</p> ⇒ hinh(chữ, ảnh, alt) đóng đoạn chữ rồi mở đoạn ảnh riêng:
+// <p>chữ</p>\n<p><img …></p> (không có chữ ⇒ chỉ <p><img …></p>).
+const anhDemo = (ten) => `data:image/webp;base64,${fs.readFileSync(new URL(`./_pe2-gadgets/anh/${ten}.webp`, import.meta.url)).toString('base64')}`;
+const hinh = (chu, ten, alt) => `${chu ? `${chu}</p>\n<p>` : ''}<img src="${anhDemo(ten)}" alt="${alt.replace(/"/g, '&quot;')}" style="max-width:100%;height:auto;border:1px solid #d1d5db;border-radius:4px">`;
 
 const anh = (seed) => `https://api.dicebear.com/9.x/icons/svg?seed=${seed}`;
 const DB = {
@@ -652,6 +659,7 @@ src/
   chucNang: [
     {
       ten: { en: 'T1 · Collection page', vi: 'C1 · Trang bộ sưu tập' }, diem: 1.5,
+      moTa: { en: hinh('', 'fig1-collection', 'Gadget Collection — /se123456/gadgets: cards sorted by price, high → low'), vi: hinh('', 'fig1-collection', 'Gadget Collection — /se123456/gadgets: thẻ xếp theo giá, cao → thấp') },
       yeuCau: [
         { en: `Navbar links <code>#nav-collection</code> and <code>#nav-management</code>; <code>/</code> redirects to <code>/${ROLL}/gadgets</code>.`, vi: `Navbar có <code>#nav-collection</code> và <code>#nav-management</code>; <code>/</code> chuyển tới <code>/${ROLL}/gadgets</code>.` },
         { en: 'Fetch all gadgets; show them as cards <code>#gadget-{id}.gadget-card</code>, <b>4 per row</b> on large screens.', vi: 'Tải mọi gadget; hiện dạng thẻ <code>#gadget-{id}.gadget-card</code>, <b>4 thẻ một hàng</b> ở màn hình lớn.' },
@@ -669,6 +677,7 @@ src/
     },
     {
       ten: { en: 'T1 · Filters', vi: 'C1 · Bộ lọc' }, diem: 1,
+      moTa: { en: hinh('', 'fig2-filter-audio-best', 'Gadget Collection — Audio + "Best sellers only": 2 gadgets'), vi: hinh('', 'fig2-filter-audio-best', 'Gadget Collection — Audio + "Best sellers only": 2 gadgets') },
       yeuCau: [
         { en: 'Buttons <code>.cat-btn</code> with id <code>cat-{Category}</code>: <code>All</code> + categories from the data, A → Z; the selected one has class <code>active</code>.', vi: 'Nút <code>.cat-btn</code> id <code>cat-{Category}</code>: <code>All</code> + các loại lấy từ dữ liệu, A → Z; nút đang chọn có class <code>active</code>.' },
         { en: 'Switch <code>#only-best</code> "Best sellers only". Both filters combine; <code>#gadget-count</code> reads <code>N gadgets</code>.', vi: 'Công tắc <code>#only-best</code> "Best sellers only". Hai bộ lọc kết hợp; <code>#gadget-count</code> ghi <code>N gadgets</code>.' },
@@ -678,6 +687,7 @@ src/
     },
     {
       ten: { en: 'T2 · Management table', vi: 'C2 · Bảng quản lý' }, diem: 1.5,
+      moTa: { en: hinh('', 'fig3-management', 'Gadget Management — /se123456/manage: id ascending, 70×70 thumbnails, Edit / Delete'), vi: hinh('', 'fig3-management', 'Gadget Management — /se123456/manage: id tăng dần, ảnh 70×70, Edit / Delete') },
       yeuCau: [
         { en: `Route <code>/${ROLL}/manage</code>. Table <code>#gadget-table</code>: <code>ID | Name | Brand | Category | Image | Actions</code>, rows <code>#gadget-row-{id}</code> sorted by id <b>ascending</b>, name cell <code>.g-name</code>.`, vi: `Route <code>/${ROLL}/manage</code>. Bảng <code>#gadget-table</code>: <code>ID | Name | Brand | Category | Image | Actions</code>, hàng <code>#gadget-row-{id}</code> theo id <b>tăng dần</b>, ô tên <code>.g-name</code>.` },
         { en: 'Image as a <b>70 × 70 px</b> thumbnail <code>img.thumb</code>.', vi: 'Ảnh là ảnh nhỏ <b>70 × 70 px</b> <code>img.thumb</code>.' },
@@ -702,7 +712,10 @@ src/
     },
     {
       ten: { en: 'T3 · Validation', vi: 'C3 · Kiểm hợp lệ' }, diem: 1.5,
-      moTa: { en: 'Validate <b>all</b> fields on submit; mark each invalid field with <code>is-invalid</code> and show its message in <code>#err-{field}</code>.', vi: 'Kiểm <b>mọi</b> ô khi gửi; ô sai có class <code>is-invalid</code> và câu lỗi nằm trong <code>#err-{tên ô}</code>.' },
+      moTa: {
+        en: hinh('Validate <b>all</b> fields on submit; mark each invalid field with <code>is-invalid</code> and show its message in <code>#err-{field}</code>.', 'fig4-add-errors', 'Add Gadget — /se123456/add: every invalid field is marked with its message'),
+        vi: hinh('Kiểm <b>mọi</b> ô khi gửi; ô sai có class <code>is-invalid</code> và câu lỗi nằm trong <code>#err-{tên ô}</code>.', 'fig4-add-errors', 'Add Gadget — /se123456/add: mọi ô sai được đánh dấu kèm câu lỗi'),
+      },
       yeuCau: [
         { en: 'name ≥ 3 chars ⇒ <code>Name must be at least 3 characters</code>', vi: 'tên ≥ 3 ký tự ⇒ <code>Name must be at least 3 characters</code>' },
         { en: 'brand ≥ 2 words ⇒ <code>Brand must contain at least 2 words</code>', vi: 'hãng ≥ 2 từ ⇒ <code>Brand must contain at least 2 words</code>' },

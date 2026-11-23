@@ -54,6 +54,7 @@ export default function MoPhongClient() {
 
   // Cấu hình đề FE
   const [cheDo, setCheDo] = useState<'thi' | 'luyen'>('thi');
+  const [kieuFe, setKieuFe] = useState<'tron' | 'nguyen'>('tron');
   const [soCau, setSoCau] = useState(50);
   const [phut, setPhut] = useState(60);
   const [phutTay, setPhutTay] = useState(false);
@@ -110,6 +111,17 @@ export default function MoPhongClient() {
       setDangTao(false);
     }
   }, [course, soCau, phut, cheDo, nguon, nhomChon, router, isVi]);
+
+  const luyenDeThat = useCallback(async (deId: number) => {
+    setDangTao(true);
+    try {
+      const r = await examMockApi.startFe(course, { deId, cheDo: 'luyen' });
+      router.push(`/exam/mo-phong/fe/${r.data.data.attemptId}`);
+    } catch (e) {
+      toast.error(loiCua(e, isVi ? 'Không mở được đề' : 'Could not open the paper'));
+      setDangTao(false);
+    }
+  }, [course, router, isVi]);
 
   const batDauPe = useCallback(async (p: { examId?: number; exerciseId?: number }, cd: 'thi' | 'luyen') => {
     setDangTao(true);
@@ -187,7 +199,7 @@ export default function MoPhongClient() {
             <div className="flex flex-wrap gap-2">
               {ov.dangDo.map((d) => (
                 <Link key={d.id} href={`/exam/mo-phong/${d.loai === 'PE' ? 'pe' : 'fe'}/${d.id}`} className="mo-chip" data-on="true">
-                  <Play className="w-3.5 h-3.5" />{d.loai === 'PE' ? pickLang(d.tieuDe, L) : d.tieuDe}
+                  <Play className="w-3.5 h-3.5" />{pickLang(d.tieuDe, L)}
                   <span className="opacity-70">· {d.mode === 'MOCK_PRACTICE' ? t('luyện', 'practice') : t('thi thật', 'timed')}</span>
                 </Link>
               ))}
@@ -202,6 +214,36 @@ export default function MoPhongClient() {
         </div>
 
         {tab === 'fe' && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            <button className="mo-chip" data-on={kieuFe === 'tron'} onClick={() => setKieuFe('tron')}>{t('Đề trộn', 'Mixed paper')}</button>
+            <button className="mo-chip" data-on={kieuFe === 'nguyen'} onClick={() => setKieuFe('nguyen')}>{t(`Đề thật nguyên bộ (${ov.deFe.length})`, `Full real papers (${ov.deFe.length})`)}</button>
+          </div>
+        )}
+
+        {tab === 'fe' && kieuFe === 'nguyen' && (
+          ov.deFe.length === 0
+            ? <div className="exam-card p-6 text-center text-text-secondary">{t('Môn này chưa có đề FE thật.', 'No real FE papers for this course yet.')}</div>
+            : (
+              <div className="grid sm:grid-cols-2 gap-3">
+                {ov.deFe.map((d) => (
+                  <div key={d.id} className="exam-card p-4 flex flex-col gap-3">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="exam-badge exam-badge-fe">FE · {d.soCau} {t('câu', 'q')} · {d.phut}′</span>
+                      {d.code && <span className="exam-badge" style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>{d.code}</span>}
+                    </div>
+                    <div className="font-semibold leading-snug">{pickLang(d.tieuDe, L)}</div>
+                    <div className="mt-auto flex gap-2">
+                      {/* Thi có giờ = đúng đề đó ở Phòng thi (/exam/:id) — không dựng lại lượt thi thứ hai ở đây. */}
+                      <Link href={`/exam/${d.id}`} className="mo-nut-chinh flex-1 justify-center"><Timer className="w-4 h-4" />{t('Thi', 'Exam')} {d.phut}′</Link>
+                      <button disabled={dangTao} onClick={() => luyenDeThat(d.id)} className="mo-nut-phu flex-1">{t('Luyện', 'Practice')}</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )
+        )}
+
+        {tab === 'fe' && kieuFe === 'tron' && (
           <div className="grid lg:grid-cols-[1fr_320px] gap-5">
             <div className="exam-card p-5 space-y-5">
               <div>
@@ -289,8 +331,14 @@ export default function MoPhongClient() {
               </ol>
             </div>
             {ov.dePe.length === 0 && <div className="exam-card p-6 text-center text-text-secondary">{t('Môn này chưa có đề PE.', 'No PE papers for this course yet.')}</div>}
+            {(['EXAM', 'CODELAB'] as const).map((nguonDe) => {
+              const ds = ov.dePe.filter((p) => p.nguon === nguonDe);
+              if (!ds.length) return null;
+              return (
+                <div key={nguonDe}>
+                  <div className="mo-nhan mb-2">{nguonDe === 'EXAM' ? t(`Đề thật (${ds.length})`, `Real papers (${ds.length})`) : t(`Đề luyện (${ds.length})`, `Practice papers (${ds.length})`)}</div>
             <div className="grid sm:grid-cols-2 gap-4">
-              {ov.dePe.map((p) => (
+              {ds.map((p) => (
                 <div key={`${p.nguon}-${p.id}`} className="exam-card p-4 flex flex-col gap-3">
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span className="exam-badge exam-badge-pe">PE · {p.phut}′</span>
@@ -306,6 +354,9 @@ export default function MoPhongClient() {
                 </div>
               ))}
             </div>
+                </div>
+              );
+            })}
           </div>
         )}
 

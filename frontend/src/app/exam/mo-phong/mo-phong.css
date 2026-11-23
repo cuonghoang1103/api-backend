@@ -116,3 +116,8 @@ html.theme-dark .mo-chip[data-on="true"] { color: #a5b4fc; }
 .mo-ba-nut button[data-on="true"][data-v="0.5"] { background: rgba(245,158,11,.16); color: var(--exam-warn); }
 .mo-ba-nut button[data-on="true"][data-v="0"] { background: rgba(239,68,68,.12); color: var(--exam-danger); }
 @media (max-width: 520px) { .mo-tc { grid-template-columns: 1fr; } }
+
+/* Đề luyện Code Lab: mục "ghi chú cho máy chấm" gập lại ở PEA + EOS (không thuộc tờ đề). */
+.mo-may-cham { margin: 1rem 0; border: 1px dashed var(--border-color); border-radius: 10px; padding: .5rem .75rem; }
+.mo-may-cham > summary { cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--text-muted); }
+.mo-may-cham[open] > summary { margin-bottom: .5rem; }

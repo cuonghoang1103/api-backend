@@ -26,7 +26,7 @@ export default {
   lessons: {
     /* ── Mục 0 — Object storage thật ra là cái gì ── */
     'os-0-1-vs-fs': { yt: 'kmU7ik0oGFA', credit: 'DataEngineeringDan — Is Cloudflare R2 The Future of Data Storage?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-03-vs-file-system-8551dd59.mp4' }, defaultVideoTrack: 'VI'}, // Is Cloudflare R2 The Future of Data Storage?
-    'os-0-2-model': { yt: 'TIp5sUZO4Uo', credit: 'Cloudflare Developers — Getting started with R2' }, // Getting started with R2
+    'os-0-2-model': { yt: 'TIp5sUZO4Uo', credit: 'Cloudflare Developers — Getting started with R2', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-04-mo-hinh-ba-tang-6d39294b.mp4' }, defaultVideoTrack: 'VI'}, // Getting started with R2
 
     /* ── Chương 1 — API S3 ── */
     'os-1-1-client': { yt: 'F6LdiDzitFo', credit: 'Storj — Using presigned urls in Javascript/Nodejs AWS SDK V3 with Storj', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/01-s3-api/01-01-khoi-tao-client-c17297f9.mp4' }, defaultVideoTrack: 'VI'},    // Using presigned urls in Javascript/Nodejs AWS SDK V3 with Storj

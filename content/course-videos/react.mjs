@@ -56,7 +56,7 @@ export default {
     /* ── Chương 5 — Chia sẻ state ── */
     'rx-5-0-slides': { yt: 'MpdFj8MEuJA', credit: "Jack Herrington — Mastering React Context: Do you NEED a state manager?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-01-slide-chuong-5-365067fe.mp4' }, defaultVideoTrack: 'VI'},
     'rx-5-1-context': { yt: '16yMmAJSGek', credit: "ByteGrad — This Context API Mistake Ruins Your Whole React App (All Components Re-Render)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-02-context-ad6166b1.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-5-2-reducer': { yt: 'rgp_iCVS8ys', credit: "Cosden Solutions — Learn React Hooks: useReducer - Simply Explained!" },
+    'rx-5-2-reducer': { yt: 'rgp_iCVS8ys', credit: "Cosden Solutions — Learn React Hooks: useReducer - Simply Explained!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-03-reducer-3f0183b4.mp4' }, defaultVideoTrack: 'VI'},
     'rx-5-3-zustand': { yt: '_ngCLZ5Iz-0', credit: "Cosden Solutions — Zustand - Complete Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-04-zustand-5a132d77.mp4' }, defaultVideoTrack: 'VI'},
     'rx-5-4-url-state': { yt: 'ukpgxEemXsk', credit: "ByteGrad — STOP using useState, instead put state in URL (in React & Next.js)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-05-url-state-b93e1845.mp4' }, defaultVideoTrack: 'VI'},
     'rx-5-5-du-an': { yt: 'vKJe95pqn8E', credit: "Cosden Solutions — Build a Multi-Step Form in React Like a Pro", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-06-du-an-f2cf8504.mp4' }, defaultVideoTrack: 'VI'},
@@ -66,7 +66,7 @@ export default {
     'rx-6-1-fetch': { yt: 'bGzanfKVFeU', credit: "BeJS — Goodbye, useEffect - David Khourshid", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-02-fetch-41cd527c.mp4' }, defaultVideoTrack: 'VI'},
     'rx-6-2-tanstack': { yt: 'mPaCnwpFvZY', credit: "Austin Davis — TanStack Query - How to become a React Query God", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-03-tanstack-a0c2a10a.mp4' }, defaultVideoTrack: 'VI'},
     'rx-6-3-mutation': { yt: 'e74rB-14-m8', credit: "PedroTech — React Query Crash Course - Learn Queries, Mutations, Caching, Optimistic Updates...", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-04-mutation-26ec8cbf.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-6-4-loi-api': { yt: 'OQQAv8t3bfc', credit: "Cosden Solutions — Error Handling in React (Complete Tutorial)" },
+    'rx-6-4-loi-api': { yt: 'OQQAv8t3bfc', credit: "Cosden Solutions — Error Handling in React (Complete Tutorial)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-05-loi-api-604847d2.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 7 — Định tuyến và cấu trúc ── */
     'rx-7-0-slides': { yt: 'NVuxUktUvxc', credit: "Maximilian Schwarzmüller — React Router 7 is amazing - despite it's confusing docs!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-01-slide-chuong-7-0870e689.mp4' }, defaultVideoTrack: 'VI'},
@@ -79,7 +79,7 @@ export default {
     /* ── Chương 8 — Hiệu năng và khả năng tiếp cận ── */
     'rx-8-0-slides': { yt: 'uAmRtE52mYk', credit: "React Conf — Exploring React Performance", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-01-slide-chuong-8-4ab59cb2.mp4' }, defaultVideoTrack: 'VI'},
     'rx-8-1-do': { yt: 'CclO4tPoebs', credit: "React Conf — Profiling with React Performance tracks", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-02-do-4955bb35.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-8-2-memo': { yt: 'huBxeruVnAM', credit: "Developer Way — Mastering memoization in React - Advanced React course, Episode 5" },
+    'rx-8-2-memo': { yt: 'huBxeruVnAM', credit: "Developer Way — Mastering memoization in React - Advanced React course, Episode 5", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-03-memo-4335e877.mp4' }, defaultVideoTrack: 'VI'},
     'rx-8-3-lazy': { yt: 'JU6sl_yyZqs', credit: "Web Dev Simplified — Speed Up Your React Apps With Code Splitting", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-04-lazy-812b0aa4.mp4' }, defaultVideoTrack: 'VI'},
     'rx-8-4-a11y': { yt: 'UHjt2A6CS6A', credit: "React Conf — Demystifying accessibility in React apps | Kateryna Porshnieva", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-05-a11y-92e0b037.mp4' }, defaultVideoTrack: 'VI'},
 
@@ -100,7 +100,7 @@ export default {
     'rx-11-0-slides': { yt: '7YhdqIR2Yzo', credit: "Philip Fabianek — How Does React Actually Work? React.js Deep Dive #1" },
     'rx-11-1-virtual-dom': { yt: 'rKk4XJYzSQA', credit: "Tejas Kumar — React Fiber Reconciliation: How it Works (Part 1)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-02-virtual-dom-ab28d0a7.mp4' }, defaultVideoTrack: 'VI'},
     'rx-11-2-key-identity': { yt: '76OedwmXlYY', credit: "Developer Way — The mystery of React key: how to write performant lists", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-03-key-identity-b3a532a2.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-11-3-strict-mode-ref': { yt: '1UOAI7pFDek', credit: "Sam Selikoff — Why React Strict Mode breaks your app – on purpose" },
+    'rx-11-3-strict-mode-ref': { yt: '1UOAI7pFDek', credit: "Sam Selikoff — Why React Strict Mode breaks your app – on purpose", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-04-strict-mode-ref-80fee16b.mp4' }, defaultVideoTrack: 'VI'},
     'rx-11-4-portal-error-boundary': { yt: 'LyLa7dU5tp8', credit: "Web Dev Simplified — Learn React Portal In 12 Minutes By Building A Modal", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-05-portal-error-boundary-894fa25f.mp4' }, defaultVideoTrack: 'VI'},
     'rx-11-5-du-an': { yt: '_FuDMEgIy7I', credit: "Web Dev Simplified — Learn React Error Boundaries In 7 Minutes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-06-du-an-081b0a01.mp4' }, defaultVideoTrack: 'VI'},
 
@@ -115,8 +115,8 @@ export default {
     'rx-13-0-slides': { yt: 'MdvzlDIdQ0o', credit: "Cosden Solutions — Design patterns in React", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-01-slide-chuong-13-379a11b1.mp4' }, defaultVideoTrack: 'VI'},
     'rx-13-1-compound-headless': { yt: 'N_WgBU3S9W8', credit: "Cosden Solutions — Compound Components in React (Design Patterns)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-02-compound-headless-784bb0a5.mp4' }, defaultVideoTrack: 'VI'},
     'rx-13-2-hook-styling': { yt: 'I2Bgi0Qcdvc', credit: "Cosden Solutions — Custom Hooks in React (Design Patterns)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-03-hook-styling-04ed4abf.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-13-3-danh-sach-dai': { yt: 'DBdo7mmuGx4', credit: "Austin Davis — TanStack Virtual - Lightning Fast React Pages" },
-    'rx-13-4-bao-mat-i18n': { yt: 'fnQdZdxYxrU', credit: "Coding Garden — XSS Explained with React and Vanilla JS Examples | Cross Site Scripting | dangerouslySetInnerHTML" },
+    'rx-13-3-danh-sach-dai': { yt: 'DBdo7mmuGx4', credit: "Austin Davis — TanStack Virtual - Lightning Fast React Pages", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-04-danh-sach-dai-98f103fb.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-13-4-bao-mat-i18n': { yt: 'fnQdZdxYxrU', credit: "Coding Garden — XSS Explained with React and Vanilla JS Examples | Cross Site Scripting | dangerouslySetInnerHTML", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-05-bao-mat-i18n-f82c46be.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 14 — Lên production ── */
     'rx-14-1-xac-thuc': { yt: 'AcYF18oGn6Y', credit: "Cosden Solutions — Authentication in React with JWTs, Access & Refresh Tokens (Complete Tutorial)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-02-xac-thuc-e3356ccc.mp4' }, defaultVideoTrack: 'VI'},

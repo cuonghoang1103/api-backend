@@ -51,17 +51,17 @@ export default {
 
     /* ── Chương 3 — Biểu thức, context, và lúc nào thứ gì tồn tại ── */
     'ga-3-0-slides': { yt: 'MdjyWei7ZKo', credit: "ExamPro — Expressions Follow Along: Advanced Expression Usage – GitHub Actions Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/03-bieu-thuc-context/03-01-slide-chuong-3-1db73e4c.mp4' }, defaultVideoTrack: 'VI'},
-    'ga-3-1-ranh-gioi': { yt: 'y8eJTk4lPks', credit: "Execute Automation — Part 5 - Understanding Context and Env variables with ${{ Expression }}" },
+    'ga-3-1-ranh-gioi': { yt: 'y8eJTk4lPks', credit: "Execute Automation — Part 5 - Understanding Context and Env variables with ${{ Expression }}", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/03-bieu-thuc-context/03-02-ranh-gioi-548007db.mp4' }, defaultVideoTrack: 'VI'},
     'ga-3-2-context': { yt: 'zI7WVWe9bHM', credit: "Testing Mini Bytes — Part 4 | Contexts | Different Contexts in Github Actions | How to use Contexts in GIthub Actions |", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/03-bieu-thuc-context/03-03-context-790db669.mp4' }, defaultVideoTrack: 'VI'},
     'ga-3-3-ep-kieu': { yt: 'Br6vyKKCwr4', credit: "Infrasity — Github Action If-else Statement", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/03-bieu-thuc-context/03-04-ep-kieu-a01e4024.mp4' }, defaultVideoTrack: 'VI'},
     'ga-3-4-ham': { yt: 'r4Z_khNOEs4', credit: "DevOps Topics — Github Actions Tutorial | Status check functions" },
-    'ga-3-5-dieu-kien': { yt: 'swS_7tMqHE0', credit: "Daminda Dinesh Imaduwa Gamage — GitHub Actions conditionals : how \"if\" works" },
+    'ga-3-5-dieu-kien': { yt: 'swS_7tMqHE0', credit: "Daminda Dinesh Imaduwa Gamage — GitHub Actions conditionals : how \"if\" works", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/03-bieu-thuc-context/03-06-dieu-kien-f202030d.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 4 — Action, và chuyện chạy mã của người khác ── */
     'ga-4-0-slides': { yt: 'W-1Zf8lrdxU', credit: "glich.stream — E5 - GitHub Actions: Write custom Javascript & Docker actions || Beginner Friendly", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-01-slide-chuong-4-1c4755fc.mp4' }, defaultVideoTrack: 'VI'},
     'ga-4-1-action-la-gi': { yt: 'JYOGmLzMbpM', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 4 - The GitHub Marketplace", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-02-action-la-gi-642708c3.mp4' }, defaultVideoTrack: 'VI'},
     'ga-4-2-ghim': { yt: '8uQLyErG4EE', credit: "bdougie — Ensure your GitHub Actions are pinned to a SHA", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-03-ghim-3cf47931.mp4' }, defaultVideoTrack: 'VI'},
-    'ga-4-3-checkout': { yt: 'nAK3mFRxfFA', credit: "DevOps Hint — How to use actions/checkout in GitHub Actions | GitHub - jobs : what is : use actions/checkout" },
+    'ga-4-3-checkout': { yt: 'nAK3mFRxfFA', credit: "DevOps Hint — How to use actions/checkout in GitHub Actions | GitHub - jobs : what is : use actions/checkout", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-04-checkout-65bd8cd0.mp4' }, defaultVideoTrack: 'VI'},
     'ga-4-4-setup': { yt: 'gRPIPiiTH-c', credit: "Swashbuckling with Code — CI #5 - Why use the setup-node action?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-05-setup-d25f9f1d.mp4' }, defaultVideoTrack: 'VI'},
     'ga-4-5-tu-viet': { yt: 'zQdEsIBbVjE', credit: "Mickey Gousset — Create Your First Custom GitHub Action", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-06-tu-viet-4e3555af.mp4' }, defaultVideoTrack: 'VI'},
 
@@ -101,7 +101,7 @@ export default {
     'ga-9-0-slides': { yt: 'w_37LDOy4sI', credit: "CoderDave — GitHub Actions: Approvals, Environments and Visualization DEEP DIVE", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-01-slide-chuong-9-fb338389.mp4' }, defaultVideoTrack: 'VI'},
     'ga-9-1-push-de-deploy': { yt: 'X3F3El_yvFg', credit: "Traversy Media — Automatic Deployment With Github Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-02-push-de-deploy-2cde542f.mp4' }, defaultVideoTrack: 'VI'},
     'ga-9-2-o-dau': { yt: 'NIAEruc-eP8', credit: "Learn Code With Durgesh — 🚀 Complete CI/CD Pipeline Tutorial with GitHub Actions & Docker | DevOps Masterclass", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-03-o-dau-524f426c.mp4' }, defaultVideoTrack: 'VI'},
-    'ga-9-3-rollback': { yt: 'sVl6De94evo', credit: "Hello World — Multi-stage deployments with GitHub Actions" },
+    'ga-9-3-rollback': { yt: 'sVl6De94evo', credit: "Hello World — Multi-stage deployments with GitHub Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-04-rollback-e6d3ad9d.mp4' }, defaultVideoTrack: 'VI'},
     'ga-9-4-moi-truong': { yt: 'EOlm3ft0VPo', credit: "Asp.Net Monsters — Deploying to Environments with GitHub Actions (#212)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-05-moi-truong-8659dec1.mp4' }, defaultVideoTrack: 'VI'},
     'ga-9-5-thong-bao': { yt: 'cNcorU57m94', credit: "DevTips Daily — Send Slack Notifications from GitHub Actions | Pass/Fail Alerts", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-06-thong-bao-d9f3f4b7.mp4' }, defaultVideoTrack: 'VI'},
 
@@ -111,7 +111,7 @@ export default {
     'ga-10-2-seed-vo': { yt: 'PX881bVAPxM', credit: "Neon Postgres — Prisma essentials: from development to production (Prisma Migrate workflow)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-03-seed-vo-ca99d834.mp4' }, defaultVideoTrack: 'VI'},
     'ga-10-3-checker-hong': { yt: 'm1oMj29P--Y', credit: "Modern Software Engineering — 3 Reasons Your CI/CD Pipeline Isn't Working As It Should...", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-04-checker-hong-132e34ad.mp4' }, defaultVideoTrack: 'VI'},
     'ga-10-4-diet-cong': { yt: 'ZZxhzr3GGlY', credit: "Mickey Gousset — The actions/checkout action fails with two possible error messages", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-05-diet-cong-ee1cf4bb.mp4' }, defaultVideoTrack: 'VI'},
-    'ga-10-5-migration': { yt: '0Ik45qw8KhM', credit: "fromDev2Dev — Let's learn Prisma ORM: migrate in detail (seeding, down migration, production)" },
+    'ga-10-5-migration': { yt: '0Ik45qw8KhM', credit: "fromDev2Dev — Let's learn Prisma ORM: migrate in detail (seeding, down migration, production)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-06-migration-21c9d086.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 11 — Ôn tổng giữa khoá: Chương 1–10 ── */
     'ga-11-1-chot': { yt: 'BQrohJ3PT7I', credit: "GitHub — How to use GitHub Actions | GitHub for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/11-on-tong-giua-khoa/11-01-chot-21cda732.mp4' }, defaultVideoTrack: 'VI'},
@@ -120,7 +120,7 @@ export default {
     /* ── Chương 12 — Tái sử dụng ở quy mô đội: workflow dùng lại, composite action & action tự viết ── */
     'ga-12-0-slides': { yt: 'zc19mR3O4a4', credit: "CoderDave — Composite Actions VS Reusable Workflows in GitHub Actions [2023 Update]", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-01-slide-chuong-12-7a730b83.mp4' }, defaultVideoTrack: 'VI'},
     'ga-12-1-reusable-workflow': { yt: 'gDBZGCGSs6E', credit: "Mickey Gousset — Create Your First Reusable Workflow", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-02-reusable-workflow-10e8a866.mp4' }, defaultVideoTrack: 'VI'},
-    'ga-12-2-composite-action': { yt: 'w8ZALhqoHgs', credit: "Yankee Maharjan — Ultimate Guide to GitHub Composite Actions (Complete Walkthrough!)" },
+    'ga-12-2-composite-action': { yt: 'w8ZALhqoHgs', credit: "Yankee Maharjan — Ultimate Guide to GitHub Composite Actions (Complete Walkthrough!)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-03-composite-action-c7c36593.mp4' }, defaultVideoTrack: 'VI'},
     'ga-12-3-action-js-docker': { yt: 'sjSmSzMJL5s', credit: "Cloud With VarJosh — GitHub JavaScript & Docker Actions Explained | Hands-on Demos", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-04-action-js-docker-687dd79b.mp4' }, defaultVideoTrack: 'VI'},
     'ga-12-4-mau-cho-to-chuc': { yt: 'Imv7zzJmpwU', credit: "TechTrapture — Creating Starter Workflow in GitHub Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-05-mau-cho-to-chuc-6e259c36.mp4' }, defaultVideoTrack: 'VI'},
 
@@ -129,7 +129,7 @@ export default {
     'ga-13-1-runner-hoat-dong': { yt: 'SASoUr9X0QA', credit: "Mickey Gousset — GitHub Actions - Self-hosted runners - Installation & Calling", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-02-runner-hoat-dong-a78deee6.mp4' }, defaultVideoTrack: 'VI'},
     'ga-13-2-tu-dung-runner': { yt: 'VNWUHX1wzN0', credit: "Coding Adda — Setting Up Self-Hosted Runner using Docker | Github Actions Series - #6", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-03-tu-dung-runner-42646793.mp4' }, defaultVideoTrack: 'VI'},
     'ga-13-3-bao-mat-self-hosted': { yt: '5P7KatZBr_I', credit: "DEFCONConference — DEF CON 32 - Grand Theft Actions Abusing Self Hosted GitHub Runners - Adnan Khan, John Stawinski", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-04-bao-mat-self-hosted-00039ae9.mp4' }, defaultVideoTrack: 'VI'},
-    'ga-13-4-mo-rong': { yt: 'nrnMNre9v3A', credit: "Mathis Van Eetvelde — Self-host your Github Actions runners on Kubernetes NOW!" },
+    'ga-13-4-mo-rong': { yt: 'nrnMNre9v3A', credit: "Mathis Van Eetvelde — Self-host your Github Actions runners on Kubernetes NOW!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-05-mo-rong-bbdd01a6.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 14 — Cổng chất lượng, bảo mật chuỗi cung ứng & phát hành ── */
     'ga-14-0-slides': { yt: '19l6sLyR3zo', credit: "NDC Conferences — Beyond the Commit: Weaponizing and Hardening GitHub Actions - Niek Palm - NDC Security 2026" },
@@ -141,7 +141,7 @@ export default {
     /* ── Chương 15 — Dự án cuối khoá: một pipeline CI/CD hoàn chỉnh từ số 0 ── */
     'ga-15-0-slides': { yt: 'YLtlz88zrLg', credit: "Tom Shaw — CI/CD Tutorial using GitHub Actions - Automated Testing & Automated Deployments", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-01-slide-chuong-15-8d3b9941.mp4' }, defaultVideoTrack: 'VI'},
     'ga-15-1-ci-cho-pr': { yt: '3mzQRJY1GVE', credit: "TECH SCHOOL — [Backend #10] Setup Github Actions for Golang + Postgres to run automated tests", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-02-ci-cho-pr-64b52289.mp4' }, defaultVideoTrack: 'VI'},
-    'ga-15-2-build-anh': { yt: '-NH8Urs4ST0', credit: "Nick Janetakis — Build Git Tagged Multi-Arch Docker Images with GitHub Actions" },
+    'ga-15-2-build-anh': { yt: '-NH8Urs4ST0', credit: "Nick Janetakis — Build Git Tagged Multi-Arch Docker Images with GitHub Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-03-build-anh-2cc4ea2c.mp4' }, defaultVideoTrack: 'VI'},
     'ga-15-3-deploy-an-toan': { yt: '-9LhRHXWjrc', credit: "Petabridge — Continuous Deployment of Docker Compose Applications Using GitHub Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-04-deploy-an-toan-ed9a04a0.mp4' }, defaultVideoTrack: 'VI'},
     'ga-15-4-van-hanh-pipeline': { yt: 'zNXJVeGcUmw', credit: "Initialized Capital — Trunk: Why CI Breaks at Scale — Merge Queues, Flaky Tests, and AI Coding", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-05-van-hanh-pipeline-8b92e12d.mp4' }, defaultVideoTrack: 'VI'},
   },

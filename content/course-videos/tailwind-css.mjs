@@ -32,7 +32,7 @@ export default {
     /* ── Chương 1 — Cái thang, thứ đáng học nhất ── */
     'tw-1-1-nhan-bon': { yt: 'qWVnYzG3ras', credit: 'Can Boz — #16 Tailwind CSS Margin & Padding | Spacing Utilities', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-01-nhan-bon-a51bdeb2.mp4' }, defaultVideoTrack: 'VI'},  // #16 Tailwind CSS Margin & Padding | Spacing Utilities
     'tw-1-2-thang-het': { yt: 'l3JtX3W5-T4', credit: 'simonswiss — Tailwind Toot — Controlling "In-Between" Spacing #tailwindcss', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-02-thang-het-280e12d8.mp4' }, defaultVideoTrack: 'VI'}, // Tailwind Toot — Controlling "In-Between" Spacing
-    'tw-1-3-thang-mau': { yt: '7Os-Bt41yp8', credit: 'Cand Dev — How to Customize Colors in Tailwind CSS' }, // How to Customize Colors in Tailwind CSS
+    'tw-1-3-thang-mau': { yt: '7Os-Bt41yp8', credit: 'Cand Dev — How to Customize Colors in Tailwind CSS', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-03-thang-mau-f3c9d7c3.mp4' }, defaultVideoTrack: 'VI'}, // How to Customize Colors in Tailwind CSS
     'tw-1-4-bo-cuc': { yt: 'lTWR_DuQAvw', credit: 'AyyazTech — Tailwind CSS: A Deep Dive into Flexbox and Grid Layouts', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-04-bo-cuc-d1d1f98e.mp4' }, defaultVideoTrack: 'VI'},    // Tailwind CSS: A Deep Dive into Flexbox and Grid Layouts
     'tw-1-5-dinh-co': { yt: 'cq3EnXRMxxM', credit: 'JDCodebase — Tailwind Layout & Box Model – Flexbox, Grid & Spacing | Web Development Series | JDCodebase', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-05-dinh-co-cec95942.mp4' }, defaultVideoTrack: 'VI'},   // Tailwind Layout & Box Model – Flexbox, Grid & Spacing | JDCodebase
 
@@ -53,7 +53,7 @@ export default {
     /* ── Chương 4 — Component, và chỗ tái dùng cho đúng ── */
     'tw-4-1-do-canh-lop': { yt: 'dcRenJApot0', credit: 'Tyler Potts — Tailwind CSS for Beginners: Build Websites FASTER', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-01-do-canh-lop-108a029b.mp4' }, defaultVideoTrack: 'VI'},  // Tailwind CSS for Beginners: Build Websites FASTER
     'tw-4-2-apply': { yt: 'fCHxFM6r9jI', credit: 'CodeWithHarry — When to use @apply and @layer directive?: Tailwind Tutorial #11', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-02-apply-24083880.mp4' }, defaultVideoTrack: 'VI'},        // When to use @apply and @layer directive?: Tailwind Tutorial #11
-    'tw-4-3-hop-dong': { yt: 'kHQNK2jU_TQ', credit: 'Coding in Public — Class Variance Authority (CVA) Quickstart' },     // Class Variance Authority (CVA) Quickstart
+    'tw-4-3-hop-dong': { yt: 'kHQNK2jU_TQ', credit: 'Coding in Public — Class Variance Authority (CVA) Quickstart', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-03-hop-dong-5a002f6d.mp4' }, defaultVideoTrack: 'VI'},     // Class Variance Authority (CVA) Quickstart
     'tw-4-4-bien-the-cva': { yt: 'qGQRdCg6JRQ', credit: 'React Tips with Brooks Lybrand — Authoring Components with CVA + tailwindcss — Basic Buttons (1 / 4)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-04-bien-the-cva-cb586eaf.mp4' }, defaultVideoTrack: 'VI'}, // Authoring Components with CVA + tailwindcss — Basic Buttons (1 / 4)
     'tw-4-5-primitives': { yt: 'B4aT_UO2NLU', credit: 'React Tips with Brooks Lybrand — Authoring Components with CVA + tailwindcss — Compound Variants (2 / 4)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-05-primitives-d2f4af33.mp4' }, defaultVideoTrack: 'VI'},   // Authoring Components with CVA + tailwindcss — Compound Variants (2 / 4)
 
@@ -102,5 +102,6 @@ export default {
     /* ── Chương 11 — Cái sống sót qua đo đạc ── */
     'tw-11-1-song-qua': { yt: '9I3JQ1q4IMk', credit: 'Coder Coder — Tailwind CSS v4 for Beginners | Full Course 2026', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/11-song-qua-do-luong/11-01-song-qua-8debb390.mp4' }, defaultVideoTrack: 'VI'}, // Tailwind CSS v4 for Beginners | Full Course 2026
     'tw-0-0-start-here-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-01-tailwind-la-gi-dcca7564.mp4' }, defaultVideoTrack: 'VI'},
+    'tw-0-0-start-here-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-02-can-biet-gi-truoc-e6257398.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

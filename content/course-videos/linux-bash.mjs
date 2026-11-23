@@ -99,7 +99,7 @@ export default {
     'lnx-9-1-giao-dien-cong-dns': { yt: 'rCdQnnaWZlA', credit: 'Verbose DevOps — Linux Network Troubleshooting Commands (ip, ifconfig, netstat, ufw, traceroute, dig)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-02-giao-dien-cong-dns-3b03dddb.mp4' }, defaultVideoTrack: 'VI'},// Linux Network Troubleshooting Commands (ip, ifconfig, netstat, ufw, traceroute, dig)
     'lnx-9-2-curl': { yt: 'Q3_3saEQiSA', credit: 'Navek — curl: A Practical Guide', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-03-curl-97b01ec9.mp4' }, defaultVideoTrack: 'VI'},              // curl: A Practical Guide
     'lnx-9-3-ssh': { yt: '5KKP8qPHrP0', credit: 'Automation Avenue — SSH Tunneling explained ( with local port forwarding examples ! )', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-04-ssh-04e0775c.mp4' }, defaultVideoTrack: 'VI'},               // SSH Tunneling explained (with local port forwarding examples!)
-    'lnx-9-4-scp-rsync': { yt: 'Pygr_TpZRpM', credit: 'Tony Teaches Tech — How to Use rsync to Reliably Copy Files Fast (many examples)' },         // How to Use rsync to Reliably Copy Files Fast (many examples)
+    'lnx-9-4-scp-rsync': { yt: 'Pygr_TpZRpM', credit: 'Tony Teaches Tech — How to Use rsync to Reliably Copy Files Fast (many examples)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-05-scp-rsync-5b50cb9e.mp4' }, defaultVideoTrack: 'VI'},         // How to Use rsync to Reliably Copy Files Fast (many examples)
     'lnx-9-5-tuong-lua': { yt: 'GQcrRhcZMF8', credit: '3CodeCamp — Lock down your Linux VPS using UFW and Fail2Ban', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-06-tuong-lua-5edeaa2f.mp4' }, defaultVideoTrack: 'VI'},         // Lock down your Linux VPS using UFW and Fail2Ban
 
     /* ── Chương 10 — Đĩa, gói phần mềm & log ── */
@@ -110,7 +110,7 @@ export default {
 
     /* ── Chương 11 — systemd, cron & quản trị ── */
     'lnx-11-0-slides': { yt: 'Kzpm-rGAXos', credit: "Learn Linux TV — Systemd Explained: How to Manage Linux Services Easily" },
-    'lnx-11-1-systemd-unit': { yt: 'C4a7jxlMTfo', credit: 'tutoriaLinux — How to Create a systemd Linux Service' },   // How to Create a systemd Linux Service
+    'lnx-11-1-systemd-unit': { yt: 'C4a7jxlMTfo', credit: 'tutoriaLinux — How to Create a systemd Linux Service', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/11-systemd-cron-quan-tri/11-02-systemd-unit-f2191125.mp4' }, defaultVideoTrack: 'VI'},   // How to Create a systemd Linux Service
     'lnx-11-2-cron-timer': { yt: 'DixhIrgMy3M', credit: 'tutoriaLinux — Introduction to systemd timers', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/11-systemd-cron-quan-tri/11-03-cron-timer-227d5e27.mp4' }, defaultVideoTrack: 'VI'},     // Introduction to systemd timers
     'lnx-11-3-gia-co-may-chu': { yt: '1PljaLoTZ28', credit: 'TechSky - Ethical Hacking — How to Harden Linux Server using Auditd, UFW & Fail2Ban?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/11-systemd-cron-quan-tri/11-04-gia-co-may-chu-78e17ab5.mp4' }, defaultVideoTrack: 'VI'}, // How to Harden Linux Server using Auditd, UFW & Fail2Ban?
 

@@ -85,8 +85,8 @@ export default {
     'dk-8-1-mang-bridge': { yt: 'bKFMS5C4CG0', credit: "NetworkChuck — Docker networking is CRAZY!! (you NEED to learn it)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-02-mang-bridge-f92fe76f.mp4' }, defaultVideoTrack: 'VI'},
     'dk-8-2-cong-bo-cong': { yt: 'bpWytcz4uMw', credit: "Awesome Open Source — Docker and Firewalls - Docker wants to punch holes in the local firewall, let's mitigate that issue", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-03-cong-bo-cong-695a2b45.mp4' }, defaultVideoTrack: 'VI'},
     'dk-8-3-goi-nhau': { yt: 'itZ_x_nDBxU', credit: "Matt Williams — Docker Networking Made Simple: Connecting Containers Like a Pro", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-04-goi-nhau-54560389.mp4' }, defaultVideoTrack: 'VI'},
-    'dk-8-4-toi-may-chu': { yt: 'NZGu-9KQVsE', credit: "anthonywritescode — docker: connecting to localhost outside the container (intermediate) anthony explains #555" },
-    'dk-8-5-chan-doan-mang': { yt: 'wqtEUFDdZXU', credit: "VirtualizationHowto — Netshoot Docker container for Docker compose networking host troubleshooting" },
+    'dk-8-4-toi-may-chu': { yt: 'NZGu-9KQVsE', credit: "anthonywritescode — docker: connecting to localhost outside the container (intermediate) anthony explains #555", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-05-toi-may-chu-e8311444.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-8-5-chan-doan-mang': { yt: 'wqtEUFDdZXU', credit: "VirtualizationHowto — Netshoot Docker container for Docker compose networking host troubleshooting", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-06-chan-doan-mang-5b984876.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 9 — Docker Compose ── */
     'dk-9-0-slides': { yt: 'WX0YLs1Jnjs', credit: "Hỏi Dân IT — #10 DOCKER COMPOSE -  Dung Hợp Ứng Dụng Docker Thành Duy Nhất | Docker Siêu Dễ Cho Beginners" },

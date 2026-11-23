@@ -37,7 +37,7 @@ export default {
 
     // Chapter 5 — functions
     "prf192-5-2-ham": { yt: "f--fD8Y0RnA", credit: "Jenny's Lectures CS IT — C_84 Introduction to Functions - part 1 | C Language Tutorials", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-05-dinh-nghia-goi-ham-63ebae04.mp4' }, defaultVideoTrack: 'VI'},
-    "prf192-5-3-scope": { yt: "qXVIMX2GlK8", credit: "Portfolio Courses — Local vs. Global Variables | C Programming Tutorial" },
+    "prf192-5-3-scope": { yt: "qXVIMX2GlK8", credit: "Portfolio Courses — Local vs. Global Variables | C Programming Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-06-pham-vi-bien-d8bacd4d.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chapter 6 — pointers
     "prf192-6-1-con-tro": { yt: "IuDJeGqEZ3A", credit: "Jenny's Lectures CS IT — C_71 Pointers in C - part 1| Introduction to pointers in C | C Programming Tutorials", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/06-con-tro/06-03-con-tro-9513485b.mp4' }, defaultVideoTrack: 'VI'},
@@ -106,8 +106,8 @@ export default {
     "prf192-7-2-math-ctype": { yt: "IF7REEKAz6Q", credit: "Portfolio Courses — pow() function | C Programming Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/07-thu-vien-chuan-c/07-05-math-ctype-b005faa0.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chapter 8 — mảng & struct
-    "prf192-8-0a-slides-mang-mot-chieu": { yt: "oe2bZKjiWrg", credit: "Portfolio Courses — Passing an Array to a Function | C Programming Tutorial" },
-    "prf192-8-0b-slides-tim-kiem-sap-xep-ma-tran": { yt: "YqzNgaFQEh8", credit: "Portfolio Courses — Bubble Sort | C Programming Example" },
+    "prf192-8-0a-slides-mang-mot-chieu": { yt: "oe2bZKjiWrg", credit: "Portfolio Courses — Passing an Array to a Function | C Programming Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-01-slide-mang-mot-chieu-0b240598.mp4' }, defaultVideoTrack: 'VI'},
+    "prf192-8-0b-slides-tim-kiem-sap-xep-ma-tran": { yt: "YqzNgaFQEh8", credit: "Portfolio Courses — Bubble Sort | C Programming Example", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-02-slide-tim-kiem-sap-xep-ma-tran-ff8fdf7d.mp4' }, defaultVideoTrack: 'VI'},
     "prf192-8-0c-slides-struct": { yt: "16P51olKuzk", credit: "Neso Academy — Structures and Functions (Part 1)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-03-slide-struct-1ccb183b.mp4' }, defaultVideoTrack: 'VI'},
     "prf192-8-workshop3": { yt: "Lk-b45vrT8U", credit: "Bro Code — C array of structs 🏫" },
 

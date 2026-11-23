@@ -51,7 +51,7 @@ export default {
     /* ── Chương 4 — Sự kiện & form có kiểm soát ─────────────────────────── */
     'nextjs-4-1-su-kien': { yt: 'peewECGtPCI', credit: 'Codevolution — React 19 Tutorial - 15 - Event Handling', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-01-su-kien-02010a9b.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-4-2-input-co-kiem-soat': { yt: 'MCIfZlQlmSc', credit: 'Codevolution — React 19 Tutorial - 24 - useState with Objects', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-02-input-co-kiem-soat-87018a50.mp4' }, defaultVideoTrack: 'VI'},
-    'nextjs-4-3-form-thật': { yt: 'XzZoUojeuF0', credit: 'Codevolution — React 19 Tutorial - 16 - Event Handlers as Props' },
+    'nextjs-4-3-form-thật': { yt: 'XzZoUojeuF0', credit: 'Codevolution — React 19 Tutorial - 16 - Event Handlers as Props', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-03-form-that-5520f2b9.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-4-4-controlled-vs-uncontrolled': { yt: 'yCS2m01bQ6w', credit: 'Codevolution — React Hooks Tutorial - 28 - useRef Hook Part 1', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-04-controlled-vs-uncontrolled-2556b553.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 5 — useEffect ───────────────────────────────────────────── */
@@ -69,7 +69,7 @@ export default {
     'nextjs-6-5-custom-hooks': { yt: 'l-s9MgoMwTI', credit: 'Codevolution — React Hooks Tutorial - 30 - Custom Hooks', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-05-custom-hooks-63cdb111.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 7 — Danh sách, key & hiệu năng render ───────────────────── */
-    'nextjs-7-1-reconciliation': { yt: 'i793Qm6kv3U', credit: 'CrossComm, Inc. — Understanding React\'s UI Rendering Process' },
+    'nextjs-7-1-reconciliation': { yt: 'i793Qm6kv3U', credit: 'CrossComm, Inc. — Understanding React\'s UI Rendering Process', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-01-reconciliation-286e702d.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-7-2-key': { yt: 'y_J0-bUoACc', credit: 'Codevolution — React 19 Tutorial - 12 - Lists and Keys', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-02-key-e2a25440.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-7-3-vi-sao-render-lai': { yt: 'qiPHXVeNi_w', credit: 'Codevolution — React 19 Tutorial - 20 - How State Updates Work', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-03-vi-sao-render-lai-a0e96498.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-7-4-react-memo': { yt: 'HA96JzJ_G1A', credit: 'Akilesh Rao — useMemo & useCallback DO NOT prevent re-renders (React Memoization Explained)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-04-react-memo-6b266d63.mp4' }, defaultVideoTrack: 'VI'},
@@ -101,7 +101,7 @@ export default {
     'nextjs-11-2-generate-static-params': { yt: '09aGB_Q6cqE', credit: 'Codevolution — Next.js 15 Tutorial - 56 - generateStaticParams', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-02-generate-static-params-2bb6397e.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-11-3-route-handlers': { yt: '27Uj6BeIDV0', credit: 'Codevolution — Next.js 15 Tutorial - 35 - Route Handlers', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-03-route-handlers-97b4da4f.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-11-4-parallel-routes': { yt: '697kNwfU-4M', credit: 'Codevolution — Next.js 15 Tutorial - 30 - Parallel Routes', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-04-parallel-routes-90330305.mp4' }, defaultVideoTrack: 'VI'},
-    'nextjs-11-5-intercepting-routes': { yt: 'FTiwIVxWC00', credit: 'Codevolution — Next.js 15 Tutorial - 33 - Intercepting Routes' },
+    'nextjs-11-5-intercepting-routes': { yt: 'FTiwIVxWC00', credit: 'Codevolution — Next.js 15 Tutorial - 33 - Intercepting Routes', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-05-intercepting-routes-f52ae23c.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 12 — Server Actions ─────────────────────────────────────── */
     'nextjs-12-1-server-action-la-gi': { yt: 'UKupfEuUc1M', credit: 'developedbyed — Next.js 14 - Server Actions TUTORIAL | Type Safety, Error Handling, Pending States', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/12-server-actions/12-01-server-action-la-gi-3e088c8b.mp4' }, defaultVideoTrack: 'VI'},

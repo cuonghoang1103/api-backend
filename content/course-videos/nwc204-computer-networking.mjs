@@ -38,7 +38,7 @@ export default {
     "nwc204-2-1-vao-thiet-bi-console-ssh-va-che-do-ios": { yt: "IYbtai7Nu2g", credit: "Jeremy's IT Lab — Free CCNA | Intro to the CLI | Day 4 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/02-cau-hinh-switch-va-thiet-bi-dau-cuoi/02-01-vao-thiet-bi-console-ssh-va-che-do-ios-29ce8f0a.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-2-2-cau-truc-lenh-tro-giup-va-lam-cung": { yt: "SDocmq1c05s", credit: "Jeremy's IT Lab — Free CCNA | Basic Device Security | Day 4 Lab | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/02-cau-hinh-switch-va-thiet-bi-dau-cuoi/02-02-cau-truc-lenh-tro-giup-va-lam-cung-e7ddc7ed.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-2-3-luu-cau-hinh-va-cong-dia-chi": { yt: "dIXJJRxbIAc", credit: "IT Boost by Formip — Cisco Config Files Explained: Running vs Startup", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/02-cau-hinh-switch-va-thiet-bi-dau-cuoi/02-03-luu-cau-hinh-va-cong-dia-chi-f19675d0.mp4' }, defaultVideoTrack: 'VI'},
-    "nwc204-2-4-cau-hinh-ip-va-kiem-tra-ket-noi": { yt: "e1jbvyMeS5I", credit: "Jeremy's IT Lab — Free CCNA | Configuring IP Addresses | Day 8 Lab | CCNA 200-301 Complete Course" },
+    "nwc204-2-4-cau-hinh-ip-va-kiem-tra-ket-noi": { yt: "e1jbvyMeS5I", credit: "Jeremy's IT Lab — Free CCNA | Configuring IP Addresses | Day 8 Lab | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/02-cau-hinh-switch-va-thiet-bi-dau-cuoi/02-04-cau-hinh-ip-va-kiem-tra-ket-noi-ea10d371.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-2-5-lab-1-1-tera-term-va-cau-hinh-co-ban": { yt: "yQdOyK0n6NY", credit: "Tech Acad — 2.9.1 Packet Tracer - Basic Switch and End Device Configuration" },
 
     /* ── Chương 3 — Giao thức và các mô hình (buổi 7–10) ────────────────── */
@@ -49,7 +49,7 @@ export default {
     /* ── Chương 4 — Tầng vật lý (buổi 11–14) ────────────────────────────── */
     "nwc204-4-1-tang-vat-ly-va-cap-dong": { yt: "ieTH5lVhNaY", credit: "Jeremy's IT Lab — Free CCNA | Interfaces and Cables | Day 2 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/04-tang-vat-ly/04-01-tang-vat-ly-va-cap-dong-ed37ad72.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-4-2-utp-cap-quang-va-khong-day": { yt: "Hoe48glXbjk", credit: "trueCABLE — Fiber Optic vs Ethernet Cable: When and Where to Use", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/04-tang-vat-ly/04-02-utp-cap-quang-va-khong-day-7d095911.mp4' }, defaultVideoTrack: 'VI'},
-    "nwc204-4-3-lab-1-3-thong-tin-nic": { yt: "DzvQxrz9ar8", credit: "Christian Augusto Romero Goyzueta — 4.6.6 Lab - View Wired and Wireless NIC Information" },
+    "nwc204-4-3-lab-1-3-thong-tin-nic": { yt: "DzvQxrz9ar8", credit: "Christian Augusto Romero Goyzueta — 4.6.6 Lab - View Wired and Wireless NIC Information", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/04-tang-vat-ly/04-03-lab-1-3-thong-tin-nic-01ff6c94.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 4B — Hệ đếm (chương BÙ, trường không xếp buổi) ──────────── */
     "nwc204-4b-1-he-nhi-phan-va-chuyen-doi-8-bit": { yt: "Toa5-1i4wRE", credit: "David Bombal — Binary? How does that work?  | Free CCNA 200-301 Course | Video #13", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/05-he-dem/05-01-he-nhi-phan-va-chuyen-doi-8-bit-4c56caaf.mp4' }, defaultVideoTrack: 'VI'},
@@ -64,10 +64,10 @@ export default {
     /* ── Chương 6 — Chuyển mạch Ethernet (buổi 17–20) ───────────────────── */
     "nwc204-6-1-khung-ethernet-va-dia-chi-mac": { yt: "u2n762WG0Vo", credit: "Jeremy's IT Lab — Free CCNA | Ethernet LAN Switching (Part 1) | Day 5 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/07-chuyen-mach-ethernet/07-01-khung-ethernet-va-dia-chi-mac-3363e031.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-6-2-bang-mac-va-cach-switch-chuyen-tiep": { yt: "5q1pqdmdPjo", credit: "Jeremy's IT Lab — Free CCNA | Ethernet LAN Switching (Part 2) | Day 6 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/07-chuyen-mach-ethernet/07-02-bang-mac-va-cach-switch-chuyen-tiep-82ddcb7f.mp4' }, defaultVideoTrack: 'VI'},
-    "nwc204-6-3-lab-1-4-wireshark-va-bang-mac": { yt: "bvBfOpOYDOc", credit: "The Technology Firm — Wireshark MAC FILTERS" },
+    "nwc204-6-3-lab-1-4-wireshark-va-bang-mac": { yt: "bvBfOpOYDOc", credit: "The Technology Firm — Wireshark MAC FILTERS", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/07-chuyen-mach-ethernet/07-03-lab-1-4-wireshark-va-bang-mac-161bbff1.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 7 — Tầng mạng (buổi 21–23) ──────────────────────────────── */
-    "nwc204-7-1-dac-tinh-tang-mang-va-goi-ipv4": { yt: "aQB22y4liXA", credit: "Jeremy's IT Lab — Free CCNA | IPv4 Header | Day 10 | CCNA 200-301 Complete Course" },
+    "nwc204-7-1-dac-tinh-tang-mang-va-goi-ipv4": { yt: "aQB22y4liXA", credit: "Jeremy's IT Lab — Free CCNA | IPv4 Header | Day 10 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/08-tang-mang/08-01-dac-tinh-tang-mang-va-goi-ipv4-a4400cb6.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-7-2-goi-ipv6-va-bang-dinh-tuyen": { yt: "aHwAm8GYbn8", credit: "Jeremy's IT Lab — Free CCNA | Routing Fundamentals | Day 11 (part 1) | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/08-tang-mang/08-02-goi-ipv6-va-bang-dinh-tuyen-24017263.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-7-3-on-tap-module-1-den-7": { yt: "4YrYV2io3as", credit: "Jeremy's IT Lab — Free CCNA | The Life of a Packet | Day 12 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/08-tang-mang/08-03-on-tap-module-1-den-7-30a3439e.mp4' }, defaultVideoTrack: 'VI'},
 
@@ -81,7 +81,7 @@ export default {
     "nwc204-9-3-lab-2-1-dung-mang-switch-router": { yt: "5vT41nPz-IA", credit: "Christian Augusto Romero Goyzueta — 10.4.4 Lab - Build a Switch and Router Network", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/10-cau-hinh-router-co-ban/10-03-lab-2-1-dung-mang-switch-router-1bd7ab1a.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 10 — Địa chỉ IPv4 (buổi 30–34) ──────────────────────────── */
-    "nwc204-10-1-cau-truc-dia-chi-ipv4": { yt: "3ROdsfEUuhs", credit: "Jeremy's IT Lab — Free CCNA | IPv4 Addressing (Part 1) | Day 7 | CCNA 200-301 Complete Course" },
+    "nwc204-10-1-cau-truc-dia-chi-ipv4": { yt: "3ROdsfEUuhs", credit: "Jeremy's IT Lab — Free CCNA | IPv4 Addressing (Part 1) | Day 7 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/11-dia-chi-ipv4/11-01-cau-truc-dia-chi-ipv4-4814c4fb.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-10-2-chia-subnet-va-vlsm": { yt: "z-JqCedc9EI", credit: "Jeremy's IT Lab — Free CCNA | Subnetting (Part 3 - VLSM) | Day 15 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/11-dia-chi-ipv4/11-02-chia-subnet-va-vlsm-718e142e.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-10-3-lab-2-2-va-thi-giua-ky": { yt: "GITl4IScWQA", credit: "Tech Acad — 11.10.1 Packet Tracer - Design and Implement a VLSM Addressing Scheme", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/11-dia-chi-ipv4/11-03-lab-2-2-va-thi-giua-ky-f9c9d010.mp4' }, defaultVideoTrack: 'VI'},
 
@@ -99,11 +99,11 @@ export default {
 
     /* ── Chương 15 — An ninh mạng (buổi 49–50) ──────────────────────────── */
     "nwc204-15-1-moi-de-doa-va-cac-kieu-tan-cong": { yt: "VvFuieyTTSw", credit: "Jeremy's IT Lab — Free CCNA | Security Fundamentals | Day 48 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/16-an-ninh-mang/16-01-moi-de-doa-va-cac-kieu-tan-cong-6bb5c307.mp4' }, defaultVideoTrack: 'VI'},
-    "nwc204-15-2-giam-thieu-va-lam-cung-thiet-bi": { yt: "sHN3jOJIido", credit: "Jeremy's IT Lab — Free CCNA | Port Security | Day 49 | CCNA 200-301 Complete Course" },
+    "nwc204-15-2-giam-thieu-va-lam-cung-thiet-bi": { yt: "sHN3jOJIido", credit: "Jeremy's IT Lab — Free CCNA | Port Security | Day 49 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/16-an-ninh-mang/16-02-giam-thieu-va-lam-cung-thiet-bi-b4b374ef.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 13 — Tầng giao vận (buổi 41–42) ─────────────────────────── */
     "nwc204-13-1-tang-giao-van-va-so-hieu-cong": { yt: "LIEACBqlntY", credit: "Jeremy's IT Lab — Free CCNA | TCP & UDP | Day 30 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/14-tang-giao-van/14-01-tang-giao-van-va-so-hieu-cong-8dca980d.mp4' }, defaultVideoTrack: 'VI'},
-    "nwc204-13-2-bat-tay-tin-cay-va-doc-may-chu-that": { yt: "JFch3ctY6nE", credit: "Practical Networking — TCP - 12 simple ideas to explain the Transmission Control Protocol" },
+    "nwc204-13-2-bat-tay-tin-cay-va-doc-may-chu-that": { yt: "JFch3ctY6nE", credit: "Practical Networking — TCP - 12 simple ideas to explain the Transmission Control Protocol", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/14-tang-giao-van/14-02-bat-tay-tin-cay-va-doc-may-chu-that-c27a1160.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 12 — ICMP (buổi 37–40) ──────────────────────────────────── */
     "nwc204-12-1-thong-diep-icmp": { yt: "zesTvBZCESk", credit: "Jeremy's IT Lab — CCNP ENCOR // Internet Control Message Protocol (ICMP) // ENCOR 350-401 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/13-icmp/13-01-thong-diep-icmp-260dba8e.mp4' }, defaultVideoTrack: 'VI'},

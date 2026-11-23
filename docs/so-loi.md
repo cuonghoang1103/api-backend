@@ -1082,3 +1082,10 @@ Mẫu một mục:
 - **Cách sửa:** `onPaste` lấy `clipboardData.files` ⇒ `guiTep()`; khung có `data-mini-chat-window`, `MiniComposer` gắn dragenter/over/leave/drop lên khung (thả bất kỳ đâu trong khung) + dải "Thả tệp vào đây"; cùng đường `guiTep` (≤10 tệp, ≤25MB).
 - **Ảnh hưởng:** chỉ tiện dụng — chưa mất tin nào; người dùng tưởng gửi tệp nhưng thật ra gửi tên tệp.
 - **Bài học:** mọi ô soạn tin có đính kèm phải hỗ trợ đủ 3 lối: nút, dán, kéo thả; thêm ô chat mới thì grep `onPaste|drop` so với `MessageInput.tsx`.
+
+### 23/11/2026 — web (Phòng thi mô phỏng FE) — câu hỏi hiện một cột ảnh trắng vỡ
+- **Triệu chứng:** `/exam/mo-phong/fe/<id>`, FER202 câu "What is Node.js?" hiện khối ảnh trắng cao, toàn biểu tượng ảnh vỡ, chen giữa đề và đáp án.
+- **Nguyên nhân:** `frontend/src/app/exam/mo-phong/fe/[attemptId]/ThiFeClient.tsx` vẽ thẳng `q.imageUrl` (ảnh QUÉT đề gốc) bằng `AnhDePhongTo`; Phòng thi thường ẩn ảnh đó sau nút "Xem ảnh đề gốc" (`QuestionImageToggle`). Ảnh `FER202/FE3-v3/q39.png` lại bị cắt hỏng lúc soạn (65×484 px, chỉ có cột ô chọn).
+- **Cách sửa:** thêm `AnhGocAn` (ẩn mặc định, `key={q.id}` tự gập khi đổi câu, giữ node trong DOM chỉ đổi `hidden`) như Phòng thi thường.
+- **Ảnh hưởng:** mọi câu FE có ảnh quét trong phòng mô phỏng đều bị ảnh chen vào (phần lớn ảnh vẫn đúng, chỉ rối mắt); câu q39 trông như lỗi trang.
+- **Bài học:** tính năng mới dựng lại màn hình có sẵn ⇒ đối chiếu từng khối với màn cũ (ở đây: ảnh đề gốc ẩn sau nút); ảnh quét đề nên có phép kiểm kích thước bất thường (rộng < 200 px) lúc soạn.

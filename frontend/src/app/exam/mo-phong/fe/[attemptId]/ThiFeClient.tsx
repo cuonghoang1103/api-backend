@@ -12,7 +12,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import {
-  ArrowLeft, ArrowRight, Check, Clock, Flag, Maximize2, Minimize2, Minus, Plus, Send, CheckCircle2, XCircle, LayoutGrid,
+  ArrowLeft, ArrowRight, Check, Clock, Flag, Maximize2, Minimize2, Minus, Plus, Send, CheckCircle2, XCircle, LayoutGrid, Eye, EyeOff,
 } from 'lucide-react';
 import { examMockApi, type MockFeAttempt } from '@/lib/api';
 import { dinhDangGiay } from '@/lib/examMoPhong';
@@ -294,7 +294,7 @@ export default function ThiFeClient({ attemptId }: { attemptId: number }) {
               </button>
             </div>
             <div className="mb-5"><ExamRichContent html={q.prompt} L={L} /></div>
-            {q.imageUrl && <AnhDePhongTo url={q.imageUrl} isVi={isVi} className="mb-5" />}
+            {q.imageUrl && <AnhGocAn key={q.id} url={q.imageUrl} isVi={isVi} />}
             <div className="space-y-2.5">
               {q.options.map((o, i) => {
                 const daChon = sel.includes(i);
@@ -358,6 +358,23 @@ export default function ThiFeClient({ attemptId }: { attemptId: number }) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// Ảnh quét đề gốc chỉ là tư liệu đối chiếu (đề đã chép thành chữ ở trên) và có ảnh cắt hỏng (FER202 FE3 q39:
+// 65×484 px chỉ có cột ô chọn) ⇒ ẩn mặc định như Phòng thi thường (QuestionImageToggle), bấm mới hiện.
+// `key={q.id}` ở chỗ gọi ⇒ sang câu khác tự gập lại. Luôn giữ node trong DOM, chỉ đổi `hidden`.
+function AnhGocAn({ url, isVi }: { url: string; isVi: boolean }) {
+  const [hien, setHien] = useState(false);
+  return (
+    <div className="mb-5">
+      <button type="button" onClick={() => setHien((h) => !h)}
+        className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)] text-text-secondary">
+        {hien ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+        {hien ? (isVi ? 'Ẩn ảnh đề gốc' : 'Hide original image') : (isVi ? 'Xem ảnh đề gốc' : 'Show original image')}
+      </button>
+      <AnhDePhongTo url={url} hidden={!hien} isVi={isVi} className="mt-2.5" />
     </div>
   );
 }

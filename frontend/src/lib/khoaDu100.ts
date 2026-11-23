@@ -30,6 +30,7 @@ export const KHOA_DU_100: Readonly<Record<string, KhoaDu100>> = Object.freeze({
   'operating-systems': { ngay: '12/11/2026', ghiChu: 'OSG202 · slide trường · 97/100 bài có video (3 bài chữa đề FE) · Code Lab 30 module · quiz 17 chương · 29 đề FE' },
   'nodejs': { ngay: '12/11/2026', ghiChu: '94/94 bài có video · Code Lab 114 module · quiz 18 chương · đề PE/FE×4/PT×3' },
   'server-side-development-nodejs-express-mongodb': { ngay: '12/11/2026', ghiChu: 'SDN302 · slide trường · 40/42 bài có video (2 bài đề thi) · Code Lab 35 module · quiz 8 chương · 25 đề PE/FE' },
+  'typescript': { ngay: '23/11/2026', ghiChu: '86/86 bài có video · Code Lab 83 module · quiz 17 chương · đề PE/FE/PT×3' },
 });
 
 export function khoaDu100(slug: string | null | undefined): KhoaDu100 | null {

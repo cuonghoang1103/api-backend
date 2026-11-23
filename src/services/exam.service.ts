@@ -15,7 +15,7 @@ import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { gradeCode, type PeGradeResult } from './exam.grading.service.js';
 import { baiDaLuu, thongKeDeThat, xemLaiMoPhong, MODE_STANDARD } from './exam/moPhong.service.js';
-import { cauHinhMon } from './exam/moPhongConfig.js';
+import { cauHinhMon, MO_PHONG_MON } from './exam/moPhongConfig.js';
 
 // ── Shapes ────────────────────────────────────────────────────────────
 export type ExamKind = 'FE' | 'PE';
@@ -124,9 +124,17 @@ export async function listExamsForCourse(courseIdOrSlug: string | number, userId
 export async function getExamForTaking(examId: number, userId?: number) {
   const exam = await prisma.exam.findUnique({
     where: { id: examId },
-    include: { questions: { orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] } },
+    include: {
+      questions: { orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] },
+      course: { select: { courseCode: true, academyType: true } },
+    },
   });
   if (!exam || !exam.isPublished) throw new AppError('Không tìm thấy đề thi', 404);
+
+  // 23/11/2026 (user duyệt): đề PE CODE của môn có cấu hình PEA + EOS riêng (FER202) chỉ làm bài tính giờ ở
+  // /exam/mo-phong — Phòng thi thường giữ phòng ôn CuongMini, nút "Bắt đầu thi" đổi thành lối sang PEA.
+  const ma = exam.course?.academyType === 'FPT' ? (exam.course.courseCode || '').toUpperCase() : '';
+  const peTaiPea = exam.kind === 'PE' && exam.peType === 'CODE' && !!MO_PHONG_MON[ma]?.rieng ? ma : null;
 
   // Timed real attempts and untimed CuongMini attempts are separate, parallel
   // attempts on the same exam (see startAttempt) — report BOTH in-progress
@@ -157,6 +165,7 @@ export async function getExamForTaking(examId: number, userId?: number) {
   return {
     ...examHeader(exam),
     my,
+    peTaiPea,
     questions: exam.questions.map(questionForTaking),
   };
 }

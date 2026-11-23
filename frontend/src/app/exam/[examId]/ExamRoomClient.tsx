@@ -26,9 +26,10 @@ import ExamRichContent from '../ExamRichContent';
 import ExamQuestionComments from '../ExamQuestionComments';
 import CuongMiniPanel from './CuongMiniPanel';
 import AnhDePhongTo from '@/components/exam/AnhDePhongTo';
+import { TEN_PHONG, duongMoPhong } from '@/lib/examMoPhong';
 import './../exam.css';
 
-type FullExam = ExamHeader & { questions: ExamTakingQuestion[] };
+type FullExam = ExamHeader & { questions: ExamTakingQuestion[]; peTaiPea?: string | null };
 type Phase = 'loading' | 'intro' | 'taking' | 'submitting';
 
 function fmt(ms: number): string {
@@ -289,6 +290,8 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
                       ? 'Đề gồm câu trắc nghiệm và câu lập trình. Câu trắc nghiệm chấm tự động, câu lập trình bạn gõ code ngay trong phòng thi và AI chấm theo tiêu chí. Đồng hồ chạy ngay khi bắt đầu và tự nộp khi hết giờ.'
                       : 'This paper mixes multiple-choice with coding questions. MCQs are auto-graded; for the coding ones you type your code right here and AI grades it against a rubric. The timer starts immediately and auto-submits when it ends.')
                     : (isVi ? 'Chọn đáp án cho từng câu. Có câu chọn nhiều đáp án. Đồng hồ chạy ngay khi bắt đầu và tự nộp khi hết giờ.' : 'Answer each question. Some allow multiple answers. The timer starts immediately and auto-submits when it ends.')
+                : exam.peType === 'CODE' && exam.peTaiPea
+                  ? (isVi ? `Thi tính giờ ở ${TEN_PHONG}. Ở đây: ôn cùng CuongMini.` : `Timed attempt in ${TEN_PHONG}. Here: study with CuongMini.`)
                 : exam.peType === 'CODE'
                   ? (isVi ? 'Đọc đề, viết code ở IDE/VS Code của bạn, nén tất cả file thành .zip rồi nộp để AI chấm.' : 'Read the problems, code in your own IDE/VS Code, then upload all files as one .zip for AI grading.')
                   : exam.peType === 'WRITE'
@@ -304,11 +307,19 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
               </div>
             )}
 
+            {exam.peTaiPea && !exam.my?.inProgressId ? (
+              <button onClick={() => router.push(`${duongMoPhong(exam.peTaiPea)}&tab=pe`)}
+                className="w-full py-3.5 rounded-xl font-semibold text-white transition-transform active:scale-[.99]"
+                style={{ background: 'linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2))' }}>
+                {isVi ? `Thi ở ${TEN_PHONG}` : `Take it in ${TEN_PHONG}`}
+              </button>
+            ) : (
             <button onClick={() => start(false)}
               className="w-full py-3.5 rounded-xl font-semibold text-white transition-transform active:scale-[.99]"
               style={{ background: 'linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2))' }}>
               {exam.my?.inProgressId ? (isVi ? 'Tiếp tục bài thi' : 'Resume attempt') : (isVi ? 'Bắt đầu thi' : 'Start exam')}
             </button>
+            )}
 
             <button onClick={() => start(true)}
               className="mt-3 w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white transition-transform active:scale-[.99]"

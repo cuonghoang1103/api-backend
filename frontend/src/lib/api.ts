@@ -1836,7 +1836,7 @@ export const examApi = {
     api.get<{ data: ExamHeader[] }>(`/exams/course/${courseIdOrSlug}`),
   // Taking
   getForTaking: (examId: number) =>
-    api.get<{ data: ExamHeader & { questions: ExamTakingQuestion[] } }>(`/exams/${examId}/take`),
+    api.get<{ data: ExamHeader & { questions: ExamTakingQuestion[]; peTaiPea?: string | null } }>(`/exams/${examId}/take`),
   start: (examId: number, opts?: { aiAssisted?: boolean }) =>
     api.post<{ data: { attemptId: number; startedAt: string; expiresAt: string | null; resumed: boolean; aiAssisted: boolean; saved?: { answers: Record<string, unknown>; flags: number[]; idx: number } } }>(`/exams/${examId}/attempts`, opts),
   // CuongMini — "Hiện đáp án" (không gọi AI) + hỏi AI (không stream, đường lùi).

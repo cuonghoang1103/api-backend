@@ -1034,6 +1034,7 @@ for route in \
     video-hoc/thu-vien \
     video-hoc/cua-toi \
     hoc-tap/tong-quan \
+    hoc-lieu/tien-do \
     ctlanguage/dich/luot \
     ctlanguage/thi/danh-muc \
     ctlanguage/ngu-phap/tong-quan \

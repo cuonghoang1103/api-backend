@@ -18,6 +18,7 @@ import { hocTapApi, MAU_MUC, type AgendaMuc, type TongQuan, type ViecCaNhan, typ
 import { DongHoRuiRo, DongViec, HopThoai, Khung, Nut, The, ThanhTienDo, cx, oNhap } from '@/components/hoc-tap/ui';
 import { ChiTietViec, thongBao } from '@/components/hoc-tap/ChiTietViec';
 import { SoanKeHoach, TaoKy, ThemMon } from '@/components/hoc-tap/ThietLap';
+import TienDoDanhGia from './TienDoDanhGia';
 
 const VN = 7 * 3_600_000;
 const NGAY = 86_400_000;
@@ -334,6 +335,9 @@ export default function HocTapLich() {
         <LuoiGio ngays={che === 'tuan' ? lich : [lich[ngayChon] ?? lich[0]]} homNay={homNay} now={now}
           onHoc={setMoViec} onCaNhan={(v) => setSuaCN({ mo: true, v })} />
       </div>
+
+      {/* 24/11/2026: Tiến độ & đánh giá — gom CT Work + /hoc-tap + khoá học + Code Lab + Exam Room (GET /hoc-lieu/tien-do). */}
+      <TienDoDanhGia />
 
       <div className="grid gap-5 lg:grid-cols-[1fr_380px]">
         {/* Môn */}

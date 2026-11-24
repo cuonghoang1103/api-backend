@@ -17,14 +17,16 @@ import { requirePerson, requireWrite } from '../../../mcp/context.js';
 import * as svc from '../../hocTap/hocTap.service.js';
 import * as caNhan from '../../hocTap/viecCaNhan.js';
 import { docMaViec, veHomNay, veTuan } from '../../hocTap/veHocTap.js';
+import { chayHocLieu, HOC_LIEU_ACTIONS } from '../../hocLieu/chay.js';
 import { defineTool, mcpOnly, type ToolDef } from './types.js';
 
 const bad = (m: string) => new BadRequestError(m, 'VALIDATION_ERROR');
-const ACTIONS = ['today', 'week', 'list_personal', 'start', 'add', 'edit', 'done', 'undone'] as const;
+const ACTIONS = ['today', 'week', 'list_personal', 'start', 'add', 'edit', 'done', 'undone', ...HOC_LIEU_ACTIONS] as const;
+const DOC_HOC_LIEU = new Set<string>(HOC_LIEU_ACTIONS);
 const WRITES = new Set<string>(['start', 'add', 'edit', 'done', 'undone']);
 
 const hocTapTool = defineTool({
-  name: 'hoc_tap', title: 'My study plan & personal schedule', group: 'planning',
+  name: 'hoc_tap', title: 'My study plan, schedule, study materials & progress', group: 'planning',
   description: 'The caller\'s OWN study plan and personal schedule (CT Work → My → Study & Schedule; private, not part of any project). '
     + 'Use it when the user asks what to study/do today or this week, or wants to add/finish a personal to-do. Times are Vietnam time (UTC+7). '
     + 'Ids: "H<n>" = a STUDY task of a subject (graded by AI from submitted evidence — you can only START it, never mark it done), '
@@ -32,8 +34,21 @@ const hocTapTool = defineTool({
     + 'today (classes + scheduled study blocks + personal tasks for today, overdue study tasks, fail-risk per subject) | week (next 7 days, by hour) | '
     + 'list_personal (from/to YYYY-MM-DD) | start (id H<n>: starts the study timer) | '
     + 'add (title; optional date YYYY-MM-DD, time HH:MM, minutes 5–600, note) | edit (id C<n>; any of title/date/time/minutes/note; time "" removes the time) | '
-    + 'done / undone (id C<n>). Adding a timed personal task re-schedules overlapping study blocks automatically. Delete on the web.',
-  write: true, personOnly: true,
+    + 'done / undone (id C<n>). Adding a timed personal task re-schedules overlapping study blocks automatically. Delete on the web. '
+    + 'STUDY MATERIALS (read-only, 24/11/2026) — when tutoring ALWAYS read the real material with these actions; never open a browser to scrape '
+    + 'cuongthai.com (it hits "Log in" and cannot open lessons). Always give the user the returned deep link. Exercise answers are included so you '
+    + 'can GRADE — do not reveal them before the user tries: '
+    + 'search (q) | outline (course=slug ⇒ chapters+lessons; OR book=dekiru|jp|ch|ielts|ielts-tap2…5|en-giao-tiep [+ bai=N] ⇒ units or one unit\'s items. '
+    + 'Dekiru = the class textbook: JPD113 = bai 1–3 (+0 kana), JPD123 = bai 4–7; groups ① core ② by class session ③ extra practice ④ exam prep ⑤ book) | '
+    + 'lesson (course + lesson=slug|id ⇒ lesson text + quiz with answers + video transcript; OR book + bai + item=id ⇒ dialogue/vocab/grammar/kanji/exercises '
+    + 'with answers; long ⇒ pass offset = returned "tiep") | exercises (course + lesson ⇒ Code Lab set; exercise=slug ⇒ statement/examples/hints/starter, '
+    + 'never the official solution) | exam (none ⇒ mock subjects; subject=FER202 ⇒ PE/FE mock overview; course=slug ⇒ exams + best scores; '
+    + 'attempt=id ⇒ review of a SUBMITTED attempt) | links (course + lesson ⇒ video/transcript, Code Lab, exams, Dekiru unit) | '
+    + 'progress (on-track vs behind per subject, trend vs last week, weak spots, streak, hours, concrete recommendations; format=json for numbers).',
+  // 24/11/2026: write:false ⇒ MCP readOnlyHint — phần lớn action là ĐỌC (học liệu, tiến độ, hôm nay/tuần); gia sư đọc bài liên tục
+  // mà mỗi lần hiện thẻ duyệt thì không dạy nổi. Action GHI (start/add/edit/done/undone) vẫn đòi scope write ở `run` (requireWrite),
+  // chỉ đụng việc CÁ NHÂN của chính người gọi, không có xoá. Gộp vào đây vì mục lục MCP token người chạm trần 280 (registry.test).
+  write: false, personOnly: true,
   input: z.object({
     action: z.enum(ACTIONS),
     id: z.union([z.string().max(14), z.number().int().positive()]).optional().describe('"H12" study task or "C5" personal task'),
@@ -43,11 +58,23 @@ const hocTapTool = defineTool({
     minutes: z.number().int().min(5).max(600).optional(),
     note: z.string().max(4000).optional(),
     from: z.string().max(10).optional(), to: z.string().max(10).optional(),
+    q: z.string().max(200).optional(),
+    course: z.string().max(255).optional().describe('course slug, e.g. linux-bash, elementary-japanese-1-a11'),
+    lesson: z.union([z.string().max(255), z.number().int().positive()]).optional().describe('lesson slug or id'),
+    book: z.string().max(40).optional().describe('dekiru | jp | ch | ielts | ielts-tap2..5 | en-giao-tiep'),
+    bai: z.number().int().min(0).max(200).optional().describe('unit number (Dekiru: Bài N)'),
+    item: z.string().max(120).optional().describe('item id from outline, e.g. b1-ngu-phap'),
+    exercise: z.string().max(255).optional(),
+    subject: z.string().max(30).optional().describe('subject code for mock exams, e.g. FER202'),
+    attempt: z.number().int().positive().optional(),
+    offset: z.number().int().min(0).optional(), maxChars: z.number().int().min(2000).max(30000).optional(),
+    answers: z.boolean().optional(), english: z.boolean().optional(), format: z.enum(['text', 'json']).optional(),
   }),
   run: async (ctx, a) => {
     await requirePerson(ctx, 'use the personal study plan');
     if (WRITES.has(a.action)) requireWrite(ctx);
     const u = ctx.userId;
+    if (DOC_HOC_LIEU.has(a.action)) return chayHocLieu(u, a) as Promise<Record<string, unknown>>;
     switch (a.action) {
       case 'today': return veHomNay(await caNhan.homNayGop(u));
       case 'week': return veTuan(await caNhan.tuanGop(u));

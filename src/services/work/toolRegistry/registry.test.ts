@@ -188,8 +188,12 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
     assert.equal(t!.destructive, undefined, 'không có xoá qua AI');
     assert.ok(!r.askCommands().includes(t!) && !r.builtinCommands().includes(t!), 'chỉ MCP');
     const actions = t!.input.shape.action.options as string[];
-    assert.deepEqual([...actions].sort(), ['add', 'done', 'edit', 'list_personal', 'start', 'today', 'undone', 'week']);
+    assert.deepEqual([...actions].sort(), ['add', 'done', 'edit', 'exam', 'exercises', 'lesson', 'links', 'list_personal', 'outline', 'progress', 'search', 'start', 'today', 'undone', 'week'].sort());
     assert.match(t!.description, /never mark it done/);
+    // 24/11/2026: + học liệu & tiến độ (đọc). Lệnh khai đọc (readOnlyHint) để gia sư đọc bài không phải duyệt từng lượt;
+    // action GHI vẫn đòi scope write trong `run` (requireWrite) — chỉ việc cá nhân của chính người gọi.
+    assert.equal(t!.write, false);
+    assert.match(t!.description, /never open a browser/);
   });
 
   it('mục lục MCP cho token người còn dưới trần 300 của máy chủ (parseMucLucMcp) — có chỗ thở', () => {

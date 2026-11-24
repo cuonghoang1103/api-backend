@@ -66,12 +66,26 @@ export interface AgendaMuc {
   key?: string; url?: string; endsAt?: string; startsAt?: string; project?: { key: string; name: string };
 }
 
+/** GET /hoc-lieu/tien-do (24/11/2026) — tiến độ & đánh giá gom từ CT Work, /hoc-tap, khoá học, Code Lab, Exam Room. */
+export interface MonTienDo {
+  ma: string; ten: string; nguon: 'ctwork' | 'hoc_tap' | 'khoa_hoc'; tong: number; xong: number; toiHan: number; xongTrongHan: number;
+  quaHan: number; xongTuanNay: number; xongTuanTruoc: number; sapToi7Ngay: number; diemTBTuanNay?: number | null; ruiRoTruot?: number | null;
+  link?: string; viecQuaHan?: Array<{ ten: string; han: string; link?: string }>;
+  phanTram: number; lich: 'dung_lich' | 'cham' | 'cham_nhieu' | 'chua_toi_han'; xuHuong: 'tang' | 'ngang' | 'giam' | 'chua_du';
+}
+export interface TienDoHoc {
+  homNay: string; mon: MonTienDo[]; codeLab: Array<{ track: string; nop: number; dat: number; link?: string }>;
+  thi: Array<{ ten: string; diem: number; toiDa: number; link?: string }>; thiTuanNay: number | null; thiTuanTruoc: number | null;
+  gioTuanNay: number; gioTuanTruoc: number; chuoi: number; ngayHocTuanNay: number; deXuat: string[]; baoCao: string;
+}
+
 const d = <T,>(p: Promise<{ data: { data: T } }>) => p.then((r) => r.data.data);
 /** Lời gọi có AI chạy đồng bộ (nhận xét, vấn đáp, chấm lại): axios mặc định cắt ở 30 giây, model cần 20–60.
  *  Để 95 giây — dưới trần 100 giây của Cloudflare. */
 const AI = { timeout: 95_000 };
 
 export const hocTapApi = {
+  tienDo: () => d<TienDoHoc>(api.get('/hoc-lieu/tien-do')),
   tongQuan: () => d<TongQuan>(api.get('/hoc-tap/tong-quan')),
   hanMuc: () => d<HanMuc>(api.get('/hoc-tap/han-muc')),
   lichSu: (ngay = 60) => d<Array<{ monId: number | null; ngay: string; tyLe: number; tienDo: number }>>(api.get(`/hoc-tap/rui-ro/lich-su?ngay=${ngay}`)),

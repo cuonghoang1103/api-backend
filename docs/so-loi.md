@@ -1117,3 +1117,17 @@ Mẫu một mục:
 - **Cách sửa:** giết client `docker build` (buildkit vẫn chạy, phải `sudo kill -9` từ Terminal thật của user — `! lệnh` không nhập được mật khẩu); dừng agent `pmn` (9 ⇒ 7 agent); thêm "LUẬT RAM" vào mọi `~/agent-nha/prompt-*.md` (container `--memory 2g`, một VM ≤ 2 GB giữ khoá nặng, RAM trống < 8 GB ⇒ chờ); hai phiên Mac thống nhất chỉ deploy khi nhà ≥ 18 GB trống + tải < 30 và báo nhau trước.
 - **Ảnh hưởng:** ~2,5 giờ giọng/render chậm; deploy IELTS phải chạy lại; tạm dừng đẩy R2 từ nhà; không mất dữ liệu.
 - **Bài học:** deploy trên máy nhà là việc nặng NHẤT (≈17 GB) ⇒ phải nằm chung khoá nặng với agent/VM hoặc kiểm RAM trống trước khi build; agent dựng VM/container phải có trần RAM; đo tải một thời điểm ("9 agent ổn") không chứng minh được gì khi việc nặng đến theo đợt.
+
+### 24/11/2026 — công cụ (đẩy hình bài học) — `len-r2.mts --help` đẩy ảnh lên bucket R2 THẬT
+- **Triệu chứng:** agent soạn khoá Giao tiếp muốn xem cách dùng, gõ `npx tsx scripts/hinh/len-r2.mts --help` ⇒ script đẩy ít nhất 4 ảnh (backhand-index-pointing-up, call-me-hand, canoe, croissant) lên `cuongthai-media-storage` trước khi bị dừng.
+- **Nguyên nhân:** `scripts/hinh/len-r2.mts:52` chỉ nhận ra `--kiem` và `--thu`; mọi cờ khác (kể cả `--help`) rơi vào nhánh mặc định = "đẩy mọi ảnh thiếu lên R2 thật".
+- **Cách sửa:** cờ lạ ⇒ in cách dùng, thoát mã 2, không đụng R2 (cùng commit với khoá Giao tiếp).
+- **Ảnh hưởng:** vô hại — 4 ảnh là ảnh bài cũ vốn đang thiếu trên R2, script chỉ thêm, không xoá.
+- **Bài học:** script có tác dụng thật (đẩy/xoá) mà nhánh MẶC ĐỊNH lại là hành động thật thì mọi cờ gõ nhầm đều thành hành động thật ⇒ cờ lạ phải dừng; agent được giao "chỉ kiểm" vẫn sẽ thử `--help`.
+
+### 24/11/2026 — web (khoá sách học) — chép chính tả CẢ CÂU bị chấm sai vì dấu câu
+- **Triệu chứng:** khoá Tiếng Anh giao tiếp có bài nghe chép cả câu ("Sorry, could you say that again?"). Người học gõ đúng chữ nhưng thiếu dấu phẩy hoặc dấu hỏi thì bị chấm sai, trong khi đề ghi "dấu câu không tính điểm".
+- **Nguyên nhân:** `frontend/src/components/sach-hoc/Blocks.tsx › Dictation.same1` (~dòng 398) chỉ bỏ qua chữ hoa và dấu cách thừa. Khối này viết cho IELTS chép tên/số ngắn, nên chưa từng gặp câu dài có dấu.
+- **Cách sửa:** chuẩn hoá cả hai phía: bỏ `, ! ? ; "`, bỏ dấu chấm cuối từ, đổi ’ thành '. GIỮ ":" và dấu chấm giữa số ("7:45", "£14.50"), vì đó là cách viết chứ không phải dấu câu.
+- **Ảnh hưởng:** chưa lên prod (khoá Giao tiếp chưa deploy); IELTS không đổi kết quả với đáp án tên/số.
+- **Bài học:** dùng lại một khối cho loại nội dung mới (từ ngắn → cả câu) phải soát lại luật chấm của khối đó; agent soát nội dung đã bắt được lỗi này dù nằm ngoài phạm vi được giao — đọc kỹ phần "còn nghi ngờ" trong báo cáo.

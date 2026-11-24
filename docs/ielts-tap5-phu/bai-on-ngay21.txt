@@ -1,0 +1,9 @@
+match-info	t5d21-doc
+sentence	t5d21-doc
+mcq	t5d21-doc
+ynng	t5d21-doc
+match-feature	t5d21-doc
+summary-box	t5d21-doc
+note	t5d21-nghe
+mcq	t5d21-nghe
+match-feature	t5d21-nghe

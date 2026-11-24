@@ -1,0 +1,1051 @@
+/**
+ * Tiếng Anh giao tiếp — NGÀY 2 (chặng 1 "Sống sót", A2): khi không nghe kịp.
+ * Khuôn: listening · speaking · writing (ngày chẵn) · homework. Mọi id bắt đầu `gtd2-`.
+ * Ngữ pháp trong câu: câu hỏi yes/no & Wh- · Could you…? · Sorry? · nối câu bằng `or`, `so`.
+ * Cảnh: Trang — sinh viên IT thực tập ở TP.HCM — lấy thẻ khách, ghi số điện thoại, nghe lịch họp đổi.
+ * Cách soạn: docs/en-giao-tiep-soan.md. Mọi hội thoại, câu ví dụ đều tự soạn.
+ */
+import type { Lesson } from '../data';
+
+export const NGAY_2: Lesson[] = [
+  /* ═══════════════════════════ BÀI 1 — NGHE CẢNH ═══════════════════════════ */
+  {
+    id: 'gtd2-nghe',
+    kind: 'listening',
+    title: 'Khi không nghe kịp: xin nhắc lại, đánh vần, số',
+    goal: 'Nghe ra tên được đánh vần, số tầng, số điện thoại, email và giờ hẹn; nhận ra người trong cảnh hỏi lại bằng những câu nào.',
+    minutes: 28,
+    blocks: [
+      {
+        t: 'recap',
+        title: 'Hôm nay bạn ở đâu, gặp ai',
+        items: [
+          'Hôm qua (Ngày 1) bạn đã chào và tự giới thiệu được. Hôm nay là kỹ năng **cứu mạng**: nghe không kịp thì làm gì.',
+          'Bạn theo chân **Trang**, thực tập sinh ở TP.HCM, qua 3 cảnh: quầy lễ tân toà nhà, văn phòng đang ồn, và một lịch họp bị đổi.',
+          'Thứ khó nghe nhất luôn là **tên riêng, chữ cái và con số**. Cả ba cảnh đều xoay quanh ba thứ đó.',
+          'Để ý: Trang **không hề giả vờ hiểu**. Mỗi lần nghe sót, bạn ấy hỏi lại đúng phần bị sót.',
+          'Cặp số dễ nhầm nhất: **fifteen / fifty**, **thirteen / thirty**. Nghe xem người ta gỡ nhầm bằng cách nào.',
+        ],
+      },
+
+      { t: 'h', text: 'Cảnh 1 — Quầy lễ tân: tên gì, tầng mấy?' },
+      {
+        t: 'canh',
+        anh: ['office-building', 'bellhop-bell', 'woman-student', 'identification-card', 'elevator'],
+        caption: '**Trang** tới một toà nhà văn phòng ở Quận 1 để dự buổi hướng dẫn tại công ty **Kestrel Labs**. Ở quầy lễ tân, anh **Declan** làm thẻ khách. Anh ấy nói rất nhanh.',
+      },
+      {
+        t: 'listen',
+        id: 'gtd2-nghe-canh1',
+        title: 'Scene 1 — At the front desk',
+        note: 'Nghe xem Trang lên tầng mấy, đi thang nào. Đếm xem Trang hỏi lại mấy lần.',
+        lines: [
+          { who: 'Declan', voice: 'ie-nam', text: 'Morning! Who are you here to see?', vi: 'Chào buổi sáng! Chị tới gặp ai ạ?' },
+          { who: 'Trang', voice: 'us-nu', text: "Sorry? Could you say that again, please?", vi: 'Xin lỗi, gì ạ? Anh nói lại giúp em được không?' },
+          { who: 'Declan', voice: 'ie-nam', text: 'Of course. Which company are you visiting?', vi: 'Được chứ. Chị tới công ty nào?' },
+          { who: 'Trang', voice: 'us-nu', text: "Oh, I see. I'm here for Kestrel Labs.", vi: 'À, em hiểu rồi. Em tới Kestrel Labs.' },
+          { who: 'Declan', voice: 'ie-nam', text: 'Kestrel Labs. Grand. And what\'s your name?', vi: 'Kestrel Labs. Tốt rồi. Chị tên gì ạ?' },
+          { who: 'Trang', voice: 'us-nu', text: "It's Trang. Le Thu Trang.", vi: 'Em tên Trang. Lê Thu Trang.' },
+          { who: 'Declan', voice: 'ie-nam', text: 'Sorry, is that Chang? C-H-A-N-G?', vi: 'Xin lỗi, là Chang phải không? C-H-A-N-G?' },
+          { who: 'Trang', voice: 'us-nu', text: 'No, Trang. T-R-A-N-G. T as in Tango.', vi: 'Không ạ, Trang. T-R-A-N-G. T như trong Tango.' },
+          { who: 'Declan', voice: 'ie-nam', text: 'T-R-A-N-G. Got it. And your surname is Le. Is that L-E-E?', vi: 'T-R-A-N-G. Hiểu rồi. Còn họ của chị là Lê. Có phải L-E-E không?' },
+          { who: 'Trang', voice: 'us-nu', text: 'Just L-E. One E.', vi: 'Chỉ L-E thôi ạ. Một chữ E.' },
+          { who: 'Declan', voice: 'ie-nam', text: "Lovely. Here's your visitor pass. Kestrel Labs is on the fifteenth floor.", vi: 'Tốt quá. Thẻ khách của chị đây. Kestrel Labs ở tầng mười lăm.' },
+          { who: 'Trang', voice: 'us-nu', text: 'Sorry, did you say fifteen or fifty?', vi: 'Xin lỗi, anh nói mười lăm hay năm mươi ạ?' },
+          { who: 'Declan', voice: 'ie-nam', text: 'Fifteen. One five. Take lift B, on your left.', vi: 'Mười lăm. Một năm. Chị đi thang máy B, bên tay trái.' },
+          { who: 'Trang', voice: 'us-nu', text: 'Lift B, or lift D?', vi: 'Thang B, hay thang D ạ?' },
+          { who: 'Declan', voice: 'ie-nam', text: 'B. B for Bravo.', vi: 'B. B như trong Bravo.' },
+          { who: 'Trang', voice: 'us-nu', text: 'So that\'s the fifteenth floor, lift B. Thank you!', vi: 'Vậy là tầng mười lăm, thang B. Cảm ơn anh!' },
+          { who: 'Declan', voice: 'ie-nam', text: "That's it. Have a good one!", vi: 'Đúng rồi. Chúc chị một ngày vui!' },
+        ],
+      },
+      {
+        t: 'mcq',
+        id: 'gtd2-nghe-canh1-hieu',
+        title: 'Cảnh 1 — Bạn nghe được gì? (4 câu)',
+        items: [
+          {
+            q: 'Lúc đầu Declan nghe tên Trang thành gì?',
+            options: ['Tran', 'Chang', 'Train', 'Trung'],
+            correct: 1,
+            why: 'Declan hỏi: "Is that **Chang**? C-H-A-N-G?" Âm "tr" tiếng Việt nghe gần với "ch" tiếng Anh, nên Trang phải đánh vần: T-R-A-N-G.',
+          },
+          {
+            q: 'Họ của Trang viết thế nào?',
+            options: ['L-E-E', 'L-E', 'L-I', 'L-A-Y'],
+            correct: 1,
+            why: 'Declan đoán L-E-E. Trang sửa: "**Just L-E. One E.**"',
+          },
+          {
+            q: 'Kestrel Labs ở tầng mấy?',
+            options: ['Tầng 5', 'Tầng 15', 'Tầng 50', 'Tầng 55'],
+            correct: 1,
+            why: 'Trang hỏi lại "fifteen or fifty?", Declan đáp: "**Fifteen. One five.**" Đọc từng chữ số là cách gỡ nhầm chắc nhất.',
+          },
+          {
+            q: 'Trang đi thang máy nào?',
+            options: ['Thang B, bên trái', 'Thang D, bên trái', 'Thang B, bên phải', 'Thang D, bên phải'],
+            correct: 0,
+            why: '"Take **lift B, on your left**." B và D rất dễ nhầm nên Declan nói thêm "B for Bravo".',
+          },
+        ],
+      },
+
+      { t: 'h', text: 'Cảnh 2 — Văn phòng đang ồn: số điện thoại và email' },
+      {
+        t: 'canh',
+        anh: ['construction', 'man-technologist', 'woman-student', 'mobile-phone', 'e-mail'],
+        caption: 'Trên tầng 15, phòng bên cạnh đang **khoan tường**. **Lucas**, người Canada, đọc cho Trang mật khẩu Wi-Fi, số điện thoại và email của anh ấy. Tiếng khoan át mất mấy chỗ.',
+      },
+      {
+        t: 'listen',
+        id: 'gtd2-nghe-canh2',
+        title: 'Scene 2 — In a noisy office',
+        note: 'Lấy giấy bút. Ghi lại mật khẩu Wi-Fi, số điện thoại và email của Lucas trong lúc nghe.',
+        lines: [
+          { who: 'Lucas', voice: 'ca-nam', text: "Hi, Trang! I'm Lucas. Sorry about the noise. They're fixing the wall next door.", vi: 'Chào Trang! Anh là Lucas. Xin lỗi vì ồn quá. Người ta đang sửa tường phòng bên.' },
+          { who: 'Trang', voice: 'us-nu', text: "Hi, Lucas. That's okay. Sorry, could you speak a bit louder?", vi: 'Chào anh Lucas. Không sao ạ. Xin lỗi, anh nói to hơn một chút được không?' },
+          { who: 'Lucas', voice: 'ca-nam', text: 'Sure! First, the Wi-Fi. The password is "kestrel", all lowercase, then a hyphen, then double seven, oh, three.', vi: 'Được! Đầu tiên là Wi-Fi. Mật khẩu là "kestrel", viết thường hết, rồi dấu gạch nối, rồi hai số bảy, không, ba.' },
+          { who: 'Trang', voice: 'us-nu', text: 'Sorry, what does "hyphen" mean?', vi: 'Xin lỗi, "hyphen" nghĩa là gì ạ?' },
+          { who: 'Lucas', voice: 'ca-nam', text: "It's a short line. Like a minus sign.", vi: 'Là một cái gạch ngắn. Giống dấu trừ ấy.' },
+          { who: 'Trang', voice: 'us-nu', text: 'Ah, okay. And how do you spell "kestrel"?', vi: 'À, vâng. Thế "kestrel" đánh vần thế nào ạ?' },
+          { who: 'Lucas', voice: 'ca-nam', text: 'K-E-S-T-R-E-L.', vi: 'K-E-S-T-R-E-L.' },
+          { who: 'Trang', voice: 'us-nu', text: 'So that\'s kestrel, hyphen, seven, seven, zero, three. Is that right?', vi: 'Vậy là kestrel, gạch nối, bảy, bảy, không, ba. Đúng không ạ?' },
+          { who: 'Lucas', voice: 'ca-nam', text: "Perfect. Now, my number. It's oh nine three, three one eight, double two, six four.", vi: 'Chuẩn. Giờ tới số của anh. Không chín ba, ba một tám, hai số hai, sáu bốn.' },
+          { who: 'Trang', voice: 'us-nu', text: "Sorry, I didn't catch the last part. Three one eight, and then?", vi: 'Xin lỗi, em chưa nghe kịp đoạn cuối. Ba một tám, rồi sao nữa ạ?' },
+          { who: 'Lucas', voice: 'ca-nam', text: 'Double two, six four. Two, two, six, four.', vi: 'Hai số hai, sáu bốn. Hai, hai, sáu, bốn.' },
+          { who: 'Trang', voice: 'us-nu', text: 'Let me read that back. Oh nine three, three one eight, two two six five.', vi: 'Để em đọc lại. Không chín ba, ba một tám, hai hai sáu năm.' },
+          { who: 'Lucas', voice: 'ca-nam', text: 'Almost. Six four at the end, not six five.', vi: 'Gần đúng rồi. Cuối là sáu bốn, không phải sáu năm.' },
+          { who: 'Trang', voice: 'us-nu', text: 'Six four. Got it. And your email?', vi: 'Sáu bốn. Em ghi rồi. Còn email của anh?' },
+          { who: 'Lucas', voice: 'ca-nam', text: "It's lucas dot m, at kestrel labs dot com. That's M as in Mike.", vi: 'Là lucas chấm m, a còng kestrel labs chấm com. M như trong Mike.' },
+          { who: 'Trang', voice: 'us-nu', text: 'Could you type it in the chat for me, please? It\'s really noisy.', vi: 'Anh gõ vào khung chat giúp em được không ạ? Ồn quá.' },
+          { who: 'Lucas', voice: 'ca-nam', text: "Good idea. I'll send it now.", vi: 'Ý hay đấy. Anh gửi ngay đây.' },
+        ],
+      },
+      {
+        t: 'mcq',
+        id: 'gtd2-nghe-canh2-hieu',
+        title: 'Cảnh 2 — Bạn nghe được gì? (4 câu)',
+        items: [
+          {
+            q: 'Mật khẩu Wi-Fi là gì?',
+            options: ['Kestrel-7703', 'kestrel-7703', 'kestrel_7703', 'kestrel-773'],
+            correct: 1,
+            why: '"**all lowercase**" (viết thường hết), "**hyphen**" (gạch nối, không phải gạch dưới), "**double seven, oh, three**" = 7703.',
+          },
+          {
+            q: 'Số điện thoại của Lucas là:',
+            options: ['093 318 2265', '093 318 2264', '093 381 2264', '039 318 2264'],
+            correct: 1,
+            why: 'Trang đọc lại "…two two six **five**", Lucas sửa: "**Six four** at the end".',
+          },
+          {
+            q: 'Khi không nghe kịp đoạn cuối số điện thoại, Trang làm gì?',
+            options: ['Xin Lucas đọc lại từ đầu', 'Nhắc lại phần đã nghe được rồi hỏi "and then?"', 'Im lặng và ghi đại', 'Nói "I don\'t understand"'],
+            correct: 1,
+            why: '"I didn\'t catch the last part. **Three one eight, and then?**" Nhắc lại phần đã nghe được, người kia chỉ cần đọc tiếp phần thiếu.',
+          },
+          {
+            q: 'Cuối cùng Trang lấy email bằng cách nào?',
+            options: ['Nghe và ghi lại đúng ngay', 'Nhờ Lucas gõ vào khung chat', 'Nhờ Lucas viết ra giấy', 'Không lấy được'],
+            correct: 1,
+            why: '"**Could you type it in the chat** for me, please?" Chỗ ồn mà cần chính xác từng ký tự thì xin bản viết là khôn nhất.',
+          },
+        ],
+      },
+
+      { t: 'h', text: 'Cảnh 3 — Lịch họp bị đổi: "half two" là mấy giờ?' },
+      {
+        t: 'canh',
+        anh: ['calendar', 'woman-office-worker', 'woman-student', 'two-oclock', 'door'],
+        caption: 'Trước giờ về, **Megan**, người Anh, báo Trang buổi hướng dẫn tiếp theo **đổi lịch**. Megan nói ngày, giờ và phòng theo kiểu Anh.',
+      },
+      {
+        t: 'listen',
+        id: 'gtd2-nghe-canh3',
+        title: 'Scene 3 — The meeting has moved',
+        note: 'Ghi lại: thứ mấy, ngày bao nhiêu, mấy giờ, phòng nào.',
+        lines: [
+          { who: 'Megan', voice: 'uk-nu', text: 'Trang, quick thing. The next session has moved.', vi: 'Trang ơi, chuyện này nhanh thôi. Buổi tiếp theo đổi lịch rồi.' },
+          { who: 'Trang', voice: 'us-nu', text: 'Oh, okay. When is it now?', vi: 'Ồ, vâng. Giờ là khi nào ạ?' },
+          { who: 'Megan', voice: 'uk-nu', text: "It's on Thursday the thirtieth, at half two.", vi: 'Thứ Năm ngày ba mươi, lúc hai rưỡi.' },
+          { who: 'Trang', voice: 'us-nu', text: 'Sorry, Thursday the thirteenth?', vi: 'Xin lỗi, thứ Năm ngày mười ba ạ?' },
+          { who: 'Megan', voice: 'uk-nu', text: 'No, the thirtieth. Three oh. The last Thursday of the month.', vi: 'Không, ngày ba mươi. Ba không. Thứ Năm cuối cùng của tháng.' },
+          { who: 'Trang', voice: 'us-nu', text: 'The thirtieth. And sorry, what time? Half two?', vi: 'Ngày ba mươi. Và xin lỗi, mấy giờ ạ? "Half two"?' },
+          { who: 'Megan', voice: 'uk-nu', text: 'Oh, sorry! Half past two. Two thirty in the afternoon.', vi: 'Ồ, xin lỗi! Hai giờ rưỡi. Hai giờ ba mươi chiều.' },
+          { who: 'Trang', voice: 'us-nu', text: 'Two thirty. Okay. Is it in the same room?', vi: 'Hai giờ ba mươi. Vâng. Vẫn phòng cũ ạ?' },
+          { who: 'Megan', voice: 'uk-nu', text: "No, we're in room thirteen this time. One three.", vi: 'Không, lần này mình ở phòng mười ba. Một ba.' },
+          { who: 'Trang', voice: 'us-nu', text: "Let me check I've got that right. Thursday the thirtieth, two thirty, room thirteen.", vi: 'Để em kiểm tra xem em ghi đúng chưa. Thứ Năm ngày ba mươi, hai giờ ba mươi, phòng mười ba.' },
+          { who: 'Megan', voice: 'uk-nu', text: "Spot on. I'll send you an invite as well.", vi: 'Chuẩn luôn. Chị sẽ gửi lời mời họp cho em nữa.' },
+          { who: 'Trang', voice: 'us-nu', text: "That would be great. Thanks, Megan. See you then!", vi: 'Thế thì tốt quá. Cảm ơn chị Megan. Hẹn gặp chị hôm đó!' },
+        ],
+      },
+      {
+        t: 'mcq',
+        id: 'gtd2-nghe-canh3-hieu',
+        title: 'Cảnh 3 — Bạn nghe được gì? (4 câu)',
+        items: [
+          {
+            q: 'Buổi hướng dẫn mới vào ngày nào?',
+            options: ['Thứ Năm ngày 13', 'Thứ Năm ngày 30', 'Thứ Ba ngày 13', 'Thứ Ba ngày 30'],
+            correct: 1,
+            why: '"**Thursday the thirtieth**… Three oh. The last Thursday of the month."',
+          },
+          {
+            q: '"Half two" trong tiếng Anh kiểu Anh là mấy giờ?',
+            options: ['1:30', '2:00', '2:30', '2:15'],
+            correct: 2,
+            why: 'half two = **half past two** = 2:30. Megan tự giải thích lại: "Two thirty in the afternoon."',
+          },
+          {
+            q: 'Họp ở phòng nào?',
+            options: ['Phòng 3', 'Phòng 13', 'Phòng 30', 'Phòng cũ'],
+            correct: 1,
+            why: '"room **thirteen** this time. **One three**."',
+          },
+          {
+            q: 'Megan nói "Spot on." Nghĩa là gì?',
+            options: ['Sai một chỗ', 'Chính xác hoàn toàn', 'Nói lại đi', 'Đứng đúng chỗ này'],
+            correct: 1,
+            why: '**Spot on** (Anh, Úc) = chính xác. Người Mỹ hay nói "Exactly" hoặc "That\'s right".',
+          },
+        ],
+      },
+
+      { t: 'h', text: 'Chép chính tả: tên, số, giờ (7 mục)' },
+      {
+        t: 'p',
+        text: 'Phần này giống hệt việc bạn phải làm ngoài đời: nghe rồi **ghi đúng**. Chỉ gõ phần được hỏi (tên, số), không gõ cả câu.',
+      },
+      {
+        t: 'dictation',
+        id: 'gtd2-nghe-chinh-ta',
+        title: 'Nghe và ghi đúng thông tin',
+        items: [
+          { label: 'Họ của người nói (surname)', spell: 'My surname is Hadley. H, A, D, L, E, Y.', answer: 'Hadley' },
+          { label: 'Tên riêng', spell: "It's Priya. P for Papa, R, I, Y, A.", answer: 'Priya' },
+          { label: 'Số tầng — ghi bằng số', spell: "We're on the fiftieth floor. Five oh.", answer: '50', alt: ['50th', 'tầng 50'] },
+          { label: 'Số điện thoại — viết liền, không dấu cách', spell: 'My number is oh three eight four, double five, one nine, seven oh.', answer: '0384551970', alt: ['0384 551 970', '0384 55 19 70', '0384 551970'] },
+          { label: 'Số phòng — ghi bằng số', spell: "It's room fourteen. One four. Not forty.", answer: '14' },
+          { label: 'Giờ hẹn — dạng 3:45', spell: "Let's meet at quarter to four.", answer: '3:45', alt: ['3.45', '15:45', '3h45', '3:45 pm'] },
+          { label: 'Email — viết thường, liền nhau', spell: "It's megan, underscore, hall, at brightmail, dot com. Megan underscore hall.", answer: 'megan_hall@brightmail.com' },
+        ],
+      },
+
+      { t: 'h', text: 'Họ nói vậy nghĩa là gì?' },
+      {
+        t: 'table',
+        head: ['Họ nói', 'Nghĩa thật', 'Ghi chú'],
+        rows: [
+          ['Sorry? ↗ (lên giọng)', 'Bạn nói lại được không?', 'Một từ thôi mà lịch sự. Xuống giọng "Sorry ↘" lại là lời xin lỗi.'],
+          ['Pardon? ↗', 'Bạn nói lại được không?', 'Hay nghe ở Anh, hơi trang trọng.'],
+          ['Come again?', 'Nói lại xem nào?', 'Thân mật. Chỉ dùng với người ngang hàng.'],
+          ['Is that C-H-A-N-G?', 'Tôi đoán vậy, bạn xác nhận giúp.', 'Người ta đánh vần thử để bạn sửa. Đừng ngại sửa.'],
+          ['One five. · Three oh.', '15 · 30 (đọc từng chữ số)', 'Cách gỡ nhầm fifteen / fifty chắc nhất.'],
+          ['double seven', 'hai số bảy liền nhau: 77', 'Anh, Úc, New Zealand hay dùng (người Mỹ hay đọc "seven seven"). Còn có "triple" = ba số liền.'],
+          ['oh', 'số 0', 'Trong số điện thoại, số phòng, năm. Cũng nói "zero".'],
+          ['Got it.', 'Tôi nghe rõ và ghi lại rồi.', 'Bạn cũng nên nói câu này khi đã chắc.'],
+          ['Spot on.', 'Chính xác.', 'Anh, Úc.'],
+          ["I'll send you an invite.", 'Tôi sẽ gửi lời mời họp (qua lịch, email).', 'Vậy là sẽ có bản viết. Yên tâm đối chiếu lại.'],
+        ],
+      },
+      {
+        t: 'note',
+        title: 'Mẹo: không nghe kịp số và tên thì làm gì',
+        items: [
+          '**Dừng người ta ngay**, đừng đợi họ nói xong cả đoạn: "Sorry, one moment." Để càng lâu càng sót nhiều.',
+          '**Hỏi đúng phần bị sót**, đừng bắt đọc lại từ đầu: "Three one eight, **and then?**" · "Sorry, **the last two numbers?**"',
+          '**Cho hai lựa chọn** khi nghi ngờ: "Fifteen **or** fifty?" · "B **or** D?" Người kia chỉ cần chọn một.',
+          '**Đọc lại** mọi con số quan trọng: "Let me read that back." Trang đọc sai một số, và nhờ đọc lại mà Lucas sửa được ngay.',
+          'Ồn quá hoặc cần chính xác từng ký tự (email, mật khẩu): **xin bản viết**. "Could you type it in the chat?" · "Could you write it down for me?"',
+          '**Không bao giờ** gật đầu "Yes, yes" khi chưa hiểu. Ghi sai tầng hay sai giờ thì hậu quả lớn hơn nhiều so với 3 giây hỏi lại.',
+        ],
+      },
+      {
+        t: 'table',
+        head: ['Ý', 'Anh', 'Mỹ', 'Úc / New Zealand'],
+        rows: [
+          ['2:30', 'half past two · **half two**', 'two thirty', 'half past two · two thirty'],
+          ['Số 0', 'oh · zero · nought', 'zero · oh', 'oh · zero'],
+          ['77 trong số điện thoại', 'double seven', 'seven seven', 'double seven'],
+          ['Chữ Z', 'zed', 'zee', 'zed'],
+          ['Ngày 3 tháng 4 viết tắt', '3/4 (ngày/tháng)', '4/3 (tháng/ngày)', '3/4 (ngày/tháng)'],
+          ['Thang máy', 'lift', 'elevator', 'lift'],
+          ['Tầng trệt', 'ground floor (tầng trên nó là first floor)', 'first floor', 'ground floor'],
+          ['Ký hiệu #', 'hash', 'pound · hashtag', 'hash'],
+          ['Dấu chấm cuối câu', 'full stop', 'period', 'full stop'],
+        ],
+        caption: 'Canada (như Lucas) nói "zed" giống Anh nhưng viết ngày và đọc giờ khá giống Mỹ. Gặp ngày viết kiểu 3/4 thì **luôn hỏi lại**: "Is that the third of April or March the fourth?"',
+      },
+      {
+        t: 'note',
+        title: '🎧 Nghe thêm ở Podcast',
+        items: [
+          '**en-ds-a2-03 · Can I Book for Saturday?** — hai cuộc gọi đặt bàn và đặt lịch cắt tóc: nói giờ, đánh vần tên, đọc số điện thoại.',
+          '**en-ds-a1-01 · Hi, How Are You?** — cuối tập có câu cứu nguy "Sorry, can you say that again?" và cách đánh vần tên một thành phố.',
+          'Hai tập này là gọi điện và gặp hàng xóm, khác ba cảnh hôm nay. Nghe để tập ghi số và tên thêm một lần nữa.',
+        ],
+      },
+    ],
+  },
+
+  /* ═══════════════════════════ BÀI 2 — NÓI ═══════════════════════════ */
+  {
+    id: 'gtd2-noi',
+    kind: 'speaking',
+    title: 'Câu "cứu nguy" — hỏi lại, nói chậm, xác nhận',
+    goal: 'Xin nhắc lại, xin nói chậm, hỏi nghĩa một từ, đánh vần tên mình, đọc số điện thoại, email, giờ hẹn và đọc lại để xác nhận.',
+    minutes: 30,
+    blocks: [
+      {
+        t: 'recap',
+        title: 'Bài này bạn luyện gì',
+        items: [
+          '**26 câu cứu nguy**, chia theo 4 bước: báo chưa nghe kịp → xin chậm lại hoặc đánh vần → hỏi nghĩa → đọc lại xác nhận.',
+          'Ngữ pháp: cách đặt **câu hỏi** (Is that…? · Did you say…? · What does … mean? · How do you spell…?) và **Could you…?**',
+          'Đọc đúng **26 chữ cái**, đánh vần tên Việt, đọc số điện thoại, email, giờ.',
+          'Cử chỉ khi không hiểu: Việt Nam hay **cười và gật**, và đó chính là thứ gây hiểu lầm nhiều nhất.',
+          'Câu cần thuộc nằm lòng hôm nay: **Sorry, could you say that again?**',
+        ],
+      },
+
+      { t: 'h', text: '1. Bốn bước khi không nghe kịp' },
+      {
+        t: 'sodo',
+        kind: 'flow',
+        title: 'Không nghe kịp? Đi đúng 4 bước này',
+        caption: 'Người nghe giỏi không phải người nghe được hết, mà là người **hỏi lại đúng lúc, đúng chỗ**.',
+        steps: [
+          { label: '1 · Báo ngay', sub: "Sorry, I didn't catch that." },
+          { label: '2 · Nói rõ cần gì', sub: 'Could you say it more slowly? · How do you spell that?' },
+          { label: '3 · Đọc lại', sub: "So that's the fifteenth floor. Is that right?" },
+          { label: '4 · Chốt + cảm ơn', sub: 'Got it. Thank you!' },
+        ],
+      },
+
+      { t: 'h', text: '2. 26 câu dùng được ngay' },
+      {
+        t: 'vocab',
+        items: [
+          { w: 'Sorry?', pos: 'phr', ipa: '/ˈsɑːri/', vi: 'Gì ạ? (xin nhắc lại, lên giọng ở cuối)', ex: 'The meeting is at half two. — Sorry?', exVi: 'Họp lúc hai rưỡi. — Gì ạ?', more: 'Câu hỏi lại **ngắn nhất**. Phải **lên giọng**. Xuống giọng thì thành lời xin lỗi.' },
+          { w: 'Sorry, could you say that again?', pos: 'phr', ipa: '/ˈsɑːri kəd ju ˌseɪ ðæt əˈɡen/', vi: 'Xin lỗi, bạn nói lại được không?', ex: 'Sorry, could you say that again, please?', exVi: 'Xin lỗi, anh nói lại giúp em được không ạ?', more: 'Câu **an toàn nhất**, dùng với ai cũng được.' },
+          { w: "I didn't catch that.", pos: 'phr', ipa: '/aɪ ˈdɪdnt ˌkætʃ ðæt/', vi: 'Mình chưa nghe kịp câu đó.', ex: "Sorry, I didn't catch that. It's a bit noisy here.", exVi: 'Xin lỗi, mình chưa nghe kịp. Ở đây hơi ồn.', more: 'catch = bắt kịp (bằng tai). Không dùng "I didn\'t hear" khi ý là nghe không rõ lời.' },
+          { w: "I didn't catch the last part.", pos: 'phr', ipa: '/aɪ ˈdɪdnt kætʃ ðə ˌlæst ˈpɑːrt/', vi: 'Mình chưa nghe kịp đoạn cuối.', ex: "Sorry, I didn't catch the last part. Three one eight, and then?", exVi: 'Xin lỗi, mình chưa nghe kịp đoạn cuối. Ba một tám, rồi sao nữa?', more: 'the **first** part (đoạn đầu) · the **name** · the **number** · the **time**' },
+          { w: 'Could you speak a bit more slowly?', pos: 'phr', ipa: '/kəd ju ˌspiːk ə bɪt mɔːr ˈsloʊli/', vi: 'Bạn nói chậm hơn một chút được không?', ex: 'Sorry, my English is not very good. Could you speak a bit more slowly?', exVi: 'Xin lỗi, tiếng Anh của mình chưa tốt lắm. Bạn nói chậm hơn một chút được không?', anh: 'turtle' },
+          { w: 'Could you speak a bit louder?', pos: 'phr', ipa: '/kəd ju ˌspiːk ə bɪt ˈlaʊdər/', vi: 'Bạn nói to hơn một chút được không?', ex: "Could you speak a bit louder? I can't hear you very well.", exVi: 'Bạn nói to hơn một chút được không? Mình nghe không rõ lắm.', anh: 'speaker-high-volume' },
+          { w: 'What does "hyphen" mean?', pos: 'phr', ipa: '/ˈwʌt dəz ˈhaɪfn miːn/', vi: '"Hyphen" nghĩa là gì?', ex: 'Sorry, what does "invite" mean here?', exVi: 'Xin lỗi, "invite" ở đây nghĩa là gì ạ?', more: 'Thay từ bất kỳ vào giữa: What does **…** mean?' },
+          { w: 'How do you spell that?', pos: 'phr', ipa: '/ˌhaʊ də ju ˈspel ðæt/', vi: 'Từ đó đánh vần thế nào?', ex: 'Nice to meet you, Siobhan. How do you spell that?', exVi: 'Rất vui được gặp chị, Siobhan. Tên đó đánh vần thế nào ạ?', anh: 'input-latin-letters' },
+          { w: 'T as in Tango', pos: 'phr', ipa: '/ˈtiː əz ɪn ˈtæŋɡoʊ/', vi: 'chữ T như trong "Tango"', ex: "It's Trang. T as in Tango, R, A, N, G.", exVi: 'Là Trang. T như trong Tango, R, A, N, G.', more: 'Anh hay nói **T for Tango**. Mỹ hay nói **T as in Tango**.' },
+          { w: 'Did you say fifteen or fifty?', pos: 'phr', ipa: '/dɪd ju ˌseɪ fɪfˈtiːn ɔːr ˈfɪfti/', vi: 'Bạn nói mười lăm hay năm mươi?', ex: 'Sorry, did you say Tuesday or Thursday?', exVi: 'Xin lỗi, anh nói thứ Ba hay thứ Năm ạ?', more: 'Khung: Did you say **A or B**?' },
+          { w: "So that's…, right?", pos: 'phr', ipa: '/soʊ ˈðæts … raɪt/', vi: 'Vậy là…, đúng không?', ex: "So that's two thirty on Thursday, right?", exVi: 'Vậy là hai rưỡi thứ Năm, đúng không ạ?', more: 'Cùng nghĩa: **Is that right?** đặt ở cuối câu.' },
+          { w: 'Let me read that back.', pos: 'phr', ipa: '/ˌlet mi ˈriːd ðæt bæk/', vi: 'Để mình đọc lại nhé.', ex: 'Let me read that back. Oh nine three, three one eight…', exVi: 'Để mình đọc lại nhé. Không chín ba, ba một tám…', more: 'Dùng cho **số, email, địa chỉ**: thứ sai một ký tự là hỏng.' },
+          { w: "Let me check I've got that right.", pos: 'phr', ipa: '/ˌlet mi ˈtʃek aɪv ɡɑːt ðæt ˈraɪt/', vi: 'Để mình kiểm tra xem mình hiểu đúng chưa.', ex: "Let me check I've got that right. Thursday, two thirty, room thirteen.", exVi: 'Để em kiểm tra xem em hiểu đúng chưa. Thứ Năm, hai rưỡi, phòng mười ba.' },
+          { w: 'Got it.', pos: 'phr', ipa: '/ˈɡɑːt ɪt/', vi: 'Hiểu rồi. / Ghi rồi.', ex: 'Lift B, on the left. — Got it. Thanks!', exVi: 'Thang B, bên trái. — Em hiểu rồi. Cảm ơn anh!', anh: 'check-mark-button' },
+          { w: 'One moment, please.', pos: 'phr', ipa: '/ˌwʌn ˈmoʊmənt pliːz/', vi: 'Chờ mình một chút ạ.', ex: 'One moment, please. Let me write that down.', exVi: 'Chờ em một chút ạ. Để em ghi lại.', more: 'Thân hơn: **Hang on a sec.** · **Just a second.**', anh: 'raised-hand' },
+          { w: 'Could you write it down for me?', pos: 'phr', ipa: '/kəd ju ˌraɪt ɪt ˈdaʊn fər mi/', vi: 'Bạn viết ra giúp mình được không?', ex: "I'm not sure about the spelling. Could you write it down for me?", exVi: 'Mình không chắc cách viết. Bạn viết ra giúp mình được không?', anh: 'memo' },
+          { w: 'Could you type it in the chat?', pos: 'phr', ipa: '/kəd ju ˌtaɪp ɪt ɪn ðə ˈtʃæt/', vi: 'Bạn gõ vào khung chat được không?', ex: "It's noisy here. Could you type it in the chat?", exVi: 'Ở đây ồn quá. Anh gõ vào khung chat được không ạ?', anh: 'keyboard' },
+          { w: 'How do you say "…" in English?', pos: 'phr', ipa: '/ˌhaʊ də ju ˈseɪ … ɪn ˈɪŋɡlɪʃ/', vi: '"…" tiếng Anh nói thế nào?', ex: 'How do you say "a còng" in English? — "At".', exVi: '"A còng" tiếng Anh nói thế nào? — "At".' },
+          { w: "I'm not sure I understand.", pos: 'phr', ipa: '/aɪm nɑːt ˌʃʊr aɪ ʌndərˈstænd/', vi: 'Mình không chắc là mình hiểu.', ex: "Sorry, I'm not sure I understand. Do you mean today?", exVi: 'Xin lỗi, em không chắc là em hiểu. Ý chị là hôm nay ạ?', more: 'Mềm hơn nhiều so với "I don\'t understand."' },
+          { w: 'Do you mean…?', pos: 'phr', ipa: '/də ju ˈmiːn/', vi: 'Ý bạn là… phải không?', ex: 'Half two? Do you mean two thirty?', exVi: '"Half two"? Ý chị là hai rưỡi ạ?' },
+          { w: 'double seven', pos: 'phr', ipa: '/ˌdʌbl ˈsevn/', vi: 'hai số bảy liền nhau (77)', ex: 'My number ends in double seven.', exVi: 'Số của mình kết thúc bằng hai số bảy.' },
+          { w: 'at · dot · hyphen · underscore', pos: 'n', ipa: '/æt/ · /dɑːt/ · /ˈhaɪfn/ · /ˈʌndərskɔːr/', vi: '@ · dấu chấm · gạch nối (-) · gạch dưới (_)', ex: "It's trang dot le at kestrel labs dot com.", exVi: 'Là trang chấm le a còng kestrel labs chấm com.', more: 'Dấu "-" còn gọi là **dash**. Dấu "/" là **slash**.', anh: 'e-mail' },
+          { w: 'capital · lowercase', pos: 'adj', ipa: '/ˈkæpɪtl/ · /ˈloʊərkeɪs/', vi: 'chữ hoa · chữ thường', ex: "It's capital K, then all lowercase.", exVi: 'Chữ K viết hoa, còn lại viết thường hết.' },
+          { w: 'half past two', pos: 'phr', ipa: '/ˌhæf pæst ˈtuː/', vi: 'hai giờ rưỡi', ex: "Let's meet at half past two.", exVi: 'Mình gặp nhau lúc hai rưỡi nhé.', more: 'Dễ nhất và ai cũng hiểu: đọc **giờ + phút**: two thirty, nine fifteen, four forty-five.', anh: 'two-thirty' },
+          { w: 'quarter past · quarter to', pos: 'phr', ipa: '/ˈkwɔːrtər pæst/ · /ˈkwɔːrtər tuː/', vi: 'hơn 15 phút · kém 15 phút', ex: "I'll be there at quarter to four.", exVi: 'Mình sẽ tới lúc bốn giờ kém mười lăm.', more: 'quarter past three = 3:15 · quarter to four = 3:45' },
+          { w: 'visitor pass', pos: 'n', ipa: '/ˈvɪzɪtər pæs/', vi: 'thẻ khách', ex: "Here's your visitor pass. Please wear it at all times.", exVi: 'Thẻ khách của chị đây. Xin đeo thẻ suốt thời gian ở đây.', anh: 'identification-card' },
+        ],
+      },
+
+      { t: 'h', text: '3. Cùng một ý, ba mức: thân · trung tính · trang trọng' },
+      {
+        t: 'table',
+        head: ['Ý', 'Thân (bạn bè)', 'Trung tính (đồng nghiệp)', 'Trang trọng (sếp, khách)'],
+        rows: [
+          ['Xin nhắc lại', 'Sorry? · Say again?', 'Sorry, could you say that again?', "I'm sorry, would you mind repeating that?"],
+          ['Xin nói chậm', 'Slow down a bit!', 'Could you speak a bit more slowly?', 'Would you mind speaking a little more slowly, please?'],
+          ['Chưa nghe kịp', "Didn't catch that.", "Sorry, I didn't catch that.", "I'm afraid I didn't quite catch that."],
+          ['Hỏi cách viết', "How's that spelled?", 'How do you spell that?', 'Could you spell that for me, please?'],
+          ['Hỏi nghĩa', "What's a hyphen?", 'What does "hyphen" mean?', 'Could you explain what "hyphen" means?'],
+          ['Xác nhận', 'Two thirty, yeah?', "So that's two thirty, right?", 'Just to confirm, that is two thirty. Is that correct?'],
+          ['Xin chờ', 'Hang on. · One sec.', 'One moment, please.', 'Could you give me a moment, please?'],
+        ],
+        caption: 'Đừng dùng **"What?"**, **"Repeat!"**, **"Again!"** với bất kỳ ai: cả ba đều nghe như ra lệnh. Thêm **Sorry** ở đầu và **please** ở cuối là đủ lịch sự.',
+      },
+
+      { t: 'h', text: '4. 🧱 Câu này ghép thế nào' },
+      {
+        t: 'p',
+        text: 'Hôm qua bạn dùng câu kể (I\'m Huy). Hôm nay toàn **câu hỏi**. Tiếng Việt chỉ cần thêm "không?", "à?" vào cuối câu. Tiếng Anh phải đưa một **từ hỏi nhỏ** (is, do, does, did, could) ra **trước chủ ngữ**.',
+      },
+      {
+        t: 'patterns',
+        rows: [
+          {
+            formula: 'Is / Are + S + …?',
+            vi: 'Câu hỏi có – không với be: đảo be lên đầu. Dùng để đoán và nhờ xác nhận.',
+            examples: [
+              { en: 'Is that Chang?', vi: 'Đó là Chang phải không?' },
+              { en: 'Is it in the same room?', vi: 'Vẫn ở phòng cũ à?' },
+              { en: 'Is that right?', vi: 'Thế có đúng không?' },
+            ],
+          },
+          {
+            formula: 'Do / Does / Did + S + V…?',
+            vi: 'Câu hỏi có – không với động từ thường: thêm do / does / did lên đầu, động từ chính giữ nguyên.',
+            examples: [
+              { en: 'Did you say fifteen or fifty?', vi: 'Anh nói mười lăm hay năm mươi?' },
+              { en: 'Do you mean two thirty?', vi: 'Ý chị là hai rưỡi ạ?' },
+              { en: 'Does it start at nine?', vi: 'Nó bắt đầu lúc chín giờ à?' },
+            ],
+          },
+          {
+            formula: 'Wh- + do / does / is + S + …?',
+            vi: 'Hỏi thông tin: từ hỏi (What, How, When, Which, Who) đứng đầu, rồi vẫn là từ hỏi nhỏ, rồi chủ ngữ.',
+            examples: [
+              { en: 'What does "hyphen" mean?', vi: '"Hyphen" nghĩa là gì?' },
+              { en: 'How do you spell "kestrel"?', vi: '"Kestrel" đánh vần thế nào?' },
+              { en: 'When is it now?', vi: 'Giờ là khi nào?' },
+            ],
+          },
+          {
+            formula: 'Could you + V + …(, please)?',
+            vi: 'Nhờ ai làm gì một cách lịch sự. Sau Could you là động từ nguyên mẫu, không "to".',
+            examples: [
+              { en: 'Could you say that again, please?', vi: 'Anh nói lại giúp em được không ạ?' },
+              { en: 'Could you speak a bit louder?', vi: 'Anh nói to hơn một chút được không?' },
+              { en: 'Could you type it in the chat for me?', vi: 'Anh gõ vào khung chat giúp em được không?' },
+            ],
+          },
+        ],
+      },
+      {
+        t: 'rule',
+        formula: '(Wh-) + do / does / did / is / are / could + S + V …?',
+        vi: 'Mọi câu hỏi tiếng Anh đều có một "từ hỏi nhỏ" đứng trước chủ ngữ. Thiếu nó là sai: ~~What means hyphen?~~ → What **does** hyphen mean?',
+      },
+      {
+        t: 'note',
+        title: 'Nối câu hôm nay: or và so',
+        items: [
+          '**or** (hay là) đưa ra hai lựa chọn cho người kia chọn: "Fifteen **or** fifty?" · "Lift B **or** lift D?" · "Tuesday **or** Thursday?" Đây là cách hỏi lại **nhanh nhất**.',
+          '**so** (vậy là) mở đầu câu tóm tắt lại điều vừa nghe: "**So** that\'s the fifteenth floor, lift B." Người kia nghe thấy "So…" là biết bạn đang xác nhận.',
+          'Ghép cả hai: "**So** is it Thursday the thirteenth **or** the thirtieth?"',
+          'Nhớ từ hôm qua: **and** nối hai ý cùng chiều. "Three one eight, **and** then?"',
+        ],
+      },
+      {
+        t: 'quiz',
+        id: 'gtd2-noi-ghep-dich',
+        title: 'Dịch sang tiếng Anh (5 câu)',
+        kind: 'translate',
+        grammar: 'Could you + V…? · What does … mean? · How do you spell…? · Did you say A or B?',
+        items: [
+          { q: 'Xin lỗi, bạn nói lại được không?', hint: 'could, say, again', answers: ['Sorry, could you say that again?', 'Sorry, could you say that again, please?', 'Sorry, can you say that again?', 'Sorry, could you repeat that?', 'Sorry, could you repeat that, please?', 'Could you say that again?', 'Could you say that again, please?'] },
+          { q: '"Invite" nghĩa là gì?', hint: 'mean', answers: ['What does "invite" mean?', 'What does invite mean?', "What does 'invite' mean?"] },
+          { q: 'Tên bạn đánh vần thế nào?', hint: 'spell, your name', answers: ['How do you spell your name?', 'How do you spell that?', 'Could you spell your name?', 'Could you spell your name, please?', 'Could you spell your name for me?'] },
+          { q: 'Bạn nói thứ Ba hay thứ Năm?', hint: 'did, say, or', answers: ['Did you say Tuesday or Thursday?', 'Sorry, did you say Tuesday or Thursday?'] },
+          { q: 'Vậy là hai giờ rưỡi, đúng không?', hint: "so, that's, right", answers: ["So that's two thirty, right?", "So that's half past two, right?", "So that's 2:30, right?", "So that's two thirty. Is that right?", "So that's half past two. Is that right?", "So it's two thirty, right?", "So it's half past two, right?"] },
+        ],
+      },
+
+      { t: 'h', text: '5. Chữ cái, số, email, giờ: đọc cho đúng' },
+      {
+        t: 'table',
+        head: ['Chữ', 'Đọc', 'Người Việt hay đọc sai thành'],
+        rows: [
+          ['A', '/eɪ/ ("ây")', '"a"'],
+          ['E', '/iː/ ("i" dài)', '"e" hoặc "ê"'],
+          ['I', '/aɪ/ ("ai")', '"i" (nghe thành chữ E)'],
+          ['G', '/dʒiː/ ("chi" rung)', 'nhầm với J'],
+          ['J', '/dʒeɪ/ ("chây" rung)', 'nhầm với G'],
+          ['H', '/eɪtʃ/ ("ây-ch")', '"hát"'],
+          ['K', '/keɪ/ ("khây")', '"ca"'],
+          ['Q', '/kjuː/ ("khiu")', '"quy"'],
+          ['R', '/ɑːr/ ("a" cong lưỡi)', '"rờ" hoặc "e-rờ"'],
+          ['W', '/ˈdʌbl juː/ ("đắp-bồ-diu")', '"vê kép"'],
+          ['X', '/eks/', '"ích-xì"'],
+          ['Y', '/waɪ/ ("oai")', '"i dài"'],
+          ['Z', 'Mỹ: /ziː/ · Anh, Úc, Canada: /zed/', '"dét"'],
+        ],
+        caption: 'Ba chữ nguy hiểm nhất là **A – E – I**: người Việt đọc "i" cho chữ I, người nghe sẽ viết chữ **E**. Tên có chữ I (Linh, Minh, Vi) phải đọc **"ai"**.',
+      },
+      {
+        t: 'table',
+        head: ['Chữ — từ', 'Chữ — từ', 'Chữ — từ', 'Chữ — từ'],
+        rows: [
+          ['A — Alpha', 'B — Bravo', 'C — Charlie', 'D — Delta'],
+          ['E — Echo', 'F — Foxtrot', 'G — Golf', 'H — Hotel'],
+          ['I — India', 'J — Juliett', 'K — Kilo', 'L — Lima'],
+          ['M — Mike', 'N — November', 'O — Oscar', 'P — Papa'],
+          ['Q — Quebec', 'R — Romeo', 'S — Sierra', 'T — Tango'],
+          ['U — Uniform', 'V — Victor', 'W — Whiskey', 'X — X-ray'],
+          ['Y — Yankee', 'Z — Zulu', '', ''],
+        ],
+        caption: 'Bảng đánh vần quốc tế (dùng ở sân bay, tổng đài, quầy lễ tân). Không cần thuộc hết. Chỉ cần thuộc **các chữ trong tên bạn**. Quên thì dùng từ nào dễ cũng được: "B as in **boy**", "N as in **November**", "M as in **Monday**".',
+      },
+      {
+        t: 'examples',
+        items: [
+          { en: "It's Trang. T as in Tango, R, A, N, G.", vi: 'Tên: đọc cả tên trước, rồi đánh vần từng chữ, chữ dễ nhầm thì thêm "as in".' },
+          { en: 'My surname is Nguyen. N, G, U, Y, E, N.', vi: 'Họ Nguyễn: đánh vần luôn, đừng đợi người ta hỏi.' },
+          { en: 'Oh nine three, three one eight, double two, six four.', vi: 'Số điện thoại 093 318 2264: đọc từng số, ngắt theo nhóm 3–4 số.' },
+          { en: 'Trang dot le, at kestrel labs, dot com.', vi: 'Email trang.le@kestrellabs.com.' },
+          { en: 'Two thirty. Half past two.', vi: '2:30 có hai cách đọc. Cách đầu dễ hơn và ai cũng hiểu.' },
+          { en: 'Thursday the thirtieth. Three oh.', vi: 'Ngày 30: thêm "three oh" để khỏi nhầm với ngày 13.' },
+        ],
+      },
+      {
+        t: 'note',
+        title: 'Mẹo: đánh vần tên Việt cho người nước ngoài',
+        items: [
+          'Chuẩn bị sẵn **một câu đánh vần tên mình** và tập cho trôi. Bạn sẽ dùng câu này hàng trăm lần: quầy lễ tân, khách sạn, sân bay, họp online.',
+          'Bỏ dấu khi đánh vần: Trần → T-R-A-N. Không cần giải thích dấu huyền, dấu sắc.',
+          'Họ **Nguyễn**: người nước ngoài gần như không đọc được. Cứ nói "It\'s like **\'win\'**" là họ gọi được ngay, đủ dùng.',
+          'Đọc **chậm**, ngừng một nhịp sau mỗi 3 chữ cái hoặc 3–4 chữ số.',
+        ],
+      },
+
+      { t: 'h', text: '6. Người Việt hay nói sai' },
+      {
+        t: 'note',
+        title: 'Người Việt hay nói sai — 8 lỗi thật',
+        items: [
+          '~~Can you speak again?~~ → **Sorry, could you say that again?** "speak" là hành động nói nói chung. Nhắc lại một câu thì dùng **say that**.',
+          '~~Repeat, please! · Again!~~ → **Could you repeat that, please?** Một động từ đứng trơ trọi là câu ra lệnh.',
+          '~~What?~~ → **Sorry?** "What?" với người lạ nghe rất cộc. "Sorry?" lên giọng, cùng nghĩa mà lịch sự.',
+          '~~I don\'t hear.~~ → **I didn\'t catch that.** (chưa nghe kịp lời) hoặc **I can\'t hear you.** (không nghe thấy tiếng, do ồn hoặc mic hỏng). Hai câu khác nghĩa nhau.',
+          '~~What means "hyphen"?~~ → **What does "hyphen" mean?** Câu hỏi cần **does**, và "mean" đứng cuối.',
+          '~~How to spell?~~ → **How do you spell that?** "How to…" không phải một câu hỏi hoàn chỉnh trong tiếng Anh.',
+          '~~Please speak slow.~~ → **Could you speak more slowly, please?** Cần **more slowly**, và thêm Could you cho mềm.',
+          '~~Yes, yes. OK.~~ (trong khi chưa hiểu) → **Sorry, I\'m not sure I understand.** Đây là lỗi **nguy hiểm nhất**, không phải lỗi ngữ pháp. Người ta tin là bạn đã hiểu và sẽ không nói lại nữa.',
+        ],
+      },
+
+      { t: 'h', text: '7. 🙋 Ngôn ngữ cơ thể khi không hiểu' },
+      {
+        t: 'p',
+        text: 'Khi chưa hiểu, mặt và tay của bạn nói trước miệng. Dùng đúng cử chỉ thì người đối diện **tự nói chậm lại** trước cả khi bạn kịp hỏi.',
+      },
+      {
+        t: 'hinh',
+        title: 'Cử chỉ đi cùng câu cứu nguy',
+        items: [
+          { anh: 'ear', w: 'Sorry?', ro: '/ˈsɑːri/', vi: 'Nghiêng đầu, hơi đưa tai về phía người nói. Ai cũng hiểu: "tôi chưa nghe rõ".' },
+          { anh: 'face-with-raised-eyebrow', w: "Sorry, I didn't catch that.", ro: '', vi: 'Nhướn mày, hơi nheo mắt. Đừng cau mày: cau mày dễ bị hiểu là khó chịu.' },
+          { anh: 'raised-hand', w: 'One moment, please.', ro: '/ˌwʌn ˈmoʊmənt pliːz/', vi: 'Giơ nhẹ bàn tay ngang ngực để xin dừng. Giơ thấp và ngắn, không đưa sát mặt người ta.' },
+          { anh: 'palm-down-hand', w: 'Could you speak a bit more slowly?', ro: '', vi: 'Bàn tay úp, hạ xuống chầm chậm = "chậm lại một chút".' },
+          { anh: 'pinching-hand', w: 'Just a little slower, please.', ro: '', vi: 'Hai ngón tay chụm gần nhau = "một chút thôi". Đi kèm nụ cười.' },
+          { anh: 'writing-hand', w: 'Could you write it down for me?', ro: '', vi: 'Làm động tác viết lên lòng bàn tay = xin bản viết.' },
+          { anh: 'person-shrugging', w: "I'm not sure I understand.", ro: '', vi: 'Nhún vai nhẹ, hai tay mở. Ở phương Tây nghĩa là "tôi không rõ", không có ý bất cần.' },
+          { anh: 'grinning-face-with-sweat', w: '(đừng làm) Yes, yes…', ro: '', vi: 'Cười trừ rồi gật khi chưa hiểu. Người Việt làm vậy vì ngại, người nước ngoài hiểu là "tôi hiểu rồi".' },
+          { anh: 'ok-hand', w: 'Got it.', ro: '/ˈɡɑːt ɪt/', vi: 'Ở Anh, Mỹ, Việt Nam = OK. Nhưng ở Brazil và Thổ Nhĩ Kỳ là cử chỉ tục, ở Nhật còn có nghĩa "tiền". Không chắc thì dùng ngón cái.' },
+          { anh: 'victory-hand', w: 'Two, please.', ro: '', vi: 'Ra dấu số 2: xoay **lòng bàn tay ra ngoài**. Ở Anh, Ireland, Úc, New Zealand, chữ V với mu bàn tay hướng ra ngoài là cử chỉ chửi.' },
+        ],
+      },
+      {
+        t: 'table',
+        head: ['Việc', 'Việt Nam', 'Anh · Mỹ · Úc', 'Nhật'],
+        rows: [
+          ['Gật đầu khi nghe', 'Gật = "em đang nghe", chưa chắc đã hiểu.', 'Gật = **tôi hiểu / tôi đồng ý**. Gật mà không hiểu sẽ gây hiểu lầm.', 'Gật và nói "hai" liên tục = "tôi đang nghe", **không** có nghĩa là đồng ý.'],
+          ['Cười khi không hiểu', 'Cười trừ cho đỡ ngại.', 'Cười = thấy vui hoặc đã hiểu. Họ sẽ nói tiếp, nhanh hơn.', 'Cũng hay cười để che lúng túng, giống Việt Nam.'],
+          ['Ngắt lời để hỏi lại', 'Ngại ngắt lời người trên.', 'Ngắt lời để hỏi lại là **bình thường**, miễn có "Sorry".', 'Ít ngắt lời. Thường đợi người kia dừng rồi mới hỏi.'],
+          ['Im lặng', 'Im lặng = đang nghĩ, hoặc ngại.', 'Im lặng quá 3–4 giây làm họ sốt ruột. Nói "Let me think" để giữ chỗ.', 'Im lặng lâu là bình thường, là đang suy nghĩ kỹ.'],
+          ['Đếm bằng tay', 'Số 1 = ngón trỏ.', 'Mỹ, Anh: số 1 = ngón trỏ. Ở Đức, Pháp: số 1 = **ngón cái**.', 'Số 1 = ngón trỏ.'],
+        ],
+        caption: 'Làm việc với khách Nhật: họ gật và nói "hai, hai" **không có nghĩa là họ đã đồng ý**. Cuối buổi luôn đọc lại để xác nhận: "So that\'s…, is that right?"',
+      },
+
+      { t: 'h', text: '8. Phát âm: -teen / -ty, chữ cái dễ nhầm, lên giọng khi hỏi' },
+      {
+        t: 'p',
+        text: '**thirTEEN** nhấn ở cuối và có /n/ rõ. **THIRty** nhấn ở đầu, đuôi ngắn (người Mỹ đọc gần như "thơ-đi"). Người Việt hay bỏ /n/ cuối nên hai từ nghe y hệt nhau. Câu hỏi có – không và "Sorry?" thì **lên giọng** ở cuối.',
+      },
+      {
+        t: 'phatam',
+        id: 'gtd2-phat-am',
+        title: 'Luyện phát âm — số -teen / -ty, chữ cái dễ nhầm, ngữ điệu câu hỏi',
+        note: 'Dòng 1–4 đọc chậm, phóng đại chỗ nhấn. Dòng 5–8 là câu hỏi lại: lên giọng ở từ cuối.',
+        items: [
+          { text: 'thirteen, thirty', ipa: 'θɝːtiːn θɝːti', vi: 'thirTEEN: nhấn sau, có /n/ · THIRty: nhấn trước, không có /n/' },
+          { text: 'fifteen, fifty', ipa: 'fɪftiːn fɪfti', vi: 'fifTEEN kéo dài /iːn/ · FIFty ngắn gọn' },
+          { text: 'A, E, I', ipa: 'eɪ iː aɪ', vi: 'A = "ây" · E = "i" · I = "ai"' },
+          { text: 'G, J, H', ipa: 'dʒiː dʒeɪ eɪtʃ', vi: 'G = /dʒiː/ · J = /dʒeɪ/ · H = /eɪtʃ/, có âm /tʃ/ cuối' },
+          { text: 'Sorry, could you say that again?', ipa: 'sɑːri kəd ju seɪ ðæt əɡen', vi: 'could you đọc nhẹ, dính nhau · lên giọng ở "again"' },
+          { text: 'How do you spell that?', ipa: 'haʊ də ju spel ðæt', vi: 'spell: bật rõ cụm /sp/, có /l/ cuối · câu hỏi Wh- thì xuống giọng' },
+          { text: 'Did you say fifteen or fifty?', ipa: 'dɪd ju seɪ fɪftiːn ɔːr fɪfti', vi: 'lên giọng ở fifteen, xuống giọng ở fifty' },
+          { text: "So that's two thirty, right?", ipa: 'soʊ ðæts tuː θɝːti raɪt', vi: "that's có /ts/ cuối · lên giọng ở \"right\"" },
+        ],
+      },
+
+      { t: 'h', text: '9. Nhập vai: làm thẻ phòng gym của toà nhà' },
+      {
+        t: 'dialogue',
+        title: 'Ở quầy phòng gym — nhân viên nói nhanh, Trang phải hỏi lại',
+        lines: [
+          { who: 'Staff', role: 'b', text: 'Hi! Are you here to sign up?', vi: 'Chào chị! Chị tới đăng ký ạ?' },
+          { who: 'Trang', role: 'a', text: 'Yes, please. I work on the fifteenth floor.', vi: 'Vâng ạ. Em làm ở tầng mười lăm.' },
+          { who: 'Staff', role: 'b', text: 'Great. Can I get your full name and a contact number?', vi: 'Tuyệt. Cho mình xin họ tên đầy đủ và số liên lạc ạ?' },
+          { who: 'Trang', role: 'a', text: 'Sorry, could you say that again more slowly?', vi: 'Xin lỗi, chị nói lại chậm hơn được không ạ?' },
+          { who: 'Staff', role: 'b', text: 'Sure. Your full name, and your phone number.', vi: 'Được ạ. Họ tên đầy đủ, và số điện thoại của chị.' },
+          { who: 'Trang', role: 'a', text: "It's Le Thu Trang. Trang is T as in Tango, R, A, N, G.", vi: 'Lê Thu Trang ạ. Trang là T như trong Tango, R, A, N, G.' },
+          { who: 'Staff', role: 'b', text: 'Thanks. And the number?', vi: 'Cảm ơn chị. Còn số điện thoại?' },
+          { who: 'Trang', role: 'a', text: "It's oh three six four, double one nine, oh eight five.", vi: 'Không ba sáu bốn, một một chín, không tám năm.' },
+          { who: 'Staff', role: 'b', text: 'Lovely. Your locker is number forty, and the code is in your welcome email.', vi: 'Tốt quá. Tủ đồ của chị là số bốn mươi, còn mã thì có trong email chào mừng.' },
+          { who: 'Trang', role: 'a', text: 'Sorry, did you say fourteen or forty?', vi: 'Xin lỗi, chị nói mười bốn hay bốn mươi ạ?' },
+          { who: 'Staff', role: 'b', text: 'Forty. Four oh.', vi: 'Bốn mươi. Bốn không.' },
+          { who: 'Trang', role: 'a', text: "So that's locker forty, and the code is in the email. Got it. Thank you!", vi: 'Vậy là tủ số bốn mươi, mã ở trong email. Em hiểu rồi. Cảm ơn chị!' },
+        ],
+      },
+      {
+        t: 'build',
+        id: 'gtd2-noi-ghep-luot',
+        title: 'Đến lượt bạn — ghép câu của Trang (5 câu)',
+        items: [
+          { vi: 'Nhân viên nói quá nhanh → Bạn: Xin lỗi, chị nói lại chậm hơn được không?', chips: ['Sorry,', 'could', 'you', 'say', 'that', 'again', 'more', 'slowly?', 'speak', 'slow'], answer: ['Sorry,', 'could', 'you', 'say', 'that', 'again', 'more', 'slowly?'] },
+          { vi: 'Nhân viên hỏi tên → Bạn: Trang là T như trong Tango, R, A, N, G.', chips: ['Trang', 'is', 'T', 'as', 'in', 'Tango,', 'R,', 'A,', 'N,', 'G.', 'like', 'for'], answer: ['Trang', 'is', 'T', 'as', 'in', 'Tango,', 'R,', 'A,', 'N,', 'G.'] },
+          { vi: 'Bạn nghe không rõ số tủ → Bạn: Chị nói mười bốn hay bốn mươi ạ?', chips: ['Did', 'you', 'say', 'fourteen', 'or', 'forty?', 'and', 'Do'], answer: ['Did', 'you', 'say', 'fourteen', 'or', 'forty?'] },
+          { vi: 'Bạn gặp một từ lạ → Bạn: "Locker" nghĩa là gì ạ?', chips: ['What', 'does', '"locker"', 'mean?', 'is', 'means'], answer: ['What', 'does', '"locker"', 'mean?'] },
+          { vi: 'Bạn chốt lại → Bạn: Vậy là tủ số bốn mươi. Đúng không ạ?', chips: ['So', "that's", 'locker', 'forty.', 'Is', 'that', 'right?', 'true', 'it'], answer: ['So', "that's", 'locker', 'forty.', 'Is', 'that', 'right?'] },
+        ],
+      },
+      {
+        t: 'speak',
+        id: 'gtd2-noi-tra-loi',
+        part: '1',
+        questions: [
+          'Can I get your full name, please? And how do you spell it?',
+          "What's your phone number?",
+          "And what's your email address?",
+          'What time are you free tomorrow?',
+        ],
+      },
+      {
+        t: 'note',
+        title: 'Nhập vai với Gia sư AI',
+        items: [
+          'Mở trang **/language/en/roleplay**, dán đoạn đề bài dưới đây. Mục tiêu của lượt này là **hỏi lại ít nhất 4 lần**. Hỏi lại càng nhiều càng tốt.',
+          '"You are a busy receptionist at an office building in Ho Chi Minh City. I am a visitor. Speak at normal speed, a little fast. Ask for my full name and ask me to spell it. Ask which company I am visiting. Tell me a floor number that is easy to mishear (for example fifteen or fifty), a lift letter, and a meeting time using British style such as half two or quarter to four. Give me a phone number to call if I get lost, using double and oh. Do not slow down unless I ask you to. If I ask you to repeat, slow down, or spell something, do it kindly. At the end, ask me to read everything back. Then tell me in Vietnamese which details I got right and which I got wrong."',
+          'Lượt hai: đổi vai. Bạn là lễ tân, AI là khách. Bạn phải hỏi tên, nhờ đánh vần và đọc lại để xác nhận.',
+        ],
+      },
+    ],
+  },
+
+  /* ═══════════════════════════ BÀI 3 — VIẾT ═══════════════════════════ */
+  {
+    id: 'gtd2-viet',
+    kind: 'writing',
+    title: 'Nhắn xác nhận tên, số điện thoại, giờ hẹn',
+    goal: 'Viết được tin nhắn ngắn để xác nhận giờ hẹn, gửi đúng tên và số điện thoại, hỏi lại thông tin chưa rõ, ở cả mức thân mật và trang trọng.',
+    minutes: 18,
+    blocks: [
+      {
+        t: 'recap',
+        title: 'Vì sao phải nhắn xác nhận',
+        items: [
+          'Nghe xong chưa chắc đã đúng. **Một tin nhắn xác nhận** biến điều bạn nghe thành chữ, sai thì người kia sửa ngay.',
+          'Tin xác nhận tốt có 3 phần: **chào ngắn → thông tin (thứ, ngày, giờ, nơi) → câu hỏi "đúng không?"**.',
+          'Hôm nay bạn viết 4 loại: xác nhận giờ hẹn · gửi tên và số điện thoại · hỏi lại chỗ chưa rõ · sửa thông tin mình gửi sai.',
+          'Mỗi loại có hai bản đặt cạnh nhau: **thân mật** (đồng nghiệp, bạn) và **trang trọng** (khách, người chưa quen).',
+          'Dùng lại cụm của bài Đọc Ngày 1: Hi + tên, Thanks, Looking forward to…',
+        ],
+      },
+
+      { t: 'h', text: '1. Bốn mẫu tin, mỗi mẫu hai mức' },
+      {
+        t: 'sodo',
+        kind: 'compare',
+        title: 'Mẫu 1 — Xác nhận giờ hẹn',
+        caption: 'Bản thân mật bỏ được chủ ngữ và dùng dấu chấm than. Bản trang trọng viết đủ câu và ghi cả tháng.',
+        cols: [
+          {
+            title: 'Thân mật (nhắn Megan)',
+            anh: 'speech-balloon',
+            items: [
+              'Hi Megan,',
+              'Just to check: Thursday the 30th at 2:30 pm, room 13. Is that right?',
+              'Thanks!',
+              'Trang',
+            ],
+          },
+          {
+            title: 'Trang trọng (email cho khách)',
+            anh: 'e-mail',
+            items: [
+              'Dear Ms Hall,',
+              'I am writing to confirm our meeting on Thursday 30 April at 2:30 pm in room 13.',
+              'Could you please let me know if this is correct?',
+              'Kind regards,',
+              'Le Thu Trang',
+            ],
+          },
+        ],
+      },
+      {
+        t: 'sodo',
+        kind: 'compare',
+        title: 'Mẫu 2 — Gửi tên và số điện thoại',
+        caption: 'Viết tên theo đúng thứ tự người ta sẽ gõ vào hệ thống, và nói rõ đâu là họ.',
+        cols: [
+          {
+            title: 'Thân mật',
+            anh: 'mobile-phone',
+            items: [
+              'Hi Lucas,',
+              "Here's my number: 0364 119 08x.",
+              'My full name is Le Thu Trang (Trang is my first name).',
+              'Thanks!',
+            ],
+          },
+          {
+            title: 'Trang trọng',
+            anh: 'identification-card',
+            items: [
+              'Dear Mr Martin,',
+              'Please find my details below.',
+              'Full name: Le Thu Trang (family name: Le)',
+              'Mobile: +84 364 119 08x',
+              'Best regards,',
+              'Le Thu Trang',
+            ],
+          },
+        ],
+      },
+      {
+        t: 'sodo',
+        kind: 'compare',
+        title: 'Mẫu 3 — Hỏi lại chỗ chưa rõ',
+        caption: 'Hỏi đúng một chỗ, và cho sẵn hai lựa chọn để người kia trả lời bằng một từ.',
+        cols: [
+          {
+            title: 'Thân mật',
+            anh: 'red-question-mark',
+            items: [
+              'Hi Megan, sorry, one quick question.',
+              'Is the session in room 13 or room 30?',
+              "I didn't catch it earlier. Thanks!",
+            ],
+          },
+          {
+            title: 'Trang trọng',
+            anh: 'memo',
+            items: [
+              'Dear Ms Hall,',
+              'Could I just check one detail?',
+              'Is the session in room 13 or room 30?',
+              'Thank you for your help.',
+              'Kind regards,',
+              'Le Thu Trang',
+            ],
+          },
+        ],
+      },
+      {
+        t: 'sodo',
+        kind: 'compare',
+        title: 'Mẫu 4 — Sửa thông tin mình gửi sai',
+        caption: 'Xin lỗi một lần, đưa thông tin đúng, xong. Không cần giải thích dài.',
+        cols: [
+          {
+            title: 'Thân mật',
+            anh: 'grinning-face-with-sweat',
+            items: [
+              'Sorry, typo!',
+              'My email is trang.le@kestrellabs.com, not trang.lee.',
+              'Just one E.',
+            ],
+          },
+          {
+            title: 'Trang trọng',
+            anh: 'e-mail',
+            items: [
+              'Dear Mr Martin,',
+              'Apologies, there was a mistake in my last message.',
+              'My correct email address is trang.le@kestrellabs.com.',
+              'Best regards,',
+              'Le Thu Trang',
+            ],
+          },
+        ],
+      },
+      {
+        t: 'note',
+        title: 'Ghi nhớ về số điện thoại trong bài mẫu',
+        items: [
+          'Chữ **x** ở cuối số trong mẫu là để che số. Khi viết thật, bạn ghi đủ số của mình.',
+          'Gửi cho người ở nước ngoài: thêm mã nước **+84** và bỏ số 0 đầu: 0364… → +84 364…',
+          'Tách số thành nhóm 3–4 chữ số cho dễ đọc: 0364 119 08x, không viết liền một dãy.',
+        ],
+      },
+
+      { t: 'h', text: '2. Khung câu để viết tin xác nhận' },
+      {
+        t: 'patterns',
+        rows: [
+          {
+            formula: 'Just to check / Just to confirm: + thông tin',
+            vi: 'Mở đầu tin xác nhận. "check" thân hơn, "confirm" trang trọng hơn.',
+            examples: [
+              { en: 'Just to check: Thursday at 2:30 pm, right?', vi: 'Hỏi lại cho chắc: thứ Năm lúc 2 rưỡi chiều, đúng không?' },
+              { en: "Just to confirm, we're meeting in room 13.", vi: 'Xin xác nhận, mình họp ở phòng 13.' },
+              { en: 'Just to confirm, my number is 0364 119 08x.', vi: 'Xin xác nhận, số của em là 0364 119 08x.' },
+            ],
+          },
+          {
+            formula: 'Is that right? / Is this correct?',
+            vi: 'Câu hỏi chốt, đặt ở cuối tin.',
+            examples: [
+              { en: 'Room 13 on the 15th floor. Is that right?', vi: 'Phòng 13 ở tầng 15. Đúng không ạ?' },
+              { en: 'Could you let me know if this is correct?', vi: 'Anh/chị báo giúp em thông tin này đúng chưa ạ?' },
+              { en: 'Is it 2:30 or 3:30?', vi: 'Là 2 rưỡi hay 3 rưỡi ạ?' },
+            ],
+          },
+          {
+            formula: 'on + thứ / ngày · at + giờ · in + phòng',
+            vi: 'Ba giới từ của một lịch hẹn. Thứ tự hay dùng: thứ ngày → giờ → nơi.',
+            examples: [
+              { en: 'on Thursday 30 April', vi: 'vào thứ Năm ngày 30 tháng 4' },
+              { en: 'at 2:30 pm', vi: 'lúc 2 giờ 30 chiều' },
+              { en: 'in room 13, on the 15th floor', vi: 'ở phòng 13, tầng 15' },
+            ],
+          },
+        ],
+      },
+      {
+        t: 'rule',
+        formula: 'Chào + Just to confirm: on + ngày, at + giờ, in + nơi. + Is that right?',
+        vi: 'Một tin xác nhận chỉ cần ba dòng: chào, thông tin đủ ngày – giờ – nơi, và một câu hỏi chốt.',
+      },
+      {
+        t: 'table',
+        head: ['Viết gì', 'Nên viết', 'Tránh', 'Vì sao'],
+        rows: [
+          ['Ngày', 'Thursday 30 April · 30 Apr', '30/4 · 4/30', 'Anh đọc 3/4 là ngày 3 tháng 4, Mỹ đọc là ngày 4 tháng 3. Viết tên tháng thì không ai nhầm.'],
+          ['Giờ', '2:30 pm · 14:30', '2h30 · 14h30', 'Chữ "h" là kiểu Việt (và Pháp). Tiếng Anh dùng dấu hai chấm, thêm am / pm.'],
+          ['Buổi', '9:00 am · 9:00 pm', '9:00 (trống)', 'Không có am / pm thì người ở múi giờ khác không biết sáng hay tối.'],
+          ['Múi giờ', '2:30 pm Vietnam time (ICT)', '(bỏ trống)', 'Hẹn với người ở nước khác thì luôn ghi múi giờ.'],
+          ['Tên', 'Le Thu Trang (family name: Le)', 'TRANG LE THU', 'Nói rõ đâu là họ, người ta mới điền đúng ô.'],
+          ['Số điện thoại', '+84 364 119 08x', '036411908x', 'Có mã nước và có khoảng cách thì dễ đọc, dễ bấm gọi.'],
+        ],
+        caption: 'Cách viết ngày, giờ, tên, số để **không ai hiểu nhầm**, dù họ ở Anh, Mỹ hay Nhật.',
+      },
+
+      { t: 'h', text: '3. Tập viết' },
+      {
+        t: 'build',
+        id: 'gtd2-viet-ghep',
+        title: 'Sắp xếp thành câu trong tin nhắn (4 câu)',
+        items: [
+          { vi: 'Hỏi lại cho chắc: thứ Năm lúc 2 rưỡi chiều, đúng không?', chips: ['Just', 'to', 'check:', 'Thursday', 'at', '2:30 pm,', 'right?', 'on', 'in'], answer: ['Just', 'to', 'check:', 'Thursday', 'at', '2:30 pm,', 'right?'] },
+          { vi: 'Buổi họp ở phòng 13 hay phòng 30?', chips: ['Is', 'the', 'session', 'in', 'room 13', 'or', 'room 30?', 'at', 'and'], answer: ['Is', 'the', 'session', 'in', 'room 13', 'or', 'room 30?'] },
+          { vi: 'Tên đầy đủ của em là Lê Thu Trang.', chips: ['My', 'full', 'name', 'is', 'Le', 'Thu', 'Trang.', 'are', 'first'], answer: ['My', 'full', 'name', 'is', 'Le', 'Thu', 'Trang.'] },
+          { vi: 'Anh/chị báo giúp em thông tin này đúng chưa ạ?', chips: ['Could', 'you', 'let', 'me', 'know', 'if', 'this', 'is', 'correct?', 'to', 'tell'], answer: ['Could', 'you', 'let', 'me', 'know', 'if', 'this', 'is', 'correct?'] },
+        ],
+      },
+      {
+        t: 'quiz',
+        id: 'gtd2-viet-dien',
+        title: 'Điền một từ vào tin nhắn (6 câu)',
+        kind: 'fill',
+        grammar: 'on + thứ / ngày · at + giờ · in + phòng',
+        items: [
+          { q: 'See you ___ Thursday!', answers: ['on'] },
+          { q: 'The session starts ___ 2:30 pm.', answers: ['at'] },
+          { q: "We're ___ room 13 this time.", answers: ['in'] },
+          { q: 'Just to ___: is it the 13th or the 30th? (từ trang trọng hơn "check")', answers: ['confirm'] },
+          { q: 'Room 13, 2:30 pm. Is that ___? (đúng)', answers: ['right', 'correct'] },
+          { q: 'Could you ___ me know if this is correct?', answers: ['let'] },
+        ],
+      },
+      {
+        t: 'quiz',
+        id: 'gtd2-viet-dich',
+        title: 'Tự viết 5 tin (dịch Việt → Anh)',
+        kind: 'translate',
+        grammar: 'Just to check / confirm · on, at, in · Is that right? · Could you…?',
+        items: [
+          { q: '(Nhắn bạn) Hỏi lại cho chắc: 9 giờ sáng mai, đúng không?', hint: 'just to check, tomorrow, right', answers: ['Just to check: 9 am tomorrow, right?', 'Just to check: tomorrow at 9 am, right?', 'Just to check, 9 am tomorrow, right?', 'Just to check, tomorrow at 9 am, right?', 'Just to check: 9:00 am tomorrow, right?', 'Just to check: tomorrow at 9:00 am, right?', 'Just to check: tomorrow at 9, right?', 'Just to check: 9 tomorrow morning, right?', 'Just to check: nine tomorrow morning, right?'] },
+          { q: 'Số điện thoại của mình đây: 0905 318 226.', hint: "here's, number", answers: ["Here's my number: 0905 318 226.", 'Here is my number: 0905 318 226.', "Here's my phone number: 0905 318 226.", 'Here is my phone number: 0905 318 226.', 'My number is 0905 318 226.', 'My phone number is 0905 318 226.'] },
+          { q: 'Xin lỗi, buổi họp là thứ Ba hay thứ Năm?', hint: 'sorry, meeting, or', answers: ['Sorry, is the meeting on Tuesday or Thursday?', 'Sorry, is the meeting on Tuesday or on Thursday?', 'Sorry, is the meeting Tuesday or Thursday?', 'Sorry, is the meeting on Tuesday or Thursday'] },
+          { q: 'Họ của em là Lê, L-E.', hint: 'family name / surname / last name', answers: ['My family name is Le, L-E.', 'My surname is Le, L-E.', 'My last name is Le, L-E.', 'My family name is Le. L-E.', 'My surname is Le. L-E.', 'My last name is Le. L-E.'] },
+          { q: '(Trang trọng) Anh/chị xác nhận giúp em giờ họp được không ạ?', hint: 'could you, confirm, the meeting time', answers: ['Could you confirm the meeting time?', 'Could you confirm the meeting time, please?', 'Could you please confirm the meeting time?', 'Could you confirm the time of the meeting?', 'Could you confirm the time of the meeting, please?', 'Could you please confirm the time of the meeting?'] },
+        ],
+      },
+      {
+        t: 'note',
+        title: 'Mẹo: 4 việc soát trước khi bấm gửi',
+        items: [
+          '**Thứ có khớp với ngày không?** Mở lịch ra nhìn. "Thursday 30" mà ngày 30 lại là thứ Sáu thì người nhận phải hỏi lại.',
+          '**Có am / pm chưa?** Hẹn với người ở nước khác thì thêm múi giờ.',
+          '**Tên người nhận viết đúng chưa?** Megan, không phải Meghan. Viết sai tên người ta là điều họ nhớ lâu nhất.',
+          '**Có câu hỏi chốt chưa?** Thiếu "Is that right?" thì người kia có thể đọc xong rồi không trả lời.',
+        ],
+      },
+    ],
+  },
+
+  /* ═══════════════════════════ BÀI TẬP ═══════════════════════════ */
+  {
+    id: 'gtd2-bai-tap',
+    kind: 'homework',
+    title: 'Bài tập Ngày 2',
+    goal: 'Làm 36 câu có đáp án để dùng thành thạo câu hỏi lại, đánh vần, đọc số và giờ, đồng thời ôn lại lời chào của Ngày 1.',
+    minutes: 25,
+    blocks: [
+      {
+        t: 'recap',
+        title: 'Cách làm',
+        items: [
+          '**5 phần, 36 câu**: chọn câu hợp cảnh · điền từ hỏi · dịch · nghe ghi số và tên · ghép câu.',
+          'Có **7 câu ôn Ngày 1** (đánh dấu "Ôn N1") trộn trong các phần.',
+          'Phần nghe: chỉ gõ **thông tin được hỏi** (số, tên, giờ), không gõ cả câu.',
+          'Đúng từ **29/36** trở lên là sẵn sàng sang Ngày 3. Sai ở phần nào thì nghe lại cảnh tương ứng trong bài Nghe.',
+        ],
+      },
+
+      { t: 'h', text: 'Phần I — Chọn câu hợp cảnh nhất' },
+      {
+        t: 'mcq',
+        id: 'gtd2-bt-chon',
+        title: 'Phần I — Chọn câu hợp cảnh (10 câu)',
+        items: [
+          {
+            q: 'Lễ tân nói rất nhanh và bạn không nghe được gì. Câu nào lịch sự nhất?',
+            options: ['What?', 'Repeat!', 'Sorry, could you say that again, please?', 'Speak again.'],
+            correct: 2,
+            why: '**Sorry + could you + say that again + please**. Ba câu kia nghe như ra lệnh.',
+          },
+          {
+            q: 'Bạn nghe được "three one eight" rồi sót phần sau. Hỏi lại thế nào là nhanh nhất?',
+            options: ['Sorry, can you say everything again from the start?', 'Three one eight, and then?', "I don't understand.", 'Yes, yes, okay.'],
+            correct: 1,
+            why: 'Nhắc lại phần đã nghe rồi hỏi **and then?** Người kia chỉ cần đọc tiếp phần thiếu.',
+          },
+          {
+            q: 'Đồng nghiệp người Anh nói: "See you at half four." Bạn tới lúc mấy giờ?',
+            options: ['3:30', '4:00', '4:30', '4:15'],
+            correct: 2,
+            why: 'Kiểu Anh: half four = **half past four** = 4:30.',
+          },
+          {
+            q: 'Bạn không chắc người ta nói tầng 14 hay tầng 40. Bạn hỏi:',
+            options: ['Is it fourteen and forty?', 'Did you say fourteen or forty?', 'How to say the floor?', 'What floor you say?'],
+            correct: 1,
+            why: 'Khung **Did you say A or B?** Dùng **or** để đưa hai lựa chọn.',
+          },
+          {
+            q: 'Người ta đáp: "Forty. Four oh." Từ "oh" ở đây là gì?',
+            options: ['Tiếng "ồ" ngạc nhiên', 'Chữ cái O', 'Số 0', 'Số 4'],
+            correct: 2,
+            why: 'Trong số phòng, số tầng, số điện thoại, **oh = 0**. "Four oh" = 40.',
+          },
+          {
+            q: 'Bạn gặp từ "underscore" và không biết nghĩa. Bạn hỏi:',
+            options: ['What means "underscore"?', 'What does "underscore" mean?', 'What is mean "underscore"?', '"Underscore" is what?'],
+            correct: 1,
+            why: 'Câu hỏi cần **does** và "mean" đứng cuối: What does … mean?',
+          },
+          {
+            q: 'Phòng rất ồn, bạn cần địa chỉ email chính xác từng ký tự. Cách nào tốt nhất?',
+            options: ['Gật đầu và ghi đại', 'Could you type it in the chat for me, please?', 'Speak louder!', 'I can hear you.'],
+            correct: 1,
+            why: 'Thông tin cần đúng từng ký tự thì **xin bản viết**.',
+          },
+          {
+            q: 'Bạn đã ghi xong và muốn chắc là đúng. Bạn nói:',
+            options: ['Let me read that back.', 'I am finish.', 'You are right.', 'Repeat it.'],
+            correct: 0,
+            why: '**Let me read that back.** rồi đọc lại toàn bộ để người kia xác nhận.',
+          },
+          {
+            q: 'Ôn N1 — Một người bước tới: "Hi there! You must be Trang." Bạn đáp:',
+            options: ['Yes, I must.', "Yes, I'm Trang. Nice to meet you.", 'No, I must not.', 'How do you do?'],
+            correct: 1,
+            why: '"You must be…" là lời đoán. Đáp: **Yes, I\'m…** rồi chào.',
+          },
+          {
+            q: 'Ôn N1 — Hôm qua bạn đã gặp Lucas. Sáng nay gặp lại, bạn nói:',
+            options: ['Nice to meet you, Lucas.', 'Morning, Lucas! Good to see you again.', 'How do you do, Lucas?', "What's your name?"],
+            correct: 1,
+            why: 'Gặp lại thì dùng **see**: Good to see you again.',
+          },
+        ],
+      },
+
+      { t: 'h', text: 'Phần II — Điền từ để hoàn chỉnh câu hỏi' },
+      {
+        t: 'quiz',
+        id: 'gtd2-bt-dien',
+        title: 'Phần II — Điền một từ: do / does / did / is / are / could / how / what (8 câu)',
+        kind: 'fill',
+        grammar: '(Wh-) + do / does / did / is / are / could + S + V…?',
+        items: [
+          { q: 'What ___ "hyphen" mean?', answers: ['does'] },
+          { q: '___ do you spell your surname?', answers: ['How'] },
+          { q: '___ you say thirteen or thirty?', answers: ['Did'] },
+          { q: '___ you speak a bit more slowly, please?', answers: ['Could', 'Can', 'Would'] },
+          { q: '___ that right?', answers: ['Is'] },
+          { q: '___ you mean two thirty?', answers: ['Do', 'Did'] },
+          { q: 'Ôn N1 — Where ___ you from?', answers: ['are'] },
+          { q: 'Ôn N1 — ___ do you do? — I\'m a tester.', answers: ['What'] },
+        ],
+      },
+
+      { t: 'h', text: 'Phần III — Dịch Việt → Anh' },
+      {
+        t: 'quiz',
+        id: 'gtd2-bt-dich',
+        title: 'Phần III — Dịch sang tiếng Anh (7 câu)',
+        kind: 'translate',
+        grammar: 'Could you…? · I didn\'t catch… · So that\'s…, right? · Let me…',
+        items: [
+          { q: 'Xin lỗi, mình chưa nghe kịp câu đó.', hint: 'catch', answers: ["Sorry, I didn't catch that.", "I'm sorry, I didn't catch that.", "Sorry I didn't catch that"] },
+          { q: 'Bạn nói chậm hơn một chút được không?', hint: 'could, speak, more slowly', answers: ['Could you speak a bit more slowly?', 'Could you speak a bit more slowly, please?', 'Could you speak more slowly?', 'Could you speak more slowly, please?', 'Could you speak a little more slowly?', 'Could you speak a little more slowly, please?', 'Can you speak a bit more slowly?', 'Can you speak more slowly?'] },
+          { q: 'Bạn viết ra giúp mình được không?', hint: 'write it down', answers: ['Could you write it down for me?', 'Could you write it down for me, please?', 'Could you write it down?', 'Could you write it down, please?', 'Can you write it down for me?', 'Could you write that down for me?', 'Could you write that down?'] },
+          { q: 'Để mình đọc lại nhé.', hint: 'read, back', answers: ['Let me read that back.', 'Let me read it back.', 'Let me read that back to you.'] },
+          { q: 'Vậy là tầng mười lăm, đúng không?', hint: "so, that's, fifteenth", answers: ["So that's the fifteenth floor, right?", "So that's the 15th floor, right?", "So that's the fifteenth floor. Is that right?", "So that's the 15th floor. Is that right?", "So it's the fifteenth floor, right?", "So it's the 15th floor, right?"] },
+          { q: 'Ôn N1 — Xin lỗi, mình chưa nghe rõ tên bạn.', hint: 'catch, name', answers: ["Sorry, I didn't catch your name.", "I'm sorry, I didn't catch your name."] },
+          { q: 'Ôn N1 — Đây là Trang. Bạn ấy là thực tập sinh mới của bọn mình.', hint: 'this is, our, intern', answers: ["This is Trang. She's our new intern.", 'This is Trang. She is our new intern.', "This is Trang she's our new intern"] },
+        ],
+      },
+
+      { t: 'h', text: 'Phần IV — Nghe và ghi đúng' },
+      {
+        t: 'dictation',
+        id: 'gtd2-bt-chinh-ta',
+        title: 'Phần IV — Nghe và ghi thông tin (6 mục)',
+        items: [
+          { label: 'Tên riêng', spell: 'My name is Duong. D for Delta, U, O, N, G.', answer: 'Duong' },
+          { label: 'Số tầng — ghi bằng số', spell: 'The office is on the thirteenth floor. One three.', answer: '13', alt: ['13th'] },
+          { label: 'Số điện thoại — viết liền', spell: 'Call me on oh nine one two, double four, seven, three oh six.', answer: '0912447306', alt: ['0912 447 306', '0912 44 7 306'] },
+          { label: 'Giờ hẹn — dạng 9:15', spell: "The class starts at quarter past nine.", answer: '9:15', alt: ['9.15', '09:15', '9h15', '9:15 am'] },
+          { label: 'Giờ hẹn — dạng 5:30', spell: "I finish at half five. Sorry, half past five.", answer: '5:30', alt: ['5.30', '17:30', '5h30', '5:30 pm'] },
+          { label: 'Email — viết thường, liền nhau', spell: "It's duong dot nguyen, at northmail, dot com.", answer: 'duong.nguyen@northmail.com' },
+        ],
+      },
+
+      { t: 'h', text: 'Phần V — Ghép câu' },
+      {
+        t: 'build',
+        id: 'gtd2-bt-ghep',
+        title: 'Phần V — Bấm các mảnh theo đúng thứ tự (5 câu)',
+        items: [
+          { vi: 'Xin lỗi, mình chưa nghe kịp đoạn cuối.', chips: ['Sorry,', 'I', "didn't", 'catch', 'the', 'last', 'part.', 'hear', "don't"], answer: ['Sorry,', 'I', "didn't", 'catch', 'the', 'last', 'part.'] },
+          { vi: 'Từ đó đánh vần thế nào?', chips: ['How', 'do', 'you', 'spell', 'that?', 'to', 'does'], answer: ['How', 'do', 'you', 'spell', 'that?'] },
+          { vi: 'Để mình kiểm tra xem mình hiểu đúng chưa.', chips: ['Let', 'me', 'check', "I've", 'got', 'that', 'right.', 'true', 'my'], answer: ['Let', 'me', 'check', "I've", 'got', 'that', 'right.'] },
+          { vi: 'Bạn gõ vào khung chat giúp mình được không?', chips: ['Could', 'you', 'type', 'it', 'in', 'the', 'chat', 'for', 'me?', 'on', 'to'], answer: ['Could', 'you', 'type', 'it', 'in', 'the', 'chat', 'for', 'me?'] },
+          { vi: 'Ôn N1 — Mình quê Huế, và mình học ở TP.HCM.', chips: ["I'm", 'from', 'Hue,', 'and', 'I', 'study', 'in', 'Ho Chi Minh City.', 'at', 'but'], answer: ["I'm", 'from', 'Hue,', 'and', 'I', 'study', 'in', 'Ho Chi Minh City.'] },
+        ],
+      },
+      {
+        t: 'note',
+        title: 'Việc cuối ngày (5 phút)',
+        items: [
+          'Viết ra giấy rồi **nói to 5 lần**: tên bạn kèm đánh vần, số điện thoại của bạn, email của bạn. Đây là ba thứ bạn sẽ phải nói bằng tiếng Anh nhiều nhất trong đời.',
+          'Dán câu này lên màn hình máy tính: **Sorry, could you say that again?**',
+          'Ngày 3: small talk về thời tiết, cuối tuần, sở thích, và cách giữ cho câu chuyện không chết.',
+        ],
+      },
+    ],
+  },
+];

@@ -1,0 +1,9 @@
+tfng	t5d27-doc
+note	t5d27-doc
+match-info	t5d27-doc
+match-feature	t5d27-doc
+summary-box	t5d27-doc
+mcq	t5d27-doc
+ynng	t5d27-doc
+mcq2	t5d27-doc
+ynng	t5d27-bai-tap

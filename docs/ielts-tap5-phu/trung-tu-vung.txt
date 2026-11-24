@@ -1,0 +1,51 @@
+== từ vựng trùng (T5 với tập khác hoặc trong T5): 50
+  restoration → T3N12 T4N9 T5N1
+  curator → T3N12 T4N13 T5N2
+  compound → T3N14 T5N10
+  dismiss → T3N14 T4N19 T5N7
+  dissolve → T3N17 T4N9 T5N5
+  account for → T3N17 T3N24 T4N12 T4N21 T5N7
+  stem from → T3N18 T5N10
+  rule out → T3N18 T4N29 T5N7
+  consent → T3N2 T4N23 T5N9
+  register → T3N2 T3N5 T5N9
+  abstract → T3N20 T5N2
+  underlie → T3N20 T5N10
+  accessible → T3N20 T5N2
+  insulation → T3N24 T3N8 T4N20 T5N5
+  remedy → T3N25 T5N3
+  genre → T3N28 T5N2
+  lose track of time → T3N30 T5N3
+  overlook → T3N5 T4N6 T5N10
+  absorb → T3N7 T5N9
+  weathered → T4N10 T5N7
+  level off → T4N12 T5N7
+  medium → T4N14 T5N2
+  devise → T4N15 T5N1
+  safety net → T4N16 T5N2
+  cut both ways → T4N18 T5N10
+  indispensable → T4N19 T4N29 T5N5
+  quote → T4N2 T5N9
+  mitigate → T4N2 T5N10
+  irreversible → T4N2 T4N23 T5N13
+  invoke → T4N20 T5N13
+  disruptive → T4N20 T5N8
+  the gig economy → T4N20 T5N8
+  start-up → T4N20 T5N8
+  strand → T4N20 T5N5
+  take sth at face value → T4N23 T5N7
+  commission → T4N24 T5N2
+  by-product → T4N24 T5N1
+  economies of scale → T4N26 T5N8
+  scrutiny → T4N27 T5N2
+  intergenerational → T4N28 T5N8
+  means-tested → T4N28 T5N2
+  interchangeable → T4N29 T5N3
+  verdict → T4N3 T5N13
+  trait → T4N4 T5N5
+  dementia → T4N8 T5N8
+  palliative care → T4N8 T5N8
+  the sandwich generation → T4N8 T5N8
+  instructive → T5N11 T5N3
+  coping mechanism → T5N12 T5N14
+  conflict of interest → T5N20 T5N22

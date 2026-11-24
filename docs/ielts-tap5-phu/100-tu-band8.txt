@@ -1,0 +1,140 @@
+# 100 từ tần suất thấp đáng giá band 8 — danh sách đã dùng (để Ngày 28 KHÔNG trùng)
+# PHẦN 1 — Tập 5 Ngày 4 (t5d4-tu-vung), soạn 24/11/2026: 50 từ, 5 nhóm × 10
+# Đã đối chiếu kho app content/ctlanguage/tu-vung/en/nang-cao-c1-*.json + nang-cao-c2-*.json:
+#   từ có dấu * là từ CŨNG có trong kho app (ở đây dạy sâu hơn: collocation, sắc thái, câu band 8, bẫy dùng sai).
+# Đã tránh từ Tập 3–4 đã dạy trong khối vocab (mitigate, stifle, erode, disparity, inherently, predominantly, albeit,
+#   notwithstanding, thereby, frugal, undermine, whereby, offset, low-key) và từ Tập 5 Ngày 2 đã dạy (resonate).
+
+## A. Động từ nêu tác động và lập luận
+exacerbate
+circumvent*
+perpetuate
+curtail*
+hamper
+entrench
+bolster*
+preclude*
+substantiate*
+galvanise*
+
+## B. Tính từ đánh giá
+pervasive*
+tenuous*
+untenable*
+disproportionate
+counterintuitive*
+intractable*
+salient*
+tangible
+conducive*
+commensurate*
+
+## C. Danh từ gọi tên khái niệm
+caveat*
+dichotomy*
+panacea*
+propensity*
+impetus
+ramification
+discrepancy
+complacency*
+onus*
+trade-off
+
+## D. Trạng từ và cụm điều tiết
+ostensibly      (* kho app có tính từ ostensible)
+inadvertently
+invariably
+unequivocally   (* kho app có tính từ unequivocal)
+markedly
+nominally
+hitherto
+by extension
+insofar as*
+seemingly
+
+## E. Từ đời thường cho Speaking
+daunting
+mundane*
+gruelling
+underwhelming
+quirky
+meticulous*
+baffling
+dwindle
+cumbersome
+fiddly
+
+# Cũng dạy trong Ngày 3–4 nhưng KHÔNG tính vào 100 từ (Ngày 28 vẫn nên tránh):
+#   N3 bài đọc: remedy, prevailing, counteract, interchangeable, substitution, provisions, afterthought, instructive, manufacture, trivial
+#   N3 Part 1 (cụm thành ngữ): hit and miss, wind down, grow on (someone), go-to, on the go, can take it or leave it, not much of a…,
+#     hopeless at, can't be bothered, in two minds (about), lose track of time, a homebody
+# Cặp đối chiếu đã nhắc trong bảng sắc thái N4 (chưa dạy thành mục riêng — Ngày 28 dùng được): worsen, widespread, inevitably, fussy, pedantic
+# Gợi ý cho PHẦN 2 (Ngày 28) từ kho app chưa dùng: corroborate, engender, supersede, thwart, vindicate, underscore, burgeoning, ephemeral,
+#   fraught, insidious, myopic, nebulous, spurious, tacit, tantamount, conundrum, crux, impasse, juncture, misnomer, pretext, dearth, plethora…
+
+# ═══════════════════════════════════════════════════════════════════════════════════════════════════════════
+# PHẦN 2 — Tập 5 Ngày 28 (t5d28-tu-vung), soạn 24/11/2026: 50 từ, 5 nhóm × 10.
+# Đã đối chiếu: không trùng phần 1; không trùng mục nào trong mọi khối `vocab` của Tập 3–5 (kể cả Ngày 25–27 viết cùng đợt;
+#   “gripping” bị loại vì Ngày 26 đã dạy ⇒ thay bằng frazzled). Không dùng danh sách “Ngày 28 vẫn nên tránh” ở trên.
+# Từ trong Ngày 28 dùng ở bài mẫu/bảng nhưng KHÔNG tính vào 100 từ: prohibitively expensive (Tập 4 N24), outlet, obsolete.
+
+## A. Động từ nêu tác động và lập luận
+corroborate
+underscore
+engender
+supersede
+thwart
+obviate
+jeopardise
+forestall
+belie
+encroach (on / upon)
+
+## B. Tính từ đánh giá
+burgeoning
+ephemeral
+fraught (with)
+insidious
+myopic
+spurious
+tacit
+tantamount to
+indiscriminate
+contentious
+
+## C. Danh từ gọi tên khái niệm
+conundrum
+crux
+impasse
+juncture
+misnomer
+pretext
+dearth
+plethora
+backlash
+linchpin
+
+## D. Trạng từ và cụm điều tiết
+conceivably
+demonstrably
+purportedly
+admittedly
+unduly
+categorically
+by and large
+on the face of it
+if anything
+in effect
+
+## E. Từ đời thường cho Speaking
+hectic
+exhilarating
+impromptu
+nostalgic
+frazzled
+pricey        (chỉ khi nói)
+stuffy
+rickety
+jaded
+humdrum

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { BookOpen, GraduationCap, Headphones, Flame, NotebookPen, ArrowRight, Sparkles } from 'lucide-react';
+import { BookOpen, GraduationCap, Headphones, Flame, NotebookPen, ArrowRight, Sparkles, Layers, Podcast } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
 import type { LanguageCard } from '@/types/language';
 import { ProgressRing, CardsSkeleton, EmptyState, useLangUser } from '@/components/language/primitives';
@@ -216,6 +216,24 @@ export default function LanguageLanding({ daiApp }: { daiApp?: ReactNode }) {
             <div className={s.duoi}>
               <div className={s.wotd}><WordOfTheDay languageCode={(hocTiep ?? ds[0])!.code} /></div>
               <div className={s.phu}>
+                {/* 24/11/2026: mục của app CT Language trên web — học tiếp trên máy tính, chung tiến độ với điện thoại. */}
+                {(() => {
+                  const c = hocTiep && ['en', 'ja', 'zh'].includes(hocTiep.code) ? hocTiep.code : 'en';
+                  return (
+                    <>
+                      <Link href={`/language/${c}/hoc-tu-vung`} className={s.phuO}>
+                        <Layers size={18} aria-hidden />
+                        <span><b>Học từ vựng</b><small>{c === 'en' ? 'IELTS 0 → 8.0 theo ngày · chủ đề · chuyên ngành' : 'Theo cấp · theo chủ đề'} — như app CT Language</small></span>
+                        <ArrowRight size={15} aria-hidden />
+                      </Link>
+                      <Link href={`/language/${c}/podcast`} className={s.phuO}>
+                        <Podcast size={18} aria-hidden />
+                        <span><b>Podcast theo cấp</b><small>Nghe từng câu, chạm từ để tra, câu hỏi hiểu bài</small></span>
+                        <ArrowRight size={15} aria-hidden />
+                      </Link>
+                    </>
+                  );
+                })()}
                 {isAuthenticated && (
                   <Link href="/language/notebook" className={s.phuO}>
                     <NotebookPen size={18} aria-hidden />

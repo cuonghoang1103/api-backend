@@ -1,0 +1,9 @@
+tfng	t5d13-doc
+note	t5d13-doc
+match-info	t5d13-doc
+match-feature	t5d13-doc
+summary	t5d13-doc
+mcq	t5d13-doc
+ynng	t5d13-doc
+summary-box	t5d13-doc
+mcq	t5d13-nghe

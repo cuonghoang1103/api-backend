@@ -1,0 +1,3 @@
+ynng	t5d11-doc
+mcq	t5d11-doc
+summary-box	t5d11-doc

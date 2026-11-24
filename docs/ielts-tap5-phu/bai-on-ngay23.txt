@@ -1,0 +1,4 @@
+tfng	t5d23-doc
+ynng	t5d23-doc
+mcq	t5d23-doc
+match-ending	t5d23-doc

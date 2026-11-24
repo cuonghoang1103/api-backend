@@ -1,0 +1,1345 @@
+/**
+ * Tiếng Anh giao tiếp — NGÀY 6 (chặng 1 "Sống sót", A2): đi lại.
+ * Khuôn: listening · speaking · writing (ngày chẵn) · homework · review (kiểm tra chặng 1, gom Ngày 1–6). Mọi id bắt đầu `gtd6-`.
+ * Ngữ pháp trong câu: câu mệnh lệnh (Go straight, Turn left) · giới từ nơi chốn (next to, opposite, between, on the corner of) · first, then.
+ * Cảnh: Thảo — sinh viên IT năm 3 — bay sang Toronto (Canada) một tuần dự khoá đào tạo ở văn phòng khách hàng.
+ * Khác podcast en-ds-a1-04 (taxi ra ga), en-a2-01 (hỏi đường tới thư viện), en-ds-a2-01 (nhận phòng, gửi vali sau trả phòng),
+ * en-ds-b1-03 (hải quan, thất lạc vali): ở đây là lạc điểm đón xe ứng dụng, chưa tới giờ nhận phòng + tiền giữ chỗ trên thẻ,
+ * lạc trong đường đi bộ ngầm, và Thảo tự chỉ đường cho khách ở Hội An.
+ * Cách soạn: docs/en-giao-tiep-soan.md. Mọi hội thoại, câu ví dụ, câu kiểm tra đều tự soạn.
+ */
+import type { Lesson } from '../data';
+
+export const NGAY_6: Lesson[] = [
+  /* ═══════════════════════════ BÀI 1 — NGHE CẢNH ═══════════════════════════ */
+  {
+    id: 'gtd6-nghe',
+    kind: 'listening',
+    title: 'Đi lại: hỏi đường, gọi xe, sân bay, khách sạn',
+    goal: 'Nghe hiểu ba cảnh đi lại ở Toronto: tìm điểm đón xe ở sân bay, nhận phòng khách sạn khi chưa tới giờ, và đi theo lời chỉ đường có mốc, có giới từ nơi chốn.',
+    minutes: 30,
+    blocks: [
+      {
+        t: 'recap',
+        title: 'Hôm nay bạn ở đâu, gặp ai',
+        items: [
+          'Bạn theo chân **Thảo**, sinh viên IT năm 3, bay **20 tiếng** sang **Toronto (Canada)** dự một tuần đào tạo ở văn phòng khách hàng. Thảo mệt, hành lý nặng, và tháng 12 ở Toronto **dưới 0 độ**.',
+          'Bạn cần nghe ra: **đi tầng nào, cửa số mấy, rẽ trái hay phải, đi mấy dãy nhà**, và **mốc** để nhận ra nơi cần tới (next to the bank, opposite the coffee shop).',
+          'Ngày 2 bạn học hỏi lại số và chữ cái. Hôm nay dùng lại để xác nhận **biển số xe**, **tên đặt phòng**, **số cửa**.',
+          'Lời chỉ đường gần như luôn là **câu mệnh lệnh**: Go up one level · Turn right · Walk two blocks. Đó không phải là ra lệnh, chỉ là cách nói chỉ đường.',
+          'Nghe mỗi cảnh **2 lần**. Lần 1 vẽ đường đi ra giấy bằng mũi tên. Lần 2 mở lời thoại đối chiếu.',
+        ],
+      },
+
+      { t: 'h', text: 'Cảnh 1 — Sân bay: "Door five, but which level?"' },
+      {
+        t: 'canh',
+        anh: ['airplane-arrival', 'luggage', 'woman-student', 'mobile-phone', 'automobile'],
+        caption: '10 giờ 45 sáng ở sân bay Toronto. Công ty khách hàng đã **đặt sẵn xe qua ứng dụng** cho **Thảo**. Thảo hỏi anh **Ray** ở quầy thông tin xem ra chỗ đón ở đâu, rồi tài xế **Marcus** gọi tới.',
+      },
+      {
+        t: 'listen',
+        id: 'gtd6-nghe-canh1',
+        title: 'Scene 1 — At the airport',
+        note: 'Nghe xem chỗ đón xe ở tầng nào, cửa số mấy, và vì sao Thảo với tài xế lúc đầu không thấy nhau.',
+        lines: [
+          { who: 'Ray', voice: 'ca-nam', text: 'Hi there, welcome to Toronto. What can I help you with?', vi: 'Chào chị, chào mừng tới Toronto. Tôi giúp gì được chị?' },
+          { who: 'Thảo', voice: 'us-nu', text: 'Hi. My company booked me a ride on an app. Where do I meet the driver?', vi: 'Chào anh. Công ty tôi đặt xe cho tôi qua ứng dụng. Tôi gặp tài xế ở đâu ạ?' },
+          { who: 'Ray', voice: 'ca-nam', text: "App pickups aren't outside arrivals. Take the elevator up one level to departures, then turn right and go out door five.", vi: 'Xe ứng dụng không đón ở cửa khu đến. Chị đi thang máy lên một tầng, tới khu đi, rồi rẽ phải và ra cửa số năm.' },
+          { who: 'Thảo', voice: 'us-nu', text: 'Sorry, up one level, then left?', vi: 'Xin lỗi, lên một tầng, rồi rẽ trái ạ?' },
+          { who: 'Ray', voice: 'ca-nam', text: 'No, right. Up one level, turn right, door five. Look for the purple signs.', vi: 'Không, rẽ phải. Lên một tầng, rẽ phải, cửa số năm. Chị tìm mấy biển màu tím.' },
+          { who: 'Thảo', voice: 'us-nu', text: 'Up, right, door five, purple signs. Thank you!', vi: 'Lên tầng, rẽ phải, cửa năm, biển tím. Cảm ơn anh!' },
+          { who: 'Marcus', voice: 'us-nam', text: "Hi, is this Thao? It's Marcus, your driver. I'm at door five. Where are you?", vi: 'Chào, Thảo phải không? Marcus đây, tài xế của chị. Tôi đang ở cửa năm. Chị đang ở đâu?' },
+          { who: 'Thảo', voice: 'us-nu', text: "Hi, Marcus. I'm at door five too, but I can't see you.", vi: 'Chào anh Marcus. Tôi cũng ở cửa năm, nhưng tôi không thấy anh.' },
+          { who: 'Marcus', voice: 'us-nam', text: 'Are you upstairs, on the departures level?', vi: 'Chị ở trên lầu, tầng khu đi chưa?' },
+          { who: 'Thảo', voice: 'us-nu', text: "Oh no. I think I'm still on the arrivals level. Sorry!", vi: 'Ôi không. Chắc tôi vẫn đang ở tầng khu đến. Xin lỗi anh!' },
+          { who: 'Marcus', voice: 'us-nam', text: "No problem. Take the elevator up one floor. I'm in a white Toyota. The plate ends in four seven two.", vi: 'Không sao. Chị đi thang máy lên một tầng. Tôi đi xe Toyota màu trắng. Biển số tận cùng là bốn bảy hai.' },
+          { who: 'Thảo', voice: 'us-nu', text: "A white Toyota, four seven two. I'm wearing a red jacket, and I have a big blue suitcase.", vi: 'Toyota trắng, bốn bảy hai. Tôi mặc áo khoác đỏ, kéo một cái vali to màu xanh.' },
+          { who: 'Marcus', voice: 'us-nam', text: 'Perfect. I can wait for five minutes, so take your time.', vi: 'Tốt quá. Tôi đợi được năm phút, chị cứ từ từ.' },
+          { who: 'Thảo', voice: 'us-nu', text: 'Hi! Are you Marcus? For Thao Nguyen?', vi: 'Chào anh! Anh là Marcus phải không? Đón Thảo Nguyễn?' },
+          { who: 'Marcus', voice: 'us-nam', text: "That's me. Let me get your bag. Hotel Lakeview on Front Street, right?", vi: 'Đúng tôi đây. Để tôi xách vali cho. Khách sạn Lakeview trên phố Front, đúng không?' },
+          { who: 'Thảo', voice: 'us-nu', text: "Yes, that's right. How long does it take to get there?", vi: 'Vâng, đúng rồi. Tới đó mất bao lâu anh?' },
+          { who: 'Marcus', voice: 'us-nam', text: "About forty minutes. The traffic's heavy downtown at lunchtime.", vi: 'Khoảng bốn mươi phút. Giờ trưa trung tâm thành phố đông xe lắm.' },
+        ],
+      },
+      {
+        t: 'mcq',
+        id: 'gtd6-nghe-canh1-hieu',
+        title: 'Cảnh 1 — Bạn nghe được gì? (4 câu)',
+        items: [
+          {
+            q: 'Ray chỉ Thảo ra chỗ đón xe thế nào?',
+            options: ['Ra thẳng cửa khu đến', 'Lên một tầng, rẽ trái, cửa 5', 'Lên một tầng, rẽ phải, cửa 5', 'Xuống một tầng, rẽ phải, cửa 5'],
+            correct: 2,
+            why: '"Take the elevator **up one level** to departures, then **turn right** and go out **door five**." Thảo nghe nhầm thành left, Ray sửa lại.',
+          },
+          {
+            q: 'Vì sao Thảo và Marcus lúc đầu không thấy nhau?',
+            options: ['Thảo đứng sai cửa', 'Thảo đứng đúng cửa 5 nhưng sai tầng', 'Marcus đến muộn', 'Marcus đi nhầm sân bay'],
+            correct: 1,
+            why: 'Cả hai đều ở **door five**, nhưng Thảo vẫn ở **arrivals level** (tầng khu đến), còn Marcus ở **departures level** (tầng khu đi).',
+          },
+          {
+            q: 'Thảo nhận ra xe bằng gì?',
+            options: ['Xe đen, biển số 472', 'Xe trắng, biển số tận cùng 472', 'Xe trắng, biển số tận cùng 742', 'Biển tím'],
+            correct: 1,
+            why: '"I\'m in a **white Toyota**. The plate **ends in four seven two**." Thảo **đọc lại** để xác nhận, đúng cách Ngày 2.',
+          },
+          {
+            q: 'Marcus nói "take your time". Ý anh là gì?',
+            options: ['Chị nhanh lên', 'Chị cứ từ từ, không cần vội', 'Chị mất thời gian của tôi', 'Chị xem đồng hồ đi'],
+            correct: 1,
+            why: '**Take your time** = cứ thong thả. Anh vừa nói "I can wait for five minutes".',
+          },
+        ],
+      },
+
+      { t: 'h', text: 'Cảnh 2 — Khách sạn: chưa tới giờ nhận phòng' },
+      {
+        t: 'canh',
+        anh: ['hotel', 'bellhop-bell', 'woman-office-worker', 'credit-card', 'eleven-oclock'],
+        caption: 'Gần trưa, Thảo tới khách sạn. Giờ nhận phòng là **3 giờ chiều**. Chị lễ tân **Chantal** tìm tên đặt phòng, và có một chuyện về **tiền trên thẻ** làm Thảo lo.',
+      },
+      {
+        t: 'listen',
+        id: 'gtd6-nghe-canh2',
+        title: 'Scene 2 — At the hotel front desk',
+        note: 'Nghe xem vì sao lễ tân lúc đầu không tìm thấy phòng, Thảo được hứa gì, khoản 100 đô là gì, và đường từ khách sạn tới văn phòng.',
+        lines: [
+          { who: 'Chantal', voice: 'ca-nu', text: 'Good morning! Are you checking in?', vi: 'Chào buổi sáng! Chị nhận phòng ạ?' },
+          { who: 'Thảo', voice: 'us-nu', text: 'Yes, please. I have a reservation. My name is Thao.', vi: 'Vâng. Tôi có đặt phòng. Tên tôi là Thảo.' },
+          { who: 'Chantal', voice: 'ca-nu', text: "Let me see… I'm sorry, I can't find anything under Thao.", vi: 'Để tôi xem… Xin lỗi chị, tôi không thấy phòng nào tên Thảo.' },
+          { who: 'Thảo', voice: 'us-nu', text: 'Could you try my last name? Nguyen, N-G-U-Y-E-N. My company booked it.', vi: 'Chị thử tìm theo họ của tôi được không? Nguyễn, N-G-U-Y-E-N. Công ty tôi đặt.' },
+          { who: 'Chantal', voice: 'ca-nu', text: "Here it is. Nguyen, five nights, a queen room. But it's only eleven thirty, and check-in is at three. Your room isn't ready yet, I'm afraid.", vi: 'Đây rồi. Nguyễn, năm đêm, phòng giường queen. Nhưng giờ mới mười một rưỡi, mà giờ nhận phòng là ba giờ. E là phòng chị chưa xong.' },
+          { who: 'Thảo', voice: 'us-nu', text: "Oh. Is there any chance of an early check-in? I've been travelling for twenty hours.", vi: 'Ôi. Có cách nào nhận phòng sớm không chị? Tôi đi đường hai mươi tiếng rồi.' },
+          { who: 'Chantal', voice: 'ca-nu', text: "I'll put you on the list. If a room is ready before three, we'll text you. You can leave your bags with us and grab some lunch.", vi: 'Tôi ghi tên chị vào danh sách. Có phòng sẵn trước ba giờ thì bên tôi nhắn tin cho chị. Chị gửi hành lý ở đây rồi đi ăn trưa đi.' },
+          { who: 'Thảo', voice: 'us-nu', text: 'That would be great, thank you.', vi: 'Vậy thì tốt quá, cảm ơn chị.' },
+          { who: 'Chantal', voice: 'ca-nu', text: "Could I have a credit card for incidentals? We put a hold of a hundred dollars a night.", vi: 'Cho tôi xin một thẻ tín dụng cho các khoản phát sinh nhé? Bên tôi tạm giữ một trăm đô mỗi đêm.' },
+          { who: 'Thảo', voice: 'us-nu', text: 'A hold? Sorry, does that mean you take the money?', vi: 'Tạm giữ? Xin lỗi, nghĩa là chị trừ tiền ạ?' },
+          { who: 'Chantal', voice: 'ca-nu', text: "No, it's not a charge. We just hold it in case you use the minibar or something. It's released after you check out.", vi: 'Không, không phải trừ tiền. Bên tôi chỉ giữ lại phòng khi chị dùng minibar hay gì đó. Trả phòng xong là được nhả ra.' },
+          { who: 'Thảo', voice: 'us-nu', text: "Okay, here you are. One more thing: how do I get to the Maple Tech office on King Street?", vi: 'Vâng, thẻ đây. Thêm một việc: tới văn phòng Maple Tech trên phố King thì đi thế nào chị?' },
+          { who: 'Chantal', voice: 'ca-nu', text: "It's about a ten-minute walk. Go out the main door and turn right onto Front Street. Walk one block to Bay Street, then turn left.", vi: 'Đi bộ khoảng mười phút. Chị ra cửa chính, rẽ phải vào phố Front. Đi một dãy nhà tới phố Bay, rồi rẽ trái.' },
+          { who: 'Chantal', voice: 'ca-nu', text: "Go straight up Bay for two blocks. The office is on the corner of King and Bay, opposite a big bank.", vi: 'Chị đi thẳng lên phố Bay hai dãy nhà. Văn phòng ở góc phố King và Bay, đối diện một ngân hàng lớn.' },
+          { who: 'Thảo', voice: 'us-nu', text: 'Right onto Front, left on Bay, two blocks, corner of King. Got it.', vi: 'Phải vào Front, trái vào Bay, hai dãy nhà, góc phố King. Tôi nhớ rồi.' },
+          { who: 'Chantal', voice: 'ca-nu', text: "Perfect. If it's snowing, you can also take the PATH. It's an underground walkway, and the entrance is in our lobby. It's warmer, but people get lost down there.", vi: 'Đúng rồi. Nếu tuyết rơi thì chị đi PATH cũng được. Đó là đường đi bộ dưới lòng đất, lối vào ngay sảnh khách sạn. Ấm hơn, nhưng hay bị lạc lắm.' },
+        ],
+      },
+      {
+        t: 'mcq',
+        id: 'gtd6-nghe-canh2-hieu',
+        title: 'Cảnh 2 — Bạn nghe được gì? (4 câu)',
+        items: [
+          {
+            q: 'Vì sao lễ tân lúc đầu không tìm thấy đặt phòng?',
+            options: ['Công ty quên đặt', 'Phòng đặt theo họ "Nguyen", không phải tên "Thao"', 'Thảo tới nhầm khách sạn', 'Hệ thống bị lỗi'],
+            correct: 1,
+            why: 'Thảo nói tên riêng "Thao", còn phòng đặt theo **last name: Nguyen**. Ngày 1 đã học: hệ thống nước ngoài hay tìm theo **họ**.',
+          },
+          {
+            q: 'Chantal hứa gì với Thảo?',
+            options: ['Cho nhận phòng ngay', 'Nhắn tin nếu có phòng trước 3 giờ', 'Giảm giá một đêm', 'Đổi sang phòng to hơn'],
+            correct: 1,
+            why: '"I\'ll put you on the list. If a room is ready before three, **we\'ll text you**."',
+          },
+          {
+            q: '"A hold of a hundred dollars a night" là gì?',
+            options: ['Phí phòng thêm 100 đô mỗi đêm', 'Tiền phạt', 'Khoản tạm giữ trên thẻ, trả phòng xong được nhả ra', 'Tiền tip cho lễ tân'],
+            correct: 2,
+            why: '"**It\'s not a charge.** We just hold it… It\'s **released after you check out**." Khách sạn ở Bắc Mỹ rất hay làm việc này. Tiền được nhả ra nhưng có khi vài ngày sau mới hiện lại trong tài khoản.',
+          },
+          {
+            q: 'Văn phòng Maple Tech ở đâu?',
+            options: ['Ngay cạnh khách sạn', 'Góc phố King và Bay, đối diện một ngân hàng lớn', 'Trên phố Front, cạnh ngân hàng', 'Dưới lòng đất, trong PATH'],
+            correct: 1,
+            why: '"The office is **on the corner of King and Bay, opposite a big bank**." opposite = đối diện (bên kia đường).',
+          },
+        ],
+      },
+
+      { t: 'h', text: 'Cảnh 3 — Lạc dưới lòng đất: "second exit or second escalator?"' },
+      {
+        t: 'canh',
+        anh: ['snowflake', 'woman-walking', 'world-map', 'woman-raising-hand', 'office-building'],
+        caption: 'Sáng hôm sau, **−8°C**, tuyết rơi. Thảo đi đường ngầm **PATH** cho ấm, và sau mười phút thì… không biết mình đang ở đâu. Thảo hỏi chị **Hannah** đang đi ngang.',
+      },
+      {
+        t: 'listen',
+        id: 'gtd6-nghe-canh3',
+        title: 'Scene 3 — Lost in the underground walkway',
+        note: 'Nghe xem Hannah chỉ đường thế nào, Thảo nghe nhầm chỗ nào, và vì sao cuối cùng Thảo không phải tự đi.',
+        lines: [
+          { who: 'Thảo', voice: 'us-nu', text: "Excuse me, sorry to stop you. I'm a bit lost. Do you know how to get to King and Bay?", vi: 'Xin lỗi chị, cho tôi hỏi chút. Tôi hơi bị lạc. Chị có biết đường tới góc King và Bay không?' },
+          { who: 'Hannah', voice: 'nz-nu', text: "Sure! Don't worry, everyone gets lost down here. Even people who've worked here for years.", vi: 'Được chứ! Đừng lo, ai xuống đây cũng lạc. Kể cả người làm ở đây cả mấy năm.' },
+          { who: 'Thảo', voice: 'us-nu', text: "That's good to hear. My map app isn't working underground.", vi: 'Nghe vậy tôi đỡ lo. Ứng dụng bản đồ của tôi không chạy dưới lòng đất.' },
+          { who: 'Hannah', voice: 'nz-nu', text: "Yeah, it never does. Okay, first, go straight past the food court. Then take the escalator up.", vi: 'Ừ, chẳng bao giờ chạy cả. Rồi, đầu tiên chị đi thẳng qua khu ăn uống. Sau đó đi thang cuốn lên.' },
+          { who: 'Thảo', voice: 'us-nu', text: 'Past the food court, then up the escalator.', vi: 'Qua khu ăn uống, rồi đi thang cuốn lên.' },
+          { who: 'Hannah', voice: 'nz-nu', text: "At the top, turn left and walk through the shops. You'll see a pharmacy on your right.", vi: 'Lên tới nơi thì rẽ trái và đi xuyên qua dãy cửa hàng. Chị sẽ thấy một hiệu thuốc bên tay phải.' },
+          { who: 'Hannah', voice: 'nz-nu', text: 'Your building is above the second exit, between the pharmacy and a coffee shop.', vi: 'Toà nhà của chị nằm phía trên lối ra thứ hai, giữa hiệu thuốc và một quán cà phê.' },
+          { who: 'Thảo', voice: 'us-nu', text: 'Sorry, is it the second exit or the second escalator?', vi: 'Xin lỗi, là lối ra thứ hai hay thang cuốn thứ hai ạ?' },
+          { who: 'Hannah', voice: 'nz-nu', text: "The second exit. Actually, you know what? I'm going that way. Just follow me.", vi: 'Lối ra thứ hai. Mà thôi, chị biết không? Tôi cũng đi đường đó. Chị cứ đi theo tôi.' },
+          { who: 'Thảo', voice: 'us-nu', text: "Really? That's so kind of you. Thank you!", vi: 'Thật ạ? Chị tốt quá. Cảm ơn chị!' },
+          { who: 'Hannah', voice: 'nz-nu', text: 'No worries. Are you new in Toronto?', vi: 'Không có gì. Chị mới tới Toronto à?' },
+          { who: 'Thảo', voice: 'us-nu', text: "Yes, I arrived yesterday. I'm from Vietnam, so this snow is a big surprise.", vi: 'Vâng, tôi tới hôm qua. Tôi từ Việt Nam sang, nên tuyết thế này làm tôi bất ngờ lắm.' },
+          { who: 'Hannah', voice: 'nz-nu', text: "Ha! I'm from New Zealand, and my first winter here was a shock too. Okay, here we are.", vi: 'Ha! Tôi người New Zealand, mùa đông đầu tiên ở đây tôi cũng choáng. Rồi, tới nơi rồi.' },
+          { who: 'Hannah', voice: 'nz-nu', text: "Go up these stairs, and your building is right in front of you. Have a good day!", vi: 'Chị lên mấy bậc thang này, toà nhà của chị ở ngay trước mặt. Chúc chị một ngày tốt lành!' },
+          { who: 'Thảo', voice: 'us-nu', text: 'You saved my morning. Thanks again!', vi: 'Chị cứu buổi sáng của tôi rồi. Cảm ơn chị lần nữa!' },
+        ],
+      },
+      {
+        t: 'mcq',
+        id: 'gtd6-nghe-canh3-hieu',
+        title: 'Cảnh 3 — Bạn nghe được gì? (4 câu)',
+        items: [
+          {
+            q: 'Bước đầu tiên Hannah chỉ là gì?',
+            options: ['Đi thang cuốn lên', 'Rẽ trái qua dãy cửa hàng', 'Đi thẳng qua khu ăn uống', 'Ra lối thứ hai'],
+            correct: 2,
+            why: '"**First**, go straight past the food court. **Then** take the escalator up." first, then đánh dấu thứ tự các bước.',
+          },
+          {
+            q: 'Toà nhà của Thảo nằm ở đâu so với hiệu thuốc?',
+            options: ['Đối diện hiệu thuốc', 'Phía sau hiệu thuốc', 'Giữa hiệu thuốc và quán cà phê', 'Trong hiệu thuốc'],
+            correct: 2,
+            why: '"above the second exit, **between the pharmacy and a coffee shop**." between A and B = ở giữa A và B.',
+          },
+          {
+            q: 'Thảo hỏi lại "second exit or second escalator?". Vì sao đây là cách hỏi tốt?',
+            options: ['Vì Thảo muốn kéo dài câu chuyện', 'Vì cho sẵn hai lựa chọn, người kia chỉ cần chọn một', 'Vì Thảo không biết từ exit', 'Vì Hannah nói sai'],
+            correct: 1,
+            why: 'Hỏi kiểu **A or B?** (Ngày 2) giúp người chỉ đường sửa đúng chỗ bạn nghe chưa chắc, không phải nói lại cả đoạn.',
+          },
+          {
+            q: 'Cuối cùng vì sao Thảo không phải tự tìm đường?',
+            options: ['Thảo gọi taxi', 'Hannah đi cùng đường nên dẫn Thảo đi', 'Ứng dụng bản đồ chạy lại', 'Thảo hỏi bảo vệ'],
+            correct: 1,
+            why: '"Actually, you know what? **I\'m going that way. Just follow me.**" Người hỏi đường ở Canada hay được dẫn đi thế này.',
+          },
+        ],
+      },
+
+      { t: 'h', text: 'Chép chính tả 7 câu khó' },
+      {
+        t: 'p',
+        text: 'Bấm loa, nghe rồi gõ lại **đúng cả câu**. Số gõ chữ hay gõ số đều được. Để ý các giới từ nhỏ bị đọc lướt: **on, onto, up, past, in front of**.',
+      },
+      {
+        t: 'dictation',
+        id: 'gtd6-nghe-chinh-ta',
+        title: 'Nghe và gõ lại',
+        items: [
+          { label: 'Câu 1 — đứng sai tầng', spell: "I think I'm still on the arrivals level.", answer: "I think I'm still on the arrivals level.", alt: ['I think I am still on the arrivals level.'] },
+          { label: 'Câu 2 — biển số xe', spell: 'The plate ends in four seven two.', answer: 'The plate ends in four seven two.', alt: ['The plate ends in 472.', 'The plate ends in 4 7 2.', 'The plate ends in 4-7-2.'] },
+          { label: 'Câu 3 — giờ nhận phòng', spell: "Check-in is at three, and your room isn't ready yet.", answer: "Check-in is at three, and your room isn't ready yet.", alt: ["Check-in is at 3, and your room isn't ready yet.", 'Check-in is at three, and your room is not ready yet.', "Check in is at three and your room isn't ready yet."] },
+          { label: 'Câu 4 — tiền tạm giữ', spell: 'We put a hold of a hundred dollars a night.', answer: 'We put a hold of a hundred dollars a night.', alt: ['We put a hold of $100 a night.', 'We put a hold of 100 dollars a night.', 'We put a hold of one hundred dollars a night.'] },
+          { label: 'Câu 5 — chỉ đường từ khách sạn', spell: 'Walk one block to Bay Street, then turn left.', answer: 'Walk one block to Bay Street, then turn left.', alt: ['Walk 1 block to Bay Street, then turn left.', 'Walk one block to Bay Street then turn left.'] },
+          { label: 'Câu 6 — chỉ đường dưới lòng đất', spell: 'First, go straight past the food court.', answer: 'First, go straight past the food court.', alt: ['First go straight past the food court.'] },
+          { label: 'Câu 7 — vị trí toà nhà', spell: "It's between the pharmacy and a coffee shop.", answer: "It's between the pharmacy and a coffee shop.", alt: ['It is between the pharmacy and a coffee shop.'] },
+        ],
+      },
+
+      { t: 'h', text: 'Họ nói vậy nghĩa là gì?' },
+      {
+        t: 'table',
+        head: ['Họ nói', 'Nghĩa thật', 'Bạn đáp'],
+        rows: [
+          ['Take your time.', 'Cứ thong thả, không cần vội.', 'Thanks! Coming now.'],
+          ["I'll put you on the list.", 'Tôi ghi tên bạn vào hàng chờ. Có, nhưng chưa chắc chắn.', 'Thank you. When will I know?'],
+          ['a hold · incidentals', 'tiền tạm giữ trên thẻ · các khoản phát sinh (minibar, đồ ăn gọi lên phòng)', 'When is it released?'],
+          ["It's about a ten-minute walk.", 'Đi bộ khoảng 10 phút. Người bản xứ đi nhanh, bạn tính thêm vài phút.', 'Great, I can walk.'],
+          ["You'll see a pharmacy on your right.", 'Mốc để biết mình đi đúng. Chưa thấy mốc thì chưa rẽ.', '(nhắc lại mốc)'],
+          ['Actually, you know what?', 'Báo trước người nói **đổi ý** hoặc có ý hay hơn.', '(nghe tiếp)'],
+          ['Here we are.', 'Tới nơi rồi.', 'Thank you so much!'],
+          ["…, eh? (Canada)", 'Đuôi câu kiểu "nhỉ?", "phải không?" rất hay nghe ở Canada: "Cold today, eh?"', "Yeah, it's freezing!"],
+        ],
+        caption: 'Ở Bắc Mỹ, lời chỉ đường hay tính bằng **blocks** (dãy nhà giữa hai ngã tư). "Two blocks" = đi qua hai ngã tư.',
+      },
+      {
+        t: 'note',
+        title: 'Mẹo: không nhớ hết lời chỉ đường thì làm gì',
+        items: [
+          '**Nhắc lại từng cụm ngắn** như Thảo: "Up, right, door five." Bộ não chỉ giữ được 3–4 bước. Nhắc lại là người kia sửa luôn chỗ sai.',
+          'Hỏi **mốc**, không chỉ hỏi hướng: "What will I see when I get there?" · "Is there anything near it?"',
+          'Nghe không chắc thì hỏi kiểu lựa chọn: "Left or right?" · "The second exit or the second escalator?"',
+          'Xin xem bản đồ: "Could you show me on the map?" Chỉ vào màn hình nhanh hơn nghe giải thích.',
+          'Chỉ nhớ **2 bước đầu**, đi tới đó rồi **hỏi người tiếp theo**. Ở thành phố lớn, hỏi đường hai ba lần là bình thường.',
+        ],
+      },
+      {
+        t: 'table',
+        head: ['Ý', 'Anh', 'Mỹ · Canada', 'Úc'],
+        rows: [
+          ['Thang máy', 'lift', 'elevator', 'lift'],
+          ['Tầng trệt', 'ground floor (first floor = **tầng 1 trên tầng trệt**)', 'first floor = **tầng trệt**', 'ground floor'],
+          ['Tàu điện ngầm', 'the Underground · the Tube (London)', 'subway', 'train · metro'],
+          ['Vỉa hè', 'pavement', 'sidewalk', 'footpath'],
+          ['Nhà vệ sinh', 'toilet · loo', 'restroom (Mỹ) · **washroom** (Canada)', 'toilet · loo'],
+          ['Vé khứ hồi / một chiều', 'return / single', 'round trip / one-way', 'return / one-way'],
+          ['Chỉ quãng đường', '"the second street on the left"', '"two blocks"', '"the second street on the left"'],
+          ['Taxi', 'taxi · cab (London: black cab)', 'cab · taxi', 'taxi · cab'],
+        ],
+        caption: 'Khác biệt Anh – Mỹ – Úc khi đi lại. Chỗ hay gây lạc nhất là **tầng**: ở Mỹ "first floor" là tầng trệt, ở Anh là tầng ngay trên tầng trệt. Hẹn ở tầng mấy thì hỏi lại cho chắc.',
+      },
+      {
+        t: 'note',
+        title: '🎧 Nghe thêm ở Podcast',
+        items: [
+          '**en-ds-a1-04 · Where To?** — Khoa hỏi chỗ bắt taxi, nói điểm đến, hỏi giá, bảo dừng xe.',
+          '**en-a2-01 · Lost in a New City** — Khánh hết pin điện thoại ở Sydney, hỏi đường tới thư viện.',
+          '**en-ds-a2-01 · Checking In** — Tuấn nhận phòng, hỏi bữa sáng, Wi-Fi, giờ trả phòng, gọi lễ tân báo hỏng máy lạnh.',
+          '**en-ds-b1-03 · My Bag Didn\'t Arrive** — làm thủ tục, hải quan và thất lạc vali (B1, khó hơn một bậc).',
+          'Bốn tập là bốn chuyện khác bài hôm nay. Nghe xong, thử kể lại đường đi của mỗi nhân vật bằng **first, then**.',
+        ],
+      },
+    ],
+  },
+
+  /* ═══════════════════════════ BÀI 2 — NÓI ═══════════════════════════ */
+  {
+    id: 'gtd6-noi',
+    kind: 'speaking',
+    title: 'Chỉ đường và hỏi đường',
+    goal: 'Hỏi đường lịch sự, hiểu và nhắc lại lời chỉ đường, tự chỉ đường cho người nước ngoài bằng câu mệnh lệnh, giới từ nơi chốn và first, then.',
+    minutes: 30,
+    blocks: [
+      {
+        t: 'recap',
+        title: 'Bài này bạn luyện gì',
+        items: [
+          '**28 câu mẫu** cho cả hai vai: **người hỏi đường** (ở nước ngoài) và **người chỉ đường** (khách nước ngoài hỏi bạn ở Việt Nam).',
+          'Ngữ pháp: **câu mệnh lệnh** (Go, Turn, Take, Cross) · **giới từ nơi chốn** (next to, opposite, between, on the corner of, in front of, behind) · **first, then**.',
+          'Bẫy lớn của người Việt: **"trước mặt"** và **"đối diện"** không phải lúc nào cũng là in front of.',
+          'Chỉ tay, vẫy taxi, ra hiệu "lại đây": cử chỉ nào ở Việt Nam bình thường mà ở Canada, Mỹ hiểu khác.',
+          'Cuối bài bạn **chỉ đường cho một khách du lịch ở Hội An** và nhập vai với Gia sư AI.',
+        ],
+      },
+
+      { t: 'h', text: '1. Chỉ đường trong 4 bước' },
+      {
+        t: 'sodo',
+        kind: 'flow',
+        title: 'Một lời chỉ đường dễ theo',
+        caption: 'Không quá 3–4 bước. Đường dài hơn thì chỉ tới một mốc lớn rồi bảo người ta hỏi tiếp.',
+        steps: [
+          { label: 'Từ chỗ đang đứng', sub: 'Go out of the hotel and turn right.' },
+          { label: 'Hướng + quãng', sub: 'Walk two blocks. / Go straight for about five minutes.' },
+          { label: 'Mốc nhìn thấy', sub: "You'll see a big bank on your left." },
+          { label: 'Đích + vị trí', sub: "It's next to the bank, opposite a coffee shop." },
+        ],
+      },
+
+      { t: 'h', text: '2. 28 câu dùng được ngay' },
+      {
+        t: 'p',
+        text: 'Nửa đầu là câu **hỏi đường và đi xe**, nửa sau là câu **chỉ đường**. Bấm loa từng câu, nói to theo, rồi bấm **Che nghĩa** để tự kiểm tra.',
+      },
+      {
+        t: 'vocab',
+        items: [
+          { w: 'Excuse me, sorry to stop you.', pos: 'phr', ipa: '/ɪkˈskjuːz mi ˈsɑːri tə ˈstɑːp ju/', vi: 'Xin lỗi, cho tôi làm phiền chút.', ex: 'Excuse me, sorry to stop you. Could you help me?', exVi: 'Xin lỗi, cho tôi làm phiền chút. Anh giúp tôi được không?', more: 'Dùng khi người kia **đang đi**. Họ đứng yên thì chỉ cần **Excuse me**.' },
+          { w: "I'm a bit lost.", pos: 'phr', ipa: '/aɪm ə bɪt ˈlɔːst/', vi: 'Tôi hơi bị lạc.', ex: "I'm a bit lost. Where are we on this map?", exVi: 'Tôi hơi bị lạc. Mình đang ở đâu trên bản đồ này ạ?', anh: 'round-pushpin' },
+          { w: 'How do I get to King Street?', pos: 'phr', ipa: '/haʊ du aɪ ˈɡet tə ˈkɪŋ striːt/', vi: 'Tới phố King đi thế nào ạ?', ex: 'Excuse me, how do I get to King Street from here?', exVi: 'Xin lỗi, từ đây tới phố King đi thế nào ạ?', more: 'Lịch sự hơn: **Could you tell me how to get to…?**' },
+          { w: 'Is it far from here?', pos: 'phr', ipa: '/ɪz ɪt ˈfɑːr frəm hɪr/', vi: 'Có xa đây không?', ex: 'Is the station far from here?', exVi: 'Nhà ga có xa đây không?' },
+          { w: 'Can I walk there?', pos: 'phr', ipa: '/kən aɪ ˈwɔːk ðer/', vi: 'Đi bộ tới đó được không?', ex: 'Can I walk there, or should I take a taxi?', exVi: 'Đi bộ tới đó được không, hay tôi nên đi taxi?', more: 'Trả lời hay nghe: **It\'s within walking distance.** (đi bộ được)', anh: 'person-walking' },
+          { w: 'How long does it take on foot?', pos: 'phr', ipa: '/haʊ ˈlɔːŋ dəz ɪt teɪk ɑːn ˈfʊt/', vi: 'Đi bộ mất bao lâu?', ex: 'How long does it take on foot? — About ten minutes.', exVi: 'Đi bộ mất bao lâu? — Khoảng mười phút.' },
+          { w: 'Could you show me on the map?', pos: 'phr', ipa: '/kʊd ju ˈʃoʊ mi ɑːn ðə ˈmæp/', vi: 'Anh/chị chỉ giúp trên bản đồ được không?', ex: 'Sorry, could you show me on the map?', exVi: 'Xin lỗi, chị chỉ giúp em trên bản đồ được không?', anh: 'world-map' },
+          { w: "Where's the nearest subway station?", pos: 'phr', ipa: '/werz ðə ˈnɪrəst ˈsʌbweɪ ˌsteɪʃn/', vi: 'Ga tàu điện ngầm gần nhất ở đâu?', ex: "Where's the nearest subway station? I need to go to Union.", exVi: 'Ga tàu điện ngầm gần nhất ở đâu ạ? Em cần tới ga Union.', more: 'Ở Anh: **the nearest Tube station**.', anh: 'metro' },
+          { w: 'Which platform is it?', pos: 'phr', ipa: '/wɪtʃ ˈplætfɔːrm ɪz ɪt/', vi: 'Ở sân ga số mấy?', ex: 'The train to the airport — which platform is it?', exVi: 'Tàu ra sân bay — ở sân ga số mấy ạ?', anh: 'station' },
+          { w: 'get on / get off', pos: 'v', ipa: '/ˌɡet ˈɑːn · ˌɡet ˈɔːf/', vi: 'lên xe / xuống xe (buýt, tàu)', ex: 'Get off at the third stop.', exVi: 'Xuống ở trạm thứ ba.', more: 'taxi, ô tô riêng thì dùng **get in / get out of**.', anh: 'bus' },
+          { w: 'Could you take me to this address?', pos: 'phr', ipa: '/kʊd ju ˈteɪk mi tə ðɪs ˈædres/', vi: 'Anh chở tôi tới địa chỉ này được không?', ex: 'Hi, could you take me to this address, please?', exVi: 'Chào anh, anh chở tôi tới địa chỉ này nhé?', anh: 'taxi' },
+          { w: 'Could you drop me off here?', pos: 'phr', ipa: '/kʊd ju ˌdrɑːp mi ˈɔːf hɪr/', vi: 'Anh cho tôi xuống đây được không?', ex: 'Could you drop me off here, next to the bank?', exVi: 'Anh cho tôi xuống đây, cạnh ngân hàng nhé?' },
+          { w: 'pick-up point', pos: 'n', ipa: '/ˈpɪk ʌp ˌpɔɪnt/', vi: 'điểm đón', ex: "Where's the pick-up point for app taxis?", exVi: 'Điểm đón xe gọi qua ứng dụng ở đâu ạ?' },
+          { w: 'check in / check out', pos: 'v', ipa: '/ˌtʃek ˈɪn · ˌtʃek ˈaʊt/', vi: 'nhận phòng / trả phòng', ex: 'What time can I check in?', exVi: 'Mấy giờ tôi nhận phòng được?', more: 'Danh từ viết có gạch nối: **check-in is at three**.', anh: 'bellhop-bell' },
+          { w: 'Go straight ahead.', pos: 'phr', ipa: '/ɡoʊ ˌstreɪt əˈhed/', vi: 'Đi thẳng.', ex: 'Go straight ahead until you see the lake.', exVi: 'Đi thẳng tới khi thấy cái hồ.' },
+          { w: 'Turn left at the traffic lights.', pos: 'phr', ipa: '/tɝːn ˈleft ət ðə ˈtræfɪk laɪts/', vi: 'Tới đèn giao thông thì rẽ trái.', ex: 'Turn left at the traffic lights, then go straight.', exVi: 'Tới đèn giao thông thì rẽ trái, rồi đi thẳng.', anh: 'vertical-traffic-light' },
+          { w: 'Take the second right.', pos: 'phr', ipa: '/teɪk ðə ˈsekənd ˈraɪt/', vi: 'Rẽ phải ở ngã rẽ thứ hai.', ex: 'Take the second right, not the first.', exVi: 'Rẽ phải ở ngã thứ hai, không phải ngã thứ nhất.' },
+          { w: 'Go past the market.', pos: 'phr', ipa: '/ɡoʊ ˈpæst ðə ˈmɑːrkɪt/', vi: 'Đi qua chợ.', ex: 'Go past the market and keep going.', exVi: 'Đi qua chợ rồi đi tiếp.', more: '**past** = đi ngang qua, không rẽ vào.' },
+          { w: 'Cross the street.', pos: 'phr', ipa: '/krɔːs ðə ˈstriːt/', vi: 'Băng qua đường.', ex: 'Cross the street at the crossing.', exVi: 'Băng qua đường ở chỗ vạch qua đường.' },
+          { w: "It's on your left.", pos: 'phr', ipa: '/ɪts ɑːn jər ˈleft/', vi: 'Nó ở bên tay trái bạn.', ex: "Walk for two minutes. It's on your left.", exVi: 'Đi hai phút. Nó ở bên tay trái bạn.', anh: 'left-arrow' },
+          { w: "It's next to the bank.", pos: 'phr', ipa: '/ɪts ˈnekst tə ðə ˈbæŋk/', vi: 'Nó ở ngay cạnh ngân hàng.', ex: "The café is next to the bank.", exVi: 'Quán cà phê ở cạnh ngân hàng.', anh: 'bank' },
+          { w: "It's opposite the hotel.", pos: 'phr', ipa: '/ɪts ˈɑːpəzɪt ðə hoʊˈtel/', vi: 'Nó ở đối diện khách sạn (bên kia đường).', ex: "The bus stop is opposite the hotel.", exVi: 'Trạm xe buýt ở đối diện khách sạn.', more: 'Mỹ hay nói **across from**: across from the hotel.' },
+          { w: "It's between the pharmacy and the café.", pos: 'phr', ipa: '/ɪts bɪˈtwiːn ðə ˈfɑːrməsi ən ðə kæˈfeɪ/', vi: 'Nó ở giữa hiệu thuốc và quán cà phê.', ex: "Our office is between the pharmacy and the café.", exVi: 'Văn phòng của mình ở giữa hiệu thuốc và quán cà phê.' },
+          { w: 'on the corner of King and Bay', pos: 'phr', ipa: '/ɑːn ðə ˈkɔːrnər əv ˈkɪŋ ən ˈbeɪ/', vi: 'ở góc phố King và Bay', ex: "It's on the corner of King and Bay.", exVi: 'Nó ở góc phố King và Bay.' },
+          { w: "You can't miss it.", pos: 'phr', ipa: '/ju ˌkænt ˈmɪs ɪt/', vi: 'Dễ thấy lắm, không lạc được đâu.', ex: "It's a big yellow building. You can't miss it.", exVi: 'Đó là một toà nhà to màu vàng. Dễ thấy lắm.' },
+          { w: "It's about a ten-minute walk.", pos: 'phr', ipa: '/ɪts əˌbaʊt ə ˈten ˌmɪnɪt ˈwɔːk/', vi: 'Đi bộ khoảng mười phút.', ex: "It's about a ten-minute walk from here.", exVi: 'Từ đây đi bộ khoảng mười phút.', more: '**a ten-minute walk** (không có s ở minute) · **ten minutes on foot**.' },
+          { w: 'block', pos: 'n', ipa: '/blɑːk/', vi: 'dãy nhà (giữa hai ngã tư, kiểu Bắc Mỹ)', ex: 'Walk two blocks and turn right.', exVi: 'Đi qua hai dãy nhà rồi rẽ phải.' },
+          { w: "Follow me, I'm going that way.", pos: 'phr', ipa: '/ˈfɑːloʊ mi aɪm ˈɡoʊɪŋ ðæt weɪ/', vi: 'Đi theo tôi, tôi cũng đi đường đó.', ex: "Don't worry. Follow me, I'm going that way.", exVi: 'Đừng lo. Đi theo tôi, tôi cũng đi đường đó.' },
+        ],
+      },
+
+      { t: 'h', text: '3. Cùng một ý, ba mức: thân · trung tính · trang trọng' },
+      {
+        t: 'p',
+        text: 'Hỏi đường người lạ ngoài phố: mức **trung tính** là đủ. Mức trang trọng hợp khi hỏi lễ tân khách sạn sang, nhân viên sân bay, hoặc khi chỉ đường cho khách của công ty.',
+      },
+      {
+        t: 'table',
+        head: ['Ý', 'Thân (bạn bè)', 'Trung tính (người lạ ngoài phố)', 'Trang trọng (lễ tân, khách công ty)'],
+        rows: [
+          ['Mở lời', 'Hey, quick question.', 'Excuse me, sorry to stop you.', 'Excuse me, I wonder if you could help me.'],
+          ['Hỏi đường', 'Which way is the station?', 'How do I get to the station?', 'Could you tell me how to get to the station?'],
+          ['Hỏi xa gần', 'Far?', 'Is it far from here?', 'Is it within walking distance?'],
+          ['Chỉ đường', 'Just go left, it\'s right there.', 'Turn left, and it\'s on your right.', "If you turn left, you'll find it on your right."],
+          ['Cảm ơn', 'Cheers! · Thanks!', 'Thanks so much.', "Thank you, that's very helpful."],
+          ['Không biết đường', 'No idea, sorry!', "Sorry, I'm not from around here.", "I'm afraid I'm not sure. The front desk could help you."],
+        ],
+        caption: '**Sorry, I\'m not from around here.** (Xin lỗi, tôi không phải người ở đây) là câu từ chối lịch sự nhất khi bạn không biết đường. Đừng đoán bừa.',
+      },
+
+      { t: 'h', text: '4. 🧱 Câu này ghép thế nào' },
+      {
+        t: 'p',
+        text: 'Lời chỉ đường gần như không có chủ ngữ: **động từ đứng đầu câu**. Đây là câu mệnh lệnh, nhưng khi chỉ đường thì nó lịch sự, vì người hỏi đã nhờ bạn. Nối các bước bằng **first, then**. Nói nơi đó ở đâu bằng **It\'s + giới từ + mốc**.',
+      },
+      {
+        t: 'patterns',
+        rows: [
+          {
+            formula: 'V + (O) + (hướng / nơi)',
+            vi: 'Câu mệnh lệnh chỉ đường. Động từ hay dùng: go, turn, take, walk, cross, keep going.',
+            examples: [
+              { en: 'Go up one level.', vi: 'Lên một tầng.' },
+              { en: 'Turn right onto Front Street.', vi: 'Rẽ phải vào phố Front.' },
+              { en: 'Take the escalator up.', vi: 'Đi thang cuốn lên.' },
+            ],
+          },
+          {
+            formula: "Don't + V…",
+            vi: 'Dặn điều KHÔNG nên làm, để người ta khỏi đi nhầm.',
+            examples: [
+              { en: "Don't take the first exit.", vi: 'Đừng ra lối thứ nhất.' },
+              { en: "Don't cross the bridge.", vi: 'Đừng qua cầu.' },
+              { en: "Don't wait outside arrivals.", vi: 'Đừng đứng chờ ngoài khu đến.' },
+            ],
+          },
+          {
+            formula: "It's + next to / opposite / behind / in front of + N",
+            vi: 'Vị trí so với MỘT mốc.',
+            examples: [
+              { en: "It's next to the pharmacy.", vi: 'Nó ở cạnh hiệu thuốc.' },
+              { en: "It's opposite a big bank.", vi: 'Nó ở đối diện một ngân hàng lớn.' },
+              { en: "The taxis are in front of the hotel.", vi: 'Taxi đậu trước cửa khách sạn.' },
+            ],
+          },
+          {
+            formula: "It's + between A and B · on the corner of A and B",
+            vi: 'Vị trí so với HAI mốc.',
+            examples: [
+              { en: "It's between the pharmacy and a coffee shop.", vi: 'Nó ở giữa hiệu thuốc và một quán cà phê.' },
+              { en: "It's on the corner of King and Bay.", vi: 'Nó ở góc phố King và Bay.' },
+              { en: "The bus stop is between the school and the park.", vi: 'Trạm xe buýt ở giữa trường học và công viên.' },
+            ],
+          },
+          {
+            formula: 'First, V… · Then V… · Go straight until you see + N',
+            vi: 'Xếp các bước theo thứ tự. until = cho tới khi.',
+            examples: [
+              { en: 'First, go past the food court.', vi: 'Đầu tiên, đi qua khu ăn uống.' },
+              { en: 'Then turn left at the top.', vi: 'Sau đó lên tới nơi thì rẽ trái.' },
+              { en: 'Go straight until you see the river.', vi: 'Đi thẳng tới khi thấy con sông.' },
+            ],
+          },
+        ],
+      },
+      {
+        t: 'table',
+        head: ['Giới từ', 'Nghĩa', 'Ví dụ', 'Hay nhầm với'],
+        rows: [
+          ['next to', 'ngay cạnh, sát bên', 'next to the bank', 'near (gần, chưa chắc sát)'],
+          ['opposite · across from', 'đối diện, **bên kia đường**', 'opposite the hotel', '**in front of** (người Việt hay dùng nhầm)'],
+          ['in front of', 'phía trước, **cùng phía**', 'in front of the hotel (ngay trước cửa)', 'opposite'],
+          ['behind', 'phía sau', 'behind the station', '—'],
+          ['between A and B', 'ở giữa A và B', 'between the café and the bank', 'among (giữa nhiều thứ)'],
+          ['on the corner of A and B', 'ở góc giao của hai phố', 'on the corner of King and Bay', 'at the corner (ở chỗ góc, khi đi tới)'],
+          ['on your left / right', 'bên tay trái / phải bạn', "It's on your right.", 'to the left (về phía trái)'],
+        ],
+        caption: 'Ở Việt Nam nói "quán cà phê **trước mặt** khách sạn" có khi là **bên kia đường**. Tiếng Anh thì bên kia đường là **opposite**, còn **in front of** là ngay trước cửa, cùng một bên.',
+      },
+      {
+        t: 'rule',
+        formula: 'V + (O) + (hướng) · First, … Then, … · It\'s + next to / opposite / between A and B / on the corner of A and B',
+        vi: 'Chỉ đường: động từ đứng đầu câu, nối các bước bằng first, then, chốt bằng một câu It\'s + giới từ + mốc.',
+      },
+      {
+        t: 'note',
+        title: 'Nối câu hôm nay: first · then · until · when you see',
+        items: [
+          '**First, … Then, …** cho biết thứ tự: "**First**, go up one level. **Then** turn right." Sau then có thể có dấu phẩy hoặc không.',
+          '**and then** nối hai bước trong một câu: "Turn left, **and then** go straight for two blocks."',
+          '**until** = cho tới khi: "Go straight **until** you see a big park."',
+          '**when you see…** = khi thấy…: "**When you see** the pharmacy, turn left."',
+          'Ngày 11 sẽ học thêm **after that, in the end** để kể chuyện. Hôm nay chỉ cần first, then là chỉ đường được.',
+        ],
+      },
+      {
+        t: 'quiz',
+        id: 'gtd6-noi-ghep-dich',
+        title: 'Dịch sang tiếng Anh (5 câu)',
+        kind: 'translate',
+        grammar: 'V + hướng · First, … Then, … · It\'s + next to / opposite / between',
+        items: [
+          { q: 'Tới đèn giao thông thì rẽ phải.', hint: 'turn right, traffic lights', answers: ['Turn right at the traffic lights.', 'Turn right at the lights.', 'At the traffic lights, turn right.', 'At the lights, turn right.'] },
+          { q: 'Đầu tiên, đi thẳng qua chợ.', hint: 'first, go straight, past', answers: ['First, go straight past the market.', 'First go straight past the market.', 'First, go past the market.', 'First, walk straight past the market.'] },
+          { q: 'Nhà ga ở đối diện khách sạn.', hint: 'opposite', answers: ['The station is opposite the hotel.', "The station's opposite the hotel.", 'The station is across from the hotel.', "The station's across from the hotel."] },
+          { q: 'Văn phòng ở giữa ngân hàng và quán cà phê.', hint: 'between… and…', answers: ['The office is between the bank and the café.', 'The office is between the bank and the cafe.', 'The office is between the bank and the coffee shop.', "The office's between the bank and the café."] },
+          { q: 'Đừng rẽ ở ngã thứ nhất.', hint: "don't, the first", answers: ["Don't take the first turn.", "Don't turn at the first street.", "Don't take the first one.", "Don't turn at the first corner.", 'Do not take the first turn.', "Don't take the first turning."] },
+        ],
+      },
+
+      { t: 'h', text: '5. Người Việt hay nói sai' },
+      {
+        t: 'note',
+        title: 'Người Việt hay nói sai — 8 lỗi thật',
+        items: [
+          '~~How to go to the station?~~ → **How do I get to the station?** "How to…" không phải câu hỏi hoàn chỉnh. Hỏi đường thì dùng **get to**, tự nhiên hơn go to.',
+          '~~Turn on the left.~~ → **Turn left.** "turn on" là bật (đèn, máy). Rẽ thì chỉ cần **turn left / turn right**.',
+          '~~The café is in front of the hotel.~~ (ý là bên kia đường) → **The café is opposite the hotel.** Xem bảng giới từ ở trên.',
+          '~~It far about two kilometres.~~ → **It\'s about two kilometres away.** Cần **It\'s** và **away** ở cuối.',
+          '~~I go by foot.~~ → **I\'ll walk.** / **I\'ll go on foot.** "by foot" ít dùng; người bản xứ nói walk là đủ.',
+          '~~Can you go me to the airport?~~ → **Could you take me to the airport?** Chở ai đó đi đâu dùng **take**.',
+          '~~I arrived to Toronto yesterday.~~ → **I arrived in Toronto yesterday.** arrive **in** + thành phố / nước, arrive **at** + sân bay, khách sạn.',
+          '~~Where is toilet?~~ → **Where\'s the restroom?** (Mỹ) · **Where\'s the washroom?** (Canada) · **Where are the toilets?** (Anh). Thiếu "the" nghe cụt, và ở Bắc Mỹ "toilet" là cái bồn cầu.',
+        ],
+      },
+
+      { t: 'h', text: '6. 🙋 Ngôn ngữ cơ thể khi hỏi và chỉ đường' },
+      {
+        t: 'p',
+        text: 'Chỉ đường là lúc tay làm việc nhiều nhất. Người nghe nhìn tay bạn để biết rẽ hướng nào, nên **nói "left" mà tay chỉ phải là hỏng ngay**. Bấm từng thẻ để nghe câu đi kèm.',
+      },
+      {
+        t: 'hinh',
+        title: 'Cử chỉ khi đi lại',
+        items: [
+          { anh: 'palm-up-hand', w: "It's that way.", ro: '/ɪts ˈðæt weɪ/', vi: 'Chỉ hướng bằng **cả bàn tay mở**, lịch sự ở mọi nơi. Ở Nhật gần như chỉ dùng cách này.' },
+          { anh: 'backhand-index-pointing-right', w: 'Turn right here.', ro: '/tɝːn ˈraɪt hɪr/', vi: 'Chỉ **hướng đi** bằng ngón trỏ thì ở Anh, Mỹ, Canada bình thường. Chỉ vào **người** mới bất lịch sự (Ngày 1).' },
+          { anh: 'man-raising-hand', w: 'Taxi!', ro: '/ˈtæksi/', vi: 'Vẫy taxi ở Bắc Mỹ, Anh: **giơ cao một tay**, lòng bàn tay hướng ra trước. Ở Việt Nam hay vẫy tay úp xuống.' },
+          { anh: 'raised-back-of-hand', w: 'Come here, please.', ro: '/kʌm ˈhɪr pliːz/', vi: 'Kiểu ngoắc tay **úp xuống** của người Việt có thể bị người phương Tây đọc thành "đi đi". Muốn gọi lại gần thì nói và **gật đầu** là đủ.' },
+          { anh: 'index-pointing-up', w: 'Just a second.', ro: '/dʒʌst ə ˈsekənd/', vi: 'Giơ một ngón: "chờ tôi một chút" trong lúc bạn mở bản đồ. Đừng quay lưng đi mà không nói gì.' },
+          { anh: 'person-shrugging', w: "Sorry, I'm not from around here.", ro: '/aɪm ˌnɑːt frəm əˌraʊnd ˈhɪr/', vi: 'Nhún vai, mỉm cười khi không biết đường. Nói thật tốt hơn đoán bừa rồi người ta đi lạc.' },
+          { anh: 'woman-gesturing-ok', w: 'Up, right, door five. Got it!', ro: '/ˈɡɑːt ɪt/', vi: 'Vừa nhắc lại vừa **chỉ tay theo hướng** người kia nói. Họ thấy tay bạn chỉ sai là sửa luôn.' },
+          { anh: 'folded-hands', w: 'Thank you so much!', ro: '/θæŋk ju soʊ ˈmʌtʃ/', vi: 'Ở Canada, Mỹ: cảm ơn bằng lời + nụ cười là đủ. Với người Nhật, kèm cúi đầu nhẹ. Chắp tay kiểu Thái không cần thiết.' },
+        ],
+      },
+      {
+        t: 'table',
+        head: ['Việc', 'Việt Nam', 'Canada · Mỹ · Anh', 'Nhật'],
+        rows: [
+          ['Hỏi đường người lạ', 'Hỏi xe ôm, quán nước ven đường.', 'Hỏi người đi đường là bình thường. Mở lời bằng **Excuse me**, đứng trước mặt, **không vỗ vai**.', 'Người được hỏi có khi dẫn bạn đi tận nơi.'],
+          ['Vẫy xe', 'Vẫy tay úp, xe ôm tự tới hỏi.', 'Giơ cao tay. Ở sân bay, xe ứng dụng đón ở **khu riêng**, không vẫy được.', 'Taxi có đèn đỏ ở kính trước là xe trống. **Cửa sau tự mở**, đừng tự kéo.'],
+          ['Ngồi xe taxi', 'Thường ngồi ghế trước nếu đi một mình.', 'Đi một mình thường ngồi **ghế sau**. Ở Úc, New Zealand ngồi ghế trước cũng phổ biến.', 'Ngồi ghế sau.'],
+          ['Khoảng cách khi hỏi', 'Đứng gần cũng được.', 'Giữ khoảng **một sải tay** (Ngày 1).', 'Xa hơn một chút.'],
+          ['Thang cuốn', 'Đứng đâu cũng được.', '**Đứng bên phải, đi bên trái** (London, Toronto).', 'Tokyo đứng bên trái, Osaka đứng bên phải.'],
+        ],
+        caption: 'Quy tắc thang cuốn nghe nhỏ nhưng đứng chắn lối bên đi là bị nhắc "Excuse me!" liên tục, nhất là giờ đi làm.',
+      },
+
+      { t: 'h', text: '7. Phát âm: trọng âm của opposite, hotel; âm cuối của left, straight, next' },
+      {
+        t: 'p',
+        text: 'Người Việt hay đọc **hotel** nhấn âm đầu ("hô-ten") và **opposite** nhấn âm giữa. Đúng là ho**TEL** và **OP**posite. **left, straight, next** kết thúc bằng cụm phụ âm: đọc mất âm cuối thì "left" nghe thành "less", "next to" nghe thành "neck to". Khi nói nhanh, "next to" bỏ bớt /t/ đầu: /neks tə/.',
+      },
+      {
+        t: 'phatam',
+        id: 'gtd6-phat-am',
+        title: 'Luyện phát âm — trọng âm, cụm phụ âm cuối, to đọc nhẹ',
+        note: 'Bấm "Nghe mẫu" rồi "Đọc & chấm". Nhấn rõ từ chỉ hướng (left, right, straight) và tên mốc; to, the, at đọc lướt.',
+        items: [
+          { text: 'How do I get to the station?', ipa: 'haʊ du aɪ ɡet tə ðə steɪʃn', vi: 'get to nối liền, to đọc nhẹ /tə/ · station nhấn STA' },
+          { text: "It's opposite the hotel.", ipa: 'ɪts ɑːpəzɪt ðə hoʊtel', vi: 'OP-po-site nhấn âm đầu · ho-TEL nhấn âm sau' },
+          { text: 'Turn left at the traffic lights.', ipa: 'tɝːn left ət ðə træfɪk laɪts', vi: 'left giữ rõ /ft/ · lights có /ts/ cuối' },
+          { text: 'Go straight ahead.', ipa: 'ɡoʊ streɪt əhed', vi: 'straight bắt đầu bằng /str/, không chèn "xơ-tr" · nối straight‿ahead' },
+          { text: "It's next to the pharmacy.", ipa: 'ɪts nekst tə ðə fɑːrməsi', vi: 'next to nói nhanh thành /neks tə/ · pharmacy nhấn PHAR' },
+          { text: 'Take the second right.', ipa: 'teɪk ðə sekənd raɪt', vi: 'second có /nd/ cuối · right với /r/ không rung lưỡi' },
+          { text: 'Could you take me to the airport?', ipa: 'kʊd ju teɪk mi tə ðə erpɔːrt', vi: 'could you nối thành /kʊdʒu/ · airport nhấn AIR' },
+          { text: "It's on the corner of King and Bay.", ipa: 'ɪts ɑːn ðə kɔːrnər əv kɪŋ ən beɪ', vi: 'corner‿of nối · of đọc /əv/ · and đọc /ən/' },
+        ],
+      },
+
+      { t: 'h', text: '8. Nhập vai: chỉ đường cho khách ở Hội An' },
+      {
+        t: 'canh',
+        anh: ['bridge-at-night', 'woman-student', 'man-walking', 'woman-walking', 'world-map'],
+        caption: 'Về nước, cuối tuần Thảo đi Hội An. Ở gần **chợ Hội An**, một cặp khách du lịch hỏi đường tới **Chùa Cầu** (the Japanese Covered Bridge). Lần này **Thảo là người chỉ đường**.',
+      },
+      {
+        t: 'dialogue',
+        title: 'Thảo chỉ đường tới Chùa Cầu',
+        lines: [
+          { who: 'Liv', role: 'b', text: "Excuse me, sorry to bother you. Do you speak English?", vi: 'Xin lỗi, làm phiền bạn chút. Bạn nói tiếng Anh được không?' },
+          { who: 'Thảo', role: 'a', text: "Yes, a little. Can I help you?", vi: 'Vâng, một chút. Mình giúp gì được bạn?' },
+          { who: 'Liv', role: 'b', text: "We're looking for the Japanese Covered Bridge. Is it far from here?", vi: 'Bọn mình đang tìm Chùa Cầu. Có xa đây không?' },
+          { who: 'Thảo', role: 'a', text: "No, it's not far. It's about a ten-minute walk.", vi: 'Không, không xa đâu. Đi bộ khoảng mười phút.' },
+          { who: 'Liv', role: 'b', text: 'Great. How do we get there?', vi: 'Tuyệt. Bọn mình đi thế nào?' },
+          { who: 'Thảo', role: 'a', text: "First, go out of the market and turn right. That's Tran Phu Street.", vi: 'Đầu tiên, các bạn ra khỏi chợ rồi rẽ phải. Đó là đường Trần Phú.' },
+          { who: 'Liv', role: 'b', text: 'Out of the market, turn right. Okay.', vi: 'Ra khỏi chợ, rẽ phải. Được.' },
+          { who: 'Thảo', role: 'a', text: "Then go straight along Tran Phu. Don't turn. You'll go past a lot of old yellow houses.", vi: 'Sau đó đi thẳng dọc Trần Phú. Đừng rẽ. Các bạn sẽ đi qua rất nhiều ngôi nhà cổ màu vàng.' },
+          { who: 'Liv', role: 'b', text: 'And then?', vi: 'Rồi sao nữa?' },
+          { who: 'Thảo', role: 'a', text: "The bridge is at the end of the street. It's a small bridge with a roof. You can't miss it.", vi: 'Chùa Cầu ở cuối đường. Đó là một cây cầu nhỏ có mái. Không lạc được đâu.' },
+          { who: 'Liv', role: 'b', text: 'Do we need a ticket?', vi: 'Có cần mua vé không?' },
+          { who: 'Thảo', role: 'a', text: "Yes, I think you need an Old Town ticket. You can buy one at the ticket booth near the bridge.", vi: 'Có, mình nghĩ cần vé tham quan phố cổ. Các bạn mua ở chòi bán vé gần cầu.' },
+          { who: 'Liv', role: 'b', text: "Perfect. Thank you so much, that's really helpful!", vi: 'Tuyệt. Cảm ơn bạn nhiều lắm, giúp ích thật đấy!' },
+          { who: 'Thảo', role: 'a', text: "You're welcome. Enjoy Hoi An!", vi: 'Không có gì. Chúc các bạn chơi Hội An vui!' },
+        ],
+      },
+      {
+        t: 'note',
+        title: 'Thảo làm đúng những gì',
+        items: [
+          'Trả lời câu **"Is it far?"** trước, rồi mới chỉ đường. Người hỏi muốn biết nên đi bộ hay gọi xe.',
+          'Chỉ **3 bước**: ra chợ rẽ phải → đi thẳng → cuối đường. Có **mốc** (nhà cổ màu vàng, cầu có mái).',
+          'Dặn một câu **Don\'t turn.** để khách khỏi rẽ nhầm vào ngõ.',
+          'Không chắc chuyện vé thì nói **"I think…"**, không khẳng định bừa. Quy định vé ở phố cổ có thể thay đổi, khách tự hỏi ở chòi bán vé.',
+        ],
+      },
+      {
+        t: 'build',
+        id: 'gtd6-noi-ghep-luot',
+        title: 'Đến lượt bạn — ghép câu chỉ đường của Thảo (5 câu)',
+        items: [
+          { vi: 'Liv: "Is it far from here?" → Bạn: Không xa đâu. Đi bộ khoảng mười phút.', chips: ["It's", 'about', 'a', 'ten-minute', 'walk.', 'minutes', 'far'], answer: ["It's", 'about', 'a', 'ten-minute', 'walk.'] },
+          { vi: 'Bạn: Đầu tiên, ra khỏi chợ rồi rẽ phải.', chips: ['First,', 'go', 'out', 'of', 'the', 'market', 'and', 'turn', 'right.', 'on', 'then'], answer: ['First,', 'go', 'out', 'of', 'the', 'market', 'and', 'turn', 'right.'] },
+          { vi: 'Bạn: Sau đó đi thẳng dọc đường Trần Phú.', chips: ['Then', 'go', 'straight', 'along', 'Tran Phu', 'Street.', 'turn', 'to'], answer: ['Then', 'go', 'straight', 'along', 'Tran Phu', 'Street.'] },
+          { vi: 'Bạn: Cây cầu ở cuối đường.', chips: ['The', 'bridge', 'is', 'at', 'the', 'end', 'of', 'the', 'street.', 'in', 'on'], answer: ['The', 'bridge', 'is', 'at', 'the', 'end', 'of', 'the', 'street.'] },
+          { vi: 'Bạn: Dễ thấy lắm, không lạc được đâu.', chips: ['You', "can't", 'miss', 'it.', 'lose', 'see'], answer: ['You', "can't", 'miss', 'it.'] },
+        ],
+      },
+      {
+        t: 'speak',
+        id: 'gtd6-noi-tra-loi',
+        part: '1',
+        questions: [
+          "Excuse me, is there a pharmacy near here? I've got a terrible headache.",
+          'Hi! How do I get to the nearest bus stop from here?',
+          'Sorry, is it within walking distance, or should I get a taxi?',
+          'Where is your office? Can you tell me what is next to it?',
+        ],
+      },
+      {
+        t: 'note',
+        title: 'Nhập vai với Gia sư AI',
+        items: [
+          'Mở trang **/language/en/roleplay**, dán đề bài dưới đây rồi nói bằng giọng của bạn. Làm **2 lượt**.',
+          '"You are Ben, a Canadian engineer visiting my company in Vietnam. You are at the front door of your hotel and you want to walk to a pharmacy, then to a coffee shop. I am a Vietnamese intern and I give you directions. Ask me how to get there, whether it is far, and what you will see on the way. If my directions are unclear, ask me to repeat or to choose: \"left or right?\". Speak at A2 level, in short sentences. If I say \"in front of\" when I mean \"opposite\", or \"turn on the left\", correct me gently. After 8 turns, tell me in Vietnamese two things I did well and two things to fix."',
+          'Lượt hai đổi vai: bạn vừa tới một sân bay ở nước ngoài, AI là nhân viên quầy thông tin. Bạn hỏi đường tới điểm đón xe, tới tàu vào trung tâm, và **nhắc lại từng bước** để xác nhận.',
+        ],
+      },
+    ],
+  },
+
+  /* ═══════════════════════════ BÀI 3 — VIẾT ═══════════════════════════ */
+  {
+    id: 'gtd6-viet',
+    kind: 'writing',
+    title: 'Nhắn tài xế, check-in, hỏi lễ tân',
+    goal: 'Viết được tin nhắn ngắn cho tài xế (mình ở đâu, nhận ra mình thế nào), tin báo khách sạn giờ đến, và tin hỏi lễ tân, ở cả mức ngắn gọn và lịch sự.',
+    minutes: 18,
+    blocks: [
+      {
+        t: 'recap',
+        title: 'Vì sao tin nhắn đi lại phải thật rõ',
+        items: [
+          'Tài xế đọc tin **khi đang lái**. Một tin tốt đọc trong **3 giây** là biết: **bạn ở đâu, trông thế nào, bao lâu nữa ra tới**.',
+          'Khách sạn đọc tin để **chuẩn bị**: đến sớm, đến muộn, cần gì. Viết rõ ngày giờ như Ngày 2: **on + ngày, at + giờ**.',
+          'Hôm nay bạn viết 4 loại: nhắn tài xế · báo khách sạn giờ đến · hỏi lễ tân · báo trễ, đổi điểm đón.',
+          'Mỗi loại có hai bản đặt cạnh nhau: **ngắn gọn** (chat trong ứng dụng) và **lịch sự** (email hoặc khi nhắn cho khách sạn sang).',
+          'Dùng lại giới từ nơi chốn của bài Nói: **at door 5, on the departures level, next to the coffee shop, opposite the bank**.',
+        ],
+      },
+
+      { t: 'h', text: '1. Bốn mẫu tin, mỗi mẫu hai mức' },
+      {
+        t: 'sodo',
+        kind: 'compare',
+        title: 'Mẫu 1 — Nhắn tài xế: mình đang ở đâu',
+        caption: 'Bản ngắn bỏ chủ ngữ được, tài xế vẫn hiểu. Ghi **vị trí + dấu hiệu nhận ra**, không cần chào hỏi dài.',
+        cols: [
+          {
+            title: 'Ngắn gọn (chat ứng dụng)',
+            anh: 'mobile-phone',
+            items: [
+              'Hi! Door 5, departures level.',
+              'Red jacket, big blue suitcase.',
+              'Coming out now.',
+            ],
+          },
+          {
+            title: 'Lịch sự (tài xế công ty đặt)',
+            anh: 'speech-balloon',
+            items: [
+              "Hello Marcus, I've just landed.",
+              "I'm waiting at door 5 on the departures level.",
+              "I'm wearing a red jacket and have a blue suitcase.",
+              'Thank you!',
+            ],
+          },
+        ],
+      },
+      {
+        t: 'sodo',
+        kind: 'compare',
+        title: 'Mẫu 2 — Báo khách sạn giờ đến',
+        caption: 'Có **mã đặt phòng** và **tên theo đúng hộ chiếu** thì lễ tân tìm được ngay, khỏi lặp lại chuyện của Thảo.',
+        cols: [
+          {
+            title: 'Ngắn gọn (tin trong ứng dụng đặt phòng)',
+            anh: 'speech-balloon',
+            items: [
+              "Hi, I'm arriving around 11 am on 6 Dec.",
+              'Any chance of an early check-in?',
+              "If not, could I leave my bags? Thanks!",
+              'Thao Nguyen (booking 48120)',
+            ],
+          },
+          {
+            title: 'Lịch sự (email cho khách sạn)',
+            anh: 'e-mail',
+            items: [
+              'Dear Front Desk team,',
+              'I have a reservation from 6 to 11 December (booking no. 48120, guest name: NGUYEN Thi Thao).',
+              'My flight lands at 9:30 am, so I expect to arrive at around 11 am.',
+              'Would it be possible to check in early? If not, could I leave my luggage with you?',
+              'Kind regards,',
+              'Nguyen Thi Thao',
+            ],
+          },
+        ],
+      },
+      {
+        t: 'sodo',
+        kind: 'compare',
+        title: 'Mẫu 3 — Hỏi lễ tân',
+        caption: 'Một tin hỏi **một việc chính**, thêm ngày giờ cụ thể. Hỏi gộp năm việc thì lễ tân hay trả lời thiếu.',
+        cols: [
+          {
+            title: 'Ngắn gọn (chat với lễ tân)',
+            anh: 'bellhop-bell',
+            items: [
+              'Hi, room 1208 here.',
+              'Could you book me a taxi to the airport at 5 am on Friday?',
+              'Thanks a lot!',
+            ],
+          },
+          {
+            title: 'Lịch sự',
+            anh: 'memo',
+            items: [
+              'Good evening,',
+              'This is Thao Nguyen in room 1208.',
+              'Could you please arrange a taxi to the airport for 5:00 am on Friday 11 December?',
+              'I will have one large suitcase.',
+              'Thank you very much.',
+            ],
+          },
+        ],
+      },
+      {
+        t: 'sodo',
+        kind: 'compare',
+        title: 'Mẫu 4 — Báo trễ, đổi điểm đón',
+        caption: 'Xin lỗi một câu, nói **bao lâu nữa** và **chỗ mới**. Tài xế cần quyết định chờ hay không.',
+        cols: [
+          {
+            title: 'Ngắn gọn',
+            anh: 'hourglass-not-done',
+            items: [
+              'Sorry, still waiting for my bag!',
+              'About 10 more minutes.',
+              "I'll meet you at door 5. Is that okay?",
+            ],
+          },
+          {
+            title: 'Lịch sự',
+            anh: 'luggage',
+            items: [
+              "Hi Marcus, I'm sorry, but my suitcase hasn't come out yet.",
+              'I should be ready in about 10 minutes.',
+              'Could we meet at door 5 instead of door 3?',
+              'Thank you for waiting.',
+            ],
+          },
+        ],
+      },
+
+      { t: 'h', text: '2. Khung câu để viết tin đi lại' },
+      {
+        t: 'patterns',
+        rows: [
+          {
+            formula: "I'm (waiting) at / on / next to + nơi",
+            vi: 'Nói mình đang ở đâu. at + điểm (door 5), on + tầng (the departures level), next to / opposite + mốc.',
+            examples: [
+              { en: "I'm at door 5.", vi: 'Tôi ở cửa số 5.' },
+              { en: "I'm waiting on the departures level.", vi: 'Tôi đang chờ ở tầng khu đi.' },
+              { en: "I'm standing next to the coffee shop.", vi: 'Tôi đang đứng cạnh quán cà phê.' },
+            ],
+          },
+          {
+            formula: "I'm wearing + quần áo · I have + đồ mang theo",
+            vi: 'Dấu hiệu để người kia nhận ra bạn.',
+            examples: [
+              { en: "I'm wearing a red jacket.", vi: 'Tôi mặc áo khoác đỏ.' },
+              { en: 'I have a big blue suitcase.', vi: 'Tôi có một cái vali to màu xanh.' },
+              { en: "I'm with a colleague. We have two black bags.", vi: 'Tôi đi cùng một đồng nghiệp. Bọn tôi có hai túi đen.' },
+            ],
+          },
+          {
+            formula: "I'll be there in + thời gian · I should be ready in + thời gian",
+            vi: 'Báo bao lâu nữa tới / xong.',
+            examples: [
+              { en: "I'll be there in two minutes.", vi: 'Hai phút nữa tôi tới.' },
+              { en: 'I should be ready in about ten minutes.', vi: 'Khoảng mười phút nữa chắc tôi xong.' },
+              { en: "I'll be at the hotel in half an hour.", vi: 'Nửa tiếng nữa tôi tới khách sạn.' },
+            ],
+          },
+          {
+            formula: 'Could you (please) + V…? · Would it be possible to + V…?',
+            vi: 'Nhờ lễ tân, tài xế. Câu sau lịch sự hơn, hợp email.',
+            examples: [
+              { en: 'Could you book me a taxi for 5 am?', vi: 'Anh/chị đặt giúp tôi taxi lúc 5 giờ sáng được không?' },
+              { en: 'Would it be possible to check in early?', vi: 'Liệu tôi có thể nhận phòng sớm không ạ?' },
+              { en: 'Could we meet at door 5 instead?', vi: 'Mình gặp ở cửa 5 thay vì chỗ cũ được không?' },
+            ],
+          },
+        ],
+      },
+      {
+        t: 'rule',
+        formula: "I'm at + nơi · I'm wearing + đồ · I'll be there in + thời gian · Could you…?",
+        vi: 'Tin cho tài xế: ở đâu → trông thế nào → bao lâu nữa. Tin cho khách sạn: tên đặt phòng + ngày giờ + một việc cần nhờ.',
+      },
+      {
+        t: 'table',
+        head: ['Viết gì', 'Nên viết', 'Tránh', 'Vì sao'],
+        rows: [
+          ['Vị trí', 'door 5, departures level', 'outside · near the airport', '"outside" ở sân bay có hàng chục cửa, hai ba tầng.'],
+          ['Dấu hiệu', 'red jacket, blue suitcase', '(bỏ trống)', 'Tài xế không biết mặt bạn. Ở cửa sân bay có cả trăm người.'],
+          ['Thời gian', 'in 10 minutes · at around 11 am', 'soon · later', '"soon" với bạn có thể là 2 phút, với tài xế là 20 phút.'],
+          ['Tên đặt phòng', 'NGUYEN Thi Thao (last name: Nguyen)', 'Thao', 'Khách sạn tìm theo **họ** (cảnh 2).'],
+          ['Mã đặt phòng', 'booking no. 48120', '(bỏ trống)', 'Có mã là tìm trong 5 giây.'],
+          ['Ngày', 'on 6 December', '6/12', 'Mỹ, Canada đọc 6/12 là ngày 12 tháng 6 (Ngày 2).'],
+        ],
+        caption: 'Cách viết để tài xế và lễ tân **không phải nhắn lại hỏi**.',
+      },
+
+      { t: 'h', text: '3. Tập viết' },
+      {
+        t: 'build',
+        id: 'gtd6-viet-ghep',
+        title: 'Sắp xếp thành câu trong tin nhắn (4 câu)',
+        items: [
+          { vi: 'Tôi đang chờ ở cửa số 5, tầng khu đi.', chips: ["I'm", 'waiting', 'at', 'door 5', 'on', 'the', 'departures', 'level.', 'in', 'of'], answer: ["I'm", 'waiting', 'at', 'door 5', 'on', 'the', 'departures', 'level.'] },
+          { vi: 'Tôi mặc áo khoác đỏ.', chips: ["I'm", 'wearing', 'a', 'red', 'jacket.', 'wear', 'the'], answer: ["I'm", 'wearing', 'a', 'red', 'jacket.'] },
+          { vi: 'Khoảng mười phút nữa tôi tới.', chips: ["I'll", 'be', 'there', 'in', 'about', 'ten', 'minutes.', 'after', 'on'], answer: ["I'll", 'be', 'there', 'in', 'about', 'ten', 'minutes.'] },
+          { vi: 'Liệu tôi có thể nhận phòng sớm không ạ?', chips: ['Would', 'it', 'be', 'possible', 'to', 'check', 'in', 'early?', 'can', 'soon'], answer: ['Would', 'it', 'be', 'possible', 'to', 'check', 'in', 'early?'] },
+        ],
+      },
+      {
+        t: 'quiz',
+        id: 'gtd6-viet-dien',
+        title: 'Điền một từ vào tin nhắn (6 câu)',
+        kind: 'fill',
+        grammar: "at + điểm · on + tầng · in + thời gian · next to / opposite + mốc",
+        items: [
+          { q: "I'm waiting ___ door 3.", answers: ['at'] },
+          { q: "We're ___ the arrivals level.", answers: ['on'] },
+          { q: "I'll be there ___ five minutes.", answers: ['in'] },
+          { q: "I'm standing ___ to the coffee shop. (ngay cạnh)", answers: ['next'] },
+          { q: "I'm ___ a black coat and a grey hat. (đang mặc)", answers: ['wearing'] },
+          { q: 'Could we meet at door 5 ___ of door 3? (thay vì)', answers: ['instead'] },
+        ],
+      },
+      {
+        t: 'quiz',
+        id: 'gtd6-viet-dich',
+        title: 'Tự viết 5 tin (dịch Việt → Anh)',
+        kind: 'translate',
+        grammar: "I'm at… · I'm wearing… · I'll be there in… · Could you…? · Would it be possible to…?",
+        items: [
+          { q: '(Nhắn tài xế) Tôi ở cửa số 2, cạnh quầy cà phê.', hint: "I'm at, next to", answers: ["I'm at door 2, next to the coffee counter.", "I'm at door 2, next to the coffee shop.", "I'm at door two, next to the coffee shop.", "I'm at door 2 next to the coffee shop.", 'I am at door 2, next to the coffee shop.', "I'm at door 2, next to the café.", "I'm at door 2, next to the cafe."] },
+          { q: '(Nhắn tài xế) Tôi mặc áo khoác đen và có một cái vali màu vàng.', hint: "I'm wearing, I have", answers: ["I'm wearing a black jacket and I have a yellow suitcase.", "I'm wearing a black jacket, and I have a yellow suitcase.", "I'm wearing a black jacket and have a yellow suitcase.", 'I am wearing a black jacket and I have a yellow suitcase.', "I'm wearing a black coat and I have a yellow suitcase.", "I'm wearing a black coat and have a yellow suitcase."] },
+          { q: '(Báo trễ) Xin lỗi, khoảng 10 phút nữa tôi mới ra được.', hint: "sorry, I'll be out / I'll be there in", answers: ["Sorry, I'll be out in about 10 minutes.", "Sorry, I'll be there in about 10 minutes.", "Sorry, I'll be out in about ten minutes.", "Sorry, I'll be there in about ten minutes.", 'Sorry, I should be ready in about 10 minutes.', 'Sorry, I should be out in about 10 minutes.'] },
+          { q: '(Hỏi lễ tân) Anh/chị đặt giúp tôi taxi ra sân bay lúc 6 giờ sáng được không?', hint: 'could you, book, a taxi, at 6 am', answers: ['Could you book me a taxi to the airport at 6 am?', 'Could you book a taxi to the airport for me at 6 am?', 'Could you book me a taxi to the airport for 6 am?', 'Could you please book me a taxi to the airport at 6 am?', 'Could you book me a taxi to the airport at 6 am, please?', 'Could you book me a taxi to the airport at 6:00 am?'] },
+          { q: '(Email khách sạn) Liệu tôi có thể gửi hành lý sau khi trả phòng không ạ?', hint: 'would it be possible to, leave my luggage, after check-out', answers: ['Would it be possible to leave my luggage after check-out?', 'Would it be possible to leave my luggage after checking out?', 'Would it be possible to leave my bags after check-out?', 'Would it be possible to leave my luggage with you after check-out?', 'Would it be possible to leave my bags after checking out?'] },
+        ],
+      },
+      {
+        t: 'note',
+        title: 'Mẹo: soát 4 điều trước khi gửi tin đi lại',
+        items: [
+          '**Vị trí có đủ cửa + tầng chưa?** Sân bay, nhà ga lớn đều có nhiều tầng. Thiếu tầng là chuyện của Thảo lặp lại.',
+          '**Có một dấu hiệu nhận ra chưa?** Màu áo hoặc màu vali là đủ.',
+          '**Có thời gian cụ thể chưa?** "in 10 minutes", không phải "soon".',
+          '**Tên + mã đặt phòng đúng như hộ chiếu chưa?** Viết họ in hoa (NGUYEN) để lễ tân biết đâu là họ.',
+        ],
+      },
+    ],
+  },
+
+  /* ═══════════════════════════ BÀI TẬP ═══════════════════════════ */
+  {
+    id: 'gtd6-bai-tap',
+    kind: 'homework',
+    title: 'Bài tập Ngày 6',
+    goal: 'Làm 35 câu có đáp án để nhớ chắc câu hỏi đường, câu chỉ đường, giới từ nơi chốn và tin nhắn đi lại, kèm ôn mua sắm của Ngày 5.',
+    minutes: 25,
+    blocks: [
+      {
+        t: 'recap',
+        title: 'Cách làm',
+        items: [
+          '**5 phần, 35 câu**: chọn câu hợp cảnh · điền giới từ và động từ chỉ đường · dịch · nghe chép · ghép câu.',
+          'Có vài câu **ôn Ngày 5** (giá, so sánh) xen vào.',
+          'Sai câu nào, đọc giải thích rồi **nói to câu đúng 2 lần**, vừa nói vừa chỉ tay đúng hướng.',
+          'Đúng từ **28/35** trở lên thì làm tiếp **Kiểm tra chặng 1** ngay sau bài này.',
+        ],
+      },
+
+      { t: 'h', text: 'Phần I — Chọn câu hợp cảnh nhất' },
+      {
+        t: 'mcq',
+        id: 'gtd6-bt-chon',
+        title: 'Phần I — Chọn câu hợp cảnh (10 câu)',
+        items: [
+          {
+            q: 'Bạn muốn hỏi một người đang đi trên phố đường tới nhà ga. Câu mở đầu hợp nhất:',
+            options: ['Hey you! Station?', 'Excuse me, sorry to stop you. How do I get to the station?', 'Tell me the way to the station.', 'How to go station?'],
+            correct: 1,
+            why: '**Excuse me, sorry to stop you** (người kia đang đi) + **How do I get to…?**',
+          },
+          {
+            q: 'Quán cà phê ở bên kia đường so với khách sạn. Bạn nói:',
+            options: ['The café is in front of the hotel.', 'The café is opposite the hotel.', 'The café is behind the hotel.', 'The café is on the hotel.'],
+            correct: 1,
+            why: 'Bên kia đường = **opposite** (Mỹ: across from). in front of là ngay trước cửa, cùng một bên.',
+          },
+          {
+            q: 'Bạn không biết đường mà có người hỏi bạn. Câu nào tốt nhất?',
+            options: ["I don't know.", "Sorry, I'm not from around here.", 'Go left, maybe.', 'Ask Google.'],
+            correct: 1,
+            why: 'Lịch sự, nói thật. Đoán bừa "Go left, maybe" làm người ta đi lạc.',
+          },
+          {
+            q: 'Tài xế nhắn: "I\'m here. Where are you?" Câu trả lời giúp tài xế nhất:',
+            options: ["I'm here too.", "I'm outside.", "I'm at door 4, arrivals level. Green jacket.", 'Wait.'],
+            correct: 2,
+            why: 'Có **cửa + tầng + dấu hiệu**. "Outside" ở sân bay chẳng nói được gì.',
+          },
+          {
+            q: 'Ở lễ tân, bạn đến lúc 10 giờ sáng, giờ nhận phòng là 3 giờ chiều. Bạn hỏi:',
+            options: ['Give me my room now.', 'Is there any chance of an early check-in?', 'Why is check-in so late?', 'I check in now, okay?'],
+            correct: 1,
+            why: '**Is there any chance of…?** hỏi khéo, để lễ tân dễ nói có hoặc hẹn lại.',
+          },
+          {
+            q: 'Lễ tân nói: "We put a hold of a hundred dollars a night." Bạn hiểu là:',
+            options: ['Bạn bị trừ thêm 100 đô mỗi đêm', '100 đô được tạm giữ trên thẻ, trả phòng xong thì nhả ra', 'Bạn phải trả tiền mặt 100 đô', 'Bạn được giảm 100 đô'],
+            correct: 1,
+            why: '**hold** = tạm giữ, không phải trừ (charge). Trả phòng xong được nhả ra.',
+          },
+          {
+            q: 'Bạn muốn tài xế taxi cho mình xuống ngay chỗ này:',
+            options: ['Let me down here.', 'Could you drop me off here, please?', 'Stop! Out!', 'I go down here.'],
+            correct: 1,
+            why: '**drop someone off** = cho ai xuống xe. "Let me down" là dịch thẳng, người bản xứ không nói thế.',
+          },
+          {
+            q: 'Người chỉ đường nói: "Take the second left." Bạn làm gì?',
+            options: ['Rẽ trái ngay ngã đầu tiên', 'Bỏ qua ngã trái đầu tiên, rẽ trái ở ngã thứ hai', 'Đi thẳng hai phút rồi rẽ trái', 'Rẽ trái hai lần'],
+            correct: 1,
+            why: '**the second left** = ngã rẽ trái **thứ hai**.',
+          },
+          {
+            q: '(Ôn Ngày 5) Bạn cầm một cái mũ và hỏi giá:',
+            options: ['How much are this?', 'How many is this?', 'How much is this?', 'How much money this hat?'],
+            correct: 2,
+            why: 'Một món, gần tay: **How much is this?**',
+          },
+          {
+            q: '(Ôn Ngày 5) Bạn muốn nói tàu nhanh hơn xe buýt:',
+            options: ['The train is more fast than the bus.', 'The train is faster than the bus.', 'The train is fast than the bus.', 'The train faster the bus.'],
+            correct: 1,
+            why: 'fast 1 âm tiết → **faster than**. Không dùng "more fast".',
+          },
+        ],
+      },
+
+      { t: 'h', text: 'Phần II — Điền giới từ và động từ chỉ đường' },
+      {
+        t: 'quiz',
+        id: 'gtd6-bt-dien',
+        title: 'Phần II — Điền một từ (8 câu)',
+        kind: 'fill',
+        grammar: 'go · turn · take · cross · next to · opposite · between · on the corner of · first, then',
+        items: [
+          { q: '___ left at the traffic lights. (rẽ)', answers: ['Turn', 'turn'] },
+          { q: '___ the street at the crossing. (băng qua)', answers: ['Cross', 'cross'] },
+          { q: '___ the escalator up to the second floor. (đi)', answers: ['Take', 'take'] },
+          { q: 'Go straight ___ the market. Don\'t stop there. (đi ngang qua)', answers: ['past'] },
+          { q: "The bank is ___ the café and the bookshop. (ở giữa)", answers: ['between'] },
+          { q: "It's on the ___ of King Street and Bay Street. (góc)", answers: ['corner'] },
+          { q: '___, go out of the hotel. Then turn right. (đầu tiên)', answers: ['First', 'first'] },
+          { q: 'Go straight ___ you see a big park. (cho tới khi)', answers: ['until', 'till'] },
+        ],
+      },
+
+      { t: 'h', text: 'Phần III — Dịch Việt → Anh, nói cho tự nhiên' },
+      {
+        t: 'quiz',
+        id: 'gtd6-bt-dich',
+        title: 'Phần III — Dịch sang tiếng Anh (7 câu)',
+        kind: 'translate',
+        grammar: 'How do I get to…? · Is it far…? · V + hướng · It\'s + giới từ + mốc',
+        items: [
+          { q: 'Xin lỗi, tới bến xe buýt đi thế nào ạ?', hint: 'excuse me, how do I get to', answers: ['Excuse me, how do I get to the bus station?', 'Excuse me, how do I get to the bus stop?', 'Excuse me, how can I get to the bus station?', 'Excuse me, how can I get to the bus stop?'] },
+          { q: 'Có xa đây không?', hint: 'far from here', answers: ['Is it far from here?', 'Is it far?', 'Is it a long way from here?'] },
+          { q: 'Đi bộ mất bao lâu?', hint: 'how long, on foot', answers: ['How long does it take on foot?', 'How long does it take to walk?', 'How long is it on foot?', 'How long does it take to walk there?'] },
+          { q: 'Đi thẳng rồi rẽ phải ở ngã thứ hai.', hint: 'go straight, take the second right', answers: ['Go straight and take the second right.', 'Go straight, then take the second right.', 'Go straight and then take the second right.', 'Go straight ahead and take the second right.', 'Go straight ahead, then take the second right.'] },
+          { q: 'Nó ở bên tay trái bạn.', hint: 'on your left', answers: ["It's on your left.", 'It is on your left.'] },
+          { q: 'Hiệu thuốc ở cạnh siêu thị.', hint: 'pharmacy, next to, supermarket', answers: ['The pharmacy is next to the supermarket.', "The pharmacy's next to the supermarket."] },
+          { q: 'Anh chở tôi tới sân bay được không?', hint: 'could you take me', answers: ['Could you take me to the airport?', 'Could you take me to the airport, please?', 'Can you take me to the airport?', 'Can you take me to the airport, please?'] },
+        ],
+      },
+
+      { t: 'h', text: 'Phần IV — Nghe và chép lại' },
+      {
+        t: 'dictation',
+        id: 'gtd6-bt-chinh-ta',
+        title: 'Phần IV — Nghe và gõ lại cả câu (5 câu)',
+        items: [
+          { label: 'Câu 1', spell: 'Take the elevator up one level.', answer: 'Take the elevator up one level.', alt: ['Take the elevator up 1 level.'] },
+          { label: 'Câu 2', spell: "It's on the corner of King and Bay.", answer: "It's on the corner of King and Bay.", alt: ['It is on the corner of King and Bay.'] },
+          { label: 'Câu 3', spell: "You'll see a pharmacy on your right.", answer: "You'll see a pharmacy on your right.", alt: ['You will see a pharmacy on your right.'] },
+          { label: 'Câu 4', spell: "Sorry, I'm not from around here.", answer: "Sorry, I'm not from around here.", alt: ['Sorry, I am not from around here.'] },
+          { label: 'Câu 5', spell: 'Could you drop me off next to the bank?', answer: 'Could you drop me off next to the bank?' },
+        ],
+      },
+
+      { t: 'h', text: 'Phần V — Ghép câu' },
+      {
+        t: 'build',
+        id: 'gtd6-bt-ghep',
+        title: 'Phần V — Bấm các mảnh theo đúng thứ tự (5 câu)',
+        items: [
+          { vi: 'Tới góc phố King đi thế nào ạ?', chips: ['How', 'do', 'I', 'get', 'to', 'King', 'Street?', 'go', 'does'], answer: ['How', 'do', 'I', 'get', 'to', 'King', 'Street?'] },
+          { vi: 'Đầu tiên, đi lên một tầng.', chips: ['First,', 'go', 'up', 'one', 'level.', 'down', 'then'], answer: ['First,', 'go', 'up', 'one', 'level.'] },
+          { vi: 'Sau đó rẽ phải và ra cửa số năm.', chips: ['Then', 'turn', 'right', 'and', 'go', 'out', 'door', 'five.', 'left', 'in'], answer: ['Then', 'turn', 'right', 'and', 'go', 'out', 'door', 'five.'] },
+          { vi: 'Văn phòng ở đối diện một ngân hàng lớn.', chips: ['The', 'office', 'is', 'opposite', 'a', 'big', 'bank.', 'front', 'in'], answer: ['The', 'office', 'is', 'opposite', 'a', 'big', 'bank.'] },
+          { vi: 'Đi thẳng cho tới khi thấy con sông.', chips: ['Go', 'straight', 'until', 'you', 'see', 'the', 'river.', 'when', 'look'], answer: ['Go', 'straight', 'until', 'you', 'see', 'the', 'river.'] },
+        ],
+      },
+      {
+        t: 'note',
+        title: 'Việc cuối ngày (5 phút)',
+        items: [
+          'Mở bản đồ quanh nhà hoặc trường bạn. Chỉ đường **từ cổng tới quán cà phê gần nhất** bằng 3–4 câu có **first, then** và một câu **It\'s next to / opposite…**. Ghi âm lại.',
+          'Viết sẵn một tin nhắn mẫu cho tài xế (vị trí + dấu hiệu + thời gian) và lưu vào ghi chú điện thoại. Lần sau đi xe là dùng được.',
+          'Làm tiếp **Kiểm tra chặng 1** ngay sau bài này. Đạt cả 4 phần thì sang chặng 2 (Ngày 7: hiệu thuốc và bác sĩ).',
+        ],
+      },
+    ],
+  },
+
+  /* ═══════════════════════════ KIỂM TRA CHẶNG 1 ═══════════════════════════ */
+  {
+    id: 'gtd6-kiem-tra',
+    kind: 'review',
+    title: 'Kiểm tra chặng 1 (Ngày 1–6)',
+    goal: 'Tự đo mức nắm chắc chặng 1 "Sống sót" (Ngày 1–6): nghe một cảnh mới, chọn câu hợp cảnh, dùng đúng ngữ pháp của từng ngày và tự viết tin nhắn đời thường. Đạt ≥ 70 % từng phần mới sang chặng 2.',
+    minutes: 40,
+    blocks: [
+      {
+        t: 'recap',
+        title: 'Bài kiểm tra này đo gì',
+        items: [
+          '**4 phần, 46 câu, khoảng 40 phút**: Nghe · Mẫu câu hợp cảnh · Ngữ pháp · Viết tin nhắn. Toàn bộ là kiến thức **Ngày 1–6**.',
+          '**Đạt** = từ **70 %** trở lên ở **từng phần**. Trượt phần nào thì ôn đúng Ngày ghi ở bảng dưới, không cần học lại cả chặng.',
+          'Mọi câu đều **mới** so với bài học: nhân vật mới, cảnh mới, câu mới. Nhớ đáp án cũ không giúp được, phải hiểu mẫu câu.',
+          'Mỗi câu có ghi **(Ngày N)** trong phần giải thích, để bạn biết câu sai thuộc ngày nào.',
+          'Chặng 2 (Ngày 7–12) bắt đầu dùng câu dài hơn, ít chú thích tiếng Việt hơn. Đạt bài này nghĩa là bạn đủ nền để theo kịp.',
+        ],
+      },
+      {
+        t: 'sodo',
+        kind: 'mindmap',
+        title: 'Chặng 1 (Ngày 1–6) — những gì sẽ bị kiểm',
+        center: 'Ngày 1–6',
+        branches: [
+          { label: 'N1 Gặp lần đầu', items: ["I'm… · This is… · Nice to meet you", 'nối bằng and'], anh: 'handshake' },
+          { label: 'N2 Hỏi lại', items: ['Sorry? · Could you say that again?', 'câu hỏi Yes/No, Wh-', 'số, đánh vần'], anh: 'red-question-mark' },
+          { label: 'N3 Small talk', items: ['hiện tại đơn, -s', 'like / enjoy + V-ing', 'but, so'], anh: 'speech-balloon' },
+          { label: 'N4 Ăn uống', items: ["I'd like… · Can I have…?", 'some / any', 'đếm được, không đếm được'], anh: 'fork-and-knife-with-plate' },
+          { label: 'N5 Mua sắm', items: ['How much / How many', 'this, that, these, those', 'cheaper, more expensive'], anh: 'shopping-bags' },
+          { label: 'N6 Đi lại', items: ['câu mệnh lệnh chỉ đường', 'next to, opposite, between', 'first, then'], anh: 'world-map' },
+        ],
+        caption: 'Mỗi nhánh là kiến thức của một ngày. Câu sai nằm ở nhánh nào thì ôn đúng ngày đó.',
+      },
+      {
+        t: 'note',
+        title: 'Cách làm bài',
+        items: [
+          '**Gập sách**: không mở lại bài học, không tra từ điển, không hỏi Gia sư AI trong lúc làm.',
+          'Thời gian gợi ý: Nghe 10′ · Mẫu câu 10′ · Ngữ pháp 8′ · Viết tin nhắn 12′.',
+          'Phần **Nghe**: đọc câu hỏi trước, nghe **tối đa 2 lần**, chưa mở lời thoại cho tới khi trả lời xong.',
+          'Phần **Viết**: cố **không bấm 💡 Gợi ý**. Bấm thì tự trừ câu đó khi tính điểm.',
+          'Làm xong phần nào thì **ghi điểm ra giấy** rồi mới sang phần sau. Cuối bài đối chiếu bảng dưới.',
+        ],
+      },
+      {
+        t: 'table',
+        caption: 'Cách tính điểm — ĐẠT = từ 70 % trở lên ở TỪNG phần',
+        head: ['Phần', 'Số câu', 'Đạt khi', 'Chưa đạt thì ôn lại'],
+        rows: [
+          ['1. Nghe', '8 + 4', '≥ 9/12 (cộng hai khối)', 'Ngày 2 · Nghe (số, tên, giờ) + mẹo "không nghe kịp" — Ngày 5 · Nghe (giá) — Ngày 6 · Nghe (chỉ đường)'],
+          ['2. Mẫu câu hợp cảnh', '12', '≥ 9/12', 'Câu sai ghi (Ngày N) → bài **Nói** của ngày đó, mục "câu dùng được ngay" và bảng ba mức lịch sự'],
+          ['3. Ngữ pháp', '12', '≥ 9/12', 'Câu sai ghi (Ngày N) → bài **Nói** của ngày đó, mục 🧱 Câu này ghép thế nào'],
+          ['4. Viết tin nhắn', '6 + 4', '≥ 7/10 (cộng hai khối)', 'Ngày 1 · Đọc (tin chào) — Ngày 2 · Viết (xác nhận) — Ngày 4 · Viết (đặt bàn, rủ đi ăn) — Ngày 6 · Viết (tài xế, lễ tân)'],
+        ],
+      },
+
+      /** ───────────── 1. Nghe ───────────── **/
+      { t: 'h', text: 'Phần 1 — Nghe (12 câu · đạt ≥ 9 · trượt thì ôn Ngày 2, 5, 6)' },
+      {
+        t: 'canh',
+        anh: ['hot-beverage', 'man-technologist', 'woman-student', 'mobile-phone', 'airplane-departure'],
+        caption: 'Ngày cuối của Thảo ở Toronto. Ở quán cà phê dưới văn phòng, Thảo gặp **Dev**, một kỹ sư mới vào nhóm, rồi gọi đồ uống với chị **Rosie** và hỏi đường ra ga tàu sân bay.',
+      },
+      {
+        t: 'listen',
+        id: 'gtd6-kt-nghe',
+        title: 'Test — Last morning in Toronto',
+        note: 'Nghe tối đa 2 lần. Ghi ra giấy: tên và cách đánh vần, đồ uống, giá, đường ra ga.',
+        lines: [
+          { who: 'Dev', voice: 'ca-nam', text: "Hi, you must be Thao from the Vietnam team. I'm Dev. I just joined last week.", vi: 'Chào, chắc bạn là Thảo của nhóm Việt Nam. Mình là Dev. Mình mới vào tuần trước.' },
+          { who: 'Thảo', voice: 'us-nu', text: "Hi, Dev. Nice to meet you. Sorry, is that D-E-V?", vi: 'Chào Dev. Rất vui được gặp bạn. Xin lỗi, viết là D-E-V phải không?' },
+          { who: 'Dev', voice: 'ca-nam', text: "Yeah, short for Devendra, but everyone calls me Dev. So, are you enjoying Toronto?", vi: 'Ừ, gọi tắt của Devendra, nhưng ai cũng gọi mình là Dev. Thế bạn thấy Toronto thế nào?' },
+          { who: 'Thảo', voice: 'us-nu', text: "I love it, but it's so cold. I usually walk everywhere at home, but here I take the PATH.", vi: 'Mình thích lắm, nhưng lạnh quá. Ở nhà mình hay đi bộ khắp nơi, nhưng ở đây mình đi đường PATH.' },
+          { who: 'Rosie', voice: 'au-nu', text: "Morning! What can I get for you?", vi: 'Chào buổi sáng! Bạn dùng gì?' },
+          { who: 'Thảo', voice: 'us-nu', text: "Could I have a medium latte with oat milk, please? And a blueberry muffin.", vi: 'Cho mình một ly latte cỡ vừa với sữa yến mạch nhé. Và một cái bánh muffin việt quất.' },
+          { who: 'Rosie', voice: 'au-nu', text: "Sure. The muffins are two for five dollars today, if you want another one.", vi: 'Được. Hôm nay muffin hai cái năm đô, nếu bạn muốn thêm một cái.' },
+          { who: 'Thảo', voice: 'us-nu', text: "Oh, then two, please. One is for my colleague. How much is that altogether?", vi: 'Ồ, vậy cho hai cái. Một cái cho đồng nghiệp. Tất cả bao nhiêu?' },
+          { who: 'Rosie', voice: 'au-nu', text: "That's eleven fifty. Tap whenever you're ready.", vi: 'Mười một đô năm mươi. Bạn sẵn sàng thì chạm thẻ nhé.' },
+          { who: 'Thảo', voice: 'us-nu', text: 'Dev, my flight is at four. How do I get to the airport train from here?', vi: 'Dev ơi, chuyến bay của mình lúc bốn giờ. Từ đây ra tàu sân bay đi thế nào?' },
+          { who: 'Dev', voice: 'ca-nam', text: "Easy. Go out the front door and turn left. Walk two blocks down Bay to Union Station.", vi: 'Dễ thôi. Bạn ra cửa trước rồi rẽ trái. Đi hai dãy nhà xuôi phố Bay tới ga Union.' },
+          { who: 'Dev', voice: 'ca-nam', text: "Then follow the signs for the airport train. The platform is upstairs, opposite the food court.", vi: 'Rồi đi theo biển chỉ tàu sân bay. Sân ga ở tầng trên, đối diện khu ăn uống.' },
+          { who: 'Thảo', voice: 'us-nu', text: 'Left, two blocks, then follow the signs. Is it cheaper than a taxi?', vi: 'Trái, hai dãy nhà, rồi theo biển. Có rẻ hơn taxi không?' },
+          { who: 'Dev', voice: 'ca-nam', text: "Much cheaper, and faster at rush hour. Leave by one thirty, just to be safe.", vi: 'Rẻ hơn nhiều, giờ cao điểm còn nhanh hơn. Bạn đi trước một giờ rưỡi cho chắc.' },
+        ],
+      },
+      {
+        t: 'mcq',
+        id: 'gtd6-kt-nghe-hieu',
+        title: 'Phần 1a — Hiểu ý (8 câu)',
+        items: [
+          {
+            q: '"You must be Thao" nghĩa là Dev…',
+            options: ['ra lệnh cho Thảo', 'đoán người trước mặt là Thảo', 'hỏi Thảo có phải đi không', 'chưa nghe tên Thảo bao giờ'],
+            correct: 1,
+            why: '**You must be + tên** = tôi đoán bạn là… (Ngày 1).',
+          },
+          {
+            q: 'Thảo xác nhận tên của Dev bằng cách nào?',
+            options: ['Hỏi lại tuổi', 'Đánh vần lại: D-E-V', 'Nhờ viết ra giấy', 'Không hỏi'],
+            correct: 1,
+            why: '"Sorry, is that **D-E-V**?" Đánh vần lại để xác nhận (Ngày 2).',
+          },
+          {
+            q: 'Ở Việt Nam, Thảo thường làm gì?',
+            options: ['Đi PATH', 'Đi bộ khắp nơi', 'Đi taxi', 'Đi tàu điện'],
+            correct: 1,
+            why: '"I **usually walk** everywhere at home" — hiện tại đơn cho thói quen (Ngày 3).',
+          },
+          {
+            q: 'Thảo gọi gì?',
+            options: ['Latte cỡ lớn với sữa bò, một muffin', 'Latte cỡ vừa với sữa yến mạch, hai muffin', 'Latte cỡ vừa với sữa yến mạch, một muffin', 'Cà phê đen, hai muffin'],
+            correct: 1,
+            why: 'Gọi **a medium latte with oat milk** + một muffin, rồi đổi thành **two** vì khuyến mãi (Ngày 4, 5).',
+          },
+          {
+            q: 'Khuyến mãi muffin là gì?',
+            options: ['Mua một tặng một', 'Hai cái năm đô', 'Giảm 50 %', 'Muffin thứ hai giá 1 đô'],
+            correct: 1,
+            why: '"The muffins are **two for five dollars** today." (Ngày 5)',
+          },
+          {
+            q: 'Tổng cộng Thảo trả bao nhiêu?',
+            options: ['$5.00', '$11.15', '$11.50', '$15.50'],
+            correct: 2,
+            why: '"That\'s **eleven fifty**." = $11.50. Giá đọc "eleven fifty" là 11 đô 50 xu (Ngày 2, 5).',
+          },
+          {
+            q: 'Sân ga tàu sân bay ở đâu?',
+            options: ['Tầng dưới, cạnh khu ăn uống', 'Tầng trên, đối diện khu ăn uống', 'Bên kia phố Bay', 'Sau quầy bán vé'],
+            correct: 1,
+            why: '"The platform is **upstairs, opposite the food court**." (Ngày 6)',
+          },
+          {
+            q: 'Dev khuyên Thảo đi lúc mấy giờ?',
+            options: ['Trước 1 giờ', 'Trước 1 giờ rưỡi', 'Lúc 3 giờ', 'Lúc 4 giờ'],
+            correct: 1,
+            why: '"Leave **by one thirty**, just to be safe." by + giờ = muộn nhất là lúc đó.',
+          },
+        ],
+      },
+      {
+        t: 'dictation',
+        id: 'gtd6-kt-chinh-ta',
+        title: 'Phần 1b — Nghe và gõ lại (4 câu)',
+        items: [
+          { label: 'Câu 1', spell: 'I just joined last week.', answer: 'I just joined last week.' },
+          { label: 'Câu 2', spell: 'How much is that altogether?', answer: 'How much is that altogether?' },
+          { label: 'Câu 3', spell: 'Go out the front door and turn left.', answer: 'Go out the front door and turn left.', alt: ['Go out the front door and turn left'] },
+          { label: 'Câu 4', spell: 'Is it cheaper than a taxi?', answer: 'Is it cheaper than a taxi?' },
+        ],
+      },
+
+      /** ───────────── 2. Mẫu câu hợp cảnh ───────────── **/
+      { t: 'h', text: 'Phần 2 — Mẫu câu hợp cảnh (12 câu · đạt ≥ 9 · trượt thì ôn bài Nói của Ngày ghi trong câu)' },
+      {
+        t: 'mcq',
+        id: 'gtd6-kt-mau-cau',
+        title: 'Phần 2 — Chọn câu hợp cảnh nhất (12 câu)',
+        items: [
+          {
+            q: 'Bạn gặp khách hàng người Đức lần đầu trong phòng họp sang trọng. Câu chào hợp nhất:',
+            options: ["Hey, what's up?", "Good afternoon. I'm Linh. It's a pleasure to meet you.", 'Yo! Nice to see you.', 'Hi, how old are you?'],
+            correct: 1,
+            why: 'Khách, lần đầu, trang trọng: **Good afternoon + tên + It\'s a pleasure to meet you.** (Ngày 1)',
+          },
+          {
+            q: 'Hôm qua bạn đã quen Mark ở buổi hội thảo. Sáng nay gặp lại, bạn nói:',
+            options: ['Nice to meet you, Mark.', 'Hi, Mark! Good to see you again.', 'How do you do?', "What's your name again?"],
+            correct: 1,
+            why: 'Gặp lại người đã quen: **see**, không phải meet. (Ngày 1)',
+          },
+          {
+            q: 'Đồng nghiệp đọc mã phòng họp nhanh quá. Bạn nói:',
+            options: ['What? Again!', 'Sorry, could you say that again, a bit more slowly?', 'Speak slow.', 'I no hear.'],
+            correct: 1,
+            why: '**Sorry, could you say that again…?** + **more slowly** (Ngày 2).',
+          },
+          {
+            q: 'Một chị đồng nghiệp đọc email, bạn không chắc là "Kate" hay "Cate". Bạn hỏi:',
+            options: ['How to spell?', 'Sorry, is that with a K or a C?', 'Write, please.', 'Kate or what?'],
+            correct: 1,
+            why: 'Hỏi kiểu lựa chọn cho chữ cái: **with a K or a C?** (Ngày 2)',
+          },
+          {
+            q: 'Thứ Hai, đồng nghiệp hỏi "How was your weekend?". Câu trả lời giữ được chuyện:',
+            options: ['Good.', 'Fine, thank you, and you?', 'Pretty good! I went hiking with some friends. How about yours?', 'Why do you ask?'],
+            correct: 2,
+            why: 'Trả lời + **kể thêm một chi tiết** + **hỏi lại** (Ngày 3).',
+          },
+          {
+            q: 'Bạn bè kể "I\'m learning to surf." Bạn muốn hỏi tiếp cho chuyện dài ra:',
+            options: ['Okay.', 'Oh, really? How often do you go?', 'Surfing is dangerous.', 'I don\'t like the sea.'],
+            correct: 1,
+            why: '**Oh, really?** + câu hỏi Wh- tiếp theo (Ngày 3).',
+          },
+          {
+            q: 'Ở quán, bạn bị dị ứng đậu phộng. Bạn hỏi phục vụ:',
+            options: ['No peanut!', 'Does this have any peanuts in it? I\'m allergic to them.', 'I am allergy peanut.', 'Peanut is bad.'],
+            correct: 1,
+            why: '**Does this have any…?** + **I\'m allergic to…** (Ngày 4).',
+          },
+          {
+            q: 'Ăn xong, bạn muốn xin hoá đơn ở một quán ở Mỹ:',
+            options: ['Calculate money, please.', 'Could we get the check, please?', 'Pay money!', 'How much I eat?'],
+            correct: 1,
+            why: 'Mỹ: **the check**; Anh, Úc: the bill. **Could we get…, please?** (Ngày 4)',
+          },
+          {
+            q: 'Ở chợ đồ cũ, chiếc đèn giá £30. Bạn muốn mặc cả khéo:',
+            options: ['Too expensive! £10!', 'Can you discount?', 'Would you take £25?', 'I want cheap price.'],
+            correct: 2,
+            why: '**Would you take + giá?** Đưa một con số hợp lý, không chê hàng (Ngày 5).',
+          },
+          {
+            q: 'Bạn muốn trả lại một áo sơ mi chưa mặc, còn nhãn, có hoá đơn, vì không vừa:',
+            options: ['I want to give back this.', "Hi, I'd like to return this. It doesn't fit. Here's the receipt.", 'This shirt is not fit me.', 'Money back, please.'],
+            correct: 1,
+            why: '**I\'d like to return this** + vấn đề + bằng chứng (Ngày 5).',
+          },
+          {
+            q: 'Một khách du lịch hỏi bạn đường mà bạn không biết. Bạn nói:',
+            options: ['Go straight. Maybe.', "Sorry, I'm not from around here.", 'No.', 'Ask the police.'],
+            correct: 1,
+            why: 'Nói thật, lịch sự: **Sorry, I\'m not from around here.** (Ngày 6)',
+          },
+          {
+            q: 'Bạn nhắn cho tài xế ở sân bay. Tin nào tốt nhất?',
+            options: ['I am here.', 'Outside, waiting.', 'Hi! Door 6, departures level. Grey coat, black suitcase.', 'Where are you? Come now.'],
+            correct: 2,
+            why: 'Đủ **cửa + tầng + dấu hiệu nhận ra** (Ngày 6).',
+          },
+        ],
+      },
+
+      /** ───────────── 3. Ngữ pháp ───────────── **/
+      { t: 'h', text: 'Phần 3 — Ngữ pháp (12 câu · đạt ≥ 9 · trượt thì ôn mục 🧱 của Ngày ghi trong câu)' },
+      {
+        t: 'quiz',
+        id: 'gtd6-kt-ngu-phap',
+        title: 'Phần 3 — Điền một từ (12 câu)',
+        kind: 'fill',
+        grammar: "be · Could / What · V-s / V-ing · some / any · much / many · -er · opposite / turn",
+        items: [
+          { q: '(Ngày 1) This ___ Minh. He\'s our new tester.', answers: ['is'] },
+          { q: '(Ngày 1) We ___ from Hue, and we study in Da Nang. (dạng đầy đủ)', answers: ['are'] },
+          { q: '(Ngày 2) ___ you speak a bit more slowly, please?', answers: ['Could', 'could', 'Can', 'can', 'Would', 'would'] },
+          { q: '(Ngày 2) ___ does "boarding pass" mean?', answers: ['What', 'what'] },
+          { q: '(Ngày 3) My manager ___ (cycle) to work every day.', answers: ['cycles'] },
+          { q: '(Ngày 3) I really enjoy ___ (cook) on Sundays.', answers: ['cooking'] },
+          { q: '(Ngày 4) Could I have ___ water, please?', answers: ['some'] },
+          { q: '(Ngày 4) Do you have ___ vegetarian dishes?', answers: ['any'] },
+          { q: '(Ngày 5) How ___ bags can I take on the plane?', answers: ['many'] },
+          { q: '(Ngày 5) The train is ___ than the bus. (fast)', answers: ['faster'] },
+          { q: '(Ngày 6) The bank is ___ the hotel, just across the street.', answers: ['opposite'] },
+          { q: '(Ngày 6) ___ left at the second traffic lights. (rẽ)', answers: ['Turn', 'turn'] },
+        ],
+      },
+
+      /** ───────────── 4. Viết tin nhắn ───────────── **/
+      { t: 'h', text: 'Phần 4 — Viết tin nhắn (10 câu · đạt ≥ 7 · trượt thì ôn bài Đọc / Viết của Ngày 1, 2, 4, 6)' },
+      {
+        t: 'quiz',
+        id: 'gtd6-kt-viet',
+        title: 'Phần 4a — Tự viết 6 tin (dịch Việt → Anh)',
+        kind: 'translate',
+        grammar: "Hi + tên · Just to confirm… · Can I book… · I'd like to return… · I'm at… / I'm wearing…",
+        items: [
+          { q: '(Ngày 1 — nhắn nhóm mới) Chào mọi người! Mình là Linh, thực tập sinh mới. Mong được làm việc cùng mọi người.', hint: "Hi everyone, I'm, the new intern, looking forward to working with you", answers: ["Hi everyone! I'm Linh, the new intern. Looking forward to working with you.", "Hi everyone! I'm Linh, the new intern. Looking forward to working with you all.", "Hi everyone! I'm Linh, the new intern. I'm looking forward to working with you.", "Hi everyone! I'm Linh, the new intern. I'm looking forward to working with you all.", "Hi everyone, I'm Linh, the new intern. Looking forward to working with you all!", "Hi all! I'm Linh, the new intern. Looking forward to working with you."] },
+          { q: '(Ngày 2 — xác nhận) Hỏi lại cho chắc: thứ Sáu lúc 10 giờ sáng, phòng 4, đúng không?', hint: 'just to check, on, at, in, right', answers: ['Just to check: Friday at 10 am, room 4, right?', 'Just to check: Friday at 10 am in room 4, right?', 'Just to check, Friday at 10 am, room 4, right?', 'Just to check, Friday at 10 am in room 4, right?', 'Just to check: Friday at 10:00 am, room 4, right?', 'Just to check: Friday at 10 am in room 4. Is that right?', 'Just to confirm: Friday at 10 am in room 4, right?'] },
+          { q: '(Ngày 4 — đặt bàn) Cho tôi đặt bàn 4 người tối thứ Bảy lúc 7 giờ được không?', hint: 'can I book a table for… on… at…', answers: ['Can I book a table for four on Saturday at 7 pm?', 'Can I book a table for 4 on Saturday at 7 pm?', 'Could I book a table for four on Saturday at 7 pm?', 'Could I book a table for 4 on Saturday at 7 pm?', 'Can I book a table for four on Saturday evening at 7?', 'Can I book a table for four for Saturday at 7 pm?', "I'd like to book a table for four on Saturday at 7 pm."] },
+          { q: '(Ngày 4 — rủ đi ăn) Trưa nay mọi người đi ăn phở không?', hint: 'do you fancy / anyone up for', answers: ['Do you fancy pho for lunch today?', 'Does anyone fancy pho for lunch today?', 'Anyone up for pho for lunch today?', 'Do you want to get pho for lunch today?', 'Does anyone want to get pho for lunch today?', 'Do you fancy getting pho for lunch today?', 'Anyone fancy pho for lunch today?'] },
+          { q: '(Ngày 5 — nhắn cửa hàng) Chào bạn, mình muốn trả lại cái áo này. Nó không vừa.', hint: "I'd like to return, doesn't fit", answers: ["Hi, I'd like to return this shirt. It doesn't fit.", "Hi, I'd like to return this jacket. It doesn't fit.", "Hi, I would like to return this shirt. It doesn't fit.", "Hi, I'd like to return this top. It doesn't fit.", "Hi, I'd like to return this. It doesn't fit.", "Hi, I'd like to return this shirt. It does not fit."] },
+          { q: '(Ngày 6 — nhắn tài xế) Tôi ở cửa số 3, tầng khu đến. Tôi mặc áo khoác xanh.', hint: "I'm at, on the arrivals level, I'm wearing", answers: ["I'm at door 3, arrivals level. I'm wearing a blue jacket.", "I'm at door 3 on the arrivals level. I'm wearing a blue jacket.", "I'm at door 3, on the arrivals level. I'm wearing a blue jacket.", "I'm at door three on the arrivals level. I'm wearing a blue jacket.", "I'm at door 3 on the arrivals level. I'm wearing a green jacket.", "I'm at door 3, arrivals level. I'm wearing a green jacket.", "I'm at door 3 on the arrivals level. I'm wearing a blue coat."] },
+        ],
+      },
+      {
+        t: 'build',
+        id: 'gtd6-kt-viet-ghep',
+        title: 'Phần 4b — Sắp xếp câu trong tin nhắn (4 câu)',
+        items: [
+          { vi: '(Ngày 1) Rất vui vì hôm nay được gặp bạn!', chips: ['It', 'was', 'nice', 'meeting', 'you', 'today!', 'meet', 'is'], answer: ['It', 'was', 'nice', 'meeting', 'you', 'today!'] },
+          { vi: '(Ngày 2) Xin lỗi, buổi họp ở phòng 13 hay phòng 30?', chips: ['Sorry,', 'is', 'the', 'meeting', 'in', 'room 13', 'or', 'room 30?', 'at', 'and'], answer: ['Sorry,', 'is', 'the', 'meeting', 'in', 'room 13', 'or', 'room 30?'] },
+          { vi: '(Ngày 5) Cửa hàng còn cỡ L màu đen không?', chips: ['Do', 'you', 'have', 'it', 'in', 'a', 'large', 'in', 'black?', 'big', 'on'], answer: ['Do', 'you', 'have', 'it', 'in', 'a', 'large', 'in', 'black?'], alt: [['Do', 'you', 'have', 'it', 'in', 'black', 'in', 'a', 'large?']] },
+          { vi: '(Ngày 6) Liệu tôi có thể nhận phòng sớm không ạ?', chips: ['Would', 'it', 'be', 'possible', 'to', 'check', 'in', 'early?', 'soon', 'can'], answer: ['Would', 'it', 'be', 'possible', 'to', 'check', 'in', 'early?'] },
+        ],
+      },
+
+      { t: 'h', text: 'Sau khi làm xong' },
+      {
+        t: 'note',
+        title: 'Đạt hay chưa đạt — làm gì tiếp',
+        items: [
+          '**Đạt cả 4 phần**: sang **Ngày 7**. Trước khi sang, nói lại bài tự giới thiệu 30 giây của Ngày 1 và ghi âm: so với hôm đầu, bạn sẽ nghe ra mình đã khác.',
+          '**Trượt Nghe**: nghe lại ba cảnh của **Ngày 2** và **Ngày 6**, mỗi cảnh 2 lần, lần 2 nhắc lại từng câu thành tiếng (shadowing). Làm lại Phần 1 sau một ngày.',
+          '**Trượt Mẫu câu**: mỗi câu sai ghi một (Ngày N). Mở bài **Nói** ngày đó, đọc lại bảng **ba mức lịch sự**, rồi làm phần "Nhập vai với Gia sư AI" của ngày đó một lượt.',
+          '**Trượt Ngữ pháp**: mở mục **🧱 Câu này ghép thế nào** của ngày có câu sai, làm lại bài dịch 5 câu trong đó.',
+          '**Trượt Viết**: làm lại phần **Tập viết** của bài Viết Ngày 2 và Ngày 6, rồi viết 3 tin thật (cho bạn bè, cho nhóm) bằng tiếng Anh trong tuần này.',
+          'Chỉ làm lại **phần trượt**, không cần làm lại cả bài. Đạt rồi thì sang Ngày 7, đừng đợi điểm tuyệt đối.',
+        ],
+      },
+    ],
+  },
+];

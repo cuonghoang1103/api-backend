@@ -35,7 +35,14 @@ export type Clip = {
   /** Đoạn TIẾNG VIỆT — tự nhận khi chữ có dấu Việt. Máy chủ (/ielts/doc) chỉ có giọng ngoại ngữ ⇒ đọc bằng
    *  giọng vi-VN của máy; máy không có giọng Việt thì bỏ qua (chữ vẫn hiện) — KHÔNG để giọng Anh đọc bồi. */
   viet?: boolean;
+  /** Hỏi giọng máy chủ qua tuyến CÔNG KHAI `POST /ctlanguage/doc` (khách chưa đăng nhập cũng nghe được giọng Azure — đúng
+   *  tuyến app CT Language dùng, `GiongSachHoc.choPhepKhach`). Cùng dịch vụ `docTo` + cùng tệp R2 với `/ielts/doc`; chỉ khác
+   *  danh tính tính trần (khách ⇒ theo IP). Tuyến đó nhận ≤ 600 ký tự ⇒ đoạn dài hơn vẫn đi `/ielts/doc`. */
+  congKhai?: boolean;
 };
+
+/** Trần ký tự của `POST /ctlanguage/doc` (api-backend `ctlanguage.doc.routes.ts`). */
+const TOI_DA_CONG_KHAI = 600;
 
 const DAU_VIET = /[ăâđêôơưàáạảãầấậẩẫằắặẳẵèéẹẻẽềếệểễìíịỉĩòóọỏõồốộổỗờớợởỡùúụủũừứựửữỳýỵỷỹ]/i;
 const laViet = (c: Clip) => !c.sfx && !c.pauseMs && (c.viet || DAU_VIET.test(c.text));
@@ -121,7 +128,8 @@ function urlFor(c: Clip): Promise<Kq> {
   const k = keyOf(c);
   const co = cache.get(k);
   if (co) return co;
-  const p = api.post('/ielts/doc', { text: c.text, giong: c.voice ?? defaultVoice, toc: c.toc, kieu: c.kieu })
+  const duong = c.congKhai && c.text.length <= TOI_DA_CONG_KHAI ? '/ctlanguage/doc' : '/ielts/doc';
+  const p = api.post(duong, { text: c.text, giong: c.voice ?? defaultVoice, toc: c.toc, kieu: c.kieu })
     .then((res) => {
       const d = res.data?.data as { url: string | null; lyDo?: string; giongDon?: boolean } | undefined;
       if (d?.lyDo === 'no_tts_key') serverOff = true;

@@ -232,6 +232,42 @@ const SPECS: Spec[] = [
       return out;
     },
   },
+  // IELTS Tập 5 (7.0 → 8.0, 24/11/2026): ielts/tap-5/ngay/ngayN.ts export NGAY_N; mọi id phải `t5dN-…`.
+  {
+    name: 'IELTS Tập 5',
+    dir: join(LANG, 'ielts/tap-5/ngay'),
+    loader: 'index.ts',
+    prefix: 'ngay',
+    idPrefix: (n) => `t5d${n}-`,
+    written: async () => {
+      const dir = join(LANG, 'ielts/tap-5/ngay');
+      const out: Record<number, Lesson[]> = {};
+      for (const n of numbered(dir, 'ngay')) {
+        const ls: Lesson[] = (await load(join(dir, `ngay${n}.ts`)))[`NGAY_${n}`];
+        if (!Array.isArray(ls)) throw new Error(`tap-5/ngay${n}.ts không export NGAY_${n}`);
+        out[n] = ls;
+      }
+      return out;
+    },
+  },
+  // Tiếng Anh giao tiếp (A2 → B2, 24/11/2026): giao-tiep/ngay/ngayN.ts export NGAY_N; mọi id phải `gtdN-…`.
+  {
+    name: 'Tiếng Anh giao tiếp',
+    dir: join(LANG, 'giao-tiep/ngay'),
+    loader: 'index.ts',
+    prefix: 'ngay',
+    idPrefix: (n) => `gtd${n}-`,
+    written: async () => {
+      const dir = join(LANG, 'giao-tiep/ngay');
+      const out: Record<number, Lesson[]> = {};
+      for (const n of numbered(dir, 'ngay')) {
+        const ls: Lesson[] = (await load(join(dir, `ngay${n}.ts`)))[`NGAY_${n}`];
+        if (!Array.isArray(ls)) throw new Error(`giao-tiep/ngay${n}.ts không export NGAY_${n}`);
+        out[n] = ls;
+      }
+      return out;
+    },
+  },
   // Khoá JP (tiếng Nhật 0→N1) và CH (tiếng Trung 0→HSK 6), 05/10/2026: baiN.ts export BAI_N.
   ...(['jp', 'ch'] as const).map((k): Spec => ({
     name: k.toUpperCase(),

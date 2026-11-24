@@ -9,6 +9,7 @@ export const shell = {
   searchOrJump: 'Search or jump to…',
   account: 'Account',
   myWork: 'My work',
+  studyPlan: 'Study & schedule',
   apiTokens: 'API tokens',
   helpGuide: 'Help & guide',
   backToSite: 'Back to CuongThai',

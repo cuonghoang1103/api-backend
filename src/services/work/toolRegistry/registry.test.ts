@@ -181,6 +181,17 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
     assert.ok(thay(false).includes('feed') && !thay(true).includes('feed'), 'agent không thấy feed');
   });
 
+  it('24/11/2026 — Học tập & Lịch cá nhân: MỘT lệnh `hoc_tap`, chỉ token NGƯỜI, chỉ MCP, không xoá, không tự tích việc học', () => {
+    const t = r.commandByName('hoc_tap');
+    assert.ok(t, 'có hoc_tap');
+    assert.equal(t!.personOnly, true);
+    assert.equal(t!.destructive, undefined, 'không có xoá qua AI');
+    assert.ok(!r.askCommands().includes(t!) && !r.builtinCommands().includes(t!), 'chỉ MCP');
+    const actions = t!.input.shape.action.options as string[];
+    assert.deepEqual([...actions].sort(), ['add', 'done', 'edit', 'list_personal', 'start', 'today', 'undone', 'week']);
+    assert.match(t!.description, /never mark it done/);
+  });
+
   it('mục lục MCP cho token người còn dưới trần 300 của máy chủ (parseMucLucMcp) — có chỗ thở', () => {
     const nguoi = r.mcpCommands().filter((t) => !t.agentOnly);
     assert.ok(nguoi.length <= 280, `${nguoi.length} lệnh cho token người — sát trần 300 của mục lục ⇒ nâng trần (tools.ts) hoặc gộp lệnh`);

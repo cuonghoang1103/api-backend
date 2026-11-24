@@ -31,6 +31,10 @@ export const TUYEN_CTWORK: readonly TuyenWeb[] = [
   { mau: '/work/github-app/done', nap: () => import('@/app/work/github-app/done/page') },
   /* Tìm thẻ mọi dự án (24/09) — tĩnh, phải đứng TRƯỚC `/work/:ws`. */
   { mau: '/work/search', nap: () => import('@/app/work/search/page') },
+  /* 24/11/2026: Của tôi → Học tập & Lịch (lịch cá nhân + việc học + việc cá nhân) — tĩnh, TRƯỚC `/work/:ws`
+     (không thì "hoc-tap" thành slug không gian); `/mon/:id` (4 đoạn) trước mọi mẫu 4 đoạn của `/work/:ws/:key/…`. */
+  { mau: '/work/hoc-tap', nap: () => import('@/app/work/hoc-tap/page') },
+  { mau: '/work/hoc-tap/mon/:id', nap: () => import('@/app/work/hoc-tap/mon/[id]/page') },
   /* CTW đợt 5 (10/10/2026): hub giảng viên + lớp học — tĩnh, phải đứng TRƯỚC `/work/:ws` (không thì "teaching" thành slug). */
   { mau: '/work/teaching', nap: () => import('@/app/work/teaching/page') },
   { mau: '/work/classes', nap: () => import('@/app/work/classes/page') },

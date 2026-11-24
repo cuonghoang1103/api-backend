@@ -8,7 +8,8 @@ import { DongHoRuiRo, DongViec, HopThoai, Khung, Nut, The, ThanhTienDo, cx, oNha
 import { ChiTietViec, thongBao } from './ChiTietViec';
 import { SoanKeHoach } from './ThietLap';
 
-export default function TrangMon({ id }: { id: number }) {
+/** `nhung`: trang con của CT Work (/work/hoc-tap/mon/:id) — bỏ khung site, nút quay lại về CT Work. */
+export default function TrangMon({ id, nhung }: { id: number; nhung?: boolean }) {
   const [d, setD] = useState<ChiTietMon | null>(null);
   const [loi, setLoi] = useState('');
   const [moViec, setMoViec] = useState<number | null>(null);
@@ -35,14 +36,14 @@ export default function TrangMon({ id }: { id: number }) {
     return [...m.entries()].sort((a, b) => a[0] - b[0]);
   }, [d, loc]);
 
-  if (!d) return <Khung><p className="py-20 text-center text-sm text-text-muted">{loi || 'Đang tải…'}</p></Khung>;
+  if (!d) return <Khung nhung={nhung}><p className="py-20 text-center text-sm text-text-muted">{loi || 'Đang tải…'}</p></Khung>;
   const mm = MAU_MUC[d.ruiRo.mucDo];
   const dat = d.viec.filter((v) => v.trangThai === 'DAT');
   const diemTB = dat.length ? (dat.reduce((s, v) => s + (v.diem ?? 0), 0) / dat.length).toFixed(1) : '—';
 
   return (
-    <Khung>
-      <Link href="/hoc-tap" className="mb-3 inline-flex items-center gap-1 text-sm text-text-muted hover:text-text-primary"><ArrowLeft size={14} /> Tổng quan</Link>
+    <Khung nhung={nhung}>
+      <Link href={nhung ? '/work/hoc-tap' : '/hoc-tap'} className="mb-3 inline-flex items-center gap-1 text-sm text-text-muted hover:text-text-primary"><ArrowLeft size={14} /> Tổng quan</Link>
 
       <The className="mb-5" style={{ borderTop: `5px solid ${d.mon.mau ?? '#6366f1'}`, background: `linear-gradient(135deg, ${mm.nen}, var(--bg-card) 65%)` }}>
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center">

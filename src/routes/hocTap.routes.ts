@@ -16,6 +16,7 @@ import { canHanMuc, chamBangChungAI, chamNen, hanMucAI, traLoiVanDap } from '../
 import { batDauSoanKeHoach, loiHuanLuyen, trangThaiSoan } from '../services/hocTap/keHoachAI.js';
 import { prisma } from '../config/database.js';
 import { xepLich } from '../services/hocTap/xepLich.js';
+import * as caNhan from '../services/hocTap/viecCaNhan.js';
 
 const router = Router();
 router.use(apiTokenAuth);
@@ -164,6 +165,38 @@ router.post('/bang-chung/:id/cham-lai', h(async (req) => {
   await chamBangChungAI(bc.id);
   return prisma.nhiemVuHoc.findUnique({ where: { id: bc.nhiemVuId } });
 }));
+
+// ─── Việc cá nhân + gộp hôm nay/tuần (24/11/2026: CT Work → Học tập & Lịch, CuongMini `/hoc`) ───
+const caNhanSchema = z.object({
+  tieuDe: z.string().min(1).max(255).optional(),
+  ghiChu: z.string().max(4000).nullish(),
+  gioBatDau: z.string().max(40).nullish(),
+  ngay: z.string().max(10).nullish(),
+  thoiLuongPhut: z.number().int().min(5).max(600).optional(),
+});
+
+router.get('/hom-nay', h(async (req) => caNhan.homNayGop(req.userId!)));
+router.get('/tuan', h(async (req) => caNhan.tuanGop(req.userId!)));
+router.get('/ca-nhan', h(async (req) => {
+  const hn = caNhan.ngayVNChuoi(new Date());
+  return caNhan.dsViecCaNhan(req.userId!, { tu: String(req.query.tu ?? hn), den: String(req.query.den ?? req.query.tu ?? hn), tonDong: req.query.ton === '1' });
+}));
+router.post('/ca-nhan', h(async (req) => {
+  const b = parse(caNhanSchema.extend({ tieuDe: z.string().min(1).max(255) }), req.body);
+  const v = await caNhan.taoViecCaNhan(req.userId!, b);
+  await caNhan.xepLaiNeuChong(req.userId!, v.gioBatDau, v.thoiLuongPhut);
+  return v;
+}));
+router.patch('/ca-nhan/:id', h(async (req) => {
+  const v = await caNhan.suaViecCaNhan(req.userId!, id(req), parse(caNhanSchema, req.body));
+  await caNhan.xepLaiNeuChong(req.userId!, v.gioBatDau, v.thoiLuongPhut);
+  return v;
+}));
+router.post('/ca-nhan/:id/xong', h(async (req) => {
+  const { xong } = parse(z.object({ xong: z.boolean().default(true) }), req.body);
+  return caNhan.danhDauXong(req.userId!, id(req), xong !== false);
+}));
+router.delete('/ca-nhan/:id', h(async (req) => { await caNhan.xoaViecCaNhan(req.userId!, id(req)); return { ok: true }; }));
 
 /** Claude Code chấm (chỉ token). */
 router.post('/viec/:id/cham', h(async (req) => {

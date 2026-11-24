@@ -20,6 +20,7 @@ import {
 import { hanhDongMcp, lamHanhDongMcp, lenhCtwork, moCtworkTuMcp, trangThaiMcpChu, type GiaoDienCtw, type ServerMcpUi } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
 // 28/10/2026: đồng bộ git ↔ GitHub ↔ repo dự án — chung ba nơi.
 import { lenhDongBo } from '../../../desktop/src/renderer/features/chat/gitDongBoLenh';
+import { lenhHocTap } from '../../../desktop/src/renderer/features/chat/hocTapLenh'; // 24/11/2026: /hoc
 import { moTaCheDo } from './cheDo';
 import { mau, mo } from './mau';
 import { L, ngonNgu, nhieu } from './i18n';
@@ -424,6 +425,8 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       /* Đợt 5: bộ lệnh CT Work CHUNG ba nơi (`desktop/.../ctworkLenh.ts`) — menu đánh số, thẻ xem trước khi ghi. */
       await lenhCtwork(ten, thamSo, giaoDienCtw(b));
       return;
+
+    case '/hoc': await lenhHocTap(thamSo, giaoDienCtw(b)); return; // 24/11/2026: Học tập & Lịch cá nhân (hocTapLenh.ts)
 
     case '/dong-bo':
       /* 28/10/2026: nhánh đang sau/trước GitHub, khớp repo dự án CT Work — hỏi pull (ff) / rebase / merge, không bao giờ ép. */

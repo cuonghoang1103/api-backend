@@ -193,6 +193,7 @@ model User {
   lichThi                 LichThi[]
   monHocKy                MonHocKy[]
   nhiemVuHoc              NhiemVuHoc[]
+  viecCaNhan              ViecCaNhan[]
   bangChungHoc            BangChungHoc[]
   ruiRoHocNgay            RuiRoHocNgay[]
 
@@ -9829,6 +9830,36 @@ model NhiemVuHoc {
   @@index([monId, tuan], map: "idx_nhiem_vu_hoc_mon_tuan")
   @@index([userId, gioBatDau], map: "idx_nhiem_vu_hoc_user_gio")
   @@map("nhiem_vu_hoc")
+}
+
+/// VIỆC CÁ NHÂN (24/11/2026) — việc KHÔNG thuộc môn nào ("gọi về nhà", "đi chợ", "ôn 30 từ"…), hiện chung lịch
+/// với việc học trong CT Work → Của tôi → Học tập & Lịch, và lệnh `/hoc` của CuongMini. Riêng tư: chỉ chủ thấy.
+/// Khác `NhiemVuHoc`: KHÔNG chấm — người dùng tự đánh dấu xong (luật "không tự tích" chỉ áp cho việc học có chấm),
+/// và KHÔNG tính vào tỷ lệ trượt. Có giờ ⇒ bộ xếp lịch học né khung này (xepLich.ts) + nhắc tới giờ như việc học.
+model ViecCaNhan {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+
+  tieuDe String  @map("tieu_de") @db.VarChar(255)
+  ghiChu String? @map("ghi_chu") @db.Text
+
+  /// Giờ bắt đầu cụ thể (UTC). null ⇒ việc trong ngày `ngay`, không giờ.
+  gioBatDau     DateTime? @map("gio_bat_dau")
+  /// Ngày làm theo giờ VN (DATE). Có `gioBatDau` thì vẫn ghi ngày VN của giờ đó — lọc theo ngày một kiểu.
+  ngay          DateTime? @db.Date
+  thoiLuongPhut Int       @default(30) @map("thoi_luong_phut")
+
+  xongLuc   DateTime? @map("xong_luc")
+  daNhacLuc DateTime? @map("da_nhac_luc")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, ngay], map: "idx_viec_ca_nhan_user_ngay")
+  @@index([userId, gioBatDau], map: "idx_viec_ca_nhan_user_gio")
+  @@map("viec_ca_nhan")
 }
 
 /// Một LẦN NỘP bằng chứng cho một việc (nộp lại được nhiều lần).

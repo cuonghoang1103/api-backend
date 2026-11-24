@@ -327,7 +327,8 @@ describe('khopTuyenWeb', () => {
     // 14/11/2026: +1 Góp ý & bổ sung khoá học (/courses/:slug/gop-y).
     // 18/11/2026: +2 IELTS Tập 3 (/language/:code/ielts/tap-3 và /ielts/tap-3), +2 IELTS Tập 4 (tap-4).
     // 22/11/2026: +3 Phòng thi mô phỏng (/exam/mo-phong, /exam/mo-phong/fe/:attemptId, /exam/mo-phong/pe/:attemptId).
-    expect(thay.size).toBe(217);
+    // 24/11/2026: +2 CT Work Học tập & Lịch cá nhân (/work/hoc-tap, /work/hoc-tap/mon/:id).
+    expect(thay.size).toBe(219);
   });
 });
 

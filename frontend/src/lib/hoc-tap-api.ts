@@ -54,6 +54,18 @@ export interface ViecDeNghi {
 export interface KeHoach { tomTat: string; nenTang: Array<{ slug: string; ten: string; lyDo: string }>; viec: ViecDeNghi[]; canhBao: string[] }
 export interface HanMuc { admin: boolean; pro: boolean; daDung: number; tran: number | null; conLai: number | null }
 
+/** Việc CÁ NHÂN (24/11/2026) — không thuộc môn, không chấm, tự đánh dấu xong. `ngay` = YYYY-MM-DD giờ VN. */
+export interface ViecCaNhan {
+  id: number; tieuDe: string; ghiChu: string | null; gioBatDau: string | null; ngay: string; thoiLuongPhut: number;
+  xong: boolean; xongLuc: string | null; quaHan: boolean;
+}
+export interface ViecCaNhanVao { tieuDe?: string; ghiChu?: string | null; gioBatDau?: string | null; ngay?: string | null; thoiLuongPhut?: number }
+/** Một mục của GET /work/me/agenda (chỉ các trường trang lịch dùng). */
+export interface AgendaMuc {
+  type: 'due' | 'sprint' | 'release' | 'stage' | 'meeting' | string; date: string; title: string;
+  key?: string; url?: string; endsAt?: string; startsAt?: string; project?: { key: string; name: string };
+}
+
 const d = <T,>(p: Promise<{ data: { data: T } }>) => p.then((r) => r.data.data);
 /** Lời gọi có AI chạy đồng bộ (nhận xét, vấn đáp, chấm lại): axios mặc định cắt ở 30 giây, model cần 20–60.
  *  Để 95 giây — dưới trần 100 giây của Cloudflare. */
@@ -87,6 +99,15 @@ export const hocTapApi = {
   xoaViec: (id: number) => d(api.delete(`/hoc-tap/viec/${id}`)),
   doiGio: (id: number, gioBatDau: string) => d(api.patch(`/hoc-tap/viec/${id}/gio`, { gioBatDau })),
   xepLai: (tu?: string) => d<{ daXep: number }>(api.post('/hoc-tap/xep-lich', tu ? { tu } : {})),
+
+  // 24/11/2026: việc cá nhân (CT Work → Học tập & Lịch). `ton`: thêm việc chưa xong của các ngày trước `tu`.
+  dsCaNhan: (tu: string, den: string, ton = false) => d<ViecCaNhan[]>(api.get(`/hoc-tap/ca-nhan?tu=${tu}&den=${den}${ton ? '&ton=1' : ''}`)),
+  themCaNhan: (b: ViecCaNhanVao & { tieuDe: string }) => d<ViecCaNhan>(api.post('/hoc-tap/ca-nhan', b)),
+  suaCaNhan: (id: number, b: ViecCaNhanVao) => d<ViecCaNhan>(api.patch(`/hoc-tap/ca-nhan/${id}`, b)),
+  xongCaNhan: (id: number, xong: boolean) => d<ViecCaNhan>(api.post(`/hoc-tap/ca-nhan/${id}/xong`, { xong })),
+  xoaCaNhan: (id: number) => d(api.delete(`/hoc-tap/ca-nhan/${id}`)),
+  /** Lịch xuyên dự án CT Work của tôi (hạn thẻ, họp, sprint…) — để lịch cá nhân hiện cả việc dự án. */
+  agendaCtWork: (from: string, to: string) => d<{ items: AgendaMuc[] }>(api.get(`/work/me/agenda?from=${from}&to=${to}`)),
 
   taiTep: async (f: File) => {
     const r = await fileApi.upload(f, f.type.startsWith('image/') ? 'images' : 'documents');

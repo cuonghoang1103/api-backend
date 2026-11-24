@@ -125,6 +125,8 @@ const MODEL_HOP_LE = new Set<string>([
   'cm-invisible', 'cm-optimum', 'cm-sonic', 'cm-solid', 'cm-nova', 'cm-shin', 'cm-heshin', 'cm-eco',
   // 19/10/2026: CuongMini Default + nhóm Classic (rambo).
   'cm-default', 'cm-classic-optimum', 'cm-classic-sonic', 'cm-classic-heshin',
+  // 24/11/2026: bản qua cổng gwai.
+  'cm-sonic-g', 'cm-optimum-g', 'cm-invisible-g',
 ]);
 
 function modelHienTai(): ModelAgent {

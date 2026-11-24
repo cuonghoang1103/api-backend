@@ -1152,3 +1152,17 @@ Mẫu một mục:
 - **Cách sửa:** `open -a Docker`, chạy lại `bash scripts/kiem-ci-truoc-push.sh 6d88d4f5e…` (xanh hết: tsc, npm test, test:work-db 508 s) rồi `git push origin <SHA>:refs/heads/main`.
 - **Ảnh hưởng:** ~15 phút GitHub chậm sau prod; prod không ảnh hưởng.
 - **Bài học:** sau mỗi lần Mac khởi động lại phải bật lại Docker Desktop (cùng `dong-bo-linux.sh`) TRƯỚC khi deploy.
+
+### 24/11/2026 — app desktop (phát hành CT Work 1.0.12) — CI đỏ: app không nhận mã model gwai `cm-*-g`
+- **Triệu chứng:** `phat-hanh:ca-hai` dừng ở app CT Work, workflow 45439094397 đỏ ở `agentModels.test.ts`: "app không nhận: cm-sonic-g, cm-optimum-g, cm-invisible-g".
+- **Nguyên nhân:** đợt CuongMini gwai (77eb6d99b) thêm 3 mã vào `src/services/agent/bangModel.ts` nhưng quên danh sách trắng của app (`desktop/src/shared/ipc.ts › modelAgentSchema` + `desktop/src/main/ipc/agent.ts › MODEL_HOP_LE`); test này chỉ chạy trong CI desktop, `kiem-ci-truoc-push.sh` của web không chạy nó.
+- **Cách sửa:** thêm 3 mã vào cả hai danh sách; `npx vitest run src/main/agent/agentModels.test.ts` xanh; phát hành lại.
+- **Ảnh hưởng:** app 1.0.12 chưa ra (~15 phút); app cũ bấm chọn model gwai sẽ bị schema từ chối im lặng tới khi cập nhật.
+- **Bài học:** thêm mã vào `bangModel.ts` ⇒ chạy luôn `(cd desktop && npx vitest run src/main/agent/agentModels.test.ts)` trước khi merge.
+
+### 24/11/2026 — video (lồng lại giọng lxb/net) — 36 tập có giọng mới nhưng video vẫn giọng CŨ, 19 làn render ngồi không
+- **Triệu chứng:** vast9 không có tiến trình render nào từ ~22:25 dù hàng `cho-duyet-render` còn 61 tập lxb; 36/68 tập đã có giọng mới 24/11 nhưng lần render gần nhất có trước giờ giọng xong.
+- **Nguyên nhân:** `tha-ll2.sh` (linux-nha) chỉ thêm id vào `hang-render-swt.txt`, mà tập lồng lại đã có sẵn dòng `ok` cũ trong `hang-render-swt-xong.txt` ⇒ làn render coi là xong và bỏ qua (một số còn render sớm lúc giọng cũ rồi giọng mới mới ghi đè).
+- **Cách sửa:** `dp-lam-lai.sh <id> render` cho 36 tập (làn nhận ngay 22:49); vòng Mac mới `video-bai-giang/scratchpad/ll2-lam-lai.sh` (10 phút/lần): tập trong `ll2-long-lai.txt` vừa có giọng mới mà còn dòng render cũ ⇒ tự `dp-lam-lai render`, đánh dấu `ll2-da-lam-lai.txt`.
+- **Ảnh hưởng:** ~25 phút 19 làn render rảnh; video giọng cũ có thể đã lên web cho những tập đó — bản render mới sẽ tự đẩy đè.
+- **Bài học:** "lồng lại" ≠ "tập mới": muốn làm lại một khâu thì phải gỡ dòng xong cũ (dp-lam-lai), và đếm "xong" phải so thời điểm render với thời điểm giọng, không chỉ có/không dòng ok.

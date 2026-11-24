@@ -998,6 +998,8 @@ export const modelAgentSchema = z.enum([
   // 19/10/2026: CuongMini Default (tự chọn: rambo sống ⇒ Classic Sonic, không ⇒ Solid) + nhóm CuongMini Classic (rambo).
   // App gửi `?bang=cm2` để máy chủ trả các mã này (app đời `?bang=cm` nhận mã cũ thay thế).
   'cm-default', 'cm-classic-optimum', 'cm-classic-sonic', 'cm-classic-heshin',
+  // 24/11/2026: bản qua cổng gwai (Claude rẻ) của nhóm chính hãng — máy chủ gửi khi admin bật gwai.
+  'cm-sonic-g', 'cm-optimum-g', 'cm-invisible-g',
 ]);
 export type ModelAgent = z.infer<typeof modelAgentSchema>;
 

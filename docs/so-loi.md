@@ -1103,3 +1103,10 @@ Mẫu một mục:
 - **Cách sửa:** thêm 9 tiền tố vào `case … continue` của `day_bai` (sao lưu `dong-bo-linux.bak-2411b.sh`), khởi động lại đồng bộ, dựng lại slide 17 tập bằng `dung-slide.sh` từng khoá, `dp-lam-lai.sh <id> render` 6 tập LOI.
 - **Ảnh hưởng:** ~6 giờ render của các tập Tiếng Anh đi làm/IDE bị lỗi; không mất nội dung (nguồn slide còn trong `scratchpad/<px>/slides-src`).
 - **Bài học:** mở tiền tố agent nhà mới ⇒ thêm vào CẢ HAI chỗ của `dong-bo-linux.sh` (exclude bước 1 + case bỏ qua bước 5) — y lỗi 18/11 (111 tập LOI 404). Đã ghi vào checklist mở agent.
+
+### 24/11/2026 — video (đồng bộ máy nhà → Mac) — 239 video render xong từ 19/11 không về Mac ⇒ không lên web
+- **Triệu chứng:** kiem-video-web báo nhiều bài "chưa có video" dù `hang-render-swt-xong.txt` ghi `ok`; `dong-bo-linux.log` lặp `⚠ kéo video dkr-10-0 lỗi/dở — vòng sau kéo tiếp` 2.297 lần (19/11 18:51 → 24/11 11:17).
+- **Nguyên nhân:** `video-bai-giang/scratchpad/dong-bo-linux.sh › render()` mỗi vòng kéo tối đa 1 video (`DP_VIDEO_MOI_VONG=1`) theo thứ tự tệp; `dkr-10-0` render ở máy thuê v2 kiểu "video gốc kéo sau", máy đã trả ⇒ thư mục trên nhà không có `video.mp4` ⇒ `[ -f video.mp4 ]` hỏng mãi, vòng sau lại chọn đúng tập đó ⇒ chặn mọi video phía sau.
+- **Cách sửa:** trước khi kéo, `test -f $p/video.mp4` trên nhà; thiếu ⇒ ghi `scratchpad/can-render-lai.txt` và đi tiếp. Thêm chốt ổ Mac < 10 GB ⇒ ngừng kéo; chạy với `DP_GIU_BAN_LINUX=1` (giữ gốc trên Kioxia nhà); `xuat/tu-day-r2.mjs` lên R2 xong ⇒ xoá bản Mac nếu nhà còn gốc; launchd tu-day-r2 2 giờ ⇒ 1 giờ. `dkr-10-0` render lại.
+- **Ảnh hưởng:** 5 ngày không video mới nào lên web (Docker, Redis, GitHub Actions, Interview Prep, DSA, Deploy VPS, Academy…); 87 video "sót" 23/11 chỉ là phần trước 19/11.
+- **Bài học:** hàng đợi xử lý tuần tự phải BỎ QUA được phần tử hỏng (đếm số lần lỗi, quá N ⇒ cách ly), không thử lại vô hạn ở đầu hàng; lượt kiểm hằng giờ phải đếm "render ok mà chưa về Mac" (dòng `Video Linux đã render chưa kéo về Mac` trong linux-trang-thai.txt đã báo 239 mà không ai đọc).

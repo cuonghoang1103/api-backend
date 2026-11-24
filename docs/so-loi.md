@@ -1145,3 +1145,10 @@ Mẫu một mục:
 - **Cách sửa:** lệnh MCP `hoc_tap` thêm action ĐỌC `search/outline/lesson/exercises/exam/links/progress` (+ REST `/api/v1/hoc-lieu`, `/hoc-lieu/tien-do`); khoá sách đọc lại JSON công khai `/sach-hoc/<khoa>/…` mà prebuild đã xuất; quyền bài = đúng luật trang học (paywall tách sang `services/course/quyenNoiDung.ts`, route bài học dùng chung); `desktop/src/main/agent/ctworkChanWeb.ts › chanWebHocLieu` từ chối `web_tai/web_doc/web_bam/web_lien_ket` trên trang học liệu và chỉ đường `mcp__ctwork__hoc_tap`. Nhánh `hoc-lieu-cuongmini`.
 - **Ảnh hưởng:** mọi lượt "dạy mình bài X" của CuongMini trước bản này đều đoán nội dung hoặc bỏ dở; không mất dữ liệu.
 - **Bài học:** AI kèm học cần đường ĐỌC dữ liệu có cấu trúc (đúng quyền người dùng), không phải trình duyệt; lệnh MCP mới phải gộp vào action của lệnh sẵn có khi mục lục token người chạm trần 280 (registry.test).
+
+### 24/11/2026 — deploy (bước 8 deploy-nha) — prod đã tráo 6d88d4f5e nhưng KHÔNG push vì phép kiểm "redis" hỏng
+- **Triệu chứng:** `deploy-nha.sh` báo `Có phép kiểm hỏng: redis — KHÔNG push` dù smoke-test 95 route sạch; origin/main lệch prod.
+- **Nguyên nhân:** Mac vừa khởi động lại, Docker Desktop chưa bật ⇒ `scripts/kiem-ci-truoc-push.sh` (khối Redis ~dòng 141–148) không dựng được Redis tạm `redis:7-alpine` cho test MFA/CRM ⇒ đánh hỏng cả bộ. Không phải lỗi mã.
+- **Cách sửa:** `open -a Docker`, chạy lại `bash scripts/kiem-ci-truoc-push.sh 6d88d4f5e…` (xanh hết: tsc, npm test, test:work-db 508 s) rồi `git push origin <SHA>:refs/heads/main`.
+- **Ảnh hưởng:** ~15 phút GitHub chậm sau prod; prod không ảnh hưởng.
+- **Bài học:** sau mỗi lần Mac khởi động lại phải bật lại Docker Desktop (cùng `dong-bo-linux.sh`) TRƯỚC khi deploy.

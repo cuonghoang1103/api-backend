@@ -311,7 +311,7 @@ export const TRA_CONG_THUC_CHANG5: Block[] = [
       ['Mặc định', 'Không passage nào có quá 5 câu 🔴 ⇒ làm 1 → 2 → 3'],
       ['Đẩy lùi', 'Passage có ≥ 6 câu 🔴 ⇒ làm sau cùng'],
       ['Kéo lên', 'Passage 3 toàn dạng 🟢 / 🟡, chủ đề quen ⇒ làm thứ hai'],
-      ['Ngân sách', '2 phút lướt · 16 (dễ nhất với bạn) · 19 · 22 (khó nhất) · 1 phút dự trữ'],
+      ['Ngân sách', '2 phút lướt · 16 (dễ nhất với bạn) · 19 · 22 (khó nhất) · 1 phút dự trữ = 60 — chính là nhịp 17 – 20 – 23 của Ngày 27, mỗi passage nhường 1 phút cho lượt lướt + dự trữ'],
       ['Luật 90 giây', 'Quá 90 giây chưa chốt ⇒ chọn đáp án nghiêng về nhất, ⚑ đánh dấu, đi tiếp; không để trống'],
     ],
   },

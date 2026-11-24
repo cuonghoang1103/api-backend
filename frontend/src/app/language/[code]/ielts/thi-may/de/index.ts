@@ -112,7 +112,7 @@ export const MUC_LUC: MucDe[] = [
   { id: 'viet-de8', kyNang: 'viet', ten: 'Academic Writing — Đề 8 (thi cuối Tập 4)', boDe: 'Đề 8', capDo: 'Band 7.0', phut: 60, soCau: 2,
     moTa: 'Task 1: international students by region of origin, 2005 and 2025, and their subjects in 2025 (bar chart + pie chart) · Task 2: taking a year off between school and university — do the advantages outweigh the disadvantages?' },
   { id: 'noi-de8', kyNang: 'noi', ten: 'Speaking — Đề 8 (thi cuối Tập 4)', boDe: 'Đề 8', capDo: 'Band 7.0', phut: 14, soCau: 3,
-    moTa: 'Part 1: plants · noise · Part 2: a piece of advice you received that was useful · Part 3: giving and taking advice, advice in the future' },
+    moTa: 'Part 1: plants · noise · Part 2: a piece of advice from a book, video or podcast that changed a habit · Part 3: advice from the media, advice in the future' },
 ];
 
 /** id → hàm tải tệp đề (mỗi tệp một chunk). */

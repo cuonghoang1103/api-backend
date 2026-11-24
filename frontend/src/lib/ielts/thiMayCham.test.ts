@@ -536,6 +536,8 @@ test('Đề 8 (thi cuối Tập 4 · sau Ngày 30): phủ dạng nửa sau Tập
   // giả định (N19), dự đoán (N7).
   assert.deepEqual(NOI_DE8.part1.map((c) => c.chuDe), ['Plants', 'Noise']);
   assert.match(NOI_DE8.part2.cueCard, /^Describe a piece of advice /);
+  // 24/11: thẻ Đề 8 không được trùng thẻ + bài mẫu Tập 4 Ngày 26 (advice nhận từ một người, không nghe lúc đầu / hoá ra hữu ích).
+  assert.doesNotMatch(NOI_DE8.part2.cueCard, /did not follow at first|turned out to be useful/);
   const p3 = NOI_DE8.part3.flatMap((c) => c.cau);
   for (const re of [/^Why do some /, /^Is it ever /, /^What would happen if /, /^Do you think .+ in the future\?$/]) assert.ok(p3.some((c) => re.test(c)), `noi-de8 Part 3: thiếu câu dạng ${re}`);
 });

@@ -24,6 +24,8 @@
  * minh oan ở Mỹ có nhân chứng nhận nhầm người. Hội thảo Coastal Tourism Conference, công ty Tidewater Cycles, trung tâm Ferndale,
  * Dr Abara và mọi nhân vật trong Part 1–3 đều HƯ CẤU.
  * Mỗi đáp án có `ev` = chuỗi NGUYÊN VĂN trong lời thoại + giải thích tiếng Việt (nêu bẫy, trỏ bài ôn).
+ * SOÁT CHÉO 24/11/2026 (theo trí nhớ): Bartlett 1932 (canoes → boats) · Loftus–Palmer 1974 (~41 vs ~32 mph, kính vỡ ~1/3 vs < 1/6) ·
+ *   Loftus 1995 (~1/4) · Neisser Challenger (2,5 năm, ~1/4 sai) · ~70% án DNA lật có nhân chứng nhận nhầm — khớp.
  */
 import type { DeNghe } from './types';
 
@@ -333,7 +335,7 @@ export const NGHE_DE7: DeNghe = {
           gioiHan: { tu: 1 },
           tieuDe: 'Flashbulb memories and the law',
           dong: [
-            'A \'flashbulb memory\' is a vivid memory of the moment when a person heard some dramatic [[36]]. After the Challenger disaster, Neisser collected two accounts from each of his students, more than two years apart. Many of the later accounts were very different, but the students\' [[37]] in them remained high. This finding is especially important in the [[38]], where a mistaken [[39]] has played a part in many wrongful convictions. As a result, the police officer who carries out an identification is now often a person who does not know the identity of the [[40]].',
+            'A \'flashbulb memory\' is a vivid memory of the moment when a person heard some dramatic [[36]]. After the Challenger disaster, Neisser collected two accounts from each of his students, more than two years apart. Many of the later accounts were very different, but the students\' [[37]] in them remained high. This finding is especially important in the [[38]], where a [[39]] who picked out the wrong person has played a part in many wrongful convictions. As a result, the police officer who carries out an identification is now often a person who does not know the identity of the [[40]].',
           ],
         },
       ],
@@ -385,8 +387,8 @@ export const NGHE_DE7: DeNghe = {
     35: { a: ['quarter'], vi: `"About a quarter of the volunteers came to accept it as real" — "approximately a ___ of them believed that the false event had happened" ⇒ **quarter**. Bẫy số: "four events", "the fourth", "the age of five" đứng ngay trước; "a third" thuộc thí nghiệm kính vỡ. 📘 Ôn số liệu trong bài giảng: Tập 4 Ngày 8.`, ev: `About a quarter of the volunteers came to accept it as real` },
     36: { a: ['news'], vi: `"memories that feel especially vivid, such as where you were when you heard a shocking piece of news" — "dramatic" = "shocking" ⇒ **news** (danh từ không đếm được, luôn có "s"). 📘 Ôn Summary completion khi nghe: Tập 4 Ngày 13.`, ev: `such as where you were when you heard a shocking piece of news` },
     37: { a: ['confidence'], vi: `"What did not decline was their confidence." — bản tóm tắt: "the students' ___ in them remained high" = "did not decline" ⇒ **confidence**. Câu chẻ "What did not decline was…" đẩy đáp án xuống CUỐI câu. Không điền "confident" (tính từ) — sau sở hữu cách cần danh từ.`, ev: `What did not decline was their confidence.` },
-    38: { a: ['courts', 'court', 'courtroom'], vi: `"This matters outside the laboratory, and nowhere more than in the courts." — "especially important in the ___" = "nowhere more than in" ⇒ **courts**. Bẫy: "laboratory" — bài nói điều này quan trọng BÊN NGOÀI phòng thí nghiệm.`, ev: `This matters outside the laboratory, and nowhere more than in the courts.` },
-    39: { a: ['witness', 'eyewitness'], vi: `"around seventy per cent involved a witness who had identified the wrong person" — "a mistaken ___" = "a witness who had identified the wrong person"; "wrongful convictions" = án bị DNA lật lại ⇒ **witness** ("eyewitness" — một từ, giảng viên cũng dùng — được chấp nhận).`, ev: `around seventy per cent involved a witness who had identified the wrong person` },
+    38: { a: ['courts', 'court'], vi: `"This matters outside the laboratory, and nowhere more than in the courts." — "especially important in the ___" = "nowhere more than in" ⇒ **courts**. Bẫy: "laboratory" — bài nói điều này quan trọng BÊN NGOÀI phòng thí nghiệm.`, ev: `This matters outside the laboratory, and nowhere more than in the courts.` },
+    39: { a: ['witness', 'eyewitness'], vi: `"around seventy per cent involved a witness who had identified the wrong person" — "a ___ who picked out the wrong person" = "a witness who had identified the wrong person" (danh từ chỉ NGƯỜI — vì có who; "identification" có trong băng nhưng không đi với who); "wrongful convictions" = án bị DNA lật lại ⇒ **witness** ("eyewitness" — một từ, giảng viên cũng dùng — được chấp nhận).`, ev: `around seventy per cent involved a witness who had identified the wrong person` },
     40: { a: ['suspect'], vi: `"The officer who conducts an identification should now be someone who doesn't know which person is the suspect" — "does not know the identity of the ___" ⇒ **suspect** (danh từ, nhấn âm ĐẦU /ˈsʌspekt/; động từ nhấn âm hai). Bẫy: "witness" — nhân chứng là người đi nhận diện, không phải người bị giấu danh tính.`, ev: `The officer who conducts an identification should now be someone who doesn't know which person is the suspect` },
   },
 };

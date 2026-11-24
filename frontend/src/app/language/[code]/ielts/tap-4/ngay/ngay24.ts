@@ -585,7 +585,7 @@ export const NGAY_24: Lesson[] = [
         steps: [
           { label: "1. Lấy CỘT TRÁI làm xương sống", sub: "Cột gợi nhớ của trang Cornell (Ngày 20) = danh sách ý chính" },
           { label: "2. Tìm luận điểm bao trùm", sub: "Một câu: “Giảng viên cho rằng…” — thường ở phần mở và phần kết bài giảng" },
-          { label: "3. Đổi ví dụ thành danh từ loại", sub: "mirrors by lifts → distractions · 3 ví dụ → “three factors”" },
+          { label: "3. Đổi ví dụ thành danh từ loại", sub: "TV screens in waiting rooms → distractions · 3 ví dụ → “three factors”" },
           { label: "4. Viết theo khung 4 phần", sub: "nguồn + luận điểm · 3–4 ý · kết luận · giới hạn (nếu giảng viên nêu)" },
         ],
       },
@@ -603,7 +603,7 @@ export const NGAY_24: Lesson[] = [
         head: ["Cột gợi nhớ", "Ghi chú"],
         rows: [
           ["Main claim", "felt length of wait > real length (for customer satisfaction)"],
-          ["1. Empty time", "nothing to do → feels longer · e.g. mirrors by lifts → complaints ↓, wait same"],
+          ["1. Empty time", "nothing to do → feels longer · e.g. TV screens in a clinic waiting room → complaints ↓, wait same"],
           ["2. Uncertainty", "unknown wait feels longer than known · e.g. countdown displays at bus stops"],
           ["3. Fairness", "being overtaken = most anger · single line for all counters preferred, even if slower"],
           ["So what?", "cheaper to manage perception than cut real wait · BUT distraction can't hide v. long delays"],
@@ -614,8 +614,8 @@ export const NGAY_24: Lesson[] = [
         kind: "compare",
         title: "Hai bản tóm tắt từ cùng trang ghi chú",
         cols: [
-          { title: "Band 6 (ước tính) — 82 từ", items: ["The lecture is about queuing. The lecturer said that people don't like waiting. First, she talked about mirrors next to lifts. People looked at mirrors and they did not complain. Second, she said there are countdown displays at bus stops, so people know the time. Third, people get angry when someone jumps the queue, so a single line is better. I think this lecture is very interesting and useful for companies, because they can make customers happier.", "✗ Không có luận điểm bao trùm · ✗ kể **ví dụ** thay cho ý · ✗ thêm ý kiến riêng (I think) · ✗ said / talked ở quá khứ, lặp · ✗ bỏ mất giới hạn"] },
-          { title: "Band 7 (ước tính) — 112 từ", items: ["In her lecture on the psychology of queuing, Dr Hale argues that how long a wait feels matters more to customers than how long it actually lasts. She identifies three factors that lengthen perceived waiting time. The first is having nothing to do, which is why distractions such as mirrors beside lifts reduce complaints. The second is uncertainty: a wait of unknown length seems longer than a known one. The third is unfairness, since people tolerate a slower single queue better than the risk of being overtaken. She concludes that managing perception is usually cheaper than shortening the wait itself, although she concedes that distraction cannot disguise very long delays.", "✓ Luận điểm ở câu 1 · ✓ “three factors” + mỗi yếu tố một câu, ví dụ chỉ một cụm · ✓ argues / identifies / concludes / concedes · ✓ không ý kiến riêng · ✓ có giới hạn"] },
+          { title: "Band 6 (ước tính) — 78 từ", items: ["The lecture is about queuing. The lecturer said that people don't like waiting. First, she talked about TV screens in a clinic. People watched the TV and they did not complain. Second, she said there are countdown displays at bus stops, so people know the time. Third, people get angry when someone jumps the queue, so a single line is better. I think this lecture is very interesting and useful for companies, because they can make customers happier.", "✗ Không có luận điểm bao trùm · ✗ kể **ví dụ** thay cho ý · ✗ thêm ý kiến riêng (I think) · ✗ said / talked ở quá khứ, lặp · ✗ bỏ mất giới hạn"] },
+          { title: "Band 7 (ước tính) — 111 từ", items: ["In her lecture on the psychology of queuing, Dr Hale argues that how long a wait feels matters more to customers than how long it actually lasts. She identifies three factors that lengthen perceived waiting time. The first is having nothing to do, which is why distractions such as screens in waiting rooms reduce complaints. The second is uncertainty: a wait of unknown length seems longer than a known one. The third is unfairness, since people tolerate a slower single queue better than the risk of being overtaken. She concludes that managing perception is usually cheaper than shortening the wait itself, although she concedes that distraction cannot disguise very long delays.", "✓ Luận điểm ở câu 1 · ✓ “three factors” + mỗi yếu tố một câu, ví dụ chỉ một cụm · ✓ argues / identifies / concludes / concedes · ✓ không ý kiến riêng · ✓ có giới hạn"] },
         ],
       },
       {

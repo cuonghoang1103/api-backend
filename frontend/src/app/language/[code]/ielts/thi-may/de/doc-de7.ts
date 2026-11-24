@@ -22,6 +22,9 @@
  * về sản lượng trên đầu người tuổi lao động của Nhật và nhận định về chính sách khuyến sinh là LẬP LUẬN của bài (có nguồn kinh tế
  * học ủng hộ nhưng còn tranh luận) — Passage 3 là bài QUAN ĐIỂM tự viết, không phải tổng thuật trung lập.
  * Mỗi đáp án có `ev` = chuỗi NGUYÊN VĂN trong bài + giải thích tiếng Việt (nêu bẫy, trỏ bài ôn).
+ * SOÁT CHÉO 24/11/2026 (đối chiếu theo trí nhớ, KHÔNG mở nguồn): Maltz 1960 · James 1890 · Wood ~43% / bỏng ngô / chuyển trường · Lally 2009,
+ *   96 người, 66 / 18 / 254 ngày, vận động ×1,5 · van Meegeren (1889, Emmaus 1937, Bredius, nhựa + lò, Göring 137 bức, Coremans,
+ *   án 11/1947, mất 12/1947) · Malthus 1798 · Ehrlich 1968 · 2,1 · Hàn Quốc < 1 · đỉnh LHQ thập niên 2080 — không thấy chỗ sai.
  */
 import type { DeDoc } from './types';
 
@@ -259,7 +262,7 @@ export const DOC_DE7: DeDoc = {
     10: { a: ['popcorn'], vi: `"people arriving at a cinema were handed boxes of popcorn that was a week old" — "no longer fresh" = "a week old" / "stale" ⇒ **popcorn**. "were given" = "were handed". Cột kết quả "regular eaters consumed the usual amount" = "ate just as much of the stale popcorn as they would have eaten of a fresh box".`, ev: `people arriving at a cinema were handed boxes of popcorn that was a week old` },
     11: { a: ['plastic surgeon', 'surgeon', 'a plastic surgeon', 'a surgeon'], vi: `"Maxwell Maltz, an American plastic surgeon" ⇒ **plastic surgeon** (bác sĩ phẫu thuật thẩm mỹ). Hai từ, đúng giới hạn; không thêm "American" (thành ba từ — vượt giới hạn là sai dù đúng ý). 📘 Ôn Short answer: Tập 3 Ngày 7.`, ev: `The number can be traced to Maxwell Maltz, an American plastic surgeon.` },
     12: { a: ['18', 'eighteen', '18 days', 'eighteen days'], vi: `"the fastest volunteer reached that point in 18 days, while for the slowest… 254 days" — "quickest" = "fastest" ⇒ **18**. Ba con số dễ lẫn: 66 = trung bình; 254 = người CHẬM nhất (ước tính); 21 = con số huyền thoại.`, ev: `the fastest volunteer reached that point in 18 days` },
-    13: { a: ['moving house', 'a move', 'moving'], vi: `"begin at a moment when your routine has been disrupted in any case, such as after moving house" — "a suitable time to start" = "begin at a moment when…"; "change in a person's life" = nếp sinh hoạt bị xáo trộn ⇒ **moving house**. Ý này nối với nghiên cứu sinh viên chuyển trường ở đầu đoạn: môi trường mới làm thói quen cũ yếu đi.`, ev: `begin at a moment when your routine has been disrupted in any case, such as after moving house` },
+    13: { a: ['moving house', 'moving'], vi: `"begin at a moment when your routine has been disrupted in any case, such as after moving house" — "a suitable time to start" = "begin at a moment when…"; "change in a person's life" = nếp sinh hoạt bị xáo trộn ⇒ **moving house**. Ý này nối với nghiên cứu sinh viên chuyển trường ở đầu đoạn: môi trường mới làm thói quen cũ yếu đi.`, ev: `begin at a moment when your routine has been disrupted in any case, such as after moving house` },
 
     /* ── Passage 2 ── */
     14: { a: ['iv'], vi: `Đoạn A: van Meegeren bị truy vì bán "báu vật quốc gia" cho kẻ thù — "treason, and treason could carry the death penalty"; để thoát, ông nhận mình là kẻ làm tranh GIẢ. Tội phản quốc nặng hơn nhiều so với tội lừa đảo ⇒ **iv** (A charge more serious than fraud). Bẫy i: đoạn A chỉ có lời KHAI, cuộc "trình diễn" có giám sát nằm ở đoạn F. 📘 Ôn Matching headings 3 (ý ẩn): Tập 4 Ngày 3.`, ev: `Selling a national treasure to the enemy was treason, and treason could carry the death penalty.` },

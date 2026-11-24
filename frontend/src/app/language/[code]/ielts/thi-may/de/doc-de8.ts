@@ -27,6 +27,9 @@
  * vị chính phủ ≈ 1/6 hiệu quả đăng trên tạp chí (DellaVigna & Linos). Phần nhận định ở đoạn 6–8 là QUAN ĐIỂM của bài (có giới
  * nghiên cứu ủng hộ nhưng còn tranh luận) — Passage 3 là bài quan điểm tự viết, không phải tổng thuật trung lập.
  * Mỗi đáp án có `ev` = chuỗi NGUYÊN VĂN trong bài + giải thích tiếng Việt (nêu bẫy, trỏ bài ôn).
+ * SOÁT CHÉO 24/11/2026 (đối chiếu theo trí nhớ, KHÔNG mở nguồn): Crawford 1920 / Keiller 1928 · cropmark + hè 2018 · lidar Angkor 2012,
+ *   Guatemala 2018 > 60.000 · Becquerel 1839 · Fritts ~1% · Einstein 1905 (Nobel vì hiệu ứng quang điện) · Bell 4/1954 ~6% · Vanguard 1
+ *   (1958 → 1964) · EEG Đức 2000 · Swanson ~20%/lần gấp đôi · Thaler–Sunstein 2008 · BIT 2010 · Nobel 2017/2002 · DellaVigna–Linos ~1/6 — khớp.
  */
 import type { DeDoc } from './types';
 

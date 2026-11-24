@@ -369,7 +369,7 @@ export const NGAY_29: Lesson[] = [
           "Bài này đẩy **Reading band 7** (≥ 30/40). Ở mức này bạn không thiếu kỹ năng đọc — bạn mất điểm vì ==hết giờ ở passage cuối== và vì ==kẹt 4 phút ở một câu==.",
           "Đề xếp passage dễ → khó **cho số đông**. Độ khó **của bạn** tuỳ vào dạng câu: có người làm Headings nhanh mà chậm ở Matching information.",
           "Việc 1: lập **hồ sơ dạng câu** (tỉ lệ đúng + phút / câu) từ ba lần 60 phút ở Ngày 13 · 21 · 27.",
-          "Việc 2: **2 phút lướt** đầu giờ → quyết thứ tự passage. Việc 3: ngân sách ==16 – 19 – 22 + 3 phút== và **luật 90 giây**.",
+          "Việc 2: **2 phút lướt** đầu giờ → quyết thứ tự passage. Việc 3: ngân sách ==16 – 19 – 22 + 3 phút== và **luật 90 giây**. Đây **không** phải nhịp mới thay cho 17 – 20 – 23 của Ngày 27: vẫn là 60 phút, chỉ là mỗi passage nhường **1 phút** để trả cho 2 phút lướt đầu giờ + 1 phút dự trữ cuối giờ (2 + 16 + 19 + 22 + 1 = 60).",
           "Ôn **Tập 3 Ngày 29** (bản đồ đoạn, 17–20–23) và **Tập 4 Ngày 5 · 9** (bẫy “đúng một nửa”, giọng điệu tác giả).",
         ],
       },
@@ -465,14 +465,14 @@ export const NGAY_29: Lesson[] = [
       { t: "h", text: "4. Ngân sách 16 – 19 – 22 + 3 và luật 90 giây" },
       {
         t: "table",
-        caption: "Đồng hồ band 7 cho 60 phút (theo ĐỘ KHÓ của passage, không theo thứ tự bạn làm)",
+        caption: "Đồng hồ band 7 cho 60 phút (theo ĐỘ KHÓ của passage, không theo thứ tự bạn làm). So với 17 – 20 – 23 của Ngày 27: mỗi passage bớt 1 phút ⇒ 3 phút đó thành 2 phút lướt + 1 phút dự trữ. Ngày 27 làm theo thứ tự đề nên không cần lượt lướt; hôm nay được đổi thứ tự nên cần.",
         head: ["Phần", "Phút", "Trong đó"],
         rows: [
           ["2 phút lướt", "2", "Chốt thứ tự (mục 3)"],
           ["Passage dễ nhất với bạn", "**16**", "2 phút bản đồ đoạn · 13 phút câu hỏi · 1 phút soát chính tả"],
           ["Passage trung bình", "**19**", "3 phút bản đồ đoạn · 15 phút câu hỏi · 1 phút soát"],
           ["Passage khó nhất với bạn", "**22**", "3 phút bản đồ đoạn · 18 phút câu hỏi · 1 phút soát"],
-          ["Dự trữ", "**1–3**", "Quay lại các câu đã đánh dấu ⚑; điền nốt mọi ô trống"],
+          ["Dự trữ", "**1**", "Quay lại các câu đã đánh dấu ⚑; điền nốt mọi ô trống (passage nào xong sớm thì phút dư cộng vào đây)"],
         ],
       },
       {
@@ -496,7 +496,7 @@ export const NGAY_29: Lesson[] = [
           "Không bao giờ để trống: IELTS không trừ điểm câu sai.",
         ],
       },
-      { t: "rule", formula: "2 phút lướt → 16 – 19 – 22 → 3 phút cho câu ⚑ · mỗi câu ≤ 90 giây", vi: "Thứ tự theo hồ sơ cá nhân; ngân sách theo độ khó; kẹt thì đoán, đánh dấu, đi." },
+      { t: "rule", formula: "2 phút lướt → 16 – 19 – 22 → 1 phút cho câu ⚑ (= 60) · mỗi câu ≤ 90 giây", vi: "Thứ tự theo hồ sơ cá nhân; ngân sách theo độ khó; kẹt thì đoán, đánh dấu, đi." },
 
       /* ── 5 ── */
       { t: "h", text: "5. Khởi động — bẫy “đúng một nửa” và từ cực đoan (ôn Ngày 5 · Ngày 9)" },
@@ -522,7 +522,7 @@ export const NGAY_29: Lesson[] = [
         intro: "You should spend about 20 minutes on Questions 27–40, which are based on the reading passage below.",
         paras: [
           { label: "A", text: "In the late 1940s the United States Air Force was losing aircraft at an alarming rate. Mechanical failure was ruled out; so, after lengthy inquiries, was carelessness on the part of the pilots. Attention eventually turned to the cockpit itself, whose dimensions had been fixed in the 1920s to suit the average measurements of the airmen of that era. The officials in charge drew what seemed the obvious conclusion: pilots must have grown larger in the intervening years, and a fresh survey would yield a new, more accurate average around which the cockpit could be rebuilt." },
-          { label: "B", text: "One of the junior researchers assigned to the survey asked a different question. Instead of calculating the new average, he wanted to know how many pilots actually matched it. He selected the ten physical dimensions considered most relevant to cockpit design, among them height, chest circumference and sleeve length, and defined ‘average’ generously, as the middle thirty per cent of the range for each. Like his colleagues, he assumed that a sizeable proportion of the four thousand or so men measured would fall within that band on all ten. The actual number was zero. Even when only three dimensions were considered, fewer than one pilot in twenty qualified. A cockpit built for the average pilot had, in effect, been built for nobody." },
+          { label: "B", text: "One of the junior researchers assigned to the survey asked a different question. Instead of calculating the new average, he wanted to know how many pilots actually matched it. He selected the ten physical dimensions considered most relevant to cockpit design, among them height, chest circumference and sleeve length, and defined ‘average’ generously, as the middle thirty per cent of the range for each. His colleagues took it for granted that a sizeable proportion of the four thousand or so men measured would fall within that band on all ten. The actual number was zero. Even when only three dimensions were considered, fewer than one pilot in twenty qualified. A cockpit built for the average pilot had, in effect, been built for nobody." },
           { label: "C", text: "Perhaps the finding should not have come as a shock, for the ‘average person’ was a comparatively recent invention. In the 1830s the Belgian astronomer Adolphe Quetelet borrowed a technique from his own discipline, in which many imperfect observations of a star are averaged to estimate its true position, and applied it to human beings. Having collected the chest measurements of several thousand soldiers, he concluded that their average represented the type at which nature was aiming, and that individual departures from it were best understood as errors. The average man, in other words, was not merely a statistical convenience; he was an ideal." },
           { label: "D", text: "The notion proved enormously attractive to large organisations. Armies ordering uniforms, insurers setting premiums and manufacturers designing tools all found that it simplified their decisions, and schools soon followed, arranging pupils by age and allotting each task the time an average child was expected to need. It would be foolish to deny what was gained. Cheap clothing, mass education and public health campaigns all depended on treating people, for certain purposes, as interchangeable. Critics who write as though averaging were simply a blunder tend to overlook this." },
           { label: "E", text: "Nevertheless, the method conceals a trap. An average describes a group; it says nothing dependable about any one member unless the members happen to be alike in the relevant respect. Statisticians understand this perfectly well. Those who plan services on the basis of their figures frequently forget it. A drug that lowers blood pressure on average may raise it in a minority of patients. A teaching method that lifts average scores may do so by helping pupils in the middle while leaving both the weakest and the strongest worse off. To pass from ‘this works on average’ to ‘this will work for you’ requires a further assumption, and it is one that is seldom tested." },
@@ -538,7 +538,7 @@ export const NGAY_29: Lesson[] = [
         title: "Questions 27–32 — Yes / No / Not Given",
         items: [
           { q: "27. The officials at first believed that pilots' bodies had changed since the cockpit was designed.", options: ["YES", "NO", "NOT GIVEN"], correct: 0, why: "Đoạn A: “pilots must have grown larger in the intervening years”. grown larger = bodies had changed; the obvious conclusion = believed at first." },
-          { q: "28. The researcher expected to find that no pilot was average on all ten dimensions.", options: ["YES", "NO", "NOT GIVEN"], correct: 1, why: "Đoạn B: “Like his colleagues, he assumed that a sizeable proportion… would fall within that band on all ten.” Anh ta đoán NHIỀU người — kết quả 0 là bất ngờ ⇒ NO." },
+          { q: "28. The other researchers expected to find that hardly any pilot was average on all ten dimensions.", options: ["YES", "NO", "NOT GIVEN"], correct: 1, why: "Đoạn B: “His colleagues took it for granted that a sizeable proportion… would fall within that band on all ten.” Họ đoán NHIỀU người (a sizeable proportion) — ngược với hardly any ⇒ NO. Bài không nói chính người nghiên cứu trẻ đoán gì — đừng gán ý của đồng nghiệp cho anh ta." },
           { q: "29. Quetelet's measurements of soldiers were more precise than those made by earlier scientists.", options: ["YES", "NO", "NOT GIVEN"], correct: 2, why: "Đoạn C chỉ nói ông thu thập số đo ngực của vài nghìn lính; không so độ chính xác với ai. Chữ “imperfect observations” nói về sao, không phải về lính ⇒ NOT GIVEN." },
           { q: "30. People who dismiss averaging as a mistake fail to recognise the benefits it brought.", options: ["YES", "NO", "NOT GIVEN"], correct: 0, why: "Đoạn D: “Critics who write as though averaging were simply a blunder tend to overlook this.” blunder = mistake; overlook this = fail to recognise (this = what was gained)." },
           { q: "31. Statisticians are more likely than service planners to misapply averages to individuals.", options: ["YES", "NO", "NOT GIVEN"], correct: 1, why: "Đoạn E nói ngược lại: “Statisticians understand this perfectly well. Those who plan services… frequently forget it.” ⇒ NO." },
@@ -613,7 +613,7 @@ export const NGAY_29: Lesson[] = [
         head: ["Trong bài", "Trong câu hỏi", "Kiểu đổi"],
         rows: [
           ["must have grown larger in the intervening years", "bodies had changed since the cockpit was designed", "cụ thể → khái quát"],
-          ["assumed that a sizeable proportion would…", "expected to find that no pilot… (NO)", "đảo nghĩa — bẫy"],
+          ["took it for granted that a sizeable proportion would…", "expected to find that hardly any pilot… (NO)", "đảo nghĩa — bẫy"],
           ["simply a blunder", "a mistake", "đồng nghĩa"],
           ["tend to overlook this", "fail to recognise the benefits", "đồng nghĩa + this → danh từ rõ"],
           ["only loosely related to one another", "have little connection with each other", "tính từ → danh từ"],
@@ -899,13 +899,13 @@ export const NGAY_29: Lesson[] = [
           { who: "Dev", voice: "ca-nam", text: "Done. The literature review is the right length, I think, but it only draws on four studies." },
           { who: "Maya", voice: "us-nu", text: "And two of those are by the same author. It doesn't need rewriting, it just needs a broader base. I found three more papers on upland paths last night; let's work those in." },
           { who: "Dev", voice: "ca-nam", text: "Good. Methods. I wondered about moving the whole description of the transects to the back." },
-          { who: "Maya", voice: "us-nu", text: "I wouldn't. A reader has to understand the method before the results. The writing's clear enough; the problem is that it's hard to picture where the ten lines were. If we drew the path and marked them on it, that would do it." },
-          { who: "Dev", voice: "ca-nam", text: "A sketch of the layout, yes. Then the results. Five pages of tables." },
-          { who: "Maya", voice: "us-nu", text: "Nobody's going to read those. Keep the two summary charts in the main text and put the raw tables at the end, where anyone who wants them can find them." },
-          { who: "Dev", voice: "ca-nam", text: "That works. Which leaves the discussion, and we're back to boots versus water." },
-          { who: "Maya", voice: "us-nu", text: "We could just rewrite it my way." },
-          { who: "Dev", voice: "ca-nam", text: "Or mine! Seriously, we shouldn't touch it until we know whether we're even allowed to present two explanations side by side. Dr Hale has office hours on Thursday. Let's take the draft and see what she says." },
-          { who: "Maya", voice: "us-nu", text: "Thursday it is." },
+          { who: "Maya", voice: "us-nu", text: "I wouldn't. A reader has to understand the method before the results. I was going to suggest a sketch showing where the ten lines were, but then I remembered the map in the introduction already marks every one of them." },
+          { who: "Dev", voice: "ca-nam", text: "So there's no point drawing it twice. Then I'd leave the methods exactly as they are. Next, the results. Five pages of tables." },
+          { who: "Maya", voice: "us-nu", text: "Agreed on the methods. But nobody's going to read five pages of tables. Keep the two summary charts in the main text and put the raw tables at the end, where anyone who wants them can find them." },
+          { who: "Dev", voice: "ca-nam", text: "That works. Which leaves the discussion, and we're back to boots versus water. Shall we take it to Dr Hale on Thursday?" },
+          { who: "Maya", voice: "us-nu", text: "She told us last week she won't comment on drafts any more — it's our call now. And it isn't the details that are wrong. The whole section is written as if the walkers were the only explanation." },
+          { who: "Dev", voice: "ca-nam", text: "Fair enough. Then there's no point patching it. Let's start again from a blank page: both explanations side by side, with the evidence for each." },
+          { who: "Maya", voice: "us-nu", text: "From scratch, then. I'll draft the half about the water tonight." },
         ],
       },
       {
@@ -928,9 +928,9 @@ export const NGAY_29: Lesson[] = [
         items: [
           { q: "26. Introduction", answers: ["A"] },
           { q: "27. Literature review", answers: ["G"] },
-          { q: "28. Methods", answers: ["C"] },
+          { q: "28. Methods", answers: ["E"] },
           { q: "29. Results", answers: ["B"] },
-          { q: "30. Discussion", answers: ["F"] },
+          { q: "30. Discussion", answers: ["D"] },
         ],
       },
 
@@ -1052,9 +1052,9 @@ export const NGAY_29: Lesson[] = [
         items: [
           "**26 A** — Introduction 600 / 3.000 từ: “Let's cut it down to three hundred”.",
           "**27 G** — Literature review: “It doesn't need rewriting, it just needs a broader base… three more papers… let's work those in”. Bẫy D (rewrite) bị gạt rõ.",
-          "**28 C** — Methods: Dev định chuyển ra cuối (bẫy B), Maya: “I wouldn't… If we drew the path and marked them on it” → Dev: “A sketch of the layout, yes.”",
+          "**28 E** — Methods: Dev định chuyển ra cuối (bẫy B) — Maya: “I wouldn't”; Maya định thêm sơ đồ (bẫy C) nhưng “the map in the introduction already marks every one of them” ⇒ Dev: “I'd leave the methods exactly as they are”, Maya: “Agreed on the methods.”",
           "**29 B** — Results: “put the raw tables at the end” = move part of it to an appendix (chỉ MỘT PHẦN: hai biểu đồ tóm tắt ở lại).",
-          "**30 F** — Discussion: “we shouldn't touch it until… Dr Hale has office hours on Thursday”. Bẫy D: “We could just rewrite it my way” chỉ là câu đùa. Bẫy E: “The abstract's fine as it is” nói về phần tóm tắt, không có trong danh sách.",
+          "**30 D** — Discussion: Dev hỏi có mang tới Dr Hale không (bẫy F) — “she won't comment on drafts any more — it's our call now”. Cả phần viết sai hướng ⇒ “no point patching it… start again from a blank page” · “From scratch, then” = rewrite it completely. Bẫy E: “The abstract's fine as it is” nói về phần tóm tắt, không có trong danh sách.",
         ],
       },
       {

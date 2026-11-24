@@ -24,6 +24,8 @@
  * Riverside Lantern Festival ở Castle Park, sông Lenn, tổ chức thiện nguyện Harbour Food Trust, Dr Okafor và mọi nhân vật trong
  * Part 1–3 đều HƯ CẤU.
  * Mỗi đáp án có `ev` = chuỗi NGUYÊN VĂN trong lời thoại + giải thích tiếng Việt (nêu bẫy, trỏ bài ôn).
+ * SOÁT CHÉO 24/11/2026 (theo trí nhớ): Songdo (Incheon, đất lấn biển, ống rác ngầm, vắng người) · Rio (trung tâm điều hành cuối 2010
+ *   sau lũ + sạt lở tháng 4/2010, > 200 người chết) · Toronto (Sidewalk Labs chọn 2017, rút 5/2020) — khớp.
  */
 import type { DeNghe } from './types';
 
@@ -315,7 +317,7 @@ export const NGHE_DE8: DeNghe = {
             dau: ['City', 'Project', 'Outcome'],
             hang: [
               ['Songdo, South Korea', 'a new district built on land taken from the [[36]]', 'for years, many flats and offices were [[37]]'],
-              ['Rio de Janeiro, Brazil', 'an operations centre set up after serious [[38]] in 2010', 'better cooperation between emergency services'],
+              ['Rio de Janeiro, Brazil', 'an operations centre set up after serious [[38]] and landslides in 2010', 'better cooperation between emergency services'],
               ['Toronto, Canada', 'a new neighbourhood planned on the city\'s [[39]]', 'abandoned in 2020 after long arguments about [[40]]'],
             ],
           },
@@ -369,7 +371,7 @@ export const NGHE_DE8: DeNghe = {
     35: { a: ['surveillance'], vi: `"Critics warned that the same data could easily be used for the surveillance of ordinary citizens" ⇒ **surveillance** (sự giám sát). Chính tả: s-u-r-v-e-i-l-l-a-n-c-e (hai "l"). "ordinary people" = "ordinary citizens".`, ev: `Critics warned that the same data could easily be used for the surveillance of ordinary citizens` },
     36: { a: ['sea'], vi: `"the whole district was built on land reclaimed from the sea" — "land taken from the ___" = "land reclaimed from the sea" ⇒ **sea**. 📘 Ôn Table completion Part 4: Tập 4 Ngày 13.`, ev: `the whole district was built on land reclaimed from the sea` },
     37: { a: ['empty'], vi: `"many of the flats and offices remained empty long after they had been finished" ⇒ **empty**. Bẫy "quiet": "strangely quiet" là lời tả của khách tham quan về CẢ khu, còn bảng hỏi về căn hộ và văn phòng.`, ev: `many of the flats and offices remained empty long after they had been finished` },
-    38: { a: ['floods', 'flooding', 'flood'], vi: `"after heavy rain earlier that year had caused serious floods and landslides" ⇒ **floods** ("landslides" cũng có trong câu nói nhưng "floods" đứng ngay sau "serious" — đề chỉ cho một từ; "flooding" cũng được chấp nhận). Bẫy "rain": mưa là NGUYÊN NHÂN của lũ, không phải "serious ___".`, ev: `after heavy rain earlier that year had caused serious floods and landslides in which more than two hundred people died` },
+    38: { a: ['floods'], vi: `"after heavy rain earlier that year had caused serious floods and landslides" ⇒ **floods** ("landslides" đã in sẵn trong bảng nên ô trống chỉ còn là floods; chép đúng dạng số nhiều của băng). Bẫy "rain": mưa là NGUYÊN NHÂN của lũ, không phải "serious ___".`, ev: `after heavy rain earlier that year had caused serious floods and landslides in which more than two hundred people died` },
     39: { a: ['waterfront'], vi: `"to develop a neighbourhood on the city's waterfront, on land that had been used for industry" ⇒ **waterfront** (khu ven hồ / ven nước). Một từ ghép, không tách "water front".`, ev: `to develop a neighbourhood on the city's waterfront` },
     40: { a: ['privacy'], vi: `"from the start the project was criticised, above all because of concerns about privacy… The arguments went on for more than two years." ⇒ **privacy**. Bẫy "economic uncertainty": lý do CÔNG TY nêu ra, nhưng bảng hỏi các cuộc tranh cãi kéo dài; bẫy "data" — chủ đề của tranh cãi, nhưng từ người giảng dùng cho mối lo là "privacy".`, ev: `above all because of concerns about privacy` },
   },

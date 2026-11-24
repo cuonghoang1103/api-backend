@@ -1,7 +1,7 @@
 /**
  * Đề 8 — Speaking, THI CUỐI TẬP 4 (docs/ielts-lo-trinh-0-8.md mục 4.2 · sau Tập 4 Ngày 30). TỰ SOẠN 18/11/2026.
  * Part 1: Plants + Noise (ôn 30 chủ đề Part 1 + idiom — T4 N30; Part 1 band 7 chi tiết + từ ít gặp — N2) — 6 câu · Part 2: Describe a
- * piece of advice (đề Part 2 TRỪU TƯỢNG "a law, a piece of advice" — T4 N26; kể có câu chuyện nhỏ N6, N14) · Part 3: 5 câu khó dần
+ * piece of advice — từ 24/11 là lời khuyên từ SÁCH / VIDEO / PODCAST làm đổi một thói quen (đổi để không trùng thẻ + bài mẫu N26) (đề Part 2 TRỪU TƯỢNG "a law, a piece of advice" — T4 N26; kể có câu chuyện nhỏ N6, N14) · Part 3: 5 câu khó dần
  * fact → nguyên nhân "Why do some…?" (N15) → đánh giá "Is it ever…?" (N23 giá trị, đạo đức) → giả định "What would happen if…?"
  * (N19 phản thực tế) → dự đoán có hedging "Do you think… in the future?" (N7), nối chủ đề "lời khuyên".
  * Khó hơn Đề 7 nửa bậc: Part 1 có câu so sánh và câu về thái độ của chính mình; Part 3 có câu đạo đức (có nên nói dối để an ủi khi
@@ -18,7 +18,7 @@ export const NOI_DE8: DeNoi = {
   ten: 'Speaking — Đề 8 (thi cuối Tập 4)',
   boDe: 'Đề 8',
   capDo: 'Band 7.0',
-  moTa: 'Part 1: plants · noise · Part 2: a piece of advice you received that was useful · Part 3: giving and taking advice, advice in the future',
+  moTa: 'Part 1: plants · noise · Part 2: a piece of advice from a book, video or podcast that changed a habit · Part 3: advice from the media, advice in the future',
   phut: 14,
   part1: [
     {
@@ -39,32 +39,32 @@ export const NOI_DE8: DeNoi = {
     },
   ],
   part2: {
-    cueCard: 'Describe a piece of advice you received that turned out to be useful.\n\nYou should say:\n• who gave you the advice\n• what the advice was\n• what situation you were in at the time\n\nand explain why the advice turned out to be useful.',
+    cueCard: 'Describe a piece of advice you came across in a book, a video or a podcast that changed one of your habits.\n\nYou should say:\n• where you came across the advice\n• what the advice was\n• how you put it into practice\n\nand explain how it changed your habit.',
     goiY: [
-      'Bạn có 1 phút chuẩn bị — đề TRỪU TƯỢNG (Tập 4 Ngày 26) ⇒ phải "neo" vào MỘT câu chuyện cụ thể: một người, một câu nói nguyên văn, một thời điểm. Ghi 4 từ khoá cho 4 ý (who · what · situation · why useful) + câu nói đó bằng tiếng Anh.',
-      'Lời khuyên dễ kể nhất là lời khuyên bạn ĐÃ KHÔNG muốn nghe lúc đầu: "đừng học ngành chỉ vì bạn bè học", "ngủ đi rồi mai quyết", "hỏi khi không hiểu, đừng giả vờ hiểu". Có sự kháng cự ⇒ có diễn biến ⇒ ý 4 dài và tự nhiên.',
-      'Thì: quá khứ đơn + quá khứ hoàn thành cho bối cảnh ("I had just failed…"); câu tường thuật cho lời khuyên ("She told me that… / She suggested that I…" — subjunctive: "suggested that I take…", Tập 4 Ngày 27); hiện tại hoàn thành cho tác dụng kéo dài tới giờ ("I\'ve followed it ever since").',
-      'Ý "why it turned out to be useful" nói DÀI NHẤT: nêu hệ quả ngay lúc đó + hệ quả lâu dài + một điều kiện hỗn hợp (Tập 4 Ngày 19): "If I hadn\'t listened to her, I\'d probably still be…". Có thể thêm một câu thừa nhận ("At the time I thought it was rather obvious…").',
-      'Một idiom đúng register nói (Tập 4 Ngày 18, Ngày 30), dùng MỘT lần, không nhồi: "sleep on it", "it went in one ear and out the other", "I took it with a pinch of salt", "it stuck with me". Câu kết: "So it\'s a small piece of advice, but it\'s probably shaped more of my decisions than anything I learnt at school."',
+      'Bạn có 1 phút chuẩn bị — đề TRỪU TƯỢNG (Tập 4 Ngày 26) ⇒ "neo" vào MỘT nguồn cụ thể: loại nguồn (podcast, video, sách), lúc nào bạn gặp nó, và câu nói gần nguyên văn bằng tiếng Anh. Ghi 4 từ khoá cho 4 ý (where · what · practice · how it changed) + MỘT con số trước/sau (giờ dùng điện thoại, số trang đọc mỗi ngày…).',
+      'KHÁC thẻ Ngày 26 (lời khuyên từ một NGƯỜI quen, chuyện “không nghe lúc đầu”): ở đây nguồn là sách / video / podcast và trọng tâm là một THÓI QUEN đổi ra sao. Đừng bê nguyên bài kể của Ngày 26 — mượn khung NEO → NỀN → CẢNH → CÂN thì được, nhưng cảnh và kết phải nói về thói quen.',
+      'Thì: quá khứ đơn cho lúc nghe lời khuyên và lúc làm thử; "would" cho thói quen cũ lặp lại ("I\'d sit down… and within five minutes I\'d be scrolling…"); quá khứ hoàn thành cho điều xảy ra trước ("which had been showing over five hours a day"); hiện tại hoàn thành cho tác dụng kéo dài tới giờ ("I\'ve since used the same trick…").',
+      'Ý "how it changed your habit" nói DÀI NHẤT: khó khăn mấy ngày đầu + điều bất ngờ + con số trước/sau + một điều kiện hỗn hợp (Tập 4 Ngày 19): "If I hadn\'t heard that episode, I suspect I\'d still be…". Kết bằng một nhận xét khái quát vì sao lời khuyên có tác dụng (ôn Đề 7 Passage 1: thói quen gắn với hoàn cảnh).',
+      'Một idiom đúng register nói (Tập 4 Ngày 18, Ngày 30), dùng MỘT lần: "it stuck with me", "old habits die hard", "easier said than done". Câu chẻ cho điểm nhấn (Ngày 7): "What I hadn\'t expected was how quickly…".',
     ],
     cauChot: [
-      'Have you ever given the same advice to anyone else?',
-      'Do you usually follow the advice that people give you?',
+      'Do you often look for advice in books or online?',
+      'Have you passed this advice on to anyone else?',
     ],
   },
   part3: [
     {
-      chuDe: 'Giving and taking advice',
+      chuDe: 'Advice from the media',
       cau: [
-        'Who do young people in your country usually turn to when they need advice?',
-        'Why do some people find it difficult to accept advice, even when it is good?',
+        'Where do people in your country usually look for advice about money or health?',
+        'Why do some people trust advice from social media influencers more than advice from experts?',
         'Is it ever acceptable to give someone advice that you would not follow yourself?',
       ],
     },
     {
       chuDe: 'Advice in the future',
       cau: [
-        'What would happen if people relied entirely on the internet for advice about their health?',
+        'What would happen if everyone followed the same popular advice about diet and exercise?',
         'Do you think people will trust advice from artificial intelligence more than advice from other people in the future?',
       ],
     },
@@ -85,15 +85,15 @@ export const NOI_DE8: DeNoi = {
     },
     {
       part: 2,
-      cau: 'Describe a piece of advice you received that turned out to be useful.',
+      cau: 'Describe a piece of advice you came across in a book, a video or a podcast that changed one of your habits.',
       band: 'Band 7.5–8.0',
-      s: 'I\'d like to talk about something my grandmother told me when I was about seventeen, which at the time I almost ignored.\n\nThe situation was this. I\'d just got my results for the end-of-year exams, and they were much worse than I\'d hoped, particularly in maths, which I\'d always considered my strongest subject. I was furious with myself, and that same evening I announced to the whole family that I was going to drop maths altogether and switch to a completely different set of subjects.\n\nMost of my family argued with me, which only made me more determined. My grandmother, though, didn\'t argue at all. She just said, very calmly, "Never make a big decision on the day you feel worst. Sleep on it for a week, and if you still feel the same, then do it." Honestly, I thought it was rather an old-fashioned thing to say, and it nearly went in one ear and out the other. But because she\'d asked so little of me — just a week — I agreed.\n\nAnd of course, a week later I felt completely different. Once I\'d calmed down and actually looked at the papers, I could see that I\'d lost most of my marks through careless mistakes rather than through not understanding the material. So I stayed with maths, and it\'s now a big part of my degree. If I hadn\'t listened to her, I\'d probably be studying something I had no real interest in.\n\nWhat makes the advice so useful, though, is that it applies to almost everything. I\'ve used that "one-week rule" before quitting a job, before ending an argument with a friend by text, even before buying an expensive phone, and it\'s saved me from a lot of regret. So it\'s a small piece of advice, but it\'s probably shaped more of my decisions than anything I learnt at school.',
+      s: 'The piece of advice I want to talk about didn\'t come from anyone I know personally. I came across it in a podcast about concentration, which I was listening to on the bus about a year ago, mainly to pass the time.\n\nThe guest was a psychologist, and at one point she said something that really stuck with me: "If you want to stop doing something, don\'t rely on willpower — just make it slightly harder to do." Her example was exactly my problem. Most of us, she said, don\'t check our phones because we\'ve decided to, but simply because they\'re within reach.\n\nAt the time I was revising for my final exams, and to be honest, I was getting very little done. I\'d sit down with my notes, and within five minutes I\'d be scrolling through videos without quite knowing how I\'d got there. So that evening I tried it. Before I started work, I switched my phone off and left it in a drawer in the kitchen — not hidden, just far enough away that fetching it meant getting up and walking downstairs.\n\nThe first couple of days were surprisingly uncomfortable; I kept reaching for my pocket. But what I hadn\'t expected was how quickly the urge faded once the phone simply wasn\'t there. My screen-time app, which had been showing over five hours a day, dropped to under two within about three weeks, and I was getting through roughly twice as much revision.\n\nLooking back, what made the advice so useful was that it didn\'t ask me to become a more disciplined person, which I\'d tried and failed to do many times. It just changed my surroundings. If I hadn\'t heard that episode, I suspect I\'d still be blaming myself for a lack of willpower. I\'ve since used the same trick for snacks, too — they live on the top shelf now.',
       phanTich: [
-        '**FC**: đủ 4 ý theo thứ tự hợp lý (giới thiệu → bối cảnh → ai khuyên và khuyên gì → vì sao hữu ích), và câu chuyện có DIỄN BIẾN rõ: cơn giận → cả nhà phản đối → bà chỉ xin một tuần → một tuần sau khác hẳn → hệ quả lâu dài. Chuyển ý tự nhiên: "The situation was this.", "My grandmother, though, …", "And of course, a week later…", "What makes the advice so useful, though, is…". Ý cuối dài nhất và mở rộng sang nhiều tình huống — đúng yêu cầu "explain" của đề trừu tượng (Tập 4 Ngày 26).',
-        '**LR**: "drop maths altogether", "switch to", "furious with myself", "only made me more determined", "sleep on it" (để qua đêm rồi quyết), "went in one ear and out the other" (nghe tai này ra tai kia — idiom dùng đúng một lần, đúng register nói, Tập 4 Ngày 18), "careless mistakes", "saved me from a lot of regret", "shaped more of my decisions". Lời khuyên được TRÍCH NGUYÊN VĂN — cách làm câu chuyện sống động.',
-        '**GRA**: quá khứ hoàn thành cho bối cảnh "I\'d just got my results… than I\'d hoped", "which I\'d always considered…"; mệnh đề quan hệ không xác định ", which at the time I almost ignored", ", which only made me more determined"; "Once I\'d calmed down"; đối lập "through careless mistakes rather than through not understanding"; điều kiện HỖN HỢP (Tập 4 Ngày 19) "If I hadn\'t listened to her, I\'d probably be studying…" (quá khứ → hiện tại); câu chẻ "What makes the advice so useful… is that…"; hiện tại hoàn thành cho tác dụng tới nay "I\'ve used…", "it\'s saved me…".',
-        '**P**: ngữ điệu kể chuyện — hạ giọng, chậm lại khi trích lời bà ("Never make a big decision / on the day you feel worst."), nhấn từ khoá "WORST", "a WEEK"; trọng âm "determined" /dɪˈtɜːmɪnd/ âm hai (âm /ɜː/ dài), "furious" /ˈfjʊəriəs/ âm đầu, "altogether" /ˌɔːltəˈɡeðə/ âm ba, "regret" /rɪˈɡret/ âm hai; -ed: "announced" /t/, "argued" /d/, "calmed" /d/ (chữ "l" câm: /kɑːmd/).',
-        '**Muốn lên band 8.5–9**: thêm một chi tiết giác quan / hình ảnh của khoảnh khắc (bà nói khi đang tưới cây ngoài ban công) và một câu khái quát có hedging ở cuối ("I suspect most bad decisions are made in the first hour after bad news").',
+        '**FC**: đủ 4 ý theo thứ tự thẻ (nguồn → lời khuyên → làm thử → thay đổi), câu chuyện có DIỄN BIẾN: thói quen cũ → làm thử ngay tối đó → mấy ngày đầu khó → bất ngờ → con số sau ba tuần → nhận xét vì sao có tác dụng. Chuyển ý tự nhiên, không đánh số: "At the time…", "So that evening I tried it.", "But what I hadn\'t expected…", "Looking back, …". Câu cuối hài hước nhẹ (đồ ăn vặt trên kệ cao) khép bài mà không cần "That\'s all".',
+        '**LR**: "pass the time", "stuck with me", "rely on willpower", "within reach", "getting very little done", "scrolling through videos", "fetching it", "the urge faded", "getting through… revision", "a more disciplined person", "blaming myself for a lack of willpower". Idiom duy nhất "it stuck with me" — đúng register nói, không nhồi (Tập 4 Ngày 18, Ngày 30). Không có chữ hiếm vô nghĩa: từ band 8 là từ ĐÚNG ngữ cảnh.',
+        '**GRA**: "would" cho thói quen cũ "I\'d sit down… I\'d be scrolling"; quá khứ hoàn thành "how I\'d got there", "which had been showing over five hours a day" (mệnh đề quan hệ không xác định + QKHT tiếp diễn); câu chẻ "what I hadn\'t expected was how quickly…" và "what made the advice so useful was that…" (Ngày 7); "not because… but simply because…"; phân từ "Looking back, …" (Ngày 5); điều kiện HỖN HỢP "If I hadn\'t heard that episode, I suspect I\'d still be blaming myself" (Ngày 19); hiện tại hoàn thành "I\'ve since used".',
+        '**P**: trích lời khuyên chậm lại, hạ giọng, ngắt hai nhịp ("don\'t rely on WILLpower — / just make it slightly HARDER to do"); trọng âm "psychologist" /saɪˈkɒlədʒɪst/ âm hai (p câm), "concentration" /ˌkɒnsnˈtreɪʃn/ âm ba, "uncomfortable" /ʌnˈkʌmftəbl/ âm hai, "disciplined" /ˈdɪsəplɪnd/ âm đầu; -ed: "switched" /t/, "dropped" /t/, "tried" /d/; nối âm "left‿it‿in‿a drawer", "kept‿reaching".',
+        '**Muốn lên band 8.5–9**: thêm một chi tiết giác quan của khoảnh khắc nghe lời khuyên (chuyến xe buýt mưa, đang định tắt podcast) và một câu khái quát có hedging ("I suspect most of our habits are decided by where things are rather than by what we want").',
       ],
     },
     {

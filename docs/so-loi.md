@@ -1096,3 +1096,10 @@ Mẫu một mục:
 - **Cách sửa:** bỏ điều kiện `peType`, chỉ cần `kind === 'PE'` + môn có cấu hình PEA riêng; nhánh chữ giới thiệu ở `ExamRoomClient.tsx` cũng xét `peTaiPea` trước.
 - **Ảnh hưởng:** không ai thấy lỗi (vừa deploy, kiểm ngay bằng API thì phát hiện); chỉ là tính năng chưa có hiệu lực ~20 phút.
 - **Bài học:** điều kiện theo giá trị enum ⇒ hỏi DỮ LIỆU thật trước (`curl /exams/course/<slug>` đếm theo `peType`), đừng suy từ mã của tính năng khác.
+
+### 24/11/2026 — video (đồng bộ Mac → máy nhà) — slide tập agent mới bị xoá sau bước lồng giọng ⇒ render LOI
+- **Triệu chứng:** 6 tập (tak-0-1/0-8/0-9/1-1/1-4, ide-0-9) render LOI `Error loading image … public/bai/<id>/slides/001.webp`; 17 tập dbg/ide/rfc/tak đã có giọng mất sạch thư mục `slides/`, dựng lại xong lại mất.
+- **Nguyên nhân:** `video-bai-giang/scratchpad/dong-bo-linux.sh › day_bai` (bước 5) đẩy `public/bai/<id>/` từ Mac sang nhà kèm `--delete` cho mọi tập còn việc; Mac chỉ có giọng (kéo về ở bước 4), không có slide ⇒ xoá slide trên nhà. Danh sách tiền tố "agent nhà, bỏ qua" chưa thêm 9 tiền tố mở 24/11 (dbg lgz rfc ide tak nst mgo pmn agl) — sáng 24/11 chỉ thêm exclude ở bước 1 (mã).
+- **Cách sửa:** thêm 9 tiền tố vào `case … continue` của `day_bai` (sao lưu `dong-bo-linux.bak-2411b.sh`), khởi động lại đồng bộ, dựng lại slide 17 tập bằng `dung-slide.sh` từng khoá, `dp-lam-lai.sh <id> render` 6 tập LOI.
+- **Ảnh hưởng:** ~6 giờ render của các tập Tiếng Anh đi làm/IDE bị lỗi; không mất nội dung (nguồn slide còn trong `scratchpad/<px>/slides-src`).
+- **Bài học:** mở tiền tố agent nhà mới ⇒ thêm vào CẢ HAI chỗ của `dong-bo-linux.sh` (exclude bước 1 + case bỏ qua bước 5) — y lỗi 18/11 (111 tập LOI 404). Đã ghi vào checklist mở agent.

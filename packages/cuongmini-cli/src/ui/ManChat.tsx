@@ -650,8 +650,9 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
           nhom: L('Model', 'Model'), nhan: `${m.canMoKhoa || m.canPro ? '🔒 ' : ''}${m.ten}`,
           /* 19/10/2026: tài khoản miễn phí — model khác Default hiện ổ khoá + lời mời nâng cấp. */
           mo: m.canPro ? L('cần gói Pro — cuongthai.com/pro', 'needs Pro — cuongthai.com/pro')
-            : !m.dungDuoc ? L('tạm thời chưa dùng được', 'temporarily unavailable') : m.canMoKhoa ? L(`cần khoá — ${m.mo}`, `needs a key — ${moModel(m.mo, m.moEn)}`) : moModel(m.mo, m.moEn),
-          tat: !m.dungDuoc && !m.canPro, ...(m.canMoKhoa || m.canPro ? { toi: true } : {}), dangChon: m.id === modelNay?.id, giaTri: `m:${m.id}`,
+            : !m.dungDuoc ? (m.lyDo ? L('chưa dùng được — Enter để xem lý do (chỉ admin thấy)', 'unavailable — press Enter for the reason (admin only)') : L('tạm thời chưa dùng được', 'temporarily unavailable')) : m.canMoKhoa ? L(`cần khoá — ${m.mo}`, `needs a key — ${moModel(m.mo, m.moEn)}`) : moModel(m.mo, m.moEn),
+          /* 24/11/2026: mục xám có `lyDo` (chỉ admin) vẫn chọn được để XEM lý do — người thường giữ mục xám im lặng. */
+          tat: !m.dungDuoc && !m.canPro && !m.lyDo, ...(m.canMoKhoa || m.canPro || (!m.dungDuoc && m.lyDo) ? { toi: true } : {}), dangChon: m.id === modelNay?.id, giaTri: `m:${m.id}`,
         })),
         ...dsMuc().map((m) => ({ nhom: L('Mức nỗ lực', 'Effort'), nhan: m.ten, mo: m.mo, dangChon: m.id === mucNay?.id, giaTri: `n:${m.id}` })),
       ];
@@ -661,6 +662,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
           const [k, id] = [m.giaTri.slice(0, 1), m.giaTri.slice(2)];
           if (k === 'n') { void doiMuc(id).then(() => kho.thongBao(`${L('Mức nỗ lực', 'Effort')}: ${m.nhan}`, 'ok')).catch((e: Error) => kho.thongBao(e.message, 'loi')); return; }
           const mm = dsModel().find((x) => x.id === id);
+          if (mm && !mm.dungDuoc && !mm.canPro) { if (mm.lyDo) kho.thongBao(`${mm.ten}: ${mm.lyDo}`, 'loi'); return; }
           if (mm?.canMoKhoa) { moKhoaModel(id); return; }
           if (mm?.canPro) { kho.thongBao(L(`${mm.ten} cần gói Pro — https://cuongthai.com/pro`, `${mm.ten} needs Pro — https://cuongthai.com/pro`), 'loi'); return; }
           const lam = () => void doiModel(id).then(() => kho.thongBao(`Model: ${mm?.ten ?? m.nhan}`, 'ok')).catch((e: Error) => kho.thongBao(e.message, 'loi'));

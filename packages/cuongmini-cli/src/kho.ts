@@ -25,7 +25,7 @@ export interface InfoLoi {
   pro?: boolean;
   model?: string | null;
   models?: Array<{
-    id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean;
+    id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean; lyDo?: string;
     /** Cổng của model: `rambo` (cổng chính) · `modelapi` · `anthropic` (Claude chính hãng). Máy chủ cũ không khai ⇒ cổng chính. */
     cong?: 'rambo' | 'modelapi' | 'anthropic';
     /** Model cao của cổng chính hãng, chưa có vé ⇒ 🔒, chọn là hỏi mật khẩu. */

@@ -42,6 +42,8 @@ export interface ModelMuc {
   cong?: 'rambo' | 'modelapi' | 'anthropic'; canMoKhoa?: boolean; mienPhi?: boolean; hang?: 'free' | 'cao';
   /** 18/10/2026: mô tả tiếng Anh, tên cổng hiển thị (CuongMini …), loại khoá. */
   moEn?: string; nhom?: string; khoa?: 'free' | 'chung' | 'invisible'; loaiKhoa?: 'chung' | 'invisible';
+  /** 24/11/2026: vì sao model đang xám — máy chủ CHỈ gửi cho admin. */
+  lyDo?: string;
   /** 19/10/2026: tài khoản miễn phí — model cần gói Pro (chỉ CuongMini Default dùng được). */
   canPro?: boolean;
 }
@@ -618,7 +620,8 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       const m = timTheoChu(q, b.dsModel());
       /* 18/10/2026: chỉ in TÊN CuongMini (mã trung tính cũng không lộ model thật). */
       if (!m) { traLoi(`${L(`Không rõ model "${q}". Có:`, `Unknown model "${q}". Available:`)}\n\n${b.dsModel().map((x) => `- ${x.ten}${x.dungDuoc ? '' : L(' (chưa mở)', ' (not enabled)')}${x.canMoKhoa ? L(' · cần khoá', ' · needs a key') : ''}${x.canPro ? L(' · cần Pro', ' · needs Pro') : ''}`).join('\n')}`); return; }
-      if (!m.dungDuoc) { traLoi(L(`**${m.ten}** chưa dùng được — máy chủ chưa mở nhà cung cấp này.`, `**${m.ten}** is not available — the server has not enabled this provider.`)); return; }
+      /* 24/11/2026: `lyDo` chỉ admin nhận (máy chủ lọc) — người thường thấy câu chung như cũ. */
+      if (!m.dungDuoc) { traLoi(L(`**${m.ten}** chưa dùng được — máy chủ chưa mở nhà cung cấp này.`, `**${m.ten}** is not available — the server has not enabled this provider.`) + (m.lyDo ? `\n\n${m.lyDo}` : '')); return; }
       if (m.canMoKhoa) { b.moKhoaModel(m.id); return; }
       if (m.canPro) { traLoi(L(`**${m.ten}** cần gói Pro — nâng cấp tại https://cuongthai.com/pro (hoặc dùng trong dự án CT Work được tài trợ).`, `**${m.ten}** needs Pro — upgrade at https://cuongthai.com/pro (or use it inside a sponsored CT Work project).`)); return; }
       if (m.dat) { b.moMenu('model'); traLoi(L(`**${m.ten}** tốn nhiều hơn hẳn — chọn lại trong menu vừa mở để xác nhận.`, `**${m.ten}** costs much more — pick it again in the menu to confirm.`)); return; }

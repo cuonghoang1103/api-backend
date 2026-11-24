@@ -952,7 +952,7 @@ export function AgentMode({
           traLoi(`Không rõ model "${q}". Có:\n\n${dsModel.map((x) => `- \`${x.id}\` — ${x.ten}${x.dungDuoc ? '' : ' (chưa cắm khoá)'}`).join('\n')}\n\nGõ \`/model\` không tham số để mở menu.`);
           return;
         }
-        if (!m.dungDuoc) { traLoi(`**${m.ten}** chưa dùng được — máy chủ chưa cắm khoá cho nhà cung cấp này.`); return; }
+        if (!m.dungDuoc) { traLoi(`**${m.ten}** chưa dùng được — máy chủ chưa cắm khoá cho nhà cung cấp này.${m.lyDo ? `\n\n${m.lyDo}` : ''}`); return; }
         /* Model cao của cổng Claude chính hãng chưa mở khoá ⇒ ô mật khẩu nằm trong menu. */
         if (m.canMoKhoa) { moTam(cuocId, 'model'); traLoi(`**${m.ten}** cần mật khẩu cổng Claude chính hãng — bấm vào nó trong menu vừa mở để mở khoá.`); return; }
         /* Model đắt (Fable ×3,5) phải qua thẻ xác nhận trong menu — gõ tắt
@@ -2544,6 +2544,8 @@ interface MucModel {
   mienPhi: boolean;
   /** Tên CỔNG hiển thị (CuongMini …) do máy chủ khai. */
   nhom?: string;
+  /** 24/11/2026: lý do model xám — chỉ admin nhận từ máy chủ. */
+  lyDo?: string;
 }
 
 /** Danh sách model hiện có — dùng chung cho menu và `/model`. */
@@ -2555,6 +2557,7 @@ function dsModelCua(info: AgentInfo): MucModel[] {
         ten: doiTenModel(m.ten),
         mo: ngonNguHienTai() === 'en' && m.moEn ? m.moEn : m.mo, dungDuoc: m.dungDuoc,
         ...(m.nhom ? { nhom: m.nhom } : {}),
+        ...(m.lyDo ? { lyDo: m.lyDo } : {}),
         dat: m.dat === true || m.id === ID_FABLE,
         cong: m.cong === 'anthropic' ? 'anthropic' as const : 'chinh' as const,
         canMoKhoa: m.canMoKhoa === true,
@@ -2641,7 +2644,7 @@ function ChonModelVaMuc({
                   data-mien-phi={m.mienPhi}
                   disabled={!m.dungDuoc}
                   style={m.canMoKhoa || m.canPro ? { opacity: 0.62 } : undefined}
-                  title={m.canPro ? dich('Cần gói Pro') : m.dungDuoc ? m.mo : dich('Model này tạm thời chưa dùng được')}
+                  title={m.canPro ? dich('Cần gói Pro') : m.dungDuoc ? m.mo : m.lyDo ?? dich('Model này tạm thời chưa dùng được')}
                   onClick={() => {
                     if (m.canMoKhoa) { datHoiKhoa((h) => (h === m.id ? null : m.id)); return; }
                     if (m.dat && m.id !== model) { datHoiFable(m.id); return; }

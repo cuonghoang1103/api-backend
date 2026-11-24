@@ -6,7 +6,7 @@
  * App (desktop, CLI `/model`, extension VS Code) CHỈ hiện `ten` — không bao giờ hiện `model` (tên thật) hay tên cổng
  * thật. `mo`/`moEn` không được nhắc tên model thật hay tên cổng thật.
  */
-import { congAgent, goiDuocModel, ramboDangNghi, ramboSonic } from '../llm/gateway.js';
+import { congAgent, congRamboCauHinh, docDsModelRamboDaNho, goiDuocModel, ramboDangNghi, ramboSonic } from '../llm/gateway.js';
 import { MODEL_AGENT_RIENG } from './models.js';
 
 /** Tên model đắt nhất (khoá riêng). Đổi ở ĐÂY là đủ. */
@@ -53,6 +53,43 @@ export interface MucModel {
   an?: boolean;
   /** Thứ tự hiển thị (nhỏ đứng trên). */
   thuTu?: number;
+  /**
+   * 24/11/2026: mã mục ẨN chạy CÙNG model này qua cổng Claude rẻ gwai — bậc giữa khi cổng chính hãng không có key /
+   * hỏng (chính hãng → gwai → `tuongDuong`). Chỉ model trả phí (Pro 2 / Max / Fable Max) có.
+   */
+  quaGwai?: string;
+  /**
+   * 24/11/2026: mục này là BẢN SAO trên gwai của model `goc` (ẩn). Đi `congRamboCauHinh()` — KHÔNG phụ thuộc công tắc
+   * rambo toàn cục; khoá/vé y như `goc`; tiền ghi theo bảng giá thật (gwai trả theo credit, không phải gói trọn) và trần
+   * theo model tính vào `goc`.
+   */
+  gwaiDoi?: boolean;
+  /** Mã mục HIỆN mà bản sao gwai này thay (`gwaiDoi`). */
+  goc?: string;
+}
+
+/**
+ * Model THẬT gửi gwai cho bản sao của Pro 2 / Max / Fable Max (24/11/2026). THUẦN theo danh sách `/v1/models` đã nhớ
+ * (`docDsModelRamboDaNho`, đọc lại mỗi 10 phút ở `llm/congTacRambo.ts`) — env `GWAI_MODEL_SONNET|OPUS|FABLE` đè.
+ *   sonnet ⇒ `ramboSonic()` (Sonnet mới nhất gwai có — cùng đường CT Work / exam_tutor đang chạy thật)
+ *   opus   ⇒ `claude-opus-5-5` (đã chạy thật trên gwai: lab_room, chat_max — `RAMBO_MODEL_MANH`)
+ *   fable  ⇒ fable-5-2 → 5-1 → 5 (cái nào gwai liệt kê); chưa có danh sách ⇒ `claude-fable-5` (CT Work work_assistant
+ *            đã chạy trên cổng này); danh sách có mà KHÔNG có fable nào ⇒ `claude-opus-5-5` (mạnh nhất gwai có).
+ * Model "chết" giữa lượt (404 not supported) ⇒ `goiCongCoLuoiDo` thử model dự phòng, rồi tự chuyển cổng.
+ */
+export function gwaiModelCho(loai: 'sonnet' | 'opus' | 'fable', ds: string[] | undefined = docDsModelRamboDaNho()?.ids): string {
+  const env = process.env[`GWAI_MODEL_${loai.toUpperCase()}`]?.trim();
+  if (env) return env;
+  if (loai === 'sonnet') return ramboSonic();
+  if (loai === 'opus') return 'claude-opus-5-5';
+  const THU_TU_FABLE = ['claude-fable-5-2', 'claude-fable-5-1', 'claude-fable-5'];
+  if (!ds?.length) return 'claude-fable-5';
+  return THU_TU_FABLE.find((m) => ds.includes(m)) ?? 'claude-opus-5-5';
+}
+
+/** gwai đã cấu hình (khoá + gốc) và cầu dao chưa nghỉ ⇒ bản sao gwai dùng được. */
+export function gwaiChayDuoc(): boolean {
+  return Boolean(congRamboCauHinh()) && !ramboDangNghi();
 }
 
 /*
@@ -98,21 +135,41 @@ const BANG: readonly MucModel[] = Object.freeze(([
     mo: 'Mạnh hơn — giỏi code, việc nhiều bước, ngữ cảnh 1 triệu token. Cần khoá (chung với Max).',
     moEn: 'Stronger — great at code and multi-step work, 1M-token context. Needs a key (shared with Max).',
     cong: 'anthropic', khoa: 'chung', nangLuc: 75, cuaSoToken: MOT_TRIEU, maxRa: RA_128K,
-    tuongDuong: MA_SOLID, nhinAnh: true, thuTu: 2,
+    tuongDuong: MA_SOLID, quaGwai: 'cm-sonic-g', nhinAnh: true, thuTu: 2,
   },
   {
     id: 'cm-optimum', model: 'claude-opus-5-5', ten: 'CuongMini Max',
     mo: 'Mạnh nhất nhóm — việc khó, refactor lớn, đọc cả kiến trúc. Cần khoá (chung với Pro 2).',
     moEn: 'Most capable of the group — hard tasks, big refactors, whole-architecture reading. Needs a key (shared with Pro 2).',
     cong: 'anthropic', khoa: 'chung', nangLuc: 90, cuaSoToken: MOT_TRIEU, maxRa: RA_128K,
-    tuongDuong: MA_SOLID, nhinAnh: true, thuTu: 3,
+    tuongDuong: MA_SOLID, quaGwai: 'cm-optimum-g', nhinAnh: true, thuTu: 3,
   },
   {
     id: 'cm-invisible', model: 'claude-fable-5-2', ten: TEN_INVISIBLE,
     mo: '⚠ Rất tốn token — chỉ cho việc cực khó. Khoá riêng.',
     moEn: '⚠ Very token-hungry — only for extremely hard tasks. Separate key.',
     cong: 'anthropic', khoa: 'invisible', nangLuc: 100, cuaSoToken: MOT_TRIEU, maxRa: RA_128K,
-    tuongDuong: MA_SOLID, nhinAnh: true, dat: true, thuTu: 4,
+    tuongDuong: MA_SOLID, quaGwai: 'cm-invisible-g', nhinAnh: true, dat: true, thuTu: 4,
+  },
+  /* 24/11/2026 — BẢN SAO TRÊN GWAI (ẩn) của 3 model trả phí: chính hãng không có key / hỏng ⇒ chạy cùng model trên gwai,
+     cùng tên hiển thị, cùng khoá/vé. gwai cũng hỏng ⇒ `tuongDuong` (cm-solid). Cửa sổ 200K như mọi đường gwai/rambo. */
+  {
+    id: 'cm-sonic-g', get model() { return gwaiModelCho('sonnet'); }, ten: 'CuongMini Pro 2',
+    mo: 'Bản dự phòng của Pro 2.', moEn: 'Pro 2 fallback.',
+    cong: 'rambo', khoa: 'chung', nangLuc: 75, cuaSoToken: 200_000, maxRa: 32_000,
+    tuongDuong: MA_SOLID, nhinAnh: true, an: true, gwaiDoi: true, goc: 'cm-sonic', thuTu: 95,
+  },
+  {
+    id: 'cm-optimum-g', get model() { return gwaiModelCho('opus'); }, ten: 'CuongMini Max',
+    mo: 'Bản dự phòng của Max.', moEn: 'Max fallback.',
+    cong: 'rambo', khoa: 'chung', nangLuc: 90, cuaSoToken: 200_000, maxRa: 32_000,
+    tuongDuong: MA_SOLID, nhinAnh: true, an: true, gwaiDoi: true, goc: 'cm-optimum', thuTu: 96,
+  },
+  {
+    id: 'cm-invisible-g', get model() { return gwaiModelCho('fable'); }, ten: TEN_INVISIBLE,
+    mo: 'Bản dự phòng của Fable Max.', moEn: 'Fable Max fallback.',
+    cong: 'rambo', khoa: 'invisible', nangLuc: 100, cuaSoToken: 200_000, maxRa: 32_000,
+    tuongDuong: MA_SOLID, nhinAnh: true, dat: true, an: true, gwaiDoi: true, goc: 'cm-invisible', thuTu: 97,
   },
   {
     id: MA_SOLID, model: 'gpt-6-sol', ten: 'CuongMini Pro',
@@ -158,9 +215,9 @@ export function bangTatCa(): readonly MucModel[] {
   return BANG;
 }
 
-/** Nhóm Classic (rambo) — 27/10/2026 ngừng dùng: luôn rỗng (giữ hàm cho chỗ đang import). */
+/** Nhóm Classic (rambo) — 27/10/2026 ngừng dùng: luôn rỗng (giữ hàm cho chỗ đang import). Bản sao gwai không tính. */
 export function bangClassic(): readonly MucModel[] {
-  return BANG.filter((m) => m.cong === 'rambo');
+  return BANG.filter((m) => m.cong === 'rambo' && !m.gwaiDoi);
 }
 
 /** DANH SÁCH CHO APP (27/10/2026): đúng 4 model, rambo không bao giờ hiện. */
@@ -293,8 +350,8 @@ export function timModel(id: unknown): MucModel {
   /* Mục ẨN (`cm-solid`) vẫn chạy được khi gọi NỘI BỘ (đích dự phòng, test cơ chế); yêu cầu từ APP bị đổi về Pro ở
      cửa vào `/agent/turn` + `/agent/compact` (`chuanHoaMaTuApp`). */
   const m = BANG.find((x) => x.id === ma) ?? MUC_DEFAULT;
-  /* Classic khi rambo tắt (mặc định từ 27/10) ⇒ Pro. */
-  return m.cong === 'rambo' && !congAgent() ? MUC_DEFAULT : m;
+  /* Classic khi rambo tắt (mặc định từ 27/10) ⇒ Pro. Bản sao gwai (24/11) không theo công tắc rambo. */
+  return m.cong === 'rambo' && !m.gwaiDoi && !congAgent() ? MUC_DEFAULT : m;
 }
 
 /** Mã model app gửi lên ⇒ mã được phép chọn: mục ẩn (dự phòng) và mã rác ⇒ CuongMini Pro. */
@@ -313,6 +370,23 @@ export function tuongDuongFree(m: MucModel): MucModel | null {
   const d = BANG.find((x) => x.id === m.tuongDuong);
   if (!d || d.khoa !== 'free' || d.cong === m.cong) return null;
   return d;
+}
+
+/**
+ * Đích khi cổng của `m` hỏng (24/11/2026): model trả phí có bản sao gwai và gwai chạy được ⇒ bản sao (cùng model, cổng
+ * rẻ); còn lại ⇒ `tuongDuongFree` như cũ. THUẦN khi truyền `coGwai`.
+ */
+export function tuongDuongCho(m: MucModel, coGwai: boolean = gwaiChayDuoc()): MucModel | null {
+  if (m.quaGwai && coGwai) {
+    const g = BANG.find((x) => x.id === m.quaGwai);
+    if (g) return g;
+  }
+  return tuongDuongFree(m);
+}
+
+/** Mục HIỆN mà một mục đại diện (bản sao gwai ⇒ mục gốc; còn lại ⇒ chính nó) — trần theo model, tên, sổ. */
+export function mucGocCua(m: MucModel): MucModel {
+  return m.gwaiDoi && m.goc ? (BANG.find((x) => x.id === m.goc) ?? m) : m;
 }
 
 /** Hạng của sổ `anthropic_usage_logs` (hai trần nhóm free/cao đã có từ 17/10). */

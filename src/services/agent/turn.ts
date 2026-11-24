@@ -41,6 +41,7 @@ import {
   gatewayRoot,
   modelFor,
   congAgent,
+  congRamboCauHinh,
   ramboDangNghi,
   xinDiemCuoi,
 } from '../llm/gateway.js';
@@ -51,7 +52,7 @@ import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { chuPdfKhongDoc, sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import {
   anTenThat, baoCongHong, cauDoiCong, congDangHong, hangSo, laDefault, laLoiCongHong, modelapiGoiDuoc,
-  timModel, tuongDuongFree, type MucModel, dungChoNhom, tenModelNhom, MA_DEFAULT, mucChoNhom,
+  timModel, tuongDuongCho, mucGocCua, type MucModel, dungChoNhom, tenModelNhom, MA_DEFAULT, mucChoNhom,
 } from './bangModel.js';
 import { loiHetTranModel, xemTranModel } from './tranModel.js';
 import { type HangChinhHang } from './anthropicChinhHang/cauHinh.js';
@@ -1230,7 +1231,8 @@ export async function runAgentTurn(
       };
     }
     /* Nhóm CuongMini Classic (rambo, 19/10/2026): cổng phải bật + cầu dao đóng; gói trọn ⇒ không trần $ theo model. */
-    const rambo = m.cong === 'rambo' ? congAgent() : null;
+    /* 24/11/2026: bản sao gwai của model trả phí đi gwai theo CẤU HÌNH (không theo công tắc rambo toàn cục). */
+    const rambo = m.cong === 'rambo' ? (m.gwaiDoi ? congRamboCauHinh() : congAgent()) : null;
     if (m.cong === 'rambo') {
       if (!rambo || ramboDangNghi()) {
         return { loai: 'cong', code: 'RAMBO_BAO_TRI', error: `${m.ten} tạm thời không chạy được (cổng bận). / ${m.ten} is temporarily unavailable (gateway busy).` };
@@ -1248,8 +1250,9 @@ export async function runAgentTurn(
     } else if (congDangHong('modelapi') || !modelapiGoiDuoc(m)) {
       return { loai: 'cong', code: 'MODEL_CHUA_CO_KHOA', error: `${m.ten} tạm thời không chạy được (cổng bận). / ${m.ten} is temporarily unavailable (gateway busy).` };
     }
-    if (!input.nhom && !input.taiTro && m.cong !== 'rambo') {
-      const ht = await xemTranModel(input.userId, m);
+    /* Bản sao gwai (24/11): tiền thật (credit gwai) ⇒ vẫn áp trần theo model, tính vào model GỐC. */
+    if (!input.nhom && !input.taiTro && (m.cong !== 'rambo' || m.gwaiDoi)) {
+      const ht = await xemTranModel(input.userId, mucGocCua(m));
       if (ht.het) {
         /* Model trả phí tới được đây ⇒ vé khoá đã mở (kiểm ở trên) — gia hạn tiền được. */
         const gh = await giaHanChoLoi(input.userId, tranChamModel(ht, m));
@@ -1275,16 +1278,26 @@ export async function runAgentTurn(
    * tương đương ở cổng kia (`tuongDuong`), một lần mỗi lượt. Model trả phí cũng
    * chỉ về model free — không bao giờ tự nâng lên model đắt hơn.
    */
-  let daTuDoi = false;
+  /*
+   * 24/11/2026: chuỗi có thể HAI bậc — model trả phí chính hãng → bản sao gwai (cùng model) → cm-solid. Mỗi lượt tối đa
+   * 2 lần đổi; không quay lại model đã chạy trong lượt (Solid ⇒ Default ⇒ Solid…); bậc nào bị chặn vì CỔNG thì thử bậc
+   * sau, bị chặn vì TRẦN thì dừng (không tự nâng/lách trần).
+   */
+  let soLanDoi = 0;
+  const daChayTrongLuot = new Set<string>([muc.id]);
   const tuDoiCong = async (): Promise<boolean> => {
-    if (daTuDoi) return false;
-    /* Free: không có đường lùi tốn tiền. Còn lại ⇒ model free tương đương ở cổng kia (Classic ⇒ Solid). */
+    if (soLanDoi >= 2) return false;
+    /* Free: không có đường lùi tốn tiền. Còn lại ⇒ bản sao gwai / model free tương đương ở cổng kia (Classic ⇒ Solid). */
     if (laFree) return false;
-    const dich = tuongDuongFree(muc);
-    if (!dich) return false;
-    if (await chuyenSang(dich)) return false;
-    daTuDoi = true;
-    return true;
+    let dich = tuongDuongCho(muc);
+    while (dich && !daChayTrongLuot.has(dich.id)) {
+      daChayTrongLuot.add(dich.id);
+      const chan = await chuyenSang(dich);
+      if (!chan) { soLanDoi += 1; return true; }
+      if (chan.loai !== 'cong') return false;
+      dich = tuongDuongCho(dich);
+    }
+    return false;
   };
   const khungTuDoi = (): AgentEvent => {
     const c = cauDoiCong(muc.ten);
@@ -1383,7 +1396,8 @@ export async function runAgentTurn(
   const moc = { in: 0, out: 0, inCH: 0, outCH: 0, usdCH: 0, cache: 0 };
   /* Rambo (nhóm Classic / Default trên rambo) là gói TRẢ TRỌN ⇒ đoạn chạy trên rambo tính 0 $ (sổ vẫn ghi lượt + token):
      không ăn ví tiền 5 giờ, không ăn trần theo model, không ăn trần $ của hạn mức nhóm (19/10/2026). */
-  const giaDoan = (m: string, vao: number, ra: number): number => (muc.cong === 'rambo' ? 0 : costUsd(m, vao, ra));
+  /* 24/11/2026: bản sao gwai của model trả phí ⇒ gwai trả theo CREDIT (không phải gói trọn) ⇒ tính theo bảng giá thật. */
+  const giaDoan = (m: string, vao: number, ra: number): number => (muc.cong === 'rambo' && !muc.gwaiDoi ? 0 : costUsd(m, vao, ra));
   const chiPhiDoan = (): number => giaDoan(model, Math.max(0, (inTong - moc.in) - (inCH - moc.inCH)), Math.max(0, (outTong - moc.out) - (outCH - moc.outCH)))
     + (usdCH - moc.usdCH);
   const chiPhi = (): number => doanDaChot.reduce((t, d) => t + d.costUsd, 0) + chiPhiDoan();
@@ -1534,24 +1548,36 @@ export async function runAgentTurn(
             throw err2;
           }
         } else {
-        const congHong = err instanceof CongAnthropicLoi
-          ? laLoiCongHong(thong, err.code)
-          : ep.label === 'cong-agent' ? maLoiCong(thong) !== 'LLM_ERROR_4XX' : laLoiCongHong(thong);
-        if (!congHong) throw err;
-        if (ep.label === 'cong-agent') baoRamboHong();
-        else baoCongHong(muc.cong);
-        const tuModel = model;
-        chotDoan();
-        if (!(await tuDoiCong())) {
-          if (ep.label === 'cong-agent') throw laFree ? new FreeBaoTri(thong) : new RamboBaoTri(thong);
-          throw err;
+        /* 24/11/2026: VÒNG — bậc vừa đổi sang (vd bản sao gwai) cũng hỏng ⇒ đổi tiếp (tối đa 2 bậc/lượt, `tuDoiCong`). */
+        let loiNay: unknown = err;
+        let thongNay = thong;
+        for (;;) {
+          const congHong = loiNay instanceof CongAnthropicLoi
+            ? laLoiCongHong(thongNay, loiNay.code)
+            : ep.label === 'cong-agent' ? maLoiCong(thongNay) !== 'LLM_ERROR_4XX' : laLoiCongHong(thongNay);
+          if (!congHong) throw loiNay;
+          if (ep.label === 'cong-agent') baoRamboHong();
+          else baoCongHong(muc.cong);
+          const tuModel = model;
+          chotDoan();
+          if (!(await tuDoiCong())) {
+            if (ep.label === 'cong-agent') throw laFree ? new FreeBaoTri(thongNay) : new RamboBaoTri(thongNay);
+            throw loiNay;
+          }
+          logger.warn('agent: cổng hỏng giữa lượt — tự chuyển model tương đương', { tu: tuModel, sang: model, loi: thongNay.slice(0, 120) });
+          emit(khungTuDoi());
+          /* Đợt 6: cửa sổ model mới có thể nhỏ hơn ⇒ dựng lại bản gửi (đã cắt/lược theo cửa sổ mới) TRƯỚC khi gọi lại. */
+          guiDi = dungGuiDi();
+          uocLuongDangBay = uocLuongVao(system, guiDi);
+          try {
+            ketQua = await goiMotLan();
+            break;
+          } catch (err3) {
+            if (signal.aborted) throw err3;
+            loiNay = err3;
+            thongNay = (err3 as Error).message || '';
+          }
         }
-        logger.warn('agent: cổng hỏng giữa lượt — tự chuyển model tương đương', { tu: tuModel, sang: model, loi: thong.slice(0, 120) });
-        emit(khungTuDoi());
-        /* Đợt 6: cửa sổ model mới có thể nhỏ hơn ⇒ dựng lại bản gửi (đã cắt/lược theo cửa sổ mới) TRƯỚC khi gọi lại. */
-        guiDi = dungGuiDi();
-        uocLuongDangBay = uocLuongVao(system, guiDi);
-        ketQua = await goiMotLan();
         }
       }
 

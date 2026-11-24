@@ -566,6 +566,18 @@ export type AiAction =
   | { type: 'command'; command: string; args: Record<string, unknown>; summary?: string | null; title?: string | null; danger?: 'delete' | null; recordsResults?: boolean | null };
 /** 28/10/2026: trợ lý được hỏi từ đâu — đổi câu "việc trên máy bạn" (app desktop ⇒ chỉ tới AI Code trong app). */
 export type AiClient = 'web' | 'desktop' | 'ctwork-desktop';
+/** 24/11/2026: một lựa chọn ở ô chọn model của trợ lý CT Work. `lyDo` chỉ admin nhận. */
+export interface AiModelOption {
+  id: 'cm-default' | 'cm-sonic' | 'cm-optimum' | 'cm-invisible';
+  name: string;
+  locked: boolean;
+  loaiKhoa?: 'chung' | 'invisible';
+  available: boolean;
+  default?: boolean;
+  dat?: boolean;
+  lyDo?: string;
+}
+
 export interface AiAnswer {
   reply: string; actions: AiAction[]; quota: AiQuota;
   /** Hội thoại đã lưu ở server (trả về từ chat/quick). */
@@ -994,8 +1006,13 @@ export const workApi = {
   aiChat: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null }) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: AI_CHO_MS })),
   /** Như aiChat nhưng huỷ được (nút Cancel trong khung AI). */
-  aiChatAbortable: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null; threadId?: number | null; attachments?: AiFileRef[] | null; client?: AiClient }, signal?: AbortSignal) =>
+  aiChatAbortable: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null; threadId?: number | null; attachments?: AiFileRef[] | null; model?: string | null; ve?: string | null; client?: AiClient }, signal?: AbortSignal) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: AI_CHO_MS, signal })),
+  /** 24/11/2026: ô chọn model của trợ lý (header `x-cuongmini-ve` = vé khoá đang giữ — cùng vé CuongMini CLI). */
+  aiModels: (pid: number, ve?: string) =>
+    d<AiModelOption[]>(api.get(`${B}/projects/${pid}/ai/models`, { headers: { 'x-cuongmini-ve': ve ?? '' } })),
+  aiUnlockModel: (pid: number, body: { matKhau: string; loai: 'chung' | 'invisible'; ve?: string | null }) =>
+    d<{ ve: string; hetHan: string; unlocked: boolean }>(api.post(`${B}/projects/${pid}/ai/unlock`, body)),
   // Hội thoại AI lưu ở server, dùng chung trong dự án
   aiThreads: (pid: number, params: { scope?: 'all' | 'mine'; q?: string }) =>
     d<AiThreadSummary[]>(api.get(`${B}/projects/${pid}/ai/threads`, { params })),

@@ -18,7 +18,7 @@ import { ganCache, ghiDung, guiChinhHang, type NguCanhGoi } from './goi.js';
 import { dungThanChinhHang, thanAnToan, type ThanAnthropic } from './thanYeuCau.js';
 import { daBatMatKhau, docBoVe } from './ve.js';
 import {
-  MA_DEFAULT, TEN_CONG, bangChoApp, bangModel, giaiDefault, hangSo, modelapiGoiDuoc, ramboChayDuoc, type LoaiKhoa, type MucModel,
+  MA_DEFAULT, TEN_CONG, bangChoApp, bangModel, giaiDefault, gwaiChayDuoc, hangSo, modelapiGoiDuoc, ramboChayDuoc, type LoaiKhoa, type MucModel,
 } from '../bangModel.js';
 import { congAgent } from '../../llm/gateway.js';
 
@@ -82,6 +82,21 @@ export interface ModelChoApp {
    * mang `canPro: true` + `dungDuoc: false`: app hiện ổ khoá + lời mời nâng cấp (không hỏi khoá).
    */
   canPro?: boolean;
+  /**
+   * 24/11/2026: VÌ SAO model đang xám — CHỈ gửi cho ADMIN (người thường chỉ thấy mục xám, không lời giải thích).
+   */
+  lyDo?: string;
+}
+
+/** Câu giải thích cho admin khi một model không dùng được (THUẦN). */
+export function lyDoKhongDung(m: MucModel, coKeyAnthropic: boolean, coGwai: boolean): string {
+  if (m.cong === 'anthropic') {
+    const ke = coKeyAnthropic ? '' : 'Kho key Anthropic chính hãng không có key dùng được (hết credit / lỗi 401-403 / hết hạn / chạm ngân sách tháng / đang Tắt) — xem /admin/commerce?tab=anthropic, bấm "Thử kết nối".';
+    const gw = m.quaGwai ? (coGwai ? '' : ' Cổng gwai chưa cấu hình (GWAI_BASE_URL/GWAI_API_KEY) hoặc đang nghỉ sau lỗi liên tiếp.') : '';
+    return (ke + gw).trim() || 'Cổng tạm thời không dùng được.';
+  }
+  if (m.cong === 'modelapi') return 'Khoá modelapi của nhóm model này chưa cắm (LLM_GATEWAY_API_KEY_GPT).';
+  return 'Cổng gwai/rambo đang tắt hoặc đang nghỉ.';
 }
 
 /**
@@ -89,7 +104,11 @@ export interface ModelChoApp {
  * KHÔNG có tên model thật. Rambo bật ⇒ thêm bảng rambo cũ ở cuối (nhóm "CuongMini Classic").
  */
 /** Một mục cho app — THUẦN (test được): không có trường `model` (tên thật) nào đi ra. */
-export function mucChoApp(m: MucModel, q: QuyenChinhHang, coKeyAnthropic: boolean): ModelChoApp {
+export function mucChoApp(m: MucModel, q: QuyenChinhHang, coKeyAnthropic: boolean, coGwai = false): ModelChoApp {
+  /* 24/11/2026: model trả phí có bản sao gwai ⇒ dùng được khi chính hãng CÓ key HOẶC gwai chạy được. */
+  const dungDuoc = m.id === MA_DEFAULT ? true
+    : m.cong === 'anthropic' ? coKeyAnthropic || (Boolean(m.quaGwai) && coGwai)
+      : m.cong === 'rambo' ? Boolean(congAgent()) : modelapiGoiDuoc(m);
   return {
     id: m.id,
     ten: m.ten,
@@ -101,10 +120,11 @@ export function mucChoApp(m: MucModel, q: QuyenChinhHang, coKeyAnthropic: boolea
     khoa: m.khoa,
     canMoKhoa: !daMoKhoa(m, q),
     ...(m.khoa !== 'free' ? { loaiKhoa: m.khoa as 'chung' | 'invisible' } : {}),
-    dungDuoc: m.id === MA_DEFAULT ? true : m.cong === 'anthropic' ? coKeyAnthropic : m.cong === 'rambo' ? Boolean(congAgent()) : modelapiGoiDuoc(m),
+    dungDuoc,
     mienPhi: m.khoa === 'free',
     hang: hangSo(m),
     ...(m.dat ? { dat: true } : {}),
+    ...(!dungDuoc && q.laAdmin ? { lyDo: lyDoKhongDung(m, coKeyAnthropic, coGwai) } : {}),
   };
 }
 
@@ -114,19 +134,20 @@ export function mucChoApp(m: MucModel, q: QuyenChinhHang, coKeyAnthropic: boolea
  */
 export async function dsModelChoApp(q: QuyenChinhHang, o: { chiDefault?: boolean } = {}): Promise<ModelChoApp[]> {
   const coKey = await coKeyKhaDung();
-  return dsModelChoAppThuan(q, coKey, o);
+  return dsModelChoAppThuan(q, coKey, o, gwaiChayDuoc());
 }
 
 /** THUẦN (test được): danh sách cho app theo trạng thái rambo hiện tại. */
-export function dsModelChoAppThuan(q: QuyenChinhHang, coKey: boolean, o: { chiDefault?: boolean } = {}): ModelChoApp[] {
+export function dsModelChoAppThuan(q: QuyenChinhHang, coKey: boolean, o: { chiDefault?: boolean } = {}, coGwai = false): ModelChoApp[] {
   return bangChoApp().map((m) => {
-    const muc = mucChoApp(m, q, coKey);
+    const muc = mucChoApp(m, q, coKey, coGwai);
     if (!o.chiDefault) return muc;
     if (m.id === MA_DEFAULT) {
       /* Free: Default chỉ chạy trên rambo (gói trọn) — rambo không sống ⇒ tạm bảo trì. */
       return { ...muc, dungDuoc: ramboChayDuoc() };
     }
-    return { ...muc, canMoKhoa: false, canPro: true, dungDuoc: false };
+    const { lyDo: _bo, ...conLai } = muc;
+    return { ...conLai, canMoKhoa: false, canPro: true, dungDuoc: false };
   });
 }
 
@@ -151,7 +172,7 @@ export interface CongNangCap {
  */
 export async function cacCongNangCap(userId: number, o: { veAnthropic?: unknown; veDuPhong?: unknown }): Promise<CongNangCap[]> {
   const q = await quyenChinhHang(userId, o.veAnthropic);
-  const coKey = await coKeyKhaDung();
+  const coKey = (await coKeyKhaDung()) || gwaiChayDuoc();
   return [{
     cong: 'anthropic',
     ten: TEN_CONG.anthropic,

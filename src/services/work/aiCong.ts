@@ -26,6 +26,7 @@
  * Không ghi khoá ra log: chỉ ghi mã HTTP / câu lỗi đã có sẵn của adapter (không chứa khoá).
  */
 
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { AppError } from '../../middleware/errorHandler.js';
 import { MA_LOI_CHAN, biChanCuongMini, cauBiChan } from '../agent/cuongMiniChan.js';
 import { logger } from '../../utils/logger.js';
@@ -37,10 +38,45 @@ import {
 
 export type ViecCtWork = 'work_assistant' | 'work_digest' | 'work_spec_review';
 export type CongCtWork = 'rambo' | 'chinh_hang' | 'modelapi';
-/** Một BẬC của chuỗi (cổng chính hãng có hai bậc: Sonnet rồi Haiku). */
-export type BacCtWork = 'rambo' | 'chinh_hang_sonnet' | 'chinh_hang_haiku' | 'modelapi';
+/**
+ * Một BẬC của chuỗi (cổng chính hãng có hai bậc: Sonnet rồi Haiku). 24/11/2026: người dùng CHỌN model ở ô trợ lý ⇒ thêm
+ * hai bậc đứng ĐẦU: `chon_chinh_hang` (đúng model đã chọn, cổng chính hãng) rồi `chon_gwai` (cùng model, cổng gwai) —
+ * sau đó mới tới chuỗi mặc định (rambo/gwai → chính hãng Sonnet → Haiku → GPT). Không chọn ⇒ chuỗi mặc định y như cũ.
+ */
+export type BacCtWork = 'rambo' | 'chinh_hang_sonnet' | 'chinh_hang_haiku' | 'modelapi' | 'chon_chinh_hang' | 'chon_gwai';
 export const CHUOI_MAC_DINH: readonly BacCtWork[] = ['rambo', 'chinh_hang_sonnet', 'chinh_hang_haiku', 'modelapi'];
-const congCuaBac = (b: BacCtWork): CongCtWork => (b === 'rambo' ? 'rambo' : b === 'modelapi' ? 'modelapi' : 'chinh_hang');
+const congCuaBac = (b: BacCtWork): CongCtWork => (b === 'rambo' || b === 'chon_gwai' ? 'rambo' : b === 'modelapi' ? 'modelapi' : 'chinh_hang');
+
+/** Model người dùng chọn cho trợ lý CT Work (24/11/2026) — cùng mã + cùng khoá/vé với CuongMini CLI. */
+export type MaModelCtWork = 'cm-sonic' | 'cm-optimum' | 'cm-invisible';
+export const MA_MODEL_CT_WORK: readonly MaModelCtWork[] = ['cm-sonic', 'cm-optimum', 'cm-invisible'];
+export interface ChonModelCtWork {
+  ma: MaModelCtWork;
+  /** Admin ⇒ bậc chính hãng của model chọn KHÔNG chịu trần $/ngày của CT Work (chủ web dùng không giới hạn). */
+  laAdmin: boolean;
+}
+/**
+ * Lựa chọn model của LƯỢT HỎI hiện tại — route `/ai/chat(/stream)` đặt bằng `chayVoiModelChon`, mọi lời gọi
+ * `goiAiCtWork` bên trong lượt (kể cả vòng đọc tool, viết tiếp) đọc lại mà không phải luồn tham số qua `chat()`.
+ */
+const kgChon = new AsyncLocalStorage<ChonModelCtWork>();
+export function chayVoiModelChon<T>(c: ChonModelCtWork | null | undefined, fn: () => Promise<T>): Promise<T> {
+  return c ? kgChon.run(c, fn) : fn();
+}
+
+/** Chuỗi bậc của MỘT lượt. THUẦN — test đọc. Chỉ trợ lý (work_assistant) nhận model chọn; việc nền giữ chuỗi mặc định. */
+export function chuoiChoLuot(chon: ChonModelCtWork | null | undefined, purpose: ViecCtWork): BacCtWork[] {
+  const goc = chuoiCtWork();
+  if (!chon || purpose !== 'work_assistant') return goc;
+  return ['chon_chinh_hang', 'chon_gwai', ...goc];
+}
+
+/** Model thật của bậc "chọn": chính hãng ⇒ đúng model của bảng CuongMini; gwai ⇒ `gwaiModelCho`. */
+async function modelCuaLuaChon(ma: MaModelCtWork, cong: 'chinh_hang' | 'gwai'): Promise<string> {
+  const { mucTheoId, gwaiModelCho } = await import('../agent/bangModel.js');
+  if (cong === 'chinh_hang') return mucTheoId(ma)?.model ?? 'claude-sonnet-5-5';
+  return gwaiModelCho(ma === 'cm-optimum' ? 'opus' : ma === 'cm-invisible' ? 'fable' : 'sonnet');
+}
 
 /**
  * Thứ tự bậc đang hiệu lực: `CTWORK_CHUOI_CONG` (phẩy ngăn cách; `chinh_hang` = `chinh_hang_sonnet`; tên lạ bị bỏ,
@@ -89,6 +125,8 @@ export interface GoiAiCtWorkOpts {
    * lùi cuối nên KHÔNG BAO GIỜ bị bỏ (có trong danh sách cũng vẫn gọi).
    */
   boQuaCong?: CongCtWork[];
+  /** 24/11/2026: model người dùng chọn (không truyền ⇒ đọc lựa chọn của lượt từ `chayVoiModelChon`). */
+  modelChon?: ChonModelCtWork | null;
 }
 
 export interface KetQuaAiCtWork {
@@ -115,6 +153,8 @@ export interface PhuThuocCong {
   goiChinhHang: (o: GoiAiCtWorkOpts, model: string) => Promise<KetQuaAiCtWork>;
   baoChinhHangHong: () => void;
   goiModelapi: (o: GoiAiCtWorkOpts, model: string) => Promise<KetQuaAiCtWork>;
+  /** 24/11/2026: cổng chính hãng có key + không nghỉ (KHÔNG xét trần) — bậc "chọn" của ADMIN. */
+  chinhHangCoKey: () => Promise<boolean>;
 }
 
 /** Model chính hãng theo việc: digest ⇒ Haiku 5.5 (nhẹ, rẻ); còn lại (kể cả việc Opus trên rambo) ⇒ Sonnet 5.5 — KHÔNG
@@ -259,6 +299,12 @@ const THAT: PhuThuocCong = {
     }
   },
   baoChinhHangHong: () => { void import('../agent/bangModel.js').then((m) => m.baoCongHong('anthropic')).catch(() => {}); },
+  chinhHangCoKey: async () => {
+    const { congDangHong } = await import('../agent/bangModel.js');
+    if (congDangHong('anthropic')) return false;
+    const { coKeyKhaDung } = await import('../agent/anthropicChinhHang/khoKey.js');
+    return coKeyKhaDung('work_ai');
+  },
   goiModelapi: async (o, model) => {
     const r = await llmComplete({
       step: 'report', system: o.system, messages: o.messages, maxTokens: o.maxTokens, userId: o.userId, feature: 'work',
@@ -301,7 +347,8 @@ export async function goiAiCtWork(o: GoiAiCtWorkOpts): Promise<KetQuaAiCtWork> {
   };
   const huy = () => { if (o.signal?.aborted) throw new AppError('The connection closed before the answer was ready. Ask again.', 499, 'WORK_AI_CANCELLED'); };
 
-  const chuoi = chuoiCtWork();
+  const chon = o.modelChon === undefined ? kgChon.getStore() ?? null : o.modelChon;
+  const chuoi = chuoiChoLuot(chon, o.purpose);
   const daThuChinhHang = new Set<string>();
   let chinhHangHong = false;
   let loiCuoi: unknown = null;
@@ -315,7 +362,20 @@ export async function goiAiCtWork(o: GoiAiCtWorkOpts): Promise<KetQuaAiCtWork> {
     let model = '';
     try {
       let r: KetQuaAiCtWork;
-      if (bac === 'rambo') {
+      if (bac === 'chon_chinh_hang' && chon) {
+        model = await modelCuaLuaChon(chon.ma, 'chinh_hang');
+        const sanSang = chon.laAdmin ? await pt.chinhHangCoKey().catch(() => false) : await pt.chinhHangSanSang(o.userId, 'sonnet').catch(() => false);
+        if (!sanSang) continue;
+        daThuChinhHang.add(model);
+        r = await pt.goiChinhHang(opts, model);
+      } else if (bac === 'chon_gwai' && chon) {
+        const ep = pt.rambo();
+        if (!ep || pt.ramboDangNghi()) continue;
+        model = await modelCuaLuaChon(chon.ma, 'gwai');
+        r = await pt.goiRambo(opts, ep, model);
+      } else if (bac === 'chon_chinh_hang' || bac === 'chon_gwai') {
+        continue;
+      } else if (bac === 'rambo') {
         const ep = pt.rambo();
         if (!ep || pt.ramboDangNghi()) continue;
         model = modelRamboCho(o.purpose, o.nang);

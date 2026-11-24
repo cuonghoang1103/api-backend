@@ -32,6 +32,8 @@ import * as tests from '../services/work/tests.service.js';
 import * as ai from '../services/work/ai.service.js';
 import { chayTrongLuot } from '../services/work/aiTaiTro.js';
 import { MAX_AI_FILES, tepRefSchema } from '../services/work/aiTep.js';
+import { chayVoiModelChon } from '../services/work/aiCong.js';
+import { dsModelTroLy, giaiModelChon } from '../services/work/aiModelChon.js';
 import { ipChongSpam } from '../services/agent/defaultGioiHan.js';
 import * as helpGuide from '../services/work/helpGuide.js';
 import * as aiThreads from '../services/work/aiThreads.service.js';
@@ -1051,8 +1053,44 @@ router.post('/projects/:pid/ai/chat', asyncHandler(async (req, res) => {
     attachments: z.array(tepRefSchema).max(MAX_AI_FILES).nullable().optional(),
     /** 28/10/2026: hỏi từ trình duyệt / app CuongThai / app CT Work — đổi câu "việc trên máy bạn" (aiTroLyWeb.ts). */
     client: z.enum(['web', 'desktop', 'ctwork-desktop']).nullable().optional(),
+    /** 24/11/2026: model chọn ở ô trợ lý (bỏ trống / cm-default = chuỗi mặc định) + bó vé khoá 48 giờ. */
+    model: z.enum(['cm-default', 'cm-sonic', 'cm-optimum', 'cm-invisible']).nullable().optional(),
+    ve: z.string().max(4000).nullable().optional(),
   }), req.body);
-  ok(res, await ai.chat(callerId(req), idParam(req, 'pid'), body));
+  const { model: maModel, ve: veModel, ...hoi } = body;
+  const uid = callerId(req);
+  const chon = await giaiModelChon(uid, maModel, veModel ?? undefined);
+  ok(res, await chayVoiModelChon(chon, () => ai.chat(uid, idParam(req, 'pid'), hoi)));
+}));
+/** 24/11/2026: ô chọn model của trợ lý (tên CuongMini; header `x-cuongmini-ve` = bó vé đang giữ). */
+router.get('/projects/:pid/ai/models', asyncHandler(async (req, res) => {
+  const uid = callerId(req);
+  await ai.chatPrecheck(uid, idParam(req, 'pid'));
+  ok(res, await dsModelTroLy(uid, String(req.headers['x-cuongmini-ve'] ?? '').slice(0, 4000) || undefined));
+}));
+/** 24/11/2026: mở khoá model của trợ lý — CÙNG khoá + vé 48 giờ với CuongMini CLI (`anthropicChinhHang/ve.ts`). Chỉ người. */
+router.post('/projects/:pid/ai/unlock', asyncHandler(async (req, res) => {
+  const uid = callerId(req);
+  await ai.chatPrecheck(uid, idParam(req, 'pid'));
+  const b = parse(z.object({
+    matKhau: z.string().min(1).max(200),
+    loai: z.enum(['chung', 'invisible']).default('chung'),
+    ve: z.string().max(4000).nullable().optional(),
+  }), req.body ?? {});
+  const { moKhoa } = await import('../services/agent/anthropicChinhHang/ve.js');
+  const { MoKhoaLoi } = await import('../services/agent/congDuPhong.js');
+  try {
+    const kq = await moKhoa(uid, b.matKhau, { boCu: b.ve ?? undefined, canMo: b.loai });
+    logger.info('[work] mở khoá model trợ lý CuongMini', { userId: uid, loai: b.loai });
+    ok(res, { ve: kq.ve, hetHan: kq.hetHan, unlocked: b.loai === 'invisible' ? kq.mo.invisible : kq.mo.chung });
+  } catch (err) {
+    if (err instanceof MoKhoaLoi) {
+      const status = err.code === 'THU_QUA_NHIEU' ? 429 : err.code === 'CHUA_BAT' ? 409 : 403;
+      const en = err.code === 'THU_QUA_NHIEU' ? 'Too many wrong attempts. Try again in 15 minutes.' : err.code === 'CHUA_BAT' ? 'This model is not available yet.' : 'Wrong key.';
+      throw new AppError(en, status, `WORK_AI_${err.code}`, { vi: err.message, en });
+    }
+    throw err;
+  }
 }));
 /**
  * Trợ lý dự án — bản STREAM (SSE, 20/10/2026). Cùng thân, cùng quyền, cùng hạn mức, cùng lưu câu hỏi/câu trả lời/đề xuất
@@ -1083,10 +1121,16 @@ router.post('/projects/:pid/ai/chat/stream', asyncHandler(async (req, res) => {
     attachments: z.array(tepRefSchema).max(MAX_AI_FILES).nullable().optional(),
     /** 28/10/2026: hỏi từ trình duyệt / app CuongThai / app CT Work — đổi câu "việc trên máy bạn" (aiTroLyWeb.ts). */
     client: z.enum(['web', 'desktop', 'ctwork-desktop']).nullable().optional(),
+    /** 24/11/2026: model chọn ở ô trợ lý (bỏ trống / cm-default = chuỗi mặc định) + bó vé khoá 48 giờ. */
+    model: z.enum(['cm-default', 'cm-sonic', 'cm-optimum', 'cm-invisible']).nullable().optional(),
+    ve: z.string().max(4000).nullable().optional(),
   }), req.body);
+  const { model: maModel, ve: veModel, ...hoi } = body;
   const uid = callerId(req);
   const pid = idParam(req, 'pid');
   await ai.chatPrecheck(uid, pid);
+  /* Model cần khoá mà vé không mở ⇒ 403 JSON TRƯỚC khi mở luồng (giao diện hỏi khoá). */
+  const chon = await giaiModelChon(uid, maModel, veModel ?? undefined);
 
   res.status(200).set({
     'Content-Type': 'text/event-stream; charset=utf-8',
@@ -1106,12 +1150,12 @@ router.post('/projects/:pid/ai/chat/stream', asyncHandler(async (req, res) => {
   const ping = setInterval(() => { if (!res.writableEnded && !res.destroyed) res.write(': ping\n\n'); }, 15_000);
   res.write('retry: 5000\n\n');
   try {
-    const out = await ai.chat(uid, pid, body, {
+    const out = await chayVoiModelChon(chon, () => ai.chat(uid, pid, hoi, {
       signal: ctrl.signal,
       onProgress: (p) => send('progress', p),
       onDelta: (text) => send('delta', { text }),
       onReset: () => send('reset'),
-    });
+    }));
     send('done', out as unknown as Record<string, unknown>);
   } catch (err) {
     const e = err as { statusCode?: number; code?: string; message?: string };

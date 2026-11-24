@@ -75,7 +75,8 @@ export async function docTranModel(): Promise<Record<string, Record<GoiCoTranMod
 /** Thuần: JSON admin đã lưu ⇒ bảng đủ mọi model. */
 export function gopTran(dat: Record<string, unknown>): Record<string, Record<GoiCoTranModel, TranUsd>> {
   const ra: Record<string, Record<GoiCoTranModel, TranUsd>> = {};
-  for (const m of bangTatCa()) {
+  /* 24/11/2026: bản sao gwai (`gwaiDoi`) không có dòng trần riêng — trần tính vào model gốc (`mucGocCua`). */
+  for (const m of bangTatCa().filter((x) => !x.gwaiDoi)) {
     const o = (dat[m.id] && typeof dat[m.id] === 'object' ? dat[m.id] : {}) as Record<string, unknown>;
     const mac = macDinh(m.id);
     ra[m.id] = { pro: docCap(o.pro, mac.pro), key_terminal: docCap(o.key_terminal, mac.key_terminal) };

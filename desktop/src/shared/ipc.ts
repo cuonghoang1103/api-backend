@@ -1526,6 +1526,8 @@ export interface AgentInfo {
   /** `dat` = model đắt bất thường (Cuong Fable ×3,5) ⇒ app xác nhận trước khi chọn. */
   models?: Array<{
     id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean;
+    /** 24/11/2026: vì sao model đang xám — máy chủ CHỈ gửi cho admin. */
+    lyDo?: string;
     /**
      * Cổng của model (17/10/2026): `rambo` (cổng chính) · `modelapi` · `anthropic`
      * (Claude chính hãng). Máy chủ cũ không khai ⇒ coi như cổng chính.

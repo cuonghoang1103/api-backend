@@ -27,6 +27,8 @@ import {
   type AiFileRef, type AiMessage, type AiQuickTask, type AiQuota, type ProjectConfig,
 } from '@/lib/work-api';
 import AiMermaid from './AiMermaid';
+import AiModelPicker, { docModelDaChon, type AiModelId } from './AiModelPicker';
+import { getTicket } from '@/lib/work-setup-api';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import { wk } from '../hooks';
@@ -197,6 +199,8 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   const qc = useQueryClient();
   const meId = useAuthStore((s) => s.user?.id);
   const [threadId, setThreadId] = useState<number | null>(() => loadLast(pid));
+  /* 24/11/2026: model trợ lý (mặc định = chuỗi cổng cũ). */
+  const [aiModel, setAiModel] = useState<AiModelId>(() => docModelDaChon());
   const [view, setView] = useState<'chat' | 'history'>('chat');
   const [draft, setDraft] = useState('');
   /** Câu vừa gửi, hiện ngay trong lúc chờ server lưu + AI trả lời. */
@@ -342,7 +346,8 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
       tid = await ensureThread(message);
       // 28/10/2026: báo trợ lý đang ở vỏ nào — việc trên máy người dùng thì app desktop chỉ tới AI Code ngay trong app.
       const client = trongAppDesktop() ? (laAppCtWork() ? 'ctwork-desktop' as const : 'desktop' as const) : 'web' as const;
-      const a = await workApi.aiChatAbortable(pid, { message, issueNumber, threadId: tid, client, ...(attachments.length ? { attachments } : {}) }, ctrl.signal);
+      const chonModel = aiModel !== 'cm-default' ? { model: aiModel, ve: getTicket() ?? null } : {};
+      const a = await workApi.aiChatAbortable(pid, { message, issueNumber, threadId: tid, client, ...chonModel, ...(attachments.length ? { attachments } : {}) }, ctrl.signal);
       onQuota(a.quota);
       for (const f of sentFiles) if (f.preview) URL.revokeObjectURL(f.preview);
     } catch (err) {
@@ -363,7 +368,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
       if (waitGen.current === gen) { setWaiting(null); setPendingQ(null); }
       await refresh(tid);
     }
-  }, [waiting, uploading, files, readyFiles, threadId, pid, issueNumber, ensureThread, onQuota, handleError, qc, refresh]);
+  }, [waiting, uploading, files, readyFiles, threadId, pid, issueNumber, ensureThread, onQuota, handleError, qc, refresh, aiModel]);
 
   const retry = useCallback(async (mid: number) => {
     if (waiting || !threadId) return;
@@ -782,6 +787,11 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                   </button>
                 )}
               </div>
+              {thread?.mode !== 'DEFENSE' && (
+                <div className="mt-1.5">
+                  <AiModelPicker pid={pid} value={aiModel} onChange={setAiModel} disabled={!!waiting} />
+                </div>
+              )}
               <p className="mt-1.5 text-[11px] leading-snug text-[var(--w-text-3)]">
                 {quota?.sponsorship ? <SponsorChip quota={quota} /> : null}
                 {isPrivate ? wt('ai.savedPrivate') : wt('ai.savedTeam')} {wt('ai.noSecrets')}

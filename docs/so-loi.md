@@ -1166,3 +1166,10 @@ Mẫu một mục:
 - **Cách sửa:** `dp-lam-lai.sh <id> render` cho 36 tập (làn nhận ngay 22:49); vòng Mac mới `video-bai-giang/scratchpad/ll2-lam-lai.sh` (10 phút/lần): tập trong `ll2-long-lai.txt` vừa có giọng mới mà còn dòng render cũ ⇒ tự `dp-lam-lai render`, đánh dấu `ll2-da-lam-lai.txt`.
 - **Ảnh hưởng:** ~25 phút 19 làn render rảnh; video giọng cũ có thể đã lên web cho những tập đó — bản render mới sẽ tự đẩy đè.
 - **Bài học:** "lồng lại" ≠ "tập mới": muốn làm lại một khâu thì phải gỡ dòng xong cũ (dp-lam-lai), và đếm "xong" phải so thời điểm render với thời điểm giọng, không chỉ có/không dòng ok.
+
+### 25/11/2026 — app desktop CuongThai (phát hành sau lượt 2) — bản dựng Windows chết OOM trên GitHub
+- **Triệu chứng:** workflow `desktop-release.yml` run 45444954066: "Dựng Windows" `FATAL ERROR: Ineffective mark-compacts near heap limit` (~7 GB) ngay sau dòng `computing gzip size...`; Linux xanh, macOS chạy quá 30 phút ⇒ `phat-hanh.mjs` báo quá giờ.
+- **Nguyên nhân:** cây renderer (dùng lại mã web) lớn dần; `vite build` ở `desktop/vite.config.ts` còn bật `reportCompressedSize` mặc định ⇒ gzip từng chunk chỉ để in bảng kích thước, đẩy heap qua trần 8 GB (`build:renderer`).
+- **Cách sửa:** `reportCompressedSize: !process.env.CI` (cạnh `sourcemap: !process.env.CI`), phát hành lại.
+- **Ảnh hưởng:** app CuongThai bản mới chậm ra vài giờ; app CT Work 1.0.12 không ảnh hưởng.
+- **Bài học:** đỉnh bộ nhớ của `vite build` trên CI gồm cả bước báo cáo — tắt mọi thứ CI vứt đi (sourcemap, gzip report) trước khi nâng heap.

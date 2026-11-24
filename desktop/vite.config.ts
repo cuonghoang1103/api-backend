@@ -142,6 +142,11 @@ export default defineConfig({
      * Gỡ lỗi ở máy nhà thì vẫn có bản đồ nguồn như cũ.
      */
     sourcemap: !process.env.CI,
+    /**
+     * 25/11/2026: runner Windows chết OOM (~7 GB heap) ĐÚNG ở bước "computing gzip size" — bước chỉ để in bảng kích
+     * thước gzip ra log, không ảnh hưởng bản cài. Tắt ở CI cho bớt một đỉnh bộ nhớ.
+     */
+    reportCompressedSize: !process.env.CI,
     target: 'chrome128',
     /**
      * HAI trang, không phải một.

@@ -38,6 +38,7 @@ import {
   tachLenh, tenFileXuat, timMuc, timTheoChu, xuatMarkdown,
 } from './lenhGach';
 import { hoiDongBoGit, lenhDongBo } from './gitDongBoLenh';
+import { lenhHocTap } from './hocTapLenh';
 import { hanhDongMcp, lamHanhDongMcp, trangThaiMcpChu, hoiGanDoan, homNay as homNayCtw, hoiCtworkMotLan, kiemTinCtw, laLoiXacThucCtw, lenhCtwork, moCtworkTuMcp, veDongCtw, xongViec as xongViecCtw, type DongCtw, type GiaoDienCtw, type TheChonCtw } from './ctworkLenh';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
@@ -856,6 +857,10 @@ export function AgentMode({
       case '/dong-bo':
         /* 28/10/2026: đồng bộ git ↔ GitHub ↔ repo dự án — chung ba nơi (`gitDongBoLenh.ts`). */
         await lenhDongBo(thamSo, gdCtw());
+        return;
+      case '/hoc':
+        /* 24/11/2026: Học tập & Lịch cá nhân (MCP `hoc_tap`) — chung CLI + app (`hocTapLenh.ts`). */
+        await lenhHocTap(thamSo, gdCtw());
         return;
       case '/hen': {
         const d = thamSo.split(/\s+/).filter(Boolean);

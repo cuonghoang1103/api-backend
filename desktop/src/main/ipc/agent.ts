@@ -69,6 +69,7 @@ import * as ctw from '../agent/ctworkHe';
 import { nguCanhChoModel } from '../agent/ctworkHe';
 import * as ctwDd from '../agent/ctworkDanDuong';
 import * as ctwGit from '../agent/ctworkGit';
+import { hocTapLenh } from '../agent/ctworkHocTap'; // 24/11/2026: `/hoc` — Học tập & Lịch cá nhân
 import { datNgonNgu as datNgonNguCtw } from '../agent/ctworkVe';
 import { cauDanhThuc, datBoChayHen, huyCho, huyHen } from '../agent/choHen';
 import { doiTen as doiTenPhienMang, dsPhienSong, toiLa } from '../agent/phienMang';
@@ -1320,6 +1321,8 @@ export function registerAgentHandlers(): void {
       case 'dongBoBat':
         if (typeof v.bat === 'boolean') setSetting('gitDongBoTuDong', v.bat);
         return { ok: true, bat: ctwGit.tuDongBat() };
+      /* 24/11/2026: `/hoc` — dữ liệu riêng của người dùng (MCP `hoc_tap`), không cần thư mục gắn dự án. */
+      case 'hocTap': return hocTapLenh(v.hocTap);
       case 'tuGhi':
         /* ⛔ Chỉ main ghi (`KHOA_CHI_MAIN`): bật là agent GHI lên CT Work không hỏi. */
         if (typeof v.bat === 'boolean') setSetting('ctworkTuGhi', v.bat);

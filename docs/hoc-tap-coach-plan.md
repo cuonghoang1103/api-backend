@@ -73,3 +73,20 @@ Tính cho từng môn, phần trăm:
   Chạy thật cục bộ: tuần 4 chưa học ⇒ 40%; AI chấm bài mkdir thử ⇒ 4/10 CHƯA ĐẠT, lý do đúng;
   AI soạn SWT301 ⇒ 42 việc, liên kết đúng bài Academy, mất ~6 phút (nên chạy nền + hỏi lại).
   Hạn mức env: HOC_TAP_AI_FREE_DAILY (20), HOC_TAP_AI_PRO_DAILY (150); admin không giới hạn.
+
+## 24/11/2026 — CT Work → Của tôi → Học tập & Lịch + việc cá nhân + CuongMini `/hoc`
+- **Trang** `/work/hoc-tap` (+ `/work/hoc-tap/mon/:id`, dùng lại `TrangMon` với `nhung`): lưới giờ Ngày/7 ngày gộp lớp
+  (ClassSchedule) + khối tự học (xepLich) + **việc cá nhân** + hạn thẻ / họp dự án (`GET /work/me/agenda`, chỉ đọc —
+  không đổi hợp đồng agenda của app iOS). Mục "Học tập & Lịch" ở thanh bên CT Work; tuyến desktop ở `tuyenCtWork.ts`.
+- **Việc cá nhân** = bảng mới `viec_ca_nhan` (migration `20261124180000_viec_ca_nhan`, chỉ THÊM bảng): không thuộc môn,
+  KHÔNG chấm, KHÔNG tính tỷ lệ trượt, tự đánh dấu xong. Có giờ ⇒ `xepLich` né khung đó (coDinh) + cron 5' nhắc APNs
+  (`nhacViecCaNhan`). Thêm/sửa có giờ chồng khối tự học ⇒ xếp lại (`xepLaiNeuChong`).
+  REST: `GET /hoc-tap/hom-nay` · `GET /hoc-tap/tuan` · `GET|POST /hoc-tap/ca-nhan` · `PATCH|DELETE /hoc-tap/ca-nhan/:id` ·
+  `POST /hoc-tap/ca-nhan/:id/xong {xong}`.
+- **MCP `hoc_tap`** (một lệnh, action today|week|list_personal|start|add|edit|done|undone; personOnly, chỉ MCP, không xoá):
+  mã `H<n>` việc học (chỉ `start` — luật không tự tích GIỮ NGUYÊN), `C<n>` việc cá nhân. Vẽ markdown ở `veHocTap.ts`.
+- **CuongMini** `/hoc` (CLI + app, chung `desktop/.../chat/hocTapLenh.ts`; lõi `agent/ctworkHocTap.ts` qua `agent:ctworkHe`
+  viec `hocTap`): `/hoc` · `/hoc tuan` · `/hoc them "Ôn kana" mai 20:00 45` · `/hoc xong C5` · `/hoc bat-dau H12` ·
+  `/hoc sua C5 khong-gio` · `/hoc ds 26/11 30/11`. Hỏi tự nhiên ("hôm nay mình học gì") ⇒ model gọi MCP `hoc_tap`.
+- Test: `npx tsx --test src/services/hocTap/viecCaNhan.test.ts` · `HOC_TAP_DB_TEST=1 … hocTap.routes.db.test.ts` (8) ·
+  registry.test · desktop vitest `hocTapLenh.test.ts`, `ctworkHocTap.test.ts`, `dinhTuyenWeb.test.ts` (219 tuyến).

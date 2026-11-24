@@ -157,9 +157,16 @@ export async function xepLich(userId: number, opts: { chiViecChuaCoGio?: boolean
   const lop = await lichLopCua(userId);
   // `tu`: "Lùi lịch" — xếp lại bắt đầu từ giờ người học hẹn quay lại (không sớm hơn bây giờ).
   const mocXep = opts.tu && opts.tu > now ? opts.tu : now;
+  // 24/11/2026: việc CÁ NHÂN có giờ (chưa xong) là khối bận — bộ xếp né chúng như lớp học. Truy vấn thẳng ở đây
+  // (không import viecCaNhan.ts — tệp đó import hocTap.service ⇒ vòng import).
+  const caNhan = await prisma.viecCaNhan.findMany({
+    where: { userId, xongLuc: null, gioBatDau: { gte: new Date(now.getTime() - NGAY), lte: new Date(now.getTime() + 75 * NGAY) } },
+    select: { gioBatDau: true, thoiLuongPhut: true }, take: 500,
+  });
   const kq = xepLichThuan(
     canXep.map((v) => ({ id: v.id, maMon: v.mon.maMon, tieuDe: v.tieuDe, hanChot: v.hanChot, thoiLuongPhut: v.thoiLuongPhut, trongSo: v.trongSo, uuTienMon: v.mon.thuTu })),
-    lop, mocXep, {}, giu.map((v) => ({ bd: v.gioBatDau!, phut: v.thoiLuongPhut })),
+    lop, mocXep, {},
+    [...giu.map((v) => ({ bd: v.gioBatDau!, phut: v.thoiLuongPhut })), ...caNhan.map((c) => ({ bd: c.gioBatDau!, phut: c.thoiLuongPhut }))],
   );
   const ghi = canXep.filter((v) => kq.has(v.id)).map((v) =>
     prisma.nhiemVuHoc.update({ where: { id: v.id }, data: { gioBatDau: kq.get(v.id)!, daNhacLuc: null } }));

@@ -1792,7 +1792,21 @@ export const agentCtworkHeSchema = z.object({
     'macDinh',
     /* 28/10/2026 (đợt 2 code): đồng bộ git với GitHub + repo dự án — kiểm · kéo về (SAU thẻ đồng ý) · xem commit · bật/tắt tự kiểm. */
     'dongBoGit', 'keoGit', 'xemCommitGit', 'dongBoBat',
+    /* 24/11/2026: `/hoc` — Học tập & Lịch cá nhân (MCP `hoc_tap`), không cần thư mục gắn dự án. */
+    'hocTap',
   ]),
+  /** 24/11/2026 (`hocTap`): việc + tham số cho lệnh MCP `hoc_tap`. */
+  hocTap: z.object({
+    action: z.enum(['today', 'week', 'list_personal', 'start', 'add', 'edit', 'done', 'undone']),
+    id: z.string().max(14).optional(),
+    title: z.string().max(255).optional(),
+    date: z.string().max(10).optional(),
+    time: z.string().max(5).optional(),
+    minutes: z.number().int().min(5).max(600).optional(),
+    note: z.string().max(4000).optional(),
+    from: z.string().max(10).optional(),
+    to: z.string().max(10).optional(),
+  }).optional(),
   ngonNgu: z.enum(['vi', 'en']).optional(),
   key: z.string().max(40).optional(),
   loai: z.enum(['ketNoi', 'ganDuAn']).optional(),

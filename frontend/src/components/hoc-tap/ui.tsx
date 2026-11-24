@@ -13,9 +13,11 @@ export function cx(...a: Array<string | false | null | undefined>) {
   return a.filter(Boolean).join(' ');
 }
 
-export function Khung({ children }: { children: ReactNode }) {
+/** `nhung`: nằm TRONG khung CT Work (/work/hoc-tap) — CT Work đã có thanh trên + nền riêng, bỏ pt-16 của site. */
+export function Khung({ children, nhung }: { children: ReactNode; nhung?: boolean }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isHydrated = useAuthStore((s) => s.isHydrated);
+  if (nhung) return <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-4">{children}</div>;
   if (isHydrated && !isAuthenticated) {
     return (
       <div className="pt-16 flex min-h-[70vh] flex-col items-center justify-center gap-4 px-6 text-center">

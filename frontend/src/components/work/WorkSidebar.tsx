@@ -51,6 +51,7 @@ import { GraduationCap, Newspaper, School } from 'lucide-react';
 import { Crosshair, Spade, MessageSquareHeart } from 'lucide-react'; // CTW đợt 7a
 import { ClipboardList, Inbox as InboxIcon, FileInput, BookOpen as BookOpenKb } from 'lucide-react'; // CTW đợt 7b
 import { PlugZap } from 'lucide-react'; // CTW đợt 8a
+import { CalendarHeart } from 'lucide-react'; // 24/11/2026: Học tập & Lịch cá nhân
 import { Download } from 'lucide-react';
 import { Code2 } from 'lucide-react'; // CTW Code (18/10/2026)
 import { codeApi, codeKeys } from './code/codeApi';
@@ -62,7 +63,7 @@ import { MoreHorizontal, Pin, PinOff, RotateCcw } from 'lucide-react';
 import { coreFor, isCustomized, matchesQuery, primaryOrder, togglePin } from './shell/sidebarNav';
 import { useNavPins } from './shell/navPins';
 
-const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes', 'security', 'connections', 'github-app']); // CTW đợt 5: + teaching, classes · đợt 7c: + security (2FA) · đợt 8a: + connections · 27/10/2026: + github-app (chọn repo sau khi cài app)
+const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes', 'security', 'connections', 'github-app', 'hoc-tap']); // CTW đợt 5: + teaching, classes · đợt 7c: + security (2FA) · đợt 8a: + connections · 27/10/2026: + github-app (chọn repo sau khi cài app)
 const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents', 'okrs', 'ai-usage', 'setup', 'feed']); // 'feed': Bảng tin nhóm (21/10/2026) // 'ai-usage': CTW đợt 8B · 'setup': Create with CuongMini
 
 export function useWorkPath() {
@@ -630,6 +631,8 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
           {!portalOnly && <NavItem href="/work?tab=my-work" icon={Inbox} label={wt('shell.myWork')} active={onMyWork} />}
           {/* Tìm thẻ mọi dự án. Không gán phím "/" toàn cục: list/board đã dùng nó — ⌘K là đủ. */}
           {!portalOnly && <NavItem href="/work/search" icon={Search} label={wt('common.search')} active={pathname.startsWith('/work/search')} />}
+          {/* 24/11/2026: lịch cá nhân — lớp + tự học + việc cá nhân + hạn thẻ/họp (riêng tư, không thuộc dự án). */}
+          {!portalOnly && <NavItem href="/work/hoc-tap" icon={CalendarHeart} label={wt('shell.studyPlan')} active={pathname.startsWith('/work/hoc-tap')} />}
           {!portalOnly && teaching.data?.teaching && <NavItem href="/work/teaching" icon={GraduationCap} label={wt('teacher.navTeaching')} active={pathname.startsWith('/work/teaching')} />}
           {!portalOnly && !slug && <NavItem href="/work/classes" icon={School} label={wt('classroom.navClasses')} active={pathname.startsWith('/work/classes')} />}
           {!slug && <NavItem href="/work?tab=workspaces" icon={LayoutGrid} label={wt('common.workspaces')} active={onWorkspaces} />}

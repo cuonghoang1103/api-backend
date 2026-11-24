@@ -12,6 +12,7 @@ export const shell: Strings<typeof En> = {
   searchOrJump: 'Tìm hoặc chuyển tới…',
   account: 'Tài khoản',
   myWork: 'Việc của tôi',
+  studyPlan: 'Học tập & Lịch',
   apiTokens: 'API token',
   helpGuide: 'Hướng dẫn sử dụng',
   backToSite: 'Về CuongThai',

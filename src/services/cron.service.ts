@@ -842,6 +842,9 @@ export function startCronJobs(): void {
     try {
       const { nhacGioHoc } = await import('./hocTap/hocTap.service.js');
       await nhacGioHoc();
+      // 24/11/2026: việc cá nhân có giờ (CT Work → Học tập & Lịch) — nhắc 5' trước như việc học.
+      const { nhacViecCaNhan } = await import('./hocTap/viecCaNhan.js');
+      await nhacViecCaNhan();
     } catch (err) {
       logger.error('cron hoc-tap nhắc giờ lỗi', { error: (err as Error).message });
     }

@@ -1,0 +1,885 @@
+{
+ "ma": "cot-loi-a1-3",
+ "nn": "en",
+ "ten": "Tính từ thông dụng A1",
+ "moTa": "Tính từ cơ bản để mô tả người, vật, cảm nhận (good, bad, important, difficult, easy, famous, true, wrong…) — cần ngay từ những câu đầu tiên.",
+ "nhom": "giao-tiep",
+ "cap": "A1",
+ "tu": [
+  {
+   "chu": "good",
+   "doc": "/ɡʊd/",
+   "loai": "adj",
+   "nghia": "tốt, giỏi, ngon, hay",
+   "cap": "A1",
+   "viDu": "She is very good at maths.",
+   "viDuNghia": "Cô ấy rất giỏi toán.",
+   "cumTu": [
+    "good at",
+    "good for",
+    "good idea",
+    "good news"
+   ],
+   "hoTu": [
+    "well (adv)",
+    "goodness (n)"
+   ],
+   "ghiChu": "So sánh: better, best. Giỏi môn gì: good AT."
+  },
+  {
+   "chu": "bad",
+   "doc": "/bæd/",
+   "loai": "adj",
+   "nghia": "xấu, tệ, kém",
+   "cap": "A1",
+   "viDu": "Too much sugar is bad for your health.",
+   "viDuNghia": "Quá nhiều đường thì có hại cho sức khoẻ.",
+   "cumTu": [
+    "bad for",
+    "bad at",
+    "bad news",
+    "bad weather"
+   ],
+   "hoTu": [
+    "badly (adv)"
+   ],
+   "ghiChu": "So sánh: worse, worst."
+  },
+  {
+   "chu": "better",
+   "doc": "/ˈbetə(r)/",
+   "loai": "adj",
+   "nghia": "tốt hơn; khoẻ hơn",
+   "cap": "A1",
+   "viDu": "This phone is better than my old one.",
+   "viDuNghia": "Điện thoại này tốt hơn cái cũ của tôi.",
+   "cumTu": [
+    "better than",
+    "get better",
+    "much better",
+    "feel better"
+   ],
+   "ghiChu": "Là dạng so sánh hơn của good/well. Không nói \"more better\"."
+  },
+  {
+   "chu": "best",
+   "doc": "/best/",
+   "loai": "adj",
+   "nghia": "tốt nhất",
+   "cap": "A1",
+   "viDu": "This is the best restaurant in town.",
+   "viDuNghia": "Đây là nhà hàng ngon nhất thị trấn.",
+   "cumTu": [
+    "best friend",
+    "do your best",
+    "the best way",
+    "best wishes"
+   ],
+   "ghiChu": "Luôn có \"the\" khi làm tính từ: the best."
+  },
+  {
+   "chu": "new",
+   "doc": "/njuː/",
+   "loai": "adj",
+   "nghia": "mới",
+   "cap": "A1",
+   "viDu": "I need a new laptop for my studies.",
+   "viDuNghia": "Tôi cần một chiếc laptop mới để học.",
+   "cumTu": [
+    "brand new",
+    "new job",
+    "new idea",
+    "New Year"
+   ],
+   "hoTu": [
+    "news (n)",
+    "newly (adv)"
+   ]
+  },
+  {
+   "chu": "important",
+   "doc": "/ɪmˈpɔːtnt/",
+   "loai": "adj",
+   "nghia": "quan trọng",
+   "cap": "A1",
+   "viDu": "It is important to sleep well before an exam.",
+   "viDuNghia": "Ngủ ngon trước kỳ thi là điều quan trọng.",
+   "cumTu": [
+    "important for",
+    "play an important role",
+    "important decision"
+   ],
+   "hoTu": [
+    "importance (n)",
+    "importantly (adv)"
+   ],
+   "ghiChu": "Từ đồng nghĩa nâng band: essential, crucial, vital, significant."
+  },
+  {
+   "chu": "difficult",
+   "doc": "/ˈdɪfɪkəlt/",
+   "loai": "adj",
+   "nghia": "khó, khó khăn",
+   "cap": "A1",
+   "viDu": "English grammar is not very difficult.",
+   "viDuNghia": "Ngữ pháp tiếng Anh không khó lắm.",
+   "cumTu": [
+    "difficult to do",
+    "find it difficult",
+    "difficult question"
+   ],
+   "hoTu": [
+    "difficulty (n)"
+   ]
+  },
+  {
+   "chu": "easy",
+   "doc": "/ˈiːzi/",
+   "loai": "adj",
+   "nghia": "dễ, dễ dàng",
+   "cap": "A1",
+   "viDu": "This app is very easy to use.",
+   "viDuNghia": "Ứng dụng này rất dễ dùng.",
+   "cumTu": [
+    "easy to use",
+    "take it easy",
+    "easy way",
+    "easy money"
+   ],
+   "hoTu": [
+    "easily (adv)",
+    "ease (n)"
+   ]
+  },
+  {
+   "chu": "hard",
+   "doc": "/hɑːd/",
+   "loai": "adj",
+   "nghia": "khó; cứng; chăm chỉ, vất vả",
+   "cap": "A1",
+   "viDu": "It is hard to find a cheap flat in the city centre.",
+   "viDuNghia": "Rất khó tìm một căn hộ rẻ ở trung tâm thành phố.",
+   "cumTu": [
+    "work hard",
+    "hard work",
+    "hard to say",
+    "try hard"
+   ],
+   "hoTu": [
+    "hardly (adv)",
+    "harden (v)"
+   ],
+   "ghiChu": "\"work hard\" = làm việc chăm; \"hardly work\" = hầu như không làm — nghĩa trái ngược."
+  },
+  {
+   "chu": "high",
+   "doc": "/haɪ/",
+   "loai": "adj",
+   "nghia": "cao (vật, mức độ, giá cả)",
+   "cap": "A1",
+   "viDu": "The price of housing in big cities is very high.",
+   "viDuNghia": "Giá nhà ở các thành phố lớn rất cao.",
+   "cumTu": [
+    "high price",
+    "high quality",
+    "high school",
+    "high level"
+   ],
+   "hoTu": [
+    "height (n)",
+    "highly (adv)"
+   ],
+   "ghiChu": "Người thì dùng \"tall\", không dùng \"high\"."
+  },
+  {
+   "chu": "large",
+   "doc": "/lɑːdʒ/",
+   "loai": "adj",
+   "nghia": "lớn, rộng",
+   "cap": "A1",
+   "viDu": "A large number of students study online.",
+   "viDuNghia": "Một số lượng lớn sinh viên học trực tuyến.",
+   "cumTu": [
+    "a large number of",
+    "large amount",
+    "large company",
+    "large scale"
+   ],
+   "hoTu": [
+    "largely (adv)",
+    "enlarge (v)"
+   ],
+   "ghiChu": "Trang trọng hơn \"big\"; dùng \"a large number/amount of\" trong Writing."
+  },
+  {
+   "chu": "fast",
+   "doc": "/fɑːst/",
+   "loai": "adj",
+   "nghia": "nhanh",
+   "cap": "A1",
+   "viDu": "The internet connection here is very fast.",
+   "viDuNghia": "Kết nối internet ở đây rất nhanh.",
+   "cumTu": [
+    "fast food",
+    "fast car",
+    "fast train",
+    "fast growth"
+   ],
+   "ghiChu": "Trạng từ cũng là \"fast\" (không có \"fastly\")."
+  },
+  {
+   "chu": "quick",
+   "doc": "/kwɪk/",
+   "loai": "adj",
+   "nghia": "nhanh, mau lẹ",
+   "cap": "A1",
+   "viDu": "Can I ask you a quick question?",
+   "viDuNghia": "Tôi hỏi bạn nhanh một câu được không?",
+   "cumTu": [
+    "quick question",
+    "quick look",
+    "quick reply",
+    "be quick"
+   ],
+   "hoTu": [
+    "quickly (adv)"
+   ]
+  },
+  {
+   "chu": "ready",
+   "doc": "/ˈredi/",
+   "loai": "adj",
+   "nghia": "sẵn sàng",
+   "cap": "A1",
+   "viDu": "Are you ready for the interview?",
+   "viDuNghia": "Bạn đã sẵn sàng cho buổi phỏng vấn chưa?",
+   "cumTu": [
+    "ready for",
+    "ready to do",
+    "get ready"
+   ],
+   "hoTu": [
+    "readiness (n)",
+    "readily (adv)"
+   ]
+  },
+  {
+   "chu": "real",
+   "doc": "/ˈriːəl/",
+   "loai": "adj",
+   "nghia": "thật, có thật",
+   "cap": "A1",
+   "viDu": "This film is based on a real story.",
+   "viDuNghia": "Bộ phim này dựa trên một câu chuyện có thật.",
+   "cumTu": [
+    "real life",
+    "real world",
+    "real problem",
+    "real name"
+   ],
+   "hoTu": [
+    "really (adv)",
+    "reality (n)",
+    "realistic (adj)"
+   ]
+  },
+  {
+   "chu": "true",
+   "doc": "/truː/",
+   "loai": "adj",
+   "nghia": "đúng, thật",
+   "cap": "A1",
+   "viDu": "Is it true that you are moving to Japan?",
+   "viDuNghia": "Có đúng là bạn sắp chuyển sang Nhật không?",
+   "cumTu": [
+    "come true",
+    "true story",
+    "true or false",
+    "it is true that"
+   ],
+   "hoTu": [
+    "truth (n)",
+    "truly (adv)"
+   ]
+  },
+  {
+   "chu": "false",
+   "doc": "/fɔːls/",
+   "loai": "adj",
+   "nghia": "sai, giả",
+   "cap": "A1",
+   "viDu": "Decide if each sentence is true or false.",
+   "viDuNghia": "Hãy xác định mỗi câu đúng hay sai.",
+   "cumTu": [
+    "true or false",
+    "false information",
+    "false name"
+   ],
+   "ghiChu": "Dạng bài True / False / Not Given trong IELTS Reading."
+  },
+  {
+   "chu": "correct",
+   "doc": "/kəˈrekt/",
+   "loai": "adj",
+   "nghia": "đúng, chính xác",
+   "cap": "A1",
+   "viDu": "Choose the correct answer for each question.",
+   "viDuNghia": "Chọn đáp án đúng cho mỗi câu hỏi.",
+   "cumTu": [
+    "correct answer",
+    "correct spelling",
+    "correct order"
+   ],
+   "hoTu": [
+    "correct (v)",
+    "correction (n)",
+    "correctly (adv)"
+   ]
+  },
+  {
+   "chu": "wrong",
+   "doc": "/rɒŋ/",
+   "loai": "adj",
+   "nghia": "sai, nhầm; không ổn",
+   "cap": "A1",
+   "viDu": "I think you have the wrong number.",
+   "viDuNghia": "Tôi nghĩ bạn gọi nhầm số rồi.",
+   "cumTu": [
+    "wrong answer",
+    "go wrong",
+    "what's wrong",
+    "wrong way"
+   ],
+   "hoTu": [
+    "wrongly (adv)"
+   ]
+  },
+  {
+   "chu": "possible",
+   "doc": "/ˈpɒsəbl/",
+   "loai": "adj",
+   "nghia": "có thể (xảy ra, làm được)",
+   "cap": "A1",
+   "viDu": "Is it possible to change my booking?",
+   "viDuNghia": "Có thể đổi đặt chỗ của tôi không?",
+   "cumTu": [
+    "if possible",
+    "as soon as possible",
+    "make it possible"
+   ],
+   "hoTu": [
+    "possibility (n)",
+    "possibly (adv)",
+    "impossible (adj)"
+   ]
+  },
+  {
+   "chu": "perfect",
+   "doc": "/ˈpɜːfɪkt/",
+   "loai": "adj",
+   "nghia": "hoàn hảo",
+   "cap": "A1",
+   "viDu": "The weather is perfect for a picnic.",
+   "viDuNghia": "Thời tiết thật hoàn hảo để đi dã ngoại.",
+   "cumTu": [
+    "perfect for",
+    "perfect score",
+    "nobody is perfect"
+   ],
+   "hoTu": [
+    "perfectly (adv)",
+    "perfection (n)"
+   ]
+  },
+  {
+   "chu": "special",
+   "doc": "/ˈspeʃl/",
+   "loai": "adj",
+   "nghia": "đặc biệt",
+   "cap": "A1",
+   "viDu": "Tet is a special time for Vietnamese families.",
+   "viDuNghia": "Tết là dịp đặc biệt với các gia đình Việt Nam.",
+   "cumTu": [
+    "special offer",
+    "special day",
+    "nothing special",
+    "special needs"
+   ],
+   "hoTu": [
+    "specially (adv)",
+    "specialist (n)",
+    "specialize (v)"
+   ]
+  },
+  {
+   "chu": "main",
+   "doc": "/meɪn/",
+   "loai": "adj",
+   "nghia": "chính, chủ yếu",
+   "cap": "A1",
+   "viDu": "What is the main idea of this paragraph?",
+   "viDuNghia": "Ý chính của đoạn văn này là gì?",
+   "cumTu": [
+    "main idea",
+    "main reason",
+    "main road",
+    "main course"
+   ],
+   "hoTu": [
+    "mainly (adv)"
+   ]
+  },
+  {
+   "chu": "common",
+   "doc": "/ˈkɒmən/",
+   "loai": "adj",
+   "nghia": "phổ biến, thông thường; chung",
+   "cap": "A1",
+   "viDu": "Nguyen is the most common family name in Vietnam.",
+   "viDuNghia": "Nguyễn là họ phổ biến nhất ở Việt Nam.",
+   "cumTu": [
+    "common problem",
+    "common sense",
+    "in common",
+    "common mistake"
+   ],
+   "hoTu": [
+    "commonly (adv)",
+    "uncommon (adj)"
+   ]
+  },
+  {
+   "chu": "popular",
+   "doc": "/ˈpɒpjələ(r)/",
+   "loai": "adj",
+   "nghia": "phổ biến, được ưa chuộng",
+   "cap": "A1",
+   "viDu": "Football is the most popular sport in my country.",
+   "viDuNghia": "Bóng đá là môn thể thao được ưa chuộng nhất ở nước tôi.",
+   "cumTu": [
+    "popular with",
+    "popular among",
+    "become popular",
+    "popular culture"
+   ],
+   "hoTu": [
+    "popularity (n)"
+   ],
+   "ghiChu": "popular WITH / AMONG young people."
+  },
+  {
+   "chu": "famous",
+   "doc": "/ˈfeɪməs/",
+   "loai": "adj",
+   "nghia": "nổi tiếng",
+   "cap": "A1",
+   "viDu": "Ha Long Bay is famous for its beautiful islands.",
+   "viDuNghia": "Vịnh Hạ Long nổi tiếng vì những hòn đảo đẹp.",
+   "cumTu": [
+    "famous for",
+    "world famous",
+    "famous person"
+   ],
+   "hoTu": [
+    "fame (n)"
+   ],
+   "ghiChu": "famous FOR something."
+  },
+  {
+   "chu": "modern",
+   "doc": "/ˈmɒdn/",
+   "loai": "adj",
+   "nghia": "hiện đại",
+   "cap": "A1",
+   "viDu": "Modern technology makes our lives easier.",
+   "viDuNghia": "Công nghệ hiện đại làm cuộc sống của chúng ta dễ dàng hơn.",
+   "cumTu": [
+    "modern life",
+    "modern technology",
+    "modern society",
+    "modern art"
+   ],
+   "hoTu": [
+    "modernize (v)"
+   ]
+  },
+  {
+   "chu": "natural",
+   "doc": "/ˈnætʃrəl/",
+   "loai": "adj",
+   "nghia": "tự nhiên, thuộc thiên nhiên",
+   "cap": "A1",
+   "viDu": "The country is rich in natural resources.",
+   "viDuNghia": "Đất nước này giàu tài nguyên thiên nhiên.",
+   "cumTu": [
+    "natural resources",
+    "natural disaster",
+    "natural gas",
+    "natural environment"
+   ],
+   "hoTu": [
+    "nature (n)",
+    "naturally (adv)"
+   ]
+  },
+  {
+   "chu": "personal",
+   "doc": "/ˈpɜːsənl/",
+   "loai": "adj",
+   "nghia": "cá nhân, riêng tư",
+   "cap": "A1",
+   "viDu": "Never share your personal information with strangers online.",
+   "viDuNghia": "Đừng bao giờ chia sẻ thông tin cá nhân với người lạ trên mạng.",
+   "cumTu": [
+    "personal information",
+    "personal experience",
+    "personal life",
+    "personal computer"
+   ],
+   "hoTu": [
+    "person (n)",
+    "personally (adv)",
+    "personality (n)"
+   ]
+  },
+  {
+   "chu": "dangerous",
+   "doc": "/ˈdeɪndʒərəs/",
+   "loai": "adj",
+   "nghia": "nguy hiểm",
+   "cap": "A1",
+   "viDu": "It is dangerous to use your phone while driving.",
+   "viDuNghia": "Dùng điện thoại khi đang lái xe rất nguy hiểm.",
+   "cumTu": [
+    "dangerous for",
+    "dangerous situation",
+    "highly dangerous"
+   ],
+   "hoTu": [
+    "danger (n)",
+    "endanger (v)"
+   ]
+  },
+  {
+   "chu": "interesting",
+   "doc": "/ˈɪntrəstɪŋ/",
+   "loai": "adj",
+   "nghia": "thú vị",
+   "cap": "A1",
+   "viDu": "I read an interesting article about robots.",
+   "viDuNghia": "Tôi đã đọc một bài báo thú vị về robot.",
+   "cumTu": [
+    "interesting idea",
+    "interesting fact",
+    "find it interesting"
+   ],
+   "hoTu": [
+    "interest (n)",
+    "interested (adj)"
+   ],
+   "ghiChu": "-ing tả sự vật (interesting book); -ed tả cảm xúc của người (I am interested)."
+  },
+  {
+   "chu": "interested",
+   "doc": "/ˈɪntrəstɪd/",
+   "loai": "adj",
+   "nghia": "quan tâm, thích thú",
+   "cap": "A1",
+   "viDu": "I am interested in learning about artificial intelligence.",
+   "viDuNghia": "Tôi quan tâm đến việc tìm hiểu về trí tuệ nhân tạo.",
+   "cumTu": [
+    "interested in",
+    "become interested",
+    "very interested"
+   ],
+   "ghiChu": "interested IN + danh từ / V-ing."
+  },
+  {
+   "chu": "exciting",
+   "doc": "/ɪkˈsaɪtɪŋ/",
+   "loai": "adj",
+   "nghia": "hào hứng, gây phấn khích",
+   "cap": "A1",
+   "viDu": "It was an exciting match from start to finish.",
+   "viDuNghia": "Đó là một trận đấu hấp dẫn từ đầu đến cuối.",
+   "cumTu": [
+    "exciting news",
+    "exciting opportunity",
+    "exciting experience"
+   ],
+   "hoTu": [
+    "excite (v)",
+    "excited (adj)",
+    "excitement (n)"
+   ]
+  },
+  {
+   "chu": "boring",
+   "doc": "/ˈbɔːrɪŋ/",
+   "loai": "adj",
+   "nghia": "nhàm chán, tẻ nhạt",
+   "cap": "A1",
+   "viDu": "The lecture was long and boring.",
+   "viDuNghia": "Bài giảng dài và nhàm chán.",
+   "cumTu": [
+    "boring job",
+    "boring lesson",
+    "get boring"
+   ],
+   "hoTu": [
+    "bore (v)",
+    "bored (adj)",
+    "boredom (n)"
+   ],
+   "ghiChu": "\"I am boring\" = tôi là người tẻ nhạt; \"I am bored\" = tôi đang chán."
+  },
+  {
+   "chu": "funny",
+   "doc": "/ˈfʌni/",
+   "loai": "adj",
+   "nghia": "buồn cười, hài hước",
+   "cap": "A1",
+   "viDu": "He told us a very funny story.",
+   "viDuNghia": "Anh ấy kể cho chúng tôi một câu chuyện rất buồn cười.",
+   "cumTu": [
+    "funny story",
+    "funny joke",
+    "funny thing"
+   ],
+   "hoTu": [
+    "fun (n)"
+   ],
+   "ghiChu": "funny = buồn cười; fun = vui, thú vị. Buổi tiệc vui: \"The party was fun\"."
+  },
+  {
+   "chu": "amazing",
+   "doc": "/əˈmeɪzɪŋ/",
+   "loai": "adj",
+   "nghia": "tuyệt vời, đáng kinh ngạc",
+   "cap": "A1",
+   "viDu": "The view from the top of the mountain is amazing.",
+   "viDuNghia": "Quang cảnh từ đỉnh núi thật tuyệt vời.",
+   "cumTu": [
+    "amazing view",
+    "amazing experience",
+    "truly amazing"
+   ],
+   "hoTu": [
+    "amaze (v)",
+    "amazed (adj)",
+    "amazingly (adv)"
+   ]
+  },
+  {
+   "chu": "wonderful",
+   "doc": "/ˈwʌndəfl/",
+   "loai": "adj",
+   "nghia": "tuyệt vời",
+   "cap": "A1",
+   "viDu": "We had a wonderful time in Da Lat.",
+   "viDuNghia": "Chúng tôi đã có khoảng thời gian tuyệt vời ở Đà Lạt.",
+   "cumTu": [
+    "wonderful time",
+    "wonderful idea",
+    "wonderful news"
+   ],
+   "hoTu": [
+    "wonder (n, v)",
+    "wonderfully (adv)"
+   ]
+  },
+  {
+   "chu": "fantastic",
+   "doc": "/fænˈtæstɪk/",
+   "loai": "adj",
+   "nghia": "tuyệt vời, cực kỳ tốt",
+   "cap": "A1",
+   "viDu": "You did a fantastic job on this project.",
+   "viDuNghia": "Bạn đã làm rất tuyệt trong dự án này.",
+   "cumTu": [
+    "fantastic job",
+    "fantastic news",
+    "fantastic view"
+   ],
+   "hoTu": [
+    "fantasy (n)"
+   ]
+  },
+  {
+   "chu": "terrible",
+   "doc": "/ˈterəbl/",
+   "loai": "adj",
+   "nghia": "tồi tệ, khủng khiếp",
+   "cap": "A1",
+   "viDu": "The traffic was terrible this morning.",
+   "viDuNghia": "Sáng nay giao thông thật kinh khủng.",
+   "cumTu": [
+    "terrible weather",
+    "terrible mistake",
+    "feel terrible"
+   ],
+   "hoTu": [
+    "terribly (adv)"
+   ]
+  },
+  {
+   "chu": "favourite",
+   "doc": "/ˈfeɪvərɪt/",
+   "loai": "adj",
+   "nghia": "yêu thích nhất",
+   "cap": "A1",
+   "viDu": "What is your favourite subject at school?",
+   "viDuNghia": "Môn học bạn yêu thích nhất ở trường là gì?",
+   "cumTu": [
+    "favourite food",
+    "favourite colour",
+    "favourite place"
+   ],
+   "hoTu": [
+    "favour (n)",
+    "favourable (adj)"
+   ],
+   "ghiChu": "Anh-Mỹ viết \"favorite\". Đã mang nghĩa \"nhất\", không nói \"most favourite\"."
+  },
+  {
+   "chu": "useful",
+   "doc": "/ˈjuːsfl/",
+   "loai": "adj",
+   "nghia": "hữu ích",
+   "cap": "A1",
+   "viDu": "This website is very useful for learning vocabulary.",
+   "viDuNghia": "Trang web này rất hữu ích để học từ vựng.",
+   "cumTu": [
+    "useful for",
+    "useful information",
+    "useful tool",
+    "useful advice"
+   ],
+   "hoTu": [
+    "use (v, n)",
+    "useless (adj)",
+    "usefulness (n)"
+   ]
+  },
+  {
+   "chu": "poor",
+   "doc": "/pɔː(r)/",
+   "loai": "adj",
+   "nghia": "nghèo; kém, tệ; tội nghiệp",
+   "cap": "A1",
+   "viDu": "Many poor families cannot afford private schools.",
+   "viDuNghia": "Nhiều gia đình nghèo không đủ tiền cho con học trường tư.",
+   "cumTu": [
+    "poor people",
+    "poor quality",
+    "poor health",
+    "poor performance"
+   ],
+   "hoTu": [
+    "poverty (n)",
+    "poorly (adv)"
+   ]
+  },
+  {
+   "chu": "rich",
+   "doc": "/rɪtʃ/",
+   "loai": "adj",
+   "nghia": "giàu; phong phú",
+   "cap": "A1",
+   "viDu": "Vietnam is rich in history and culture.",
+   "viDuNghia": "Việt Nam giàu lịch sử và văn hoá.",
+   "cumTu": [
+    "rich in",
+    "rich people",
+    "get rich",
+    "rich country"
+   ],
+   "hoTu": [
+    "richness (n)",
+    "enrich (v)"
+   ]
+  },
+  {
+   "chu": "fat",
+   "doc": "/fæt/",
+   "loai": "adj",
+   "nghia": "béo, mập",
+   "cap": "A1",
+   "viDu": "My cat is getting fat because it eats too much.",
+   "viDuNghia": "Con mèo của tôi đang béo lên vì ăn quá nhiều.",
+   "cumTu": [
+    "get fat",
+    "fat cat",
+    "low fat"
+   ],
+   "hoTu": [
+    "fat (n)",
+    "fatty (adj)"
+   ],
+   "ghiChu": "Nói về người thì bất lịch sự; dùng \"overweight\" lịch sự hơn."
+  },
+  {
+   "chu": "thirsty",
+   "doc": "/ˈθɜːsti/",
+   "loai": "adj",
+   "nghia": "khát nước",
+   "cap": "A1",
+   "viDu": "I am really thirsty after running.",
+   "viDuNghia": "Tôi rất khát sau khi chạy.",
+   "cumTu": [
+    "feel thirsty",
+    "get thirsty",
+    "hungry and thirsty"
+   ],
+   "hoTu": [
+    "thirst (n)"
+   ]
+  },
+  {
+   "chu": "grey",
+   "doc": "/ɡreɪ/",
+   "loai": "adj",
+   "nghia": "màu xám",
+   "cap": "A1",
+   "viDu": "He wore a grey suit to the interview.",
+   "viDuNghia": "Anh ấy mặc bộ vest màu xám đến buổi phỏng vấn.",
+   "cumTu": [
+    "grey hair",
+    "grey sky",
+    "dark grey",
+    "grey area"
+   ],
+   "ghiChu": "Anh-Mỹ viết \"gray\"."
+  },
+  {
+   "chu": "dear",
+   "doc": "/dɪə(r)/",
+   "loai": "adj",
+   "nghia": "thân mến (mở đầu thư); thân yêu",
+   "cap": "A1",
+   "viDu": "Dear Mr Smith, I am writing to ask about the course.",
+   "viDuNghia": "Kính gửi ông Smith, tôi viết thư để hỏi về khoá học.",
+   "cumTu": [
+    "Dear Sir or Madam",
+    "dear friend",
+    "oh dear"
+   ],
+   "ghiChu": "Mở đầu thư trang trọng: Dear Sir or Madam, / Dear Mr Smith,."
+  },
+  {
+   "chu": "extra",
+   "doc": "/ˈekstrə/",
+   "loai": "adj",
+   "nghia": "thêm, phụ thêm",
+   "cap": "A1",
+   "viDu": "We need extra time to finish the project.",
+   "viDuNghia": "Chúng tôi cần thêm thời gian để hoàn thành dự án.",
+   "cumTu": [
+    "extra time",
+    "extra money",
+    "extra work",
+    "extra charge"
+   ]
+  }
+ ]
+}

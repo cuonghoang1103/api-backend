@@ -1,0 +1,1500 @@
+{
+  "ma": "khoa-ielts-t3-3",
+  "nn": "en",
+  "ten": "Từ của IELTS Tập 3 (5.0 → 6.0) · 3",
+  "moTa": "Từ vựng dạy trong IELTS Tập 3 (5.0 → 6.0) trên web (cùng nghĩa, ví dụ, ghi chú như bài học) — gom vào lộ trình để ôn theo ngày.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "off-peak",
+      "doc": "/ˌɒf ˈpiːk/",
+      "loai": "adj",
+      "nghia": "ngoài giờ cao điểm",
+      "cap": "B2",
+      "viDu": "Off-peak tickets are thirty per cent cheaper.",
+      "viDuNghia": "Vé ngoài giờ cao điểm rẻ hơn ba mươi phần trăm.",
+      "ghiChu": "off-peak travel / fares / hours · ≠ peak · at peak times"
+    },
+    {
+      "chu": "bottleneck",
+      "doc": "/ˈbɒtlnek/",
+      "loai": "n",
+      "nghia": "nút thắt cổ chai (chỗ đường hẹp gây tắc)",
+      "cap": "B2",
+      "viDu": "The old bridge is the worst bottleneck in the city.",
+      "viDuNghia": "Cây cầu cũ là nút thắt cổ chai tệ nhất thành phố.",
+      "ghiChu": "create / remove a bottleneck · cũng dùng nghĩa bóng: a bottleneck in production"
+    },
+    {
+      "chu": "tailback",
+      "doc": "/ˈteɪlbæk/",
+      "loai": "n",
+      "nghia": "dòng xe ùn dài",
+      "cap": "B2",
+      "viDu": "The accident caused a five-kilometre tailback on the motorway.",
+      "viDuNghia": "Vụ tai nạn gây ra một dòng xe ùn dài năm cây số trên cao tốc.",
+      "ghiChu": "a long tailback (Anh) = a traffic jam / backup (Mỹ) · tailbacks of up to 10 km"
+    },
+    {
+      "chu": "junction",
+      "doc": "/ˈdʒʌŋkʃn/",
+      "loai": "n",
+      "nghia": "nút giao, ngã ba / ngã tư",
+      "cap": "B2",
+      "viDu": "Turn left at the junction with Queen Street.",
+      "viDuNghia": "Rẽ trái ở nút giao với phố Queen.",
+      "ghiChu": "a busy / dangerous junction · = intersection (Mỹ) · a roundabout = vòng xuyến"
+    },
+    {
+      "chu": "bypass",
+      "doc": "/ˈbaɪpɑːs/",
+      "loai": "n",
+      "nghia": "đường tránh; đi vòng tránh",
+      "cap": "B2",
+      "viDu": "A new bypass was built to take traffic away from the village.",
+      "viDuNghia": "Một đường tránh mới được xây để đưa xe cộ ra khỏi ngôi làng.",
+      "ghiChu": "build a bypass · bypass the town centre (v)"
+    },
+    {
+      "chu": "flyover",
+      "doc": "/ˈflaɪəʊvə/",
+      "loai": "n",
+      "nghia": "cầu vượt (cho xe)",
+      "cap": "B2",
+      "viDu": "The flyover lets traffic cross the junction without stopping.",
+      "viDuNghia": "Cầu vượt cho phép xe qua nút giao mà không phải dừng.",
+      "ghiChu": "= overpass (Mỹ) · ≠ underpass (hầm chui) · a footbridge (cầu đi bộ)"
+    },
+    {
+      "chu": "freight",
+      "doc": "/freɪt/",
+      "loai": "n",
+      "nghia": "hàng hoá vận chuyển",
+      "cap": "B2",
+      "viDu": "Moving freight by rail would take thousands of lorries off the roads.",
+      "viDuNghia": "Chở hàng bằng đường sắt sẽ rút hàng nghìn xe tải khỏi đường.",
+      "ghiChu": "rail / air freight · a freight train · không đếm được"
+    },
+    {
+      "chu": "light rail",
+      "doc": "/ˌlaɪt ˈreɪl/",
+      "loai": "n",
+      "nghia": "đường sắt nhẹ đô thị",
+      "cap": "B2",
+      "viDu": "The city plans a light rail line from the airport to the centre.",
+      "viDuNghia": "Thành phố dự định làm một tuyến đường sắt nhẹ từ sân bay vào trung tâm.",
+      "ghiChu": "a light rail system / network · the underground / metro / subway = tàu điện ngầm"
+    },
+    {
+      "chu": "interchange",
+      "doc": "/ˈɪntətʃeɪndʒ/",
+      "loai": "n",
+      "nghia": "điểm trung chuyển; nút giao lớn",
+      "cap": "B2",
+      "viDu": "At the interchange you can change from the train to six bus routes.",
+      "viDuNghia": "Tại điểm trung chuyển bạn có thể đổi từ tàu sang sáu tuyến xe buýt.",
+      "ghiChu": "a transport interchange / hub · change (trains) at…"
+    },
+    {
+      "chu": "park-and-ride",
+      "doc": "/ˌpɑːk ən ˈraɪd/",
+      "loai": "n",
+      "nghia": "bãi đỗ xe ngoại ô kèm xe buýt vào trung tâm",
+      "cap": "B2",
+      "viDu": "Visitors can leave their cars at the park-and-ride and take a bus into town.",
+      "viDuNghia": "Du khách có thể để xe ở bãi đỗ ngoại ô rồi đi xe buýt vào phố.",
+      "ghiChu": "a park-and-ride scheme / site"
+    },
+    {
+      "chu": "ride-hailing",
+      "doc": "/ˈraɪd heɪlɪŋ/",
+      "loai": "n",
+      "nghia": "gọi xe qua ứng dụng",
+      "cap": "B2",
+      "viDu": "Ride-hailing apps have replaced traditional motorbike taxis in many cities.",
+      "viDuNghia": "Ứng dụng gọi xe đã thay thế xe ôm truyền thống ở nhiều thành phố.",
+      "ghiChu": "a ride-hailing app / service / driver · hail a taxi = vẫy taxi"
+    },
+    {
+      "chu": "charging point",
+      "doc": "/ˈtʃɑːdʒɪŋ pɔɪnt/",
+      "loai": "n",
+      "nghia": "trạm / điểm sạc",
+      "cap": "B2",
+      "viDu": "There are too few charging points outside the big cities.",
+      "viDuNghia": "Có quá ít điểm sạc bên ngoài các thành phố lớn.",
+      "ghiChu": "install charging points · = a charging station"
+    },
+    {
+      "chu": "driverless",
+      "doc": "/ˈdraɪvələs/",
+      "loai": "adj",
+      "nghia": "không người lái, tự lái",
+      "cap": "B2",
+      "viDu": "Driverless trains already operate on several metro lines.",
+      "viDuNghia": "Tàu không người lái đã hoạt động trên vài tuyến metro.",
+      "ghiChu": "driverless cars = self-driving / autonomous vehicles"
+    },
+    {
+      "chu": "mobility",
+      "doc": "/məʊˈbɪləti/",
+      "loai": "n",
+      "nghia": "khả năng đi lại; sự di chuyển",
+      "cap": "B2",
+      "viDu": "Free bus passes improve the mobility of elderly people.",
+      "viDuNghia": "Thẻ xe buýt miễn phí cải thiện khả năng đi lại của người cao tuổi.",
+      "ghiChu": "urban mobility · social mobility (dịch chuyển xã hội) · mobile (adj)"
+    },
+    {
+      "chu": "punctual",
+      "doc": "/ˈpʌŋktʃuəl/",
+      "loai": "adj",
+      "nghia": "đúng giờ",
+      "cap": "B2",
+      "viDu": "Japanese trains are famous for being punctual.",
+      "viDuNghia": "Tàu Nhật nổi tiếng đúng giờ.",
+      "ghiChu": "punctuality (n) · ≠ delayed / late · a cancellation (chuyến bị huỷ)"
+    },
+    {
+      "chu": "journey time",
+      "doc": "/ˈdʒɜːni taɪm/",
+      "loai": "n",
+      "nghia": "thời gian hành trình",
+      "cap": "B2",
+      "viDu": "The new line will cut the journey time from ninety minutes to forty.",
+      "viDuNghia": "Tuyến mới sẽ rút thời gian hành trình từ chín mươi phút xuống bốn mươi.",
+      "ghiChu": "reduce / cut journey times · the average journey time — cột hay gặp trong bảng Task 1"
+    },
+    {
+      "chu": "season ticket",
+      "doc": "/ˈsiːzn tɪkɪt/",
+      "loai": "n",
+      "nghia": "vé tháng / vé dài hạn",
+      "cap": "B2",
+      "viDu": "A monthly season ticket costs less than twenty single tickets.",
+      "viDuNghia": "Một vé tháng rẻ hơn hai mươi vé lượt.",
+      "ghiChu": "an annual / monthly season ticket · a single ≠ a return (ticket) · a travel pass"
+    },
+    {
+      "chu": "nuisance",
+      "doc": "/ˈnjuːsns/",
+      "loai": "n",
+      "nghia": "điều phiền toái",
+      "cap": "B2",
+      "viDu": "For engineers, fallen leaves were simply a nuisance.",
+      "viDuNghia": "Với kỹ sư, lá rụng chỉ là thứ phiền toái.",
+      "ghiChu": "a public nuisance · cause a nuisance"
+    },
+    {
+      "chu": "sapling",
+      "doc": "/ˈsæplɪŋ/",
+      "loai": "n",
+      "nghia": "cây non (mới trồng)",
+      "cap": "B2",
+      "viDu": "Half of the saplings died during the dry summer.",
+      "viDuNghia": "Một nửa số cây non chết trong mùa hè khô hạn.",
+      "ghiChu": "plant a sapling"
+    },
+    {
+      "chu": "unequal",
+      "doc": "/ʌnˈiːkwəl/",
+      "loai": "adj",
+      "nghia": "không đồng đều, bất bình đẳng",
+      "cap": "B2",
+      "viDu": "Unequal investment has left poor districts with few parks.",
+      "viDuNghia": "Đầu tư không đồng đều khiến các quận nghèo có ít công viên.",
+      "ghiChu": "danh từ: inequality · widen / narrow the gap between rich and poor"
+    },
+    {
+      "chu": "tolerate",
+      "doc": "/ˈtɒləreɪt/",
+      "loai": "v",
+      "nghia": "chịu được, chịu đựng",
+      "cap": "B2",
+      "viDu": "Few plants can tolerate such dry conditions.",
+      "viDuNghia": "Ít loài cây chịu được điều kiện khô như vậy.",
+      "ghiChu": "danh từ: tolerance · tính từ: tolerant of"
+    },
+    {
+      "chu": "mammal",
+      "doc": "/ˈmæml/",
+      "loai": "n",
+      "nghia": "động vật có vú",
+      "cap": "B2",
+      "viDu": "The blue whale is the largest mammal in the world.",
+      "viDuNghia": "Cá voi xanh là loài có vú lớn nhất thế giới.",
+      "ghiChu": "marine mammals (cá voi, cá heo)"
+    },
+    {
+      "chu": "reptile",
+      "doc": "/ˈreptaɪl/",
+      "loai": "n",
+      "nghia": "bò sát",
+      "cap": "B2",
+      "viDu": "Snakes and crocodiles are reptiles.",
+      "viDuNghia": "Rắn và cá sấu là bò sát.",
+      "ghiChu": "cùng nhóm: amphibian (lưỡng cư), insect (côn trùng)"
+    },
+    {
+      "chu": "insect",
+      "doc": "/ˈɪnsekt/",
+      "loai": "n",
+      "nghia": "côn trùng",
+      "cap": "B2",
+      "viDu": "Many crops depend on insects such as bees.",
+      "viDuNghia": "Nhiều cây trồng phụ thuộc vào côn trùng như ong.",
+      "ghiChu": "pollinate (thụ phấn) · insect populations"
+    },
+    {
+      "chu": "prey",
+      "doc": "/preɪ/",
+      "loai": "n",
+      "nghia": "con mồi (không đếm được)",
+      "cap": "B2",
+      "viDu": "Owls hunt their prey at night.",
+      "viDuNghia": "Cú săn mồi vào ban đêm.",
+      "ghiChu": "động từ: prey on small animals · đọc giống pray"
+    },
+    {
+      "chu": "invasive",
+      "doc": "/ɪnˈveɪsɪv/",
+      "loai": "adj",
+      "nghia": "xâm lấn (loài ngoại lai gây hại)",
+      "cap": "B2",
+      "viDu": "Invasive plants can push out native species.",
+      "viDuNghia": "Cây xâm lấn có thể đẩy lùi loài bản địa.",
+      "ghiChu": "an invasive species · động từ: invade"
+    },
+    {
+      "chu": "die out",
+      "doc": "/daɪ aʊt/",
+      "loai": "phr",
+      "nghia": "chết dần, tuyệt chủng",
+      "cap": "B2",
+      "viDu": "Many island birds died out after cats were introduced.",
+      "viDuNghia": "Nhiều loài chim đảo tuyệt chủng sau khi mèo được đưa tới.",
+      "ghiChu": "= become extinct · cũng dùng cho truyền thống: the custom is dying out"
+    },
+    {
+      "chu": "captivity",
+      "doc": "/kæpˈtɪvəti/",
+      "loai": "n",
+      "nghia": "tình trạng nuôi nhốt",
+      "cap": "B2",
+      "viDu": "Animals kept in captivity often live longer but behave differently.",
+      "viDuNghia": "Động vật nuôi nhốt thường sống lâu hơn nhưng hành xử khác đi.",
+      "ghiChu": "in captivity ↔ in the wild · be bred in captivity"
+    },
+    {
+      "chu": "protected area",
+      "doc": "/prəˌtektɪd ˈeəriə/",
+      "loai": "n",
+      "nghia": "khu vực được bảo vệ",
+      "cap": "B2",
+      "viDu": "Hunting is not allowed inside the protected area.",
+      "viDuNghia": "Không được săn bắn trong khu vực được bảo vệ.",
+      "ghiChu": "a protected species · protect sth from / against"
+    },
+    {
+      "chu": "nature reserve",
+      "doc": "/ˈneɪtʃə rɪzɜːv/",
+      "loai": "n",
+      "nghia": "khu bảo tồn thiên nhiên",
+      "cap": "B2",
+      "viDu": "The wetland was turned into a nature reserve in 2005.",
+      "viDuNghia": "Vùng đất ngập nước được chuyển thành khu bảo tồn năm 2005.",
+      "ghiChu": "cùng nhóm: a national park · a marine reserve"
+    },
+    {
+      "chu": "sanctuary",
+      "doc": "/ˈsæŋktʃuəri/",
+      "loai": "n",
+      "nghia": "khu cứu hộ, nơi trú ẩn cho động vật",
+      "cap": "B2",
+      "viDu": "The bears were moved to a sanctuary after being rescued.",
+      "viDuNghia": "Những con gấu được chuyển tới khu cứu hộ sau khi được giải cứu.",
+      "ghiChu": "a wildlife / bird sanctuary · rescue (giải cứu)"
+    },
+    {
+      "chu": "reintroduce",
+      "doc": "/ˌriːɪntrəˈdjuːs/",
+      "loai": "v",
+      "nghia": "tái thả (đưa loài trở lại tự nhiên)",
+      "cap": "B2",
+      "viDu": "Wolves were reintroduced to the park in 1995.",
+      "viDuNghia": "Sói được tái thả vào công viên năm 1995.",
+      "ghiChu": "danh từ: reintroduction · release animals into the wild"
+    },
+    {
+      "chu": "breeding programme",
+      "doc": "/ˈbriːdɪŋ prəʊɡræm/",
+      "loai": "n",
+      "nghia": "chương trình nhân giống",
+      "cap": "B2",
+      "viDu": "Zoos run breeding programmes for rare species.",
+      "viDuNghia": "Sở thú thực hiện các chương trình nhân giống loài quý hiếm.",
+      "ghiChu": "a captive breeding programme · Anh-Mỹ: program"
+    },
+    {
+      "chu": "awareness",
+      "doc": "/əˈweənəs/",
+      "loai": "n",
+      "nghia": "nhận thức, sự hiểu biết",
+      "cap": "B2",
+      "viDu": "Documentaries have increased public awareness of ocean pollution.",
+      "viDuNghia": "Phim tài liệu đã nâng cao nhận thức của công chúng về ô nhiễm đại dương.",
+      "ghiChu": "raise awareness of / about · tính từ: aware of"
+    },
+    {
+      "chu": "cruel",
+      "doc": "/ˈkruːəl/",
+      "loai": "adj",
+      "nghia": "tàn nhẫn, độc ác",
+      "cap": "B2",
+      "viDu": "Many people think it is cruel to keep whales in small pools.",
+      "viDuNghia": "Nhiều người cho rằng nhốt cá voi trong bể nhỏ là tàn nhẫn.",
+      "ghiChu": "be cruel to animals · danh từ: cruelty · trái nghĩa: humane"
+    },
+    {
+      "chu": "on the verge of extinction",
+      "doc": "/ɒn ðə vɜːdʒ əv ɪkˈstɪŋkʃn/",
+      "loai": "phr",
+      "nghia": "bên bờ tuyệt chủng",
+      "cap": "B2",
+      "viDu": "The species was on the verge of extinction in the 1980s.",
+      "viDuNghia": "Loài này từng ở bên bờ tuyệt chủng vào thập niên 1980.",
+      "ghiChu": "= on the brink of extinction"
+    },
+    {
+      "chu": "be driven to extinction",
+      "doc": "/bi ˈdrɪvn tu ɪkˈstɪŋkʃn/",
+      "loai": "phr",
+      "nghia": "bị đẩy tới tuyệt chủng",
+      "cap": "B2",
+      "viDu": "Several species have been driven to extinction by hunting.",
+      "viDuNghia": "Một số loài đã bị săn bắn đẩy tới tuyệt chủng.",
+      "ghiChu": "drive – drove – driven · by + nguyên nhân"
+    },
+    {
+      "chu": "in the wild",
+      "doc": "/ɪn ðə waɪld/",
+      "loai": "phr",
+      "nghia": "trong tự nhiên hoang dã",
+      "cap": "B2",
+      "viDu": "Only about 5,500 tigers remain in the wild.",
+      "viDuNghia": "Chỉ còn khoảng 5.500 con hổ trong tự nhiên.",
+      "ghiChu": "↔ in captivity · live / survive in the wild"
+    },
+    {
+      "chu": "natural habitat",
+      "doc": "/ˌnætʃrəl ˈhæbɪtæt/",
+      "loai": "phr",
+      "nghia": "môi trường sống tự nhiên",
+      "cap": "B2",
+      "viDu": "Animals should be allowed to live in their natural habitat.",
+      "viDuNghia": "Động vật nên được sống trong môi trường tự nhiên của chúng.",
+      "ghiChu": "destroy / lose / protect their natural habitat"
+    },
+    {
+      "chu": "loss of biodiversity",
+      "doc": "/lɒs əv ˌbaɪəʊdaɪˈvɜːsəti/",
+      "loai": "phr",
+      "nghia": "sự suy giảm đa dạng sinh học",
+      "cap": "B2",
+      "viDu": "Intensive farming contributes to the loss of biodiversity.",
+      "viDuNghia": "Canh tác thâm canh góp phần làm suy giảm đa dạng sinh học.",
+      "ghiChu": "= biodiversity loss · contribute to / lead to the loss of…"
+    },
+    {
+      "chu": "upset the balance of nature",
+      "doc": "/ʌpˈset ðə ˈbæləns əv ˈneɪtʃə/",
+      "loai": "phr",
+      "nghia": "làm đảo lộn cân bằng tự nhiên",
+      "cap": "B2",
+      "viDu": "Removing one predator can upset the balance of nature.",
+      "viDuNghia": "Loại bỏ một loài săn mồi có thể làm đảo lộn cân bằng tự nhiên.",
+      "ghiChu": "= disturb the ecological balance"
+    },
+    {
+      "chu": "animal testing",
+      "doc": "/ˈænɪml ˈtestɪŋ/",
+      "loai": "phr",
+      "nghia": "thử nghiệm trên động vật",
+      "cap": "B2",
+      "viDu": "Animal testing for cosmetics is banned in many countries.",
+      "viDuNghia": "Thử nghiệm mỹ phẩm trên động vật bị cấm ở nhiều nước.",
+      "ghiChu": "= experiments on animals · test products on animals"
+    },
+    {
+      "chu": "the illegal wildlife trade",
+      "doc": "/ði ɪˈliːɡl ˈwaɪldlaɪf treɪd/",
+      "loai": "phr",
+      "nghia": "nạn buôn bán động vật hoang dã trái phép",
+      "cap": "B2",
+      "viDu": "The illegal wildlife trade is worth billions of dollars a year.",
+      "viDuNghia": "Buôn bán động vật hoang dã trái phép trị giá hàng tỷ đô-la mỗi năm.",
+      "ghiChu": "trade in ivory / rare birds"
+    },
+    {
+      "chu": "for future generations",
+      "doc": "/fə ˈfjuːtʃə ˌdʒenəˈreɪʃnz/",
+      "loai": "phr",
+      "nghia": "cho các thế hệ tương lai",
+      "cap": "B2",
+      "viDu": "We have a duty to protect these forests for future generations.",
+      "viDuNghia": "Ta có nghĩa vụ bảo vệ những khu rừng này cho các thế hệ tương lai.",
+      "ghiChu": "have a duty / responsibility to + V"
+    },
+    {
+      "chu": "vanish",
+      "doc": "/ˈvænɪʃ/",
+      "loai": "v",
+      "nghia": "biến mất (đột ngột / hoàn toàn)",
+      "cap": "B2",
+      "viDu": "Many traditional jobs have vanished in the last twenty years.",
+      "viDuNghia": "Nhiều nghề truyền thống đã biến mất trong hai mươi năm qua.",
+      "ghiChu": "vanish completely / without trace · = disappear (trang trọng hơn)"
+    },
+    {
+      "chu": "wander",
+      "doc": "/ˈwɒndə/",
+      "loai": "v",
+      "nghia": "đi lang thang; (tâm trí) nghĩ vẩn vơ",
+      "cap": "B2",
+      "viDu": "My mind often wanders during long meetings.",
+      "viDuNghia": "Đầu óc tôi hay nghĩ vẩn vơ trong các cuộc họp dài.",
+      "ghiChu": "let your mind wander · wander around the town · dễ nhầm với wonder /ˈwʌndə/ (tự hỏi)"
+    },
+    {
+      "chu": "admirable",
+      "doc": "/ˈædmərəbl/",
+      "loai": "adj",
+      "nghia": "đáng khen, đáng ngưỡng mộ",
+      "cap": "B2",
+      "viDu": "Her intentions were admirable, but the plan failed.",
+      "viDuNghia": "Ý định của cô ấy đáng khen, nhưng kế hoạch thất bại.",
+      "ghiChu": "trọng âm ở âm tiết đầu · admire (v) · admiration (n)"
+    },
+    {
+      "chu": "blunt",
+      "doc": "/blʌnt/",
+      "loai": "adj",
+      "nghia": "cùn; (cách làm) thô, thiếu tinh tế; (lời nói) thẳng thừng",
+      "cap": "B2",
+      "viDu": "A total ban is a blunt tool for a complex problem.",
+      "viDuNghia": "Cấm hoàn toàn là một công cụ thô cho một vấn đề phức tạp.",
+      "ghiChu": "a blunt instrument / answer · to be blunt = nói thẳng · ≠ subtle (tinh tế)"
+    },
+    {
+      "chu": "exaggeration",
+      "doc": "/ɪɡˌzædʒəˈreɪʃn/",
+      "loai": "n",
+      "nghia": "sự phóng đại, nói quá",
+      "cap": "B2",
+      "viDu": "It is no exaggeration to say that the internet has changed everything.",
+      "viDuNghia": "Không quá lời khi nói internet đã thay đổi mọi thứ.",
+      "ghiChu": "It is no exaggeration to say that… · exaggerate (v) · a slight / gross exaggeration"
+    },
+    {
+      "chu": "coal",
+      "doc": "/kəʊl/",
+      "loai": "n",
+      "nghia": "than đá",
+      "cap": "B2",
+      "viDu": "The country closed its last coal mine in 2015.",
+      "viDuNghia": "Nước này đóng mỏ than cuối cùng vào năm 2015.",
+      "ghiChu": "a coal-fired power station · a coal mine · không đếm được"
+    },
+    {
+      "chu": "crude oil",
+      "doc": "/ˌkruːd ˈɔɪl/",
+      "loai": "n",
+      "nghia": "dầu thô",
+      "cap": "B2",
+      "viDu": "The price of crude oil doubled within a year.",
+      "viDuNghia": "Giá dầu thô tăng gấp đôi trong vòng một năm.",
+      "ghiChu": "a barrel of crude oil · oil reserves · an oil field · petrol (UK) = gasoline (US)"
+    },
+    {
+      "chu": "natural gas",
+      "doc": "/ˌnætʃrəl ˈɡæs/",
+      "loai": "n",
+      "nghia": "khí tự nhiên",
+      "cap": "B2",
+      "viDu": "Natural gas produces less carbon dioxide than coal.",
+      "viDuNghia": "Khí tự nhiên thải ít CO₂ hơn than.",
+      "ghiChu": "a gas-fired plant · a gas pipeline"
+    },
+    {
+      "chu": "solar power",
+      "doc": "/ˌsəʊlə ˈpaʊə/",
+      "loai": "n",
+      "nghia": "điện mặt trời",
+      "cap": "B2",
+      "viDu": "Solar power is cheap, but it is only available during the day.",
+      "viDuNghia": "Điện mặt trời rẻ, nhưng chỉ có vào ban ngày.",
+      "ghiChu": "solar energy / panels / farm · solar-powered (adj)"
+    },
+    {
+      "chu": "wind farm",
+      "doc": "/ˈwɪnd fɑːm/",
+      "loai": "n",
+      "nghia": "trang trại điện gió",
+      "cap": "B2",
+      "viDu": "A new offshore wind farm will power half a million homes.",
+      "viDuNghia": "Một trang trại điện gió ngoài khơi mới sẽ cấp điện cho nửa triệu hộ.",
+      "ghiChu": "an offshore / onshore wind farm · wind power / energy"
+    },
+    {
+      "chu": "turbine",
+      "doc": "/ˈtɜːbaɪn/",
+      "loai": "n",
+      "nghia": "tua-bin",
+      "cap": "B2",
+      "viDu": "Steam from the well is used to turn a turbine.",
+      "viDuNghia": "Hơi nước từ giếng được dùng để quay tua-bin.",
+      "ghiChu": "a wind turbine · turn / drive a turbine"
+    },
+    {
+      "chu": "geothermal",
+      "doc": "/ˌdʒiːəʊˈθɜːml/",
+      "loai": "adj",
+      "nghia": "thuộc địa nhiệt (nhiệt trong lòng đất)",
+      "cap": "B2",
+      "viDu": "Geothermal energy can be produced day and night, whatever the weather.",
+      "viDuNghia": "Năng lượng địa nhiệt có thể sản xuất cả ngày lẫn đêm, bất kể thời tiết.",
+      "ghiChu": "geothermal energy / field / plant · geo- = đất · thermal = nhiệt"
+    },
+    {
+      "chu": "tidal",
+      "doc": "/ˈtaɪdl/",
+      "loai": "adj",
+      "nghia": "thuộc thuỷ triều",
+      "cap": "B2",
+      "viDu": "Tidal power is more predictable than wind power.",
+      "viDuNghia": "Điện thuỷ triều dễ dự đoán hơn điện gió.",
+      "ghiChu": "tidal power / energy · tide (n) = thuỷ triều · wave power = điện sóng"
+    },
+    {
+      "chu": "biofuel",
+      "doc": "/ˈbaɪəʊfjuːəl/",
+      "loai": "n",
+      "nghia": "nhiên liệu sinh học",
+      "cap": "B2",
+      "viDu": "Biofuel made from crops competes with food production for land.",
+      "viDuNghia": "Nhiên liệu sinh học làm từ cây trồng cạnh tranh đất với sản xuất lương thực.",
+      "ghiChu": "bio- = sinh học · biomass (n) = sinh khối · biodegradable (adj)"
+    },
+    {
+      "chu": "power station",
+      "doc": "/ˈpaʊə steɪʃn/",
+      "loai": "n",
+      "nghia": "nhà máy điện",
+      "cap": "B2",
+      "viDu": "The old power station was replaced by a wind farm.",
+      "viDuNghia": "Nhà máy điện cũ được thay bằng một trang trại điện gió.",
+      "ghiChu": "= power plant (US) · a coal-fired / nuclear power station"
+    },
+    {
+      "chu": "grid",
+      "doc": "/ɡrɪd/",
+      "loai": "n",
+      "nghia": "lưới điện",
+      "cap": "B2",
+      "viDu": "Homes with solar panels can sell extra electricity back to the grid.",
+      "viDuNghia": "Nhà có pin mặt trời có thể bán điện dư lại cho lưới.",
+      "ghiChu": "the national grid · be connected to the grid · off-grid (adj) = không nối lưới"
+    },
+    {
+      "chu": "energy efficiency",
+      "doc": "/ˌenədʒi ɪˈfɪʃnsi/",
+      "loai": "n",
+      "nghia": "hiệu quả sử dụng năng lượng",
+      "cap": "B2",
+      "viDu": "Improving energy efficiency is cheaper than building new power stations.",
+      "viDuNghia": "Nâng hiệu quả năng lượng rẻ hơn xây nhà máy điện mới.",
+      "ghiChu": "energy-efficient appliances / homes · efficient (adj) ≠ inefficient · efficiently (adv)"
+    },
+    {
+      "chu": "pipeline",
+      "doc": "/ˈpaɪplaɪn/",
+      "loai": "n",
+      "nghia": "đường ống (dẫn dầu, khí)",
+      "cap": "B2",
+      "viDu": "The gas is transported by pipeline from the coast.",
+      "viDuNghia": "Khí được vận chuyển bằng đường ống từ bờ biển.",
+      "ghiChu": "an oil / gas pipeline · in the pipeline (thành ngữ) = đang được chuẩn bị"
+    },
+    {
+      "chu": "reserves",
+      "doc": "/rɪˈzɜːvz/",
+      "loai": "n",
+      "nghia": "trữ lượng",
+      "cap": "B2",
+      "viDu": "The region has some of the largest gas reserves in the world.",
+      "viDuNghia": "Vùng này có trữ lượng khí vào loại lớn nhất thế giới.",
+      "ghiChu": "oil / gas / coal reserves · a nature reserve = khu bảo tồn (Ngày 22)"
+    },
+    {
+      "chu": "mining",
+      "doc": "/ˈmaɪnɪŋ/",
+      "loai": "n",
+      "nghia": "ngành khai mỏ",
+      "cap": "B2",
+      "viDu": "Mining provides jobs but often damages the local environment.",
+      "viDuNghia": "Khai mỏ tạo việc làm nhưng thường gây hại môi trường địa phương.",
+      "ghiChu": "coal / gold mining · a mine (n) · miner (n) · mineral (n) = khoáng sản"
+    },
+    {
+      "chu": "carbon-neutral",
+      "doc": "/ˌkɑːbən ˈnjuːtrəl/",
+      "loai": "adj",
+      "nghia": "trung hoà carbon",
+      "cap": "B2",
+      "viDu": "The city aims to become carbon-neutral by 2040.",
+      "viDuNghia": "Thành phố đặt mục tiêu trung hoà carbon vào năm 2040.",
+      "ghiChu": "become / go carbon-neutral · reach net zero (emissions) · low-carbon (adj)"
+    },
+    {
+      "chu": "meet the demand for",
+      "doc": "/miːt ðə dɪˈmɑːnd fə/",
+      "loai": "phr",
+      "nghia": "đáp ứng nhu cầu về",
+      "cap": "B2",
+      "viDu": "Renewables alone cannot yet meet the demand for electricity in large cities.",
+      "viDuNghia": "Chỉ riêng năng lượng tái tạo chưa thể đáp ứng nhu cầu điện ở các thành phố lớn.",
+      "ghiChu": "meet the growing / rising demand for energy"
+    },
+    {
+      "chu": "reliance on",
+      "doc": "/rɪˈlaɪəns ɒn/",
+      "loai": "phr",
+      "nghia": "sự phụ thuộc vào",
+      "cap": "B2",
+      "viDu": "Governments should reduce their reliance on imported oil.",
+      "viDuNghia": "Các chính phủ nên giảm phụ thuộc vào dầu nhập khẩu.",
+      "ghiChu": "reduce our reliance / dependence on fossil fuels · rely on (v) · be reliant on"
+    },
+    {
+      "chu": "energy bill",
+      "doc": "/ˈenədʒi bɪl/",
+      "loai": "n",
+      "nghia": "hoá đơn năng lượng (điện, gas)",
+      "cap": "B2",
+      "viDu": "Better insulation is the quickest way to cut energy bills.",
+      "viDuNghia": "Cách nhiệt tốt hơn là cách nhanh nhất để giảm hoá đơn năng lượng.",
+      "ghiChu": "cut / reduce / lower energy bills · rising energy bills · an electricity bill"
+    },
+    {
+      "chu": "energy security",
+      "doc": "/ˌenədʒi sɪˈkjʊərəti/",
+      "loai": "n",
+      "nghia": "an ninh năng lượng",
+      "cap": "B2",
+      "viDu": "Producing power at home improves a country's energy security.",
+      "viDuNghia": "Tự sản xuất điện trong nước cải thiện an ninh năng lượng của quốc gia.",
+      "ghiChu": "improve / threaten energy security · an energy crisis = khủng hoảng năng lượng"
+    },
+    {
+      "chu": "invest in clean energy",
+      "doc": "/ɪnˈvest ɪn kliːn ˈenədʒi/",
+      "loai": "phr",
+      "nghia": "đầu tư vào năng lượng sạch",
+      "cap": "B2",
+      "viDu": "Countries that invest in clean energy today will pay less for power tomorrow.",
+      "viDuNghia": "Nước nào đầu tư vào năng lượng sạch hôm nay sẽ trả ít tiền điện hơn mai sau.",
+      "ghiChu": "clean / green / low-carbon energy · investment in (n)"
+    },
+    {
+      "chu": "alternative energy sources",
+      "doc": "/ɔːlˈtɜːnətɪv ˈenədʒi sɔːsɪz/",
+      "loai": "phr",
+      "nghia": "các nguồn năng lượng thay thế",
+      "cap": "B2",
+      "viDu": "Rising oil prices encourage companies to look for alternative energy sources.",
+      "viDuNghia": "Giá dầu tăng thúc đẩy các công ty tìm nguồn năng lượng thay thế.",
+      "ghiChu": "an alternative to fossil fuels · alternative (n, adj)"
+    },
+    {
+      "chu": "the largest share",
+      "doc": "/ðə ˈlɑːdʒɪst ʃeə/",
+      "loai": "phr",
+      "nghia": "phần lớn nhất",
+      "cap": "B2",
+      "viDu": "Coal had the largest share of electricity generation in 2000.",
+      "viDuNghia": "Than có phần lớn nhất trong sản xuất điện năm 2000.",
+      "ghiChu": "the largest / smallest share / proportion of · a significant / small proportion of"
+    },
+    {
+      "chu": "peak at",
+      "doc": "/piːk æt/",
+      "loai": "phr",
+      "nghia": "đạt đỉnh ở mức",
+      "cap": "B2",
+      "viDu": "Coal output peaked at 130 terawatt-hours in 2005.",
+      "viDuNghia": "Sản lượng than đạt đỉnh 130 terawatt-giờ vào năm 2005.",
+      "ghiChu": "reach a peak of + số · ≠ hit a low of + số (chạm đáy)"
+    },
+    {
+      "chu": "a sharp increase in",
+      "doc": "/ə ʃɑːp ˈɪŋkriːs ɪn/",
+      "loai": "phr",
+      "nghia": "một mức tăng mạnh về",
+      "cap": "B2",
+      "viDu": "There was a sharp increase in wind and solar output.",
+      "viDuNghia": "Có một mức tăng mạnh về sản lượng điện gió và mặt trời.",
+      "ghiChu": "a sharp / steady / slight / gradual / dramatic increase / rise / fall / decline in (không phải ~~of~~) + cái gì; of + con số: an increase of 20%"
+    },
+    {
+      "chu": "threefold",
+      "doc": "/ˈθriːfəʊld/",
+      "loai": "adj",
+      "nghia": "gấp ba lần",
+      "cap": "B2",
+      "viDu": "The table shows a threefold increase in investment.",
+      "viDuNghia": "Bảng cho thấy đầu tư tăng gấp ba.",
+      "ghiChu": "a twofold / threefold / tenfold increase in · increase fivefold · = triple (v), treble (v) · double (v), halve (v)"
+    },
+    {
+      "chu": "pamphlet",
+      "doc": "/ˈpæmflət/",
+      "loai": "n",
+      "nghia": "cuốn sách mỏng, tập tài liệu nhỏ (thường để tuyên truyền một ý kiến)",
+      "cap": "B2",
+      "viDu": "He set out his ideas in a short pamphlet.",
+      "viDuNghia": "Ông trình bày ý tưởng trong một cuốn sách mỏng.",
+      "ghiChu": "publish / distribute a pamphlet · ≈ leaflet (tờ rơi, ngắn hơn)"
+    },
+    {
+      "chu": "remedy",
+      "doc": "/ˈremədi/",
+      "loai": "n",
+      "nghia": "cách khắc phục, giải pháp",
+      "cap": "B2",
+      "viDu": "There is no simple remedy for traffic congestion.",
+      "viDuNghia": "Không có cách khắc phục đơn giản cho tắc đường.",
+      "ghiChu": "a remedy for + N (giới từ for, không “to”) · a home remedy — bài thuốc dân gian"
+    },
+    {
+      "chu": "come into force",
+      "doc": "/kʌm ˈɪntə fɔːs/",
+      "loai": "phr",
+      "nghia": "(luật, quy định) bắt đầu có hiệu lực",
+      "cap": "B2",
+      "viDu": "The new speed limit comes into force next month.",
+      "viDuNghia": "Giới hạn tốc độ mới có hiệu lực từ tháng sau.",
+      "ghiChu": "= take effect · danh hoá: the introduction of a law"
+    },
+    {
+      "chu": "far-reaching",
+      "doc": "/ˌfɑːˈriːtʃɪŋ/",
+      "loai": "adj",
+      "nghia": "sâu rộng, ảnh hưởng lớn",
+      "cap": "B2",
+      "viDu": "The internet has had far-reaching effects on education.",
+      "viDuNghia": "Internet đã có ảnh hưởng sâu rộng tới giáo dục.",
+      "ghiChu": "far-reaching effects / consequences / changes — tính từ ghép (Ngữ pháp mục 3)"
+    },
+    {
+      "chu": "attribute … to",
+      "doc": "/əˈtrɪbjuːt tə/",
+      "loai": "phr",
+      "nghia": "cho rằng… là do / là công của",
+      "cap": "B2",
+      "viDu": "The rise in sales was attributed to lower prices.",
+      "viDuNghia": "Doanh số tăng được cho là nhờ giá thấp hơn.",
+      "ghiChu": "be attributed to + N — cụm bị động rất hay gặp trong Reading và dùng được ở Task 2"
+    },
+    {
+      "chu": "livelihood",
+      "doc": "/ˈlaɪvlihʊd/",
+      "loai": "n",
+      "nghia": "kế sinh nhai",
+      "cap": "B2",
+      "viDu": "Thousands of families depend on tourism for their livelihood.",
+      "viDuNghia": "Hàng nghìn gia đình sống nhờ vào du lịch.",
+      "ghiChu": "earn a livelihood · lose one's livelihood · threaten local livelihoods"
+    },
+    {
+      "chu": "commercialise",
+      "doc": "/kəˈmɜːʃəlaɪz/",
+      "loai": "v",
+      "nghia": "thương mại hoá",
+      "cap": "B2",
+      "viDu": "Critics say the festival has become too commercialised.",
+      "viDuNghia": "Giới phê bình cho rằng lễ hội đã bị thương mại hoá quá mức.",
+      "ghiChu": "commercial (adj) → commercialise (v) → commercialisation (n) · thường dùng bị động: be / become commercialised"
+    },
+    {
+      "chu": "entrance fee",
+      "doc": "/ˈentrəns fiː/",
+      "loai": "n",
+      "nghia": "phí vào cửa",
+      "cap": "B2",
+      "viDu": "The city plans to charge day visitors an entrance fee.",
+      "viDuNghia": "Thành phố dự định thu phí vào cửa với khách tham quan trong ngày.",
+      "ghiChu": "charge / pay an entrance fee · = admission fee · a tourist tax (thuế du lịch)"
+    },
+    {
+      "chu": "etiquette",
+      "doc": "/ˈetɪket/",
+      "loai": "n",
+      "nghia": "phép lịch sự, quy tắc ứng xử",
+      "cap": "B2",
+      "viDu": "Visitors should learn basic table etiquette before they travel.",
+      "viDuNghia": "Du khách nên học phép lịch sự cơ bản trên bàn ăn trước khi đi.",
+      "ghiChu": "table / business / social etiquette · không đếm được: ~~an etiquette~~"
+    },
+    {
+      "chu": "taboo",
+      "doc": "/təˈbuː/",
+      "loai": "n",
+      "nghia": "điều cấm kỵ",
+      "cap": "B2",
+      "viDu": "Talking about money is taboo in some cultures.",
+      "viDuNghia": "Nói chuyện tiền bạc là điều cấm kỵ ở một số nền văn hoá.",
+      "ghiChu": "a cultural taboo · break a taboo · a taboo subject"
+    },
+    {
+      "chu": "diversity",
+      "doc": "/daɪˈvɜːsəti/",
+      "loai": "n",
+      "nghia": "sự đa dạng",
+      "cap": "B2",
+      "viDu": "Tourism can help to protect cultural diversity.",
+      "viDuNghia": "Du lịch có thể giúp bảo vệ sự đa dạng văn hoá.",
+      "ghiChu": "diverse (adj) → diversity (n) · cultural / ethnic diversity (AWL sublist 6)"
+    },
+    {
+      "chu": "immerse",
+      "doc": "/ɪˈmɜːs/",
+      "loai": "v",
+      "nghia": "đắm mình, hoà mình vào",
+      "cap": "B2",
+      "viDu": "The best way to learn a language is to immerse yourself in the culture.",
+      "viDuNghia": "Cách tốt nhất để học một ngôn ngữ là hoà mình vào văn hoá đó.",
+      "ghiChu": "immerse yourself in + N · immersion (n) · an immersive experience"
+    },
+    {
+      "chu": "language barrier",
+      "doc": "/ˈlæŋɡwɪdʒ ˌbæriə/",
+      "loai": "n",
+      "nghia": "rào cản ngôn ngữ",
+      "cap": "B2",
+      "viDu": "The language barrier made it hard to ask for directions.",
+      "viDuNghia": "Rào cản ngôn ngữ khiến việc hỏi đường rất khó.",
+      "ghiChu": "overcome / break down the language barrier"
+    },
+    {
+      "chu": "scenic",
+      "doc": "/ˈsiːnɪk/",
+      "loai": "adj",
+      "nghia": "có cảnh đẹp (nói về đường đi, vùng đất)",
+      "cap": "B2",
+      "viDu": "We took the scenic route along the coast.",
+      "viDuNghia": "Chúng tôi đi con đường ngắm cảnh dọc bờ biển.",
+      "ghiChu": "scenery (n, không đếm được) → scenic (adj) · a scenic route / view / area"
+    },
+    {
+      "chu": "unspoilt",
+      "doc": "/ˌʌnˈspɔɪlt/",
+      "loai": "adj",
+      "nghia": "còn nguyên sơ, chưa bị tàn phá",
+      "cap": "B2",
+      "viDu": "The island still has miles of unspoilt beaches.",
+      "viDuNghia": "Hòn đảo vẫn còn hàng dặm bãi biển nguyên sơ.",
+      "ghiChu": "unspoilt countryside / beaches · (Mỹ: unspoiled) · trái nghĩa: spoilt by tourism"
+    },
+    {
+      "chu": "long-haul",
+      "doc": "/ˌlɒŋ ˈhɔːl/",
+      "loai": "adj",
+      "nghia": "đường dài (chuyến bay)",
+      "cap": "B2",
+      "viDu": "Long-haul flights produce a large share of tourism's carbon emissions.",
+      "viDuNghia": "Các chuyến bay đường dài tạo ra phần lớn khí thải carbon của ngành du lịch.",
+      "ghiChu": "a long-haul flight · trái nghĩa: short-haul"
+    },
+    {
+      "chu": "homestay",
+      "doc": "/ˈhəʊmsteɪ/",
+      "loai": "n",
+      "nghia": "ở nhà dân",
+      "cap": "B2",
+      "viDu": "A homestay lets you see how local people really live.",
+      "viDuNghia": "Ở nhà dân cho bạn thấy người địa phương thật sự sống thế nào.",
+      "ghiChu": "stay in / book a homestay · host family (gia đình chủ nhà)"
+    },
+    {
+      "chu": "guided tour",
+      "doc": "/ˌɡaɪdɪd ˈtʊə/",
+      "loai": "n",
+      "nghia": "chuyến tham quan có hướng dẫn viên",
+      "cap": "B2",
+      "viDu": "We joined a guided tour of the old citadel.",
+      "viDuNghia": "Chúng tôi tham gia chuyến tham quan thành cổ có hướng dẫn viên.",
+      "ghiChu": "go on / join a guided tour of + nơi · a self-guided tour · a tour guide"
+    },
+    {
+      "chu": "venture",
+      "doc": "/ˈventʃə/",
+      "loai": "v",
+      "nghia": "mạo hiểm đi (tới nơi lạ)",
+      "cap": "B2",
+      "viDu": "Few tourists venture beyond the main square.",
+      "viDuNghia": "Ít du khách dám đi xa hơn quảng trường chính.",
+      "ghiChu": "venture into / beyond / out · thay cho “go” khi muốn nói có chút mạo hiểm"
+    },
+    {
+      "chu": "resemble",
+      "doc": "/rɪˈzembl/",
+      "loai": "v",
+      "nghia": "giống với",
+      "cap": "B2",
+      "viDu": "The new wood was dyed so that it would resemble red cedar.",
+      "viDuNghia": "Loại gỗ mới được nhuộm để trông giống gỗ tuyết tùng đỏ.",
+      "ghiChu": "⚠️ không có giới từ: ~~resemble to~~ · không dùng tiếp diễn · resemblance (n)"
+    },
+    {
+      "chu": "pollinator",
+      "doc": "/ˈpɒləneɪtə/",
+      "loai": "n",
+      "nghia": "loài thụ phấn (ong, bướm…)",
+      "cap": "B2",
+      "viDu": "Wild pollinators visited flowers less often in districts with many hives.",
+      "viDuNghia": "Các loài thụ phấn hoang dã ghé hoa ít hơn ở những quận có nhiều tổ ong.",
+      "ghiChu": "pollen (phấn hoa) → pollinate (v) → pollination (n) · nối Ngày 22 (biodiversity)"
+    },
+    {
+      "chu": "alternate",
+      "doc": "/ˈɔːltəneɪt/",
+      "loai": "v",
+      "nghia": "luân phiên, xen kẽ",
+      "cap": "B2",
+      "viDu": "Volunteers were asked to alternate between two simple tasks.",
+      "viDuNghia": "Tình nguyện viên được yêu cầu làm xen kẽ hai việc đơn giản.",
+      "ghiChu": "alternate between A and B · tính từ đọc /ɔːlˈtɜːnət/ · ⚠️ khác alternative (lựa chọn khác)"
+    },
+    {
+      "chu": "habitually",
+      "doc": "/həˈbɪtʃuəli/",
+      "loai": "adv",
+      "nghia": "theo thói quen, thường xuyên",
+      "cap": "B2",
+      "viDu": "The study compared students who habitually used several media at once.",
+      "viDuNghia": "Nghiên cứu so sánh những sinh viên có thói quen dùng nhiều phương tiện cùng lúc.",
+      "ghiChu": "habit (n) → habitual (adj) → habitually · gần nghĩa: regularly, routinely"
+    },
+    {
+      "chu": "sustained",
+      "doc": "/səˈsteɪnd/",
+      "loai": "adj",
+      "nghia": "kéo dài liên tục, bền bỉ",
+      "cap": "B2",
+      "viDu": "Open offices make sustained attention difficult.",
+      "viDuNghia": "Văn phòng mở khiến việc tập trung liên tục trở nên khó.",
+      "ghiChu": "sustained attention / effort / growth · sustain (v) · sustainable (adj) = bền vững"
+    },
+    {
+      "chu": "mother tongue",
+      "doc": "/ˌmʌðə ˈtʌŋ/",
+      "loai": "n",
+      "nghia": "tiếng mẹ đẻ",
+      "cap": "B2",
+      "viDu": "Children learn best when they are first taught in their mother tongue.",
+      "viDuNghia": "Trẻ học tốt nhất khi ban đầu được dạy bằng tiếng mẹ đẻ.",
+      "ghiChu": "= first language / native language · a native speaker of Vietnamese · ⚠️ không nói ~~mother language~~"
+    },
+    {
+      "chu": "bilingual",
+      "doc": "/ˌbaɪˈlɪŋɡwəl/",
+      "loai": "adj",
+      "nghia": "song ngữ; người nói hai thứ tiếng",
+      "cap": "B2",
+      "viDu": "Bilingual children often switch between languages without effort.",
+      "viDuNghia": "Trẻ song ngữ thường chuyển qua lại giữa hai ngôn ngữ mà không tốn sức.",
+      "ghiChu": "bilingual education / school / dictionary · be bilingual in English and French · monolingual (một thứ tiếng)"
+    },
+    {
+      "chu": "multilingual",
+      "doc": "/ˌmʌltiˈlɪŋɡwəl/",
+      "loai": "adj",
+      "nghia": "đa ngôn ngữ",
+      "cap": "B2",
+      "viDu": "Singapore is a multilingual society with four official languages.",
+      "viDuNghia": "Singapore là một xã hội đa ngôn ngữ với bốn ngôn ngữ chính thức.",
+      "ghiChu": "a multilingual society / workforce · official language (ngôn ngữ chính thức)"
+    },
+    {
+      "chu": "fluent",
+      "doc": "/ˈfluːənt/",
+      "loai": "adj",
+      "nghia": "trôi chảy, thành thạo",
+      "cap": "B2",
+      "viDu": "After five years in Berlin, she is fluent in German.",
+      "viDuNghia": "Sau năm năm ở Berlin, cô ấy thành thạo tiếng Đức.",
+      "ghiChu": "fluent in + ngôn ngữ · speak fluent English / speak English fluently · fluency (n) · ⚠️ ~~fluent with~~"
+    },
+    {
+      "chu": "dialect",
+      "doc": "/ˈdaɪəlekt/",
+      "loai": "n",
+      "nghia": "phương ngữ, tiếng địa phương",
+      "cap": "B2",
+      "viDu": "My grandparents still speak the local dialect at home.",
+      "viDuNghia": "Ông bà tôi vẫn nói tiếng địa phương ở nhà.",
+      "ghiChu": "a local / regional dialect · dialect khác cả từ vựng lẫn ngữ pháp; accent chỉ khác cách phát âm"
+    },
+    {
+      "chu": "accent",
+      "doc": "/ˈæksent/",
+      "loai": "n",
+      "nghia": "giọng (vùng miền, nước ngoài)",
+      "cap": "B2",
+      "viDu": "He speaks English with a strong Vietnamese accent.",
+      "viDuNghia": "Anh ấy nói tiếng Anh với giọng Việt rất đặc.",
+      "ghiChu": "a strong / slight / regional accent · with an accent · IELTS không trừ điểm vì accent, chỉ trừ khi khó hiểu"
+    },
+    {
+      "chu": "lingua franca",
+      "doc": "/ˌlɪŋɡwə ˈfræŋkə/",
+      "loai": "n",
+      "nghia": "ngôn ngữ chung (giữa những người khác tiếng mẹ đẻ)",
+      "cap": "B2",
+      "viDu": "English has become the lingua franca of science and business.",
+      "viDuNghia": "Tiếng Anh đã trở thành ngôn ngữ chung của khoa học và kinh doanh.",
+      "ghiChu": "a global / common lingua franca · gần nghĩa: a common language, an international language"
+    },
+    {
+      "chu": "minority language",
+      "doc": "/maɪˈnɒrəti ˌlæŋɡwɪdʒ/",
+      "loai": "n",
+      "nghia": "ngôn ngữ thiểu số",
+      "cap": "B2",
+      "viDu": "Many minority languages are spoken by only a few thousand people.",
+      "viDuNghia": "Nhiều ngôn ngữ thiểu số chỉ còn vài nghìn người nói.",
+      "ghiChu": "an ethnic minority (dân tộc thiểu số) · ≠ the dominant / majority language"
+    },
+    {
+      "chu": "identity",
+      "doc": "/aɪˈdentəti/",
+      "loai": "n",
+      "nghia": "bản sắc, danh tính",
+      "cap": "B2",
+      "viDu": "For many people, language is at the heart of their cultural identity.",
+      "viDuNghia": "Với nhiều người, ngôn ngữ là cốt lõi của bản sắc văn hoá.",
+      "ghiChu": "cultural / national identity · a sense of identity · lose / preserve one's identity · identify with (thấy mình thuộc về)"
+    },
+    {
+      "chu": "assimilate",
+      "doc": "/əˈsɪməleɪt/",
+      "loai": "v",
+      "nghia": "đồng hoá, hoà tan (vào văn hoá khác)",
+      "cap": "B2",
+      "viDu": "Second-generation migrants often assimilate quickly and lose their parents' language.",
+      "viDuNghia": "Thế hệ nhập cư thứ hai thường hoà tan nhanh và mất tiếng của cha mẹ.",
+      "ghiChu": "assimilate into a society · assimilation (n) · sắc thái: assimilate = bỏ cái cũ; integrate = giữ cái cũ và tham gia cái mới"
+    },
+    {
+      "chu": "pass down",
+      "doc": "/ˌpɑːs ˈdaʊn/",
+      "loai": "phr",
+      "nghia": "truyền lại (cho đời sau)",
+      "cap": "B2",
+      "viDu": "These stories have been passed down from generation to generation.",
+      "viDuNghia": "Những câu chuyện này được truyền từ đời này sang đời khác.",
+      "ghiChu": "pass sth down to sb · from generation to generation · = hand down"
+    },
+    {
+      "chu": "fiction",
+      "doc": "/ˈfɪkʃn/",
+      "loai": "n",
+      "nghia": "truyện hư cấu",
+      "cap": "B2",
+      "viDu": "I mostly read fiction, especially crime novels.",
+      "viDuNghia": "Tôi chủ yếu đọc truyện hư cấu, nhất là tiểu thuyết trinh thám.",
+      "ghiChu": "science / historical / crime fiction · fictional (adj): a fictional character · ⚠️ không đếm được"
+    },
+    {
+      "chu": "non-fiction",
+      "doc": "/ˌnɒn ˈfɪkʃn/",
+      "loai": "n",
+      "nghia": "sách phi hư cấu (sách về sự thật)",
+      "cap": "B2",
+      "viDu": "Non-fiction, such as history and popular science, sells well among adults.",
+      "viDuNghia": "Sách phi hư cấu như lịch sử và khoa học thường thức bán chạy ở người lớn.",
+      "ghiChu": "gồm biography, self-help, history, travel writing · a work of non-fiction"
+    },
+    {
+      "chu": "character",
+      "doc": "/ˈkærəktə/",
+      "loai": "n",
+      "nghia": "nhân vật; tính cách",
+      "cap": "B2",
+      "viDu": "The main character is a detective who has lost his memory.",
+      "viDuNghia": "Nhân vật chính là một thám tử bị mất trí nhớ.",
+      "ghiChu": "the main / central character · a well-developed character · ⚠️ chữ viết tiếng Trung cũng là Chinese characters"
+    },
+    {
+      "chu": "biography",
+      "doc": "/baɪˈɒɡrəfi/",
+      "loai": "n",
+      "nghia": "tiểu sử (do người khác viết)",
+      "cap": "B2",
+      "viDu": "I have just finished a biography of Marie Curie.",
+      "viDuNghia": "Tôi vừa đọc xong một cuốn tiểu sử về Marie Curie.",
+      "ghiChu": "a biography of sb · autobiography (tự truyện) · memoir (hồi ký)"
+    },
+    {
+      "chu": "bestseller",
+      "doc": "/ˌbestˈselə/",
+      "loai": "n",
+      "nghia": "sách bán chạy",
+      "cap": "B2",
+      "viDu": "The book became an international bestseller within months.",
+      "viDuNghia": "Cuốn sách trở thành sách bán chạy quốc tế chỉ trong vài tháng.",
+      "ghiChu": "a best-selling (adj) novel · top the bestseller list"
+    },
+    {
+      "chu": "classic",
+      "doc": "/ˈklæsɪk/",
+      "loai": "n",
+      "nghia": "tác phẩm kinh điển; kinh điển",
+      "cap": "B2",
+      "viDu": "Schools still teach the classics, although many pupils find them hard.",
+      "viDuNghia": "Trường học vẫn dạy các tác phẩm kinh điển dù nhiều học sinh thấy khó.",
+      "ghiChu": "a modern classic · ⚠️ classic (kinh điển, tiêu biểu) ≠ classical (cổ điển: classical music) — xem mục 6"
+    },
+    {
+      "chu": "page-turner",
+      "doc": "/ˈpeɪdʒ ˌtɜːnə/",
+      "loai": "n",
+      "nghia": "cuốn sách cuốn hút (đọc không dừng được)",
+      "cap": "B2",
+      "viDu": "It's a real page-turner — I finished it in two days.",
+      "viDuNghia": "Đó đúng là cuốn sách không dứt ra được — tôi đọc xong trong hai ngày.",
+      "ghiChu": "văn nói, hợp Part 1–2 · I couldn't put it down (Tập 2 Ngày 9) · gripping (adj)"
+    },
+    {
+      "chu": "paperback",
+      "doc": "/ˈpeɪpəbæk/",
+      "loai": "n",
+      "nghia": "sách bìa mềm",
+      "cap": "B2",
+      "viDu": "I prefer paperbacks because they are light enough to carry around.",
+      "viDuNghia": "Tôi thích sách bìa mềm vì đủ nhẹ để mang theo.",
+      "ghiChu": "≠ hardback (bìa cứng) · in paperback: The novel came out in paperback last year."
+    },
+    {
+      "chu": "e-book",
+      "doc": "/ˈiː bʊk/",
+      "loai": "n",
+      "nghia": "sách điện tử",
+      "cap": "B2",
+      "viDu": "E-books are cheaper, but many readers still like the feel of paper.",
+      "viDuNghia": "Sách điện tử rẻ hơn nhưng nhiều người đọc vẫn thích cảm giác cầm giấy.",
+      "ghiChu": "an e-reader (máy đọc sách) · printed / physical books ≠ digital books · download an e-book"
+    },
+    {
+      "chu": "bookworm",
+      "doc": "/ˈbʊkwɜːm/",
+      "loai": "n",
+      "nghia": "mọt sách",
+      "cap": "B2",
+      "viDu": "My sister is a real bookworm — she reads at least a book a week.",
+      "viDuNghia": "Chị tôi đúng là mọt sách — mỗi tuần đọc ít nhất một cuốn.",
+      "ghiChu": "văn nói, hợp Part 1 · gần nghĩa trang trọng hơn: an avid reader"
+    },
+    {
+      "chu": "avid reader",
+      "doc": "/ˌævɪd ˈriːdə/",
+      "loai": "n",
+      "nghia": "người ham đọc",
+      "cap": "B2",
+      "viDu": "He has been an avid reader since childhood.",
+      "viDuNghia": "Anh ấy ham đọc sách từ thời thơ ấu.",
+      "ghiChu": "an avid reader / fan / collector · read for pleasure (đọc để giải trí) · a reading habit"
+    },
+    {
+      "chu": "flick through",
+      "doc": "/ˌflɪk ˈθruː/",
+      "loai": "phr",
+      "nghia": "lật xem lướt",
+      "cap": "B2",
+      "viDu": "I usually flick through a book in the shop before I buy it.",
+      "viDuNghia": "Tôi thường lật xem lướt một cuốn sách ở hiệu trước khi mua.",
+      "ghiChu": "= flip through, skim through · khác read from cover to cover (đọc từ đầu tới cuối)"
+    },
+    {
+      "chu": "decay",
+      "doc": "/dɪˈkeɪ/",
+      "loai": "n",
+      "nghia": "sự suy tàn, phân rã; mục nát dần",
+      "cap": "B2",
+      "viDu": "Psychologists once described forgetting mainly as decay.",
+      "viDuNghia": "Các nhà tâm lý học từng mô tả việc quên chủ yếu là sự suy tàn.",
+      "ghiChu": "tooth decay (sâu răng) · urban decay (sự xuống cấp đô thị)"
+    },
+    {
+      "chu": "selective",
+      "doc": "/sɪˈlektɪv/",
+      "loai": "adj",
+      "nghia": "có chọn lọc",
+      "cap": "B2",
+      "viDu": "A good memory is a selective one.",
+      "viDuNghia": "Một trí nhớ tốt là một trí nhớ có chọn lọc.",
+      "ghiChu": "select (v) → selection (n) → selective (adj)"
+    },
+    {
+      "chu": "over the moon",
+      "doc": "/ˌəʊvə ðə ˈmuːn/",
+      "loai": "phr",
+      "nghia": "vui sướng tột độ",
+      "cap": "B2",
+      "viDu": "I was over the moon when I got the scholarship.",
+      "viDuNghia": "Tôi sướng phát điên khi nhận được học bổng.",
+      "ghiChu": "be over the moon about / with sth · viết: be delighted, be extremely pleased"
+    },
+    {
+      "chu": "under the weather",
+      "doc": "/ˌʌndə ðə ˈweðə/",
+      "loai": "phr",
+      "nghia": "hơi mệt, không khoẻ (ốm nhẹ)",
+      "cap": "B2",
+      "viDu": "I was feeling a bit under the weather, so I stayed at home.",
+      "viDuNghia": "Tôi thấy hơi mệt nên ở nhà.",
+      "ghiChu": "feel / be a bit under the weather · không dùng cho bệnh nặng"
+    },
+    {
+      "chu": "get on someone's nerves",
+      "doc": "/ɡet ɒn ˈsʌmwʌnz nɜːvz/",
+      "loai": "phr",
+      "nghia": "làm ai bực mình, khó chịu",
+      "cap": "B2",
+      "viDu": "The noise from the building site really gets on my nerves.",
+      "viDuNghia": "Tiếng ồn từ công trường làm tôi rất bực.",
+      "ghiChu": "đổi ngôi: on my / her / their nerves · viết: irritate, annoy"
+    },
+    {
+      "chu": "feel at home",
+      "doc": "/fiːl ət ˈhəʊm/",
+      "loai": "phr",
+      "nghia": "thấy thoải mái như ở nhà",
+      "cap": "B2",
+      "viDu": "My host family made me feel at home from the first day.",
+      "viDuNghia": "Gia đình chủ nhà khiến tôi thấy thoải mái ngay từ ngày đầu.",
+      "ghiChu": "make sb feel at home (causative, Ngày 29) · viết: feel comfortable, settle in"
+    },
+    {
+      "chu": "let off steam",
+      "doc": "/let ɒf ˈstiːm/",
+      "loai": "phr",
+      "nghia": "xả stress, giải toả bức bối",
+      "cap": "B2",
+      "viDu": "I play football twice a week to let off steam.",
+      "viDuNghia": "Tôi đá bóng hai buổi một tuần để xả stress.",
+      "ghiChu": "Mỹ: blow off steam · viết: relieve stress, release tension"
+    },
+    {
+      "chu": "a piece of cake",
+      "doc": "/ə ˌpiːs əv ˈkeɪk/",
+      "loai": "phr",
+      "nghia": "dễ ợt",
+      "cap": "B2",
+      "viDu": "I thought the driving test would be hard, but it was a piece of cake.",
+      "viDuNghia": "Tôi tưởng thi bằng lái khó, hoá ra dễ ợt.",
+      "ghiChu": "be a piece of cake · viết: be straightforward, be very easy"
+    },
+    {
+      "chu": "from scratch",
+      "doc": "/frəm ˈskrætʃ/",
+      "loai": "phr",
+      "nghia": "từ con số không, từ đầu",
+      "cap": "B2",
+      "viDu": "I learned to code from scratch using free online courses.",
+      "viDuNghia": "Tôi học lập trình từ con số không bằng các khoá miễn phí trên mạng.",
+      "ghiChu": "start / build / learn sth from scratch · viết: from the very beginning"
+    },
+    {
+      "chu": "learn the ropes",
+      "doc": "/lɜːn ðə ˈrəʊps/",
+      "loai": "phr",
+      "nghia": "học cho biết việc (khi mới vào nghề)",
+      "cap": "B2",
+      "viDu": "It took me about a month to learn the ropes in my new job.",
+      "viDuNghia": "Tôi mất khoảng một tháng để quen việc ở chỗ làm mới.",
+      "ghiChu": "show sb the ropes = chỉ việc cho ai · viết: become familiar with the job"
+    },
+    {
+      "chu": "burn the midnight oil",
+      "doc": "/bɜːn ðə ˌmɪdnaɪt ˈɔɪl/",
+      "loai": "phr",
+      "nghia": "thức khuya học / làm",
+      "cap": "B2",
+      "viDu": "Before the final exams, most of my classmates burn the midnight oil.",
+      "viDuNghia": "Trước kỳ thi cuối kỳ, hầu hết bạn cùng lớp tôi thức khuya học.",
+      "ghiChu": "viết: study / work late into the night"
+    },
+    {
+      "chu": "call it a day",
+      "doc": "/ˌkɔːl ɪt ə ˈdeɪ/",
+      "loai": "phr",
+      "nghia": "nghỉ thôi, dừng làm (cho hôm nay)",
+      "cap": "B2",
+      "viDu": "We had been revising for five hours, so we decided to call it a day.",
+      "viDuNghia": "Chúng tôi đã ôn năm tiếng nên quyết định nghỉ.",
+      "ghiChu": "Let's call it a day. · viết: stop working, finish for the day"
+    },
+    {
+      "chu": "cost an arm and a leg",
+      "doc": "/kɒst ən ˌɑːm ən ə ˈleɡ/",
+      "loai": "phr",
+      "nghia": "đắt cắt cổ",
+      "cap": "B2",
+      "viDu": "A flat in the city centre costs an arm and a leg these days.",
+      "viDuNghia": "Dạo này một căn hộ ở trung tâm đắt cắt cổ.",
+      "ghiChu": "cost – cost – cost · viết: be extremely expensive, be unaffordable"
+    },
+    {
+      "chu": "once in a blue moon",
+      "doc": "/wʌns ɪn ə ˌbluː ˈmuːn/",
+      "loai": "phr",
+      "nghia": "năm thì mười hoạ, rất hiếm khi",
+      "cap": "B2",
+      "viDu": "I only eat fast food once in a blue moon.",
+      "viDuNghia": "Năm thì mười hoạ tôi mới ăn đồ ăn nhanh.",
+      "ghiChu": "trả lời “How often…?” ở Part 1 · viết: very rarely, on rare occasions"
+    },
+    {
+      "chu": "in the nick of time",
+      "doc": "/ɪn ðə ˌnɪk əv ˈtaɪm/",
+      "loai": "phr",
+      "nghia": "vừa kịp lúc, sát nút",
+      "cap": "B2",
+      "viDu": "We got to the station in the nick of time — the train left a minute later.",
+      "viDuNghia": "Chúng tôi tới ga vừa kịp — một phút sau tàu chạy.",
+      "ghiChu": "hợp kể chuyện Part 2 · viết: just in time"
+    },
+    {
+      "chu": "lose track of time",
+      "doc": "/luːz ˌtræk əv ˈtaɪm/",
+      "loai": "phr",
+      "nghia": "mải mê quên cả giờ giấc",
+      "cap": "B2",
+      "viDu": "When I'm reading a good novel, I completely lose track of time.",
+      "viDuNghia": "Khi đọc một cuốn tiểu thuyết hay, tôi quên hết giờ giấc.",
+      "ghiChu": "lose – lost – lost · keep track of = theo dõi"
+    },
+    {
+      "chu": "around the clock",
+      "doc": "/əˌraʊnd ðə ˈklɒk/",
+      "loai": "phr",
+      "nghia": "suốt ngày đêm, 24/24",
+      "cap": "B2",
+      "viDu": "Doctors were working around the clock during the outbreak.",
+      "viDuNghia": "Bác sĩ làm việc suốt ngày đêm trong đợt dịch.",
+      "ghiChu": "= round the clock · viết: 24 hours a day, continuously"
+    },
+    {
+      "chu": "break the ice",
+      "doc": "/breɪk ði ˈaɪs/",
+      "loai": "phr",
+      "nghia": "phá tan không khí ngượng ngùng lúc mới gặp",
+      "cap": "B2",
+      "viDu": "The teacher started with a game to break the ice.",
+      "viDuNghia": "Giáo viên mở đầu bằng một trò chơi để phá băng.",
+      "ghiChu": "an ice-breaker (n) · viết: help people feel relaxed"
+    },
+    {
+      "chu": "give someone a hand",
+      "doc": "/ɡɪv ˌsʌmwʌn ə ˈhænd/",
+      "loai": "phr",
+      "nghia": "giúp ai một tay",
+      "cap": "B2",
+      "viDu": "My neighbours always give us a hand when we need it.",
+      "viDuNghia": "Hàng xóm luôn giúp chúng tôi một tay khi cần.",
+      "ghiChu": "give sb a hand with sth · Could you give me a hand? · viết: help, assist"
+    },
+    {
+      "chu": "run in the family",
+      "doc": "/rʌn ɪn ðə ˈfæməli/",
+      "loai": "phr",
+      "nghia": "di truyền trong nhà, cả nhà đều có",
+      "cap": "B2",
+      "viDu": "Musical talent seems to run in the family — my mother and my sister both play the piano.",
+      "viDuNghia": "Năng khiếu âm nhạc hình như là di truyền — mẹ và chị tôi đều chơi piano.",
+      "ghiChu": "chủ ngữ là tài năng / bệnh / tính cách · viết: be inherited"
+    },
+    {
+      "chu": "a couch potato",
+      "doc": "/ə ˈkaʊtʃ pəˌteɪtəʊ/",
+      "loai": "phr",
+      "nghia": "người lười vận động, suốt ngày nằm xem TV",
+      "cap": "B2",
+      "viDu": "I used to be a couch potato, but now I go jogging every morning.",
+      "viDuNghia": "Trước đây tôi lười vận động, giờ sáng nào cũng chạy bộ.",
+      "ghiChu": "số nhiều: couch potatoes · viết: an inactive person, lead a sedentary lifestyle"
+    },
+    {
+      "chu": "a double-edged sword",
+      "doc": "/ə ˌdʌbl edʒd ˈsɔːd/",
+      "loai": "phr",
+      "nghia": "con dao hai lưỡi",
+      "cap": "B2",
+      "viDu": "Tourism is a double-edged sword: it creates jobs but damages the environment.",
+      "viDuNghia": "Du lịch là con dao hai lưỡi: tạo việc làm nhưng hại môi trường.",
+      "ghiChu": "mở câu trả lời ưu – nhược · viết: have both benefits and drawbacks"
+    },
+    {
+      "chu": "the tip of the iceberg",
+      "doc": "/ðə ˌtɪp əv ði ˈaɪsbɜːɡ/",
+      "loai": "phr",
+      "nghia": "phần nổi của tảng băng chìm",
+      "cap": "B2",
+      "viDu": "The plastic we see on beaches is just the tip of the iceberg.",
+      "viDuNghia": "Rác nhựa ta thấy trên bãi biển mới chỉ là phần nổi của tảng băng.",
+      "ghiChu": "just / only the tip of the iceberg · viết: only a small part of a much larger problem"
+    },
+    {
+      "chu": "a drop in the ocean",
+      "doc": "/ə ˌdrɒp ɪn ði ˈəʊʃn/",
+      "loai": "phr",
+      "nghia": "muối bỏ bể",
+      "cap": "B2",
+      "viDu": "Recycling at home is a drop in the ocean compared with what factories produce.",
+      "viDuNghia": "Tái chế ở nhà chỉ như muối bỏ bể so với lượng nhà máy thải ra.",
+      "ghiChu": "Mỹ: a drop in the bucket · viết: a very small amount compared with what is needed"
+    },
+    {
+      "chu": "a blessing in disguise",
+      "doc": "/ə ˌblesɪŋ ɪn dɪsˈɡaɪz/",
+      "loai": "phr",
+      "nghia": "trong cái rủi có cái may",
+      "cap": "B2",
+      "viDu": "Losing that job was a blessing in disguise, because it pushed me to go back to university.",
+      "viDuNghia": "Mất việc đó hoá ra lại may, vì nó thúc tôi quay lại học đại học.",
+      "ghiChu": "hợp đề Part 2 “a difficult time” · viết: an apparent misfortune that has good results"
+    },
+    {
+      "chu": "the best of both worlds",
+      "doc": "/ðə ˌbest əv bəʊθ ˈwɜːldz/",
+      "loai": "phr",
+      "nghia": "được cả đôi đường",
+      "cap": "B2",
+      "viDu": "Working from home three days a week gives me the best of both worlds.",
+      "viDuNghia": "Làm ở nhà ba ngày một tuần giúp tôi được cả đôi đường.",
+      "ghiChu": "have / get / enjoy the best of both worlds · viết: combine the advantages of both"
+    },
+    {
+      "chu": "at the end of the day",
+      "doc": "/ət ði ˌend əv ðə ˈdeɪ/",
+      "loai": "phr",
+      "nghia": "suy cho cùng, rốt cuộc",
+      "cap": "B2",
+      "viDu": "At the end of the day, parents are responsible for their children's behaviour.",
+      "viDuNghia": "Suy cho cùng, cha mẹ chịu trách nhiệm về hành vi của con.",
+      "ghiChu": "mở câu chốt của câu trả lời Part 3 · viết: ultimately"
+    }
+  ]
+}

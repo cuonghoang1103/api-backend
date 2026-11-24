@@ -1,0 +1,853 @@
+{
+  "ma": "nang-cao-c2-3",
+  "nn": "en",
+  "ten": "Chặng C2 · Danh từ học thuật, nói giảm tránh và thành ngữ tự nhiên",
+  "moTa": "Danh từ trừu tượng C2 (caveat, dichotomy, impasse, panacea, propensity…), cụm nói giảm tránh và chuyển ý trang trọng (insofar as, be that as it may, to all intents and purposes) và thành ngữ người bản xứ dùng thật khi nói (the jury is still out, a moot point, bite the bullet).",
+  "nhom": "ielts",
+  "cap": "C2",
+  "tu": [
+    {
+      "chu": "apathy",
+      "doc": "/ˈæpəθi/",
+      "loai": "n",
+      "nghia": "sự thờ ơ, lãnh đạm",
+      "cap": "C2",
+      "viDu": "Low turnout at elections is often blamed on voter apathy.",
+      "viDuNghia": "Tỉ lệ đi bầu thấp thường bị đổ cho sự thờ ơ của cử tri.",
+      "cumTu": [
+        "voter apathy",
+        "public apathy",
+        "apathy towards"
+      ],
+      "hoTu": [
+        "apathetic (adj)"
+      ]
+    },
+    {
+      "chu": "caveat",
+      "doc": "/ˈkæviæt/",
+      "loai": "n",
+      "nghia": "lời lưu ý, điều kiện kèm theo",
+      "cap": "C2",
+      "viDu": "The results are promising, with the caveat that the sample was small.",
+      "viDuNghia": "Kết quả hứa hẹn, với lưu ý rằng mẫu nghiên cứu nhỏ.",
+      "cumTu": [
+        "with the caveat that",
+        "an important caveat",
+        "add a caveat"
+      ],
+      "ghiChu": "Dùng để giới hạn nhận định — hedging rất tự nhiên."
+    },
+    {
+      "chu": "complacency",
+      "doc": "/kəmˈpleɪsnsi/",
+      "loai": "n",
+      "nghia": "sự tự mãn, chủ quan",
+      "cap": "C2",
+      "viDu": "There is no room for complacency when it comes to data security.",
+      "viDuNghia": "Không được phép chủ quan khi nói tới bảo mật dữ liệu.",
+      "cumTu": [
+        "no room for complacency",
+        "a sense of complacency",
+        "guard against complacency"
+      ],
+      "hoTu": [
+        "complacent (adj)"
+      ]
+    },
+    {
+      "chu": "conundrum",
+      "doc": "/kəˈnʌndrəm/",
+      "loai": "n",
+      "nghia": "vấn đề hóc búa, khó xử",
+      "cap": "C2",
+      "viDu": "How to grow the economy without harming the environment is a real conundrum.",
+      "viDuNghia": "Làm sao tăng trưởng kinh tế mà không hại môi trường là một bài toán hóc búa thật sự.",
+      "cumTu": [
+        "face a conundrum",
+        "solve a conundrum",
+        "an ethical conundrum"
+      ]
+    },
+    {
+      "chu": "crux",
+      "doc": "/krʌks/",
+      "loai": "n",
+      "nghia": "điểm mấu chốt",
+      "cap": "C2",
+      "viDu": "The crux of the matter is who will pay for the changes.",
+      "viDuNghia": "Mấu chốt của vấn đề là ai sẽ trả tiền cho những thay đổi này.",
+      "cumTu": [
+        "the crux of the matter",
+        "the crux of the problem",
+        "the crux of the argument"
+      ]
+    },
+    {
+      "chu": "detriment",
+      "doc": "/ˈdetrɪmənt/",
+      "loai": "n",
+      "nghia": "sự thiệt hại, tổn hại",
+      "cap": "C2",
+      "viDu": "He worked long hours to the detriment of his health.",
+      "viDuNghia": "Anh ấy làm việc nhiều giờ tới mức tổn hại sức khoẻ.",
+      "cumTu": [
+        "to the detriment of",
+        "without detriment to"
+      ],
+      "hoTu": [
+        "detrimental (adj)"
+      ],
+      "ghiChu": "Gần như chỉ dùng trong cụm \"to the detriment of\"."
+    },
+    {
+      "chu": "dichotomy",
+      "doc": "/daɪˈkɒtəmi/",
+      "loai": "n",
+      "nghia": "sự phân đôi, thế lưỡng phân",
+      "cap": "C2",
+      "viDu": "The essay questions the false dichotomy between economic growth and environmental protection.",
+      "viDuNghia": "Bài luận chất vấn thế lưỡng phân giả giữa tăng trưởng kinh tế và bảo vệ môi trường.",
+      "cumTu": [
+        "a false dichotomy",
+        "a dichotomy between A and B"
+      ],
+      "hoTu": [
+        "dichotomous (adj)"
+      ],
+      "ghiChu": "\"a false dichotomy\" — vũ khí phản biện đề \"A or B?\"."
+    },
+    {
+      "chu": "dissonance",
+      "doc": "/ˈdɪsənəns/",
+      "loai": "n",
+      "nghia": "sự không ăn khớp, mâu thuẫn bên trong",
+      "cap": "C2",
+      "viDu": "People feel cognitive dissonance when their actions contradict their beliefs.",
+      "viDuNghia": "Con người thấy bất hoà nhận thức khi hành động trái với niềm tin của mình.",
+      "cumTu": [
+        "cognitive dissonance",
+        "dissonance between"
+      ],
+      "hoTu": [
+        "dissonant (adj)"
+      ]
+    },
+    {
+      "chu": "echelon",
+      "doc": "/ˈeʃəlɒn/",
+      "loai": "n",
+      "nghia": "cấp bậc, tầng lớp (trong tổ chức, xã hội)",
+      "cap": "C2",
+      "viDu": "Women remain under-represented in the upper echelons of management.",
+      "viDuNghia": "Phụ nữ vẫn ít hiện diện ở các tầng quản lý cấp cao.",
+      "cumTu": [
+        "the upper echelons of",
+        "the higher echelons",
+        "lower echelons"
+      ],
+      "ghiChu": "Thường số nhiều: the upper echelons."
+    },
+    {
+      "chu": "ethos",
+      "doc": "/ˈiːθɒs/",
+      "loai": "n",
+      "nghia": "tinh thần, hệ giá trị đặc trưng",
+      "cap": "C2",
+      "viDu": "The company's ethos is built on openness and shared responsibility.",
+      "viDuNghia": "Tinh thần của công ty được xây trên sự cởi mở và trách nhiệm chung.",
+      "cumTu": [
+        "a company ethos",
+        "the ethos of",
+        "a work ethos"
+      ]
+    },
+    {
+      "chu": "impasse",
+      "doc": "/ˈæmpɑːs/",
+      "loai": "n",
+      "nghia": "thế bế tắc",
+      "cap": "C2",
+      "viDu": "Talks between the union and management have reached an impasse.",
+      "viDuNghia": "Đàm phán giữa công đoàn và ban lãnh đạo đã đi vào bế tắc.",
+      "cumTu": [
+        "reach an impasse",
+        "break the impasse",
+        "a political impasse"
+      ]
+    },
+    {
+      "chu": "juncture",
+      "doc": "/ˈdʒʌŋktʃə(r)/",
+      "loai": "n",
+      "nghia": "thời điểm (quan trọng)",
+      "cap": "C2",
+      "viDu": "At this critical juncture, the government cannot afford another mistake.",
+      "viDuNghia": "Ở thời điểm then chốt này, chính phủ không thể phạm thêm sai lầm.",
+      "cumTu": [
+        "at this juncture",
+        "a critical juncture",
+        "a crucial juncture"
+      ]
+    },
+    {
+      "chu": "misnomer",
+      "doc": "/ˌmɪsˈnəʊmə(r)/",
+      "loai": "n",
+      "nghia": "tên gọi sai, cách gọi không đúng bản chất",
+      "cap": "C2",
+      "viDu": "\"Free app\" is a misnomer when you pay with your personal data.",
+      "viDuNghia": "Gọi là \"ứng dụng miễn phí\" là sai bản chất khi bạn trả bằng dữ liệu cá nhân.",
+      "cumTu": [
+        "something of a misnomer",
+        "a complete misnomer"
+      ]
+    },
+    {
+      "chu": "onus",
+      "doc": "/ˈəʊnəs/",
+      "loai": "n",
+      "nghia": "trách nhiệm, nghĩa vụ (phải làm gì)",
+      "cap": "C2",
+      "viDu": "The onus is on employers to provide a safe workplace.",
+      "viDuNghia": "Trách nhiệm tạo nơi làm việc an toàn thuộc về người sử dụng lao động.",
+      "cumTu": [
+        "the onus is on someone to",
+        "put the onus on",
+        "the onus of proof"
+      ],
+      "ghiChu": "Mẫu: the onus is ON sb TO do sth."
+    },
+    {
+      "chu": "panacea",
+      "doc": "/ˌpænəˈsiːə/",
+      "loai": "n",
+      "nghia": "thuốc chữa bách bệnh, giải pháp cho mọi thứ",
+      "cap": "C2",
+      "viDu": "Technology is not a panacea for the problems of education.",
+      "viDuNghia": "Công nghệ không phải thuốc chữa bách bệnh cho các vấn đề giáo dục.",
+      "cumTu": [
+        "a panacea for",
+        "no panacea",
+        "offer a panacea"
+      ],
+      "ghiChu": "Hầu như dùng ở thể phủ định: \"X is no panacea\"."
+    },
+    {
+      "chu": "pretext",
+      "doc": "/ˈpriːtekst/",
+      "loai": "n",
+      "nghia": "cái cớ (che lý do thật)",
+      "cap": "C2",
+      "viDu": "He left the meeting early on the pretext of an urgent call.",
+      "viDuNghia": "Anh ta rời cuộc họp sớm với cái cớ có cuộc gọi khẩn.",
+      "cumTu": [
+        "on the pretext of",
+        "under the pretext that",
+        "a pretext for"
+      ]
+    },
+    {
+      "chu": "propensity",
+      "doc": "/prəˈpensəti/",
+      "loai": "n",
+      "nghia": "khuynh hướng tự nhiên",
+      "cap": "C2",
+      "viDu": "Younger consumers show a greater propensity to shop online.",
+      "viDuNghia": "Người tiêu dùng trẻ thể hiện khuynh hướng mua sắm trực tuyến cao hơn.",
+      "cumTu": [
+        "a propensity to do",
+        "a propensity for",
+        "propensity to spend"
+      ]
+    },
+    {
+      "chu": "quandary",
+      "doc": "/ˈkwɒndəri/",
+      "loai": "n",
+      "nghia": "tình thế khó xử, không biết chọn gì",
+      "cap": "C2",
+      "viDu": "Graduates are in a quandary about whether to study further or start work.",
+      "viDuNghia": "Sinh viên mới ra trường khó xử giữa học tiếp hay đi làm.",
+      "cumTu": [
+        "in a quandary",
+        "a moral quandary",
+        "face a quandary"
+      ]
+    },
+    {
+      "chu": "scourge",
+      "doc": "/skɜːdʒ/",
+      "loai": "n",
+      "nghia": "tai hoạ, nỗi khổ lớn (của xã hội)",
+      "cap": "C2",
+      "viDu": "Plastic pollution is the scourge of the world's oceans.",
+      "viDuNghia": "Ô nhiễm nhựa là tai hoạ của các đại dương trên thế giới.",
+      "cumTu": [
+        "the scourge of",
+        "the scourge of unemployment",
+        "fight the scourge"
+      ],
+      "ghiChu": "Đọc /skɜːdʒ/."
+    },
+    {
+      "chu": "semblance",
+      "doc": "/ˈsembləns/",
+      "loai": "n",
+      "nghia": "vẻ bề ngoài, chút dáng vẻ của",
+      "cap": "C2",
+      "viDu": "After the flood, it took months to restore some semblance of normal life.",
+      "viDuNghia": "Sau trận lũ, phải mất nhiều tháng mới khôi phục được chút dáng vẻ của cuộc sống bình thường.",
+      "cumTu": [
+        "some semblance of",
+        "a semblance of order",
+        "any semblance of"
+      ]
+    },
+    {
+      "chu": "vestige",
+      "doc": "/ˈvestɪdʒ/",
+      "loai": "n",
+      "nghia": "dấu vết còn sót lại",
+      "cap": "C2",
+      "viDu": "The old market is one of the last vestiges of the colonial town.",
+      "viDuNghia": "Khu chợ cũ là một trong những dấu vết cuối cùng của thị trấn thời thuộc địa.",
+      "cumTu": [
+        "the last vestiges of",
+        "a vestige of the past"
+      ],
+      "hoTu": [
+        "vestigial (adj)"
+      ]
+    },
+    {
+      "chu": "zeitgeist",
+      "doc": "/ˈzaɪtɡaɪst/",
+      "loai": "n",
+      "nghia": "tinh thần thời đại",
+      "cap": "C2",
+      "viDu": "The film captured the zeitgeist of a generation raised on the internet.",
+      "viDuNghia": "Bộ phim nắm bắt được tinh thần thời đại của một thế hệ lớn lên cùng internet.",
+      "cumTu": [
+        "capture the zeitgeist",
+        "the zeitgeist of"
+      ],
+      "ghiChu": "Từ mượn tiếng Đức; đọc /ˈzaɪtɡaɪst/."
+    },
+    {
+      "chu": "acumen",
+      "doc": "/ˈækjəmən/",
+      "loai": "n",
+      "nghia": "sự nhạy bén (trong lĩnh vực nào đó)",
+      "cap": "C2",
+      "viDu": "Technical skill is not enough; founders also need business acumen.",
+      "viDuNghia": "Kỹ năng kỹ thuật là chưa đủ; nhà sáng lập còn cần sự nhạy bén kinh doanh.",
+      "cumTu": [
+        "business acumen",
+        "political acumen",
+        "financial acumen"
+      ]
+    },
+    {
+      "chu": "affinity",
+      "doc": "/əˈfɪnəti/",
+      "loai": "n",
+      "nghia": "sự gần gũi, đồng điệu tự nhiên",
+      "cap": "C2",
+      "viDu": "She has always felt a strong affinity with the countryside.",
+      "viDuNghia": "Cô ấy luôn thấy gắn bó tự nhiên với miền quê.",
+      "cumTu": [
+        "an affinity with",
+        "an affinity for",
+        "a natural affinity"
+      ]
+    },
+    {
+      "chu": "aversion",
+      "doc": "/əˈvɜːʃn/",
+      "loai": "n",
+      "nghia": "sự ác cảm, không ưa",
+      "cap": "C2",
+      "viDu": "Investors' aversion to risk increases during a recession.",
+      "viDuNghia": "Sự e ngại rủi ro của nhà đầu tư tăng lên trong thời suy thoái.",
+      "cumTu": [
+        "an aversion to",
+        "risk aversion",
+        "a strong aversion"
+      ],
+      "hoTu": [
+        "averse (adj)"
+      ],
+      "ghiChu": "\"risk-averse\" = ngại rủi ro."
+    },
+    {
+      "chu": "dearth",
+      "doc": "/dɜːθ/",
+      "loai": "n",
+      "nghia": "sự khan hiếm, thiếu hụt",
+      "cap": "C2",
+      "viDu": "There is a dearth of reliable data on informal employment.",
+      "viDuNghia": "Đang thiếu hụt dữ liệu đáng tin về việc làm phi chính thức.",
+      "cumTu": [
+        "a dearth of",
+        "a dearth of evidence",
+        "a dearth of talent"
+      ],
+      "ghiChu": "Luôn \"a dearth OF\". Trái nghĩa: a plethora of."
+    },
+    {
+      "chu": "plethora",
+      "doc": "/ˈpleθərə/",
+      "loai": "n",
+      "nghia": "vô số, quá nhiều",
+      "cap": "C2",
+      "viDu": "Learners today face a plethora of apps, all promising fluency in weeks.",
+      "viDuNghia": "Người học ngày nay đứng trước vô số ứng dụng, cái nào cũng hứa trôi chảy sau vài tuần.",
+      "cumTu": [
+        "a plethora of",
+        "a plethora of options",
+        "a plethora of information"
+      ],
+      "ghiChu": "Trọng âm đầu. Gốc nghĩa là \"nhiều quá mức cần\"."
+    },
+    {
+      "chu": "myriad",
+      "doc": "/ˈmɪriəd/",
+      "loai": "n",
+      "nghia": "vô vàn, vô số",
+      "cap": "C2",
+      "viDu": "Cities face a myriad of problems, from pollution to housing shortages.",
+      "viDuNghia": "Các thành phố đối mặt vô vàn vấn đề, từ ô nhiễm tới thiếu nhà ở.",
+      "cumTu": [
+        "a myriad of",
+        "myriad problems",
+        "myriad ways"
+      ],
+      "hoTu": [
+        "myriad (adj)"
+      ],
+      "ghiChu": "Cả \"a myriad of problems\" và \"myriad problems\" đều đúng."
+    },
+    {
+      "chu": "modicum",
+      "doc": "/ˈmɒdɪkəm/",
+      "loai": "n",
+      "nghia": "một chút, một lượng nhỏ (điều tốt)",
+      "cap": "C2",
+      "viDu": "Anyone with a modicum of common sense would back up their files.",
+      "viDuNghia": "Ai có chút lẽ thường cũng sẽ sao lưu tệp của mình.",
+      "cumTu": [
+        "a modicum of",
+        "a modicum of common sense",
+        "a modicum of success"
+      ]
+    },
+    {
+      "chu": "predicament",
+      "doc": "/prɪˈdɪkəmənt/",
+      "loai": "n",
+      "nghia": "tình thế khó khăn, khó thoát",
+      "cap": "C2",
+      "viDu": "Rising debt has left many families in a difficult predicament.",
+      "viDuNghia": "Nợ tăng đã đẩy nhiều gia đình vào tình thế khó khăn.",
+      "cumTu": [
+        "in a predicament",
+        "a financial predicament",
+        "a difficult predicament"
+      ]
+    },
+    {
+      "chu": "rapport",
+      "doc": "/ræˈpɔː(r)/",
+      "loai": "n",
+      "nghia": "quan hệ thân thiện, hiểu ý nhau",
+      "cap": "C2",
+      "viDu": "Good interviewers build rapport with candidates in the first few minutes.",
+      "viDuNghia": "Người phỏng vấn giỏi tạo được thiện cảm với ứng viên ngay vài phút đầu.",
+      "cumTu": [
+        "build rapport with",
+        "establish a rapport",
+        "a good rapport"
+      ],
+      "ghiChu": "Chữ \"t\" câm: /ræˈpɔː/."
+    },
+    {
+      "chu": "insofar as",
+      "doc": "/ˌɪnsəˈfɑːr əz/",
+      "loai": "phr",
+      "nghia": "trong chừng mực mà",
+      "cap": "C2",
+      "viDu": "The policy is successful insofar as it has reduced waiting times.",
+      "viDuNghia": "Chính sách thành công trong chừng mực nó đã giảm được thời gian chờ.",
+      "cumTu": [
+        "insofar as possible",
+        "insofar as it goes"
+      ],
+      "ghiChu": "Giới hạn phạm vi nhận định; cũng viết \"in so far as\"."
+    },
+    {
+      "chu": "inasmuch as",
+      "doc": "/ˌɪnəzˈmʌtʃ əz/",
+      "loai": "phr",
+      "nghia": "bởi lẽ, xét ở chỗ",
+      "cap": "C2",
+      "viDu": "The study is limited inasmuch as it covers only urban schools.",
+      "viDuNghia": "Nghiên cứu có hạn chế ở chỗ nó chỉ bao quát trường thành thị.",
+      "cumTu": [
+        "inasmuch as it",
+        "limited inasmuch as"
+      ],
+      "ghiChu": "Rất trang trọng; gần nghĩa \"since/in that\"."
+    },
+    {
+      "chu": "be that as it may",
+      "doc": "/ˌbiː ðæt əz ɪt ˈmeɪ/",
+      "loai": "phr",
+      "nghia": "dù vậy đi nữa, cứ cho là thế",
+      "cap": "C2",
+      "viDu": "The costs are high. Be that as it may, the long-term benefits justify them.",
+      "viDuNghia": "Chi phí cao. Dù vậy đi nữa, lợi ích dài hạn vẫn xứng đáng.",
+      "cumTu": [
+        "be that as it may, …"
+      ],
+      "ghiChu": "Cụm nhượng bộ trang trọng, đứng đầu câu, thay cho \"however\"."
+    },
+    {
+      "chu": "to all intents and purposes",
+      "doc": "/tə ˌɔːl ɪnˈtents ən ˈpɜːpəsɪz/",
+      "loai": "phr",
+      "nghia": "trên thực tế, gần như hoàn toàn",
+      "cap": "C2",
+      "viDu": "The two versions are, to all intents and purposes, identical.",
+      "viDuNghia": "Hai phiên bản trên thực tế là giống hệt nhau.",
+      "cumTu": [
+        "to all intents and purposes"
+      ],
+      "ghiChu": "Hedging: gần như đúng tuyệt đối nhưng chừa một chút."
+    },
+    {
+      "chu": "up to a point",
+      "doc": "/ˌʌp tu ə ˈpɔɪnt/",
+      "loai": "phr",
+      "nghia": "ở một mức độ nào đó thôi",
+      "cap": "C2",
+      "viDu": "I agree with you up to a point, but I think cost matters more.",
+      "viDuNghia": "Tôi đồng ý với bạn ở một mức độ nào đó, nhưng tôi nghĩ chi phí quan trọng hơn.",
+      "cumTu": [
+        "agree up to a point",
+        "true up to a point"
+      ],
+      "ghiChu": "Cách đồng ý một phần lịch sự ở Speaking Part 3."
+    },
+    {
+      "chu": "if anything",
+      "doc": "/ɪf ˈeniθɪŋ/",
+      "loai": "phr",
+      "nghia": "nếu có thì là (ngược lại, hơn thế)",
+      "cap": "C2",
+      "viDu": "Remote work has not reduced productivity; if anything, it has increased it.",
+      "viDuNghia": "Làm từ xa không làm giảm năng suất; nếu có thì là làm tăng.",
+      "cumTu": [
+        "if anything, …"
+      ],
+      "ghiChu": "Dùng sau câu phủ định để nêu điều ngược lại mới đúng."
+    },
+    {
+      "chu": "more often than not",
+      "doc": "/ˌmɔːr ɒfn ðən ˈnɒt/",
+      "loai": "phr",
+      "nghia": "thường thì, đa phần",
+      "cap": "C2",
+      "viDu": "More often than not, the cheapest option costs more in the long run.",
+      "viDuNghia": "Thường thì lựa chọn rẻ nhất về lâu dài lại tốn hơn.",
+      "cumTu": [
+        "more often than not"
+      ],
+      "ghiChu": "Hedging tự nhiên thay cho \"usually\"."
+    },
+    {
+      "chu": "by all accounts",
+      "doc": "/baɪ ˌɔːl əˈkaʊnts/",
+      "loai": "phr",
+      "nghia": "theo mọi người nói, theo các nguồn",
+      "cap": "C2",
+      "viDu": "By all accounts, the new manager is fair and easy to work with.",
+      "viDuNghia": "Theo mọi người nói, quản lý mới công bằng và dễ làm việc cùng.",
+      "cumTu": [
+        "by all accounts"
+      ],
+      "ghiChu": "Thuật lại điều mình không trực tiếp chứng kiến."
+    },
+    {
+      "chu": "to say the least",
+      "doc": "/tə ˌseɪ ðə ˈliːst/",
+      "loai": "phr",
+      "nghia": "nói nhẹ nhất thì cũng là",
+      "cap": "C2",
+      "viDu": "The first release was disappointing, to say the least.",
+      "viDuNghia": "Bản phát hành đầu tiên, nói nhẹ nhất, cũng là đáng thất vọng.",
+      "cumTu": [
+        "…, to say the least"
+      ],
+      "ghiChu": "Đặt cuối câu, ngụ ý thực tế còn tệ hơn."
+    },
+    {
+      "chu": "so to speak",
+      "doc": "/ˌsəʊ tə ˈspiːk/",
+      "loai": "phr",
+      "nghia": "có thể nói như vậy, nói theo kiểu hình ảnh",
+      "cap": "C2",
+      "viDu": "The database is, so to speak, the heart of the whole system.",
+      "viDuNghia": "Cơ sở dữ liệu, có thể nói như vậy, là trái tim của cả hệ thống.",
+      "cumTu": [
+        "…, so to speak, …"
+      ],
+      "ghiChu": "Báo cho người nghe biết mình đang nói hình ảnh; \"as it were\" trang trọng hơn."
+    },
+    {
+      "chu": "at face value",
+      "doc": "/ət ˌfeɪs ˈvæljuː/",
+      "loai": "phr",
+      "nghia": "theo bề ngoài, không xét kỹ",
+      "cap": "C2",
+      "viDu": "Statistics in advertisements should never be taken at face value.",
+      "viDuNghia": "Số liệu trong quảng cáo không bao giờ nên tin ngay theo bề ngoài.",
+      "cumTu": [
+        "take something at face value",
+        "accept at face value"
+      ]
+    },
+    {
+      "chu": "at stake",
+      "doc": "/ət ˈsteɪk/",
+      "loai": "phr",
+      "nghia": "đang bị đe doạ, được mất ở đây là",
+      "cap": "C2",
+      "viDu": "With thousands of jobs at stake, the government had to intervene.",
+      "viDuNghia": "Khi hàng nghìn việc làm bị đe doạ, chính phủ buộc phải can thiệp.",
+      "cumTu": [
+        "be at stake",
+        "what is at stake",
+        "the issues at stake"
+      ],
+      "hoTu": [
+        "stake (n)"
+      ]
+    },
+    {
+      "chu": "a moot point",
+      "doc": "/ə ˌmuːt ˈpɔɪnt/",
+      "loai": "phr",
+      "nghia": "điểm còn tranh cãi; chuyện không còn ý nghĩa thực tế",
+      "cap": "C2",
+      "viDu": "Whether exams measure real ability is a moot point.",
+      "viDuNghia": "Kỳ thi có đo được năng lực thật hay không là điểm còn tranh cãi.",
+      "cumTu": [
+        "a moot point",
+        "remain a moot point"
+      ],
+      "ghiChu": "Anh-Anh: còn tranh cãi; Anh-Mỹ thường hiểu: bàn cũng vô ích."
+    },
+    {
+      "chu": "a foregone conclusion",
+      "doc": "/ə ˌfɔːɡɒn kənˈkluːʒn/",
+      "loai": "phr",
+      "nghia": "kết quả đã định sẵn, chắc chắn xảy ra",
+      "cap": "C2",
+      "viDu": "With that much funding, the project's success seemed a foregone conclusion.",
+      "viDuNghia": "Với ngần ấy kinh phí, thành công của dự án dường như đã là điều chắc chắn.",
+      "cumTu": [
+        "a foregone conclusion",
+        "by no means a foregone conclusion"
+      ]
+    },
+    {
+      "chu": "a level playing field",
+      "doc": "/ə ˌlevl ˈpleɪɪŋ fiːld/",
+      "loai": "phr",
+      "nghia": "sân chơi bình đẳng",
+      "cap": "C2",
+      "viDu": "Scholarships help to create a level playing field for poorer students.",
+      "viDuNghia": "Học bổng giúp tạo sân chơi bình đẳng cho sinh viên nghèo.",
+      "cumTu": [
+        "create a level playing field",
+        "compete on a level playing field"
+      ]
+    },
+    {
+      "chu": "the jury is still out",
+      "doc": "/ðə ˌdʒʊəri ɪz stɪl ˈaʊt/",
+      "loai": "phr",
+      "nghia": "vẫn chưa ngã ngũ, chưa có kết luận",
+      "cap": "C2",
+      "viDu": "The jury is still out on whether AI tutors really improve learning.",
+      "viDuNghia": "Việc gia sư AI có thật sự cải thiện việc học hay không vẫn chưa ngã ngũ.",
+      "cumTu": [
+        "the jury is still out on"
+      ],
+      "ghiChu": "Đi với \"on\" + vấn đề; rất tự nhiên ở Speaking Part 3."
+    },
+    {
+      "chu": "the elephant in the room",
+      "doc": "/ði ˌelɪfənt ɪn ðə ˈruːm/",
+      "loai": "phr",
+      "nghia": "vấn đề lớn ai cũng thấy mà né không nói",
+      "cap": "C2",
+      "viDu": "Nobody mentioned the budget, which was the elephant in the room.",
+      "viDuNghia": "Không ai nhắc tới ngân sách, dù đó là vấn đề lớn ai cũng thấy.",
+      "cumTu": [
+        "address the elephant in the room",
+        "ignore the elephant in the room"
+      ]
+    },
+    {
+      "chu": "bite the bullet",
+      "doc": "/ˌbaɪt ðə ˈbʊlɪt/",
+      "loai": "phr",
+      "nghia": "cắn răng làm việc khó chịu nhưng cần",
+      "cap": "C2",
+      "viDu": "We decided to bite the bullet and rewrite the whole module.",
+      "viDuNghia": "Chúng tôi quyết định cắn răng viết lại toàn bộ mô-đun.",
+      "cumTu": [
+        "bite the bullet and do something"
+      ],
+      "ghiChu": "Thân mật — dùng khi nói, tránh trong Writing Task 2."
+    },
+    {
+      "chu": "play devil's advocate",
+      "doc": "/ˌpleɪ ˌdevlz ˈædvəkət/",
+      "loai": "phr",
+      "nghia": "cố ý phản biện để thử lập luận",
+      "cap": "C2",
+      "viDu": "Let me play devil's advocate: what if users simply ignore the new feature?",
+      "viDuNghia": "Để tôi đóng vai phản biện: nếu người dùng cứ lờ tính năng mới đi thì sao?",
+      "cumTu": [
+        "play devil's advocate",
+        "to play devil's advocate for a moment"
+      ],
+      "ghiChu": "Cách phản biện lịch sự trong họp và ở Speaking Part 3."
+    },
+    {
+      "chu": "err on the side of caution",
+      "doc": "/ˌɜːr ɒn ðə ˌsaɪd əv ˈkɔːʃn/",
+      "loai": "phr",
+      "nghia": "thà cẩn thận quá còn hơn",
+      "cap": "C2",
+      "viDu": "When handling customer data, it is wise to err on the side of caution.",
+      "viDuNghia": "Khi xử lý dữ liệu khách hàng, thà cẩn thận quá còn hơn.",
+      "cumTu": [
+        "err on the side of caution"
+      ],
+      "hoTu": [
+        "err (v)",
+        "error (n)"
+      ],
+      "ghiChu": "\"err\" đọc /ɜː(r)/."
+    },
+    {
+      "chu": "hold water",
+      "doc": "/ˌhəʊld ˈwɔːtə(r)/",
+      "loai": "phr",
+      "nghia": "(lập luận) đứng vững, hợp lý",
+      "cap": "C2",
+      "viDu": "The argument that taxes always harm growth does not hold water.",
+      "viDuNghia": "Lập luận rằng thuế luôn gây hại cho tăng trưởng là không đứng vững.",
+      "cumTu": [
+        "not hold water",
+        "the theory holds water"
+      ],
+      "ghiChu": "Chủ yếu dùng ở thể phủ định."
+    },
+    {
+      "chu": "bear the brunt of",
+      "doc": "/ˌbeə ðə ˈbrʌnt əv/",
+      "loai": "phr",
+      "nghia": "hứng chịu phần nặng nề nhất của",
+      "cap": "C2",
+      "viDu": "Low-income families bear the brunt of rising food prices.",
+      "viDuNghia": "Gia đình thu nhập thấp hứng chịu nặng nhất việc giá thực phẩm tăng.",
+      "cumTu": [
+        "bear the brunt of the crisis",
+        "bear the brunt of the cuts"
+      ]
+    },
+    {
+      "chu": "stand the test of time",
+      "doc": "/ˌstænd ðə ˌtest əv ˈtaɪm/",
+      "loai": "phr",
+      "nghia": "trụ vững qua thời gian",
+      "cap": "C2",
+      "viDu": "Well-designed software can stand the test of time for decades.",
+      "viDuNghia": "Phần mềm thiết kế tốt có thể trụ vững qua hàng chục năm.",
+      "cumTu": [
+        "stand the test of time"
+      ]
+    },
+    {
+      "chu": "few and far between",
+      "doc": "/ˌfjuː ən ˌfɑː bɪˈtwiːn/",
+      "loai": "phr",
+      "nghia": "hiếm hoi, thưa thớt",
+      "cap": "C2",
+      "viDu": "Well-paid jobs for graduates without experience are few and far between.",
+      "viDuNghia": "Việc lương cao cho cử nhân chưa có kinh nghiệm là hiếm hoi.",
+      "cumTu": [
+        "be few and far between"
+      ],
+      "ghiChu": "Đứng sau \"be\", không đứng trước danh từ."
+    },
+    {
+      "chu": "come to the fore",
+      "doc": "/ˌkʌm tə ðə ˈfɔː(r)/",
+      "loai": "phr",
+      "nghia": "nổi lên, trở nên nổi bật",
+      "cap": "C2",
+      "viDu": "Questions of privacy come to the fore whenever a new app goes viral.",
+      "viDuNghia": "Câu hỏi về quyền riêng tư lại nổi lên mỗi khi một ứng dụng mới lan truyền mạnh.",
+      "cumTu": [
+        "come to the fore",
+        "bring something to the fore"
+      ]
+    },
+    {
+      "chu": "keep abreast of",
+      "doc": "/ˌkiːp əˈbrest əv/",
+      "loai": "phr",
+      "nghia": "luôn cập nhật, theo kịp",
+      "cap": "C2",
+      "viDu": "Developers must keep abreast of changes in the tools they use.",
+      "viDuNghia": "Lập trình viên phải luôn cập nhật các thay đổi trong công cụ họ dùng.",
+      "cumTu": [
+        "keep abreast of developments",
+        "keep abreast of the news"
+      ],
+      "ghiChu": "Trang trọng hơn \"keep up with\" — dùng tốt khi phỏng vấn."
+    },
+    {
+      "chu": "lend itself to",
+      "doc": "/ˌlend ɪtˈself tə/",
+      "loai": "phr",
+      "nghia": "phù hợp với, dễ dùng cho",
+      "cap": "C2",
+      "viDu": "Maths does not always lend itself to online teaching.",
+      "viDuNghia": "Môn toán không phải lúc nào cũng hợp với dạy trực tuyến.",
+      "cumTu": [
+        "lend itself to something",
+        "lend itself well to"
+      ],
+      "ghiChu": "Chủ ngữ là vật/việc, không phải người."
+    },
+    {
+      "chu": "in the grand scheme of things",
+      "doc": "/ɪn ðə ˌɡrænd ˌskiːm əv ˈθɪŋz/",
+      "loai": "phr",
+      "nghia": "xét trên tổng thể, nhìn rộng ra",
+      "cap": "C2",
+      "viDu": "In the grand scheme of things, one failed exam is not a disaster.",
+      "viDuNghia": "Nhìn rộng ra thì trượt một kỳ thi chẳng phải thảm hoạ.",
+      "cumTu": [
+        "in the grand scheme of things"
+      ]
+    }
+  ]
+}

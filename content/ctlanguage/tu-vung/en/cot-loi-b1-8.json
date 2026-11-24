@@ -1,0 +1,1779 @@
+{
+ "ma": "cot-loi-b1-8",
+ "nn": "en",
+ "ten": "Từ đời sống & cảm xúc B1 (bổ sung NGSL)",
+ "moTa": "Động từ, tính từ và danh từ thông dụng còn sót sau khi đối chiếu NGSL / Oxford (attempt, deserve, disturb, interrupt, owe, rescue, exhausted, unexpected, relief, concern, entire…) — lấp khoảng trống trước khi lên B2.",
+ "nhom": "giao-tiep",
+ "cap": "B1",
+ "tu": [
+  {
+   "chu": "afterwards",
+   "doc": "/ˈɑːftəwədz/",
+   "loai": "adv",
+   "nghia": "sau đó, về sau",
+   "cap": "B1",
+   "viDu": "We had dinner and went for a walk afterwards.",
+   "viDuNghia": "Chúng tôi ăn tối rồi sau đó đi dạo.",
+   "cumTu": [
+    "shortly afterwards",
+    "soon afterwards",
+    "immediately afterwards"
+   ],
+   "ghiChu": "Anh-Mỹ: afterward."
+  },
+  {
+   "chu": "aloud",
+   "doc": "/əˈlaʊd/",
+   "loai": "adv",
+   "nghia": "thành tiếng, to lên",
+   "cap": "B1",
+   "viDu": "Read the text aloud to practise your pronunciation.",
+   "viDuNghia": "Hãy đọc to bài văn để luyện phát âm.",
+   "cumTu": [
+    "read aloud",
+    "think aloud",
+    "say aloud"
+   ],
+   "hoTu": [
+    "loud (adj)"
+   ]
+  },
+  {
+   "chu": "asleep",
+   "doc": "/əˈsliːp/",
+   "loai": "adj",
+   "nghia": "đang ngủ",
+   "cap": "A2",
+   "viDu": "The baby is asleep, so please be quiet.",
+   "viDuNghia": "Em bé đang ngủ, nên làm ơn giữ yên lặng.",
+   "cumTu": [
+    "fall asleep",
+    "fast asleep",
+    "half asleep",
+    "be asleep"
+   ],
+   "hoTu": [
+    "sleep (v, n)",
+    "sleepy (adj)"
+   ],
+   "ghiChu": "Chỉ đứng sau động từ; trước danh từ dùng \"sleeping\": a sleeping baby."
+  },
+  {
+   "chu": "awake",
+   "doc": "/əˈweɪk/",
+   "loai": "adj",
+   "nghia": "thức, tỉnh",
+   "cap": "B1",
+   "viDu": "I was still awake at two in the morning.",
+   "viDuNghia": "Hai giờ sáng tôi vẫn còn thức.",
+   "cumTu": [
+    "stay awake",
+    "wide awake",
+    "keep somebody awake",
+    "lie awake"
+   ],
+   "hoTu": [
+    "wake (v)"
+   ]
+  },
+  {
+   "chu": "attempt",
+   "doc": "/əˈtempt/",
+   "loai": "n",
+   "nghia": "sự cố gắng, nỗ lực thử",
+   "cap": "B1",
+   "viDu": "I passed my driving test at the second attempt.",
+   "viDuNghia": "Tôi đỗ kỳ thi lái xe ở lần thử thứ hai.",
+   "cumTu": [
+    "make an attempt",
+    "first attempt",
+    "attempt to do",
+    "in an attempt to"
+   ],
+   "hoTu": [
+    "attempt (v)"
+   ],
+   "ghiChu": "\"in an attempt to + V\" = nhằm cố gắng… — hợp văn viết."
+  },
+  {
+   "chu": "automatically",
+   "doc": "/ˌɔːtəˈmætɪkli/",
+   "loai": "adv",
+   "nghia": "một cách tự động",
+   "cap": "B1",
+   "viDu": "The doors open automatically when you walk towards them.",
+   "viDuNghia": "Cửa tự động mở khi bạn bước tới.",
+   "cumTu": [
+    "update automatically",
+    "automatically save",
+    "happen automatically"
+   ],
+   "hoTu": [
+    "automatic (adj)",
+    "automate (v)",
+    "automation (n)"
+   ]
+  },
+  {
+   "chu": "blind",
+   "doc": "/blaɪnd/",
+   "loai": "adj",
+   "nghia": "mù, khiếm thị",
+   "cap": "B1",
+   "viDu": "Guide dogs help blind people to cross the road.",
+   "viDuNghia": "Chó dẫn đường giúp người mù qua đường.",
+   "cumTu": [
+    "go blind",
+    "blind person",
+    "blind in one eye",
+    "blind spot"
+   ],
+   "hoTu": [
+    "blindness (n)"
+   ],
+   "ghiChu": "Lịch sự hơn: \"visually impaired\"."
+  },
+  {
+   "chu": "deaf",
+   "doc": "/def/",
+   "loai": "adj",
+   "nghia": "điếc, khiếm thính",
+   "cap": "B1",
+   "viDu": "He has been deaf since he was born.",
+   "viDuNghia": "Anh ấy bị điếc bẩm sinh.",
+   "cumTu": [
+    "go deaf",
+    "deaf people",
+    "partially deaf"
+   ],
+   "hoTu": [
+    "deafness (n)"
+   ],
+   "ghiChu": "Đọc /def/ (không phải /diːf/)."
+  },
+  {
+   "chu": "chase",
+   "doc": "/tʃeɪs/",
+   "loai": "v",
+   "nghia": "đuổi theo",
+   "cap": "B1",
+   "viDu": "My dog loves to chase birds in the park.",
+   "viDuNghia": "Con chó của tôi thích đuổi chim trong công viên.",
+   "cumTu": [
+    "chase after",
+    "chase a dream",
+    "chase away"
+   ],
+   "hoTu": [
+    "chase (n)"
+   ]
+  },
+  {
+   "chu": "congratulate",
+   "doc": "/kənˈɡrætʃuleɪt/",
+   "loai": "v",
+   "nghia": "chúc mừng",
+   "cap": "B1",
+   "viDu": "I would like to congratulate you on your promotion.",
+   "viDuNghia": "Tôi muốn chúc mừng bạn được thăng chức.",
+   "cumTu": [
+    "congratulate somebody on",
+    "congratulate the team"
+   ],
+   "hoTu": [
+    "congratulations (n)"
+   ],
+   "ghiChu": "congratulate somebody ON something."
+  },
+  {
+   "chu": "cure",
+   "doc": "/kjʊə(r)/",
+   "loai": "n",
+   "nghia": "phương thuốc, cách chữa khỏi",
+   "cap": "B1",
+   "viDu": "Scientists are still looking for a cure for cancer.",
+   "viDuNghia": "Các nhà khoa học vẫn đang tìm phương thuốc chữa ung thư.",
+   "cumTu": [
+    "cure for",
+    "find a cure",
+    "no cure",
+    "miracle cure"
+   ],
+   "hoTu": [
+    "cure (v)",
+    "curable (adj)"
+   ],
+   "ghiChu": "a cure FOR a disease."
+  },
+  {
+   "chu": "cute",
+   "doc": "/kjuːt/",
+   "loai": "adj",
+   "nghia": "dễ thương, đáng yêu",
+   "cap": "B1",
+   "viDu": "Your puppy is so cute!",
+   "viDuNghia": "Chú cún của bạn dễ thương quá!",
+   "cumTu": [
+    "cute baby",
+    "cute dog",
+    "look cute",
+    "so cute"
+   ]
+  },
+  {
+   "chu": "defeat",
+   "doc": "/dɪˈfiːt/",
+   "loai": "v",
+   "nghia": "đánh bại",
+   "cap": "B1",
+   "viDu": "Our team managed to defeat the champions.",
+   "viDuNghia": "Đội chúng tôi đã đánh bại được nhà vô địch.",
+   "cumTu": [
+    "defeat an enemy",
+    "defeat a team",
+    "narrowly defeat"
+   ],
+   "hoTu": [
+    "defeat (n)"
+   ]
+  },
+  {
+   "chu": "defend",
+   "doc": "/dɪˈfend/",
+   "loai": "v",
+   "nghia": "bảo vệ, phòng thủ; bênh vực",
+   "cap": "B1",
+   "viDu": "You should be able to defend your opinion with examples.",
+   "viDuNghia": "Bạn nên có khả năng bảo vệ ý kiến của mình bằng ví dụ.",
+   "cumTu": [
+    "defend yourself",
+    "defend a country",
+    "defend an opinion",
+    "defend against"
+   ],
+   "hoTu": [
+    "defence (n)",
+    "defender (n)",
+    "defensive (adj)"
+   ]
+  },
+  {
+   "chu": "deserve",
+   "doc": "/dɪˈzɜːv/",
+   "loai": "v",
+   "nghia": "xứng đáng",
+   "cap": "B1",
+   "viDu": "You deserve a holiday after all that hard work.",
+   "viDuNghia": "Bạn xứng đáng được nghỉ sau ngần ấy công việc vất vả.",
+   "cumTu": [
+    "deserve a break",
+    "deserve to win",
+    "deserve better",
+    "deserve respect"
+   ],
+   "ghiChu": "Không dùng ở thì tiếp diễn."
+  },
+  {
+   "chu": "disappoint",
+   "doc": "/ˌdɪsəˈpɔɪnt/",
+   "loai": "v",
+   "nghia": "làm thất vọng",
+   "cap": "B1",
+   "viDu": "I do not want to disappoint my parents.",
+   "viDuNghia": "Tôi không muốn làm bố mẹ thất vọng.",
+   "cumTu": [
+    "disappoint somebody",
+    "disappoint the fans",
+    "sorry to disappoint you"
+   ],
+   "hoTu": [
+    "disappointed (adj)",
+    "disappointing (adj)",
+    "disappointment (n)"
+   ],
+   "ghiChu": "Một chữ s, hai chữ p."
+  },
+  {
+   "chu": "disturb",
+   "doc": "/dɪˈstɜːb/",
+   "loai": "v",
+   "nghia": "làm phiền, quấy rầy",
+   "cap": "B1",
+   "viDu": "Please do not disturb me while I am in a meeting.",
+   "viDuNghia": "Xin đừng làm phiền tôi khi tôi đang họp.",
+   "cumTu": [
+    "do not disturb",
+    "sorry to disturb you",
+    "disturb the peace"
+   ],
+   "hoTu": [
+    "disturbance (n)",
+    "disturbing (adj)"
+   ],
+   "ghiChu": "\"Do Not Disturb\" — biển treo cửa phòng / chế độ trên điện thoại."
+  },
+  {
+   "chu": "dive",
+   "doc": "/daɪv/",
+   "loai": "v",
+   "nghia": "lặn; nhảy lao xuống nước",
+   "cap": "B1",
+   "viDu": "We learned to dive on holiday in Nha Trang.",
+   "viDuNghia": "Chúng tôi đã học lặn trong kỳ nghỉ ở Nha Trang.",
+   "cumTu": [
+    "dive into",
+    "go diving",
+    "dive in"
+   ],
+   "hoTu": [
+    "diver (n)",
+    "diving (n)"
+   ],
+   "ghiChu": "\"dive into a topic\" = đi sâu vào một chủ đề."
+  },
+  {
+   "chu": "exhausted",
+   "doc": "/ɪɡˈzɔːstɪd/",
+   "loai": "adj",
+   "nghia": "kiệt sức, mệt lử",
+   "cap": "B1",
+   "viDu": "I was exhausted after working twelve hours.",
+   "viDuNghia": "Tôi kiệt sức sau khi làm việc mười hai tiếng.",
+   "cumTu": [
+    "completely exhausted",
+    "feel exhausted",
+    "look exhausted"
+   ],
+   "hoTu": [
+    "exhaust (v)",
+    "exhausting (adj)",
+    "exhaustion (n)"
+   ],
+   "ghiChu": "Mạnh hơn \"very tired\"; đi với absolutely/completely (không dùng \"very exhausted\")."
+  },
+  {
+   "chu": "fetch",
+   "doc": "/fetʃ/",
+   "loai": "v",
+   "nghia": "đi lấy về, đi đón; lấy (dữ liệu)",
+   "cap": "B1",
+   "viDu": "Could you fetch my glasses from the kitchen?",
+   "viDuNghia": "Bạn lấy giúp tôi cái kính ở trong bếp được không?",
+   "cumTu": [
+    "fetch a doctor",
+    "fetch data",
+    "go and fetch"
+   ],
+   "ghiChu": "IT: \"fetch data from the server\"."
+  },
+  {
+   "chu": "float",
+   "doc": "/fləʊt/",
+   "loai": "v",
+   "nghia": "nổi, trôi nổi",
+   "cap": "B1",
+   "viDu": "Wood will float on water, but stone will not.",
+   "viDuNghia": "Gỗ sẽ nổi trên nước, còn đá thì không.",
+   "cumTu": [
+    "float on water",
+    "float in the air",
+    "float away"
+   ],
+   "hoTu": [
+    "float (n)"
+   ]
+  },
+  {
+   "chu": "fond",
+   "doc": "/fɒnd/",
+   "loai": "adj",
+   "nghia": "yêu thích, có cảm tình",
+   "cap": "B1",
+   "viDu": "I am very fond of my grandmother's cooking.",
+   "viDuNghia": "Tôi rất thích món ăn bà tôi nấu.",
+   "cumTu": [
+    "fond of",
+    "fond memories",
+    "grow fond of"
+   ],
+   "hoTu": [
+    "fondness (n)"
+   ],
+   "ghiChu": "be fond OF + danh từ/V-ing."
+  },
+  {
+   "chu": "gain",
+   "doc": "/ɡeɪn/",
+   "loai": "v",
+   "nghia": "đạt được, thu được; tăng (cân)",
+   "cap": "B1",
+   "viDu": "You will gain a lot of experience from this internship.",
+   "viDuNghia": "Bạn sẽ thu được nhiều kinh nghiệm từ kỳ thực tập này.",
+   "cumTu": [
+    "gain experience",
+    "gain weight",
+    "gain knowledge",
+    "gain confidence"
+   ],
+   "hoTu": [
+    "gain (n)"
+   ],
+   "ghiChu": "gain experience / knowledge / skills — cụm chuẩn cho chủ đề học tập, việc làm."
+  },
+  {
+   "chu": "grab",
+   "doc": "/ɡræb/",
+   "loai": "v",
+   "nghia": "chộp lấy, vớ lấy",
+   "cap": "B2",
+   "viDu": "Let me grab my coat and we can go.",
+   "viDuNghia": "Để tôi lấy áo khoác rồi mình đi.",
+   "cumTu": [
+    "grab a coffee",
+    "grab a seat",
+    "grab attention",
+    "grab lunch"
+   ],
+   "ghiChu": "Thân mật: \"grab a coffee\" = đi uống nhanh ly cà phê."
+  },
+  {
+   "chu": "harm",
+   "doc": "/hɑːm/",
+   "loai": "n",
+   "nghia": "sự tổn hại, tác hại",
+   "cap": "B2",
+   "viDu": "Too much screen time can do harm to children's eyes.",
+   "viDuNghia": "Dùng màn hình quá nhiều có thể gây hại cho mắt trẻ em.",
+   "cumTu": [
+    "do harm",
+    "cause harm",
+    "no harm",
+    "harm to"
+   ],
+   "hoTu": [
+    "harm (v)",
+    "harmful (adj)",
+    "harmless (adj)"
+   ],
+   "ghiChu": "DO / CAUSE harm (không dùng \"make harm\")."
+  },
+  {
+   "chu": "heal",
+   "doc": "/hiːl/",
+   "loai": "v",
+   "nghia": "lành lại, chữa lành",
+   "cap": "B1",
+   "viDu": "The cut will heal in about a week.",
+   "viDuNghia": "Vết cắt sẽ lành trong khoảng một tuần.",
+   "cumTu": [
+    "heal quickly",
+    "heal a wound",
+    "time heals"
+   ],
+   "hoTu": [
+    "healing (n)"
+   ]
+  },
+  {
+   "chu": "ache",
+   "doc": "/eɪk/",
+   "loai": "v",
+   "nghia": "đau nhức",
+   "cap": "B1",
+   "viDu": "My legs ache after yesterday's run.",
+   "viDuNghia": "Chân tôi đau nhức sau buổi chạy hôm qua.",
+   "cumTu": [
+    "ache all over",
+    "ache with",
+    "my back aches"
+   ],
+   "hoTu": [
+    "ache (n)",
+    "headache (n)"
+   ],
+   "ghiChu": "Đọc /eɪk/."
+  },
+  {
+   "chu": "sore",
+   "doc": "/sɔː(r)/",
+   "loai": "adj",
+   "nghia": "đau, rát",
+   "cap": "B1",
+   "viDu": "I have a sore throat and a cough.",
+   "viDuNghia": "Tôi bị đau họng và ho.",
+   "cumTu": [
+    "sore throat",
+    "sore muscles",
+    "feel sore",
+    "sore eyes"
+   ]
+  },
+  {
+   "chu": "hopefully",
+   "doc": "/ˈhəʊpfəli/",
+   "loai": "adv",
+   "nghia": "hy vọng là",
+   "cap": "B1",
+   "viDu": "Hopefully, the weather will be better tomorrow.",
+   "viDuNghia": "Hy vọng là ngày mai thời tiết sẽ đẹp hơn.",
+   "cumTu": [
+    "hopefully, …",
+    "hopefully not",
+    "hopefully soon"
+   ],
+   "hoTu": [
+    "hope (v, n)",
+    "hopeful (adj)"
+   ]
+  },
+  {
+   "chu": "humour",
+   "doc": "/ˈhjuːmə(r)/",
+   "loai": "n",
+   "nghia": "sự hài hước",
+   "cap": "B1",
+   "viDu": "I like people with a good sense of humour.",
+   "viDuNghia": "Tôi thích những người có óc hài hước.",
+   "cumTu": [
+    "sense of humour",
+    "good humour",
+    "black humour"
+   ],
+   "hoTu": [
+    "humorous (adj)"
+   ],
+   "ghiChu": "Anh-Mỹ: humor."
+  },
+  {
+   "chu": "inform",
+   "doc": "/ɪnˈfɔːm/",
+   "loai": "v",
+   "nghia": "thông báo, báo cho biết",
+   "cap": "B1",
+   "viDu": "Please inform us of any changes to your address.",
+   "viDuNghia": "Vui lòng thông báo cho chúng tôi nếu có thay đổi địa chỉ.",
+   "cumTu": [
+    "inform somebody of",
+    "inform somebody about",
+    "inform somebody that",
+    "keep somebody informed"
+   ],
+   "hoTu": [
+    "information (n)",
+    "informative (adj)",
+    "informed (adj)"
+   ],
+   "ghiChu": "Email trang trọng: \"I am writing to inform you that…\"."
+  },
+  {
+   "chu": "interrupt",
+   "doc": "/ˌɪntəˈrʌpt/",
+   "loai": "v",
+   "nghia": "ngắt lời, làm gián đoạn",
+   "cap": "B1",
+   "viDu": "Sorry to interrupt, but there is a call for you.",
+   "viDuNghia": "Xin lỗi vì ngắt lời, nhưng có điện thoại gọi cho bạn.",
+   "cumTu": [
+    "sorry to interrupt",
+    "interrupt a meeting",
+    "interrupt somebody"
+   ],
+   "hoTu": [
+    "interruption (n)"
+   ]
+  },
+  {
+   "chu": "junior",
+   "doc": "/ˈdʒuːniə(r)/",
+   "loai": "adj",
+   "nghia": "cấp dưới, ít kinh nghiệm hơn",
+   "cap": "B1",
+   "viDu": "She started as a junior developer three years ago.",
+   "viDuNghia": "Cô ấy bắt đầu làm lập trình viên junior ba năm trước.",
+   "cumTu": [
+    "junior developer",
+    "junior staff",
+    "junior position",
+    "junior school"
+   ],
+   "hoTu": [
+    "junior (n)"
+   ],
+   "ghiChu": "Trái nghĩa: senior."
+  },
+  {
+   "chu": "senior",
+   "doc": "/ˈsiːniə(r)/",
+   "loai": "adj",
+   "nghia": "cấp cao, thâm niên hơn; lớn tuổi",
+   "cap": "B1",
+   "viDu": "He is a senior engineer with ten years of experience.",
+   "viDuNghia": "Anh ấy là kỹ sư cấp cao với mười năm kinh nghiệm.",
+   "cumTu": [
+    "senior manager",
+    "senior engineer",
+    "senior citizen",
+    "senior position"
+   ],
+   "hoTu": [
+    "seniority (n)"
+   ],
+   "ghiChu": "\"senior citizens\" = người cao tuổi (lịch sự)."
+  },
+  {
+   "chu": "lately",
+   "doc": "/ˈleɪtli/",
+   "loai": "adv",
+   "nghia": "gần đây, dạo này",
+   "cap": "B1",
+   "viDu": "I have been very busy lately.",
+   "viDuNghia": "Dạo này tôi rất bận.",
+   "cumTu": [
+    "just lately",
+    "until lately",
+    "busy lately"
+   ],
+   "ghiChu": "lately = gần đây (đi với hiện tại hoàn thành); late = muộn."
+  },
+  {
+   "chu": "lower",
+   "doc": "/ˈləʊə(r)/",
+   "loai": "v",
+   "nghia": "hạ thấp, giảm xuống",
+   "cap": "B1",
+   "viDu": "The shop decided to lower its prices.",
+   "viDuNghia": "Cửa hàng quyết định giảm giá.",
+   "cumTu": [
+    "lower the price",
+    "lower the cost",
+    "lower your voice",
+    "lower the risk"
+   ],
+   "hoTu": [
+    "low (adj)"
+   ]
+  },
+  {
+   "chu": "mend",
+   "doc": "/mend/",
+   "loai": "v",
+   "nghia": "sửa, vá",
+   "cap": "B1",
+   "viDu": "Can you mend this hole in my shirt?",
+   "viDuNghia": "Bạn vá giúp tôi cái lỗ trên áo này được không?",
+   "cumTu": [
+    "mend clothes",
+    "mend a fence",
+    "mend a relationship"
+   ],
+   "ghiChu": "Anh-Anh; với máy móc thường dùng fix / repair."
+  },
+  {
+   "chu": "misunderstand",
+   "doc": "/ˌmɪsʌndəˈstænd/",
+   "loai": "v",
+   "nghia": "hiểu lầm, hiểu sai",
+   "cap": "B1",
+   "viDu": "Please do not misunderstand me. I am not angry.",
+   "viDuNghia": "Xin đừng hiểu lầm tôi. Tôi không giận đâu.",
+   "cumTu": [
+    "misunderstand a question",
+    "completely misunderstand"
+   ],
+   "hoTu": [
+    "misunderstanding (n)"
+   ],
+   "ghiChu": "Quá khứ: misunderstood."
+  },
+  {
+   "chu": "nasty",
+   "doc": "/ˈnɑːsti/",
+   "loai": "adj",
+   "nghia": "khó chịu, tồi tệ; xấu tính",
+   "cap": "B1",
+   "viDu": "This medicine has a nasty taste.",
+   "viDuNghia": "Thuốc này có vị rất khó chịu.",
+   "cumTu": [
+    "nasty smell",
+    "nasty surprise",
+    "nasty cold",
+    "nasty comment"
+   ]
+  },
+  {
+   "chu": "nonsense",
+   "doc": "/ˈnɒnsns/",
+   "loai": "n",
+   "nghia": "điều vô lý, chuyện vớ vẩn",
+   "cap": "B1",
+   "viDu": "Do not believe everything online. A lot of it is nonsense.",
+   "viDuNghia": "Đừng tin mọi thứ trên mạng. Nhiều thứ trong đó là vớ vẩn.",
+   "cumTu": [
+    "talk nonsense",
+    "complete nonsense",
+    "make nonsense of"
+   ],
+   "ghiChu": "Không đếm được."
+  },
+  {
+   "chu": "owe",
+   "doc": "/əʊ/",
+   "loai": "v",
+   "nghia": "nợ",
+   "cap": "B1",
+   "viDu": "I owe my brother fifty dollars.",
+   "viDuNghia": "Tôi nợ anh trai năm mươi đô la.",
+   "cumTu": [
+    "owe money",
+    "owe somebody a favour",
+    "owe somebody an apology",
+    "owe to"
+   ],
+   "ghiChu": "\"I owe you one\" = tôi nợ bạn một lần giúp đỡ."
+  },
+  {
+   "chu": "pause",
+   "doc": "/pɔːz/",
+   "loai": "v",
+   "nghia": "tạm dừng",
+   "cap": "B1",
+   "viDu": "Pause the video and repeat the sentence.",
+   "viDuNghia": "Hãy tạm dừng video và nhắc lại câu đó.",
+   "cumTu": [
+    "pause a video",
+    "pause for a moment",
+    "pause the game"
+   ],
+   "hoTu": [
+    "pause (n)"
+   ]
+  },
+  {
+   "chu": "pile",
+   "doc": "/paɪl/",
+   "loai": "n",
+   "nghia": "chồng, đống",
+   "cap": "B1",
+   "viDu": "There is a pile of books on my desk.",
+   "viDuNghia": "Có một chồng sách trên bàn tôi.",
+   "cumTu": [
+    "a pile of",
+    "pile of paper",
+    "pile of clothes"
+   ],
+   "hoTu": [
+    "pile (v)"
+   ]
+  },
+  {
+   "chu": "pity",
+   "doc": "/ˈpɪti/",
+   "loai": "n",
+   "nghia": "điều đáng tiếc; lòng thương hại",
+   "cap": "B1",
+   "viDu": "It is a pity that you cannot join us.",
+   "viDuNghia": "Thật tiếc là bạn không thể tham gia cùng chúng tôi.",
+   "cumTu": [
+    "it's a pity",
+    "what a pity",
+    "feel pity for"
+   ],
+   "hoTu": [
+    "pity (v)"
+   ]
+  },
+  {
+   "chu": "polish",
+   "doc": "/ˈpɒlɪʃ/",
+   "loai": "v",
+   "nghia": "đánh bóng; trau chuốt",
+   "cap": "B1",
+   "viDu": "I need to polish my shoes before the interview.",
+   "viDuNghia": "Tôi cần đánh giày trước buổi phỏng vấn.",
+   "cumTu": [
+    "polish shoes",
+    "polish your skills",
+    "polish a presentation"
+   ],
+   "hoTu": [
+    "polish (n)",
+    "polished (adj)"
+   ],
+   "ghiChu": "Viết thường \"polish\" /ˈpɒlɪʃ/; viết hoa \"Polish\" /ˈpəʊlɪʃ/ = thuộc Ba Lan."
+  },
+  {
+   "chu": "praise",
+   "doc": "/preɪz/",
+   "loai": "v",
+   "nghia": "khen ngợi",
+   "cap": "B2",
+   "viDu": "Good teachers praise students for their effort.",
+   "viDuNghia": "Giáo viên giỏi khen ngợi nỗ lực của học sinh.",
+   "cumTu": [
+    "praise somebody for",
+    "highly praise",
+    "praise the work"
+   ],
+   "hoTu": [
+    "praise (n)"
+   ]
+  },
+  {
+   "chu": "rescue",
+   "doc": "/ˈreskjuː/",
+   "loai": "v",
+   "nghia": "cứu, giải cứu",
+   "cap": "B1",
+   "viDu": "Firefighters managed to rescue everyone from the building.",
+   "viDuNghia": "Lính cứu hoả đã cứu được mọi người khỏi toà nhà.",
+   "cumTu": [
+    "rescue somebody from",
+    "rescue team",
+    "come to the rescue"
+   ],
+   "hoTu": [
+    "rescue (n)",
+    "rescuer (n)"
+   ]
+  },
+  {
+   "chu": "rob",
+   "doc": "/rɒb/",
+   "loai": "v",
+   "nghia": "cướp",
+   "cap": "B1",
+   "viDu": "Two men tried to rob the bank last night.",
+   "viDuNghia": "Hai người đàn ông đã cố cướp ngân hàng đêm qua.",
+   "cumTu": [
+    "rob a bank",
+    "rob somebody of",
+    "be robbed"
+   ],
+   "hoTu": [
+    "robber (n)",
+    "robbery (n)"
+   ],
+   "ghiChu": "rob + người/nơi chốn; steal + đồ vật."
+  },
+  {
+   "chu": "rub",
+   "doc": "/rʌb/",
+   "loai": "v",
+   "nghia": "chà, xoa, dụi",
+   "cap": "B1",
+   "viDu": "Do not rub your eyes with dirty hands.",
+   "viDuNghia": "Đừng dụi mắt bằng tay bẩn.",
+   "cumTu": [
+    "rub your eyes",
+    "rub your hands",
+    "rub out"
+   ],
+   "hoTu": [
+    "rubber (n)"
+   ]
+  },
+  {
+   "chu": "ruin",
+   "doc": "/ˈruːɪn/",
+   "loai": "v",
+   "nghia": "phá hỏng, làm hỏng",
+   "cap": "B1",
+   "viDu": "The rain may ruin our plans for the picnic.",
+   "viDuNghia": "Cơn mưa có thể phá hỏng kế hoạch dã ngoại của chúng ta.",
+   "cumTu": [
+    "ruin a plan",
+    "ruin your health",
+    "ruin everything",
+    "ruin the surprise"
+   ],
+   "hoTu": [
+    "ruin (n)",
+    "ruins (n)"
+   ],
+   "ghiChu": "\"the ruins\" = tàn tích, phế tích."
+  },
+  {
+   "chu": "rush",
+   "doc": "/rʌʃ/",
+   "loai": "v",
+   "nghia": "vội vã, lao tới; làm gấp",
+   "cap": "B1",
+   "viDu": "There is no need to rush. We have plenty of time.",
+   "viDuNghia": "Không cần phải vội. Chúng ta có nhiều thời gian.",
+   "cumTu": [
+    "rush hour",
+    "rush to do",
+    "rush into",
+    "in a rush"
+   ],
+   "hoTu": [
+    "rush (n)"
+   ],
+   "ghiChu": "\"rush hour\" = giờ cao điểm."
+  },
+  {
+   "chu": "scare",
+   "doc": "/skeə(r)/",
+   "loai": "v",
+   "nghia": "làm sợ hãi",
+   "cap": "B1",
+   "viDu": "Loud fireworks scare my cat.",
+   "viDuNghia": "Pháo hoa nổ to làm con mèo của tôi sợ.",
+   "cumTu": [
+    "scare somebody",
+    "scare away",
+    "scare somebody to death"
+   ],
+   "hoTu": [
+    "scared (adj)",
+    "scary (adj)"
+   ]
+  },
+  {
+   "chu": "shame",
+   "doc": "/ʃeɪm/",
+   "loai": "n",
+   "nghia": "sự xấu hổ; điều đáng tiếc",
+   "cap": "B1",
+   "viDu": "It is a shame that the concert was cancelled.",
+   "viDuNghia": "Thật tiếc là buổi hoà nhạc bị huỷ.",
+   "cumTu": [
+    "it's a shame",
+    "what a shame",
+    "feel shame"
+   ],
+   "hoTu": [
+    "ashamed (adj)",
+    "shameful (adj)"
+   ],
+   "ghiChu": "\"What a shame!\" = Tiếc quá! (không mang nghĩa xấu hổ)."
+  },
+  {
+   "chu": "somehow",
+   "doc": "/ˈsʌmhaʊ/",
+   "loai": "adv",
+   "nghia": "bằng cách nào đó; không hiểu sao",
+   "cap": "B1",
+   "viDu": "Somehow we managed to finish on time.",
+   "viDuNghia": "Bằng cách nào đó chúng tôi đã kịp hoàn thành đúng giờ.",
+   "cumTu": [
+    "somehow or other",
+    "somehow manage",
+    "somehow feel"
+   ]
+  },
+  {
+   "chu": "spare",
+   "doc": "/speə(r)/",
+   "loai": "adj",
+   "nghia": "dư, dự phòng; rảnh",
+   "cap": "B1",
+   "viDu": "What do you like doing in your spare time?",
+   "viDuNghia": "Bạn thích làm gì vào thời gian rảnh?",
+   "cumTu": [
+    "spare time",
+    "spare room",
+    "spare key",
+    "spare part"
+   ],
+   "hoTu": [
+    "spare (v)"
+   ],
+   "ghiChu": "\"spare time\" = free time — hay gặp trong Speaking Part 1."
+  },
+  {
+   "chu": "spill",
+   "doc": "/spɪl/",
+   "loai": "v",
+   "nghia": "làm đổ, làm tràn",
+   "cap": "B1",
+   "viDu": "Be careful not to spill coffee on your keyboard.",
+   "viDuNghia": "Cẩn thận đừng làm đổ cà phê lên bàn phím.",
+   "cumTu": [
+    "spill coffee",
+    "spill water",
+    "spill over",
+    "oil spill"
+   ],
+   "hoTu": [
+    "spill (n)"
+   ],
+   "ghiChu": "Quá khứ: spilled / spilt."
+  },
+  {
+   "chu": "stare",
+   "doc": "/steə(r)/",
+   "loai": "v",
+   "nghia": "nhìn chằm chằm",
+   "cap": "B1",
+   "viDu": "It is rude to stare at people.",
+   "viDuNghia": "Nhìn chằm chằm vào người khác là bất lịch sự.",
+   "cumTu": [
+    "stare at",
+    "stare into space",
+    "stare out of the window"
+   ],
+   "hoTu": [
+    "stare (n)"
+   ]
+  },
+  {
+   "chu": "steep",
+   "doc": "/stiːp/",
+   "loai": "adj",
+   "nghia": "dốc; (tăng, giảm) mạnh",
+   "cap": "B1",
+   "viDu": "The path up the mountain is very steep.",
+   "viDuNghia": "Con đường lên núi rất dốc.",
+   "cumTu": [
+    "steep hill",
+    "steep rise",
+    "steep slope",
+    "steep increase"
+   ],
+   "hoTu": [
+    "steeply (adv)"
+   ],
+   "ghiChu": "Task 1: \"a steep rise/fall\", \"rose steeply\"."
+  },
+  {
+   "chu": "strike",
+   "doc": "/straɪk/",
+   "loai": "n",
+   "nghia": "cuộc đình công; cú đánh",
+   "cap": "B1",
+   "viDu": "The bus drivers are on strike today.",
+   "viDuNghia": "Hôm nay các tài xế xe buýt đình công.",
+   "cumTu": [
+    "go on strike",
+    "be on strike",
+    "train strike",
+    "general strike"
+   ],
+   "hoTu": [
+    "strike (v)",
+    "striker (n)",
+    "striking (adj)"
+   ],
+   "ghiChu": "Động từ quá khứ: struck."
+  },
+  {
+   "chu": "surround",
+   "doc": "/səˈraʊnd/",
+   "loai": "v",
+   "nghia": "bao quanh, vây quanh",
+   "cap": "B1",
+   "viDu": "Tall trees surround the lake.",
+   "viDuNghia": "Những hàng cây cao bao quanh hồ.",
+   "cumTu": [
+    "be surrounded by",
+    "surround yourself with"
+   ],
+   "hoTu": [
+    "surroundings (n)",
+    "surrounding (adj)"
+   ],
+   "ghiChu": "Thường ở bị động: be surrounded BY."
+  },
+  {
+   "chu": "swear",
+   "doc": "/sweə(r)/",
+   "loai": "v",
+   "nghia": "chửi thề; thề",
+   "cap": "B1",
+   "viDu": "Please do not swear in front of the children.",
+   "viDuNghia": "Xin đừng chửi thề trước mặt bọn trẻ.",
+   "cumTu": [
+    "swear at",
+    "swear word",
+    "swear to do",
+    "I swear"
+   ],
+   "ghiChu": "Quá khứ: swore, sworn."
+  },
+  {
+   "chu": "swing",
+   "doc": "/swɪŋ/",
+   "loai": "v",
+   "nghia": "đu đưa, lắc lư; vung",
+   "cap": "B1",
+   "viDu": "The children love to swing on the rope in the garden.",
+   "viDuNghia": "Bọn trẻ thích đu trên sợi dây trong vườn.",
+   "cumTu": [
+    "swing back and forth",
+    "swing open",
+    "swing your arms"
+   ],
+   "hoTu": [
+    "swing (n)"
+   ],
+   "ghiChu": "Quá khứ: swung."
+  },
+  {
+   "chu": "tap",
+   "doc": "/tæp/",
+   "loai": "n",
+   "nghia": "vòi nước; cái gõ nhẹ, chạm nhẹ",
+   "cap": "B1",
+   "viDu": "Do not leave the tap running while you brush your teeth.",
+   "viDuNghia": "Đừng để vòi nước chảy trong lúc bạn đánh răng.",
+   "cumTu": [
+    "tap water",
+    "turn on the tap",
+    "turn off the tap",
+    "a tap on the shoulder"
+   ],
+   "hoTu": [
+    "tap (v)"
+   ],
+   "ghiChu": "Động từ: \"tap the icon\" = chạm vào biểu tượng. Anh-Mỹ: faucet."
+  },
+  {
+   "chu": "tear",
+   "doc": "/teə(r)/",
+   "loai": "v",
+   "nghia": "xé, làm rách",
+   "cap": "B1",
+   "viDu": "Be careful not to tear the paper.",
+   "viDuNghia": "Cẩn thận đừng làm rách tờ giấy.",
+   "cumTu": [
+    "tear up",
+    "tear open",
+    "tear down",
+    "tear a page"
+   ],
+   "hoTu": [
+    "tear (n) /tɪə(r)/"
+   ],
+   "ghiChu": "Động từ /teə(r)/ (tore, torn); danh từ \"tear\" /tɪə(r)/ = giọt nước mắt."
+  },
+  {
+   "chu": "unexpected",
+   "doc": "/ˌʌnɪkˈspektɪd/",
+   "loai": "adj",
+   "nghia": "bất ngờ, không lường trước",
+   "cap": "B1",
+   "viDu": "We had an unexpected visitor last night.",
+   "viDuNghia": "Tối qua chúng tôi có một vị khách bất ngờ.",
+   "cumTu": [
+    "unexpected result",
+    "unexpected problem",
+    "unexpected change",
+    "completely unexpected"
+   ],
+   "hoTu": [
+    "expect (v)",
+    "unexpectedly (adv)"
+   ]
+  },
+  {
+   "chu": "unknown",
+   "doc": "/ˌʌnˈnəʊn/",
+   "loai": "adj",
+   "nghia": "chưa biết, không rõ; vô danh",
+   "cap": "B1",
+   "viDu": "The cause of the fire is still unknown.",
+   "viDuNghia": "Nguyên nhân vụ cháy vẫn chưa rõ.",
+   "cumTu": [
+    "unknown number",
+    "unknown reason",
+    "unknown to",
+    "remain unknown"
+   ],
+   "hoTu": [
+    "know (v)"
+   ]
+  },
+  {
+   "chu": "weird",
+   "doc": "/wɪəd/",
+   "loai": "adj",
+   "nghia": "kỳ quặc, lạ lùng",
+   "cap": "B1",
+   "viDu": "I had a really weird dream last night.",
+   "viDuNghia": "Đêm qua tôi có một giấc mơ thật kỳ quặc.",
+   "cumTu": [
+    "weird dream",
+    "feel weird",
+    "weird noise",
+    "a bit weird"
+   ],
+   "ghiChu": "Thân mật; chính tả: wEIrd."
+  },
+  {
+   "chu": "whisper",
+   "doc": "/ˈwɪspə(r)/",
+   "loai": "v",
+   "nghia": "thì thầm",
+   "cap": "B1",
+   "viDu": "You have to whisper in the library.",
+   "viDuNghia": "Bạn phải nói thì thầm trong thư viện.",
+   "cumTu": [
+    "whisper to somebody",
+    "whisper in somebody's ear",
+    "whisper something"
+   ],
+   "hoTu": [
+    "whisper (n)"
+   ]
+  },
+  {
+   "chu": "wise",
+   "doc": "/waɪz/",
+   "loai": "adj",
+   "nghia": "khôn ngoan, sáng suốt",
+   "cap": "B1",
+   "viDu": "It is wise to save some money every month.",
+   "viDuNghia": "Tiết kiệm một ít tiền mỗi tháng là điều khôn ngoan.",
+   "cumTu": [
+    "wise decision",
+    "wise choice",
+    "wise man",
+    "it is wise to"
+   ],
+   "hoTu": [
+    "wisdom (n)",
+    "wisely (adv)"
+   ]
+  },
+  {
+   "chu": "wrap",
+   "doc": "/ræp/",
+   "loai": "v",
+   "nghia": "gói, bọc",
+   "cap": "B1",
+   "viDu": "I need to wrap this present before the party.",
+   "viDuNghia": "Tôi cần gói món quà này trước bữa tiệc.",
+   "cumTu": [
+    "wrap a present",
+    "wrap up",
+    "wrap in paper"
+   ],
+   "hoTu": [
+    "wrapping (n)",
+    "wrapper (n)"
+   ],
+   "ghiChu": "Chữ w câm. \"Let's wrap up\" = kết thúc (cuộc họp) thôi."
+  },
+  {
+   "chu": "heater",
+   "doc": "/ˈhiːtə(r)/",
+   "loai": "n",
+   "nghia": "máy sưởi, bình nóng lạnh",
+   "cap": "B1",
+   "viDu": "We turn on the heater when the weather gets cold.",
+   "viDuNghia": "Chúng tôi bật máy sưởi khi trời trở lạnh.",
+   "cumTu": [
+    "water heater",
+    "electric heater",
+    "turn on the heater"
+   ],
+   "hoTu": [
+    "heat (n, v)",
+    "heating (n)"
+   ]
+  },
+  {
+   "chu": "actual",
+   "doc": "/ˈæktʃuəl/",
+   "loai": "adj",
+   "nghia": "thực tế, thực sự",
+   "cap": "B2",
+   "viDu": "The actual cost was higher than we expected.",
+   "viDuNghia": "Chi phí thực tế cao hơn chúng tôi dự kiến.",
+   "cumTu": [
+    "actual cost",
+    "actual number",
+    "in actual fact",
+    "actual size"
+   ],
+   "hoTu": [
+    "actually (adv)"
+   ],
+   "ghiChu": "KHÔNG có nghĩa \"hiện tại\" (đó là current / present)."
+  },
+  {
+   "chu": "concern",
+   "doc": "/kənˈsɜːn/",
+   "loai": "n",
+   "nghia": "mối lo ngại, sự quan tâm",
+   "cap": "B2",
+   "viDu": "There is growing concern about air pollution in big cities.",
+   "viDuNghia": "Ngày càng có nhiều lo ngại về ô nhiễm không khí ở các thành phố lớn.",
+   "cumTu": [
+    "concern about",
+    "growing concern",
+    "main concern",
+    "raise concerns"
+   ],
+   "hoTu": [
+    "concern (v)",
+    "concerned (adj)",
+    "concerning (prep)"
+   ],
+   "ghiChu": "\"There is growing concern about…\" — mở bài Task 2 rất dùng được."
+  },
+  {
+   "chu": "entire",
+   "doc": "/ɪnˈtaɪə(r)/",
+   "loai": "adj",
+   "nghia": "toàn bộ, trọn vẹn",
+   "cap": "B2",
+   "viDu": "I spent the entire day preparing for the interview.",
+   "viDuNghia": "Tôi dành trọn cả ngày để chuẩn bị cho buổi phỏng vấn.",
+   "cumTu": [
+    "the entire day",
+    "entire life",
+    "entire world",
+    "entire population"
+   ],
+   "hoTu": [
+    "entirely (adv)"
+   ],
+   "ghiChu": "Mạnh hơn \"whole\"."
+  },
+  {
+   "chu": "struggle",
+   "doc": "/ˈstrʌɡl/",
+   "loai": "v",
+   "nghia": "vật lộn, chật vật",
+   "cap": "B2",
+   "viDu": "Many students struggle with English pronunciation.",
+   "viDuNghia": "Nhiều sinh viên chật vật với phát âm tiếng Anh.",
+   "cumTu": [
+    "struggle with",
+    "struggle to do",
+    "struggle for",
+    "struggle financially"
+   ],
+   "hoTu": [
+    "struggle (n)"
+   ],
+   "ghiChu": "struggle TO do / struggle WITH something."
+  },
+  {
+   "chu": "satisfy",
+   "doc": "/ˈsætɪsfaɪ/",
+   "loai": "v",
+   "nghia": "làm hài lòng, đáp ứng",
+   "cap": "B2",
+   "viDu": "It is hard to satisfy every customer.",
+   "viDuNghia": "Thật khó làm hài lòng mọi khách hàng.",
+   "cumTu": [
+    "satisfy a need",
+    "satisfy customers",
+    "satisfy demand",
+    "satisfy requirements"
+   ],
+   "hoTu": [
+    "satisfaction (n)",
+    "satisfied (adj)",
+    "satisfying (adj)",
+    "satisfactory (adj)"
+   ]
+  },
+  {
+   "chu": "relief",
+   "doc": "/rɪˈliːf/",
+   "loai": "n",
+   "nghia": "sự nhẹ nhõm; sự cứu trợ",
+   "cap": "B2",
+   "viDu": "It was a great relief to hear that everyone was safe.",
+   "viDuNghia": "Thật nhẹ nhõm khi nghe tin mọi người đều an toàn.",
+   "cumTu": [
+    "a great relief",
+    "sigh of relief",
+    "pain relief",
+    "relief from"
+   ],
+   "hoTu": [
+    "relieve (v)",
+    "relieved (adj)"
+   ],
+   "ghiChu": "\"What a relief!\" = Nhẹ cả người!"
+  },
+  {
+   "chu": "elsewhere",
+   "doc": "/ˌelsˈweə(r)/",
+   "loai": "adv",
+   "nghia": "ở nơi khác",
+   "cap": "B2",
+   "viDu": "If the shop is closed, we will have to look elsewhere.",
+   "viDuNghia": "Nếu cửa hàng đóng cửa, chúng ta sẽ phải tìm ở nơi khác.",
+   "cumTu": [
+    "go elsewhere",
+    "look elsewhere",
+    "elsewhere in the world"
+   ]
+  },
+  {
+   "chu": "slight",
+   "doc": "/slaɪt/",
+   "loai": "adj",
+   "nghia": "nhẹ, không đáng kể",
+   "cap": "B2",
+   "viDu": "There was a slight increase in sales last month.",
+   "viDuNghia": "Doanh số tháng trước tăng nhẹ.",
+   "cumTu": [
+    "slight increase",
+    "slight change",
+    "slight difference",
+    "slight problem"
+   ],
+   "hoTu": [
+    "slightly (adv)"
+   ],
+   "ghiChu": "Task 1: \"a slight increase/decrease\", \"rose slightly\"."
+  },
+  {
+   "chu": "rapid",
+   "doc": "/ˈræpɪd/",
+   "loai": "adj",
+   "nghia": "nhanh chóng",
+   "cap": "B2",
+   "viDu": "The city has seen rapid growth in the last ten years.",
+   "viDuNghia": "Thành phố đã tăng trưởng nhanh trong mười năm qua.",
+   "cumTu": [
+    "rapid growth",
+    "rapid change",
+    "rapid increase",
+    "rapid development"
+   ],
+   "hoTu": [
+    "rapidly (adv)"
+   ],
+   "ghiChu": "Task 1: \"a rapid rise\", \"grew rapidly\"."
+  },
+  {
+   "chu": "minor",
+   "doc": "/ˈmaɪnə(r)/",
+   "loai": "adj",
+   "nghia": "nhỏ, không quan trọng",
+   "cap": "B2",
+   "viDu": "We found a few minor errors in the report.",
+   "viDuNghia": "Chúng tôi tìm thấy vài lỗi nhỏ trong báo cáo.",
+   "cumTu": [
+    "minor problem",
+    "minor change",
+    "minor injury",
+    "minor role"
+   ],
+   "hoTu": [
+    "minority (n)"
+   ],
+   "ghiChu": "Trái nghĩa: major."
+  },
+  {
+   "chu": "massive",
+   "doc": "/ˈmæsɪv/",
+   "loai": "adj",
+   "nghia": "to lớn, đồ sộ",
+   "cap": "B2",
+   "viDu": "Social media has had a massive impact on communication.",
+   "viDuNghia": "Mạng xã hội đã có tác động to lớn đến giao tiếp.",
+   "cumTu": [
+    "massive impact",
+    "massive increase",
+    "massive amount",
+    "massive building"
+   ],
+   "hoTu": [
+    "massively (adv)",
+    "mass (n)"
+   ]
+  },
+  {
+   "chu": "ridiculous",
+   "doc": "/rɪˈdɪkjələs/",
+   "loai": "adj",
+   "nghia": "lố bịch, nực cười",
+   "cap": "B2",
+   "viDu": "It is ridiculous to pay so much for a cup of coffee.",
+   "viDuNghia": "Trả nhiều tiền như vậy cho một cốc cà phê thật là nực cười.",
+   "cumTu": [
+    "ridiculous idea",
+    "ridiculous price",
+    "look ridiculous",
+    "absolutely ridiculous"
+   ],
+   "hoTu": [
+    "ridiculously (adv)",
+    "ridicule (v)"
+   ]
+  },
+  {
+   "chu": "awkward",
+   "doc": "/ˈɔːkwəd/",
+   "loai": "adj",
+   "nghia": "ngượng ngùng, khó xử; vụng về",
+   "cap": "B2",
+   "viDu": "There was an awkward silence after his question.",
+   "viDuNghia": "Có một khoảng lặng ngượng ngùng sau câu hỏi của anh ấy.",
+   "cumTu": [
+    "awkward silence",
+    "awkward situation",
+    "feel awkward",
+    "awkward question"
+   ],
+   "hoTu": [
+    "awkwardly (adv)"
+   ]
+  },
+  {
+   "chu": "eager",
+   "doc": "/ˈiːɡə(r)/",
+   "loai": "adj",
+   "nghia": "háo hức, hăm hở",
+   "cap": "B2",
+   "viDu": "I am eager to learn new skills in this role.",
+   "viDuNghia": "Tôi rất háo hức được học kỹ năng mới ở vị trí này.",
+   "cumTu": [
+    "eager to do",
+    "eager to learn",
+    "eager for"
+   ],
+   "hoTu": [
+    "eagerly (adv)",
+    "eagerness (n)"
+   ],
+   "ghiChu": "\"eager to learn\" — cụm ghi điểm khi phỏng vấn."
+  },
+  {
+   "chu": "hesitate",
+   "doc": "/ˈhezɪteɪt/",
+   "loai": "v",
+   "nghia": "do dự, ngần ngại",
+   "cap": "B2",
+   "viDu": "Please do not hesitate to contact me if you need help.",
+   "viDuNghia": "Xin đừng ngần ngại liên hệ với tôi nếu bạn cần giúp đỡ.",
+   "cumTu": [
+    "do not hesitate to",
+    "hesitate to do",
+    "hesitate for a moment"
+   ],
+   "hoTu": [
+    "hesitation (n)",
+    "hesitant (adj)"
+   ],
+   "ghiChu": "Câu kết email kinh điển: \"Please do not hesitate to contact me.\""
+  },
+  {
+   "chu": "inspire",
+   "doc": "/ɪnˈspaɪə(r)/",
+   "loai": "v",
+   "nghia": "truyền cảm hứng",
+   "cap": "B2",
+   "viDu": "Good teachers inspire their students to learn more.",
+   "viDuNghia": "Giáo viên giỏi truyền cảm hứng cho học sinh học nhiều hơn.",
+   "cumTu": [
+    "inspire somebody to do",
+    "inspire confidence",
+    "be inspired by"
+   ],
+   "hoTu": [
+    "inspiration (n)",
+    "inspiring (adj)",
+    "inspired (adj)"
+   ]
+  },
+  {
+   "chu": "embarrass",
+   "doc": "/ɪmˈbærəs/",
+   "loai": "v",
+   "nghia": "làm xấu hổ, làm ngượng",
+   "cap": "B2",
+   "viDu": "Please do not embarrass me in front of my friends.",
+   "viDuNghia": "Xin đừng làm tôi xấu hổ trước mặt bạn bè.",
+   "cumTu": [
+    "embarrass somebody",
+    "embarrass yourself"
+   ],
+   "hoTu": [
+    "embarrassed (adj)",
+    "embarrassing (adj)",
+    "embarrassment (n)"
+   ],
+   "ghiChu": "Chính tả: hai r, hai s."
+  },
+  {
+   "chu": "forbid",
+   "doc": "/fəˈbɪd/",
+   "loai": "v",
+   "nghia": "cấm",
+   "cap": "B2",
+   "viDu": "Many schools forbid students to use phones in class.",
+   "viDuNghia": "Nhiều trường cấm học sinh dùng điện thoại trong lớp.",
+   "cumTu": [
+    "forbid somebody to do",
+    "forbid somebody from doing",
+    "strictly forbidden"
+   ],
+   "hoTu": [
+    "forbidden (adj)"
+   ],
+   "ghiChu": "Quá khứ: forbade, forbidden."
+  },
+  {
+   "chu": "threaten",
+   "doc": "/ˈθretn/",
+   "loai": "v",
+   "nghia": "đe doạ",
+   "cap": "B2",
+   "viDu": "Rising sea levels threaten many coastal cities.",
+   "viDuNghia": "Mực nước biển dâng đe doạ nhiều thành phố ven biển.",
+   "cumTu": [
+    "threaten to do",
+    "threaten the environment",
+    "threaten somebody with"
+   ],
+   "hoTu": [
+    "threat (n)",
+    "threatening (adj)"
+   ]
+  },
+  {
+   "chu": "burst",
+   "doc": "/bɜːst/",
+   "loai": "v",
+   "nghia": "nổ tung, vỡ tung; bật (khóc, cười)",
+   "cap": "B2",
+   "viDu": "The pipe may burst if the water freezes.",
+   "viDuNghia": "Đường ống có thể vỡ nếu nước đóng băng.",
+   "cumTu": [
+    "burst into tears",
+    "burst out laughing",
+    "burst into flames",
+    "pipe burst"
+   ],
+   "hoTu": [
+    "burst (n)"
+   ],
+   "ghiChu": "Ba dạng giống nhau: burst, burst, burst."
+  },
+  {
+   "chu": "beg",
+   "doc": "/beɡ/",
+   "loai": "v",
+   "nghia": "cầu xin, van nài; ăn xin",
+   "cap": "B2",
+   "viDu": "I beg you to think again before you quit.",
+   "viDuNghia": "Tôi xin bạn hãy nghĩ lại trước khi nghỉ việc.",
+   "cumTu": [
+    "beg for",
+    "beg somebody to do",
+    "I beg your pardon"
+   ],
+   "hoTu": [
+    "beggar (n)"
+   ],
+   "ghiChu": "\"I beg your pardon?\" = Xin lỗi, bạn nói gì ạ? (rất lịch sự)."
+  },
+  {
+   "chu": "bet",
+   "doc": "/bet/",
+   "loai": "v",
+   "nghia": "cá, đánh cược; dám chắc",
+   "cap": "B2",
+   "viDu": "I bet you will pass the test easily.",
+   "viDuNghia": "Tôi dám chắc bạn sẽ đỗ bài kiểm tra dễ dàng.",
+   "cumTu": [
+    "I bet",
+    "bet on",
+    "you bet",
+    "bet money"
+   ],
+   "hoTu": [
+    "bet (n)"
+   ],
+   "ghiChu": "\"I bet (that)…\" = tôi chắc là… (thân mật)."
+  },
+  {
+   "chu": "bunch",
+   "doc": "/bʌntʃ/",
+   "loai": "n",
+   "nghia": "chùm, bó; nhóm",
+   "cap": "B2",
+   "viDu": "He bought a bunch of flowers for his mother.",
+   "viDuNghia": "Anh ấy mua một bó hoa tặng mẹ.",
+   "cumTu": [
+    "a bunch of flowers",
+    "a bunch of keys",
+    "a bunch of bananas",
+    "a bunch of people"
+   ],
+   "ghiChu": "Thân mật: \"a bunch of\" = nhiều."
+  },
+  {
+   "chu": "drag",
+   "doc": "/dræɡ/",
+   "loai": "v",
+   "nghia": "kéo lê; kéo (chuột)",
+   "cap": "B2",
+   "viDu": "Drag the file into the folder to copy it.",
+   "viDuNghia": "Kéo tệp vào thư mục để sao chép.",
+   "cumTu": [
+    "drag and drop",
+    "drag a file",
+    "drag on",
+    "drag behind"
+   ],
+   "ghiChu": "IT: \"drag and drop\" = kéo và thả."
+  },
+  {
+   "chu": "evil",
+   "doc": "/ˈiːvl/",
+   "loai": "adj",
+   "nghia": "xấu xa, độc ác",
+   "cap": "B2",
+   "viDu": "The film is about a fight between good and evil forces.",
+   "viDuNghia": "Bộ phim kể về cuộc chiến giữa thế lực thiện và ác.",
+   "cumTu": [
+    "evil spirit",
+    "evil person",
+    "good and evil"
+   ],
+   "hoTu": [
+    "evil (n)"
+   ]
+  },
+  {
+   "chu": "recall",
+   "doc": "/rɪˈkɔːl/",
+   "loai": "v",
+   "nghia": "nhớ lại, hồi tưởng",
+   "cap": "B2",
+   "viDu": "I cannot recall the name of the hotel.",
+   "viDuNghia": "Tôi không nhớ nổi tên khách sạn.",
+   "cumTu": [
+    "recall a name",
+    "recall doing",
+    "as far as I recall"
+   ],
+   "hoTu": [
+    "recall (n)"
+   ],
+   "ghiChu": "Trang trọng hơn \"remember\"."
+  },
+  {
+   "chu": "regard",
+   "doc": "/rɪˈɡɑːd/",
+   "loai": "v",
+   "nghia": "coi như, xem là",
+   "cap": "B2",
+   "viDu": "Many people regard him as the best player in the world.",
+   "viDuNghia": "Nhiều người coi anh ấy là cầu thủ hay nhất thế giới.",
+   "cumTu": [
+    "regard as",
+    "be regarded as",
+    "highly regarded",
+    "with regard to"
+   ],
+   "hoTu": [
+    "regard (n)",
+    "regarding (prep)",
+    "regardless (adv)"
+   ],
+   "ghiChu": "\"be widely regarded as…\" — cụm học thuật hay."
+  }
+ ]
+}

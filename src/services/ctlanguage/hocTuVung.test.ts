@@ -11,7 +11,7 @@ import path from 'node:path';
 import { CAP_CUA } from './chuDeTuThuan.js';
 import { chiTiet } from './nguPhap.js';
 import {
-  _datKhoHtv, baiHtv, lamSachDoc, chiaDeu, dungKhoHtv, khoHtv, khoaTuHtv, loTrinhHtv, napBoSung, nguonCua, tongQuanHtv, type NhomNguonHtv,
+  _datKhoHtv, baiHtv, lamSachDoc, chiaDeu, dungKhoHtv, khoHtv, khoaTuHtv, TU_MOI_NGAY, loTrinhHtv, napBoSung, nguonCua, tongQuanHtv, type NhomNguonHtv,
 } from './hocTuVung.js';
 
 after(() => { setTimeout(() => process.exit(process.exitCode ?? 0), 200).unref(); });
@@ -52,7 +52,21 @@ for (const nn of ['en', 'ja', 'zh'] as const) {
       assert.ok(nho.length <= lt.nhom.length + 6, `${lt.theo}: ${nho.length} bài < 10 từ`);
     }
     const dem = (lt: typeof k.theoCap) => lt.nhom.reduce((s, n) => s + n.bai.reduce((x, b) => x + b.tu.length, 0), 0);
-    assert.equal(dem(k.theoCap), dem(k.theoChuDe));
+    // Theo chủ đề = lộ trình chung + nhóm CHUYÊN NGÀNH (`cn-…`, chỉ ở đây, không lặp từ chung).
+    const chung = { ...k.theoChuDe, nhom: k.theoChuDe.nhom.filter((n) => !n.ma.startsWith('cn-')) };
+    assert.equal(dem(k.theoCap), dem(chung));
+    if (nn === 'en') {
+      assert.ok(k.theoChuDe.nhom.some((n) => n.ma.startsWith('cn-')), 'en: thiếu nhóm chuyên ngành');
+      // Theo ngày: đúng tập từ của theo cấp, id en-ngay-1…N liên tục, mỗi ngày 10–29 từ, chặng theo thứ tự cấp.
+      const ngay = k.theoNgay!;
+      assert.equal(dem(ngay), dem(k.theoCap));
+      const ds = ngay.nhom.flatMap((n) => n.bai);
+      ds.forEach((b, i) => { assert.equal(b.id, `en-ngay-${i + 1}`); assert.ok(b.tu.length >= 10 && b.tu.length < 2 * TU_MOI_NGAY, `${b.id}: ${b.tu.length}`); });
+      assert.deepEqual(ngay.nhom.map((n) => n.ma), k.theoCap.nhom.map((n) => n.ma));
+      assert.equal(k.bai.get('en-ngay-1')!.ke, 'en-ngay-2');
+      // Bài theo cấp cũ vẫn mở được theo id.
+      assert.ok(k.bai.has(k.theoCap.nhom[0]!.bai[0]!.id));
+    } else assert.equal(k.theoNgay, null);
     assert.ok(dem(k.theoCap) > 3000, `${nn}: ${dem(k.theoCap)} từ`);
     // Theo cấp: nhóm đúng thứ tự dễ → khó, mọi từ của nhóm đúng cấp đó.
     const thuTu = k.theoCap.nhom.map((n) => caps.indexOf(n.ma));
@@ -109,7 +123,7 @@ test('bộ bổ sung: thư mục trống / thiếu ⇒ rỗng; tệp đúng khu�
     const ds = napBoSung('en', goc);
     assert.equal(ds.length, 1);
     const ng = nguonCua('en', goc);
-    assert.equal(ng.at(-1)!.ma, 'bs-ielts-thu');
+    assert.equal(ng.filter((g) => !g.chiChuDe).at(-1)!.ma, 'bs-ielts-thu');
     assert.equal(ng.filter((g) => !g.boSung).length > 40, true);
   } finally { fs.rmSync(goc, { recursive: true, force: true }); }
 });

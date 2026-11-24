@@ -1,0 +1,729 @@
+{
+ "ma": "cot-loi-a2-1",
+ "nn": "en",
+ "ten": "Từ chức năng & trạng từ A2",
+ "moTa": "Đại từ phản thân, từ chỉ mức độ, khả năng và vị trí (almost, perhaps, might, such, whole, towards, myself…) — giúp câu nói chính xác và tự nhiên hơn.",
+ "nhom": "giao-tiep",
+ "cap": "A2",
+ "tu": [
+  {
+   "chu": "myself",
+   "doc": "/maɪˈself/",
+   "loai": "pron",
+   "nghia": "chính tôi, bản thân tôi",
+   "cap": "A2",
+   "viDu": "I taught myself to code using online videos.",
+   "viDuNghia": "Tôi tự học lập trình bằng video trên mạng.",
+   "cumTu": [
+    "by myself",
+    "introduce myself",
+    "enjoy myself"
+   ],
+   "ghiChu": "\"by myself\" = một mình, tự mình."
+  },
+  {
+   "chu": "himself",
+   "doc": "/hɪmˈself/",
+   "loai": "pron",
+   "nghia": "chính anh ấy, bản thân anh ấy",
+   "cap": "A2",
+   "viDu": "He cut himself while cooking dinner.",
+   "viDuNghia": "Anh ấy bị đứt tay khi đang nấu bữa tối.",
+   "cumTu": [
+    "by himself",
+    "hurt himself",
+    "himself and others"
+   ]
+  },
+  {
+   "chu": "herself",
+   "doc": "/hɜːˈself/",
+   "loai": "pron",
+   "nghia": "chính cô ấy, bản thân cô ấy",
+   "cap": "A2",
+   "viDu": "She made the dress herself.",
+   "viDuNghia": "Cô ấy tự may chiếc váy đó.",
+   "cumTu": [
+    "by herself",
+    "look after herself",
+    "herself and others"
+   ]
+  },
+  {
+   "chu": "itself",
+   "doc": "/ɪtˈself/",
+   "loai": "pron",
+   "nghia": "chính nó, bản thân nó",
+   "cap": "A2",
+   "viDu": "The program updates itself every night.",
+   "viDuNghia": "Chương trình tự cập nhật mỗi đêm.",
+   "cumTu": [
+    "by itself",
+    "in itself",
+    "repeat itself"
+   ]
+  },
+  {
+   "chu": "ourselves",
+   "doc": "/ˌaʊəˈselvz/",
+   "loai": "pron",
+   "nghia": "chính chúng tôi, bản thân chúng ta",
+   "cap": "A2",
+   "viDu": "We painted the whole flat ourselves.",
+   "viDuNghia": "Chúng tôi tự sơn cả căn hộ.",
+   "cumTu": [
+    "by ourselves",
+    "enjoy ourselves",
+    "help ourselves"
+   ]
+  },
+  {
+   "chu": "themselves",
+   "doc": "/ðəmˈselvz/",
+   "loai": "pron",
+   "nghia": "chính họ, bản thân họ",
+   "cap": "A2",
+   "viDu": "Young children cannot look after themselves.",
+   "viDuNghia": "Trẻ nhỏ không thể tự chăm sóc bản thân.",
+   "cumTu": [
+    "by themselves",
+    "among themselves",
+    "enjoy themselves"
+   ]
+  },
+  {
+   "chu": "mine",
+   "doc": "/maɪn/",
+   "loai": "pron",
+   "nghia": "cái của tôi",
+   "cap": "A2",
+   "viDu": "This seat is mine, and that one is yours.",
+   "viDuNghia": "Chỗ ngồi này là của tôi, còn chỗ kia là của bạn.",
+   "cumTu": [
+    "a friend of mine",
+    "is mine"
+   ],
+   "ghiChu": "Không có danh từ theo sau: \"It is mine\" (không nói \"mine book\")."
+  },
+  {
+   "chu": "yours",
+   "doc": "/jɔːz/",
+   "loai": "pron",
+   "nghia": "cái của bạn",
+   "cap": "A2",
+   "viDu": "Is this pen yours?",
+   "viDuNghia": "Cây bút này của bạn à?",
+   "cumTu": [
+    "a friend of yours",
+    "Yours sincerely",
+    "Yours faithfully"
+   ],
+   "ghiChu": "Kết thư trang trọng: \"Yours sincerely\" (biết tên người nhận), \"Yours faithfully\" (không biết tên)."
+  },
+  {
+   "chu": "hers",
+   "doc": "/hɜːz/",
+   "loai": "pron",
+   "nghia": "cái của cô ấy",
+   "cap": "A2",
+   "viDu": "My laptop is old, but hers is brand new.",
+   "viDuNghia": "Laptop của tôi cũ, nhưng của cô ấy thì mới tinh.",
+   "cumTu": [
+    "a friend of hers",
+    "is hers"
+   ],
+   "ghiChu": "Không có dấu nháy: hers."
+  },
+  {
+   "chu": "whose",
+   "doc": "/huːz/",
+   "loai": "pron",
+   "nghia": "của ai; mà … của người ấy",
+   "cap": "A2",
+   "viDu": "Whose bag is this?",
+   "viDuNghia": "Cái túi này của ai?",
+   "cumTu": [
+    "whose turn",
+    "whose idea",
+    "a friend whose"
+   ],
+   "ghiChu": "Dễ nhầm với \"who's\" (= who is / who has)."
+  },
+  {
+   "chu": "anybody",
+   "doc": "/ˈenibɒdi/",
+   "loai": "pron",
+   "nghia": "bất kỳ ai (= anyone)",
+   "cap": "A2",
+   "viDu": "Is there anybody in the office today?",
+   "viDuNghia": "Hôm nay có ai ở văn phòng không?",
+   "cumTu": [
+    "anybody else",
+    "anybody can",
+    "if anybody"
+   ]
+  },
+  {
+   "chu": "none",
+   "doc": "/nʌn/",
+   "loai": "pron",
+   "nghia": "không ai, không cái nào",
+   "cap": "A2",
+   "viDu": "None of my friends live near me.",
+   "viDuNghia": "Không người bạn nào của tôi sống gần tôi.",
+   "cumTu": [
+    "none of",
+    "none at all",
+    "second to none"
+   ],
+   "ghiChu": "none of + danh từ số nhiều/không đếm được."
+  },
+  {
+   "chu": "either",
+   "doc": "/ˈaɪðə(r)/",
+   "loai": "pron",
+   "nghia": "một trong hai; cũng không",
+   "cap": "A2",
+   "viDu": "You can pay either by card or in cash.",
+   "viDuNghia": "Bạn có thể trả bằng thẻ hoặc bằng tiền mặt.",
+   "cumTu": [
+    "either … or",
+    "either way",
+    "either side",
+    "not … either"
+   ],
+   "ghiChu": "Cuối câu phủ định dùng \"either\" thay cho \"too\": I don't like it either."
+  },
+  {
+   "chu": "neither",
+   "doc": "/ˈnaɪðə(r)/",
+   "loai": "pron",
+   "nghia": "không cái nào trong hai; cũng không",
+   "cap": "A2",
+   "viDu": "Neither answer is correct.",
+   "viDuNghia": "Cả hai câu trả lời đều không đúng.",
+   "cumTu": [
+    "neither … nor",
+    "neither of",
+    "me neither"
+   ],
+   "ghiChu": "neither + danh từ số ít; đã mang nghĩa phủ định nên động từ ở khẳng định."
+  },
+  {
+   "chu": "such",
+   "doc": "/sʌtʃ/",
+   "loai": "pron",
+   "nghia": "như thế, như vậy; thật là",
+   "cap": "A2",
+   "viDu": "It was such a difficult exam that many students failed.",
+   "viDuNghia": "Đó là một kỳ thi khó đến nỗi nhiều sinh viên trượt.",
+   "cumTu": [
+    "such as",
+    "such a",
+    "such … that",
+    "as such"
+   ],
+   "ghiChu": "such + (a) + tính từ + danh từ; so + tính từ: such a good film / so good."
+  },
+  {
+   "chu": "whole",
+   "doc": "/həʊl/",
+   "loai": "adj",
+   "nghia": "toàn bộ, cả",
+   "cap": "A2",
+   "viDu": "I spent the whole weekend fixing bugs.",
+   "viDuNghia": "Tôi dành cả cuối tuần để sửa lỗi.",
+   "cumTu": [
+    "the whole day",
+    "the whole world",
+    "as a whole",
+    "on the whole"
+   ],
+   "hoTu": [
+    "wholly (adv)"
+   ],
+   "ghiChu": "\"On the whole\" = nhìn chung — dùng mở đầu kết luận."
+  },
+  {
+   "chu": "less",
+   "doc": "/les/",
+   "loai": "pron",
+   "nghia": "ít hơn",
+   "cap": "A2",
+   "viDu": "You should spend less time on social media.",
+   "viDuNghia": "Bạn nên dành ít thời gian hơn cho mạng xã hội.",
+   "cumTu": [
+    "less than",
+    "less and less",
+    "more or less",
+    "much less"
+   ],
+   "ghiChu": "less + danh từ không đếm được; fewer + danh từ đếm được (fewer cars)."
+  },
+  {
+   "chu": "least",
+   "doc": "/liːst/",
+   "loai": "pron",
+   "nghia": "ít nhất",
+   "cap": "A2",
+   "viDu": "This is the least expensive phone in the shop.",
+   "viDuNghia": "Đây là chiếc điện thoại ít đắt nhất trong cửa hàng.",
+   "cumTu": [
+    "at least",
+    "the least",
+    "last but not least",
+    "not in the least"
+   ]
+  },
+  {
+   "chu": "might",
+   "doc": "/maɪt/",
+   "loai": "v",
+   "nghia": "có thể, có lẽ (khả năng thấp hơn may)",
+   "cap": "A2",
+   "viDu": "It might rain later, so take a coat.",
+   "viDuNghia": "Lát nữa trời có thể mưa, nên hãy mang áo khoác.",
+   "cumTu": [
+    "might be",
+    "might have",
+    "might not",
+    "might as well"
+   ],
+   "ghiChu": "Dùng \"might/may\" để nói thận trọng (hedging) trong Writing."
+  },
+  {
+   "chu": "shall",
+   "doc": "/ʃæl/",
+   "loai": "v",
+   "nghia": "sẽ; dùng để đề nghị với I/we",
+   "cap": "A2",
+   "viDu": "Shall we start the meeting now?",
+   "viDuNghia": "Chúng ta bắt đầu cuộc họp bây giờ nhé?",
+   "cumTu": [
+    "shall we…?",
+    "shall I…?",
+    "we shall see"
+   ],
+   "ghiChu": "\"Shall I/we…?\" dùng để đề nghị, gợi ý một cách lịch sự."
+  },
+  {
+   "chu": "able",
+   "doc": "/ˈeɪbl/",
+   "loai": "adj",
+   "nghia": "có thể, có khả năng",
+   "cap": "A2",
+   "viDu": "I was not able to finish the test on time.",
+   "viDuNghia": "Tôi đã không thể làm xong bài kiểm tra đúng giờ.",
+   "cumTu": [
+    "be able to",
+    "able to do",
+    "better able"
+   ],
+   "hoTu": [
+    "ability (n)",
+    "enable (v)",
+    "unable (adj)"
+   ],
+   "ghiChu": "\"be able to\" thay cho \"can\" ở các thì mà can không có (will be able to, have been able to)."
+  },
+  {
+   "chu": "almost",
+   "doc": "/ˈɔːlməʊst/",
+   "loai": "adv",
+   "nghia": "gần như, hầu như",
+   "cap": "A2",
+   "viDu": "I have almost finished my homework.",
+   "viDuNghia": "Tôi gần làm xong bài tập rồi.",
+   "cumTu": [
+    "almost all",
+    "almost every",
+    "almost always",
+    "almost never"
+   ],
+   "ghiChu": "\"almost all students\" (không nói \"almost students\")."
+  },
+  {
+   "chu": "nearly",
+   "doc": "/ˈnɪəli/",
+   "loai": "adv",
+   "nghia": "gần, suýt",
+   "cap": "A2",
+   "viDu": "It took nearly three hours to get there.",
+   "viDuNghia": "Mất gần ba tiếng để đến đó.",
+   "cumTu": [
+    "nearly all",
+    "nearly always",
+    "not nearly",
+    "very nearly"
+   ],
+   "hoTu": [
+    "near (adj, prep)"
+   ],
+   "ghiChu": "Dùng tốt khi mô tả số liệu: nearly half, nearly 40%."
+  },
+  {
+   "chu": "perhaps",
+   "doc": "/pəˈhæps/",
+   "loai": "adv",
+   "nghia": "có lẽ",
+   "cap": "A2",
+   "viDu": "Perhaps we should ask the teacher for help.",
+   "viDuNghia": "Có lẽ chúng ta nên nhờ giáo viên giúp.",
+   "cumTu": [
+    "perhaps not",
+    "or perhaps",
+    "perhaps because"
+   ],
+   "ghiChu": "Trang trọng hơn \"maybe\" — hợp văn viết."
+  },
+  {
+   "chu": "rather",
+   "doc": "/ˈrɑːðə(r)/",
+   "loai": "adv",
+   "nghia": "khá, hơi; thà … hơn",
+   "cap": "A2",
+   "viDu": "The film was rather long, but I enjoyed it.",
+   "viDuNghia": "Bộ phim khá dài nhưng tôi thích.",
+   "cumTu": [
+    "rather than",
+    "would rather",
+    "or rather",
+    "rather difficult"
+   ],
+   "ghiChu": "\"would rather + V\" = thích … hơn: I would rather stay at home."
+  },
+  {
+   "chu": "especially",
+   "doc": "/ɪˈspeʃəli/",
+   "loai": "adv",
+   "nghia": "đặc biệt là, nhất là",
+   "cap": "A2",
+   "viDu": "I love Vietnamese food, especially pho.",
+   "viDuNghia": "Tôi mê đồ ăn Việt Nam, nhất là phở.",
+   "cumTu": [
+    "especially for",
+    "especially when",
+    "especially important"
+   ],
+   "ghiChu": "Không đứng đầu câu trong văn viết trang trọng."
+  },
+  {
+   "chu": "extremely",
+   "doc": "/ɪkˈstriːmli/",
+   "loai": "adv",
+   "nghia": "cực kỳ, vô cùng",
+   "cap": "A2",
+   "viDu": "The exam was extremely difficult.",
+   "viDuNghia": "Kỳ thi cực kỳ khó.",
+   "cumTu": [
+    "extremely important",
+    "extremely useful",
+    "extremely difficult"
+   ],
+   "hoTu": [
+    "extreme (adj, n)"
+   ]
+  },
+  {
+   "chu": "definitely",
+   "doc": "/ˈdefɪnətli/",
+   "loai": "adv",
+   "nghia": "chắc chắn, nhất định",
+   "cap": "A2",
+   "viDu": "I will definitely come to your party.",
+   "viDuNghia": "Tôi chắc chắn sẽ đến bữa tiệc của bạn.",
+   "cumTu": [
+    "definitely not",
+    "will definitely",
+    "most definitely"
+   ],
+   "hoTu": [
+    "definite (adj)"
+   ],
+   "ghiChu": "Hay viết sai thành \"definately\"."
+  },
+  {
+   "chu": "certainly",
+   "doc": "/ˈsɜːtnli/",
+   "loai": "adv",
+   "nghia": "chắc chắn; tất nhiên rồi",
+   "cap": "A2",
+   "viDu": "This is certainly the best phone I have ever had.",
+   "viDuNghia": "Đây chắc chắn là chiếc điện thoại tốt nhất tôi từng có.",
+   "cumTu": [
+    "certainly not",
+    "almost certainly",
+    "will certainly"
+   ],
+   "hoTu": [
+    "certain (adj)",
+    "certainty (n)"
+   ]
+  },
+  {
+   "chu": "suddenly",
+   "doc": "/ˈsʌdənli/",
+   "loai": "adv",
+   "nghia": "đột nhiên, bất ngờ",
+   "cap": "A2",
+   "viDu": "Suddenly the lights went out.",
+   "viDuNghia": "Đột nhiên đèn tắt hết.",
+   "cumTu": [
+    "suddenly realize",
+    "stop suddenly",
+    "suddenly appear"
+   ],
+   "hoTu": [
+    "sudden (adj)"
+   ]
+  },
+  {
+   "chu": "unfortunately",
+   "doc": "/ʌnˈfɔːtʃənətli/",
+   "loai": "adv",
+   "nghia": "thật không may, đáng tiếc là",
+   "cap": "A2",
+   "viDu": "Unfortunately, I cannot come to the meeting tomorrow.",
+   "viDuNghia": "Thật tiếc, tôi không thể dự cuộc họp ngày mai.",
+   "cumTu": [
+    "unfortunately for",
+    "unfortunately not",
+    "but unfortunately"
+   ],
+   "hoTu": [
+    "fortunately (adv)",
+    "fortunate (adj)",
+    "fortune (n)"
+   ],
+   "ghiChu": "Mở đầu lịch sự khi báo tin xấu trong email."
+  },
+  {
+   "chu": "mostly",
+   "doc": "/ˈməʊstli/",
+   "loai": "adv",
+   "nghia": "chủ yếu, phần lớn",
+   "cap": "A2",
+   "viDu": "My classmates are mostly from the north of Vietnam.",
+   "viDuNghia": "Bạn cùng lớp của tôi chủ yếu đến từ miền Bắc Việt Nam.",
+   "cumTu": [
+    "mostly because",
+    "mostly used",
+    "mostly made of"
+   ]
+  },
+  {
+   "chu": "abroad",
+   "doc": "/əˈbrɔːd/",
+   "loai": "adv",
+   "nghia": "ở nước ngoài, ra nước ngoài",
+   "cap": "A2",
+   "viDu": "She wants to study abroad after university.",
+   "viDuNghia": "Cô ấy muốn du học sau khi tốt nghiệp đại học.",
+   "cumTu": [
+    "study abroad",
+    "go abroad",
+    "live abroad",
+    "work abroad"
+   ],
+   "ghiChu": "Không dùng giới từ: go abroad (không nói \"go to abroad\")."
+  },
+  {
+   "chu": "alone",
+   "doc": "/əˈləʊn/",
+   "loai": "adj",
+   "nghia": "một mình",
+   "cap": "A2",
+   "viDu": "He lives alone in a small flat.",
+   "viDuNghia": "Anh ấy sống một mình trong một căn hộ nhỏ.",
+   "cumTu": [
+    "live alone",
+    "leave me alone",
+    "all alone",
+    "travel alone"
+   ],
+   "ghiChu": "alone = một mình (trung tính); lonely = cô đơn (buồn)."
+  },
+  {
+   "chu": "anywhere",
+   "doc": "/ˈeniweə(r)/",
+   "loai": "adv",
+   "nghia": "bất cứ đâu; ở đâu (câu hỏi, phủ định)",
+   "cap": "A2",
+   "viDu": "I cannot find my glasses anywhere.",
+   "viDuNghia": "Tôi không tìm thấy kính ở đâu cả.",
+   "cumTu": [
+    "anywhere else",
+    "go anywhere",
+    "anywhere in the world"
+   ]
+  },
+  {
+   "chu": "everywhere",
+   "doc": "/ˈevriweə(r)/",
+   "loai": "adv",
+   "nghia": "ở khắp mọi nơi",
+   "cap": "A2",
+   "viDu": "Free wifi is available everywhere in the building.",
+   "viDuNghia": "Wifi miễn phí có ở khắp nơi trong toà nhà.",
+   "cumTu": [
+    "everywhere else",
+    "go everywhere",
+    "look everywhere"
+   ]
+  },
+  {
+   "chu": "somewhere",
+   "doc": "/ˈsʌmweə(r)/",
+   "loai": "adv",
+   "nghia": "ở đâu đó",
+   "cap": "A2",
+   "viDu": "Let us go somewhere quiet to talk.",
+   "viDuNghia": "Mình đi đâu đó yên tĩnh để nói chuyện đi.",
+   "cumTu": [
+    "somewhere else",
+    "somewhere near",
+    "go somewhere"
+   ]
+  },
+  {
+   "chu": "nowhere",
+   "doc": "/ˈnəʊweə(r)/",
+   "loai": "adv",
+   "nghia": "không ở đâu cả",
+   "cap": "A2",
+   "viDu": "There is nowhere to park near the station.",
+   "viDuNghia": "Không có chỗ nào để đỗ xe gần nhà ga.",
+   "cumTu": [
+    "nowhere to go",
+    "nowhere near",
+    "out of nowhere",
+    "get nowhere"
+   ]
+  },
+  {
+   "chu": "against",
+   "doc": "/əˈɡenst/",
+   "loai": "prep",
+   "nghia": "chống lại, phản đối; tựa vào",
+   "cap": "A2",
+   "viDu": "Many people are against the new law.",
+   "viDuNghia": "Nhiều người phản đối luật mới.",
+   "cumTu": [
+    "against the law",
+    "play against",
+    "be against",
+    "against the wall"
+   ],
+   "ghiChu": "\"for and against\" = ủng hộ và phản đối — hay gặp trong bài luận thảo luận."
+  },
+  {
+   "chu": "along",
+   "doc": "/əˈlɒŋ/",
+   "loai": "prep",
+   "nghia": "dọc theo",
+   "cap": "A2",
+   "viDu": "We walked along the river in the evening.",
+   "viDuNghia": "Chúng tôi đi bộ dọc bờ sông vào buổi tối.",
+   "cumTu": [
+    "along the road",
+    "along with",
+    "get along",
+    "all along"
+   ]
+  },
+  {
+   "chu": "among",
+   "doc": "/əˈmʌŋ/",
+   "loai": "prep",
+   "nghia": "ở giữa, trong số (từ ba trở lên)",
+   "cap": "A2",
+   "viDu": "This game is popular among teenagers.",
+   "viDuNghia": "Trò chơi này phổ biến trong giới thanh thiếu niên.",
+   "cumTu": [
+    "among young people",
+    "among the best",
+    "among others",
+    "among friends"
+   ],
+   "ghiChu": "among = giữa nhiều; between = giữa hai."
+  },
+  {
+   "chu": "onto",
+   "doc": "/ˈɒntuː/",
+   "loai": "prep",
+   "nghia": "lên trên (có chuyển động)",
+   "cap": "A2",
+   "viDu": "The cat jumped onto the table.",
+   "viDuNghia": "Con mèo nhảy lên bàn.",
+   "cumTu": [
+    "get onto",
+    "move onto",
+    "onto the screen"
+   ]
+  },
+  {
+   "chu": "towards",
+   "doc": "/təˈwɔːdz/",
+   "loai": "prep",
+   "nghia": "về phía, hướng tới",
+   "cap": "A2",
+   "viDu": "She walked towards the door.",
+   "viDuNghia": "Cô ấy bước về phía cửa.",
+   "cumTu": [
+    "towards the end",
+    "attitude towards",
+    "move towards",
+    "step towards"
+   ],
+   "ghiChu": "Anh-Mỹ thường dùng \"toward\"."
+  },
+  {
+   "chu": "per",
+   "doc": "/pɜː(r)/",
+   "loai": "prep",
+   "nghia": "mỗi, cho mỗi",
+   "cap": "A2",
+   "viDu": "The room costs fifty dollars per night.",
+   "viDuNghia": "Phòng có giá năm mươi đô la mỗi đêm.",
+   "cumTu": [
+    "per day",
+    "per person",
+    "per cent",
+    "per hour"
+   ],
+   "ghiChu": "Hay gặp trong số liệu Task 1: per year, per person."
+  },
+  {
+   "chu": "while",
+   "doc": "/waɪl/",
+   "loai": "conj",
+   "nghia": "trong khi; trong lúc",
+   "cap": "A2",
+   "viDu": "I listen to podcasts while I am cooking.",
+   "viDuNghia": "Tôi nghe podcast trong lúc nấu ăn.",
+   "cumTu": [
+    "while doing",
+    "for a while",
+    "after a while",
+    "while others"
+   ],
+   "ghiChu": "Còn dùng để đối lập: While some people agree, others do not."
+  },
+  {
+   "chu": "bit",
+   "doc": "/bɪt/",
+   "loai": "n",
+   "nghia": "một chút, một ít; mẩu nhỏ",
+   "cap": "A2",
+   "viDu": "I am a bit tired, so I will go to bed early.",
+   "viDuNghia": "Tôi hơi mệt nên sẽ đi ngủ sớm.",
+   "cumTu": [
+    "a bit",
+    "a little bit",
+    "a bit of",
+    "quite a bit"
+   ],
+   "ghiChu": "\"a bit\" thân mật; trong văn viết dùng \"slightly\" hoặc \"somewhat\"."
+  }
+ ]
+}

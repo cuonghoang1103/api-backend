@@ -1,0 +1,867 @@
+{
+  "ma": "nang-cao-c2-1",
+  "nn": "en",
+  "ten": "Chặng C2 · Động từ chính xác cho band 8",
+  "moTa": "Động từ C2 để lập luận, phản biện và diễn tả quan hệ nhân quả thật chính xác (corroborate, engender, preclude, substantiate, supersede, thwart…) — dùng một cách chọn lọc ở Writing Task 2 và khi đọc bài học thuật khó.",
+  "nhom": "ielts",
+  "cap": "C2",
+  "tu": [
+    {
+      "chu": "acquiesce",
+      "doc": "/ˌækwiˈes/",
+      "loai": "v",
+      "nghia": "bằng lòng một cách miễn cưỡng, ưng thuận",
+      "cap": "C2",
+      "viDu": "The board eventually acquiesced in the plan, though several members had doubts.",
+      "viDuNghia": "Hội đồng rốt cuộc cũng miễn cưỡng ưng thuận kế hoạch, dù vài thành viên còn nghi ngại.",
+      "cumTu": [
+        "acquiesce in something",
+        "acquiesce to demands",
+        "quietly acquiesce"
+      ],
+      "hoTu": [
+        "acquiescence (n)",
+        "acquiescent (adj)"
+      ],
+      "ghiChu": "Đi với \"in\" hoặc \"to\"; ngụ ý đồng ý mà không thật sự muốn."
+    },
+    {
+      "chu": "ameliorate",
+      "doc": "/əˈmiːliəreɪt/",
+      "loai": "v",
+      "nghia": "cải thiện, làm bớt tồi tệ",
+      "cap": "C2",
+      "viDu": "Planting trees can ameliorate the effects of urban heat.",
+      "viDuNghia": "Trồng cây có thể làm dịu tác động của nhiệt đô thị.",
+      "cumTu": [
+        "ameliorate the effects",
+        "ameliorate conditions",
+        "ameliorate the situation"
+      ],
+      "hoTu": [
+        "amelioration (n)"
+      ],
+      "ghiChu": "Trang trọng hơn \"improve\"; dùng cho tình trạng xấu, không dùng cho kỹ năng."
+    },
+    {
+      "chu": "belie",
+      "doc": "/bɪˈlaɪ/",
+      "loai": "v",
+      "nghia": "che giấu, tạo ấn tượng sai về",
+      "cap": "C2",
+      "viDu": "Her calm voice belied the pressure she was under.",
+      "viDuNghia": "Giọng nói điềm tĩnh của cô che giấu áp lực cô đang chịu.",
+      "cumTu": [
+        "belie the fact that",
+        "belie its age",
+        "belie the claim"
+      ],
+      "ghiChu": "Chủ ngữ là vẻ ngoài, tân ngữ là sự thật bị che."
+    },
+    {
+      "chu": "circumvent",
+      "doc": "/ˌsɜːkəmˈvent/",
+      "loai": "v",
+      "nghia": "lách (luật, hạn chế), né tránh",
+      "cap": "C2",
+      "viDu": "Some users install tools to circumvent the company's firewall.",
+      "viDuNghia": "Một số người dùng cài công cụ để lách tường lửa của công ty.",
+      "cumTu": [
+        "circumvent the law",
+        "circumvent restrictions",
+        "circumvent the rules"
+      ],
+      "hoTu": [
+        "circumvention (n)"
+      ]
+    },
+    {
+      "chu": "corroborate",
+      "doc": "/kəˈrɒbəreɪt/",
+      "loai": "v",
+      "nghia": "chứng thực, củng cố bằng chứng",
+      "cap": "C2",
+      "viDu": "Later studies corroborate the original findings.",
+      "viDuNghia": "Các nghiên cứu về sau chứng thực những phát hiện ban đầu.",
+      "cumTu": [
+        "corroborate a claim",
+        "corroborate the findings",
+        "corroborating evidence"
+      ],
+      "hoTu": [
+        "corroboration (n)"
+      ]
+    },
+    {
+      "chu": "disseminate",
+      "doc": "/dɪˈsemɪneɪt/",
+      "loai": "v",
+      "nghia": "phổ biến, truyền bá (thông tin)",
+      "cap": "C2",
+      "viDu": "Social media allows anyone to disseminate information instantly.",
+      "viDuNghia": "Mạng xã hội cho phép bất kỳ ai phổ biến thông tin tức thì.",
+      "cumTu": [
+        "disseminate information",
+        "disseminate knowledge",
+        "widely disseminated"
+      ],
+      "hoTu": [
+        "dissemination (n)"
+      ]
+    },
+    {
+      "chu": "engender",
+      "doc": "/ɪnˈdʒendə(r)/",
+      "loai": "v",
+      "nghia": "sinh ra, gây ra (cảm xúc, tình trạng)",
+      "cap": "C2",
+      "viDu": "Transparent decisions engender trust among employees.",
+      "viDuNghia": "Quyết định minh bạch tạo ra niềm tin trong nhân viên.",
+      "cumTu": [
+        "engender trust",
+        "engender a sense of",
+        "engender debate"
+      ],
+      "ghiChu": "Tân ngữ thường là cảm xúc/trạng thái trừu tượng."
+    },
+    {
+      "chu": "epitomise",
+      "doc": "/ɪˈpɪtəmaɪz/",
+      "loai": "v",
+      "nghia": "là ví dụ điển hình của",
+      "cap": "C2",
+      "viDu": "The smartphone epitomises the pace of technological change.",
+      "viDuNghia": "Điện thoại thông minh là ví dụ điển hình cho tốc độ thay đổi công nghệ.",
+      "cumTu": [
+        "epitomise the spirit of",
+        "epitomise the problem"
+      ],
+      "hoTu": [
+        "epitome (n) /ɪˈpɪtəmi/"
+      ],
+      "ghiChu": "\"the epitome of\" đọc 4 âm tiết, đuôi /mi/."
+    },
+    {
+      "chu": "eschew",
+      "doc": "/ɪsˈtʃuː/",
+      "loai": "v",
+      "nghia": "cố ý tránh, kiêng (vì nguyên tắc)",
+      "cap": "C2",
+      "viDu": "Many young professionals eschew car ownership in favour of public transport.",
+      "viDuNghia": "Nhiều người trẻ đi làm chủ động không sở hữu ô tô mà chọn giao thông công cộng.",
+      "cumTu": [
+        "eschew violence",
+        "eschew the use of",
+        "eschew tradition"
+      ]
+    },
+    {
+      "chu": "extrapolate",
+      "doc": "/ɪkˈstræpəleɪt/",
+      "loai": "v",
+      "nghia": "ngoại suy",
+      "cap": "C2",
+      "viDu": "It is risky to extrapolate national trends from such a small sample.",
+      "viDuNghia": "Ngoại suy xu hướng cả nước từ mẫu nhỏ như vậy là rủi ro.",
+      "cumTu": [
+        "extrapolate from data",
+        "extrapolate a trend",
+        "extrapolate to"
+      ],
+      "hoTu": [
+        "extrapolation (n)"
+      ]
+    },
+    {
+      "chu": "galvanise",
+      "doc": "/ˈɡælvənaɪz/",
+      "loai": "v",
+      "nghia": "khích động, thúc ai hành động",
+      "cap": "C2",
+      "viDu": "The disaster galvanised the public into demanding stricter safety laws.",
+      "viDuNghia": "Thảm hoạ đã thúc công chúng đòi luật an toàn nghiêm hơn.",
+      "cumTu": [
+        "galvanise someone into action",
+        "galvanise support",
+        "galvanise public opinion"
+      ],
+      "ghiChu": "Cấu trúc: galvanise SB INTO (doing) sth."
+    },
+    {
+      "chu": "juxtapose",
+      "doc": "/ˌdʒʌkstəˈpəʊz/",
+      "loai": "v",
+      "nghia": "đặt cạnh nhau để đối chiếu",
+      "cap": "C2",
+      "viDu": "The exhibition juxtaposes old photographs with images of the city today.",
+      "viDuNghia": "Triển lãm đặt ảnh cũ cạnh hình ảnh thành phố ngày nay để đối chiếu.",
+      "cumTu": [
+        "juxtapose A with B",
+        "be juxtaposed against"
+      ],
+      "hoTu": [
+        "juxtaposition (n)"
+      ]
+    },
+    {
+      "chu": "obfuscate",
+      "doc": "/ˈɒbfʌskeɪt/",
+      "loai": "v",
+      "nghia": "cố tình làm cho khó hiểu",
+      "cap": "C2",
+      "viDu": "Long legal terms often obfuscate what users are actually agreeing to.",
+      "viDuNghia": "Điều khoản pháp lý dài dòng thường làm mờ điều người dùng thật sự đồng ý.",
+      "cumTu": [
+        "obfuscate the truth",
+        "obfuscate the issue",
+        "obfuscated code"
+      ],
+      "hoTu": [
+        "obfuscation (n)"
+      ],
+      "ghiChu": "Trong IT: code obfuscation = làm rối mã để khó dịch ngược."
+    },
+    {
+      "chu": "placate",
+      "doc": "/pləˈkeɪt/",
+      "loai": "v",
+      "nghia": "xoa dịu (người đang giận)",
+      "cap": "C2",
+      "viDu": "The discount was an attempt to placate angry customers.",
+      "viDuNghia": "Khoản giảm giá là nỗ lực xoa dịu khách hàng đang giận.",
+      "cumTu": [
+        "placate critics",
+        "placate angry customers",
+        "an attempt to placate"
+      ],
+      "hoTu": [
+        "placatory (adj)"
+      ]
+    },
+    {
+      "chu": "preclude",
+      "doc": "/prɪˈkluːd/",
+      "loai": "v",
+      "nghia": "ngăn không cho xảy ra, loại trừ khả năng",
+      "cap": "C2",
+      "viDu": "A lack of funding does not preclude further research.",
+      "viDuNghia": "Thiếu kinh phí không loại trừ khả năng nghiên cứu tiếp.",
+      "cumTu": [
+        "preclude the possibility of",
+        "preclude someone from doing",
+        "not preclude"
+      ],
+      "hoTu": [
+        "preclusion (n)"
+      ],
+      "ghiChu": "preclude SB FROM doing sth."
+    },
+    {
+      "chu": "relegate",
+      "doc": "/ˈrelɪɡeɪt/",
+      "loai": "v",
+      "nghia": "đẩy xuống vị trí kém quan trọng hơn",
+      "cap": "C2",
+      "viDu": "Art and music are often relegated to the margins of the curriculum.",
+      "viDuNghia": "Mỹ thuật và âm nhạc thường bị đẩy ra rìa chương trình học.",
+      "cumTu": [
+        "relegate something to",
+        "be relegated to the sidelines"
+      ],
+      "hoTu": [
+        "relegation (n)"
+      ],
+      "ghiChu": "Thường bị động: be relegated TO."
+    },
+    {
+      "chu": "stymie",
+      "doc": "/ˈstaɪmi/",
+      "loai": "v",
+      "nghia": "cản trở, làm bế tắc",
+      "cap": "C2",
+      "viDu": "Efforts to reform the system have been stymied by a lack of funds.",
+      "viDuNghia": "Nỗ lực cải cách hệ thống bị bế tắc vì thiếu tiền.",
+      "cumTu": [
+        "stymie progress",
+        "stymie efforts",
+        "be stymied by"
+      ],
+      "ghiChu": "Hơi thân mật kiểu báo chí; trong bài luận ưu tiên \"hinder/thwart\"."
+    },
+    {
+      "chu": "substantiate",
+      "doc": "/səbˈstænʃieɪt/",
+      "loai": "v",
+      "nghia": "chứng minh bằng chứng cứ",
+      "cap": "C2",
+      "viDu": "The author fails to substantiate this claim with any data.",
+      "viDuNghia": "Tác giả không chứng minh được nhận định này bằng dữ liệu nào.",
+      "cumTu": [
+        "substantiate a claim",
+        "substantiate an allegation",
+        "fail to substantiate"
+      ],
+      "hoTu": [
+        "substantiation (n)",
+        "unsubstantiated (adj)"
+      ],
+      "ghiChu": "\"unsubstantiated claims\" = nhận định vô căn cứ."
+    },
+    {
+      "chu": "supersede",
+      "doc": "/ˌsuːpəˈsiːd/",
+      "loai": "v",
+      "nghia": "thay thế (cái cũ, kém hơn)",
+      "cap": "C2",
+      "viDu": "Streaming has largely superseded physical media.",
+      "viDuNghia": "Phát trực tuyến đã thay thế phần lớn phương tiện vật lý.",
+      "cumTu": [
+        "be superseded by",
+        "supersede the previous version",
+        "supersede an agreement"
+      ],
+      "ghiChu": "Chính tả: superSEDE (không phải -cede)."
+    },
+    {
+      "chu": "vindicate",
+      "doc": "/ˈvɪndɪkeɪt/",
+      "loai": "v",
+      "nghia": "chứng minh là đúng, minh oan",
+      "cap": "C2",
+      "viDu": "The strong sales figures vindicated the decision to invest early.",
+      "viDuNghia": "Số liệu bán hàng tốt đã chứng minh quyết định đầu tư sớm là đúng.",
+      "cumTu": [
+        "vindicate a decision",
+        "feel vindicated",
+        "fully vindicated"
+      ],
+      "hoTu": [
+        "vindication (n)"
+      ]
+    },
+    {
+      "chu": "accentuate",
+      "doc": "/əkˈsentʃueɪt/",
+      "loai": "v",
+      "nghia": "làm nổi bật, nhấn mạnh thêm",
+      "cap": "C2",
+      "viDu": "The pandemic accentuated existing inequalities in education.",
+      "viDuNghia": "Đại dịch làm nổi rõ thêm những bất bình đẳng sẵn có trong giáo dục.",
+      "cumTu": [
+        "accentuate the difference",
+        "accentuate the positive",
+        "accentuate inequalities"
+      ],
+      "hoTu": [
+        "accentuation (n)"
+      ]
+    },
+    {
+      "chu": "allay",
+      "doc": "/əˈleɪ/",
+      "loai": "v",
+      "nghia": "làm dịu (nỗi sợ, lo ngại)",
+      "cap": "C2",
+      "viDu": "The minister tried to allay public fears about the new technology.",
+      "viDuNghia": "Bộ trưởng cố làm dịu nỗi lo của công chúng về công nghệ mới.",
+      "cumTu": [
+        "allay fears",
+        "allay concerns",
+        "allay suspicion"
+      ],
+      "ghiChu": "Gần như chỉ đi với fears/concerns/doubts."
+    },
+    {
+      "chu": "allude",
+      "doc": "/əˈluːd/",
+      "loai": "v",
+      "nghia": "ám chỉ, nói bóng gió tới",
+      "cap": "C2",
+      "viDu": "In her speech she alluded to problems within the department.",
+      "viDuNghia": "Trong bài phát biểu, bà ám chỉ tới các vấn đề trong phòng ban.",
+      "cumTu": [
+        "allude to something",
+        "allude briefly to"
+      ],
+      "hoTu": [
+        "allusion (n)",
+        "allusive (adj)"
+      ],
+      "ghiChu": "allude TO. Khác \"elude\" (lẩn tránh)."
+    },
+    {
+      "chu": "assuage",
+      "doc": "/əˈsweɪdʒ/",
+      "loai": "v",
+      "nghia": "làm nguôi, xoa dịu (cảm giác khó chịu)",
+      "cap": "C2",
+      "viDu": "Nothing the company said could assuage the anger of its customers.",
+      "viDuNghia": "Không điều gì công ty nói có thể làm nguôi cơn giận của khách hàng.",
+      "cumTu": [
+        "assuage fears",
+        "assuage guilt",
+        "assuage anger"
+      ],
+      "ghiChu": "Đọc /əˈsweɪdʒ/."
+    },
+    {
+      "chu": "attenuate",
+      "doc": "/əˈtenjueɪt/",
+      "loai": "v",
+      "nghia": "làm yếu đi, làm giảm cường độ",
+      "cap": "C2",
+      "viDu": "Thick walls attenuate the signal from the router.",
+      "viDuNghia": "Tường dày làm suy yếu tín hiệu từ bộ phát.",
+      "cumTu": [
+        "attenuate the effect",
+        "attenuate a signal",
+        "attenuate the impact"
+      ],
+      "hoTu": [
+        "attenuation (n)"
+      ]
+    },
+    {
+      "chu": "augment",
+      "doc": "/ɔːɡˈment/",
+      "loai": "v",
+      "nghia": "tăng thêm, bổ sung",
+      "cap": "C2",
+      "viDu": "Many students take part-time jobs to augment their income.",
+      "viDuNghia": "Nhiều sinh viên làm thêm để tăng thu nhập.",
+      "cumTu": [
+        "augment income",
+        "augment reality",
+        "augment the workforce"
+      ],
+      "hoTu": [
+        "augmentation (n)",
+        "augmented (adj)"
+      ],
+      "ghiChu": "augmented reality (AR) = thực tế tăng cường."
+    },
+    {
+      "chu": "buttress",
+      "doc": "/ˈbʌtrəs/",
+      "loai": "v",
+      "nghia": "chống đỡ, củng cố (lập luận, thể chế)",
+      "cap": "C2",
+      "viDu": "The author buttresses her argument with statistics from three countries.",
+      "viDuNghia": "Tác giả củng cố lập luận bằng số liệu thống kê từ ba nước.",
+      "cumTu": [
+        "buttress an argument",
+        "buttress a claim",
+        "buttressed by"
+      ],
+      "hoTu": [
+        "buttress (n)"
+      ]
+    },
+    {
+      "chu": "capitulate",
+      "doc": "/kəˈpɪtʃuleɪt/",
+      "loai": "v",
+      "nghia": "đầu hàng, nhượng bộ",
+      "cap": "C2",
+      "viDu": "The government refused to capitulate to pressure from lobbyists.",
+      "viDuNghia": "Chính phủ từ chối nhượng bộ trước sức ép của giới vận động hành lang.",
+      "cumTu": [
+        "capitulate to demands",
+        "capitulate to pressure",
+        "refuse to capitulate"
+      ],
+      "hoTu": [
+        "capitulation (n)"
+      ]
+    },
+    {
+      "chu": "concur",
+      "doc": "/kənˈkɜː(r)/",
+      "loai": "v",
+      "nghia": "đồng tình, nhất trí",
+      "cap": "C2",
+      "viDu": "Most economists concur that the policy will raise prices.",
+      "viDuNghia": "Phần lớn nhà kinh tế đồng tình rằng chính sách sẽ làm giá tăng.",
+      "cumTu": [
+        "concur with someone",
+        "concur that",
+        "concur in a view"
+      ],
+      "hoTu": [
+        "concurrence (n)",
+        "concurrent (adj)"
+      ],
+      "ghiChu": "Trang trọng hơn \"agree\"; concur WITH."
+    },
+    {
+      "chu": "construe",
+      "doc": "/kənˈstruː/",
+      "loai": "v",
+      "nghia": "hiểu, diễn giải theo một cách nào đó",
+      "cap": "C2",
+      "viDu": "Silence should not be construed as agreement.",
+      "viDuNghia": "Không nên hiểu im lặng là đồng ý.",
+      "cumTu": [
+        "be construed as",
+        "construe something to mean",
+        "wrongly construed"
+      ],
+      "hoTu": [
+        "misconstrue (v)",
+        "construction (n)"
+      ],
+      "ghiChu": "Thường bị động: be construed AS."
+    },
+    {
+      "chu": "delineate",
+      "doc": "/dɪˈlɪnieɪt/",
+      "loai": "v",
+      "nghia": "vạch rõ, mô tả chi tiết ranh giới",
+      "cap": "C2",
+      "viDu": "The contract clearly delineates the responsibilities of each party.",
+      "viDuNghia": "Hợp đồng vạch rõ trách nhiệm của từng bên.",
+      "cumTu": [
+        "delineate boundaries",
+        "clearly delineate",
+        "delineate roles"
+      ],
+      "hoTu": [
+        "delineation (n)"
+      ]
+    },
+    {
+      "chu": "elucidate",
+      "doc": "/ɪˈluːsɪdeɪt/",
+      "loai": "v",
+      "nghia": "làm sáng tỏ, giải thích rõ",
+      "cap": "C2",
+      "viDu": "The diagram helps to elucidate how the algorithm works.",
+      "viDuNghia": "Sơ đồ giúp làm sáng tỏ cách thuật toán hoạt động.",
+      "cumTu": [
+        "elucidate a point",
+        "elucidate the meaning",
+        "elucidate the mechanism"
+      ],
+      "hoTu": [
+        "elucidation (n)"
+      ]
+    },
+    {
+      "chu": "emulate",
+      "doc": "/ˈemjuleɪt/",
+      "loai": "v",
+      "nghia": "noi theo, cố làm bằng hoặc hơn",
+      "cap": "C2",
+      "viDu": "Many countries have tried to emulate Singapore's education system.",
+      "viDuNghia": "Nhiều nước đã cố noi theo hệ thống giáo dục của Singapore.",
+      "cumTu": [
+        "emulate the success of",
+        "emulate a model",
+        "try to emulate"
+      ],
+      "hoTu": [
+        "emulation (n)",
+        "emulator (n)"
+      ],
+      "ghiChu": "Trong IT: emulator = trình giả lập."
+    },
+    {
+      "chu": "espouse",
+      "doc": "/ɪˈspaʊz/",
+      "loai": "v",
+      "nghia": "tán thành và ủng hộ (lý tưởng, chủ trương)",
+      "cap": "C2",
+      "viDu": "The party espouses free education for all.",
+      "viDuNghia": "Đảng này chủ trương giáo dục miễn phí cho mọi người.",
+      "cumTu": [
+        "espouse a cause",
+        "espouse a view",
+        "espouse values"
+      ],
+      "hoTu": [
+        "espousal (n)"
+      ]
+    },
+    {
+      "chu": "forestall",
+      "doc": "/fɔːˈstɔːl/",
+      "loai": "v",
+      "nghia": "chặn trước, ngăn bằng cách hành động trước",
+      "cap": "C2",
+      "viDu": "The firm cut prices to forestall competition from new entrants.",
+      "viDuNghia": "Công ty giảm giá để chặn trước sự cạnh tranh từ các đối thủ mới.",
+      "cumTu": [
+        "forestall criticism",
+        "forestall an attack",
+        "forestall a crisis"
+      ]
+    },
+    {
+      "chu": "herald",
+      "doc": "/ˈherəld/",
+      "loai": "v",
+      "nghia": "báo hiệu (điều lớn sắp tới)",
+      "cap": "C2",
+      "viDu": "The invention of the transistor heralded a new era in computing.",
+      "viDuNghia": "Việc phát minh bóng bán dẫn báo hiệu một kỷ nguyên mới của ngành tính toán.",
+      "cumTu": [
+        "herald a new era",
+        "be heralded as",
+        "herald the arrival of"
+      ],
+      "hoTu": [
+        "herald (n)"
+      ],
+      "ghiChu": "\"be heralded as\" = được ca tụng là."
+    },
+    {
+      "chu": "instigate",
+      "doc": "/ˈɪnstɪɡeɪt/",
+      "loai": "v",
+      "nghia": "khởi xướng; xúi giục",
+      "cap": "C2",
+      "viDu": "The new director instigated a review of all safety procedures.",
+      "viDuNghia": "Giám đốc mới khởi xướng việc rà soát mọi quy trình an toàn.",
+      "cumTu": [
+        "instigate a review",
+        "instigate reforms",
+        "instigate violence"
+      ],
+      "hoTu": [
+        "instigation (n)",
+        "instigator (n)"
+      ]
+    },
+    {
+      "chu": "permeate",
+      "doc": "/ˈpɜːmieɪt/",
+      "loai": "v",
+      "nghia": "thấm vào, lan toả khắp",
+      "cap": "C2",
+      "viDu": "A fear of failure permeates the whole education system.",
+      "viDuNghia": "Nỗi sợ thất bại thấm khắp hệ thống giáo dục.",
+      "cumTu": [
+        "permeate society",
+        "permeate every aspect of",
+        "permeate through"
+      ],
+      "hoTu": [
+        "permeable (adj)",
+        "permeation (n)"
+      ]
+    },
+    {
+      "chu": "posit",
+      "doc": "/ˈpɒzɪt/",
+      "loai": "v",
+      "nghia": "đưa ra làm giả định, cho rằng",
+      "cap": "C2",
+      "viDu": "The theory posits that language shapes the way we think.",
+      "viDuNghia": "Lý thuyết cho rằng ngôn ngữ định hình cách ta suy nghĩ.",
+      "cumTu": [
+        "posit that",
+        "posit a theory",
+        "posit the existence of"
+      ],
+      "ghiChu": "Động từ tường thuật học thuật; khác \"deposit\"."
+    },
+    {
+      "chu": "precipitate",
+      "doc": "/prɪˈsɪpɪteɪt/",
+      "loai": "v",
+      "nghia": "làm xảy ra đột ngột, sớm hơn",
+      "cap": "C2",
+      "viDu": "The bank's collapse precipitated a wider financial crisis.",
+      "viDuNghia": "Sự sụp đổ của ngân hàng làm bùng ra khủng hoảng tài chính rộng hơn.",
+      "cumTu": [
+        "precipitate a crisis",
+        "precipitate a decline",
+        "precipitate change"
+      ],
+      "hoTu": [
+        "precipitation (n)",
+        "precipitous (adj)"
+      ],
+      "ghiChu": "Mạnh hơn \"cause\": ngụ ý đột ngột và thường là điều xấu."
+    },
+    {
+      "chu": "pre-empt",
+      "doc": "/priˈempt/",
+      "loai": "v",
+      "nghia": "hành động trước để ngăn chặn, đón đầu",
+      "cap": "C2",
+      "viDu": "The company announced a recall to pre-empt negative press coverage.",
+      "viDuNghia": "Công ty thông báo thu hồi để đón đầu tin xấu trên báo chí.",
+      "cumTu": [
+        "pre-empt criticism",
+        "pre-empt a decision",
+        "pre-empt an attack"
+      ],
+      "hoTu": [
+        "pre-emptive (adj)"
+      ]
+    },
+    {
+      "chu": "quell",
+      "doc": "/kwel/",
+      "loai": "v",
+      "nghia": "dập tắt, trấn áp (bạo loạn, lo sợ)",
+      "cap": "C2",
+      "viDu": "The central bank acted quickly to quell fears of a recession.",
+      "viDuNghia": "Ngân hàng trung ương hành động nhanh để dập nỗi lo suy thoái.",
+      "cumTu": [
+        "quell fears",
+        "quell a riot",
+        "quell unrest"
+      ]
+    },
+    {
+      "chu": "rebut",
+      "doc": "/rɪˈbʌt/",
+      "loai": "v",
+      "nghia": "bác bỏ bằng lập luận, chứng cứ",
+      "cap": "C2",
+      "viDu": "In the third paragraph, the writer rebuts the main objection.",
+      "viDuNghia": "Ở đoạn ba, người viết bác bỏ ý phản đối chính.",
+      "cumTu": [
+        "rebut an argument",
+        "rebut a claim",
+        "rebut criticism"
+      ],
+      "hoTu": [
+        "rebuttal (n)"
+      ],
+      "ghiChu": "Kỹ năng \"rebuttal\" là cốt lõi của bài discuss both views band 8."
+    },
+    {
+      "chu": "repudiate",
+      "doc": "/rɪˈpjuːdieɪt/",
+      "loai": "v",
+      "nghia": "khước từ, bác bỏ dứt khoát",
+      "cap": "C2",
+      "viDu": "The minister repudiated suggestions that the figures had been altered.",
+      "viDuNghia": "Bộ trưởng bác bỏ dứt khoát ý cho rằng số liệu đã bị sửa.",
+      "cumTu": [
+        "repudiate a claim",
+        "repudiate an agreement",
+        "repudiate violence"
+      ],
+      "hoTu": [
+        "repudiation (n)"
+      ]
+    },
+    {
+      "chu": "rescind",
+      "doc": "/rɪˈsɪnd/",
+      "loai": "v",
+      "nghia": "huỷ bỏ, bãi bỏ (quyết định, luật)",
+      "cap": "C2",
+      "viDu": "The university rescinded its offer after discovering the false documents.",
+      "viDuNghia": "Trường đại học huỷ thư mời sau khi phát hiện giấy tờ giả.",
+      "cumTu": [
+        "rescind an offer",
+        "rescind a decision",
+        "rescind a contract"
+      ],
+      "hoTu": [
+        "rescission (n)"
+      ]
+    },
+    {
+      "chu": "surmise",
+      "doc": "/səˈmaɪz/",
+      "loai": "v",
+      "nghia": "phỏng đoán (từ thông tin có được)",
+      "cap": "C2",
+      "viDu": "From the logs, we can only surmise that the disk was already full.",
+      "viDuNghia": "Từ log, ta chỉ có thể phỏng đoán rằng đĩa đã đầy từ trước.",
+      "cumTu": [
+        "surmise that",
+        "can only surmise",
+        "correctly surmise"
+      ],
+      "hoTu": [
+        "surmise (n)"
+      ]
+    },
+    {
+      "chu": "thwart",
+      "doc": "/θwɔːt/",
+      "loai": "v",
+      "nghia": "ngăn cản, làm thất bại (kế hoạch)",
+      "cap": "C2",
+      "viDu": "Strong passwords thwart most automated attacks.",
+      "viDuNghia": "Mật khẩu mạnh làm thất bại phần lớn các cuộc tấn công tự động.",
+      "cumTu": [
+        "thwart an attempt",
+        "thwart a plan",
+        "be thwarted by"
+      ]
+    },
+    {
+      "chu": "transcend",
+      "doc": "/trænˈsend/",
+      "loai": "v",
+      "nghia": "vượt lên trên, vượt ra ngoài giới hạn",
+      "cap": "C2",
+      "viDu": "Music can transcend cultural and linguistic boundaries.",
+      "viDuNghia": "Âm nhạc có thể vượt qua ranh giới văn hoá và ngôn ngữ.",
+      "cumTu": [
+        "transcend boundaries",
+        "transcend borders",
+        "transcend differences"
+      ],
+      "hoTu": [
+        "transcendent (adj)"
+      ]
+    },
+    {
+      "chu": "underscore",
+      "doc": "/ˌʌndəˈskɔː(r)/",
+      "loai": "v",
+      "nghia": "nhấn mạnh, làm nổi rõ tầm quan trọng",
+      "cap": "C2",
+      "viDu": "The incident underscores the need for regular backups.",
+      "viDuNghia": "Sự cố này nhấn mạnh sự cần thiết của việc sao lưu định kỳ.",
+      "cumTu": [
+        "underscore the need for",
+        "underscore the importance of",
+        "underscore the fact that"
+      ],
+      "ghiChu": "Đồng nghĩa trang trọng của \"highlight/underline\"."
+    },
+    {
+      "chu": "usher in",
+      "doc": "/ˌʌʃər ˈɪn/",
+      "loai": "phr",
+      "nghia": "mở ra (một thời kỳ mới)",
+      "cap": "C2",
+      "viDu": "Cheap solar power could usher in an era of clean energy.",
+      "viDuNghia": "Điện mặt trời giá rẻ có thể mở ra kỷ nguyên năng lượng sạch.",
+      "cumTu": [
+        "usher in a new era",
+        "usher in change",
+        "usher in a period of"
+      ],
+      "hoTu": [
+        "usher (n, v)"
+      ]
+    },
+    {
+      "chu": "vacillate",
+      "doc": "/ˈvæsəleɪt/",
+      "loai": "v",
+      "nghia": "dao động, lưỡng lự giữa các lựa chọn",
+      "cap": "C2",
+      "viDu": "The government continues to vacillate between tax cuts and higher spending.",
+      "viDuNghia": "Chính phủ vẫn tiếp tục lưỡng lự giữa giảm thuế và tăng chi tiêu.",
+      "cumTu": [
+        "vacillate between A and B",
+        "vacillate over a decision"
+      ],
+      "hoTu": [
+        "vacillation (n)"
+      ]
+    }
+  ]
+}

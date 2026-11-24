@@ -1,0 +1,1500 @@
+{
+  "ma": "khoa-ielts-t3-1",
+  "nn": "en",
+  "ten": "Từ của IELTS Tập 3 (5.0 → 6.0) · 1",
+  "moTa": "Từ vựng dạy trong IELTS Tập 3 (5.0 → 6.0) trên web (cùng nghĩa, ví dụ, ghi chú như bài học) — gom vào lộ trình để ôn theo ngày.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "core",
+      "doc": "/kɔː(r)/",
+      "loai": "n",
+      "nghia": "cốt lõi, trọng tâm",
+      "cap": "B2",
+      "viDu": "Maths and science are core subjects in most countries.",
+      "viDuNghia": "Toán và khoa học là môn cốt lõi ở hầu hết các nước.",
+      "ghiChu": "core subjects / skills / values · the core of the problem. Trái nghĩa trong ngữ cảnh môn học: optional subjects."
+    },
+    {
+      "chu": "corporate",
+      "doc": "/ˈkɔːpərət/",
+      "loai": "adj",
+      "nghia": "thuộc doanh nghiệp, công ty",
+      "cap": "B2",
+      "viDu": "Some universities now depend on corporate sponsorship.",
+      "viDuNghia": "Một số trường đại học giờ phụ thuộc vào tài trợ của doanh nghiệp.",
+      "ghiChu": "corporate culture / sponsorship / training · corporation (n, tập đoàn). Chỉ đứng trước danh từ."
+    },
+    {
+      "chu": "criteria",
+      "doc": "/kraɪˈtɪəriə/",
+      "loai": "n",
+      "nghia": "các tiêu chí",
+      "cap": "B2",
+      "viDu": "IELTS Writing is marked against four criteria.",
+      "viDuNghia": "Bài viết IELTS được chấm theo bốn tiêu chí.",
+      "ghiChu": "Số ít: criterion /kraɪˈtɪəriən/. ⚠️ ~~a criteria~~ / ~~criterias~~ → a criterion, several criteria. meet / satisfy the criteria."
+    },
+    {
+      "chu": "fund",
+      "doc": "/fʌnd/",
+      "loai": "n",
+      "nghia": "quỹ, tiền vốn; cấp tiền",
+      "cap": "B2",
+      "viDu": "The project is funded by the Ministry of Education.",
+      "viDuNghia": "Dự án được Bộ Giáo dục cấp kinh phí.",
+      "ghiChu": "funds (số nhiều = tiền) · funding (n, không đếm được): government funding for schools · publicly funded · raise funds."
+    },
+    {
+      "chu": "illustrate",
+      "doc": "/ˈɪləstreɪt/",
+      "loai": "v",
+      "nghia": "minh hoạ; cho thấy rõ",
+      "cap": "B2",
+      "viDu": "The chart illustrates how spending on education changed.",
+      "viDuNghia": "Biểu đồ minh hoạ chi tiêu cho giáo dục đã thay đổi thế nào.",
+      "ghiChu": "Mở bài Task 1: The graph illustrates / shows / compares… · illustration (n) · to illustrate (để minh hoạ, …)."
+    },
+    {
+      "chu": "layer",
+      "doc": "/ˈleɪə(r)/",
+      "loai": "n",
+      "nghia": "lớp, tầng",
+      "cap": "B2",
+      "viDu": "The process adds another layer of bureaucracy to schools.",
+      "viDuNghia": "Quy trình này thêm một tầng thủ tục hành chính nữa cho trường học.",
+      "ghiChu": "a layer of ice / dust / management · the ozone layer · Task 1 quy trình: a layer of sand is added."
+    },
+    {
+      "chu": "location",
+      "doc": "/ləʊˈkeɪʃn/",
+      "loai": "n",
+      "nghia": "vị trí, địa điểm",
+      "cap": "B2",
+      "viDu": "The location of a school affects how pupils travel to it.",
+      "viDuNghia": "Vị trí của trường ảnh hưởng tới cách học sinh đi học.",
+      "ghiChu": "locate (v): be located in / on / near (Task 1 bản đồ) · relocate (v, chuyển chỗ) · a convenient location."
+    },
+    {
+      "chu": "negative",
+      "doc": "/ˈneɡətɪv/",
+      "loai": "adj",
+      "nghia": "tiêu cực; phủ định; âm",
+      "cap": "B2",
+      "viDu": "Too much testing has a negative effect on creativity.",
+      "viDuNghia": "Kiểm tra quá nhiều có tác động tiêu cực tới sự sáng tạo.",
+      "ghiChu": "have a negative effect / impact on · negatively (adv) · negate (v, vô hiệu hoá). ↔ positive."
+    },
+    {
+      "chu": "partnership",
+      "doc": "/ˈpɑːtnəʃɪp/",
+      "loai": "n",
+      "nghia": "quan hệ đối tác, sự hợp tác",
+      "cap": "B2",
+      "viDu": "The college works in partnership with local employers.",
+      "viDuNghia": "Trường cao đẳng hợp tác với các nhà tuyển dụng địa phương.",
+      "ghiChu": "in partnership with · a partnership between A and B · partner (n, v)."
+    },
+    {
+      "chu": "philosophy",
+      "doc": "/fəˈlɒsəfi/",
+      "loai": "n",
+      "nghia": "triết học; triết lý",
+      "cap": "B2",
+      "viDu": "The school's philosophy is that every child can succeed.",
+      "viDuNghia": "Triết lý của trường là mọi đứa trẻ đều có thể thành công.",
+      "ghiChu": "philosopher (n) · philosophical (adj) · a philosophy of education. Trọng âm: phi-LO-so-phy."
+    },
+    {
+      "chu": "proportion",
+      "doc": "/prəˈpɔːʃn/",
+      "loai": "n",
+      "nghia": "tỉ lệ, phần",
+      "cap": "B2",
+      "viDu": "The proportion of women in engineering rose to 25%.",
+      "viDuNghia": "Tỉ lệ nữ trong ngành kỹ thuật tăng lên 25%.",
+      "ghiChu": "the proportion of + N (Task 1: = the percentage of) · a large / significant proportion · proportional to · in proportion to."
+    },
+    {
+      "chu": "rely",
+      "doc": "/rɪˈlaɪ/",
+      "loai": "v",
+      "nghia": "dựa vào, phụ thuộc",
+      "cap": "B2",
+      "viDu": "Many students rely on their parents for financial support.",
+      "viDuNghia": "Nhiều sinh viên dựa vào cha mẹ về tài chính.",
+      "ghiChu": "rely on / upon · reliable (adj, đáng tin) ↔ unreliable · reliance (n): reliance on technology · reliability (n)."
+    },
+    {
+      "chu": "scheme",
+      "doc": "/skiːm/",
+      "loai": "n",
+      "nghia": "chương trình, kế hoạch (do tổ chức đề ra)",
+      "cap": "B2",
+      "viDu": "The government launched a scheme to train more science teachers.",
+      "viDuNghia": "Chính phủ khởi động một chương trình đào tạo thêm giáo viên khoa học.",
+      "ghiChu": "launch / introduce a scheme · a training / pension / loan scheme. Anh-Anh; Mỹ dùng program. Đọc /sk/, không phải /ʃ/."
+    },
+    {
+      "chu": "sequence",
+      "doc": "/ˈsiːkwəns/",
+      "loai": "n",
+      "nghia": "trình tự, chuỗi",
+      "cap": "B2",
+      "viDu": "Lessons should follow a logical sequence.",
+      "viDuNghia": "Các bài học nên đi theo một trình tự hợp lý.",
+      "ghiChu": "a sequence of events · in sequence · sequential (adj) · subsequent (adj, tiếp theo) — subsequently = afterwards (Task 1 quy trình)."
+    },
+    {
+      "chu": "sex",
+      "doc": "/seks/",
+      "loai": "n",
+      "nghia": "giới tính",
+      "cap": "B2",
+      "viDu": "The table compares literacy rates by age and sex.",
+      "viDuNghia": "Bảng so sánh tỉ lệ biết chữ theo tuổi và giới tính.",
+      "ghiChu": "single-sex schools ↔ mixed / co-educational schools · trong văn học thuật hiện nay hay dùng gender: gender equality."
+    },
+    {
+      "chu": "shift",
+      "doc": "/ʃɪft/",
+      "loai": "n",
+      "nghia": "sự chuyển dịch; chuyển, đổi; ca làm việc",
+      "cap": "B2",
+      "viDu": "There has been a shift from textbooks to digital materials.",
+      "viDuNghia": "Đã có sự chuyển dịch từ sách giáo khoa sang học liệu số.",
+      "ghiChu": "a shift from A to B · a shift in attitudes · shift towards · night shift (ca đêm). Động từ: shift the focus to…"
+    },
+    {
+      "chu": "technical",
+      "doc": "/ˈteknɪkl/",
+      "loai": "adj",
+      "nghia": "thuộc kỹ thuật; chuyên môn",
+      "cap": "B2",
+      "viDu": "Technical subjects prepare students for skilled jobs.",
+      "viDuNghia": "Các môn kỹ thuật chuẩn bị cho học sinh những công việc có tay nghề.",
+      "ghiChu": "technical skills / support / college · technically (adv) · technician (n, kỹ thuật viên)."
+    },
+    {
+      "chu": "technique",
+      "doc": "/tekˈniːk/",
+      "loai": "n",
+      "nghia": "kỹ thuật, phương pháp thực hiện",
+      "cap": "B2",
+      "viDu": "Teachers use a range of techniques to keep pupils interested.",
+      "viDuNghia": "Giáo viên dùng nhiều kỹ thuật để giữ cho học sinh hứng thú.",
+      "ghiChu": "a technique for + V-ing · exam / study techniques. ⚠️ technique = cách làm; technology = công nghệ; technical = tính từ. Trọng âm tech-NIQUE."
+    },
+    {
+      "chu": "volume",
+      "doc": "/ˈvɒljuːm/",
+      "loai": "n",
+      "nghia": "khối lượng, lượng; âm lượng; tập sách",
+      "cap": "B2",
+      "viDu": "The volume of homework has increased in recent years.",
+      "viDuNghia": "Lượng bài tập về nhà đã tăng trong những năm gần đây.",
+      "ghiChu": "the volume of traffic / trade / work (thường đi với danh từ không đếm được hoặc lượng lớn; đếm từng cái thì dùng the number of) · a high / large volume."
+    },
+    {
+      "chu": "coursework",
+      "doc": "/ˈkɔːswɜːk/",
+      "loai": "n",
+      "nghia": "bài làm trong khoá (tính điểm)",
+      "cap": "B2",
+      "viDu": "Half of the final mark comes from coursework.",
+      "viDuNghia": "Một nửa điểm cuối cùng đến từ bài làm trong khoá.",
+      "ghiChu": "Không đếm được: ~~courseworks~~. Liên quan: assignment (bài được giao, đếm được) · dissertation / thesis (luận văn)."
+    },
+    {
+      "chu": "dropout rate",
+      "doc": "/ˈdrɒpaʊt reɪt/",
+      "loai": "n",
+      "nghia": "tỉ lệ bỏ học",
+      "cap": "B2",
+      "viDu": "The dropout rate is highest among students who work part-time.",
+      "viDuNghia": "Tỉ lệ bỏ học cao nhất ở nhóm sinh viên đi làm thêm.",
+      "ghiChu": "drop out (of school / university) (v) · a dropout (n, người bỏ học). Liên quan: truancy (trốn học), attendance (sự chuyên cần)."
+    },
+    {
+      "chu": "acquire knowledge / skills",
+      "doc": "/əˈkwaɪə(r) ˈnɒlɪdʒ/",
+      "loai": "phr",
+      "nghia": "tiếp thu kiến thức / kỹ năng",
+      "cap": "B2",
+      "viDu": "Children acquire language skills faster than adults.",
+      "viDuNghia": "Trẻ em tiếp thu kỹ năng ngôn ngữ nhanh hơn người lớn.",
+      "ghiChu": "⚠️ ~~learn knowledge~~ → acquire / gain knowledge. knowledge không đếm được: ~~knowledges~~, ~~a knowledge~~ (trừ a good knowledge of)."
+    },
+    {
+      "chu": "sit / take an exam",
+      "doc": "/sɪt ən ɪɡˈzæm/",
+      "loai": "phr",
+      "nghia": "dự thi",
+      "cap": "B2",
+      "viDu": "Pupils sit national exams at the age of fifteen.",
+      "viDuNghia": "Học sinh dự kỳ thi quốc gia năm mười lăm tuổi.",
+      "ghiChu": "⚠️ ~~join / attend an exam~~ (do an exam là văn nói Anh-Anh, bài viết nên dùng sit / take). pass = đỗ (~~pass the exam~~ không có nghĩa là “đi thi”) · fail · resit / retake (thi lại) · revise for an exam."
+    },
+    {
+      "chu": "meet a deadline",
+      "doc": "/miːt ə ˈdedlaɪn/",
+      "loai": "phr",
+      "nghia": "kịp hạn chót",
+      "cap": "B2",
+      "viDu": "University teaches students to meet deadlines without reminders.",
+      "viDuNghia": "Đại học dạy sinh viên kịp hạn chót mà không cần ai nhắc.",
+      "ghiChu": "↔ miss a deadline · a tight deadline · set / extend a deadline."
+    },
+    {
+      "chu": "fall behind",
+      "doc": "/fɔːl bɪˈhaɪnd/",
+      "loai": "phr",
+      "nghia": "tụt lại phía sau",
+      "cap": "B2",
+      "viDu": "Pupils who miss lessons quickly fall behind.",
+      "viDuNghia": "Học sinh nghỉ học sẽ nhanh chóng tụt lại.",
+      "ghiChu": "fall behind with schoolwork · ↔ keep up with (theo kịp) · catch up (đuổi kịp)."
+    },
+    {
+      "chu": "enrol on / in a course",
+      "doc": "/ɪnˈrəʊl/",
+      "loai": "phr",
+      "nghia": "ghi danh một khoá học",
+      "cap": "B2",
+      "viDu": "More adults are enrolling on evening courses.",
+      "viDuNghia": "Ngày càng nhiều người lớn ghi danh các khoá buổi tối.",
+      "ghiChu": "Anh: enrol on; Mỹ: enroll in · enrolment (n) · gần nghĩa: sign up for, register for."
+    },
+    {
+      "chu": "pursue a degree / career",
+      "doc": "/pəˈsjuː/",
+      "loai": "phr",
+      "nghia": "theo đuổi tấm bằng / sự nghiệp",
+      "cap": "B2",
+      "viDu": "She moved to the city to pursue a degree in medicine.",
+      "viDuNghia": "Cô ấy chuyển lên thành phố để theo đuổi tấm bằng y khoa.",
+      "ghiChu": "pursue higher education / one's interests · pursuit (n). Trang trọng hơn follow."
+    },
+    {
+      "chu": "hands-on experience",
+      "doc": "/ˌhændz ˈɒn ɪkˈspɪəriəns/",
+      "loai": "phr",
+      "nghia": "kinh nghiệm thực hành trực tiếp",
+      "cap": "B2",
+      "viDu": "Internships give students hands-on experience of real work.",
+      "viDuNghia": "Thực tập cho sinh viên kinh nghiệm thực hành về công việc thật.",
+      "ghiChu": "= practical experience · gain / provide hands-on experience · learning by doing."
+    },
+    {
+      "chu": "put theory into practice",
+      "doc": "/pʊt ˈθɪəri ˈɪntə ˈpræktɪs/",
+      "loai": "phr",
+      "nghia": "đưa lý thuyết vào thực hành",
+      "cap": "B2",
+      "viDu": "Laboratory classes let students put theory into practice.",
+      "viDuNghia": "Giờ thí nghiệm cho sinh viên đưa lý thuyết vào thực hành.",
+      "ghiChu": "theoretical knowledge ↔ practical skills · in theory… in practice… (về lý thuyết… trên thực tế…)."
+    },
+    {
+      "chu": "a well-rounded education",
+      "doc": "/ˌwel ˈraʊndɪd/",
+      "loai": "phr",
+      "nghia": "nền giáo dục toàn diện",
+      "cap": "B2",
+      "viDu": "Art and music are part of a well-rounded education.",
+      "viDuNghia": "Mỹ thuật và âm nhạc là một phần của nền giáo dục toàn diện.",
+      "ghiChu": "a well-rounded person / student · gần nghĩa: a broad / balanced education."
+    },
+    {
+      "chu": "equal access to education",
+      "doc": "/ˌiːkwəl ˈækses/",
+      "loai": "phr",
+      "nghia": "quyền tiếp cận giáo dục bình đẳng",
+      "cap": "B2",
+      "viDu": "Scholarships give poorer students equal access to education.",
+      "viDuNghia": "Học bổng cho sinh viên nghèo hơn quyền tiếp cận giáo dục bình đẳng.",
+      "ghiChu": "have access to (⚠️ ~~access to~~ làm động từ: access sth, không có to) · equal opportunities · educational inequality."
+    },
+    {
+      "chu": "bridge the gap",
+      "doc": "/brɪdʒ ðə ɡæp/",
+      "loai": "phr",
+      "nghia": "thu hẹp khoảng cách",
+      "cap": "B2",
+      "viDu": "Free tutoring helps to bridge the gap between rich and poor pupils.",
+      "viDuNghia": "Dạy kèm miễn phí giúp thu hẹp khoảng cách giữa học sinh giàu và nghèo.",
+      "ghiChu": "bridge / narrow / close the gap between A and B ↔ widen the gap · the attainment gap (khoảng cách thành tích)."
+    },
+    {
+      "chu": "tailor … to individual needs",
+      "doc": "/ˈteɪlə(r)/",
+      "loai": "phr",
+      "nghia": "điều chỉnh … theo nhu cầu từng người",
+      "cap": "B2",
+      "viDu": "Small classes allow teachers to tailor lessons to individual needs.",
+      "viDuNghia": "Lớp ít người cho phép giáo viên điều chỉnh bài học theo nhu cầu từng em.",
+      "ghiChu": "tailor sth to / for · tailor-made (adj) · individual attention (sự quan tâm tới từng em)."
+    },
+    {
+      "chu": "a heavy workload",
+      "doc": "/ˌhevi ˈwɜːkləʊd/",
+      "loai": "phr",
+      "nghia": "khối lượng công việc / bài vở nặng",
+      "cap": "B2",
+      "viDu": "A heavy workload leaves students little time to relax.",
+      "viDuNghia": "Bài vở nặng khiến học sinh còn ít thời gian thư giãn.",
+      "ghiChu": "cope with / reduce the workload · academic pressure · be under pressure to + V."
+    },
+    {
+      "chu": "job prospects",
+      "doc": "/ˈdʒɒb prɒspekts/",
+      "loai": "phr",
+      "nghia": "triển vọng việc làm",
+      "cap": "B2",
+      "viDu": "A degree in computing improves graduates' job prospects.",
+      "viDuNghia": "Tấm bằng ngành máy tính cải thiện triển vọng việc làm của người tốt nghiệp.",
+      "ghiChu": "improve / damage job prospects · career prospects · employability (n, khả năng được tuyển) · the job market."
+    },
+    {
+      "chu": "gain a qualification",
+      "doc": "/ɡeɪn/",
+      "loai": "phr",
+      "nghia": "đạt được bằng cấp",
+      "cap": "B2",
+      "viDu": "Adults return to college to gain new qualifications.",
+      "viDuNghia": "Người lớn quay lại trường để lấy thêm bằng cấp mới.",
+      "ghiChu": "gain / obtain / acquire a qualification · gain experience / confidence / independence — gain đi được với rất nhiều danh từ trừu tượng."
+    },
+    {
+      "chu": "foster creativity",
+      "doc": "/ˈfɒstə(r) ˌkriːeɪˈtɪvəti/",
+      "loai": "phr",
+      "nghia": "nuôi dưỡng sự sáng tạo",
+      "cap": "B2",
+      "viDu": "Project work fosters creativity and independence.",
+      "viDuNghia": "Làm dự án nuôi dưỡng sự sáng tạo và tính tự lập.",
+      "ghiChu": "foster / encourage / stifle creativity (stifle = bóp nghẹt) · foster a love of reading."
+    },
+    {
+      "chu": "a sense of responsibility",
+      "doc": "/sens əv rɪˌspɒnsəˈbɪləti/",
+      "loai": "phr",
+      "nghia": "tinh thần trách nhiệm",
+      "cap": "B2",
+      "viDu": "Part-time work gives teenagers a sense of responsibility.",
+      "viDuNghia": "Việc làm thêm cho thiếu niên tinh thần trách nhiệm.",
+      "ghiChu": "develop / give sb a sense of responsibility / achievement / belonging."
+    },
+    {
+      "chu": "be equipped with",
+      "doc": "/ɪˈkwɪpt wɪð/",
+      "loai": "phr",
+      "nghia": "được trang bị (kỹ năng, kiến thức)",
+      "cap": "B2",
+      "viDu": "School leavers should be equipped with basic financial skills.",
+      "viDuNghia": "Học sinh ra trường nên được trang bị kỹ năng tài chính cơ bản.",
+      "ghiChu": "equip sb with sth · equip sb for adult life / the job market · school leavers (học sinh vừa ra trường)."
+    },
+    {
+      "chu": "cargo",
+      "doc": "/ˈkɑːɡəʊ/",
+      "loai": "n",
+      "nghia": "hàng hoá chở trên tàu, máy bay",
+      "cap": "B2",
+      "viDu": "The ship was carrying a cargo of rice.",
+      "viDuNghia": "Con tàu đang chở một lô gạo.",
+      "ghiChu": "Gần nghĩa: freight /freɪt/ (hàng vận chuyển nói chung, không đếm được). a cargo ship = tàu hàng."
+    },
+    {
+      "chu": "vessel",
+      "doc": "/ˈvesl/",
+      "loai": "n",
+      "nghia": "tàu thuyền (trang trọng)",
+      "cap": "B2",
+      "viDu": "Fishing vessels are not allowed in this area.",
+      "viDuNghia": "Tàu cá không được phép vào khu vực này.",
+      "ghiChu": "Trong bài đọc học thuật, vessel thay cho ship để tránh lặp — phép P1."
+    },
+    {
+      "chu": "resistance",
+      "doc": "/rɪˈzɪstəns/",
+      "loai": "n",
+      "nghia": "sự phản đối, chống lại",
+      "cap": "B2",
+      "viDu": "The plan met strong resistance from local residents.",
+      "viDuNghia": "Kế hoạch gặp sự phản đối mạnh từ cư dân địa phương.",
+      "ghiChu": "resistance to / from · động từ resist · tính từ resistant to."
+    },
+    {
+      "chu": "standardisation",
+      "doc": "/ˌstændədaɪˈzeɪʃn/",
+      "loai": "n",
+      "nghia": "sự tiêu chuẩn hoá",
+      "cap": "B2",
+      "viDu": "Standardisation made the parts cheaper to produce.",
+      "viDuNghia": "Tiêu chuẩn hoá làm linh kiện rẻ hơn khi sản xuất.",
+      "ghiChu": "Họ từ: standard (n, adj) → standardise (v) → standardisation (n). Mỹ viết -ize / -ization."
+    },
+    {
+      "chu": "dependent",
+      "doc": "/dɪˈpendənt/",
+      "loai": "adj",
+      "nghia": "phụ thuộc",
+      "cap": "B2",
+      "viDu": "The island is heavily dependent on tourism.",
+      "viDuNghia": "Hòn đảo phụ thuộc nặng vào du lịch.",
+      "ghiChu": "dependent on (không phải ~~of~~) · động từ depend on · danh từ dependence · trái nghĩa independent of."
+    },
+    {
+      "chu": "impulse buy",
+      "doc": "/ˈɪmpʌls baɪ/",
+      "loai": "n",
+      "nghia": "món mua bốc đồng (không định trước)",
+      "cap": "B2",
+      "viDu": "Those headphones were an impulse buy.",
+      "viDuNghia": "Cái tai nghe đó là một món mua bốc đồng.",
+      "ghiChu": "buy something on impulse · an impulse purchase."
+    },
+    {
+      "chu": "harsh",
+      "doc": "/hɑːʃ/",
+      "loai": "adj",
+      "nghia": "(hình phạt) nặng, khắc nghiệt",
+      "cap": "B2",
+      "viDu": "Some people call for harsher punishments.",
+      "viDuNghia": "Một số người kêu gọi hình phạt nặng hơn.",
+      "ghiChu": "= severe, tough. be tough on crime (mạnh tay với tội phạm)."
+    },
+    {
+      "chu": "prevention",
+      "doc": "/prɪˈvenʃn/",
+      "loai": "n",
+      "nghia": "sự phòng ngừa",
+      "cap": "B2",
+      "viDu": "Crime prevention is cheaper than punishment.",
+      "viDuNghia": "Phòng ngừa tội phạm rẻ hơn trừng phạt.",
+      "ghiChu": "Động từ: prevent sb from + V-ing · Prevention is better than cure. (phòng hơn chữa)."
+    },
+    {
+      "chu": "shadow",
+      "doc": "/ˈʃædəʊ/",
+      "loai": "v",
+      "nghia": "đi theo ai để quan sát và học việc",
+      "cap": "B2",
+      "viDu": "New staff shadow a senior colleague for a week.",
+      "viDuNghia": "Nhân viên mới đi theo học việc một đồng nghiệp lâu năm trong một tuần.",
+      "ghiChu": "job shadowing = kiến tập. Từ hay gặp ở Listening về công việc, tình nguyện."
+    },
+    {
+      "chu": "sturdy",
+      "doc": "/ˈstɜːdi/",
+      "loai": "adj",
+      "nghia": "chắc chắn, bền",
+      "cap": "B2",
+      "viDu": "You will need sturdy shoes for the hike.",
+      "viDuNghia": "Bạn sẽ cần giày chắc chắn cho chuyến đi bộ đường dài.",
+      "ghiChu": "sturdy boots / furniture / bag. footwear = giày dép nói chung (không đếm được)."
+    },
+    {
+      "chu": "at no charge",
+      "doc": "/ət nəʊ tʃɑːdʒ/",
+      "loai": "phr",
+      "nghia": "miễn phí",
+      "cap": "B2",
+      "viDu": "Members can borrow tools at no charge.",
+      "viDuNghia": "Thành viên được mượn dụng cụ miễn phí.",
+      "ghiChu": "= free of charge = for free = at no cost — bốn cách nói một ý, đề hay đổi qua lại."
+    },
+    {
+      "chu": "census",
+      "doc": "/ˈsensəs/",
+      "loai": "n",
+      "nghia": "cuộc điều tra dân số",
+      "cap": "B2",
+      "viDu": "The census is carried out every ten years.",
+      "viDuNghia": "Cuộc điều tra dân số được tiến hành mười năm một lần.",
+      "ghiChu": "conduct / carry out a census · census data / figures. Số nhiều: censuses."
+    },
+    {
+      "chu": "under-represented",
+      "doc": "/ˌʌndə ˌreprɪˈzentɪd/",
+      "loai": "adj",
+      "nghia": "có mặt ít hơn thực tế, chưa được đại diện đủ",
+      "cap": "B2",
+      "viDu": "Young renters are under-represented in the data.",
+      "viDuNghia": "Người trẻ thuê nhà xuất hiện trong số liệu ít hơn thực tế.",
+      "ghiChu": "Trái nghĩa over-represented. Họ từ: represent (v) · representation (n) · representative (n, adj)."
+    },
+    {
+      "chu": "abandon",
+      "doc": "/əˈbændən/",
+      "loai": "v",
+      "nghia": "từ bỏ, bỏ hẳn",
+      "cap": "B2",
+      "viDu": "Several countries have abandoned the paper questionnaire.",
+      "viDuNghia": "Vài nước đã bỏ hẳn phiếu hỏi giấy.",
+      "ghiChu": "abandon a plan / a policy / an attempt. AWL sublist 8."
+    },
+    {
+      "chu": "taxpayer",
+      "doc": "/ˈtækspeɪə/",
+      "loai": "n",
+      "nghia": "người nộp thuế",
+      "cap": "B2",
+      "viDu": "Taxpayers want to know how their money is spent.",
+      "viDuNghia": "Người nộp thuế muốn biết tiền của họ được tiêu thế nào.",
+      "ghiChu": "taxpayers' money = tiền thuế của dân (cụm ăn điểm trong Task 2)."
+    },
+    {
+      "chu": "funding",
+      "doc": "/ˈfʌndɪŋ/",
+      "loai": "n",
+      "nghia": "kinh phí, tiền tài trợ",
+      "cap": "B2",
+      "viDu": "Many schools suffer from a lack of funding.",
+      "viDuNghia": "Nhiều trường thiếu kinh phí.",
+      "ghiChu": "Không đếm được: ~~fundings~~. government / public funding · receive / provide funding for. Xem bảng fund / funding / funds bên dưới. AWL sublist 3 (fund)."
+    },
+    {
+      "chu": "welfare",
+      "doc": "/ˈwelfeə/",
+      "loai": "n",
+      "nghia": "phúc lợi; trợ cấp xã hội",
+      "cap": "B2",
+      "viDu": "Spending on welfare rises when unemployment is high.",
+      "viDuNghia": "Chi cho phúc lợi tăng khi thất nghiệp cao.",
+      "ghiChu": "the welfare state · welfare benefits (các khoản trợ cấp) · animal welfare (quyền lợi động vật). AWL sublist 5."
+    },
+    {
+      "chu": "public spending",
+      "doc": "/ˌpʌblɪk ˈspendɪŋ/",
+      "loai": "n",
+      "nghia": "chi tiêu công",
+      "cap": "B2",
+      "viDu": "Public spending on education varies widely between countries.",
+      "viDuNghia": "Chi tiêu công cho giáo dục khác nhau nhiều giữa các nước.",
+      "ghiChu": "spending on · cut / increase public spending · government spending (đồng nghĩa)."
+    },
+    {
+      "chu": "accountable",
+      "doc": "/əˈkaʊntəbl/",
+      "loai": "adj",
+      "nghia": "phải chịu trách nhiệm giải trình",
+      "cap": "B2",
+      "viDu": "Politicians should be held accountable for their decisions.",
+      "viDuNghia": "Chính trị gia cần phải chịu trách nhiệm về quyết định của mình.",
+      "ghiChu": "hold sb accountable for · be accountable to the public · accountability (n)."
+    },
+    {
+      "chu": "bureaucracy",
+      "doc": "/bjʊəˈrɒkrəsi/",
+      "loai": "n",
+      "nghia": "bộ máy quan liêu; thủ tục hành chính rườm rà",
+      "cap": "B2",
+      "viDu": "Small businesses complain about too much bureaucracy.",
+      "viDuNghia": "Doanh nghiệp nhỏ than phiền thủ tục hành chính quá rườm rà.",
+      "ghiChu": "bureaucratic /ˌbjʊərəˈkrætɪk/ (adj) · red tape (cách nói thân mật)."
+    },
+    {
+      "chu": "privatise",
+      "doc": "/ˈpraɪvətaɪz/",
+      "loai": "v",
+      "nghia": "tư nhân hoá",
+      "cap": "B2",
+      "viDu": "The railways were privatised in the 1990s.",
+      "viDuNghia": "Ngành đường sắt được tư nhân hoá vào thập niên 1990.",
+      "ghiChu": "Mỹ: privatize. privatisation (n) ↔ nationalise (quốc hữu hoá)."
+    },
+    {
+      "chu": "public sector",
+      "doc": "/ˌpʌblɪk ˈsektə/",
+      "loai": "n",
+      "nghia": "khu vực công (nhà nước)",
+      "cap": "B2",
+      "viDu": "Wages in the public sector have not kept up with prices.",
+      "viDuNghia": "Lương khu vực công không theo kịp giá cả.",
+      "ghiChu": "↔ the private sector (khu vực tư nhân). Luôn có the: work in the public sector. AWL sublist 1 (sector)."
+    },
+    {
+      "chu": "taxpayers' money",
+      "doc": "/ˈtækspeɪəz ˌmʌni/",
+      "loai": "phr",
+      "nghia": "tiền thuế của dân",
+      "cap": "B2",
+      "viDu": "Critics say the stadium is a waste of taxpayers' money.",
+      "viDuNghia": "Người chỉ trích nói sân vận động là sự lãng phí tiền thuế của dân.",
+      "ghiChu": "a waste / a good use of taxpayers' money."
+    },
+    {
+      "chu": "public funds",
+      "doc": "/ˌpʌblɪk ˈfʌndz/",
+      "loai": "phr",
+      "nghia": "công quỹ, tiền công",
+      "cap": "B2",
+      "viDu": "Public funds are limited, so choices have to be made.",
+      "viDuNghia": "Công quỹ có hạn, nên phải lựa chọn.",
+      "ghiChu": "= public money. Câu này mở được mọi đoạn phản đề về chi tiêu."
+    },
+    {
+      "chu": "raise / cut taxes",
+      "doc": "/reɪz/ /kʌt/ /ˈtæksɪz/",
+      "loai": "phr",
+      "nghia": "tăng / giảm thuế",
+      "cap": "B2",
+      "viDu": "No government likes to raise taxes before an election.",
+      "viDuNghia": "Không chính phủ nào thích tăng thuế trước bầu cử.",
+      "ghiChu": "raise (ngoại động từ) — không dùng ~~rise taxes~~. Taxes rise (tự tăng)."
+    },
+    {
+      "chu": "allocate a budget to",
+      "doc": "/ˈæləkeɪt ə ˈbʌdʒɪt tə/",
+      "loai": "phr",
+      "nghia": "dành một khoản ngân sách cho",
+      "cap": "B2",
+      "viDu": "A larger budget should be allocated to public transport.",
+      "viDuNghia": "Nên dành một ngân sách lớn hơn cho giao thông công cộng.",
+      "ghiChu": "Dạng bị động rất hợp văn học thuật: More funding should be allocated to…"
+    },
+    {
+      "chu": "at the expense of",
+      "doc": "/ət ði ɪkˈspens əv/",
+      "loai": "phr",
+      "nghia": "với cái giá là, làm thiệt cho",
+      "cap": "B2",
+      "viDu": "New roads should not be built at the expense of public transport.",
+      "viDuNghia": "Không nên xây đường mới mà làm thiệt cho giao thông công cộng.",
+      "ghiChu": "Cụm then chốt của đề “A rather than B”: chi cho A at the expense of B."
+    },
+    {
+      "chu": "a top priority",
+      "doc": "/ə ˌtɒp praɪˈɒrəti/",
+      "loai": "phr",
+      "nghia": "ưu tiên hàng đầu",
+      "cap": "B2",
+      "viDu": "Reducing air pollution should be a top priority.",
+      "viDuNghia": "Giảm ô nhiễm không khí nên là ưu tiên hàng đầu.",
+      "ghiChu": "make sth a priority · give priority to sth over sth."
+    },
+    {
+      "chu": "tackle a problem",
+      "doc": "/ˈtækl ə ˈprɒbləm/",
+      "loai": "phr",
+      "nghia": "giải quyết (xử lý thẳng) một vấn đề",
+      "cap": "B2",
+      "viDu": "Higher fines alone will not tackle the problem of littering.",
+      "viDuNghia": "Chỉ tăng tiền phạt sẽ không giải quyết được nạn xả rác.",
+      "ghiChu": "tackle không có giới từ: ~~tackle with~~. Đồng nghĩa: address / deal with."
+    },
+    {
+      "chu": "take measures",
+      "doc": "/teɪk ˈmeʒəz/",
+      "loai": "phr",
+      "nghia": "thực hiện các biện pháp",
+      "cap": "B2",
+      "viDu": "The authorities must take measures to reduce congestion.",
+      "viDuNghia": "Nhà chức trách phải có biện pháp giảm ùn tắc.",
+      "ghiChu": "= take steps / take action. introduce measures · effective / strict measures."
+    },
+    {
+      "chu": "introduce a law",
+      "doc": "/ˌɪntrəˈdjuːs ə ˈlɔː/",
+      "loai": "phr",
+      "nghia": "ban hành một đạo luật",
+      "cap": "B2",
+      "viDu": "Several countries have introduced laws against plastic bags.",
+      "viDuNghia": "Vài nước đã ban hành luật chống túi nhựa.",
+      "ghiChu": "pass a law (thông qua) · enforce a law (thực thi) · break / obey the law."
+    },
+    {
+      "chu": "be responsible for",
+      "doc": "/bi rɪˈspɒnsəbl fə/",
+      "loai": "phr",
+      "nghia": "chịu trách nhiệm về",
+      "cap": "B2",
+      "viDu": "Who should be responsible for looking after the elderly?",
+      "viDuNghia": "Ai nên chịu trách nhiệm chăm sóc người cao tuổi?",
+      "ghiChu": "responsible for + N / V-ing (không phải ~~responsible to do~~). Danh từ: it is the responsibility of governments to…"
+    },
+    {
+      "chu": "in the long term",
+      "doc": "/ɪn ðə ˌlɒŋ ˈtɜːm/",
+      "loai": "phr",
+      "nghia": "về lâu dài",
+      "cap": "B2",
+      "viDu": "In the long term, prevention is cheaper than treatment.",
+      "viDuNghia": "Về lâu dài, phòng bệnh rẻ hơn chữa bệnh.",
+      "ghiChu": "↔ in the short term. Tính từ: a long-term solution (có gạch nối)."
+    },
+    {
+      "chu": "independently",
+      "doc": "/ˌɪndɪˈpendəntli/",
+      "loai": "adv",
+      "nghia": "một cách độc lập",
+      "cap": "B2",
+      "viDu": "The two teams reached the same result independently.",
+      "viDuNghia": "Hai nhóm đạt cùng kết quả một cách độc lập.",
+      "ghiChu": "independent (adj) of · independence (n) from"
+    },
+    {
+      "chu": "approximate",
+      "doc": "/əˈprɒksɪmət/",
+      "loai": "adj",
+      "nghia": "xấp xỉ, gần đúng",
+      "cap": "B2",
+      "viDu": "The approximate cost of the project is two million dollars.",
+      "viDuNghia": "Chi phí xấp xỉ của dự án là hai triệu đô la.",
+      "ghiChu": "approximately (adv) = about, roughly — dùng nhiều ở Task 1 · động từ approximate đọc /-meɪt/"
+    },
+    {
+      "chu": "attitude",
+      "doc": "/ˈætɪtjuːd/",
+      "loai": "n",
+      "nghia": "thái độ, quan điểm",
+      "cap": "B2",
+      "viDu": "Attitudes towards renting have changed among young people.",
+      "viDuNghia": "Thái độ đối với việc thuê nhà đã thay đổi ở giới trẻ.",
+      "ghiChu": "attitude to / towards · a positive / negative attitude · change attitudes"
+    },
+    {
+      "chu": "civil",
+      "doc": "/ˈsɪvl/",
+      "loai": "adj",
+      "nghia": "dân sự; thuộc công dân",
+      "cap": "B2",
+      "viDu": "Civil engineers design roads, bridges and tunnels.",
+      "viDuNghia": "Kỹ sư xây dựng dân dụng thiết kế đường, cầu và hầm.",
+      "ghiChu": "civil engineering / rights / war / servant (công chức)"
+    },
+    {
+      "chu": "communicate",
+      "doc": "/kəˈmjuːnɪkeɪt/",
+      "loai": "v",
+      "nghia": "giao tiếp, truyền đạt",
+      "cap": "B2",
+      "viDu": "Architects must communicate their ideas clearly to clients.",
+      "viDuNghia": "Kiến trúc sư phải truyền đạt ý tưởng rõ ràng cho khách hàng.",
+      "ghiChu": "communicate with sb · communication (n) · communicative (adj)"
+    },
+    {
+      "chu": "conference",
+      "doc": "/ˈkɒnfərəns/",
+      "loai": "n",
+      "nghia": "hội nghị",
+      "cap": "B2",
+      "viDu": "She presented her research at an international conference.",
+      "viDuNghia": "Cô trình bày nghiên cứu tại một hội nghị quốc tế.",
+      "ghiChu": "attend / hold a conference · a press conference (họp báo)"
+    },
+    {
+      "chu": "contrast",
+      "doc": "/ˈkɒntrɑːst/",
+      "loai": "n",
+      "nghia": "sự tương phản; đối chiếu",
+      "cap": "B2",
+      "viDu": "In contrast, rents in the north fell slightly.",
+      "viDuNghia": "Ngược lại, tiền thuê ở miền bắc giảm nhẹ.",
+      "ghiChu": "in contrast (to) · by contrast · a sharp contrast · động từ nhấn sau: /kənˈtrɑːst/"
+    },
+    {
+      "chu": "ethnic",
+      "doc": "/ˈeθnɪk/",
+      "loai": "adj",
+      "nghia": "thuộc dân tộc, sắc tộc",
+      "cap": "B2",
+      "viDu": "Vietnam has more than fifty ethnic groups.",
+      "viDuNghia": "Việt Nam có hơn năm mươi dân tộc.",
+      "ghiChu": "ethnic minority / group / background · ethnicity (n)"
+    },
+    {
+      "chu": "implicate",
+      "doc": "/ˈɪmplɪkeɪt/",
+      "loai": "v",
+      "nghia": "cho thấy có liên đới",
+      "cap": "B2",
+      "viDu": "Poor housing has been implicated in many health problems.",
+      "viDuNghia": "Nhà ở tồi tàn được cho là có liên quan tới nhiều vấn đề sức khoẻ.",
+      "ghiChu": "danh từ gặp nhiều hơn: implication — have serious implications for (hệ quả đối với)"
+    },
+    {
+      "chu": "occupy",
+      "doc": "/ˈɒkjupaɪ/",
+      "loai": "v",
+      "nghia": "chiếm (chỗ); ở, sử dụng",
+      "cap": "B2",
+      "viDu": "Offices occupy the first three floors of the tower.",
+      "viDuNghia": "Văn phòng chiếm ba tầng đầu của toà tháp.",
+      "ghiChu": "owner-occupied homes (nhà chủ ở) · occupant (người ở) · occupation (nghề; sự chiếm đóng)"
+    },
+    {
+      "chu": "output",
+      "doc": "/ˈaʊtpʊt/",
+      "loai": "n",
+      "nghia": "sản lượng; đầu ra",
+      "cap": "B2",
+      "viDu": "Industrial output grew by five per cent.",
+      "viDuNghia": "Sản lượng công nghiệp tăng năm phần trăm.",
+      "ghiChu": "industrial / agricultural output · ≠ input"
+    },
+    {
+      "chu": "parallel",
+      "doc": "/ˈpærəlel/",
+      "loai": "adj",
+      "nghia": "song song; điểm tương đồng",
+      "cap": "B2",
+      "viDu": "The railway runs parallel to the river.",
+      "viDuNghia": "Đường sắt chạy song song với con sông.",
+      "ghiChu": "parallel to / with · draw a parallel between A and B · Task 1 map"
+    },
+    {
+      "chu": "predict",
+      "doc": "/prɪˈdɪkt/",
+      "loai": "v",
+      "nghia": "dự đoán",
+      "cap": "B2",
+      "viDu": "Rents are predicted to rise by five per cent next year.",
+      "viDuNghia": "Tiền thuê được dự đoán tăng năm phần trăm vào năm tới.",
+      "ghiChu": "is predicted to + V — Task 1 dự báo · prediction (n) · predictable (adj)"
+    },
+    {
+      "chu": "regime",
+      "doc": "/reɪˈʒiːm/",
+      "loai": "n",
+      "nghia": "chế độ; hệ thống quy định",
+      "cap": "B2",
+      "viDu": "The new tax regime favours first-time buyers.",
+      "viDuNghia": "Chế độ thuế mới có lợi cho người mua nhà lần đầu.",
+      "ghiChu": "a military regime · a tax regime · a fitness regime"
+    },
+    {
+      "chu": "series",
+      "doc": "/ˈsɪəriːz/",
+      "loai": "n",
+      "nghia": "loạt, chuỗi",
+      "cap": "B2",
+      "viDu": "A series of new towers has changed the skyline.",
+      "viDuNghia": "Một loạt toà tháp mới đã thay đổi đường chân trời thành phố.",
+      "ghiChu": "a series of + N số nhiều + động từ số ít · số nhiều vẫn viết series"
+    },
+    {
+      "chu": "statistic",
+      "doc": "/stəˈtɪstɪk/",
+      "loai": "n",
+      "nghia": "số liệu thống kê",
+      "cap": "B2",
+      "viDu": "Official statistics show that rents have doubled.",
+      "viDuNghia": "Số liệu chính thức cho thấy tiền thuê đã tăng gấp đôi.",
+      "ghiChu": "statistics show / suggest that · statistical (adj) · statistically (adv)"
+    },
+    {
+      "chu": "social housing",
+      "doc": "/ˌsəʊʃl ˈhaʊzɪŋ/",
+      "loai": "n",
+      "nghia": "nhà ở xã hội",
+      "cap": "B2",
+      "viDu": "There is a long waiting list for social housing.",
+      "viDuNghia": "Có một danh sách chờ dài để được nhà ở xã hội.",
+      "ghiChu": "= council housing (Anh) / public housing (Mỹ)"
+    },
+    {
+      "chu": "utility bills",
+      "doc": "/juːˈtɪləti bɪlz/",
+      "loai": "n",
+      "nghia": "hoá đơn điện, nước, ga",
+      "cap": "B2",
+      "viDu": "The rent includes all utility bills.",
+      "viDuNghia": "Tiền thuê đã gồm mọi hoá đơn điện nước.",
+      "ghiChu": "utilities = electricity, gas, water · split the bills"
+    },
+    {
+      "chu": "block of flats",
+      "doc": "/ˌblɒk əv ˈflæts/",
+      "loai": "n",
+      "nghia": "toà chung cư",
+      "cap": "B2",
+      "viDu": "A new block of flats is going up opposite the park.",
+      "viDuNghia": "Một toà chung cư mới đang mọc lên đối diện công viên.",
+      "ghiChu": "Mỹ: apartment building · số nhiều: blocks of flats"
+    },
+    {
+      "chu": "storey",
+      "doc": "/ˈstɔːri/",
+      "loai": "n",
+      "nghia": "tầng (của toà nhà)",
+      "cap": "B2",
+      "viDu": "The tower is eighteen storeys high.",
+      "viDuNghia": "Toà tháp cao mười tám tầng.",
+      "ghiChu": "a two-storey house (không s) · Mỹ: story · ≠ floor (tầng mình đang đứng: on the third floor)"
+    },
+    {
+      "chu": "facade",
+      "doc": "/fəˈsɑːd/",
+      "loai": "n",
+      "nghia": "mặt tiền",
+      "cap": "B2",
+      "viDu": "The glass facade reflects the sky.",
+      "viDuNghia": "Mặt tiền kính phản chiếu bầu trời.",
+      "ghiChu": "cũng viết façade · retain the original facade"
+    },
+    {
+      "chu": "layout",
+      "doc": "/ˈleɪaʊt/",
+      "loai": "n",
+      "nghia": "cách bố trí, mặt bằng",
+      "cap": "B2",
+      "viDu": "The layout of the flat makes it feel larger.",
+      "viDuNghia": "Cách bố trí căn hộ khiến nó có cảm giác rộng hơn.",
+      "ghiChu": "floor plan (bản vẽ mặt bằng) · an open-plan layout"
+    },
+    {
+      "chu": "open-plan",
+      "doc": "/ˌəʊpən ˈplæn/",
+      "loai": "adj",
+      "nghia": "không gian mở (không vách ngăn)",
+      "cap": "B2",
+      "viDu": "Modern flats often have an open-plan kitchen and living area.",
+      "viDuNghia": "Căn hộ hiện đại thường có bếp và phòng khách không gian mở.",
+      "ghiChu": "an open-plan office / kitchen"
+    },
+    {
+      "chu": "renovate",
+      "doc": "/ˈrenəveɪt/",
+      "loai": "v",
+      "nghia": "cải tạo, tân trang",
+      "cap": "B2",
+      "viDu": "It is often cheaper to renovate an old building than to replace it.",
+      "viDuNghia": "Cải tạo nhà cũ thường rẻ hơn thay mới.",
+      "ghiChu": "renovation (n) · = do up (khẩu ngữ) · need renovating (Ngày 7)"
+    },
+    {
+      "chu": "insulation",
+      "doc": "/ˌɪnsjuˈleɪʃn/",
+      "loai": "n",
+      "nghia": "lớp / sự cách nhiệt",
+      "cap": "B2",
+      "viDu": "Good insulation can halve a home's heating bill.",
+      "viDuNghia": "Cách nhiệt tốt có thể giảm một nửa tiền sưởi.",
+      "ghiChu": "insulate (v) · well / poorly insulated · sound insulation (cách âm)"
+    },
+    {
+      "chu": "ventilation",
+      "doc": "/ˌventɪˈleɪʃn/",
+      "loai": "n",
+      "nghia": "sự thông gió",
+      "cap": "B2",
+      "viDu": "Poor ventilation causes damp and mould.",
+      "viDuNghia": "Thông gió kém gây ẩm và mốc.",
+      "ghiChu": "natural ventilation · well-ventilated (adj) · damp (ẩm), mould (mốc)"
+    },
+    {
+      "chu": "energy-efficient",
+      "doc": "/ˌenədʒi ɪˈfɪʃnt/",
+      "loai": "adj",
+      "nghia": "tiết kiệm năng lượng",
+      "cap": "B2",
+      "viDu": "Energy-efficient homes are cheaper to run.",
+      "viDuNghia": "Nhà tiết kiệm năng lượng tốn ít chi phí vận hành hơn.",
+      "ghiChu": "energy efficiency (n) · eco-friendly · solar panels (pin mặt trời)"
+    },
+    {
+      "chu": "outskirts",
+      "doc": "/ˈaʊtskɜːts/",
+      "loai": "n",
+      "nghia": "vùng ven, rìa thành phố",
+      "cap": "B2",
+      "viDu": "The new campus is on the outskirts of the city.",
+      "viDuNghia": "Cơ sở mới nằm ở vùng ven thành phố.",
+      "ghiChu": "on the outskirts of — luôn số nhiều, giới từ on"
+    },
+    {
+      "chu": "artificial",
+      "doc": "/ˌɑːtɪˈfɪʃl/",
+      "loai": "adj",
+      "nghia": "nhân tạo",
+      "cap": "B2",
+      "viDu": "Most people now live under skies brightened by artificial light.",
+      "viDuNghia": "Phần lớn mọi người nay sống dưới bầu trời bị ánh sáng nhân tạo làm sáng lên.",
+      "ghiChu": "Trái nghĩa: natural. artificial intelligence · artificial light / flavours."
+    },
+    {
+      "chu": "scatter",
+      "doc": "/ˈskætə/",
+      "loai": "v",
+      "nghia": "làm tán xạ; rải, vãi",
+      "cap": "B2",
+      "viDu": "Blue light is scattered more strongly by the atmosphere.",
+      "viDuNghia": "Ánh sáng xanh bị khí quyển tán xạ mạnh hơn.",
+      "ghiChu": "be scattered across / around = nằm rải rác khắp."
+    },
+    {
+      "chu": "navigate",
+      "doc": "/ˈnævɪɡeɪt/",
+      "loai": "v",
+      "nghia": "định hướng, tìm đường",
+      "cap": "B2",
+      "viDu": "Many birds use the stars to navigate.",
+      "viDuNghia": "Nhiều loài chim dùng sao để định hướng.",
+      "ghiChu": "Họ từ: navigation (n) · navigator (n). navigate a website."
+    },
+    {
+      "chu": "disruption",
+      "doc": "/dɪsˈrʌpʃn/",
+      "loai": "n",
+      "nghia": "sự gián đoạn, xáo trộn",
+      "cap": "B2",
+      "viDu": "The strike caused serious disruption to train services.",
+      "viDuNghia": "Cuộc đình công gây gián đoạn nghiêm trọng cho dịch vụ tàu hoả.",
+      "ghiChu": "disruption to + N · disrupt (v) · disruptive (adj)."
+    },
+    {
+      "chu": "residue",
+      "doc": "/ˈrezɪdjuː/",
+      "loai": "n",
+      "nghia": "cặn, dư lượng còn sót lại",
+      "cap": "B2",
+      "viDu": "Chemical residues were found in the river.",
+      "viDuNghia": "Người ta tìm thấy dư lượng hoá chất trong sông.",
+      "ghiChu": "pesticide residues = dư lượng thuốc trừ sâu. leave no residue."
+    },
+    {
+      "chu": "advance",
+      "doc": "/ədˈvɑːns/",
+      "loai": "n",
+      "nghia": "bước tiến, tiến bộ",
+      "cap": "B2",
+      "viDu": "Recent advances in medicine have increased life expectancy.",
+      "viDuNghia": "Những tiến bộ gần đây trong y học đã làm tăng tuổi thọ.",
+      "ghiChu": "advances in + lĩnh vực · scientific / technological / medical advances. Tính từ: advanced. Đồng nghĩa: progress (không đếm được), development."
+    },
+    {
+      "chu": "pioneering",
+      "doc": "/ˌpaɪəˈnɪərɪŋ/",
+      "loai": "adj",
+      "nghia": "tiên phong, mở đường",
+      "cap": "B2",
+      "viDu": "Her pioneering work on radioactivity won two Nobel Prizes.",
+      "viDuNghia": "Công trình tiên phong của bà về phóng xạ giành hai giải Nobel.",
+      "ghiChu": "pioneering work / research / surgery. Danh từ / động từ: pioneer (người tiên phong; mở đường)."
+    },
+    {
+      "chu": "clinical trial",
+      "doc": "/ˌklɪnɪkl ˈtraɪəl/",
+      "loai": "n",
+      "nghia": "thử nghiệm lâm sàng (thử thuốc trên người)",
+      "cap": "B2",
+      "viDu": "The drug is still in clinical trials and is not yet available.",
+      "viDuNghia": "Thuốc vẫn đang thử nghiệm lâm sàng và chưa có trên thị trường.",
+      "ghiChu": "run / take part in a clinical trial. trial = cuộc thử nghiệm; trial and error = thử và sai."
+    },
+    {
+      "chu": "space debris",
+      "doc": "/ˈspeɪs ˌdebriː/",
+      "loai": "n",
+      "nghia": "rác vũ trụ",
+      "cap": "B2",
+      "viDu": "Tens of thousands of pieces of space debris are now circling the Earth.",
+      "viDuNghia": "Hàng chục nghìn mảnh rác vũ trụ hiện đang bay quanh Trái Đất.",
+      "ghiChu": "debris không đếm được, chữ s cuối câm: /ˈdebriː/. Đời thường: space junk."
+    },
+    {
+      "chu": "mission",
+      "doc": "/ˈmɪʃn/",
+      "loai": "n",
+      "nghia": "sứ mệnh, chuyến bay (vũ trụ)",
+      "cap": "B2",
+      "viDu": "A crewed mission to Mars could cost hundreds of billions of dollars.",
+      "viDuNghia": "Một sứ mệnh có người lái tới sao Hoả có thể tốn hàng trăm tỉ đô-la.",
+      "ghiChu": "a crewed / manned mission (có người) ↔ an uncrewed / unmanned mission (không người) · a mission to + nơi đến."
+    },
+    {
+      "chu": "colonise",
+      "doc": "/ˈkɒlənaɪz/",
+      "loai": "v",
+      "nghia": "lập khu định cư, chiếm làm thuộc địa",
+      "cap": "B2",
+      "viDu": "Some scientists argue that humans should colonise other planets.",
+      "viDuNghia": "Một số nhà khoa học cho rằng loài người nên lập khu định cư trên hành tinh khác.",
+      "ghiChu": "Anh-Mỹ: colonize. Danh từ: colony (thuộc địa, khu định cư) · colonisation."
+    },
+    {
+      "chu": "extraterrestrial",
+      "doc": "/ˌekstrətəˈrestriəl/",
+      "loai": "adj",
+      "nghia": "ngoài Trái Đất",
+      "cap": "B2",
+      "viDu": "So far, no evidence of extraterrestrial life has been found.",
+      "viDuNghia": "Đến nay chưa tìm thấy bằng chứng nào về sự sống ngoài Trái Đất.",
+      "ghiChu": "extra- (ngoài) + terrestrial (thuộc Trái Đất). extraterrestrial life = sự sống ngoài hành tinh; đời thường: aliens."
+    },
+    {
+      "chu": "conduct research into",
+      "doc": "/kənˌdʌkt rɪˈsɜːtʃ ɪntə/",
+      "loai": "phr",
+      "nghia": "tiến hành nghiên cứu về",
+      "cap": "B2",
+      "viDu": "Universities should conduct more research into renewable energy.",
+      "viDuNghia": "Các trường đại học nên tiến hành thêm nghiên cứu về năng lượng tái tạo.",
+      "ghiChu": "Cũng được: carry out / do research into / on. Danh từ research nhấn âm 2 (reSEARCH) trong Anh-Anh."
+    },
+    {
+      "chu": "carry out an experiment",
+      "doc": "/ˌkæri aʊt ən ɪkˈsperɪmənt/",
+      "loai": "phr",
+      "nghia": "tiến hành một thí nghiệm",
+      "cap": "B2",
+      "viDu": "Students learn more when they carry out experiments themselves.",
+      "viDuNghia": "Học sinh học được nhiều hơn khi tự làm thí nghiệm.",
+      "ghiChu": "carry out + a study / a survey / tests / research. Bị động: The experiment was carried out in 2019."
+    },
+    {
+      "chu": "test a hypothesis",
+      "doc": "/ˌtest ə haɪˈpɒθəsɪs/",
+      "loai": "phr",
+      "nghia": "kiểm tra một giả thuyết",
+      "cap": "B2",
+      "viDu": "A large sample is needed to test the hypothesis properly.",
+      "viDuNghia": "Cần một mẫu lớn để kiểm tra giả thuyết cho đúng.",
+      "ghiChu": "Chuỗi: form → test → support / reject a hypothesis."
+    },
+    {
+      "chu": "analyse data",
+      "doc": "/ˌænəlaɪz ˈdeɪtə/",
+      "loai": "phr",
+      "nghia": "phân tích dữ liệu",
+      "cap": "B2",
+      "viDu": "Computers can analyse huge amounts of data in seconds.",
+      "viDuNghia": "Máy tính có thể phân tích lượng dữ liệu khổng lồ trong vài giây.",
+      "ghiChu": "Họ từ: analysis (n, số nhiều analyses) · analyst (người) · analytical (adj). Anh-Mỹ: analyze."
+    },
+    {
+      "chu": "draw a conclusion",
+      "doc": "/ˌdrɔː ə kənˈkluːʒn/",
+      "loai": "phr",
+      "nghia": "rút ra kết luận",
+      "cap": "B2",
+      "viDu": "It is too early to draw any firm conclusions from the study.",
+      "viDuNghia": "Còn quá sớm để rút ra kết luận chắc chắn nào từ nghiên cứu.",
+      "ghiChu": "draw / reach / come to a conclusion — ~~make a conclusion~~ / ~~take a conclusion~~."
+    },
+    {
+      "chu": "allocate funding to",
+      "doc": "/ˌæləkeɪt ˈfʌndɪŋ tə/",
+      "loai": "phr",
+      "nghia": "phân bổ kinh phí cho",
+      "cap": "B2",
+      "viDu": "Governments should allocate more funding to medical research.",
+      "viDuNghia": "Chính phủ nên phân bổ thêm kinh phí cho nghiên cứu y khoa.",
+      "ghiChu": "allocate money / resources / a budget to + N. Danh từ: allocation. Dễ hơn: spend more on · invest more in."
+    },
+    {
+      "chu": "push the boundaries of",
+      "doc": "/ˌpʊʃ ðə ˈbaʊndriz əv/",
+      "loai": "phr",
+      "nghia": "mở rộng giới hạn của",
+      "cap": "B2",
+      "viDu": "Space missions push the boundaries of human knowledge.",
+      "viDuNghia": "Các sứ mệnh vũ trụ mở rộng giới hạn hiểu biết của loài người.",
+      "ghiChu": "push the boundaries of science / knowledge / technology. boundary = ranh giới."
+    },
+    {
+      "chu": "benefit humanity",
+      "doc": "/ˌbenɪfɪt hjuːˈmænəti/",
+      "loai": "phr",
+      "nghia": "mang lại lợi ích cho nhân loại",
+      "cap": "B2",
+      "viDu": "Research should be judged by how much it benefits humanity.",
+      "viDuNghia": "Nghiên cứu nên được đánh giá theo mức độ nó mang lại lợi ích cho nhân loại.",
+      "ghiChu": "Động từ benefit đi thẳng với tân ngữ: benefit society — ~~benefit for society~~. Danh từ: be of benefit to · for the benefit of humanity / mankind."
+    },
+    {
+      "chu": "a waste of public money",
+      "doc": "/ə ˌweɪst əv ˌpʌblɪk ˈmʌni/",
+      "loai": "phr",
+      "nghia": "sự lãng phí tiền công (tiền thuế)",
+      "cap": "B2",
+      "viDu": "Critics describe the Mars project as a waste of public money.",
+      "viDuNghia": "Những người chỉ trích gọi dự án sao Hoả là sự lãng phí tiền công.",
+      "ghiChu": "a waste of time / money / resources. taxpayers' money = tiền của người đóng thuế. public spending = chi tiêu công."
+    },
+    {
+      "chu": "pave the way for",
+      "doc": "/ˌpeɪv ðə ˈweɪ fə/",
+      "loai": "phr",
+      "nghia": "mở đường cho",
+      "cap": "B2",
+      "viDu": "Early space research paved the way for modern satellite navigation.",
+      "viDuNghia": "Nghiên cứu vũ trụ thời đầu đã mở đường cho định vị vệ tinh hiện đại.",
+      "ghiChu": "pave the way for + N / V-ing. Rất hợp để nói lợi ích dài hạn."
+    },
+    {
+      "chu": "in the long run",
+      "doc": "/ɪn ðə ˌlɒŋ ˈrʌn/",
+      "loai": "phr",
+      "nghia": "về lâu dài",
+      "cap": "B2",
+      "viDu": "Investment in science pays off in the long run.",
+      "viDuNghia": "Đầu tư vào khoa học sẽ sinh lời về lâu dài.",
+      "ghiChu": "↔ in the short term (trước mắt). pay off = đem lại kết quả xứng đáng. Trang trọng hơn: in the long term."
+    },
+    {
+      "chu": "fourfold",
+      "doc": "/ˈfɔːfəʊld/",
+      "loai": "adj",
+      "nghia": "gấp bốn lần",
+      "cap": "B2",
+      "viDu": "There was a fourfold increase in online sales.",
+      "viDuNghia": "Doanh số trực tuyến tăng gấp bốn.",
+      "ghiChu": "twofold · threefold · fivefold · tenfold · rise fourfold (adv) · a fourfold rise (adj). Không thêm s."
+    },
+    {
+      "chu": "quadruple",
+      "doc": "/kwɒˈdruːpl/",
+      "loai": "v",
+      "nghia": "tăng gấp bốn",
+      "cap": "B2",
+      "viDu": "The number of users quadrupled in five years.",
+      "viDuNghia": "Số người dùng tăng gấp bốn trong năm năm.",
+      "ghiChu": "double → triple → quadruple · ngược lại: halve (giảm một nửa)."
+    },
+    {
+      "chu": "comparable",
+      "doc": "/ˈkɒmpərəbl/",
+      "loai": "adj",
+      "nghia": "tương đương, ngang nhau",
+      "cap": "B2",
+      "viDu": "The two countries had comparable levels of spending.",
+      "viDuNghia": "Hai nước có mức chi tiêu tương đương.",
+      "ghiChu": "comparable to / with + N. Trọng âm ở âm tiết đầu: COM-parable. Họ từ: compare (v), comparison (n), comparatively (adv)."
+    },
+    {
+      "chu": "brittle",
+      "doc": "/ˈbrɪtl/",
+      "loai": "adj",
+      "nghia": "giòn, dễ gãy vỡ",
+      "cap": "B2",
+      "viDu": "Old plastic becomes brittle in the sun.",
+      "viDuNghia": "Nhựa cũ trở nên giòn khi phơi nắng.",
+      "ghiChu": "become / grow brittle · nghĩa bóng: a brittle peace (hoà bình mong manh)."
+    },
+    {
+      "chu": "prehistoric",
+      "doc": "/ˌpriːhɪˈstɒrɪk/",
+      "loai": "adj",
+      "nghia": "thuộc thời tiền sử (trước khi có chữ viết)",
+      "cap": "B2",
+      "viDu": "Prehistoric paintings were found on the walls of the cave.",
+      "viDuNghia": "Người ta tìm thấy tranh thời tiền sử trên vách hang.",
+      "ghiChu": "prehistoric times / tools / humans · danh từ: prehistory. Tiền tố pre- = trước."
+    },
+    {
+      "chu": "medieval",
+      "doc": "/ˌmediˈiːvl/",
+      "loai": "adj",
+      "nghia": "thuộc thời trung cổ (khoảng thế kỷ 5–15 ở châu Âu)",
+      "cap": "B2",
+      "viDu": "The town still has its medieval walls and narrow streets.",
+      "viDuNghia": "Thị trấn vẫn còn tường thành trung cổ và những con phố hẹp.",
+      "ghiChu": "medieval castle / town / manuscript · danh từ: the Middle Ages (thời Trung cổ)."
+    },
+    {
+      "chu": "era",
+      "doc": "/ˈɪərə/",
+      "loai": "n",
+      "nghia": "kỷ nguyên, thời đại",
+      "cap": "B2",
+      "viDu": "The invention of printing marked the beginning of a new era.",
+      "viDuNghia": "Việc phát minh ra in ấn đánh dấu khởi đầu một kỷ nguyên mới.",
+      "ghiChu": "the colonial / digital / post-war era · the end of an era · gần nghĩa: period, age (the Bronze Age)."
+    },
+    {
+      "chu": "civilisation",
+      "doc": "/ˌsɪvəlaɪˈzeɪʃn/",
+      "loai": "n",
+      "nghia": "nền văn minh",
+      "cap": "B2",
+      "viDu": "Rivers played a key role in the rise of early civilisations.",
+      "viDuNghia": "Sông ngòi đóng vai trò then chốt trong sự hình thành các nền văn minh sơ khai.",
+      "ghiChu": "ancient / early / lost civilisation · the rise / collapse of a civilisation · Mỹ viết civilization. Họ từ: civilised (adj)."
+    },
+    {
+      "chu": "empire",
+      "doc": "/ˈempaɪə/",
+      "loai": "n",
+      "nghia": "đế chế",
+      "cap": "B2",
+      "viDu": "At its height, the Roman Empire stretched from Britain to Egypt.",
+      "viDuNghia": "Vào thời cực thịnh, Đế chế La Mã trải dài từ Anh tới Ai Cập.",
+      "ghiChu": "build / rule / expand an empire · the fall of an empire · người đứng đầu: emperor; tính từ: imperial."
+    },
+    {
+      "chu": "dynasty",
+      "doc": "/ˈdɪnəsti/",
+      "loai": "n",
+      "nghia": "triều đại",
+      "cap": "B2",
+      "viDu": "The temple was built during the Ly dynasty in the eleventh century.",
+      "viDuNghia": "Ngôi đền được xây dưới triều Lý vào thế kỷ mười một.",
+      "ghiChu": "during the … dynasty · found / overthrow a dynasty · Mỹ đọc /ˈdaɪnəsti/."
+    },
+    {
+      "chu": "colonial",
+      "doc": "/kəˈləʊniəl/",
+      "loai": "adj",
+      "nghia": "thuộc thời thuộc địa",
+      "cap": "B2",
+      "viDu": "Many colonial buildings in the city centre have been turned into hotels.",
+      "viDuNghia": "Nhiều toà nhà thời thuộc địa ở trung tâm thành phố đã thành khách sạn.",
+      "ghiChu": "colonial rule / architecture / period · Họ từ: colony (n) thuộc địa · colonise (v) · colonialism (n) chủ nghĩa thực dân."
+    },
+    {
+      "chu": "ancestor",
+      "doc": "/ˈænsestə/",
+      "loai": "n",
+      "nghia": "tổ tiên",
+      "cap": "B2",
+      "viDu": "Our ancestors relied on the river for food and transport.",
+      "viDuNghia": "Tổ tiên chúng ta dựa vào con sông để có thức ăn và đi lại.",
+      "ghiChu": "distant / early / common ancestor · tính từ: ancestral (ancestral home — nhà tổ) · trái nghĩa: descendant."
+    },
+    {
+      "chu": "descendant",
+      "doc": "/dɪˈsendənt/",
+      "loai": "n",
+      "nghia": "con cháu, hậu duệ",
+      "cap": "B2",
+      "viDu": "The descendants of the original settlers still live in the village.",
+      "viDuNghia": "Con cháu của những người định cư đầu tiên vẫn sống trong làng.",
+      "ghiChu": "a direct descendant of + người · động từ: thường dùng be descended from (She is descended from a farming family); descend from cũng có nhưng trang trọng, ít gặp."
+    },
+    {
+      "chu": "chronological",
+      "doc": "/ˌkrɒnəˈlɒdʒɪkl/",
+      "loai": "adj",
+      "nghia": "theo trình tự thời gian",
+      "cap": "B2",
+      "viDu": "The exhibits are arranged in chronological order.",
+      "viDuNghia": "Hiện vật được sắp theo trình tự thời gian.",
+      "ghiChu": "in chronological order · trạng từ: chronologically · danh từ: chronology. Gốc chrono- = thời gian."
+    },
+    {
+      "chu": "archive",
+      "doc": "/ˈɑːkaɪv/",
+      "loai": "n",
+      "nghia": "kho lưu trữ; tài liệu lưu trữ",
+      "cap": "B2",
+      "viDu": "Historians spent years studying letters in the national archives.",
+      "viDuNghia": "Các nhà sử học mất nhiều năm nghiên cứu thư từ trong kho lưu trữ quốc gia.",
+      "ghiChu": "the national / city / family archives · chữ ch đọc /k/. Động từ: archive (v) lưu trữ."
+    },
+    {
+      "chu": "primary source",
+      "doc": "/ˈpraɪməri sɔːs/",
+      "loai": "n",
+      "nghia": "nguồn sử liệu gốc (do người đương thời tạo ra)",
+      "cap": "B2",
+      "viDu": "Diaries and letters are valuable primary sources for historians.",
+      "viDuNghia": "Nhật ký và thư từ là nguồn sử liệu gốc quý giá với nhà sử học.",
+      "ghiChu": "≠ secondary source (sách, bài viết về sau) · a reliable / written source · historical records."
+    },
+    {
+      "chu": "archaeology",
+      "doc": "/ˌɑːkiˈɒlədʒi/",
+      "loai": "n",
+      "nghia": "khảo cổ học",
+      "cap": "B2",
+      "viDu": "She studied archaeology at university and now works on sites in Greece.",
+      "viDuNghia": "Cô ấy học khảo cổ ở đại học và giờ làm việc tại các di chỉ ở Hy Lạp.",
+      "ghiChu": "Trọng âm ở -OL-. Tính từ: archaeological (an archaeological site / dig / discovery). Mỹ có thể viết archeology."
+    },
+    {
+      "chu": "archaeologist",
+      "doc": "/ˌɑːkiˈɒlədʒɪst/",
+      "loai": "n",
+      "nghia": "nhà khảo cổ",
+      "cap": "B2",
+      "viDu": "Archaeologists believe the settlement was abandoned after a flood.",
+      "viDuNghia": "Các nhà khảo cổ tin rằng khu định cư bị bỏ hoang sau một trận lụt.",
+      "ghiChu": "Cùng kiểu: historian (nhà sử học) · anthropologist (nhà nhân học) · curator (người phụ trách bảo tàng)."
+    },
+    {
+      "chu": "excavate",
+      "doc": "/ˈekskəveɪt/",
+      "loai": "v",
+      "nghia": "khai quật",
+      "cap": "B2",
+      "viDu": "The team has been excavating the site since 2019.",
+      "viDuNghia": "Nhóm nghiên cứu khai quật di chỉ này từ năm 2019.",
+      "ghiChu": "excavate a site / a tomb / the remains of + N · danh từ: excavation (carry out an excavation) · từ thường ngày: dig (n, v)."
+    },
+    {
+      "chu": "remains",
+      "doc": "/rɪˈmeɪnz/",
+      "loai": "n",
+      "nghia": "di tích còn sót lại; hài cốt",
+      "cap": "B2",
+      "viDu": "The remains of a Roman villa lie beneath the car park.",
+      "viDuNghia": "Di tích một biệt thự La Mã nằm bên dưới bãi đỗ xe.",
+      "ghiChu": "Luôn số nhiều, động từ số nhiều: the remains were found. human / skeletal remains = hài cốt. So với ruins: xem mục 5."
+    },
+    {
+      "chu": "tomb",
+      "doc": "/tuːm/",
+      "loai": "n",
+      "nghia": "lăng mộ, ngôi mộ (thường xây bằng đá)",
+      "cap": "B2",
+      "viDu": "The king's tomb had remained sealed for three thousand years.",
+      "viDuNghia": "Lăng mộ nhà vua vẫn bị niêm kín suốt ba nghìn năm.",
+      "ghiChu": "Chữ b câm. a royal tomb · khác: grave (mộ, thường là huyệt đất) · cemetery (nghĩa trang)."
+    },
+    {
+      "chu": "burial",
+      "doc": "/ˈberiəl/",
+      "loai": "n",
+      "nghia": "sự chôn cất; mộ táng",
+      "cap": "B2",
+      "viDu": "The objects found in the burial suggest that she was a person of high status.",
+      "viDuNghia": "Những đồ vật tìm thấy trong mộ táng cho thấy bà là người có địa vị cao.",
+      "ghiChu": "Đọc như berry-al, không đọc “bu-”. a burial site / ground / chamber · động từ: bury /ˈberi/."
+    },
+    {
+      "chu": "inscription",
+      "doc": "/ɪnˈskrɪpʃn/",
+      "loai": "n",
+      "nghia": "chữ khắc (trên đá, kim loại)",
+      "cap": "B2",
+      "viDu": "An inscription on the stone records the name of the builder.",
+      "viDuNghia": "Dòng chữ khắc trên đá ghi tên người xây.",
+      "ghiChu": "an inscription on + vật · động từ: inscribe (be inscribed with). Cùng gốc script: manuscript (bản viết tay)."
+    },
+    {
+      "chu": "uncover",
+      "doc": "/ʌnˈkʌvə/",
+      "loai": "v",
+      "nghia": "làm lộ ra, phát hiện (thứ bị che, bị chôn)",
+      "cap": "B2",
+      "viDu": "Building work uncovered the foundations of a medieval church.",
+      "viDuNghia": "Việc thi công làm lộ ra nền móng một nhà thờ trung cổ.",
+      "ghiChu": "uncover evidence / remains / the truth · gần nghĩa: unearth (đào lên), reveal, discover."
+    },
+    {
+      "chu": "settlement",
+      "doc": "/ˈsetlmənt/",
+      "loai": "n",
+      "nghia": "khu định cư",
+      "cap": "B2",
+      "viDu": "The earliest settlements were built close to fresh water.",
+      "viDuNghia": "Những khu định cư sớm nhất được dựng gần nguồn nước ngọt.",
+      "ghiChu": "an early / permanent / farming settlement · Họ từ: settle (v) định cư · settler (n) người định cư."
+    },
+    {
+      "chu": "date back to",
+      "doc": "/deɪt bæk tə/",
+      "loai": "phr",
+      "nghia": "có từ (thời điểm nào đó)",
+      "cap": "B2",
+      "viDu": "The oldest part of the castle dates back to the twelfth century.",
+      "viDuNghia": "Phần cổ nhất của lâu đài có từ thế kỷ mười hai.",
+      "ghiChu": "= date from + mốc. Dùng hiện tại đơn khi vật còn tồn tại. Không ~~is dated back to~~, không ~~dates back from~~. Động từ date (v): date the pottery to 500 BC."
+    }
+  ]
+}

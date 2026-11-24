@@ -1,0 +1,897 @@
+{
+  "ma": "nang-cao-c1-1",
+  "nn": "en",
+  "ten": "Bù C1 · Động từ học thuật và lập luận",
+  "moTa": "Động từ C1 còn thiếu so với Oxford 5000 và danh sách học thuật: nêu quan điểm, quy trách nhiệm, tăng giảm, cản trở (allege, ascertain, bolster, curtail, incur, reiterate…) — dùng để viết Task 2 band 7+ và đọc bài học thuật.",
+  "nhom": "ielts",
+  "cap": "C1",
+  "tu": [
+    {
+      "chu": "convene",
+      "doc": "/kənˈviːn/",
+      "loai": "v",
+      "nghia": "triệu tập, họp lại",
+      "cap": "C1",
+      "viDu": "The board will convene an emergency meeting to discuss the data breach.",
+      "viDuNghia": "Hội đồng sẽ triệu tập cuộc họp khẩn để bàn về vụ rò rỉ dữ liệu.",
+      "cumTu": [
+        "convene a meeting",
+        "convene a panel",
+        "convene a conference"
+      ],
+      "hoTu": [
+        "convention (n)",
+        "convener (n)"
+      ]
+    },
+    {
+      "chu": "ascertain",
+      "doc": "/ˌæsəˈteɪn/",
+      "loai": "v",
+      "nghia": "xác minh, tìm hiểu cho chắc",
+      "cap": "C1",
+      "viDu": "Investigators are trying to ascertain the cause of the outage.",
+      "viDuNghia": "Các điều tra viên đang cố xác minh nguyên nhân sự cố.",
+      "cumTu": [
+        "ascertain the cause",
+        "ascertain the facts",
+        "ascertain whether"
+      ],
+      "hoTu": [
+        "ascertainable (adj)"
+      ],
+      "ghiChu": "Trang trọng hơn \"find out\"; trọng âm cuối."
+    },
+    {
+      "chu": "jeopardise",
+      "doc": "/ˈdʒepədaɪz/",
+      "loai": "v",
+      "nghia": "gây nguy hiểm, đe doạ làm hỏng",
+      "cap": "C1",
+      "viDu": "Skipping the security review could jeopardise the entire project.",
+      "viDuNghia": "Bỏ qua bước rà soát bảo mật có thể đe doạ cả dự án.",
+      "cumTu": [
+        "jeopardise the future",
+        "jeopardise your chances",
+        "seriously jeopardise"
+      ],
+      "hoTu": [
+        "jeopardy (n)"
+      ],
+      "ghiChu": "\"in jeopardy\" = lâm nguy. Chữ \"eo\" đọc /e/."
+    },
+    {
+      "chu": "negate",
+      "doc": "/nɪˈɡeɪt/",
+      "loai": "v",
+      "nghia": "làm mất tác dụng, phủ nhận",
+      "cap": "C1",
+      "viDu": "Higher rents may negate the benefits of the wage increase.",
+      "viDuNghia": "Tiền thuê nhà tăng có thể xoá mất lợi ích của việc tăng lương.",
+      "cumTu": [
+        "negate the effect",
+        "negate the benefits",
+        "negate the need for"
+      ],
+      "hoTu": [
+        "negation (n)",
+        "negative (adj)"
+      ]
+    },
+    {
+      "chu": "confer",
+      "doc": "/kənˈfɜː(r)/",
+      "loai": "v",
+      "nghia": "trao tặng (bằng, quyền); bàn bạc",
+      "cap": "C1",
+      "viDu": "A degree does not automatically confer the skills employers need.",
+      "viDuNghia": "Tấm bằng không tự động đem lại kỹ năng mà nhà tuyển dụng cần.",
+      "cumTu": [
+        "confer a degree on",
+        "confer an advantage",
+        "confer with colleagues"
+      ],
+      "hoTu": [
+        "conference (n)",
+        "conferral (n)"
+      ],
+      "ghiChu": "confer sth ON sb (trao); confer WITH sb (bàn bạc)."
+    },
+    {
+      "chu": "acclaim",
+      "doc": "/əˈkleɪm/",
+      "loai": "n",
+      "nghia": "sự ca ngợi, hoan nghênh",
+      "cap": "C1",
+      "viDu": "Her first novel won international acclaim.",
+      "viDuNghia": "Tiểu thuyết đầu tay của cô nhận được sự ca ngợi quốc tế.",
+      "cumTu": [
+        "critical acclaim",
+        "win acclaim",
+        "international acclaim"
+      ],
+      "hoTu": [
+        "acclaim (v)",
+        "acclaimed (adj)"
+      ],
+      "ghiChu": "\"critically acclaimed film\" — hữu ích cho Speaking tả phim/sách."
+    },
+    {
+      "chu": "adhere",
+      "doc": "/ədˈhɪə(r)/",
+      "loai": "v",
+      "nghia": "tuân thủ; bám dính",
+      "cap": "C1",
+      "viDu": "All contributors must adhere to the coding standards.",
+      "viDuNghia": "Mọi người đóng góp phải tuân thủ chuẩn viết mã.",
+      "cumTu": [
+        "adhere to rules",
+        "adhere strictly to",
+        "adhere to a principle"
+      ],
+      "hoTu": [
+        "adherence (n)",
+        "adherent (n)",
+        "adhesive (n, adj)"
+      ],
+      "ghiChu": "Luôn đi với \"to\": adhere TO."
+    },
+    {
+      "chu": "allege",
+      "doc": "/əˈledʒ/",
+      "loai": "v",
+      "nghia": "cáo buộc (chưa có chứng cứ)",
+      "cap": "C1",
+      "viDu": "Critics allege that the company hid the problem for months.",
+      "viDuNghia": "Giới phê bình cáo buộc công ty đã che giấu vấn đề suốt nhiều tháng.",
+      "cumTu": [
+        "allege that",
+        "it is alleged that",
+        "allege misconduct"
+      ],
+      "hoTu": [
+        "allegation (n)",
+        "alleged (adj)",
+        "allegedly (adv)"
+      ],
+      "ghiChu": "\"allegedly\" giúp thuật lại mà không khẳng định — một dạng hedging."
+    },
+    {
+      "chu": "articulate",
+      "doc": "/ɑːˈtɪkjuleɪt/",
+      "loai": "v",
+      "nghia": "diễn đạt rõ ràng (ý nghĩ, cảm xúc)",
+      "cap": "C1",
+      "viDu": "Candidates must be able to articulate their ideas clearly.",
+      "viDuNghia": "Ứng viên phải diễn đạt được ý tưởng một cách rõ ràng.",
+      "cumTu": [
+        "articulate an idea",
+        "articulate a vision",
+        "clearly articulate"
+      ],
+      "hoTu": [
+        "articulate (adj) /ɑːˈtɪkjələt/",
+        "articulation (n)"
+      ],
+      "ghiChu": "Tính từ (ăn nói lưu loát) đọc đuôi /lət/."
+    },
+    {
+      "chu": "aspire",
+      "doc": "/əˈspaɪə(r)/",
+      "loai": "v",
+      "nghia": "khao khát, có hoài bão",
+      "cap": "C1",
+      "viDu": "Many students aspire to work for global technology companies.",
+      "viDuNghia": "Nhiều sinh viên khao khát làm việc cho các công ty công nghệ toàn cầu.",
+      "cumTu": [
+        "aspire to do something",
+        "aspire to a career",
+        "aspiring engineers"
+      ],
+      "hoTu": [
+        "aspiration (n)",
+        "aspiring (adj)"
+      ],
+      "ghiChu": "aspire TO. \"career aspirations\" hay được hỏi khi phỏng vấn."
+    },
+    {
+      "chu": "bolster",
+      "doc": "/ˈbəʊlstə(r)/",
+      "loai": "v",
+      "nghia": "củng cố, tăng cường",
+      "cap": "C1",
+      "viDu": "New evidence will bolster the argument for a four-day week.",
+      "viDuNghia": "Bằng chứng mới sẽ củng cố lập luận ủng hộ tuần làm bốn ngày.",
+      "cumTu": [
+        "bolster confidence",
+        "bolster the economy",
+        "bolster an argument"
+      ],
+      "ghiChu": "Đồng nghĩa trang trọng của \"strengthen/support\"."
+    },
+    {
+      "chu": "circumscribe",
+      "doc": "/ˈsɜːkəmskraɪb/",
+      "loai": "v",
+      "nghia": "giới hạn, hạn chế (quyền, phạm vi)",
+      "cap": "C2",
+      "viDu": "The new law will circumscribe the powers of local councils.",
+      "viDuNghia": "Luật mới sẽ giới hạn quyền hạn của hội đồng địa phương.",
+      "cumTu": [
+        "circumscribe power",
+        "narrowly circumscribed",
+        "circumscribe freedom"
+      ],
+      "hoTu": [
+        "circumscription (n)"
+      ],
+      "ghiChu": "Rất trang trọng; thường ở dạng bị động."
+    },
+    {
+      "chu": "correlate",
+      "doc": "/ˈkɒrəleɪt/",
+      "loai": "v",
+      "nghia": "có tương quan với",
+      "cap": "C1",
+      "viDu": "Higher levels of education correlate with better health outcomes.",
+      "viDuNghia": "Trình độ học vấn cao hơn có tương quan với sức khoẻ tốt hơn.",
+      "cumTu": [
+        "correlate with something",
+        "closely correlate",
+        "correlate strongly"
+      ],
+      "hoTu": [
+        "correlation (n)"
+      ],
+      "ghiChu": "Tương quan KHÔNG có nghĩa là nhân quả — dùng khi chưa dám nói \"cause\"."
+    },
+    {
+      "chu": "culminate",
+      "doc": "/ˈkʌlmɪneɪt/",
+      "loai": "v",
+      "nghia": "lên tới đỉnh điểm, kết thúc bằng",
+      "cap": "C1",
+      "viDu": "Months of negotiation will culminate in a final agreement next week.",
+      "viDuNghia": "Nhiều tháng đàm phán sẽ kết thúc bằng một thoả thuận cuối cùng vào tuần tới.",
+      "cumTu": [
+        "culminate in something",
+        "culminate with"
+      ],
+      "hoTu": [
+        "culmination (n)"
+      ],
+      "ghiChu": "Đi với \"in\": culminate IN."
+    },
+    {
+      "chu": "curtail",
+      "doc": "/kɜːˈteɪl/",
+      "loai": "v",
+      "nghia": "cắt giảm, hạn chế bớt",
+      "cap": "C1",
+      "viDu": "Budget cuts forced the school to curtail its music programme.",
+      "viDuNghia": "Cắt giảm ngân sách buộc trường phải thu hẹp chương trình âm nhạc.",
+      "cumTu": [
+        "curtail spending",
+        "curtail freedom",
+        "severely curtail"
+      ],
+      "hoTu": [
+        "curtailment (n)"
+      ]
+    },
+    {
+      "chu": "defy",
+      "doc": "/dɪˈfaɪ/",
+      "loai": "v",
+      "nghia": "bất chấp, thách thức",
+      "cap": "C1",
+      "viDu": "Some drivers openly defy the ban on using phones at the wheel.",
+      "viDuNghia": "Một số tài xế công khai bất chấp lệnh cấm dùng điện thoại khi lái xe.",
+      "cumTu": [
+        "defy the law",
+        "defy expectations",
+        "defy description"
+      ],
+      "hoTu": [
+        "defiance (n)",
+        "defiant (adj)"
+      ],
+      "ghiChu": "\"defy expectations\" = vượt ngoài dự đoán."
+    },
+    {
+      "chu": "embed",
+      "doc": "/ɪmˈbed/",
+      "loai": "v",
+      "nghia": "gắn chặt vào, nhúng",
+      "cap": "C1",
+      "viDu": "These values are deeply embedded in the company culture.",
+      "viDuNghia": "Những giá trị này ăn sâu trong văn hoá công ty.",
+      "cumTu": [
+        "deeply embedded in",
+        "embed a video",
+        "embedded systems"
+      ],
+      "hoTu": [
+        "embedded (adj)"
+      ],
+      "ghiChu": "Trong IT: embed code/video; embedded system = hệ thống nhúng."
+    },
+    {
+      "chu": "embody",
+      "doc": "/ɪmˈbɒdi/",
+      "loai": "v",
+      "nghia": "là hiện thân của, thể hiện",
+      "cap": "C1",
+      "viDu": "The new campus is meant to embody the university's commitment to sustainability.",
+      "viDuNghia": "Khuôn viên mới nhằm thể hiện cam kết của trường với phát triển bền vững.",
+      "cumTu": [
+        "embody a principle",
+        "embody the spirit of",
+        "embody values"
+      ],
+      "hoTu": [
+        "embodiment (n)"
+      ]
+    },
+    {
+      "chu": "evade",
+      "doc": "/ɪˈveɪd/",
+      "loai": "v",
+      "nghia": "lẩn tránh, trốn (thuế, trách nhiệm)",
+      "cap": "C1",
+      "viDu": "Large firms sometimes use legal tricks to evade taxes.",
+      "viDuNghia": "Các công ty lớn đôi khi dùng mánh pháp lý để trốn thuế.",
+      "cumTu": [
+        "evade tax",
+        "evade responsibility",
+        "evade the question"
+      ],
+      "hoTu": [
+        "evasion (n)",
+        "evasive (adj)"
+      ],
+      "ghiChu": "\"tax evasion\" (trốn thuế, phạm pháp) khác \"tax avoidance\" (né thuế hợp pháp)."
+    },
+    {
+      "chu": "gauge",
+      "doc": "/ɡeɪdʒ/",
+      "loai": "v",
+      "nghia": "đánh giá, đo lường (thái độ, mức độ)",
+      "cap": "C1",
+      "viDu": "Surveys are used to gauge public opinion on the new policy.",
+      "viDuNghia": "Khảo sát được dùng để đo dư luận về chính sách mới.",
+      "cumTu": [
+        "gauge public opinion",
+        "gauge the reaction",
+        "difficult to gauge"
+      ],
+      "hoTu": [
+        "gauge (n)"
+      ],
+      "ghiChu": "Phát âm /ɡeɪdʒ/ — chữ \"au\" đọc /eɪ/."
+    },
+    {
+      "chu": "incur",
+      "doc": "/ɪnˈkɜː(r)/",
+      "loai": "v",
+      "nghia": "gánh chịu, phải chịu (chi phí, hậu quả)",
+      "cap": "C1",
+      "viDu": "Students who study abroad often incur large debts.",
+      "viDuNghia": "Sinh viên du học thường gánh những khoản nợ lớn.",
+      "cumTu": [
+        "incur costs",
+        "incur debts",
+        "incur a penalty"
+      ],
+      "ghiChu": "Quá khứ: incurred (gấp đôi r)."
+    },
+    {
+      "chu": "inflict",
+      "doc": "/ɪnˈflɪkt/",
+      "loai": "v",
+      "nghia": "gây ra (đau đớn, thiệt hại)",
+      "cap": "C1",
+      "viDu": "Cyber attacks can inflict serious damage on small businesses.",
+      "viDuNghia": "Tấn công mạng có thể gây thiệt hại nghiêm trọng cho doanh nghiệp nhỏ.",
+      "cumTu": [
+        "inflict damage on",
+        "inflict pain",
+        "inflict harm"
+      ],
+      "hoTu": [
+        "infliction (n)"
+      ],
+      "ghiChu": "inflict sth ON sb."
+    },
+    {
+      "chu": "overhaul",
+      "doc": "/ˌəʊvəˈhɔːl/",
+      "loai": "v",
+      "nghia": "đại tu, cải tổ toàn diện",
+      "cap": "C1",
+      "viDu": "The government plans to overhaul the national exam system.",
+      "viDuNghia": "Chính phủ dự định cải tổ toàn diện hệ thống thi quốc gia.",
+      "cumTu": [
+        "overhaul the system",
+        "completely overhaul",
+        "overhaul the law"
+      ],
+      "hoTu": [
+        "overhaul (n) /ˈəʊvəhɔːl/"
+      ],
+      "ghiChu": "Danh từ: a complete overhaul of the tax system."
+    },
+    {
+      "chu": "oversee",
+      "doc": "/ˌəʊvəˈsiː/",
+      "loai": "v",
+      "nghia": "giám sát, trông coi",
+      "cap": "C1",
+      "viDu": "She was hired to oversee the migration to the cloud.",
+      "viDuNghia": "Cô ấy được thuê để giám sát việc chuyển lên đám mây.",
+      "cumTu": [
+        "oversee a project",
+        "oversee the work",
+        "oversee the process"
+      ],
+      "hoTu": [
+        "oversight (n)",
+        "overseer (n)"
+      ],
+      "ghiChu": "Khác \"overlook\" (bỏ sót). \"oversight\" có hai nghĩa: giám sát / sơ suất."
+    },
+    {
+      "chu": "ponder",
+      "doc": "/ˈpɒndə(r)/",
+      "loai": "v",
+      "nghia": "suy ngẫm, cân nhắc kỹ",
+      "cap": "C1",
+      "viDu": "The committee will ponder the proposal before making a decision.",
+      "viDuNghia": "Uỷ ban sẽ cân nhắc kỹ đề xuất trước khi quyết định.",
+      "cumTu": [
+        "ponder a question",
+        "ponder over something",
+        "ponder the future"
+      ]
+    },
+    {
+      "chu": "propel",
+      "doc": "/prəˈpel/",
+      "loai": "v",
+      "nghia": "đẩy tới, thúc đẩy",
+      "cap": "C1",
+      "viDu": "Cheap smartphones helped to propel the growth of online payment.",
+      "viDuNghia": "Điện thoại giá rẻ đã góp phần thúc đẩy thanh toán trực tuyến tăng trưởng.",
+      "cumTu": [
+        "propel growth",
+        "propel someone to fame",
+        "propel forward"
+      ],
+      "hoTu": [
+        "propulsion (n)",
+        "propeller (n)"
+      ]
+    },
+    {
+      "chu": "reiterate",
+      "doc": "/riˈɪtəreɪt/",
+      "loai": "v",
+      "nghia": "nhắc lại, nhấn mạnh lại",
+      "cap": "C1",
+      "viDu": "I would like to reiterate that safety remains our first priority.",
+      "viDuNghia": "Tôi muốn nhắc lại rằng an toàn vẫn là ưu tiên hàng đầu của chúng tôi.",
+      "cumTu": [
+        "reiterate a point",
+        "reiterate that",
+        "reiterate a commitment"
+      ],
+      "hoTu": [
+        "reiteration (n)"
+      ],
+      "ghiChu": "Dùng mở đoạn kết bài: \"To reiterate, …\"."
+    },
+    {
+      "chu": "reside",
+      "doc": "/rɪˈzaɪd/",
+      "loai": "v",
+      "nghia": "cư trú, sinh sống",
+      "cap": "C1",
+      "viDu": "Over half of the world's population now reside in urban areas.",
+      "viDuNghia": "Hơn nửa dân số thế giới hiện sinh sống ở khu vực đô thị.",
+      "cumTu": [
+        "reside in a country",
+        "reside abroad",
+        "reside permanently"
+      ],
+      "hoTu": [
+        "resident (n)",
+        "residence (n)",
+        "residential (adj)"
+      ],
+      "ghiChu": "Trang trọng hơn \"live\" — thay thế tốt ở Task 1/2."
+    },
+    {
+      "chu": "spur",
+      "doc": "/spɜː(r)/",
+      "loai": "v",
+      "nghia": "thúc đẩy, kích thích",
+      "cap": "C1",
+      "viDu": "Lower interest rates are expected to spur investment.",
+      "viDuNghia": "Lãi suất thấp hơn được kỳ vọng sẽ kích thích đầu tư.",
+      "cumTu": [
+        "spur growth",
+        "spur someone on",
+        "spur investment"
+      ],
+      "hoTu": [
+        "spur (n)"
+      ],
+      "ghiChu": "\"on the spur of the moment\" = bốc đồng, không tính trước."
+    },
+    {
+      "chu": "succumb",
+      "doc": "/səˈkʌm/",
+      "loai": "v",
+      "nghia": "khuất phục, không chống nổi",
+      "cap": "C1",
+      "viDu": "Many dieters eventually succumb to temptation.",
+      "viDuNghia": "Nhiều người ăn kiêng cuối cùng vẫn không cưỡng nổi cám dỗ.",
+      "cumTu": [
+        "succumb to pressure",
+        "succumb to temptation",
+        "succumb to illness"
+      ],
+      "ghiChu": "Chữ \"b\" câm; đi với \"to\"."
+    },
+    {
+      "chu": "alienate",
+      "doc": "/ˈeɪliəneɪt/",
+      "loai": "v",
+      "nghia": "làm xa lánh, khiến mất thiện cảm",
+      "cap": "C1",
+      "viDu": "Constant price rises risk alienating loyal customers.",
+      "viDuNghia": "Tăng giá liên tục có nguy cơ khiến khách hàng trung thành quay lưng.",
+      "cumTu": [
+        "alienate voters",
+        "alienate customers",
+        "feel alienated from"
+      ],
+      "hoTu": [
+        "alienation (n)",
+        "alien (adj, n)"
+      ]
+    },
+    {
+      "chu": "captivate",
+      "doc": "/ˈkæptɪveɪt/",
+      "loai": "v",
+      "nghia": "làm say mê, cuốn hút",
+      "cap": "C1",
+      "viDu": "A good speaker can captivate an audience within the first minute.",
+      "viDuNghia": "Diễn giả giỏi có thể cuốn hút khán giả ngay trong phút đầu.",
+      "cumTu": [
+        "captivate an audience",
+        "be captivated by",
+        "captivate the imagination"
+      ],
+      "hoTu": [
+        "captivating (adj)"
+      ]
+    },
+    {
+      "chu": "coerce",
+      "doc": "/kəʊˈɜːs/",
+      "loai": "v",
+      "nghia": "ép buộc, cưỡng ép",
+      "cap": "C1",
+      "viDu": "Nobody should be coerced into working unpaid overtime.",
+      "viDuNghia": "Không ai nên bị ép làm thêm giờ không lương.",
+      "cumTu": [
+        "coerce someone into doing",
+        "be coerced into"
+      ],
+      "hoTu": [
+        "coercion (n)",
+        "coercive (adj)"
+      ],
+      "ghiChu": "Cấu trúc: coerce SB INTO doing sth."
+    },
+    {
+      "chu": "designate",
+      "doc": "/ˈdezɪɡneɪt/",
+      "loai": "v",
+      "nghia": "chỉ định, chọn làm",
+      "cap": "C1",
+      "viDu": "The area has been designated as a national park.",
+      "viDuNghia": "Khu vực này đã được chỉ định làm vườn quốc gia.",
+      "cumTu": [
+        "designate something as",
+        "designated area",
+        "designate a successor"
+      ],
+      "hoTu": [
+        "designation (n)",
+        "designated (adj)"
+      ]
+    },
+    {
+      "chu": "discern",
+      "doc": "/dɪˈsɜːn/",
+      "loai": "v",
+      "nghia": "nhận ra, phân biệt được",
+      "cap": "C1",
+      "viDu": "It is difficult to discern any clear pattern in the data.",
+      "viDuNghia": "Khó nhận ra quy luật rõ ràng nào trong dữ liệu.",
+      "cumTu": [
+        "discern a pattern",
+        "discern a difference",
+        "clearly discern"
+      ],
+      "hoTu": [
+        "discernible (adj)",
+        "discerning (adj)"
+      ],
+      "ghiChu": "\"no discernible difference\" — cụm dùng tốt ở Task 1."
+    },
+    {
+      "chu": "enact",
+      "doc": "/ɪˈnækt/",
+      "loai": "v",
+      "nghia": "ban hành (luật)",
+      "cap": "C1",
+      "viDu": "Several countries have enacted laws to protect personal data.",
+      "viDuNghia": "Nhiều nước đã ban hành luật bảo vệ dữ liệu cá nhân.",
+      "cumTu": [
+        "enact a law",
+        "enact legislation",
+        "enact reforms"
+      ],
+      "hoTu": [
+        "enactment (n)"
+      ]
+    },
+    {
+      "chu": "entitle",
+      "doc": "/ɪnˈtaɪtl/",
+      "loai": "v",
+      "nghia": "cho quyền, cho phép được hưởng",
+      "cap": "C1",
+      "viDu": "Full-time staff are entitled to twenty days of paid leave.",
+      "viDuNghia": "Nhân viên chính thức được hưởng hai mươi ngày nghỉ có lương.",
+      "cumTu": [
+        "be entitled to something",
+        "entitle someone to do",
+        "fully entitled"
+      ],
+      "hoTu": [
+        "entitlement (n)"
+      ],
+      "ghiChu": "Hầu như luôn bị động: be entitled TO."
+    },
+    {
+      "chu": "fabricate",
+      "doc": "/ˈfæbrɪkeɪt/",
+      "loai": "v",
+      "nghia": "bịa đặt, nguỵ tạo",
+      "cap": "C1",
+      "viDu": "The researcher was found to have fabricated some of the results.",
+      "viDuNghia": "Nhà nghiên cứu bị phát hiện đã nguỵ tạo một phần kết quả.",
+      "cumTu": [
+        "fabricate evidence",
+        "fabricate data",
+        "fabricate a story"
+      ],
+      "hoTu": [
+        "fabrication (n)"
+      ],
+      "ghiChu": "Còn có nghĩa kỹ thuật \"chế tạo\" (chip fabrication)."
+    },
+    {
+      "chu": "forfeit",
+      "doc": "/ˈfɔːfɪt/",
+      "loai": "v",
+      "nghia": "mất quyền, bị tước (do vi phạm)",
+      "cap": "C1",
+      "viDu": "If you cancel late, you forfeit your deposit.",
+      "viDuNghia": "Nếu huỷ muộn, bạn sẽ mất tiền đặt cọc.",
+      "cumTu": [
+        "forfeit a right",
+        "forfeit a deposit",
+        "forfeit the match"
+      ],
+      "hoTu": [
+        "forfeiture (n)"
+      ],
+      "ghiChu": "Đọc /ˈfɔːfɪt/, không phải \"-feet\"."
+    },
+    {
+      "chu": "indulge",
+      "doc": "/ɪnˈdʌldʒ/",
+      "loai": "v",
+      "nghia": "nuông chiều, tự cho phép hưởng",
+      "cap": "C1",
+      "viDu": "On holiday I like to indulge in the local street food.",
+      "viDuNghia": "Đi nghỉ tôi thích tự thưởng cho mình đồ ăn đường phố bản địa.",
+      "cumTu": [
+        "indulge in something",
+        "indulge yourself",
+        "indulge a child"
+      ],
+      "hoTu": [
+        "indulgence (n)",
+        "indulgent (adj)"
+      ]
+    },
+    {
+      "chu": "intimidate",
+      "doc": "/ɪnˈtɪmɪdeɪt/",
+      "loai": "v",
+      "nghia": "doạ dẫm, làm cho sợ",
+      "cap": "C1",
+      "viDu": "Large codebases can intimidate new developers at first.",
+      "viDuNghia": "Kho mã lớn có thể khiến lập trình viên mới thấy ngợp lúc đầu.",
+      "cumTu": [
+        "intimidate someone into",
+        "feel intimidated by",
+        "intimidate witnesses"
+      ],
+      "hoTu": [
+        "intimidation (n)",
+        "intimidating (adj)"
+      ]
+    },
+    {
+      "chu": "obstruct",
+      "doc": "/əbˈstrʌkt/",
+      "loai": "v",
+      "nghia": "cản trở, làm tắc",
+      "cap": "C1",
+      "viDu": "Parked cars obstruct the pavement and force people into the road.",
+      "viDuNghia": "Xe đỗ chắn vỉa hè và buộc người đi bộ xuống lòng đường.",
+      "cumTu": [
+        "obstruct the view",
+        "obstruct justice",
+        "obstruct traffic"
+      ],
+      "hoTu": [
+        "obstruction (n)",
+        "obstructive (adj)"
+      ]
+    },
+    {
+      "chu": "penetrate",
+      "doc": "/ˈpenətreɪt/",
+      "loai": "v",
+      "nghia": "thâm nhập, xuyên qua",
+      "cap": "C1",
+      "viDu": "The firm hopes to penetrate the Southeast Asian market next year.",
+      "viDuNghia": "Công ty hy vọng thâm nhập thị trường Đông Nam Á vào năm tới.",
+      "cumTu": [
+        "penetrate a market",
+        "penetrate deep into",
+        "penetrate defences"
+      ],
+      "hoTu": [
+        "penetration (n)"
+      ],
+      "ghiChu": "Bảo mật: penetration testing = kiểm thử xâm nhập."
+    },
+    {
+      "chu": "pinpoint",
+      "doc": "/ˈpɪnpɔɪnt/",
+      "loai": "v",
+      "nghia": "xác định chính xác",
+      "cap": "C1",
+      "viDu": "The logs helped us pinpoint the exact line that caused the crash.",
+      "viDuNghia": "Log đã giúp chúng tôi xác định chính xác dòng gây sập.",
+      "cumTu": [
+        "pinpoint the cause",
+        "pinpoint the location",
+        "hard to pinpoint"
+      ],
+      "hoTu": [
+        "pinpoint (adj)"
+      ]
+    },
+    {
+      "chu": "provoke",
+      "doc": "/prəˈvəʊk/",
+      "loai": "v",
+      "nghia": "khiêu khích; gây ra (phản ứng)",
+      "cap": "C1",
+      "viDu": "The proposal is likely to provoke a strong reaction from teachers.",
+      "viDuNghia": "Đề xuất này nhiều khả năng gây phản ứng mạnh từ giáo viên.",
+      "cumTu": [
+        "provoke a reaction",
+        "provoke debate",
+        "provoke anger"
+      ],
+      "hoTu": [
+        "provocation (n)",
+        "provocative (adj)"
+      ]
+    },
+    {
+      "chu": "refrain",
+      "doc": "/rɪˈfreɪn/",
+      "loai": "v",
+      "nghia": "kiềm chế, tránh làm",
+      "cap": "C1",
+      "viDu": "Please refrain from using your phone during the test.",
+      "viDuNghia": "Vui lòng không sử dụng điện thoại trong lúc thi.",
+      "cumTu": [
+        "refrain from doing",
+        "refrain from comment",
+        "kindly refrain"
+      ],
+      "ghiChu": "refrain FROM + V-ing; văn thông báo trang trọng."
+    },
+    {
+      "chu": "retaliate",
+      "doc": "/rɪˈtælieɪt/",
+      "loai": "v",
+      "nghia": "trả đũa",
+      "cap": "C1",
+      "viDu": "If one country raises tariffs, others usually retaliate.",
+      "viDuNghia": "Nếu một nước tăng thuế quan, các nước khác thường trả đũa.",
+      "cumTu": [
+        "retaliate against",
+        "retaliate by doing",
+        "threaten to retaliate"
+      ],
+      "hoTu": [
+        "retaliation (n)",
+        "retaliatory (adj)"
+      ]
+    },
+    {
+      "chu": "saturate",
+      "doc": "/ˈsætʃəreɪt/",
+      "loai": "v",
+      "nghia": "làm bão hoà",
+      "cap": "C1",
+      "viDu": "Cheap phones have saturated the market, so prices keep falling.",
+      "viDuNghia": "Điện thoại giá rẻ đã làm bão hoà thị trường nên giá cứ giảm.",
+      "cumTu": [
+        "saturate the market",
+        "be saturated with",
+        "saturated fat"
+      ],
+      "hoTu": [
+        "saturation (n)",
+        "saturated (adj)"
+      ]
+    },
+    {
+      "chu": "unveil",
+      "doc": "/ˌʌnˈveɪl/",
+      "loai": "v",
+      "nghia": "công bố, ra mắt",
+      "cap": "C1",
+      "viDu": "The company will unveil its new laptop at the conference.",
+      "viDuNghia": "Công ty sẽ ra mắt mẫu laptop mới tại hội nghị.",
+      "cumTu": [
+        "unveil a plan",
+        "unveil a product",
+        "unveil a statue"
+      ],
+      "hoTu": [
+        "unveiling (n)"
+      ]
+    },
+    {
+      "chu": "wield",
+      "doc": "/wiːld/",
+      "loai": "v",
+      "nghia": "nắm và sử dụng (quyền lực, ảnh hưởng)",
+      "cap": "C1",
+      "viDu": "A few technology giants wield enormous power over what we read.",
+      "viDuNghia": "Vài gã khổng lồ công nghệ nắm quyền lực khổng lồ với những gì ta đọc.",
+      "cumTu": [
+        "wield power",
+        "wield influence",
+        "wield a weapon"
+      ]
+    }
+  ]
+}

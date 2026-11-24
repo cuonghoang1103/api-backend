@@ -1,0 +1,1361 @@
+{
+ "ma": "cot-loi-a2-6",
+ "nn": "en",
+ "ten": "Cụm cố định & câu giao tiếp A2",
+ "moTa": "Cụm từ nối, cụm thời gian – nơi chốn và câu đáp thường ngày (at least, of course, a lot of, for example, in the end, let me know, it depends…) — học theo cụm để nói trôi chảy.",
+ "nhom": "giao-tiep",
+ "cap": "A2",
+ "tu": [
+  {
+   "chu": "a lot of",
+   "doc": "/ə lɒt ɒv/",
+   "loai": "phr",
+   "nghia": "nhiều, rất nhiều",
+   "cap": "A1",
+   "viDu": "A lot of students use their phones to study English.",
+   "viDuNghia": "Rất nhiều sinh viên dùng điện thoại để học tiếng Anh.",
+   "cumTu": [
+    "a lot of people",
+    "a lot of time",
+    "a lot of money",
+    "quite a lot of"
+   ],
+   "ghiChu": "Dùng được cho cả danh từ đếm được và không đếm được. Văn viết trang trọng: many / a great deal of."
+  },
+  {
+   "chu": "a few",
+   "doc": "/ə fjuː/",
+   "loai": "phr",
+   "nghia": "một vài (với danh từ đếm được)",
+   "cap": "A1",
+   "viDu": "I have a few questions about the homework.",
+   "viDuNghia": "Tôi có một vài câu hỏi về bài tập về nhà.",
+   "cumTu": [
+    "a few days",
+    "a few minutes",
+    "a few people",
+    "quite a few"
+   ],
+   "ghiChu": "\"a few\" = có vài cái (đủ dùng); \"few\" = rất ít, gần như không."
+  },
+  {
+   "chu": "a little",
+   "doc": "/ə ˈlɪtl/",
+   "loai": "phr",
+   "nghia": "một ít, một chút",
+   "cap": "A1",
+   "viDu": "I can speak a little Japanese.",
+   "viDuNghia": "Tôi nói được một chút tiếng Nhật.",
+   "cumTu": [
+    "a little bit",
+    "a little time",
+    "a little more",
+    "a little money"
+   ],
+   "ghiChu": "a little + danh từ không đếm được; a few + danh từ đếm được."
+  },
+  {
+   "chu": "a bit",
+   "doc": "/ə bɪt/",
+   "loai": "phr",
+   "nghia": "một chút, hơi",
+   "cap": "A2",
+   "viDu": "This shirt is a bit too small for me.",
+   "viDuNghia": "Cái áo này hơi chật so với tôi.",
+   "cumTu": [
+    "a bit of",
+    "a bit tired",
+    "a bit more",
+    "wait a bit"
+   ],
+   "ghiChu": "Thân mật; văn viết dùng \"slightly\"."
+  },
+  {
+   "chu": "a pair of",
+   "doc": "/ə peə(r) ɒv/",
+   "loai": "phr",
+   "nghia": "một đôi, một cặp",
+   "cap": "A1",
+   "viDu": "I bought a pair of shoes for the interview.",
+   "viDuNghia": "Tôi đã mua một đôi giày để đi phỏng vấn.",
+   "cumTu": [
+    "a pair of shoes",
+    "a pair of glasses",
+    "a pair of jeans",
+    "a pair of socks"
+   ],
+   "ghiChu": "Dùng cho vật gồm hai phần: a pair of trousers / scissors / glasses."
+  },
+  {
+   "chu": "a piece of",
+   "doc": "/ə piːs ɒv/",
+   "loai": "phr",
+   "nghia": "một miếng, một mẩu, một (lời khuyên, thông tin)",
+   "cap": "A2",
+   "viDu": "Let me give you a piece of advice.",
+   "viDuNghia": "Để tôi cho bạn một lời khuyên.",
+   "cumTu": [
+    "a piece of cake",
+    "a piece of paper",
+    "a piece of advice",
+    "a piece of information"
+   ],
+   "ghiChu": "Dùng để \"đếm\" danh từ không đếm được: a piece of advice / furniture / news."
+  },
+  {
+   "chu": "a kind of",
+   "doc": "/ə kaɪnd ɒv/",
+   "loai": "phr",
+   "nghia": "một loại, một kiểu",
+   "cap": "A2",
+   "viDu": "Pho is a kind of noodle soup.",
+   "viDuNghia": "Phở là một loại súp có sợi bánh.",
+   "cumTu": [
+    "a kind of food",
+    "a kind of music",
+    "this kind of",
+    "what kind of"
+   ]
+  },
+  {
+   "chu": "a number of",
+   "doc": "/ə ˈnʌmbə(r) ɒv/",
+   "loai": "phr",
+   "nghia": "một số, nhiều",
+   "cap": "B1",
+   "viDu": "A number of students were late because of the rain.",
+   "viDuNghia": "Một số sinh viên đến muộn vì trời mưa.",
+   "cumTu": [
+    "a large number of",
+    "a small number of",
+    "a growing number of"
+   ],
+   "ghiChu": "\"a number of + danh từ số nhiều + động từ số nhiều\"; \"the number of … + động từ số ít\"."
+  },
+  {
+   "chu": "plenty of",
+   "doc": "/ˈplenti ɒv/",
+   "loai": "phr",
+   "nghia": "nhiều, dư dả",
+   "cap": "B1",
+   "viDu": "Do not rush. We have plenty of time.",
+   "viDuNghia": "Đừng vội. Chúng ta có nhiều thời gian.",
+   "cumTu": [
+    "plenty of time",
+    "plenty of money",
+    "plenty of room",
+    "plenty of opportunities"
+   ],
+   "ghiChu": "Mang nghĩa \"đủ và hơn cả đủ\"."
+  },
+  {
+   "chu": "at least",
+   "doc": "/æt liːst/",
+   "loai": "phr",
+   "nghia": "ít nhất, tối thiểu",
+   "cap": "A2",
+   "viDu": "You should sleep at least seven hours a night.",
+   "viDuNghia": "Bạn nên ngủ ít nhất bảy tiếng mỗi đêm.",
+   "cumTu": [
+    "at least once",
+    "at least two",
+    "at least try",
+    "at the very least"
+   ]
+  },
+  {
+   "chu": "at last",
+   "doc": "/æt lɑːst/",
+   "loai": "phr",
+   "nghia": "cuối cùng thì (sau khi chờ lâu)",
+   "cap": "A2",
+   "viDu": "At last, the bus arrived after forty minutes.",
+   "viDuNghia": "Cuối cùng thì xe buýt cũng đến sau bốn mươi phút.",
+   "cumTu": [
+    "at long last",
+    "free at last"
+   ],
+   "ghiChu": "at last = mãi rồi cũng (nhẹ nhõm); lastly = cuối cùng (trong danh sách ý)."
+  },
+  {
+   "chu": "at all",
+   "doc": "/æt ɔːl/",
+   "loai": "phr",
+   "nghia": "chút nào, hoàn toàn (trong câu phủ định, câu hỏi)",
+   "cap": "A2",
+   "viDu": "I do not like horror films at all.",
+   "viDuNghia": "Tôi không thích phim kinh dị chút nào.",
+   "cumTu": [
+    "not at all",
+    "nothing at all",
+    "any at all",
+    "at all times"
+   ],
+   "ghiChu": "\"Not at all\" còn là lời đáp lịch sự cho \"Thank you\"."
+  },
+  {
+   "chu": "at once",
+   "doc": "/æt wʌns/",
+   "loai": "phr",
+   "nghia": "ngay lập tức; cùng một lúc",
+   "cap": "B1",
+   "viDu": "Please call me at once if there is a problem.",
+   "viDuNghia": "Hãy gọi cho tôi ngay nếu có vấn đề.",
+   "cumTu": [
+    "all at once",
+    "come at once",
+    "two things at once"
+   ]
+  },
+  {
+   "chu": "at the moment",
+   "doc": "/æt ðə ˈməʊmənt/",
+   "loai": "phr",
+   "nghia": "hiện tại, lúc này",
+   "cap": "A2",
+   "viDu": "I am quite busy at the moment.",
+   "viDuNghia": "Lúc này tôi khá bận.",
+   "cumTu": [
+    "busy at the moment",
+    "not at the moment",
+    "at the moment I am"
+   ],
+   "ghiChu": "Thường đi với hiện tại tiếp diễn."
+  },
+  {
+   "chu": "at home",
+   "doc": "/æt həʊm/",
+   "loai": "phr",
+   "nghia": "ở nhà",
+   "cap": "A1",
+   "viDu": "I usually stay at home on Sunday mornings.",
+   "viDuNghia": "Tôi thường ở nhà vào sáng Chủ nhật.",
+   "cumTu": [
+    "stay at home",
+    "work at home",
+    "feel at home",
+    "at home with"
+   ],
+   "ghiChu": "\"feel at home\" = cảm thấy thoải mái như ở nhà."
+  },
+  {
+   "chu": "at work",
+   "doc": "/æt wɜːk/",
+   "loai": "phr",
+   "nghia": "ở chỗ làm, đang làm việc",
+   "cap": "A1",
+   "viDu": "I cannot answer my phone when I am at work.",
+   "viDuNghia": "Tôi không thể nghe điện thoại khi đang ở chỗ làm.",
+   "cumTu": [
+    "at work today",
+    "busy at work",
+    "stress at work"
+   ],
+   "ghiChu": "Không có \"the\": at work."
+  },
+  {
+   "chu": "at night",
+   "doc": "/æt naɪt/",
+   "loai": "phr",
+   "nghia": "vào ban đêm",
+   "cap": "A1",
+   "viDu": "It is very quiet here at night.",
+   "viDuNghia": "Ở đây rất yên tĩnh vào ban đêm.",
+   "cumTu": [
+    "late at night",
+    "work at night",
+    "at night time"
+   ],
+   "ghiChu": "in the morning / afternoon / evening nhưng AT night."
+  },
+  {
+   "chu": "at the weekend",
+   "doc": "/æt ðə ˌwiːkˈend/",
+   "loai": "phr",
+   "nghia": "vào cuối tuần",
+   "cap": "A1",
+   "viDu": "I usually visit my grandparents at the weekend.",
+   "viDuNghia": "Tôi thường thăm ông bà vào cuối tuần.",
+   "cumTu": [
+    "at the weekend",
+    "at weekends"
+   ],
+   "ghiChu": "Anh-Anh: AT the weekend; Anh-Mỹ: ON the weekend."
+  },
+  {
+   "chu": "in the morning",
+   "doc": "/ɪn ðə ˈmɔːnɪŋ/",
+   "loai": "phr",
+   "nghia": "vào buổi sáng",
+   "cap": "A1",
+   "viDu": "I work best in the morning.",
+   "viDuNghia": "Tôi làm việc hiệu quả nhất vào buổi sáng.",
+   "cumTu": [
+    "early in the morning",
+    "in the morning and evening",
+    "first thing in the morning"
+   ],
+   "ghiChu": "Nhưng: ON Monday morning."
+  },
+  {
+   "chu": "in the end",
+   "doc": "/ɪn ði end/",
+   "loai": "phr",
+   "nghia": "cuối cùng, rốt cuộc",
+   "cap": "A2",
+   "viDu": "In the end, we decided to stay at home.",
+   "viDuNghia": "Cuối cùng, chúng tôi quyết định ở nhà.",
+   "cumTu": [
+    "in the end, …",
+    "work out in the end"
+   ],
+   "ghiChu": "in the end = rốt cuộc (sau quá trình); at the end of + danh từ = ở cuối cái gì."
+  },
+  {
+   "chu": "at the end",
+   "doc": "/æt ði end/",
+   "loai": "phr",
+   "nghia": "ở cuối, vào cuối",
+   "cap": "A2",
+   "viDu": "There is a short quiz at the end of each unit.",
+   "viDuNghia": "Có một bài kiểm tra ngắn ở cuối mỗi bài.",
+   "cumTu": [
+    "at the end of the day",
+    "at the end of the month",
+    "at the end of the road"
+   ]
+  },
+  {
+   "chu": "at the beginning",
+   "doc": "/æt ðə bɪˈɡɪnɪŋ/",
+   "loai": "phr",
+   "nghia": "lúc đầu, ở phần đầu",
+   "cap": "A2",
+   "viDu": "The numbers were low at the beginning of the period.",
+   "viDuNghia": "Các con số thấp vào đầu giai đoạn.",
+   "cumTu": [
+    "at the beginning of",
+    "at the beginning of the year",
+    "right at the beginning"
+   ],
+   "ghiChu": "\"at the beginning of the period\" dùng cho Task 1."
+  },
+  {
+   "chu": "in the future",
+   "doc": "/ɪn ðə ˈfjuːtʃə(r)/",
+   "loai": "phr",
+   "nghia": "trong tương lai",
+   "cap": "A2",
+   "viDu": "I hope to work abroad in the future.",
+   "viDuNghia": "Tôi hy vọng được làm việc ở nước ngoài trong tương lai.",
+   "cumTu": [
+    "in the near future",
+    "in the future, I will",
+    "plans in the future"
+   ]
+  },
+  {
+   "chu": "in the past",
+   "doc": "/ɪn ðə pɑːst/",
+   "loai": "phr",
+   "nghia": "trong quá khứ, trước đây",
+   "cap": "A2",
+   "viDu": "In the past, people wrote letters instead of emails.",
+   "viDuNghia": "Trước đây, người ta viết thư thay vì email.",
+   "cumTu": [
+    "in the past, …",
+    "in the past few years",
+    "unlike in the past"
+   ],
+   "ghiChu": "\"In the past few years\" + hiện tại hoàn thành."
+  },
+  {
+   "chu": "these days",
+   "doc": "/ðiːz deɪz/",
+   "loai": "phr",
+   "nghia": "dạo này, thời nay",
+   "cap": "A2",
+   "viDu": "These days, most people shop online.",
+   "viDuNghia": "Thời nay, hầu hết mọi người mua sắm trực tuyến.",
+   "cumTu": [
+    "these days, …",
+    "busy these days",
+    "kids these days"
+   ],
+   "ghiChu": "Đồng nghĩa: nowadays. Không viết \"in these days\"."
+  },
+  {
+   "chu": "so far",
+   "doc": "/səʊ fɑː(r)/",
+   "loai": "phr",
+   "nghia": "cho đến nay",
+   "cap": "B1",
+   "viDu": "So far, we have finished three of the five tasks.",
+   "viDuNghia": "Cho đến nay, chúng tôi đã hoàn thành ba trong năm nhiệm vụ.",
+   "cumTu": [
+    "so far so good",
+    "so far this year",
+    "the best so far"
+   ],
+   "ghiChu": "Đi với hiện tại hoàn thành."
+  },
+  {
+   "chu": "all the time",
+   "doc": "/ɔːl ðə taɪm/",
+   "loai": "phr",
+   "nghia": "suốt, lúc nào cũng",
+   "cap": "A2",
+   "viDu": "My little brother plays games all the time.",
+   "viDuNghia": "Em trai tôi chơi game suốt.",
+   "cumTu": [
+    "happen all the time",
+    "all the time now"
+   ]
+  },
+  {
+   "chu": "most of the time",
+   "doc": "/məʊst ɒv ðə taɪm/",
+   "loai": "phr",
+   "nghia": "hầu hết thời gian, thường thì",
+   "cap": "A2",
+   "viDu": "Most of the time, I cook dinner at home.",
+   "viDuNghia": "Hầu hết thời gian tôi nấu bữa tối ở nhà.",
+   "cumTu": [
+    "most of the time, …"
+   ]
+  },
+  {
+   "chu": "from time to time",
+   "doc": "/frɒm taɪm tuː taɪm/",
+   "loai": "phr",
+   "nghia": "thỉnh thoảng",
+   "cap": "B1",
+   "viDu": "From time to time, I meet my old classmates for coffee.",
+   "viDuNghia": "Thỉnh thoảng tôi gặp bạn học cũ đi cà phê.",
+   "cumTu": [
+    "from time to time, …"
+   ],
+   "ghiChu": "Đồng nghĩa: occasionally, now and then."
+  },
+  {
+   "chu": "once a week",
+   "doc": "/wʌns ə wiːk/",
+   "loai": "phr",
+   "nghia": "một lần một tuần",
+   "cap": "A1",
+   "viDu": "I go swimming once a week.",
+   "viDuNghia": "Tôi đi bơi một tuần một lần.",
+   "cumTu": [
+    "once a week",
+    "twice a week",
+    "three times a week",
+    "once a month"
+   ]
+  },
+  {
+   "chu": "as usual",
+   "doc": "/æz ˈjuːʒuəl/",
+   "loai": "phr",
+   "nghia": "như thường lệ",
+   "cap": "A2",
+   "viDu": "As usual, he was the first person to arrive.",
+   "viDuNghia": "Như thường lệ, anh ấy là người đến đầu tiên.",
+   "cumTu": [
+    "as usual, …",
+    "late as usual",
+    "business as usual"
+   ]
+  },
+  {
+   "chu": "as well",
+   "doc": "/æz wel/",
+   "loai": "phr",
+   "nghia": "cũng, nữa (đứng cuối câu)",
+   "cap": "A2",
+   "viDu": "I am learning Japanese, and Korean as well.",
+   "viDuNghia": "Tôi đang học tiếng Nhật, và cả tiếng Hàn nữa.",
+   "cumTu": [
+    "as well as",
+    "might as well",
+    "… as well"
+   ],
+   "ghiChu": "\"as well\" đứng cuối câu; \"as well as\" + danh từ/V-ing = cũng như."
+  },
+  {
+   "chu": "for example",
+   "doc": "/fɔː(r) ɪɡˈzɑːmpl/",
+   "loai": "phr",
+   "nghia": "ví dụ, chẳng hạn",
+   "cap": "A1",
+   "viDu": "Many cities, for example Hanoi, have serious traffic problems.",
+   "viDuNghia": "Nhiều thành phố, ví dụ Hà Nội, có vấn đề giao thông nghiêm trọng.",
+   "cumTu": [
+    "for example, …",
+    "take … for example"
+   ],
+   "ghiChu": "Đồng nghĩa: for instance. Sau \"For example\" đầu câu cần dấu phẩy."
+  },
+  {
+   "chu": "because of",
+   "doc": "/bɪˈkɒz ɒv/",
+   "loai": "phr",
+   "nghia": "bởi vì, do (+ danh từ)",
+   "cap": "A2",
+   "viDu": "The flight was late because of bad weather.",
+   "viDuNghia": "Chuyến bay bị trễ vì thời tiết xấu.",
+   "cumTu": [
+    "because of this",
+    "because of the rain",
+    "because of you"
+   ],
+   "ghiChu": "because of + danh từ/V-ing; because + mệnh đề."
+  },
+  {
+   "chu": "instead of",
+   "doc": "/ɪnˈsted ɒv/",
+   "loai": "phr",
+   "nghia": "thay vì",
+   "cap": "A2",
+   "viDu": "I walked to work instead of taking the bus.",
+   "viDuNghia": "Tôi đi bộ đi làm thay vì đi xe buýt.",
+   "cumTu": [
+    "instead of doing",
+    "instead of this",
+    "instead of me"
+   ],
+   "ghiChu": "instead of + V-ing/danh từ."
+  },
+  {
+   "chu": "according to",
+   "doc": "/əˈkɔːdɪŋ tuː/",
+   "loai": "phr",
+   "nghia": "theo, dựa theo",
+   "cap": "A2",
+   "viDu": "According to the chart, sales rose sharply in 2020.",
+   "viDuNghia": "Theo biểu đồ, doanh số tăng mạnh vào năm 2020.",
+   "cumTu": [
+    "according to the chart",
+    "according to research",
+    "according to the plan"
+   ],
+   "ghiChu": "Không nói \"according to me\" — dùng \"in my opinion\"."
+  },
+  {
+   "chu": "in order to",
+   "doc": "/ɪn ˈɔːdə(r) tuː/",
+   "loai": "phr",
+   "nghia": "để, nhằm (làm gì)",
+   "cap": "B1",
+   "viDu": "Students need to practise daily in order to improve.",
+   "viDuNghia": "Sinh viên cần luyện tập hằng ngày để tiến bộ.",
+   "cumTu": [
+    "in order to do",
+    "in order not to",
+    "in order to achieve"
+   ],
+   "ghiChu": "Trang trọng hơn \"to\" — hợp Writing Task 2."
+  },
+  {
+   "chu": "in my opinion",
+   "doc": "/ɪn maɪ əˈpɪnjən/",
+   "loai": "phr",
+   "nghia": "theo ý kiến của tôi",
+   "cap": "A2",
+   "viDu": "In my opinion, children should start learning English early.",
+   "viDuNghia": "Theo tôi, trẻ em nên bắt đầu học tiếng Anh sớm.",
+   "cumTu": [
+    "in my opinion, …",
+    "in my personal opinion"
+   ],
+   "ghiChu": "Không viết \"In my opinion, I think…\" (thừa). Thay thế: From my point of view / I believe."
+  },
+  {
+   "chu": "in common",
+   "doc": "/ɪn ˈkɒmən/",
+   "loai": "phr",
+   "nghia": "có điểm chung",
+   "cap": "B1",
+   "viDu": "My sister and I have a lot in common.",
+   "viDuNghia": "Chị tôi và tôi có nhiều điểm chung.",
+   "cumTu": [
+    "have something in common",
+    "have a lot in common",
+    "in common with"
+   ]
+  },
+  {
+   "chu": "in total",
+   "doc": "/ɪn ˈtəʊtl/",
+   "loai": "phr",
+   "nghia": "tổng cộng",
+   "cap": "B1",
+   "viDu": "In total, the trip cost about ten million dong.",
+   "viDuNghia": "Tổng cộng, chuyến đi tốn khoảng mười triệu đồng.",
+   "cumTu": [
+    "in total, …",
+    "cost in total",
+    "hours in total"
+   ]
+  },
+  {
+   "chu": "in time",
+   "doc": "/ɪn taɪm/",
+   "loai": "phr",
+   "nghia": "kịp lúc, kịp giờ",
+   "cap": "A2",
+   "viDu": "We arrived just in time to catch the train.",
+   "viDuNghia": "Chúng tôi đến vừa kịp để bắt chuyến tàu.",
+   "cumTu": [
+    "just in time",
+    "in time for",
+    "in time to do"
+   ],
+   "ghiChu": "in time = kịp lúc (không muộn); on time = đúng giờ đã định."
+  },
+  {
+   "chu": "in a hurry",
+   "doc": "/ɪn ə ˈhʌri/",
+   "loai": "phr",
+   "nghia": "đang vội",
+   "cap": "A2",
+   "viDu": "Sorry, I cannot talk now. I am in a hurry.",
+   "viDuNghia": "Xin lỗi, tôi không nói chuyện được lúc này. Tôi đang vội.",
+   "cumTu": [
+    "be in a hurry",
+    "in a hurry to do",
+    "leave in a hurry"
+   ]
+  },
+  {
+   "chu": "in love",
+   "doc": "/ɪn lʌv/",
+   "loai": "phr",
+   "nghia": "đang yêu",
+   "cap": "A2",
+   "viDu": "They fell in love when they were students.",
+   "viDuNghia": "Họ phải lòng nhau khi còn là sinh viên.",
+   "cumTu": [
+    "fall in love with",
+    "be in love",
+    "in love with"
+   ]
+  },
+  {
+   "chu": "in public",
+   "doc": "/ɪn ˈpʌblɪk/",
+   "loai": "phr",
+   "nghia": "ở nơi công cộng, trước đám đông",
+   "cap": "B1",
+   "viDu": "Many people are afraid of speaking in public.",
+   "viDuNghia": "Nhiều người sợ nói trước đám đông.",
+   "cumTu": [
+    "speak in public",
+    "in public places",
+    "appear in public"
+   ]
+  },
+  {
+   "chu": "in danger",
+   "doc": "/ɪn ˈdeɪndʒə(r)/",
+   "loai": "phr",
+   "nghia": "đang gặp nguy hiểm",
+   "cap": "B1",
+   "viDu": "Many wild animals are in danger because of hunting.",
+   "viDuNghia": "Nhiều loài động vật hoang dã đang gặp nguy hiểm vì nạn săn bắn.",
+   "cumTu": [
+    "in danger of",
+    "be in danger",
+    "put somebody in danger"
+   ],
+   "ghiChu": "\"in danger of extinction\" = có nguy cơ tuyệt chủng."
+  },
+  {
+   "chu": "in trouble",
+   "doc": "/ɪn ˈtrʌbl/",
+   "loai": "phr",
+   "nghia": "gặp rắc rối",
+   "cap": "B1",
+   "viDu": "You will be in trouble if you miss the deadline again.",
+   "viDuNghia": "Bạn sẽ gặp rắc rối nếu lại trễ hạn chót.",
+   "cumTu": [
+    "be in trouble",
+    "get in trouble",
+    "in trouble with"
+   ]
+  },
+  {
+   "chu": "in touch",
+   "doc": "/ɪn tʌtʃ/",
+   "loai": "phr",
+   "nghia": "giữ liên lạc",
+   "cap": "B1",
+   "viDu": "I am still in touch with my friends from high school.",
+   "viDuNghia": "Tôi vẫn giữ liên lạc với bạn bè thời cấp ba.",
+   "cumTu": [
+    "keep in touch",
+    "get in touch with",
+    "stay in touch",
+    "be in touch"
+   ],
+   "ghiChu": "\"I'll be in touch\" = tôi sẽ liên lạc lại."
+  },
+  {
+   "chu": "in charge of",
+   "doc": "/ɪn tʃɑːdʒ ɒv/",
+   "loai": "phr",
+   "nghia": "phụ trách, chịu trách nhiệm",
+   "cap": "B1",
+   "viDu": "She is in charge of the marketing team.",
+   "viDuNghia": "Cô ấy phụ trách nhóm marketing.",
+   "cumTu": [
+    "be in charge of",
+    "put somebody in charge of",
+    "person in charge"
+   ],
+   "ghiChu": "Câu phỏng vấn: \"I was in charge of…\"."
+  },
+  {
+   "chu": "on foot",
+   "doc": "/ɒn fʊt/",
+   "loai": "phr",
+   "nghia": "đi bộ",
+   "cap": "A2",
+   "viDu": "It takes ten minutes to get there on foot.",
+   "viDuNghia": "Mất mười phút để đi bộ đến đó.",
+   "cumTu": [
+    "go on foot",
+    "travel on foot"
+   ],
+   "ghiChu": "by bus / by car nhưng ON foot."
+  },
+  {
+   "chu": "by bus",
+   "doc": "/baɪ bʌs/",
+   "loai": "phr",
+   "nghia": "bằng xe buýt",
+   "cap": "A1",
+   "viDu": "I go to university by bus every day.",
+   "viDuNghia": "Tôi đi học đại học bằng xe buýt mỗi ngày.",
+   "cumTu": [
+    "go by bus",
+    "travel by bus",
+    "by bus or by train"
+   ],
+   "ghiChu": "by + phương tiện, không có mạo từ: by bus, by car, by plane."
+  },
+  {
+   "chu": "on holiday",
+   "doc": "/ɒn ˈhɒlədeɪ/",
+   "loai": "phr",
+   "nghia": "đang đi nghỉ",
+   "cap": "A2",
+   "viDu": "My manager is on holiday until next Monday.",
+   "viDuNghia": "Quản lý của tôi đi nghỉ đến thứ Hai tuần sau.",
+   "cumTu": [
+    "go on holiday",
+    "be on holiday",
+    "on holiday in"
+   ],
+   "ghiChu": "Anh-Mỹ: on vacation."
+  },
+  {
+   "chu": "on business",
+   "doc": "/ɒn ˈbɪznəs/",
+   "loai": "phr",
+   "nghia": "đi công tác",
+   "cap": "B1",
+   "viDu": "He often travels to Singapore on business.",
+   "viDuNghia": "Anh ấy thường đi Singapore công tác.",
+   "cumTu": [
+    "travel on business",
+    "be away on business",
+    "go on business"
+   ]
+  },
+  {
+   "chu": "on sale",
+   "doc": "/ɒn seɪl/",
+   "loai": "phr",
+   "nghia": "đang được bán; đang giảm giá",
+   "cap": "B1",
+   "viDu": "Tickets for the concert go on sale tomorrow.",
+   "viDuNghia": "Vé buổi hoà nhạc sẽ mở bán vào ngày mai.",
+   "cumTu": [
+    "go on sale",
+    "be on sale",
+    "on sale now"
+   ],
+   "ghiChu": "for sale = để bán; on sale = đang bày bán / đang giảm giá."
+  },
+  {
+   "chu": "for free",
+   "doc": "/fɔː(r) friː/",
+   "loai": "phr",
+   "nghia": "miễn phí",
+   "cap": "A2",
+   "viDu": "You can download the app for free.",
+   "viDuNghia": "Bạn có thể tải ứng dụng miễn phí.",
+   "cumTu": [
+    "get something for free",
+    "download for free",
+    "work for free"
+   ]
+  },
+  {
+   "chu": "on purpose",
+   "doc": "/ɒn ˈpɜːpəs/",
+   "loai": "phr",
+   "nghia": "cố ý",
+   "cap": "B1",
+   "viDu": "I did not break it on purpose. It was an accident.",
+   "viDuNghia": "Tôi không cố ý làm vỡ nó. Đó là tai nạn.",
+   "cumTu": [
+    "do something on purpose",
+    "not on purpose"
+   ],
+   "ghiChu": "Trái nghĩa: by accident."
+  },
+  {
+   "chu": "by accident",
+   "doc": "/baɪ ˈæksɪdənt/",
+   "loai": "phr",
+   "nghia": "tình cờ, vô tình",
+   "cap": "B1",
+   "viDu": "I deleted the file by accident.",
+   "viDuNghia": "Tôi đã vô tình xoá mất tệp.",
+   "cumTu": [
+    "happen by accident",
+    "by accident or on purpose",
+    "find by accident"
+   ]
+  },
+  {
+   "chu": "by mistake",
+   "doc": "/baɪ mɪˈsteɪk/",
+   "loai": "phr",
+   "nghia": "do nhầm lẫn",
+   "cap": "B1",
+   "viDu": "I sent the email to the wrong person by mistake.",
+   "viDuNghia": "Tôi đã gửi nhầm email cho người khác.",
+   "cumTu": [
+    "do something by mistake",
+    "take by mistake"
+   ]
+  },
+  {
+   "chu": "on average",
+   "doc": "/ɒn ˈævərɪdʒ/",
+   "loai": "phr",
+   "nghia": "trung bình",
+   "cap": "B1",
+   "viDu": "On average, people spend three hours a day on their phones.",
+   "viDuNghia": "Trung bình, mọi người dùng điện thoại ba tiếng mỗi ngày.",
+   "cumTu": [
+    "on average, …",
+    "hours on average",
+    "cost on average"
+   ],
+   "ghiChu": "Hữu ích khi mô tả số liệu Task 1."
+  },
+  {
+   "chu": "up to date",
+   "doc": "/ʌp tuː deɪt/",
+   "loai": "phr",
+   "nghia": "cập nhật, mới nhất",
+   "cap": "B1",
+   "viDu": "Make sure your software is up to date.",
+   "viDuNghia": "Hãy đảm bảo phần mềm của bạn được cập nhật.",
+   "cumTu": [
+    "keep up to date",
+    "up-to-date information",
+    "bring up to date"
+   ],
+   "ghiChu": "Có gạch nối khi đứng trước danh từ: up-to-date information."
+  },
+  {
+   "chu": "out of date",
+   "doc": "/aʊt ɒv deɪt/",
+   "loai": "phr",
+   "nghia": "lỗi thời, hết hạn",
+   "cap": "B1",
+   "viDu": "The information on this website is out of date.",
+   "viDuNghia": "Thông tin trên trang web này đã lỗi thời.",
+   "cumTu": [
+    "be out of date",
+    "go out of date",
+    "out-of-date software"
+   ]
+  },
+  {
+   "chu": "no longer",
+   "doc": "/nəʊ ˈlɒŋɡə(r)/",
+   "loai": "phr",
+   "nghia": "không còn … nữa",
+   "cap": "B1",
+   "viDu": "This phone model is no longer available.",
+   "viDuNghia": "Mẫu điện thoại này không còn bán nữa.",
+   "cumTu": [
+    "no longer available",
+    "no longer exist",
+    "no longer needed"
+   ],
+   "ghiChu": "Đứng trước động từ chính, sau \"to be\": He no longer works here."
+  },
+  {
+   "chu": "more or less",
+   "doc": "/mɔː(r) ɔː(r) les/",
+   "loai": "phr",
+   "nghia": "ít nhiều, gần như",
+   "cap": "B1",
+   "viDu": "The project is more or less finished.",
+   "viDuNghia": "Dự án gần như đã xong.",
+   "cumTu": [
+    "more or less the same",
+    "more or less finished"
+   ]
+  },
+  {
+   "chu": "sooner or later",
+   "doc": "/ˈsuːnə(r) ɔː(r) ˈleɪtə(r)/",
+   "loai": "phr",
+   "nghia": "sớm muộn gì cũng",
+   "cap": "B1",
+   "viDu": "Sooner or later, you will need to learn how to drive.",
+   "viDuNghia": "Sớm muộn gì bạn cũng cần học lái xe.",
+   "cumTu": [
+    "sooner or later, …"
+   ]
+  },
+  {
+   "chu": "each other",
+   "doc": "/iːtʃ ˈʌðə(r)/",
+   "loai": "phr",
+   "nghia": "nhau, lẫn nhau",
+   "cap": "A2",
+   "viDu": "We help each other with our homework.",
+   "viDuNghia": "Chúng tôi giúp nhau làm bài tập.",
+   "cumTu": [
+    "know each other",
+    "help each other",
+    "talk to each other",
+    "love each other"
+   ]
+  },
+  {
+   "chu": "on my own",
+   "doc": "/ɒn maɪ əʊn/",
+   "loai": "phr",
+   "nghia": "một mình, tự mình",
+   "cap": "B1",
+   "viDu": "I prefer to study on my own in the library.",
+   "viDuNghia": "Tôi thích tự học một mình trong thư viện hơn.",
+   "cumTu": [
+    "live on my own",
+    "do it on my own",
+    "all on my own"
+   ],
+   "ghiChu": "Đổi theo ngôi: on your own, on his own…"
+  },
+  {
+   "chu": "be able to",
+   "doc": "/bi ˈeɪbl tuː/",
+   "loai": "phr",
+   "nghia": "có thể, có khả năng",
+   "cap": "A2",
+   "viDu": "You will be able to speak with confidence after this course.",
+   "viDuNghia": "Bạn sẽ có thể nói tự tin sau khoá học này.",
+   "cumTu": [
+    "be able to do",
+    "will be able to",
+    "not be able to"
+   ],
+   "ghiChu": "Dùng thay \"can\" sau will / have / might."
+  },
+  {
+   "chu": "have to",
+   "doc": "/ˈhæv tuː/",
+   "loai": "phr",
+   "nghia": "phải (làm gì)",
+   "cap": "A1",
+   "viDu": "I have to finish this report by five o'clock.",
+   "viDuNghia": "Tôi phải hoàn thành báo cáo này trước năm giờ.",
+   "cumTu": [
+    "have to do",
+    "do not have to",
+    "will have to",
+    "had to"
+   ],
+   "ghiChu": "\"don't have to\" = không cần phải (khác \"mustn't\" = cấm)."
+  },
+  {
+   "chu": "would like",
+   "doc": "/wʊd laɪk/",
+   "loai": "phr",
+   "nghia": "muốn (lịch sự)",
+   "cap": "A1",
+   "viDu": "I would like a table for two, please.",
+   "viDuNghia": "Tôi muốn một bàn cho hai người.",
+   "cumTu": [
+    "would like to do",
+    "would you like…?",
+    "I'd like"
+   ],
+   "ghiChu": "Viết tắt: I'd like. Sau đó dùng \"to V\": I would like to order."
+  },
+  {
+   "chu": "how about",
+   "doc": "/haʊ əˈbaʊt/",
+   "loai": "phr",
+   "nghia": "… thì sao; hay là (gợi ý)",
+   "cap": "A2",
+   "viDu": "How about going for a coffee after class?",
+   "viDuNghia": "Hay là đi uống cà phê sau giờ học nhé?",
+   "cumTu": [
+    "how about you",
+    "how about doing",
+    "how about this"
+   ],
+   "ghiChu": "how about + V-ing/danh từ."
+  },
+  {
+   "chu": "what about",
+   "doc": "/wɒt əˈbaʊt/",
+   "loai": "phr",
+   "nghia": "còn … thì sao",
+   "cap": "A2",
+   "viDu": "I love pop music. What about you?",
+   "viDuNghia": "Tôi mê nhạc pop. Còn bạn thì sao?",
+   "cumTu": [
+    "what about you",
+    "what about doing",
+    "what about the cost"
+   ]
+  },
+  {
+   "chu": "all right",
+   "doc": "/ɔːl raɪt/",
+   "loai": "phr",
+   "nghia": "ổn, được; đồng ý",
+   "cap": "A2",
+   "viDu": "Is it all right if I leave a bit early today?",
+   "viDuNghia": "Hôm nay tôi về sớm một chút có được không?",
+   "cumTu": [
+    "all right, then",
+    "that's all right",
+    "are you all right"
+   ],
+   "ghiChu": "Viết chuẩn là hai từ: all right."
+  },
+  {
+   "chu": "not at all",
+   "doc": "/nɒt æt ɔːl/",
+   "loai": "phr",
+   "nghia": "không chút nào; không có gì (đáp lời cảm ơn)",
+   "cap": "A2",
+   "viDu": "\"Do you mind if I sit here?\" \"Not at all.\"",
+   "viDuNghia": "\"Tôi ngồi đây có phiền không?\" \"Không sao cả.\"",
+   "cumTu": [
+    "not at all sure",
+    "not at all bad"
+   ]
+  },
+  {
+   "chu": "not really",
+   "doc": "/nɒt ˈriːəli/",
+   "loai": "phr",
+   "nghia": "không hẳn, không lắm",
+   "cap": "A2",
+   "viDu": "\"Do you like football?\" \"Not really. I prefer tennis.\"",
+   "viDuNghia": "\"Bạn thích bóng đá không?\" \"Không hẳn. Tôi thích tennis hơn.\"",
+   "cumTu": [
+    "not really sure",
+    "not really interested"
+   ],
+   "ghiChu": "Cách từ chối / phủ định nhẹ nhàng."
+  },
+  {
+   "chu": "not yet",
+   "doc": "/nɒt jet/",
+   "loai": "phr",
+   "nghia": "chưa",
+   "cap": "A2",
+   "viDu": "\"Have you finished the report?\" \"Not yet.\"",
+   "viDuNghia": "\"Bạn làm xong báo cáo chưa?\" \"Chưa.\"",
+   "cumTu": [
+    "not yet ready",
+    "not yet available",
+    "not yet finished"
+   ]
+  },
+  {
+   "chu": "never mind",
+   "doc": "/ˈnevə(r) maɪnd/",
+   "loai": "phr",
+   "nghia": "không sao đâu, đừng bận tâm",
+   "cap": "A2",
+   "viDu": "Never mind, we can try again tomorrow.",
+   "viDuNghia": "Không sao đâu, mai mình thử lại.",
+   "cumTu": [
+    "never mind about",
+    "oh, never mind"
+   ]
+  },
+  {
+   "chu": "no way",
+   "doc": "/nəʊ weɪ/",
+   "loai": "phr",
+   "nghia": "không đời nào; không thể nào",
+   "cap": "B1",
+   "viDu": "No way! You finished the whole project in one night?",
+   "viDuNghia": "Không thể nào! Bạn làm xong cả dự án trong một đêm á?",
+   "cumTu": [
+    "there is no way",
+    "no way out",
+    "no way back"
+   ],
+   "ghiChu": "Thân mật."
+  },
+  {
+   "chu": "well done",
+   "doc": "/wel dʌn/",
+   "loai": "phr",
+   "nghia": "làm tốt lắm",
+   "cap": "A2",
+   "viDu": "Well done! You passed all your exams.",
+   "viDuNghia": "Làm tốt lắm! Bạn đã đỗ hết các kỳ thi.",
+   "cumTu": [
+    "well done on",
+    "well done, everyone"
+   ]
+  },
+  {
+   "chu": "congratulations",
+   "doc": "/kənˌɡrætʃuˈleɪʃnz/",
+   "loai": "intj",
+   "nghia": "chúc mừng",
+   "cap": "A2",
+   "viDu": "Congratulations on your new job!",
+   "viDuNghia": "Chúc mừng bạn có công việc mới!",
+   "cumTu": [
+    "congratulations on",
+    "many congratulations",
+    "offer congratulations"
+   ],
+   "hoTu": [
+    "congratulate (v)"
+   ],
+   "ghiChu": "Luôn có \"s\" và đi với ON."
+  },
+  {
+   "chu": "nice to meet you",
+   "doc": "/naɪs tuː miːt juː/",
+   "loai": "phr",
+   "nghia": "rất vui được gặp bạn",
+   "cap": "A1",
+   "viDu": "Hello, I am Minh. Nice to meet you.",
+   "viDuNghia": "Xin chào, tôi là Minh. Rất vui được gặp bạn.",
+   "cumTu": [
+    "nice to meet you too",
+    "it's nice to meet you"
+   ],
+   "ghiChu": "Chỉ dùng lần ĐẦU gặp; gặp lại thì nói \"Nice to see you\"."
+  },
+  {
+   "chu": "i'm afraid",
+   "doc": "/aɪm əˈfreɪd/",
+   "loai": "phr",
+   "nghia": "tôi e rằng, rất tiếc là",
+   "cap": "A2",
+   "viDu": "I'm afraid I cannot come to the meeting tomorrow.",
+   "viDuNghia": "Tôi e rằng tôi không thể dự cuộc họp ngày mai.",
+   "cumTu": [
+    "I'm afraid so",
+    "I'm afraid not",
+    "I'm afraid that"
+   ],
+   "ghiChu": "Cách báo tin không vui / từ chối lịch sự."
+  },
+  {
+   "chu": "i mean",
+   "doc": "/aɪ miːn/",
+   "loai": "phr",
+   "nghia": "ý tôi là",
+   "cap": "A2",
+   "viDu": "It is too expensive. I mean, we cannot afford it right now.",
+   "viDuNghia": "Nó quá đắt. Ý tôi là, hiện giờ chúng ta không đủ tiền.",
+   "cumTu": [
+    "I mean it",
+    "what I mean is",
+    "you know what I mean"
+   ],
+   "ghiChu": "Từ đệm hữu ích để tự sửa / làm rõ ý trong Speaking."
+  },
+  {
+   "chu": "you know",
+   "doc": "/juː nəʊ/",
+   "loai": "phr",
+   "nghia": "bạn biết đấy (từ đệm)",
+   "cap": "A2",
+   "viDu": "It is, you know, a really difficult question.",
+   "viDuNghia": "Đó là, bạn biết đấy, một câu hỏi thật sự khó.",
+   "cumTu": [
+    "you know what",
+    "as you know",
+    "you know what I mean"
+   ],
+   "ghiChu": "Dùng vừa phải; lạm dụng sẽ bị trừ điểm trôi chảy."
+  },
+  {
+   "chu": "it depends",
+   "doc": "/ɪt dɪˈpendz/",
+   "loai": "phr",
+   "nghia": "còn tuỳ",
+   "cap": "A2",
+   "viDu": "\"Do you eat out a lot?\" \"It depends on how busy I am.\"",
+   "viDuNghia": "\"Bạn có hay ăn ngoài không?\" \"Còn tuỳ tôi bận thế nào.\"",
+   "cumTu": [
+    "it depends on",
+    "it depends what",
+    "it all depends"
+   ],
+   "ghiChu": "Mở đầu câu trả lời Speaking rất tự nhiên: \"It depends on…\"."
+  },
+  {
+   "chu": "that's right",
+   "doc": "/ðæts raɪt/",
+   "loai": "phr",
+   "nghia": "đúng vậy",
+   "cap": "A1",
+   "viDu": "\"So you are from Hue?\" \"Yes, that's right.\"",
+   "viDuNghia": "\"Vậy bạn đến từ Huế à?\" \"Vâng, đúng vậy.\"",
+   "cumTu": [
+    "yes, that's right",
+    "that's right, …"
+   ]
+  },
+  {
+   "chu": "let me see",
+   "doc": "/let miː siː/",
+   "loai": "phr",
+   "nghia": "để tôi xem nào, để tôi nghĩ đã",
+   "cap": "A2",
+   "viDu": "Let me see… I think the last time was two years ago.",
+   "viDuNghia": "Để tôi nghĩ xem… Tôi nghĩ lần cuối là hai năm trước.",
+   "cumTu": [
+    "let me see, …",
+    "let me see if"
+   ],
+   "ghiChu": "Câu câu giờ lịch sự khi cần nghĩ trong Speaking."
+  },
+  {
+   "chu": "let me know",
+   "doc": "/let miː nəʊ/",
+   "loai": "phr",
+   "nghia": "cho tôi biết nhé",
+   "cap": "A2",
+   "viDu": "Please let me know if you need any help.",
+   "viDuNghia": "Hãy cho tôi biết nếu bạn cần giúp gì nhé.",
+   "cumTu": [
+    "let me know if",
+    "let me know when",
+    "please let me know"
+   ],
+   "ghiChu": "Câu kết email thân thiện."
+  },
+  {
+   "chu": "it's up to you",
+   "doc": "/ɪts ʌp tuː juː/",
+   "loai": "phr",
+   "nghia": "tuỳ bạn quyết định",
+   "cap": "B1",
+   "viDu": "We can eat at home or go out. It's up to you.",
+   "viDuNghia": "Chúng ta có thể ăn ở nhà hoặc ra ngoài. Tuỳ bạn.",
+   "cumTu": [
+    "it's up to you to decide",
+    "it's entirely up to you"
+   ]
+  },
+  {
+   "chu": "i don't mind",
+   "doc": "/aɪ dəʊnt maɪnd/",
+   "loai": "phr",
+   "nghia": "tôi không phiền, sao cũng được",
+   "cap": "A2",
+   "viDu": "I don't mind working at the weekend if it is necessary.",
+   "viDuNghia": "Tôi không ngại làm việc cuối tuần nếu cần thiết.",
+   "cumTu": [
+    "I don't mind doing",
+    "I don't mind if",
+    "I don't mind at all"
+   ],
+   "ghiChu": "I don't mind + V-ing."
+  },
+  {
+   "chu": "i'd rather",
+   "doc": "/aɪd ˈrɑːðə(r)/",
+   "loai": "phr",
+   "nghia": "tôi thích … hơn, tôi thà",
+   "cap": "B1",
+   "viDu": "I'd rather stay at home tonight than go out.",
+   "viDuNghia": "Tối nay tôi thích ở nhà hơn là ra ngoài.",
+   "cumTu": [
+    "I'd rather not",
+    "I'd rather do … than",
+    "I'd rather you"
+   ],
+   "ghiChu": "I'd rather + động từ nguyên mẫu không \"to\"."
+  },
+  {
+   "chu": "i'd love to",
+   "doc": "/aɪd lʌv tuː/",
+   "loai": "phr",
+   "nghia": "tôi rất muốn, rất sẵn lòng",
+   "cap": "A2",
+   "viDu": "\"Would you like to join us for dinner?\" \"I'd love to.\"",
+   "viDuNghia": "\"Bạn có muốn ăn tối cùng chúng tôi không?\" \"Tôi rất sẵn lòng.\"",
+   "cumTu": [
+    "I'd love to, but",
+    "I'd love to come"
+   ],
+   "ghiChu": "\"I'd love to, but…\" — cách từ chối lịch sự."
+  },
+  {
+   "chu": "what a pity",
+   "doc": "/wɒt ə ˈpɪti/",
+   "loai": "phr",
+   "nghia": "tiếc quá",
+   "cap": "B1",
+   "viDu": "What a pity you cannot come to the party!",
+   "viDuNghia": "Tiếc quá, bạn không đến dự tiệc được!",
+   "cumTu": [
+    "what a pity that",
+    "it's a pity"
+   ],
+   "ghiChu": "Đồng nghĩa: What a shame!"
+  },
+  {
+   "chu": "how's it going",
+   "doc": "/haʊz ɪt ˈɡəʊɪŋ/",
+   "loai": "phr",
+   "nghia": "dạo này thế nào",
+   "cap": "A2",
+   "viDu": "Hi Nam, how's it going?",
+   "viDuNghia": "Chào Nam, dạo này thế nào?",
+   "cumTu": [
+    "how's it going with",
+    "hey, how's it going"
+   ],
+   "ghiChu": "Thân mật; đáp: \"Not bad, thanks\" / \"Pretty good\"."
+  },
+  {
+   "chu": "bless you",
+   "doc": "/bles juː/",
+   "loai": "phr",
+   "nghia": "(nói khi ai đó hắt hơi) cầu cho bạn khoẻ",
+   "cap": "A2",
+   "viDu": "\"Achoo!\" \"Bless you!\"",
+   "viDuNghia": "\"Hắt xì!\" \"Chúc sức khoẻ!\"",
+   "ghiChu": "Phép lịch sự phổ biến ở các nước nói tiếng Anh."
+  }
+ ]
+}

@@ -1,0 +1,859 @@
+{
+  "ma": "nang-cao-c2-4",
+  "nn": "en",
+  "ten": "Chặng C2 · Tính cách, khuynh hướng và lối nói tinh tế",
+  "moTa": "Từ C2 tả tính cách và phẩm chất (affable, aloof, erudite, gregarious, magnanimous), danh từ chỉ khuynh hướng và số lượng (penchant, proclivity, paucity, surfeit), động từ trang trọng (postulate, purport, renege, usurp) và vài cụm nói tự nhiên của người bản xứ.",
+  "nhom": "ielts",
+  "cap": "C2",
+  "tu": [
+    {
+      "chu": "abdicate",
+      "doc": "/ˈæbdɪkeɪt/",
+      "loai": "v",
+      "nghia": "thoái vị; chối bỏ (trách nhiệm)",
+      "cap": "C2",
+      "viDu": "Parents cannot abdicate responsibility for their children's online safety.",
+      "viDuNghia": "Cha mẹ không thể chối bỏ trách nhiệm về an toàn trên mạng của con.",
+      "cumTu": [
+        "abdicate responsibility",
+        "abdicate the throne",
+        "abdicate in favour of"
+      ],
+      "hoTu": [
+        "abdication (n)"
+      ]
+    },
+    {
+      "chu": "aberration",
+      "doc": "/ˌæbəˈreɪʃn/",
+      "loai": "n",
+      "nghia": "sự lệch chuẩn, điều bất thường tạm thời",
+      "cap": "C2",
+      "viDu": "The poor results this year were an aberration, not a trend.",
+      "viDuNghia": "Kết quả kém năm nay là một bất thường, không phải xu hướng.",
+      "cumTu": [
+        "a temporary aberration",
+        "a statistical aberration",
+        "an aberration from"
+      ],
+      "hoTu": [
+        "aberrant (adj)"
+      ]
+    },
+    {
+      "chu": "abhorrent",
+      "doc": "/əbˈhɒrənt/",
+      "loai": "adj",
+      "nghia": "ghê tởm, không thể chấp nhận về đạo đức",
+      "cap": "C2",
+      "viDu": "The idea of selling children's data is abhorrent to most parents.",
+      "viDuNghia": "Ý tưởng bán dữ liệu của trẻ em là ghê tởm với hầu hết phụ huynh.",
+      "cumTu": [
+        "abhorrent to someone",
+        "morally abhorrent",
+        "an abhorrent practice"
+      ],
+      "hoTu": [
+        "abhor (v)",
+        "abhorrence (n)"
+      ]
+    },
+    {
+      "chu": "affable",
+      "doc": "/ˈæfəbl/",
+      "loai": "adj",
+      "nghia": "hoà nhã, dễ gần",
+      "cap": "C2",
+      "viDu": "The new director is affable and always ready to listen.",
+      "viDuNghia": "Giám đốc mới hoà nhã và luôn sẵn lòng lắng nghe.",
+      "cumTu": [
+        "an affable manner",
+        "an affable host",
+        "affable and relaxed"
+      ],
+      "hoTu": [
+        "affability (n)",
+        "affably (adv)"
+      ]
+    },
+    {
+      "chu": "aloof",
+      "doc": "/əˈluːf/",
+      "loai": "adj",
+      "nghia": "xa cách, lạnh lùng",
+      "cap": "C2",
+      "viDu": "He seemed aloof at first, but he was simply shy.",
+      "viDuNghia": "Ban đầu anh ấy có vẻ xa cách, nhưng thật ra chỉ nhút nhát.",
+      "cumTu": [
+        "remain aloof",
+        "aloof from something",
+        "cold and aloof"
+      ],
+      "hoTu": [
+        "aloofness (n)"
+      ]
+    },
+    {
+      "chu": "altruistic",
+      "doc": "/ˌæltruˈɪstɪk/",
+      "loai": "adj",
+      "nghia": "vị tha, vì người khác",
+      "cap": "C2",
+      "viDu": "Not all volunteers have purely altruistic motives.",
+      "viDuNghia": "Không phải tình nguyện viên nào cũng có động cơ thuần vị tha.",
+      "cumTu": [
+        "altruistic motives",
+        "altruistic behaviour",
+        "purely altruistic"
+      ],
+      "hoTu": [
+        "altruism (n)",
+        "altruist (n)"
+      ]
+    },
+    {
+      "chu": "amiable",
+      "doc": "/ˈeɪmiəbl/",
+      "loai": "adj",
+      "nghia": "dễ mến, thân thiện",
+      "cap": "C2",
+      "viDu": "The interview was conducted in an amiable atmosphere.",
+      "viDuNghia": "Buổi phỏng vấn diễn ra trong bầu không khí thân thiện.",
+      "cumTu": [
+        "an amiable manner",
+        "an amiable man",
+        "an amiable atmosphere"
+      ],
+      "hoTu": [
+        "amiably (adv)"
+      ],
+      "ghiChu": "\"amiable\" tả người; \"amicable\" tả quan hệ, thoả thuận."
+    },
+    {
+      "chu": "antipathy",
+      "doc": "/ænˈtɪpəθi/",
+      "loai": "n",
+      "nghia": "ác cảm sâu sắc",
+      "cap": "C2",
+      "viDu": "There is growing antipathy towards companies that avoid paying tax.",
+      "viDuNghia": "Ác cảm với các công ty né thuế đang tăng lên.",
+      "cumTu": [
+        "antipathy towards",
+        "antipathy to",
+        "a deep antipathy"
+      ],
+      "hoTu": [
+        "antipathetic (adj)"
+      ],
+      "ghiChu": "Trọng âm ở âm tiết hai."
+    },
+    {
+      "chu": "benevolent",
+      "doc": "/bəˈnevələnt/",
+      "loai": "adj",
+      "nghia": "nhân từ, rộng lòng giúp đỡ",
+      "cap": "C2",
+      "viDu": "The scholarship was funded by a benevolent former student.",
+      "viDuNghia": "Học bổng được tài trợ bởi một cựu sinh viên hảo tâm.",
+      "cumTu": [
+        "a benevolent donor",
+        "a benevolent dictator",
+        "a benevolent smile"
+      ],
+      "hoTu": [
+        "benevolence (n)"
+      ]
+    },
+    {
+      "chu": "candour",
+      "doc": "/ˈkændə(r)/",
+      "loai": "n",
+      "nghia": "sự thẳng thắn, không che giấu",
+      "cap": "C2",
+      "viDu": "She spoke with remarkable candour about her early failures.",
+      "viDuNghia": "Cô ấy nói về những thất bại ban đầu với sự thẳng thắn đáng nể.",
+      "cumTu": [
+        "with candour",
+        "remarkable candour",
+        "candour about"
+      ],
+      "hoTu": [
+        "candid (adj)"
+      ],
+      "ghiChu": "Anh-Mỹ: candor."
+    },
+    {
+      "chu": "conjecture",
+      "doc": "/kənˈdʒektʃə(r)/",
+      "loai": "n",
+      "nghia": "sự phỏng đoán (thiếu bằng chứng)",
+      "cap": "C2",
+      "viDu": "What caused the outage is still a matter of conjecture.",
+      "viDuNghia": "Nguyên nhân sự cố vẫn chỉ là chuyện phỏng đoán.",
+      "cumTu": [
+        "a matter of conjecture",
+        "pure conjecture",
+        "conjecture about"
+      ],
+      "hoTu": [
+        "conjecture (v)",
+        "conjectural (adj)"
+      ]
+    },
+    {
+      "chu": "encumber",
+      "doc": "/ɪnˈkʌmbə(r)/",
+      "loai": "v",
+      "nghia": "làm vướng víu, đè nặng",
+      "cap": "C2",
+      "viDu": "Young graduates are encumbered with debt before they earn anything.",
+      "viDuNghia": "Cử nhân trẻ đã bị nợ nần đè nặng trước khi kiếm được đồng nào.",
+      "cumTu": [
+        "be encumbered with",
+        "be encumbered by",
+        "encumber progress"
+      ],
+      "hoTu": [
+        "encumbrance (n)",
+        "unencumbered (adj)"
+      ],
+      "ghiChu": "Thường bị động."
+    },
+    {
+      "chu": "erudite",
+      "doc": "/ˈerudaɪt/",
+      "loai": "adj",
+      "nghia": "uyên bác",
+      "cap": "C2",
+      "viDu": "Her lectures are erudite yet easy to follow.",
+      "viDuNghia": "Bài giảng của bà uyên bác mà vẫn dễ theo.",
+      "cumTu": [
+        "an erudite scholar",
+        "an erudite book",
+        "erudite and witty"
+      ],
+      "hoTu": [
+        "erudition (n)"
+      ]
+    },
+    {
+      "chu": "expound",
+      "doc": "/ɪkˈspaʊnd/",
+      "loai": "v",
+      "nghia": "trình bày, giảng giải chi tiết",
+      "cap": "C2",
+      "viDu": "In chapter two, the author expounds on the causes of inequality.",
+      "viDuNghia": "Ở chương hai, tác giả trình bày chi tiết các nguyên nhân của bất bình đẳng.",
+      "cumTu": [
+        "expound on a theory",
+        "expound a view",
+        "expound at length"
+      ],
+      "hoTu": [
+        "exposition (n)"
+      ]
+    },
+    {
+      "chu": "fastidious",
+      "doc": "/fæˈstɪdiəs/",
+      "loai": "adj",
+      "nghia": "kỹ tính, cầu kỳ tới từng chi tiết",
+      "cap": "C2",
+      "viDu": "He is fastidious about the formatting of his code.",
+      "viDuNghia": "Anh ấy rất kỹ tính về cách trình bày mã của mình.",
+      "cumTu": [
+        "fastidious about something",
+        "a fastidious eater",
+        "fastidious attention"
+      ],
+      "hoTu": [
+        "fastidiously (adv)"
+      ],
+      "ghiChu": "Mạnh hơn \"meticulous\", đôi khi hơi chê là khó tính."
+    },
+    {
+      "chu": "finesse",
+      "doc": "/fɪˈnes/",
+      "loai": "n",
+      "nghia": "sự khéo léo, tinh tế (khi xử lý)",
+      "cap": "C2",
+      "viDu": "Giving negative feedback requires finesse.",
+      "viDuNghia": "Đưa ra góp ý tiêu cực đòi hỏi sự khéo léo.",
+      "cumTu": [
+        "with finesse",
+        "require finesse",
+        "lack finesse"
+      ],
+      "hoTu": [
+        "finesse (v)"
+      ]
+    },
+    {
+      "chu": "foil",
+      "doc": "/fɔɪl/",
+      "loai": "v",
+      "nghia": "làm thất bại (âm mưu, kế hoạch)",
+      "cap": "C2",
+      "viDu": "Two-factor authentication foiled the attempt to steal the account.",
+      "viDuNghia": "Xác thực hai lớp đã làm thất bại nỗ lực đánh cắp tài khoản.",
+      "cumTu": [
+        "foil a plot",
+        "foil an attempt",
+        "foil a robbery"
+      ],
+      "hoTu": [
+        "foil (n)"
+      ],
+      "ghiChu": "Hay gặp trên báo: \"police foiled a plot\"."
+    },
+    {
+      "chu": "frivolous",
+      "doc": "/ˈfrɪvələs/",
+      "loai": "adj",
+      "nghia": "phù phiếm, không nghiêm túc",
+      "cap": "C2",
+      "viDu": "Critics dismiss space tourism as a frivolous waste of resources.",
+      "viDuNghia": "Giới phê bình coi du lịch vũ trụ là sự lãng phí tài nguyên phù phiếm.",
+      "cumTu": [
+        "a frivolous waste",
+        "frivolous spending",
+        "a frivolous lawsuit"
+      ],
+      "hoTu": [
+        "frivolity (n)"
+      ]
+    },
+    {
+      "chu": "gamut",
+      "doc": "/ˈɡæmət/",
+      "loai": "n",
+      "nghia": "toàn bộ phạm vi, đủ mọi cung bậc",
+      "cap": "C2",
+      "viDu": "The course covers the whole gamut of web development, from design to deployment.",
+      "viDuNghia": "Khoá học bao trọn mọi mảng của phát triển web, từ thiết kế tới triển khai.",
+      "cumTu": [
+        "the whole gamut of",
+        "run the gamut from A to B"
+      ],
+      "ghiChu": "\"run the gamut\" = trải đủ mọi cung bậc."
+    },
+    {
+      "chu": "gratuitous",
+      "doc": "/ɡrəˈtjuːɪtəs/",
+      "loai": "adj",
+      "nghia": "vô cớ, không cần thiết (và gây hại)",
+      "cap": "C2",
+      "viDu": "Many parents object to the gratuitous violence in video games.",
+      "viDuNghia": "Nhiều phụ huynh phản đối bạo lực vô cớ trong trò chơi điện tử.",
+      "cumTu": [
+        "gratuitous violence",
+        "a gratuitous insult",
+        "gratuitous detail"
+      ],
+      "hoTu": [
+        "gratuitously (adv)"
+      ],
+      "ghiChu": "Không liên quan nghĩa tới \"gratitude\"; khác \"gratuity\" (tiền boa)."
+    },
+    {
+      "chu": "gregarious",
+      "doc": "/ɡrɪˈɡeəriəs/",
+      "loai": "adj",
+      "nghia": "thích giao du, quảng giao",
+      "cap": "C2",
+      "viDu": "My brother is gregarious, whereas I prefer small groups.",
+      "viDuNghia": "Anh tôi quảng giao, còn tôi thích nhóm nhỏ.",
+      "cumTu": [
+        "a gregarious person",
+        "gregarious by nature",
+        "gregarious animals"
+      ],
+      "hoTu": [
+        "gregariousness (n)"
+      ],
+      "ghiChu": "Tự nhiên hơn \"sociable\" khi tả tính cách ở Speaking."
+    },
+    {
+      "chu": "idiosyncrasy",
+      "doc": "/ˌɪdiəˈsɪŋkrəsi/",
+      "loai": "n",
+      "nghia": "nét riêng lập dị, đặc điểm khác thường",
+      "cap": "C2",
+      "viDu": "Every programming language has its own idiosyncrasies.",
+      "viDuNghia": "Ngôn ngữ lập trình nào cũng có những nét kỳ quặc riêng.",
+      "cumTu": [
+        "personal idiosyncrasies",
+        "an idiosyncrasy of",
+        "its own idiosyncrasies"
+      ],
+      "hoTu": [
+        "idiosyncratic (adj)"
+      ]
+    },
+    {
+      "chu": "imbue",
+      "doc": "/ɪmˈbjuː/",
+      "loai": "v",
+      "nghia": "thấm đẫm, truyền cho (phẩm chất, cảm xúc)",
+      "cap": "C2",
+      "viDu": "Good teachers imbue their students with a love of learning.",
+      "viDuNghia": "Giáo viên giỏi truyền cho học trò tình yêu học tập.",
+      "cumTu": [
+        "imbue someone with",
+        "be imbued with a sense of"
+      ],
+      "ghiChu": "imbue SB/STH WITH sth."
+    },
+    {
+      "chu": "incipient",
+      "doc": "/ɪnˈsɪpiənt/",
+      "loai": "adj",
+      "nghia": "chớm xuất hiện, mới manh nha",
+      "cap": "C2",
+      "viDu": "Regular check-ups can detect incipient health problems.",
+      "viDuNghia": "Khám định kỳ có thể phát hiện vấn đề sức khoẻ mới chớm.",
+      "cumTu": [
+        "an incipient problem",
+        "incipient signs of",
+        "incipient decline"
+      ]
+    },
+    {
+      "chu": "incontrovertible",
+      "doc": "/ˌɪnkɒntrəˈvɜːtəbl/",
+      "loai": "adj",
+      "nghia": "không thể bác bỏ",
+      "cap": "C2",
+      "viDu": "There is now incontrovertible evidence that the planet is warming.",
+      "viDuNghia": "Hiện đã có bằng chứng không thể bác bỏ rằng hành tinh đang ấm lên.",
+      "cumTu": [
+        "incontrovertible evidence",
+        "incontrovertible proof",
+        "an incontrovertible fact"
+      ],
+      "hoTu": [
+        "incontrovertibly (adv)"
+      ]
+    },
+    {
+      "chu": "inextricably",
+      "doc": "/ˌɪnɪkˈstrɪkəbli/",
+      "loai": "adv",
+      "nghia": "không thể tách rời",
+      "cap": "C2",
+      "viDu": "Economic growth and energy use are inextricably linked.",
+      "viDuNghia": "Tăng trưởng kinh tế và việc sử dụng năng lượng gắn với nhau không thể tách rời.",
+      "cumTu": [
+        "inextricably linked",
+        "inextricably bound up with",
+        "inextricably intertwined"
+      ],
+      "hoTu": [
+        "inextricable (adj)"
+      ],
+      "ghiChu": "Gần như chỉ đi với \"linked/bound up/intertwined\"."
+    },
+    {
+      "chu": "insinuate",
+      "doc": "/ɪnˈsɪnjueɪt/",
+      "loai": "v",
+      "nghia": "nói bóng gió (điều khó nghe)",
+      "cap": "C2",
+      "viDu": "The article insinuates that the minister knew about the deal.",
+      "viDuNghia": "Bài báo nói bóng gió rằng bộ trưởng đã biết về thương vụ.",
+      "cumTu": [
+        "insinuate that",
+        "what are you insinuating"
+      ],
+      "hoTu": [
+        "insinuation (n)"
+      ]
+    },
+    {
+      "chu": "irrefutable",
+      "doc": "/ˌɪrɪˈfjuːtəbl/",
+      "loai": "adj",
+      "nghia": "không thể chối cãi",
+      "cap": "C2",
+      "viDu": "The video provided irrefutable proof of what had happened.",
+      "viDuNghia": "Đoạn video cung cấp bằng chứng không thể chối cãi về điều đã xảy ra.",
+      "cumTu": [
+        "irrefutable proof",
+        "irrefutable evidence",
+        "irrefutable logic"
+      ],
+      "hoTu": [
+        "refute (v)",
+        "irrefutably (adv)"
+      ]
+    },
+    {
+      "chu": "magnanimous",
+      "doc": "/mæɡˈnænɪməs/",
+      "loai": "adj",
+      "nghia": "hào hiệp, độ lượng (với đối thủ, kẻ yếu)",
+      "cap": "C2",
+      "viDu": "She was magnanimous in victory and praised her opponent.",
+      "viDuNghia": "Cô ấy độ lượng khi chiến thắng và khen ngợi đối thủ.",
+      "cumTu": [
+        "magnanimous in victory",
+        "a magnanimous gesture"
+      ],
+      "hoTu": [
+        "magnanimity (n)"
+      ]
+    },
+    {
+      "chu": "nexus",
+      "doc": "/ˈneksəs/",
+      "loai": "n",
+      "nghia": "mối liên kết, điểm giao",
+      "cap": "C2",
+      "viDu": "The report examines the nexus between poverty and crime.",
+      "viDuNghia": "Báo cáo xem xét mối liên kết giữa nghèo đói và tội phạm.",
+      "cumTu": [
+        "the nexus between A and B",
+        "a nexus of"
+      ]
+    },
+    {
+      "chu": "paucity",
+      "doc": "/ˈpɔːsəti/",
+      "loai": "n",
+      "nghia": "sự ít ỏi, khan hiếm",
+      "cap": "C2",
+      "viDu": "The study was limited by a paucity of data from rural areas.",
+      "viDuNghia": "Nghiên cứu bị hạn chế bởi sự ít ỏi dữ liệu từ vùng nông thôn.",
+      "cumTu": [
+        "a paucity of",
+        "a paucity of evidence",
+        "a paucity of research"
+      ],
+      "ghiChu": "Trang trọng hơn \"lack\"; luôn \"a paucity OF\"."
+    },
+    {
+      "chu": "pedantic",
+      "doc": "/pɪˈdæntɪk/",
+      "loai": "adj",
+      "nghia": "quá câu nệ tiểu tiết, bắt bẻ",
+      "cap": "C2",
+      "viDu": "It may sound pedantic, but the difference between the two terms matters.",
+      "viDuNghia": "Nghe có thể hơi bắt bẻ, nhưng khác biệt giữa hai thuật ngữ này là quan trọng.",
+      "cumTu": [
+        "sound pedantic",
+        "a pedantic point",
+        "pedantic about"
+      ],
+      "hoTu": [
+        "pedant (n)",
+        "pedantry (n)"
+      ]
+    },
+    {
+      "chu": "penchant",
+      "doc": "/ˈpɒ̃ʃɒ̃/",
+      "loai": "n",
+      "nghia": "sở thích đặc biệt, thiên hướng",
+      "cap": "C2",
+      "viDu": "He has a penchant for solving problems the hard way.",
+      "viDuNghia": "Anh ấy có thói thích giải quyết vấn đề theo cách khó.",
+      "cumTu": [
+        "a penchant for something",
+        "a penchant for doing"
+      ],
+      "ghiChu": "Từ gốc Pháp; Anh-Mỹ đọc /ˈpentʃənt/. Đi với \"for\"."
+    },
+    {
+      "chu": "polarising",
+      "doc": "/ˈpəʊləraɪzɪŋ/",
+      "loai": "adj",
+      "nghia": "gây chia rẽ thành hai phe đối lập",
+      "cap": "C2",
+      "viDu": "Immigration remains one of the most polarising issues in politics.",
+      "viDuNghia": "Nhập cư vẫn là một trong những vấn đề gây chia rẽ nhất trong chính trị.",
+      "cumTu": [
+        "a polarising issue",
+        "a polarising figure",
+        "deeply polarising"
+      ],
+      "hoTu": [
+        "polarise (v)",
+        "polarisation (n)"
+      ]
+    },
+    {
+      "chu": "postulate",
+      "doc": "/ˈpɒstjuleɪt/",
+      "loai": "v",
+      "nghia": "đưa ra làm giả thuyết, giả định",
+      "cap": "C2",
+      "viDu": "Researchers postulate that sleep helps the brain remove waste.",
+      "viDuNghia": "Các nhà nghiên cứu giả định rằng giấc ngủ giúp não loại bỏ chất thải.",
+      "cumTu": [
+        "postulate that",
+        "postulate a theory",
+        "postulate the existence of"
+      ],
+      "hoTu": [
+        "postulate (n) /ˈpɒstjələt/"
+      ]
+    },
+    {
+      "chu": "predilection",
+      "doc": "/ˌpriːdɪˈlekʃn/",
+      "loai": "n",
+      "nghia": "sự ưa thích đặc biệt",
+      "cap": "C2",
+      "viDu": "The director has a predilection for long, silent scenes.",
+      "viDuNghia": "Vị đạo diễn đặc biệt ưa những cảnh dài, không lời.",
+      "cumTu": [
+        "a predilection for",
+        "a marked predilection"
+      ]
+    },
+    {
+      "chu": "proclivity",
+      "doc": "/prəˈklɪvəti/",
+      "loai": "n",
+      "nghia": "khuynh hướng (thường là không tốt)",
+      "cap": "C2",
+      "viDu": "Teenagers have a proclivity for taking risks.",
+      "viDuNghia": "Thanh thiếu niên có khuynh hướng thích mạo hiểm.",
+      "cumTu": [
+        "a proclivity for",
+        "a proclivity to do",
+        "natural proclivity"
+      ]
+    },
+    {
+      "chu": "profuse",
+      "doc": "/prəˈfjuːs/",
+      "loai": "adj",
+      "nghia": "rất nhiều, dồi dào tuôn ra",
+      "cap": "C2",
+      "viDu": "The airline offered profuse apologies for the delay.",
+      "viDuNghia": "Hãng bay rối rít xin lỗi vì chuyến bị trễ.",
+      "cumTu": [
+        "profuse apologies",
+        "profuse thanks",
+        "profuse bleeding"
+      ],
+      "hoTu": [
+        "profusely (adv)",
+        "profusion (n)"
+      ],
+      "ghiChu": "\"apologise profusely\" = xin lỗi rối rít."
+    },
+    {
+      "chu": "purport",
+      "doc": "/pəˈpɔːt/",
+      "loai": "v",
+      "nghia": "tự cho là, có vẻ như là (nhưng đáng ngờ)",
+      "cap": "C2",
+      "viDu": "The email purports to come from the bank, but the address is fake.",
+      "viDuNghia": "Bức email tự nhận là của ngân hàng, nhưng địa chỉ là giả.",
+      "cumTu": [
+        "purport to be",
+        "purport to show",
+        "purport to come from"
+      ],
+      "hoTu": [
+        "purported (adj)",
+        "purportedly (adv)"
+      ],
+      "ghiChu": "Ngụ ý người viết không tin — công cụ hedging mạnh."
+    },
+    {
+      "chu": "quagmire",
+      "doc": "/ˈkwæɡmaɪə(r)/",
+      "loai": "n",
+      "nghia": "vũng lầy, tình thế sa lầy",
+      "cap": "C2",
+      "viDu": "The merger turned into a legal quagmire that lasted years.",
+      "viDuNghia": "Vụ sáp nhập biến thành vũng lầy pháp lý kéo dài nhiều năm.",
+      "cumTu": [
+        "a legal quagmire",
+        "a political quagmire",
+        "sink into a quagmire"
+      ]
+    },
+    {
+      "chu": "renege",
+      "doc": "/rɪˈniːɡ/",
+      "loai": "v",
+      "nghia": "nuốt lời, bội ước",
+      "cap": "C2",
+      "viDu": "The company reneged on its promise to raise wages.",
+      "viDuNghia": "Công ty nuốt lời hứa tăng lương.",
+      "cumTu": [
+        "renege on a promise",
+        "renege on a deal",
+        "renege on an agreement"
+      ],
+      "ghiChu": "Luôn đi với \"on\"."
+    },
+    {
+      "chu": "reprehensible",
+      "doc": "/ˌreprɪˈhensəbl/",
+      "loai": "adj",
+      "nghia": "đáng lên án, đáng khiển trách",
+      "cap": "C2",
+      "viDu": "Exploiting interns as free labour is morally reprehensible.",
+      "viDuNghia": "Bóc lột thực tập sinh như lao động miễn phí là đáng lên án về đạo đức.",
+      "cumTu": [
+        "morally reprehensible",
+        "reprehensible conduct",
+        "reprehensible behaviour"
+      ]
+    },
+    {
+      "chu": "schism",
+      "doc": "/ˈskɪzəm/",
+      "loai": "n",
+      "nghia": "sự ly khai, chia rẽ sâu (trong tổ chức)",
+      "cap": "C2",
+      "viDu": "The proposal caused a schism within the governing party.",
+      "viDuNghia": "Đề xuất gây chia rẽ sâu sắc trong đảng cầm quyền.",
+      "cumTu": [
+        "a schism within",
+        "a schism between",
+        "a deep schism"
+      ],
+      "hoTu": [
+        "schismatic (adj)"
+      ]
+    },
+    {
+      "chu": "surfeit",
+      "doc": "/ˈsɜːfɪt/",
+      "loai": "n",
+      "nghia": "sự dư thừa quá mức",
+      "cap": "C2",
+      "viDu": "Readers today suffer from a surfeit of information, not a shortage.",
+      "viDuNghia": "Người đọc ngày nay khổ vì thừa thông tin chứ không phải thiếu.",
+      "cumTu": [
+        "a surfeit of",
+        "a surfeit of information",
+        "a surfeit of choice"
+      ],
+      "ghiChu": "Đọc /ˈsɜːfɪt/."
+    },
+    {
+      "chu": "taciturn",
+      "doc": "/ˈtæsɪtɜːn/",
+      "loai": "adj",
+      "nghia": "ít nói, lầm lì",
+      "cap": "C2",
+      "viDu": "My grandfather was a taciturn man who rarely spoke about the war.",
+      "viDuNghia": "Ông tôi là người ít nói, hiếm khi kể về chiến tranh.",
+      "cumTu": [
+        "a taciturn man",
+        "taciturn by nature",
+        "taciturn and reserved"
+      ],
+      "hoTu": [
+        "taciturnity (n)"
+      ]
+    },
+    {
+      "chu": "usurp",
+      "doc": "/juːˈzɜːp/",
+      "loai": "v",
+      "nghia": "chiếm đoạt (quyền lực, vị trí)",
+      "cap": "C2",
+      "viDu": "Some fear that algorithms will usurp the role of human editors.",
+      "viDuNghia": "Có người sợ thuật toán sẽ chiếm mất vai trò của biên tập viên con người.",
+      "cumTu": [
+        "usurp power",
+        "usurp the role of",
+        "usurp the throne"
+      ],
+      "hoTu": [
+        "usurper (n)",
+        "usurpation (n)"
+      ]
+    },
+    {
+      "chu": "as it were",
+      "doc": "/əz ɪt ˈwɜː(r)/",
+      "loai": "phr",
+      "nghia": "có thể nói là, nói ví von",
+      "cap": "C2",
+      "viDu": "The library is, as it were, the memory of the university.",
+      "viDuNghia": "Thư viện, có thể nói, là ký ức của trường đại học.",
+      "cumTu": [
+        "…, as it were, …"
+      ],
+      "ghiChu": "Trang trọng hơn \"so to speak\"; đặt giữa hai dấu phẩy."
+    },
+    {
+      "chu": "for want of a better word",
+      "doc": "/fə ˌwɒnt əv ə ˌbetə ˈwɜːd/",
+      "loai": "phr",
+      "nghia": "tạm gọi là, vì chưa tìm được từ hay hơn",
+      "cap": "C2",
+      "viDu": "The design felt, for want of a better word, old-fashioned.",
+      "viDuNghia": "Thiết kế ấy, tạm gọi là, lỗi thời.",
+      "cumTu": [
+        "for want of a better word",
+        "for want of a better term"
+      ],
+      "ghiChu": "Cứu cánh khi nói: thừa nhận từ mình dùng chưa thật chính xác."
+    },
+    {
+      "chu": "in no small part",
+      "doc": "/ɪn ˌnəʊ smɔːl ˈpɑːt/",
+      "loai": "phr",
+      "nghia": "phần lớn là, nhờ đáng kể vào",
+      "cap": "C2",
+      "viDu": "The project succeeded in no small part thanks to the testers.",
+      "viDuNghia": "Dự án thành công phần lớn là nhờ nhóm kiểm thử.",
+      "cumTu": [
+        "in no small part due to",
+        "in no small part thanks to",
+        "in no small part because of"
+      ],
+      "ghiChu": "Nói giảm kiểu Anh: \"không nhỏ\" = rất lớn."
+    },
+    {
+      "chu": "par for the course",
+      "doc": "/ˌpɑː fə ðə ˈkɔːs/",
+      "loai": "phr",
+      "nghia": "chuyện thường tình, đúng như dự đoán (điều không hay)",
+      "cap": "C2",
+      "viDu": "Delays of a week or two are par for the course in software projects.",
+      "viDuNghia": "Trễ một hai tuần là chuyện thường tình trong dự án phần mềm.",
+      "cumTu": [
+        "be par for the course"
+      ],
+      "ghiChu": "Gốc từ môn golf; hơi thân mật."
+    },
+    {
+      "chu": "nip something in the bud",
+      "doc": "/ˌnɪp sʌmθɪŋ ɪn ðə ˈbʌd/",
+      "loai": "phr",
+      "nghia": "dập tắt từ trong trứng nước",
+      "cap": "C2",
+      "viDu": "Teachers should nip bullying in the bud before it spreads.",
+      "viDuNghia": "Giáo viên nên dập nạn bắt nạt từ trong trứng nước trước khi nó lan ra.",
+      "cumTu": [
+        "nip a problem in the bud",
+        "nip it in the bud"
+      ]
+    },
+    {
+      "chu": "take something with a pinch of salt",
+      "doc": "/ˌteɪk sʌmθɪŋ wɪð ə ˌpɪntʃ əv ˈsɔːlt/",
+      "loai": "phr",
+      "nghia": "nghe thì nghe nhưng đừng tin hẳn",
+      "cap": "C2",
+      "viDu": "You should take online reviews with a pinch of salt.",
+      "viDuNghia": "Bạn nên đọc đánh giá trên mạng với sự dè dặt.",
+      "cumTu": [
+        "take it with a pinch of salt",
+        "take claims with a pinch of salt"
+      ],
+      "ghiChu": "Anh-Mỹ: \"a grain of salt\"."
+    }
+  ]
+}

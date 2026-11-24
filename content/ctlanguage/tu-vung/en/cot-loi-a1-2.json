@@ -1,0 +1,749 @@
+{
+ "ma": "cot-loi-a1-2",
+ "nn": "en",
+ "ten": "Động từ nền tảng A1",
+ "moTa": "Những động từ dùng hằng ngày mà kho chủ đề còn thiếu (get, give, take, think, want, find, tell, feel…) — xương sống của mọi câu nói và câu viết.",
+ "nhom": "giao-tiep",
+ "cap": "A1",
+ "tu": [
+  {
+   "chu": "get",
+   "doc": "/ɡet/",
+   "loai": "v",
+   "nghia": "nhận được, lấy; trở nên; đến nơi",
+   "cap": "A1",
+   "viDu": "I usually get home at six o'clock.",
+   "viDuNghia": "Tôi thường về đến nhà lúc sáu giờ.",
+   "cumTu": [
+    "get up",
+    "get home",
+    "get a job",
+    "get better"
+   ],
+   "ghiChu": "Động từ đa nghĩa nhất tiếng Anh nói; trong văn viết IELTS nên thay bằng receive, obtain, become."
+  },
+  {
+   "chu": "give",
+   "doc": "/ɡɪv/",
+   "loai": "v",
+   "nghia": "cho, đưa, tặng",
+   "cap": "A1",
+   "viDu": "Can you give me your email address?",
+   "viDuNghia": "Bạn cho tôi địa chỉ email được không?",
+   "cumTu": [
+    "give advice",
+    "give a presentation",
+    "give up",
+    "give back"
+   ],
+   "hoTu": [
+    "gift (n)",
+    "giver (n)"
+   ],
+   "ghiChu": "Quá khứ: gave, given."
+  },
+  {
+   "chu": "take",
+   "doc": "/teɪk/",
+   "loai": "v",
+   "nghia": "cầm, lấy; mất (thời gian); đi (xe)",
+   "cap": "A1",
+   "viDu": "It will take about two hours to finish the report.",
+   "viDuNghia": "Sẽ mất khoảng hai tiếng để hoàn thành báo cáo.",
+   "cumTu": [
+    "take a photo",
+    "take a bus",
+    "take time",
+    "take notes"
+   ],
+   "ghiChu": "Quá khứ: took, taken. \"It takes + thời gian + to V\"."
+  },
+  {
+   "chu": "come",
+   "doc": "/kʌm/",
+   "loai": "v",
+   "nghia": "đến, tới",
+   "cap": "A1",
+   "viDu": "Can you come to my office at three?",
+   "viDuNghia": "Bạn đến văn phòng tôi lúc ba giờ được không?",
+   "cumTu": [
+    "come back",
+    "come from",
+    "come in",
+    "come true"
+   ],
+   "ghiChu": "Quá khứ: came, come."
+  },
+  {
+   "chu": "say",
+   "doc": "/seɪ/",
+   "loai": "v",
+   "nghia": "nói",
+   "cap": "A1",
+   "viDu": "How do you say this word in English?",
+   "viDuNghia": "Từ này trong tiếng Anh nói thế nào?",
+   "cumTu": [
+    "say hello",
+    "say sorry",
+    "say goodbye",
+    "say something"
+   ],
+   "hoTu": [
+    "saying (n)"
+   ],
+   "ghiChu": "say something (TO somebody); tell somebody something. Không nói \"say me\"."
+  },
+  {
+   "chu": "tell",
+   "doc": "/tel/",
+   "loai": "v",
+   "nghia": "kể, bảo, nói cho biết",
+   "cap": "A1",
+   "viDu": "Please tell me the truth.",
+   "viDuNghia": "Làm ơn nói cho tôi sự thật.",
+   "cumTu": [
+    "tell a story",
+    "tell the truth",
+    "tell the difference",
+    "tell a joke"
+   ],
+   "ghiChu": "Phải có người nghe ngay sau: tell ME. Quá khứ: told."
+  },
+  {
+   "chu": "see",
+   "doc": "/siː/",
+   "loai": "v",
+   "nghia": "nhìn thấy; gặp; hiểu",
+   "cap": "A1",
+   "viDu": "I can see the sea from my hotel room.",
+   "viDuNghia": "Tôi có thể nhìn thấy biển từ phòng khách sạn.",
+   "cumTu": [
+    "see you later",
+    "I see",
+    "see a doctor",
+    "see a film"
+   ],
+   "hoTu": [
+    "sight (n)"
+   ],
+   "ghiChu": "see = thấy; look at = nhìn có chủ ý; watch = xem thứ chuyển động."
+  },
+  {
+   "chu": "hear",
+   "doc": "/hɪə(r)/",
+   "loai": "v",
+   "nghia": "nghe thấy",
+   "cap": "A1",
+   "viDu": "Can you hear me clearly?",
+   "viDuNghia": "Bạn nghe tôi rõ không?",
+   "cumTu": [
+    "hear a noise",
+    "hear about",
+    "hear from",
+    "hear the news"
+   ],
+   "hoTu": [
+    "hearing (n)"
+   ],
+   "ghiChu": "hear = nghe thấy (tự nhiên); listen to = lắng nghe có chủ ý."
+  },
+  {
+   "chu": "think",
+   "doc": "/θɪŋk/",
+   "loai": "v",
+   "nghia": "nghĩ, suy nghĩ; cho rằng",
+   "cap": "A1",
+   "viDu": "I think this is the best solution.",
+   "viDuNghia": "Tôi nghĩ đây là giải pháp tốt nhất.",
+   "cumTu": [
+    "think about",
+    "think of",
+    "I think so",
+    "think twice"
+   ],
+   "hoTu": [
+    "thought (n)",
+    "thinker (n)",
+    "thinking (n)"
+   ],
+   "ghiChu": "Quá khứ: thought. Phủ định ở \"think\": I don't think it is right."
+  },
+  {
+   "chu": "want",
+   "doc": "/wɒnt/",
+   "loai": "v",
+   "nghia": "muốn",
+   "cap": "A1",
+   "viDu": "I want to improve my speaking skills.",
+   "viDuNghia": "Tôi muốn cải thiện kỹ năng nói.",
+   "cumTu": [
+    "want to do",
+    "want something",
+    "if you want"
+   ],
+   "ghiChu": "want + to V. Lịch sự hơn: would like."
+  },
+  {
+   "chu": "feel",
+   "doc": "/fiːl/",
+   "loai": "v",
+   "nghia": "cảm thấy",
+   "cap": "A1",
+   "viDu": "I feel tired after a long day at work.",
+   "viDuNghia": "Tôi cảm thấy mệt sau một ngày dài làm việc.",
+   "cumTu": [
+    "feel better",
+    "feel like",
+    "feel sorry",
+    "feel free"
+   ],
+   "hoTu": [
+    "feeling (n)"
+   ],
+   "ghiChu": "Quá khứ: felt. feel + tính từ: feel happy (không dùng trạng từ)."
+  },
+  {
+   "chu": "find",
+   "doc": "/faɪnd/",
+   "loai": "v",
+   "nghia": "tìm thấy; nhận thấy",
+   "cap": "A1",
+   "viDu": "I cannot find my keys anywhere.",
+   "viDuNghia": "Tôi không tìm thấy chìa khoá ở đâu cả.",
+   "cumTu": [
+    "find out",
+    "find a job",
+    "find a way",
+    "find it difficult"
+   ],
+   "hoTu": [
+    "finding (n)"
+   ],
+   "ghiChu": "Quá khứ: found. look for = đang tìm; find = tìm thấy."
+  },
+  {
+   "chu": "put",
+   "doc": "/pʊt/",
+   "loai": "v",
+   "nghia": "đặt, để",
+   "cap": "A1",
+   "viDu": "Please put your phone on the desk.",
+   "viDuNghia": "Hãy đặt điện thoại của bạn lên bàn.",
+   "cumTu": [
+    "put on",
+    "put away",
+    "put off",
+    "put together"
+   ],
+   "ghiChu": "Ba dạng giống nhau: put, put, put."
+  },
+  {
+   "chu": "keep",
+   "doc": "/kiːp/",
+   "loai": "v",
+   "nghia": "giữ; tiếp tục",
+   "cap": "A1",
+   "viDu": "You should keep your password in a safe place.",
+   "viDuNghia": "Bạn nên giữ mật khẩu ở nơi an toàn.",
+   "cumTu": [
+    "keep calm",
+    "keep going",
+    "keep in touch",
+    "keep a secret"
+   ],
+   "hoTu": [
+    "keeper (n)"
+   ],
+   "ghiChu": "keep + V-ing = cứ tiếp tục: keep trying. Quá khứ: kept."
+  },
+  {
+   "chu": "use",
+   "doc": "/juːz/",
+   "loai": "v",
+   "nghia": "dùng, sử dụng",
+   "cap": "A1",
+   "viDu": "Can I use your charger for a minute?",
+   "viDuNghia": "Tôi dùng sạc của bạn một lát được không?",
+   "cumTu": [
+    "use a computer",
+    "use up",
+    "make use of"
+   ],
+   "hoTu": [
+    "use (n) /juːs/",
+    "useful (adj)",
+    "user (n)",
+    "useless (adj)"
+   ],
+   "ghiChu": "Động từ đọc /juːz/, danh từ đọc /juːs/."
+  },
+  {
+   "chu": "become",
+   "doc": "/bɪˈkʌm/",
+   "loai": "v",
+   "nghia": "trở thành, trở nên",
+   "cap": "A1",
+   "viDu": "She wants to become a doctor.",
+   "viDuNghia": "Cô ấy muốn trở thành bác sĩ.",
+   "cumTu": [
+    "become popular",
+    "become famous",
+    "become a member",
+    "become aware"
+   ],
+   "ghiChu": "Quá khứ: became, become."
+  },
+  {
+   "chu": "begin",
+   "doc": "/bɪˈɡɪn/",
+   "loai": "v",
+   "nghia": "bắt đầu",
+   "cap": "A1",
+   "viDu": "The lessons begin at eight o'clock.",
+   "viDuNghia": "Các tiết học bắt đầu lúc tám giờ.",
+   "cumTu": [
+    "begin with",
+    "begin to do",
+    "to begin with"
+   ],
+   "hoTu": [
+    "beginning (n)",
+    "beginner (n)"
+   ],
+   "ghiChu": "Quá khứ: began, begun. Trang trọng hơn \"start\"."
+  },
+  {
+   "chu": "believe",
+   "doc": "/bɪˈliːv/",
+   "loai": "v",
+   "nghia": "tin, tin tưởng",
+   "cap": "A1",
+   "viDu": "I believe that hard work brings success.",
+   "viDuNghia": "Tôi tin rằng chăm chỉ mang lại thành công.",
+   "cumTu": [
+    "believe in",
+    "believe it or not",
+    "firmly believe"
+   ],
+   "hoTu": [
+    "belief (n)",
+    "believable (adj)",
+    "unbelievable (adj)"
+   ],
+   "ghiChu": "\"I believe that…\" dùng tốt để nêu quan điểm trong Writing Task 2."
+  },
+  {
+   "chu": "break",
+   "doc": "/breɪk/",
+   "loai": "v",
+   "nghia": "làm vỡ, làm gãy; hỏng",
+   "cap": "A1",
+   "viDu": "Be careful not to break that glass.",
+   "viDuNghia": "Cẩn thận đừng làm vỡ cái cốc đó.",
+   "cumTu": [
+    "break a leg",
+    "break the law",
+    "break down",
+    "break a record"
+   ],
+   "hoTu": [
+    "break (n)",
+    "broken (adj)"
+   ],
+   "ghiChu": "Quá khứ: broke, broken."
+  },
+  {
+   "chu": "build",
+   "doc": "/bɪld/",
+   "loai": "v",
+   "nghia": "xây dựng",
+   "cap": "A1",
+   "viDu": "They plan to build a new school here.",
+   "viDuNghia": "Họ dự định xây một ngôi trường mới ở đây.",
+   "cumTu": [
+    "build a house",
+    "build a team",
+    "build up",
+    "build a career"
+   ],
+   "hoTu": [
+    "building (n)",
+    "builder (n)"
+   ],
+   "ghiChu": "Quá khứ: built."
+  },
+  {
+   "chu": "compare",
+   "doc": "/kəmˈpeə(r)/",
+   "loai": "v",
+   "nghia": "so sánh",
+   "cap": "A1",
+   "viDu": "Compare the two charts and describe the main differences.",
+   "viDuNghia": "Hãy so sánh hai biểu đồ và mô tả những khác biệt chính.",
+   "cumTu": [
+    "compare with",
+    "compare to",
+    "compare prices"
+   ],
+   "hoTu": [
+    "comparison (n)",
+    "comparative (adj)",
+    "comparable (adj)"
+   ],
+   "ghiChu": "Động từ đề bài quen thuộc trong IELTS Writing Task 1."
+  },
+  {
+   "chu": "complete",
+   "doc": "/kəmˈpliːt/",
+   "loai": "v",
+   "nghia": "hoàn thành; điền đầy đủ",
+   "cap": "A1",
+   "viDu": "Please complete this form and send it back.",
+   "viDuNghia": "Vui lòng điền đầy đủ mẫu này rồi gửi lại.",
+   "cumTu": [
+    "complete a form",
+    "complete a task",
+    "complete a course"
+   ],
+   "hoTu": [
+    "complete (adj)",
+    "completely (adv)",
+    "completion (n)"
+   ]
+  },
+  {
+   "chu": "describe",
+   "doc": "/dɪˈskraɪb/",
+   "loai": "v",
+   "nghia": "mô tả, miêu tả",
+   "cap": "A1",
+   "viDu": "Can you describe your hometown?",
+   "viDuNghia": "Bạn có thể mô tả quê bạn không?",
+   "cumTu": [
+    "describe a person",
+    "describe in detail",
+    "describe as"
+   ],
+   "hoTu": [
+    "description (n)",
+    "descriptive (adj)"
+   ],
+   "ghiChu": "\"Describe…\" là câu lệnh mở đầu thẻ đề Speaking Part 2."
+  },
+  {
+   "chu": "die",
+   "doc": "/daɪ/",
+   "loai": "v",
+   "nghia": "chết, qua đời",
+   "cap": "A1",
+   "viDu": "Plants die quickly without water.",
+   "viDuNghia": "Cây cối chết nhanh nếu không có nước.",
+   "cumTu": [
+    "die of",
+    "die from",
+    "die out",
+    "die young"
+   ],
+   "hoTu": [
+    "death (n)",
+    "dead (adj)",
+    "dying (adj)"
+   ],
+   "ghiChu": "V-ing: dying. Lịch sự hơn: pass away."
+  },
+  {
+   "chu": "enjoy",
+   "doc": "/ɪnˈdʒɔɪ/",
+   "loai": "v",
+   "nghia": "thích thú, tận hưởng",
+   "cap": "A1",
+   "viDu": "I enjoy reading books before bed.",
+   "viDuNghia": "Tôi thích đọc sách trước khi ngủ.",
+   "cumTu": [
+    "enjoy doing",
+    "enjoy yourself",
+    "enjoy the weekend"
+   ],
+   "hoTu": [
+    "enjoyable (adj)",
+    "enjoyment (n)"
+   ],
+   "ghiChu": "enjoy + V-ing (không dùng \"to V\")."
+  },
+  {
+   "chu": "explain",
+   "doc": "/ɪkˈspleɪn/",
+   "loai": "v",
+   "nghia": "giải thích",
+   "cap": "A1",
+   "viDu": "Could you explain this word to me?",
+   "viDuNghia": "Bạn giải thích từ này cho tôi được không?",
+   "cumTu": [
+    "explain why",
+    "explain to somebody",
+    "explain clearly"
+   ],
+   "hoTu": [
+    "explanation (n)"
+   ],
+   "ghiChu": "explain something TO somebody — không nói \"explain me\"."
+  },
+  {
+   "chu": "forget",
+   "doc": "/fəˈɡet/",
+   "loai": "v",
+   "nghia": "quên",
+   "cap": "A1",
+   "viDu": "Do not forget to save your file.",
+   "viDuNghia": "Đừng quên lưu tệp của bạn.",
+   "cumTu": [
+    "forget to do",
+    "forget about",
+    "never forget"
+   ],
+   "hoTu": [
+    "forgetful (adj)",
+    "unforgettable (adj)"
+   ],
+   "ghiChu": "Quá khứ: forgot, forgotten."
+  },
+  {
+   "chu": "guess",
+   "doc": "/ɡes/",
+   "loai": "v",
+   "nghia": "đoán",
+   "cap": "A1",
+   "viDu": "Can you guess the meaning of this word?",
+   "viDuNghia": "Bạn có đoán được nghĩa của từ này không?",
+   "cumTu": [
+    "guess the answer",
+    "I guess so",
+    "guess what"
+   ],
+   "hoTu": [
+    "guess (n)"
+   ],
+   "ghiChu": "\"I guess…\" = tôi đoán / tôi nghĩ là (thân mật)."
+  },
+  {
+   "chu": "happen",
+   "doc": "/ˈhæpən/",
+   "loai": "v",
+   "nghia": "xảy ra",
+   "cap": "A1",
+   "viDu": "What will happen if we miss the deadline?",
+   "viDuNghia": "Chuyện gì sẽ xảy ra nếu chúng ta trễ hạn?",
+   "cumTu": [
+    "happen to",
+    "what happened",
+    "happen again"
+   ],
+   "hoTu": [
+    "happening (n)"
+   ],
+   "ghiChu": "Không dùng bị động: nói \"an accident happened\", không nói \"was happened\"."
+  },
+  {
+   "chu": "imagine",
+   "doc": "/ɪˈmædʒɪn/",
+   "loai": "v",
+   "nghia": "tưởng tượng",
+   "cap": "A1",
+   "viDu": "Imagine a world without the internet.",
+   "viDuNghia": "Hãy tưởng tượng một thế giới không có internet.",
+   "cumTu": [
+    "imagine doing",
+    "can't imagine",
+    "just imagine"
+   ],
+   "hoTu": [
+    "imagination (n)",
+    "imaginary (adj)",
+    "imaginative (adj)"
+   ]
+  },
+  {
+   "chu": "join",
+   "doc": "/dʒɔɪn/",
+   "loai": "v",
+   "nghia": "tham gia, gia nhập",
+   "cap": "A1",
+   "viDu": "Would you like to join our English club?",
+   "viDuNghia": "Bạn có muốn tham gia câu lạc bộ tiếng Anh của chúng tôi không?",
+   "cumTu": [
+    "join a club",
+    "join a team",
+    "join in",
+    "join a meeting"
+   ],
+   "hoTu": [
+    "joint (adj)"
+   ],
+   "ghiChu": "Không cần giới từ: join a club (không phải \"join to\")."
+  },
+  {
+   "chu": "meet",
+   "doc": "/miːt/",
+   "loai": "v",
+   "nghia": "gặp, gặp gỡ",
+   "cap": "A1",
+   "viDu": "Let us meet at the cafe near the office.",
+   "viDuNghia": "Mình gặp nhau ở quán cà phê gần văn phòng nhé.",
+   "cumTu": [
+    "meet a friend",
+    "meet a deadline",
+    "meet up",
+    "nice to meet you"
+   ],
+   "hoTu": [
+    "meeting (n)"
+   ],
+   "ghiChu": "Quá khứ: met. \"meet a deadline\" = kịp hạn chót."
+  },
+  {
+   "chu": "move",
+   "doc": "/muːv/",
+   "loai": "v",
+   "nghia": "di chuyển; chuyển nhà",
+   "cap": "A1",
+   "viDu": "We plan to move to a bigger flat next year.",
+   "viDuNghia": "Chúng tôi định chuyển đến căn hộ lớn hơn vào năm sau.",
+   "cumTu": [
+    "move house",
+    "move to",
+    "move on",
+    "move forward"
+   ],
+   "hoTu": [
+    "movement (n)",
+    "move (n)"
+   ]
+  },
+  {
+   "chu": "open",
+   "doc": "/ˈəʊpən/",
+   "loai": "v",
+   "nghia": "mở",
+   "cap": "A1",
+   "viDu": "Please open your books at page ten.",
+   "viDuNghia": "Hãy mở sách ra trang mười.",
+   "cumTu": [
+    "open the door",
+    "open a file",
+    "open an account"
+   ],
+   "hoTu": [
+    "open (adj)",
+    "opening (n)"
+   ],
+   "ghiChu": "Với thiết bị điện dùng \"turn on\", không dùng \"open the light\"."
+  },
+  {
+   "chu": "prefer",
+   "doc": "/prɪˈfɜː(r)/",
+   "loai": "v",
+   "nghia": "thích hơn",
+   "cap": "A1",
+   "viDu": "I prefer tea to coffee.",
+   "viDuNghia": "Tôi thích trà hơn cà phê.",
+   "cumTu": [
+    "prefer A to B",
+    "prefer to do",
+    "would prefer"
+   ],
+   "hoTu": [
+    "preference (n)",
+    "preferable (adj)"
+   ],
+   "ghiChu": "prefer A TO B (không dùng \"than\")."
+  },
+  {
+   "chu": "remember",
+   "doc": "/rɪˈmembə(r)/",
+   "loai": "v",
+   "nghia": "nhớ, nhớ lại",
+   "cap": "A1",
+   "viDu": "I cannot remember his name.",
+   "viDuNghia": "Tôi không nhớ được tên anh ấy.",
+   "cumTu": [
+    "remember to do",
+    "remember doing",
+    "remember that"
+   ],
+   "ghiChu": "remember to do = nhớ phải làm; remember doing = nhớ là đã làm."
+  },
+  {
+   "chu": "ride",
+   "doc": "/raɪd/",
+   "loai": "v",
+   "nghia": "đi, cưỡi (xe đạp, xe máy, ngựa)",
+   "cap": "A1",
+   "viDu": "Most people in my city ride a motorbike to work.",
+   "viDuNghia": "Hầu hết người dân thành phố tôi đi xe máy đi làm.",
+   "cumTu": [
+    "ride a bike",
+    "ride a horse",
+    "ride a motorbike"
+   ],
+   "hoTu": [
+    "ride (n)",
+    "rider (n)"
+   ],
+   "ghiChu": "Quá khứ: rode, ridden. ride xe hai bánh; drive ô tô."
+  },
+  {
+   "chu": "sit",
+   "doc": "/sɪt/",
+   "loai": "v",
+   "nghia": "ngồi",
+   "cap": "A1",
+   "viDu": "Please sit here and wait for the doctor.",
+   "viDuNghia": "Mời bạn ngồi đây chờ bác sĩ.",
+   "cumTu": [
+    "sit down",
+    "sit on a chair",
+    "sit an exam"
+   ],
+   "hoTu": [
+    "seat (n)"
+   ],
+   "ghiChu": "Quá khứ: sat. \"sit an exam\" (Anh-Anh) = dự thi."
+  },
+  {
+   "chu": "stay",
+   "doc": "/steɪ/",
+   "loai": "v",
+   "nghia": "ở lại; lưu trú",
+   "cap": "A1",
+   "viDu": "We will stay at a small hotel near the beach.",
+   "viDuNghia": "Chúng tôi sẽ ở một khách sạn nhỏ gần bãi biển.",
+   "cumTu": [
+    "stay at home",
+    "stay up late",
+    "stay in touch",
+    "stay healthy"
+   ],
+   "hoTu": [
+    "stay (n)"
+   ]
+  },
+  {
+   "chu": "wake",
+   "doc": "/weɪk/",
+   "loai": "v",
+   "nghia": "thức dậy; đánh thức",
+   "cap": "A1",
+   "viDu": "Please wake me at six tomorrow.",
+   "viDuNghia": "Làm ơn đánh thức tôi lúc sáu giờ sáng mai.",
+   "cumTu": [
+    "wake up",
+    "wake somebody up",
+    "wake early"
+   ],
+   "hoTu": [
+    "awake (adj)"
+   ],
+   "ghiChu": "Quá khứ: woke, woken. Thường dùng với \"up\"."
+  }
+ ]
+}

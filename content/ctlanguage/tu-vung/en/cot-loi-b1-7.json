@@ -1,0 +1,778 @@
+{
+ "ma": "cot-loi-b1-7",
+ "nn": "en",
+ "ten": "Công việc, email & máy tính B1",
+ "moTa": "Từ và cụm dùng ở chỗ làm: email, họp trực tuyến, tiến độ, tuyển dụng và thao tác máy tính (best regards, on schedule, attached, approve, job offer, sign in, restart, error message…) — sát nhu cầu sinh viên IT đi làm.",
+ "nhom": "giao-tiep",
+ "cap": "B1",
+ "tu": [
+  {
+   "chu": "attached",
+   "doc": "/əˈtætʃt/",
+   "loai": "adj",
+   "nghia": "được đính kèm",
+   "cap": "B1",
+   "viDu": "Please find the attached file with my CV.",
+   "viDuNghia": "Vui lòng xem tệp đính kèm có CV của tôi.",
+   "cumTu": [
+    "attached file",
+    "attached document",
+    "please find attached",
+    "attached to"
+   ],
+   "hoTu": [
+    "attach (v)",
+    "attachment (n)"
+   ],
+   "ghiChu": "Email: \"Please find attached…\" / \"I have attached…\"."
+  },
+  {
+   "chu": "regards",
+   "doc": "/rɪˈɡɑːdz/",
+   "loai": "n",
+   "nghia": "lời chào trân trọng (cuối thư)",
+   "cap": "B1",
+   "viDu": "Please give my regards to your team.",
+   "viDuNghia": "Xin gửi lời hỏi thăm của tôi đến nhóm của bạn.",
+   "cumTu": [
+    "best regards",
+    "kind regards",
+    "warm regards",
+    "give my regards to"
+   ],
+   "hoTu": [
+    "regard (v)",
+    "regarding (prep)"
+   ]
+  },
+  {
+   "chu": "best regards",
+   "doc": "/best rɪˈɡɑːdz/",
+   "loai": "phr",
+   "nghia": "trân trọng (lời kết email)",
+   "cap": "B1",
+   "viDu": "Thank you for your help. Best regards, Minh.",
+   "viDuNghia": "Cảm ơn sự giúp đỡ của bạn. Trân trọng, Minh.",
+   "ghiChu": "Lời kết email phổ biến nhất nơi công sở; trang trọng hơn: Yours sincerely."
+  },
+  {
+   "chu": "kind regards",
+   "doc": "/kaɪnd rɪˈɡɑːdz/",
+   "loai": "phr",
+   "nghia": "trân trọng (lời kết email, lịch sự)",
+   "cap": "B1",
+   "viDu": "I look forward to your reply. Kind regards, Lan.",
+   "viDuNghia": "Tôi mong nhận được hồi âm của bạn. Trân trọng, Lan.",
+   "ghiChu": "Hơi trang trọng hơn \"Best regards\"."
+  },
+  {
+   "chu": "sincerely",
+   "doc": "/sɪnˈsɪəli/",
+   "loai": "adv",
+   "nghia": "một cách chân thành",
+   "cap": "B1",
+   "viDu": "I sincerely apologize for the late reply.",
+   "viDuNghia": "Tôi chân thành xin lỗi vì trả lời muộn.",
+   "cumTu": [
+    "Yours sincerely",
+    "sincerely apologize",
+    "sincerely hope",
+    "sincerely believe"
+   ],
+   "hoTu": [
+    "sincere (adj)",
+    "sincerity (n)"
+   ],
+   "ghiChu": "Anh-Anh: \"Yours sincerely\"; Anh-Mỹ: \"Sincerely,\"."
+  },
+  {
+   "chu": "as soon as possible",
+   "doc": "/æz suːn æz ˈpɒsəbl/",
+   "loai": "phr",
+   "nghia": "càng sớm càng tốt",
+   "cap": "B1",
+   "viDu": "Please send me the report as soon as possible.",
+   "viDuNghia": "Vui lòng gửi cho tôi báo cáo càng sớm càng tốt.",
+   "cumTu": [
+    "reply as soon as possible",
+    "as soon as possible, please"
+   ],
+   "ghiChu": "Viết tắt ASAP — chỉ dùng trong tin nhắn thân mật."
+  },
+  {
+   "chu": "on behalf of",
+   "doc": "/ɒn bɪˈhɑːf ɒv/",
+   "loai": "phr",
+   "nghia": "thay mặt cho",
+   "cap": "B1",
+   "viDu": "On behalf of the team, I would like to thank you.",
+   "viDuNghia": "Thay mặt cả nhóm, tôi xin cảm ơn bạn.",
+   "cumTu": [
+    "on behalf of the company",
+    "on behalf of everyone",
+    "on my behalf"
+   ]
+  },
+  {
+   "chu": "reach out",
+   "doc": "/riːtʃ aʊt/",
+   "loai": "phr",
+   "nghia": "liên hệ, chủ động liên lạc",
+   "cap": "B1",
+   "viDu": "Feel free to reach out if you have any questions.",
+   "viDuNghia": "Cứ liên hệ nếu bạn có bất kỳ câu hỏi nào.",
+   "cumTu": [
+    "reach out to somebody",
+    "reach out for help",
+    "reach out by email"
+   ],
+   "ghiChu": "Rất phổ biến trong email công việc kiểu Mỹ."
+  },
+  {
+   "chu": "report to",
+   "doc": "/rɪˈpɔːt tuː/",
+   "loai": "phr",
+   "nghia": "báo cáo cho, chịu sự quản lý của",
+   "cap": "B1",
+   "viDu": "In this role, you will report to the head of engineering.",
+   "viDuNghia": "Ở vị trí này, bạn sẽ báo cáo cho trưởng bộ phận kỹ thuật.",
+   "cumTu": [
+    "report to a manager",
+    "report directly to"
+   ]
+  },
+  {
+   "chu": "on schedule",
+   "doc": "/ɒn ˈʃedjuːl/",
+   "loai": "phr",
+   "nghia": "đúng tiến độ",
+   "cap": "B1",
+   "viDu": "The project is on schedule and will finish in May.",
+   "viDuNghia": "Dự án đang đúng tiến độ và sẽ hoàn thành vào tháng Năm.",
+   "cumTu": [
+    "be on schedule",
+    "run on schedule",
+    "finish on schedule"
+   ],
+   "ghiChu": "Anh-Mỹ đọc /ˈskedʒuːl/."
+  },
+  {
+   "chu": "behind schedule",
+   "doc": "/bɪˈhaɪnd ˈʃedjuːl/",
+   "loai": "phr",
+   "nghia": "chậm tiến độ",
+   "cap": "B1",
+   "viDu": "We are two weeks behind schedule because of the bugs.",
+   "viDuNghia": "Chúng tôi chậm tiến độ hai tuần vì các lỗi.",
+   "cumTu": [
+    "be behind schedule",
+    "fall behind schedule",
+    "run behind schedule"
+   ]
+  },
+  {
+   "chu": "ahead of schedule",
+   "doc": "/əˈhed ɒv ˈʃedjuːl/",
+   "loai": "phr",
+   "nghia": "vượt tiến độ, sớm hơn kế hoạch",
+   "cap": "B1",
+   "viDu": "The team finished the work ahead of schedule.",
+   "viDuNghia": "Nhóm đã hoàn thành công việc sớm hơn kế hoạch.",
+   "cumTu": [
+    "finish ahead of schedule",
+    "be ahead of schedule"
+   ]
+  },
+  {
+   "chu": "on track",
+   "doc": "/ɒn træk/",
+   "loai": "phr",
+   "nghia": "đi đúng hướng, đúng tiến độ",
+   "cap": "B1",
+   "viDu": "We are on track to launch the app next month.",
+   "viDuNghia": "Chúng tôi đang đúng tiến độ để ra mắt ứng dụng vào tháng tới.",
+   "cumTu": [
+    "be on track",
+    "stay on track",
+    "get back on track",
+    "keep on track"
+   ]
+  },
+  {
+   "chu": "approve",
+   "doc": "/əˈpruːv/",
+   "loai": "v",
+   "nghia": "phê duyệt, chấp thuận",
+   "cap": "B2",
+   "viDu": "The manager must approve all holiday requests.",
+   "viDuNghia": "Người quản lý phải phê duyệt mọi yêu cầu nghỉ phép.",
+   "cumTu": [
+    "approve a request",
+    "approve a plan",
+    "approve of",
+    "approve a budget"
+   ],
+   "hoTu": [
+    "approval (n)",
+    "disapprove (v)"
+   ],
+   "ghiChu": "approve something = phê duyệt; approve OF something = tán thành."
+  },
+  {
+   "chu": "approval",
+   "doc": "/əˈpruːvl/",
+   "loai": "n",
+   "nghia": "sự phê duyệt, sự chấp thuận",
+   "cap": "B2",
+   "viDu": "We need approval from the client before we start.",
+   "viDuNghia": "Chúng ta cần sự chấp thuận của khách hàng trước khi bắt đầu.",
+   "cumTu": [
+    "get approval",
+    "give approval",
+    "approval from",
+    "subject to approval"
+   ],
+   "hoTu": [
+    "approve (v)"
+   ]
+  },
+  {
+   "chu": "job offer",
+   "doc": "/dʒɒb ˈɒfə(r)/",
+   "loai": "phr",
+   "nghia": "lời mời làm việc",
+   "cap": "B1",
+   "viDu": "I got a job offer from a software company in Da Nang.",
+   "viDuNghia": "Tôi nhận được lời mời làm việc từ một công ty phần mềm ở Đà Nẵng.",
+   "cumTu": [
+    "accept a job offer",
+    "turn down a job offer",
+    "receive a job offer"
+   ]
+  },
+  {
+   "chu": "applicant",
+   "doc": "/ˈæplɪkənt/",
+   "loai": "n",
+   "nghia": "người nộp đơn, ứng viên",
+   "cap": "B1",
+   "viDu": "Each applicant must send a CV and a cover letter.",
+   "viDuNghia": "Mỗi ứng viên phải gửi CV và thư xin việc.",
+   "cumTu": [
+    "job applicant",
+    "successful applicant",
+    "applicant for"
+   ],
+   "hoTu": [
+    "apply (v)",
+    "application (n)"
+   ]
+  },
+  {
+   "chu": "weakness",
+   "doc": "/ˈwiːknəs/",
+   "loai": "n",
+   "nghia": "điểm yếu",
+   "cap": "B1",
+   "viDu": "My biggest weakness is that I sometimes work too slowly.",
+   "viDuNghia": "Điểm yếu lớn nhất của tôi là đôi khi tôi làm việc quá chậm.",
+   "cumTu": [
+    "strengths and weaknesses",
+    "biggest weakness",
+    "a weakness for"
+   ],
+   "hoTu": [
+    "weak (adj)",
+    "weaken (v)"
+   ],
+   "ghiChu": "Câu phỏng vấn kinh điển: \"What are your strengths and weaknesses?\""
+  },
+  {
+   "chu": "coworker",
+   "doc": "/ˈkəʊwɜːkə(r)/",
+   "loai": "n",
+   "nghia": "đồng nghiệp",
+   "cap": "B1",
+   "viDu": "I often have lunch with a coworker from the design team.",
+   "viDuNghia": "Tôi thường ăn trưa với một đồng nghiệp bên nhóm thiết kế.",
+   "cumTu": [
+    "friendly coworker",
+    "former coworker"
+   ],
+   "ghiChu": "Anh-Mỹ; Anh-Anh dùng \"colleague\" nhiều hơn."
+  },
+  {
+   "chu": "full-time",
+   "doc": "/ˌfʊl ˈtaɪm/",
+   "loai": "adj",
+   "nghia": "toàn thời gian",
+   "cap": "B1",
+   "viDu": "I am looking for a full-time job after graduation.",
+   "viDuNghia": "Tôi đang tìm một công việc toàn thời gian sau khi tốt nghiệp.",
+   "cumTu": [
+    "full-time job",
+    "full-time student",
+    "work full-time",
+    "full-time employee"
+   ],
+   "ghiChu": "Trái nghĩa: part-time."
+  },
+  {
+   "chu": "handover",
+   "doc": "/ˈhændəʊvə(r)/",
+   "loai": "n",
+   "nghia": "sự bàn giao (công việc)",
+   "cap": "B2",
+   "viDu": "We need a proper handover before she goes on leave.",
+   "viDuNghia": "Chúng ta cần bàn giao đầy đủ trước khi cô ấy nghỉ phép.",
+   "cumTu": [
+    "handover meeting",
+    "handover notes",
+    "handover of"
+   ],
+   "hoTu": [
+    "hand over (phr v)"
+   ]
+  },
+  {
+   "chu": "slide",
+   "doc": "/slaɪd/",
+   "loai": "n",
+   "nghia": "trang trình chiếu; cầu trượt",
+   "cap": "B1",
+   "viDu": "The next slide shows our sales for this year.",
+   "viDuNghia": "Trang chiếu tiếp theo cho thấy doanh số năm nay của chúng tôi.",
+   "cumTu": [
+    "next slide",
+    "presentation slide",
+    "slide show",
+    "go to the next slide"
+   ],
+   "hoTu": [
+    "slide (v)"
+   ]
+  },
+  {
+   "chu": "whiteboard",
+   "doc": "/ˈwaɪtbɔːd/",
+   "loai": "n",
+   "nghia": "bảng trắng",
+   "cap": "B1",
+   "viDu": "The teacher wrote the key words on the whiteboard.",
+   "viDuNghia": "Giáo viên viết các từ khoá lên bảng trắng.",
+   "cumTu": [
+    "write on the whiteboard",
+    "whiteboard marker",
+    "online whiteboard"
+   ]
+  },
+  {
+   "chu": "share screen",
+   "doc": "/ʃeə(r) skriːn/",
+   "loai": "phr",
+   "nghia": "chia sẻ màn hình",
+   "cap": "B1",
+   "viDu": "Click \"Share screen\" so that we can all see the document.",
+   "viDuNghia": "Hãy bấm \"Share screen\" (chia sẻ màn hình) để mọi người cùng xem tài liệu.",
+   "cumTu": [
+    "share your screen",
+    "stop sharing",
+    "screen sharing"
+   ],
+   "ghiChu": "Thường nói: \"Could you share your screen?\""
+  },
+  {
+   "chu": "unmute",
+   "doc": "/ˌʌnˈmjuːt/",
+   "loai": "v",
+   "nghia": "bật tiếng (micro)",
+   "cap": "B1",
+   "viDu": "Please unmute your microphone when you want to speak.",
+   "viDuNghia": "Hãy bật micro khi bạn muốn nói.",
+   "cumTu": [
+    "unmute yourself",
+    "unmute the microphone"
+   ],
+   "hoTu": [
+    "mute (v, adj)"
+   ],
+   "ghiChu": "Câu họp online quen thuộc: \"You're on mute.\""
+  },
+  {
+   "chu": "demo",
+   "doc": "/ˈdeməʊ/",
+   "loai": "n",
+   "nghia": "bản trình diễn, chạy thử",
+   "cap": "B1",
+   "viDu": "We will give a short demo of the app on Friday.",
+   "viDuNghia": "Chúng tôi sẽ trình diễn ngắn ứng dụng vào thứ Sáu.",
+   "cumTu": [
+    "give a demo",
+    "product demo",
+    "demo version",
+    "live demo"
+   ],
+   "hoTu": [
+    "demonstrate (v)",
+    "demonstration (n)"
+   ]
+  },
+  {
+   "chu": "testing",
+   "doc": "/ˈtestɪŋ/",
+   "loai": "n",
+   "nghia": "việc kiểm thử, thử nghiệm",
+   "cap": "B1",
+   "viDu": "The new feature is still in testing.",
+   "viDuNghia": "Tính năng mới vẫn đang được kiểm thử.",
+   "cumTu": [
+    "software testing",
+    "user testing",
+    "testing phase",
+    "in testing"
+   ],
+   "hoTu": [
+    "test (v, n)",
+    "tester (n)"
+   ]
+  },
+  {
+   "chu": "bug report",
+   "doc": "/bʌɡ rɪˈpɔːt/",
+   "loai": "phr",
+   "nghia": "báo cáo lỗi phần mềm",
+   "cap": "B1",
+   "viDu": "Please write a bug report with clear steps.",
+   "viDuNghia": "Vui lòng viết báo cáo lỗi với các bước rõ ràng.",
+   "cumTu": [
+    "file a bug report",
+    "submit a bug report",
+    "detailed bug report"
+   ]
+  },
+  {
+   "chu": "error message",
+   "doc": "/ˈerə(r) ˈmesɪdʒ/",
+   "loai": "phr",
+   "nghia": "thông báo lỗi",
+   "cap": "B1",
+   "viDu": "An error message appears when I try to log in.",
+   "viDuNghia": "Một thông báo lỗi hiện ra khi tôi cố đăng nhập.",
+   "cumTu": [
+    "get an error message",
+    "show an error message",
+    "error message says"
+   ]
+  },
+  {
+   "chu": "restart",
+   "doc": "/ˌriːˈstɑːt/",
+   "loai": "v",
+   "nghia": "khởi động lại",
+   "cap": "B1",
+   "viDu": "Try to restart your computer and see if that helps.",
+   "viDuNghia": "Hãy thử khởi động lại máy tính xem có đỡ không.",
+   "cumTu": [
+    "restart the computer",
+    "restart the app",
+    "restart the server"
+   ],
+   "hoTu": [
+    "restart (n)"
+   ]
+  },
+  {
+   "chu": "troubleshoot",
+   "doc": "/ˈtrʌblʃuːt/",
+   "loai": "v",
+   "nghia": "tìm và khắc phục sự cố",
+   "cap": "B2",
+   "viDu": "I spent the morning trying to troubleshoot a network problem.",
+   "viDuNghia": "Tôi dành cả buổi sáng để tìm cách khắc phục sự cố mạng.",
+   "cumTu": [
+    "troubleshoot a problem",
+    "troubleshoot an issue",
+    "troubleshoot the network"
+   ],
+   "hoTu": [
+    "troubleshooting (n)"
+   ]
+  },
+  {
+   "chu": "sign in",
+   "doc": "/saɪn ɪn/",
+   "loai": "phr",
+   "nghia": "đăng nhập",
+   "cap": "A2",
+   "viDu": "Sign in with your email address and password.",
+   "viDuNghia": "Đăng nhập bằng địa chỉ email và mật khẩu của bạn.",
+   "cumTu": [
+    "sign in to an account",
+    "sign in with",
+    "sign in again"
+   ],
+   "hoTu": [
+    "sign-in (n)"
+   ],
+   "ghiChu": "= log in."
+  },
+  {
+   "chu": "sign out",
+   "doc": "/saɪn aʊt/",
+   "loai": "phr",
+   "nghia": "đăng xuất",
+   "cap": "A2",
+   "viDu": "Remember to sign out when you use a public computer.",
+   "viDuNghia": "Nhớ đăng xuất khi bạn dùng máy tính công cộng.",
+   "cumTu": [
+    "sign out of an account",
+    "sign out of all devices"
+   ],
+   "ghiChu": "= log out."
+  },
+  {
+   "chu": "subscribe",
+   "doc": "/səbˈskraɪb/",
+   "loai": "v",
+   "nghia": "đăng ký theo dõi, đăng ký dài hạn",
+   "cap": "B1",
+   "viDu": "You can subscribe to our channel for more lessons.",
+   "viDuNghia": "Bạn có thể đăng ký kênh của chúng tôi để xem thêm bài học.",
+   "cumTu": [
+    "subscribe to a channel",
+    "subscribe to a newsletter",
+    "subscribe for free"
+   ],
+   "hoTu": [
+    "subscription (n)",
+    "subscriber (n)"
+   ],
+   "ghiChu": "subscribe TO something."
+  },
+  {
+   "chu": "paste",
+   "doc": "/peɪst/",
+   "loai": "v",
+   "nghia": "dán (văn bản, tệp)",
+   "cap": "B1",
+   "viDu": "Copy the link and paste it into the chat.",
+   "viDuNghia": "Sao chép đường dẫn rồi dán vào khung chat.",
+   "cumTu": [
+    "copy and paste",
+    "paste into",
+    "paste a link",
+    "paste text"
+   ],
+   "hoTu": [
+    "paste (n)"
+   ]
+  },
+  {
+   "chu": "tab",
+   "doc": "/tæb/",
+   "loai": "n",
+   "nghia": "thẻ (trình duyệt, giao diện)",
+   "cap": "B1",
+   "viDu": "Open the link in a new tab.",
+   "viDuNghia": "Mở đường dẫn trong một thẻ mới.",
+   "cumTu": [
+    "new tab",
+    "open a tab",
+    "close the tab",
+    "browser tab"
+   ]
+  },
+  {
+   "chu": "icon",
+   "doc": "/ˈaɪkɒn/",
+   "loai": "n",
+   "nghia": "biểu tượng",
+   "cap": "B1",
+   "viDu": "Click the icon in the top right corner of the screen.",
+   "viDuNghia": "Nhấp vào biểu tượng ở góc trên bên phải màn hình.",
+   "cumTu": [
+    "click an icon",
+    "app icon",
+    "desktop icon",
+    "menu icon"
+   ],
+   "ghiChu": "Cũng có nghĩa \"thần tượng, biểu tượng\": a fashion icon."
+  },
+  {
+   "chu": "cursor",
+   "doc": "/ˈkɜːsə(r)/",
+   "loai": "n",
+   "nghia": "con trỏ (trên màn hình)",
+   "cap": "B1",
+   "viDu": "Move the cursor to the end of the line.",
+   "viDuNghia": "Di chuyển con trỏ đến cuối dòng.",
+   "cumTu": [
+    "move the cursor",
+    "mouse cursor",
+    "cursor position"
+   ]
+  },
+  {
+   "chu": "pop-up",
+   "doc": "/ˈpɒp ʌp/",
+   "loai": "n",
+   "nghia": "cửa sổ bật lên",
+   "cap": "B1",
+   "viDu": "A pop-up asked me to accept the cookies.",
+   "viDuNghia": "Một cửa sổ bật lên yêu cầu tôi chấp nhận cookie.",
+   "cumTu": [
+    "pop-up window",
+    "pop-up ad",
+    "block pop-ups",
+    "pop-up message"
+   ],
+   "hoTu": [
+    "pop up (phr v)"
+   ]
+  },
+  {
+   "chu": "checkbox",
+   "doc": "/ˈtʃekbɒks/",
+   "loai": "n",
+   "nghia": "ô đánh dấu",
+   "cap": "B1",
+   "viDu": "Tick the checkbox to agree to the terms.",
+   "viDuNghia": "Đánh dấu vào ô để đồng ý với điều khoản.",
+   "cumTu": [
+    "tick a checkbox",
+    "select the checkbox",
+    "clear the checkbox"
+   ]
+  },
+  {
+   "chu": "zoom",
+   "doc": "/zuːm/",
+   "loai": "v",
+   "nghia": "phóng to, thu nhỏ (hình ảnh)",
+   "cap": "B1",
+   "viDu": "You can zoom in to see the details of the map.",
+   "viDuNghia": "Bạn có thể phóng to để xem chi tiết bản đồ.",
+   "cumTu": [
+    "zoom in",
+    "zoom out",
+    "zoom in on"
+   ],
+   "hoTu": [
+    "zoom (n)"
+   ],
+   "ghiChu": "zoom in = phóng to; zoom out = thu nhỏ."
+  },
+  {
+   "chu": "brightness",
+   "doc": "/ˈbraɪtnəs/",
+   "loai": "n",
+   "nghia": "độ sáng",
+   "cap": "B1",
+   "viDu": "Turn down the brightness of your screen to save battery.",
+   "viDuNghia": "Giảm độ sáng màn hình để tiết kiệm pin.",
+   "cumTu": [
+    "screen brightness",
+    "adjust the brightness",
+    "brightness level"
+   ],
+   "hoTu": [
+    "bright (adj)",
+    "brighten (v)"
+   ]
+  },
+  {
+   "chu": "cable",
+   "doc": "/ˈkeɪbl/",
+   "loai": "n",
+   "nghia": "dây cáp",
+   "cap": "B1",
+   "viDu": "I forgot to bring the charging cable for my laptop.",
+   "viDuNghia": "Tôi quên mang dây sạc laptop.",
+   "cumTu": [
+    "charging cable",
+    "USB cable",
+    "cable TV",
+    "connect a cable"
+   ]
+  },
+  {
+   "chu": "sync",
+   "doc": "/sɪŋk/",
+   "loai": "v",
+   "nghia": "đồng bộ hoá",
+   "cap": "B2",
+   "viDu": "Your photos sync to the cloud every night.",
+   "viDuNghia": "Ảnh của bạn được đồng bộ lên đám mây mỗi đêm.",
+   "cumTu": [
+    "sync data",
+    "sync with",
+    "sync files",
+    "in sync"
+   ],
+   "hoTu": [
+    "synchronize (v)",
+    "sync (n)"
+   ],
+   "ghiChu": "\"out of sync\" = không khớp, lệch nhau."
+  },
+  {
+   "chu": "scanner",
+   "doc": "/ˈskænə(r)/",
+   "loai": "n",
+   "nghia": "máy quét",
+   "cap": "B1",
+   "viDu": "Use the scanner to make a digital copy of your passport.",
+   "viDuNghia": "Dùng máy quét để tạo bản sao số của hộ chiếu.",
+   "cumTu": [
+    "document scanner",
+    "barcode scanner",
+    "security scanner"
+   ],
+   "hoTu": [
+    "scan (v, n)"
+   ]
+  },
+  {
+   "chu": "open-source",
+   "doc": "/ˌəʊpən ˈsɔːs/",
+   "loai": "adj",
+   "nghia": "mã nguồn mở",
+   "cap": "B2",
+   "viDu": "Linux is a well-known open-source operating system.",
+   "viDuNghia": "Linux là một hệ điều hành mã nguồn mở nổi tiếng.",
+   "cumTu": [
+    "open-source software",
+    "open-source project",
+    "open-source code"
+   ]
+  },
+  {
+   "chu": "downtime",
+   "doc": "/ˈdaʊntaɪm/",
+   "loai": "n",
+   "nghia": "thời gian ngừng hoạt động (hệ thống); thời gian nghỉ",
+   "cap": "B2",
+   "viDu": "The website had two hours of downtime last night.",
+   "viDuNghia": "Trang web đã ngừng hoạt động hai tiếng đêm qua.",
+   "cumTu": [
+    "server downtime",
+    "reduce downtime",
+    "planned downtime"
+   ]
+  },
+  {
+   "chu": "what's up",
+   "doc": "/wɒts ʌp/",
+   "loai": "phr",
+   "nghia": "có chuyện gì thế; dạo này sao rồi",
+   "cap": "A2",
+   "viDu": "Hey, what's up? You look worried.",
+   "viDuNghia": "Này, có chuyện gì thế? Trông bạn lo lắng quá.",
+   "cumTu": [
+    "what's up with",
+    "hey, what's up"
+   ],
+   "ghiChu": "Rất thân mật — không dùng với giám khảo hay cấp trên."
+  }
+ ]
+}

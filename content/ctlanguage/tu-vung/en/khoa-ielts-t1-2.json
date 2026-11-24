@@ -1,0 +1,1223 @@
+{
+  "ma": "khoa-ielts-t1-2",
+  "nn": "en",
+  "ten": "Từ của IELTS Tập 1 (0 → 4.0) · 2",
+  "moTa": "Từ vựng dạy trong IELTS Tập 1 (0 → 4.0) trên web (cùng nghĩa, ví dụ, ghi chú như bài học) — gom vào lộ trình để ôn theo ngày.",
+  "nhom": "ielts",
+  "cap": "A2",
+  "tu": [
+    {
+      "chu": "blood donor",
+      "doc": "/ˈblʌd ˌdəʊnə(r)/",
+      "loai": "n",
+      "nghia": "người hiến máu",
+      "cap": "A2",
+      "viDu": "My father has been a blood donor for over ten years.",
+      "viDuNghia": "Bố tôi là người hiến máu đã hơn mười năm.",
+      "ghiChu": "donor = người hiến / người tặng (an organ donor — người hiến tạng). Hành động: give blood / donate blood."
+    },
+    {
+      "chu": "clean-up",
+      "doc": "/ˈkliːn ʌp/",
+      "loai": "n",
+      "nghia": "cuộc / buổi dọn dẹp",
+      "cap": "A2",
+      "viDu": "Over 200 students joined the beach clean-up on Sunday.",
+      "viDuNghia": "Hơn 200 học sinh tham gia buổi dọn bãi biển hôm Chủ nhật.",
+      "ghiChu": "Danh từ viết có gạch nối (a clean-up), động từ viết rời (clean up the beach) — giống set up / setup ở Ngày 5."
+    },
+    {
+      "chu": "unpaid",
+      "doc": "/ˌʌnˈpeɪd/",
+      "loai": "adj",
+      "nghia": "không lương, không được trả tiền",
+      "cap": "A2",
+      "viDu": "Most of the work at the festival is unpaid.",
+      "viDuNghia": "Phần lớn công việc ở lễ hội là không lương.",
+      "ghiChu": "unpaid work / an unpaid internship (thực tập không lương). Cùng nghĩa: work for free. Trái nghĩa: paid."
+    },
+    {
+      "chu": "make a difference",
+      "doc": "/ˌmeɪk ə ˈdɪfrəns/",
+      "loai": "phr",
+      "nghia": "tạo ra sự thay đổi tích cực, có ích thật sự",
+      "cap": "A2",
+      "viDu": "Even one hour a week can make a difference to a lonely old person.",
+      "viDuNghia": "Chỉ một giờ mỗi tuần cũng có thể tạo ra thay đổi cho một người già cô đơn.",
+      "ghiChu": "make a (big / real) difference to / in + người / việc. Dùng make, không dùng ~~do a difference~~."
+    },
+    {
+      "chu": "help out",
+      "doc": "/ˌhelp ˈaʊt/",
+      "loai": "phr",
+      "nghia": "phụ giúp (nhất là lúc ai đó đang bận / khó khăn)",
+      "cap": "A2",
+      "viDu": "I helped out at my uncle's restaurant during the holidays.",
+      "viDuNghia": "Kỳ nghỉ tôi phụ giúp ở nhà hàng của chú.",
+      "ghiChu": "help out at + nơi · help (sb) out with + việc: Can you help me out with the boxes?"
+    },
+    {
+      "chu": "give back",
+      "doc": "/ˌɡɪv ˈbæk/",
+      "loai": "phr",
+      "nghia": "đền đáp, đóng góp lại (cho cộng đồng đã giúp mình); trả lại",
+      "cap": "A2",
+      "viDu": "After he became a doctor, he wanted to give back to his village.",
+      "viDuNghia": "Sau khi thành bác sĩ, anh ấy muốn đóng góp lại cho làng mình.",
+      "ghiChu": "give back to the community — cụm rất hay cho Task 2. Nghĩa thường: give it back (trả lại nó)."
+    },
+    {
+      "chu": "hand out",
+      "doc": "/ˌhænd ˈaʊt/",
+      "loai": "phr",
+      "nghia": "phát (cho từng người)",
+      "cap": "A2",
+      "viDu": "The volunteers handed out water to the runners.",
+      "viDuNghia": "Các tình nguyện viên phát nước cho người chạy.",
+      "ghiChu": "hand out leaflets / food / gifts · danh từ a handout (tài liệu phát tay)."
+    },
+    {
+      "chu": "clean up",
+      "doc": "/ˌkliːn ˈʌp/",
+      "loai": "phr",
+      "nghia": "dọn sạch",
+      "cap": "A2",
+      "viDu": "It took us four hours to clean up the river bank.",
+      "viDuNghia": "Chúng tôi mất bốn tiếng để dọn sạch bờ sông.",
+      "ghiChu": "Tách được: clean the beach up / clean it up. Danh từ: a clean-up."
+    },
+    {
+      "chu": "reach out to",
+      "doc": "/ˌriːtʃ ˈaʊt tə/",
+      "loai": "phr",
+      "nghia": "chủ động liên hệ, tìm đến (để giúp hoặc nhờ giúp)",
+      "cap": "A2",
+      "viDu": "The charity reached out to local businesses for donations.",
+      "viDuNghia": "Tổ chức từ thiện đã chủ động liên hệ các doanh nghiệp địa phương để xin quyên góp.",
+      "ghiChu": "Dùng nhiều trong công việc: Feel free to reach out to me if you have questions."
+    },
+    {
+      "chu": "pitch in",
+      "doc": "/ˌpɪtʃ ˈɪn/",
+      "loai": "phr",
+      "nghia": "cùng góp sức, xắn tay vào làm (thân mật)",
+      "cap": "A2",
+      "viDu": "When the storm hit, the whole street pitched in to clear the fallen trees.",
+      "viDuNghia": "Khi bão đổ bộ, cả khu phố cùng xắn tay dọn cây đổ.",
+      "ghiChu": "Thân mật, hợp với Speaking. Trong Writing dùng contribute / work together."
+    },
+    {
+      "chu": "coordinator",
+      "doc": "/kəʊˈɔːdɪneɪtə(r)/",
+      "loai": "n",
+      "nghia": "người điều phối",
+      "cap": "A2",
+      "viDu": "The volunteer coordinator gave us a timetable.",
+      "viDuNghia": "Người điều phối tình nguyện viên phát cho chúng tôi thời gian biểu.",
+      "ghiChu": "Động từ coordinate (điều phối). Cụm: a project coordinator."
+    },
+    {
+      "chu": "rubbish tip",
+      "doc": "/ˈrʌbɪʃ tɪp/",
+      "loai": "n",
+      "nghia": "bãi rác (Anh-Anh); Mỹ: dump / landfill",
+      "cap": "A2",
+      "viDu": "The new park was built on an old rubbish tip.",
+      "viDuNghia": "Công viên mới được xây trên một bãi rác cũ.",
+      "ghiChu": "rubbish (Anh) = trash / garbage (Mỹ) — không đếm được."
+    },
+    {
+      "chu": "council",
+      "doc": "/ˈkaʊnsl/",
+      "loai": "n",
+      "nghia": "hội đồng, chính quyền địa phương",
+      "cap": "A2",
+      "viDu": "The council agreed to build a new playground.",
+      "viDuNghia": "Chính quyền địa phương đồng ý xây sân chơi mới.",
+      "ghiChu": "the local council / city council. Đừng nhầm với counsel (lời khuyên, cùng cách đọc)."
+    },
+    {
+      "chu": "muddy",
+      "doc": "/ˈmʌdi/",
+      "loai": "adj",
+      "nghia": "lầy lội, dính bùn",
+      "cap": "A2",
+      "viDu": "After the rain, the path was too muddy to walk on.",
+      "viDuNghia": "Sau mưa, lối đi lầy lội quá không đi được.",
+      "ghiChu": "Gốc mud (bùn — không đếm được)."
+    },
+    {
+      "chu": "beehive",
+      "doc": "/ˈbiːhaɪv/",
+      "loai": "n",
+      "nghia": "tổ ong (do người nuôi)",
+      "cap": "A2",
+      "viDu": "The farm keeps six beehives for honey.",
+      "viDuNghia": "Nông trại nuôi sáu tổ ong để lấy mật."
+    },
+    {
+      "chu": "pier",
+      "doc": "/pɪə(r)/",
+      "loai": "n",
+      "nghia": "cầu tàu (nhô ra biển)",
+      "cap": "A2",
+      "viDu": "We met beside the lighthouse, next to the pier.",
+      "viDuNghia": "Chúng tôi gặp nhau cạnh hải đăng, sát cầu tàu.",
+      "ghiChu": "Đọc giống peer /pɪə/ — nguyên âm đôi /ɪə/ (Ngày 6)."
+    },
+    {
+      "chu": "habit",
+      "doc": "/ˈhæbɪt/",
+      "loai": "n",
+      "nghia": "thói quen",
+      "cap": "A2",
+      "viDu": "Checking my phone first thing in the morning is a bad habit.",
+      "viDuNghia": "Kiểm tra điện thoại ngay khi vừa ngủ dậy là một thói quen xấu.",
+      "ghiChu": "form / build / develop a habit (hình thành) · break / kick a habit (bỏ) · be in the habit of + V-ing · a good / bad / healthy habit."
+    },
+    {
+      "chu": "routine",
+      "doc": "/ruːˈtiːn/",
+      "loai": "n",
+      "nghia": "lịch sinh hoạt / nếp làm việc lặp lại hằng ngày",
+      "cap": "A2",
+      "viDu": "My morning routine starts with a glass of water and ten minutes of stretching.",
+      "viDuNghia": "Lịch buổi sáng của tôi bắt đầu bằng một cốc nước và mười phút giãn cơ.",
+      "ghiChu": "daily / morning / bedtime routine · stick to a routine (giữ nếp) · tính từ routine = thường lệ: a routine check."
+    },
+    {
+      "chu": "permission",
+      "doc": "/pəˈmɪʃn/",
+      "loai": "n",
+      "nghia": "sự cho phép",
+      "cap": "A2",
+      "viDu": "You need your parents' permission to join the trip.",
+      "viDuNghia": "Em cần sự cho phép của bố mẹ để tham gia chuyến đi.",
+      "ghiChu": "ask for / give / get permission · động từ permit. Không đếm được: ~~a permission~~."
+    },
+    {
+      "chu": "surroundings",
+      "doc": "/səˈraʊndɪŋz/",
+      "loai": "n",
+      "nghia": "môi trường xung quanh (luôn số nhiều)",
+      "cap": "A2",
+      "viDu": "Children learn faster in safe and friendly surroundings.",
+      "viDuNghia": "Trẻ em học nhanh hơn trong môi trường an toàn và thân thiện.",
+      "ghiChu": "Luôn có -s và đi với động từ số nhiều. Gần nghĩa: environment (số ít)."
+    },
+    {
+      "chu": "overestimate",
+      "doc": "/ˌəʊvərˈestɪmeɪt/",
+      "loai": "v",
+      "nghia": "đánh giá quá cao",
+      "cap": "A2",
+      "viDu": "Many students overestimate how much they can study in one night.",
+      "viDuNghia": "Nhiều sinh viên đánh giá quá cao lượng bài có thể học trong một đêm.",
+      "ghiChu": "Trái nghĩa underestimate (đánh giá thấp). Tiền tố over- = quá: overwork, oversleep, overeat."
+    },
+    {
+      "chu": "exhaust",
+      "doc": "/ɪɡˈzɔːst/",
+      "loai": "v",
+      "nghia": "làm kiệt sức; dùng cạn",
+      "cap": "A2",
+      "viDu": "Long night shifts exhaust even young nurses.",
+      "viDuNghia": "Những ca đêm dài làm kiệt sức cả những y tá trẻ.",
+      "ghiChu": "Tính từ exhausted (người kiệt sức) · exhausting (việc làm kiệt sức). Chữ h câm: /ɪɡˈzɔːst/."
+    },
+    {
+      "chu": "automatic",
+      "doc": "/ˌɔːtəˈmætɪk/",
+      "loai": "adj",
+      "nghia": "tự động; theo phản xạ, không cần nghĩ",
+      "cap": "A2",
+      "viDu": "After a few weeks, riding a motorbike becomes automatic.",
+      "viDuNghia": "Sau vài tuần, việc lái xe máy trở thành phản xạ tự động.",
+      "ghiChu": "Trạng từ automatically. Danh từ automation (sự tự động hoá)."
+    },
+    {
+      "chu": "attention",
+      "doc": "/əˈtenʃn/",
+      "loai": "n",
+      "nghia": "sự chú ý",
+      "cap": "A2",
+      "viDu": "Please pay attention to the spelling of names in Part 1.",
+      "viDuNghia": "Hãy chú ý chính tả của tên riêng trong Part 1.",
+      "ghiChu": "pay attention to (không ~~pay attention on~~) · attract / catch sb's attention · attention span (khả năng tập trung)."
+    },
+    {
+      "chu": "fall back on",
+      "doc": "/fɔːl ˈbæk ɒn/",
+      "loai": "phr",
+      "nghia": "quay về dựa vào (cái quen thuộc / dự phòng)",
+      "cap": "A2",
+      "viDu": "When I forget a word in English, I fall back on simple vocabulary.",
+      "viDuNghia": "Khi quên một từ tiếng Anh, tôi quay về dùng từ đơn giản.",
+      "ghiChu": "Quá khứ: fell back on. Danh từ fallback = phương án dự phòng."
+    },
+    {
+      "chu": "insist",
+      "doc": "/ɪnˈsɪst/",
+      "loai": "v",
+      "nghia": "khẳng định chắc chắn, nhất quyết (dù người khác nghi ngờ)",
+      "cap": "A2",
+      "viDu": "My teacher insists that we speak only English in class.",
+      "viDuNghia": "Giáo viên tôi nhất quyết yêu cầu chúng tôi chỉ nói tiếng Anh trong lớp.",
+      "ghiChu": "insist that + S + V · insist on + V-ing / N (He insisted on paying). Danh từ insistence. Trong bài đọc là động từ báo cáo mạnh (she insists) — Matching Features hay dùng."
+    },
+    {
+      "chu": "consumption",
+      "doc": "/kənˈsʌmpʃn/",
+      "loai": "n",
+      "nghia": "sự tiêu thụ (lượng ăn, uống, dùng)",
+      "cap": "A2",
+      "viDu": "Sugar consumption among children has risen in recent years.",
+      "viDuNghia": "Lượng tiêu thụ đường ở trẻ em đã tăng trong những năm gần đây.",
+      "ghiChu": "Động từ consume. Cụm Task 1 hay gặp: energy / water / meat consumption. Không đếm được."
+    },
+    {
+      "chu": "convinced",
+      "doc": "/kənˈvɪnst/",
+      "loai": "adj",
+      "nghia": "tin chắc, bị thuyết phục",
+      "cap": "A2",
+      "viDu": "I am convinced that reading every day improves vocabulary.",
+      "viDuNghia": "Tôi tin chắc rằng đọc mỗi ngày giúp tăng vốn từ.",
+      "ghiChu": "be convinced that + S + V / be convinced of + N. Động từ convince sb to + V (thuyết phục ai làm gì)."
+    },
+    {
+      "chu": "warn",
+      "doc": "/wɔːn/",
+      "loai": "v",
+      "nghia": "cảnh báo",
+      "cap": "A2",
+      "viDu": "Doctors warn that sitting all day is bad for your back.",
+      "viDuNghia": "Bác sĩ cảnh báo rằng ngồi cả ngày có hại cho lưng.",
+      "ghiChu": "warn sb about / of sth · warn sb not to + V · warn against + V-ing / N (Ruiz warns against all-or-nothing thinking). Danh từ warning (one final warning — đoạn F)."
+    },
+    {
+      "chu": "reward",
+      "doc": "/rɪˈwɔːd/",
+      "loai": "n",
+      "nghia": "phần thưởng; thưởng",
+      "cap": "A2",
+      "viDu": "After finishing my essay, I reward myself with a cup of bubble tea.",
+      "viDuNghia": "Viết xong bài luận, tôi tự thưởng một cốc trà sữa.",
+      "ghiChu": "reward sb with sth · tính từ rewarding = đáng làm, mang lại cảm giác xứng đáng: a rewarding job."
+    },
+    {
+      "chu": "immediately",
+      "doc": "/ɪˈmiːdiətli/",
+      "loai": "adv",
+      "nghia": "ngay lập tức",
+      "cap": "A2",
+      "viDu": "Write down new words immediately, or you will forget them.",
+      "viDuNghia": "Ghi từ mới ngay lập tức, nếu không bạn sẽ quên.",
+      "ghiChu": "Tính từ immediate (an immediate reward = phần thưởng tức thì). Gần nghĩa: instantly, right away."
+    },
+    {
+      "chu": "claim",
+      "doc": "/kleɪm/",
+      "loai": "n",
+      "nghia": "lời khẳng định (chưa chắc đúng); khẳng định",
+      "cap": "A2",
+      "viDu": "The advert claims that the drink makes you smarter.",
+      "viDuNghia": "Quảng cáo khẳng định đồ uống đó làm bạn thông minh hơn.",
+      "ghiChu": "claim that + S + V. Trong Writing, claim cho thấy người viết chưa tin hẳn — khác show / prove."
+    },
+    {
+      "chu": "willpower",
+      "doc": "/ˈwɪlpaʊə(r)/",
+      "loai": "n",
+      "nghia": "ý chí, sức tự chủ",
+      "cap": "A2",
+      "viDu": "It takes willpower to study when your friends are going out.",
+      "viDuNghia": "Cần có ý chí để ngồi học khi bạn bè đang đi chơi.",
+      "ghiChu": "Không đếm được. have / lack willpower · strong willpower."
+    },
+    {
+      "chu": "behaviour",
+      "doc": "/bɪˈheɪvjə(r)/",
+      "loai": "n",
+      "nghia": "hành vi, cách cư xử",
+      "cap": "A2",
+      "viDu": "Teachers praise good behaviour in class.",
+      "viDuNghia": "Giáo viên khen ngợi cách cư xử tốt trong lớp.",
+      "ghiChu": "Mỹ viết behavior. Thường không đếm được. Động từ behave (cư xử): behave well / badly."
+    },
+    {
+      "chu": "wake up",
+      "doc": "/ˌweɪk ˈʌp/",
+      "loai": "phr",
+      "nghia": "tỉnh giấc",
+      "cap": "A2",
+      "viDu": "I usually wake up before my alarm goes off.",
+      "viDuNghia": "Tôi thường tỉnh giấc trước khi chuông báo thức reo.",
+      "ghiChu": "wake up = mở mắt, tỉnh dậy (có thể vẫn nằm trên giường) ≠ get up = ra khỏi giường. Quá khứ: woke up."
+    },
+    {
+      "chu": "get up",
+      "doc": "/ˌɡet ˈʌp/",
+      "loai": "phr",
+      "nghia": "thức dậy, ra khỏi giường",
+      "cap": "A2",
+      "viDu": "On weekdays, I get up at half past six.",
+      "viDuNghia": "Ngày thường tôi dậy lúc sáu rưỡi.",
+      "ghiChu": "get up early / late · cuối tuần ngủ nướng: sleep in (I tend to sleep in on Sundays)."
+    },
+    {
+      "chu": "set an alarm",
+      "doc": "/ˌset ən əˈlɑːm/",
+      "loai": "phr",
+      "nghia": "đặt chuông báo thức",
+      "cap": "A2",
+      "viDu": "I always set two alarms because I'm a heavy sleeper.",
+      "viDuNghia": "Tôi luôn đặt hai cái báo thức vì tôi ngủ rất say.",
+      "ghiChu": "alarm /əˈlɑːm/ nhấn âm tiết thứ hai. Chuông reo: the alarm goes off · tắt: turn off the alarm."
+    },
+    {
+      "chu": "have a shower",
+      "doc": "/ˌhæv ə ˈʃaʊə(r)/",
+      "loai": "phr",
+      "nghia": "tắm (bằng vòi sen)",
+      "cap": "A2",
+      "viDu": "First, I have a quick shower to wake myself up.",
+      "viDuNghia": "Đầu tiên, tôi tắm nhanh cho tỉnh ngủ.",
+      "ghiChu": "Anh-Anh have a shower, Anh-Mỹ take a shower. Tắm bồn: have a bath."
+    },
+    {
+      "chu": "take a nap",
+      "doc": "/ˌteɪk ə ˈnæp/",
+      "loai": "phr",
+      "nghia": "chợp mắt, ngủ ngắn ban ngày",
+      "cap": "A2",
+      "viDu": "Many Vietnamese students take a short nap after lunch.",
+      "viDuNghia": "Nhiều học sinh Việt Nam ngủ trưa một lát sau bữa trưa.",
+      "ghiChu": "= have a nap. a power nap = giấc chợp mắt 15–20 phút cho tỉnh táo."
+    },
+    {
+      "chu": "stay up late",
+      "doc": "/ˌsteɪ ʌp ˈleɪt/",
+      "loai": "phr",
+      "nghia": "thức khuya",
+      "cap": "A2",
+      "viDu": "I sometimes stay up late to finish my homework.",
+      "viDuNghia": "Thỉnh thoảng tôi thức khuya để làm xong bài tập.",
+      "ghiChu": "≠ get up late (dậy muộn). Thức thâu đêm: stay up all night."
+    },
+    {
+      "chu": "go to bed",
+      "doc": "/ˌɡəʊ tə ˈbed/",
+      "loai": "phr",
+      "nghia": "đi ngủ (lên giường)",
+      "cap": "A2",
+      "viDu": "I usually go to bed at around eleven.",
+      "viDuNghia": "Tôi thường đi ngủ khoảng mười một giờ.",
+      "ghiChu": "go to bed (lên giường) ≠ fall asleep (ngủ thiếp đi). Không có the: ~~go to the bed~~."
+    },
+    {
+      "chu": "transport",
+      "doc": "/ˈtrænspɔːt/",
+      "loai": "n",
+      "nghia": "giao thông, phương tiện đi lại",
+      "cap": "A2",
+      "viDu": "Public transport in my city is cheap but slow.",
+      "viDuNghia": "Giao thông công cộng ở thành phố tôi rẻ nhưng chậm.",
+      "ghiChu": "Không đếm được: public transport · a form / means of transport. Mỹ hay dùng transportation."
+    },
+    {
+      "chu": "pedal",
+      "doc": "/ˈpedl/",
+      "loai": "n",
+      "nghia": "bàn đạp; đạp (xe)",
+      "cap": "A2",
+      "viDu": "Push the pedals harder when you go uphill.",
+      "viDuNghia": "Đạp mạnh hơn khi lên dốc.",
+      "ghiChu": "V-ing: pedalling (Anh) / pedaling (Mỹ)."
+    },
+    {
+      "chu": "frame",
+      "doc": "/freɪm/",
+      "loai": "n",
+      "nghia": "khung (xe, kính, tranh)",
+      "cap": "A2",
+      "viDu": "This bike has a light metal frame.",
+      "viDuNghia": "Chiếc xe này có khung kim loại nhẹ."
+    },
+    {
+      "chu": "wheel",
+      "doc": "/wiːl/",
+      "loai": "n",
+      "nghia": "bánh xe",
+      "cap": "A2",
+      "viDu": "The front wheel of my bike is bent.",
+      "viDuNghia": "Bánh trước xe tôi bị cong.",
+      "ghiChu": "steering wheel = vô-lăng. front / back wheel."
+    },
+    {
+      "chu": "handlebars",
+      "doc": "/ˈhændlbɑːz/",
+      "loai": "n",
+      "nghia": "ghi-đông, tay lái xe đạp / xe máy",
+      "cap": "A2",
+      "viDu": "Keep both hands on the handlebars.",
+      "viDuNghia": "Giữ cả hai tay trên ghi-đông.",
+      "ghiChu": "Thường số nhiều."
+    },
+    {
+      "chu": "courage",
+      "doc": "/ˈkʌrɪdʒ/",
+      "loai": "n",
+      "nghia": "sự can đảm",
+      "cap": "A2",
+      "viDu": "It takes courage to speak English in front of the class.",
+      "viDuNghia": "Cần can đảm để nói tiếng Anh trước lớp.",
+      "ghiChu": "Tính từ courageous. Động từ encourage (khuyến khích)."
+    },
+    {
+      "chu": "chain",
+      "doc": "/tʃeɪn/",
+      "loai": "n",
+      "nghia": "xích, dây xích; chuỗi (cửa hàng)",
+      "cap": "A2",
+      "viDu": "The chain came off my bike on the way home.",
+      "viDuNghia": "Xích xe tôi bị tuột trên đường về.",
+      "ghiChu": "Nghĩa 2: a chain of shops / hotels = chuỗi cửa hàng / khách sạn."
+    },
+    {
+      "chu": "tyre",
+      "doc": "/ˈtaɪə(r)/",
+      "loai": "n",
+      "nghia": "lốp xe",
+      "cap": "A2",
+      "viDu": "I need to pump up my back tyre.",
+      "viDuNghia": "Tôi cần bơm lốp sau.",
+      "ghiChu": "Mỹ viết tire. a flat tyre = lốp xẹp."
+    },
+    {
+      "chu": "independence",
+      "doc": "/ˌɪndɪˈpendəns/",
+      "loai": "n",
+      "nghia": "sự độc lập, tự chủ",
+      "cap": "A2",
+      "viDu": "A part-time job gives students some financial independence.",
+      "viDuNghia": "Việc làm thêm cho sinh viên chút độc lập về tài chính.",
+      "ghiChu": "Tính từ independent (of). Trái nghĩa: dependence."
+    },
+    {
+      "chu": "redesign",
+      "doc": "/ˌriːdɪˈzaɪn/",
+      "loai": "v",
+      "nghia": "thiết kế lại",
+      "cap": "A2",
+      "viDu": "The city plans to redesign the old market.",
+      "viDuNghia": "Thành phố định thiết kế lại khu chợ cũ.",
+      "ghiChu": "Tiền tố re- = làm lại: rebuild, rewrite, reuse."
+    },
+    {
+      "chu": "old-fashioned",
+      "doc": "/ˌəʊld ˈfæʃnd/",
+      "loai": "adj",
+      "nghia": "lỗi thời, cổ lỗ",
+      "cap": "A2",
+      "viDu": "Some teenagers think writing letters is old-fashioned.",
+      "viDuNghia": "Một số thiếu niên nghĩ viết thư tay là lỗi thời.",
+      "ghiChu": "Đồng nghĩa: out of date, outdated. Trái nghĩa: modern, up to date."
+    },
+    {
+      "chu": "crisis",
+      "doc": "/ˈkraɪsɪs/",
+      "loai": "n",
+      "nghia": "cuộc khủng hoảng",
+      "cap": "A2",
+      "viDu": "The oil crisis made petrol very expensive.",
+      "viDuNghia": "Khủng hoảng dầu mỏ khiến xăng rất đắt.",
+      "ghiChu": "Số nhiều bất quy tắc: crises /ˈkraɪsiːz/. an economic / energy crisis."
+    },
+    {
+      "chu": "persuade",
+      "doc": "/pəˈsweɪd/",
+      "loai": "v",
+      "nghia": "thuyết phục",
+      "cap": "A2",
+      "viDu": "My friend persuaded me to join the English club.",
+      "viDuNghia": "Bạn tôi đã thuyết phục tôi tham gia câu lạc bộ tiếng Anh.",
+      "ghiChu": "persuade sb to + V. Danh từ persuasion, tính từ persuasive."
+    },
+    {
+      "chu": "residential",
+      "doc": "/ˌrezɪˈdenʃl/",
+      "loai": "adj",
+      "nghia": "(thuộc) khu dân cư",
+      "cap": "A2",
+      "viDu": "Trucks are not allowed in residential streets at night.",
+      "viDuNghia": "Xe tải không được vào phố dân cư ban đêm.",
+      "ghiChu": "Danh từ resident (cư dân), residence (nơi cư trú)."
+    },
+    {
+      "chu": "free of charge",
+      "doc": "/friː əv tʃɑːdʒ/",
+      "loai": "phr",
+      "nghia": "miễn phí",
+      "cap": "A2",
+      "viDu": "Children under six can visit the museum free of charge.",
+      "viDuNghia": "Trẻ dưới sáu tuổi được vào bảo tàng miễn phí.",
+      "ghiChu": "Đồng nghĩa: for free · at no cost. ~~for free of charge~~ là thừa."
+    },
+    {
+      "chu": "e-learning",
+      "doc": "/ˈiː lɜːnɪŋ/",
+      "loai": "n",
+      "nghia": "học điện tử (học qua máy tính, internet)",
+      "cap": "A2",
+      "viDu": "E-learning grew very quickly during the pandemic.",
+      "viDuNghia": "Học điện tử phát triển rất nhanh trong đại dịch.",
+      "ghiChu": "Không đếm được (~~an e-learning~~). Gần nghĩa: online learning, online education."
+    },
+    {
+      "chu": "forum",
+      "doc": "/ˈfɔːrəm/",
+      "loai": "n",
+      "nghia": "diễn đàn (nơi đăng câu hỏi, trao đổi trên mạng)",
+      "cap": "A2",
+      "viDu": "Students post their questions on the course forum.",
+      "viDuNghia": "Sinh viên đăng câu hỏi lên diễn đàn của khoá học.",
+      "ghiChu": "an online / discussion forum · post on a forum · số nhiều forums. (platform = nền tảng — đã học Ngày 4.)"
+    },
+    {
+      "chu": "virtual classroom",
+      "doc": "/ˌvɜːtʃuəl ˈklɑːsruːm/",
+      "loai": "n",
+      "nghia": "lớp học ảo (lớp học trên mạng)",
+      "cap": "A2",
+      "viDu": "In a virtual classroom, students raise their hand by clicking a button.",
+      "viDuNghia": "Trong lớp học ảo, học sinh giơ tay bằng cách bấm một nút.",
+      "ghiChu": "virtual = ảo, trên máy tính (virtual tour, virtual meeting) — khác real / physical (thật, vật lý)."
+    },
+    {
+      "chu": "webinar",
+      "doc": "/ˈwebɪnɑː(r)/",
+      "loai": "n",
+      "nghia": "hội thảo trực tuyến",
+      "cap": "A2",
+      "viDu": "Over 300 teachers joined the webinar on AI in education.",
+      "viDuNghia": "Hơn 300 giáo viên tham gia hội thảo trực tuyến về AI trong giáo dục.",
+      "ghiChu": "join / attend / host a webinar · a webinar on + chủ đề."
+    },
+    {
+      "chu": "recorded lecture",
+      "doc": "/rɪˌkɔːdɪd ˈlektʃə(r)/",
+      "loai": "n",
+      "nghia": "bài giảng ghi hình (xem lại được)",
+      "cap": "A2",
+      "viDu": "Recorded lectures let students pause and take notes at their own speed.",
+      "viDuNghia": "Bài giảng ghi hình cho phép sinh viên dừng lại và ghi chép theo tốc độ của mình.",
+      "ghiChu": "Trái nghĩa: a live lecture (/laɪv/ — trực tiếp, đang diễn ra)."
+    },
+    {
+      "chu": "self-paced",
+      "doc": "/ˌself ˈpeɪst/",
+      "loai": "adj",
+      "nghia": "tự định tốc độ học",
+      "cap": "A2",
+      "viDu": "It is a self-paced course, so you can finish it in two weeks or two months.",
+      "viDuNghia": "Đây là khoá tự định tốc độ, nên bạn học xong trong hai tuần hay hai tháng đều được.",
+      "ghiChu": "Cụm cùng nghĩa rất hay dùng: work / study / learn at your own pace."
+    },
+    {
+      "chu": "flexibility",
+      "doc": "/ˌfleksəˈbɪləti/",
+      "loai": "n",
+      "nghia": "sự linh hoạt",
+      "cap": "A2",
+      "viDu": "The flexibility of online study suits working parents.",
+      "viDuNghia": "Sự linh hoạt của việc học trực tuyến phù hợp với các phụ huynh đang đi làm.",
+      "ghiChu": "offer / provide / give flexibility · greater flexibility. Tính từ flexible (linh hoạt)."
+    },
+    {
+      "chu": "procrastination",
+      "doc": "/prəˌkræstɪˈneɪʃn/",
+      "loai": "n",
+      "nghia": "sự trì hoãn",
+      "cap": "A2",
+      "viDu": "Procrastination is the biggest enemy of online learners.",
+      "viDuNghia": "Sự trì hoãn là kẻ thù lớn nhất của người học trực tuyến.",
+      "ghiChu": "Động từ procrastinate = put off doing things (cứ lùi việc lại)."
+    },
+    {
+      "chu": "technical problem",
+      "doc": "/ˌteknɪkl ˈprɒbləm/",
+      "loai": "n",
+      "nghia": "sự cố kỹ thuật",
+      "cap": "A2",
+      "viDu": "A technical problem stopped the online exam for twenty minutes.",
+      "viDuNghia": "Một sự cố kỹ thuật làm bài thi trực tuyến dừng hai mươi phút.",
+      "ghiChu": "Cùng nghĩa: technical issue / difficulty, (thân mật) glitch /ɡlɪtʃ/. poor internet connection (mạng yếu)."
+    },
+    {
+      "chu": "MOOC",
+      "doc": "/muːk/",
+      "loai": "n",
+      "nghia": "khoá học trực tuyến mở đại trà (Massive Open Online Course)",
+      "cap": "A2",
+      "viDu": "Thousands of people signed up for the free MOOC on climate change.",
+      "viDuNghia": "Hàng nghìn người đăng ký khoá MOOC miễn phí về biến đổi khí hậu.",
+      "ghiChu": "sign up for / enrol on / complete a MOOC. Đọc như một từ: “mook”."
+    },
+    {
+      "chu": "face-to-face",
+      "doc": "/ˌfeɪs tə ˈfeɪs/",
+      "loai": "adj",
+      "nghia": "trực tiếp, mặt đối mặt",
+      "cap": "A2",
+      "viDu": "Face-to-face classes make it easier to ask questions.",
+      "viDuNghia": "Lớp học trực tiếp giúp việc đặt câu hỏi dễ hơn.",
+      "ghiChu": "Trước danh từ có gạch nối: face-to-face teaching. Làm trạng từ thì thường không gạch: meet face to face. Gần nghĩa: in person, in-person classes."
+    },
+    {
+      "chu": "peer",
+      "doc": "/pɪə(r)/",
+      "loai": "n",
+      "nghia": "bạn đồng trang lứa, bạn học cùng cấp",
+      "cap": "A2",
+      "viDu": "Students often learn as much from their peers as from their teachers.",
+      "viDuNghia": "Học sinh thường học được từ bạn bè nhiều ngang với từ thầy cô.",
+      "ghiChu": "peer pressure (áp lực từ bạn bè) · peer feedback (bạn học góp ý cho nhau)."
+    },
+    {
+      "chu": "extracurricular activities",
+      "doc": "/ˌekstrəkəˈrɪkjələr ækˈtɪvətiz/",
+      "loai": "n",
+      "nghia": "hoạt động ngoại khoá",
+      "cap": "A2",
+      "viDu": "Extracurricular activities such as football and drama build teamwork.",
+      "viDuNghia": "Hoạt động ngoại khoá như bóng đá và kịch giúp xây dựng tinh thần đồng đội.",
+      "ghiChu": "extra (ngoài) + curricular (thuộc chương trình học). take part in extracurricular activities."
+    },
+    {
+      "chu": "supervision",
+      "doc": "/ˌsuːpəˈvɪʒn/",
+      "loai": "n",
+      "nghia": "sự giám sát, trông nom",
+      "cap": "A2",
+      "viDu": "Young children need adult supervision when they use the internet.",
+      "viDuNghia": "Trẻ nhỏ cần người lớn giám sát khi dùng internet.",
+      "ghiChu": "under the supervision of · động từ supervise · người: supervisor."
+    },
+    {
+      "chu": "social skills",
+      "doc": "/ˈsəʊʃl skɪlz/",
+      "loai": "n",
+      "nghia": "kỹ năng xã hội (giao tiếp, hợp tác với người khác)",
+      "cap": "A2",
+      "viDu": "Group projects help children develop social skills.",
+      "viDuNghia": "Dự án nhóm giúp trẻ phát triển kỹ năng xã hội.",
+      "ghiChu": "develop / improve social skills · cùng nhóm: communication skills, teamwork skills."
+    },
+    {
+      "chu": "concentration",
+      "doc": "/ˌkɒnsnˈtreɪʃn/",
+      "loai": "n",
+      "nghia": "sự tập trung",
+      "cap": "A2",
+      "viDu": "A quiet classroom helps students' concentration.",
+      "viDuNghia": "Lớp học yên tĩnh giúp học sinh tập trung.",
+      "ghiChu": "lose / improve concentration · động từ concentrate on (~~concentrate in~~) · gần nghĩa focus. (routine = nề nếp — đã học Ngày 10.)"
+    },
+    {
+      "chu": "tuition fees",
+      "doc": "/tjuˈɪʃn fiːz/",
+      "loai": "n",
+      "nghia": "học phí",
+      "cap": "A2",
+      "viDu": "Tuition fees at private universities have risen sharply.",
+      "viDuNghia": "Học phí ở các trường đại học tư đã tăng mạnh.",
+      "ghiChu": "pay / cut / raise tuition fees. Thường dùng số nhiều fees."
+    },
+    {
+      "chu": "convenient",
+      "doc": "/kənˈviːniənt/",
+      "loai": "adj",
+      "nghia": "thuận tiện",
+      "cap": "A2",
+      "viDu": "Online classes are convenient for students who live far from the city.",
+      "viDuNghia": "Lớp trực tuyến thuận tiện cho sinh viên sống xa thành phố.",
+      "ghiChu": "convenient for + người · danh từ convenience · trái nghĩa inconvenient."
+    },
+    {
+      "chu": "cost-effective",
+      "doc": "/ˌkɒst ɪˈfektɪv/",
+      "loai": "adj",
+      "nghia": "tiết kiệm chi phí (hiệu quả so với số tiền bỏ ra)",
+      "cap": "A2",
+      "viDu": "Recording one lecture for 500 students is very cost-effective.",
+      "viDuNghia": "Ghi hình một bài giảng cho 500 sinh viên rất tiết kiệm chi phí.",
+      "ghiChu": "Trang trọng hơn cheap. Cách nói khác: affordable (giá vừa túi tiền)."
+    },
+    {
+      "chu": "distraction",
+      "doc": "/dɪˈstrækʃn/",
+      "loai": "n",
+      "nghia": "sự xao nhãng; thứ làm xao nhãng",
+      "cap": "A2",
+      "viDu": "At home, the TV and the fridge are constant distractions.",
+      "viDuNghia": "Ở nhà, cái TV và tủ lạnh là những thứ gây xao nhãng liên tục.",
+      "ghiChu": "Đếm được khi chỉ “thứ gây xao nhãng”. Động từ distract (distract somebody from something) · tính từ distracting."
+    },
+    {
+      "chu": "immediate",
+      "doc": "/ɪˈmiːdiət/",
+      "loai": "adj",
+      "nghia": "ngay lập tức",
+      "cap": "A2",
+      "viDu": "In class, students get immediate feedback when they make a mistake.",
+      "viDuNghia": "Trên lớp, học sinh nhận góp ý ngay lập tức khi mắc lỗi.",
+      "ghiChu": "Collocation ăn điểm: immediate feedback · trạng từ immediately."
+    },
+    {
+      "chu": "well-equipped",
+      "doc": "/ˌwel ɪˈkwɪpt/",
+      "loai": "adj",
+      "nghia": "được trang bị tốt (máy móc, dụng cụ đầy đủ)",
+      "cap": "A2",
+      "viDu": "The university has well-equipped laboratories.",
+      "viDuNghia": "Trường đại học có các phòng thí nghiệm được trang bị tốt.",
+      "ghiChu": "Động từ equip · danh từ equipment (không đếm được — ~~equipments~~)."
+    },
+    {
+      "chu": "interactive",
+      "doc": "/ˌɪntərˈæktɪv/",
+      "loai": "adj",
+      "nghia": "có tính tương tác (người học làm, bấm, trả lời được)",
+      "cap": "A2",
+      "viDu": "Interactive quizzes keep online lessons interesting.",
+      "viDuNghia": "Các câu đố tương tác giữ cho bài học trực tuyến thú vị.",
+      "ghiChu": "an interactive whiteboard / lesson / map · họ từ: interact → interaction → interactive."
+    },
+    {
+      "chu": "glowing",
+      "doc": "/ˈɡləʊɪŋ/",
+      "loai": "adj",
+      "nghia": "phát sáng, sáng rực",
+      "cap": "A2",
+      "viDu": "The children's faces were lit by glowing screens.",
+      "viDuNghia": "Khuôn mặt bọn trẻ sáng lên bởi những màn hình phát sáng.",
+      "ghiChu": "Động từ glow (phát sáng nhẹ). Nghĩa bóng: glowing review = lời khen nồng nhiệt."
+    },
+    {
+      "chu": "store",
+      "doc": "/stɔː(r)/",
+      "loai": "v",
+      "nghia": "lưu trữ, cất giữ",
+      "cap": "A2",
+      "viDu": "All my photos are stored online.",
+      "viDuNghia": "Mọi ảnh của tôi đều được lưu trực tuyến.",
+      "ghiChu": "Danh từ storage (sự lưu trữ). store (n) = cửa hàng (Mỹ)."
+    },
+    {
+      "chu": "actively",
+      "doc": "/ˈæktɪvli/",
+      "loai": "adv",
+      "nghia": "một cách tích cực, chủ động",
+      "cap": "A2",
+      "viDu": "The school actively encourages students to read.",
+      "viDuNghia": "Nhà trường tích cực khuyến khích học sinh đọc sách.",
+      "ghiChu": "actively encourage / take part / support."
+    },
+    {
+      "chu": "factual",
+      "doc": "/ˈfæktʃuəl/",
+      "loai": "adj",
+      "nghia": "thuộc về sự kiện, dữ kiện (đúng/sai kiểm được)",
+      "cap": "A2",
+      "viDu": "The quiz had twenty factual questions about Vietnamese history.",
+      "viDuNghia": "Bài đố có hai mươi câu hỏi dữ kiện về lịch sử Việt Nam.",
+      "ghiChu": "Từ fact (sự thật, dữ kiện). Khác conceptual (thuộc về khái niệm, cần hiểu)."
+    },
+    {
+      "chu": "identical",
+      "doc": "/aɪˈdentɪkl/",
+      "loai": "adj",
+      "nghia": "giống hệt",
+      "cap": "A2",
+      "viDu": "The twins wore identical shirts.",
+      "viDuNghia": "Cặp sinh đôi mặc áo giống hệt nhau.",
+      "ghiChu": "identical to / with · identical twins (sinh đôi cùng trứng) · gần nghĩa: the same."
+    },
+    {
+      "chu": "explanation",
+      "doc": "/ˌekspləˈneɪʃn/",
+      "loai": "n",
+      "nghia": "lời giải thích, cách giải thích",
+      "cap": "A2",
+      "viDu": "There is a simple explanation for the result.",
+      "viDuNghia": "Có một cách giải thích đơn giản cho kết quả này.",
+      "ghiChu": "Động từ explain (~~explain me~~ → explain to me). Chính tả: explain → explanation (mất chữ i)."
+    },
+    {
+      "chu": "express",
+      "doc": "/ɪkˈspres/",
+      "loai": "v",
+      "nghia": "diễn đạt, bày tỏ",
+      "cap": "A2",
+      "viDu": "It is hard to express my feelings in English.",
+      "viDuNghia": "Bày tỏ cảm xúc bằng tiếng Anh thật khó.",
+      "ghiChu": "express an idea / an opinion / feelings · danh từ expression."
+    },
+    {
+      "chu": "select",
+      "doc": "/sɪˈlekt/",
+      "loai": "v",
+      "nghia": "chọn lọc, lựa chọn",
+      "cap": "A2",
+      "viDu": "Only ten students were selected for the team.",
+      "viDuNghia": "Chỉ mười học sinh được chọn vào đội.",
+      "ghiChu": "Trang trọng hơn choose · danh từ selection."
+    },
+    {
+      "chu": "summarise",
+      "doc": "/ˈsʌməraɪz/",
+      "loai": "v",
+      "nghia": "tóm tắt",
+      "cap": "A2",
+      "viDu": "Can you summarise the article in three sentences?",
+      "viDuNghia": "Bạn có thể tóm tắt bài báo trong ba câu không?",
+      "ghiChu": "Mỹ viết summarize · danh từ summary (bản tóm tắt) — chính tên dạng bài hôm nay."
+    },
+    {
+      "chu": "verbatim",
+      "doc": "/vɜːˈbeɪtɪm/",
+      "loai": "adj",
+      "nghia": "nguyên văn, từng chữ một",
+      "cap": "A2",
+      "viDu": "He repeated the teacher's words verbatim.",
+      "viDuNghia": "Anh ấy nhắc lại lời thầy nguyên văn.",
+      "ghiChu": "= word for word (trạng từ) / word-for-word (tính từ, có gạch nối khi đứng trước danh từ)."
+    },
+    {
+      "chu": "instruction",
+      "doc": "/ɪnˈstrʌkʃn/",
+      "loai": "n",
+      "nghia": "lời hướng dẫn, chỉ thị",
+      "cap": "A2",
+      "viDu": "Read the instructions carefully before you start the test.",
+      "viDuNghia": "Đọc kỹ hướng dẫn trước khi bắt đầu bài thi.",
+      "ghiChu": "Thường số nhiều instructions · follow / give instructions · động từ instruct."
+    },
+    {
+      "chu": "temptation",
+      "doc": "/tempˈteɪʃn/",
+      "loai": "n",
+      "nghia": "sự cám dỗ, thứ cám dỗ",
+      "cap": "A2",
+      "viDu": "There is always a temptation to check your phone.",
+      "viDuNghia": "Luôn có sự cám dỗ muốn xem điện thoại.",
+      "ghiChu": "resist a temptation (cưỡng lại) · động từ tempt · tính từ tempting (hấp dẫn, cám dỗ)."
+    },
+    {
+      "chu": "unrelated",
+      "doc": "/ˌʌnrɪˈleɪtɪd/",
+      "loai": "adj",
+      "nghia": "không liên quan",
+      "cap": "A2",
+      "viDu": "She asked a question unrelated to the lesson.",
+      "viDuNghia": "Cô ấy hỏi một câu không liên quan đến bài học.",
+      "ghiChu": "unrelated to + N · trái nghĩa related to · tiền tố un- = không."
+    },
+    {
+      "chu": "switch",
+      "doc": "/swɪtʃ/",
+      "loai": "v",
+      "nghia": "chuyển (qua lại), đổi",
+      "cap": "A2",
+      "viDu": "He kept switching between his notes and social media.",
+      "viDuNghia": "Anh ấy liên tục chuyển qua lại giữa ghi chép và mạng xã hội.",
+      "ghiChu": "switch between A and B · switch from A to B · switch off / on (tắt / bật: switch off the internet)."
+    },
+    {
+      "chu": "repeat",
+      "doc": "/rɪˈpiːt/",
+      "loai": "v",
+      "nghia": "lặp lại; (nghiên cứu) làm lại thí nghiệm để kiểm chứng",
+      "cap": "A2",
+      "viDu": "Scientists repeated the experiment with a larger group.",
+      "viDuNghia": "Các nhà khoa học làm lại thí nghiệm với nhóm lớn hơn.",
+      "ghiChu": "Từ học thuật cùng nghĩa: replicate (lặp lại nghiên cứu). Danh từ repetition (Ngày 13)."
+    },
+    {
+      "chu": "option",
+      "doc": "/ˈɒpʃn/",
+      "loai": "n",
+      "nghia": "lựa chọn, phương án",
+      "cap": "A2",
+      "viDu": "For some students, typing is the only practical option.",
+      "viDuNghia": "Với một số sinh viên, gõ phím là phương án khả thi duy nhất.",
+      "ghiChu": "have no option but to + V (không còn cách nào khác) · tính từ optional (tuỳ chọn) ≠ compulsory (bắt buộc)."
+    },
+    {
+      "chu": "advantage",
+      "doc": "/ədˈvɑːntɪdʒ/",
+      "loai": "n",
+      "nghia": "ưu điểm, lợi thế",
+      "cap": "A2",
+      "viDu": "One advantage of living in the city is good public transport.",
+      "viDuNghia": "Một ưu điểm của sống ở thành phố là giao thông công cộng tốt.",
+      "ghiChu": "the advantage of + N / V-ing · have an advantage over · trái nghĩa disadvantage, drawback."
+    },
+    {
+      "chu": "organise",
+      "doc": "/ˈɔːɡənaɪz/",
+      "loai": "v",
+      "nghia": "sắp xếp, tổ chức",
+      "cap": "A2",
+      "viDu": "I organise my notes by subject and date.",
+      "viDuNghia": "Tôi sắp xếp ghi chép theo môn và ngày.",
+      "ghiChu": "Mỹ viết organize · danh từ organisation · tính từ organised (ngăn nắp)."
+    },
+    {
+      "chu": "north-east",
+      "doc": "/ˌnɔːθ ˈiːst/",
+      "loai": "n",
+      "nghia": "phía đông bắc",
+      "cap": "A2",
+      "viDu": "A forest covered the north-east of the island.",
+      "viDuNghia": "Một khu rừng phủ phía đông bắc hòn đảo.",
+      "ghiChu": "Luôn nói north/south TRƯỚC: north-east, south-west (~~east-north~~). Gạch nối có hay không đều được (northeast)."
+    },
+    {
+      "chu": "south-west",
+      "doc": "/ˌsaʊθ ˈwest/",
+      "loai": "n",
+      "nghia": "phía tây nam",
+      "cap": "A2",
+      "viDu": "The houses in the south-west have remained unchanged.",
+      "viDuNghia": "Những ngôi nhà ở phía tây nam vẫn giữ nguyên.",
+      "ghiChu": "Tương tự: north-west (tây bắc), south-east (đông nam)."
+    },
+    {
+      "chu": "centre",
+      "doc": "/ˈsentə(r)/",
+      "loai": "n",
+      "nghia": "trung tâm, chính giữa",
+      "cap": "A2",
+      "viDu": "There is a fountain in the centre of the square.",
+      "viDuNghia": "Có một đài phun nước ở chính giữa quảng trường.",
+      "ghiChu": "in the centre of · Mỹ viết center · city centre (trung tâm thành phố)."
+    },
+    {
+      "chu": "demolish",
+      "doc": "/dɪˈmɒlɪʃ/",
+      "loai": "v",
+      "nghia": "phá huỷ, phá dỡ (công trình)",
+      "cap": "A2",
+      "viDu": "The old cinema was demolished in 2015.",
+      "viDuNghia": "Rạp chiếu phim cũ bị phá dỡ năm 2015.",
+      "ghiChu": "= knock down / pull down (thân mật hơn). Danh từ demolition."
+    },
+    {
+      "chu": "knock down",
+      "doc": "/ˌnɒk ˈdaʊn/",
+      "loai": "phr",
+      "nghia": "đập bỏ, phá đổ",
+      "cap": "A2",
+      "viDu": "Several houses were knocked down to widen the road.",
+      "viDuNghia": "Vài ngôi nhà bị đập bỏ để mở rộng con đường."
+    },
+    {
+      "chu": "extend",
+      "doc": "/ɪkˈstend/",
+      "loai": "v",
+      "nghia": "kéo dài, nối dài; mở rộng",
+      "cap": "A2",
+      "viDu": "The main road has been extended southwards.",
+      "viDuNghia": "Con đường chính đã được kéo dài về phía nam.",
+      "ghiChu": "Danh từ extension (phần nới thêm của toà nhà: a new extension)."
+    },
+    {
+      "chu": "reduce",
+      "doc": "/rɪˈdjuːs/",
+      "loai": "v",
+      "nghia": "thu nhỏ, giảm bớt",
+      "cap": "A2",
+      "viDu": "The forest has been reduced to half its original size.",
+      "viDuNghia": "Khu rừng đã bị thu hẹp còn một nửa diện tích ban đầu.",
+      "ghiChu": "reduce to + kích thước còn lại · reduce by + phần bị mất (reduced by 50%)."
+    },
+    {
+      "chu": "remove",
+      "doc": "/rɪˈmuːv/",
+      "loai": "v",
+      "nghia": "dỡ bỏ, loại bỏ",
+      "cap": "A2",
+      "viDu": "The old fence was removed to create more space.",
+      "viDuNghia": "Hàng rào cũ được dỡ bỏ để tạo thêm không gian."
+    },
+    {
+      "chu": "relocate",
+      "doc": "/ˌriːləʊˈkeɪt/",
+      "loai": "v",
+      "nghia": "di dời (đến chỗ khác)",
+      "cap": "A2",
+      "viDu": "The bus station has been relocated to the edge of town.",
+      "viDuNghia": "Bến xe buýt đã được di dời ra rìa thị trấn.",
+      "ghiChu": "= move. Danh từ relocation."
+    },
+    {
+      "chu": "develop",
+      "doc": "/dɪˈveləp/",
+      "loai": "v",
+      "nghia": "xây dựng, khai thác (một khu đất) thành khu đô thị / công trình",
+      "cap": "A2",
+      "viDu": "The land to the north of the river has been developed into a housing estate.",
+      "viDuNghia": "Khu đất phía bắc sông đã được xây dựng thành một khu nhà ở.",
+      "ghiChu": "develop A into B · danh từ development (a new housing development = khu nhà mới) · developed / undeveloped land."
+    },
+    {
+      "chu": "cut down",
+      "doc": "/ˌkʌt ˈdaʊn/",
+      "loai": "phr",
+      "nghia": "chặt (cây)",
+      "cap": "A2",
+      "viDu": "Half of the forest has been cut down.",
+      "viDuNghia": "Một nửa khu rừng đã bị chặt.",
+      "ghiChu": "Trang trọng: cleared (the forest was cleared). V3 của cut vẫn là cut."
+    },
+    {
+      "chu": "widen",
+      "doc": "/ˈwaɪdn/",
+      "loai": "v",
+      "nghia": "mở rộng (đường, lối đi)",
+      "cap": "A2",
+      "viDu": "The road was widened to four lanes.",
+      "viDuNghia": "Con đường được mở rộng thành bốn làn.",
+      "ghiChu": "Hậu tố -en = làm cho…: widen, shorten, strengthen."
+    },
+    {
+      "chu": "make way for",
+      "doc": "/ˌmeɪk ˈweɪ fə(r)/",
+      "loai": "phr",
+      "nghia": "nhường chỗ cho, dọn chỗ cho",
+      "cap": "A2",
+      "viDu": "The shop was demolished to make way for a car park.",
+      "viDuNghia": "Cửa hàng bị phá để nhường chỗ cho bãi đỗ xe."
+    },
+    {
+      "chu": "load",
+      "doc": "/ləʊd/",
+      "loai": "v",
+      "nghia": "chất (hàng) lên",
+      "cap": "A2",
+      "viDu": "The bottles are loaded onto trucks and transported to the plant.",
+      "viDuNghia": "Các chai được chất lên xe tải và vận chuyển đến nhà máy.",
+      "ghiChu": "load A onto B · trái nghĩa unload (dỡ xuống). transport (v) /trænˈspɔːt/ = vận chuyển — động từ nhấn âm sau, danh từ (Ngày 12) nhấn âm đầu."
+    },
+    {
+      "chu": "sort",
+      "doc": "/sɔːt/",
+      "loai": "v",
+      "nghia": "phân loại",
+      "cap": "A2",
+      "viDu": "The rubbish is sorted into paper, plastic and metal.",
+      "viDuNghia": "Rác được phân loại thành giấy, nhựa và kim loại.",
+      "ghiChu": "sort A into B · sort by colour / size."
+    },
+    {
+      "chu": "crush",
+      "doc": "/krʌʃ/",
+      "loai": "v",
+      "nghia": "nghiền vụn, ép nát",
+      "cap": "A2",
+      "viDu": "The glass is crushed into small pieces.",
+      "viDuNghia": "Thuỷ tinh được nghiền thành mảnh nhỏ.",
+      "ghiChu": "crush into + kết quả · gần nghĩa grind (xay mịn — grind/ground/ground)."
+    },
+    {
+      "chu": "melt",
+      "doc": "/melt/",
+      "loai": "v",
+      "nghia": "tan chảy; làm tan chảy",
+      "cap": "A2",
+      "viDu": "The glass melts at a very high temperature.",
+      "viDuNghia": "Thuỷ tinh nóng chảy ở nhiệt độ rất cao.",
+      "ghiChu": "Vừa nội vừa ngoại động từ: The ice melts (tự tan) / The glass is melted (bị nấu chảy)."
+    },
+    {
+      "chu": "place",
+      "doc": "/pleɪs/",
+      "loai": "v",
+      "nghia": "đặt, xếp vào",
+      "cap": "A2",
+      "viDu": "The fish is placed in wooden barrels.",
+      "viDuNghia": "Cá được xếp vào các thùng gỗ.",
+      "ghiChu": "Trang trọng hơn put · place A in / on B · danh từ place = nơi chốn. (store = cất trữ — Ngày 14.)"
+    },
+    {
+      "chu": "fill",
+      "doc": "/fɪl/",
+      "loai": "v",
+      "nghia": "làm đầy, chiết đầy",
+      "cap": "A2",
+      "viDu": "The bottles are filled with juice.",
+      "viDuNghia": "Các chai được chiết đầy nước ép.",
+      "ghiChu": "fill A with B (~~fill B into A~~)."
+    },
+    {
+      "chu": "raw material",
+      "doc": "/ˌrɔː məˈtɪəriəl/",
+      "loai": "n",
+      "nghia": "nguyên liệu thô",
+      "cap": "A2",
+      "viDu": "Sand is the main raw material for glass.",
+      "viDuNghia": "Cát là nguyên liệu thô chính để làm thuỷ tinh."
+    },
+    {
+      "chu": "recycling plant",
+      "doc": "/riːˈsaɪklɪŋ plɑːnt/",
+      "loai": "n",
+      "nghia": "nhà máy tái chế",
+      "cap": "A2",
+      "viDu": "The bottles are taken to a recycling plant.",
+      "viDuNghia": "Các chai được đưa đến nhà máy tái chế.",
+      "ghiChu": "plant ở đây = nhà máy (power plant, recycling plant), không phải cái cây."
+    },
+    {
+      "chu": "machine",
+      "doc": "/məˈʃiːn/",
+      "loai": "n",
+      "nghia": "máy móc",
+      "cap": "A2",
+      "viDu": "The leaves are rolled by machine.",
+      "viDuNghia": "Lá được vò bằng máy.",
+      "ghiChu": "by machine / by hand (không mạo từ)."
+    },
+    {
+      "chu": "conveyor belt",
+      "doc": "/kənˈveɪə belt/",
+      "loai": "n",
+      "nghia": "băng chuyền",
+      "cap": "A2",
+      "viDu": "The bottles move along a conveyor belt.",
+      "viDuNghia": "Các chai di chuyển trên băng chuyền."
+    },
+    {
+      "chu": "mould",
+      "doc": "/məʊld/",
+      "loai": "n",
+      "nghia": "khuôn",
+      "cap": "A2",
+      "viDu": "The liquid glass is poured into moulds.",
+      "viDuNghia": "Thuỷ tinh lỏng được đổ vào khuôn.",
+      "ghiChu": "Mỹ viết mold. Cũng là động từ: mould = tạo hình bằng khuôn."
+    },
+    {
+      "chu": "end product",
+      "doc": "/ˈend ˌprɒdʌkt/",
+      "loai": "n",
+      "nghia": "thành phẩm, sản phẩm cuối cùng",
+      "cap": "A2",
+      "viDu": "The end product is sold in supermarkets.",
+      "viDuNghia": "Thành phẩm được bán ở siêu thị.",
+      "ghiChu": "= final product · finished product."
+    }
+  ]
+}

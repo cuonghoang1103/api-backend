@@ -1,0 +1,1063 @@
+{
+ "ma": "cot-loi-a2-3",
+ "nn": "en",
+ "ten": "Tính từ thông dụng A2",
+ "moTa": "Tính từ mô tả tính chất, mức độ, đánh giá (certain, necessary, simple, successful, recent, social, general, particular…) — nền để diễn đạt ý kiến rõ ràng.",
+ "nhom": "giao-tiep",
+ "cap": "A2",
+ "tu": [
+  {
+   "chu": "alive",
+   "doc": "/əˈlaɪv/",
+   "loai": "adj",
+   "nghia": "còn sống",
+   "cap": "A2",
+   "viDu": "My great-grandmother is still alive at the age of 95.",
+   "viDuNghia": "Cụ bà tôi vẫn còn sống ở tuổi 95.",
+   "cumTu": [
+    "still alive",
+    "stay alive",
+    "keep alive",
+    "come alive"
+   ],
+   "hoTu": [
+    "live (v)",
+    "life (n)"
+   ],
+   "ghiChu": "Chỉ đứng sau động từ (is alive); trước danh từ dùng \"living\" hoặc \"live\"."
+  },
+  {
+   "chu": "awful",
+   "doc": "/ˈɔːfl/",
+   "loai": "adj",
+   "nghia": "kinh khủng, tồi tệ",
+   "cap": "A2",
+   "viDu": "The weather was awful during our holiday.",
+   "viDuNghia": "Thời tiết thật tồi tệ trong kỳ nghỉ của chúng tôi.",
+   "cumTu": [
+    "awful weather",
+    "feel awful",
+    "awful smell",
+    "look awful"
+   ],
+   "hoTu": [
+    "awfully (adv)"
+   ]
+  },
+  {
+   "chu": "brilliant",
+   "doc": "/ˈbrɪliənt/",
+   "loai": "adj",
+   "nghia": "xuất sắc, rất thông minh; tuyệt vời",
+   "cap": "A2",
+   "viDu": "That is a brilliant idea for the project.",
+   "viDuNghia": "Đó là một ý tưởng xuất sắc cho dự án.",
+   "cumTu": [
+    "brilliant idea",
+    "brilliant student",
+    "brilliant career"
+   ],
+   "hoTu": [
+    "brilliantly (adv)",
+    "brilliance (n)"
+   ]
+  },
+  {
+   "chu": "certain",
+   "doc": "/ˈsɜːtn/",
+   "loai": "adj",
+   "nghia": "chắc chắn; nhất định, nào đó",
+   "cap": "A2",
+   "viDu": "I am certain that she will pass the exam.",
+   "viDuNghia": "Tôi chắc chắn rằng cô ấy sẽ đỗ kỳ thi.",
+   "cumTu": [
+    "certain that",
+    "for certain",
+    "a certain amount",
+    "certain types"
+   ],
+   "hoTu": [
+    "certainly (adv)",
+    "certainty (n)",
+    "uncertain (adj)"
+   ],
+   "ghiChu": "\"certain people\" = một số người nào đó."
+  },
+  {
+   "chu": "clever",
+   "doc": "/ˈklevə(r)/",
+   "loai": "adj",
+   "nghia": "thông minh, lanh lợi",
+   "cap": "A2",
+   "viDu": "She is a clever girl who learns very quickly.",
+   "viDuNghia": "Cô ấy là một cô gái thông minh, học rất nhanh.",
+   "cumTu": [
+    "clever idea",
+    "clever student",
+    "clever trick"
+   ],
+   "hoTu": [
+    "cleverly (adv)"
+   ]
+  },
+  {
+   "chu": "closed",
+   "doc": "/kləʊzd/",
+   "loai": "adj",
+   "nghia": "đóng cửa, đã đóng",
+   "cap": "A2",
+   "viDu": "The library is closed on Sundays.",
+   "viDuNghia": "Thư viện đóng cửa vào Chủ nhật.",
+   "cumTu": [
+    "closed door",
+    "closed on Mondays",
+    "closed to the public"
+   ],
+   "hoTu": [
+    "close (v)"
+   ],
+   "ghiChu": "Biển báo dùng \"closed\" (không dùng \"close\")."
+  },
+  {
+   "chu": "connected",
+   "doc": "/kəˈnektɪd/",
+   "loai": "adj",
+   "nghia": "có liên quan; được kết nối",
+   "cap": "A2",
+   "viDu": "Make sure your laptop is connected to the wifi.",
+   "viDuNghia": "Hãy chắc chắn laptop của bạn đã kết nối wifi.",
+   "cumTu": [
+    "connected to",
+    "connected with",
+    "closely connected",
+    "stay connected"
+   ],
+   "hoTu": [
+    "connect (v)",
+    "connection (n)"
+   ]
+  },
+  {
+   "chu": "crazy",
+   "doc": "/ˈkreɪzi/",
+   "loai": "adj",
+   "nghia": "điên rồ; cuồng, mê",
+   "cap": "A2",
+   "viDu": "My brother is crazy about football.",
+   "viDuNghia": "Anh trai tôi mê bóng đá cuồng nhiệt.",
+   "cumTu": [
+    "crazy about",
+    "go crazy",
+    "crazy idea",
+    "drive somebody crazy"
+   ],
+   "ghiChu": "Thân mật — tránh dùng trong văn viết học thuật."
+  },
+  {
+   "chu": "curly",
+   "doc": "/ˈkɜːli/",
+   "loai": "adj",
+   "nghia": "xoăn (tóc)",
+   "cap": "A2",
+   "viDu": "She has long curly hair.",
+   "viDuNghia": "Cô ấy có mái tóc dài xoăn.",
+   "cumTu": [
+    "curly hair",
+    "naturally curly"
+   ],
+   "hoTu": [
+    "curl (n, v)"
+   ]
+  },
+  {
+   "chu": "dead",
+   "doc": "/ded/",
+   "loai": "adj",
+   "nghia": "đã chết; hết pin, không hoạt động",
+   "cap": "A2",
+   "viDu": "My phone is dead. Can I borrow your charger?",
+   "viDuNghia": "Điện thoại tôi hết pin rồi. Cho tôi mượn sạc được không?",
+   "cumTu": [
+    "dead body",
+    "dead battery",
+    "dead end",
+    "dead silence"
+   ],
+   "hoTu": [
+    "death (n)",
+    "die (v)",
+    "deadly (adj)"
+   ],
+   "ghiChu": "dead (tính từ) – die (động từ) – death (danh từ)."
+  },
+  {
+   "chu": "deep",
+   "doc": "/diːp/",
+   "loai": "adj",
+   "nghia": "sâu",
+   "cap": "A2",
+   "viDu": "The lake is very deep in the middle.",
+   "viDuNghia": "Hồ rất sâu ở giữa.",
+   "cumTu": [
+    "deep water",
+    "deep breath",
+    "deep sleep",
+    "deep understanding"
+   ],
+   "hoTu": [
+    "depth (n)",
+    "deeply (adv)",
+    "deepen (v)"
+   ]
+  },
+  {
+   "chu": "electrical",
+   "doc": "/ɪˈlektrɪkl/",
+   "loai": "adj",
+   "nghia": "thuộc về điện, dùng điện",
+   "cap": "A2",
+   "viDu": "The fire was caused by an electrical fault.",
+   "viDuNghia": "Vụ cháy do một lỗi về điện gây ra.",
+   "cumTu": [
+    "electrical equipment",
+    "electrical engineer",
+    "electrical fault",
+    "electrical goods"
+   ],
+   "hoTu": [
+    "electric (adj)",
+    "electricity (n)",
+    "electrician (n)"
+   ],
+   "ghiChu": "electric + thiết bị cụ thể (electric car); electrical + nghĩa chung về điện (electrical engineering)."
+  },
+  {
+   "chu": "empty",
+   "doc": "/ˈempti/",
+   "loai": "adj",
+   "nghia": "trống, rỗng",
+   "cap": "A2",
+   "viDu": "The bus was almost empty this morning.",
+   "viDuNghia": "Sáng nay xe buýt gần như trống.",
+   "cumTu": [
+    "empty room",
+    "empty bottle",
+    "empty space",
+    "empty stomach"
+   ],
+   "hoTu": [
+    "empty (v)",
+    "emptiness (n)"
+   ]
+  },
+  {
+   "chu": "everyday",
+   "doc": "/ˈevrideɪ/",
+   "loai": "adj",
+   "nghia": "hằng ngày, thường ngày",
+   "cap": "A2",
+   "viDu": "Smartphones are now part of everyday life.",
+   "viDuNghia": "Điện thoại thông minh giờ là một phần của cuộc sống hằng ngày.",
+   "cumTu": [
+    "everyday life",
+    "everyday use",
+    "everyday problems",
+    "everyday English"
+   ],
+   "ghiChu": "\"everyday\" (tính từ, viết liền) khác \"every day\" (trạng từ: I run every day)."
+  },
+  {
+   "chu": "exact",
+   "doc": "/ɪɡˈzækt/",
+   "loai": "adj",
+   "nghia": "chính xác",
+   "cap": "A2",
+   "viDu": "I do not know the exact number of students.",
+   "viDuNghia": "Tôi không biết con số chính xác về sinh viên.",
+   "cumTu": [
+    "exact number",
+    "exact time",
+    "exact same",
+    "exact location"
+   ],
+   "hoTu": [
+    "exactly (adv)"
+   ]
+  },
+  {
+   "chu": "excellent",
+   "doc": "/ˈeksələnt/",
+   "loai": "adj",
+   "nghia": "xuất sắc, tuyệt vời",
+   "cap": "A2",
+   "viDu": "Your presentation was excellent.",
+   "viDuNghia": "Bài thuyết trình của bạn rất xuất sắc.",
+   "cumTu": [
+    "excellent work",
+    "excellent service",
+    "excellent idea",
+    "excellent quality"
+   ],
+   "hoTu": [
+    "excellence (n)",
+    "excel (v)"
+   ],
+   "ghiChu": "Đã ở mức cao nhất, không nói \"very excellent\"."
+  },
+  {
+   "chu": "extreme",
+   "doc": "/ɪkˈstriːm/",
+   "loai": "adj",
+   "nghia": "cực độ, khắc nghiệt, cực đoan",
+   "cap": "A2",
+   "viDu": "Extreme weather is becoming more common.",
+   "viDuNghia": "Thời tiết cực đoan đang trở nên phổ biến hơn.",
+   "cumTu": [
+    "extreme weather",
+    "extreme sports",
+    "extreme heat",
+    "extreme poverty"
+   ],
+   "hoTu": [
+    "extremely (adv)",
+    "extremist (n)"
+   ]
+  },
+  {
+   "chu": "female",
+   "doc": "/ˈfiːmeɪl/",
+   "loai": "adj",
+   "nghia": "nữ, giống cái",
+   "cap": "A2",
+   "viDu": "The number of female engineers is increasing.",
+   "viDuNghia": "Số lượng kỹ sư nữ đang tăng.",
+   "cumTu": [
+    "female student",
+    "female worker",
+    "female employees",
+    "male and female"
+   ],
+   "hoTu": [
+    "female (n)"
+   ],
+   "ghiChu": "Dùng \"female/male\" khi mô tả số liệu theo giới trong Task 1."
+  },
+  {
+   "chu": "male",
+   "doc": "/meɪl/",
+   "loai": "adj",
+   "nghia": "nam, giống đực",
+   "cap": "A2",
+   "viDu": "Most of the nurses are women, but some are male.",
+   "viDuNghia": "Hầu hết y tá là nữ, nhưng một số là nam.",
+   "cumTu": [
+    "male student",
+    "male employee",
+    "male and female"
+   ],
+   "hoTu": [
+    "male (n)"
+   ]
+  },
+  {
+   "chu": "foreign",
+   "doc": "/ˈfɒrən/",
+   "loai": "adj",
+   "nghia": "nước ngoài",
+   "cap": "A2",
+   "viDu": "Learning a foreign language opens many doors.",
+   "viDuNghia": "Học một ngoại ngữ mở ra nhiều cơ hội.",
+   "cumTu": [
+    "foreign language",
+    "foreign country",
+    "foreign company",
+    "foreign investment"
+   ],
+   "hoTu": [
+    "foreigner (n)"
+   ],
+   "ghiChu": "Chữ g câm."
+  },
+  {
+   "chu": "general",
+   "doc": "/ˈdʒenrəl/",
+   "loai": "adj",
+   "nghia": "chung, tổng quát",
+   "cap": "A2",
+   "viDu": "The general idea of the article is easy to understand.",
+   "viDuNghia": "Ý chung của bài báo dễ hiểu.",
+   "cumTu": [
+    "in general",
+    "general public",
+    "general knowledge",
+    "general idea"
+   ],
+   "hoTu": [
+    "generally (adv)",
+    "generalize (v)"
+   ]
+  },
+  {
+   "chu": "human",
+   "doc": "/ˈhjuːmən/",
+   "loai": "adj",
+   "nghia": "thuộc về con người",
+   "cap": "A2",
+   "viDu": "Human activity is the main cause of climate change.",
+   "viDuNghia": "Hoạt động của con người là nguyên nhân chính gây biến đổi khí hậu.",
+   "cumTu": [
+    "human being",
+    "human rights",
+    "human activity",
+    "human nature"
+   ],
+   "hoTu": [
+    "human (n)",
+    "humanity (n)"
+   ]
+  },
+  {
+   "chu": "ideal",
+   "doc": "/aɪˈdiːəl/",
+   "loai": "adj",
+   "nghia": "lý tưởng",
+   "cap": "A2",
+   "viDu": "This quiet room is ideal for studying.",
+   "viDuNghia": "Căn phòng yên tĩnh này rất lý tưởng để học.",
+   "cumTu": [
+    "ideal for",
+    "ideal place",
+    "ideal job",
+    "ideal solution"
+   ],
+   "hoTu": [
+    "ideally (adv)",
+    "ideal (n)"
+   ]
+  },
+  {
+   "chu": "ill",
+   "doc": "/ɪl/",
+   "loai": "adj",
+   "nghia": "ốm, bệnh",
+   "cap": "A2",
+   "viDu": "She could not come to class because she was ill.",
+   "viDuNghia": "Cô ấy không thể đến lớp vì bị ốm.",
+   "cumTu": [
+    "feel ill",
+    "fall ill",
+    "seriously ill",
+    "become ill"
+   ],
+   "hoTu": [
+    "illness (n)"
+   ],
+   "ghiChu": "Anh-Mỹ dùng \"sick\" nhiều hơn."
+  },
+  {
+   "chu": "impossible",
+   "doc": "/ɪmˈpɒsəbl/",
+   "loai": "adj",
+   "nghia": "không thể",
+   "cap": "A2",
+   "viDu": "It is impossible to finish all this work in one day.",
+   "viDuNghia": "Không thể hoàn thành hết chỗ việc này trong một ngày.",
+   "cumTu": [
+    "impossible to do",
+    "almost impossible",
+    "make it impossible"
+   ],
+   "hoTu": [
+    "possible (adj)",
+    "impossibility (n)"
+   ]
+  },
+  {
+   "chu": "incredible",
+   "doc": "/ɪnˈkredəbl/",
+   "loai": "adj",
+   "nghia": "khó tin; tuyệt vời",
+   "cap": "A2",
+   "viDu": "The view from the top was incredible.",
+   "viDuNghia": "Quang cảnh từ trên đỉnh thật tuyệt vời.",
+   "cumTu": [
+    "incredible story",
+    "incredible view",
+    "incredible amount"
+   ],
+   "hoTu": [
+    "incredibly (adv)"
+   ]
+  },
+  {
+   "chu": "informal",
+   "doc": "/ɪnˈfɔːml/",
+   "loai": "adj",
+   "nghia": "thân mật, không trang trọng",
+   "cap": "A2",
+   "viDu": "You can use informal language when you write to a friend.",
+   "viDuNghia": "Bạn có thể dùng ngôn ngữ thân mật khi viết cho bạn bè.",
+   "cumTu": [
+    "informal language",
+    "informal meeting",
+    "informal letter",
+    "informal style"
+   ],
+   "hoTu": [
+    "formal (adj)",
+    "informally (adv)"
+   ],
+   "ghiChu": "Writing Task 2 cần văn phong formal: tránh viết tắt và từ lóng."
+  },
+  {
+   "chu": "intelligent",
+   "doc": "/ɪnˈtelɪdʒənt/",
+   "loai": "adj",
+   "nghia": "thông minh",
+   "cap": "A2",
+   "viDu": "Dolphins are highly intelligent animals.",
+   "viDuNghia": "Cá heo là loài động vật rất thông minh.",
+   "cumTu": [
+    "highly intelligent",
+    "intelligent student",
+    "intelligent machine"
+   ],
+   "hoTu": [
+    "intelligence (n)"
+   ]
+  },
+  {
+   "chu": "likely",
+   "doc": "/ˈlaɪkli/",
+   "loai": "adj",
+   "nghia": "có khả năng xảy ra",
+   "cap": "A2",
+   "viDu": "It is likely to rain this afternoon.",
+   "viDuNghia": "Chiều nay có khả năng sẽ mưa.",
+   "cumTu": [
+    "likely to do",
+    "more likely",
+    "most likely",
+    "highly likely"
+   ],
+   "hoTu": [
+    "unlikely (adj)",
+    "likelihood (n)"
+   ],
+   "ghiChu": "\"be likely to + V\" — cấu trúc dự đoán thận trọng rất nên dùng trong Writing."
+  },
+  {
+   "chu": "loud",
+   "doc": "/laʊd/",
+   "loai": "adj",
+   "nghia": "to, ồn ào",
+   "cap": "A2",
+   "viDu": "The music is too loud. Please turn it down.",
+   "viDuNghia": "Nhạc to quá. Làm ơn vặn nhỏ lại.",
+   "cumTu": [
+    "loud noise",
+    "loud music",
+    "loud voice",
+    "out loud"
+   ],
+   "hoTu": [
+    "loudly (adv)",
+    "aloud (adv)"
+   ]
+  },
+  {
+   "chu": "low",
+   "doc": "/ləʊ/",
+   "loai": "adj",
+   "nghia": "thấp",
+   "cap": "A2",
+   "viDu": "Prices are low at this time of year.",
+   "viDuNghia": "Giá cả thấp vào thời điểm này trong năm.",
+   "cumTu": [
+    "low price",
+    "low level",
+    "low income",
+    "low cost"
+   ],
+   "hoTu": [
+    "lower (v)"
+   ],
+   "ghiChu": "low dùng cho mức độ, giá, vật; người thấp dùng \"short\"."
+  },
+  {
+   "chu": "lucky",
+   "doc": "/ˈlʌki/",
+   "loai": "adj",
+   "nghia": "may mắn",
+   "cap": "A2",
+   "viDu": "I was lucky to find a job so quickly.",
+   "viDuNghia": "Tôi thật may mắn khi tìm được việc nhanh như vậy.",
+   "cumTu": [
+    "lucky to do",
+    "lucky number",
+    "feel lucky",
+    "lucky day"
+   ],
+   "hoTu": [
+    "luck (n)",
+    "luckily (adv)",
+    "unlucky (adj)"
+   ]
+  },
+  {
+   "chu": "missing",
+   "doc": "/ˈmɪsɪŋ/",
+   "loai": "adj",
+   "nghia": "bị thiếu, mất tích",
+   "cap": "A2",
+   "viDu": "Two pages are missing from this report.",
+   "viDuNghia": "Bản báo cáo này bị thiếu hai trang.",
+   "cumTu": [
+    "go missing",
+    "missing person",
+    "missing information",
+    "missing piece"
+   ],
+   "hoTu": [
+    "miss (v)"
+   ]
+  },
+  {
+   "chu": "mobile",
+   "doc": "/ˈməʊbaɪl/",
+   "loai": "adj",
+   "nghia": "di động",
+   "cap": "A2",
+   "viDu": "Most people use mobile apps to pay bills.",
+   "viDuNghia": "Hầu hết mọi người dùng ứng dụng di động để thanh toán hoá đơn.",
+   "cumTu": [
+    "mobile phone",
+    "mobile app",
+    "mobile device",
+    "mobile data"
+   ],
+   "hoTu": [
+    "mobility (n)"
+   ]
+  },
+  {
+   "chu": "national",
+   "doc": "/ˈnæʃnəl/",
+   "loai": "adj",
+   "nghia": "thuộc quốc gia, toàn quốc",
+   "cap": "A2",
+   "viDu": "Independence Day is a national holiday in Vietnam.",
+   "viDuNghia": "Ngày Quốc khánh là ngày lễ quốc gia ở Việt Nam.",
+   "cumTu": [
+    "national holiday",
+    "national park",
+    "national team",
+    "national level"
+   ],
+   "hoTu": [
+    "nation (n)",
+    "nationality (n)",
+    "international (adj)"
+   ]
+  },
+  {
+   "chu": "necessary",
+   "doc": "/ˈnesəsəri/",
+   "loai": "adj",
+   "nghia": "cần thiết",
+   "cap": "A2",
+   "viDu": "It is necessary to book a ticket in advance.",
+   "viDuNghia": "Cần phải đặt vé trước.",
+   "cumTu": [
+    "necessary for",
+    "if necessary",
+    "necessary to do",
+    "absolutely necessary"
+   ],
+   "hoTu": [
+    "necessity (n)",
+    "necessarily (adv)",
+    "unnecessary (adj)"
+   ],
+   "ghiChu": "Chính tả: một c, hai s."
+  },
+  {
+   "chu": "original",
+   "doc": "/əˈrɪdʒənl/",
+   "loai": "adj",
+   "nghia": "ban đầu, gốc; độc đáo",
+   "cap": "A2",
+   "viDu": "Please keep the original file and send me a copy.",
+   "viDuNghia": "Hãy giữ tệp gốc và gửi cho tôi một bản sao.",
+   "cumTu": [
+    "original idea",
+    "original plan",
+    "original version",
+    "original copy"
+   ],
+   "hoTu": [
+    "origin (n)",
+    "originally (adv)",
+    "originality (n)"
+   ]
+  },
+  {
+   "chu": "particular",
+   "doc": "/pəˈtɪkjələ(r)/",
+   "loai": "adj",
+   "nghia": "cụ thể, riêng biệt, đặc biệt",
+   "cap": "A2",
+   "viDu": "Is there a particular type of food you like?",
+   "viDuNghia": "Có loại đồ ăn cụ thể nào bạn thích không?",
+   "cumTu": [
+    "in particular",
+    "particular type",
+    "particular area",
+    "particular interest"
+   ],
+   "hoTu": [
+    "particularly (adv)"
+   ],
+   "ghiChu": "\"in particular\" = đặc biệt là."
+  },
+  {
+   "chu": "recent",
+   "doc": "/ˈriːsnt/",
+   "loai": "adj",
+   "nghia": "gần đây",
+   "cap": "A2",
+   "viDu": "In recent years, online shopping has grown quickly.",
+   "viDuNghia": "Trong những năm gần đây, mua sắm trực tuyến đã tăng nhanh.",
+   "cumTu": [
+    "in recent years",
+    "recent study",
+    "recent research",
+    "recent development"
+   ],
+   "hoTu": [
+    "recently (adv)"
+   ],
+   "ghiChu": "\"In recent years\" + hiện tại hoàn thành — mở bài Task 2 kinh điển."
+  },
+  {
+   "chu": "secret",
+   "doc": "/ˈsiːkrət/",
+   "loai": "adj",
+   "nghia": "bí mật",
+   "cap": "A2",
+   "viDu": "Keep your password secret at all times.",
+   "viDuNghia": "Hãy luôn giữ bí mật mật khẩu của bạn.",
+   "cumTu": [
+    "keep something secret",
+    "secret code",
+    "secret place",
+    "top secret"
+   ],
+   "hoTu": [
+    "secret (n)",
+    "secretly (adv)",
+    "secrecy (n)"
+   ]
+  },
+  {
+   "chu": "simple",
+   "doc": "/ˈsɪmpl/",
+   "loai": "adj",
+   "nghia": "đơn giản",
+   "cap": "A2",
+   "viDu": "The app has a simple and clean design.",
+   "viDuNghia": "Ứng dụng có thiết kế đơn giản và gọn gàng.",
+   "cumTu": [
+    "simple way",
+    "simple question",
+    "simple answer",
+    "keep it simple"
+   ],
+   "hoTu": [
+    "simply (adv)",
+    "simplify (v)",
+    "simplicity (n)"
+   ]
+  },
+  {
+   "chu": "social",
+   "doc": "/ˈsəʊʃl/",
+   "loai": "adj",
+   "nghia": "thuộc xã hội; giao lưu",
+   "cap": "A2",
+   "viDu": "Teenagers spend hours on social media every day.",
+   "viDuNghia": "Thanh thiếu niên dành hàng giờ trên mạng xã hội mỗi ngày.",
+   "cumTu": [
+    "social media",
+    "social life",
+    "social problems",
+    "social skills"
+   ],
+   "hoTu": [
+    "society (n)",
+    "socially (adv)",
+    "socialize (v)"
+   ]
+  },
+  {
+   "chu": "soft",
+   "doc": "/sɒft/",
+   "loai": "adj",
+   "nghia": "mềm, mềm mại; nhẹ nhàng",
+   "cap": "A2",
+   "viDu": "This bed is too soft for me.",
+   "viDuNghia": "Cái giường này quá mềm đối với tôi.",
+   "cumTu": [
+    "soft skills",
+    "soft drink",
+    "soft voice",
+    "soft toy"
+   ],
+   "hoTu": [
+    "soften (v)",
+    "softly (adv)"
+   ],
+   "ghiChu": "\"soft skills\" = kỹ năng mềm — từ khoá khi phỏng vấn."
+  },
+  {
+   "chu": "strange",
+   "doc": "/streɪndʒ/",
+   "loai": "adj",
+   "nghia": "kỳ lạ, lạ lùng",
+   "cap": "A2",
+   "viDu": "I heard a strange noise outside last night.",
+   "viDuNghia": "Đêm qua tôi nghe thấy một tiếng động lạ bên ngoài.",
+   "cumTu": [
+    "strange noise",
+    "strange feeling",
+    "strange behaviour",
+    "feel strange"
+   ],
+   "hoTu": [
+    "stranger (n)",
+    "strangely (adv)"
+   ]
+  },
+  {
+   "chu": "stupid",
+   "doc": "/ˈstjuːpɪd/",
+   "loai": "adj",
+   "nghia": "ngu ngốc, ngớ ngẩn",
+   "cap": "A2",
+   "viDu": "I made a stupid mistake in the test.",
+   "viDuNghia": "Tôi đã mắc một lỗi ngớ ngẩn trong bài kiểm tra.",
+   "cumTu": [
+    "stupid mistake",
+    "stupid question",
+    "stupid idea"
+   ],
+   "hoTu": [
+    "stupidity (n)"
+   ],
+   "ghiChu": "Nói về người thì rất bất lịch sự."
+  },
+  {
+   "chu": "successful",
+   "doc": "/səkˈsesfl/",
+   "loai": "adj",
+   "nghia": "thành công",
+   "cap": "A2",
+   "viDu": "She runs a successful online business.",
+   "viDuNghia": "Cô ấy điều hành một doanh nghiệp trực tuyến thành công.",
+   "cumTu": [
+    "successful in",
+    "successful business",
+    "successful career",
+    "highly successful"
+   ],
+   "hoTu": [
+    "success (n)",
+    "succeed (v)",
+    "successfully (adv)"
+   ],
+   "ghiChu": "Chính tả: hai c, hai s, một l."
+  },
+  {
+   "chu": "surprising",
+   "doc": "/səˈpraɪzɪŋ/",
+   "loai": "adj",
+   "nghia": "đáng ngạc nhiên",
+   "cap": "A2",
+   "viDu": "It is not surprising that he passed the exam.",
+   "viDuNghia": "Không có gì ngạc nhiên khi anh ấy đỗ kỳ thi.",
+   "cumTu": [
+    "surprising result",
+    "surprising news",
+    "not surprising",
+    "surprising number"
+   ],
+   "hoTu": [
+    "surprise (n, v)",
+    "surprised (adj)",
+    "surprisingly (adv)"
+   ]
+  },
+  {
+   "chu": "teenage",
+   "doc": "/ˈtiːneɪdʒ/",
+   "loai": "adj",
+   "nghia": "ở tuổi thanh thiếu niên",
+   "cap": "A2",
+   "viDu": "They have two teenage children.",
+   "viDuNghia": "Họ có hai đứa con tuổi thiếu niên.",
+   "cumTu": [
+    "teenage children",
+    "teenage years",
+    "teenage girl"
+   ],
+   "hoTu": [
+    "teenager (n)"
+   ]
+  },
+  {
+   "chu": "tidy",
+   "doc": "/ˈtaɪdi/",
+   "loai": "adj",
+   "nghia": "gọn gàng, ngăn nắp",
+   "cap": "A2",
+   "viDu": "I try to keep my desk clean and tidy.",
+   "viDuNghia": "Tôi cố giữ bàn làm việc sạch sẽ và gọn gàng.",
+   "cumTu": [
+    "clean and tidy",
+    "tidy room",
+    "keep tidy",
+    "neat and tidy"
+   ],
+   "hoTu": [
+    "tidy (v)",
+    "untidy (adj)"
+   ]
+  },
+  {
+   "chu": "unusual",
+   "doc": "/ʌnˈjuːʒuəl/",
+   "loai": "adj",
+   "nghia": "khác thường, hiếm gặp",
+   "cap": "A2",
+   "viDu": "It is unusual to see snow in Vietnam.",
+   "viDuNghia": "Hiếm khi thấy tuyết ở Việt Nam.",
+   "cumTu": [
+    "unusual name",
+    "unusual for",
+    "highly unusual",
+    "nothing unusual"
+   ],
+   "hoTu": [
+    "usual (adj)",
+    "unusually (adv)"
+   ]
+  },
+  {
+   "chu": "usual",
+   "doc": "/ˈjuːʒuəl/",
+   "loai": "adj",
+   "nghia": "thông thường, thường lệ",
+   "cap": "A2",
+   "viDu": "I woke up later than usual this morning.",
+   "viDuNghia": "Sáng nay tôi dậy muộn hơn thường lệ.",
+   "cumTu": [
+    "as usual",
+    "than usual",
+    "usual time",
+    "usual place"
+   ],
+   "hoTu": [
+    "usually (adv)",
+    "unusual (adj)"
+   ]
+  },
+  {
+   "chu": "weak",
+   "doc": "/wiːk/",
+   "loai": "adj",
+   "nghia": "yếu",
+   "cap": "A2",
+   "viDu": "My listening skills are still quite weak.",
+   "viDuNghia": "Kỹ năng nghe của tôi vẫn còn khá yếu.",
+   "cumTu": [
+    "weak point",
+    "weak signal",
+    "weak economy",
+    "feel weak"
+   ],
+   "hoTu": [
+    "weakness (n)",
+    "weaken (v)"
+   ],
+   "ghiChu": "Phát âm giống \"week\"."
+  },
+  {
+   "chu": "wild",
+   "doc": "/waɪld/",
+   "loai": "adj",
+   "nghia": "hoang dã, mọc hoang",
+   "cap": "A2",
+   "viDu": "We should protect wild animals and their homes.",
+   "viDuNghia": "Chúng ta nên bảo vệ động vật hoang dã và nơi ở của chúng.",
+   "cumTu": [
+    "wild animals",
+    "wild flowers",
+    "in the wild",
+    "go wild"
+   ],
+   "hoTu": [
+    "wildlife (n)",
+    "wildly (adv)"
+   ]
+  },
+  {
+   "chu": "wooden",
+   "doc": "/ˈwʊdn/",
+   "loai": "adj",
+   "nghia": "bằng gỗ",
+   "cap": "A2",
+   "viDu": "They live in an old wooden house by the lake.",
+   "viDuNghia": "Họ sống trong một ngôi nhà gỗ cũ bên hồ.",
+   "cumTu": [
+    "wooden house",
+    "wooden table",
+    "wooden floor",
+    "wooden box"
+   ],
+   "hoTu": [
+    "wood (n)"
+   ]
+  },
+  {
+   "chu": "worse",
+   "doc": "/wɜːs/",
+   "loai": "adj",
+   "nghia": "tệ hơn, xấu hơn",
+   "cap": "A2",
+   "viDu": "The traffic is worse than it was last year.",
+   "viDuNghia": "Giao thông tệ hơn so với năm ngoái.",
+   "cumTu": [
+    "worse than",
+    "get worse",
+    "even worse",
+    "make things worse"
+   ],
+   "ghiChu": "So sánh hơn của bad/badly. Không nói \"more bad\"."
+  },
+  {
+   "chu": "worst",
+   "doc": "/wɜːst/",
+   "loai": "adj",
+   "nghia": "tệ nhất, xấu nhất",
+   "cap": "A2",
+   "viDu": "That was the worst film I have ever seen.",
+   "viDuNghia": "Đó là bộ phim tệ nhất tôi từng xem.",
+   "cumTu": [
+    "the worst thing",
+    "at worst",
+    "worst case",
+    "worst of all"
+   ]
+  }
+ ]
+}

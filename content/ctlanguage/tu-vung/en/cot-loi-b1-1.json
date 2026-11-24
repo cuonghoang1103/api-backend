@@ -1,0 +1,607 @@
+{
+ "ma": "cot-loi-b1-1",
+ "nn": "en",
+ "ten": "Trạng từ & từ nối B1",
+ "moTa": "Trạng từ chỉ mức độ, thái độ, phạm vi và liên từ (absolutely, generally, obviously, whether, within, throughout, though…) — làm câu nói và bài viết mạch lạc, có sắc thái.",
+ "nhom": "giao-tiep",
+ "cap": "B1",
+ "tu": [
+  {
+   "chu": "absolutely",
+   "doc": "/ˈæbsəluːtli/",
+   "loai": "adv",
+   "nghia": "hoàn toàn, tuyệt đối; chắc chắn rồi",
+   "cap": "B1",
+   "viDu": "You are absolutely right about the deadline.",
+   "viDuNghia": "Bạn hoàn toàn đúng về hạn chót.",
+   "cumTu": [
+    "absolutely right",
+    "absolutely necessary",
+    "absolutely not",
+    "absolutely essential"
+   ],
+   "hoTu": [
+    "absolute (adj)"
+   ],
+   "ghiChu": "Đi với tính từ mức tuyệt đối: absolutely amazing (không nói \"very amazing\")."
+  },
+  {
+   "chu": "apart",
+   "doc": "/əˈpɑːt/",
+   "loai": "adv",
+   "nghia": "cách xa nhau; tách rời",
+   "cap": "B1",
+   "viDu": "The two villages are five kilometres apart.",
+   "viDuNghia": "Hai ngôi làng cách nhau năm ki-lô-mét.",
+   "cumTu": [
+    "apart from",
+    "fall apart",
+    "far apart",
+    "take apart"
+   ],
+   "ghiChu": "\"apart from\" = ngoài … ra."
+  },
+  {
+   "chu": "backwards",
+   "doc": "/ˈbækwədz/",
+   "loai": "adv",
+   "nghia": "về phía sau; ngược",
+   "cap": "B1",
+   "viDu": "Can you count backwards from ten to one?",
+   "viDuNghia": "Bạn có thể đếm ngược từ mười về một không?",
+   "cumTu": [
+    "go backwards",
+    "backwards and forwards",
+    "step backwards"
+   ],
+   "hoTu": [
+    "backward (adj)"
+   ]
+  },
+  {
+   "chu": "currently",
+   "doc": "/ˈkʌrəntli/",
+   "loai": "adv",
+   "nghia": "hiện tại, hiện nay",
+   "cap": "B1",
+   "viDu": "I am currently working on a mobile app.",
+   "viDuNghia": "Hiện tại tôi đang làm một ứng dụng di động.",
+   "cumTu": [
+    "currently available",
+    "currently working",
+    "currently studying"
+   ],
+   "hoTu": [
+    "current (adj)"
+   ],
+   "ghiChu": "Hay dùng trong CV và phỏng vấn; thường đi với hiện tại tiếp diễn."
+  },
+  {
+   "chu": "equally",
+   "doc": "/ˈiːkwəli/",
+   "loai": "adv",
+   "nghia": "ngang nhau, như nhau",
+   "cap": "B1",
+   "viDu": "Both skills are equally important for this job.",
+   "viDuNghia": "Cả hai kỹ năng đều quan trọng như nhau với công việc này.",
+   "cumTu": [
+    "equally important",
+    "equally well",
+    "treat equally",
+    "share equally"
+   ],
+   "hoTu": [
+    "equal (adj)",
+    "equality (n)"
+   ]
+  },
+  {
+   "chu": "fairly",
+   "doc": "/ˈfeəli/",
+   "loai": "adv",
+   "nghia": "khá, tương đối; một cách công bằng",
+   "cap": "B1",
+   "viDu": "The test was fairly easy for most students.",
+   "viDuNghia": "Bài kiểm tra khá dễ với hầu hết sinh viên.",
+   "cumTu": [
+    "fairly easy",
+    "fairly well",
+    "fairly common",
+    "treat fairly"
+   ],
+   "hoTu": [
+    "fair (adj)"
+   ],
+   "ghiChu": "Mức độ nhẹ hơn \"very\", gần với \"quite\"."
+  },
+  {
+   "chu": "forever",
+   "doc": "/fərˈevə(r)/",
+   "loai": "adv",
+   "nghia": "mãi mãi",
+   "cap": "B1",
+   "viDu": "Nothing lasts forever.",
+   "viDuNghia": "Không có gì kéo dài mãi mãi.",
+   "cumTu": [
+    "last forever",
+    "forever young",
+    "take forever",
+    "stay forever"
+   ],
+   "ghiChu": "\"take forever\" = mất rất nhiều thời gian (thân mật)."
+  },
+  {
+   "chu": "frequently",
+   "doc": "/ˈfriːkwəntli/",
+   "loai": "adv",
+   "nghia": "thường xuyên",
+   "cap": "B1",
+   "viDu": "Buses run frequently between the airport and the city.",
+   "viDuNghia": "Xe buýt chạy thường xuyên giữa sân bay và thành phố.",
+   "cumTu": [
+    "frequently asked questions",
+    "frequently used",
+    "most frequently"
+   ],
+   "hoTu": [
+    "frequent (adj)",
+    "frequency (n)"
+   ],
+   "ghiChu": "Trang trọng hơn \"often\" — hợp văn viết. FAQ = frequently asked questions."
+  },
+  {
+   "chu": "generally",
+   "doc": "/ˈdʒenrəli/",
+   "loai": "adv",
+   "nghia": "nói chung, thường thì",
+   "cap": "B1",
+   "viDu": "Generally, people in my city are very friendly.",
+   "viDuNghia": "Nói chung, người dân thành phố tôi rất thân thiện.",
+   "cumTu": [
+    "generally speaking",
+    "generally accepted",
+    "generally agreed"
+   ],
+   "hoTu": [
+    "general (adj)"
+   ],
+   "ghiChu": "\"It is generally agreed that…\" — mở ý an toàn trong Task 2."
+  },
+  {
+   "chu": "indoors",
+   "doc": "/ˌɪnˈdɔːz/",
+   "loai": "adv",
+   "nghia": "ở trong nhà",
+   "cap": "B1",
+   "viDu": "We stayed indoors because of the rain.",
+   "viDuNghia": "Chúng tôi ở trong nhà vì trời mưa.",
+   "cumTu": [
+    "stay indoors",
+    "go indoors",
+    "play indoors"
+   ],
+   "hoTu": [
+    "indoor (adj)"
+   ],
+   "ghiChu": "indoors (trạng từ) / indoor (tính từ: indoor pool)."
+  },
+  {
+   "chu": "outdoors",
+   "doc": "/ˌaʊtˈdɔːz/",
+   "loai": "adv",
+   "nghia": "ở ngoài trời",
+   "cap": "B1",
+   "viDu": "Children should spend more time outdoors.",
+   "viDuNghia": "Trẻ em nên dành nhiều thời gian hơn ở ngoài trời.",
+   "cumTu": [
+    "play outdoors",
+    "eat outdoors",
+    "work outdoors",
+    "the great outdoors"
+   ],
+   "hoTu": [
+    "outdoor (adj)"
+   ]
+  },
+  {
+   "chu": "naturally",
+   "doc": "/ˈnætʃrəli/",
+   "loai": "adv",
+   "nghia": "một cách tự nhiên; tất nhiên",
+   "cap": "B1",
+   "viDu": "Try to speak naturally in the speaking test.",
+   "viDuNghia": "Hãy cố nói thật tự nhiên trong bài thi nói.",
+   "cumTu": [
+    "speak naturally",
+    "occur naturally",
+    "come naturally",
+    "naturally curious"
+   ],
+   "hoTu": [
+    "natural (adj)",
+    "nature (n)"
+   ]
+  },
+  {
+   "chu": "necessarily",
+   "doc": "/ˌnesəˈserəli/",
+   "loai": "adv",
+   "nghia": "nhất thiết, tất yếu",
+   "cap": "B1",
+   "viDu": "Expensive phones are not necessarily better.",
+   "viDuNghia": "Điện thoại đắt tiền không nhất thiết tốt hơn.",
+   "cumTu": [
+    "not necessarily",
+    "necessarily mean",
+    "necessarily true"
+   ],
+   "hoTu": [
+    "necessary (adj)"
+   ],
+   "ghiChu": "\"not necessarily\" giúp phản biện mềm mỏng trong bài luận."
+  },
+  {
+   "chu": "obviously",
+   "doc": "/ˈɒbviəsli/",
+   "loai": "adv",
+   "nghia": "rõ ràng, hiển nhiên",
+   "cap": "B1",
+   "viDu": "Obviously, we need more time to finish this.",
+   "viDuNghia": "Rõ ràng là chúng ta cần thêm thời gian để hoàn thành việc này.",
+   "cumTu": [
+    "obviously not",
+    "obviously wrong",
+    "quite obviously"
+   ],
+   "hoTu": [
+    "obvious (adj)"
+   ]
+  },
+  {
+   "chu": "personally",
+   "doc": "/ˈpɜːsənəli/",
+   "loai": "adv",
+   "nghia": "về phần tôi; đích thân",
+   "cap": "B1",
+   "viDu": "Personally, I prefer working in a small team.",
+   "viDuNghia": "Về phần tôi, tôi thích làm việc trong một nhóm nhỏ hơn.",
+   "cumTu": [
+    "personally, I think",
+    "personally responsible",
+    "know personally"
+   ],
+   "hoTu": [
+    "personal (adj)"
+   ],
+   "ghiChu": "\"Personally, I believe…\" — cách nêu ý kiến trong Speaking Part 3."
+  },
+  {
+   "chu": "possibly",
+   "doc": "/ˈpɒsəbli/",
+   "loai": "adv",
+   "nghia": "có thể, có lẽ",
+   "cap": "B1",
+   "viDu": "This is possibly the best book I have read this year.",
+   "viDuNghia": "Đây có lẽ là cuốn sách hay nhất tôi đọc trong năm nay.",
+   "cumTu": [
+    "could possibly",
+    "possibly because",
+    "as soon as you possibly can"
+   ],
+   "hoTu": [
+    "possible (adj)",
+    "possibility (n)"
+   ]
+  },
+  {
+   "chu": "properly",
+   "doc": "/ˈprɒpəli/",
+   "loai": "adv",
+   "nghia": "đúng cách, đàng hoàng",
+   "cap": "B1",
+   "viDu": "The printer is not working properly.",
+   "viDuNghia": "Máy in đang hoạt động không đúng cách.",
+   "cumTu": [
+    "work properly",
+    "do properly",
+    "eat properly",
+    "properly trained"
+   ],
+   "hoTu": [
+    "proper (adj)"
+   ]
+  },
+  {
+   "chu": "seriously",
+   "doc": "/ˈsɪəriəsli/",
+   "loai": "adv",
+   "nghia": "nghiêm túc; nghiêm trọng",
+   "cap": "B1",
+   "viDu": "You should take this warning seriously.",
+   "viDuNghia": "Bạn nên xem cảnh báo này một cách nghiêm túc.",
+   "cumTu": [
+    "take seriously",
+    "seriously ill",
+    "seriously injured",
+    "seriously consider"
+   ],
+   "hoTu": [
+    "serious (adj)",
+    "seriousness (n)"
+   ]
+  },
+  {
+   "chu": "simply",
+   "doc": "/ˈsɪmpli/",
+   "loai": "adv",
+   "nghia": "đơn giản là; một cách đơn giản",
+   "cap": "B1",
+   "viDu": "I simply do not have enough time today.",
+   "viDuNghia": "Đơn giản là hôm nay tôi không có đủ thời gian.",
+   "cumTu": [
+    "simply because",
+    "quite simply",
+    "live simply",
+    "simply put"
+   ],
+   "hoTu": [
+    "simple (adj)"
+   ]
+  },
+  {
+   "chu": "surely",
+   "doc": "/ˈʃʊəli/",
+   "loai": "adv",
+   "nghia": "chắc chắn, hẳn là",
+   "cap": "B1",
+   "viDu": "Surely there is a better way to do this.",
+   "viDuNghia": "Hẳn là phải có cách tốt hơn để làm việc này.",
+   "cumTu": [
+    "surely not",
+    "slowly but surely",
+    "surely you"
+   ],
+   "hoTu": [
+    "sure (adj)"
+   ],
+   "ghiChu": "Thường diễn tả sự ngạc nhiên / mong người nghe đồng ý."
+  },
+  {
+   "chu": "totally",
+   "doc": "/ˈtəʊtəli/",
+   "loai": "adv",
+   "nghia": "hoàn toàn",
+   "cap": "B1",
+   "viDu": "I totally agree with your idea.",
+   "viDuNghia": "Tôi hoàn toàn đồng ý với ý kiến của bạn.",
+   "cumTu": [
+    "totally agree",
+    "totally different",
+    "totally wrong",
+    "totally new"
+   ],
+   "hoTu": [
+    "total (adj, n)"
+   ]
+  },
+  {
+   "chu": "though",
+   "doc": "/ðəʊ/",
+   "loai": "conj",
+   "nghia": "mặc dù; tuy nhiên (cuối câu)",
+   "cap": "B1",
+   "viDu": "Though it was raining, we went for a walk.",
+   "viDuNghia": "Mặc dù trời mưa, chúng tôi vẫn đi dạo.",
+   "cumTu": [
+    "even though",
+    "as though",
+    "though it is"
+   ],
+   "ghiChu": "Trong văn nói có thể đứng cuối câu: \"It was good, though.\""
+  },
+  {
+   "chu": "whether",
+   "doc": "/ˈweðə(r)/",
+   "loai": "conj",
+   "nghia": "liệu … hay không",
+   "cap": "B1",
+   "viDu": "I am not sure whether he will come or not.",
+   "viDuNghia": "Tôi không chắc liệu anh ấy có đến hay không.",
+   "cumTu": [
+    "whether or not",
+    "whether … or",
+    "decide whether",
+    "depend on whether"
+   ],
+   "ghiChu": "Sau giới từ và trước \"to V\" dùng whether, không dùng if."
+  },
+  {
+   "chu": "whatever",
+   "doc": "/wɒtˈevə(r)/",
+   "loai": "pron",
+   "nghia": "bất cứ cái gì; dù gì đi nữa",
+   "cap": "B1",
+   "viDu": "You can order whatever you like.",
+   "viDuNghia": "Bạn có thể gọi bất cứ món gì bạn thích.",
+   "cumTu": [
+    "whatever happens",
+    "whatever you want",
+    "or whatever",
+    "whatever the reason"
+   ]
+  },
+  {
+   "chu": "whenever",
+   "doc": "/wenˈevə(r)/",
+   "loai": "conj",
+   "nghia": "bất cứ khi nào",
+   "cap": "B1",
+   "viDu": "Call me whenever you need help.",
+   "viDuNghia": "Hãy gọi cho tôi bất cứ khi nào bạn cần giúp.",
+   "cumTu": [
+    "whenever possible",
+    "whenever you want",
+    "whenever I can"
+   ]
+  },
+  {
+   "chu": "nor",
+   "doc": "/nɔː(r)/",
+   "loai": "conj",
+   "nghia": "cũng không",
+   "cap": "B1",
+   "viDu": "He does not smoke, nor does he drink.",
+   "viDuNghia": "Anh ấy không hút thuốc, cũng không uống rượu.",
+   "cumTu": [
+    "neither … nor",
+    "nor do I",
+    "nor is it"
+   ],
+   "ghiChu": "Sau \"nor\" đảo ngữ: nor DOES he."
+  },
+  {
+   "chu": "within",
+   "doc": "/wɪˈðɪn/",
+   "loai": "prep",
+   "nghia": "trong vòng, trong phạm vi",
+   "cap": "B1",
+   "viDu": "Please reply within three days.",
+   "viDuNghia": "Vui lòng trả lời trong vòng ba ngày.",
+   "cumTu": [
+    "within a week",
+    "within walking distance",
+    "within reach",
+    "from within"
+   ],
+   "ghiChu": "within 3 days = không quá 3 ngày; in 3 days = sau 3 ngày nữa."
+  },
+  {
+   "chu": "throughout",
+   "doc": "/θruːˈaʊt/",
+   "loai": "prep",
+   "nghia": "khắp, suốt",
+   "cap": "B1",
+   "viDu": "The number stayed the same throughout the year.",
+   "viDuNghia": "Con số giữ nguyên trong suốt cả năm.",
+   "cumTu": [
+    "throughout the year",
+    "throughout the country",
+    "throughout history",
+    "throughout the period"
+   ],
+   "ghiChu": "\"throughout the period\" dùng tốt trong Task 1."
+  },
+  {
+   "chu": "upon",
+   "doc": "/əˈpɒn/",
+   "loai": "prep",
+   "nghia": "trên, vào lúc (trang trọng của on)",
+   "cap": "B1",
+   "viDu": "Upon arrival, please go to the front desk.",
+   "viDuNghia": "Khi đến nơi, vui lòng tới quầy lễ tân.",
+   "cumTu": [
+    "depend upon",
+    "once upon a time",
+    "upon arrival",
+    "upon request"
+   ]
+  },
+  {
+   "chu": "ought",
+   "doc": "/ɔːt/",
+   "loai": "v",
+   "nghia": "nên, phải (đi với to)",
+   "cap": "B1",
+   "viDu": "You ought to see a doctor about that cough.",
+   "viDuNghia": "Bạn nên đi khám bác sĩ về cơn ho đó.",
+   "cumTu": [
+    "ought to do",
+    "ought to be",
+    "ought not to",
+    "ought to have"
+   ],
+   "ghiChu": "Luôn có \"to\": ought TO go. Nghĩa gần như \"should\"."
+  },
+  {
+   "chu": "ours",
+   "doc": "/ˈaʊəz/",
+   "loai": "pron",
+   "nghia": "cái của chúng tôi",
+   "cap": "B1",
+   "viDu": "Their office is bigger than ours.",
+   "viDuNghia": "Văn phòng của họ lớn hơn của chúng tôi.",
+   "cumTu": [
+    "a friend of ours",
+    "is ours"
+   ]
+  },
+  {
+   "chu": "theirs",
+   "doc": "/ðeəz/",
+   "loai": "pron",
+   "nghia": "cái của họ",
+   "cap": "B1",
+   "viDu": "Our team finished first, and theirs came second.",
+   "viDuNghia": "Đội chúng tôi về nhất, còn đội họ về nhì.",
+   "cumTu": [
+    "a friend of theirs",
+    "is theirs"
+   ],
+   "ghiChu": "Không có dấu nháy: theirs."
+  },
+  {
+   "chu": "due",
+   "doc": "/djuː/",
+   "loai": "adj",
+   "nghia": "đến hạn; dự kiến (đến)",
+   "cap": "B1",
+   "viDu": "The assignment is due next Friday.",
+   "viDuNghia": "Bài tập đến hạn nộp vào thứ Sáu tới.",
+   "cumTu": [
+    "due to",
+    "due date",
+    "due in",
+    "in due course"
+   ],
+   "ghiChu": "\"due date\" = hạn nộp; \"due to + danh từ\" = do, bởi vì."
+  },
+  {
+   "chu": "worth",
+   "doc": "/wɜːθ/",
+   "loai": "adj",
+   "nghia": "đáng giá, đáng (làm gì)",
+   "cap": "B1",
+   "viDu": "This museum is really worth visiting.",
+   "viDuNghia": "Bảo tàng này thực sự đáng ghé thăm.",
+   "cumTu": [
+    "worth doing",
+    "worth it",
+    "worth a visit",
+    "worth the money"
+   ],
+   "hoTu": [
+    "worth (n)",
+    "worthwhile (adj)",
+    "worthless (adj)"
+   ],
+   "ghiChu": "be worth + V-ing (không dùng \"to V\")."
+  },
+  {
+   "chu": "worldwide",
+   "doc": "/ˌwɜːldˈwaɪd/",
+   "loai": "adv",
+   "nghia": "trên toàn thế giới",
+   "cap": "B1",
+   "viDu": "The company sells its products worldwide.",
+   "viDuNghia": "Công ty bán sản phẩm của mình trên toàn thế giới.",
+   "cumTu": [
+    "sell worldwide",
+    "worldwide success",
+    "known worldwide"
+   ],
+   "hoTu": [
+    "worldwide (adj)"
+   ]
+  }
+ ]
+}

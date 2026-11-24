@@ -1,0 +1,1079 @@
+{
+ "ma": "cot-loi-a1-4",
+ "nn": "en",
+ "ten": "Danh từ nền tảng A1",
+ "moTa": "Danh từ rất thông dụng còn thiếu trong kho chủ đề (people, thing, way, world, idea, example, reason, result, country…) — dùng trong mọi chủ đề nói và viết.",
+ "nhom": "giao-tiep",
+ "cap": "A1",
+ "tu": [
+  {
+   "chu": "people",
+   "doc": "/ˈpiːpl/",
+   "loai": "n",
+   "nghia": "người, mọi người (số nhiều của person)",
+   "cap": "A1",
+   "viDu": "Many people work from home these days.",
+   "viDuNghia": "Ngày nay nhiều người làm việc tại nhà.",
+   "cumTu": [
+    "young people",
+    "most people",
+    "local people",
+    "people say"
+   ],
+   "ghiChu": "Luôn là số nhiều: people ARE. Không nói \"peoples\" khi nghĩa là \"nhiều người\"."
+  },
+  {
+   "chu": "person",
+   "doc": "/ˈpɜːsn/",
+   "loai": "n",
+   "nghia": "người (một người)",
+   "cap": "A1",
+   "viDu": "She is a very friendly person.",
+   "viDuNghia": "Cô ấy là một người rất thân thiện.",
+   "cumTu": [
+    "in person",
+    "per person",
+    "the right person"
+   ],
+   "hoTu": [
+    "personal (adj)",
+    "personality (n)"
+   ],
+   "ghiChu": "Số nhiều thông dụng là \"people\"; \"persons\" chỉ dùng trong văn bản pháp lý."
+  },
+  {
+   "chu": "man",
+   "doc": "/mæn/",
+   "loai": "n",
+   "nghia": "người đàn ông",
+   "cap": "A1",
+   "viDu": "The man at the front desk helped us.",
+   "viDuNghia": "Người đàn ông ở quầy lễ tân đã giúp chúng tôi.",
+   "cumTu": [
+    "young man",
+    "old man",
+    "man and woman"
+   ],
+   "ghiChu": "Số nhiều bất quy tắc: men /men/."
+  },
+  {
+   "chu": "woman",
+   "doc": "/ˈwʊmən/",
+   "loai": "n",
+   "nghia": "người phụ nữ",
+   "cap": "A1",
+   "viDu": "The woman who teaches us comes from Canada.",
+   "viDuNghia": "Người phụ nữ dạy chúng tôi đến từ Canada.",
+   "cumTu": [
+    "young woman",
+    "business woman",
+    "women's rights"
+   ],
+   "ghiChu": "Số nhiều: women, đọc /ˈwɪmɪn/ — âm đầu đổi thành /ɪ/."
+  },
+  {
+   "chu": "boy",
+   "doc": "/bɔɪ/",
+   "loai": "n",
+   "nghia": "con trai, cậu bé",
+   "cap": "A1",
+   "viDu": "The boy is playing football in the yard.",
+   "viDuNghia": "Cậu bé đang chơi bóng đá ngoài sân.",
+   "cumTu": [
+    "little boy",
+    "boys and girls",
+    "school boy"
+   ]
+  },
+  {
+   "chu": "girl",
+   "doc": "/ɡɜːl/",
+   "loai": "n",
+   "nghia": "con gái, cô bé",
+   "cap": "A1",
+   "viDu": "The girl in the red dress is my cousin.",
+   "viDuNghia": "Cô bé mặc váy đỏ là em họ tôi.",
+   "cumTu": [
+    "little girl",
+    "young girl",
+    "school girl"
+   ]
+  },
+  {
+   "chu": "teenager",
+   "doc": "/ˈtiːneɪdʒə(r)/",
+   "loai": "n",
+   "nghia": "thanh thiếu niên (13–19 tuổi)",
+   "cap": "A1",
+   "viDu": "Every teenager in my class has a smartphone.",
+   "viDuNghia": "Mọi thiếu niên trong lớp tôi đều có điện thoại thông minh.",
+   "cumTu": [
+    "young teenager",
+    "typical teenager"
+   ],
+   "hoTu": [
+    "teenage (adj)",
+    "teen (n)"
+   ]
+  },
+  {
+   "chu": "grandparent",
+   "doc": "/ˈɡrænpeərənt/",
+   "loai": "n",
+   "nghia": "ông hoặc bà",
+   "cap": "A1",
+   "viDu": "A grandparent often helps to look after the children.",
+   "viDuNghia": "Ông bà thường giúp trông nom các cháu.",
+   "cumTu": [
+    "live with grandparents",
+    "visit grandparents"
+   ],
+   "hoTu": [
+    "grandchild (n)"
+   ]
+  },
+  {
+   "chu": "neighbour",
+   "doc": "/ˈneɪbə(r)/",
+   "loai": "n",
+   "nghia": "hàng xóm",
+   "cap": "A1",
+   "viDu": "My neighbour sometimes looks after my cat.",
+   "viDuNghia": "Hàng xóm của tôi thỉnh thoảng trông mèo giúp tôi.",
+   "cumTu": [
+    "next-door neighbour",
+    "good neighbour",
+    "noisy neighbour"
+   ],
+   "hoTu": [
+    "neighbourhood (n)",
+    "neighbouring (adj)"
+   ],
+   "ghiChu": "Anh-Mỹ viết \"neighbor\"."
+  },
+  {
+   "chu": "visitor",
+   "doc": "/ˈvɪzɪtə(r)/",
+   "loai": "n",
+   "nghia": "khách tham quan, khách đến thăm",
+   "cap": "A1",
+   "viDu": "Every visitor must sign in at the front desk.",
+   "viDuNghia": "Mọi khách đến thăm phải đăng ký ở quầy lễ tân.",
+   "cumTu": [
+    "foreign visitor",
+    "visitor centre",
+    "attract visitors"
+   ],
+   "hoTu": [
+    "visit (v, n)"
+   ]
+  },
+  {
+   "chu": "member",
+   "doc": "/ˈmembə(r)/",
+   "loai": "n",
+   "nghia": "thành viên",
+   "cap": "A1",
+   "viDu": "I am a member of the university chess club.",
+   "viDuNghia": "Tôi là thành viên câu lạc bộ cờ vua của trường.",
+   "cumTu": [
+    "team member",
+    "family member",
+    "member of staff",
+    "become a member"
+   ],
+   "hoTu": [
+    "membership (n)"
+   ]
+  },
+  {
+   "chu": "name",
+   "doc": "/neɪm/",
+   "loai": "n",
+   "nghia": "tên",
+   "cap": "A1",
+   "viDu": "Could you spell your name, please?",
+   "viDuNghia": "Bạn đánh vần tên của bạn được không?",
+   "cumTu": [
+    "first name",
+    "family name",
+    "full name",
+    "user name"
+   ],
+   "hoTu": [
+    "name (v)",
+    "namely (adv)"
+   ]
+  },
+  {
+   "chu": "age",
+   "doc": "/eɪdʒ/",
+   "loai": "n",
+   "nghia": "tuổi; thời đại",
+   "cap": "A1",
+   "viDu": "Children start school at the age of six.",
+   "viDuNghia": "Trẻ em bắt đầu đi học lúc sáu tuổi.",
+   "cumTu": [
+    "at the age of",
+    "age group",
+    "old age",
+    "the digital age"
+   ],
+   "hoTu": [
+    "aged (adj)",
+    "ageing (adj)"
+   ],
+   "ghiChu": "\"age group\" hay dùng khi mô tả biểu đồ Task 1."
+  },
+  {
+   "chu": "thing",
+   "doc": "/θɪŋ/",
+   "loai": "n",
+   "nghia": "vật, đồ vật; điều, việc",
+   "cap": "A1",
+   "viDu": "The most important thing is to practise every day.",
+   "viDuNghia": "Điều quan trọng nhất là luyện tập mỗi ngày.",
+   "cumTu": [
+    "the same thing",
+    "the first thing",
+    "things to do",
+    "one thing"
+   ],
+   "ghiChu": "Trong Writing nên thay \"thing\" bằng từ cụ thể: factor, issue, aspect."
+  },
+  {
+   "chu": "way",
+   "doc": "/weɪ/",
+   "loai": "n",
+   "nghia": "cách, phương pháp; đường đi",
+   "cap": "A1",
+   "viDu": "Reading is a good way to learn new words.",
+   "viDuNghia": "Đọc là một cách tốt để học từ mới.",
+   "cumTu": [
+    "way to do",
+    "on the way",
+    "by the way",
+    "in this way"
+   ],
+   "ghiChu": "\"a way to do\" hoặc \"a way of doing\"."
+  },
+  {
+   "chu": "idea",
+   "doc": "/aɪˈdɪə/",
+   "loai": "n",
+   "nghia": "ý tưởng, ý kiến",
+   "cap": "A1",
+   "viDu": "That sounds like a great idea.",
+   "viDuNghia": "Nghe có vẻ là một ý tưởng tuyệt vời.",
+   "cumTu": [
+    "good idea",
+    "main idea",
+    "have an idea",
+    "no idea"
+   ],
+   "ghiChu": "\"I have no idea\" = tôi hoàn toàn không biết."
+  },
+  {
+   "chu": "example",
+   "doc": "/ɪɡˈzɑːmpl/",
+   "loai": "n",
+   "nghia": "ví dụ",
+   "cap": "A1",
+   "viDu": "Can you give me an example of this rule?",
+   "viDuNghia": "Bạn cho tôi một ví dụ về quy tắc này được không?",
+   "cumTu": [
+    "for example",
+    "give an example",
+    "a good example",
+    "set an example"
+   ],
+   "ghiChu": "Viết tắt \"e.g.\"; trong Writing dùng \"for example\" hoặc \"for instance\"."
+  },
+  {
+   "chu": "reason",
+   "doc": "/ˈriːzn/",
+   "loai": "n",
+   "nghia": "lý do",
+   "cap": "A1",
+   "viDu": "There is more than one reason for this problem.",
+   "viDuNghia": "Có nhiều hơn một lý do cho vấn đề này.",
+   "cumTu": [
+    "reason for",
+    "the main reason",
+    "for this reason",
+    "reason why"
+   ],
+   "hoTu": [
+    "reasonable (adj)",
+    "reasoning (n)"
+   ],
+   "ghiChu": "the reason FOR something; the reason WHY + mệnh đề."
+  },
+  {
+   "chu": "result",
+   "doc": "/rɪˈzʌlt/",
+   "loai": "n",
+   "nghia": "kết quả",
+   "cap": "A1",
+   "viDu": "I am waiting for the result of my English test.",
+   "viDuNghia": "Tôi đang chờ kết quả bài kiểm tra tiếng Anh.",
+   "cumTu": [
+    "as a result",
+    "exam result",
+    "result in",
+    "final result"
+   ],
+   "hoTu": [
+    "result (v)"
+   ],
+   "ghiChu": "\"As a result, …\" là từ nối chỉ hệ quả rất hay dùng trong Task 2."
+  },
+  {
+   "chu": "mistake",
+   "doc": "/mɪˈsteɪk/",
+   "loai": "n",
+   "nghia": "lỗi, sai lầm",
+   "cap": "A1",
+   "viDu": "Everyone can make a mistake when learning a language.",
+   "viDuNghia": "Ai cũng có thể mắc lỗi khi học ngoại ngữ.",
+   "cumTu": [
+    "make a mistake",
+    "by mistake",
+    "spelling mistake",
+    "learn from mistakes"
+   ],
+   "hoTu": [
+    "mistaken (adj)"
+   ],
+   "ghiChu": "MAKE a mistake (không dùng \"do\")."
+  },
+  {
+   "chu": "part",
+   "doc": "/pɑːt/",
+   "loai": "n",
+   "nghia": "phần, bộ phận",
+   "cap": "A1",
+   "viDu": "The first part of the test is listening.",
+   "viDuNghia": "Phần đầu của bài thi là nghe.",
+   "cumTu": [
+    "part of",
+    "take part in",
+    "play a part",
+    "for the most part"
+   ],
+   "hoTu": [
+    "partly (adv)",
+    "partial (adj)"
+   ]
+  },
+  {
+   "chu": "end",
+   "doc": "/end/",
+   "loai": "n",
+   "nghia": "phần cuối, sự kết thúc",
+   "cap": "A1",
+   "viDu": "We get paid at the end of the month.",
+   "viDuNghia": "Chúng tôi nhận lương vào cuối tháng.",
+   "cumTu": [
+    "at the end of",
+    "in the end",
+    "the end of the year",
+    "come to an end"
+   ],
+   "hoTu": [
+    "end (v)",
+    "ending (n)",
+    "endless (adj)"
+   ],
+   "ghiChu": "\"at the end of + danh từ\" (cuối cái gì) khác \"in the end\" (rốt cuộc)."
+  },
+  {
+   "chu": "future",
+   "doc": "/ˈfjuːtʃə(r)/",
+   "loai": "n",
+   "nghia": "tương lai",
+   "cap": "A1",
+   "viDu": "I want to work abroad in the future.",
+   "viDuNghia": "Tôi muốn làm việc ở nước ngoài trong tương lai.",
+   "cumTu": [
+    "in the future",
+    "near future",
+    "future plans",
+    "future generations"
+   ],
+   "hoTu": [
+    "future (adj)"
+   ]
+  },
+  {
+   "chu": "world",
+   "doc": "/wɜːld/",
+   "loai": "n",
+   "nghia": "thế giới",
+   "cap": "A1",
+   "viDu": "English is spoken all over the world.",
+   "viDuNghia": "Tiếng Anh được nói trên khắp thế giới.",
+   "cumTu": [
+    "all over the world",
+    "around the world",
+    "the real world",
+    "world record"
+   ],
+   "hoTu": [
+    "worldwide (adj, adv)"
+   ]
+  },
+  {
+   "chu": "country",
+   "doc": "/ˈkʌntri/",
+   "loai": "n",
+   "nghia": "đất nước, quốc gia; vùng quê",
+   "cap": "A1",
+   "viDu": "Vietnam is a beautiful country with friendly people.",
+   "viDuNghia": "Việt Nam là một đất nước xinh đẹp với con người thân thiện.",
+   "cumTu": [
+    "developing country",
+    "foreign country",
+    "home country",
+    "in the country"
+   ],
+   "hoTu": [
+    "countryside (n)"
+   ],
+   "ghiChu": "\"developing/developed countries\" là cụm quen thuộc trong Task 2."
+  },
+  {
+   "chu": "air",
+   "doc": "/eə(r)/",
+   "loai": "n",
+   "nghia": "không khí",
+   "cap": "A1",
+   "viDu": "The air in the mountains is clean and fresh.",
+   "viDuNghia": "Không khí trên núi trong lành và sạch.",
+   "cumTu": [
+    "fresh air",
+    "air pollution",
+    "air conditioning",
+    "by air"
+   ]
+  },
+  {
+   "chu": "colour",
+   "doc": "/ˈkʌlə(r)/",
+   "loai": "n",
+   "nghia": "màu sắc",
+   "cap": "A1",
+   "viDu": "What colour is your new car?",
+   "viDuNghia": "Xe mới của bạn màu gì?",
+   "cumTu": [
+    "bright colour",
+    "favourite colour",
+    "dark colour",
+    "in colour"
+   ],
+   "hoTu": [
+    "colourful (adj)",
+    "coloured (adj)"
+   ],
+   "ghiChu": "Anh-Mỹ viết \"color\"."
+  },
+  {
+   "chu": "word",
+   "doc": "/wɜːd/",
+   "loai": "n",
+   "nghia": "từ, lời",
+   "cap": "A1",
+   "viDu": "I learn ten new English words every day, one word at a time.",
+   "viDuNghia": "Tôi học mười từ tiếng Anh mới mỗi ngày, từng từ một.",
+   "cumTu": [
+    "new word",
+    "key word",
+    "in other words",
+    "word for word"
+   ],
+   "hoTu": [
+    "wording (n)"
+   ],
+   "ghiChu": "\"in other words\" = nói cách khác — hữu ích khi diễn đạt lại."
+  },
+  {
+   "chu": "phrase",
+   "doc": "/freɪz/",
+   "loai": "n",
+   "nghia": "cụm từ",
+   "cap": "A1",
+   "viDu": "This phrase is very common in spoken English.",
+   "viDuNghia": "Cụm từ này rất phổ biến trong tiếng Anh nói.",
+   "cumTu": [
+    "useful phrase",
+    "common phrase",
+    "key phrase"
+   ],
+   "hoTu": [
+    "phrasal (adj)"
+   ]
+  },
+  {
+   "chu": "meaning",
+   "doc": "/ˈmiːnɪŋ/",
+   "loai": "n",
+   "nghia": "nghĩa, ý nghĩa",
+   "cap": "A1",
+   "viDu": "What is the meaning of this word?",
+   "viDuNghia": "Nghĩa của từ này là gì?",
+   "cumTu": [
+    "the meaning of",
+    "have a meaning",
+    "different meaning"
+   ],
+   "hoTu": [
+    "mean (v)",
+    "meaningful (adj)",
+    "meaningless (adj)"
+   ]
+  },
+  {
+   "chu": "spelling",
+   "doc": "/ˈspelɪŋ/",
+   "loai": "n",
+   "nghia": "chính tả, cách đánh vần",
+   "cap": "A1",
+   "viDu": "Check your spelling before you send the email.",
+   "viDuNghia": "Hãy kiểm tra chính tả trước khi gửi email.",
+   "cumTu": [
+    "spelling mistake",
+    "correct spelling",
+    "check the spelling"
+   ],
+   "hoTu": [
+    "spell (v)"
+   ],
+   "ghiChu": "Sai chính tả bị trừ điểm trong IELTS Listening và Writing."
+  },
+  {
+   "chu": "dialogue",
+   "doc": "/ˈdaɪəlɒɡ/",
+   "loai": "n",
+   "nghia": "đoạn hội thoại, cuộc đối thoại",
+   "cap": "A1",
+   "viDu": "Listen to the dialogue and answer the questions.",
+   "viDuNghia": "Nghe đoạn hội thoại và trả lời câu hỏi.",
+   "cumTu": [
+    "short dialogue",
+    "have a dialogue",
+    "dialogue between"
+   ]
+  },
+  {
+   "chu": "list",
+   "doc": "/lɪst/",
+   "loai": "n",
+   "nghia": "danh sách",
+   "cap": "A1",
+   "viDu": "I always make a list before I go shopping.",
+   "viDuNghia": "Tôi luôn lập danh sách trước khi đi mua sắm.",
+   "cumTu": [
+    "make a list",
+    "shopping list",
+    "to-do list",
+    "waiting list"
+   ],
+   "hoTu": [
+    "list (v)"
+   ]
+  },
+  {
+   "chu": "detail",
+   "doc": "/ˈdiːteɪl/",
+   "loai": "n",
+   "nghia": "chi tiết",
+   "cap": "A1",
+   "viDu": "Please send me the details of the course.",
+   "viDuNghia": "Vui lòng gửi cho tôi thông tin chi tiết về khoá học.",
+   "cumTu": [
+    "in detail",
+    "contact details",
+    "for more details",
+    "attention to detail"
+   ],
+   "hoTu": [
+    "detailed (adj)"
+   ]
+  },
+  {
+   "chu": "type",
+   "doc": "/taɪp/",
+   "loai": "n",
+   "nghia": "loại, kiểu",
+   "cap": "A1",
+   "viDu": "What type of music do you like?",
+   "viDuNghia": "Bạn thích loại nhạc nào?",
+   "cumTu": [
+    "type of",
+    "different types",
+    "this type of",
+    "blood type"
+   ],
+   "hoTu": [
+    "typical (adj)",
+    "type (v)"
+   ]
+  },
+  {
+   "chu": "situation",
+   "doc": "/ˌsɪtʃuˈeɪʃn/",
+   "loai": "n",
+   "nghia": "tình huống, hoàn cảnh",
+   "cap": "A1",
+   "viDu": "What would you do in this situation?",
+   "viDuNghia": "Bạn sẽ làm gì trong tình huống này?",
+   "cumTu": [
+    "difficult situation",
+    "in this situation",
+    "current situation",
+    "economic situation"
+   ]
+  },
+  {
+   "chu": "activity",
+   "doc": "/ækˈtɪvəti/",
+   "loai": "n",
+   "nghia": "hoạt động",
+   "cap": "A1",
+   "viDu": "Swimming is my favourite outdoor activity.",
+   "viDuNghia": "Bơi là hoạt động ngoài trời tôi yêu thích.",
+   "cumTu": [
+    "outdoor activity",
+    "leisure activity",
+    "physical activity",
+    "group activity"
+   ],
+   "hoTu": [
+    "active (adj)",
+    "act (v)"
+   ]
+  },
+  {
+   "chu": "interview",
+   "doc": "/ˈɪntəvjuː/",
+   "loai": "n",
+   "nghia": "cuộc phỏng vấn",
+   "cap": "A1",
+   "viDu": "I have a job interview next Monday.",
+   "viDuNghia": "Thứ Hai tới tôi có một buổi phỏng vấn xin việc.",
+   "cumTu": [
+    "job interview",
+    "have an interview",
+    "interview with",
+    "online interview"
+   ],
+   "hoTu": [
+    "interview (v)",
+    "interviewer (n)",
+    "interviewee (n)"
+   ]
+  },
+  {
+   "chu": "career",
+   "doc": "/kəˈrɪə(r)/",
+   "loai": "n",
+   "nghia": "sự nghiệp, nghề nghiệp",
+   "cap": "A1",
+   "viDu": "She wants a career in information technology.",
+   "viDuNghia": "Cô ấy muốn theo đuổi sự nghiệp trong ngành công nghệ thông tin.",
+   "cumTu": [
+    "career in",
+    "career path",
+    "start a career",
+    "career change"
+   ],
+   "ghiChu": "Trọng âm rơi vào âm tiết hai; đừng đọc giống \"carrier\" (hãng vận chuyển)."
+  },
+  {
+   "chu": "programme",
+   "doc": "/ˈprəʊɡræm/",
+   "loai": "n",
+   "nghia": "chương trình (truyền hình, đào tạo)",
+   "cap": "A1",
+   "viDu": "My favourite TV programme is on at eight tonight.",
+   "viDuNghia": "Chương trình TV yêu thích của tôi phát lúc tám giờ tối nay.",
+   "cumTu": [
+    "TV programme",
+    "training programme",
+    "exchange programme"
+   ],
+   "ghiChu": "Anh-Mỹ viết \"program\"; chương trình máy tính luôn viết \"program\"."
+  },
+  {
+   "chu": "film",
+   "doc": "/fɪlm/",
+   "loai": "n",
+   "nghia": "bộ phim",
+   "cap": "A1",
+   "viDu": "We watched a great film last night.",
+   "viDuNghia": "Tối qua chúng tôi xem một bộ phim rất hay.",
+   "cumTu": [
+    "watch a film",
+    "film star",
+    "horror film",
+    "make a film"
+   ],
+   "hoTu": [
+    "film (v)"
+   ],
+   "ghiChu": "Anh-Mỹ thường dùng \"movie\"."
+  },
+  {
+   "chu": "cinema",
+   "doc": "/ˈsɪnəmə/",
+   "loai": "n",
+   "nghia": "rạp chiếu phim",
+   "cap": "A1",
+   "viDu": "We often go to the cinema at the weekend.",
+   "viDuNghia": "Chúng tôi thường đi xem phim vào cuối tuần.",
+   "cumTu": [
+    "go to the cinema",
+    "at the cinema",
+    "cinema ticket"
+   ],
+   "ghiChu": "Anh-Mỹ: movie theater."
+  },
+  {
+   "chu": "theatre",
+   "doc": "/ˈθɪətə(r)/",
+   "loai": "n",
+   "nghia": "nhà hát, rạp hát",
+   "cap": "A1",
+   "viDu": "We saw a play at the theatre last weekend.",
+   "viDuNghia": "Cuối tuần trước chúng tôi xem một vở kịch ở nhà hát.",
+   "cumTu": [
+    "go to the theatre",
+    "theatre ticket",
+    "open-air theatre"
+   ],
+   "ghiChu": "Anh-Mỹ viết \"theater\"."
+  },
+  {
+   "chu": "club",
+   "doc": "/klʌb/",
+   "loai": "n",
+   "nghia": "câu lạc bộ",
+   "cap": "A1",
+   "viDu": "I joined the coding club in my first year.",
+   "viDuNghia": "Tôi tham gia câu lạc bộ lập trình từ năm nhất.",
+   "cumTu": [
+    "join a club",
+    "football club",
+    "book club",
+    "club member"
+   ]
+  },
+  {
+   "chu": "college",
+   "doc": "/ˈkɒlɪdʒ/",
+   "loai": "n",
+   "nghia": "trường cao đẳng, trường đại học",
+   "cap": "A1",
+   "viDu": "My brother is studying design at college.",
+   "viDuNghia": "Anh trai tôi đang học thiết kế ở trường cao đẳng.",
+   "cumTu": [
+    "go to college",
+    "college student",
+    "at college",
+    "college degree"
+   ]
+  },
+  {
+   "chu": "building",
+   "doc": "/ˈbɪldɪŋ/",
+   "loai": "n",
+   "nghia": "toà nhà",
+   "cap": "A1",
+   "viDu": "Our office is in the tall building next to the bank.",
+   "viDuNghia": "Văn phòng của chúng tôi ở toà nhà cao cạnh ngân hàng.",
+   "cumTu": [
+    "office building",
+    "tall building",
+    "public building",
+    "historic building"
+   ],
+   "hoTu": [
+    "build (v)",
+    "builder (n)"
+   ]
+  },
+  {
+   "chu": "journey",
+   "doc": "/ˈdʒɜːni/",
+   "loai": "n",
+   "nghia": "chuyến đi, hành trình",
+   "cap": "A1",
+   "viDu": "The journey from Hanoi to Hue takes about twelve hours by train.",
+   "viDuNghia": "Chuyến đi từ Hà Nội đến Huế mất khoảng mười hai tiếng bằng tàu.",
+   "cumTu": [
+    "long journey",
+    "train journey",
+    "safe journey",
+    "journey to work"
+   ],
+   "ghiChu": "journey = quãng đường đi; trip = cả chuyến đi và về; travel thường là động từ/danh từ không đếm được."
+  },
+  {
+   "chu": "picture",
+   "doc": "/ˈpɪktʃə(r)/",
+   "loai": "n",
+   "nghia": "bức tranh, bức ảnh",
+   "cap": "A1",
+   "viDu": "There is a picture of my family on my desk.",
+   "viDuNghia": "Trên bàn tôi có một bức ảnh gia đình.",
+   "cumTu": [
+    "take a picture",
+    "draw a picture",
+    "in the picture",
+    "big picture"
+   ],
+   "hoTu": [
+    "picture (v)"
+   ]
+  },
+  {
+   "chu": "photograph",
+   "doc": "/ˈfəʊtəɡrɑːf/",
+   "loai": "n",
+   "nghia": "bức ảnh (trang trọng hơn photo)",
+   "cap": "A1",
+   "viDu": "This photograph shows my grandparents in 1980.",
+   "viDuNghia": "Bức ảnh này chụp ông bà tôi năm 1980.",
+   "cumTu": [
+    "take a photograph",
+    "old photograph",
+    "family photograph"
+   ],
+   "hoTu": [
+    "photographer (n)",
+    "photography (n)"
+   ],
+   "ghiChu": "Trọng âm đổi: PHOtograph – phoTOgrapher – photoGRAPHic."
+  },
+  {
+   "chu": "title",
+   "doc": "/ˈtaɪtl/",
+   "loai": "n",
+   "nghia": "tiêu đề, nhan đề; chức danh",
+   "cap": "A1",
+   "viDu": "What is the title of the book you are reading?",
+   "viDuNghia": "Nhan đề cuốn sách bạn đang đọc là gì?",
+   "cumTu": [
+    "job title",
+    "book title",
+    "the title of"
+   ]
+  },
+  {
+   "chu": "box",
+   "doc": "/bɒks/",
+   "loai": "n",
+   "nghia": "cái hộp, thùng; ô (trên biểu mẫu)",
+   "cap": "A1",
+   "viDu": "Tick the correct box on the form.",
+   "viDuNghia": "Đánh dấu vào ô đúng trên biểu mẫu.",
+   "cumTu": [
+    "cardboard box",
+    "lunch box",
+    "tick the box",
+    "box of"
+   ]
+  },
+  {
+   "chu": "bottle",
+   "doc": "/ˈbɒtl/",
+   "loai": "n",
+   "nghia": "cái chai, lọ",
+   "cap": "A1",
+   "viDu": "I always carry a bottle of water with me.",
+   "viDuNghia": "Tôi luôn mang theo một chai nước.",
+   "cumTu": [
+    "a bottle of water",
+    "plastic bottle",
+    "glass bottle"
+   ]
+  },
+  {
+   "chu": "bath",
+   "doc": "/bɑːθ/",
+   "loai": "n",
+   "nghia": "bồn tắm; việc tắm bồn",
+   "cap": "A1",
+   "viDu": "I like to have a hot bath after work.",
+   "viDuNghia": "Tôi thích tắm nước nóng sau giờ làm.",
+   "cumTu": [
+    "have a bath",
+    "take a bath",
+    "hot bath"
+   ],
+   "hoTu": [
+    "bathe (v)",
+    "bathroom (n)"
+   ]
+  },
+  {
+   "chu": "bike",
+   "doc": "/baɪk/",
+   "loai": "n",
+   "nghia": "xe đạp (thân mật)",
+   "cap": "A1",
+   "viDu": "I ride my bike to school every day.",
+   "viDuNghia": "Tôi đạp xe đến trường mỗi ngày.",
+   "cumTu": [
+    "ride a bike",
+    "by bike",
+    "mountain bike",
+    "bike lane"
+   ],
+   "hoTu": [
+    "biker (n)"
+   ]
+  },
+  {
+   "chu": "shoe",
+   "doc": "/ʃuː/",
+   "loai": "n",
+   "nghia": "chiếc giày",
+   "cap": "A1",
+   "viDu": "I need a new pair of running shoes because one shoe is torn.",
+   "viDuNghia": "Tôi cần một đôi giày chạy mới vì một chiếc đã rách.",
+   "cumTu": [
+    "a pair of shoes",
+    "running shoes",
+    "shoe shop",
+    "take off your shoes"
+   ]
+  },
+  {
+   "chu": "boot",
+   "doc": "/buːt/",
+   "loai": "n",
+   "nghia": "giày ống, bốt",
+   "cap": "A1",
+   "viDu": "You need strong boots, so try this boot on first.",
+   "viDuNghia": "Bạn cần đôi bốt chắc chắn, nên hãy thử chiếc bốt này trước.",
+   "cumTu": [
+    "a pair of boots",
+    "walking boots",
+    "winter boots"
+   ],
+   "ghiChu": "Anh-Anh: \"boot\" còn là cốp xe ô tô."
+  },
+  {
+   "chu": "trousers",
+   "doc": "/ˈtraʊzəz/",
+   "loai": "n",
+   "nghia": "quần dài",
+   "cap": "A1",
+   "viDu": "He wore black trousers and a white shirt.",
+   "viDuNghia": "Anh ấy mặc quần đen và áo sơ mi trắng.",
+   "cumTu": [
+    "a pair of trousers",
+    "long trousers",
+    "trouser pocket"
+   ],
+   "ghiChu": "Luôn số nhiều: trousers ARE. Anh-Mỹ: pants."
+  },
+  {
+   "chu": "kilometre",
+   "doc": "/ˈkɪləmiːtə(r)/",
+   "loai": "n",
+   "nghia": "ki-lô-mét",
+   "cap": "A1",
+   "viDu": "My house is about one kilometre from the station.",
+   "viDuNghia": "Nhà tôi cách ga khoảng một ki-lô-mét.",
+   "cumTu": [
+    "kilometres per hour",
+    "square kilometre",
+    "a few kilometres"
+   ],
+   "ghiChu": "Viết tắt km. Anh-Mỹ viết \"kilometer\"."
+  },
+  {
+   "chu": "metre",
+   "doc": "/ˈmiːtə(r)/",
+   "loai": "n",
+   "nghia": "mét",
+   "cap": "A1",
+   "viDu": "The swimming pool is fifty metres long, and every metre counts in a race.",
+   "viDuNghia": "Bể bơi dài năm mươi mét, và trong cuộc đua từng mét đều quan trọng.",
+   "cumTu": [
+    "square metre",
+    "metres high",
+    "cubic metre"
+   ],
+   "hoTu": [
+    "metric (adj)"
+   ],
+   "ghiChu": "Viết tắt m. Anh-Mỹ viết \"meter\"."
+  },
+  {
+   "chu": "front",
+   "doc": "/frʌnt/",
+   "loai": "n",
+   "nghia": "phía trước, mặt trước",
+   "cap": "A1",
+   "viDu": "Please write your name on the front of the envelope.",
+   "viDuNghia": "Hãy viết tên bạn ở mặt trước phong bì.",
+   "cumTu": [
+    "in front of",
+    "at the front",
+    "front door",
+    "front desk"
+   ],
+   "hoTu": [
+    "front (adj)"
+   ]
+  },
+  {
+   "chu": "upstairs",
+   "doc": "/ˌʌpˈsteəz/",
+   "loai": "adv",
+   "nghia": "ở tầng trên, lên gác",
+   "cap": "A1",
+   "viDu": "The bedrooms are upstairs.",
+   "viDuNghia": "Các phòng ngủ ở tầng trên.",
+   "cumTu": [
+    "go upstairs",
+    "live upstairs",
+    "upstairs room"
+   ],
+   "ghiChu": "Không dùng giới từ: go upstairs (không phải \"go to upstairs\")."
+  },
+  {
+   "chu": "downstairs",
+   "doc": "/ˌdaʊnˈsteəz/",
+   "loai": "adv",
+   "nghia": "ở tầng dưới, xuống gác",
+   "cap": "A1",
+   "viDu": "I will wait for you downstairs.",
+   "viDuNghia": "Tôi sẽ đợi bạn ở tầng dưới.",
+   "cumTu": [
+    "go downstairs",
+    "come downstairs",
+    "downstairs neighbour"
+   ]
+  },
+  {
+   "chu": "little",
+   "doc": "/ˈlɪtl/",
+   "loai": "adj",
+   "nghia": "nhỏ, bé; ít",
+   "cap": "A1",
+   "viDu": "They live in a little house near the river.",
+   "viDuNghia": "Họ sống trong một ngôi nhà nhỏ gần sông.",
+   "cumTu": [
+    "a little",
+    "little by little",
+    "little girl",
+    "very little"
+   ],
+   "ghiChu": "\"a little\" = có một ít (tích cực); \"little\" = hầu như không có (tiêu cực)."
+  }
+ ]
+}

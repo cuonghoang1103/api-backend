@@ -1,0 +1,623 @@
+{
+ "ma": "cot-loi-b1-6",
+ "nn": "en",
+ "ten": "Cụm động từ + danh từ & giới từ B1",
+ "moTa": "Collocation cốt lõi với make / do / take / have / get và động từ đi kèm giới từ (make a mistake, take a look, do business, get ready, refer to, respond to…) — sai cụm là lỗi người Việt hay gặp nhất.",
+ "nhom": "giao-tiep",
+ "cap": "B1",
+ "tu": [
+  {
+   "chu": "make a mistake",
+   "doc": "/meɪk ə mɪˈsteɪk/",
+   "loai": "phr",
+   "nghia": "mắc lỗi, phạm sai lầm",
+   "cap": "A2",
+   "viDu": "Do not worry if you make a mistake. Just try again.",
+   "viDuNghia": "Đừng lo nếu bạn mắc lỗi. Cứ thử lại.",
+   "cumTu": [
+    "make a big mistake",
+    "make the same mistake",
+    "make a spelling mistake"
+   ],
+   "ghiChu": "MAKE a mistake (không dùng \"do a mistake\")."
+  },
+  {
+   "chu": "make a decision",
+   "doc": "/meɪk ə dɪˈsɪʒn/",
+   "loai": "phr",
+   "nghia": "đưa ra quyết định",
+   "cap": "B1",
+   "viDu": "We need to make a decision before Friday.",
+   "viDuNghia": "Chúng ta cần đưa ra quyết định trước thứ Sáu.",
+   "cumTu": [
+    "make a decision about",
+    "make the right decision",
+    "make a quick decision"
+   ],
+   "ghiChu": "MAKE a decision (Anh-Anh cũng dùng \"take a decision\")."
+  },
+  {
+   "chu": "make sure",
+   "doc": "/meɪk ʃʊə(r)/",
+   "loai": "phr",
+   "nghia": "đảm bảo, chắc chắn rằng",
+   "cap": "A2",
+   "viDu": "Make sure you save your work before you close the laptop.",
+   "viDuNghia": "Hãy chắc chắn là bạn đã lưu bài trước khi gập laptop.",
+   "cumTu": [
+    "make sure that",
+    "make sure of",
+    "just to make sure"
+   ]
+  },
+  {
+   "chu": "make sense",
+   "doc": "/meɪk sens/",
+   "loai": "phr",
+   "nghia": "có lý, dễ hiểu",
+   "cap": "B1",
+   "viDu": "Your explanation does not make sense to me.",
+   "viDuNghia": "Lời giải thích của bạn tôi thấy không hợp lý.",
+   "cumTu": [
+    "make sense of",
+    "make sense to somebody",
+    "make perfect sense"
+   ],
+   "ghiChu": "\"Does that make sense?\" — câu hỏi kiểm tra người nghe đã hiểu chưa."
+  },
+  {
+   "chu": "make money",
+   "doc": "/meɪk ˈmʌni/",
+   "loai": "phr",
+   "nghia": "kiếm tiền",
+   "cap": "A2",
+   "viDu": "Many students make money by teaching children at home.",
+   "viDuNghia": "Nhiều sinh viên kiếm tiền bằng cách dạy kèm trẻ em tại nhà.",
+   "cumTu": [
+    "make money from",
+    "make a lot of money",
+    "make money online"
+   ]
+  },
+  {
+   "chu": "make progress",
+   "doc": "/meɪk ˈprəʊɡres/",
+   "loai": "phr",
+   "nghia": "tiến bộ, đạt tiến triển",
+   "cap": "B1",
+   "viDu": "You will make progress if you practise every day.",
+   "viDuNghia": "Bạn sẽ tiến bộ nếu luyện tập mỗi ngày.",
+   "cumTu": [
+    "make good progress",
+    "make progress in",
+    "make slow progress"
+   ],
+   "ghiChu": "Không có \"a\": make progress."
+  },
+  {
+   "chu": "make an effort",
+   "doc": "/meɪk ən ˈefət/",
+   "loai": "phr",
+   "nghia": "nỗ lực, cố gắng",
+   "cap": "B1",
+   "viDu": "You should make an effort to speak English in class.",
+   "viDuNghia": "Bạn nên cố gắng nói tiếng Anh trong lớp.",
+   "cumTu": [
+    "make an effort to do",
+    "make every effort",
+    "make a real effort"
+   ]
+  },
+  {
+   "chu": "make an appointment",
+   "doc": "/meɪk ən əˈpɔɪntmənt/",
+   "loai": "phr",
+   "nghia": "đặt lịch hẹn",
+   "cap": "B1",
+   "viDu": "I need to make an appointment with the dentist.",
+   "viDuNghia": "Tôi cần đặt lịch hẹn với nha sĩ.",
+   "cumTu": [
+    "make an appointment with",
+    "make an appointment for",
+    "make a doctor's appointment"
+   ]
+  },
+  {
+   "chu": "make a call",
+   "doc": "/meɪk ə kɔːl/",
+   "loai": "phr",
+   "nghia": "gọi một cuộc điện thoại",
+   "cap": "A2",
+   "viDu": "Excuse me, I need to make a call.",
+   "viDuNghia": "Xin lỗi, tôi cần gọi một cuộc điện thoại.",
+   "cumTu": [
+    "make a phone call",
+    "make a quick call",
+    "make a video call"
+   ]
+  },
+  {
+   "chu": "do homework",
+   "doc": "/duː ˈhəʊmwɜːk/",
+   "loai": "phr",
+   "nghia": "làm bài tập về nhà",
+   "cap": "A1",
+   "viDu": "I always do homework before dinner.",
+   "viDuNghia": "Tôi luôn làm bài tập về nhà trước bữa tối.",
+   "cumTu": [
+    "do my homework",
+    "do homework on time",
+    "help with homework"
+   ],
+   "ghiChu": "DO homework (không dùng \"make\"). Không đếm được: không nói \"homeworks\"."
+  },
+  {
+   "chu": "do exercise",
+   "doc": "/duː ˈeksəsaɪz/",
+   "loai": "phr",
+   "nghia": "tập thể dục",
+   "cap": "A2",
+   "viDu": "You should do exercise at least three times a week.",
+   "viDuNghia": "Bạn nên tập thể dục ít nhất ba lần một tuần.",
+   "cumTu": [
+    "do some exercise",
+    "do exercise regularly",
+    "do more exercise"
+   ]
+  },
+  {
+   "chu": "do the shopping",
+   "doc": "/duː ðə ˈʃɒpɪŋ/",
+   "loai": "phr",
+   "nghia": "đi chợ, mua đồ thiết yếu",
+   "cap": "A2",
+   "viDu": "I usually do the shopping on Saturday morning.",
+   "viDuNghia": "Tôi thường đi chợ vào sáng thứ Bảy.",
+   "cumTu": [
+    "do the weekly shopping",
+    "do the food shopping"
+   ],
+   "ghiChu": "do the shopping = mua đồ ăn thiết yếu; go shopping = đi mua sắm cho vui."
+  },
+  {
+   "chu": "do business",
+   "doc": "/duː ˈbɪznəs/",
+   "loai": "phr",
+   "nghia": "làm ăn, kinh doanh",
+   "cap": "B1",
+   "viDu": "It is easy to do business with people you trust.",
+   "viDuNghia": "Làm ăn với người mình tin tưởng thì dễ dàng.",
+   "cumTu": [
+    "do business with",
+    "do business in",
+    "do business online"
+   ]
+  },
+  {
+   "chu": "do well",
+   "doc": "/duː wel/",
+   "loai": "phr",
+   "nghia": "làm tốt, đạt kết quả tốt",
+   "cap": "A2",
+   "viDu": "I hope you do well in your exam tomorrow.",
+   "viDuNghia": "Tôi hy vọng ngày mai bạn làm bài thi tốt.",
+   "cumTu": [
+    "do well in an exam",
+    "do well at school",
+    "do really well"
+   ]
+  },
+  {
+   "chu": "do your best",
+   "doc": "/duː jɔː(r) best/",
+   "loai": "phr",
+   "nghia": "cố gắng hết sức",
+   "cap": "A2",
+   "viDu": "Just do your best and do not worry about the result.",
+   "viDuNghia": "Cứ cố gắng hết sức và đừng lo về kết quả.",
+   "cumTu": [
+    "do my best to",
+    "do your very best",
+    "always do your best"
+   ]
+  },
+  {
+   "chu": "take a look",
+   "doc": "/teɪk ə lʊk/",
+   "loai": "phr",
+   "nghia": "xem qua, nhìn thử",
+   "cap": "A2",
+   "viDu": "Could you take a look at my CV before I send it?",
+   "viDuNghia": "Bạn xem qua CV giúp tôi trước khi tôi gửi được không?",
+   "cumTu": [
+    "take a look at",
+    "take a quick look",
+    "take a closer look"
+   ],
+   "ghiChu": "= have a look (Anh-Anh)."
+  },
+  {
+   "chu": "take a seat",
+   "doc": "/teɪk ə siːt/",
+   "loai": "phr",
+   "nghia": "ngồi xuống, mời ngồi",
+   "cap": "A2",
+   "viDu": "Please take a seat. The manager will see you soon.",
+   "viDuNghia": "Mời bạn ngồi. Quản lý sẽ gặp bạn ngay.",
+   "cumTu": [
+    "please take a seat",
+    "take your seat"
+   ],
+   "ghiChu": "Lịch sự hơn \"sit down\"."
+  },
+  {
+   "chu": "take a photo",
+   "doc": "/teɪk ə ˈfəʊtəʊ/",
+   "loai": "phr",
+   "nghia": "chụp ảnh",
+   "cap": "A1",
+   "viDu": "Could you take a photo of us, please?",
+   "viDuNghia": "Bạn chụp giúp chúng tôi một tấm ảnh được không?",
+   "cumTu": [
+    "take a photo of",
+    "take photos",
+    "take a photo with"
+   ],
+   "ghiChu": "TAKE a photo (không dùng \"make/shoot a photo\" trong lời nói thường ngày)."
+  },
+  {
+   "chu": "take your time",
+   "doc": "/teɪk jɔː(r) taɪm/",
+   "loai": "phr",
+   "nghia": "cứ từ từ, không cần vội",
+   "cap": "B1",
+   "viDu": "Take your time. There is no need to hurry.",
+   "viDuNghia": "Cứ từ từ. Không cần vội đâu.",
+   "cumTu": [
+    "take your time with",
+    "take my time"
+   ]
+  },
+  {
+   "chu": "have a look",
+   "doc": "/hæv ə lʊk/",
+   "loai": "phr",
+   "nghia": "xem thử, nhìn qua",
+   "cap": "A2",
+   "viDu": "Can I have a look at your notes?",
+   "viDuNghia": "Tôi xem vở ghi của bạn một chút được không?",
+   "cumTu": [
+    "have a look at",
+    "have a quick look",
+    "have a look around"
+   ]
+  },
+  {
+   "chu": "have a rest",
+   "doc": "/hæv ə rest/",
+   "loai": "phr",
+   "nghia": "nghỉ ngơi một lát",
+   "cap": "A2",
+   "viDu": "You look tired. Sit down and have a rest.",
+   "viDuNghia": "Trông bạn mệt đấy. Ngồi xuống nghỉ một lát đi.",
+   "cumTu": [
+    "have a short rest",
+    "have a good rest"
+   ]
+  },
+  {
+   "chu": "get ready",
+   "doc": "/ɡet ˈredi/",
+   "loai": "phr",
+   "nghia": "chuẩn bị sẵn sàng",
+   "cap": "A2",
+   "viDu": "It takes me twenty minutes to get ready for work.",
+   "viDuNghia": "Tôi mất hai mươi phút để chuẩn bị đi làm.",
+   "cumTu": [
+    "get ready for",
+    "get ready to do",
+    "get ready for school"
+   ]
+  },
+  {
+   "chu": "get lost",
+   "doc": "/ɡet lɒst/",
+   "loai": "phr",
+   "nghia": "bị lạc",
+   "cap": "A2",
+   "viDu": "It is easy to get lost in a big city without a map.",
+   "viDuNghia": "Rất dễ bị lạc ở một thành phố lớn nếu không có bản đồ.",
+   "cumTu": [
+    "get lost in",
+    "get lost on the way"
+   ]
+  },
+  {
+   "chu": "get better",
+   "doc": "/ɡet ˈbetə(r)/",
+   "loai": "phr",
+   "nghia": "khá hơn, tiến bộ; khỏi bệnh",
+   "cap": "A2",
+   "viDu": "Your English will get better with practice.",
+   "viDuNghia": "Tiếng Anh của bạn sẽ khá lên nhờ luyện tập.",
+   "cumTu": [
+    "get better at",
+    "get better soon",
+    "get better and better"
+   ],
+   "ghiChu": "\"Get well soon\" / \"I hope you get better soon\" — chúc người ốm."
+  },
+  {
+   "chu": "get a job",
+   "doc": "/ɡet ə dʒɒb/",
+   "loai": "phr",
+   "nghia": "kiếm được việc làm",
+   "cap": "A2",
+   "viDu": "It is not easy to get a job without experience.",
+   "viDuNghia": "Không dễ kiếm được việc nếu không có kinh nghiệm.",
+   "cumTu": [
+    "get a good job",
+    "get a job in",
+    "get a part-time job"
+   ]
+  },
+  {
+   "chu": "get home",
+   "doc": "/ɡet həʊm/",
+   "loai": "phr",
+   "nghia": "về đến nhà",
+   "cap": "A1",
+   "viDu": "I usually get home at about seven.",
+   "viDuNghia": "Tôi thường về đến nhà lúc khoảng bảy giờ.",
+   "cumTu": [
+    "get home late",
+    "get home from work",
+    "get home safely"
+   ],
+   "ghiChu": "Không có \"to\": get home (không nói \"get to home\")."
+  },
+  {
+   "chu": "go shopping",
+   "doc": "/ɡəʊ ˈʃɒpɪŋ/",
+   "loai": "phr",
+   "nghia": "đi mua sắm",
+   "cap": "A1",
+   "viDu": "We often go shopping at the weekend.",
+   "viDuNghia": "Chúng tôi thường đi mua sắm vào cuối tuần.",
+   "cumTu": [
+    "go shopping for",
+    "go shopping with",
+    "go shopping online"
+   ],
+   "ghiChu": "go + V-ing cho hoạt động: go shopping / swimming / camping."
+  },
+  {
+   "chu": "go home",
+   "doc": "/ɡəʊ həʊm/",
+   "loai": "phr",
+   "nghia": "về nhà",
+   "cap": "A1",
+   "viDu": "I am tired, so I want to go home.",
+   "viDuNghia": "Tôi mệt nên muốn về nhà.",
+   "cumTu": [
+    "go home early",
+    "go home after work",
+    "go straight home"
+   ],
+   "ghiChu": "Không có \"to\": go home."
+  },
+  {
+   "chu": "go to work",
+   "doc": "/ɡəʊ tuː wɜːk/",
+   "loai": "phr",
+   "nghia": "đi làm",
+   "cap": "A1",
+   "viDu": "I go to work by motorbike.",
+   "viDuNghia": "Tôi đi làm bằng xe máy.",
+   "cumTu": [
+    "go to work early",
+    "go to work by bus"
+   ],
+   "ghiChu": "Không có \"the\": go to work."
+  },
+  {
+   "chu": "go for a walk",
+   "doc": "/ɡəʊ fɔː(r) ə wɔːk/",
+   "loai": "phr",
+   "nghia": "đi dạo",
+   "cap": "A2",
+   "viDu": "We like to go for a walk after dinner.",
+   "viDuNghia": "Chúng tôi thích đi dạo sau bữa tối.",
+   "cumTu": [
+    "go for a walk in the park",
+    "go for a short walk"
+   ]
+  },
+  {
+   "chu": "catch a cold",
+   "doc": "/kætʃ ə kəʊld/",
+   "loai": "phr",
+   "nghia": "bị cảm lạnh",
+   "cap": "A2",
+   "viDu": "Wear a coat or you will catch a cold.",
+   "viDuNghia": "Mặc áo khoác vào kẻo bạn bị cảm.",
+   "cumTu": [
+    "catch a bad cold",
+    "catch a cold easily"
+   ]
+  },
+  {
+   "chu": "fall asleep",
+   "doc": "/fɔːl əˈsliːp/",
+   "loai": "phr",
+   "nghia": "ngủ thiếp đi",
+   "cap": "A2",
+   "viDu": "I often fall asleep while watching TV.",
+   "viDuNghia": "Tôi thường ngủ thiếp đi khi đang xem TV.",
+   "cumTu": [
+    "fall asleep quickly",
+    "fall asleep in class",
+    "fall asleep on the sofa"
+   ],
+   "ghiChu": "fall asleep = bắt đầu ngủ; go to sleep = đi ngủ có chủ ý."
+  },
+  {
+   "chu": "pay attention",
+   "doc": "/peɪ əˈtenʃn/",
+   "loai": "phr",
+   "nghia": "chú ý",
+   "cap": "B1",
+   "viDu": "Please pay attention to the safety instructions.",
+   "viDuNghia": "Xin hãy chú ý đến các hướng dẫn an toàn.",
+   "cumTu": [
+    "pay attention to",
+    "pay close attention",
+    "pay more attention"
+   ],
+   "ghiChu": "PAY attention TO something."
+  },
+  {
+   "chu": "change your mind",
+   "doc": "/tʃeɪndʒ jɔː(r) maɪnd/",
+   "loai": "phr",
+   "nghia": "đổi ý",
+   "cap": "B1",
+   "viDu": "Let me know if you change your mind about the trip.",
+   "viDuNghia": "Hãy cho tôi biết nếu bạn đổi ý về chuyến đi.",
+   "cumTu": [
+    "change my mind about",
+    "make somebody change their mind"
+   ]
+  },
+  {
+   "chu": "think of",
+   "doc": "/θɪŋk ɒv/",
+   "loai": "phr",
+   "nghia": "nghĩ ra; có ý kiến về",
+   "cap": "B1",
+   "viDu": "What do you think of the new design?",
+   "viDuNghia": "Bạn nghĩ gì về thiết kế mới?",
+   "cumTu": [
+    "think of an idea",
+    "think of a name",
+    "what do you think of"
+   ]
+  },
+  {
+   "chu": "search for",
+   "doc": "/sɜːtʃ fɔː(r)/",
+   "loai": "phr",
+   "nghia": "tìm kiếm, tra tìm",
+   "cap": "B1",
+   "viDu": "I search for information online before I buy anything.",
+   "viDuNghia": "Tôi tìm thông tin trên mạng trước khi mua bất cứ thứ gì.",
+   "cumTu": [
+    "search for information",
+    "search for a job",
+    "search for answers"
+   ]
+  },
+  {
+   "chu": "hear about",
+   "doc": "/hɪə(r) əˈbaʊt/",
+   "loai": "phr",
+   "nghia": "nghe nói về, biết tin về",
+   "cap": "B1",
+   "viDu": "Did you hear about the new library on campus?",
+   "viDuNghia": "Bạn đã nghe nói về thư viện mới trong trường chưa?",
+   "cumTu": [
+    "hear about the news",
+    "hear about a job",
+    "hear a lot about"
+   ],
+   "ghiChu": "hear about = biết tin về; hear of = từng nghe tên; hear from = nhận tin từ ai."
+  },
+  {
+   "chu": "dream of",
+   "doc": "/driːm ɒv/",
+   "loai": "phr",
+   "nghia": "mơ ước, mơ về",
+   "cap": "B1",
+   "viDu": "Many young people dream of starting their own company.",
+   "viDuNghia": "Nhiều người trẻ mơ ước mở công ty riêng.",
+   "cumTu": [
+    "dream of doing",
+    "dream of becoming",
+    "dream of a better life"
+   ]
+  },
+  {
+   "chu": "care for",
+   "doc": "/keə(r) fɔː(r)/",
+   "loai": "phr",
+   "nghia": "chăm sóc; thích",
+   "cap": "B1",
+   "viDu": "Nurses care for patients day and night.",
+   "viDuNghia": "Y tá chăm sóc bệnh nhân ngày đêm.",
+   "cumTu": [
+    "care for the elderly",
+    "care for children",
+    "care for a patient"
+   ]
+  },
+  {
+   "chu": "prepare for",
+   "doc": "/prɪˈpeə(r) fɔː(r)/",
+   "loai": "phr",
+   "nghia": "chuẩn bị cho",
+   "cap": "B1",
+   "viDu": "I need two more weeks to prepare for the IELTS test.",
+   "viDuNghia": "Tôi cần thêm hai tuần để chuẩn bị cho kỳ thi IELTS.",
+   "cumTu": [
+    "prepare for an exam",
+    "prepare for an interview",
+    "prepare for the future"
+   ]
+  },
+  {
+   "chu": "refer to",
+   "doc": "/rɪˈfɜː(r) tuː/",
+   "loai": "phr",
+   "nghia": "nhắc đến; tham khảo; ám chỉ",
+   "cap": "B1",
+   "viDu": "The word \"they\" in line five may refer to the students.",
+   "viDuNghia": "Từ \"they\" ở dòng năm có thể chỉ các sinh viên.",
+   "cumTu": [
+    "refer to a document",
+    "refer to somebody as",
+    "refer to the table"
+   ],
+   "ghiChu": "Câu hỏi Reading quen thuộc: \"What does 'it' refer to?\""
+  },
+  {
+   "chu": "respond to",
+   "doc": "/rɪˈspɒnd tuː/",
+   "loai": "phr",
+   "nghia": "trả lời, phản hồi",
+   "cap": "B1",
+   "viDu": "We try to respond to every email within one day.",
+   "viDuNghia": "Chúng tôi cố gắng phản hồi mọi email trong vòng một ngày.",
+   "cumTu": [
+    "respond to an email",
+    "respond to a question",
+    "respond to a request",
+    "respond quickly to"
+   ],
+   "ghiChu": "Trang trọng hơn \"answer / reply to\"."
+  },
+  {
+   "chu": "point at",
+   "doc": "/pɔɪnt æt/",
+   "loai": "phr",
+   "nghia": "chỉ vào",
+   "cap": "B1",
+   "viDu": "It is rude to point at people.",
+   "viDuNghia": "Chỉ tay vào người khác là bất lịch sự.",
+   "cumTu": [
+    "point at somebody",
+    "point at the screen",
+    "point at the map"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1570 @@
+{
+ "ma": "cot-loi-a1-1",
+ "nn": "en",
+ "ten": "Từ chức năng nền tảng A1",
+ "moTa": "Đại từ, mạo từ, giới từ, liên từ, từ hỏi và trợ động từ xuất hiện trong gần như mọi câu tiếng Anh (I, the, of, because, can, would…) — học trước tiên để ghép được câu.",
+ "nhom": "giao-tiep",
+ "cap": "A1",
+ "tu": [
+  {
+   "chu": "I",
+   "doc": "/aɪ/",
+   "loai": "pron",
+   "nghia": "tôi, mình",
+   "cap": "A1",
+   "viDu": "I am a student at a university in Hanoi.",
+   "viDuNghia": "Tôi là sinh viên một trường đại học ở Hà Nội.",
+   "cumTu": [
+    "I am",
+    "I think",
+    "I would like"
+   ],
+   "ghiChu": "Luôn viết hoa \"I\" dù đứng giữa câu."
+  },
+  {
+   "chu": "you",
+   "doc": "/juː/",
+   "loai": "pron",
+   "nghia": "bạn, anh, chị, các bạn",
+   "cap": "A1",
+   "viDu": "Do you want some coffee?",
+   "viDuNghia": "Bạn có muốn uống cà phê không?",
+   "cumTu": [
+    "thank you",
+    "see you",
+    "you and I"
+   ],
+   "hoTu": [
+    "your (det)",
+    "yours (pron)",
+    "yourself (pron)"
+   ]
+  },
+  {
+   "chu": "he",
+   "doc": "/hiː/",
+   "loai": "pron",
+   "nghia": "anh ấy, ông ấy, nó (nam)",
+   "cap": "A1",
+   "viDu": "He works for a software company.",
+   "viDuNghia": "Anh ấy làm việc cho một công ty phần mềm.",
+   "cumTu": [
+    "he is",
+    "he has"
+   ],
+   "hoTu": [
+    "him (pron)",
+    "his (det)"
+   ]
+  },
+  {
+   "chu": "she",
+   "doc": "/ʃiː/",
+   "loai": "pron",
+   "nghia": "cô ấy, bà ấy, chị ấy",
+   "cap": "A1",
+   "viDu": "She speaks English very well.",
+   "viDuNghia": "Cô ấy nói tiếng Anh rất tốt.",
+   "cumTu": [
+    "she is",
+    "she has"
+   ],
+   "hoTu": [
+    "her (pron/det)",
+    "hers (pron)"
+   ]
+  },
+  {
+   "chu": "it",
+   "doc": "/ɪt/",
+   "loai": "pron",
+   "nghia": "nó, cái đó; chủ ngữ giả (thời tiết, giờ giấc)",
+   "cap": "A1",
+   "viDu": "It is raining, so take an umbrella.",
+   "viDuNghia": "Trời đang mưa, nên hãy mang ô theo.",
+   "cumTu": [
+    "it is",
+    "it takes",
+    "it seems"
+   ],
+   "hoTu": [
+    "its (det)",
+    "itself (pron)"
+   ],
+   "ghiChu": "Dùng \"it\" làm chủ ngữ giả: It is hot / It is 7 o'clock — tiếng Việt không có nên hay bị bỏ sót."
+  },
+  {
+   "chu": "we",
+   "doc": "/wiː/",
+   "loai": "pron",
+   "nghia": "chúng tôi, chúng ta",
+   "cap": "A1",
+   "viDu": "We have a meeting at nine.",
+   "viDuNghia": "Chúng tôi có cuộc họp lúc chín giờ.",
+   "cumTu": [
+    "we are",
+    "we need to"
+   ],
+   "hoTu": [
+    "us (pron)",
+    "our (det)",
+    "ours (pron)"
+   ]
+  },
+  {
+   "chu": "they",
+   "doc": "/ðeɪ/",
+   "loai": "pron",
+   "nghia": "họ, chúng nó",
+   "cap": "A1",
+   "viDu": "They live near the city centre.",
+   "viDuNghia": "Họ sống gần trung tâm thành phố.",
+   "cumTu": [
+    "they are",
+    "they say"
+   ],
+   "hoTu": [
+    "them (pron)",
+    "their (det)",
+    "theirs (pron)"
+   ]
+  },
+  {
+   "chu": "me",
+   "doc": "/miː/",
+   "loai": "pron",
+   "nghia": "tôi (làm tân ngữ)",
+   "cap": "A1",
+   "viDu": "Can you help me with this exercise?",
+   "viDuNghia": "Bạn giúp tôi bài tập này được không?",
+   "cumTu": [
+    "tell me",
+    "give me",
+    "excuse me"
+   ],
+   "ghiChu": "Sau động từ/giới từ dùng \"me\", không dùng \"I\": with me, for me."
+  },
+  {
+   "chu": "him",
+   "doc": "/hɪm/",
+   "loai": "pron",
+   "nghia": "anh ấy, ông ấy (làm tân ngữ)",
+   "cap": "A1",
+   "viDu": "I asked him a question about the project.",
+   "viDuNghia": "Tôi hỏi anh ấy một câu về dự án.",
+   "cumTu": [
+    "ask him",
+    "tell him",
+    "with him"
+   ]
+  },
+  {
+   "chu": "her",
+   "doc": "/hɜː(r)/",
+   "loai": "pron",
+   "nghia": "cô ấy (tân ngữ); của cô ấy",
+   "cap": "A1",
+   "viDu": "I sent her an email this morning.",
+   "viDuNghia": "Sáng nay tôi đã gửi email cho cô ấy.",
+   "cumTu": [
+    "her name",
+    "tell her",
+    "with her"
+   ],
+   "hoTu": [
+    "hers (pron)",
+    "herself (pron)"
+   ]
+  },
+  {
+   "chu": "us",
+   "doc": "/ʌs/",
+   "loai": "pron",
+   "nghia": "chúng tôi, chúng ta (làm tân ngữ)",
+   "cap": "A1",
+   "viDu": "Our teacher gave us a lot of homework.",
+   "viDuNghia": "Giáo viên giao cho chúng tôi rất nhiều bài tập.",
+   "cumTu": [
+    "with us",
+    "join us",
+    "let us"
+   ]
+  },
+  {
+   "chu": "them",
+   "doc": "/ðem/",
+   "loai": "pron",
+   "nghia": "họ, chúng (làm tân ngữ)",
+   "cap": "A1",
+   "viDu": "I met them at the airport.",
+   "viDuNghia": "Tôi đã gặp họ ở sân bay.",
+   "cumTu": [
+    "with them",
+    "tell them",
+    "one of them"
+   ]
+  },
+  {
+   "chu": "my",
+   "doc": "/maɪ/",
+   "loai": "pron",
+   "nghia": "của tôi",
+   "cap": "A1",
+   "viDu": "My phone is on the table.",
+   "viDuNghia": "Điện thoại của tôi ở trên bàn.",
+   "cumTu": [
+    "my name",
+    "my family",
+    "my friend"
+   ],
+   "hoTu": [
+    "mine (pron)",
+    "myself (pron)"
+   ]
+  },
+  {
+   "chu": "your",
+   "doc": "/jɔː(r)/",
+   "loai": "pron",
+   "nghia": "của bạn, của các bạn",
+   "cap": "A1",
+   "viDu": "What is your phone number?",
+   "viDuNghia": "Số điện thoại của bạn là gì?",
+   "cumTu": [
+    "your name",
+    "your turn",
+    "your own"
+   ],
+   "ghiChu": "Đừng nhầm \"your\" (của bạn) với \"you're\" (= you are)."
+  },
+  {
+   "chu": "his",
+   "doc": "/hɪz/",
+   "loai": "pron",
+   "nghia": "của anh ấy, của ông ấy",
+   "cap": "A1",
+   "viDu": "His brother is a doctor.",
+   "viDuNghia": "Anh trai của anh ấy là bác sĩ.",
+   "cumTu": [
+    "his name",
+    "his job",
+    "his own"
+   ]
+  },
+  {
+   "chu": "its",
+   "doc": "/ɪts/",
+   "loai": "pron",
+   "nghia": "của nó",
+   "cap": "A1",
+   "viDu": "The company changed its logo last year.",
+   "viDuNghia": "Công ty đã đổi logo của nó vào năm ngoái.",
+   "cumTu": [
+    "its own",
+    "its name",
+    "its size"
+   ],
+   "ghiChu": "\"its\" (của nó) không có dấu nháy; \"it's\" = it is / it has."
+  },
+  {
+   "chu": "our",
+   "doc": "/ˈaʊə(r)/",
+   "loai": "pron",
+   "nghia": "của chúng tôi, của chúng ta",
+   "cap": "A1",
+   "viDu": "Our office is on the fifth floor.",
+   "viDuNghia": "Văn phòng của chúng tôi ở tầng năm.",
+   "cumTu": [
+    "our team",
+    "our house",
+    "our country"
+   ],
+   "hoTu": [
+    "ours (pron)",
+    "ourselves (pron)"
+   ]
+  },
+  {
+   "chu": "their",
+   "doc": "/ðeə(r)/",
+   "loai": "pron",
+   "nghia": "của họ",
+   "cap": "A1",
+   "viDu": "The children are doing their homework.",
+   "viDuNghia": "Bọn trẻ đang làm bài tập về nhà của chúng.",
+   "cumTu": [
+    "their house",
+    "their own",
+    "their children"
+   ],
+   "hoTu": [
+    "theirs (pron)"
+   ],
+   "ghiChu": "Dễ nhầm chính tả: their (của họ) / there (ở đó) / they're (they are)."
+  },
+  {
+   "chu": "this",
+   "doc": "/ðɪs/",
+   "loai": "pron",
+   "nghia": "này, cái này, đây",
+   "cap": "A1",
+   "viDu": "This is my friend Lan.",
+   "viDuNghia": "Đây là bạn tôi, Lan.",
+   "cumTu": [
+    "this morning",
+    "this week",
+    "this one"
+   ],
+   "hoTu": [
+    "these (số nhiều)"
+   ]
+  },
+  {
+   "chu": "that",
+   "doc": "/ðæt/",
+   "loai": "pron",
+   "nghia": "kia, đó, cái đó; rằng",
+   "cap": "A1",
+   "viDu": "That is a good idea.",
+   "viDuNghia": "Đó là một ý tưởng hay.",
+   "cumTu": [
+    "that one",
+    "after that",
+    "I think that"
+   ],
+   "hoTu": [
+    "those (số nhiều)"
+   ],
+   "ghiChu": "Cũng là liên từ \"rằng\": I think that he is right."
+  },
+  {
+   "chu": "what",
+   "doc": "/wɒt/",
+   "loai": "pron",
+   "nghia": "cái gì, gì",
+   "cap": "A1",
+   "viDu": "What do you do in your free time?",
+   "viDuNghia": "Bạn làm gì vào thời gian rảnh?",
+   "cumTu": [
+    "what time",
+    "what kind of",
+    "what about"
+   ],
+   "hoTu": [
+    "whatever (pron)"
+   ]
+  },
+  {
+   "chu": "who",
+   "doc": "/huː/",
+   "loai": "pron",
+   "nghia": "ai; người mà",
+   "cap": "A1",
+   "viDu": "Who is your favourite teacher?",
+   "viDuNghia": "Giáo viên bạn yêu thích là ai?",
+   "cumTu": [
+    "who is",
+    "who else",
+    "people who"
+   ],
+   "hoTu": [
+    "whose (det)",
+    "whom (pron)"
+   ]
+  },
+  {
+   "chu": "which",
+   "doc": "/wɪtʃ/",
+   "loai": "pron",
+   "nghia": "cái nào; cái mà",
+   "cap": "A1",
+   "viDu": "Which bus goes to the airport?",
+   "viDuNghia": "Xe buýt nào đi sân bay?",
+   "cumTu": [
+    "which one",
+    "which of",
+    "in which"
+   ]
+  },
+  {
+   "chu": "where",
+   "doc": "/weə(r)/",
+   "loai": "adv",
+   "nghia": "ở đâu; nơi mà",
+   "cap": "A1",
+   "viDu": "Where do you live?",
+   "viDuNghia": "Bạn sống ở đâu?",
+   "cumTu": [
+    "where is",
+    "where from",
+    "where to"
+   ]
+  },
+  {
+   "chu": "why",
+   "doc": "/waɪ/",
+   "loai": "adv",
+   "nghia": "tại sao",
+   "cap": "A1",
+   "viDu": "Why are you late today?",
+   "viDuNghia": "Tại sao hôm nay bạn đến muộn?",
+   "cumTu": [
+    "why not",
+    "that is why",
+    "the reason why"
+   ]
+  },
+  {
+   "chu": "how",
+   "doc": "/haʊ/",
+   "loai": "adv",
+   "nghia": "như thế nào, bằng cách nào",
+   "cap": "A1",
+   "viDu": "How do you go to work?",
+   "viDuNghia": "Bạn đi làm bằng cách nào?",
+   "cumTu": [
+    "how much",
+    "how many",
+    "how long",
+    "how often"
+   ]
+  },
+  {
+   "chu": "a",
+   "doc": "/ə/",
+   "loai": "pron",
+   "nghia": "một (mạo từ không xác định; \"an\" trước nguyên âm)",
+   "cap": "A1",
+   "viDu": "She bought a laptop and an umbrella.",
+   "viDuNghia": "Cô ấy mua một cái laptop và một cái ô.",
+   "cumTu": [
+    "a lot of",
+    "a few",
+    "once a week"
+   ],
+   "ghiChu": "Dùng \"an\" trước ÂM nguyên âm: an hour, an apple; nhưng a university."
+  },
+  {
+   "chu": "the",
+   "doc": "/ðə/",
+   "loai": "pron",
+   "nghia": "(mạo từ xác định) cái/người… ấy, đã biết",
+   "cap": "A1",
+   "viDu": "Please close the door.",
+   "viDuNghia": "Làm ơn đóng cửa lại.",
+   "cumTu": [
+    "the same",
+    "the best",
+    "in the morning"
+   ],
+   "ghiChu": "Người Việt hay bỏ quên \"the\"; dùng khi người nghe đã biết đang nói tới cái nào."
+  },
+  {
+   "chu": "some",
+   "doc": "/sʌm/",
+   "loai": "pron",
+   "nghia": "một vài, một ít",
+   "cap": "A1",
+   "viDu": "I need some time to finish this task.",
+   "viDuNghia": "Tôi cần một ít thời gian để xong việc này.",
+   "cumTu": [
+    "some people",
+    "some of",
+    "some more"
+   ],
+   "ghiChu": "Câu khẳng định dùng some, câu hỏi/phủ định thường dùng any."
+  },
+  {
+   "chu": "any",
+   "doc": "/ˈeni/",
+   "loai": "pron",
+   "nghia": "nào, bất kỳ (trong câu hỏi, phủ định)",
+   "cap": "A1",
+   "viDu": "Do you have any questions?",
+   "viDuNghia": "Bạn có câu hỏi nào không?",
+   "cumTu": [
+    "any more",
+    "any time",
+    "any other"
+   ]
+  },
+  {
+   "chu": "many",
+   "doc": "/ˈmeni/",
+   "loai": "pron",
+   "nghia": "nhiều (với danh từ đếm được)",
+   "cap": "A1",
+   "viDu": "How many people work in your team?",
+   "viDuNghia": "Có bao nhiêu người làm trong nhóm bạn?",
+   "cumTu": [
+    "how many",
+    "so many",
+    "too many"
+   ],
+   "ghiChu": "many + danh từ đếm được; much + danh từ không đếm được."
+  },
+  {
+   "chu": "much",
+   "doc": "/mʌtʃ/",
+   "loai": "pron",
+   "nghia": "nhiều (với danh từ không đếm được)",
+   "cap": "A1",
+   "viDu": "I do not have much free time this week.",
+   "viDuNghia": "Tuần này tôi không có nhiều thời gian rảnh.",
+   "cumTu": [
+    "how much",
+    "too much",
+    "very much"
+   ]
+  },
+  {
+   "chu": "more",
+   "doc": "/mɔː(r)/",
+   "loai": "pron",
+   "nghia": "nhiều hơn, thêm",
+   "cap": "A1",
+   "viDu": "We need more time to test the app.",
+   "viDuNghia": "Chúng tôi cần thêm thời gian để kiểm thử ứng dụng.",
+   "cumTu": [
+    "more than",
+    "more and more",
+    "one more"
+   ]
+  },
+  {
+   "chu": "most",
+   "doc": "/məʊst/",
+   "loai": "pron",
+   "nghia": "hầu hết; nhiều nhất",
+   "cap": "A1",
+   "viDu": "Most students use a laptop in class.",
+   "viDuNghia": "Hầu hết sinh viên dùng laptop trong lớp.",
+   "cumTu": [
+    "most of",
+    "most people",
+    "the most important"
+   ],
+   "hoTu": [
+    "mostly (adv)"
+   ],
+   "ghiChu": "\"most people\" (không có of) nhưng \"most of the people\"."
+  },
+  {
+   "chu": "each",
+   "doc": "/iːtʃ/",
+   "loai": "pron",
+   "nghia": "mỗi, từng",
+   "cap": "A1",
+   "viDu": "Each student has a different topic.",
+   "viDuNghia": "Mỗi sinh viên có một chủ đề khác nhau.",
+   "cumTu": [
+    "each other",
+    "each of",
+    "each time"
+   ],
+   "ghiChu": "Động từ theo sau chia số ít: each student HAS."
+  },
+  {
+   "chu": "other",
+   "doc": "/ˈʌðə(r)/",
+   "loai": "adj",
+   "nghia": "khác, kia",
+   "cap": "A1",
+   "viDu": "Do you have any other questions?",
+   "viDuNghia": "Bạn còn câu hỏi nào khác không?",
+   "cumTu": [
+    "each other",
+    "on the other hand",
+    "the other day"
+   ],
+   "hoTu": [
+    "another (det)",
+    "others (pron)"
+   ]
+  },
+  {
+   "chu": "another",
+   "doc": "/əˈnʌðə(r)/",
+   "loai": "pron",
+   "nghia": "một cái khác, thêm một cái nữa",
+   "cap": "A1",
+   "viDu": "Can I have another cup of tea?",
+   "viDuNghia": "Cho tôi thêm một tách trà nữa được không?",
+   "cumTu": [
+    "another one",
+    "another way",
+    "one another"
+   ],
+   "ghiChu": "another + danh từ số ít; other + danh từ số nhiều."
+  },
+  {
+   "chu": "same",
+   "doc": "/seɪm/",
+   "loai": "adj",
+   "nghia": "giống nhau, cùng",
+   "cap": "A1",
+   "viDu": "We work in the same office.",
+   "viDuNghia": "Chúng tôi làm cùng một văn phòng.",
+   "cumTu": [
+    "the same as",
+    "at the same time",
+    "the same thing"
+   ],
+   "ghiChu": "Luôn có \"the\": the same."
+  },
+  {
+   "chu": "own",
+   "doc": "/əʊn/",
+   "loai": "adj",
+   "nghia": "của riêng mình",
+   "cap": "A1",
+   "viDu": "She wants to start her own business.",
+   "viDuNghia": "Cô ấy muốn mở doanh nghiệp của riêng mình.",
+   "cumTu": [
+    "my own",
+    "on your own",
+    "own room"
+   ],
+   "hoTu": [
+    "owner (n)",
+    "own (v)"
+   ]
+  },
+  {
+   "chu": "something",
+   "doc": "/ˈsʌmθɪŋ/",
+   "loai": "pron",
+   "nghia": "cái gì đó, điều gì đó",
+   "cap": "A1",
+   "viDu": "I want to tell you something important.",
+   "viDuNghia": "Tôi muốn nói với bạn một điều quan trọng.",
+   "cumTu": [
+    "something else",
+    "something new",
+    "something like"
+   ]
+  },
+  {
+   "chu": "anything",
+   "doc": "/ˈeniθɪŋ/",
+   "loai": "pron",
+   "nghia": "bất cứ cái gì, gì (trong câu hỏi/phủ định)",
+   "cap": "A1",
+   "viDu": "I did not eat anything this morning.",
+   "viDuNghia": "Sáng nay tôi không ăn gì cả.",
+   "cumTu": [
+    "anything else",
+    "anything like",
+    "if anything"
+   ]
+  },
+  {
+   "chu": "nothing",
+   "doc": "/ˈnʌθɪŋ/",
+   "loai": "pron",
+   "nghia": "không có gì",
+   "cap": "A1",
+   "viDu": "There is nothing in the fridge.",
+   "viDuNghia": "Không có gì trong tủ lạnh cả.",
+   "cumTu": [
+    "nothing special",
+    "nothing to do",
+    "nothing else"
+   ],
+   "ghiChu": "Không dùng hai phủ định: nói \"I have nothing\", không nói \"I don't have nothing\"."
+  },
+  {
+   "chu": "everything",
+   "doc": "/ˈevriθɪŋ/",
+   "loai": "pron",
+   "nghia": "mọi thứ",
+   "cap": "A1",
+   "viDu": "Everything is ready for the presentation.",
+   "viDuNghia": "Mọi thứ đã sẵn sàng cho buổi thuyết trình.",
+   "cumTu": [
+    "everything else",
+    "everything is fine"
+   ],
+   "ghiChu": "Động từ chia số ít: everything IS."
+  },
+  {
+   "chu": "someone",
+   "doc": "/ˈsʌmwʌn/",
+   "loai": "pron",
+   "nghia": "ai đó, một người nào đó",
+   "cap": "A1",
+   "viDu": "Someone left a bag in the classroom.",
+   "viDuNghia": "Ai đó để quên túi trong lớp.",
+   "cumTu": [
+    "someone else",
+    "someone like"
+   ],
+   "ghiChu": "= somebody."
+  },
+  {
+   "chu": "somebody",
+   "doc": "/ˈsʌmbədi/",
+   "loai": "pron",
+   "nghia": "ai đó (= someone)",
+   "cap": "A1",
+   "viDu": "Somebody is knocking on the door.",
+   "viDuNghia": "Có ai đó đang gõ cửa.",
+   "cumTu": [
+    "somebody else",
+    "somebody new"
+   ]
+  },
+  {
+   "chu": "anyone",
+   "doc": "/ˈeniwʌn/",
+   "loai": "pron",
+   "nghia": "bất kỳ ai, ai (trong câu hỏi/phủ định)",
+   "cap": "A1",
+   "viDu": "Does anyone know the answer?",
+   "viDuNghia": "Có ai biết câu trả lời không?",
+   "cumTu": [
+    "anyone else",
+    "anyone can",
+    "hardly anyone"
+   ],
+   "ghiChu": "= anybody."
+  },
+  {
+   "chu": "everybody",
+   "doc": "/ˈevribɒdi/",
+   "loai": "pron",
+   "nghia": "mọi người (= everyone)",
+   "cap": "A1",
+   "viDu": "Everybody in my class likes the new teacher.",
+   "viDuNghia": "Mọi người trong lớp tôi đều thích giáo viên mới.",
+   "cumTu": [
+    "everybody else",
+    "everybody knows"
+   ],
+   "ghiChu": "Động từ chia số ít: everybody LIKES."
+  },
+  {
+   "chu": "nobody",
+   "doc": "/ˈnəʊbədi/",
+   "loai": "pron",
+   "nghia": "không ai",
+   "cap": "A1",
+   "viDu": "Nobody was in the office on Sunday.",
+   "viDuNghia": "Không có ai ở văn phòng vào Chủ nhật.",
+   "cumTu": [
+    "nobody else",
+    "nobody knows"
+   ],
+   "ghiChu": "= no one."
+  },
+  {
+   "chu": "yourself",
+   "doc": "/jɔːˈself/",
+   "loai": "pron",
+   "nghia": "chính bạn, bản thân bạn",
+   "cap": "A1",
+   "viDu": "Please tell me about yourself.",
+   "viDuNghia": "Hãy kể cho tôi nghe về bản thân bạn.",
+   "cumTu": [
+    "by yourself",
+    "help yourself",
+    "enjoy yourself"
+   ],
+   "hoTu": [
+    "yourselves (số nhiều)"
+   ],
+   "ghiChu": "\"Tell me about yourself\" là câu mở đầu phỏng vấn rất phổ biến."
+  },
+  {
+   "chu": "and",
+   "doc": "/ænd/",
+   "loai": "conj",
+   "nghia": "và",
+   "cap": "A1",
+   "viDu": "I study English and Japanese.",
+   "viDuNghia": "Tôi học tiếng Anh và tiếng Nhật.",
+   "cumTu": [
+    "and so on",
+    "and then",
+    "more and more"
+   ]
+  },
+  {
+   "chu": "but",
+   "doc": "/bʌt/",
+   "loai": "conj",
+   "nghia": "nhưng",
+   "cap": "A1",
+   "viDu": "The test was long but not very difficult.",
+   "viDuNghia": "Bài kiểm tra dài nhưng không khó lắm.",
+   "cumTu": [
+    "but also",
+    "not only … but also",
+    "but then"
+   ],
+   "ghiChu": "Không dùng \"although … but\" trong cùng một câu."
+  },
+  {
+   "chu": "or",
+   "doc": "/ɔː(r)/",
+   "loai": "conj",
+   "nghia": "hoặc, hay",
+   "cap": "A1",
+   "viDu": "Would you like tea or coffee?",
+   "viDuNghia": "Bạn muốn trà hay cà phê?",
+   "cumTu": [
+    "or so",
+    "or else",
+    "either … or"
+   ]
+  },
+  {
+   "chu": "because",
+   "doc": "/bɪˈkɒz/",
+   "loai": "conj",
+   "nghia": "bởi vì",
+   "cap": "A1",
+   "viDu": "I stayed at home because I was ill.",
+   "viDuNghia": "Tôi ở nhà vì tôi bị ốm.",
+   "cumTu": [
+    "because of",
+    "just because",
+    "mainly because"
+   ],
+   "ghiChu": "Không dùng \"because … so\" trong cùng một câu. because + mệnh đề; because of + danh từ."
+  },
+  {
+   "chu": "if",
+   "doc": "/ɪf/",
+   "loai": "conj",
+   "nghia": "nếu",
+   "cap": "A1",
+   "viDu": "If it rains, we will stay at home.",
+   "viDuNghia": "Nếu trời mưa, chúng tôi sẽ ở nhà.",
+   "cumTu": [
+    "if possible",
+    "if so",
+    "even if",
+    "what if"
+   ],
+   "ghiChu": "Mệnh đề \"if\" loại 1 dùng hiện tại đơn, không dùng \"will\"."
+  },
+  {
+   "chu": "so",
+   "doc": "/səʊ/",
+   "loai": "conj",
+   "nghia": "vì vậy; rất, quá",
+   "cap": "A1",
+   "viDu": "I was tired, so I went to bed early.",
+   "viDuNghia": "Tôi mệt nên đã đi ngủ sớm.",
+   "cumTu": [
+    "so much",
+    "so that",
+    "and so on",
+    "I think so"
+   ]
+  },
+  {
+   "chu": "than",
+   "doc": "/ðæn/",
+   "loai": "conj",
+   "nghia": "hơn (dùng trong so sánh)",
+   "cap": "A1",
+   "viDu": "My sister is taller than me.",
+   "viDuNghia": "Chị gái tôi cao hơn tôi.",
+   "cumTu": [
+    "more than",
+    "less than",
+    "rather than",
+    "better than"
+   ],
+   "ghiChu": "Dễ nhầm với \"then\" (sau đó)."
+  },
+  {
+   "chu": "as",
+   "doc": "/æz/",
+   "loai": "conj",
+   "nghia": "như, với vai trò là; khi; vì",
+   "cap": "A1",
+   "viDu": "She works as a software tester.",
+   "viDuNghia": "Cô ấy làm việc với vai trò kiểm thử phần mềm.",
+   "cumTu": [
+    "as well",
+    "as soon as",
+    "as … as",
+    "such as"
+   ],
+   "ghiChu": "work AS a teacher (là giáo viên) khác look LIKE a teacher (trông giống)."
+  },
+  {
+   "chu": "however",
+   "doc": "/haʊˈevə(r)/",
+   "loai": "adv",
+   "nghia": "tuy nhiên",
+   "cap": "A1",
+   "viDu": "The hotel was cheap. However, it was very clean.",
+   "viDuNghia": "Khách sạn rẻ. Tuy nhiên, nó rất sạch.",
+   "cumTu": [
+    "however, …",
+    "however much",
+    "however hard"
+   ],
+   "ghiChu": "Đứng đầu câu, sau có dấu phẩy; không nối hai mệnh đề bằng dấu phẩy như \"but\"."
+  },
+  {
+   "chu": "also",
+   "doc": "/ˈɔːlsəʊ/",
+   "loai": "adv",
+   "nghia": "cũng, ngoài ra",
+   "cap": "A1",
+   "viDu": "She speaks English and also a little French.",
+   "viDuNghia": "Cô ấy nói tiếng Anh và cũng nói một chút tiếng Pháp.",
+   "cumTu": [
+    "but also",
+    "also known as",
+    "can also"
+   ],
+   "ghiChu": "Thường đứng trước động từ chính, sau \"to be\"; \"too\" đứng cuối câu."
+  },
+  {
+   "chu": "too",
+   "doc": "/tuː/",
+   "loai": "adv",
+   "nghia": "cũng; quá (mức)",
+   "cap": "A1",
+   "viDu": "This bag is too heavy for me.",
+   "viDuNghia": "Cái túi này quá nặng đối với tôi.",
+   "cumTu": [
+    "too much",
+    "too many",
+    "me too",
+    "too late"
+   ],
+   "ghiChu": "\"too\" mang nghĩa quá mức, tiêu cực; \"very\" chỉ là rất."
+  },
+  {
+   "chu": "very",
+   "doc": "/ˈveri/",
+   "loai": "adv",
+   "nghia": "rất",
+   "cap": "A1",
+   "viDu": "The food here is very good.",
+   "viDuNghia": "Đồ ăn ở đây rất ngon.",
+   "cumTu": [
+    "very much",
+    "very well",
+    "very important"
+   ],
+   "ghiChu": "Không nói \"very like\"; nói \"like … very much\"."
+  },
+  {
+   "chu": "really",
+   "doc": "/ˈriːəli/",
+   "loai": "adv",
+   "nghia": "thật sự, rất",
+   "cap": "A1",
+   "viDu": "I really like my new job.",
+   "viDuNghia": "Tôi thật sự thích công việc mới.",
+   "cumTu": [
+    "really good",
+    "really want",
+    "not really"
+   ],
+   "hoTu": [
+    "real (adj)",
+    "reality (n)"
+   ]
+  },
+  {
+   "chu": "quite",
+   "doc": "/kwaɪt/",
+   "loai": "adv",
+   "nghia": "khá, tương đối",
+   "cap": "A1",
+   "viDu": "The exam was quite easy.",
+   "viDuNghia": "Bài thi khá dễ.",
+   "cumTu": [
+    "quite a lot",
+    "quite good",
+    "not quite"
+   ],
+   "ghiChu": "Dễ nhầm chính tả với \"quiet\" (yên tĩnh)."
+  },
+  {
+   "chu": "only",
+   "doc": "/ˈəʊnli/",
+   "loai": "adv",
+   "nghia": "chỉ; duy nhất",
+   "cap": "A1",
+   "viDu": "I only have ten minutes before the meeting.",
+   "viDuNghia": "Tôi chỉ có mười phút trước cuộc họp.",
+   "cumTu": [
+    "not only",
+    "only one",
+    "the only way",
+    "if only"
+   ]
+  },
+  {
+   "chu": "even",
+   "doc": "/ˈiːvn/",
+   "loai": "adv",
+   "nghia": "thậm chí, ngay cả",
+   "cap": "A1",
+   "viDu": "Even a child can use this app.",
+   "viDuNghia": "Ngay cả một đứa trẻ cũng dùng được ứng dụng này.",
+   "cumTu": [
+    "even if",
+    "even though",
+    "even more",
+    "not even"
+   ]
+  },
+  {
+   "chu": "again",
+   "doc": "/əˈɡen/",
+   "loai": "adv",
+   "nghia": "lại, một lần nữa",
+   "cap": "A1",
+   "viDu": "Could you say that again, please?",
+   "viDuNghia": "Bạn nói lại điều đó được không?",
+   "cumTu": [
+    "once again",
+    "again and again",
+    "try again",
+    "never again"
+   ]
+  },
+  {
+   "chu": "away",
+   "doc": "/əˈweɪ/",
+   "loai": "adv",
+   "nghia": "xa, đi xa, vắng mặt",
+   "cap": "A1",
+   "viDu": "The station is two kilometres away.",
+   "viDuNghia": "Nhà ga cách đây hai ki-lô-mét.",
+   "cumTu": [
+    "go away",
+    "far away",
+    "right away",
+    "throw away"
+   ]
+  },
+  {
+   "chu": "out",
+   "doc": "/aʊt/",
+   "loai": "adv",
+   "nghia": "ra ngoài, ở ngoài",
+   "cap": "A1",
+   "viDu": "Let us go out for dinner tonight.",
+   "viDuNghia": "Tối nay mình ra ngoài ăn tối đi.",
+   "cumTu": [
+    "go out",
+    "out of",
+    "find out",
+    "eat out"
+   ]
+  },
+  {
+   "chu": "off",
+   "doc": "/ɒf/",
+   "loai": "adv",
+   "nghia": "tắt; rời khỏi; nghỉ",
+   "cap": "A1",
+   "viDu": "Please turn off the lights when you leave.",
+   "viDuNghia": "Làm ơn tắt đèn khi bạn rời đi.",
+   "cumTu": [
+    "turn off",
+    "take off",
+    "day off",
+    "get off"
+   ]
+  },
+  {
+   "chu": "well",
+   "doc": "/wel/",
+   "loai": "adv",
+   "nghia": "tốt, giỏi; khoẻ",
+   "cap": "A1",
+   "viDu": "She plays the piano very well.",
+   "viDuNghia": "Cô ấy chơi piano rất giỏi.",
+   "cumTu": [
+    "as well",
+    "very well",
+    "well done",
+    "get well"
+   ],
+   "hoTu": [
+    "good (adj)"
+   ],
+   "ghiChu": "Trạng từ của \"good\" là \"well\": speak English well (không phải \"speak good\")."
+  },
+  {
+   "chu": "maybe",
+   "doc": "/ˈmeɪbi/",
+   "loai": "adv",
+   "nghia": "có lẽ, có thể",
+   "cap": "A1",
+   "viDu": "Maybe we can meet next week.",
+   "viDuNghia": "Có lẽ chúng ta có thể gặp nhau tuần tới.",
+   "cumTu": [
+    "maybe later",
+    "maybe not",
+    "or maybe"
+   ],
+   "ghiChu": "\"maybe\" (trạng từ, viết liền) khác \"may be\" (có thể là)."
+  },
+  {
+   "chu": "probably",
+   "doc": "/ˈprɒbəbli/",
+   "loai": "adv",
+   "nghia": "có lẽ, rất có thể",
+   "cap": "A1",
+   "viDu": "I will probably be late tomorrow.",
+   "viDuNghia": "Có lẽ ngày mai tôi sẽ đến muộn.",
+   "cumTu": [
+    "probably not",
+    "most probably",
+    "will probably"
+   ],
+   "hoTu": [
+    "probable (adj)",
+    "probability (n)"
+   ]
+  },
+  {
+   "chu": "ever",
+   "doc": "/ˈevə(r)/",
+   "loai": "adv",
+   "nghia": "đã từng, bao giờ",
+   "cap": "A1",
+   "viDu": "Have you ever been to Japan?",
+   "viDuNghia": "Bạn đã bao giờ đến Nhật chưa?",
+   "cumTu": [
+    "ever since",
+    "hardly ever",
+    "for ever",
+    "the best ever"
+   ],
+   "ghiChu": "Hay dùng với hiện tại hoàn thành: Have you ever…?"
+  },
+  {
+   "chu": "else",
+   "doc": "/els/",
+   "loai": "adv",
+   "nghia": "khác, nữa",
+   "cap": "A1",
+   "viDu": "Would you like anything else?",
+   "viDuNghia": "Bạn có muốn gì khác nữa không?",
+   "cumTu": [
+    "someone else",
+    "anything else",
+    "or else",
+    "what else"
+   ]
+  },
+  {
+   "chu": "enough",
+   "doc": "/ɪˈnʌf/",
+   "loai": "adv",
+   "nghia": "đủ",
+   "cap": "A1",
+   "viDu": "We do not have enough money for a new car.",
+   "viDuNghia": "Chúng tôi không có đủ tiền mua xe mới.",
+   "cumTu": [
+    "enough time",
+    "good enough",
+    "more than enough"
+   ],
+   "ghiChu": "enough đứng TRƯỚC danh từ nhưng SAU tính từ: enough time, big enough."
+  },
+  {
+   "chu": "not",
+   "doc": "/nɒt/",
+   "loai": "adv",
+   "nghia": "không",
+   "cap": "A1",
+   "viDu": "I am not ready for the exam.",
+   "viDuNghia": "Tôi chưa sẵn sàng cho kỳ thi.",
+   "cumTu": [
+    "not only",
+    "not yet",
+    "not at all",
+    "why not"
+   ]
+  },
+  {
+   "chu": "about",
+   "doc": "/əˈbaʊt/",
+   "loai": "prep",
+   "nghia": "về; khoảng",
+   "cap": "A1",
+   "viDu": "We talked about our plans for the weekend.",
+   "viDuNghia": "Chúng tôi nói về kế hoạch cuối tuần.",
+   "cumTu": [
+    "talk about",
+    "think about",
+    "about ten minutes",
+    "how about"
+   ]
+  },
+  {
+   "chu": "across",
+   "doc": "/əˈkrɒs/",
+   "loai": "prep",
+   "nghia": "ngang qua, bên kia",
+   "cap": "A1",
+   "viDu": "The bank is across the street.",
+   "viDuNghia": "Ngân hàng ở bên kia đường.",
+   "cumTu": [
+    "across the road",
+    "across the country",
+    "come across"
+   ]
+  },
+  {
+   "chu": "around",
+   "doc": "/əˈraʊnd/",
+   "loai": "prep",
+   "nghia": "xung quanh; khoảng",
+   "cap": "A1",
+   "viDu": "There are many cafes around the university.",
+   "viDuNghia": "Có nhiều quán cà phê quanh trường đại học.",
+   "cumTu": [
+    "around the world",
+    "around here",
+    "look around",
+    "turn around"
+   ]
+  },
+  {
+   "chu": "by",
+   "doc": "/baɪ/",
+   "loai": "prep",
+   "nghia": "bằng (phương tiện); bởi; cạnh; trước (thời hạn)",
+   "cap": "A1",
+   "viDu": "I usually go to work by bus.",
+   "viDuNghia": "Tôi thường đi làm bằng xe buýt.",
+   "cumTu": [
+    "by car",
+    "by the way",
+    "by Friday",
+    "by myself"
+   ],
+   "ghiChu": "by Friday = muộn nhất là thứ Sáu (hạn chót)."
+  },
+  {
+   "chu": "during",
+   "doc": "/ˈdjʊərɪŋ/",
+   "loai": "prep",
+   "nghia": "trong suốt, trong lúc",
+   "cap": "A1",
+   "viDu": "Please do not use your phone during the lesson.",
+   "viDuNghia": "Xin đừng dùng điện thoại trong giờ học.",
+   "cumTu": [
+    "during the day",
+    "during the summer",
+    "during the meeting"
+   ],
+   "ghiChu": "during + danh từ (during the film); for + khoảng thời gian (for two hours)."
+  },
+  {
+   "chu": "for",
+   "doc": "/fɔː(r)/",
+   "loai": "prep",
+   "nghia": "cho, dành cho; trong (khoảng thời gian)",
+   "cap": "A1",
+   "viDu": "I bought a present for my mother.",
+   "viDuNghia": "Tôi đã mua một món quà cho mẹ.",
+   "cumTu": [
+    "for example",
+    "for a long time",
+    "wait for",
+    "look for"
+   ],
+   "ghiChu": "for + khoảng thời gian (for two years); since + mốc thời gian (since 2020)."
+  },
+  {
+   "chu": "from",
+   "doc": "/frɒm/",
+   "loai": "prep",
+   "nghia": "từ, đến từ",
+   "cap": "A1",
+   "viDu": "I am from Vietnam.",
+   "viDuNghia": "Tôi đến từ Việt Nam.",
+   "cumTu": [
+    "from … to",
+    "come from",
+    "far from",
+    "different from"
+   ]
+  },
+  {
+   "chu": "in",
+   "doc": "/ɪn/",
+   "loai": "prep",
+   "nghia": "trong, ở trong; vào (tháng, năm)",
+   "cap": "A1",
+   "viDu": "She was born in 2005 in Da Nang.",
+   "viDuNghia": "Cô ấy sinh năm 2005 ở Đà Nẵng.",
+   "cumTu": [
+    "in the morning",
+    "in fact",
+    "in front of",
+    "in time"
+   ],
+   "ghiChu": "in + tháng/năm/thành phố; on + ngày/thứ; at + giờ/địa điểm cụ thể."
+  },
+  {
+   "chu": "into",
+   "doc": "/ˈɪntuː/",
+   "loai": "prep",
+   "nghia": "vào trong",
+   "cap": "A1",
+   "viDu": "He walked into the room and sat down.",
+   "viDuNghia": "Anh ấy bước vào phòng và ngồi xuống.",
+   "cumTu": [
+    "go into",
+    "turn into",
+    "translate into",
+    "get into"
+   ]
+  },
+  {
+   "chu": "of",
+   "doc": "/ɒv/",
+   "loai": "prep",
+   "nghia": "của",
+   "cap": "A1",
+   "viDu": "What is the name of this street?",
+   "viDuNghia": "Tên của con đường này là gì?",
+   "cumTu": [
+    "a lot of",
+    "one of",
+    "a cup of",
+    "because of"
+   ]
+  },
+  {
+   "chu": "on",
+   "doc": "/ɒn/",
+   "loai": "prep",
+   "nghia": "trên; vào (ngày, thứ)",
+   "cap": "A1",
+   "viDu": "The meeting is on Monday morning.",
+   "viDuNghia": "Cuộc họp vào sáng thứ Hai.",
+   "cumTu": [
+    "on time",
+    "on the left",
+    "on holiday",
+    "on the internet"
+   ]
+  },
+  {
+   "chu": "through",
+   "doc": "/θruː/",
+   "loai": "prep",
+   "nghia": "xuyên qua, qua",
+   "cap": "A1",
+   "viDu": "The train goes through a long tunnel.",
+   "viDuNghia": "Tàu đi xuyên qua một đường hầm dài.",
+   "cumTu": [
+    "go through",
+    "through the window",
+    "all the way through"
+   ],
+   "hoTu": [
+    "throughout (prep)"
+   ]
+  },
+  {
+   "chu": "with",
+   "doc": "/wɪð/",
+   "loai": "prep",
+   "nghia": "với, cùng với; bằng",
+   "cap": "A1",
+   "viDu": "I live with my parents.",
+   "viDuNghia": "Tôi sống với bố mẹ.",
+   "cumTu": [
+    "with me",
+    "agree with",
+    "deal with",
+    "with pleasure"
+   ]
+  },
+  {
+   "chu": "without",
+   "doc": "/wɪˈðaʊt/",
+   "loai": "prep",
+   "nghia": "không có, mà không",
+   "cap": "A1",
+   "viDu": "I cannot work without coffee.",
+   "viDuNghia": "Tôi không thể làm việc mà không có cà phê.",
+   "cumTu": [
+    "without doubt",
+    "do without",
+    "without saying"
+   ],
+   "ghiChu": "without + V-ing: without asking."
+  },
+  {
+   "chu": "be",
+   "doc": "/biː/",
+   "loai": "v",
+   "nghia": "thì, là, ở (am / is / are / was / were)",
+   "cap": "A1",
+   "viDu": "I want to be a software engineer.",
+   "viDuNghia": "Tôi muốn trở thành kỹ sư phần mềm.",
+   "cumTu": [
+    "be careful",
+    "be late",
+    "be able to",
+    "be from"
+   ],
+   "ghiChu": "Tiếng Việt hay bỏ \"là\" trước tính từ nhưng tiếng Anh bắt buộc: She IS tired."
+  },
+  {
+   "chu": "do",
+   "doc": "/duː/",
+   "loai": "v",
+   "nghia": "làm; trợ động từ tạo câu hỏi, phủ định",
+   "cap": "A1",
+   "viDu": "What do you do at the weekend?",
+   "viDuNghia": "Bạn làm gì vào cuối tuần?",
+   "cumTu": [
+    "do homework",
+    "do your best",
+    "do the dishes",
+    "do business"
+   ],
+   "hoTu": [
+    "doing (n)"
+   ],
+   "ghiChu": "do homework / do exercise nhưng make a mistake / make a decision."
+  },
+  {
+   "chu": "have",
+   "doc": "/hæv/",
+   "loai": "v",
+   "nghia": "có; ăn, uống; trợ động từ thì hoàn thành",
+   "cap": "A1",
+   "viDu": "I have two brothers and one sister.",
+   "viDuNghia": "Tôi có hai anh em trai và một chị gái.",
+   "cumTu": [
+    "have breakfast",
+    "have a look",
+    "have to",
+    "have fun"
+   ],
+   "ghiChu": "Ngôi thứ ba số ít: has. Không nói \"there have\"; nói \"there is/are\"."
+  },
+  {
+   "chu": "can",
+   "doc": "/kæn/",
+   "loai": "v",
+   "nghia": "có thể, biết (làm gì)",
+   "cap": "A1",
+   "viDu": "I can swim, but I cannot drive.",
+   "viDuNghia": "Tôi biết bơi nhưng không biết lái xe.",
+   "cumTu": [
+    "can you…?",
+    "cannot (can't)",
+    "can afford"
+   ],
+   "hoTu": [
+    "could (quá khứ)"
+   ],
+   "ghiChu": "Sau \"can\" là động từ nguyên mẫu không \"to\". Phủ định viết liền: cannot."
+  },
+  {
+   "chu": "could",
+   "doc": "/kʊd/",
+   "loai": "v",
+   "nghia": "có thể (quá khứ của can; lời đề nghị lịch sự)",
+   "cap": "A1",
+   "viDu": "Could you open the window, please?",
+   "viDuNghia": "Bạn mở cửa sổ giúp được không?",
+   "cumTu": [
+    "could you…?",
+    "could be",
+    "could have"
+   ],
+   "ghiChu": "\"Could you…?\" lịch sự hơn \"Can you…?\"."
+  },
+  {
+   "chu": "will",
+   "doc": "/wɪl/",
+   "loai": "v",
+   "nghia": "sẽ",
+   "cap": "A1",
+   "viDu": "I will call you tomorrow morning.",
+   "viDuNghia": "Sáng mai tôi sẽ gọi cho bạn.",
+   "cumTu": [
+    "will be",
+    "will not (won't)",
+    "will have"
+   ]
+  },
+  {
+   "chu": "would",
+   "doc": "/wʊd/",
+   "loai": "v",
+   "nghia": "sẽ (giả định); dùng trong lời mời, đề nghị lịch sự",
+   "cap": "A1",
+   "viDu": "I would like a glass of water, please.",
+   "viDuNghia": "Cho tôi xin một cốc nước.",
+   "cumTu": [
+    "would like",
+    "would you…?",
+    "would rather",
+    "would be"
+   ],
+   "ghiChu": "\"I would like\" lịch sự hơn \"I want\"."
+  },
+  {
+   "chu": "should",
+   "doc": "/ʃʊd/",
+   "loai": "v",
+   "nghia": "nên",
+   "cap": "A1",
+   "viDu": "You should drink more water every day.",
+   "viDuNghia": "Bạn nên uống nhiều nước hơn mỗi ngày.",
+   "cumTu": [
+    "should be",
+    "should not (shouldn't)",
+    "should have"
+   ]
+  },
+  {
+   "chu": "must",
+   "doc": "/mʌst/",
+   "loai": "v",
+   "nghia": "phải, bắt buộc",
+   "cap": "A1",
+   "viDu": "You must wear a helmet when you ride a motorbike.",
+   "viDuNghia": "Bạn phải đội mũ bảo hiểm khi đi xe máy.",
+   "cumTu": [
+    "must be",
+    "must not (mustn't)",
+    "must have"
+   ],
+   "ghiChu": "\"must not\" = cấm; \"do not have to\" = không cần."
+  },
+  {
+   "chu": "let",
+   "doc": "/let/",
+   "loai": "v",
+   "nghia": "để cho, cho phép",
+   "cap": "A1",
+   "viDu": "Let me help you with those bags.",
+   "viDuNghia": "Để tôi giúp bạn xách mấy cái túi đó.",
+   "cumTu": [
+    "let me know",
+    "let's go",
+    "let me see",
+    "let go"
+   ],
+   "ghiChu": "let + tân ngữ + động từ nguyên mẫu không \"to\": let me GO."
+  }
+ ]
+}

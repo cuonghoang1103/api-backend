@@ -1,0 +1,941 @@
+{
+  "ma": "nang-cao-b2-1",
+  "nn": "en",
+  "ten": "Bù B2 · Cảm xúc, tính cách và cách mô tả",
+  "moTa": "Từ B2 còn thiếu so với Oxford 5000: cảm xúc mạnh (despair, dread, grief, outrage), tính từ mô tả sắc nét (absurd, bizarre, fierce, subtle, vague) và danh từ trừu tượng hay gặp ở IELTS Speaking/Reading.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "absurd",
+      "doc": "/əbˈsɜːd/",
+      "loai": "adj",
+      "nghia": "vô lý, lố bịch",
+      "cap": "B2",
+      "viDu": "It is absurd to expect a junior developer to fix the whole system alone.",
+      "viDuNghia": "Thật vô lý khi mong một lập trình viên mới vào nghề tự sửa cả hệ thống.",
+      "cumTu": [
+        "an absurd idea",
+        "utterly absurd",
+        "seem absurd"
+      ],
+      "hoTu": [
+        "absurdity (n)",
+        "absurdly (adv)"
+      ],
+      "ghiChu": "Mạnh hơn \"unreasonable\"; hay đi với \"utterly/completely\", không dùng \"very absurd\"."
+    },
+    {
+      "chu": "aggression",
+      "doc": "/əˈɡreʃn/",
+      "loai": "n",
+      "nghia": "sự hung hăng, hành vi gây hấn",
+      "cap": "B2",
+      "viDu": "Some studies link violent video games to aggression in teenagers.",
+      "viDuNghia": "Một số nghiên cứu liên hệ trò chơi bạo lực với sự hung hăng ở thanh thiếu niên.",
+      "cumTu": [
+        "an act of aggression",
+        "physical aggression",
+        "show aggression"
+      ],
+      "hoTu": [
+        "aggressive (adj)",
+        "aggressor (n)"
+      ]
+    },
+    {
+      "chu": "barrier",
+      "doc": "/ˈbæriə(r)/",
+      "loai": "n",
+      "nghia": "rào cản, chướng ngại",
+      "cap": "B2",
+      "viDu": "The language barrier is the biggest challenge for international students.",
+      "viDuNghia": "Rào cản ngôn ngữ là thách thức lớn nhất với du học sinh.",
+      "cumTu": [
+        "a language barrier",
+        "break down barriers",
+        "a barrier to trade"
+      ],
+      "ghiChu": "Đi với \"to\": a barrier TO success (không dùng \"for\")."
+    },
+    {
+      "chu": "clash",
+      "doc": "/klæʃ/",
+      "loai": "n",
+      "nghia": "cuộc xung đột, sự va chạm (quan điểm, văn hoá)",
+      "cap": "B2",
+      "viDu": "There was a clash between the design team and the engineers over the deadline.",
+      "viDuNghia": "Đã có va chạm giữa nhóm thiết kế và kỹ sư về hạn chót.",
+      "cumTu": [
+        "a clash of cultures",
+        "a clash with someone",
+        "a violent clash"
+      ],
+      "hoTu": [
+        "clash (v)"
+      ]
+    },
+    {
+      "chu": "coincidence",
+      "doc": "/kəʊˈɪnsɪdəns/",
+      "loai": "n",
+      "nghia": "sự trùng hợp ngẫu nhiên",
+      "cap": "B2",
+      "viDu": "It was pure coincidence that we applied to the same company.",
+      "viDuNghia": "Hoàn toàn là trùng hợp khi chúng tôi nộp đơn vào cùng một công ty.",
+      "cumTu": [
+        "pure coincidence",
+        "by coincidence",
+        "a strange coincidence"
+      ],
+      "hoTu": [
+        "coincide (v)",
+        "coincidental (adj)"
+      ],
+      "ghiChu": "\"What a coincidence!\" là câu cảm thán tự nhiên khi nói."
+    },
+    {
+      "chu": "courtesy",
+      "doc": "/ˈkɜːtəsi/",
+      "loai": "n",
+      "nghia": "sự lịch sự, phép lịch sự",
+      "cap": "B2",
+      "viDu": "As a courtesy, please tell the team before you change the database.",
+      "viDuNghia": "Vì phép lịch sự, hãy báo cho nhóm trước khi bạn thay đổi cơ sở dữ liệu.",
+      "cumTu": [
+        "common courtesy",
+        "as a courtesy",
+        "treat someone with courtesy"
+      ],
+      "hoTu": [
+        "courteous (adj)"
+      ]
+    },
+    {
+      "chu": "curiosity",
+      "doc": "/ˌkjʊəriˈɒsəti/",
+      "loai": "n",
+      "nghia": "sự tò mò, tính ham hiểu biết",
+      "cap": "B2",
+      "viDu": "Good teachers encourage children's natural curiosity about the world.",
+      "viDuNghia": "Giáo viên giỏi khuyến khích sự tò mò tự nhiên của trẻ về thế giới.",
+      "cumTu": [
+        "out of curiosity",
+        "natural curiosity",
+        "satisfy your curiosity"
+      ],
+      "hoTu": [
+        "curious (adj)",
+        "curiously (adv)"
+      ],
+      "ghiChu": "Chính tả: curious nhưng curiOSity (mất chữ u)."
+    },
+    {
+      "chu": "dedication",
+      "doc": "/ˌdedɪˈkeɪʃn/",
+      "loai": "n",
+      "nghia": "sự tận tâm, cống hiến",
+      "cap": "B2",
+      "viDu": "Learning a language to a high level requires years of dedication.",
+      "viDuNghia": "Học một ngôn ngữ tới trình độ cao đòi hỏi nhiều năm tận tâm.",
+      "cumTu": [
+        "dedication to work",
+        "show dedication",
+        "hard work and dedication"
+      ],
+      "hoTu": [
+        "dedicate (v)",
+        "dedicated (adj)"
+      ]
+    },
+    {
+      "chu": "despair",
+      "doc": "/dɪˈspeə(r)/",
+      "loai": "n",
+      "nghia": "sự tuyệt vọng",
+      "cap": "B2",
+      "viDu": "Many unemployed graduates feel a sense of despair about the future.",
+      "viDuNghia": "Nhiều cử nhân thất nghiệp cảm thấy tuyệt vọng về tương lai.",
+      "cumTu": [
+        "in despair",
+        "a sense of despair",
+        "drive someone to despair"
+      ],
+      "hoTu": [
+        "despair (v)",
+        "desperate (adj)"
+      ]
+    },
+    {
+      "chu": "distress",
+      "doc": "/dɪˈstres/",
+      "loai": "n",
+      "nghia": "sự đau khổ, lo lắng cùng cực",
+      "cap": "B2",
+      "viDu": "News of the layoffs caused great distress among the staff.",
+      "viDuNghia": "Tin cắt giảm nhân sự gây lo lắng lớn trong nhân viên.",
+      "cumTu": [
+        "emotional distress",
+        "cause distress",
+        "in distress"
+      ],
+      "hoTu": [
+        "distressing (adj)",
+        "distressed (adj)"
+      ]
+    },
+    {
+      "chu": "dread",
+      "doc": "/dred/",
+      "loai": "v",
+      "nghia": "rất sợ, kinh hãi (việc sắp xảy ra)",
+      "cap": "B2",
+      "viDu": "Many students dread speaking in front of the whole class.",
+      "viDuNghia": "Nhiều sinh viên rất sợ phải nói trước cả lớp.",
+      "cumTu": [
+        "dread doing something",
+        "dread the thought of",
+        "dread to think"
+      ],
+      "hoTu": [
+        "dread (n)",
+        "dreadful (adj)"
+      ],
+      "ghiChu": "Theo sau là V-ing: dread speaking (không dùng \"dread to speak\", trừ cụm \"I dread to think\")."
+    },
+    {
+      "chu": "grief",
+      "doc": "/ɡriːf/",
+      "loai": "n",
+      "nghia": "nỗi đau buồn (nhất là khi mất người thân)",
+      "cap": "B2",
+      "viDu": "People deal with grief in very different ways.",
+      "viDuNghia": "Mỗi người đối diện với nỗi đau mất mát theo cách rất khác nhau.",
+      "cumTu": [
+        "overcome with grief",
+        "deal with grief",
+        "grief at the loss"
+      ],
+      "hoTu": [
+        "grieve (v)"
+      ]
+    },
+    {
+      "chu": "outrage",
+      "doc": "/ˈaʊtreɪdʒ/",
+      "loai": "n",
+      "nghia": "sự phẫn nộ",
+      "cap": "B2",
+      "viDu": "The decision to raise tuition fees caused public outrage.",
+      "viDuNghia": "Quyết định tăng học phí đã gây phẫn nộ trong công chúng.",
+      "cumTu": [
+        "public outrage",
+        "cause outrage",
+        "express outrage"
+      ],
+      "hoTu": [
+        "outrage (v)",
+        "outrageous (adj)"
+      ]
+    },
+    {
+      "chu": "thrill",
+      "doc": "/θrɪl/",
+      "loai": "n",
+      "nghia": "cảm giác hồi hộp, phấn khích",
+      "cap": "B2",
+      "viDu": "Nothing beats the thrill of seeing your first app go live.",
+      "viDuNghia": "Không gì bằng cảm giác phấn khích khi thấy ứng dụng đầu tay chạy thật.",
+      "cumTu": [
+        "the thrill of something",
+        "get a thrill from",
+        "a thrill to do"
+      ],
+      "hoTu": [
+        "thrill (v)",
+        "thrilling (adj)",
+        "thrilled (adj)"
+      ]
+    },
+    {
+      "chu": "triumph",
+      "doc": "/ˈtraɪʌmf/",
+      "loai": "n",
+      "nghia": "chiến thắng lớn, thành công vang dội",
+      "cap": "B2",
+      "viDu": "Passing the exam after three attempts was a personal triumph for her.",
+      "viDuNghia": "Đậu kỳ thi sau ba lần thử là một chiến thắng cá nhân với cô ấy.",
+      "cumTu": [
+        "a personal triumph",
+        "a triumph over",
+        "in triumph"
+      ],
+      "hoTu": [
+        "triumph (v)",
+        "triumphant (adj)"
+      ]
+    },
+    {
+      "chu": "instinct",
+      "doc": "/ˈɪnstɪŋkt/",
+      "loai": "n",
+      "nghia": "bản năng",
+      "cap": "B2",
+      "viDu": "My first instinct was to restart the server, but I checked the logs instead.",
+      "viDuNghia": "Bản năng đầu tiên của tôi là khởi động lại máy chủ, nhưng tôi đã xem log trước.",
+      "cumTu": [
+        "first instinct",
+        "trust your instincts",
+        "a survival instinct"
+      ],
+      "hoTu": [
+        "instinctive (adj)",
+        "instinctively (adv)"
+      ]
+    },
+    {
+      "chu": "illusion",
+      "doc": "/ɪˈluːʒn/",
+      "loai": "n",
+      "nghia": "ảo tưởng, ảo giác",
+      "cap": "B2",
+      "viDu": "Social media creates the illusion that everyone else has a perfect life.",
+      "viDuNghia": "Mạng xã hội tạo ra ảo tưởng rằng ai khác cũng có cuộc sống hoàn hảo.",
+      "cumTu": [
+        "create an illusion",
+        "be under the illusion that",
+        "an optical illusion"
+      ],
+      "hoTu": [
+        "illusory (adj)",
+        "disillusioned (adj)"
+      ],
+      "ghiChu": "Dễ nhầm với \"allusion\" (sự ám chỉ) và \"delusion\" (hoang tưởng)."
+    },
+    {
+      "chu": "irony",
+      "doc": "/ˈaɪrəni/",
+      "loai": "n",
+      "nghia": "sự trớ trêu; lối nói mỉa",
+      "cap": "B2",
+      "viDu": "The irony is that the security update itself caused the data leak.",
+      "viDuNghia": "Điều trớ trêu là chính bản cập nhật bảo mật lại gây ra vụ lộ dữ liệu.",
+      "cumTu": [
+        "the irony is that",
+        "a touch of irony",
+        "with heavy irony"
+      ],
+      "hoTu": [
+        "ironic (adj)",
+        "ironically (adv)"
+      ]
+    },
+    {
+      "chu": "glimpse",
+      "doc": "/ɡlɪmps/",
+      "loai": "n",
+      "nghia": "cái nhìn thoáng qua",
+      "cap": "B2",
+      "viDu": "The museum offers a glimpse into life in the nineteenth century.",
+      "viDuNghia": "Bảo tàng cho ta một cái nhìn thoáng qua về cuộc sống thế kỷ mười chín.",
+      "cumTu": [
+        "catch a glimpse of",
+        "a glimpse into",
+        "a brief glimpse"
+      ],
+      "hoTu": [
+        "glimpse (v)"
+      ]
+    },
+    {
+      "chu": "bizarre",
+      "doc": "/bɪˈzɑː(r)/",
+      "loai": "adj",
+      "nghia": "kỳ quái, rất lạ lùng",
+      "cap": "B2",
+      "viDu": "The bug produced some truly bizarre results on older phones.",
+      "viDuNghia": "Lỗi này cho ra vài kết quả thật sự kỳ quái trên điện thoại đời cũ.",
+      "cumTu": [
+        "a bizarre situation",
+        "bizarre behaviour",
+        "truly bizarre"
+      ],
+      "hoTu": [
+        "bizarrely (adv)"
+      ]
+    },
+    {
+      "chu": "brutal",
+      "doc": "/ˈbruːtl/",
+      "loai": "adj",
+      "nghia": "tàn bạo; thẳng thừng phũ phàng",
+      "cap": "B2",
+      "viDu": "To be brutally honest, the first version was a brutal failure.",
+      "viDuNghia": "Nói thật phũ phàng thì bản đầu tiên là một thất bại ê chề.",
+      "cumTu": [
+        "a brutal attack",
+        "brutal honesty",
+        "a brutal winter"
+      ],
+      "hoTu": [
+        "brutality (n)",
+        "brutally (adv)"
+      ]
+    },
+    {
+      "chu": "fierce",
+      "doc": "/fɪəs/",
+      "loai": "adj",
+      "nghia": "dữ dội, khốc liệt",
+      "cap": "B2",
+      "viDu": "Graduates face fierce competition for jobs at top technology firms.",
+      "viDuNghia": "Sinh viên tốt nghiệp đối mặt cạnh tranh khốc liệt để vào các công ty công nghệ hàng đầu.",
+      "cumTu": [
+        "fierce competition",
+        "fierce criticism",
+        "a fierce debate"
+      ],
+      "hoTu": [
+        "fiercely (adv)"
+      ],
+      "ghiChu": "\"fierce competition\" là collocation ăn điểm ở Task 2 chủ đề việc làm."
+    },
+    {
+      "chu": "grim",
+      "doc": "/ɡrɪm/",
+      "loai": "adj",
+      "nghia": "ảm đạm, đáng lo ngại",
+      "cap": "B2",
+      "viDu": "The report paints a grim picture of the housing market.",
+      "viDuNghia": "Bản báo cáo vẽ nên bức tranh ảm đạm về thị trường nhà ở.",
+      "cumTu": [
+        "a grim picture",
+        "grim news",
+        "a grim reminder"
+      ],
+      "hoTu": [
+        "grimly (adv)"
+      ]
+    },
+    {
+      "chu": "hectic",
+      "doc": "/ˈhektɪk/",
+      "loai": "adj",
+      "nghia": "bận rộn, hối hả",
+      "cap": "B2",
+      "viDu": "Life in the city is hectic, so I escape to the countryside at weekends.",
+      "viDuNghia": "Cuộc sống thành phố rất hối hả nên cuối tuần tôi trốn về quê.",
+      "cumTu": [
+        "a hectic schedule",
+        "a hectic lifestyle",
+        "hectic pace"
+      ],
+      "ghiChu": "Tự nhiên hơn \"very busy\" trong Speaking Part 1."
+    },
+    {
+      "chu": "naive",
+      "doc": "/naɪˈiːv/",
+      "loai": "adj",
+      "nghia": "ngây thơ, cả tin",
+      "cap": "B2",
+      "viDu": "It would be naive to think that technology alone can fix education.",
+      "viDuNghia": "Thật ngây thơ nếu nghĩ chỉ công nghệ là sửa được giáo dục.",
+      "cumTu": [
+        "a naive belief",
+        "politically naive",
+        "naive enough to"
+      ],
+      "hoTu": [
+        "naivety (n)",
+        "naively (adv)"
+      ]
+    },
+    {
+      "chu": "subtle",
+      "doc": "/ˈsʌtl/",
+      "loai": "adj",
+      "nghia": "tinh tế, khó nhận ra",
+      "cap": "B2",
+      "viDu": "There is a subtle difference in meaning between the two words.",
+      "viDuNghia": "Có một khác biệt tinh tế về nghĩa giữa hai từ.",
+      "cumTu": [
+        "a subtle difference",
+        "a subtle change",
+        "subtle hints"
+      ],
+      "hoTu": [
+        "subtlety (n)",
+        "subtly (adv)"
+      ],
+      "ghiChu": "Chữ \"b\" câm: /ˈsʌtl/."
+    },
+    {
+      "chu": "vague",
+      "doc": "/veɪɡ/",
+      "loai": "adj",
+      "nghia": "mơ hồ, không rõ ràng",
+      "cap": "B2",
+      "viDu": "The client's requirements were so vague that we had to ask again.",
+      "viDuNghia": "Yêu cầu của khách hàng mơ hồ tới mức chúng tôi phải hỏi lại.",
+      "cumTu": [
+        "a vague idea",
+        "vague about something",
+        "a vague memory"
+      ],
+      "hoTu": [
+        "vaguely (adv)",
+        "vagueness (n)"
+      ]
+    },
+    {
+      "chu": "wary",
+      "doc": "/ˈweəri/",
+      "loai": "adj",
+      "nghia": "thận trọng, dè chừng",
+      "cap": "B2",
+      "viDu": "Consumers are increasingly wary of apps that collect personal data.",
+      "viDuNghia": "Người tiêu dùng ngày càng dè chừng các ứng dụng thu thập dữ liệu cá nhân.",
+      "cumTu": [
+        "wary of something",
+        "remain wary",
+        "keep a wary eye on"
+      ],
+      "hoTu": [
+        "warily (adv)",
+        "wariness (n)"
+      ],
+      "ghiChu": "Đi với \"of\": wary OF strangers."
+    },
+    {
+      "chu": "vibrant",
+      "doc": "/ˈvaɪbrənt/",
+      "loai": "adj",
+      "nghia": "sôi động, đầy sức sống",
+      "cap": "B2",
+      "viDu": "Ho Chi Minh City has a vibrant street food culture.",
+      "viDuNghia": "Thành phố Hồ Chí Minh có văn hoá ẩm thực đường phố sôi động.",
+      "cumTu": [
+        "a vibrant city",
+        "vibrant colours",
+        "a vibrant community"
+      ],
+      "hoTu": [
+        "vibrancy (n)"
+      ],
+      "ghiChu": "Từ đắt khi tả thành phố ở Speaking Part 2."
+    },
+    {
+      "chu": "versatile",
+      "doc": "/ˈvɜːsətaɪl/",
+      "loai": "adj",
+      "nghia": "đa năng, linh hoạt",
+      "cap": "B2",
+      "viDu": "Python is a versatile language used in web development and data science.",
+      "viDuNghia": "Python là ngôn ngữ đa năng dùng cho cả phát triển web lẫn khoa học dữ liệu.",
+      "cumTu": [
+        "a versatile tool",
+        "a versatile player",
+        "highly versatile"
+      ],
+      "hoTu": [
+        "versatility (n)"
+      ]
+    },
+    {
+      "chu": "renowned",
+      "doc": "/rɪˈnaʊnd/",
+      "loai": "adj",
+      "nghia": "nổi tiếng, lừng danh",
+      "cap": "B2",
+      "viDu": "The university is renowned for its research in artificial intelligence.",
+      "viDuNghia": "Trường đại học này nổi tiếng về nghiên cứu trí tuệ nhân tạo.",
+      "cumTu": [
+        "renowned for something",
+        "world-renowned",
+        "a renowned expert"
+      ],
+      "hoTu": [
+        "renown (n)"
+      ],
+      "ghiChu": "Trang trọng hơn \"famous\"; đi với \"for\"."
+    },
+    {
+      "chu": "exotic",
+      "doc": "/ɪɡˈzɒtɪk/",
+      "loai": "adj",
+      "nghia": "lạ, đến từ xứ xa; kỳ thú",
+      "cap": "B2",
+      "viDu": "Tourists come here to try exotic fruits they have never seen before.",
+      "viDuNghia": "Du khách tới đây để thử những loại trái cây lạ họ chưa từng thấy.",
+      "cumTu": [
+        "exotic fruits",
+        "an exotic location",
+        "exotic species"
+      ]
+    },
+    {
+      "chu": "elaborate",
+      "doc": "/ɪˈlæbərət/",
+      "loai": "adj",
+      "nghia": "công phu, tỉ mỉ",
+      "cap": "B2",
+      "viDu": "They made elaborate preparations for the product launch.",
+      "viDuNghia": "Họ đã chuẩn bị công phu cho buổi ra mắt sản phẩm.",
+      "cumTu": [
+        "elaborate preparations",
+        "an elaborate design",
+        "an elaborate plan"
+      ],
+      "hoTu": [
+        "elaborate (v) /ɪˈlæbəreɪt/",
+        "elaborately (adv)"
+      ],
+      "ghiChu": "Động từ \"elaborate on\" = nói rõ thêm; phát âm đuôi khác tính từ."
+    },
+    {
+      "chu": "dense",
+      "doc": "/dens/",
+      "loai": "adj",
+      "nghia": "dày đặc, đông đúc",
+      "cap": "B2",
+      "viDu": "Dense traffic and dense population make the city centre very noisy.",
+      "viDuNghia": "Giao thông dày đặc và dân cư đông đúc khiến trung tâm thành phố rất ồn.",
+      "cumTu": [
+        "dense population",
+        "dense forest",
+        "dense fog"
+      ],
+      "hoTu": [
+        "density (n)",
+        "densely (adv)"
+      ],
+      "ghiChu": "\"densely populated\" rất hay dùng ở Task 1 bản đồ và chủ đề đô thị."
+    },
+    {
+      "chu": "concise",
+      "doc": "/kənˈsaɪs/",
+      "loai": "adj",
+      "nghia": "ngắn gọn, súc tích",
+      "cap": "B2",
+      "viDu": "A good commit message is clear and concise.",
+      "viDuNghia": "Một thông điệp commit tốt thì rõ ràng và súc tích.",
+      "cumTu": [
+        "clear and concise",
+        "a concise summary",
+        "concise writing"
+      ],
+      "hoTu": [
+        "concisely (adv)",
+        "conciseness (n)"
+      ]
+    },
+    {
+      "chu": "confidential",
+      "doc": "/ˌkɒnfɪˈdenʃl/",
+      "loai": "adj",
+      "nghia": "bí mật, không được tiết lộ",
+      "cap": "B2",
+      "viDu": "Customer records are strictly confidential and must not be shared.",
+      "viDuNghia": "Hồ sơ khách hàng là tuyệt mật và không được chia sẻ.",
+      "cumTu": [
+        "strictly confidential",
+        "confidential information",
+        "keep something confidential"
+      ],
+      "hoTu": [
+        "confidentiality (n)",
+        "confidentially (adv)"
+      ],
+      "ghiChu": "Khác \"confident\" (tự tin)."
+    },
+    {
+      "chu": "constructive",
+      "doc": "/kənˈstrʌktɪv/",
+      "loai": "adj",
+      "nghia": "mang tính xây dựng",
+      "cap": "B2",
+      "viDu": "Code reviews work best when the feedback is constructive.",
+      "viDuNghia": "Review code hiệu quả nhất khi góp ý mang tính xây dựng.",
+      "cumTu": [
+        "constructive feedback",
+        "constructive criticism",
+        "a constructive discussion"
+      ],
+      "hoTu": [
+        "constructively (adv)"
+      ]
+    },
+    {
+      "chu": "credible",
+      "doc": "/ˈkredəbl/",
+      "loai": "adj",
+      "nghia": "đáng tin cậy",
+      "cap": "B2",
+      "viDu": "Always check whether your sources are credible before quoting them.",
+      "viDuNghia": "Luôn kiểm tra nguồn có đáng tin không trước khi trích dẫn.",
+      "cumTu": [
+        "a credible source",
+        "a credible threat",
+        "barely credible"
+      ],
+      "hoTu": [
+        "credibility (n)",
+        "credibly (adv)"
+      ],
+      "ghiChu": "Khác \"credulous\" (cả tin) và \"creditable\" (đáng khen)."
+    },
+    {
+      "chu": "decisive",
+      "doc": "/dɪˈsaɪsɪv/",
+      "loai": "adj",
+      "nghia": "quyết đoán; có tính quyết định",
+      "cap": "B2",
+      "viDu": "Government action will be the decisive factor in cutting emissions.",
+      "viDuNghia": "Hành động của chính phủ sẽ là yếu tố quyết định trong việc cắt giảm khí thải.",
+      "cumTu": [
+        "a decisive factor",
+        "decisive action",
+        "play a decisive role"
+      ],
+      "hoTu": [
+        "decide (v)",
+        "decision (n)",
+        "decisively (adv)"
+      ]
+    },
+    {
+      "chu": "drastic",
+      "doc": "/ˈdræstɪk/",
+      "loai": "adj",
+      "nghia": "quyết liệt, mạnh tay",
+      "cap": "B2",
+      "viDu": "Drastic measures are needed to reduce plastic waste.",
+      "viDuNghia": "Cần những biện pháp mạnh tay để giảm rác thải nhựa.",
+      "cumTu": [
+        "drastic measures",
+        "drastic changes",
+        "a drastic reduction"
+      ],
+      "hoTu": [
+        "drastically (adv)"
+      ],
+      "ghiChu": "\"take drastic measures\" dùng tốt ở đoạn giải pháp Task 2."
+    },
+    {
+      "chu": "eligible",
+      "doc": "/ˈelɪdʒəbl/",
+      "loai": "adj",
+      "nghia": "đủ điều kiện, đủ tư cách",
+      "cap": "B2",
+      "viDu": "Only full-time students are eligible for the scholarship.",
+      "viDuNghia": "Chỉ sinh viên chính quy mới đủ điều kiện nhận học bổng.",
+      "cumTu": [
+        "eligible for something",
+        "eligible to do something",
+        "eligible voters"
+      ],
+      "hoTu": [
+        "eligibility (n)",
+        "ineligible (adj)"
+      ],
+      "ghiChu": "Dễ nhầm với \"illegible\" (chữ không đọc được)."
+    },
+    {
+      "chu": "fertile",
+      "doc": "/ˈfɜːtaɪl/",
+      "loai": "adj",
+      "nghia": "màu mỡ, phì nhiêu",
+      "cap": "B2",
+      "viDu": "The delta has fertile soil that is ideal for growing rice.",
+      "viDuNghia": "Vùng châu thổ có đất màu mỡ rất hợp trồng lúa.",
+      "cumTu": [
+        "fertile soil",
+        "fertile land",
+        "a fertile imagination"
+      ],
+      "hoTu": [
+        "fertility (n)",
+        "fertiliser (n)",
+        "infertile (adj)"
+      ]
+    },
+    {
+      "chu": "immune",
+      "doc": "/ɪˈmjuːn/",
+      "loai": "adj",
+      "nghia": "miễn dịch; không bị ảnh hưởng",
+      "cap": "B2",
+      "viDu": "No company is immune to cyber attacks.",
+      "viDuNghia": "Không công ty nào miễn nhiễm với tấn công mạng.",
+      "cumTu": [
+        "immune to something",
+        "the immune system",
+        "immune from prosecution"
+      ],
+      "hoTu": [
+        "immunity (n)",
+        "immunise (v)"
+      ]
+    },
+    {
+      "chu": "inferior",
+      "doc": "/ɪnˈfɪəriə(r)/",
+      "loai": "adj",
+      "nghia": "kém hơn, thấp hơn",
+      "cap": "B2",
+      "viDu": "Cheap imports are often inferior to locally made products.",
+      "viDuNghia": "Hàng nhập giá rẻ thường kém hơn sản phẩm sản xuất trong nước.",
+      "cumTu": [
+        "inferior to something",
+        "inferior quality",
+        "feel inferior"
+      ],
+      "hoTu": [
+        "inferiority (n)"
+      ],
+      "ghiChu": "Đi với \"to\", KHÔNG \"than\": inferior TO."
+    },
+    {
+      "chu": "superior",
+      "doc": "/suːˈpɪəriə(r)/",
+      "loai": "adj",
+      "nghia": "vượt trội, tốt hơn",
+      "cap": "B2",
+      "viDu": "The new chip is far superior to the previous model in battery life.",
+      "viDuNghia": "Con chip mới vượt trội hẳn mẫu trước về thời lượng pin.",
+      "cumTu": [
+        "superior to something",
+        "far superior",
+        "superior quality"
+      ],
+      "hoTu": [
+        "superiority (n)",
+        "superior (n)"
+      ],
+      "ghiChu": "Đi với \"to\", KHÔNG \"than\"; không thêm \"more\"."
+    },
+    {
+      "chu": "swift",
+      "doc": "/swɪft/",
+      "loai": "adj",
+      "nghia": "nhanh chóng, mau lẹ",
+      "cap": "B2",
+      "viDu": "The company promised a swift response to the security report.",
+      "viDuNghia": "Công ty hứa sẽ phản hồi nhanh chóng với báo cáo bảo mật.",
+      "cumTu": [
+        "a swift response",
+        "swift action",
+        "a swift decision"
+      ],
+      "hoTu": [
+        "swiftly (adv)"
+      ]
+    },
+    {
+      "chu": "prone",
+      "doc": "/prəʊn/",
+      "loai": "adj",
+      "nghia": "dễ bị, có khuynh hướng (điều xấu)",
+      "cap": "B2",
+      "viDu": "Tired drivers are more prone to accidents.",
+      "viDuNghia": "Tài xế mệt mỏi dễ gặp tai nạn hơn.",
+      "cumTu": [
+        "prone to something",
+        "prone to do something",
+        "error-prone"
+      ],
+      "ghiChu": "Hậu tố \"-prone\": error-prone code, accident-prone."
+    },
+    {
+      "chu": "optimal",
+      "doc": "/ˈɒptɪməl/",
+      "loai": "adj",
+      "nghia": "tối ưu",
+      "cap": "B2",
+      "viDu": "We tested several settings to find the optimal configuration.",
+      "viDuNghia": "Chúng tôi thử nhiều thiết lập để tìm cấu hình tối ưu.",
+      "cumTu": [
+        "optimal conditions",
+        "an optimal solution",
+        "optimal performance"
+      ],
+      "hoTu": [
+        "optimise (v)",
+        "optimum (adj, n)"
+      ]
+    },
+    {
+      "chu": "obscure",
+      "doc": "/əbˈskjʊə(r)/",
+      "loai": "adj",
+      "nghia": "ít người biết; khó hiểu",
+      "cap": "B2",
+      "viDu": "The error message was so obscure that nobody understood it.",
+      "viDuNghia": "Thông báo lỗi khó hiểu tới mức không ai hiểu nổi.",
+      "cumTu": [
+        "an obscure reference",
+        "for some obscure reason",
+        "remain obscure"
+      ],
+      "hoTu": [
+        "obscure (v)",
+        "obscurity (n)"
+      ]
+    },
+    {
+      "chu": "ample",
+      "doc": "/ˈæmpl/",
+      "loai": "adj",
+      "nghia": "dư dả, thừa đủ",
+      "cap": "B2",
+      "viDu": "Students were given ample time to complete the project.",
+      "viDuNghia": "Sinh viên được cho dư thời gian để hoàn thành dự án.",
+      "cumTu": [
+        "ample time",
+        "ample evidence",
+        "ample opportunity"
+      ],
+      "hoTu": [
+        "amply (adv)"
+      ],
+      "ghiChu": "Trang trọng hơn \"enough/plenty of\"; dùng trước danh từ không đếm được hoặc số nhiều."
+    },
+    {
+      "chu": "crude",
+      "doc": "/kruːd/",
+      "loai": "adj",
+      "nghia": "thô sơ; ước lượng thô; (dầu) thô",
+      "cap": "B2",
+      "viDu": "This is only a crude estimate, but it shows the scale of the problem.",
+      "viDuNghia": "Đây chỉ là ước lượng thô nhưng cho thấy quy mô vấn đề.",
+      "cumTu": [
+        "a crude estimate",
+        "crude oil",
+        "a crude method"
+      ],
+      "hoTu": [
+        "crudely (adv)"
+      ]
+    },
+    {
+      "chu": "infinite",
+      "doc": "/ˈɪnfɪnət/",
+      "loai": "adj",
+      "nghia": "vô hạn, vô tận",
+      "cap": "B2",
+      "viDu": "A missing exit condition caused an infinite loop in the program.",
+      "viDuNghia": "Thiếu điều kiện thoát đã gây ra vòng lặp vô hạn trong chương trình.",
+      "cumTu": [
+        "an infinite loop",
+        "an infinite number of",
+        "infinite patience"
+      ],
+      "hoTu": [
+        "infinity (n)",
+        "infinitely (adv)",
+        "finite (adj)"
+      ],
+      "ghiChu": "Trọng âm ở âm tiết đầu: /ˈɪnfɪnət/, không đọc như \"finite\"."
+    }
+  ]
+}

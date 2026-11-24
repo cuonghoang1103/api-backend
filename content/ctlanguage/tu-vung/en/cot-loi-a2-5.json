@@ -1,0 +1,742 @@
+{
+ "ma": "cot-loi-a2-5",
+ "nn": "en",
+ "ten": "Cụm động từ thông dụng 1 (A2)",
+ "moTa": "Cụm động từ gặp hằng ngày trong hội thoại và email (give up, find out, look for, go on, come back, grow up, turn down…) — người bản ngữ dùng liên tục, IELTS Listening rất hay có.",
+ "nhom": "giao-tiep",
+ "cap": "A2",
+ "tu": [
+  {
+   "chu": "give up",
+   "doc": "/ɡɪv ʌp/",
+   "loai": "phr",
+   "nghia": "từ bỏ, bỏ cuộc",
+   "cap": "A2",
+   "viDu": "Do not give up when the lessons get harder.",
+   "viDuNghia": "Đừng bỏ cuộc khi bài học khó dần lên.",
+   "cumTu": [
+    "give up smoking",
+    "never give up",
+    "give up hope",
+    "give up trying"
+   ],
+   "ghiChu": "give up + V-ing: give up smoking."
+  },
+  {
+   "chu": "look for",
+   "doc": "/lʊk fɔː(r)/",
+   "loai": "phr",
+   "nghia": "tìm kiếm",
+   "cap": "A2",
+   "viDu": "I am going to look for a part-time job this summer.",
+   "viDuNghia": "Tôi sẽ tìm một công việc bán thời gian vào mùa hè này.",
+   "cumTu": [
+    "look for a job",
+    "look for information",
+    "look for a flat"
+   ],
+   "ghiChu": "look for = đang tìm; find = tìm thấy."
+  },
+  {
+   "chu": "look at",
+   "doc": "/lʊk æt/",
+   "loai": "phr",
+   "nghia": "nhìn vào, xem",
+   "cap": "A2",
+   "viDu": "Look at the chart and describe the main trends.",
+   "viDuNghia": "Hãy nhìn biểu đồ và mô tả các xu hướng chính.",
+   "cumTu": [
+    "look at the picture",
+    "look at me",
+    "take a look at",
+    "look at the data"
+   ]
+  },
+  {
+   "chu": "look up",
+   "doc": "/lʊk ʌp/",
+   "loai": "phr",
+   "nghia": "tra cứu (từ, thông tin)",
+   "cap": "A2",
+   "viDu": "You can look up new words in an online dictionary.",
+   "viDuNghia": "Bạn có thể tra từ mới trong từ điển trực tuyến.",
+   "cumTu": [
+    "look up a word",
+    "look it up",
+    "look up the address"
+   ],
+   "ghiChu": "Đại từ đứng giữa: look IT up (không nói \"look up it\")."
+  },
+  {
+   "chu": "look around",
+   "doc": "/lʊk əˈraʊnd/",
+   "loai": "phr",
+   "nghia": "nhìn quanh; đi xem quanh",
+   "cap": "A2",
+   "viDu": "We had an hour to look around the old town.",
+   "viDuNghia": "Chúng tôi có một tiếng để đi xem quanh khu phố cổ.",
+   "cumTu": [
+    "look around the shop",
+    "look around the city",
+    "have a look around"
+   ]
+  },
+  {
+   "chu": "look out",
+   "doc": "/lʊk aʊt/",
+   "loai": "phr",
+   "nghia": "coi chừng, cẩn thận",
+   "cap": "A2",
+   "viDu": "Look out! There is a car coming.",
+   "viDuNghia": "Coi chừng! Có xe đang tới.",
+   "cumTu": [
+    "look out for",
+    "look out of the window"
+   ],
+   "ghiChu": "\"look out for\" = để ý tìm, canh chừng."
+  },
+  {
+   "chu": "find out",
+   "doc": "/faɪnd aʊt/",
+   "loai": "phr",
+   "nghia": "tìm ra, phát hiện, biết được",
+   "cap": "A2",
+   "viDu": "I need to find out what time the train leaves.",
+   "viDuNghia": "Tôi cần tìm hiểu xem mấy giờ tàu chạy.",
+   "cumTu": [
+    "find out about",
+    "find out the truth",
+    "find out more",
+    "find out why"
+   ],
+   "ghiChu": "find out = biết được thông tin; find = tìm thấy vật."
+  },
+  {
+   "chu": "go on",
+   "doc": "/ɡəʊ ɒn/",
+   "loai": "phr",
+   "nghia": "tiếp tục; xảy ra",
+   "cap": "A2",
+   "viDu": "Please go on with your story.",
+   "viDuNghia": "Bạn kể tiếp câu chuyện đi.",
+   "cumTu": [
+    "go on with",
+    "go on doing",
+    "what's going on",
+    "go on holiday"
+   ],
+   "ghiChu": "\"What's going on?\" = Có chuyện gì thế?"
+  },
+  {
+   "chu": "go out",
+   "doc": "/ɡəʊ aʊt/",
+   "loai": "phr",
+   "nghia": "đi ra ngoài, đi chơi",
+   "cap": "A2",
+   "viDu": "We usually go out for dinner on Fridays.",
+   "viDuNghia": "Chúng tôi thường ra ngoài ăn tối vào thứ Sáu.",
+   "cumTu": [
+    "go out for dinner",
+    "go out with friends",
+    "go out with somebody"
+   ]
+  },
+  {
+   "chu": "go away",
+   "doc": "/ɡəʊ əˈweɪ/",
+   "loai": "phr",
+   "nghia": "đi khỏi; đi xa; biến mất",
+   "cap": "A2",
+   "viDu": "We plan to go away for a few days next month.",
+   "viDuNghia": "Chúng tôi định đi xa vài ngày vào tháng tới.",
+   "cumTu": [
+    "go away for the weekend",
+    "go away on business",
+    "the pain will go away"
+   ]
+  },
+  {
+   "chu": "come back",
+   "doc": "/kʌm bæk/",
+   "loai": "phr",
+   "nghia": "quay lại, trở về",
+   "cap": "A2",
+   "viDu": "What time will you come back from work?",
+   "viDuNghia": "Mấy giờ bạn đi làm về?",
+   "cumTu": [
+    "come back home",
+    "come back from",
+    "come back later"
+   ],
+   "hoTu": [
+    "comeback (n)"
+   ]
+  },
+  {
+   "chu": "come in",
+   "doc": "/kʌm ɪn/",
+   "loai": "phr",
+   "nghia": "đi vào, mời vào",
+   "cap": "A2",
+   "viDu": "Please come in and take a seat.",
+   "viDuNghia": "Mời vào và ngồi xuống.",
+   "cumTu": [
+    "come in, please",
+    "come in handy",
+    "come in first"
+   ],
+   "ghiChu": "\"come in handy\" = hữu ích khi cần."
+  },
+  {
+   "chu": "come on",
+   "doc": "/kʌm ɒn/",
+   "loai": "phr",
+   "nghia": "nhanh lên; thôi nào, cố lên",
+   "cap": "A2",
+   "viDu": "Come on, we are going to be late!",
+   "viDuNghia": "Nhanh lên nào, chúng ta sắp muộn rồi!",
+   "cumTu": [
+    "come on, let's go",
+    "oh, come on"
+   ]
+  },
+  {
+   "chu": "come out",
+   "doc": "/kʌm aʊt/",
+   "loai": "phr",
+   "nghia": "ra mắt, được phát hành; lộ ra",
+   "cap": "A2",
+   "viDu": "The new version of the app will come out in June.",
+   "viDuNghia": "Phiên bản mới của ứng dụng sẽ ra mắt vào tháng Sáu.",
+   "cumTu": [
+    "come out of",
+    "come out in",
+    "the truth comes out"
+   ]
+  },
+  {
+   "chu": "come over",
+   "doc": "/kʌm ˈəʊvə(r)/",
+   "loai": "phr",
+   "nghia": "ghé qua, sang chơi",
+   "cap": "A2",
+   "viDu": "Why don't you come over for dinner tonight?",
+   "viDuNghia": "Sao tối nay bạn không sang ăn tối nhỉ?",
+   "cumTu": [
+    "come over to my place",
+    "come over for dinner"
+   ]
+  },
+  {
+   "chu": "get in",
+   "doc": "/ɡet ɪn/",
+   "loai": "phr",
+   "nghia": "vào trong (xe hơi, nhà); đến nơi",
+   "cap": "A2",
+   "viDu": "Get in the car, and I will drive you home.",
+   "viDuNghia": "Lên xe đi, tôi sẽ chở bạn về nhà.",
+   "cumTu": [
+    "get in the car",
+    "get in a taxi",
+    "get in touch"
+   ],
+   "ghiChu": "get in/out of a car, a taxi; get on/off a bus, a train, a plane."
+  },
+  {
+   "chu": "get out",
+   "doc": "/ɡet aʊt/",
+   "loai": "phr",
+   "nghia": "ra khỏi",
+   "cap": "A2",
+   "viDu": "We need to get out of the building now.",
+   "viDuNghia": "Chúng ta cần ra khỏi toà nhà ngay.",
+   "cumTu": [
+    "get out of the car",
+    "get out of bed",
+    "get out of here"
+   ]
+  },
+  {
+   "chu": "get back",
+   "doc": "/ɡet bæk/",
+   "loai": "phr",
+   "nghia": "trở về; lấy lại",
+   "cap": "A2",
+   "viDu": "What time did you get back last night?",
+   "viDuNghia": "Tối qua mấy giờ bạn về?",
+   "cumTu": [
+    "get back home",
+    "get back to work",
+    "get your money back",
+    "get back to somebody"
+   ],
+   "ghiChu": "\"I'll get back to you\" = tôi sẽ trả lời bạn sau — câu công việc rất hay dùng."
+  },
+  {
+   "chu": "grow up",
+   "doc": "/ɡrəʊ ʌp/",
+   "loai": "phr",
+   "nghia": "lớn lên, trưởng thành",
+   "cap": "A2",
+   "viDu": "I want my children to grow up in a safe place.",
+   "viDuNghia": "Tôi muốn các con mình lớn lên ở một nơi an toàn.",
+   "cumTu": [
+    "grow up in",
+    "when I grow up",
+    "grow up fast"
+   ],
+   "hoTu": [
+    "grown-up (n, adj)"
+   ],
+   "ghiChu": "grow up = người lớn lên (không có tân ngữ); \"bring up\" = nuôi dạy."
+  },
+  {
+   "chu": "turn up",
+   "doc": "/tɜːn ʌp/",
+   "loai": "phr",
+   "nghia": "vặn to lên; xuất hiện, đến",
+   "cap": "A2",
+   "viDu": "Can you turn up the volume? I cannot hear it.",
+   "viDuNghia": "Bạn vặn to âm lượng lên được không? Tôi không nghe thấy.",
+   "cumTu": [
+    "turn up the volume",
+    "turn up the heating",
+    "turn up late"
+   ]
+  },
+  {
+   "chu": "turn down",
+   "doc": "/tɜːn daʊn/",
+   "loai": "phr",
+   "nghia": "vặn nhỏ; từ chối",
+   "cap": "A2",
+   "viDu": "Please turn down the music. I am trying to study.",
+   "viDuNghia": "Làm ơn vặn nhỏ nhạc. Tôi đang cố học.",
+   "cumTu": [
+    "turn down the volume",
+    "turn down an offer",
+    "turn down a job"
+   ],
+   "ghiChu": "\"turn down a job offer\" = từ chối lời mời làm việc."
+  },
+  {
+   "chu": "switch on",
+   "doc": "/swɪtʃ ɒn/",
+   "loai": "phr",
+   "nghia": "bật (thiết bị)",
+   "cap": "A2",
+   "viDu": "Switch on the projector before the meeting starts.",
+   "viDuNghia": "Hãy bật máy chiếu trước khi cuộc họp bắt đầu.",
+   "cumTu": [
+    "switch on the light",
+    "switch on the TV",
+    "switch on the computer"
+   ],
+   "ghiChu": "= turn on. Trái nghĩa: switch off."
+  },
+  {
+   "chu": "plug in",
+   "doc": "/plʌɡ ɪn/",
+   "loai": "phr",
+   "nghia": "cắm điện, cắm vào",
+   "cap": "A2",
+   "viDu": "Plug in your laptop before the battery dies.",
+   "viDuNghia": "Hãy cắm sạc laptop trước khi hết pin.",
+   "cumTu": [
+    "plug in the charger",
+    "plug it in",
+    "plug in a device"
+   ],
+   "hoTu": [
+    "plug-in (n)",
+    "unplug (v)"
+   ]
+  },
+  {
+   "chu": "put away",
+   "doc": "/pʊt əˈweɪ/",
+   "loai": "phr",
+   "nghia": "cất đi, dọn vào chỗ",
+   "cap": "A2",
+   "viDu": "Please put away your books before the test.",
+   "viDuNghia": "Hãy cất sách đi trước khi làm bài kiểm tra.",
+   "cumTu": [
+    "put away your phone",
+    "put the dishes away",
+    "put away clothes"
+   ]
+  },
+  {
+   "chu": "put down",
+   "doc": "/pʊt daʊn/",
+   "loai": "phr",
+   "nghia": "đặt xuống; ghi lại",
+   "cap": "A2",
+   "viDu": "Put down your pens. The exam is over.",
+   "viDuNghia": "Đặt bút xuống. Giờ thi đã hết.",
+   "cumTu": [
+    "put down the phone",
+    "put down your name",
+    "put it down"
+   ]
+  },
+  {
+   "chu": "take out",
+   "doc": "/teɪk aʊt/",
+   "loai": "phr",
+   "nghia": "lấy ra; đưa đi (ăn, chơi)",
+   "cap": "A2",
+   "viDu": "Take out your notebooks and write the date.",
+   "viDuNghia": "Hãy lấy vở ra và ghi ngày tháng.",
+   "cumTu": [
+    "take out the rubbish",
+    "take somebody out",
+    "take out money"
+   ],
+   "hoTu": [
+    "takeaway (n)"
+   ]
+  },
+  {
+   "chu": "take back",
+   "doc": "/teɪk bæk/",
+   "loai": "phr",
+   "nghia": "mang trả lại; rút lại (lời nói)",
+   "cap": "A2",
+   "viDu": "I need to take back these shoes because they are too small.",
+   "viDuNghia": "Tôi cần mang trả đôi giày này vì chúng quá chật.",
+   "cumTu": [
+    "take back to the shop",
+    "take it back",
+    "take back what you said"
+   ]
+  },
+  {
+   "chu": "bring back",
+   "doc": "/brɪŋ bæk/",
+   "loai": "phr",
+   "nghia": "mang về, mang trả; gợi lại",
+   "cap": "A2",
+   "viDu": "Please bring back the book when you finish it.",
+   "viDuNghia": "Hãy mang trả cuốn sách khi bạn đọc xong.",
+   "cumTu": [
+    "bring back memories",
+    "bring it back",
+    "bring back a souvenir"
+   ]
+  },
+  {
+   "chu": "write down",
+   "doc": "/raɪt daʊn/",
+   "loai": "phr",
+   "nghia": "ghi lại, viết ra",
+   "cap": "A2",
+   "viDu": "Write down the new words in your notebook.",
+   "viDuNghia": "Hãy ghi các từ mới vào vở.",
+   "cumTu": [
+    "write down the answer",
+    "write it down",
+    "write down your ideas"
+   ]
+  },
+  {
+   "chu": "fill in",
+   "doc": "/fɪl ɪn/",
+   "loai": "phr",
+   "nghia": "điền vào (mẫu đơn)",
+   "cap": "A2",
+   "viDu": "Please fill in this form with your details.",
+   "viDuNghia": "Vui lòng điền thông tin của bạn vào mẫu này.",
+   "cumTu": [
+    "fill in a form",
+    "fill in the blanks",
+    "fill in the gaps"
+   ],
+   "ghiChu": "Anh-Mỹ thường dùng \"fill out a form\"."
+  },
+  {
+   "chu": "sign up",
+   "doc": "/saɪn ʌp/",
+   "loai": "phr",
+   "nghia": "đăng ký (khoá học, dịch vụ)",
+   "cap": "A2",
+   "viDu": "You can sign up for the course on the website.",
+   "viDuNghia": "Bạn có thể đăng ký khoá học trên trang web.",
+   "cumTu": [
+    "sign up for",
+    "sign up online",
+    "sign up for free"
+   ],
+   "hoTu": [
+    "sign-up (n)"
+   ],
+   "ghiChu": "sign up FOR something. sign up = tạo tài khoản; sign in = đăng nhập."
+  },
+  {
+   "chu": "check out",
+   "doc": "/tʃek aʊt/",
+   "loai": "phr",
+   "nghia": "trả phòng; xem thử",
+   "cap": "A2",
+   "viDu": "We have to check out of the hotel before noon.",
+   "viDuNghia": "Chúng tôi phải trả phòng khách sạn trước buổi trưa.",
+   "cumTu": [
+    "check out of a hotel",
+    "check it out",
+    "check out a website"
+   ],
+   "hoTu": [
+    "checkout (n)"
+   ],
+   "ghiChu": "\"Check this out!\" = Xem cái này đi!"
+  },
+  {
+   "chu": "hold on",
+   "doc": "/həʊld ɒn/",
+   "loai": "phr",
+   "nghia": "chờ một chút; bám chặt",
+   "cap": "A2",
+   "viDu": "Hold on a minute. I will check for you.",
+   "viDuNghia": "Chờ một chút. Tôi sẽ kiểm tra giúp bạn.",
+   "cumTu": [
+    "hold on a second",
+    "hold on tight",
+    "hold on to"
+   ],
+   "ghiChu": "Câu quen thuộc khi nghe điện thoại: \"Hold on, please.\""
+  },
+  {
+   "chu": "hurry up",
+   "doc": "/ˈhʌri ʌp/",
+   "loai": "phr",
+   "nghia": "nhanh lên",
+   "cap": "A2",
+   "viDu": "Hurry up or we will miss the bus.",
+   "viDuNghia": "Nhanh lên, không thì chúng ta lỡ xe buýt đấy.",
+   "cumTu": [
+    "hurry up and",
+    "hurry up, please"
+   ]
+  },
+  {
+   "chu": "slow down",
+   "doc": "/sləʊ daʊn/",
+   "loai": "phr",
+   "nghia": "chậm lại, giảm tốc",
+   "cap": "A2",
+   "viDu": "Please slow down. You are speaking too fast for me.",
+   "viDuNghia": "Làm ơn nói chậm lại. Bạn nói nhanh quá.",
+   "cumTu": [
+    "slow down a bit",
+    "slow down the car",
+    "the economy slows down"
+   ],
+   "hoTu": [
+    "slowdown (n)"
+   ]
+  },
+  {
+   "chu": "fall down",
+   "doc": "/fɔːl daʊn/",
+   "loai": "phr",
+   "nghia": "ngã xuống, đổ xuống",
+   "cap": "A2",
+   "viDu": "Be careful not to fall down the stairs.",
+   "viDuNghia": "Cẩn thận kẻo ngã cầu thang.",
+   "cumTu": [
+    "fall down the stairs",
+    "fall down on the ground"
+   ]
+  },
+  {
+   "chu": "run away",
+   "doc": "/rʌn əˈweɪ/",
+   "loai": "phr",
+   "nghia": "chạy trốn, bỏ chạy",
+   "cap": "A2",
+   "viDu": "The cat will run away if you make a loud noise.",
+   "viDuNghia": "Con mèo sẽ bỏ chạy nếu bạn gây tiếng động lớn.",
+   "cumTu": [
+    "run away from",
+    "run away from home"
+   ]
+  },
+  {
+   "chu": "stay up",
+   "doc": "/steɪ ʌp/",
+   "loai": "phr",
+   "nghia": "thức khuya",
+   "cap": "A2",
+   "viDu": "I often stay up late to finish my assignments.",
+   "viDuNghia": "Tôi thường thức khuya để hoàn thành bài tập.",
+   "cumTu": [
+    "stay up late",
+    "stay up all night",
+    "stay up until midnight"
+   ]
+  },
+  {
+   "chu": "wash up",
+   "doc": "/wɒʃ ʌp/",
+   "loai": "phr",
+   "nghia": "rửa bát (Anh-Anh)",
+   "cap": "A2",
+   "viDu": "I will cook if you wash up after dinner.",
+   "viDuNghia": "Tôi sẽ nấu nếu bạn rửa bát sau bữa tối.",
+   "cumTu": [
+    "wash up after dinner",
+    "help to wash up"
+   ],
+   "hoTu": [
+    "washing-up (n)"
+   ],
+   "ghiChu": "Anh-Mỹ: do the dishes."
+  },
+  {
+   "chu": "wait for",
+   "doc": "/weɪt fɔː(r)/",
+   "loai": "phr",
+   "nghia": "chờ, đợi",
+   "cap": "A2",
+   "viDu": "I will wait for you outside the cinema.",
+   "viDuNghia": "Tôi sẽ đợi bạn bên ngoài rạp chiếu phim.",
+   "cumTu": [
+    "wait for the bus",
+    "wait for a reply",
+    "wait for somebody to do"
+   ],
+   "ghiChu": "Bắt buộc có \"for\": wait FOR me (không nói \"wait me\")."
+  },
+  {
+   "chu": "listen to",
+   "doc": "/ˈlɪsn tuː/",
+   "loai": "phr",
+   "nghia": "lắng nghe",
+   "cap": "A2",
+   "viDu": "I listen to English podcasts on the way to work.",
+   "viDuNghia": "Tôi nghe podcast tiếng Anh trên đường đi làm.",
+   "cumTu": [
+    "listen to music",
+    "listen to the radio",
+    "listen to me"
+   ],
+   "ghiChu": "Bắt buộc có \"to\": listen TO music."
+  },
+  {
+   "chu": "talk about",
+   "doc": "/tɔːk əˈbaʊt/",
+   "loai": "phr",
+   "nghia": "nói về, bàn về",
+   "cap": "A2",
+   "viDu": "Today I am going to talk about my hometown.",
+   "viDuNghia": "Hôm nay tôi sẽ nói về quê hương của mình.",
+   "cumTu": [
+    "talk about a problem",
+    "talk about work",
+    "talk about the future"
+   ]
+  },
+  {
+   "chu": "think about",
+   "doc": "/θɪŋk əˈbaʊt/",
+   "loai": "phr",
+   "nghia": "suy nghĩ về, cân nhắc",
+   "cap": "A2",
+   "viDu": "I need more time to think about your offer.",
+   "viDuNghia": "Tôi cần thêm thời gian để suy nghĩ về lời đề nghị của bạn.",
+   "cumTu": [
+    "think about doing",
+    "think about the future",
+    "think about it"
+   ],
+   "ghiChu": "think about = cân nhắc; think of = nảy ra ý, nghĩ gì về."
+  },
+  {
+   "chu": "ask for",
+   "doc": "/ɑːsk fɔː(r)/",
+   "loai": "phr",
+   "nghia": "xin, yêu cầu",
+   "cap": "A2",
+   "viDu": "Do not be afraid to ask for help.",
+   "viDuNghia": "Đừng ngại xin giúp đỡ.",
+   "cumTu": [
+    "ask for help",
+    "ask for advice",
+    "ask for information",
+    "ask for the bill"
+   ]
+  },
+  {
+   "chu": "pay for",
+   "doc": "/peɪ fɔː(r)/",
+   "loai": "phr",
+   "nghia": "trả tiền cho",
+   "cap": "A2",
+   "viDu": "How much did you pay for your laptop?",
+   "viDuNghia": "Bạn đã trả bao nhiêu tiền cho chiếc laptop?",
+   "cumTu": [
+    "pay for a ticket",
+    "pay for dinner",
+    "pay for it"
+   ],
+   "ghiChu": "pay FOR a thing; nhưng pay the bill (không có for)."
+  },
+  {
+   "chu": "agree with",
+   "doc": "/əˈɡriː wɪð/",
+   "loai": "phr",
+   "nghia": "đồng ý với",
+   "cap": "A2",
+   "viDu": "I agree with you about the new timetable.",
+   "viDuNghia": "Tôi đồng ý với bạn về thời khoá biểu mới.",
+   "cumTu": [
+    "agree with somebody",
+    "agree with an idea",
+    "totally agree with"
+   ],
+   "ghiChu": "Không nói \"I am agree\". Đúng: I agree with you."
+  },
+  {
+   "chu": "belong to",
+   "doc": "/bɪˈlɒŋ tuː/",
+   "loai": "phr",
+   "nghia": "thuộc về, là của",
+   "cap": "A2",
+   "viDu": "These headphones belong to my roommate.",
+   "viDuNghia": "Cái tai nghe này là của bạn cùng phòng tôi.",
+   "cumTu": [
+    "belong to somebody",
+    "belong to a club",
+    "belong to a group"
+   ]
+  },
+  {
+   "chu": "laugh at",
+   "doc": "/lɑːf æt/",
+   "loai": "phr",
+   "nghia": "cười nhạo; cười vì",
+   "cap": "A2",
+   "viDu": "Nobody will laugh at you if you make a mistake.",
+   "viDuNghia": "Sẽ không ai cười bạn nếu bạn mắc lỗi.",
+   "cumTu": [
+    "laugh at a joke",
+    "laugh at somebody"
+   ]
+  },
+  {
+   "chu": "be going to",
+   "doc": "/bi ˈɡəʊɪŋ tuː/",
+   "loai": "phr",
+   "nghia": "sắp, định (làm gì)",
+   "cap": "A2",
+   "viDu": "I am going to be a little late, so please start without me.",
+   "viDuNghia": "Tôi sẽ đến muộn một chút, nên cứ bắt đầu mà không cần tôi.",
+   "cumTu": [
+    "be going to do",
+    "is going to rain",
+    "are you going to…?"
+   ],
+   "ghiChu": "Dùng cho dự định đã có và dự đoán có căn cứ; \"will\" cho quyết định tức thời."
+  }
+ ]
+}

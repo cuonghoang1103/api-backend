@@ -1,0 +1,1180 @@
+{
+ "ma": "cot-loi-a2-2",
+ "nn": "en",
+ "ten": "Động từ thông dụng A2",
+ "moTa": "Động từ thiết yếu cho giao tiếp, công việc và bài luận (allow, avoid, consider, expect, provide, suggest, solve, manage, seem…) — phần lớn nằm trong 1.000 từ đầu của NGSL.",
+ "nhom": "giao-tiep",
+ "cap": "A2",
+ "tu": [
+  {
+   "chu": "act",
+   "doc": "/ækt/",
+   "loai": "v",
+   "nghia": "hành động; diễn xuất",
+   "cap": "A2",
+   "viDu": "We need to act now to protect the environment.",
+   "viDuNghia": "Chúng ta cần hành động ngay để bảo vệ môi trường.",
+   "cumTu": [
+    "act quickly",
+    "act as",
+    "act on",
+    "act now"
+   ],
+   "hoTu": [
+    "action (n)",
+    "actor (n)",
+    "activity (n)",
+    "act (n)"
+   ]
+  },
+  {
+   "chu": "advertise",
+   "doc": "/ˈædvətaɪz/",
+   "loai": "v",
+   "nghia": "quảng cáo",
+   "cap": "A2",
+   "viDu": "Many companies advertise their products on social media.",
+   "viDuNghia": "Nhiều công ty quảng cáo sản phẩm trên mạng xã hội.",
+   "cumTu": [
+    "advertise a product",
+    "advertise a job",
+    "advertise online"
+   ],
+   "hoTu": [
+    "advertisement (n)",
+    "advertising (n)",
+    "advertiser (n)"
+   ]
+  },
+  {
+   "chu": "allow",
+   "doc": "/əˈlaʊ/",
+   "loai": "v",
+   "nghia": "cho phép",
+   "cap": "A2",
+   "viDu": "The school does not allow students to use phones in class.",
+   "viDuNghia": "Trường không cho phép học sinh dùng điện thoại trong lớp.",
+   "cumTu": [
+    "allow somebody to do",
+    "be allowed to",
+    "allow for"
+   ],
+   "hoTu": [
+    "allowance (n)"
+   ],
+   "ghiChu": "allow + tân ngữ + TO V. Bị động: be allowed to do."
+  },
+  {
+   "chu": "appear",
+   "doc": "/əˈpɪə(r)/",
+   "loai": "v",
+   "nghia": "xuất hiện; có vẻ",
+   "cap": "A2",
+   "viDu": "A new message will appear on your screen.",
+   "viDuNghia": "Một tin nhắn mới sẽ xuất hiện trên màn hình của bạn.",
+   "cumTu": [
+    "appear to be",
+    "appear on TV",
+    "appear in court"
+   ],
+   "hoTu": [
+    "appearance (n)",
+    "disappear (v)"
+   ],
+   "ghiChu": "\"It appears that…\" = có vẻ như — cách nói thận trọng."
+  },
+  {
+   "chu": "avoid",
+   "doc": "/əˈvɔɪd/",
+   "loai": "v",
+   "nghia": "tránh",
+   "cap": "A2",
+   "viDu": "You should avoid eating too much fast food.",
+   "viDuNghia": "Bạn nên tránh ăn quá nhiều đồ ăn nhanh.",
+   "cumTu": [
+    "avoid doing",
+    "avoid mistakes",
+    "avoid the traffic",
+    "try to avoid"
+   ],
+   "hoTu": [
+    "avoidable (adj)",
+    "avoidance (n)"
+   ],
+   "ghiChu": "avoid + V-ing (không dùng \"to V\")."
+  },
+  {
+   "chu": "behave",
+   "doc": "/bɪˈheɪv/",
+   "loai": "v",
+   "nghia": "cư xử, hành xử",
+   "cap": "A2",
+   "viDu": "Children should learn how to behave in public.",
+   "viDuNghia": "Trẻ em nên học cách cư xử ở nơi công cộng.",
+   "cumTu": [
+    "behave well",
+    "behave badly",
+    "behave yourself",
+    "behave like"
+   ],
+   "hoTu": [
+    "behaviour (n)"
+   ]
+  },
+  {
+   "chu": "belong",
+   "doc": "/bɪˈlɒŋ/",
+   "loai": "v",
+   "nghia": "thuộc về",
+   "cap": "A2",
+   "viDu": "Does this laptop belong to you?",
+   "viDuNghia": "Chiếc laptop này có phải của bạn không?",
+   "cumTu": [
+    "belong to",
+    "belong together",
+    "belong here"
+   ],
+   "hoTu": [
+    "belongings (n)"
+   ],
+   "ghiChu": "Không dùng ở thì tiếp diễn: \"It belongs to me\"."
+  },
+  {
+   "chu": "brush",
+   "doc": "/brʌʃ/",
+   "loai": "v",
+   "nghia": "chải, đánh (răng, tóc)",
+   "cap": "A2",
+   "viDu": "I brush my teeth twice a day.",
+   "viDuNghia": "Tôi đánh răng hai lần một ngày.",
+   "cumTu": [
+    "brush your teeth",
+    "brush your hair",
+    "brush up on"
+   ],
+   "hoTu": [
+    "brush (n)"
+   ],
+   "ghiChu": "\"brush up on your English\" = ôn lại, mài lại tiếng Anh."
+  },
+  {
+   "chu": "catch",
+   "doc": "/kætʃ/",
+   "loai": "v",
+   "nghia": "bắt, chụp; bắt kịp (xe); mắc (bệnh)",
+   "cap": "A2",
+   "viDu": "We need to leave now to catch the last bus.",
+   "viDuNghia": "Chúng ta cần đi ngay để bắt kịp chuyến xe buýt cuối.",
+   "cumTu": [
+    "catch a bus",
+    "catch a cold",
+    "catch up",
+    "catch fire"
+   ],
+   "hoTu": [
+    "catch (n)",
+    "catchy (adj)"
+   ],
+   "ghiChu": "Quá khứ: caught /kɔːt/."
+  },
+  {
+   "chu": "consider",
+   "doc": "/kənˈsɪdə(r)/",
+   "loai": "v",
+   "nghia": "cân nhắc, xem xét; coi là",
+   "cap": "A2",
+   "viDu": "You should consider all the options before you decide.",
+   "viDuNghia": "Bạn nên cân nhắc mọi lựa chọn trước khi quyết định.",
+   "cumTu": [
+    "consider doing",
+    "consider an option",
+    "be considered as",
+    "carefully consider"
+   ],
+   "hoTu": [
+    "consideration (n)",
+    "considerable (adj)",
+    "considerate (adj)"
+   ],
+   "ghiChu": "consider + V-ing. \"It is considered (to be)…\" hay dùng trong Writing."
+  },
+  {
+   "chu": "contain",
+   "doc": "/kənˈteɪn/",
+   "loai": "v",
+   "nghia": "chứa, bao gồm",
+   "cap": "A2",
+   "viDu": "This drink does not contain any sugar.",
+   "viDuNghia": "Đồ uống này không chứa đường.",
+   "cumTu": [
+    "contain information",
+    "contain sugar",
+    "contain errors"
+   ],
+   "hoTu": [
+    "container (n)",
+    "content (n)"
+   ],
+   "ghiChu": "Không dùng ở thì tiếp diễn."
+  },
+  {
+   "chu": "continue",
+   "doc": "/kənˈtɪnjuː/",
+   "loai": "v",
+   "nghia": "tiếp tục",
+   "cap": "A2",
+   "viDu": "The price of petrol will continue to rise next year.",
+   "viDuNghia": "Giá xăng sẽ tiếp tục tăng vào năm tới.",
+   "cumTu": [
+    "continue to do",
+    "continue doing",
+    "continue with",
+    "continue to rise"
+   ],
+   "hoTu": [
+    "continuous (adj)",
+    "continuation (n)",
+    "continually (adv)"
+   ],
+   "ghiChu": "\"continue to rise/fall\" rất hữu ích khi mô tả xu hướng Task 1."
+  },
+  {
+   "chu": "cover",
+   "doc": "/ˈkʌvə(r)/",
+   "loai": "v",
+   "nghia": "che, phủ; bao gồm, đề cập",
+   "cap": "A2",
+   "viDu": "This course will cover the basics of web design.",
+   "viDuNghia": "Khoá học này sẽ bao gồm kiến thức cơ bản về thiết kế web.",
+   "cumTu": [
+    "cover a topic",
+    "cover the cost",
+    "be covered with",
+    "cover an area"
+   ],
+   "hoTu": [
+    "cover (n)",
+    "coverage (n)"
+   ]
+  },
+  {
+   "chu": "cross",
+   "doc": "/krɒs/",
+   "loai": "v",
+   "nghia": "băng qua, đi qua",
+   "cap": "A2",
+   "viDu": "Be careful when you cross the road.",
+   "viDuNghia": "Hãy cẩn thận khi băng qua đường.",
+   "cumTu": [
+    "cross the road",
+    "cross the border",
+    "cross your mind",
+    "cross out"
+   ],
+   "hoTu": [
+    "crossing (n)",
+    "cross (n)"
+   ]
+  },
+  {
+   "chu": "depend",
+   "doc": "/dɪˈpend/",
+   "loai": "v",
+   "nghia": "phụ thuộc, tuỳ thuộc",
+   "cap": "A2",
+   "viDu": "The price will depend on the size of the room.",
+   "viDuNghia": "Giá sẽ tuỳ thuộc vào kích thước căn phòng.",
+   "cumTu": [
+    "depend on",
+    "it depends",
+    "depend heavily on"
+   ],
+   "hoTu": [
+    "dependent (adj)",
+    "independence (n)",
+    "dependence (n)"
+   ],
+   "ghiChu": "Luôn đi với ON (không dùng \"depend of/in\")."
+  },
+  {
+   "chu": "destroy",
+   "doc": "/dɪˈstrɔɪ/",
+   "loai": "v",
+   "nghia": "phá huỷ, tàn phá",
+   "cap": "A2",
+   "viDu": "Floods can destroy thousands of homes.",
+   "viDuNghia": "Lũ lụt có thể phá huỷ hàng nghìn ngôi nhà.",
+   "cumTu": [
+    "destroy the environment",
+    "completely destroy",
+    "destroy a building"
+   ],
+   "hoTu": [
+    "destruction (n)",
+    "destructive (adj)"
+   ]
+  },
+  {
+   "chu": "disappear",
+   "doc": "/ˌdɪsəˈpɪə(r)/",
+   "loai": "v",
+   "nghia": "biến mất",
+   "cap": "A2",
+   "viDu": "Many small shops may disappear from our streets.",
+   "viDuNghia": "Nhiều cửa hàng nhỏ có thể biến mất khỏi đường phố.",
+   "cumTu": [
+    "disappear from",
+    "disappear completely",
+    "slowly disappear"
+   ],
+   "hoTu": [
+    "disappearance (n)"
+   ],
+   "ghiChu": "Một chữ s, hai chữ p. Không dùng bị động."
+  },
+  {
+   "chu": "dream",
+   "doc": "/driːm/",
+   "loai": "v",
+   "nghia": "mơ, mơ ước",
+   "cap": "A2",
+   "viDu": "I dream of working for a big tech company.",
+   "viDuNghia": "Tôi mơ ước được làm việc cho một công ty công nghệ lớn.",
+   "cumTu": [
+    "dream of",
+    "dream about",
+    "dream big"
+   ],
+   "hoTu": [
+    "dream (n)",
+    "dreamer (n)"
+   ],
+   "ghiChu": "dream OF/ABOUT + V-ing."
+  },
+  {
+   "chu": "earn",
+   "doc": "/ɜːn/",
+   "loai": "v",
+   "nghia": "kiếm (tiền); giành được",
+   "cap": "A2",
+   "viDu": "Software engineers can earn a good salary.",
+   "viDuNghia": "Kỹ sư phần mềm có thể kiếm được mức lương tốt.",
+   "cumTu": [
+    "earn money",
+    "earn a living",
+    "earn a salary",
+    "earn respect"
+   ],
+   "hoTu": [
+    "earnings (n)",
+    "earner (n)"
+   ],
+   "ghiChu": "earn money (nhờ làm việc) khác win money (nhờ may mắn, thi đấu)."
+  },
+  {
+   "chu": "employ",
+   "doc": "/ɪmˈplɔɪ/",
+   "loai": "v",
+   "nghia": "thuê, tuyển dụng (lao động)",
+   "cap": "A2",
+   "viDu": "The factory will employ over five hundred workers.",
+   "viDuNghia": "Nhà máy sẽ tuyển hơn năm trăm công nhân.",
+   "cumTu": [
+    "employ staff",
+    "employ workers",
+    "be employed as"
+   ],
+   "hoTu": [
+    "employee (n)",
+    "employer (n)",
+    "employment (n)",
+    "unemployed (adj)"
+   ]
+  },
+  {
+   "chu": "exist",
+   "doc": "/ɪɡˈzɪst/",
+   "loai": "v",
+   "nghia": "tồn tại",
+   "cap": "A2",
+   "viDu": "Does life exist on other planets?",
+   "viDuNghia": "Có sự sống tồn tại trên các hành tinh khác không?",
+   "cumTu": [
+    "exist in",
+    "still exist",
+    "no longer exist",
+    "cease to exist"
+   ],
+   "hoTu": [
+    "existence (n)",
+    "existing (adj)"
+   ],
+   "ghiChu": "Không dùng tiếp diễn hay bị động."
+  },
+  {
+   "chu": "expect",
+   "doc": "/ɪkˈspekt/",
+   "loai": "v",
+   "nghia": "mong đợi, dự kiến",
+   "cap": "A2",
+   "viDu": "We expect the project to finish in May.",
+   "viDuNghia": "Chúng tôi dự kiến dự án sẽ hoàn thành vào tháng Năm.",
+   "cumTu": [
+    "expect to do",
+    "expect somebody to do",
+    "be expected to",
+    "as expected"
+   ],
+   "hoTu": [
+    "expectation (n)",
+    "expected (adj)",
+    "unexpected (adj)"
+   ],
+   "ghiChu": "\"is expected to rise\" dùng cho dự báo trong Task 1."
+  },
+  {
+   "chu": "fight",
+   "doc": "/faɪt/",
+   "loai": "v",
+   "nghia": "đánh nhau, chiến đấu; đấu tranh",
+   "cap": "A2",
+   "viDu": "Doctors fight against diseases every day.",
+   "viDuNghia": "Các bác sĩ chiến đấu với bệnh tật mỗi ngày.",
+   "cumTu": [
+    "fight against",
+    "fight for",
+    "fight crime",
+    "fight back"
+   ],
+   "hoTu": [
+    "fight (n)",
+    "fighter (n)"
+   ],
+   "ghiChu": "Quá khứ: fought /fɔːt/."
+  },
+  {
+   "chu": "hit",
+   "doc": "/hɪt/",
+   "loai": "v",
+   "nghia": "đánh, đập, va vào",
+   "cap": "A2",
+   "viDu": "Be careful not to hit your head on the shelf.",
+   "viDuNghia": "Cẩn thận kẻo đập đầu vào cái giá.",
+   "cumTu": [
+    "hit the ball",
+    "hit your head",
+    "hit a target",
+    "hit the road"
+   ],
+   "hoTu": [
+    "hit (n)"
+   ],
+   "ghiChu": "Ba dạng giống nhau: hit, hit, hit."
+  },
+  {
+   "chu": "invent",
+   "doc": "/ɪnˈvent/",
+   "loai": "v",
+   "nghia": "phát minh",
+   "cap": "A2",
+   "viDu": "Scientists hope to invent a cheaper battery.",
+   "viDuNghia": "Các nhà khoa học hy vọng phát minh ra loại pin rẻ hơn.",
+   "cumTu": [
+    "invent a machine",
+    "invent a new way",
+    "invent a story"
+   ],
+   "hoTu": [
+    "invention (n)",
+    "inventor (n)",
+    "inventive (adj)"
+   ],
+   "ghiChu": "invent = tạo ra cái chưa có; discover = tìm ra cái đã tồn tại."
+  },
+  {
+   "chu": "kill",
+   "doc": "/kɪl/",
+   "loai": "v",
+   "nghia": "giết",
+   "cap": "A2",
+   "viDu": "Smoking can kill thousands of people every year.",
+   "viDuNghia": "Hút thuốc có thể giết chết hàng nghìn người mỗi năm.",
+   "cumTu": [
+    "kill time",
+    "kill animals",
+    "be killed in"
+   ],
+   "hoTu": [
+    "killer (n)",
+    "killing (n)"
+   ],
+   "ghiChu": "\"kill time\" = giết thời gian."
+  },
+  {
+   "chu": "knock",
+   "doc": "/nɒk/",
+   "loai": "v",
+   "nghia": "gõ (cửa); va, đụng",
+   "cap": "A2",
+   "viDu": "Please knock on the door before you come in.",
+   "viDuNghia": "Hãy gõ cửa trước khi vào.",
+   "cumTu": [
+    "knock on the door",
+    "knock down",
+    "knock over"
+   ],
+   "hoTu": [
+    "knock (n)"
+   ],
+   "ghiChu": "Chữ k câm."
+  },
+  {
+   "chu": "lead",
+   "doc": "/liːd/",
+   "loai": "v",
+   "nghia": "dẫn dắt, lãnh đạo; dẫn đến",
+   "cap": "A2",
+   "viDu": "Too much stress can lead to health problems.",
+   "viDuNghia": "Quá nhiều căng thẳng có thể dẫn đến các vấn đề sức khoẻ.",
+   "cumTu": [
+    "lead to",
+    "lead a team",
+    "lead the way",
+    "lead a healthy life"
+   ],
+   "hoTu": [
+    "leader (n)",
+    "leadership (n)",
+    "leading (adj)"
+   ],
+   "ghiChu": "\"lead to + danh từ\" là cụm chỉ hệ quả quan trọng nhất trong Task 2. Quá khứ: led."
+  },
+  {
+   "chu": "lock",
+   "doc": "/lɒk/",
+   "loai": "v",
+   "nghia": "khoá",
+   "cap": "A2",
+   "viDu": "Do not forget to lock the door when you leave.",
+   "viDuNghia": "Đừng quên khoá cửa khi bạn ra ngoài.",
+   "cumTu": [
+    "lock the door",
+    "lock your screen",
+    "lock up"
+   ],
+   "hoTu": [
+    "lock (n)",
+    "unlock (v)"
+   ]
+  },
+  {
+   "chu": "manage",
+   "doc": "/ˈmænɪdʒ/",
+   "loai": "v",
+   "nghia": "quản lý; xoay xở được",
+   "cap": "A2",
+   "viDu": "She will manage a team of ten people.",
+   "viDuNghia": "Cô ấy sẽ quản lý một nhóm mười người.",
+   "cumTu": [
+    "manage to do",
+    "manage a team",
+    "manage time",
+    "manage money"
+   ],
+   "hoTu": [
+    "manager (n)",
+    "management (n)"
+   ],
+   "ghiChu": "\"manage to do\" = cố gắng và làm được."
+  },
+  {
+   "chu": "matter",
+   "doc": "/ˈmætə(r)/",
+   "loai": "v",
+   "nghia": "quan trọng, có ý nghĩa",
+   "cap": "A2",
+   "viDu": "It does not matter if you make a mistake.",
+   "viDuNghia": "Bạn mắc lỗi cũng không sao cả.",
+   "cumTu": [
+    "it doesn't matter",
+    "what matters",
+    "matter to"
+   ],
+   "hoTu": [
+    "matter (n)"
+   ],
+   "ghiChu": "\"What's the matter?\" = Có chuyện gì thế?"
+  },
+  {
+   "chu": "mind",
+   "doc": "/maɪnd/",
+   "loai": "v",
+   "nghia": "phiền, ngại; để ý",
+   "cap": "A2",
+   "viDu": "Do you mind if I open the window?",
+   "viDuNghia": "Bạn có phiền nếu tôi mở cửa sổ không?",
+   "cumTu": [
+    "do you mind",
+    "would you mind",
+    "never mind",
+    "mind your step"
+   ],
+   "hoTu": [
+    "mind (n)"
+   ],
+   "ghiChu": "\"Would you mind + V-ing?\" Trả lời đồng ý là \"No, not at all\"."
+  },
+  {
+   "chu": "notice",
+   "doc": "/ˈnəʊtɪs/",
+   "loai": "v",
+   "nghia": "nhận thấy, để ý thấy",
+   "cap": "A2",
+   "viDu": "Did you notice the new sign at the entrance?",
+   "viDuNghia": "Bạn có để ý thấy tấm biển mới ở lối vào không?",
+   "cumTu": [
+    "notice a change",
+    "notice a difference",
+    "notice that"
+   ],
+   "hoTu": [
+    "notice (n)",
+    "noticeable (adj)"
+   ]
+  },
+  {
+   "chu": "offer",
+   "doc": "/ˈɒfə(r)/",
+   "loai": "v",
+   "nghia": "mời, đề nghị; cung cấp",
+   "cap": "A2",
+   "viDu": "The company will offer free English lessons to all staff.",
+   "viDuNghia": "Công ty sẽ cung cấp các buổi học tiếng Anh miễn phí cho toàn bộ nhân viên.",
+   "cumTu": [
+    "offer help",
+    "offer a job",
+    "offer to do",
+    "offer a service"
+   ],
+   "hoTu": [
+    "offer (n)",
+    "offering (n)"
+   ]
+  },
+  {
+   "chu": "organize",
+   "doc": "/ˈɔːɡənaɪz/",
+   "loai": "v",
+   "nghia": "tổ chức, sắp xếp",
+   "cap": "A2",
+   "viDu": "We plan to organize a party for our teacher.",
+   "viDuNghia": "Chúng tôi định tổ chức một bữa tiệc cho thầy giáo.",
+   "cumTu": [
+    "organize an event",
+    "organize a meeting",
+    "organize your time"
+   ],
+   "hoTu": [
+    "organization (n)",
+    "organizer (n)",
+    "organized (adj)"
+   ],
+   "ghiChu": "Anh-Anh cũng viết \"organise\"."
+  },
+  {
+   "chu": "pick",
+   "doc": "/pɪk/",
+   "loai": "v",
+   "nghia": "chọn; hái, nhặt",
+   "cap": "A2",
+   "viDu": "You can pick any seat you like.",
+   "viDuNghia": "Bạn có thể chọn bất kỳ chỗ ngồi nào bạn thích.",
+   "cumTu": [
+    "pick up",
+    "pick a number",
+    "pick fruit",
+    "pick out"
+   ],
+   "hoTu": [
+    "pick (n)"
+   ]
+  },
+  {
+   "chu": "prevent",
+   "doc": "/prɪˈvent/",
+   "loai": "v",
+   "nghia": "ngăn chặn, phòng ngừa",
+   "cap": "A2",
+   "viDu": "Regular exercise can help prevent heart disease.",
+   "viDuNghia": "Tập thể dục đều đặn có thể giúp ngăn ngừa bệnh tim.",
+   "cumTu": [
+    "prevent somebody from doing",
+    "prevent disease",
+    "prevent accidents",
+    "prevent crime"
+   ],
+   "hoTu": [
+    "prevention (n)",
+    "preventive (adj)"
+   ],
+   "ghiChu": "prevent + tân ngữ + FROM + V-ing."
+  },
+  {
+   "chu": "produce",
+   "doc": "/prəˈdjuːs/",
+   "loai": "v",
+   "nghia": "sản xuất, tạo ra",
+   "cap": "A2",
+   "viDu": "This factory can produce a thousand cars a week.",
+   "viDuNghia": "Nhà máy này có thể sản xuất một nghìn chiếc xe mỗi tuần.",
+   "cumTu": [
+    "produce goods",
+    "produce food",
+    "produce electricity",
+    "produce results"
+   ],
+   "hoTu": [
+    "product (n)",
+    "production (n)",
+    "producer (n)",
+    "productive (adj)"
+   ],
+   "ghiChu": "Động từ nhấn âm hai; danh từ \"produce\" (nông sản) nhấn âm đầu."
+  },
+  {
+   "chu": "promise",
+   "doc": "/ˈprɒmɪs/",
+   "loai": "v",
+   "nghia": "hứa",
+   "cap": "A2",
+   "viDu": "I promise to send you the file tonight.",
+   "viDuNghia": "Tôi hứa sẽ gửi tệp cho bạn tối nay.",
+   "cumTu": [
+    "promise to do",
+    "promise that",
+    "keep a promise",
+    "break a promise"
+   ],
+   "hoTu": [
+    "promise (n)",
+    "promising (adj)"
+   ]
+  },
+  {
+   "chu": "pronounce",
+   "doc": "/prəˈnaʊns/",
+   "loai": "v",
+   "nghia": "phát âm",
+   "cap": "A2",
+   "viDu": "How do you pronounce this word?",
+   "viDuNghia": "Bạn phát âm từ này thế nào?",
+   "cumTu": [
+    "pronounce a word",
+    "pronounce correctly",
+    "hard to pronounce"
+   ],
+   "hoTu": [
+    "pronunciation (n)"
+   ],
+   "ghiChu": "Danh từ là pronUNciation (không có chữ \"o\" sau n) — rất hay viết sai."
+  },
+  {
+   "chu": "provide",
+   "doc": "/prəˈvaɪd/",
+   "loai": "v",
+   "nghia": "cung cấp",
+   "cap": "A2",
+   "viDu": "The hotel will provide breakfast for all guests.",
+   "viDuNghia": "Khách sạn sẽ cung cấp bữa sáng cho tất cả khách.",
+   "cumTu": [
+    "provide somebody with something",
+    "provide information",
+    "provide a service",
+    "provide support"
+   ],
+   "hoTu": [
+    "provider (n)",
+    "provision (n)"
+   ],
+   "ghiChu": "provide somebody WITH something / provide something FOR somebody."
+  },
+  {
+   "chu": "pull",
+   "doc": "/pʊl/",
+   "loai": "v",
+   "nghia": "kéo",
+   "cap": "A2",
+   "viDu": "You need to pull the door to open it.",
+   "viDuNghia": "Bạn cần kéo cửa để mở nó.",
+   "cumTu": [
+    "pull the door",
+    "pull out",
+    "pull over",
+    "pull down"
+   ],
+   "hoTu": [
+    "pull (n)"
+   ]
+  },
+  {
+   "chu": "push",
+   "doc": "/pʊʃ/",
+   "loai": "v",
+   "nghia": "đẩy; ấn",
+   "cap": "A2",
+   "viDu": "Push the red button to stop the machine.",
+   "viDuNghia": "Ấn nút đỏ để dừng máy.",
+   "cumTu": [
+    "push a button",
+    "push the door",
+    "push yourself",
+    "push back"
+   ],
+   "hoTu": [
+    "push (n)"
+   ]
+  },
+  {
+   "chu": "reach",
+   "doc": "/riːtʃ/",
+   "loai": "v",
+   "nghia": "đến, tới; đạt tới; với tới",
+   "cap": "A2",
+   "viDu": "The number of users will reach one million next year.",
+   "viDuNghia": "Số người dùng sẽ đạt một triệu vào năm tới.",
+   "cumTu": [
+    "reach a peak",
+    "reach an agreement",
+    "reach a goal",
+    "reach a decision"
+   ],
+   "hoTu": [
+    "reach (n)"
+   ],
+   "ghiChu": "Không dùng giới từ: reach the station (không nói \"reach to\"). \"reach a peak\" dùng trong Task 1."
+  },
+  {
+   "chu": "realize",
+   "doc": "/ˈriːəlaɪz/",
+   "loai": "v",
+   "nghia": "nhận ra",
+   "cap": "A2",
+   "viDu": "I did not realize how late it was.",
+   "viDuNghia": "Tôi đã không nhận ra là muộn đến thế.",
+   "cumTu": [
+    "realize that",
+    "realize a dream",
+    "suddenly realize",
+    "realize the importance"
+   ],
+   "hoTu": [
+    "realization (n)"
+   ],
+   "ghiChu": "Anh-Anh cũng viết \"realise\"."
+  },
+  {
+   "chu": "recognize",
+   "doc": "/ˈrekəɡnaɪz/",
+   "loai": "v",
+   "nghia": "nhận ra (đã biết từ trước); công nhận",
+   "cap": "A2",
+   "viDu": "I did not recognize him with his new haircut.",
+   "viDuNghia": "Tôi không nhận ra anh ấy với kiểu tóc mới.",
+   "cumTu": [
+    "recognize a face",
+    "recognize the need",
+    "be recognized as"
+   ],
+   "hoTu": [
+    "recognition (n)",
+    "recognizable (adj)"
+   ]
+  },
+  {
+   "chu": "refer",
+   "doc": "/rɪˈfɜː(r)/",
+   "loai": "v",
+   "nghia": "nhắc đến, đề cập; tham khảo",
+   "cap": "A2",
+   "viDu": "Please refer to the user guide for more details.",
+   "viDuNghia": "Vui lòng tham khảo hướng dẫn sử dụng để biết thêm chi tiết.",
+   "cumTu": [
+    "refer to",
+    "refer to as",
+    "refer back to"
+   ],
+   "hoTu": [
+    "reference (n)",
+    "referral (n)"
+   ],
+   "ghiChu": "Luôn đi với TO. Quá khứ gấp đôi r: referred."
+  },
+  {
+   "chu": "refuse",
+   "doc": "/rɪˈfjuːz/",
+   "loai": "v",
+   "nghia": "từ chối",
+   "cap": "A2",
+   "viDu": "They refuse to answer any questions.",
+   "viDuNghia": "Họ từ chối trả lời bất kỳ câu hỏi nào.",
+   "cumTu": [
+    "refuse to do",
+    "refuse an offer",
+    "refuse permission"
+   ],
+   "hoTu": [
+    "refusal (n)"
+   ],
+   "ghiChu": "refuse + to V."
+  },
+  {
+   "chu": "seem",
+   "doc": "/siːm/",
+   "loai": "v",
+   "nghia": "có vẻ, dường như",
+   "cap": "A2",
+   "viDu": "You seem tired today. Are you OK?",
+   "viDuNghia": "Hôm nay bạn có vẻ mệt. Bạn ổn chứ?",
+   "cumTu": [
+    "seem to be",
+    "it seems that",
+    "seem like",
+    "seem happy"
+   ],
+   "hoTu": [
+    "seemingly (adv)"
+   ],
+   "ghiChu": "seem + tính từ (seem happy), không dùng trạng từ."
+  },
+  {
+   "chu": "separate",
+   "doc": "/ˈsepəreɪt/",
+   "loai": "v",
+   "nghia": "tách ra, chia tách",
+   "cap": "A2",
+   "viDu": "Please separate the paper from the plastic.",
+   "viDuNghia": "Vui lòng tách giấy ra khỏi nhựa.",
+   "cumTu": [
+    "separate from",
+    "separate into",
+    "separate waste"
+   ],
+   "hoTu": [
+    "separate (adj) /ˈseprət/",
+    "separation (n)",
+    "separately (adv)"
+   ],
+   "ghiChu": "Chính tả: sepArate (không phải \"seperate\"). Tính từ đọc /ˈseprət/."
+  },
+  {
+   "chu": "shout",
+   "doc": "/ʃaʊt/",
+   "loai": "v",
+   "nghia": "hét, la to",
+   "cap": "A2",
+   "viDu": "There is no need to shout. I can hear you.",
+   "viDuNghia": "Không cần phải hét. Tôi nghe thấy bạn mà.",
+   "cumTu": [
+    "shout at",
+    "shout for help",
+    "shout out"
+   ],
+   "hoTu": [
+    "shout (n)"
+   ],
+   "ghiChu": "shout AT somebody = quát; shout TO somebody = gọi to."
+  },
+  {
+   "chu": "shut",
+   "doc": "/ʃʌt/",
+   "loai": "v",
+   "nghia": "đóng, khép",
+   "cap": "A2",
+   "viDu": "Could you shut the window, please?",
+   "viDuNghia": "Bạn đóng cửa sổ giúp được không?",
+   "cumTu": [
+    "shut the door",
+    "shut down",
+    "shut your eyes",
+    "shut up"
+   ],
+   "ghiChu": "Ba dạng giống nhau: shut, shut, shut. \"Shut up\" là thô lỗ."
+  },
+  {
+   "chu": "solve",
+   "doc": "/sɒlv/",
+   "loai": "v",
+   "nghia": "giải quyết, giải (bài toán)",
+   "cap": "A2",
+   "viDu": "We need to solve this problem before the deadline.",
+   "viDuNghia": "Chúng ta cần giải quyết vấn đề này trước hạn chót.",
+   "cumTu": [
+    "solve a problem",
+    "solve a puzzle",
+    "solve a crime",
+    "solve an issue"
+   ],
+   "hoTu": [
+    "solution (n)",
+    "solvable (adj)"
+   ],
+   "ghiChu": "SOLVE a problem (không dùng \"solve a solution\" hay \"fix a solution\")."
+  },
+  {
+   "chu": "steal",
+   "doc": "/stiːl/",
+   "loai": "v",
+   "nghia": "ăn trộm, lấy cắp",
+   "cap": "A2",
+   "viDu": "Someone tried to steal my bike last night.",
+   "viDuNghia": "Đêm qua có người định lấy trộm xe đạp của tôi.",
+   "cumTu": [
+    "steal money",
+    "steal from",
+    "steal data",
+    "steal an idea"
+   ],
+   "hoTu": [
+    "theft (n)",
+    "thief (n)"
+   ],
+   "ghiChu": "Quá khứ: stole, stolen. steal + đồ vật; rob + người/nơi chốn."
+  },
+  {
+   "chu": "succeed",
+   "doc": "/səkˈsiːd/",
+   "loai": "v",
+   "nghia": "thành công",
+   "cap": "A2",
+   "viDu": "You need to work hard to succeed in this field.",
+   "viDuNghia": "Bạn cần làm việc chăm chỉ để thành công trong lĩnh vực này.",
+   "cumTu": [
+    "succeed in doing",
+    "succeed at",
+    "succeed in life",
+    "succeed in business"
+   ],
+   "hoTu": [
+    "success (n)",
+    "successful (adj)",
+    "successfully (adv)"
+   ],
+   "ghiChu": "succeed IN + V-ing (không dùng \"succeed to do\")."
+  },
+  {
+   "chu": "suggest",
+   "doc": "/səˈdʒest/",
+   "loai": "v",
+   "nghia": "gợi ý, đề xuất; cho thấy",
+   "cap": "A2",
+   "viDu": "I suggest taking a short break now.",
+   "viDuNghia": "Tôi đề nghị nghỉ giải lao một lát bây giờ.",
+   "cumTu": [
+    "suggest doing",
+    "suggest that",
+    "suggest an idea",
+    "research suggests"
+   ],
+   "hoTu": [
+    "suggestion (n)"
+   ],
+   "ghiChu": "suggest + V-ing / suggest that… — KHÔNG nói \"suggest somebody to do\"."
+  },
+  {
+   "chu": "suppose",
+   "doc": "/səˈpəʊz/",
+   "loai": "v",
+   "nghia": "cho rằng, giả sử",
+   "cap": "A2",
+   "viDu": "I suppose you are right about that.",
+   "viDuNghia": "Tôi cho là bạn nói đúng về điều đó.",
+   "cumTu": [
+    "I suppose so",
+    "be supposed to",
+    "suppose that"
+   ],
+   "hoTu": [
+    "supposedly (adv)"
+   ],
+   "ghiChu": "\"be supposed to do\" = được cho là phải làm, lẽ ra phải."
+  },
+  {
+   "chu": "throw",
+   "doc": "/θrəʊ/",
+   "loai": "v",
+   "nghia": "ném, quăng",
+   "cap": "A2",
+   "viDu": "Please do not throw rubbish on the street.",
+   "viDuNghia": "Xin đừng vứt rác ra đường.",
+   "cumTu": [
+    "throw away",
+    "throw a ball",
+    "throw a party",
+    "throw out"
+   ],
+   "hoTu": [
+    "throw (n)"
+   ],
+   "ghiChu": "Quá khứ: threw, thrown."
+  },
+  {
+   "chu": "wish",
+   "doc": "/wɪʃ/",
+   "loai": "v",
+   "nghia": "ước, mong",
+   "cap": "A2",
+   "viDu": "I wish you all the best in your new job.",
+   "viDuNghia": "Chúc bạn mọi điều tốt đẹp nhất ở công việc mới.",
+   "cumTu": [
+    "wish somebody luck",
+    "wish for",
+    "I wish I could",
+    "best wishes"
+   ],
+   "hoTu": [
+    "wish (n)"
+   ],
+   "ghiChu": "\"I wish + quá khứ đơn\" để ước điều trái hiện tại: I wish I had more time."
+  },
+  {
+   "chu": "worry",
+   "doc": "/ˈwʌri/",
+   "loai": "v",
+   "nghia": "lo lắng",
+   "cap": "A2",
+   "viDu": "Do not worry about the test. You will be fine.",
+   "viDuNghia": "Đừng lo về bài kiểm tra. Bạn sẽ ổn thôi.",
+   "cumTu": [
+    "worry about",
+    "don't worry",
+    "worry too much"
+   ],
+   "hoTu": [
+    "worried (adj)",
+    "worrying (adj)",
+    "worry (n)"
+   ],
+   "ghiChu": "worry ABOUT something."
+  },
+  {
+   "chu": "sail",
+   "doc": "/seɪl/",
+   "loai": "v",
+   "nghia": "đi thuyền buồm, đi tàu biển",
+   "cap": "A2",
+   "viDu": "They plan to sail around the island this summer.",
+   "viDuNghia": "Họ định đi thuyền quanh đảo vào mùa hè này.",
+   "cumTu": [
+    "sail around",
+    "sail across",
+    "set sail",
+    "go sailing"
+   ],
+   "hoTu": [
+    "sailing (n)",
+    "sailor (n)",
+    "sail (n)"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1290 @@
+{
+  "ma": "khoa-ielts-t4-4",
+  "nn": "en",
+  "ten": "Từ của IELTS Tập 4 (6.0 → 7.0) · 4",
+  "moTa": "Từ vựng dạy trong IELTS Tập 4 (6.0 → 7.0) trên web (cùng nghĩa, ví dụ, ghi chú như bài học) — gom vào lộ trình để ôn theo ngày.",
+  "nhom": "ielts",
+  "cap": "C1",
+  "tu": [
+    {
+      "chu": "depress",
+      "doc": "/dɪˈpres/",
+      "loai": "v",
+      "nghia": "làm buồn chán; làm suy giảm (giá, kinh tế)",
+      "cap": "C1",
+      "viDu": "Cheap imports have depressed wages in the textile industry.",
+      "viDuNghia": "Hàng nhập giá rẻ đã kéo lương ngành dệt xuống.",
+      "ghiChu": "depress prices / wages / demand · depression (n): an economic depression · depressed / depressing (adj)"
+    },
+    {
+      "chu": "forthcoming",
+      "doc": "/ˌfɔːθˈkʌmɪŋ/",
+      "loai": "adj",
+      "nghia": "sắp tới; sẵn có (khi cần)",
+      "cap": "C1",
+      "viDu": "No explanation was forthcoming from the ministry.",
+      "viDuNghia": "Bộ không đưa ra lời giải thích nào.",
+      "ghiChu": "the forthcoming election / book · funding was not forthcoming (= không được cấp)"
+    },
+    {
+      "chu": "inclined",
+      "doc": "/ɪnˈklaɪnd/",
+      "loai": "adj",
+      "nghia": "có xu hướng; thiên về",
+      "cap": "C1",
+      "viDu": "Younger voters are more inclined to support environmental policies.",
+      "viDuNghia": "Cử tri trẻ có xu hướng ủng hộ chính sách môi trường hơn.",
+      "ghiChu": "be inclined to V · I'm inclined to agree (rào đón lịch sự) · inclination (n) · incline (v, n: mặt dốc)"
+    },
+    {
+      "chu": "intrinsic",
+      "doc": "/ɪnˈtrɪnzɪk/",
+      "loai": "adj",
+      "nghia": "thuộc bản chất, tự thân",
+      "cap": "C1",
+      "viDu": "Good teachers build on children's intrinsic motivation to learn.",
+      "viDuNghia": "Giáo viên giỏi dựa trên động lực học tự thân của trẻ.",
+      "ghiChu": "intrinsic value / motivation ≠ extrinsic · be intrinsic to sth · intrinsically (adv)"
+    },
+    {
+      "chu": "invoke",
+      "doc": "/ɪnˈvəʊk/",
+      "loai": "v",
+      "nghia": "viện dẫn (luật, nguyên tắc)",
+      "cap": "C1",
+      "viDu": "The government invoked emergency powers to close the border.",
+      "viDuNghia": "Chính phủ viện dẫn quyền khẩn cấp để đóng biên giới.",
+      "ghiChu": "invoke a law / a right / a principle · ⚠️ khác evoke (gợi lên cảm xúc, ký ức)"
+    },
+    {
+      "chu": "levy",
+      "doc": "/ˈlevi/",
+      "loai": "n",
+      "nghia": "khoản thu, thuế; đánh (thuế)",
+      "cap": "C1",
+      "viDu": "A levy on sugary drinks was introduced to tackle obesity.",
+      "viDuNghia": "Một khoản thuế đánh vào đồ uống có đường được áp dụng để chống béo phì.",
+      "ghiChu": "impose / introduce a levy on sth · levy a tax / a fine on sb"
+    },
+    {
+      "chu": "odd",
+      "doc": "/ɒd/",
+      "loai": "adj",
+      "nghia": "kỳ lạ; lẻ (số)",
+      "cap": "C1",
+      "viDu": "It seems odd that no one questioned the figures.",
+      "viDuNghia": "Thật lạ là không ai đặt câu hỏi về các con số.",
+      "ghiChu": "odd numbers ≠ even numbers · It is odd that… · the odd + N (= thỉnh thoảng): the odd mistake · oddly (adv)"
+    },
+    {
+      "chu": "panel",
+      "doc": "/ˈpænl/",
+      "loai": "n",
+      "nghia": "hội đồng (chuyên gia); tấm bảng",
+      "cap": "C1",
+      "viDu": "A panel of experts was appointed to review the evidence.",
+      "viDuNghia": "Một hội đồng chuyên gia được chỉ định để xem xét chứng cứ.",
+      "ghiChu": "a panel of experts / judges · an interview panel · a solar panel · a panel discussion"
+    },
+    {
+      "chu": "so-called",
+      "doc": "/ˌsəʊ ˈkɔːld/",
+      "loai": "adj",
+      "nghia": "cái gọi là (ngụ ý nghi ngờ / giới thiệu thuật ngữ)",
+      "cap": "C1",
+      "viDu": "The so-called sharing economy has created few stable jobs.",
+      "viDuNghia": "Cái gọi là kinh tế chia sẻ tạo ra rất ít việc làm ổn định.",
+      "ghiChu": "đứng TRƯỚC danh từ, có gạch nối · sau động từ viết rời: the area is so called because…"
+    },
+    {
+      "chu": "generative AI",
+      "doc": "/ˌdʒenərətɪv eɪ ˈaɪ/",
+      "loai": "n",
+      "nghia": "AI tạo sinh (viết chữ, vẽ ảnh)",
+      "cap": "C1",
+      "viDu": "Generative AI can draft an essay in seconds, which raises questions about assessment.",
+      "viDuNghia": "AI tạo sinh có thể viết nháp một bài luận trong vài giây, điều này đặt ra câu hỏi về việc đánh giá.",
+      "ghiChu": "generative AI tools · AI-generated content / images"
+    },
+    {
+      "chu": "training data",
+      "doc": "/ˈtreɪnɪŋ ˌdeɪtə/",
+      "loai": "n",
+      "nghia": "dữ liệu huấn luyện",
+      "cap": "C1",
+      "viDu": "A system is only as fair as the training data it learns from.",
+      "viDuNghia": "Một hệ thống chỉ công bằng ngang với dữ liệu huấn luyện mà nó học.",
+      "ghiChu": "be trained on data · data: văn học thuật dùng số nhiều (the data are), đời thường số ít"
+    },
+    {
+      "chu": "algorithmic bias",
+      "doc": "/ˌælɡəˌrɪðmɪk ˈbaɪəs/",
+      "loai": "n",
+      "nghia": "thiên lệch thuật toán",
+      "cap": "C1",
+      "viDu": "Algorithmic bias has led some firms to reject qualified female applicants.",
+      "viDuNghia": "Thiên lệch thuật toán đã khiến một số công ty loại ứng viên nữ đủ năng lực.",
+      "ghiChu": "bias against / towards / in favour of sb · biased (adj) · eliminate / reduce bias"
+    },
+    {
+      "chu": "facial recognition",
+      "doc": "/ˌfeɪʃl ˌrekəɡˈnɪʃn/",
+      "loai": "n",
+      "nghia": "nhận diện khuôn mặt",
+      "cap": "C1",
+      "viDu": "Several cities have banned the use of facial recognition by the police.",
+      "viDuNghia": "Một số thành phố đã cấm cảnh sát dùng nhận diện khuôn mặt.",
+      "ghiChu": "facial-recognition software / cameras"
+    },
+    {
+      "chu": "deepfake",
+      "doc": "/ˈdiːpfeɪk/",
+      "loai": "n",
+      "nghia": "video / âm thanh giả mạo bằng AI",
+      "cap": "C1",
+      "viDu": "Deepfakes make it harder for voters to know which videos are genuine.",
+      "viDuNghia": "Deepfake khiến cử tri khó biết video nào là thật.",
+      "ghiChu": "a deepfake video · từ mới, trung tính; trong Task 2 có thể viết: AI-generated fake videos"
+    },
+    {
+      "chu": "disruptive",
+      "doc": "/dɪsˈrʌptɪv/",
+      "loai": "adj",
+      "nghia": "gây xáo trộn, làm thay đổi tận gốc (một ngành)",
+      "cap": "C1",
+      "viDu": "Ride-hailing apps proved highly disruptive to the taxi industry.",
+      "viDuNghia": "Ứng dụng gọi xe đã gây xáo trộn mạnh ngành taxi.",
+      "ghiChu": "disruptive technology / innovation · disrupt (v) · disruption (n): cause disruption to sth"
+    },
+    {
+      "chu": "the gig economy",
+      "doc": "/ðə ˈɡɪɡ iˌkɒnəmi/",
+      "loai": "n",
+      "nghia": "kinh tế việc làm tự do theo “cuốc”",
+      "cap": "C1",
+      "viDu": "Workers in the gig economy rarely receive sick pay or a pension.",
+      "viDuNghia": "Người làm trong kinh tế việc tự do hiếm khi có lương ốm hay lương hưu.",
+      "ghiChu": "gig workers · platform work · nối Tập 3 Ngày 14 (quyền lợi lao động)"
+    },
+    {
+      "chu": "upskill",
+      "doc": "/ˌʌpˈskɪl/",
+      "loai": "v",
+      "nghia": "nâng cao kỹ năng (cho nhân viên / bản thân)",
+      "cap": "C1",
+      "viDu": "Governments should help workers upskill before their jobs are automated.",
+      "viDuNghia": "Chính phủ nên giúp người lao động nâng kỹ năng trước khi việc của họ bị tự động hoá.",
+      "ghiChu": "upskill the workforce · reskill / retrain = học kỹ năng khác để đổi nghề"
+    },
+    {
+      "chu": "early adopter",
+      "doc": "/ˌɜːli əˈdɒptə/",
+      "loai": "n",
+      "nghia": "người dùng sớm (công nghệ mới)",
+      "cap": "C1",
+      "viDu": "Early adopters pay high prices and put up with faults.",
+      "viDuNghia": "Người dùng sớm trả giá cao và chịu các lỗi vặt.",
+      "ghiChu": "an early adopter of sth · adopt (v) a technology · adoption (n): the adoption of electric vehicles"
+    },
+    {
+      "chu": "streamline",
+      "doc": "/ˈstriːmlaɪn/",
+      "loai": "v",
+      "nghia": "tinh gọn, làm cho hiệu quả hơn",
+      "cap": "C1",
+      "viDu": "The hospital streamlined its booking system, cutting waiting times by a third.",
+      "viDuNghia": "Bệnh viện tinh gọn hệ thống đặt lịch, giảm một phần ba thời gian chờ.",
+      "ghiChu": "streamline a process / procedures / operations"
+    },
+    {
+      "chu": "the Internet of Things",
+      "doc": "/ði ˌɪntənet əv ˈθɪŋz/",
+      "loai": "n",
+      "nghia": "Internet vạn vật (thiết bị nối mạng)",
+      "cap": "C1",
+      "viDu": "The Internet of Things means that even a fridge can be hacked.",
+      "viDuNghia": "Internet vạn vật nghĩa là ngay cả tủ lạnh cũng có thể bị xâm nhập.",
+      "ghiChu": "viết tắt IoT · smart / connected devices · a smart home"
+    },
+    {
+      "chu": "e-waste",
+      "doc": "/ˈiː weɪst/",
+      "loai": "n",
+      "nghia": "rác thải điện tử",
+      "cap": "C1",
+      "viDu": "Only a fifth of the world's e-waste is properly recycled.",
+      "viDuNghia": "Chỉ một phần năm rác điện tử của thế giới được tái chế đúng cách.",
+      "ghiChu": "= electronic waste · dispose of / recycle e-waste · không đếm được"
+    },
+    {
+      "chu": "planned obsolescence",
+      "doc": "/ˌplænd ˌɒbsəˈlesns/",
+      "loai": "n",
+      "nghia": "sự lỗi thời có chủ đích (thiết kế để mau hỏng)",
+      "cap": "C1",
+      "viDu": "Planned obsolescence forces consumers to replace phones every two years.",
+      "viDuNghia": "Lỗi thời có chủ đích buộc người tiêu dùng thay điện thoại hai năm một lần.",
+      "ghiChu": "obsolete (adj — Tập 2 Ngày 6) → obsolescence (n) · the right to repair"
+    },
+    {
+      "chu": "tech giant",
+      "doc": "/ˈtek ˌdʒaɪənt/",
+      "loai": "n",
+      "nghia": "tập đoàn công nghệ khổng lồ",
+      "cap": "C1",
+      "viDu": "A handful of tech giants now control most online advertising.",
+      "viDuNghia": "Một nhúm tập đoàn công nghệ nay kiểm soát phần lớn quảng cáo trực tuyến.",
+      "ghiChu": "regulate the tech giants · a monopoly (thế độc quyền) · trang trọng: large technology companies"
+    },
+    {
+      "chu": "game-changer",
+      "doc": "/ˈɡeɪm ˌtʃeɪndʒə/",
+      "loai": "n",
+      "nghia": "thứ làm thay đổi cuộc chơi (thân mật)",
+      "cap": "C1",
+      "viDu": "For rural clinics, video consultations have been a real game-changer.",
+      "viDuNghia": "Với trạm y tế nông thôn, khám qua video thật sự làm thay đổi cuộc chơi.",
+      "ghiChu": "hợp Speaking · Task 2 viết: a major breakthrough / a turning point"
+    },
+    {
+      "chu": "over-reliance",
+      "doc": "/ˌəʊvə rɪˈlaɪəns/",
+      "loai": "n",
+      "nghia": "sự phụ thuộc quá mức",
+      "cap": "C1",
+      "viDu": "Over-reliance on navigation apps may weaken our sense of direction.",
+      "viDuNghia": "Phụ thuộc quá mức vào ứng dụng dẫn đường có thể làm yếu khả năng định hướng.",
+      "ghiChu": "over-reliance on sth · be over-reliant on · nối: rely heavily on (Tập 2 Ngày 6)"
+    },
+    {
+      "chu": "render sth obsolete",
+      "doc": "/ˈrendə ˈɒbsəliːt/",
+      "loai": "phr",
+      "nghia": "khiến cái gì trở nên lỗi thời",
+      "cap": "C1",
+      "viDu": "Streaming has rendered DVD players virtually obsolete.",
+      "viDuNghia": "Dịch vụ xem trực tuyến đã khiến đầu DVD gần như lỗi thời.",
+      "ghiChu": "render + N + adj: render sb unemployed / sth useless · trang trọng hơn make"
+    },
+    {
+      "chu": "roll out",
+      "doc": "/ˌrəʊl ˈaʊt/",
+      "loai": "phr",
+      "nghia": "triển khai rộng (dịch vụ, chương trình)",
+      "cap": "C1",
+      "viDu": "The scheme will be rolled out nationwide next year.",
+      "viDuNghia": "Chương trình sẽ được triển khai toàn quốc năm sau.",
+      "ghiChu": "roll out a service / a vaccine / 5G · the roll-out of sth (n) · thử trước: pilot (v, n)"
+    },
+    {
+      "chu": "teething problems",
+      "doc": "/ˈtiːðɪŋ ˌprɒbləmz/",
+      "loai": "n",
+      "nghia": "trục trặc ban đầu (khi mới triển khai)",
+      "cap": "C1",
+      "viDu": "After some teething problems, the online booking system now works well.",
+      "viDuNghia": "Sau vài trục trặc ban đầu, hệ thống đặt chỗ trực tuyến nay chạy tốt.",
+      "ghiChu": "hợp Speaking · Task 2 viết: initial difficulties · luôn số nhiều"
+    },
+    {
+      "chu": "keep pace with",
+      "doc": "/kiːp ˈpeɪs wɪð/",
+      "loai": "phr",
+      "nghia": "theo kịp tốc độ của",
+      "cap": "C1",
+      "viDu": "Legislation has failed to keep pace with advances in AI.",
+      "viDuNghia": "Luật pháp đã không theo kịp các tiến bộ về AI.",
+      "ghiChu": "= keep up with (Tập 2 Ngày 6, thân mật hơn) · keep pace with change / demand / inflation"
+    },
+    {
+      "chu": "at the touch of a button",
+      "doc": "/ət ðə ˌtʌtʃ əv ə ˈbʌtn/",
+      "loai": "phr",
+      "nghia": "chỉ bằng một nút bấm",
+      "cap": "C1",
+      "viDu": "Customers can now compare hundreds of prices at the touch of a button.",
+      "viDuNghia": "Khách hàng nay có thể so hàng trăm mức giá chỉ bằng một nút bấm.",
+      "ghiChu": "cùng nghĩa: at your fingertips · with a single click"
+    },
+    {
+      "chu": "seabed",
+      "doc": "/ˈsiːbed/",
+      "loai": "n",
+      "nghia": "đáy biển",
+      "cap": "C1",
+      "viDu": "The cable rests on the seabed for most of its length.",
+      "viDuNghia": "Sợi cáp nằm trên đáy biển suốt phần lớn chiều dài.",
+      "ghiChu": "on the seabed · = the ocean floor · cùng khuôn: riverbed"
+    },
+    {
+      "chu": "strand",
+      "doc": "/strænd/",
+      "loai": "n",
+      "nghia": "sợi (tóc, dây, sợi quang)",
+      "cap": "C1",
+      "viDu": "Each cable contains several strands of glass.",
+      "viDuNghia": "Mỗi sợi cáp chứa vài sợi thuỷ tinh.",
+      "ghiChu": "a strand of hair / wire / fibre · nghĩa bóng: a strand of an argument"
+    },
+    {
+      "chu": "sabotage",
+      "doc": "/ˈsæbətɑːʒ/",
+      "loai": "n",
+      "nghia": "sự phá hoại có chủ ý",
+      "cap": "C1",
+      "viDu": "Investigators ruled out sabotage as the cause of the fault.",
+      "viDuNghia": "Nhà điều tra đã loại trừ phá hoại là nguyên nhân sự cố.",
+      "ghiChu": "an act of sabotage · sabotage a plan / talks (v)"
+    },
+    {
+      "chu": "parable",
+      "doc": "/ˈpærəbl/",
+      "loai": "n",
+      "nghia": "câu chuyện ngụ ý, dụ ngôn",
+      "cap": "C1",
+      "viDu": "For a generation this parable guided policy.",
+      "viDuNghia": "Suốt một thế hệ, dụ ngôn này dẫn đường cho chính sách.",
+      "ghiChu": "gần nghĩa: a thought experiment (thí nghiệm tưởng tượng)"
+    },
+    {
+      "chu": "free-rider",
+      "doc": "/ˌfriː ˈraɪdə/",
+      "loai": "n",
+      "nghia": "người hưởng lợi mà không đóng góp",
+      "cap": "C1",
+      "viDu": "Many players chose to punish free-riders.",
+      "viDuNghia": "Nhiều người chơi chọn phạt kẻ ăn theo.",
+      "ghiChu": "the free-rider problem — dùng được cho đề thuế, giao thông công cộng, môi trường"
+    },
+    {
+      "chu": "graduated",
+      "doc": "/ˈɡrædʒueɪtɪd/",
+      "loai": "adj",
+      "nghia": "tăng dần theo bậc",
+      "cap": "C1",
+      "viDu": "Penalties were graduated: the punishment rose if the offence was repeated.",
+      "viDuNghia": "Hình phạt tăng theo bậc: tái phạm thì phạt nặng hơn.",
+      "ghiChu": "a graduated tax / response"
+    },
+    {
+      "chu": "blueprint",
+      "doc": "/ˈbluːprɪnt/",
+      "loai": "n",
+      "nghia": "bản thiết kế mẫu, khuôn để làm theo",
+      "cap": "C1",
+      "viDu": "The list was not a blueprint to be copied.",
+      "viDuNghia": "Danh sách ấy không phải khuôn mẫu để sao chép.",
+      "ghiChu": "a blueprint for reform · panacea = thuốc chữa bách bệnh (no panaceas)"
+    },
+    {
+      "chu": "concede",
+      "doc": "/kənˈsiːd/",
+      "loai": "v",
+      "nghia": "thừa nhận (điều mình từng không muốn nhận)",
+      "cap": "C1",
+      "viDu": "Hardin himself later conceded the point.",
+      "viDuNghia": "Chính Hardin về sau cũng thừa nhận điểm này.",
+      "ghiChu": "n: concession · concede that… — động từ tường thuật band 7 (Ngày 17)"
+    },
+    {
+      "chu": "booked out",
+      "doc": "/ˌbʊkt ˈaʊt/",
+      "loai": "adj",
+      "nghia": "kín chỗ",
+      "cap": "C1",
+      "viDu": "The bed and breakfasts are booked out months ahead.",
+      "viDuNghia": "Các nhà nghỉ kín chỗ từ nhiều tháng trước.",
+      "ghiChu": "= fully booked · booked up"
+    },
+    {
+      "chu": "by ear",
+      "doc": "/baɪ ˈɪə/",
+      "loai": "phr",
+      "nghia": "(học, chơi nhạc) bằng tai, không nhìn bản nhạc",
+      "cap": "C1",
+      "viDu": "We teach everything by ear.",
+      "viDuNghia": "Chúng tôi dạy mọi thứ bằng tai.",
+      "ghiChu": "play it by ear (thành ngữ) = tuỳ cơ ứng biến — dùng được trong Speaking"
+    },
+    {
+      "chu": "put back",
+      "doc": "/ˌpʊt ˈbæk/",
+      "loai": "phr",
+      "nghia": "lùi (lịch) lại",
+      "cap": "C1",
+      "viDu": "The tower has been put back to next spring.",
+      "viDuNghia": "Cái tháp đã lùi sang mùa xuân tới.",
+      "ghiChu": "trang trọng: postpone / delay — bẫy quen của Part 2"
+    },
+    {
+      "chu": "hide",
+      "doc": "/haɪd/",
+      "loai": "n",
+      "nghia": "chòi nấp quan sát chim, thú",
+      "cap": "C1",
+      "viDu": "The trail leads to a wooden hide at the water's edge.",
+      "viDuNghia": "Lối mòn dẫn tới một chòi gỗ sát mép nước.",
+      "ghiChu": "nghĩa danh từ ít gặp của hide — hay có trong Part 2 về khu bảo tồn"
+    },
+    {
+      "chu": "put your name down",
+      "doc": "/ˌpʊt jɔː ˈneɪm daʊn/",
+      "loai": "phr",
+      "nghia": "ghi tên đăng ký",
+      "cap": "C1",
+      "viDu": "You need to put your name down at the desk beforehand.",
+      "viDuNghia": "Bạn cần ghi tên ở quầy trước.",
+      "ghiChu": "= sign up / book in advance / reserve a place"
+    },
+    {
+      "chu": "there and back",
+      "doc": "/ˌðeər ən ˈbæk/",
+      "loai": "phr",
+      "nghia": "cả đi lẫn về",
+      "cap": "C1",
+      "viDu": "It is six kilometres there and back.",
+      "viDuNghia": "Cả đi lẫn về là sáu cây số.",
+      "ghiChu": "= a round trip of six kilometres"
+    },
+    {
+      "chu": "authoritative",
+      "doc": "/ɔːˈθɒrətətɪv/",
+      "loai": "adj",
+      "nghia": "nghiêm nhưng ấm áp, có giải thích (kiểu được khuyên)",
+      "cap": "C1",
+      "viDu": "Authoritative parents set firm rules but explain the reasons for them.",
+      "viDuNghia": "Cha mẹ nghiêm-mà-ấm đặt quy tắc chắc nhưng giải thích lý do.",
+      "ghiChu": "còn nghĩa “có thẩm quyền, đáng tin”: an authoritative source"
+    },
+    {
+      "chu": "authoritarian",
+      "doc": "/ɔːˌθɒrɪˈteəriən/",
+      "loai": "adj",
+      "nghia": "độc đoán, bắt vâng lời tuyệt đối",
+      "cap": "C1",
+      "viDu": "An authoritarian style may produce obedience but little initiative.",
+      "viDuNghia": "Kiểu độc đoán có thể tạo ra sự vâng lời nhưng ít tính chủ động.",
+      "ghiChu": "an authoritarian regime / parent — nghĩa xấu"
+    },
+    {
+      "chu": "permissive",
+      "doc": "/pəˈmɪsɪv/",
+      "loai": "adj",
+      "nghia": "dễ dãi, ít đặt giới hạn",
+      "cap": "C1",
+      "viDu": "Permissive parenting is often blamed for poor behaviour at school.",
+      "viDuNghia": "Cách nuôi dạy dễ dãi thường bị đổ lỗi cho hành vi kém ở trường.",
+      "ghiChu": "gần nghĩa: lenient (nhẹ tay) · trái: strict"
+    },
+    {
+      "chu": "overprotective",
+      "doc": "/ˌəʊvəprəˈtektɪv/",
+      "loai": "adj",
+      "nghia": "bao bọc quá mức",
+      "cap": "C1",
+      "viDu": "Overprotective parents may prevent children from learning to judge risk.",
+      "viDuNghia": "Cha mẹ bao bọc quá mức có thể khiến trẻ không học được cách lường rủi ro.",
+      "ghiChu": "n: overprotection · báo chí: helicopter parents"
+    },
+    {
+      "chu": "boundary",
+      "doc": "/ˈbaʊndri/",
+      "loai": "n",
+      "nghia": "giới hạn, ranh giới",
+      "cap": "C1",
+      "viDu": "Teenagers test boundaries precisely because they need them.",
+      "viDuNghia": "Thiếu niên thử giới hạn chính vì chúng cần giới hạn.",
+      "ghiChu": "set / establish clear boundaries · overstep the boundaries"
+    },
+    {
+      "chu": "instil",
+      "doc": "/ɪnˈstɪl/",
+      "loai": "v",
+      "nghia": "gieo, khắc sâu (giá trị, thói quen)",
+      "cap": "C1",
+      "viDu": "Parents try to instil a sense of responsibility in their children.",
+      "viDuNghia": "Cha mẹ cố khắc sâu ý thức trách nhiệm ở con.",
+      "ghiChu": "instil sth in sb · instil discipline / confidence / values (Mỹ: instill)"
+    },
+    {
+      "chu": "spoil",
+      "doc": "/spɔɪl/",
+      "loai": "v",
+      "nghia": "nuông chiều làm hư",
+      "cap": "C1",
+      "viDu": "Grandparents are sometimes accused of spoiling their grandchildren.",
+      "viDuNghia": "Ông bà đôi khi bị trách là chiều hư cháu.",
+      "ghiChu": "a spoilt child (Anh) / spoiled (Mỹ) · trang trọng hơn: indulge"
+    },
+    {
+      "chu": "formative years",
+      "doc": "/ˈfɔːmətɪv jɪəz/",
+      "loai": "n",
+      "nghia": "những năm hình thành nhân cách (đầu đời)",
+      "cap": "C1",
+      "viDu": "Habits acquired in the formative years are hard to change.",
+      "viDuNghia": "Thói quen hình thành trong những năm đầu đời rất khó đổi.",
+      "ghiChu": "during / in sb's formative years · a formative experience / influence"
+    },
+    {
+      "chu": "cognitive development",
+      "doc": "/ˈkɒɡnətɪv dɪˈveləpmənt/",
+      "loai": "n",
+      "nghia": "sự phát triển nhận thức",
+      "cap": "C1",
+      "viDu": "Play is essential for a child's cognitive development.",
+      "viDuNghia": "Vui chơi thiết yếu cho sự phát triển nhận thức của trẻ.",
+      "ghiChu": "cùng khuôn: emotional / social / physical development"
+    },
+    {
+      "chu": "milestone",
+      "doc": "/ˈmaɪlstəʊn/",
+      "loai": "n",
+      "nghia": "cột mốc phát triển",
+      "cap": "C1",
+      "viDu": "Walking and first words are milestones that parents watch for anxiously.",
+      "viDuNghia": "Biết đi và nói những từ đầu tiên là các cột mốc cha mẹ hồi hộp chờ.",
+      "ghiChu": "reach / pass a milestone · a developmental milestone"
+    },
+    {
+      "chu": "primary caregiver",
+      "doc": "/ˈpraɪməri ˈkeəɡɪvə/",
+      "loai": "n",
+      "nghia": "người chăm sóc chính",
+      "cap": "C1",
+      "viDu": "Fathers who are the primary caregiver are still relatively rare.",
+      "viDuNghia": "Những ông bố là người chăm sóc chính vẫn tương đối hiếm.",
+      "ghiChu": "Anh cũng nói carer · caregiving (n)"
+    },
+    {
+      "chu": "single-parent household",
+      "doc": "/ˌsɪŋɡl ˈpeərənt ˈhaʊshəʊld/",
+      "loai": "n",
+      "nghia": "hộ gia đình đơn thân",
+      "cap": "C1",
+      "viDu": "Single-parent households are more likely to face financial hardship.",
+      "viDuNghia": "Hộ đơn thân dễ gặp khó khăn tài chính hơn.",
+      "ghiChu": "a lone parent · a dual-income household = hai người cùng đi làm"
+    },
+    {
+      "chu": "quality time",
+      "doc": "/ˈkwɒləti taɪm/",
+      "loai": "n",
+      "nghia": "thời gian thật sự dành cho nhau",
+      "cap": "C1",
+      "viDu": "Parents who work long hours struggle to spend quality time with their children.",
+      "viDuNghia": "Cha mẹ làm việc nhiều giờ khó dành thời gian chất lượng cho con.",
+      "ghiChu": "spend quality time with sb — dùng được cả nói lẫn viết"
+    },
+    {
+      "chu": "gender pay gap",
+      "doc": "/ˌdʒendə ˈpeɪ ɡæp/",
+      "loai": "n",
+      "nghia": "khoảng cách lương theo giới",
+      "cap": "C1",
+      "viDu": "The gender pay gap widens after the birth of a first child.",
+      "viDuNghia": "Khoảng cách lương theo giới giãn rộng sau khi sinh con đầu.",
+      "ghiChu": "narrow / close the gap · the gap widens"
+    },
+    {
+      "chu": "glass ceiling",
+      "doc": "/ˌɡlɑːs ˈsiːlɪŋ/",
+      "loai": "n",
+      "nghia": "“trần kính” — rào cản vô hình chặn thăng tiến",
+      "cap": "C1",
+      "viDu": "Few women in the industry have broken through the glass ceiling.",
+      "viDuNghia": "Ít phụ nữ trong ngành vượt qua được trần kính.",
+      "ghiChu": "break (through) / hit the glass ceiling — ẩn dụ đã thành thuật ngữ, viết được"
+    },
+    {
+      "chu": "unpaid labour",
+      "doc": "/ʌnˌpeɪd ˈleɪbə/",
+      "loai": "n",
+      "nghia": "lao động không lương (việc nhà, chăm sóc)",
+      "cap": "C1",
+      "viDu": "Women still perform the bulk of unpaid labour in the home.",
+      "viDuNghia": "Phụ nữ vẫn làm phần lớn lao động không lương trong nhà.",
+      "ghiChu": "unpaid domestic / care work · domestic chores = việc nhà"
+    },
+    {
+      "chu": "division of labour",
+      "doc": "/dɪˌvɪʒn əv ˈleɪbə/",
+      "loai": "n",
+      "nghia": "sự phân chia công việc",
+      "cap": "C1",
+      "viDu": "An unequal division of labour at home limits women's careers.",
+      "viDuNghia": "Phân chia việc nhà không đều hạn chế sự nghiệp của phụ nữ.",
+      "ghiChu": "an equal / fair / unequal division of labour"
+    },
+    {
+      "chu": "underrepresented",
+      "doc": "/ˌʌndəreprɪˈzentɪd/",
+      "loai": "adj",
+      "nghia": "có đại diện ít hơn tỉ lệ đáng có",
+      "cap": "C1",
+      "viDu": "Women remain underrepresented in engineering and computing.",
+      "viDuNghia": "Phụ nữ vẫn ít hiện diện trong ngành kỹ thuật và máy tính.",
+      "ghiChu": "underrepresented in a field · trái: overrepresented"
+    },
+    {
+      "chu": "gender-neutral",
+      "doc": "/ˌdʒendə ˈnjuːtrəl/",
+      "loai": "adj",
+      "nghia": "trung tính về giới",
+      "cap": "C1",
+      "viDu": "Some schools have introduced gender-neutral uniforms.",
+      "viDuNghia": "Một số trường đã áp dụng đồng phục trung tính về giới.",
+      "ghiChu": "gender-neutral language: firefighter (không fireman), chair (không chairman)"
+    },
+    {
+      "chu": "posterity",
+      "doc": "/pɒˈsterəti/",
+      "loai": "n",
+      "nghia": "hậu thế, các thế hệ mai sau",
+      "cap": "C1",
+      "viDu": "The archive was created to preserve these recordings for posterity.",
+      "viDuNghia": "Kho lưu trữ được lập ra để giữ các bản ghi này cho hậu thế.",
+      "ghiChu": "for posterity · on behalf of posterity. Trang trọng; văn nói dùng future generations."
+    },
+    {
+      "chu": "discount rate",
+      "doc": "/ˈdɪskaʊnt reɪt/",
+      "loai": "n",
+      "nghia": "tỉ lệ chiết khấu (mức giảm giá trị của lợi ích tương lai)",
+      "cap": "C1",
+      "viDu": "A high discount rate makes long-term projects look unattractive.",
+      "viDuNghia": "Tỉ lệ chiết khấu cao khiến các dự án dài hạn trông kém hấp dẫn.",
+      "ghiChu": "apply / set a discount rate · động từ: discount future benefits"
+    },
+    {
+      "chu": "materialise",
+      "doc": "/məˈtɪəriəlaɪz/",
+      "loai": "v",
+      "nghia": "thành hiện thực, xảy ra thật",
+      "cap": "C1",
+      "viDu": "The promised jobs never materialised.",
+      "viDuNghia": "Những việc làm được hứa hẹn không bao giờ thành hiện thực.",
+      "ghiChu": "thường ở phủ định: fail to materialise · Mỹ: materialize"
+    },
+    {
+      "chu": "constituency",
+      "doc": "/kənˈstɪtʃuənsi/",
+      "loai": "n",
+      "nghia": "khu vực bầu cử; nhóm cử tri / nhóm người ủng hộ",
+      "cap": "C1",
+      "viDu": "Pensioners are a powerful political constituency.",
+      "viDuNghia": "Người hưởng lương hưu là một nhóm cử tri có thế lực.",
+      "ghiChu": "họ từ: constituent (cử tri; thành phần)"
+    },
+    {
+      "chu": "veto",
+      "doc": "/ˈviːtəʊ/",
+      "loai": "v",
+      "nghia": "phủ quyết; quyền phủ quyết",
+      "cap": "C1",
+      "viDu": "The president has the power to veto any bill.",
+      "viDuNghia": "Tổng thống có quyền phủ quyết bất kỳ dự luật nào.",
+      "ghiChu": "the power of veto · veto a proposal / legislation"
+    },
+    {
+      "chu": "unflattering",
+      "doc": "/ʌnˈflætərɪŋ/",
+      "loai": "adj",
+      "nghia": "không mấy hay ho, cho thấy mặt xấu",
+      "cap": "C1",
+      "viDu": "The report gives an unflattering picture of the industry.",
+      "viDuNghia": "Báo cáo vẽ ra một bức tranh không mấy hay ho về ngành này.",
+      "ghiChu": "an unflattering verdict / comparison / portrait"
+    },
+    {
+      "chu": "a grey area",
+      "doc": "/ə ˌɡreɪ ˈeəriə/",
+      "loai": "phr",
+      "nghia": "vùng xám (chưa rõ đúng hay sai)",
+      "cap": "C1",
+      "viDu": "Using a friend's password is a bit of a grey area.",
+      "viDuNghia": "Dùng mật khẩu của bạn bè là chuyện hơi thuộc vùng xám.",
+      "ghiChu": "a legal / moral grey area · Mỹ: gray"
+    },
+    {
+      "chu": "a fine line between",
+      "doc": "/ə ˌfaɪn ˈlaɪn bɪtwiːn/",
+      "loai": "phr",
+      "nghia": "ranh giới mỏng giữa… và…",
+      "cap": "C1",
+      "viDu": "There's a fine line between protecting children and controlling them.",
+      "viDuNghia": "Có một ranh giới mỏng giữa bảo vệ con và kiểm soát con.",
+      "ghiChu": "tread / walk a fine line · sau between là hai V-ing hoặc hai danh từ"
+    },
+    {
+      "chu": "a trade-off",
+      "doc": "/ə ˈtreɪd ɒf/",
+      "loai": "n",
+      "nghia": "sự đánh đổi (được cái này mất cái kia)",
+      "cap": "C1",
+      "viDu": "There's always a trade-off between convenience and privacy.",
+      "viDuNghia": "Luôn có sự đánh đổi giữa tiện lợi và riêng tư.",
+      "ghiChu": "a trade-off between A and B · động từ: trade A for B"
+    },
+    {
+      "chu": "be held accountable",
+      "doc": "/bi held əˈkaʊntəbl/",
+      "loai": "phr",
+      "nghia": "bị buộc chịu trách nhiệm",
+      "cap": "C1",
+      "viDu": "Companies should be held accountable for what their products do.",
+      "viDuNghia": "Các công ty nên bị buộc chịu trách nhiệm về những gì sản phẩm của họ gây ra.",
+      "ghiChu": "hold sb accountable for sth · danh từ: accountability"
+    },
+    {
+      "chu": "a moral obligation",
+      "doc": "/ə ˌmɒrəl ɒblɪˈɡeɪʃn/",
+      "loai": "phr",
+      "nghia": "nghĩa vụ đạo đức",
+      "cap": "C1",
+      "viDu": "Do we have a moral obligation to help strangers?",
+      "viDuNghia": "Chúng ta có nghĩa vụ đạo đức phải giúp người lạ không?",
+      "ghiChu": "have / feel a moral obligation to do sth · gần nghĩa: a duty"
+    },
+    {
+      "chu": "double standards",
+      "doc": "/ˌdʌbl ˈstændədz/",
+      "loai": "n",
+      "nghia": "tiêu chuẩn kép",
+      "cap": "C1",
+      "viDu": "It's double standards to ban phones for pupils but not for teachers.",
+      "viDuNghia": "Cấm học sinh dùng điện thoại mà không cấm giáo viên là tiêu chuẩn kép.",
+      "ghiChu": "apply / have double standards"
+    },
+    {
+      "chu": "in principle… in practice…",
+      "doc": "/ɪn ˈprɪnsəpl/ /ɪn ˈpræktɪs/",
+      "loai": "phr",
+      "nghia": "về nguyên tắc… trên thực tế…",
+      "cap": "C1",
+      "viDu": "In principle everyone agrees; in practice hardly anyone changes their habits.",
+      "viDuNghia": "Về nguyên tắc ai cũng đồng ý; trên thực tế hầu như không ai đổi thói quen.",
+      "ghiChu": "Lỗi chính tả: principle (nguyên tắc) ≠ principal (hiệu trưởng; chính)"
+    },
+    {
+      "chu": "the lesser of two evils",
+      "doc": "/ðə ˌlesər əv tuː ˈiːvlz/",
+      "loai": "phr",
+      "nghia": "cái đỡ tệ hơn trong hai cái tệ",
+      "cap": "C1",
+      "viDu": "A white lie is sometimes the lesser of two evils.",
+      "viDuNghia": "Nói dối vô hại đôi khi là cái đỡ tệ hơn trong hai cái tệ.",
+      "ghiChu": "giữ nguyên dạng; không nói ~~the less of two evils~~"
+    },
+    {
+      "chu": "the end justifies the means",
+      "doc": "/ði end ˈdʒʌstɪfaɪz ðə miːnz/",
+      "loai": "phr",
+      "nghia": "mục đích biện minh cho phương tiện",
+      "cap": "C1",
+      "viDu": "I don't believe the end always justifies the means.",
+      "viDuNghia": "Tôi không tin mục đích lúc nào cũng biện minh được cho phương tiện.",
+      "ghiChu": "thường dùng ở phủ định / nghi vấn"
+    },
+    {
+      "chu": "turn a blind eye to",
+      "doc": "/tɜːn ə ˌblaɪnd ˈaɪ tə/",
+      "loai": "phr",
+      "nghia": "nhắm mắt làm ngơ trước",
+      "cap": "C1",
+      "viDu": "Platforms have turned a blind eye to fake accounts for years.",
+      "viDuNghia": "Các nền tảng đã làm ngơ trước tài khoản giả suốt nhiều năm.",
+      "ghiChu": "turn a blind eye to + N"
+    },
+    {
+      "chu": "take sth at face value",
+      "doc": "/teɪk ət ˌfeɪs ˈvæljuː/",
+      "loai": "phr",
+      "nghia": "tin ngay theo vẻ bề ngoài",
+      "cap": "C1",
+      "viDu": "People tend to take what they read online at face value.",
+      "viDuNghia": "Người ta hay tin ngay những gì đọc được trên mạng.",
+      "ghiChu": "thường phủ định: shouldn't take it at face value"
+    },
+    {
+      "chu": "a slippery slope",
+      "doc": "/ə ˌslɪpəri ˈsləʊp/",
+      "loai": "phr",
+      "nghia": "con dốc trơn (cho phép một bước nhỏ sẽ dẫn tới điều tệ hơn)",
+      "cap": "C1",
+      "viDu": "Letting employers read private messages is a slippery slope.",
+      "viDuNghia": "Cho chủ lao động đọc tin nhắn riêng là một con dốc trơn.",
+      "ghiChu": "be on / start down a slippery slope"
+    },
+    {
+      "chu": "the common good",
+      "doc": "/ðə ˌkɒmən ˈɡʊd/",
+      "loai": "phr",
+      "nghia": "lợi ích chung",
+      "cap": "C1",
+      "viDu": "Paying tax is a small sacrifice for the common good.",
+      "viDuNghia": "Đóng thuế là một hi sinh nhỏ vì lợi ích chung.",
+      "ghiChu": "for the common good · gần nghĩa: the public interest"
+    },
+    {
+      "chu": "conscience",
+      "doc": "/ˈkɒnʃəns/",
+      "loai": "n",
+      "nghia": "lương tâm",
+      "cap": "C1",
+      "viDu": "In the end it's a matter of individual conscience.",
+      "viDuNghia": "Rốt cuộc đó là chuyện lương tâm mỗi người.",
+      "ghiChu": "a clear / guilty conscience · ≠ conscious /ˈkɒnʃəs/ (có ý thức)"
+    },
+    {
+      "chu": "hypocritical",
+      "doc": "/ˌhɪpəˈkrɪtɪkl/",
+      "loai": "adj",
+      "nghia": "đạo đức giả",
+      "cap": "C1",
+      "viDu": "It's hypocritical to complain about pollution and drive everywhere.",
+      "viDuNghia": "Than phiền về ô nhiễm mà đi đâu cũng lái xe là đạo đức giả.",
+      "ghiChu": "danh từ: hypocrisy /hɪˈpɒkrəsi/ (trọng âm đổi chỗ) · người: a hypocrite"
+    },
+    {
+      "chu": "a marked increase",
+      "doc": "/ə ˌmɑːkt ˈɪnkriːs/",
+      "loai": "adj",
+      "nghia": "mức tăng rõ rệt",
+      "cap": "C1",
+      "viDu": "There was a marked increase in cycling after the new lanes opened.",
+      "viDuNghia": "Lượng người đạp xe tăng rõ rệt sau khi làn đường mới mở.",
+      "ghiChu": "marked increase / decline / difference / contrast · trạng từ: markedly"
+    },
+    {
+      "chu": "a modest rise",
+      "doc": "/ə ˌmɒdɪst ˈraɪz/",
+      "loai": "adj",
+      "nghia": "mức tăng khiêm tốn",
+      "cap": "C1",
+      "viDu": "Wages saw only a modest rise over the decade.",
+      "viDuNghia": "Tiền lương chỉ tăng khiêm tốn trong cả thập kỷ.",
+      "ghiChu": "modest growth / gain / improvement"
+    },
+    {
+      "chu": "a steady decline",
+      "doc": "/ə ˌstedi dɪˈklaɪn/",
+      "loai": "adj",
+      "nghia": "sự giảm đều đặn",
+      "cap": "C1",
+      "viDu": "Newspaper sales went into a steady decline from 2005.",
+      "viDuNghia": "Doanh số báo in giảm đều từ năm 2005.",
+      "ghiChu": "go into / be in decline · steady growth / rise"
+    },
+    {
+      "chu": "a slight dip",
+      "doc": "/ə ˌslaɪt ˈdɪp/",
+      "loai": "adj",
+      "nghia": "một lần giảm nhẹ (rồi hồi lại)",
+      "cap": "C1",
+      "viDu": "After a slight dip in 2012, the figure recovered.",
+      "viDuNghia": "Sau một lần giảm nhẹ năm 2012, con số hồi phục.",
+      "ghiChu": "dip = giảm ngắn rồi lên lại; không dùng cho giảm kéo dài"
+    },
+    {
+      "chu": "a pronounced gap",
+      "doc": "/ə prəˌnaʊnst ˈɡæp/",
+      "loai": "adj",
+      "nghia": "khoảng cách rõ rệt",
+      "cap": "C1",
+      "viDu": "There was a pronounced gap between urban and rural incomes.",
+      "viDuNghia": "Có khoảng cách rõ rệt giữa thu nhập thành thị và nông thôn.",
+      "ghiChu": "pronounced difference / effect / shift · widen / narrow the gap"
+    },
+    {
+      "chu": "a striking feature",
+      "doc": "/ə ˌstraɪkɪŋ ˈfiːtʃə/",
+      "loai": "adj",
+      "nghia": "đặc điểm nổi bật",
+      "cap": "C1",
+      "viDu": "The most striking feature of the chart is the collapse in coal use.",
+      "viDuNghia": "Đặc điểm nổi bật nhất của biểu đồ là việc dùng than sụt mạnh.",
+      "ghiChu": "khung overview: The most striking feature is…"
+    },
+    {
+      "chu": "the overwhelming majority",
+      "doc": "/ði ˌəʊvəˌwelmɪŋ məˈdʒɒrəti/",
+      "loai": "adj",
+      "nghia": "tuyệt đại đa số",
+      "cap": "C1",
+      "viDu": "The overwhelming majority of students (88%) lived at home.",
+      "viDuNghia": "Tuyệt đại đa số sinh viên (88%) sống ở nhà.",
+      "ghiChu": "dùng khi > 80 %; 55–70 %: a clear majority; ~51 %: a narrow majority"
+    },
+    {
+      "chu": "a negligible proportion",
+      "doc": "/ə ˌneɡlɪdʒəbl prəˈpɔːʃn/",
+      "loai": "adj",
+      "nghia": "tỉ lệ không đáng kể",
+      "cap": "C1",
+      "viDu": "Only a negligible proportion of journeys were made by ferry.",
+      "viDuNghia": "Chỉ một tỉ lệ không đáng kể chuyến đi là bằng phà.",
+      "ghiChu": "negligible amount / difference / impact (< 2–3 %)"
+    },
+    {
+      "chu": "a sizeable share",
+      "doc": "/ə ˌsaɪzəbl ˈʃeə/",
+      "loai": "adj",
+      "nghia": "một phần khá lớn",
+      "cap": "C1",
+      "viDu": "Housing took up a sizeable share of the budget, at 34%.",
+      "viDuNghia": "Nhà ở chiếm một phần khá lớn ngân sách, ở mức 34%.",
+      "ghiChu": "sizeable minority / proportion / number · lớn nhất: the largest share"
+    },
+    {
+      "chu": "an upward trajectory",
+      "doc": "/ən ˌʌpwəd trəˈdʒektəri/",
+      "loai": "adj",
+      "nghia": "quỹ đạo đi lên",
+      "cap": "C1",
+      "viDu": "Online sales continued on an upward trajectory throughout the period.",
+      "viDuNghia": "Doanh số trực tuyến tiếp tục đi lên suốt giai đoạn.",
+      "ghiChu": "on an upward / a downward trajectory · gần nghĩa: an upward trend"
+    },
+    {
+      "chu": "a narrow margin",
+      "doc": "/ə ˌnærəʊ ˈmɑːdʒɪn/",
+      "loai": "adj",
+      "nghia": "cách biệt sít sao",
+      "cap": "C1",
+      "viDu": "Buses were ahead of trains by a narrow margin (31% against 29%).",
+      "viDuNghia": "Xe buýt nhỉnh hơn tàu với cách biệt sít sao (31% so với 29%).",
+      "ghiChu": "by a narrow / wide margin"
+    },
+    {
+      "chu": "a stark contrast",
+      "doc": "/ə ˌstɑːk ˈkɒntrɑːst/",
+      "loai": "adj",
+      "nghia": "sự tương phản gay gắt",
+      "cap": "C1",
+      "viDu": "In stark contrast, spending on books fell by half.",
+      "viDuNghia": "Tương phản hẳn, chi tiêu cho sách giảm một nửa.",
+      "ghiChu": "in stark contrast (to) · stand in stark contrast to"
+    },
+    {
+      "chu": "marginally higher",
+      "doc": "/ˌmɑːdʒɪnəli ˈhaɪə/",
+      "loai": "adv",
+      "nghia": "cao hơn một chút xíu",
+      "cap": "C1",
+      "viDu": "The rate for women was marginally higher, at 51%.",
+      "viDuNghia": "Tỉ lệ của nữ cao hơn một chút, ở mức 51%.",
+      "ghiChu": "marginally lower / better / more expensive"
+    },
+    {
+      "chu": "considerably lower",
+      "doc": "/kənˌsɪdərəbli ˈləʊə/",
+      "loai": "adv",
+      "nghia": "thấp hơn đáng kể",
+      "cap": "C1",
+      "viDu": "Rents in the north were considerably lower than in the capital.",
+      "viDuNghia": "Tiền thuê ở miền bắc thấp hơn đáng kể so với thủ đô.",
+      "ghiChu": "= substantially / significantly lower"
+    },
+    {
+      "chu": "broadly similar",
+      "doc": "/ˌbrɔːdli ˈsɪmələ/",
+      "loai": "adv",
+      "nghia": "nhìn chung tương tự",
+      "cap": "C1",
+      "viDu": "Spending patterns in the two cities were broadly similar.",
+      "viDuNghia": "Mô thức chi tiêu ở hai thành phố nhìn chung tương tự.",
+      "ghiChu": "broadly in line with / comparable"
+    },
+    {
+      "chu": "virtually unchanged",
+      "doc": "/ˌvɜːtʃuəli ʌnˈtʃeɪndʒd/",
+      "loai": "adv",
+      "nghia": "gần như không đổi",
+      "cap": "C1",
+      "viDu": "The proportion of renters remained virtually unchanged.",
+      "viDuNghia": "Tỉ lệ người thuê nhà gần như không đổi.",
+      "ghiChu": "remain virtually unchanged · virtually identical / non-existent"
+    },
+    {
+      "chu": "relatively stable",
+      "doc": "/ˌrelətɪvli ˈsteɪbl/",
+      "loai": "adv",
+      "nghia": "tương đối ổn định",
+      "cap": "C1",
+      "viDu": "Prices stayed relatively stable until 2018.",
+      "viDuNghia": "Giá giữ tương đối ổn định tới năm 2018.",
+      "ghiChu": "relatively low / small / minor"
+    },
+    {
+      "chu": "roughly equal",
+      "doc": "/ˌrʌfli ˈiːkwəl/",
+      "loai": "adv",
+      "nghia": "xấp xỉ bằng nhau",
+      "cap": "C1",
+      "viDu": "The remaining budget was split into three roughly equal parts.",
+      "viDuNghia": "Phần ngân sách còn lại chia thành ba phần xấp xỉ bằng nhau.",
+      "ghiChu": "roughly the same / comparable / a third"
+    },
+    {
+      "chu": "noticeably smaller",
+      "doc": "/ˌnəʊtɪsəbli ˈsmɔːlə/",
+      "loai": "adv",
+      "nghia": "nhỏ hơn thấy rõ",
+      "cap": "C1",
+      "viDu": "The gap was noticeably smaller among younger workers.",
+      "viDuNghia": "Khoảng cách nhỏ hơn thấy rõ ở lao động trẻ.",
+      "ghiChu": "noticeably higher / different"
+    },
+    {
+      "chu": "almost identical",
+      "doc": "/ˌɔːlməʊst aɪˈdentɪkl/",
+      "loai": "adv",
+      "nghia": "gần như y hệt",
+      "cap": "C1",
+      "viDu": "The figures for 2010 and 2020 were almost identical.",
+      "viDuNghia": "Con số năm 2010 và 2020 gần như y hệt.",
+      "ghiChu": "identical là tính từ tuyệt đối ⇒ không ~~very identical~~"
+    },
+    {
+      "chu": "comparatively low",
+      "doc": "/kəmˌpærətɪvli ˈləʊ/",
+      "loai": "adv",
+      "nghia": "thấp nếu so (với các mục khác)",
+      "cap": "C1",
+      "viDu": "Spending on leisure was comparatively low in every age group.",
+      "viDuNghia": "Chi cho giải trí thấp so với các mục khác ở mọi nhóm tuổi.",
+      "ghiChu": "comparatively small / rare / few"
+    },
+    {
+      "chu": "significantly greater",
+      "doc": "/sɪɡˌnɪfɪkəntli ˈɡreɪtə/",
+      "loai": "adv",
+      "nghia": "lớn hơn đáng kể",
+      "cap": "C1",
+      "viDu": "Demand was significantly greater in summer than in winter.",
+      "viDuNghia": "Nhu cầu mùa hè lớn hơn đáng kể so với mùa đông.",
+      "ghiChu": "greater cho lượng / mức; higher cho con số, tỉ lệ"
+    },
+    {
+      "chu": "a compelling argument",
+      "doc": "/ə kəmˌpelɪŋ ˈɑːɡjumənt/",
+      "loai": "adj",
+      "nghia": "lập luận thuyết phục",
+      "cap": "C1",
+      "viDu": "There is a compelling argument for taxing sugary drinks.",
+      "viDuNghia": "Có một lập luận thuyết phục cho việc đánh thuế đồ uống có đường.",
+      "ghiChu": "a compelling argument for / against · compelling evidence / reason"
+    },
+    {
+      "chu": "a valid point",
+      "doc": "/ə ˌvælɪd ˈpɔɪnt/",
+      "loai": "adj",
+      "nghia": "ý có lý",
+      "cap": "C1",
+      "viDu": "Opponents make a valid point about the cost.",
+      "viDuNghia": "Phe phản đối nêu một ý có lý về chi phí.",
+      "ghiChu": "make / raise a valid point · valid concern / criticism"
+    },
+    {
+      "chu": "far-reaching consequences",
+      "doc": "/ˌfɑː riːtʃɪŋ ˈkɒnsɪkwənsɪz/",
+      "loai": "adj",
+      "nghia": "hệ quả sâu rộng",
+      "cap": "C1",
+      "viDu": "An ageing population has far-reaching consequences for healthcare.",
+      "viDuNghia": "Dân số già đi có hệ quả sâu rộng với y tế.",
+      "ghiChu": "have far-reaching consequences for · far-reaching implications / reforms"
+    },
+    {
+      "chu": "a detrimental effect",
+      "doc": "/ə ˌdetrɪˌmentl ɪˈfekt/",
+      "loai": "adj",
+      "nghia": "tác động có hại",
+      "cap": "C1",
+      "viDu": "Long hours have a detrimental effect on family life.",
+      "viDuNghia": "Làm việc nhiều giờ có tác động xấu tới đời sống gia đình.",
+      "ghiChu": "have a detrimental effect on · trang trọng hơn harmful / adverse"
+    },
+    {
+      "chu": "a pressing issue",
+      "doc": "/ə ˌpresɪŋ ˈɪʃuː/",
+      "loai": "adj",
+      "nghia": "vấn đề cấp bách",
+      "cap": "C1",
+      "viDu": "Affordable housing is the most pressing issue facing young adults.",
+      "viDuNghia": "Nhà ở vừa túi tiền là vấn đề cấp bách nhất với người trẻ.",
+      "ghiChu": "pressing need / problem / concern"
+    },
+    {
+      "chu": "a viable solution",
+      "doc": "/ə ˌvaɪəbl səˈluːʃn/",
+      "loai": "adj",
+      "nghia": "giải pháp khả thi",
+      "cap": "C1",
+      "viDu": "Car-sharing is a viable solution only in dense cities.",
+      "viDuNghia": "Đi chung xe chỉ là giải pháp khả thi ở thành phố đông dân.",
+      "ghiChu": "viable alternative / option · Ngày 22: đánh giá tính khả thi"
+    },
+    {
+      "chu": "a short-sighted policy",
+      "doc": "/ə ˌʃɔːt saɪtɪd ˈpɒləsi/",
+      "loai": "adj",
+      "nghia": "chính sách thiển cận",
+      "cap": "C1",
+      "viDu": "Cutting research funding is a short-sighted policy.",
+      "viDuNghia": "Cắt kinh phí nghiên cứu là một chính sách thiển cận.",
+      "ghiChu": "short-sighted approach / decision · trái: far-sighted"
+    },
+    {
+      "chu": "a heated debate",
+      "doc": "/ə ˌhiːtɪd dɪˈbeɪt/",
+      "loai": "adj",
+      "nghia": "cuộc tranh luận gay gắt",
+      "cap": "C1",
+      "viDu": "The plan has sparked a heated debate among residents.",
+      "viDuNghia": "Kế hoạch đã châm ngòi một cuộc tranh luận gay gắt giữa cư dân.",
+      "ghiChu": "spark / provoke a heated debate · heated argument / discussion"
+    },
+    {
+      "chu": "a widespread belief",
+      "doc": "/ə ˌwaɪdspred bɪˈliːf/",
+      "loai": "adj",
+      "nghia": "niềm tin phổ biến",
+      "cap": "C1",
+      "viDu": "There is a widespread belief that a degree guarantees a job.",
+      "viDuNghia": "Có một niềm tin phổ biến rằng tấm bằng bảo đảm việc làm.",
+      "ghiChu": "widespread support / concern / use · mở bài: Contrary to widespread belief, …"
+    },
+    {
+      "chu": "the root cause",
+      "doc": "/ðə ˌruːt ˈkɔːz/",
+      "loai": "adj",
+      "nghia": "nguyên nhân gốc rễ",
+      "cap": "C1",
+      "viDu": "Fines treat the symptom, not the root cause of the problem.",
+      "viDuNghia": "Tiền phạt chữa triệu chứng, không chữa nguyên nhân gốc rễ.",
+      "ghiChu": "address / tackle the root cause(s) of"
+    },
+    {
+      "chu": "a vested interest",
+      "doc": "/ə ˌvestɪd ˈɪntrəst/",
+      "loai": "adj",
+      "nghia": "lợi ích riêng gắn liền (nên không khách quan)",
+      "cap": "C1",
+      "viDu": "Oil companies have a vested interest in delaying change.",
+      "viDuNghia": "Các công ty dầu có lợi ích riêng trong việc trì hoãn thay đổi.",
+      "ghiChu": "have a vested interest in + V-ing"
+    },
+    {
+      "chu": "a sweeping generalisation",
+      "doc": "/ə ˌswiːpɪŋ ˌdʒenrəlaɪˈzeɪʃn/",
+      "loai": "adj",
+      "nghia": "sự vơ đũa cả nắm",
+      "cap": "C1",
+      "viDu": "To say that all teenagers are addicted to phones is a sweeping generalisation.",
+      "viDuNghia": "Nói mọi thiếu niên đều nghiện điện thoại là vơ đũa cả nắm.",
+      "ghiChu": "make a sweeping generalisation · sweeping changes / reforms (nghĩa: sâu rộng)"
+    },
+    {
+      "chu": "a mixed blessing",
+      "doc": "/ə ˌmɪkst ˈblesɪŋ/",
+      "loai": "adj",
+      "nghia": "điều vừa lợi vừa hại",
+      "cap": "C1",
+      "viDu": "Tourism has been a mixed blessing for the island.",
+      "viDuNghia": "Du lịch là điều vừa lợi vừa hại với hòn đảo.",
+      "ghiChu": "hợp bài advantages / disadvantages · gần nghĩa: a double-edged sword (Ngày 20)"
+    },
+    {
+      "chu": "a disproportionate burden",
+      "doc": "/ə ˌdɪsprəˌpɔːʃənət ˈbɜːdn/",
+      "loai": "adj",
+      "nghia": "gánh nặng quá phần (không tương xứng)",
+      "cap": "C1",
+      "viDu": "Flat taxes place a disproportionate burden on the poor.",
+      "viDuNghia": "Thuế đồng mức đặt gánh nặng quá phần lên người nghèo.",
+      "ghiChu": "place / impose a burden on · disproportionate share / impact"
+    },
+    {
+      "chu": "a concerted effort",
+      "doc": "/ə kənˌsɜːtɪd ˈefət/",
+      "loai": "adj",
+      "nghia": "nỗ lực phối hợp, quyết liệt",
+      "cap": "C1",
+      "viDu": "Reducing plastic waste requires a concerted effort from producers and consumers.",
+      "viDuNghia": "Giảm rác nhựa đòi hỏi nỗ lực phối hợp của nhà sản xuất và người tiêu dùng.",
+      "ghiChu": "make a concerted effort to V"
+    },
+    {
+      "chu": "a tangible benefit",
+      "doc": "/ə ˌtændʒəbl ˈbenɪfɪt/",
+      "loai": "adj",
+      "nghia": "lợi ích cụ thể, thấy được",
+      "cap": "C1",
+      "viDu": "Residents have yet to see any tangible benefit from the new stadium.",
+      "viDuNghia": "Cư dân vẫn chưa thấy lợi ích cụ thể nào từ sân vận động mới.",
+      "ghiChu": "tangible results / evidence / improvement · trái: intangible"
+    },
+    {
+      "chu": "highly unlikely",
+      "doc": "/ˌhaɪli ʌnˈlaɪkli/",
+      "loai": "adv",
+      "nghia": "rất khó xảy ra",
+      "cap": "C1",
+      "viDu": "It is highly unlikely that cash will vanish completely.",
+      "viDuNghia": "Rất khó có chuyện tiền mặt biến mất hoàn toàn.",
+      "ghiChu": "highly likely / effective / controversial / desirable"
+    },
+    {
+      "chu": "deeply rooted",
+      "doc": "/ˌdiːpli ˈruːtɪd/",
+      "loai": "adv",
+      "nghia": "ăn sâu bén rễ",
+      "cap": "C1",
+      "viDu": "Such attitudes are deeply rooted in tradition.",
+      "viDuNghia": "Những thái độ như vậy ăn sâu trong truyền thống.",
+      "ghiChu": "deeply rooted in · trước danh từ viết gạch nối: deep-rooted prejudice"
+    },
+    {
+      "chu": "widely accepted",
+      "doc": "/ˌwaɪdli əkˈseptɪd/",
+      "loai": "adv",
+      "nghia": "được thừa nhận rộng rãi",
+      "cap": "C1",
+      "viDu": "It is widely accepted that exercise improves mental health.",
+      "viDuNghia": "Người ta thừa nhận rộng rãi rằng vận động cải thiện sức khoẻ tinh thần.",
+      "ghiChu": "It is widely accepted / believed / acknowledged that… (mở bài)"
+    },
+    {
+      "chu": "fundamentally flawed",
+      "doc": "/ˌfʌndəˌmentəli ˈflɔːd/",
+      "loai": "adv",
+      "nghia": "sai từ gốc",
+      "cap": "C1",
+      "viDu": "The plan is fundamentally flawed because it ignores cost.",
+      "viDuNghia": "Kế hoạch sai từ gốc vì bỏ qua chi phí.",
+      "ghiChu": "fundamentally different / wrong / unfair · seriously / deeply flawed"
+    },
+    {
+      "chu": "readily available",
+      "doc": "/ˌredɪli əˈveɪləbl/",
+      "loai": "adv",
+      "nghia": "sẵn có, dễ kiếm",
+      "cap": "C1",
+      "viDu": "Cheap fast food is readily available in every neighbourhood.",
+      "viDuNghia": "Đồ ăn nhanh rẻ sẵn có ở mọi khu phố.",
+      "ghiChu": "readily accessible / accepted · freely / widely available"
+    },
+    {
+      "chu": "inherently risky",
+      "doc": "/ɪnˌherəntli ˈrɪski/",
+      "loai": "adv",
+      "nghia": "tự bản chất đã rủi ro",
+      "cap": "C1",
+      "viDu": "Investing in new technology is inherently risky.",
+      "viDuNghia": "Đầu tư vào công nghệ mới tự bản chất đã rủi ro.",
+      "ghiChu": "inherently unfair / dangerous / unstable"
+    }
+  ]
+}

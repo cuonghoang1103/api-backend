@@ -1,0 +1,1083 @@
+{
+ "ma": "cot-loi-b1-3",
+ "nn": "en",
+ "ten": "Tính từ thông dụng B1",
+ "moTa": "Tính từ để đánh giá và mô tả chính xác hơn (basic, current, economic, environmental, familiar, global, proper, various, valuable, unlikely…) — cần cho Speaking Part 3 và Writing Task 2.",
+ "nhom": "giao-tiep",
+ "cap": "B1",
+ "tu": [
+  {
+   "chu": "advanced",
+   "doc": "/ədˈvɑːnst/",
+   "loai": "adj",
+   "nghia": "tiên tiến; nâng cao",
+   "cap": "B1",
+   "viDu": "The course is for advanced learners of English.",
+   "viDuNghia": "Khoá học dành cho người học tiếng Anh trình độ nâng cao.",
+   "cumTu": [
+    "advanced technology",
+    "advanced level",
+    "advanced course",
+    "advanced learner"
+   ],
+   "hoTu": [
+    "advance (n, v)",
+    "advancement (n)"
+   ]
+  },
+  {
+   "chu": "basic",
+   "doc": "/ˈbeɪsɪk/",
+   "loai": "adj",
+   "nghia": "cơ bản",
+   "cap": "B1",
+   "viDu": "Everyone should have basic computer skills.",
+   "viDuNghia": "Ai cũng nên có kỹ năng máy tính cơ bản.",
+   "cumTu": [
+    "basic skills",
+    "basic needs",
+    "basic knowledge",
+    "basic rule"
+   ],
+   "hoTu": [
+    "basically (adv)",
+    "basics (n)",
+    "basis (n)"
+   ]
+  },
+  {
+   "chu": "careless",
+   "doc": "/ˈkeələs/",
+   "loai": "adj",
+   "nghia": "bất cẩn, cẩu thả",
+   "cap": "B1",
+   "viDu": "I lost marks because of a careless mistake.",
+   "viDuNghia": "Tôi mất điểm vì một lỗi bất cẩn.",
+   "cumTu": [
+    "careless mistake",
+    "careless driving",
+    "careless about"
+   ],
+   "hoTu": [
+    "carelessly (adv)",
+    "carelessness (n)",
+    "careful (adj)"
+   ]
+  },
+  {
+   "chu": "central",
+   "doc": "/ˈsentrəl/",
+   "loai": "adj",
+   "nghia": "trung tâm; chủ chốt",
+   "cap": "B1",
+   "viDu": "The hotel is in a central location near the station.",
+   "viDuNghia": "Khách sạn nằm ở vị trí trung tâm gần nhà ga.",
+   "cumTu": [
+    "central location",
+    "central role",
+    "central government",
+    "central heating"
+   ],
+   "hoTu": [
+    "centre (n)",
+    "centrally (adv)"
+   ]
+  },
+  {
+   "chu": "competitive",
+   "doc": "/kəmˈpetətɪv/",
+   "loai": "adj",
+   "nghia": "cạnh tranh, có tính cạnh tranh",
+   "cap": "B1",
+   "viDu": "The job market is very competitive for new graduates.",
+   "viDuNghia": "Thị trường việc làm rất cạnh tranh đối với sinh viên mới ra trường.",
+   "cumTu": [
+    "competitive market",
+    "competitive price",
+    "highly competitive",
+    "competitive salary"
+   ],
+   "hoTu": [
+    "compete (v)",
+    "competition (n)",
+    "competitor (n)"
+   ],
+   "ghiChu": "\"competitive salary\" hay gặp trong tin tuyển dụng."
+  },
+  {
+   "chu": "cultural",
+   "doc": "/ˈkʌltʃərəl/",
+   "loai": "adj",
+   "nghia": "thuộc văn hoá",
+   "cap": "B1",
+   "viDu": "Tourists should respect cultural differences.",
+   "viDuNghia": "Du khách nên tôn trọng những khác biệt văn hoá.",
+   "cumTu": [
+    "cultural differences",
+    "cultural heritage",
+    "cultural diversity",
+    "cultural event"
+   ],
+   "hoTu": [
+    "culture (n)",
+    "culturally (adv)"
+   ]
+  },
+  {
+   "chu": "current",
+   "doc": "/ˈkʌrənt/",
+   "loai": "adj",
+   "nghia": "hiện tại, hiện hành",
+   "cap": "B1",
+   "viDu": "What is your current job?",
+   "viDuNghia": "Công việc hiện tại của bạn là gì?",
+   "cumTu": [
+    "current job",
+    "current situation",
+    "current trend",
+    "current affairs"
+   ],
+   "hoTu": [
+    "currently (adv)",
+    "current (n)"
+   ]
+  },
+  {
+   "chu": "economic",
+   "doc": "/ˌiːkəˈnɒmɪk/",
+   "loai": "adj",
+   "nghia": "thuộc kinh tế",
+   "cap": "B1",
+   "viDu": "Economic growth has slowed down this year.",
+   "viDuNghia": "Tăng trưởng kinh tế đã chậm lại trong năm nay.",
+   "cumTu": [
+    "economic growth",
+    "economic development",
+    "economic crisis",
+    "economic problems"
+   ],
+   "hoTu": [
+    "economy (n)",
+    "economics (n)",
+    "economical (adj)",
+    "economist (n)"
+   ],
+   "ghiChu": "economic = thuộc về kinh tế; economical = tiết kiệm."
+  },
+  {
+   "chu": "educational",
+   "doc": "/ˌedʒuˈkeɪʃənl/",
+   "loai": "adj",
+   "nghia": "mang tính giáo dục, thuộc giáo dục",
+   "cap": "B1",
+   "viDu": "Children can learn a lot from educational games.",
+   "viDuNghia": "Trẻ em có thể học được nhiều từ các trò chơi giáo dục.",
+   "cumTu": [
+    "educational games",
+    "educational system",
+    "educational background",
+    "educational value"
+   ],
+   "hoTu": [
+    "education (n)",
+    "educate (v)"
+   ]
+  },
+  {
+   "chu": "environmental",
+   "doc": "/ɪnˌvaɪrənˈmentl/",
+   "loai": "adj",
+   "nghia": "thuộc môi trường",
+   "cap": "B1",
+   "viDu": "Plastic waste is a serious environmental problem.",
+   "viDuNghia": "Rác thải nhựa là một vấn đề môi trường nghiêm trọng.",
+   "cumTu": [
+    "environmental problem",
+    "environmental protection",
+    "environmental damage",
+    "environmental issues"
+   ],
+   "hoTu": [
+    "environment (n)",
+    "environmentally (adv)",
+    "environmentalist (n)"
+   ],
+   "ghiChu": "\"environmentally friendly\" = thân thiện với môi trường."
+  },
+  {
+   "chu": "equal",
+   "doc": "/ˈiːkwəl/",
+   "loai": "adj",
+   "nghia": "bằng nhau, bình đẳng",
+   "cap": "B1",
+   "viDu": "Men and women should have equal opportunities at work.",
+   "viDuNghia": "Nam và nữ nên có cơ hội bình đẳng trong công việc.",
+   "cumTu": [
+    "equal opportunities",
+    "equal rights",
+    "equal to",
+    "equal pay"
+   ],
+   "hoTu": [
+    "equality (n)",
+    "equally (adv)",
+    "unequal (adj)"
+   ],
+   "ghiChu": "equal TO something."
+  },
+  {
+   "chu": "familiar",
+   "doc": "/fəˈmɪliə(r)/",
+   "loai": "adj",
+   "nghia": "quen thuộc",
+   "cap": "B1",
+   "viDu": "Are you familiar with this software?",
+   "viDuNghia": "Bạn có quen với phần mềm này không?",
+   "cumTu": [
+    "familiar with",
+    "familiar to",
+    "familiar face",
+    "look familiar"
+   ],
+   "hoTu": [
+    "familiarity (n)",
+    "unfamiliar (adj)"
+   ],
+   "ghiChu": "I am familiar WITH it / It is familiar TO me."
+  },
+  {
+   "chu": "fancy",
+   "doc": "/ˈfænsi/",
+   "loai": "adj",
+   "nghia": "sang trọng, cầu kỳ",
+   "cap": "B1",
+   "viDu": "We had dinner at a fancy restaurant for her birthday.",
+   "viDuNghia": "Chúng tôi ăn tối ở một nhà hàng sang trọng nhân sinh nhật cô ấy.",
+   "cumTu": [
+    "fancy restaurant",
+    "fancy dress",
+    "nothing fancy",
+    "fancy hotel"
+   ],
+   "hoTu": [
+    "fancy (v)"
+   ],
+   "ghiChu": "Anh-Anh: \"Do you fancy a coffee?\" = Bạn có muốn uống cà phê không?"
+  },
+  {
+   "chu": "fascinating",
+   "doc": "/ˈfæsɪneɪtɪŋ/",
+   "loai": "adj",
+   "nghia": "vô cùng hấp dẫn, lôi cuốn",
+   "cap": "B1",
+   "viDu": "I read a fascinating article about space travel.",
+   "viDuNghia": "Tôi đã đọc một bài báo vô cùng hấp dẫn về du hành vũ trụ.",
+   "cumTu": [
+    "fascinating story",
+    "fascinating subject",
+    "find it fascinating",
+    "absolutely fascinating"
+   ],
+   "hoTu": [
+    "fascinate (v)",
+    "fascinated (adj)",
+    "fascination (n)"
+   ],
+   "ghiChu": "Từ thay thế \"very interesting\" để nâng điểm từ vựng Speaking."
+  },
+  {
+   "chu": "fixed",
+   "doc": "/fɪkst/",
+   "loai": "adj",
+   "nghia": "cố định",
+   "cap": "B1",
+   "viDu": "The shop sells everything at a fixed price.",
+   "viDuNghia": "Cửa hàng bán mọi thứ với giá cố định.",
+   "cumTu": [
+    "fixed price",
+    "fixed time",
+    "fixed income",
+    "fixed term"
+   ],
+   "hoTu": [
+    "fix (v)"
+   ]
+  },
+  {
+   "chu": "frozen",
+   "doc": "/ˈfrəʊzn/",
+   "loai": "adj",
+   "nghia": "đông lạnh; đóng băng",
+   "cap": "B1",
+   "viDu": "We keep frozen food in the freezer.",
+   "viDuNghia": "Chúng tôi để đồ đông lạnh trong ngăn đá.",
+   "cumTu": [
+    "frozen food",
+    "frozen lake",
+    "frozen screen"
+   ],
+   "hoTu": [
+    "freeze (v)",
+    "freezer (n)"
+   ],
+   "ghiChu": "\"The screen is frozen\" = màn hình bị đơ."
+  },
+  {
+   "chu": "giant",
+   "doc": "/ˈdʒaɪənt/",
+   "loai": "adj",
+   "nghia": "khổng lồ",
+   "cap": "B1",
+   "viDu": "There is a giant screen in the city square.",
+   "viDuNghia": "Có một màn hình khổng lồ ở quảng trường thành phố.",
+   "cumTu": [
+    "giant screen",
+    "giant step",
+    "giant company",
+    "tech giant"
+   ],
+   "hoTu": [
+    "giant (n)"
+   ],
+   "ghiChu": "\"tech giant\" = gã khổng lồ công nghệ."
+  },
+  {
+   "chu": "global",
+   "doc": "/ˈɡləʊbl/",
+   "loai": "adj",
+   "nghia": "toàn cầu",
+   "cap": "B1",
+   "viDu": "Climate change is a global problem.",
+   "viDuNghia": "Biến đổi khí hậu là một vấn đề toàn cầu.",
+   "cumTu": [
+    "global warming",
+    "global economy",
+    "global problem",
+    "global market"
+   ],
+   "hoTu": [
+    "globe (n)",
+    "globally (adv)",
+    "globalization (n)"
+   ]
+  },
+  {
+   "chu": "historical",
+   "doc": "/hɪˈstɒrɪkl/",
+   "loai": "adj",
+   "nghia": "thuộc lịch sử, liên quan đến lịch sử",
+   "cap": "B1",
+   "viDu": "Hue is famous for its historical buildings.",
+   "viDuNghia": "Huế nổi tiếng với các công trình lịch sử.",
+   "cumTu": [
+    "historical building",
+    "historical event",
+    "historical site",
+    "historical figure"
+   ],
+   "hoTu": [
+    "history (n)",
+    "historic (adj)",
+    "historian (n)"
+   ],
+   "ghiChu": "historical = thuộc về lịch sử; historic = có ý nghĩa lịch sử trọng đại."
+  },
+  {
+   "chu": "horrible",
+   "doc": "/ˈhɒrəbl/",
+   "loai": "adj",
+   "nghia": "kinh khủng, tồi tệ",
+   "cap": "B1",
+   "viDu": "There is a horrible smell in the kitchen.",
+   "viDuNghia": "Có một mùi kinh khủng trong bếp.",
+   "cumTu": [
+    "horrible smell",
+    "horrible weather",
+    "horrible feeling",
+    "horrible mistake"
+   ],
+   "hoTu": [
+    "horror (n)",
+    "horribly (adv)"
+   ]
+  },
+  {
+   "chu": "impressive",
+   "doc": "/ɪmˈpresɪv/",
+   "loai": "adj",
+   "nghia": "ấn tượng",
+   "cap": "B1",
+   "viDu": "Her knowledge of history is very impressive.",
+   "viDuNghia": "Kiến thức lịch sử của cô ấy rất ấn tượng.",
+   "cumTu": [
+    "impressive result",
+    "impressive performance",
+    "impressive building",
+    "very impressive"
+   ],
+   "hoTu": [
+    "impress (v)",
+    "impression (n)",
+    "impressed (adj)"
+   ],
+   "ghiChu": "impressive tả sự vật; impressed tả người: I was impressed."
+  },
+  {
+   "chu": "indirect",
+   "doc": "/ˌɪndəˈrekt/",
+   "loai": "adj",
+   "nghia": "gián tiếp",
+   "cap": "B1",
+   "viDu": "Stress can be an indirect cause of illness.",
+   "viDuNghia": "Căng thẳng có thể là nguyên nhân gián tiếp gây bệnh.",
+   "cumTu": [
+    "indirect cause",
+    "indirect effect",
+    "indirect question",
+    "indirect route"
+   ],
+   "hoTu": [
+    "direct (adj)",
+    "indirectly (adv)"
+   ]
+  },
+  {
+   "chu": "indoor",
+   "doc": "/ˈɪndɔː(r)/",
+   "loai": "adj",
+   "nghia": "trong nhà",
+   "cap": "B1",
+   "viDu": "The hotel has an indoor swimming pool.",
+   "viDuNghia": "Khách sạn có một bể bơi trong nhà.",
+   "cumTu": [
+    "indoor pool",
+    "indoor activities",
+    "indoor plants",
+    "indoor sports"
+   ],
+   "hoTu": [
+    "indoors (adv)"
+   ]
+  },
+  {
+   "chu": "outdoor",
+   "doc": "/ˈaʊtdɔː(r)/",
+   "loai": "adj",
+   "nghia": "ngoài trời",
+   "cap": "B1",
+   "viDu": "Hiking is a popular outdoor activity.",
+   "viDuNghia": "Đi bộ đường dài là một hoạt động ngoài trời phổ biến.",
+   "cumTu": [
+    "outdoor activities",
+    "outdoor sports",
+    "outdoor pool",
+    "outdoor market"
+   ],
+   "hoTu": [
+    "outdoors (adv)"
+   ]
+  },
+  {
+   "chu": "involved",
+   "doc": "/ɪnˈvɒlvd/",
+   "loai": "adj",
+   "nghia": "tham gia, có liên quan",
+   "cap": "B1",
+   "viDu": "Parents should be involved in their children's education.",
+   "viDuNghia": "Cha mẹ nên tham gia vào việc học của con cái.",
+   "cumTu": [
+    "be involved in",
+    "get involved",
+    "involved with",
+    "actively involved"
+   ],
+   "hoTu": [
+    "involve (v)",
+    "involvement (n)"
+   ],
+   "ghiChu": "be/get involved IN something."
+  },
+  {
+   "chu": "keen",
+   "doc": "/kiːn/",
+   "loai": "adj",
+   "nghia": "say mê, háo hức",
+   "cap": "B1",
+   "viDu": "I am keen on learning new programming languages.",
+   "viDuNghia": "Tôi rất thích học các ngôn ngữ lập trình mới.",
+   "cumTu": [
+    "keen on",
+    "keen to do",
+    "keen interest",
+    "keen learner"
+   ],
+   "hoTu": [
+    "keenly (adv)"
+   ],
+   "ghiChu": "keen ON + V-ing / keen TO + V. Thay \"like\" để đa dạng từ vựng."
+  },
+  {
+   "chu": "painful",
+   "doc": "/ˈpeɪnfl/",
+   "loai": "adj",
+   "nghia": "đau đớn",
+   "cap": "B1",
+   "viDu": "My knee is still painful when I walk.",
+   "viDuNghia": "Đầu gối tôi vẫn còn đau khi đi bộ.",
+   "cumTu": [
+    "painful experience",
+    "painful memory",
+    "very painful",
+    "painful to"
+   ],
+   "hoTu": [
+    "pain (n)",
+    "painfully (adv)",
+    "painless (adj)"
+   ],
+   "ghiChu": "Không nói \"I am painful\"; nói \"My leg is painful\" hoặc \"I am in pain\"."
+  },
+  {
+   "chu": "pleasant",
+   "doc": "/ˈpleznt/",
+   "loai": "adj",
+   "nghia": "dễ chịu, thú vị",
+   "cap": "B1",
+   "viDu": "We spent a pleasant evening with our neighbours.",
+   "viDuNghia": "Chúng tôi đã có một buổi tối dễ chịu với hàng xóm.",
+   "cumTu": [
+    "pleasant evening",
+    "pleasant surprise",
+    "pleasant weather",
+    "pleasant atmosphere"
+   ],
+   "hoTu": [
+    "please (v)",
+    "pleasure (n)",
+    "unpleasant (adj)"
+   ]
+  },
+  {
+   "chu": "poisonous",
+   "doc": "/ˈpɔɪzənəs/",
+   "loai": "adj",
+   "nghia": "có độc",
+   "cap": "B1",
+   "viDu": "Some mushrooms are poisonous and can kill you.",
+   "viDuNghia": "Một số loại nấm có độc và có thể gây chết người.",
+   "cumTu": [
+    "poisonous snake",
+    "poisonous gas",
+    "poisonous plant",
+    "highly poisonous"
+   ],
+   "hoTu": [
+    "poison (n, v)"
+   ]
+  },
+  {
+   "chu": "powerful",
+   "doc": "/ˈpaʊəfl/",
+   "loai": "adj",
+   "nghia": "mạnh mẽ, quyền lực",
+   "cap": "B1",
+   "viDu": "This laptop has a very powerful processor.",
+   "viDuNghia": "Chiếc laptop này có bộ xử lý rất mạnh.",
+   "cumTu": [
+    "powerful computer",
+    "powerful tool",
+    "powerful country",
+    "powerful effect"
+   ],
+   "hoTu": [
+    "power (n)",
+    "powerfully (adv)"
+   ]
+  },
+  {
+   "chu": "prepared",
+   "doc": "/prɪˈpeəd/",
+   "loai": "adj",
+   "nghia": "sẵn sàng, có chuẩn bị",
+   "cap": "B1",
+   "viDu": "I was not prepared for such difficult questions.",
+   "viDuNghia": "Tôi đã không chuẩn bị cho những câu hỏi khó như vậy.",
+   "cumTu": [
+    "prepared for",
+    "well prepared",
+    "be prepared to do"
+   ],
+   "hoTu": [
+    "prepare (v)",
+    "preparation (n)"
+   ],
+   "ghiChu": "\"be prepared to do\" = sẵn lòng làm."
+  },
+  {
+   "chu": "proper",
+   "doc": "/ˈprɒpə(r)/",
+   "loai": "adj",
+   "nghia": "đúng đắn, thích hợp, tử tế",
+   "cap": "B1",
+   "viDu": "You need proper training before using this machine.",
+   "viDuNghia": "Bạn cần được đào tạo đúng cách trước khi dùng máy này.",
+   "cumTu": [
+    "proper training",
+    "proper job",
+    "proper way",
+    "proper name"
+   ],
+   "hoTu": [
+    "properly (adv)"
+   ]
+  },
+  {
+   "chu": "rare",
+   "doc": "/reə(r)/",
+   "loai": "adj",
+   "nghia": "hiếm",
+   "cap": "B1",
+   "viDu": "It is rare to see this bird in the city.",
+   "viDuNghia": "Hiếm khi thấy loài chim này trong thành phố.",
+   "cumTu": [
+    "rare animal",
+    "rare species",
+    "rare disease",
+    "rare opportunity"
+   ],
+   "hoTu": [
+    "rarely (adv)",
+    "rarity (n)"
+   ]
+  },
+  {
+   "chu": "related",
+   "doc": "/rɪˈleɪtɪd/",
+   "loai": "adj",
+   "nghia": "có liên quan; có họ hàng",
+   "cap": "B1",
+   "viDu": "I am looking for a job related to my degree.",
+   "viDuNghia": "Tôi đang tìm một công việc liên quan đến bằng cấp của mình.",
+   "cumTu": [
+    "related to",
+    "closely related",
+    "work-related",
+    "related field"
+   ],
+   "hoTu": [
+    "relate (v)",
+    "relation (n)",
+    "unrelated (adj)"
+   ],
+   "ghiChu": "related TO something."
+  },
+  {
+   "chu": "relaxing",
+   "doc": "/rɪˈlæksɪŋ/",
+   "loai": "adj",
+   "nghia": "thư giãn, dễ chịu",
+   "cap": "B1",
+   "viDu": "We spent a relaxing weekend at the beach.",
+   "viDuNghia": "Chúng tôi đã có một cuối tuần thư giãn ở biển.",
+   "cumTu": [
+    "relaxing weekend",
+    "relaxing music",
+    "relaxing holiday",
+    "find it relaxing"
+   ],
+   "hoTu": [
+    "relax (v)",
+    "relaxed (adj)",
+    "relaxation (n)"
+   ]
+  },
+  {
+   "chu": "royal",
+   "doc": "/ˈrɔɪəl/",
+   "loai": "adj",
+   "nghia": "thuộc hoàng gia",
+   "cap": "B1",
+   "viDu": "Thousands of tourists visit the royal palace every year.",
+   "viDuNghia": "Hàng nghìn du khách tham quan cung điện hoàng gia mỗi năm.",
+   "cumTu": [
+    "royal family",
+    "royal palace",
+    "royal wedding"
+   ],
+   "hoTu": [
+    "royalty (n)"
+   ]
+  },
+  {
+   "chu": "secondary",
+   "doc": "/ˈsekəndri/",
+   "loai": "adj",
+   "nghia": "trung học; thứ yếu",
+   "cap": "B1",
+   "viDu": "She teaches English at a secondary school.",
+   "viDuNghia": "Cô ấy dạy tiếng Anh ở một trường trung học.",
+   "cumTu": [
+    "secondary school",
+    "secondary education",
+    "secondary importance",
+    "secondary source"
+   ],
+   "hoTu": [
+    "second (num)"
+   ]
+  },
+  {
+   "chu": "silent",
+   "doc": "/ˈsaɪlənt/",
+   "loai": "adj",
+   "nghia": "im lặng, không tiếng động",
+   "cap": "B1",
+   "viDu": "Please keep your phone on silent mode during the test.",
+   "viDuNghia": "Hãy để điện thoại ở chế độ im lặng trong lúc thi.",
+   "cumTu": [
+    "silent mode",
+    "remain silent",
+    "keep silent",
+    "silent letter"
+   ],
+   "hoTu": [
+    "silence (n)",
+    "silently (adv)"
+   ]
+  },
+  {
+   "chu": "solid",
+   "doc": "/ˈsɒlɪd/",
+   "loai": "adj",
+   "nghia": "rắn; vững chắc",
+   "cap": "B1",
+   "viDu": "You need a solid understanding of grammar to write well.",
+   "viDuNghia": "Bạn cần nắm vững ngữ pháp thì mới viết tốt được.",
+   "cumTu": [
+    "solid foundation",
+    "solid wood",
+    "solid evidence",
+    "solid understanding"
+   ],
+   "hoTu": [
+    "solid (n)",
+    "solidify (v)"
+   ]
+  },
+  {
+   "chu": "sudden",
+   "doc": "/ˈsʌdn/",
+   "loai": "adj",
+   "nghia": "đột ngột, bất ngờ",
+   "cap": "B1",
+   "viDu": "There was a sudden change in the weather.",
+   "viDuNghia": "Thời tiết đã thay đổi đột ngột.",
+   "cumTu": [
+    "sudden change",
+    "sudden increase",
+    "all of a sudden",
+    "sudden death"
+   ],
+   "hoTu": [
+    "suddenly (adv)"
+   ],
+   "ghiChu": "\"a sudden increase/drop\" dùng trong Task 1."
+  },
+  {
+   "chu": "tight",
+   "doc": "/taɪt/",
+   "loai": "adj",
+   "nghia": "chật, chặt; eo hẹp",
+   "cap": "B1",
+   "viDu": "We have a very tight deadline for this project.",
+   "viDuNghia": "Chúng tôi có hạn chót rất gấp cho dự án này.",
+   "cumTu": [
+    "tight deadline",
+    "tight budget",
+    "tight schedule",
+    "too tight"
+   ],
+   "hoTu": [
+    "tighten (v)",
+    "tightly (adv)"
+   ]
+  },
+  {
+   "chu": "unable",
+   "doc": "/ʌnˈeɪbl/",
+   "loai": "adj",
+   "nghia": "không thể",
+   "cap": "B1",
+   "viDu": "I am sorry that I was unable to attend the meeting.",
+   "viDuNghia": "Tôi xin lỗi vì đã không thể dự cuộc họp.",
+   "cumTu": [
+    "be unable to do",
+    "unable to attend",
+    "unable to work"
+   ],
+   "hoTu": [
+    "able (adj)",
+    "inability (n)"
+   ],
+   "ghiChu": "Trang trọng hơn \"can't\" — hợp email công việc."
+  },
+  {
+   "chu": "uncomfortable",
+   "doc": "/ʌnˈkʌmftəbl/",
+   "loai": "adj",
+   "nghia": "không thoải mái, khó chịu",
+   "cap": "B1",
+   "viDu": "These shoes are really uncomfortable.",
+   "viDuNghia": "Đôi giày này thật sự khó chịu.",
+   "cumTu": [
+    "feel uncomfortable",
+    "uncomfortable chair",
+    "uncomfortable silence"
+   ],
+   "hoTu": [
+    "comfortable (adj)",
+    "discomfort (n)"
+   ]
+  },
+  {
+   "chu": "unemployed",
+   "doc": "/ˌʌnɪmˈplɔɪd/",
+   "loai": "adj",
+   "nghia": "thất nghiệp",
+   "cap": "B1",
+   "viDu": "He has been unemployed for six months.",
+   "viDuNghia": "Anh ấy đã thất nghiệp sáu tháng.",
+   "cumTu": [
+    "unemployed people",
+    "become unemployed",
+    "long-term unemployed",
+    "the unemployed"
+   ],
+   "hoTu": [
+    "unemployment (n)",
+    "employ (v)"
+   ]
+  },
+  {
+   "chu": "unfair",
+   "doc": "/ˌʌnˈfeə(r)/",
+   "loai": "adj",
+   "nghia": "không công bằng",
+   "cap": "B1",
+   "viDu": "It is unfair to pay women less than men for the same job.",
+   "viDuNghia": "Trả lương cho nữ thấp hơn nam cho cùng một công việc là không công bằng.",
+   "cumTu": [
+    "unfair to",
+    "unfair treatment",
+    "unfair advantage",
+    "totally unfair"
+   ],
+   "hoTu": [
+    "fair (adj)",
+    "unfairly (adv)"
+   ]
+  },
+  {
+   "chu": "unlikely",
+   "doc": "/ʌnˈlaɪkli/",
+   "loai": "adj",
+   "nghia": "khó có khả năng xảy ra",
+   "cap": "B1",
+   "viDu": "It is unlikely that prices will fall this year.",
+   "viDuNghia": "Khó có khả năng giá sẽ giảm trong năm nay.",
+   "cumTu": [
+    "unlikely to do",
+    "highly unlikely",
+    "it is unlikely that",
+    "seem unlikely"
+   ],
+   "hoTu": [
+    "likely (adj)"
+   ],
+   "ghiChu": "\"be unlikely to + V\" — cấu trúc dự đoán thận trọng."
+  },
+  {
+   "chu": "unnecessary",
+   "doc": "/ʌnˈnesəsəri/",
+   "loai": "adj",
+   "nghia": "không cần thiết",
+   "cap": "B1",
+   "viDu": "Try to avoid unnecessary spending.",
+   "viDuNghia": "Hãy cố tránh chi tiêu không cần thiết.",
+   "cumTu": [
+    "unnecessary spending",
+    "unnecessary risk",
+    "completely unnecessary"
+   ],
+   "hoTu": [
+    "necessary (adj)",
+    "unnecessarily (adv)"
+   ]
+  },
+  {
+   "chu": "unpleasant",
+   "doc": "/ʌnˈpleznt/",
+   "loai": "adj",
+   "nghia": "khó chịu",
+   "cap": "B1",
+   "viDu": "The medicine has an unpleasant taste.",
+   "viDuNghia": "Thuốc có vị khó chịu.",
+   "cumTu": [
+    "unpleasant smell",
+    "unpleasant experience",
+    "unpleasant surprise"
+   ],
+   "hoTu": [
+    "pleasant (adj)"
+   ]
+  },
+  {
+   "chu": "valuable",
+   "doc": "/ˈvæljuəbl/",
+   "loai": "adj",
+   "nghia": "có giá trị, quý giá",
+   "cap": "B1",
+   "viDu": "The internship gave me valuable experience.",
+   "viDuNghia": "Kỳ thực tập đã cho tôi kinh nghiệm quý giá.",
+   "cumTu": [
+    "valuable experience",
+    "valuable information",
+    "valuable lesson",
+    "valuable time"
+   ],
+   "hoTu": [
+    "value (n, v)",
+    "invaluable (adj)"
+   ],
+   "ghiChu": "\"invaluable\" = vô giá (không phải \"không có giá trị\")."
+  },
+  {
+   "chu": "various",
+   "doc": "/ˈveəriəs/",
+   "loai": "adj",
+   "nghia": "nhiều, đa dạng, khác nhau",
+   "cap": "B1",
+   "viDu": "There are various ways to solve this problem.",
+   "viDuNghia": "Có nhiều cách khác nhau để giải quyết vấn đề này.",
+   "cumTu": [
+    "various ways",
+    "various reasons",
+    "various types",
+    "various kinds"
+   ],
+   "hoTu": [
+    "variety (n)",
+    "vary (v)",
+    "variation (n)"
+   ],
+   "ghiChu": "various + danh từ số nhiều. Từ thay thế \"many different\"."
+  },
+  {
+   "chu": "violent",
+   "doc": "/ˈvaɪələnt/",
+   "loai": "adj",
+   "nghia": "bạo lực, dữ dội",
+   "cap": "B1",
+   "viDu": "Some parents worry about violent video games.",
+   "viDuNghia": "Một số phụ huynh lo ngại về trò chơi điện tử bạo lực.",
+   "cumTu": [
+    "violent crime",
+    "violent film",
+    "violent behaviour",
+    "violent storm"
+   ],
+   "hoTu": [
+    "violence (n)",
+    "violently (adv)"
+   ]
+  },
+  {
+   "chu": "eastern",
+   "doc": "/ˈiːstən/",
+   "loai": "adj",
+   "nghia": "thuộc phía đông",
+   "cap": "B1",
+   "viDu": "The storm will hit the eastern coast tomorrow.",
+   "viDuNghia": "Bão sẽ đổ bộ vào bờ biển phía đông ngày mai.",
+   "cumTu": [
+    "eastern coast",
+    "eastern Europe",
+    "eastern part"
+   ],
+   "hoTu": [
+    "east (n)"
+   ]
+  },
+  {
+   "chu": "western",
+   "doc": "/ˈwestən/",
+   "loai": "adj",
+   "nghia": "thuộc phía tây; phương Tây",
+   "cap": "B1",
+   "viDu": "Western food is popular with young people in my city.",
+   "viDuNghia": "Đồ ăn phương Tây được giới trẻ thành phố tôi ưa chuộng.",
+   "cumTu": [
+    "western countries",
+    "western culture",
+    "western part",
+    "western food"
+   ],
+   "hoTu": [
+    "west (n)"
+   ]
+  },
+  {
+   "chu": "northern",
+   "doc": "/ˈnɔːðən/",
+   "loai": "adj",
+   "nghia": "thuộc phía bắc",
+   "cap": "B1",
+   "viDu": "Winters are cold in the northern part of Vietnam.",
+   "viDuNghia": "Mùa đông lạnh ở miền Bắc Việt Nam.",
+   "cumTu": [
+    "northern part",
+    "northern Vietnam",
+    "northern hemisphere"
+   ],
+   "hoTu": [
+    "north (n)"
+   ],
+   "ghiChu": "Phát âm /ð/ như \"this\": /ˈnɔːðən/."
+  },
+  {
+   "chu": "southern",
+   "doc": "/ˈsʌðən/",
+   "loai": "adj",
+   "nghia": "thuộc phía nam",
+   "cap": "B1",
+   "viDu": "Ho Chi Minh City is in the southern part of the country.",
+   "viDuNghia": "Thành phố Hồ Chí Minh nằm ở miền Nam đất nước.",
+   "cumTu": [
+    "southern part",
+    "southern Vietnam",
+    "southern coast"
+   ],
+   "hoTu": [
+    "south (n)"
+   ],
+   "ghiChu": "Đọc /ˈsʌðən/ — nguyên âm khác hẳn \"south\" /saʊθ/."
+  },
+  {
+   "chu": "drunk",
+   "doc": "/drʌŋk/",
+   "loai": "adj",
+   "nghia": "say rượu",
+   "cap": "B1",
+   "viDu": "It is illegal to drive when you are drunk.",
+   "viDuNghia": "Lái xe khi đang say rượu là phạm pháp.",
+   "cumTu": [
+    "get drunk",
+    "drunk driver",
+    "drunk driving"
+   ],
+   "hoTu": [
+    "drink (v, n)"
+   ]
+  }
+ ]
+}

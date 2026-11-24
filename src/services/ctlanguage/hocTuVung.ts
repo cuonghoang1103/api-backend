@@ -26,6 +26,8 @@ import { CAP_CUA, NHAN_LOAI, hienThi, urlAnh, type NnCdt } from './chuDeTuThuan.
 import { chuDeCua, idAm } from './chuDeTu.js';
 import { danhMuc as danhMucNguPhap } from './nguPhap.js';
 import { kiemBoTu, type BoTuBoSung } from './tuVungThuan.js';
+import { napSoChuyenNganh } from './soChuyenNganh.js';
+import { laBoDeThi } from './soChuyenNganhThuan.js';
 
 export const THU_MUC_BO_SUNG = path.join(process.cwd(), 'content', 'ctlanguage', 'tu-vung');
 export const NN_HTV = ['en', 'ja', 'zh'] as const;
@@ -55,6 +57,9 @@ export interface NhomNguonHtv {
   bieuTuong: string;
   anh: string | null;
   boSung: boolean;
+  /** Chỉ vào lộ trình "theo chủ đề" (sổ từ CHUYÊN NGÀNH theo môn — 24/11/2026): không vào lộ trình theo cấp / theo ngày,
+   *  từ đã có ở nguồn chung thì không lặp lại. */
+  chiChuDe?: boolean;
   tu: TuNguonHtv[];
 }
 
@@ -80,7 +85,19 @@ export interface NhomBaiHtv { ma: string; ten: string; moTa: string; bieuTuong: 
 
 export interface LoTrinhHtv { nn: NnCdt; theo: 'cap' | 'chu-de'; nhom: NhomBaiHtv[] }
 
-export interface KhoHtv { nn: NnCdt; theoCap: LoTrinhHtv; theoChuDe: LoTrinhHtv; bai: Map<string, { bai: BaiHtv; theo: 'cap' | 'chu-de'; ke: string | null; truoc: string | null }> }
+type TheoHtv = 'cap' | 'chu-de' | 'ngay';
+export interface KhoHtv {
+  nn: NnCdt;
+  theoCap: LoTrinhHtv;
+  theoChuDe: LoTrinhHtv;
+  /** Tiếng Anh (24/11/2026): lộ trình "Ngày 1 → Ngày N", `TU_MOI_NGAY` từ/ngày, gom theo chặng cấp — app gọi `theo=cap`
+   *  nhận bản này (ngôn ngữ khác ⇒ null, `theo=cap` giữ bài theo cấp). Bài theo cấp cũ vẫn mở được theo id. */
+  theoNgay: LoTrinhHtv | null;
+  bai: Map<string, { bai: BaiHtv; theo: TheoHtv; ke: string | null; truoc: string | null }>;
+}
+
+/** Số từ mới mỗi ngày của lộ trình theo ngày (tiếng Anh). Ngày cuối mỗi chặng < 10 từ ⇒ dồn vào ngày trước. */
+export const TU_MOI_NGAY = 20;
 
 /** Khoá so trùng / định danh từ — app tính đúng như vậy (en chữ thường, gộp khoảng trắng; ja/zh nguyên chữ). */
 export function khoaTuHtv(nn: string, chu: string): string {
@@ -146,6 +163,7 @@ export function dungKhoHtv(nn: NnCdt, nguon: readonly NhomNguonHtv[], nguPhap: r
   type Chon = { tu: TuTrongBai; ni: number; ci: number; vi: number };
   const chon = new Map<string, Chon>();
   nguon.forEach((g, ni) => g.tu.forEach((t, vi) => {
+    if (g.chiChuDe) return;
     if (!t?.chu?.trim() || !t.nghia?.trim()) return;
     const k = khoaTuHtv(nn, t.chu);
     let ci = capIdx(t.cap);
@@ -217,8 +235,21 @@ export function dungKhoHtv(nn: NnCdt, nguon: readonly NhomNguonHtv[], nguPhap: r
 
   // 4) Theo chủ đề: mỗi nhóm nguồn giữ những từ thuộc về nó, xếp dễ → khó.
   const theoChuDe: NhomBaiHtv[] = [];
+  const daRieng = new Set<string>();
   nguon.forEach((g, ni) => {
-    const ds = tatCa.filter((c) => c.ni === ni).sort((a, b) => a.ci - b.ci || a.vi - b.vi);
+    let ds = tatCa.filter((c) => c.ni === ni).sort((a, b) => a.ci - b.ci || a.vi - b.vi);
+    if (g.chiChuDe) {
+      // Sổ chuyên ngành: chỉ từ CHƯA có ở nguồn chung và chưa có ở bộ chuyên ngành trước; cấp ước lượng B2.
+      const ci = Math.min(caps.length - 1, caps.indexOf(capGiua(nn)) + 1);
+      ds = [];
+      g.tu.forEach((t, vi) => {
+        if (!t?.chu?.trim() || !t.nghia?.trim()) return;
+        const k = khoaTuHtv(nn, t.chu);
+        if (chon.has(k) || daRieng.has(k)) return;
+        daRieng.add(k);
+        ds.push({ tu: { ...t, k, cap: caps[ci]!, capUoc: true, nguon: g.ma }, ni, ci, vi });
+      });
+    }
     if (!ds.length) return;
     const phan = cat(ds, chiaDeu(ds.length));
     const bai: BaiHtv[] = phan.map((p, i) => {
@@ -233,12 +264,50 @@ export function dungKhoHtv(nn: NnCdt, nguon: readonly NhomNguonHtv[], nguPhap: r
     theoChuDe.push({ ma: g.ma, ten: g.ten, moTa: g.moTa, bieuTuong: g.bieuTuong, anh: g.anh, bai });
   });
 
-  const bai = new Map<string, { bai: BaiHtv; theo: 'cap' | 'chu-de'; ke: string | null; truoc: string | null }>();
-  for (const [theo, nhom] of [['cap', theoCap], ['chu-de', theoChuDe]] as const) {
+  // 5) Theo ngày (tiếng Anh): mỗi chặng cấp nối từ theo đúng thứ tự bài cấp, cắt `TU_MOI_NGAY` từ/ngày.
+  let theoNgay: NhomBaiHtv[] | null = null;
+  if (nn === 'en') {
+    theoNgay = [];
+    const tenNguon = new Map(nguon.map((g) => [g.ma, g]));
+    let ngay = 0;
+    theoCap.forEach((n) => {
+      const ci = caps.indexOf(n.ma);
+      // Từ NỀN (bộ `cot-loi-*`: từ chức năng, động từ/tính từ/danh từ cốt lõi) học TRƯỚC trong mỗi chặng, rồi tới chủ đề.
+      const uuTien = (t: TuTrongBai) => (t.nguon.startsWith('bs-cot-loi') ? 0 : 1);
+      const tu = n.bai.flatMap((b) => b.tu).map((t, i) => ({ t, i })).sort((a, b) => uuTien(a.t) - uuTien(b.t) || a.i - b.i).map((x) => x.t);
+      const phan: TuTrongBai[][] = [];
+      for (let i = 0; i < tu.length; i += TU_MOI_NGAY) phan.push(tu.slice(i, i + TU_MOI_NGAY));
+      if (phan.length > 1 && phan[phan.length - 1]!.length < BAI_TOI_THIEU) phan[phan.length - 2]!.push(...phan.pop()!);
+      const dau = ngay + 1;
+      const bai: BaiHtv[] = phan.map((p) => {
+        ngay++;
+        const dem = new Map<string, number>();
+        for (const t of p) dem.set(t.nguon, (dem.get(t.nguon) ?? 0) + 1);
+        const chinh = [...dem.entries()].sort((a, b) => b[1] - a[1]).map(([m]) => tenNguon.get(m)!);
+        return {
+          id: `${nn}-ngay-${ngay}`,
+          ten: `Ngày ${ngay} · ${chinh.slice(0, 2).map((g) => g.ten).join(' · ')}`,
+          moTa: chinh.map((g) => g.ten).join(' · '),
+          cap: n.ma, nhanCap: n.ma, nhom: 'ngay', bieuTuong: chinh[0]!.bieuTuong, anh: chinh[0]!.anh,
+          nguPhap: goiNp('ngay', ci), tu: p,
+        };
+      });
+      theoNgay!.push({
+        ma: n.ma, ten: `${n.ten} · Ngày ${dau}–${ngay}`,
+        moTa: `${n.moTa} · ${tu.length} từ, ${TU_MOI_NGAY} từ/ngày`, bieuTuong: n.bieuTuong, anh: null, bai,
+      });
+    });
+  }
+
+  const bai = new Map<string, { bai: BaiHtv; theo: TheoHtv; ke: string | null; truoc: string | null }>();
+  for (const [theo, nhom] of [['cap', theoCap], ['chu-de', theoChuDe], ['ngay', theoNgay ?? []]] as const) {
     const phang = nhom.flatMap((n) => n.bai);
     phang.forEach((b, i) => bai.set(b.id, { bai: b, theo, ke: phang[i + 1]?.id ?? null, truoc: phang[i - 1]?.id ?? null }));
   }
-  return { nn, theoCap: { nn, theo: 'cap', nhom: theoCap }, theoChuDe: { nn, theo: 'chu-de', nhom: theoChuDe }, bai };
+  return {
+    nn, theoCap: { nn, theo: 'cap', nhom: theoCap }, theoChuDe: { nn, theo: 'chu-de', nhom: theoChuDe },
+    theoNgay: theoNgay ? { nn, theo: 'cap', nhom: theoNgay } : null, bai,
+  };
 }
 
 // ─── Nạp nguồn (đĩa) ──────────────────────────────────────────────────────────────────────────────────────────────
@@ -272,7 +341,22 @@ export function nguonCua(nn: NnCdt, thuMucBoSung = THU_MUC_BO_SUNG): NhomNguonHt
   const boSung: NhomNguonHtv[] = napBoSung(nn, thuMucBoSung).map((b) => ({
     ma: `bs-${b.ma}`, ten: b.ten, moTa: b.moTa, bieuTuong: BIEU_TUONG_BO[b.nhom] ?? 'books.vertical.fill', anh: null, boSung: true, tu: b.tu,
   }));
-  return [...chuDe, ...boSung];
+  return [...chuDe, ...boSung, ...nguonChuyenNganh(nn)];
+}
+
+/** Sổ từ CHUYÊN NGÀNH theo môn (bộ đề thi + đồ án — `so-chuyen-nganh/en/<môn>-<n>.json`, 24/11/2026): nhóm chỉ ở lộ trình
+ *  "theo chủ đề", xếp theo `thuTu` (học kỳ). Tiếng Anh mới có. */
+function nguonChuyenNganh(nn: NnCdt): NhomNguonHtv[] {
+  if (nn !== 'en') return [];
+  try {
+    return napSoChuyenNganh().filter((b) => b.nn === 'en' && laBoDeThi(b.ma)).sort((a, b) => a.thuTu - b.thuTu).map((b) => ({
+      ma: `cn-${b.ma}`, ten: `Chuyên ngành · ${b.ten}`, moTa: b.moTa, bieuTuong: b.bieuTuong, anh: null, boSung: true, chiChuDe: true,
+      tu: b.tu.map((t) => ({ chu: t.chu, doc: t.doc, nghia: t.nghia, viDu: t.viDu, viDuNghia: t.viDuNghia })),
+    }));
+  } catch (e) {
+    logger.warn('[ctl-hoc-tu-vung] không đọc được sổ chuyên ngành', { error: e instanceof Error ? e.message : String(e) });
+    return [];
+  }
 }
 
 function nguPhapCua(nn: NnCdt): DiemNguPhapGoiY[] {
@@ -333,7 +417,8 @@ export function tongQuanHtv() {
 export function loTrinhHtv(nnV: unknown, theoV: unknown) {
   const nn = docNnHtv(nnV);
   const theo = theoV === 'chu-de' ? 'chu-de' : 'cap';
-  const lt = theo === 'cap' ? khoHtv(nn).theoCap : khoHtv(nn).theoChuDe;
+  const k = khoHtv(nn);
+  const lt = theo === 'cap' ? (k.theoNgay ?? k.theoCap) : k.theoChuDe;
   const nhom = lt.nhom.map((n) => ({
     ma: n.ma, ten: n.ten, moTa: n.moTa, bieuTuong: n.bieuTuong, anhUrl: urlAnh(n.anh),
     soTu: n.bai.reduce((s, b) => s + b.tu.length, 0), soBai: n.bai.length, bai: n.bai.map(tomTatBai),

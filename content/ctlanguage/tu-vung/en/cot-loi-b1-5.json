@@ -1,0 +1,967 @@
+{
+ "ma": "cot-loi-b1-5",
+ "nn": "en",
+ "ten": "Cụm động từ thông dụng 2 (B1)",
+ "moTa": "Cụm động từ cho công việc và bài thi (carry out, come up with, deal with, figure out, point out, take over, turn out, sort out, end up…) — nghe hiểu người bản ngữ và diễn đạt tự nhiên hơn.",
+ "nhom": "giao-tiep",
+ "cap": "B1",
+ "tu": [
+  {
+   "chu": "carry on",
+   "doc": "/ˈkæri ɒn/",
+   "loai": "phr",
+   "nghia": "tiếp tục",
+   "cap": "B1",
+   "viDu": "Please carry on with your work while I am out.",
+   "viDuNghia": "Hãy tiếp tục công việc trong lúc tôi ra ngoài.",
+   "cumTu": [
+    "carry on with",
+    "carry on doing",
+    "carry on working"
+   ],
+   "ghiChu": "carry on + V-ing."
+  },
+  {
+   "chu": "carry out",
+   "doc": "/ˈkæri aʊt/",
+   "loai": "phr",
+   "nghia": "tiến hành, thực hiện",
+   "cap": "B1",
+   "viDu": "Scientists carry out research to find new medicines.",
+   "viDuNghia": "Các nhà khoa học tiến hành nghiên cứu để tìm ra thuốc mới.",
+   "cumTu": [
+    "carry out research",
+    "carry out a survey",
+    "carry out a plan",
+    "carry out an experiment"
+   ],
+   "ghiChu": "Cụm học thuật: carry out research / a study / a survey (thay cho \"do\")."
+  },
+  {
+   "chu": "come up with",
+   "doc": "/kʌm ʌp wɪð/",
+   "loai": "phr",
+   "nghia": "nghĩ ra, đưa ra (ý tưởng, giải pháp)",
+   "cap": "B1",
+   "viDu": "We need to come up with a better solution.",
+   "viDuNghia": "Chúng ta cần nghĩ ra một giải pháp tốt hơn.",
+   "cumTu": [
+    "come up with an idea",
+    "come up with a plan",
+    "come up with a solution"
+   ]
+  },
+  {
+   "chu": "come up",
+   "doc": "/kʌm ʌp/",
+   "loai": "phr",
+   "nghia": "nảy sinh, xuất hiện; được nhắc tới",
+   "cap": "B1",
+   "viDu": "Something urgent may come up, so keep your phone on.",
+   "viDuNghia": "Có thể phát sinh việc gấp, nên hãy bật điện thoại.",
+   "cumTu": [
+    "something came up",
+    "come up in conversation",
+    "come up in the exam"
+   ]
+  },
+  {
+   "chu": "deal with",
+   "doc": "/diːl wɪð/",
+   "loai": "phr",
+   "nghia": "giải quyết, xử lý; đối phó",
+   "cap": "B1",
+   "viDu": "I have to deal with a lot of emails every morning.",
+   "viDuNghia": "Tôi phải xử lý rất nhiều email mỗi sáng.",
+   "cumTu": [
+    "deal with a problem",
+    "deal with customers",
+    "deal with stress",
+    "deal with an issue"
+   ],
+   "ghiChu": "Trong Task 2: \"Governments should deal with this problem\" (trang trọng hơn: tackle, address)."
+  },
+  {
+   "chu": "cope with",
+   "doc": "/kəʊp wɪð/",
+   "loai": "phr",
+   "nghia": "đương đầu, xoay xở với",
+   "cap": "B1",
+   "viDu": "Exercise helps me cope with stress.",
+   "viDuNghia": "Tập thể dục giúp tôi đương đầu với căng thẳng.",
+   "cumTu": [
+    "cope with stress",
+    "cope with pressure",
+    "cope with change",
+    "cope with the workload"
+   ]
+  },
+  {
+   "chu": "figure out",
+   "doc": "/ˈfɪɡə(r) aʊt/",
+   "loai": "phr",
+   "nghia": "tìm ra, hiểu ra",
+   "cap": "B1",
+   "viDu": "I cannot figure out why the code is not working.",
+   "viDuNghia": "Tôi không hiểu nổi vì sao đoạn mã không chạy.",
+   "cumTu": [
+    "figure out why",
+    "figure out how",
+    "figure it out",
+    "figure out a solution"
+   ],
+   "ghiChu": "Thân mật; trong văn viết dùng \"work out\" hoặc \"determine\"."
+  },
+  {
+   "chu": "point out",
+   "doc": "/pɔɪnt aʊt/",
+   "loai": "phr",
+   "nghia": "chỉ ra, nêu ra",
+   "cap": "B1",
+   "viDu": "I would like to point out one small mistake in the report.",
+   "viDuNghia": "Tôi muốn chỉ ra một lỗi nhỏ trong báo cáo.",
+   "cumTu": [
+    "point out that",
+    "point out a mistake",
+    "point out a problem"
+   ],
+   "ghiChu": "\"It should be pointed out that…\" dùng được trong Writing."
+  },
+  {
+   "chu": "get along with",
+   "doc": "/ɡet əˈlɒŋ wɪð/",
+   "loai": "phr",
+   "nghia": "hoà thuận, hợp với",
+   "cap": "B1",
+   "viDu": "I get along with everyone in my team.",
+   "viDuNghia": "Tôi hoà hợp với mọi người trong nhóm.",
+   "cumTu": [
+    "get along with colleagues",
+    "get along well with",
+    "get along with each other"
+   ],
+   "ghiChu": "Anh-Anh: get on with."
+  },
+  {
+   "chu": "get over",
+   "doc": "/ɡet ˈəʊvə(r)/",
+   "loai": "phr",
+   "nghia": "vượt qua, hồi phục sau",
+   "cap": "B1",
+   "viDu": "It took me a week to get over the flu.",
+   "viDuNghia": "Tôi mất một tuần để khỏi cúm.",
+   "cumTu": [
+    "get over an illness",
+    "get over a problem",
+    "get over it"
+   ]
+  },
+  {
+   "chu": "get rid of",
+   "doc": "/ɡet rɪd ɒv/",
+   "loai": "phr",
+   "nghia": "loại bỏ, vứt bỏ",
+   "cap": "B1",
+   "viDu": "We should get rid of plastic bags in supermarkets.",
+   "viDuNghia": "Chúng ta nên loại bỏ túi ni-lông ở siêu thị.",
+   "cumTu": [
+    "get rid of waste",
+    "get rid of a habit",
+    "get rid of old clothes"
+   ],
+   "ghiChu": "Trang trọng hơn: eliminate, remove."
+  },
+  {
+   "chu": "break down",
+   "doc": "/breɪk daʊn/",
+   "loai": "phr",
+   "nghia": "bị hỏng (xe, máy); chia nhỏ",
+   "cap": "B1",
+   "viDu": "Old buses often break down on long trips.",
+   "viDuNghia": "Xe buýt cũ thường bị hỏng trong những chuyến đi dài.",
+   "cumTu": [
+    "car break down",
+    "break down into",
+    "break down a task"
+   ],
+   "hoTu": [
+    "breakdown (n)"
+   ],
+   "ghiChu": "\"break a task down into steps\" = chia việc thành các bước."
+  },
+  {
+   "chu": "break out",
+   "doc": "/breɪk aʊt/",
+   "loai": "phr",
+   "nghia": "bùng nổ, nổ ra",
+   "cap": "B1",
+   "viDu": "A fire may break out if you leave the cooker on.",
+   "viDuNghia": "Hoả hoạn có thể bùng phát nếu bạn để bếp bật.",
+   "cumTu": [
+    "war break out",
+    "fire break out",
+    "break out of"
+   ],
+   "hoTu": [
+    "outbreak (n)"
+   ]
+  },
+  {
+   "chu": "call off",
+   "doc": "/kɔːl ɒf/",
+   "loai": "phr",
+   "nghia": "huỷ bỏ",
+   "cap": "B1",
+   "viDu": "They had to call off the match because of the storm.",
+   "viDuNghia": "Họ phải huỷ trận đấu vì cơn bão.",
+   "cumTu": [
+    "call off a meeting",
+    "call off the match",
+    "call off the wedding"
+   ],
+   "ghiChu": "= cancel."
+  },
+  {
+   "chu": "take care of",
+   "doc": "/teɪk keə(r) ɒv/",
+   "loai": "phr",
+   "nghia": "chăm sóc; lo liệu, xử lý",
+   "cap": "B1",
+   "viDu": "I will take care of the booking, so do not worry.",
+   "viDuNghia": "Tôi sẽ lo việc đặt chỗ, bạn đừng lo.",
+   "cumTu": [
+    "take care of children",
+    "take care of yourself",
+    "take care of a problem"
+   ]
+  },
+  {
+   "chu": "take part in",
+   "doc": "/teɪk pɑːt ɪn/",
+   "loai": "phr",
+   "nghia": "tham gia",
+   "cap": "B1",
+   "viDu": "More than fifty students take part in the competition every year.",
+   "viDuNghia": "Hơn năm mươi sinh viên tham gia cuộc thi mỗi năm.",
+   "cumTu": [
+    "take part in an activity",
+    "take part in a competition",
+    "take part in a discussion"
+   ],
+   "ghiChu": "= participate in (trang trọng hơn)."
+  },
+  {
+   "chu": "take over",
+   "doc": "/teɪk ˈəʊvə(r)/",
+   "loai": "phr",
+   "nghia": "tiếp quản, đảm nhận thay",
+   "cap": "B1",
+   "viDu": "Lan will take over the project when I leave.",
+   "viDuNghia": "Lan sẽ tiếp quản dự án khi tôi nghỉ.",
+   "cumTu": [
+    "take over a company",
+    "take over from somebody",
+    "take over the world"
+   ],
+   "hoTu": [
+    "takeover (n)"
+   ]
+  },
+  {
+   "chu": "take on",
+   "doc": "/teɪk ɒn/",
+   "loai": "phr",
+   "nghia": "nhận (việc, trách nhiệm); tuyển thêm",
+   "cap": "B1",
+   "viDu": "I cannot take on any more work this month.",
+   "viDuNghia": "Tháng này tôi không thể nhận thêm việc nào nữa.",
+   "cumTu": [
+    "take on responsibility",
+    "take on a project",
+    "take on new staff"
+   ]
+  },
+  {
+   "chu": "take up",
+   "doc": "/teɪk ʌp/",
+   "loai": "phr",
+   "nghia": "bắt đầu (sở thích); chiếm (thời gian, chỗ)",
+   "cap": "B1",
+   "viDu": "I want to take up yoga to reduce stress.",
+   "viDuNghia": "Tôi muốn bắt đầu tập yoga để giảm căng thẳng.",
+   "cumTu": [
+    "take up a hobby",
+    "take up a sport",
+    "take up time",
+    "take up space"
+   ]
+  },
+  {
+   "chu": "turn into",
+   "doc": "/tɜːn ˈɪntuː/",
+   "loai": "phr",
+   "nghia": "biến thành, trở thành",
+   "cap": "B1",
+   "viDu": "A small problem can turn into a big one if you ignore it.",
+   "viDuNghia": "Một vấn đề nhỏ có thể biến thành vấn đề lớn nếu bạn phớt lờ nó.",
+   "cumTu": [
+    "turn into a problem",
+    "turn water into ice",
+    "turn a hobby into a job"
+   ]
+  },
+  {
+   "chu": "turn out",
+   "doc": "/tɜːn aʊt/",
+   "loai": "phr",
+   "nghia": "hoá ra là; kết cục là",
+   "cap": "B1",
+   "viDu": "The exam may turn out to be easier than you think.",
+   "viDuNghia": "Kỳ thi có thể hoá ra dễ hơn bạn nghĩ.",
+   "cumTu": [
+    "turn out to be",
+    "turn out well",
+    "it turns out that"
+   ],
+   "ghiChu": "\"It turns out that…\" = hoá ra là…"
+  },
+  {
+   "chu": "turn over",
+   "doc": "/tɜːn ˈəʊvə(r)/",
+   "loai": "phr",
+   "nghia": "lật lại, lật sang trang",
+   "cap": "B1",
+   "viDu": "Turn over the page and answer the questions.",
+   "viDuNghia": "Hãy lật sang trang và trả lời các câu hỏi.",
+   "cumTu": [
+    "turn over the page",
+    "turn over the paper",
+    "turn over in bed"
+   ],
+   "hoTu": [
+    "turnover (n)"
+   ]
+  },
+  {
+   "chu": "put out",
+   "doc": "/pʊt aʊt/",
+   "loai": "phr",
+   "nghia": "dập tắt (lửa, thuốc lá)",
+   "cap": "B1",
+   "viDu": "It took two hours to put out the fire.",
+   "viDuNghia": "Mất hai tiếng để dập tắt đám cháy.",
+   "cumTu": [
+    "put out a fire",
+    "put out a cigarette",
+    "put the rubbish out"
+   ]
+  },
+  {
+   "chu": "put together",
+   "doc": "/pʊt təˈɡeðə(r)/",
+   "loai": "phr",
+   "nghia": "lắp ráp; soạn, tập hợp lại",
+   "cap": "B1",
+   "viDu": "We need to put together a plan for the launch.",
+   "viDuNghia": "Chúng ta cần soạn một kế hoạch cho buổi ra mắt.",
+   "cumTu": [
+    "put together a team",
+    "put together a report",
+    "put together a plan"
+   ]
+  },
+  {
+   "chu": "make up for",
+   "doc": "/meɪk ʌp fɔː(r)/",
+   "loai": "phr",
+   "nghia": "bù đắp cho",
+   "cap": "B1",
+   "viDu": "I will work on Saturday to make up for the lost time.",
+   "viDuNghia": "Tôi sẽ làm thứ Bảy để bù cho thời gian đã mất.",
+   "cumTu": [
+    "make up for lost time",
+    "make up for a mistake",
+    "make up for it"
+   ]
+  },
+  {
+   "chu": "give away",
+   "doc": "/ɡɪv əˈweɪ/",
+   "loai": "phr",
+   "nghia": "cho đi, tặng miễn phí; tiết lộ",
+   "cap": "B1",
+   "viDu": "I plan to give away my old books to the library.",
+   "viDuNghia": "Tôi định tặng sách cũ của mình cho thư viện.",
+   "cumTu": [
+    "give away for free",
+    "give away a secret",
+    "give away prizes"
+   ],
+   "hoTu": [
+    "giveaway (n)"
+   ]
+  },
+  {
+   "chu": "give out",
+   "doc": "/ɡɪv aʊt/",
+   "loai": "phr",
+   "nghia": "phân phát",
+   "cap": "B1",
+   "viDu": "The teacher will give out the test papers at nine.",
+   "viDuNghia": "Giáo viên sẽ phát đề kiểm tra lúc chín giờ.",
+   "cumTu": [
+    "give out leaflets",
+    "give out information",
+    "give out papers"
+   ],
+   "ghiChu": "= hand out."
+  },
+  {
+   "chu": "give in",
+   "doc": "/ɡɪv ɪn/",
+   "loai": "phr",
+   "nghia": "nhượng bộ, chịu thua",
+   "cap": "B1",
+   "viDu": "My parents never give in when I ask for more pocket money.",
+   "viDuNghia": "Bố mẹ tôi không bao giờ nhượng bộ khi tôi xin thêm tiền tiêu vặt.",
+   "cumTu": [
+    "give in to pressure",
+    "give in to somebody",
+    "finally give in"
+   ]
+  },
+  {
+   "chu": "keep on",
+   "doc": "/kiːp ɒn/",
+   "loai": "phr",
+   "nghia": "cứ tiếp tục (làm gì)",
+   "cap": "B1",
+   "viDu": "Keep on practising and your speaking will improve.",
+   "viDuNghia": "Cứ tiếp tục luyện tập thì kỹ năng nói của bạn sẽ tiến bộ.",
+   "cumTu": [
+    "keep on doing",
+    "keep on trying",
+    "keep on going"
+   ],
+   "ghiChu": "keep on + V-ing."
+  },
+  {
+   "chu": "keep up",
+   "doc": "/kiːp ʌp/",
+   "loai": "phr",
+   "nghia": "theo kịp; duy trì",
+   "cap": "B1",
+   "viDu": "It is hard to keep up with new technology.",
+   "viDuNghia": "Thật khó để theo kịp công nghệ mới.",
+   "cumTu": [
+    "keep up with",
+    "keep up the good work",
+    "keep it up"
+   ],
+   "ghiChu": "\"Keep up the good work!\" = Cứ phát huy nhé!"
+  },
+  {
+   "chu": "run out",
+   "doc": "/rʌn aʊt/",
+   "loai": "phr",
+   "nghia": "hết, cạn kiệt",
+   "cap": "B1",
+   "viDu": "We may run out of time if we do not hurry.",
+   "viDuNghia": "Chúng ta có thể hết thời gian nếu không nhanh lên.",
+   "cumTu": [
+    "run out of time",
+    "run out of money",
+    "run out of battery"
+   ],
+   "ghiChu": "run out OF something."
+  },
+  {
+   "chu": "run into",
+   "doc": "/rʌn ˈɪntuː/",
+   "loai": "phr",
+   "nghia": "tình cờ gặp; gặp phải (khó khăn)",
+   "cap": "B1",
+   "viDu": "You may run into problems if you skip the tests.",
+   "viDuNghia": "Bạn có thể gặp rắc rối nếu bỏ qua bước kiểm thử.",
+   "cumTu": [
+    "run into a friend",
+    "run into problems",
+    "run into trouble"
+   ]
+  },
+  {
+   "chu": "set out",
+   "doc": "/set aʊt/",
+   "loai": "phr",
+   "nghia": "khởi hành; bắt đầu với mục tiêu",
+   "cap": "B1",
+   "viDu": "We set out early to avoid the traffic.",
+   "viDuNghia": "Chúng tôi khởi hành sớm để tránh tắc đường.",
+   "cumTu": [
+    "set out to do",
+    "set out on a journey",
+    "set out early"
+   ]
+  },
+  {
+   "chu": "pass away",
+   "doc": "/pɑːs əˈweɪ/",
+   "loai": "phr",
+   "nghia": "qua đời (nói tránh)",
+   "cap": "B1",
+   "viDu": "Many people pass away from heart disease every year.",
+   "viDuNghia": "Mỗi năm có nhiều người qua đời vì bệnh tim.",
+   "cumTu": [
+    "pass away peacefully",
+    "sadly pass away"
+   ],
+   "ghiChu": "Lịch sự, nhẹ nhàng hơn \"die\"."
+  },
+  {
+   "chu": "pass on",
+   "doc": "/pɑːs ɒn/",
+   "loai": "phr",
+   "nghia": "chuyển lời, truyền lại",
+   "cap": "B1",
+   "viDu": "Could you pass on this message to your manager?",
+   "viDuNghia": "Bạn chuyển lời nhắn này đến quản lý của bạn được không?",
+   "cumTu": [
+    "pass on a message",
+    "pass on information",
+    "pass on to"
+   ]
+  },
+  {
+   "chu": "pick out",
+   "doc": "/pɪk aʊt/",
+   "loai": "phr",
+   "nghia": "chọn ra; nhận ra",
+   "cap": "B1",
+   "viDu": "Pick out three words that you want to remember.",
+   "viDuNghia": "Hãy chọn ra ba từ bạn muốn ghi nhớ.",
+   "cumTu": [
+    "pick out the best",
+    "pick out a present",
+    "pick out key words"
+   ]
+  },
+  {
+   "chu": "pull out",
+   "doc": "/pʊl aʊt/",
+   "loai": "phr",
+   "nghia": "rút ra; rút lui",
+   "cap": "B1",
+   "viDu": "The company decided to pull out of the project.",
+   "viDuNghia": "Công ty quyết định rút khỏi dự án.",
+   "cumTu": [
+    "pull out of",
+    "pull out a tooth",
+    "pull out a plug"
+   ]
+  },
+  {
+   "chu": "end up",
+   "doc": "/end ʌp/",
+   "loai": "phr",
+   "nghia": "rốt cuộc thành ra, kết cục là",
+   "cap": "B1",
+   "viDu": "If you do not plan, you may end up wasting a lot of time.",
+   "viDuNghia": "Nếu không lập kế hoạch, rốt cuộc bạn có thể lãng phí rất nhiều thời gian.",
+   "cumTu": [
+    "end up doing",
+    "end up in",
+    "end up with"
+   ],
+   "ghiChu": "end up + V-ing."
+  },
+  {
+   "chu": "sort out",
+   "doc": "/sɔːt aʊt/",
+   "loai": "phr",
+   "nghia": "giải quyết, sắp xếp ổn thoả",
+   "cap": "B1",
+   "viDu": "I need to sort out a problem with my bank account.",
+   "viDuNghia": "Tôi cần giải quyết một vấn đề với tài khoản ngân hàng.",
+   "cumTu": [
+    "sort out a problem",
+    "sort it out",
+    "sort out the details"
+   ],
+   "ghiChu": "Rất thông dụng trong tiếng Anh-Anh nơi công sở."
+  },
+  {
+   "chu": "line up",
+   "doc": "/laɪn ʌp/",
+   "loai": "phr",
+   "nghia": "xếp hàng",
+   "cap": "B1",
+   "viDu": "Please line up outside the classroom.",
+   "viDuNghia": "Hãy xếp hàng bên ngoài lớp học.",
+   "cumTu": [
+    "line up for",
+    "line up outside",
+    "line up in order"
+   ],
+   "hoTu": [
+    "line-up (n)"
+   ]
+  },
+  {
+   "chu": "fall apart",
+   "doc": "/fɔːl əˈpɑːt/",
+   "loai": "phr",
+   "nghia": "vỡ vụn, tan rã, hỏng bét",
+   "cap": "B1",
+   "viDu": "My old shoes are starting to fall apart.",
+   "viDuNghia": "Đôi giày cũ của tôi bắt đầu bung ra.",
+   "cumTu": [
+    "plans fall apart",
+    "fall apart completely",
+    "start to fall apart"
+   ]
+  },
+  {
+   "chu": "drop by",
+   "doc": "/drɒp baɪ/",
+   "loai": "phr",
+   "nghia": "ghé qua, tạt qua",
+   "cap": "B1",
+   "viDu": "Drop by my office when you have a minute.",
+   "viDuNghia": "Hãy ghé qua văn phòng tôi khi bạn rảnh một lát.",
+   "cumTu": [
+    "drop by the office",
+    "drop by for a coffee",
+    "drop by later"
+   ],
+   "ghiChu": "= drop in."
+  },
+  {
+   "chu": "leave out",
+   "doc": "/liːv aʊt/",
+   "loai": "phr",
+   "nghia": "bỏ sót, bỏ ra",
+   "cap": "B1",
+   "viDu": "Be careful not to leave out any important details.",
+   "viDuNghia": "Cẩn thận đừng bỏ sót chi tiết quan trọng nào.",
+   "cumTu": [
+    "leave out a word",
+    "leave out details",
+    "feel left out"
+   ],
+   "ghiChu": "\"feel left out\" = cảm thấy bị cho ra rìa."
+  },
+  {
+   "chu": "stand out",
+   "doc": "/stænd aʊt/",
+   "loai": "phr",
+   "nghia": "nổi bật",
+   "cap": "B1",
+   "viDu": "A clear CV will help you stand out from other candidates.",
+   "viDuNghia": "Một CV rõ ràng sẽ giúp bạn nổi bật so với các ứng viên khác.",
+   "cumTu": [
+    "stand out from the crowd",
+    "stand out as",
+    "really stand out"
+   ],
+   "hoTu": [
+    "outstanding (adj)"
+   ]
+  },
+  {
+   "chu": "stand for",
+   "doc": "/stænd fɔː(r)/",
+   "loai": "phr",
+   "nghia": "là viết tắt của; đại diện cho",
+   "cap": "B1",
+   "viDu": "What does \"AI\" stand for?",
+   "viDuNghia": "\"AI\" là viết tắt của từ gì?",
+   "cumTu": [
+    "stand for something",
+    "what does it stand for"
+   ]
+  },
+  {
+   "chu": "wear out",
+   "doc": "/weə(r) aʊt/",
+   "loai": "phr",
+   "nghia": "làm mòn, hỏng dần; làm kiệt sức",
+   "cap": "B1",
+   "viDu": "Cheap shoes wear out very quickly.",
+   "viDuNghia": "Giày rẻ tiền mòn rất nhanh.",
+   "cumTu": [
+    "wear out quickly",
+    "wear somebody out",
+    "worn out"
+   ],
+   "ghiChu": "\"I'm worn out\" = tôi mệt lử."
+  },
+  {
+   "chu": "blow up",
+   "doc": "/bləʊ ʌp/",
+   "loai": "phr",
+   "nghia": "nổ tung; thổi phồng, bơm căng",
+   "cap": "B1",
+   "viDu": "We need to blow up fifty balloons for the party.",
+   "viDuNghia": "Chúng ta cần thổi năm mươi quả bóng bay cho bữa tiệc.",
+   "cumTu": [
+    "blow up a balloon",
+    "blow up a building",
+    "bomb blow up"
+   ]
+  },
+  {
+   "chu": "build up",
+   "doc": "/bɪld ʌp/",
+   "loai": "phr",
+   "nghia": "tích luỹ, xây dựng dần",
+   "cap": "B1",
+   "viDu": "Reading every day will build up your vocabulary.",
+   "viDuNghia": "Đọc mỗi ngày sẽ giúp bạn tích luỹ vốn từ.",
+   "cumTu": [
+    "build up confidence",
+    "build up experience",
+    "build up a business",
+    "build up strength"
+   ]
+  },
+  {
+   "chu": "count on",
+   "doc": "/kaʊnt ɒn/",
+   "loai": "phr",
+   "nghia": "trông cậy vào, tin tưởng vào",
+   "cap": "B1",
+   "viDu": "You can always count on me for help.",
+   "viDuNghia": "Bạn luôn có thể trông cậy vào sự giúp đỡ của tôi.",
+   "cumTu": [
+    "count on somebody",
+    "count on it",
+    "count on support"
+   ],
+   "ghiChu": "= rely on, depend on."
+  },
+  {
+   "chu": "go through",
+   "doc": "/ɡəʊ θruː/",
+   "loai": "phr",
+   "nghia": "trải qua; xem kỹ từng phần",
+   "cap": "B1",
+   "viDu": "Let us go through the report together before the meeting.",
+   "viDuNghia": "Chúng ta hãy cùng xem kỹ bản báo cáo trước cuộc họp.",
+   "cumTu": [
+    "go through a difficult time",
+    "go through the list",
+    "go through security"
+   ]
+  },
+  {
+   "chu": "show up",
+   "doc": "/ʃəʊ ʌp/",
+   "loai": "phr",
+   "nghia": "xuất hiện, có mặt",
+   "cap": "B1",
+   "viDu": "Only five people show up for the early class.",
+   "viDuNghia": "Chỉ có năm người có mặt ở lớp học sáng sớm.",
+   "cumTu": [
+    "show up late",
+    "show up on time",
+    "show up for work"
+   ],
+   "ghiChu": "Thân mật; trang trọng hơn: arrive, attend."
+  },
+  {
+   "chu": "shut down",
+   "doc": "/ʃʌt daʊn/",
+   "loai": "phr",
+   "nghia": "tắt (máy); đóng cửa, ngừng hoạt động",
+   "cap": "B1",
+   "viDu": "Always shut down your computer before you leave.",
+   "viDuNghia": "Luôn tắt máy tính trước khi bạn về.",
+   "cumTu": [
+    "shut down the computer",
+    "shut down a factory",
+    "shut down the system"
+   ],
+   "hoTu": [
+    "shutdown (n)"
+   ]
+  },
+  {
+   "chu": "speed up",
+   "doc": "/spiːd ʌp/",
+   "loai": "phr",
+   "nghia": "tăng tốc, làm nhanh hơn",
+   "cap": "B1",
+   "viDu": "A new server will speed up the website.",
+   "viDuNghia": "Một máy chủ mới sẽ làm trang web nhanh hơn.",
+   "cumTu": [
+    "speed up the process",
+    "speed up a bit",
+    "speed up development"
+   ],
+   "ghiChu": "Trái nghĩa: slow down."
+  },
+  {
+   "chu": "depend on",
+   "doc": "/dɪˈpend ɒn/",
+   "loai": "phr",
+   "nghia": "phụ thuộc vào, tuỳ vào",
+   "cap": "B1",
+   "viDu": "Many families depend on tourism for their income.",
+   "viDuNghia": "Nhiều gia đình sống dựa vào du lịch.",
+   "cumTu": [
+    "depend on the weather",
+    "depend on somebody",
+    "it depends on"
+   ],
+   "ghiChu": "Luôn là ON (không dùng \"depend of\")."
+  },
+  {
+   "chu": "focus on",
+   "doc": "/ˈfəʊkəs ɒn/",
+   "loai": "phr",
+   "nghia": "tập trung vào",
+   "cap": "B1",
+   "viDu": "This course will focus on speaking and listening.",
+   "viDuNghia": "Khoá học này sẽ tập trung vào kỹ năng nói và nghe.",
+   "cumTu": [
+    "focus on a task",
+    "focus on the problem",
+    "focus on quality",
+    "focus on your studies"
+   ]
+  },
+  {
+   "chu": "apply for",
+   "doc": "/əˈplaɪ fɔː(r)/",
+   "loai": "phr",
+   "nghia": "nộp đơn xin",
+   "cap": "B1",
+   "viDu": "I am going to apply for an internship at a tech company.",
+   "viDuNghia": "Tôi sẽ nộp đơn xin thực tập ở một công ty công nghệ.",
+   "cumTu": [
+    "apply for a job",
+    "apply for a visa",
+    "apply for a scholarship",
+    "apply for a position"
+   ],
+   "ghiChu": "apply FOR a job / apply TO a company."
+  },
+  {
+   "chu": "suffer from",
+   "doc": "/ˈsʌfə(r) frɒm/",
+   "loai": "phr",
+   "nghia": "bị, mắc phải, chịu đựng",
+   "cap": "B1",
+   "viDu": "Many students suffer from stress before exams.",
+   "viDuNghia": "Nhiều sinh viên bị căng thẳng trước các kỳ thi.",
+   "cumTu": [
+    "suffer from stress",
+    "suffer from a disease",
+    "suffer from pollution"
+   ]
+  },
+  {
+   "chu": "believe in",
+   "doc": "/bɪˈliːv ɪn/",
+   "loai": "phr",
+   "nghia": "tin vào, tin tưởng ở",
+   "cap": "B1",
+   "viDu": "You have to believe in yourself to succeed.",
+   "viDuNghia": "Bạn phải tin vào chính mình thì mới thành công.",
+   "cumTu": [
+    "believe in yourself",
+    "believe in God",
+    "believe in hard work"
+   ]
+  },
+  {
+   "chu": "care about",
+   "doc": "/keə(r) əˈbaʊt/",
+   "loai": "phr",
+   "nghia": "quan tâm đến",
+   "cap": "B1",
+   "viDu": "Good managers care about their employees.",
+   "viDuNghia": "Người quản lý tốt quan tâm đến nhân viên của mình.",
+   "cumTu": [
+    "care about the environment",
+    "care about people",
+    "really care about"
+   ],
+   "ghiChu": "care about = quan tâm; care for = chăm sóc / thích."
+  },
+  {
+   "chu": "hear from",
+   "doc": "/hɪə(r) frɒm/",
+   "loai": "phr",
+   "nghia": "nhận được tin từ",
+   "cap": "B1",
+   "viDu": "I look forward to hearing from you. I hope to hear from you soon.",
+   "viDuNghia": "Tôi mong nhận được hồi âm của bạn. Hy vọng sớm nhận tin từ bạn.",
+   "cumTu": [
+    "hear from somebody",
+    "hear from you soon"
+   ],
+   "ghiChu": "\"I look forward to hearing from you\" — câu kết email trang trọng."
+  },
+  {
+   "chu": "look forward to",
+   "doc": "/lʊk ˈfɔːwəd tuː/",
+   "loai": "phr",
+   "nghia": "mong chờ, trông đợi",
+   "cap": "B1",
+   "viDu": "I look forward to meeting you next week.",
+   "viDuNghia": "Tôi mong được gặp bạn vào tuần tới.",
+   "cumTu": [
+    "look forward to doing",
+    "look forward to seeing you",
+    "look forward to the weekend"
+   ],
+   "ghiChu": "Sau \"to\" là V-ing: look forward to MEETING (không phải \"to meet\")."
+  },
+  {
+   "chu": "get back to",
+   "doc": "/ɡet bæk tuː/",
+   "loai": "phr",
+   "nghia": "trả lời lại sau; quay lại với",
+   "cap": "B1",
+   "viDu": "I will check and get back to you by Friday.",
+   "viDuNghia": "Tôi sẽ kiểm tra và trả lời bạn trước thứ Sáu.",
+   "cumTu": [
+    "get back to you",
+    "get back to work",
+    "get back to normal"
+   ],
+   "ghiChu": "Câu công việc kinh điển: \"Let me get back to you on that.\""
+  },
+  {
+   "chu": "get used to",
+   "doc": "/ɡet juːst tuː/",
+   "loai": "phr",
+   "nghia": "dần quen với",
+   "cap": "B1",
+   "viDu": "It takes time to get used to a new job.",
+   "viDuNghia": "Cần thời gian để quen với công việc mới.",
+   "cumTu": [
+    "get used to doing",
+    "get used to the weather",
+    "get used to it"
+   ],
+   "ghiChu": "get used to + V-ing/danh từ (dần quen); used to + V (đã từng)."
+  },
+  {
+   "chu": "used to",
+   "doc": "/ˈjuːst tuː/",
+   "loai": "phr",
+   "nghia": "đã từng, trước đây thường",
+   "cap": "B1",
+   "viDu": "I used to play football every day when I was a child.",
+   "viDuNghia": "Hồi nhỏ tôi từng chơi bóng đá mỗi ngày.",
+   "cumTu": [
+    "used to do",
+    "used to be",
+    "did not use to"
+   ],
+   "ghiChu": "Chỉ thói quen quá khứ nay không còn. Phủ định: didn't use to."
+  }
+ ]
+}

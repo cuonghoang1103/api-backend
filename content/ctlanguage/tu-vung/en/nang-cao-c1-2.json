@@ -1,0 +1,910 @@
+{
+  "ma": "nang-cao-c1-2",
+  "nn": "en",
+  "ten": "Bù C1 · Tính từ đánh giá và mô tả chính xác",
+  "moTa": "Tính từ C1 còn thiếu để đánh giá, phê bình và mô tả có sắc thái (bleak, formidable, meticulous, pervasive, pivotal, superficial…) — thay cho \"good/bad/big/important\" ở Writing và Speaking band 7+.",
+  "nhom": "ielts",
+  "cap": "C1",
+  "tu": [
+    {
+      "chu": "bleak",
+      "doc": "/bliːk/",
+      "loai": "adj",
+      "nghia": "ảm đạm, không có hy vọng",
+      "cap": "C1",
+      "viDu": "Without investment, the future of rural schools looks bleak.",
+      "viDuNghia": "Không có đầu tư, tương lai của trường học nông thôn trông ảm đạm.",
+      "cumTu": [
+        "a bleak future",
+        "a bleak outlook",
+        "bleak prospects"
+      ],
+      "hoTu": [
+        "bleakly (adv)",
+        "bleakness (n)"
+      ]
+    },
+    {
+      "chu": "candid",
+      "doc": "/ˈkændɪd/",
+      "loai": "adj",
+      "nghia": "thẳng thắn, bộc trực",
+      "cap": "C1",
+      "viDu": "The manager gave a candid assessment of the team's weaknesses.",
+      "viDuNghia": "Người quản lý đưa ra đánh giá thẳng thắn về điểm yếu của nhóm.",
+      "cumTu": [
+        "a candid interview",
+        "a candid assessment",
+        "be candid about"
+      ],
+      "hoTu": [
+        "candour (n)",
+        "candidly (adv)"
+      ]
+    },
+    {
+      "chu": "complacent",
+      "doc": "/kəmˈpleɪsnt/",
+      "loai": "adj",
+      "nghia": "tự mãn, chủ quan",
+      "cap": "C1",
+      "viDu": "After years of success, the company became complacent about security.",
+      "viDuNghia": "Sau nhiều năm thành công, công ty trở nên chủ quan về bảo mật.",
+      "cumTu": [
+        "complacent about something",
+        "become complacent",
+        "a complacent attitude"
+      ],
+      "hoTu": [
+        "complacency (n)",
+        "complacently (adv)"
+      ],
+      "ghiChu": "Khác \"complaisant\" (dễ dãi chiều người)."
+    },
+    {
+      "chu": "contingent",
+      "doc": "/kənˈtɪndʒənt/",
+      "loai": "adj",
+      "nghia": "phụ thuộc vào, tuỳ thuộc",
+      "cap": "C1",
+      "viDu": "The job offer is contingent on passing a background check.",
+      "viDuNghia": "Lời mời làm việc tuỳ thuộc vào việc qua được bước xác minh lý lịch.",
+      "cumTu": [
+        "contingent on something",
+        "contingent upon approval"
+      ],
+      "hoTu": [
+        "contingency (n)"
+      ],
+      "ghiChu": "\"contingency plan\" = phương án dự phòng."
+    },
+    {
+      "chu": "formidable",
+      "doc": "/fəˈmɪdəbl/",
+      "loai": "adj",
+      "nghia": "đáng gờm, ghê gớm",
+      "cap": "C1",
+      "viDu": "Reducing traffic in a city of ten million is a formidable challenge.",
+      "viDuNghia": "Giảm giao thông ở thành phố mười triệu dân là thách thức đáng gờm.",
+      "cumTu": [
+        "a formidable challenge",
+        "a formidable opponent",
+        "a formidable task"
+      ],
+      "hoTu": [
+        "formidably (adv)"
+      ]
+    },
+    {
+      "chu": "grave",
+      "doc": "/ɡreɪv/",
+      "loai": "adj",
+      "nghia": "nghiêm trọng, trầm trọng",
+      "cap": "C1",
+      "viDu": "Scientists have expressed grave concern about rising sea levels.",
+      "viDuNghia": "Giới khoa học bày tỏ quan ngại sâu sắc về mực nước biển dâng.",
+      "cumTu": [
+        "grave concern",
+        "grave danger",
+        "a grave mistake"
+      ],
+      "hoTu": [
+        "gravely (adv)",
+        "gravity (n)"
+      ],
+      "ghiChu": "Trang trọng hơn \"serious\"; \"grave concern\" là collocation cố định."
+    },
+    {
+      "chu": "imperative",
+      "doc": "/ɪmˈperətɪv/",
+      "loai": "adj",
+      "nghia": "cấp thiết, bắt buộc phải làm",
+      "cap": "C1",
+      "viDu": "It is imperative that governments act before the damage becomes permanent.",
+      "viDuNghia": "Điều cấp thiết là chính phủ phải hành động trước khi thiệt hại thành vĩnh viễn.",
+      "cumTu": [
+        "it is imperative that",
+        "imperative to do",
+        "absolutely imperative"
+      ],
+      "hoTu": [
+        "imperative (n)"
+      ],
+      "ghiChu": "Sau \"it is imperative that\" dùng động từ nguyên mẫu (giả định): that he act."
+    },
+    {
+      "chu": "ingenious",
+      "doc": "/ɪnˈdʒiːniəs/",
+      "loai": "adj",
+      "nghia": "khéo léo, tài tình (ý tưởng, thiết bị)",
+      "cap": "C1",
+      "viDu": "She came up with an ingenious solution to the storage problem.",
+      "viDuNghia": "Cô ấy nghĩ ra một giải pháp tài tình cho vấn đề lưu trữ.",
+      "cumTu": [
+        "an ingenious solution",
+        "an ingenious device",
+        "an ingenious idea"
+      ],
+      "hoTu": [
+        "ingenuity (n)",
+        "ingeniously (adv)"
+      ],
+      "ghiChu": "Khác \"ingenuous\" (ngây thơ, thật thà)."
+    },
+    {
+      "chu": "intact",
+      "doc": "/ɪnˈtækt/",
+      "loai": "adj",
+      "nghia": "nguyên vẹn, không hư hại",
+      "cap": "C1",
+      "viDu": "Despite the crash, the database remained intact.",
+      "viDuNghia": "Dù bị sập, cơ sở dữ liệu vẫn nguyên vẹn.",
+      "cumTu": [
+        "remain intact",
+        "keep something intact",
+        "largely intact"
+      ],
+      "ghiChu": "Không đứng trước danh từ: the data is intact."
+    },
+    {
+      "chu": "invaluable",
+      "doc": "/ɪnˈvæljuəbl/",
+      "loai": "adj",
+      "nghia": "vô giá, cực kỳ hữu ích",
+      "cap": "C1",
+      "viDu": "The internship gave me invaluable experience of working in a real team.",
+      "viDuNghia": "Kỳ thực tập cho tôi kinh nghiệm vô giá khi làm việc trong một nhóm thật.",
+      "cumTu": [
+        "invaluable experience",
+        "invaluable help",
+        "prove invaluable"
+      ],
+      "ghiChu": "KHÔNG có nghĩa \"không có giá trị\" — đó là \"worthless/valueless\"."
+    },
+    {
+      "chu": "meticulous",
+      "doc": "/məˈtɪkjələs/",
+      "loai": "adj",
+      "nghia": "tỉ mỉ, kỹ lưỡng",
+      "cap": "C1",
+      "viDu": "Good testers are meticulous about recording every step.",
+      "viDuNghia": "Người kiểm thử giỏi rất tỉ mỉ trong việc ghi lại từng bước.",
+      "cumTu": [
+        "meticulous attention to detail",
+        "meticulous planning",
+        "meticulous about"
+      ],
+      "hoTu": [
+        "meticulously (adv)"
+      ]
+    },
+    {
+      "chu": "mundane",
+      "doc": "/mʌnˈdeɪn/",
+      "loai": "adj",
+      "nghia": "tẻ nhạt, đời thường",
+      "cap": "C1",
+      "viDu": "Robots now handle the mundane tasks that people used to hate.",
+      "viDuNghia": "Rô-bốt giờ xử lý những việc tẻ nhạt mà con người từng ghét.",
+      "cumTu": [
+        "mundane tasks",
+        "mundane matters",
+        "a mundane job"
+      ]
+    },
+    {
+      "chu": "notorious",
+      "doc": "/nəʊˈtɔːriəs/",
+      "loai": "adj",
+      "nghia": "khét tiếng, nổi tiếng xấu",
+      "cap": "C1",
+      "viDu": "The city is notorious for its rush-hour traffic jams.",
+      "viDuNghia": "Thành phố này khét tiếng vì kẹt xe giờ cao điểm.",
+      "cumTu": [
+        "notorious for something",
+        "a notorious criminal",
+        "notoriously difficult"
+      ],
+      "hoTu": [
+        "notoriety (n)",
+        "notoriously (adv)"
+      ],
+      "ghiChu": "Nổi tiếng vì điều XẤU — đừng dùng thay \"famous\"."
+    },
+    {
+      "chu": "paramount",
+      "doc": "/ˈpærəmaʊnt/",
+      "loai": "adj",
+      "nghia": "tối quan trọng, trên hết",
+      "cap": "C1",
+      "viDu": "The safety of passengers is of paramount importance.",
+      "viDuNghia": "An toàn của hành khách là điều tối quan trọng.",
+      "cumTu": [
+        "of paramount importance",
+        "paramount concern",
+        "be paramount"
+      ],
+      "ghiChu": "Không dùng \"very paramount\"."
+    },
+    {
+      "chu": "pervasive",
+      "doc": "/pəˈveɪsɪv/",
+      "loai": "adj",
+      "nghia": "lan tràn khắp nơi",
+      "cap": "C1",
+      "viDu": "Advertising has become a pervasive influence on children.",
+      "viDuNghia": "Quảng cáo đã trở thành ảnh hưởng lan tràn khắp nơi đối với trẻ em.",
+      "cumTu": [
+        "a pervasive influence",
+        "a pervasive problem",
+        "increasingly pervasive"
+      ],
+      "hoTu": [
+        "pervade (v)",
+        "pervasiveness (n)"
+      ]
+    },
+    {
+      "chu": "pivotal",
+      "doc": "/ˈpɪvətl/",
+      "loai": "adj",
+      "nghia": "then chốt, có vai trò bản lề",
+      "cap": "C1",
+      "viDu": "Teachers play a pivotal role in shaping students' attitudes.",
+      "viDuNghia": "Giáo viên đóng vai trò then chốt trong việc định hình thái độ của học sinh.",
+      "cumTu": [
+        "a pivotal role",
+        "a pivotal moment",
+        "pivotal to something"
+      ],
+      "hoTu": [
+        "pivot (n, v)"
+      ],
+      "ghiChu": "\"play a pivotal role in\" — nâng cấp của \"play an important role\"."
+    },
+    {
+      "chu": "pristine",
+      "doc": "/ˈprɪstiːn/",
+      "loai": "adj",
+      "nghia": "nguyên sơ, còn như mới",
+      "cap": "C1",
+      "viDu": "Mass tourism threatens the island's pristine beaches.",
+      "viDuNghia": "Du lịch đại trà đe doạ những bãi biển nguyên sơ của hòn đảo.",
+      "cumTu": [
+        "pristine beaches",
+        "in pristine condition",
+        "pristine wilderness"
+      ]
+    },
+    {
+      "chu": "proficient",
+      "doc": "/prəˈfɪʃnt/",
+      "loai": "adj",
+      "nghia": "thành thạo",
+      "cap": "C1",
+      "viDu": "Applicants should be proficient in at least one programming language.",
+      "viDuNghia": "Ứng viên cần thành thạo ít nhất một ngôn ngữ lập trình.",
+      "cumTu": [
+        "proficient in something",
+        "proficient at doing",
+        "highly proficient"
+      ],
+      "hoTu": [
+        "proficiency (n)",
+        "proficiently (adv)"
+      ],
+      "ghiChu": "proficient IN (ngôn ngữ, kỹ năng)."
+    },
+    {
+      "chu": "rampant",
+      "doc": "/ˈræmpənt/",
+      "loai": "adj",
+      "nghia": "tràn lan, không kiểm soát được",
+      "cap": "C1",
+      "viDu": "Rampant inflation wiped out people's savings.",
+      "viDuNghia": "Lạm phát phi mã đã xoá sạch tiền tiết kiệm của người dân.",
+      "cumTu": [
+        "rampant inflation",
+        "rampant corruption",
+        "run rampant"
+      ],
+      "ghiChu": "Chỉ dùng cho điều xấu."
+    },
+    {
+      "chu": "relentless",
+      "doc": "/rɪˈlentləs/",
+      "loai": "adj",
+      "nghia": "không ngừng, không khoan nhượng",
+      "cap": "C1",
+      "viDu": "Employees are exhausted by the relentless pressure to meet targets.",
+      "viDuNghia": "Nhân viên kiệt sức vì áp lực không ngừng phải đạt chỉ tiêu.",
+      "cumTu": [
+        "relentless pressure",
+        "relentless pursuit of",
+        "relentless criticism"
+      ],
+      "hoTu": [
+        "relentlessly (adv)"
+      ]
+    },
+    {
+      "chu": "sparse",
+      "doc": "/spɑːs/",
+      "loai": "adj",
+      "nghia": "thưa thớt",
+      "cap": "C1",
+      "viDu": "Public transport is poor in areas with a sparse population.",
+      "viDuNghia": "Giao thông công cộng kém ở những vùng dân cư thưa thớt.",
+      "cumTu": [
+        "a sparse population",
+        "sparse vegetation",
+        "sparsely populated"
+      ],
+      "hoTu": [
+        "sparsely (adv)",
+        "sparsity (n)"
+      ],
+      "ghiChu": "Trái nghĩa của \"dense\"; \"sparsely populated\" dùng cho Task 1 bản đồ."
+    },
+    {
+      "chu": "staggering",
+      "doc": "/ˈstæɡərɪŋ/",
+      "loai": "adj",
+      "nghia": "gây choáng váng, lớn kinh ngạc",
+      "cap": "C1",
+      "viDu": "A staggering 80 per cent of the waste ends up in the ocean.",
+      "viDuNghia": "Con số gây choáng: 80 phần trăm rác thải trôi ra đại dương.",
+      "cumTu": [
+        "a staggering amount",
+        "a staggering number",
+        "a staggering 80 per cent"
+      ],
+      "hoTu": [
+        "stagger (v)",
+        "staggeringly (adv)"
+      ],
+      "ghiChu": "Mẫu \"a staggering + con số\" rất hay khi nêu số liệu."
+    },
+    {
+      "chu": "unanimous",
+      "doc": "/juˈnænɪməs/",
+      "loai": "adj",
+      "nghia": "nhất trí, đồng lòng",
+      "cap": "C1",
+      "viDu": "The committee reached a unanimous decision to reject the plan.",
+      "viDuNghia": "Uỷ ban đạt quyết định nhất trí bác bỏ kế hoạch.",
+      "cumTu": [
+        "a unanimous decision",
+        "unanimous support",
+        "unanimous in"
+      ],
+      "hoTu": [
+        "unanimity (n)",
+        "unanimously (adv)"
+      ],
+      "ghiChu": "Dùng \"a unanimous\" (âm đầu /j/)."
+    },
+    {
+      "chu": "utter",
+      "doc": "/ˈʌtə(r)/",
+      "loai": "adj",
+      "nghia": "hoàn toàn, tuyệt đối (nhấn mạnh)",
+      "cap": "C1",
+      "viDu": "Leaving the server without a password was an act of utter carelessness.",
+      "viDuNghia": "Để máy chủ không mật khẩu là một hành động bất cẩn hết mức.",
+      "cumTu": [
+        "utter nonsense",
+        "utter chaos",
+        "utter disbelief"
+      ],
+      "hoTu": [
+        "utterly (adv)",
+        "utter (v)",
+        "utterance (n)"
+      ],
+      "ghiChu": "Chỉ đứng trước danh từ, thường nghĩa tiêu cực."
+    },
+    {
+      "chu": "vigorous",
+      "doc": "/ˈvɪɡərəs/",
+      "loai": "adj",
+      "nghia": "mạnh mẽ, hăng hái",
+      "cap": "C1",
+      "viDu": "The proposal met with vigorous opposition from local residents.",
+      "viDuNghia": "Đề xuất vấp phải sự phản đối mạnh mẽ của cư dân địa phương.",
+      "cumTu": [
+        "vigorous exercise",
+        "vigorous opposition",
+        "a vigorous debate"
+      ],
+      "hoTu": [
+        "vigour (n)",
+        "vigorously (adv)"
+      ]
+    },
+    {
+      "chu": "conspicuous",
+      "doc": "/kənˈspɪkjuəs/",
+      "loai": "adj",
+      "nghia": "dễ thấy, đập vào mắt",
+      "cap": "C1",
+      "viDu": "The warning must be placed in a conspicuous position on the page.",
+      "viDuNghia": "Cảnh báo phải được đặt ở vị trí dễ thấy trên trang.",
+      "cumTu": [
+        "a conspicuous position",
+        "conspicuous by its absence",
+        "conspicuous consumption"
+      ],
+      "hoTu": [
+        "conspicuously (adv)",
+        "inconspicuous (adj)"
+      ],
+      "ghiChu": "\"conspicuous consumption\" = tiêu dùng phô trương."
+    },
+    {
+      "chu": "cynical",
+      "doc": "/ˈsɪnɪkl/",
+      "loai": "adj",
+      "nghia": "hoài nghi (về lòng tốt, động cơ con người)",
+      "cap": "C1",
+      "viDu": "Many voters have grown cynical about politicians' promises.",
+      "viDuNghia": "Nhiều cử tri ngày càng hoài nghi lời hứa của chính trị gia.",
+      "cumTu": [
+        "cynical about something",
+        "a cynical view",
+        "deeply cynical"
+      ],
+      "hoTu": [
+        "cynic (n)",
+        "cynicism (n)"
+      ],
+      "ghiChu": "Khác \"sceptical\" (nghi ngờ vì thiếu bằng chứng): cynical là không tin vào thiện ý."
+    },
+    {
+      "chu": "detached",
+      "doc": "/dɪˈtætʃt/",
+      "loai": "adj",
+      "nghia": "khách quan, không dính líu cảm xúc; tách rời",
+      "cap": "C1",
+      "viDu": "A researcher should take a detached view of the evidence.",
+      "viDuNghia": "Nhà nghiên cứu nên nhìn bằng chứng một cách khách quan.",
+      "cumTu": [
+        "a detached view",
+        "emotionally detached",
+        "a detached house"
+      ],
+      "hoTu": [
+        "detach (v)",
+        "detachment (n)"
+      ]
+    },
+    {
+      "chu": "devoid",
+      "doc": "/dɪˈvɔɪd/",
+      "loai": "adj",
+      "nghia": "hoàn toàn không có",
+      "cap": "C1",
+      "viDu": "The report was full of numbers but devoid of any real analysis.",
+      "viDuNghia": "Bản báo cáo đầy số liệu nhưng không hề có phân tích thực chất.",
+      "cumTu": [
+        "devoid of meaning",
+        "devoid of emotion",
+        "completely devoid of"
+      ],
+      "ghiChu": "Luôn đi với \"of\"."
+    },
+    {
+      "chu": "diligent",
+      "doc": "/ˈdɪlɪdʒənt/",
+      "loai": "adj",
+      "nghia": "siêng năng, cần mẫn",
+      "cap": "C1",
+      "viDu": "She is a diligent student who never misses a deadline.",
+      "viDuNghia": "Cô ấy là sinh viên cần mẫn, không bao giờ trễ hạn.",
+      "cumTu": [
+        "a diligent student",
+        "diligent work",
+        "diligent in"
+      ],
+      "hoTu": [
+        "diligence (n)",
+        "diligently (adv)"
+      ],
+      "ghiChu": "Trang trọng hơn \"hard-working\". \"due diligence\" = thẩm định kỹ."
+    },
+    {
+      "chu": "eccentric",
+      "doc": "/ɪkˈsentrɪk/",
+      "loai": "adj",
+      "nghia": "lập dị, khác thường",
+      "cap": "C1",
+      "viDu": "The founder was an eccentric genius who worked only at night.",
+      "viDuNghia": "Nhà sáng lập là một thiên tài lập dị chỉ làm việc ban đêm.",
+      "cumTu": [
+        "an eccentric character",
+        "eccentric behaviour",
+        "slightly eccentric"
+      ],
+      "hoTu": [
+        "eccentricity (n)",
+        "eccentric (n)"
+      ]
+    },
+    {
+      "chu": "eloquent",
+      "doc": "/ˈeləkwənt/",
+      "loai": "adj",
+      "nghia": "hùng biện, có tài ăn nói",
+      "cap": "C1",
+      "viDu": "He gave an eloquent speech about the value of education.",
+      "viDuNghia": "Ông có bài phát biểu hùng hồn về giá trị của giáo dục.",
+      "cumTu": [
+        "an eloquent speech",
+        "an eloquent speaker",
+        "eloquent testimony"
+      ],
+      "hoTu": [
+        "eloquence (n)",
+        "eloquently (adv)"
+      ]
+    },
+    {
+      "chu": "elusive",
+      "doc": "/ɪˈluːsɪv/",
+      "loai": "adj",
+      "nghia": "khó nắm bắt, khó đạt được",
+      "cap": "C1",
+      "viDu": "A lasting solution to traffic congestion remains elusive.",
+      "viDuNghia": "Một giải pháp lâu dài cho ùn tắc giao thông vẫn khó đạt được.",
+      "cumTu": [
+        "remain elusive",
+        "an elusive goal",
+        "prove elusive"
+      ],
+      "hoTu": [
+        "elude (v)"
+      ]
+    },
+    {
+      "chu": "erratic",
+      "doc": "/ɪˈrætɪk/",
+      "loai": "adj",
+      "nghia": "thất thường, không ổn định",
+      "cap": "C1",
+      "viDu": "The app's performance is erratic on slow connections.",
+      "viDuNghia": "Hiệu năng của ứng dụng thất thường khi mạng chậm.",
+      "cumTu": [
+        "erratic behaviour",
+        "erratic rainfall",
+        "an erratic schedule"
+      ],
+      "hoTu": [
+        "erratically (adv)"
+      ]
+    },
+    {
+      "chu": "exempt",
+      "doc": "/ɪɡˈzempt/",
+      "loai": "adj",
+      "nghia": "được miễn",
+      "cap": "C1",
+      "viDu": "Low-income families are exempt from the new tax.",
+      "viDuNghia": "Gia đình thu nhập thấp được miễn loại thuế mới.",
+      "cumTu": [
+        "exempt from tax",
+        "be exempt from",
+        "tax-exempt"
+      ],
+      "hoTu": [
+        "exempt (v)",
+        "exemption (n)"
+      ],
+      "ghiChu": "exempt FROM."
+    },
+    {
+      "chu": "exhaustive",
+      "doc": "/ɪɡˈzɔːstɪv/",
+      "loai": "adj",
+      "nghia": "toàn diện, không bỏ sót",
+      "cap": "C1",
+      "viDu": "This list is not exhaustive, but it covers the most common errors.",
+      "viDuNghia": "Danh sách này không đầy đủ tuyệt đối, nhưng bao gồm các lỗi thường gặp nhất.",
+      "cumTu": [
+        "an exhaustive list",
+        "exhaustive research",
+        "an exhaustive search"
+      ],
+      "hoTu": [
+        "exhaustively (adv)"
+      ],
+      "ghiChu": "Khác \"exhausting\" (làm kiệt sức)."
+    },
+    {
+      "chu": "generic",
+      "doc": "/dʒəˈnerɪk/",
+      "loai": "adj",
+      "nghia": "chung chung, không đặc thù",
+      "cap": "C1",
+      "viDu": "Avoid generic answers in interviews and give specific examples instead.",
+      "viDuNghia": "Tránh câu trả lời chung chung khi phỏng vấn, hãy đưa ví dụ cụ thể.",
+      "cumTu": [
+        "a generic term",
+        "generic drugs",
+        "a generic answer"
+      ],
+      "hoTu": [
+        "generically (adv)"
+      ],
+      "ghiChu": "Trong lập trình: generic types / generics."
+    },
+    {
+      "chu": "incompatible",
+      "doc": "/ˌɪnkəmˈpætəbl/",
+      "loai": "adj",
+      "nghia": "không tương thích, không hợp nhau",
+      "cap": "C1",
+      "viDu": "The plugin is incompatible with the latest version of the browser.",
+      "viDuNghia": "Phần bổ trợ không tương thích với phiên bản trình duyệt mới nhất.",
+      "cumTu": [
+        "incompatible with something",
+        "mutually incompatible",
+        "incompatible goals"
+      ],
+      "hoTu": [
+        "incompatibility (n)",
+        "compatible (adj)"
+      ]
+    },
+    {
+      "chu": "liable",
+      "doc": "/ˈlaɪəbl/",
+      "loai": "adj",
+      "nghia": "chịu trách nhiệm pháp lý; dễ có khả năng",
+      "cap": "C1",
+      "viDu": "The company is liable for any damage caused by its software.",
+      "viDuNghia": "Công ty chịu trách nhiệm pháp lý về mọi thiệt hại do phần mềm của mình gây ra.",
+      "cumTu": [
+        "liable for something",
+        "liable to do something",
+        "hold someone liable"
+      ],
+      "hoTu": [
+        "liability (n)"
+      ],
+      "ghiChu": "liable FOR (trách nhiệm) / liable TO do (dễ xảy ra)."
+    },
+    {
+      "chu": "malicious",
+      "doc": "/məˈlɪʃəs/",
+      "loai": "adj",
+      "nghia": "có ác ý, độc hại",
+      "cap": "C1",
+      "viDu": "Never open attachments that might contain malicious software.",
+      "viDuNghia": "Đừng bao giờ mở tệp đính kèm có thể chứa phần mềm độc hại.",
+      "cumTu": [
+        "malicious software",
+        "malicious intent",
+        "a malicious attack"
+      ],
+      "hoTu": [
+        "malice (n)",
+        "maliciously (adv)"
+      ],
+      "ghiChu": "malware = MALicious softWARE."
+    },
+    {
+      "chu": "mediocre",
+      "doc": "/ˌmiːdiˈəʊkə(r)/",
+      "loai": "adj",
+      "nghia": "tầm thường, xoàng",
+      "cap": "C1",
+      "viDu": "The food was mediocre, but the service was excellent.",
+      "viDuNghia": "Đồ ăn thì xoàng, nhưng phục vụ thì tuyệt vời.",
+      "cumTu": [
+        "a mediocre performance",
+        "mediocre results",
+        "rather mediocre"
+      ],
+      "hoTu": [
+        "mediocrity (n)"
+      ]
+    },
+    {
+      "chu": "monotonous",
+      "doc": "/məˈnɒtənəs/",
+      "loai": "adj",
+      "nghia": "đơn điệu, buồn tẻ",
+      "cap": "C1",
+      "viDu": "Factory work can be monotonous and badly paid.",
+      "viDuNghia": "Công việc nhà máy có thể đơn điệu và lương thấp.",
+      "cumTu": [
+        "a monotonous job",
+        "a monotonous voice",
+        "monotonous routine"
+      ],
+      "hoTu": [
+        "monotony (n)",
+        "monotone (n)"
+      ]
+    },
+    {
+      "chu": "ominous",
+      "doc": "/ˈɒmɪnəs/",
+      "loai": "adj",
+      "nghia": "báo điềm xấu, đáng ngại",
+      "cap": "C1",
+      "viDu": "There was an ominous silence after the manager read the results.",
+      "viDuNghia": "Có một sự im lặng đáng ngại sau khi quản lý đọc kết quả.",
+      "cumTu": [
+        "an ominous sign",
+        "an ominous silence",
+        "ominous clouds"
+      ],
+      "hoTu": [
+        "omen (n)",
+        "ominously (adv)"
+      ]
+    },
+    {
+      "chu": "poised",
+      "doc": "/pɔɪzd/",
+      "loai": "adj",
+      "nghia": "sẵn sàng, sắp sửa (làm gì)",
+      "cap": "C1",
+      "viDu": "The company is poised to become the market leader in Asia.",
+      "viDuNghia": "Công ty đang sẵn sàng trở thành đơn vị dẫn đầu thị trường châu Á.",
+      "cumTu": [
+        "poised to do something",
+        "poised for growth",
+        "be poised on the edge"
+      ],
+      "hoTu": [
+        "poise (n)"
+      ]
+    },
+    {
+      "chu": "prudent",
+      "doc": "/ˈpruːdnt/",
+      "loai": "adj",
+      "nghia": "thận trọng, khôn ngoan",
+      "cap": "C1",
+      "viDu": "It would be prudent to save some money before quitting your job.",
+      "viDuNghia": "Sẽ là khôn ngoan nếu để dành ít tiền trước khi nghỉ việc.",
+      "cumTu": [
+        "a prudent decision",
+        "prudent to do",
+        "financially prudent"
+      ],
+      "hoTu": [
+        "prudence (n)",
+        "prudently (adv)"
+      ]
+    },
+    {
+      "chu": "ruthless",
+      "doc": "/ˈruːθləs/",
+      "loai": "adj",
+      "nghia": "tàn nhẫn, không thương tiếc",
+      "cap": "C1",
+      "viDu": "The retail industry is known for its ruthless competition.",
+      "viDuNghia": "Ngành bán lẻ nổi tiếng vì cạnh tranh không khoan nhượng.",
+      "cumTu": [
+        "ruthless competition",
+        "a ruthless dictator",
+        "ruthless efficiency"
+      ],
+      "hoTu": [
+        "ruthlessly (adv)",
+        "ruthlessness (n)"
+      ]
+    },
+    {
+      "chu": "secular",
+      "doc": "/ˈsekjələ(r)/",
+      "loai": "adj",
+      "nghia": "thế tục, không thuộc tôn giáo",
+      "cap": "C1",
+      "viDu": "Most state schools provide a secular education.",
+      "viDuNghia": "Phần lớn trường công cung cấp nền giáo dục thế tục.",
+      "cumTu": [
+        "a secular society",
+        "secular education",
+        "a secular state"
+      ],
+      "hoTu": [
+        "secularism (n)"
+      ]
+    },
+    {
+      "chu": "shrewd",
+      "doc": "/ʃruːd/",
+      "loai": "adj",
+      "nghia": "sắc sảo, tinh khôn (trong phán đoán)",
+      "cap": "C1",
+      "viDu": "Buying the land early turned out to be a shrewd investment.",
+      "viDuNghia": "Mua mảnh đất sớm hoá ra là một khoản đầu tư sắc sảo.",
+      "cumTu": [
+        "a shrewd investment",
+        "a shrewd businessman",
+        "a shrewd move"
+      ],
+      "hoTu": [
+        "shrewdly (adv)",
+        "shrewdness (n)"
+      ]
+    },
+    {
+      "chu": "superficial",
+      "doc": "/ˌsuːpəˈfɪʃl/",
+      "loai": "adj",
+      "nghia": "hời hợt, nông cạn; bề ngoài",
+      "cap": "C1",
+      "viDu": "Reading only headlines gives people a superficial understanding of the news.",
+      "viDuNghia": "Chỉ đọc tiêu đề khiến người ta hiểu tin tức một cách hời hợt.",
+      "cumTu": [
+        "a superficial understanding",
+        "superficial knowledge",
+        "superficial similarities"
+      ],
+      "hoTu": [
+        "superficially (adv)",
+        "superficiality (n)"
+      ]
+    },
+    {
+      "chu": "vicious",
+      "doc": "/ˈvɪʃəs/",
+      "loai": "adj",
+      "nghia": "hung ác, dữ dội",
+      "cap": "C1",
+      "viDu": "Poverty and poor education form a vicious cycle that is hard to break.",
+      "viDuNghia": "Nghèo đói và giáo dục kém tạo thành vòng luẩn quẩn khó phá vỡ.",
+      "cumTu": [
+        "a vicious cycle",
+        "a vicious attack",
+        "a vicious rumour"
+      ],
+      "hoTu": [
+        "viciously (adv)"
+      ],
+      "ghiChu": "\"a vicious cycle/circle\" = vòng luẩn quẩn — cụm ăn điểm Task 2."
+    },
+    {
+      "chu": "vigilant",
+      "doc": "/ˈvɪdʒɪlənt/",
+      "loai": "adj",
+      "nghia": "cảnh giác",
+      "cap": "C1",
+      "viDu": "Users should remain vigilant against phishing emails.",
+      "viDuNghia": "Người dùng nên luôn cảnh giác với email lừa đảo.",
+      "cumTu": [
+        "remain vigilant",
+        "vigilant against",
+        "vigilant about"
+      ],
+      "hoTu": [
+        "vigilance (n)"
+      ]
+    }
+  ]
+}

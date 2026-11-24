@@ -1,0 +1,959 @@
+{
+  "ma": "nang-cao-b2-2",
+  "nn": "en",
+  "ten": "Bù B2 · Động từ hành động và danh từ xã hội",
+  "moTa": "Động từ B2 còn thiếu (collaborate, confront, deprive, disrupt, endure, thrive, seize…) cùng danh từ về xã hội, kinh tế, rủi ro (catastrophe, hazard, setback, surplus) — dùng nhiều ở Writing Task 2 và Reading.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "assemble",
+      "doc": "/əˈsembl/",
+      "loai": "v",
+      "nghia": "lắp ráp; tập hợp",
+      "cap": "B2",
+      "viDu": "Workers assemble the phones in a factory near Hanoi.",
+      "viDuNghia": "Công nhân lắp ráp điện thoại tại một nhà máy gần Hà Nội.",
+      "cumTu": [
+        "assemble a team",
+        "assemble evidence",
+        "assemble parts"
+      ],
+      "hoTu": [
+        "assembly (n)"
+      ]
+    },
+    {
+      "chu": "liberate",
+      "doc": "/ˈlɪbəreɪt/",
+      "loai": "v",
+      "nghia": "giải phóng",
+      "cap": "B2",
+      "viDu": "Automation can liberate workers from boring, repetitive tasks.",
+      "viDuNghia": "Tự động hoá có thể giải phóng người lao động khỏi các việc lặp lại nhàm chán.",
+      "cumTu": [
+        "liberate someone from",
+        "liberate a country",
+        "feel liberated"
+      ],
+      "hoTu": [
+        "liberation (n)",
+        "liberty (n)"
+      ]
+    },
+    {
+      "chu": "boast",
+      "doc": "/bəʊst/",
+      "loai": "v",
+      "nghia": "khoe khoang; tự hào có",
+      "cap": "B2",
+      "viDu": "The campus can boast a modern library and three research labs.",
+      "viDuNghia": "Khuôn viên tự hào có thư viện hiện đại và ba phòng nghiên cứu.",
+      "cumTu": [
+        "boast about something",
+        "boast of",
+        "boast an impressive record"
+      ],
+      "hoTu": [
+        "boast (n)",
+        "boastful (adj)"
+      ],
+      "ghiChu": "Nghĩa \"tự hào có\" (không tiêu cực) hay dùng khi tả địa điểm: The city boasts…"
+    },
+    {
+      "chu": "circulate",
+      "doc": "/ˈsɜːkjəleɪt/",
+      "loai": "v",
+      "nghia": "lưu thông; lan truyền",
+      "cap": "B2",
+      "viDu": "False rumours circulate quickly on social media.",
+      "viDuNghia": "Tin đồn sai lan truyền rất nhanh trên mạng xã hội.",
+      "cumTu": [
+        "circulate widely",
+        "circulate a report",
+        "blood circulates"
+      ],
+      "hoTu": [
+        "circulation (n)",
+        "circular (adj)"
+      ]
+    },
+    {
+      "chu": "collaborate",
+      "doc": "/kəˈlæbəreɪt/",
+      "loai": "v",
+      "nghia": "hợp tác, cộng tác",
+      "cap": "B2",
+      "viDu": "Our team had to collaborate with designers in another time zone.",
+      "viDuNghia": "Nhóm chúng tôi phải cộng tác với các nhà thiết kế ở múi giờ khác.",
+      "cumTu": [
+        "collaborate with someone",
+        "collaborate on a project",
+        "collaborate closely"
+      ],
+      "hoTu": [
+        "collaboration (n)",
+        "collaborative (adj)",
+        "collaborator (n)"
+      ],
+      "ghiChu": "collaborate WITH người, ON việc. Từ rất hay dùng khi phỏng vấn."
+    },
+    {
+      "chu": "condemn",
+      "doc": "/kənˈdem/",
+      "loai": "v",
+      "nghia": "lên án, chỉ trích mạnh",
+      "cap": "B2",
+      "viDu": "World leaders were quick to condemn the attack.",
+      "viDuNghia": "Các nhà lãnh đạo thế giới nhanh chóng lên án vụ tấn công.",
+      "cumTu": [
+        "strongly condemn",
+        "condemn violence",
+        "condemn someone for"
+      ],
+      "hoTu": [
+        "condemnation (n)"
+      ],
+      "ghiChu": "Chữ \"n\" cuối câm: /kənˈdem/."
+    },
+    {
+      "chu": "confront",
+      "doc": "/kənˈfrʌnt/",
+      "loai": "v",
+      "nghia": "đối mặt, đương đầu",
+      "cap": "B2",
+      "viDu": "Governments must confront the problem of youth unemployment.",
+      "viDuNghia": "Các chính phủ phải đối mặt với vấn đề thất nghiệp ở giới trẻ.",
+      "cumTu": [
+        "confront a problem",
+        "be confronted with",
+        "confront someone about"
+      ],
+      "hoTu": [
+        "confrontation (n)",
+        "confrontational (adj)"
+      ]
+    },
+    {
+      "chu": "delegate",
+      "doc": "/ˈdelɪɡeɪt/",
+      "loai": "v",
+      "nghia": "giao phó, uỷ quyền (công việc)",
+      "cap": "B2",
+      "viDu": "A good manager knows how to delegate tasks to the team.",
+      "viDuNghia": "Người quản lý giỏi biết cách giao việc cho nhóm.",
+      "cumTu": [
+        "delegate tasks",
+        "delegate responsibility",
+        "delegate authority to"
+      ],
+      "hoTu": [
+        "delegate (n) /ˈdelɪɡət/",
+        "delegation (n)"
+      ],
+      "ghiChu": "Danh từ \"delegate\" = đại biểu, đọc đuôi /ɡət/."
+    },
+    {
+      "chu": "deprive",
+      "doc": "/dɪˈpraɪv/",
+      "loai": "v",
+      "nghia": "tước đi, lấy mất",
+      "cap": "B2",
+      "viDu": "Poverty can deprive children of a proper education.",
+      "viDuNghia": "Nghèo đói có thể tước đi của trẻ em một nền giáo dục tử tế.",
+      "cumTu": [
+        "deprive someone of something",
+        "be deprived of sleep",
+        "deprived areas"
+      ],
+      "hoTu": [
+        "deprivation (n)",
+        "deprived (adj)"
+      ],
+      "ghiChu": "Cấu trúc: deprive SB OF sth. \"sleep deprivation\" = thiếu ngủ."
+    },
+    {
+      "chu": "devastate",
+      "doc": "/ˈdevəsteɪt/",
+      "loai": "v",
+      "nghia": "tàn phá; làm suy sụp",
+      "cap": "B2",
+      "viDu": "Floods devastate farmland in the region almost every year.",
+      "viDuNghia": "Lũ lụt tàn phá đất nông nghiệp trong vùng gần như mỗi năm.",
+      "cumTu": [
+        "devastate a region",
+        "be devastated by",
+        "devastate the economy"
+      ],
+      "hoTu": [
+        "devastating (adj)",
+        "devastation (n)"
+      ]
+    },
+    {
+      "chu": "disrupt",
+      "doc": "/dɪsˈrʌpt/",
+      "loai": "v",
+      "nghia": "làm gián đoạn, gây xáo trộn",
+      "cap": "B2",
+      "viDu": "Online shopping continues to disrupt traditional retail.",
+      "viDuNghia": "Mua sắm trực tuyến tiếp tục làm xáo trộn ngành bán lẻ truyền thống.",
+      "cumTu": [
+        "disrupt services",
+        "disrupt an industry",
+        "seriously disrupt"
+      ],
+      "hoTu": [
+        "disruption (n)",
+        "disruptive (adj)"
+      ],
+      "ghiChu": "\"disruptive technology\" = công nghệ đột phá làm thay đổi cả ngành."
+    },
+    {
+      "chu": "distract",
+      "doc": "/dɪˈstrækt/",
+      "loai": "v",
+      "nghia": "làm xao nhãng",
+      "cap": "B2",
+      "viDu": "Phone notifications distract students during lessons.",
+      "viDuNghia": "Thông báo điện thoại làm học sinh xao nhãng trong giờ học.",
+      "cumTu": [
+        "distract someone from",
+        "easily distracted",
+        "distract attention"
+      ],
+      "hoTu": [
+        "distraction (n)",
+        "distracting (adj)"
+      ]
+    },
+    {
+      "chu": "embark",
+      "doc": "/ɪmˈbɑːk/",
+      "loai": "v",
+      "nghia": "bắt tay vào (việc lớn); lên tàu",
+      "cap": "B2",
+      "viDu": "After graduation she decided to embark on a career in data science.",
+      "viDuNghia": "Sau khi tốt nghiệp cô quyết định bắt đầu sự nghiệp khoa học dữ liệu.",
+      "cumTu": [
+        "embark on a career",
+        "embark on a journey",
+        "embark on a project"
+      ],
+      "hoTu": [
+        "embarkation (n)"
+      ],
+      "ghiChu": "Luôn đi với \"on/upon\": embark ON."
+    },
+    {
+      "chu": "endure",
+      "doc": "/ɪnˈdjʊə(r)/",
+      "loai": "v",
+      "nghia": "chịu đựng; tồn tại lâu",
+      "cap": "B2",
+      "viDu": "Commuters endure long delays whenever it rains heavily.",
+      "viDuNghia": "Người đi làm phải chịu cảnh chậm trễ kéo dài mỗi khi mưa lớn.",
+      "cumTu": [
+        "endure hardship",
+        "endure pain",
+        "endure for centuries"
+      ],
+      "hoTu": [
+        "endurance (n)",
+        "enduring (adj)"
+      ]
+    },
+    {
+      "chu": "escalate",
+      "doc": "/ˈeskəleɪt/",
+      "loai": "v",
+      "nghia": "leo thang, trở nên nghiêm trọng hơn",
+      "cap": "B2",
+      "viDu": "If the client is still unhappy, escalate the issue to your manager.",
+      "viDuNghia": "Nếu khách vẫn chưa hài lòng, hãy chuyển vấn đề lên quản lý.",
+      "cumTu": [
+        "escalate into something",
+        "escalate a problem",
+        "costs escalate"
+      ],
+      "hoTu": [
+        "escalation (n)"
+      ],
+      "ghiChu": "Ở chỗ làm IT: \"escalate a ticket\" = chuyển lên cấp cao hơn xử lý."
+    },
+    {
+      "chu": "grasp",
+      "doc": "/ɡrɑːsp/",
+      "loai": "v",
+      "nghia": "nắm bắt, hiểu được; nắm chặt",
+      "cap": "B2",
+      "viDu": "It took me weeks to grasp the concept of recursion.",
+      "viDuNghia": "Tôi mất nhiều tuần mới hiểu được khái niệm đệ quy.",
+      "cumTu": [
+        "grasp a concept",
+        "grasp the meaning",
+        "grasp an opportunity"
+      ],
+      "hoTu": [
+        "grasp (n)"
+      ],
+      "ghiChu": "\"have a good grasp of\" = nắm vững."
+    },
+    {
+      "chu": "halt",
+      "doc": "/hɔːlt/",
+      "loai": "v",
+      "nghia": "dừng lại, chặn đứng",
+      "cap": "B2",
+      "viDu": "The factory had to halt production because of a parts shortage.",
+      "viDuNghia": "Nhà máy phải dừng sản xuất vì thiếu linh kiện.",
+      "cumTu": [
+        "halt production",
+        "come to a halt",
+        "halt the spread of"
+      ],
+      "hoTu": [
+        "halt (n)"
+      ]
+    },
+    {
+      "chu": "inherit",
+      "doc": "/ɪnˈherɪt/",
+      "loai": "v",
+      "nghia": "thừa kế, thừa hưởng",
+      "cap": "B2",
+      "viDu": "The new team will inherit a codebase with very few tests.",
+      "viDuNghia": "Nhóm mới sẽ thừa hưởng một kho mã có rất ít kiểm thử.",
+      "cumTu": [
+        "inherit money",
+        "inherit a problem",
+        "inherit from parents"
+      ],
+      "hoTu": [
+        "inheritance (n)",
+        "heir (n)"
+      ],
+      "ghiChu": "Trong lập trình: a class inherits from another class."
+    },
+    {
+      "chu": "opt",
+      "doc": "/ɒpt/",
+      "loai": "v",
+      "nghia": "chọn, quyết định chọn",
+      "cap": "B2",
+      "viDu": "More and more graduates opt for remote jobs.",
+      "viDuNghia": "Ngày càng nhiều cử nhân chọn công việc từ xa.",
+      "cumTu": [
+        "opt for something",
+        "opt to do something",
+        "opt out of"
+      ],
+      "hoTu": [
+        "option (n)",
+        "optional (adj)"
+      ],
+      "ghiChu": "opt FOR + danh từ; opt TO + động từ; opt out = chọn không tham gia."
+    },
+    {
+      "chu": "prosper",
+      "doc": "/ˈprɒspə(r)/",
+      "loai": "v",
+      "nghia": "thịnh vượng, phát đạt",
+      "cap": "B2",
+      "viDu": "Small businesses prosper when taxes are simple and fair.",
+      "viDuNghia": "Doanh nghiệp nhỏ phát đạt khi thuế đơn giản và công bằng.",
+      "cumTu": [
+        "prosper economically",
+        "continue to prosper",
+        "help someone prosper"
+      ],
+      "hoTu": [
+        "prosperity (n)",
+        "prosperous (adj)"
+      ]
+    },
+    {
+      "chu": "resent",
+      "doc": "/rɪˈzent/",
+      "loai": "v",
+      "nghia": "bực bội, oán giận",
+      "cap": "B2",
+      "viDu": "Some employees resent being monitored while working from home.",
+      "viDuNghia": "Một số nhân viên bực bội vì bị giám sát khi làm việc tại nhà.",
+      "cumTu": [
+        "resent doing something",
+        "bitterly resent",
+        "resent the fact that"
+      ],
+      "hoTu": [
+        "resentment (n)",
+        "resentful (adj)"
+      ],
+      "ghiChu": "Theo sau là V-ing hoặc danh từ, không dùng \"to V\"."
+    },
+    {
+      "chu": "revive",
+      "doc": "/rɪˈvaɪv/",
+      "loai": "v",
+      "nghia": "làm sống lại, phục hồi",
+      "cap": "B2",
+      "viDu": "The government hopes tourism will revive the local economy.",
+      "viDuNghia": "Chính phủ hy vọng du lịch sẽ phục hồi kinh tế địa phương.",
+      "cumTu": [
+        "revive the economy",
+        "revive interest in",
+        "revive a tradition"
+      ],
+      "hoTu": [
+        "revival (n)"
+      ]
+    },
+    {
+      "chu": "seize",
+      "doc": "/siːz/",
+      "loai": "v",
+      "nghia": "nắm lấy; tịch thu",
+      "cap": "B2",
+      "viDu": "You should seize every opportunity to practise speaking English.",
+      "viDuNghia": "Bạn nên nắm lấy mọi cơ hội để luyện nói tiếng Anh.",
+      "cumTu": [
+        "seize an opportunity",
+        "seize power",
+        "seize control"
+      ],
+      "hoTu": [
+        "seizure (n)"
+      ],
+      "ghiChu": "Chính tả ngoại lệ: sEIze (e trước i)."
+    },
+    {
+      "chu": "steer",
+      "doc": "/stɪə(r)/",
+      "loai": "v",
+      "nghia": "lái, điều hướng",
+      "cap": "B2",
+      "viDu": "Parents often try to steer their children towards safe careers.",
+      "viDuNghia": "Cha mẹ thường cố hướng con cái tới những nghề an toàn.",
+      "cumTu": [
+        "steer someone towards",
+        "steer clear of",
+        "steer a conversation"
+      ],
+      "hoTu": [
+        "steering (n)"
+      ],
+      "ghiChu": "\"steer clear of\" = tránh xa."
+    },
+    {
+      "chu": "stumble",
+      "doc": "/ˈstʌmbl/",
+      "loai": "v",
+      "nghia": "vấp; tình cờ gặp",
+      "cap": "B2",
+      "viDu": "I happened to stumble across a library that solved the whole problem.",
+      "viDuNghia": "Tôi tình cờ tìm thấy một thư viện giải quyết trọn vấn đề.",
+      "cumTu": [
+        "stumble across something",
+        "stumble over words",
+        "stumble on"
+      ],
+      "hoTu": [
+        "stumble (n)"
+      ],
+      "ghiChu": "\"a stumbling block\" = trở ngại."
+    },
+    {
+      "chu": "tempt",
+      "doc": "/tempt/",
+      "loai": "v",
+      "nghia": "cám dỗ, lôi cuốn",
+      "cap": "B2",
+      "viDu": "High salaries tempt many engineers to move abroad.",
+      "viDuNghia": "Lương cao lôi kéo nhiều kỹ sư ra nước ngoài làm việc.",
+      "cumTu": [
+        "tempt someone to do",
+        "be tempted by",
+        "tempt fate"
+      ],
+      "hoTu": [
+        "temptation (n)",
+        "tempting (adj)"
+      ]
+    },
+    {
+      "chu": "thrive",
+      "doc": "/θraɪv/",
+      "loai": "v",
+      "nghia": "phát triển mạnh, hưng thịnh",
+      "cap": "B2",
+      "viDu": "Some people thrive under pressure, while others shut down.",
+      "viDuNghia": "Có người càng áp lực càng phát huy, có người lại đứng hình.",
+      "cumTu": [
+        "thrive on something",
+        "thrive in an environment",
+        "a thriving business"
+      ],
+      "hoTu": [
+        "thriving (adj)"
+      ],
+      "ghiChu": "thrive ON pressure/challenge — câu trả lời phỏng vấn rất tự nhiên."
+    },
+    {
+      "chu": "urge",
+      "doc": "/ɜːdʒ/",
+      "loai": "v",
+      "nghia": "thúc giục, kêu gọi",
+      "cap": "B2",
+      "viDu": "Doctors urge people to cut down on sugary drinks.",
+      "viDuNghia": "Bác sĩ kêu gọi mọi người giảm đồ uống có đường.",
+      "cumTu": [
+        "urge someone to do",
+        "strongly urge",
+        "urge caution"
+      ],
+      "hoTu": [
+        "urge (n)",
+        "urgent (adj)",
+        "urgency (n)"
+      ],
+      "ghiChu": "Cấu trúc: urge SB TO do sth."
+    },
+    {
+      "chu": "cater",
+      "doc": "/ˈkeɪtə(r)/",
+      "loai": "v",
+      "nghia": "phục vụ, đáp ứng nhu cầu",
+      "cap": "B2",
+      "viDu": "The course is designed to cater for complete beginners.",
+      "viDuNghia": "Khoá học được thiết kế để phục vụ người mới hoàn toàn.",
+      "cumTu": [
+        "cater for someone",
+        "cater to demand",
+        "cater for all tastes"
+      ],
+      "hoTu": [
+        "catering (n)",
+        "caterer (n)"
+      ],
+      "ghiChu": "Anh-Anh: cater FOR người; cater TO thường mang nghĩa chiều theo."
+    },
+    {
+      "chu": "legislate",
+      "doc": "/ˈledʒɪsleɪt/",
+      "loai": "v",
+      "nghia": "lập pháp, ban hành luật",
+      "cap": "B2",
+      "viDu": "Governments should legislate against the sale of personal data.",
+      "viDuNghia": "Chính phủ nên ban hành luật chống việc mua bán dữ liệu cá nhân.",
+      "cumTu": [
+        "legislate against something",
+        "legislate for",
+        "legislate on an issue"
+      ],
+      "hoTu": [
+        "legislation (n)",
+        "legislative (adj)",
+        "legislator (n)"
+      ]
+    },
+    {
+      "chu": "catastrophe",
+      "doc": "/kəˈtæstrəfi/",
+      "loai": "n",
+      "nghia": "thảm hoạ",
+      "cap": "B2",
+      "viDu": "Losing the only backup would be a catastrophe for the company.",
+      "viDuNghia": "Mất bản sao lưu duy nhất sẽ là thảm hoạ với công ty.",
+      "cumTu": [
+        "an environmental catastrophe",
+        "avoid catastrophe",
+        "a humanitarian catastrophe"
+      ],
+      "hoTu": [
+        "catastrophic (adj)"
+      ],
+      "ghiChu": "Đọc 4 âm tiết, đuôi /fi/ chứ không phải /trəʊf/."
+    },
+    {
+      "chu": "clarity",
+      "doc": "/ˈklærəti/",
+      "loai": "n",
+      "nghia": "sự rõ ràng, mạch lạc",
+      "cap": "B2",
+      "viDu": "Short sentences improve the clarity of technical writing.",
+      "viDuNghia": "Câu ngắn giúp văn kỹ thuật rõ ràng hơn.",
+      "cumTu": [
+        "clarity of thought",
+        "lack clarity",
+        "for the sake of clarity"
+      ],
+      "hoTu": [
+        "clarify (v)",
+        "clear (adj)"
+      ]
+    },
+    {
+      "chu": "credibility",
+      "doc": "/ˌkredəˈbɪləti/",
+      "loai": "n",
+      "nghia": "uy tín, độ tin cậy",
+      "cap": "B2",
+      "viDu": "One false statistic can damage the credibility of the whole essay.",
+      "viDuNghia": "Một số liệu sai có thể làm hỏng độ tin cậy của cả bài luận.",
+      "cumTu": [
+        "lose credibility",
+        "damage credibility",
+        "gain credibility"
+      ],
+      "hoTu": [
+        "credible (adj)"
+      ]
+    },
+    {
+      "chu": "defect",
+      "doc": "/ˈdiːfekt/",
+      "loai": "n",
+      "nghia": "khuyết tật, lỗi (sản phẩm)",
+      "cap": "B2",
+      "viDu": "The testers found a serious defect in the payment module.",
+      "viDuNghia": "Nhóm kiểm thử tìm thấy một lỗi nghiêm trọng trong mô-đun thanh toán.",
+      "cumTu": [
+        "a design defect",
+        "a serious defect",
+        "a birth defect"
+      ],
+      "hoTu": [
+        "defective (adj)",
+        "defect (v) /dɪˈfekt/"
+      ],
+      "ghiChu": "Trong kiểm thử phần mềm, \"defect\" là thuật ngữ chính thức của \"bug\"."
+    },
+    {
+      "chu": "fragment",
+      "doc": "/ˈfræɡmənt/",
+      "loai": "n",
+      "nghia": "mảnh vỡ, mẩu nhỏ",
+      "cap": "B2",
+      "viDu": "Only a fragment of the original document has survived.",
+      "viDuNghia": "Chỉ một mẩu nhỏ của tài liệu gốc còn sót lại.",
+      "cumTu": [
+        "a fragment of something",
+        "tiny fragments",
+        "fragments of glass"
+      ],
+      "hoTu": [
+        "fragment (v) /fræɡˈment/",
+        "fragmented (adj)"
+      ]
+    },
+    {
+      "chu": "hazard",
+      "doc": "/ˈhæzəd/",
+      "loai": "n",
+      "nghia": "mối nguy hiểm",
+      "cap": "B2",
+      "viDu": "Air pollution is a serious health hazard in big cities.",
+      "viDuNghia": "Ô nhiễm không khí là mối nguy sức khoẻ nghiêm trọng ở các thành phố lớn.",
+      "cumTu": [
+        "a health hazard",
+        "a fire hazard",
+        "pose a hazard"
+      ],
+      "hoTu": [
+        "hazardous (adj)"
+      ],
+      "ghiChu": "\"hazardous waste\" = chất thải nguy hại."
+    },
+    {
+      "chu": "setback",
+      "doc": "/ˈsetbæk/",
+      "loai": "n",
+      "nghia": "bước lùi, trở ngại tạm thời",
+      "cap": "B2",
+      "viDu": "The failed launch was a major setback, but the team recovered quickly.",
+      "viDuNghia": "Lần ra mắt thất bại là một bước lùi lớn, nhưng nhóm đã hồi phục nhanh.",
+      "cumTu": [
+        "a major setback",
+        "suffer a setback",
+        "a temporary setback"
+      ],
+      "hoTu": [
+        "set back (phr v)"
+      ],
+      "ghiChu": "Hay dùng khi kể về khó khăn đã vượt qua trong phỏng vấn."
+    },
+    {
+      "chu": "shortcoming",
+      "doc": "/ˈʃɔːtkʌmɪŋ/",
+      "loai": "n",
+      "nghia": "thiếu sót, khuyết điểm",
+      "cap": "B2",
+      "viDu": "The main shortcoming of the plan is its high cost.",
+      "viDuNghia": "Thiếu sót chính của kế hoạch là chi phí cao.",
+      "cumTu": [
+        "a serious shortcoming",
+        "overcome shortcomings",
+        "despite its shortcomings"
+      ],
+      "ghiChu": "Thường dùng số nhiều: shortcomings. Trang trọng hơn \"weakness\"."
+    },
+    {
+      "chu": "surplus",
+      "doc": "/ˈsɜːpləs/",
+      "loai": "n",
+      "nghia": "thặng dư, phần dư thừa",
+      "cap": "B2",
+      "viDu": "The country had a trade surplus for the third year in a row.",
+      "viDuNghia": "Nước này có thặng dư thương mại năm thứ ba liên tiếp.",
+      "cumTu": [
+        "a trade surplus",
+        "a budget surplus",
+        "a surplus of food"
+      ],
+      "hoTu": [
+        "surplus (adj)"
+      ],
+      "ghiChu": "Trái nghĩa: deficit. Gặp nhiều ở Task 1 và bài đọc kinh tế."
+    },
+    {
+      "chu": "tactic",
+      "doc": "/ˈtæktɪk/",
+      "loai": "n",
+      "nghia": "chiến thuật, mưu mẹo",
+      "cap": "B2",
+      "viDu": "Offering free delivery is a common marketing tactic.",
+      "viDuNghia": "Miễn phí giao hàng là một chiến thuật tiếp thị phổ biến.",
+      "cumTu": [
+        "a marketing tactic",
+        "delaying tactics",
+        "change tactics"
+      ],
+      "hoTu": [
+        "tactical (adj)"
+      ]
+    },
+    {
+      "chu": "strain",
+      "doc": "/streɪn/",
+      "loai": "n",
+      "nghia": "sức ép, sự căng thẳng",
+      "cap": "B2",
+      "viDu": "Rapid population growth puts a strain on public services.",
+      "viDuNghia": "Dân số tăng nhanh gây sức ép lên dịch vụ công.",
+      "cumTu": [
+        "put a strain on",
+        "under strain",
+        "financial strain"
+      ],
+      "hoTu": [
+        "strain (v)",
+        "strained (adj)"
+      ],
+      "ghiChu": "\"put a strain on\" là collocation rất đắt ở Task 2."
+    },
+    {
+      "chu": "span",
+      "doc": "/spæn/",
+      "loai": "n",
+      "nghia": "khoảng thời gian; quãng",
+      "cap": "B2",
+      "viDu": "Many people believe smartphones have shortened our attention span.",
+      "viDuNghia": "Nhiều người tin rằng điện thoại thông minh đã rút ngắn quãng tập trung của chúng ta.",
+      "cumTu": [
+        "attention span",
+        "life span",
+        "over a span of ten years"
+      ],
+      "hoTu": [
+        "span (v)"
+      ]
+    },
+    {
+      "chu": "retreat",
+      "doc": "/rɪˈtriːt/",
+      "loai": "v",
+      "nghia": "rút lui, lùi lại",
+      "cap": "B2",
+      "viDu": "When criticised, he tends to retreat into silence.",
+      "viDuNghia": "Khi bị phê bình, anh ấy thường thu mình vào im lặng.",
+      "cumTu": [
+        "retreat from something",
+        "retreat into",
+        "be forced to retreat"
+      ],
+      "hoTu": [
+        "retreat (n)"
+      ]
+    },
+    {
+      "chu": "alliance",
+      "doc": "/əˈlaɪəns/",
+      "loai": "n",
+      "nghia": "liên minh, khối đồng minh",
+      "cap": "B2",
+      "viDu": "The two airlines formed an alliance to share routes.",
+      "viDuNghia": "Hai hãng hàng không lập liên minh để chia sẻ đường bay.",
+      "cumTu": [
+        "form an alliance",
+        "an alliance with",
+        "a military alliance"
+      ],
+      "hoTu": [
+        "ally (n, v)",
+        "allied (adj)"
+      ]
+    },
+    {
+      "chu": "elite",
+      "doc": "/eɪˈliːt/",
+      "loai": "n",
+      "nghia": "tầng lớp tinh hoa",
+      "cap": "B2",
+      "viDu": "Higher education should not be reserved for a wealthy elite.",
+      "viDuNghia": "Giáo dục đại học không nên chỉ dành cho một tầng lớp tinh hoa giàu có.",
+      "cumTu": [
+        "a wealthy elite",
+        "the political elite",
+        "an elite university"
+      ],
+      "hoTu": [
+        "elite (adj)",
+        "elitism (n)",
+        "elitist (adj)"
+      ]
+    },
+    {
+      "chu": "humanitarian",
+      "doc": "/hjuːˌmænɪˈteəriən/",
+      "loai": "adj",
+      "nghia": "nhân đạo",
+      "cap": "B2",
+      "viDu": "The organisation delivers humanitarian aid to flood victims.",
+      "viDuNghia": "Tổ chức này chuyển viện trợ nhân đạo tới nạn nhân lũ lụt.",
+      "cumTu": [
+        "humanitarian aid",
+        "a humanitarian crisis",
+        "humanitarian grounds"
+      ],
+      "hoTu": [
+        "humanity (n)"
+      ]
+    },
+    {
+      "chu": "disposable",
+      "doc": "/dɪˈspəʊzəbl/",
+      "loai": "adj",
+      "nghia": "dùng một lần; (thu nhập) khả dụng",
+      "cap": "B2",
+      "viDu": "Young professionals now have more disposable income than their parents did.",
+      "viDuNghia": "Người trẻ đi làm hiện có thu nhập khả dụng nhiều hơn cha mẹ họ ngày trước.",
+      "cumTu": [
+        "disposable income",
+        "disposable cups",
+        "disposable products"
+      ],
+      "hoTu": [
+        "dispose (v)",
+        "disposal (n)"
+      ],
+      "ghiChu": "\"disposable income\" = tiền còn lại sau thuế và chi phí thiết yếu."
+    },
+    {
+      "chu": "amid",
+      "doc": "/əˈmɪd/",
+      "loai": "prep",
+      "nghia": "giữa lúc, trong bối cảnh",
+      "cap": "B2",
+      "viDu": "The company cut jobs amid fears of a global recession.",
+      "viDuNghia": "Công ty cắt giảm việc làm giữa nỗi lo suy thoái toàn cầu.",
+      "cumTu": [
+        "amid fears of",
+        "amid growing concern",
+        "amid rumours"
+      ],
+      "hoTu": [
+        "amidst (prep)"
+      ],
+      "ghiChu": "Văn báo chí; đi với danh từ trừu tượng (fears, concerns, criticism)."
+    },
+    {
+      "chu": "time-consuming",
+      "doc": "/ˈtaɪm kənsjuːmɪŋ/",
+      "loai": "adj",
+      "nghia": "tốn thời gian",
+      "cap": "B2",
+      "viDu": "Testing every feature by hand is extremely time-consuming.",
+      "viDuNghia": "Kiểm thử thủ công mọi tính năng cực kỳ tốn thời gian.",
+      "cumTu": [
+        "a time-consuming process",
+        "extremely time-consuming",
+        "time-consuming tasks"
+      ]
+    },
+    {
+      "chu": "long-standing",
+      "doc": "/ˌlɒŋ ˈstændɪŋ/",
+      "loai": "adj",
+      "nghia": "đã có từ lâu, lâu đời",
+      "cap": "B2",
+      "viDu": "The two countries finally settled their long-standing dispute.",
+      "viDuNghia": "Hai nước cuối cùng đã giải quyết tranh chấp lâu năm.",
+      "cumTu": [
+        "a long-standing tradition",
+        "a long-standing problem",
+        "a long-standing relationship"
+      ]
+    },
+    {
+      "chu": "bear in mind",
+      "doc": "/beər ɪn ˈmaɪnd/",
+      "loai": "phr",
+      "nghia": "ghi nhớ, lưu ý rằng",
+      "cap": "B2",
+      "viDu": "Please bear in mind that the deadline cannot be extended.",
+      "viDuNghia": "Xin lưu ý rằng hạn chót không thể gia hạn.",
+      "cumTu": [
+        "bear in mind that",
+        "bear something in mind",
+        "worth bearing in mind"
+      ],
+      "ghiChu": "Trang trọng hơn \"remember\"; mở câu lưu ý trong email công việc."
+    },
+    {
+      "chu": "as opposed to",
+      "doc": "/əz əˈpəʊzd tə/",
+      "loai": "phr",
+      "nghia": "trái với, thay vì",
+      "cap": "B2",
+      "viDu": "The survey focused on quality as opposed to quantity.",
+      "viDuNghia": "Khảo sát tập trung vào chất lượng thay vì số lượng.",
+      "cumTu": [
+        "as opposed to doing",
+        "X as opposed to Y"
+      ],
+      "hoTu": [
+        "oppose (v)",
+        "opposition (n)"
+      ],
+      "ghiChu": "Dùng để đối chiếu hai thứ; theo sau là danh từ hoặc V-ing."
+    },
+    {
+      "chu": "tend to",
+      "doc": "/ˈtend tə/",
+      "loai": "phr",
+      "nghia": "có xu hướng, thường hay",
+      "cap": "B2",
+      "viDu": "Younger employees tend to change jobs more often than older ones.",
+      "viDuNghia": "Nhân viên trẻ có xu hướng đổi việc thường xuyên hơn người lớn tuổi.",
+      "cumTu": [
+        "tend to do something",
+        "tend to be",
+        "tend not to"
+      ],
+      "hoTu": [
+        "tendency (n)"
+      ],
+      "ghiChu": "Cách nói giảm tránh (hedging) cơ bản nhất ở Task 2: tránh khẳng định tuyệt đối \"always\"."
+    }
+  ]
+}

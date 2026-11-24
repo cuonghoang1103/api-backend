@@ -1,0 +1,780 @@
+{
+  "ma": "nang-cao-c1-4",
+  "nn": "en",
+  "ten": "Bù B2–C1 · Từ miêu tả, cảm xúc và thái độ kiên định",
+  "moTa": "Từ B2–C1 còn sót sau các đợt trước: từ miêu tả giàu hình ảnh cho Speaking (dazzling, serene, tranquil, exquisite, frantic), động từ văn viết (cling, dwell, relish, revoke, vow) và nhóm từ nói về lập trường (resolute, steadfast, emphatic, categorical).",
+  "nhom": "ielts",
+  "cap": "C1",
+  "tu": [
+    {
+      "chu": "cemetery",
+      "doc": "/ˈsemətri/",
+      "loai": "n",
+      "nghia": "nghĩa trang",
+      "cap": "B2",
+      "viDu": "The old cemetery on the hill is now a protected historic site.",
+      "viDuNghia": "Nghĩa trang cũ trên đồi giờ là di tích lịch sử được bảo vệ.",
+      "cumTu": [
+        "a military cemetery",
+        "be buried in a cemetery",
+        "the local cemetery"
+      ],
+      "ghiChu": "Chính tả: ba chữ \"e\", không có \"a\" (không viết \"cemetary\")."
+    },
+    {
+      "chu": "dazzling",
+      "doc": "/ˈdæzlɪŋ/",
+      "loai": "adj",
+      "nghia": "chói loá; rực rỡ gây ấn tượng mạnh",
+      "cap": "B2",
+      "viDu": "The festival ended with a dazzling display of fireworks.",
+      "viDuNghia": "Lễ hội kết thúc bằng màn pháo hoa rực rỡ.",
+      "cumTu": [
+        "a dazzling display",
+        "dazzling lights",
+        "a dazzling performance"
+      ],
+      "hoTu": [
+        "dazzle (v)"
+      ]
+    },
+    {
+      "chu": "destined",
+      "doc": "/ˈdestɪnd/",
+      "loai": "adj",
+      "nghia": "được định sẵn, chắc chắn sẽ",
+      "cap": "B2",
+      "viDu": "With no clear users in mind, the product was destined to fail.",
+      "viDuNghia": "Không nhắm tới người dùng rõ ràng nào, sản phẩm chắc chắn thất bại.",
+      "cumTu": [
+        "destined to do something",
+        "destined for success",
+        "destined for export"
+      ],
+      "hoTu": [
+        "destiny (n)",
+        "destination (n)"
+      ],
+      "ghiChu": "destined TO + V / destined FOR + N."
+    },
+    {
+      "chu": "frantic",
+      "doc": "/ˈfræntɪk/",
+      "loai": "adj",
+      "nghia": "cuống cuồng, hối hả",
+      "cap": "B2",
+      "viDu": "There was a frantic rush to fix the bug before the demo.",
+      "viDuNghia": "Mọi người cuống cuồng sửa lỗi trước buổi demo.",
+      "cumTu": [
+        "a frantic rush",
+        "a frantic search",
+        "frantic efforts"
+      ],
+      "hoTu": [
+        "frantically (adv)"
+      ]
+    },
+    {
+      "chu": "gross",
+      "doc": "/ɡrəʊs/",
+      "loai": "adj",
+      "nghia": "(thu nhập, tổng) gộp, trước thuế; nghiêm trọng",
+      "cap": "B2",
+      "viDu": "Her gross salary is high, but a third of it goes on tax.",
+      "viDuNghia": "Lương gộp của cô ấy cao, nhưng một phần ba dành nộp thuế.",
+      "cumTu": [
+        "gross income",
+        "gross domestic product",
+        "gross negligence"
+      ],
+      "hoTu": [
+        "gross (v)",
+        "grossly (adv)"
+      ],
+      "ghiChu": "Trái nghĩa: net (ròng). GDP = Gross Domestic Product. Đọc /ɡrəʊs/."
+    },
+    {
+      "chu": "petty",
+      "doc": "/ˈpeti/",
+      "loai": "adj",
+      "nghia": "nhỏ nhặt, vặt vãnh",
+      "cap": "B2",
+      "viDu": "The team wasted an hour on petty arguments about naming.",
+      "viDuNghia": "Cả nhóm phí một giờ cho những tranh cãi vặt về cách đặt tên.",
+      "cumTu": [
+        "petty arguments",
+        "petty crime",
+        "petty details"
+      ],
+      "hoTu": [
+        "pettiness (n)"
+      ],
+      "ghiChu": "\"petty crime\" = tội vặt — dùng cho chủ đề tội phạm."
+    },
+    {
+      "chu": "timid",
+      "doc": "/ˈtɪmɪd/",
+      "loai": "adj",
+      "nghia": "rụt rè, nhút nhát",
+      "cap": "B2",
+      "viDu": "Timid students rarely ask questions in large lectures.",
+      "viDuNghia": "Sinh viên rụt rè hiếm khi đặt câu hỏi trong giảng đường lớn.",
+      "cumTu": [
+        "a timid child",
+        "a timid voice",
+        "too timid to"
+      ],
+      "hoTu": [
+        "timidity (n)",
+        "timidly (adv)"
+      ]
+    },
+    {
+      "chu": "weary",
+      "doc": "/ˈwɪəri/",
+      "loai": "adj",
+      "nghia": "mệt mỏi rã rời; chán ngán",
+      "cap": "B2",
+      "viDu": "Commuters are weary of constant delays and rising fares.",
+      "viDuNghia": "Người đi làm đã chán ngán cảnh trễ chuyến liên miên và vé tăng giá.",
+      "cumTu": [
+        "weary of something",
+        "grow weary",
+        "a weary sigh"
+      ],
+      "hoTu": [
+        "weariness (n)",
+        "wearily (adv)"
+      ],
+      "ghiChu": "Đọc /ˈwɪəri/. Khác \"wary\" /ˈweəri/ (dè chừng)."
+    },
+    {
+      "chu": "tranquil",
+      "doc": "/ˈtræŋkwɪl/",
+      "loai": "adj",
+      "nghia": "yên bình, thanh tĩnh",
+      "cap": "B2",
+      "viDu": "I grew up in a tranquil village surrounded by rice fields.",
+      "viDuNghia": "Tôi lớn lên ở một ngôi làng yên bình có ruộng lúa bao quanh.",
+      "cumTu": [
+        "a tranquil village",
+        "a tranquil atmosphere",
+        "tranquil waters"
+      ],
+      "hoTu": [
+        "tranquillity (n)",
+        "tranquilliser (n)"
+      ],
+      "ghiChu": "Từ đắt để tả quê nhà ở Speaking Part 1–2."
+    },
+    {
+      "chu": "soothe",
+      "doc": "/suːð/",
+      "loai": "v",
+      "nghia": "xoa dịu, làm dịu",
+      "cap": "B2",
+      "viDu": "Soft music can soothe a crying baby.",
+      "viDuNghia": "Nhạc nhẹ có thể dỗ dịu em bé đang khóc.",
+      "cumTu": [
+        "soothe the pain",
+        "soothe someone's nerves",
+        "a soothing voice"
+      ],
+      "hoTu": [
+        "soothing (adj)"
+      ],
+      "ghiChu": "Âm cuối /ð/ hữu thanh."
+    },
+    {
+      "chu": "rejoice",
+      "doc": "/rɪˈdʒɔɪs/",
+      "loai": "v",
+      "nghia": "vui mừng khôn xiết",
+      "cap": "B2",
+      "viDu": "Fans rejoice whenever the national team reaches a final.",
+      "viDuNghia": "Người hâm mộ vui mừng khôn xiết mỗi khi đội tuyển vào chung kết.",
+      "cumTu": [
+        "rejoice at the news",
+        "rejoice in something",
+        "rejoice over"
+      ],
+      "hoTu": [
+        "rejoicing (n)"
+      ]
+    },
+    {
+      "chu": "earnest",
+      "doc": "/ˈɜːnɪst/",
+      "loai": "adj",
+      "nghia": "nghiêm túc, chân thành",
+      "cap": "C1",
+      "viDu": "Work on the new campus will begin in earnest next spring.",
+      "viDuNghia": "Việc xây khuôn viên mới sẽ bắt đầu thật sự nghiêm túc vào mùa xuân tới.",
+      "cumTu": [
+        "in earnest",
+        "an earnest attempt",
+        "an earnest young man"
+      ],
+      "hoTu": [
+        "earnestly (adv)",
+        "earnestness (n)"
+      ],
+      "ghiChu": "\"begin in earnest\" = bắt đầu thật sự, hết mình."
+    },
+    {
+      "chu": "cling",
+      "doc": "/klɪŋ/",
+      "loai": "v",
+      "nghia": "bám chặt; khư khư giữ (niềm tin, thói quen)",
+      "cap": "C1",
+      "viDu": "Some managers cling to the idea that long hours mean hard work.",
+      "viDuNghia": "Một số quản lý vẫn khư khư ý nghĩ làm nhiều giờ nghĩa là chăm chỉ.",
+      "cumTu": [
+        "cling to the belief",
+        "cling to power",
+        "cling on to"
+      ],
+      "hoTu": [
+        "clingy (adj)"
+      ],
+      "ghiChu": "Bất quy tắc: cling – clung – clung."
+    },
+    {
+      "chu": "dwell",
+      "doc": "/dwel/",
+      "loai": "v",
+      "nghia": "cứ nghĩ mãi, nói mãi về (điều không vui)",
+      "cap": "C1",
+      "viDu": "There is no point in dwelling on past mistakes.",
+      "viDuNghia": "Cứ nghĩ mãi về sai lầm đã qua chẳng ích gì.",
+      "cumTu": [
+        "dwell on the past",
+        "dwell on a problem",
+        "dwell in a place"
+      ],
+      "hoTu": [
+        "dweller (n)",
+        "dwelling (n)"
+      ],
+      "ghiChu": "\"city dwellers\" = dân thành thị — rất hay dùng ở Task 2."
+    },
+    {
+      "chu": "inflate",
+      "doc": "/ɪnˈfleɪt/",
+      "loai": "v",
+      "nghia": "thổi phồng; bơm căng; làm tăng giá",
+      "cap": "C1",
+      "viDu": "Some companies inflate their figures to attract investors.",
+      "viDuNghia": "Một số công ty thổi phồng số liệu để hút nhà đầu tư.",
+      "cumTu": [
+        "inflate prices",
+        "inflate figures",
+        "an inflated sense of"
+      ],
+      "hoTu": [
+        "inflation (n)",
+        "inflated (adj)",
+        "deflate (v)"
+      ]
+    },
+    {
+      "chu": "reign",
+      "doc": "/reɪn/",
+      "loai": "n",
+      "nghia": "triều đại, thời trị vì",
+      "cap": "C1",
+      "viDu": "The temple was built during the reign of King Ly Thai To.",
+      "viDuNghia": "Ngôi đền được xây dưới triều vua Lý Thái Tổ.",
+      "cumTu": [
+        "during the reign of",
+        "a long reign",
+        "a reign of terror"
+      ],
+      "hoTu": [
+        "reign (v)"
+      ],
+      "ghiChu": "Đồng âm với \"rain\" và \"rein\". \"reign supreme\" = thống trị tuyệt đối."
+    },
+    {
+      "chu": "relish",
+      "doc": "/ˈrelɪʃ/",
+      "loai": "v",
+      "nghia": "thích thú, háo hức đón nhận",
+      "cap": "C1",
+      "viDu": "She seems to relish the challenge of leading a new team.",
+      "viDuNghia": "Cô ấy có vẻ thích thú với thử thách dẫn dắt một nhóm mới.",
+      "cumTu": [
+        "relish the challenge",
+        "relish the prospect of",
+        "relish the opportunity"
+      ],
+      "hoTu": [
+        "relish (n)"
+      ]
+    },
+    {
+      "chu": "repel",
+      "doc": "/rɪˈpel/",
+      "loai": "v",
+      "nghia": "đẩy lùi; làm ghê sợ",
+      "cap": "C1",
+      "viDu": "The coating is designed to repel water and dust.",
+      "viDuNghia": "Lớp phủ được thiết kế để chống bám nước và bụi.",
+      "cumTu": [
+        "repel an attack",
+        "repel insects",
+        "repel water"
+      ],
+      "hoTu": [
+        "repellent (adj, n)",
+        "repulsive (adj)"
+      ],
+      "ghiChu": "Quá khứ: repelled."
+    },
+    {
+      "chu": "serene",
+      "doc": "/səˈriːn/",
+      "loai": "adj",
+      "nghia": "thanh thản, yên ả",
+      "cap": "C1",
+      "viDu": "The lake looks serene in the early morning mist.",
+      "viDuNghia": "Mặt hồ trông yên ả trong sương sớm.",
+      "cumTu": [
+        "a serene landscape",
+        "a serene smile",
+        "calm and serene"
+      ],
+      "hoTu": [
+        "serenity (n)",
+        "serenely (adv)"
+      ]
+    },
+    {
+      "chu": "thrust",
+      "doc": "/θrʌst/",
+      "loai": "n",
+      "nghia": "ý chính, trọng tâm; lực đẩy",
+      "cap": "C1",
+      "viDu": "The main thrust of the report is that prevention costs less than cure.",
+      "viDuNghia": "Trọng tâm của báo cáo là phòng ngừa tốn ít hơn chữa trị.",
+      "cumTu": [
+        "the main thrust of",
+        "the thrust of an argument",
+        "engine thrust"
+      ],
+      "hoTu": [
+        "thrust (v)"
+      ],
+      "ghiChu": "Động từ bất quy tắc: thrust – thrust – thrust."
+    },
+    {
+      "chu": "torment",
+      "doc": "/ˈtɔːment/",
+      "loai": "n",
+      "nghia": "nỗi giày vò, đau khổ kéo dài",
+      "cap": "C1",
+      "viDu": "Online bullying can cause years of torment for its victims.",
+      "viDuNghia": "Bắt nạt trên mạng có thể gây nhiều năm giày vò cho nạn nhân.",
+      "cumTu": [
+        "suffer torment",
+        "mental torment",
+        "in torment"
+      ],
+      "hoTu": [
+        "torment (v) /tɔːˈment/",
+        "tormentor (n)"
+      ]
+    },
+    {
+      "chu": "vow",
+      "doc": "/vaʊ/",
+      "loai": "v",
+      "nghia": "thề, cam kết long trọng",
+      "cap": "C1",
+      "viDu": "The government vowed to halve emissions by 2035.",
+      "viDuNghia": "Chính phủ cam kết giảm một nửa khí thải trước năm 2035.",
+      "cumTu": [
+        "vow to do something",
+        "vow that",
+        "vow revenge"
+      ],
+      "hoTu": [
+        "vow (n)"
+      ],
+      "ghiChu": "Hay gặp ở tít báo."
+    },
+    {
+      "chu": "zeal",
+      "doc": "/ziːl/",
+      "loai": "n",
+      "nghia": "lòng nhiệt thành, hăng say",
+      "cap": "C1",
+      "viDu": "New graduates often start work with great zeal.",
+      "viDuNghia": "Cử nhân mới ra trường thường bắt đầu công việc với nhiệt huyết lớn.",
+      "cumTu": [
+        "with great zeal",
+        "religious zeal",
+        "reforming zeal"
+      ],
+      "hoTu": [
+        "zealous (adj)",
+        "zealot (n)"
+      ]
+    },
+    {
+      "chu": "incline",
+      "doc": "/ɪnˈklaɪn/",
+      "loai": "v",
+      "nghia": "có khuynh hướng, thiên về",
+      "cap": "C1",
+      "viDu": "I am inclined to agree with the second view, and the evidence inclines me further that way.",
+      "viDuNghia": "Tôi thiên về đồng ý với quan điểm thứ hai, và bằng chứng càng khiến tôi nghiêng về hướng đó.",
+      "cumTu": [
+        "be inclined to do",
+        "be inclined to agree",
+        "incline towards"
+      ],
+      "hoTu": [
+        "inclination (n)",
+        "inclined (adj)"
+      ],
+      "ghiChu": "\"I am inclined to think/agree\" — cách nêu quan điểm mềm, đúng kiểu hedging."
+    },
+    {
+      "chu": "enlighten",
+      "doc": "/ɪnˈlaɪtn/",
+      "loai": "v",
+      "nghia": "khai sáng, giải thích cho hiểu",
+      "cap": "C1",
+      "viDu": "The talk enlightened us about how recommendation systems really work.",
+      "viDuNghia": "Buổi nói chuyện giúp chúng tôi vỡ lẽ cách hệ thống gợi ý thật sự hoạt động.",
+      "cumTu": [
+        "enlighten someone about",
+        "enlighten the public",
+        "an enlightening talk"
+      ],
+      "hoTu": [
+        "enlightenment (n)",
+        "enlightening (adj)",
+        "enlightened (adj)"
+      ]
+    },
+    {
+      "chu": "exquisite",
+      "doc": "/ɪkˈskwɪzɪt/",
+      "loai": "adj",
+      "nghia": "tinh xảo, đẹp tuyệt",
+      "cap": "C1",
+      "viDu": "The museum displays exquisite ceramics from the fifteenth century.",
+      "viDuNghia": "Bảo tàng trưng bày đồ gốm tinh xảo từ thế kỷ mười lăm.",
+      "cumTu": [
+        "exquisite craftsmanship",
+        "exquisite detail",
+        "exquisite taste"
+      ],
+      "hoTu": [
+        "exquisitely (adv)"
+      ]
+    },
+    {
+      "chu": "ludicrous",
+      "doc": "/ˈluːdɪkrəs/",
+      "loai": "adj",
+      "nghia": "lố bịch, nực cười",
+      "cap": "C1",
+      "viDu": "It is ludicrous to suggest that one app can replace a teacher.",
+      "viDuNghia": "Thật nực cười khi cho rằng một ứng dụng có thể thay giáo viên.",
+      "cumTu": [
+        "a ludicrous idea",
+        "a ludicrous suggestion",
+        "utterly ludicrous"
+      ],
+      "hoTu": [
+        "ludicrously (adv)"
+      ],
+      "ghiChu": "Mạnh hơn \"absurd/ridiculous\"."
+    },
+    {
+      "chu": "sovereign",
+      "doc": "/ˈsɒvrɪn/",
+      "loai": "adj",
+      "nghia": "có chủ quyền",
+      "cap": "C1",
+      "viDu": "Every sovereign state has the right to set its own tax policy.",
+      "viDuNghia": "Mọi quốc gia có chủ quyền đều có quyền định chính sách thuế của mình.",
+      "cumTu": [
+        "a sovereign state",
+        "sovereign power",
+        "sovereign debt"
+      ],
+      "hoTu": [
+        "sovereignty (n)",
+        "sovereign (n)"
+      ],
+      "ghiChu": "Chữ \"g\" câm: /ˈsɒvrɪn/."
+    },
+    {
+      "chu": "commendable",
+      "doc": "/kəˈmendəbl/",
+      "loai": "adj",
+      "nghia": "đáng khen ngợi",
+      "cap": "C1",
+      "viDu": "The school has made commendable efforts to include disabled pupils.",
+      "viDuNghia": "Trường đã có những nỗ lực đáng khen để hoà nhập học sinh khuyết tật.",
+      "cumTu": [
+        "commendable efforts",
+        "a commendable job",
+        "highly commendable"
+      ],
+      "hoTu": [
+        "commend (v)",
+        "commendation (n)"
+      ]
+    },
+    {
+      "chu": "meagre",
+      "doc": "/ˈmiːɡə(r)/",
+      "loai": "adj",
+      "nghia": "ít ỏi, đạm bạc",
+      "cap": "C1",
+      "viDu": "Many pensioners struggle to live on a meagre income.",
+      "viDuNghia": "Nhiều người hưu trí chật vật sống bằng thu nhập ít ỏi.",
+      "cumTu": [
+        "a meagre income",
+        "meagre resources",
+        "a meagre salary"
+      ],
+      "ghiChu": "Anh-Mỹ viết \"meager\"."
+    },
+    {
+      "chu": "rift",
+      "doc": "/rɪft/",
+      "loai": "n",
+      "nghia": "rạn nứt (quan hệ)",
+      "cap": "C1",
+      "viDu": "The dispute over pay caused a rift between staff and management.",
+      "viDuNghia": "Tranh chấp về lương gây rạn nứt giữa nhân viên và ban lãnh đạo.",
+      "cumTu": [
+        "a rift between",
+        "heal the rift",
+        "a growing rift"
+      ]
+    },
+    {
+      "chu": "revoke",
+      "doc": "/rɪˈvəʊk/",
+      "loai": "v",
+      "nghia": "thu hồi, huỷ bỏ (giấy phép, quyền)",
+      "cap": "C1",
+      "viDu": "Admins should revoke access as soon as an employee leaves.",
+      "viDuNghia": "Quản trị viên nên thu hồi quyền truy cập ngay khi nhân viên nghỉ việc.",
+      "cumTu": [
+        "revoke a licence",
+        "revoke access",
+        "revoke a token"
+      ],
+      "hoTu": [
+        "revocation (n)",
+        "irrevocable (adj)"
+      ],
+      "ghiChu": "Trong IT: revoke a token/certificate/permission."
+    },
+    {
+      "chu": "resolute",
+      "doc": "/ˈrezəluːt/",
+      "loai": "adj",
+      "nghia": "kiên quyết, cương quyết",
+      "cap": "C1",
+      "viDu": "She remained resolute in her decision to study abroad.",
+      "viDuNghia": "Cô ấy vẫn kiên quyết với quyết định đi du học.",
+      "cumTu": [
+        "remain resolute",
+        "resolute in something",
+        "resolute action"
+      ],
+      "hoTu": [
+        "resolution (n)",
+        "resolve (v, n)",
+        "resolutely (adv)"
+      ]
+    },
+    {
+      "chu": "emphatic",
+      "doc": "/ɪmˈfætɪk/",
+      "loai": "adj",
+      "nghia": "dứt khoát, nhấn mạnh",
+      "cap": "C1",
+      "viDu": "The answer from the committee was an emphatic no.",
+      "viDuNghia": "Câu trả lời của uỷ ban là một chữ \"không\" dứt khoát.",
+      "cumTu": [
+        "an emphatic no",
+        "an emphatic victory",
+        "emphatic about"
+      ],
+      "hoTu": [
+        "emphasis (n)",
+        "emphasise (v)",
+        "emphatically (adv)"
+      ]
+    },
+    {
+      "chu": "indisputable",
+      "doc": "/ˌɪndɪˈspjuːtəbl/",
+      "loai": "adj",
+      "nghia": "không thể tranh cãi",
+      "cap": "C1",
+      "viDu": "It is indisputable that smoking damages health.",
+      "viDuNghia": "Không thể tranh cãi rằng hút thuốc gây hại sức khoẻ.",
+      "cumTu": [
+        "indisputable evidence",
+        "an indisputable fact",
+        "it is indisputable that"
+      ],
+      "hoTu": [
+        "dispute (n, v)",
+        "indisputably (adv)"
+      ],
+      "ghiChu": "Chỉ dùng khi thật sự chắc — band 8 biết lúc nào KHÔNG nên hedging."
+    },
+    {
+      "chu": "prowess",
+      "doc": "/ˈpraʊəs/",
+      "loai": "n",
+      "nghia": "tài nghệ, năng lực vượt trội",
+      "cap": "C1",
+      "viDu": "The country is known for its engineering prowess.",
+      "viDuNghia": "Nước này nổi tiếng về năng lực kỹ thuật vượt trội.",
+      "cumTu": [
+        "technical prowess",
+        "sporting prowess",
+        "academic prowess"
+      ]
+    },
+    {
+      "chu": "categorical",
+      "doc": "/ˌkætəˈɡɒrɪkl/",
+      "loai": "adj",
+      "nghia": "dứt khoát, tuyệt đối (lời khẳng định, phủ nhận)",
+      "cap": "C1",
+      "viDu": "The company issued a categorical denial of the allegations.",
+      "viDuNghia": "Công ty đưa ra lời phủ nhận dứt khoát các cáo buộc.",
+      "cumTu": [
+        "a categorical denial",
+        "a categorical assurance",
+        "categorical data"
+      ],
+      "hoTu": [
+        "categorically (adv)",
+        "category (n)"
+      ],
+      "ghiChu": "Trong thống kê: categorical data = dữ liệu phân loại."
+    },
+    {
+      "chu": "steadfast",
+      "doc": "/ˈstedfɑːst/",
+      "loai": "adj",
+      "nghia": "kiên định, trước sau như một",
+      "cap": "C1",
+      "viDu": "Despite the criticism, she remained steadfast in her support for the reform.",
+      "viDuNghia": "Dù bị chỉ trích, bà vẫn kiên định ủng hộ cải cách.",
+      "cumTu": [
+        "steadfast support",
+        "remain steadfast",
+        "a steadfast refusal"
+      ],
+      "hoTu": [
+        "steadfastly (adv)"
+      ]
+    },
+    {
+      "chu": "unwavering",
+      "doc": "/ʌnˈweɪvərɪŋ/",
+      "loai": "adj",
+      "nghia": "không lay chuyển, vững vàng",
+      "cap": "C1",
+      "viDu": "The project succeeded thanks to the unwavering support of the community.",
+      "viDuNghia": "Dự án thành công nhờ sự ủng hộ không lay chuyển của cộng đồng.",
+      "cumTu": [
+        "unwavering support",
+        "unwavering commitment",
+        "unwavering faith"
+      ],
+      "hoTu": [
+        "waver (v)"
+      ]
+    },
+    {
+      "chu": "deplorable",
+      "doc": "/dɪˈplɔːrəbl/",
+      "loai": "adj",
+      "nghia": "tồi tệ đáng lên án",
+      "cap": "C1",
+      "viDu": "Migrant workers were living in deplorable conditions.",
+      "viDuNghia": "Lao động nhập cư phải sống trong điều kiện tồi tệ đáng lên án.",
+      "cumTu": [
+        "deplorable conditions",
+        "a deplorable act",
+        "deplorable behaviour"
+      ],
+      "hoTu": [
+        "deplore (v)",
+        "deplorably (adv)"
+      ]
+    },
+    {
+      "chu": "hard-pressed",
+      "doc": "/ˌhɑːd ˈprest/",
+      "loai": "adj",
+      "nghia": "chật vật, khó mà làm được",
+      "cap": "C1",
+      "viDu": "You would be hard-pressed to find a job today that requires no digital skills.",
+      "viDuNghia": "Ngày nay bạn khó mà tìm được việc nào không cần kỹ năng số.",
+      "cumTu": [
+        "be hard-pressed to do",
+        "hard-pressed families",
+        "hard-pressed for time"
+      ],
+      "ghiChu": "Mẫu: be hard-pressed TO do sth."
+    },
+    {
+      "chu": "wishful thinking",
+      "doc": "/ˌwɪʃfl ˈθɪŋkɪŋ/",
+      "loai": "phr",
+      "nghia": "suy nghĩ viển vông, mong sao được vậy",
+      "cap": "C1",
+      "viDu": "Hoping that traffic will improve without investment is wishful thinking.",
+      "viDuNghia": "Mong giao thông khá lên mà không đầu tư là suy nghĩ viển vông.",
+      "cumTu": [
+        "pure wishful thinking",
+        "just wishful thinking"
+      ]
+    },
+    {
+      "chu": "second to none",
+      "doc": "/ˌsekənd tə ˈnʌn/",
+      "loai": "phr",
+      "nghia": "không thua kém ai, tốt nhất",
+      "cap": "C1",
+      "viDu": "The university's research facilities are second to none.",
+      "viDuNghia": "Cơ sở nghiên cứu của trường không thua kém nơi nào.",
+      "cumTu": [
+        "be second to none"
+      ],
+      "ghiChu": "Đứng sau \"be\"."
+    },
+    {
+      "chu": "be at odds with",
+      "doc": "/bi ət ˈɒdz wɪð/",
+      "loai": "phr",
+      "nghia": "mâu thuẫn với, bất đồng với",
+      "cap": "C1",
+      "viDu": "These findings appear to be at odds with earlier research.",
+      "viDuNghia": "Những phát hiện này có vẻ mâu thuẫn với nghiên cứu trước đó.",
+      "cumTu": [
+        "be at odds with someone",
+        "at odds over something"
+      ],
+      "ghiChu": "at odds WITH người/điều gì, OVER vấn đề gì."
+    }
+  ]
+}

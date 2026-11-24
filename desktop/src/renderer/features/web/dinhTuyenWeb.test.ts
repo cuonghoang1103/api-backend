@@ -330,7 +330,8 @@ describe('khopTuyenWeb', () => {
     // 24/11/2026: +2 IELTS Tập 5 (tap-5). +1 Tiếng Anh giao tiếp (/language/:code/giao-tiep).
     // 24/11/2026: +5 mục app CT Language trên web (hoc-tu-vung, podcast, podcast/:id, so-chuyen-nganh, so-chuyen-nganh/:ma).
     // 24/11/2026: +2 CT Work Học tập & Lịch cá nhân (/work/hoc-tap, /work/hoc-tap/mon/:id).
-    expect(thay.size).toBe(227);
+    // 24/11/2026: +2 Nhận xét học tập tuần (/language/:code/nhan-xet-tuan và /ielts/nhan-xet-tuan).
+    expect(thay.size).toBe(229);
   });
 });
 

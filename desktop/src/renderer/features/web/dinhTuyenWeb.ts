@@ -69,6 +69,8 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/language/:code/podcast/:id', nap: () => import('@/app/language/[code]/podcast/[id]/page') },
   { mau: '/language/:code/so-chuyen-nganh', nap: () => import('@/app/language/[code]/so-chuyen-nganh/page') },
   { mau: '/language/:code/so-chuyen-nganh/:ma', nap: () => import('@/app/language/[code]/so-chuyen-nganh/[ma]/page') },
+  // Nhận xét học tập tuần của CuongMini (24/11/2026) — số liệu thật + 3 điểm yếu + kế hoạch tuần sau (tiếng Anh).
+  { mau: '/language/:code/nhan-xet-tuan', nap: () => import('@/app/language/[code]/nhan-xet-tuan/page') },
   // Khoá học kiểu sách (28/09/2026): IELTS 4 kỹ năng và tiếng Nhật できる日本語 —
   // cùng bộ khung components/sach-hoc, tải nội dung từng buổi theo import().
   { mau: '/language/:code/ielts', nap: () => import('@/app/language/[code]/ielts/page') },
@@ -98,6 +100,7 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/ielts/tap-4', nap: () => import('@/app/language/[code]/ielts/tap-4/page'), thamSoCo: { code: 'en' } },
   { mau: '/ielts/tap-5', nap: () => import('@/app/language/[code]/ielts/tap-5/page'), thamSoCo: { code: 'en' } },
   { mau: '/ielts/tai-lieu-rieng', nap: () => import('@/app/language/[code]/ielts/tai-lieu-rieng/page'), thamSoCo: { code: 'en' } },
+  { mau: '/ielts/nhan-xet-tuan', nap: () => import('@/app/language/[code]/nhan-xet-tuan/page'), thamSoCo: { code: 'en' } },
   { mau: '/language/:code/dekiru', nap: () => import('@/app/language/[code]/dekiru/page') },
   { mau: '/language/:code/dekiru/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page') },
   // 09/11/2026: hai trang con của Sách gốc (🎧 bản chép file nghe CD, 🖼️ tài liệu gốc của lớp) — thiếu ⇒ "Không tìm thấy".

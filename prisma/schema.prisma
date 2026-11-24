@@ -537,6 +537,9 @@ model User {
   ctlBaiAi                 CtlBaiAi[]                @relation("CtlBaiAiNguoiTao")
   ctlBaiAiHoc              CtlBaiAiHoc[]             @relation("CtlBaiAiHocNguoi")
   ctlSuKienThuong          CtlSuKienThuong[]         @relation("CtlSuKienThuongNguoi")
+  // Nhận xét học tập hằng tuần của CuongMini (tiếng Anh, 24/11/2026) — báo cáo theo tuần + cài đặt email
+  ieltsNhanXetTuan         IeltsNhanXetTuan[]        @relation("IeltsNhanXetTuanNguoi")
+  ieltsNhanXetCaiDat       IeltsNhanXetCaiDat?       @relation("IeltsNhanXetCaiDatNguoi")
   // CT Language — trò chơi (16/11/2026): điểm từng ván (bảng xếp hạng) + thách đấu bạn bè đã tạo
   ctlTroChoiDiem           CtlTroChoiDiem[]          @relation("CtlTroChoiDiemNguoi")
   ctlThachDau              CtlThachDau[]             @relation("CtlThachDauNguoiTao")
@@ -10641,6 +10644,47 @@ model IeltsXepLop {
 
   @@index([userId, createdAt], name: "idx_ielts_xep_lop_user")
   @@map("ielts_xep_lop")
+}
+
+/// NHẬN XÉT HỌC TẬP HẰNG TUẦN của CuongMini cho người học tiếng Anh (24/11/2026) — `src/services/ielts/nhanXetTuan*.ts`.
+/// Một dòng = một người · một tuần (thứ Hai → Chủ nhật, giờ VN; `tuan` = ngày thứ Hai 'YYYY-MM-DD').
+/// `soLieu` + `diemYeu` + `keHoach` do MÃ tính (con số thật); `nhanXet` là chữ LLM viết quanh các con số đó (đã kiểm không
+/// bịa số; hỏng ⇒ chữ dự phòng do mã viết, `nguon = 'ma'`). `denLuc` < cuối tuần ⇒ báo cáo dở (tuần đang học).
+model IeltsNhanXetTuan {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  tuan      String    @db.VarChar(10)
+  tuLuc     DateTime  @map("tu_luc")
+  denLuc    DateTime  @map("den_luc")
+  soLieu    Json      @map("so_lieu") @db.JsonB
+  diemYeu   Json      @map("diem_yeu") @db.JsonB
+  keHoach   Json      @map("ke_hoach") @db.JsonB
+  nhanXet   Json      @map("nhan_xet") @db.JsonB
+  /// ai | ma — chữ nhận xét do LLM viết hay do mã viết (LLM không có / hỏng / bịa số).
+  nguon     String    @db.VarChar(8)
+  model     String?   @db.VarChar(60)
+  /// Số lần đã tạo báo cáo của tuần này (1 = lần đầu; nút "Tạo lại" có trần).
+  lanTao    Int       @default(1) @map("lan_tao")
+  emailLuc  DateTime? @map("email_luc")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  user User @relation("IeltsNhanXetTuanNguoi", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tuan], name: "uk_ielts_nhan_xet_tuan", map: "uk_ielts_nhan_xet_tuan")
+  @@index([tuan], name: "idx_ielts_nhan_xet_tuan_tuan")
+  @@map("ielts_nhan_xet_tuan")
+}
+
+/// Tuỳ chọn của người học cho nhận xét tuần — gửi email tóm tắt (mặc định TẮT; chưa có dòng = tắt).
+model IeltsNhanXetCaiDat {
+  userId    Int      @id @map("user_id")
+  guiEmail  Boolean  @default(false) @map("gui_email")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation("IeltsNhanXetCaiDatNguoi", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("ielts_nhan_xet_cai_dat")
 }
 
 // ============================================================

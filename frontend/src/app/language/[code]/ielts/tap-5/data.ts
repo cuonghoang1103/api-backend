@@ -147,6 +147,7 @@ export const IELTS_T5 = defineCourse({
     { href: '/language/en/ielts/thi-may', label: '🖥️ Online Test — thi trên máy tính (Reading · Listening · Writing · Speaking)' },
     { href: '/language/en/ielts/the-tu', label: '🃏 Flashcards (bộ "Từ của khoá — Tập 5")' },
     { href: '/language/en/ielts/so-loi', label: '📒 Sổ lỗi tự động' },
+    { href: '/language/en/nhan-xet-tuan', label: '📊 Nhận xét tuần của CuongMini — số liệu, điểm yếu, kế hoạch tuần sau' },
     { href: '/language/en/ielts/luyen-them', label: '📚 Luyện thêm theo chặng (0 → 7.5)' },
   ],
   videos: VIDEO_BAI_T5,

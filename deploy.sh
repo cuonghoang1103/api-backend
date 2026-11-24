@@ -1047,6 +1047,7 @@ for route in \
     ctlanguage/phat-am/luot \
     ctlanguage/tro-choi/danh-muc \
     ctlanguage/vong-quay \
+    ctlanguage/nhan-xet-tuan \
     xuong-3d/bo-phan \
     gifs \
     toc-do-mang/ping \

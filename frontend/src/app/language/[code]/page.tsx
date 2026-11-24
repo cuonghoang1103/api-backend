@@ -373,6 +373,16 @@ export default function LanguageHomePage() {
                 to="#6366f1"
               />
             )}
+            {code === 'en' && (
+              <StartCard
+                href="/language/en/nhan-xet-tuan"
+                icon={<BarChart3 size={22} strokeWidth={1.75} />}
+                title="Nhận xét tuần của CuongMini"
+                desc="Số liệu thật 7 ngày qua: ngày học, bài xong, band, từ mới — 3 điểm yếu có bằng chứng + kế hoạch tuần sau theo ngày"
+                from="#0f766e"
+                to="#1d4f91"
+              />
+            )}
           </div>
         </motion.section>
 

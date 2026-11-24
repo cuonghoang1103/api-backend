@@ -17,6 +17,7 @@
 
 import { loadNgay } from './ngay';
 import { MANIFEST } from './ngay/manifest';
+import { VIDEO_BAI_GT } from './videos';
 
 import { defineCourse } from '@/components/sach-hoc/course';
 import type { Lesson, Day } from '@/components/sach-hoc/types';
@@ -165,10 +166,11 @@ export const GIAO_TIEP = defineCourse({
   links: [
     { href: '/language/en/roleplay', label: '🎭 Nhập vai với AI — luyện cảnh vừa học' },
     { href: '/language/en/conversation', label: '💬 Trò chuyện tự do với AI' },
+    { href: '/language/en/nhan-xet-tuan', label: '📊 Nhận xét tuần của CuongMini — số liệu, điểm yếu, kế hoạch tuần sau' },
     { href: '/language/en/ielts', label: '📘 IELTS Tập 1–5 (mất gốc → band 8.0)' },
     { href: '/courses/tieng-anh-ky-thuat-di-lam', label: '💼 Technical English at Work — tiếng Anh kỹ thuật khi đi làm' },
   ],
-  videos: {},
+  videos: VIDEO_BAI_GT,
   days: DAYS,
   manifest: MANIFEST,
   loadDay: loadNgay,

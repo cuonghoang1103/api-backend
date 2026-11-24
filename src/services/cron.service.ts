@@ -39,6 +39,17 @@ export function startCronJobs(): void {
   }
   _started = true;
 
+  // ─── Nhận xét học tập tuần (tiếng Anh, 24/11/2026) — Chủ nhật 20:30 giờ VN (13:30 UTC). MẶC ĐỊNH TẮT: chỉ chạy khi
+  // NHAN_XET_TUAN_CRON=1, và lời gọi model là việc NỀN (cần LLM_BACKGROUND_ENABLED=true). Xem nhanXetTuan.service.ts.
+  cron.schedule('30 13 * * 0', async () => {
+    try {
+      const nx = await import('./ielts/nhanXetTuan.service.js');
+      if (nx.cronBat()) await nx.chayCronTuan();
+    } catch (err) {
+      logger.warn('[nhan-xet-tuan] job Chủ nhật lỗi', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // ─── CT Lồng Tiếng (18/11/2026) — MỖI GIỜ: xếp lại việc mất nhịp tim + dọn tệp R2 quá 7 ngày ───
   // Không giữ bản sao video người khác lâu (docs/long-tieng-hop-dong.md). Trạm cũng tự xếp lại lúc /nhan,
   // nhịp này lo trường hợp trạm tắt hẳn (không ai gọi /nhan) — việc treo `lam` hiện lại là `cho` trên trang.

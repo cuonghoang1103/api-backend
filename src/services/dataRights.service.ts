@@ -123,6 +123,9 @@ export async function anonymizeAccount(userId: number): Promise<{ anonymized: tr
     // Vòng quay may mắn: lịch sử lượt quay + quà.
     prisma.ctlVongQuay.deleteMany({ where: { userId } }),
     prisma.ctLanguageProfile.deleteMany({ where: { userId } }),
+    // Nhận xét học tập hằng tuần (tiếng Anh): báo cáo chứa số liệu học + chữ nhận xét về chính người đó.
+    prisma.ieltsNhanXetTuan.deleteMany({ where: { userId } }),
+    prisma.ieltsNhanXetCaiDat.deleteMany({ where: { userId } }),
     // Hội thoại AI CT Work "Riêng tư" do họ tạo — chỉ họ đọc được, nên xoá mềm (như nút Xoá hội thoại).
     prisma.workAiThread.updateMany({
       where: { createdById: userId, visibility: 'PRIVATE', deletedAt: null },

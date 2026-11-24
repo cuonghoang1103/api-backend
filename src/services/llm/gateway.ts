@@ -319,6 +319,7 @@ export type LlmPurpose =
   | 'interview_generate'  // sinh ngân hàng câu hỏi
   | 'language_tutor'      // gia sư ngoại ngữ, chấm câu người học viết
   | 'language_bulk'       // sinh từ vựng/bài đọc hàng loạt
+  | 'language_weekly'     // nhận xét học tập hằng tuần (tiếng Anh) — diễn đạt số liệu MÃ đã tính + kế hoạch tuần sau
   | 'codelab_coach'       // kèm code, giải thích lỗi
   | 'codelab_bulk'        // sinh bài tập hàng loạt
   | 'course_tutor'        // gia sư khoá học Academy — chat hỏi trong bài
@@ -423,6 +424,14 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
 
   language_tutor: 'claude-sonnet-5',
   language_bulk: 'gpt-6-luna',
+  /**
+   * Nhận xét học tập hằng tuần (24/11/2026, `src/services/ielts/nhanXetTuan*.ts`). Người học ĐỌC TỪNG CHỮ rồi làm theo
+   * kế hoạch ⇒ cần nhận xét sắc, cụ thể (như `interview_report`), nhưng MỌI con số do mã tính sẵn và mã kiểm lại chữ
+   * model viết (số lạ ⇒ thay bằng chữ dự phòng) ⇒ không cần Claude đắt. `gpt-6-sol` (in 1,25 / out 3,3 $ mỗi triệu
+   * token): một báo cáo ~4k token vào + ~1,5k ra (+ suy luận medium) ≈ 0,01–0,02 $. Trần: 1 báo cáo/tuần/người + 3 lần
+   * "Tạo lại" + trần tiền chung `budget.ts`. Vặn: `LLM_MODEL_LANGUAGE_WEEKLY=…`, `LLM_EFFORT_LANGUAGE_WEEKLY=…`.
+   */
+  language_weekly: 'gpt-6-sol',
 
   // Gia sư LAB211 (giảng đề + chat hỏi tiếp + vấn đáp + đối chiếu code) chạy
   // model MẠNH NHẤT theo yêu cầu: hiểu đề + 4 tính chất OOP + review code cần độ
@@ -1504,7 +1513,7 @@ const SUY_LUAN_THEO_VIEC: Partial<Record<LlmPurpose, MucSuyLuan>> = {
   exam_tutor: 'medium', lab_room: 'medium', interview_report: 'high', chat_max: 'high', cv_critique: 'high',
   study_verify: 'high', work_agent: 'high', codelab_bulk: 'high', doc_ocr: 'high',
   // Sinh nội dung có cấu trúc (JSON/nét vẽ/đồ thị) — vừa đủ.
-  language_bulk: 'medium', work_digest: 'medium', work_setup: 'medium', ve_net: 'medium', vo_viet_lai: 'medium', so_do_khoi: 'medium',
+  language_bulk: 'medium', language_weekly: 'medium', work_digest: 'medium', work_setup: 'medium', ve_net: 'medium', vo_viet_lai: 'medium', so_do_khoi: 'medium',
   mach_dien: 'medium', long_tieng_dich: 'medium', study_plan: 'medium', study_coach: 'medium', creator_script: 'medium', cv_writing: 'medium',
   exphub_doc: 'medium', news_bulletin: 'medium', plan_review: 'medium', video_lenh: 'medium',
   // Máy đọc / tra cứu nhỏ / độ trễ quan trọng.

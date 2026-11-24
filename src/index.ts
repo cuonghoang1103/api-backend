@@ -222,6 +222,8 @@ const ctLanguagePhatAmRoutes = (await import(path.join(__dirname, 'routes', 'ctl
 const ctLanguageTroChoiRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.troChoi.routes.js'))).default;
 // CT Language — vòng quay may mắn (16/11/2026): quà trong app, máy chủ giữ lượt/ngày — cũng gắn TRƯỚC /ctlanguage
 const ctLanguageVongQuayRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.vongQuay.routes.js'))).default;
+// CT Language — Nhận xét học tập hằng tuần của CuongMini (tiếng Anh, 24/11/2026) — cũng gắn TRƯỚC /ctlanguage
+const ctLanguageNhanXetTuanRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.nhanXetTuan.routes.js'))).default;
 const booksRoutes = (await import(path.join(__dirname, 'routes', 'books.routes.js'))).default;
 const doiKhangRoutes = (await import(path.join(__dirname, 'routes', 'doiKhang.routes.js'))).default;
 const flyingPencilRoutes = (await import(path.join(__dirname, 'routes', 'flyingPencil.routes.js'))).default;
@@ -762,6 +764,7 @@ app.use('/api/v1/ctlanguage/tu-vung', ctLanguageHocTuVungRoutes);
 app.use('/api/v1/ctlanguage/phat-am', ctLanguagePhatAmRoutes);
 app.use('/api/v1/ctlanguage/tro-choi', ctLanguageTroChoiRoutes);
 app.use('/api/v1/ctlanguage/vong-quay', ctLanguageVongQuayRoutes);
+app.use('/api/v1/ctlanguage/nhan-xet-tuan', ctLanguageNhanXetTuanRoutes);
 // PHẢI đứng TRƯỚC router chung: router chung có `router.use(authenticate)` chặn mọi đường không khớp của khách.
 app.use('/api/v1/ctlanguage/tu-dien-sau', ctLanguageTuDienSauRoutes);
 app.use('/api/v1/ctlanguage', ctLanguageRoutes);

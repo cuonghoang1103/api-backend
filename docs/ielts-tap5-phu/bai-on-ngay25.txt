@@ -1,0 +1,16 @@
+tfng	t5d25-doc
+note	t5d25-doc
+table	t5d25-doc
+match-info	t5d25-doc
+match-feature	t5d25-doc
+summary	t5d25-doc
+ynng	t5d25-doc
+mcq	t5d25-doc
+match-ending	t5d25-doc
+form	t5d25-nghe
+table	t5d25-nghe
+mcq	t5d25-nghe
+map	t5d25-nghe
+mcq2	t5d25-nghe
+flow	t5d25-nghe
+note	t5d25-nghe

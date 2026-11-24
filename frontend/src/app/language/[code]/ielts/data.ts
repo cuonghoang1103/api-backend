@@ -940,6 +940,7 @@ export const IELTS = defineCourse({
     { href: '/language/en/ielts/tap-2', label: '📗 Tập 2 (band 4.0 → 5.0, 24 ngày) →' },
     { href: '/language/en/ielts/tap-3', label: '📘 Tập 3 (band 5.0 → 6.0, 30 ngày) →' },
     { href: '/language/en/ielts/tap-4', label: '📙 Tập 4 (band 6.0 → 7.0, 30 ngày) →' },
+    { href: '/language/en/ielts/tap-5', label: '📕 Tập 5 (band 7.0 → 8.0, 30 ngày) →' },
     { href: '/language/en/ielts/thi-may', label: '🖥️ Online Test — thi trên máy tính (Reading · Listening · Writing)' },
     { href: '/language/en/ielts/the-tu', label: '🃏 Flashcards 100 từ/ngày (lặp lại ngắt quãng)' },
     { href: '/language/en/ielts/so-loi', label: '📒 Sổ lỗi tự động' },

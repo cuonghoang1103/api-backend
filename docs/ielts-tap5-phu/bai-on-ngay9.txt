@@ -1,0 +1,5 @@
+ynng	t5d9-doc
+heading	t5d9-doc
+form	t5d9-nghe
+mcq2	t5d9-nghe
+note	t5d9-nghe

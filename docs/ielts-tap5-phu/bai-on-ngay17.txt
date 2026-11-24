@@ -1,0 +1,7 @@
+tfng	t5d17-doc
+short	t5d17-doc
+summary-box	t5d17-doc
+ynng	t5d17-doc
+match-feature	t5d17-doc
+mcq	t5d17-nghe
+match-feature	t5d17-nghe

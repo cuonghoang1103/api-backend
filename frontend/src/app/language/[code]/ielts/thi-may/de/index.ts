@@ -113,6 +113,50 @@ export const MUC_LUC: MucDe[] = [
     moTa: 'Task 1: international students by region of origin, 2005 and 2025, and their subjects in 2025 (bar chart + pie chart) · Task 2: taking a year off between school and university — do the advantages outweigh the disadvantages?' },
   { id: 'noi-de8', kyNang: 'noi', ten: 'Speaking — Đề 8 (thi cuối Tập 4)', boDe: 'Đề 8', capDo: 'Band 7.0', phut: 14, soCau: 3,
     moTa: 'Part 1: plants · noise · Part 2: a piece of advice from a book, video or podcast that changed a habit · Part 3: advice from the media, advice in the future' },
+  // Đề 9 — Tập 5 · Ngày 8, band 7.0 → 7.5 (soạn 24/11/2026). Tốc độ thật, giọng trộn; Writing map + Problem / solution.
+  { id: 'nghe-de9', kyNang: 'nghe', ten: 'Listening — Đề 9 (Tập 5 · Ngày 8)', boDe: 'Đề 9', capDo: 'Band 7.0 → 7.5', phut: 30, soCau: 40,
+    moTa: 'Booking a dog into boarding kennels (Canadian + UK) · Welcome talk for new allotment holders (Australian speaker) · Two students and their tutor discuss a river fieldwork report (US + UK + Irish) · Lecture on citizen science (New Zealand speaker)',
+    dang: ['form', 'note', 'mcq', 'match-feature', 'mcq2', 'flow', 'sentence'] },
+  { id: 'doc-de9', kyNang: 'doc', ten: 'Academic Reading — Đề 9 (Tập 5 · Ngày 8)', boDe: 'Đề 9', capDo: 'Band 7.0 → 7.5', phut: 60, soCau: 40,
+    moTa: 'The foxes of Novosibirsk (an experiment in domestication) · Silver, ships and sweet potatoes (when did globalisation begin?) · Drawing the line (what separates science from pseudoscience?)',
+    dang: ['tfng', 'flow', 'sentence', 'heading', 'match-feature', 'mcq2', 'mcq', 'ynng', 'match-ending'] },
+  { id: 'viet-de9', kyNang: 'viet', ten: 'Academic Writing — Đề 9 (Tập 5 · Ngày 8)', boDe: 'Đề 9', capDo: 'Band 7.0 → 7.5', phut: 60, soCau: 2,
+    moTa: 'Task 1: the harbour area of a town in 1995 and today (two maps) · Task 2: a shortage of skilled manual workers — what problems does it cause, and what could be done?' },
+  { id: 'noi-de9', kyNang: 'noi', ten: 'Speaking — Đề 9 (Tập 5 · Ngày 8)', boDe: 'Đề 9', capDo: 'Band 7.0 → 7.5', phut: 14, soCau: 3,
+    moTa: 'Part 1: photography · celebrations · Part 2: a time when you persuaded someone to look at a decision differently · Part 3: changing opinions, persuasion and public debate' },
+  // Đề 10 — Tập 5 · Ngày 16, band 7.5 (soạn 24/11/2026). (Đề 9 đặt TRƯỚC khối này, Đề 11 đặt SAU.)
+  { id: 'nghe-de10', kyNang: 'nghe', ten: 'Listening — Đề 10 (Tập 5 · Ngày 16)', boDe: 'Đề 10', capDo: 'Band 7.5', phut: 30, soCau: 40,
+    moTa: 'Renting a self-storage unit (US + AU) · Briefing for heritage weekend volunteers (Irish speaker) · Two students and a tutor discuss an oral history project · Lecture on the acoustics of concert halls',
+    dang: ['form', 'table', 'mcq', 'match-feature', 'mcq2', 'flow', 'note', 'summary'] },
+  { id: 'doc-de10', kyNang: 'doc', ten: 'Academic Reading — Đề 10 (Tập 5 · Ngày 16)', boDe: 'Đề 10', capDo: 'Band 7.5', phut: 60, soCau: 40,
+    moTa: 'Reading the planet from the outside (what earthquakes reveal about the Earth\'s interior) · A language is born (Nicaraguan Sign Language) · The arithmetic of fairness (can an algorithm be unbiased?)',
+    dang: ['tfng', 'diagram', 'short', 'heading', 'match-feature', 'sentence', 'ynng', 'mcq', 'summary-box'] },
+  { id: 'viet-de10', kyNang: 'viet', ten: 'Academic Writing — Đề 10 (Tập 5 · Ngày 16)', boDe: 'Đề 10', capDo: 'Band 7.5', phut: 60, soCau: 2,
+    moTa: 'Task 1: the public library service of one city in 2010 and 2025, and visitors\' reasons for coming in 2025 (table + pie chart) · Task 2: learning new skills throughout working life — why has this become necessary, and who should pay for it? (two-part question)' },
+  { id: 'noi-de10', kyNang: 'noi', ten: 'Speaking — Đề 10 (Tập 5 · Ngày 16)', boDe: 'Đề 10', capDo: 'Band 7.5', phut: 14, soCau: 3,
+    moTa: 'Part 1: colours · weekends · Part 2: a tradition in your family or community that you hope will continue · Part 3: why traditions survive or die out, traditions and the modern world' },
+  // Đề 11 — Tập 5 · Ngày 24, band 8.0 (soạn 24/11/2026). Tốc độ thật + nhiễu nền dựng bằng tình huống; Writing process 2 giai đoạn + Discussion.
+  { id: 'nghe-de11', kyNang: 'nghe', ten: 'Listening — Đề 11 (Tập 5 · Ngày 24)', boDe: 'Đề 11', capDo: 'Band 8.0', phut: 30, soCau: 40,
+    moTa: 'Changing a ferry booking from a noisy café (Australian + Irish) · Welcome talk at a reopened lido & site plan · Two students and a tutor review a pilot survey of river life · Lecture on the history of weather forecasting',
+    dang: ['form', 'table', 'mcq', 'map', 'mcq2', 'flow', 'note'] },
+  { id: 'doc-de11', kyNang: 'doc', ten: 'Academic Reading — Đề 11 (Tập 5 · Ngày 24)', boDe: 'Đề 11', capDo: 'Band 8.0', phut: 60, soCau: 40,
+    moTa: 'The economy in a water tank (a hydraulic model of the national economy) · The map inside the head (how the brain knows where it is) · Discovered or devised? (the invention of perspective)',
+    dang: ['tfng', 'note', 'table', 'match-info', 'match-feature', 'summary', 'ynng', 'mcq', 'match-ending'] },
+  { id: 'viet-de11', kyNang: 'viet', ten: 'Academic Writing — Đề 11 (Tập 5 · Ngày 24)', boDe: 'Đề 11', capDo: 'Band 8.0', phut: 60, soCau: 2,
+    moTa: 'Task 1: how used plastic bottles are made into fleece jackets (process diagram in two stages) · Task 2: should museums return historical objects to their countries of origin? (discuss both views)' },
+  { id: 'noi-de11', kyNang: 'noi', ten: 'Speaking — Đề 11 (Tập 5 · Ngày 24)', boDe: 'Đề 11', capDo: 'Band 8.0', phut: 14, soCau: 3,
+    moTa: 'Part 1: numbers · clothes · Part 2: an achievement you did not think you were capable of · Part 3: recognising achievement, success and society' },
+  // Đề 12 "Final" — thi cuối Tập 5 · Ngày 30, band 8.0 (soạn 24/11/2026). Đề tổng duyệt: Reading đủ 16 dạng, Listening đủ 12 kiểu câu của phòng thi máy.
+  { id: 'nghe-de12', kyNang: 'nghe', ten: 'Listening — Đề 12 (Tập 5 · Ngày 30)', boDe: 'Đề 12', capDo: 'Band 8.0', phut: 30, soCau: 40,
+    moTa: 'Hiring a canal boat for a week (New Zealand + UK) · Induction at a community darkroom & floor plan (Canadian speaker) · Two students and a tutor review four hospital sign systems (Irish + US + Australian) · Lecture on qanats, the underground water channels of Iran (US speaker)',
+    dang: ['form', 'table', 'short', 'mcq', 'map', 'sentence', 'mcq2', 'match-feature', 'flow', 'note', 'diagram', 'summary'] },
+  { id: 'doc-de12', kyNang: 'doc', ten: 'Academic Reading — Đề 12 (Tập 5 · Ngày 30)', boDe: 'Đề 12', capDo: 'Band 8.0', phut: 60, soCau: 40,
+    moTa: 'The cure that was lost twice (scurvy and the first clinical trial) · Reading the unreadable (the decipherment of Linear B) · Keeping score (how good are experts at predicting the future?)',
+    dang: ['tfng', 'note', 'table', 'flow', 'short', 'heading', 'match-info', 'match-feature', 'diagram', 'sentence', 'ynng', 'mcq', 'mcq2', 'match-ending', 'summary-box', 'summary'] },
+  { id: 'viet-de12', kyNang: 'viet', ten: 'Academic Writing — Đề 12 (Tập 5 · Ngày 30)', boDe: 'Đề 12', capDo: 'Band 8.0', phut: 60, soCau: 2,
+    moTa: 'Task 1: adults doing regular voluntary work by age group, 2005–2025, and the kind of work done by the youngest and oldest volunteers in 2025 (line graph + bar chart) · Task 2: should citizens have a legal right to deal with a human being rather than a machine when they use public services? (opinion)' },
+  { id: 'noi-de12', kyNang: 'noi', ten: 'Speaking — Đề 12 (Tập 5 · Ngày 30)', boDe: 'Đề 12', capDo: 'Band 8.0', phut: 14, soCau: 3,
+    moTa: 'Part 1: mirrors · patience · Part 2: a conversation with a stranger that you still remember · Part 3: talking to strangers, trust in society' },
 ];
 
 /** id → hàm tải tệp đề (mỗi tệp một chunk). */
@@ -154,6 +198,22 @@ const TEP_DE: Record<string, () => Promise<De>> = {
   'doc-de8': () => import('./doc-de8').then((m) => m.DOC_DE8),
   'viet-de8': () => import('./viet-de8').then((m) => m.VIET_DE8),
   'noi-de8': () => import('./noi-de8').then((m) => m.NOI_DE8),
+  'nghe-de9': () => import('./nghe-de9').then((m) => m.NGHE_DE9),
+  'doc-de9': () => import('./doc-de9').then((m) => m.DOC_DE9),
+  'viet-de9': () => import('./viet-de9').then((m) => m.VIET_DE9),
+  'noi-de9': () => import('./noi-de9').then((m) => m.NOI_DE9),
+  'nghe-de10': () => import('./nghe-de10').then((m) => m.NGHE_DE10),
+  'doc-de10': () => import('./doc-de10').then((m) => m.DOC_DE10),
+  'viet-de10': () => import('./viet-de10').then((m) => m.VIET_DE10),
+  'noi-de10': () => import('./noi-de10').then((m) => m.NOI_DE10),
+  'nghe-de11': () => import('./nghe-de11').then((m) => m.NGHE_DE11),
+  'doc-de11': () => import('./doc-de11').then((m) => m.DOC_DE11),
+  'viet-de11': () => import('./viet-de11').then((m) => m.VIET_DE11),
+  'noi-de11': () => import('./noi-de11').then((m) => m.NOI_DE11),
+  'nghe-de12': () => import('./nghe-de12').then((m) => m.NGHE_DE12),
+  'doc-de12': () => import('./doc-de12').then((m) => m.DOC_DE12),
+  'viet-de12': () => import('./viet-de12').then((m) => m.VIET_DE12),
+  'noi-de12': () => import('./noi-de12').then((m) => m.NOI_DE12),
 };
 
 export function taiDe(id: string): Promise<De> | null {
@@ -176,6 +236,10 @@ export const THU_TU_THI: KyNang[] = ['sangloc', 'nghe', 'doc', 'viet', 'noi'];
  * Đề 4 (giữa Tập 3, sau Ngày 15) = bộ `-de4`; Đề 5 (thi cuối Tập 3, sau Ngày 30) = bộ `-de5`.
  * Đề 6 (đầu Tập 4) = `nghe-01` · `doc-01` · `viet-01` · `noi-06`.
  * Đề 7 (giữa Tập 4, sau Ngày 15) = bộ `-de7`; Đề 8 (thi cuối Tập 4, sau Ngày 30) = bộ `-de8`.
+ * Đề 9 (Tập 5 · Ngày 8) = bộ `-de9`.
+ * Đề 10 (Tập 5 · Ngày 16, band 7.5) = bộ `-de10` (`bo-10`). Giữ BO_DE tăng dần theo `so`.
+ * Đề 11 (Tập 5 · Ngày 24, band 8.0) = bộ `-de11` (`bo-11`).
+ * Đề 12 "Final" (thi cuối Tập 5 · Ngày 30, band 8.0) = bộ `-de12` (`bo-12`).
  */
 export const BO_DE: BoDeDu[] = [
   {
@@ -213,6 +277,22 @@ export const BO_DE: BoDeDu[] = [
   {
     id: 'bo-08', so: 8, ten: 'Đề 8', capDo: 'Band 7.0', viTri: 'Thi cuối Tập 4 (sau Ngày 30)',
     nghe: 'nghe-de8', doc: 'doc-de8', viet: 'viet-de8', noi: 'noi-de8',
+  },
+  {
+    id: 'bo-09', so: 9, ten: 'Đề 9', capDo: 'Band 7.0 → 7.5', viTri: 'Tập 5 · Ngày 8',
+    nghe: 'nghe-de9', doc: 'doc-de9', viet: 'viet-de9', noi: 'noi-de9',
+  },
+  {
+    id: 'bo-10', so: 10, ten: 'Đề 10', capDo: 'Band 7.5', viTri: 'Tập 5 · Ngày 16',
+    nghe: 'nghe-de10', doc: 'doc-de10', viet: 'viet-de10', noi: 'noi-de10',
+  },
+  {
+    id: 'bo-11', so: 11, ten: 'Đề 11', capDo: 'Band 8.0', viTri: 'Tập 5 · Ngày 24',
+    nghe: 'nghe-de11', doc: 'doc-de11', viet: 'viet-de11', noi: 'noi-de11',
+  },
+  {
+    id: 'bo-12', so: 12, ten: 'Đề 12', capDo: 'Band 8.0', viTri: 'Thi cuối Tập 5 (Ngày 30)',
+    nghe: 'nghe-de12', doc: 'doc-de12', viet: 'viet-de12', noi: 'noi-de12',
   },
 ];
 

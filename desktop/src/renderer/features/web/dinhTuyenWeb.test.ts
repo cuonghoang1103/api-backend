@@ -63,7 +63,7 @@ describe('khopTuyenWeb', () => {
     expect(khopTuyenWeb('/language/en/ielts/phong-thi')?.tuyen.mau).toBe('/language/:code/ielts/phong-thi');
     expect(thuocCayWeb('/ielts/phong-thi')).toBe(true);
     // Đợt 1 nâng cấp (07/10/2026): phòng thi máy tính, flashcard, sổ lỗi. 12/11/2026: + khoá Tập 2 (/tap-2). 18/11/2026: + Tập 3, Tập 4.
-    for (const t of ['thi-may', 'the-tu', 'so-loi', 'tap-2', 'tap-3', 'tap-4']) {
+    for (const t of ['thi-may', 'the-tu', 'so-loi', 'tap-2', 'tap-3', 'tap-4', 'tap-5']) {
       expect(khopTuyenWeb(`/ielts/${t}`)?.thamSo).toEqual({ code: 'en' });
       expect(khopTuyenWeb(`/language/en/ielts/${t}`)?.tuyen.mau).toBe(`/language/:code/ielts/${t}`);
       expect(thuocCayWeb(`/ielts/${t}`)).toBe(true);
@@ -327,8 +327,10 @@ describe('khopTuyenWeb', () => {
     // 14/11/2026: +1 Góp ý & bổ sung khoá học (/courses/:slug/gop-y).
     // 18/11/2026: +2 IELTS Tập 3 (/language/:code/ielts/tap-3 và /ielts/tap-3), +2 IELTS Tập 4 (tap-4).
     // 22/11/2026: +3 Phòng thi mô phỏng (/exam/mo-phong, /exam/mo-phong/fe/:attemptId, /exam/mo-phong/pe/:attemptId).
+    // 24/11/2026: +2 IELTS Tập 5 (tap-5). +1 Tiếng Anh giao tiếp (/language/:code/giao-tiep).
+    // 24/11/2026: +5 mục app CT Language trên web (hoc-tu-vung, podcast, podcast/:id, so-chuyen-nganh, so-chuyen-nganh/:ma).
     // 24/11/2026: +2 CT Work Học tập & Lịch cá nhân (/work/hoc-tap, /work/hoc-tap/mon/:id).
-    expect(thay.size).toBe(219);
+    expect(thay.size).toBe(227);
   });
 });
 

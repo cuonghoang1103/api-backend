@@ -395,7 +395,11 @@ function Dictation({ b }: { b: Extract<Block, { t: 'dictation' }> }) {
   const [plays, setPlays] = useState<number[]>(() => b.items.map(() => 0));
   const [checked, setChecked] = useState<Record<number, boolean>>({});
   // "Greenwood Road" nghe là cả cụm; chấm không phân biệt hoa thường và dấu cách thừa.
-  const same1 = (a: string, c: string) => a.toLowerCase().replace(/\s+/g, ' ').trim() === c.toLowerCase();
+  // 24/11/2026: chép CẢ CÂU (khoá Giao tiếp) ⇒ bỏ qua dấu câu không nghe được (, ! ? ; " và dấu chấm CUỐI câu), gộp ’ → '.
+  // Giữ ":" và dấu chấm GIỮA số ("7:45", "14.50") — đó là cách viết, `alt` lo phần khác.
+  const chuan = (x: string) => x.toLowerCase().replace(/[’‘]/g, "'").replace(/[“”"]/g, '').replace(/[,!?;]/g, ' ')
+    .replace(/\.+(\s|$)/g, '$1').replace(/\s+/g, ' ').trim();
+  const same1 = (a: string, c: string) => chuan(a) === chuan(c);
   // `alt` (12/11/2026): cách viết khác cũng đúng — "7:45" bên cạnh "7.45", "£14.50" bên cạnh "14.50".
   const same = (a: string, it: { answer: string; alt?: string[] }) => [it.answer, ...(it.alt ?? [])].some((c) => same1(a, c));
   const grade = (i: number) => {

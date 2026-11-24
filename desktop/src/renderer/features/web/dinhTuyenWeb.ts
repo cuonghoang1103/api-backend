@@ -56,10 +56,19 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/language/:code/reading', nap: () => import('@/app/language/[code]/reading/page') },
   { mau: '/language/:code/roadmap', nap: () => import('@/app/language/[code]/roadmap/page') },
   { mau: '/language/:code/roleplay', nap: () => import('@/app/language/[code]/roleplay/page') },
+  // Tiếng Anh giao tiếp (24/11/2026) — khoá sach-hoc riêng (stage giaotiep1), 30 ngày A2 → B2.
+  { mau: '/language/:code/giao-tiep', nap: () => import('@/app/language/[code]/giao-tiep/page') },
   { mau: '/language/:code/stats', nap: () => import('@/app/language/[code]/stats/page') },
   { mau: '/language/:code/translate', nap: () => import('@/app/language/[code]/translate/page') },
   { mau: '/language/:code/vocab', nap: () => import('@/app/language/[code]/vocab/page') },
   { mau: '/language/:code/writing', nap: () => import('@/app/language/[code]/writing/page') },
+  // Mục của app CT Language trên web (24/11/2026): Học từ vựng · Podcast · Sổ chuyên ngành — chung tiến độ với app điện thoại.
+  // TĨNH trước ĐỘNG: danh sách trước trang chi tiết `:id` / `:ma`.
+  { mau: '/language/:code/hoc-tu-vung', nap: () => import('@/app/language/[code]/hoc-tu-vung/page') },
+  { mau: '/language/:code/podcast', nap: () => import('@/app/language/[code]/podcast/page') },
+  { mau: '/language/:code/podcast/:id', nap: () => import('@/app/language/[code]/podcast/[id]/page') },
+  { mau: '/language/:code/so-chuyen-nganh', nap: () => import('@/app/language/[code]/so-chuyen-nganh/page') },
+  { mau: '/language/:code/so-chuyen-nganh/:ma', nap: () => import('@/app/language/[code]/so-chuyen-nganh/[ma]/page') },
   // Khoá học kiểu sách (28/09/2026): IELTS 4 kỹ năng và tiếng Nhật できる日本語 —
   // cùng bộ khung components/sach-hoc, tải nội dung từng buổi theo import().
   { mau: '/language/:code/ielts', nap: () => import('@/app/language/[code]/ielts/page') },
@@ -72,6 +81,7 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/language/:code/ielts/tap-2', nap: () => import('@/app/language/[code]/ielts/tap-2/page') },
   { mau: '/language/:code/ielts/tap-3', nap: () => import('@/app/language/[code]/ielts/tap-3/page') },
   { mau: '/language/:code/ielts/tap-4', nap: () => import('@/app/language/[code]/ielts/tap-4/page') },
+  { mau: '/language/:code/ielts/tap-5', nap: () => import('@/app/language/[code]/ielts/tap-5/page') },
   // 🔒 Tài liệu riêng IELTS (12/11/2026) — chỉ tài khoản được phép; khung đầu bài dẫn tới đây.
   { mau: '/language/:code/ielts/tai-lieu-rieng', nap: () => import('@/app/language/[code]/ielts/tai-lieu-rieng/page') },
 
@@ -86,6 +96,7 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/ielts/tap-2', nap: () => import('@/app/language/[code]/ielts/tap-2/page'), thamSoCo: { code: 'en' } },
   { mau: '/ielts/tap-3', nap: () => import('@/app/language/[code]/ielts/tap-3/page'), thamSoCo: { code: 'en' } },
   { mau: '/ielts/tap-4', nap: () => import('@/app/language/[code]/ielts/tap-4/page'), thamSoCo: { code: 'en' } },
+  { mau: '/ielts/tap-5', nap: () => import('@/app/language/[code]/ielts/tap-5/page'), thamSoCo: { code: 'en' } },
   { mau: '/ielts/tai-lieu-rieng', nap: () => import('@/app/language/[code]/ielts/tai-lieu-rieng/page'), thamSoCo: { code: 'en' } },
   { mau: '/language/:code/dekiru', nap: () => import('@/app/language/[code]/dekiru/page') },
   { mau: '/language/:code/dekiru/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page') },

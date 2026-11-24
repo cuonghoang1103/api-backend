@@ -28,6 +28,9 @@ import {
   Zap,
   Heart,
   Target,
+  Layers,
+  Podcast,
+  Briefcase,
 } from 'lucide-react';
 import { languageApi } from '@/lib/language-api';
 import type { LanguageOverview } from '@/types/language';
@@ -67,6 +70,9 @@ const CJK_ONLY = new Set(['hanzi']);
 const CJK_CODES = new Set(['ja', 'zh']);
 
 const AI_SECTIONS = new Set(['writing', 'roleplay', 'translate', 'grammar-check']);
+
+/** Ngôn ngữ có các mục của app CT Language (Học từ vựng · Podcast · Sổ chuyên ngành). */
+const CTL_CODES = new Set(['en', 'ja', 'zh']);
 
 /** One stat, counted up on mount. Plain numbers — no emoji bubbles. */
 function Stat({ value, label, icon, hue }: { value: number; label: string; icon: React.ReactNode; hue: string }) {
@@ -351,14 +357,61 @@ export default function LanguageHomePage() {
               <StartCard
                 href="/language/en/ielts"
                 icon={<Target size={22} strokeWidth={1.75} />}
-                title="IELTS nền tảng"
-                desc="15 ngày từ con số 0, có gia sư AI giảng từng trang"
+                title="IELTS 0 → 8.0 · 5 tập"
+                desc="Từ mất gốc tới band 8.0: 129 ngày học, 12 đề thi trên máy, gia sư AI giảng từng trang"
                 from="#f97316"
                 to="#ef4444"
               />
             )}
+            {code === 'en' && (
+              <StartCard
+                href="/language/en/giao-tiep"
+                icon={<MessagesSquare size={22} strokeWidth={1.75} />}
+                title="Tiếng Anh giao tiếp"
+                desc="30 ngày A2 → B2: hội thoại đời sống, công sở, video call, kết bạn — nghe nhiều giọng, nói theo mẫu, nhập vai"
+                from="#0ea5e9"
+                to="#6366f1"
+              />
+            )}
           </div>
         </motion.section>
+
+        {/* 24/11/2026: ba mục học của app CT Language có bản web — tiến độ đi theo tài khoản (sổ "Học từ vựng", ôn lặp,
+            chuỗi ngày), chán học trên điện thoại thì lên máy tính học tiếp. */}
+        {CTL_CODES.has(code) && (
+          <motion.section variants={m.childEnter} className={s.section}>
+            <div className={s.sectionHead}>
+              <h2 className={s.h2}>Như trên app CT Language</h2>
+              <span className={s.sectionNote}>Học chung tiến độ với điện thoại</span>
+            </div>
+            <div className={s.startGrid}>
+              <StartCard
+                href={`/language/${code}/hoc-tu-vung`}
+                icon={<Layers size={22} strokeWidth={1.75} />}
+                title="Học từ vựng"
+                desc={code === 'en' ? 'Lộ trình IELTS 0 → 8.0 theo ngày, 20 từ/ngày · theo chủ đề · chuyên ngành theo môn' : 'Theo cấp và theo chủ đề: thẻ từ, kiểm tra nhiều dạng, ôn lặp'}
+                from="#1d4f91"
+                to="#6d28d9"
+              />
+              <StartCard
+                href={`/language/${code}/podcast`}
+                icon={<Podcast size={22} strokeWidth={1.75} />}
+                title="Podcast theo cấp"
+                desc="Nghe từng câu bằng giọng thật, chạm từ để tra, song ngữ / che chữ, câu hỏi hiểu bài"
+                from="#22c55e"
+                to="#0e7490"
+              />
+              <StartCard
+                href={`/language/${code}/so-chuyen-nganh`}
+                icon={<Briefcase size={22} strokeWidth={1.75} />}
+                title="Sổ chuyên ngành"
+                desc={code === 'en' ? 'Từ theo đề thi các môn FPT + từ theo nghề, có câu ví dụ, lưu vào sổ' : 'Từ theo nghề cho người đi làm, du học — có câu ví dụ, lưu vào sổ'}
+                from="#d97706"
+                to="#b91c1c"
+              />
+            </div>
+          </motion.section>
+        )}
 
         {/* Two sections, because a lesson and an AI tool are different promises:
             one has content waiting, the other needs Pro and writes something new. */}

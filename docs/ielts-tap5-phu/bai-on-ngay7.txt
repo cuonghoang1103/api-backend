@@ -1,0 +1,2 @@
+short	t5d7-doc
+sentence	t5d7-doc

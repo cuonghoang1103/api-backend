@@ -144,6 +144,7 @@ export const IELTS_T4 = defineCourse({
   intro: INTRO,
   extras: [TRA_CONG_THUC_T4, TRA_TU_VUNG_T4],
   links: [
+    { href: '/language/en/ielts/tap-5', label: '📕 Học tiếp Tập 5 (band 7.0 → 8.0) →' },
     { href: '/language/en/ielts/tap-3', label: '← Tập 3 (5.0 → 6.0) — ôn lại ngày còn yếu' },
     { href: '/language/en/ielts/tap-2', label: '← Tập 2 (4.0 → 5.0)' },
     { href: '/language/en/ielts', label: '← Tập 1 (mất gốc → 4.0)' },

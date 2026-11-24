@@ -99,6 +99,8 @@ const SPECS: Spec[] = [
   { khoa: 'ielts-tap2', data: join(LANG, 'ielts/tap-2/data.ts'), ten: 'IELTS_T2' },
   { khoa: 'ielts-tap3', data: join(LANG, 'ielts/tap-3/data.ts'), ten: 'IELTS_T3' },
   { khoa: 'ielts-tap4', data: join(LANG, 'ielts/tap-4/data.ts'), ten: 'IELTS_T4' },
+  { khoa: 'ielts-tap5', data: join(LANG, 'ielts/tap-5/data.ts'), ten: 'IELTS_T5' },
+  { khoa: 'en-giao-tiep', data: join(LANG, 'giao-tiep/data.ts'), ten: 'GIAO_TIEP' },
   { khoa: 'jp', data: join(LANG, 'jp/data.ts'), ten: 'JP' },
   { khoa: 'ch', data: join(LANG, 'ch/data.ts'), ten: 'CH' },
 ];

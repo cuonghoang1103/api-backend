@@ -63,7 +63,7 @@ export async function urlMedia(id: string): Promise<{ url: string; het: number }
 export const urlTrangIelts = (id: string, p: number) => `/api/v1/sach-rieng/ielts/trang/${encodeURIComponent(id)}/${p}`;
 
 /** Đường tới bài trong khoá: id `t2…` ⇒ Tập 2. */
-export const duongBai = (lessonId: string) => { const t = /^t([234])/.exec(lessonId)?.[1]; return `/language/en/ielts${t ? `/tap-${t}` : ''}?bai=${encodeURIComponent(lessonId)}`; };
+export const duongBai = (lessonId: string) => { const t = /^t([2-5])/.exec(lessonId)?.[1]; return `/language/en/ielts${t ? `/tap-${t}` : ''}?bai=${encodeURIComponent(lessonId)}`; };
 
 export function dongHo(giay: number): string {
   const g = Math.max(0, Math.floor(giay));

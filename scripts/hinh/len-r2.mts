@@ -33,6 +33,9 @@ const THU_MUC = [
   'frontend/src/app/language/[code]/ielts/tap-3', // IELTS Tập 3: data.ts (Mở đầu) + tracuu.ts
   'frontend/src/app/language/[code]/ielts/tap-4/ngay', // IELTS Tập 4 (18/11/2026): ngày t4dN
   'frontend/src/app/language/[code]/ielts/tap-4', // IELTS Tập 4: data.ts (Mở đầu) + tracuu.ts
+  'frontend/src/app/language/[code]/ielts/tap-5/ngay', // IELTS Tập 5 (24/11/2026): ngày t5dN
+  'frontend/src/app/language/[code]/ielts/tap-5', // IELTS Tập 5: data.ts (Mở đầu) + tracuu.ts
+  'frontend/src/app/language/[code]/giao-tiep/ngay', // Tiếng Anh giao tiếp (24/11/2026): canh, hinh cử chỉ, vocab.anh
 ];
 export const KHOA = (slug: string) => `hoc/hinh/${slug}.webp`;
 
@@ -47,6 +50,12 @@ function timSlug(src: string): Set<string> {
 }
 
 const args = process.argv.slice(2);
+// 24/11/2026: một agent gõ `--help` ⇒ script coi là "đẩy thật" và đẩy ảnh lên bucket thật. Cờ lạ ⇒ in cách dùng rồi DỪNG.
+const coLa = args.filter((a) => a.startsWith('-') && !['--kiem', '--thu'].includes(a));
+if (coLa.length) {
+  console.error(`Cờ lạ: ${coLa.join(' ')}\nDùng: --kiem (chỉ kiểm) · --thu <slug…> (đẩy đúng mấy slug) · không cờ = đẩy mọi ảnh thiếu lên R2 THẬT`);
+  process.exit(2);
+}
 const chiKiem = args.includes('--kiem');
 let slugs = new Set<string>();
 if (args[0] === '--thu') slugs = new Set(args.slice(1));

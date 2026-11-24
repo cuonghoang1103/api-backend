@@ -1,0 +1,3 @@
+note	t5d20-nghe
+table	t5d20-nghe
+mcq	t5d20-nghe

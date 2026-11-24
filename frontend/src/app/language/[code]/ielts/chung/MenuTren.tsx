@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import s from './cdt.module.css';
 
-export type TrangMenu = 'khoa' | 'tap-2' | 'tap-3' | 'tap-4' | 'grammar' | 'the-tu' | 'thi-may' | 'so-loi';
+export type TrangMenu = 'khoa' | 'tap-2' | 'tap-3' | 'tap-4' | 'tap-5' | 'grammar' | 'the-tu' | 'thi-may' | 'so-loi';
 
 const MUC: { id: TrangMenu; href: string; ten: string }[] = [
   { id: 'khoa', href: '/language/en/ielts', ten: 'IELTS Course' },
@@ -17,6 +17,7 @@ const MUC: { id: TrangMenu; href: string; ten: string }[] = [
   { id: 'tap-2', href: '/language/en/ielts/tap-2', ten: 'Tập 2' },
   { id: 'tap-3', href: '/language/en/ielts/tap-3', ten: 'Tập 3' },
   { id: 'tap-4', href: '/language/en/ielts/tap-4', ten: 'Tập 4' },
+  { id: 'tap-5', href: '/language/en/ielts/tap-5', ten: 'Tập 5' },
   { id: 'grammar', href: '/language/en/ielts?bai=tra-cong-thuc', ten: 'Grammar' },
   { id: 'the-tu', href: '/language/en/ielts/the-tu', ten: 'Flashcards' },
   { id: 'thi-may', href: '/language/en/ielts/thi-may', ten: 'Online Test' },

@@ -1,0 +1,11 @@
+short	t5d19-doc
+tfng	t5d19-doc
+flow	t5d19-doc
+heading	t5d19-doc
+summary	t5d19-doc
+mcq	t5d19-doc
+ynng	t5d19-doc
+match-ending	t5d19-doc
+mcq	t5d19-noi
+match-feature	t5d19-noi
+note	t5d19-noi

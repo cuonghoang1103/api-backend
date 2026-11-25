@@ -1,0 +1,602 @@
+{
+ "ma": "prn232-1",
+ "nn": "en",
+ "ten": "PRN232 · 1. Web API, OData, bảo mật, WCF, gRPC, microservice",
+ "moTa": "PRN232 (xây dựng back-end đa nền tảng với .NET) chưa có đề chữ: bộ từ soạn từ syllabus và giáo trình — ASP.NET Core Web API và REST, model binding, mã trạng thái HTTP, OData, xác thực JWT/OAuth, client JavaScript (Ajax, Fetch), WCF, gRPC và kiến trúc microservice.",
+ "bieuTuong": "server.rack",
+ "thuTu": -899,
+ "tu": [
+  {
+   "chu": "Web API",
+   "doc": "/wɛb ˌeɪ piː ˈaɪ/",
+   "nghia": "Web API: dịch vụ HTTP trả dữ liệu (thường JSON) cho web, di động, desktop dùng chung",
+   "nhom": "Web API & REST",
+   "viDu": "The WPF app and the React app both call the same Web API.",
+   "viDuNghia": "Ứng dụng WPF và React cùng gọi một Web API."
+  },
+  {
+   "chu": "ASP.NET Core Web API",
+   "doc": "/ˌeɪ ɛs ˈpiː dɒt nɛt kɔːr wɛb ˌeɪ piː ˈaɪ/",
+   "nghia": "ASP.NET Core Web API: kiểu dự án ASP.NET Core để viết dịch vụ RESTful",
+   "nhom": "Web API & REST",
+   "viDu": "Create an ASP.NET Core Web API project to expose the product data.",
+   "viDuNghia": "Tạo dự án ASP.NET Core Web API để cung cấp dữ liệu sản phẩm."
+  },
+  {
+   "chu": "RESTful service",
+   "doc": "/ˈrɛstfʊl ˈsɜːrvɪs/",
+   "nghia": "dịch vụ RESTful: API theo phong cách REST — tài nguyên có URI, thao tác bằng động từ HTTP, không trạng thái",
+   "nhom": "Web API & REST",
+   "viDu": "A RESTful service uses GET to read and POST to create a resource.",
+   "viDuNghia": "Dịch vụ RESTful dùng GET để đọc và POST để tạo tài nguyên."
+  },
+  {
+   "chu": "URI",
+   "doc": "/ˌjuː ɑːr ˈaɪ/",
+   "nghia": "URI (Uniform Resource Identifier): chuỗi định danh tài nguyên, vd /api/products/5",
+   "nhom": "Web API & REST",
+   "viDu": "In REST, every resource is identified by a URI such as /api/products/5.",
+   "viDuNghia": "Trong REST, mỗi tài nguyên được định danh bằng một URI như /api/products/5."
+  },
+  {
+   "chu": "resource URI",
+   "doc": "/rɪˈzɔːrs ˌjuː ɑːr ˈaɪ/",
+   "nghia": "URI tài nguyên: nên dùng danh từ số nhiều, không dùng động từ (/api/orders, không /api/getOrders)",
+   "nhom": "Web API & REST",
+   "viDu": "A good resource URI uses nouns: /api/orders/10, not /api/getOrder?id=10.",
+   "viDuNghia": "URI tài nguyên tốt dùng danh từ: /api/orders/10, không phải /api/getOrder?id=10."
+  },
+  {
+   "chu": "XML",
+   "doc": "/ˌɛks ɛm ˈɛl/",
+   "nghia": "XML: định dạng dữ liệu dạng thẻ; Web API có thể trả XML khi client yêu cầu",
+   "nhom": "Web API & REST",
+   "viDu": "The API returns XML when the client sends Accept: application/xml.",
+   "viDuNghia": "API trả XML khi client gửi Accept: application/xml."
+  },
+  {
+   "chu": "media formatter",
+   "doc": "/ˈmiːdiə ˈfɔːrmætər/",
+   "nghia": "bộ định dạng (formatter): thành phần đổi đối tượng sang JSON/XML và ngược lại",
+   "nhom": "Web API & REST",
+   "viDu": "Add the XML media formatter with AddXmlSerializerFormatters().",
+   "viDuNghia": "Thêm bộ định dạng XML bằng AddXmlSerializerFormatters()."
+  },
+  {
+   "chu": "ControllerBase",
+   "doc": "/kənˈtroʊlər beɪs/",
+   "nghia": "ControllerBase: lớp cha của controller Web API (không có hỗ trợ view)",
+   "nhom": "Web API & REST",
+   "viDu": "API controllers inherit from ControllerBase, not from Controller.",
+   "viDuNghia": "Controller của API kế thừa ControllerBase, không phải Controller."
+  },
+  {
+   "chu": "ApiController attribute",
+   "doc": "/ˌeɪ piː ˈaɪ kənˈtroʊlər ˈætrɪbjuːt/",
+   "nghia": "thuộc tính [ApiController]: bật hành vi API (tự kiểm model, trả 400, suy nguồn binding)",
+   "nhom": "Web API & REST",
+   "viDu": "With the [ApiController] attribute, invalid models return 400 automatically.",
+   "viDuNghia": "Với [ApiController], model không hợp lệ tự trả về 400."
+  },
+  {
+   "chu": "action result",
+   "doc": "/ˈækʃən rɪˈzʌlt/",
+   "nghia": "kết quả action: đối tượng mô tả phản hồi (Ok, NotFound, CreatedAtAction…)",
+   "nhom": "Web API & REST",
+   "viDu": "Return an action result such as NotFound() when the product does not exist.",
+   "viDuNghia": "Trả một kết quả action như NotFound() khi sản phẩm không tồn tại."
+  },
+  {
+   "chu": "IActionResult",
+   "doc": "/ˌaɪ ˈækʃən rɪˈzʌlt/",
+   "nghia": "IActionResult: kiểu trả về cho phép action trả nhiều loại phản hồi khác nhau",
+   "nhom": "Web API & REST",
+   "viDu": "Use IActionResult when the method can return Ok() or BadRequest().",
+   "viDuNghia": "Dùng IActionResult khi phương thức có thể trả Ok() hoặc BadRequest()."
+  },
+  {
+   "chu": "ActionResult",
+   "doc": "/ˈækʃən rɪˈzʌlt/",
+   "nghia": "ActionResult<T>: kiểu trả về vừa mang dữ liệu T vừa trả được mã lỗi",
+   "nhom": "Web API & REST",
+   "viDu": "ActionResult<Product> can return either a Product or NotFound().",
+   "viDuNghia": "ActionResult<Product> có thể trả về Product hoặc NotFound()."
+  },
+  {
+   "chu": "minimal API",
+   "doc": "/ˈmɪnɪməl ˌeɪ piː ˈaɪ/",
+   "nghia": "minimal API: viết endpoint gọn ngay trong Program.cs bằng app.MapGet, không cần controller",
+   "nhom": "Web API & REST",
+   "viDu": "app.MapGet(\"/hello\", () => \"Hello\") is a minimal API endpoint.",
+   "viDuNghia": "app.MapGet(\"/hello\", () => \"Hello\") là một endpoint minimal API."
+  },
+  {
+   "chu": "JSON serialization",
+   "doc": "/ˈdʒeɪsən ˌsɪəriəlaɪˈzeɪʃən/",
+   "nghia": "tuần tự hoá JSON: đổi đối tượng C# thành chuỗi JSON (System.Text.Json)",
+   "nhom": "Web API & REST",
+   "viDu": "By default, JSON serialization in ASP.NET Core uses camelCase property names.",
+   "viDuNghia": "Mặc định, tuần tự hoá JSON trong ASP.NET Core dùng tên thuộc tính camelCase."
+  },
+  {
+   "chu": "AutoMapper",
+   "doc": "/ˈɔːtoʊˌmæpər/",
+   "nghia": "AutoMapper: thư viện tự chép dữ liệu giữa entity và DTO",
+   "nhom": "Web API & REST",
+   "viDu": "Use AutoMapper to map the Product entity to a ProductDto.",
+   "viDuNghia": "Dùng AutoMapper để ánh xạ entity Product sang ProductDto."
+  },
+  {
+   "chu": "FromBody",
+   "doc": "/frɒm ˈbɒdi/",
+   "nghia": "[FromBody]: lấy tham số từ thân request (JSON)",
+   "nhom": "Binding, kiểm tra & mã trạng thái",
+   "viDu": "[FromBody] Product product reads the JSON body of a POST request.",
+   "viDuNghia": "[FromBody] Product product đọc thân JSON của request POST."
+  },
+  {
+   "chu": "FromQuery",
+   "doc": "/frɒm ˈkwɪəri/",
+   "nghia": "[FromQuery]: lấy tham số từ chuỗi truy vấn (?page=2)",
+   "nhom": "Binding, kiểm tra & mã trạng thái",
+   "viDu": "[FromQuery] int page reads ?page=2 from the URL.",
+   "viDuNghia": "[FromQuery] int page đọc ?page=2 từ URL."
+  },
+  {
+   "chu": "FromRoute",
+   "doc": "/frɒm ruːt/",
+   "nghia": "[FromRoute]: lấy tham số từ đường dẫn (/products/5)",
+   "nhom": "Binding, kiểm tra & mã trạng thái",
+   "viDu": "[FromRoute] int id reads 5 from /api/products/5.",
+   "viDuNghia": "[FromRoute] int id đọc 5 từ /api/products/5."
+  },
+  {
+   "chu": "201 Created",
+   "doc": "/tuː oʊ wʌn kriˈeɪtɪd/",
+   "nghia": "201 Created: tạo tài nguyên thành công, kèm header Location trỏ tới nó",
+   "nhom": "Binding, kiểm tra & mã trạng thái",
+   "viDu": "A successful POST should return 201 Created with the new product.",
+   "viDuNghia": "POST thành công nên trả 201 Created kèm sản phẩm mới."
+  },
+  {
+   "chu": "204 No Content",
+   "doc": "/tuː oʊ fɔːr noʊ ˈkɒntɛnt/",
+   "nghia": "204 No Content: thành công nhưng không có dữ liệu trả về (hay dùng cho PUT, DELETE)",
+   "nhom": "Binding, kiểm tra & mã trạng thái",
+   "viDu": "A successful DELETE often returns 204 No Content.",
+   "viDuNghia": "DELETE thành công thường trả 204 No Content."
+  },
+  {
+   "chu": "400 Bad Request",
+   "doc": "/fɔːr ˈhʌndrəd bæd rɪˈkwɛst/",
+   "nghia": "400 Bad Request: dữ liệu gửi lên sai định dạng hoặc không hợp lệ",
+   "nhom": "Binding, kiểm tra & mã trạng thái",
+   "viDu": "Missing required fields cause a 400 Bad Request.",
+   "viDuNghia": "Thiếu trường bắt buộc gây lỗi 400 Bad Request."
+  },
+  {
+   "chu": "401 Unauthorized",
+   "doc": "/fɔːr oʊ wʌn ʌnˈɔːθəraɪzd/",
+   "nghia": "401 Unauthorized: chưa xác thực (thiếu hoặc sai token)",
+   "nhom": "Binding, kiểm tra & mã trạng thái",
+   "viDu": "Calling the API without a token returns 401 Unauthorized.",
+   "viDuNghia": "Gọi API không có token trả 401 Unauthorized."
+  },
+  {
+   "chu": "403 Forbidden",
+   "doc": "/fɔːr oʊ θriː fərˈbɪdən/",
+   "nghia": "403 Forbidden: đã xác thực nhưng không đủ quyền",
+   "nhom": "Binding, kiểm tra & mã trạng thái",
+   "viDu": "A Staff user calling an Admin-only endpoint gets 403 Forbidden.",
+   "viDuNghia": "Người dùng Staff gọi endpoint chỉ dành cho Admin nhận 403 Forbidden."
+  },
+  {
+   "chu": "404 Not Found",
+   "doc": "/fɔːr oʊ fɔːr nɒt faʊnd/",
+   "nghia": "404 Not Found: không tìm thấy tài nguyên",
+   "nhom": "Binding, kiểm tra & mã trạng thái",
+   "viDu": "GET /api/products/999 returns 404 Not Found if the id does not exist.",
+   "viDuNghia": "GET /api/products/999 trả 404 Not Found nếu id không tồn tại."
+  },
+  {
+   "chu": "500 Internal Server Error",
+   "doc": "/faɪv ˈhʌndrəd ɪnˈtɜːrnəl ˈsɜːrvər ˈɛrər/",
+   "nghia": "500 Internal Server Error: lỗi phía máy chủ (ngoại lệ chưa bắt)",
+   "nhom": "Binding, kiểm tra & mã trạng thái",
+   "viDu": "An unhandled exception in the controller produces 500 Internal Server Error.",
+   "viDuNghia": "Ngoại lệ không được bắt trong controller sinh ra lỗi 500."
+  },
+  {
+   "chu": "OData",
+   "doc": "/oʊ ˈdeɪtə/",
+   "nghia": "OData (Open Data Protocol): chuẩn REST cho client tự lọc, sắp, chọn trường qua URL",
+   "nhom": "OData",
+   "viDu": "With OData, the client can write /odata/Products?$filter=Price gt 100.",
+   "viDuNghia": "Với OData, client có thể viết /odata/Products?$filter=Price gt 100."
+  },
+  {
+   "chu": "query option",
+   "doc": "/ˈkwɪəri ˈɒpʃən/",
+   "nghia": "tuỳ chọn truy vấn OData: $filter, $select, $expand, $orderby, $top, $skip, $count",
+   "nhom": "OData",
+   "viDu": "The $top and $skip query options are used for paging.",
+   "viDuNghia": "Các tuỳ chọn truy vấn $top và $skip dùng để phân trang."
+  },
+  {
+   "chu": "filter query option",
+   "doc": "/ˈfɪltər ˈkwɪəri ˈɒpʃən/",
+   "nghia": "$filter: lọc bản ghi theo điều kiện (eq, ne, gt, lt, and, contains)",
+   "nhom": "OData",
+   "viDu": "The filter query option $filter=Category eq 'Books' returns only books.",
+   "viDuNghia": "Tuỳ chọn $filter=Category eq 'Books' chỉ trả về sách."
+  },
+  {
+   "chu": "select query option",
+   "doc": "/sɪˈlɛkt ˈkwɪəri ˈɒpʃən/",
+   "nghia": "$select: chỉ lấy một số trường",
+   "nhom": "OData",
+   "viDu": "$select=Name,Price returns only the name and the price.",
+   "viDuNghia": "$select=Name,Price chỉ trả về tên và giá."
+  },
+  {
+   "chu": "expand query option",
+   "doc": "/ɪkˈspænd ˈkwɪəri ˈɒpʃən/",
+   "nghia": "$expand: lấy kèm dữ liệu liên quan (bảng con)",
+   "nhom": "OData",
+   "viDu": "$expand=Category includes the category of each product.",
+   "viDuNghia": "$expand=Category lấy kèm danh mục của từng sản phẩm."
+  },
+  {
+   "chu": "orderby query option",
+   "doc": "/ˈɔːrdər baɪ ˈkwɪəri ˈɒpʃən/",
+   "nghia": "$orderby: sắp xếp kết quả (asc, desc)",
+   "nhom": "OData",
+   "viDu": "$orderby=Price desc sorts products from the most expensive.",
+   "viDuNghia": "$orderby=Price desc sắp sản phẩm từ đắt nhất."
+  },
+  {
+   "chu": "Entity Data Model",
+   "doc": "/ˈɛntɪti ˈdeɪtə ˈmɒdəl/",
+   "nghia": "EDM: mô hình dữ liệu OData mô tả tập thực thể và quan hệ, dựng bằng ODataConventionModelBuilder",
+   "nhom": "OData",
+   "viDu": "Build the Entity Data Model with ODataConventionModelBuilder.",
+   "viDuNghia": "Dựng EDM bằng ODataConventionModelBuilder."
+  },
+  {
+   "chu": "EnableQuery",
+   "doc": "/ɪˈneɪbl ˈkwɪəri/",
+   "nghia": "[EnableQuery]: thuộc tính bật tuỳ chọn truy vấn OData cho một action",
+   "nhom": "OData",
+   "viDu": "Add [EnableQuery] so the action accepts $filter and $orderby.",
+   "viDuNghia": "Thêm [EnableQuery] để action nhận $filter và $orderby."
+  },
+  {
+   "chu": "authentication scheme",
+   "doc": "/ɔːˌθɛntɪˈkeɪʃən skiːm/",
+   "nghia": "lược đồ xác thực: cách API nhận diện người dùng (JwtBearer, Cookie…)",
+   "nhom": "Bảo mật API",
+   "viDu": "Register JwtBearer as the default authentication scheme.",
+   "viDuNghia": "Đăng ký JwtBearer làm lược đồ xác thực mặc định."
+  },
+  {
+   "chu": "JWT",
+   "doc": "/ˌdʒeɪ ˌdʌbəljuː ˈtiː/",
+   "nghia": "JWT (JSON Web Token): chuỗi header.payload.signature đã ký, mang claim của người dùng",
+   "nhom": "Bảo mật API",
+   "viDu": "The API returns a JWT after a successful login.",
+   "viDuNghia": "API trả một JWT sau khi đăng nhập thành công."
+  },
+  {
+   "chu": "token validation",
+   "doc": "/ˈtoʊkən ˌvælɪˈdeɪʃən/",
+   "nghia": "kiểm tra token: kiểm chữ ký, issuer, audience, hạn dùng của JWT",
+   "nhom": "Bảo mật API",
+   "viDu": "Token validation fails if the token has expired.",
+   "viDuNghia": "Kiểm tra token thất bại nếu token đã hết hạn."
+  },
+  {
+   "chu": "issuer",
+   "doc": "/ˈɪʃuːər/",
+   "nghia": "bên phát hành (iss): ai tạo ra token",
+   "nhom": "Bảo mật API",
+   "viDu": "The issuer in the token must match the value configured in appsettings.json.",
+   "viDuNghia": "Bên phát hành trong token phải khớp giá trị cấu hình trong appsettings.json."
+  },
+  {
+   "chu": "symmetric security key",
+   "doc": "/sɪˈmɛtrɪk sɪˈkjʊərɪti kiː/",
+   "nghia": "khoá đối xứng ký token: cùng một khoá bí mật để ký và kiểm chữ ký JWT",
+   "nhom": "Bảo mật API",
+   "viDu": "The token is signed with a symmetric security key stored on the server.",
+   "viDuNghia": "Token được ký bằng khoá đối xứng lưu trên máy chủ."
+  },
+  {
+   "chu": "Authorize attribute",
+   "doc": "/ˈɔːθəraɪz ˈætrɪbjuːt/",
+   "nghia": "[Authorize]: bắt buộc đăng nhập (có thể kèm Roles) để gọi controller/action",
+   "nhom": "Bảo mật API",
+   "viDu": "[Authorize(Roles = \"Admin\")] allows only administrators.",
+   "viDuNghia": "[Authorize(Roles = \"Admin\")] chỉ cho quản trị viên gọi."
+  },
+  {
+   "chu": "AllowAnonymous",
+   "doc": "/əˈlaʊ əˈnɒnɪməs/",
+   "nghia": "[AllowAnonymous]: cho phép gọi không cần đăng nhập (vd action Login)",
+   "nhom": "Bảo mật API",
+   "viDu": "Mark the Login action with [AllowAnonymous].",
+   "viDuNghia": "Đánh dấu action Login bằng [AllowAnonymous]."
+  },
+  {
+   "chu": "policy-based authorization",
+   "doc": "/ˈpɒlɪsi beɪst ˌɔːθərɪˈzeɪʃən/",
+   "nghia": "phân quyền theo chính sách: quy tắc tuỳ chỉnh dựa trên claim (vd tuổi ≥ 18)",
+   "nhom": "Bảo mật API",
+   "viDu": "Policy-based authorization can require a claim such as \"Department = Sales\".",
+   "viDuNghia": "Phân quyền theo chính sách có thể đòi một claim như \"Department = Sales\"."
+  },
+  {
+   "chu": "OAuth 2.0",
+   "doc": "/ˈoʊ ɔːθ tuː ˈpɔɪnt ˈzɪəroʊ/",
+   "nghia": "OAuth 2.0: chuẩn uỷ quyền cho ứng dụng truy cập tài nguyên thay người dùng (đăng nhập bằng Google)",
+   "nhom": "Bảo mật API",
+   "viDu": "OAuth 2.0 lets users sign in with their Google account.",
+   "viDuNghia": "OAuth 2.0 cho người dùng đăng nhập bằng tài khoản Google."
+  },
+  {
+   "chu": "API key",
+   "doc": "/ˌeɪ piː ˈaɪ kiː/",
+   "nghia": "khoá API: chuỗi bí mật gửi kèm request để định danh ứng dụng gọi",
+   "nhom": "Bảo mật API",
+   "viDu": "Send the API key in a request header, never in the URL.",
+   "viDuNghia": "Gửi khoá API trong header của request, không bao giờ đặt trong URL."
+  },
+  {
+   "chu": "HTTPS redirection",
+   "doc": "/ˌeɪtʃ tiː tiː piː ˈɛs ˌriːdəˈrɛkʃən/",
+   "nghia": "chuyển hướng HTTPS: middleware tự chuyển request HTTP sang HTTPS",
+   "nhom": "Bảo mật API",
+   "viDu": "app.UseHttpsRedirection() sends every HTTP request to HTTPS.",
+   "viDuNghia": "app.UseHttpsRedirection() chuyển mọi request HTTP sang HTTPS."
+  },
+  {
+   "chu": "Swashbuckle",
+   "doc": "/ˈswɒʃbʌkl/",
+   "nghia": "Swashbuckle: thư viện sinh tài liệu Swagger/OpenAPI cho ASP.NET Core",
+   "nhom": "Bảo mật API",
+   "viDu": "Swashbuckle generates the Swagger page from your controllers.",
+   "viDuNghia": "Swashbuckle sinh trang Swagger từ các controller."
+  },
+  {
+   "chu": "Ajax",
+   "doc": "/ˈeɪdʒæks/",
+   "nghia": "Ajax: gửi request từ trang web tới máy chủ ngầm, không tải lại trang",
+   "nhom": "Client JavaScript",
+   "viDu": "Use Ajax to load the product list without reloading the page.",
+   "viDuNghia": "Dùng Ajax để tải danh sách sản phẩm mà không tải lại trang."
+  },
+  {
+   "chu": "XMLHttpRequest",
+   "doc": "/ˌɛks ɛm ˈɛl ˌeɪtʃ tiː tiː ˈpiː rɪˈkwɛst/",
+   "nghia": "XMLHttpRequest: đối tượng trình duyệt cũ để gửi request Ajax",
+   "nhom": "Client JavaScript",
+   "viDu": "Older code uses XMLHttpRequest instead of fetch.",
+   "viDuNghia": "Mã cũ dùng XMLHttpRequest thay cho fetch."
+  },
+  {
+   "chu": "Fetch API",
+   "doc": "/fɛtʃ ˌeɪ piː ˈaɪ/",
+   "nghia": "Fetch API: hàm fetch() của trình duyệt gửi request, trả Promise",
+   "nhom": "Client JavaScript",
+   "viDu": "fetch(\"/api/products\").then(res => res.json()) uses the Fetch API.",
+   "viDuNghia": "fetch(\"/api/products\").then(res => res.json()) dùng Fetch API."
+  },
+  {
+   "chu": "jQuery",
+   "doc": "/ˈdʒeɪkwɪəri/",
+   "nghia": "jQuery: thư viện JavaScript; $.ajax() gửi request tới API",
+   "nhom": "Client JavaScript",
+   "viDu": "$.ajax({ url: \"/api/products\", type: \"GET\" }) calls the API with jQuery.",
+   "viDuNghia": "$.ajax({ url: \"/api/products\", type: \"GET\" }) gọi API bằng jQuery."
+  },
+  {
+   "chu": "callback",
+   "doc": "/ˈkɔːlbæk/",
+   "nghia": "hàm gọi lại: hàm truyền vào để chạy khi request xong (success, error)",
+   "nhom": "Client JavaScript",
+   "viDu": "The success callback receives the JSON returned by the API.",
+   "viDuNghia": "Hàm gọi lại success nhận JSON do API trả về."
+  },
+  {
+   "chu": "Windows Communication Foundation",
+   "doc": "/ˈwɪndoʊz kəˌmjuːnɪˈkeɪʃən faʊnˈdeɪʃən/",
+   "nghia": "WCF: framework dịch vụ của .NET Framework (SOAP, nhiều kiểu binding)",
+   "nhom": "WCF & gRPC",
+   "viDu": "Windows Communication Foundation services expose operations defined by contracts.",
+   "viDuNghia": "Dịch vụ WCF cung cấp các thao tác được định nghĩa bằng hợp đồng."
+  },
+  {
+   "chu": "ServiceContract attribute",
+   "doc": "/ˈsɜːrvɪs ˈkɒntrækt ˈætrɪbjuːt/",
+   "nghia": "thuộc tính [ServiceContract] (hợp đồng dịch vụ WCF): interface khai báo dịch vụ WCF",
+   "nhom": "WCF & gRPC",
+   "viDu": "Mark the interface with [ServiceContract] to define a WCF service contract.",
+   "viDuNghia": "Đánh dấu interface bằng [ServiceContract] để định nghĩa hợp đồng dịch vụ WCF."
+  },
+  {
+   "chu": "operation contract",
+   "doc": "/ˌɒpəˈreɪʃən ˈkɒntrækt/",
+   "nghia": "hợp đồng thao tác [OperationContract]: phương thức client gọi được",
+   "nhom": "WCF & gRPC",
+   "viDu": "Each method that clients can call needs [OperationContract].",
+   "viDuNghia": "Mỗi phương thức client gọi được cần [OperationContract]."
+  },
+  {
+   "chu": "data contract",
+   "doc": "/ˈdeɪtə ˈkɒntrækt/",
+   "nghia": "hợp đồng dữ liệu [DataContract]/[DataMember]: lớp dữ liệu được tuần tự hoá qua WCF",
+   "nhom": "WCF & gRPC",
+   "viDu": "Mark the Product class with [DataContract] and its fields with [DataMember].",
+   "viDuNghia": "Đánh dấu lớp Product bằng [DataContract] và các trường bằng [DataMember]."
+  },
+  {
+   "chu": "WCF binding",
+   "doc": "/ˌdʌbəljuː siː ˈɛf ˈbaɪndɪŋ/",
+   "nghia": "binding WCF: quy định giao thức, mã hoá, bảo mật của endpoint (BasicHttpBinding, WebHttpBinding)",
+   "nhom": "WCF & gRPC",
+   "viDu": "Use WebHttpBinding to build a RESTful WCF service.",
+   "viDuNghia": "Dùng WebHttpBinding để dựng dịch vụ WCF kiểu RESTful."
+  },
+  {
+   "chu": "SOAP",
+   "doc": "/soʊp/",
+   "nghia": "SOAP: giao thức dịch vụ web trao đổi thông điệp XML có cấu trúc chặt",
+   "nhom": "WCF & gRPC",
+   "viDu": "WCF services traditionally exchange SOAP messages.",
+   "viDuNghia": "Dịch vụ WCF truyền thống trao đổi thông điệp SOAP."
+  },
+  {
+   "chu": "Web Services Description Language",
+   "doc": "/wɛb ˈsɜːrvɪsɪz dɪˈskrɪpʃən ˈlæŋɡwɪdʒ/",
+   "nghia": "WSDL: tệp XML mô tả các thao tác của dịch vụ SOAP",
+   "nhom": "WCF & gRPC",
+   "viDu": "The client reads the WSDL to generate a proxy class.",
+   "viDuNghia": "Client đọc WSDL để sinh lớp proxy."
+  },
+  {
+   "chu": "gRPC",
+   "doc": "/ˌdʒiː ɑːr piː ˈsiː/",
+   "nghia": "gRPC: framework gọi thủ tục từ xa hiệu năng cao, chạy trên HTTP/2 và Protocol Buffers",
+   "nhom": "WCF & gRPC",
+   "viDu": "gRPC is faster than JSON over HTTP because messages are binary.",
+   "viDuNghia": "gRPC nhanh hơn JSON qua HTTP vì thông điệp ở dạng nhị phân."
+  },
+  {
+   "chu": "Protocol Buffers",
+   "doc": "/ˈproʊtəkɒl ˈbʌfərz/",
+   "nghia": "Protocol Buffers (protobuf): định dạng tuần tự hoá nhị phân gọn của Google",
+   "nhom": "WCF & gRPC",
+   "viDu": "Protocol Buffers messages are smaller than the same data in JSON.",
+   "viDuNghia": "Thông điệp Protocol Buffers nhỏ hơn cùng dữ liệu đó ở dạng JSON."
+  },
+  {
+   "chu": "proto file",
+   "doc": "/ˈproʊtoʊ faɪl/",
+   "nghia": "tệp .proto: khai báo service và message của gRPC, từ đó sinh mã C#",
+   "nhom": "WCF & gRPC",
+   "viDu": "Define the service and its messages in a proto file.",
+   "viDuNghia": "Khai báo service và các message trong tệp .proto."
+  },
+  {
+   "chu": "HTTP/2",
+   "doc": "/ˌeɪtʃ tiː tiː ˈpiː tuː/",
+   "nghia": "HTTP/2: phiên bản HTTP nhị phân, ghép nhiều luồng trên một kết nối — nền của gRPC",
+   "nhom": "WCF & gRPC",
+   "viDu": "gRPC requires HTTP/2.",
+   "viDuNghia": "gRPC cần HTTP/2."
+  },
+  {
+   "chu": "unary call",
+   "doc": "/ˈjuːnəri kɔːl/",
+   "nghia": "lời gọi đơn: client gửi một request, nhận một response",
+   "nhom": "WCF & gRPC",
+   "viDu": "GetProduct is a unary call: one request and one response.",
+   "viDuNghia": "GetProduct là lời gọi đơn: một request và một response."
+  },
+  {
+   "chu": "server streaming",
+   "doc": "/ˈsɜːrvər ˈstriːmɪŋ/",
+   "nghia": "luồng phía máy chủ: client gửi một request, máy chủ trả về dòng nhiều thông điệp",
+   "nhom": "WCF & gRPC",
+   "viDu": "Server streaming sends stock prices continuously to the client.",
+   "viDuNghia": "Luồng phía máy chủ gửi giá cổ phiếu liên tục cho client."
+  },
+  {
+   "chu": "client streaming",
+   "doc": "/ˈklaɪənt ˈstriːmɪŋ/",
+   "nghia": "luồng phía client: client gửi nhiều thông điệp, máy chủ trả một response",
+   "nhom": "WCF & gRPC",
+   "viDu": "Client streaming is used to upload a file in chunks.",
+   "viDuNghia": "Luồng phía client dùng để tải tệp lên theo từng mảnh."
+  },
+  {
+   "chu": "bidirectional streaming",
+   "doc": "/ˌbaɪdəˈrɛkʃənəl ˈstriːmɪŋ/",
+   "nghia": "luồng hai chiều: cả hai bên gửi nhiều thông điệp cùng lúc (chat)",
+   "nhom": "WCF & gRPC",
+   "viDu": "A chat service can use bidirectional streaming.",
+   "viDuNghia": "Dịch vụ chat có thể dùng luồng hai chiều."
+  },
+  {
+   "chu": "microservices architecture",
+   "doc": "/ˈmaɪkroʊˌsɜːrvɪsɪz ˈɑːrkɪtɛktʃər/",
+   "nghia": "kiến trúc microservice: hệ thống chia thành nhiều dịch vụ nhỏ, triển khai độc lập, giao tiếp qua API",
+   "nhom": "Kiến trúc microservice",
+   "viDu": "In a microservices architecture, the Order service and the Product service are deployed separately.",
+   "viDuNghia": "Trong kiến trúc microservice, dịch vụ Order và Product được triển khai riêng."
+  },
+  {
+   "chu": "monolithic architecture",
+   "doc": "/ˌmɒnəˈlɪθɪk ˈɑːrkɪtɛktʃər/",
+   "nghia": "kiến trúc nguyên khối: cả ứng dụng là một khối, build và triển khai cùng nhau",
+   "nhom": "Kiến trúc microservice",
+   "viDu": "A monolithic architecture is simple to start but hard to scale part by part.",
+   "viDuNghia": "Kiến trúc nguyên khối dễ bắt đầu nhưng khó mở rộng từng phần."
+  },
+  {
+   "chu": "database per service",
+   "doc": "/ˈdeɪtəbeɪs pɜːr ˈsɜːrvɪs/",
+   "nghia": "mỗi dịch vụ một CSDL: dịch vụ không đọc thẳng CSDL của dịch vụ khác",
+   "nhom": "Kiến trúc microservice",
+   "viDu": "With database per service, the Order service cannot query the Product tables directly.",
+   "viDuNghia": "Với mỗi dịch vụ một CSDL, dịch vụ Order không truy vấn thẳng bảng của Product được."
+  },
+  {
+   "chu": "Ocelot",
+   "doc": "/ˈɒsəlɒt/",
+   "nghia": "Ocelot: thư viện API gateway cho .NET, định tuyến request tới các microservice",
+   "nhom": "Kiến trúc microservice",
+   "viDu": "Ocelot routes /gateway/products to the Product service.",
+   "viDuNghia": "Ocelot chuyển /gateway/products tới dịch vụ Product."
+  },
+  {
+   "chu": "message broker",
+   "doc": "/ˈmɛsɪdʒ ˈbroʊkər/",
+   "nghia": "trung gian thông điệp (RabbitMQ, Kafka): dịch vụ gửi sự kiện cho nhau không đồng bộ",
+   "nhom": "Kiến trúc microservice",
+   "viDu": "The Order service publishes an event to the message broker.",
+   "viDuNghia": "Dịch vụ Order phát một sự kiện lên trung gian thông điệp."
+  },
+  {
+   "chu": "eventual consistency",
+   "doc": "/ɪˈvɛntʃuəl kənˈsɪstənsi/",
+   "nghia": "nhất quán cuối cùng: dữ liệu giữa các dịch vụ có thể lệch tạm thời rồi khớp lại sau",
+   "nhom": "Kiến trúc microservice",
+   "viDu": "Microservices usually accept eventual consistency instead of one big transaction.",
+   "viDuNghia": "Microservice thường chấp nhận nhất quán cuối cùng thay vì một giao dịch lớn."
+  },
+  {
+   "chu": "containerization",
+   "doc": "/kənˌteɪnəraɪˈzeɪʃən/",
+   "nghia": "đóng gói container: gói ứng dụng cùng môi trường chạy thành container",
+   "nhom": "Kiến trúc microservice",
+   "viDu": "Containerization lets each microservice run the same way on every server.",
+   "viDuNghia": "Đóng gói container cho mỗi microservice chạy giống nhau trên mọi máy chủ."
+  },
+  {
+   "chu": "Docker",
+   "doc": "/ˈdɒkər/",
+   "nghia": "Docker: công cụ tạo và chạy container",
+   "nhom": "Kiến trúc microservice",
+   "viDu": "Write a Dockerfile to run the Web API in Docker.",
+   "viDuNghia": "Viết Dockerfile để chạy Web API trong Docker."
+  },
+  {
+   "chu": "RPC",
+   "doc": "/ˌɑːr piː ˈsiː/",
+   "nghia": "gọi thủ tục từ xa (Remote Procedure Call): gọi một hàm chạy trên máy khác như gọi hàm cục bộ; gRPC, WCF theo kiểu này, khác REST xoay quanh tài nguyên",
+   "nhom": "WCF & gRPC",
+   "viDu": "SOAP and RPC are different, older communication protocols and styles than REST.",
+   "viDuNghia": "SOAP và RPC là các giao thức / phong cách giao tiếp khác, cũ hơn REST."
+  }
+ ]
+}

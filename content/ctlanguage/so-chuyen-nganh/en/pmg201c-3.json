@@ -1,0 +1,498 @@
+{
+  "ma": "pmg201c-3",
+  "nn": "en",
+  "ten": "PMG201c · 3. Tổ chức, lịch, rủi ro, chi phí & đóng dự án",
+  "moTa": "Bổ sung PMG201c: PMO và kiểu tổ chức, điều lệ dự án, mạng lịch (float, PDM, PERT), kỹ thuật ước lượng, nhóm và động lực, phân tích rủi ro định tính/định lượng, loại chi phí và chất lượng, hợp đồng, kiểm soát thay đổi và đóng dự án, chỉ số EVM nâng cao.",
+  "bieuTuong": "calendar.badge.clock",
+  "thuTu": -907,
+  "tu": [
+    {
+      "chu": "Project Management Office",
+      "doc": "/ˈprɑːdʒekt ˈmænɪdʒmənt ˈɔːfɪs/",
+      "nghia": "PMO: bộ phận chuẩn hoá quy trình, công cụ và giám sát các dự án của tổ chức",
+      "nhom": "Tổ chức và khởi tạo",
+      "viDu": "The PMO standardizes project management processes across the organization.",
+      "viDuNghia": "PMO chuẩn hoá quy trình quản lý dự án trong toàn tổ chức."
+    },
+    {
+      "chu": "project sponsor",
+      "doc": "/ˈprɑːdʒekt ˈspɑːnsər/",
+      "nghia": "nhà tài trợ dự án: người cấp kinh phí, ban hành điều lệ và hỗ trợ dự án",
+      "nhom": "Tổ chức và khởi tạo",
+      "viDu": "The project sponsor issues the project charter.",
+      "viDuNghia": "Nhà tài trợ ban hành điều lệ dự án."
+    },
+    {
+      "chu": "narrative charter",
+      "doc": "/ˈnærətɪv ˈtʃɑːrtər/",
+      "nghia": "điều lệ dạng tường thuật: văn bản mô tả tên, lý do, ràng buộc, mục tiêu của dự án",
+      "nhom": "Tổ chức và khởi tạo",
+      "viDu": "Write a narrative charter statement that covers the project name, justifications and constraints.",
+      "viDuNghia": "Viết điều lệ tường thuật gồm tên dự án, lý do thực hiện và ràng buộc."
+    },
+    {
+      "chu": "SMART objective",
+      "doc": "/smɑːrt əbˈdʒektɪv/",
+      "nghia": "mục tiêu SMART: cụ thể, đo được, khả thi, liên quan, có hạn thời gian",
+      "nhom": "Tổ chức và khởi tạo",
+      "viDu": "Define at least 2 project objectives using SMART criteria.",
+      "viDuNghia": "Định nghĩa ít nhất 2 mục tiêu dự án theo tiêu chí SMART."
+    },
+    {
+      "chu": "composite organization",
+      "doc": "/kəmˈpɑːzət ˌɔːrɡənəˈzeɪʃn/",
+      "nghia": "tổ chức hỗn hợp: kết hợp chức năng, ma trận và theo dự án ở các cấp khác nhau",
+      "nhom": "Tổ chức và khởi tạo",
+      "viDu": "Functional, Weak, Strong and Composite",
+      "viDuNghia": "Chức năng, ma trận yếu, ma trận mạnh và hỗn hợp."
+    },
+    {
+      "chu": "phase gate",
+      "doc": "/feɪz ɡeɪt/",
+      "nghia": "cổng giai đoạn: điểm duyệt cuối mỗi pha để quyết định đi tiếp, sửa hay dừng",
+      "nhom": "Tổ chức và khởi tạo",
+      "viDu": "The project passed the phase gate review before design started.",
+      "viDuNghia": "Dự án qua buổi duyệt cổng giai đoạn trước khi bắt đầu thiết kế."
+    },
+    {
+      "chu": "statement of work",
+      "doc": "/ˈsteɪtmənt əv wɜːrk/",
+      "nghia": "SOW: mô tả công việc, sản phẩm, thời hạn mà bên thực hiện phải giao",
+      "nhom": "Tổ chức và khởi tạo",
+      "viDu": "The statement of work lists the deliverables of the vendor.",
+      "viDuNghia": "Bản mô tả công việc liệt kê sản phẩm bàn giao của nhà cung cấp."
+    },
+    {
+      "chu": "communication matrix",
+      "doc": "/kəˌmjuːnɪˈkeɪʃn ˈmeɪtrɪks/",
+      "nghia": "ma trận truyền thông: ai nhận thông tin gì, khi nào, qua kênh nào, ai gửi",
+      "nhom": "Tổ chức và khởi tạo",
+      "viDu": "With whom information will be communicated, and how often.",
+      "viDuNghia": "Thông tin được trao đổi với ai và bao lâu một lần."
+    },
+    {
+      "chu": "salience model",
+      "doc": "/ˈseɪliəns ˈmɑːdl/",
+      "nghia": "mô hình nổi bật: phân loại bên liên quan theo quyền lực, tính cấp thiết, tính chính đáng",
+      "nhom": "Tổ chức và khởi tạo",
+      "viDu": "The salience model ranks stakeholders by power, urgency and legitimacy.",
+      "viDuNghia": "Mô hình nổi bật xếp hạng bên liên quan theo quyền lực, cấp thiết và chính đáng."
+    },
+    {
+      "chu": "precedence diagramming method",
+      "doc": "/ˈpresɪdəns ˈdaɪəɡræmɪŋ ˈmeθəd/",
+      "nghia": "PDM: vẽ mạng lịch với hoạt động ở nút và bốn kiểu phụ thuộc (FS, SS, FF, SF)",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "The precedence diagramming method places activities on nodes.",
+      "viDuNghia": "PDM đặt các hoạt động lên nút."
+    },
+    {
+      "chu": "activity on node",
+      "doc": "/ækˈtɪvəti ɑːn noʊd/",
+      "nghia": "AON: kiểu sơ đồ mạng mà mỗi nút là một hoạt động, mũi tên là phụ thuộc",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "Draw the network as activity on node.",
+      "viDuNghia": "Vẽ mạng theo kiểu hoạt động trên nút."
+    },
+    {
+      "chu": "immediate successor",
+      "doc": "/ɪˈmiːdiət səkˈsesər/",
+      "nghia": "hoạt động kế tiếp trực tiếp",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "In the backward pass, take the earliest late start of its immediate successors.",
+      "viDuNghia": "Ở lượt tính lùi, lấy late start nhỏ nhất của các hoạt động kế tiếp trực tiếp."
+    },
+    {
+      "chu": "total float",
+      "doc": "/ˈtoʊtl floʊt/",
+      "nghia": "độ trễ toàn phần: thời gian hoạt động trễ được mà không làm trễ cả dự án (LS − ES)",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "Activities on the critical path have zero total float.",
+      "viDuNghia": "Hoạt động trên đường găng có độ trễ toàn phần bằng 0."
+    },
+    {
+      "chu": "free float",
+      "doc": "/friː floʊt/",
+      "nghia": "độ trễ tự do: trễ được mà không làm trễ hoạt động kế tiếp",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "Free float never exceeds total float.",
+      "viDuNghia": "Độ trễ tự do không bao giờ lớn hơn độ trễ toàn phần."
+    },
+    {
+      "chu": "non-critical path",
+      "doc": "/ˌnɑːn ˈkrɪtɪkl pæθ/",
+      "nghia": "đường không găng: đường có độ trễ lớn hơn 0",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "The high risk activities, non-critical path.",
+      "viDuNghia": "Các hoạt động rủi ro cao, đường không găng."
+    },
+    {
+      "chu": "resource leveling",
+      "doc": "/ˈriːsɔːrs ˈlevəlɪŋ/",
+      "nghia": "san bằng nguồn lực: dời lịch để không ai bị giao quá tải, có thể kéo dài dự án",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "Resource leveling may extend the project end date.",
+      "viDuNghia": "San bằng nguồn lực có thể kéo dài ngày kết thúc."
+    },
+    {
+      "chu": "PERT",
+      "doc": "/pɜːrt/",
+      "nghia": "Program Evaluation and Review Technique: ước lượng (O + 4M + P) / 6",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "With O = 2, M = 4 and P = 12 days, the PERT estimate is 5 days.",
+      "viDuNghia": "Với O = 2, M = 4, P = 12 ngày, ước lượng PERT là 5 ngày."
+    },
+    {
+      "chu": "one-point estimating",
+      "doc": "/ˌwʌn pɔɪnt ˈestɪmeɪtɪŋ/",
+      "nghia": "ước lượng một điểm: chỉ đưa một con số, không phản ánh độ bất định",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "One-point estimating",
+      "viDuNghia": "Ước lượng một điểm."
+    },
+    {
+      "chu": "expert judgment",
+      "doc": "/ˈekspɜːrt ˈdʒʌdʒmənt/",
+      "nghia": "ý kiến chuyên gia: ước lượng dựa trên kinh nghiệm của người am hiểu",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "Expert judgment is used when no historical data exists.",
+      "viDuNghia": "Ý kiến chuyên gia được dùng khi không có dữ liệu lịch sử."
+    },
+    {
+      "chu": "Delphi technique",
+      "doc": "/ˈdelfaɪ tekˈniːk/",
+      "nghia": "kỹ thuật Delphi: hỏi chuyên gia ẩn danh nhiều vòng cho tới khi ý kiến hội tụ",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "The Delphi technique collects anonymous estimates in several rounds.",
+      "viDuNghia": "Kỹ thuật Delphi thu ước lượng ẩn danh qua nhiều vòng."
+    },
+    {
+      "chu": "effort estimation",
+      "doc": "/ˈefərt ˌestɪˈmeɪʃn/",
+      "nghia": "ước lượng công sức: số người–ngày/người–giờ cần cho công việc",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "The estimation must be expressed in effort (man-days, man-hours) for labor cost.",
+      "viDuNghia": "Ước lượng phải tính theo công sức (người–ngày, người–giờ) cho chi phí nhân công."
+    },
+    {
+      "chu": "man-day",
+      "doc": "/ˈmæn deɪ/",
+      "nghia": "người–ngày: công của một người làm trong một ngày",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "Ten man-days can be two people working for five days.",
+      "viDuNghia": "Mười người–ngày có thể là hai người làm năm ngày."
+    },
+    {
+      "chu": "work package size",
+      "doc": "/wɜːrk ˈpækɪdʒ saɪz/",
+      "nghia": "cỡ gói công việc: quy tắc 8/80 — từ 8 tới 80 giờ công",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "Work packages should be between 8 and 80 hours of effort.",
+      "viDuNghia": "Gói công việc nên từ 8 tới 80 giờ công."
+    },
+    {
+      "chu": "hundred percent rule",
+      "doc": "/ˈhʌndrəd pərˈsent ruːl/",
+      "nghia": "quy tắc 100%: WBS phải chứa đủ 100% công việc của dự án, không thừa không thiếu",
+      "nhom": "Mạng lịch và ước lượng",
+      "viDu": "The 100% rule says the WBS includes all the work and nothing more.",
+      "viDuNghia": "Quy tắc 100% nói WBS chứa toàn bộ công việc và không gì thêm."
+    },
+    {
+      "chu": "Tuckman model",
+      "doc": "/ˈtʌkmən ˈmɑːdl/",
+      "nghia": "mô hình Tuckman: các giai đoạn phát triển nhóm forming → storming → norming → performing → adjourning",
+      "nhom": "Nhóm, xung đột và động lực",
+      "viDu": "In the Tuckman model, conflicts appear in the storming stage.",
+      "viDuNghia": "Trong mô hình Tuckman, xung đột xuất hiện ở giai đoạn storming."
+    },
+    {
+      "chu": "Maslow's hierarchy",
+      "doc": "/ˈmæzloʊz ˈhaɪərɑːrki/",
+      "nghia": "tháp nhu cầu Maslow: sinh lý → an toàn → xã hội → được tôn trọng → tự khẳng định",
+      "nhom": "Nhóm, xung đột và động lực",
+      "viDu": "Self-actualization is at the top of Maslow's hierarchy.",
+      "viDuNghia": "Tự khẳng định ở đỉnh tháp nhu cầu Maslow."
+    },
+    {
+      "chu": "Herzberg's theory",
+      "doc": "/ˈhɜːrtsbɜːrɡz ˈθɪri/",
+      "nghia": "thuyết hai yếu tố Herzberg: yếu tố duy trì (lương, điều kiện) và yếu tố thúc đẩy (thành tích, ghi nhận)",
+      "nhom": "Nhóm, xung đột và động lực",
+      "viDu": "Herzberg's theory says salary is a hygiene factor, not a motivator.",
+      "viDuNghia": "Thuyết Herzberg nói lương là yếu tố duy trì, không phải yếu tố thúc đẩy."
+    },
+    {
+      "chu": "Theory X and Theory Y",
+      "doc": "/ˈθɪri eks ənd ˈθɪri waɪ/",
+      "nghia": "thuyết X và Y (McGregor): X cho rằng nhân viên lười phải giám sát, Y cho rằng họ tự giác",
+      "nhom": "Nhóm, xung đột và động lực",
+      "viDu": "A Theory Y manager trusts the team to work without close supervision.",
+      "viDuNghia": "Quản lý theo thuyết Y tin nhóm tự làm việc không cần giám sát sát sao."
+    },
+    {
+      "chu": "productive conflict",
+      "doc": "/prəˈdʌktɪv ˈkɑːnflɪkt/",
+      "nghia": "xung đột tích cực: tranh luận về công việc giúp ra quyết định tốt hơn (đối lập xung đột không lành mạnh)",
+      "nhom": "Nhóm, xung đột và động lực",
+      "viDu": "Which is NOT a type of conflict: productive, unproductive or unhealthy conflict?",
+      "viDuNghia": "Đâu KHÔNG phải loại xung đột: tích cực, không hiệu quả hay không lành mạnh?"
+    },
+    {
+      "chu": "risk trigger",
+      "doc": "/rɪsk ˈtrɪɡər/",
+      "nghia": "dấu hiệu kích hoạt rủi ro: sự kiện báo rủi ro sắp xảy ra",
+      "nhom": "Rủi ro",
+      "viDu": "A missed vendor deadline is a risk trigger.",
+      "viDuNghia": "Nhà cung cấp lỡ hạn là dấu hiệu kích hoạt rủi ro."
+    },
+    {
+      "chu": "risk owner",
+      "doc": "/rɪsk ˈoʊnər/",
+      "nghia": "người phụ trách rủi ro: theo dõi và thực hiện biện pháp ứng phó",
+      "nhom": "Rủi ro",
+      "viDu": "Each risk in the register has a risk owner.",
+      "viDuNghia": "Mỗi rủi ro trong sổ có người phụ trách."
+    },
+    {
+      "chu": "residual risk",
+      "doc": "/rɪˈzɪdʒuəl rɪsk/",
+      "nghia": "rủi ro còn lại sau khi đã áp biện pháp ứng phó",
+      "nhom": "Rủi ro",
+      "viDu": "Insurance leaves a small residual risk.",
+      "viDuNghia": "Bảo hiểm vẫn để lại một ít rủi ro còn lại."
+    },
+    {
+      "chu": "fallback plan",
+      "doc": "/ˈfɔːlbæk plæn/",
+      "nghia": "kế hoạch dự phòng thứ hai: dùng khi kế hoạch dự phòng chính không hiệu quả",
+      "nhom": "Rủi ro",
+      "viDu": "Prepare a fallback plan in case the contingency plan fails.",
+      "viDuNghia": "Chuẩn bị kế hoạch dự phòng thứ hai phòng khi kế hoạch chính thất bại."
+    },
+    {
+      "chu": "qualitative risk analysis",
+      "doc": "/ˈkwɑːlɪteɪtɪv rɪsk əˈnæləsɪs/",
+      "nghia": "phân tích rủi ro định tính: xếp hạng rủi ro theo xác suất và tác động (cao, trung bình, thấp)",
+      "nhom": "Rủi ro",
+      "viDu": "Qualitative risk analysis uses a probability and impact matrix.",
+      "viDuNghia": "Phân tích định tính dùng ma trận xác suất–tác động."
+    },
+    {
+      "chu": "quantitative risk analysis",
+      "doc": "/ˈkwɑːntɪteɪtɪv rɪsk əˈnæləsɪs/",
+      "nghia": "phân tích rủi ro định lượng: tính bằng số ảnh hưởng của rủi ro lên chi phí, tiến độ",
+      "nhom": "Rủi ro",
+      "viDu": "Monte Carlo simulation is a quantitative risk analysis technique.",
+      "viDuNghia": "Mô phỏng Monte Carlo là kỹ thuật phân tích rủi ro định lượng."
+    },
+    {
+      "chu": "expected monetary value",
+      "doc": "/ɪkˈspektɪd ˈmʌnɪteri ˈvæljuː/",
+      "nghia": "EMV: giá trị tiền kỳ vọng = xác suất × tác động bằng tiền",
+      "nhom": "Rủi ro",
+      "viDu": "A 20% chance of a $5,000 loss has an expected monetary value of -$1,000.",
+      "viDuNghia": "Xác suất 20% mất 5.000 đô có EMV là -1.000 đô."
+    },
+    {
+      "chu": "decision tree analysis",
+      "doc": "/dɪˈsɪʒn triː əˈnæləsɪs/",
+      "nghia": "phân tích cây quyết định: so các lựa chọn bằng EMV của từng nhánh",
+      "nhom": "Rủi ro",
+      "viDu": "Decision tree analysis compares building versus buying.",
+      "viDuNghia": "Phân tích cây quyết định so tự làm với mua."
+    },
+    {
+      "chu": "Monte Carlo simulation",
+      "doc": "/ˌmɑːnti ˈkɑːrloʊ ˌsɪmjuˈleɪʃn/",
+      "nghia": "mô phỏng Monte Carlo: chạy hàng nghìn lần với giá trị ngẫu nhiên để ra phân bố khả năng hoàn thành",
+      "nhom": "Rủi ro",
+      "viDu": "Monte Carlo simulation shows an 80% chance of finishing by June.",
+      "viDuNghia": "Mô phỏng Monte Carlo cho thấy 80% khả năng xong trước tháng Sáu."
+    },
+    {
+      "chu": "sensitivity analysis",
+      "doc": "/ˌsensəˈtɪvəti əˈnæləsɪs/",
+      "nghia": "phân tích độ nhạy: rủi ro nào ảnh hưởng lớn nhất tới kết quả (biểu đồ tornado)",
+      "nhom": "Rủi ro",
+      "viDu": "Sensitivity analysis is shown as a tornado diagram.",
+      "viDuNghia": "Phân tích độ nhạy được thể hiện bằng biểu đồ tornado."
+    },
+    {
+      "chu": "fixed cost",
+      "doc": "/fɪkst kɔːst/",
+      "nghia": "chi phí cố định: không đổi theo sản lượng (thuê văn phòng, thiết lập)",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "Fixed costs do not change as production changes.",
+      "viDuNghia": "Chi phí cố định không đổi khi sản lượng thay đổi."
+    },
+    {
+      "chu": "variable cost",
+      "doc": "/ˈveriəbl kɔːst/",
+      "nghia": "chi phí biến đổi: tăng giảm theo sản lượng, khối lượng công việc",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "Variable costs change with the amount of work done.",
+      "viDuNghia": "Chi phí biến đổi thay đổi theo khối lượng công việc."
+    },
+    {
+      "chu": "sunk cost",
+      "doc": "/sʌŋk kɔːst/",
+      "nghia": "chi phí chìm: tiền đã tiêu, không lấy lại được, không nên dùng để quyết định tiếp",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "Sunk cost should not influence the decision to continue.",
+      "viDuNghia": "Chi phí chìm không nên ảnh hưởng quyết định có làm tiếp hay không."
+    },
+    {
+      "chu": "opportunity cost",
+      "doc": "/ˌɑːpərˈtuːnəti kɔːst/",
+      "nghia": "chi phí cơ hội: giá trị của phương án tốt nhất bị bỏ khi chọn phương án khác",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "Choosing project A has the opportunity cost of project B's profit.",
+      "viDuNghia": "Chọn dự án A có chi phí cơ hội là lợi nhuận của dự án B."
+    },
+    {
+      "chu": "cost of conformance",
+      "doc": "/kɔːst əv kənˈfɔːrməns/",
+      "nghia": "chi phí phù hợp: chi để phòng ngừa và kiểm định (đào tạo, kiểm thử)",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "Training and testing are costs of conformance.",
+      "viDuNghia": "Đào tạo và kiểm thử là chi phí phù hợp."
+    },
+    {
+      "chu": "cost of nonconformance",
+      "doc": "/kɔːst əv ˌnɑːnkənˈfɔːrməns/",
+      "nghia": "chi phí không phù hợp: chi do lỗi (sửa lại, bảo hành, mất khách)",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "Rework and warranty claims are costs of nonconformance.",
+      "viDuNghia": "Làm lại và bảo hành là chi phí không phù hợp."
+    },
+    {
+      "chu": "fishbone diagram",
+      "doc": "/ˈfɪʃboʊn ˈdaɪəɡræm/",
+      "nghia": "biểu đồ xương cá (Ishikawa): tìm nguyên nhân gốc theo nhóm (con người, máy, phương pháp…)",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "A fishbone diagram groups the possible causes of late releases.",
+      "viDuNghia": "Biểu đồ xương cá gom các nguyên nhân có thể của việc phát hành muộn."
+    },
+    {
+      "chu": "control chart",
+      "doc": "/kənˈtroʊl tʃɑːrt/",
+      "nghia": "biểu đồ kiểm soát: dữ liệu theo thời gian với giới hạn trên/dưới để thấy quy trình ổn định không",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "A point outside the control limits needs investigation.",
+      "viDuNghia": "Một điểm nằm ngoài giới hạn kiểm soát cần được điều tra."
+    },
+    {
+      "chu": "scatter diagram",
+      "doc": "/ˈskætər ˈdaɪəɡræm/",
+      "nghia": "biểu đồ phân tán: xem quan hệ giữa hai biến",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "A scatter diagram shows the link between code size and defects.",
+      "viDuNghia": "Biểu đồ phân tán cho thấy liên hệ giữa cỡ mã và số lỗi."
+    },
+    {
+      "chu": "fixed-price contract",
+      "doc": "/ˌfɪkst ˈpraɪs ˈkɑːntrækt/",
+      "nghia": "hợp đồng trọn gói: giá cố định, rủi ro chi phí nằm ở bên bán",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "A fixed-price contract puts the cost risk on the seller.",
+      "viDuNghia": "Hợp đồng trọn gói đặt rủi ro chi phí lên bên bán."
+    },
+    {
+      "chu": "cost-reimbursable contract",
+      "doc": "/ˌkɔːst ˌriːɪmˈbɜːrsəbl ˈkɑːntrækt/",
+      "nghia": "hợp đồng hoàn trả chi phí: bên mua trả chi phí thực tế cộng phí, rủi ro ở bên mua",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "In a cost-reimbursable contract the buyer carries the cost risk.",
+      "viDuNghia": "Trong hợp đồng hoàn trả chi phí, bên mua chịu rủi ro chi phí."
+    },
+    {
+      "chu": "time and materials contract",
+      "doc": "/taɪm ənd məˈtɪriəlz ˈkɑːntrækt/",
+      "nghia": "hợp đồng theo thời gian và vật tư: trả theo giờ công và vật tư thực dùng",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "Small change requests are often billed on a time and materials contract.",
+      "viDuNghia": "Yêu cầu thay đổi nhỏ thường tính theo hợp đồng thời gian và vật tư."
+    },
+    {
+      "chu": "make-or-buy analysis",
+      "doc": "/ˌmeɪk ɔːr ˈbaɪ əˈnæləsɪs/",
+      "nghia": "phân tích tự làm hay mua: so chi phí, rủi ro của tự phát triển với mua ngoài",
+      "nhom": "Chi phí, chất lượng và hợp đồng",
+      "viDu": "A make-or-buy analysis decides whether to build the payment module.",
+      "viDuNghia": "Phân tích tự làm hay mua quyết định có tự xây module thanh toán không."
+    },
+    {
+      "chu": "integrated change control",
+      "doc": "/ˈɪntɪɡreɪtɪd tʃeɪndʒ kənˈtroʊl/",
+      "nghia": "kiểm soát thay đổi tích hợp: xem xét, duyệt và quản lý mọi thay đổi trên toàn bộ kế hoạch",
+      "nhom": "Kiểm soát, EVM nâng cao và đóng dự án",
+      "viDu": "Complete integrated change control.",
+      "viDuNghia": "Thực hiện kiểm soát thay đổi tích hợp."
+    },
+    {
+      "chu": "rebaseline",
+      "doc": "/ˌriːˈbeɪslaɪn/",
+      "nghia": "lập lại đường cơ sở: đặt kế hoạch gốc mới khi thay đổi lớn đã được duyệt",
+      "nhom": "Kiểm soát, EVM nâng cao và đóng dự án",
+      "viDu": "Yes, if the baseline is completely unachievable and the project sponsor approves it.",
+      "viDuNghia": "Có, nếu đường cơ sở hoàn toàn không đạt được và nhà tài trợ duyệt."
+    },
+    {
+      "chu": "scope validation",
+      "doc": "/skoʊp ˌvælɪˈdeɪʃn/",
+      "nghia": "xác nhận phạm vi: khách hàng chính thức chấp nhận sản phẩm bàn giao đã hoàn thành",
+      "nhom": "Kiểm soát, EVM nâng cao và đóng dự án",
+      "viDu": "Define how formal verification and acceptance of the completed deliverables will be accomplished.",
+      "viDuNghia": "Định nghĩa cách xác minh và chấp nhận chính thức sản phẩm bàn giao đã hoàn thành."
+    },
+    {
+      "chu": "variance at completion",
+      "doc": "/ˈveriəns ət kəmˈpliːʃn/",
+      "nghia": "VAC = BAC − EAC: chênh lệch dự kiến giữa ngân sách và chi phí lúc hoàn thành",
+      "nhom": "Kiểm soát, EVM nâng cao và đóng dự án",
+      "viDu": "A negative variance at completion means the project will finish over budget.",
+      "viDuNghia": "VAC âm nghĩa là dự án sẽ vượt ngân sách."
+    },
+    {
+      "chu": "to-complete performance index",
+      "doc": "/tə kəmˈpliːt pərˈfɔːrməns ˈɪndeks/",
+      "nghia": "TCPI = (BAC − EV) / (BAC − AC): hiệu suất chi phí cần đạt cho phần việc còn lại",
+      "nhom": "Kiểm soát, EVM nâng cao và đóng dự án",
+      "viDu": "A TCPI above 1 means the remaining work must be done more efficiently.",
+      "viDuNghia": "TCPI lớn hơn 1 nghĩa là phần việc còn lại phải làm hiệu quả hơn."
+    },
+    {
+      "chu": "estimated duration at completion",
+      "doc": "/ˈestɪmeɪtɪd duˈreɪʃn ət kəmˈpliːʃn/",
+      "nghia": "EDAC: thời gian dự kiến hoàn thành = thời gian kế hoạch / SPI",
+      "nhom": "Kiểm soát, EVM nâng cao và đóng dự án",
+      "viDu": "Apply the Earned Value model to compute PV, EV, AC, SV, CV, SPI, CPI, EAC and EDAC.",
+      "viDuNghia": "Áp mô hình giá trị thu được để tính PV, EV, AC, SV, CV, SPI, CPI, EAC và EDAC."
+    },
+    {
+      "chu": "project closure",
+      "doc": "/ˈprɑːdʒekt ˈkloʊʒər/",
+      "nghia": "đóng dự án: bàn giao, giải phóng nguồn lực, lưu hồ sơ, rút bài học",
+      "nhom": "Kiểm soát, EVM nâng cao và đóng dự án",
+      "viDu": "Create lessons learned during project closure.",
+      "viDuNghia": "Rút bài học kinh nghiệm khi đóng dự án."
+    },
+    {
+      "chu": "administrative closure",
+      "doc": "/ədˈmɪnɪstreɪtɪv ˈkloʊʒər/",
+      "nghia": "đóng hành chính: hoàn tất thủ tục, lưu trữ tài liệu, báo cáo cuối",
+      "nhom": "Kiểm soát, EVM nâng cao và đóng dự án",
+      "viDu": "Administrative closure archives all project documents.",
+      "viDuNghia": "Đóng hành chính lưu trữ mọi tài liệu dự án."
+    },
+    {
+      "chu": "contract closure",
+      "doc": "/ˈkɑːntrækt ˈkloʊʒər/",
+      "nghia": "đóng hợp đồng: xác nhận bên bán đã giao đủ, thanh toán và kết thúc hợp đồng",
+      "nhom": "Kiểm soát, EVM nâng cao và đóng dự án",
+      "viDu": "Contract closure confirms that all deliverables were accepted.",
+      "viDuNghia": "Đóng hợp đồng xác nhận mọi sản phẩm bàn giao đã được chấp nhận."
+    }
+  ]
+}

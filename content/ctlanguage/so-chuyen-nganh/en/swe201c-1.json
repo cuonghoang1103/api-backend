@@ -1,0 +1,522 @@
+{
+  "ma": "swe201c-1",
+  "nn": "en",
+  "ten": "SWE201c · 1. Quy trình, Agile, Lean & chất lượng phần mềm",
+  "moTa": "Môn Introduction to Software Engineering (SWE201c, khoá Coursera của Đại học Minnesota): mô hình quy trình, RUP, Tuyên ngôn Agile, Scrum và XP, Lean và Kanban, các loại kết dính/ghép nối, chất lượng trong thiết kế, mã, kiểm thử và triển khai. Soạn từ giáo trình và syllabus.",
+  "bieuTuong": "arrow.triangle.branch",
+  "thuTu": -920,
+  "tu": [
+    {
+      "chu": "software process",
+      "doc": "/ˈsɔːftwer ˈprɑːses/",
+      "nghia": "quy trình phần mềm: tập hoạt động có cấu trúc để đặc tả, thiết kế, cài đặt, kiểm thử và bảo trì phần mềm",
+      "nhom": "Quy trình và mô hình phát triển",
+      "viDu": "A software process defines who does what, when and how.",
+      "viDuNghia": "Quy trình phần mềm xác định ai làm gì, khi nào và làm thế nào."
+    },
+    {
+      "chu": "process model",
+      "doc": "/ˈprɑːses ˈmɑːdl/",
+      "nghia": "mô hình quy trình: cách sắp thứ tự các hoạt động (thác nước, xoắn ốc, lặp)",
+      "nhom": "Quy trình và mô hình phát triển",
+      "viDu": "Choose a process model that fits the project risk.",
+      "viDuNghia": "Chọn mô hình quy trình hợp với rủi ro dự án."
+    },
+    {
+      "chu": "plan-driven process",
+      "doc": "/ˈplæn ˌdrɪvn ˈprɑːses/",
+      "nghia": "quy trình hướng kế hoạch: lập kế hoạch và tài liệu đầy đủ trước rồi làm theo",
+      "nhom": "Quy trình và mô hình phát triển",
+      "viDu": "Waterfall is a plan-driven process.",
+      "viDuNghia": "Thác nước là quy trình hướng kế hoạch."
+    },
+    {
+      "chu": "iterative development",
+      "doc": "/ˈɪtəreɪtɪv dɪˈveləpmənt/",
+      "nghia": "phát triển lặp: làm qua nhiều vòng, mỗi vòng thiết kế–cài đặt–kiểm thử rồi cải tiến",
+      "nhom": "Quy trình và mô hình phát triển",
+      "viDu": "Iterative development delivers feedback early.",
+      "viDuNghia": "Phát triển lặp đem lại phản hồi sớm."
+    },
+    {
+      "chu": "prototyping model",
+      "doc": "/ˈproʊtətaɪpɪŋ ˈmɑːdl/",
+      "nghia": "mô hình bản mẫu: dựng nhanh bản thử để làm rõ yêu cầu với khách hàng",
+      "nhom": "Quy trình và mô hình phát triển",
+      "viDu": "The prototyping model helps when requirements are unclear.",
+      "viDuNghia": "Mô hình bản mẫu hữu ích khi yêu cầu chưa rõ."
+    },
+    {
+      "chu": "Rational Unified Process",
+      "doc": "/ˈræʃənl ˈjuːnɪfaɪd ˈprɑːses/",
+      "nghia": "RUP: quy trình lặp của IBM Rational gồm bốn pha Inception, Elaboration, Construction, Transition",
+      "nhom": "Quy trình và mô hình phát triển",
+      "viDu": "RUP divides a project into four phases with iterations inside each.",
+      "viDuNghia": "RUP chia dự án thành bốn pha, mỗi pha có nhiều vòng lặp."
+    },
+    {
+      "chu": "inception phase",
+      "doc": "/ɪnˈsepʃn feɪz/",
+      "nghia": "pha khởi đầu (RUP): xác định phạm vi, tình huống nghiệp vụ, tính khả thi",
+      "nhom": "Quy trình và mô hình phát triển",
+      "viDu": "The inception phase ends with an agreed project scope.",
+      "viDuNghia": "Pha khởi đầu kết thúc với phạm vi dự án đã thống nhất."
+    },
+    {
+      "chu": "elaboration phase",
+      "doc": "/ɪˌlæbəˈreɪʃn feɪz/",
+      "nghia": "pha tinh chỉnh (RUP): phân tích yêu cầu, chốt kiến trúc, xử lý rủi ro lớn",
+      "nhom": "Quy trình và mô hình phát triển",
+      "viDu": "The architecture is baselined in the elaboration phase.",
+      "viDuNghia": "Kiến trúc được chốt ở pha tinh chỉnh."
+    },
+    {
+      "chu": "transition phase",
+      "doc": "/trænˈzɪʃn feɪz/",
+      "nghia": "pha chuyển giao (RUP): đưa phần mềm tới người dùng, đào tạo, sửa lỗi cuối",
+      "nhom": "Quy trình và mô hình phát triển",
+      "viDu": "Beta testing happens in the transition phase.",
+      "viDuNghia": "Kiểm thử beta diễn ra ở pha chuyển giao."
+    },
+    {
+      "chu": "heavyweight process",
+      "doc": "/ˈheviweɪt ˈprɑːses/",
+      "nghia": "quy trình nặng: nhiều tài liệu, vai trò, thủ tục (đối lập quy trình nhẹ như Agile)",
+      "nhom": "Quy trình và mô hình phát triển",
+      "viDu": "Agile reacted against heavyweight processes.",
+      "viDuNghia": "Agile ra đời để phản ứng lại các quy trình nặng."
+    },
+    {
+      "chu": "Capability Maturity Model Integration",
+      "doc": "/ˌkeɪpəˈbɪləti məˈtʃʊrəti ˈmɑːdl ˌɪntɪˈɡreɪʃn/",
+      "nghia": "CMMI: mô hình đánh giá mức trưởng thành quy trình của tổ chức (5 mức)",
+      "nhom": "Quy trình và mô hình phát triển",
+      "viDu": "CMMI level 3 means the process is defined across the organization.",
+      "viDuNghia": "CMMI mức 3 nghĩa là quy trình đã được định nghĩa cho toàn tổ chức."
+    },
+    {
+      "chu": "Agile Manifesto",
+      "doc": "/ˈædʒaɪl ˌmænɪˈfestoʊ/",
+      "nghia": "Tuyên ngôn Agile (2001): bốn giá trị và mười hai nguyên tắc phát triển phần mềm linh hoạt",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "The Agile Manifesto values working software over comprehensive documentation.",
+      "viDuNghia": "Tuyên ngôn Agile coi trọng phần mềm chạy được hơn tài liệu đầy đủ."
+    },
+    {
+      "chu": "individuals and interactions",
+      "doc": "/ˌɪndɪˈvɪdʒuəlz ənd ˌɪntərˈækʃnz/",
+      "nghia": "cá nhân và tương tác — giá trị Agile đặt trên quy trình và công cụ",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "Individuals and interactions over processes and tools.",
+      "viDuNghia": "Cá nhân và tương tác hơn quy trình và công cụ."
+    },
+    {
+      "chu": "customer collaboration",
+      "doc": "/ˈkʌstəmər kəˌlæbəˈreɪʃn/",
+      "nghia": "cộng tác với khách hàng — giá trị Agile đặt trên đàm phán hợp đồng",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "Customer collaboration over contract negotiation.",
+      "viDuNghia": "Cộng tác với khách hàng hơn đàm phán hợp đồng."
+    },
+    {
+      "chu": "responding to change",
+      "doc": "/rɪˈspɑːndɪŋ tə tʃeɪndʒ/",
+      "nghia": "đáp ứng thay đổi — giá trị Agile đặt trên làm theo kế hoạch",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "Responding to change over following a plan.",
+      "viDuNghia": "Đáp ứng thay đổi hơn làm theo kế hoạch."
+    },
+    {
+      "chu": "agile principle",
+      "doc": "/ˈædʒaɪl ˈprɪnsəpl/",
+      "nghia": "nguyên tắc Agile: một trong 12 nguyên tắc, vd giao phần mềm chạy được thường xuyên",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "An agile principle says to welcome changing requirements, even late.",
+      "viDuNghia": "Một nguyên tắc Agile nói hãy chào đón yêu cầu thay đổi, kể cả khi muộn."
+    },
+    {
+      "chu": "self-organizing team",
+      "doc": "/ˌself ˈɔːrɡənaɪzɪŋ tiːm/",
+      "nghia": "nhóm tự tổ chức: tự quyết cách làm việc, không chờ chỉ đạo từng việc",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "The best designs emerge from self-organizing teams.",
+      "viDuNghia": "Thiết kế tốt nhất nảy sinh từ các nhóm tự tổ chức."
+    },
+    {
+      "chu": "timebox",
+      "doc": "/ˈtaɪmbɑːks/",
+      "nghia": "khung thời gian cố định cho một hoạt động (sprint 2 tuần, daily 15 phút)",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "The daily scrum is timeboxed to 15 minutes.",
+      "viDuNghia": "Daily scrum giới hạn trong 15 phút."
+    },
+    {
+      "chu": "daily scrum",
+      "doc": "/ˈdeɪli skrʌm/",
+      "nghia": "họp đứng hằng ngày 15 phút: hôm qua làm gì, hôm nay làm gì, vướng gì",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "The developers inspect progress in the daily scrum.",
+      "viDuNghia": "Nhóm phát triển xem lại tiến độ trong daily scrum."
+    },
+    {
+      "chu": "sprint backlog",
+      "doc": "/sprɪnt ˈbæklɔːɡ/",
+      "nghia": "danh sách việc của sprint: mục backlog được chọn cùng kế hoạch thực hiện",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "Only the developers can change the sprint backlog.",
+      "viDuNghia": "Chỉ nhóm phát triển được sửa sprint backlog."
+    },
+    {
+      "chu": "sprint retrospective",
+      "doc": "/sprɪnt ˌretrəˈspektɪv/",
+      "nghia": "buổi cải tiến cuối sprint: nhóm bàn điều làm tốt, chưa tốt và cách làm tốt hơn",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "The sprint retrospective focuses on how the team works, not on the product.",
+      "viDuNghia": "Buổi retrospective tập trung vào cách nhóm làm việc, không vào sản phẩm."
+    },
+    {
+      "chu": "Extreme Programming",
+      "doc": "/ɪkˈstriːm ˈproʊɡræmɪŋ/",
+      "nghia": "XP: phương pháp Agile chú trọng kỹ thuật (TDD, lập trình cặp, tích hợp liên tục, phát hành nhỏ)",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "Extreme Programming pushes good engineering practices to the extreme.",
+      "viDuNghia": "XP đẩy các thực hành kỹ thuật tốt tới mức tối đa."
+    },
+    {
+      "chu": "test-driven development",
+      "doc": "/ˌtest ˈdrɪvn dɪˈveləpmənt/",
+      "nghia": "TDD: viết test trước, viết mã cho test qua, rồi tái cấu trúc (red–green–refactor)",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "In test-driven development, a failing test comes first.",
+      "viDuNghia": "Trong TDD, một test trượt được viết trước."
+    },
+    {
+      "chu": "planning game",
+      "doc": "/ˈplænɪŋ ɡeɪm/",
+      "nghia": "trò chơi lập kế hoạch (XP): khách chọn user story, lập trình viên ước lượng",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "The planning game decides what goes into the next release.",
+      "viDuNghia": "Trò chơi lập kế hoạch quyết định thứ đưa vào bản phát hành tới."
+    },
+    {
+      "chu": "small releases",
+      "doc": "/smɔːl rɪˈliːsɪz/",
+      "nghia": "phát hành nhỏ (XP): đưa phần mềm chạy được tới người dùng thường xuyên",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "Small releases get real feedback every few weeks.",
+      "viDuNghia": "Phát hành nhỏ lấy phản hồi thật vài tuần một lần."
+    },
+    {
+      "chu": "collective code ownership",
+      "doc": "/kəˈlektɪv koʊd ˈoʊnərʃɪp/",
+      "nghia": "sở hữu mã tập thể (XP): ai trong nhóm cũng được sửa mọi phần mã",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "Collective code ownership removes single points of knowledge.",
+      "viDuNghia": "Sở hữu mã tập thể bỏ tình trạng chỉ một người hiểu một phần."
+    },
+    {
+      "chu": "sustainable pace",
+      "doc": "/səˈsteɪnəbl peɪs/",
+      "nghia": "nhịp làm việc bền vững: không tăng ca kéo dài, giữ nhịp đều",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "XP limits overtime to keep a sustainable pace.",
+      "viDuNghia": "XP hạn chế tăng ca để giữ nhịp làm việc bền vững."
+    },
+    {
+      "chu": "on-site customer",
+      "doc": "/ˌɑːn saɪt ˈkʌstəmər/",
+      "nghia": "khách hàng tại chỗ (XP): đại diện khách ngồi cùng nhóm để trả lời ngay",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "An on-site customer answers questions the same day.",
+      "viDuNghia": "Khách hàng tại chỗ trả lời câu hỏi ngay trong ngày."
+    },
+    {
+      "chu": "simple design",
+      "doc": "/ˈsɪmpl dɪˈzaɪn/",
+      "nghia": "thiết kế đơn giản: chỉ làm đủ cho yêu cầu hiện tại, không thừa",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "Simple design means no code for features nobody asked for.",
+      "viDuNghia": "Thiết kế đơn giản là không viết mã cho tính năng không ai yêu cầu."
+    },
+    {
+      "chu": "YAGNI",
+      "doc": "/ˈjæɡni/",
+      "nghia": "You Aren't Gonna Need It: đừng làm thứ \"để sau sẽ cần\"",
+      "nhom": "Agile, Scrum và XP",
+      "viDu": "YAGNI warns against building features for an imagined future.",
+      "viDuNghia": "YAGNI cảnh báo việc làm tính năng cho tương lai tưởng tượng."
+    },
+    {
+      "chu": "Lean software development",
+      "doc": "/liːn ˈsɔːftwer dɪˈveləpmənt/",
+      "nghia": "phát triển phần mềm tinh gọn: áp nguyên lý sản xuất Toyota (bỏ lãng phí, giao nhanh) vào phần mềm",
+      "nhom": "Lean và Kanban",
+      "viDu": "Lean software development has seven principles.",
+      "viDuNghia": "Phát triển phần mềm tinh gọn có bảy nguyên tắc."
+    },
+    {
+      "chu": "Toyota Production System",
+      "doc": "/tɔɪˈjoʊtə prəˈdʌkʃn ˈsɪstəm/",
+      "nghia": "hệ thống sản xuất Toyota: nguồn gốc của Lean (just-in-time, jidoka, Kaizen)",
+      "nhom": "Lean và Kanban",
+      "viDu": "Lean thinking comes from the Toyota Production System.",
+      "viDuNghia": "Tư duy Lean bắt nguồn từ hệ thống sản xuất Toyota."
+    },
+    {
+      "chu": "eliminate waste",
+      "doc": "/ɪˈlɪmɪneɪt weɪst/",
+      "nghia": "loại bỏ lãng phí: nguyên tắc Lean đầu tiên — bỏ mọi thứ không tạo giá trị cho khách",
+      "nhom": "Lean và Kanban",
+      "viDu": "Eliminate waste is the first Lean principle.",
+      "viDuNghia": "Loại bỏ lãng phí là nguyên tắc Lean đầu tiên."
+    },
+    {
+      "chu": "partially done work",
+      "doc": "/ˈpɑːrʃəli dʌn wɜːrk/",
+      "nghia": "việc làm dở: mã chưa tích hợp, chưa kiểm thử — một loại lãng phí trong Lean",
+      "nhom": "Lean và Kanban",
+      "viDu": "Partially done work hides problems until late.",
+      "viDuNghia": "Việc làm dở che giấu vấn đề tới tận cuối."
+    },
+    {
+      "chu": "task switching",
+      "doc": "/tæsk ˈswɪtʃɪŋ/",
+      "nghia": "chuyển việc liên tục: một người làm nhiều việc cùng lúc, mất thời gian khởi động lại — lãng phí",
+      "nhom": "Lean và Kanban",
+      "viDu": "Task switching slows every task down.",
+      "viDuNghia": "Chuyển việc liên tục làm mọi việc chậm lại."
+    },
+    {
+      "chu": "amplify learning",
+      "doc": "/ˈæmplɪfaɪ ˈlɜːrnɪŋ/",
+      "nghia": "khuếch đại học hỏi: vòng phản hồi ngắn, thử nghiệm sớm (nguyên tắc Lean)",
+      "nhom": "Lean và Kanban",
+      "viDu": "Short iterations amplify learning.",
+      "viDuNghia": "Vòng lặp ngắn khuếch đại việc học hỏi."
+    },
+    {
+      "chu": "decide as late as possible",
+      "doc": "/dɪˈsaɪd əz leɪt əz ˈpɑːsəbl/",
+      "nghia": "quyết định càng muộn càng tốt: giữ phương án mở tới khi có đủ thông tin (Lean)",
+      "nhom": "Lean và Kanban",
+      "viDu": "Decide as late as possible keeps options open.",
+      "viDuNghia": "Quyết định muộn giữ các phương án còn mở."
+    },
+    {
+      "chu": "deliver as fast as possible",
+      "doc": "/dɪˈlɪvər əz fæst əz ˈpɑːsəbl/",
+      "nghia": "giao càng nhanh càng tốt: rút ngắn thời gian từ ý tưởng tới tay khách (Lean)",
+      "nhom": "Lean và Kanban",
+      "viDu": "Deliver as fast as possible shortens the feedback loop.",
+      "viDuNghia": "Giao nhanh nhất có thể rút ngắn vòng phản hồi."
+    },
+    {
+      "chu": "build integrity in",
+      "doc": "/bɪld ɪnˈteɡrəti ɪn/",
+      "nghia": "xây chất lượng ngay từ trong: chất lượng là một phần của quy trình, không kiểm sau cùng (Lean)",
+      "nhom": "Lean và Kanban",
+      "viDu": "Build integrity in by testing continuously.",
+      "viDuNghia": "Xây chất lượng từ trong bằng kiểm thử liên tục."
+    },
+    {
+      "chu": "see the whole",
+      "doc": "/siː ðə hoʊl/",
+      "nghia": "nhìn toàn cục: tối ưu cả chuỗi giá trị chứ không tối ưu từng phần (Lean)",
+      "nhom": "Lean và Kanban",
+      "viDu": "See the whole means optimizing the entire value stream.",
+      "viDuNghia": "Nhìn toàn cục là tối ưu cả chuỗi giá trị."
+    },
+    {
+      "chu": "Kanban",
+      "doc": "/ˈkɑːnbɑːn/",
+      "nghia": "Kanban: phương pháp quản lý luồng việc bằng bảng trực quan và giới hạn việc đang làm",
+      "nhom": "Lean và Kanban",
+      "viDu": "Kanban, Value Stream Mapping and Kaizen.",
+      "viDuNghia": "Kanban, sơ đồ chuỗi giá trị và Kaizen."
+    },
+    {
+      "chu": "work in progress limit",
+      "doc": "/wɜːrk ɪn ˈprɑːɡres ˈlɪmɪt/",
+      "nghia": "giới hạn WIP: số việc tối đa trong một cột của bảng Kanban",
+      "nhom": "Lean và Kanban",
+      "viDu": "A WIP limit of three stops the team from starting a fourth task.",
+      "viDuNghia": "Giới hạn WIP bằng ba ngăn nhóm bắt đầu việc thứ tư."
+    },
+    {
+      "chu": "pull system",
+      "doc": "/pʊl ˈsɪstəm/",
+      "nghia": "hệ thống kéo: chỉ nhận việc mới khi có chỗ trống, không đẩy việc vào",
+      "nhom": "Lean và Kanban",
+      "viDu": "Kanban is a pull system.",
+      "viDuNghia": "Kanban là hệ thống kéo."
+    },
+    {
+      "chu": "cumulative flow diagram",
+      "doc": "/ˈkjuːmjəleɪtɪv floʊ ˈdaɪəɡræm/",
+      "nghia": "biểu đồ luồng tích luỹ: số việc ở từng trạng thái theo thời gian, thấy điểm nghẽn",
+      "nhom": "Lean và Kanban",
+      "viDu": "A widening band in the cumulative flow diagram shows a bottleneck.",
+      "viDuNghia": "Một dải phình ra trong biểu đồ luồng tích luỹ cho thấy điểm nghẽn."
+    },
+    {
+      "chu": "value stream mapping",
+      "doc": "/ˈvæljuː striːm ˈmæpɪŋ/",
+      "nghia": "sơ đồ chuỗi giá trị: vẽ mọi bước từ yêu cầu tới giao hàng để tìm thời gian chờ, lãng phí",
+      "nhom": "Lean và Kanban",
+      "viDu": "Value stream mapping showed that code waited five days for review.",
+      "viDuNghia": "Sơ đồ chuỗi giá trị cho thấy mã chờ duyệt năm ngày."
+    },
+    {
+      "chu": "coincidental cohesion",
+      "doc": "/koʊˌɪnsɪˈdentl koʊˈhiːʒn/",
+      "nghia": "kết dính ngẫu nhiên: các phần gom lại không vì lý do gì (tệ nhất)",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "Coincidental cohesion means the parts are grouped for no reason.",
+      "viDuNghia": "Kết dính ngẫu nhiên là các phần được gom không vì lý do gì."
+    },
+    {
+      "chu": "logical cohesion",
+      "doc": "/ˈlɑːdʒɪkl koʊˈhiːʒn/",
+      "nghia": "kết dính logic: gom các việc cùng loại, chọn bằng một cờ điều khiển",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "A utility class that handles all input types shows logical cohesion.",
+      "viDuNghia": "Lớp tiện ích xử lý mọi kiểu nhập cho thấy kết dính logic."
+    },
+    {
+      "chu": "temporal cohesion",
+      "doc": "/ˈtempərəl koʊˈhiːʒn/",
+      "nghia": "kết dính thời điểm: gom chỉ vì chạy cùng một lúc (vd khởi động)",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "An init() method that sets up unrelated things has temporal cohesion.",
+      "viDuNghia": "Hàm init() khởi tạo nhiều thứ không liên quan có kết dính thời điểm."
+    },
+    {
+      "chu": "functional cohesion",
+      "doc": "/ˈfʌŋkʃənl koʊˈhiːʒn/",
+      "nghia": "kết dính chức năng: mọi phần cùng phục vụ đúng một nhiệm vụ (tốt nhất)",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "A calculateTax() method has functional cohesion.",
+      "viDuNghia": "Hàm calculateTax() có kết dính chức năng."
+    },
+    {
+      "chu": "content coupling",
+      "doc": "/ˈkɑːntent ˈkʌplɪŋ/",
+      "nghia": "ghép nối nội dung: module sửa thẳng dữ liệu bên trong module khác (tệ nhất)",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "Content coupling breaks when the other module changes its internals.",
+      "viDuNghia": "Ghép nối nội dung vỡ khi module kia đổi phần bên trong."
+    },
+    {
+      "chu": "common coupling",
+      "doc": "/ˈkɑːmən ˈkʌplɪŋ/",
+      "nghia": "ghép nối chung: nhiều module cùng dùng biến toàn cục",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "Global variables create common coupling.",
+      "viDuNghia": "Biến toàn cục tạo ra ghép nối chung."
+    },
+    {
+      "chu": "control coupling",
+      "doc": "/kənˈtroʊl ˈkʌplɪŋ/",
+      "nghia": "ghép nối điều khiển: truyền cờ để điều khiển luồng chạy của module khác",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "Passing a mode flag is control coupling.",
+      "viDuNghia": "Truyền cờ chế độ là ghép nối điều khiển."
+    },
+    {
+      "chu": "stamp coupling",
+      "doc": "/stæmp ˈkʌplɪŋ/",
+      "nghia": "ghép nối nhãn: truyền cả cấu trúc dữ liệu dù chỉ cần một phần",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "Passing a whole Customer object to read one field is stamp coupling.",
+      "viDuNghia": "Truyền cả đối tượng Customer để đọc một trường là ghép nối nhãn."
+    },
+    {
+      "chu": "data coupling",
+      "doc": "/ˈdeɪtə ˈkʌplɪŋ/",
+      "nghia": "ghép nối dữ liệu: chỉ truyền đúng tham số cần dùng (tốt nhất)",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "Data coupling passes only the values that are needed.",
+      "viDuNghia": "Ghép nối dữ liệu chỉ truyền giá trị cần thiết."
+    },
+    {
+      "chu": "coupling between objects",
+      "doc": "/ˈkʌplɪŋ bɪˈtwiːn ˈɑːbdʒekts/",
+      "nghia": "CBO: số đo số lớp mà một lớp phụ thuộc; cao nghĩa là khó sửa, khó test",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "A high coupling between objects value signals a fragile class.",
+      "viDuNghia": "CBO cao báo hiệu lớp dễ vỡ."
+    },
+    {
+      "chu": "code smell",
+      "doc": "/koʊd smel/",
+      "nghia": "mùi mã: dấu hiệu thiết kế kém (hàm quá dài, mã lặp, lớp quá lớn)",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "A 300-line method is a code smell.",
+      "viDuNghia": "Một hàm 300 dòng là dấu hiệu mã có vấn đề."
+    },
+    {
+      "chu": "DRY principle",
+      "doc": "/draɪ ˈprɪnsəpl/",
+      "nghia": "Don't Repeat Yourself: mỗi tri thức chỉ nằm ở một chỗ trong mã",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "Copy-pasted validation breaks the DRY principle.",
+      "viDuNghia": "Sao chép đoạn kiểm tra là vi phạm nguyên tắc DRY."
+    },
+    {
+      "chu": "KISS principle",
+      "doc": "/kɪs ˈprɪnsəpl/",
+      "nghia": "Keep It Simple, Stupid: chọn lời giải đơn giản nhất chạy được",
+      "nhom": "Chất lượng trong thiết kế và mã",
+      "viDu": "The KISS principle favours a plain loop over a clever trick.",
+      "viDuNghia": "Nguyên tắc KISS ưu tiên vòng lặp thường hơn mẹo phức tạp."
+    },
+    {
+      "chu": "continuous delivery",
+      "doc": "/kənˈtɪnjuəs dɪˈlɪvəri/",
+      "nghia": "chuyển giao liên tục: mã luôn ở trạng thái phát hành được, đưa lên thật chỉ cần một nút bấm",
+      "nhom": "Kiểm thử và triển khai",
+      "viDu": "Continuous delivery keeps every build ready to release.",
+      "viDuNghia": "Chuyển giao liên tục giữ mọi bản dựng sẵn sàng phát hành."
+    },
+    {
+      "chu": "deployment pipeline",
+      "doc": "/dɪˈplɔɪmənt ˈpaɪplaɪn/",
+      "nghia": "dây chuyền triển khai: chuỗi bước tự động build → test → staging → production",
+      "nhom": "Kiểm thử và triển khai",
+      "viDu": "A failing test stops the deployment pipeline.",
+      "viDuNghia": "Một test trượt sẽ dừng dây chuyền triển khai."
+    },
+    {
+      "chu": "DevOps",
+      "doc": "/ˈdev ɑːps/",
+      "nghia": "văn hoá và thực hành gắn phát triển (Dev) với vận hành (Ops): tự động hoá, đo đạc, chia sẻ trách nhiệm",
+      "nhom": "Kiểm thử và triển khai",
+      "viDu": "DevOps teams own their service in production.",
+      "viDuNghia": "Nhóm DevOps chịu trách nhiệm cả dịch vụ khi chạy thật."
+    },
+    {
+      "chu": "blue-green deployment",
+      "doc": "/ˌbluː ˈɡriːn dɪˈplɔɪmənt/",
+      "nghia": "triển khai xanh–lam: chạy song song bản cũ và bản mới, chuyển lưu lượng một lần, lỗi thì chuyển về",
+      "nhom": "Kiểm thử và triển khai",
+      "viDu": "Blue-green deployment makes rollback a single switch.",
+      "viDuNghia": "Triển khai xanh–lam khiến việc quay lại chỉ là một lần chuyển."
+    },
+    {
+      "chu": "canary release",
+      "doc": "/kəˈneri rɪˈliːs/",
+      "nghia": "phát hành chim hoàng yến: đưa bản mới cho một phần nhỏ người dùng trước rồi mới mở rộng",
+      "nhom": "Kiểm thử và triển khai",
+      "viDu": "A canary release goes to 5% of users first.",
+      "viDuNghia": "Bản canary đến tay 5% người dùng trước."
+    },
+    {
+      "chu": "feature toggle",
+      "doc": "/ˈfiːtʃər ˈtɑːɡl/",
+      "nghia": "công tắc tính năng: bật/tắt tính năng bằng cấu hình mà không cần triển khai lại",
+      "nhom": "Kiểm thử và triển khai",
+      "viDu": "The new checkout is hidden behind a feature toggle.",
+      "viDuNghia": "Trang thanh toán mới được ẩn sau công tắc tính năng."
+    }
+  ]
+}

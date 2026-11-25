@@ -1,0 +1,618 @@
+{
+ "ma": "nwc204-2",
+ "nn": "en",
+ "ten": "NWC204 · 2. Cấu hình Cisco, IPv6, công cụ & bảo mật mạng",
+ "moTa": "Bổ sung NWC204 (kiểu CCNA ITN): các chế độ dòng lệnh Cisco IOS, khởi động thiết bị, khung Ethernet và chuyển mạch, tiêu đề IPv4/IPv6, các loại địa chỉ IPv6 và ND, DHCP, công cụ chẩn đoán (ping, Wireshark), tấn công lớp 2 và cách gia cố thiết bị.",
+ "bieuTuong": "server.rack",
+ "thuTu": -957,
+ "tu": [
+  {
+   "chu": "user EXEC mode",
+   "doc": "/ˈjuːzər ɪɡˈzek moʊd/",
+   "nghia": "chế độ EXEC người dùng (dấu nhắc >): chỉ xem thông tin cơ bản, không cấu hình được",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "The prompt Switch> shows that you are in user EXEC mode.",
+   "viDuNghia": "Dấu nhắc Switch> cho biết bạn đang ở chế độ EXEC người dùng."
+  },
+  {
+   "chu": "privileged EXEC mode",
+   "doc": "/ˈprɪvəlɪdʒd ɪɡˈzek moʊd/",
+   "nghia": "chế độ EXEC đặc quyền (dấu nhắc #): vào bằng lệnh enable, xem và lưu được mọi cấu hình",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "The enable command moves you from user EXEC mode to privileged EXEC mode.",
+   "viDuNghia": "Lệnh enable đưa bạn từ chế độ EXEC người dùng sang chế độ EXEC đặc quyền."
+  },
+  {
+   "chu": "global configuration mode",
+   "doc": "/ˈɡloʊbl kənˌfɪɡjəˈreɪʃn moʊd/",
+   "nghia": "chế độ cấu hình toàn cục (config): vào bằng configure terminal, đổi cấu hình cho cả thiết bị",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "Enter global configuration mode with configure terminal before setting the hostname.",
+   "viDuNghia": "Vào chế độ cấu hình toàn cục bằng configure terminal trước khi đặt hostname."
+  },
+  {
+   "chu": "line configuration mode",
+   "doc": "/laɪn kənˌfɪɡjəˈreɪʃn moʊd/",
+   "nghia": "chế độ cấu hình đường (config-line): cấu hình cổng console hoặc đường vty cho Telnet/SSH",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "Passwords for console access are set in line configuration mode.",
+   "viDuNghia": "Mật khẩu truy cập cổng console được đặt ở chế độ cấu hình đường."
+  },
+  {
+   "chu": "password encryption",
+   "doc": "/ˈpæswɜːrd ɪnˈkrɪpʃn/",
+   "nghia": "mã hoá mật khẩu: lệnh service password-encryption che các mật khẩu dạng chữ thường trong tệp cấu hình",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "service password-encryption",
+   "viDuNghia": "Lệnh bật mã hoá mật khẩu trong cấu hình"
+  },
+  {
+   "chu": "exec-timeout",
+   "doc": "/ɪɡˈzek ˈtaɪmaʊt/",
+   "nghia": "exec-timeout: tự đăng xuất phiên console/vty sau một khoảng không thao tác",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "exec-timeout 5 0",
+   "viDuNghia": "exec-timeout 5 0 (tự đăng xuất sau 5 phút không thao tác)"
+  },
+  {
+   "chu": "message of the day",
+   "doc": "/ˈmesɪdʒ əv ðə deɪ/",
+   "nghia": "thông điệp trong ngày (banner motd): dòng cảnh báo hiện ra khi có người kết nối vào thiết bị",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "A message of the day banner warns that unauthorized access is prohibited.",
+   "viDuNghia": "Banner thông điệp trong ngày cảnh báo cấm truy cập trái phép."
+  },
+  {
+   "chu": "no shutdown",
+   "doc": "/noʊ ˈʃʌtdaʊn/",
+   "nghia": "no shutdown: lệnh bật một cổng (interface) đang bị tắt bằng tay trên router/switch Cisco",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "no shutdown on the interface",
+   "viDuNghia": "Chạy no shutdown trên cổng đó"
+  },
+  {
+   "chu": "loopback interface",
+   "doc": "/ˈluːpbæk ˈɪntərfeɪs/",
+   "nghia": "cổng loopback: cổng ảo luôn ở trạng thái up, hay dùng để kiểm tra và làm định danh router",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "A loopback interface stays up as long as the router is running.",
+   "viDuNghia": "Cổng loopback luôn bật chừng nào router còn chạy."
+  },
+  {
+   "chu": "domain lookup",
+   "doc": "/doʊˈmeɪn ˈlʊkʌp/",
+   "nghia": "tra tên miền: thiết bị Cisco coi lệnh gõ sai là tên máy và đi hỏi DNS (tắt bằng no ip domain-lookup)",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "Disable domain lookup so that a mistyped command does not trigger a DNS query.",
+   "viDuNghia": "Tắt tra tên miền để lệnh gõ sai không kích hoạt truy vấn DNS."
+  },
+  {
+   "chu": "NVRAM",
+   "doc": "/ˈen viːræm/",
+   "nghia": "NVRAM: bộ nhớ không mất khi tắt điện, chứa tệp startup-config",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "The startup configuration is stored in NVRAM.",
+   "viDuNghia": "Cấu hình khởi động được lưu trong NVRAM."
+  },
+  {
+   "chu": "IOS image",
+   "doc": "/ˌaɪ oʊ ˈes ˈɪmɪdʒ/",
+   "nghia": "ảnh IOS: tệp hệ điều hành của thiết bị Cisco, thường lưu trong flash",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "During boot, the router loads the IOS image from flash into RAM.",
+   "viDuNghia": "Khi khởi động, router nạp ảnh IOS từ flash vào RAM."
+  },
+  {
+   "chu": "power-on self-test",
+   "doc": "/ˈpaʊər ɑːn self test/",
+   "nghia": "tự kiểm khi bật nguồn (POST): bước đầu khởi động, kiểm tra phần cứng",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "The power-on self-test checks the hardware before the IOS is loaded.",
+   "viDuNghia": "Bước tự kiểm khi bật nguồn kiểm tra phần cứng trước khi nạp IOS."
+  },
+  {
+   "chu": "helper address",
+   "doc": "/ˈhelpər ˈædres/",
+   "nghia": "địa chỉ trợ giúp (ip helper-address): router chuyển tiếp gói DHCP quảng bá tới máy chủ DHCP ở mạng khác",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "ip helper-address with the server's IP",
+   "viDuNghia": "ip helper-address kèm địa chỉ IP của máy chủ"
+  },
+  {
+   "chu": "DHCP relay agent",
+   "doc": "/ˌdiː eɪtʃ siː ˈpiː ˈriːleɪ ˈeɪdʒənt/",
+   "nghia": "tác nhân chuyển tiếp DHCP: router nhận DHCP quảng bá rồi gửi đơn hướng tới máy chủ DHCP ở mạng con khác",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "A DHCP relay agent forwards client requests to a server on another subnet.",
+   "viDuNghia": "Tác nhân chuyển tiếp DHCP gửi yêu cầu của máy khách tới máy chủ ở mạng con khác."
+  },
+  {
+   "chu": "Cisco Discovery Protocol",
+   "doc": "/ˈsɪskoʊ dɪˈskʌvəri ˈproʊtəkɔːl/",
+   "nghia": "CDP: giao thức của Cisco để thiết bị láng giềng tự giới thiệu với nhau; nên tắt ở cổng hướng ra ngoài",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "Leave CDP and every default service enabled",
+   "viDuNghia": "Để nguyên CDP và mọi dịch vụ mặc định đang bật (cách làm KHÔNG an toàn)"
+  },
+  {
+   "chu": "uplink",
+   "doc": "/ˈʌplɪŋk/",
+   "nghia": "cổng/đường lên: liên kết nối switch truy cập lên switch hoặc router tầng trên",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "Half-duplex on the uplink port",
+   "viDuNghia": "Chế độ bán song công trên cổng uplink"
+  },
+  {
+   "chu": "auto-negotiation",
+   "doc": "/ˌɔːtoʊ nɪˌɡoʊʃiˈeɪʃn/",
+   "nghia": "tự thương lượng: hai đầu cổng Ethernet tự thoả thuận tốc độ và chế độ song công",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "A duplex mismatch often happens when only one side uses auto-negotiation.",
+   "viDuNghia": "Lệch song công thường xảy ra khi chỉ một đầu dùng tự thương lượng."
+  },
+  {
+   "chu": "auto-MDIX",
+   "doc": "/ˈɔːtoʊ ˌem diː aɪ ˈeks/",
+   "nghia": "auto-MDIX: cổng tự nhận dạng loại cáp thẳng hay chéo và tự đổi cặp dây cho đúng",
+   "nhom": "Dòng lệnh Cisco IOS",
+   "viDu": "With auto-MDIX, a straight-through cable also works between two switches.",
+   "viDuNghia": "Với auto-MDIX, cáp thẳng cũng dùng được giữa hai switch."
+  },
+  {
+   "chu": "logical link control",
+   "doc": "/ˈlɑːdʒɪkl lɪŋk kənˈtroʊl/",
+   "nghia": "điều khiển liên kết logic (LLC): lớp con trên của tầng liên kết, giao tiếp với tầng mạng",
+   "nhom": "Ethernet và chuyển mạch",
+   "viDu": "The LLC sublayer identifies which network layer protocol is carried in the frame.",
+   "viDuNghia": "Lớp con LLC cho biết giao thức tầng mạng nào được chở trong khung."
+  },
+  {
+   "chu": "start frame delimiter",
+   "doc": "/stɑːrt freɪm dɪˈlɪmɪtər/",
+   "nghia": "dấu bắt đầu khung (SFD): byte 10101011 sau phần mở đầu, báo khung Ethernet bắt đầu",
+   "nhom": "Ethernet và chuyển mạch",
+   "viDu": "The start frame delimiter marks the end of the preamble and the start of the frame.",
+   "viDuNghia": "Dấu bắt đầu khung đánh dấu hết phần mở đầu và bắt đầu khung."
+  },
+  {
+   "chu": "runt frame",
+   "doc": "/rʌnt freɪm/",
+   "nghia": "khung lùn: khung Ethernet ngắn hơn 64 byte, thường do va chạm, bị switch loại bỏ",
+   "nhom": "Ethernet và chuyển mạch",
+   "viDu": "A runt frame is shorter than 64 bytes and is discarded.",
+   "viDuNghia": "Khung lùn ngắn hơn 64 byte và bị loại bỏ."
+  },
+  {
+   "chu": "cut-through switching",
+   "doc": "/ˈkʌt θruː ˈswɪtʃɪŋ/",
+   "nghia": "chuyển mạch cắt ngang: switch chuyển khung ngay khi đọc xong địa chỉ đích, không chờ nhận đủ khung",
+   "nhom": "Ethernet và chuyển mạch",
+   "viDu": "Cut-through switching has lower latency but may forward corrupted frames.",
+   "viDuNghia": "Chuyển mạch cắt ngang có độ trễ thấp hơn nhưng có thể chuyển cả khung hỏng."
+  },
+  {
+   "chu": "MAC address learning",
+   "doc": "/mæk ˈædres ˈlɜːrnɪŋ/",
+   "nghia": "học địa chỉ MAC: switch ghi địa chỉ MAC nguồn của khung tới cùng cổng vào bảng MAC",
+   "nhom": "Ethernet và chuyển mạch",
+   "viDu": "Through MAC address learning, the switch records the source MAC on the incoming port.",
+   "viDuNghia": "Nhờ học địa chỉ MAC, switch ghi lại MAC nguồn gắn với cổng nhận khung."
+  },
+  {
+   "chu": "Spanning Tree Protocol",
+   "doc": "/ˈspænɪŋ triː ˈproʊtəkɔːl/",
+   "nghia": "STP: giao thức chặn bớt cổng dư để mạng switch có đường dự phòng mà không bị vòng lặp",
+   "nhom": "Ethernet và chuyển mạch",
+   "viDu": "The Spanning Tree Protocol blocks redundant links to prevent switching loops.",
+   "viDuNghia": "STP chặn các liên kết dư để tránh vòng lặp chuyển mạch."
+  },
+  {
+   "chu": "electromagnetic interference",
+   "doc": "/ɪˌlektroʊmæɡˈnetɪk ˌɪntərˈfɪrəns/",
+   "nghia": "nhiễu điện từ (EMI): nhiễu từ động cơ, đèn, dây điện làm hỏng tín hiệu trên cáp đồng",
+   "nhom": "Ethernet và chuyển mạch",
+   "viDu": "Fiber is more affected by EMI than UTP",
+   "viDuNghia": "Cáp quang bị ảnh hưởng bởi EMI nhiều hơn UTP (phát biểu sai: cáp quang miễn nhiễm EMI)"
+  },
+  {
+   "chu": "crimp",
+   "doc": "/krɪmp/",
+   "nghia": "bấm (đầu cáp): ép đầu nối RJ-45 vào cáp mạng bằng kìm bấm",
+   "nhom": "Ethernet và chuyển mạch",
+   "viDu": "Use a crimping tool to crimp the RJ-45 connector onto the cable.",
+   "viDuNghia": "Dùng kìm bấm để bấm đầu nối RJ-45 vào cáp."
+  },
+  {
+   "chu": "SSID",
+   "doc": "/ˌes es aɪ ˈdiː/",
+   "nghia": "SSID: tên mạng không dây mà điểm truy cập quảng bá",
+   "nhom": "Ethernet và chuyển mạch",
+   "viDu": "Change the default SSID and use WPA2 or WPA3 security.",
+   "viDuNghia": "Đổi SSID mặc định và dùng bảo mật WPA2 hoặc WPA3."
+  },
+  {
+   "chu": "Internet Header Length",
+   "doc": "/ˈɪntərnet ˈhedər leŋθ/",
+   "nghia": "IHL: trường của tiêu đề IPv4 cho biết độ dài tiêu đề (tính theo từ 32 bit)",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "The Internet Header Length field is 5 when the IPv4 header has no options.",
+   "viDuNghia": "Trường IHL bằng 5 khi tiêu đề IPv4 không có tuỳ chọn."
+  },
+  {
+   "chu": "flow label",
+   "doc": "/floʊ ˈleɪbl/",
+   "nghia": "nhãn luồng: trường 20 bit của tiêu đề IPv6 đánh dấu các gói thuộc cùng một luồng",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "The flow label lets routers treat packets of the same flow alike.",
+   "viDuNghia": "Nhãn luồng cho router xử lý các gói cùng luồng như nhau."
+  },
+  {
+   "chu": "traffic class",
+   "doc": "/ˈtræfɪk klæs/",
+   "nghia": "lớp lưu lượng: trường của tiêu đề IPv6 dùng phân loại ưu tiên gói (giống DSCP của IPv4)",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "The traffic class field in IPv6 plays the same role as DSCP in IPv4.",
+   "viDuNghia": "Trường lớp lưu lượng của IPv6 đóng vai trò như DSCP trong IPv4."
+  },
+  {
+   "chu": "next header",
+   "doc": "/nekst ˈhedər/",
+   "nghia": "tiêu đề kế tiếp: trường IPv6 cho biết sau tiêu đề là gì (TCP, UDP, ICMPv6 hay tiêu đề mở rộng)",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "The next header field tells which protocol follows the IPv6 header.",
+   "viDuNghia": "Trường tiêu đề kế tiếp cho biết giao thức nào nằm sau tiêu đề IPv6."
+  },
+  {
+   "chu": "extension header",
+   "doc": "/ɪkˈstenʃn ˈhedər/",
+   "nghia": "tiêu đề mở rộng: tiêu đề tuỳ chọn của IPv6 nằm giữa tiêu đề chính và dữ liệu (phân mảnh, định tuyến…)",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "IPv6 moves options into extension headers to keep the main header fixed at 40 bytes.",
+   "viDuNghia": "IPv6 đưa tuỳ chọn vào tiêu đề mở rộng để tiêu đề chính cố định 40 byte."
+  },
+  {
+   "chu": "Differentiated Services Code Point",
+   "doc": "/ˌdɪfəˈrenʃieɪtɪd ˈsɜːrvɪsɪz koʊd pɔɪnt/",
+   "nghia": "DSCP: 6 bit trong tiêu đề IP đánh dấu mức ưu tiên dịch vụ của gói",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "Voice packets are marked with a high DSCP value.",
+   "viDuNghia": "Gói thoại được đánh dấu giá trị DSCP cao."
+  },
+  {
+   "chu": "global unicast address",
+   "doc": "/ˈɡloʊbl ˈjuːnɪkæst ˈædres/",
+   "nghia": "địa chỉ đơn hướng toàn cầu (GUA): địa chỉ IPv6 định tuyến được trên Internet, thường bắt đầu bằng 2 hoặc 3",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "Both are global unicast addresses",
+   "viDuNghia": "Cả hai đều là địa chỉ đơn hướng toàn cầu"
+  },
+  {
+   "chu": "unique local address",
+   "doc": "/juˈniːk ˈloʊkl ˈædres/",
+   "nghia": "địa chỉ cục bộ duy nhất (ULA, fc00::/7): địa chỉ IPv6 riêng, không định tuyến ra Internet",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "A unique local address is the IPv6 counterpart of a private IPv4 address.",
+   "viDuNghia": "Địa chỉ cục bộ duy nhất là bản tương ứng IPv6 của địa chỉ IPv4 riêng."
+  },
+  {
+   "chu": "solicited-node multicast address",
+   "doc": "/səˈlɪsɪtɪd noʊd ˈmʌltikæst ˈædres/",
+   "nghia": "địa chỉ đa hướng nút được hỏi (ff02::1:ff..): dùng trong ND thay cho quảng bá ARP",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "Neighbor Solicitation messages are sent to the solicited-node multicast address.",
+   "viDuNghia": "Thông điệp Neighbor Solicitation được gửi tới địa chỉ đa hướng nút được hỏi."
+  },
+  {
+   "chu": "anycast",
+   "doc": "/ˈenikæst/",
+   "nghia": "anycast: một địa chỉ gán cho nhiều máy, gói tới máy gần nhất",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "DNS root servers use anycast so that queries reach the nearest copy.",
+   "viDuNghia": "Máy chủ DNS gốc dùng anycast để truy vấn tới bản gần nhất."
+  },
+  {
+   "chu": "EUI-64",
+   "doc": "/ˌiː juː aɪ ˌsɪksti ˈfɔːr/",
+   "nghia": "EUI-64: cách tạo ID giao diện IPv6 64 bit từ địa chỉ MAC (chèn FFFE, đảo bit thứ 7)",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "EUI-64 builds the interface ID by inserting FFFE into the middle of the MAC address.",
+   "viDuNghia": "EUI-64 tạo ID giao diện bằng cách chèn FFFE vào giữa địa chỉ MAC."
+  },
+  {
+   "chu": "global routing prefix",
+   "doc": "/ˈɡloʊbl ˈruːtɪŋ ˈpriːfɪks/",
+   "nghia": "tiền tố định tuyến toàn cầu: phần đầu địa chỉ GUA do nhà cung cấp cấp cho tổ chức",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "The ISP assigns the global routing prefix, and the organization chooses the subnet ID.",
+   "viDuNghia": "ISP cấp tiền tố định tuyến toàn cầu, còn tổ chức tự chọn ID mạng con."
+  },
+  {
+   "chu": "subnet ID",
+   "doc": "/ˈsʌbnet ˌaɪ ˈdiː/",
+   "nghia": "ID mạng con: phần địa chỉ IPv6 nằm giữa tiền tố toàn cầu và ID giao diện, dùng chia mạng con",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "A /48 prefix leaves 16 bits for the subnet ID.",
+   "viDuNghia": "Tiền tố /48 để lại 16 bit cho ID mạng con."
+  },
+  {
+   "chu": "neighbor discovery",
+   "doc": "/ˈneɪbər dɪˈskʌvəri/",
+   "nghia": "khám phá láng giềng (NDP): bộ thông điệp ICMPv6 thay ARP, tìm router và cấu hình địa chỉ",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "IPv6 uses neighbor discovery instead of ARP.",
+   "viDuNghia": "IPv6 dùng khám phá láng giềng thay cho ARP."
+  },
+  {
+   "chu": "Router Solicitation",
+   "doc": "/ˈraʊtər səˌlɪsɪˈteɪʃn/",
+   "nghia": "lời mời router (RS): máy IPv6 gửi để xin router trả về thông tin tiền tố mạng",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "A host sends a Router Solicitation to ask for a Router Advertisement.",
+   "viDuNghia": "Máy trạm gửi Router Solicitation để xin một Router Advertisement."
+  },
+  {
+   "chu": "Neighbor Advertisement",
+   "doc": "/ˈneɪbər ədˈvɜːrtɪsmənt/",
+   "nghia": "quảng bá láng giềng (NA): trả lời Neighbor Solicitation, cho biết địa chỉ MAC của mình",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "The target replies with a Neighbor Advertisement containing its MAC address.",
+   "viDuNghia": "Máy đích trả lời bằng Neighbor Advertisement chứa địa chỉ MAC của nó."
+  },
+  {
+   "chu": "duplicate address detection",
+   "doc": "/ˈduːplɪkət ˈædres dɪˈtekʃn/",
+   "nghia": "dò địa chỉ trùng (DAD): máy IPv6 kiểm tra không ai dùng địa chỉ trước khi nhận nó",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "Duplicate address detection makes sure a new IPv6 address is unique on the link.",
+   "viDuNghia": "Dò địa chỉ trùng bảo đảm địa chỉ IPv6 mới là duy nhất trên đoạn mạng."
+  },
+  {
+   "chu": "DHCPv6",
+   "doc": "/ˌdiː eɪtʃ siː piː viː ˈsɪks/",
+   "nghia": "DHCPv6: DHCP cho IPv6, cấp địa chỉ có trạng thái hoặc chỉ cấp thông tin như DNS",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "It asks the DHCPv6 server for the MAC",
+   "viDuNghia": "Nó hỏi máy chủ DHCPv6 để lấy MAC (phát biểu sai: tìm MAC là việc của ND)"
+  },
+  {
+   "chu": "DORA",
+   "doc": "/ˈdɔːrə/",
+   "nghia": "DORA: bốn bước cấp địa chỉ DHCP — Discover, Offer, Request, Acknowledgment",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "DHCP leasing follows the DORA process: Discover, Offer, Request, Acknowledgment.",
+   "viDuNghia": "Cấp địa chỉ DHCP theo bốn bước DORA: Discover, Offer, Request, Acknowledgment."
+  },
+  {
+   "chu": "APIPA",
+   "doc": "/ˌeɪ piː aɪ piː ˈeɪ/",
+   "nghia": "APIPA: địa chỉ 169.254.x.x Windows tự gán khi không liên lạc được máy chủ DHCP",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "The PC has an APIPA address",
+   "viDuNghia": "Máy tính có địa chỉ APIPA"
+  },
+  {
+   "chu": "carrier-grade NAT",
+   "doc": "/ˈkæriər ɡreɪd næt/",
+   "nghia": "NAT cấp nhà mạng (CGNAT): nhà mạng dùng NAT để nhiều khách hàng chung một địa chỉ IPv4 công cộng",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "With carrier-grade NAT, many home routers share one public IPv4 address.",
+   "viDuNghia": "Với CGNAT, nhiều router gia đình dùng chung một địa chỉ IPv4 công cộng."
+  },
+  {
+   "chu": "wildcard mask",
+   "doc": "/ˈwaɪldkɑːrd mæsk/",
+   "nghia": "mặt nạ ký tự đại diện: nghịch đảo của mặt nạ mạng con, dùng trong ACL và OSPF (0.0.0.255)",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "The wildcard mask 0.0.0.255 matches every host in a /24 network.",
+   "viDuNghia": "Mặt nạ đại diện 0.0.0.255 khớp mọi máy trong mạng /24."
+  },
+  {
+   "chu": "route summarization",
+   "doc": "/ruːt ˌsʌmərəˈzeɪʃn/",
+   "nghia": "tóm tắt tuyến: gộp nhiều mạng con liên tiếp thành một tuyến có tiền tố ngắn hơn",
+   "nhom": "Tiêu đề và địa chỉ IPv4/IPv6",
+   "viDu": "Route summarization reduces the size of routing tables.",
+   "viDuNghia": "Tóm tắt tuyến làm bảng định tuyến nhỏ lại."
+  },
+  {
+   "chu": "Echo Request",
+   "doc": "/ˈekoʊ rɪˈkwest/",
+   "nghia": "Echo Request: thông điệp ICMP mà lệnh ping gửi đi",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "The ping command sends ICMP Echo Request messages to the target.",
+   "viDuNghia": "Lệnh ping gửi các thông điệp ICMP Echo Request tới máy đích."
+  },
+  {
+   "chu": "Echo Reply",
+   "doc": "/ˈekoʊ rɪˈplaɪ/",
+   "nghia": "Echo Reply: thông điệp ICMP máy đích trả lời ping",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "Receiving an Echo Reply proves the destination is reachable.",
+   "viDuNghia": "Nhận được Echo Reply chứng tỏ máy đích tới được."
+  },
+  {
+   "chu": "Time Exceeded",
+   "doc": "/taɪm ɪkˈsiːdɪd/",
+   "nghia": "Time Exceeded: thông điệp ICMP router gửi về khi TTL của gói giảm về 0",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "It raises TTL step by step and reads Time Exceeded replies",
+   "viDuNghia": "Nó tăng TTL từng bước và đọc các phản hồi Time Exceeded"
+  },
+  {
+   "chu": "ipconfig",
+   "doc": "/ˌaɪ ˈpiː ˌkɑːnfɪɡ/",
+   "nghia": "ipconfig: lệnh Windows xem cấu hình IP (ipconfig /all, /release, /renew)",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "Run ipconfig /all to see the IP address, gateway and DNS servers of the PC.",
+   "viDuNghia": "Chạy ipconfig /all để xem địa chỉ IP, cổng mặc định và máy chủ DNS của máy."
+  },
+  {
+   "chu": "nslookup",
+   "doc": "/ˈen es lʊkʌp/",
+   "nghia": "nslookup: lệnh hỏi máy chủ DNS để kiểm tra phân giải tên",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "Use nslookup to check whether a host name resolves to the right address.",
+   "viDuNghia": "Dùng nslookup để kiểm tra tên máy có phân giải đúng địa chỉ không."
+  },
+  {
+   "chu": "netstat",
+   "doc": "/ˈnet stæt/",
+   "nghia": "netstat: lệnh liệt kê các kết nối và cổng đang mở trên máy",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "netstat shows which TCP ports are listening on the host.",
+   "viDuNghia": "netstat cho biết những cổng TCP nào đang lắng nghe trên máy."
+  },
+  {
+   "chu": "Wireshark",
+   "doc": "/ˈwaɪərʃɑːrk/",
+   "nghia": "Wireshark: phần mềm bắt và phân tích gói tin theo từng tầng",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "Wireshark lets you inspect every field of a captured frame.",
+   "viDuNghia": "Wireshark cho phép xem từng trường của khung đã bắt được."
+  },
+  {
+   "chu": "packet capture",
+   "doc": "/ˈpækɪt ˈkæptʃər/",
+   "nghia": "bắt gói: ghi lại các gói đi qua một cổng mạng để phân tích (pcap)",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "A packet capture shows the three-way handshake of a TCP connection.",
+   "viDuNghia": "Một bản bắt gói cho thấy bắt tay ba bước của kết nối TCP."
+  },
+  {
+   "chu": "goodput",
+   "doc": "/ˈɡʊdpʊt/",
+   "nghia": "thông lượng hữu ích: lượng dữ liệu ứng dụng thật sự nhận được mỗi giây, không tính tiêu đề và gói truyền lại",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "Goodput is always lower than throughput because of headers and retransmissions.",
+   "viDuNghia": "Thông lượng hữu ích luôn thấp hơn thông lượng vì tiêu đề và gói truyền lại."
+  },
+  {
+   "chu": "syslog",
+   "doc": "/ˈsɪslɑːɡ/",
+   "nghia": "syslog: chuẩn gửi và lưu thông điệp nhật ký của thiết bị mạng và máy chủ",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "Routers can send their log messages to a central syslog server.",
+   "viDuNghia": "Router có thể gửi thông điệp nhật ký tới một máy chủ syslog trung tâm."
+  },
+  {
+   "chu": "Simple Network Management Protocol",
+   "doc": "/ˈsɪmpl ˈnetwɜːrk ˈmænɪdʒmənt ˈproʊtəkɔːl/",
+   "nghia": "SNMP: giao thức giám sát và quản lý thiết bị mạng từ xa",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "SNMP lets a management station read interface counters from routers.",
+   "viDuNghia": "SNMP cho trạm quản lý đọc bộ đếm cổng từ các router."
+  },
+  {
+   "chu": "Trivial File Transfer Protocol",
+   "doc": "/ˈtrɪviəl faɪl ˈtrænsfɜːr ˈproʊtəkɔːl/",
+   "nghia": "TFTP: giao thức truyền tệp đơn giản trên UDP, hay dùng sao lưu cấu hình hoặc ảnh IOS",
+   "nhom": "Kiểm tra và công cụ",
+   "viDu": "Network engineers use the Trivial File Transfer Protocol to back up router configurations.",
+   "viDuNghia": "Kỹ sư mạng dùng TFTP để sao lưu cấu hình router."
+  },
+  {
+   "chu": "hardening",
+   "doc": "/ˈhɑːrdnɪŋ/",
+   "nghia": "gia cố (thiết bị): tắt dịch vụ thừa, đổi mật khẩu mặc định, dùng SSH… để giảm bề mặt tấn công",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "Device hardening includes disabling unused services and ports.",
+   "viDuNghia": "Gia cố thiết bị gồm tắt các dịch vụ và cổng không dùng."
+  },
+  {
+   "chu": "reconnaissance",
+   "doc": "/rɪˈkɑːnɪsns/",
+   "nghia": "trinh sát: giai đoạn kẻ tấn công dò tìm máy, cổng và dịch vụ trên mạng",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "A reconnaissance sweep",
+   "viDuNghia": "Một đợt quét trinh sát"
+  },
+  {
+   "chu": "spoofing",
+   "doc": "/ˈspuːfɪŋ/",
+   "nghia": "giả mạo: làm giả địa chỉ IP, MAC hay danh tính để đánh lừa hệ thống",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "IP address spoofing hides the real source of an attack.",
+   "viDuNghia": "Giả mạo địa chỉ IP che giấu nguồn thật của cuộc tấn công."
+  },
+  {
+   "chu": "ARP spoofing",
+   "doc": "/ɑːrp ˈspuːfɪŋ/",
+   "nghia": "giả mạo ARP: gửi trả lời ARP giả để lưu lượng đi qua máy kẻ tấn công",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "ARP spoofing can redirect traffic through the attacker's computer.",
+   "viDuNghia": "Giả mạo ARP có thể chuyển hướng lưu lượng đi qua máy của kẻ tấn công."
+  },
+  {
+   "chu": "MAC address flooding",
+   "doc": "/mæk ˈædres ˈflʌdɪŋ/",
+   "nghia": "tràn bảng MAC: gửi thật nhiều MAC giả làm đầy bảng, buộc switch phát khung ra mọi cổng",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "MAC address flooding turns a switch into a hub-like device.",
+   "viDuNghia": "Tràn bảng MAC biến switch thành thiết bị giống hub."
+  },
+  {
+   "chu": "DHCP starvation",
+   "doc": "/ˌdiː eɪtʃ siː ˈpiː stɑːrˈveɪʃn/",
+   "nghia": "làm cạn DHCP: xin hết địa chỉ trong dải bằng MAC giả, máy thật không còn địa chỉ",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "A DHCP starvation attack uses up all the addresses in the pool.",
+   "viDuNghia": "Tấn công làm cạn DHCP dùng hết mọi địa chỉ trong dải."
+  },
+  {
+   "chu": "DHCP snooping",
+   "doc": "/ˌdiː eɪtʃ siː ˈpiː ˈsnuːpɪŋ/",
+   "nghia": "DHCP snooping: tính năng switch chỉ cho trả lời DHCP đi ra từ cổng tin cậy",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "DHCP snooping blocks replies from rogue DHCP servers.",
+   "viDuNghia": "DHCP snooping chặn trả lời từ máy chủ DHCP giả."
+  },
+  {
+   "chu": "man-in-the-middle attack",
+   "doc": "/ˌmæn ɪn ðə ˈmɪdl əˈtæk/",
+   "nghia": "tấn công xen giữa: kẻ tấn công đứng giữa hai bên, nghe lén hoặc sửa dữ liệu",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "A man-in-the-middle attack",
+   "viDuNghia": "Một cuộc tấn công xen giữa"
+  },
+  {
+   "chu": "dictionary attack",
+   "doc": "/ˈdɪkʃəneri əˈtæk/",
+   "nghia": "tấn công từ điển: thử lần lượt các mật khẩu phổ biến trong danh sách",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "A dictionary attack tries common passwords from a word list.",
+   "viDuNghia": "Tấn công từ điển thử các mật khẩu phổ biến trong danh sách từ."
+  },
+  {
+   "chu": "port security",
+   "doc": "/pɔːrt sɪˈkjʊrəti/",
+   "nghia": "bảo mật cổng: giới hạn số và giá trị địa chỉ MAC được dùng trên một cổng switch",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "Port security shuts down a port when an unknown MAC address appears.",
+   "viDuNghia": "Bảo mật cổng tắt cổng khi xuất hiện địa chỉ MAC lạ."
+  },
+  {
+   "chu": "virtual private network",
+   "doc": "/ˈvɜːrtʃuəl ˈpraɪvət ˈnetwɜːrk/",
+   "nghia": "mạng riêng ảo (VPN): đường hầm mã hoá nối người dùng hoặc chi nhánh qua Internet",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "Remote workers connect to the company network through a virtual private network.",
+   "viDuNghia": "Nhân viên làm từ xa kết nối mạng công ty qua mạng riêng ảo."
+  },
+  {
+   "chu": "Wi-Fi Protected Access",
+   "doc": "/ˈwaɪ faɪ prəˈtektɪd ˈækses/",
+   "nghia": "WPA: chuẩn bảo mật mạng không dây (WPA2, WPA3) thay cho WEP",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "Wi-Fi Protected Access 2 uses AES encryption.",
+   "viDuNghia": "WPA2 dùng mã hoá AES."
+  },
+  {
+   "chu": "STARTTLS",
+   "doc": "/ˈstɑːrt ˌtiː el ˈes/",
+   "nghia": "STARTTLS: lệnh nâng kết nối thư thường (SMTP, IMAP) lên kết nối mã hoá TLS",
+   "nhom": "Tấn công và gia cố",
+   "viDu": "STARTTLS upgrades an existing SMTP connection to an encrypted one.",
+   "viDuNghia": "STARTTLS nâng một kết nối SMTP đang có lên kết nối mã hoá."
+  }
+ ]
+}

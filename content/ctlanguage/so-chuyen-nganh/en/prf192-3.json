@@ -1,0 +1,962 @@
+{
+ "ma": "prf192-3",
+ "nn": "en",
+ "ten": "PRF192 · 3. Thư viện chuẩn C, bộ nhớ & lỗi hay gặp",
+ "moTa": "Bổ sung cho PRF192: tên hàm thư viện chuẩn C hay hỏi trong đề (stdio.h, string.h, ctype.h, stdlib.h, math.h), hàm tệp, cấp phát động, toán tử và lỗi thường gặp khi chạy chương trình C. Câu ví dụ phần lớn lấy từ đề FE/PE thật.",
+ "bieuTuong": "books.vertical.fill",
+ "thuTu": -992,
+ "tu": [
+  {
+   "chu": "stdio.h",
+   "doc": "/ˈstændərd ˌaɪ ˈoʊ dɒt eɪtʃ/",
+   "nghia": "stdio.h: tệp tiêu đề nhập xuất chuẩn (printf, scanf, getchar, fopen…)",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "The library stdio.h contains functions for printing out data, including ___________",
+   "viDuNghia": "Thư viện stdio.h chứa các hàm in dữ liệu ra, gồm ___________"
+  },
+  {
+   "chu": "printf",
+   "doc": "/ˈprɪnt ɛf/",
+   "nghia": "printf: hàm in có định dạng ra màn hình (stdout)",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "What will be the output of the C program? int i = 5, j = 8; while(++i < --j) printf(\"loop\");",
+   "viDuNghia": "Chương trình C sau in ra gì? int i = 5, j = 8; while(++i < --j) printf(\"loop\");"
+  },
+  {
+   "chu": "scanf",
+   "doc": "/skæn ɛf/",
+   "nghia": "scanf: hàm đọc dữ liệu có định dạng từ bàn phím (stdin); trả về số mục đọc được",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "scanf will expect two integers inputted by user and write them to variables a and b.",
+   "viDuNghia": "scanf sẽ chờ hai số nguyên người dùng nhập và ghi chúng vào biến a và b."
+  },
+  {
+   "chu": "getchar",
+   "doc": "/ɡɛt kɑːr/",
+   "nghia": "getchar: hàm đọc MỘT ký tự từ stdin",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "getchar() retrieves a single character from the standard input stream buffer without translating the input.",
+   "viDuNghia": "getchar() lấy một ký tự từ bộ đệm luồng nhập chuẩn mà không chuyển đổi dữ liệu nhập."
+  },
+  {
+   "chu": "putchar",
+   "doc": "/pʊt kɑːr/",
+   "nghia": "putchar: hàm in MỘT ký tự ra stdout",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "putchar(c) writes the character c to the standard output.",
+   "viDuNghia": "putchar(c) ghi ký tự c ra đầu ra chuẩn."
+  },
+  {
+   "chu": "fgets",
+   "doc": "/ɛf ɡɛts/",
+   "nghia": "fgets: đọc một dòng (tối đa n−1 ký tự) từ tệp hoặc stdin vào mảng; giữ lại ký tự '\\n'",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "fgets(s, sizeof(s), stdin);",
+   "viDuNghia": "fgets(s, sizeof(s), stdin); — đọc một dòng từ bàn phím vào chuỗi s."
+  },
+  {
+   "chu": "fputs",
+   "doc": "/ɛf pʊts/",
+   "nghia": "fputs: ghi một chuỗi ra tệp (không tự thêm xuống dòng)",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "int fputs( const char *s, FILE *fp );",
+   "viDuNghia": "int fputs(const char *s, FILE *fp); — nguyên mẫu hàm ghi chuỗi s vào tệp fp."
+  },
+  {
+   "chu": "format string",
+   "doc": "/ˈfɔːrmæt strɪŋ/",
+   "nghia": "chuỗi định dạng: chuỗi chứa đặc tả %d, %f, %s… truyền cho printf/scanf",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "The format string \"%5.2f\" prints a float in a field of width 5 with 2 digits after the point.",
+   "viDuNghia": "Chuỗi định dạng \"%5.2f\" in số thực trong ô rộng 5 với 2 chữ số sau dấu chấm."
+  },
+  {
+   "chu": "field width",
+   "doc": "/fiːld wɪdθ/",
+   "nghia": "độ rộng trường: số ô tối thiểu khi in (%5d chiếm 5 ô, căn phải)",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "printf(\"%5d\", 42) uses a field width of 5, so three spaces are printed before 42.",
+   "viDuNghia": "printf(\"%5d\", 42) dùng độ rộng trường 5 nên in ba dấu cách trước 42."
+  },
+  {
+   "chu": "precision",
+   "doc": "/prɪˈsɪʒən/",
+   "nghia": "độ chính xác: số chữ số sau dấu thập phân (%.2f) hoặc số ký tự tối đa của chuỗi (%.3s)",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "The precision .2 in \"%.2f\" rounds the value to two decimal places.",
+   "viDuNghia": "Độ chính xác .2 trong \"%.2f\" làm tròn giá trị tới hai chữ số thập phân."
+  },
+  {
+   "chu": "escape sequence",
+   "doc": "/ɪˈskeɪp ˈsiːkwəns/",
+   "nghia": "chuỗi thoát: ký tự đặc biệt viết bằng dấu \\ (\\n xuống dòng, \\t tab, \\\\ dấu gạch chéo ngược)",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "The escape sequence \\n moves the cursor to the beginning of the next line.",
+   "viDuNghia": "Chuỗi thoát \\n đưa con trỏ về đầu dòng kế tiếp."
+  },
+  {
+   "chu": "backslash",
+   "doc": "/ˈbækslæʃ/",
+   "nghia": "dấu gạch chéo ngược \\ : mở đầu chuỗi thoát trong C",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "Simply precede the percent sign with a double backslash \\\\%",
+   "viDuNghia": "Chỉ cần đặt hai dấu gạch chéo ngược \\\\ trước dấu phần trăm. (Đáp án đúng là viết %%.)"
+  },
+  {
+   "chu": "tab character",
+   "doc": "/tæb ˈkærəktər/",
+   "nghia": "ký tự tab \\t: nhảy tới cột tab kế tiếp",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "Use the tab character \\t to align the columns of the output table.",
+   "viDuNghia": "Dùng ký tự tab \\t để căn thẳng các cột của bảng kết quả."
+  },
+  {
+   "chu": "buffered input",
+   "doc": "/ˈbʌfərd ˈɪnpʊt/",
+   "nghia": "nhập có bộ đệm: phím gõ được gom vào bộ đệm, chương trình chỉ nhận khi bấm Enter",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "In the buffered input, the program can respond to each and every keystroke directly.",
+   "viDuNghia": "Với nhập có bộ đệm, chương trình có thể phản hồi trực tiếp từng phím gõ. (Phát biểu SAI — phải chờ Enter.)"
+  },
+  {
+   "chu": "unbuffered input",
+   "doc": "/ʌnˈbʌfərd ˈɪnpʊt/",
+   "nghia": "nhập không bộ đệm: chương trình nhận ngay từng phím (vd getch() của conio.h)",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "scanf is a kind of unbuffered input",
+   "viDuNghia": "scanf là một kiểu nhập không bộ đệm. (Phát biểu SAI — scanf dùng bộ đệm.)"
+  },
+  {
+   "chu": "input buffer",
+   "doc": "/ˈɪnpʊt ˈbʌfər/",
+   "nghia": "bộ đệm nhập: vùng nhớ tạm giữ dữ liệu gõ vào chờ chương trình đọc; '\\n' sót lại hay làm lệnh đọc sau bị trôi",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "The newline left in the input buffer makes the next getchar() return immediately.",
+   "viDuNghia": "Ký tự xuống dòng còn sót trong bộ đệm nhập làm lệnh getchar() kế tiếp trả về ngay."
+  },
+  {
+   "chu": "flush",
+   "doc": "/flʌʃ/",
+   "nghia": "xả (bộ đệm): đẩy hết dữ liệu đang chờ trong bộ đệm ra hoặc bỏ đi",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "Output is flushed to the screen when a newline is printed or the buffer is full.",
+   "viDuNghia": "Dữ liệu ra được xả lên màn hình khi in ký tự xuống dòng hoặc bộ đệm đầy."
+  },
+  {
+   "chu": "fflush",
+   "doc": "/ɛf flʌʃ/",
+   "nghia": "fflush: hàm xả bộ đệm của một luồng ra (fflush(stdout)); fflush(stdin) là hành vi không xác định theo chuẩn",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "Call fflush(stdout) to make sure the prompt appears before reading input.",
+   "viDuNghia": "Gọi fflush(stdout) để chắc chắn lời nhắc hiện ra trước khi đọc dữ liệu nhập."
+  },
+  {
+   "chu": "stdin",
+   "doc": "/ˈstændərd ɪn/",
+   "nghia": "stdin: luồng nhập chuẩn (mặc định là bàn phím)",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "getchar() gets a character (an unsigned char) from stdin.",
+   "viDuNghia": "getchar() lấy một ký tự (unsigned char) từ stdin."
+  },
+  {
+   "chu": "stdout",
+   "doc": "/ˈstændərd aʊt/",
+   "nghia": "stdout: luồng xuất chuẩn (mặc định là màn hình)",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "printf() writes its output to stdout.",
+   "viDuNghia": "printf() ghi kết quả ra stdout."
+  },
+  {
+   "chu": "stderr",
+   "doc": "/ˈstændərd ˈɛrər/",
+   "nghia": "stderr: luồng lỗi chuẩn, dùng in thông báo lỗi (không bị chuyển hướng cùng stdout)",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "Error messages should be written to stderr with fprintf(stderr, ...).",
+   "viDuNghia": "Thông báo lỗi nên ghi ra stderr bằng fprintf(stderr, ...)."
+  },
+  {
+   "chu": "delimiter",
+   "doc": "/dɪˈlɪmɪtər/",
+   "nghia": "ký tự phân cách: ký tự đánh dấu chỗ ngắt giữa các phần dữ liệu (dấu cách, dấu phẩy, '\\n')",
+   "nhom": "Nhập xuất chuẩn (stdio.h)",
+   "viDu": "It throws away the delimiter after accepting the string",
+   "viDuNghia": "Nó bỏ đi ký tự phân cách sau khi nhận chuỗi."
+  },
+  {
+   "chu": "fopen",
+   "doc": "/ɛf ˈoʊpən/",
+   "nghia": "fopen: mở tệp theo chế độ (\"r\", \"w\", \"a\", \"rb\"…); trả về FILE* hoặc NULL nếu lỗi",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "What is the purpose of \"rb\" in fopen() function used below in the code? FILE *fp; fp = fopen(\"demo.txt\", \"rb\");",
+   "viDuNghia": "\"rb\" trong lời gọi fopen() dưới đây có tác dụng gì? FILE *fp; fp = fopen(\"demo.txt\", \"rb\");"
+  },
+  {
+   "chu": "fclose",
+   "doc": "/ɛf kloʊz/",
+   "nghia": "fclose: đóng tệp, ghi nốt bộ đệm và giải phóng FILE*",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "Always call fclose(fp) when you have finished working with the file.",
+   "viDuNghia": "Luôn gọi fclose(fp) khi đã làm xong với tệp."
+  },
+  {
+   "chu": "fgetc",
+   "doc": "/ɛf ɡɛt siː/",
+   "nghia": "fgetc: đọc một ký tự từ tệp; trả về EOF khi hết tệp",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "while ((ch = fgetc(file_ptr)) != EOF) { putchar(ch); }",
+   "viDuNghia": "Trong khi ký tự ch đọc bằng fgetc(file_ptr) khác EOF thì in ch ra."
+  },
+  {
+   "chu": "fputc",
+   "doc": "/ɛf pʊt siː/",
+   "nghia": "fputc: ghi một ký tự vào tệp",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "int fputc( int c, FILE *fp );",
+   "viDuNghia": "int fputc(int c, FILE *fp); — nguyên mẫu hàm ghi ký tự c vào tệp fp."
+  },
+  {
+   "chu": "fprintf",
+   "doc": "/ɛf ˈprɪnt ɛf/",
+   "nghia": "fprintf: printf nhưng ghi vào tệp chỉ định",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "fprintf(file_ptr, \"Hello, World!\\n\");",
+   "viDuNghia": "fprintf(file_ptr, \"Hello, World!\\n\"); — ghi dòng chữ vào tệp file_ptr."
+  },
+  {
+   "chu": "fscanf",
+   "doc": "/ɛf skæn ɛf/",
+   "nghia": "fscanf: scanf nhưng đọc từ tệp chỉ định",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "fscanf(fp, \"%d\", &n) reads an integer from the file into n.",
+   "viDuNghia": "fscanf(fp, \"%d\", &n) đọc một số nguyên từ tệp vào n."
+  },
+  {
+   "chu": "fread",
+   "doc": "/ɛf riːd/",
+   "nghia": "fread: đọc một khối byte (n phần tử, mỗi phần tử size byte) từ tệp nhị phân",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "fread(&s, sizeof(struct Student), 1, fp) reads one record from a binary file.",
+   "viDuNghia": "fread(&s, sizeof(struct Student), 1, fp) đọc một bản ghi từ tệp nhị phân."
+  },
+  {
+   "chu": "fwrite",
+   "doc": "/ɛf raɪt/",
+   "nghia": "fwrite: ghi một khối byte vào tệp nhị phân",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "Which statement correctly uses fwrite() to save an array of 10 integers to a binary file?",
+   "viDuNghia": "Câu lệnh nào dùng fwrite() đúng để lưu mảng 10 số nguyên vào tệp nhị phân?"
+  },
+  {
+   "chu": "fseek",
+   "doc": "/ɛf siːk/",
+   "nghia": "fseek: dời con trỏ vị trí trong tệp (SEEK_SET đầu tệp, SEEK_CUR hiện tại, SEEK_END cuối tệp)",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "fseek(fp, 0, SEEK_END) moves the file position to the end of the file.",
+   "viDuNghia": "fseek(fp, 0, SEEK_END) dời vị trí đọc/ghi tới cuối tệp."
+  },
+  {
+   "chu": "ftell",
+   "doc": "/ɛf tɛl/",
+   "nghia": "ftell: trả về vị trí hiện tại (tính bằng byte) trong tệp",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "After fseek(fp, 0, SEEK_END), ftell(fp) gives the size of the file in bytes.",
+   "viDuNghia": "Sau fseek(fp, 0, SEEK_END), ftell(fp) cho biết kích thước tệp tính bằng byte."
+  },
+  {
+   "chu": "rewind",
+   "doc": "/ˌriːˈwaɪnd/",
+   "nghia": "rewind: đưa con trỏ vị trí về đầu tệp",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "What is the rewind () function used for?",
+   "viDuNghia": "Hàm rewind() dùng để làm gì?"
+  },
+  {
+   "chu": "feof",
+   "doc": "/ɛf iː oʊ ɛf/",
+   "nghia": "feof: kiểm tra đã gặp cuối tệp chưa (khác 0 nếu đã đọc quá cuối)",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "feof(fp) returns non-zero only after a read has tried to go past the end of the file.",
+   "viDuNghia": "feof(fp) chỉ trả về khác 0 sau khi một lệnh đọc đã cố đọc quá cuối tệp."
+  },
+  {
+   "chu": "EOF",
+   "doc": "/ˌiː oʊ ˈɛf/",
+   "nghia": "EOF (End Of File): hằng (thường −1) báo hết dữ liệu hoặc lỗi đọc",
+   "nhom": "Hàm làm việc với tệp",
+   "viDu": "EOF indicates that scanf filled all assigned items",
+   "viDuNghia": "EOF cho biết scanf đã điền đủ mọi mục được gán. (Phát biểu SAI — EOF báo hết dữ liệu/lỗi.)"
+  },
+  {
+   "chu": "stdlib.h",
+   "doc": "/ˈstændərd lɪb dɒt eɪtʃ/",
+   "nghia": "stdlib.h: thư viện tiện ích chung (malloc, free, rand, atoi, exit…)",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "To use malloc() and free(), you must include stdlib.h.",
+   "viDuNghia": "Muốn dùng malloc() và free() phải include stdlib.h."
+  },
+  {
+   "chu": "malloc",
+   "doc": "/ˈmæl ɒk/",
+   "nghia": "malloc: cấp phát một khối bộ nhớ động (chưa khởi tạo), trả về con trỏ hoặc NULL",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "int * a = ( int *) malloc ( 5 * sizeof ( int ));",
+   "viDuNghia": "int *a = (int*) malloc(5 * sizeof(int)); — cấp phát mảng động 5 số nguyên."
+  },
+  {
+   "chu": "calloc",
+   "doc": "/ˈkæl ɒk/",
+   "nghia": "calloc: cấp phát n phần tử và đặt toàn bộ về 0",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "Unlike malloc, calloc(5, sizeof(int)) sets all five integers to 0.",
+   "viDuNghia": "Khác malloc, calloc(5, sizeof(int)) đặt cả năm số nguyên về 0."
+  },
+  {
+   "chu": "realloc",
+   "doc": "/riˈæl ɒk/",
+   "nghia": "realloc: đổi kích thước khối đã cấp phát (có thể dời sang chỗ mới, giữ dữ liệu cũ)",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "int *ptr = malloc( sizeof( int ) ); To reallocate ptr to be an array of 5 elements, which of the following statements is correct?",
+   "viDuNghia": "int *ptr = malloc(sizeof(int)); Để cấp phát lại ptr thành mảng 5 phần tử, câu lệnh nào đúng?"
+  },
+  {
+   "chu": "dynamic array",
+   "doc": "/daɪˈnæmɪk əˈreɪ/",
+   "nghia": "mảng động: mảng cấp phát lúc chạy bằng malloc/calloc, kích thước đổi được bằng realloc",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "A dynamic array lets the user choose the number of elements at run time.",
+   "viDuNghia": "Mảng động cho người dùng chọn số phần tử lúc chạy."
+  },
+  {
+   "chu": "dereference",
+   "doc": "/ˌdiːˈrɛfərəns/",
+   "nghia": "giải tham chiếu: dùng *p để lấy (hoặc gán) giá trị tại địa chỉ p trỏ tới",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "Dereferencing a NULL pointer causes the program to crash.",
+   "viDuNghia": "Giải tham chiếu con trỏ NULL làm chương trình sập."
+  },
+  {
+   "chu": "indirection operator",
+   "doc": "/ˌɪndəˈrɛkʃən ˈɒpəreɪtər/",
+   "nghia": "toán tử gián tiếp *: truy cập giá trị qua con trỏ (cùng nghĩa dereference)",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "In *p = 10, the indirection operator stores 10 in the variable that p points to.",
+   "viDuNghia": "Trong *p = 10, toán tử gián tiếp ghi 10 vào biến mà p trỏ tới."
+  },
+  {
+   "chu": "address-of operator",
+   "doc": "/ˈædrɛs ɒv ˈɒpəreɪtər/",
+   "nghia": "toán tử lấy địa chỉ &: trả về địa chỉ của biến (vì thế scanf cần &n)",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "scanf needs the address-of operator: scanf(\"%d\", &n).",
+   "viDuNghia": "scanf cần toán tử lấy địa chỉ: scanf(\"%d\", &n)."
+  },
+  {
+   "chu": "pointer to pointer",
+   "doc": "/ˈpɔɪntər tə ˈpɔɪntər/",
+   "nghia": "con trỏ cấp hai (int **pp): biến lưu địa chỉ của một con trỏ khác",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "A pointer to pointer is needed when a function must change the caller's pointer.",
+   "viDuNghia": "Cần con trỏ cấp hai khi hàm phải sửa chính con trỏ của nơi gọi."
+  },
+  {
+   "chu": "array of pointers",
+   "doc": "/əˈreɪ ɒv ˈpɔɪntərz/",
+   "nghia": "mảng con trỏ: mảng mà mỗi phần tử là một con trỏ (vd char *names[10])",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "char *words[3] is an array of pointers, each pointing to a string.",
+   "viDuNghia": "char *words[3] là mảng con trỏ, mỗi phần tử trỏ tới một chuỗi."
+  },
+  {
+   "chu": "dangling pointer",
+   "doc": "/ˈdæŋɡlɪŋ ˈpɔɪntər/",
+   "nghia": "con trỏ treo: con trỏ vẫn giữ địa chỉ của vùng nhớ đã free hoặc đã hết phạm vi",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "After free(p), p becomes a dangling pointer, so set p = NULL.",
+   "viDuNghia": "Sau free(p), p thành con trỏ treo, nên gán p = NULL."
+  },
+  {
+   "chu": "out of bounds",
+   "doc": "/aʊt ɒv baʊndz/",
+   "nghia": "vượt biên: chỉ số mảng nằm ngoài 0..n−1; C không báo lỗi, gây hành vi không xác định",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "Accessing arr[10] in an array of 10 elements is out of bounds.",
+   "viDuNghia": "Truy cập arr[10] trong mảng 10 phần tử là vượt biên."
+  },
+  {
+   "chu": "bounds checking",
+   "doc": "/baʊndz ˈtʃɛkɪŋ/",
+   "nghia": "kiểm tra biên: kiểm chỉ số có nằm trong mảng không; C KHÔNG tự làm việc này",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "C performs no bounds checking, so the programmer must check every index.",
+   "viDuNghia": "C không kiểm tra biên nên lập trình viên phải tự kiểm mọi chỉ số."
+  },
+  {
+   "chu": "stack overflow",
+   "doc": "/stæk ˈoʊvərfloʊ/",
+   "nghia": "tràn ngăn xếp: ngăn xếp lời gọi đầy, thường do đệ quy không có điểm dừng",
+   "nhom": "Bộ nhớ động & con trỏ",
+   "viDu": "A recursive function without a base case ends with a stack overflow.",
+   "viDuNghia": "Hàm đệ quy không có trường hợp dừng sẽ kết thúc bằng lỗi tràn ngăn xếp."
+  },
+  {
+   "chu": "string.h",
+   "doc": "/strɪŋ dɒt eɪtʃ/",
+   "nghia": "string.h: thư viện xử lý chuỗi (strlen, strcpy, strcmp, strcat…)",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "strlen(), strcpy() and strcmp() are declared in string.h.",
+   "viDuNghia": "strlen(), strcpy() và strcmp() được khai báo trong string.h."
+  },
+  {
+   "chu": "null terminator",
+   "doc": "/nʌl ˈtɜːrmɪneɪtər/",
+   "nghia": "ký tự kết thúc chuỗi '\\0': đánh dấu chỗ hết chuỗi trong C",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "The null terminator in C strings",
+   "viDuNghia": "Ký tự kết thúc '\\0' trong chuỗi C."
+  },
+  {
+   "chu": "strlen",
+   "doc": "/stɜːr lɛn/",
+   "nghia": "strlen: trả về độ dài chuỗi (không tính '\\0')",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "strlen(\"hello\") returns 5, not 6.",
+   "viDuNghia": "strlen(\"hello\") trả về 5, không phải 6."
+  },
+  {
+   "chu": "strcpy",
+   "doc": "/stɜːr ˈkɒpi/",
+   "nghia": "strcpy: chép chuỗi nguồn vào chuỗi đích (đích phải đủ chỗ)",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "What is the output of the following code snippet? char str1[] = \"Hello\"; char str2[10]; strcpy(str2, str1);",
+   "viDuNghia": "Đoạn mã sau in gì? char str1[] = \"Hello\"; char str2[10]; strcpy(str2, str1);"
+  },
+  {
+   "chu": "strncpy",
+   "doc": "/stɜːr ɛn ˈkɒpi/",
+   "nghia": "strncpy: chép tối đa n ký tự; có thể KHÔNG thêm '\\0' nếu chuỗi nguồn dài",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "strncpy(dest, src, 5) copies at most five characters into dest.",
+   "viDuNghia": "strncpy(dest, src, 5) chép nhiều nhất năm ký tự vào dest."
+  },
+  {
+   "chu": "strcat",
+   "doc": "/stɜːr kæt/",
+   "nghia": "strcat: nối chuỗi thứ hai vào cuối chuỗi thứ nhất",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "What is the function of the strcat(str1, str2) function in C?",
+   "viDuNghia": "Hàm strcat(str1, str2) trong C có chức năng gì?"
+  },
+  {
+   "chu": "strcmp",
+   "doc": "/stɜːr kəmˈpɛər/",
+   "nghia": "strcmp: so sánh hai chuỗi theo mã ký tự; trả về 0 nếu bằng, âm nếu chuỗi 1 nhỏ hơn, dương nếu lớn hơn",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "What is the return value of the strcmp(\"abc\",\"Abcdef\") function?",
+   "viDuNghia": "Hàm strcmp(\"abc\", \"Abcdef\") trả về giá trị gì?"
+  },
+  {
+   "chu": "strstr",
+   "doc": "/stɜːr stɜːr/",
+   "nghia": "strstr: tìm vị trí xuất hiện đầu tiên của chuỗi con; trả về con trỏ hoặc NULL",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "strstr(s, \"abc\") returns a pointer to the first occurrence of \"abc\" in s.",
+   "viDuNghia": "strstr(s, \"abc\") trả về con trỏ tới lần xuất hiện đầu tiên của \"abc\" trong s."
+  },
+  {
+   "chu": "strchr",
+   "doc": "/stɜːr kɑːr/",
+   "nghia": "strchr: tìm lần xuất hiện đầu tiên của một ký tự trong chuỗi",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "strchr(s, '@') returns NULL if the string has no '@'.",
+   "viDuNghia": "strchr(s, '@') trả về NULL nếu chuỗi không có '@'."
+  },
+  {
+   "chu": "strtok",
+   "doc": "/stɜːr tɒk/",
+   "nghia": "strtok: tách chuỗi thành các mảnh theo ký tự phân cách (sửa chuỗi gốc)",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "Use strtok(line, \" ,\") to split a sentence into words.",
+   "viDuNghia": "Dùng strtok(line, \" ,\") để tách câu thành các từ."
+  },
+  {
+   "chu": "atoi",
+   "doc": "/ˌeɪ tə ˈaɪ/",
+   "nghia": "atoi (ASCII to integer): đổi chuỗi chữ số thành số int",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "What is the purpose of the function void atoi (const char*) ?",
+   "viDuNghia": "Hàm atoi(const char*) dùng để làm gì?"
+  },
+  {
+   "chu": "ctype.h",
+   "doc": "/ˈsiː taɪp dɒt eɪtʃ/",
+   "nghia": "ctype.h: thư viện phân loại và đổi hoa/thường ký tự (isdigit, toupper…)",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "Which of the following is true about the isdigit() function in ctype.h?",
+   "viDuNghia": "Phát biểu nào đúng về hàm isdigit() trong ctype.h?"
+  },
+  {
+   "chu": "isdigit",
+   "doc": "/ɪz ˈdɪdʒɪt/",
+   "nghia": "isdigit: kiểm ký tự có phải chữ số '0'–'9' không (khác 0 nếu đúng)",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "isdigit('7') returns a non-zero value, while isdigit('a') returns 0.",
+   "viDuNghia": "isdigit('7') trả về giá trị khác 0, còn isdigit('a') trả về 0."
+  },
+  {
+   "chu": "isalpha",
+   "doc": "/ɪz ˈælfə/",
+   "nghia": "isalpha: kiểm ký tự có phải chữ cái không",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "Count the letters in a string by testing each character with isalpha().",
+   "viDuNghia": "Đếm số chữ cái trong chuỗi bằng cách thử từng ký tự với isalpha()."
+  },
+  {
+   "chu": "isspace",
+   "doc": "/ɪz speɪs/",
+   "nghia": "isspace: kiểm ký tự trắng (dấu cách, tab, xuống dòng)",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "while (!isspace(a[i])) i++;",
+   "viDuNghia": "Trong khi a[i] không phải ký tự trắng thì tăng i."
+  },
+  {
+   "chu": "isupper",
+   "doc": "/ɪz ˈʌpər/",
+   "nghia": "isupper: kiểm ký tự có phải chữ in hoa không",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "isupper('Q') is true, isupper('q') is false.",
+   "viDuNghia": "isupper('Q') đúng, isupper('q') sai."
+  },
+  {
+   "chu": "islower",
+   "doc": "/ɪz ˈloʊər/",
+   "nghia": "islower: kiểm ký tự có phải chữ thường không",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "The function islower() returns a non-zero value if a character is:",
+   "viDuNghia": "Hàm islower() trả về giá trị khác 0 nếu ký tự là:"
+  },
+  {
+   "chu": "toupper",
+   "doc": "/tuː ˈʌpər/",
+   "nghia": "toupper: đổi chữ thường thành chữ hoa (ký tự khác giữ nguyên)",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "toupper('a') returns 'A'.",
+   "viDuNghia": "toupper('a') trả về 'A'."
+  },
+  {
+   "chu": "tolower",
+   "doc": "/tuː ˈloʊər/",
+   "nghia": "tolower: đổi chữ hoa thành chữ thường",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "What will be the output of the following code? printf(\"%c\", tolower('c'));",
+   "viDuNghia": "Đoạn mã sau in gì? printf(\"%c\", tolower('c'));"
+  },
+  {
+   "chu": "palindrome",
+   "doc": "/ˈpælɪndroʊm/",
+   "nghia": "chuỗi đối xứng (palindrome): đọc xuôi ngược như nhau (level, 12321)",
+   "nhom": "Chuỗi & ký tự (string.h, ctype.h)",
+   "viDu": "Write a function that checks whether a string is a palindrome.",
+   "viDuNghia": "Viết hàm kiểm tra một chuỗi có phải chuỗi đối xứng không."
+  },
+  {
+   "chu": "char",
+   "doc": "/tʃɑːr/",
+   "nghia": "char: kiểu ký tự 1 byte, lưu mã ASCII của ký tự",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Given the variable arr declared as follow char arr[16]; What is the maximum number of characters you can store in arr?",
+   "viDuNghia": "Cho biến arr khai báo char arr[16]; arr lưu được tối đa bao nhiêu ký tự? (15 — chừa chỗ cho '\\0'.)"
+  },
+  {
+   "chu": "int",
+   "doc": "/ɪnt/",
+   "nghia": "int: kiểu số nguyên (thường 4 byte)",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Which function is specifically used to return the absolute value of an int data type in C?",
+   "viDuNghia": "Hàm nào dùng riêng để trả về giá trị tuyệt đối của dữ liệu kiểu int trong C?"
+  },
+  {
+   "chu": "typedef",
+   "doc": "/ˈtaɪp dɛf/",
+   "nghia": "typedef: đặt tên mới (bí danh) cho một kiểu dữ liệu",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "typedef struct { dataType1 field1; dataType2 field2; } structName;",
+   "viDuNghia": "typedef struct { kiểu1 trường1; kiểu2 trường2; } TênStruct; — đặt tên kiểu cho struct."
+  },
+  {
+   "chu": "struct",
+   "doc": "/strʌkt/",
+   "nghia": "struct: (C) từ khoá khai báo kiểu cấu trúc gồm nhiều trường khác kiểu · (C#, PRN212) kiểu giá trị nhẹ, sao chép khi gán",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Use struct Student { char name[30]; float gpa; }; to group a student's data.",
+   "viDuNghia": "Dùng struct Student { char name[30]; float gpa; }; để gom dữ liệu một sinh viên."
+  },
+  {
+   "chu": "storage class",
+   "doc": "/ˈstɔːrɪdʒ klæs/",
+   "nghia": "lớp lưu trữ: từ khoá quyết định phạm vi và thời gian sống của biến (auto, static, extern, register)",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Which storage class keeps a local variable's value between function calls?",
+   "viDuNghia": "Lớp lưu trữ nào giữ giá trị của biến cục bộ giữa các lần gọi hàm? (static)"
+  },
+  {
+   "chu": "auto",
+   "doc": "/ˈɔːtoʊ/",
+   "nghia": "auto (C): lớp lưu trữ mặc định của biến cục bộ, tạo khi vào khối và mất khi ra khỏi khối",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Local variables are auto by default, so the keyword is rarely written.",
+   "viDuNghia": "Biến cục bộ mặc định là auto nên hiếm khi viết từ khoá này."
+  },
+  {
+   "chu": "extern",
+   "doc": "/ɪkˈstɜːrn/",
+   "nghia": "extern: khai báo biến/hàm được định nghĩa ở tệp khác (không cấp bộ nhớ mới)",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "extern int count; tells the compiler that count is defined in another file.",
+   "viDuNghia": "extern int count; báo trình biên dịch rằng count được định nghĩa ở tệp khác."
+  },
+  {
+   "chu": "register variable",
+   "doc": "/ˈrɛdʒɪstər ˈvɛəriəbl/",
+   "nghia": "biến register: gợi ý trình biên dịch giữ biến trong thanh ghi CPU; không lấy địa chỉ & được",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "You cannot apply the & operator to a register variable.",
+   "viDuNghia": "Không dùng được toán tử & với biến register."
+  },
+  {
+   "chu": "lvalue",
+   "doc": "/ˈɛl ˌvæljuː/",
+   "nghia": "lvalue: biểu thức chỉ một ô nhớ, đứng được bên trái phép gán (biến, *p, a[i])",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "\"lvalue required as left operand of assignment\" appears when you write 5 = x.",
+   "viDuNghia": "Lỗi \"lvalue required as left operand of assignment\" xuất hiện khi viết 5 = x."
+  },
+  {
+   "chu": "uninitialized variable",
+   "doc": "/ˌʌnɪˈnɪʃəlaɪzd ˈvɛəriəbl/",
+   "nghia": "biến chưa khởi tạo: biến cục bộ chưa gán giá trị, chứa giá trị rác",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Printing an uninitialized variable shows a garbage value.",
+   "viDuNghia": "In một biến chưa khởi tạo sẽ ra giá trị rác."
+  },
+  {
+   "chu": "undeclared identifier",
+   "doc": "/ˌʌndɪˈklɛərd aɪˈdɛntɪfaɪər/",
+   "nghia": "định danh chưa khai báo: dùng tên biến/hàm chưa khai báo ⇒ lỗi biên dịch",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "\"error: 'total' undeclared\" means the variable was used before it was declared.",
+   "viDuNghia": "Lỗi \"'total' undeclared\" nghĩa là biến được dùng trước khi khai báo."
+  },
+  {
+   "chu": "operator precedence",
+   "doc": "/ˈɒpəreɪtər ˈprɛsɪdəns/",
+   "nghia": "độ ưu tiên toán tử: thứ tự thực hiện các toán tử khác nhau (* trước +)",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Because of operator precedence, 2 + 3 * 4 equals 14, not 20.",
+   "viDuNghia": "Do độ ưu tiên toán tử, 2 + 3 * 4 bằng 14, không phải 20."
+  },
+  {
+   "chu": "associativity",
+   "doc": "/əˌsoʊʃiəˈtɪvɪti/",
+   "nghia": "tính kết hợp: chiều tính khi các toán tử cùng độ ưu tiên đứng cạnh nhau (trái sang phải, hoặc phải sang trái như phép gán)",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "The assignment operator has right-to-left associativity, so a = b = 5 sets both to 5.",
+   "viDuNghia": "Phép gán kết hợp từ phải sang trái nên a = b = 5 gán cả hai bằng 5."
+  },
+  {
+   "chu": "increment operator",
+   "doc": "/ˈɪŋkrəmənt ˈɒpəreɪtər/",
+   "nghia": "toán tử tăng ++: cộng 1 vào biến",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "The increment operator ++ adds 1 to its operand.",
+   "viDuNghia": "Toán tử tăng ++ cộng 1 vào toán hạng của nó."
+  },
+  {
+   "chu": "prefix increment",
+   "doc": "/ˈpriːfɪks ˈɪŋkrəmənt/",
+   "nghia": "tăng trước (++i): tăng rồi mới dùng giá trị mới",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "With prefix increment, y = ++x gives x and y the same new value.",
+   "viDuNghia": "Với tăng trước, y = ++x làm x và y cùng nhận giá trị mới."
+  },
+  {
+   "chu": "postfix increment",
+   "doc": "/ˈpoʊstfɪks ˈɪŋkrəmənt/",
+   "nghia": "tăng sau (i++): dùng giá trị cũ rồi mới tăng",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "With postfix increment, y = x++ stores the old value of x in y.",
+   "viDuNghia": "Với tăng sau, y = x++ gán giá trị CŨ của x cho y."
+  },
+  {
+   "chu": "modulus operator",
+   "doc": "/ˈmɒdjʊləs ˈɒpəreɪtər/",
+   "nghia": "toán tử chia lấy dư %: chỉ dùng cho số nguyên",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Use the modulus operator to test if a number is even: n % 2 == 0.",
+   "viDuNghia": "Dùng toán tử chia lấy dư để kiểm số chẵn: n % 2 == 0."
+  },
+  {
+   "chu": "integer division",
+   "doc": "/ˈɪntɪdʒər dɪˈvɪʒən/",
+   "nghia": "chia nguyên: chia hai số nguyên thì bỏ phần thập phân (7/2 = 3)",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Integer division makes 5 / 2 equal 2, so write 5.0 / 2 to get 2.5.",
+   "viDuNghia": "Chia nguyên làm 5 / 2 bằng 2, nên viết 5.0 / 2 để được 2.5."
+  },
+  {
+   "chu": "truncation",
+   "doc": "/trʌŋˈkeɪʃən/",
+   "nghia": "sự cắt bỏ: bỏ phần lẻ khi đổi số thực sang số nguyên (không làm tròn)",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Converting 3.99 to int causes truncation, so the result is 3.",
+   "viDuNghia": "Đổi 3.99 sang int bị cắt bỏ phần lẻ nên kết quả là 3."
+  },
+  {
+   "chu": "non-zero",
+   "doc": "/ˌnɒn ˈzɪəroʊ/",
+   "nghia": "khác 0: trong C mọi giá trị khác 0 được coi là đúng (true)",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "The function islower() returns a non-zero value if a character is:",
+   "viDuNghia": "Hàm islower() trả về giá trị khác 0 nếu ký tự là:"
+  },
+  {
+   "chu": "fall-through",
+   "doc": "/ˈfɔːl θruː/",
+   "nghia": "rơi xuống nhánh dưới: trong switch, thiếu break thì chạy luôn các case phía sau",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Without a break statement, control falls through to the next case.",
+   "viDuNghia": "Không có lệnh break thì điều khiển rơi xuống case kế tiếp."
+  },
+  {
+   "chu": "nested loop",
+   "doc": "/ˈnɛstɪd luːp/",
+   "nghia": "vòng lặp lồng nhau: vòng lặp nằm trong thân vòng lặp khác (in bảng, ma trận, hình sao)",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Printing a pyramid of stars needs a nested loop.",
+   "viDuNghia": "In kim tự tháp dấu sao cần vòng lặp lồng nhau."
+  },
+  {
+   "chu": "sentinel value",
+   "doc": "/ˈsɛntɪnəl ˈvæljuː/",
+   "nghia": "giá trị canh (lính gác): giá trị đặc biệt báo dừng nhập (vd nhập 0 để kết thúc)",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Keep reading numbers until the user enters the sentinel value 0.",
+   "viDuNghia": "Đọc số liên tục tới khi người dùng nhập giá trị canh 0."
+  },
+  {
+   "chu": "off-by-one error",
+   "doc": "/ˌɒf baɪ ˈwʌn ˈɛrər/",
+   "nghia": "lỗi lệch một: vòng lặp chạy thừa/thiếu một lần (vd dùng <= n thay vì < n)",
+   "nhom": "Kiểu, khai báo & toán tử",
+   "viDu": "Using i <= n for an array of size n is a classic off-by-one error.",
+   "viDuNghia": "Dùng i <= n với mảng n phần tử là lỗi lệch một kinh điển."
+  },
+  {
+   "chu": "math.h",
+   "doc": "/mæθ dɒt eɪtʃ/",
+   "nghia": "math.h: thư viện hàm toán (sqrt, pow, fabs, sin…), hầu hết trả về double",
+   "nhom": "Toán học & số ngẫu nhiên",
+   "viDu": "What is the returned type of the sqrt() function from the math.h library in C?",
+   "viDuNghia": "Hàm sqrt() của thư viện math.h trong C trả về kiểu gì?"
+  },
+  {
+   "chu": "pow",
+   "doc": "/paʊ/",
+   "nghia": "pow: hàm luỹ thừa pow(x, y) = x mũ y, trả về double",
+   "nhom": "Toán học & số ngẫu nhiên",
+   "viDu": "The pow() function in the math.h library is used to calculate the value of a number raised to a specified power. What is its return type?",
+   "viDuNghia": "Hàm pow() của math.h tính một số luỹ thừa một số mũ cho trước. Nó trả về kiểu gì?"
+  },
+  {
+   "chu": "fabs",
+   "doc": "/ɛf æbz/",
+   "nghia": "fabs: giá trị tuyệt đối của số thực (abs dùng cho int)",
+   "nhom": "Toán học & số ngẫu nhiên",
+   "viDu": "fabs(-2.5) returns 2.5, while abs() is for integers.",
+   "viDuNghia": "fabs(-2.5) trả về 2.5, còn abs() dùng cho số nguyên."
+  },
+  {
+   "chu": "rand",
+   "doc": "/rænd/",
+   "nghia": "rand: trả về số nguyên giả ngẫu nhiên trong khoảng 0..RAND_MAX",
+   "nhom": "Toán học & số ngẫu nhiên",
+   "viDu": "Which library function returns a pseudo-random number in the range 0 to RAND_MAX?",
+   "viDuNghia": "Hàm thư viện nào trả về số giả ngẫu nhiên trong khoảng 0 tới RAND_MAX?"
+  },
+  {
+   "chu": "srand",
+   "doc": "/ɛs rænd/",
+   "nghia": "srand: đặt hạt giống (seed) cho rand; thường srand(time(NULL)) để mỗi lần chạy khác nhau",
+   "nhom": "Toán học & số ngẫu nhiên",
+   "viDu": "srand(time(NULL));",
+   "viDuNghia": "srand(time(NULL)); — lấy thời gian hiện tại làm hạt giống cho rand()."
+  },
+  {
+   "chu": "time.h",
+   "doc": "/taɪm dɒt eɪtʃ/",
+   "nghia": "time.h: thư viện thời gian (time, clock, difftime…)",
+   "nhom": "Toán học & số ngẫu nhiên",
+   "viDu": "Include time.h before calling time(NULL).",
+   "viDuNghia": "Phải include time.h trước khi gọi time(NULL)."
+  },
+  {
+   "chu": "digit sum",
+   "doc": "/ˈdɪdʒɪt sʌm/",
+   "nghia": "tổng các chữ số: cộng từng chữ số của số (dùng n % 10 và n / 10)",
+   "nhom": "Toán học & số ngẫu nhiên",
+   "viDu": "Write a program that prints the digit sum of a positive integer.",
+   "viDuNghia": "Viết chương trình in tổng các chữ số của một số nguyên dương."
+  },
+  {
+   "chu": "machine code",
+   "doc": "/məˈʃiːn koʊd/",
+   "nghia": "mã máy: dãy lệnh nhị phân CPU chạy trực tiếp",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "Program code in a high level language can not run, it must be translated to binary code (machine code) before running.",
+   "viDuNghia": "Mã viết bằng ngôn ngữ bậc cao không chạy ngay được, phải dịch sang mã nhị phân (mã máy) trước khi chạy."
+  },
+  {
+   "chu": "higher-level language",
+   "doc": "/ˈhaɪər ˈlɛvəl ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ bậc cao hơn: gần ngôn ngữ người, xa phần cứng hơn",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "To make our programs longer, we use higher-level languages.",
+   "viDuNghia": "Để chương trình dài hơn, ta dùng ngôn ngữ bậc cao. (Phát biểu SAI.)"
+  },
+  {
+   "chu": "English-like",
+   "doc": "/ˈɪŋɡlɪʃ laɪk/",
+   "nghia": "giống tiếng Anh: cú pháp dùng từ tiếng Anh dễ đọc (if, while, return)",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "C is English-like",
+   "viDuNghia": "C có cú pháp giống tiếng Anh."
+  },
+  {
+   "chu": "code portability",
+   "doc": "/koʊd ˌpɔːrtəˈbɪlɪti/",
+   "nghia": "tính khả chuyển của mã: mã dịch và chạy được trên nhiều máy/HĐH mà ít phải sửa",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "It improves code portability",
+   "viDuNghia": "Nó cải thiện tính khả chuyển của mã."
+  },
+  {
+   "chu": "interchangeably",
+   "doc": "/ˌɪntərˈtʃeɪndʒəbli/",
+   "nghia": "dùng thay thế cho nhau",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "Compilation and interpretation are two terms that are used interchangeably.",
+   "viDuNghia": "Biên dịch và thông dịch là hai thuật ngữ dùng thay thế cho nhau. (Phát biểu SAI.)"
+  },
+  {
+   "chu": "compile time",
+   "doc": "/kəmˈpaɪl taɪm/",
+   "nghia": "lúc biên dịch: giai đoạn trình biên dịch kiểm và dịch mã, trước khi chạy",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "Compile time error, case label outside switch statement",
+   "viDuNghia": "Lỗi lúc biên dịch: nhãn case nằm ngoài lệnh switch."
+  },
+  {
+   "chu": "run time",
+   "doc": "/rʌn taɪm/",
+   "nghia": "lúc chạy: giai đoạn chương trình đang thực thi",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "Error at run time, because pointer variable p has not be allocated memory yet.",
+   "viDuNghia": "Lỗi lúc chạy, vì biến con trỏ p chưa được cấp phát bộ nhớ."
+  },
+  {
+   "chu": "semantic error",
+   "doc": "/sɪˈmæntɪk ˈɛrər/",
+   "nghia": "lỗi ngữ nghĩa: đúng cú pháp nhưng sai ý nghĩa/logic (vd chia cho biến bằng 0, dùng = thay ==)",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "Writing if (x = 5) compiles, but it is a semantic error.",
+   "viDuNghia": "Viết if (x = 5) vẫn biên dịch được nhưng là lỗi ngữ nghĩa."
+  },
+  {
+   "chu": "compiler warning",
+   "doc": "/kəmˈpaɪlər ˈwɔːrnɪŋ/",
+   "nghia": "cảnh báo của trình biên dịch: không chặn biên dịch nhưng báo mã đáng ngờ",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "A compiler warning such as \"format '%d' expects int\" often points to a real bug.",
+   "viDuNghia": "Cảnh báo kiểu \"format '%d' expects int\" thường chỉ ra một lỗi thật."
+  },
+  {
+   "chu": "macro",
+   "doc": "/ˈmækroʊ/",
+   "nghia": "macro: (C) tên được bộ tiền xử lý thay bằng đoạn mã trước khi biên dịch (#define) · (hợp ngữ, CEA201) đoạn lệnh đặt tên, chèn nguyên văn vào mỗi chỗ gọi",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "Which header file can be used to define math function prototypes and macros?",
+   "viDuNghia": "Tệp tiêu đề nào dùng để khai báo nguyên mẫu hàm toán và các macro?"
+  },
+  {
+   "chu": "define directive",
+   "doc": "/dɪˈfaɪn dəˈrɛktɪv/",
+   "nghia": "chỉ thị #define: định nghĩa hằng hoặc macro cho bộ tiền xử lý",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "#define PI 3.14159 is a define directive, not a variable declaration.",
+   "viDuNghia": "#define PI 3.14159 là chỉ thị define, không phải khai báo biến."
+  },
+  {
+   "chu": "recursive function",
+   "doc": "/rɪˈkɜːrsɪv ˈfʌŋkʃən/",
+   "nghia": "hàm đệ quy: hàm tự gọi lại chính nó với bài toán nhỏ hơn",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "A recursive function must have a condition that stops the recursion.",
+   "viDuNghia": "Hàm đệ quy phải có điều kiện dừng đệ quy."
+  },
+  {
+   "chu": "parameter list",
+   "doc": "/pəˈræmɪtər lɪst/",
+   "nghia": "danh sách tham số: các tham số trong ngoặc của khai báo hàm",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "int funct(char x, char y); has a parameter list of two char parameters.",
+   "viDuNghia": "int funct(char x, char y); có danh sách tham số gồm hai tham số kiểu char."
+  },
+  {
+   "chu": "formal parameter",
+   "doc": "/ˈfɔːrməl pəˈræmɪtər/",
+   "nghia": "tham số hình thức: biến khai báo trong định nghĩa hàm",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "In void f(int n), n is a formal parameter.",
+   "viDuNghia": "Trong void f(int n), n là tham số hình thức."
+  },
+  {
+   "chu": "actual parameter",
+   "doc": "/ˈæktʃuəl pəˈræmɪtər/",
+   "nghia": "tham số thực (đối số): giá trị truyền vào khi gọi hàm",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "In the call f(10), 10 is the actual parameter.",
+   "viDuNghia": "Trong lời gọi f(10), 10 là tham số thực."
+  },
+  {
+   "chu": "trace table",
+   "doc": "/treɪs ˈteɪbl/",
+   "nghia": "bảng vết: bảng ghi giá trị từng biến sau mỗi bước để dò tay chương trình",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "Use a trace table to find the output of the loop by hand.",
+   "viDuNghia": "Dùng bảng vết để tìm kết quả của vòng lặp bằng tay."
+  },
+  {
+   "chu": "constant time",
+   "doc": "/ˈkɒnstənt taɪm/",
+   "nghia": "thời gian hằng O(1): không phụ thuộc kích thước dữ liệu",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "Arrays provide constant-time access to elements.",
+   "viDuNghia": "Mảng cho truy cập phần tử trong thời gian hằng."
+  },
+  {
+   "chu": "bit sequence",
+   "doc": "/bɪt ˈsiːkwəns/",
+   "nghia": "dãy bit: chuỗi các bit 0/1 biểu diễn dữ liệu",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "All data in memory is stored as bit sequences.",
+   "viDuNghia": "Mọi dữ liệu trong bộ nhớ đều lưu dưới dạng dãy bit."
+  },
+  {
+   "chu": "nibble",
+   "doc": "/ˈnɪbl/",
+   "nghia": "nibble: nửa byte = 4 bit, ứng với đúng một chữ số hex",
+   "nhom": "Biên dịch, lỗi & khái niệm chung",
+   "viDu": "One byte consists of two nibbles, each shown as one hexadecimal digit.",
+   "viDuNghia": "Một byte gồm hai nibble, mỗi nibble viết thành một chữ số hex."
+  }
+ ]
+}

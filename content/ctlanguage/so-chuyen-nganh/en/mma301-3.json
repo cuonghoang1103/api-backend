@@ -1,0 +1,578 @@
+{
+ "ma": "mma301-3",
+ "nn": "en",
+ "ten": "MMA301 · 3. Điều hướng, lưu trữ, API thiết bị & native",
+ "moTa": "Bổ sung MMA301: tuỳ chọn React Navigation và hook điều hướng, sự kiện focus, AsyncStorage và lưu trữ, Firebase, vị trí và bản đồ, API platform, native module iOS/Android, kiến trúc mới (JSI, Fabric, Hermes) và công cụ Expo.",
+ "bieuTuong": "apps.iphone",
+ "thuTu": -902,
+ "tu": [
+  {
+   "chu": "screenOptions",
+   "doc": "/skriːn ˈɑːpʃnz/",
+   "nghia": "prop của navigator đặt tuỳ chọn chung cho mọi màn hình (tiêu đề, màu, icon tab)",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "Which options would you configure to set up icons for each tab?",
+   "viDuNghia": "Bạn cấu hình tuỳ chọn nào để đặt icon cho từng tab?"
+  },
+  {
+   "chu": "tabBarIcon",
+   "doc": "/tæb bɑːr ˈaɪkɑːn/",
+   "nghia": "tuỳ chọn trả về biểu tượng cho từng tab của Bottom Tabs (nhận focused, color, size)",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "tabBarIcon: ({ color, size }) => <Ionicons name=\"home\" color={color} size={size} />",
+   "viDuNghia": "Trả biểu tượng ngôi nhà cho tab theo màu và cỡ được truyền vào."
+  },
+  {
+   "chu": "drawerPosition",
+   "doc": "/ˈdrɔːr pəˈzɪʃn/",
+   "nghia": "tuỳ chọn của Drawer Navigator: ngăn kéo mở từ trái hay phải",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "The position where the drawer appears is determined by the drawerPosition prop.",
+   "viDuNghia": "Vị trí ngăn kéo hiện ra do prop drawerPosition quyết định."
+  },
+  {
+   "chu": "initialRouteName",
+   "doc": "/ɪˈnɪʃl ruːt neɪm/",
+   "nghia": "tên màn hình navigator hiện đầu tiên",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "Set initialRouteName=\"Home\" so the app opens on the Home screen.",
+   "viDuNghia": "Đặt initialRouteName=\"Home\" để app mở ở màn hình Home."
+  },
+  {
+   "chu": "headerShown",
+   "doc": "/ˈhedər ʃoʊn/",
+   "nghia": "tuỳ chọn ẩn/hiện thanh tiêu đề của màn hình (headerShown: false)",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "headerShown: false hides the stack header on the Home screen.",
+   "viDuNghia": "headerShown: false ẩn thanh tiêu đề ở màn hình Home."
+  },
+  {
+   "chu": "useNavigation",
+   "doc": "/juːz ˌnævɪˈɡeɪʃn/",
+   "nghia": "hook lấy đối tượng navigation trong component không phải màn hình",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "const navigation = useNavigation();",
+   "viDuNghia": "Lấy đối tượng navigation bằng hook."
+  },
+  {
+   "chu": "useRoute",
+   "doc": "/juːz ruːt/",
+   "nghia": "hook lấy route hiện tại (route.name, route.params)",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "const route = useRoute(); const routeName = route.name;",
+   "viDuNghia": "Lấy route hiện tại và tên của nó."
+  },
+  {
+   "chu": "useNavigationState",
+   "doc": "/juːz ˌnævɪˈɡeɪʃn steɪt/",
+   "nghia": "hook đọc trạng thái navigator (danh sách route, chỉ số route đang mở)",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "useNavigationState(state => state.index) returns the index of the current route.",
+   "viDuNghia": "Trả chỉ số route đang mở."
+  },
+  {
+   "chu": "useIsFocused",
+   "doc": "/juːz ɪz ˈfoʊkəst/",
+   "nghia": "hook trả true khi màn hình đang được hiển thị, false khi rời đi",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "const isFocused = useIsFocused();",
+   "viDuNghia": "Biết màn hình có đang được hiển thị không."
+  },
+  {
+   "chu": "useFocusEffect",
+   "doc": "/juːz ˈfoʊkəs ɪˈfekt/",
+   "nghia": "hook chạy hiệu ứng mỗi lần màn hình được focus (vd đọc lại danh sách yêu thích)",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "The effect will run every time the component is focused and not unfocused.",
+   "viDuNghia": "Hiệu ứng chạy mỗi lần màn hình được focus, không chạy khi rời đi."
+  },
+  {
+   "chu": "focus event",
+   "doc": "/ˈfoʊkəs ɪˈvent/",
+   "nghia": "sự kiện 'focus' / 'blur' của navigation khi màn hình hiện ra hay bị rời đi",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "'HomeScreen is focused' initially, followed by 'HomeScreen is not focused'.",
+   "viDuNghia": "Ban đầu in \"HomeScreen is focused\", sau đó \"HomeScreen is not focused\"."
+  },
+  {
+   "chu": "nested navigator",
+   "doc": "/ˈnestɪd ˈnævɪɡeɪtər/",
+   "nghia": "navigator lồng nhau: vd Stack bên trong một tab của Bottom Tabs",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "Put a Stack navigator inside the Home tab as a nested navigator.",
+   "viDuNghia": "Đặt Stack navigator trong tab Home thành navigator lồng nhau."
+  },
+  {
+   "chu": "Material Bottom Tabs",
+   "doc": "/məˈtɪriəl ˈbɑːtəm tæbz/",
+   "nghia": "navigator tab dưới theo phong cách Material Design",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "Material Bottom Tabs Navigator",
+   "viDuNghia": "Navigator tab dưới kiểu Material."
+  },
+  {
+   "chu": "current route",
+   "doc": "/ˈkɜːrənt ruːt/",
+   "nghia": "route (màn hình) đang hiển thị",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "How do you get the name of the current route?",
+   "viDuNghia": "Làm sao lấy tên route đang hiển thị?"
+  },
+  {
+   "chu": "switchable screen",
+   "doc": "/ˈswɪtʃəbl skriːn/",
+   "nghia": "màn hình chuyển qua lại được (yêu cầu đề PE: chuyển bằng một lần chạm)",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "All screens should be switchable with a single touch.",
+   "viDuNghia": "Mọi màn hình phải chuyển được bằng một lần chạm."
+  },
+  {
+   "chu": "deep linking",
+   "doc": "/diːp ˈlɪŋkɪŋ/",
+   "nghia": "liên kết sâu: mở thẳng một màn hình cụ thể của app từ URL (myapp://product/1)",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "Deep linking opens the Detail screen directly from a URL.",
+   "viDuNghia": "Liên kết sâu mở thẳng màn hình Detail từ một URL."
+  },
+  {
+   "chu": "AsyncStorage",
+   "doc": "/eɪˈsɪŋk ˈstɔːrɪdʒ/",
+   "nghia": "kho khoá–giá trị bất đồng bộ, lưu bền, KHÔNG mã hoá, dùng chung toàn app",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "AsyncStorage is an unencrypted, asynchronous, persistent, key-value storage system.",
+   "viDuNghia": "AsyncStorage là kho khoá–giá trị bất đồng bộ, lưu bền, không mã hoá."
+  },
+  {
+   "chu": "setItem",
+   "doc": "/set ˈaɪtəm/",
+   "nghia": "AsyncStorage.setItem(key, value): lưu chuỗi; object phải JSON.stringify trước",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "await AsyncStorage.setItem('favorites', JSON.stringify(list));",
+   "viDuNghia": "Lưu danh sách yêu thích dưới dạng chuỗi JSON."
+  },
+  {
+   "chu": "getItem",
+   "doc": "/ɡet ˈaɪtəm/",
+   "nghia": "AsyncStorage.getItem(key): đọc chuỗi đã lưu, không có thì null",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "const json = await AsyncStorage.getItem('favorites');",
+   "viDuNghia": "Đọc chuỗi danh sách yêu thích đã lưu."
+  },
+  {
+   "chu": "removeItem",
+   "doc": "/rɪˈmuːv ˈaɪtəm/",
+   "nghia": "AsyncStorage.removeItem(key): xoá một khoá",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "AsyncStorage.removeItem(key)",
+   "viDuNghia": "Xoá một khoá khỏi AsyncStorage."
+  },
+  {
+   "chu": "getAllKeys",
+   "doc": "/ɡet ɔːl kiːz/",
+   "nghia": "AsyncStorage.getAllKeys(): lấy mọi khoá đang lưu",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "AsyncStorage.getAllKeys()",
+   "viDuNghia": "Lấy toàn bộ khoá đang lưu."
+  },
+  {
+   "chu": "unencrypted",
+   "doc": "/ˌʌnɪnˈkrɪptɪd/",
+   "nghia": "không mã hoá: dữ liệu lưu dạng thô, không nên chứa mật khẩu, token nhạy cảm",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "Do not keep tokens in AsyncStorage because it is unencrypted.",
+   "viDuNghia": "Đừng lưu token trong AsyncStorage vì nó không mã hoá."
+  },
+  {
+   "chu": "SecureStore",
+   "doc": "/sɪˈkjʊr stɔːr/",
+   "nghia": "expo-secure-store: lưu dữ liệu nhạy cảm đã mã hoá bằng Keychain/Keystore",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "Store the login token in SecureStore.",
+   "viDuNghia": "Lưu token đăng nhập trong SecureStore."
+  },
+  {
+   "chu": "SQLite",
+   "doc": "/ˌes kjuː el ˈaɪt/",
+   "nghia": "CSDL quan hệ nhỏ nhúng trong máy, dùng cho dữ liệu cục bộ lớn có truy vấn",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "Use SQLite when the app must query thousands of offline records.",
+   "viDuNghia": "Dùng SQLite khi app phải truy vấn hàng nghìn bản ghi ngoại tuyến."
+  },
+  {
+   "chu": "offline-first",
+   "doc": "/ˌɔːflaɪn ˈfɜːrst/",
+   "nghia": "ưu tiên ngoại tuyến: app chạy bằng dữ liệu cục bộ, có mạng thì đồng bộ sau",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "An offline-first app shows cached data when there is no network.",
+   "viDuNghia": "App ưu tiên ngoại tuyến hiện dữ liệu đã lưu khi không có mạng."
+  },
+  {
+   "chu": "error object",
+   "doc": "/ˈerər ˈɑːbdʒekt/",
+   "nghia": "đối tượng lỗi bắt được trong catch (có message), in ra khi lưu/đọc thất bại",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "Error saving data [error object]",
+   "viDuNghia": "Lỗi khi lưu dữ liệu [đối tượng lỗi]."
+  },
+  {
+   "chu": "Firebase",
+   "doc": "/ˈfaɪərbeɪs/",
+   "nghia": "nền tảng backend của Google: Authentication, Firestore, Cloud Messaging, Storage",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "Use Firebase Authentication for email login.",
+   "viDuNghia": "Dùng Firebase Authentication cho đăng nhập bằng email."
+  },
+  {
+   "chu": "Cloud Firestore",
+   "doc": "/klaʊd ˈfaɪərstɔːr/",
+   "nghia": "CSDL NoSQL thời gian thực của Firebase, lưu theo collection và document",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "Cloud Firestore pushes new messages to every device in real time.",
+   "viDuNghia": "Firestore đẩy tin nhắn mới tới mọi thiết bị theo thời gian thực."
+  },
+  {
+   "chu": "Firebase Cloud Messaging",
+   "doc": "/ˈfaɪərbeɪs klaʊd ˈmesɪdʒɪŋ/",
+   "nghia": "FCM: dịch vụ gửi thông báo đẩy miễn phí tới Android và iOS",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "Firebase Cloud Messaging delivers the push notification.",
+   "viDuNghia": "FCM gửi thông báo đẩy."
+  },
+  {
+   "chu": "Geolocation API",
+   "doc": "/ˌdʒiːoʊloʊˈkeɪʃn ˌeɪ piː ˈaɪ/",
+   "nghia": "API lấy vị trí địa lý của thiết bị (GPS, mạng)",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "What is the purpose of the Geolocation API?",
+   "viDuNghia": "Mục đích của Geolocation API là gì?"
+  },
+  {
+   "chu": "getCurrentPosition",
+   "doc": "/ɡet ˈkɜːrənt pəˈzɪʃn/",
+   "nghia": "lấy vị trí hiện tại MỘT lần",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "Assess the impact of using watchPosition versus getCurrentPosition in a geolocation API.",
+   "viDuNghia": "Đánh giá khác biệt giữa watchPosition và getCurrentPosition trong API vị trí."
+  },
+  {
+   "chu": "watchPosition",
+   "doc": "/wɑːtʃ pəˈzɪʃn/",
+   "nghia": "theo dõi vị trí liên tục, gọi lại mỗi khi vị trí thay đổi; dừng bằng clearWatch",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "watchPosition continuously tracks location changes.",
+   "viDuNghia": "watchPosition theo dõi liên tục thay đổi vị trí."
+  },
+  {
+   "chu": "clearWatch",
+   "doc": "/klɪr wɑːtʃ/",
+   "nghia": "huỷ việc theo dõi vị trí đã mở bằng watchPosition",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "Call clearWatch in the cleanup function to save battery.",
+   "viDuNghia": "Gọi clearWatch trong hàm dọn dẹp để tiết kiệm pin."
+  },
+  {
+   "chu": "latitude",
+   "doc": "/ˈlætɪtuːd/",
+   "nghia": "vĩ độ: toạ độ bắc–nam",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "region={{ latitude: 21.03, longitude: 105.85 }} centers the map on Hanoi.",
+   "viDuNghia": "Đặt tâm bản đồ ở Hà Nội bằng vĩ độ và kinh độ."
+  },
+  {
+   "chu": "longitude",
+   "doc": "/ˈlɑːndʒɪtuːd/",
+   "nghia": "kinh độ: toạ độ đông–tây",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "coords.longitude returns the user's longitude.",
+   "viDuNghia": "coords.longitude trả kinh độ của người dùng."
+  },
+  {
+   "chu": "MapView",
+   "doc": "/mæp vjuː/",
+   "nghia": "component bản đồ của react-native-maps",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "Install react-native-maps and use the MapView component.",
+   "viDuNghia": "Cài react-native-maps và dùng component MapView."
+  },
+  {
+   "chu": "real-time location",
+   "doc": "/ˈriːəl taɪm loʊˈkeɪʃn/",
+   "nghia": "vị trí thời gian thực: cập nhật liên tục khi người dùng di chuyển",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "Providing real-time location updates.",
+   "viDuNghia": "Cung cấp cập nhật vị trí theo thời gian thực."
+  },
+  {
+   "chu": "location permission",
+   "doc": "/loʊˈkeɪʃn pərˈmɪʃn/",
+   "nghia": "quyền truy cập vị trí; phải xin người dùng trước khi đọc GPS",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "Request location permission before calling getCurrentPosition.",
+   "viDuNghia": "Xin quyền vị trí trước khi gọi getCurrentPosition."
+  },
+  {
+   "chu": "camera access",
+   "doc": "/ˈkæmərə ˈækses/",
+   "nghia": "quyền và API mở camera của thiết bị (expo-camera)",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "Which native component is used for capturing images using the device's camera?",
+   "viDuNghia": "Component nào dùng để chụp ảnh bằng camera của thiết bị?"
+  },
+  {
+   "chu": "gesture handler",
+   "doc": "/ˈdʒestʃər ˈhændlər/",
+   "nghia": "thư viện react-native-gesture-handler nhận cử chỉ vuốt, kéo, chụm mượt ở luồng native",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "react-native-gesture-handler",
+   "viDuNghia": "Thư viện xử lý cử chỉ react-native-gesture-handler."
+  },
+  {
+   "chu": "API platform",
+   "doc": "/ˌeɪ piː ˈaɪ ˈplætfɔːrm/",
+   "nghia": "nền tảng API: bộ công cụ để thiết kế, kiểm thử, công bố và dùng API (vd Postman)",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "An API platform is a software system with integrated tools that allow teams to build, manage, publish, and consume APIs.",
+   "viDuNghia": "Nền tảng API là hệ thống công cụ tích hợp giúp nhóm xây, quản lý, công bố và dùng API."
+  },
+  {
+   "chu": "CI/CD pipeline",
+   "doc": "/ˌsiː aɪ ˌsiː ˈdiː ˈpaɪplaɪn/",
+   "nghia": "dây chuyền tích hợp và triển khai liên tục: tự build, test, phát hành sau mỗi lần đẩy mã",
+   "nhom": "Vị trí, bản đồ và API thiết bị",
+   "viDu": "API platforms integrate with source code management tools and CI/CD pipelines.",
+   "viDuNghia": "Nền tảng API tích hợp với công cụ quản lý mã nguồn và dây chuyền CI/CD."
+  },
+  {
+   "chu": "Objective-C",
+   "doc": "/əbˌdʒektɪv ˈsiː/",
+   "nghia": "ngôn ngữ lập trình iOS cũ của Apple; cùng Swift dùng để viết native module iOS",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Writing the native module in Objective-C or Swift.",
+   "viDuNghia": "Viết native module bằng Objective-C hoặc Swift."
+  },
+  {
+   "chu": "Swift language",
+   "doc": "/swɪft ˈlæŋɡwɪdʒ/",
+   "nghia": "Swift: ngôn ngữ chính hiện nay để lập trình ứng dụng iOS",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Swift and Objective-C are used for iOS native code.",
+   "viDuNghia": "Swift và Objective-C dùng cho mã native iOS."
+  },
+  {
+   "chu": "Kotlin",
+   "doc": "/ˈkɑːtlɪn/",
+   "nghia": "ngôn ngữ chính thức hiện nay cho Android, chạy trên JVM, dùng được cùng Java",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Native Android modules can be written in Java or Kotlin.",
+   "viDuNghia": "Native module Android viết được bằng Java hoặc Kotlin."
+  },
+  {
+   "chu": "Xcode",
+   "doc": "/ˈeks koʊd/",
+   "nghia": "IDE của Apple để dựng và chạy app iOS, kèm iOS Simulator",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Xcode and iOS Simulator.",
+   "viDuNghia": "Xcode và iOS Simulator."
+  },
+  {
+   "chu": "bridging header",
+   "doc": "/ˈbrɪdʒɪŋ ˈhedər/",
+   "nghia": "tệp tiêu đề cầu nối cho mã Swift gọi được mã Objective-C trong dự án Xcode",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Configuring the Xcode project to include the bridging header.",
+   "viDuNghia": "Cấu hình dự án Xcode để thêm tệp bridging header."
+  },
+  {
+   "chu": "CocoaPods",
+   "doc": "/ˈkoʊkoʊ pɑːdz/",
+   "nghia": "trình quản lý thư viện native của iOS (lệnh pod install)",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Run pod install after adding a native library for iOS.",
+   "viDuNghia": "Chạy pod install sau khi thêm thư viện native cho iOS."
+  },
+  {
+   "chu": "RCTBridgeModule",
+   "doc": "/ˌɑːr siː ˈtiː brɪdʒ ˈmɑːdʒuːl/",
+   "nghia": "giao thức iOS mà native module phải tuân theo để React Native nhận ra",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Registering the module with RCTBridgeModule.",
+   "viDuNghia": "Đăng ký module với RCTBridgeModule."
+  },
+  {
+   "chu": "exported method",
+   "doc": "/ɪkˈspɔːrtɪd ˈmeθəd/",
+   "nghia": "phương thức native được lộ ra cho JavaScript gọi (iOS: macro RCT_EXPORT_METHOD; Android: chú thích @ReactMethod)",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Using RCT_EXPORT_METHOD to expose methods to JavaScript.",
+   "viDuNghia": "Dùng RCT_EXPORT_METHOD để lộ phương thức cho JavaScript."
+  },
+  {
+   "chu": "ReactPackage",
+   "doc": "/riˈækt ˈpækɪdʒ/",
+   "nghia": "giao diện Android: lớp Package khai báo các native module để đăng ký với React Native",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Registering the module in a Package class that implements ReactPackage.",
+   "viDuNghia": "Đăng ký module trong lớp Package cài đặt ReactPackage."
+  },
+  {
+   "chu": "MainApplication",
+   "doc": "/meɪn ˌæplɪˈkeɪʃn/",
+   "nghia": "lớp khởi động app Android (MainApplication.java/.kt), nơi thêm package native",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Adding the native module to the MainApplication.java file.",
+   "viDuNghia": "Thêm native module vào tệp MainApplication.java."
+  },
+  {
+   "chu": "React Native bridge",
+   "doc": "/riˈækt ˈneɪtɪv brɪdʒ/",
+   "nghia": "cầu nối (kiến trúc cũ): JS và native gửi tin nhắn JSON bất đồng bộ qua lại",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "The old React Native bridge serializes every message to JSON.",
+   "viDuNghia": "Cầu nối cũ tuần tự hoá mọi tin nhắn thành JSON."
+  },
+  {
+   "chu": "JavaScript Interface",
+   "doc": "/ˈdʒɑːvəskrɪpt ˈɪntərfeɪs/",
+   "nghia": "JSI: lớp C++ cho JS gọi trực tiếp mã native, không qua cầu nối JSON",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "JSI lets JavaScript call native code directly.",
+   "viDuNghia": "JSI cho JavaScript gọi trực tiếp mã native."
+  },
+  {
+   "chu": "Fabric renderer",
+   "doc": "/ˈfæbrɪk ˈrendərər/",
+   "nghia": "Fabric: bộ dựng giao diện mới của React Native trong New Architecture",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Fabric is the new rendering system of React Native.",
+   "viDuNghia": "Fabric là hệ thống dựng giao diện mới của React Native."
+  },
+  {
+   "chu": "TurboModules",
+   "doc": "/ˈtɜːrboʊ ˈmɑːdʒuːlz/",
+   "nghia": "native module thế hệ mới: nạp lười khi cần, gọi qua JSI",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "TurboModules load native code only when it is first used.",
+   "viDuNghia": "TurboModules chỉ nạp mã native khi được dùng lần đầu."
+  },
+  {
+   "chu": "New Architecture",
+   "doc": "/nuː ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc mới của React Native gồm JSI, Fabric, TurboModules, thay cho bridge",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "The New Architecture removes the asynchronous bridge.",
+   "viDuNghia": "Kiến trúc mới bỏ cầu nối bất đồng bộ."
+  },
+  {
+   "chu": "Hermes engine",
+   "doc": "/ˈhɜːrmiːz ˈendʒɪn/",
+   "nghia": "bộ máy JavaScript tối ưu cho React Native: khởi động nhanh, tốn ít bộ nhớ",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "Hermes is the default JavaScript engine in new React Native apps.",
+   "viDuNghia": "Hermes là bộ máy JavaScript mặc định của app React Native mới."
+  },
+  {
+   "chu": "commit phase",
+   "doc": "/kəˈmɪt feɪz/",
+   "nghia": "giai đoạn commit: React áp thay đổi lên giao diện thật sau giai đoạn render",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "The render phase computes changes; the commit phase applies them to the UI.",
+   "viDuNghia": "Giai đoạn render tính thay đổi; giai đoạn commit áp chúng lên giao diện."
+  },
+  {
+   "chu": "render phase",
+   "doc": "/ˈrendər feɪz/",
+   "nghia": "giai đoạn render: React gọi component để tính cây giao diện mới, chưa đụng tới màn hình",
+   "nhom": "Native module và kiến trúc",
+   "viDu": "The render phase must not have side effects.",
+   "viDuNghia": "Giai đoạn render không được có tác dụng phụ."
+  },
+  {
+   "chu": "Expo Go",
+   "doc": "/ˈekspoʊ ɡoʊ/",
+   "nghia": "app trên điện thoại để chạy thử dự án Expo bằng cách quét mã QR",
+   "nhom": "Công cụ Expo và phát triển",
+   "viDu": "Scan the QR code with Expo Go to run the app on your phone.",
+   "viDuNghia": "Quét mã QR bằng Expo Go để chạy app trên điện thoại."
+  },
+  {
+   "chu": "Expo CLI",
+   "doc": "/ˈekspoʊ ˌsiː el ˈaɪ/",
+   "nghia": "công cụ dòng lệnh của Expo (npx expo start); bản cũ cài bằng expo-cli toàn cục",
+   "nhom": "Công cụ Expo và phát triển",
+   "viDu": "npm install -g expo-cli",
+   "viDuNghia": "Cài Expo CLI toàn cục."
+  },
+  {
+   "chu": "expo install",
+   "doc": "/ˈekspoʊ ɪnˈstɔːl/",
+   "nghia": "lệnh npx expo install: cài thư viện đúng phiên bản tương thích với SDK Expo",
+   "nhom": "Công cụ Expo và phát triển",
+   "viDu": "Use npx expo install react-native-maps.",
+   "viDuNghia": "Dùng npx expo install để cài react-native-maps."
+  },
+  {
+   "chu": "development build",
+   "doc": "/dɪˈveləpmənt bɪld/",
+   "nghia": "bản dựng phát triển: app riêng có native module tuỳ chỉnh, thay cho Expo Go",
+   "nhom": "Công cụ Expo và phát triển",
+   "viDu": "Libraries with custom native code need a development build.",
+   "viDuNghia": "Thư viện có mã native riêng cần bản dựng phát triển."
+  },
+  {
+   "chu": "EAS Build",
+   "doc": "/ˌiː eɪ ˈes bɪld/",
+   "nghia": "dịch vụ đám mây của Expo dựng tệp cài đặt Android/iOS",
+   "nhom": "Công cụ Expo và phát triển",
+   "viDu": "Use EAS Build to create the Android app bundle.",
+   "viDuNghia": "Dùng EAS Build để tạo gói cài Android."
+  },
+  {
+   "chu": "Metro bundler",
+   "doc": "/ˈmetroʊ ˈbʌndlər/",
+   "nghia": "bộ đóng gói JavaScript mặc định của React Native, chạy khi npx expo start",
+   "nhom": "Công cụ Expo và phát triển",
+   "viDu": "Metro bundler serves the JavaScript bundle to the app.",
+   "viDuNghia": "Metro gửi gói JavaScript cho app."
+  },
+  {
+   "chu": "Fast Refresh",
+   "doc": "/fæst rɪˈfreʃ/",
+   "nghia": "tự cập nhật ngay khi lưu tệp, giữ nguyên state của component",
+   "nhom": "Công cụ Expo và phát triển",
+   "viDu": "Fast Refresh keeps the component state after you save a file.",
+   "viDuNghia": "Fast Refresh giữ state của component sau khi lưu tệp."
+  },
+  {
+   "chu": "live reload",
+   "doc": "/laɪv ˌriːˈloʊd/",
+   "nghia": "tải lại toàn bộ app mỗi khi mã đổi (mất state), khác hot reload chỉ thay phần đổi",
+   "nhom": "Công cụ Expo và phát triển",
+   "viDu": "Live and Hot reloads.",
+   "viDuNghia": "Tải lại toàn bộ và tải lại nóng."
+  },
+  {
+   "chu": "over-the-air update",
+   "doc": "/ˌoʊvər ðə ˈer ˈʌpdeɪt/",
+   "nghia": "cập nhật qua mạng: đẩy bản JS mới tới máy người dùng không cần nộp lại cửa hàng (EAS Update)",
+   "nhom": "Công cụ Expo và phát triển",
+   "viDu": "An over-the-air update fixes a JavaScript bug without a new store release.",
+   "viDuNghia": "Cập nhật qua mạng sửa lỗi JavaScript mà không phải phát hành lại."
+  },
+  {
+   "chu": "Bottom Tab Navigator",
+   "doc": "/ˈbɒtəm tæb ˈnævɪɡeɪtər/",
+   "nghia": "bộ điều hướng tab đáy (createBottomTabNavigator, gói @react-navigation/bottom-tabs): thanh tab dưới màn hình để chuyển giữa các màn chính",
+   "nhom": "Điều hướng nâng cao",
+   "viDu": "In @react-navigation/bottom-tabs, tabBarActiveTintColor and tabBarInactiveTintColor colour the tab icon and label.",
+   "viDuNghia": "Trong @react-navigation/bottom-tabs, tabBarActiveTintColor và tabBarInactiveTintColor tô màu biểu tượng và nhãn tab."
+  },
+  {
+   "chu": "application performance monitoring",
+   "doc": "/ˌæplɪˈkeɪʃn pərˈfɔːrməns ˈmɒnɪtərɪŋ/",
+   "nghia": "giám sát hiệu năng ứng dụng (APM): công cụ theo dõi thời gian phản hồi, lỗi, tài nguyên của ứng dụng đang chạy (Sentry, New Relic…)",
+   "nhom": "Công cụ Expo và phát triển",
+   "viDu": "It integrates with source code management tools, CI/CD pipelines, cloud infrastructure, and APM solutions.",
+   "viDuNghia": "Nó tích hợp với công cụ quản lý mã nguồn, pipeline CI/CD, hạ tầng cloud và giải pháp APM."
+  }
+ ]
+}

@@ -1,0 +1,658 @@
+{
+ "ma": "cea201-4",
+ "nn": "en",
+ "ten": "CEA201 · 4. Logic số, số học, điều khiển & hợp ngữ",
+ "moTa": "Bổ sung cho CEA201 (Stallings + MARIE): mạch tổ hợp và tuần tự, rút gọn hàm Boole, phép nhân/chia và dấu phẩy động IEEE 754, đơn vị điều khiển vi chương trình, hợp ngữ, đơn vị dung lượng và cách đo hiệu năng.",
+ "bieuTuong": "cpu",
+ "thuTu": -983,
+ "tu": [
+  {
+   "chu": "half adder",
+   "doc": "/hæf ˈædər/",
+   "nghia": "bộ cộng bán phần: cộng hai bit, ra tổng (XOR) và số nhớ (AND)",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "A half adder cannot add a carry coming from a previous stage.",
+   "viDuNghia": "Bộ cộng bán phần không cộng được số nhớ từ tầng trước."
+  },
+  {
+   "chu": "full adder",
+   "doc": "/fʊl ˈædər/",
+   "nghia": "bộ cộng toàn phần: cộng hai bit và một bit nhớ vào, ra tổng và nhớ ra",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "How many inputs and outputs does a full adder have?",
+   "viDuNghia": "Bộ cộng toàn phần có bao nhiêu đầu vào và đầu ra? (3 vào, 2 ra)"
+  },
+  {
+   "chu": "ripple-carry adder",
+   "doc": "/ˈrɪpl ˈkæri ˈædər/",
+   "nghia": "bộ cộng nhớ nối tiếp: n bộ cộng toàn phần nối chuỗi, số nhớ lan dần nên chậm",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "In a ripple-carry adder, each stage must wait for the carry from the stage before it.",
+   "viDuNghia": "Trong bộ cộng nhớ nối tiếp, mỗi tầng phải chờ số nhớ của tầng trước."
+  },
+  {
+   "chu": "carry-lookahead adder",
+   "doc": "/ˈkæri ˈlʊkəhɛd ˈædər/",
+   "nghia": "bộ cộng nhớ nhìn trước: tính trước mọi số nhớ bằng tín hiệu sinh/truyền nên nhanh hơn",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "A carry-lookahead adder computes all carries in parallel.",
+   "viDuNghia": "Bộ cộng nhớ nhìn trước tính mọi số nhớ song song."
+  },
+  {
+   "chu": "encoder",
+   "doc": "/ɪnˈkoʊdər/",
+   "nghia": "bộ mã hoá: 2ⁿ đầu vào, ra mã n bit của đầu vào đang bật (ngược decoder)",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "An 8-to-3 encoder outputs the binary number of the active input line.",
+   "viDuNghia": "Bộ mã hoá 8 sang 3 đưa ra số nhị phân của đường vào đang bật."
+  },
+  {
+   "chu": "demultiplexer",
+   "doc": "/ˌdiːˈmʌltɪplɛksər/",
+   "nghia": "bộ phân kênh (DEMUX): đưa một đầu vào ra một trong nhiều đầu ra theo đường chọn",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "A demultiplexer sends one input to one of several outputs.",
+   "viDuNghia": "Bộ phân kênh đưa một đầu vào tới một trong nhiều đầu ra."
+  },
+  {
+   "chu": "shifter",
+   "doc": "/ˈʃɪftər/",
+   "nghia": "bộ dịch: mạch dịch các bit sang trái/phải",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "The ALU uses a shifter to perform shift and rotate instructions.",
+   "viDuNghia": "ALU dùng bộ dịch để làm các lệnh dịch và quay bit."
+  },
+  {
+   "chu": "barrel shifter",
+   "doc": "/ˈbærəl ˈʃɪftər/",
+   "nghia": "bộ dịch thùng: dịch nhiều vị trí trong MỘT chu kỳ (ARM dùng cho toán hạng thứ hai)",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "A barrel shifter can shift a word by any number of bits in one clock cycle.",
+   "viDuNghia": "Bộ dịch thùng dịch một từ đi số bit bất kỳ trong một chu kỳ."
+  },
+  {
+   "chu": "minterm",
+   "doc": "/ˈmɪntɜːrm/",
+   "nghia": "tiểu hạng (minterm): tích (AND) chứa đủ mọi biến, đúng ở đúng một hàng của bảng chân trị",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "Each 1 in the truth table corresponds to one minterm of the sum of products.",
+   "viDuNghia": "Mỗi số 1 trong bảng chân trị ứng với một tiểu hạng của dạng tổng các tích."
+  },
+  {
+   "chu": "maxterm",
+   "doc": "/ˈmækstɜːrm/",
+   "nghia": "đại hạng (maxterm): tổng (OR) chứa đủ mọi biến, sai ở đúng một hàng",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "The product of sums is built from the maxterms where the function is 0.",
+   "viDuNghia": "Dạng tích các tổng được dựng từ các đại hạng mà tại đó hàm bằng 0."
+  },
+  {
+   "chu": "product of sums",
+   "doc": "/ˈprɒdʌkt ɒv sʌmz/",
+   "nghia": "dạng tích các tổng (POS): AND của nhiều cụm OR",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "F = (A + B)(A' + C) is written in product of sums form.",
+   "viDuNghia": "F = (A + B)(A' + C) được viết ở dạng tích các tổng."
+  },
+  {
+   "chu": "implicant",
+   "doc": "/ˈɪmplɪkənt/",
+   "nghia": "nguyên nhân (implicant): tích các biến làm hàm bằng 1 — một nhóm ô 1 trên bìa Karnaugh",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "Each group of 1s on a Karnaugh map is an implicant of the function.",
+   "viDuNghia": "Mỗi nhóm ô 1 trên bìa Karnaugh là một nguyên nhân của hàm."
+  },
+  {
+   "chu": "prime implicant",
+   "doc": "/praɪm ˈɪmplɪkənt/",
+   "nghia": "nguyên nhân nguyên tố: nhóm ô 1 lớn nhất, không gộp thêm được nữa",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "The minimal expression is a sum of essential prime implicants.",
+   "viDuNghia": "Biểu thức tối giản là tổng các nguyên nhân nguyên tố cốt yếu."
+  },
+  {
+   "chu": "don't-care condition",
+   "doc": "/doʊnt kɛər kənˈdɪʃən/",
+   "nghia": "điều kiện tuỳ định (X): tổ hợp vào không bao giờ xảy ra, coi 0 hay 1 tuỳ ý để rút gọn",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "Don't-care conditions can be used as 1s to make larger groups on the Karnaugh map.",
+   "viDuNghia": "Điều kiện tuỳ định có thể coi là 1 để tạo nhóm lớn hơn trên bìa Karnaugh."
+  },
+  {
+   "chu": "Quine-McCluskey method",
+   "doc": "/kwaɪn məˈklʌski ˈmɛθəd/",
+   "nghia": "phương pháp Quine–McCluskey: rút gọn hàm Boole bằng bảng, dùng được cho nhiều biến hơn bìa Karnaugh",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "The Quine-McCluskey method is easier to program than a Karnaugh map.",
+   "viDuNghia": "Phương pháp Quine–McCluskey dễ lập trình hơn bìa Karnaugh."
+  },
+  {
+   "chu": "programmable logic array",
+   "doc": "/proʊˈɡræməbl ˈlɒdʒɪk əˈreɪ/",
+   "nghia": "mảng logic lập trình được (PLA): ma trận AND và OR lập trình được để dựng dạng tổng các tích",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "A programmable logic array implements a sum-of-products expression.",
+   "viDuNghia": "Mảng logic lập trình được hiện thực một biểu thức dạng tổng các tích."
+  },
+  {
+   "chu": "programmable logic device",
+   "doc": "/proʊˈɡræməbl ˈlɒdʒɪk dɪˈvaɪs/",
+   "nghia": "thiết bị logic lập trình được (PLD): chip mà người dùng tự cấu hình chức năng logic",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "PLA and FPGA are two kinds of programmable logic device.",
+   "viDuNghia": "PLA và FPGA là hai loại thiết bị logic lập trình được."
+  },
+  {
+   "chu": "field-programmable gate array",
+   "doc": "/fiːld proʊˈɡræməbl ɡeɪt əˈreɪ/",
+   "nghia": "FPGA: chip gồm rất nhiều khối logic và đường nối lập trình lại được tại chỗ",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "An FPGA can be reprogrammed to implement a new circuit.",
+   "viDuNghia": "FPGA có thể lập trình lại để hiện thực một mạch mới."
+  },
+  {
+   "chu": "lookup table",
+   "doc": "/ˈlʊkʌp ˈteɪbl/",
+   "nghia": "bảng tra (LUT): bộ nhớ nhỏ chứa sẵn đầu ra cho mọi tổ hợp vào — khối cơ bản của FPGA",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "A 4-input lookup table can implement any Boolean function of four variables.",
+   "viDuNghia": "Bảng tra 4 đầu vào hiện thực được mọi hàm Boole bốn biến."
+  },
+  {
+   "chu": "latch",
+   "doc": "/lætʃ/",
+   "nghia": "chốt (latch): mạch lưu 1 bit, đổi trạng thái theo mức tín hiệu (không theo sườn xung)",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "Unlike a flip-flop, a latch is level-sensitive.",
+   "viDuNghia": "Khác flip-flop, chốt nhạy theo mức tín hiệu."
+  },
+  {
+   "chu": "S-R latch",
+   "doc": "/ˌɛs ˈɑːr lætʃ/",
+   "nghia": "chốt S-R: hai cổng NOR (hoặc NAND) hồi tiếp, có đầu Set và Reset; S = R = 1 bị cấm",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "In an S-R latch built from NOR gates, S = 1 and R = 1 is not allowed.",
+   "viDuNghia": "Trong chốt S-R dựng bằng cổng NOR, S = 1 và R = 1 là không được phép."
+  },
+  {
+   "chu": "clocked flip-flop",
+   "doc": "/klɒkt ˈflɪp flɒp/",
+   "nghia": "flip-flop có xung nhịp: chỉ đổi trạng thái tại sườn của xung đồng hồ",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "A clocked flip-flop changes state only on the edge of the clock pulse.",
+   "viDuNghia": "Flip-flop có xung nhịp chỉ đổi trạng thái tại sườn xung đồng hồ."
+  },
+  {
+   "chu": "D flip-flop",
+   "doc": "/diː ˈflɪp flɒp/",
+   "nghia": "flip-flop D: đầu ra Q nhận giá trị D tại sườn xung — làm thanh ghi",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "A register is built from a group of D flip-flops.",
+   "viDuNghia": "Thanh ghi được dựng từ một nhóm flip-flop D."
+  },
+  {
+   "chu": "J-K flip-flop",
+   "doc": "/ˌdʒeɪ ˈkeɪ ˈflɪp flɒp/",
+   "nghia": "flip-flop J-K: như S-R nhưng J = K = 1 thì đảo trạng thái (toggle)",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "When J = K = 1, a J-K flip-flop toggles its output.",
+   "viDuNghia": "Khi J = K = 1, flip-flop J-K đảo đầu ra."
+  },
+  {
+   "chu": "ripple counter",
+   "doc": "/ˈrɪpl ˈkaʊntər/",
+   "nghia": "bộ đếm không đồng bộ (gợn): đầu ra flip-flop này làm xung cho flip-flop sau",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "In a ripple counter, the flip-flops do not change state at exactly the same time.",
+   "viDuNghia": "Trong bộ đếm không đồng bộ, các flip-flop không đổi trạng thái cùng lúc."
+  },
+  {
+   "chu": "synchronous counter",
+   "doc": "/ˈsɪŋkrənəs ˈkaʊntər/",
+   "nghia": "bộ đếm đồng bộ: mọi flip-flop dùng chung xung nhịp nên đổi cùng lúc",
+   "nhom": "Mạch logic tổ hợp & tuần tự",
+   "viDu": "A synchronous counter is faster than a ripple counter.",
+   "viDuNghia": "Bộ đếm đồng bộ nhanh hơn bộ đếm không đồng bộ."
+  },
+  {
+   "chu": "multiplier",
+   "doc": "/ˈmʌltɪplaɪər/",
+   "nghia": "số nhân (trong phép a × b là b) · cũng chỉ mạch nhân",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "The multiplier is examined bit by bit, starting from the least significant bit.",
+   "viDuNghia": "Số nhân được xét từng bit, bắt đầu từ bit thấp nhất."
+  },
+  {
+   "chu": "multiplicand",
+   "doc": "/ˌmʌltɪplɪˈkænd/",
+   "nghia": "số bị nhân: số được cộng dồn và dịch trong phép nhân nhị phân",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "If the current multiplier bit is 1, the multiplicand is added to the partial product.",
+   "viDuNghia": "Nếu bit hiện tại của số nhân là 1 thì cộng số bị nhân vào tích riêng."
+  },
+  {
+   "chu": "Booth's algorithm",
+   "doc": "/buːθs ˈælɡərɪðəm/",
+   "nghia": "thuật toán Booth: nhân hai số bù hai bằng cách xét từng cặp bit Q0 và Q-1",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "Booth's algorithm multiplies signed numbers in two's complement directly.",
+   "viDuNghia": "Thuật toán Booth nhân trực tiếp các số có dấu dạng bù hai."
+  },
+  {
+   "chu": "dividend",
+   "doc": "/ˈdɪvɪdɛnd/",
+   "nghia": "số bị chia",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "In the division 13 / 4, 13 is the dividend and 4 is the divisor.",
+   "viDuNghia": "Trong phép chia 13 / 4, 13 là số bị chia và 4 là số chia."
+  },
+  {
+   "chu": "single precision",
+   "doc": "/ˈsɪŋɡl prɪˈsɪʒən/",
+   "nghia": "độ chính xác đơn (32 bit): 1 bit dấu, 8 bit mũ, 23 bit phần định trị",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "In IEEE 754 single precision, the exponent is stored in biased form. What is the value of the bias?",
+   "viDuNghia": "Ở độ chính xác đơn IEEE 754, số mũ lưu dạng lệch. Độ lệch bằng bao nhiêu? (127)"
+  },
+  {
+   "chu": "double precision",
+   "doc": "/ˈdʌbl prɪˈsɪʒən/",
+   "nghia": "độ chính xác kép (64 bit): 1 bit dấu, 11 bit mũ, 52 bit phần định trị, độ lệch 1023",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "Double precision uses an 11-bit exponent with a bias of 1023.",
+   "viDuNghia": "Độ chính xác kép dùng 11 bit mũ với độ lệch 1023."
+  },
+  {
+   "chu": "biased exponent",
+   "doc": "/ˈbaɪəst ɪkˈspoʊnənt/",
+   "nghia": "số mũ lệch: số mũ thật cộng thêm độ lệch để luôn không âm",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "The biased exponent of 1.0 x 2^3 in single precision is 3 + 127 = 130.",
+   "viDuNghia": "Số mũ lệch của 1,0 × 2³ ở độ chính xác đơn là 3 + 127 = 130."
+  },
+  {
+   "chu": "subnormal number",
+   "doc": "/sʌbˈnɔːrməl ˈnʌmbər/",
+   "nghia": "số dưới chuẩn: mũ toàn 0, phần định trị khác 0 — biểu diễn số rất gần 0",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "Subnormal numbers fill the gap between zero and the smallest normalized number.",
+   "viDuNghia": "Số dưới chuẩn lấp khoảng trống giữa 0 và số chuẩn hoá nhỏ nhất."
+  },
+  {
+   "chu": "not a number",
+   "doc": "/nɒt ə ˈnʌmbər/",
+   "nghia": "NaN: giá trị đặc biệt cho kết quả không xác định (0/0, √−1) — mũ toàn 1, phần định trị khác 0",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "In IEEE 754, 0/0 gives NaN (not a number).",
+   "viDuNghia": "Trong IEEE 754, 0/0 cho kết quả NaN (không phải số)."
+  },
+  {
+   "chu": "guard bit",
+   "doc": "/ɡɑːrd bɪt/",
+   "nghia": "bit bảo vệ: bit thêm bên phải phần định trị khi tính để làm tròn chính xác hơn",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "Guard bits are extra bits kept during floating-point arithmetic.",
+   "viDuNghia": "Bit bảo vệ là các bit thêm được giữ lại khi tính dấu phẩy động."
+  },
+  {
+   "chu": "rounding",
+   "doc": "/ˈraʊndɪŋ/",
+   "nghia": "làm tròn: bỏ bớt bit/chữ số thừa theo một quy tắc (về gần nhất, về 0, lên, xuống)",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "IEEE 754 uses round to nearest as the default rounding mode.",
+   "viDuNghia": "IEEE 754 dùng làm tròn về gần nhất làm chế độ mặc định."
+  },
+  {
+   "chu": "binary-coded decimal",
+   "doc": "/ˈbaɪnəri ˈkoʊdɪd ˈdɛsɪməl/",
+   "nghia": "mã BCD: mỗi chữ số thập phân mã hoá bằng 4 bit riêng",
+   "nhom": "Số học máy tính & IEEE 754",
+   "viDu": "In binary-coded decimal, 25 is stored as 0010 0101.",
+   "viDuNghia": "Trong mã BCD, 25 được lưu là 0010 0101."
+  },
+  {
+   "chu": "micro-operation",
+   "doc": "/ˈmaɪkroʊ ˌɒpəˈreɪʃən/",
+   "nghia": "vi thao tác: bước nhỏ nhất của CPU (vd MAR ← PC) — mỗi chu kỳ lệnh gồm nhiều vi thao tác",
+   "nhom": "Đơn vị điều khiển & vi chương trình",
+   "viDu": "The fetch cycle consists of micro-operations such as MAR <- PC and MBR <- memory.",
+   "viDuNghia": "Chu kỳ nạp gồm các vi thao tác như MAR ← PC và MBR ← bộ nhớ."
+  },
+  {
+   "chu": "microinstruction",
+   "doc": "/ˌmaɪkroʊɪnˈstrʌkʃən/",
+   "nghia": "vi lệnh: một từ trong bộ nhớ điều khiển, chứa các tín hiệu điều khiển cho một bước",
+   "nhom": "Đơn vị điều khiển & vi chương trình",
+   "viDu": "During microinstruction execution, which of the following is generated by the control unit?",
+   "viDuNghia": "Khi thực thi vi lệnh, đơn vị điều khiển tạo ra cái nào sau đây?"
+  },
+  {
+   "chu": "microcode",
+   "doc": "/ˈmaɪkroʊkoʊd/",
+   "nghia": "vi mã: tập vi lệnh hiện thực từng lệnh máy trong đơn vị điều khiển vi chương trình",
+   "nhom": "Đơn vị điều khiển & vi chương trình",
+   "viDu": "Complex x86 instructions are executed by microcode inside the processor.",
+   "viDuNghia": "Các lệnh x86 phức tạp được thực thi bằng vi mã bên trong bộ xử lý."
+  },
+  {
+   "chu": "control memory",
+   "doc": "/kənˈtroʊl ˈmɛməri/",
+   "nghia": "bộ nhớ điều khiển: bộ nhớ chứa vi chương trình của đơn vị điều khiển",
+   "nhom": "Đơn vị điều khiển & vi chương trình",
+   "viDu": "The next address for the control memory.",
+   "viDuNghia": "Địa chỉ kế tiếp của bộ nhớ điều khiển."
+  },
+  {
+   "chu": "hardwired control unit",
+   "doc": "/ˈhɑːrdwaɪərd kənˈtroʊl ˈjuːnɪt/",
+   "nghia": "đơn vị điều khiển nối cứng: tín hiệu điều khiển sinh bằng mạch logic cố định — nhanh nhưng khó sửa",
+   "nhom": "Đơn vị điều khiển & vi chương trình",
+   "viDu": "RISC processors usually use a hardwired control unit for speed.",
+   "viDuNghia": "Bộ xử lý RISC thường dùng đơn vị điều khiển nối cứng cho nhanh."
+  },
+  {
+   "chu": "MARIE",
+   "doc": "/məˈriː/",
+   "nghia": "MARIE: máy tính giả lập đơn giản (một thanh ghi AC, lệnh 16 bit) dùng để học hợp ngữ",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "In MARIE, the instruction Skipcond 400 skips the next instruction if AC = 0.",
+   "viDuNghia": "Trong MARIE, lệnh Skipcond 400 bỏ qua lệnh kế tiếp nếu AC = 0."
+  },
+  {
+   "chu": "x86",
+   "doc": "/ˌɛks eɪti ˈsɪks/",
+   "nghia": "x86: họ kiến trúc tập lệnh CISC của Intel/AMD, lệnh dài thay đổi",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "x86 instructions are variable in length, while ARM instructions are fixed",
+   "viDuNghia": "Lệnh x86 có độ dài thay đổi, còn lệnh ARM có độ dài cố định."
+  },
+  {
+   "chu": "segment register",
+   "doc": "/ˈsɛɡmənt ˈrɛdʒɪstər/",
+   "nghia": "thanh ghi đoạn (CS, DS, SS…): giữ địa chỉ gốc của đoạn bộ nhớ trong x86",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "The x86 uses segment registers such as CS for code and SS for the stack.",
+   "viDuNghia": "x86 dùng các thanh ghi đoạn như CS cho mã và SS cho ngăn xếp."
+  },
+  {
+   "chu": "Thumb instruction set",
+   "doc": "/θʌm ɪnˈstrʌkʃən sɛt/",
+   "nghia": "tập lệnh Thumb: tập lệnh 16 bit rút gọn của ARM để mã gọn hơn",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "The Thumb instruction set uses 16-bit instructions to reduce code size.",
+   "viDuNghia": "Tập lệnh Thumb dùng lệnh 16 bit để giảm kích thước mã."
+  },
+  {
+   "chu": "assembler directive",
+   "doc": "/əˈsɛmblər dəˈrɛktɪv/",
+   "nghia": "chỉ thị hợp dịch: lệnh cho trình hợp dịch (vd ORG, DEC, HEX), không sinh mã máy",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "ORG and END are assembler directives, not machine instructions.",
+   "viDuNghia": "ORG và END là chỉ thị hợp dịch, không phải lệnh máy."
+  },
+  {
+   "chu": "pseudo-instruction",
+   "doc": "/ˈsuːdoʊ ɪnˈstrʌkʃən/",
+   "nghia": "lệnh giả: lệnh hợp ngữ tiện dụng mà trình hợp dịch đổi thành một hay vài lệnh thật",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "A pseudo-instruction is translated by the assembler into real machine instructions.",
+   "viDuNghia": "Lệnh giả được trình hợp dịch đổi thành các lệnh máy thật."
+  },
+  {
+   "chu": "symbol table",
+   "doc": "/ˈsɪmbəl ˈteɪbl/",
+   "nghia": "bảng ký hiệu: bảng nhãn và địa chỉ tương ứng do trình hợp dịch lập",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "In the first pass, the assembler builds the symbol table.",
+   "viDuNghia": "Ở lượt thứ nhất, trình hợp dịch lập bảng ký hiệu."
+  },
+  {
+   "chu": "one-pass assembler",
+   "doc": "/wʌn pæs əˈsɛmblər/",
+   "nghia": "trình hợp dịch một lượt: dịch trong một lần đọc, phải xử lý nhãn khai sau (forward reference)",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "A one-pass assembler must handle labels that are used before they are defined.",
+   "viDuNghia": "Trình hợp dịch một lượt phải xử lý nhãn được dùng trước khi định nghĩa."
+  },
+  {
+   "chu": "two-pass assembler",
+   "doc": "/tuː pæs əˈsɛmblər/",
+   "nghia": "trình hợp dịch hai lượt: lượt 1 lập bảng ký hiệu, lượt 2 sinh mã máy",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "A two-pass assembler builds the symbol table in the first pass and generates code in the second.",
+   "viDuNghia": "Trình hợp dịch hai lượt lập bảng ký hiệu ở lượt một và sinh mã ở lượt hai."
+  },
+  {
+   "chu": "zero-address instruction",
+   "doc": "/ˈzɪəroʊ ˈædrɛs ɪnˈstrʌkʃən/",
+   "nghia": "lệnh không địa chỉ: toán hạng lấy ngầm từ đỉnh ngăn xếp (vd ADD trên máy ngăn xếp)",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "A stack machine uses zero-address instructions such as ADD and MUL.",
+   "viDuNghia": "Máy ngăn xếp dùng lệnh không địa chỉ như ADD và MUL."
+  },
+  {
+   "chu": "one-address instruction",
+   "doc": "/wʌn ˈædrɛs ɪnˈstrʌkʃən/",
+   "nghia": "lệnh một địa chỉ: toán hạng thứ hai ngầm là thanh ghi tích luỹ AC",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "MARIE uses one-address instructions with the accumulator AC.",
+   "viDuNghia": "MARIE dùng lệnh một địa chỉ với thanh ghi tích luỹ AC."
+  },
+  {
+   "chu": "three-address instruction",
+   "doc": "/θriː ˈædrɛs ɪnˈstrʌkʃən/",
+   "nghia": "lệnh ba địa chỉ: ghi rõ hai toán hạng nguồn và một đích (ADD R1, R2, R3)",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "ADD R1, R2, R3 is a three-address instruction.",
+   "viDuNghia": "ADD R1, R2, R3 là một lệnh ba địa chỉ."
+  },
+  {
+   "chu": "PC-relative addressing",
+   "doc": "/ˌpiː ˈsiː ˈrɛlətɪv əˈdrɛsɪŋ/",
+   "nghia": "định địa chỉ tương đối PC: địa chỉ hiệu dụng = PC + độ dời",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "In PC-relative addressing, how is the effective address computed?",
+   "viDuNghia": "Trong định địa chỉ tương đối PC, địa chỉ hiệu dụng được tính thế nào?"
+  },
+  {
+   "chu": "jump instruction",
+   "doc": "/dʒʌmp ɪnˈstrʌkʃən/",
+   "nghia": "lệnh nhảy: nạp địa chỉ mới vào PC để rẽ luồng thực thi",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "A jump instruction loads a new address into the program counter.",
+   "viDuNghia": "Lệnh nhảy nạp địa chỉ mới vào bộ đếm chương trình."
+  },
+  {
+   "chu": "unconditional branch",
+   "doc": "/ˌʌnkənˈdɪʃənəl bræntʃ/",
+   "nghia": "rẽ nhánh không điều kiện: luôn nhảy, không xét cờ",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "JMP is an unconditional branch, while BRZ branches only if the result is zero.",
+   "viDuNghia": "JMP là rẽ nhánh không điều kiện, còn BRZ chỉ rẽ khi kết quả bằng 0."
+  },
+  {
+   "chu": "subroutine",
+   "doc": "/ˈsʌbruːtiːn/",
+   "nghia": "chương trình con: đoạn mã gọi được nhiều lần, có lệnh gọi (CALL/JnS) và trả về",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "Each thread has its own data area for a stack (to enable subroutine branching).",
+   "viDuNghia": "Mỗi luồng có vùng dữ liệu riêng cho ngăn xếp (để rẽ nhánh gọi chương trình con)."
+  },
+  {
+   "chu": "procedure call",
+   "doc": "/prəˈsiːdʒər kɔːl/",
+   "nghia": "lời gọi thủ tục: lưu địa chỉ trả về rồi nhảy tới chương trình con",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "A procedure call saves the return address before jumping to the subroutine.",
+   "viDuNghia": "Lời gọi thủ tục lưu địa chỉ trả về trước khi nhảy tới chương trình con."
+  },
+  {
+   "chu": "register-to-register",
+   "doc": "/ˈrɛdʒɪstər tə ˈrɛdʒɪstər/",
+   "nghia": "thanh ghi – thanh ghi: lệnh mà mọi toán hạng đều ở thanh ghi (kiểu RISC)",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "RISC arithmetic instructions are register-to-register.",
+   "viDuNghia": "Lệnh số học của RISC là kiểu thanh ghi – thanh ghi."
+  },
+  {
+   "chu": "memory-to-memory",
+   "doc": "/ˈmɛməri tə ˈmɛməri/",
+   "nghia": "bộ nhớ – bộ nhớ: lệnh lấy toán hạng trực tiếp từ bộ nhớ (kiểu CISC cũ, vd VAX)",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "Memory-to-memory instructions need more memory accesses per instruction.",
+   "viDuNghia": "Lệnh bộ nhớ – bộ nhớ cần nhiều lần truy cập bộ nhớ hơn cho mỗi lệnh."
+  },
+  {
+   "chu": "unaligned access",
+   "doc": "/ˌʌnəˈlaɪnd ˈæksɛs/",
+   "nghia": "truy cập không thẳng hàng: đọc từ nhiều byte ở địa chỉ không chia hết cho kích thước từ — chậm hơn hoặc bị cấm",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "An unaligned access to a 4-byte word may need two memory reads.",
+   "viDuNghia": "Truy cập không thẳng hàng một từ 4 byte có thể cần hai lần đọc bộ nhớ."
+  },
+  {
+   "chu": "halfword",
+   "doc": "/ˈhæfwɜːrd/",
+   "nghia": "nửa từ: 16 bit (trong kiến trúc từ 32 bit như ARM)",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "ARM supports byte, halfword and word load instructions.",
+   "viDuNghia": "ARM hỗ trợ lệnh nạp byte, nửa từ và từ."
+  },
+  {
+   "chu": "doubleword",
+   "doc": "/ˈdʌblwɜːrd/",
+   "nghia": "từ kép: 32 bit trong x86 (2 lần từ 16 bit)",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "In x86 terminology, a doubleword is 32 bits.",
+   "viDuNghia": "Theo thuật ngữ x86, từ kép là 32 bit."
+  },
+  {
+   "chu": "quadword",
+   "doc": "/ˈkwɒdwɜːrd/",
+   "nghia": "từ bốn: 64 bit trong x86",
+   "nhom": "Hợp ngữ & định dạng lệnh",
+   "viDu": "A quadword holds 64 bits.",
+   "viDuNghia": "Một từ bốn chứa 64 bit."
+  },
+  {
+   "chu": "kilobyte",
+   "doc": "/ˈkɪləbaɪt/",
+   "nghia": "kilobyte (KB): 2¹⁰ = 1024 byte (bộ nhớ) hoặc 1000 byte (đĩa, mạng)",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "A 64-kilobyte memory has 2^16 byte addresses.",
+   "viDuNghia": "Bộ nhớ 64 KB có 2¹⁶ địa chỉ byte."
+  },
+  {
+   "chu": "megabyte",
+   "doc": "/ˈmɛɡəbaɪt/",
+   "nghia": "megabyte (MB): 2²⁰ byte",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "A 4-megabyte cache needs 22 address bits for its bytes.",
+   "viDuNghia": "Bộ nhớ đệm 4 MB cần 22 bit địa chỉ cho các byte."
+  },
+  {
+   "chu": "gigabyte",
+   "doc": "/ˈɡɪɡəbaɪt/",
+   "nghia": "gigabyte (GB): 2³⁰ byte",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "A 32-bit address can access 4 gigabytes of memory.",
+   "viDuNghia": "Địa chỉ 32 bit truy cập được 4 GB bộ nhớ."
+  },
+  {
+   "chu": "terabyte",
+   "doc": "/ˈtɛrəbaɪt/",
+   "nghia": "terabyte (TB): 2⁴⁰ byte (hãng đĩa dùng 10¹² byte)",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "Disk makers use 1 terabyte to mean 10^12 bytes.",
+   "viDuNghia": "Hãng đĩa dùng 1 TB để chỉ 10¹² byte."
+  },
+  {
+   "chu": "MIPS rate",
+   "doc": "/mɪps reɪt/",
+   "nghia": "tốc độ MIPS: số triệu lệnh mỗi giây = f / (CPI × 10⁶)",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "MIPS rate = 285.7",
+   "viDuNghia": "Tốc độ MIPS = 285,7."
+  },
+  {
+   "chu": "floating-point operations per second",
+   "doc": "/ˈfloʊtɪŋ pɔɪnt ˌɒpəˈreɪʃənz pər ˈsɛkənd/",
+   "nghia": "FLOPS: số phép tính dấu phẩy động mỗi giây (MFLOPS, GFLOPS) — đo máy tính khoa học",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "Supercomputers are rated in floating-point operations per second.",
+   "viDuNghia": "Siêu máy tính được xếp hạng theo số phép tính dấu phẩy động mỗi giây."
+  },
+  {
+   "chu": "arithmetic mean",
+   "doc": "/ˌærɪθˈmɛtɪk miːn/",
+   "nghia": "trung bình cộng: dùng cho thời gian chạy",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "A benchmark is run 4 times with execution times 8 s, 10 s, 12 s, 14 s. What is the arithmetic mean?",
+   "viDuNghia": "Chạy một benchmark 4 lần hết 8, 10, 12, 14 giây. Trung bình cộng là bao nhiêu?"
+  },
+  {
+   "chu": "harmonic mean",
+   "doc": "/hɑːrˈmɒnɪk miːn/",
+   "nghia": "trung bình điều hoà: n / Σ(1/xᵢ), dùng đúng cho tốc độ (MIPS, MFLOPS)",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "The harmonic mean is the right way to average rates such as MIPS.",
+   "viDuNghia": "Trung bình điều hoà là cách đúng để lấy trung bình các tốc độ như MIPS."
+  },
+  {
+   "chu": "geometric mean",
+   "doc": "/ˌdʒiːəˈmɛtrɪk miːn/",
+   "nghia": "trung bình nhân: căn bậc n của tích — SPEC dùng cho tỉ số tốc độ",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "SPEC reports the geometric mean of the speed ratios of all benchmarks.",
+   "viDuNghia": "SPEC báo trung bình nhân của tỉ số tốc độ mọi benchmark."
+  },
+  {
+   "chu": "SPEC benchmark",
+   "doc": "/spɛk ˈbɛntʃmɑːrk/",
+   "nghia": "bộ benchmark SPEC: các chương trình chuẩn để so hiệu năng máy (SPEC CPU)",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "The SPEC benchmark suite compares processors using real programs.",
+   "viDuNghia": "Bộ benchmark SPEC so sánh bộ xử lý bằng các chương trình thật."
+  },
+  {
+   "chu": "Gustafson's law",
+   "doc": "/ˈɡʌstəfsənz lɔː/",
+   "nghia": "định luật Gustafson: tăng số bộ xử lý thì tăng cỡ bài toán, nên tốc độ tăng gần tuyến tính (đối lập Amdahl)",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "Gustafson's law assumes that the problem size grows with the number of processors.",
+   "viDuNghia": "Định luật Gustafson giả định cỡ bài toán tăng theo số bộ xử lý."
+  },
+  {
+   "chu": "Little's law",
+   "doc": "/ˈlɪtlz lɔː/",
+   "nghia": "định luật Little: số việc trung bình trong hệ = tốc độ đến × thời gian chờ trung bình (L = λW)",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "By Little's law, if 10 requests arrive per second and each waits 0.5 s, 5 requests are in the system on average.",
+   "viDuNghia": "Theo định luật Little, nếu 10 yêu cầu tới mỗi giây và mỗi cái chờ 0,5 s thì trung bình có 5 yêu cầu trong hệ."
+  },
+  {
+   "chu": "wafer",
+   "doc": "/ˈweɪfər/",
+   "nghia": "tấm wafer: lát silicon mỏng hình tròn, trên đó chế tạo nhiều chip cùng lúc",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "Hundreds of chips are made on a single silicon wafer.",
+   "viDuNghia": "Hàng trăm chip được chế tạo trên một tấm wafer silicon."
+  },
+  {
+   "chu": "silicon",
+   "doc": "/ˈsɪlɪkən/",
+   "nghia": "silic: chất bán dẫn chính để làm transistor và chip",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "Integrated circuits are built on silicon.",
+   "viDuNghia": "Mạch tích hợp được chế tạo trên silic."
+  },
+  {
+   "chu": "chipset",
+   "doc": "/ˈtʃɪpsɛt/",
+   "nghia": "chipset: bộ chip trên bo mạch chủ điều khiển kết nối CPU với bộ nhớ và I/O",
+   "nhom": "Đơn vị dung lượng & đo hiệu năng",
+   "viDu": "The chipset connects the processor to memory and peripheral buses.",
+   "viDuNghia": "Chipset nối bộ xử lý với bộ nhớ và các bus ngoại vi."
+  }
+ ]
+}

@@ -1,0 +1,610 @@
+{
+ "ma": "csd203-1",
+ "nn": "en",
+ "ten": "CSD203 · Cấu trúc dữ liệu & giải thuật với Python",
+ "moTa": "Môn Data Structures and Algorithm with Python (CSD203, sách Goodrich): phân tích thuật toán bằng thực nghiệm, list và dict của Python bên trong, ADT ngăn xếp – hàng đợi – danh sách vị trí, cây tổng quát, bảng ánh xạ, đồ thị và các công cụ Python hay dùng khi viết bài lab, PE.",
+ "bieuTuong": "chevron.left.forwardslash.chevron.right",
+ "thuTu": -950,
+ "tu": [
+  {
+   "chu": "experimental analysis",
+   "doc": "/ɪkˌsperɪˈmentl əˈnæləsɪs/",
+   "nghia": "phân tích thực nghiệm: đo thời gian chạy thật với nhiều cỡ đầu vào rồi vẽ đồ thị",
+   "nhom": "Phân tích thuật toán",
+   "viDu": "Experimental analysis measures the running time for several input sizes.",
+   "viDuNghia": "Phân tích thực nghiệm đo thời gian chạy với nhiều cỡ đầu vào khác nhau."
+  },
+  {
+   "chu": "primitive operation",
+   "doc": "/ˈprɪmətɪv ˌɑːpəˈreɪʃn/",
+   "nghia": "phép toán cơ sở: thao tác tốn thời gian hằng số (gán, so sánh, gọi hàm) dùng để đếm chi phí",
+   "nhom": "Phân tích thuật toán",
+   "viDu": "We count primitive operations instead of measuring seconds.",
+   "viDuNghia": "Ta đếm số phép toán cơ sở thay vì đo bằng giây."
+  },
+  {
+   "chu": "seven functions",
+   "doc": "/ˈsevn ˈfʌŋkʃnz/",
+   "nghia": "bảy hàm cơ bản trong phân tích: hằng, log n, n, n log n, n², n³, 2ⁿ",
+   "nhom": "Phân tích thuật toán",
+   "viDu": "The seven functions used in algorithm analysis range from constant to exponential.",
+   "viDuNghia": "Bảy hàm dùng trong phân tích thuật toán trải từ hằng số tới hàm mũ."
+  },
+  {
+   "chu": "big-Oh",
+   "doc": "/bɪɡ ˈoʊ/",
+   "nghia": "ký hiệu big-Oh: cách Goodrich gọi Big-O, cận trên của tốc độ tăng",
+   "nhom": "Phân tích thuật toán",
+   "viDu": "The append method of a Python list runs in O(1) amortized time, using big-Oh notation.",
+   "viDuNghia": "Theo ký hiệu big-Oh, phương thức append của list Python chạy trong O(1) khấu hao."
+  },
+  {
+   "chu": "timeit",
+   "doc": "/ˈtaɪm ɪt/",
+   "nghia": "timeit: mô-đun Python đo thời gian chạy của một đoạn mã nhỏ nhiều lần",
+   "nhom": "Phân tích thuật toán",
+   "viDu": "Use the timeit module to compare two versions of a function.",
+   "viDuNghia": "Dùng mô-đun timeit để so sánh hai phiên bản của một hàm."
+  },
+  {
+   "chu": "time module",
+   "doc": "/taɪm ˈmɑːdʒuːl/",
+   "nghia": "mô-đun time: có time.time() và time.perf_counter() để bấm giờ",
+   "nhom": "Phân tích thuật toán",
+   "viDu": "Record time.time() before and after the call to measure elapsed time.",
+   "viDuNghia": "Ghi time.time() trước và sau lời gọi để đo thời gian trôi qua."
+  },
+  {
+   "chu": "recursion limit",
+   "doc": "/rɪˈkɜːrʒn ˈlɪmɪt/",
+   "nghia": "giới hạn đệ quy: Python mặc định cho sâu khoảng 1000 lần gọi, vượt quá thì báo RecursionError",
+   "nhom": "Phân tích thuật toán",
+   "viDu": "Deep recursion in Python hits the recursion limit and raises RecursionError.",
+   "viDuNghia": "Đệ quy quá sâu trong Python chạm giới hạn đệ quy và báo RecursionError."
+  },
+  {
+   "chu": "two-pointer technique",
+   "doc": "/ˌtuː ˈpɔɪntər tekˈniːk/",
+   "nghia": "kỹ thuật hai con trỏ: hai chỉ số đi từ hai đầu (hoặc cùng chiều) để giải bài trên mảng đã sắp trong O(n)",
+   "nhom": "Phân tích thuật toán",
+   "viDu": "The two-pointer technique finds a pair with a given sum in a sorted list.",
+   "viDuNghia": "Kỹ thuật hai con trỏ tìm một cặp có tổng cho trước trong list đã sắp."
+  },
+  {
+   "chu": "two-sum problem",
+   "doc": "/ˌtuː ˈsʌm ˈprɑːbləm/",
+   "nghia": "bài toán two-sum: tìm hai phần tử có tổng bằng giá trị đích; dùng dict để đạt O(n)",
+   "nhom": "Phân tích thuật toán",
+   "viDu": "The two-sum problem can be solved in O(n) with a dictionary of seen values.",
+   "viDuNghia": "Bài two-sum giải được trong O(n) bằng một dict lưu các giá trị đã gặp."
+  },
+  {
+   "chu": "prefix sum",
+   "doc": "/ˈpriːfɪks sʌm/",
+   "nghia": "tổng tiền tố: mảng P[i] là tổng i phần tử đầu, giúp tính tổng một đoạn trong O(1)",
+   "nhom": "Phân tích thuật toán",
+   "viDu": "With a prefix sum array, the sum of a range is P[j] - P[i].",
+   "viDuNghia": "Với mảng tổng tiền tố, tổng một đoạn bằng P[j] - P[i]."
+  },
+  {
+   "chu": "Python list",
+   "doc": "/ˈpaɪθɑːn lɪst/",
+   "nghia": "list của Python: mảng động lưu tham chiếu tới đối tượng, truy cập theo chỉ số trong O(1)",
+   "nhom": "List và dict của Python",
+   "viDu": "A Python list stores references to objects, not the objects themselves.",
+   "viDuNghia": "List của Python lưu tham chiếu tới đối tượng, không lưu chính đối tượng."
+  },
+  {
+   "chu": "over-allocation",
+   "doc": "/ˌoʊvər ˌæləˈkeɪʃn/",
+   "nghia": "cấp dư: list xin trước nhiều ô hơn cần để những lần append sau không phải chép lại",
+   "nhom": "List và dict của Python",
+   "viDu": "Over-allocation is why append is fast on average.",
+   "viDuNghia": "Cấp dư là lý do append nhanh xét trung bình."
+  },
+  {
+   "chu": "list index",
+   "doc": "/lɪst ˈɪndeks/",
+   "nghia": "chỉ số list: vị trí phần tử, bắt đầu từ 0",
+   "nhom": "List và dict của Python",
+   "viDu": "Accessing a list index outside the range raises IndexError.",
+   "viDuNghia": "Truy cập chỉ số list ngoài phạm vi sẽ báo IndexError."
+  },
+  {
+   "chu": "negative index",
+   "doc": "/ˈneɡətɪv ˈɪndeks/",
+   "nghia": "chỉ số âm: đếm từ cuối list, data[-1] là phần tử cuối",
+   "nhom": "List và dict của Python",
+   "viDu": "data[-1] uses a negative index to get the last element.",
+   "viDuNghia": "data[-1] dùng chỉ số âm để lấy phần tử cuối."
+  },
+  {
+   "chu": "slicing",
+   "doc": "/ˈslaɪsɪŋ/",
+   "nghia": "cắt lát: lấy một đoạn list/chuỗi bằng data[start:stop:step], tạo ra bản sao mới",
+   "nhom": "List và dict của Python",
+   "viDu": "Slicing creates a new list, so it costs O(k) time for k elements.",
+   "viDuNghia": "Cắt lát tạo list mới nên tốn O(k) cho k phần tử."
+  },
+  {
+   "chu": "nested list",
+   "doc": "/ˈnestɪd lɪst/",
+   "nghia": "list lồng: list chứa list, hay dùng biểu diễn ma trận",
+   "nhom": "List và dict của Python",
+   "viDu": "A nested list such as [[0] * 3 for i in range(3)] represents a 3 x 3 matrix.",
+   "viDuNghia": "List lồng như [[0] * 3 for i in range(3)] biểu diễn ma trận 3 x 3."
+  },
+  {
+   "chu": "list comprehension",
+   "doc": "/lɪst ˌkɑːmprɪˈhenʃn/",
+   "nghia": "biểu thức tạo list: cú pháp [biểu thức for x in dãy if điều kiện]",
+   "nhom": "List và dict của Python",
+   "viDu": "squares = [k * k for k in range(10)] is a list comprehension.",
+   "viDuNghia": "squares = [k * k for k in range(10)] là một biểu thức tạo list."
+  },
+  {
+   "chu": "dictionary comprehension",
+   "doc": "/ˈdɪkʃəneri ˌkɑːmprɪˈhenʃn/",
+   "nghia": "biểu thức tạo dict: {khoá: giá trị for x in dãy}",
+   "nhom": "List và dict của Python",
+   "viDu": "{w: len(w) for w in words} is a dictionary comprehension.",
+   "viDuNghia": "{w: len(w) for w in words} là một biểu thức tạo dict."
+  },
+  {
+   "chu": "mutable",
+   "doc": "/ˈmjuːtəbl/",
+   "nghia": "khả biến: đối tượng sửa được sau khi tạo (list, dict, set)",
+   "nhom": "List và dict của Python",
+   "viDu": "A list is mutable, but a tuple is not.",
+   "viDuNghia": "List là khả biến còn tuple thì không."
+  },
+  {
+   "chu": "hashable",
+   "doc": "/ˈhæʃəbl/",
+   "nghia": "băm được: đối tượng có giá trị băm không đổi nên làm khoá dict/phần tử set được",
+   "nhom": "List và dict của Python",
+   "viDu": "A list is not hashable, so it cannot be a dictionary key.",
+   "viDuNghia": "List không băm được nên không thể làm khoá của dict."
+  },
+  {
+   "chu": "hash value",
+   "doc": "/hæʃ ˈvæljuː/",
+   "nghia": "giá trị băm: số nguyên hàm hash() trả về, quyết định ô lưu trong bảng băm",
+   "nhom": "List và dict của Python",
+   "viDu": "Two equal objects must have the same hash value.",
+   "viDuNghia": "Hai đối tượng bằng nhau phải có cùng giá trị băm."
+  },
+  {
+   "chu": "membership test",
+   "doc": "/ˈmembərʃɪp test/",
+   "nghia": "kiểm tra thuộc (in): x in s; với set/dict là O(1) trung bình, với list là O(n)",
+   "nhom": "List và dict của Python",
+   "viDu": "A membership test on a set is much faster than on a list.",
+   "viDuNghia": "Kiểm tra thuộc trên set nhanh hơn nhiều so với trên list."
+  },
+  {
+   "chu": "dictionary view",
+   "doc": "/ˈdɪkʃəneri vjuː/",
+   "nghia": "khung nhìn dict: keys(), values(), items() phản ánh trực tiếp nội dung dict",
+   "nhom": "List và dict của Python",
+   "viDu": "Looping over d.items() gives each key-value pair through a dictionary view.",
+   "viDuNghia": "Duyệt d.items() cho từng cặp khoá – giá trị qua một khung nhìn dict."
+  },
+  {
+   "chu": "defaultdict",
+   "doc": "/dɪˈfɔːlt dɪkt/",
+   "nghia": "defaultdict: dict tự tạo giá trị mặc định cho khoá chưa có (vd đếm tần suất)",
+   "nhom": "List và dict của Python",
+   "viDu": "defaultdict(int) makes counting words easy because missing keys start at 0.",
+   "viDuNghia": "defaultdict(int) giúp đếm từ dễ vì khoá chưa có bắt đầu bằng 0."
+  },
+  {
+   "chu": "OrderedDict",
+   "doc": "/ˈɔːrdərd dɪkt/",
+   "nghia": "OrderedDict: dict giữ thứ tự thêm vào và có move_to_end, hay dùng cài bộ đệm LRU",
+   "nhom": "List và dict của Python",
+   "viDu": "An OrderedDict can implement an LRU cache with move_to_end().",
+   "viDuNghia": "OrderedDict có thể cài bộ đệm LRU bằng move_to_end()."
+  },
+  {
+   "chu": "collections module",
+   "doc": "/kəˈlekʃnz ˈmɑːdʒuːl/",
+   "nghia": "mô-đun collections: chứa deque, Counter, defaultdict, OrderedDict",
+   "nhom": "List và dict của Python",
+   "viDu": "Import deque from the collections module to build a fast queue.",
+   "viDuNghia": "Nhập deque từ mô-đun collections để dựng hàng đợi nhanh."
+  },
+  {
+   "chu": "popleft",
+   "doc": "/ˈpɑːp left/",
+   "nghia": "popleft(): lấy phần tử đầu của deque trong O(1) (list.pop(0) tốn O(n))",
+   "nhom": "List và dict của Python",
+   "viDu": "queue.popleft() removes the front element in constant time.",
+   "viDuNghia": "queue.popleft() lấy phần tử đầu trong thời gian hằng số."
+  },
+  {
+   "chu": "heapq module",
+   "doc": "/ˈhiːp kjuː ˈmɑːdʒuːl/",
+   "nghia": "mô-đun heapq: các hàm heappush, heappop biến list thành min-heap",
+   "nhom": "List và dict của Python",
+   "viDu": "heapq.heappop(h) always returns the smallest item.",
+   "viDuNghia": "heapq.heappop(h) luôn trả về phần tử nhỏ nhất."
+  },
+  {
+   "chu": "bisect module",
+   "doc": "/baɪˈsekt ˈmɑːdʒuːl/",
+   "nghia": "mô-đun bisect: tìm kiếm nhị phân để chèn vào list đã sắp mà vẫn giữ thứ tự",
+   "nhom": "List và dict của Python",
+   "viDu": "bisect.insort() inserts an item into a sorted list.",
+   "viDuNghia": "bisect.insort() chèn một phần tử vào list đã sắp."
+  },
+  {
+   "chu": "Timsort",
+   "doc": "/ˈtɪmsɔːrt/",
+   "nghia": "Timsort: thuật toán sắp xếp lai (merge sort + insertion sort) ổn định mà sorted() và list.sort() dùng",
+   "nhom": "List và dict của Python",
+   "viDu": "Python's sorted() uses Timsort, which runs in O(n log n) in the worst case.",
+   "viDuNghia": "sorted() của Python dùng Timsort, chạy O(n log n) trong trường hợp xấu nhất."
+  },
+  {
+   "chu": "sorted function",
+   "doc": "/ˈsɔːrtɪd ˈfʌŋkʃn/",
+   "nghia": "hàm sorted(): trả về list mới đã sắp, không sửa dãy gốc",
+   "nhom": "List và dict của Python",
+   "viDu": "sorted(data) returns a new list, while data.sort() sorts in place.",
+   "viDuNghia": "sorted(data) trả về list mới, còn data.sort() sắp tại chỗ."
+  },
+  {
+   "chu": "key function",
+   "doc": "/kiː ˈfʌŋkʃn/",
+   "nghia": "hàm khoá (key=): hàm lấy ra giá trị dùng để so sánh khi sắp xếp, tìm min/max",
+   "nhom": "List và dict của Python",
+   "viDu": "sorted(students, key=lambda s: s.gpa) sorts students by GPA.",
+   "viDuNghia": "sorted(students, key=lambda s: s.gpa) sắp sinh viên theo điểm trung bình."
+  },
+  {
+   "chu": "self",
+   "doc": "/self/",
+   "nghia": "self (Python): tham số đầu của phương thức, trỏ tới chính đối tượng đang gọi",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Every method of a class receives self as its first parameter.",
+   "viDuNghia": "Mọi phương thức của lớp đều nhận self làm tham số đầu tiên."
+  },
+  {
+   "chu": "class variable",
+   "doc": "/klæs ˈveriəbl/",
+   "nghia": "biến lớp: dùng chung cho mọi đối tượng của lớp, khai báo ngay trong thân lớp",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "DEFAULT_CAPACITY = 10 is a class variable shared by every stack.",
+   "viDuNghia": "DEFAULT_CAPACITY = 10 là biến lớp dùng chung cho mọi ngăn xếp."
+  },
+  {
+   "chu": "special method",
+   "doc": "/ˈspeʃl ˈmeθəd/",
+   "nghia": "phương thức đặc biệt (dunder): __len__, __getitem__, __iter__… cho lớp tự viết dùng được len(), [], for",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Defining __len__ lets len() work on your own linked list class.",
+   "viDuNghia": "Định nghĩa __len__ giúp len() dùng được với lớp danh sách liên kết tự viết."
+  },
+  {
+   "chu": "duck typing",
+   "doc": "/dʌk ˈtaɪpɪŋ/",
+   "nghia": "duck typing: không xét kiểu, chỉ cần đối tượng có đúng phương thức là dùng được",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Thanks to duck typing, any object with __iter__ can be used in a for loop.",
+   "viDuNghia": "Nhờ duck typing, đối tượng nào có __iter__ cũng dùng được trong vòng for."
+  },
+  {
+   "chu": "dynamic typing",
+   "doc": "/daɪˈnæmɪk ˈtaɪpɪŋ/",
+   "nghia": "kiểu động: kiểu gắn với giá trị lúc chạy, biến không cần khai báo kiểu",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Because of dynamic typing, a variable can hold an int and later a string.",
+   "viDuNghia": "Vì kiểu động, một biến có thể giữ số nguyên rồi sau đó giữ chuỗi."
+  },
+  {
+   "chu": "aliasing",
+   "doc": "/ˈeɪliəsɪŋ/",
+   "nghia": "đặt bí danh (tham chiếu chung): hai biến cùng trỏ tới một đối tượng, sửa qua biến này thì biến kia thấy",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "After b = a, aliasing means that b.append(1) also changes a.",
+   "viDuNghia": "Sau b = a, do tham chiếu chung nên b.append(1) cũng làm a thay đổi."
+  },
+  {
+   "chu": "is operator",
+   "doc": "/ɪz ˈɑːpəreɪtər/",
+   "nghia": "toán tử is: so sánh hai biến có cùng là một đối tượng không (đồng nhất), khác == so giá trị",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Use node is None rather than node == None.",
+   "viDuNghia": "Dùng node is None thay vì node == None."
+  },
+  {
+   "chu": "reference counting",
+   "doc": "/ˈrefrəns ˈkaʊntɪŋ/",
+   "nghia": "đếm tham chiếu: Python giải phóng đối tượng khi số tham chiếu tới nó về 0",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "When a node is unlinked, reference counting lets Python reclaim it.",
+   "viDuNghia": "Khi một nút bị gỡ liên kết, cơ chế đếm tham chiếu cho Python thu hồi nó."
+  },
+  {
+   "chu": "enumerate",
+   "doc": "/ɪˈnuːməreɪt/",
+   "nghia": "enumerate(): duyệt dãy kèm chỉ số, cho từng cặp (chỉ số, phần tử)",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "for i, value in enumerate(data) gives both the index and the value.",
+   "viDuNghia": "for i, value in enumerate(data) cho cả chỉ số lẫn giá trị."
+  },
+  {
+   "chu": "zip",
+   "doc": "/zɪp/",
+   "nghia": "zip(): ghép nhiều dãy thành các bộ theo từng vị trí",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "zip(names, scores) pairs each name with its score.",
+   "viDuNghia": "zip(names, scores) ghép mỗi tên với điểm của nó."
+  },
+  {
+   "chu": "built-in function",
+   "doc": "/ˌbɪlt ɪn ˈfʌŋkʃn/",
+   "nghia": "hàm có sẵn: len, min, max, sum, sorted… dùng không cần import",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "len() is a built-in function that runs in O(1) for a list.",
+   "viDuNghia": "len() là hàm có sẵn chạy trong O(1) với list."
+  },
+  {
+   "chu": "type hint",
+   "doc": "/taɪp hɪnt/",
+   "nghia": "gợi ý kiểu: ghi kiểu cho tham số và giá trị trả về (def push(self, e: int) -> None)",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Type hints make the stack interface easier to read but are not checked at run time.",
+   "viDuNghia": "Gợi ý kiểu làm giao diện ngăn xếp dễ đọc hơn nhưng không được kiểm tra lúc chạy."
+  },
+  {
+   "chu": "docstring",
+   "doc": "/ˈdɑːkstrɪŋ/",
+   "nghia": "chuỗi tài liệu: chuỗi ngay dưới dòng def/class mô tả hàm hoặc lớp",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Write a docstring that explains what the method returns.",
+   "viDuNghia": "Viết chuỗi tài liệu giải thích phương thức trả về gì."
+  },
+  {
+   "chu": "f-string",
+   "doc": "/ˈef strɪŋ/",
+   "nghia": "f-string: chuỗi định dạng f\"...\" chèn giá trị biểu thức trong ngoặc nhọn",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "print(f\"Size: {len(s)}\") uses an f-string.",
+   "viDuNghia": "print(f\"Size: {len(s)}\") dùng một f-string."
+  },
+  {
+   "chu": "indentation",
+   "doc": "/ˌɪndenˈteɪʃn/",
+   "nghia": "thụt lề: Python dùng thụt lề để xác định khối lệnh thay cho ngoặc nhọn",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Wrong indentation causes an IndentationError in Python.",
+   "viDuNghia": "Thụt lề sai gây lỗi IndentationError trong Python."
+  },
+  {
+   "chu": "IndexError",
+   "doc": "/ˈɪndeks ˌerər/",
+   "nghia": "IndexError: lỗi khi truy cập chỉ số ngoài phạm vi",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Popping from an empty list raises IndexError.",
+   "viDuNghia": "Lấy ra từ list rỗng sẽ báo IndexError."
+  },
+  {
+   "chu": "KeyError",
+   "doc": "/ˈkiː ˌerər/",
+   "nghia": "KeyError: lỗi khi truy cập khoá không có trong dict",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "d[\"x\"] raises KeyError if \"x\" is not a key; d.get(\"x\") returns None instead.",
+   "viDuNghia": "d[\"x\"] báo KeyError nếu \"x\" không phải khoá; d.get(\"x\") trả về None."
+  },
+  {
+   "chu": "StopIteration",
+   "doc": "/stɑːp ˌɪtəˈreɪʃn/",
+   "nghia": "StopIteration: ngoại lệ báo bộ lặp đã hết phần tử",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "The __next__ method raises StopIteration when there are no more items.",
+   "viDuNghia": "Phương thức __next__ báo StopIteration khi không còn phần tử."
+  },
+  {
+   "chu": "assert statement",
+   "doc": "/əˈsɜːrt ˈsteɪtmənt/",
+   "nghia": "lệnh assert: kiểm tra điều kiện phải đúng, sai thì báo AssertionError",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "assert len(s) == 0 checks that the stack is empty after the test.",
+   "viDuNghia": "assert len(s) == 0 kiểm tra ngăn xếp rỗng sau khi chạy thử."
+  },
+  {
+   "chu": "doctest",
+   "doc": "/ˈdɑːktest/",
+   "nghia": "doctest: chạy các ví dụ viết trong docstring như phép thử tự động",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "doctest runs the examples written inside the docstring.",
+   "viDuNghia": "doctest chạy các ví dụ viết trong chuỗi tài liệu."
+  },
+  {
+   "chu": "virtual environment",
+   "doc": "/ˈvɜːrtʃuəl ɪnˈvaɪrənmənt/",
+   "nghia": "môi trường ảo (venv): thư mục cài gói riêng cho từng dự án Python",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Create a virtual environment so that each project has its own packages.",
+   "viDuNghia": "Tạo môi trường ảo để mỗi dự án có bộ gói riêng."
+  },
+  {
+   "chu": "pip",
+   "doc": "/pɪp/",
+   "nghia": "pip: trình cài gói của Python (pip install tên-gói)",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Run pip install pytest to install the testing tool.",
+   "viDuNghia": "Chạy pip install pytest để cài công cụ kiểm thử."
+  },
+  {
+   "chu": "PEP 8",
+   "doc": "/pep eɪt/",
+   "nghia": "PEP 8: quy ước viết mã Python (đặt tên, thụt 4 dấu cách, độ dài dòng)",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "PEP 8 recommends snake_case for function names.",
+   "viDuNghia": "PEP 8 khuyên đặt tên hàm theo kiểu snake_case."
+  },
+  {
+   "chu": "Thonny",
+   "doc": "/ˈtɑːni/",
+   "nghia": "Thonny: IDE Python đơn giản cho người mới, có trình gỡ lỗi từng bước",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "Thonny shows how variables change step by step.",
+   "viDuNghia": "Thonny cho thấy biến thay đổi thế nào qua từng bước."
+  },
+  {
+   "chu": "PyCharm",
+   "doc": "/ˈpaɪtʃɑːrm/",
+   "nghia": "PyCharm: IDE Python của JetBrains",
+   "nhom": "Ngôn ngữ Python khi cài cấu trúc dữ liệu",
+   "viDu": "PyCharm can run and debug your lab files.",
+   "viDuNghia": "PyCharm có thể chạy và gỡ lỗi các tệp bài lab của bạn."
+  },
+  {
+   "chu": "array-based stack",
+   "doc": "/əˈreɪ beɪst stæk/",
+   "nghia": "ngăn xếp dùng mảng: cài stack bằng list Python, push là append, pop là pop()",
+   "nhom": "ADT danh sách, ngăn xếp, hàng đợi",
+   "viDu": "An array-based stack uses a Python list with append and pop.",
+   "viDuNghia": "Ngăn xếp dùng mảng dùng list Python với append và pop."
+  },
+  {
+   "chu": "linked stack",
+   "doc": "/lɪŋkt stæk/",
+   "nghia": "ngăn xếp liên kết: cài stack bằng danh sách liên kết đơn, đỉnh là đầu danh sách",
+   "nhom": "ADT danh sách, ngăn xếp, hàng đợi",
+   "viDu": "A linked stack pushes and pops at the head of a singly linked list.",
+   "viDuNghia": "Ngăn xếp liên kết đẩy và lấy ở đầu danh sách liên kết đơn."
+  },
+  {
+   "chu": "linked queue",
+   "doc": "/lɪŋkt kjuː/",
+   "nghia": "hàng đợi liên kết: thêm ở đuôi, lấy ở đầu danh sách liên kết",
+   "nhom": "ADT danh sách, ngăn xếp, hàng đợi",
+   "viDu": "A linked queue keeps references to both the head and the tail.",
+   "viDuNghia": "Hàng đợi liên kết giữ tham chiếu tới cả đầu lẫn đuôi."
+  },
+  {
+   "chu": "sentinel node",
+   "doc": "/ˈsentɪnl noʊd/",
+   "nghia": "nút canh: nút giả không chứa dữ liệu ở đầu/cuối danh sách, giúp bỏ các trường hợp đặc biệt",
+   "nhom": "ADT danh sách, ngăn xếp, hàng đợi",
+   "viDu": "Sentinel nodes remove special cases when inserting at the ends.",
+   "viDuNghia": "Nút canh bỏ được các trường hợp đặc biệt khi chèn ở hai đầu."
+  },
+  {
+   "chu": "header node",
+   "doc": "/ˈhedər noʊd/",
+   "nghia": "nút đầu (header): nút canh đứng trước phần tử đầu tiên của danh sách liên kết đôi",
+   "nhom": "ADT danh sách, ngăn xếp, hàng đợi",
+   "viDu": "The header node is placed before the first real element.",
+   "viDuNghia": "Nút header được đặt trước phần tử thật đầu tiên."
+  },
+  {
+   "chu": "trailer node",
+   "doc": "/ˈtreɪlər noʊd/",
+   "nghia": "nút cuối (trailer): nút canh đứng sau phần tử cuối cùng của danh sách liên kết đôi",
+   "nhom": "ADT danh sách, ngăn xếp, hàng đợi",
+   "viDu": "In an empty list, the header's next is the trailer node.",
+   "viDuNghia": "Trong danh sách rỗng, phần tử sau header chính là nút trailer."
+  },
+  {
+   "chu": "positional list",
+   "doc": "/pəˈzɪʃənl lɪst/",
+   "nghia": "danh sách vị trí (positional list ADT): thao tác qua đối tượng Position thay vì chỉ số",
+   "nhom": "ADT danh sách, ngăn xếp, hàng đợi",
+   "viDu": "A positional list lets you insert after a given position in O(1).",
+   "viDuNghia": "Danh sách vị trí cho phép chèn sau một vị trí cho trước trong O(1)."
+  },
+  {
+   "chu": "tree ADT",
+   "doc": "/triː ˌeɪ diː ˈtiː/",
+   "nghia": "ADT cây: giao diện trừu tượng với root, parent, children, is_leaf…",
+   "nhom": "Cây, ánh xạ và đồ thị",
+   "viDu": "The tree ADT defines methods such as root(), parent(p) and children(p).",
+   "viDuNghia": "ADT cây định nghĩa các phương thức như root(), parent(p) và children(p)."
+  },
+  {
+   "chu": "general tree",
+   "doc": "/ˈdʒenrəl triː/",
+   "nghia": "cây tổng quát: mỗi nút có thể có số con bất kỳ",
+   "nhom": "Cây, ánh xạ và đồ thị",
+   "viDu": "A file system directory structure is a general tree.",
+   "viDuNghia": "Cấu trúc thư mục của hệ thống tệp là một cây tổng quát."
+  },
+  {
+   "chu": "ordered tree",
+   "doc": "/ˈɔːrdərd triː/",
+   "nghia": "cây có thứ tự: các con của mỗi nút có thứ tự trái – phải xác định",
+   "nhom": "Cây, ánh xạ và đồ thị",
+   "viDu": "The chapters and sections of a book form an ordered tree.",
+   "viDuNghia": "Các chương và mục của một cuốn sách tạo thành cây có thứ tự."
+  },
+  {
+   "chu": "Euler tour",
+   "doc": "/ˈɔɪlər tʊr/",
+   "nghia": "duyệt Euler: đi vòng quanh cây, gặp mỗi nút trước, giữa và sau các con",
+   "nhom": "Cây, ánh xạ và đồ thị",
+   "viDu": "An Euler tour visits each node before and after its subtrees.",
+   "viDuNghia": "Duyệt Euler thăm mỗi nút trước và sau các cây con của nó."
+  },
+  {
+   "chu": "level-order traversal",
+   "doc": "/ˈlevl ˈɔːrdər trəˈvɜːrsl/",
+   "nghia": "duyệt theo mức: thăm nút từng tầng từ gốc xuống, dùng hàng đợi",
+   "nhom": "Cây, ánh xạ và đồ thị",
+   "viDu": "A level-order traversal of a tree uses a queue.",
+   "viDuNghia": "Duyệt theo mức một cây dùng hàng đợi."
+  },
+  {
+   "chu": "map ADT",
+   "doc": "/mæp ˌeɪ diː ˈtiː/",
+   "nghia": "ADT ánh xạ: tập cặp khoá – giá trị với khoá duy nhất (dict của Python là một cài đặt)",
+   "nhom": "Cây, ánh xạ và đồ thị",
+   "viDu": "Python's dict is an implementation of the map ADT.",
+   "viDuNghia": "dict của Python là một cài đặt của ADT ánh xạ."
+  },
+  {
+   "chu": "sorted map",
+   "doc": "/ˈsɔːrtɪd mæp/",
+   "nghia": "ánh xạ có thứ tự: map giữ khoá theo thứ tự, hỗ trợ tìm khoá gần nhất, truy vấn khoảng",
+   "nhom": "Cây, ánh xạ và đồ thị",
+   "viDu": "A sorted map can find the smallest key greater than a given value.",
+   "viDuNghia": "Ánh xạ có thứ tự tìm được khoá nhỏ nhất lớn hơn một giá trị cho trước."
+  },
+  {
+   "chu": "separate chaining",
+   "doc": "/ˈsepərət ˈtʃeɪnɪŋ/",
+   "nghia": "móc nối riêng: mỗi ô bảng băm giữ một danh sách các cặp có cùng chỉ số băm",
+   "nhom": "Cây, ánh xạ và đồ thị",
+   "viDu": "With separate chaining, each bucket stores a small list of entries.",
+   "viDuNghia": "Với móc nối riêng, mỗi xô lưu một danh sách nhỏ các phần tử."
+  },
+  {
+   "chu": "graph ADT",
+   "doc": "/ɡræf ˌeɪ diː ˈtiː/",
+   "nghia": "ADT đồ thị: giao diện với vertices, edges, insert_vertex, insert_edge…",
+   "nhom": "Cây, ánh xạ và đồ thị",
+   "viDu": "The graph ADT includes insert_vertex() and insert_edge().",
+   "viDuNghia": "ADT đồ thị gồm insert_vertex() và insert_edge()."
+  },
+  {
+   "chu": "edge list",
+   "doc": "/edʒ lɪst/",
+   "nghia": "danh sách cạnh: lưu đồ thị bằng một danh sách mọi cạnh, đơn giản nhưng tìm cạnh chậm",
+   "nhom": "Cây, ánh xạ và đồ thị",
+   "viDu": "An edge list stores every edge in one unordered list.",
+   "viDuNghia": "Danh sách cạnh lưu mọi cạnh trong một danh sách không thứ tự."
+  },
+  {
+   "chu": "adjacency map",
+   "doc": "/əˈdʒeɪsnsi mæp/",
+   "nghia": "ánh xạ kề: mỗi đỉnh có một dict từ đỉnh kề tới cạnh, kiểm tra cạnh trong O(1) trung bình",
+   "nhom": "Cây, ánh xạ và đồ thị",
+   "viDu": "An adjacency map uses a dictionary for each vertex.",
+   "viDuNghia": "Ánh xạ kề dùng một dict cho mỗi đỉnh."
+  }
+ ]
+}

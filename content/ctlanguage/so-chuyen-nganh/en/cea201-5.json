@@ -1,0 +1,834 @@
+{
+ "ma": "cea201-5",
+ "nn": "en",
+ "ten": "CEA201 · 5. Cache sâu, bus, lưu trữ, pipeline & đa nhân",
+ "moTa": "Bổ sung cho CEA201: tổ chức cache và giao thức nhất quán (MESI), trọng tài bus và kết nối điểm–điểm, đĩa quang và DRAM đồng bộ, các loại phụ thuộc trong pipeline, siêu vô hướng, đa luồng, đa nhân dị thể và ngắt/chế độ của ARM — đề FE hay hỏi.",
+ "bieuTuong": "memorychip",
+ "thuTu": -982,
+ "tu": [
+  {
+   "chu": "spatial locality",
+   "doc": "/ˈspeɪʃəl loʊˈkælɪti/",
+   "nghia": "cục bộ không gian: dữ liệu ở gần ô vừa dùng sắp được dùng (duyệt mảng) — lý do nạp cả khối",
+   "nhom": "Tổ chức cache",
+   "viDu": "Spatial locality can no longer be exploited",
+   "viDuNghia": "Không còn tận dụng được tính cục bộ không gian."
+  },
+  {
+   "chu": "temporal locality",
+   "doc": "/ˈtɛmpərəl loʊˈkælɪti/",
+   "nghia": "cục bộ thời gian: ô vừa dùng sẽ sớm được dùng lại (biến trong vòng lặp)",
+   "nhom": "Tổ chức cache",
+   "viDu": "Loops exhibit temporal locality because the same instructions run again and again.",
+   "viDuNghia": "Vòng lặp có tính cục bộ thời gian vì cùng các lệnh chạy lặp đi lặp lại."
+  },
+  {
+   "chu": "fully associative",
+   "doc": "/ˈfʊli əˈsoʊʃiətɪv/",
+   "nghia": "kết hợp toàn phần: một khối nhớ đặt được vào BẤT KỲ dòng cache nào — phải so tag mọi dòng",
+   "nhom": "Tổ chức cache",
+   "viDu": "The cache is forced to become fully associative",
+   "viDuNghia": "Bộ nhớ đệm buộc phải trở thành kết hợp toàn phần."
+  },
+  {
+   "chu": "k-way set associative",
+   "doc": "/keɪ weɪ sɛt əˈsoʊʃiətɪv/",
+   "nghia": "kết hợp tập k đường: cache chia thành tập, mỗi tập k dòng; khối vào đúng một tập, dòng tuỳ ý trong tập",
+   "nhom": "Tổ chức cache",
+   "viDu": "A 4-way set associative cache has four lines in each set.",
+   "viDuNghia": "Cache kết hợp tập 4 đường có bốn dòng trong mỗi tập."
+  },
+  {
+   "chu": "block offset",
+   "doc": "/blɒk ˈɒfsɛt/",
+   "nghia": "trường độ dời khối: các bit thấp của địa chỉ chọn byte/từ trong một dòng cache",
+   "nhom": "Tổ chức cache",
+   "viDu": "With 64-byte lines, the block offset takes 6 bits of the address.",
+   "viDuNghia": "Với dòng 64 byte, trường độ dời khối chiếm 6 bit địa chỉ."
+  },
+  {
+   "chu": "valid bit",
+   "doc": "/ˈvælɪd bɪt/",
+   "nghia": "bit hợp lệ: báo dòng cache đang chứa dữ liệu thật hay còn trống",
+   "nhom": "Tổ chức cache",
+   "viDu": "At power-on, every valid bit in the cache is cleared to 0.",
+   "viDuNghia": "Khi bật máy, mọi bit hợp lệ trong cache được xoá về 0."
+  },
+  {
+   "chu": "eviction",
+   "doc": "/ɪˈvɪkʃən/",
+   "nghia": "sự loại khỏi cache: bỏ một dòng ra để lấy chỗ cho khối mới (dòng bẩn phải ghi về bộ nhớ)",
+   "nhom": "Tổ chức cache",
+   "viDu": "On a cache miss in a full set, the replacement algorithm chooses a line for eviction.",
+   "viDuNghia": "Khi trượt cache mà tập đã đầy, thuật toán thay thế chọn một dòng để loại ra."
+  },
+  {
+   "chu": "least frequently used",
+   "doc": "/liːst ˈfriːkwəntli juːzd/",
+   "nghia": "ít dùng nhất về số lần (LFU): thay dòng được truy cập ít lần nhất",
+   "nhom": "Tổ chức cache",
+   "viDu": "Least Frequently Used (LFU)",
+   "viDuNghia": "Thuật toán thay thế ít được dùng nhất (LFU)."
+  },
+  {
+   "chu": "random replacement",
+   "doc": "/ˈrændəm rɪˈpleɪsmənt/",
+   "nghia": "thay thế ngẫu nhiên: chọn bừa một dòng để thay — rẻ, hiệu quả chỉ kém LRU chút ít",
+   "nhom": "Tổ chức cache",
+   "viDu": "Random replacement performs only slightly worse than LRU in simulations.",
+   "viDuNghia": "Thay thế ngẫu nhiên chỉ kém LRU một chút trong mô phỏng."
+  },
+  {
+   "chu": "write allocate",
+   "doc": "/raɪt ˈæləkeɪt/",
+   "nghia": "ghi có cấp phát: ghi trượt thì nạp khối vào cache rồi mới ghi (đi cùng write back)",
+   "nhom": "Tổ chức cache",
+   "viDu": "There are 3 techniques and their names are written through, write back, and write allocate",
+   "viDuNghia": "Có 3 kỹ thuật tên là ghi xuyên, ghi sau và ghi có cấp phát."
+  },
+  {
+   "chu": "no-write allocate",
+   "doc": "/noʊ raɪt ˈæləkeɪt/",
+   "nghia": "ghi không cấp phát: ghi trượt thì ghi thẳng xuống bộ nhớ, không nạp khối (đi cùng write through)",
+   "nhom": "Tổ chức cache",
+   "viDu": "No-write allocate is normally used with write through.",
+   "viDuNghia": "Ghi không cấp phát thường đi cùng ghi xuyên."
+  },
+  {
+   "chu": "victim cache",
+   "doc": "/ˈvɪktɪm kæʃ/",
+   "nghia": "cache nạn nhân: cache nhỏ kết hợp toàn phần giữ các dòng vừa bị loại để giảm trượt xung đột",
+   "nhom": "Tổ chức cache",
+   "viDu": "A victim cache holds lines recently evicted from the L1 cache.",
+   "viDuNghia": "Cache nạn nhân giữ các dòng vừa bị loại khỏi cache L1."
+  },
+  {
+   "chu": "split cache",
+   "doc": "/splɪt kæʃ/",
+   "nghia": "cache tách: cache lệnh và cache dữ liệu riêng (thường ở L1) — tránh tranh chấp trong pipeline",
+   "nhom": "Tổ chức cache",
+   "viDu": "A split cache lets the pipeline fetch an instruction and load data at the same time.",
+   "viDuNghia": "Cache tách cho pipeline vừa nạp lệnh vừa đọc dữ liệu cùng lúc."
+  },
+  {
+   "chu": "unified cache",
+   "doc": "/ˈjuːnɪfaɪd kæʃ/",
+   "nghia": "cache hợp nhất: lệnh và dữ liệu chung một cache (thường ở L2, L3)",
+   "nhom": "Tổ chức cache",
+   "viDu": "A unified cache balances the load between instructions and data automatically.",
+   "viDuNghia": "Cache hợp nhất tự cân bằng giữa lệnh và dữ liệu."
+  },
+  {
+   "chu": "instruction cache",
+   "doc": "/ɪnˈstrʌkʃən kæʃ/",
+   "nghia": "cache lệnh (I-cache)",
+   "nhom": "Tổ chức cache",
+   "viDu": "The size of the instruction cache.",
+   "viDuNghia": "Kích thước của cache lệnh."
+  },
+  {
+   "chu": "data cache",
+   "doc": "/ˈdeɪtə kæʃ/",
+   "nghia": "cache dữ liệu (D-cache)",
+   "nhom": "Tổ chức cache",
+   "viDu": "Load and store instructions access the data cache.",
+   "viDuNghia": "Lệnh nạp và lưu truy cập cache dữ liệu."
+  },
+  {
+   "chu": "cache size",
+   "doc": "/kæʃ saɪz/",
+   "nghia": "dung lượng cache",
+   "nhom": "Tổ chức cache",
+   "viDu": "To conserve chip area by reducing the cache size and increasing the memory size",
+   "viDuNghia": "Để tiết kiệm diện tích chip bằng cách giảm dung lượng cache và tăng dung lượng bộ nhớ."
+  },
+  {
+   "chu": "line size",
+   "doc": "/laɪn saɪz/",
+   "nghia": "kích thước dòng cache: số byte nạp một lần từ bộ nhớ chính",
+   "nhom": "Tổ chức cache",
+   "viDu": "Increasing the line size improves the hit ratio only up to a point.",
+   "viDuNghia": "Tăng kích thước dòng chỉ cải thiện tỉ lệ trúng tới một mức nào đó."
+  },
+  {
+   "chu": "inclusion property",
+   "doc": "/ɪnˈkluːʒən ˈprɒpərti/",
+   "nghia": "tính bao hàm: mọi dữ liệu ở cache cấp trên cũng có ở cache cấp dưới",
+   "nhom": "Tổ chức cache",
+   "viDu": "With the inclusion property, every line in L1 is also present in L2.",
+   "viDuNghia": "Với tính bao hàm, mọi dòng ở L1 cũng có trong L2."
+  },
+  {
+   "chu": "granularity",
+   "doc": "/ˌɡrænjʊˈlærɪti/",
+   "nghia": "độ mịn (mức hạt): kích thước đơn vị công việc/dữ liệu được chia hoặc chia sẻ",
+   "nhom": "Tổ chức cache",
+   "viDu": "Fine granularity parallelism splits a task into very small pieces.",
+   "viDuNghia": "Song song độ mịn cao chia công việc thành các mảnh rất nhỏ."
+  },
+  {
+   "chu": "MESI protocol",
+   "doc": "/ˈmɛsi ˈproʊtəkɒl/",
+   "nghia": "giao thức MESI: mỗi dòng cache ở một trong 4 trạng thái Modified, Exclusive, Shared, Invalid",
+   "nhom": "Nhất quán cache đa xử lý",
+   "viDu": "In a multiprocessor where every core has its own cache, which problem is the MESI protocol designed to solve?",
+   "viDuNghia": "Trong đa xử lý mà mỗi nhân có cache riêng, giao thức MESI giải quyết vấn đề gì? (nhất quán cache)"
+  },
+  {
+   "chu": "snoopy protocol",
+   "doc": "/ˈsnuːpi ˈproʊtəkɒl/",
+   "nghia": "giao thức rình bus: mỗi cache theo dõi bus để biết khi nào dòng mình giữ bị sửa ở nơi khác",
+   "nhom": "Nhất quán cache đa xử lý",
+   "viDu": "Snoopy protocols suit bus-based multiprocessors.",
+   "viDuNghia": "Giao thức rình bus hợp với đa xử lý dùng bus chung."
+  },
+  {
+   "chu": "directory protocol",
+   "doc": "/dəˈrɛktəri ˈproʊtəkɒl/",
+   "nghia": "giao thức thư mục: một thư mục trung tâm ghi cache nào đang giữ bản sao của khối nào",
+   "nhom": "Nhất quán cache đa xử lý",
+   "viDu": "A directory protocol scales better than snooping for many processors.",
+   "viDuNghia": "Giao thức thư mục mở rộng tốt hơn rình bus khi có nhiều bộ xử lý."
+  },
+  {
+   "chu": "write-invalidate",
+   "doc": "/raɪt ɪnˈvælɪdeɪt/",
+   "nghia": "ghi – vô hiệu: khi một nhân ghi, mọi bản sao khác bị đánh dấu Invalid (MESI dùng cách này)",
+   "nhom": "Nhất quán cache đa xử lý",
+   "viDu": "With write-invalidate, other caches mark their copy of the line as invalid.",
+   "viDuNghia": "Với ghi – vô hiệu, các cache khác đánh dấu bản sao của dòng là không hợp lệ."
+  },
+  {
+   "chu": "write-update",
+   "doc": "/raɪt ʌpˈdeɪt/",
+   "nghia": "ghi – cập nhật: khi một nhân ghi, dữ liệu mới được phát tới mọi bản sao",
+   "nhom": "Nhất quán cache đa xử lý",
+   "viDu": "Write-update broadcasts the new data to all caches holding the line.",
+   "viDuNghia": "Ghi – cập nhật phát dữ liệu mới tới mọi cache đang giữ dòng đó."
+  },
+  {
+   "chu": "bus master",
+   "doc": "/bʌs ˈmæstər/",
+   "nghia": "chủ bus: thiết bị đang được quyền điều khiển bus để khởi tạo truyền",
+   "nhom": "Bus & kết nối",
+   "viDu": "Only one bus master can use the bus at a time.",
+   "viDuNghia": "Mỗi lúc chỉ một chủ bus được dùng bus."
+  },
+  {
+   "chu": "bus arbitration",
+   "doc": "/bʌs ˌɑːrbɪˈtreɪʃən/",
+   "nghia": "trọng tài bus: cơ chế quyết định thiết bị nào được dùng bus khi nhiều thiết bị cùng xin",
+   "nhom": "Bus & kết nối",
+   "viDu": "In a bus system, what is the purpose of arbitration?",
+   "viDuNghia": "Trong hệ thống bus, trọng tài bus dùng để làm gì?"
+  },
+  {
+   "chu": "centralized arbitration",
+   "doc": "/ˈsɛntrəlaɪzd ˌɑːrbɪˈtreɪʃən/",
+   "nghia": "trọng tài tập trung: một bộ điều khiển bus duy nhất cấp quyền",
+   "nhom": "Bus & kết nối",
+   "viDu": "In centralized arbitration, a single bus controller allocates time on the bus.",
+   "viDuNghia": "Trong trọng tài tập trung, một bộ điều khiển bus duy nhất cấp thời gian dùng bus."
+  },
+  {
+   "chu": "distributed arbitration",
+   "doc": "/dɪˈstrɪbjuːtɪd ˌɑːrbɪˈtreɪʃən/",
+   "nghia": "trọng tài phân tán: các thiết bị tự thương lượng quyền dùng bus",
+   "nhom": "Bus & kết nối",
+   "viDu": "In distributed arbitration, each module contains access control logic.",
+   "viDuNghia": "Trong trọng tài phân tán, mỗi khối có mạch điều khiển truy cập riêng."
+  },
+  {
+   "chu": "synchronous timing",
+   "doc": "/ˈsɪŋkrənəs ˈtaɪmɪŋ/",
+   "nghia": "định thời đồng bộ: sự kiện trên bus bám theo xung đồng hồ chung",
+   "nhom": "Bus & kết nối",
+   "viDu": "With synchronous timing, events on the bus are determined by a clock.",
+   "viDuNghia": "Với định thời đồng bộ, các sự kiện trên bus do xung đồng hồ quyết định."
+  },
+  {
+   "chu": "asynchronous timing",
+   "doc": "/eɪˈsɪŋkrənəs ˈtaɪmɪŋ/",
+   "nghia": "định thời không đồng bộ: sự kiện sau xảy ra khi sự kiện trước báo xong (bắt tay)",
+   "nhom": "Bus & kết nối",
+   "viDu": "With asynchronous timing, the occurrence of one event on a bus follows and depends on the occurrence of a previous event.",
+   "viDuNghia": "Với định thời không đồng bộ, một sự kiện trên bus xảy ra sau và phụ thuộc sự kiện trước."
+  },
+  {
+   "chu": "point-to-point interconnect",
+   "doc": "/pɔɪnt tə pɔɪnt ˌɪntərkəˈnɛkt/",
+   "nghia": "kết nối điểm – điểm: mỗi cặp thành phần có đường nối riêng thay cho bus chung (QPI, PCIe)",
+   "nhom": "Bus & kết nối",
+   "viDu": "Modern processors replace the shared bus with point-to-point interconnect.",
+   "viDuNghia": "Bộ xử lý hiện đại thay bus chung bằng kết nối điểm – điểm."
+  },
+  {
+   "chu": "QuickPath Interconnect",
+   "doc": "/ˈkwɪkpæθ ˌɪntərkəˈnɛkt/",
+   "nghia": "QPI: kết nối điểm – điểm của Intel giữa các bộ xử lý và chipset",
+   "nhom": "Bus & kết nối",
+   "viDu": "Intel QuickPath Interconnect uses packets sent over point-to-point links.",
+   "viDuNghia": "QPI của Intel dùng gói tin gửi qua các liên kết điểm – điểm."
+  },
+  {
+   "chu": "flit",
+   "doc": "/flɪt/",
+   "nghia": "flit (flow control unit): đơn vị điều khiển luồng của QPI, 80 bit",
+   "nhom": "Bus & kết nối",
+   "viDu": "QPI transfers data in 80-bit units called flits.",
+   "viDuNghia": "QPI truyền dữ liệu theo đơn vị 80 bit gọi là flit."
+  },
+  {
+   "chu": "Universal Serial Bus",
+   "doc": "/ˌjuːnɪˈvɜːrsəl ˈsɪəriəl bʌs/",
+   "nghia": "USB: bus nối tiếp phổ dụng để nối thiết bị ngoại vi, cắm nóng được",
+   "nhom": "Bus & kết nối",
+   "viDu": "Universal Serial Bus devices can be plugged in while the computer is running.",
+   "viDuNghia": "Thiết bị USB cắm được khi máy đang chạy."
+  },
+  {
+   "chu": "Thunderbolt",
+   "doc": "/ˈθʌndərboʊlt/",
+   "nghia": "Thunderbolt: giao tiếp tốc độ cao của Intel gộp dữ liệu, hình ảnh và nguồn trên một cáp",
+   "nhom": "Bus & kết nối",
+   "viDu": "Thunderbolt combines data, video and power in a single cable.",
+   "viDuNghia": "Thunderbolt gộp dữ liệu, hình ảnh và nguồn trong một cáp."
+  },
+  {
+   "chu": "InfiniBand",
+   "doc": "/ˈɪnfɪnibænd/",
+   "nghia": "InfiniBand: mạng kết nối tốc độ cao cho máy chủ và cụm máy",
+   "nhom": "Bus & kết nối",
+   "viDu": "InfiniBand is used to connect servers in high-performance clusters.",
+   "viDuNghia": "InfiniBand dùng để nối các máy chủ trong cụm hiệu năng cao."
+  },
+  {
+   "chu": "Serial ATA",
+   "doc": "/ˈsɪəriəl ˌeɪ tiː ˈeɪ/",
+   "nghia": "SATA: giao tiếp nối tiếp nối ổ cứng/SSD với bo mạch chủ",
+   "nhom": "Bus & kết nối",
+   "viDu": "Most hard disk drives connect to the motherboard through Serial ATA.",
+   "viDuNghia": "Phần lớn ổ cứng nối với bo mạch chủ qua SATA."
+  },
+  {
+   "chu": "NVM Express",
+   "doc": "/ˌɛn viː ˈɛm ɪkˈsprɛs/",
+   "nghia": "NVMe: giao thức cho SSD chạy trực tiếp trên PCIe, độ trễ thấp hơn SATA",
+   "nhom": "Bus & kết nối",
+   "viDu": "NVM Express SSDs are much faster than SATA SSDs.",
+   "viDuNghia": "SSD NVMe nhanh hơn nhiều so với SSD SATA."
+  },
+  {
+   "chu": "synchronous DRAM",
+   "doc": "/ˈsɪŋkrənəs ˈdiː ræm/",
+   "nghia": "SDRAM: DRAM trao đổi dữ liệu đồng bộ với xung nhịp hệ thống",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "Synchronous DRAM exchanges data with the processor synchronized to an external clock.",
+   "viDuNghia": "SDRAM trao đổi dữ liệu với bộ xử lý đồng bộ theo xung nhịp ngoài."
+  },
+  {
+   "chu": "double data rate",
+   "doc": "/ˈdʌbl ˈdeɪtə reɪt/",
+   "nghia": "DDR: truyền dữ liệu ở CẢ sườn lên và sườn xuống của xung, gấp đôi băng thông",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "DDR SDRAM transfers data on both the rising and the falling edge of the clock.",
+   "viDuNghia": "DDR SDRAM truyền dữ liệu ở cả sườn lên và sườn xuống của xung nhịp."
+  },
+  {
+   "chu": "magnetoresistive",
+   "doc": "/mæɡˌniːtoʊrɪˈzɪstɪv/",
+   "nghia": "từ trở: vật liệu đổi điện trở theo từ trường — dùng làm đầu đọc đĩa và MRAM",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "Magnetoresistive",
+   "viDuNghia": "Từ trở. (Loại đầu đọc của đĩa từ hiện đại.)"
+  },
+  {
+   "chu": "perpendicular recording",
+   "doc": "/ˌpɜːrpənˈdɪkjʊlər rɪˈkɔːrdɪŋ/",
+   "nghia": "ghi vuông góc: các bit từ dựng đứng vuông góc mặt đĩa, tăng mật độ ghi",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "Perpendicular recording increases the areal density of hard disks.",
+   "viDuNghia": "Ghi vuông góc làm tăng mật độ ghi của ổ cứng."
+  },
+  {
+   "chu": "multiple zone recording",
+   "doc": "/ˈmʌltɪpl zoʊn rɪˈkɔːrdɪŋ/",
+   "nghia": "ghi nhiều vùng: rãnh ngoài chia nhiều sector hơn rãnh trong để tận dụng diện tích",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "Multiple zone recording puts more sectors on the outer tracks.",
+   "viDuNghia": "Ghi nhiều vùng đặt nhiều sector hơn ở các rãnh ngoài."
+  },
+  {
+   "chu": "spindle",
+   "doc": "/ˈspɪndl/",
+   "nghia": "trục quay: trục giữa làm các đĩa (platter) quay",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "All platters are mounted on one spindle and rotate together.",
+   "viDuNghia": "Mọi đĩa gắn trên một trục quay và quay cùng nhau."
+  },
+  {
+   "chu": "parity strip",
+   "doc": "/ˈpærɪti strɪp/",
+   "nghia": "dải chẵn lẻ: dải chứa bit chẵn lẻ của các dải dữ liệu cùng hàng (RAID 4, 5)",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "In RAID 5, the parity strips are distributed across all disks.",
+   "viDuNghia": "Trong RAID 5, các dải chẵn lẻ được rải trên mọi đĩa."
+  },
+  {
+   "chu": "CD-ROM",
+   "doc": "/ˌsiː diː ˈrɒm/",
+   "nghia": "CD-ROM: đĩa quang chỉ đọc, dữ liệu dập sẵn bằng pit và land",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "Data on a CD-ROM is stored as pits and lands read by a laser.",
+   "viDuNghia": "Dữ liệu trên CD-ROM lưu dạng pit và land được tia laser đọc."
+  },
+  {
+   "chu": "CD-R",
+   "doc": "/ˌsiː diː ˈɑːr/",
+   "nghia": "CD-R: đĩa quang ghi được một lần",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "A CD-R can be written only once.",
+   "viDuNghia": "CD-R chỉ ghi được một lần."
+  },
+  {
+   "chu": "CD-RW",
+   "doc": "/ˌsiː diː ˌɑːr ˈdʌbəljuː/",
+   "nghia": "CD-RW: đĩa quang ghi xoá nhiều lần (đổi pha vật liệu)",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "A CD-RW uses a phase-change material so it can be rewritten.",
+   "viDuNghia": "CD-RW dùng vật liệu đổi pha nên ghi lại được."
+  },
+  {
+   "chu": "DVD",
+   "doc": "/ˌdiː viː ˈdiː/",
+   "nghia": "DVD: đĩa quang dung lượng lớn hơn CD (4,7 GB một lớp)",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "A DVD holds more data than a CD because its pits are smaller and closer.",
+   "viDuNghia": "DVD chứa nhiều dữ liệu hơn CD vì pit nhỏ và sát nhau hơn."
+  },
+  {
+   "chu": "Blu-ray",
+   "doc": "/ˈbluː reɪ/",
+   "nghia": "Blu-ray: đĩa quang dùng laser xanh tím bước sóng ngắn, 25 GB một lớp",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "Blu-ray uses a blue-violet laser with a shorter wavelength.",
+   "viDuNghia": "Blu-ray dùng laser xanh tím có bước sóng ngắn hơn."
+  },
+  {
+   "chu": "laser",
+   "doc": "/ˈleɪzər/",
+   "nghia": "tia laser: chùm sáng hẹp dùng đọc/ghi đĩa quang",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "The beam is reflected by the aluminum surface when passing through a land.",
+   "viDuNghia": "Chùm laser bị mặt nhôm phản xạ khi đi qua một land."
+  },
+  {
+   "chu": "DMA controller",
+   "doc": "/ˌdiː ɛm ˈeɪ kənˈtroʊlər/",
+   "nghia": "bộ điều khiển DMA: thay CPU chuyển khối dữ liệu giữa I/O và bộ nhớ, xong thì ngắt báo CPU",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "The DMA controller interrupts the CPU only when the whole block has been transferred.",
+   "viDuNghia": "Bộ điều khiển DMA chỉ ngắt CPU khi đã chuyển xong cả khối."
+  },
+  {
+   "chu": "I/O processor",
+   "doc": "/ˌaɪ ˈoʊ ˈproʊsɛsər/",
+   "nghia": "bộ xử lý vào/ra (IOP): bộ xử lý riêng chạy chương trình vào/ra, giải phóng CPU",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "Which statement best describes the role of an I/O processor (IOP) in a computer system?",
+   "viDuNghia": "Phát biểu nào mô tả đúng nhất vai trò của bộ xử lý vào/ra trong máy tính?"
+  },
+  {
+   "chu": "selector channel",
+   "doc": "/sɪˈlɛktər ˈtʃænəl/",
+   "nghia": "kênh chọn: kênh I/O phục vụ một thiết bị tốc độ cao tại một thời điểm",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "A selector channel controls several high-speed devices but serves only one at a time.",
+   "viDuNghia": "Kênh chọn điều khiển nhiều thiết bị tốc độ cao nhưng mỗi lúc chỉ phục vụ một."
+  },
+  {
+   "chu": "multiplexor channel",
+   "doc": "/ˈmʌltɪplɛksər ˈtʃænəl/",
+   "nghia": "kênh đa hợp: kênh I/O phục vụ xen kẽ nhiều thiết bị cùng lúc",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "A multiplexor channel can handle I/O with several devices at the same time.",
+   "viDuNghia": "Kênh đa hợp xử lý vào/ra với nhiều thiết bị cùng lúc."
+  },
+  {
+   "chu": "uniprogramming",
+   "doc": "/ˌjuːniˈproʊɡræmɪŋ/",
+   "nghia": "đơn chương: bộ nhớ chỉ chứa một chương trình người dùng tại một thời điểm",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "In uniprogramming, the processor is idle while the program waits for I/O.",
+   "viDuNghia": "Trong đơn chương, bộ xử lý ngồi không khi chương trình chờ vào/ra."
+  },
+  {
+   "chu": "data dependency",
+   "doc": "/ˈdeɪtə dɪˈpɛndənsi/",
+   "nghia": "phụ thuộc dữ liệu: lệnh sau cần kết quả của lệnh trước",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "A data dependency exists when an instruction needs the result of a previous instruction.",
+   "viDuNghia": "Phụ thuộc dữ liệu xảy ra khi một lệnh cần kết quả của lệnh trước đó."
+  },
+  {
+   "chu": "true data dependency",
+   "doc": "/truː ˈdeɪtə dɪˈpɛndənsi/",
+   "nghia": "phụ thuộc dữ liệu thật (RAW): lệnh sau đọc thanh ghi mà lệnh trước ghi",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "ADD r1, r2 followed by MOVE r3, r1 is a true data dependency.",
+   "viDuNghia": "ADD r1, r2 rồi MOVE r3, r1 là một phụ thuộc dữ liệu thật."
+  },
+  {
+   "chu": "read after write",
+   "doc": "/riːd ˈæftər raɪt/",
+   "nghia": "đọc sau ghi (RAW): đọc trước khi lệnh trước kịp ghi xong thì lấy giá trị cũ",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "A read after write hazard occurs if an instruction reads a register before the previous write is finished.",
+   "viDuNghia": "Hazard đọc sau ghi xảy ra nếu một lệnh đọc thanh ghi trước khi lệnh ghi trước đó xong."
+  },
+  {
+   "chu": "write after read",
+   "doc": "/raɪt ˈæftər riːd/",
+   "nghia": "ghi sau đọc (WAR, phản phụ thuộc): lệnh sau ghi vào chỗ lệnh trước còn cần đọc",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "Register renaming removes write after read hazards.",
+   "viDuNghia": "Đổi tên thanh ghi loại bỏ hazard ghi sau đọc."
+  },
+  {
+   "chu": "write after write",
+   "doc": "/raɪt ˈæftər raɪt/",
+   "nghia": "ghi sau ghi (WAW, phụ thuộc đầu ra): hai lệnh cùng ghi một thanh ghi, phải giữ đúng thứ tự",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "A write after write hazard appears when two instructions write the same register out of order.",
+   "viDuNghia": "Hazard ghi sau ghi xuất hiện khi hai lệnh ghi cùng một thanh ghi sai thứ tự."
+  },
+  {
+   "chu": "antidependency",
+   "doc": "/ˌæntidɪˈpɛndənsi/",
+   "nghia": "phản phụ thuộc: tên khác của WAR",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "An antidependency is not a true dependency; it can be removed by renaming.",
+   "viDuNghia": "Phản phụ thuộc không phải phụ thuộc thật; có thể loại bằng đổi tên."
+  },
+  {
+   "chu": "output dependency",
+   "doc": "/ˈaʊtpʊt dɪˈpɛndənsi/",
+   "nghia": "phụ thuộc đầu ra: tên khác của WAW",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "Output dependency arises when two instructions write to the same location.",
+   "viDuNghia": "Phụ thuộc đầu ra phát sinh khi hai lệnh cùng ghi vào một chỗ."
+  },
+  {
+   "chu": "procedural dependency",
+   "doc": "/prəˈsiːdʒərəl dɪˈpɛndənsi/",
+   "nghia": "phụ thuộc thủ tục: lệnh sau lệnh rẽ nhánh chưa thể thực thi khi chưa biết nhánh",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "Instructions after a branch have a procedural dependency on the branch.",
+   "viDuNghia": "Các lệnh sau lệnh rẽ nhánh có phụ thuộc thủ tục vào lệnh rẽ nhánh."
+  },
+  {
+   "chu": "resource conflict",
+   "doc": "/rɪˈzɔːrs ˈkɒnflɪkt/",
+   "nghia": "xung đột tài nguyên: hai lệnh cùng cần một khối phần cứng cùng lúc (= structural hazard)",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "A resource conflict occurs when two instructions need the same functional unit.",
+   "viDuNghia": "Xung đột tài nguyên xảy ra khi hai lệnh cần cùng một khối chức năng."
+  },
+  {
+   "chu": "pipeline stall",
+   "doc": "/ˈpaɪplaɪn stɔːl/",
+   "nghia": "ngưng pipeline (bong bóng): chèn chu kỳ chờ khi có hazard",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "A data hazard may cause a pipeline stall of two clock cycles.",
+   "viDuNghia": "Hazard dữ liệu có thể làm pipeline ngưng hai chu kỳ."
+  },
+  {
+   "chu": "operand forwarding",
+   "doc": "/ˈɒpərænd ˈfɔːrwərdɪŋ/",
+   "nghia": "chuyển tiếp toán hạng (bypassing): đưa kết quả ALU thẳng sang lệnh sau, không chờ ghi thanh ghi",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "Operand forwarding reduces stalls caused by data hazards.",
+   "viDuNghia": "Chuyển tiếp toán hạng giảm số lần ngưng do hazard dữ liệu."
+  },
+  {
+   "chu": "NOOP",
+   "doc": "/ˈnoʊ ɒp/",
+   "nghia": "lệnh NOOP (no operation): lệnh không làm gì, chèn vào để tránh hazard",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "By using NOOP instructions inserted by the compiler or assembler",
+   "viDuNghia": "Bằng cách dùng các lệnh NOOP do trình biên dịch hoặc trình hợp dịch chèn vào."
+  },
+  {
+   "chu": "branch target buffer",
+   "doc": "/bræntʃ ˈtɑːrɡɪt ˈbʌfər/",
+   "nghia": "bộ đệm đích rẽ nhánh (BTB): cache nhỏ lưu địa chỉ đích của các lệnh rẽ nhánh gần đây",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "A branch target buffer stores the target addresses of recent branches.",
+   "viDuNghia": "Bộ đệm đích rẽ nhánh lưu địa chỉ đích của các lệnh rẽ nhánh gần đây."
+  },
+  {
+   "chu": "branch history table",
+   "doc": "/bræntʃ ˈhɪstəri ˈteɪbl/",
+   "nghia": "bảng lịch sử rẽ nhánh: ghi các lần rẽ trước (bit dự đoán) để đoán lần sau",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "A two-bit branch history table changes its prediction only after two wrong guesses.",
+   "viDuNghia": "Bảng lịch sử rẽ nhánh 2 bit chỉ đổi dự đoán sau hai lần đoán sai."
+  },
+  {
+   "chu": "loop buffer",
+   "doc": "/luːp ˈbʌfər/",
+   "nghia": "bộ đệm vòng lặp: bộ nhớ nhỏ nhanh giữ các lệnh vừa nạp, cho vòng lặp ngắn chạy không cần nạp lại",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "A loop buffer keeps the instructions of a small loop so they need not be fetched again.",
+   "viDuNghia": "Bộ đệm vòng lặp giữ lệnh của vòng lặp nhỏ để khỏi phải nạp lại."
+  },
+  {
+   "chu": "loop unrolling",
+   "doc": "/luːp ʌnˈroʊlɪŋ/",
+   "nghia": "trải vòng lặp: chép thân vòng lặp nhiều lần để bớt lệnh rẽ nhánh và tăng song song",
+   "nhom": "Phụ thuộc & hazard trong pipeline",
+   "viDu": "Loop unrolling reduces the number of branch instructions executed.",
+   "viDuNghia": "Trải vòng lặp giảm số lệnh rẽ nhánh phải thực thi."
+  },
+  {
+   "chu": "superpipelined",
+   "doc": "/ˌsuːpərˈpaɪplaɪnd/",
+   "nghia": "siêu ống: chia pipeline thành rất nhiều giai đoạn ngắn để tăng xung nhịp",
+   "nhom": "Song song mức lệnh & siêu vô hướng",
+   "viDu": "A superpipelined processor completes two pipeline stages per clock cycle.",
+   "viDuNghia": "Bộ xử lý siêu ống hoàn thành hai giai đoạn pipeline mỗi chu kỳ."
+  },
+  {
+   "chu": "very long instruction word",
+   "doc": "/ˈvɛri lɒŋ ɪnˈstrʌkʃən wɜːrd/",
+   "nghia": "VLIW: một lệnh dài chứa nhiều thao tác độc lập do TRÌNH BIÊN DỊCH sắp sẵn để chạy song song",
+   "nhom": "Song song mức lệnh & siêu vô hướng",
+   "viDu": "In a very long instruction word machine, the compiler schedules the parallel operations.",
+   "viDuNghia": "Trong máy VLIW, trình biên dịch sắp lịch các thao tác song song."
+  },
+  {
+   "chu": "instruction window",
+   "doc": "/ɪnˈstrʌkʃən ˈwɪndoʊ/",
+   "nghia": "cửa sổ lệnh: vùng đệm chứa các lệnh đã giải mã chờ đủ toán hạng để phát lệnh",
+   "nhom": "Song song mức lệnh & siêu vô hướng",
+   "viDu": "The instruction window lets the processor look ahead for independent instructions.",
+   "viDuNghia": "Cửa sổ lệnh cho bộ xử lý nhìn trước tìm các lệnh độc lập."
+  },
+  {
+   "chu": "in-order issue",
+   "doc": "/ɪn ˈɔːrdər ˈɪʃuː/",
+   "nghia": "phát lệnh theo thứ tự: lệnh được đưa vào thực thi đúng thứ tự trong chương trình",
+   "nhom": "Song song mức lệnh & siêu vô hướng",
+   "viDu": "In-order issue with out-of-order completion",
+   "viDuNghia": "Phát lệnh theo thứ tự, hoàn thành không theo thứ tự."
+  },
+  {
+   "chu": "out-of-order completion",
+   "doc": "/aʊt ɒv ˈɔːrdər kəmˈpliːʃən/",
+   "nghia": "hoàn thành không theo thứ tự: lệnh xong trước lệnh đứng trước nó",
+   "nhom": "Song song mức lệnh & siêu vô hướng",
+   "viDu": "Using technique of out-of-order issue with out-of-order completion",
+   "viDuNghia": "Dùng kỹ thuật phát lệnh và hoàn thành đều không theo thứ tự."
+  },
+  {
+   "chu": "reservation station",
+   "doc": "/ˌrɛzərˈveɪʃən ˈsteɪʃən/",
+   "nghia": "trạm đặt chỗ: hàng chờ trước mỗi khối chức năng, giữ lệnh tới khi đủ toán hạng (Tomasulo)",
+   "nhom": "Song song mức lệnh & siêu vô hướng",
+   "viDu": "Each functional unit has a reservation station holding instructions waiting for operands.",
+   "viDuNghia": "Mỗi khối chức năng có trạm đặt chỗ giữ lệnh đang chờ toán hạng."
+  },
+  {
+   "chu": "reorder buffer",
+   "doc": "/riˈɔːrdər ˈbʌfər/",
+   "nghia": "bộ đệm sắp lại: giữ kết quả lệnh chạy không theo thứ tự rồi ghi (commit) đúng thứ tự",
+   "nhom": "Song song mức lệnh & siêu vô hướng",
+   "viDu": "The reorder buffer commits results in program order.",
+   "viDuNghia": "Bộ đệm sắp lại ghi kết quả theo đúng thứ tự chương trình."
+  },
+  {
+   "chu": "Spectre",
+   "doc": "/ˈspɛktər/",
+   "nghia": "Spectre: lỗ hổng lợi dụng thực thi suy đoán để lộ dữ liệu qua dấu vết trong cache",
+   "nhom": "Song song mức lệnh & siêu vô hướng",
+   "viDu": "Spectre tricks the processor into speculatively executing instructions that leak data.",
+   "viDuNghia": "Spectre lừa bộ xử lý thực thi suy đoán các lệnh làm lộ dữ liệu."
+  },
+  {
+   "chu": "Meltdown",
+   "doc": "/ˈmɛltdaʊn/",
+   "nghia": "Meltdown: lỗ hổng cho chương trình người dùng đọc bộ nhớ nhân nhờ thực thi không theo thứ tự",
+   "nhom": "Song song mức lệnh & siêu vô hướng",
+   "viDu": "Meltdown lets a user program read kernel memory.",
+   "viDuNghia": "Meltdown cho chương trình người dùng đọc bộ nhớ của nhân."
+  },
+  {
+   "chu": "coarse-grained multithreading",
+   "doc": "/kɔːrs ɡreɪnd ˌmʌltiˈθrɛdɪŋ/",
+   "nghia": "đa luồng hạt thô: chỉ đổi luồng khi gặp sự kiện chờ lâu (trượt cache)",
+   "nhom": "Đa luồng, đa nhân & bộ xử lý chuyên dụng",
+   "viDu": "Coarse-grained multithreading switches threads only on a long-latency event.",
+   "viDuNghia": "Đa luồng hạt thô chỉ đổi luồng khi có sự kiện độ trễ lớn."
+  },
+  {
+   "chu": "fine-grained multithreading",
+   "doc": "/faɪn ɡreɪnd ˌmʌltiˈθrɛdɪŋ/",
+   "nghia": "đa luồng hạt mịn: đổi luồng sau MỖI chu kỳ, xoay vòng giữa các luồng",
+   "nhom": "Đa luồng, đa nhân & bộ xử lý chuyên dụng",
+   "viDu": "Fine-grained multithreading switches to another thread every clock cycle.",
+   "viDuNghia": "Đa luồng hạt mịn đổi sang luồng khác mỗi chu kỳ."
+  },
+  {
+   "chu": "simultaneous multithreading",
+   "doc": "/ˌsaɪməlˈteɪniəs ˌmʌltiˈθrɛdɪŋ/",
+   "nghia": "đa luồng đồng thời (SMT): lệnh của nhiều luồng phát cùng một chu kỳ trên bộ xử lý siêu vô hướng",
+   "nhom": "Đa luồng, đa nhân & bộ xử lý chuyên dụng",
+   "viDu": "Simultaneous multithreading",
+   "viDuNghia": "Đa luồng đồng thời."
+  },
+  {
+   "chu": "hyper-threading",
+   "doc": "/ˈhaɪpər ˈθrɛdɪŋ/",
+   "nghia": "Hyper-Threading: tên thương mại SMT của Intel — một nhân vật lý hiện thành hai nhân logic",
+   "nhom": "Đa luồng, đa nhân & bộ xử lý chuyên dụng",
+   "viDu": "With hyper-threading, the operating system sees two logical processors per core.",
+   "viDuNghia": "Với Hyper-Threading, hệ điều hành thấy hai bộ xử lý logic trên mỗi nhân."
+  },
+  {
+   "chu": "chip multiprocessor",
+   "doc": "/tʃɪp ˌmʌltiˈproʊsɛsər/",
+   "nghia": "đa xử lý trên chip: nhiều nhân hoàn chỉnh trên một chip (= bộ xử lý đa nhân)",
+   "nhom": "Đa luồng, đa nhân & bộ xử lý chuyên dụng",
+   "viDu": "A chip multiprocessor replicates whole cores on a single die.",
+   "viDuNghia": "Đa xử lý trên chip nhân bản nguyên các nhân trên một chip."
+  },
+  {
+   "chu": "heterogeneous multicore",
+   "doc": "/ˌhɛtərəˈdʒiːniəs ˈmʌltikɔːr/",
+   "nghia": "đa nhân dị thể: các nhân khác loại trên một chip (nhân lớn mạnh + nhân nhỏ tiết kiệm, CPU + GPU)",
+   "nhom": "Đa luồng, đa nhân & bộ xử lý chuyên dụng",
+   "viDu": "In a heterogeneous multicore processor, some cores are high-performance (big cores) while others are low-power (small cores).",
+   "viDuNghia": "Trong bộ xử lý đa nhân dị thể, có nhân hiệu năng cao (nhân lớn) và nhân tiết kiệm điện (nhân nhỏ)."
+  },
+  {
+   "chu": "graphics processing unit",
+   "doc": "/ˈɡræfɪks ˈproʊsɛsɪŋ ˈjuːnɪt/",
+   "nghia": "bộ xử lý đồ hoạ (GPU): hàng nghìn nhân đơn giản chạy song song kiểu SIMD",
+   "nhom": "Đa luồng, đa nhân & bộ xử lý chuyên dụng",
+   "viDu": "A graphics processing unit has thousands of simple cores working in parallel.",
+   "viDuNghia": "GPU có hàng nghìn nhân đơn giản chạy song song."
+  },
+  {
+   "chu": "general-purpose GPU",
+   "doc": "/ˈdʒɛnərəl ˈpɜːrpəs ˌdʒiː piː ˈjuː/",
+   "nghia": "GPGPU: dùng GPU cho tính toán thông thường (học máy, khoa học) chứ không chỉ đồ hoạ",
+   "nhom": "Đa luồng, đa nhân & bộ xử lý chuyên dụng",
+   "viDu": "General-purpose GPU computing is used to train neural networks.",
+   "viDuNghia": "Tính toán GPGPU được dùng để huấn luyện mạng nơ-ron."
+  },
+  {
+   "chu": "digital signal processor",
+   "doc": "/ˈdɪdʒɪtəl ˈsɪɡnəl ˈproʊsɛsər/",
+   "nghia": "bộ xử lý tín hiệu số (DSP): tối ưu cho lọc, biến đổi tín hiệu âm thanh/hình ảnh",
+   "nhom": "Đa luồng, đa nhân & bộ xử lý chuyên dụng",
+   "viDu": "Digital signal processors (DSPs)",
+   "viDuNghia": "Các bộ xử lý tín hiệu số (DSP)."
+  },
+  {
+   "chu": "system on a chip",
+   "doc": "/ˈsɪstəm ɒn ə tʃɪp/",
+   "nghia": "hệ thống trên chip (SoC): CPU, GPU, bộ nhớ, I/O gộp trên một chip (điện thoại)",
+   "nhom": "Đa luồng, đa nhân & bộ xử lý chuyên dụng",
+   "viDu": "A smartphone uses a system on a chip that includes CPU, GPU and modem.",
+   "viDuNghia": "Điện thoại dùng SoC gồm CPU, GPU và modem."
+  },
+  {
+   "chu": "processor mode",
+   "doc": "/ˈproʊsɛsər moʊd/",
+   "nghia": "chế độ bộ xử lý: mức đặc quyền đang chạy (ARM có User, Supervisor, IRQ, FIQ…)",
+   "nhom": "Ngắt & chế độ bộ xử lý (ARM)",
+   "viDu": "ARM has several processor modes, each with some banked registers.",
+   "viDuNghia": "ARM có nhiều chế độ bộ xử lý, mỗi chế độ có một số thanh ghi riêng."
+  },
+  {
+   "chu": "supervisor mode",
+   "doc": "/ˈsuːpərvaɪzər moʊd/",
+   "nghia": "chế độ giám sát: chế độ đặc quyền của HĐH, vào khi gọi hệ thống",
+   "nhom": "Ngắt & chế độ bộ xử lý (ARM)",
+   "viDu": "A software interrupt switches the ARM processor into supervisor mode.",
+   "viDuNghia": "Ngắt phần mềm chuyển bộ xử lý ARM sang chế độ giám sát."
+  },
+  {
+   "chu": "current program status register",
+   "doc": "/ˈkʌrənt ˈproʊɡræm ˈsteɪtəs ˈrɛdʒɪstər/",
+   "nghia": "CPSR: thanh ghi trạng thái của ARM chứa cờ N, Z, C, V, bit cấm ngắt và chế độ hiện tại",
+   "nhom": "Ngắt & chế độ bộ xử lý (ARM)",
+   "viDu": "The condition flags N, Z, C and V are stored in the current program status register.",
+   "viDuNghia": "Các cờ điều kiện N, Z, C, V lưu trong thanh ghi CPSR."
+  },
+  {
+   "chu": "fast interrupt request",
+   "doc": "/fæst ˌɪntəˈrʌpt rɪˈkwɛst/",
+   "nghia": "FIQ: ngắt ưu tiên cao của ARM, có nhiều thanh ghi riêng nên xử lý nhanh",
+   "nhom": "Ngắt & chế độ bộ xử lý (ARM)",
+   "viDu": "A fast interrupt request has higher priority than a normal IRQ.",
+   "viDuNghia": "Ngắt FIQ có độ ưu tiên cao hơn IRQ thường."
+  },
+  {
+   "chu": "interrupt vector table",
+   "doc": "/ˌɪntəˈrʌpt ˈvɛktər ˈteɪbl/",
+   "nghia": "bảng vector ngắt: bảng địa chỉ của các trình phục vụ ngắt, tra theo số hiệu ngắt",
+   "nhom": "Ngắt & chế độ bộ xử lý (ARM)",
+   "viDu": "The processor finds the handler address in the interrupt vector table.",
+   "viDuNghia": "Bộ xử lý tìm địa chỉ trình xử lý trong bảng vector ngắt."
+  },
+  {
+   "chu": "interrupt priority",
+   "doc": "/ˌɪntəˈrʌpt praɪˈɒrɪti/",
+   "nghia": "độ ưu tiên ngắt: quy định ngắt nào được phục vụ trước khi nhiều ngắt cùng xảy ra",
+   "nhom": "Ngắt & chế độ bộ xử lý (ARM)",
+   "viDu": "Nested interrupts with a priority scheme",
+   "viDuNghia": "Ngắt lồng nhau theo một sơ đồ ưu tiên."
+  },
+  {
+   "chu": "nested interrupt",
+   "doc": "/ˈnɛstɪd ˌɪntəˈrʌpt/",
+   "nghia": "ngắt lồng: ngắt ưu tiên cao được phép ngắt trình phục vụ của ngắt thấp hơn",
+   "nhom": "Ngắt & chế độ bộ xử lý (ARM)",
+   "viDu": "With nested interrupts, a printer interrupt can be interrupted by a communications interrupt.",
+   "viDuNghia": "Với ngắt lồng, ngắt máy in có thể bị ngắt truyền thông chen vào."
+  },
+  {
+   "chu": "interrupt mask",
+   "doc": "/ˌɪntəˈrʌpt mæsk/",
+   "nghia": "mặt nạ ngắt: bit dùng để cấm (che) tạm thời một số ngắt",
+   "nhom": "Ngắt & chế độ bộ xử lý (ARM)",
+   "viDu": "Setting the interrupt mask bit disables interrupts while a critical routine runs.",
+   "viDuNghia": "Đặt bit mặt nạ ngắt để cấm ngắt khi một thủ tục quan trọng đang chạy."
+  },
+  {
+   "chu": "high-performance computing",
+   "doc": "/haɪ pərˈfɔːrməns kəmˈpjuːtɪŋ/",
+   "nghia": "tính toán hiệu năng cao (HPC): dùng siêu máy tính / cụm nhiều bộ xử lý chạy song song cho bài toán tính toán lớn",
+   "nhom": "Đa luồng, đa nhân & bộ xử lý chuyên dụng",
+   "viDu": "Why is cache design used in high-performance computing (HPC)?",
+   "viDuNghia": "Vì sao thiết kế cache được dùng trong tính toán hiệu năng cao (HPC)?"
+  },
+  {
+   "chu": "inboard memory",
+   "doc": "/ˈɪnbɔːrd ˈmeməri/",
+   "nghia": "bộ nhớ trong bo mạch: thanh ghi, cache, bộ nhớ chính – tầng trên của tháp bộ nhớ, CPU truy cập trực tiếp",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "Registers, cache and main memory are inboard memory.",
+   "viDuNghia": "Thanh ghi, cache và bộ nhớ chính là bộ nhớ trong bo mạch."
+  },
+  {
+   "chu": "outboard storage",
+   "doc": "/ˈaʊtbɔːrd ˈstɔːrɪdʒ/",
+   "nghia": "lưu trữ ngoài bo mạch: đĩa từ, đĩa quang (CD, DVD, Blu-ray)… – tầng dưới inboard memory trong tháp bộ nhớ, rẻ hơn nhưng chậm hơn",
+   "nhom": "Bộ nhớ, lưu trữ & vào/ra",
+   "viDu": "Memory cache is outboard storage memory",
+   "viDuNghia": "Cache là bộ nhớ lưu trữ ngoài bo mạch (phát biểu sai: cache thuộc inboard memory)"
+  }
+ ]
+}

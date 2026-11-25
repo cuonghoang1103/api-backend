@@ -1,0 +1,810 @@
+{
+ "ma": "osg202-5",
+ "nn": "en",
+ "ten": "OSG202 · 5. Bộ nhớ, tệp & vào/ra trên Linux",
+ "moTa": "Bổ sung OSG202: bộ nhớ ảo nâng cao (TLB miss, copy-on-write, OOM killer, swap), nạp chương trình (ELF, thư viện liên kết động), hệ thống tệp Linux (inode, dentry, mount, quyền rwx, setuid), vào/ra và đĩa (DMA từng từ, C-SCAN, spooler) cùng I/O không chặn (epoll).",
+ "bieuTuong": "internaldrive.fill",
+ "thuTu": -964,
+ "tu": [
+  {
+   "chu": "virtual address space",
+   "doc": "/ˈvɜːrtʃuəl ˈædres speɪs/",
+   "nghia": "không gian địa chỉ ảo: dải địa chỉ mỗi tiến trình thấy riêng, được MMU ánh xạ sang bộ nhớ vật lý",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Each process has its own virtual address space, isolated from other processes.",
+   "viDuNghia": "Mỗi tiến trình có không gian địa chỉ ảo riêng, tách biệt với tiến trình khác."
+  },
+  {
+   "chu": "address translation",
+   "doc": "/ˈædres trænzˈleɪʃn/",
+   "nghia": "dịch địa chỉ: đổi địa chỉ ảo thành địa chỉ vật lý qua bảng trang (do MMU làm)",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "The MMU translates virtual addresses into physical addresses",
+   "viDuNghia": "MMU dịch địa chỉ ảo thành địa chỉ vật lý"
+  },
+  {
+   "chu": "TLB miss",
+   "doc": "/ˌtiː el ˈbiː mɪs/",
+   "nghia": "trượt TLB: mục bảng trang cần dùng không có trong TLB, phải tra bảng trang trong bộ nhớ",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "A TLB miss implies a disk operation will follow",
+   "viDuNghia": "Trượt TLB có nghĩa là sắp có một thao tác đọc đĩa (phát biểu sai: chỉ lỗi trang mới cần đọc đĩa)"
+  },
+  {
+   "chu": "multilevel page table",
+   "doc": "/ˌmʌltiˈlevl peɪdʒ ˈteɪbl/",
+   "nghia": "bảng trang nhiều cấp: chia bảng trang thành cây nhiều tầng để không phải giữ toàn bộ bảng trong bộ nhớ",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "A multilevel page table avoids keeping the whole page table in memory.",
+   "viDuNghia": "Bảng trang nhiều cấp giúp không phải giữ toàn bộ bảng trang trong bộ nhớ."
+  },
+  {
+   "chu": "segment table",
+   "doc": "/ˈseɡmənt ˈteɪbl/",
+   "nghia": "bảng phân đoạn: lưu địa chỉ nền và độ dài của từng đoạn trong phân đoạn bộ nhớ",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Each entry in the segment table holds the base and the limit of a segment.",
+   "viDuNghia": "Mỗi mục trong bảng phân đoạn chứa địa chỉ nền và giới hạn của một đoạn."
+  },
+  {
+   "chu": "dirty bit",
+   "doc": "/ˈdɜːrti bɪt/",
+   "nghia": "bit bẩn (= modified bit): báo trang đã bị ghi, phải ghi ra đĩa trước khi bị thay",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Relies on a modified bit to determine which page to replace",
+   "viDuNghia": "Dựa vào bit sửa đổi (bit bẩn) để quyết định thay trang nào"
+  },
+  {
+   "chu": "copy-on-write",
+   "doc": "/ˌkɑːpi ɑːn ˈraɪt/",
+   "nghia": "sao chép khi ghi: cha và con dùng chung trang chỉ đọc sau fork(), chỉ khi một bên ghi mới sao trang đó",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Copy-on-write makes fork() fast because pages are copied only when written.",
+   "viDuNghia": "Sao chép khi ghi làm fork() nhanh vì trang chỉ bị sao khi có ghi."
+  },
+  {
+   "chu": "minor page fault",
+   "doc": "/ˈmaɪnər peɪdʒ fɔːlt/",
+   "nghia": "lỗi trang nhẹ: trang đã nằm sẵn trong RAM (vd page cache), chỉ cần cập nhật bảng trang, không đọc đĩa",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "A minor page fault is resolved without any disk I/O.",
+   "viDuNghia": "Lỗi trang nhẹ được xử lý mà không cần đọc ghi đĩa."
+  },
+  {
+   "chu": "major page fault",
+   "doc": "/ˈmeɪdʒər peɪdʒ fɔːlt/",
+   "nghia": "lỗi trang nặng: trang không có trong RAM, phải đọc từ đĩa hoặc vùng swap",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Many major page faults are a sign that the system is short of memory.",
+   "viDuNghia": "Nhiều lỗi trang nặng là dấu hiệu hệ thống thiếu bộ nhớ."
+  },
+  {
+   "chu": "external pager",
+   "doc": "/ɪkˈstɜːrnl ˈpeɪdʒər/",
+   "nghia": "bộ phân trang ngoài: tiến trình ở không gian người dùng quyết định nạp/ghi trang thay cho nhân (kiểu Mach)",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "An external pager running in user space",
+   "viDuNghia": "Một bộ phân trang ngoài chạy trong không gian người dùng"
+  },
+  {
+   "chu": "page reclaim",
+   "doc": "/peɪdʒ rɪˈkleɪm/",
+   "nghia": "thu hồi trang: nhân giải phóng các trang ít dùng (bỏ page cache, đẩy ra swap) khi thiếu bộ nhớ",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Under memory pressure, the kernel starts page reclaim to free memory.",
+   "viDuNghia": "Khi thiếu bộ nhớ, nhân bắt đầu thu hồi trang để giải phóng bộ nhớ."
+  },
+  {
+   "chu": "memory pressure",
+   "doc": "/ˈmeməri ˈpreʃər/",
+   "nghia": "áp lực bộ nhớ: tình trạng bộ nhớ trống sắp cạn, buộc nhân phải thu hồi trang",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "High memory pressure causes heavy swapping and slow response.",
+   "viDuNghia": "Áp lực bộ nhớ cao gây hoán đổi nhiều và phản hồi chậm."
+  },
+  {
+   "chu": "anonymous memory",
+   "doc": "/əˈnɑːnɪməs ˈmeməri/",
+   "nghia": "bộ nhớ ẩn danh: trang không gắn với tệp nào (heap, stack); khi thiếu RAM chỉ có thể đẩy ra swap",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Heap and stack pages are anonymous memory, so they can only be written to swap.",
+   "viDuNghia": "Trang heap và stack là bộ nhớ ẩn danh nên chỉ có thể ghi ra swap."
+  },
+  {
+   "chu": "swap space",
+   "doc": "/swɑːp speɪs/",
+   "nghia": "vùng swap: phân vùng hoặc tệp trên đĩa chứa các trang bị đẩy ra khỏi RAM",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "When RAM is full, inactive pages are moved to swap space.",
+   "viDuNghia": "Khi RAM đầy, các trang không hoạt động được chuyển ra vùng swap."
+  },
+  {
+   "chu": "swappiness",
+   "doc": "/ˈswɑːpinəs/",
+   "nghia": "swappiness: tham số Linux (0–200) cho biết nhân thiên về đẩy trang ra swap tới mức nào",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Lowering swappiness makes the kernel prefer dropping page cache over swapping.",
+   "viDuNghia": "Giảm swappiness khiến nhân ưu tiên bỏ page cache hơn là hoán đổi."
+  },
+  {
+   "chu": "OOM killer",
+   "doc": "/ˌoʊ oʊ ˈem ˈkɪlər/",
+   "nghia": "trình diệt OOM: cơ chế Linux chọn và giết một tiến trình khi hết bộ nhớ (out of memory)",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "When memory runs out, the OOM killer terminates the process with the highest badness score.",
+   "viDuNghia": "Khi hết bộ nhớ, trình diệt OOM kết thúc tiến trình có điểm \"xấu\" cao nhất."
+  },
+  {
+   "chu": "overcommit",
+   "doc": "/ˌoʊvərkəˈmɪt/",
+   "nghia": "cấp vượt bộ nhớ: nhân cho phép xin nhiều bộ nhớ ảo hơn lượng RAM + swap thật đang có",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Because of overcommit, malloc() may succeed even when there is not enough physical memory.",
+   "viDuNghia": "Vì cơ chế cấp vượt, malloc() có thể thành công ngay cả khi không đủ bộ nhớ vật lý."
+  },
+  {
+   "chu": "resident set size",
+   "doc": "/ˈrezɪdənt set saɪz/",
+   "nghia": "RSS: lượng bộ nhớ vật lý tiến trình đang thật sự chiếm trong RAM",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "The ps command shows both the virtual size and the resident set size of a process.",
+   "viDuNghia": "Lệnh ps hiển thị cả kích thước ảo lẫn RSS của một tiến trình."
+  },
+  {
+   "chu": "huge page",
+   "doc": "/hjuːdʒ peɪdʒ/",
+   "nghia": "trang lớn: trang 2 MB hoặc 1 GB thay vì 4 KB, giảm số mục TLB cần dùng",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Databases often use huge pages to reduce TLB misses.",
+   "viDuNghia": "Cơ sở dữ liệu thường dùng trang lớn để giảm trượt TLB."
+  },
+  {
+   "chu": "local page replacement",
+   "doc": "/ˈloʊkl peɪdʒ rɪˈpleɪsmənt/",
+   "nghia": "thay trang cục bộ: chỉ chọn trang nạn nhân trong các khung của chính tiến trình bị lỗi trang",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "With local page replacement, each process keeps a fixed number of frames.",
+   "viDuNghia": "Với thay trang cục bộ, mỗi tiến trình giữ một số khung cố định."
+  },
+  {
+   "chu": "global page replacement",
+   "doc": "/ˈɡloʊbl peɪdʒ rɪˈpleɪsmənt/",
+   "nghia": "thay trang toàn cục: chọn trang nạn nhân trong toàn bộ khung trang của mọi tiến trình",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Global page replacement usually gives better throughput than local replacement.",
+   "viDuNghia": "Thay trang toàn cục thường cho thông lượng tốt hơn thay trang cục bộ."
+  },
+  {
+   "chu": "paging daemon",
+   "doc": "/ˈpeɪdʒɪŋ ˈdiːmən/",
+   "nghia": "tiến trình nền phân trang: định kỳ thức dậy, giữ đủ khung trống bằng cách ghi và thu hồi trang",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "The paging daemon keeps a pool of free page frames ready for future faults.",
+   "viDuNghia": "Tiến trình nền phân trang giữ sẵn một nhóm khung trang trống cho các lỗi trang sau này."
+  },
+  {
+   "chu": "WSClock",
+   "doc": "/ˈdʌbl juː es klɑːk/",
+   "nghia": "thuật toán WSClock: kết hợp tập làm việc với thuật toán đồng hồ, dùng danh sách vòng các khung trang",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "WSClock combines the working set idea with the clock algorithm.",
+   "viDuNghia": "WSClock kết hợp ý tưởng tập làm việc với thuật toán đồng hồ."
+  },
+  {
+   "chu": "aging algorithm",
+   "doc": "/ˈeɪdʒɪŋ ˈælɡərɪðəm/",
+   "nghia": "thuật toán lão hoá (thay trang): mô phỏng LRU bằng bộ đếm dịch phải, gắn bit R vào bit trái nhất",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "The aging algorithm approximates LRU in software using shift counters.",
+   "viDuNghia": "Thuật toán lão hoá xấp xỉ LRU bằng phần mềm nhờ các bộ đếm dịch bit."
+  },
+  {
+   "chu": "compaction",
+   "doc": "/kəmˈpækʃn/",
+   "nghia": "dồn bộ nhớ: dời các tiến trình về một phía để gom các lỗ trống nhỏ thành một vùng lớn",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Memory compaction removes external fragmentation but is time-consuming.",
+   "viDuNghia": "Dồn bộ nhớ xoá được phân mảnh ngoài nhưng tốn thời gian."
+  },
+  {
+   "chu": "base register",
+   "doc": "/beɪs ˈredʒɪstər/",
+   "nghia": "thanh ghi nền: chứa địa chỉ vật lý bắt đầu của tiến trình, cộng vào mọi địa chỉ tiến trình sinh ra",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "The base register is added to every address generated by the program.",
+   "viDuNghia": "Thanh ghi nền được cộng vào mọi địa chỉ mà chương trình sinh ra."
+  },
+  {
+   "chu": "address binding",
+   "doc": "/ˈædres ˈbaɪndɪŋ/",
+   "nghia": "gắn địa chỉ: quyết định địa chỉ thật của lệnh và dữ liệu lúc biên dịch, lúc nạp hoặc lúc chạy",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Address binding at run time requires hardware support such as an MMU.",
+   "viDuNghia": "Gắn địa chỉ lúc chạy cần phần cứng hỗ trợ như MMU."
+  },
+  {
+   "chu": "segmentation fault",
+   "doc": "/ˌseɡmenˈteɪʃn fɔːlt/",
+   "nghia": "lỗi phân đoạn: tiến trình truy cập vùng nhớ không được phép, bị nhân gửi SIGSEGV",
+   "nhom": "Bộ nhớ ảo nâng cao",
+   "viDu": "Writing through an uninitialized pointer often ends in a segmentation fault.",
+   "viDuNghia": "Ghi qua một con trỏ chưa khởi tạo thường kết thúc bằng lỗi phân đoạn."
+  },
+  {
+   "chu": "loader",
+   "doc": "/ˈloʊdər/",
+   "nghia": "trình nạp: phần của HĐH đưa tệp thực thi vào bộ nhớ và bắt đầu chạy nó",
+   "nhom": "Nạp chương trình",
+   "viDu": "The loader maps the program's segments into memory before it starts running.",
+   "viDuNghia": "Trình nạp ánh xạ các đoạn của chương trình vào bộ nhớ trước khi chạy."
+  },
+  {
+   "chu": "ELF",
+   "doc": "/elf/",
+   "nghia": "ELF (Executable and Linkable Format): định dạng tệp thực thi, thư viện, tệp đối tượng trên Linux",
+   "nhom": "Nạp chương trình",
+   "viDu": "On Linux, programs and shared libraries are stored in ELF format.",
+   "viDuNghia": "Trên Linux, chương trình và thư viện dùng chung được lưu theo định dạng ELF."
+  },
+  {
+   "chu": "text segment",
+   "doc": "/tekst ˈseɡmənt/",
+   "nghia": "đoạn mã: vùng chỉ đọc chứa mã máy của chương trình, có thể dùng chung giữa các tiến trình",
+   "nhom": "Nạp chương trình",
+   "viDu": "The text segment is read-only and can be shared by several processes.",
+   "viDuNghia": "Đoạn mã là chỉ đọc và có thể được nhiều tiến trình dùng chung."
+  },
+  {
+   "chu": "data segment",
+   "doc": "/ˈdeɪtə ˈseɡmənt/",
+   "nghia": "đoạn dữ liệu: vùng chứa biến toàn cục và biến tĩnh đã khởi tạo",
+   "nhom": "Nạp chương trình",
+   "viDu": "Initialized global variables are stored in the data segment.",
+   "viDuNghia": "Biến toàn cục đã khởi tạo được lưu trong đoạn dữ liệu."
+  },
+  {
+   "chu": "BSS segment",
+   "doc": "/ˌbiː es ˈes ˈseɡmənt/",
+   "nghia": "đoạn BSS: vùng chứa biến toàn cục/tĩnh chưa khởi tạo, được nhân điền toàn số 0 khi nạp",
+   "nhom": "Nạp chương trình",
+   "viDu": "Uninitialized global variables are placed in the BSS segment and set to zero.",
+   "viDuNghia": "Biến toàn cục chưa khởi tạo được đặt trong đoạn BSS và gán bằng 0."
+  },
+  {
+   "chu": "shared library",
+   "doc": "/ʃerd ˈlaɪbreri/",
+   "nghia": "thư viện dùng chung (.so, .dll): một bản mã trong RAM được nhiều chương trình dùng chung",
+   "nhom": "Nạp chương trình",
+   "viDu": "A shared library is loaded once and mapped into every process that uses it.",
+   "viDuNghia": "Thư viện dùng chung được nạp một lần và ánh xạ vào mọi tiến trình dùng nó."
+  },
+  {
+   "chu": "dynamic linking",
+   "doc": "/daɪˈnæmɪk ˈlɪŋkɪŋ/",
+   "nghia": "liên kết động: gắn hàm thư viện vào chương trình lúc nạp hoặc lúc chạy, không chép vào tệp thực thi",
+   "nhom": "Nạp chương trình",
+   "viDu": "With dynamic linking, a bug fix in the library reaches every program without recompiling.",
+   "viDuNghia": "Với liên kết động, bản sửa lỗi thư viện tới được mọi chương trình mà không cần biên dịch lại."
+  },
+  {
+   "chu": "static linking",
+   "doc": "/ˈstætɪk ˈlɪŋkɪŋ/",
+   "nghia": "liên kết tĩnh: chép mã thư viện vào thẳng tệp thực thi lúc liên kết",
+   "nhom": "Nạp chương trình",
+   "viDu": "Static linking produces larger executables that need no external libraries.",
+   "viDuNghia": "Liên kết tĩnh tạo ra tệp thực thi lớn hơn, không cần thư viện bên ngoài."
+  },
+  {
+   "chu": "mmap",
+   "doc": "/ˈem mæp/",
+   "nghia": "mmap: lời gọi hệ thống ánh xạ một tệp hoặc vùng nhớ ẩn danh vào không gian địa chỉ của tiến trình",
+   "nhom": "Nạp chương trình",
+   "viDu": "The mmap() call maps a file into the address space of the process.",
+   "viDuNghia": "Lời gọi mmap() ánh xạ một tệp vào không gian địa chỉ của tiến trình."
+  },
+  {
+   "chu": "memory-mapped file",
+   "doc": "/ˈmeməri mæpt faɪl/",
+   "nghia": "tệp ánh xạ bộ nhớ: tệp được truy cập như một mảng trong bộ nhớ, trang nạp theo yêu cầu",
+   "nhom": "Nạp chương trình",
+   "viDu": "Reading a memory-mapped file causes page faults instead of read() calls.",
+   "viDuNghia": "Đọc một tệp ánh xạ bộ nhớ gây ra lỗi trang thay vì các lời gọi read()."
+  },
+  {
+   "chu": "position-independent code",
+   "doc": "/pəˈzɪʃn ˌɪndɪˈpendənt koʊd/",
+   "nghia": "mã độc lập vị trí (PIC): mã chạy đúng ở bất kỳ địa chỉ nào được nạp vào, dùng cho thư viện dùng chung",
+   "nhom": "Nạp chương trình",
+   "viDu": "Shared libraries are compiled as position-independent code.",
+   "viDuNghia": "Thư viện dùng chung được biên dịch thành mã độc lập vị trí."
+  },
+  {
+   "chu": "inode number",
+   "doc": "/ˈaɪnoʊd ˈnʌmbər/",
+   "nghia": "số i-node: số định danh tệp trong một hệ thống tệp; tên tệp chỉ là liên kết tới số này",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "I-node number and file name",
+   "viDuNghia": "Số i-node và tên tệp"
+  },
+  {
+   "chu": "directory entry",
+   "doc": "/dəˈrektəri ˈentri/",
+   "nghia": "mục thư mục: cặp (tên tệp, số i-node) lưu trong thư mục",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "In UNIX, a directory entry contains only a file name and an i-node number.",
+   "viDuNghia": "Trong UNIX, một mục thư mục chỉ chứa tên tệp và số i-node."
+  },
+  {
+   "chu": "dentry",
+   "doc": "/ˈdentri/",
+   "nghia": "dentry: đối tượng mục thư mục trong nhân Linux, được lưu trong bộ đệm để tra đường dẫn nhanh",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "The dentry cache speeds up path name lookup.",
+   "viDuNghia": "Bộ đệm dentry làm việc tra tên đường dẫn nhanh hơn."
+  },
+  {
+   "chu": "link count",
+   "doc": "/lɪŋk kaʊnt/",
+   "nghia": "số liên kết: số tên (liên kết cứng) đang trỏ tới một i-node; về 0 thì tệp mới bị xoá",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "Hard links require to increase the link count in the i-node for each linking",
+   "viDuNghia": "Liên kết cứng đòi hỏi tăng số liên kết trong i-node mỗi lần tạo liên kết"
+  },
+  {
+   "chu": "unlink",
+   "doc": "/ʌnˈlɪŋk/",
+   "nghia": "unlink: xoá một tên tệp khỏi thư mục và giảm số liên kết của i-node",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "Deleting a file in UNIX calls unlink(), which removes one name of the file.",
+   "viDuNghia": "Xoá tệp trong UNIX gọi unlink(), lệnh này xoá một tên của tệp."
+  },
+  {
+   "chu": "mount point",
+   "doc": "/maʊnt pɔɪnt/",
+   "nghia": "điểm gắn: thư mục nơi một hệ thống tệp khác được gắn vào cây thư mục",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "The USB file system is mounted at the mount point /mnt/usb.",
+   "viDuNghia": "Hệ thống tệp USB được gắn vào điểm gắn /mnt/usb."
+  },
+  {
+   "chu": "virtual file system",
+   "doc": "/ˈvɜːrtʃuəl faɪl ˈsɪstəm/",
+   "nghia": "hệ thống tệp ảo (VFS): lớp trừu tượng cho phép nhân dùng chung một giao diện với mọi loại hệ thống tệp",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "The virtual file system lets the same open() call work on ext4, NTFS and NFS.",
+   "viDuNghia": "Hệ thống tệp ảo cho phép cùng một lời gọi open() chạy trên ext4, NTFS và NFS."
+  },
+  {
+   "chu": "ext4",
+   "doc": "/ˌiː eks ti ˈfɔːr/",
+   "nghia": "ext4: hệ thống tệp có nhật ký mặc định của nhiều bản Linux, cấp phát theo extent",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "ext4 is a journaling file system that allocates space in extents.",
+   "viDuNghia": "ext4 là hệ thống tệp có nhật ký, cấp phát không gian theo extent."
+  },
+  {
+   "chu": "master file table",
+   "doc": "/ˈmæstər faɪl ˈteɪbl/",
+   "nghia": "bảng tệp chủ (MFT): bảng trung tâm của NTFS, mỗi tệp có ít nhất một bản ghi",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "In NTFS, every file is described by at least one record in the master file table.",
+   "viDuNghia": "Trong NTFS, mỗi tệp được mô tả bằng ít nhất một bản ghi trong bảng tệp chủ."
+  },
+  {
+   "chu": "fsck",
+   "doc": "/ˌef es siː ˈkeɪ/",
+   "nghia": "fsck: công cụ kiểm tra và sửa tính nhất quán của hệ thống tệp sau khi hệ sập",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "After a power failure, fsck checks the file system for inconsistencies.",
+   "viDuNghia": "Sau khi mất điện, fsck kiểm tra hệ thống tệp xem có chỗ không nhất quán."
+  },
+  {
+   "chu": "crash consistency",
+   "doc": "/kræʃ kənˈsɪstənsi/",
+   "nghia": "nhất quán khi sập: hệ thống tệp vẫn ở trạng thái hợp lệ dù máy sập giữa lúc ghi",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "Journaling provides crash consistency without a full fsck after every crash.",
+   "viDuNghia": "Ghi nhật ký giúp nhất quán khi sập mà không cần chạy fsck toàn bộ sau mỗi lần sập."
+  },
+  {
+   "chu": "tmpfs",
+   "doc": "/ˈtemp ef es/",
+   "nghia": "tmpfs: hệ thống tệp nằm trong bộ nhớ (RAM/swap), mất sạch khi khởi động lại",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "Files in /tmp may live in tmpfs and disappear after a reboot.",
+   "viDuNghia": "Tệp trong /tmp có thể nằm trên tmpfs và biến mất sau khi khởi động lại."
+  },
+  {
+   "chu": "proc file system",
+   "doc": "/prɑːk faɪl ˈsɪstəm/",
+   "nghia": "hệ thống tệp /proc: hệ thống tệp giả do nhân sinh ra, hiển thị thông tin tiến trình và nhân dưới dạng tệp",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "The proc file system exposes each process as a directory such as /proc/1234.",
+   "viDuNghia": "Hệ thống tệp /proc hiển thị mỗi tiến trình thành một thư mục như /proc/1234."
+  },
+  {
+   "chu": "pseudo file system",
+   "doc": "/ˈsuːdoʊ faɪl ˈsɪstəm/",
+   "nghia": "hệ thống tệp giả: không lưu trên đĩa, nội dung do nhân sinh ra khi đọc (proc, sysfs)",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "/proc and /sys are pseudo file systems generated by the kernel.",
+   "viDuNghia": "/proc và /sys là các hệ thống tệp giả do nhân sinh ra."
+  },
+  {
+   "chu": "device file",
+   "doc": "/dɪˈvaɪs faɪl/",
+   "nghia": "tệp thiết bị: tệp đặc biệt trong /dev đại diện cho một thiết bị (tệp khối hoặc tệp ký tự)",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "Programs access a disk through a device file such as /dev/sda.",
+   "viDuNghia": "Chương trình truy cập đĩa qua một tệp thiết bị như /dev/sda."
+  },
+  {
+   "chu": "page cache",
+   "doc": "/peɪdʒ kæʃ/",
+   "nghia": "bộ đệm trang: phần RAM nhân dùng giữ nội dung tệp vừa đọc/ghi để lần sau khỏi đọc đĩa",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "Reading the same file twice is fast because it is served from the page cache.",
+   "viDuNghia": "Đọc cùng một tệp lần thứ hai nhanh vì dữ liệu lấy từ bộ đệm trang."
+  },
+  {
+   "chu": "dirty page",
+   "doc": "/ˈdɜːrti peɪdʒ/",
+   "nghia": "trang bẩn: trang trong bộ đệm đã bị sửa nhưng chưa ghi xuống đĩa",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "Dirty pages are written back to disk periodically or when fsync() is called.",
+   "viDuNghia": "Trang bẩn được ghi xuống đĩa định kỳ hoặc khi gọi fsync()."
+  },
+  {
+   "chu": "fsync",
+   "doc": "/ˈef sɪŋk/",
+   "nghia": "fsync: lời gọi ép ghi toàn bộ dữ liệu đã sửa của một tệp từ bộ đệm xuống đĩa",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "A database calls fsync() so that a committed transaction survives a power failure.",
+   "viDuNghia": "Cơ sở dữ liệu gọi fsync() để giao tác đã commit vẫn còn sau khi mất điện."
+  },
+  {
+   "chu": "file locking",
+   "doc": "/faɪl ˈlɑːkɪŋ/",
+   "nghia": "khoá tệp: ngăn nhiều tiến trình cùng sửa một tệp (hoặc một vùng của tệp) một lúc",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "File locking prevents two processes from updating the same record at once.",
+   "viDuNghia": "Khoá tệp ngăn hai tiến trình cùng cập nhật một bản ghi một lúc."
+  },
+  {
+   "chu": "advisory lock",
+   "doc": "/ədˈvaɪzəri lɑːk/",
+   "nghia": "khoá khuyến nghị: khoá chỉ có tác dụng khi mọi tiến trình đều tự kiểm tra khoá (flock trên Linux)",
+   "nhom": "Hệ thống tệp Linux",
+   "viDu": "An advisory lock does not stop a process that ignores it.",
+   "viDuNghia": "Khoá khuyến nghị không ngăn được tiến trình phớt lờ nó."
+  },
+  {
+   "chu": "file permission",
+   "doc": "/faɪl pərˈmɪʃn/",
+   "nghia": "quyền tệp: quyền đọc (r), ghi (w), thực thi (x) cho chủ, nhóm và người khác",
+   "nhom": "Quyền truy cập tệp",
+   "viDu": "The file permission rw-r--r-- lets only the owner write the file.",
+   "viDuNghia": "Quyền tệp rw-r--r-- chỉ cho chủ sở hữu ghi tệp."
+  },
+  {
+   "chu": "permission bit",
+   "doc": "/pərˈmɪʃn bɪt/",
+   "nghia": "bit quyền: 9 bit rwx (cùng các bit đặc biệt) lưu trong i-node quyết định ai làm gì với tệp",
+   "nhom": "Quyền truy cập tệp",
+   "viDu": "The permission bits are stored in the i-node of the file.",
+   "viDuNghia": "Các bit quyền được lưu trong i-node của tệp."
+  },
+  {
+   "chu": "chmod",
+   "doc": "/ˌsiː eɪtʃ ˈmɑːd/",
+   "nghia": "chmod: lệnh/lời gọi đổi quyền truy cập của tệp (vd chmod 755)",
+   "nhom": "Quyền truy cập tệp",
+   "viDu": "The command chmod 755 script.sh makes the script executable for everyone.",
+   "viDuNghia": "Lệnh chmod 755 script.sh làm cho script thực thi được với mọi người."
+  },
+  {
+   "chu": "chown",
+   "doc": "/ˌsiː eɪtʃ ˈoʊn/",
+   "nghia": "chown: lệnh/lời gọi đổi chủ sở hữu (và nhóm) của tệp",
+   "nhom": "Quyền truy cập tệp",
+   "viDu": "Only the superuser can use chown to give a file to another user.",
+   "viDuNghia": "Chỉ siêu người dùng mới được dùng chown để giao tệp cho người dùng khác."
+  },
+  {
+   "chu": "umask",
+   "doc": "/ˈjuː mæsk/",
+   "nghia": "umask: mặt nạ bit quyền bị gỡ đi khi tạo tệp mới (vd umask 022 ⇒ tệp mới 644)",
+   "nhom": "Quyền truy cập tệp",
+   "viDu": "With a umask of 022, new files are created with permission 644.",
+   "viDuNghia": "Với umask 022, tệp mới được tạo với quyền 644."
+  },
+  {
+   "chu": "setuid",
+   "doc": "/ˈset juː aɪ diː/",
+   "nghia": "bit setuid: chương trình chạy với quyền của chủ tệp thay vì người chạy (vd passwd chạy quyền root)",
+   "nhom": "Quyền truy cập tệp",
+   "viDu": "The passwd program is setuid root so that users can change their own password.",
+   "viDuNghia": "Chương trình passwd có bit setuid root để người dùng tự đổi được mật khẩu."
+  },
+  {
+   "chu": "setgid",
+   "doc": "/ˈset dʒiː aɪ diː/",
+   "nghia": "bit setgid: chạy với quyền nhóm của tệp; đặt trên thư mục thì tệp mới thừa hưởng nhóm của thư mục",
+   "nhom": "Quyền truy cập tệp",
+   "viDu": "A setgid directory makes new files inherit the group of the directory.",
+   "viDuNghia": "Thư mục có bit setgid làm cho tệp mới thừa hưởng nhóm của thư mục."
+  },
+  {
+   "chu": "sticky bit",
+   "doc": "/ˈstɪki bɪt/",
+   "nghia": "bit dính: đặt trên thư mục thì chỉ chủ tệp mới được xoá/đổi tên tệp của mình (như /tmp)",
+   "nhom": "Quyền truy cập tệp",
+   "viDu": "The sticky bit on /tmp stops users from deleting each other's files.",
+   "viDuNghia": "Bit dính trên /tmp ngăn người dùng xoá tệp của nhau."
+  },
+  {
+   "chu": "access control list",
+   "doc": "/ˈækses kənˈtroʊl lɪst/",
+   "nghia": "danh sách kiểm soát truy cập (ACL): gắn vào mỗi đối tượng danh sách ai được làm gì với nó",
+   "nhom": "Quyền truy cập tệp",
+   "viDu": "An access control list stores, for each file, which users may access it and how.",
+   "viDuNghia": "Danh sách kiểm soát truy cập lưu, cho mỗi tệp, người dùng nào được truy cập và theo cách nào."
+  },
+  {
+   "chu": "superuser",
+   "doc": "/ˈsuːpərjuːzər/",
+   "nghia": "siêu người dùng (root): tài khoản có mọi quyền trên hệ thống, bỏ qua kiểm tra quyền tệp",
+   "nhom": "Quyền truy cập tệp",
+   "viDu": "The superuser can read any file regardless of its permission bits.",
+   "viDuNghia": "Siêu người dùng đọc được mọi tệp bất kể bit quyền của nó."
+  },
+  {
+   "chu": "word-at-a-time mode",
+   "doc": "/wɜːrd ət ə taɪm moʊd/",
+   "nghia": "chế độ từng từ (DMA): bộ điều khiển DMA chuyển một từ rồi trả bus cho CPU (lấy trộm chu kỳ)",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "Word-at-a-time mode and byte mode.",
+   "viDuNghia": "Chế độ từng từ và chế độ từng byte."
+  },
+  {
+   "chu": "burst mode",
+   "doc": "/bɜːrst moʊd/",
+   "nghia": "chế độ chùm (DMA): bộ điều khiển DMA giữ bus để chuyển liên tục cả khối dữ liệu",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "In burst mode, the DMA controller transfers a whole block before releasing the bus.",
+   "viDuNghia": "Ở chế độ chùm, bộ điều khiển DMA chuyển cả khối rồi mới trả bus."
+  },
+  {
+   "chu": "device-independent software",
+   "doc": "/dɪˈvaɪs ˌɪndɪˈpendənt ˈsɔːftwer/",
+   "nghia": "phần mềm vào/ra độc lập thiết bị: tầng dùng chung cho mọi thiết bị (đặt tên, đệm, báo lỗi, cấp phát)",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "Providing a device-independent block size",
+   "viDuNghia": "Cung cấp kích thước khối độc lập với thiết bị"
+  },
+  {
+   "chu": "imprecise interrupt",
+   "doc": "/ˌɪmprɪˈsaɪs ˈɪntərʌpt/",
+   "nghia": "ngắt không chính xác: lúc ngắt, trạng thái máy không xác định rõ lệnh nào đã/ chưa chạy xong",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "Imprecise interrupt",
+   "viDuNghia": "Ngắt không chính xác"
+  },
+  {
+   "chu": "interrupt service routine",
+   "doc": "/ˈɪntərʌpt ˈsɜːrvɪs ruːˈtiːn/",
+   "nghia": "thủ tục phục vụ ngắt (ISR): đoạn mã chạy ngay khi có ngắt từ thiết bị",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "An interrupt service routine should finish quickly and defer heavy work.",
+   "viDuNghia": "Thủ tục phục vụ ngắt nên chạy xong nhanh và hoãn việc nặng lại sau."
+  },
+  {
+   "chu": "interrupt latency",
+   "doc": "/ˈɪntərʌpt ˈleɪtənsi/",
+   "nghia": "độ trễ ngắt: thời gian từ lúc thiết bị phát ngắt tới lúc trình xử lý ngắt bắt đầu chạy",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "Real-time systems require a small and predictable interrupt latency.",
+   "viDuNghia": "Hệ thời gian thực cần độ trễ ngắt nhỏ và đoán trước được."
+  },
+  {
+   "chu": "C-SCAN",
+   "doc": "/ˌsiː ˈskæn/",
+   "nghia": "C-SCAN: lập lịch đĩa quét vòng, đầu đọc chỉ phục vụ theo một chiều rồi quay về đầu đĩa",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "C-SCAN gives more uniform waiting times than the elevator algorithm.",
+   "viDuNghia": "C-SCAN cho thời gian chờ đồng đều hơn thuật toán thang máy."
+  },
+  {
+   "chu": "rotational latency",
+   "doc": "/roʊˈteɪʃənl ˈleɪtənsi/",
+   "nghia": "độ trễ quay: thời gian chờ cung từ cần đọc quay tới dưới đầu đọc",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "For a 7200 RPM disk, the average rotational latency is about 4.17 ms.",
+   "viDuNghia": "Với đĩa 7200 vòng/phút, độ trễ quay trung bình khoảng 4,17 ms."
+  },
+  {
+   "chu": "bad block",
+   "doc": "/bæd blɑːk/",
+   "nghia": "khối hỏng: khối đĩa không đọc ghi tin cậy được, phải được đánh dấu và thay thế",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "The disk controller remaps a bad block to a spare sector.",
+   "viDuNghia": "Bộ điều khiển đĩa ánh xạ khối hỏng sang một cung dự phòng."
+  },
+  {
+   "chu": "I/O scheduler",
+   "doc": "/ˌaɪ ˈoʊ ˈskedʒuːlər/",
+   "nghia": "bộ lập lịch vào/ra: phần nhân sắp xếp, gộp các yêu cầu đọc ghi khối trước khi gửi xuống đĩa",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "The I/O scheduler merges adjacent requests to reduce seek time.",
+   "viDuNghia": "Bộ lập lịch vào/ra gộp các yêu cầu liền kề để giảm thời gian tìm."
+  },
+  {
+   "chu": "solid-state drive",
+   "doc": "/ˌsɑːlɪd steɪt draɪv/",
+   "nghia": "ổ thể rắn (SSD): ổ lưu trữ dùng bộ nhớ flash, không có đầu đọc cơ học nên không có thời gian tìm",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "A solid-state drive has no seek time because it has no moving parts.",
+   "viDuNghia": "Ổ SSD không có thời gian tìm vì không có bộ phận chuyển động."
+  },
+  {
+   "chu": "wear leveling",
+   "doc": "/wer ˈlevəlɪŋ/",
+   "nghia": "cân bằng hao mòn: rải đều số lần ghi lên các khối flash để SSD bền hơn",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "Wear leveling spreads writes evenly across flash blocks.",
+   "viDuNghia": "Cân bằng hao mòn rải đều các lần ghi lên các khối flash."
+  },
+  {
+   "chu": "spooler",
+   "doc": "/ˈspuːlər/",
+   "nghia": "trình spool: tiến trình nền duy nhất được dùng thiết bị chuyên dụng (máy in), lấy việc từ thư mục spool",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "Spooling printer output to disk to allow the printer daemon exclusive access.",
+   "viDuNghia": "Spool đầu ra máy in xuống đĩa để tiến trình nền máy in được dùng độc quyền."
+  },
+  {
+   "chu": "double buffering",
+   "doc": "/ˈdʌbl ˈbʌfərɪŋ/",
+   "nghia": "đệm kép: dùng hai bộ đệm luân phiên, một bộ đang được điền thì bộ kia đang được xử lý",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "With double buffering, the device fills one buffer while the process empties the other.",
+   "viDuNghia": "Với đệm kép, thiết bị điền một bộ đệm trong khi tiến trình lấy dữ liệu từ bộ kia."
+  },
+  {
+   "chu": "circular buffer",
+   "doc": "/ˈsɜːrkjələr ˈbʌfər/",
+   "nghia": "bộ đệm vòng: mảng cố định dùng theo vòng với con trỏ đầu và cuối, hay dùng cho producer – consumer",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "The buffer is full, there is no place to put them",
+   "viDuNghia": "Bộ đệm đã đầy, không còn chỗ để đặt chúng (câu về bộ đệm vòng giới hạn)"
+  },
+  {
+   "chu": "real-time clock",
+   "doc": "/ˈriːəl taɪm klɑːk/",
+   "nghia": "đồng hồ thời gian thực (RTC): mạch có pin nuôi, giữ ngày giờ cả khi máy tắt",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "At boot, the kernel reads the date and time from the real-time clock.",
+   "viDuNghia": "Lúc khởi động, nhân đọc ngày giờ từ đồng hồ thời gian thực."
+  },
+  {
+   "chu": "UEFI",
+   "doc": "/ˌjuː iː ef ˈaɪ/",
+   "nghia": "UEFI: chuẩn phần sụn thay BIOS, khởi động hệ điều hành từ phân vùng GPT",
+   "nhom": "Vào/ra và đĩa",
+   "viDu": "UEFI firmware replaces the legacy BIOS on modern PCs.",
+   "viDuNghia": "Phần sụn UEFI thay cho BIOS cũ trên máy tính hiện đại."
+  },
+  {
+   "chu": "blocking I/O",
+   "doc": "/ˈblɑːkɪŋ ˌaɪ ˈoʊ/",
+   "nghia": "vào/ra chặn: lời gọi đọc/ghi bắt luồng ngủ cho tới khi dữ liệu sẵn sàng",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "With blocking I/O, a thread waiting on one socket cannot serve other clients.",
+   "viDuNghia": "Với vào/ra chặn, luồng đang chờ một socket không thể phục vụ khách khác."
+  },
+  {
+   "chu": "non-blocking I/O",
+   "doc": "/ˌnɑːn ˈblɑːkɪŋ ˌaɪ ˈoʊ/",
+   "nghia": "vào/ra không chặn: lời gọi trả về ngay (EAGAIN) nếu chưa có dữ liệu thay vì bắt chờ",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "In non-blocking I/O, read() returns immediately with EAGAIN if no data is available.",
+   "viDuNghia": "Ở vào/ra không chặn, read() trả về ngay với EAGAIN nếu chưa có dữ liệu."
+  },
+  {
+   "chu": "asynchronous I/O",
+   "doc": "/eɪˈsɪŋkrənəs ˌaɪ ˈoʊ/",
+   "nghia": "vào/ra bất đồng bộ: gửi yêu cầu rồi làm việc khác, được báo khi thao tác đã hoàn tất",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "With asynchronous I/O, the program is notified when the operation has completed.",
+   "viDuNghia": "Với vào/ra bất đồng bộ, chương trình được báo khi thao tác đã hoàn tất."
+  },
+  {
+   "chu": "I/O multiplexing",
+   "doc": "/ˌaɪ ˈoʊ ˈmʌltɪpleksɪŋ/",
+   "nghia": "ghép kênh vào/ra: một luồng theo dõi nhiều mô tả tệp cùng lúc (select, poll, epoll)",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "I/O multiplexing lets one thread watch thousands of sockets.",
+   "viDuNghia": "Ghép kênh vào/ra cho phép một luồng theo dõi hàng nghìn socket."
+  },
+  {
+   "chu": "epoll",
+   "doc": "/ˈiː pɔːl/",
+   "nghia": "epoll: cơ chế ghép kênh vào/ra hiệu năng cao của Linux, báo những mô tả tệp nào đã sẵn sàng",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "Node.js uses epoll on Linux to wait for many sockets at once.",
+   "viDuNghia": "Node.js dùng epoll trên Linux để chờ nhiều socket cùng lúc."
+  },
+  {
+   "chu": "edge-triggered",
+   "doc": "/ˈedʒ ˌtrɪɡərd/",
+   "nghia": "kích theo sườn: chỉ báo khi trạng thái thay đổi (dữ liệu mới tới), phải đọc tới khi hết",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "In edge-triggered mode, epoll reports a socket only when new data arrives.",
+   "viDuNghia": "Ở chế độ kích theo sườn, epoll chỉ báo socket khi có dữ liệu mới tới."
+  },
+  {
+   "chu": "level-triggered",
+   "doc": "/ˈlevl ˌtrɪɡərd/",
+   "nghia": "kích theo mức: còn dữ liệu chưa đọc thì lần chờ nào cũng báo lại",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "In level-triggered mode, epoll keeps reporting the socket while data remains unread.",
+   "viDuNghia": "Ở chế độ kích theo mức, epoll vẫn báo socket chừng nào còn dữ liệu chưa đọc."
+  },
+  {
+   "chu": "completion port",
+   "doc": "/kəmˈpliːʃn pɔːrt/",
+   "nghia": "cổng hoàn tất (IOCP): cơ chế vào/ra bất đồng bộ của Windows, báo khi thao tác đã xong",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "Windows servers use I/O completion ports to handle many connections.",
+   "viDuNghia": "Server Windows dùng cổng hoàn tất vào/ra để xử lý nhiều kết nối."
+  },
+  {
+   "chu": "zero-copy",
+   "doc": "/ˈzɪroʊ ˈkɑːpi/",
+   "nghia": "không sao chép: chuyển dữ liệu từ tệp ra mạng mà không chép qua bộ đệm của chương trình (sendfile)",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "The sendfile() call enables zero-copy transfer from a file to a socket.",
+   "viDuNghia": "Lời gọi sendfile() cho phép chuyển dữ liệu không sao chép từ tệp ra socket."
+  },
+  {
+   "chu": "direct I/O",
+   "doc": "/dəˈrekt ˌaɪ ˈoʊ/",
+   "nghia": "vào/ra trực tiếp (O_DIRECT): đọc ghi đĩa bỏ qua bộ đệm trang của nhân",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "Databases sometimes use direct I/O to bypass the page cache.",
+   "viDuNghia": "Cơ sở dữ liệu đôi khi dùng vào/ra trực tiếp để bỏ qua bộ đệm trang."
+  },
+  {
+   "chu": "TTY",
+   "doc": "/ˌtiː tiː ˈwaɪ/",
+   "nghia": "TTY: thiết bị terminal (ban đầu là máy điện báo đánh chữ); mỗi phiên terminal gắn với một tty",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "The tty command prints the name of the terminal attached to the shell.",
+   "viDuNghia": "Lệnh tty in tên terminal đang gắn với shell."
+  },
+  {
+   "chu": "pseudo-terminal",
+   "doc": "/ˈsuːdoʊ ˈtɜːrmɪnl/",
+   "nghia": "terminal giả (pty): cặp thiết bị phần mềm giả lập terminal cho SSH, cửa sổ terminal",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "Each SSH session gets its own pseudo-terminal such as /dev/pts/0.",
+   "viDuNghia": "Mỗi phiên SSH có một terminal giả riêng như /dev/pts/0."
+  },
+  {
+   "chu": "canonical mode",
+   "doc": "/kəˈnɑːnɪkl moʊd/",
+   "nghia": "chế độ chính tắc (terminal): nhập theo dòng, chương trình chỉ nhận dữ liệu khi nhấn Enter",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "In canonical mode, input is delivered to the program one line at a time.",
+   "viDuNghia": "Ở chế độ chính tắc, dữ liệu nhập được giao cho chương trình theo từng dòng."
+  },
+  {
+   "chu": "raw mode",
+   "doc": "/rɔː moʊd/",
+   "nghia": "chế độ thô (terminal): từng phím gõ được giao ngay cho chương trình, không xử lý dòng",
+   "nhom": "Vào/ra không chặn",
+   "viDu": "Text editors such as vi put the terminal in raw mode.",
+   "viDuNghia": "Trình soạn thảo như vi đặt terminal vào chế độ thô."
+  }
+ ]
+}

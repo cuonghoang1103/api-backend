@@ -1,0 +1,762 @@
+{
+ "ma": "fer202-3",
+ "nn": "en",
+ "ten": "FER202 · 3. UI Bootstrap/Tailwind, Next.js & công cụ",
+ "moTa": "Bổ sung FER202: component React-Bootstrap và lớp Bootstrap, Tailwind CSS, Next.js (SSR, SSG, App Router), công cụ dựng dự án (npm, npx, Vite, Babel, Webpack), kiểm thử React (Jest, Vitest, Testing Library) và TypeScript trong React.",
+ "bieuTuong": "atom",
+ "thuTu": -913,
+ "tu": [
+  {
+   "chu": "Container",
+   "doc": "/kənˈteɪnər/",
+   "nghia": "component Container (React-Bootstrap) / lớp .container: khung căn giữa có lề, bọc ngoài Row và Col",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "<Container><Row><Col xs={6}>2 of 3 (wider)</Col></Row></Container>",
+   "viDuNghia": "Container bọc Row, Row bọc Col chiếm 6/12 cột."
+  },
+  {
+   "chu": "Col",
+   "doc": "/kɑːl/",
+   "nghia": "component Col (cột) trong lưới React-Bootstrap; prop xs, sm, md, lg quy định số cột chiếm theo kích thước màn hình",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "<Col xs={6}> takes 6 of the 12 columns on extra-small screens and up.",
+   "viDuNghia": "<Col xs={6}> chiếm 6/12 cột từ màn hình rất nhỏ trở lên."
+  },
+  {
+   "chu": "container-fluid",
+   "doc": "/kənˈteɪnər ˈfluːɪd/",
+   "nghia": "lớp .container-fluid: khung rộng 100% chiều ngang ở mọi kích thước màn hình",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "Use .container-fluid for the entire layout.",
+   "viDuNghia": "Dùng .container-fluid cho toàn bộ bố cục."
+  },
+  {
+   "chu": "responsive container",
+   "doc": "/rɪˈspɑːnsɪv kənˈteɪnər/",
+   "nghia": "khung co giãn theo điểm ngắt: .container-md rộng 100% cho tới mốc md rồi mới cố định",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "Use .container-md to apply a responsive container at the md breakpoint.",
+   "viDuNghia": "Dùng .container-md để có khung co giãn tại điểm ngắt md."
+  },
+  {
+   "chu": "extra-small screen",
+   "doc": "/ˌekstrə smɔːl skriːn/",
+   "nghia": "màn hình rất nhỏ (xs, dưới 576px — điện thoại); mốc nhỏ nhất của lưới Bootstrap",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "The column will have its width defined on extra-small screens and will apply to larger sizes.",
+   "viDuNghia": "Cột có độ rộng định ở màn hình rất nhỏ và áp dụng cả cho màn hình lớn hơn."
+  },
+  {
+   "chu": "12-column grid",
+   "doc": "/ˌtwelv ˈkɑːləm ɡrɪd/",
+   "nghia": "lưới 12 cột của Bootstrap: mỗi hàng chia 12 phần, Col cộng lại tối đa 12",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "The layout adapts to different screen sizes using a 12-column responsive grid system.",
+   "viDuNghia": "Bố cục thích ứng mọi màn hình nhờ hệ lưới 12 cột co giãn."
+  },
+  {
+   "chu": "navbar",
+   "doc": "/ˈnɑːvbɑːr/",
+   "nghia": "component/lớp navbar: thanh điều hướng đầu trang, tự gập thành nút trên màn nhỏ",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "Which Bootstrap class is commonly used to create a responsive navigation bar?",
+   "viDuNghia": "Lớp Bootstrap nào thường dùng để tạo thanh điều hướng co giãn?"
+  },
+  {
+   "chu": "nav item",
+   "doc": "/næv ˈaɪtəm/",
+   "nghia": "lớp .nav-item: một mục trong danh sách điều hướng (.nav), chứa .nav-link",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "By using the .nav and .nav-item classes along with the data-bs-toggle=\"tab\" attribute.",
+   "viDuNghia": "Bằng lớp .nav và .nav-item cùng thuộc tính data-bs-toggle=\"tab\"."
+  },
+  {
+   "chu": "dropdown item",
+   "doc": "/ˈdrɑːpdaʊn ˈaɪtəm/",
+   "nghia": "lớp .dropdown-item: một lựa chọn trong menu thả xuống",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "<a class=\"dropdown-item\" href=\"#\">Sub-item 1</a>",
+   "viDuNghia": "Một mục \"Sub-item 1\" trong menu thả xuống."
+  },
+  {
+   "chu": "dropdown toggle",
+   "doc": "/ˈdrɑːpdaʊn ˈtɑːɡl/",
+   "nghia": "lớp .dropdown-toggle: nút bấm để mở/đóng menu thả xuống, có mũi tên nhỏ",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "<a class=\"nav-link dropdown-toggle\" role=\"button\" data-toggle=\"dropdown\">Dropdown</a>",
+   "viDuNghia": "Liên kết có lớp dropdown-toggle để mở menu thả xuống."
+  },
+  {
+   "chu": "tooltip",
+   "doc": "/ˈtuːltɪp/",
+   "nghia": "chú giải nổi: khung chữ nhỏ hiện khi rê chuột vào phần tử (OverlayTrigger + Tooltip)",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "How do you add a tooltip to a button in Bootstrap?",
+   "viDuNghia": "Làm sao thêm chú giải nổi cho một nút trong Bootstrap?"
+  },
+  {
+   "chu": "popover",
+   "doc": "/ˈpɑːpoʊvər/",
+   "nghia": "khung bật nổi: giống tooltip nhưng lớn hơn, có tiêu đề và nội dung, thường mở khi nhấp",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "A popover shows a title and content next to the clicked element.",
+   "viDuNghia": "Popover hiện tiêu đề và nội dung bên cạnh phần tử được nhấp."
+  },
+  {
+   "chu": "accordion",
+   "doc": "/əˈkɔːrdiən/",
+   "nghia": "accordion: các khối nội dung xếp chồng, nhấp tiêu đề để mở một khối và gập khối khác",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "What is the purpose of Accordions in Bootstrap's JavaScript components?",
+   "viDuNghia": "Accordion trong các component JavaScript của Bootstrap dùng để làm gì?"
+  },
+  {
+   "chu": "Card component",
+   "doc": "/kɑːrd kəmˈpoʊnənt/",
+   "nghia": "component Card: khung nội dung gồm Card.Img, Card.Title, Card.Text, Card.Body",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "Card (with Card.Img, Card.Title, Card.Text, Card.Body) is the flexible content container.",
+   "viDuNghia": "Card (cùng Card.Img, Card.Title, Card.Text, Card.Body) là khung nội dung linh hoạt."
+  },
+  {
+   "chu": "Form.Control",
+   "doc": "/fɔːrm kənˈtroʊl/",
+   "nghia": "component ô nhập của React-Bootstrap (input, textarea), nhận value, onChange, isInvalid",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "<Form.Control type=\"email\" placeholder=\"Enter email\" />",
+   "viDuNghia": "Ô nhập email dùng Form.Control."
+  },
+  {
+   "chu": "Form.Check",
+   "doc": "/fɔːrm tʃek/",
+   "nghia": "component ô chọn (checkbox, radio, switch) của React-Bootstrap",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "Use Form.Check with type=\"radio\" for a single choice.",
+   "viDuNghia": "Dùng Form.Check với type=\"radio\" cho lựa chọn một."
+  },
+  {
+   "chu": "data-bs-toggle",
+   "doc": "/ˈdeɪtə biː es ˈtɑːɡl/",
+   "nghia": "thuộc tính data của Bootstrap 5 khai báo hành vi JS (modal, tab, collapse) mà không cần viết JS",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "By using the .modal class along with the data-bs-toggle=\"modal\" attribute.",
+   "viDuNghia": "Bằng lớp .modal cùng thuộc tính data-bs-toggle=\"modal\"."
+  },
+  {
+   "chu": "ARIA attribute",
+   "doc": "/ˈɑːriə ˈætrɪbjuːt/",
+   "nghia": "thuộc tính ARIA (aria-label, aria-expanded, aria-haspopup): mô tả vai trò/trạng thái cho trình đọc màn hình",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "aria-haspopup=\"true\" aria-expanded=\"false\"",
+   "viDuNghia": "aria-haspopup=\"true\": có menu bật ra; aria-expanded=\"false\": đang đóng."
+  },
+  {
+   "chu": "pre-built component",
+   "doc": "/ˌpriː bɪlt kəmˈpoʊnənt/",
+   "nghia": "component dựng sẵn: thư viện cung cấp nút, form, modal… dùng ngay, không tự viết",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "It provides a comprehensive set of pre-built components for rapid development.",
+   "viDuNghia": "Nó cung cấp bộ component dựng sẵn đầy đủ để phát triển nhanh."
+  },
+  {
+   "chu": "UI library",
+   "doc": "/ˌjuː ˈaɪ ˈlaɪbreri/",
+   "nghia": "thư viện giao diện: React-Bootstrap, Material UI, Ant Design — gói component có sẵn kiểu dáng",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "Which UI library provides Material Design components for React?",
+   "viDuNghia": "Thư viện giao diện nào cung cấp component kiểu Material Design cho React?"
+  },
+  {
+   "chu": "Navbar.Toggle",
+   "doc": "/ˈnɑːvbɑːr ˈtɑːɡl/",
+   "nghia": "nút ba gạch (hamburger) của React-Bootstrap, bấm để mở menu khi màn hình nhỏ",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "Navbar.Toggle opens the Navbar.Collapse on small screens.",
+   "viDuNghia": "Navbar.Toggle mở Navbar.Collapse trên màn hình nhỏ."
+  },
+  {
+   "chu": "Navbar.Collapse",
+   "doc": "/ˈnɑːvbɑːr kəˈlæps/",
+   "nghia": "phần menu của navbar được gập lại trên màn hình nhỏ",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "Put the Nav links inside Navbar.Collapse.",
+   "viDuNghia": "Đặt các liên kết Nav bên trong Navbar.Collapse."
+  },
+  {
+   "chu": "offcanvas",
+   "doc": "/ˌɔːfˈkænvəs/",
+   "nghia": "ngăn trượt: bảng menu trượt vào từ cạnh màn hình",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "An offcanvas menu slides in from the left edge.",
+   "viDuNghia": "Menu offcanvas trượt vào từ cạnh trái."
+  },
+  {
+   "chu": "badge",
+   "doc": "/bædʒ/",
+   "nghia": "nhãn nhỏ (Badge) hiện số đếm hoặc trạng thái bên cạnh chữ, vd số tin chưa đọc",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "<Badge bg=\"danger\">3</Badge> shows three unread messages.",
+   "viDuNghia": "<Badge bg=\"danger\">3</Badge> hiện ba tin chưa đọc."
+  },
+  {
+   "chu": "spinner",
+   "doc": "/ˈspɪnər/",
+   "nghia": "vòng xoay tải (Spinner) hiện trong lúc chờ dữ liệu",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "Show a Spinner while the data is loading.",
+   "viDuNghia": "Hiện Spinner trong lúc dữ liệu đang tải."
+  },
+  {
+   "chu": "ListGroup",
+   "doc": "/lɪst ɡruːp/",
+   "nghia": "component danh sách dạng khối của React-Bootstrap (ListGroup.Item)",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "Render each product as a ListGroup.Item.",
+   "viDuNghia": "Hiển thị mỗi sản phẩm là một ListGroup.Item."
+  },
+  {
+   "chu": "striped table",
+   "doc": "/straɪpt ˈteɪbl/",
+   "nghia": "bảng kẻ sọc: dòng chẵn lẻ khác màu (Table striped bordered hover)",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "<Table striped bordered hover> renders a striped table.",
+   "viDuNghia": "<Table striped bordered hover> hiển thị bảng kẻ sọc có viền."
+  },
+  {
+   "chu": "Material UI",
+   "doc": "/məˈtɪriəl ˌjuː ˈaɪ/",
+   "nghia": "MUI: thư viện component React theo Material Design của Google",
+   "nhom": "React-Bootstrap và lớp Bootstrap",
+   "viDu": "Material UI provides components that follow Material Design.",
+   "viDuNghia": "Material UI cung cấp component theo Material Design."
+  },
+  {
+   "chu": "JIT engine",
+   "doc": "/ˌdʒeɪ aɪ ˈtiː ˈendʒɪn/",
+   "nghia": "bộ sinh CSS \"đúng lúc\" của Tailwind: chỉ sinh lớp thực sự xuất hiện trong mã",
+   "nhom": "Tailwind CSS",
+   "viDu": "The JIT engine generates only the classes you use.",
+   "viDuNghia": "Bộ JIT chỉ sinh những lớp bạn dùng."
+  },
+  {
+   "chu": "spacing utility",
+   "doc": "/ˈspeɪsɪŋ juːˈtɪləti/",
+   "nghia": "lớp tiện ích khoảng cách: p-4, mx-auto, mt-2 (padding/margin theo thang có sẵn)",
+   "nhom": "Tailwind CSS",
+   "viDu": "p-4 and mt-2 are spacing utilities.",
+   "viDuNghia": "p-4 và mt-2 là lớp tiện ích khoảng cách."
+  },
+  {
+   "chu": "tailwind.config.js",
+   "doc": "/ˈteɪlwɪnd kənˈfɪɡ ˌdʒeɪ ˈes/",
+   "nghia": "tệp cấu hình Tailwind: khai báo content (tệp cần quét), theme mở rộng, plugin",
+   "nhom": "Tailwind CSS",
+   "viDu": "What is the primary purpose of the tailwind.config.js file in a Tailwind CSS project?",
+   "viDuNghia": "Mục đích chính của tệp tailwind.config.js trong dự án Tailwind CSS là gì?"
+  },
+  {
+   "chu": "content path",
+   "doc": "/ˈkɑːntent pæθ/",
+   "nghia": "đường dẫn content trong cấu hình Tailwind: các tệp được quét để chỉ sinh lớp CSS thực sự dùng",
+   "nhom": "Tailwind CSS",
+   "viDu": "Add \"./src/**/*.{js,jsx}\" to the content paths.",
+   "viDuNghia": "Thêm \"./src/**/*.{js,jsx}\" vào đường dẫn content."
+  },
+  {
+   "chu": "Tailwind directive",
+   "doc": "/ˈteɪlwɪnd dəˈrektɪv/",
+   "nghia": "chỉ thị @tailwind base; @tailwind components; @tailwind utilities đặt trong tệp CSS gốc",
+   "nhom": "Tailwind CSS",
+   "viDu": "Add the Tailwind directives to index.css.",
+   "viDuNghia": "Thêm các chỉ thị Tailwind vào index.css."
+  },
+  {
+   "chu": "responsive prefix",
+   "doc": "/rɪˈspɑːnsɪv ˈpriːfɪks/",
+   "nghia": "tiền tố điểm ngắt sm:, md:, lg: — md:flex nghĩa là từ màn md trở lên mới áp flex",
+   "nhom": "Tailwind CSS",
+   "viDu": "md:grid-cols-3 applies three columns from the md breakpoint up.",
+   "viDuNghia": "md:grid-cols-3 áp ba cột từ điểm ngắt md trở lên."
+  },
+  {
+   "chu": "state variant",
+   "doc": "/steɪt ˈveriənt/",
+   "nghia": "tiền tố trạng thái hover:, focus:, disabled: — áp lớp khi phần tử ở trạng thái đó",
+   "nhom": "Tailwind CSS",
+   "viDu": "hover:bg-blue-700 darkens the button on hover.",
+   "viDuNghia": "hover:bg-blue-700 làm nút sẫm màu khi rê chuột."
+  },
+  {
+   "chu": "dark mode",
+   "doc": "/dɑːrk moʊd/",
+   "nghia": "chế độ tối: tiền tố dark: trong Tailwind đổi màu khi người dùng dùng giao diện tối",
+   "nhom": "Tailwind CSS",
+   "viDu": "dark:bg-gray-900 sets the background in dark mode.",
+   "viDuNghia": "dark:bg-gray-900 đặt nền khi ở chế độ tối."
+  },
+  {
+   "chu": "arbitrary value",
+   "doc": "/ˈɑːrbətreri ˈvæljuː/",
+   "nghia": "giá trị tuỳ ý trong ngoặc vuông của Tailwind, vd w-[350px], khi thang có sẵn không đủ",
+   "nhom": "Tailwind CSS",
+   "viDu": "w-[350px] uses an arbitrary width value.",
+   "viDuNghia": "w-[350px] dùng giá trị độ rộng tuỳ ý."
+  },
+  {
+   "chu": "PostCSS",
+   "doc": "/poʊst ˌsiː es ˈes/",
+   "nghia": "công cụ biến đổi CSS bằng plugin; Tailwind và Autoprefixer chạy như plugin PostCSS",
+   "nhom": "Tailwind CSS",
+   "viDu": "Tailwind CSS runs as a PostCSS plugin.",
+   "viDuNghia": "Tailwind CSS chạy như một plugin của PostCSS."
+  },
+  {
+   "chu": "CSS framework",
+   "doc": "/ˌsiː es ˈes ˈfreɪmwɜːrk/",
+   "nghia": "khung CSS: bộ lớp và quy ước viết sẵn (Bootstrap theo component, Tailwind theo tiện ích)",
+   "nhom": "Tailwind CSS",
+   "viDu": "Tailwind is a utility-first CSS framework.",
+   "viDuNghia": "Tailwind là một khung CSS theo hướng tiện ích."
+  },
+  {
+   "chu": "CSS module",
+   "doc": "/ˌsiː es ˈes ˈmɑːdʒuːl/",
+   "nghia": "tệp *.module.css: tên lớp được đổi duy nhất theo component để không đụng nhau",
+   "nhom": "Tailwind CSS",
+   "viDu": "Import styles from './Button.module.css' to scope class names.",
+   "viDuNghia": "Nhập styles từ './Button.module.css' để tên lớp chỉ có tác dụng trong component."
+  },
+  {
+   "chu": "create-next-app",
+   "doc": "/kriˌeɪt nekst æp/",
+   "nghia": "công cụ dòng lệnh khởi tạo dự án Next.js (npx create-next-app)",
+   "nhom": "Next.js",
+   "viDu": "Use the create-next-app command-line tool.",
+   "viDuNghia": "Dùng công cụ dòng lệnh create-next-app."
+  },
+  {
+   "chu": "file-based routing",
+   "doc": "/ˌfaɪl beɪst ˈruːtɪŋ/",
+   "nghia": "định tuyến theo tệp: mỗi tệp/thư mục trong app/ hoặc pages/ thành một đường dẫn",
+   "nhom": "Next.js",
+   "viDu": "Server-side rendering, Static Site Generation, Image Optimization, Built-in Routing.",
+   "viDuNghia": "Kết xuất phía server, sinh trang tĩnh, tối ưu ảnh, định tuyến có sẵn."
+  },
+  {
+   "chu": "App Router",
+   "doc": "/æp ˈruːtər/",
+   "nghia": "bộ định tuyến thư mục app/ của Next.js 13+: page.tsx, layout.tsx, mặc định là server component",
+   "nhom": "Next.js",
+   "viDu": "In the App Router, app/about/page.tsx becomes the /about route.",
+   "viDuNghia": "Trong App Router, app/about/page.tsx thành route /about."
+  },
+  {
+   "chu": "Pages Router",
+   "doc": "/ˈpeɪdʒɪz ˈruːtər/",
+   "nghia": "bộ định tuyến cũ dựa thư mục pages/, dùng getStaticProps, getServerSideProps",
+   "nhom": "Next.js",
+   "viDu": "getServerSideProps only works in the Pages Router.",
+   "viDuNghia": "getServerSideProps chỉ chạy trong Pages Router."
+  },
+  {
+   "chu": "getStaticProps",
+   "doc": "/ɡet ˈstætɪk prɑːps/",
+   "nghia": "hàm (Pages Router) lấy dữ liệu lúc build để sinh trang tĩnh (SSG)",
+   "nhom": "Next.js",
+   "viDu": "getStaticProps fetches data at build time.",
+   "viDuNghia": "getStaticProps lấy dữ liệu lúc build."
+  },
+  {
+   "chu": "getServerSideProps",
+   "doc": "/ɡet ˈsɜːrvər saɪd prɑːps/",
+   "nghia": "hàm (Pages Router) lấy dữ liệu ở server mỗi lần có request (SSR)",
+   "nhom": "Next.js",
+   "viDu": "getServerSideProps runs on every request.",
+   "viDuNghia": "getServerSideProps chạy ở mỗi request."
+  },
+  {
+   "chu": "incremental static regeneration",
+   "doc": "/ˌɪŋkrəˈmentl ˈstætɪk rɪˌdʒenəˈreɪʃn/",
+   "nghia": "ISR: trang tĩnh được dựng lại ngầm sau một khoảng revalidate mà không build lại cả site",
+   "nhom": "Next.js",
+   "viDu": "Incremental static regeneration rebuilds a page after the revalidate time.",
+   "viDuNghia": "ISR dựng lại trang sau thời gian revalidate."
+  },
+  {
+   "chu": "API route",
+   "doc": "/ˌeɪ piː ˈaɪ ruːt/",
+   "nghia": "route API trong Next.js (pages/api hoặc app/api/route.ts): viết backend nhỏ ngay trong dự án",
+   "nhom": "Next.js",
+   "viDu": "API routes let a Next.js app handle requests on the server.",
+   "viDuNghia": "Route API cho ứng dụng Next.js xử lý request ở phía server."
+  },
+  {
+   "chu": "serverless function",
+   "doc": "/ˈsɜːrvərləs ˈfʌŋkʃn/",
+   "nghia": "hàm không máy chủ: đoạn mã chạy theo yêu cầu trên nền tảng đám mây (Vercel), không tự quản server",
+   "nhom": "Next.js",
+   "viDu": "It enables serverless function deployment.",
+   "viDuNghia": "Nó cho phép triển khai hàm serverless."
+  },
+  {
+   "chu": "image optimization",
+   "doc": "/ˈɪmɪdʒ ˌɑːptɪməˈzeɪʃn/",
+   "nghia": "tối ưu ảnh: component next/image tự đổi kích thước, nén, tải lười ảnh",
+   "nhom": "Next.js",
+   "viDu": "The next/image component provides automatic image optimization.",
+   "viDuNghia": "Component next/image tự động tối ưu ảnh."
+  },
+  {
+   "chu": "hydration",
+   "doc": "/haɪˈdreɪʃn/",
+   "nghia": "hydration: React gắn sự kiện và state vào HTML đã render sẵn từ server để trang tương tác được",
+   "nhom": "Next.js",
+   "viDu": "A hydration error occurs when the server HTML differs from the client render.",
+   "viDuNghia": "Lỗi hydration xảy ra khi HTML từ server khác kết quả render ở client."
+  },
+  {
+   "chu": "server component",
+   "doc": "/ˈsɜːrvər kəmˈpoʊnənt/",
+   "nghia": "component chạy ở server (mặc định trong App Router), không có state/hook, gửi về HTML",
+   "nhom": "Next.js",
+   "viDu": "Server components can fetch data directly without useEffect.",
+   "viDuNghia": "Server component lấy dữ liệu trực tiếp, không cần useEffect."
+  },
+  {
+   "chu": "client component",
+   "doc": "/ˈklaɪənt kəmˈpoʊnənt/",
+   "nghia": "component chạy ở trình duyệt, khai báo \"use client\" ở đầu tệp, dùng được useState, sự kiện",
+   "nhom": "Next.js",
+   "viDu": "Add \"use client\" at the top of the file to make a client component.",
+   "viDuNghia": "Thêm \"use client\" ở đầu tệp để tạo client component."
+  },
+  {
+   "chu": "initial page load",
+   "doc": "/ɪˈnɪʃl peɪdʒ loʊd/",
+   "nghia": "lần tải trang đầu tiên: thời gian từ lúc mở URL tới lúc thấy nội dung",
+   "nhom": "Next.js",
+   "viDu": "By resulting in faster initial page load times and better SEO.",
+   "viDuNghia": "Nhờ tải trang đầu nhanh hơn và SEO tốt hơn."
+  },
+  {
+   "chu": "npx",
+   "doc": "/ˌen piː ˈeks/",
+   "nghia": "npx: chạy một gói npm mà không cần cài toàn cục, vd npx create-react-app my-app",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "Use the npx tailwindcss init command.",
+   "viDuNghia": "Dùng lệnh npx tailwindcss init."
+  },
+  {
+   "chu": "yarn",
+   "doc": "/jɑːrn/",
+   "nghia": "Yarn: trình quản lý gói thay npm (yarn add thay npm install)",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "By using npm or yarn to install the package.",
+   "viDuNghia": "Bằng cách dùng npm hoặc yarn để cài gói."
+  },
+  {
+   "chu": "create-react-app",
+   "doc": "/kriˌeɪt riˈækt æp/",
+   "nghia": "CRA: công cụ cũ khởi tạo dự án React có sẵn cấu hình Webpack/Babel; nay khuyên dùng Vite",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "By running npx create-react-app my-app.",
+   "viDuNghia": "Bằng cách chạy npx create-react-app my-app."
+  },
+  {
+   "chu": "Vite",
+   "doc": "/viːt/",
+   "nghia": "Vite: công cụ dựng và máy chủ dev rất nhanh cho React (npm create vite@latest)",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "npm create vite@latest my-app -- --template react",
+   "viDuNghia": "Tạo dự án React bằng Vite."
+  },
+  {
+   "chu": "Webpack",
+   "doc": "/ˈwebpæk/",
+   "nghia": "Webpack: bộ đóng gói gom các module JS, CSS, ảnh thành tệp bundle cho trình duyệt",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "Webpack bundles all modules into a few static files.",
+   "viDuNghia": "Webpack gom mọi module thành vài tệp tĩnh."
+  },
+  {
+   "chu": "Babel",
+   "doc": "/ˈbeɪbl/",
+   "nghia": "Babel: trình chuyển mã, đổi JSX và JavaScript mới thành JavaScript trình duyệt cũ hiểu",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "Babel transforms JSX into React.createElement calls.",
+   "viDuNghia": "Babel đổi JSX thành lời gọi React.createElement."
+  },
+  {
+   "chu": "transpile",
+   "doc": "/trænsˈpaɪl/",
+   "nghia": "chuyển mã: dịch mã nguồn sang mã nguồn ngôn ngữ/phiên bản khác (TS → JS, JSX → JS)",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "TypeScript code is transpiled to JavaScript before it runs.",
+   "viDuNghia": "Mã TypeScript được chuyển sang JavaScript trước khi chạy."
+  },
+  {
+   "chu": "bundler",
+   "doc": "/ˈbʌndlər/",
+   "nghia": "bộ đóng gói (Webpack, Vite, esbuild): gom và tối ưu mã thành tệp để triển khai",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "A bundler combines many modules into one file.",
+   "viDuNghia": "Bộ đóng gói gộp nhiều module thành một tệp."
+  },
+  {
+   "chu": "tree shaking",
+   "doc": "/ˈtriː ʃeɪkɪŋ/",
+   "nghia": "rung cây: bộ đóng gói bỏ phần mã export mà không ai import để bundle nhỏ hơn",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "Named imports allow tree shaking of unused code.",
+   "viDuNghia": "Import theo tên cho phép bỏ phần mã không dùng."
+  },
+  {
+   "chu": "hot module replacement",
+   "doc": "/hɑːt ˈmɑːdʒuːl rɪˈpleɪsmənt/",
+   "nghia": "HMR: thay module đã sửa ngay khi app đang chạy, không tải lại trang và giữ state",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "Vite uses hot module replacement during development.",
+   "viDuNghia": "Vite dùng HMR trong lúc phát triển."
+  },
+  {
+   "chu": "devDependencies",
+   "doc": "/ˌdev dɪˈpendənsiz/",
+   "nghia": "mục trong package.json cho gói chỉ cần lúc phát triển (test, lint, build), không cần khi chạy",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "Install testing tools as devDependencies with npm install -D.",
+   "viDuNghia": "Cài công cụ test vào devDependencies bằng npm install -D."
+  },
+  {
+   "chu": "node modules folder",
+   "doc": "/noʊd ˈmɑːdʒuːlz ˈfoʊldər/",
+   "nghia": "thư mục node_modules: chứa các gói đã cài; không đưa lên Git và phải xoá trước khi nộp bài",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "Add node_modules to the .gitignore file.",
+   "viDuNghia": "Thêm node_modules vào tệp .gitignore."
+  },
+  {
+   "chu": "gitignore file",
+   "doc": "/ˈɡɪt ɪɡˌnɔːr faɪl/",
+   "nghia": "tệp .gitignore: liệt kê những tệp/thư mục Git bỏ qua (node_modules, .env, build)",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "By creating a .gitignore file.",
+   "viDuNghia": "Bằng cách tạo tệp .gitignore."
+  },
+  {
+   "chu": "install globally",
+   "doc": "/ɪnˈstɔːl ˈɡloʊbəli/",
+   "nghia": "cài toàn cục (npm install -g): gói dùng được ở mọi thư mục, không chỉ trong dự án",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "Install Tailwind CSS globally with npm.",
+   "viDuNghia": "Cài Tailwind CSS toàn cục bằng npm."
+  },
+  {
+   "chu": "browser developer tools",
+   "doc": "/ˈbraʊzər dɪˈveləpər tuːlz/",
+   "nghia": "công cụ nhà phát triển của trình duyệt (F12): xem phần tử, console, mạng",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "By pressing F12 or right-clicking and selecting Inspect.",
+   "viDuNghia": "Bằng cách nhấn F12 hoặc nhấp phải rồi chọn Inspect."
+  },
+  {
+   "chu": "ESLint",
+   "doc": "/ˈiː es lɪnt/",
+   "nghia": "công cụ soi lỗi mã JavaScript/React; luật react-hooks bắt lỗi dùng hook sai chỗ",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "ESLint warns about a missing dependency in useEffect.",
+   "viDuNghia": "ESLint cảnh báo thiếu dependency trong useEffect."
+  },
+  {
+   "chu": "Prettier",
+   "doc": "/ˈprɪtiər/",
+   "nghia": "công cụ tự định dạng mã (thụt lề, dấu nháy) cho cả nhóm thống nhất",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "Run Prettier to format the code before committing.",
+   "viDuNghia": "Chạy Prettier để định dạng mã trước khi commit."
+  },
+  {
+   "chu": "source map",
+   "doc": "/ˈsɔːrs mæp/",
+   "nghia": "bản đồ nguồn: ánh xạ mã đã đóng gói về mã gốc để gỡ lỗi trong trình duyệt",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "Source maps let DevTools show the original JSX line.",
+   "viDuNghia": "Source map cho DevTools hiện đúng dòng JSX gốc."
+  },
+  {
+   "chu": "minification",
+   "doc": "/ˌmɪnɪfɪˈkeɪʃn/",
+   "nghia": "thu nhỏ mã: bỏ khoảng trắng, đổi tên biến ngắn để bundle nhẹ hơn",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "The production build applies minification.",
+   "viDuNghia": "Bản dựng production có thu nhỏ mã."
+  },
+  {
+   "chu": "polyfill",
+   "doc": "/ˈpɑːlifɪl/",
+   "nghia": "mã vá: cài thêm tính năng JS mới cho trình duyệt cũ chưa hỗ trợ",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "Add a polyfill for older browsers.",
+   "viDuNghia": "Thêm polyfill cho trình duyệt cũ."
+  },
+  {
+   "chu": "test runner",
+   "doc": "/test ˈrʌnər/",
+   "nghia": "trình chạy test: tìm tệp test, chạy và báo kết quả đạt/trượt",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "Vitest is a fast test runner for Vite projects.",
+   "viDuNghia": "Vitest là trình chạy test nhanh cho dự án Vite."
+  },
+  {
+   "chu": "matcher",
+   "doc": "/ˈmætʃər/",
+   "nghia": "hàm so khớp trong test: toBe, toEqual, toBeInTheDocument",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "expect(button).toBeInTheDocument() uses a DOM matcher.",
+   "viDuNghia": "expect(button).toBeInTheDocument() dùng một matcher cho DOM."
+  },
+  {
+   "chu": "getByRole",
+   "doc": "/ɡet baɪ roʊl/",
+   "nghia": "truy vấn của Testing Library tìm phần tử theo vai trò truy cập (button, heading)",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "screen.getByRole('button', { name: /save/i })",
+   "viDuNghia": "Tìm nút có chữ Save theo vai trò button."
+  },
+  {
+   "chu": "mock function",
+   "doc": "/mɑːk ˈfʌŋkʃn/",
+   "nghia": "hàm giả (jest.fn, vi.fn): ghi lại số lần và tham số được gọi",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "Pass a mock function as onClick and check it was called once.",
+   "viDuNghia": "Truyền hàm giả làm onClick rồi kiểm nó được gọi một lần."
+  },
+  {
+   "chu": "snapshot test",
+   "doc": "/ˈsnæpʃɑːt test/",
+   "nghia": "test ảnh chụp: lưu kết quả render rồi so ở các lần chạy sau để phát hiện thay đổi",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "A snapshot test fails when the rendered markup changes.",
+   "viDuNghia": "Test ảnh chụp trượt khi HTML render ra thay đổi."
+  },
+  {
+   "chu": "testing framework",
+   "doc": "/ˈtestɪŋ ˈfreɪmwɜːrk/",
+   "nghia": "khung kiểm thử: cung cấp test runner, assertion, mock (Jest, Vitest)",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "A testing framework for JavaScript applications.",
+   "viDuNghia": "Một khung kiểm thử cho ứng dụng JavaScript."
+  },
+  {
+   "chu": "Jest",
+   "doc": "/dʒest/",
+   "nghia": "Jest: khung kiểm thử JavaScript phổ biến (describe, test, expect)",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "Jest runs files ending in .test.js.",
+   "viDuNghia": "Jest chạy các tệp đuôi .test.js."
+  },
+  {
+   "chu": "Vitest",
+   "doc": "/ˈviːtest/",
+   "nghia": "Vitest: khung kiểm thử chạy trên Vite, API giống Jest",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "Vitest shares the Vite configuration of the project.",
+   "viDuNghia": "Vitest dùng chung cấu hình Vite của dự án."
+  },
+  {
+   "chu": "React Testing Library",
+   "doc": "/riˈækt ˈtestɪŋ ˈlaɪbreri/",
+   "nghia": "thư viện kiểm thử component theo cách người dùng thấy: render, screen, getByRole",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "React Testing Library queries elements the way a user finds them.",
+   "viDuNghia": "React Testing Library tìm phần tử theo cách người dùng tìm."
+  },
+  {
+   "chu": "jsdom",
+   "doc": "/ˈdʒeɪ es dɑːm/",
+   "nghia": "môi trường DOM giả lập bằng JavaScript để chạy test component không cần trình duyệt",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "Set the test environment to jsdom.",
+   "viDuNghia": "Đặt môi trường test là jsdom."
+  },
+  {
+   "chu": "user-event",
+   "doc": "/ˈjuːzər ɪˈvent/",
+   "nghia": "thư viện @testing-library/user-event giả lập gõ phím, nhấp chuột như người thật",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "await userEvent.type(input, 'hello') simulates typing.",
+   "viDuNghia": "await userEvent.type(input, 'hello') giả lập việc gõ phím."
+  },
+  {
+   "chu": "Mock Service Worker",
+   "doc": "/mɑːk ˈsɜːrvɪs ˈwɜːrkər/",
+   "nghia": "MSW: chặn request mạng trong test/dev và trả dữ liệu giả",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "Mock Service Worker intercepts fetch calls in tests.",
+   "viDuNghia": "MSW chặn các lời gọi fetch trong test."
+  },
+  {
+   "chu": "TypeScript",
+   "doc": "/ˈtaɪpskrɪpt/",
+   "nghia": "TypeScript: JavaScript có thêm kiểu tĩnh, phát hiện lỗi kiểu lúc biên dịch",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "TypeScript catches a missing prop before the app runs.",
+   "viDuNghia": "TypeScript bắt lỗi thiếu prop trước khi app chạy."
+  },
+  {
+   "chu": "TSX file",
+   "doc": "/ˌtiː es ˈeks faɪl/",
+   "nghia": "tệp .tsx: TypeScript có chứa JSX (component React viết bằng TypeScript)",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "Rename App.jsx to App.tsx to use TypeScript.",
+   "viDuNghia": "Đổi App.jsx thành App.tsx để dùng TypeScript."
+  },
+  {
+   "chu": "type annotation",
+   "doc": "/taɪp ˌænəˈteɪʃn/",
+   "nghia": "chú thích kiểu: ghi kiểu sau tên biến, vd const age: number = 20",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "function greet(name: string) uses a type annotation.",
+   "viDuNghia": "function greet(name: string) dùng chú thích kiểu."
+  },
+  {
+   "chu": "type inference",
+   "doc": "/taɪp ˈɪnfərəns/",
+   "nghia": "suy luận kiểu: TypeScript tự đoán kiểu từ giá trị gán, không cần ghi",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "With type inference, useState(0) is typed as number.",
+   "viDuNghia": "Nhờ suy luận kiểu, useState(0) được hiểu là number."
+  },
+  {
+   "chu": "union type",
+   "doc": "/ˈjuːniən taɪp/",
+   "nghia": "kiểu hợp: biến nhận một trong vài kiểu, vd 'loading' hoặc 'done' (viết bằng dấu gạch đứng)",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "A union type limits status to a few allowed string values.",
+   "viDuNghia": "Kiểu hợp giới hạn status trong vài chuỗi cho phép."
+  },
+  {
+   "chu": "tsconfig.json",
+   "doc": "/ˌtiː es ˈkɑːnfɪɡ ˌdʒeɪ sɑːn/",
+   "nghia": "tệp cấu hình trình biên dịch TypeScript (strict, jsx, target)",
+   "nhom": "Kiểm thử React và TypeScript",
+   "viDu": "Enable strict mode in tsconfig.json.",
+   "viDuNghia": "Bật chế độ strict trong tsconfig.json."
+  },
+  {
+   "chu": "plugin",
+   "doc": "/ˈplʌɡɪn/",
+   "nghia": "plugin (trình cắm): gói mở rộng thêm tính năng cho một công cụ / thư viện (Tailwind, PostCSS, Bootstrap JS…)",
+   "nhom": "Công cụ dựng dự án",
+   "viDu": "By installing a Tailwind CSS plugin for Next.js.",
+   "viDuNghia": "Bằng cách cài một plugin Tailwind CSS cho Next.js."
+  },
+  {
+   "chu": "Bulma",
+   "doc": "/ˈbuːlmə/",
+   "nghia": "Bulma: framework CSS thuần (không kèm JavaScript) dựa trên Flexbox, dùng lớp dựng sẵn giống Bootstrap",
+   "nhom": "Tailwind CSS",
+   "viDu": "Bulma and Bootstrap are component/class-based frameworks with pre-built styles.",
+   "viDuNghia": "Bulma và Bootstrap là framework theo hướng lớp/component, có sẵn kiểu dáng."
+  }
+ ]
+}

@@ -1,0 +1,730 @@
+{
+ "ma": "csd201-3",
+ "nn": "en",
+ "ten": "CSD201 · 3. Phân tích, sắp xếp & cấu trúc nâng cao",
+ "moTa": "Bổ sung CSD201 theo giáo trình: ký hiệu tiệm cận và phân tích khấu hao, thêm thuật toán sắp xếp – tìm kiếm, hàng đợi ưu tiên và heap nhị phân, cây cân bằng (đỏ đen, B-tree, splay), đồ thị (sắp xếp tô-pô, Floyd-Warshall), bảng băm nâng cao và các kỹ thuật thiết kế thuật toán.",
+ "bieuTuong": "function",
+ "thuTu": -951,
+ "tu": [
+  {
+   "chu": "asymptotic",
+   "doc": "/ˌæsɪmˈtɑːtɪk/",
+   "nghia": "tiệm cận: xét hành vi của hàm khi kích thước đầu vào n tiến tới rất lớn",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "Big-O describes the asymptotic upper bound of a function.",
+   "viDuNghia": "Big-O mô tả cận trên tiệm cận của một hàm."
+  },
+  {
+   "chu": "Big-Omega",
+   "doc": "/bɪɡ oʊˈmeɡə/",
+   "nghia": "Big-Omega (Ω): ký hiệu cận dưới tiệm cận của thời gian chạy",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "Any comparison-based sort is Big-Omega of n log n in the worst case.",
+   "viDuNghia": "Mọi thuật toán sắp xếp dựa trên so sánh đều là Ω(n log n) trong trường hợp xấu nhất."
+  },
+  {
+   "chu": "Big-Theta",
+   "doc": "/bɪɡ ˈθeɪtə/",
+   "nghia": "Big-Theta (Θ): ký hiệu cận chặt, vừa là cận trên vừa là cận dưới",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "Merge sort runs in Big-Theta of n log n in all cases.",
+   "viDuNghia": "Merge sort chạy trong Θ(n log n) ở mọi trường hợp."
+  },
+  {
+   "chu": "n log n",
+   "doc": "/en lɔːɡ en/",
+   "nghia": "n log n: bậc thời gian của các thuật toán sắp xếp nhanh như merge sort, heap sort",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "The best case is O(nlogn), and the worst case is O(n^2)",
+   "viDuNghia": "Trường hợp tốt nhất là O(n log n), xấu nhất là O(n^2)"
+  },
+  {
+   "chu": "logarithmic time",
+   "doc": "/ˌlɔːɡəˈrɪðmɪk taɪm/",
+   "nghia": "thời gian lôgarit O(log n): mỗi bước loại bỏ một phần cố định của dữ liệu (tìm kiếm nhị phân)",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "Searching a balanced BST takes logarithmic time.",
+   "viDuNghia": "Tìm kiếm trên cây BST cân bằng mất thời gian lôgarit."
+  },
+  {
+   "chu": "exponential time",
+   "doc": "/ˌekspəˈnenʃl taɪm/",
+   "nghia": "thời gian hàm mũ O(2^n): tăng gấp đôi khi n tăng thêm 1, chỉ dùng được với n nhỏ",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "The naive recursive Fibonacci function runs in exponential time.",
+   "viDuNghia": "Hàm Fibonacci đệ quy ngây thơ chạy trong thời gian hàm mũ."
+  },
+  {
+   "chu": "space complexity",
+   "doc": "/speɪs kəmˈpleksəti/",
+   "nghia": "độ phức tạp không gian: lượng bộ nhớ phụ thuật toán cần theo kích thước đầu vào",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "Merge sort has a space complexity of O(n) because of the temporary array.",
+   "viDuNghia": "Merge sort có độ phức tạp không gian O(n) vì mảng tạm."
+  },
+  {
+   "chu": "amortized analysis",
+   "doc": "/ˈæmərtaɪzd əˈnæləsɪs/",
+   "nghia": "phân tích khấu hao: chi phí trung bình mỗi thao tác trên cả một dãy thao tác, dù có lần rất tốn",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "With amortized analysis, appending to a dynamic array costs O(1) per operation.",
+   "viDuNghia": "Theo phân tích khấu hao, thêm vào cuối mảng động tốn O(1) mỗi thao tác."
+  },
+  {
+   "chu": "nondeterministic",
+   "doc": "/ˌnɑːndɪˌtɜːrmɪˈnɪstɪk/",
+   "nghia": "không tất định: cùng đầu vào nhưng kết quả hoặc thứ tự chạy có thể khác nhau",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "The results are nondeterministic",
+   "viDuNghia": "Kết quả là không tất định"
+  },
+  {
+   "chu": "NP-complete",
+   "doc": "/ˌen piː kəmˈpliːt/",
+   "nghia": "NP-đầy đủ: lớp bài toán khó nhất trong NP, chưa ai biết thuật toán thời gian đa thức",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "The travelling salesman decision problem is NP-complete.",
+   "viDuNghia": "Bài toán người du lịch dạng quyết định là NP-đầy đủ."
+  },
+  {
+   "chu": "activation record",
+   "doc": "/ˌæktɪˈveɪʃn ˈrekərd/",
+   "nghia": "bản ghi kích hoạt: vùng trên ngăn xếp lưu tham số, biến cục bộ, địa chỉ trả về của một lần gọi hàm",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "Each recursive call pushes a new activation record onto the run-time stack.",
+   "viDuNghia": "Mỗi lần gọi đệ quy đẩy một bản ghi kích hoạt mới lên ngăn xếp thời gian chạy."
+  },
+  {
+   "chu": "stack frame",
+   "doc": "/stæk freɪm/",
+   "nghia": "khung ngăn xếp: tên khác của bản ghi kích hoạt một lần gọi hàm",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "Too deep recursion creates too many stack frames and causes a stack overflow.",
+   "viDuNghia": "Đệ quy quá sâu tạo quá nhiều khung ngăn xếp và gây tràn ngăn xếp."
+  },
+  {
+   "chu": "class invariant",
+   "doc": "/klæs ɪnˈveriənt/",
+   "nghia": "bất biến lớp: điều kiện luôn đúng với mọi đối tượng của lớp sau mỗi thao tác",
+   "nhom": "Phân tích độ phức tạp",
+   "viDu": "Remember the class invariant: an Item's weight and length must both be 0.",
+   "viDuNghia": "Nhớ bất biến của lớp: cân nặng và độ dài của Item đều phải bằng 0."
+  },
+  {
+   "chu": "in-place",
+   "doc": "/ˌɪn ˈpleɪs/",
+   "nghia": "tại chỗ: thuật toán chỉ dùng thêm O(1) bộ nhớ, sắp xếp ngay trên mảng gốc",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "Quick sort is an in-place sorting algorithm, but merge sort is not.",
+   "viDuNghia": "Quick sort là thuật toán sắp xếp tại chỗ, còn merge sort thì không."
+  },
+  {
+   "chu": "shell sort",
+   "doc": "/ʃel sɔːrt/",
+   "nghia": "sắp xếp Shell: sắp chèn trên các dãy con cách nhau một bước giảm dần (h-sort)",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "Shell sort improves insertion sort by comparing elements far apart.",
+   "viDuNghia": "Shell sort cải tiến insertion sort bằng cách so sánh các phần tử cách xa nhau."
+  },
+  {
+   "chu": "counting sort",
+   "doc": "/ˈkaʊntɪŋ sɔːrt/",
+   "nghia": "sắp xếp đếm: đếm số lần xuất hiện của mỗi khoá nguyên trong một miền nhỏ, không so sánh",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "Counting sort runs in O(n + k) when keys are integers from 0 to k.",
+   "viDuNghia": "Counting sort chạy trong O(n + k) khi khoá là số nguyên từ 0 tới k."
+  },
+  {
+   "chu": "radix sort",
+   "doc": "/ˈreɪdɪks sɔːrt/",
+   "nghia": "sắp xếp cơ số: sắp lần lượt theo từng chữ số (từ hàng đơn vị lên) bằng một phép sắp ổn định",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "Radix sort sorts numbers digit by digit using a stable sort.",
+   "viDuNghia": "Radix sort sắp số theo từng chữ số bằng một phép sắp ổn định."
+  },
+  {
+   "chu": "key comparison",
+   "doc": "/kiː kəmˈpærɪsn/",
+   "nghia": "phép so sánh khoá: đơn vị đếm chi phí của thuật toán sắp xếp, tìm kiếm",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "Selection sort always performs n(n-1)/2 key comparisons.",
+   "viDuNghia": "Selection sort luôn thực hiện n(n-1)/2 phép so sánh khoá."
+  },
+  {
+   "chu": "quickselect",
+   "doc": "/ˈkwɪkselekt/",
+   "nghia": "quickselect: tìm phần tử nhỏ thứ k bằng cách phân hoạch như quick sort nhưng chỉ đi một nhánh",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "Quickselect finds the k-th smallest element in O(n) time on average.",
+   "viDuNghia": "Quickselect tìm phần tử nhỏ thứ k trong thời gian trung bình O(n)."
+  },
+  {
+   "chu": "interpolation search",
+   "doc": "/ɪnˌtɜːrpəˈleɪʃn sɜːrtʃ/",
+   "nghia": "tìm kiếm nội suy: đoán vị trí theo giá trị khoá trên mảng đã sắp, phân bố đều",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "Interpolation search works best when keys are uniformly distributed.",
+   "viDuNghia": "Tìm kiếm nội suy chạy tốt nhất khi khoá phân bố đều."
+  },
+  {
+   "chu": "sentinel",
+   "doc": "/ˈsentɪnl/",
+   "nghia": "phần tử canh: giá trị đặc biệt đặt ở cuối mảng/danh sách để vòng lặp khỏi phải kiểm tra biên",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "A sentinel at the end of the array removes the index check from the search loop.",
+   "viDuNghia": "Một phần tử canh ở cuối mảng giúp vòng tìm kiếm khỏi kiểm tra chỉ số."
+  },
+  {
+   "chu": "sorted array",
+   "doc": "/ˈsɔːrtɪd əˈreɪ/",
+   "nghia": "mảng đã sắp xếp: điều kiện để dùng tìm kiếm nhị phân",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "Binary search can only be applied to a sorted array.",
+   "viDuNghia": "Tìm kiếm nhị phân chỉ áp dụng được cho mảng đã sắp xếp."
+  },
+  {
+   "chu": "alphabetically",
+   "doc": "/ˌælfəˈbetɪkli/",
+   "nghia": "theo thứ tự chữ cái",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "The tree has to be ordered alphabetically according to the customer's id.",
+   "viDuNghia": "Cây phải được sắp theo thứ tự chữ cái của mã khách hàng."
+  },
+  {
+   "chu": "subarray",
+   "doc": "/ˈsʌbəreɪ/",
+   "nghia": "mảng con: đoạn các phần tử liên tiếp của một mảng",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "Kadane's algorithm finds the subarray with the largest sum.",
+   "viDuNghia": "Thuật toán Kadane tìm mảng con có tổng lớn nhất."
+  },
+  {
+   "chu": "subsequence",
+   "doc": "/ˈsʌbsɪkwəns/",
+   "nghia": "dãy con: các phần tử lấy ra giữ nguyên thứ tự nhưng không cần liên tiếp",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "The longest common subsequence problem is solved with dynamic programming.",
+   "viDuNghia": "Bài toán dãy con chung dài nhất được giải bằng quy hoạch động."
+  },
+  {
+   "chu": "Kadane's algorithm",
+   "doc": "/kəˈdeɪnz ˈælɡərɪðəm/",
+   "nghia": "thuật toán Kadane: tìm tổng mảng con lớn nhất trong O(n) bằng một lần duyệt",
+   "nhom": "Sắp xếp và tìm kiếm",
+   "viDu": "Kadane's algorithm keeps the best sum ending at the current position.",
+   "viDuNghia": "Thuật toán Kadane giữ tổng tốt nhất kết thúc tại vị trí hiện tại."
+  },
+  {
+   "chu": "priority queue",
+   "doc": "/praɪˈɔːrəti kjuː/",
+   "nghia": "hàng đợi ưu tiên: luôn lấy ra phần tử có độ ưu tiên cao nhất (nhỏ nhất/lớn nhất) trước",
+   "nhom": "Hàng đợi ưu tiên và heap",
+   "viDu": "Do not use java.util.PriorityQueue .",
+   "viDuNghia": "Không được dùng java.util.PriorityQueue (phải tự cài hàng đợi ưu tiên)."
+  },
+  {
+   "chu": "binary heap",
+   "doc": "/ˈbaɪnəri hiːp/",
+   "nghia": "heap nhị phân: cây nhị phân hoàn chỉnh lưu trong mảng, cha luôn ≥ (hoặc ≤) con",
+   "nhom": "Hàng đợi ưu tiên và heap",
+   "viDu": "In a binary heap stored in an array, the children of node i are at 2i + 1 and 2i + 2.",
+   "viDuNghia": "Trong heap nhị phân lưu bằng mảng, con của nút i nằm ở 2i + 1 và 2i + 2."
+  },
+  {
+   "chu": "min heap",
+   "doc": "/mɪn hiːp/",
+   "nghia": "min-heap: heap mà mỗi nút nhỏ hơn hoặc bằng các con, gốc là phần tử nhỏ nhất",
+   "nhom": "Hàng đợi ưu tiên và heap",
+   "viDu": "Dijkstra's algorithm uses a min heap to pick the closest vertex.",
+   "viDuNghia": "Thuật toán Dijkstra dùng min-heap để chọn đỉnh gần nhất."
+  },
+  {
+   "chu": "heapify",
+   "doc": "/ˈhiːpɪfaɪ/",
+   "nghia": "vun đống: sắp lại một mảng/cây con để thoả tính chất heap",
+   "nhom": "Hàng đợi ưu tiên và heap",
+   "viDu": "Building a heap by heapifying from the last internal node takes O(n).",
+   "viDuNghia": "Dựng heap bằng cách vun đống từ nút trong cuối cùng mất O(n)."
+  },
+  {
+   "chu": "sift down",
+   "doc": "/sɪft daʊn/",
+   "nghia": "đẩy xuống (sift-down): đổi chỗ nút với con lớn hơn (max-heap) cho tới khi đúng vị trí",
+   "nhom": "Hàng đợi ưu tiên và heap",
+   "viDu": "After removing the root, the last element is moved to the root and sifted down.",
+   "viDuNghia": "Sau khi xoá gốc, phần tử cuối được đưa lên gốc rồi đẩy xuống."
+  },
+  {
+   "chu": "sift up",
+   "doc": "/sɪft ʌp/",
+   "nghia": "đẩy lên (sift-up): đổi chỗ nút mới chèn với cha cho tới khi thoả tính chất heap",
+   "nhom": "Hàng đợi ưu tiên và heap",
+   "viDu": "A newly inserted element is placed at the end and sifted up.",
+   "viDuNghia": "Phần tử mới chèn được đặt ở cuối rồi đẩy lên."
+  },
+  {
+   "chu": "deque",
+   "doc": "/dek/",
+   "nghia": "hàng đợi hai đầu: thêm, bớt được ở cả đầu lẫn cuối",
+   "nhom": "Hàng đợi ưu tiên và heap",
+   "viDu": "A deque can be used as both a stack and a queue.",
+   "viDuNghia": "Hàng đợi hai đầu có thể dùng như cả ngăn xếp lẫn hàng đợi."
+  },
+  {
+   "chu": "peek",
+   "doc": "/piːk/",
+   "nghia": "xem đỉnh (peek): đọc phần tử ở đầu ngăn xếp/hàng đợi mà không lấy nó ra",
+   "nhom": "Hàng đợi ưu tiên và heap",
+   "viDu": "peek() returns the top element without removing it from the stack.",
+   "viDuNghia": "peek() trả về phần tử đỉnh mà không lấy nó ra khỏi ngăn xếp."
+  },
+  {
+   "chu": "LIFO",
+   "doc": "/ˈlaɪfoʊ/",
+   "nghia": "LIFO (last in, first out): vào sau ra trước, nguyên tắc của ngăn xếp",
+   "nhom": "Hàng đợi ưu tiên và heap",
+   "viDu": "A stack follows the LIFO principle.",
+   "viDuNghia": "Ngăn xếp theo nguyên tắc vào sau ra trước."
+  },
+  {
+   "chu": "parent node",
+   "doc": "/ˈperənt noʊd/",
+   "nghia": "nút cha: nút ngay phía trên một nút trong cây",
+   "nhom": "Cây nâng cao",
+   "viDu": "Every node except the root has exactly one parent node.",
+   "viDuNghia": "Mọi nút trừ gốc đều có đúng một nút cha."
+  },
+  {
+   "chu": "degree of a node",
+   "doc": "/dɪˈɡriː əv ə noʊd/",
+   "nghia": "bậc của nút: số con của một nút trong cây",
+   "nhom": "Cây nâng cao",
+   "viDu": "In a binary tree, the degree of a node is at most 2.",
+   "viDuNghia": "Trong cây nhị phân, bậc của một nút tối đa là 2."
+  },
+  {
+   "chu": "perfect binary tree",
+   "doc": "/ˈpɜːrfɪkt ˈbaɪnəri triː/",
+   "nghia": "cây nhị phân hoàn hảo: mọi nút trong có hai con và mọi lá cùng một mức",
+   "nhom": "Cây nâng cao",
+   "viDu": "A perfect binary tree of height h has 2^(h+1) - 1 nodes.",
+   "viDuNghia": "Cây nhị phân hoàn hảo có chiều cao h chứa 2^(h+1) - 1 nút."
+  },
+  {
+   "chu": "degenerate tree",
+   "doc": "/dɪˈdʒenərət triː/",
+   "nghia": "cây suy biến: mỗi nút chỉ có một con, cây thành như danh sách liên kết",
+   "nhom": "Cây nâng cao",
+   "viDu": "Inserting sorted keys into a BST produces a degenerate tree.",
+   "viDuNghia": "Chèn các khoá đã sắp vào BST tạo ra cây suy biến."
+  },
+  {
+   "chu": "balanced tree",
+   "doc": "/ˈbælənst triː/",
+   "nghia": "cây cân bằng: chiều cao luôn cỡ O(log n) nên tìm, chèn, xoá đều nhanh",
+   "nhom": "Cây nâng cao",
+   "viDu": "A balanced tree keeps search time logarithmic.",
+   "viDuNghia": "Cây cân bằng giữ thời gian tìm kiếm ở mức lôgarit."
+  },
+  {
+   "chu": "height-balanced",
+   "doc": "/ˌhaɪt ˈbælənst/",
+   "nghia": "cân bằng chiều cao: chiều cao hai cây con của mọi nút chênh nhau không quá 1 (AVL)",
+   "nhom": "Cây nâng cao",
+   "viDu": "An AVL tree is a height-balanced binary search tree.",
+   "viDuNghia": "Cây AVL là cây tìm kiếm nhị phân cân bằng chiều cao."
+  },
+  {
+   "chu": "self-balancing",
+   "doc": "/ˌself ˈbælənsɪŋ/",
+   "nghia": "tự cân bằng: cây tự xoay lại sau chèn/xoá để giữ chiều cao thấp",
+   "nhom": "Cây nâng cao",
+   "viDu": "Red-black trees and AVL trees are self-balancing binary search trees.",
+   "viDuNghia": "Cây đỏ đen và cây AVL là các cây tìm kiếm nhị phân tự cân bằng."
+  },
+  {
+   "chu": "single rotation",
+   "doc": "/ˈsɪŋɡl roʊˈteɪʃn/",
+   "nghia": "phép xoay đơn: một lần xoay trái hoặc phải để sửa lệch kiểu LL hoặc RR",
+   "nhom": "Cây nâng cao",
+   "viDu": "A single rotation fixes an AVL imbalance of the left-left type.",
+   "viDuNghia": "Một phép xoay đơn sửa được mất cân bằng AVL kiểu trái – trái."
+  },
+  {
+   "chu": "double rotation",
+   "doc": "/ˈdʌbl roʊˈteɪʃn/",
+   "nghia": "phép xoay kép: hai lần xoay liên tiếp để sửa lệch kiểu LR hoặc RL",
+   "nhom": "Cây nâng cao",
+   "viDu": "A left-right imbalance needs a double rotation.",
+   "viDuNghia": "Mất cân bằng kiểu trái – phải cần một phép xoay kép."
+  },
+  {
+   "chu": "DSW algorithm",
+   "doc": "/ˌdiː es ˈdʌbl juː ˈælɡərɪðəm/",
+   "nghia": "thuật toán DSW (Day–Stout–Warren): cân bằng lại toàn bộ BST bằng cách xoay thành \"xương sống\" rồi xoay ngược lại",
+   "nhom": "Cây nâng cao",
+   "viDu": "The DSW algorithm first turns the tree into a backbone and then balances it.",
+   "viDuNghia": "Thuật toán DSW trước hết biến cây thành dạng xương sống rồi cân bằng nó."
+  },
+  {
+   "chu": "red-black tree",
+   "doc": "/ˌred ˈblæk triː/",
+   "nghia": "cây đỏ đen: BST tự cân bằng, mỗi nút tô đỏ hoặc đen theo các luật màu",
+   "nhom": "Cây nâng cao",
+   "viDu": "Java's TreeMap is implemented as a red-black tree.",
+   "viDuNghia": "TreeMap của Java được cài đặt bằng cây đỏ đen."
+  },
+  {
+   "chu": "splay tree",
+   "doc": "/spleɪ triː/",
+   "nghia": "cây splay: BST tự đưa nút vừa truy cập lên gốc bằng các phép xoay",
+   "nhom": "Cây nâng cao",
+   "viDu": "In a splay tree, recently accessed nodes move close to the root.",
+   "viDuNghia": "Trong cây splay, các nút vừa được truy cập dời lên gần gốc."
+  },
+  {
+   "chu": "B-tree",
+   "doc": "/ˈbiː triː/",
+   "nghia": "B-tree: cây tìm kiếm nhiều nhánh, cân bằng, mỗi nút chứa nhiều khoá; dùng cho chỉ mục CSDL và hệ thống tệp",
+   "nhom": "Cây nâng cao",
+   "viDu": "A B-tree keeps many keys in each node to reduce disk accesses.",
+   "viDuNghia": "B-tree giữ nhiều khoá trong mỗi nút để giảm số lần truy cập đĩa."
+  },
+  {
+   "chu": "2-3 tree",
+   "doc": "/ˌtuː ˈθriː triː/",
+   "nghia": "cây 2-3: cây cân bằng mà mỗi nút trong có 2 hoặc 3 con",
+   "nhom": "Cây nâng cao",
+   "viDu": "In a 2-3 tree, all leaves are at the same level.",
+   "viDuNghia": "Trong cây 2-3, mọi lá đều ở cùng một mức."
+  },
+  {
+   "chu": "multiway tree",
+   "doc": "/ˈmʌltiweɪ triː/",
+   "nghia": "cây nhiều nhánh: mỗi nút có thể có nhiều hơn hai con",
+   "nhom": "Cây nâng cao",
+   "viDu": "A B-tree is a balanced multiway search tree.",
+   "viDuNghia": "B-tree là cây tìm kiếm nhiều nhánh cân bằng."
+  },
+  {
+   "chu": "threaded binary tree",
+   "doc": "/ˈθredɪd ˈbaɪnəri triː/",
+   "nghia": "cây nhị phân luồng: con trỏ rỗng được dùng trỏ tới nút đứng trước/sau, duyệt không cần ngăn xếp",
+   "nhom": "Cây nâng cao",
+   "viDu": "A threaded binary tree allows in-order traversal without a stack.",
+   "viDuNghia": "Cây nhị phân luồng cho phép duyệt trung thứ tự mà không cần ngăn xếp."
+  },
+  {
+   "chu": "inorder successor",
+   "doc": "/ˈɪnɔːrdər səkˈsesər/",
+   "nghia": "nút kế tiếp trung thứ tự: nút nhỏ nhất trong cây con phải, dùng khi xoá nút có hai con",
+   "nhom": "Cây nâng cao",
+   "viDu": "When deleting a node with two children, replace it with its inorder successor.",
+   "viDuNghia": "Khi xoá nút có hai con, thay nó bằng nút kế tiếp trung thứ tự."
+  },
+  {
+   "chu": "rightmost",
+   "doc": "/ˈraɪtmoʊst/",
+   "nghia": "ngoài cùng bên phải: nút đi theo con phải tới tận cùng (lớn nhất trong cây con)",
+   "nhom": "Cây nâng cao",
+   "viDu": "The rightmost node of the left subtree holds the predecessor key.",
+   "viDuNghia": "Nút ngoài cùng bên phải của cây con trái chứa khoá đứng trước."
+  },
+  {
+   "chu": "leftmost",
+   "doc": "/ˈleftmoʊst/",
+   "nghia": "ngoài cùng bên trái: nút đi theo con trái tới tận cùng (nhỏ nhất trong cây con)",
+   "nhom": "Cây nâng cao",
+   "viDu": "The smallest key in a BST is stored in the leftmost node.",
+   "viDuNghia": "Khoá nhỏ nhất của BST nằm ở nút ngoài cùng bên trái."
+  },
+  {
+   "chu": "lowest common ancestor",
+   "doc": "/ˈloʊɪst ˈkɑːmən ˈænsestər/",
+   "nghia": "tổ tiên chung thấp nhất (LCA): nút sâu nhất là tổ tiên của cả hai nút đã cho",
+   "nhom": "Cây nâng cao",
+   "viDu": "In a BST, the lowest common ancestor of two keys is the first node between them.",
+   "viDuNghia": "Trong BST, tổ tiên chung thấp nhất của hai khoá là nút đầu tiên nằm giữa chúng."
+  },
+  {
+   "chu": "trie",
+   "doc": "/traɪ/",
+   "nghia": "cây tiền tố (trie): cây lưu chuỗi theo từng ký tự, dùng tra từ và gợi ý tự động",
+   "nhom": "Cây nâng cao",
+   "viDu": "A trie can find all words that start with a given prefix.",
+   "viDuNghia": "Cây tiền tố tìm được mọi từ bắt đầu bằng một tiền tố cho trước."
+  },
+  {
+   "chu": "segment tree",
+   "doc": "/ˈseɡmənt triː/",
+   "nghia": "cây phân đoạn: cây lưu thông tin của từng đoạn mảng, truy vấn tổng/min trên đoạn trong O(log n)",
+   "nhom": "Cây nâng cao",
+   "viDu": "A segment tree answers range sum queries in O(log n).",
+   "viDuNghia": "Cây phân đoạn trả lời truy vấn tổng trên đoạn trong O(log n)."
+  },
+  {
+   "chu": "Fenwick tree",
+   "doc": "/ˈfenwɪk triː/",
+   "nghia": "cây Fenwick (BIT): mảng đặc biệt cập nhật và tính tổng tiền tố trong O(log n)",
+   "nhom": "Cây nâng cao",
+   "viDu": "A Fenwick tree supports prefix sums with very little code.",
+   "viDuNghia": "Cây Fenwick hỗ trợ tính tổng tiền tố với rất ít mã."
+  },
+  {
+   "chu": "digraph",
+   "doc": "/ˈdaɪɡræf/",
+   "nghia": "đồ thị có hướng (directed graph): mỗi cạnh có chiều từ đỉnh này sang đỉnh kia",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "In a digraph, an edge from u to v does not imply an edge from v to u.",
+   "viDuNghia": "Trong đồ thị có hướng, cạnh từ u tới v không kéo theo cạnh từ v tới u."
+  },
+  {
+   "chu": "directed acyclic graph",
+   "doc": "/dəˈrektɪd eɪˈsaɪklɪk ɡræf/",
+   "nghia": "đồ thị có hướng không chu trình (DAG): đồ thị có hướng không có chu trình nào",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "Only a directed acyclic graph has a topological order.",
+   "viDuNghia": "Chỉ đồ thị có hướng không chu trình mới có thứ tự tô-pô."
+  },
+  {
+   "chu": "topological sort",
+   "doc": "/ˌtɑːpəˈlɑːdʒɪkl sɔːrt/",
+   "nghia": "sắp xếp tô-pô: xếp các đỉnh của DAG sao cho mọi cạnh đi từ trước ra sau",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "A topological sort orders courses so that prerequisites come first.",
+   "viDuNghia": "Sắp xếp tô-pô xếp các môn học sao cho môn tiên quyết đứng trước."
+  },
+  {
+   "chu": "Kahn's algorithm",
+   "doc": "/kɑːnz ˈælɡərɪðəm/",
+   "nghia": "thuật toán Kahn: sắp xếp tô-pô bằng cách liên tục lấy đỉnh có bậc vào bằng 0",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "Kahn's algorithm repeatedly removes vertices whose in-degree is zero.",
+   "viDuNghia": "Thuật toán Kahn liên tục bỏ các đỉnh có bậc vào bằng 0."
+  },
+  {
+   "chu": "degree of a vertex",
+   "doc": "/dɪˈɡriː əv ə ˈvɜːrteks/",
+   "nghia": "bậc của đỉnh: số cạnh nối với đỉnh đó (đồ thị vô hướng)",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "The array int deg[] is already declared — compute d[i] = degree of vertex i.",
+   "viDuNghia": "Mảng int deg[] đã được khai báo — hãy tính d[i] = bậc của đỉnh i."
+  },
+  {
+   "chu": "simple path",
+   "doc": "/ˈsɪmpl pæθ/",
+   "nghia": "đường đi đơn: đường đi không qua đỉnh nào hai lần",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "A simple path never visits the same vertex twice.",
+   "viDuNghia": "Đường đi đơn không bao giờ đi qua một đỉnh hai lần."
+  },
+  {
+   "chu": "Eulerian path",
+   "doc": "/juːˈlɪəriən pæθ/",
+   "nghia": "đường đi Euler: đi qua mọi cạnh đúng một lần",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "A connected graph has an Eulerian path if it has zero or two vertices of odd degree.",
+   "viDuNghia": "Đồ thị liên thông có đường đi Euler nếu có 0 hoặc 2 đỉnh bậc lẻ."
+  },
+  {
+   "chu": "cycle detection",
+   "doc": "/ˈsaɪkl dɪˈtekʃn/",
+   "nghia": "phát hiện chu trình: kiểm tra đồ thị có chu trình không (bằng DFS hoặc union-find)",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "Depth-first search can be used for cycle detection in a graph.",
+   "viDuNghia": "Tìm kiếm theo chiều sâu có thể dùng để phát hiện chu trình trong đồ thị."
+  },
+  {
+   "chu": "articulation point",
+   "doc": "/ɑːrˌtɪkjuˈleɪʃn pɔɪnt/",
+   "nghia": "điểm khớp: đỉnh mà bỏ đi thì đồ thị mất liên thông",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "Removing an articulation point splits the graph into several components.",
+   "viDuNghia": "Bỏ một điểm khớp sẽ tách đồ thị thành nhiều thành phần."
+  },
+  {
+   "chu": "Floyd-Warshall algorithm",
+   "doc": "/flɔɪd ˈwɔːrʃɔːl ˈælɡərɪðəm/",
+   "nghia": "thuật toán Floyd-Warshall: tìm đường ngắn nhất giữa mọi cặp đỉnh trong O(V^3)",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "The Floyd-Warshall algorithm computes shortest paths between all pairs of vertices.",
+   "viDuNghia": "Thuật toán Floyd-Warshall tính đường ngắn nhất giữa mọi cặp đỉnh."
+  },
+  {
+   "chu": "minimum cost",
+   "doc": "/ˈmɪnɪməm kɔːst/",
+   "nghia": "chi phí nhỏ nhất: tổng trọng số nhỏ nhất của đường đi hay cây khung",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "Prim's algorithm builds a spanning tree of minimum cost.",
+   "viDuNghia": "Thuật toán Prim dựng một cây khung có chi phí nhỏ nhất."
+  },
+  {
+   "chu": "spanning forest",
+   "doc": "/ˈspænɪŋ ˈfɔːrɪst/",
+   "nghia": "rừng khung: tập cây khung của từng thành phần liên thông",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "A disconnected graph has a spanning forest instead of a spanning tree.",
+   "viDuNghia": "Đồ thị không liên thông có rừng khung thay vì cây khung."
+  },
+  {
+   "chu": "disjoint set",
+   "doc": "/dɪsˈdʒɔɪnt set/",
+   "nghia": "tập rời nhau: các tập không có phần tử chung; cấu trúc union-find quản lý chúng",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "Kruskal's algorithm uses a disjoint set structure to avoid cycles.",
+   "viDuNghia": "Thuật toán Kruskal dùng cấu trúc tập rời nhau để tránh tạo chu trình."
+  },
+  {
+   "chu": "union-find",
+   "doc": "/ˌjuːnjən ˈfaɪnd/",
+   "nghia": "union-find: cấu trúc hai thao tác — gộp hai tập và tìm tập chứa một phần tử",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "With path compression, union-find operations are almost constant time.",
+   "viDuNghia": "Với nén đường đi, các thao tác union-find gần như tốn thời gian hằng số."
+  },
+  {
+   "chu": "Manhattan distance",
+   "doc": "/mænˈhætn ˈdɪstəns/",
+   "nghia": "khoảng cách Manhattan: |x1 - x2| + |y1 - y2|, đi theo lưới ô vuông",
+   "nhom": "Đồ thị nâng cao",
+   "viDu": "On a grid without diagonal moves, use the Manhattan distance as the heuristic.",
+   "viDuNghia": "Trên lưới không đi chéo, dùng khoảng cách Manhattan làm hàm ước lượng."
+  },
+  {
+   "chu": "load factor",
+   "doc": "/loʊd ˈfæktər/",
+   "nghia": "hệ số tải: số phần tử chia số ô của bảng băm; càng cao thì càng nhiều xung đột",
+   "nhom": "Băm nâng cao",
+   "viDu": "When the load factor exceeds 0.75, the table is resized and rehashed.",
+   "viDuNghia": "Khi hệ số tải vượt 0,75, bảng được nới rộng và băm lại."
+  },
+  {
+   "chu": "rehash",
+   "doc": "/riːˈhæʃ/",
+   "nghia": "băm lại: tạo bảng lớn hơn rồi chèn lại mọi khoá bằng hàm băm mới",
+   "nhom": "Băm nâng cao",
+   "viDu": "After resizing, every key must be rehashed into the new table.",
+   "viDuNghia": "Sau khi nới bảng, mọi khoá phải được băm lại vào bảng mới."
+  },
+  {
+   "chu": "double hashing",
+   "doc": "/ˈdʌbl ˈhæʃɪŋ/",
+   "nghia": "băm kép: dùng hàm băm thứ hai để tính bước nhảy khi xảy ra xung đột",
+   "nhom": "Băm nâng cao",
+   "viDu": "Double hashing reduces clustering compared with linear probing.",
+   "viDuNghia": "Băm kép giảm hiện tượng gom cụm so với dò tuyến tính."
+  },
+  {
+   "chu": "perfect hashing",
+   "doc": "/ˈpɜːrfɪkt ˈhæʃɪŋ/",
+   "nghia": "băm hoàn hảo: hàm băm không gây xung đột nào với một tập khoá cố định",
+   "nhom": "Băm nâng cao",
+   "viDu": "Perfect hashing is possible when all keys are known in advance.",
+   "viDuNghia": "Băm hoàn hảo làm được khi biết trước mọi khoá."
+  },
+  {
+   "chu": "extendible hashing",
+   "doc": "/ɪkˈstendəbl ˈhæʃɪŋ/",
+   "nghia": "băm mở rộng được: dùng thư mục trỏ tới các xô, khi xô đầy thì tách xô và nhân đôi thư mục",
+   "nhom": "Băm nâng cao",
+   "viDu": "Extendible hashing grows the table by splitting only the bucket that overflows.",
+   "viDuNghia": "Băm mở rộng được nới bảng bằng cách chỉ tách xô bị tràn."
+  },
+  {
+   "chu": "bitmask",
+   "doc": "/ˈbɪtmæsk/",
+   "nghia": "mặt nạ bit: số nguyên mà mỗi bit đánh dấu một phần tử được chọn hay không",
+   "nhom": "Băm nâng cao",
+   "viDu": "A bitmask of n bits can represent every subset of n items.",
+   "viDuNghia": "Mặt nạ n bit có thể biểu diễn mọi tập con của n phần tử."
+  },
+  {
+   "chu": "entropy",
+   "doc": "/ˈentrəpi/",
+   "nghia": "entropy: lượng thông tin trung bình mỗi ký hiệu, giới hạn dưới của độ dài mã khi nén",
+   "nhom": "Băm nâng cao",
+   "viDu": "Huffman coding produces an average code length close to the entropy.",
+   "viDuNghia": "Mã Huffman cho độ dài mã trung bình gần với entropy."
+  },
+  {
+   "chu": "divide and conquer",
+   "doc": "/dɪˈvaɪd ən ˈkɑːŋkər/",
+   "nghia": "chia để trị: chia bài toán thành bài toán con cùng dạng, giải đệ quy rồi gộp kết quả",
+   "nhom": "Kỹ thuật thiết kế thuật toán",
+   "viDu": "Merge sort is a classic divide and conquer algorithm.",
+   "viDuNghia": "Merge sort là thuật toán chia để trị kinh điển."
+  },
+  {
+   "chu": "dynamic programming",
+   "doc": "/daɪˈnæmɪk ˈproʊɡræmɪŋ/",
+   "nghia": "quy hoạch động: lưu kết quả bài toán con để không phải tính lại nhiều lần",
+   "nhom": "Kỹ thuật thiết kế thuật toán",
+   "viDu": "Dynamic programming solves the knapsack problem in O(nW) time.",
+   "viDuNghia": "Quy hoạch động giải bài toán cái túi trong thời gian O(nW)."
+  },
+  {
+   "chu": "subproblem",
+   "doc": "/ˈsʌbprɑːbləm/",
+   "nghia": "bài toán con: phần nhỏ hơn cùng dạng với bài toán ban đầu",
+   "nhom": "Kỹ thuật thiết kế thuật toán",
+   "viDu": "Dynamic programming stores the answer of each subproblem in a table.",
+   "viDuNghia": "Quy hoạch động lưu đáp án của mỗi bài toán con vào một bảng."
+  },
+  {
+   "chu": "optimal substructure",
+   "doc": "/ˈɑːptɪml ˈsʌbstrʌktʃər/",
+   "nghia": "cấu trúc con tối ưu: lời giải tối ưu được ghép từ lời giải tối ưu của các bài toán con",
+   "nhom": "Kỹ thuật thiết kế thuật toán",
+   "viDu": "Shortest paths have optimal substructure.",
+   "viDuNghia": "Đường đi ngắn nhất có cấu trúc con tối ưu."
+  },
+  {
+   "chu": "overlapping subproblems",
+   "doc": "/ˌoʊvərˈlæpɪŋ ˈsʌbprɑːbləmz/",
+   "nghia": "bài toán con gối nhau: cùng một bài toán con bị giải nhiều lần, dấu hiệu nên dùng quy hoạch động",
+   "nhom": "Kỹ thuật thiết kế thuật toán",
+   "viDu": "Fibonacci has overlapping subproblems, so memoization helps a lot.",
+   "viDuNghia": "Fibonacci có các bài toán con gối nhau nên ghi nhớ kết quả giúp rất nhiều."
+  },
+  {
+   "chu": "backtracking",
+   "doc": "/ˈbæktrækɪŋ/",
+   "nghia": "quay lui: thử từng lựa chọn, đi sâu, gặp ngõ cụt thì lùi lại thử lựa chọn khác",
+   "nhom": "Kỹ thuật thiết kế thuật toán",
+   "viDu": "The N-queens problem is usually solved by backtracking.",
+   "viDuNghia": "Bài toán N quân hậu thường được giải bằng quay lui."
+  },
+  {
+   "chu": "N-queens problem",
+   "doc": "/ˌen ˈkwiːnz ˈprɑːbləm/",
+   "nghia": "bài toán N quân hậu: đặt N quân hậu lên bàn N x N sao cho không con nào ăn nhau",
+   "nhom": "Kỹ thuật thiết kế thuật toán",
+   "viDu": "The N-queens problem places queens row by row and backtracks on conflicts.",
+   "viDuNghia": "Bài toán N quân hậu đặt hậu theo từng hàng và quay lui khi xung đột."
+  },
+  {
+   "chu": "knapsack problem",
+   "doc": "/ˈnæpsæk ˈprɑːbləm/",
+   "nghia": "bài toán cái túi: chọn đồ vật có tổng trọng lượng không vượt sức chứa mà tổng giá trị lớn nhất",
+   "nhom": "Kỹ thuật thiết kế thuật toán",
+   "viDu": "The 0/1 knapsack problem cannot be solved correctly by a greedy method.",
+   "viDuNghia": "Bài toán cái túi 0/1 không giải đúng được bằng phương pháp tham lam."
+  },
+  {
+   "chu": "KMP algorithm",
+   "doc": "/ˌkeɪ em ˈpiː ˈælɡərɪðəm/",
+   "nghia": "thuật toán KMP (Knuth–Morris–Pratt): tìm chuỗi con trong O(n + m) nhờ bảng tiền tố, không lùi con trỏ văn bản",
+   "nhom": "Kỹ thuật thiết kế thuật toán",
+   "viDu": "The KMP algorithm never moves backward in the text.",
+   "viDuNghia": "Thuật toán KMP không bao giờ lùi lại trong văn bản."
+  },
+  {
+   "chu": "Catalan number",
+   "doc": "/ˈkætəlæn ˈnʌmbər/",
+   "nghia": "số Catalan: đếm số cây nhị phân có n nút, số cách đặt ngoặc đúng…",
+   "nhom": "Kỹ thuật thiết kế thuật toán",
+   "viDu": "The number of binary trees with n nodes is the n-th Catalan number.",
+   "viDuNghia": "Số cây nhị phân có n nút là số Catalan thứ n."
+  }
+ ]
+}

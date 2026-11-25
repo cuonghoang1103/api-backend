@@ -4,7 +4,7 @@
  "ten": "SDN302 · Node.js, Express, MongoDB",
  "moTa": "Môn Server-side development with NodeJS, Express and MongoDB (SDN302): Node.js và vòng lặp sự kiện, Express, REST API, mã trạng thái HTTP, MongoDB, Mongoose, JWT, phân quyền, quy tắc nghiệp vụ trong đề PE. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu thật trong đề.",
  "bieuTuong": "point.3.connected.trianglepath.dotted",
- "thuTu": -943,
+ "thuTu": -912,
  "tu": [
   {
    "chu": "runtime environment",

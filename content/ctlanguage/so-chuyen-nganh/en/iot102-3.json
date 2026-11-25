@@ -1,0 +1,802 @@
+{
+ "ma": "iot102-3",
+ "nn": "en",
+ "ten": "IOT102 · 3. Điện tử, mô-đun, giao tiếp & ứng dụng IoT",
+ "moTa": "Bổ sung IOT102 theo đề và giáo trình: điện cơ bản (mạch nối tiếp/song song, ngắn mạch, đồng hồ vạn năng), chân và bộ nhớ của Arduino, ngắt và chống dội phím, các cảm biến – mô-đun hay dùng, giao tiếp UART/I2C/SPI, MQTT kiểu xuất bản – đăng ký, mạng diện rộng công suất thấp và ứng dụng IoT.",
+ "bieuTuong": "antenna.radiowaves.left.and.right",
+ "thuTu": -941,
+ "tu": [
+  {
+   "chu": "electron",
+   "doc": "/ɪˈlektrɑːn/",
+   "nghia": "electron: hạt mang điện âm; dòng điện là dòng electron chuyển động",
+   "nhom": "Điện cơ bản",
+   "viDu": "The negatively charged electrons jump between atoms.",
+   "viDuNghia": "Các electron mang điện âm nhảy giữa các nguyên tử."
+  },
+  {
+   "chu": "ampere",
+   "doc": "/ˈæmpɪr/",
+   "nghia": "ampe (A): đơn vị đo cường độ dòng điện",
+   "nhom": "Điện cơ bản",
+   "viDu": "An Arduino pin should not supply more than about 20 milliamperes.",
+   "viDuNghia": "Một chân Arduino không nên cấp quá khoảng 20 miliampe."
+  },
+  {
+   "chu": "milliampere",
+   "doc": "/ˌmɪliˈæmpɪr/",
+   "nghia": "miliampe (mA): một phần nghìn ampe",
+   "nhom": "Điện cơ bản",
+   "viDu": "An LED usually needs about 20 milliamperes of current.",
+   "viDuNghia": "Một đèn LED thường cần dòng khoảng 20 miliampe."
+  },
+  {
+   "chu": "watt",
+   "doc": "/wɑːt/",
+   "nghia": "oát (W): đơn vị công suất, bằng điện áp nhân dòng điện",
+   "nhom": "Điện cơ bản",
+   "viDu": "A 5 V device drawing 1 A consumes 5 watts.",
+   "viDuNghia": "Thiết bị 5 V tiêu thụ dòng 1 A dùng công suất 5 oát."
+  },
+  {
+   "chu": "Vcc",
+   "doc": "/ˌviː siː ˈsiː/",
+   "nghia": "Vcc: chân/đường cấp nguồn dương của mạch",
+   "nhom": "Điện cơ bản",
+   "viDu": "Vcc, GND, Analog",
+   "viDuNghia": "Vcc, GND, Analog (ba chân của mô-đun cảm biến)"
+  },
+  {
+   "chu": "series circuit",
+   "doc": "/ˈsɪriːz ˈsɜːrkɪt/",
+   "nghia": "mạch nối tiếp: các linh kiện nối thành một đường, cùng một dòng điện chạy qua",
+   "nhom": "Điện cơ bản",
+   "viDu": "In a series circuit, the same current flows through every component.",
+   "viDuNghia": "Trong mạch nối tiếp, cùng một dòng điện chạy qua mọi linh kiện."
+  },
+  {
+   "chu": "parallel circuit",
+   "doc": "/ˈpærəlel ˈsɜːrkɪt/",
+   "nghia": "mạch song song: các nhánh cùng nối giữa hai điểm, mỗi nhánh cùng điện áp",
+   "nhom": "Điện cơ bản",
+   "viDu": "In a parallel circuit, every branch has the same voltage.",
+   "viDuNghia": "Trong mạch song song, mọi nhánh có cùng điện áp."
+  },
+  {
+   "chu": "short circuit",
+   "doc": "/ʃɔːrt ˈsɜːrkɪt/",
+   "nghia": "ngắn mạch (chập mạch): nối thẳng nguồn với đất không qua tải, dòng rất lớn có thể làm cháy linh kiện",
+   "nhom": "Điện cơ bản",
+   "viDu": "Connecting 5V directly to GND creates a short circuit.",
+   "viDuNghia": "Nối thẳng 5V với GND tạo ra ngắn mạch."
+  },
+  {
+   "chu": "open circuit",
+   "doc": "/ˈoʊpən ˈsɜːrkɪt/",
+   "nghia": "hở mạch: mạch bị đứt nên không có dòng điện chạy qua",
+   "nhom": "Điện cơ bản",
+   "viDu": "A loose jumper wire leaves an open circuit and the LED stays off.",
+   "viDuNghia": "Một dây cắm lỏng làm hở mạch và đèn LED không sáng."
+  },
+  {
+   "chu": "insulator",
+   "doc": "/ˈɪnsəleɪtər/",
+   "nghia": "chất cách điện: vật liệu gần như không cho dòng điện đi qua (nhựa, cao su)",
+   "nhom": "Điện cơ bản",
+   "viDu": "The plastic coating of a wire is an insulator.",
+   "viDuNghia": "Lớp vỏ nhựa của dây điện là chất cách điện."
+  },
+  {
+   "chu": "diode",
+   "doc": "/ˈdaɪoʊd/",
+   "nghia": "đi-ốt: linh kiện chỉ cho dòng điện đi một chiều",
+   "nhom": "Điện cơ bản",
+   "viDu": "A diode protects the circuit from reversed power supply.",
+   "viDuNghia": "Đi-ốt bảo vệ mạch khi cắm ngược nguồn."
+  },
+  {
+   "chu": "photodiode",
+   "doc": "/ˌfoʊtoʊˈdaɪoʊd/",
+   "nghia": "đi-ốt quang: đi-ốt tạo ra dòng điện khi bị chiếu sáng",
+   "nhom": "Điện cơ bản",
+   "viDu": "A photodiode reacts to light much faster than a photoresistor.",
+   "viDuNghia": "Đi-ốt quang phản ứng với ánh sáng nhanh hơn nhiều so với quang trở."
+  },
+  {
+   "chu": "voltage regulator",
+   "doc": "/ˈvoʊltɪdʒ ˈreɡjuleɪtər/",
+   "nghia": "ổn áp: linh kiện giữ điện áp ra cố định (vd 5 V) dù điện áp vào thay đổi",
+   "nhom": "Điện cơ bản",
+   "viDu": "Voltage regulator",
+   "viDuNghia": "Bộ ổn áp"
+  },
+  {
+   "chu": "reference voltage",
+   "doc": "/ˈrefrəns ˈvoʊltɪdʒ/",
+   "nghia": "điện áp tham chiếu: điện áp lớn nhất ứng với giá trị ADC cao nhất (1023)",
+   "nhom": "Điện cơ bản",
+   "viDu": "Reference voltage for analog inputs.",
+   "viDuNghia": "Điện áp tham chiếu cho các đầu vào tương tự."
+  },
+  {
+   "chu": "logic high",
+   "doc": "/ˈlɑːdʒɪk haɪ/",
+   "nghia": "mức logic cao (HIGH): điện áp gần mức nguồn, đọc là 1",
+   "nhom": "Điện cơ bản",
+   "viDu": "On a 5 V Arduino, a logic high is close to 5 volts.",
+   "viDuNghia": "Trên Arduino 5 V, mức logic cao gần 5 vôn."
+  },
+  {
+   "chu": "logic low",
+   "doc": "/ˈlɑːdʒɪk loʊ/",
+   "nghia": "mức logic thấp (LOW): điện áp gần 0 V, đọc là 0",
+   "nhom": "Điện cơ bản",
+   "viDu": "A pressed button pulls the pin to logic low when a pull-up resistor is used.",
+   "viDuNghia": "Khi dùng điện trở kéo lên, nút được nhấn kéo chân về mức logic thấp."
+  },
+  {
+   "chu": "pull-down resistor",
+   "doc": "/ˈpʊl daʊn rɪˈzɪstər/",
+   "nghia": "điện trở kéo xuống: nối chân vào đất để chân đọc LOW khi nút không được nhấn",
+   "nhom": "Điện cơ bản",
+   "viDu": "A pull-down resistor keeps the input LOW until the button is pressed.",
+   "viDuNghia": "Điện trở kéo xuống giữ đầu vào ở mức LOW cho tới khi nút được nhấn."
+  },
+  {
+   "chu": "multimeter",
+   "doc": "/ˈmʌltimiːtər/",
+   "nghia": "đồng hồ vạn năng: dụng cụ đo điện áp, dòng điện, điện trở",
+   "nhom": "Điện cơ bản",
+   "viDu": "Use a multimeter to check whether the battery still gives 9 volts.",
+   "viDuNghia": "Dùng đồng hồ vạn năng để kiểm tra pin còn cho 9 vôn không."
+  },
+  {
+   "chu": "oscilloscope",
+   "doc": "/əˈsɪləskoʊp/",
+   "nghia": "máy hiện sóng: dụng cụ vẽ dạng tín hiệu điện theo thời gian",
+   "nhom": "Điện cơ bản",
+   "viDu": "Employing a real-time oscilloscope for debugging.",
+   "viDuNghia": "Dùng máy hiện sóng thời gian thực để gỡ lỗi."
+  },
+  {
+   "chu": "waveform",
+   "doc": "/ˈweɪvfɔːrm/",
+   "nghia": "dạng sóng: hình dạng của tín hiệu theo thời gian (vuông, sin, tam giác)",
+   "nhom": "Điện cơ bản",
+   "viDu": "to produce a waveform with an analog frequency",
+   "viDuNghia": "để tạo ra một dạng sóng có tần số tương tự"
+  },
+  {
+   "chu": "EEPROM",
+   "doc": "/ˌiː ˈiː prɑːm/",
+   "nghia": "EEPROM: bộ nhớ không mất khi tắt điện, ghi xoá được bằng điện, số lần ghi có giới hạn",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "EEPROM memory has unlimited write cycles.",
+   "viDuNghia": "Bộ nhớ EEPROM có số lần ghi không giới hạn (phát biểu sai: chỉ khoảng 100 000 lần)."
+  },
+  {
+   "chu": "non-volatile memory",
+   "doc": "/ˌnɑːn ˈvɑːlətl ˈmeməri/",
+   "nghia": "bộ nhớ không khả biến: giữ dữ liệu khi mất điện (flash, EEPROM)",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "The sketch is stored in non-volatile flash memory.",
+   "viDuNghia": "Chương trình được lưu trong bộ nhớ flash không khả biến."
+  },
+  {
+   "chu": "header pin",
+   "doc": "/ˈhedər pɪn/",
+   "nghia": "hàng chân cắm: dãy chân/lỗ cắm trên bo để nối dây hoặc gắn shield",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "Jumper wires plug into the header pins of the Arduino.",
+   "viDuNghia": "Dây cắm được cắm vào hàng chân của Arduino."
+  },
+  {
+   "chu": "barrel jack",
+   "doc": "/ˈbærəl dʒæk/",
+   "nghia": "jack nguồn tròn: cổng cắm bộ đổi nguồn 7–12 V cho Arduino",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "The Arduino can be powered through the USB port or the barrel jack.",
+   "viDuNghia": "Arduino có thể cấp nguồn qua cổng USB hoặc jack nguồn tròn."
+  },
+  {
+   "chu": "reset button",
+   "doc": "/ˈriːset ˈbʌtn/",
+   "nghia": "nút reset: khởi động lại vi điều khiển, chạy lại chương trình từ đầu",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "To reset the microcontroller.",
+   "viDuNghia": "Để khởi động lại vi điều khiển."
+  },
+  {
+   "chu": "Vin pin",
+   "doc": "/ˈviː ɪn pɪn/",
+   "nghia": "chân Vin: chân nhận nguồn vào chưa ổn áp (7–12 V)",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "You can power the board with a 9 V battery connected to the Vin pin.",
+   "viDuNghia": "Có thể cấp nguồn cho bo bằng pin 9 V nối vào chân Vin."
+  },
+  {
+   "chu": "on-board LED",
+   "doc": "/ˌɑːn bɔːrd ˌel iː ˈdiː/",
+   "nghia": "đèn LED trên bo: đèn gắn sẵn nối với chân 13 của Arduino Uno",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "The Blink example flashes the on-board LED connected to pin 13.",
+   "viDuNghia": "Ví dụ Blink nháy đèn LED trên bo nối với chân 13."
+  },
+  {
+   "chu": "PWM pin",
+   "doc": "/ˌpiː ˈdʌbl juː ˈem pɪn/",
+   "nghia": "chân PWM: chân số có dấu ~ phát được xung điều rộng bằng analogWrite()",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "analogWrite() only works on PWM pins marked with a tilde.",
+   "viDuNghia": "analogWrite() chỉ chạy trên các chân PWM có dấu ngã."
+  },
+  {
+   "chu": "analog pin",
+   "doc": "/ˈænəlɔːɡ pɪn/",
+   "nghia": "chân tương tự (A0–A5): đọc điện áp 0–5 V thành số 0–1023",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "Anode of the LED component will indirectly connected by a resistor to 5V pin in Arduino board and cathode of the LED component is connected to the A0 pin in the Arduino board.",
+   "viDuNghia": "Anốt của LED nối qua điện trở tới chân 5V và catốt nối vào chân tương tự A0 của Arduino."
+  },
+  {
+   "chu": "internal pull-up resistor",
+   "doc": "/ɪnˈtɜːrnl ˈpʊl ʌp rɪˈzɪstər/",
+   "nghia": "điện trở kéo lên bên trong: điện trở có sẵn trong chip, bật bằng pinMode(pin, INPUT_PULLUP); chân để hở đọc HIGH",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "INPUT takes the default reading as 0 while INPUT_PULLUP takes default reading as 1023",
+   "viDuNghia": "INPUT có giá trị đọc mặc định 0 còn INPUT_PULLUP có giá trị mặc định 1023 (phát biểu sai: digitalRead cho HIGH)"
+  },
+  {
+   "chu": "millis",
+   "doc": "/ˈmɪlɪz/",
+   "nghia": "millis(): hàm trả về số mili giây từ khi bo bắt đầu chạy, dùng định thời không chặn",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "Using millis() instead of delay() lets the loop keep reading sensors.",
+   "viDuNghia": "Dùng millis() thay cho delay() giúp vòng lặp vẫn đọc được cảm biến."
+  },
+  {
+   "chu": "attachInterrupt",
+   "doc": "/əˈtætʃ ˈɪntərʌpt/",
+   "nghia": "attachInterrupt(): gắn hàm xử lý ngắt cho một chân, chạy ngay khi tín hiệu đổi",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "attachInterrupt() runs a function as soon as the signal on pin 2 changes.",
+   "viDuNghia": "attachInterrupt() chạy một hàm ngay khi tín hiệu ở chân 2 thay đổi."
+  },
+  {
+   "chu": "switch bounce",
+   "doc": "/swɪtʃ baʊns/",
+   "nghia": "dội phím: tiếp điểm nút bấm rung vài mili giây, tạo nhiều lần đóng ngắt giả",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "Switch bounce can make one press look like several presses.",
+   "viDuNghia": "Dội phím có thể làm một lần nhấn trông như nhiều lần nhấn."
+  },
+  {
+   "chu": "debounce",
+   "doc": "/diːˈbaʊns/",
+   "nghia": "chống dội: lọc dội phím bằng phần mềm (chờ ổn định) hoặc phần cứng (tụ điện)",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "Debounce the button by ignoring changes for 50 milliseconds.",
+   "viDuNghia": "Chống dội nút bằng cách bỏ qua thay đổi trong 50 mili giây."
+  },
+  {
+   "chu": "sleep mode",
+   "doc": "/sliːp moʊd/",
+   "nghia": "chế độ ngủ: vi điều khiển tắt bớt khối để tiết kiệm pin, đánh thức bằng ngắt",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "When the Arduino is in deep sleep mode",
+   "viDuNghia": "Khi Arduino ở chế độ ngủ sâu"
+  },
+  {
+   "chu": "Serial Plotter",
+   "doc": "/ˈsɪriəl ˈplɑːtər/",
+   "nghia": "Serial Plotter: công cụ của Arduino IDE vẽ đồ thị các số gửi qua cổng nối tiếp",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "The Serial Plotter draws sensor readings as a live graph.",
+   "viDuNghia": "Serial Plotter vẽ số đo cảm biến thành đồ thị trực tiếp."
+  },
+  {
+   "chu": "Wire library",
+   "doc": "/ˈwaɪər ˈlaɪbreri/",
+   "nghia": "thư viện Wire: thư viện Arduino để giao tiếp I2C",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "The Wire library is used to talk to I2C devices such as an LCD backpack.",
+   "viDuNghia": "Thư viện Wire được dùng để giao tiếp với thiết bị I2C như mô-đun LCD."
+  },
+  {
+   "chu": "Tinkercad",
+   "doc": "/ˈtɪŋkərkæd/",
+   "nghia": "Tinkercad: công cụ trực tuyến miễn phí để thiết kế và mô phỏng mạch Arduino",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "Tinkercad is a free online collection of software tools that help people create and simulate circuits.",
+   "viDuNghia": "Tinkercad là bộ công cụ trực tuyến miễn phí giúp tạo và mô phỏng mạch điện."
+  },
+  {
+   "chu": "Fritzing",
+   "doc": "/ˈfrɪtsɪŋ/",
+   "nghia": "Fritzing: phần mềm vẽ sơ đồ mạch kiểu breadboard, sơ đồ nguyên lý và bo mạch in",
+   "nhom": "Bo mạch và lập trình Arduino",
+   "viDu": "Fritzing lets you draw a breadboard diagram of your project.",
+   "viDuNghia": "Fritzing cho phép vẽ sơ đồ breadboard của dự án."
+  },
+  {
+   "chu": "soil moisture sensor",
+   "doc": "/sɔɪl ˈmɔɪstʃər ˈsensər/",
+   "nghia": "cảm biến độ ẩm đất: đo lượng nước trong đất cho hệ thống tưới tự động",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "A soil moisture sensor tells the system when to water the plants.",
+   "viDuNghia": "Cảm biến độ ẩm đất báo cho hệ thống khi nào cần tưới cây."
+  },
+  {
+   "chu": "gas sensor",
+   "doc": "/ɡæs ˈsensər/",
+   "nghia": "cảm biến khí (MQ-2…): phát hiện khói, khí gas, CO",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "A gas sensor can trigger an alarm when it detects smoke.",
+   "viDuNghia": "Cảm biến khí có thể bật báo động khi phát hiện khói."
+  },
+  {
+   "chu": "infrared sensor",
+   "doc": "/ˌɪnfrəˈred ˈsensər/",
+   "nghia": "cảm biến hồng ngoại: phát và thu tia hồng ngoại để phát hiện vật cản, dò line",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "An infrared sensor detects obstacles in front of the robot.",
+   "viDuNghia": "Cảm biến hồng ngoại phát hiện vật cản phía trước robot."
+  },
+  {
+   "chu": "PIR sensor",
+   "doc": "/ˌpiː aɪ ˈɑːr ˈsensər/",
+   "nghia": "cảm biến PIR: phát hiện chuyển động của người qua thay đổi bức xạ nhiệt",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "A PIR sensor turns on the light when someone enters the room.",
+   "viDuNghia": "Cảm biến PIR bật đèn khi có người vào phòng."
+  },
+  {
+   "chu": "accelerometer",
+   "doc": "/əkˌseləˈrɑːmɪtər/",
+   "nghia": "gia tốc kế: đo gia tốc và độ nghiêng theo ba trục",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "The phone uses an accelerometer to rotate the screen.",
+   "viDuNghia": "Điện thoại dùng gia tốc kế để xoay màn hình."
+  },
+  {
+   "chu": "gyroscope",
+   "doc": "/ˈdʒaɪrəskoʊp/",
+   "nghia": "con quay hồi chuyển: đo tốc độ quay quanh các trục",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "A drone uses a gyroscope to keep itself stable.",
+   "viDuNghia": "Máy bay không người lái dùng con quay hồi chuyển để giữ thăng bằng."
+  },
+  {
+   "chu": "GPS module",
+   "doc": "/ˌdʒiː piː ˈes ˈmɑːdʒuːl/",
+   "nghia": "mô-đun GPS: thu tín hiệu vệ tinh để biết vị trí (kinh độ, vĩ độ)",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "A GPS module sends location data to the Arduino over serial.",
+   "viDuNghia": "Mô-đun GPS gửi dữ liệu vị trí cho Arduino qua cổng nối tiếp."
+  },
+  {
+   "chu": "keypad",
+   "doc": "/ˈkiːpæd/",
+   "nghia": "bàn phím ma trận: các nút xếp hàng – cột, quét để biết phím nào được nhấn",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "A 4x4 keypad lets the user enter a password.",
+   "viDuNghia": "Bàn phím 4x4 cho người dùng nhập mật khẩu."
+  },
+  {
+   "chu": "trigger pin",
+   "doc": "/ˈtrɪɡər pɪn/",
+   "nghia": "chân Trig: chân phát xung kích sóng siêu âm của cảm biến HC-SR04",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "A 10-microsecond pulse on the trigger pin starts the ultrasonic burst.",
+   "viDuNghia": "Xung 10 micro giây ở chân Trig bắt đầu phát sóng siêu âm."
+  },
+  {
+   "chu": "echo pin",
+   "doc": "/ˈekoʊ pɪn/",
+   "nghia": "chân Echo: chân trả xung có độ rộng tỉ lệ thời gian sóng đi và về",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "To receive the echo signal",
+   "viDuNghia": "Để nhận tín hiệu dội về"
+  },
+  {
+   "chu": "transceiver",
+   "doc": "/trænˈsiːvər/",
+   "nghia": "bộ thu phát: mô-đun vừa phát vừa thu sóng (nRF24L01, HC-05)",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "A Bluetooth transceiver lets the Arduino talk to a phone.",
+   "viDuNghia": "Bộ thu phát Bluetooth cho Arduino trò chuyện với điện thoại."
+  },
+  {
+   "chu": "RF module",
+   "doc": "/ˌɑːr ˈef ˈmɑːdʒuːl/",
+   "nghia": "mô-đun RF: mô-đun truyền nhận sóng vô tuyến (433 MHz…)",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "Cheap 433 MHz RF modules are used in remote controls.",
+   "viDuNghia": "Mô-đun RF 433 MHz giá rẻ được dùng trong điều khiển từ xa."
+  },
+  {
+   "chu": "motor driver",
+   "doc": "/ˈmoʊtər ˈdraɪvər/",
+   "nghia": "mạch điều khiển động cơ (L298N…): khuếch đại dòng từ chân Arduino để chạy động cơ",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "Never connect a DC motor directly to a pin; use a motor driver.",
+   "viDuNghia": "Đừng nối động cơ DC trực tiếp vào chân; hãy dùng mạch điều khiển động cơ."
+  },
+  {
+   "chu": "H-bridge",
+   "doc": "/ˈeɪtʃ brɪdʒ/",
+   "nghia": "cầu H: mạch bốn khoá đảo được chiều dòng qua động cơ để quay thuận/nghịch",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "An H-bridge allows a DC motor to run in both directions.",
+   "viDuNghia": "Cầu H cho phép động cơ DC quay cả hai chiều."
+  },
+  {
+   "chu": "stepper motor",
+   "doc": "/ˈstepər ˈmoʊtər/",
+   "nghia": "động cơ bước: quay từng bước góc cố định, điều khiển vị trí chính xác",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "3D printers move their axes with stepper motors.",
+   "viDuNghia": "Máy in 3D di chuyển các trục bằng động cơ bước."
+  },
+  {
+   "chu": "solenoid",
+   "doc": "/ˈsoʊlənɔɪd/",
+   "nghia": "cuộn hút (solenoid): cuộn dây tạo lực hút đẩy một lõi, dùng làm khoá cửa, van nước",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "A solenoid valve opens the water pipe when the soil is dry.",
+   "viDuNghia": "Van điện từ mở ống nước khi đất khô."
+  },
+  {
+   "chu": "start bit",
+   "doc": "/stɑːrt bɪt/",
+   "nghia": "bit bắt đầu: bit 0 báo một khung UART bắt đầu",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Each UART frame begins with a start bit.",
+   "viDuNghia": "Mỗi khung UART bắt đầu bằng một bit bắt đầu."
+  },
+  {
+   "chu": "stop bit",
+   "doc": "/stɑːp bɪt/",
+   "nghia": "bit dừng: bit 1 kết thúc một khung UART",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "The common setting 8N1 means 8 data bits, no parity and 1 stop bit.",
+   "viDuNghia": "Thiết lập thông dụng 8N1 nghĩa là 8 bit dữ liệu, không chẵn lẻ và 1 bit dừng."
+  },
+  {
+   "chu": "master device",
+   "doc": "/ˈmæstər dɪˈvaɪs/",
+   "nghia": "thiết bị chủ: bên phát xung đồng hồ và khởi động giao tiếp trên bus I2C/SPI",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Maximum distance between master and slaves",
+   "viDuNghia": "Khoảng cách tối đa giữa thiết bị chủ và thiết bị tớ"
+  },
+  {
+   "chu": "slave device",
+   "doc": "/sleɪv dɪˈvaɪs/",
+   "nghia": "thiết bị tớ: bên trả lời khi thiết bị chủ gọi đúng địa chỉ của nó",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Each slave device on the I2C bus has its own address.",
+   "viDuNghia": "Mỗi thiết bị tớ trên bus I2C có địa chỉ riêng."
+  },
+  {
+   "chu": "I2C address",
+   "doc": "/ˌaɪ ˈtuː siː ˈædres/",
+   "nghia": "địa chỉ I2C: số 7 bit định danh mỗi thiết bị trên bus I2C (vd 0x27 cho LCD)",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Many LCD backpacks use the I2C address 0x27.",
+   "viDuNghia": "Nhiều mô-đun LCD dùng địa chỉ I2C 0x27."
+  },
+  {
+   "chu": "SDA",
+   "doc": "/ˌes diː ˈeɪ/",
+   "nghia": "SDA: đường dữ liệu nối tiếp của bus I2C (chân A4 trên Uno)",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "On the Arduino Uno, SDA is pin A4 and SCL is pin A5.",
+   "viDuNghia": "Trên Arduino Uno, SDA là chân A4 và SCL là chân A5."
+  },
+  {
+   "chu": "SCL",
+   "doc": "/ˌes siː ˈel/",
+   "nghia": "SCL: đường xung đồng hồ của bus I2C (chân A5 trên Uno)",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "The master drives the SCL line to clock the data.",
+   "viDuNghia": "Thiết bị chủ điều khiển đường SCL để làm nhịp cho dữ liệu."
+  },
+  {
+   "chu": "MOSI",
+   "doc": "/ˈmoʊsi/",
+   "nghia": "MOSI (master out, slave in): đường SPI chủ gửi dữ liệu sang tớ",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Data from the master travels on the MOSI line.",
+   "viDuNghia": "Dữ liệu từ thiết bị chủ đi trên đường MOSI."
+  },
+  {
+   "chu": "MISO",
+   "doc": "/ˈmiːsoʊ/",
+   "nghia": "MISO (master in, slave out): đường SPI tớ gửi dữ liệu về chủ",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "The SD card answers the master on the MISO line.",
+   "viDuNghia": "Thẻ SD trả lời thiết bị chủ trên đường MISO."
+  },
+  {
+   "chu": "chip select",
+   "doc": "/tʃɪp sɪˈlekt/",
+   "nghia": "chọn chip (CS/SS): chân chủ kéo xuống LOW để chọn thiết bị SPI cần nói chuyện",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "SPI uses a separate chip select line for each slave.",
+   "viDuNghia": "SPI dùng một đường chọn chip riêng cho mỗi thiết bị tớ."
+  },
+  {
+   "chu": "bi-directional",
+   "doc": "/ˌbaɪ dəˈrekʃənl/",
+   "nghia": "hai chiều: truyền được theo cả hai hướng",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Bi-directional voice communication",
+   "viDuNghia": "Liên lạc thoại hai chiều"
+  },
+  {
+   "chu": "point-to-point connection",
+   "doc": "/ˌpɔɪnt tə ˈpɔɪnt kəˈnekʃn/",
+   "nghia": "kết nối điểm – điểm: chỉ hai thiết bị nối với nhau",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Classic Bluetooth supports point-to-point and multi-point connections.",
+   "viDuNghia": "Bluetooth cổ điển hỗ trợ kết nối điểm – điểm và đa điểm."
+  },
+  {
+   "chu": "multi-point connection",
+   "doc": "/ˌmʌlti pɔɪnt kəˈnekʃn/",
+   "nghia": "kết nối đa điểm: một thiết bị nối với nhiều thiết bị cùng lúc",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Multi-point connection",
+   "viDuNghia": "Kết nối đa điểm"
+  },
+  {
+   "chu": "amplitude modulation",
+   "doc": "/ˈæmplɪtuːd ˌmɑːdʒəˈleɪʃn/",
+   "nghia": "điều biên (AM): thay đổi biên độ sóng mang theo tín hiệu",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "AM radio uses amplitude modulation.",
+   "viDuNghia": "Đài AM dùng điều biên."
+  },
+  {
+   "chu": "frequency modulation",
+   "doc": "/ˈfriːkwənsi ˌmɑːdʒəˈleɪʃn/",
+   "nghia": "điều tần (FM): thay đổi tần số sóng mang theo tín hiệu",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Frequency modulation is less affected by noise than AM.",
+   "viDuNghia": "Điều tần ít bị nhiễu ảnh hưởng hơn điều biên."
+  },
+  {
+   "chu": "publish-subscribe",
+   "doc": "/ˈpʌblɪʃ səbˈskraɪb/",
+   "nghia": "xuất bản – đăng ký: bên gửi đăng tin lên chủ đề, bên nhận đăng ký chủ đề và nhận qua broker",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "MQTT follows the publish-subscribe model.",
+   "viDuNghia": "MQTT theo mô hình xuất bản – đăng ký."
+  },
+  {
+   "chu": "QoS level",
+   "doc": "/ˌkjuː oʊ ˈes ˈlevl/",
+   "nghia": "mức QoS (MQTT): 0 tối đa một lần, 1 ít nhất một lần, 2 đúng một lần",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "QoS level 2 guarantees that a message is delivered exactly once.",
+   "viDuNghia": "Mức QoS 2 bảo đảm thông điệp được giao đúng một lần."
+  },
+  {
+   "chu": "JSON payload",
+   "doc": "/ˈdʒeɪsn ˈpeɪloʊd/",
+   "nghia": "phần dữ liệu JSON: nội dung thông điệp gửi lên đám mây dưới dạng JSON",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "The sensor sends a JSON payload such as {\"temp\": 28}.",
+   "viDuNghia": "Cảm biến gửi phần dữ liệu JSON như {\"temp\": 28}."
+  },
+  {
+   "chu": "ThingSpeak",
+   "doc": "/ˈθɪŋspiːk/",
+   "nghia": "ThingSpeak: nền tảng đám mây IoT lưu và vẽ đồ thị dữ liệu cảm biến",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "ThingSpeak stores sensor data and draws charts online.",
+   "viDuNghia": "ThingSpeak lưu dữ liệu cảm biến và vẽ biểu đồ trực tuyến."
+  },
+  {
+   "chu": "Blynk",
+   "doc": "/blɪŋk/",
+   "nghia": "Blynk: nền tảng làm ứng dụng điện thoại điều khiển thiết bị IoT",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "With Blynk, you can switch a relay from your phone.",
+   "viDuNghia": "Với Blynk, bạn có thể bật tắt rơ-le từ điện thoại."
+  },
+  {
+   "chu": "Node-RED",
+   "doc": "/noʊd red/",
+   "nghia": "Node-RED: công cụ lập trình kéo thả nối các luồng dữ liệu IoT",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "Node-RED connects MQTT messages to a dashboard without much code.",
+   "viDuNghia": "Node-RED nối thông điệp MQTT với bảng điều khiển mà không cần nhiều mã."
+  },
+  {
+   "chu": "data lake",
+   "doc": "/ˈdeɪtə leɪk/",
+   "nghia": "hồ dữ liệu: kho chứa dữ liệu thô đủ loại với khối lượng lớn để phân tích sau",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "IoT data is often stored in a data lake before analysis.",
+   "viDuNghia": "Dữ liệu IoT thường được lưu vào hồ dữ liệu trước khi phân tích."
+  },
+  {
+   "chu": "digital twin",
+   "doc": "/ˈdɪdʒɪtl twɪn/",
+   "nghia": "bản sao số: mô hình số mô phỏng thiết bị thật theo dữ liệu thời gian thực",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "A digital twin of a machine predicts when it will fail.",
+   "viDuNghia": "Bản sao số của một máy dự đoán khi nào nó hỏng."
+  },
+  {
+   "chu": "NB-IoT",
+   "doc": "/ˌen ˈbiː aɪ oʊ ˈtiː/",
+   "nghia": "NB-IoT: mạng di động băng hẹp cho thiết bị IoT công suất thấp",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "NB-IoT runs on licensed cellular frequencies.",
+   "viDuNghia": "NB-IoT chạy trên tần số di động có cấp phép."
+  },
+  {
+   "chu": "Sigfox",
+   "doc": "/ˈsɪɡfɑːks/",
+   "nghia": "Sigfox: mạng LPWAN băng siêu hẹp, mỗi thiết bị chỉ gửi vài thông điệp ngắn mỗi ngày",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "Sigfox devices send only a few small messages per day.",
+   "viDuNghia": "Thiết bị Sigfox chỉ gửi vài thông điệp nhỏ mỗi ngày."
+  },
+  {
+   "chu": "5G",
+   "doc": "/ˌfaɪv ˈdʒiː/",
+   "nghia": "5G: mạng di động thế hệ 5, độ trễ thấp và kết nối được rất nhiều thiết bị",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "5G can connect up to a million devices per square kilometre.",
+   "viDuNghia": "5G có thể kết nối tới một triệu thiết bị mỗi ki-lô-mét vuông."
+  },
+  {
+   "chu": "duty cycling",
+   "doc": "/ˈduːti ˈsaɪklɪŋ/",
+   "nghia": "chạy theo chu kỳ làm việc: thiết bị thức dậy làm việc ngắn rồi ngủ lại để tiết kiệm pin",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "Duty cycling lets a sensor node run for years on one battery.",
+   "viDuNghia": "Chạy theo chu kỳ làm việc giúp nút cảm biến chạy nhiều năm bằng một viên pin."
+  },
+  {
+   "chu": "energy harvesting",
+   "doc": "/ˈenərdʒi ˈhɑːrvɪstɪŋ/",
+   "nghia": "thu năng lượng: lấy năng lượng từ môi trường (ánh sáng, rung, nhiệt) để nuôi thiết bị",
+   "nhom": "Đám mây và giao thức IoT",
+   "viDu": "Energy harvesting from sunlight can power a remote weather station.",
+   "viDuNghia": "Thu năng lượng mặt trời có thể nuôi một trạm thời tiết ở xa."
+  },
+  {
+   "chu": "X.509 certificate",
+   "doc": "/ˌeks faɪv oʊ ˈnaɪn sərˈtɪfɪkət/",
+   "nghia": "chứng chỉ X.509: chứng chỉ số định danh thiết bị/máy chủ khi kết nối TLS",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "Biometrics, X.509 digital certificates, and endpoint MAC addresses",
+   "viDuNghia": "Sinh trắc học, chứng chỉ số X.509 và địa chỉ MAC của thiết bị đầu cuối"
+  },
+  {
+   "chu": "biometrics",
+   "doc": "/ˌbaɪoʊˈmetrɪks/",
+   "nghia": "sinh trắc học: xác thực bằng đặc điểm cơ thể (vân tay, khuôn mặt)",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "Biometrics, X.509 digital certificates, and endpoint MAC addresses",
+   "viDuNghia": "Sinh trắc học, chứng chỉ số X.509 và địa chỉ MAC của thiết bị đầu cuối"
+  },
+  {
+   "chu": "botnet",
+   "doc": "/ˈbɑːtnet/",
+   "nghia": "mạng máy ma: nhiều thiết bị bị chiếm quyền, bị điều khiển chung để tấn công",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "The Mirai botnet used hacked IoT cameras to launch DDoS attacks.",
+   "viDuNghia": "Mạng máy ma Mirai dùng camera IoT bị chiếm quyền để tấn công DDoS."
+  },
+  {
+   "chu": "data ownership",
+   "doc": "/ˈdeɪtə ˈoʊnərʃɪp/",
+   "nghia": "quyền sở hữu dữ liệu: ai được quyền giữ, dùng, bán dữ liệu thiết bị thu được",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "Data ownership is unclear when a smart TV collects viewing habits.",
+   "viDuNghia": "Quyền sở hữu dữ liệu không rõ ràng khi TV thông minh thu thói quen xem."
+  },
+  {
+   "chu": "smart agriculture",
+   "doc": "/smɑːrt ˈæɡrɪkʌltʃər/",
+   "nghia": "nông nghiệp thông minh: dùng cảm biến, tưới tự động, phân tích dữ liệu trong trồng trọt chăn nuôi",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "Soil moisture monitoring is a typical smart agriculture application.",
+   "viDuNghia": "Theo dõi độ ẩm đất là ứng dụng nông nghiệp thông minh điển hình."
+  },
+  {
+   "chu": "livestock monitoring",
+   "doc": "/ˈlaɪvstɑːk ˈmɑːnɪtərɪŋ/",
+   "nghia": "giám sát vật nuôi: cảm biến đeo trên gia súc theo dõi sức khoẻ, vận động",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "A sensor on a milking cow is an example of livestock monitoring.",
+   "viDuNghia": "Cảm biến đeo trên bò sữa là ví dụ của giám sát vật nuôi."
+  },
+  {
+   "chu": "remote patient monitoring",
+   "doc": "/rɪˈmoʊt ˈpeɪʃnt ˈmɑːnɪtərɪŋ/",
+   "nghia": "theo dõi bệnh nhân từ xa: thiết bị đeo gửi chỉ số sức khoẻ về bác sĩ",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "Wearable device to monitor blood glucose level",
+   "viDuNghia": "Thiết bị đeo để theo dõi đường huyết (ví dụ theo dõi bệnh nhân từ xa)"
+  },
+  {
+   "chu": "predictive maintenance",
+   "doc": "/prɪˈdɪktɪv ˈmeɪntənəns/",
+   "nghia": "bảo trì dự đoán: phân tích dữ liệu cảm biến để sửa máy trước khi hỏng",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "Vibration sensors enable predictive maintenance of factory motors.",
+   "viDuNghia": "Cảm biến rung giúp bảo trì dự đoán động cơ nhà máy."
+  },
+  {
+   "chu": "asset tracking",
+   "doc": "/ˈæset ˈtrækɪŋ/",
+   "nghia": "theo dõi tài sản: định vị hàng hoá, xe, thiết bị bằng GPS/RFID",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "GPS trackers are used for asset tracking in logistics.",
+   "viDuNghia": "Thiết bị định vị GPS được dùng để theo dõi tài sản trong logistics."
+  },
+  {
+   "chu": "Industry 4.0",
+   "doc": "/ˈɪndəstri fɔːr pɔɪnt oʊ/",
+   "nghia": "công nghiệp 4.0: nhà máy thông minh kết hợp IoT, dữ liệu lớn, AI và tự động hoá",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "Industry 4.0 connects machines, sensors and data analytics in the factory.",
+   "viDuNghia": "Công nghiệp 4.0 kết nối máy móc, cảm biến và phân tích dữ liệu trong nhà máy."
+  },
+  {
+   "chu": "cyber-physical system",
+   "doc": "/ˌsaɪbər ˈfɪzɪkl ˈsɪstəm/",
+   "nghia": "hệ thống vật lý – số: phần mềm điều khiển trực tiếp quá trình vật lý qua cảm biến và cơ cấu chấp hành",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "A self-driving car is a cyber-physical system.",
+   "viDuNghia": "Xe tự lái là một hệ thống vật lý – số."
+  },
+  {
+   "chu": "real-time operating system",
+   "doc": "/ˈriːəl taɪm ˈɑːpəreɪtɪŋ ˈsɪstəm/",
+   "nghia": "hệ điều hành thời gian thực (RTOS): lập lịch tác vụ có hạn chót cho vi điều khiển (FreeRTOS)",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "FreeRTOS is a popular real-time operating system for microcontrollers.",
+   "viDuNghia": "FreeRTOS là hệ điều hành thời gian thực phổ biến cho vi điều khiển."
+  },
+  {
+   "chu": "GND",
+   "doc": "/ˌdʒiː en ˈdiː/",
+   "nghia": "GND (ground): chân / đường nối đất, mốc 0 V của mạch",
+   "nhom": "Điện cơ bản",
+   "viDu": "A servo needs power (Vcc), ground (GND), and a PWM control signal.",
+   "viDuNghia": "Servo cần nguồn (Vcc), đất (GND) và một tín hiệu điều khiển PWM."
+  },
+  {
+   "chu": "sound sensor",
+   "doc": "/saʊnd ˈsensər/",
+   "nghia": "cảm biến âm thanh: micro kèm mạch khuếch đại, xuất tín hiệu theo cường độ âm",
+   "nhom": "Cảm biến và mô-đun",
+   "viDu": "Sound intensity sensor",
+   "viDuNghia": "Cảm biến cường độ âm thanh"
+  },
+  {
+   "chu": "CNC machine",
+   "doc": "/ˌsiː en ˈsiː məˈʃiːn/",
+   "nghia": "máy CNC: máy gia công (phay, tiện, cắt) điều khiển số bằng máy tính – tự động hoá công nghiệp, không nhất thiết là IoT",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "Manufacturing bolts using a CNC machine",
+   "viDuNghia": "Sản xuất bu-lông bằng máy CNC"
+  },
+  {
+   "chu": "blockchain",
+   "doc": "/ˈblɒktʃeɪn/",
+   "nghia": "chuỗi khối: sổ cái phân tán, các khối dữ liệu nối nhau bằng hàm băm nên rất khó sửa; dùng cho giao dịch an toàn",
+   "nhom": "Bảo mật và ứng dụng",
+   "viDu": "Using blockchain technology for secure transactions",
+   "viDuNghia": "Dùng công nghệ blockchain cho giao dịch an toàn"
+  }
+ ]
+}

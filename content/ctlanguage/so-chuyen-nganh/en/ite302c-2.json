@@ -1,0 +1,674 @@
+{
+ "ma": "ite302c-2",
+ "nn": "en",
+ "ten": "ITE302c · 2. Lý thuyết, mô hình, dữ liệu & khủng hoảng",
+ "moTa": "Bổ sung ITE302c: lý thuyết đạo đức (mệnh lệnh tuyệt đối, thuyết tương đối), bộ nguyên tắc AI, đánh giá và giải thích mô hình (ROC, ma trận nhầm lẫn, LIME, SHAP), các loại thiên kiến, quyền dữ liệu (GDPR), rủi ro công nghệ, kế hoạch khắc phục thảm hoạ và văn hoá đạo đức — từ đề FE thật.",
+ "bieuTuong": "scalemass.fill",
+ "thuTu": -918,
+ "tu": [
+  {
+   "chu": "normative ethics",
+   "doc": "/ˈnɔːrmətɪv ˈeθɪks/",
+   "nghia": "đạo đức học chuẩn tắc: lý thuyết về điều NÊN làm (nghĩa vụ, hệ quả, đức hạnh)",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "Most people are not educated on normative ethical theories.",
+   "viDuNghia": "Phần lớn người ta không được học các lý thuyết đạo đức chuẩn tắc."
+  },
+  {
+   "chu": "deontological ethics",
+   "doc": "/ˌdiːɒntəˈlɑːdʒɪkl ˈeθɪks/",
+   "nghia": "đạo đức nghĩa vụ: đúng sai theo quy tắc/bổn phận, không theo hệ quả",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "The moral agent follows a deontological code of ethics.",
+   "viDuNghia": "Chủ thể đạo đức theo bộ quy tắc đạo đức nghĩa vụ."
+  },
+  {
+   "chu": "categorical imperative",
+   "doc": "/ˌkætəˈɡɔːrɪkl ɪmˈperətɪv/",
+   "nghia": "mệnh lệnh tuyệt đối (Kant): chỉ hành động theo quy tắc mà bạn muốn mọi người cùng làm",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "Categorical imperative",
+   "viDuNghia": "Mệnh lệnh tuyệt đối."
+  },
+  {
+   "chu": "consequentialism",
+   "doc": "/ˌkɑːnsəˈkwenʃəlɪzəm/",
+   "nghia": "thuyết hệ quả: hành động đúng là hành động cho kết quả tốt nhất (vị lợi là một dạng)",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "Utilitarianism is a form of consequentialism.",
+   "viDuNghia": "Chủ nghĩa vị lợi là một dạng thuyết hệ quả."
+  },
+  {
+   "chu": "moral relativism",
+   "doc": "/ˈmɔːrəl ˈrelətɪvɪzəm/",
+   "nghia": "thuyết tương đối đạo đức: đúng sai tuỳ văn hoá, bối cảnh, không có chuẩn chung tuyệt đối",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "Moral relativism",
+   "viDuNghia": "Thuyết tương đối đạo đức."
+  },
+  {
+   "chu": "trolley problem",
+   "doc": "/ˈtrɑːli ˈprɑːbləm/",
+   "nghia": "bài toán xe điện: chọn hy sinh một người để cứu năm người — dùng bàn về xe tự lái",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "The moral responsibility is split between you and the person controlling the trolley.",
+   "viDuNghia": "Trách nhiệm đạo đức chia cho bạn và người điều khiển xe điện."
+  },
+  {
+   "chu": "artificial general intelligence",
+   "doc": "/ˌɑːrtɪˈfɪʃl ˈdʒenrəl ɪnˈtelɪdʒəns/",
+   "nghia": "AGI: trí tuệ nhân tạo tổng quát, làm được mọi việc trí óc như con người (chưa có)",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "We should keep limits on what artificial general intelligence (AGI) is capable of.",
+   "viDuNghia": "Ta nên giới hạn những gì AGI có thể làm."
+  },
+  {
+   "chu": "Beijing AI Principles",
+   "doc": "/beɪˈdʒɪŋ ˌeɪ ˈaɪ ˈprɪnsəplz/",
+   "nghia": "bộ nguyên tắc AI Bắc Kinh (2019) về nghiên cứu, sử dụng và quản trị AI",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "The Beijing AI Principles' tenets about the use of AI.",
+   "viDuNghia": "Các nguyên lý của bộ nguyên tắc AI Bắc Kinh về việc dùng AI."
+  },
+  {
+   "chu": "Ethically Aligned Design",
+   "doc": "/ˈeθɪkli əˈlaɪnd dɪˈzaɪn/",
+   "nghia": "khung \"Thiết kế hợp đạo đức\" của IEEE cho hệ thống tự động và AI",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "The IEEE Ethically Aligned Design's discussion on classical ethics.",
+   "viDuNghia": "Phần bàn về đạo đức cổ điển trong khung Ethically Aligned Design của IEEE."
+  },
+  {
+   "chu": "engineering activism",
+   "doc": "/ˌendʒɪˈnɪrɪŋ ˈæktɪvɪzəm/",
+   "nghia": "hoạt động vì đạo đức của kỹ sư: lên tiếng, từ chối làm sản phẩm gây hại",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "A reference to one of the tenets of engineering activism.",
+   "viDuNghia": "Tham chiếu tới một nguyên lý của hoạt động vì đạo đức của kỹ sư."
+  },
+  {
+   "chu": "non-discrimination",
+   "doc": "/ˌnɑːn dɪˌskrɪmɪˈneɪʃn/",
+   "nghia": "không phân biệt đối xử — một nguyên tắc AI có trách nhiệm",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "Fairness and non-discrimination",
+   "viDuNghia": "Công bằng và không phân biệt đối xử."
+  },
+  {
+   "chu": "Goodhart's Law",
+   "doc": "/ˈɡʊdhɑːrts lɔː/",
+   "nghia": "định luật Goodhart: khi một số đo thành mục tiêu thì nó không còn là số đo tốt",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "Why is it important to consider Goodhart's law?",
+   "viDuNghia": "Vì sao cần cân nhắc định luật Goodhart?"
+  },
+  {
+   "chu": "confusion matrix",
+   "doc": "/kənˈfjuːʒn ˈmeɪtrɪks/",
+   "nghia": "ma trận nhầm lẫn: bảng đếm TP, FP, TN, FN của mô hình phân loại",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Confusion matrix",
+   "viDuNghia": "Ma trận nhầm lẫn."
+  },
+  {
+   "chu": "receiver operating characteristic",
+   "doc": "/rɪˈsiːvər ˈɑːpəreɪtɪŋ ˌkærəktəˈrɪstɪk/",
+   "nghia": "đường ROC: tỉ lệ dương tính thật theo tỉ lệ dương tính giả ở mọi ngưỡng",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Receiver operating characteristic (ROC)",
+   "viDuNghia": "Đường đặc tính hoạt động của bộ thu (ROC)."
+  },
+  {
+   "chu": "area under the curve",
+   "doc": "/ˈeriə ˈʌndər ðə kɜːrv/",
+   "nghia": "AUC: diện tích dưới đường ROC, càng gần 1 mô hình càng phân biệt tốt",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "An area under the curve of 0.5 means the model is guessing.",
+   "viDuNghia": "AUC bằng 0,5 nghĩa là mô hình chỉ đoán mò."
+  },
+  {
+   "chu": "false positive rate",
+   "doc": "/fɔːls ˈpɑːzətɪv reɪt/",
+   "nghia": "tỉ lệ dương tính giả: phần ca âm thật bị đoán nhầm là dương",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Compare the false positive rate across groups to check fairness.",
+   "viDuNghia": "So tỉ lệ dương tính giả giữa các nhóm để kiểm công bằng."
+  },
+  {
+   "chu": "true positive rate",
+   "doc": "/truː ˈpɑːzətɪv reɪt/",
+   "nghia": "tỉ lệ dương tính thật (recall, độ nhạy): phần ca dương thật được đoán đúng",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "The ROC curve plots the true positive rate against the false positive rate.",
+   "viDuNghia": "Đường ROC vẽ tỉ lệ dương tính thật theo tỉ lệ dương tính giả."
+  },
+  {
+   "chu": "F1 score",
+   "doc": "/ˌef ˈwʌn skɔːr/",
+   "nghia": "điểm F1: trung bình điều hoà của precision và recall",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "The F1 score balances precision and recall.",
+   "viDuNghia": "Điểm F1 cân bằng precision và recall."
+  },
+  {
+   "chu": "dimensionality reduction",
+   "doc": "/daɪˌmenʃəˈnæləti rɪˈdʌkʃn/",
+   "nghia": "giảm chiều dữ liệu: bớt số đặc trưng mà giữ thông tin chính (PCA)",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Dimensionality reduction",
+   "viDuNghia": "Giảm chiều dữ liệu."
+  },
+  {
+   "chu": "Local Interpretable Model-Agnostic Explanations",
+   "doc": "/ˈloʊkl ɪnˈtɜːrprɪtəbl ˈmɑːdl æɡˈnɑːstɪk ˌekspləˈneɪʃnz/",
+   "nghia": "LIME: giải thích từng dự đoán bằng một mô hình đơn giản xấp xỉ quanh điểm đó",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Local Interpretable Model-Agnostic Explanations",
+   "viDuNghia": "Giải thích cục bộ, dễ hiểu, không phụ thuộc mô hình (LIME)."
+  },
+  {
+   "chu": "SHAP",
+   "doc": "/ʃæp/",
+   "nghia": "SHapley Additive exPlanations: đo mức đóng góp của từng đặc trưng vào dự đoán theo giá trị Shapley",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "LIME is less accurate than SHAP.",
+   "viDuNghia": "LIME kém chính xác hơn SHAP."
+  },
+  {
+   "chu": "counterfactual explanation",
+   "doc": "/ˌkaʊntərˈfæktʃuəl ˌekspləˈneɪʃn/",
+   "nghia": "giải thích phản thực tế: nếu thay đổi gì thì kết quả sẽ khác (vd thu nhập thêm 2 triệu thì được duyệt)",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "A counterfactual explanation tells the applicant what would change the decision.",
+   "viDuNghia": "Giải thích phản thực tế cho người nộp đơn biết điều gì làm quyết định thay đổi."
+  },
+  {
+   "chu": "model card",
+   "doc": "/ˈmɑːdl kɑːrd/",
+   "nghia": "thẻ mô hình: tài liệu ngắn về mục đích, dữ liệu, hiệu năng, giới hạn của một mô hình",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Publish a model card with the accuracy for each subgroup.",
+   "viDuNghia": "Công bố thẻ mô hình kèm độ chính xác theo từng nhóm con."
+  },
+  {
+   "chu": "bias mitigation",
+   "doc": "/ˈbaɪəs ˌmɪtɪˈɡeɪʃn/",
+   "nghia": "giảm thiên kiến: kỹ thuật trước, trong, sau huấn luyện để mô hình công bằng hơn",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "An open source library that evaluates models for bias and provides mitigation tactics.",
+   "viDuNghia": "Thư viện mã nguồn mở đánh giá thiên kiến của mô hình và đưa cách giảm thiểu."
+  },
+  {
+   "chu": "AI Fairness 360",
+   "doc": "/ˌeɪ ˈaɪ ˈfernəs ˌθriː ˈsɪksti/",
+   "nghia": "AIF360: bộ công cụ mã nguồn mở của IBM đo và giảm thiên kiến mô hình",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "AI Fairness 360 provides fairness metrics and mitigation algorithms.",
+   "viDuNghia": "AI Fairness 360 cung cấp số đo công bằng và thuật toán giảm thiên kiến."
+  },
+  {
+   "chu": "demographic parity",
+   "doc": "/ˌdeməˈɡræfɪk ˈpærəti/",
+   "nghia": "cân bằng nhân khẩu: tỉ lệ được chọn như nhau giữa các nhóm",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Demographic parity requires equal approval rates for every group.",
+   "viDuNghia": "Cân bằng nhân khẩu đòi tỉ lệ được duyệt bằng nhau giữa các nhóm."
+  },
+  {
+   "chu": "equalized odds",
+   "doc": "/ˈiːkwəlaɪzd ɑːdz/",
+   "nghia": "cân bằng tỉ lệ lỗi: tỉ lệ dương tính thật và dương tính giả bằng nhau giữa các nhóm",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Equalized odds compares error rates between groups.",
+   "viDuNghia": "Cân bằng tỉ lệ lỗi so tỉ lệ lỗi giữa các nhóm."
+  },
+  {
+   "chu": "radioactive data",
+   "doc": "/ˌreɪdioʊˈæktɪv ˈdeɪtə/",
+   "nghia": "dữ liệu đánh dấu: ảnh được sửa không nhận ra bằng mắt để biết mô hình nào đã học từ nó",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Radioactive data tracing makes the modification imperceptible to human beings.",
+   "viDuNghia": "Truy vết dữ liệu đánh dấu làm thay đổi không nhận ra bằng mắt."
+  },
+  {
+   "chu": "confounding variable",
+   "doc": "/kənˈfaʊndɪŋ ˈveriəbl/",
+   "nghia": "biến gây nhiễu: biến thứ ba ảnh hưởng cả hai biến, làm tưởng có quan hệ nhân quả",
+   "nhom": "Thiên kiến và dữ liệu",
+   "viDu": "When you correlate a variable with a confounding variable.",
+   "viDuNghia": "Khi bạn tương quan một biến với một biến gây nhiễu."
+  },
+  {
+   "chu": "spurious correlation",
+   "doc": "/ˈspjʊriəs ˌkɔːrəˈleɪʃn/",
+   "nghia": "tương quan giả: hai biến cùng biến động nhưng không có quan hệ thật",
+   "nhom": "Thiên kiến và dữ liệu",
+   "viDu": "Ice cream sales and drownings show a spurious correlation.",
+   "viDuNghia": "Doanh số kem và số vụ đuối nước là tương quan giả."
+  },
+  {
+   "chu": "selection bias",
+   "doc": "/sɪˈlekʃn ˈbaɪəs/",
+   "nghia": "thiên kiến chọn mẫu: dữ liệu không đại diện cho tổng thể vì cách chọn",
+   "nhom": "Thiên kiến và dữ liệu",
+   "viDu": "Training only on hospital patients introduces selection bias.",
+   "viDuNghia": "Chỉ huấn luyện bằng bệnh nhân bệnh viện gây thiên kiến chọn mẫu."
+  },
+  {
+   "chu": "historical bias",
+   "doc": "/hɪˈstɔːrɪkl ˈbaɪəs/",
+   "nghia": "thiên kiến lịch sử: dữ liệu quá khứ mang sẵn bất công xã hội",
+   "nhom": "Thiên kiến và dữ liệu",
+   "viDu": "Past hiring data carries historical bias against women.",
+   "viDuNghia": "Dữ liệu tuyển dụng cũ mang thiên kiến lịch sử với phụ nữ."
+  },
+  {
+   "chu": "measurement bias",
+   "doc": "/ˈmeʒərmənt ˈbaɪəs/",
+   "nghia": "thiên kiến đo lường: cách đo hoặc nhãn sai lệch giữa các nhóm",
+   "nhom": "Thiên kiến và dữ liệu",
+   "viDu": "Using arrests as a proxy for crime causes measurement bias.",
+   "viDuNghia": "Dùng số vụ bắt giữ thay cho tội phạm gây thiên kiến đo lường."
+  },
+  {
+   "chu": "culture fit",
+   "doc": "/ˈkʌltʃər fɪt/",
+   "nghia": "hợp văn hoá: tiêu chí tuyển dụng dễ che giấu thiên kiến",
+   "nhom": "Thiên kiến và dữ liệu",
+   "viDu": "Hiring candidates based on their culture fit.",
+   "viDuNghia": "Tuyển ứng viên dựa trên độ hợp văn hoá."
+  },
+  {
+   "chu": "data poisoning",
+   "doc": "/ˈdeɪtə ˈpɔɪzənɪŋ/",
+   "nghia": "đầu độc dữ liệu: cài dữ liệu xấu vào tập huấn luyện để làm hỏng mô hình",
+   "nhom": "Thiên kiến và dữ liệu",
+   "viDu": "Data poisoning makes the spam filter accept spam.",
+   "viDuNghia": "Đầu độc dữ liệu khiến bộ lọc thư rác chấp nhận thư rác."
+  },
+  {
+   "chu": "adversarial example",
+   "doc": "/ˌædvərˈseriəl ɪɡˈzæmpl/",
+   "nghia": "mẫu đối kháng: đầu vào bị sửa rất nhỏ khiến mô hình đoán sai",
+   "nhom": "Thiên kiến và dữ liệu",
+   "viDu": "A few changed pixels create an adversarial example.",
+   "viDuNghia": "Vài điểm ảnh bị sửa tạo thành mẫu đối kháng."
+  },
+  {
+   "chu": "model drift",
+   "doc": "/ˈmɑːdl drɪft/",
+   "nghia": "trôi mô hình: độ chính xác giảm dần vì dữ liệu thực tế thay đổi so với lúc huấn luyện",
+   "nhom": "Thiên kiến và dữ liệu",
+   "viDu": "Monitor model drift and retrain when accuracy drops.",
+   "viDuNghia": "Theo dõi trôi mô hình và huấn luyện lại khi độ chính xác giảm."
+  },
+  {
+   "chu": "data subject",
+   "doc": "/ˈdeɪtə ˈsʌbdʒɪkt/",
+   "nghia": "chủ thể dữ liệu: người mà dữ liệu cá nhân nói về (GDPR)",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "The data subject can ask for a copy of their data.",
+   "viDuNghia": "Chủ thể dữ liệu có thể yêu cầu bản sao dữ liệu của mình."
+  },
+  {
+   "chu": "data controller",
+   "doc": "/ˈdeɪtə kənˈtroʊlər/",
+   "nghia": "bên kiểm soát dữ liệu: tổ chức quyết định mục đích và cách xử lý dữ liệu cá nhân",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "The data controller is responsible for GDPR compliance.",
+   "viDuNghia": "Bên kiểm soát dữ liệu chịu trách nhiệm tuân thủ GDPR."
+  },
+  {
+   "chu": "lawful basis",
+   "doc": "/ˈlɔːfl ˈbeɪsɪs/",
+   "nghia": "cơ sở pháp lý để xử lý dữ liệu (đồng ý, hợp đồng, nghĩa vụ pháp lý, lợi ích chính đáng)",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "Consent is only one lawful basis for processing.",
+   "viDuNghia": "Sự đồng ý chỉ là một cơ sở pháp lý để xử lý dữ liệu."
+  },
+  {
+   "chu": "purpose limitation",
+   "doc": "/ˈpɜːrpəs ˌlɪmɪˈteɪʃn/",
+   "nghia": "giới hạn mục đích: chỉ dùng dữ liệu cho mục đích đã nói khi thu thập",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "Purpose limitation forbids reusing delivery addresses for advertising.",
+   "viDuNghia": "Giới hạn mục đích cấm dùng địa chỉ giao hàng cho quảng cáo."
+  },
+  {
+   "chu": "storage limitation",
+   "doc": "/ˈstɔːrɪdʒ ˌlɪmɪˈteɪʃn/",
+   "nghia": "giới hạn lưu trữ: chỉ giữ dữ liệu trong thời gian cần thiết",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "Only keep data for as long as it is needed.",
+   "viDuNghia": "Chỉ giữ dữ liệu trong thời gian cần thiết."
+  },
+  {
+   "chu": "right to be forgotten",
+   "doc": "/raɪt tə bi fərˈɡɑːtn/",
+   "nghia": "quyền được lãng quên: người dùng yêu cầu xoá dữ liệu cá nhân của mình",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "The right to be forgotten lets users ask for erasure.",
+   "viDuNghia": "Quyền được lãng quên cho người dùng yêu cầu xoá dữ liệu."
+  },
+  {
+   "chu": "data portability",
+   "doc": "/ˈdeɪtə ˌpɔːrtəˈbɪləti/",
+   "nghia": "quyền mang dữ liệu đi: nhận dữ liệu của mình ở định dạng máy đọc được để chuyển sang dịch vụ khác",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "Data portability lets users move their playlists to another service.",
+   "viDuNghia": "Quyền mang dữ liệu cho người dùng chuyển danh sách nhạc sang dịch vụ khác."
+  },
+  {
+   "chu": "opt-in",
+   "doc": "/ˈɑːpt ɪn/",
+   "nghia": "chọn tham gia: chỉ thu thập/gửi khi người dùng chủ động đồng ý (đối lập opt-out)",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "Opt-out/opt-in mechanisms",
+   "viDuNghia": "Cơ chế chọn không tham gia / chọn tham gia."
+  },
+  {
+   "chu": "pseudonymization",
+   "doc": "/suːˌdɑːnɪmaɪˈzeɪʃn/",
+   "nghia": "bí danh hoá: thay định danh bằng mã, vẫn khôi phục được nếu có khoá",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "Anonymized datasets can be re-identified by anyone holding the hash key.",
+   "viDuNghia": "Bộ dữ liệu ẩn danh có thể bị nhận dạng lại bởi ai giữ khoá băm. (đó là bí danh hoá, không phải ẩn danh thật)"
+  },
+  {
+   "chu": "privacy by design",
+   "doc": "/ˈpraɪvəsi baɪ dɪˈzaɪn/",
+   "nghia": "bảo vệ riêng tư ngay từ thiết kế: tính riêng tư là mặc định, không thêm sau",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "Privacy by design collects only the data the feature needs.",
+   "viDuNghia": "Riêng tư từ thiết kế chỉ thu dữ liệu tính năng cần."
+  },
+  {
+   "chu": "data monetization",
+   "doc": "/ˈdeɪtə ˌmɑːnɪtəˈzeɪʃn/",
+   "nghia": "kiếm tiền từ dữ liệu: bán hoặc khai thác dữ liệu người dùng để thu lợi",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "They take away monetization opportunities, leaving individuals unfairly compensated for their data.",
+   "viDuNghia": "Họ lấy mất cơ hội kiếm tiền, khiến cá nhân không được trả công xứng đáng cho dữ liệu."
+  },
+  {
+   "chu": "data broker",
+   "doc": "/ˈdeɪtə ˈbroʊkər/",
+   "nghia": "môi giới dữ liệu: công ty thu gom và bán hồ sơ dữ liệu cá nhân",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "A data broker sells profiles built from many sources.",
+   "viDuNghia": "Môi giới dữ liệu bán hồ sơ dựng từ nhiều nguồn."
+  },
+  {
+   "chu": "dark pattern",
+   "doc": "/dɑːrk ˈpætərn/",
+   "nghia": "mẫu giao diện lừa: thiết kế đánh lừa người dùng (nút huỷ khó tìm, ô đồng ý tick sẵn)",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "Hiding the unsubscribe button is a dark pattern.",
+   "viDuNghia": "Giấu nút huỷ đăng ký là mẫu giao diện lừa."
+  },
+  {
+   "chu": "jurisdiction",
+   "doc": "/ˌdʒʊrɪsˈdɪkʃn/",
+   "nghia": "khu vực pháp lý: vùng mà một bộ luật có hiệu lực",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "It is a legal requirement in many jurisdictions.",
+   "viDuNghia": "Đó là yêu cầu pháp lý ở nhiều khu vực pháp lý."
+  },
+  {
+   "chu": "covert surveillance",
+   "doc": "/ˈkoʊvɜːrt sərˈveɪləns/",
+   "nghia": "giám sát lén: theo dõi người dùng mà họ không biết",
+   "nhom": "Rủi ro công nghệ và xã hội",
+   "viDu": "Linked IoT technology that conducts covert surveillance on the people within its environment.",
+   "viDuNghia": "Công nghệ IoT kết nối giám sát lén những người trong môi trường của nó."
+  },
+  {
+   "chu": "content moderation",
+   "doc": "/ˈkɑːntent ˌmɑːdəˈreɪʃn/",
+   "nghia": "kiểm duyệt nội dung trên nền tảng trực tuyến (gỡ nội dung độc hại)",
+   "nhom": "Rủi ro công nghệ và xã hội",
+   "viDu": "What is the most important argument in favor of content moderation in online platforms?",
+   "viDuNghia": "Lập luận quan trọng nhất ủng hộ kiểm duyệt nội dung trên nền tảng trực tuyến là gì?"
+  },
+  {
+   "chu": "filter bubble",
+   "doc": "/ˈfɪltər ˈbʌbl/",
+   "nghia": "bong bóng lọc: thuật toán chỉ đưa nội dung hợp ý nên người dùng ít thấy quan điểm khác",
+   "nhom": "Rủi ro công nghệ và xã hội",
+   "viDu": "Recommendation engines can trap users in a filter bubble.",
+   "viDuNghia": "Hệ gợi ý có thể nhốt người dùng trong bong bóng lọc."
+  },
+  {
+   "chu": "disenfranchisement",
+   "doc": "/ˌdɪsɪnˈfræntʃaɪzmənt/",
+   "nghia": "tước quyền: làm một nhóm mất quyền hay cơ hội (bầu cử, dịch vụ)",
+   "nhom": "Rủi ro công nghệ và xã hội",
+   "viDu": "Disenfranchisement",
+   "viDuNghia": "Sự tước quyền."
+  },
+  {
+   "chu": "Big Tech",
+   "doc": "/bɪɡ tek/",
+   "nghia": "các tập đoàn công nghệ lớn (Google, Apple, Meta, Amazon, Microsoft)",
+   "nhom": "Rủi ro công nghệ và xã hội",
+   "viDu": "By acting virtuous, the public respects Big Tech more and more.",
+   "viDuNghia": "Bằng cách hành xử đạo đức, công chúng ngày càng tôn trọng Big Tech."
+  },
+  {
+   "chu": "monopoly",
+   "doc": "/məˈnɑːpəli/",
+   "nghia": "độc quyền: một công ty chiếm lĩnh thị trường, chặn đối thủ nhỏ",
+   "nhom": "Rủi ro công nghệ và xã hội",
+   "viDu": "Locking out smaller players, leading to monopolies or cartels.",
+   "viDuNghia": "Loại các bên nhỏ, dẫn tới độc quyền hoặc cartel."
+  },
+  {
+   "chu": "dual use",
+   "doc": "/ˈduːəl juːs/",
+   "nghia": "lưỡng dụng: công nghệ dùng được cả cho mục đích tốt lẫn gây hại",
+   "nhom": "Rủi ro công nghệ và xã hội",
+   "viDu": "Facial recognition is a dual use technology.",
+   "viDuNghia": "Nhận diện khuôn mặt là công nghệ lưỡng dụng."
+  },
+  {
+   "chu": "autonomous vehicle",
+   "doc": "/ɔːˈtɑːnəməs ˈviːəkl/",
+   "nghia": "xe tự lái",
+   "nhom": "Rủi ro công nghệ và xã hội",
+   "viDu": "Who is responsible when an autonomous vehicle causes a crash?",
+   "viDuNghia": "Ai chịu trách nhiệm khi xe tự lái gây tai nạn?"
+  },
+  {
+   "chu": "job displacement",
+   "doc": "/dʒɑːb dɪsˈpleɪsmənt/",
+   "nghia": "mất việc do tự động hoá thay thế người lao động",
+   "nhom": "Rủi ro công nghệ và xã hội",
+   "viDu": "Automation raises concerns about job displacement.",
+   "viDuNghia": "Tự động hoá làm dấy lo ngại về mất việc."
+  },
+  {
+   "chu": "disaster recovery plan",
+   "doc": "/dɪˈzæstər rɪˈkʌvəri plæn/",
+   "nghia": "DRP: kế hoạch khôi phục hệ thống và dữ liệu sau sự cố lớn",
+   "nhom": "Quản trị rủi ro, khủng hoảng và văn hoá",
+   "viDu": "By using data-driven techniques to inform the strategies behind the DRP.",
+   "viDuNghia": "Dùng kỹ thuật dựa trên dữ liệu để định hướng chiến lược của DRP."
+  },
+  {
+   "chu": "red team",
+   "doc": "/red tiːm/",
+   "nghia": "đội đỏ: nhóm đóng vai kẻ tấn công để tìm điểm yếu (kiểm thử xâm nhập, thử AI)",
+   "nhom": "Quản trị rủi ro, khủng hoảng và văn hoá",
+   "viDu": "What is the function of a red team in a penetration testing exercise?",
+   "viDuNghia": "Chức năng của đội đỏ trong bài kiểm thử xâm nhập là gì?"
+  },
+  {
+   "chu": "security posture",
+   "doc": "/sɪˈkjʊrəti ˈpɑːstʃər/",
+   "nghia": "mức độ an ninh tổng thể của một sản phẩm/tổ chức",
+   "nhom": "Quản trị rủi ro, khủng hoảng và văn hoá",
+   "viDu": "Enhancing the security posture of a product or service.",
+   "viDuNghia": "Nâng cao mức an ninh của sản phẩm hoặc dịch vụ."
+  },
+  {
+   "chu": "emergent risk",
+   "doc": "/ɪˈmɜːrdʒənt rɪsk/",
+   "nghia": "rủi ro mới nảy sinh khi sản phẩm, công nghệ, xã hội thay đổi",
+   "nhom": "Quản trị rủi ro, khủng hoảng và văn hoá",
+   "viDu": "It helps maintain alignment with the emergent risks and changing ethical posture of the products.",
+   "viDuNghia": "Nó giúp theo kịp các rủi ro mới nảy sinh và lập trường đạo đức đang đổi của sản phẩm."
+  },
+  {
+   "chu": "periodic review",
+   "doc": "/ˌpɪriˈɑːdɪk rɪˈvjuː/",
+   "nghia": "rà soát định kỳ chính sách, mô hình, rủi ro",
+   "nhom": "Quản trị rủi ro, khủng hoảng và văn hoá",
+   "viDu": "During periodic reviews, with ongoing customer feedback solicited.",
+   "viDuNghia": "Trong các đợt rà soát định kỳ, có lấy phản hồi khách hàng liên tục."
+  },
+  {
+   "chu": "reputational damage",
+   "doc": "/ˌrepjuˈteɪʃənl ˈdæmɪdʒ/",
+   "nghia": "tổn hại uy tín",
+   "nhom": "Quản trị rủi ro, khủng hoảng và văn hoá",
+   "viDu": "Avoidance of reputational damage",
+   "viDuNghia": "Tránh tổn hại uy tín."
+  },
+  {
+   "chu": "ethical violation",
+   "doc": "/ˈeθɪkl ˌvaɪəˈleɪʃn/",
+   "nghia": "vi phạm đạo đức",
+   "nhom": "Quản trị rủi ro, khủng hoảng và văn hoá",
+   "viDu": "In case an ethical violation occurs, stakeholders know whom to contact.",
+   "viDuNghia": "Khi có vi phạm đạo đức, các bên liên quan biết liên hệ ai."
+  },
+  {
+   "chu": "culture-building workshop",
+   "doc": "/ˈkʌltʃər ˈbɪldɪŋ ˈwɜːrkʃɑːp/",
+   "nghia": "hội thảo xây dựng văn hoá: giúp nhân viên đưa giá trị công ty vào việc hằng ngày",
+   "nhom": "Quản trị rủi ro, khủng hoảng và văn hoá",
+   "viDu": "How is a culture-building workshop different from ethics training?",
+   "viDuNghia": "Hội thảo xây dựng văn hoá khác đào tạo đạo đức thế nào?"
+  },
+  {
+   "chu": "whistleblower",
+   "doc": "/ˈwɪslbloʊər/",
+   "nghia": "người tố giác sai phạm trong tổ chức",
+   "nhom": "Quản trị rủi ro, khủng hoảng và văn hoá",
+   "viDu": "A whistleblower reported the hidden data sharing.",
+   "viDuNghia": "Một người tố giác đã báo việc chia sẻ dữ liệu lén."
+  },
+  {
+   "chu": "quasi-identifier",
+   "doc": "/ˌkweɪzaɪ aɪˈdentɪfaɪər/",
+   "nghia": "định danh gián tiếp: thuộc tính (mã bưu chính, ngày sinh, giới tính…) tự nó không chỉ ra ai nhưng ghép lại thì nhận ra được người",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "A quasi-identifier (zip code, birth date) can identify people when combined.",
+   "viDuNghia": "Định danh gián tiếp (mã bưu chính, ngày sinh) có thể nhận ra người khi ghép lại."
+  },
+  {
+   "chu": "sensitive attribute",
+   "doc": "/ˈsensətɪv ˈætrɪbjuːt/",
+   "nghia": "thuộc tính nhạy cảm: dữ liệu không định danh trực tiếp nhưng cần bảo vệ (chẩn đoán bệnh, lương…)",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "A sensitive attribute is not directly identifying but is still sensitive personal information.",
+   "viDuNghia": "Thuộc tính nhạy cảm không định danh trực tiếp nhưng vẫn là thông tin cá nhân nhạy cảm."
+  },
+  {
+   "chu": "anonymized data",
+   "doc": "/əˈnɒnɪmaɪzd ˈdeɪtə/",
+   "nghia": "dữ liệu đã ẩn danh: đã gỡ / che thông tin định danh; vẫn có thể bị tái định danh khi ghép với nguồn khác",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "How do anonymized datasets fall short of their goal of being anonymous?",
+   "viDuNghia": "Vì sao các tập dữ liệu đã ẩn danh vẫn không đạt mục tiêu ẩn danh?"
+  },
+  {
+   "chu": "opt-out",
+   "doc": "/ˈɒpt aʊt/",
+   "nghia": "chọn không tham gia: dữ liệu được thu / dùng mặc định cho tới khi người dùng chủ động từ chối (ngược với opt-in)",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "Granular control and opt-in/opt-out mechanisms give users real choices about data usage.",
+   "viDuNghia": "Kiểm soát chi tiết và cơ chế opt-in/opt-out cho người dùng lựa chọn thật về việc dùng dữ liệu."
+  },
+  {
+   "chu": "granular control",
+   "doc": "/ˈɡrænjələr kənˈtroʊl/",
+   "nghia": "kiểm soát chi tiết: người dùng chọn chính xác từng loại dữ liệu được chia sẻ, thay vì đồng ý tất cả hoặc không gì cả",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "Granular or modular control over data usage",
+   "viDuNghia": "Kiểm soát chi tiết, theo từng phần đối với việc dùng dữ liệu"
+  },
+  {
+   "chu": "legalese",
+   "doc": "/ˌliːɡəˈliːz/",
+   "nghia": "lời văn pháp lý rườm rà: ngôn ngữ luật khó hiểu với người thường, làm chính sách kém minh bạch",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "Including detailed legalese in the policy that mirrors regulatory requirements.",
+   "viDuNghia": "Đưa nhiều lời văn pháp lý chi tiết, chép theo yêu cầu của luật, vào chính sách."
+  },
+  {
+   "chu": "layperson",
+   "doc": "/ˈleɪpɜːrsn/",
+   "nghia": "người ngoài ngành: người không có chuyên môn (về luật, kỹ thuật…)",
+   "nhom": "Quyền dữ liệu và quyền riêng tư",
+   "viDu": "The use of pictures with simple text makes it easier for the layperson to understand the details of a contract.",
+   "viDuNghia": "Dùng hình kèm chữ đơn giản giúp người ngoài ngành dễ hiểu chi tiết hợp đồng hơn."
+  },
+  {
+   "chu": "anthropocentric",
+   "doc": "/ˌænθrəpəˈsentrɪk/",
+   "nghia": "lấy con người làm trung tâm: chỉ coi con người có giá trị và quyền, không mở rộng cho thực thể khác (AI, động vật)",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "Humans are anthropocentric and don't want to extend rights to other sentient entities.",
+   "viDuNghia": "Con người lấy mình làm trung tâm và không muốn mở rộng quyền cho các thực thể có tri giác khác."
+  },
+  {
+   "chu": "actionable",
+   "doc": "/ˈækʃənəbl/",
+   "nghia": "làm được ngay: đủ cụ thể để biến thành bước hành động",
+   "nhom": "Lý thuyết và nguyên tắc đạo đức",
+   "viDu": "A practical ethical framework creates concrete, actionable steps to mitigate ethical concerns.",
+   "viDuNghia": "Một khung đạo đức thực tiễn tạo ra các bước cụ thể, làm được ngay để giảm các lo ngại đạo đức."
+  },
+  {
+   "chu": "decommissioning",
+   "doc": "/ˌdiːkəˈmɪʃənɪŋ/",
+   "nghia": "ngừng vận hành: giai đoạn cuối vòng đời, rút hệ thống khỏi sử dụng và xử lý dữ liệu của nó",
+   "nhom": "Rủi ro công nghệ và xã hội",
+   "viDu": "Ethical consideration should span the entire lifecycle of a technology, from inception through decommissioning.",
+   "viDuNghia": "Cân nhắc đạo đức phải trải suốt vòng đời công nghệ, từ khi khởi tạo tới khi ngừng vận hành."
+  },
+  {
+   "chu": "descriptive analytics",
+   "doc": "/dɪˈskrɪptɪv ˌænəˈlɪtɪks/",
+   "nghia": "phân tích mô tả: tóm tắt điều ĐÃ xảy ra (báo cáo, thống kê, dashboard)",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Descriptive analytics summarizes what has already happened.",
+   "viDuNghia": "Phân tích mô tả tóm tắt những gì đã xảy ra."
+  },
+  {
+   "chu": "predictive analytics",
+   "doc": "/prɪˈdɪktɪv ˌænəˈlɪtɪks/",
+   "nghia": "phân tích dự đoán: dùng dữ liệu quá khứ và mô hình để dự báo điều SẼ xảy ra",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Predictive analytics uses historical data to forecast what is likely to happen.",
+   "viDuNghia": "Phân tích dự đoán dùng dữ liệu quá khứ để dự báo điều có khả năng xảy ra."
+  },
+  {
+   "chu": "prescriptive analytics",
+   "doc": "/prɪˈskrɪptɪv ˌænəˈlɪtɪks/",
+   "nghia": "phân tích đề xuất: khuyến nghị hành động / quyết định tốt nhất NÊN làm",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Determining the best action to take is prescriptive analytics, which recommends optimal decisions.",
+   "viDuNghia": "Xác định hành động tốt nhất nên làm là phân tích đề xuất – nó khuyến nghị quyết định tối ưu."
+  },
+  {
+   "chu": "EBITDA",
+   "doc": "/ˈiːbɪtdɑː/",
+   "nghia": "EBITDA: lợi nhuận trước lãi vay, thuế và khấu hao – chỉ số tài chính chung của doanh nghiệp, không riêng cho hệ thống dữ liệu",
+   "nhom": "Đánh giá và giải thích mô hình",
+   "viDu": "Earnings before interest, taxes, depreciation, and amortization (EBITDA)",
+   "viDuNghia": "Lợi nhuận trước lãi vay, thuế, khấu hao tài sản hữu hình và vô hình (EBITDA)"
+  }
+ ]
+}

@@ -1,0 +1,784 @@
+{
+ "ma": "fer202-2",
+ "nn": "en",
+ "ten": "FER202 · 2. Redux, Router, vòng đời & hiệu năng",
+ "moTa": "Bổ sung FER202: Flux và Redux Toolkit, component lớp và vòng đời, hook nâng cao (useMemo, useCallback, useRef), xử lý sự kiện, React Router, mẫu component và cú pháp JavaScript hay gặp trong đề FE/PE.",
+ "bieuTuong": "atom",
+ "thuTu": -914,
+ "tu": [
+  {
+   "chu": "Flux",
+   "doc": "/flʌks/",
+   "nghia": "Flux: kiến trúc của Facebook cho luồng dữ liệu một chiều (action → dispatcher → store → view); Redux kế thừa ý tưởng này",
+   "nhom": "Flux và Redux",
+   "viDu": "Flux enforces unidirectional data flow, while MVC allows bidirectional data flow.",
+   "viDuNghia": "Flux bắt buộc luồng dữ liệu một chiều, còn MVC cho phép luồng dữ liệu hai chiều."
+  },
+  {
+   "chu": "bidirectional data flow",
+   "doc": "/ˌbaɪdəˈrekʃənl ˈdeɪtə floʊ/",
+   "nghia": "luồng dữ liệu hai chiều: model và view cập nhật lẫn nhau (kiểu MVC truyền thống)",
+   "nhom": "Flux và Redux",
+   "viDu": "Both Flux and MVC allow bidirectional data flow.",
+   "viDuNghia": "Cả Flux và MVC đều cho phép luồng dữ liệu hai chiều. (Sai: Flux chỉ một chiều.)"
+  },
+  {
+   "chu": "two-way data binding",
+   "doc": "/ˌtuː weɪ ˈdeɪtə ˈbaɪndɪŋ/",
+   "nghia": "ràng buộc dữ liệu hai chiều: ô nhập và biến tự đồng bộ hai phía (Angular); React mặc định dùng một chiều",
+   "nhom": "Flux và Redux",
+   "viDu": "Which feature is NOT part of React: one-way data flow or two-way data binding?",
+   "viDuNghia": "Tính năng nào KHÔNG thuộc React: luồng dữ liệu một chiều hay ràng buộc dữ liệu hai chiều?"
+  },
+  {
+   "chu": "dispatch",
+   "doc": "/dɪˈspætʃ/",
+   "nghia": "dispatch (Redux): gửi một action tới store để reducer tính state mới, vd dispatch({ type: 'add' })",
+   "nhom": "Flux và Redux",
+   "viDu": "Middleware dispatches action, then reducer, store and component are updated.",
+   "viDuNghia": "Middleware dispatch action, sau đó reducer, store và component được cập nhật."
+  },
+  {
+   "chu": "action type",
+   "doc": "/ˈækʃn taɪp/",
+   "nghia": "kiểu action: chuỗi trong trường type cho reducer biết phải làm gì, vd 'counter/increment'",
+   "nhom": "Flux và Redux",
+   "viDu": "The reducer uses a switch statement on the action type.",
+   "viDuNghia": "Reducer dùng câu lệnh switch theo kiểu action."
+  },
+  {
+   "chu": "action object",
+   "doc": "/ˈækʃn ˈɑːbdʒekt/",
+   "nghia": "đối tượng action: object thuần có trường type (và payload) mô tả việc đã xảy ra",
+   "nhom": "Flux và Redux",
+   "viDu": "An action object must have a type property.",
+   "viDuNghia": "Một đối tượng action bắt buộc có thuộc tính type."
+  },
+  {
+   "chu": "Redux Toolkit",
+   "doc": "/ˈriːdʌks ˈtuːlkɪt/",
+   "nghia": "Redux Toolkit (RTK): bộ công cụ chính thức để viết Redux gọn (configureStore, createSlice, createAsyncThunk)",
+   "nhom": "Flux và Redux",
+   "viDu": "import { configureStore } from '@reduxjs/toolkit';",
+   "viDuNghia": "Nhập configureStore từ gói @reduxjs/toolkit."
+  },
+  {
+   "chu": "configureStore",
+   "doc": "/kənˈfɪɡjər stɔːr/",
+   "nghia": "hàm của Redux Toolkit tạo store, tự gộp reducer và gắn sẵn middleware thunk + DevTools",
+   "nhom": "Flux và Redux",
+   "viDu": "const store = configureStore({ reducer: { counter: counterReducer } });",
+   "viDuNghia": "Tạo store bằng configureStore với reducer counter."
+  },
+  {
+   "chu": "createSlice",
+   "doc": "/kriˈeɪt slaɪs/",
+   "nghia": "hàm của Redux Toolkit sinh cùng lúc reducer và action creator cho một phần state (slice)",
+   "nhom": "Flux và Redux",
+   "viDu": "createSlice generates action creators and a reducer for one slice of state.",
+   "viDuNghia": "createSlice sinh action creator và reducer cho một phần state."
+  },
+  {
+   "chu": "slice reducer",
+   "doc": "/slaɪs rɪˈduːsər/",
+   "nghia": "reducer của một phần state (một \"lát\" của store), được gộp lại thành root reducer",
+   "nhom": "Flux và Redux",
+   "viDu": "Each slice reducer manages its own part of the store.",
+   "viDuNghia": "Mỗi slice reducer quản lý phần state riêng của nó."
+  },
+  {
+   "chu": "root reducer",
+   "doc": "/ruːt rɪˈduːsər/",
+   "nghia": "reducer gốc: gộp mọi slice reducer (combineReducers) thành reducer duy nhất của store",
+   "nhom": "Flux và Redux",
+   "viDu": "The root reducer is created with combineReducers.",
+   "viDuNghia": "Reducer gốc được tạo bằng combineReducers."
+  },
+  {
+   "chu": "combineReducers",
+   "doc": "/kəmˈbaɪn rɪˈduːsərz/",
+   "nghia": "hàm Redux gộp nhiều reducer con thành một reducer, mỗi reducer quản một khoá của state",
+   "nhom": "Flux và Redux",
+   "viDu": "combineReducers({ todos, filter }) returns a single reducer function.",
+   "viDuNghia": "combineReducers({ todos, filter }) trả về một hàm reducer duy nhất."
+  },
+  {
+   "chu": "Redux middleware",
+   "doc": "/ˈriːdʌks ˈmɪdlwer/",
+   "nghia": "middleware Redux: lớp chen giữa dispatch và reducer để xử lý việc bất đồng bộ, ghi log",
+   "nhom": "Flux và Redux",
+   "viDu": "A middleware that handles asynchronous operations in Redux.",
+   "viDuNghia": "Một middleware xử lý thao tác bất đồng bộ trong Redux."
+  },
+  {
+   "chu": "Redux DevTools",
+   "doc": "/ˈriːdʌks ˈdev tuːlz/",
+   "nghia": "tiện ích trình duyệt xem từng action, state trước/sau và quay lại trạng thái cũ",
+   "nhom": "Flux và Redux",
+   "viDu": "Redux DevTools lets you inspect every dispatched action.",
+   "viDuNghia": "Redux DevTools cho xem từng action đã dispatch."
+  },
+  {
+   "chu": "time-travel debugging",
+   "doc": "/ˈtaɪm trævl diːˈbʌɡɪŋ/",
+   "nghia": "gỡ lỗi du hành thời gian: tua lại các action để xem state ở từng thời điểm",
+   "nhom": "Flux và Redux",
+   "viDu": "Pure reducers make time-travel debugging possible.",
+   "viDuNghia": "Reducer thuần khiến việc gỡ lỗi du hành thời gian trở nên khả thi."
+  },
+  {
+   "chu": "immutable update",
+   "doc": "/ɪˈmjuːtəbl ˈʌpdeɪt/",
+   "nghia": "cập nhật bất biến: tạo object/mảng mới thay vì sửa trực tiếp state cũ",
+   "nhom": "Flux và Redux",
+   "viDu": "In Redux, how do you update the state immutably?",
+   "viDuNghia": "Trong Redux, làm sao cập nhật state một cách bất biến?"
+  },
+  {
+   "chu": "mutate",
+   "doc": "/ˈmjuːteɪt/",
+   "nghia": "sửa trực tiếp (làm biến đổi) object/mảng đang có; trong React/Redux không được mutate state",
+   "nhom": "Flux và Redux",
+   "viDu": "Never mutate the state directly; return a new object instead.",
+   "viDuNghia": "Đừng bao giờ sửa trực tiếp state; hãy trả về object mới."
+  },
+  {
+   "chu": "Immer",
+   "doc": "/ˈɪmər/",
+   "nghia": "thư viện Redux Toolkit dùng bên trong: cho viết code \"như sửa trực tiếp\" nhưng vẫn sinh state mới bất biến",
+   "nhom": "Flux và Redux",
+   "viDu": "Thanks to Immer, state.value += 1 inside createSlice is safe.",
+   "viDuNghia": "Nhờ Immer, viết state.value += 1 trong createSlice vẫn an toàn."
+  },
+  {
+   "chu": "createAsyncThunk",
+   "doc": "/kriˈeɪt eɪˈsɪŋk θʌŋk/",
+   "nghia": "hàm Redux Toolkit tạo thunk gọi API, tự dispatch ba action pending, fulfilled, rejected",
+   "nhom": "Flux và Redux",
+   "viDu": "createAsyncThunk dispatches pending, fulfilled and rejected actions.",
+   "viDuNghia": "createAsyncThunk dispatch các action pending, fulfilled và rejected."
+  },
+  {
+   "chu": "getState",
+   "doc": "/ɡet steɪt/",
+   "nghia": "phương thức store.getState(): đọc toàn bộ state hiện tại của Redux store",
+   "nhom": "Flux và Redux",
+   "viDu": "console.log(store.getState()) prints the whole state tree.",
+   "viDuNghia": "console.log(store.getState()) in ra toàn bộ cây state."
+  },
+  {
+   "chu": "react-redux",
+   "doc": "/riˈækt ˈriːdʌks/",
+   "nghia": "thư viện nối React với Redux: Provider, useSelector, useDispatch, connect",
+   "nhom": "Flux và Redux",
+   "viDu": "The Provider from react-redux makes the store available to every component.",
+   "viDuNghia": "Provider của react-redux giúp mọi component dùng được store."
+  },
+  {
+   "chu": "connect function",
+   "doc": "/kəˈnekt ˈfʌŋkʃn/",
+   "nghia": "hàm connect() (react-redux, kiểu cũ): nối component với store qua mapStateToProps và mapDispatchToProps",
+   "nhom": "Flux và Redux",
+   "viDu": "To connect React components to the Redux store.",
+   "viDuNghia": "Để nối component React với Redux store."
+  },
+  {
+   "chu": "mapStateToProps",
+   "doc": "/mæp steɪt tuː prɑːps/",
+   "nghia": "hàm chọn phần state của store để đưa vào props của component khi dùng connect()",
+   "nhom": "Flux và Redux",
+   "viDu": "mapStateToProps returns the part of the store the component needs.",
+   "viDuNghia": "mapStateToProps trả về phần store mà component cần."
+  },
+  {
+   "chu": "createContext",
+   "doc": "/kriˈeɪt ˈkɑːntekst/",
+   "nghia": "hàm tạo một Context, trả về đối tượng có Provider và Consumer",
+   "nhom": "Flux và Redux",
+   "viDu": "const ThemeContext = createContext('light');",
+   "viDuNghia": "Tạo ThemeContext với giá trị mặc định 'light'."
+  },
+  {
+   "chu": "context consumer",
+   "doc": "/ˈkɑːntekst kənˈsuːmər/",
+   "nghia": "nơi đọc giá trị Context (Context.Consumer hoặc hook useContext)",
+   "nhom": "Flux và Redux",
+   "viDu": "What is a \"context consumer\"?",
+   "viDuNghia": "\"Context consumer\" là gì?"
+  },
+  {
+   "chu": "PureComponent",
+   "doc": "/pjʊr kəmˈpoʊnənt/",
+   "nghia": "React.PureComponent: lớp component tự so nông props/state, không đổi thì không render lại",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "A PureComponent skips re-rendering when props and state are shallowly equal.",
+   "viDuNghia": "PureComponent bỏ qua render lại khi props và state bằng nhau theo so sánh nông."
+  },
+  {
+   "chu": "super",
+   "doc": "/ˈsuːpər/",
+   "nghia": "super(props): gọi hàm tạo của lớp cha trong constructor, bắt buộc trước khi dùng this",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "Call super(props) before using this in the constructor.",
+   "viDuNghia": "Gọi super(props) trước khi dùng this trong constructor."
+  },
+  {
+   "chu": "React.Component",
+   "doc": "/riˈækt kəmˈpoʊnənt/",
+   "nghia": "lớp gốc mà component lớp kế thừa (class App extends React.Component)",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "return class extends React.Component { // HOC implementation };",
+   "viDuNghia": "Trả về một lớp kế thừa React.Component (phần cài đặt HOC)."
+  },
+  {
+   "chu": "setState",
+   "doc": "/set steɪt/",
+   "nghia": "phương thức của component lớp để cập nhật state và yêu cầu render lại",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "Which method updates the state of a class component? By using the setState() method.",
+   "viDuNghia": "Phương thức nào cập nhật state của component lớp? Dùng setState()."
+  },
+  {
+   "chu": "forceUpdate",
+   "doc": "/fɔːrs ˈʌpdeɪt/",
+   "nghia": "phương thức buộc component lớp render lại, bỏ qua kiểm tra state/props (ít dùng)",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "render, setState, forceUpdate.",
+   "viDuNghia": "render, setState, forceUpdate."
+  },
+  {
+   "chu": "componentDidMount",
+   "doc": "/kəmˈpoʊnənt dɪd maʊnt/",
+   "nghia": "phương thức vòng đời chạy một lần ngay sau khi component được gắn vào DOM (hay dùng để gọi API)",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "Use a class component with componentDidMount to fetch the data.",
+   "viDuNghia": "Dùng component lớp với componentDidMount để lấy dữ liệu."
+  },
+  {
+   "chu": "componentDidUpdate",
+   "doc": "/kəmˈpoʊnənt dɪd ˈʌpdeɪt/",
+   "nghia": "phương thức vòng đời chạy sau mỗi lần cập nhật (props hoặc state đổi)",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "componentDidMount, componentDidUpdate, componentWillUnmount.",
+   "viDuNghia": "Ba phương thức vòng đời: sau gắn, sau cập nhật, trước gỡ."
+  },
+  {
+   "chu": "componentWillUnmount",
+   "doc": "/kəmˈpoʊnənt wɪl ʌnˈmaʊnt/",
+   "nghia": "phương thức vòng đời chạy ngay trước khi component bị gỡ: huỷ timer, huỷ đăng ký sự kiện",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "Clear the interval in componentWillUnmount.",
+   "viDuNghia": "Huỷ interval trong componentWillUnmount."
+  },
+  {
+   "chu": "shouldComponentUpdate",
+   "doc": "/ʃʊd kəmˈpoʊnənt ˈʌpdeɪt/",
+   "nghia": "phương thức trả true/false để quyết định có render lại hay không (tối ưu hiệu năng)",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "shouldComponentUpdate returns false to skip a re-render.",
+   "viDuNghia": "shouldComponentUpdate trả false để bỏ qua lần render lại."
+  },
+  {
+   "chu": "mounting phase",
+   "doc": "/ˈmaʊntɪŋ feɪz/",
+   "nghia": "giai đoạn gắn: component được tạo và chèn vào DOM lần đầu (constructor → render → componentDidMount)",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "constructor and render run during the mounting phase.",
+   "viDuNghia": "constructor và render chạy trong giai đoạn gắn."
+  },
+  {
+   "chu": "updating phase",
+   "doc": "/ˈʌpdeɪtɪŋ feɪz/",
+   "nghia": "giai đoạn cập nhật: khi props/state đổi, component render lại",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "componentDidUpdate is called in the updating phase.",
+   "viDuNghia": "componentDidUpdate được gọi ở giai đoạn cập nhật."
+  },
+  {
+   "chu": "unmounting phase",
+   "doc": "/ʌnˈmaʊntɪŋ feɪz/",
+   "nghia": "giai đoạn gỡ: component bị xoá khỏi DOM",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "componentWillUnmount is the only method of the unmounting phase.",
+   "viDuNghia": "componentWillUnmount là phương thức duy nhất của giai đoạn gỡ."
+  },
+  {
+   "chu": "bind method",
+   "doc": "/baɪnd ˈmeθəd/",
+   "nghia": "phương thức bind(): gắn cố định this cho hàm, hay dùng trong constructor của component lớp",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "By using the bind method when binding the event handler.",
+   "viDuNghia": "Bằng cách dùng phương thức bind khi gắn hàm xử lý sự kiện."
+  },
+  {
+   "chu": "this keyword",
+   "doc": "/ðɪs ˈkiːwɜːrd/",
+   "nghia": "từ khoá this: trỏ tới đối tượng đang gọi hàm; trong component lớp là chính component",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "Arrow functions do not have their own this keyword.",
+   "viDuNghia": "Arrow function không có this riêng."
+  },
+  {
+   "chu": "useMemo",
+   "doc": "/juːz ˈmemoʊ/",
+   "nghia": "hook ghi nhớ KẾT QUẢ tính toán, chỉ tính lại khi dependency đổi",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "By using the useMemo and useCallback Hooks.",
+   "viDuNghia": "Bằng cách dùng hook useMemo và useCallback."
+  },
+  {
+   "chu": "useCallback",
+   "doc": "/juːz ˈkɔːlbæk/",
+   "nghia": "hook ghi nhớ chính HÀM, giữ nguyên tham chiếu giữa các lần render",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "React.memo() and useCallback()",
+   "viDuNghia": "React.memo() và useCallback()"
+  },
+  {
+   "chu": "useRef",
+   "doc": "/juːz ref/",
+   "nghia": "hook tạo object { current } tồn tại suốt vòng đời, đổi không gây render lại; dùng để trỏ tới phần tử DOM",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "Using the useRef hook.",
+   "viDuNghia": "Dùng hook useRef."
+  },
+  {
+   "chu": "forwardRef",
+   "doc": "/ˈfɔːrwərd ref/",
+   "nghia": "hàm cho phép component hàm nhận ref từ cha và chuyển tiếp xuống phần tử bên trong",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "Function components cannot be given a ref unless wrapped in forwardRef.",
+   "viDuNghia": "Component hàm không nhận được ref trừ khi được bọc trong forwardRef."
+  },
+  {
+   "chu": "useImperativeHandle",
+   "doc": "/juːz ɪmˈperətɪv ˈhændl/",
+   "nghia": "hook dùng cùng forwardRef để chọn các hàm mà component con lộ ra cho ref của cha",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "Use forwardRef + useImperativeHandle to explicitly expose internal functions.",
+   "viDuNghia": "Dùng forwardRef + useImperativeHandle để lộ rõ các hàm bên trong."
+  },
+  {
+   "chu": "React.memo",
+   "doc": "/riˈækt ˈmemoʊ/",
+   "nghia": "hàm bọc component để bỏ qua render lại khi props không đổi (so sánh nông)",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "Select the benefits of using React.memo and useMemo in React applications.",
+   "viDuNghia": "Chọn lợi ích của React.memo và useMemo trong ứng dụng React."
+  },
+  {
+   "chu": "unnecessary re-render",
+   "doc": "/ʌnˈnesəseri ˌriːˈrendər/",
+   "nghia": "lần render lại thừa: component vẽ lại dù dữ liệu hiển thị không đổi",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "By avoiding unnecessary re-renders with the memo Hook.",
+   "viDuNghia": "Bằng cách tránh những lần render lại thừa với memo."
+  },
+  {
+   "chu": "diffing algorithm",
+   "doc": "/ˈdɪfɪŋ ˈælɡərɪðəm/",
+   "nghia": "thuật toán so khác: React so cây virtual DOM mới với cũ để chỉ cập nhật phần đổi",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "The Virtual DOM diffing algorithm used internally by React.",
+   "viDuNghia": "Thuật toán so khác virtual DOM mà React dùng bên trong."
+  },
+  {
+   "chu": "useLayoutEffect",
+   "doc": "/juːz ˈleɪaʊt ɪˈfekt/",
+   "nghia": "giống useEffect nhưng chạy đồng bộ ngay sau khi DOM đổi, trước khi trình duyệt vẽ",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "useLayoutEffect runs before the browser paints the screen.",
+   "viDuNghia": "useLayoutEffect chạy trước khi trình duyệt vẽ màn hình."
+  },
+  {
+   "chu": "side effect",
+   "doc": "/ˈsaɪd ɪfekt/",
+   "nghia": "tác dụng phụ (lập trình): việc ảnh hưởng ra ngoài việc render như gọi API, hẹn giờ, sửa DOM — đặt trong useEffect",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "Side effects such as data fetching belong in useEffect.",
+   "viDuNghia": "Tác dụng phụ như lấy dữ liệu phải đặt trong useEffect."
+  },
+  {
+   "chu": "functional update",
+   "doc": "/ˈfʌŋkʃənl ˈʌpdeɪt/",
+   "nghia": "cập nhật dạng hàm: setCount(prev => prev + 1), dùng khi state mới phụ thuộc state cũ",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "Use a functional update when the new state depends on the previous one.",
+   "viDuNghia": "Dùng cập nhật dạng hàm khi state mới phụ thuộc state trước."
+  },
+  {
+   "chu": "stale closure",
+   "doc": "/steɪl ˈkloʊʒər/",
+   "nghia": "closure cũ: hàm giữ giá trị state của lần render trước nên đọc ra số đã lỗi thời",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "A missing dependency causes a stale closure inside useEffect.",
+   "viDuNghia": "Thiếu dependency gây ra closure cũ bên trong useEffect."
+  },
+  {
+   "chu": "batching",
+   "doc": "/ˈbætʃɪŋ/",
+   "nghia": "gộp lô: React gộp nhiều lần setState trong cùng sự kiện thành một lần render",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "React 18 batches several state updates into one render.",
+   "viDuNghia": "React 18 gộp nhiều lần cập nhật state thành một lần render."
+  },
+  {
+   "chu": "derived state",
+   "doc": "/dɪˈraɪvd steɪt/",
+   "nghia": "state suy ra: giá trị tính được từ props/state khác, không nên lưu riêng thành state",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "Compute derived state during render instead of storing it.",
+   "viDuNghia": "Tính state suy ra ngay lúc render thay vì lưu lại."
+  },
+  {
+   "chu": "referential equality",
+   "doc": "/ˌrefəˈrenʃl iˈkwɑːləti/",
+   "nghia": "bằng nhau theo tham chiếu: hai object/hàm chỉ \"bằng\" khi cùng một vùng nhớ — lý do cần useCallback",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "useCallback keeps referential equality between renders.",
+   "viDuNghia": "useCallback giữ nguyên tham chiếu giữa các lần render."
+  },
+  {
+   "chu": "StrictMode",
+   "doc": "/strɪkt moʊd/",
+   "nghia": "component React.StrictMode: chế độ nghiêm ngặt lúc dev, chạy hiệu ứng hai lần để lộ lỗi",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "In development, StrictMode runs effects twice to find bugs.",
+   "viDuNghia": "Ở môi trường dev, StrictMode chạy effect hai lần để tìm lỗi."
+  },
+  {
+   "chu": "createRoot",
+   "doc": "/kriˈeɪt ruːt/",
+   "nghia": "ReactDOM.createRoot(): tạo gốc React 18 gắn vào một phần tử DOM rồi gọi render",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "ReactDOM.createRoot() and BrowserRouter.",
+   "viDuNghia": "ReactDOM.createRoot() và BrowserRouter."
+  },
+  {
+   "chu": "ReactDOM",
+   "doc": "/riˈækt dɑːm/",
+   "nghia": "gói react-dom: cầu nối giữa React và DOM trình duyệt (createRoot, createPortal)",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "By passing the JSX to the ReactDOM.render() function.",
+   "viDuNghia": "Bằng cách truyền JSX vào hàm ReactDOM.render()."
+  },
+  {
+   "chu": "React DevTools",
+   "doc": "/riˈækt ˈdev tuːlz/",
+   "nghia": "tiện ích trình duyệt xem cây component, props, state và đo hiệu năng (Profiler)",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "Use the Profiler tab of React DevTools to find slow components.",
+   "viDuNghia": "Dùng thẻ Profiler của React DevTools để tìm component chậm."
+  },
+  {
+   "chu": "event pooling",
+   "doc": "/ɪˈvent ˈpuːlɪŋ/",
+   "nghia": "gom sự kiện (React ≤ 16): tái dùng đối tượng synthetic event để tiết kiệm bộ nhớ; React 17 đã bỏ",
+   "nhom": "Sự kiện trong React",
+   "viDu": "What is the advantage of event pooling in React?",
+   "viDuNghia": "Lợi thế của event pooling trong React là gì?"
+  },
+  {
+   "chu": "event object",
+   "doc": "/ɪˈvent ˈɑːbdʒekt/",
+   "nghia": "đối tượng sự kiện: tham số e truyền vào hàm xử lý, chứa target, type, preventDefault()",
+   "nhom": "Sự kiện trong React",
+   "viDu": "It reduces memory usage by reusing event objects.",
+   "viDuNghia": "Nó giảm bộ nhớ dùng bằng cách tái sử dụng đối tượng sự kiện."
+  },
+  {
+   "chu": "event target",
+   "doc": "/ɪˈvent ˈtɑːrɡɪt/",
+   "nghia": "e.target: phần tử phát ra sự kiện, vd đọc giá trị ô nhập bằng e.target.value",
+   "nhom": "Sự kiện trong React",
+   "viDu": "setName(event.target.value) updates the state on every keystroke.",
+   "viDuNghia": "setName(event.target.value) cập nhật state ở mỗi lần gõ phím."
+  },
+  {
+   "chu": "event bubbling",
+   "doc": "/ɪˈvent ˈbʌblɪŋ/",
+   "nghia": "nổi bọt sự kiện: sự kiện lan từ phần tử con lên dần các phần tử cha",
+   "nhom": "Sự kiện trong React",
+   "viDu": "Call stopPropagation() to stop event bubbling.",
+   "viDuNghia": "Gọi stopPropagation() để chặn sự kiện nổi bọt."
+  },
+  {
+   "chu": "stopPropagation",
+   "doc": "/stɑːp ˌprɑːpəˈɡeɪʃn/",
+   "nghia": "phương thức dừng sự kiện lan tiếp lên phần tử cha",
+   "nhom": "Sự kiện trong React",
+   "viDu": "e.stopPropagation() keeps the click from reaching the parent div.",
+   "viDuNghia": "e.stopPropagation() giữ cú nhấp không lan tới div cha."
+  },
+  {
+   "chu": "onChange",
+   "doc": "/ɑːn tʃeɪndʒ/",
+   "nghia": "sự kiện onChange: chạy mỗi khi giá trị ô nhập thay đổi (React kích hoạt theo từng phím)",
+   "nhom": "Sự kiện trong React",
+   "viDu": "A controlled input needs both value and onChange.",
+   "viDuNghia": "Ô nhập được kiểm soát cần cả value lẫn onChange."
+  },
+  {
+   "chu": "onSubmit",
+   "doc": "/ɑːn səbˈmɪt/",
+   "nghia": "sự kiện onSubmit của form: chạy khi gửi form, thường gọi e.preventDefault()",
+   "nhom": "Sự kiện trong React",
+   "viDu": "Handle the form in onSubmit and call event.preventDefault().",
+   "viDuNghia": "Xử lý form trong onSubmit và gọi event.preventDefault()."
+  },
+  {
+   "chu": "handle an event",
+   "doc": "/ˈhændl ən ɪˈvent/",
+   "nghia": "xử lý sự kiện: gắn hàm chạy khi người dùng nhấp, gõ, gửi form",
+   "nhom": "Sự kiện trong React",
+   "viDu": "How do you handle events in React class components?",
+   "viDuNghia": "Làm sao xử lý sự kiện trong component lớp của React?"
+  },
+  {
+   "chu": "BrowserRouter",
+   "doc": "/ˈbraʊzər ˈruːtər/",
+   "nghia": "router dùng History API của trình duyệt (URL sạch, không dấu #), bọc ngoài toàn ứng dụng",
+   "nhom": "React Router",
+   "viDu": "import { BrowserRouter as Router, Route } from \"react-router-dom\";",
+   "viDuNghia": "Nhập BrowserRouter (đặt tên Router) và Route từ react-router-dom."
+  },
+  {
+   "chu": "Routes component",
+   "doc": "/ruːts kəmˈpoʊnənt/",
+   "nghia": "component Routes (React Router v6): chứa các Route, chọn route khớp nhất",
+   "nhom": "React Router",
+   "viDu": "How do you declare multiple routes? Put several Route elements inside Routes.",
+   "viDuNghia": "Khai báo nhiều route thế nào? Đặt nhiều Route bên trong Routes."
+  },
+  {
+   "chu": "Switch component",
+   "doc": "/swɪtʃ kəmˈpoʊnənt/",
+   "nghia": "component Switch (React Router v5): chỉ hiển thị route ĐẦU TIÊN khớp; v6 thay bằng Routes",
+   "nhom": "React Router",
+   "viDu": "Using the Switch component to render only the first matching route.",
+   "viDuNghia": "Dùng component Switch để chỉ hiển thị route đầu tiên khớp."
+  },
+  {
+   "chu": "exact prop",
+   "doc": "/ɪɡˈzækt prɑːp/",
+   "nghia": "prop exact (v5): route chỉ khớp khi URL trùng hoàn toàn, không khớp một phần",
+   "nhom": "React Router",
+   "viDu": "What is the purpose of the exact prop in a Route component?",
+   "viDuNghia": "Prop exact trong component Route dùng để làm gì?"
+  },
+  {
+   "chu": "Link component",
+   "doc": "/lɪŋk kəmˈpoʊnənt/",
+   "nghia": "component Link: tạo liên kết chuyển trang phía client, không tải lại toàn trang",
+   "nhom": "React Router",
+   "viDu": "Using the Link component to navigate between pages.",
+   "viDuNghia": "Dùng component Link để chuyển giữa các trang."
+  },
+  {
+   "chu": "NavLink",
+   "doc": "/ˈnæv lɪŋk/",
+   "nghia": "Link đặc biệt tự gắn lớp/kiểu \"active\" khi đang ở đúng trang đó",
+   "nhom": "React Router",
+   "viDu": "Using the NavLink component to highlight the active menu item.",
+   "viDuNghia": "Dùng component NavLink để tô sáng mục menu đang chọn."
+  },
+  {
+   "chu": "Outlet",
+   "doc": "/ˈaʊtlet/",
+   "nghia": "component Outlet: chỗ trong route cha để hiển thị route con lồng nhau",
+   "nhom": "React Router",
+   "viDu": "Nested routes render inside the parent's Outlet.",
+   "viDuNghia": "Route lồng nhau hiển thị bên trong Outlet của route cha."
+  },
+  {
+   "chu": "useParams",
+   "doc": "/juːz pəˈræmz/",
+   "nghia": "hook đọc tham số động trên URL, vd /users/:userId ⇒ const { userId } = useParams()",
+   "nhom": "React Router",
+   "viDu": "const { userId, postId } = useParams();",
+   "viDuNghia": "Lấy userId và postId từ URL bằng useParams()."
+  },
+  {
+   "chu": "useLocation",
+   "doc": "/juːz loʊˈkeɪʃn/",
+   "nghia": "hook trả đối tượng location hiện tại (pathname, search, state)",
+   "nhom": "React Router",
+   "viDu": "useLocation().pathname returns the current path.",
+   "viDuNghia": "useLocation().pathname trả về đường dẫn hiện tại."
+  },
+  {
+   "chu": "index route",
+   "doc": "/ˈɪndeks ruːt/",
+   "nghia": "route mặc định hiển thị ở Outlet khi URL đúng bằng đường dẫn của route cha",
+   "nhom": "React Router",
+   "viDu": "An index route renders at the parent's exact path.",
+   "viDuNghia": "Index route hiển thị đúng tại đường dẫn của route cha."
+  },
+  {
+   "chu": "catch-all route",
+   "doc": "/ˈkætʃ ɔːl ruːt/",
+   "nghia": "route bắt mọi đường dẫn còn lại (path=\"*\"), dùng hiện trang 404",
+   "nhom": "React Router",
+   "viDu": "Add a catch-all route with path=\"*\" for unknown URLs.",
+   "viDuNghia": "Thêm route bắt tất cả với path=\"*\" cho các URL lạ."
+  },
+  {
+   "chu": "programmatic navigation",
+   "doc": "/ˌproʊɡrəˈmætɪk ˌnævɪˈɡeɪʃn/",
+   "nghia": "chuyển trang bằng mã (navigate(\"/home\")) sau khi lưu form, đăng nhập… thay vì người dùng bấm link",
+   "nhom": "React Router",
+   "viDu": "After a successful login, use programmatic navigation to go to the dashboard.",
+   "viDuNghia": "Sau khi đăng nhập thành công, chuyển trang bằng mã tới dashboard."
+  },
+  {
+   "chu": "container component",
+   "doc": "/kənˈteɪnər kəmˈpoʊnənt/",
+   "nghia": "component chứa: lo dữ liệu và logic (gọi API, state) rồi truyền xuống component trình bày",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "What is the purpose of a container component in React?",
+   "viDuNghia": "Container component trong React dùng để làm gì?"
+  },
+  {
+   "chu": "presentational component",
+   "doc": "/ˌprezenˈteɪʃənl kəmˈpoʊnənt/",
+   "nghia": "component trình bày: chỉ nhận props và vẽ giao diện, không tự lo dữ liệu",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "A presentational component only receives props and renders UI.",
+   "viDuNghia": "Component trình bày chỉ nhận props và vẽ giao diện."
+  },
+  {
+   "chu": "wrapped component",
+   "doc": "/ræpt kəmˈpoʊnənt/",
+   "nghia": "component được bọc: component đầu vào mà HOC bọc lại để thêm tính năng",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "function withLogger(WrappedComponent) { return class extends React.Component {} }",
+   "viDuNghia": "Hàm withLogger nhận component được bọc và trả về một lớp mới."
+  },
+  {
+   "chu": "ternary operator",
+   "doc": "/ˈtɜːrnəri ˈɑːpəreɪtər/",
+   "nghia": "toán tử ba ngôi: điều kiện ? A : B, hay dùng để render có điều kiện trong JSX",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "By using the ternary operator {condition ? trueContent : falseContent}",
+   "viDuNghia": "Bằng toán tử ba ngôi {điều kiện ? nội dung đúng : nội dung sai}."
+  },
+  {
+   "chu": "logical AND operator",
+   "doc": "/ˈlɑːdʒɪkl ænd ˈɑːpəreɪtər/",
+   "nghia": "toán tử && : {cond && <X/>} chỉ hiện X khi cond đúng",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "Use the logical AND operator to render an element only when a condition is true.",
+   "viDuNghia": "Dùng toán tử && để hiện phần tử chỉ khi điều kiện đúng."
+  },
+  {
+   "chu": "truthy",
+   "doc": "/ˈtruːθi/",
+   "nghia": "giá trị được coi là đúng khi ép sang boolean (mọi giá trị trừ falsy)",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "A non-empty string is truthy.",
+   "viDuNghia": "Một chuỗi không rỗng là giá trị truthy."
+  },
+  {
+   "chu": "falsy",
+   "doc": "/ˈfɔːlsi/",
+   "nghia": "giá trị bị coi là sai: false, 0, '', null, undefined, NaN — chú ý {0 && <X/>} hiện số 0",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "{count && <List />} renders 0 because 0 is falsy.",
+   "viDuNghia": "{count && <List />} hiện số 0 vì 0 là giá trị falsy."
+  },
+  {
+   "chu": "short-circuit evaluation",
+   "doc": "/ˌʃɔːrt ˈsɜːrkɪt ɪˌvæljuˈeɪʃn/",
+   "nghia": "đánh giá ngắn mạch: && và",
+   "nhom": "Mẫu component và cú pháp JS"
+  },
+  {
+   "chu": "template literal",
+   "doc": "/ˈtemplət ˈlɪtərəl/",
+   "nghia": "chuỗi mẫu ES6 viết trong dấu backtick, chèn biến bằng ${...}",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "Template Literals",
+   "viDuNghia": "Chuỗi mẫu (template literal)."
+  },
+  {
+   "chu": "optional chaining",
+   "doc": "/ˈɑːpʃənl ˈtʃeɪnɪŋ/",
+   "nghia": "toán tử ?. : đọc thuộc tính lồng nhau mà không lỗi khi giá trị là null/undefined",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "user?.address?.city returns undefined instead of throwing an error.",
+   "viDuNghia": "user?.address?.city trả undefined thay vì báo lỗi."
+  },
+  {
+   "chu": "nullish coalescing",
+   "doc": "/ˈnʌlɪʃ ˌkoʊəˈlesɪŋ/",
+   "nghia": "toán tử ?? : lấy giá trị bên phải chỉ khi bên trái là null hoặc undefined",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "const total = price ?? 0; uses 0 only when price is null or undefined.",
+   "viDuNghia": "const total = price ?? 0; chỉ dùng 0 khi price là null hoặc undefined."
+  },
+  {
+   "chu": "rest parameter",
+   "doc": "/rest pəˈræmɪtər/",
+   "nghia": "tham số rest ...args: gom các đối số còn lại thành một mảng",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "const { name, ...rest } = props;",
+   "viDuNghia": "Tách name, phần còn lại của props gom vào rest."
+  },
+  {
+   "chu": "shallow copy",
+   "doc": "/ˈʃæloʊ ˈkɑːpi/",
+   "nghia": "bản sao nông: chỉ chép tầng ngoài, object lồng bên trong vẫn dùng chung tham chiếu",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "The spread operator only makes a shallow copy.",
+   "viDuNghia": "Toán tử spread chỉ tạo bản sao nông."
+  },
+  {
+   "chu": "deep copy",
+   "doc": "/diːp ˈkɑːpi/",
+   "nghia": "bản sao sâu: chép cả các object lồng bên trong (structuredClone)",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "Use structuredClone to make a deep copy of nested state.",
+   "viDuNghia": "Dùng structuredClone để tạo bản sao sâu của state lồng nhau."
+  },
+  {
+   "chu": "map method",
+   "doc": "/mæp ˈmeθəd/",
+   "nghia": "phương thức map() của mảng: biến mỗi phần tử thành phần tử mới, hay dùng để render danh sách",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "{items.map(item => <li key={item.id}>{item.name}</li>)}",
+   "viDuNghia": "Dùng map để render mỗi item thành một thẻ li."
+  },
+  {
+   "chu": "filter method",
+   "doc": "/ˈfɪltər ˈmeθəd/",
+   "nghia": "phương thức filter() của mảng: giữ lại các phần tử thoả điều kiện",
+   "nhom": "Mẫu component và cú pháp JS",
+   "viDu": "{items.filter(item => item.length > 5).map(item => <li>{item}</li>)}",
+   "viDuNghia": "Lọc các item dài hơn 5 ký tự rồi render thành li."
+  },
+  {
+   "chu": "perceived performance",
+   "doc": "/pərˈsiːvd pərˈfɔːrməns/",
+   "nghia": "hiệu năng cảm nhận: ứng dụng có vẻ nhanh với người dùng (hiện khung, loading sớm) dù tổng thời gian tải không đổi",
+   "nhom": "Hook nâng cao và hiệu năng",
+   "viDu": "It improves the responsiveness and perceived performance of the application",
+   "viDuNghia": "Nó cải thiện độ phản hồi và hiệu năng cảm nhận của ứng dụng"
+  },
+  {
+   "chu": "pre-commit phase",
+   "doc": "/priː kəˈmɪt feɪz/",
+   "nghia": "giai đoạn trước commit: sau render, ngay trước khi React ghi thay đổi vào DOM; chỉ được ĐỌC DOM (getSnapshotBeforeUpdate)",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "Pre-Commit reads the not-yet-changed tree, while Commit applies the changes.",
+   "viDuNghia": "Giai đoạn trước commit đọc cây chưa thay đổi, còn commit mới áp thay đổi."
+  },
+  {
+   "chu": "getSnapshotBeforeUpdate",
+   "doc": "/ɡet ˈsnæpʃɒt bɪˈfɔːr ʌpˈdeɪt/",
+   "nghia": "getSnapshotBeforeUpdate: phương thức vòng đời của component lớp, chạy ngay trước khi DOM cập nhật; giá trị nó trả (vd vị trí cuộn) truyền sang componentDidUpdate",
+   "nhom": "Component lớp và vòng đời",
+   "viDu": "In the Pre-Commit phase React calls getSnapshotBeforeUpdate, letting you read information such as the scroll position.",
+   "viDuNghia": "Ở giai đoạn trước commit, React gọi getSnapshotBeforeUpdate để bạn đọc thông tin như vị trí cuộn."
+  }
+ ]
+}

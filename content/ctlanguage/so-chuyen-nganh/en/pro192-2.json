@@ -4,7 +4,7 @@
  "ten": "PRO192 · 2. Ngoại lệ, Collections, tệp",
  "moTa": "PRO192 – Lập trình hướng đối tượng (Java), phần 2: xử lý ngoại lệ, Collections (List, Set, Map), sắp xếp – so sánh, đọc ghi tệp, xử lý chuỗi. Từ lấy từ đề FE/PE thật; câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "exclamationmark.triangle.fill",
- "thuTu": -982,
+ "thuTu": -976,
  "tu": [
   {
    "chu": "exception handling",

@@ -4,7 +4,7 @@
  "ten": "FER202 · Front-End với React",
  "moTa": "Môn Front-End web development with React (FER202): component, props, state, hook, JSX, React Router, Redux, Context, gọi API, React-Bootstrap, tối ưu hiệu năng. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu hỏi thật trong đề.",
  "bieuTuong": "atom",
- "thuTu": -944,
+ "thuTu": -915,
  "tu": [
   {
    "chu": "React component",

@@ -4,7 +4,7 @@
  "ten": "MAS291 · 3. Kiểm định giả thuyết & hồi quy",
  "moTa": "Xác suất thống kê (MAS291), bộ 3: giả thuyết không - đối thuyết, thống kê kiểm định, P-value, miền bác bỏ, sai lầm loại I - II, kiểm định một mẫu và hai mẫu, hồi quy tuyến tính đơn, tương quan, bảng ANOVA và cách đọc bảng kết quả Excel. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "chart.xyaxis.line",
- "thuTu": -957,
+ "thuTu": -935,
  "tu": [
   {
    "chu": "hypothesis testing",

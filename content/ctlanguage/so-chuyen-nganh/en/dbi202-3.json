@@ -1,0 +1,898 @@
+{
+ "ma": "dbi202-3",
+ "nn": "en",
+ "ten": "DBI202 · 3. ER mở rộng, T-SQL, giao tác & tối ưu",
+ "moTa": "Bổ sung DBI202 theo đề và giáo trình: ER mở rộng (tham gia, quan hệ định danh, ISA), ràng buộc toàn vẹn, chuẩn hoá nâng cao (4NF, phủ tối thiểu), kiểu dữ liệu và hàm ngày giờ T-SQL, CTE và hàm cửa sổ, mức cô lập và lỗi đọc, sao lưu – phục hồi, chỉ mục và bộ tối ưu truy vấn.",
+ "bieuTuong": "cylinder.fill",
+ "thuTu": -947,
+ "tu": [
+  {
+   "chu": "participation constraint",
+   "doc": "/pɑːrˌtɪsɪˈpeɪʃn kənˈstreɪnt/",
+   "nghia": "ràng buộc tham gia: mỗi thực thể có bắt buộc phải tham gia mối quan hệ hay không",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "A participation constraint states whether every entity must take part in the relationship.",
+   "viDuNghia": "Ràng buộc tham gia cho biết mọi thực thể có bắt buộc tham gia mối quan hệ không."
+  },
+  {
+   "chu": "total participation",
+   "doc": "/ˈtoʊtl pɑːrˌtɪsɪˈpeɪʃn/",
+   "nghia": "tham gia toàn phần: mọi thực thể của tập đều phải có trong mối quan hệ (vẽ nét đôi)",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "Every loan must belong to a customer, so Loan has total participation in Borrows.",
+   "viDuNghia": "Mọi khoản vay phải thuộc một khách hàng nên Loan tham gia toàn phần vào Borrows."
+  },
+  {
+   "chu": "partial participation",
+   "doc": "/ˈpɑːrʃl pɑːrˌtɪsɪˈpeɪʃn/",
+   "nghia": "tham gia một phần: chỉ một số thực thể tham gia mối quan hệ",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "Not every employee manages a department, so participation in Manages is partial.",
+   "viDuNghia": "Không phải nhân viên nào cũng quản lý phòng nên tham gia vào Manages là một phần."
+  },
+  {
+   "chu": "identifying relationship",
+   "doc": "/aɪˈdentɪfaɪɪŋ rɪˈleɪʃnʃɪp/",
+   "nghia": "quan hệ định danh: nối tập thực thể yếu với tập thực thể chủ, giúp tạo khoá cho thực thể yếu",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "A weak entity set is connected to its owner through an identifying relationship.",
+   "viDuNghia": "Tập thực thể yếu được nối với tập chủ qua một quan hệ định danh."
+  },
+  {
+   "chu": "partial key",
+   "doc": "/ˈpɑːrʃl kiː/",
+   "nghia": "khoá bộ phận (discriminator): thuộc tính phân biệt các thực thể yếu thuộc cùng một chủ",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "The partial key of Dependent is name, which is unique only within one employee.",
+   "viDuNghia": "Khoá bộ phận của Dependent là tên, chỉ duy nhất trong phạm vi một nhân viên."
+  },
+  {
+   "chu": "ISA hierarchy",
+   "doc": "/ˈɪzə ˈhaɪərɑːrki/",
+   "nghia": "phân cấp ISA (là-một): tập thực thể con kế thừa thuộc tính của tập cha (chuyên biệt hoá/tổng quát hoá)",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "In an ISA hierarchy, Cartoon is a subclass of Movie.",
+   "viDuNghia": "Trong phân cấp ISA, Cartoon là lớp con của Movie."
+  },
+  {
+   "chu": "ternary relationship",
+   "doc": "/ˈtɜːrnəri rɪˈleɪʃnʃɪp/",
+   "nghia": "quan hệ ba ngôi: mối quan hệ nối ba tập thực thể cùng lúc",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "Contracts is a ternary relationship among stars, movies and studios.",
+   "viDuNghia": "Contracts là quan hệ ba ngôi giữa ngôi sao, phim và hãng phim."
+  },
+  {
+   "chu": "recursive relationship",
+   "doc": "/rɪˈkɜːrsɪv rɪˈleɪʃnʃɪp/",
+   "nghia": "quan hệ đệ quy: mối quan hệ của một tập thực thể với chính nó (nhân viên quản lý nhân viên)",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "Supervises is a recursive relationship on the Employee entity set.",
+   "viDuNghia": "Supervises là quan hệ đệ quy trên tập thực thể Employee."
+  },
+  {
+   "chu": "role name",
+   "doc": "/roʊl neɪm/",
+   "nghia": "tên vai trò: nhãn trên nét nối cho biết thực thể đóng vai gì khi xuất hiện nhiều lần trong một quan hệ",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "In Supervises, the role names are supervisor and subordinate.",
+   "viDuNghia": "Trong Supervises, tên vai trò là người giám sát và cấp dưới."
+  },
+  {
+   "chu": "multivalued attribute",
+   "doc": "/ˌmʌltiˈvæljuːd ˈætrɪbjuːt/",
+   "nghia": "thuộc tính đa trị: một thực thể có thể có nhiều giá trị (nhiều số điện thoại)",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "If R: Has a primary key, no repeating groups, no multivalued attributes/complex attributes, no partial functional dependencies.",
+   "viDuNghia": "Nếu R có khoá chính, không có nhóm lặp, không có thuộc tính đa trị/phức hợp, không có phụ thuộc hàm bộ phận."
+  },
+  {
+   "chu": "simple attribute",
+   "doc": "/ˈsɪmpl ˈætrɪbjuːt/",
+   "nghia": "thuộc tính đơn: không chia nhỏ được nữa (ngược với thuộc tính phức hợp)",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "Age is a simple attribute, while Address is usually composite.",
+   "viDuNghia": "Tuổi là thuộc tính đơn, còn địa chỉ thường là thuộc tính phức hợp."
+  },
+  {
+   "chu": "key attribute",
+   "doc": "/kiː ˈætrɪbjuːt/",
+   "nghia": "thuộc tính khoá: thuộc tính (gạch chân trên ER) dùng phân biệt các thực thể",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "In an ER diagram, a key attribute is underlined.",
+   "viDuNghia": "Trên sơ đồ ER, thuộc tính khoá được gạch chân."
+  },
+  {
+   "chu": "logical design",
+   "doc": "/ˈlɑːdʒɪkl dɪˈzaɪn/",
+   "nghia": "thiết kế logic: biến sơ đồ ER thành lược đồ quan hệ (bảng, khoá)",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "Logical design maps the ER diagram to relation schemas.",
+   "viDuNghia": "Thiết kế logic chuyển sơ đồ ER thành các lược đồ quan hệ."
+  },
+  {
+   "chu": "physical design",
+   "doc": "/ˈfɪzɪkl dɪˈzaɪn/",
+   "nghia": "thiết kế vật lý: chọn kiểu dữ liệu, chỉ mục, cách lưu trữ trên DBMS cụ thể",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "Choosing indexes is part of physical design.",
+   "viDuNghia": "Chọn chỉ mục là một phần của thiết kế vật lý."
+  },
+  {
+   "chu": "junction table",
+   "doc": "/ˈdʒʌŋkʃn ˈteɪbl/",
+   "nghia": "bảng trung gian: bảng hiện thực quan hệ nhiều – nhiều, chứa khoá ngoại tới hai bảng",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "A many-to-many relationship is implemented with a junction table.",
+   "viDuNghia": "Quan hệ nhiều – nhiều được cài bằng một bảng trung gian."
+  },
+  {
+   "chu": "surrogate key",
+   "doc": "/ˈsɜːrəɡət kiː/",
+   "nghia": "khoá thay thế: khoá nhân tạo (số tự tăng, UUID) không mang nghĩa nghiệp vụ",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "An IDENTITY column is often used as a surrogate key.",
+   "viDuNghia": "Cột IDENTITY thường được dùng làm khoá thay thế."
+  },
+  {
+   "chu": "natural key",
+   "doc": "/ˈnætʃrəl kiː/",
+   "nghia": "khoá tự nhiên: khoá có sẵn nghĩa trong nghiệp vụ (mã số thuế, email)",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "An e-mail address can serve as a natural key, but it may change.",
+   "viDuNghia": "Địa chỉ email có thể làm khoá tự nhiên nhưng nó có thể thay đổi."
+  },
+  {
+   "chu": "alternate key",
+   "doc": "/ˈɔːltərnət kiː/",
+   "nghia": "khoá dự phòng: khoá ứng viên không được chọn làm khoá chính",
+   "nhom": "Thiết kế ER mở rộng",
+   "viDu": "An alternate key is usually enforced with a UNIQUE constraint.",
+   "viDuNghia": "Khoá dự phòng thường được áp bằng ràng buộc UNIQUE."
+  },
+  {
+   "chu": "domain integrity",
+   "doc": "/doʊˈmeɪn ɪnˈteɡrəti/",
+   "nghia": "toàn vẹn miền: giá trị mỗi cột phải thuộc miền cho phép (kiểu, CHECK, NOT NULL)",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "The above picture is an example of a database that has not enforced domain integrity",
+   "viDuNghia": "Hình trên là ví dụ về một CSDL chưa áp đặt toàn vẹn miền"
+  },
+  {
+   "chu": "entity integrity",
+   "doc": "/ˈentəti ɪnˈteɡrəti/",
+   "nghia": "toàn vẹn thực thể: khoá chính không được rỗng và không được trùng",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "The above picture is an example of a database that has not enforced entity integrity",
+   "viDuNghia": "Hình trên là ví dụ về một CSDL chưa áp đặt toàn vẹn thực thể"
+  },
+  {
+   "chu": "domain constraint",
+   "doc": "/doʊˈmeɪn kənˈstreɪnt/",
+   "nghia": "ràng buộc miền: quy định tập giá trị hợp lệ của một thuộc tính",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "A domain constraint limits Gender to the values M and F.",
+   "viDuNghia": "Ràng buộc miền giới hạn Gender ở hai giá trị M và F."
+  },
+  {
+   "chu": "ON DELETE CASCADE",
+   "doc": "/ɑːn dɪˈliːt kæsˈkeɪd/",
+   "nghia": "ON DELETE CASCADE: xoá dòng cha thì tự xoá mọi dòng con tham chiếu tới nó",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "With ON DELETE CASCADE, deleting a customer also deletes all of its orders.",
+   "viDuNghia": "Với ON DELETE CASCADE, xoá một khách hàng cũng xoá mọi đơn hàng của họ."
+  },
+  {
+   "chu": "SET NULL",
+   "doc": "/set nʌl/",
+   "nghia": "SET NULL (khoá ngoại): xoá/sửa dòng cha thì khoá ngoại ở dòng con được gán NULL",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "ON DELETE SET NULL keeps the child rows but clears their foreign key.",
+   "viDuNghia": "ON DELETE SET NULL giữ dòng con nhưng xoá trắng khoá ngoại của chúng."
+  },
+  {
+   "chu": "arity",
+   "doc": "/ˈærəti/",
+   "nghia": "bậc của quan hệ: số thuộc tính (cột) của một quan hệ",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "A relation with three attributes has arity 3.",
+   "viDuNghia": "Quan hệ có ba thuộc tính có bậc 3."
+  },
+  {
+   "chu": "relational calculus",
+   "doc": "/rɪˈleɪʃənl ˈkælkjələs/",
+   "nghia": "phép tính quan hệ: ngôn ngữ truy vấn khai báo dựa trên logic vị từ (nói muốn gì, không nói cách làm)",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "SQL is based on both relational algebra and relational calculus.",
+   "viDuNghia": "SQL dựa trên cả đại số quan hệ lẫn phép tính quan hệ."
+  },
+  {
+   "chu": "semijoin",
+   "doc": "/ˈsemidʒɔɪn/",
+   "nghia": "nửa kết nối: lấy các dòng của R có ít nhất một dòng khớp ở S, chỉ giữ cột của R",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "A semijoin can be written in SQL with EXISTS.",
+   "viDuNghia": "Nửa kết nối có thể viết trong SQL bằng EXISTS."
+  },
+  {
+   "chu": "duplicate elimination",
+   "doc": "/ˈduːplɪkət ɪˌlɪmɪˈneɪʃn/",
+   "nghia": "loại bỏ trùng lặp (δ): phép toán biến túi thành tập, tương ứng DISTINCT",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "The DISTINCT keyword performs duplicate elimination.",
+   "viDuNghia": "Từ khoá DISTINCT thực hiện loại bỏ trùng lặp."
+  },
+  {
+   "chu": "extended projection",
+   "doc": "/ɪkˈstendɪd prəˈdʒekʃn/",
+   "nghia": "phép chiếu mở rộng: phép chiếu cho phép tính biểu thức và đổi tên cột",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "Extended projection can compute price * quantity as a new column.",
+   "viDuNghia": "Phép chiếu mở rộng có thể tính price * quantity thành một cột mới."
+  },
+  {
+   "chu": "attribute closure",
+   "doc": "/ˈætrɪbjuːt ˈkloʊʒər/",
+   "nghia": "bao đóng thuộc tính (X+): mọi thuộc tính suy ra được từ X theo các phụ thuộc hàm",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "If the attribute closure of X contains all attributes, X is a superkey.",
+   "viDuNghia": "Nếu bao đóng thuộc tính của X chứa mọi thuộc tính thì X là siêu khoá."
+  },
+  {
+   "chu": "minimal cover",
+   "doc": "/ˈmɪnɪml ˈkʌvər/",
+   "nghia": "phủ tối thiểu (canonical cover): tập phụ thuộc hàm tương đương nhỏ nhất, vế phải một thuộc tính, không thừa",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "A minimal cover is used to synthesize a 3NF decomposition.",
+   "viDuNghia": "Phủ tối thiểu được dùng để tổng hợp phép tách về 3NF."
+  },
+  {
+   "chu": "lossy decomposition",
+   "doc": "/ˈlɔːsi ˌdiːkɑːmpəˈzɪʃn/",
+   "nghia": "phép tách mất thông tin: kết nối lại các bảng con sinh ra dòng giả không có trong bảng gốc",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "A lossy decomposition produces spurious tuples when the parts are joined again.",
+   "viDuNghia": "Phép tách mất thông tin sinh ra bộ giả khi kết nối các phần lại."
+  },
+  {
+   "chu": "chase test",
+   "doc": "/tʃeɪs test/",
+   "nghia": "phép thử chase: kiểm tra một phép tách có kết nối không mất thông tin hay không",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "The chase test checks whether a decomposition has a lossless join.",
+   "viDuNghia": "Phép thử chase kiểm tra phép tách có kết nối không mất thông tin không."
+  },
+  {
+   "chu": "fourth normal form",
+   "doc": "/fɔːrθ ˈnɔːrml fɔːrm/",
+   "nghia": "dạng chuẩn 4 (4NF): BCNF và không có phụ thuộc đa trị không tầm thường nào",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "Fourth normal form removes nontrivial multivalued dependencies.",
+   "viDuNghia": "Dạng chuẩn 4 loại bỏ các phụ thuộc đa trị không tầm thường."
+  },
+  {
+   "chu": "VARCHAR",
+   "doc": "/ˈvɑːrkɑːr/",
+   "nghia": "VARCHAR(n): chuỗi độ dài thay đổi, tối đa n ký tự không Unicode",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "CREATE TABLE Studio (name CHAR ( 30 ) PRIMARY KEY , address VARCHAR ( 256 ), presC# INT FOREIGN KEY );",
+   "viDuNghia": "Câu lệnh tạo bảng Studio với name CHAR(30) là khoá chính, address VARCHAR(256) và presC# INT khoá ngoại."
+  },
+  {
+   "chu": "NVARCHAR",
+   "doc": "/ˈenvɑːrkɑːr/",
+   "nghia": "NVARCHAR(n): chuỗi Unicode độ dài thay đổi, lưu được tiếng Việt có dấu (hằng chuỗi viết N'...')",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "Use NVARCHAR and the N prefix to store Vietnamese text correctly.",
+   "viDuNghia": "Dùng NVARCHAR và tiền tố N để lưu đúng chữ tiếng Việt."
+  },
+  {
+   "chu": "DATETIME",
+   "doc": "/ˈdeɪt taɪm/",
+   "nghia": "DATETIME: kiểu ngày giờ của SQL Server",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "Test 3 and Test 4 inserted with CreatedAt = current datetime.",
+   "viDuNghia": "Test 3 và Test 4 được chèn với CreatedAt bằng ngày giờ hiện tại."
+  },
+  {
+   "chu": "collation",
+   "doc": "/kəˈleɪʃn/",
+   "nghia": "đối chiếu (collation): quy tắc so sánh, sắp xếp chuỗi (phân biệt hoa thường, dấu)",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "A case-insensitive collation treats 'abc' and 'ABC' as equal.",
+   "viDuNghia": "Collation không phân biệt hoa thường coi 'abc' và 'ABC' là bằng nhau."
+  },
+  {
+   "chu": "GETDATE",
+   "doc": "/ɡet deɪt/",
+   "nghia": "GETDATE(): hàm trả về ngày giờ hiện tại của máy chủ SQL Server",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "SELECT COUNT ( * ) FROM Purchases WHERE PurchaseTime = CONVERT ( DATE , GETDATE())",
+   "viDuNghia": "Đếm số giao dịch mua có PurchaseTime bằng ngày hôm nay (đổi GETDATE() sang kiểu DATE)"
+  },
+  {
+   "chu": "DATEPART",
+   "doc": "/ˈdeɪt pɑːrt/",
+   "nghia": "DATEPART(phần, ngày): lấy một phần (năm, tháng, ngày…) của giá trị ngày giờ dưới dạng số",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "SELECT datepart(DAY,'10-jan-24')",
+   "viDuNghia": "Lấy phần ngày của '10-jan-24' (kết quả 10)"
+  },
+  {
+   "chu": "DATEADD",
+   "doc": "/ˈdeɪt æd/",
+   "nghia": "DATEADD(phần, số, ngày): cộng một khoảng thời gian vào ngày",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "DATEADD(DAY, 1, GETDATE()) returns the same time tomorrow.",
+   "viDuNghia": "DATEADD(DAY, 1, GETDATE()) trả về cùng giờ ngày mai."
+  },
+  {
+   "chu": "DATEDIFF",
+   "doc": "/ˈdeɪt dɪf/",
+   "nghia": "DATEDIFF(phần, ngày đầu, ngày cuối): số đơn vị thời gian giữa hai ngày",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "DATEDIFF(YEAR, BirthDate, GETDATE()) gives an approximate age.",
+   "viDuNghia": "DATEDIFF(YEAR, BirthDate, GETDATE()) cho ra tuổi gần đúng."
+  },
+  {
+   "chu": "ISNULL",
+   "doc": "/ˈɪz nʌl/",
+   "nghia": "ISNULL(biểu thức, giá trị thay): trả về giá trị thay thế khi biểu thức là NULL (SQL Server)",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "ISNULL(Phone, 'N/A') shows N/A for customers without a phone number.",
+   "viDuNghia": "ISNULL(Phone, 'N/A') hiện N/A cho khách không có số điện thoại."
+  },
+  {
+   "chu": "COALESCE",
+   "doc": "/ˌkoʊəˈles/",
+   "nghia": "COALESCE: trả về giá trị khác NULL đầu tiên trong danh sách (chuẩn SQL)",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "COALESCE(MobilePhone, HomePhone, 'none') returns the first phone that is not null.",
+   "viDuNghia": "COALESCE(MobilePhone, HomePhone, 'none') trả về số điện thoại đầu tiên khác null."
+  },
+  {
+   "chu": "CASE expression",
+   "doc": "/keɪs ɪkˈspreʃn/",
+   "nghia": "biểu thức CASE: chọn giá trị theo điều kiện ngay trong câu SQL (CASE WHEN … THEN … END)",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "A CASE expression can label scores as Pass or Fail.",
+   "viDuNghia": "Biểu thức CASE có thể gán nhãn điểm thành Đạt hoặc Trượt."
+  },
+  {
+   "chu": "common table expression",
+   "doc": "/ˈkɑːmən ˈteɪbl ɪkˈspreʃn/",
+   "nghia": "biểu thức bảng chung (CTE): bảng tạm có tên định nghĩa bằng WITH, chỉ sống trong một câu lệnh",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "A common table expression makes a long query easier to read.",
+   "viDuNghia": "Biểu thức bảng chung làm câu truy vấn dài dễ đọc hơn."
+  },
+  {
+   "chu": "recursive CTE",
+   "doc": "/rɪˈkɜːrsɪv ˌsiː tiː ˈiː/",
+   "nghia": "CTE đệ quy: CTE tự tham chiếu chính nó, dùng duyệt cây phân cấp (nhân viên – quản lý)",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "A recursive CTE can list every employee under a given manager.",
+   "viDuNghia": "CTE đệ quy có thể liệt kê mọi nhân viên dưới quyền một quản lý."
+  },
+  {
+   "chu": "window function",
+   "doc": "/ˈwɪndoʊ ˈfʌŋkʃn/",
+   "nghia": "hàm cửa sổ: tính trên một nhóm dòng liên quan mà không gộp dòng (RANK, SUM OVER)",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "A window function can rank students within each class without GROUP BY.",
+   "viDuNghia": "Hàm cửa sổ có thể xếp hạng sinh viên trong từng lớp mà không cần GROUP BY."
+  },
+  {
+   "chu": "OVER clause",
+   "doc": "/ˈoʊvər klɔːz/",
+   "nghia": "mệnh đề OVER: định nghĩa cửa sổ dòng cho hàm cửa sổ (PARTITION BY, ORDER BY)",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "The OVER clause defines the set of rows used by a window function.",
+   "viDuNghia": "Mệnh đề OVER xác định tập dòng mà hàm cửa sổ dùng."
+  },
+  {
+   "chu": "PARTITION BY",
+   "doc": "/pɑːrˈtɪʃn baɪ/",
+   "nghia": "PARTITION BY: chia dòng thành từng nhóm để hàm cửa sổ tính riêng trong mỗi nhóm",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "RANK() OVER (PARTITION BY ClassID ORDER BY Score DESC) ranks students in each class.",
+   "viDuNghia": "RANK() OVER (PARTITION BY ClassID ORDER BY Score DESC) xếp hạng sinh viên trong mỗi lớp."
+  },
+  {
+   "chu": "UNION ALL",
+   "doc": "/ˈjuːnjən ɔːl/",
+   "nghia": "UNION ALL: hợp hai kết quả và GIỮ dòng trùng (nhanh hơn UNION)",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "UNION ALL keeps duplicate rows, while UNION removes them.",
+   "viDuNghia": "UNION ALL giữ dòng trùng, còn UNION thì loại bỏ."
+  },
+  {
+   "chu": "IN operator",
+   "doc": "/ɪn ˈɑːpəreɪtər/",
+   "nghia": "toán tử IN: kiểm tra giá trị có thuộc một danh sách hoặc kết quả truy vấn con không",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "WHERE City IN ('HN', 'HCM') selects rows from either city.",
+   "viDuNghia": "WHERE City IN ('HN', 'HCM') lấy các dòng thuộc một trong hai thành phố."
+  },
+  {
+   "chu": "derived table",
+   "doc": "/dɪˈraɪvd ˈteɪbl/",
+   "nghia": "bảng dẫn xuất: truy vấn con đặt ở mệnh đề FROM và được đặt bí danh",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "A derived table must have an alias in SQL Server.",
+   "viDuNghia": "Bảng dẫn xuất phải có bí danh trong SQL Server."
+  },
+  {
+   "chu": "scalar subquery",
+   "doc": "/ˈskeɪlər ˈsʌbkwɪri/",
+   "nghia": "truy vấn con vô hướng: truy vấn con trả về đúng một giá trị",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "A scalar subquery can be used in the SELECT list.",
+   "viDuNghia": "Truy vấn con vô hướng có thể dùng trong danh sách SELECT."
+  },
+  {
+   "chu": "OFFSET FETCH",
+   "doc": "/ˈɔːfset fetʃ/",
+   "nghia": "OFFSET … FETCH: bỏ qua n dòng đầu rồi lấy m dòng tiếp, dùng phân trang (cần ORDER BY)",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "OFFSET 20 ROWS FETCH NEXT 10 ROWS ONLY returns the third page of results.",
+   "viDuNghia": "OFFSET 20 ROWS FETCH NEXT 10 ROWS ONLY trả về trang kết quả thứ ba."
+  },
+  {
+   "chu": "temporary table",
+   "doc": "/ˈtempəreri ˈteɪbl/",
+   "nghia": "bảng tạm (#tên): bảng sống trong phiên làm việc, tự xoá khi phiên kết thúc",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "A temporary table whose name starts with # is visible only to the current session.",
+   "viDuNghia": "Bảng tạm có tên bắt đầu bằng # chỉ thấy được trong phiên hiện tại."
+  },
+  {
+   "chu": "table variable",
+   "doc": "/ˈteɪbl ˈveriəbl/",
+   "nghia": "biến bảng (@tên TABLE): biến chứa dữ liệu dạng bảng trong một lô lệnh",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "A table variable is declared with DECLARE @t TABLE (...).",
+   "viDuNghia": "Biến bảng được khai báo bằng DECLARE @t TABLE (...)."
+  },
+  {
+   "chu": "TRY CATCH",
+   "doc": "/traɪ kætʃ/",
+   "nghia": "khối TRY…CATCH: bắt lỗi trong T-SQL, lỗi trong TRY chuyển sang CATCH để xử lý hoặc rollback",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "Wrap the transaction in TRY CATCH and roll back in the CATCH block.",
+   "viDuNghia": "Bọc giao tác trong TRY CATCH và rollback ở khối CATCH."
+  },
+  {
+   "chu": "RAISERROR",
+   "doc": "/ˈreɪz erər/",
+   "nghia": "RAISERROR: lệnh T-SQL phát ra một thông báo lỗi tự định nghĩa",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "The trigger calls RAISERROR and rolls back when the quantity is negative.",
+   "viDuNghia": "Trigger gọi RAISERROR và rollback khi số lượng âm."
+  },
+  {
+   "chu": "SET NOCOUNT",
+   "doc": "/set noʊ kaʊnt/",
+   "nghia": "SET NOCOUNT ON: tắt thông báo \"n rows affected\" trong thủ tục, giảm lưu lượng",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "Stored procedures often start with SET NOCOUNT ON.",
+   "viDuNghia": "Thủ tục lưu trữ thường bắt đầu bằng SET NOCOUNT ON."
+  },
+  {
+   "chu": "dynamic SQL",
+   "doc": "/daɪˈnæmɪk ˌes kjuː ˈel/",
+   "nghia": "SQL động: câu lệnh được ghép thành chuỗi rồi mới thực thi lúc chạy; dễ dính SQL injection",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "Dynamic SQL must use parameters to avoid SQL injection.",
+   "viDuNghia": "SQL động phải dùng tham số để tránh SQL injection."
+  },
+  {
+   "chu": "query plan",
+   "doc": "/ˈkwɪri plæn/",
+   "nghia": "kế hoạch truy vấn: các bước DBMS chọn để thực thi câu lệnh",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "The query plan is compiled and cached on the server.",
+   "viDuNghia": "Kế hoạch truy vấn được biên dịch và lưu đệm trên máy chủ."
+  },
+  {
+   "chu": "work-unit",
+   "doc": "/ˈwɜːrk ˌjuːnɪt/",
+   "nghia": "đơn vị công việc: phần việc giao tác phải làm trọn hoặc không làm gì",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "Each work-unit performed in a database must either complete in its entirety or have no effect whatsoever.",
+   "viDuNghia": "Mỗi đơn vị công việc trong CSDL phải hoàn tất trọn vẹn hoặc không có tác dụng gì."
+  },
+  {
+   "chu": "explicit transaction",
+   "doc": "/ɪkˈsplɪsɪt trænˈzækʃn/",
+   "nghia": "giao tác tường minh: bắt đầu bằng BEGIN TRANSACTION, kết thúc bằng COMMIT hoặc ROLLBACK",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "An explicit transaction starts with BEGIN TRANSACTION.",
+   "viDuNghia": "Giao tác tường minh bắt đầu bằng BEGIN TRANSACTION."
+  },
+  {
+   "chu": "autocommit",
+   "doc": "/ˈɔːtoʊkəmɪt/",
+   "nghia": "tự xác nhận: chế độ mặc định của SQL Server, mỗi câu lệnh là một giao tác riêng",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "In autocommit mode, each INSERT is committed immediately.",
+   "viDuNghia": "Ở chế độ tự xác nhận, mỗi lệnh INSERT được commit ngay."
+  },
+  {
+   "chu": "READ UNCOMMITTED",
+   "doc": "/riːd ˌʌnkəˈmɪtɪd/",
+   "nghia": "mức cô lập thấp nhất: được đọc dữ liệu chưa commit nên có thể bị đọc bẩn",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "READ UNCOMMITTED allows dirty reads.",
+   "viDuNghia": "READ UNCOMMITTED cho phép đọc bẩn."
+  },
+  {
+   "chu": "READ COMMITTED",
+   "doc": "/riːd kəˈmɪtɪd/",
+   "nghia": "mức cô lập mặc định của SQL Server: chỉ đọc dữ liệu đã commit",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "READ COMMITTED prevents dirty reads but not non-repeatable reads.",
+   "viDuNghia": "READ COMMITTED ngăn đọc bẩn nhưng không ngăn đọc không lặp lại."
+  },
+  {
+   "chu": "REPEATABLE READ",
+   "doc": "/rɪˈpiːtəbl riːd/",
+   "nghia": "mức cô lập giữ khoá đọc tới hết giao tác: đọc lại cho cùng kết quả nhưng vẫn có thể có dòng ma",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "REPEATABLE READ still allows phantom reads.",
+   "viDuNghia": "REPEATABLE READ vẫn cho phép đọc dòng ma."
+  },
+  {
+   "chu": "non-repeatable read",
+   "doc": "/ˌnɑːn rɪˈpiːtəbl riːd/",
+   "nghia": "đọc không lặp lại: đọc cùng một dòng hai lần trong giao tác mà ra hai giá trị khác nhau",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "A non-repeatable read happens when another transaction updates the row between two reads.",
+   "viDuNghia": "Đọc không lặp lại xảy ra khi giao tác khác cập nhật dòng giữa hai lần đọc."
+  },
+  {
+   "chu": "phantom read",
+   "doc": "/ˈfæntəm riːd/",
+   "nghia": "đọc dòng ma: chạy lại cùng truy vấn thấy thêm/bớt dòng do giao tác khác chèn/xoá",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "Only SERIALIZABLE prevents phantom reads.",
+   "viDuNghia": "Chỉ SERIALIZABLE mới ngăn được đọc dòng ma."
+  },
+  {
+   "chu": "lost update",
+   "doc": "/lɔːst ˈʌpdeɪt/",
+   "nghia": "mất cập nhật: hai giao tác cùng đọc rồi cùng ghi, lần ghi sau đè mất lần ghi trước",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "Two cashiers updating the same balance at once can cause a lost update.",
+   "viDuNghia": "Hai thu ngân cùng cập nhật một số dư một lúc có thể gây mất cập nhật."
+  },
+  {
+   "chu": "serializability",
+   "doc": "/ˌsɪriəlaɪzəˈbɪləti/",
+   "nghia": "tính khả tuần tự: lịch chạy xen kẽ cho kết quả như chạy lần lượt từng giao tác",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "Two-phase locking guarantees conflict serializability.",
+   "viDuNghia": "Khoá hai pha bảo đảm tính khả tuần tự xung đột."
+  },
+  {
+   "chu": "precedence graph",
+   "doc": "/ˈpresɪdəns ɡræf/",
+   "nghia": "đồ thị ưu tiên: đồ thị giữa các giao tác, không có chu trình thì lịch khả tuần tự xung đột",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "A schedule is conflict-serializable if its precedence graph has no cycle.",
+   "viDuNghia": "Một lịch khả tuần tự xung đột nếu đồ thị ưu tiên của nó không có chu trình."
+  },
+  {
+   "chu": "snapshot isolation",
+   "doc": "/ˈsnæpʃɑːt ˌaɪsəˈleɪʃn/",
+   "nghia": "cô lập ảnh chụp: mỗi giao tác đọc một phiên bản dữ liệu tại lúc bắt đầu, người đọc không chặn người ghi",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "With snapshot isolation, readers do not block writers.",
+   "viDuNghia": "Với cô lập ảnh chụp, người đọc không chặn người ghi."
+  },
+  {
+   "chu": "row versioning",
+   "doc": "/roʊ ˈvɜːrʒnɪŋ/",
+   "nghia": "quản lý phiên bản dòng: giữ bản cũ của dòng để giao tác khác đọc mà không cần khoá",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "Snapshot isolation in SQL Server is built on row versioning in tempdb.",
+   "viDuNghia": "Cô lập ảnh chụp trong SQL Server dựa trên phiên bản dòng trong tempdb."
+  },
+  {
+   "chu": "optimistic concurrency",
+   "doc": "/ˌɑːptɪˈmɪstɪk kənˈkɜːrənsi/",
+   "nghia": "đồng thời lạc quan: không khoá trước, lúc ghi mới kiểm tra có ai sửa chưa",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "Optimistic concurrency checks a version number before saving.",
+   "viDuNghia": "Đồng thời lạc quan kiểm tra số phiên bản trước khi lưu."
+  },
+  {
+   "chu": "pessimistic concurrency",
+   "doc": "/ˌpesɪˈmɪstɪk kənˈkɜːrənsi/",
+   "nghia": "đồng thời bi quan: khoá dữ liệu ngay khi đọc để không ai sửa được",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "Pessimistic concurrency locks rows as soon as they are read.",
+   "viDuNghia": "Đồng thời bi quan khoá dòng ngay khi chúng được đọc."
+  },
+  {
+   "chu": "blocking",
+   "doc": "/ˈblɑːkɪŋ/",
+   "nghia": "chặn (khoá): giao tác phải chờ vì giao tác khác đang giữ khoá trên cùng dữ liệu",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "Long transactions cause blocking for other users.",
+   "viDuNghia": "Giao tác dài gây chặn cho người dùng khác."
+  },
+  {
+   "chu": "deadlock victim",
+   "doc": "/ˈdedlɑːk ˈvɪktɪm/",
+   "nghia": "nạn nhân bế tắc: giao tác SQL Server chọn huỷ (lỗi 1205) để phá bế tắc",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "SQL Server rolls back the deadlock victim with error 1205.",
+   "viDuNghia": "SQL Server rollback nạn nhân bế tắc kèm lỗi 1205."
+  },
+  {
+   "chu": "lock escalation",
+   "doc": "/lɑːk ˌeskəˈleɪʃn/",
+   "nghia": "nâng cấp khoá: gom nhiều khoá dòng thành một khoá bảng để tiết kiệm bộ nhớ",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "Updating many rows at once may trigger lock escalation to a table lock.",
+   "viDuNghia": "Cập nhật rất nhiều dòng một lúc có thể gây nâng cấp lên khoá bảng."
+  },
+  {
+   "chu": "write-ahead logging",
+   "doc": "/ˌraɪt əˈhed ˈlɔːɡɪŋ/",
+   "nghia": "ghi nhật ký trước (WAL): bản ghi nhật ký phải xuống đĩa trước khi trang dữ liệu được ghi",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "Write-ahead logging makes it possible to undo and redo changes after a crash.",
+   "viDuNghia": "Ghi nhật ký trước cho phép hoàn tác và làm lại thay đổi sau khi sập."
+  },
+  {
+   "chu": "redo",
+   "doc": "/ˌriːˈduː/",
+   "nghia": "làm lại (redo): áp lại thay đổi của giao tác đã commit từ nhật ký khi phục hồi",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "During recovery, committed transactions are redone and uncommitted ones are undone.",
+   "viDuNghia": "Khi phục hồi, giao tác đã commit được làm lại còn giao tác chưa commit bị hoàn tác."
+  },
+  {
+   "chu": "full backup",
+   "doc": "/fʊl ˈbækʌp/",
+   "nghia": "sao lưu toàn bộ: bản sao đầy đủ của cơ sở dữ liệu tại một thời điểm",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "A full backup is the starting point for every restore.",
+   "viDuNghia": "Bản sao lưu toàn bộ là điểm khởi đầu của mọi lần khôi phục."
+  },
+  {
+   "chu": "differential backup",
+   "doc": "/ˌdɪfəˈrenʃl ˈbækʌp/",
+   "nghia": "sao lưu khác biệt: chỉ chứa phần dữ liệu thay đổi kể từ lần sao lưu toàn bộ gần nhất",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "A differential backup contains changes since the last full backup.",
+   "viDuNghia": "Bản sao lưu khác biệt chứa thay đổi kể từ lần sao lưu toàn bộ gần nhất."
+  },
+  {
+   "chu": "log backup",
+   "doc": "/lɔːɡ ˈbækʌp/",
+   "nghia": "sao lưu nhật ký: sao lưu nhật ký giao tác, cho phép khôi phục tới một thời điểm",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "Log backups allow point-in-time recovery.",
+   "viDuNghia": "Sao lưu nhật ký cho phép khôi phục về một thời điểm cụ thể."
+  },
+  {
+   "chu": "recovery model",
+   "doc": "/rɪˈkʌvəri ˈmɑːdl/",
+   "nghia": "mô hình phục hồi: cách SQL Server giữ nhật ký (SIMPLE, FULL, BULK_LOGGED)",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "Under the SIMPLE recovery model, log backups are not possible.",
+   "viDuNghia": "Ở mô hình phục hồi SIMPLE, không sao lưu nhật ký được."
+  },
+  {
+   "chu": "query optimizer",
+   "doc": "/ˈkwɪri ˈɑːptɪmaɪzər/",
+   "nghia": "bộ tối ưu truy vấn: thành phần DBMS chọn kế hoạch thực thi rẻ nhất cho câu lệnh",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "A query optimizer",
+   "viDuNghia": "Một bộ tối ưu truy vấn"
+  },
+  {
+   "chu": "table scan",
+   "doc": "/ˈteɪbl skæn/",
+   "nghia": "quét bảng: đọc mọi dòng của bảng vì không có chỉ mục phù hợp",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "Without an index on Email, the query needs a full table scan.",
+   "viDuNghia": "Không có chỉ mục trên Email, truy vấn phải quét toàn bảng."
+  },
+  {
+   "chu": "index seek",
+   "doc": "/ˈɪndeks siːk/",
+   "nghia": "tìm theo chỉ mục: đi thẳng tới các dòng cần qua cây chỉ mục, nhanh hơn quét",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "An index seek reads only the rows that match the condition.",
+   "viDuNghia": "Tìm theo chỉ mục chỉ đọc những dòng khớp điều kiện."
+  },
+  {
+   "chu": "covering index",
+   "doc": "/ˈkʌvərɪŋ ˈɪndeks/",
+   "nghia": "chỉ mục bao phủ: chứa đủ mọi cột câu truy vấn cần nên không phải đọc bảng",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "A covering index lets the query be answered from the index alone.",
+   "viDuNghia": "Chỉ mục bao phủ cho phép trả lời truy vấn chỉ từ chỉ mục."
+  },
+  {
+   "chu": "composite index",
+   "doc": "/kəmˈpɑːzɪt ˈɪndeks/",
+   "nghia": "chỉ mục tổ hợp: chỉ mục trên nhiều cột; thứ tự cột quyết định truy vấn nào dùng được",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "A composite index on (LastName, FirstName) cannot help a search by FirstName only.",
+   "viDuNghia": "Chỉ mục tổ hợp trên (LastName, FirstName) không giúp được tìm kiếm chỉ theo FirstName."
+  },
+  {
+   "chu": "B+ tree",
+   "doc": "/ˌbiː ˈplʌs triː/",
+   "nghia": "cây B+: cấu trúc chỉ mục phổ biến của DBMS, dữ liệu ở lá và các lá nối thành danh sách",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "Most database indexes are stored as B+ trees.",
+   "viDuNghia": "Phần lớn chỉ mục CSDL được lưu dưới dạng cây B+."
+  },
+  {
+   "chu": "fill factor",
+   "doc": "/fɪl ˈfæktər/",
+   "nghia": "hệ số lấp đầy: tỉ lệ phần trăm mỗi trang chỉ mục được lấp lúc tạo, chừa chỗ để tránh tách trang",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "A lower fill factor leaves room for new rows and reduces page splits.",
+   "viDuNghia": "Hệ số lấp đầy thấp chừa chỗ cho dòng mới và giảm tách trang."
+  },
+  {
+   "chu": "sargable",
+   "doc": "/ˈsɑːrɡəbl/",
+   "nghia": "sargable: điều kiện WHERE dùng được chỉ mục (không bọc cột trong hàm)",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "WHERE YEAR(OrderDate) = 2024 is not sargable, but a date range is.",
+   "viDuNghia": "WHERE YEAR(OrderDate) = 2024 không dùng được chỉ mục, còn khoảng ngày thì dùng được."
+  },
+  {
+   "chu": "system catalog",
+   "doc": "/ˈsɪstəm ˈkætəlɔːɡ/",
+   "nghia": "danh mục hệ thống: các bảng nội bộ DBMS lưu siêu dữ liệu về bảng, cột, chỉ mục, quyền",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "The system catalog stores the definitions of all tables and columns.",
+   "viDuNghia": "Danh mục hệ thống lưu định nghĩa của mọi bảng và cột."
+  },
+  {
+   "chu": "OLTP",
+   "doc": "/ˌoʊ el tiː ˈpiː/",
+   "nghia": "OLTP (xử lý giao tác trực tuyến): hệ nhiều giao tác ngắn ghi đọc liên tục (bán hàng, ngân hàng)",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "An OLTP database is normalized to support many small transactions.",
+   "viDuNghia": "CSDL OLTP được chuẩn hoá để phục vụ nhiều giao tác nhỏ."
+  },
+  {
+   "chu": "OLAP",
+   "doc": "/ˈoʊlæp/",
+   "nghia": "OLAP (xử lý phân tích trực tuyến): truy vấn tổng hợp lớn trên dữ liệu lịch sử để phân tích",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "OLAP queries aggregate millions of rows for reports.",
+   "viDuNghia": "Truy vấn OLAP tổng hợp hàng triệu dòng cho báo cáo."
+  },
+  {
+   "chu": "data warehouse",
+   "doc": "/ˈdeɪtə ˈwerhaʊs/",
+   "nghia": "kho dữ liệu: CSDL tổng hợp dữ liệu lịch sử từ nhiều nguồn để phân tích, báo cáo",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "A data warehouse is often organized as a star schema.",
+   "viDuNghia": "Kho dữ liệu thường được tổ chức theo lược đồ hình sao."
+  },
+  {
+   "chu": "dbo",
+   "doc": "/ˌdiː biː ˈoʊ/",
+   "nghia": "dbo (database owner): lược đồ mặc định trong SQL Server; dbo.Customers là bảng Customers thuộc lược đồ dbo",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "SELECT * FROM dbo.Customers AS c",
+   "viDuNghia": "Lấy mọi dòng của bảng Customers trong lược đồ dbo, đặt bí danh là c"
+  },
+  {
+   "chu": "NOCHECK",
+   "doc": "/noʊ ˈtʃek/",
+   "nghia": "NOCHECK CONSTRAINT: tạm tắt việc kiểm tra một ràng buộc (vd khoá ngoại) của bảng; bật lại bằng CHECK CONSTRAINT",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "ALTER TABLE B NOCHECK CONSTRAINT fk_name",
+   "viDuNghia": "Tạm tắt kiểm tra ràng buộc khoá ngoại fk_name của bảng B"
+  },
+  {
+   "chu": "non-trivial dependency",
+   "doc": "/nɒn ˈtrɪviəl dɪˈpendənsi/",
+   "nghia": "phụ thuộc hàm không tầm thường: X → Y mà Y không phải tập con của X",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "In BCNF, every determinant X of a non-trivial FD X -> A must be a superkey.",
+   "viDuNghia": "Ở BCNF, vế trái X của mọi phụ thuộc hàm không tầm thường X -> A phải là siêu khoá."
+  },
+  {
+   "chu": "non-prime attribute",
+   "doc": "/nɒn praɪm ˈætrɪbjuːt/",
+   "nghia": "thuộc tính không khoá: thuộc tính không nằm trong bất kỳ khoá ứng viên nào",
+   "nhom": "Toàn vẹn và lý thuyết quan hệ",
+   "viDu": "2NF check: no non-prime attribute is partially dependent on a candidate key.",
+   "viDuNghia": "Kiểm 2NF: không thuộc tính không khoá nào phụ thuộc bộ phận vào một khoá ứng viên."
+  },
+  {
+   "chu": "multi-user access",
+   "doc": "/ˌmʌlti ˈjuːzər ˈækses/",
+   "nghia": "truy cập nhiều người dùng: nhiều người cùng đọc/ghi CSDL một lúc, DBMS kiểm soát đồng thời bằng khoá và giao tác",
+   "nhom": "Giao tác và đồng thời",
+   "viDu": "A core selling point of a DBMS is multi-user, concurrent access with controlled sharing.",
+   "viDuNghia": "Điểm mạnh cốt lõi của DBMS là cho nhiều người dùng truy cập đồng thời và chia sẻ có kiểm soát."
+  },
+  {
+   "chu": "FREETEXT",
+   "doc": "/ˈfriːtekst/",
+   "nghia": "FREETEXT: vị từ tìm kiếm toàn văn theo NGHĨA (khớp cả dạng biến đổi của từ) trên cột có chỉ mục toàn văn",
+   "nhom": "Kiểu dữ liệu và hàm T-SQL",
+   "viDu": "SELECT * FROM Books WHERE FREETEXT(*, 'computer')",
+   "viDuNghia": "Lấy các sách có cột chỉ mục toàn văn nào mang nội dung liên quan tới 'computer'"
+  },
+  {
+   "chu": "full-text index",
+   "doc": "/ˌfʊl tekst ˈɪndeks/",
+   "nghia": "chỉ mục toàn văn: chỉ mục đặc biệt trên cột chữ để tìm từ / cụm từ nhanh bằng CONTAINS, FREETEXT",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "FREETEXT(*, 'word') searches all full-text indexed columns of the table.",
+   "viDuNghia": "FREETEXT(*, 'word') tìm trên mọi cột có chỉ mục toàn văn của bảng."
+  },
+  {
+   "chu": "precompiled",
+   "doc": "/ˌpriːkəmˈpaɪld/",
+   "nghia": "biên dịch sẵn: thủ tục lưu trữ được dịch thành kế hoạch thực thi và lưu đệm để dùng lại, nên chạy nhanh hơn gửi từng câu lệnh",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "A stored procedure is a named, precompiled batch of SQL statements saved in the database.",
+   "viDuNghia": "Thủ tục lưu trữ là một lô câu lệnh SQL có tên, đã biên dịch sẵn và lưu trong CSDL."
+  },
+  {
+   "chu": "recompile",
+   "doc": "/ˌriːkəmˈpaɪl/",
+   "nghia": "biên dịch lại: WITH RECOMPILE buộc SQL Server dựng kế hoạch thực thi mới mỗi lần chạy thủ tục, không dùng bản lưu đệm",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "Use the WITH RECOMPILE option when creating the stored procedure.",
+   "viDuNghia": "Dùng tuỳ chọn WITH RECOMPILE khi tạo thủ tục lưu trữ."
+  },
+  {
+   "chu": "set-based operation",
+   "doc": "/ˌset beɪst ˌɒpəˈreɪʃn/",
+   "nghia": "thao tác theo tập: một câu lệnh xử lý cả tập dòng cùng lúc (khác cursor duyệt từng dòng), thường nhanh và ít tốn tài nguyên hơn",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "Use cursors only when row-by-row logic is unavoidable; otherwise prefer a set-based statement.",
+   "viDuNghia": "Chỉ dùng cursor khi buộc phải xử lý từng dòng; còn lại nên dùng câu lệnh theo tập."
+  },
+  {
+   "chu": "query compiler",
+   "doc": "/ˈkwɪəri kəmˈpaɪlər/",
+   "nghia": "bộ biên dịch truy vấn: biến câu SQL thành kế hoạch thực thi qua ba bước parser → preprocessor → optimizer",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "In query compiler, which unit builds a tree structure from the text form of the query?",
+   "viDuNghia": "Trong bộ biên dịch truy vấn, khối nào dựng cấu trúc cây từ dạng văn bản của câu truy vấn?"
+  },
+  {
+   "chu": "parser",
+   "doc": "/ˈpɑːrsər/",
+   "nghia": "bộ phân tích cú pháp: kiểm từ vựng, cú pháp của câu truy vấn dạng văn bản và dựng cây phân tích (parse tree)",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "The parser builds a parse tree from the query text.",
+   "viDuNghia": "Bộ phân tích cú pháp dựng cây phân tích từ văn bản câu truy vấn."
+  },
+  {
+   "chu": "parse tree",
+   "doc": "/pɑːrs triː/",
+   "nghia": "cây phân tích cú pháp: cây biểu diễn cấu trúc ngữ pháp của câu truy vấn, đầu ra của parser",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "The query parser performs lexical and syntax analysis and builds a parse tree.",
+   "viDuNghia": "Bộ phân tích truy vấn phân tích từ vựng, cú pháp rồi dựng cây phân tích."
+  },
+  {
+   "chu": "query preprocessor",
+   "doc": "/ˈkwɪəri ˌpriːˈprəʊsesər/",
+   "nghia": "bộ tiền xử lý truy vấn: kiểm ngữ nghĩa (bảng, thuộc tính có tồn tại, kiểu có hợp không) rồi đổi cây phân tích thành kế hoạch logic ban đầu",
+   "nhom": "Sao lưu và hiệu năng",
+   "viDu": "The preprocessor checks semantics, such as whether the tables and attributes exist.",
+   "viDuNghia": "Bộ tiền xử lý kiểm ngữ nghĩa, vd bảng và thuộc tính có tồn tại không."
+  }
+ ]
+}

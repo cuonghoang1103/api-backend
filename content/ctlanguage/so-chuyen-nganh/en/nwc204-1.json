@@ -4,7 +4,7 @@
  "ten": "NWC204 · Mạng máy tính (phần riêng)",
  "moTa": "Môn Mạng máy tính bản mới (NWC204): chia mạng con IPv4/IPv6, switch và ARP, cáp, cấu hình thiết bị Cisco, kiểm tra lỗi mạng, bảo mật cơ bản. Chỉ gồm từ chưa có ở ba bộ NWC203c/NWC204. Từ lấy từ đề thật; câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "wifi.router.fill",
- "thuTu": -971,
+ "thuTu": -958,
  "tu": [
   {
    "chu": "prefix length",

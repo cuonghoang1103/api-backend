@@ -1,0 +1,706 @@
+{
+ "ma": "prn212-1",
+ "nn": "en",
+ "ten": "PRN212 · 1. Nền tảng .NET, C#, LINQ, WPF & EF Core",
+ "moTa": "PRN212 (lập trình đa nền tảng cơ bản với .NET) chưa có đề chữ: bộ từ soạn từ syllabus và giáo trình — nền tảng .NET và CLR, đặc trưng ngôn ngữ C#, delegate/event/LINQ, ứng dụng WPF với XAML và data binding, Entity Framework Core và kiến trúc ba lớp.",
+ "bieuTuong": "square.stack.3d.forward.dottedline.fill",
+ "thuTu": -901,
+ "tu": [
+  {
+   "chu": "Microsoft .NET",
+   "doc": "/ˈmaɪkrəsɒft dɒt nɛt/",
+   "nghia": ".NET: nền tảng phát triển mã nguồn mở, đa nền tảng của Microsoft (C#, F#, VB)",
+   "nhom": "Nền tảng .NET",
+   "viDu": ".NET 8 runs on Windows, macOS and Linux.",
+   "viDuNghia": ".NET 8 chạy trên Windows, macOS và Linux."
+  },
+  {
+   "chu": "Microsoft .NET Framework",
+   "doc": "/ˈmaɪkrəsɒft dɒt nɛt ˈfreɪmwɜːrk/",
+   "nghia": ".NET Framework: bản .NET cũ chỉ chạy trên Windows (tới 4.8)",
+   "nhom": "Nền tảng .NET",
+   "viDu": "WPF was first released as part of the .NET Framework.",
+   "viDuNghia": "WPF ra đời lần đầu trong .NET Framework."
+  },
+  {
+   "chu": "Microsoft .NET Core",
+   "doc": "/ˈmaɪkrəsɒft dɒt nɛt kɔːr/",
+   "nghia": ".NET Core: bản .NET viết lại, đa nền tảng — từ .NET 5 gọi chung là .NET",
+   "nhom": "Nền tảng .NET",
+   "viDu": ".NET Core was renamed simply .NET starting with version 5.",
+   "viDuNghia": ".NET Core được đổi tên thành .NET từ phiên bản 5."
+  },
+  {
+   "chu": "Common Language Runtime",
+   "doc": "/ˈkɒmən ˈlæŋɡwɪdʒ ˈrʌntaɪm/",
+   "nghia": "CLR: máy ảo của .NET — nạp assembly, dịch JIT, gom rác, kiểm an toàn kiểu",
+   "nhom": "Nền tảng .NET",
+   "viDu": "The Common Language Runtime compiles IL code to machine code with the JIT compiler.",
+   "viDuNghia": "CLR dịch mã IL sang mã máy bằng trình biên dịch JIT."
+  },
+  {
+   "chu": "Common Intermediate Language",
+   "doc": "/ˈkɒmən ˌɪntərˈmiːdiət ˈlæŋɡwɪdʒ/",
+   "nghia": "CIL (MSIL, IL): mã trung gian mà trình biên dịch C# sinh ra, chạy trên CLR",
+   "nhom": "Nền tảng .NET",
+   "viDu": "The C# compiler produces Common Intermediate Language, not native code.",
+   "viDuNghia": "Trình biên dịch C# sinh ra mã trung gian CIL, không phải mã máy gốc."
+  },
+  {
+   "chu": "Base Class Library",
+   "doc": "/beɪs klɑːs ˈlaɪbrəri/",
+   "nghia": "BCL: thư viện lớp nền của .NET (System, System.IO, System.Collections…)",
+   "nhom": "Nền tảng .NET",
+   "viDu": "Console, List and File all come from the Base Class Library.",
+   "viDuNghia": "Console, List và File đều thuộc thư viện lớp nền BCL."
+  },
+  {
+   "chu": "Common Type System",
+   "doc": "/ˈkɒmən taɪp ˈsɪstəm/",
+   "nghia": "CTS: quy định chung về kiểu dữ liệu để mọi ngôn ngữ .NET dùng được kiểu của nhau",
+   "nhom": "Nền tảng .NET",
+   "viDu": "Thanks to the Common Type System, an int in C# is the same System.Int32 in VB.",
+   "viDuNghia": "Nhờ CTS, int trong C# cũng là System.Int32 trong VB."
+  },
+  {
+   "chu": "Common Language Specification",
+   "doc": "/ˈkɒmən ˈlæŋɡwɪdʒ ˌspɛsɪfɪˈkeɪʃən/",
+   "nghia": "CLS: tập luật tối thiểu để thư viện viết bằng ngôn ngữ này dùng được từ ngôn ngữ .NET khác",
+   "nhom": "Nền tảng .NET",
+   "viDu": "A library that follows the Common Language Specification can be used from any .NET language.",
+   "viDuNghia": "Thư viện theo CLS dùng được từ mọi ngôn ngữ .NET."
+  },
+  {
+   "chu": "assembly",
+   "doc": "/əˈsɛmbli/",
+   "nghia": "assembly (.NET): đơn vị đóng gói đã biên dịch (.dll hoặc .exe) chứa IL và siêu dữ liệu",
+   "nhom": "Nền tảng .NET",
+   "viDu": "Each project in the solution is compiled into its own assembly.",
+   "viDuNghia": "Mỗi dự án trong solution được biên dịch thành một assembly riêng."
+  },
+  {
+   "chu": "managed code",
+   "doc": "/ˈmænɪdʒd koʊd/",
+   "nghia": "mã được quản lý: chạy dưới CLR, được gom rác và kiểm an toàn",
+   "nhom": "Nền tảng .NET",
+   "viDu": "C# code is managed code because it runs under the CLR.",
+   "viDuNghia": "Mã C# là mã được quản lý vì chạy dưới CLR."
+  },
+  {
+   "chu": "unmanaged code",
+   "doc": "/ʌnˈmænɪdʒd koʊd/",
+   "nghia": "mã không được quản lý: chạy thẳng trên HĐH (C/C++), tự quản bộ nhớ",
+   "nhom": "Nền tảng .NET",
+   "viDu": "Calling a Windows API written in C means calling unmanaged code.",
+   "viDuNghia": "Gọi một API Windows viết bằng C là gọi mã không được quản lý."
+  },
+  {
+   "chu": "NuGet package",
+   "doc": "/ˈnjuːɡɛt ˈpækɪdʒ/",
+   "nghia": "gói NuGet: thư viện .NET cài qua trình quản lý gói NuGet",
+   "nhom": "Nền tảng .NET",
+   "viDu": "Install the Microsoft.EntityFrameworkCore.SqlServer NuGet package.",
+   "viDuNghia": "Cài gói NuGet Microsoft.EntityFrameworkCore.SqlServer."
+  },
+  {
+   "chu": "Visual Studio",
+   "doc": "/ˈvɪʒuəl ˈstjuːdioʊ/",
+   "nghia": "Visual Studio: IDE chính của Microsoft để viết ứng dụng .NET",
+   "nhom": "Nền tảng .NET",
+   "viDu": "Create a WPF App project in Visual Studio 2022.",
+   "viDuNghia": "Tạo dự án WPF App trong Visual Studio 2022."
+  },
+  {
+   "chu": "Visual Studio solution",
+   "doc": "/ˈvɪʒuəl ˈstjuːdioʊ səˈluːʃən/",
+   "nghia": "solution (.sln): tệp gom nhiều dự án (UI, thư viện, DAL) mở cùng lúc",
+   "nhom": "Nền tảng .NET",
+   "viDu": "The solution contains three projects: WPFApp, BusinessObjects and DataAccess.",
+   "viDuNghia": "Solution gồm ba dự án: WPFApp, BusinessObjects và DataAccess."
+  },
+  {
+   "chu": "IntelliSense",
+   "doc": "/ɪnˈtɛlɪsɛns/",
+   "nghia": "IntelliSense: gợi ý mã tự động trong Visual Studio (tên lớp, phương thức, tham số)",
+   "nhom": "Nền tảng .NET",
+   "viDu": "IntelliSense shows the members of an object after you type a dot.",
+   "viDuNghia": "IntelliSense hiện các thành phần của đối tượng sau khi gõ dấu chấm."
+  },
+  {
+   "chu": "GitHub Copilot",
+   "doc": "/ˈɡɪthʌb ˈkoʊpaɪlət/",
+   "nghia": "GitHub Copilot: trợ lý AI gợi ý mã khi viết C#, XAML, SQL",
+   "nhom": "Nền tảng .NET",
+   "viDu": "Review every line that GitHub Copilot suggests before you accept it.",
+   "viDuNghia": "Xem lại từng dòng GitHub Copilot gợi ý trước khi chấp nhận."
+  },
+  {
+   "chu": "GitHub Actions",
+   "doc": "/ˈɡɪthʌb ˈækʃənz/",
+   "nghia": "GitHub Actions: dịch vụ CI/CD của GitHub, chạy workflow build/test khi push",
+   "nhom": "Nền tảng .NET",
+   "viDu": "A GitHub Actions workflow builds and tests the solution on every push.",
+   "viDuNghia": "Một workflow GitHub Actions build và test solution mỗi lần push."
+  },
+  {
+   "chu": "using directive",
+   "doc": "/ˈjuːzɪŋ dəˈrɛktɪv/",
+   "nghia": "chỉ thị using: khai báo dùng một namespace ở đầu tệp (using System.Linq;)",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "Add the using directive using System.Linq; to call LINQ methods.",
+   "viDuNghia": "Thêm chỉ thị using System.Linq; để gọi các phương thức LINQ."
+  },
+  {
+   "chu": "using statement",
+   "doc": "/ˈjuːzɪŋ ˈsteɪtmənt/",
+   "nghia": "lệnh using: tự gọi Dispose() khi ra khỏi khối (đóng kết nối, tệp)",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "A using statement makes sure the SqlConnection is closed.",
+   "viDuNghia": "Lệnh using bảo đảm SqlConnection được đóng."
+  },
+  {
+   "chu": "value type",
+   "doc": "/ˈvæljuː taɪp/",
+   "nghia": "kiểu giá trị: biến chứa trực tiếp dữ liệu, gán là sao chép (int, double, struct, enum)",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "int and struct are value types, so assignment copies the data.",
+   "viDuNghia": "int và struct là kiểu giá trị nên phép gán sao chép dữ liệu."
+  },
+  {
+   "chu": "reference type",
+   "doc": "/ˈrɛfərəns taɪp/",
+   "nghia": "kiểu tham chiếu: biến chứa tham chiếu tới đối tượng trên heap (class, string, array)",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "A class is a reference type, so two variables can point to the same object.",
+   "viDuNghia": "Lớp là kiểu tham chiếu nên hai biến có thể trỏ cùng một đối tượng."
+  },
+  {
+   "chu": "boxing",
+   "doc": "/ˈbɒksɪŋ/",
+   "nghia": "boxing (C#): đóng gói một giá trị kiểu giá trị vào object trên heap; unboxing là lấy ra",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "Storing an int in an object variable causes boxing.",
+   "viDuNghia": "Gán int vào biến object gây boxing."
+  },
+  {
+   "chu": "nullable type",
+   "doc": "/ˈnʌləbl taɪp/",
+   "nghia": "kiểu nullable (int?): kiểu giá trị nhận thêm giá trị null",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "Use int? for an optional age that may be null.",
+   "viDuNghia": "Dùng int? cho tuổi tuỳ chọn có thể null."
+  },
+  {
+   "chu": "null-coalescing operator",
+   "doc": "/nʌl ˌkoʊəˈlɛsɪŋ ˈɒpəreɪtər/",
+   "nghia": "toán tử ?? : lấy giá trị bên phải khi bên trái là null",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "name ?? \"Unknown\" returns \"Unknown\" when name is null.",
+   "viDuNghia": "name ?? \"Unknown\" trả \"Unknown\" khi name là null."
+  },
+  {
+   "chu": "null-conditional operator",
+   "doc": "/nʌl kənˈdɪʃənəl ˈɒpəreɪtər/",
+   "nghia": "toán tử ?. : chỉ truy cập thành phần khi đối tượng khác null, ngược lại trả null",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "customer?.Address?.City avoids a NullReferenceException.",
+   "viDuNghia": "customer?.Address?.City tránh lỗi NullReferenceException."
+  },
+  {
+   "chu": "record type",
+   "doc": "/ˈrɛkɔːrd taɪp/",
+   "nghia": "kiểu record (C# 9): kiểu dữ liệu so sánh theo giá trị, mặc định bất biến",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "public record Product(int Id, string Name); creates a record type.",
+   "viDuNghia": "public record Product(int Id, string Name); tạo một kiểu record."
+  },
+  {
+   "chu": "auto-implemented property",
+   "doc": "/ˈɔːtoʊ ˈɪmplɪmɛntɪd ˈprɒpərti/",
+   "nghia": "thuộc tính tự hiện thực: public string Name { get; set; } — trình biên dịch tự tạo field ẩn",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "public string Name { get; set; } is an auto-implemented property.",
+   "viDuNghia": "public string Name { get; set; } là thuộc tính tự hiện thực."
+  },
+  {
+   "chu": "indexer",
+   "doc": "/ˈɪndɛksər/",
+   "nghia": "indexer: cho truy cập đối tượng bằng chỉ số như mảng (this[int i])",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "An indexer lets you write library[0] to get the first book.",
+   "viDuNghia": "Indexer cho phép viết library[0] để lấy cuốn sách đầu tiên."
+  },
+  {
+   "chu": "partial class",
+   "doc": "/ˈpɑːrʃəl klɑːs/",
+   "nghia": "lớp partial: một lớp chia ra nhiều tệp (XAML + code-behind, mã sinh tự động)",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "MainWindow is a partial class split between MainWindow.xaml and MainWindow.xaml.cs.",
+   "viDuNghia": "MainWindow là lớp partial chia giữa MainWindow.xaml và MainWindow.xaml.cs."
+  },
+  {
+   "chu": "static class",
+   "doc": "/ˈstætɪk klɑːs/",
+   "nghia": "lớp static: không tạo đối tượng được, chỉ chứa thành phần static (nơi đặt extension method)",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "Extension methods must be declared in a static class.",
+   "viDuNghia": "Extension method phải khai báo trong lớp static."
+  },
+  {
+   "chu": "virtual method",
+   "doc": "/ˈvɜːrtʃuəl ˈmɛθəd/",
+   "nghia": "phương thức virtual: cho phép lớp con ghi đè bằng override (C# không mặc định cho ghi đè)",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "In C#, a method must be marked virtual before a subclass can override it.",
+   "viDuNghia": "Trong C#, phương thức phải đánh dấu virtual thì lớp con mới override được."
+  },
+  {
+   "chu": "extension method",
+   "doc": "/ɪkˈstɛnʃən ˈmɛθəd/",
+   "nghia": "phương thức mở rộng: thêm phương thức cho kiểu có sẵn mà không sửa nó (tham số đầu có this)",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "LINQ methods such as Where and Select are extension methods on IEnumerable.",
+   "viDuNghia": "Các phương thức LINQ như Where, Select là phương thức mở rộng của IEnumerable."
+  },
+  {
+   "chu": "anonymous type",
+   "doc": "/əˈnɒnɪməs taɪp/",
+   "nghia": "kiểu vô danh: new { Name, Price } — kiểu tạm do trình biên dịch tạo, hay dùng trong select",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "select new { p.Name, p.Price } creates an anonymous type.",
+   "viDuNghia": "select new { p.Name, p.Price } tạo một kiểu vô danh."
+  },
+  {
+   "chu": "implicitly typed local variable",
+   "doc": "/ɪmˈplɪsɪtli taɪpt ˈloʊkəl ˈvɛəriəbl/",
+   "nghia": "biến cục bộ kiểu ngầm định (var): trình biên dịch tự suy kiểu từ giá trị khởi tạo",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "var result = list.Where(x => x > 5); declares an implicitly typed local variable.",
+   "viDuNghia": "var result = list.Where(x => x > 5); khai báo biến cục bộ kiểu ngầm định."
+  },
+  {
+   "chu": "object initializer",
+   "doc": "/ˈɒbdʒɛkt ɪˈnɪʃəlaɪzər/",
+   "nghia": "khởi tạo đối tượng: new Product { Id = 1, Name = \"Pen\" }",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "An object initializer sets properties without a special constructor.",
+   "viDuNghia": "Khởi tạo đối tượng gán thuộc tính mà không cần constructor riêng."
+  },
+  {
+   "chu": "collection initializer",
+   "doc": "/kəˈlɛkʃən ɪˈnɪʃəlaɪzər/",
+   "nghia": "khởi tạo tập hợp: new List<int> { 1, 2, 3 }",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "A collection initializer fills a list in one statement.",
+   "viDuNghia": "Khởi tạo tập hợp điền danh sách trong một câu lệnh."
+  },
+  {
+   "chu": "generic class",
+   "doc": "/dʒəˈnɛrɪk klɑːs/",
+   "nghia": "lớp generic: lớp có tham số kiểu, vd Repository<T>",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "A generic class Repository<T> works for both Product and Customer.",
+   "viDuNghia": "Lớp generic Repository<T> dùng được cho cả Product lẫn Customer."
+  },
+  {
+   "chu": "generic method",
+   "doc": "/dʒəˈnɛrɪk ˈmɛθəd/",
+   "nghia": "phương thức generic: phương thức có tham số kiểu riêng, vd Swap<T>(ref T a, ref T b)",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "Swap<T> is a generic method that works for any type.",
+   "viDuNghia": "Swap<T> là phương thức generic dùng được với mọi kiểu."
+  },
+  {
+   "chu": "type constraint",
+   "doc": "/taɪp kənˈstreɪnt/",
+   "nghia": "ràng buộc kiểu: where T : class, new() — giới hạn kiểu được truyền cho generic",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "The type constraint where T : class allows only reference types.",
+   "viDuNghia": "Ràng buộc kiểu where T : class chỉ cho phép kiểu tham chiếu."
+  },
+  {
+   "chu": "prototype pattern",
+   "doc": "/ˈproʊtətaɪp ˈpætərn/",
+   "nghia": "mẫu Prototype: tạo đối tượng mới bằng cách sao chép (clone) một đối tượng mẫu",
+   "nhom": "Ngôn ngữ C#",
+   "viDu": "The prototype pattern creates new objects by cloning an existing one.",
+   "viDuNghia": "Mẫu Prototype tạo đối tượng mới bằng cách sao chép một đối tượng có sẵn."
+  },
+  {
+   "chu": "delegate",
+   "doc": "/ˈdɛlɪɡət/",
+   "nghia": "delegate (C#): kiểu tham chiếu tới phương thức có chữ ký xác định — nền của event và lambda",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "A delegate can hold a reference to any method with a matching signature.",
+   "viDuNghia": "Delegate giữ được tham chiếu tới mọi phương thức có chữ ký khớp."
+  },
+  {
+   "chu": "multicast delegate",
+   "doc": "/ˈmʌltikɑːst ˈdɛlɪɡət/",
+   "nghia": "delegate đa hướng: một delegate giữ nhiều phương thức, gọi lần lượt (dùng += )",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "Using += on a delegate creates a multicast delegate.",
+   "viDuNghia": "Dùng += với delegate tạo ra delegate đa hướng."
+  },
+  {
+   "chu": "anonymous method",
+   "doc": "/əˈnɒnɪməs ˈmɛθəd/",
+   "nghia": "phương thức vô danh: delegate(int x) { … } — tiền thân của lambda",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "An anonymous method is written inline with the delegate keyword.",
+   "viDuNghia": "Phương thức vô danh được viết tại chỗ với từ khoá delegate."
+  },
+  {
+   "chu": "Func",
+   "doc": "/fʌŋk/",
+   "nghia": "Func<T, TResult>: delegate có sẵn nhận tham số và TRẢ VỀ giá trị",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "Func<int, int> square = x => x * x;",
+   "viDuNghia": "Func<int, int> square = x => x * x; — delegate tính bình phương."
+  },
+  {
+   "chu": "Action delegate",
+   "doc": "/ˈækʃən ˈdɛlɪɡət/",
+   "nghia": "Action<T>: delegate có sẵn nhận tham số, KHÔNG trả về giá trị",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "Action<string> print = s => Console.WriteLine(s);",
+   "viDuNghia": "Action<string> print = s => Console.WriteLine(s); — delegate in chuỗi."
+  },
+  {
+   "chu": "Predicate delegate",
+   "doc": "/ˈprɛdɪkət ˈdɛlɪɡət/",
+   "nghia": "Predicate<T>: delegate có sẵn trả về bool (dùng trong Find, RemoveAll)",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "list.Find() takes a Predicate delegate such as p => p.Price > 100.",
+   "viDuNghia": "list.Find() nhận một Predicate như p => p.Price > 100."
+  },
+  {
+   "chu": "event keyword",
+   "doc": "/ɪˈvɛnt ˈkiːwɜːrd/",
+   "nghia": "từ khoá event: khai báo sự kiện dựa trên delegate; lớp ngoài chỉ được đăng ký += hoặc huỷ -=",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "The event keyword stops other classes from invoking the delegate directly.",
+   "viDuNghia": "Từ khoá event ngăn lớp khác gọi thẳng delegate."
+  },
+  {
+   "chu": "Language Integrated Query",
+   "doc": "/ˈlæŋɡwɪdʒ ˈɪntɪɡreɪtɪd ˈkwɪəri/",
+   "nghia": "LINQ: truy vấn dữ liệu (danh sách, CSDL, XML) bằng cú pháp ngay trong C#",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "Language Integrated Query lets you filter a list with Where and sort it with OrderBy.",
+   "viDuNghia": "LINQ cho phép lọc danh sách bằng Where và sắp xếp bằng OrderBy."
+  },
+  {
+   "chu": "query syntax",
+   "doc": "/ˈkwɪəri ˈsɪntæks/",
+   "nghia": "cú pháp truy vấn LINQ: from p in products where … select p (giống SQL)",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "In query syntax: from p in products where p.Price > 10 select p.Name.",
+   "viDuNghia": "Theo cú pháp truy vấn: from p in products where p.Price > 10 select p.Name."
+  },
+  {
+   "chu": "method syntax",
+   "doc": "/ˈmɛθəd ˈsɪntæks/",
+   "nghia": "cú pháp phương thức LINQ: products.Where(p => …).Select(p => …)",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "Method syntax chains calls such as products.Where(p => p.Price > 10).Select(p => p.Name).",
+   "viDuNghia": "Cú pháp phương thức nối các lời gọi như products.Where(p => p.Price > 10).Select(p => p.Name)."
+  },
+  {
+   "chu": "deferred execution",
+   "doc": "/dɪˈfɜːrd ˌɛksɪˈkjuːʃən/",
+   "nghia": "thực thi trì hoãn: truy vấn LINQ chỉ chạy khi được duyệt (foreach, ToList)",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "Because of deferred execution, the query runs only when you call ToList().",
+   "viDuNghia": "Do thực thi trì hoãn, truy vấn chỉ chạy khi gọi ToList()."
+  },
+  {
+   "chu": "immediate execution",
+   "doc": "/ɪˈmiːdiət ˌɛksɪˈkjuːʃən/",
+   "nghia": "thực thi ngay: ToList(), Count(), First() buộc truy vấn chạy liền",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "Count() forces immediate execution of the query.",
+   "viDuNghia": "Count() buộc truy vấn thực thi ngay."
+  },
+  {
+   "chu": "IEnumerable",
+   "doc": "/ˌaɪ ɪˈnjuːmərəbl/",
+   "nghia": "IEnumerable<T>: interface duyệt được bằng foreach; LINQ to Objects chạy trên bộ nhớ",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "Where on an IEnumerable filters the data in memory.",
+   "viDuNghia": "Where trên IEnumerable lọc dữ liệu trong bộ nhớ."
+  },
+  {
+   "chu": "IQueryable",
+   "doc": "/ˌaɪ ˈkwɪərəbl/",
+   "nghia": "IQueryable<T>: truy vấn được dịch thành SQL và chạy ở CSDL (EF Core)",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "Where on an IQueryable is translated into a SQL WHERE clause.",
+   "viDuNghia": "Where trên IQueryable được dịch thành mệnh đề WHERE của SQL."
+  },
+  {
+   "chu": "LINQ to Objects",
+   "doc": "/lɪŋk tuː ˈɒbdʒɛkts/",
+   "nghia": "LINQ to Objects: dùng LINQ trên tập hợp trong bộ nhớ (List, mảng)",
+   "nhom": "Delegate, event & LINQ",
+   "viDu": "LINQ to Objects works on any collection that implements IEnumerable.",
+   "viDuNghia": "LINQ to Objects chạy trên mọi tập hợp hiện thực IEnumerable."
+  },
+  {
+   "chu": "Windows Presentation Foundation",
+   "doc": "/ˈwɪndoʊz ˌprɛzənˈteɪʃən faʊnˈdeɪʃən/",
+   "nghia": "WPF: framework giao diện desktop của .NET, vẽ bằng DirectX, mô tả bằng XAML",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Windows Presentation Foundation separates the UI (XAML) from the logic (C#).",
+   "viDuNghia": "WPF tách giao diện (XAML) khỏi xử lý (C#)."
+  },
+  {
+   "chu": "XAML",
+   "doc": "/ˈzæməl/",
+   "nghia": "XAML: ngôn ngữ đánh dấu dạng XML mô tả giao diện WPF",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Each window is described in a XAML file such as MainWindow.xaml.",
+   "viDuNghia": "Mỗi cửa sổ được mô tả trong một tệp XAML như MainWindow.xaml."
+  },
+  {
+   "chu": "code-behind",
+   "doc": "/koʊd bɪˈhaɪnd/",
+   "nghia": "code-behind: tệp .xaml.cs chứa mã C# xử lý sự kiện của cửa sổ XAML",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Put the button click handler in the code-behind file.",
+   "viDuNghia": "Đặt hàm xử lý bấm nút trong tệp code-behind."
+  },
+  {
+   "chu": "layout panel",
+   "doc": "/ˈleɪaʊt ˈpænəl/",
+   "nghia": "bảng bố cục: phần tử sắp xếp các control con (Grid, StackPanel, DockPanel…)",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Choose a layout panel before adding controls to the window.",
+   "viDuNghia": "Chọn bảng bố cục trước khi thêm control vào cửa sổ."
+  },
+  {
+   "chu": "Grid panel",
+   "doc": "/ɡrɪd ˈpænəl/",
+   "nghia": "Grid: bảng bố cục chia hàng và cột (RowDefinitions, ColumnDefinitions)",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Place the TextBox in row 1, column 2 of the Grid panel.",
+   "viDuNghia": "Đặt TextBox ở hàng 1, cột 2 của Grid."
+  },
+  {
+   "chu": "StackPanel",
+   "doc": "/ˈstæk ˌpænəl/",
+   "nghia": "StackPanel: xếp control thành một hàng dọc hoặc ngang",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "A StackPanel stacks its children vertically by default.",
+   "viDuNghia": "StackPanel mặc định xếp các control con theo chiều dọc."
+  },
+  {
+   "chu": "DockPanel",
+   "doc": "/ˈdɒk ˌpænəl/",
+   "nghia": "DockPanel: gắn control vào cạnh trên, dưới, trái, phải",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Use a DockPanel to keep the menu at the top and the status bar at the bottom.",
+   "viDuNghia": "Dùng DockPanel giữ menu ở trên và thanh trạng thái ở dưới."
+  },
+  {
+   "chu": "WrapPanel",
+   "doc": "/ˈræp ˌpænəl/",
+   "nghia": "WrapPanel: xếp control nối tiếp, hết chỗ thì xuống hàng",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "A WrapPanel moves items to the next line when there is no more space.",
+   "viDuNghia": "WrapPanel đưa phần tử xuống dòng khi hết chỗ."
+  },
+  {
+   "chu": "Canvas panel",
+   "doc": "/ˈkænvəs ˈpænəl/",
+   "nghia": "Canvas: đặt control theo toạ độ tuyệt đối (Canvas.Left, Canvas.Top)",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "A Canvas panel positions shapes with exact coordinates.",
+   "viDuNghia": "Canvas đặt hình theo toạ độ chính xác."
+  },
+  {
+   "chu": "TextBox",
+   "doc": "/ˈtɛkst bɒks/",
+   "nghia": "TextBox: ô nhập chữ",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Bind the TextBox Text property to the product name.",
+   "viDuNghia": "Ràng buộc thuộc tính Text của TextBox với tên sản phẩm."
+  },
+  {
+   "chu": "ListBox",
+   "doc": "/ˈlɪst bɒks/",
+   "nghia": "ListBox: danh sách cho chọn một hay nhiều mục",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Show the categories in a ListBox.",
+   "viDuNghia": "Hiển thị các danh mục trong một ListBox."
+  },
+  {
+   "chu": "DataGrid",
+   "doc": "/ˈdeɪtə ɡrɪd/",
+   "nghia": "DataGrid: bảng hiển thị và sửa dữ liệu dạng hàng – cột",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Set the ItemsSource of the DataGrid to the list of products.",
+   "viDuNghia": "Gán ItemsSource của DataGrid bằng danh sách sản phẩm."
+  },
+  {
+   "chu": "message box",
+   "doc": "/ˈmɛsɪdʒ bɒks/",
+   "nghia": "hộp thông báo: MessageBox.Show(...) hiện thông báo hoặc hỏi xác nhận",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Show a message box to confirm before deleting the product.",
+   "viDuNghia": "Hiện hộp thông báo xác nhận trước khi xoá sản phẩm."
+  },
+  {
+   "chu": "binding mode",
+   "doc": "/ˈbaɪndɪŋ moʊd/",
+   "nghia": "chế độ ràng buộc dữ liệu: OneWay, TwoWay, OneTime, OneWayToSource",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Set the binding mode to TwoWay so user input updates the model.",
+   "viDuNghia": "Đặt chế độ ràng buộc TwoWay để dữ liệu người nhập cập nhật vào model."
+  },
+  {
+   "chu": "one-way binding",
+   "doc": "/wʌn weɪ ˈbaɪndɪŋ/",
+   "nghia": "ràng buộc một chiều: dữ liệu nguồn đổi thì giao diện đổi theo",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "A TextBlock usually uses one-way binding.",
+   "viDuNghia": "TextBlock thường dùng ràng buộc một chiều."
+  },
+  {
+   "chu": "two-way binding",
+   "doc": "/tuː weɪ ˈbaɪndɪŋ/",
+   "nghia": "ràng buộc hai chiều: giao diện và nguồn cập nhật lẫn nhau",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "A TextBox for editing a name needs two-way binding.",
+   "viDuNghia": "TextBox để sửa tên cần ràng buộc hai chiều."
+  },
+  {
+   "chu": "INotifyPropertyChanged",
+   "doc": "/ˌaɪ ˈnoʊtɪfaɪ ˈprɒpərti tʃeɪndʒd/",
+   "nghia": "INotifyPropertyChanged: interface phát sự kiện PropertyChanged để giao diện tự cập nhật",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Implement INotifyPropertyChanged so the window refreshes when a property changes.",
+   "viDuNghia": "Hiện thực INotifyPropertyChanged để cửa sổ tự làm mới khi thuộc tính đổi."
+  },
+  {
+   "chu": "ICommand",
+   "doc": "/ˌaɪ kəˈmɑːnd/",
+   "nghia": "ICommand: interface lệnh (Execute, CanExecute) để nút bấm gọi ViewModel thay cho code-behind",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Bind the Button Command property to an ICommand in the ViewModel.",
+   "viDuNghia": "Ràng buộc thuộc tính Command của nút với một ICommand trong ViewModel."
+  },
+  {
+   "chu": "dependency property",
+   "doc": "/dɪˈpɛndənsi ˈprɒpərti/",
+   "nghia": "thuộc tính phụ thuộc: thuộc tính WPF hỗ trợ binding, style, animation",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Only a dependency property can be the target of a data binding.",
+   "viDuNghia": "Chỉ thuộc tính phụ thuộc mới làm đích của ràng buộc dữ liệu được."
+  },
+  {
+   "chu": "routed event",
+   "doc": "/ˈruːtɪd ɪˈvɛnt/",
+   "nghia": "sự kiện định tuyến: sự kiện WPF lan lên (bubbling) hoặc xuống (tunneling) cây phần tử",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "A Click routed event bubbles up from the Button to its parent Grid.",
+   "viDuNghia": "Sự kiện định tuyến Click nổi lên từ Button tới Grid cha."
+  },
+  {
+   "chu": "resource dictionary",
+   "doc": "/rɪˈzɔːrs ˈdɪkʃənəri/",
+   "nghia": "từ điển tài nguyên: nơi khai style, màu, template dùng chung cho nhiều cửa sổ",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "Put shared button styles in a resource dictionary.",
+   "viDuNghia": "Đặt style nút dùng chung trong từ điển tài nguyên."
+  },
+  {
+   "chu": "control template",
+   "doc": "/kənˈtroʊl ˈtɛmpleɪt/",
+   "nghia": "mẫu control: định nghĩa lại toàn bộ hình dạng của một control",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "A control template can turn a normal button into a round button.",
+   "viDuNghia": "Mẫu control có thể biến nút thường thành nút tròn."
+  },
+  {
+   "chu": "data template",
+   "doc": "/ˈdeɪtə ˈtɛmpleɪt/",
+   "nghia": "mẫu dữ liệu: quy định cách hiển thị mỗi phần tử dữ liệu trong ListBox/ItemsControl",
+   "nhom": "Ứng dụng WPF & XAML",
+   "viDu": "A data template shows each product with its image, name and price.",
+   "viDuNghia": "Mẫu dữ liệu hiển thị mỗi sản phẩm với ảnh, tên và giá."
+  },
+  {
+   "chu": "ADO.NET",
+   "doc": "/ˌeɪ diː ˈoʊ dɒt nɛt/",
+   "nghia": "ADO.NET: thư viện truy cập CSDL mức thấp (SqlConnection, SqlCommand, SqlDataReader)",
+   "nhom": "Truy cập dữ liệu & kiến trúc",
+   "viDu": "ADO.NET requires you to write the SQL statements yourself.",
+   "viDuNghia": "ADO.NET bắt bạn tự viết các câu lệnh SQL."
+  },
+  {
+   "chu": "SqlConnection",
+   "doc": "/ˌɛs kjuː ˈɛl kəˈnɛkʃən/",
+   "nghia": "SqlConnection: đối tượng mở kết nối tới SQL Server từ chuỗi kết nối",
+   "nhom": "Truy cập dữ liệu & kiến trúc",
+   "viDu": "Open a SqlConnection inside a using statement.",
+   "viDuNghia": "Mở SqlConnection bên trong lệnh using."
+  },
+  {
+   "chu": "Entity Framework Core",
+   "doc": "/ˈɛntɪti ˈfreɪmwɜːrk kɔːr/",
+   "nghia": "EF Core: ORM của .NET — làm việc với CSDL qua lớp DbContext và các đối tượng C#",
+   "nhom": "Truy cập dữ liệu & kiến trúc",
+   "viDu": "Entity Framework Core translates LINQ queries on a DbContext into SQL.",
+   "viDuNghia": "EF Core dịch truy vấn LINQ trên DbContext thành SQL."
+  },
+  {
+   "chu": "DbSet",
+   "doc": "/ˌdiː ˈbiː sɛt/",
+   "nghia": "DbSet<T>: thuộc tính của DbContext đại diện một bảng; thêm/xoá/truy vấn qua nó",
+   "nhom": "Truy cập dữ liệu & kiến trúc",
+   "viDu": "context.Products is a DbSet<Product> that maps to the Products table.",
+   "viDuNghia": "context.Products là DbSet<Product> ánh xạ tới bảng Products."
+  },
+  {
+   "chu": "database-first",
+   "doc": "/ˈdeɪtəbeɪs fɜːrst/",
+   "nghia": "database-first: có CSDL trước, dùng Scaffold-DbContext sinh lớp model từ bảng",
+   "nhom": "Truy cập dữ liệu & kiến trúc",
+   "viDu": "In database-first, run Scaffold-DbContext to generate the model classes.",
+   "viDuNghia": "Với database-first, chạy Scaffold-DbContext để sinh các lớp model."
+  },
+  {
+   "chu": "code-first",
+   "doc": "/koʊd fɜːrst/",
+   "nghia": "code-first: viết lớp C# trước rồi để migration tạo/cập nhật CSDL",
+   "nhom": "Truy cập dữ liệu & kiến trúc",
+   "viDu": "With code-first, the database is created from your entity classes.",
+   "viDuNghia": "Với code-first, CSDL được tạo từ các lớp thực thể."
+  },
+  {
+   "chu": "migration",
+   "doc": "/maɪˈɡreɪʃən/",
+   "nghia": "migration (EF Core): bản ghi thay đổi cấu trúc CSDL sinh từ model (Add-Migration, Update-Database)",
+   "nhom": "Truy cập dữ liệu & kiến trúc",
+   "viDu": "Run Add-Migration and Update-Database after adding a new property.",
+   "viDuNghia": "Chạy Add-Migration rồi Update-Database sau khi thêm thuộc tính mới."
+  },
+  {
+   "chu": "repository pattern",
+   "doc": "/rɪˈpɒzɪtɔːri ˈpætərn/",
+   "nghia": "mẫu Repository: lớp trung gian che giấu cách truy cập dữ liệu sau một interface",
+   "nhom": "Truy cập dữ liệu & kiến trúc",
+   "viDu": "The WPF window calls IProductRepository instead of using the DbContext directly.",
+   "viDuNghia": "Cửa sổ WPF gọi IProductRepository thay vì dùng thẳng DbContext."
+  },
+  {
+   "chu": "three-layer architecture",
+   "doc": "/θriː ˈleɪər ˈɑːrkɪtɛktʃər/",
+   "nghia": "kiến trúc ba lớp: giao diện – nghiệp vụ – truy cập dữ liệu, mỗi lớp một dự án",
+   "nhom": "Truy cập dữ liệu & kiến trúc",
+   "viDu": "The assignment uses a three-layer architecture: WPFApp, Services and Repositories.",
+   "viDuNghia": "Bài tập dùng kiến trúc ba lớp: WPFApp, Services và Repositories."
+  }
+ ]
+}

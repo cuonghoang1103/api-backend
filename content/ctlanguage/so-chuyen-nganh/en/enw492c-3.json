@@ -1,0 +1,562 @@
+{
+ "ma": "enw492c-3",
+ "nn": "en",
+ "ten": "ENW492c · 3. Lập luận, câu, nguồn & trình bày (bổ sung)",
+ "moTa": "Bổ sung ENW492c từ đề và giáo trình: phản lập luận và cách bác bỏ, loại bài luận và cách sắp ý, cấu trúc câu và lỗi câu (comma splice, câu chạy), dẫn nguồn (đánh giá CRAAP, trích khối, cụm dẫn), quy trình viết và văn phong học thuật.",
+ "bieuTuong": "pencil.and.outline",
+ "thuTu": -892,
+ "tu": [
+  {
+   "chu": "counterargument",
+   "doc": "/ˈkaʊntərˌɑːrɡjumənt/",
+   "nghia": "phản lập luận: ý kiến trái chiều với luận điểm của người viết, nêu ra để bác bỏ hoặc nhượng bộ",
+   "nhom": "Lập luận",
+   "viDu": "providing a counterargument and refuting it",
+   "viDuNghia": "đưa ra một phản lập luận rồi bác bỏ nó"
+  },
+  {
+   "chu": "refutation",
+   "doc": "/ˌrefjuˈteɪʃn/",
+   "nghia": "sự bác bỏ: chứng minh phản lập luận sai hoặc yếu bằng bằng chứng",
+   "nhom": "Lập luận",
+   "viDu": "A strong refutation uses evidence, not just the writer's feelings.",
+   "viDuNghia": "Lời bác bỏ thuyết phục dùng bằng chứng, không chỉ cảm nghĩ của người viết."
+  },
+  {
+   "chu": "arguable claim",
+   "doc": "/ˈɑːrɡjuəbl kleɪm/",
+   "nghia": "luận điểm có thể tranh luận: nhận định mà người hợp lý có thể không đồng ý (không phải sự thật hiển nhiên)",
+   "nhom": "Lập luận",
+   "viDu": "A thesis must be an arguable claim, not a simple fact.",
+   "viDuNghia": "Luận đề phải là một nhận định có thể tranh luận, không phải sự thật đơn giản."
+  },
+  {
+   "chu": "primary argument",
+   "doc": "/ˈpraɪmeri ˈɑːrɡjumənt/",
+   "nghia": "lập luận chính: ý quan trọng nhất người viết muốn chứng minh",
+   "nhom": "Lập luận",
+   "viDu": "Additional factors of relevance to the primary argument",
+   "viDuNghia": "Những yếu tố bổ sung liên quan tới lập luận chính"
+  },
+  {
+   "chu": "writer's opinion",
+   "doc": "/ˈraɪtərz əˈpɪnjən/",
+   "nghia": "quan điểm của người viết: ý kiến riêng của tác giả về vấn đề",
+   "nhom": "Lập luận",
+   "viDu": "The sentence is a successful thesis statement that presents the writer's opinion explicitly.",
+   "viDuNghia": "Câu này là một câu luận đề tốt vì nêu rõ quan điểm của người viết."
+  },
+  {
+   "chu": "overgeneralization",
+   "doc": "/ˌoʊvərˌdʒenrələˈzeɪʃn/",
+   "nghia": "khái quát quá mức: kết luận cho tất cả từ vài trường hợp, không có bằng chứng",
+   "nhom": "Lập luận",
+   "viDu": "It may be true, but it is presenting the author's opinion as if it were a fact and generalizing about the people of the world without any evidence.",
+   "viDuNghia": "Có thể đúng, nhưng nó trình bày ý kiến tác giả như sự thật và khái quát về mọi người trên thế giới mà không có bằng chứng."
+  },
+  {
+   "chu": "rhetorical question",
+   "doc": "/rɪˈtɔːrɪkl ˈkwestʃən/",
+   "nghia": "câu hỏi tu từ: câu hỏi không cần trả lời, dùng để gây chú ý hay nhấn mạnh",
+   "nhom": "Lập luận",
+   "viDu": "Opening with a rhetorical question can hook the reader.",
+   "viDuNghia": "Mở bài bằng một câu hỏi tu từ có thể thu hút người đọc."
+  },
+  {
+   "chu": "background information",
+   "doc": "/ˈbækɡraʊnd ˌɪnfərˈmeɪʃn/",
+   "nghia": "thông tin nền: bối cảnh giúp người đọc hiểu vấn đề trước khi vào luận đề",
+   "nhom": "Lập luận",
+   "viDu": "to provide some background information about Wasatch Gardens",
+   "viDuNghia": "để cung cấp vài thông tin nền về Wasatch Gardens"
+  },
+  {
+   "chu": "final thought",
+   "doc": "/ˈfaɪnl θɔːt/",
+   "nghia": "ý kết: lời bình cuối cùng để người đọc suy ngẫm (dự đoán, khuyến nghị, lời kêu gọi)",
+   "nhom": "Lập luận",
+   "viDu": "summarises the main points, reiterates the argument, and adds a final thought.",
+   "viDuNghia": "tóm tắt các ý chính, nhắc lại lập luận và thêm một ý kết."
+  },
+  {
+   "chu": "restatement",
+   "doc": "/ˌriːˈsteɪtmənt/",
+   "nghia": "sự nhắc lại (bằng lời khác): nhắc lại luận đề ở phần kết mà không chép nguyên văn",
+   "nhom": "Lập luận",
+   "viDu": "The conclusion begins with a restatement of the thesis in new words.",
+   "viDuNghia": "Phần kết bắt đầu bằng việc nhắc lại luận đề bằng lời mới."
+  },
+  {
+   "chu": "writing genre",
+   "doc": "/ˈraɪtɪŋ ˈʒɑːnrə/",
+   "nghia": "thể loại bài viết: kiểu văn bản có mục đích và cấu trúc riêng (bài luận, báo cáo, tóm tắt)",
+   "nhom": "Loại bài luận và sắp ý",
+   "viDu": "Explanation of different writing genres in higher education",
+   "viDuNghia": "Giải thích các thể loại bài viết khác nhau ở bậc đại học"
+  },
+  {
+   "chu": "narrative essay",
+   "doc": "/ˈnærətɪv ˈeseɪ/",
+   "nghia": "bài luận tự sự: kể một câu chuyện, trải nghiệm theo trình tự",
+   "nhom": "Loại bài luận và sắp ý",
+   "viDu": "A narrative account of how one student develops academic writing skills over time.",
+   "viDuNghia": "Một bài kể lại cách một sinh viên phát triển kỹ năng viết học thuật theo thời gian."
+  },
+  {
+   "chu": "descriptive essay",
+   "doc": "/dɪˈskrɪptɪv ˈeseɪ/",
+   "nghia": "bài luận miêu tả: tả người, nơi chốn, sự vật bằng chi tiết giác quan",
+   "nhom": "Loại bài luận và sắp ý",
+   "viDu": "A descriptive essay uses sensory details to paint a picture.",
+   "viDuNghia": "Bài luận miêu tả dùng chi tiết giác quan để vẽ nên một bức tranh."
+  },
+  {
+   "chu": "expository essay",
+   "doc": "/ɪkˈspɑːzətɔːri ˈeseɪ/",
+   "nghia": "bài luận giải thích: trình bày, giải thích một vấn đề một cách khách quan",
+   "nhom": "Loại bài luận và sắp ý",
+   "viDu": "An expository essay explains a topic without arguing for one side.",
+   "viDuNghia": "Bài luận giải thích trình bày một chủ đề mà không bênh một phía."
+  },
+  {
+   "chu": "persuasive essay",
+   "doc": "/pərˈsweɪsɪv ˈeseɪ/",
+   "nghia": "bài luận thuyết phục: thuyết phục người đọc tin hoặc làm theo ý người viết",
+   "nhom": "Loại bài luận và sắp ý",
+   "viDu": "A persuasive essay often ends with a call to action.",
+   "viDuNghia": "Bài luận thuyết phục thường kết thúc bằng lời kêu gọi hành động."
+  },
+  {
+   "chu": "five-paragraph essay",
+   "doc": "/ˌfaɪv ˈpærəɡræf ˈeseɪ/",
+   "nghia": "bài luận năm đoạn: mở bài, ba đoạn thân, kết bài",
+   "nhom": "Loại bài luận và sắp ý",
+   "viDu": "The five-paragraph essay is a common model for beginners.",
+   "viDuNghia": "Bài luận năm đoạn là khuôn mẫu phổ biến cho người mới."
+  },
+  {
+   "chu": "point-by-point method",
+   "doc": "/ˌpɔɪnt baɪ ˈpɔɪnt ˈmeθəd/",
+   "nghia": "cách so sánh theo từng điểm: mỗi đoạn so cả hai đối tượng trên một tiêu chí",
+   "nhom": "Loại bài luận và sắp ý",
+   "viDu": "The point-by-point method compares both cities on cost in one paragraph.",
+   "viDuNghia": "Cách theo từng điểm so sánh cả hai thành phố về chi phí trong một đoạn."
+  },
+  {
+   "chu": "block method",
+   "doc": "/blɑːk ˈmeθəd/",
+   "nghia": "cách so sánh theo khối: viết hết về đối tượng A rồi mới sang đối tượng B",
+   "nhom": "Loại bài luận và sắp ý",
+   "viDu": "In the block method, the first half discusses A and the second half discusses B.",
+   "viDuNghia": "Trong cách theo khối, nửa đầu bàn về A, nửa sau bàn về B."
+  },
+  {
+   "chu": "thematic structure",
+   "doc": "/θɪˈmætɪk ˈstrʌktʃər/",
+   "nghia": "cấu trúc theo chủ đề: các đoạn sắp theo từng chủ đề (khía cạnh) thay vì theo thời gian",
+   "nhom": "Loại bài luận và sắp ý",
+   "viDu": "The essay follows a thematic structure",
+   "viDuNghia": "Bài luận theo cấu trúc chủ đề"
+  },
+  {
+   "chu": "chronological order",
+   "doc": "/ˌkrɑːnəˈlɑːdʒɪkl ˈɔːrdər/",
+   "nghia": "thứ tự thời gian: sắp sự kiện theo trình tự xảy ra",
+   "nhom": "Loại bài luận và sắp ý",
+   "viDu": "A narrative essay is usually organized in chronological order.",
+   "viDuNghia": "Bài luận tự sự thường sắp theo thứ tự thời gian."
+  },
+  {
+   "chu": "simple sentence",
+   "doc": "/ˈsɪmpl ˈsentəns/",
+   "nghia": "câu đơn: chỉ có một mệnh đề độc lập",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "\"Students write essays.\" is a simple sentence.",
+   "viDuNghia": "\"Students write essays.\" là một câu đơn."
+  },
+  {
+   "chu": "compound sentence",
+   "doc": "/ˈkɑːmpaʊnd ˈsentəns/",
+   "nghia": "câu ghép: hai mệnh đề độc lập nối bằng liên từ đẳng lập hoặc dấu chấm phẩy",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "A compound sentence joins two independent clauses with \"and\", \"but\" or \"so\".",
+   "viDuNghia": "Câu ghép nối hai mệnh đề độc lập bằng \"and\", \"but\" hoặc \"so\"."
+  },
+  {
+   "chu": "complex sentence",
+   "doc": "/ˈkɑːmpleks ˈsentəns/",
+   "nghia": "câu phức: một mệnh đề độc lập và ít nhất một mệnh đề phụ thuộc",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "\"Although it rained, we went out.\" is a complex sentence.",
+   "viDuNghia": "\"Although it rained, we went out.\" là một câu phức."
+  },
+  {
+   "chu": "compound-complex sentence",
+   "doc": "/ˌkɑːmpaʊnd ˈkɑːmpleks ˈsentəns/",
+   "nghia": "câu ghép – phức: ít nhất hai mệnh đề độc lập và một mệnh đề phụ thuộc",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "a compound-complex sentence",
+   "viDuNghia": "một câu ghép – phức"
+  },
+  {
+   "chu": "independent clause",
+   "doc": "/ˌɪndɪˈpendənt klɔːz/",
+   "nghia": "mệnh đề độc lập: có chủ ngữ, động từ và đứng một mình thành câu được",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "Each independent clause can stand alone as a sentence.",
+   "viDuNghia": "Mỗi mệnh đề độc lập có thể đứng riêng thành một câu."
+  },
+  {
+   "chu": "dependent clause",
+   "doc": "/dɪˈpendənt klɔːz/",
+   "nghia": "mệnh đề phụ thuộc: bắt đầu bằng từ nối phụ thuộc, không đứng một mình được",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "\"Because the fee is high\" is a dependent clause.",
+   "viDuNghia": "\"Because the fee is high\" là một mệnh đề phụ thuộc."
+  },
+  {
+   "chu": "coordinating conjunction",
+   "doc": "/koʊˈɔːrdɪneɪtɪŋ kənˈdʒʌŋkʃn/",
+   "nghia": "liên từ đẳng lập: for, and, nor, but, or, yet, so (FANBOYS)",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "Use a comma before a coordinating conjunction that joins two independent clauses.",
+   "viDuNghia": "Dùng dấu phẩy trước liên từ đẳng lập nối hai mệnh đề độc lập."
+  },
+  {
+   "chu": "FANBOYS",
+   "doc": "/ˈfænbɔɪz/",
+   "nghia": "FANBOYS: mẹo nhớ bảy liên từ đẳng lập — for, and, nor, but, or, yet, so",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "Remember FANBOYS to list the coordinating conjunctions.",
+   "viDuNghia": "Nhớ FANBOYS để kể ra các liên từ đẳng lập."
+  },
+  {
+   "chu": "subordinating conjunction",
+   "doc": "/səˈbɔːrdɪneɪtɪŋ kənˈdʒʌŋkʃn/",
+   "nghia": "liên từ phụ thuộc: because, although, when, if… mở đầu mệnh đề phụ thuộc",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "\"Although\" is a subordinating conjunction that shows contrast.",
+   "viDuNghia": "\"Although\" là liên từ phụ thuộc thể hiện sự tương phản."
+  },
+  {
+   "chu": "comma splice",
+   "doc": "/ˈkɑːmə splaɪs/",
+   "nghia": "lỗi nối bằng dấu phẩy: nối hai mệnh đề độc lập chỉ bằng dấu phẩy",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "\"The course is hard, many students fail.\" is a comma splice.",
+   "viDuNghia": "\"The course is hard, many students fail.\" là lỗi nối bằng dấu phẩy."
+  },
+  {
+   "chu": "run-on sentence",
+   "doc": "/ˈrʌn ɑːn ˈsentəns/",
+   "nghia": "câu chạy: hai mệnh đề độc lập dính liền nhau không có dấu câu hay liên từ",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "Fix a run-on sentence with a period, a semicolon or a conjunction.",
+   "viDuNghia": "Sửa câu chạy bằng dấu chấm, dấu chấm phẩy hoặc liên từ."
+  },
+  {
+   "chu": "sentence fragment",
+   "doc": "/ˈsentəns ˈfræɡmənt/",
+   "nghia": "câu cụt: nhóm từ thiếu chủ ngữ hoặc động từ chính nhưng viết như một câu",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "\"Because the library closes early.\" is a sentence fragment.",
+   "viDuNghia": "\"Because the library closes early.\" là một câu cụt."
+  },
+  {
+   "chu": "parallel structure",
+   "doc": "/ˈpærəlel ˈstrʌktʃər/",
+   "nghia": "cấu trúc song song: các ý cùng cấp được viết cùng dạng ngữ pháp",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "Use parallel structure: reading, writing and speaking, not reading, to write and speech.",
+   "viDuNghia": "Dùng cấu trúc song song: reading, writing and speaking, chứ không phải reading, to write and speech."
+  },
+  {
+   "chu": "active voice",
+   "doc": "/ˈæktɪv vɔɪs/",
+   "nghia": "thể chủ động: chủ ngữ là người/vật thực hiện hành động",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "Active voice makes the sentence shorter and clearer.",
+   "viDuNghia": "Thể chủ động làm câu ngắn và rõ hơn."
+  },
+  {
+   "chu": "nominalization",
+   "doc": "/ˌnɑːmɪnələˈzeɪʃn/",
+   "nghia": "danh hoá: biến động từ/tính từ thành danh từ (decide → decision), hay dùng trong văn học thuật",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "Nominalization turns \"the price increased\" into \"the increase in price\".",
+   "viDuNghia": "Danh hoá biến \"the price increased\" thành \"the increase in price\"."
+  },
+  {
+   "chu": "cohesive device",
+   "doc": "/koʊˈhiːsɪv dɪˈvaɪs/",
+   "nghia": "phương tiện liên kết: từ nối, đại từ, từ lặp giúp các câu gắn với nhau",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "Pronouns and linking words are cohesive devices.",
+   "viDuNghia": "Đại từ và từ nối là các phương tiện liên kết."
+  },
+  {
+   "chu": "reference word",
+   "doc": "/ˈrefrəns wɜːrd/",
+   "nghia": "từ quy chiếu: this, these, it, such… trỏ về ý đã nói trước",
+   "nhom": "Cấu trúc câu và lỗi câu",
+   "viDu": "Readers must know what each reference word such as \"this\" refers to.",
+   "viDuNghia": "Người đọc phải biết mỗi từ quy chiếu như \"this\" trỏ tới điều gì."
+  },
+  {
+   "chu": "giving credit",
+   "doc": "/ˈɡɪvɪŋ ˈkredɪt/",
+   "nghia": "ghi công (nguồn): nêu rõ ý hay lời lấy từ ai, ở đâu",
+   "nhom": "Dẫn nguồn",
+   "viDu": "Quoting and giving credit to the source.",
+   "viDuNghia": "Trích dẫn và ghi công cho nguồn."
+  },
+  {
+   "chu": "CRAAP test",
+   "doc": "/kræp test/",
+   "nghia": "phép thử CRAAP: đánh giá nguồn theo Currency, Relevance, Authority, Accuracy, Purpose",
+   "nhom": "Dẫn nguồn",
+   "viDu": "Use the CRAAP test to decide whether a website is a reliable source.",
+   "viDuNghia": "Dùng phép thử CRAAP để quyết định một trang web có phải nguồn đáng tin không."
+  },
+  {
+   "chu": "credible source",
+   "doc": "/ˈkredəbl sɔːrs/",
+   "nghia": "nguồn đáng tin: nguồn có tác giả, tổ chức uy tín và bằng chứng kiểm chứng được",
+   "nhom": "Dẫn nguồn",
+   "viDu": "A government report is usually a credible source.",
+   "viDuNghia": "Báo cáo của chính phủ thường là nguồn đáng tin."
+  },
+  {
+   "chu": "scholarly article",
+   "doc": "/ˈskɑːlərli ˈɑːrtɪkl/",
+   "nghia": "bài báo khoa học: bài do chuyên gia viết, qua bình duyệt, đăng trên tạp chí học thuật",
+   "nhom": "Dẫn nguồn",
+   "viDu": "A scholarly article includes a reference list and is peer-reviewed.",
+   "viDuNghia": "Bài báo khoa học có danh mục tham khảo và đã qua bình duyệt."
+  },
+  {
+   "chu": "patchwriting",
+   "doc": "/ˈpætʃraɪtɪŋ/",
+   "nghia": "chắp vá câu nguồn: chỉ đổi vài từ của câu gốc mà giữ cấu trúc, vẫn bị coi là đạo văn",
+   "nhom": "Dẫn nguồn",
+   "viDu": "Patchwriting keeps the original sentence structure and only swaps a few words.",
+   "viDuNghia": "Chắp vá câu nguồn giữ cấu trúc câu gốc và chỉ thay vài từ."
+  },
+  {
+   "chu": "signal phrase",
+   "doc": "/ˈsɪɡnəl freɪz/",
+   "nghia": "cụm dẫn: cụm giới thiệu nguồn trước lời trích (According to Smith, … argues that)",
+   "nhom": "Dẫn nguồn",
+   "viDu": "Begin the quotation with a signal phrase such as \"According to Rose\".",
+   "viDuNghia": "Bắt đầu lời trích bằng một cụm dẫn như \"According to Rose\"."
+  },
+  {
+   "chu": "block quotation",
+   "doc": "/blɑːk kwoʊˈteɪʃn/",
+   "nghia": "trích khối: lời trích dài (APA từ 40 từ) viết thành khối thụt lề, không ngoặc kép",
+   "nhom": "Dẫn nguồn",
+   "viDu": "The quotation is over 40 words and according to APA guidelines, it should be formatted as follows: drop a line, indent, remove quotation marks.",
+   "viDuNghia": "Lời trích dài hơn 40 từ nên theo APA phải xuống dòng, thụt lề và bỏ ngoặc kép."
+  },
+  {
+   "chu": "hanging indent",
+   "doc": "/ˈhæŋɪŋ ˈɪndent/",
+   "nghia": "thụt lề treo: dòng đầu sát lề, các dòng sau thụt vào, dùng cho danh mục tham khảo",
+   "nhom": "Dẫn nguồn",
+   "viDu": "Each entry in the Works Cited list uses a hanging indent.",
+   "viDuNghia": "Mỗi mục trong danh mục Works Cited dùng thụt lề treo."
+  },
+  {
+   "chu": "surname",
+   "doc": "/ˈsɜːrneɪm/",
+   "nghia": "họ (của tác giả): phần tên dùng trong trích dẫn trong bài",
+   "nhom": "Dẫn nguồn",
+   "viDu": "Add the author's surname and leave the page number as is.",
+   "viDuNghia": "Thêm họ của tác giả và giữ nguyên số trang."
+  },
+  {
+   "chu": "author-date",
+   "doc": "/ˌɔːθər ˈdeɪt/",
+   "nghia": "kiểu tác giả – năm: cách trích APA ghi (Họ, năm) trong bài",
+   "nhom": "Dẫn nguồn",
+   "viDu": "APA uses the author-date system, for example (Rose, 2017).",
+   "viDuNghia": "APA dùng kiểu tác giả – năm, ví dụ (Rose, 2017)."
+  },
+  {
+   "chu": "parenthetical citation",
+   "doc": "/ˌpærənˈθetɪkl saɪˈteɪʃn/",
+   "nghia": "trích dẫn trong ngoặc: thông tin nguồn đặt trong ngoặc đơn cuối câu",
+   "nhom": "Dẫn nguồn",
+   "viDu": "A parenthetical citation in MLA looks like (Verplanken 686).",
+   "viDuNghia": "Trích dẫn trong ngoặc theo MLA trông như (Verplanken 686)."
+  },
+  {
+   "chu": "ellipsis",
+   "doc": "/ɪˈlɪpsɪs/",
+   "nghia": "dấu tỉnh lược (...): đánh dấu đã lược bỏ bớt chữ trong lời trích",
+   "nhom": "Dẫn nguồn",
+   "viDu": "Use an ellipsis to show that words have been left out of a quotation.",
+   "viDuNghia": "Dùng dấu tỉnh lược để cho thấy đã bỏ bớt chữ trong lời trích."
+  },
+  {
+   "chu": "square brackets",
+   "doc": "/skwer ˈbrækɪts/",
+   "nghia": "ngoặc vuông [ ]: thêm hoặc đổi chữ của người viết vào trong lời trích",
+   "nhom": "Dẫn nguồn",
+   "viDu": "Square brackets show words the writer added inside a quotation.",
+   "viDuNghia": "Ngoặc vuông cho thấy chữ do người viết thêm vào trong lời trích."
+  },
+  {
+   "chu": "annotated bibliography",
+   "doc": "/ˈænəteɪtɪd ˌbɪbliˈɑːɡrəfi/",
+   "nghia": "thư mục chú giải: danh sách nguồn, mỗi nguồn kèm đoạn tóm tắt và đánh giá ngắn",
+   "nhom": "Dẫn nguồn",
+   "viDu": "An annotated bibliography summarizes and evaluates each source.",
+   "viDuNghia": "Thư mục chú giải tóm tắt và đánh giá từng nguồn."
+  },
+  {
+   "chu": "Chicago style",
+   "doc": "/ʃɪˈkɑːɡoʊ staɪl/",
+   "nghia": "kiểu Chicago: kiểu trích dẫn dùng chú thích cuối trang hoặc tác giả – năm",
+   "nhom": "Dẫn nguồn",
+   "viDu": "History papers often use Chicago style footnotes.",
+   "viDuNghia": "Bài về lịch sử thường dùng chú thích cuối trang kiểu Chicago."
+  },
+  {
+   "chu": "DOI",
+   "doc": "/ˌdiː oʊ ˈaɪ/",
+   "nghia": "DOI (Digital Object Identifier): mã định danh cố định của bài báo, ghi trong tài liệu tham khảo",
+   "nhom": "Dẫn nguồn",
+   "viDu": "APA references include the DOI of a journal article when it is available.",
+   "viDuNghia": "Tài liệu tham khảo APA ghi DOI của bài báo khi có."
+  },
+  {
+   "chu": "publication date",
+   "doc": "/ˌpʌblɪˈkeɪʃn deɪt/",
+   "nghia": "ngày xuất bản: thời điểm nguồn được công bố, dùng để đánh giá độ mới",
+   "nhom": "Dẫn nguồn",
+   "viDu": "Check the publication date to see whether the data are still current.",
+   "viDuNghia": "Kiểm tra ngày xuất bản để biết số liệu còn mới không."
+  },
+  {
+   "chu": "citation style",
+   "doc": "/saɪˈteɪʃn staɪl/",
+   "nghia": "kiểu trích dẫn: bộ quy tắc ghi nguồn (MLA, APA, Chicago)",
+   "nhom": "Dẫn nguồn",
+   "viDu": "Use one citation style consistently throughout the essay.",
+   "viDuNghia": "Dùng thống nhất một kiểu trích dẫn trong toàn bài."
+  },
+  {
+   "chu": "freewriting",
+   "doc": "/ˈfriːraɪtɪŋ/",
+   "nghia": "viết tự do: viết liên tục trong vài phút không sửa để tìm ý",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "Freewriting for ten minutes helps you find ideas for the topic.",
+   "viDuNghia": "Viết tự do mười phút giúp bạn tìm ý cho chủ đề."
+  },
+  {
+   "chu": "revision",
+   "doc": "/rɪˈvɪʒn/",
+   "nghia": "sửa bài (về nội dung): xem lại ý, bố cục, lập luận của bản nháp",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "Revision focuses on ideas and organization before grammar.",
+   "viDuNghia": "Sửa bài tập trung vào ý và bố cục trước ngữ pháp."
+  },
+  {
+   "chu": "proofreading",
+   "doc": "/ˈpruːfriːdɪŋ/",
+   "nghia": "soát lỗi: đọc lại lần cuối để sửa chính tả, dấu câu, ngữ pháp",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "Proofreading catches spelling and punctuation mistakes.",
+   "viDuNghia": "Soát lỗi bắt được lỗi chính tả và dấu câu."
+  },
+  {
+   "chu": "annotate",
+   "doc": "/ˈænəteɪt/",
+   "nghia": "chú thích (khi đọc): gạch chân, ghi chú bên lề những ý quan trọng",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "Annotate the reading by marking the thesis and key evidence.",
+   "viDuNghia": "Chú thích bài đọc bằng cách đánh dấu luận đề và bằng chứng chính."
+  },
+  {
+   "chu": "critical reading",
+   "doc": "/ˈkrɪtɪkl ˈriːdɪŋ/",
+   "nghia": "đọc phản biện: đọc để đánh giá lập luận, bằng chứng và mục đích của tác giả",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "Critical reading asks whether the evidence really supports the claim.",
+   "viDuNghia": "Đọc phản biện đặt câu hỏi bằng chứng có thật sự ủng hộ nhận định không."
+  },
+  {
+   "chu": "academic vocabulary",
+   "doc": "/ˌækəˈdemɪk vəˈkæbjəleri/",
+   "nghia": "từ vựng học thuật: từ trang trọng dùng nhiều trong văn bản học thuật (analyze, significant)",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "Use academic vocabulary such as \"significant\" instead of \"big\".",
+   "viDuNghia": "Dùng từ vựng học thuật như \"significant\" thay cho \"big\"."
+  },
+  {
+   "chu": "first person",
+   "doc": "/fɜːrst ˈpɜːrsn/",
+   "nghia": "ngôi thứ nhất: I, we; nhiều bài học thuật hạn chế dùng",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "Many academic essays avoid the first person.",
+   "viDuNghia": "Nhiều bài luận học thuật tránh dùng ngôi thứ nhất."
+  },
+  {
+   "chu": "third person",
+   "doc": "/θɜːrd ˈpɜːrsn/",
+   "nghia": "ngôi thứ ba: he, she, they, it; giọng khách quan hơn",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "Writing in the third person sounds more objective.",
+   "viDuNghia": "Viết ở ngôi thứ ba nghe khách quan hơn."
+  },
+  {
+   "chu": "contraction",
+   "doc": "/kənˈtrækʃn/",
+   "nghia": "dạng rút gọn: don't, it's; nên viết đầy đủ trong văn học thuật",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "Avoid contractions such as \"can't\" in academic writing.",
+   "viDuNghia": "Tránh dạng rút gọn như \"can't\" trong văn học thuật."
+  },
+  {
+   "chu": "colloquial",
+   "doc": "/kəˈloʊkwiəl/",
+   "nghia": "khẩu ngữ, thân mật: lối nói hằng ngày, không hợp văn học thuật",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "\"A lot of stuff\" is too colloquial for an essay.",
+   "viDuNghia": "\"A lot of stuff\" quá thân mật đối với một bài luận."
+  },
+  {
+   "chu": "wordiness",
+   "doc": "/ˈwɜːrdinəs/",
+   "nghia": "sự dài dòng: dùng nhiều chữ hơn cần thiết",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "Cut wordiness: \"due to the fact that\" can be \"because\".",
+   "viDuNghia": "Bớt dài dòng: \"due to the fact that\" có thể thay bằng \"because\"."
+  },
+  {
+   "chu": "conciseness",
+   "doc": "/kənˈsaɪsnəs/",
+   "nghia": "sự súc tích: nói đủ ý bằng ít chữ nhất",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "Conciseness makes academic writing easier to follow.",
+   "viDuNghia": "Sự súc tích làm văn học thuật dễ theo dõi hơn."
+  },
+  {
+   "chu": "word count",
+   "doc": "/wɜːrd kaʊnt/",
+   "nghia": "số chữ: độ dài bài theo số từ, thường có giới hạn",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "The essay must be between 500 and 700 words in word count.",
+   "viDuNghia": "Bài luận phải có số chữ từ 500 tới 700."
+  },
+  {
+   "chu": "first-year writing",
+   "doc": "/ˌfɜːrst jɪr ˈraɪtɪŋ/",
+   "nghia": "môn viết năm nhất: học phần viết học thuật bắt buộc cho sinh viên năm đầu đại học",
+   "nhom": "Quy trình viết và văn phong",
+   "viDu": "The first shift to the specific topic by mentioning first-year writing",
+   "viDuNghia": "Bước chuyển đầu tiên sang chủ đề cụ thể bằng việc nhắc tới môn viết năm nhất"
+  }
+ ]
+}

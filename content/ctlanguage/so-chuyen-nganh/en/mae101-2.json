@@ -4,7 +4,7 @@
  "ten": "MAE101 · 2. Hàm số, giới hạn, đạo hàm",
  "moTa": "Toán cho kỹ sư (MAE101), bộ 2 - giải tích: hàm số và đồ thị, giới hạn và liên tục, đạo hàm, cực trị và khảo sát hàm số. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "function",
- "thuTu": -992,
+ "thuTu": -990,
  "tu": [
   {
    "chu": "domain of a function",

@@ -1,0 +1,954 @@
+{
+ "ma": "csi104-4",
+ "nn": "en",
+ "ten": "CSI104/CSI106 · 4. Lịch sử, đa phương tiện, CSDL, AI",
+ "moTa": "Bổ sung cho CSI104/CSI106 (sách Forouzan): lịch sử và phân loại máy tính, nén ảnh/âm thanh, mạng và hệ điều hành, ngôn ngữ lập trình, mô hình CSDL, mật mã nâng cao, lý thuyết tính toán và trí tuệ nhân tạo — các chương đề hỏi mà ba bộ đầu chưa có.",
+ "bieuTuong": "book.closed.fill",
+ "thuTu": -995,
+ "tu": [
+  {
+   "chu": "Jacquard loom",
+   "doc": "/dʒəˈkɑːrd luːm/",
+   "nghia": "máy dệt Jacquard (1801): máy dệt điều khiển bằng thẻ đục lỗ, ý tưởng \"chương trình lưu trên thẻ\" đầu tiên",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "The Jacquard loom used punched cards to control the weaving pattern.",
+   "viDuNghia": "Máy dệt Jacquard dùng thẻ đục lỗ để điều khiển hoa văn dệt."
+  },
+  {
+   "chu": "punched card",
+   "doc": "/pʌntʃt kɑːrd/",
+   "nghia": "thẻ đục lỗ: thẻ giấy lưu dữ liệu/lệnh bằng vị trí các lỗ, dùng cho máy tính đời đầu",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "Early computers read programs and data from punched cards.",
+   "viDuNghia": "Máy tính đời đầu đọc chương trình và dữ liệu từ thẻ đục lỗ."
+  },
+  {
+   "chu": "Pascaline",
+   "doc": "/ˌpæskəˈliːn/",
+   "nghia": "Pascaline: máy cộng trừ cơ khí do Blaise Pascal chế tạo (1642)",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "The Pascaline could only add and subtract numbers.",
+   "viDuNghia": "Pascaline chỉ cộng và trừ được."
+  },
+  {
+   "chu": "difference engine",
+   "doc": "/ˈdɪfrəns ˈɛndʒɪn/",
+   "nghia": "máy sai phân: máy tính cơ khí của Charles Babbage để lập bảng số đa thức",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "Babbage designed the Difference Engine to calculate tables of polynomial values.",
+   "viDuNghia": "Babbage thiết kế máy sai phân để tính các bảng giá trị đa thức."
+  },
+  {
+   "chu": "Analytical Engine",
+   "doc": "/ˌænəˈlɪtɪkəl ˈɛndʒɪn/",
+   "nghia": "Máy giải tích của Babbage: thiết kế máy tính đa năng cơ khí đầu tiên, có bộ nhớ, bộ xử lý, vào/ra",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "The Analytical Engine had a mill (processor), a store (memory) and punched-card input.",
+   "viDuNghia": "Máy giải tích có \"xưởng\" (bộ xử lý), \"kho\" (bộ nhớ) và nhập bằng thẻ đục lỗ."
+  },
+  {
+   "chu": "EDVAC",
+   "doc": "/ˈɛdvæk/",
+   "nghia": "EDVAC: máy tính đầu tiên thiết kế theo khái niệm chương trình lưu trữ (von Neumann)",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "EDVAC was one of the first computers based on the stored-program concept.",
+   "viDuNghia": "EDVAC là một trong những máy tính đầu tiên dựa trên khái niệm chương trình lưu trữ."
+  },
+  {
+   "chu": "UNIVAC",
+   "doc": "/ˈjuːnɪvæk/",
+   "nghia": "UNIVAC I: máy tính thương mại đầu tiên bán ở Mỹ (1951)",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "UNIVAC was the first commercially produced computer in the United States.",
+   "viDuNghia": "UNIVAC là máy tính sản xuất thương mại đầu tiên ở Mỹ."
+  },
+  {
+   "chu": "large-scale integration",
+   "doc": "/lɑːrdʒ skeɪl ˌɪntɪˈɡreɪʃən/",
+   "nghia": "tích hợp mức lớn (LSI): hàng nghìn transistor trên một chip — nền của máy thế hệ thứ tư",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "Large-scale integration made it possible to put a whole CPU on one chip.",
+   "viDuNghia": "Tích hợp mức lớn cho phép đặt cả CPU trên một chip."
+  },
+  {
+   "chu": "very-large-scale integration",
+   "doc": "/ˈvɛri lɑːrdʒ skeɪl ˌɪntɪˈɡreɪʃən/",
+   "nghia": "tích hợp mức rất lớn (VLSI): hàng trăm nghìn tới hàng triệu transistor trên một chip",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "Modern microprocessors are built with very-large-scale integration.",
+   "viDuNghia": "Bộ vi xử lý hiện đại được chế tạo bằng công nghệ tích hợp mức rất lớn."
+  },
+  {
+   "chu": "minicomputer",
+   "doc": "/ˈmɪnikəmˌpjuːtər/",
+   "nghia": "máy tính mini: máy cỡ vừa, rẻ hơn máy lớn, phổ biến thập niên 1960–1970",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "When Minicomputers appeared on the market?",
+   "viDuNghia": "Máy tính mini xuất hiện trên thị trường khi nào?"
+  },
+  {
+   "chu": "supercomputer",
+   "doc": "/ˈsuːpərkəmˌpjuːtər/",
+   "nghia": "siêu máy tính: máy tính cực mạnh, xử lý song song lớn, dùng cho mô phỏng khoa học",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "Supercomputers are used for weather forecasting and scientific simulation.",
+   "viDuNghia": "Siêu máy tính được dùng cho dự báo thời tiết và mô phỏng khoa học."
+  },
+  {
+   "chu": "Harvard architecture",
+   "doc": "/ˈhɑːrvərd ˈɑːrkɪtɛktʃər/",
+   "nghia": "kiến trúc Harvard: bộ nhớ lệnh và bộ nhớ dữ liệu tách riêng (khác von Neumann dùng chung)",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "In the Harvard architecture, instructions and data are stored in separate memories.",
+   "viDuNghia": "Trong kiến trúc Harvard, lệnh và dữ liệu lưu ở hai bộ nhớ riêng."
+  },
+  {
+   "chu": "Flynn's taxonomy",
+   "doc": "/flɪnz tækˈsɒnəmi/",
+   "nghia": "phân loại Flynn: xếp máy song song theo số dòng lệnh và dòng dữ liệu (SISD, SIMD, MISD, MIMD)",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "Flynn's taxonomy classifies computers by the number of instruction streams and data streams.",
+   "viDuNghia": "Phân loại Flynn xếp máy tính theo số dòng lệnh và số dòng dữ liệu."
+  },
+  {
+   "chu": "single instruction single data",
+   "doc": "/ˈsɪŋɡl ɪnˈstrʌkʃən ˈsɪŋɡl ˈdeɪtə/",
+   "nghia": "SISD: một dòng lệnh xử lý một dòng dữ liệu — máy tuần tự kiểu von Neumann",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "SISD - Single Instruction-stream, Single Data-stream",
+   "viDuNghia": "SISD — một dòng lệnh, một dòng dữ liệu."
+  },
+  {
+   "chu": "multiple instruction single data",
+   "doc": "/ˈmʌltɪpl ɪnˈstrʌkʃən ˈsɪŋɡl ˈdeɪtə/",
+   "nghia": "MISD: nhiều dòng lệnh cùng xử lý một dòng dữ liệu (hiếm, dùng cho hệ chịu lỗi)",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "MISD - Multiple Instruction-stream, Single Data-stream",
+   "viDuNghia": "MISD — nhiều dòng lệnh, một dòng dữ liệu."
+  },
+  {
+   "chu": "motherboard",
+   "doc": "/ˈmʌðərbɔːrd/",
+   "nghia": "bo mạch chủ: bảng mạch chính nối CPU, RAM, khe mở rộng và thiết bị",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "What is the primary function of the motherboard in a computer?",
+   "viDuNghia": "Chức năng chính của bo mạch chủ trong máy tính là gì?"
+  },
+  {
+   "chu": "power supply unit",
+   "doc": "/ˈpaʊər səˈplaɪ ˈjuːnɪt/",
+   "nghia": "bộ nguồn (PSU): đổi điện lưới xoay chiều thành điện một chiều cho linh kiện",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "Power supply unit (PSU)",
+   "viDuNghia": "Bộ nguồn (PSU)."
+  },
+  {
+   "chu": "expansion slot",
+   "doc": "/ɪkˈspænʃən slɒt/",
+   "nghia": "khe mở rộng: khe trên bo mạch chủ để cắm card (đồ hoạ, mạng…)",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "A graphics card is installed in an expansion slot on the motherboard.",
+   "viDuNghia": "Card đồ hoạ được cắm vào khe mở rộng trên bo mạch chủ."
+  },
+  {
+   "chu": "multimedia",
+   "doc": "/ˌmʌltiˈmiːdiə/",
+   "nghia": "đa phương tiện: dữ liệu gồm văn bản, ảnh, âm thanh, video",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "Convert multimedia into binary",
+   "viDuNghia": "Chuyển dữ liệu đa phương tiện sang nhị phân."
+  },
+  {
+   "chu": "quantize",
+   "doc": "/ˈkwɒntaɪz/",
+   "nghia": "lượng tử hoá: làm tròn mỗi giá trị mẫu về một mức gần nhất để mã hoá bằng số bit cố định",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "In storing audio, the quantized sample values need to be ________ as bit patterns",
+   "viDuNghia": "Khi lưu âm thanh, các giá trị mẫu đã lượng tử hoá cần được ________ thành mẫu bit. (mã hoá)"
+  },
+  {
+   "chu": "RGB",
+   "doc": "/ˌɑːr dʒiː ˈbiː/",
+   "nghia": "RGB: mô hình màu đỏ–lục–lam; mỗi điểm ảnh 3 byte (true color)",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "In the True-Color (RGB) model, where Red is represented by (255, 0, 0), determine the RGB encoding for the color White.",
+   "viDuNghia": "Trong mô hình màu thật (RGB), nếu Đỏ là (255, 0, 0) thì màu Trắng mã hoá thế nào? (255, 255, 255)"
+  },
+  {
+   "chu": "indexed color",
+   "doc": "/ˈɪndɛkst ˈkʌlər/",
+   "nghia": "màu chỉ mục: mỗi điểm ảnh chỉ lưu số thứ tự của màu trong bảng màu (palette) để tiết kiệm bit",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "Index-color and vector graphics",
+   "viDuNghia": "Màu chỉ mục và đồ hoạ vector."
+  },
+  {
+   "chu": "JPEG",
+   "doc": "/ˈdʒeɪpɛɡ/",
+   "nghia": "JPEG: chuẩn nén ảnh CÓ MẤT dữ liệu, dựa trên biến đổi cosin rời rạc",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "JPEG is lossy, and ZIP is lossless",
+   "viDuNghia": "JPEG nén có mất dữ liệu, còn ZIP nén không mất."
+  },
+  {
+   "chu": "GIF",
+   "doc": "/ɡɪf/",
+   "nghia": "GIF: định dạng ảnh dùng màu chỉ mục (tối đa 256 màu) và nén LZW không mất",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "GIF images use indexed color with a palette of up to 256 colors.",
+   "viDuNghia": "Ảnh GIF dùng màu chỉ mục với bảng tối đa 256 màu."
+  },
+  {
+   "chu": "MPEG",
+   "doc": "/ˈɛmpɛɡ/",
+   "nghia": "MPEG: họ chuẩn nén video (và âm thanh) có mất dữ liệu",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "MPEG compresses video by storing only the changes between frames.",
+   "viDuNghia": "MPEG nén video bằng cách chỉ lưu phần thay đổi giữa các khung hình."
+  },
+  {
+   "chu": "MP3",
+   "doc": "/ˌɛm piː ˈθriː/",
+   "nghia": "MP3 (MPEG audio layer 3): chuẩn nén âm thanh có mất, dùng mã hoá theo cảm nhận",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "MP3 removes sounds that the human ear cannot hear well.",
+   "viDuNghia": "MP3 bỏ những âm mà tai người khó nghe thấy."
+  },
+  {
+   "chu": "Lempel-Ziv encoding",
+   "doc": "/ˈlɛmpəl ziv ɪnˈkoʊdɪŋ/",
+   "nghia": "mã hoá Lempel–Ziv (LZ): nén không mất bằng từ điển tự xây, thay chuỗi lặp bằng chỉ số",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "Lempel-Ziv encoding is an example of dictionary coding.",
+   "viDuNghia": "Mã hoá Lempel–Ziv là một ví dụ của mã hoá từ điển."
+  },
+  {
+   "chu": "dictionary coding",
+   "doc": "/ˈdɪkʃənəri ˈkoʊdɪŋ/",
+   "nghia": "mã hoá từ điển: thay các chuỗi lặp bằng chỉ số của chúng trong một từ điển",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "ZIP files use a form of dictionary coding.",
+   "viDuNghia": "Tệp ZIP dùng một dạng mã hoá từ điển."
+  },
+  {
+   "chu": "predictive encoding",
+   "doc": "/prɪˈdɪktɪv ɪnˈkoʊdɪŋ/",
+   "nghia": "mã hoá dự đoán: chỉ lưu độ chênh giữa giá trị thật và giá trị dự đoán từ mẫu trước",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "Predictive encoding stores the difference between consecutive samples.",
+   "viDuNghia": "Mã hoá dự đoán lưu độ chênh giữa các mẫu liên tiếp."
+  },
+  {
+   "chu": "perceptual encoding",
+   "doc": "/pərˈsɛptʃuəl ɪnˈkoʊdɪŋ/",
+   "nghia": "mã hoá theo cảm nhận: bỏ phần tín hiệu giác quan người không nhận ra (dùng trong MP3)",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "MP3 uses perceptual encoding based on psychoacoustics.",
+   "viDuNghia": "MP3 dùng mã hoá theo cảm nhận dựa trên tâm lý âm học."
+  },
+  {
+   "chu": "discrete cosine transform",
+   "doc": "/dɪˈskriːt ˈkoʊsaɪn ˈtrænsfɔːrm/",
+   "nghia": "biến đổi cosin rời rạc (DCT): đổi khối 8×8 điểm ảnh sang miền tần số, bước chính của JPEG",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "JPEG applies the discrete cosine transform to each 8 x 8 block of pixels.",
+   "viDuNghia": "JPEG áp biến đổi cosin rời rạc lên từng khối 8 × 8 điểm ảnh."
+  },
+  {
+   "chu": "radix",
+   "doc": "/ˈreɪdɪks/",
+   "nghia": "cơ số: số ký hiệu dùng trong một hệ đếm (thập phân radix 10, nhị phân radix 2)",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "In a positional number system with radix b, each digit is multiplied by a power of b.",
+   "viDuNghia": "Trong hệ đếm theo vị trí có cơ số b, mỗi chữ số được nhân với một luỹ thừa của b."
+  },
+  {
+   "chu": "leftmost bit",
+   "doc": "/ˈlɛftmoʊst bɪt/",
+   "nghia": "bit trái nhất: bit có trọng số cao nhất; trong bù hai là bit dấu",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "In two's complement representation, the leftmost bit defines the sign of the integer.",
+   "viDuNghia": "Trong biểu diễn bù hai, bit trái nhất cho biết dấu của số nguyên."
+  },
+  {
+   "chu": "rightmost bit",
+   "doc": "/ˈraɪtmoʊst bɪt/",
+   "nghia": "bit phải nhất: bit có trọng số thấp nhất (quyết định chẵn/lẻ)",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "A number is odd if its rightmost bit is 1.",
+   "viDuNghia": "Một số là số lẻ nếu bit phải nhất của nó là 1."
+  },
+  {
+   "chu": "bit mask",
+   "doc": "/bɪt mæsk/",
+   "nghia": "mặt nạ bit: mẫu bit dùng với AND/OR/XOR để xoá, đặt hoặc lật các bit chọn trước",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "________ is the mask to unset (clear) the four leftmost bits of the pattern 1010 0111?",
+   "viDuNghia": "________ là mặt nạ để xoá (đặt về 0) bốn bit trái nhất của mẫu 1010 0111? (0000 1111 với phép AND)"
+  },
+  {
+   "chu": "row-major order",
+   "doc": "/roʊ ˈmeɪdʒər ˈɔːrdər/",
+   "nghia": "thứ tự ưu tiên hàng: mảng hai chiều lưu lần lượt từng hàng trong bộ nhớ (C, Java)",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "In row-major order, element A[i][j] is stored at position i x columns + j.",
+   "viDuNghia": "Theo thứ tự ưu tiên hàng, phần tử A[i][j] nằm ở vị trí i × số cột + j."
+  },
+  {
+   "chu": "column-major order",
+   "doc": "/ˈkɒləm ˈmeɪdʒər ˈɔːrdər/",
+   "nghia": "thứ tự ưu tiên cột: mảng hai chiều lưu lần lượt từng cột (FORTRAN)",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "FORTRAN stores two-dimensional arrays in column-major order.",
+   "viDuNghia": "FORTRAN lưu mảng hai chiều theo thứ tự ưu tiên cột."
+  },
+  {
+   "chu": "data storage",
+   "doc": "/ˈdeɪtə ˈstɔːrɪdʒ/",
+   "nghia": "lưu trữ dữ liệu: cách biểu diễn và cất giữ dữ liệu trong máy",
+   "nhom": "Biểu diễn dữ liệu & đa phương tiện",
+   "viDu": "In data storage, text is an example of _______ data and audio is an example of _____ data.",
+   "viDuNghia": "Trong lưu trữ dữ liệu, văn bản là ví dụ dữ liệu _______ còn âm thanh là ví dụ dữ liệu _____."
+  },
+  {
+   "chu": "data-link layer",
+   "doc": "/ˈdeɪtə lɪŋk ˈleɪər/",
+   "nghia": "tầng liên kết dữ liệu: truyền khung giữa hai nút kề nhau trên cùng một đường truyền",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "The role of the physical layer is to transfer the bits received from the data-link layer and convert them to ______ for transmission.",
+   "viDuNghia": "Tầng vật lý nhận bit từ tầng liên kết dữ liệu và đổi chúng thành ______ để truyền. (tín hiệu điện từ)"
+  },
+  {
+   "chu": "process-to-process delivery",
+   "doc": "/ˈproʊsɛs tə ˈproʊsɛs dɪˈlɪvəri/",
+   "nghia": "truyền giữa tiến trình với tiến trình: nhiệm vụ của tầng giao vận (dùng số hiệu cổng)",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "The transport layer is responsible for process-to-process delivery of the entire message.",
+   "viDuNghia": "Tầng giao vận chịu trách nhiệm truyền trọn thông điệp từ tiến trình tới tiến trình."
+  },
+  {
+   "chu": "host-to-host delivery",
+   "doc": "/hoʊst tə hoʊst dɪˈlɪvəri/",
+   "nghia": "truyền giữa máy với máy: nhiệm vụ của tầng mạng (dùng địa chỉ IP)",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "The network layer provides host-to-host delivery using IP addresses.",
+   "viDuNghia": "Tầng mạng truyền từ máy tới máy bằng địa chỉ IP."
+  },
+  {
+   "chu": "backbone",
+   "doc": "/ˈbækboʊn/",
+   "nghia": "đường trục (mạng): mạng tốc độ cao nối các mạng nhỏ hơn hoặc các ISP",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "Internet backbones are owned by large telecommunication companies.",
+   "viDuNghia": "Đường trục Internet do các công ty viễn thông lớn sở hữu."
+  },
+  {
+   "chu": "peer-to-peer paradigm",
+   "doc": "/ˌpɪər tə ˈpɪər ˈpærədaɪm/",
+   "nghia": "mô hình ngang hàng (P2P): các máy vừa là khách vừa là chủ, chia sẻ trực tiếp với nhau",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "The storing and downloading of the files are done using the peer-to-peer paradigm.",
+   "viDuNghia": "Việc lưu và tải tệp được thực hiện theo mô hình ngang hàng."
+  },
+  {
+   "chu": "batch operating system",
+   "doc": "/bætʃ ˈɒpəreɪtɪŋ ˈsɪstəm/",
+   "nghia": "hệ điều hành xử lý theo lô: gom các công việc thành lô và chạy lần lượt, không tương tác",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "Batch operating systems were designed in the 1950s to control mainframe computers.",
+   "viDuNghia": "Hệ điều hành theo lô được thiết kế thập niên 1950 để điều khiển máy tính lớn."
+  },
+  {
+   "chu": "job scheduler",
+   "doc": "/dʒɒb ˈskɛdʒuːlər/",
+   "nghia": "bộ lập lịch công việc: chọn công việc từ hàng đợi để nạp vào bộ nhớ thành tiến trình",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "What is the role of the job scheduler?",
+   "viDuNghia": "Vai trò của bộ lập lịch công việc là gì?"
+  },
+  {
+   "chu": "process scheduler",
+   "doc": "/ˈproʊsɛs ˈskɛdʒuːlər/",
+   "nghia": "bộ lập lịch tiến trình: chuyển tiến trình giữa các trạng thái sẵn sàng, chạy, chờ",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "The process scheduler moves a process from the ready state to the running state.",
+   "viDuNghia": "Bộ lập lịch tiến trình chuyển tiến trình từ trạng thái sẵn sàng sang đang chạy."
+  },
+  {
+   "chu": "terminated state",
+   "doc": "/ˈtɜːrmɪneɪtɪd steɪt/",
+   "nghia": "trạng thái kết thúc: tiến trình đã chạy xong và được thu hồi tài nguyên",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "When a process finishes, it moves to the terminated state.",
+   "viDuNghia": "Khi tiến trình chạy xong, nó chuyển sang trạng thái kết thúc."
+  },
+  {
+   "chu": "linker",
+   "doc": "/ˈlɪŋkər/",
+   "nghia": "trình liên kết: ghép mã đối tượng với thư viện thành tệp thực thi",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "The linker combines object files and library code into one executable file.",
+   "viDuNghia": "Trình liên kết ghép các tệp đối tượng và mã thư viện thành một tệp thực thi."
+  },
+  {
+   "chu": "pathname",
+   "doc": "/ˈpæθneɪm/",
+   "nghia": "tên đường dẫn: chuỗi thư mục dẫn tới một tệp (UNIX ngăn bằng dấu /)",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "What is used to separate directories in an absolute pathname in UNIX?",
+   "viDuNghia": "Trong UNIX, ký tự nào dùng để ngăn các thư mục trong tên đường dẫn tuyệt đối?"
+  },
+  {
+   "chu": "application program",
+   "doc": "/ˌæplɪˈkeɪʃən ˈproʊɡræm/",
+   "nghia": "chương trình ứng dụng: phần mềm phục vụ việc của người dùng, chạy trên hệ điều hành",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "In a binary file, how is data typically interpreted by an application program?",
+   "viDuNghia": "Trong một tệp nhị phân, dữ liệu thường được chương trình ứng dụng diễn giải thế nào?"
+  },
+  {
+   "chu": "software lifecycle",
+   "doc": "/ˈsɒftwɛər ˈlaɪfsaɪkəl/",
+   "nghia": "vòng đời phần mềm: phát triển, sử dụng, sửa đổi rồi loại bỏ phần mềm",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "In which phase of the software lifecycle is the problem domain analyzed?",
+   "viDuNghia": "Miền bài toán được phân tích ở giai đoạn nào của vòng đời phần mềm?"
+  },
+  {
+   "chu": "procedure-oriented analysis",
+   "doc": "/prəˈsiːdʒər ˈɔːriɛntɪd əˈnæləsɪs/",
+   "nghia": "phân tích hướng thủ tục: xem hệ thống như các thủ tục xử lý dữ liệu (dùng DFD, sơ đồ trạng thái)",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "Procedure-oriented analysis",
+   "viDuNghia": "Phân tích hướng thủ tục."
+  },
+  {
+   "chu": "use-case diagram",
+   "doc": "/juːs keɪs ˈdaɪəɡræm/",
+   "nghia": "sơ đồ ca sử dụng: vẽ tác nhân và các chức năng họ dùng của hệ thống (UML)",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "A use-case diagram shows the user's view of the system.",
+   "viDuNghia": "Sơ đồ ca sử dụng thể hiện góc nhìn của người dùng về hệ thống."
+  },
+  {
+   "chu": "UML activity diagram",
+   "doc": "/ˌjuː ɛm ˈɛl ækˈtɪvɪti ˈdaɪəɡræm/",
+   "nghia": "sơ đồ hoạt động UML: vẽ luồng các bước của thuật toán/quy trình (giống lưu đồ)",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "A UML activity diagram can show the steps of an algorithm graphically.",
+   "viDuNghia": "Sơ đồ hoạt động UML có thể thể hiện các bước của thuật toán bằng hình."
+  },
+  {
+   "chu": "control structure testing",
+   "doc": "/kənˈtroʊl ˈstrʌktʃər ˈtɛstɪŋ/",
+   "nghia": "kiểm thử cấu trúc điều khiển: thử các điều kiện, luồng dữ liệu và vòng lặp của mã",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "Condition testing and loop testing are kinds of control structure testing.",
+   "viDuNghia": "Kiểm thử điều kiện và kiểm thử vòng lặp là các dạng kiểm thử cấu trúc điều khiển."
+  },
+  {
+   "chu": "user documentation",
+   "doc": "/ˈjuːzər ˌdɒkjʊmɛnˈteɪʃən/",
+   "nghia": "tài liệu người dùng: hướng dẫn sử dụng phần mềm cho người dùng cuối",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "User documentation tells the user how to use the software step by step.",
+   "viDuNghia": "Tài liệu người dùng chỉ người dùng cách dùng phần mềm từng bước."
+  },
+  {
+   "chu": "system documentation",
+   "doc": "/ˈsɪstəm ˌdɒkjʊmɛnˈteɪʃən/",
+   "nghia": "tài liệu hệ thống: mô tả phần mềm từ phân tích, thiết kế tới kiểm thử để bảo trì về sau",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "System documentation defines the package itself so it can be maintained later.",
+   "viDuNghia": "Tài liệu hệ thống mô tả chính gói phần mềm để có thể bảo trì về sau."
+  },
+  {
+   "chu": "technical documentation",
+   "doc": "/ˈtɛknɪkəl ˌdɒkjʊmɛnˈteɪʃən/",
+   "nghia": "tài liệu kỹ thuật: hướng dẫn cài đặt và phục vụ hệ thống",
+   "nhom": "Mạng, hệ điều hành & phần mềm",
+   "viDu": "Technical documentation describes the installation and the servicing of the software system.",
+   "viDuNghia": "Tài liệu kỹ thuật mô tả việc cài đặt và bảo trì hệ thống phần mềm."
+  },
+  {
+   "chu": "FORTRAN",
+   "doc": "/ˈfɔːrtræn/",
+   "nghia": "FORTRAN (FORmula TRANslation): ngôn ngữ bậc cao đầu tiên, thủ tục, cho tính toán khoa học",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "FORTRAN is a(n) ________ language.",
+   "viDuNghia": "FORTRAN là một ngôn ngữ ________. (thủ tục)"
+  },
+  {
+   "chu": "COBOL",
+   "doc": "/ˈkoʊbɒl/",
+   "nghia": "COBOL: ngôn ngữ thủ tục cho xử lý dữ liệu kinh doanh",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "COBOL was designed for business data processing.",
+   "viDuNghia": "COBOL được thiết kế cho xử lý dữ liệu kinh doanh."
+  },
+  {
+   "chu": "Pascal",
+   "doc": "/pæˈskæl/",
+   "nghia": "Pascal: ngôn ngữ thủ tục do Niklaus Wirth tạo để dạy lập trình có cấu trúc",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "Pascal is a(n) _______ language.",
+   "viDuNghia": "Pascal là một ngôn ngữ _______. (thủ tục)"
+  },
+  {
+   "chu": "LISP",
+   "doc": "/lɪsp/",
+   "nghia": "LISP (LISt Programming): ngôn ngữ hàm, xử lý mọi thứ dưới dạng danh sách",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "LISP is an example of the functional paradigm.",
+   "viDuNghia": "LISP là một ví dụ của mô hình hàm."
+  },
+  {
+   "chu": "Prolog",
+   "doc": "/ˈproʊlɒɡ/",
+   "nghia": "Prolog (PROgramming in LOGic): ngôn ngữ khai báo dựa trên sự kiện và luật suy diễn",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "Prolog is a declarative language built on facts and rules.",
+   "viDuNghia": "Prolog là ngôn ngữ khai báo dựa trên sự kiện và luật."
+  },
+  {
+   "chu": "Smalltalk",
+   "doc": "/ˈsmɔːltɔːk/",
+   "nghia": "Smalltalk: một trong những ngôn ngữ hướng đối tượng thuần tuý đầu tiên",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "Smalltalk is a pure object-oriented language.",
+   "viDuNghia": "Smalltalk là ngôn ngữ hướng đối tượng thuần tuý."
+  },
+  {
+   "chu": "relational database model",
+   "doc": "/rɪˈleɪʃənəl ˈdeɪtəbeɪs ˈmɒdəl/",
+   "nghia": "mô hình CSDL quan hệ: dữ liệu tổ chức thành các bảng hai chiều gọi là quan hệ",
+   "nhom": "Mô hình cơ sở dữ liệu",
+   "viDu": "In the relational database model, data is organized in ______ called relations.",
+   "viDuNghia": "Trong mô hình CSDL quan hệ, dữ liệu được tổ chức thành ______ gọi là quan hệ. (bảng hai chiều)"
+  },
+  {
+   "chu": "select operation",
+   "doc": "/sɪˈlɛkt ˌɒpəˈreɪʃən/",
+   "nghia": "phép chọn: lấy một tập con các BỘ (hàng) thoả điều kiện",
+   "nhom": "Mô hình cơ sở dữ liệu",
+   "viDu": "The select operation creates a new relation containing a subset of the tuples.",
+   "viDuNghia": "Phép chọn tạo quan hệ mới gồm một tập con các bộ."
+  },
+  {
+   "chu": "project operation",
+   "doc": "/ˈprɒdʒɛkt ˌɒpəˈreɪʃən/",
+   "nghia": "phép chiếu: lấy một tập con các THUỘC TÍNH (cột)",
+   "nhom": "Mô hình cơ sở dữ liệu",
+   "viDu": "The project operation creates a relation with only some of the attributes.",
+   "viDuNghia": "Phép chiếu tạo quan hệ chỉ gồm một số thuộc tính."
+  },
+  {
+   "chu": "join operation",
+   "doc": "/dʒɔɪn ˌɒpəˈreɪʃən/",
+   "nghia": "phép kết nối: ghép hai quan hệ dựa trên thuộc tính chung",
+   "nhom": "Mô hình cơ sở dữ liệu",
+   "viDu": "The join operation combines two relations based on common attributes.",
+   "viDuNghia": "Phép kết nối ghép hai quan hệ dựa trên thuộc tính chung."
+  },
+  {
+   "chu": "flat-file database",
+   "doc": "/flæt faɪl ˈdeɪtəbeɪs/",
+   "nghia": "CSDL tệp phẳng: toàn bộ dữ liệu trong một bảng/tệp, không có quan hệ giữa các bảng",
+   "nhom": "Mô hình cơ sở dữ liệu",
+   "viDu": "A spreadsheet of contacts is a simple flat-file database.",
+   "viDuNghia": "Một bảng tính danh bạ là một CSDL tệp phẳng đơn giản."
+  },
+  {
+   "chu": "non-relational database",
+   "doc": "/ˌnɒn rɪˈleɪʃənəl ˈdeɪtəbeɪs/",
+   "nghia": "CSDL phi quan hệ (NoSQL): lưu theo tài liệu, khoá–giá trị, đồ thị… thay vì bảng",
+   "nhom": "Mô hình cơ sở dữ liệu",
+   "viDu": "MongoDB is a popular non-relational database.",
+   "viDuNghia": "MongoDB là một CSDL phi quan hệ phổ biến."
+  },
+  {
+   "chu": "fragmented distributed database",
+   "doc": "/ˈfræɡmɛntɪd dɪˈstrɪbjuːtɪd ˈdeɪtəbeɪs/",
+   "nghia": "CSDL phân tán phân mảnh: mỗi nơi giữ một phần dữ liệu riêng của mình",
+   "nhom": "Mô hình cơ sở dữ liệu",
+   "viDu": "In a fragmented distributed database, each site keeps only its own part of the data.",
+   "viDuNghia": "Trong CSDL phân tán phân mảnh, mỗi nơi chỉ giữ phần dữ liệu của mình."
+  },
+  {
+   "chu": "replicated distributed database",
+   "doc": "/ˈrɛplɪkeɪtɪd dɪˈstrɪbjuːtɪd ˈdeɪtəbeɪs/",
+   "nghia": "CSDL phân tán nhân bản: mỗi nơi giữ một bản sao đầy đủ của dữ liệu",
+   "nhom": "Mô hình cơ sở dữ liệu",
+   "viDu": "In a replicated distributed database, every site has an exact copy of the data.",
+   "viDuNghia": "Trong CSDL phân tán nhân bản, mọi nơi đều có một bản sao giống hệt của dữ liệu."
+  },
+  {
+   "chu": "CIA triad",
+   "doc": "/ˌsiː aɪ ˈeɪ ˈtraɪæd/",
+   "nghia": "bộ ba CIA: ba mục tiêu an ninh — bí mật (confidentiality), toàn vẹn (integrity), sẵn sàng (availability)",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "Denial of service is an attack that threatens the availability goal of the CIA triad.",
+   "viDuNghia": "Từ chối dịch vụ là kiểu tấn công đe doạ mục tiêu sẵn sàng của bộ ba CIA."
+  },
+  {
+   "chu": "cyber attack",
+   "doc": "/ˈsaɪbər əˈtæk/",
+   "nghia": "tấn công mạng: hành vi xâm nhập hoặc phá hoại hệ thống máy tính qua mạng",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "How many types of cyber attacks exist?",
+   "viDuNghia": "Có bao nhiêu loại tấn công mạng?"
+  },
+  {
+   "chu": "spyware",
+   "doc": "/ˈspaɪwɛər/",
+   "nghia": "phần mềm gián điệp: lén thu thập thông tin người dùng gửi ra ngoài",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "Spyware secretly records the websites you visit and the keys you press.",
+   "viDuNghia": "Phần mềm gián điệp lén ghi lại trang bạn xem và phím bạn gõ."
+  },
+  {
+   "chu": "espionage",
+   "doc": "/ˈɛspiənɑːʒ/",
+   "nghia": "hoạt động gián điệp: lấy trộm thông tin mật (công nghiệp, quốc gia)",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "Hackers may break into a company network for industrial espionage.",
+   "viDuNghia": "Tin tặc có thể đột nhập mạng công ty để làm gián điệp công nghiệp."
+  },
+  {
+   "chu": "ethical hacking",
+   "doc": "/ˈɛθɪkəl ˈhækɪŋ/",
+   "nghia": "tấn công có đạo đức: được phép thử xâm nhập để tìm lỗ hổng trước kẻ xấu",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "Ethical hacking is done with the owner's permission to find security holes.",
+   "viDuNghia": "Tấn công có đạo đức được làm khi có phép của chủ hệ thống để tìm lỗ hổng."
+  },
+  {
+   "chu": "Caesar cipher",
+   "doc": "/ˈsiːzər ˈsaɪfər/",
+   "nghia": "mã Caesar: mã thay thế dịch mỗi chữ cái đi k vị trí (Caesar dùng k = 3)",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "In the Caesar cipher with key 3, the letter A is encrypted as D.",
+   "viDuNghia": "Trong mã Caesar với khoá 3, chữ A được mã hoá thành D."
+  },
+  {
+   "chu": "RSA cryptosystem",
+   "doc": "/ˌɑːr ɛs ˈeɪ ˈkrɪptoʊˌsɪstəm/",
+   "nghia": "hệ mật RSA: mật mã khoá công khai dựa trên độ khó phân tích tích hai số nguyên tố lớn",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "The RSA cryptosystem uses a public key for encryption and a private key for decryption.",
+   "viDuNghia": "Hệ mật RSA dùng khoá công khai để mã hoá và khoá riêng để giải mã."
+  },
+  {
+   "chu": "Data Encryption Standard",
+   "doc": "/ˈdeɪtə ɪnˈkrɪpʃən ˈstændərd/",
+   "nghia": "DES: chuẩn mã khối khoá đối xứng cũ, khối 64 bit, khoá 56 bit (nay không an toàn)",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "The Data Encryption Standard uses a 56-bit key, which is too short today.",
+   "viDuNghia": "Chuẩn DES dùng khoá 56 bit, ngày nay là quá ngắn."
+  },
+  {
+   "chu": "Advanced Encryption Standard",
+   "doc": "/ədˈvænst ɪnˈkrɪpʃən ˈstændərd/",
+   "nghia": "AES: chuẩn mã khối khoá đối xứng hiện hành, khối 128 bit, khoá 128/192/256 bit",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "AES replaced DES as the standard symmetric-key block cipher.",
+   "viDuNghia": "AES thay DES làm chuẩn mã khối khoá đối xứng."
+  },
+  {
+   "chu": "public-key cipher",
+   "doc": "/ˈpʌblɪk kiː ˈsaɪfər/",
+   "nghia": "mật mã khoá công khai: mã bất đối xứng, mỗi người có cặp khoá công khai và khoá riêng",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "_____ ciphers are sometimes called public-key ciphers",
+   "viDuNghia": "Các mật mã _____ đôi khi được gọi là mật mã khoá công khai. (bất đối xứng)"
+  },
+  {
+   "chu": "session key",
+   "doc": "/ˈsɛʃən kiː/",
+   "nghia": "khoá phiên: khoá đối xứng tạm, chỉ dùng cho một phiên liên lạc",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "A session key is created for one communication and then thrown away.",
+   "viDuNghia": "Khoá phiên được tạo cho một lần liên lạc rồi bỏ đi."
+  },
+  {
+   "chu": "key distribution center",
+   "doc": "/kiː ˌdɪstrɪˈbjuːʃən ˈsɛntər/",
+   "nghia": "trung tâm phân phối khoá (KDC): bên tin cậy cấp khoá phiên đối xứng cho hai bên",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "A key distribution center gives a session key to two parties that want to communicate.",
+   "viDuNghia": "Trung tâm phân phối khoá cấp khoá phiên cho hai bên muốn liên lạc."
+  },
+  {
+   "chu": "certificate authority",
+   "doc": "/sərˈtɪfɪkət ɔːˈθɒrɪti/",
+   "nghia": "tổ chức cấp chứng thư (CA): bên tin cậy ký xác nhận khoá công khai thuộc về ai",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "A certificate authority binds a public key to its owner.",
+   "viDuNghia": "Tổ chức cấp chứng thư gắn khoá công khai với chủ của nó."
+  },
+  {
+   "chu": "Diffie-Hellman",
+   "doc": "/ˌdɪfi ˈhɛlmən/",
+   "nghia": "giao thức Diffie–Hellman: hai bên tạo chung một khoá bí mật qua kênh công khai",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "Diffie-Hellman lets two parties create a shared symmetric key without sending it.",
+   "viDuNghia": "Diffie–Hellman cho hai bên tạo chung một khoá đối xứng mà không phải gửi nó đi."
+  },
+  {
+   "chu": "message digest",
+   "doc": "/ˈmɛsɪdʒ ˈdaɪdʒɛst/",
+   "nghia": "bản tóm lược thông điệp: chuỗi ngắn cố định do hàm băm mật mã tạo ra, dùng kiểm tính toàn vẹn",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "The receiver compares the message digest to check that the message was not changed.",
+   "viDuNghia": "Bên nhận so bản tóm lược để kiểm thông điệp không bị sửa."
+  },
+  {
+   "chu": "message authentication code",
+   "doc": "/ˈmɛsɪdʒ ɔːˌθɛntɪˈkeɪʃən koʊd/",
+   "nghia": "mã xác thực thông điệp (MAC): bản tóm lược có dùng khoá bí mật, chứng minh cả toàn vẹn lẫn nguồn gửi",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "A message authentication code uses a secret key shared by sender and receiver.",
+   "viDuNghia": "Mã xác thực thông điệp dùng khoá bí mật chung giữa bên gửi và bên nhận."
+  },
+  {
+   "chu": "cryptographic protocol",
+   "doc": "/ˌkrɪptəˈɡræfɪk ˈproʊtəkɒl/",
+   "nghia": "giao thức mật mã: quy trình dùng mật mã để liên lạc an toàn (TLS, SSH)",
+   "nhom": "Bảo mật & mật mã",
+   "viDu": "Which cryptographic protocol forms the foundation of HTTPS for secure communication over the internet?",
+   "viDuNghia": "Giao thức mật mã nào là nền của HTTPS để liên lạc an toàn qua Internet? (TLS)"
+  },
+  {
+   "chu": "Simple Language",
+   "doc": "/ˈsɪmpl ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ Simple: ngôn ngữ tối giản chỉ có tăng, giảm và lặp, đủ để tính mọi thứ tính được",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Simple Language has only three statements: increment, decrement and loop.",
+   "viDuNghia": "Ngôn ngữ Simple chỉ có ba lệnh: tăng, giảm và lặp."
+  },
+  {
+   "chu": "Turing machine",
+   "doc": "/ˈtjʊərɪŋ məˈʃiːn/",
+   "nghia": "máy Turing: mô hình máy trừu tượng gồm băng, đầu đọc/ghi và bộ điều khiển trạng thái",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "A Turing machine has a tape, a read/write head and a controller.",
+   "viDuNghia": "Máy Turing có một băng, một đầu đọc/ghi và một bộ điều khiển."
+  },
+  {
+   "chu": "Church-Turing thesis",
+   "doc": "/tʃɜːrtʃ ˈtjʊərɪŋ ˈθiːsɪs/",
+   "nghia": "luận đề Church–Turing: mọi thứ tính được bằng thuật toán đều tính được bằng máy Turing",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "The Church-Turing thesis says that any algorithm can be simulated by a Turing machine.",
+   "viDuNghia": "Luận đề Church–Turing nói mọi thuật toán đều mô phỏng được bằng máy Turing."
+  },
+  {
+   "chu": "Godel number",
+   "doc": "/ˈɡɜːrdəl ˈnʌmbər/",
+   "nghia": "số Gödel: số nguyên duy nhất gán cho mỗi chương trình, để chương trình được xem như dữ liệu",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Every program in Simple Language can be given a unique Godel number.",
+   "viDuNghia": "Mỗi chương trình viết bằng Simple đều gán được một số Gödel duy nhất."
+  },
+  {
+   "chu": "halting problem",
+   "doc": "/ˈhɔːltɪŋ ˈprɒbləm/",
+   "nghia": "bài toán dừng: xác định một chương trình có dừng hay không — đã chứng minh là không giải được",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "The halting problem is an example of an unsolvable problem.",
+   "viDuNghia": "Bài toán dừng là một ví dụ của bài toán không giải được."
+  },
+  {
+   "chu": "computability",
+   "doc": "/kəmˌpjuːtəˈbɪlɪti/",
+   "nghia": "tính tính được: câu hỏi bài toán nào máy tính giải được bằng thuật toán",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "The theory of computability asks which problems can be solved by a computer.",
+   "viDuNghia": "Lý thuyết tính tính được hỏi bài toán nào máy tính giải được."
+  },
+  {
+   "chu": "solvable problem",
+   "doc": "/ˈsɒlvəbl ˈprɒbləm/",
+   "nghia": "bài toán giải được: có thuật toán cho lời giải trong thời gian hữu hạn",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Sorting a list of numbers is a solvable problem.",
+   "viDuNghia": "Sắp xếp một dãy số là bài toán giải được."
+  },
+  {
+   "chu": "unsolvable problem",
+   "doc": "/ʌnˈsɒlvəbl ˈprɒbləm/",
+   "nghia": "bài toán không giải được: không tồn tại thuật toán nào giải nó cho mọi đầu vào",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "No computer can ever solve an unsolvable problem, however fast it is.",
+   "viDuNghia": "Không máy nào giải được bài toán không giải được, dù nhanh tới đâu."
+  },
+  {
+   "chu": "polynomial problem",
+   "doc": "/ˌpɒliˈnoʊmiəl ˈprɒbləm/",
+   "nghia": "bài toán đa thức: giải được trong thời gian O(n^k) — coi là giải được trên thực tế",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "A problem with complexity O(n^2) is a polynomial problem.",
+   "viDuNghia": "Bài toán có độ phức tạp O(n^2) là bài toán đa thức."
+  },
+  {
+   "chu": "nonpolynomial problem",
+   "doc": "/ˌnɒnpɒliˈnoʊmiəl ˈprɒbləm/",
+   "nghia": "bài toán phi đa thức: thời gian giải tăng nhanh hơn mọi đa thức (vd O(2^n)), thực tế khó giải khi n lớn",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "A problem with complexity O(2^n) is a nonpolynomial problem.",
+   "viDuNghia": "Bài toán có độ phức tạp O(2^n) là bài toán phi đa thức."
+  },
+  {
+   "chu": "Turing test",
+   "doc": "/ˈtjʊərɪŋ tɛst/",
+   "nghia": "phép thử Turing: máy được coi là thông minh nếu người hỏi không phân biệt được nó với người thật",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "In the Turing test, a person asks questions to a computer and a human without seeing them.",
+   "viDuNghia": "Trong phép thử Turing, một người đặt câu hỏi cho máy và người thật mà không nhìn thấy họ."
+  },
+  {
+   "chu": "intelligent agent",
+   "doc": "/ɪnˈtɛlɪdʒənt ˈeɪdʒənt/",
+   "nghia": "tác tử thông minh: hệ thống cảm nhận môi trường và hành động để đạt mục tiêu",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "A robot vacuum cleaner is a simple intelligent agent.",
+   "viDuNghia": "Robot hút bụi là một tác tử thông minh đơn giản."
+  },
+  {
+   "chu": "knowledge representation",
+   "doc": "/ˈnɒlɪdʒ ˌrɛprɪzɛnˈteɪʃən/",
+   "nghia": "biểu diễn tri thức: cách lưu sự kiện và quy luật để máy suy luận được",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Semantic networks, frames and predicate logic are methods of knowledge representation.",
+   "viDuNghia": "Mạng ngữ nghĩa, khung và logic vị từ là các cách biểu diễn tri thức."
+  },
+  {
+   "chu": "semantic network",
+   "doc": "/sɪˈmæntɪk ˈnɛtwɜːrk/",
+   "nghia": "mạng ngữ nghĩa: đồ thị có đỉnh là khái niệm, cạnh là quan hệ (is-a, has-a)",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "In a semantic network, an edge labelled is-a links \"dog\" to \"animal\".",
+   "viDuNghia": "Trong mạng ngữ nghĩa, cạnh nhãn is-a nối \"chó\" với \"động vật\"."
+  },
+  {
+   "chu": "propositional logic",
+   "doc": "/ˌprɒpəˈzɪʃənəl ˈlɒdʒɪk/",
+   "nghia": "logic mệnh đề: suy luận trên các mệnh đề đúng/sai và phép nối (and, or, not)",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Propositional logic cannot express statements about all members of a group.",
+   "viDuNghia": "Logic mệnh đề không diễn đạt được phát biểu về mọi thành viên của một nhóm."
+  },
+  {
+   "chu": "predicate logic",
+   "doc": "/ˈprɛdɪkət ˈlɒdʒɪk/",
+   "nghia": "logic vị từ: logic mệnh đề mở rộng thêm vị từ và lượng từ (với mọi, tồn tại)",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Predicate logic can say \"every student has a student ID\".",
+   "viDuNghia": "Logic vị từ diễn đạt được \"mọi sinh viên đều có mã số\"."
+  },
+  {
+   "chu": "rule-based system",
+   "doc": "/ruːl beɪst ˈsɪstəm/",
+   "nghia": "hệ dựa trên luật: biểu diễn tri thức bằng luật NẾU … THÌ … và suy diễn từ đó",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "A rule-based system uses a set of if-then rules to draw conclusions.",
+   "viDuNghia": "Hệ dựa trên luật dùng tập luật nếu–thì để rút ra kết luận."
+  },
+  {
+   "chu": "expert system",
+   "doc": "/ˈɛkspɜːrt ˈsɪstəm/",
+   "nghia": "hệ chuyên gia: chương trình AI dùng tri thức của chuyên gia để tư vấn (y khoa, kỹ thuật)",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "An expert system for medical diagnosis stores the knowledge of doctors as rules.",
+   "viDuNghia": "Hệ chuyên gia chẩn đoán y khoa lưu tri thức của bác sĩ dưới dạng luật."
+  },
+  {
+   "chu": "supervised learning",
+   "doc": "/ˈsuːpərvaɪzd ˈlɜːrnɪŋ/",
+   "nghia": "học có giám sát: học từ dữ liệu đã gán nhãn đúng sẵn",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Supervised learning",
+   "viDuNghia": "Học có giám sát."
+  },
+  {
+   "chu": "unsupervised learning",
+   "doc": "/ˌʌnˈsuːpərvaɪzd ˈlɜːrnɪŋ/",
+   "nghia": "học không giám sát: tự tìm nhóm/quy luật trong dữ liệu chưa gán nhãn",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Unsupervised learning",
+   "viDuNghia": "Học không giám sát."
+  },
+  {
+   "chu": "reinforcement learning",
+   "doc": "/ˌriːɪnˈfɔːrsmənt ˈlɜːrnɪŋ/",
+   "nghia": "học tăng cường: tác tử học bằng thử–sai, nhận thưởng hoặc phạt sau mỗi hành động",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Reinforcement learning",
+   "viDuNghia": "Học tăng cường."
+  },
+  {
+   "chu": "neural network",
+   "doc": "/ˈnjʊərəl ˈnɛtwɜːrk/",
+   "nghia": "mạng nơ-ron: mô hình gồm nhiều nơ-ron nhân tạo nối thành lớp, học bằng chỉnh trọng số",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "A neural network learns by adjusting the weights between its neurons.",
+   "viDuNghia": "Mạng nơ-ron học bằng cách chỉnh trọng số giữa các nơ-ron."
+  },
+  {
+   "chu": "perceptron",
+   "doc": "/pərˈsɛptrɒn/",
+   "nghia": "perceptron: nơ-ron nhân tạo đơn giản — cộng có trọng số các đầu vào rồi so với ngưỡng",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "A perceptron outputs 1 if the weighted sum of its inputs exceeds the threshold.",
+   "viDuNghia": "Perceptron ra 1 nếu tổng có trọng số các đầu vào vượt ngưỡng."
+  },
+  {
+   "chu": "natural language processing",
+   "doc": "/ˈnætʃrəl ˈlæŋɡwɪdʒ ˈproʊsɛsɪŋ/",
+   "nghia": "xử lý ngôn ngữ tự nhiên (NLP): máy hiểu và tạo ngôn ngữ của người",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Machine translation is an application of natural language processing.",
+   "viDuNghia": "Dịch máy là một ứng dụng của xử lý ngôn ngữ tự nhiên."
+  },
+  {
+   "chu": "image processing",
+   "doc": "/ˈɪmɪdʒ ˈproʊsɛsɪŋ/",
+   "nghia": "xử lý ảnh: phân tích và biến đổi ảnh số (tách biên, nhận dạng vật)",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Edge detection is one of the first steps in image processing.",
+   "viDuNghia": "Tách biên là một trong các bước đầu của xử lý ảnh."
+  },
+  {
+   "chu": "edge detection",
+   "doc": "/ɛdʒ dɪˈtɛkʃən/",
+   "nghia": "tách biên: tìm chỗ độ sáng thay đổi đột ngột trong ảnh để lấy đường viền vật",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "Edge detection finds the boundaries of objects in an image.",
+   "viDuNghia": "Tách biên tìm đường ranh giới của các vật trong ảnh."
+  },
+  {
+   "chu": "heuristic search",
+   "doc": "/hjʊˈrɪstɪk sɜːrtʃ/",
+   "nghia": "tìm kiếm heuristic: tìm kiếm có định hướng nhờ ước lượng khoảng cách tới đích",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "A heuristic search explores the most promising states first.",
+   "viDuNghia": "Tìm kiếm heuristic duyệt các trạng thái hứa hẹn nhất trước."
+  },
+  {
+   "chu": "brute force",
+   "doc": "/bruːt fɔːrs/",
+   "nghia": "vét cạn (brute force): thử mọi khả năng — chắc tìm ra nhưng rất chậm (cũng là kiểu tấn công đoán khoá)",
+   "nhom": "Lý thuyết tính toán & trí tuệ nhân tạo",
+   "viDu": "A brute force attack tries every possible key until the right one is found.",
+   "viDuNghia": "Tấn công vét cạn thử mọi khoá có thể cho tới khi tìm ra khoá đúng."
+  },
+  {
+   "chu": "instruction stream",
+   "doc": "/ɪnˈstrʌkʃn striːm/",
+   "nghia": "dòng lệnh: chuỗi lệnh mà bộ xử lý thực thi; số dòng lệnh (một hay nhiều) là một trục của phân loại Flynn",
+   "nhom": "Lịch sử & phân loại máy tính",
+   "viDu": "SIMD - Single Instruction-stream, Multiple Data-stream",
+   "viDuNghia": "SIMD – một dòng lệnh, nhiều dòng dữ liệu"
+  }
+ ]
+}

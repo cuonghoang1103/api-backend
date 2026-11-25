@@ -1,0 +1,618 @@
+{
+  "ma": "sdn302-3",
+  "nn": "en",
+  "ten": "SDN302 · 3. MongoDB, Mongoose & lõi Node.js",
+  "moTa": "Bổ sung SDN302: loại cơ sở dữ liệu NoSQL, mô hình hoá dữ liệu MongoDB, toán tử truy vấn và phương thức CRUD, kiểu và validator của Mongoose, module lõi Node.js (fs, http, events), vòng lặp sự kiện, callback/Promise, module hệ thống và NestJS.",
+  "bieuTuong": "point.3.connected.trianglepath.dotted",
+  "thuTu": -910,
+  "tu": [
+    {
+      "chu": "document-oriented database",
+      "doc": "/ˈdɑːkjumentɪd ˈɔːriəntɪd ˈdeɪtəbeɪs/",
+      "nghia": "CSDL hướng tài liệu: lưu bản ghi dạng tài liệu JSON/BSON lồng nhau (MongoDB)",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "MongoDB stores data in flexible, JSON-like documents.",
+      "viDuNghia": "MongoDB lưu dữ liệu dạng tài liệu giống JSON, linh hoạt."
+    },
+    {
+      "chu": "key-value store",
+      "doc": "/ˌkiː ˈvæljuː stɔːr/",
+      "nghia": "kho khoá–giá trị: mỗi bản ghi là một cặp khoá và giá trị (Redis)",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "Which type of NoSQL database is Redis? A key-value store.",
+      "viDuNghia": "Redis là loại NoSQL nào? Kho khoá–giá trị."
+    },
+    {
+      "chu": "columnar database",
+      "doc": "/kəˈlʌmnər ˈdeɪtəbeɪs/",
+      "nghia": "CSDL dạng cột: lưu dữ liệu theo từng cột, mạnh cho thống kê",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "MongoDB is not a columnar database.",
+      "viDuNghia": "MongoDB không phải CSDL dạng cột."
+    },
+    {
+      "chu": "graph database",
+      "doc": "/ɡræf ˈdeɪtəbeɪs/",
+      "nghia": "CSDL đồ thị: lưu nút và cạnh quan hệ (Neo4j)",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "A graph database stores nodes and relationships.",
+      "viDuNghia": "CSDL đồ thị lưu các nút và quan hệ."
+    },
+    {
+      "chu": "distributed database",
+      "doc": "/dɪˈstrɪbjuːtɪd ˈdeɪtəbeɪs/",
+      "nghia": "CSDL phân tán: dữ liệu nằm trên nhiều máy chủ nhưng dùng như một",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "MongoDB is a distributed database at its core, allowing you to put data where you want it.",
+      "viDuNghia": "Cốt lõi MongoDB là CSDL phân tán, cho đặt dữ liệu ở nơi bạn muốn."
+    },
+    {
+      "chu": "horizontal scaling",
+      "doc": "/ˌhɔːrəˈzɑːntl ˈskeɪlɪŋ/",
+      "nghia": "mở rộng ngang: thêm máy chủ để chia tải (sharding); khác mở rộng dọc là nâng cấp một máy",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "NoSQL databases are horizontally scalable.",
+      "viDuNghia": "CSDL NoSQL mở rộng ngang được."
+    },
+    {
+      "chu": "vertical scaling",
+      "doc": "/ˈvɜːrtɪkl ˈskeɪlɪŋ/",
+      "nghia": "mở rộng dọc: nâng CPU, RAM của một máy chủ",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "Vertical scaling adds more RAM to the same server.",
+      "viDuNghia": "Mở rộng dọc là thêm RAM cho cùng máy chủ."
+    },
+    {
+      "chu": "schemaless",
+      "doc": "/ˈskiːmələs/",
+      "nghia": "không lược đồ cố định: các tài liệu trong cùng collection có thể khác trường",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "MongoDB is schemaless, but Mongoose adds a schema in the application.",
+      "viDuNghia": "MongoDB không lược đồ cố định, Mongoose thêm lược đồ ở tầng ứng dụng."
+    },
+    {
+      "chu": "BSON",
+      "doc": "/ˈbiːsən/",
+      "nghia": "Binary JSON: định dạng nhị phân MongoDB dùng lưu tài liệu, có thêm kiểu ObjectId, Date",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "MongoDB stores documents internally as BSON.",
+      "viDuNghia": "Bên trong MongoDB lưu tài liệu dạng BSON."
+    },
+    {
+      "chu": "id field",
+      "doc": "/aɪ ˈdiː fiːld/",
+      "nghia": "trường _id: khoá chính bắt buộc của mỗi tài liệu, mặc định là ObjectId tự sinh",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "{ \"_id\": \"67bc8ff7d100471c0d9a4c58\", \"name\": \"Samsung Galaxy S23\", \"price\": 899 }",
+      "viDuNghia": "Tài liệu có _id tự sinh, tên và giá sản phẩm."
+    },
+    {
+      "chu": "mongosh",
+      "doc": "/ˈmɑːŋɡoʊ ʃel/",
+      "nghia": "MongoDB Shell: dòng lệnh để chạy lệnh db.collection.find() trực tiếp",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "db.collection.insertOne()",
+      "viDuNghia": "Lệnh chèn một tài liệu trong mongosh."
+    },
+    {
+      "chu": "MongoDB Compass",
+      "doc": "/ˈmɑːŋɡoʊ diː biː ˈkʌmpəs/",
+      "nghia": "ứng dụng giao diện đồ hoạ để xem, sửa dữ liệu và chạy truy vấn MongoDB",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "Import the JSON seed file with MongoDB Compass.",
+      "viDuNghia": "Nhập tệp dữ liệu mẫu JSON bằng MongoDB Compass."
+    },
+    {
+      "chu": "MongoDB driver",
+      "doc": "/ˈmɑːŋɡoʊ diː biː ˈdraɪvər/",
+      "nghia": "trình điều khiển MongoDB cho Node.js (gói mongodb, MongoClient)",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "The driver supports both callback-based and promise-based interactions.",
+      "viDuNghia": "Driver hỗ trợ cả kiểu callback lẫn kiểu Promise."
+    },
+    {
+      "chu": "MongoClient",
+      "doc": "/ˈmɑːŋɡoʊ ˈklaɪənt/",
+      "nghia": "lớp của driver mongodb dùng để kết nối tới máy chủ MongoDB",
+      "nhom": "Cơ sở dữ liệu NoSQL",
+      "viDu": "Use the import statement to import MongoClient.",
+      "viDuNghia": "Dùng câu lệnh import để nhập MongoClient."
+    },
+    {
+      "chu": "data modeling",
+      "doc": "/ˈdeɪtə ˈmɑːdlɪŋ/",
+      "nghia": "mô hình hoá dữ liệu: chọn nhúng (embed) hay tham chiếu (ref) giữa các tài liệu",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "Good data modeling in MongoDB follows how the data is read.",
+      "viDuNghia": "Mô hình hoá tốt trong MongoDB đi theo cách dữ liệu được đọc."
+    },
+    {
+      "chu": "embedding",
+      "doc": "/ɪmˈbedɪŋ/",
+      "nghia": "nhúng: đặt tài liệu con ngay trong tài liệu cha (đọc một lần, hợp quan hệ một–ít)",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "Embedding the seats array inside the showtime avoids a second query.",
+      "viDuNghia": "Nhúng mảng ghế trong suất chiếu giúp khỏi truy vấn lần hai."
+    },
+    {
+      "chu": "one-to-many relationship",
+      "doc": "/ˌwʌn tə ˈmeni rɪˈleɪʃnʃɪp/",
+      "nghia": "quan hệ một–nhiều: một tài liệu liên kết nhiều tài liệu khác (một phim nhiều suất chiếu)",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "What type of relationship does Mongoose population create?",
+      "viDuNghia": "Populate trong Mongoose tạo ra loại quan hệ nào?"
+    },
+    {
+      "chu": "query operator",
+      "doc": "/ˈkwɪri ˈɑːpəreɪtər/",
+      "nghia": "toán tử truy vấn bắt đầu bằng $: $eq, $gt, $in, $regex, $and, $or",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "Regex can be used in the $regex operator to match string patterns.",
+      "viDuNghia": "Biểu thức chính quy dùng được trong toán tử $regex để khớp chuỗi."
+    },
+    {
+      "chu": "update operator",
+      "doc": "/ˈʌpdeɪt ˈɑːpəreɪtər/",
+      "nghia": "toán tử cập nhật: $set gán trường, $inc tăng số, $push thêm vào mảng, $pull bỏ khỏi mảng",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "Use the $set update operator to change only the status field.",
+      "viDuNghia": "Dùng toán tử $set để chỉ đổi trường status."
+    },
+    {
+      "chu": "case-insensitive",
+      "doc": "/ˌkeɪs ɪnˈsensətɪv/",
+      "nghia": "không phân biệt chữ hoa/thường; trong $regex dùng tuỳ chọn 'i'",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "Regex allows for case-insensitive searches by using the 'i' option.",
+      "viDuNghia": "Regex cho tìm không phân biệt hoa thường bằng tuỳ chọn 'i'."
+    },
+    {
+      "chu": "insertOne",
+      "doc": "/ɪnˈsɜːrt wʌn/",
+      "nghia": "thêm một tài liệu vào collection (insertMany thêm nhiều)",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "Use insertOne to create new tasks.",
+      "viDuNghia": "Dùng insertOne để tạo nhiệm vụ mới."
+    },
+    {
+      "chu": "insertMany",
+      "doc": "/ɪnˈsɜːrt ˈmeni/",
+      "nghia": "thêm nhiều tài liệu cùng lúc",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "db.collection.insertMany()",
+      "viDuNghia": "Thêm nhiều tài liệu vào collection."
+    },
+    {
+      "chu": "findOne",
+      "doc": "/faɪnd wʌn/",
+      "nghia": "tìm tài liệu ĐẦU TIÊN khớp điều kiện; không có trả null",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "findOne returns the first document that matches the filter.",
+      "viDuNghia": "findOne trả tài liệu đầu tiên khớp bộ lọc."
+    },
+    {
+      "chu": "findById",
+      "doc": "/faɪnd baɪ aɪ ˈdiː/",
+      "nghia": "phương thức Mongoose tìm tài liệu theo _id",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "Class.findById(classId) returns null if the class does not exist.",
+      "viDuNghia": "Class.findById(classId) trả null nếu lớp không tồn tại."
+    },
+    {
+      "chu": "findByIdAndUpdate",
+      "doc": "/faɪnd baɪ aɪ ˈdiː ənd ˈʌpdeɪt/",
+      "nghia": "tìm theo _id rồi cập nhật; thêm { new: true } để nhận bản sau khi sửa",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "findByIdAndUpdate(id, req.body, { new: true })",
+      "viDuNghia": "Cập nhật theo id và trả về bản mới."
+    },
+    {
+      "chu": "updateOne",
+      "doc": "/ˈʌpdeɪt wʌn/",
+      "nghia": "cập nhật một tài liệu đầu tiên khớp điều kiện",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "updateOne is used to update a single document in a collection.",
+      "viDuNghia": "updateOne dùng để cập nhật một tài liệu trong collection."
+    },
+    {
+      "chu": "updateMany",
+      "doc": "/ˈʌpdeɪt ˈmeni/",
+      "nghia": "cập nhật mọi tài liệu khớp điều kiện",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "updateMany sets isActive to false for all expired tickets.",
+      "viDuNghia": "updateMany đặt isActive bằng false cho mọi vé hết hạn."
+    },
+    {
+      "chu": "deleteMany",
+      "doc": "/dɪˈliːt ˈmeni/",
+      "nghia": "xoá mọi tài liệu khớp điều kiện (deleteOne xoá một)",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "deleteMany is used to delete multiple documents from a collection.",
+      "viDuNghia": "deleteMany dùng để xoá nhiều tài liệu khỏi collection."
+    },
+    {
+      "chu": "countDocuments",
+      "doc": "/kaʊnt ˈdɑːkjuments/",
+      "nghia": "đếm số tài liệu khớp điều kiện",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "countDocuments({ status: 'present' }) counts the present students.",
+      "viDuNghia": "Đếm số sinh viên có mặt."
+    },
+    {
+      "chu": "upsert",
+      "doc": "/ˈʌpsɜːrt/",
+      "nghia": "cập nhật nếu có, chưa có thì chèn mới (tuỳ chọn { upsert: true })",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "With upsert: true, the attendance record is created if it does not exist.",
+      "viDuNghia": "Với upsert: true, bản điểm danh được tạo nếu chưa có."
+    },
+    {
+      "chu": "lookup stage",
+      "doc": "/ˈlʊkʌp steɪdʒ/",
+      "nghia": "giai đoạn $lookup của aggregation: nối tài liệu từ collection khác (giống JOIN)",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "Use $lookup to join tickets with the movies collection.",
+      "viDuNghia": "Dùng $lookup để nối vé với collection phim."
+    },
+    {
+      "chu": "group stage",
+      "doc": "/ɡruːp steɪdʒ/",
+      "nghia": "giai đoạn $group của aggregation: gom nhóm theo khoá và tính tổng, đếm, trung bình",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "$group by genre with $sum to count movies per genre.",
+      "viDuNghia": "Gom theo thể loại với $sum để đếm phim mỗi thể loại."
+    },
+    {
+      "chu": "match stage",
+      "doc": "/mætʃ steɪdʒ/",
+      "nghia": "giai đoạn $match của aggregation: lọc tài liệu theo điều kiện (giống WHERE)",
+      "nhom": "Mô hình hoá và truy vấn MongoDB",
+      "viDu": "Put $match first to reduce the documents early.",
+      "viDuNghia": "Đặt $match đầu tiên để lọc bớt tài liệu sớm."
+    },
+    {
+      "chu": "SchemaTypes",
+      "doc": "/ˈskiːmə taɪps/",
+      "nghia": "các kiểu trường của Mongoose: String, Number, Date, Boolean, ObjectId, Mixed, Array",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "{ type: Schema.Types.ObjectId, ref: 'User' }",
+      "viDuNghia": "Trường kiểu ObjectId tham chiếu tới model User."
+    },
+    {
+      "chu": "ObjectId reference",
+      "doc": "/ˈɑːbdʒekt aɪ diː ˈrefrəns/",
+      "nghia": "tham chiếu ObjectId: trường lưu _id của tài liệu ở collection khác, khai bằng ref",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "Which schema definition creates a reference to the User model?",
+      "viDuNghia": "Định nghĩa lược đồ nào tạo tham chiếu tới model User?"
+    },
+    {
+      "chu": "ref option",
+      "doc": "/ref ˈɑːpʃn/",
+      "nghia": "tuỳ chọn ref: tên model mà trường ObjectId trỏ tới, cần cho populate()",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "populate('author') works only if the field has a ref option.",
+      "viDuNghia": "populate('author') chỉ chạy khi trường có tuỳ chọn ref."
+    },
+    {
+      "chu": "Mixed type",
+      "doc": "/mɪkst taɪp/",
+      "nghia": "kiểu Schema.Types.Mixed: nhận mọi giá trị, Mongoose không kiểm và không theo dõi thay đổi",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "[Schema.Types.Mixed]",
+      "viDuNghia": "Mảng kiểu Mixed."
+    },
+    {
+      "chu": "required validator",
+      "doc": "/rɪˈkwaɪərd ˈvælɪdeɪtər/",
+      "nghia": "ràng buộc required: trường bắt buộc có giá trị, thiếu thì lỗi ValidationError",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "name: { type: String, required: true }",
+      "viDuNghia": "Trường name kiểu chuỗi, bắt buộc."
+    },
+    {
+      "chu": "enum validator",
+      "doc": "/ˈiːnʌm ˈvælɪdeɪtər/",
+      "nghia": "ràng buộc enum: giá trị chỉ được thuộc danh sách cho phép",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "status: { type: String, enum: ['present', 'absent'] }",
+      "viDuNghia": "Trường status chỉ nhận present hoặc absent."
+    },
+    {
+      "chu": "match validator",
+      "doc": "/mætʃ ˈvælɪdeɪtər/",
+      "nghia": "ràng buộc match: chuỗi phải khớp biểu thức chính quy",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "penName includes only letters (a-z, A-Z) and space, and must be unique.",
+      "viDuNghia": "penName chỉ gồm chữ cái và khoảng trắng, và phải duy nhất."
+    },
+    {
+      "chu": "custom validator",
+      "doc": "/ˈkʌstəm ˈvælɪdeɪtər/",
+      "nghia": "hàm kiểm tra tự viết (validate) cho quy tắc riêng, vd ngày không được ở tương lai",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "A custom validator rejects a date in the future.",
+      "viDuNghia": "Validator tự viết từ chối ngày ở tương lai."
+    },
+    {
+      "chu": "virtual property",
+      "doc": "/ˈvɜːrtʃuəl ˈprɑːpərti/",
+      "nghia": "thuộc tính ảo: tính từ trường khác, không lưu vào CSDL (vd fullName)",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "A virtual property combines firstName and lastName.",
+      "viDuNghia": "Thuộc tính ảo ghép firstName và lastName."
+    },
+    {
+      "chu": "select method",
+      "doc": "/sɪˈlekt ˈmeθəd/",
+      "nghia": ".select(): chọn hoặc loại trường trả về, vd .select('-password')",
+      "nhom": "Mongoose nâng cao",
+      "viDu": ".select(\"-password\") keeps the hash out of the profile response.",
+      "viDuNghia": ".select(\"-password\") giữ mật khẩu băm khỏi phản hồi hồ sơ."
+    },
+    {
+      "chu": "findOneAndUpdate",
+      "doc": "/faɪnd wʌn ənd ˈʌpdeɪt/",
+      "nghia": "tìm tài liệu đầu tiên khớp rồi cập nhật trong một thao tác",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "User.findOneAndUpdate({ email }, { name }, { new: true }) returns the updated user.",
+      "viDuNghia": "Tìm người dùng theo email, đổi tên và trả về bản đã cập nhật."
+    },
+    {
+      "chu": "ValidationError",
+      "doc": "/ˌvælɪˈdeɪʃn ˈerər/",
+      "nghia": "lỗi Mongoose ném ra khi dữ liệu vi phạm lược đồ; bắt lại và trả 400",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "Catch the ValidationError and return 400 Bad Request.",
+      "viDuNghia": "Bắt ValidationError và trả 400 Bad Request."
+    },
+    {
+      "chu": "CastError",
+      "doc": "/kæst ˈerər/",
+      "nghia": "lỗi Mongoose khi giá trị không ép được sang kiểu khai báo, vd id sai định dạng ObjectId",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "An invalid id causes a CastError; return 400 instead of 500.",
+      "viDuNghia": "Id sai định dạng gây CastError; trả 400 thay vì 500."
+    },
+    {
+      "chu": "seed data",
+      "doc": "/siːd ˈdeɪtə/",
+      "nghia": "dữ liệu mẫu nạp sẵn vào CSDL để chạy và chấm bài",
+      "nhom": "Mongoose nâng cao",
+      "viDu": "The seed data's password field is already bcrypt-hashed.",
+      "viDuNghia": "Trường mật khẩu trong dữ liệu mẫu đã được băm bcrypt."
+    },
+    {
+      "chu": "fs module",
+      "doc": "/ˌef ˈes ˈmɑːdʒuːl/",
+      "nghia": "module fs (file system): đọc, ghi, kiểm tệp (readFile, writeFile, existsSync)",
+      "nhom": "Lõi Node.js",
+      "viDu": "fs.exists(filePath, function(exists) { ... });",
+      "viDuNghia": "Kiểm tệp có tồn tại bằng fs.exists."
+    },
+    {
+      "chu": "http module",
+      "doc": "/ˌeɪtʃ tiː tiː ˈpiː ˈmɑːdʒuːl/",
+      "nghia": "module http có sẵn để tạo máy chủ web không cần Express",
+      "nhom": "Lõi Node.js",
+      "viDu": "The http.createServer method is used to create a server instance.",
+      "viDuNghia": "Phương thức http.createServer dùng để tạo một máy chủ."
+    },
+    {
+      "chu": "path module",
+      "doc": "/pæθ ˈmɑːdʒuːl/",
+      "nghia": "module path ghép và chuẩn hoá đường dẫn tệp đúng mọi hệ điều hành (path.join)",
+      "nhom": "Lõi Node.js",
+      "viDu": "path.join(__dirname, 'public') builds a safe file path.",
+      "viDuNghia": "path.join(__dirname, 'public') ghép đường dẫn an toàn."
+    },
+    {
+      "chu": "dirname variable",
+      "doc": "/ˈdɜːrneɪm ˈveriəbl/",
+      "nghia": "biến __dirname: chứa đường dẫn thư mục của tệp đang chạy (CommonJS)",
+      "nhom": "Lõi Node.js",
+      "viDu": "app.use(express.static(__dirname + '/public'));",
+      "viDuNghia": "Phục vụ thư mục public nằm cạnh tệp đang chạy."
+    },
+    {
+      "chu": "EventEmitter",
+      "doc": "/ɪˈvent ɪˈmɪtər/",
+      "nghia": "lớp của module events: phát sự kiện bằng emit và lắng nghe bằng on",
+      "nhom": "Lõi Node.js",
+      "viDu": "Attaching an error event listener to EventEmitter instances.",
+      "viDuNghia": "Gắn hàm lắng nghe lỗi cho các đối tượng EventEmitter."
+    },
+    {
+      "chu": "ENOENT",
+      "doc": "/iː ˈnoʊ ent/",
+      "nghia": "mã lỗi \"no such file or directory\": không tìm thấy tệp hoặc thư mục",
+      "nhom": "Lõi Node.js",
+      "viDu": "Error: ENOENT: no such file or directory, open 'config.json'",
+      "viDuNghia": "Lỗi: không có tệp hay thư mục config.json."
+    },
+    {
+      "chu": "blocking code",
+      "doc": "/ˈblɑːkɪŋ koʊd/",
+      "nghia": "mã chặn: lệnh đồng bộ chạy lâu (readFileSync, vòng lặp nặng) làm treo vòng lặp sự kiện",
+      "nhom": "Lõi Node.js",
+      "viDu": "Avoiding blocking the event loop.",
+      "viDuNghia": "Tránh chặn vòng lặp sự kiện."
+    },
+    {
+      "chu": "libuv",
+      "doc": "/ˈlɪb juː viː/",
+      "nghia": "thư viện C của Node.js lo vòng lặp sự kiện và nhóm luồng cho I/O bất đồng bộ",
+      "nhom": "Lõi Node.js",
+      "viDu": "libuv provides the event loop and the thread pool.",
+      "viDuNghia": "libuv cung cấp vòng lặp sự kiện và nhóm luồng."
+    },
+    {
+      "chu": "V8 engine",
+      "doc": "/ˌviː ˈeɪt ˈendʒɪn/",
+      "nghia": "bộ máy JavaScript của Google (trong Chrome) mà Node.js dùng để chạy mã JS",
+      "nhom": "Lõi Node.js",
+      "viDu": "Node.js runs JavaScript on the V8 engine.",
+      "viDuNghia": "Node.js chạy JavaScript trên bộ máy V8."
+    },
+    {
+      "chu": "setImmediate",
+      "doc": "/set ɪˈmiːdiət/",
+      "nghia": "hẹn chạy callback ngay sau giai đoạn hiện tại của vòng lặp sự kiện",
+      "nhom": "Lõi Node.js",
+      "viDu": "setImmediate() schedules the callback to run immediately after the current event loop iteration.",
+      "viDuNghia": "setImmediate() hẹn callback chạy ngay sau vòng lặp sự kiện hiện tại."
+    },
+    {
+      "chu": "process.nextTick",
+      "doc": "/ˈprɑːses nekst tɪk/",
+      "nghia": "hẹn callback chạy ngay khi thao tác hiện tại xong, trước mọi giai đoạn khác của vòng lặp",
+      "nhom": "Lõi Node.js",
+      "viDu": "process.nextTick callbacks run before setImmediate callbacks.",
+      "viDuNghia": "Callback của process.nextTick chạy trước callback của setImmediate."
+    },
+    {
+      "chu": "call stack",
+      "doc": "/kɔːl stæk/",
+      "nghia": "ngăn xếp lời gọi: nơi JS chạy hàm đồng bộ; trống thì vòng lặp sự kiện lấy callback kế tiếp",
+      "nhom": "Lõi Node.js",
+      "viDu": "The event loop pushes a callback when the call stack is empty.",
+      "viDuNghia": "Vòng lặp sự kiện đưa callback vào khi ngăn xếp lời gọi trống."
+    },
+    {
+      "chu": "callback queue",
+      "doc": "/ˈkɔːlbæk kjuː/",
+      "nghia": "hàng đợi callback: callback đã sẵn sàng chờ được chạy",
+      "nhom": "Lõi Node.js",
+      "viDu": "Completed I/O callbacks wait in the callback queue.",
+      "viDuNghia": "Callback của I/O đã xong chờ trong hàng đợi callback."
+    },
+    {
+      "chu": "callback hell",
+      "doc": "/ˈkɔːlbæk hel/",
+      "nghia": "địa ngục callback: callback lồng nhiều tầng khó đọc; khắc phục bằng Promise, async/await",
+      "nhom": "Lõi Node.js",
+      "viDu": "Using async/await avoids nested callbacks.",
+      "viDuNghia": "Dùng async/await tránh callback lồng nhau."
+    },
+    {
+      "chu": "error-first callback",
+      "doc": "/ˈerər fɜːrst ˈkɔːlbæk/",
+      "nghia": "quy ước callback của Node: tham số đầu là lỗi, kết quả ở sau, vd (err, data)",
+      "nhom": "Lõi Node.js",
+      "viDu": "fs.readFile(path, (err, data) => { if (err) return; }) uses an error-first callback.",
+      "viDuNghia": "fs.readFile dùng callback theo quy ước lỗi đứng đầu."
+    },
+    {
+      "chu": "unhandled promise rejection",
+      "doc": "/ʌnˈhændld ˈprɑːmɪs rɪˈdʒekʃn/",
+      "nghia": "Promise bị từ chối mà không có catch, Node in cảnh báo hoặc dừng tiến trình",
+      "nhom": "Lõi Node.js",
+      "viDu": "Throws an unhandled promise rejection.",
+      "viDuNghia": "Ném lỗi Promise bị từ chối không được xử lý."
+    },
+    {
+      "chu": "JSON.stringify",
+      "doc": "/ˈdʒeɪsən ˈstrɪŋɡɪfaɪ/",
+      "nghia": "đổi đối tượng JS thành chuỗi JSON (tuần tự hoá)",
+      "nhom": "Lõi Node.js",
+      "viDu": "JSON.stringify(obj) is responsible for serialization.",
+      "viDuNghia": "JSON.stringify(obj) đảm nhận việc tuần tự hoá."
+    },
+    {
+      "chu": "JSON.parse",
+      "doc": "/ˈdʒeɪsən pɑːrs/",
+      "nghia": "đổi chuỗi JSON thành đối tượng JS (giải tuần tự)",
+      "nhom": "Lõi Node.js",
+      "viDu": "JSON.parse(serializedObj) is responsible for deserialization.",
+      "viDuNghia": "JSON.parse(serializedObj) đảm nhận việc giải tuần tự."
+    },
+    {
+      "chu": "deserialization",
+      "doc": "/diːˌsɪriəlaɪˈzeɪʃn/",
+      "nghia": "giải tuần tự hoá: dựng lại đối tượng từ chuỗi/byte đã lưu hoặc truyền",
+      "nhom": "Lõi Node.js",
+      "viDu": "Which line is responsible for deserialization?",
+      "viDuNghia": "Dòng nào đảm nhận việc giải tuần tự hoá?"
+    },
+    {
+      "chu": "CommonJS",
+      "doc": "/ˈkɑːmən ˌdʒeɪ ˈes/",
+      "nghia": "hệ module mặc định cũ của Node: require() và module.exports",
+      "nhom": "Module, cấu hình và NestJS",
+      "viDu": "The require('express') statement loads a CommonJS module.",
+      "viDuNghia": "Câu lệnh require('express') nạp một module CommonJS."
+    },
+    {
+      "chu": "ES module",
+      "doc": "/ˌiː ˈes ˈmɑːdʒuːl/",
+      "nghia": "module chuẩn ECMAScript: import/export; bật bằng \"type\": \"module\" trong package.json",
+      "nhom": "Module, cấu hình và NestJS",
+      "viDu": "Use the import statement to import MongoClient.",
+      "viDuNghia": "Dùng câu lệnh import để nhập MongoClient."
+    },
+    {
+      "chu": "module.exports",
+      "doc": "/ˈmɑːdʒuːl ɪkˈspɔːrts/",
+      "nghia": "đối tượng chứa thứ một tệp CommonJS xuất ra cho tệp khác require",
+      "nhom": "Module, cấu hình và NestJS",
+      "viDu": "module.exports = router;",
+      "viDuNghia": "Xuất router cho tệp khác dùng."
+    },
+    {
+      "chu": "dotenv",
+      "doc": "/ˈdɑːt env/",
+      "nghia": "gói nạp biến môi trường từ tệp .env vào process.env",
+      "nhom": "Module, cấu hình và NestJS",
+      "viDu": "require('dotenv').config() loads the JWT secret from .env.",
+      "viDuNghia": "require('dotenv').config() nạp khoá bí mật JWT từ tệp .env."
+    },
+    {
+      "chu": "process.env",
+      "doc": "/ˈprɑːses env/",
+      "nghia": "đối tượng chứa các biến môi trường của tiến trình Node",
+      "nhom": "Module, cấu hình và NestJS",
+      "viDu": "Read the port from process.env.PORT.",
+      "viDuNghia": "Đọc cổng từ process.env.PORT."
+    },
+    {
+      "chu": "package-lock.json",
+      "doc": "/ˈpækɪdʒ lɑːk ˈdʒeɪsən/",
+      "nghia": "tệp khoá phiên bản chính xác của mọi gói đã cài để cài lại y hệt",
+      "nhom": "Module, cấu hình và NestJS",
+      "viDu": "Commit package-lock.json so everyone installs the same versions.",
+      "viDuNghia": "Commit package-lock.json để mọi người cài đúng cùng phiên bản."
+    },
+    {
+      "chu": "NestJS",
+      "doc": "/nest ˌdʒeɪ ˈes/",
+      "nghia": "framework Node.js viết bằng TypeScript, tổ chức theo module, controller, provider và DI",
+      "nhom": "Module, cấu hình và NestJS",
+      "viDu": "What is the purpose of Dependency Injection in NestJS?",
+      "viDuNghia": "Mục đích của Dependency Injection trong NestJS là gì?"
+    },
+    {
+      "chu": "NestJS module",
+      "doc": "/nest ˌdʒeɪ ˈes ˈmɑːdʒuːl/",
+      "nghia": "lớp gắn @Module() gom controller và provider của một tính năng",
+      "nhom": "Module, cấu hình và NestJS",
+      "viDu": "What is a module in NestJS?",
+      "viDuNghia": "Module trong NestJS là gì?"
+    },
+    {
+      "chu": "injectable service",
+      "doc": "/ɪnˈdʒektəbl ˈsɜːrvɪs/",
+      "nghia": "lớp gắn @Injectable(): service được NestJS tự tạo và tiêm vào controller",
+      "nhom": "Module, cấu hình và NestJS",
+      "viDu": "The service is marked with @Injectable() so Nest can inject it.",
+      "viDuNghia": "Service gắn @Injectable() để Nest tiêm vào được."
+    },
+    {
+      "chu": "Hono",
+      "doc": "/ˈhoʊnoʊ/",
+      "nghia": "Hono: framework web nhỏ, nhanh, chạy trên Node, Bun và môi trường edge, cú pháp gần Express",
+      "nhom": "Module, cấu hình và NestJS",
+      "viDu": "Hono handles routes with c.json() instead of res.json().",
+      "viDuNghia": "Hono trả kết quả bằng c.json() thay vì res.json()."
+    }
+  ]
+}

@@ -4,7 +4,7 @@
  "ten": "NWC203c/NWC204 · 2. Tầng liên kết, kiểm lỗi, ARQ, LAN",
  "moTa": "Môn Mạng máy tính (NWC203c, dùng chung cho NWC204), phần 2: đóng khung, phát hiện lỗi (parity, CRC, checksum), các giao thức ARQ và cửa sổ trượt, điều khiển truy cập đường truyền, Ethernet, LAN không dây, PPP. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "cable.connector",
- "thuTu": -973,
+ "thuTu": -961,
  "tu": [
   {
    "chu": "framing",

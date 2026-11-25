@@ -1,0 +1,506 @@
+{
+  "ma": "hsf302-2",
+  "nn": "en",
+  "ten": "HSF302 · 2. Spring MVC, Thymeleaf, giao tác & JavaFX",
+  "moTa": "Bổ sung HSF302: Spring MVC (DispatcherServlet, controller, ánh xạ request, ràng buộc form và kiểm tra dữ liệu), Thymeleaf, Spring JDBC và giao tác @Transactional, migration Flyway, và JavaFX dựng ứng dụng desktop CRUD.",
+  "bieuTuong": "leaf.fill",
+  "thuTu": -897,
+  "tu": [
+    {
+      "chu": "Spring MVC",
+      "doc": "/sprɪŋ ˌem viː ˈsiː/",
+      "nghia": "mô-đun web của Spring theo mô hình Model–View–Controller, chạy trên Servlet API",
+      "nhom": "Spring MVC",
+      "viDu": "Spring MVC provides a programming and configuration model for Java web applications.",
+      "viDuNghia": "Spring MVC cung cấp mô hình lập trình và cấu hình cho ứng dụng web Java."
+    },
+    {
+      "chu": "DispatcherServlet",
+      "doc": "/dɪˈspætʃər ˈsɜːrvlət/",
+      "nghia": "servlet trung tâm (front controller) của Spring MVC nhận mọi request rồi gọi đúng controller",
+      "nhom": "Spring MVC",
+      "viDu": "DispatcherServlet sends each request to the matching controller method.",
+      "viDuNghia": "DispatcherServlet chuyển mỗi request tới phương thức controller phù hợp."
+    },
+    {
+      "chu": "Controller annotation",
+      "doc": "/kənˈtroʊlər ˌænəˈteɪʃn/",
+      "nghia": "@Controller: lớp xử lý request và trả tên view",
+      "nhom": "Spring MVC",
+      "viDu": "A @Controller method returns the name of a Thymeleaf template.",
+      "viDuNghia": "Phương thức @Controller trả tên một template Thymeleaf."
+    },
+    {
+      "chu": "RequestMapping",
+      "doc": "/rɪˈkwest ˈmæpɪŋ/",
+      "nghia": "@RequestMapping: ánh xạ URL (và phương thức HTTP) tới lớp hoặc phương thức",
+      "nhom": "Spring MVC",
+      "viDu": "@RequestMapping(\"/products\") sets the base path of the controller.",
+      "viDuNghia": "@RequestMapping(\"/products\") đặt đường dẫn gốc của controller."
+    },
+    {
+      "chu": "GetMapping",
+      "doc": "/ɡet ˈmæpɪŋ/",
+      "nghia": "@GetMapping: ánh xạ request GET (dạng rút gọn của RequestMapping)",
+      "nhom": "Spring MVC",
+      "viDu": "@GetMapping(\"/{id}\") shows one product.",
+      "viDuNghia": "@GetMapping(\"/{id}\") hiện một sản phẩm."
+    },
+    {
+      "chu": "PostMapping",
+      "doc": "/poʊst ˈmæpɪŋ/",
+      "nghia": "@PostMapping: ánh xạ request POST (gửi form)",
+      "nhom": "Spring MVC",
+      "viDu": "@PostMapping(\"/save\") handles the submitted form.",
+      "viDuNghia": "@PostMapping(\"/save\") xử lý form gửi lên."
+    },
+    {
+      "chu": "RequestParam",
+      "doc": "/rɪˈkwest pəˈræm/",
+      "nghia": "@RequestParam: lấy tham số query/form, vd ?keyword=phone",
+      "nhom": "Spring MVC",
+      "viDu": "@RequestParam(defaultValue = \"0\") int page",
+      "viDuNghia": "Lấy tham số page, mặc định 0."
+    },
+    {
+      "chu": "PathVariable",
+      "doc": "/pæθ ˈveriəbl/",
+      "nghia": "@PathVariable: lấy giá trị từ đường dẫn, vd /products/{id}",
+      "nhom": "Spring MVC",
+      "viDu": "@PathVariable Long id reads the id from the URL path.",
+      "viDuNghia": "@PathVariable Long id đọc id từ đường dẫn."
+    },
+    {
+      "chu": "Model object",
+      "doc": "/ˈmɑːdl ˈɑːbdʒekt/",
+      "nghia": "đối tượng Model: chứa dữ liệu controller gửi sang view (addAttribute)",
+      "nhom": "Spring MVC",
+      "viDu": "model.addAttribute(\"products\", products);",
+      "viDuNghia": "Đưa danh sách sản phẩm sang view."
+    },
+    {
+      "chu": "ModelAttribute",
+      "doc": "/ˈmɑːdl ˈætrɪbjuːt/",
+      "nghia": "@ModelAttribute: ràng buộc dữ liệu form vào một đối tượng",
+      "nhom": "Spring MVC",
+      "viDu": "@ModelAttribute Product product binds the form fields.",
+      "viDuNghia": "@ModelAttribute Product ràng buộc các ô của form."
+    },
+    {
+      "chu": "view resolver",
+      "doc": "/vjuː rɪˈzɑːlvər/",
+      "nghia": "bộ phân giải view: đổi tên view controller trả về thành tệp template thật",
+      "nhom": "Spring MVC",
+      "viDu": "The view resolver maps \"list\" to templates/list.html.",
+      "viDuNghia": "Bộ phân giải view đổi \"list\" thành templates/list.html."
+    },
+    {
+      "chu": "redirect prefix",
+      "doc": "/ˌriːdəˈrekt ˈpriːfɪks/",
+      "nghia": "tiền tố \"redirect:\" trong tên view để chuyển hướng (dùng cho mẫu PRG)",
+      "nhom": "Spring MVC",
+      "viDu": "return \"redirect:/products\";",
+      "viDuNghia": "Chuyển hướng về /products sau khi lưu."
+    },
+    {
+      "chu": "flash attribute",
+      "doc": "/flæʃ ˈætrɪbjuːt/",
+      "nghia": "thuộc tính chỉ sống qua MỘT lần chuyển hướng, dùng hiện thông báo \"Lưu thành công\"",
+      "nhom": "Spring MVC",
+      "viDu": "redirectAttributes.addFlashAttribute(\"msg\", \"Saved\");",
+      "viDuNghia": "Thêm thông báo \"Saved\" sống qua một lần chuyển hướng."
+    },
+    {
+      "chu": "Bean Validation",
+      "doc": "/biːn ˌvælɪˈdeɪʃn/",
+      "nghia": "chuẩn kiểm tra dữ liệu bằng chú thích (@NotBlank, @Size, @Min, @Email)",
+      "nhom": "Spring MVC",
+      "viDu": "@NotBlank @Size(max = 100) private String name;",
+      "viDuNghia": "Tên không được trống và tối đa 100 ký tự."
+    },
+    {
+      "chu": "Valid annotation",
+      "doc": "/ˈvælɪd ˌænəˈteɪʃn/",
+      "nghia": "@Valid: bật kiểm tra Bean Validation cho tham số controller",
+      "nhom": "Spring MVC",
+      "viDu": "@Valid @ModelAttribute Product product, BindingResult result",
+      "viDuNghia": "Kiểm tra sản phẩm và nhận kết quả vào BindingResult."
+    },
+    {
+      "chu": "BindingResult",
+      "doc": "/ˈbaɪndɪŋ rɪˈzʌlt/",
+      "nghia": "đối tượng chứa lỗi ràng buộc/kiểm tra; có lỗi thì trả lại form",
+      "nhom": "Spring MVC",
+      "viDu": "if (result.hasErrors()) return \"product-form\";",
+      "viDuNghia": "Có lỗi thì trả lại trang form."
+    },
+    {
+      "chu": "Spring Boot DevTools",
+      "doc": "/sprɪŋ buːt ˈdev tuːlz/",
+      "nghia": "công cụ dev: tự khởi động lại khi đổi mã, tắt cache template",
+      "nhom": "Spring MVC",
+      "viDu": "DevTools restarts the application when a class changes.",
+      "viDuNghia": "DevTools khởi động lại ứng dụng khi một lớp thay đổi."
+    },
+    {
+      "chu": "server.port",
+      "doc": "/ˈsɜːrvər pɔːrt/",
+      "nghia": "khoá cấu hình cổng của Tomcat nhúng (mặc định 8080)",
+      "nhom": "Spring MVC",
+      "viDu": "server.port=8081 avoids a conflict with another app.",
+      "viDuNghia": "server.port=8081 tránh trùng cổng với app khác."
+    },
+    {
+      "chu": "Value annotation",
+      "doc": "/ˈvæljuː ˌænəˈteɪʃn/",
+      "nghia": "@Value(\"${app.name}\"): tiêm một giá trị cấu hình vào trường",
+      "nhom": "Spring MVC",
+      "viDu": "@Value(\"${shop.page-size}\") int pageSize;",
+      "viDuNghia": "Tiêm cỡ trang từ cấu hình."
+    },
+    {
+      "chu": "templates folder",
+      "doc": "/ˈtempləts ˈfoʊldər/",
+      "nghia": "thư mục src/main/resources/templates chứa tệp Thymeleaf",
+      "nhom": "Spring MVC",
+      "viDu": "Put list.html in the templates folder.",
+      "viDuNghia": "Đặt list.html trong thư mục templates."
+    },
+    {
+      "chu": "static folder",
+      "doc": "/ˈstætɪk ˈfoʊldər/",
+      "nghia": "thư mục src/main/resources/static chứa CSS, JS, ảnh phục vụ thẳng",
+      "nhom": "Spring MVC",
+      "viDu": "Bootstrap CSS goes in the static folder.",
+      "viDuNghia": "CSS Bootstrap đặt trong thư mục static."
+    },
+    {
+      "chu": "Thymeleaf",
+      "doc": "/ˈtaɪmliːf/",
+      "nghia": "template engine phía server cho Spring: HTML tự nhiên có thuộc tính th:*",
+      "nhom": "Thymeleaf",
+      "viDu": "Chapter 06: Spring Web Development with Thymeleaf.",
+      "viDuNghia": "Chương 6: phát triển web Spring với Thymeleaf."
+    },
+    {
+      "chu": "Thymeleaf attribute",
+      "doc": "/ˈtaɪmliːf ˈætrɪbjuːt/",
+      "nghia": "thuộc tính th:* gắn lên thẻ HTML: th:text (in giá trị đã thoát), th:each (lặp), th:if, th:field",
+      "nhom": "Thymeleaf",
+      "viDu": "<tr th:each=\"p : ${products}\"><td th:text=\"${p.name}\">Name</td></tr>",
+      "viDuNghia": "Lặp mỗi sản phẩm thành một dòng và in tên."
+    },
+    {
+      "chu": "variable expression",
+      "doc": "/ˈveriəbl ɪkˈspreʃn/",
+      "nghia": "biểu thức biến ${...}: đọc dữ liệu trong Model",
+      "nhom": "Thymeleaf",
+      "viDu": "<p th:if=\"${products.isEmpty()}\">No products</p>",
+      "viDuNghia": "Hiện \"No products\" khi danh sách trống."
+    },
+    {
+      "chu": "selection expression",
+      "doc": "/sɪˈlekʃn ɪkˈspreʃn/",
+      "nghia": "biểu thức chọn *{...}: đọc trường của đối tượng đang chọn bằng th:object",
+      "nhom": "Thymeleaf",
+      "viDu": "<input th:field=\"*{name}\">",
+      "viDuNghia": "Ô nhập ràng buộc với trường name của đối tượng form."
+    },
+    {
+      "chu": "form-backing object",
+      "doc": "/ˈfɔːrm ˌbækɪŋ ˈɑːbdʒekt/",
+      "nghia": "đối tượng đứng sau form: được ràng buộc với form qua th:object, nhận dữ liệu khi gửi",
+      "nhom": "Thymeleaf",
+      "viDu": "<form th:object=\"${product}\"> sets the form-backing object.",
+      "viDuNghia": "th:object đặt đối tượng đứng sau form."
+    },
+    {
+      "chu": "link expression",
+      "doc": "/lɪŋk ɪkˈspreʃn/",
+      "nghia": "biểu thức đường dẫn @{...} của Thymeleaf tự thêm context path",
+      "nhom": "Thymeleaf",
+      "viDu": "<a th:href=\"@{/products/{id}(id=${p.id})}\">View</a>",
+      "viDuNghia": "Liên kết tới trang chi tiết sản phẩm."
+    },
+    {
+      "chu": "template fragment",
+      "doc": "/ˈtemplət ˈfræɡmənt/",
+      "nghia": "đoạn template dùng lại (header, footer) chèn bằng th:replace hoặc th:insert",
+      "nhom": "Thymeleaf",
+      "viDu": "<div th:replace=\"~{fragments/header :: header}\"></div>",
+      "viDuNghia": "Chèn đoạn header dùng chung."
+    },
+    {
+      "chu": "Spring JDBC",
+      "doc": "/sprɪŋ ˌdʒeɪ diː biː ˈsiː/",
+      "nghia": "mô-đun giúp dùng JDBC gọn hơn: tự mở/đóng kết nối, đổi lỗi thành DataAccessException",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "Build a simple application with data access using Spring JDBC and Spring ORM.",
+      "viDuNghia": "Dựng ứng dụng đơn giản có truy cập dữ liệu bằng Spring JDBC và Spring ORM."
+    },
+    {
+      "chu": "JdbcTemplate",
+      "doc": "/ˌdʒeɪ diː biː ˈsiː ˈtemplət/",
+      "nghia": "lớp trung tâm của Spring JDBC: query, update với SQL và tham số",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "jdbcTemplate.update(\"DELETE FROM product WHERE id = ?\", id);",
+      "viDuNghia": "Xoá sản phẩm theo id bằng JdbcTemplate."
+    },
+    {
+      "chu": "RowMapper",
+      "doc": "/roʊ ˈmæpər/",
+      "nghia": "giao diện đổi mỗi dòng ResultSet thành một đối tượng",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "A RowMapper turns each row into a Product object.",
+      "viDuNghia": "RowMapper đổi mỗi dòng thành đối tượng Product."
+    },
+    {
+      "chu": "DataAccessException",
+      "doc": "/ˈdeɪtə ˈækses ɪkˈsepʃn/",
+      "nghia": "ngoại lệ không kiểm tra chung của Spring cho mọi lỗi truy cập dữ liệu",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "Spring translates SQLException into DataAccessException.",
+      "viDuNghia": "Spring đổi SQLException thành DataAccessException."
+    },
+    {
+      "chu": "Transactional",
+      "doc": "/trænˈzækʃənl/",
+      "nghia": "@Transactional: bọc phương thức trong một giao tác, lỗi RuntimeException thì tự rollback",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "Mark the placeOrder() service method as @Transactional.",
+      "viDuNghia": "Đánh dấu phương thức placeOrder() là @Transactional."
+    },
+    {
+      "chu": "transaction propagation",
+      "doc": "/trænˈzækʃn ˌprɑːpəˈɡeɪʃn/",
+      "nghia": "lan truyền giao tác: phương thức tham gia giao tác có sẵn (REQUIRED) hay mở giao tác mới (REQUIRES_NEW)",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "The default transaction propagation is REQUIRED.",
+      "viDuNghia": "Lan truyền giao tác mặc định là REQUIRED."
+    },
+    {
+      "chu": "self-invocation",
+      "doc": "/ˌself ˌɪnvəˈkeɪʃn/",
+      "nghia": "tự gọi: phương thức gọi phương thức @Transactional khác trong CÙNG lớp nên không qua proxy, chú thích bị bỏ qua",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "Self-invocation bypasses the proxy, so @Transactional has no effect.",
+      "viDuNghia": "Tự gọi bỏ qua proxy nên @Transactional không có tác dụng."
+    },
+    {
+      "chu": "open-in-view",
+      "doc": "/ˌoʊpən ɪn ˈvjuː/",
+      "nghia": "cấu hình giữ phiên Hibernate mở tới lúc dựng view (mặc định bật), dễ che lỗi N+1",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "Set spring.jpa.open-in-view=false to catch lazy loading bugs early.",
+      "viDuNghia": "Tắt open-in-view để phát hiện sớm lỗi nạp lười."
+    },
+    {
+      "chu": "NamedParameterJdbcTemplate",
+      "doc": "/neɪmd pəˈræmɪtər ˌdʒeɪ diː biː ˈsiː ˈtemplət/",
+      "nghia": "biến thể JdbcTemplate dùng tham số đặt tên :name thay cho dấu ?",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "WHERE price > :min reads clearer with NamedParameterJdbcTemplate.",
+      "viDuNghia": "Tham số đặt tên :min dễ đọc hơn dấu ?."
+    },
+    {
+      "chu": "rollbackFor",
+      "doc": "/ˈroʊlbæk fɔːr/",
+      "nghia": "thuộc tính của @Transactional buộc rollback cả với checked exception",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "@Transactional(rollbackFor = Exception.class)",
+      "viDuNghia": "Rollback với mọi loại ngoại lệ."
+    },
+    {
+      "chu": "read-only transaction",
+      "doc": "/ˌriːd ˈoʊnli trænˈzækʃn/",
+      "nghia": "giao tác chỉ đọc @Transactional(readOnly = true): tối ưu cho truy vấn, không ghi",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "Use a read-only transaction for report queries.",
+      "viDuNghia": "Dùng giao tác chỉ đọc cho truy vấn báo cáo."
+    },
+    {
+      "chu": "HikariCP",
+      "doc": "/hɪˈkɑːri ˌsiː ˈpiː/",
+      "nghia": "bể kết nối JDBC mặc định của Spring Boot",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "spring.datasource.hikari.maximum-pool-size limits the pool.",
+      "viDuNghia": "Giới hạn số kết nối trong bể HikariCP."
+    },
+    {
+      "chu": "Spring ORM",
+      "doc": "/sprɪŋ ˌoʊ ɑːr ˈem/",
+      "nghia": "mô-đun tích hợp Spring với JPA/Hibernate (giao tác, đổi ngoại lệ)",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "Spring ORM integrates Hibernate with Spring transactions.",
+      "viDuNghia": "Spring ORM tích hợp Hibernate với giao tác của Spring."
+    },
+    {
+      "chu": "Flyway",
+      "doc": "/ˈflaɪweɪ/",
+      "nghia": "công cụ migration CSDL theo phiên bản: tệp V1__init.sql, bảng flyway_schema_history",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "Flyway applies V1 and V2 scripts in order at startup.",
+      "viDuNghia": "Flyway áp các tệp V1, V2 theo thứ tự khi khởi động."
+    },
+    {
+      "chu": "versioned migration",
+      "doc": "/ˈvɜːrʒnd maɪˈɡreɪʃn/",
+      "nghia": "migration có phiên bản: mỗi tệp chạy đúng một lần, không sửa tệp đã chạy",
+      "nhom": "Spring JDBC và giao tác",
+      "viDu": "Never edit a versioned migration that has already been applied.",
+      "viDuNghia": "Đừng sửa migration đã được áp dụng."
+    },
+    {
+      "chu": "JavaFX",
+      "doc": "/ˈdʒɑːvə ˌef ˈeks/",
+      "nghia": "bộ công cụ dựng giao diện desktop đa nền tảng cho Java (Windows, macOS, Linux)",
+      "nhom": "JavaFX",
+      "viDu": "Create cross-platform applications using JavaFX.",
+      "viDuNghia": "Tạo ứng dụng đa nền tảng bằng JavaFX."
+    },
+    {
+      "chu": "JavaFX stage",
+      "doc": "/ˈdʒɑːvə ˌef ˈeks steɪdʒ/",
+      "nghia": "Stage: cửa sổ của ứng dụng JavaFX",
+      "nhom": "JavaFX",
+      "viDu": "primaryStage.setTitle(\"Product Manager\");",
+      "viDuNghia": "Đặt tiêu đề cửa sổ chính."
+    },
+    {
+      "chu": "JavaFX scene",
+      "doc": "/ˈdʒɑːvə ˌef ˈeks siːn/",
+      "nghia": "Scene: nội dung đặt trong cửa sổ, chứa cây nút giao diện",
+      "nhom": "JavaFX",
+      "viDu": "stage.setScene(new Scene(root, 800, 600));",
+      "viDuNghia": "Đặt cảnh 800 x 600 cho cửa sổ."
+    },
+    {
+      "chu": "scene graph",
+      "doc": "/siːn ɡræf/",
+      "nghia": "đồ thị cảnh: cây các nút (Node) giao diện của JavaFX",
+      "nhom": "JavaFX",
+      "viDu": "Every control is a node in the scene graph.",
+      "viDuNghia": "Mỗi điều khiển là một nút trong đồ thị cảnh."
+    },
+    {
+      "chu": "FXML",
+      "doc": "/ˌef ˌeks em ˈel/",
+      "nghia": "tệp XML mô tả giao diện JavaFX, tách khỏi mã Java",
+      "nhom": "JavaFX",
+      "viDu": "FXMLLoader.load() builds the UI from an FXML file.",
+      "viDuNghia": "FXMLLoader.load() dựng giao diện từ tệp FXML."
+    },
+    {
+      "chu": "Scene Builder",
+      "doc": "/siːn ˈbɪldər/",
+      "nghia": "công cụ kéo-thả thiết kế giao diện JavaFX, sinh tệp FXML",
+      "nhom": "JavaFX",
+      "viDu": "Design the form in Scene Builder.",
+      "viDuNghia": "Thiết kế form trong Scene Builder."
+    },
+    {
+      "chu": "FXMLLoader",
+      "doc": "/ˌef eks em ˈel ˈloʊdər/",
+      "nghia": "lớp nạp tệp FXML thành cây giao diện và tạo controller",
+      "nhom": "JavaFX",
+      "viDu": "Parent root = FXMLLoader.load(getClass().getResource(\"main.fxml\"));",
+      "viDuNghia": "Nạp main.fxml thành nút gốc."
+    },
+    {
+      "chu": "FXML controller",
+      "doc": "/ˌef eks em ˈel kənˈtroʊlər/",
+      "nghia": "lớp Java xử lý sự kiện của tệp FXML; trường gắn @FXML trùng fx:id của điều khiển",
+      "nhom": "JavaFX",
+      "viDu": "The FXML controller reads the TextField marked with @FXML.",
+      "viDuNghia": "Controller FXML đọc TextField gắn @FXML."
+    },
+    {
+      "chu": "Application class",
+      "doc": "/ˌæplɪˈkeɪʃn klæs/",
+      "nghia": "lớp javafx.application.Application: ghi đè start(Stage) và gọi launch() trong main",
+      "nhom": "JavaFX",
+      "viDu": "public class App extends Application { public void start(Stage stage) {} }",
+      "viDuNghia": "Lớp App kế thừa Application và ghi đè start."
+    },
+    {
+      "chu": "setOnAction",
+      "doc": "/set ɑːn ˈækʃn/",
+      "nghia": "gắn hàm xử lý khi bấm nút hoặc nhấn Enter",
+      "nhom": "JavaFX",
+      "viDu": "saveButton.setOnAction(e -> save());",
+      "viDuNghia": "Bấm nút Lưu thì gọi save()."
+    },
+    {
+      "chu": "TextField",
+      "doc": "/tekst fiːld/",
+      "nghia": "ô nhập một dòng của JavaFX",
+      "nhom": "JavaFX",
+      "viDu": "String name = nameField.getText();",
+      "viDuNghia": "Đọc chữ trong ô nhập tên."
+    },
+    {
+      "chu": "ComboBox",
+      "doc": "/ˈkɑːmboʊ bɑːks/",
+      "nghia": "hộp chọn thả xuống của JavaFX",
+      "nhom": "JavaFX",
+      "viDu": "Fill the ComboBox with all categories.",
+      "viDuNghia": "Nạp mọi danh mục vào ComboBox."
+    },
+    {
+      "chu": "DatePicker",
+      "doc": "/deɪt ˈpɪkər/",
+      "nghia": "điều khiển chọn ngày, trả LocalDate",
+      "nhom": "JavaFX",
+      "viDu": "LocalDate dob = dobPicker.getValue();",
+      "viDuNghia": "Lấy ngày sinh từ DatePicker."
+    },
+    {
+      "chu": "JavaFX Application Thread",
+      "doc": "/ˈdʒɑːvə ˌef ˈeks ˌæplɪˈkeɪʃn θred/",
+      "nghia": "luồng giao diện duy nhất của JavaFX; chỉ được sửa giao diện trên luồng này",
+      "nhom": "JavaFX",
+      "viDu": "Long database calls must not run on the JavaFX Application Thread.",
+      "viDuNghia": "Lệnh CSDL lâu không được chạy trên luồng giao diện JavaFX."
+    },
+    {
+      "chu": "Platform.runLater",
+      "doc": "/ˈplætfɔːrm rʌn ˈleɪtər/",
+      "nghia": "đẩy một việc cập nhật giao diện về luồng JavaFX từ luồng nền",
+      "nhom": "JavaFX",
+      "viDu": "Platform.runLater(() -> table.refresh());",
+      "viDuNghia": "Làm mới bảng trên luồng giao diện."
+    },
+    {
+      "chu": "TableView",
+      "doc": "/ˈteɪbl vjuː/",
+      "nghia": "điều khiển bảng của JavaFX, mỗi cột là một TableColumn",
+      "nhom": "JavaFX",
+      "viDu": "Show the products in a TableView with three columns.",
+      "viDuNghia": "Hiện sản phẩm trong TableView ba cột."
+    },
+    {
+      "chu": "ObservableList",
+      "doc": "/əbˈzɜːrvəbl lɪst/",
+      "nghia": "danh sách quan sát được: thay đổi phần tử thì TableView/ListView tự cập nhật",
+      "nhom": "JavaFX",
+      "viDu": "Adding to the ObservableList refreshes the table.",
+      "viDuNghia": "Thêm vào ObservableList thì bảng tự làm mới."
+    },
+    {
+      "chu": "property binding",
+      "doc": "/ˈprɑːpərti ˈbaɪndɪŋ/",
+      "nghia": "ràng buộc thuộc tính: giá trị một thuộc tính tự theo giá trị thuộc tính khác",
+      "nhom": "JavaFX",
+      "viDu": "Property binding keeps the label in sync with the slider.",
+      "viDuNghia": "Ràng buộc thuộc tính giữ nhãn đồng bộ với thanh trượt."
+    },
+    {
+      "chu": "layout pane",
+      "doc": "/ˈleɪaʊt peɪn/",
+      "nghia": "khung bố cục JavaFX: VBox, HBox, BorderPane, GridPane",
+      "nhom": "JavaFX",
+      "viDu": "A GridPane layout pane arranges the form in rows and columns.",
+      "viDuNghia": "Khung GridPane xếp form theo hàng và cột."
+    }
+  ]
+}

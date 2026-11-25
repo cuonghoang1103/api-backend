@@ -4,7 +4,7 @@
  "ten": "NWC203c/NWC204 · 3. Tầng mạng, giao vận, tắc nghẽn",
  "moTa": "Môn Mạng máy tính (NWC203c, dùng chung cho NWC204), phần 3: địa chỉ IP và chia mạng con, định tuyến (RIP, OSPF), TCP/UDP, điều khiển tắc nghẽn, quản lý lưu lượng và chất lượng dịch vụ. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "point.3.connected.trianglepath.dotted",
- "thuTu": -972,
+ "thuTu": -960,
  "tu": [
   {
    "chu": "Internet Protocol",

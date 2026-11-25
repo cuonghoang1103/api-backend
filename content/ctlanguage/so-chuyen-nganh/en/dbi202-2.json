@@ -4,7 +4,7 @@
  "ten": "DBI202 · 2. SQL, giao tác, lập trình T-SQL",
  "moTa": "Môn Database Systems (DBI202), bộ 2: ngôn ngữ SQL (DDL, DML, truy vấn, kết bảng, gom nhóm), view, index, stored procedure, trigger, giao tác ACID và phân quyền. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu hỏi thật trong đề.",
  "bieuTuong": "tablecells.fill",
- "thuTu": -965,
+ "thuTu": -948,
  "tu": [
   {
    "chu": "Structured Query Language",

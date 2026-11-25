@@ -1,0 +1,514 @@
+{
+  "ma": "sba301-1",
+  "nn": "en",
+  "ten": "SBA301 · 1. REST với Spring Boot, bảo mật & dữ liệu",
+  "moTa": "Môn Integrate SPA with Spring Boot (SBA301): REST controller và xử lý lỗi, tài liệu OpenAPI, versioning và phân trang, kiểm thử, Spring Security với JWT/CORS, Hibernate, Spring Data MongoDB và nối SPA React. Soạn từ syllabus và giáo trình vì môn chưa có đề chữ.",
+  "bieuTuong": "arrow.triangle.2.circlepath",
+  "thuTu": -896,
+  "tu": [
+    {
+      "chu": "RestController",
+      "doc": "/rest kənˈtroʊlər/",
+      "nghia": "@RestController: controller trả DỮ LIỆU (JSON) thay vì tên view; gộp @Controller và @ResponseBody",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "Build RESTful APIs using Spring Boot's built-in features and frameworks.",
+      "viDuNghia": "Xây API RESTful bằng các tính năng có sẵn của Spring Boot."
+    },
+    {
+      "chu": "RequestBody",
+      "doc": "/rɪˈkwest ˈbɑːdi/",
+      "nghia": "@RequestBody: đổi thân JSON của request thành đối tượng Java",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "@PostMapping public Product create(@RequestBody ProductDto dto)",
+      "viDuNghia": "Tạo sản phẩm từ thân JSON."
+    },
+    {
+      "chu": "ResponseBody",
+      "doc": "/rɪˈspɑːns ˈbɑːdi/",
+      "nghia": "@ResponseBody: ghi giá trị trả về thẳng vào thân phản hồi (JSON)",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "@ResponseBody turns the returned object into JSON.",
+      "viDuNghia": "@ResponseBody đổi đối tượng trả về thành JSON."
+    },
+    {
+      "chu": "ResponseEntity",
+      "doc": "/rɪˈspɑːns ˈentəti/",
+      "nghia": "đối tượng phản hồi đầy đủ: mã trạng thái, header và thân",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "return ResponseEntity.status(HttpStatus.CREATED).body(saved);",
+      "viDuNghia": "Trả 201 Created kèm sản phẩm vừa lưu."
+    },
+    {
+      "chu": "HTTP message converter",
+      "doc": "/ˌeɪtʃ tiː tiː ˈpiː ˈmesɪdʒ kənˈvɜːrtər/",
+      "nghia": "bộ chuyển thông điệp: đổi đối tượng ↔ JSON/XML khi đọc request và ghi response",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "The HTTP message converter uses Jackson to write JSON.",
+      "viDuNghia": "Bộ chuyển thông điệp dùng Jackson để ghi JSON."
+    },
+    {
+      "chu": "Jackson",
+      "doc": "/ˈdʒæksən/",
+      "nghia": "thư viện JSON mặc định của Spring Boot (ObjectMapper, @JsonIgnore)",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "@JsonIgnore keeps the password out of the JSON response.",
+      "viDuNghia": "@JsonIgnore giữ mật khẩu khỏi phản hồi JSON."
+    },
+    {
+      "chu": "ExceptionHandler",
+      "doc": "/ɪkˈsepʃn ˈhændlər/",
+      "nghia": "@ExceptionHandler: phương thức xử lý một loại ngoại lệ và trả phản hồi lỗi",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "@ExceptionHandler(NotFoundException.class) returns 404.",
+      "viDuNghia": "Xử lý NotFoundException và trả 404."
+    },
+    {
+      "chu": "RestControllerAdvice",
+      "doc": "/rest kənˈtroʊlər ədˈvaɪs/",
+      "nghia": "@RestControllerAdvice: lớp xử lý lỗi chung cho mọi REST controller",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "Put every @ExceptionHandler in one @RestControllerAdvice class.",
+      "viDuNghia": "Đặt mọi @ExceptionHandler vào một lớp @RestControllerAdvice."
+    },
+    {
+      "chu": "ProblemDetail",
+      "doc": "/ˈprɑːbləm ˈdiːteɪl/",
+      "nghia": "định dạng lỗi chuẩn RFC 9457 (type, title, status, detail) có sẵn trong Spring 6",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "Return a ProblemDetail with status 400 and a clear detail message.",
+      "viDuNghia": "Trả ProblemDetail mã 400 kèm thông điệp chi tiết rõ ràng."
+    },
+    {
+      "chu": "ResponseStatus",
+      "doc": "/rɪˈspɑːns ˈsteɪtəs/",
+      "nghia": "@ResponseStatus: gắn mã trạng thái mặc định cho phương thức hoặc lớp ngoại lệ",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "@ResponseStatus(HttpStatus.NOT_FOUND) on a custom exception class.",
+      "viDuNghia": "Gắn 404 cho lớp ngoại lệ tự định nghĩa."
+    },
+    {
+      "chu": "content negotiation",
+      "doc": "/ˈkɑːntent nɪˌɡoʊʃiˈeɪʃn/",
+      "nghia": "thương lượng nội dung: server chọn định dạng phản hồi (JSON, XML) theo header Accept",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "Content negotiation returns XML when the client sends Accept: application/xml.",
+      "viDuNghia": "Thương lượng nội dung trả XML khi client gửi Accept: application/xml."
+    },
+    {
+      "chu": "HATEOAS",
+      "doc": "/ˈheɪtiəs/",
+      "nghia": "Hypermedia as the Engine of Application State: phản hồi REST kèm liên kết tới hành động tiếp theo",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "With HATEOAS, each order includes a link to cancel it.",
+      "viDuNghia": "Với HATEOAS, mỗi đơn hàng kèm liên kết để huỷ."
+    },
+    {
+      "chu": "Java record",
+      "doc": "/ˈdʒɑːvə ˈrekərd/",
+      "nghia": "kiểu record (Java 16+): lớp dữ liệu bất biến gọn, hợp để làm DTO",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "public record ProductDto(Long id, String name, double price) {}",
+      "viDuNghia": "DTO sản phẩm viết bằng record."
+    },
+    {
+      "chu": "RestTemplate",
+      "doc": "/rest ˈtemplət/",
+      "nghia": "lớp cũ của Spring để gọi REST API khác từ server (đồng bộ)",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "restTemplate.getForObject(url, Rate.class) calls the exchange rate API.",
+      "viDuNghia": "Gọi API tỷ giá bằng RestTemplate."
+    },
+    {
+      "chu": "WebClient",
+      "doc": "/web ˈklaɪənt/",
+      "nghia": "client HTTP không chặn của Spring WebFlux, thay thế RestTemplate",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "WebClient calls another service without blocking the thread.",
+      "viDuNghia": "WebClient gọi dịch vụ khác mà không chặn luồng."
+    },
+    {
+      "chu": "DTO mapping",
+      "doc": "/ˌdiː tiː ˈoʊ ˈmæpɪŋ/",
+      "nghia": "chuyển giữa entity và DTO để không lộ cấu trúc CSDL ra API (MapStruct, ModelMapper)",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "DTO mapping keeps the entity hidden from API clients.",
+      "viDuNghia": "Chuyển DTO giữ entity ẩn khỏi client."
+    },
+    {
+      "chu": "Lombok",
+      "doc": "/ˈlɑːmbɑːk/",
+      "nghia": "thư viện sinh getter, setter, constructor bằng chú thích (@Data, @Builder)",
+      "nhom": "REST controller trong Spring Boot",
+      "viDu": "@Data generates getters, setters and toString.",
+      "viDuNghia": "@Data sinh getter, setter và toString."
+    },
+    {
+      "chu": "OpenAPI",
+      "doc": "/ˈoʊpən ˌeɪ piː ˈaɪ/",
+      "nghia": "chuẩn mô tả REST API bằng JSON/YAML (đường dẫn, tham số, lược đồ)",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "Chapter 11. Documenting REST Services.",
+      "viDuNghia": "Chương 11. Viết tài liệu cho dịch vụ REST."
+    },
+    {
+      "chu": "Swagger UI",
+      "doc": "/ˈswæɡər ˌjuː ˈaɪ/",
+      "nghia": "trang web sinh từ OpenAPI để xem và gọi thử API",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "Open /swagger-ui.html to try the endpoints.",
+      "viDuNghia": "Mở /swagger-ui.html để gọi thử các endpoint."
+    },
+    {
+      "chu": "springdoc-openapi",
+      "doc": "/ˈsprɪŋdɑːk ˈoʊpən ˌeɪ piː ˈaɪ/",
+      "nghia": "thư viện tự sinh tài liệu OpenAPI từ controller Spring Boot",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "springdoc-openapi scans the controllers and builds the spec.",
+      "viDuNghia": "springdoc-openapi quét controller và dựng bản đặc tả."
+    },
+    {
+      "chu": "API versioning",
+      "doc": "/ˌeɪ piː ˈaɪ ˈvɜːrʒənɪŋ/",
+      "nghia": "đánh phiên bản API (/api/v1, /api/v2 hoặc header) để thay đổi không phá client cũ",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "Chapter 12. Versioning, Paging, Sorting and Testing.",
+      "viDuNghia": "Chương 12. Đánh phiên bản, phân trang, sắp xếp và kiểm thử."
+    },
+    {
+      "chu": "URI versioning",
+      "doc": "/ˌjuː ɑːr ˈaɪ ˈvɜːrʒənɪŋ/",
+      "nghia": "đặt số phiên bản trong đường dẫn, vd /api/v2/products",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "URI versioning keeps /api/v1 alive while /api/v2 is added.",
+      "viDuNghia": "Đánh phiên bản qua URI giữ /api/v1 trong khi thêm /api/v2."
+    },
+    {
+      "chu": "paging and sorting",
+      "doc": "/ˈpeɪdʒɪŋ ənd ˈsɔːrtɪŋ/",
+      "nghia": "phân trang và sắp xếp qua tham số ?page=0&size=10&sort=name,asc",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "GET /api/products?page=0&size=10&sort=price,desc",
+      "viDuNghia": "Lấy trang đầu 10 sản phẩm, giá giảm dần."
+    },
+    {
+      "chu": "sort parameter",
+      "doc": "/sɔːrt pəˈræmɪtər/",
+      "nghia": "tham số sort của API; phải giới hạn trường được phép để không lộ cột nhạy cảm",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "Whitelist the sort parameter so users cannot sort by password.",
+      "viDuNghia": "Giới hạn tham số sort để không sắp được theo mật khẩu."
+    },
+    {
+      "chu": "MockMvc",
+      "doc": "/mɑːk ˌem viː ˈsiː/",
+      "nghia": "công cụ kiểm thử controller Spring MVC mà không cần chạy server thật",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "mockMvc.perform(get(\"/api/products\")).andExpect(status().isOk());",
+      "viDuNghia": "Gọi thử GET /api/products và mong mã 200."
+    },
+    {
+      "chu": "WebMvcTest",
+      "doc": "/web ˌem viː ˈsiː test/",
+      "nghia": "@WebMvcTest: test chỉ nạp tầng web (controller), service được làm giả",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "@WebMvcTest(ProductController.class) loads only the web layer.",
+      "viDuNghia": "@WebMvcTest chỉ nạp tầng web."
+    },
+    {
+      "chu": "SpringBootTest",
+      "doc": "/sprɪŋ buːt test/",
+      "nghia": "@SpringBootTest: test nạp toàn bộ ngữ cảnh ứng dụng (kiểm thử tích hợp)",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "@SpringBootTest starts the full application context.",
+      "viDuNghia": "@SpringBootTest khởi động toàn bộ ngữ cảnh ứng dụng."
+    },
+    {
+      "chu": "Mockito",
+      "doc": "/məˈkiːtoʊ/",
+      "nghia": "thư viện tạo đối tượng giả (mock) và kiểm lời gọi trong unit test Java",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "when(repo.findById(1L)).thenReturn(Optional.of(product));",
+      "viDuNghia": "Cho repository giả trả sản phẩm khi tìm id 1."
+    },
+    {
+      "chu": "Spring Boot Actuator",
+      "doc": "/sprɪŋ buːt ˈæktʃueɪtər/",
+      "nghia": "mô-đun mở endpoint giám sát (/actuator/health, /actuator/metrics)",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "GET /actuator/health returns UP when the app is healthy.",
+      "viDuNghia": "/actuator/health trả UP khi ứng dụng khoẻ."
+    },
+    {
+      "chu": "Testcontainers",
+      "doc": "/ˈtest kənˈteɪnərz/",
+      "nghia": "thư viện chạy CSDL thật trong Docker cho kiểm thử tích hợp",
+      "nhom": "Tài liệu, versioning và kiểm thử",
+      "viDu": "Testcontainers starts a real SQL Server for the tests.",
+      "viDuNghia": "Testcontainers khởi động SQL Server thật cho các test."
+    },
+    {
+      "chu": "Spring Security",
+      "doc": "/sprɪŋ sɪˈkjʊrəti/",
+      "nghia": "framework xác thực và phân quyền cho ứng dụng Spring, chạy bằng chuỗi filter",
+      "nhom": "Spring Security",
+      "viDu": "Chapter 16. Securing REST Services with Spring Boot.",
+      "viDuNghia": "Chương 16. Bảo mật dịch vụ REST với Spring Boot."
+    },
+    {
+      "chu": "SecurityFilterChain",
+      "doc": "/sɪˈkjʊrəti ˈfɪltər tʃeɪn/",
+      "nghia": "bean cấu hình chuỗi filter bảo mật: URL nào cần đăng nhập, vai trò nào",
+      "nhom": "Spring Security",
+      "viDu": "The SecurityFilterChain permits /api/auth/** and protects the rest.",
+      "viDuNghia": "Chuỗi filter cho qua /api/auth/** và bảo vệ phần còn lại."
+    },
+    {
+      "chu": "PasswordEncoder",
+      "doc": "/ˈpæswɜːrd ɪnˈkoʊdər/",
+      "nghia": "giao diện băm và so mật khẩu; thường dùng BCryptPasswordEncoder",
+      "nhom": "Spring Security",
+      "viDu": "passwordEncoder.matches(raw, user.getPassword())",
+      "viDuNghia": "So mật khẩu nhập với chuỗi băm đã lưu."
+    },
+    {
+      "chu": "UserDetailsService",
+      "doc": "/ˈjuːzər ˈdiːteɪlz ˈsɜːrvɪs/",
+      "nghia": "dịch vụ nạp người dùng theo username cho Spring Security",
+      "nhom": "Spring Security",
+      "viDu": "Implement UserDetailsService to load users from the database.",
+      "viDuNghia": "Cài UserDetailsService để nạp người dùng từ CSDL."
+    },
+    {
+      "chu": "AuthenticationManager",
+      "doc": "/ɔːˌθentɪˈkeɪʃn ˈmænɪdʒər/",
+      "nghia": "thành phần kiểm thông tin đăng nhập và trả đối tượng Authentication",
+      "nhom": "Spring Security",
+      "viDu": "The login endpoint calls the AuthenticationManager.",
+      "viDuNghia": "Endpoint đăng nhập gọi AuthenticationManager."
+    },
+    {
+      "chu": "PreAuthorize",
+      "doc": "/ˌpriː ˈɔːθəraɪz/",
+      "nghia": "@PreAuthorize: kiểm quyền trước khi chạy phương thức, vd hasRole('ADMIN')",
+      "nhom": "Spring Security",
+      "viDu": "@PreAuthorize(\"hasRole('ADMIN')\") on the delete method.",
+      "viDuNghia": "Chỉ ADMIN mới gọi được phương thức xoá."
+    },
+    {
+      "chu": "method security",
+      "doc": "/ˈmeθəd sɪˈkjʊrəti/",
+      "nghia": "bảo mật mức phương thức, bật bằng @EnableMethodSecurity",
+      "nhom": "Spring Security",
+      "viDu": "Enable method security to use @PreAuthorize.",
+      "viDuNghia": "Bật bảo mật mức phương thức để dùng @PreAuthorize."
+    },
+    {
+      "chu": "JWT filter",
+      "doc": "/ˌdʒeɪ ˌdʌbljuː ˈtiː ˈfɪltər/",
+      "nghia": "filter tự viết (OncePerRequestFilter) đọc Bearer token, kiểm chữ ký và đặt người dùng vào SecurityContext",
+      "nhom": "Spring Security",
+      "viDu": "The JWT filter runs before UsernamePasswordAuthenticationFilter.",
+      "viDuNghia": "Filter JWT chạy trước filter đăng nhập bằng username/password."
+    },
+    {
+      "chu": "OncePerRequestFilter",
+      "doc": "/wʌns pər rɪˈkwest ˈfɪltər/",
+      "nghia": "lớp filter của Spring bảo đảm chỉ chạy một lần cho mỗi request",
+      "nhom": "Spring Security",
+      "viDu": "Extend OncePerRequestFilter to write the JWT filter.",
+      "viDuNghia": "Kế thừa OncePerRequestFilter để viết filter JWT."
+    },
+    {
+      "chu": "SecurityContext",
+      "doc": "/sɪˈkjʊrəti ˈkɑːntekst/",
+      "nghia": "nơi giữ thông tin người dùng đã xác thực của request hiện tại",
+      "nhom": "Spring Security",
+      "viDu": "SecurityContextHolder.getContext().getAuthentication() returns the current user.",
+      "viDuNghia": "Lấy người dùng hiện tại từ SecurityContext."
+    },
+    {
+      "chu": "stateless session policy",
+      "doc": "/ˈsteɪtləs ˈseʃn ˈpɑːləsi/",
+      "nghia": "SessionCreationPolicy.STATELESS: không tạo HttpSession, mỗi request tự mang JWT",
+      "nhom": "Spring Security",
+      "viDu": "Set the session policy to STATELESS for a JWT API.",
+      "viDuNghia": "Đặt chính sách phiên STATELESS cho API dùng JWT."
+    },
+    {
+      "chu": "CorsConfiguration",
+      "doc": "/kɔːrz kənˌfɪɡjəˈreɪʃn/",
+      "nghia": "cấu hình CORS của Spring: origin, phương thức, header được phép (cho frontend React)",
+      "nhom": "Spring Security",
+      "viDu": "Allow http://localhost:5173 in the CorsConfiguration.",
+      "viDuNghia": "Cho phép http://localhost:5173 trong cấu hình CORS."
+    },
+    {
+      "chu": "CrossOrigin annotation",
+      "doc": "/ˌkrɔːs ˈɔːrɪdʒɪn ˌænəˈteɪʃn/",
+      "nghia": "@CrossOrigin: mở CORS cho một controller hoặc phương thức",
+      "nhom": "Spring Security",
+      "viDu": "@CrossOrigin(origins = \"http://localhost:3000\")",
+      "viDuNghia": "Cho phép frontend ở cổng 3000 gọi API."
+    },
+    {
+      "chu": "401 vs 403",
+      "doc": "/ˌfɔːr oʊ ˈwʌn vɜːrsəs ˌfɔːr oʊ ˈθriː/",
+      "nghia": "401 = chưa xác thực (thiếu/sai token); 403 = đã xác thực nhưng không đủ quyền",
+      "nhom": "Spring Security",
+      "viDu": "A missing token returns 401; a USER calling an ADMIN API gets 403.",
+      "viDuNghia": "Thiếu token trả 401; USER gọi API của ADMIN nhận 403."
+    },
+    {
+      "chu": "API key authentication",
+      "doc": "/ˌeɪ piː ˈaɪ kiː ɔːˌθentɪˈkeɪʃn/",
+      "nghia": "xác thực bằng khoá API gửi trong header, hay dùng cho dịch vụ gọi dịch vụ",
+      "nhom": "Spring Security",
+      "viDu": "Check the X-API-KEY header in a filter for API key authentication.",
+      "viDuNghia": "Kiểm header X-API-KEY trong filter để xác thực bằng khoá API."
+    },
+    {
+      "chu": "OAuth2 resource server",
+      "doc": "/ˈoʊɔːθ tuː ˈriːsɔːrs ˈsɜːrvər/",
+      "nghia": "máy chủ tài nguyên OAuth2: API chỉ nhận request có access token hợp lệ",
+      "nhom": "Spring Security",
+      "viDu": "Configure the API as an OAuth2 resource server that validates JWTs.",
+      "viDuNghia": "Cấu hình API thành máy chủ tài nguyên OAuth2 kiểm JWT."
+    },
+    {
+      "chu": "Hibernate architecture",
+      "doc": "/ˈhaɪbərneɪt ˈɑːrkɪtektʃər/",
+      "nghia": "kiến trúc Hibernate: Configuration → SessionFactory → Session → Transaction → Query",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "Chapter 17: Hibernate Architecture, Configuration, Mapping.",
+      "viDuNghia": "Chương 17: Kiến trúc, cấu hình và ánh xạ Hibernate."
+    },
+    {
+      "chu": "SessionFactory",
+      "doc": "/ˈseʃn ˈfæktəri/",
+      "nghia": "đối tượng nặng, tạo một lần cho cả ứng dụng, dùng để mở Session",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "Build one SessionFactory when the application starts.",
+      "viDuNghia": "Dựng một SessionFactory khi ứng dụng khởi động."
+    },
+    {
+      "chu": "Hibernate Session",
+      "doc": "/ˈhaɪbərneɪt ˈseʃn/",
+      "nghia": "phiên làm việc Hibernate (tương đương EntityManager): save, get, update, delete",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "session.beginTransaction(); session.persist(product);",
+      "viDuNghia": "Mở giao tác rồi lưu sản phẩm."
+    },
+    {
+      "chu": "hibernate.cfg.xml",
+      "doc": "/ˈhaɪbərneɪt ˈkɑːnfɪɡ ˌeks em ˈel/",
+      "nghia": "tệp cấu hình Hibernate: kết nối CSDL, dialect, lớp được ánh xạ",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "hibernate.cfg.xml lists the connection URL and the mapped classes.",
+      "viDuNghia": "Tệp ghi URL kết nối và các lớp được ánh xạ."
+    },
+    {
+      "chu": "Hibernate Query Language",
+      "doc": "/ˈhaɪbərneɪt ˈkwɪri ˈlæŋɡwɪdʒ/",
+      "nghia": "HQL: ngôn ngữ truy vấn hướng đối tượng của Hibernate (tiền thân của JPQL)",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "FROM Product p WHERE p.price > 100 is an HQL query.",
+      "viDuNghia": "Đây là một truy vấn HQL."
+    },
+    {
+      "chu": "SQL dialect",
+      "doc": "/ˌes kjuː ˈel ˈdaɪəlekt/",
+      "nghia": "phương ngữ SQL: cấu hình để Hibernate sinh câu SQL đúng kiểu CSDL (SQLServerDialect)",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "Set the SQL Server dialect in the configuration.",
+      "viDuNghia": "Đặt phương ngữ SQL Server trong cấu hình."
+    },
+    {
+      "chu": "first-level cache",
+      "doc": "/ˌfɜːrst ˈlevl kæʃ/",
+      "nghia": "bộ đệm cấp 1: đệm entity trong một Session, luôn bật",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "The second get() of the same id hits the first-level cache.",
+      "viDuNghia": "Lần get() thứ hai cùng id lấy từ bộ đệm cấp 1."
+    },
+    {
+      "chu": "second-level cache",
+      "doc": "/ˈsekənd ˈlevl kæʃ/",
+      "nghia": "bộ đệm cấp 2: đệm dùng chung giữa các Session, phải bật và cấu hình riêng",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "A second-level cache is shared by all sessions.",
+      "viDuNghia": "Bộ đệm cấp 2 dùng chung cho mọi Session."
+    },
+    {
+      "chu": "Spring Data MongoDB",
+      "doc": "/sprɪŋ ˈdeɪtə ˈmɑːŋɡoʊ diː biː/",
+      "nghia": "dự án Spring làm việc với MongoDB bằng repository và MongoTemplate",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "Apply Spring Data with MongoDB to build an application.",
+      "viDuNghia": "Áp Spring Data với MongoDB để xây ứng dụng."
+    },
+    {
+      "chu": "MongoRepository",
+      "doc": "/ˈmɑːŋɡoʊ rɪˈpɑːzətɔːri/",
+      "nghia": "giao diện repository cho MongoDB (findAll, save, truy vấn suy ra từ tên)",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "interface BookRepository extends MongoRepository<Book, String> {}",
+      "viDuNghia": "Repository sách kế thừa MongoRepository."
+    },
+    {
+      "chu": "Document annotation",
+      "doc": "/ˈdɑːkjumənt ˌænəˈteɪʃn/",
+      "nghia": "@Document(collection = \"books\"): ánh xạ lớp Java tới một collection MongoDB",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "@Document(collection = \"books\") public class Book {}",
+      "viDuNghia": "Lớp Book ánh xạ tới collection books."
+    },
+    {
+      "chu": "MongoTemplate",
+      "doc": "/ˈmɑːŋɡoʊ ˈtemplət/",
+      "nghia": "lớp truy vấn MongoDB linh hoạt bằng Query và Criteria",
+      "nhom": "Hibernate và Spring Data MongoDB",
+      "viDu": "mongoTemplate.find(query(where(\"genre\").is(\"AI\")), Book.class)",
+      "viDuNghia": "Tìm sách thể loại AI bằng MongoTemplate."
+    },
+    {
+      "chu": "single page application",
+      "doc": "/ˈsɪŋɡl peɪdʒ ˌæplɪˈkeɪʃn/",
+      "nghia": "SPA: ứng dụng một trang, React đổi nội dung bằng JavaScript và gọi API lấy dữ liệu",
+      "nhom": "Nối SPA React với API",
+      "viDu": "Chapter 14. Create Single Page Application.",
+      "viDuNghia": "Chương 14. Tạo ứng dụng trang đơn."
+    },
+    {
+      "chu": "client-server communication",
+      "doc": "/ˈklaɪənt ˈsɜːrvər kəˌmjuːnɪˈkeɪʃn/",
+      "nghia": "giao tiếp client–server: frontend gửi request HTTP, nhận JSON",
+      "nhom": "Nối SPA React với API",
+      "viDu": "Apply fetch and caching data in client-server communication.",
+      "viDuNghia": "Áp fetch và lưu đệm dữ liệu trong giao tiếp client–server."
+    },
+    {
+      "chu": "data caching",
+      "doc": "/ˈdeɪtə ˈkæʃɪŋ/",
+      "nghia": "lưu đệm dữ liệu phía client để khỏi gọi lại API cho dữ liệu chưa đổi",
+      "nhom": "Nối SPA React với API",
+      "viDu": "Chapter 08. Fetching and Caching Data.",
+      "viDuNghia": "Chương 8. Lấy và lưu đệm dữ liệu."
+    },
+    {
+      "chu": "TanStack Query",
+      "doc": "/ˈtænstæk ˈkwɪri/",
+      "nghia": "thư viện React Query: tự gọi API, lưu đệm, làm mới và trạng thái loading/error",
+      "nhom": "Nối SPA React với API",
+      "viDu": "useQuery({ queryKey: ['products'], queryFn: getProducts })",
+      "viDuNghia": "Gọi API sản phẩm và lưu đệm theo khoá products."
+    },
+    {
+      "chu": "CRUD application",
+      "doc": "/krʌd ˌæplɪˈkeɪʃn/",
+      "nghia": "ứng dụng thêm, xem, sửa, xoá dữ liệu — dạng bài Assignment/PE điển hình",
+      "nhom": "Nối SPA React với API",
+      "viDu": "Implement a CRUD application with a RESTful web service and ReactJS.",
+      "viDuNghia": "Làm ứng dụng CRUD với dịch vụ web RESTful và ReactJS."
+    }
+  ]
+}

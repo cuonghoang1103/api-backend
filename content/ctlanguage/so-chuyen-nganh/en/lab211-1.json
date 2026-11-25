@@ -1,0 +1,786 @@
+{
+ "ma": "lab211-1",
+ "nn": "en",
+ "ten": "LAB211 · 1. Bài lab Java: đề, kiến trúc, nhập liệu & review",
+ "moTa": "LAB211 (OOP with Java Lab) không có đề trắc nghiệm: bộ từ soạn từ syllabus và giáo trình — cách đọc đề bài lab, kiến trúc Main–Controller–Model–Validation, nhập liệu an toàn, ngày tháng, chuỗi, menu CRUD, gỡ lỗi trong NetBeans, quy ước code theo check sheet và buổi review (viva) với mentor.",
+ "bieuTuong": "laptopcomputer",
+ "thuTu": -973,
+ "tu": [
+  {
+   "chu": "lab assignment",
+   "doc": "/læb əˈsaɪnmənt/",
+   "nghia": "bài lab: một đề lập trình nhỏ (J1.S.P00xx) phải tự làm xong trong phòng lab",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "Each lab assignment must be completed continuously in the defined time.",
+   "viDuNghia": "Mỗi bài lab phải làm liên tục và xong trong thời gian quy định."
+  },
+  {
+   "chu": "LOC",
+   "doc": "/ˌɛl oʊ ˈsiː/",
+   "nghia": "LOC (lines of code): số dòng lệnh quy đổi của bài — LAB211 cần đủ tổng LOC để qua môn",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "You pass LAB211 only when your approved assignments add up to enough LOC.",
+   "viDuNghia": "Chỉ qua LAB211 khi tổng LOC các bài được duyệt đủ mức yêu cầu."
+  },
+  {
+   "chu": "short program",
+   "doc": "/ʃɔːrt ˈproʊɡræm/",
+   "nghia": "bài ngắn: bài lab ít LOC, làm trong một slot",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "A short program is usually worth fewer LOC than a long program.",
+   "viDuNghia": "Bài ngắn thường được ít LOC hơn bài dài."
+  },
+  {
+   "chu": "long program",
+   "doc": "/lɒŋ ˈproʊɡræm/",
+   "nghia": "bài dài: bài lab nhiều chức năng, nhiều lớp, LOC cao",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "A long program is a complete application with several menus and classes.",
+   "viDuNghia": "Bài dài là một ứng dụng hoàn chỉnh có nhiều menu và lớp."
+  },
+  {
+   "chu": "spec reading",
+   "doc": "/spɛk ˈriːdɪŋ/",
+   "nghia": "đọc đề (đặc tả): đọc kỹ yêu cầu, mẫu nhập xuất và ràng buộc trước khi gõ code",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "Careful spec reading saves you from rewriting the whole program.",
+   "viDuNghia": "Đọc đề kỹ giúp khỏi phải viết lại cả chương trình."
+  },
+  {
+   "chu": "sample output",
+   "doc": "/ˈsæmpl ˈaʊtpʊt/",
+   "nghia": "kết quả mẫu: màn hình chạy minh hoạ trong đề — output phải khớp tới từng ký tự",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "Your output must match the sample output exactly, including spaces.",
+   "viDuNghia": "Kết quả phải khớp chính xác kết quả mẫu, kể cả dấu cách."
+  },
+  {
+   "chu": "actual output",
+   "doc": "/ˈæktʃuəl ˈaʊtpʊt/",
+   "nghia": "kết quả thực tế: thứ chương trình in ra khi chạy, đem so với kết quả mong đợi",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "Compare the actual output with the expected output line by line.",
+   "viDuNghia": "So kết quả thực tế với kết quả mong đợi từng dòng."
+  },
+  {
+   "chu": "test input",
+   "doc": "/tɛst ˈɪnpʊt/",
+   "nghia": "dữ liệu thử: bộ giá trị nhập vào để kiểm chương trình",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "The mentor types unusual test input to see if your validation holds.",
+   "viDuNghia": "Mentor gõ dữ liệu thử bất thường để xem phần kiểm tra của bạn có vững không."
+  },
+  {
+   "chu": "edge-case input",
+   "doc": "/ɛdʒ keɪs ˈɪnpʊt/",
+   "nghia": "đầu vào biên: giá trị đặc biệt (rỗng, 0, âm, quá lớn, khoảng trắng) dễ làm chương trình sai",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "Test edge-case input such as an empty string or a negative number.",
+   "viDuNghia": "Thử đầu vào biên như chuỗi rỗng hoặc số âm."
+  },
+  {
+   "chu": "mentor review",
+   "doc": "/ˈmɛntɔːr rɪˈvjuː/",
+   "nghia": "buổi review của mentor: giảng viên chạy thử, hỏi đáp và quyết định duyệt bài",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "During the mentor review, you must explain every line of your code.",
+   "viDuNghia": "Trong buổi review, bạn phải giải thích từng dòng code."
+  },
+  {
+   "chu": "viva",
+   "doc": "/ˈvaɪvə/",
+   "nghia": "vấn đáp (viva): phần mentor hỏi trực tiếp để chắc bạn tự làm và hiểu bài",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "If you copied solutions, the viva is where that shows.",
+   "viDuNghia": "Nếu chép lời giải, buổi vấn đáp sẽ lộ ra ngay."
+  },
+  {
+   "chu": "oral defense",
+   "doc": "/ˈɔːrəl dɪˈfɛns/",
+   "nghia": "bảo vệ miệng: trình bày và trả lời câu hỏi về bài của mình",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "Prepare a one-minute oral defense of your design choices.",
+   "viDuNghia": "Chuẩn bị một phút bảo vệ miệng cho các lựa chọn thiết kế của bạn."
+  },
+  {
+   "chu": "grader",
+   "doc": "/ˈɡreɪdər/",
+   "nghia": "người (hoặc máy) chấm bài",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "The grader checks the output, the validation and the code convention.",
+   "viDuNghia": "Người chấm kiểm kết quả, phần kiểm tra dữ liệu và quy ước code."
+  },
+  {
+   "chu": "deduct points",
+   "doc": "/dɪˈdʌkt pɔɪnts/",
+   "nghia": "trừ điểm",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "The mentor may deduct points for every item of the check sheet that is not OK.",
+   "viDuNghia": "Mentor có thể trừ điểm cho mỗi mục check sheet không đạt."
+  },
+  {
+   "chu": "resubmit",
+   "doc": "/ˌriːsəbˈmɪt/",
+   "nghia": "nộp lại: sửa theo góp ý rồi nộp bài lần nữa",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "Fix the bugs the mentor found and resubmit in the next slot.",
+   "viDuNghia": "Sửa lỗi mentor tìm được rồi nộp lại ở slot sau."
+  },
+  {
+   "chu": "self-review",
+   "doc": "/sɛlf rɪˈvjuː/",
+   "nghia": "tự soát bài: tự kiểm bài theo check sheet trước khi gọi mentor",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "Do a self-review with the check sheet before calling the mentor.",
+   "viDuNghia": "Tự soát bài theo check sheet trước khi gọi mentor."
+  },
+  {
+   "chu": "work independently",
+   "doc": "/wɜːrk ˌɪndɪˈpɛndəntli/",
+   "nghia": "tự làm độc lập: không chép, không nhờ người khác viết hộ",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "Students are required to work independently on every assignment in the lab room.",
+   "viDuNghia": "Sinh viên phải tự làm độc lập mọi bài trong phòng lab."
+  },
+  {
+   "chu": "warm-up exercise",
+   "doc": "/ˈwɔːrm ʌp ˈɛksərsaɪz/",
+   "nghia": "bài khởi động: bài dễ để làm quen kiến trúc và công cụ",
+   "nhom": "Bài lab & đánh giá",
+   "viDu": "Start with a warm-up exercise such as sorting an array of random numbers.",
+   "viDuNghia": "Bắt đầu bằng một bài khởi động như sắp xếp mảng số ngẫu nhiên."
+  },
+  {
+   "chu": "MVC",
+   "doc": "/ˌɛm viː ˈsiː/",
+   "nghia": "MVC (Model–View–Controller): tách dữ liệu, giao diện và điều khiển — khung chuẩn của bài LAB211",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "The guide uses MVC: Main shows the menu, the controller runs the logic, the model holds the data.",
+   "viDuNghia": "Hướng dẫn dùng MVC: Main hiện menu, controller chạy xử lý, model giữ dữ liệu."
+  },
+  {
+   "chu": "Main class",
+   "doc": "/meɪn klɑːs/",
+   "nghia": "lớp Main: chứa main(), hiện menu và đọc lựa chọn của người dùng",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "Keep the Main class short: it only shows the menu and calls the controller.",
+   "viDuNghia": "Giữ lớp Main ngắn: chỉ hiện menu và gọi controller."
+  },
+  {
+   "chu": "model layer",
+   "doc": "/ˈmɒdəl ˈleɪər/",
+   "nghia": "tầng model: các lớp dữ liệu (Student, Product…) có field private, constructor, getter/setter",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "The model layer must not read from the keyboard.",
+   "viDuNghia": "Tầng model không được đọc dữ liệu từ bàn phím."
+  },
+  {
+   "chu": "controller layer",
+   "doc": "/kənˈtroʊlər ˈleɪər/",
+   "nghia": "tầng controller: xử lý nghiệp vụ (thêm, tìm, sắp xếp) trên danh sách đối tượng",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "Sorting and searching belong to the controller layer.",
+   "viDuNghia": "Sắp xếp và tìm kiếm thuộc về tầng controller."
+  },
+  {
+   "chu": "validator class",
+   "doc": "/ˈvælɪdeɪtər klɑːs/",
+   "nghia": "lớp kiểm tra (Validation): gom mọi hàm đọc và kiểm dữ liệu nhập",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "Put every input check in one validator class so it can be reused.",
+   "viDuNghia": "Đặt mọi phần kiểm dữ liệu nhập vào một lớp kiểm tra để dùng lại."
+  },
+  {
+   "chu": "helper class",
+   "doc": "/ˈhɛlpər klɑːs/",
+   "nghia": "lớp trợ giúp: lớp chứa các hàm tiện ích dùng chung (thường static)",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "A helper class with static methods avoids repeating the same code.",
+   "viDuNghia": "Lớp trợ giúp có phương thức static giúp khỏi lặp lại cùng một đoạn mã."
+  },
+  {
+   "chu": "data layer",
+   "doc": "/ˈdeɪtə ˈleɪər/",
+   "nghia": "tầng dữ liệu: phần đọc/ghi tệp hoặc giữ danh sách đối tượng",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "Reading and writing the CSV file is the job of the data layer.",
+   "viDuNghia": "Đọc ghi tệp CSV là việc của tầng dữ liệu."
+  },
+  {
+   "chu": "user interface layer",
+   "doc": "/ˈjuːzər ˈɪntərfeɪs ˈleɪər/",
+   "nghia": "tầng giao diện: phần in menu, đọc lựa chọn, in kết quả ra console",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "The user interface layer prints menus and results only.",
+   "viDuNghia": "Tầng giao diện chỉ in menu và kết quả."
+  },
+  {
+   "chu": "console application",
+   "doc": "/ˈkɒnsoʊl ˌæplɪˈkeɪʃən/",
+   "nghia": "ứng dụng console: chương trình chạy trong cửa sổ dòng lệnh, nhập xuất bằng chữ",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "Every LAB211 assignment is a console application.",
+   "viDuNghia": "Mọi bài LAB211 đều là ứng dụng console."
+  },
+  {
+   "chu": "menu-driven program",
+   "doc": "/ˈmɛnjuː ˈdrɪvən ˈproʊɡræm/",
+   "nghia": "chương trình điều khiển bằng menu: lặp hiện menu, chọn số để chạy chức năng",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "A menu-driven program repeats the menu until the user chooses Exit.",
+   "viDuNghia": "Chương trình điều khiển bằng menu lặp lại menu tới khi người dùng chọn Thoát."
+  },
+  {
+   "chu": "main menu",
+   "doc": "/meɪn ˈmɛnjuː/",
+   "nghia": "menu chính: danh sách chức năng đầu tiên của chương trình",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "After each function finishes, return to the main menu.",
+   "viDuNghia": "Xong mỗi chức năng thì quay về menu chính."
+  },
+  {
+   "chu": "exit option",
+   "doc": "/ˈɛɡzɪt ˈɒpʃən/",
+   "nghia": "lựa chọn thoát: mục menu kết thúc chương trình",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "The exit option must stop the loop and end the program cleanly.",
+   "viDuNghia": "Lựa chọn thoát phải dừng vòng lặp và kết thúc chương trình gọn gàng."
+  },
+  {
+   "chu": "CRUD",
+   "doc": "/krʌd/",
+   "nghia": "CRUD: Create – Read – Update – Delete, bốn thao tác cơ bản trên dữ liệu",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "Most long programs are a CRUD menu over a list of objects.",
+   "viDuNghia": "Phần lớn bài dài là một menu CRUD trên danh sách đối tượng."
+  },
+  {
+   "chu": "display list",
+   "doc": "/dɪˈspleɪ lɪst/",
+   "nghia": "hiển thị danh sách: in mọi phần tử theo bảng định dạng",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "If the list is empty, display list must print \"List empty.\"",
+   "viDuNghia": "Nếu danh sách rỗng, chức năng hiển thị phải in \"List empty.\""
+  },
+  {
+   "chu": "search by ID",
+   "doc": "/sɜːrtʃ baɪ ˌaɪ ˈdiː/",
+   "nghia": "tìm theo mã: tìm đối tượng có mã trùng giá trị nhập",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "Search by ID returns the object or reports \"Not found\".",
+   "viDuNghia": "Tìm theo mã trả về đối tượng hoặc báo \"Không tìm thấy\"."
+  },
+  {
+   "chu": "unique ID",
+   "doc": "/juːˈniːk ˌaɪ ˈdiː/",
+   "nghia": "mã duy nhất: không được trùng với đối tượng đã có",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "Check that the new code is a unique ID before adding the product.",
+   "viDuNghia": "Kiểm mã mới là duy nhất trước khi thêm sản phẩm."
+  },
+  {
+   "chu": "ID format",
+   "doc": "/ˌaɪ ˈdiː ˈfɔːrmæt/",
+   "nghia": "định dạng mã: mẫu mã đề yêu cầu, vd SE0001 (2 chữ + 4 số)",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "The ID format is \"SE\" followed by four digits.",
+   "viDuNghia": "Định dạng mã là \"SE\" và bốn chữ số."
+  },
+  {
+   "chu": "duplicate check",
+   "doc": "/ˈdjuːplɪkət tʃɛk/",
+   "nghia": "kiểm trùng: kiểm dữ liệu mới có trùng bản ghi cũ không",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "Do the duplicate check in the controller, not in the model.",
+   "viDuNghia": "Làm phần kiểm trùng ở controller, không ở model."
+  },
+  {
+   "chu": "case-insensitive search",
+   "doc": "/keɪs ɪnˈsɛnsətɪv sɜːrtʃ/",
+   "nghia": "tìm không phân biệt hoa thường (dùng equalsIgnoreCase hoặc toLowerCase)",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "A case-insensitive search treats \"java\" and \"Java\" as the same.",
+   "viDuNghia": "Tìm không phân biệt hoa thường coi \"java\" và \"Java\" là một."
+  },
+  {
+   "chu": "partial match",
+   "doc": "/ˈpɑːrʃəl mætʃ/",
+   "nghia": "khớp một phần: tên chứa chuỗi tìm (dùng contains)",
+   "nhom": "Kiến trúc chương trình",
+   "viDu": "Search by name should accept a partial match such as \"an\" for \"Nguyen Van An\".",
+   "viDuNghia": "Tìm theo tên nên nhận khớp một phần như \"an\" cho \"Nguyen Van An\"."
+  },
+  {
+   "chu": "retry loop",
+   "doc": "/riːˈtraɪ luːp/",
+   "nghia": "vòng lặp nhập lại: lặp tới khi người dùng nhập đúng",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "Wrap the input in a retry loop until the value is valid.",
+   "viDuNghia": "Bọc phần nhập trong vòng lặp nhập lại tới khi giá trị hợp lệ."
+  },
+  {
+   "chu": "re-enter",
+   "doc": "/riː ˈɛntər/",
+   "nghia": "nhập lại",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "Invalid number, please re-enter.",
+   "viDuNghia": "Số không hợp lệ, vui lòng nhập lại."
+  },
+  {
+   "chu": "empty input",
+   "doc": "/ˈɛmpti ˈɪnpʊt/",
+   "nghia": "nhập rỗng: người dùng chỉ bấm Enter",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "Reject empty input and ask the user again.",
+   "viDuNghia": "Từ chối dữ liệu rỗng và hỏi lại người dùng."
+  },
+  {
+   "chu": "blank string",
+   "doc": "/blæŋk strɪŋ/",
+   "nghia": "chuỗi trắng: chỉ gồm khoảng trắng (isBlank() là true)",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "A blank string such as \"   \" must be treated like empty input.",
+   "viDuNghia": "Chuỗi trắng như \"   \" phải coi như nhập rỗng."
+  },
+  {
+   "chu": "input range",
+   "doc": "/ˈɪnpʊt reɪndʒ/",
+   "nghia": "khoảng giá trị cho phép của dữ liệu nhập (vd 1–100)",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "The menu choice must be inside the input range 1 to 5.",
+   "viDuNghia": "Lựa chọn menu phải nằm trong khoảng 1 tới 5."
+  },
+  {
+   "chu": "Integer.parseInt",
+   "doc": "/ˈɪntɪdʒər pɑːrs ɪnt/",
+   "nghia": "Integer.parseInt: đổi chuỗi thành int, ném NumberFormatException nếu không phải số",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "Read a line, then call Integer.parseInt inside try-catch.",
+   "viDuNghia": "Đọc một dòng rồi gọi Integer.parseInt trong try-catch."
+  },
+  {
+   "chu": "Scanner nextLine",
+   "doc": "/ˈskænər ˈnɛkst laɪn/",
+   "nghia": "Scanner.nextLine(): đọc cả dòng — nên dùng thay nextInt để tránh sót ký tự xuống dòng",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "Use Scanner nextLine for every input, then parse the number yourself.",
+   "viDuNghia": "Dùng Scanner nextLine cho mọi lần nhập rồi tự đổi sang số."
+  },
+  {
+   "chu": "nextInt",
+   "doc": "/nɛkst ɪnt/",
+   "nghia": "nextInt(): đọc một số nguyên nhưng để lại '\\n', làm lệnh nextLine sau bị trôi",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "After nextInt(), the next nextLine() returns an empty string.",
+   "viDuNghia": "Sau nextInt(), lệnh nextLine() kế tiếp trả về chuỗi rỗng."
+  },
+  {
+   "chu": "newline character",
+   "doc": "/ˈnjuːlaɪn ˈkærəktər/",
+   "nghia": "ký tự xuống dòng '\\n' còn sót trong bộ đệm sau khi đọc số",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "The leftover newline character is why the name input is skipped.",
+   "viDuNghia": "Ký tự xuống dòng còn sót là lý do phần nhập tên bị bỏ qua."
+  },
+  {
+   "chu": "infinite input loop",
+   "doc": "/ˈɪnfɪnɪt ˈɪnpʊt luːp/",
+   "nghia": "vòng lặp nhập vô tận: lỗi lặp mãi do không xoá dữ liệu sai trong Scanner",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "Calling nextInt() again without clearing the bad token causes an infinite input loop.",
+   "viDuNghia": "Gọi lại nextInt() mà không xoá token sai gây vòng lặp nhập vô tận."
+  },
+  {
+   "chu": "trim",
+   "doc": "/trɪm/",
+   "nghia": "trim(): bỏ khoảng trắng ở đầu và cuối chuỗi",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "Always call trim() on user input before checking it.",
+   "viDuNghia": "Luôn gọi trim() với dữ liệu nhập trước khi kiểm tra."
+  },
+  {
+   "chu": "leading space",
+   "doc": "/ˈliːdɪŋ speɪs/",
+   "nghia": "khoảng trắng đầu chuỗi",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "A leading space makes \" SE0001\" fail the ID format check.",
+   "viDuNghia": "Khoảng trắng đầu làm \" SE0001\" sai định dạng mã."
+  },
+  {
+   "chu": "trailing space",
+   "doc": "/ˈtreɪlɪŋ speɪs/",
+   "nghia": "khoảng trắng cuối chuỗi",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "A trailing space in the output line can make the grader mark it wrong.",
+   "viDuNghia": "Khoảng trắng cuối dòng xuất có thể làm người chấm đánh sai."
+  },
+  {
+   "chu": "regular expression pattern",
+   "doc": "/ˈrɛɡjʊlər ɪkˈsprɛʃən ˈpætərn/",
+   "nghia": "mẫu biểu thức chính quy: chuỗi mô tả định dạng hợp lệ, vd \"^SE\\\\d{4}$\"",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "Use the regular expression pattern ^[0-9]{10}$ for a ten-digit phone number.",
+   "viDuNghia": "Dùng mẫu biểu thức chính quy ^[0-9]{10}$ cho số điện thoại mười chữ số."
+  },
+  {
+   "chu": "matches method",
+   "doc": "/ˈmætʃɪz ˈmɛθəd/",
+   "nghia": "String.matches(regex): kiểm cả chuỗi có khớp mẫu không",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "code.matches(\"SE\\\\d{4}\") returns true for SE0001.",
+   "viDuNghia": "code.matches(\"SE\\\\d{4}\") trả về true với SE0001."
+  },
+  {
+   "chu": "equalsIgnoreCase",
+   "doc": "/ˈiːkwəlz ɪɡˈnɔːr keɪs/",
+   "nghia": "equalsIgnoreCase(): so sánh chuỗi không phân biệt hoa thường",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "Use equalsIgnoreCase to accept both \"Y\" and \"y\".",
+   "viDuNghia": "Dùng equalsIgnoreCase để nhận cả \"Y\" lẫn \"y\"."
+  },
+  {
+   "chu": "Y/N prompt",
+   "doc": "/waɪ ɛn prɒmpt/",
+   "nghia": "câu hỏi Y/N: hỏi người dùng có tiếp tục không",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "Show a Y/N prompt: \"Do you want to continue (Y/N)?\"",
+   "viDuNghia": "Hiện câu hỏi Y/N: \"Bạn có muốn tiếp tục (Y/N)?\""
+  },
+  {
+   "chu": "positive number check",
+   "doc": "/ˈpɒzətɪv ˈnʌmbər tʃɛk/",
+   "nghia": "kiểm số dương: từ chối 0 và số âm khi đề yêu cầu",
+   "nhom": "Nhập liệu & kiểm tra dữ liệu",
+   "viDu": "Add a positive number check for the price and the quantity.",
+   "viDuNghia": "Thêm phần kiểm số dương cho giá và số lượng."
+  },
+  {
+   "chu": "date format",
+   "doc": "/deɪt ˈfɔːrmæt/",
+   "nghia": "định dạng ngày: mẫu đề cho, vd dd/MM/yyyy",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "The date format must be dd/MM/yyyy, for example 29/02/2024.",
+   "viDuNghia": "Định dạng ngày phải là dd/MM/yyyy, vd 29/02/2024."
+  },
+  {
+   "chu": "SimpleDateFormat",
+   "doc": "/ˈsɪmpl deɪt ˈfɔːrmæt/",
+   "nghia": "SimpleDateFormat: lớp cũ đọc/in ngày theo mẫu; mặc định \"dễ dãi\" (lenient)",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "Call setLenient(false) on SimpleDateFormat so 31/02 is rejected.",
+   "viDuNghia": "Gọi setLenient(false) trên SimpleDateFormat để 31/02 bị từ chối."
+  },
+  {
+   "chu": "lenient parsing",
+   "doc": "/ˈliːniənt ˈpɑːrsɪŋ/",
+   "nghia": "phân tích dễ dãi: tự \"sửa\" ngày sai (31/02 thành 02/03) thay vì báo lỗi — bẫy hay gặp",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "Lenient parsing silently turns 31/02/2024 into 02/03/2024.",
+   "viDuNghia": "Phân tích dễ dãi lặng lẽ đổi 31/02/2024 thành 02/03/2024."
+  },
+  {
+   "chu": "ParseException",
+   "doc": "/pɑːrs ɪkˈsɛpʃən/",
+   "nghia": "ParseException: SimpleDateFormat.parse ném khi chuỗi ngày sai mẫu",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "Catch ParseException and ask the user to enter the date again.",
+   "viDuNghia": "Bắt ParseException rồi yêu cầu nhập lại ngày."
+  },
+  {
+   "chu": "LocalDate",
+   "doc": "/ˈloʊkəl deɪt/",
+   "nghia": "LocalDate (java.time): kiểu ngày hiện đại, bất biến, kiểm ngày hợp lệ chặt",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "LocalDate.of(2023, 2, 29) throws an exception because 2023 is not a leap year.",
+   "viDuNghia": "LocalDate.of(2023, 2, 29) ném ngoại lệ vì 2023 không phải năm nhuận."
+  },
+  {
+   "chu": "DateTimeFormatter",
+   "doc": "/deɪt taɪm ˈfɔːrmætər/",
+   "nghia": "DateTimeFormatter: mẫu đọc/in LocalDate, vd ofPattern(\"dd/MM/yyyy\")",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "DateTimeFormatter.ofPattern(\"dd/MM/yyyy\") formats a LocalDate for output.",
+   "viDuNghia": "DateTimeFormatter.ofPattern(\"dd/MM/yyyy\") định dạng LocalDate để in."
+  },
+  {
+   "chu": "DecimalFormat",
+   "doc": "/ˈdɛsɪməl ˈfɔːrmæt/",
+   "nghia": "DecimalFormat: in số theo mẫu, vd \"#,##0.00\"",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "new DecimalFormat(\"#,##0.00\") prints 1234.5 as 1,234.50.",
+   "viDuNghia": "new DecimalFormat(\"#,##0.00\") in 1234.5 thành 1,234.50."
+  },
+  {
+   "chu": "format output",
+   "doc": "/ˈfɔːrmæt ˈaʊtpʊt/",
+   "nghia": "định dạng kết quả: căn cột, số chữ số thập phân đúng như đề",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "Use String.format to format output in aligned columns.",
+   "viDuNghia": "Dùng String.format để định dạng kết quả thành các cột thẳng hàng."
+  },
+  {
+   "chu": "column alignment",
+   "doc": "/ˈkɒləm əˈlaɪnmənt/",
+   "nghia": "căn cột: in bảng với độ rộng cột cố định (%-15s)",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "Column alignment with %-15s keeps the table readable.",
+   "viDuNghia": "Căn cột bằng %-15s giúp bảng dễ đọc."
+  },
+  {
+   "chu": "base conversion",
+   "doc": "/beɪs kənˈvɜːrʒən/",
+   "nghia": "đổi cơ số: chuyển số giữa nhị phân, thập phân, thập lục phân",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "The base conversion program converts binary, decimal and hexadecimal numbers.",
+   "viDuNghia": "Bài đổi cơ số chuyển số giữa nhị phân, thập phân và thập lục phân."
+  },
+  {
+   "chu": "string processing",
+   "doc": "/strɪŋ ˈproʊsɛsɪŋ/",
+   "nghia": "xử lý chuỗi: tách từ, đếm ký tự, chuẩn hoá khoảng trắng, đảo chuỗi",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "Normalizing extra spaces is a classic string processing task.",
+   "viDuNghia": "Chuẩn hoá khoảng trắng thừa là bài xử lý chuỗi kinh điển."
+  },
+  {
+   "chu": "character frequency",
+   "doc": "/ˈkærəktər ˈfriːkwənsi/",
+   "nghia": "tần suất ký tự: số lần mỗi ký tự xuất hiện (đếm bằng HashMap)",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "Count the character frequency of the input string with a HashMap.",
+   "viDuNghia": "Đếm tần suất ký tự của chuỗi nhập bằng HashMap."
+  },
+  {
+   "chu": "split method",
+   "doc": "/splɪt ˈmɛθəd/",
+   "nghia": "split(regex): tách chuỗi thành mảng theo ký tự phân cách",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "line.split(\",\") separates the fields of a CSV line.",
+   "viDuNghia": "line.split(\",\") tách các trường của một dòng CSV."
+  },
+  {
+   "chu": "StringTokenizer",
+   "doc": "/strɪŋ ˈtoʊkənaɪzər/",
+   "nghia": "StringTokenizer: lớp cũ tách chuỗi thành từ theo ký tự phân cách",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "StringTokenizer splits a sentence into words separated by spaces.",
+   "viDuNghia": "StringTokenizer tách câu thành các từ ngăn bởi dấu cách."
+  },
+  {
+   "chu": "toUpperCase",
+   "doc": "/tuː ˈʌpər keɪs/",
+   "nghia": "toUpperCase(): đổi chuỗi sang chữ hoa (trả chuỗi mới, String không đổi)",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "Store the code with toUpperCase() so \"se0001\" becomes \"SE0001\".",
+   "viDuNghia": "Lưu mã bằng toUpperCase() để \"se0001\" thành \"SE0001\"."
+  },
+  {
+   "chu": "isEmpty",
+   "doc": "/ɪz ˈɛmpti/",
+   "nghia": "isEmpty(): chuỗi/danh sách không có phần tử nào",
+   "nhom": "Ngày tháng, số & chuỗi",
+   "viDu": "Check list.isEmpty() before printing the table header.",
+   "viDuNghia": "Kiểm list.isEmpty() trước khi in tiêu đề bảng."
+  },
+  {
+   "chu": "file I/O",
+   "doc": "/faɪl ˌaɪ ˈoʊ/",
+   "nghia": "đọc/ghi tệp: nạp dữ liệu từ tệp khi khởi động, lưu lại khi thoát",
+   "nhom": "Tệp & dữ liệu lưu trữ",
+   "viDu": "Load the products with file I/O when the program starts.",
+   "viDuNghia": "Nạp danh sách sản phẩm bằng đọc tệp khi chương trình khởi động."
+  },
+  {
+   "chu": "deserialize",
+   "doc": "/ˌdiːˈsɪəriəlaɪz/",
+   "nghia": "giải tuần tự hoá: đọc đối tượng đã ghi bằng ObjectOutputStream trở lại bộ nhớ",
+   "nhom": "Tệp & dữ liệu lưu trữ",
+   "viDu": "Deserialize the list with ObjectInputStream and cast it to ArrayList<Student>.",
+   "viDuNghia": "Giải tuần tự hoá danh sách bằng ObjectInputStream rồi ép kiểu về ArrayList<Student>."
+  },
+  {
+   "chu": "zip file",
+   "doc": "/zɪp faɪl/",
+   "nghia": "tệp zip: tệp nén nhiều tệp (bài nén/giải nén bằng ZipOutputStream)",
+   "nhom": "Tệp & dữ liệu lưu trữ",
+   "viDu": "The assignment asks you to compress a folder into a zip file.",
+   "viDuNghia": "Bài yêu cầu nén một thư mục thành tệp zip."
+  },
+  {
+   "chu": "NetBeans",
+   "doc": "/ˈnɛtbiːnz/",
+   "nghia": "NetBeans: IDE Java dùng trong phòng lab LAB211",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Create a new Java Application project in NetBeans for each assignment.",
+   "viDuNghia": "Tạo một dự án Java Application mới trong NetBeans cho mỗi bài."
+  },
+  {
+   "chu": "CheckStyle",
+   "doc": "/ˈtʃɛkstaɪl/",
+   "nghia": "CheckStyle: plugin kiểm quy ước code (tên, độ dài dòng, khoảng trắng)",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Run CheckStyle and fix every warning before the review.",
+   "viDuNghia": "Chạy CheckStyle và sửa hết cảnh báo trước buổi review."
+  },
+  {
+   "chu": "debugger",
+   "doc": "/diːˈbʌɡər/",
+   "nghia": "trình gỡ lỗi: chạy chương trình từng bước, xem giá trị biến",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Use the debugger to find why the total is wrong.",
+   "viDuNghia": "Dùng trình gỡ lỗi để tìm vì sao tổng bị sai."
+  },
+  {
+   "chu": "step over",
+   "doc": "/stɛp ˈoʊvər/",
+   "nghia": "bước qua (F8): chạy hết dòng hiện tại, không đi vào hàm được gọi",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Press Step Over to run the current line without entering the method.",
+   "viDuNghia": "Bấm Step Over để chạy dòng hiện tại mà không vào trong phương thức."
+  },
+  {
+   "chu": "step into",
+   "doc": "/stɛp ˈɪntuː/",
+   "nghia": "bước vào (F7): đi vào bên trong phương thức đang được gọi",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Use Step Into to follow the code inside your validation method.",
+   "viDuNghia": "Dùng Step Into để theo dõi code bên trong phương thức kiểm tra."
+  },
+  {
+   "chu": "step out",
+   "doc": "/stɛp aʊt/",
+   "nghia": "bước ra: chạy nốt phương thức hiện tại rồi dừng ở chỗ gọi",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Step Out returns to the caller after finishing the current method.",
+   "viDuNghia": "Step Out quay về nơi gọi sau khi chạy xong phương thức hiện tại."
+  },
+  {
+   "chu": "watch expression",
+   "doc": "/wɒtʃ ɪkˈsprɛʃən/",
+   "nghia": "biểu thức theo dõi: biểu thức đặt trong cửa sổ Watches để xem giá trị khi chạy từng bước",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Add i * 2 as a watch expression to see its value in each loop.",
+   "viDuNghia": "Thêm i * 2 làm biểu thức theo dõi để xem giá trị ở mỗi vòng lặp."
+  },
+  {
+   "chu": "variable inspection",
+   "doc": "/ˈvɛəriəbl ɪnˈspɛkʃən/",
+   "nghia": "xem giá trị biến: kiểm biến trong cửa sổ Variables khi dừng ở điểm ngắt",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Variable inspection shows that the list is still empty at this line.",
+   "viDuNghia": "Xem giá trị biến cho thấy danh sách vẫn rỗng ở dòng này."
+  },
+  {
+   "chu": "run-time error",
+   "doc": "/rʌn taɪm ˈɛrər/",
+   "nghia": "lỗi khi chạy: biên dịch được nhưng chạy thì ném ngoại lệ",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "A division by zero causes a run-time error, not a compile error.",
+   "viDuNghia": "Chia cho 0 gây lỗi khi chạy, không phải lỗi biên dịch."
+  },
+  {
+   "chu": "logic error",
+   "doc": "/ˈlɒdʒɪk ˈɛrər/",
+   "nghia": "lỗi logic: chạy không lỗi nhưng kết quả sai",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Sorting in the wrong order is a logic error.",
+   "viDuNghia": "Sắp xếp sai chiều là lỗi logic."
+  },
+  {
+   "chu": "check sheet",
+   "doc": "/tʃɛk ʃiːt/",
+   "nghia": "tờ check sheet: danh sách mục quy ước code mentor dùng để chấm (đặt tên, comment, độ dài dòng…)",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "The check sheet limits one line of code (comments not counted) to 100 characters.",
+   "viDuNghia": "Check sheet giới hạn một dòng code (không tính chú thích) tối đa 100 ký tự."
+  },
+  {
+   "chu": "code convention",
+   "doc": "/koʊd kənˈvɛnʃən/",
+   "nghia": "quy ước code: luật đặt tên, thụt lề, chú thích chung cho cả nhóm",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Following the Java code convention makes your code easy to review.",
+   "viDuNghia": "Theo quy ước code Java giúp code dễ review."
+  },
+  {
+   "chu": "Java convention",
+   "doc": "/ˈdʒɑːvə kənˈvɛnʃən/",
+   "nghia": "quy ước Java: lớp PascalCase, biến và phương thức camelCase, hằng chữ hoa",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "By Java convention, class names start with a capital letter.",
+   "viDuNghia": "Theo quy ước Java, tên lớp bắt đầu bằng chữ hoa."
+  },
+  {
+   "chu": "camelCase",
+   "doc": "/ˈkæməl keɪs/",
+   "nghia": "camelCase: từ đầu viết thường, các từ sau viết hoa chữ cái đầu — cho biến, phương thức",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Name variables in camelCase, for example totalPrice.",
+   "viDuNghia": "Đặt tên biến theo camelCase, vd totalPrice."
+  },
+  {
+   "chu": "PascalCase",
+   "doc": "/ˈpæskæl keɪs/",
+   "nghia": "PascalCase: mọi từ viết hoa chữ cái đầu — cho tên lớp, interface",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Class names use PascalCase, for example StudentManager.",
+   "viDuNghia": "Tên lớp dùng PascalCase, vd StudentManager."
+  },
+  {
+   "chu": "upper snake case",
+   "doc": "/ˈʌpər sneɪk keɪs/",
+   "nghia": "chữ hoa nối gạch dưới (MAX_SIZE): cho hằng static final",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Constants use upper snake case, for example MAX_STUDENTS.",
+   "viDuNghia": "Hằng dùng chữ hoa nối gạch dưới, vd MAX_STUDENTS."
+  },
+  {
+   "chu": "package naming",
+   "doc": "/ˈpækɪdʒ ˈneɪmɪŋ/",
+   "nghia": "đặt tên package: chữ thường hết, vd controller, model, utils",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Package naming uses only lowercase letters.",
+   "viDuNghia": "Tên package chỉ dùng chữ thường."
+  },
+  {
+   "chu": "indentation style",
+   "doc": "/ˌɪndɛnˈteɪʃən staɪl/",
+   "nghia": "kiểu thụt lề: thụt đều 4 dấu cách, ngoặc nhọn đặt thống nhất",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Use one indentation style throughout the project.",
+   "viDuNghia": "Dùng một kiểu thụt lề thống nhất trong cả dự án."
+  },
+  {
+   "chu": "magic number",
+   "doc": "/ˈmædʒɪk ˈnʌmbər/",
+   "nghia": "số ma thuật: hằng số viết thẳng trong code không giải thích — nên đặt thành hằng có tên",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Replace the magic number 100 with a constant MAX_QUANTITY.",
+   "viDuNghia": "Thay số ma thuật 100 bằng hằng MAX_QUANTITY."
+  },
+  {
+   "chu": "unused import",
+   "doc": "/ʌnˈjuːzd ˈɪmpɔːrt/",
+   "nghia": "import thừa: câu import không dùng tới — CheckStyle báo lỗi",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Remove every unused import before submitting.",
+   "viDuNghia": "Xoá mọi import thừa trước khi nộp."
+  },
+  {
+   "chu": "long method",
+   "doc": "/lɒŋ ˈmɛθəd/",
+   "nghia": "phương thức quá dài: nên tách thành nhiều phương thức nhỏ",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "A long method that does input, logic and output should be split.",
+   "viDuNghia": "Phương thức dài làm cả nhập, xử lý và xuất nên được tách ra."
+  },
+  {
+   "chu": "god class",
+   "doc": "/ɡɒd klɑːs/",
+   "nghia": "lớp \"toàn năng\": một lớp ôm hết mọi việc — vi phạm đơn trách nhiệm",
+   "nhom": "Gỡ lỗi & quy ước code",
+   "viDu": "Putting all code in Main creates a god class.",
+   "viDuNghia": "Dồn hết code vào Main tạo ra một lớp toàn năng."
+  }
+ ]
+}

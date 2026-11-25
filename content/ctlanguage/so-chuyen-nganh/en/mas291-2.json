@@ -4,7 +4,7 @@
  "ten": "MAS291 · 2. Thống kê mô tả & ước lượng",
  "moTa": "Xác suất thống kê (MAS291), bộ 2: dữ liệu và cách thu thập, trung bình - trung vị - tứ phân vị, biểu đồ thân lá - hộp - tần số, ước lượng điểm và khoảng tin cậy, đơn vị đo kiểu Mỹ và từ trong bài toán sản xuất. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "chart.bar.fill",
- "thuTu": -958,
+ "thuTu": -936,
  "tu": [
   {
    "chu": "random sample",

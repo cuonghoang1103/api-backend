@@ -1,0 +1,650 @@
+{
+ "ma": "ssg104-3",
+ "nn": "en",
+ "ten": "SSG104 · 3. Nhóm, xung đột, văn hoá & tư duy (bổ sung)",
+ "moTa": "Bổ sung SSG104 từ đề và giáo trình: vấn đề của nhóm (gắn kết, lười xã hội, phân cực), quyền lực và xung đột (lệ thuộc, hoà giải, đôi bên cùng có lợi), chiều văn hoá Hofstede, tư duy và tự nhận thức, viết thư – báo cáo và hồ sơ xin việc.",
+ "bieuTuong": "person.2.wave.2.fill",
+ "thuTu": -954,
+ "tu": [
+  {
+   "chu": "group cohesion",
+   "doc": "/ɡruːp koʊˈhiːʒn/",
+   "nghia": "tính gắn kết của nhóm: mức các thành viên gắn bó, muốn ở lại cùng nhóm",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "cohesion, isolation, discouragement, biased leadership",
+   "viDuNghia": "gắn kết, cô lập, nản lòng, lãnh đạo thiên vị (các yếu tố ảnh hưởng tới nhóm)"
+  },
+  {
+   "chu": "biased leadership",
+   "doc": "/ˈbaɪəst ˈliːdərʃɪp/",
+   "nghia": "lãnh đạo thiên vị: người dẫn dắt nghiêng về một phía, đối xử không công bằng với thành viên",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "cohesion, isolation, biased leadership, decisional stress",
+   "viDuNghia": "gắn kết, cô lập, lãnh đạo thiên vị, căng thẳng khi ra quyết định"
+  },
+  {
+   "chu": "discouragement",
+   "doc": "/dɪsˈkɜːrɪdʒmənt/",
+   "nghia": "sự nản lòng: mất tinh thần, không còn muốn cố gắng",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "isolation, biased leadership, aggressiveness, discouragement",
+   "viDuNghia": "cô lập, lãnh đạo thiên vị, tính hung hăng, nản lòng"
+  },
+  {
+   "chu": "aggressiveness",
+   "doc": "/əˈɡresɪvnəs/",
+   "nghia": "tính hung hăng: thái độ gây hấn, áp đảo người khác khi tranh luận",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "cohesion, isolation, decisional stress, aggressiveness",
+   "viDuNghia": "gắn kết, cô lập, căng thẳng khi ra quyết định, tính hung hăng"
+  },
+  {
+   "chu": "disintegration",
+   "doc": "/dɪsˌɪntɪˈɡreɪʃn/",
+   "nghia": "sự tan rã: nhóm rời rạc, không còn hoạt động như một khối",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "Isolation, disintegration, firm leadership, decisional stress",
+   "viDuNghia": "Cô lập, tan rã, lãnh đạo cứng rắn, căng thẳng khi ra quyết định"
+  },
+  {
+   "chu": "social loafing",
+   "doc": "/ˈsoʊʃl ˈloʊfɪŋ/",
+   "nghia": "lười biếng xã hội: làm ít đi khi làm việc nhóm vì nghĩ phần mình không ai thấy",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "Social loafing happens when members rely on others to do the work.",
+   "viDuNghia": "Lười biếng xã hội xảy ra khi thành viên trông vào người khác làm việc."
+  },
+  {
+   "chu": "group polarization",
+   "doc": "/ɡruːp ˌpoʊlərəˈzeɪʃn/",
+   "nghia": "phân cực nhóm: sau thảo luận, quan điểm cả nhóm trở nên cực đoan hơn ban đầu",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "Group polarization can push a team toward a riskier decision than any member would make alone.",
+   "viDuNghia": "Phân cực nhóm có thể đẩy cả đội tới quyết định liều hơn bất kỳ ai tự quyết."
+  },
+  {
+   "chu": "devil's advocate",
+   "doc": "/ˈdevlz ˈædvəkət/",
+   "nghia": "người phản biện cố ý: người được giao nói ngược để nhóm soi kỹ ý kiến, chống tư duy bầy đàn",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "Appointing devils' advocates in discussions",
+   "viDuNghia": "Cử người phản biện cố ý trong các cuộc thảo luận"
+  },
+  {
+   "chu": "in-group",
+   "doc": "/ˈɪn ɡruːp/",
+   "nghia": "nhóm trong: nhóm mình cảm thấy thuộc về; người ta thường ưu ái người trong nhóm",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "People tend to favor members of their in-group.",
+   "viDuNghia": "Người ta có xu hướng ưu ái thành viên nhóm mình."
+  },
+  {
+   "chu": "out-group",
+   "doc": "/ˈaʊt ɡruːp/",
+   "nghia": "nhóm ngoài: nhóm mình không thuộc về, dễ bị nhìn bằng định kiến",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "Stereotypes are often applied to members of an out-group.",
+   "viDuNghia": "Khuôn mẫu định kiến thường bị áp lên thành viên nhóm ngoài."
+  },
+  {
+   "chu": "role conflict",
+   "doc": "/roʊl ˈkɑːnflɪkt/",
+   "nghia": "xung đột vai trò: một người bị đòi hỏi trái ngược nhau giữa các vai trò mình đang giữ",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "Role conflict appears when a student is also a team leader and a part-time worker.",
+   "viDuNghia": "Xung đột vai trò xuất hiện khi một sinh viên vừa là trưởng nhóm vừa đi làm thêm."
+  },
+  {
+   "chu": "uninvolved",
+   "doc": "/ˌʌnɪnˈvɑːlvd/",
+   "nghia": "không liên quan, không tham gia: không có lợi ích trong vấn đề đang bàn",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "individuals who are uninvolved in the issues for discussion",
+   "viDuNghia": "những người không liên quan tới các vấn đề đem ra thảo luận"
+  },
+  {
+   "chu": "orderly",
+   "doc": "/ˈɔːrdərli/",
+   "nghia": "có trật tự, ngăn nắp: diễn ra theo thứ tự rõ ràng",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "The group follows an approved agenda that promotes orderly business.",
+   "viDuNghia": "Nhóm theo một chương trình họp đã duyệt giúp công việc diễn ra có trật tự."
+  },
+  {
+   "chu": "buy-in",
+   "doc": "/ˈbaɪ ɪn/",
+   "nghia": "sự đồng thuận ủng hộ: người có quyền đồng ý và cam kết theo một kế hoạch",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "The main purpose of minutes is to get buy-in from decision-makers",
+   "viDuNghia": "Mục đích chính của biên bản họp là lấy được sự ủng hộ của người ra quyết định"
+  },
+  {
+   "chu": "decision-maker",
+   "doc": "/dɪˈsɪʒn ˌmeɪkər/",
+   "nghia": "người ra quyết định: người có quyền quyết định cuối cùng",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "The main purpose of minutes is to get buy-in from decision-makers",
+   "viDuNghia": "Mục đích chính của biên bản họp là lấy được sự ủng hộ của người ra quyết định"
+  },
+  {
+   "chu": "wiki",
+   "doc": "/ˈwɪki/",
+   "nghia": "wiki: trang web nhiều người cùng soạn, sửa nội dung",
+   "nhom": "Vấn đề của nhóm",
+   "viDu": "Wikis can help students build and share group resources and knowledge.",
+   "viDuNghia": "Wiki giúp sinh viên xây dựng và chia sẻ tài nguyên, kiến thức của nhóm."
+  },
+  {
+   "chu": "power dependence",
+   "doc": "/ˈpaʊər dɪˈpendəns/",
+   "nghia": "sự lệ thuộc quyền lực: B càng cần thứ A kiểm soát thì A càng có quyền với B",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Katy has more modest power over John, but John is still largely power dependent.",
+   "viDuNghia": "Katy có quyền lực vừa phải với John, nhưng John vẫn lệ thuộc quyền lực rất nhiều."
+  },
+  {
+   "chu": "mastery",
+   "doc": "/ˈmæstəri/",
+   "nghia": "sự tinh thông: hiểu biết, kỹ năng sâu về một lĩnh vực (nguồn của quyền lực chuyên môn)",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Professors presumably have power in the classroom because of their mastery of a particular subject matter.",
+   "viDuNghia": "Giảng viên có quyền lực trong lớp có lẽ vì họ tinh thông một môn học cụ thể."
+  },
+  {
+   "chu": "charismatic",
+   "doc": "/ˌkærɪzˈmætɪk/",
+   "nghia": "có sức hút: cuốn hút, khiến người khác muốn đi theo",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Having a charismatic leader of the group",
+   "viDuNghia": "Nhóm có một người lãnh đạo có sức hút"
+  },
+  {
+   "chu": "coercion",
+   "doc": "/koʊˈɜːrʒn/",
+   "nghia": "sự cưỡng ép: dùng đe doạ, trừng phạt để buộc người khác làm theo",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Coercion may bring short-term obedience but destroys trust.",
+   "viDuNghia": "Cưỡng ép có thể khiến người ta nghe lời trước mắt nhưng phá huỷ lòng tin."
+  },
+  {
+   "chu": "persuasion",
+   "doc": "/pərˈsweɪʒn/",
+   "nghia": "sự thuyết phục: làm người khác đổi ý bằng lý lẽ, cảm xúc, uy tín",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Persuasion relies on ethos, pathos and logos.",
+   "viDuNghia": "Thuyết phục dựa vào uy tín, cảm xúc và lý lẽ."
+  },
+  {
+   "chu": "trustworthiness",
+   "doc": "/ˈtrʌstwɜːrðinəs/",
+   "nghia": "sự đáng tin cậy: phẩm chất khiến người khác tin mình",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Trustworthiness and betrayal",
+   "viDuNghia": "Sự đáng tin cậy và sự phản bội"
+  },
+  {
+   "chu": "betrayal",
+   "doc": "/bɪˈtreɪəl/",
+   "nghia": "sự phản bội: làm trái lòng tin người khác đặt vào mình",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Trustworthiness and betrayal",
+   "viDuNghia": "Sự đáng tin cậy và sự phản bội"
+  },
+  {
+   "chu": "confrontation",
+   "doc": "/ˌkɑːnfrənˈteɪʃn/",
+   "nghia": "sự đối đầu: hai bên trực tiếp đối mặt nói ra mâu thuẫn",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Confrontation and negotiation",
+   "viDuNghia": "Đối đầu và thương lượng"
+  },
+  {
+   "chu": "third-party consultation",
+   "doc": "/ˌθɜːrd ˈpɑːrti ˌkɑːnslˈteɪʃn/",
+   "nghia": "tham vấn bên thứ ba: nhờ người trung lập giúp hai bên hiểu nhau và tìm cách giải quyết",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Third-party consultation helps both sides understand each other's needs.",
+   "viDuNghia": "Tham vấn bên thứ ba giúp hai bên hiểu nhu cầu của nhau."
+  },
+  {
+   "chu": "mediation",
+   "doc": "/ˌmiːdiˈeɪʃn/",
+   "nghia": "hoà giải: người trung gian giúp hai bên tự đi tới thoả thuận, không áp đặt phán quyết",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "In mediation, the mediator helps the parties reach their own agreement.",
+   "viDuNghia": "Trong hoà giải, người hoà giải giúp các bên tự đi tới thoả thuận."
+  },
+  {
+   "chu": "arbitration",
+   "doc": "/ˌɑːrbɪˈtreɪʃn/",
+   "nghia": "trọng tài: bên thứ ba nghe hai phía rồi ra quyết định mà các bên phải theo",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "In arbitration, the third party makes a binding decision.",
+   "viDuNghia": "Trong trọng tài, bên thứ ba đưa ra quyết định ràng buộc."
+  },
+  {
+   "chu": "win-win",
+   "doc": "/ˌwɪn ˈwɪn/",
+   "nghia": "đôi bên cùng có lợi: giải pháp làm cả hai bên đều được điều mình cần",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Collaborating aims at a win-win solution for both parties.",
+   "viDuNghia": "Hợp tác hướng tới giải pháp đôi bên cùng có lợi."
+  },
+  {
+   "chu": "sarcasm",
+   "doc": "/ˈsɑːrkæzəm/",
+   "nghia": "lời mỉa mai: nói ngược ý để chê bai, châm chọc",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Make use of sarcasm and cynicism to make things fun and healthy",
+   "viDuNghia": "Dùng lời mỉa mai và thái độ hoài nghi để mọi thứ vui vẻ, lành mạnh (cách làm SAI)"
+  },
+  {
+   "chu": "cynicism",
+   "doc": "/ˈsɪnɪsɪzəm/",
+   "nghia": "thái độ hoài nghi yếm thế: nghi ngờ động cơ tốt của người khác",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Make use of sarcasm and cynicism to make things fun and healthy",
+   "viDuNghia": "Dùng lời mỉa mai và thái độ hoài nghi để mọi thứ vui vẻ, lành mạnh (cách làm SAI)"
+  },
+  {
+   "chu": "friendliness",
+   "doc": "/ˈfrendlinəs/",
+   "nghia": "sự thân thiện: thái độ cởi mở, dễ gần (một yếu tố gây thiện cảm)",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "similarity and friendliness",
+   "viDuNghia": "sự tương đồng và sự thân thiện"
+  },
+  {
+   "chu": "interpersonal",
+   "doc": "/ˌɪntərˈpɜːrsənl/",
+   "nghia": "giữa các cá nhân: liên quan tới quan hệ giữa người với người",
+   "nhom": "Quyền lực và xung đột",
+   "viDu": "Readiness to absorb interpersonal stress",
+   "viDuNghia": "Sẵn sàng chịu được căng thẳng giữa các cá nhân"
+  },
+  {
+   "chu": "cultural competence",
+   "doc": "/ˈkʌltʃərəl ˈkɑːmpɪtəns/",
+   "nghia": "năng lực văn hoá: hiểu, tôn trọng và làm việc hiệu quả với người khác văn hoá",
+   "nhom": "Văn hoá",
+   "viDu": "Developing cultural competence",
+   "viDuNghia": "Phát triển năng lực văn hoá"
+  },
+  {
+   "chu": "continuum",
+   "doc": "/kənˈtɪnjuəm/",
+   "nghia": "dải liên tục: thang đo trải dài giữa hai cực, không chia đôi rạch ròi",
+   "nhom": "Văn hoá",
+   "viDu": "Cultural viewpoint is a continuum or range.",
+   "viDuNghia": "Quan điểm văn hoá là một dải liên tục hay một khoảng."
+  },
+  {
+   "chu": "intercultural",
+   "doc": "/ˌɪntərˈkʌltʃərəl/",
+   "nghia": "liên văn hoá: giữa những người thuộc các nền văn hoá khác nhau",
+   "nhom": "Văn hoá",
+   "viDu": "Participating in intercultural workshops, seminars, festivals, and events.",
+   "viDuNghia": "Tham gia các hội thảo, toạ đàm, lễ hội và sự kiện liên văn hoá."
+  },
+  {
+   "chu": "Hofstede's cultural dimensions",
+   "doc": "/ˈhɑːfstedəz ˈkʌltʃərəl daɪˈmenʃnz/",
+   "nghia": "các chiều văn hoá Hofstede: khoảng cách quyền lực, cá nhân – tập thể, né tránh bất định, nam tính, định hướng dài hạn, tự thoả mãn",
+   "nhom": "Văn hoá",
+   "viDu": "Hofstede's cultural dimensions compare national cultures on six scales.",
+   "viDuNghia": "Các chiều văn hoá Hofstede so sánh văn hoá các nước trên sáu thang đo."
+  },
+  {
+   "chu": "uncertainty avoidance",
+   "doc": "/ʌnˈsɜːrtnti əˈvɔɪdəns/",
+   "nghia": "né tránh bất định: mức một nền văn hoá khó chịu với điều mơ hồ, không lường trước",
+   "nhom": "Văn hoá",
+   "viDu": "Cultures with high uncertainty avoidance prefer clear rules and procedures.",
+   "viDuNghia": "Văn hoá né tránh bất định cao thích quy tắc và quy trình rõ ràng."
+  },
+  {
+   "chu": "masculinity",
+   "doc": "/ˌmæskjuˈlɪnəti/",
+   "nghia": "tính nam (chiều văn hoá): coi trọng cạnh tranh, thành tích hơn chăm sóc, chất lượng sống",
+   "nhom": "Văn hoá",
+   "viDu": "In a culture high in masculinity, achievement and success are strongly valued.",
+   "viDuNghia": "Ở văn hoá có tính nam cao, thành tích và thành công rất được coi trọng."
+  },
+  {
+   "chu": "indulgence",
+   "doc": "/ɪnˈdʌldʒəns/",
+   "nghia": "tự thoả mãn (chiều văn hoá): cho phép hưởng thụ, vui chơi, ngược với kiềm chế",
+   "nhom": "Văn hoá",
+   "viDu": "Indulgence versus restraint is the sixth of Hofstede's dimensions.",
+   "viDuNghia": "Tự thoả mãn hay kiềm chế là chiều thứ sáu của Hofstede."
+  },
+  {
+   "chu": "collectivism",
+   "doc": "/kəˈlektɪvɪzəm/",
+   "nghia": "chủ nghĩa tập thể: đặt lợi ích nhóm, gia đình lên trước cá nhân",
+   "nhom": "Văn hoá",
+   "viDu": "Vietnam is often described as a culture high in collectivism.",
+   "viDuNghia": "Việt Nam thường được mô tả là nền văn hoá có tính tập thể cao."
+  },
+  {
+   "chu": "high-context culture",
+   "doc": "/haɪ ˈkɑːntekst ˈkʌltʃər/",
+   "nghia": "văn hoá ngữ cảnh cao: nhiều ý nằm ở ngữ cảnh, quan hệ, cử chỉ, nói ít mà hiểu nhiều",
+   "nhom": "Văn hoá",
+   "viDu": "In a high-context culture, much of the meaning is not stated directly.",
+   "viDuNghia": "Trong văn hoá ngữ cảnh cao, phần lớn ý không được nói thẳng ra."
+  },
+  {
+   "chu": "low-context culture",
+   "doc": "/loʊ ˈkɑːntekst ˈkʌltʃər/",
+   "nghia": "văn hoá ngữ cảnh thấp: ý được nói rõ, thẳng bằng lời",
+   "nhom": "Văn hoá",
+   "viDu": "People from a low-context culture expect messages to be explicit.",
+   "viDuNghia": "Người từ văn hoá ngữ cảnh thấp mong thông điệp được nói rõ ràng."
+  },
+  {
+   "chu": "monochronic",
+   "doc": "/ˌmɑːnəˈkrɑːnɪk/",
+   "nghia": "đơn thời: làm từng việc một, coi trọng đúng giờ và lịch hẹn",
+   "nhom": "Văn hoá",
+   "viDu": "In monochronic cultures, being late for a meeting is seen as rude.",
+   "viDuNghia": "Ở văn hoá đơn thời, đến họp muộn bị coi là bất lịch sự."
+  },
+  {
+   "chu": "polychronic",
+   "doc": "/ˌpɑːliˈkrɑːnɪk/",
+   "nghia": "đa thời: làm nhiều việc cùng lúc, coi trọng quan hệ hơn lịch trình",
+   "nhom": "Văn hoá",
+   "viDu": "Polychronic people may handle several tasks and conversations at once.",
+   "viDuNghia": "Người đa thời có thể xử lý nhiều việc và cuộc trò chuyện cùng lúc."
+  },
+  {
+   "chu": "ethnocentrism",
+   "doc": "/ˌeθnoʊˈsentrɪzəm/",
+   "nghia": "chủ nghĩa vị chủng: lấy văn hoá mình làm chuẩn để đánh giá văn hoá khác",
+   "nhom": "Văn hoá",
+   "viDu": "Ethnocentrism makes people judge other cultures by their own standards.",
+   "viDuNghia": "Chủ nghĩa vị chủng khiến người ta đánh giá văn hoá khác theo chuẩn của mình."
+  },
+  {
+   "chu": "self-evaluation",
+   "doc": "/ˌself ɪˌvæljuˈeɪʃn/",
+   "nghia": "tự đánh giá: nhìn nhận năng lực, giá trị của bản thân",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Social comparison and its effects on self-evaluation will not depend on personality and individual differences.",
+   "viDuNghia": "So sánh xã hội và tác động của nó lên việc tự đánh giá sẽ không phụ thuộc tính cách và khác biệt cá nhân (phát biểu sai)."
+  },
+  {
+   "chu": "self-awareness",
+   "doc": "/ˌself əˈwernəs/",
+   "nghia": "tự nhận thức: hiểu rõ cảm xúc, điểm mạnh, điểm yếu và giá trị của mình",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Self-awareness is the first step of career planning.",
+   "viDuNghia": "Tự nhận thức là bước đầu tiên của việc lập kế hoạch nghề nghiệp."
+  },
+  {
+   "chu": "emotional intelligence",
+   "doc": "/ɪˈmoʊʃənl ɪnˈtelɪdʒəns/",
+   "nghia": "trí tuệ cảm xúc (EQ): nhận biết, điều khiển cảm xúc của mình và hiểu cảm xúc người khác",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Emotional intelligence helps a leader handle conflict calmly.",
+   "viDuNghia": "Trí tuệ cảm xúc giúp người lãnh đạo xử lý xung đột một cách bình tĩnh."
+  },
+  {
+   "chu": "self-disclosure",
+   "doc": "/ˌself dɪsˈkloʊʒər/",
+   "nghia": "tự bộc lộ: chủ động chia sẻ thông tin, cảm xúc về bản thân với người khác",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Appropriate self-disclosure builds trust in a relationship.",
+   "viDuNghia": "Tự bộc lộ đúng mức giúp xây dựng lòng tin trong mối quan hệ."
+  },
+  {
+   "chu": "Johari window",
+   "doc": "/dʒoʊˈhɑːri ˈwɪndoʊ/",
+   "nghia": "cửa sổ Johari: mô hình bốn ô (mở, mù, ẩn, chưa biết) về điều mình và người khác biết về mình",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "The Johari window shows how feedback can shrink our blind area.",
+   "viDuNghia": "Cửa sổ Johari cho thấy góp ý có thể thu nhỏ vùng mù của ta."
+  },
+  {
+   "chu": "growth mindset",
+   "doc": "/ɡroʊθ ˈmaɪndset/",
+   "nghia": "tư duy phát triển: tin rằng năng lực tăng được nhờ nỗ lực và học hỏi",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Students with a growth mindset see mistakes as chances to learn.",
+   "viDuNghia": "Sinh viên có tư duy phát triển coi lỗi sai là cơ hội để học."
+  },
+  {
+   "chu": "fixed mindset",
+   "doc": "/fɪkst ˈmaɪndset/",
+   "nghia": "tư duy cố định: tin rằng năng lực là bẩm sinh, không thay đổi được",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "A fixed mindset makes people avoid challenges they might fail.",
+   "viDuNghia": "Tư duy cố định khiến người ta né những thử thách có thể thất bại."
+  },
+  {
+   "chu": "extrinsic motivation",
+   "doc": "/eksˈtrɪnsɪk ˌmoʊtɪˈveɪʃn/",
+   "nghia": "động lực bên ngoài: làm vì phần thưởng, điểm số, tiền hay sợ bị phạt",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Grades and salary are sources of extrinsic motivation.",
+   "viDuNghia": "Điểm số và tiền lương là nguồn động lực bên ngoài."
+  },
+  {
+   "chu": "hierarchy of needs",
+   "doc": "/ˈhaɪərɑːrki əv niːdz/",
+   "nghia": "tháp nhu cầu Maslow: sinh lý, an toàn, xã hội, được tôn trọng, tự khẳng định",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "In Maslow's hierarchy of needs, physiological needs come first.",
+   "viDuNghia": "Trong tháp nhu cầu Maslow, nhu cầu sinh lý đứng đầu tiên."
+  },
+  {
+   "chu": "self-actualization",
+   "doc": "/ˌself ˌæktʃuələˈzeɪʃn/",
+   "nghia": "tự khẳng định (tự hiện thực hoá): phát huy hết tiềm năng của bản thân, tầng cao nhất của tháp Maslow",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Self-actualization is at the top of Maslow's pyramid.",
+   "viDuNghia": "Tự hiện thực hoá nằm trên đỉnh tháp Maslow."
+  },
+  {
+   "chu": "cognitive dissonance",
+   "doc": "/ˈkɑːɡnətɪv ˈdɪsənəns/",
+   "nghia": "bất hoà nhận thức: khó chịu khi niềm tin và hành động mâu thuẫn nhau (Festinger)",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Cognitive dissonance makes people change their beliefs to match their actions.",
+   "viDuNghia": "Bất hoà nhận thức khiến người ta đổi niềm tin cho khớp với hành động."
+  },
+  {
+   "chu": "self-serving bias",
+   "doc": "/ˌself ˈsɜːrvɪŋ ˈbaɪəs/",
+   "nghia": "thiên kiến vị kỷ: thành công thì nhận là do mình, thất bại thì đổ cho hoàn cảnh",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Because of self-serving bias, we credit ourselves for success and blame others for failure.",
+   "viDuNghia": "Vì thiên kiến vị kỷ, ta nhận công khi thành công và đổ lỗi người khác khi thất bại."
+  },
+  {
+   "chu": "halo effect",
+   "doc": "/ˈheɪloʊ ɪˈfekt/",
+   "nghia": "hiệu ứng hào quang: một điểm tốt nổi bật khiến ta đánh giá cao mọi mặt khác của người đó",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "The halo effect can make an interviewer overrate a well-dressed candidate.",
+   "viDuNghia": "Hiệu ứng hào quang có thể khiến người phỏng vấn đánh giá quá cao ứng viên ăn mặc đẹp."
+  },
+  {
+   "chu": "receptive",
+   "doc": "/rɪˈseptɪv/",
+   "nghia": "dễ tiếp thu: sẵn lòng nghe và nhận ý kiến mới",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Being receptive to having your opinions changed",
+   "viDuNghia": "Sẵn lòng để ý kiến của mình được thay đổi"
+  },
+  {
+   "chu": "suspend judgment",
+   "doc": "/səˈspend ˈdʒʌdʒmənt/",
+   "nghia": "tạm gác phán xét: chưa vội kết luận khi chưa xem xét đủ",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Always challenge assumptions and suspend judgment",
+   "viDuNghia": "Luôn chất vấn các giả định và tạm gác phán xét"
+  },
+  {
+   "chu": "blindly",
+   "doc": "/ˈblaɪndli/",
+   "nghia": "một cách mù quáng: không suy xét, không đặt câu hỏi",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Is simple thinking that memorizing facts or blindly accepting what you hear or read",
+   "viDuNghia": "Là kiểu nghĩ đơn giản: học thuộc sự kiện hoặc chấp nhận mù quáng điều mình nghe hay đọc"
+  },
+  {
+   "chu": "inquiring mind",
+   "doc": "/ɪnˈkwaɪərɪŋ maɪnd/",
+   "nghia": "óc tò mò ham hiểu biết: luôn muốn hỏi và tìm hiểu",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Having an inquiring mind",
+   "viDuNghia": "Có óc ham hiểu biết"
+  },
+  {
+   "chu": "mind map",
+   "doc": "/maɪnd mæp/",
+   "nghia": "sơ đồ tư duy: sơ đồ toả nhánh từ một ý trung tâm để ghi và nối các ý",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Use mind-mapping to capture ideas",
+   "viDuNghia": "Dùng sơ đồ tư duy để ghi lại ý tưởng"
+  },
+  {
+   "chu": "lateral thinking",
+   "doc": "/ˈlætərəl ˈθɪŋkɪŋ/",
+   "nghia": "tư duy đi ngang: giải vấn đề bằng cách nhìn từ góc khác thường thay vì lối mòn",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Lateral thinking looks at a problem from unexpected angles.",
+   "viDuNghia": "Tư duy đi ngang nhìn vấn đề từ những góc không ngờ tới."
+  },
+  {
+   "chu": "divergent thinking",
+   "doc": "/daɪˈvɜːrdʒənt ˈθɪŋkɪŋ/",
+   "nghia": "tư duy phân kỳ: nghĩ ra thật nhiều phương án khác nhau cho một vấn đề",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Brainstorming is a form of divergent thinking.",
+   "viDuNghia": "Động não là một dạng tư duy phân kỳ."
+  },
+  {
+   "chu": "convergent thinking",
+   "doc": "/kənˈvɜːrdʒənt ˈθɪŋkɪŋ/",
+   "nghia": "tư duy hội tụ: thu hẹp các phương án để chọn ra một lời giải tốt nhất",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Convergent thinking selects the best solution from many ideas.",
+   "viDuNghia": "Tư duy hội tụ chọn ra lời giải tốt nhất từ nhiều ý tưởng."
+  },
+  {
+   "chu": "deductive reasoning",
+   "doc": "/dɪˈdʌktɪv ˈriːzənɪŋ/",
+   "nghia": "suy luận diễn dịch: đi từ nguyên tắc chung tới kết luận cụ thể, tiền đề đúng thì kết luận chắc chắn đúng",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Deductive reasoning moves from general rules to a specific conclusion.",
+   "viDuNghia": "Suy luận diễn dịch đi từ quy tắc chung tới một kết luận cụ thể."
+  },
+  {
+   "chu": "inductive reasoning",
+   "doc": "/ɪnˈdʌktɪv ˈriːzənɪŋ/",
+   "nghia": "suy luận quy nạp: khái quát từ nhiều trường hợp cụ thể, kết luận chỉ có khả năng đúng",
+   "nhom": "Tư duy và tự nhận thức",
+   "viDu": "Inductive reasoning draws a general conclusion from specific observations.",
+   "viDuNghia": "Suy luận quy nạp rút ra kết luận chung từ những quan sát cụ thể."
+  },
+  {
+   "chu": "comprehend",
+   "doc": "/ˌkɑːmprɪˈhend/",
+   "nghia": "hiểu thấu: đọc và nắm được ý nghĩa",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "It refers to the reader's ability to read and comprehend the document.",
+   "viDuNghia": "Nó chỉ khả năng của người đọc trong việc đọc và hiểu tài liệu."
+  },
+  {
+   "chu": "grammatical",
+   "doc": "/ɡrəˈmætɪkl/",
+   "nghia": "(thuộc) ngữ pháp",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "It involves word choice and grammatical structures.",
+   "viDuNghia": "Nó gồm việc chọn từ và cấu trúc ngữ pháp."
+  },
+  {
+   "chu": "netiquette",
+   "doc": "/ˈnetɪket/",
+   "nghia": "phép lịch sự trên mạng: quy tắc ứng xử khi viết email, nhắn tin, bình luận",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "Reflect professionalism and follow the rules of netiquette.",
+   "viDuNghia": "Thể hiện sự chuyên nghiệp và theo đúng phép lịch sự trên mạng."
+  },
+  {
+   "chu": "solicited proposal",
+   "doc": "/səˈlɪsɪtɪd prəˈpoʊzl/",
+   "nghia": "đề xuất theo yêu cầu: đề xuất viết để trả lời một lời mời (vd RFP)",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "A solicited proposal responds to a request for proposal from the client.",
+   "viDuNghia": "Đề xuất theo yêu cầu trả lời hồ sơ mời thầu của khách hàng."
+  },
+  {
+   "chu": "unsolicited proposal",
+   "doc": "/ˌʌnsəˈlɪsɪtɪd prəˈpoʊzl/",
+   "nghia": "đề xuất tự nguyện: chủ động gửi khi chưa ai yêu cầu, phải thuyết phục mạnh hơn",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "An unsolicited proposal must first convince the reader that a problem exists.",
+   "viDuNghia": "Đề xuất tự nguyện trước hết phải thuyết phục người đọc rằng có vấn đề tồn tại."
+  },
+  {
+   "chu": "feasibility report",
+   "doc": "/ˌfiːzəˈbɪləti rɪˈpɔːrt/",
+   "nghia": "báo cáo khả thi: phân tích một phương án có làm được, có nên làm không",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "A feasibility report helps managers decide whether to start a project.",
+   "viDuNghia": "Báo cáo khả thi giúp quản lý quyết định có bắt đầu dự án hay không."
+  },
+  {
+   "chu": "performance appraisal",
+   "doc": "/pərˈfɔːrməns əˈpreɪzl/",
+   "nghia": "đánh giá kết quả làm việc: cấp trên định kỳ đánh giá nhân viên",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "Salary and promotion among most blue-collar workers is based on a labor contract, not a performance appraisal.",
+   "viDuNghia": "Lương và thăng chức của phần lớn công nhân dựa vào hợp đồng lao động, không dựa vào đánh giá kết quả làm việc."
+  },
+  {
+   "chu": "labor contract",
+   "doc": "/ˈleɪbər ˈkɑːntrækt/",
+   "nghia": "hợp đồng lao động: thoả thuận giữa người lao động và người sử dụng lao động",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "Salary and promotion among most blue-collar workers is based on a labor contract, not a performance appraisal.",
+   "viDuNghia": "Lương và thăng chức của phần lớn công nhân dựa vào hợp đồng lao động, không dựa vào đánh giá kết quả làm việc."
+  },
+  {
+   "chu": "embellish",
+   "doc": "/ɪmˈbelɪʃ/",
+   "nghia": "thêm thắt, tô vẽ: nói quá sự thật cho đẹp hơn",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "Embellish your achievements and accomplishments to make sure the employer remembers them.",
+   "viDuNghia": "Tô vẽ thành tích của bạn để nhà tuyển dụng chắc chắn nhớ (lời khuyên SAI)."
+  },
+  {
+   "chu": "bragging",
+   "doc": "/ˈbræɡɪŋ/",
+   "nghia": "sự khoe khoang: kể thành tích của mình một cách khoác lác",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "Use caution when describing what you have accomplished so you will not appear to be bragging on yourself.",
+   "viDuNghia": "Cẩn thận khi kể những gì mình đã làm được để không có vẻ khoe khoang."
+  },
+  {
+   "chu": "self-confident",
+   "doc": "/ˌself ˈkɑːnfɪdənt/",
+   "nghia": "tự tin: tin vào khả năng của mình",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "Articulate and self-confident",
+   "viDuNghia": "Ăn nói lưu loát và tự tin"
+  },
+  {
+   "chu": "constructive feedback",
+   "doc": "/kənˈstrʌktɪv ˈfiːdbæk/",
+   "nghia": "góp ý mang tính xây dựng: chỉ ra vấn đề cụ thể kèm cách cải thiện, không công kích cá nhân",
+   "nhom": "Viết và hồ sơ xin việc",
+   "viDu": "Constructive feedback focuses on the behavior, not on the person.",
+   "viDuNghia": "Góp ý mang tính xây dựng tập trung vào hành vi, không vào con người."
+  }
+ ]
+}

@@ -1,0 +1,938 @@
+{
+ "ma": "mae101-5",
+ "nn": "en",
+ "ten": "MAE101 · 5. Định lý, quy tắc & thuật ngữ bổ sung",
+ "moTa": "Bổ sung cho MAE101 (Stewart + Nicholson): tên các định lý và quy tắc tính đạo hàm, giới hạn, tích phân, ứng dụng hình học, cùng các loại ma trận, phép khử Gauss–Jordan, hạng–số chiều hạt nhân, tích vô hướng — những từ hay gặp trong đề và giáo trình mà bốn bộ đầu chưa có.",
+ "bieuTuong": "function",
+ "thuTu": -987,
+ "tu": [
+  {
+   "chu": "continuity",
+   "doc": "/ˌkɒntɪˈnjuːɪti/",
+   "nghia": "tính liên tục: f liên tục tại a khi lim f(x) khi x→a bằng f(a)",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "Use continuity to evaluate the limit of sin(x + sin x) as x approaches pi.",
+   "viDuNghia": "Dùng tính liên tục để tính giới hạn của sin(x + sin x) khi x tiến tới pi."
+  },
+  {
+   "chu": "one-sided limit",
+   "doc": "/wʌn ˈsaɪdɪd ˈlɪmɪt/",
+   "nghia": "giới hạn một phía: chỉ cho x tiến tới a từ bên trái hoặc từ bên phải",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "The limit exists only if both one-sided limits exist and are equal.",
+   "viDuNghia": "Giới hạn tồn tại chỉ khi cả hai giới hạn một phía tồn tại và bằng nhau."
+  },
+  {
+   "chu": "left-hand limit",
+   "doc": "/lɛft hænd ˈlɪmɪt/",
+   "nghia": "giới hạn trái: x tiến tới a từ phía nhỏ hơn a (x → a⁻)",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "Find the left-hand limit of f(x) as x approaches 2.",
+   "viDuNghia": "Tìm giới hạn trái của f(x) khi x tiến tới 2."
+  },
+  {
+   "chu": "limit at infinity",
+   "doc": "/ˈlɪmɪt æt ɪnˈfɪnɪti/",
+   "nghia": "giới hạn tại vô cực: giá trị f(x) tiến tới khi x → ±∞ (cho tiệm cận ngang)",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "The limit at infinity of (3x + 1)/(x - 2) is 3.",
+   "viDuNghia": "Giới hạn tại vô cực của (3x + 1)/(x − 2) là 3."
+  },
+  {
+   "chu": "infinite limit",
+   "doc": "/ˈɪnfɪnɪt ˈlɪmɪt/",
+   "nghia": "giới hạn vô cực: f(x) tăng (giảm) không giới hạn khi x → a (cho tiệm cận đứng)",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "An infinite limit at x = 1 means the graph has a vertical asymptote there.",
+   "viDuNghia": "Giới hạn vô cực tại x = 1 nghĩa là đồ thị có tiệm cận đứng ở đó."
+  },
+  {
+   "chu": "indeterminate form",
+   "doc": "/ˌɪndɪˈtɜːrmɪnət fɔːrm/",
+   "nghia": "dạng vô định: 0/0, ∞/∞, 0·∞, ∞ − ∞, 1^∞… — chưa kết luận được, phải biến đổi",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "The limit of (x^2 - 1)/(x - 1) as x approaches 1 is of the indeterminate form 0/0.",
+   "viDuNghia": "Giới hạn của (x² − 1)/(x − 1) khi x tiến tới 1 có dạng vô định 0/0."
+  },
+  {
+   "chu": "L'Hospital's rule",
+   "doc": "/ˌloʊpiːˈtɑːlz ruːl/",
+   "nghia": "quy tắc L'Hôpital: với dạng 0/0 hoặc ∞/∞, lấy giới hạn của f'/g'",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "Use L'Hospital's rule to find the limit of (e^x - 1)/x as x approaches 0.",
+   "viDuNghia": "Dùng quy tắc L'Hôpital để tìm giới hạn của (eˣ − 1)/x khi x tiến tới 0."
+  },
+  {
+   "chu": "squeeze theorem",
+   "doc": "/skwiːz ˈθɪərəm/",
+   "nghia": "định lý kẹp: nếu g ≤ f ≤ h và g, h cùng tiến tới L thì f cũng tiến tới L",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "By the squeeze theorem, the limit of x^2 sin(1/x) as x approaches 0 is 0.",
+   "viDuNghia": "Theo định lý kẹp, giới hạn của x² sin(1/x) khi x tiến tới 0 bằng 0."
+  },
+  {
+   "chu": "intermediate value theorem",
+   "doc": "/ˌɪntərˈmiːdiət ˈvæljuː ˈθɪərəm/",
+   "nghia": "định lý giá trị trung gian: f liên tục trên [a, b] thì nhận mọi giá trị giữa f(a) và f(b) — dùng chứng minh phương trình có nghiệm",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "Use the intermediate value theorem to show that x^3 + x - 1 = 0 has a root in (0, 1).",
+   "viDuNghia": "Dùng định lý giá trị trung gian chứng minh x³ + x − 1 = 0 có nghiệm trong (0, 1)."
+  },
+  {
+   "chu": "removable discontinuity",
+   "doc": "/rɪˈmuːvəbl ˌdɪskɒntɪˈnjuːɪti/",
+   "nghia": "gián đoạn bỏ được: giới hạn tồn tại nhưng khác (hoặc không có) giá trị hàm — định nghĩa lại một điểm là liên tục",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "f(x) = (x^2 - 4)/(x - 2) has a removable discontinuity at x = 2.",
+   "viDuNghia": "f(x) = (x² − 4)/(x − 2) có điểm gián đoạn bỏ được tại x = 2."
+  },
+  {
+   "chu": "jump discontinuity",
+   "doc": "/dʒʌmp ˌdɪskɒntɪˈnjuːɪti/",
+   "nghia": "gián đoạn nhảy: hai giới hạn một phía tồn tại nhưng khác nhau",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "The floor function has a jump discontinuity at every integer.",
+   "viDuNghia": "Hàm phần nguyên có điểm gián đoạn nhảy tại mọi số nguyên."
+  },
+  {
+   "chu": "infinite discontinuity",
+   "doc": "/ˈɪnfɪnɪt ˌdɪskɒntɪˈnjuːɪti/",
+   "nghia": "gián đoạn vô cực: hàm tiến ra vô cực tại điểm đó",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "f(x) = 1/x^2 has an infinite discontinuity at x = 0.",
+   "viDuNghia": "f(x) = 1/x² có điểm gián đoạn vô cực tại x = 0."
+  },
+  {
+   "chu": "closed interval",
+   "doc": "/kloʊzd ˈɪntərvəl/",
+   "nghia": "đoạn (khoảng đóng) [a, b]: gồm cả hai đầu mút",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "Find the absolute maximum and minimum values of f on the closed interval [0, 3].",
+   "viDuNghia": "Tìm giá trị lớn nhất và nhỏ nhất của f trên đoạn [0, 3]."
+  },
+  {
+   "chu": "open interval",
+   "doc": "/ˈoʊpən ˈɪntərvəl/",
+   "nghia": "khoảng (mở) (a, b): không gồm hai đầu mút",
+   "nhom": "Giới hạn & liên tục",
+   "viDu": "The function is increasing on the open interval (1, 4).",
+   "viDuNghia": "Hàm số đồng biến trên khoảng (1, 4)."
+  },
+  {
+   "chu": "power rule",
+   "doc": "/ˈpaʊər ruːl/",
+   "nghia": "quy tắc luỹ thừa: đạo hàm của xⁿ là n·xⁿ⁻¹",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "By the power rule, the derivative of x^5 is 5x^4.",
+   "viDuNghia": "Theo quy tắc luỹ thừa, đạo hàm của x⁵ là 5x⁴."
+  },
+  {
+   "chu": "constant multiple rule",
+   "doc": "/ˈkɒnstənt ˈmʌltɪpl ruːl/",
+   "nghia": "quy tắc hằng số nhân: đạo hàm của c·f bằng c·f'",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "The constant multiple rule lets us move the constant 7 outside the derivative.",
+   "viDuNghia": "Quy tắc hằng số nhân cho phép đưa hằng số 7 ra ngoài đạo hàm."
+  },
+  {
+   "chu": "sum rule",
+   "doc": "/sʌm ruːl/",
+   "nghia": "quy tắc tổng: (giải tích) đạo hàm của tổng bằng tổng các đạo hàm · (đếm, MAD101) việc làm theo cách A HOẶC cách B rời nhau có m + n cách",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "By the sum rule, (f + g)' = f' + g'.",
+   "viDuNghia": "Theo quy tắc tổng, (f + g)' = f' + g'."
+  },
+  {
+   "chu": "product rule",
+   "doc": "/ˈprɒdʌkt ruːl/",
+   "nghia": "quy tắc tích: (giải tích) (fg)' = f'g + fg' · (đếm, MAD101) việc gồm hai bước liên tiếp có m·n cách",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Use the product rule to differentiate y = x^2 e^x.",
+   "viDuNghia": "Dùng quy tắc tích để lấy đạo hàm y = x² eˣ."
+  },
+  {
+   "chu": "quotient rule",
+   "doc": "/ˈkwoʊʃənt ruːl/",
+   "nghia": "quy tắc thương: (f/g)' = (f'g − fg')/g²",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Use the quotient rule to find the derivative of sqrt(x)/(x + 1).",
+   "viDuNghia": "Dùng quy tắc thương để tìm đạo hàm của √x/(x + 1)."
+  },
+  {
+   "chu": "second derivative",
+   "doc": "/ˈsɛkənd dɪˈrɪvətɪv/",
+   "nghia": "đạo hàm cấp hai f'': đạo hàm của đạo hàm, cho biết độ lõm và gia tốc",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "The second derivative of the position function is the acceleration.",
+   "viDuNghia": "Đạo hàm cấp hai của hàm vị trí là gia tốc."
+  },
+  {
+   "chu": "higher derivative",
+   "doc": "/ˈhaɪər dɪˈrɪvətɪv/",
+   "nghia": "đạo hàm cấp cao: đạo hàm cấp ba, cấp bốn…",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Find the 27th derivative of cos x by looking for a pattern in the higher derivatives.",
+   "viDuNghia": "Tìm đạo hàm cấp 27 của cos x bằng cách tìm quy luật của các đạo hàm cấp cao."
+  },
+  {
+   "chu": "logarithmic differentiation",
+   "doc": "/ˌlɒɡəˈrɪðmɪk ˌdɪfəˌrɛnʃiˈeɪʃən/",
+   "nghia": "đạo hàm lôgarit: lấy ln hai vế rồi mới đạo hàm (dùng cho dạng x^x, tích nhiều thừa số)",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Use logarithmic differentiation to find the derivative of y = x^x.",
+   "viDuNghia": "Dùng đạo hàm lôgarit để tìm đạo hàm của y = xˣ."
+  },
+  {
+   "chu": "Rolle's theorem",
+   "doc": "/rɒlz ˈθɪərəm/",
+   "nghia": "định lý Rolle: f liên tục trên [a, b], khả vi trên (a, b), f(a) = f(b) thì có c với f'(c) = 0",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Verify that f(x) = x^2 - 4x satisfies the hypotheses of Rolle's theorem on [0, 4].",
+   "viDuNghia": "Kiểm tra f(x) = x² − 4x thoả các giả thiết của định lý Rolle trên [0, 4]."
+  },
+  {
+   "chu": "secant line",
+   "doc": "/ˈsiːkənt laɪn/",
+   "nghia": "cát tuyến: đường thẳng qua hai điểm của đồ thị; hệ số góc = tốc độ thay đổi trung bình",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "The slope of the secant line through (1, f(1)) and (3, f(3)) is the average rate of change.",
+   "viDuNghia": "Hệ số góc của cát tuyến qua (1, f(1)) và (3, f(3)) là tốc độ thay đổi trung bình."
+  },
+  {
+   "chu": "normal line",
+   "doc": "/ˈnɔːrməl laɪn/",
+   "nghia": "pháp tuyến: đường thẳng vuông góc với tiếp tuyến tại tiếp điểm",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Find an equation of the normal line to the curve y = x^2 at the point (1, 1).",
+   "viDuNghia": "Viết phương trình pháp tuyến của đường cong y = x² tại điểm (1, 1)."
+  },
+  {
+   "chu": "average rate of change",
+   "doc": "/ˈævərɪdʒ reɪt ɒv tʃeɪndʒ/",
+   "nghia": "tốc độ thay đổi trung bình: (f(b) − f(a))/(b − a)",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Find the average rate of change of the temperature between 2 p.m. and 5 p.m.",
+   "viDuNghia": "Tìm tốc độ thay đổi trung bình của nhiệt độ từ 2 giờ tới 5 giờ chiều."
+  },
+  {
+   "chu": "instantaneous rate of change",
+   "doc": "/ˌɪnstənˈteɪniəs reɪt ɒv tʃeɪndʒ/",
+   "nghia": "tốc độ thay đổi tức thời: đạo hàm tại một điểm",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "The instantaneous rate of change of f at x = a is f'(a).",
+   "viDuNghia": "Tốc độ thay đổi tức thời của f tại x = a là f'(a)."
+  },
+  {
+   "chu": "related rates",
+   "doc": "/rɪˈleɪtɪd reɪts/",
+   "nghia": "bài toán tốc độ liên quan: tìm tốc độ của một đại lượng từ tốc độ đã biết của đại lượng khác",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Related rates: how fast is the radius increasing when the volume of the balloon grows at 100 cm^3/s?",
+   "viDuNghia": "Tốc độ liên quan: bán kính tăng nhanh bao nhiêu khi thể tích bóng tăng 100 cm³/s?"
+  },
+  {
+   "chu": "critical point",
+   "doc": "/ˈkrɪtɪkəl pɔɪnt/",
+   "nghia": "điểm tới hạn: điểm mà f'(x) = 0 hoặc f'(x) không tồn tại",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Find the critical points of f(x) = x^3 - 3x + 1.",
+   "viDuNghia": "Tìm các điểm tới hạn của f(x) = x³ − 3x + 1."
+  },
+  {
+   "chu": "local maximum",
+   "doc": "/ˈloʊkəl ˈmæksɪməm/",
+   "nghia": "cực đại địa phương: giá trị lớn nhất của f trong một lân cận nhỏ (= relative maximum)",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Local maximum: (0, 0); Local minima: (-1/4, -5/256) and (1/4, 1/256)",
+   "viDuNghia": "Cực đại: (0, 0); cực tiểu: (−1/4, −5/256) và (1/4, 1/256)."
+  },
+  {
+   "chu": "local minimum",
+   "doc": "/ˈloʊkəl ˈmɪnɪməm/",
+   "nghia": "cực tiểu địa phương: giá trị nhỏ nhất của f trong một lân cận nhỏ; số nhiều minima",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Local minimum: (-1/4, -5/256); Local maximum: (0, 0)",
+   "viDuNghia": "Cực tiểu: (−1/4, −5/256); cực đại: (0, 0)."
+  },
+  {
+   "chu": "extrema",
+   "doc": "/ɪkˈstriːmə/",
+   "nghia": "các cực trị (số nhiều của extremum): gồm cực đại và cực tiểu",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Find the relative extrema, if they exist, of the function f(x) = 4/(x^2 - 1).",
+   "viDuNghia": "Tìm các cực trị địa phương (nếu có) của hàm f(x) = 4/(x² − 1)."
+  },
+  {
+   "chu": "first derivative test",
+   "doc": "/fɜːrst dɪˈrɪvətɪv tɛst/",
+   "nghia": "dấu hiệu đạo hàm cấp một: f' đổi dấu từ + sang − tại c ⇒ cực đại, từ − sang + ⇒ cực tiểu",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Use the first derivative test to classify each critical number.",
+   "viDuNghia": "Dùng dấu hiệu đạo hàm cấp một để phân loại từng điểm tới hạn."
+  },
+  {
+   "chu": "second derivative test",
+   "doc": "/ˈsɛkənd dɪˈrɪvətɪv tɛst/",
+   "nghia": "dấu hiệu đạo hàm cấp hai: f'(c) = 0 và f''(c) > 0 ⇒ cực tiểu, f''(c) < 0 ⇒ cực đại",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "If f''(c) = 0, the second derivative test gives no conclusion.",
+   "viDuNghia": "Nếu f''(c) = 0 thì dấu hiệu đạo hàm cấp hai không kết luận được."
+  },
+  {
+   "chu": "concavity",
+   "doc": "/kɒnˈkævɪti/",
+   "nghia": "tính lồi lõm (độ lõm): đồ thị lõm lên khi f'' > 0, lõm xuống khi f'' < 0",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Determine the intervals of concavity and the inflection points of f.",
+   "viDuNghia": "Xác định các khoảng lồi lõm và điểm uốn của f."
+  },
+  {
+   "chu": "closed interval method",
+   "doc": "/kloʊzd ˈɪntərvəl ˈmɛθəd/",
+   "nghia": "phương pháp đoạn đóng: tìm GTLN/GTNN trên [a, b] bằng cách so f tại điểm tới hạn và hai đầu mút",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Use the closed interval method to find the absolute extreme values of f on [-1, 2].",
+   "viDuNghia": "Dùng phương pháp đoạn đóng tìm giá trị lớn nhất, nhỏ nhất của f trên [−1, 2]."
+  },
+  {
+   "chu": "optimization problem",
+   "doc": "/ˌɒptɪmaɪˈzeɪʃən ˈprɒbləm/",
+   "nghia": "bài toán tối ưu: tìm giá trị làm một đại lượng lớn nhất hoặc nhỏ nhất (diện tích, chi phí…)",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "In this optimization problem, find the dimensions of the box with the largest volume.",
+   "viDuNghia": "Trong bài toán tối ưu này, tìm kích thước chiếc hộp có thể tích lớn nhất."
+  },
+  {
+   "chu": "monotonic",
+   "doc": "/ˌmɒnəˈtɒnɪk/",
+   "nghia": "đơn điệu: luôn tăng hoặc luôn giảm trên một khoảng",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "A function whose derivative is always positive is monotonic increasing.",
+   "viDuNghia": "Hàm có đạo hàm luôn dương là hàm đơn điệu tăng."
+  },
+  {
+   "chu": "error estimate",
+   "doc": "/ˈɛrər ˈɛstɪmət/",
+   "nghia": "ước lượng sai số: chặn trên của độ lệch giữa giá trị gần đúng và giá trị đúng",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "Use the error estimate to find how large n must be for the midpoint rule to be accurate to 0.0001.",
+   "viDuNghia": "Dùng ước lượng sai số để tìm n phải lớn cỡ nào để quy tắc điểm giữa chính xác tới 0,0001."
+  },
+  {
+   "chu": "lower bound",
+   "doc": "/ˈloʊər baʊnd/",
+   "nghia": "cận dưới: số nhỏ hơn hoặc bằng mọi giá trị đang xét",
+   "nhom": "Quy tắc & định lý đạo hàm",
+   "viDu": "The left Riemann sum of an increasing function gives a lower bound for the integral.",
+   "viDuNghia": "Tổng Riemann trái của hàm tăng cho một cận dưới của tích phân."
+  },
+  {
+   "chu": "odd function",
+   "doc": "/ɒd ˈfʌŋkʃən/",
+   "nghia": "hàm lẻ: f(−x) = −f(x), đồ thị đối xứng qua gốc toạ độ",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "sin x is an odd function, so its integral from -a to a is 0.",
+   "viDuNghia": "sin x là hàm lẻ nên tích phân của nó từ −a tới a bằng 0."
+  },
+  {
+   "chu": "polynomial function",
+   "doc": "/ˌpɒliˈnoʊmiəl ˈfʌŋkʃən/",
+   "nghia": "hàm đa thức: tổng các số hạng aₖxᵏ",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "Every polynomial function is continuous on (-infinity, infinity).",
+   "viDuNghia": "Mọi hàm đa thức đều liên tục trên (−∞, ∞)."
+  },
+  {
+   "chu": "rational function",
+   "doc": "/ˈræʃənəl ˈfʌŋkʃən/",
+   "nghia": "hàm phân thức (hữu tỉ): thương của hai đa thức",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "A rational function is continuous wherever its denominator is not zero.",
+   "viDuNghia": "Hàm phân thức liên tục tại mọi điểm mẫu khác 0."
+  },
+  {
+   "chu": "logarithmic function",
+   "doc": "/ˌlɒɡəˈrɪðmɪk ˈfʌŋkʃən/",
+   "nghia": "hàm lôgarit: y = log_a x, hàm ngược của hàm mũ",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "The logarithmic function ln x is defined only for x > 0.",
+   "viDuNghia": "Hàm lôgarit ln x chỉ xác định khi x > 0."
+  },
+  {
+   "chu": "inverse trigonometric function",
+   "doc": "/ɪnˈvɜːrs ˌtrɪɡənəˈmɛtrɪk ˈfʌŋkʃən/",
+   "nghia": "hàm lượng giác ngược: arcsin, arccos, arctan…",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "Find the derivative of the inverse trigonometric function y = arcsin(2x).",
+   "viDuNghia": "Tìm đạo hàm của hàm lượng giác ngược y = arcsin(2x)."
+  },
+  {
+   "chu": "arcsine",
+   "doc": "/ˈɑːrksaɪn/",
+   "nghia": "arcsin: hàm ngược của sin, giá trị trong [−π/2, π/2]",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "The arcsine of 1/2 is pi/6.",
+   "viDuNghia": "arcsin của 1/2 bằng π/6."
+  },
+  {
+   "chu": "arctangent",
+   "doc": "/ɑːrkˈtændʒənt/",
+   "nghia": "arctan: hàm ngược của tan, giá trị trong (−π/2, π/2)",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "The integral of 1/(1 + x^2) is the arctangent of x plus C.",
+   "viDuNghia": "Tích phân của 1/(1 + x²) là arctan x cộng C."
+  },
+  {
+   "chu": "tangent",
+   "doc": "/ˈtændʒənt/",
+   "nghia": "(hình học) tiếp tuyến, tiếp xúc · (lượng giác) tang, tan x = sin x / cos x",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "Find an equation of the tangent line to the curve y = sqrt(x)/(x + 1) at (4, 0.4).",
+   "viDuNghia": "Viết phương trình tiếp tuyến của đường cong y = √x/(x + 1) tại (4; 0,4)."
+  },
+  {
+   "chu": "secant",
+   "doc": "/ˈsiːkənt/",
+   "nghia": "sec: sec x = 1/cos x (cũng là \"cát tuyến\")",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "The derivative of tan x is secant squared of x.",
+   "viDuNghia": "Đạo hàm của tan x là sec² x."
+  },
+  {
+   "chu": "cosecant",
+   "doc": "/koʊˈsiːkənt/",
+   "nghia": "cosec: csc x = 1/sin x",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "The cosecant of x is undefined when sin x = 0.",
+   "viDuNghia": "csc x không xác định khi sin x = 0."
+  },
+  {
+   "chu": "cotangent",
+   "doc": "/koʊˈtændʒənt/",
+   "nghia": "cotang: cot x = cos x / sin x",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "The derivative of the cotangent function is -csc^2 x.",
+   "viDuNghia": "Đạo hàm của hàm cot là −csc² x."
+  },
+  {
+   "chu": "horizontal line test",
+   "doc": "/ˌhɒrɪˈzɒntəl laɪn tɛst/",
+   "nghia": "phép thử đường ngang: hàm là một–một khi mọi đường ngang cắt đồ thị nhiều nhất một lần",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "Use the horizontal line test to decide whether f has an inverse.",
+   "viDuNghia": "Dùng phép thử đường ngang để xét f có hàm ngược không."
+  },
+  {
+   "chu": "y-axis",
+   "doc": "/ˈwaɪ ˌæksɪs/",
+   "nghia": "trục tung (trục y)",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "Reflect about the y-axis, and then shift 3 units downward",
+   "viDuNghia": "Lấy đối xứng qua trục tung rồi tịnh tiến xuống 3 đơn vị."
+  },
+  {
+   "chu": "vertical shift",
+   "doc": "/ˈvɜːrtɪkəl ʃɪft/",
+   "nghia": "tịnh tiến dọc: y = f(x) + c dời đồ thị lên (c > 0) hoặc xuống",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "y = x^2 - 3 is a vertical shift of y = x^2 by 3 units downward.",
+   "viDuNghia": "y = x² − 3 là phép tịnh tiến dọc của y = x² xuống 3 đơn vị."
+  },
+  {
+   "chu": "horizontal shift",
+   "doc": "/ˌhɒrɪˈzɒntəl ʃɪft/",
+   "nghia": "tịnh tiến ngang: y = f(x − c) dời đồ thị sang phải c đơn vị",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "y = (x - 2)^2 is a horizontal shift of y = x^2 by 2 units to the right.",
+   "viDuNghia": "y = (x − 2)² là phép tịnh tiến ngang của y = x² sang phải 2 đơn vị."
+  },
+  {
+   "chu": "oscillation",
+   "doc": "/ˌɒsɪˈleɪʃən/",
+   "nghia": "sự dao động: hàm lên xuống liên tục (vd sin(1/x) gần 0, nên không có giới hạn)",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "The limit of sin(1/x) as x approaches 0 does not exist because of oscillation.",
+   "viDuNghia": "Giới hạn của sin(1/x) khi x tiến tới 0 không tồn tại do dao động."
+  },
+  {
+   "chu": "root of an equation",
+   "doc": "/ruːt ɒv ən ɪˈkweɪʒən/",
+   "nghia": "nghiệm của phương trình: giá trị x làm phương trình đúng",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "Use Newton's method to find the root of the equation x^3 - 2x - 5 = 0.",
+   "viDuNghia": "Dùng phương pháp Newton tìm nghiệm của phương trình x³ − 2x − 5 = 0."
+  },
+  {
+   "chu": "zero of a function",
+   "doc": "/ˈzɪəroʊ ɒv ə ˈfʌŋkʃən/",
+   "nghia": "không điểm của hàm: x mà f(x) = 0 (giao điểm đồ thị với trục hoành)",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "The zeros of a function are the x-intercepts of its graph.",
+   "viDuNghia": "Các không điểm của hàm là hoành độ giao điểm đồ thị với trục hoành."
+  },
+  {
+   "chu": "interior",
+   "doc": "/ɪnˈtɪəriər/",
+   "nghia": "phần trong: điểm nằm bên trong miền/khoảng, không phải điểm biên",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "Local extrema can occur only at interior points where f' = 0 or f' does not exist.",
+   "viDuNghia": "Cực trị địa phương chỉ xảy ra tại điểm trong mà f' = 0 hoặc không tồn tại."
+  },
+  {
+   "chu": "density",
+   "doc": "/ˈdɛnsɪti/",
+   "nghia": "mật độ, khối lượng riêng (khối lượng trên một đơn vị độ dài/thể tích)",
+   "nhom": "Hàm số & đồ thị",
+   "viDu": "A rod has linear density p(x) = 2 + x kg/m; find its total mass.",
+   "viDuNghia": "Một thanh có mật độ dài p(x) = 2 + x kg/m; tìm khối lượng của nó."
+  },
+  {
+   "chu": "partial fractions",
+   "doc": "/ˈpɑːrʃəl ˈfrækʃənz/",
+   "nghia": "phân tích thành phân thức đơn giản: tách phân thức để tích phân",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "Use partial fractions to evaluate the integral of 1/(x^2 - 1).",
+   "viDuNghia": "Dùng phân tích thành phân thức đơn giản để tính tích phân của 1/(x² − 1)."
+  },
+  {
+   "chu": "trigonometric substitution",
+   "doc": "/ˌtrɪɡənəˈmɛtrɪk ˌsʌbstɪˈtjuːʃən/",
+   "nghia": "đổi biến lượng giác: đặt x = a sin θ, a tan θ… để khử căn",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "Evaluate the integral of sqrt(9 - x^2) using a trigonometric substitution.",
+   "viDuNghia": "Tính tích phân của √(9 − x²) bằng đổi biến lượng giác."
+  },
+  {
+   "chu": "fundamental theorem of calculus",
+   "doc": "/ˌfʌndəˈmɛntəl ˈθɪərəm ɒv ˈkælkjʊləs/",
+   "nghia": "định lý cơ bản của giải tích: đạo hàm của ∫ₐˣ f(t)dt là f(x); ∫ₐᵇ f = F(b) − F(a)",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "Use the fundamental theorem of calculus to find the derivative of the integral of cos(t^2) from 0 to x.",
+   "viDuNghia": "Dùng định lý cơ bản của giải tích để tìm đạo hàm của tích phân cos(t²) từ 0 tới x."
+  },
+  {
+   "chu": "net change",
+   "doc": "/nɛt tʃeɪndʒ/",
+   "nghia": "biến thiên ròng: tích phân của tốc độ thay đổi = giá trị cuối − giá trị đầu",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "The integral of a rate of change gives the net change of the quantity.",
+   "viDuNghia": "Tích phân của tốc độ thay đổi cho biến thiên ròng của đại lượng."
+  },
+  {
+   "chu": "total distance",
+   "doc": "/ˈtoʊtəl ˈdɪstəns/",
+   "nghia": "tổng quãng đường: tích phân của |v(t)| (khác độ dời)",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "Find the displacement and the total distance traveled by the particle during 1 <= t <= 4.",
+   "viDuNghia": "Tìm độ dời và tổng quãng đường hạt đi được trong 1 ≤ t ≤ 4."
+  },
+  {
+   "chu": "arc length",
+   "doc": "/ɑːrk lɛŋθ/",
+   "nghia": "độ dài cung: ∫ √(1 + (f'(x))²) dx",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "Find the arc length of the curve y = x^(3/2) from x = 0 to x = 1.",
+   "viDuNghia": "Tìm độ dài cung của đường cong y = x^(3/2) từ x = 0 tới x = 1."
+  },
+  {
+   "chu": "solid of revolution",
+   "doc": "/ˈsɒlɪd ɒv ˌrɛvəˈluːʃən/",
+   "nghia": "vật thể tròn xoay: khối tạo ra khi quay một miền phẳng quanh một trục",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "Find the volume of the solid of revolution obtained by rotating y = sqrt(x), 0 <= x <= 1, about the x-axis.",
+   "viDuNghia": "Tìm thể tích vật thể tròn xoay tạo ra khi quay y = √x, 0 ≤ x ≤ 1, quanh trục hoành."
+  },
+  {
+   "chu": "disk method",
+   "doc": "/dɪsk ˈmɛθəd/",
+   "nghia": "phương pháp đĩa: thể tích = ∫ π r² dx với mỗi lát cắt là một đĩa tròn",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "The disk method is used when the region touches the axis of rotation.",
+   "viDuNghia": "Phương pháp đĩa dùng khi miền chạm trục quay."
+  },
+  {
+   "chu": "washer method",
+   "doc": "/ˈwɒʃər ˈmɛθəd/",
+   "nghia": "phương pháp vành khăn: thể tích = ∫ π (R² − r²) dx khi lát cắt có lỗ ở giữa",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "Use the washer method when there is a gap between the region and the axis.",
+   "viDuNghia": "Dùng phương pháp vành khăn khi giữa miền và trục có khoảng trống."
+  },
+  {
+   "chu": "cylindrical shell method",
+   "doc": "/sɪˈlɪndrɪkəl ʃɛl ˈmɛθəd/",
+   "nghia": "phương pháp vỏ trụ: thể tích = ∫ 2π x f(x) dx khi quay quanh trục tung",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "Use the cylindrical shell method to rotate the region about the y-axis.",
+   "viDuNghia": "Dùng phương pháp vỏ trụ để quay miền quanh trục tung."
+  },
+  {
+   "chu": "power series",
+   "doc": "/ˈpaʊər ˈsɪəriːz/",
+   "nghia": "chuỗi luỹ thừa: tổng vô hạn cₙ(x − a)ⁿ",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "Find the radius of convergence of the power series.",
+   "viDuNghia": "Tìm bán kính hội tụ của chuỗi luỹ thừa."
+  },
+  {
+   "chu": "Taylor series",
+   "doc": "/ˈteɪlər ˈsɪəriːz/",
+   "nghia": "chuỗi Taylor: khai triển f quanh a bằng các đạo hàm f⁽ⁿ⁾(a)/n!",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "Find the Taylor series of e^x centered at a = 1.",
+   "viDuNghia": "Tìm chuỗi Taylor của eˣ tại tâm a = 1."
+  },
+  {
+   "chu": "Maclaurin series",
+   "doc": "/məˈklɔːrɪn ˈsɪəriːz/",
+   "nghia": "chuỗi Maclaurin: chuỗi Taylor tại a = 0",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "The Maclaurin series of sin x contains only odd powers of x.",
+   "viDuNghia": "Chuỗi Maclaurin của sin x chỉ có các luỹ thừa lẻ của x."
+  },
+  {
+   "chu": "limit of a sequence",
+   "doc": "/ˈlɪmɪt ɒv ə ˈsiːkwəns/",
+   "nghia": "giới hạn của dãy số: giá trị aₙ tiến tới khi n → ∞",
+   "nhom": "Tích phân & ứng dụng",
+   "viDu": "Determine whether the sequence converges and find the limit of the sequence.",
+   "viDuNghia": "Xét dãy số có hội tụ không và tìm giới hạn của dãy."
+  },
+  {
+   "chu": "matrix multiplication",
+   "doc": "/ˈmeɪtrɪks ˌmʌltɪplɪˈkeɪʃən/",
+   "nghia": "phép nhân ma trận: hàng của A nhân cột của B; AB xác định khi số cột A = số hàng B, nói chung AB ≠ BA",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Matrix multiplication is not commutative in general.",
+   "viDuNghia": "Phép nhân ma trận nói chung không giao hoán."
+  },
+  {
+   "chu": "inverse matrix",
+   "doc": "/ɪnˈvɜːrs ˈmeɪtrɪks/",
+   "nghia": "ma trận nghịch đảo A⁻¹: AA⁻¹ = A⁻¹A = I",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Let A be a 3 x 3 matrix. Find the (2,1)-entry of the inverse matrix A^(-1).",
+   "viDuNghia": "Cho A là ma trận 3 × 3. Tìm phần tử (2,1) của ma trận nghịch đảo A⁻¹."
+  },
+  {
+   "chu": "singular matrix",
+   "doc": "/ˈsɪŋɡjʊlər ˈmeɪtrɪks/",
+   "nghia": "ma trận suy biến: định thức bằng 0, không có nghịch đảo",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "A singular matrix has determinant 0 and no inverse.",
+   "viDuNghia": "Ma trận suy biến có định thức bằng 0 và không có nghịch đảo."
+  },
+  {
+   "chu": "nonsingular matrix",
+   "doc": "/ˌnɒnˈsɪŋɡjʊlər ˈmeɪtrɪks/",
+   "nghia": "ma trận không suy biến: định thức khác 0 (= khả nghịch)",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "If A is a nonsingular matrix, the system Ax = b has exactly one solution.",
+   "viDuNghia": "Nếu A không suy biến thì hệ Ax = b có đúng một nghiệm."
+  },
+  {
+   "chu": "diagonal matrix",
+   "doc": "/daɪˈæɡənəl ˈmeɪtrɪks/",
+   "nghia": "ma trận chéo: mọi phần tử ngoài đường chéo chính bằng 0",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "The powers of a diagonal matrix are easy to compute.",
+   "viDuNghia": "Luỹ thừa của ma trận chéo rất dễ tính."
+  },
+  {
+   "chu": "triangular matrix",
+   "doc": "/traɪˈæŋɡjʊlər ˈmeɪtrɪks/",
+   "nghia": "ma trận tam giác: định thức bằng tích các phần tử trên đường chéo",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "The determinant of a triangular matrix is the product of its diagonal entries.",
+   "viDuNghia": "Định thức của ma trận tam giác bằng tích các phần tử trên đường chéo."
+  },
+  {
+   "chu": "upper triangular matrix",
+   "doc": "/ˈʌpər traɪˈæŋɡjʊlər ˈmeɪtrɪks/",
+   "nghia": "ma trận tam giác trên: mọi phần tử DƯỚI đường chéo bằng 0",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Gaussian elimination turns A into an upper triangular matrix.",
+   "viDuNghia": "Phép khử Gauss đưa A về ma trận tam giác trên."
+  },
+  {
+   "chu": "lower triangular matrix",
+   "doc": "/ˈloʊər traɪˈæŋɡjʊlər ˈmeɪtrɪks/",
+   "nghia": "ma trận tam giác dưới: mọi phần tử TRÊN đường chéo bằng 0",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "The transpose of an upper triangular matrix is a lower triangular matrix.",
+   "viDuNghia": "Chuyển vị của ma trận tam giác trên là ma trận tam giác dưới."
+  },
+  {
+   "chu": "skew-symmetric matrix",
+   "doc": "/skjuː sɪˈmɛtrɪk ˈmeɪtrɪks/",
+   "nghia": "ma trận phản đối xứng: Aᵀ = −A (đường chéo toàn 0)",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Every square matrix is the sum of a symmetric and a skew-symmetric matrix.",
+   "viDuNghia": "Mọi ma trận vuông là tổng của một ma trận đối xứng và một ma trận phản đối xứng."
+  },
+  {
+   "chu": "elementary matrix",
+   "doc": "/ˌɛlɪˈmɛntəri ˈmeɪtrɪks/",
+   "nghia": "ma trận sơ cấp: nhận được từ I bằng đúng một phép biến đổi hàng sơ cấp",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Multiplying A on the left by an elementary matrix performs a row operation on A.",
+   "viDuNghia": "Nhân bên trái A với một ma trận sơ cấp tương đương làm một phép biến đổi hàng trên A."
+  },
+  {
+   "chu": "trace of a matrix",
+   "doc": "/treɪs ɒv ə ˈmeɪtrɪks/",
+   "nghia": "vết của ma trận tr(A): tổng các phần tử trên đường chéo chính, bằng tổng các trị riêng",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "The trace of a matrix equals the sum of its eigenvalues.",
+   "viDuNghia": "Vết của ma trận bằng tổng các trị riêng của nó."
+  },
+  {
+   "chu": "rule of Sarrus",
+   "doc": "/ruːl ɒv ˈsærəs/",
+   "nghia": "quy tắc Sarrus: cách nhẩm định thức 3 × 3 bằng các đường chéo (chỉ dùng cho 3 × 3)",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "The rule of Sarrus works only for 3 x 3 determinants.",
+   "viDuNghia": "Quy tắc Sarrus chỉ dùng cho định thức cấp 3."
+  },
+  {
+   "chu": "cofactor expansion",
+   "doc": "/ˈkoʊfæktər ɪkˈspænʃən/",
+   "nghia": "khai triển theo phần bù đại số (Laplace): tính định thức theo một hàng hoặc một cột",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Compute the determinant by cofactor expansion along the row with the most zeros.",
+   "viDuNghia": "Tính định thức bằng khai triển theo hàng có nhiều số 0 nhất."
+  },
+  {
+   "chu": "Gauss-Jordan elimination",
+   "doc": "/ɡaʊs ˈdʒɔːrdən ɪˌlɪmɪˈneɪʃən/",
+   "nghia": "phép khử Gauss–Jordan: biến đổi hàng tới dạng bậc thang RÚT GỌN để đọc nghiệm trực tiếp",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Solve the system by Gauss-Jordan elimination.",
+   "viDuNghia": "Giải hệ bằng phép khử Gauss–Jordan."
+  },
+  {
+   "chu": "back-substitution",
+   "doc": "/bæk ˌsʌbstɪˈtjuːʃən/",
+   "nghia": "thế ngược: giải từ phương trình cuối của dạng bậc thang lên trên",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "After Gaussian elimination, find the solution by back-substitution.",
+   "viDuNghia": "Sau phép khử Gauss, tìm nghiệm bằng thế ngược."
+  },
+  {
+   "chu": "leading one",
+   "doc": "/ˈliːdɪŋ wʌn/",
+   "nghia": "số 1 dẫn đầu: phần tử khác 0 đầu tiên (bằng 1) của mỗi hàng trong dạng bậc thang",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "In row-echelon form, each leading one is to the right of the leading one above it.",
+   "viDuNghia": "Ở dạng bậc thang, mỗi số 1 dẫn đầu nằm bên phải số 1 dẫn đầu của hàng trên."
+  },
+  {
+   "chu": "leading variable",
+   "doc": "/ˈliːdɪŋ ˈvɛəriəbl/",
+   "nghia": "ẩn chính: ẩn ứng với cột có số 1 dẫn đầu",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Express each leading variable in terms of the free parameters.",
+   "viDuNghia": "Biểu diễn mỗi ẩn chính theo các tham số tự do."
+  },
+  {
+   "chu": "free variable",
+   "doc": "/friː ˈvɛəriəbl/",
+   "nghia": "(đại số tuyến tính) ẩn tự do: ẩn không ứng với cột dẫn đầu, lấy giá trị tuỳ ý · (logic, MAD101) biến tự do, không bị lượng từ ràng buộc",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "A system with a free variable and no contradiction has infinitely many solutions.",
+   "viDuNghia": "Hệ có ẩn tự do và không mâu thuẫn thì có vô số nghiệm."
+  },
+  {
+   "chu": "consistent system",
+   "doc": "/kənˈsɪstənt ˈsɪstəm/",
+   "nghia": "hệ tương thích: hệ có ít nhất một nghiệm",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "A system of linear equations is consistent if it has at least one solution.",
+   "viDuNghia": "Hệ phương trình tuyến tính tương thích nếu có ít nhất một nghiệm."
+  },
+  {
+   "chu": "infinitely many solutions",
+   "doc": "/ˈɪnfɪnɪtli ˈmɛni səˈluːʃənz/",
+   "nghia": "vô số nghiệm",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "The system has only the trivial solution, or infinitely many solutions.",
+   "viDuNghia": "Hệ chỉ có nghiệm tầm thường, hoặc có vô số nghiệm."
+  },
+  {
+   "chu": "nullity",
+   "doc": "/ˈnʌlɪti/",
+   "nghia": "số chiều hạt nhân (nullity): dim null A = số ẩn tự do",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "If A is 4 x 6 with rank 3, what is the nullity of A?",
+   "viDuNghia": "Nếu A cỡ 4 × 6 có hạng 3 thì số chiều hạt nhân của A bằng bao nhiêu? (3)"
+  },
+  {
+   "chu": "rank-nullity theorem",
+   "doc": "/ræŋk ˈnʌlɪti ˈθɪərəm/",
+   "nghia": "định lý hạng – số chiều hạt nhân: rank A + nullity A = số cột của A",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "By the rank-nullity theorem, rank A + dim null A = n.",
+   "viDuNghia": "Theo định lý hạng – số chiều hạt nhân, rank A + dim null A = n."
+  },
+  {
+   "chu": "kernel of a linear transformation",
+   "doc": "/ˈkɜːrnəl ɒv ə ˈlɪniər ˌtrænsfərˈmeɪʃən/",
+   "nghia": "hạt nhân ker T: tập mọi vectơ bị T biến thành vectơ 0",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "The kernel of a linear transformation is a subspace of its domain.",
+   "viDuNghia": "Hạt nhân của một phép biến đổi tuyến tính là không gian con của miền xác định."
+  },
+  {
+   "chu": "diagonalization",
+   "doc": "/daɪˌæɡənəlaɪˈzeɪʃən/",
+   "nghia": "chéo hoá: tìm P khả nghịch và D chéo sao cho P⁻¹AP = D",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Diagonalization makes it easy to compute A^100.",
+   "viDuNghia": "Chéo hoá giúp tính A¹⁰⁰ dễ dàng."
+  },
+  {
+   "chu": "similar matrices",
+   "doc": "/ˈsɪmɪlər ˈmeɪtrɪsiːz/",
+   "nghia": "ma trận đồng dạng: B = P⁻¹AP; có cùng định thức, vết và trị riêng",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Similar matrices have the same eigenvalues.",
+   "viDuNghia": "Các ma trận đồng dạng có cùng trị riêng."
+  },
+  {
+   "chu": "complex number",
+   "doc": "/ˈkɒmplɛks ˈnʌmbər/",
+   "nghia": "số phức a + bi",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "The characteristic polynomial λ^2 - 6λ + 25 has complex roots 3 + 4i and 3 - 4i.",
+   "viDuNghia": "Đa thức đặc trưng λ² − 6λ + 25 có nghiệm phức 3 + 4i và 3 − 4i."
+  },
+  {
+   "chu": "imaginary unit",
+   "doc": "/ɪˈmædʒɪnəri ˈjuːnɪt/",
+   "nghia": "đơn vị ảo i, với i² = −1",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "The imaginary unit i satisfies i^2 = -1.",
+   "viDuNghia": "Đơn vị ảo i thoả i² = −1."
+  },
+  {
+   "chu": "complex conjugate",
+   "doc": "/ˈkɒmplɛks ˈkɒndʒʊɡət/",
+   "nghia": "số phức liên hợp: liên hợp của a + bi là a − bi",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Complex eigenvalues of a real matrix come in complex conjugate pairs.",
+   "viDuNghia": "Trị riêng phức của ma trận thực đi thành từng cặp liên hợp."
+  },
+  {
+   "chu": "modulus",
+   "doc": "/ˈmɒdjʊləs/",
+   "nghia": "mô-đun của số phức |a + bi| = √(a² + b²)",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "The modulus of 3 + 4i is 5.",
+   "viDuNghia": "Mô-đun của 3 + 4i bằng 5."
+  },
+  {
+   "chu": "length of a vector",
+   "doc": "/lɛŋθ ɒv ə ˈvɛktər/",
+   "nghia": "độ dài (chuẩn) của vectơ ‖v‖ = √(v·v)",
+   "nhom": "Vectơ & hình học không gian",
+   "viDu": "Find the length of the vector v = (1, -2, 2).",
+   "viDuNghia": "Tìm độ dài của vectơ v = (1, −2, 2)."
+  },
+  {
+   "chu": "scalar multiple",
+   "doc": "/ˈskeɪlər ˈmʌltɪpl/",
+   "nghia": "bội vô hướng: vectơ kv; hai vectơ song song khi cái này là bội vô hướng của cái kia",
+   "nhom": "Vectơ & hình học không gian",
+   "viDu": "Two nonzero vectors are parallel if one is a scalar multiple of the other.",
+   "viDuNghia": "Hai vectơ khác 0 song song nếu vectơ này là bội vô hướng của vectơ kia."
+  },
+  {
+   "chu": "collinear",
+   "doc": "/koʊˈlɪniər/",
+   "nghia": "thẳng hàng: các điểm cùng nằm trên một đường thẳng",
+   "nhom": "Vectơ & hình học không gian",
+   "viDu": "Determine whether the points P, Q and R are collinear.",
+   "viDuNghia": "Xét xem ba điểm P, Q, R có thẳng hàng không."
+  },
+  {
+   "chu": "coplanar",
+   "doc": "/koʊˈpleɪnər/",
+   "nghia": "đồng phẳng: các điểm/vectơ cùng nằm trên một mặt phẳng (tích hỗn tạp bằng 0)",
+   "nhom": "Vectơ & hình học không gian",
+   "viDu": "Three vectors are coplanar if their scalar triple product is 0.",
+   "viDuNghia": "Ba vectơ đồng phẳng nếu tích hỗn tạp của chúng bằng 0."
+  },
+  {
+   "chu": "orthogonality",
+   "doc": "/ɔːrˌθɒɡəˈnælɪti/",
+   "nghia": "tính trực giao: hai vectơ trực giao khi tích vô hướng bằng 0",
+   "nhom": "Vectơ & hình học không gian",
+   "viDu": "Check the orthogonality of u and v by computing u · v.",
+   "viDuNghia": "Kiểm tính trực giao của u và v bằng cách tính u · v."
+  },
+  {
+   "chu": "orthogonal matrix",
+   "doc": "/ɔːrˈθɒɡənəl ˈmeɪtrɪks/",
+   "nghia": "ma trận trực giao: Qᵀ = Q⁻¹, các cột là cơ sở trực chuẩn",
+   "nhom": "Vectơ & hình học không gian",
+   "viDu": "The matrix of a rotation is an orthogonal matrix.",
+   "viDuNghia": "Ma trận của phép quay là ma trận trực giao."
+  },
+  {
+   "chu": "standard basis",
+   "doc": "/ˈstændərd ˈbeɪsɪs/",
+   "nghia": "cơ sở chính tắc của ℝⁿ: e₁ = (1, 0, …, 0), e₂, …, eₙ",
+   "nhom": "Vectơ & hình học không gian",
+   "viDu": "The matrix of T is found by applying T to each vector of the standard basis.",
+   "viDuNghia": "Ma trận của T tìm được bằng cách áp T lên từng vectơ của cơ sở chính tắc."
+  },
+  {
+   "chu": "Euclidean space",
+   "doc": "/juːˈklɪdiən speɪs/",
+   "nghia": "không gian Euclid ℝⁿ: các bộ n số thực, có tích vô hướng và độ dài",
+   "nhom": "Vectơ & hình học không gian",
+   "viDu": "R^3 is the three-dimensional Euclidean space.",
+   "viDuNghia": "ℝ³ là không gian Euclid ba chiều."
+  },
+  {
+   "chu": "Cauchy-Schwarz inequality",
+   "doc": "/ˈkoʊʃi ʃwɔːrts ˌɪnɪˈkwɒlɪti/",
+   "nghia": "bất đẳng thức Cauchy–Schwarz: |u · v| ≤ ‖u‖‖v‖",
+   "nhom": "Vectơ & hình học không gian",
+   "viDu": "The Cauchy-Schwarz inequality guarantees that the cosine of the angle lies between -1 and 1.",
+   "viDuNghia": "Bất đẳng thức Cauchy–Schwarz bảo đảm cosin của góc nằm giữa −1 và 1."
+  },
+  {
+   "chu": "triangle inequality",
+   "doc": "/ˈtraɪæŋɡl ˌɪnɪˈkwɒlɪti/",
+   "nghia": "bất đẳng thức tam giác: ‖u + v‖ ≤ ‖u‖ + ‖v‖",
+   "nhom": "Vectơ & hình học không gian",
+   "viDu": "The triangle inequality says that one side of a triangle is never longer than the sum of the other two.",
+   "viDuNghia": "Bất đẳng thức tam giác nói một cạnh tam giác không bao giờ dài hơn tổng hai cạnh kia."
+  },
+  {
+   "chu": "Pythagorean theorem",
+   "doc": "/pɪˌθæɡəˈriːən ˈθɪərəm/",
+   "nghia": "định lý Pythagore: u ⊥ v thì ‖u + v‖² = ‖u‖² + ‖v‖²",
+   "nhom": "Vectơ & hình học không gian",
+   "viDu": "If u and v are orthogonal, the Pythagorean theorem gives ||u + v||^2 = ||u||^2 + ||v||^2.",
+   "viDuNghia": "Nếu u và v trực giao, định lý Pythagore cho ‖u + v‖² = ‖u‖² + ‖v‖²."
+  },
+  {
+   "chu": "row echelon form",
+   "doc": "/roʊ ˈeʃəlɒn fɔːrm/",
+   "nghia": "dạng bậc thang: dòng toàn 0 nằm dưới cùng, phần tử khác 0 đầu tiên (pivot) của mỗi dòng nằm bên phải pivot của dòng trên",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Gaussian elimination reduces the augmented matrix to row echelon form.",
+   "viDuNghia": "Phép khử Gauss đưa ma trận bổ sung về dạng bậc thang."
+  },
+  {
+   "chu": "reduced row echelon form",
+   "doc": "/rɪˈduːst roʊ ˈeʃəlɒn fɔːrm/",
+   "nghia": "dạng bậc thang rút gọn: dạng bậc thang mà mỗi pivot bằng 1 và là số khác 0 duy nhất trong cột của nó",
+   "nhom": "Ma trận & hệ phương trình",
+   "viDu": "Find x so that the matrix is in reduced-row echelon form.",
+   "viDuNghia": "Tìm x để ma trận ở dạng bậc thang rút gọn."
+  }
+ ]
+}

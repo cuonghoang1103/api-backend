@@ -1,0 +1,586 @@
+{
+ "ma": "prn222-1",
+ "nn": "en",
+ "ten": "PRN222 · 1. ASP.NET Core, async, DI, MVC, Razor, SignalR",
+ "moTa": "PRN222 (lập trình đa nền tảng nâng cao với .NET) chưa có đề chữ: bộ từ soạn từ syllabus và giáo trình — lập trình mạng với socket, async/await và lập trình song song, tiêm phụ thuộc, ASP.NET Core MVC, Razor Pages, Blazor, SignalR và Worker Service.",
+ "bieuTuong": "globe.desk.fill",
+ "thuTu": -900,
+ "tu": [
+  {
+   "chu": "TcpListener",
+   "doc": "/ˌtiː siː ˈpiː ˈlɪsənər/",
+   "nghia": "TcpListener: lớp phía máy chủ lắng nghe và nhận kết nối TCP trên một cổng",
+   "nhom": "Lập trình mạng",
+   "viDu": "The server creates a TcpListener on port 5000 and waits for clients.",
+   "viDuNghia": "Máy chủ tạo TcpListener trên cổng 5000 và chờ client."
+  },
+  {
+   "chu": "TcpClient",
+   "doc": "/ˌtiː siː ˈpiː ˈklaɪənt/",
+   "nghia": "TcpClient: lớp phía client mở kết nối TCP tới máy chủ",
+   "nhom": "Lập trình mạng",
+   "viDu": "The client uses TcpClient to connect to the server at 127.0.0.1:5000.",
+   "viDuNghia": "Client dùng TcpClient để kết nối máy chủ tại 127.0.0.1:5000."
+  },
+  {
+   "chu": "UdpClient",
+   "doc": "/ˌjuː diː ˈpiː ˈklaɪənt/",
+   "nghia": "UdpClient: gửi/nhận gói UDP, không cần thiết lập kết nối",
+   "nhom": "Lập trình mạng",
+   "viDu": "UdpClient sends datagrams without opening a connection first.",
+   "viDuNghia": "UdpClient gửi gói dữ liệu mà không cần mở kết nối trước."
+  },
+  {
+   "chu": "IPEndPoint",
+   "doc": "/ˌaɪ ˈpiː ˈɛnd pɔɪnt/",
+   "nghia": "IPEndPoint: cặp địa chỉ IP + số cổng xác định một đầu kết nối",
+   "nhom": "Lập trình mạng",
+   "viDu": "new IPEndPoint(IPAddress.Any, 5000) listens on every network interface.",
+   "viDuNghia": "new IPEndPoint(IPAddress.Any, 5000) lắng nghe trên mọi giao diện mạng."
+  },
+  {
+   "chu": "NetworkStream",
+   "doc": "/ˈnɛtwɜːrk striːm/",
+   "nghia": "NetworkStream: luồng byte đọc/ghi qua kết nối socket",
+   "nhom": "Lập trình mạng",
+   "viDu": "Read the client message from the NetworkStream returned by GetStream().",
+   "viDuNghia": "Đọc tin nhắn của client từ NetworkStream mà GetStream() trả về."
+  },
+  {
+   "chu": "Socket class",
+   "doc": "/ˈsɒkɪt klɑːs/",
+   "nghia": "lớp Socket: API mạng mức thấp của .NET (Bind, Listen, Accept, Send, Receive)",
+   "nhom": "Lập trình mạng",
+   "viDu": "The Socket class gives full control over Bind, Listen and Accept.",
+   "viDuNghia": "Lớp Socket cho toàn quyền điều khiển Bind, Listen và Accept."
+  },
+  {
+   "chu": "HttpClient",
+   "doc": "/ˌeɪtʃ tiː tiː ˈpiː ˈklaɪənt/",
+   "nghia": "HttpClient: lớp gửi yêu cầu HTTP và nhận phản hồi (GetAsync, PostAsync)",
+   "nhom": "Lập trình mạng",
+   "viDu": "Reuse one HttpClient instead of creating a new one for every request.",
+   "viDuNghia": "Dùng lại một HttpClient thay vì tạo mới cho mỗi yêu cầu."
+  },
+  {
+   "chu": "asynchronous programming",
+   "doc": "/eɪˈsɪŋkrənəs ˈproʊɡræmɪŋ/",
+   "nghia": "lập trình bất đồng bộ: việc chờ (mạng, đĩa) không chặn luồng, luồng làm việc khác trong lúc chờ",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "Asynchronous programming keeps the UI responsive while data is loading.",
+   "viDuNghia": "Lập trình bất đồng bộ giữ giao diện không bị đơ khi đang tải dữ liệu."
+  },
+  {
+   "chu": "async",
+   "doc": "/eɪˈsɪŋk/",
+   "nghia": "async: từ khoá đánh dấu phương thức bất đồng bộ (trả về Task hoặc Task<T>)",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "Mark the method async and return Task<string>.",
+   "viDuNghia": "Đánh dấu phương thức là async và trả về Task<string>."
+  },
+  {
+   "chu": "await",
+   "doc": "/əˈweɪt/",
+   "nghia": "await: chờ một Task xong mà không chặn luồng, rồi chạy tiếp phần sau",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "var html = await client.GetStringAsync(url);",
+   "viDuNghia": "var html = await client.GetStringAsync(url); — chờ tải chuỗi về mà không chặn luồng."
+  },
+  {
+   "chu": "async method",
+   "doc": "/eɪˈsɪŋk ˈmɛθəd/",
+   "nghia": "phương thức bất đồng bộ: theo quy ước tên kết thúc bằng Async (SaveChangesAsync)",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "By convention, the name of an async method ends with Async.",
+   "viDuNghia": "Theo quy ước, tên phương thức bất đồng bộ kết thúc bằng Async."
+  },
+  {
+   "chu": "Task",
+   "doc": "/tɑːsk/",
+   "nghia": "Task (.NET): đối tượng đại diện cho một công việc bất đồng bộ đang chạy, có thể chờ bằng await",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "Task.Run starts work on a thread-pool thread and returns a Task.",
+   "viDuNghia": "Task.Run chạy công việc trên một luồng của thread pool và trả về một Task."
+  },
+  {
+   "chu": "Task Parallel Library",
+   "doc": "/tɑːsk ˈpærəlɛl ˈlaɪbrəri/",
+   "nghia": "TPL: thư viện lập trình song song của .NET (Task, Parallel, PLINQ)",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "The Task Parallel Library makes it easier to use all CPU cores.",
+   "viDuNghia": "TPL giúp tận dụng mọi nhân CPU dễ hơn."
+  },
+  {
+   "chu": "Parallel.For",
+   "doc": "/ˈpærəlɛl fɔːr/",
+   "nghia": "Parallel.For: vòng lặp for chia các lần lặp cho nhiều luồng chạy song song",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "Parallel.For processes the images on several cores at once.",
+   "viDuNghia": "Parallel.For xử lý các ảnh trên nhiều nhân cùng lúc."
+  },
+  {
+   "chu": "Parallel.ForEach",
+   "doc": "/ˈpærəlɛl fɔːr iːtʃ/",
+   "nghia": "Parallel.ForEach: duyệt tập hợp song song",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "Use Parallel.ForEach to resize every file in the folder in parallel.",
+   "viDuNghia": "Dùng Parallel.ForEach để đổi cỡ mọi tệp trong thư mục song song."
+  },
+  {
+   "chu": "PLINQ",
+   "doc": "/piː lɪŋk/",
+   "nghia": "PLINQ (Parallel LINQ): chạy truy vấn LINQ song song bằng AsParallel()",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "numbers.AsParallel().Where(IsPrime) uses PLINQ.",
+   "viDuNghia": "numbers.AsParallel().Where(IsPrime) dùng PLINQ."
+  },
+  {
+   "chu": "parallel programming",
+   "doc": "/ˈpærəlɛl ˈproʊɡræmɪŋ/",
+   "nghia": "lập trình song song: chia việc tính toán nặng cho nhiều nhân chạy cùng lúc",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "Parallel programming speeds up CPU-bound work, not waiting for I/O.",
+   "viDuNghia": "Lập trình song song tăng tốc việc nặng về tính toán, không phải việc chờ vào/ra."
+  },
+  {
+   "chu": "CancellationToken",
+   "doc": "/ˌkænsəˈleɪʃən ˈtoʊkən/",
+   "nghia": "CancellationToken: tín hiệu yêu cầu huỷ một tác vụ bất đồng bộ đang chạy",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "Pass a CancellationToken so the user can stop a long download.",
+   "viDuNghia": "Truyền CancellationToken để người dùng dừng được một lần tải lâu."
+  },
+  {
+   "chu": "thread safety",
+   "doc": "/θrɛd ˈseɪfti/",
+   "nghia": "an toàn luồng: mã chạy đúng khi nhiều luồng cùng truy cập dữ liệu chung",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "List<T> has no thread safety, so use a lock or ConcurrentBag<T>.",
+   "viDuNghia": "List<T> không an toàn luồng nên dùng lock hoặc ConcurrentBag<T>."
+  },
+  {
+   "chu": "lock statement",
+   "doc": "/lɒk ˈsteɪtmənt/",
+   "nghia": "lệnh lock: chỉ cho một luồng vào đoạn mã găng tại một thời điểm",
+   "nhom": "Bất đồng bộ & song song",
+   "viDu": "Wrap the counter update in a lock statement.",
+   "viDuNghia": "Bọc phần cập nhật biến đếm trong lệnh lock."
+  },
+  {
+   "chu": "service lifetime",
+   "doc": "/ˈsɜːrvɪs ˈlaɪftaɪm/",
+   "nghia": "vòng đời dịch vụ: Transient, Scoped hoặc Singleton — quyết định khi nào tạo đối tượng mới",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "Choose the service lifetime when you register a service in Program.cs.",
+   "viDuNghia": "Chọn vòng đời dịch vụ khi đăng ký dịch vụ trong Program.cs."
+  },
+  {
+   "chu": "transient service",
+   "doc": "/ˈtrænziənt ˈsɜːrvɪs/",
+   "nghia": "dịch vụ Transient: tạo đối tượng mới MỖI lần được yêu cầu",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "A transient service gets a new instance every time it is injected.",
+   "viDuNghia": "Dịch vụ Transient nhận đối tượng mới mỗi lần được tiêm."
+  },
+  {
+   "chu": "scoped service",
+   "doc": "/skoʊpt ˈsɜːrvɪs/",
+   "nghia": "dịch vụ Scoped: một đối tượng cho mỗi request HTTP (DbContext đăng ký kiểu này)",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "DbContext is registered as a scoped service: one instance per request.",
+   "viDuNghia": "DbContext được đăng ký kiểu Scoped: một đối tượng cho mỗi request."
+  },
+  {
+   "chu": "singleton service",
+   "doc": "/ˈsɪŋɡltən ˈsɜːrvɪs/",
+   "nghia": "dịch vụ Singleton: một đối tượng duy nhất dùng suốt đời ứng dụng",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "A singleton service is created once and shared by every request.",
+   "viDuNghia": "Dịch vụ Singleton tạo một lần và dùng chung cho mọi request."
+  },
+  {
+   "chu": "service container",
+   "doc": "/ˈsɜːrvɪs kənˈteɪnər/",
+   "nghia": "bộ chứa dịch vụ (IServiceCollection/IServiceProvider): nơi đăng ký và tạo các dịch vụ",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "builder.Services.AddScoped<IProductService, ProductService>() adds a service to the service container.",
+   "viDuNghia": "builder.Services.AddScoped<IProductService, ProductService>() thêm dịch vụ vào bộ chứa."
+  },
+  {
+   "chu": "AddScoped",
+   "doc": "/æd skoʊpt/",
+   "nghia": "AddScoped: phương thức đăng ký dịch vụ có vòng đời Scoped",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "Call AddScoped for repositories that use the DbContext.",
+   "viDuNghia": "Gọi AddScoped cho các repository dùng DbContext."
+  },
+  {
+   "chu": "Program.cs",
+   "doc": "/ˈproʊɡræm dɒt ˌsiː ˈɛs/",
+   "nghia": "Program.cs: tệp khởi động ứng dụng ASP.NET Core — đăng ký dịch vụ và dựng chuỗi middleware",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "Register services and middleware in Program.cs.",
+   "viDuNghia": "Đăng ký dịch vụ và middleware trong Program.cs."
+  },
+  {
+   "chu": "appsettings.json",
+   "doc": "/əˈpsɛtɪŋz dɒt ˈdʒeɪsən/",
+   "nghia": "appsettings.json: tệp cấu hình JSON (chuỗi kết nối, mức log…)",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "Store the connection string in appsettings.json, not in the code.",
+   "viDuNghia": "Lưu chuỗi kết nối trong appsettings.json, không viết trong mã."
+  },
+  {
+   "chu": "launchSettings.json",
+   "doc": "/lɔːntʃ ˈsɛtɪŋz dɒt ˈdʒeɪsən/",
+   "nghia": "launchSettings.json: cấu hình cách chạy khi phát triển (cổng, môi trường Development)",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "The local port of the app is set in launchSettings.json.",
+   "viDuNghia": "Cổng chạy cục bộ của ứng dụng đặt trong launchSettings.json."
+  },
+  {
+   "chu": "IConfiguration",
+   "doc": "/ˌaɪ kənˌfɪɡjəˈreɪʃən/",
+   "nghia": "IConfiguration: interface đọc giá trị cấu hình từ appsettings, biến môi trường…",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "Inject IConfiguration to read the \"DefaultConnection\" string.",
+   "viDuNghia": "Tiêm IConfiguration để đọc chuỗi \"DefaultConnection\"."
+  },
+  {
+   "chu": "options pattern",
+   "doc": "/ˈɒpʃənz ˈpætərn/",
+   "nghia": "mẫu Options: gắn một nhóm cấu hình vào lớp C# có kiểu (IOptions<T>)",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "Use the options pattern to bind the \"Email\" section to an EmailSettings class.",
+   "viDuNghia": "Dùng mẫu Options để gắn mục \"Email\" vào lớp EmailSettings."
+  },
+  {
+   "chu": "ILogger",
+   "doc": "/ˌaɪ ˈlɒɡər/",
+   "nghia": "ILogger<T>: interface ghi log có sẵn trong ASP.NET Core",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "Inject ILogger<HomeController> and call LogInformation.",
+   "viDuNghia": "Tiêm ILogger<HomeController> rồi gọi LogInformation."
+  },
+  {
+   "chu": "wwwroot",
+   "doc": "/ˌdʌbəljuː ˌdʌbəljuː ˌdʌbəljuː ruːt/",
+   "nghia": "wwwroot: thư mục chứa tệp tĩnh (CSS, JS, ảnh) được phục vụ trực tiếp",
+   "nhom": "Tiêm phụ thuộc & cấu hình",
+   "viDu": "Put site.css and images in the wwwroot folder.",
+   "viDuNghia": "Đặt site.css và ảnh trong thư mục wwwroot."
+  },
+  {
+   "chu": "ASP.NET Core",
+   "doc": "/ˌeɪ ɛs ˈpiː dɒt nɛt kɔːr/",
+   "nghia": "ASP.NET Core: framework web đa nền tảng của .NET (MVC, Razor Pages, Web API, Blazor)",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "ASP.NET Core apps run on Windows, Linux and macOS.",
+   "viDuNghia": "Ứng dụng ASP.NET Core chạy trên Windows, Linux và macOS."
+  },
+  {
+   "chu": "Kestrel",
+   "doc": "/ˈkɛstrəl/",
+   "nghia": "Kestrel: máy chủ web tích hợp sẵn, nhẹ và nhanh của ASP.NET Core",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "Kestrel is the default web server of ASP.NET Core.",
+   "viDuNghia": "Kestrel là máy chủ web mặc định của ASP.NET Core."
+  },
+  {
+   "chu": "request pipeline",
+   "doc": "/rɪˈkwɛst ˈpaɪplaɪn/",
+   "nghia": "đường ống xử lý request: chuỗi middleware mà mỗi request đi qua theo thứ tự đăng ký",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "UseAuthentication must come before UseAuthorization in the request pipeline.",
+   "viDuNghia": "UseAuthentication phải đứng trước UseAuthorization trong đường ống request."
+  },
+  {
+   "chu": "ASP.NET Core MVC",
+   "doc": "/ˌeɪ ɛs ˈpiː dɒt nɛt kɔːr ˌɛm viː ˈsiː/",
+   "nghia": "ASP.NET Core MVC: mô hình web chia Model, View (Razor) và Controller",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "In ASP.NET Core MVC, the controller returns a view with a model.",
+   "viDuNghia": "Trong ASP.NET Core MVC, controller trả về một view kèm model."
+  },
+  {
+   "chu": "action method",
+   "doc": "/ˈækʃən ˈmɛθəd/",
+   "nghia": "phương thức action: phương thức public của controller xử lý một URL",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "The Details action method returns View(product).",
+   "viDuNghia": "Phương thức action Details trả về View(product)."
+  },
+  {
+   "chu": "Razor view",
+   "doc": "/ˈreɪzər vjuː/",
+   "nghia": "Razor view (.cshtml): tệp giao diện trộn HTML với mã C#",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "The Index Razor view loops over the model to build an HTML table.",
+   "viDuNghia": "Razor view Index duyệt model để dựng bảng HTML."
+  },
+  {
+   "chu": "Razor syntax",
+   "doc": "/ˈreɪzər ˈsɪntæks/",
+   "nghia": "cú pháp Razor: dùng @ để chèn mã C# vào HTML (@Model.Name, @foreach)",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "Razor syntax uses @ to switch from HTML to C#.",
+   "viDuNghia": "Cú pháp Razor dùng @ để chuyển từ HTML sang C#."
+  },
+  {
+   "chu": "layout page",
+   "doc": "/ˈleɪaʊt peɪdʒ/",
+   "nghia": "trang layout (_Layout.cshtml): khung chung (menu, chân trang), nội dung trang chèn vào @RenderBody()",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "Every page shares the menu defined in the layout page.",
+   "viDuNghia": "Mọi trang dùng chung menu khai trong trang layout."
+  },
+  {
+   "chu": "partial view",
+   "doc": "/ˈpɑːrʃəl vjuː/",
+   "nghia": "partial view: mảnh giao diện dùng lại, nhúng vào view khác",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "Use a partial view for the product card shown on several pages.",
+   "viDuNghia": "Dùng partial view cho thẻ sản phẩm hiện ở nhiều trang."
+  },
+  {
+   "chu": "tag helper",
+   "doc": "/tæɡ ˈhɛlpər/",
+   "nghia": "tag helper: thuộc tính asp-* trong thẻ HTML sinh mã phía máy chủ (asp-for, asp-action)",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "<input asp-for=\"Name\" /> is a tag helper that binds the input to the model.",
+   "viDuNghia": "<input asp-for=\"Name\" /> là tag helper gắn ô nhập với model."
+  },
+  {
+   "chu": "HTML helper",
+   "doc": "/ˌeɪtʃ tiː ɛm ˈɛl ˈhɛlpər/",
+   "nghia": "HTML helper: phương thức @Html.* sinh thẻ HTML (Html.DisplayFor, Html.ActionLink)",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "@Html.DisplayFor(m => m.Price) is an HTML helper.",
+   "viDuNghia": "@Html.DisplayFor(m => m.Price) là một HTML helper."
+  },
+  {
+   "chu": "ViewBag",
+   "doc": "/ˈvjuː bæɡ/",
+   "nghia": "ViewBag: đối tượng động chuyển dữ liệu nhỏ từ controller sang view",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "ViewBag.Title = \"Products\" sets the page title for the view.",
+   "viDuNghia": "ViewBag.Title = \"Products\" đặt tiêu đề trang cho view."
+  },
+  {
+   "chu": "ViewData",
+   "doc": "/ˈvjuː ˌdeɪtə/",
+   "nghia": "ViewData: từ điển chuỗi–object chuyển dữ liệu từ controller sang view trong cùng request",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "ViewData[\"Message\"] is available only for the current request.",
+   "viDuNghia": "ViewData[\"Message\"] chỉ dùng được trong request hiện tại."
+  },
+  {
+   "chu": "TempData",
+   "doc": "/ˈtɛmp ˌdeɪtə/",
+   "nghia": "TempData: dữ liệu giữ tới request KẾ TIẾP (hay dùng cho thông báo sau khi chuyển hướng)",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "Use TempData to show \"Saved successfully\" after RedirectToAction.",
+   "viDuNghia": "Dùng TempData để hiện \"Lưu thành công\" sau RedirectToAction."
+  },
+  {
+   "chu": "model binding",
+   "doc": "/ˈmɒdəl ˈbaɪndɪŋ/",
+   "nghia": "gắn kết model: tự lấy dữ liệu form, route, query string gán vào tham số action",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "Model binding fills the Product parameter from the posted form fields.",
+   "viDuNghia": "Gắn kết model điền tham số Product từ các trường form gửi lên."
+  },
+  {
+   "chu": "model validation",
+   "doc": "/ˈmɒdəl ˌvælɪˈdeɪʃən/",
+   "nghia": "kiểm tra model: kiểm dữ liệu theo data annotation, kết quả ở ModelState.IsValid",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "Check ModelState.IsValid before saving the product.",
+   "viDuNghia": "Kiểm ModelState.IsValid trước khi lưu sản phẩm."
+  },
+  {
+   "chu": "data annotation",
+   "doc": "/ˈdeɪtə ˌænəˈteɪʃən/",
+   "nghia": "chú thích dữ liệu: thuộc tính [Required], [StringLength], [Range] đặt trên property để kiểm hợp lệ",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "Add the [Required] data annotation to the Name property.",
+   "viDuNghia": "Thêm chú thích dữ liệu [Required] cho thuộc tính Name."
+  },
+  {
+   "chu": "conventional routing",
+   "doc": "/kənˈvɛnʃənəl ˈruːtɪŋ/",
+   "nghia": "định tuyến theo quy ước: mẫu chung {controller=Home}/{action=Index}/{id?}",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "Conventional routing maps /Products/Edit/5 to ProductsController.Edit(5).",
+   "viDuNghia": "Định tuyến theo quy ước ánh xạ /Products/Edit/5 tới ProductsController.Edit(5)."
+  },
+  {
+   "chu": "attribute routing",
+   "doc": "/ˈætrɪbjuːt ˈruːtɪŋ/",
+   "nghia": "định tuyến bằng thuộc tính: ghi [Route(\"...\")] ngay trên controller/action",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "[Route(\"shop/{id}\")] is an example of attribute routing.",
+   "viDuNghia": "[Route(\"shop/{id}\")] là ví dụ định tuyến bằng thuộc tính."
+  },
+  {
+   "chu": "route template",
+   "doc": "/ruːt ˈtɛmpleɪt/",
+   "nghia": "mẫu tuyến: chuỗi mô tả URL kèm tham số, vd \"products/{id:int}\"",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "The route template \"products/{id:int}\" accepts only integer ids.",
+   "viDuNghia": "Mẫu tuyến \"products/{id:int}\" chỉ nhận id là số nguyên."
+  },
+  {
+   "chu": "session state",
+   "doc": "/ˈsɛʃən steɪt/",
+   "nghia": "trạng thái phiên: dữ liệu lưu theo người dùng qua nhiều request (giỏ hàng, người đăng nhập)",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "Store the shopping cart in session state.",
+   "viDuNghia": "Lưu giỏ hàng trong trạng thái phiên."
+  },
+  {
+   "chu": "ASP.NET Core Identity",
+   "doc": "/ˌeɪ ɛs ˈpiː dɒt nɛt kɔːr aɪˈdɛntɪti/",
+   "nghia": "ASP.NET Core Identity: hệ thống có sẵn quản lý tài khoản, mật khẩu, vai trò, đăng nhập",
+   "nhom": "ASP.NET Core & MVC",
+   "viDu": "ASP.NET Core Identity stores users and roles in the database.",
+   "viDuNghia": "ASP.NET Core Identity lưu người dùng và vai trò trong CSDL."
+  },
+  {
+   "chu": "Razor Pages",
+   "doc": "/ˈreɪzər ˈpeɪdʒɪz/",
+   "nghia": "Razor Pages: mô hình web theo TRANG, mỗi trang .cshtml đi kèm một lớp PageModel",
+   "nhom": "Razor Pages & Blazor",
+   "viDu": "In Razor Pages, each page has its own PageModel class instead of a controller.",
+   "viDuNghia": "Trong Razor Pages, mỗi trang có lớp PageModel riêng thay cho controller."
+  },
+  {
+   "chu": "page model",
+   "doc": "/peɪdʒ ˈmɒdəl/",
+   "nghia": "PageModel: lớp mã đi kèm trang Razor (.cshtml.cs), chứa dữ liệu và handler",
+   "nhom": "Razor Pages & Blazor",
+   "viDu": "The page model loads the products in OnGetAsync.",
+   "viDuNghia": "PageModel nạp danh sách sản phẩm trong OnGetAsync."
+  },
+  {
+   "chu": "handler method",
+   "doc": "/ˈhændlər ˈmɛθəd/",
+   "nghia": "phương thức handler: OnGet, OnPost, OnPostDelete… xử lý request tới trang",
+   "nhom": "Razor Pages & Blazor",
+   "viDu": "The OnPost handler method saves the form data.",
+   "viDuNghia": "Phương thức handler OnPost lưu dữ liệu form."
+  },
+  {
+   "chu": "Blazor",
+   "doc": "/ˈbleɪzər/",
+   "nghia": "Blazor: framework làm giao diện web tương tác bằng C# thay cho JavaScript",
+   "nhom": "Razor Pages & Blazor",
+   "viDu": "Blazor lets you write interactive web UI with C# instead of JavaScript.",
+   "viDuNghia": "Blazor cho viết giao diện web tương tác bằng C# thay cho JavaScript."
+  },
+  {
+   "chu": "Blazor Server",
+   "doc": "/ˈbleɪzər ˈsɜːrvər/",
+   "nghia": "Blazor Server: component chạy trên máy chủ, giao diện cập nhật qua kết nối SignalR",
+   "nhom": "Razor Pages & Blazor",
+   "viDu": "In Blazor Server, every UI event travels to the server over SignalR.",
+   "viDuNghia": "Trong Blazor Server, mọi sự kiện giao diện đi về máy chủ qua SignalR."
+  },
+  {
+   "chu": "Blazor WebAssembly",
+   "doc": "/ˈbleɪzər wɛb əˈsɛmbli/",
+   "nghia": "Blazor WebAssembly: tải ứng dụng .NET về chạy ngay trong trình duyệt",
+   "nhom": "Razor Pages & Blazor",
+   "viDu": "Blazor WebAssembly runs the .NET code directly in the browser.",
+   "viDuNghia": "Blazor WebAssembly chạy mã .NET ngay trong trình duyệt."
+  },
+  {
+   "chu": "Razor component",
+   "doc": "/ˈreɪzər kəmˈpoʊnənt/",
+   "nghia": "Razor component (.razor): khối giao diện Blazor dùng lại được, có tham số và sự kiện",
+   "nhom": "Razor Pages & Blazor",
+   "viDu": "A Razor component can receive data through [Parameter] properties.",
+   "viDuNghia": "Razor component nhận dữ liệu qua các thuộc tính [Parameter]."
+  },
+  {
+   "chu": "render mode",
+   "doc": "/ˈrɛndər moʊd/",
+   "nghia": "chế độ hiển thị: component Blazor chạy tĩnh, trên máy chủ hay trong trình duyệt (@rendermode)",
+   "nhom": "Razor Pages & Blazor",
+   "viDu": "Set the render mode to InteractiveServer to handle button clicks.",
+   "viDuNghia": "Đặt chế độ hiển thị InteractiveServer để xử lý bấm nút."
+  },
+  {
+   "chu": "real-time communication",
+   "doc": "/ˈrɪəl taɪm kəˌmjuːnɪˈkeɪʃən/",
+   "nghia": "giao tiếp thời gian thực: máy chủ đẩy dữ liệu tới client ngay khi có (chat, thông báo)",
+   "nhom": "Thời gian thực & tác vụ nền",
+   "viDu": "A chat room needs real-time communication between users.",
+   "viDuNghia": "Phòng chat cần giao tiếp thời gian thực giữa người dùng."
+  },
+  {
+   "chu": "SignalR",
+   "doc": "/ˈsɪɡnəl ɑːr/",
+   "nghia": "SignalR: thư viện ASP.NET Core cho giao tiếp thời gian thực, tự chọn WebSocket hoặc cách dự phòng",
+   "nhom": "Thời gian thực & tác vụ nền",
+   "viDu": "SignalR pushes new messages to every connected browser.",
+   "viDuNghia": "SignalR đẩy tin nhắn mới tới mọi trình duyệt đang kết nối."
+  },
+  {
+   "chu": "SignalR hub",
+   "doc": "/ˈsɪɡnəl ɑːr hʌb/",
+   "nghia": "hub SignalR: lớp máy chủ mà client gọi phương thức và nhận phương thức gọi ngược",
+   "nhom": "Thời gian thực & tác vụ nền",
+   "viDu": "ChatHub is a SignalR hub with a SendMessage method.",
+   "viDuNghia": "ChatHub là một hub SignalR có phương thức SendMessage."
+  },
+  {
+   "chu": "WebSocket",
+   "doc": "/ˈwɛbˌsɒkɪt/",
+   "nghia": "WebSocket: giao thức giữ kết nối hai chiều lâu dài giữa trình duyệt và máy chủ",
+   "nhom": "Thời gian thực & tác vụ nền",
+   "viDu": "WebSocket keeps one connection open for two-way messages.",
+   "viDuNghia": "WebSocket giữ một kết nối mở để gửi tin hai chiều."
+  },
+  {
+   "chu": "long polling",
+   "doc": "/lɒŋ ˈpoʊlɪŋ/",
+   "nghia": "long polling: client gửi request và máy chủ giữ lại tới khi có dữ liệu mới — cách dự phòng của SignalR",
+   "nhom": "Thời gian thực & tác vụ nền",
+   "viDu": "SignalR falls back to long polling when WebSocket is not available.",
+   "viDuNghia": "SignalR lùi về long polling khi không dùng được WebSocket."
+  },
+  {
+   "chu": "server-sent events",
+   "doc": "/ˈsɜːrvər sɛnt ɪˈvɛnts/",
+   "nghia": "server-sent events (SSE): máy chủ đẩy dữ liệu một chiều tới trình duyệt qua HTTP",
+   "nhom": "Thời gian thực & tác vụ nền",
+   "viDu": "Server-sent events only allow the server to push data to the client.",
+   "viDuNghia": "Server-sent events chỉ cho máy chủ đẩy dữ liệu xuống client."
+  },
+  {
+   "chu": "worker service",
+   "doc": "/ˈwɜːrkər ˈsɜːrvɪs/",
+   "nghia": "worker service: dự án .NET chạy tác vụ nền lâu dài, không có giao diện",
+   "nhom": "Thời gian thực & tác vụ nền",
+   "viDu": "A worker service can check the inventory every ten minutes.",
+   "viDuNghia": "Worker service có thể kiểm kho mỗi mười phút."
+  },
+  {
+   "chu": "hosted service",
+   "doc": "/ˈhoʊstɪd ˈsɜːrvɪs/",
+   "nghia": "hosted service (IHostedService): dịch vụ chạy nền trong vòng đời của host",
+   "nhom": "Thời gian thực & tác vụ nền",
+   "viDu": "Register the email sender as a hosted service.",
+   "viDuNghia": "Đăng ký trình gửi email làm hosted service."
+  },
+  {
+   "chu": "BackgroundService",
+   "doc": "/ˈbækɡraʊnd ˈsɜːrvɪs/",
+   "nghia": "BackgroundService: lớp cơ sở để viết tác vụ nền, ghi đè ExecuteAsync",
+   "nhom": "Thời gian thực & tác vụ nền",
+   "viDu": "Override ExecuteAsync in your BackgroundService and loop until cancellation.",
+   "viDuNghia": "Ghi đè ExecuteAsync trong BackgroundService và lặp tới khi bị huỷ."
+  }
+ ]
+}

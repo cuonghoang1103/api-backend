@@ -1,0 +1,730 @@
+{
+ "ma": "swd392-3",
+ "nn": "en",
+ "ten": "SWD392 · 3. COMET, giao tiếp, kiến trúc & mẫu GoF",
+ "moTa": "Bổ sung SWD392 (giáo trình Gomaa – COMET): dòng sản phẩm phần mềm (kernel, optional, variant), cấu trúc đối tượng, giao tác hợp thành và 2PC, các mẫu giao tiếp thông điệp, broker, SOA, tác vụ đồng thời, UML nâng cao, kiến trúc hiện đại (hexagonal, CQRS, DDD) và mẫu GoF — câu ví dụ lấy từ đề FE thật.",
+ "bieuTuong": "square.stack.3d.up.fill",
+ "thuTu": -921,
+ "tu": [
+  {
+   "chu": "COMET method",
+   "doc": "/ˈkɑːmɪt ˈmeθəd/",
+   "nghia": "COMET (Gomaa): phương pháp mô hình hoá dựa trên UML, dẫn dắt bởi use case, đi từ yêu cầu → phân tích → thiết kế",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "A UML-based software modeling method.",
+   "viDuNghia": "Một phương pháp mô hình hoá phần mềm dựa trên UML."
+  },
+  {
+   "chu": "use case-driven modeling",
+   "doc": "/ˈjuːs keɪs ˌdrɪvn ˈmɑːdlɪŋ/",
+   "nghia": "mô hình hoá dẫn dắt bởi use case: mọi mô hình động/tĩnh xuất phát từ use case",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "Use case-driven modeling",
+   "viDuNghia": "Mô hình hoá dẫn dắt bởi use case."
+  },
+  {
+   "chu": "kernel class",
+   "doc": "/ˈkɜːrnl klæs/",
+   "nghia": "lớp lõi: lớp có mặt trong MỌI thành viên của dòng sản phẩm",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "A member of the SPL composed of kernel classes and possibly some optional classes.",
+   "viDuNghia": "Thành viên dòng sản phẩm gồm lớp lõi và có thể thêm vài lớp tuỳ chọn."
+  },
+  {
+   "chu": "optional class",
+   "doc": "/ˈɑːpʃənl klæs/",
+   "nghia": "lớp tuỳ chọn: chỉ có ở một số thành viên của dòng sản phẩm",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "Optional classes appear only in some members of the product line.",
+   "viDuNghia": "Lớp tuỳ chọn chỉ xuất hiện ở một số thành viên của dòng sản phẩm."
+  },
+  {
+   "chu": "variant class",
+   "doc": "/ˈveriənt klæs/",
+   "nghia": "lớp biến thể: các lớp khác nhau thay thế cho nhau giữa các thành viên",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "Common and variant stereotypes",
+   "viDuNghia": "Khuôn mẫu chung và biến thể."
+  },
+  {
+   "chu": "kernel use case",
+   "doc": "/ˈkɜːrnl juːs keɪs/",
+   "nghia": "use case lõi: thành viên nào của dòng sản phẩm cũng có",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "Kernel and optional stereotypes",
+   "viDuNghia": "Khuôn mẫu lõi và tuỳ chọn."
+  },
+  {
+   "chu": "optional use case",
+   "doc": "/ˈɑːpʃənl juːs keɪs/",
+   "nghia": "use case tuỳ chọn: chỉ một số thành viên dòng sản phẩm có",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "An optional use case is needed by some but not all members of the product line.",
+   "viDuNghia": "Use case tuỳ chọn cần cho một số, không phải mọi thành viên."
+  },
+  {
+   "chu": "alternative use case",
+   "doc": "/ɔːlˈtɜːrnətɪv juːs keɪs/",
+   "nghia": "use case thay thế: được chọn thay cho một use case khác ở một thành viên SPL",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "A use case that can be chosen in place of a different use case in an SPL member.",
+   "viDuNghia": "Use case có thể được chọn thay cho use case khác trong một thành viên SPL."
+  },
+  {
+   "chu": "application logic object",
+   "doc": "/ˌæplɪˈkeɪʃn ˈlɑːdʒɪk ˈɑːbdʒekt/",
+   "nghia": "đối tượng logic ứng dụng: chứa quy tắc nghiệp vụ hoặc thuật toán, tách khỏi dữ liệu",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "An object that defines business-specific application logic.",
+   "viDuNghia": "Đối tượng định nghĩa logic ứng dụng riêng cho nghiệp vụ."
+  },
+  {
+   "chu": "external I/O device",
+   "doc": "/ɪkˈstɜːrnl ˌaɪ ˈoʊ dɪˈvaɪs/",
+   "nghia": "thiết bị vào/ra bên ngoài (cảm biến, máy đọc thẻ) mà đối tượng biên giao tiếp",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "External I/O device",
+   "viDuNghia": "Thiết bị vào/ra bên ngoài."
+  },
+  {
+   "chu": "abstract use case",
+   "doc": "/ˈæbstrækt juːs keɪs/",
+   "nghia": "use case trừu tượng: không tự chạy, chỉ được include hoặc kế thừa bởi use case khác",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "An inclusion use case is an abstract use case.",
+   "viDuNghia": "Use case được include là use case trừu tượng."
+  },
+  {
+   "chu": "attribute inheritance",
+   "doc": "/ˈætrɪbjuːt ɪnˈherɪtəns/",
+   "nghia": "kế thừa thuộc tính: lớp con nhận và có thể định nghĩa lại thuộc tính của lớp cha",
+   "nhom": "Dòng sản phẩm và mô hình hoá",
+   "viDu": "Subclass redefines attributes inherited from superclass.",
+   "viDuNghia": "Lớp con định nghĩa lại thuộc tính kế thừa từ lớp cha."
+  },
+  {
+   "chu": "atomic transaction",
+   "doc": "/əˈtɑːmɪk trænˈzækʃn/",
+   "nghia": "giao tác nguyên tử: thực hiện trọn vẹn hoặc không gì cả, không chia nhỏ được",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "The compound transaction is indivisible.",
+   "viDuNghia": "Giao tác hợp thành không thể chia nhỏ. (phương án sai)"
+  },
+  {
+   "chu": "two-phase commit",
+   "doc": "/ˌtuː feɪz kəˈmɪt/",
+   "nghia": "cam kết hai pha (2PC): điều phối hỏi mọi bên \"sẵn sàng?\" rồi mới cùng commit hoặc cùng huỷ",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "Two-Phase Commit Protocol Pattern",
+   "viDuNghia": "Mẫu giao thức cam kết hai pha."
+  },
+  {
+   "chu": "saga pattern",
+   "doc": "/ˈsɑːɡə ˈpætərn/",
+   "nghia": "mẫu saga: chuỗi giao tác cục bộ, lỗi thì chạy giao tác bù trừ (thay 2PC trong microservice)",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "The saga pattern undoes earlier steps with compensating transactions.",
+   "viDuNghia": "Mẫu saga hoàn tác bước trước bằng giao tác bù trừ."
+  },
+  {
+   "chu": "outbox pattern",
+   "doc": "/ˈaʊtbɑːks ˈpætərn/",
+   "nghia": "mẫu outbox: ghi sự kiện vào bảng outbox cùng giao tác với dữ liệu rồi mới gửi đi",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "The outbox pattern avoids losing events when the broker is down.",
+   "viDuNghia": "Mẫu outbox tránh mất sự kiện khi broker ngừng."
+  },
+  {
+   "chu": "message producer",
+   "doc": "/ˈmesɪdʒ prəˈduːsər/",
+   "nghia": "bên gửi thông điệp",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "The producer waits for a response from the consumer.",
+   "viDuNghia": "Bên gửi chờ phản hồi từ bên nhận."
+  },
+  {
+   "chu": "message consumer",
+   "doc": "/ˈmesɪdʒ kənˈsuːmər/",
+   "nghia": "bên nhận và xử lý thông điệp",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "In asynchronous communication the producer does not wait for the message consumer.",
+   "viDuNghia": "Trong giao tiếp bất đồng bộ bên gửi không chờ bên nhận."
+  },
+  {
+   "chu": "synchronous message communication",
+   "doc": "/ˈsɪŋkrənəs ˈmesɪdʒ kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "giao tiếp thông điệp đồng bộ: bên gửi chờ (có hoặc không có trả lời)",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "The synchronous message communication pattern",
+   "viDuNghia": "Mẫu giao tiếp thông điệp đồng bộ."
+  },
+  {
+   "chu": "asynchronous message communication",
+   "doc": "/eɪˈsɪŋkrənəs ˈmesɪdʒ kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "giao tiếp thông điệp bất đồng bộ: gửi vào hàng đợi rồi làm tiếp, không chờ",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "Asynchronous Message Communication pattern",
+   "viDuNghia": "Mẫu giao tiếp thông điệp bất đồng bộ."
+  },
+  {
+   "chu": "bidirectional message communication",
+   "doc": "/ˌbaɪdəˈrekʃənl ˈmesɪdʒ kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "giao tiếp thông điệp hai chiều bất đồng bộ: hai bên gửi qua lại mà không chặn nhau",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "Bidirectional Message Communication pattern",
+   "viDuNghia": "Mẫu giao tiếp thông điệp hai chiều."
+  },
+  {
+   "chu": "publish/subscribe",
+   "doc": "/ˈpʌblɪʃ səbˈskraɪb/",
+   "nghia": "xuất bản/đăng ký (subscription/notification): bên đăng ký nhận mọi thông điệp của chủ đề",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "What are the communication characteristics of subscription/notification?",
+   "viDuNghia": "Giao tiếp đăng ký/thông báo có đặc điểm gì?"
+  },
+  {
+   "chu": "broker pattern",
+   "doc": "/ˈbroʊkər ˈpætərn/",
+   "nghia": "mẫu broker: trung gian giúp client tìm và gọi service mà không cần biết vị trí",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "Broker Forwarding Pattern",
+   "viDuNghia": "Mẫu broker chuyển tiếp."
+  },
+  {
+   "chu": "broker forwarding",
+   "doc": "/ˈbroʊkər ˈfɔːrwərdɪŋ/",
+   "nghia": "broker chuyển tiếp: client gửi qua broker, broker chuyển tới service và trả kết quả về",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "In broker forwarding, every message passes through the broker.",
+   "viDuNghia": "Trong broker chuyển tiếp, mọi thông điệp đều đi qua broker."
+  },
+  {
+   "chu": "broker handle",
+   "doc": "/ˈbroʊkər ˈhændl/",
+   "nghia": "broker trả địa chỉ: broker chỉ trả handle của service, client gọi thẳng service lần sau",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "With a broker handle, the client talks to the service directly.",
+   "viDuNghia": "Với broker handle, client nói chuyện thẳng với service."
+  },
+  {
+   "chu": "service registry",
+   "doc": "/ˈsɜːrvɪs ˈredʒɪstri/",
+   "nghia": "danh bạ dịch vụ: nơi service đăng ký vị trí để client/broker tìm thấy",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "So that the registry is up to date.",
+   "viDuNghia": "Để danh bạ luôn được cập nhật."
+  },
+  {
+   "chu": "Simple Object Access Protocol",
+   "doc": "/ˈsɪmpl ˈɑːbdʒekt ˈækses ˈproʊtəkɔːl/",
+   "nghia": "SOAP: giao thức dịch vụ web trao đổi thông điệp XML",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "SOAP XML HTTP TCP/IP",
+   "viDuNghia": "Ngăn xếp SOAP, XML, HTTP, TCP/IP."
+  },
+  {
+   "chu": "WSDL",
+   "doc": "/ˈwɪzdl/",
+   "nghia": "Web Services Description Language: tệp XML mô tả giao diện của dịch vụ SOAP",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "The WSDL file describes the operations of the web service.",
+   "viDuNghia": "Tệp WSDL mô tả các thao tác của dịch vụ web."
+  },
+  {
+   "chu": "service contract",
+   "doc": "/ˈsɜːrvɪs ˈkɑːntrækt/",
+   "nghia": "hợp đồng dịch vụ: giao diện và quy ước mà service cam kết với bên dùng",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "Services communicate only through a well-defined service contract.",
+   "viDuNghia": "Các service chỉ giao tiếp qua hợp đồng dịch vụ rõ ràng."
+  },
+  {
+   "chu": "service consumer",
+   "doc": "/ˈsɜːrvɪs kənˈsuːmər/",
+   "nghia": "bên dùng dịch vụ trong SOA",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "The service consumer finds the provider through the registry.",
+   "viDuNghia": "Bên dùng dịch vụ tìm bên cung cấp qua danh bạ."
+  },
+  {
+   "chu": "choreography",
+   "doc": "/ˌkɔːriˈɑːɡrəfi/",
+   "nghia": "điều phối phân tán: mỗi service tự phản ứng theo sự kiện, không có trung tâm",
+   "nhom": "Giao tác và mẫu giao tiếp",
+   "viDu": "In choreography each service reacts to events on its own.",
+   "viDuNghia": "Trong điều phối phân tán mỗi service tự phản ứng theo sự kiện."
+  },
+  {
+   "chu": "concurrent object",
+   "doc": "/kənˈkɜːrənt ˈɑːbdʒekt/",
+   "nghia": "đối tượng đồng thời (active object): có luồng điều khiển riêng",
+   "nhom": "Tác vụ đồng thời và trạng thái",
+   "viDu": "concurrent object",
+   "viDuNghia": "Đối tượng đồng thời."
+  },
+  {
+   "chu": "concurrent task",
+   "doc": "/kənˈkɜːrənt tæsk/",
+   "nghia": "tác vụ đồng thời: đơn vị chạy song song trong thiết kế hệ thời gian thực",
+   "nhom": "Tác vụ đồng thời và trạng thái",
+   "viDu": "Each concurrent task has its own thread of control.",
+   "viDuNghia": "Mỗi tác vụ đồng thời có luồng điều khiển riêng."
+  },
+  {
+   "chu": "task structuring",
+   "doc": "/tæsk ˈstrʌktʃərɪŋ/",
+   "nghia": "cấu trúc tác vụ: gom đối tượng thành tác vụ đồng thời theo tiêu chí (sự kiện, định kỳ, theo yêu cầu)",
+   "nhom": "Tác vụ đồng thời và trạng thái",
+   "viDu": "Task structuring maps objects to concurrent tasks.",
+   "viDuNghia": "Cấu trúc tác vụ ánh xạ đối tượng vào tác vụ đồng thời."
+  },
+  {
+   "chu": "event-driven task",
+   "doc": "/ɪˈvent ˌdrɪvn tæsk/",
+   "nghia": "tác vụ hướng sự kiện: chạy khi có ngắt hoặc sự kiện từ thiết bị",
+   "nhom": "Tác vụ đồng thời và trạng thái",
+   "viDu": "An event-driven task is activated by an interrupt from an I/O device.",
+   "viDuNghia": "Tác vụ hướng sự kiện được kích hoạt bởi ngắt từ thiết bị vào/ra."
+  },
+  {
+   "chu": "state definition",
+   "doc": "/steɪt ˌdefɪˈnɪʃn/",
+   "nghia": "định nghĩa trạng thái: tình huống nhận biết được, kéo dài một khoảng thời gian",
+   "nhom": "Tác vụ đồng thời và trạng thái",
+   "viDu": "A state is a recognizable situation that exists over an interval of time.",
+   "viDuNghia": "Trạng thái là tình huống nhận biết được, tồn tại trong một khoảng thời gian."
+  },
+  {
+   "chu": "orthogonal region",
+   "doc": "/ɔːrˈθɑːɡənl ˈriːdʒən/",
+   "nghia": "vùng trực giao: các phần độc lập chạy song song trong một trạng thái hợp thành",
+   "nhom": "Tác vụ đồng thời và trạng thái",
+   "viDu": "An orthogonal region lets two substates be active at the same time.",
+   "viDuNghia": "Vùng trực giao cho hai trạng thái con cùng hoạt động."
+  },
+  {
+   "chu": "history state",
+   "doc": "/ˈhɪstri steɪt/",
+   "nghia": "trạng thái lịch sử (H): quay lại đúng trạng thái con cuối cùng khi vào lại trạng thái hợp thành",
+   "nhom": "Tác vụ đồng thời và trạng thái",
+   "viDu": "The history state resumes the last active substate.",
+   "viDuNghia": "Trạng thái lịch sử khôi phục trạng thái con hoạt động cuối cùng."
+  },
+  {
+   "chu": "do activity",
+   "doc": "/duː ækˈtɪvəti/",
+   "nghia": "hoạt động do/: việc chạy liên tục suốt thời gian ở trong một trạng thái",
+   "nhom": "Tác vụ đồng thời và trạng thái",
+   "viDu": "do / playMusic runs while the player stays in the Playing state.",
+   "viDuNghia": "do / playMusic chạy suốt thời gian ở trạng thái Playing."
+  },
+  {
+   "chu": "Object Management Group",
+   "doc": "/ˈɑːbdʒekt ˈmænɪdʒmənt ɡruːp/",
+   "nghia": "OMG: tổ chức chuẩn hoá và duy trì UML",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "A standardized graphical language and notation maintained by OMG.",
+   "viDuNghia": "Một ngôn ngữ đồ hoạ chuẩn do OMG duy trì."
+  },
+  {
+   "chu": "realization",
+   "doc": "/ˌriːələˈzeɪʃn/",
+   "nghia": "quan hệ hiện thực (mũi tên nét đứt tam giác rỗng): lớp cài đặt một interface",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "refinement of realization",
+   "viDuNghia": "Tinh chỉnh của quan hệ hiện thực."
+  },
+  {
+   "chu": "navigability",
+   "doc": "/ˌnævɪɡəˈbɪləti/",
+   "nghia": "tính điều hướng của liên kết: mũi tên cho biết lớp nào biết tới lớp nào",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "Navigability shows which class can reach the other.",
+   "viDuNghia": "Tính điều hướng cho biết lớp nào truy cập được lớp kia."
+  },
+  {
+   "chu": "compartment",
+   "doc": "/kəmˈpɑːrtmənt/",
+   "nghia": "ngăn của hình lớp: tên, thuộc tính, phương thức",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "A class can be drawn as a box with one compartment.",
+   "viDuNghia": "Lớp có thể vẽ là hộp một ngăn."
+  },
+  {
+   "chu": "composite structure diagram",
+   "doc": "/kəmˈpɑːzət ˈstrʌktʃər ˈdaɪəɡræm/",
+   "nghia": "sơ đồ cấu trúc hợp thành: cấu trúc bên trong một lớp/thành phần (part, port, connector)",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "In UML, what is the purpose of a composite structure diagram?",
+   "viDuNghia": "Trong UML, sơ đồ cấu trúc hợp thành dùng để làm gì?"
+  },
+  {
+   "chu": "structured class",
+   "doc": "/ˈstrʌktʃərd klæs/",
+   "nghia": "lớp có cấu trúc: lớp gồm các phần bên trong và cổng nối",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "A structured class contains parts connected through ports.",
+   "viDuNghia": "Lớp có cấu trúc chứa các phần nối qua cổng."
+  },
+  {
+   "chu": "provided interface",
+   "doc": "/prəˈvaɪdɪd ˈɪntərfeɪs/",
+   "nghia": "giao diện cung cấp (hình kẹo mút): các thao tác component cung cấp cho bên khác",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "What does a component's provided interface consist of?",
+   "viDuNghia": "Giao diện cung cấp của component gồm những gì?"
+  },
+  {
+   "chu": "required interface",
+   "doc": "/rɪˈkwaɪərd ˈɪntərfeɪs/",
+   "nghia": "giao diện yêu cầu (hình ổ cắm): các thao tác component cần bên khác cung cấp",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "What does a component's required interface consist of?",
+   "viDuNghia": "Giao diện yêu cầu của component gồm những gì?"
+  },
+  {
+   "chu": "activation bar",
+   "doc": "/ˌæktɪˈveɪʃn bɑːr/",
+   "nghia": "thanh kích hoạt: hình chữ nhật hẹp trên lifeline khi đối tượng đang xử lý",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "The activation bar shows when the object is executing.",
+   "viDuNghia": "Thanh kích hoạt cho thấy khi đối tượng đang chạy."
+  },
+  {
+   "chu": "combined fragment",
+   "doc": "/kəmˈbaɪnd ˈfræɡmənt/",
+   "nghia": "khung tổ hợp trong sơ đồ tuần tự: alt (rẽ nhánh), opt, loop, par",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "Use an alt combined fragment for the success and failure paths.",
+   "viDuNghia": "Dùng khung alt cho nhánh thành công và thất bại."
+  },
+  {
+   "chu": "interaction overview diagram",
+   "doc": "/ˌɪntərˈækʃn ˈoʊvərvjuː ˈdaɪəɡræm/",
+   "nghia": "sơ đồ tổng quan tương tác: sơ đồ hoạt động mà mỗi nút là một sơ đồ tương tác",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "An interaction overview diagram links several sequence diagrams.",
+   "viDuNghia": "Sơ đồ tổng quan tương tác nối nhiều sơ đồ tuần tự."
+  },
+  {
+   "chu": "timing diagram",
+   "doc": "/ˈtaɪmɪŋ ˈdaɪəɡræm/",
+   "nghia": "sơ đồ thời gian: trạng thái của đối tượng theo trục thời gian chính xác",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "A timing diagram shows state changes on a time axis.",
+   "viDuNghia": "Sơ đồ thời gian thể hiện thay đổi trạng thái trên trục thời gian."
+  },
+  {
+   "chu": "PlantUML",
+   "doc": "/plænt ˌjuː em ˈel/",
+   "nghia": "công cụ vẽ sơ đồ UML từ văn bản (@startuml ... @enduml)",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "Write the class diagram in PlantUML between @startuml and @enduml.",
+   "viDuNghia": "Viết sơ đồ lớp bằng PlantUML giữa @startuml và @enduml."
+  },
+  {
+   "chu": "deployment view",
+   "doc": "/dɪˈplɔɪmənt vjuː/",
+   "nghia": "khung nhìn triển khai: cấu hình vật lý gồm các nút và kết nối",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "A view of the physical configuration in terms of nodes and interconnections.",
+   "viDuNghia": "Khung nhìn cấu hình vật lý theo các nút và kết nối."
+  },
+  {
+   "chu": "logical view",
+   "doc": "/ˈlɑːdʒɪkl vjuː/",
+   "nghia": "khung nhìn logic (mô hình 4+1): cấu trúc tĩnh — lớp, đối tượng, quan hệ",
+   "nhom": "Phần tử UML nâng cao",
+   "viDu": "Which view in the 4+1 model represents the static organization?",
+   "viDuNghia": "Khung nhìn nào trong mô hình 4+1 thể hiện tổ chức tĩnh?"
+  },
+  {
+   "chu": "distributed architecture",
+   "doc": "/dɪˈstrɪbjuːtɪd ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc phân tán: các thành phần chạy trên nhiều nút, giao tiếp qua mạng",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "A distributed software architecture consisting of multiple related services.",
+   "viDuNghia": "Kiến trúc phần mềm phân tán gồm nhiều dịch vụ liên quan."
+  },
+  {
+   "chu": "monolith",
+   "doc": "/ˈmɑːnəlɪθ/",
+   "nghia": "ứng dụng nguyên khối: mọi chức năng đóng gói và triển khai như một khối",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "Microservices break down a monolith into independently deployable services.",
+   "viDuNghia": "Microservice chia ứng dụng nguyên khối thành các dịch vụ triển khai độc lập."
+  },
+  {
+   "chu": "modular monolith",
+   "doc": "/ˈmɑːdʒələr ˈmɑːnəlɪθ/",
+   "nghia": "nguyên khối mô-đun: một khối triển khai nhưng chia module ranh giới rõ",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "Start with a modular monolith before splitting into microservices.",
+   "viDuNghia": "Bắt đầu bằng nguyên khối mô-đun trước khi tách microservice."
+  },
+  {
+   "chu": "hexagonal architecture",
+   "doc": "/hekˈsæɡənl ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc lục giác (ports and adapters): lõi nghiệp vụ ở giữa, giao tiếp ngoài qua cổng và bộ chuyển",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "Hexagonal architecture keeps the domain independent of the database.",
+   "viDuNghia": "Kiến trúc lục giác giữ lõi nghiệp vụ độc lập với CSDL."
+  },
+  {
+   "chu": "ports and adapters",
+   "doc": "/pɔːrts ənd əˈdæptərz/",
+   "nghia": "cổng và bộ chuyển: lõi khai cổng (interface), bên ngoài cắm bộ chuyển (REST, DB)",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "In ports and adapters, the REST controller is an inbound adapter.",
+   "viDuNghia": "Trong cổng và bộ chuyển, REST controller là bộ chuyển chiều vào."
+  },
+  {
+   "chu": "clean architecture",
+   "doc": "/kliːn ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc sạch: các vòng đồng tâm, phụ thuộc chỉ hướng vào trong (về phía nghiệp vụ)",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "In clean architecture, dependencies point inward.",
+   "viDuNghia": "Trong kiến trúc sạch, phụ thuộc hướng vào trong."
+  },
+  {
+   "chu": "event sourcing",
+   "doc": "/ɪˈvent ˈsɔːrsɪŋ/",
+   "nghia": "lưu theo sự kiện: lưu chuỗi sự kiện thay vì trạng thái cuối, dựng lại trạng thái bằng cách phát lại",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "With event sourcing, the account balance is rebuilt from its events.",
+   "viDuNghia": "Với lưu theo sự kiện, số dư được dựng lại từ các sự kiện."
+  },
+  {
+   "chu": "CQRS",
+   "doc": "/ˌsiː kjuː ɑːr ˈes/",
+   "nghia": "Command Query Responsibility Segregation: tách mô hình ghi (command) và mô hình đọc (query)",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "CQRS uses separate models for writes and reads.",
+   "viDuNghia": "CQRS dùng mô hình riêng cho ghi và đọc."
+  },
+  {
+   "chu": "circuit breaker",
+   "doc": "/ˈsɜːrkɪt ˈbreɪkər/",
+   "nghia": "cầu dao: ngừng gọi service đang lỗi trong một khoảng để tránh lỗi dây chuyền",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "The circuit breaker opens after five failed calls.",
+   "viDuNghia": "Cầu dao ngắt sau năm lần gọi thất bại."
+  },
+  {
+   "chu": "sidecar",
+   "doc": "/ˈsaɪdkɑːr/",
+   "nghia": "mẫu sidecar: tiến trình phụ chạy cạnh service lo log, proxy, bảo mật",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "A sidecar proxy handles TLS for the service.",
+   "viDuNghia": "Proxy sidecar lo TLS cho service."
+  },
+  {
+   "chu": "service mesh",
+   "doc": "/ˈsɜːrvɪs meʃ/",
+   "nghia": "lưới dịch vụ: tầng hạ tầng lo giao tiếp giữa microservice (định tuyến, mã hoá, đo đạc)",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "A service mesh adds retries and encryption between services.",
+   "viDuNghia": "Lưới dịch vụ thêm thử lại và mã hoá giữa các service."
+  },
+  {
+   "chu": "domain-driven design",
+   "doc": "/doʊˈmeɪn ˌdrɪvn dɪˈzaɪn/",
+   "nghia": "DDD: thiết kế lấy miền nghiệp vụ làm trung tâm, dùng ngôn ngữ chung với chuyên gia",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "Domain-driven design splits a large model into bounded contexts.",
+   "viDuNghia": "DDD chia mô hình lớn thành các ngữ cảnh giới hạn."
+  },
+  {
+   "chu": "bounded context",
+   "doc": "/ˈbaʊndɪd ˈkɑːntekst/",
+   "nghia": "ngữ cảnh giới hạn: vùng mà một mô hình và thuật ngữ có nghĩa nhất quán",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "Customer means different things in the Sales and Support bounded contexts.",
+   "viDuNghia": "Customer mang nghĩa khác nhau trong ngữ cảnh Bán hàng và Hỗ trợ."
+  },
+  {
+   "chu": "aggregate root",
+   "doc": "/ˈæɡrɪɡət ruːt/",
+   "nghia": "gốc tổng hợp: thực thể duy nhất bên ngoài được giữ tham chiếu, bảo vệ tính nhất quán cụm",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "Order is the aggregate root; order lines are changed only through it.",
+   "viDuNghia": "Order là gốc tổng hợp; dòng đơn chỉ được sửa qua nó."
+  },
+  {
+   "chu": "value object",
+   "doc": "/ˈvæljuː ˈɑːbdʒekt/",
+   "nghia": "đối tượng giá trị: không có định danh, bằng nhau khi giá trị bằng nhau (Money, Address)",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "Money is a value object with an amount and a currency.",
+   "viDuNghia": "Money là đối tượng giá trị gồm số tiền và loại tiền."
+  },
+  {
+   "chu": "domain event",
+   "doc": "/doʊˈmeɪn ɪˈvent/",
+   "nghia": "sự kiện miền: điều quan trọng đã xảy ra trong nghiệp vụ, vd OrderPlaced",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "The OrderPlaced domain event triggers the invoice service.",
+   "viDuNghia": "Sự kiện OrderPlaced kích hoạt dịch vụ hoá đơn."
+  },
+  {
+   "chu": "anti-corruption layer",
+   "doc": "/ˌænti kəˈrʌpʃn ˈleɪər/",
+   "nghia": "lớp chống hỏng: lớp dịch giữa hệ thống mới và hệ thống cũ để mô hình cũ không lan vào",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "An anti-corruption layer translates the legacy data format.",
+   "viDuNghia": "Lớp chống hỏng dịch định dạng dữ liệu của hệ cũ."
+  },
+  {
+   "chu": "architecture decision record",
+   "doc": "/ˈɑːrkɪtektʃər dɪˈsɪʒn ˈrekərd/",
+   "nghia": "ADR: ghi chép ngắn một quyết định kiến trúc (bối cảnh, lựa chọn, hệ quả)",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "Write an architecture decision record for choosing PostgreSQL.",
+   "viDuNghia": "Viết ADR cho quyết định chọn PostgreSQL."
+  },
+  {
+   "chu": "quality attribute scenario",
+   "doc": "/ˈkwɑːləti ˈætrɪbjuːt səˈnærioʊ/",
+   "nghia": "kịch bản thuộc tính chất lượng: nguồn, kích thích, môi trường, phản hồi, số đo",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "A quality attribute scenario makes \"fast\" measurable.",
+   "viDuNghia": "Kịch bản thuộc tính chất lượng khiến \"nhanh\" đo được."
+  },
+  {
+   "chu": "lack of cohesion in methods",
+   "doc": "/læk əv koʊˈhiːʒn ɪn ˈmeθədz/",
+   "nghia": "LCOM: số đo mức các phương thức của lớp không dùng chung thuộc tính; cao là lớp kém kết dính",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "A high lack of cohesion in methods suggests splitting the class.",
+   "viDuNghia": "LCOM cao gợi ý nên tách lớp."
+  },
+  {
+   "chu": "Gang of Four",
+   "doc": "/ɡæŋ əv fɔːr/",
+   "nghia": "GoF: bốn tác giả cuốn Design Patterns (1994) với 23 mẫu thiết kế",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The Gang of Four grouped patterns into creational, structural and behavioral.",
+   "viDuNghia": "GoF chia mẫu thành khởi tạo, cấu trúc và hành vi."
+  },
+  {
+   "chu": "factory method",
+   "doc": "/ˈfæktəri ˈmeθəd/",
+   "nghia": "mẫu Factory Method: lớp con quyết định tạo đối tượng cụ thể nào",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "Factory method pattern",
+   "viDuNghia": "Mẫu phương thức nhà máy."
+  },
+  {
+   "chu": "abstract factory",
+   "doc": "/ˈæbstrækt ˈfæktəri/",
+   "nghia": "mẫu Abstract Factory: tạo họ đối tượng liên quan mà không chỉ rõ lớp cụ thể",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "Abstract Factory Pattern",
+   "viDuNghia": "Mẫu nhà máy trừu tượng."
+  },
+  {
+   "chu": "adaptee",
+   "doc": "/ˌædæpˈtiː/",
+   "nghia": "lớp được chuyển đổi trong mẫu Adapter: lớp có giao diện không khớp mà adapter bọc lại",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The adapter wraps the adaptee and exposes the target interface.",
+   "viDuNghia": "Adapter bọc adaptee và lộ ra giao diện đích."
+  },
+  {
+   "chu": "bridge pattern",
+   "doc": "/brɪdʒ ˈpætərn/",
+   "nghia": "mẫu Bridge: tách phần trừu tượng khỏi phần cài đặt để hai bên thay đổi độc lập",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The bridge pattern separates shapes from rendering engines.",
+   "viDuNghia": "Mẫu Bridge tách hình vẽ khỏi bộ vẽ."
+  },
+  {
+   "chu": "flyweight pattern",
+   "doc": "/ˈflaɪweɪt ˈpætərn/",
+   "nghia": "mẫu Flyweight: dùng chung đối tượng nhỏ để tiết kiệm bộ nhớ khi có rất nhiều bản",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The flyweight pattern shares one glyph object per character.",
+   "viDuNghia": "Mẫu Flyweight dùng chung một đối tượng cho mỗi ký tự."
+  },
+  {
+   "chu": "mediator pattern",
+   "doc": "/ˈmiːdieɪtər ˈpætərn/",
+   "nghia": "mẫu Mediator: đối tượng trung gian điều phối, các đối tượng không gọi nhau trực tiếp",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "A chat room acts as a mediator between users.",
+   "viDuNghia": "Phòng chat đóng vai trung gian giữa người dùng."
+  },
+  {
+   "chu": "command pattern",
+   "doc": "/kəˈmænd ˈpætərn/",
+   "nghia": "mẫu Command: gói yêu cầu thành đối tượng để xếp hàng, ghi log, hoàn tác",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The command pattern makes undo easy.",
+   "viDuNghia": "Mẫu Command giúp hoàn tác dễ dàng."
+  },
+  {
+   "chu": "state pattern",
+   "doc": "/steɪt ˈpætərn/",
+   "nghia": "mẫu State: hành vi đổi theo trạng thái, mỗi trạng thái là một lớp",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The state pattern replaces a large switch on status.",
+   "viDuNghia": "Mẫu State thay câu switch lớn theo trạng thái."
+  },
+  {
+   "chu": "template method",
+   "doc": "/ˈtemplət ˈmeθəd/",
+   "nghia": "mẫu Template Method: lớp cha định khung thuật toán, lớp con điền các bước",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The template method fixes the order of the steps.",
+   "viDuNghia": "Template method cố định thứ tự các bước."
+  },
+  {
+   "chu": "iterator pattern",
+   "doc": "/ˈɪtəreɪtər ˈpætərn/",
+   "nghia": "mẫu Iterator: duyệt phần tử tập hợp mà không lộ cấu trúc bên trong",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "Java's for-each loop relies on the iterator pattern.",
+   "viDuNghia": "Vòng for-each của Java dựa trên mẫu Iterator."
+  },
+  {
+   "chu": "chain of responsibility",
+   "doc": "/tʃeɪn əv rɪˌspɑːnsəˈbɪləti/",
+   "nghia": "mẫu chuỗi trách nhiệm: yêu cầu đi qua chuỗi bộ xử lý tới khi có bộ xử lý nhận",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "Servlet filters form a chain of responsibility.",
+   "viDuNghia": "Filter của servlet tạo thành một chuỗi trách nhiệm."
+  },
+  {
+   "chu": "visitor pattern",
+   "doc": "/ˈvɪzɪtər ˈpætərn/",
+   "nghia": "mẫu Visitor: thêm thao tác mới cho cấu trúc đối tượng mà không sửa các lớp",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The visitor pattern adds a tax calculation to every product type.",
+   "viDuNghia": "Mẫu Visitor thêm phép tính thuế cho mọi loại sản phẩm."
+  },
+  {
+   "chu": "memento pattern",
+   "doc": "/məˈmentoʊ ˈpætərn/",
+   "nghia": "mẫu Memento: lưu ảnh trạng thái để khôi phục mà không phá đóng gói",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The memento pattern saves the editor state for undo.",
+   "viDuNghia": "Mẫu Memento lưu trạng thái trình soạn để hoàn tác."
+  },
+  {
+   "chu": "blackboard architecture",
+   "doc": "/ˈblækbɔːrd ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc bảng đen: nhiều thành phần chuyên môn cùng đọc/ghi một kho chung CHỦ ĐỘNG, kho báo cho thành phần quan tâm khi dữ liệu đổi (gốc từ nhận dạng tiếng nói)",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "Blackboard is an active store that notifies interested components of changes.",
+   "viDuNghia": "Blackboard là kho chủ động, tự báo cho các thành phần quan tâm khi có thay đổi."
+  },
+  {
+   "chu": "repository architecture",
+   "doc": "/rɪˈpɒzətɔːri ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc kho dữ liệu: các client dùng chung một kho THỤ ĐỘNG (vd CSDL) và tự truy cập nó",
+   "nhom": "Kiến trúc hiện đại",
+   "viDu": "Repository is a passive store, e.g. a database, accessed by clients.",
+   "viDuNghia": "Repository là kho thụ động, vd một CSDL, do các client tự truy cập."
+  }
+ ]
+}

@@ -4,7 +4,7 @@
  "ten": "CEA201 · 3. Tập lệnh, số học, logic, pipeline, HĐH",
  "moTa": "Môn Tổ chức & kiến trúc máy tính (CEA201), phần 3: tập lệnh, hợp ngữ, kiểu định địa chỉ, biểu diễn số, cổng logic và đại số Boole, đường ống lệnh và xung đột, RISC/CISC, đa xử lý, hỗ trợ hệ điều hành. Từ lấy từ đề FE thật; phần lớn câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "function",
- "thuTu": -987,
+ "thuTu": -984,
  "tu": [
   {
    "chu": "instruction set",

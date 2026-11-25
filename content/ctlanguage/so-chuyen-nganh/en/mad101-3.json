@@ -4,7 +4,7 @@
  "ten": "MAD101 · 3. Đồ thị & cây",
  "moTa": "Toán rời rạc (MAD101), bộ 3: các loại đồ thị, bậc của đỉnh, ma trận kề, đẳng cấu, liên thông, chu trình Euler - Hamilton, đường đi ngắn nhất, cây, duyệt cây, mã Huffman, cây khung nhỏ nhất. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "point.3.filled.connected.trianglepath.dotted",
- "thuTu": -978,
+ "thuTu": -970,
  "tu": [
   {
    "chu": "simple graph",

@@ -4,7 +4,7 @@
  "ten": "SWR302 · 4. Kiểm chứng & quản lý yêu cầu",
  "moTa": "Môn Software Requirements (FPT): kiểm chứng, rà soát, xếp ưu tiên, kiểm soát thay đổi, truy vết, tái sử dụng, rủi ro, Agile và các loại dự án. Từ trích từ đề FE/PE thật; phần lớn câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "arrow.triangle.branch",
- "thuTu": -953,
+ "thuTu": -930,
  "tu": [
   {
    "chu": "requirements validation",

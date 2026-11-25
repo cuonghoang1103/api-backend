@@ -4,7 +4,7 @@
  "ten": "PRF192 · 2. Hàm, mảng, con trỏ, chuỗi, tệp",
  "moTa": "PRF192/PRF193 – Cơ sở lập trình (C), phần 2: hàm và tham số, mảng, tìm kiếm – sắp xếp, con trỏ, cấp phát động, chuỗi, struct, tệp và từ hay gặp trong đề PE. Từ lấy từ đề FE/PE thật; câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "function",
- "thuTu": -994,
+ "thuTu": -993,
  "tu": [
   {
    "chu": "function prototype",

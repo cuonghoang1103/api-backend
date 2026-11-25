@@ -1,0 +1,890 @@
+{
+ "ma": "wed201c-3",
+ "nn": "en",
+ "ten": "WED201c · 3. Thuộc tính CSS, thẻ HTML & DOM (bổ sung)",
+ "moTa": "Bổ sung WED201c từ đề và giáo trình: các thuộc tính CSS hay hỏi (font-weight, text-transform, box-sizing, z-index…), đơn vị em/rem/vw, bộ chọn nâng cao, bố cục flex/grid, thẻ bảng – form – đa phương tiện HTML5, ARIA, thẻ meta viewport, vài phương thức DOM và khái niệm làm web.",
+ "bieuTuong": "paintbrush.fill",
+ "thuTu": -944,
+ "tu": [
+  {
+   "chu": "font weight",
+   "doc": "/fɑːnt weɪt/",
+   "nghia": "độ đậm chữ (font-weight): normal, bold hoặc số 100–900",
+   "nhom": "Chữ và màu",
+   "viDu": "The font-weight property sets the font size of the element",
+   "viDuNghia": "Thuộc tính font-weight đặt cỡ chữ của phần tử (phát biểu sai: nó đặt độ đậm)"
+  },
+  {
+   "chu": "text transform",
+   "doc": "/tekst ˈtrænsfɔːrm/",
+   "nghia": "biến đổi chữ (text-transform): uppercase, lowercase, capitalize (viết hoa chữ đầu mỗi từ)",
+   "nhom": "Chữ và màu",
+   "viDu": "text-transform:capitalize",
+   "viDuNghia": "text-transform:capitalize (viết hoa chữ cái đầu mỗi từ)"
+  },
+  {
+   "chu": "text decoration",
+   "doc": "/tekst ˌdekəˈreɪʃn/",
+   "nghia": "trang trí chữ (text-decoration): gạch chân, gạch ngang; text-decoration: none bỏ gạch chân liên kết",
+   "nhom": "Chữ và màu",
+   "viDu": "a {text-decoration:no-underline;}",
+   "viDuNghia": "a {text-decoration:no-underline;} (giá trị sai: đúng là none)"
+  },
+  {
+   "chu": "word wrap",
+   "doc": "/wɜːrd ræp/",
+   "nghia": "ngắt dòng trong từ (word-wrap / overflow-wrap: break-word): cho phép bẻ từ quá dài xuống dòng",
+   "nhom": "Chữ và màu",
+   "viDu": "p.test {word-wrap:break-word;}",
+   "viDuNghia": "p.test {word-wrap:break-word;} (cho phép bẻ từ dài xuống dòng)"
+  },
+  {
+   "chu": "line height",
+   "doc": "/laɪn haɪt/",
+   "nghia": "chiều cao dòng (line-height): khoảng cách giữa các dòng chữ",
+   "nhom": "Chữ và màu",
+   "viDu": "Setting line-height to 1.5 makes paragraphs easier to read.",
+   "viDuNghia": "Đặt line-height bằng 1.5 làm đoạn văn dễ đọc hơn."
+  },
+  {
+   "chu": "serif",
+   "doc": "/ˈserɪf/",
+   "nghia": "chữ có chân: kiểu chữ có nét nhỏ ở đầu nét (Times New Roman)",
+   "nhom": "Chữ và màu",
+   "viDu": "Times New Roman is a serif font.",
+   "viDuNghia": "Times New Roman là một phông chữ có chân."
+  },
+  {
+   "chu": "sans-serif",
+   "doc": "/ˌsænz ˈserɪf/",
+   "nghia": "chữ không chân: kiểu chữ không có nét chân (Arial, Helvetica)",
+   "nhom": "Chữ và màu",
+   "viDu": "The text will be displayed in Helvetica",
+   "viDuNghia": "Chữ sẽ được hiển thị bằng Helvetica (một phông không chân)"
+  },
+  {
+   "chu": "monospace",
+   "doc": "/ˈmɑːnoʊspeɪs/",
+   "nghia": "chữ đơn cách: mọi ký tự rộng bằng nhau, dùng hiển thị mã nguồn",
+   "nhom": "Chữ và màu",
+   "viDu": "Code samples are usually shown in a monospace font.",
+   "viDuNghia": "Mẫu mã thường được hiển thị bằng phông đơn cách."
+  },
+  {
+   "chu": "cursive",
+   "doc": "/ˈkɜːrsɪv/",
+   "nghia": "kiểu chữ viết tay (cursive): họ phông mô phỏng nét bút viết",
+   "nhom": "Chữ và màu",
+   "viDu": "The text will be displayed in Cursive",
+   "viDuNghia": "Chữ sẽ được hiển thị bằng kiểu chữ viết tay"
+  },
+  {
+   "chu": "web font",
+   "doc": "/web fɑːnt/",
+   "nghia": "phông web: phông tải từ máy chủ qua @font-face hoặc Google Fonts, không cần cài trên máy người xem",
+   "nhom": "Chữ và màu",
+   "viDu": "A web font is downloaded by the browser when the page loads.",
+   "viDuNghia": "Phông web được trình duyệt tải về khi trang được nạp."
+  },
+  {
+   "chu": "icon font",
+   "doc": "/ˈaɪkɑːn fɑːnt/",
+   "nghia": "phông biểu tượng: phông mà mỗi ký tự là một biểu tượng (Font Awesome, Glyphicons)",
+   "nhom": "Chữ và màu",
+   "viDu": "An icon font lets you change the size and color of icons with CSS.",
+   "viDuNghia": "Phông biểu tượng cho phép đổi cỡ và màu biểu tượng bằng CSS."
+  },
+  {
+   "chu": "Font Awesome",
+   "doc": "/fɑːnt ˈɔːsəm/",
+   "nghia": "Font Awesome: bộ phông biểu tượng phổ biến, dùng bằng thẻ i class=\"fa fa-…\"",
+   "nhom": "Chữ và màu",
+   "viDu": "a href=\"https://twitter.com/\" aria-label=\"Twitter\" i class=\"fa fa-twitter\" /i /a",
+   "viDuNghia": "Liên kết tới Twitter dùng biểu tượng Font Awesome fa-twitter kèm aria-label"
+  },
+  {
+   "chu": "hex color",
+   "doc": "/heks ˈkʌlər/",
+   "nghia": "mã màu thập lục phân: màu viết #RRGGBB, vd #FFFFFF là trắng",
+   "nhom": "Chữ và màu",
+   "viDu": "h1 .all { background-color : #FFFFFF ;}",
+   "viDuNghia": "Đặt màu nền trắng (#FFFFFF) cho phần tử có lớp all trong h1"
+  },
+  {
+   "chu": "HSL",
+   "doc": "/ˌeɪtʃ es ˈel/",
+   "nghia": "HSL: cách ghi màu theo sắc độ (hue), độ bão hoà (saturation), độ sáng (lightness)",
+   "nhom": "Chữ và màu",
+   "viDu": "hsl(0, 100%, 50%) is pure red.",
+   "viDuNghia": "hsl(0, 100%, 50%) là màu đỏ thuần."
+  },
+  {
+   "chu": "background image",
+   "doc": "/ˈbækɡraʊnd ˈɪmɪdʒ/",
+   "nghia": "ảnh nền (background-image): đặt ảnh làm nền cho phần tử bằng url(...)",
+   "nhom": "Chữ và màu",
+   "viDu": "background-image: url(\"bg.jpg\") sets a picture behind the content.",
+   "viDuNghia": "background-image: url(\"bg.jpg\") đặt một bức ảnh phía sau nội dung."
+  },
+  {
+   "chu": "background repeat",
+   "doc": "/ˈbækɡraʊnd rɪˈpiːt/",
+   "nghia": "lặp ảnh nền (background-repeat): repeat, no-repeat, repeat-x, repeat-y",
+   "nhom": "Chữ và màu",
+   "viDu": "Use background-repeat: no-repeat to show the image only once.",
+   "viDuNghia": "Dùng background-repeat: no-repeat để ảnh chỉ hiện một lần."
+  },
+  {
+   "chu": "background position",
+   "doc": "/ˈbækɡraʊnd pəˈzɪʃn/",
+   "nghia": "vị trí ảnh nền (background-position): đặt ảnh nền ở giữa, góc trên…",
+   "nhom": "Chữ và màu",
+   "viDu": "background-position: center places the image in the middle of the element.",
+   "viDuNghia": "background-position: center đặt ảnh ở giữa phần tử."
+  },
+  {
+   "chu": "em unit",
+   "doc": "/em ˈjuːnɪt/",
+   "nghia": "đơn vị em: bội số cỡ chữ của phần tử cha (2em = gấp đôi)",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "A font-size of 2em is twice the font size of the parent element.",
+   "viDuNghia": "Cỡ chữ 2em gấp đôi cỡ chữ của phần tử cha."
+  },
+  {
+   "chu": "rem unit",
+   "doc": "/rem ˈjuːnɪt/",
+   "nghia": "đơn vị rem: bội số cỡ chữ của phần tử gốc html, không phụ thuộc phần tử cha",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "The rem unit sets the font-size relative to the browser's base font-size, and will not inherit from its parents.",
+   "viDuNghia": "Đơn vị rem đặt cỡ chữ theo cỡ chữ gốc của trình duyệt, không kế thừa từ phần tử cha."
+  },
+  {
+   "chu": "viewport unit",
+   "doc": "/ˈvjuːpɔːrt ˈjuːnɪt/",
+   "nghia": "đơn vị theo khung nhìn: 1vw = 1% chiều rộng, 1vh = 1% chiều cao khung nhìn",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "A height of 100vh makes the section fill the whole screen.",
+   "viDuNghia": "Chiều cao 100vh làm phần đó lấp đầy cả màn hình."
+  },
+  {
+   "chu": "box-sizing",
+   "doc": "/ˈbɑːks ˌsaɪzɪŋ/",
+   "nghia": "box-sizing: quy định width có tính cả padding và viền hay không",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "box-sizing: content-box",
+   "viDuNghia": "box-sizing: content-box (giá trị mặc định)"
+  },
+  {
+   "chu": "content-box",
+   "doc": "/ˈkɑːntent bɑːks/",
+   "nghia": "content-box: width chỉ tính phần nội dung; padding và viền cộng thêm ra ngoài",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "With content-box, adding padding makes the element wider than its width.",
+   "viDuNghia": "Với content-box, thêm padding làm phần tử rộng hơn giá trị width."
+  },
+  {
+   "chu": "border-box",
+   "doc": "/ˈbɔːrdər bɑːks/",
+   "nghia": "border-box: width đã gồm cả padding và viền, dễ tính bố cục hơn",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "box-sizing: border-box",
+   "viDuNghia": "box-sizing: border-box (width gồm cả padding và viền)"
+  },
+  {
+   "chu": "border style",
+   "doc": "/ˈbɔːrdər staɪl/",
+   "nghia": "kiểu viền (border-style): solid, dashed, dotted, double…",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "A div element is formatted such as a double border-style and black border-color",
+   "viDuNghia": "Một phần tử div được định dạng với kiểu viền đôi và màu viền đen"
+  },
+  {
+   "chu": "border radius",
+   "doc": "/ˈbɔːrdər ˈreɪdiəs/",
+   "nghia": "bo góc (border-radius): làm tròn các góc của viền",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "border-radius: 30px;",
+   "viDuNghia": "border-radius: 30px; (bo tròn góc 30px)"
+  },
+  {
+   "chu": "margin collapsing",
+   "doc": "/ˈmɑːrdʒɪn kəˈlæpsɪŋ/",
+   "nghia": "gộp lề: lề trên và lề dưới của hai khối liền nhau gộp thành lề lớn hơn trong hai",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "Because of margin collapsing, two 20px margins produce only a 20px gap.",
+   "viDuNghia": "Do gộp lề, hai lề 20px chỉ tạo ra khoảng cách 20px."
+  },
+  {
+   "chu": "auto margin",
+   "doc": "/ˈɔːtoʊ ˈmɑːrdʒɪn/",
+   "nghia": "lề tự động: margin: 0 auto căn giữa một khối có độ rộng cố định",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "margin: 0 auto centers a block that has a fixed width.",
+   "viDuNghia": "margin: 0 auto căn giữa một khối có độ rộng cố định."
+  },
+  {
+   "chu": "min-width",
+   "doc": "/ˈmɪn wɪdθ/",
+   "nghia": "độ rộng tối thiểu (min-width): phần tử không hẹp hơn giá trị này",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "Using the min-width property and set up the code \"min-width:100%\"",
+   "viDuNghia": "Dùng thuộc tính min-width và đặt mã \"min-width:100%\""
+  },
+  {
+   "chu": "max-width",
+   "doc": "/ˈmæks wɪdθ/",
+   "nghia": "độ rộng tối đa (max-width): phần tử không rộng hơn giá trị này; max-width: 100% giúp ảnh co theo màn hình",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "img { max-width: 100%; } keeps images inside their container.",
+   "viDuNghia": "img { max-width: 100%; } giữ ảnh nằm gọn trong khung chứa."
+  },
+  {
+   "chu": "display property",
+   "doc": "/dɪˈspleɪ ˈprɑːpərti/",
+   "nghia": "thuộc tính display: block, inline, inline-block, flex, grid, none",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "display: none removes the element from the layout.",
+   "viDuNghia": "display: none gỡ phần tử ra khỏi bố cục."
+  },
+  {
+   "chu": "inline-block",
+   "doc": "/ˌɪnlaɪn ˈblɑːk/",
+   "nghia": "inline-block: nằm trên cùng dòng như inline nhưng đặt được width, height như block",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "Menu items are often set to inline-block.",
+   "viDuNghia": "Các mục menu thường được đặt là inline-block."
+  },
+  {
+   "chu": "z-index",
+   "doc": "/ˈziː ˌɪndeks/",
+   "nghia": "z-index: thứ tự chồng lớp; giá trị lớn hơn nằm trên (chỉ có tác dụng với phần tử đã định vị)",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "An element with z-index: 10 appears above one with z-index: 1.",
+   "viDuNghia": "Phần tử có z-index: 10 nằm trên phần tử có z-index: 1."
+  },
+  {
+   "chu": "static positioning",
+   "doc": "/ˈstætɪk pəˈzɪʃənɪŋ/",
+   "nghia": "định vị tĩnh (static): mặc định, theo dòng chảy bình thường, top/left không có tác dụng",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "The code works, but the left property is not necessary since static elements don't allow offsets",
+   "viDuNghia": "Mã chạy được nhưng thuộc tính left là thừa vì phần tử tĩnh không cho dịch vị trí"
+  },
+  {
+   "chu": "relative positioning",
+   "doc": "/ˈrelətɪv pəˈzɪʃənɪŋ/",
+   "nghia": "định vị tương đối (relative): dịch so với vị trí bình thường của chính nó, vẫn giữ chỗ cũ",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "With relative positioning, top: 10px moves the element down from its normal place.",
+   "viDuNghia": "Với định vị tương đối, top: 10px dời phần tử xuống so với chỗ bình thường."
+  },
+  {
+   "chu": "sticky positioning",
+   "doc": "/ˈstɪki pəˈzɪʃənɪŋ/",
+   "nghia": "định vị dính (sticky): cuộn bình thường tới một ngưỡng rồi dính lại như fixed",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "A header with sticky positioning stays at the top while you scroll.",
+   "viDuNghia": "Tiêu đề định vị dính đứng yên ở trên khi cuộn trang."
+  },
+  {
+   "chu": "stacking context",
+   "doc": "/ˈstækɪŋ ˈkɑːntekst/",
+   "nghia": "ngữ cảnh xếp chồng: nhóm phần tử có z-index so sánh với nhau trong cùng một ngữ cảnh",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "A z-index only competes with elements in the same stacking context.",
+   "viDuNghia": "z-index chỉ so với các phần tử trong cùng ngữ cảnh xếp chồng."
+  },
+  {
+   "chu": "justify-content",
+   "doc": "/ˈdʒʌstɪfaɪ ˈkɑːntent/",
+   "nghia": "justify-content: căn các phần tử flex theo trục chính (start, center, space-between…)",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "justify-content: space-between spreads flex items across the row.",
+   "viDuNghia": "justify-content: space-between rải các phần tử flex đều trên hàng."
+  },
+  {
+   "chu": "align-items",
+   "doc": "/əˈlaɪn ˈaɪtəmz/",
+   "nghia": "align-items: căn các phần tử flex theo trục phụ (thường là chiều dọc)",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "align-items: center vertically centers items in a flex row.",
+   "viDuNghia": "align-items: center căn giữa theo chiều dọc các phần tử trong hàng flex."
+  },
+  {
+   "chu": "CSS grid",
+   "doc": "/ˌsiː es ˈes ɡrɪd/",
+   "nghia": "lưới CSS: bố cục hai chiều theo hàng và cột (display: grid)",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "CSS grid lays out content in rows and columns at the same time.",
+   "viDuNghia": "Lưới CSS bố trí nội dung theo hàng và cột cùng lúc."
+  },
+  {
+   "chu": "grid template",
+   "doc": "/ɡrɪd ˈtempleɪt/",
+   "nghia": "khuôn lưới (grid-template-columns/rows): khai báo số và kích thước các cột, hàng",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "grid-template-columns: 1fr 2fr creates two columns, the second twice as wide.",
+   "viDuNghia": "grid-template-columns: 1fr 2fr tạo hai cột, cột thứ hai rộng gấp đôi."
+  },
+  {
+   "chu": "keyframes",
+   "doc": "/ˈkiːfreɪmz/",
+   "nghia": "khung hình chính (@keyframes): khai báo các bước của một hiệu ứng chuyển động CSS",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "The keyframes rule defines the steps of a CSS animation.",
+   "viDuNghia": "Quy tắc keyframes định nghĩa các bước của hiệu ứng chuyển động CSS."
+  },
+  {
+   "chu": "universal selector",
+   "doc": "/ˌjuːnɪˈvɜːrsl sɪˈlektər/",
+   "nghia": "bộ chọn toàn bộ (*): chọn mọi phần tử",
+   "nhom": "Bộ chọn và cascade",
+   "viDu": "The universal selector * matches every element on the page.",
+   "viDuNghia": "Bộ chọn toàn bộ * khớp mọi phần tử trên trang."
+  },
+  {
+   "chu": "attribute selector",
+   "doc": "/ˈætrɪbjuːt sɪˈlektər/",
+   "nghia": "bộ chọn thuộc tính: chọn phần tử theo thuộc tính, vd input[type=\"text\"]",
+   "nhom": "Bộ chọn và cascade",
+   "viDu": "input[type=\"email\"] is an attribute selector.",
+   "viDuNghia": "input[type=\"email\"] là một bộ chọn thuộc tính."
+  },
+  {
+   "chu": "adjacent sibling selector",
+   "doc": "/əˈdʒeɪsnt ˈsɪblɪŋ sɪˈlektər/",
+   "nghia": "bộ chọn anh em kề (A + B): chọn B đứng ngay sau A cùng cha",
+   "nhom": "Bộ chọn và cascade",
+   "viDu": "h2 + p selects the first paragraph right after each h2.",
+   "viDuNghia": "h2 + p chọn đoạn văn đứng ngay sau mỗi h2."
+  },
+  {
+   "chu": "general sibling selector",
+   "doc": "/ˈdʒenrəl ˈsɪblɪŋ sɪˈlektər/",
+   "nghia": "bộ chọn anh em chung (A ~ B): chọn mọi B đứng sau A cùng cha",
+   "nhom": "Bộ chọn và cascade",
+   "viDu": "h2 ~ p selects every paragraph that follows an h2 in the same parent.",
+   "viDuNghia": "h2 ~ p chọn mọi đoạn văn đứng sau h2 trong cùng phần tử cha."
+  },
+  {
+   "chu": "first-child",
+   "doc": "/ˌfɜːrst ˈtʃaɪld/",
+   "nghia": ":first-child: lớp giả chọn phần tử là con đầu tiên của cha nó",
+   "nhom": "Bộ chọn và cascade",
+   "viDu": "div p:first-child { color: blue; }",
+   "viDuNghia": "Tô xanh những p là con đầu tiên của cha nó và nằm trong div"
+  },
+  {
+   "chu": "nth-child",
+   "doc": "/ˌenθ ˈtʃaɪld/",
+   "nghia": ":nth-child(n): lớp giả chọn con thứ n (odd, even, 2n+1…)",
+   "nhom": "Bộ chọn và cascade",
+   "viDu": "tr:nth-child(even) colors every second table row.",
+   "viDuNghia": "tr:nth-child(even) tô màu mỗi hàng chẵn của bảng."
+  },
+  {
+   "chu": "important declaration",
+   "doc": "/ɪmˈpɔːrtnt ˌdekləˈreɪʃn/",
+   "nghia": "khai báo !important: thắng mọi quy tắc khác trừ !important mạnh hơn; nên tránh lạm dụng",
+   "nhom": "Bộ chọn và cascade",
+   "viDu": "An important declaration overrides normal rules regardless of specificity.",
+   "viDuNghia": "Khai báo !important đè các quy tắc thường bất kể độ ưu tiên."
+  },
+  {
+   "chu": "user agent stylesheet",
+   "doc": "/ˈjuːzər ˈeɪdʒənt ˈstaɪlʃiːt/",
+   "nghia": "bảng kiểu mặc định của trình duyệt: CSS trình duyệt tự áp (lề body, cỡ h1…)",
+   "nhom": "Bộ chọn và cascade",
+   "viDu": "The default margin of body comes from the user agent stylesheet.",
+   "viDuNghia": "Lề mặc định của body đến từ bảng kiểu mặc định của trình duyệt."
+  },
+  {
+   "chu": "CSS reset",
+   "doc": "/ˌsiː es ˈes ˈriːset/",
+   "nghia": "CSS reset: bộ quy tắc xoá kiểu mặc định của trình duyệt để các trình duyệt hiển thị như nhau",
+   "nhom": "Bộ chọn và cascade",
+   "viDu": "A CSS reset removes default margins and paddings.",
+   "viDuNghia": "CSS reset gỡ bỏ lề và đệm mặc định."
+  },
+  {
+   "chu": "thead",
+   "doc": "/ˈtiː hed/",
+   "nghia": "thead: phần đầu bảng chứa hàng tiêu đề",
+   "nhom": "Thẻ HTML",
+   "viDu": "caption , thead , tbody , tfoot",
+   "viDuNghia": "caption, thead, tbody, tfoot (các phần của bảng HTML)"
+  },
+  {
+   "chu": "tbody",
+   "doc": "/ˈtiː bɑːdi/",
+   "nghia": "tbody: phần thân bảng chứa các hàng dữ liệu",
+   "nhom": "Thẻ HTML",
+   "viDu": "caption , thead , tbody , tfoot",
+   "viDuNghia": "caption, thead, tbody, tfoot (các phần của bảng HTML)"
+  },
+  {
+   "chu": "tfoot",
+   "doc": "/ˈtiː fʊt/",
+   "nghia": "tfoot: phần chân bảng (tổng cộng, ghi chú)",
+   "nhom": "Thẻ HTML",
+   "viDu": "caption , thead , tbody , tfoot",
+   "viDuNghia": "caption, thead, tbody, tfoot (các phần của bảng HTML)"
+  },
+  {
+   "chu": "colspan",
+   "doc": "/ˈkɑːlspæn/",
+   "nghia": "colspan: thuộc tính cho ô bảng trải rộng qua nhiều cột",
+   "nhom": "Thẻ HTML",
+   "viDu": "td colspan=\"2\" makes a cell span two columns.",
+   "viDuNghia": "td colspan=\"2\" làm ô trải qua hai cột."
+  },
+  {
+   "chu": "rowspan",
+   "doc": "/ˈroʊspæn/",
+   "nghia": "rowspan: thuộc tính cho ô bảng trải dài qua nhiều hàng",
+   "nhom": "Thẻ HTML",
+   "viDu": "td rowspan=\"3\" makes a cell span three rows.",
+   "viDuNghia": "td rowspan=\"3\" làm ô trải qua ba hàng."
+  },
+  {
+   "chu": "iframe",
+   "doc": "/ˈaɪfreɪm/",
+   "nghia": "iframe (inline frame): khung nhúng một trang web khác vào trang hiện tại",
+   "nhom": "Thẻ HTML",
+   "viDu": "An iframe can embed a YouTube video or a Google map.",
+   "viDuNghia": "iframe có thể nhúng video YouTube hoặc bản đồ Google."
+  },
+  {
+   "chu": "video element",
+   "doc": "/ˈvɪdioʊ ˈelɪmənt/",
+   "nghia": "thẻ video: phát video trực tiếp trong HTML5, thuộc tính controls hiện nút điều khiển",
+   "nhom": "Thẻ HTML",
+   "viDu": "The video element with the controls attribute shows play and pause buttons.",
+   "viDuNghia": "Thẻ video có thuộc tính controls hiện nút phát và tạm dừng."
+  },
+  {
+   "chu": "audio element",
+   "doc": "/ˈɔːdioʊ ˈelɪmənt/",
+   "nghia": "thẻ audio: phát âm thanh trong HTML5",
+   "nhom": "Thẻ HTML",
+   "viDu": "The audio element plays sound files without a plug-in.",
+   "viDuNghia": "Thẻ audio phát tệp âm thanh mà không cần trình cắm."
+  },
+  {
+   "chu": "figcaption",
+   "doc": "/ˈfɪɡkæpʃn/",
+   "nghia": "figcaption: chú thích cho hình ảnh đặt trong thẻ figure",
+   "nhom": "Thẻ HTML",
+   "viDu": "A figcaption describes the image inside a figure element.",
+   "viDuNghia": "figcaption mô tả hình ảnh bên trong thẻ figure."
+  },
+  {
+   "chu": "aside",
+   "doc": "/əˈsaɪd/",
+   "nghia": "aside: thẻ ngữ nghĩa cho nội dung phụ bên lề (thanh bên, quảng cáo)",
+   "nhom": "Thẻ HTML",
+   "viDu": "HTML5 offers new elements for better document structure: aside , footer , header , section ...",
+   "viDuNghia": "HTML5 có các thẻ mới để cấu trúc tài liệu tốt hơn: aside, footer, header, section..."
+  },
+  {
+   "chu": "main element",
+   "doc": "/meɪn ˈelɪmənt/",
+   "nghia": "thẻ main: chứa nội dung chính, duy nhất của tài liệu",
+   "nhom": "Thẻ HTML",
+   "viDu": "the main content of a document",
+   "viDuNghia": "nội dung chính của một tài liệu"
+  },
+  {
+   "chu": "select element",
+   "doc": "/sɪˈlekt ˈelɪmənt/",
+   "nghia": "thẻ select: danh sách thả xuống, mỗi lựa chọn là một thẻ option",
+   "nhom": "Thẻ HTML",
+   "viDu": "A select element lets the user choose one city from a list.",
+   "viDuNghia": "Thẻ select cho người dùng chọn một thành phố từ danh sách."
+  },
+  {
+   "chu": "textarea",
+   "doc": "/ˈtekst ˌeriə/",
+   "nghia": "textarea: ô nhập văn bản nhiều dòng",
+   "nhom": "Thẻ HTML",
+   "viDu": "Use a textarea for comments that may span several lines.",
+   "viDuNghia": "Dùng textarea cho bình luận có thể dài nhiều dòng."
+  },
+  {
+   "chu": "fieldset",
+   "doc": "/ˈfiːldset/",
+   "nghia": "fieldset: nhóm các ô nhập liên quan trong form, vẽ khung bao quanh",
+   "nhom": "Thẻ HTML",
+   "viDu": "A fieldset groups the shipping address fields together.",
+   "viDuNghia": "fieldset gom các ô địa chỉ giao hàng lại với nhau."
+  },
+  {
+   "chu": "legend",
+   "doc": "/ˈledʒənd/",
+   "nghia": "legend: tiêu đề của một fieldset",
+   "nhom": "Thẻ HTML",
+   "viDu": "The legend element gives a title to a fieldset.",
+   "viDuNghia": "Thẻ legend đặt tiêu đề cho một fieldset."
+  },
+  {
+   "chu": "action attribute",
+   "doc": "/ˈækʃn ˈætrɪbjuːt/",
+   "nghia": "thuộc tính action: địa chỉ (URL) nhận dữ liệu khi form được gửi",
+   "nhom": "Thẻ HTML",
+   "viDu": "The action attribute specifies the HTTP method to use when sending form-data",
+   "viDuNghia": "Thuộc tính action chỉ định phương thức HTTP khi gửi dữ liệu form (phát biểu sai: đó là việc của method)"
+  },
+  {
+   "chu": "method attribute",
+   "doc": "/ˈmeθəd ˈætrɪbjuːt/",
+   "nghia": "thuộc tính method: cách gửi dữ liệu form, GET (trên URL) hoặc POST (trong thân yêu cầu)",
+   "nhom": "Thẻ HTML",
+   "viDu": "The method attribute specifies where to send the form-data when a form is submitted",
+   "viDuNghia": "Thuộc tính method chỉ định nơi gửi dữ liệu form (phát biểu sai: nơi gửi là action)"
+  },
+  {
+   "chu": "target attribute",
+   "doc": "/ˈtɑːrɡɪt ˈætrɪbjuːt/",
+   "nghia": "thuộc tính target: nơi mở liên kết; target=\"_blank\" mở ở thẻ mới",
+   "nhom": "Thẻ HTML",
+   "viDu": "a href=\"url\" target=\"_blank\"",
+   "viDuNghia": "Liên kết mở ở thẻ (tab) mới"
+  },
+  {
+   "chu": "mailto link",
+   "doc": "/ˈmeɪltuː lɪŋk/",
+   "nghia": "liên kết mailto: href=\"mailto:...\" mở chương trình thư để soạn email",
+   "nhom": "Thẻ HTML",
+   "viDu": "a href= shayhowe@awesome.com?subject=Hi body=How are you Email /a",
+   "viDuNghia": "Liên kết email thiếu tiền tố mailto: nên sai (đúng là href=\"mailto:...?subject=Hi&body=...\")"
+  },
+  {
+   "chu": "data attribute",
+   "doc": "/ˈdeɪtə ˈætrɪbjuːt/",
+   "nghia": "thuộc tính data-*: gắn dữ liệu tuỳ ý vào phần tử để JavaScript đọc",
+   "nhom": "Thẻ HTML",
+   "viDu": "A button with data-id=\"7\" can be read in JavaScript through dataset.id.",
+   "viDuNghia": "Nút có data-id=\"7\" được đọc trong JavaScript qua dataset.id."
+  },
+  {
+   "chu": "title attribute",
+   "doc": "/ˈtaɪtl ˈætrɪbjuːt/",
+   "nghia": "thuộc tính title: chữ chú thích hiện ra khi rê chuột lên phần tử",
+   "nhom": "Thẻ HTML",
+   "viDu": "The title attribute shows a tooltip when the mouse hovers over the element.",
+   "viDuNghia": "Thuộc tính title hiện chú thích khi rê chuột lên phần tử."
+  },
+  {
+   "chu": "character entity",
+   "doc": "/ˈkærəktər ˈentəti/",
+   "nghia": "thực thể ký tự: cách viết ký tự đặc biệt trong HTML, vd &lt; cho dấu nhỏ hơn",
+   "nhom": "Thẻ HTML",
+   "viDu": "Use the character entity &lt; to show a less-than sign.",
+   "viDuNghia": "Dùng thực thể ký tự &lt; để hiện dấu nhỏ hơn."
+  },
+  {
+   "chu": "non-breaking space",
+   "doc": "/ˌnɑːn ˈbreɪkɪŋ speɪs/",
+   "nghia": "khoảng trắng không ngắt (&nbsp;): dấu cách không cho xuống dòng, không bị gộp",
+   "nhom": "Thẻ HTML",
+   "viDu": "A non-breaking space keeps \"100 km\" on the same line.",
+   "viDuNghia": "Khoảng trắng không ngắt giữ \"100 km\" trên cùng một dòng."
+  },
+  {
+   "chu": "description list",
+   "doc": "/dɪˈskrɪpʃn lɪst/",
+   "nghia": "danh sách mô tả (dl, dt, dd): danh sách cặp thuật ngữ – lời giải thích",
+   "nhom": "Thẻ HTML",
+   "viDu": "A description list pairs each term with its definition.",
+   "viDuNghia": "Danh sách mô tả ghép mỗi thuật ngữ với lời định nghĩa."
+  },
+  {
+   "chu": "favicon",
+   "doc": "/ˈfævɪkɑːn/",
+   "nghia": "favicon: biểu tượng nhỏ của trang hiện trên thẻ trình duyệt",
+   "nhom": "Thẻ HTML",
+   "viDu": "The favicon is linked with link rel=\"icon\".",
+   "viDuNghia": "Favicon được liên kết bằng link rel=\"icon\"."
+  },
+  {
+   "chu": "ARIA",
+   "doc": "/ˈɑːriə/",
+   "nghia": "ARIA: bộ thuộc tính (role, aria-*) giúp trình đọc màn hình hiểu phần tử",
+   "nhom": "Thẻ HTML",
+   "viDu": "ARIA attributes describe custom widgets to screen readers.",
+   "viDuNghia": "Thuộc tính ARIA mô tả các thành phần tự làm cho trình đọc màn hình."
+  },
+  {
+   "chu": "aria-label",
+   "doc": "/ˈɑːriə ˈleɪbl/",
+   "nghia": "aria-label: nhãn đọc cho trình đọc màn hình khi phần tử không có chữ (nút chỉ có biểu tượng)",
+   "nhom": "Thẻ HTML",
+   "viDu": "a href=\"https://twitter.com/\" aria-label=\"Twitter\" i class=\"fa fa-twitter\" /i /a",
+   "viDuNghia": "Liên kết biểu tượng Twitter có aria-label=\"Twitter\" để trình đọc màn hình đọc được"
+  },
+  {
+   "chu": "device-width",
+   "doc": "/dɪˈvaɪs wɪdθ/",
+   "nghia": "device-width: độ rộng màn hình thiết bị, dùng trong thẻ meta viewport",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "The viewport is the user's device-width",
+   "viDuNghia": "Khung nhìn bằng độ rộng thiết bị của người dùng"
+  },
+  {
+   "chu": "initial-scale",
+   "doc": "/ɪˈnɪʃl skeɪl/",
+   "nghia": "initial-scale: mức phóng to ban đầu khi trang mở (1.0 = không phóng)",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "In the meta tag, you set the property width=device-width and the property initial-scale=1.0.",
+   "viDuNghia": "Trong thẻ meta, bạn đặt width=device-width và initial-scale=1.0."
+  },
+  {
+   "chu": "maximum-scale",
+   "doc": "/ˈmæksɪməm skeɪl/",
+   "nghia": "maximum-scale: mức phóng to tối đa người dùng được phép",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'",
+   "viDuNghia": "Thẻ meta viewport đặt độ rộng theo thiết bị, phóng ban đầu 1 và tối đa 1 (không cho phóng to)"
+  },
+  {
+   "chu": "min-device-width",
+   "doc": "/ˌmɪn dɪˈvaɪs wɪdθ/",
+   "nghia": "min-device-width: điều kiện media theo độ rộng màn hình thiết bị (đã lỗi thời, nay dùng min-width)",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "min-device-width: 768px",
+   "viDuNghia": "Điều kiện độ rộng thiết bị tối thiểu 768px"
+  },
+  {
+   "chu": "media type",
+   "doc": "/ˈmiːdiə taɪp/",
+   "nghia": "loại thiết bị (media type): screen, print, all trong truy vấn media",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "The div elements will only be visible only when the page is printed",
+   "viDuNghia": "Các phần tử div chỉ hiện khi trang được in (quy tắc dùng media type print)"
+  },
+  {
+   "chu": "container class",
+   "doc": "/kənˈteɪnər klæs/",
+   "nghia": "lớp container (Bootstrap): khung bao có lề hai bên, chứa hàng và cột của lưới",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "All div tags that are inside the container will wrap if necessary.",
+   "viDuNghia": "Mọi thẻ div bên trong container sẽ xuống dòng khi cần."
+  },
+  {
+   "chu": "jumbotron",
+   "doc": "/ˈdʒʌmboʊtrɑːn/",
+   "nghia": "jumbotron (Bootstrap 3–4): khối lớn nổi bật đầu trang để giới thiệu nội dung chính",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "A jumbotron displays a large welcome message at the top of the page.",
+   "viDuNghia": "Jumbotron hiện một lời chào lớn ở đầu trang."
+  },
+  {
+   "chu": "breadcrumb",
+   "doc": "/ˈbredkrʌm/",
+   "nghia": "đường dẫn mẩu bánh mì: thanh cho biết vị trí trang (Trang chủ / Sản phẩm / Áo)",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "A breadcrumb shows the user where the current page is in the site.",
+   "viDuNghia": "Đường dẫn breadcrumb cho người dùng biết trang hiện tại nằm ở đâu trong website."
+  },
+  {
+   "chu": "form control",
+   "doc": "/fɔːrm kənˈtroʊl/",
+   "nghia": "lớp form-control (Bootstrap): làm ô nhập rộng đầy đủ và có kiểu thống nhất",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "Add the form-control class to input elements for consistent styling.",
+   "viDuNghia": "Thêm lớp form-control cho các ô nhập để có kiểu thống nhất."
+  },
+  {
+   "chu": "button group",
+   "doc": "/ˈbʌtn ɡruːp/",
+   "nghia": "nhóm nút (btn-group): gom nhiều nút sát nhau trên một hàng",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "A button group joins several buttons into one bar.",
+   "viDuNghia": "Nhóm nút ghép nhiều nút thành một thanh."
+  },
+  {
+   "chu": "querySelector",
+   "doc": "/ˈkwɪri sɪˌlektər/",
+   "nghia": "querySelector(): trả về phần tử đầu tiên khớp bộ chọn CSS",
+   "nhom": "DOM và làm web",
+   "viDu": "document.querySelector(\".menu li\") returns the first list item in the menu.",
+   "viDuNghia": "document.querySelector(\".menu li\") trả về mục đầu tiên trong menu."
+  },
+  {
+   "chu": "addEventListener",
+   "doc": "/ˌæd ɪˈvent ˌlɪsnər/",
+   "nghia": "addEventListener(): gắn hàm xử lý sự kiện cho phần tử mà không ghi đè hàm cũ",
+   "nhom": "DOM và làm web",
+   "viDu": "button.addEventListener(\"click\", show) runs show when the button is clicked.",
+   "viDuNghia": "button.addEventListener(\"click\", show) chạy hàm show khi bấm nút."
+  },
+  {
+   "chu": "classList",
+   "doc": "/ˈklæs lɪst/",
+   "nghia": "classList: danh sách lớp của phần tử, có add, remove, toggle",
+   "nhom": "DOM và làm web",
+   "viDu": "element.classList.toggle(\"active\") adds or removes the active class.",
+   "viDuNghia": "element.classList.toggle(\"active\") thêm hoặc bỏ lớp active."
+  },
+  {
+   "chu": "textContent",
+   "doc": "/tekst ˈkɑːntent/",
+   "nghia": "textContent: nội dung chữ thuần của phần tử, không hiểu thẻ HTML (an toàn hơn innerHTML)",
+   "nhom": "DOM và làm web",
+   "viDu": "Setting textContent does not parse HTML tags.",
+   "viDuNghia": "Gán textContent không phân tích thẻ HTML."
+  },
+  {
+   "chu": "style property",
+   "doc": "/staɪl ˈprɑːpərti/",
+   "nghia": "thuộc tính style (DOM): đổi CSS nội tuyến bằng JavaScript, vd el.style.color",
+   "nhom": "DOM và làm web",
+   "viDu": "document.getElementById(\"demo\").style.color = \"red\" changes the text color.",
+   "viDuNghia": "document.getElementById(\"demo\").style.color = \"red\" đổi màu chữ."
+  },
+  {
+   "chu": "web hosting",
+   "doc": "/web ˈhoʊstɪŋ/",
+   "nghia": "dịch vụ lưu trữ web: thuê máy chủ để đặt website lên Internet",
+   "nhom": "DOM và làm web",
+   "viDu": "a domain name and hosting service",
+   "viDuNghia": "một tên miền và dịch vụ lưu trữ web"
+  },
+  {
+   "chu": "directory path",
+   "doc": "/dəˈrektəri pæθ/",
+   "nghia": "đường dẫn thư mục: phần sau tên máy trong URL chỉ tới tệp trên máy chủ",
+   "nhom": "DOM và làm web",
+   "viDu": "service, hostname and directory path",
+   "viDuNghia": "dịch vụ (giao thức), tên máy và đường dẫn thư mục (ba phần của URL)"
+  },
+  {
+   "chu": "ICANN",
+   "doc": "/ˈaɪkæn/",
+   "nghia": "ICANN: tổ chức quản lý tên miền và địa chỉ IP toàn cầu",
+   "nhom": "DOM và làm web",
+   "viDu": "ICANN coordinates domain names and IP addresses worldwide.",
+   "viDuNghia": "ICANN điều phối tên miền và địa chỉ IP trên toàn thế giới."
+  },
+  {
+   "chu": "text editor",
+   "doc": "/tekst ˈedɪtər/",
+   "nghia": "trình soạn thảo văn bản: phần mềm viết mã (VS Code, Sublime Text, Notepad++)",
+   "nhom": "DOM và làm web",
+   "viDu": "The process that happens when a HTML5 is created with an editor",
+   "viDuNghia": "Quá trình xảy ra khi tạo một tệp HTML5 bằng trình soạn thảo"
+  },
+  {
+   "chu": "browser compatibility",
+   "doc": "/ˈbraʊzər kəmˌpætəˈbɪləti/",
+   "nghia": "tương thích trình duyệt: trang hiển thị và chạy đúng trên Chrome, Firefox, Safari…",
+   "nhom": "DOM và làm web",
+   "viDu": "Test your page in Chrome, Firefox and Safari to check browser compatibility.",
+   "viDuNghia": "Thử trang trên Chrome, Firefox và Safari để kiểm tra tương thích trình duyệt."
+  },
+  {
+   "chu": "progressive enhancement",
+   "doc": "/prəˈɡresɪv ɪnˈhænsmənt/",
+   "nghia": "nâng cấp dần: làm bản cơ bản chạy được ở mọi nơi rồi thêm tính năng cho trình duyệt mạnh",
+   "nhom": "DOM và làm web",
+   "viDu": "Progressive enhancement starts with plain HTML that works everywhere.",
+   "viDuNghia": "Nâng cấp dần bắt đầu từ HTML thuần chạy được mọi nơi."
+  },
+  {
+   "chu": "graceful degradation",
+   "doc": "/ˈɡreɪsfl ˌdeɡrəˈdeɪʃn/",
+   "nghia": "xuống cấp êm: làm bản đầy đủ rồi bảo đảm trình duyệt cũ vẫn dùng được phần chính",
+   "nhom": "DOM và làm web",
+   "viDu": "Graceful degradation keeps the core features usable in old browsers.",
+   "viDuNghia": "Xuống cấp êm giữ các tính năng chính vẫn dùng được trên trình duyệt cũ."
+  },
+  {
+   "chu": "border color",
+   "doc": "/ˈbɔːrdər ˈkʌlər/",
+   "nghia": "màu viền (border-color); không khai báo thì lấy currentColor – màu chữ của phần tử",
+   "nhom": "Đơn vị và mô hình hộp",
+   "viDu": "\"border: double;\" only sets border-style; the unspecified border-color defaults to currentColor.",
+   "viDuNghia": "\"border: double;\" chỉ đặt kiểu viền; border-color không khai báo thì mặc định là currentColor."
+  },
+  {
+   "chu": "list-style-type",
+   "doc": "/lɪst staɪl taɪp/",
+   "nghia": "kiểu dấu đầu dòng của danh sách (disc, circle, square, decimal…); none để bỏ dấu",
+   "nhom": "Hiển thị và bố cục",
+   "viDu": "list-style-type: none; is the correct CSS to remove bullet markers from a list.",
+   "viDuNghia": "list-style-type: none; là CSS đúng để bỏ dấu chấm đầu dòng của danh sách."
+  },
+  {
+   "chu": "rel attribute",
+   "doc": "/rel ˈætrɪbjuːt/",
+   "nghia": "thuộc tính rel: quan hệ giữa trang và tài nguyên được liên kết; <link rel=\"stylesheet\"> để nạp tệp CSS",
+   "nhom": "Thẻ HTML",
+   "viDu": "A and C use an invalid rel value ('css/stylesheet' instead of exactly 'stylesheet').",
+   "viDuNghia": "A và C dùng giá trị rel sai ('css/stylesheet' thay vì đúng 'stylesheet')."
+  },
+  {
+   "chu": "max-device-width",
+   "doc": "/ˌmæks dɪˈvaɪs wɪdθ/",
+   "nghia": "max-device-width: điều kiện media khớp khi độ rộng màn hình thiết bị KHÔNG vượt giá trị (đã lỗi thời, nay dùng max-width)",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "\"768px or smaller\" means an upper bound, which requires max-device-width, not min-device-width.",
+   "viDuNghia": "\"768px hoặc nhỏ hơn\" là giới hạn trên nên phải dùng max-device-width, không phải min-device-width."
+  },
+  {
+   "chu": "navbar-fixed-top",
+   "doc": "/ˈnɑːvbɑːr fɪkst tɒp/",
+   "nghia": "navbar-fixed-top (Bootstrap 3; Bootstrap 4+ là fixed-top): ghim thanh điều hướng ở đỉnh màn hình (position: fixed), không cuộn theo trang",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": ".navbar-fixed-top uses position:fixed so it stays pinned and does not scroll with the page.",
+   "viDuNghia": ".navbar-fixed-top dùng position:fixed nên luôn ghim ở đỉnh, không cuộn theo trang."
+  },
+  {
+   "chu": "navbar-static-top",
+   "doc": "/ˈnɑːvbɑːr ˈstætɪk tɒp/",
+   "nghia": "navbar-static-top (Bootstrap 3): thanh điều hướng tràn ngang ở đầu trang nhưng vẫn theo luồng thường, nên cuộn đi cùng trang",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": ".navbar-static-top keeps the navbar in normal document flow, so it scrolls away with the page.",
+   "viDuNghia": ".navbar-static-top giữ thanh điều hướng trong luồng thường nên nó cuộn đi cùng trang."
+  },
+  {
+   "chu": "nav tabs",
+   "doc": "/nɑːv tæbz/",
+   "nghia": "nav-tabs (Bootstrap): lớp gắn cho ul.nav để các mục hiện thành thẻ tab",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "<ul class=\"nav nav-tabs\"> creates a tabbed navigation menu.",
+   "viDuNghia": "<ul class=\"nav nav-tabs\"> tạo menu điều hướng dạng tab."
+  },
+  {
+   "chu": "nav pills",
+   "doc": "/nɑːv pɪlz/",
+   "nghia": "nav-pills (Bootstrap): mục điều hướng dạng viên thuốc bo tròn, mục đang chọn được tô nền",
+   "nhom": "Responsive và Bootstrap",
+   "viDu": "<ul class=\"nav nav-pills\"> shows the menu items as rounded pills.",
+   "viDuNghia": "<ul class=\"nav nav-pills\"> hiện các mục menu dạng viên bo tròn."
+  },
+  {
+   "chu": "onmouseover",
+   "doc": "/ɒn ˈmaʊs ˈoʊvər/",
+   "nghia": "onmouseover: sự kiện khi con trỏ chuột di VÀO phần tử",
+   "nhom": "DOM và làm web",
+   "viDu": "onmouseover fires when the mouse pointer moves onto an element.",
+   "viDuNghia": "onmouseover chạy khi con trỏ chuột di vào phần tử."
+  },
+  {
+   "chu": "onmouseout",
+   "doc": "/ɒn ˈmaʊs aʊt/",
+   "nghia": "onmouseout: sự kiện khi con trỏ chuột rời KHỎI phần tử",
+   "nhom": "DOM và làm web",
+   "viDu": "The onmouseout event fires when the mouse pointer moves out of an element.",
+   "viDuNghia": "Sự kiện onmouseout chạy khi con trỏ chuột rời khỏi phần tử."
+  },
+  {
+   "chu": "onscroll",
+   "doc": "/ɒn ˈskroʊl/",
+   "nghia": "onscroll: sự kiện khi phần tử (hoặc trang) đang được cuộn",
+   "nhom": "DOM và làm web",
+   "viDu": "The event that fires while an element is being scrolled is onscroll.",
+   "viDuNghia": "Sự kiện chạy khi phần tử đang được cuộn là onscroll."
+  }
+ ]
+}

@@ -4,7 +4,7 @@
  "ten": "OSG202 · 2. Deadlock và quản lý bộ nhớ",
  "moTa": "Môn Hệ điều hành (OSG202), phần 2: bế tắc (deadlock) – điều kiện, phát hiện, tránh, ngăn ngừa; quản lý bộ nhớ – phân vùng, phân trang, bộ nhớ ảo, thuật toán thay trang, phân đoạn. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "memorychip.fill",
- "thuTu": -976,
+ "thuTu": -967,
  "tu": [
   {
    "chu": "deadlock",

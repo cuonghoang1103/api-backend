@@ -1,0 +1,690 @@
+{
+ "ma": "osg202-6",
+ "nn": "en",
+ "ten": "OSG202 · 6. Ảo hoá, container, đa xử lý & bảo mật",
+ "moTa": "Bổ sung OSG202: ảo hoá (hypervisor, ảo hoá song song, hypercall, dịch nhị phân), container trên Linux (namespace, cgroup, OverlayFS, seccomp), hệ đa xử lý và đa máy tính (NUMA, gang scheduling), mô hình bảo vệ (ma trận truy cập, Bell-LaPadula) và tấn công – phòng thủ (tràn bộ đệm, ASLR, rootkit).",
+ "bieuTuong": "lock.shield.fill",
+ "thuTu": -963,
+ "tu": [
+  {
+   "chu": "hypervisor",
+   "doc": "/ˈhaɪpərvaɪzər/",
+   "nghia": "trình siêu giám sát (hypervisor, VMM): phần mềm tạo và chạy các máy ảo trên cùng phần cứng",
+   "nhom": "Ảo hoá",
+   "viDu": "Type 2 hypervisors, as they offer more flexibility.",
+   "viDuNghia": "Hypervisor loại 2, vì chúng linh hoạt hơn."
+  },
+  {
+   "chu": "full virtualization",
+   "doc": "/fʊl ˌvɜːrtʃuələˈzeɪʃn/",
+   "nghia": "ảo hoá toàn phần: HĐH khách chạy nguyên bản, không sửa mã, không biết mình đang ở trong máy ảo",
+   "nhom": "Ảo hoá",
+   "viDu": "Full virtualization runs an unmodified guest operating system.",
+   "viDuNghia": "Ảo hoá toàn phần chạy HĐH khách không cần sửa đổi."
+  },
+  {
+   "chu": "paravirtualization",
+   "doc": "/ˌpærəˌvɜːrtʃuələˈzeɪʃn/",
+   "nghia": "ảo hoá song song: HĐH khách được sửa để gọi hypervisor (hypercall) thay cho lệnh nhạy cảm",
+   "nhom": "Ảo hoá",
+   "viDu": "the paravirtualized guest executes hyper calls",
+   "viDuNghia": "máy khách ảo hoá song song thực hiện các hypercall"
+  },
+  {
+   "chu": "hypercall",
+   "doc": "/ˈhaɪpərkɔːl/",
+   "nghia": "hypercall: lời gọi từ HĐH khách xuống hypervisor, giống system call nhưng ở tầng ảo hoá",
+   "nhom": "Ảo hoá",
+   "viDu": "A paravirtualized guest uses a hypercall instead of executing a sensitive instruction.",
+   "viDuNghia": "Máy khách ảo hoá song song dùng hypercall thay vì chạy lệnh nhạy cảm."
+  },
+  {
+   "chu": "sensitive instruction",
+   "doc": "/ˈsensətɪv ɪnˈstrʌkʃn/",
+   "nghia": "lệnh nhạy cảm: lệnh đọc/đổi trạng thái máy (vào/ra, MMU); ảo hoá được khi mọi lệnh nhạy cảm đều là lệnh đặc quyền",
+   "nhom": "Ảo hoá",
+   "viDu": "A machine is virtualizable only if its sensitive instructions are a subset of its privileged instructions.",
+   "viDuNghia": "Một máy ảo hoá được chỉ khi các lệnh nhạy cảm là tập con của các lệnh đặc quyền."
+  },
+  {
+   "chu": "trap-and-emulate",
+   "doc": "/ˌtræp ən ˈemjuleɪt/",
+   "nghia": "bẫy và giả lập: lệnh đặc quyền của máy khách gây bẫy về hypervisor, hypervisor giả lập lệnh đó",
+   "nhom": "Ảo hoá",
+   "viDu": "Classic hypervisors use trap-and-emulate to run privileged guest instructions.",
+   "viDuNghia": "Hypervisor kinh điển dùng bẫy và giả lập để chạy lệnh đặc quyền của máy khách."
+  },
+  {
+   "chu": "binary translation",
+   "doc": "/ˈbaɪnəri trænzˈleɪʃn/",
+   "nghia": "dịch nhị phân: hypervisor quét và viết lại mã máy khách lúc chạy, thay lệnh nhạy cảm bằng lệnh an toàn",
+   "nhom": "Ảo hoá",
+   "viDu": "VMware used binary translation before x86 had hardware support for virtualization.",
+   "viDuNghia": "VMware dùng dịch nhị phân trước khi x86 có phần cứng hỗ trợ ảo hoá."
+  },
+  {
+   "chu": "hardware-assisted virtualization",
+   "doc": "/ˈhɑːrdwer əˈsɪstɪd ˌvɜːrtʃuələˈzeɪʃn/",
+   "nghia": "ảo hoá có phần cứng hỗ trợ: CPU có chế độ riêng cho máy khách (Intel VT-x, AMD-V)",
+   "nhom": "Ảo hoá",
+   "viDu": "Hardware-assisted virtualization makes binary translation unnecessary.",
+   "viDuNghia": "Ảo hoá có phần cứng hỗ trợ làm cho dịch nhị phân trở nên không cần thiết."
+  },
+  {
+   "chu": "VT-x",
+   "doc": "/ˌviː tiː ˈeks/",
+   "nghia": "VT-x: phần mở rộng ảo hoá của CPU Intel, thêm chế độ chạy riêng cho máy khách",
+   "nhom": "Ảo hoá",
+   "viDu": "KVM requires a CPU with VT-x or AMD-V.",
+   "viDuNghia": "KVM cần CPU có VT-x hoặc AMD-V."
+  },
+  {
+   "chu": "KVM",
+   "doc": "/ˌkeɪ viː ˈem/",
+   "nghia": "KVM (Kernel-based Virtual Machine): mô-đun biến nhân Linux thành hypervisor",
+   "nhom": "Ảo hoá",
+   "viDu": "KVM turns the Linux kernel into a type 1 hypervisor.",
+   "viDuNghia": "KVM biến nhân Linux thành một hypervisor loại 1."
+  },
+  {
+   "chu": "guest operating system",
+   "doc": "/ɡest ˈɑːpəreɪtɪŋ ˈsɪstəm/",
+   "nghia": "HĐH khách: hệ điều hành chạy bên trong máy ảo",
+   "nhom": "Ảo hoá",
+   "viDu": "The guest operating system believes it controls the real hardware.",
+   "viDuNghia": "HĐH khách tin rằng nó đang điều khiển phần cứng thật."
+  },
+  {
+   "chu": "host operating system",
+   "doc": "/hoʊst ˈɑːpəreɪtɪŋ ˈsɪstəm/",
+   "nghia": "HĐH chủ: hệ điều hành cài trực tiếp trên máy thật, nơi hypervisor loại 2 chạy",
+   "nhom": "Ảo hoá",
+   "viDu": "A type 2 hypervisor runs as an application on a host operating system.",
+   "viDuNghia": "Hypervisor loại 2 chạy như một ứng dụng trên HĐH chủ."
+  },
+  {
+   "chu": "shadow page table",
+   "doc": "/ˈʃædoʊ peɪdʒ ˈteɪbl/",
+   "nghia": "bảng trang bóng: bảng hypervisor tự duy trì, ánh xạ thẳng địa chỉ ảo của khách sang bộ nhớ vật lý thật",
+   "nhom": "Ảo hoá",
+   "viDu": "Without hardware support, the hypervisor must keep a shadow page table for each guest.",
+   "viDuNghia": "Không có phần cứng hỗ trợ, hypervisor phải giữ một bảng trang bóng cho mỗi máy khách."
+  },
+  {
+   "chu": "nested page table",
+   "doc": "/ˈnestɪd peɪdʒ ˈteɪbl/",
+   "nghia": "bảng trang lồng (EPT/NPT): phần cứng tự dịch hai tầng địa chỉ khách → vật lý, không cần bảng trang bóng",
+   "nhom": "Ảo hoá",
+   "viDu": "Nested page tables let the hardware handle guest address translation.",
+   "viDuNghia": "Bảng trang lồng cho phép phần cứng tự dịch địa chỉ của máy khách."
+  },
+  {
+   "chu": "virtio",
+   "doc": "/ˈvɜːrtioʊ/",
+   "nghia": "virtio: chuẩn trình điều khiển thiết bị ảo hoá song song (đĩa, mạng) giữa máy khách và hypervisor",
+   "nhom": "Ảo hoá",
+   "viDu": "Virtio drivers give a guest much faster disk and network I/O than emulated devices.",
+   "viDuNghia": "Trình điều khiển virtio cho máy khách vào/ra đĩa và mạng nhanh hơn nhiều so với thiết bị giả lập."
+  },
+  {
+   "chu": "live migration",
+   "doc": "/laɪv maɪˈɡreɪʃn/",
+   "nghia": "di trú trực tiếp: chuyển máy ảo đang chạy sang máy chủ khác mà gần như không gián đoạn",
+   "nhom": "Ảo hoá",
+   "viDu": "Live migration copies the memory pages of a running virtual machine to another host.",
+   "viDuNghia": "Di trú trực tiếp sao các trang bộ nhớ của máy ảo đang chạy sang máy chủ khác."
+  },
+  {
+   "chu": "virtual CPU",
+   "doc": "/ˈvɜːrtʃuəl ˌsiː piː ˈjuː/",
+   "nghia": "CPU ảo (vCPU): bộ xử lý mà máy ảo nhìn thấy, được hypervisor lập lịch lên CPU thật",
+   "nhom": "Ảo hoá",
+   "viDu": "A virtual machine with four virtual CPUs may run on a host with only two cores.",
+   "viDuNghia": "Một máy ảo có bốn CPU ảo vẫn có thể chạy trên máy chủ chỉ có hai nhân."
+  },
+  {
+   "chu": "memory ballooning",
+   "doc": "/ˈmeməri bəˈluːnɪŋ/",
+   "nghia": "bơm bóng bộ nhớ: trình điều khiển trong máy khách \"phồng\" lên giữ trang để trả bớt RAM cho hypervisor",
+   "nhom": "Ảo hoá",
+   "viDu": "Memory ballooning lets the hypervisor reclaim unused memory from a guest.",
+   "viDuNghia": "Bơm bóng bộ nhớ cho phép hypervisor thu lại bộ nhớ chưa dùng từ máy khách."
+  },
+  {
+   "chu": "unikernel",
+   "doc": "/ˈjuːnɪkɜːrnl/",
+   "nghia": "unikernel: một ứng dụng biên dịch chung với đúng phần HĐH nó cần, chạy thẳng trên hypervisor",
+   "nhom": "Ảo hoá",
+   "viDu": "A unikernel contains only the operating system services that the application needs.",
+   "viDuNghia": "Unikernel chỉ chứa những dịch vụ HĐH mà ứng dụng cần."
+  },
+  {
+   "chu": "namespace",
+   "doc": "/ˈneɪmspeɪs/",
+   "nghia": "(Linux) không gian tên: cơ chế nhân cho mỗi nhóm tiến trình một góc nhìn riêng về PID, mạng, điểm gắn, người dùng",
+   "nhom": "Container trên Linux",
+   "viDu": "Containers use namespaces to give each group of processes its own view of the system.",
+   "viDuNghia": "Container dùng không gian tên để mỗi nhóm tiến trình có góc nhìn riêng về hệ thống."
+  },
+  {
+   "chu": "PID namespace",
+   "doc": "/ˌpiː aɪ ˈdiː ˈneɪmspeɪs/",
+   "nghia": "không gian tên PID: tiến trình trong container có dãy PID riêng, tiến trình đầu tiên là PID 1",
+   "nhom": "Container trên Linux",
+   "viDu": "Inside a new PID namespace, the first process sees itself as PID 1.",
+   "viDuNghia": "Trong không gian tên PID mới, tiến trình đầu tiên thấy mình là PID 1."
+  },
+  {
+   "chu": "network namespace",
+   "doc": "/ˈnetwɜːrk ˈneɪmspeɪs/",
+   "nghia": "không gian tên mạng: giao diện mạng, bảng định tuyến, cổng riêng cho mỗi container",
+   "nhom": "Container trên Linux",
+   "viDu": "Each container has its own network namespace, so two containers can both listen on port 80.",
+   "viDuNghia": "Mỗi container có không gian tên mạng riêng nên hai container đều nghe được cổng 80."
+  },
+  {
+   "chu": "mount namespace",
+   "doc": "/maʊnt ˈneɪmspeɪs/",
+   "nghia": "không gian tên gắn: cây thư mục và các điểm gắn riêng cho mỗi nhóm tiến trình",
+   "nhom": "Container trên Linux",
+   "viDu": "A mount namespace lets a container see its own root file system.",
+   "viDuNghia": "Không gian tên gắn cho phép container thấy hệ thống tệp gốc của riêng nó."
+  },
+  {
+   "chu": "user namespace",
+   "doc": "/ˈjuːzər ˈneɪmspeɪs/",
+   "nghia": "không gian tên người dùng: root trong container được ánh xạ thành người dùng thường bên ngoài",
+   "nhom": "Container trên Linux",
+   "viDu": "With a user namespace, root inside the container is an ordinary user on the host.",
+   "viDuNghia": "Với không gian tên người dùng, root trong container chỉ là người dùng thường trên máy chủ."
+  },
+  {
+   "chu": "control group",
+   "doc": "/kənˈtroʊl ɡruːp/",
+   "nghia": "nhóm điều khiển (cgroup): cơ chế Linux giới hạn và đo CPU, bộ nhớ, I/O cho một nhóm tiến trình",
+   "nhom": "Container trên Linux",
+   "viDu": "A control group can limit a container to 512 MB of memory.",
+   "viDuNghia": "Nhóm điều khiển có thể giới hạn một container ở mức 512 MB bộ nhớ."
+  },
+  {
+   "chu": "chroot",
+   "doc": "/ˈtʃeɪ ruːt/",
+   "nghia": "chroot: đổi thư mục gốc của tiến trình sang một thư mục con, tiền thân của container",
+   "nhom": "Container trên Linux",
+   "viDu": "chroot changes the root directory but does not isolate processes or the network.",
+   "viDuNghia": "chroot đổi thư mục gốc nhưng không cô lập tiến trình hay mạng."
+  },
+  {
+   "chu": "container image",
+   "doc": "/kənˈteɪnər ˈɪmɪdʒ/",
+   "nghia": "ảnh container: gói chỉ đọc chứa hệ thống tệp và cấu hình để chạy container",
+   "nhom": "Container trên Linux",
+   "viDu": "A container image is built from a Dockerfile layer by layer.",
+   "viDuNghia": "Ảnh container được dựng từ Dockerfile theo từng lớp."
+  },
+  {
+   "chu": "image layer",
+   "doc": "/ˈɪmɪdʒ ˈleɪər/",
+   "nghia": "lớp ảnh: mỗi lệnh dựng tạo một lớp chỉ đọc, các ảnh dùng chung được các lớp giống nhau",
+   "nhom": "Container trên Linux",
+   "viDu": "Unchanged image layers are reused from the build cache.",
+   "viDuNghia": "Các lớp ảnh không đổi được dùng lại từ bộ đệm dựng."
+  },
+  {
+   "chu": "OverlayFS",
+   "doc": "/ˈoʊvərleɪ ef es/",
+   "nghia": "OverlayFS: hệ thống tệp chồng lớp, ghép các lớp ảnh chỉ đọc với một lớp ghi được ở trên cùng",
+   "nhom": "Container trên Linux",
+   "viDu": "Docker uses OverlayFS to stack read-only image layers under a writable layer.",
+   "viDuNghia": "Docker dùng OverlayFS để chồng các lớp ảnh chỉ đọc dưới một lớp ghi được."
+  },
+  {
+   "chu": "container runtime",
+   "doc": "/kənˈteɪnər ˈrʌntaɪm/",
+   "nghia": "trình chạy container: phần mềm tạo namespace, cgroup và khởi chạy container (runc, containerd)",
+   "nhom": "Container trên Linux",
+   "viDu": "The container runtime sets up namespaces and cgroups before starting the process.",
+   "viDuNghia": "Trình chạy container dựng namespace và cgroup trước khi khởi chạy tiến trình."
+  },
+  {
+   "chu": "orchestration",
+   "doc": "/ˌɔːrkɪˈstreɪʃn/",
+   "nghia": "điều phối (container): tự động triển khai, co giãn, khởi động lại container trên nhiều máy",
+   "nhom": "Container trên Linux",
+   "viDu": "Kubernetes provides orchestration for containers across a cluster.",
+   "viDuNghia": "Kubernetes điều phối container trên cả một cụm máy."
+  },
+  {
+   "chu": "Kubernetes",
+   "doc": "/ˌkuːbərˈnetiːz/",
+   "nghia": "Kubernetes: nền tảng điều phối container mã nguồn mở",
+   "nhom": "Container trên Linux",
+   "viDu": "Kubernetes restarts a container automatically when it is OOMKilled.",
+   "viDuNghia": "Kubernetes tự khởi động lại container khi nó bị diệt vì hết bộ nhớ."
+  },
+  {
+   "chu": "Linux capabilities",
+   "doc": "/ˈlɪnəks ˌkeɪpəˈbɪlətiz/",
+   "nghia": "capability của Linux: chia quyền root thành nhiều quyền nhỏ (CAP_NET_BIND_SERVICE…) cấp riêng từng cái",
+   "nhom": "Container trên Linux",
+   "viDu": "Linux capabilities let a process bind to port 80 without full root privileges.",
+   "viDuNghia": "Capability của Linux cho tiến trình mở cổng 80 mà không cần toàn quyền root."
+  },
+  {
+   "chu": "seccomp",
+   "doc": "/ˈsekɑːmp/",
+   "nghia": "seccomp: bộ lọc của Linux giới hạn những lời gọi hệ thống một tiến trình được phép dùng",
+   "nhom": "Container trên Linux",
+   "viDu": "A seccomp profile blocks dangerous system calls inside a container.",
+   "viDuNghia": "Một hồ sơ seccomp chặn các lời gọi hệ thống nguy hiểm bên trong container."
+  },
+  {
+   "chu": "resource limit",
+   "doc": "/ˈriːsɔːrs ˈlɪmɪt/",
+   "nghia": "giới hạn tài nguyên (rlimit, ulimit): mức trần số tệp mở, bộ nhớ, tiến trình… của một tiến trình",
+   "nhom": "Container trên Linux",
+   "viDu": "Too many open files means the process has reached its resource limit for file descriptors.",
+   "viDuNghia": "Lỗi quá nhiều tệp mở nghĩa là tiến trình đã chạm giới hạn tài nguyên về mô tả tệp."
+  },
+  {
+   "chu": "throttling",
+   "doc": "/ˈθrɑːtlɪŋ/",
+   "nghia": "bóp băng thông/CPU: tạm không cho chạy khi nhóm tiến trình dùng hết hạn mức CPU của cgroup",
+   "nhom": "Container trên Linux",
+   "viDu": "CPU throttling occurs when a container uses up its CPU quota for the period.",
+   "viDuNghia": "Bóp CPU xảy ra khi container dùng hết hạn mức CPU trong chu kỳ."
+  },
+  {
+   "chu": "multicomputer",
+   "doc": "/ˌmʌltikəmˈpjuːtər/",
+   "nghia": "hệ đa máy tính: nhiều máy mỗi máy có bộ nhớ riêng, nối với nhau và trao đổi bằng thông điệp",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "In a multicomputer, each node has its own private memory.",
+   "viDuNghia": "Trong hệ đa máy tính, mỗi nút có bộ nhớ riêng."
+  },
+  {
+   "chu": "UMA",
+   "doc": "/ˌjuː em ˈeɪ/",
+   "nghia": "UMA (Uniform Memory Access): mọi CPU truy cập mọi ô nhớ với thời gian như nhau",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "In a UMA multiprocessor, every memory word can be read as fast as every other.",
+   "viDuNghia": "Trong hệ đa xử lý UMA, mọi từ nhớ đều đọc nhanh như nhau."
+  },
+  {
+   "chu": "NUMA",
+   "doc": "/ˈnuːmə/",
+   "nghia": "NUMA (Nonuniform Memory Access): CPU truy cập bộ nhớ gần nó nhanh hơn bộ nhớ của nút khác",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "On a NUMA machine, the scheduler tries to keep a thread near its memory.",
+   "viDuNghia": "Trên máy NUMA, bộ lập lịch cố giữ luồng ở gần bộ nhớ của nó."
+  },
+  {
+   "chu": "symmetric multiprocessing",
+   "doc": "/sɪˈmetrɪk ˌmʌltiˈprɑːsesɪŋ/",
+   "nghia": "đa xử lý đối xứng (SMP): một bản HĐH, mọi CPU ngang hàng và đều chạy được mã nhân",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "In symmetric multiprocessing, any CPU can run kernel code.",
+   "viDuNghia": "Trong đa xử lý đối xứng, CPU nào cũng chạy được mã nhân."
+  },
+  {
+   "chu": "master-slave multiprocessor",
+   "doc": "/ˌmæstər ˈsleɪv ˌmʌltiˈprɑːsesər/",
+   "nghia": "đa xử lý chủ – tớ: chỉ một CPU chạy HĐH, các CPU khác chỉ chạy tiến trình người dùng",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "In a master-slave multiprocessor, the master CPU can become a bottleneck.",
+   "viDuNghia": "Trong hệ đa xử lý chủ – tớ, CPU chủ có thể trở thành nút cổ chai."
+  },
+  {
+   "chu": "crossbar switch",
+   "doc": "/ˈkrɔːsbɑːr swɪtʃ/",
+   "nghia": "chuyển mạch crossbar: lưới điểm giao nối n CPU với k mô-đun nhớ, cho nhiều cặp kết nối cùng lúc",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "A crossbar switch is nonblocking but needs n x k crosspoints.",
+   "viDuNghia": "Chuyển mạch crossbar không bị chặn nhưng cần n x k điểm giao."
+  },
+  {
+   "chu": "torus",
+   "doc": "/ˈtɔːrəs/",
+   "nghia": "mạng hình xuyến: lưới nối các nút đa máy tính, cạnh ngoài nối vòng về phía đối diện",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "A torus is a grid whose edges wrap around to the opposite side.",
+   "viDuNghia": "Hình xuyến là một lưới có các cạnh vòng về phía đối diện."
+  },
+  {
+   "chu": "interconnection network",
+   "doc": "/ˌɪntərkəˈnekʃn ˈnetwɜːrk/",
+   "nghia": "mạng liên kết: mạng nối các CPU, bộ nhớ hoặc nút trong hệ đa xử lý/đa máy tính (bus, lưới, hypercube)",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "The interconnection network of a multicomputer can be a grid, a torus or a hypercube.",
+   "viDuNghia": "Mạng liên kết của hệ đa máy tính có thể là lưới, hình xuyến hoặc hypercube."
+  },
+  {
+   "chu": "false sharing",
+   "doc": "/fɔːls ˈʃerɪŋ/",
+   "nghia": "chia sẻ giả: hai CPU sửa hai biến khác nhau nằm cùng một dòng cache, khiến dòng cache bị chuyển qua lại liên tục",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "False sharing slows down two threads that update different variables on the same cache line.",
+   "viDuNghia": "Chia sẻ giả làm chậm hai luồng cập nhật hai biến khác nhau trên cùng một dòng cache."
+  },
+  {
+   "chu": "affinity scheduling",
+   "doc": "/əˈfɪnəti ˈskedʒuːlɪŋ/",
+   "nghia": "lập lịch theo ái lực: cố cho luồng chạy lại trên CPU cũ để cache của nó vẫn còn nóng",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "Affinity scheduling tries to run a thread on the CPU it used last time.",
+   "viDuNghia": "Lập lịch theo ái lực cố cho luồng chạy trên CPU nó dùng lần trước."
+  },
+  {
+   "chu": "gang scheduling",
+   "doc": "/ɡæŋ ˈskedʒuːlɪŋ/",
+   "nghia": "lập lịch theo nhóm: các luồng liên quan được lập lịch chạy cùng lúc trên nhiều CPU",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "Gang scheduling runs all threads of a group at the same time on different CPUs.",
+   "viDuNghia": "Lập lịch theo nhóm cho mọi luồng của một nhóm chạy cùng lúc trên các CPU khác nhau."
+  },
+  {
+   "chu": "space sharing",
+   "doc": "/speɪs ˈʃerɪŋ/",
+   "nghia": "chia không gian: chia tập CPU cho từng nhóm luồng chạy độc quyền tới khi xong",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "With space sharing, a group of related threads gets its own set of CPUs.",
+   "viDuNghia": "Với chia không gian, một nhóm luồng liên quan được cấp một tập CPU riêng."
+  },
+  {
+   "chu": "hyperthreading",
+   "doc": "/ˈhaɪpərθredɪŋ/",
+   "nghia": "siêu phân luồng: một nhân vật lý chạy hai luồng phần cứng, HĐH thấy như hai CPU logic",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "With hyperthreading, a quad-core CPU appears as eight logical CPUs.",
+   "viDuNghia": "Với siêu phân luồng, CPU bốn nhân hiện ra như tám CPU logic."
+  },
+  {
+   "chu": "grid computing",
+   "doc": "/ɡrɪd kəmˈpjuːtɪŋ/",
+   "nghia": "tính toán lưới: gom máy tính ở nhiều nơi thành một hệ phân tán để chạy việc lớn",
+   "nhom": "Đa xử lý và đa máy tính",
+   "viDu": "Grid computing connects machines from different organizations to solve large problems.",
+   "viDuNghia": "Tính toán lưới nối máy của nhiều tổ chức để giải các bài toán lớn."
+  },
+  {
+   "chu": "protection domain",
+   "doc": "/prəˈtekʃn doʊˈmeɪn/",
+   "nghia": "miền bảo vệ: tập các cặp (đối tượng, quyền); tiến trình tại một thời điểm chạy trong một miền",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "In UNIX, the protection domain of a process is defined by its UID and GID.",
+   "viDuNghia": "Trong UNIX, miền bảo vệ của tiến trình được xác định bởi UID và GID của nó."
+  },
+  {
+   "chu": "access matrix",
+   "doc": "/ˈækses ˈmeɪtrɪks/",
+   "nghia": "ma trận truy cập: hàng là miền, cột là đối tượng, ô là các quyền; lưu theo cột thành ACL, theo hàng thành capability list",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "Storing the access matrix by columns gives access control lists.",
+   "viDuNghia": "Lưu ma trận truy cập theo cột cho ra các danh sách kiểm soát truy cập."
+  },
+  {
+   "chu": "capability list",
+   "doc": "/ˌkeɪpəˈbɪləti lɪst/",
+   "nghia": "danh sách năng lực (C-list): mỗi tiến trình giữ danh sách đối tượng nó được truy cập và quyền đi kèm",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "A capability list is attached to each process instead of each object.",
+   "viDuNghia": "Danh sách năng lực gắn với mỗi tiến trình thay vì mỗi đối tượng."
+  },
+  {
+   "chu": "reference monitor",
+   "doc": "/ˈrefrəns ˈmɑːnɪtər/",
+   "nghia": "bộ giám sát tham chiếu: thành phần mọi truy cập tài nguyên đều phải đi qua để kiểm tra quyền",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "Every system call that touches a protected object must pass through the reference monitor.",
+   "viDuNghia": "Mọi lời gọi hệ thống chạm tới đối tượng được bảo vệ đều phải đi qua bộ giám sát tham chiếu."
+  },
+  {
+   "chu": "trusted computing base",
+   "doc": "/ˈtrʌstɪd kəmˈpjuːtɪŋ beɪs/",
+   "nghia": "nền tính toán tin cậy (TCB): phần cứng và phần mềm phải đúng thì hệ mới an toàn; nên càng nhỏ càng tốt",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "A smaller trusted computing base is easier to verify.",
+   "viDuNghia": "Nền tính toán tin cậy càng nhỏ thì càng dễ kiểm chứng."
+  },
+  {
+   "chu": "principle of least privilege",
+   "doc": "/ˈprɪnsəpl əv liːst ˈprɪvəlɪdʒ/",
+   "nghia": "nguyên tắc đặc quyền tối thiểu: mỗi tiến trình/người dùng chỉ được đúng những quyền cần cho việc của mình",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "Following the principle of least privilege, a web server should not run as root.",
+   "viDuNghia": "Theo nguyên tắc đặc quyền tối thiểu, web server không nên chạy bằng root."
+  },
+  {
+   "chu": "discretionary access control",
+   "doc": "/dɪˈskreʃəneri ˈækses kənˈtroʊl/",
+   "nghia": "kiểm soát truy cập tuỳ quyền (DAC): chủ đối tượng tự quyết ai được truy cập (quyền rwx của UNIX)",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "UNIX file permissions are an example of discretionary access control.",
+   "viDuNghia": "Quyền tệp của UNIX là một ví dụ của kiểm soát truy cập tuỳ quyền."
+  },
+  {
+   "chu": "mandatory access control",
+   "doc": "/ˈmændətɔːri ˈækses kənˈtroʊl/",
+   "nghia": "kiểm soát truy cập bắt buộc (MAC): chính sách do hệ thống áp đặt, người dùng không tự nới được",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "SELinux adds mandatory access control on top of normal file permissions.",
+   "viDuNghia": "SELinux thêm kiểm soát truy cập bắt buộc bên trên quyền tệp thông thường."
+  },
+  {
+   "chu": "Bell-LaPadula model",
+   "doc": "/ˌbel ˈlæpədʊlə ˈmɑːdl/",
+   "nghia": "mô hình Bell-LaPadula: mô hình bảo mật giữ bí mật — không đọc lên mức cao hơn, không ghi xuống mức thấp hơn",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "The Bell-LaPadula model forbids reading up and writing down.",
+   "viDuNghia": "Mô hình Bell-LaPadula cấm đọc lên và ghi xuống."
+  },
+  {
+   "chu": "Biba model",
+   "doc": "/ˈbiːbə ˈmɑːdl/",
+   "nghia": "mô hình Biba: mô hình giữ toàn vẹn — không ghi lên mức cao hơn, không đọc xuống mức thấp hơn",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "The Biba model protects integrity, the opposite goal of Bell-LaPadula.",
+   "viDuNghia": "Mô hình Biba bảo vệ tính toàn vẹn, mục tiêu ngược với Bell-LaPadula."
+  },
+  {
+   "chu": "covert channel",
+   "doc": "/ˈkoʊvɜːrt ˈtʃænl/",
+   "nghia": "kênh ngầm: đường rò thông tin không chủ định, vd điều khiển tải CPU để truyền bit ra ngoài",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "A covert channel can leak data even when the access rules are correct.",
+   "viDuNghia": "Kênh ngầm có thể làm rò dữ liệu ngay cả khi luật truy cập đúng."
+  },
+  {
+   "chu": "side channel",
+   "doc": "/saɪd ˈtʃænl/",
+   "nghia": "kênh kề: suy ra bí mật từ hiệu ứng phụ như thời gian chạy, điện năng, cache",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "Spectre is a side channel attack that leaks data through the CPU cache.",
+   "viDuNghia": "Spectre là tấn công kênh kề làm rò dữ liệu qua cache của CPU."
+  },
+  {
+   "chu": "SELinux",
+   "doc": "/ˌes iː ˈlɪnəks/",
+   "nghia": "SELinux: mô-đun bảo mật của Linux áp dụng kiểm soát truy cập bắt buộc bằng nhãn",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "SELinux can stop a compromised web server from reading users' home directories.",
+   "viDuNghia": "SELinux có thể ngăn web server bị chiếm quyền đọc thư mục nhà của người dùng."
+  },
+  {
+   "chu": "AppArmor",
+   "doc": "/ˈæp ɑːrmər/",
+   "nghia": "AppArmor: mô-đun bảo mật Linux giới hạn chương trình theo hồ sơ đường dẫn tệp",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "Ubuntu uses AppArmor profiles to confine applications.",
+   "viDuNghia": "Ubuntu dùng hồ sơ AppArmor để giới hạn các ứng dụng."
+  },
+  {
+   "chu": "security policy",
+   "doc": "/sɪˈkjʊrəti ˈpɑːləsi/",
+   "nghia": "chính sách bảo mật: quy định ai được làm gì; cơ chế (mechanism) là cách hệ thực thi chính sách",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "The operating system should separate the security policy from the protection mechanism.",
+   "viDuNghia": "HĐH nên tách chính sách bảo mật khỏi cơ chế bảo vệ."
+  },
+  {
+   "chu": "sandbox",
+   "doc": "/ˈsændbɑːks/",
+   "nghia": "hộp cát: môi trường cô lập chạy mã không tin cậy với quyền hạn rất hẹp",
+   "nhom": "Mô hình bảo vệ",
+   "viDu": "Browsers run web content in a sandbox to limit damage from attacks.",
+   "viDuNghia": "Trình duyệt chạy nội dung web trong hộp cát để hạn chế thiệt hại khi bị tấn công."
+  },
+  {
+   "chu": "buffer overflow",
+   "doc": "/ˈbʌfər ˈoʊvərfloʊ/",
+   "nghia": "tràn bộ đệm: ghi quá kích thước bộ đệm, đè lên dữ liệu kề bên như địa chỉ trả về",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "A buffer overflow on the stack can overwrite the return address of a function.",
+   "viDuNghia": "Tràn bộ đệm trên ngăn xếp có thể ghi đè địa chỉ trả về của hàm."
+  },
+  {
+   "chu": "stack canary",
+   "doc": "/stæk kəˈneri/",
+   "nghia": "chim hoàng yến ngăn xếp: giá trị ngẫu nhiên đặt trước địa chỉ trả về, bị đổi là phát hiện tràn bộ đệm",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "If the stack canary has changed, the program aborts before returning.",
+   "viDuNghia": "Nếu giá trị canary trên ngăn xếp bị đổi, chương trình dừng trước khi trả về."
+  },
+  {
+   "chu": "NX bit",
+   "doc": "/ˌen ˈeks bɪt/",
+   "nghia": "bit NX (No-eXecute): đánh dấu trang dữ liệu không được thực thi mã",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "The NX bit stops code injected into the stack from being executed.",
+   "viDuNghia": "Bit NX ngăn mã bị chèn vào ngăn xếp được thực thi."
+  },
+  {
+   "chu": "data execution prevention",
+   "doc": "/ˈdeɪtə ˌeksɪˈkjuːʃn prɪˈvenʃn/",
+   "nghia": "ngăn thực thi dữ liệu (DEP, W^X): một trang ghi được thì không chạy được và ngược lại",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "Data execution prevention marks the stack and heap as non-executable.",
+   "viDuNghia": "Ngăn thực thi dữ liệu đánh dấu stack và heap là không thực thi được."
+  },
+  {
+   "chu": "address space layout randomization",
+   "doc": "/ˈædres speɪs ˈleɪaʊt ˌrændəməˈzeɪʃn/",
+   "nghia": "ngẫu nhiên hoá bố cục không gian địa chỉ (ASLR): đặt stack, heap, thư viện ở địa chỉ ngẫu nhiên mỗi lần chạy",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "Address space layout randomization makes it hard for an attacker to guess where code is.",
+   "viDuNghia": "ASLR khiến kẻ tấn công khó đoán mã nằm ở đâu."
+  },
+  {
+   "chu": "return-oriented programming",
+   "doc": "/rɪˈtɜːrn ˈɔːrientɪd ˈproʊɡræmɪŋ/",
+   "nghia": "lập trình hướng trả về (ROP): nối các đoạn mã có sẵn kết thúc bằng lệnh ret để vượt qua NX",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "Return-oriented programming reuses existing code, so the NX bit alone cannot stop it.",
+   "viDuNghia": "ROP dùng lại mã có sẵn nên chỉ bit NX thì không chặn được."
+  },
+  {
+   "chu": "code injection",
+   "doc": "/koʊd ɪnˈdʒekʃn/",
+   "nghia": "chèn mã: đưa mã độc vào dữ liệu đầu vào rồi lừa chương trình thực thi nó",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "Code injection attacks exploit programs that execute untrusted input.",
+   "viDuNghia": "Tấn công chèn mã khai thác chương trình thực thi dữ liệu đầu vào không tin cậy."
+  },
+  {
+   "chu": "format string attack",
+   "doc": "/ˈfɔːrmæt strɪŋ əˈtæk/",
+   "nghia": "tấn công chuỗi định dạng: người dùng điều khiển chuỗi định dạng của printf để đọc/ghi bộ nhớ",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "Calling printf(input) instead of printf(\"%s\", input) allows a format string attack.",
+   "viDuNghia": "Gọi printf(input) thay vì printf(\"%s\", input) mở đường cho tấn công chuỗi định dạng."
+  },
+  {
+   "chu": "integer overflow",
+   "doc": "/ˈɪntɪdʒər ˈoʊvərfloʊ/",
+   "nghia": "tràn số nguyên: phép tính vượt giới hạn kiểu số nên quay vòng, có thể làm cấp phát bộ đệm quá nhỏ",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "An integer overflow in a size calculation can lead to a buffer overflow.",
+   "viDuNghia": "Tràn số nguyên khi tính kích thước có thể dẫn tới tràn bộ đệm."
+  },
+  {
+   "chu": "TOCTOU",
+   "doc": "/ˈtɑːk tuː/",
+   "nghia": "TOCTOU (time of check to time of use): lỗi chạy đua giữa lúc kiểm tra và lúc dùng tài nguyên",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "A TOCTOU bug lets an attacker swap a file after access() checks it but before open() uses it.",
+   "viDuNghia": "Lỗi TOCTOU cho kẻ tấn công tráo tệp sau khi access() kiểm tra nhưng trước khi open() dùng nó."
+  },
+  {
+   "chu": "privilege escalation",
+   "doc": "/ˈprɪvəlɪdʒ ˌeskəˈleɪʃn/",
+   "nghia": "leo thang đặc quyền: kẻ tấn công từ quyền thấp chiếm được quyền cao hơn (thường là root)",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "A bug in a setuid program can allow privilege escalation to root.",
+   "viDuNghia": "Lỗi trong một chương trình setuid có thể cho phép leo thang đặc quyền lên root."
+  },
+  {
+   "chu": "rootkit",
+   "doc": "/ˈruːtkɪt/",
+   "nghia": "rootkit: bộ mã độc tự giấu mình (tệp, tiến trình) để duy trì quyền root lâu dài",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "A kernel rootkit can hide its processes from the ps command.",
+   "viDuNghia": "Rootkit ở mức nhân có thể giấu tiến trình của nó khỏi lệnh ps."
+  },
+  {
+   "chu": "backdoor",
+   "doc": "/ˈbækdɔːr/",
+   "nghia": "cửa hậu: lối vào bí mật do người viết mã cài, bỏ qua bước xác thực bình thường",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "A programmer may leave a backdoor that skips the password check for a special user name.",
+   "viDuNghia": "Lập trình viên có thể để lại cửa hậu bỏ qua kiểm tra mật khẩu với một tên người dùng đặc biệt."
+  },
+  {
+   "chu": "logic bomb",
+   "doc": "/ˈlɑːdʒɪk bɑːm/",
+   "nghia": "bom logic: mã độc nằm im trong chương trình, chỉ kích hoạt khi một điều kiện xảy ra",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "A logic bomb may delete files if its author is removed from the payroll.",
+   "viDuNghia": "Bom logic có thể xoá tệp nếu tác giả của nó bị gạch khỏi bảng lương."
+  },
+  {
+   "chu": "zero-day",
+   "doc": "/ˈzɪroʊ deɪ/",
+   "nghia": "lỗ hổng zero-day: lỗ hổng bị khai thác trước khi nhà sản xuất biết và kịp vá",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "A zero-day exploit attacks a vulnerability that has no patch yet.",
+   "viDuNghia": "Mã khai thác zero-day tấn công một lỗ hổng chưa có bản vá."
+  },
+  {
+   "chu": "fuzzing",
+   "doc": "/ˈfʌzɪŋ/",
+   "nghia": "kiểm thử mờ: đưa hàng loạt đầu vào ngẫu nhiên hoặc hỏng để tìm lỗi làm chương trình sập",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "Fuzzing found many buffer overflows in file parsers.",
+   "viDuNghia": "Kiểm thử mờ đã tìm ra nhiều lỗi tràn bộ đệm trong các bộ đọc tệp."
+  },
+  {
+   "chu": "antivirus",
+   "doc": "/ˈæntivaɪrəs/",
+   "nghia": "phần mềm diệt vi-rút: quét tệp và bộ nhớ để phát hiện, chặn mã độc",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "The antivirus program checks all files for viruses",
+   "viDuNghia": "Chương trình diệt vi-rút kiểm tra mọi tệp để tìm vi-rút"
+  },
+  {
+   "chu": "virus signature",
+   "doc": "/ˈvaɪrəs ˈsɪɡnətʃər/",
+   "nghia": "chữ ký vi-rút: chuỗi byte đặc trưng của một mã độc, dùng để nhận diện khi quét",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "A polymorphic virus changes its code so that a fixed virus signature cannot match it.",
+   "viDuNghia": "Vi-rút đa hình đổi mã của nó để chữ ký vi-rút cố định không khớp được."
+  },
+  {
+   "chu": "one-time password",
+   "doc": "/ˌwʌn taɪm ˈpæswɜːrd/",
+   "nghia": "mật khẩu dùng một lần (OTP): mỗi mật khẩu chỉ dùng được một lần, bị nghe lén cũng vô dụng",
+   "nhom": "Tấn công và phòng thủ",
+   "viDu": "A one-time password is useless to an attacker who captures it after it has been used.",
+   "viDuNghia": "Mật khẩu dùng một lần vô dụng với kẻ tấn công bắt được nó sau khi đã dùng."
+  }
+ ]
+}

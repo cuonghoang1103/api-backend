@@ -1,0 +1,602 @@
+{
+ "ma": "swt301-5",
+ "nn": "en",
+ "ten": "SWT301 · 5. Chiến lược, báo cáo, độ phủ & JUnit",
+ "moTa": "Bổ sung SWT301: các chiến lược kiểm thử ISTQB, tiêu chí tạm dừng/tiếp tục, báo cáo và số đo lỗi, độ phủ nâng cao (LCSAJ, MC/DC), kỹ thuật dựa trên kinh nghiệm, loại kiểm thử chấp nhận, tổ chức và công cụ, nguyên lý kiểm thử, viết unit test JUnit theo mẫu UTCID.",
+ "bieuTuong": "checkmark.seal.fill",
+ "thuTu": -924,
+ "tu": [
+  {
+   "chu": "test policy",
+   "doc": "/test ˈpɑːləsi/",
+   "nghia": "chính sách kiểm thử: tài liệu cấp tổ chức nêu mục tiêu và nguyên tắc kiểm thử chung",
+   "nhom": "Chiến lược kiểm thử",
+   "viDu": "The test policy describes the organization's overall goals for testing.",
+   "viDuNghia": "Chính sách kiểm thử mô tả mục tiêu kiểm thử chung của tổ chức."
+  },
+  {
+   "chu": "analytical strategy",
+   "doc": "/ˌænəˈlɪtɪkl ˈstrætədʒi/",
+   "nghia": "chiến lược phân tích: thiết kế test dựa trên phân tích yêu cầu hoặc rủi ro",
+   "nhom": "Chiến lược kiểm thử",
+   "viDu": "Risk-based testing is an example of an analytical strategy.",
+   "viDuNghia": "Kiểm thử dựa trên rủi ro là ví dụ của chiến lược phân tích."
+  },
+  {
+   "chu": "model-based strategy",
+   "doc": "/ˈmɑːdl beɪst ˈstrætədʒi/",
+   "nghia": "chiến lược theo mô hình: test sinh từ mô hình hệ thống (máy trạng thái, mô hình sử dụng)",
+   "nhom": "Chiến lược kiểm thử",
+   "viDu": "Test cases are derived systematically from models of the system.",
+   "viDuNghia": "Test case được suy ra có hệ thống từ mô hình của hệ thống."
+  },
+  {
+   "chu": "methodical strategy",
+   "doc": "/məˈθɑːdɪkl ˈstrætədʒi/",
+   "nghia": "chiến lược có phương pháp: làm theo danh sách kiểm, bộ điều kiện chuẩn đã định trước",
+   "nhom": "Chiến lược kiểm thử",
+   "viDu": "Methodical testing approach",
+   "viDuNghia": "Cách tiếp cận kiểm thử có phương pháp."
+  },
+  {
+   "chu": "process-compliant strategy",
+   "doc": "/ˈprɑːses kəmˈplaɪənt ˈstrætədʒi/",
+   "nghia": "chiến lược tuân theo quy trình/chuẩn: làm theo chuẩn ngành hoặc quy trình bắt buộc",
+   "nhom": "Chiến lược kiểm thử",
+   "viDu": "Process or standard compliant testing approach",
+   "viDuNghia": "Cách tiếp cận tuân theo quy trình hoặc chuẩn."
+  },
+  {
+   "chu": "reactive strategy",
+   "doc": "/riˈæktɪv ˈstrætədʒi/",
+   "nghia": "chiến lược phản ứng: thiết kế và chạy test khi phần mềm đã có (vd kiểm thử thăm dò)",
+   "nhom": "Chiến lược kiểm thử",
+   "viDu": "Exploratory testing follows a reactive strategy.",
+   "viDuNghia": "Kiểm thử thăm dò theo chiến lược phản ứng."
+  },
+  {
+   "chu": "consultative strategy",
+   "doc": "/kənˈsʌltətɪv ˈstrætədʒi/",
+   "nghia": "chiến lược tư vấn (directed): chọn test theo ý kiến chuyên gia, người dùng, bên liên quan",
+   "nhom": "Chiến lược kiểm thử",
+   "viDu": "Directed (Consultative)",
+   "viDuNghia": "Chiến lược theo chỉ dẫn (tư vấn)."
+  },
+  {
+   "chu": "regression-averse strategy",
+   "doc": "/rɪˈɡreʃn əˈvɜːrs ˈstrætədʒi/",
+   "nghia": "chiến lược tránh hồi quy: tự động hoá và chạy lại nhiều test để giữ chức năng cũ không hỏng",
+   "nhom": "Chiến lược kiểm thử",
+   "viDu": "Reactive, analytical, and regression-averse",
+   "viDuNghia": "Phản ứng, phân tích và tránh hồi quy."
+  },
+  {
+   "chu": "metric-based approach",
+   "doc": "/ˈmetrɪk beɪst əˈproʊtʃ/",
+   "nghia": "ước lượng dựa trên số đo: dùng dữ liệu dự án trước để ước lượng công sức kiểm thử",
+   "nhom": "Chiến lược kiểm thử",
+   "viDu": "Primarily a metric-based approach, supplemented by an expert-based approach.",
+   "viDuNghia": "Chủ yếu dựa trên số đo, bổ sung bằng ý kiến chuyên gia."
+  },
+  {
+   "chu": "expert-based approach",
+   "doc": "/ˈekspɜːrt beɪst əˈproʊtʃ/",
+   "nghia": "ước lượng dựa trên chuyên gia: hỏi người có kinh nghiệm (vd Wideband Delphi)",
+   "nhom": "Chiến lược kiểm thử",
+   "viDu": "(iv) is an expert-based estimation technique.",
+   "viDuNghia": "(iv) là kỹ thuật ước lượng dựa trên chuyên gia."
+  },
+  {
+   "chu": "suspension criteria",
+   "doc": "/səˈspenʃn kraɪˈtɪriə/",
+   "nghia": "tiêu chí tạm dừng: điều kiện phải dừng kiểm thử (vd bản dựng lỗi quá nhiều)",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "Suspension criteria.",
+   "viDuNghia": "Tiêu chí tạm dừng."
+  },
+  {
+   "chu": "resumption criteria",
+   "doc": "/rɪˈzʌmpʃn kraɪˈtɪriə/",
+   "nghia": "tiêu chí tiếp tục: điều kiện để kiểm thử chạy lại sau khi tạm dừng",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "Resumption criteria define when testing can restart.",
+   "viDuNghia": "Tiêu chí tiếp tục xác định khi nào được kiểm thử lại."
+  },
+  {
+   "chu": "test incident report",
+   "doc": "/test ˈɪnsɪdənt rɪˈpɔːrt/",
+   "nghia": "báo cáo sự cố kiểm thử: ghi mọi sự kiện bất thường khi chạy test cần điều tra",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "Test Incident Report",
+   "viDuNghia": "Báo cáo sự cố kiểm thử."
+  },
+  {
+   "chu": "interim test report",
+   "doc": "/ˈɪntərɪm test rɪˈpɔːrt/",
+   "nghia": "báo cáo kiểm thử giữa kỳ: tình hình tại một thời điểm trong lúc đang kiểm thử",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "Interim Test report",
+   "viDuNghia": "Báo cáo kiểm thử giữa kỳ."
+  },
+  {
+   "chu": "test progress report",
+   "doc": "/test ˈprɑːɡres rɪˈpɔːrt/",
+   "nghia": "báo cáo tiến độ kiểm thử: số test đã chạy, đạt, trượt, lỗi mở so với kế hoạch",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "A test progress report shows the number of tests run and passed.",
+   "viDuNghia": "Báo cáo tiến độ cho thấy số test đã chạy và đạt."
+  },
+  {
+   "chu": "defect detection percentage",
+   "doc": "/ˈdiːfekt dɪˈtekʃn pərˈsentɪdʒ/",
+   "nghia": "DDP: tỉ lệ lỗi do đội kiểm thử tìm được trên tổng lỗi (gồm cả lỗi người dùng phát hiện sau)",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "Defect detection percentage measures how effective the testing was.",
+   "viDuNghia": "DDP đo mức hiệu quả của kiểm thử."
+  },
+  {
+   "chu": "defect removal efficiency",
+   "doc": "/ˈdiːfekt rɪˈmuːvl ɪˈfɪʃnsi/",
+   "nghia": "hiệu suất loại bỏ lỗi: tỉ lệ lỗi được loại trước khi phát hành",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "A high defect removal efficiency means few defects reach users.",
+   "viDuNghia": "Hiệu suất loại lỗi cao nghĩa là ít lỗi tới tay người dùng."
+  },
+  {
+   "chu": "mean time between failures",
+   "doc": "/miːn taɪm bɪˈtwiːn ˈfeɪljərz/",
+   "nghia": "MTBF: thời gian trung bình giữa hai lần hỏng — số đo độ tin cậy",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "Reliability is often measured as mean time between failures.",
+   "viDuNghia": "Độ tin cậy thường đo bằng thời gian trung bình giữa hai lần hỏng."
+  },
+  {
+   "chu": "bug triage",
+   "doc": "/bʌɡ ˈtriːɑːʒ/",
+   "nghia": "phân loại lỗi: họp xét lỗi mới, gán mức nghiêm trọng, ưu tiên và người sửa",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "The team holds a bug triage meeting every morning.",
+   "viDuNghia": "Nhóm họp phân loại lỗi mỗi sáng."
+  },
+  {
+   "chu": "corrective action",
+   "doc": "/kəˈrektɪv ˈækʃn/",
+   "nghia": "hành động khắc phục: biện pháp khi tiến độ hoặc chất lượng lệch kế hoạch",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "Initiating corrective actions.",
+   "viDuNghia": "Khởi động các hành động khắc phục."
+  },
+  {
+   "chu": "deliverable baselining",
+   "doc": "/dɪˈlɪvərəbl ˈbeɪslaɪnɪŋ/",
+   "nghia": "chốt mốc sản phẩm bàn giao: cố định một phiên bản tài liệu/mã để làm cơ sở so sánh",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "Deliverable base-lining",
+   "viDuNghia": "Chốt mốc sản phẩm bàn giao."
+  },
+  {
+   "chu": "conformance",
+   "doc": "/kənˈfɔːrməns/",
+   "nghia": "sự tuân thủ: đúng với yêu cầu, đặc tả hoặc chuẩn",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "Auditing conformance to ISO 9001.",
+   "viDuNghia": "Đánh giá sự tuân thủ ISO 9001."
+  },
+  {
+   "chu": "ISO 9001",
+   "doc": "/ˌaɪ es ˈoʊ naɪn ˈθaʊzənd wʌn/",
+   "nghia": "tiêu chuẩn quốc tế về hệ thống quản lý chất lượng",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "An audit checks conformance to ISO 9001.",
+   "viDuNghia": "Đánh giá kiểm tra sự tuân thủ ISO 9001."
+  },
+  {
+   "chu": "test thoroughness",
+   "doc": "/test ˈθɜːroʊnəs/",
+   "nghia": "độ kỹ lưỡng của kiểm thử; độ phủ chỉ là thước đo một phần",
+   "nhom": "Tiêu chí, báo cáo và số đo",
+   "viDu": "Coverage is a partial measure of test thoroughness.",
+   "viDuNghia": "Độ phủ là thước đo một phần của độ kỹ lưỡng kiểm thử."
+  },
+  {
+   "chu": "LCSAJ",
+   "doc": "/ˌel ˌsiː ˌes eɪ ˈdʒeɪ/",
+   "nghia": "Linear Code Sequence and Jump: đoạn mã chạy thẳng rồi nhảy — đơn vị đo độ phủ hộp trắng",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "LCSAJ (Linear Code Sequence and Jump)",
+   "viDuNghia": "Chuỗi mã tuyến tính và bước nhảy."
+  },
+  {
+   "chu": "control flow testing",
+   "doc": "/kənˈtroʊl floʊ ˈtestɪŋ/",
+   "nghia": "kiểm thử luồng điều khiển: chọn test theo các đường đi trong đồ thị luồng điều khiển",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Control flow testing is a white-box technique.",
+   "viDuNghia": "Kiểm thử luồng điều khiển là kỹ thuật hộp trắng."
+  },
+  {
+   "chu": "multiple condition coverage",
+   "doc": "/ˈmʌltɪpl kənˈdɪʃn ˈkʌvərɪdʒ/",
+   "nghia": "độ phủ đa điều kiện: thử MỌI tổ hợp đúng/sai của các điều kiện con",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Multiple condition coverage needs 2^n tests for n conditions.",
+   "viDuNghia": "Độ phủ đa điều kiện cần 2^n test cho n điều kiện."
+  },
+  {
+   "chu": "modified condition decision coverage",
+   "doc": "/ˈmɑːdɪfaɪd kənˈdɪʃn dɪˈsɪʒn ˈkʌvərɪdʒ/",
+   "nghia": "MC/DC: mỗi điều kiện con phải tự mình làm đổi kết quả quyết định; bắt buộc trong phần mềm hàng không",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "MC/DC is required for safety-critical avionics software.",
+   "viDuNghia": "MC/DC bắt buộc cho phần mềm hàng không an toàn."
+  },
+  {
+   "chu": "requirements-based testing",
+   "doc": "/rɪˈkwaɪərmənts beɪst ˈtestɪŋ/",
+   "nghia": "kiểm thử dựa trên yêu cầu: mỗi yêu cầu có test tương ứng",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Requirements-based testing",
+   "viDuNghia": "Kiểm thử dựa trên yêu cầu."
+  },
+  {
+   "chu": "business process-based testing",
+   "doc": "/ˈbɪznəs ˈprɑːses beɪst ˈtestɪŋ/",
+   "nghia": "kiểm thử dựa trên quy trình nghiệp vụ: test theo luồng công việc thật của người dùng",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Business process-based testing",
+   "viDuNghia": "Kiểm thử dựa trên quy trình nghiệp vụ."
+  },
+  {
+   "chu": "experience-based technique",
+   "doc": "/ɪkˈspɪriəns beɪst tekˈniːk/",
+   "nghia": "kỹ thuật dựa trên kinh nghiệm: đoán lỗi, thăm dò, dựa trên danh sách kiểm",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Experience-based",
+   "viDuNghia": "Dựa trên kinh nghiệm."
+  },
+  {
+   "chu": "checklist-based testing",
+   "doc": "/ˈtʃeklɪst beɪst ˈtestɪŋ/",
+   "nghia": "kiểm thử theo danh sách kiểm: tester đi theo danh sách điều cần xác minh",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Checklist-based testing uses a list of items to verify.",
+   "viDuNghia": "Kiểm thử theo danh sách kiểm dùng danh sách mục cần xác minh."
+  },
+  {
+   "chu": "fault attack",
+   "doc": "/fɔːlt əˈtæk/",
+   "nghia": "tấn công lỗi: cố ý tạo tình huống khiến loại lỗi đã biết xuất hiện",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "A fault attack tries to force a known type of failure.",
+   "viDuNghia": "Tấn công lỗi cố ép một loại hỏng hóc đã biết xảy ra."
+  },
+  {
+   "chu": "pairwise testing",
+   "doc": "/ˈperwaɪz ˈtestɪŋ/",
+   "nghia": "kiểm thử theo cặp: mọi cặp giá trị tham số xuất hiện ít nhất một lần, giảm mạnh số test",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Pairwise testing covers every pair of parameter values.",
+   "viDuNghia": "Kiểm thử theo cặp phủ mọi cặp giá trị tham số."
+  },
+  {
+   "chu": "orthogonal array",
+   "doc": "/ɔːrˈθɑːɡənl əˈreɪ/",
+   "nghia": "mảng trực giao: bảng tổ hợp cân bằng dùng để sinh test theo cặp",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "An orthogonal array reduces 27 combinations to 9 tests.",
+   "viDuNghia": "Mảng trực giao giảm 27 tổ hợp còn 9 test."
+  },
+  {
+   "chu": "classification tree",
+   "doc": "/ˌklæsɪfɪˈkeɪʃn triː/",
+   "nghia": "cây phân loại: chia miền đầu vào thành lớp theo dạng cây rồi chọn tổ hợp",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "The classification tree method combines input classes.",
+   "viDuNghia": "Phương pháp cây phân loại kết hợp các lớp đầu vào."
+  },
+  {
+   "chu": "domain analysis",
+   "doc": "/doʊˈmeɪn əˈnæləsɪs/",
+   "nghia": "phân tích miền: kết hợp phân vùng tương đương và giá trị biên cho nhiều biến",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Domain analysis tests boundaries of several variables together.",
+   "viDuNghia": "Phân tích miền kiểm thử biên của nhiều biến cùng lúc."
+  },
+  {
+   "chu": "test oracle",
+   "doc": "/test ˈɔːrəkl/",
+   "nghia": "nguồn xác định kết quả mong đợi để so với kết quả thật",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Without an expected result there is no oracle, so pass/fail cannot be determined.",
+   "viDuNghia": "Không có kết quả mong đợi thì không có oracle, nên không xác định được đạt/trượt."
+  },
+  {
+   "chu": "mutation testing",
+   "doc": "/mjuːˈteɪʃn ˈtestɪŋ/",
+   "nghia": "kiểm thử đột biến: cài thay đổi nhỏ vào mã, xem bộ test có bắt được không",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Mutation testing measures how good the test suite is.",
+   "viDuNghia": "Kiểm thử đột biến đo bộ test tốt tới đâu."
+  },
+  {
+   "chu": "fault seeding",
+   "doc": "/fɔːlt ˈsiːdɪŋ/",
+   "nghia": "gieo lỗi: cố ý cài lỗi đã biết để ước lượng số lỗi còn sót",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Fault seeding estimates how many defects remain.",
+   "viDuNghia": "Gieo lỗi ước lượng số lỗi còn lại."
+  },
+  {
+   "chu": "fault injection",
+   "doc": "/fɔːlt ɪnˈdʒekʃn/",
+   "nghia": "tiêm lỗi: tạo lỗi giả lập (mất mạng, đĩa đầy) để xem hệ thống chịu được không",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Fault injection checks how the system handles a database outage.",
+   "viDuNghia": "Tiêm lỗi kiểm hệ thống xử lý sự cố mất CSDL thế nào."
+  },
+  {
+   "chu": "operational acceptance testing",
+   "doc": "/ˌɑːpəˈreɪʃənl əkˈseptəns ˈtestɪŋ/",
+   "nghia": "kiểm thử chấp nhận vận hành: quản trị viên kiểm sao lưu, khôi phục, bảo mật, bảo trì",
+   "nhom": "Loại kiểm thử chấp nhận và phi chức năng",
+   "viDu": "Operational acceptance testing checks backup and recovery.",
+   "viDuNghia": "Kiểm thử chấp nhận vận hành kiểm sao lưu và khôi phục."
+  },
+  {
+   "chu": "contractual acceptance testing",
+   "doc": "/kənˈtræktʃuəl əkˈseptəns ˈtestɪŋ/",
+   "nghia": "kiểm thử chấp nhận theo hợp đồng: đối chiếu tiêu chí chấp nhận đã ghi trong hợp đồng",
+   "nhom": "Loại kiểm thử chấp nhận và phi chức năng",
+   "viDu": "Contractual requirements are checked in contractual acceptance testing.",
+   "viDuNghia": "Yêu cầu hợp đồng được kiểm trong kiểm thử chấp nhận theo hợp đồng."
+  },
+  {
+   "chu": "regulatory acceptance testing",
+   "doc": "/ˈreɡjələtɔːri əkˈseptəns ˈtestɪŋ/",
+   "nghia": "kiểm thử chấp nhận theo quy định: đối chiếu luật, quy chuẩn bắt buộc (y tế, ngân hàng)",
+   "nhom": "Loại kiểm thử chấp nhận và phi chức năng",
+   "viDu": "Regulatory compliance",
+   "viDuNghia": "Tuân thủ quy định."
+  },
+  {
+   "chu": "accessibility testing",
+   "doc": "/əkˌsesəˈbɪləti ˈtestɪŋ/",
+   "nghia": "kiểm thử khả năng tiếp cận: người khuyết tật dùng được không (trình đọc màn hình, bàn phím)",
+   "nhom": "Loại kiểm thử chấp nhận và phi chức năng",
+   "viDu": "Accessibility testing checks screen reader support.",
+   "viDuNghia": "Kiểm thử khả năng tiếp cận kiểm hỗ trợ trình đọc màn hình."
+  },
+  {
+   "chu": "localization testing",
+   "doc": "/ˌloʊkələˈzeɪʃn ˈtestɪŋ/",
+   "nghia": "kiểm thử bản địa hoá: chữ dịch, định dạng ngày, tiền theo từng vùng",
+   "nhom": "Loại kiểm thử chấp nhận và phi chức năng",
+   "viDu": "Localization testing checks dates and currency for each region.",
+   "viDuNghia": "Kiểm thử bản địa hoá kiểm ngày và tiền tệ theo từng vùng."
+  },
+  {
+   "chu": "reliability testing",
+   "doc": "/rɪˌlaɪəˈbɪləti ˈtestɪŋ/",
+   "nghia": "kiểm thử độ tin cậy: chạy lâu để đo tần suất hỏng",
+   "nhom": "Loại kiểm thử chấp nhận và phi chức năng",
+   "viDu": "Decreased software reliability",
+   "viDuNghia": "Độ tin cậy phần mềm giảm."
+  },
+  {
+   "chu": "installation testing",
+   "doc": "/ˌɪnstəˈleɪʃn ˈtestɪŋ/",
+   "nghia": "kiểm thử cài đặt: cài, nâng cấp, gỡ trên các môi trường đích",
+   "nhom": "Loại kiểm thử chấp nhận và phi chức năng",
+   "viDu": "Installation test",
+   "viDuNghia": "Kiểm thử cài đặt."
+  },
+  {
+   "chu": "independence of testing",
+   "doc": "/ˌɪndɪˈpendəns əv ˈtestɪŋ/",
+   "nghia": "tính độc lập của kiểm thử: người test càng tách khỏi người viết mã càng dễ thấy lỗi",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "Independent in testing",
+   "viDuNghia": "Độc lập trong kiểm thử."
+  },
+  {
+   "chu": "independent test team",
+   "doc": "/ˌɪndɪˈpendənt test tiːm/",
+   "nghia": "đội kiểm thử độc lập: thuộc bộ phận riêng hoặc công ty khác",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "An independent test team finds defects the developers overlook.",
+   "viDuNghia": "Đội kiểm thử độc lập tìm lỗi mà lập trình viên bỏ sót."
+  },
+  {
+   "chu": "test analyst",
+   "doc": "/test ˈænəlɪst/",
+   "nghia": "chuyên viên phân tích kiểm thử: phân tích cơ sở test, thiết kế test case",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "Writing test summary reports is a test manager task, not a test analyst task.",
+   "viDuNghia": "Viết báo cáo tổng kết là việc của quản lý kiểm thử, không phải của chuyên viên phân tích."
+  },
+  {
+   "chu": "test automation engineer",
+   "doc": "/test ˌɔːtəˈmeɪʃn ˌendʒɪˈnɪr/",
+   "nghia": "kỹ sư tự động hoá kiểm thử: viết và bảo trì script test tự động",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "The test automation engineer maintains the Selenium scripts.",
+   "viDuNghia": "Kỹ sư tự động hoá bảo trì các script Selenium."
+  },
+  {
+   "chu": "capture/replay tool",
+   "doc": "/ˈkæptʃər ˈriːpleɪ tuːl/",
+   "nghia": "công cụ ghi/phát lại: ghi thao tác người dùng rồi phát lại thành test",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "Capture/Playback",
+   "viDuNghia": "Ghi/phát lại."
+  },
+  {
+   "chu": "keyword-driven testing",
+   "doc": "/ˈkiːwɜːrd ˌdrɪvn ˈtestɪŋ/",
+   "nghia": "kiểm thử hướng từ khoá: test viết bằng các từ khoá hành động (Login, AddItem) gắn với script",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "Keyword-driven testing lets non-programmers write tests.",
+   "viDuNghia": "Kiểm thử hướng từ khoá cho người không lập trình cũng viết được test."
+  },
+  {
+   "chu": "data-driven testing",
+   "doc": "/ˈdeɪtə ˌdrɪvn ˈtestɪŋ/",
+   "nghia": "kiểm thử hướng dữ liệu: một script chạy với nhiều bộ dữ liệu đọc từ bảng/tệp",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "Utilization of data-driven testing tools enhances reusability of test scripts.",
+   "viDuNghia": "Dùng công cụ hướng dữ liệu tăng khả năng tái sử dụng script test."
+  },
+  {
+   "chu": "coverage tool",
+   "doc": "/ˈkʌvərɪdʒ tuːl/",
+   "nghia": "công cụ đo độ phủ mã khi test chạy (JaCoCo)",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "Code coverage requires dynamic execution with a coverage tool.",
+   "viDuNghia": "Đo độ phủ mã cần chạy thật với công cụ đo độ phủ."
+  },
+  {
+   "chu": "Computer Aided Software Testing",
+   "doc": "/kəmˈpjuːtər ˈeɪdɪd ˈsɔːftwer ˈtestɪŋ/",
+   "nghia": "CAST: kiểm thử phần mềm có máy tính hỗ trợ (dùng công cụ)",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "Computer Aided Software Testing",
+   "viDuNghia": "Kiểm thử phần mềm có máy tính hỗ trợ."
+  },
+  {
+   "chu": "probe effect",
+   "doc": "/proʊb ɪˈfekt/",
+   "nghia": "hiệu ứng thăm dò: chính công cụ đo làm thay đổi hành vi hệ thống được đo",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "A performance monitor can cause a probe effect.",
+   "viDuNghia": "Công cụ giám sát hiệu năng có thể gây hiệu ứng thăm dò."
+  },
+  {
+   "chu": "intrusive tool",
+   "doc": "/ɪnˈtruːsɪv tuːl/",
+   "nghia": "công cụ xâm nhập: sửa mã hoặc môi trường khi chạy (có thể gây hiệu ứng thăm dò)",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "A tool that modifies code or the operating environment is intrusive.",
+   "viDuNghia": "Công cụ sửa mã hay môi trường vận hành là công cụ xâm nhập."
+  },
+  {
+   "chu": "absence-of-errors fallacy",
+   "doc": "/ˈæbsəns əv ˈerərz ˈfæləsi/",
+   "nghia": "ngộ nhận không lỗi là tốt: sửa hết lỗi vẫn vô ích nếu hệ thống không đáp ứng nhu cầu người dùng",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "Finding and fixing defects does not help if the system built is unusable.",
+   "viDuNghia": "Tìm và sửa lỗi chẳng giúp gì nếu hệ thống làm ra không dùng được."
+  },
+  {
+   "chu": "testing shows presence of defects",
+   "doc": "/ˈtestɪŋ ʃoʊz ˈprezns əv ˈdiːfekts/",
+   "nghia": "nguyên lý: kiểm thử cho thấy có lỗi, không chứng minh được hết lỗi",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "Find the explanation of \"Testing shows presence of defects\".",
+   "viDuNghia": "Tìm lời giải thích cho nguyên lý \"Kiểm thử cho thấy sự hiện diện của lỗi\"."
+  },
+  {
+   "chu": "testing is context dependent",
+   "doc": "/ˈtestɪŋ ɪz ˈkɑːntekst dɪˈpendənt/",
+   "nghia": "nguyên lý: kiểm thử làm khác nhau tuỳ bối cảnh (phần mềm y tế khác web bán hàng)",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "Testing is done differently in different contexts.",
+   "viDuNghia": "Kiểm thử được làm khác nhau trong các bối cảnh khác nhau."
+  },
+  {
+   "chu": "management review",
+   "doc": "/ˈmænɪdʒmənt rɪˈvjuː/",
+   "nghia": "rà soát quản lý: đánh giá tiến độ, rủi ro, quyết định của dự án",
+   "nhom": "Tổ chức, công cụ và nguyên lý",
+   "viDu": "A management review evaluates project status against the plan.",
+   "viDuNghia": "Rà soát quản lý đánh giá tình trạng dự án so với kế hoạch."
+  },
+  {
+   "chu": "ISTQB",
+   "doc": "/ˌaɪ es tiː kjuː ˈbiː/",
+   "nghia": "International Software Testing Qualifications Board: hội đồng chứng chỉ kiểm thử phần mềm quốc tế",
+   "nhom": "JUnit và mẫu UTCID",
+   "viDu": "In the ISTQB syllabus a technical review is also known as a peer review.",
+   "viDuNghia": "Trong giáo trình ISTQB, technical review còn gọi là peer review."
+  },
+  {
+   "chu": "Certified Tester Foundation Level",
+   "doc": "/ˈsɜːrtɪfaɪd ˈtestər faʊnˈdeɪʃn ˈlevl/",
+   "nghia": "CTFL: chứng chỉ kiểm thử nền tảng của ISTQB mà SWT301 bám theo",
+   "nhom": "JUnit và mẫu UTCID",
+   "viDu": "SWT301 follows the Certified Tester Foundation Level syllabus.",
+   "viDuNghia": "SWT301 bám theo giáo trình CTFL."
+  },
+  {
+   "chu": "JUnit",
+   "doc": "/ˈdʒeɪ juːnɪt/",
+   "nghia": "khung kiểm thử đơn vị cho Java (@Test, assertEquals)",
+   "nhom": "JUnit và mẫu UTCID",
+   "viDu": "Write JUnit tests for the BMI calculator.",
+   "viDuNghia": "Viết test JUnit cho bộ tính BMI."
+  },
+  {
+   "chu": "assertEquals",
+   "doc": "/əˈsɜːrt ˈiːkwəlz/",
+   "nghia": "lệnh khẳng định của JUnit: kết quả thật phải bằng kết quả mong đợi",
+   "nhom": "JUnit và mẫu UTCID",
+   "viDu": "assertEquals(22.86, bmi.calculate(70, 1.75), 0.01);",
+   "viDuNghia": "Khẳng định BMI tính ra bằng 22,86 (sai số 0,01)."
+  },
+  {
+   "chu": "test fixture",
+   "doc": "/test ˈfɪkstʃər/",
+   "nghia": "bối cảnh test cố định: dữ liệu, đối tượng chuẩn bị sẵn trước mỗi test",
+   "nhom": "JUnit và mẫu UTCID",
+   "viDu": "The test fixture creates a new calculator before each test.",
+   "viDuNghia": "Bối cảnh test tạo bộ tính mới trước mỗi test."
+  },
+  {
+   "chu": "BeforeEach annotation",
+   "doc": "/bɪˈfɔːr iːtʃ ˌænəˈteɪʃn/",
+   "nghia": "@BeforeEach (JUnit 5): phương thức chạy trước MỖI phương thức test",
+   "nhom": "JUnit và mẫu UTCID",
+   "viDu": "@BeforeEach void setUp() { calc = new BmiCalculator(); }",
+   "viDuNghia": "Tạo bộ tính mới trước mỗi test."
+  },
+  {
+   "chu": "parameterized test",
+   "doc": "/pəˈræmɪtəraɪzd test/",
+   "nghia": "test tham số hoá: một phương thức test chạy với nhiều bộ dữ liệu (@ParameterizedTest, @CsvSource)",
+   "nhom": "JUnit và mẫu UTCID",
+   "viDu": "A parameterized test runs each boundary value from a CSV source.",
+   "viDuNghia": "Test tham số hoá chạy từng giá trị biên từ nguồn CSV."
+  },
+  {
+   "chu": "mock object",
+   "doc": "/mɑːk ˈɑːbdʒekt/",
+   "nghia": "đối tượng giả (Mockito) thay cho phụ thuộc thật, ghi lại cách nó được gọi",
+   "nhom": "JUnit và mẫu UTCID",
+   "viDu": "Use a mock object instead of the real database.",
+   "viDuNghia": "Dùng đối tượng giả thay cho CSDL thật."
+  },
+  {
+   "chu": "UTCID",
+   "doc": "/ˌjuː tiː siː aɪ ˈdiː/",
+   "nghia": "mã test case đơn vị trong mẫu báo cáo unit test của FPT (UTCID01, UTCID02…), mỗi cột một bộ đầu vào",
+   "nhom": "JUnit và mẫu UTCID",
+   "viDu": "Each UTCID column marks the inputs and the expected result of one test case.",
+   "viDuNghia": "Mỗi cột UTCID đánh dấu đầu vào và kết quả mong đợi của một test case."
+  },
+  {
+   "chu": "data flow testing",
+   "doc": "/ˈdeɪtə floʊ ˈtɛstɪŋ/",
+   "nghia": "kiểm thử luồng dữ liệu: kiểu kiểm thử hộp trắng theo chỗ biến được gán và được dùng",
+   "nhom": "Độ phủ và kỹ thuật thiết kế test",
+   "viDu": "Data flow testing is a white-box testing technique.",
+   "viDuNghia": "Kiểm thử luồng dữ liệu là một kỹ thuật kiểm thử hộp trắng."
+  },
+  {
+   "chu": "business criticality",
+   "doc": "/ˈbɪznəs ˌkrɪtɪˈkæləti/",
+   "nghia": "mức hệ trọng với nghiệp vụ: chức năng hỏng thì doanh nghiệp thiệt hại tới đâu – căn cứ xếp ưu tiên trong kiểm thử theo rủi ro",
+   "nhom": "Chiến lược kiểm thử",
+   "viDu": "Prioritize testing by business criticality and defect probability (risk-based).",
+   "viDuNghia": "Xếp ưu tiên kiểm thử theo mức hệ trọng nghiệp vụ và khả năng có lỗi (dựa trên rủi ro)."
+  }
+ ]
+}

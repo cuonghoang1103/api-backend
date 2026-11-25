@@ -4,7 +4,7 @@
  "ten": "IOT102 · 2. Arduino, điện tử, cảm biến, lập trình",
  "moTa": "Môn Internet vạn vật (IOT102), phần 2: bo mạch Arduino Uno, chân và tín hiệu số – tương tự, linh kiện điện tử, cảm biến và cơ cấu chấp hành, hàm lập trình Arduino, giao tiếp nối tiếp. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "cpu",
- "thuTu": -961,
+ "thuTu": -942,
  "tu": [
   {
    "chu": "Arduino Uno",

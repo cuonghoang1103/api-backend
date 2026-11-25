@@ -1,0 +1,610 @@
+{
+  "ma": "prj301-2",
+  "nn": "en",
+  "ten": "PRJ301 · 2. Servlet API, web.xml, JSP & JSTL",
+  "moTa": "Bổ sung PRJ301: phương thức Servlet API, các thẻ của web.xml, đóng gói WAR/JAR, phiên và listener, chỉ thị và hành động JSP, đối tượng ngầm và phạm vi EL, thẻ JSTL core/fmt, thẻ tự tạo — lấy từ câu hỏi FE/PE thật.",
+  "bieuTuong": "server.rack",
+  "thuTu": -939,
+  "tu": [
+    {
+      "chu": "init method",
+      "doc": "/ɪˈnɪt ˈmeθəd/",
+      "nghia": "init(): container gọi MỘT lần khi tạo servlet, trước request đầu tiên",
+      "nhom": "Servlet API",
+      "viDu": "Which methods form the servlet life cycle? init(), service(), destroy().",
+      "viDuNghia": "Những phương thức nào tạo nên vòng đời servlet? init(), service(), destroy()."
+    },
+    {
+      "chu": "doGet",
+      "doc": "/duː ɡet/",
+      "nghia": "phương thức của HttpServlet xử lý request GET",
+      "nhom": "Servlet API",
+      "viDu": "To make the page load faster; set in the doGet() method.",
+      "viDuNghia": "Để trang tải nhanh hơn; đặt trong phương thức doGet()."
+    },
+    {
+      "chu": "doPost",
+      "doc": "/duː poʊst/",
+      "nghia": "phương thức của HttpServlet xử lý request POST (gửi form)",
+      "nhom": "Servlet API",
+      "viDu": "doPost(HttpServletRequest, HttpServletResponse);",
+      "viDuNghia": "Chữ ký doPost nhận request và response."
+    },
+    {
+      "chu": "getParameter",
+      "doc": "/ɡet pəˈræmɪtər/",
+      "nghia": "request.getParameter(\"name\"): đọc giá trị một tham số form/URL dạng chuỗi",
+      "nhom": "Servlet API",
+      "viDu": "req.getParameter(\"txtname1\");",
+      "viDuNghia": "Đọc tham số txtname1 từ request."
+    },
+    {
+      "chu": "getParameterValues",
+      "doc": "/ɡet pəˈræmɪtər ˈvæljuːz/",
+      "nghia": "đọc mọi giá trị của một tham số nhiều giá trị (checkbox) thành mảng String",
+      "nhom": "Servlet API",
+      "viDu": "Use getParameterValues() to read all checked hobbies.",
+      "viDuNghia": "Dùng getParameterValues() để đọc mọi sở thích được đánh dấu."
+    },
+    {
+      "chu": "sendRedirect",
+      "doc": "/send ˌriːdəˈrekt/",
+      "nghia": "response.sendRedirect(url): bảo trình duyệt gửi request MỚI tới URL khác (URL trên thanh địa chỉ đổi)",
+      "nhom": "Servlet API",
+      "viDu": "response.sendRedirect(\"currentURL?sessionID=123\");",
+      "viDuNghia": "Chuyển hướng trình duyệt tới URL kèm sessionID."
+    },
+    {
+      "chu": "forward method",
+      "doc": "/ˈfɔːrwərd ˈmeθəd/",
+      "nghia": "RequestDispatcher.forward(): chuyển request sang tài nguyên khác ngay ở server, URL không đổi",
+      "nhom": "Servlet API",
+      "viDu": "It is faster than RequestDispatcher.forward().",
+      "viDuNghia": "Nó nhanh hơn RequestDispatcher.forward()."
+    },
+    {
+      "chu": "include method",
+      "doc": "/ɪnˈkluːd ˈmeθəd/",
+      "nghia": "RequestDispatcher.include(): chèn kết quả của tài nguyên khác vào phản hồi hiện tại",
+      "nhom": "Servlet API",
+      "viDu": "include() adds the output of header.jsp to the current response.",
+      "viDuNghia": "include() chèn kết quả của header.jsp vào phản hồi hiện tại."
+    },
+    {
+      "chu": "ServletConfig",
+      "doc": "/ˈsɜːrvlət kənˈfɪɡ/",
+      "nghia": "đối tượng cấu hình RIÊNG của một servlet, đọc init-param bằng getInitParameter()",
+      "nhom": "Servlet API",
+      "viDu": "ServletContext and ServletConfig",
+      "viDuNghia": "ServletContext và ServletConfig."
+    },
+    {
+      "chu": "ServletContext",
+      "doc": "/ˈsɜːrvlət ˈkɑːntekst/",
+      "nghia": "đối tượng dùng CHUNG cho toàn ứng dụng web: context-param, thuộc tính ứng dụng",
+      "nhom": "Servlet API",
+      "viDu": "It is accessible to all the servlets of the webapp.",
+      "viDuNghia": "Nó truy cập được từ mọi servlet của ứng dụng web."
+    },
+    {
+      "chu": "getSession",
+      "doc": "/ɡet ˈseʃn/",
+      "nghia": "request.getSession(true) lấy phiên hiện có hoặc tạo mới; getSession(false) không tạo mới",
+      "nhom": "Servlet API",
+      "viDu": "request.getSession(true)",
+      "viDuNghia": "Lấy phiên, chưa có thì tạo mới."
+    },
+    {
+      "chu": "setAttribute",
+      "doc": "/set ˈætrɪbjuːt/",
+      "nghia": "gắn một đối tượng theo tên vào request, session hoặc context",
+      "nhom": "Servlet API",
+      "viDu": "context.setAttribute(\"key\", value);",
+      "viDuNghia": "Gắn giá trị vào context theo khoá."
+    },
+    {
+      "chu": "getAttribute",
+      "doc": "/ɡet ˈætrɪbjuːt/",
+      "nghia": "đọc đối tượng đã gắn theo tên (trả Object, cần ép kiểu)",
+      "nhom": "Servlet API",
+      "viDu": "getAttribute(\"userid\");",
+      "viDuNghia": "Đọc thuộc tính userid."
+    },
+    {
+      "chu": "removeAttribute",
+      "doc": "/rɪˈmuːv ˈætrɪbjuːt/",
+      "nghia": "gỡ một thuộc tính khỏi phạm vi",
+      "nhom": "Servlet API",
+      "viDu": "session.removeAttribute(\"USER\");",
+      "viDuNghia": "Gỡ thuộc tính USER khỏi phiên."
+    },
+    {
+      "chu": "addCookie",
+      "doc": "/æd ˈkʊki/",
+      "nghia": "response.addCookie(): gửi cookie về trình duyệt",
+      "nhom": "Servlet API",
+      "viDu": "ServletResponse.addCookie(Cookie cookie)",
+      "viDuNghia": "Thêm cookie vào phản hồi."
+    },
+    {
+      "chu": "getCookies",
+      "doc": "/ɡet ˈkʊkiz/",
+      "nghia": "request.getCookies(): lấy mảng cookie trình duyệt gửi lên",
+      "nhom": "Servlet API",
+      "viDu": "getCookies() is a method on HttpServletRequest.",
+      "viDuNghia": "getCookies() là phương thức của HttpServletRequest."
+    },
+    {
+      "chu": "encodeURL",
+      "doc": "/ɪnˈkoʊd ˌjuː ɑːr ˈel/",
+      "nghia": "gắn mã phiên vào URL (URL rewriting) khi trình duyệt tắt cookie",
+      "nhom": "Servlet API",
+      "viDu": "encodeURL() of HttpServletResponse",
+      "viDuNghia": "encodeURL() của HttpServletResponse."
+    },
+    {
+      "chu": "servlet instance",
+      "doc": "/ˈsɜːrvlət ˈɪnstəns/",
+      "nghia": "thể hiện servlet: thường chỉ MỘT đối tượng dùng chung cho mọi request (mỗi request một luồng)",
+      "nhom": "Servlet API",
+      "viDu": "An object representing a single servlet instance.",
+      "viDuNghia": "Một đối tượng đại diện cho một thể hiện servlet."
+    },
+    {
+      "chu": "web container",
+      "doc": "/web kənˈteɪnər/",
+      "nghia": "bộ chứa web (vd Tomcat): tạo servlet, gọi vòng đời, quản phiên, ánh xạ URL",
+      "nhom": "Servlet API",
+      "viDu": "The web container calls init() before the first request.",
+      "viDuNghia": "Bộ chứa web gọi init() trước request đầu tiên."
+    },
+    {
+      "chu": "servlet-name",
+      "doc": "/ˈsɜːrvlət neɪm/",
+      "nghia": "thẻ servlet-name: tên nội bộ nối thẻ servlet với servlet-mapping",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "<servlet><servlet-name>name</servlet-name><servlet-class>class</servlet-class></servlet>",
+      "viDuNghia": "Khai tên và lớp của servlet trong web.xml."
+    },
+    {
+      "chu": "servlet-class",
+      "doc": "/ˈsɜːrvlət klæs/",
+      "nghia": "thẻ servlet-class: tên đầy đủ (có package) của lớp servlet",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "The servlet-class element gives the fully qualified class name.",
+      "viDuNghia": "Thẻ servlet-class ghi tên lớp đầy đủ."
+    },
+    {
+      "chu": "init-param",
+      "doc": "/ɪˈnɪt pəˈræm/",
+      "nghia": "thẻ tham số khởi tạo riêng một servlet (param-name, param-value), đọc qua ServletConfig",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "<init-param><param-name>name</param-name><param-value>value</param-value></init-param>",
+      "viDuNghia": "Khai tham số khởi tạo tên và giá trị."
+    },
+    {
+      "chu": "context-param",
+      "doc": "/ˈkɑːntekst pəˈræm/",
+      "nghia": "tham số chung của cả ứng dụng, đọc bằng ServletContext.getInitParameter()",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "Configuring context parameters.",
+      "viDuNghia": "Cấu hình tham số ngữ cảnh."
+    },
+    {
+      "chu": "param-name",
+      "doc": "/pəˈræm neɪm/",
+      "nghia": "thẻ tên tham số trong init-param hoặc context-param",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "<param-name>email</param-name>",
+      "viDuNghia": "Tên tham số là email."
+    },
+    {
+      "chu": "param-value",
+      "doc": "/pəˈræm ˈvæljuː/",
+      "nghia": "thẻ giá trị tham số",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "<param-value>admin@shop.com</param-value>",
+      "viDuNghia": "Giá trị tham số."
+    },
+    {
+      "chu": "load-on-startup",
+      "doc": "/loʊd ɑːn ˈstɑːrtʌp/",
+      "nghia": "thẻ yêu cầu tạo servlet ngay khi ứng dụng khởi động (số nhỏ tạo trước)",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "load-on-startup with value 1 creates the servlet when the application starts.",
+      "viDuNghia": "load-on-startup bằng 1 tạo servlet khi ứng dụng khởi động."
+    },
+    {
+      "chu": "url-pattern",
+      "doc": "/ˌjuː ɑːr ˈel ˈpætərn/",
+      "nghia": "thẻ mẫu URL ánh xạ tới servlet/filter: /login, /admin/*, *.do",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "Which url-pattern matches any URL? /*",
+      "viDuNghia": "Mẫu URL nào khớp mọi URL? /*"
+    },
+    {
+      "chu": "filter-mapping",
+      "doc": "/ˈfɪltər ˈmæpɪŋ/",
+      "nghia": "thẻ ánh xạ filter vào url-pattern hoặc servlet-name",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "<filter> and <filter-mapping>",
+      "viDuNghia": "Thẻ filter và filter-mapping."
+    },
+    {
+      "chu": "WebServlet annotation",
+      "doc": "/ˈweb sɜːrvlət ˌænəˈteɪʃn/",
+      "nghia": "@WebServlet(\"/login\"): khai servlet và URL ngay trong lớp, thay cho web.xml",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "@WebServlet(urlPatterns = \"/login\") maps the servlet without web.xml.",
+      "viDuNghia": "@WebServlet ánh xạ servlet mà không cần web.xml."
+    },
+    {
+      "chu": "WebFilter annotation",
+      "doc": "/ˈweb fɪltər ˌænəˈteɪʃn/",
+      "nghia": "@WebFilter: khai filter và URL áp dụng ngay trong lớp",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "In Java, the @WebFilter annotation declares a filter.",
+      "viDuNghia": "Trong Java, @WebFilter khai báo một filter."
+    },
+    {
+      "chu": "doFilter",
+      "doc": "/duː ˈfɪltər/",
+      "nghia": "phương thức xử lý của filter; gọi chain.doFilter() để cho request đi tiếp",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "Before each doFilter() method call.",
+      "viDuNghia": "Trước mỗi lần gọi doFilter()."
+    },
+    {
+      "chu": "FilterChain",
+      "doc": "/ˈfɪltər tʃeɪn/",
+      "nghia": "đối tượng nối các filter; chain.doFilter() chuyển sang filter kế hoặc servlet",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "FilterChain chains multiple filters together.",
+      "viDuNghia": "FilterChain nối nhiều filter với nhau."
+    },
+    {
+      "chu": "WEB-INF",
+      "doc": "/ˌweb ɪn ˈef/",
+      "nghia": "thư mục ẩn của ứng dụng web: chứa web.xml, classes, lib; trình duyệt không truy cập thẳng được",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "/WEB-INF/classes",
+      "viDuNghia": "Thư mục chứa các lớp đã biên dịch."
+    },
+    {
+      "chu": "META-INF",
+      "doc": "/ˌmetə ɪn ˈef/",
+      "nghia": "thư mục chứa thông tin gói (MANIFEST.MF) trong tệp JAR/WAR",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "META-INF/MANIFEST.MF",
+      "viDuNghia": "Tệp kê khai của gói."
+    },
+    {
+      "chu": "web archive file",
+      "doc": "/web ˈɑːrkaɪv faɪl/",
+      "nghia": "tệp WAR: gói toàn bộ ứng dụng web để triển khai lên server",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "Which file format is used to deploy a web application? A Web Archive file.",
+      "viDuNghia": "Định dạng nào dùng để triển khai ứng dụng web? Tệp WAR."
+    },
+    {
+      "chu": "Java Archive",
+      "doc": "/ˈdʒɑːvə ˈɑːrkaɪv/",
+      "nghia": "tệp JAR: gói các lớp Java và tài nguyên (thư viện)",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "Convert the Web Archive file to a Java Archive file and deploy it.",
+      "viDuNghia": "Đổi tệp WAR thành tệp JAR rồi triển khai. (phương án sai)"
+    },
+    {
+      "chu": "undeploy",
+      "doc": "/ˌʌndɪˈplɔɪ/",
+      "nghia": "gỡ ứng dụng đã triển khai khỏi server",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "After the web application is undeployed.",
+      "viDuNghia": "Sau khi ứng dụng web bị gỡ khỏi server."
+    },
+    {
+      "chu": "MIME type",
+      "doc": "/maɪm taɪp/",
+      "nghia": "kiểu MIME: nhãn kiểu nội dung (text/html, image/gif, application/json)",
+      "nhom": "Cấu hình web.xml và đóng gói",
+      "viDu": "Specifies the MIME type of the data in the response. The default type is text/html.",
+      "viDuNghia": "Chỉ định kiểu MIME của dữ liệu trả về. Mặc định là text/html."
+    },
+    {
+      "chu": "HttpSessionListener",
+      "doc": "/ˌeɪtʃ tiː tiː ˈpiː ˈseʃn ˈlɪsənər/",
+      "nghia": "listener nhận sự kiện tạo phiên (sessionCreated) và huỷ phiên (sessionDestroyed)",
+      "nhom": "Phiên và listener",
+      "viDu": "HttpSessionListener",
+      "viDuNghia": "Listener phiên HTTP."
+    },
+    {
+      "chu": "HttpSessionAttributeListener",
+      "doc": "/ˌeɪtʃ tiː tiː ˈpiː ˈseʃn ˈætrɪbjuːt ˈlɪsənər/",
+      "nghia": "listener nhận sự kiện thêm, thay, gỡ thuộc tính phiên",
+      "nhom": "Phiên và listener",
+      "viDu": "To listen for changes in session attributes.",
+      "viDuNghia": "Để lắng nghe thay đổi thuộc tính phiên."
+    },
+    {
+      "chu": "setMaxInactiveInterval",
+      "doc": "/set mæks ɪnˈæktɪv ˈɪntərvl/",
+      "nghia": "đặt số GIÂY phiên được rảnh trước khi hết hạn",
+      "nhom": "Phiên và listener",
+      "viDu": "session.setMaxInactiveInterval(30 * 60);",
+      "viDuNghia": "Đặt phiên hết hạn sau 30 phút không hoạt động."
+    },
+    {
+      "chu": "session destruction",
+      "doc": "/ˈseʃn dɪˈstrʌkʃn/",
+      "nghia": "huỷ phiên: do invalidate() hoặc hết thời gian chờ",
+      "nhom": "Phiên và listener",
+      "viDu": "Session destruction",
+      "viDuNghia": "Huỷ phiên."
+    },
+    {
+      "chu": "new session",
+      "doc": "/nuː ˈseʃn/",
+      "nghia": "phiên mới: tạo khi chưa có phiên hoặc phiên cũ đã huỷ",
+      "nhom": "Phiên và listener",
+      "viDu": "When is a new session created?",
+      "viDuNghia": "Khi nào một phiên mới được tạo?"
+    },
+    {
+      "chu": "session data",
+      "doc": "/ˈseʃn ˈdeɪtə/",
+      "nghia": "dữ liệu phiên: đối tượng lưu trong HttpSession cho một người dùng",
+      "nhom": "Phiên và listener",
+      "viDu": "Store session data on the server side.",
+      "viDuNghia": "Lưu dữ liệu phiên ở phía server."
+    },
+    {
+      "chu": "shared across multiple servlets",
+      "doc": "/ʃerd əˈkrɔːs ˈmʌltɪpl ˈsɜːrvləts/",
+      "nghia": "dùng chung giữa nhiều servlet (thuộc tính ServletContext/application)",
+      "nhom": "Phiên và listener",
+      "viDu": "Data shared across multiple servlets is stored in the ServletContext.",
+      "viDuNghia": "Dữ liệu dùng chung giữa nhiều servlet lưu trong ServletContext."
+    },
+    {
+      "chu": "page directive",
+      "doc": "/peɪdʒ dəˈrektɪv/",
+      "nghia": "chỉ thị <%@ page %>: contentType, import, errorPage, isErrorPage, session",
+      "nhom": "JSP và Expression Language",
+      "viDu": "Set the encoding in the JSP page directive with contentType.",
+      "viDuNghia": "Đặt mã hoá trong chỉ thị page bằng contentType."
+    },
+    {
+      "chu": "taglib directive",
+      "doc": "/ˈtæɡlɪb dəˈrektɪv/",
+      "nghia": "chỉ thị <%@ taglib uri=\"…\" prefix=\"c\" %>: khai báo dùng thư viện thẻ",
+      "nhom": "JSP và Expression Language",
+      "viDu": "<%@taglib%>",
+      "viDuNghia": "Chỉ thị taglib."
+    },
+    {
+      "chu": "errorPage attribute",
+      "doc": "/ˈerər peɪdʒ ˈætrɪbjuːt/",
+      "nghia": "thuộc tính errorPage của chỉ thị page: trang hiện khi trang này ném ngoại lệ",
+      "nhom": "JSP và Expression Language",
+      "viDu": "errorPage=\"error.jsp\"",
+      "viDuNghia": "Chuyển sang error.jsp khi có lỗi."
+    },
+    {
+      "chu": "isErrorPage attribute",
+      "doc": "/ɪz ˈerər peɪdʒ ˈætrɪbjuːt/",
+      "nghia": "isErrorPage=\"true\": đánh dấu trang lỗi, cho dùng đối tượng ngầm exception",
+      "nhom": "JSP và Expression Language",
+      "viDu": "isErrorPage=\"true\"",
+      "viDuNghia": "Đánh dấu đây là trang lỗi."
+    },
+    {
+      "chu": "useBean action",
+      "doc": "/juːz biːn ˈækʃn/",
+      "nghia": "hành động chuẩn jsp:useBean: tạo hoặc lấy một JavaBean trong một phạm vi",
+      "nhom": "JSP và Expression Language",
+      "viDu": "<jsp:useBean>",
+      "viDuNghia": "Hành động jsp:useBean."
+    },
+    {
+      "chu": "setProperty action",
+      "doc": "/set ˈprɑːpərti ˈækʃn/",
+      "nghia": "hành động jsp:setProperty: gán thuộc tính cho bean (property=\"*\" gán theo mọi tham số trùng tên)",
+      "nhom": "JSP và Expression Language",
+      "viDu": "<jsp:setProperty>",
+      "viDuNghia": "Hành động jsp:setProperty."
+    },
+    {
+      "chu": "include action",
+      "doc": "/ɪnˈkluːd ˈækʃn/",
+      "nghia": "hành động jsp:include: chèn kết quả của trang khác LÚC CHẠY (khác chỉ thị include chèn lúc dịch)",
+      "nhom": "JSP và Expression Language",
+      "viDu": "<jsp:include>",
+      "viDuNghia": "Hành động jsp:include."
+    },
+    {
+      "chu": "forward action",
+      "doc": "/ˈfɔːrwərd ˈækʃn/",
+      "nghia": "hành động jsp:forward: chuyển request sang trang khác ở server",
+      "nhom": "JSP và Expression Language",
+      "viDu": "<jsp:forward> includes another resource; <jsp:include> forwards the request.",
+      "viDuNghia": "jsp:forward chèn tài nguyên khác; jsp:include chuyển request. (Sai — ngược lại)"
+    },
+    {
+      "chu": "out implicit object",
+      "doc": "/aʊt ɪmˈplɪsɪt ˈɑːbdʒekt/",
+      "nghia": "đối tượng ngầm out (JspWriter): ghi chữ ra phản hồi",
+      "nhom": "JSP và Expression Language",
+      "viDu": "<% out.println(mybean.getName()); %>",
+      "viDuNghia": "In tên của bean ra trang."
+    },
+    {
+      "chu": "exception implicit object",
+      "doc": "/ɪkˈsepʃn ɪmˈplɪsɪt ˈɑːbdʒekt/",
+      "nghia": "đối tượng ngầm exception: chỉ có ở trang isErrorPage=\"true\"",
+      "nhom": "JSP và Expression Language",
+      "viDu": "exception.getMessage() shows the error on the error page.",
+      "viDuNghia": "exception.getMessage() hiện lỗi trên trang lỗi."
+    },
+    {
+      "chu": "pageContext",
+      "doc": "/peɪdʒ ˈkɑːntekst/",
+      "nghia": "đối tượng ngầm cho truy cập mọi đối tượng ngầm và mọi phạm vi khác",
+      "nhom": "JSP và Expression Language",
+      "viDu": "pageContext provides access to all other implicit objects.",
+      "viDuNghia": "pageContext cho truy cập mọi đối tượng ngầm khác."
+    },
+    {
+      "chu": "page scope",
+      "doc": "/peɪdʒ skoʊp/",
+      "nghia": "phạm vi trang: thuộc tính chỉ sống trong một trang JSP (hẹp nhất)",
+      "nhom": "JSP và Expression Language",
+      "viDu": "findAttribute() searches page, request, session and application scope in that order.",
+      "viDuNghia": "findAttribute() tìm lần lượt phạm vi page, request, session, application."
+    },
+    {
+      "chu": "sessionScope",
+      "doc": "/ˈseʃn skoʊp/",
+      "nghia": "đối tượng ngầm EL đọc thuộc tính phiên, vd ${sessionScope.user}",
+      "nhom": "JSP và Expression Language",
+      "viDu": "${sessionScope.user}",
+      "viDuNghia": "Đọc thuộc tính user trong phiên bằng EL."
+    },
+    {
+      "chu": "param object",
+      "doc": "/pəˈræm ˈɑːbdʒekt/",
+      "nghia": "đối tượng ngầm EL param đọc tham số request, vd ${param.name}",
+      "nhom": "JSP và Expression Language",
+      "viDu": "${param.keyword} prints the search keyword.",
+      "viDuNghia": "${param.keyword} in từ khoá tìm kiếm."
+    },
+    {
+      "chu": "empty operator",
+      "doc": "/ˈempti ˈɑːpəreɪtər/",
+      "nghia": "toán tử empty của EL: true khi giá trị null, chuỗi rỗng hoặc danh sách rỗng",
+      "nhom": "JSP và Expression Language",
+      "viDu": "<c:if test=\"${empty myVar}\">",
+      "viDuNghia": "Kiểm biến myVar có rỗng không."
+    },
+    {
+      "chu": "forEach tag",
+      "doc": "/fɔːr ˈiːtʃ tæɡ/",
+      "nghia": "thẻ c:forEach (JSTL core): lặp qua danh sách (items, var, varStatus)",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "<c:forEach var=\"p\" items=\"${products}\">",
+      "viDuNghia": "Lặp qua danh sách sản phẩm."
+    },
+    {
+      "chu": "if tag",
+      "doc": "/ɪf tæɡ/",
+      "nghia": "thẻ c:if (JSTL core): hiện nội dung khi test đúng (không có else)",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "<c:if test=\"${empty myVar}\">",
+      "viDuNghia": "Chỉ hiện khi myVar rỗng."
+    },
+    {
+      "chu": "choose tag",
+      "doc": "/tʃuːz tæɡ/",
+      "nghia": "thẻ c:choose (JSTL core): rẽ nhiều nhánh với c:when và c:otherwise (thay if-else)",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "<c:choose><c:when test=\"...\"/><c:otherwise/></c:choose>",
+      "viDuNghia": "Rẽ nhánh với when và otherwise."
+    },
+    {
+      "chu": "formatNumber tag",
+      "doc": "/ˈfɔːrmæt ˈnʌmbər tæɡ/",
+      "nghia": "thẻ fmt:formatNumber: định dạng số, tiền, phần trăm theo locale",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "<fmt:formatNumber value=\"${price}\" type=\"currency\"/>",
+      "viDuNghia": "Hiện giá theo định dạng tiền tệ."
+    },
+    {
+      "chu": "formatDate tag",
+      "doc": "/ˈfɔːrmæt deɪt tæɡ/",
+      "nghia": "thẻ fmt:formatDate: đổi Date thành chuỗi để hiển thị",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "<fmt:parseDate> turns text into a date; <fmt:formatDate> turns a date into text.",
+      "viDuNghia": "parseDate đổi chữ thành ngày; formatDate đổi ngày thành chữ."
+    },
+    {
+      "chu": "parseDate tag",
+      "doc": "/pɑːrs deɪt tæɡ/",
+      "nghia": "thẻ fmt:parseDate: đổi chuỗi thành đối tượng Date",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "<fmt:parseDate> is for calculations, and <fmt:formatDate> is for showing dates.",
+      "viDuNghia": "parseDate dùng để tính toán, formatDate để hiển thị ngày."
+    },
+    {
+      "chu": "setLocale tag",
+      "doc": "/set loʊˈkæl tæɡ/",
+      "nghia": "thẻ fmt:setLocale: đặt ngôn ngữ và quốc gia để các thẻ fmt khác định dạng theo",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "<fmt:setLocale> tells other tags which language and country format to use.",
+      "viDuNghia": "setLocale báo cho thẻ khác dùng định dạng ngôn ngữ và quốc gia nào."
+    },
+    {
+      "chu": "internationalization",
+      "doc": "/ˌɪntərˌnæʃnələˈzeɪʃn/",
+      "nghia": "quốc tế hoá (i18n): thiết kế ứng dụng để đổi ngôn ngữ, định dạng theo vùng",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "JSTL provides tags for iteration, conditionals, and internationalization.",
+      "viDuNghia": "JSTL có thẻ cho lặp, điều kiện và quốc tế hoá."
+    },
+    {
+      "chu": "resource bundle",
+      "doc": "/ˈriːsɔːrs ˈbʌndl/",
+      "nghia": "gói tài nguyên: tệp .properties chứa chuỗi theo từng ngôn ngữ (fmt:setBundle)",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "The name of the internationalization bundle.",
+      "viDuNghia": "Tên gói tài nguyên quốc tế hoá."
+    },
+    {
+      "chu": "Tag interface",
+      "doc": "/tæɡ ˈɪntərfeɪs/",
+      "nghia": "giao diện javax.servlet.jsp.tagext.Tag để viết tag handler kiểu cũ",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "By implementing the Tag interface directly.",
+      "viDuNghia": "Bằng cách cài trực tiếp giao diện Tag."
+    },
+    {
+      "chu": "doStartTag",
+      "doc": "/duː stɑːrt tæɡ/",
+      "nghia": "phương thức của tag handler chạy ở thẻ mở; trả SKIP_BODY hoặc EVAL_BODY_INCLUDE",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "A compilation error occurs because doStartTag() returns an invalid constant.",
+      "viDuNghia": "Lỗi biên dịch vì doStartTag() trả hằng không hợp lệ."
+    },
+    {
+      "chu": "doEndTag",
+      "doc": "/duː end tæɡ/",
+      "nghia": "phương thức chạy ở thẻ đóng; trả EVAL_PAGE (chạy tiếp) hoặc SKIP_PAGE (dừng trang)",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "The page stops before END due to SKIP_PAGE in doEndTag().",
+      "viDuNghia": "Trang dừng trước chữ END vì doEndTag() trả SKIP_PAGE."
+    },
+    {
+      "chu": "SimpleTagSupport",
+      "doc": "/ˈsɪmpl tæɡ səˈpɔːrt/",
+      "nghia": "lớp cơ sở để viết thẻ tự tạo kiểu mới, chỉ cần ghi đè doTag()",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "Extend SimpleTagSupport and override doTag().",
+      "viDuNghia": "Kế thừa SimpleTagSupport và ghi đè doTag()."
+    },
+    {
+      "chu": "TLD file",
+      "doc": "/ˌtiː el ˈdiː faɪl/",
+      "nghia": "tệp .tld mô tả thư viện thẻ (tên thẻ, lớp xử lý, thuộc tính), đặt trong WEB-INF",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "<taglib><uri>/graph</uri><location>/WEB-INF/Charts.tld</location></taglib>",
+      "viDuNghia": "Khai URI /graph trỏ tới tệp Charts.tld."
+    },
+    {
+      "chu": "scriptlet-free JSP",
+      "doc": "/ˈskrɪptlət friː ˌdʒeɪ es ˈpiː/",
+      "nghia": "JSP không chứa mã Java, chỉ dùng EL và JSTL (dễ đọc, đúng MVC)",
+      "nhom": "Thẻ JSTL và thẻ tự tạo",
+      "viDu": "JSTL improves readability over scriptlets.",
+      "viDuNghia": "JSTL giúp dễ đọc hơn scriptlet."
+    }
+  ]
+}

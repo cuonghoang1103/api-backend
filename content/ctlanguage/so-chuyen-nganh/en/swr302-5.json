@@ -1,0 +1,570 @@
+{
+ "ma": "swr302-5",
+ "nn": "en",
+ "ten": "SWR302 · 5. Quy trình nghiệp vụ, gói phần mềm & truy vết",
+ "moTa": "Bổ sung SWR302: BPM/BPA/BPI, sơ đồ DFD, yêu cầu báo cáo và phân tích dữ liệu, gói COTS/SaaS, kiểu nguyên mẫu, loại người dùng, kỹ thuật khơi gợi, ưu tiên (Kano, 100 đô), Agile (INVEST, BDD), rủi ro và truy vết xuôi/ngược — lấy từ câu hỏi FE thật.",
+ "bieuTuong": "doc.text.magnifyingglass",
+ "thuTu": -929,
+ "tu": [
+  {
+   "chu": "business process management",
+   "doc": "/ˈbɪznəs ˈprɑːses ˈmænɪdʒmənt/",
+   "nghia": "BPM: quản lý quy trình nghiệp vụ — phân tích, thiết kế lại và theo dõi mọi quy trình của doanh nghiệp",
+   "nhom": "Quy trình nghiệp vụ và DFD",
+   "viDu": "Business process management (BPM) encompasses understanding all of the enterprise's business processes.",
+   "viDuNghia": "BPM bao gồm việc hiểu mọi quy trình nghiệp vụ của doanh nghiệp."
+  },
+  {
+   "chu": "business process analysis",
+   "doc": "/ˈbɪznəs ˈprɑːses əˈnæləsɪs/",
+   "nghia": "BPA: phân tích quy trình nghiệp vụ hiện tại để tìm chỗ cần cải tiến",
+   "nhom": "Quy trình nghiệp vụ và DFD",
+   "viDu": "Business process analysis (BPA) involves understanding the processes as a basis for improving them.",
+   "viDuNghia": "BPA là hiểu các quy trình làm cơ sở để cải tiến chúng."
+  },
+  {
+   "chu": "business process improvement",
+   "doc": "/ˈbɪznəs ˈprɑːses ɪmˈpruːvmənt/",
+   "nghia": "BPI: cải tiến dần quy trình nghiệp vụ cho hiệu quả hơn",
+   "nhom": "Quy trình nghiệp vụ và DFD",
+   "viDu": "Business process improvement (BPI) makes an existing process faster or cheaper.",
+   "viDuNghia": "BPI làm một quy trình hiện có nhanh hơn hoặc rẻ hơn."
+  },
+  {
+   "chu": "business process reengineering",
+   "doc": "/ˈbɪznəs ˈprɑːses ˌriːendʒɪˈnɪrɪŋ/",
+   "nghia": "BPR: tái thiết kế triệt để quy trình nghiệp vụ, thường cùng lúc với hệ thống mới",
+   "nhom": "Quy trình nghiệp vụ và DFD",
+   "viDu": "It automates the reengineering process.",
+   "viDuNghia": "Nó tự động hoá quá trình tái thiết kế."
+  },
+  {
+   "chu": "process bubble",
+   "doc": "/ˈprɑːses ˈbʌbl/",
+   "nghia": "hình tròn xử lý trong DFD: biến đổi dữ liệu vào thành dữ liệu ra",
+   "nhom": "Quy trình nghiệp vụ và DFD",
+   "viDu": "Data flows through a process bubble, not directly between data stores.",
+   "viDuNghia": "Dữ liệu đi qua hình tròn xử lý, không đi thẳng giữa các kho dữ liệu."
+  },
+  {
+   "chu": "temporal event",
+   "doc": "/ˈtempərəl ɪˈvent/",
+   "nghia": "sự kiện thời gian: sự kiện kích hoạt theo lịch (cuối tháng gửi báo cáo), không do tác nhân bấm",
+   "nhom": "Quy trình nghiệp vụ và DFD",
+   "viDu": "Sending the monthly invoice at midnight is a temporal event.",
+   "viDuNghia": "Gửi hoá đơn tháng lúc nửa đêm là sự kiện thời gian."
+  },
+  {
+   "chu": "event-response table",
+   "doc": "/ɪˈvent rɪˈspɑːns ˈteɪbl/",
+   "nghia": "bảng sự kiện–phản hồi: liệt kê sự kiện ngoài và cách hệ thống phải phản hồi",
+   "nhom": "Quy trình nghiệp vụ và DFD",
+   "viDu": "An event-response table lists each external event and the expected system behaviour.",
+   "viDuNghia": "Bảng sự kiện–phản hồi liệt kê từng sự kiện ngoài và hành vi hệ thống mong đợi."
+  },
+  {
+   "chu": "main success scenario",
+   "doc": "/meɪn səkˈses səˈnærioʊ/",
+   "nghia": "kịch bản thành công chính (normal flow) của use case, tách riêng khỏi luồng thay thế",
+   "nhom": "Quy trình nghiệp vụ và DFD",
+   "viDu": "Separating normal flows from alternative flows.",
+   "viDuNghia": "Tách luồng chính khỏi các luồng thay thế."
+  },
+  {
+   "chu": "Display-Action-Response model",
+   "doc": "/dɪˈspleɪ ˈækʃn rɪˈspɑːns ˈmɑːdl/",
+   "nghia": "mô hình DAR: mô tả mỗi màn hình theo điều hiển thị, thao tác người dùng và phản hồi của hệ thống",
+   "nhom": "Quy trình nghiệp vụ và DFD",
+   "viDu": "Display-Action-Response (DAR) model.",
+   "viDuNghia": "Mô hình Hiển thị–Thao tác–Phản hồi (DAR)."
+  },
+  {
+   "chu": "reporting requirement",
+   "doc": "/rɪˈpɔːrtɪŋ rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu báo cáo: nội dung, bố cục, tần suất, người nhận của từng báo cáo",
+   "nhom": "Yêu cầu báo cáo và dữ liệu",
+   "viDu": "Specifying reporting requirements is a key part of data-intensive projects.",
+   "viDuNghia": "Đặc tả yêu cầu báo cáo là phần chính của dự án nặng dữ liệu."
+  },
+  {
+   "chu": "report specification",
+   "doc": "/rɪˈpɔːrt ˌspesɪfɪˈkeɪʃn/",
+   "nghia": "bản đặc tả báo cáo: mẫu ghi tên, mục đích, dữ liệu, sắp xếp, lọc của báo cáo",
+   "nhom": "Yêu cầu báo cáo và dữ liệu",
+   "viDu": "A report specification template lists the report title, purpose and data sources.",
+   "viDuNghia": "Mẫu đặc tả báo cáo ghi tên, mục đích và nguồn dữ liệu."
+  },
+  {
+   "chu": "ad hoc report",
+   "doc": "/ˌæd ˈhɑːk rɪˈpɔːrt/",
+   "nghia": "báo cáo đột xuất: người dùng tự tạo để trả lời câu hỏi ngay, không theo mẫu cố định",
+   "nhom": "Yêu cầu báo cáo và dữ liệu",
+   "viDu": "Ad hoc report to answer questions in real time.",
+   "viDuNghia": "Báo cáo đột xuất để trả lời câu hỏi ngay lập tức."
+  },
+  {
+   "chu": "standard report",
+   "doc": "/ˈstændərd rɪˈpɔːrt/",
+   "nghia": "báo cáo chuẩn: định kỳ, mẫu cố định về dữ liệu quá khứ",
+   "nhom": "Yêu cầu báo cáo và dữ liệu",
+   "viDu": "Standard report about past data.",
+   "viDuNghia": "Báo cáo chuẩn về dữ liệu quá khứ."
+  },
+  {
+   "chu": "analytics project",
+   "doc": "/ˌænəˈlɪtɪks ˈprɑːdʒekt/",
+   "nghia": "dự án phân tích dữ liệu: yêu cầu xoay quanh câu hỏi nghiệp vụ, kho dữ liệu, mô hình dự báo",
+   "nhom": "Yêu cầu báo cáo và dữ liệu",
+   "viDu": "Exploring the requirements for business analytics and data warehousing.",
+   "viDuNghia": "Tìm hiểu yêu cầu cho phân tích nghiệp vụ và kho dữ liệu."
+  },
+  {
+   "chu": "multidimensional view",
+   "doc": "/ˌmʌltidaɪˈmenʃənl vjuː/",
+   "nghia": "góc nhìn đa chiều: xem số liệu theo nhiều chiều (thời gian, vùng, sản phẩm) như bảng OLAP",
+   "nhom": "Yêu cầu báo cáo và dữ liệu",
+   "viDu": "It aims to provide a consolidated, multidimensional view of what is going on in an organization.",
+   "viDuNghia": "Nó nhằm đưa ra góc nhìn đa chiều, tổng hợp về những gì đang diễn ra trong tổ chức."
+  },
+  {
+   "chu": "conceptual data model",
+   "doc": "/kənˈseptʃuəl ˈdeɪtə ˈmɑːdl/",
+   "nghia": "mô hình dữ liệu khái niệm: các thực thể nghiệp vụ và quan hệ, chưa đi vào bảng cột",
+   "nhom": "Yêu cầu báo cáo và dữ liệu",
+   "viDu": "The ERD shows the conceptual data model of the chemical tracking system.",
+   "viDuNghia": "ERD thể hiện mô hình dữ liệu khái niệm của hệ thống theo dõi hoá chất."
+  },
+  {
+   "chu": "domain model",
+   "doc": "/doʊˈmeɪn ˈmɑːdl/",
+   "nghia": "mô hình miền: các khái niệm nghiệp vụ và quan hệ giữa chúng (thường vẽ bằng sơ đồ lớp)",
+   "nhom": "Yêu cầu báo cáo và dữ liệu",
+   "viDu": "A domain model captures the key business concepts.",
+   "viDuNghia": "Mô hình miền nắm các khái niệm nghiệp vụ chính."
+  },
+  {
+   "chu": "classifier",
+   "doc": "/ˈklæsɪfaɪər/",
+   "nghia": "classifier (UML): phần tử mô tả tập đối tượng có đặc điểm chung (lớp, giao diện, use case, actor)",
+   "nhom": "Yêu cầu báo cáo và dữ liệu",
+   "viDu": "Object diagrams are a special case of class diagrams where classifiers are restricted to instances.",
+   "viDuNghia": "Sơ đồ đối tượng là trường hợp riêng của sơ đồ lớp, khi classifier chỉ là thể hiện."
+  },
+  {
+   "chu": "Software as a Service",
+   "doc": "/ˈsɔːftwer əz ə ˈsɜːrvɪs/",
+   "nghia": "SaaS: phần mềm thuê dùng qua Internet, nhà cung cấp lo hạ tầng và cập nhật",
+   "nhom": "Gói phần mềm, SaaS và nguồn lực",
+   "viDu": "Which of the following is NOT a characteristic of Software as a Service (SaaS)?",
+   "viDuNghia": "Đâu KHÔNG phải đặc điểm của phần mềm dạng dịch vụ (SaaS)?"
+  },
+  {
+   "chu": "subscription-based pricing",
+   "doc": "/səbˈskrɪpʃn beɪst ˈpraɪsɪŋ/",
+   "nghia": "tính giá theo thuê bao: trả phí định kỳ theo tháng/năm hoặc theo người dùng",
+   "nhom": "Gói phần mềm, SaaS và nguồn lực",
+   "viDu": "Subscription-based pricing",
+   "viDuNghia": "Tính giá theo thuê bao."
+  },
+  {
+   "chu": "on-premises deployment",
+   "doc": "/ˌɑːn ˈpremɪsɪz dɪˈplɔɪmənt/",
+   "nghia": "triển khai tại chỗ: cài trên máy chủ của chính doanh nghiệp (đối lập SaaS)",
+   "nhom": "Gói phần mềm, SaaS và nguồn lực",
+   "viDu": "On-premises deployment is NOT a characteristic of SaaS.",
+   "viDuNghia": "Triển khai tại chỗ KHÔNG phải đặc điểm của SaaS."
+  },
+  {
+   "chu": "customization",
+   "doc": "/ˌkʌstəməzəˈzeɪʃn/",
+   "nghia": "tuỳ biến: sửa gói có sẵn cho hợp nghiệp vụ riêng; càng nhiều càng tốn khi nâng cấp",
+   "nhom": "Gói phần mềm, SaaS và nguồn lực",
+   "viDu": "COTS packages always require significant customization.",
+   "viDuNghia": "Gói COTS luôn cần tuỳ biến nhiều. (phương án sai)"
+  },
+  {
+   "chu": "custom-built system",
+   "doc": "/ˌkʌstəm ˈbɪlt ˈsɪstəm/",
+   "nghia": "hệ thống tự xây: viết riêng cho tổ chức, không mua sẵn",
+   "nhom": "Gói phần mềm, SaaS và nguồn lực",
+   "viDu": "It replaces an existing application with a new custom-built system.",
+   "viDuNghia": "Nó thay ứng dụng cũ bằng hệ thống tự xây mới."
+  },
+  {
+   "chu": "in-house development",
+   "doc": "/ˌɪn ˈhaʊs dɪˈveləpmənt/",
+   "nghia": "tự phát triển nội bộ: đội của chính công ty làm phần mềm",
+   "nhom": "Gói phần mềm, SaaS và nguồn lực",
+   "viDu": "It takes advantage of development skills they have available in-house.",
+   "viDuNghia": "Nó tận dụng kỹ năng phát triển sẵn có trong nội bộ."
+  },
+  {
+   "chu": "single sign-on",
+   "doc": "/ˈsɪŋɡl ˈsaɪn ɑːn/",
+   "nghia": "đăng nhập một lần (SSO): một tài khoản dùng chung cho nhiều hệ thống",
+   "nhom": "Gói phần mềm, SaaS và nguồn lực",
+   "viDu": "All products must have a single sign-on using Active Directory.",
+   "viDuNghia": "Mọi sản phẩm phải đăng nhập một lần qua Active Directory."
+  },
+  {
+   "chu": "reusable requirement",
+   "doc": "/riˈjuːzəbl rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu tái sử dụng được: viết chung để dùng lại cho nhiều dự án, sản phẩm",
+   "nhom": "Gói phần mềm, SaaS và nguồn lực",
+   "viDu": "Which is an example of a security requirements reuse opportunity?",
+   "viDuNghia": "Ví dụ nào là cơ hội tái sử dụng yêu cầu bảo mật?"
+  },
+  {
+   "chu": "product line",
+   "doc": "/ˈprɑːdʌkt laɪn/",
+   "nghia": "dòng sản phẩm: nhiều sản phẩm chung lõi yêu cầu, khác ở phần biến thể",
+   "nhom": "Gói phần mềm, SaaS và nguồn lực",
+   "viDu": "A product line shares the same core set of requirements.",
+   "viDuNghia": "Một dòng sản phẩm dùng chung bộ yêu cầu lõi."
+  },
+  {
+   "chu": "high-fidelity prototype",
+   "doc": "/ˌhaɪ fɪˈdeləti ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu độ trung thực cao: trông và chạy gần như sản phẩm thật",
+   "nhom": "Nguyên mẫu và người dùng",
+   "viDu": "Detailed screen layouts and high-fidelity prototypes.",
+   "viDuNghia": "Bố cục màn hình chi tiết và nguyên mẫu độ trung thực cao."
+  },
+  {
+   "chu": "low-fidelity prototype",
+   "doc": "/ˌloʊ fɪˈdeləti ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu độ trung thực thấp: phác bằng giấy, bút, khung dây đơn giản",
+   "nhom": "Nguyên mẫu và người dùng",
+   "viDu": "A low-fidelity prototype is quick and cheap to change.",
+   "viDuNghia": "Nguyên mẫu độ trung thực thấp làm nhanh, sửa rẻ."
+  },
+  {
+   "chu": "releasable prototype",
+   "doc": "/rɪˈliːsəbl ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu phát hành được: nguyên mẫu tiến hoá đủ chất lượng để đưa tới người dùng",
+   "nhom": "Nguyên mẫu và người dùng",
+   "viDu": "You might prefer to call it a releasable prototype.",
+   "viDuNghia": "Bạn có thể gọi nó là nguyên mẫu phát hành được."
+  },
+  {
+   "chu": "mock-up",
+   "doc": "/ˈmɑːk ʌp/",
+   "nghia": "bản dựng giả giao diện: cho thấy màn hình trông thế nào, chưa có logic thật",
+   "nhom": "Nguyên mẫu và người dùng",
+   "viDu": "Which of the following statements is incorrect about mockups?",
+   "viDuNghia": "Câu nào SAI về mockup?"
+  },
+  {
+   "chu": "disfavored user class",
+   "doc": "/dɪsˈfeɪvərd ˈjuːzər klæs/",
+   "nghia": "loại người dùng không được ưu tiên: nhóm mà hệ thống cố ý không phục vụ (vd kẻ tấn công)",
+   "nhom": "Nguyên mẫu và người dùng",
+   "viDu": "Hackers are a disfavored user class.",
+   "viDuNghia": "Tin tặc là loại người dùng không được ưu tiên."
+  },
+  {
+   "chu": "surrogate user",
+   "doc": "/ˈsɜːrəɡət ˈjuːzər/",
+   "nghia": "người dùng đại diện: người thay mặt khi không gặp được người dùng thật",
+   "nhom": "Nguyên mẫu và người dùng",
+   "viDu": "A surrogate user may not truly represent the real users.",
+   "viDuNghia": "Người dùng đại diện có thể không thật sự đại diện người dùng thật."
+  },
+  {
+   "chu": "indirect user",
+   "doc": "/ˌɪndəˈrekt ˈjuːzər/",
+   "nghia": "người dùng gián tiếp: nhận kết quả hệ thống (báo cáo) mà không trực tiếp thao tác",
+   "nhom": "Nguyên mẫu và người dùng",
+   "viDu": "Includes direct users and indirect users.",
+   "viDuNghia": "Gồm người dùng trực tiếp và gián tiếp."
+  },
+  {
+   "chu": "subject matter expert",
+   "doc": "/ˈsʌbdʒɪkt ˈmætər ˈekspɜːrt/",
+   "nghia": "chuyên gia nghiệp vụ (SME): người am hiểu sâu lĩnh vực, giúp làm rõ yêu cầu",
+   "nhom": "Nguyên mẫu và người dùng",
+   "viDu": "A subject matter expert explains the chemical safety rules.",
+   "viDuNghia": "Chuyên gia nghiệp vụ giải thích các quy định an toàn hoá chất."
+  },
+  {
+   "chu": "usage-centered design",
+   "doc": "/ˈjuːsɪdʒ ˈsentərd dɪˈzaɪn/",
+   "nghia": "thiết kế lấy việc sử dụng làm trung tâm: xuất phát từ việc người dùng cần làm (use case)",
+   "nhom": "Nguyên mẫu và người dùng",
+   "viDu": "Usage-centered design starts from the tasks users must perform.",
+   "viDuNghia": "Thiết kế lấy sử dụng làm trung tâm bắt đầu từ việc người dùng phải làm."
+  },
+  {
+   "chu": "requirements workshop",
+   "doc": "/rɪˈkwaɪərmənts ˈwɜːrkʃɑːp/",
+   "nghia": "hội thảo yêu cầu: buổi làm việc có điều phối với nhiều bên liên quan để thống nhất yêu cầu",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "Requirements workshops",
+   "viDuNghia": "Hội thảo yêu cầu."
+  },
+  {
+   "chu": "Joint Application Development",
+   "doc": "/dʒɔɪnt ˌæplɪˈkeɪʃn dɪˈveləpmənt/",
+   "nghia": "JAD: hội thảo cùng thiết kế giữa người dùng và đội phát triển, có người điều phối",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "Joint Application Development sessions bring users and developers into one room.",
+   "viDuNghia": "Buổi JAD đưa người dùng và đội phát triển vào cùng một phòng."
+  },
+  {
+   "chu": "Business Requirements Document",
+   "doc": "/ˈbɪznəs rɪˈkwaɪərmənts ˈdɑːkjumənt/",
+   "nghia": "BRD: tài liệu yêu cầu nghiệp vụ — mục tiêu, phạm vi, lợi ích của dự án",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "business requirements document (BRD)",
+   "viDuNghia": "Tài liệu yêu cầu nghiệp vụ (BRD)."
+  },
+  {
+   "chu": "requirements template",
+   "doc": "/rɪˈkwaɪərmənts ˈtemplət/",
+   "nghia": "mẫu tài liệu yêu cầu (SRS, vision and scope) giúp không bỏ sót mục",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "Fred will use standardized templates.",
+   "viDuNghia": "Fred sẽ dùng các mẫu chuẩn."
+  },
+  {
+   "chu": "limitations and exclusions",
+   "doc": "/ˌlɪmɪˈteɪʃnz ənd ɪkˈskluːʒnz/",
+   "nghia": "giới hạn và loại trừ: mục trong vision and scope ghi rõ những gì KHÔNG làm",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "List limitations and exclusions to prevent scope creep.",
+   "viDuNghia": "Ghi giới hạn và loại trừ để chặn phình phạm vi."
+  },
+  {
+   "chu": "TBD",
+   "doc": "/ˌtiː biː ˈdiː/",
+   "nghia": "to be determined: đánh dấu chỗ chưa biết trong đặc tả để quay lại xử lý",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "When should you use the notation TBD (to be determined) in a software requirements specification?",
+   "viDuNghia": "Khi nào dùng ký hiệu TBD trong đặc tả yêu cầu phần mềm?"
+  },
+  {
+   "chu": "ambiguous term",
+   "doc": "/æmˈbɪɡjuəs tɜːrm/",
+   "nghia": "từ mơ hồ: từ hiểu nhiều nghĩa (fast, user-friendly, etc.) cần thay bằng tiêu chí đo được",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "Vague and ambiguous",
+   "viDuNghia": "Mơ hồ và đa nghĩa."
+  },
+  {
+   "chu": "testable requirement",
+   "doc": "/ˈtestəbl rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu kiểm thử được: có thể viết test để xác nhận đạt hay không",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "Measurable and testable",
+   "viDuNghia": "Đo được và kiểm thử được."
+  },
+  {
+   "chu": "fit criterion",
+   "doc": "/fɪt kraɪˈtɪriən/",
+   "nghia": "tiêu chí đạt: con số đo được để biết yêu cầu đã thoả, vd 95% thao tác dưới 2 giây",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "Each quality requirement needs a fit criterion.",
+   "viDuNghia": "Mỗi yêu cầu chất lượng cần một tiêu chí đạt."
+  },
+  {
+   "chu": "performance requirement",
+   "doc": "/pərˈfɔːrməns rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu hiệu năng: thời gian phản hồi, thông lượng, sức chứa",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "How fast do users expect queries to return results?",
+   "viDuNghia": "Người dùng mong truy vấn trả kết quả nhanh tới đâu?"
+  },
+  {
+   "chu": "security requirement",
+   "doc": "/sɪˈkjʊrəti rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu bảo mật: xác thực, phân quyền, mã hoá, ghi nhật ký truy cập",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "User authentication and security requirements are often the same across systems.",
+   "viDuNghia": "Yêu cầu xác thực và bảo mật thường giống nhau giữa các hệ thống."
+  },
+  {
+   "chu": "formal specification",
+   "doc": "/ˈfɔːrml ˌspesɪfɪˈkeɪʃn/",
+   "nghia": "đặc tả hình thức: viết yêu cầu bằng ngôn ngữ toán học chính xác (Z, B)",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "Formal specifications define requirements by using mathematically precise specification languages.",
+   "viDuNghia": "Đặc tả hình thức định nghĩa yêu cầu bằng ngôn ngữ đặc tả chính xác kiểu toán học."
+  },
+  {
+   "chu": "Kano model",
+   "doc": "/ˈkɑːnoʊ ˈmɑːdl/",
+   "nghia": "mô hình Kano: chia tính năng thành cơ bản, hiệu năng, gây thích thú để ưu tiên",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "How does the Kano model help analyze user requirements?",
+   "viDuNghia": "Mô hình Kano giúp phân tích yêu cầu người dùng thế nào?"
+  },
+  {
+   "chu": "hundred-dollar method",
+   "doc": "/ˈhʌndrəd ˈdɑːlər ˈmeθəd/",
+   "nghia": "phương pháp 100 đô: mỗi người chia 100 đô ảo cho các yêu cầu để thể hiện mức ưu tiên",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "The hundred-dollar method lets each stakeholder spend $100 on requirements.",
+   "viDuNghia": "Phương pháp 100 đô cho mỗi bên chi 100 đô cho các yêu cầu."
+  },
+  {
+   "chu": "cost-benefit analysis",
+   "doc": "/ˌkɔːst ˈbenɪfɪt əˈnæləsɪs/",
+   "nghia": "phân tích chi phí–lợi ích: so giá trị thu được với chi phí làm một yêu cầu",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "A cost-benefit analysis shows whether the feature is worth building.",
+   "viDuNghia": "Phân tích chi phí–lợi ích cho biết tính năng có đáng làm không."
+  },
+  {
+   "chu": "analysis paralysis",
+   "doc": "/əˈnæləsɪs pəˈræləsɪs/",
+   "nghia": "tê liệt vì phân tích: phân tích mãi không dám chốt yêu cầu để làm",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "Time box discussions to avoid analysis paralysis.",
+   "viDuNghia": "Giới hạn thời gian thảo luận để tránh tê liệt vì phân tích."
+  },
+  {
+   "chu": "INVEST criteria",
+   "doc": "/ɪnˈvest kraɪˈtɪriə/",
+   "nghia": "tiêu chí INVEST cho user story: Independent, Negotiable, Valuable, Estimable, Small, Testable",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "A good user story meets the INVEST criteria.",
+   "viDuNghia": "User story tốt thoả tiêu chí INVEST."
+  },
+  {
+   "chu": "story mapping",
+   "doc": "/ˈstɔːri ˈmæpɪŋ/",
+   "nghia": "lập bản đồ câu chuyện: xếp user story theo hành trình người dùng và theo bản phát hành",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Story mapping shows which stories belong in the first release.",
+   "viDuNghia": "Bản đồ câu chuyện cho thấy story nào thuộc bản phát hành đầu."
+  },
+  {
+   "chu": "behavior-driven development",
+   "doc": "/bɪˈheɪvjər ˈdrɪvn dɪˈveləpmənt/",
+   "nghia": "BDD: viết yêu cầu dưới dạng kịch bản hành vi Given–When–Then rồi tự động hoá thành test",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Behavior-driven development writes acceptance tests as Given-When-Then scenarios.",
+   "viDuNghia": "BDD viết test chấp nhận thành kịch bản Given–When–Then."
+  },
+  {
+   "chu": "Given-When-Then",
+   "doc": "/ˈɡɪvn wen ðen/",
+   "nghia": "mẫu kịch bản: Given (bối cảnh) – When (hành động) – Then (kết quả mong đợi)",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Given a logged-in student, when she submits the form, then a receipt is shown.",
+   "viDuNghia": "Cho sinh viên đã đăng nhập, khi cô nộp form, thì hiện biên nhận."
+  },
+  {
+   "chu": "acceptance test-driven development",
+   "doc": "/əkˈseptəns ˌtest ˈdrɪvn dɪˈveləpmənt/",
+   "nghia": "ATDD: cả nhóm và khách viết test chấp nhận trước khi làm tính năng",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "In acceptance test-driven development, acceptance tests define \"done\".",
+   "viDuNghia": "Trong ATDD, test chấp nhận xác định thế nào là \"xong\"."
+  },
+  {
+   "chu": "risk exposure",
+   "doc": "/rɪsk ɪkˈspoʊʒər/",
+   "nghia": "mức phơi nhiễm rủi ro = xác suất × tác động; dùng để xếp hạng rủi ro",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Risk exposure = probability × impact; risks are ranked by exposure.",
+   "viDuNghia": "Mức phơi nhiễm rủi ro = xác suất × tác động; xếp hạng rủi ro theo đó."
+  },
+  {
+   "chu": "risk transfer",
+   "doc": "/rɪsk ˈtrænsfɜːr/",
+   "nghia": "chuyển giao rủi ro: đẩy hậu quả sang bên khác (bảo hiểm, hợp đồng thuê ngoài)",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Buying insurance is a form of risk transfer.",
+   "viDuNghia": "Mua bảo hiểm là một dạng chuyển giao rủi ro."
+  },
+  {
+   "chu": "risk acceptance",
+   "doc": "/rɪsk əkˈseptəns/",
+   "nghia": "chấp nhận rủi ro: biết rủi ro nhưng không làm gì, chuẩn bị phương án dự phòng",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Risk acceptance suits low-priority risks with minimal impact.",
+   "viDuNghia": "Chấp nhận rủi ro hợp với rủi ro ưu tiên thấp, tác động nhỏ."
+  },
+  {
+   "chu": "requirements volatility",
+   "doc": "/rɪˈkwaɪərmənts ˌvɑːləˈtɪləti/",
+   "nghia": "độ biến động yêu cầu: tốc độ yêu cầu thay đổi theo thời gian",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Measuring requirements volatility is part of change control.",
+   "viDuNghia": "Đo độ biến động yêu cầu là một phần của kiểm soát thay đổi."
+  },
+  {
+   "chu": "change control process",
+   "doc": "/tʃeɪndʒ kənˈtroʊl ˈprɑːses/",
+   "nghia": "quy trình kiểm soát thay đổi: gửi yêu cầu thay đổi → phân tích tác động → CCB quyết định → cập nhật",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Change Control Process",
+   "viDuNghia": "Quy trình kiểm soát thay đổi."
+  },
+  {
+   "chu": "requirement status",
+   "doc": "/rɪˈkwaɪərmənt ˈsteɪtəs/",
+   "nghia": "trạng thái yêu cầu: Proposed, Approved, Implemented, Verified, Deleted",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Track the requirement status from Proposed to Verified.",
+   "viDuNghia": "Theo dõi trạng thái yêu cầu từ Đề xuất tới Đã xác minh."
+  },
+  {
+   "chu": "forward traceability",
+   "doc": "/ˈfɔːrwərd ˌtreɪsəˈbɪləti/",
+   "nghia": "truy vết xuôi: từ yêu cầu tới thiết kế, mã và test",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Traceability links each requirement forward to design, code and test artifacts.",
+   "viDuNghia": "Truy vết nối mỗi yêu cầu xuôi tới thiết kế, mã và test."
+  },
+  {
+   "chu": "backward traceability",
+   "doc": "/ˈbækwərd ˌtreɪsəˈbɪləti/",
+   "nghia": "truy vết ngược: từ yêu cầu về nguồn gốc (người đề xuất, quy định, nhu cầu)",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Traceability links each requirement backward to its origin.",
+   "viDuNghia": "Truy vết nối mỗi yêu cầu ngược về nguồn gốc."
+  },
+  {
+   "chu": "cross-reference",
+   "doc": "/ˌkrɔːs ˈrefrəns/",
+   "nghia": "tham chiếu chéo: chỉ tới một yêu cầu khác theo mã định danh của nó",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Unique IDs allow us to refer to specific requirements in a change request or cross-reference.",
+   "viDuNghia": "Mã duy nhất giúp tham chiếu yêu cầu trong yêu cầu thay đổi hoặc tham chiếu chéo."
+  },
+  {
+   "chu": "requirement defect",
+   "doc": "/rɪˈkwaɪərmənt ˈdiːfekt/",
+   "nghia": "lỗi yêu cầu: thiếu, sai, mơ hồ, mâu thuẫn — sửa càng muộn càng đắt",
+   "nhom": "Agile, rủi ro và truy vết",
+   "viDu": "Use a defect checklist to find requirement defects during inspection.",
+   "viDuNghia": "Dùng danh sách lỗi để tìm lỗi yêu cầu khi thanh tra."
+  },
+  {
+   "chu": "as-is process",
+   "doc": "/æz ˈɪz ˈprɒses/",
+   "nghia": "quy trình hiện tại (as-is): doanh nghiệp đang làm việc thế nào trước khi có hệ thống mới",
+   "nhom": "Quy trình nghiệp vụ và DFD",
+   "viDu": "As-is processes describe how the business currently works.",
+   "viDuNghia": "Quy trình as-is mô tả doanh nghiệp đang vận hành ra sao."
+  },
+  {
+   "chu": "to-be process",
+   "doc": "/tə ˈbiː ˈprɒses/",
+   "nghia": "quy trình tương lai (to-be): cách làm mong muốn sau khi cải tiến / có hệ thống mới",
+   "nhom": "Quy trình nghiệp vụ và DFD",
+   "viDu": "The future state of the business is the to-be process.",
+   "viDuNghia": "Trạng thái tương lai của doanh nghiệp là quy trình to-be."
+  },
+  {
+   "chu": "repertory grid",
+   "doc": "/ˈrepərtɔːri ɡrɪd/",
+   "nghia": "lưới repertory: kỹ thuật khơi gợi – người dùng chấm các đối tượng theo các cặp tiêu chí đối lập để lộ cách họ phân biệt chúng",
+   "nhom": "Khơi gợi, đặc tả và ưu tiên",
+   "viDu": "Organizing data into repertory grids.",
+   "viDuNghia": "Sắp xếp dữ liệu vào các lưới repertory."
+  }
+ ]
+}

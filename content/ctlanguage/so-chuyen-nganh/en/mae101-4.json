@@ -4,7 +4,7 @@
  "ten": "MAE101 · 4. Đại số tuyến tính",
  "moTa": "Toán cho kỹ sư (MAE101), bộ 4 - đại số tuyến tính: hệ phương trình, ma trận và định thức, vectơ và hình học không gian, không gian con, phép biến đổi tuyến tính, trị riêng. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "square.grid.3x3.fill",
- "thuTu": -990,
+ "thuTu": -988,
  "tu": [
   {
    "chu": "system of linear equations",

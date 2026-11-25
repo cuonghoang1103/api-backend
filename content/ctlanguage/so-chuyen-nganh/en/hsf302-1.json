@@ -1,0 +1,514 @@
+{
+  "ma": "hsf302-1",
+  "nn": "en",
+  "ten": "HSF302 · 1. JPA, Spring Core, Spring Boot & Spring Data",
+  "moTa": "Môn Working with Spring Framework (HSF302): ánh xạ ORM với JPA (entity, quan hệ, fetch, persistence context), IoC/DI và bean của Spring, Spring Boot (starter, auto-configuration, profile), Spring Data JPA. Soạn từ syllabus và giáo trình vì môn chưa có đề chữ.",
+  "bieuTuong": "leaf.fill",
+  "thuTu": -898,
+  "tu": [
+    {
+      "chu": "Object-Relational Mapping",
+      "doc": "/ˈɑːbdʒekt rɪˈleɪʃənl ˈmæpɪŋ/",
+      "nghia": "ORM: ánh xạ đối tượng Java sang bảng quan hệ để thao tác CSDL bằng đối tượng thay vì SQL viết tay",
+      "nhom": "ORM và JPA",
+      "viDu": "Describe the basics of Object-Relational Mapping (ORM) and how it simplifies database interactions.",
+      "viDuNghia": "Mô tả cơ bản ORM và cách nó đơn giản hoá thao tác CSDL."
+    },
+    {
+      "chu": "Jakarta Persistence API",
+      "doc": "/dʒəˈkɑːrtə pərˈsɪstəns ˌeɪ piː ˈaɪ/",
+      "nghia": "JPA: đặc tả chuẩn của Java về ORM (Hibernate là bản cài đặt phổ biến nhất)",
+      "nhom": "ORM và JPA",
+      "viDu": "Use the JPA ORM tool to map Java objects to database tables.",
+      "viDuNghia": "Dùng công cụ ORM JPA để ánh xạ đối tượng Java sang bảng CSDL."
+    },
+    {
+      "chu": "Hibernate ORM",
+      "doc": "/ˈhaɪbərneɪt ˌoʊ ɑːr ˈem/",
+      "nghia": "Hibernate: framework ORM cài đặt JPA, Spring Boot dùng mặc định",
+      "nhom": "ORM và JPA",
+      "viDu": "Spring Data JPA uses Hibernate ORM under the hood.",
+      "viDuNghia": "Spring Data JPA dùng Hibernate ở bên dưới."
+    },
+    {
+      "chu": "Entity annotation",
+      "doc": "/ˈentəti ˌænəˈteɪʃn/",
+      "nghia": "@Entity: đánh dấu lớp Java được ánh xạ thành một bảng",
+      "nhom": "ORM và JPA",
+      "viDu": "@Entity public class Product { @Id private Long id; }",
+      "viDuNghia": "Lớp Product là entity với khoá chính id."
+    },
+    {
+      "chu": "Id annotation",
+      "doc": "/aɪ ˈdiː ˌænəˈteɪʃn/",
+      "nghia": "@Id: đánh dấu trường làm khoá chính của entity",
+      "nhom": "ORM và JPA",
+      "viDu": "Every entity needs a field marked with @Id.",
+      "viDuNghia": "Mọi entity cần một trường gắn @Id."
+    },
+    {
+      "chu": "GeneratedValue",
+      "doc": "/ˈdʒenəreɪtɪd ˈvæljuː/",
+      "nghia": "@GeneratedValue: khoá chính tự sinh; strategy IDENTITY dùng cột tự tăng của SQL Server",
+      "nhom": "ORM và JPA",
+      "viDu": "@GeneratedValue(strategy = GenerationType.IDENTITY)",
+      "viDuNghia": "Khoá tự sinh theo cột IDENTITY."
+    },
+    {
+      "chu": "Column annotation",
+      "doc": "/ˈkɑːləm ˌænəˈteɪʃn/",
+      "nghia": "@Column: cấu hình cột (name, nullable, length, unique)",
+      "nhom": "ORM và JPA",
+      "viDu": "@Column(nullable = false, length = 100) private String name;",
+      "viDuNghia": "Cột name không rỗng, dài tối đa 100."
+    },
+    {
+      "chu": "Table annotation",
+      "doc": "/ˈteɪbl ˌænəˈteɪʃn/",
+      "nghia": "@Table: đặt tên bảng khác tên lớp",
+      "nhom": "ORM và JPA",
+      "viDu": "@Table(name = \"orders\") maps the Order entity to the orders table.",
+      "viDuNghia": "@Table đặt entity Order vào bảng orders."
+    },
+    {
+      "chu": "OneToMany",
+      "doc": "/wʌn tə ˈmeni/",
+      "nghia": "@OneToMany: quan hệ một–nhiều (một danh mục nhiều sản phẩm)",
+      "nhom": "ORM và JPA",
+      "viDu": "@OneToMany(mappedBy = \"category\") private List<Product> products;",
+      "viDuNghia": "Một danh mục có danh sách sản phẩm."
+    },
+    {
+      "chu": "ManyToOne",
+      "doc": "/ˈmeni tə wʌn/",
+      "nghia": "@ManyToOne: nhiều–một, phía giữ khoá ngoại (mặc định fetch EAGER)",
+      "nhom": "ORM và JPA",
+      "viDu": "@ManyToOne @JoinColumn(name = \"category_id\") private Category category;",
+      "viDuNghia": "Nhiều sản phẩm thuộc một danh mục qua cột category_id."
+    },
+    {
+      "chu": "ManyToMany",
+      "doc": "/ˈmeni tə ˈmeni/",
+      "nghia": "@ManyToMany: nhiều–nhiều, cần bảng nối (@JoinTable)",
+      "nhom": "ORM và JPA",
+      "viDu": "A student has a ManyToMany relationship with courses.",
+      "viDuNghia": "Sinh viên có quan hệ nhiều–nhiều với khoá học."
+    },
+    {
+      "chu": "JoinColumn",
+      "doc": "/dʒɔɪn ˈkɑːləm/",
+      "nghia": "@JoinColumn: khai cột khoá ngoại của quan hệ",
+      "nhom": "ORM và JPA",
+      "viDu": "@JoinColumn(name = \"customer_id\") names the foreign key column.",
+      "viDuNghia": "@JoinColumn đặt tên cột khoá ngoại."
+    },
+    {
+      "chu": "mappedBy",
+      "doc": "/mæpt baɪ/",
+      "nghia": "thuộc tính chỉ phía KHÔNG sở hữu quan hệ hai chiều, trỏ tên trường bên sở hữu",
+      "nhom": "ORM và JPA",
+      "viDu": "mappedBy = \"category\" means Product owns the relationship.",
+      "viDuNghia": "mappedBy = \"category\" nghĩa là Product sở hữu quan hệ."
+    },
+    {
+      "chu": "owning side",
+      "doc": "/ˈoʊnɪŋ saɪd/",
+      "nghia": "phía sở hữu quan hệ: entity giữ khoá ngoại, thay đổi ở phía này mới được lưu",
+      "nhom": "ORM và JPA",
+      "viDu": "Only changes on the owning side are written to the database.",
+      "viDuNghia": "Chỉ thay đổi ở phía sở hữu mới được ghi xuống CSDL."
+    },
+    {
+      "chu": "cascade type",
+      "doc": "/kæˈskeɪd taɪp/",
+      "nghia": "kiểu lan truyền: thao tác persist/remove trên cha tự áp cho con (CascadeType.ALL)",
+      "nhom": "ORM và JPA",
+      "viDu": "CascadeType.ALL saves the order lines together with the order.",
+      "viDuNghia": "CascadeType.ALL lưu các dòng đơn cùng với đơn hàng."
+    },
+    {
+      "chu": "orphan removal",
+      "doc": "/ˈɔːrfən rɪˈmuːvl/",
+      "nghia": "xoá mồ côi: bỏ con khỏi danh sách của cha thì xoá luôn dòng con trong CSDL",
+      "nhom": "ORM và JPA",
+      "viDu": "orphanRemoval = true deletes a line removed from the list.",
+      "viDuNghia": "orphanRemoval = true xoá dòng bị bỏ khỏi danh sách."
+    },
+    {
+      "chu": "fetch type",
+      "doc": "/fetʃ taɪp/",
+      "nghia": "kiểu nạp quan hệ: LAZY (nạp khi dùng) hoặc EAGER (nạp ngay cùng entity)",
+      "nhom": "ORM và JPA",
+      "viDu": "OneToMany uses FetchType.LAZY by default.",
+      "viDuNghia": "OneToMany mặc định dùng FetchType.LAZY."
+    },
+    {
+      "chu": "lazy fetch",
+      "doc": "/ˈleɪzi fetʃ/",
+      "nghia": "nạp lười trong JPA: dữ liệu quan hệ chỉ truy vấn khi lần đầu được truy cập",
+      "nhom": "ORM và JPA",
+      "viDu": "Accessing a lazy fetch collection outside a transaction throws LazyInitializationException.",
+      "viDuNghia": "Đọc tập nạp lười ngoài giao tác ném LazyInitializationException."
+    },
+    {
+      "chu": "eager fetch",
+      "doc": "/ˈiːɡər fetʃ/",
+      "nghia": "nạp sớm: quan hệ được truy vấn ngay cùng entity",
+      "nhom": "ORM và JPA",
+      "viDu": "Eager fetch on every relation loads far more data than needed.",
+      "viDuNghia": "Nạp sớm mọi quan hệ tải nhiều dữ liệu hơn cần."
+    },
+    {
+      "chu": "N+1 query problem",
+      "doc": "/en plʌs wʌn ˈkwɪri ˈprɑːbləm/",
+      "nghia": "lỗi N+1: một truy vấn lấy danh sách rồi thêm N truy vấn cho từng phần tử; sửa bằng JOIN FETCH",
+      "nhom": "ORM và JPA",
+      "viDu": "JOIN FETCH solves the N+1 query problem.",
+      "viDuNghia": "JOIN FETCH xử lý lỗi N+1 truy vấn."
+    },
+    {
+      "chu": "persistence context",
+      "doc": "/pərˈsɪstəns ˈkɑːntekst/",
+      "nghia": "ngữ cảnh lưu trữ: tập entity đang được EntityManager quản lý trong một giao tác",
+      "nhom": "ORM và JPA",
+      "viDu": "Two finds of the same id return the same object from the persistence context.",
+      "viDuNghia": "Hai lần tìm cùng id trả cùng một đối tượng trong ngữ cảnh lưu trữ."
+    },
+    {
+      "chu": "EntityManager",
+      "doc": "/ˈentəti ˈmænɪdʒər/",
+      "nghia": "đối tượng JPA chính: persist, find, merge, remove, createQuery",
+      "nhom": "ORM và JPA",
+      "viDu": "entityManager.persist(product) inserts a new row.",
+      "viDuNghia": "entityManager.persist(product) chèn một dòng mới."
+    },
+    {
+      "chu": "managed entity",
+      "doc": "/ˈmænɪdʒd ˈentəti/",
+      "nghia": "entity được quản lý: mọi thay đổi tự ghi xuống CSDL khi giao tác kết thúc",
+      "nhom": "ORM và JPA",
+      "viDu": "Changing a managed entity needs no explicit save() call.",
+      "viDuNghia": "Sửa entity được quản lý không cần gọi save()."
+    },
+    {
+      "chu": "detached entity",
+      "doc": "/dɪˈtætʃt ˈentəti/",
+      "nghia": "entity tách rời: không còn nằm trong ngữ cảnh lưu trữ, phải merge mới lưu được",
+      "nhom": "ORM và JPA",
+      "viDu": "A detached entity must be merged before it is saved.",
+      "viDuNghia": "Entity tách rời phải merge rồi mới lưu được."
+    },
+    {
+      "chu": "dirty checking",
+      "doc": "/ˈdɜːrti ˈtʃekɪŋ/",
+      "nghia": "kiểm tra bẩn: Hibernate so entity với ảnh chụp ban đầu để tự sinh UPDATE",
+      "nhom": "ORM và JPA",
+      "viDu": "Dirty checking generates the UPDATE statement automatically.",
+      "viDuNghia": "Kiểm tra bẩn tự sinh câu UPDATE."
+    },
+    {
+      "chu": "JPQL",
+      "doc": "/ˌdʒeɪ piː kjuː ˈel/",
+      "nghia": "Jakarta Persistence Query Language: truy vấn theo tên entity và trường, không theo tên bảng",
+      "nhom": "ORM và JPA",
+      "viDu": "SELECT p FROM Product p WHERE p.price > :min",
+      "viDuNghia": "Truy vấn JPQL lấy sản phẩm có giá lớn hơn min."
+    },
+    {
+      "chu": "native query",
+      "doc": "/ˈneɪtɪv ˈkwɪri/",
+      "nghia": "truy vấn SQL gốc của CSDL chạy qua JPA (nativeQuery = true)",
+      "nhom": "ORM và JPA",
+      "viDu": "Use a native query for a SQL Server specific function.",
+      "viDuNghia": "Dùng truy vấn gốc cho hàm riêng của SQL Server."
+    },
+    {
+      "chu": "Spring Framework",
+      "doc": "/sprɪŋ ˈfreɪmwɜːrk/",
+      "nghia": "framework Java cho ứng dụng doanh nghiệp: IoC/DI, MVC, truy cập dữ liệu, bảo mật",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "Describe the concepts of Spring Framework and Spring Boot.",
+      "viDuNghia": "Mô tả khái niệm Spring Framework và Spring Boot."
+    },
+    {
+      "chu": "Inversion of Control",
+      "doc": "/ɪnˈvɜːrʒn əv kənˈtroʊl/",
+      "nghia": "đảo ngược điều khiển: container tạo và nối đối tượng, lớp không tự new phụ thuộc",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "Inversion of Control lets the container create and wire the objects.",
+      "viDuNghia": "IoC để container tạo và nối các đối tượng."
+    },
+    {
+      "chu": "IoC container",
+      "doc": "/ˌaɪ oʊ ˈsiː kənˈteɪnər/",
+      "nghia": "bộ chứa IoC (ApplicationContext): quản lý vòng đời và phụ thuộc của bean",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "The IoC container injects the repository into the service.",
+      "viDuNghia": "Container IoC tiêm repository vào service."
+    },
+    {
+      "chu": "ApplicationContext",
+      "doc": "/ˌæplɪˈkeɪʃn ˈkɑːntekst/",
+      "nghia": "giao diện container chính của Spring, nạp cấu hình và cấp bean",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "context.getBean(OrderService.class) returns the bean.",
+      "viDuNghia": "context.getBean(OrderService.class) trả về bean."
+    },
+    {
+      "chu": "Spring bean",
+      "doc": "/sprɪŋ biːn/",
+      "nghia": "bean: đối tượng do container Spring tạo và quản lý",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "A Spring bean is an object managed by the container.",
+      "viDuNghia": "Bean là đối tượng do container Spring quản lý."
+    },
+    {
+      "chu": "bean scope",
+      "doc": "/biːn skoʊp/",
+      "nghia": "phạm vi bean: singleton (mặc định, một đối tượng), prototype (mỗi lần lấy một đối tượng mới), request, session",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "The default bean scope is singleton.",
+      "viDuNghia": "Phạm vi bean mặc định là singleton."
+    },
+    {
+      "chu": "prototype scope",
+      "doc": "/ˈproʊtətaɪp skoʊp/",
+      "nghia": "phạm vi prototype: mỗi lần yêu cầu, container tạo một đối tượng mới",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "A prototype scope bean is created every time it is requested.",
+      "viDuNghia": "Bean phạm vi prototype được tạo mới mỗi lần yêu cầu."
+    },
+    {
+      "chu": "constructor injection",
+      "doc": "/kənˈstrʌktər ɪnˈdʒekʃn/",
+      "nghia": "tiêm qua hàm tạo: cách khuyên dùng, phụ thuộc final và dễ kiểm thử",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "Prefer constructor injection over field injection.",
+      "viDuNghia": "Ưu tiên tiêm qua hàm tạo hơn tiêm vào trường."
+    },
+    {
+      "chu": "setter injection",
+      "doc": "/ˈsetər ɪnˈdʒekʃn/",
+      "nghia": "tiêm qua setter: dùng cho phụ thuộc tuỳ chọn",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "Setter injection suits optional dependencies.",
+      "viDuNghia": "Tiêm qua setter hợp với phụ thuộc tuỳ chọn."
+    },
+    {
+      "chu": "field injection",
+      "doc": "/fiːld ɪnˈdʒekʃn/",
+      "nghia": "tiêm thẳng vào trường bằng @Autowired: gọn nhưng khó test, không khuyên dùng",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "Field injection hides dependencies and makes testing harder.",
+      "viDuNghia": "Tiêm vào trường che giấu phụ thuộc và khó kiểm thử."
+    },
+    {
+      "chu": "Autowired",
+      "doc": "/ˈɔːtoʊ waɪərd/",
+      "nghia": "@Autowired: yêu cầu Spring tự tìm bean phù hợp để tiêm",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "@Autowired is optional on a single constructor.",
+      "viDuNghia": "@Autowired không bắt buộc khi lớp chỉ có một hàm tạo."
+    },
+    {
+      "chu": "stereotype annotation",
+      "doc": "/ˈsteriətaɪp ˌænəˈteɪʃn/",
+      "nghia": "chú thích vai trò bean: @Component, @Service, @Repository, @Controller",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "@Service is a stereotype annotation for the business layer.",
+      "viDuNghia": "@Service là chú thích vai trò cho tầng nghiệp vụ."
+    },
+    {
+      "chu": "component scanning",
+      "doc": "/kəmˈpoʊnənt ˈskænɪŋ/",
+      "nghia": "quét thành phần: Spring tìm lớp có @Component trong package để tạo bean",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "Component scanning starts from the package of the main class.",
+      "viDuNghia": "Quét thành phần bắt đầu từ package của lớp main."
+    },
+    {
+      "chu": "Configuration class",
+      "doc": "/kənˌfɪɡjəˈreɪʃn klæs/",
+      "nghia": "lớp @Configuration chứa phương thức @Bean khai báo bean bằng mã Java",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "A @Configuration class declares a PasswordEncoder with @Bean.",
+      "viDuNghia": "Lớp @Configuration khai bean PasswordEncoder bằng @Bean."
+    },
+    {
+      "chu": "Bean annotation",
+      "doc": "/biːn ˌænəˈteɪʃn/",
+      "nghia": "@Bean: phương thức trả về đối tượng sẽ được đăng ký làm bean",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "@Bean public RestTemplate restTemplate() { return new RestTemplate(); }",
+      "viDuNghia": "Khai báo bean RestTemplate."
+    },
+    {
+      "chu": "Qualifier",
+      "doc": "/ˈkwɑːlɪfaɪər/",
+      "nghia": "@Qualifier: chọn đúng bean theo tên khi có nhiều bean cùng kiểu",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "Use @Qualifier(\"smsSender\") when two senders exist.",
+      "viDuNghia": "Dùng @Qualifier khi có hai bean gửi tin."
+    },
+    {
+      "chu": "bean lifecycle",
+      "doc": "/biːn ˈlaɪfsaɪkl/",
+      "nghia": "vòng đời bean: tạo → tiêm phụ thuộc → khởi tạo (@PostConstruct) → dùng → huỷ (@PreDestroy)",
+      "nhom": "Spring Core: IoC và DI",
+      "viDu": "@PostConstruct runs after dependencies are injected.",
+      "viDuNghia": "@PostConstruct chạy sau khi phụ thuộc được tiêm."
+    },
+    {
+      "chu": "Spring Boot",
+      "doc": "/sprɪŋ buːt/",
+      "nghia": "nền tảng dựng nhanh ứng dụng Spring: starter, tự cấu hình, Tomcat nhúng, chạy bằng java -jar",
+      "nhom": "Spring Boot",
+      "viDu": "Spring Boot runs the application with an embedded Tomcat.",
+      "viDuNghia": "Spring Boot chạy ứng dụng với Tomcat nhúng."
+    },
+    {
+      "chu": "starter dependency",
+      "doc": "/ˈstɑːrtər dɪˈpendənsi/",
+      "nghia": "gói starter gom sẵn thư viện cho một việc (spring-boot-starter-web, -data-jpa)",
+      "nhom": "Spring Boot",
+      "viDu": "Add spring-boot-starter-data-jpa to use JPA.",
+      "viDuNghia": "Thêm starter data-jpa để dùng JPA."
+    },
+    {
+      "chu": "auto-configuration",
+      "doc": "/ˌɔːtoʊ kənˌfɪɡjəˈreɪʃn/",
+      "nghia": "tự cấu hình: Spring Boot tạo bean mặc định dựa vào thư viện có trên classpath",
+      "nhom": "Spring Boot",
+      "viDu": "Auto-configuration creates a DataSource when a JDBC driver is found.",
+      "viDuNghia": "Tự cấu hình tạo DataSource khi thấy driver JDBC."
+    },
+    {
+      "chu": "application.properties",
+      "doc": "/ˌæplɪˈkeɪʃn ˈprɑːpərtiz/",
+      "nghia": "tệp cấu hình Spring Boot (cổng, kết nối CSDL, log); có thể viết dạng application.yml",
+      "nhom": "Spring Boot",
+      "viDu": "spring.datasource.url is set in application.properties.",
+      "viDuNghia": "spring.datasource.url đặt trong application.properties."
+    },
+    {
+      "chu": "Spring profile",
+      "doc": "/sprɪŋ ˈproʊfaɪl/",
+      "nghia": "hồ sơ cấu hình theo môi trường (dev, test, prod), bật bằng spring.profiles.active",
+      "nhom": "Spring Boot",
+      "viDu": "Activate the dev Spring profile with spring.profiles.active=dev.",
+      "viDuNghia": "Bật hồ sơ dev bằng spring.profiles.active=dev."
+    },
+    {
+      "chu": "embedded Tomcat",
+      "doc": "/ɪmˈbedɪd ˈtɑːmkæt/",
+      "nghia": "Tomcat nhúng sẵn trong tệp JAR của ứng dụng Spring Boot, không cần cài server riêng",
+      "nhom": "Spring Boot",
+      "viDu": "The embedded Tomcat starts on port 8080.",
+      "viDuNghia": "Tomcat nhúng khởi động ở cổng 8080."
+    },
+    {
+      "chu": "Spring Initializr",
+      "doc": "/sprɪŋ ɪˈnɪʃəlaɪzər/",
+      "nghia": "trang start.spring.io sinh khung dự án Spring Boot với starter đã chọn",
+      "nhom": "Spring Boot",
+      "viDu": "Generate the project skeleton with Spring Initializr.",
+      "viDuNghia": "Sinh khung dự án bằng Spring Initializr."
+    },
+    {
+      "chu": "SpringBootApplication",
+      "doc": "/sprɪŋ buːt ˌæplɪˈkeɪʃn/",
+      "nghia": "@SpringBootApplication: gộp @Configuration, @EnableAutoConfiguration, @ComponentScan trên lớp main",
+      "nhom": "Spring Boot",
+      "viDu": "The main class is annotated with @SpringBootApplication.",
+      "viDuNghia": "Lớp main gắn @SpringBootApplication."
+    },
+    {
+      "chu": "CommandLineRunner",
+      "doc": "/kəˈmænd laɪn ˈrʌnər/",
+      "nghia": "bean chạy một lần sau khi ứng dụng khởi động (nạp dữ liệu mẫu)",
+      "nhom": "Spring Boot",
+      "viDu": "A CommandLineRunner seeds the database at startup.",
+      "viDuNghia": "CommandLineRunner nạp dữ liệu mẫu lúc khởi động."
+    },
+    {
+      "chu": "Maven",
+      "doc": "/ˈmeɪvən/",
+      "nghia": "công cụ build Java quản lý thư viện phụ thuộc qua tệp pom.xml",
+      "nhom": "Spring Boot",
+      "viDu": "Maven downloads the dependencies declared in pom.xml.",
+      "viDuNghia": "Maven tải các thư viện khai trong pom.xml."
+    },
+    {
+      "chu": "pom.xml",
+      "doc": "/ˌpiː oʊ ˈem ˌeks em ˈel/",
+      "nghia": "Project Object Model: tệp cấu hình Maven (groupId, artifactId, dependencies)",
+      "nhom": "Spring Boot",
+      "viDu": "Add the SQL Server driver to pom.xml.",
+      "viDuNghia": "Thêm driver SQL Server vào pom.xml."
+    },
+    {
+      "chu": "Spring Data JPA",
+      "doc": "/sprɪŋ ˈdeɪtə ˌdʒeɪ piː ˈeɪ/",
+      "nghia": "dự án Spring sinh sẵn lớp truy cập dữ liệu từ giao diện repository",
+      "nhom": "Spring Data JPA",
+      "viDu": "Describe how Spring Data works with various data sources.",
+      "viDuNghia": "Mô tả cách Spring Data làm việc với nhiều nguồn dữ liệu."
+    },
+    {
+      "chu": "JpaRepository",
+      "doc": "/ˌdʒeɪ piː ˈeɪ rɪˈpɑːzətɔːri/",
+      "nghia": "giao diện repository có sẵn save, findById, findAll, deleteById, phân trang",
+      "nhom": "Spring Data JPA",
+      "viDu": "public interface ProductRepository extends JpaRepository<Product, Long> {}",
+      "viDuNghia": "Repository sản phẩm kế thừa JpaRepository."
+    },
+    {
+      "chu": "CrudRepository",
+      "doc": "/krʌd rɪˈpɑːzətɔːri/",
+      "nghia": "giao diện repository cơ bản chỉ có thao tác CRUD",
+      "nhom": "Spring Data JPA",
+      "viDu": "JpaRepository extends CrudRepository and adds paging.",
+      "viDuNghia": "JpaRepository kế thừa CrudRepository và thêm phân trang."
+    },
+    {
+      "chu": "derived query method",
+      "doc": "/dɪˈraɪvd ˈkwɪri ˈmeθəd/",
+      "nghia": "phương thức truy vấn suy ra từ tên, vd findByNameContaining(String name)",
+      "nhom": "Spring Data JPA",
+      "viDu": "findByPriceLessThan(double max) is a derived query method.",
+      "viDuNghia": "findByPriceLessThan là phương thức truy vấn suy ra từ tên."
+    },
+    {
+      "chu": "Pageable",
+      "doc": "/ˈpeɪdʒəbl/",
+      "nghia": "tham số phân trang (số trang, cỡ trang, sắp xếp) truyền cho repository",
+      "nhom": "Spring Data JPA",
+      "viDu": "PageRequest.of(0, 10) creates a Pageable for the first page.",
+      "viDuNghia": "PageRequest.of(0, 10) tạo Pageable cho trang đầu."
+    },
+    {
+      "chu": "Page object",
+      "doc": "/peɪdʒ ˈɑːbdʒekt/",
+      "nghia": "kết quả phân trang: danh sách phần tử kèm tổng số phần tử và tổng số trang",
+      "nhom": "Spring Data JPA",
+      "viDu": "page.getTotalPages() returns the number of pages.",
+      "viDuNghia": "page.getTotalPages() trả tổng số trang."
+    },
+    {
+      "chu": "DataSource",
+      "doc": "/ˈdeɪtə sɔːrs/",
+      "nghia": "nguồn kết nối CSDL do Spring cấp (mặc định bể kết nối HikariCP)",
+      "nhom": "Spring Data JPA",
+      "viDu": "Spring Boot configures a HikariCP DataSource automatically.",
+      "viDuNghia": "Spring Boot tự cấu hình DataSource HikariCP."
+    },
+    {
+      "chu": "ddl-auto",
+      "doc": "/ˌdiː diː ˈel ˈɔːtoʊ/",
+      "nghia": "spring.jpa.hibernate.ddl-auto: Hibernate tự tạo/cập nhật bảng (create, update, validate, none)",
+      "nhom": "Spring Data JPA",
+      "viDu": "Use ddl-auto=validate in production, never create.",
+      "viDuNghia": "Dùng ddl-auto=validate khi chạy thật, không dùng create."
+    }
+  ]
+}

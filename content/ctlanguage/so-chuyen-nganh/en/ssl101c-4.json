@@ -1,0 +1,938 @@
+{
+ "ma": "ssl101c-4",
+ "nn": "en",
+ "ten": "SSL101c · 4. Tìm nguồn, lập luận, hội thoại & học tập",
+ "moTa": "Bổ sung cho SSL101c: thuật ngữ thư viện và tìm tài liệu, các kiểu vi phạm học thuật, mô hình lập luận Toulmin và nguỵ biện, loại bài toán theo tri thức, phân tích hội thoại (sửa chữa, lượt lời), thuyết trình và kỹ năng tự học hay gặp trong đề và giáo trình.",
+ "bieuTuong": "books.vertical",
+ "thuTu": -978,
+ "tu": [
+  {
+   "chu": "catalogue",
+   "doc": "/ˈkætəlɒɡ/",
+   "nghia": "mục lục thư viện: danh sách tra cứu mọi tài liệu thư viện có",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Search the library catalogue to see whether the book is available.",
+   "viDuNghia": "Tra mục lục thư viện để xem cuốn sách có sẵn không."
+  },
+  {
+   "chu": "call number",
+   "doc": "/kɔːl ˈnʌmbər/",
+   "nghia": "ký hiệu xếp giá: mã trên gáy sách cho biết sách nằm ở kệ nào",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Write down the call number so you can find the book on the shelf.",
+   "viDuNghia": "Ghi lại ký hiệu xếp giá để tìm sách trên kệ."
+  },
+  {
+   "chu": "Dewey Decimal Classification",
+   "doc": "/ˈduːi ˈdɛsɪməl ˌklæsɪfɪˈkeɪʃən/",
+   "nghia": "khung phân loại thập phân Dewey: xếp sách theo 10 lớp chủ đề đánh số 000–999",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Under the Dewey Decimal Classification, computer science books are in the 000s.",
+   "viDuNghia": "Theo khung phân loại Dewey, sách khoa học máy tính nằm ở nhóm 000."
+  },
+  {
+   "chu": "interlibrary loan",
+   "doc": "/ˌɪntərˈlaɪbrəri loʊn/",
+   "nghia": "mượn liên thư viện: mượn tài liệu từ thư viện khác thông qua thư viện của mình",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "If your library does not have the book, request it through interlibrary loan.",
+   "viDuNghia": "Nếu thư viện không có sách, hãy xin mượn liên thư viện."
+  },
+  {
+   "chu": "Boolean operator",
+   "doc": "/ˈbuːliən ˈɒpəreɪtər/",
+   "nghia": "toán tử Boole khi tìm kiếm: AND (thu hẹp), OR (mở rộng), NOT (loại trừ)",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Use the Boolean operator AND to combine two key words and narrow your search.",
+   "viDuNghia": "Dùng toán tử AND để ghép hai từ khoá và thu hẹp kết quả."
+  },
+  {
+   "chu": "phrase searching",
+   "doc": "/freɪz ˈsɜːrtʃɪŋ/",
+   "nghia": "tìm theo cụm: đặt cụm từ trong ngoặc kép để tìm đúng thứ tự từ",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Phrase searching with \"critical thinking\" finds the exact phrase only.",
+   "viDuNghia": "Tìm theo cụm với \"critical thinking\" chỉ ra đúng cụm đó."
+  },
+  {
+   "chu": "advanced search",
+   "doc": "/ədˈvænst sɜːrtʃ/",
+   "nghia": "tìm kiếm nâng cao: lọc theo tác giả, năm, loại tài liệu, ngôn ngữ…",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Use the advanced search to limit results to peer-reviewed articles since 2020.",
+   "viDuNghia": "Dùng tìm kiếm nâng cao để chỉ lấy bài bình duyệt từ năm 2020."
+  },
+  {
+   "chu": "search strategy",
+   "doc": "/sɜːrtʃ ˈstrætədʒi/",
+   "nghia": "chiến lược tìm kiếm: kế hoạch chọn từ khoá, cơ sở dữ liệu và bộ lọc",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "A good search strategy starts by listing the key words and their synonyms.",
+   "viDuNghia": "Chiến lược tìm kiếm tốt bắt đầu bằng việc liệt kê từ khoá và từ đồng nghĩa."
+  },
+  {
+   "chu": "Google Scholar",
+   "doc": "/ˈɡuːɡəl ˈskɒlər/",
+   "nghia": "Google Scholar: công cụ tìm kiếm tài liệu học thuật (bài báo, luận văn, sách)",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Google Scholar shows how many times an article has been cited.",
+   "viDuNghia": "Google Scholar cho biết một bài báo được trích dẫn bao nhiêu lần."
+  },
+  {
+   "chu": "open access",
+   "doc": "/ˈoʊpən ˈæksɛs/",
+   "nghia": "truy cập mở: tài liệu học thuật đọc miễn phí trên mạng",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Open access journals let anyone read their articles for free.",
+   "viDuNghia": "Tạp chí truy cập mở cho mọi người đọc bài miễn phí."
+  },
+  {
+   "chu": "impact factor",
+   "doc": "/ˈɪmpækt ˈfæktər/",
+   "nghia": "chỉ số ảnh hưởng: số lần trích dẫn trung bình của bài trên một tạp chí — đo uy tín tạp chí",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "A journal with a high impact factor is cited often by other researchers.",
+   "viDuNghia": "Tạp chí có chỉ số ảnh hưởng cao được các nhà nghiên cứu khác trích dẫn nhiều."
+  },
+  {
+   "chu": "digital object identifier",
+   "doc": "/ˈdɪdʒɪtəl ˈɒbdʒɛkt aɪˈdɛntɪfaɪər/",
+   "nghia": "mã DOI: mã định danh vĩnh viễn của một bài báo/tài liệu số",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Include the DOI (digital object identifier) at the end of the reference.",
+   "viDuNghia": "Ghi mã DOI ở cuối mục tham khảo."
+  },
+  {
+   "chu": "edited book",
+   "doc": "/ˈɛdɪtɪd bʊk/",
+   "nghia": "sách biên tập: sách gồm nhiều chương của các tác giả khác nhau, do biên tập viên tập hợp",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Textbooks, edited nonfiction books, single-author nonfiction books.",
+   "viDuNghia": "Giáo trình, sách phi hư cấu biên tập, sách phi hư cấu một tác giả."
+  },
+  {
+   "chu": "nonfiction",
+   "doc": "/ˌnɒnˈfɪkʃən/",
+   "nghia": "phi hư cấu: tài liệu viết về sự thật (khác tiểu thuyết)",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Biographies and history books are nonfiction.",
+   "viDuNghia": "Tiểu sử và sách lịch sử là sách phi hư cấu."
+  },
+  {
+   "chu": "reprint",
+   "doc": "/ˈriːprɪnt/",
+   "nghia": "bản in lại: tài liệu được in lại (có thể ghi năm xuất bản gốc)",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Cite the original year if you use a reprint of an old book.",
+   "viDuNghia": "Ghi năm gốc nếu dùng bản in lại của một sách cũ."
+  },
+  {
+   "chu": "in press",
+   "doc": "/ɪn prɛs/",
+   "nghia": "đang in: bài đã được nhận đăng nhưng chưa xuất bản",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "When an article has been accepted but not yet published, write (in press) instead of the year.",
+   "viDuNghia": "Khi bài đã được nhận nhưng chưa xuất bản, viết (in press) thay cho năm."
+  },
+  {
+   "chu": "retrieved from",
+   "doc": "/rɪˈtriːvd frɒm/",
+   "nghia": "lấy từ (địa chỉ): cụm dùng trước URL trong mục tham khảo",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Retrieved from https://www.example.org/report",
+   "viDuNghia": "Lấy từ https://www.example.org/report."
+  },
+  {
+   "chu": "ibid",
+   "doc": "/ˈɪbɪd/",
+   "nghia": "ibid. (Latinh ibidem): \"như trên\" — trích cùng nguồn với chú thích ngay trước",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Ibid. is used in footnotes when the source is the same as the one before.",
+   "viDuNghia": "Ibid. dùng trong chú thích khi nguồn giống nguồn ngay trước đó."
+  },
+  {
+   "chu": "Harvard style",
+   "doc": "/ˈhɑːrvərd staɪl/",
+   "nghia": "kiểu trích dẫn Harvard: tác giả – năm trong bài, danh mục xếp theo ABC",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "In Harvard style, the in-text citation looks like (Smith 2020, p. 15).",
+   "viDuNghia": "Theo kiểu Harvard, trích dẫn trong bài có dạng (Smith 2020, tr. 15)."
+  },
+  {
+   "chu": "reference management software",
+   "doc": "/ˈrɛfərəns ˈmænɪdʒmənt ˈsɒftwɛər/",
+   "nghia": "phần mềm quản lý tài liệu tham khảo (Zotero, Mendeley): lưu nguồn và tự tạo trích dẫn",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Reference management software such as Zotero can format your reference list automatically.",
+   "viDuNghia": "Phần mềm quản lý tài liệu như Zotero tự định dạng danh mục tham khảo."
+  },
+  {
+   "chu": "reliable source",
+   "doc": "/rɪˈlaɪəbl sɔːrs/",
+   "nghia": "nguồn đáng tin cậy: có tác giả rõ ràng, được kiểm duyệt, có bằng chứng",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Wikipedia is not an entirely reliable source for academic writing.",
+   "viDuNghia": "Wikipedia không hoàn toàn là nguồn đáng tin cậy cho bài viết học thuật."
+  },
+  {
+   "chu": "fact-checking",
+   "doc": "/fækt ˈtʃɛkɪŋ/",
+   "nghia": "kiểm chứng thông tin: đối chiếu một tuyên bố với nhiều nguồn tin cậy",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Fact-checking a news story means comparing it with several reliable sources.",
+   "viDuNghia": "Kiểm chứng một tin tức nghĩa là so nó với nhiều nguồn đáng tin."
+  },
+  {
+   "chu": "disinformation",
+   "doc": "/ˌdɪsɪnfərˈmeɪʃən/",
+   "nghia": "tin sai cố ý: thông tin sai được tung ra để lừa người đọc (khác misinformation là sai vô tình)",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Disinformation is false information spread on purpose.",
+   "viDuNghia": "Tin sai cố ý là thông tin sai được lan truyền có chủ đích."
+  },
+  {
+   "chu": "Creative Commons",
+   "doc": "/kriˈeɪtɪv ˈkɒmənz/",
+   "nghia": "giấy phép Creative Commons (CC): cho phép dùng lại tác phẩm với điều kiện ghi nguồn (BY), chia sẻ tương tự (SA)…",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "The image is licensed under Creative Commons CC BY-SA, so you must credit the author.",
+   "viDuNghia": "Hình được cấp phép Creative Commons CC BY-SA nên phải ghi tên tác giả."
+  },
+  {
+   "chu": "attribution",
+   "doc": "/ˌætrɪˈbjuːʃən/",
+   "nghia": "sự ghi nguồn: nêu rõ tác giả và nguồn của ý tưởng, hình ảnh, câu trích",
+   "nhom": "Thư viện & tìm tài liệu",
+   "viDu": "Every image taken from the internet needs proper attribution.",
+   "viDuNghia": "Mọi hình lấy từ Internet đều cần ghi nguồn đúng cách."
+  },
+  {
+   "chu": "collusion",
+   "doc": "/kəˈluːʒən/",
+   "nghia": "thông đồng: làm chung bài cá nhân rồi nộp như bài riêng",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "Sharing your answers with a friend for an individual assignment is collusion.",
+   "viDuNghia": "Đưa đáp án cho bạn trong bài cá nhân là thông đồng."
+  },
+  {
+   "chu": "contract cheating",
+   "doc": "/ˈkɒntrækt ˈtʃiːtɪŋ/",
+   "nghia": "gian lận thuê làm: trả tiền/nhờ người khác làm bài rồi nộp như của mình",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "Paying someone to write your essay is contract cheating.",
+   "viDuNghia": "Trả tiền cho người khác viết bài luận là gian lận thuê làm."
+  },
+  {
+   "chu": "ghostwriting",
+   "doc": "/ˈɡoʊstraɪtɪŋ/",
+   "nghia": "viết thuê (viết hộ): người khác viết bài, mình đứng tên",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "Ghostwriting an assignment for another student breaks academic integrity.",
+   "viDuNghia": "Viết hộ bài cho sinh viên khác là vi phạm liêm chính học thuật."
+  },
+  {
+   "chu": "impersonation",
+   "doc": "/ɪmˌpɜːrsəˈneɪʃən/",
+   "nghia": "thi hộ, mạo danh: người khác giả làm mình để thi hoặc làm bài",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "Sitting an exam for another student is impersonation.",
+   "viDuNghia": "Đi thi thay sinh viên khác là mạo danh."
+  },
+  {
+   "chu": "data fabrication",
+   "doc": "/ˈdeɪtə ˌfæbrɪˈkeɪʃən/",
+   "nghia": "bịa dữ liệu: tạo ra số liệu không hề thu thập",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "Inventing survey results that were never collected is data fabrication.",
+   "viDuNghia": "Bịa ra kết quả khảo sát chưa từng thu là bịa dữ liệu."
+  },
+  {
+   "chu": "data falsification",
+   "doc": "/ˈdeɪtə ˌfɔːlsɪfɪˈkeɪʃən/",
+   "nghia": "làm sai lệch dữ liệu: sửa hoặc bỏ bớt số liệu thật cho đẹp kết quả",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "Removing results that do not support your hypothesis is data falsification.",
+   "viDuNghia": "Bỏ các kết quả không ủng hộ giả thuyết là làm sai lệch dữ liệu."
+  },
+  {
+   "chu": "paraphrasing tool",
+   "doc": "/ˈpærəfreɪzɪŋ tuːl/",
+   "nghia": "công cụ diễn đạt lại: phần mềm tự đổi từ ngữ — dùng để giấu đạo văn vẫn là vi phạm",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "Using a paraphrasing tool to hide copied text is still plagiarism.",
+   "viDuNghia": "Dùng công cụ diễn đạt lại để che đoạn chép vẫn là đạo văn."
+  },
+  {
+   "chu": "Turnitin",
+   "doc": "/ˈtɜːrnɪtɪn/",
+   "nghia": "Turnitin: phần mềm kiểm tra trùng lặp (đạo văn) bài nộp",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "The lecturer checks every report with Turnitin before grading.",
+   "viDuNghia": "Giảng viên kiểm mọi báo cáo bằng Turnitin trước khi chấm."
+  },
+  {
+   "chu": "similarity report",
+   "doc": "/ˌsɪmɪˈlærɪti rɪˈpɔːrt/",
+   "nghia": "báo cáo trùng lặp: tỉ lệ và vị trí các đoạn giống nguồn khác",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "A high score in the similarity report does not always mean plagiarism.",
+   "viDuNghia": "Điểm cao trong báo cáo trùng lặp không luôn có nghĩa là đạo văn."
+  },
+  {
+   "chu": "plagiarism detection",
+   "doc": "/ˈpleɪdʒərɪzəm dɪˈtɛkʃən/",
+   "nghia": "phát hiện đạo văn: dùng phần mềm so bài với kho văn bản",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "Plagiarism detection software compares your work with millions of documents.",
+   "viDuNghia": "Phần mềm phát hiện đạo văn so bài của bạn với hàng triệu tài liệu."
+  },
+  {
+   "chu": "direct quotation",
+   "doc": "/dəˈrɛkt kwoʊˈteɪʃən/",
+   "nghia": "trích dẫn nguyên văn: chép đúng từng chữ, đặt trong ngoặc kép và ghi nguồn, số trang",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "A direct quotation must be placed in quotation marks with the page number.",
+   "viDuNghia": "Trích dẫn nguyên văn phải đặt trong ngoặc kép kèm số trang."
+  },
+  {
+   "chu": "authorship",
+   "doc": "/ˈɔːθərʃɪp/",
+   "nghia": "quyền tác giả, tư cách tác giả: ai được đứng tên là người viết",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "Only people who made a real contribution should be given authorship.",
+   "viDuNghia": "Chỉ người đóng góp thật mới được đứng tên tác giả."
+  },
+  {
+   "chu": "acknowledgement",
+   "doc": "/əkˈnɒlɪdʒmənt/",
+   "nghia": "lời ghi nhận, lời cảm ơn: ghi công người/nguồn đã giúp",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "Thank the people who helped you in the acknowledgement section.",
+   "viDuNghia": "Cảm ơn những người đã giúp bạn trong phần lời cảm ơn."
+  },
+  {
+   "chu": "unassisted",
+   "doc": "/ˌʌnəˈsɪstɪd/",
+   "nghia": "không có trợ giúp: tự làm, không nhờ người hay công cụ",
+   "nhom": "Liêm chính & vi phạm học thuật",
+   "viDu": "Exams test what you can do unassisted.",
+   "viDuNghia": "Bài thi kiểm tra những gì bạn tự làm được mà không có trợ giúp."
+  },
+  {
+   "chu": "Toulmin model",
+   "doc": "/ˈtuːlmɪn ˈmɒdəl/",
+   "nghia": "mô hình lập luận Toulmin: luận điểm (claim), căn cứ (grounds), lý lẽ bảo đảm (warrant), hỗ trợ (backing), mức độ (qualifier), phản bác (rebuttal)",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "According to the Toulmin model, the warrant connects the evidence to the claim.",
+   "viDuNghia": "Theo mô hình Toulmin, lý lẽ bảo đảm nối bằng chứng với luận điểm."
+  },
+  {
+   "chu": "backing",
+   "doc": "/ˈbækɪŋ/",
+   "nghia": "sự hỗ trợ (Toulmin): bằng chứng thêm làm vững lý lẽ bảo đảm",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "Backing gives extra support to the warrant when the audience doubts it.",
+   "viDuNghia": "Phần hỗ trợ củng cố lý lẽ bảo đảm khi người nghe còn nghi ngờ."
+  },
+  {
+   "chu": "modal qualifier",
+   "doc": "/ˈmoʊdəl ˈkwɒlɪfaɪər/",
+   "nghia": "từ chỉ mức độ (qualifier, Toulmin): \"probably\", \"in most cases\" — cho biết luận điểm mạnh tới đâu",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "Words such as \"usually\" and \"probably\" act as a modal qualifier.",
+   "viDuNghia": "Những từ như \"usually\" và \"probably\" đóng vai trò từ chỉ mức độ."
+  },
+  {
+   "chu": "counterclaim",
+   "doc": "/ˈkaʊntərkleɪm/",
+   "nghia": "luận điểm đối lập: ý kiến ngược với luận điểm của mình mà bài cần trả lời",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "A strong essay presents a counterclaim and then refutes it.",
+   "viDuNghia": "Bài luận mạnh nêu luận điểm đối lập rồi bác bỏ nó."
+  },
+  {
+   "chu": "evidence-based",
+   "doc": "/ˈɛvɪdəns beɪst/",
+   "nghia": "dựa trên bằng chứng: kết luận dựa vào dữ liệu, nghiên cứu, không dựa cảm tính",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "Policies should be evidence-based rather than based on opinion.",
+   "viDuNghia": "Chính sách nên dựa trên bằng chứng chứ không dựa vào ý kiến."
+  },
+  {
+   "chu": "anecdotal evidence",
+   "doc": "/ˌænɪkˈdoʊtəl ˈɛvɪdəns/",
+   "nghia": "bằng chứng giai thoại: chuyện cá nhân lẻ tẻ, không đủ để khái quát",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "\"My friend smoked and lived to 90\" is only anecdotal evidence.",
+   "viDuNghia": "\"Bạn tôi hút thuốc mà sống tới 90\" chỉ là bằng chứng giai thoại."
+  },
+  {
+   "chu": "causation",
+   "doc": "/kɔːˈzeɪʃən/",
+   "nghia": "quan hệ nhân quả: A thật sự gây ra B (khác chỉ tương quan)",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "Correlation does not prove causation.",
+   "viDuNghia": "Tương quan không chứng minh được quan hệ nhân quả."
+  },
+  {
+   "chu": "logical fallacy",
+   "doc": "/ˈlɒdʒɪkəl ˈfæləsi/",
+   "nghia": "nguỵ biện logic: lỗi suy luận làm lập luận không hợp lệ",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "Attacking the person instead of the argument is a logical fallacy.",
+   "viDuNghia": "Công kích người nói thay vì lập luận là một nguỵ biện logic."
+  },
+  {
+   "chu": "slippery slope",
+   "doc": "/ˈslɪpəri sloʊp/",
+   "nghia": "nguỵ biện dốc trượt: cho rằng một bước nhỏ chắc chắn dẫn tới chuỗi hậu quả tồi tệ",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "\"If we allow phones in class, students will stop learning entirely\" is a slippery slope.",
+   "viDuNghia": "\"Cho dùng điện thoại trong lớp thì sinh viên sẽ bỏ học hẳn\" là nguỵ biện dốc trượt."
+  },
+  {
+   "chu": "false dilemma",
+   "doc": "/fɔːls dɪˈlɛmə/",
+   "nghia": "nguỵ biện lưỡng nan giả: chỉ đưa ra hai lựa chọn trong khi còn nhiều khả năng khác",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "\"Either you agree with me or you hate the team\" is a false dilemma.",
+   "viDuNghia": "\"Hoặc đồng ý với tôi hoặc bạn ghét cả nhóm\" là nguỵ biện lưỡng nan giả."
+  },
+  {
+   "chu": "appeal to authority",
+   "doc": "/əˈpiːl tuː ɔːˈθɒrɪti/",
+   "nghia": "nguỵ biện dựa uy tín: cho là đúng chỉ vì người nổi tiếng/quyền lực nói vậy",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "Believing a claim only because a celebrity said it is an appeal to authority.",
+   "viDuNghia": "Tin một điều chỉ vì người nổi tiếng nói là nguỵ biện dựa uy tín."
+  },
+  {
+   "chu": "circular reasoning",
+   "doc": "/ˈsɜːrkjʊlər ˈriːzənɪŋ/",
+   "nghia": "lập luận vòng quanh: dùng chính kết luận làm tiền đề",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "\"This source is reliable because it says it is reliable\" is circular reasoning.",
+   "viDuNghia": "\"Nguồn này đáng tin vì nó tự nói nó đáng tin\" là lập luận vòng quanh."
+  },
+  {
+   "chu": "red herring",
+   "doc": "/rɛd ˈhɛrɪŋ/",
+   "nghia": "đánh lạc hướng: đưa ra vấn đề không liên quan để né câu hỏi chính",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "Changing the topic to avoid the real question is a red herring.",
+   "viDuNghia": "Đổi chủ đề để né câu hỏi thật là nguỵ biện đánh lạc hướng."
+  },
+  {
+   "chu": "post hoc",
+   "doc": "/poʊst hɒk/",
+   "nghia": "nguỵ biện post hoc: thấy B xảy ra sau A liền cho A là nguyên nhân của B",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "\"I wore my lucky shirt and passed, so the shirt made me pass\" is a post hoc fallacy.",
+   "viDuNghia": "\"Mặc áo may mắn rồi đậu, vậy áo làm tôi đậu\" là nguỵ biện post hoc."
+  },
+  {
+   "chu": "loaded language",
+   "doc": "/ˈloʊdɪd ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ thiên kiến: từ mang cảm xúc mạnh để dắt người đọc (vd \"disaster\", \"heroic\")",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "News reports with loaded language try to make readers feel angry.",
+   "viDuNghia": "Bản tin dùng ngôn ngữ thiên kiến cố khiến người đọc tức giận."
+  },
+  {
+   "chu": "bias indicator",
+   "doc": "/ˈbaɪəs ˈɪndɪkeɪtər/",
+   "nghia": "dấu hiệu thiên lệch: chi tiết cho thấy nguồn không khách quan (chỉ một phía, từ cảm xúc, tài trợ)",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "Using only one side of the story is a bias indicator.",
+   "viDuNghia": "Chỉ dùng một phía câu chuyện là một dấu hiệu thiên lệch."
+  },
+  {
+   "chu": "hedging",
+   "doc": "/ˈhɛdʒɪŋ/",
+   "nghia": "rào đón: dùng từ thận trọng (may, might, suggest) để không khẳng định quá mức",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "It does not use necessary hedging, or cautious, language",
+   "viDuNghia": "Nó không dùng cách rào đón, tức ngôn ngữ thận trọng, cần thiết."
+  },
+  {
+   "chu": "tentative language",
+   "doc": "/ˈtɛntətɪv ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ dè dặt: cách nói không chắc chắn tuyệt đối (\"it appears that…\")",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "Academic writers use tentative language when the evidence is limited.",
+   "viDuNghia": "Người viết học thuật dùng ngôn ngữ dè dặt khi bằng chứng còn hạn chế."
+  },
+  {
+   "chu": "deduction",
+   "doc": "/dɪˈdʌkʃən/",
+   "nghia": "suy diễn: đi từ quy luật chung tới kết luận riêng chắc chắn",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "Deduction moves from a general rule to a specific conclusion.",
+   "viDuNghia": "Suy diễn đi từ quy luật chung tới kết luận cụ thể."
+  },
+  {
+   "chu": "induction",
+   "doc": "/ɪnˈdʌkʃən/",
+   "nghia": "quy nạp (lập luận): đi từ nhiều trường hợp riêng tới khái quát có thể đúng",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "Induction generalizes from many specific observations.",
+   "viDuNghia": "Quy nạp khái quát hoá từ nhiều quan sát cụ thể."
+  },
+  {
+   "chu": "abduction",
+   "doc": "/æbˈdʌkʃən/",
+   "nghia": "suy luận giải thích tốt nhất: chọn lời giải thích hợp lý nhất cho hiện tượng quan sát được",
+   "nhom": "Lập luận & nguỵ biện",
+   "viDu": "A doctor uses abduction to choose the most likely cause of the symptoms.",
+   "viDuNghia": "Bác sĩ dùng suy luận giải thích tốt nhất để chọn nguyên nhân khả dĩ nhất của triệu chứng."
+  },
+  {
+   "chu": "knowledge-lean problem",
+   "doc": "/ˈnɒlɪdʒ liːn ˈprɒbləm/",
+   "nghia": "bài toán ít tri thức: giải được mà không cần nhiều kiến thức chuyên môn (đố mẹo, xếp hình)",
+   "nhom": "Giải quyết vấn đề & tư duy thiết kế",
+   "viDu": "What is defined as Knowledge-Lean Problems?",
+   "viDuNghia": "Bài toán ít tri thức được định nghĩa là gì?"
+  },
+  {
+   "chu": "semantically lean problem",
+   "doc": "/sɪˈmæntɪkli liːn ˈprɒbləm/",
+   "nghia": "bài toán nghèo ngữ nghĩa: người giải chưa có kinh nghiệm với lĩnh vực của bài",
+   "nhom": "Giải quyết vấn đề & tư duy thiết kế",
+   "viDu": "Semantically lean problem",
+   "viDuNghia": "Bài toán nghèo ngữ nghĩa."
+  },
+  {
+   "chu": "semantically rich problem",
+   "doc": "/sɪˈmæntɪkli rɪtʃ ˈprɒbləm/",
+   "nghia": "bài toán giàu ngữ nghĩa: người giải có nhiều kinh nghiệm liên quan để vận dụng",
+   "nhom": "Giải quyết vấn đề & tư duy thiết kế",
+   "viDu": "Semantically rich problem",
+   "viDuNghia": "Bài toán giàu ngữ nghĩa."
+  },
+  {
+   "chu": "what is",
+   "doc": "/wɒt ɪz/",
+   "nghia": "\"What is?\" — câu hỏi 1 của tư duy thiết kế (Liedtka): khám phá thực trạng hiện tại",
+   "nhom": "Giải quyết vấn đề & tư duy thiết kế",
+   "viDu": "The first step in problem solving is to ask yourself \"what is the problem that you are trying to solve?\".",
+   "viDuNghia": "Bước đầu giải quyết vấn đề là tự hỏi \"vấn đề mình đang cố giải là gì?\"."
+  },
+  {
+   "chu": "what if",
+   "doc": "/wɒt ɪf/",
+   "nghia": "\"What if?\" — câu hỏi 2 (Liedtka): hình dung các khả năng, ý tưởng mới",
+   "nhom": "Giải quyết vấn đề & tư duy thiết kế",
+   "viDu": "In the \"what if\" stage, the team imagines many possible futures.",
+   "viDuNghia": "Ở giai đoạn \"what if\", nhóm hình dung nhiều tương lai khả dĩ."
+  },
+  {
+   "chu": "what wows",
+   "doc": "/wɒt waʊz/",
+   "nghia": "\"What wows?\" — câu hỏi 3 (Liedtka): chọn ý tưởng làm khách hàng thích thú nhất",
+   "nhom": "Giải quyết vấn đề & tư duy thiết kế",
+   "viDu": "In the \"what wows\" stage, the team picks the concepts that excite customers most.",
+   "viDuNghia": "Ở giai đoạn \"what wows\", nhóm chọn ý tưởng làm khách hàng thích nhất."
+  },
+  {
+   "chu": "what works",
+   "doc": "/wɒt wɜːrks/",
+   "nghia": "\"What works?\" — câu hỏi 4 (Liedtka): thử nghiệm với người dùng thật để xem cái gì hiệu quả",
+   "nhom": "Giải quyết vấn đề & tư duy thiết kế",
+   "viDu": "3 - 4 different solutions: You need to try a few to see what works best, and then present a few different options in your answer.",
+   "viDuNghia": "3–4 giải pháp: cần thử vài cái để xem cái nào hiệu quả nhất rồi trình bày vài phương án."
+  },
+  {
+   "chu": "empathize",
+   "doc": "/ˈɛmpəθaɪz/",
+   "nghia": "thấu cảm: bước đầu tư duy thiết kế — hiểu cảm nhận và nhu cầu thật của người dùng",
+   "nhom": "Giải quyết vấn đề & tư duy thiết kế",
+   "viDu": "Designers empathize with users by observing and interviewing them.",
+   "viDuNghia": "Nhà thiết kế thấu cảm với người dùng bằng cách quan sát và phỏng vấn họ."
+  },
+  {
+   "chu": "ideate",
+   "doc": "/ˈaɪdieɪt/",
+   "nghia": "lên ý tưởng: bước nghĩ ra thật nhiều giải pháp",
+   "nhom": "Giải quyết vấn đề & tư duy thiết kế",
+   "viDu": "After defining the problem, the team ideates as many solutions as possible.",
+   "viDuNghia": "Sau khi xác định vấn đề, nhóm nghĩ ra càng nhiều giải pháp càng tốt."
+  },
+  {
+   "chu": "conversation analyst",
+   "doc": "/ˌkɒnvərˈseɪʃən ˈænəlɪst/",
+   "nghia": "nhà phân tích hội thoại: người nghiên cứu cách người ta nói chuyện trong đời thực",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Conversation analysts study recordings of naturally occurring talk.",
+   "viDuNghia": "Nhà phân tích hội thoại nghiên cứu bản ghi lời nói tự nhiên."
+  },
+  {
+   "chu": "turn-taking",
+   "doc": "/tɜːrn ˈteɪkɪŋ/",
+   "nghia": "luân phiên lượt lời: cách người nói thay nhau nói trong hội thoại",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Turn-taking rules tell speakers when they may start talking.",
+   "viDuNghia": "Luật luân phiên lượt lời cho biết khi nào người nói được bắt đầu."
+  },
+  {
+   "chu": "transition relevance place",
+   "doc": "/trænˈzɪʃən ˈrɛləvəns pleɪs/",
+   "nghia": "điểm chuyển lượt (TRP): chỗ mà người nghe có thể nhận lượt nói",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "A pause at the end of a sentence is a transition relevance place.",
+   "viDuNghia": "Chỗ ngừng ở cuối câu là một điểm chuyển lượt."
+  },
+  {
+   "chu": "adjacency pair",
+   "doc": "/əˈdʒeɪsənsi pɛər/",
+   "nghia": "cặp kế cận: hai lượt đi liền nhau (hỏi – đáp, chào – chào, mời – nhận/từ chối)",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "A question and its answer form an adjacency pair.",
+   "viDuNghia": "Một câu hỏi và câu trả lời của nó tạo thành một cặp kế cận."
+  },
+  {
+   "chu": "preferred response",
+   "doc": "/prɪˈfɜːrd rɪˈspɒns/",
+   "nghia": "lượt đáp ưu tiên: câu trả lời được mong đợi, nói ngay và ngắn (nhận lời mời)",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Accepting an invitation is the preferred response.",
+   "viDuNghia": "Nhận lời mời là lượt đáp ưu tiên."
+  },
+  {
+   "chu": "dispreferred response",
+   "doc": "/ˌdɪsprɪˈfɜːrd rɪˈspɒns/",
+   "nghia": "lượt đáp không ưu tiên: câu từ chối/không đồng ý, thường có ngập ngừng và lời giải thích",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "A dispreferred response often starts with a pause or \"well\".",
+   "viDuNghia": "Lượt đáp không ưu tiên thường mở đầu bằng ngập ngừng hoặc \"well\"."
+  },
+  {
+   "chu": "trouble source",
+   "doc": "/ˈtrʌbl sɔːrs/",
+   "nghia": "nguồn trục trặc: chỗ trong lời nói gây hiểu lầm hoặc nghe không rõ, cần sửa",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "The word the listener did not hear is the trouble source.",
+   "viDuNghia": "Từ người nghe không nghe rõ là nguồn trục trặc."
+  },
+  {
+   "chu": "self-repair",
+   "doc": "/sɛlf rɪˈpɛər/",
+   "nghia": "tự sửa: người nói tự sửa lỗi trong lời của mình",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "\"I'll meet you on Monday, sorry, Tuesday\" is an example of self-repair.",
+   "viDuNghia": "\"Gặp bạn thứ Hai, à xin lỗi, thứ Ba\" là ví dụ tự sửa."
+  },
+  {
+   "chu": "other-initiated repair",
+   "doc": "/ˈʌðər ɪˈnɪʃieɪtɪd rɪˈpɛər/",
+   "nghia": "sửa do người khác khởi xướng: người nghe hỏi lại (\"Sorry?\", \"What?\") để người nói sửa",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "\"Sorry, what did you say?\" starts an other-initiated repair.",
+   "viDuNghia": "\"Xin lỗi, bạn nói gì cơ?\" mở đầu một lần sửa do người khác khởi xướng."
+  },
+  {
+   "chu": "transcription",
+   "doc": "/trænˈskrɪpʃən/",
+   "nghia": "bản ghi lời nói (phiên âm hội thoại): chép lại lời nói kèm ký hiệu ngừng, chồng lời",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Conversation analysts use a detailed transcription of pauses and overlaps.",
+   "viDuNghia": "Nhà phân tích hội thoại dùng bản ghi chi tiết các chỗ ngừng và chồng lời."
+  },
+  {
+   "chu": "filler word",
+   "doc": "/ˈfɪlər wɜːrd/",
+   "nghia": "từ đệm: \"um\", \"uh\", \"like\" — dùng nhiều làm bài nói kém chuyên nghiệp",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Too many filler words make a presentation sound unprepared.",
+   "viDuNghia": "Quá nhiều từ đệm làm bài thuyết trình nghe như chưa chuẩn bị."
+  },
+  {
+   "chu": "narration",
+   "doc": "/nəˈreɪʃən/",
+   "nghia": "lời dẫn, lời kể: phần lời nói đi kèm hình ảnh hoặc video",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Record the narration for each slide before the deadline.",
+   "viDuNghia": "Thu lời dẫn cho từng slide trước hạn nộp."
+  },
+  {
+   "chu": "infographic",
+   "doc": "/ˌɪnfoʊˈɡræfɪk/",
+   "nghia": "đồ hoạ thông tin: hình kết hợp số liệu, biểu tượng và chữ ngắn để truyền tải nhanh",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "An infographic can summarize survey results on one page.",
+   "viDuNghia": "Một đồ hoạ thông tin có thể tóm kết quả khảo sát trên một trang."
+  },
+  {
+   "chu": "signposting language",
+   "doc": "/ˈsaɪnpoʊstɪŋ ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ dẫn đường: cụm báo cho người nghe/đọc biết đang ở đâu (\"Firstly\", \"Moving on to…\")",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Signposting language such as \"Next, I will talk about…\" helps the audience follow.",
+   "viDuNghia": "Ngôn ngữ dẫn đường như \"Tiếp theo tôi sẽ nói về…\" giúp khán giả theo kịp."
+  },
+  {
+   "chu": "transition word",
+   "doc": "/trænˈzɪʃən wɜːrd/",
+   "nghia": "từ chuyển tiếp: however, therefore, in addition… nối các ý",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Use transition words to connect your paragraphs.",
+   "viDuNghia": "Dùng từ chuyển tiếp để nối các đoạn."
+  },
+  {
+   "chu": "pronoun",
+   "doc": "/ˈproʊnaʊn/",
+   "nghia": "đại từ: từ thay cho danh từ (it, they, this) — giúp văn liên kết",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Cohesion can be achieved by using pronouns to refer back to other parts of the text.",
+   "viDuNghia": "Tính liên kết đạt được nhờ dùng đại từ để chỉ lại các phần khác của bài."
+  },
+  {
+   "chu": "IMRD structure",
+   "doc": "/ˌaɪ ɛm ɑːr ˈdiː ˈstrʌktʃər/",
+   "nghia": "cấu trúc IMRD: Introduction – Methods – Results – Discussion của bài nghiên cứu",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Most research articles follow the IMRD structure.",
+   "viDuNghia": "Phần lớn bài báo nghiên cứu theo cấu trúc IMRD."
+  },
+  {
+   "chu": "question-and-answer session",
+   "doc": "/ˈkwɛstʃən ənd ˈænsər ˈsɛʃən/",
+   "nghia": "phần hỏi đáp: thời gian khán giả đặt câu hỏi sau bài thuyết trình",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Prepare for the question-and-answer session by predicting likely questions.",
+   "viDuNghia": "Chuẩn bị phần hỏi đáp bằng cách đoán trước các câu hỏi."
+  },
+  {
+   "chu": "closed question",
+   "doc": "/kloʊzd ˈkwɛstʃən/",
+   "nghia": "câu hỏi đóng: chỉ trả lời có/không hoặc chọn sẵn",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "\"Did you finish the report?\" is a closed question.",
+   "viDuNghia": "\"Bạn làm xong báo cáo chưa?\" là câu hỏi đóng."
+  },
+  {
+   "chu": "probing question",
+   "doc": "/ˈproʊbɪŋ ˈkwɛstʃən/",
+   "nghia": "câu hỏi thăm dò: hỏi sâu thêm để làm rõ ý (\"Why do you think so?\")",
+   "nhom": "Hội thoại & thuyết trình",
+   "viDu": "Ask probing questions to understand the real cause of the problem.",
+   "viDuNghia": "Đặt câu hỏi thăm dò để hiểu nguyên nhân thật của vấn đề."
+  },
+  {
+   "chu": "learning outcome",
+   "doc": "/ˈlɜːrnɪŋ ˈaʊtkʌm/",
+   "nghia": "chuẩn đầu ra: điều sinh viên phải biết/làm được khi học xong",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Each assessment is linked to one or more learning outcomes of the course.",
+   "viDuNghia": "Mỗi bài đánh giá gắn với một hay nhiều chuẩn đầu ra của môn."
+  },
+  {
+   "chu": "formative assessment",
+   "doc": "/ˈfɔːrmətɪv əˈsɛsmənt/",
+   "nghia": "đánh giá quá trình: kiểm tra trong lúc học để góp ý, ít hoặc không tính điểm",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Weekly quizzes are a kind of formative assessment.",
+   "viDuNghia": "Bài kiểm tra hằng tuần là một dạng đánh giá quá trình."
+  },
+  {
+   "chu": "summative assessment",
+   "doc": "/ˈsʌmətɪv əˈsɛsmənt/",
+   "nghia": "đánh giá tổng kết: bài thi cuối kỳ, tính điểm để xác định đạt hay không",
+   "nhom": "Học tập ở đại học",
+   "viDu": "The final exam is a summative assessment.",
+   "viDuNghia": "Bài thi cuối kỳ là đánh giá tổng kết."
+  },
+  {
+   "chu": "peer assessment",
+   "doc": "/pɪər əˈsɛsmənt/",
+   "nghia": "đánh giá đồng đẳng: sinh viên chấm/góp ý bài của nhau",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Peer assessment helps you learn by reviewing other students' work.",
+   "viDuNghia": "Đánh giá đồng đẳng giúp bạn học bằng cách xem bài của bạn khác."
+  },
+  {
+   "chu": "peer-led",
+   "doc": "/pɪər lɛd/",
+   "nghia": "do bạn học dẫn dắt: buổi học/nhóm do sinh viên tự điều phối",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Peer-led study groups help first-year students settle in.",
+   "viDuNghia": "Nhóm học do bạn học dẫn dắt giúp sinh viên năm nhất làm quen."
+  },
+  {
+   "chu": "cohort",
+   "doc": "/ˈkoʊhɔːrt/",
+   "nghia": "khoá (nhóm sinh viên nhập học cùng đợt)",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Students in the same cohort start and finish the program together.",
+   "viDuNghia": "Sinh viên cùng khoá bắt đầu và kết thúc chương trình cùng nhau."
+  },
+  {
+   "chu": "office hours",
+   "doc": "/ˈɒfɪs aʊərz/",
+   "nghia": "giờ tiếp sinh viên: khung giờ giảng viên ngồi tại phòng để giải đáp",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Visit your lecturer during office hours if you do not understand the feedback.",
+   "viDuNghia": "Đến gặp giảng viên trong giờ tiếp sinh viên nếu chưa hiểu nhận xét."
+  },
+  {
+   "chu": "academic advisor",
+   "doc": "/ˌækəˈdɛmɪk ədˈvaɪzər/",
+   "nghia": "cố vấn học tập: người hướng dẫn chọn môn, lộ trình học",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Talk to your academic advisor before dropping a course.",
+   "viDuNghia": "Trao đổi với cố vấn học tập trước khi bỏ một môn."
+  },
+  {
+   "chu": "learning management system",
+   "doc": "/ˈlɜːrnɪŋ ˈmænɪdʒmənt ˈsɪstəm/",
+   "nghia": "hệ thống quản lý học tập (LMS): nơi đăng tài liệu, nộp bài, xem điểm",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Download the slides from the learning management system.",
+   "viDuNghia": "Tải slide từ hệ thống quản lý học tập."
+  },
+  {
+   "chu": "lecture slides",
+   "doc": "/ˈlɛktʃər slaɪdz/",
+   "nghia": "slide bài giảng",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Lecture slides are only a summary; read the textbook for details.",
+   "viDuNghia": "Slide bài giảng chỉ là tóm tắt; đọc giáo trình để biết chi tiết."
+  },
+  {
+   "chu": "grade point average",
+   "doc": "/ɡreɪd pɔɪnt ˈævərɪdʒ/",
+   "nghia": "điểm trung bình tích luỹ (GPA)",
+   "nhom": "Học tập ở đại học",
+   "viDu": "You need a grade point average of 3.0 to keep the scholarship.",
+   "viDuNghia": "Bạn cần GPA 3,0 để giữ học bổng."
+  },
+  {
+   "chu": "massive open online course",
+   "doc": "/ˈmæsɪv ˈoʊpən ˈɒnlaɪn kɔːrs/",
+   "nghia": "khoá học trực tuyến mở đại trà (MOOC) như Coursera",
+   "nhom": "Học tập ở đại học",
+   "viDu": "SSL101c is delivered as a massive open online course on Coursera.",
+   "viDuNghia": "SSL101c được dạy dưới dạng khoá học trực tuyến mở trên Coursera."
+  },
+  {
+   "chu": "note-taking",
+   "doc": "/noʊt ˈteɪkɪŋ/",
+   "nghia": "ghi chép (khi nghe giảng, khi đọc)",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Good note-taking means writing key ideas in your own words.",
+   "viDuNghia": "Ghi chép tốt là viết ý chính bằng lời của mình."
+  },
+  {
+   "chu": "Cornell method",
+   "doc": "/kɔːrˈnɛl ˈmɛθəd/",
+   "nghia": "phương pháp ghi chép Cornell: trang chia cột gợi ý, cột ghi chép và phần tóm tắt cuối trang",
+   "nhom": "Học tập ở đại học",
+   "viDu": "The Cornell method divides the page into cues, notes and a summary.",
+   "viDuNghia": "Phương pháp Cornell chia trang thành cột gợi ý, ghi chép và tóm tắt."
+  },
+  {
+   "chu": "skimming",
+   "doc": "/ˈskɪmɪŋ/",
+   "nghia": "đọc lướt: đọc nhanh để nắm ý chính",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Skimming the abstract tells you if the article is relevant.",
+   "viDuNghia": "Đọc lướt phần tóm tắt cho biết bài có liên quan không."
+  },
+  {
+   "chu": "scanning",
+   "doc": "/ˈskænɪŋ/",
+   "nghia": "đọc dò: đọc nhanh để tìm một thông tin cụ thể (tên, số, năm)",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Use scanning to find the date in a long article.",
+   "viDuNghia": "Dùng đọc dò để tìm ngày tháng trong một bài dài."
+  },
+  {
+   "chu": "active reading",
+   "doc": "/ˈæktɪv ˈriːdɪŋ/",
+   "nghia": "đọc chủ động: vừa đọc vừa đặt câu hỏi, gạch chân, ghi chú",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Active reading means asking questions and making notes while you read.",
+   "viDuNghia": "Đọc chủ động là vừa đọc vừa đặt câu hỏi và ghi chú."
+  },
+  {
+   "chu": "SMART goal",
+   "doc": "/smɑːrt ɡoʊl/",
+   "nghia": "mục tiêu SMART: cụ thể, đo được, khả thi, liên quan, có thời hạn",
+   "nhom": "Học tập ở đại học",
+   "viDu": "\"Finish two practice tests by Friday\" is a SMART goal.",
+   "viDuNghia": "\"Làm xong hai đề luyện trước thứ Sáu\" là một mục tiêu SMART."
+  },
+  {
+   "chu": "achievable",
+   "doc": "/əˈtʃiːvəbl/",
+   "nghia": "khả thi (chữ A trong SMART)",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Make sure your study goal is achievable with the time you have.",
+   "viDuNghia": "Bảo đảm mục tiêu học tập khả thi với thời gian bạn có."
+  },
+  {
+   "chu": "time-bound",
+   "doc": "/taɪm baʊnd/",
+   "nghia": "có thời hạn (chữ T trong SMART)",
+   "nhom": "Học tập ở đại học",
+   "viDu": "A time-bound goal has a clear deadline.",
+   "viDuNghia": "Mục tiêu có thời hạn có hạn chót rõ ràng."
+  },
+  {
+   "chu": "take-away",
+   "doc": "/ˈteɪk əweɪ/",
+   "nghia": "điều đọng lại: ý chính người học/người nghe mang về",
+   "nhom": "Học tập ở đại học",
+   "viDu": "What is the main take-away from this lesson?",
+   "viDuNghia": "Điều đọng lại chính của bài học này là gì?"
+  },
+  {
+   "chu": "distractor",
+   "doc": "/dɪˈstræktər/",
+   "nghia": "phương án nhiễu: đáp án sai được viết giống đúng trong câu trắc nghiệm",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Read every option carefully because a distractor may look almost correct.",
+   "viDuNghia": "Đọc kỹ mọi phương án vì phương án nhiễu có thể trông gần như đúng."
+  },
+  {
+   "chu": "multiple-choice question",
+   "doc": "/ˈmʌltɪpl tʃɔɪs ˈkwɛstʃən/",
+   "nghia": "câu hỏi trắc nghiệm nhiều lựa chọn",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Each multiple-choice question has only one correct answer unless stated otherwise.",
+   "viDuNghia": "Mỗi câu trắc nghiệm chỉ có một đáp án đúng trừ khi ghi khác."
+  },
+  {
+   "chu": "reflective journal",
+   "doc": "/rɪˈflɛktɪv ˈdʒɜːrnəl/",
+   "nghia": "nhật ký phản tư: ghi lại điều đã học, cảm nhận và việc sẽ làm khác đi",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Write a reflective journal entry after each group meeting.",
+   "viDuNghia": "Viết một trang nhật ký phản tư sau mỗi buổi họp nhóm."
+  },
+  {
+   "chu": "learning log",
+   "doc": "/ˈlɜːrnɪŋ lɒɡ/",
+   "nghia": "sổ ghi việc học: ghi đều đặn mình học gì, mất bao lâu, gặp khó gì",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Keep a learning log to see how you spend your study time.",
+   "viDuNghia": "Giữ sổ ghi việc học để thấy mình dùng thời gian học thế nào."
+  },
+  {
+   "chu": "self-regulated learning",
+   "doc": "/sɛlf ˈrɛɡjʊleɪtɪd ˈlɜːrnɪŋ/",
+   "nghia": "tự điều chỉnh việc học: tự đặt mục tiêu, theo dõi và điều chỉnh cách học",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Self-regulated learning includes planning, monitoring and evaluating your study.",
+   "viDuNghia": "Tự điều chỉnh việc học gồm lập kế hoạch, theo dõi và đánh giá việc học."
+  },
+  {
+   "chu": "stress management",
+   "doc": "/strɛs ˈmænɪdʒmənt/",
+   "nghia": "quản lý căng thẳng: cách giữ bình tĩnh, cân bằng khi nhiều áp lực",
+   "nhom": "Học tập ở đại học",
+   "viDu": "Good sleep and exercise are part of stress management during exams.",
+   "viDuNghia": "Ngủ đủ và tập thể dục là một phần của quản lý căng thẳng mùa thi."
+  }
+ ]
+}

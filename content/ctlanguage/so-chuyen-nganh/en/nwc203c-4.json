@@ -1,0 +1,770 @@
+{
+ "ma": "nwc203c-4",
+ "nn": "en",
+ "ten": "NWC203c · 4. Mã hoá tín hiệu, truy cập kênh, định tuyến",
+ "moTa": "Bổ sung NWC203c theo giáo trình và đề: mã hoá đường truyền và điều chế, định lý Nyquist/Shannon, sửa lỗi Hamming, các kiểu CSMA và lùi nhị phân, HTTP bền vững, truy vấn DNS, đếm tới vô cùng, BGP, IP di động, cơ chế TCP (AIMD, truyền lại nhanh) và QoS đa phương tiện.",
+ "bieuTuong": "waveform.path",
+ "thuTu": -959,
+ "tu": [
+  {
+   "chu": "line coding",
+   "doc": "/laɪn ˈkoʊdɪŋ/",
+   "nghia": "mã hoá đường truyền: quy tắc biến chuỗi bit thành tín hiệu số trên dây (NRZ, Manchester)",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "Line coding converts a sequence of bits into a digital signal.",
+   "viDuNghia": "Mã hoá đường truyền biến một chuỗi bit thành tín hiệu số."
+  },
+  {
+   "chu": "non-return-to-zero",
+   "doc": "/ˌnɑːn rɪˈtɜːrn tə ˈzɪroʊ/",
+   "nghia": "NRZ: mã hoá mức điện áp cố định trong cả chu kỳ bit; chuỗi bit giống nhau dài dễ mất đồng bộ",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "Long runs of identical bits in non-return-to-zero coding can cause loss of synchronization.",
+   "viDuNghia": "Chuỗi dài các bit giống nhau trong mã NRZ có thể gây mất đồng bộ."
+  },
+  {
+   "chu": "Manchester encoding",
+   "doc": "/ˈmæntʃestər ɪnˈkoʊdɪŋ/",
+   "nghia": "mã Manchester: mỗi bit có một lần chuyển mức ở giữa chu kỳ, tự mang xung đồng hồ (Ethernet 10 Mbps)",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "Manchester encoding has a transition in the middle of every bit, so the clock can be recovered.",
+   "viDuNghia": "Mã Manchester có chuyển mức ở giữa mọi bit nên khôi phục được xung đồng hồ."
+  },
+  {
+   "chu": "modulation",
+   "doc": "/ˌmɑːdʒəˈleɪʃn/",
+   "nghia": "điều chế: thay đổi biên độ, tần số hoặc pha của sóng mang để chở dữ liệu",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "A modem uses modulation to send digital data over an analog line.",
+   "viDuNghia": "Modem dùng điều chế để gửi dữ liệu số qua đường dây tương tự."
+  },
+  {
+   "chu": "amplitude shift keying",
+   "doc": "/ˈæmplɪtuːd ʃɪft ˈkiːɪŋ/",
+   "nghia": "khoá dịch biên độ (ASK): biểu diễn bit bằng các mức biên độ khác nhau của sóng mang",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "Amplitude shift keying is very sensitive to noise.",
+   "viDuNghia": "Khoá dịch biên độ rất nhạy với nhiễu."
+  },
+  {
+   "chu": "frequency shift keying",
+   "doc": "/ˈfriːkwənsi ʃɪft ˈkiːɪŋ/",
+   "nghia": "khoá dịch tần (FSK): biểu diễn bit bằng các tần số sóng mang khác nhau",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "Frequency shift keying uses one frequency for 0 and another for 1.",
+   "viDuNghia": "Khoá dịch tần dùng một tần số cho bit 0 và một tần số khác cho bit 1."
+  },
+  {
+   "chu": "phase shift keying",
+   "doc": "/feɪz ʃɪft ˈkiːɪŋ/",
+   "nghia": "khoá dịch pha (PSK): biểu diễn bit bằng các góc pha khác nhau của sóng mang",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "Phase shift keying changes the phase of the carrier to represent data.",
+   "viDuNghia": "Khoá dịch pha thay đổi pha của sóng mang để biểu diễn dữ liệu."
+  },
+  {
+   "chu": "quadrature amplitude modulation",
+   "doc": "/ˈkwɑːdrətʃər ˈæmplɪtuːd ˌmɑːdʒəˈleɪʃn/",
+   "nghia": "điều chế biên độ cầu phương (QAM): kết hợp biên độ và pha để mỗi ký hiệu chở nhiều bit",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "16-QAM carries 4 bits per symbol by combining amplitude and phase.",
+   "viDuNghia": "16-QAM chở 4 bit mỗi ký hiệu nhờ kết hợp biên độ và pha."
+  },
+  {
+   "chu": "Nyquist theorem",
+   "doc": "/ˈnaɪkwɪst ˈθɪərəm/",
+   "nghia": "định lý Nyquist: kênh không nhiễu băng thông B, dùng V mức tín hiệu có tốc độ tối đa 2B log2 V bit/s",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "By the Nyquist theorem, a 3 kHz noiseless channel with binary signals carries at most 6 kbps.",
+   "viDuNghia": "Theo định lý Nyquist, kênh 3 kHz không nhiễu với tín hiệu nhị phân chở tối đa 6 kbps."
+  },
+  {
+   "chu": "Shannon capacity",
+   "doc": "/ˈʃænən kəˈpæsəti/",
+   "nghia": "dung lượng Shannon: tốc độ tối đa của kênh có nhiễu, C = B log2(1 + S/N)",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "The Shannon capacity sets an upper limit that no coding scheme can exceed.",
+   "viDuNghia": "Dung lượng Shannon đặt ra giới hạn trên mà không cách mã hoá nào vượt được."
+  },
+  {
+   "chu": "signal-to-noise ratio",
+   "doc": "/ˈsɪɡnəl tə nɔɪz ˈreɪʃioʊ/",
+   "nghia": "tỉ số tín hiệu trên nhiễu (SNR): công suất tín hiệu chia công suất nhiễu, thường tính bằng dB",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "A higher signal-to-noise ratio allows a higher data rate.",
+   "viDuNghia": "Tỉ số tín hiệu trên nhiễu càng cao thì tốc độ dữ liệu càng cao."
+  },
+  {
+   "chu": "pulse code modulation",
+   "doc": "/pʌls koʊd ˌmɑːdʒəˈleɪʃn/",
+   "nghia": "điều chế xung mã (PCM): lấy mẫu, lượng tử hoá và mã hoá tín hiệu tương tự thành bit",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "Telephone voice is digitized with pulse code modulation at 8000 samples per second.",
+   "viDuNghia": "Giọng nói điện thoại được số hoá bằng PCM với 8000 mẫu mỗi giây."
+  },
+  {
+   "chu": "wavelength-division multiplexing",
+   "doc": "/ˈweɪvleŋθ dɪˈvɪʒn ˈmʌltɪpleksɪŋ/",
+   "nghia": "ghép kênh theo bước sóng (WDM): nhiều tia sáng bước sóng khác nhau đi chung một sợi quang",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "Wavelength-division multiplexing sends many light signals over a single fiber.",
+   "viDuNghia": "Ghép kênh theo bước sóng gửi nhiều tín hiệu ánh sáng trên một sợi quang."
+  },
+  {
+   "chu": "statistical multiplexing",
+   "doc": "/stəˈtɪstɪkl ˈmʌltɪpleksɪŋ/",
+   "nghia": "ghép kênh thống kê: cấp băng thông theo nhu cầu thực tế, không giữ khe cố định cho mỗi nguồn",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "Packet switching relies on statistical multiplexing of bursty traffic.",
+   "viDuNghia": "Chuyển mạch gói dựa vào ghép kênh thống kê cho lưu lượng bùng phát."
+  },
+  {
+   "chu": "asynchronous TDM",
+   "doc": "/eɪˈsɪŋkrənəs ˌtiː diː ˈem/",
+   "nghia": "TDM bất đồng bộ (thống kê): khe thời gian chỉ cấp cho nguồn đang có dữ liệu, kèm địa chỉ",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "Asynchronous TDM",
+   "viDuNghia": "TDM bất đồng bộ"
+  },
+  {
+   "chu": "SONET",
+   "doc": "/ˈsɑːnet/",
+   "nghia": "SONET (Synchronous Optical Network): chuẩn truyền dẫn quang đồng bộ của mạng lõi nhà mạng",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "SONET multiplexes many telephone channels onto optical fiber.",
+   "viDuNghia": "SONET ghép nhiều kênh điện thoại lên sợi quang."
+  },
+  {
+   "chu": "virtual circuit",
+   "doc": "/ˈvɜːrtʃuəl ˈsɜːrkɪt/",
+   "nghia": "mạch ảo: đường đi được thiết lập trước khi gửi, mọi gói đi cùng đường theo thứ tự",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "In a virtual circuit network, all packets of a connection follow the same path.",
+   "viDuNghia": "Trong mạng mạch ảo, mọi gói của một kết nối đi cùng một đường."
+  },
+  {
+   "chu": "datagram network",
+   "doc": "/ˈdeɪtəɡræm ˈnetwɜːrk/",
+   "nghia": "mạng datagram: mỗi gói được định tuyến độc lập, có thể đi đường khác và tới sai thứ tự",
+   "nhom": "Tầng vật lý và mã hoá",
+   "viDu": "The Internet is a datagram network, so packets may arrive out of order.",
+   "viDuNghia": "Internet là mạng datagram nên gói có thể tới sai thứ tự."
+  },
+  {
+   "chu": "Hamming distance",
+   "doc": "/ˈhæmɪŋ ˈdɪstəns/",
+   "nghia": "khoảng cách Hamming: số vị trí bit khác nhau giữa hai từ mã; khoảng cách d phát hiện được d-1 lỗi",
+   "nhom": "Kiểm lỗi và đóng khung",
+   "viDu": "To correct d single-bit errors, a code needs a Hamming distance of 2d + 1.",
+   "viDuNghia": "Để sửa d lỗi một bit, bộ mã cần khoảng cách Hamming 2d + 1."
+  },
+  {
+   "chu": "forward error correction",
+   "doc": "/ˈfɔːrwərd ˈerər kəˈrekʃn/",
+   "nghia": "sửa lỗi tiến (FEC): gửi kèm bit dư để bên nhận tự sửa lỗi, không cần truyền lại",
+   "nhom": "Kiểm lỗi và đóng khung",
+   "viDu": "Forward error correction is preferred on links where retransmission is too slow.",
+   "viDuNghia": "Sửa lỗi tiến được ưu tiên trên đường truyền mà truyền lại quá chậm."
+  },
+  {
+   "chu": "two-dimensional parity",
+   "doc": "/ˌtuː dəˈmenʃənl ˈpærəti/",
+   "nghia": "chẵn lẻ hai chiều: thêm bit chẵn lẻ cho từng hàng và từng cột, sửa được một lỗi đơn",
+   "nhom": "Kiểm lỗi và đóng khung",
+   "viDu": "Two-dimensional parity can locate and correct a single-bit error.",
+   "viDuNghia": "Chẵn lẻ hai chiều định vị và sửa được một lỗi một bit."
+  },
+  {
+   "chu": "Internet checksum",
+   "doc": "/ˈɪntərnet ˈtʃeksʌm/",
+   "nghia": "tổng kiểm Internet: cộng bù một các từ 16 bit, dùng trong tiêu đề IP, TCP, UDP",
+   "nhom": "Kiểm lỗi và đóng khung",
+   "viDu": "The Internet checksum is weaker than CRC but cheap to compute in software.",
+   "viDuNghia": "Tổng kiểm Internet yếu hơn CRC nhưng tính bằng phần mềm rất rẻ."
+  },
+  {
+   "chu": "header error control",
+   "doc": "/ˈhedər ˈerər kənˈtroʊl/",
+   "nghia": "kiểm soát lỗi tiêu đề (HEC): trường CRC bảo vệ tiêu đề, còn dùng để dò ranh giới khung (GFP, ATM)",
+   "nhom": "Kiểm lỗi và đóng khung",
+   "viDu": "GFP uses a variation of HEC-based self delineation technique",
+   "viDuNghia": "GFP dùng một biến thể của kỹ thuật tự phân định dựa trên HEC"
+  },
+  {
+   "chu": "self-delineation",
+   "doc": "/ˌself dɪˌlɪniˈeɪʃn/",
+   "nghia": "tự phân định: bên nhận tìm ranh giới khung bằng cách kiểm tra HEC liên tiếp, không cần cờ hay chèn byte",
+   "nhom": "Kiểm lỗi và đóng khung",
+   "viDu": "Self-delineation finds frame boundaries without flags or byte stuffing.",
+   "viDuNghia": "Tự phân định tìm ranh giới khung mà không cần cờ hay chèn byte."
+  },
+  {
+   "chu": "loss of synchronization",
+   "doc": "/lɔːs əv ˌsɪŋkrənəˈzeɪʃn/",
+   "nghia": "mất đồng bộ: bên nhận không còn xác định đúng ranh giới bit hoặc khung",
+   "nhom": "Kiểm lỗi và đóng khung",
+   "viDu": "Frames lost due to loss-of-synchronization or receiver buffer overflow",
+   "viDuNghia": "Khung bị mất do mất đồng bộ hoặc tràn bộ đệm bên nhận"
+  },
+  {
+   "chu": "reliable delivery",
+   "doc": "/rɪˈlaɪəbl dɪˈlɪvəri/",
+   "nghia": "truyền tin cậy: bảo đảm dữ liệu tới đủ, đúng, không trùng nhờ ACK và truyền lại",
+   "nhom": "Kiểm lỗi và đóng khung",
+   "viDu": "The message is lost because FTP does not use a reliable delivery method.",
+   "viDuNghia": "Thông điệp bị mất vì FTP không dùng cách truyền tin cậy (phát biểu sai: FTP chạy trên TCP)."
+  },
+  {
+   "chu": "same-order delivery",
+   "doc": "/seɪm ˈɔːrdər dɪˈlɪvəri/",
+   "nghia": "giao đúng thứ tự: dữ liệu tới tay ứng dụng theo đúng thứ tự đã gửi",
+   "nhom": "Kiểm lỗi và đóng khung",
+   "viDu": "TCP provides same-order delivery, but UDP does not.",
+   "viDuNghia": "TCP giao dữ liệu đúng thứ tự, còn UDP thì không."
+  },
+  {
+   "chu": "out-of-order",
+   "doc": "/ˌaʊt əv ˈɔːrdər/",
+   "nghia": "sai thứ tự: gói tới bên nhận không theo thứ tự đã gửi",
+   "nhom": "Kiểm lỗi và đóng khung",
+   "viDu": "Selective Repeat buffers frames that arrive out-of-order.",
+   "viDuNghia": "Selective Repeat giữ lại trong bộ đệm các khung tới sai thứ tự."
+  },
+  {
+   "chu": "shared medium",
+   "doc": "/ʃerd ˈmiːdiəm/",
+   "nghia": "môi trường truyền dùng chung: nhiều trạm cùng phát trên một kênh, cần giao thức đa truy cập",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "Polling can provide bounds on access delay to the shared medium",
+   "viDuNghia": "Hỏi vòng có thể giới hạn được độ trễ truy cập vào môi trường dùng chung"
+  },
+  {
+   "chu": "access delay",
+   "doc": "/ˈækses dɪˈleɪ/",
+   "nghia": "độ trễ truy cập: thời gian một trạm phải chờ trước khi được phát lên kênh",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "Polling can provide bounds on access delay to the shared medium",
+   "viDuNghia": "Hỏi vòng có thể giới hạn được độ trễ truy cập vào môi trường dùng chung"
+  },
+  {
+   "chu": "regulated access",
+   "doc": "/ˈreɡjuleɪtɪd ˈækses/",
+   "nghia": "truy cập có điều phối: các trạm lần lượt được trao quyền phát (hỏi vòng, chuyền thẻ) thay vì tranh nhau",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "Polling can provide fairness through regulated access opportunities",
+   "viDuNghia": "Hỏi vòng có thể bảo đảm công bằng nhờ cơ hội truy cập có điều phối"
+  },
+  {
+   "chu": "contention",
+   "doc": "/kənˈtenʃn/",
+   "nghia": "tranh chấp kênh: các trạm tranh nhau phát, có thể va chạm (ALOHA, CSMA)",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "Contention protocols work well under light load but collide often under heavy load.",
+   "viDuNghia": "Giao thức tranh chấp chạy tốt khi tải nhẹ nhưng va chạm nhiều khi tải nặng."
+  },
+  {
+   "chu": "1-persistent",
+   "doc": "/ˌwʌn pərˈsɪstənt/",
+   "nghia": "CSMA 1-bền: kênh rảnh là phát ngay với xác suất 1, nên dễ va chạm khi nhiều trạm cùng chờ",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "1-persistent CSMA",
+   "viDuNghia": "CSMA 1-bền"
+  },
+  {
+   "chu": "nonpersistent",
+   "doc": "/ˌnɑːnpərˈsɪstənt/",
+   "nghia": "CSMA không bền: kênh bận thì chờ một khoảng ngẫu nhiên rồi mới nghe lại",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "Nonpersistent CSMA reduces collisions but increases delay.",
+   "viDuNghia": "CSMA không bền giảm va chạm nhưng tăng độ trễ."
+  },
+  {
+   "chu": "p-persistent",
+   "doc": "/ˌpiː pərˈsɪstənt/",
+   "nghia": "CSMA p-bền: kênh rảnh thì phát với xác suất p, dùng cho kênh chia khe",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "In p-persistent CSMA, a station transmits with probability p when the channel is idle.",
+   "viDuNghia": "Trong CSMA p-bền, trạm phát với xác suất p khi kênh rảnh."
+  },
+  {
+   "chu": "binary exponential backoff",
+   "doc": "/ˈbaɪnəri ˌekspəˈnenʃl ˈbækɔːf/",
+   "nghia": "lùi theo hàm mũ nhị phân: sau va chạm thứ n, chờ ngẫu nhiên 0..2^n - 1 khe thời gian",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "Ethernet uses binary exponential backoff after each collision.",
+   "viDuNghia": "Ethernet dùng lùi theo hàm mũ nhị phân sau mỗi lần va chạm."
+  },
+  {
+   "chu": "slot time",
+   "doc": "/slɑːt taɪm/",
+   "nghia": "thời gian khe: đơn vị chờ trong CSMA/CD, bằng thời gian đi – về xa nhất (512 bit với Ethernet)",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "Classic Ethernet defines a slot time of 512 bit times.",
+   "viDuNghia": "Ethernet cổ điển định nghĩa thời gian khe bằng 512 thời gian bit."
+  },
+  {
+   "chu": "minimum frame size",
+   "doc": "/ˈmɪnɪməm freɪm saɪz/",
+   "nghia": "kích thước khung tối thiểu: khung phải đủ dài để trạm còn đang phát khi phát hiện va chạm (64 byte với Ethernet)",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "The minimum frame size guarantees that a collision is detected while the frame is still being sent.",
+   "viDuNghia": "Kích thước khung tối thiểu bảo đảm phát hiện va chạm khi khung vẫn đang được gửi."
+  },
+  {
+   "chu": "token ring",
+   "doc": "/ˈtoʊkən rɪŋ/",
+   "nghia": "mạng vòng chuyền thẻ: các trạm nối thành vòng, chỉ trạm giữ thẻ mới được phát",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "In a token ring, a station must capture the token before sending.",
+   "viDuNghia": "Trong mạng vòng chuyền thẻ, trạm phải giữ được thẻ mới được gửi."
+  },
+  {
+   "chu": "RTS/CTS",
+   "doc": "/ˌɑːr tiː ˈes ˌsiː tiː ˈes/",
+   "nghia": "RTS/CTS: cặp khung xin phát – cho phép phát trong 802.11, giảm va chạm do trạm ẩn",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "RTS/CTS reduces collisions caused by hidden stations in wireless LANs.",
+   "viDuNghia": "RTS/CTS giảm va chạm do trạm ẩn trong mạng LAN không dây."
+  },
+  {
+   "chu": "exposed station",
+   "doc": "/ɪkˈspoʊzd ˈsteɪʃn/",
+   "nghia": "trạm phơi: trạm nghe thấy người khác phát nên nhịn, dù việc phát của nó không gây nhiễu tới đích",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "The exposed station problem makes a station defer even though it could send safely.",
+   "viDuNghia": "Vấn đề trạm phơi khiến một trạm nhịn phát dù nó có thể phát an toàn."
+  },
+  {
+   "chu": "beacon frame",
+   "doc": "/ˈbiːkən freɪm/",
+   "nghia": "khung beacon: khung điểm truy cập phát định kỳ để quảng bá SSID và thông số mạng không dây",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "The access point periodically sends a beacon frame announcing its SSID.",
+   "viDuNghia": "Điểm truy cập định kỳ phát khung beacon thông báo SSID của nó."
+  },
+  {
+   "chu": "piconet",
+   "doc": "/ˈpiːkoʊnet/",
+   "nghia": "piconet: mạng Bluetooth nhỏ gồm một nút chủ và tối đa bảy nút tớ hoạt động",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "A Bluetooth piconet has one master and up to seven active slaves.",
+   "viDuNghia": "Một piconet Bluetooth có một nút chủ và tối đa bảy nút tớ hoạt động."
+  },
+  {
+   "chu": "base station",
+   "doc": "/beɪs ˈsteɪʃn/",
+   "nghia": "trạm gốc: điểm nối giữa thiết bị không dây và mạng có dây (trạm phát sóng di động, điểm truy cập)",
+   "nhom": "Truy cập kênh dùng chung",
+   "viDu": "A mobile phone hands off to a new base station when it moves.",
+   "viDuNghia": "Điện thoại chuyển sang trạm gốc mới khi nó di chuyển."
+  },
+  {
+   "chu": "persistent connection",
+   "doc": "/pərˈsɪstənt kəˈnekʃn/",
+   "nghia": "kết nối bền vững (HTTP): một kết nối TCP dùng lại cho nhiều yêu cầu – phản hồi",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "HTTP/1.1 uses persistent connections by default.",
+   "viDuNghia": "HTTP/1.1 mặc định dùng kết nối bền vững."
+  },
+  {
+   "chu": "nonpersistent connection",
+   "doc": "/ˌnɑːnpərˈsɪstənt kəˈnekʃn/",
+   "nghia": "kết nối không bền vững: mỗi đối tượng web cần một kết nối TCP mới (tốn 2 RTT mỗi đối tượng)",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "With nonpersistent connections, each object costs two round-trip times.",
+   "viDuNghia": "Với kết nối không bền vững, mỗi đối tượng tốn hai lần thời gian đi – về."
+  },
+  {
+   "chu": "web cache",
+   "doc": "/web kæʃ/",
+   "nghia": "bộ đệm web: máy chủ trung gian giữ bản sao trang web để trả lời nhanh, giảm tải đường truy cập",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "Web cache can substantially reduce the response time for a client request to a web server",
+   "viDuNghia": "Bộ đệm web có thể giảm đáng kể thời gian phản hồi cho yêu cầu của máy khách tới web server"
+  },
+  {
+   "chu": "conditional GET",
+   "doc": "/kənˈdɪʃənl ɡet/",
+   "nghia": "GET có điều kiện: yêu cầu kèm If-Modified-Since, máy chủ trả 304 nếu bản trong cache còn mới",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "A conditional GET lets the cache check whether its copy is still up to date.",
+   "viDuNghia": "GET có điều kiện cho bộ đệm kiểm tra bản sao của nó còn mới không."
+  },
+  {
+   "chu": "BitTorrent",
+   "doc": "/ˈbɪttɔːrənt/",
+   "nghia": "BitTorrent: giao thức chia sẻ tệp ngang hàng, mỗi máy vừa tải vừa gửi các mảnh tệp",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "In BitTorrent, peers exchange chunks of a file with each other.",
+   "viDuNghia": "Trong BitTorrent, các máy ngang hàng trao đổi các mảnh của tệp với nhau."
+  },
+  {
+   "chu": "MIME",
+   "doc": "/maɪm/",
+   "nghia": "MIME: chuẩn mở rộng thư để gửi tệp đính kèm, ảnh, chữ không phải ASCII; cũng dùng làm kiểu nội dung HTTP",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "MIME allows e-mail to carry images and attachments.",
+   "viDuNghia": "MIME cho phép thư điện tử chở ảnh và tệp đính kèm."
+  },
+  {
+   "chu": "user agent",
+   "doc": "/ˈjuːzər ˈeɪdʒənt/",
+   "nghia": "tác nhân người dùng: phần mềm phía người dùng (trình duyệt, trình đọc thư) gửi yêu cầu thay người dùng",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "In e-mail, the user agent lets the user read and compose messages.",
+   "viDuNghia": "Trong thư điện tử, tác nhân người dùng cho phép đọc và soạn thư."
+  },
+  {
+   "chu": "mail server",
+   "doc": "/meɪl ˈsɜːrvər/",
+   "nghia": "máy chủ thư: giữ hộp thư và chuyển thư cho nhau bằng SMTP",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "Mail servers transfer messages to each other using SMTP.",
+   "viDuNghia": "Các máy chủ thư chuyển thư cho nhau bằng SMTP."
+  },
+  {
+   "chu": "iterative query",
+   "doc": "/ˈɪtəreɪtɪv ˈkwɪri/",
+   "nghia": "truy vấn lặp (DNS): máy chủ được hỏi chỉ trả về địa chỉ máy chủ kế tiếp cần hỏi",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "In an iterative query, the root server replies with the address of a TLD server.",
+   "viDuNghia": "Trong truy vấn lặp, máy chủ gốc trả về địa chỉ của một máy chủ TLD."
+  },
+  {
+   "chu": "recursive query",
+   "doc": "/rɪˈkɜːrsɪv ˈkwɪri/",
+   "nghia": "truy vấn đệ quy (DNS): máy chủ được hỏi tự đi hỏi tiếp cho tới khi có câu trả lời cuối",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "The local resolver sends a recursive query on behalf of the host.",
+   "viDuNghia": "Trình phân giải cục bộ gửi truy vấn đệ quy thay cho máy trạm."
+  },
+  {
+   "chu": "root name server",
+   "doc": "/ruːt neɪm ˈsɜːrvər/",
+   "nghia": "máy chủ tên gốc: tầng cao nhất của DNS, chỉ ra máy chủ của từng miền cấp cao (.com, .vn)",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "A root name server points the resolver to the servers for .com.",
+   "viDuNghia": "Máy chủ tên gốc chỉ cho trình phân giải các máy chủ của miền .com."
+  },
+  {
+   "chu": "count-to-infinity",
+   "doc": "/kaʊnt tu ɪnˈfɪnəti/",
+   "nghia": "đếm tới vô cùng: lỗi của định tuyến vectơ khoảng cách, tin xấu lan rất chậm, khoảng cách tăng dần mãi",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "Distance vector routing reacts slowly to bad news because of the count-to-infinity problem.",
+   "viDuNghia": "Định tuyến vectơ khoảng cách phản ứng chậm với tin xấu do vấn đề đếm tới vô cùng."
+  },
+  {
+   "chu": "split horizon",
+   "doc": "/splɪt həˈraɪzn/",
+   "nghia": "chia cắt tầm nhìn: không quảng bá một tuyến ngược lại qua chính cổng đã học được nó",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "Split horizon prevents a router from advertising a route back to its source.",
+   "viDuNghia": "Chia cắt tầm nhìn ngăn router quảng bá một tuyến ngược về nơi nó học được."
+  },
+  {
+   "chu": "poison reverse",
+   "doc": "/ˈpɔɪzn rɪˈvɜːrs/",
+   "nghia": "đầu độc ngược: quảng bá ngược tuyến đó với khoảng cách vô cùng để phá vòng lặp",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "With poison reverse, the route is sent back with an infinite metric.",
+   "viDuNghia": "Với đầu độc ngược, tuyến được gửi ngược lại với giá trị đo vô cùng."
+  },
+  {
+   "chu": "hold-down timer",
+   "doc": "/ˈhoʊld daʊn ˈtaɪmər/",
+   "nghia": "bộ hẹn giờ giữ: tạm không nhận tin tốt về một tuyến vừa hỏng trong một khoảng thời gian",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "A hold-down timer stops a router from accepting a route that has just failed.",
+   "viDuNghia": "Bộ hẹn giờ giữ ngăn router nhận lại một tuyến vừa bị hỏng."
+  },
+  {
+   "chu": "link-state advertisement",
+   "doc": "/lɪŋk steɪt ədˈvɜːrtɪsmənt/",
+   "nghia": "quảng bá trạng thái liên kết (LSA): gói mô tả các liên kết của router, được tràn tới mọi router",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "Each router floods its link-state advertisements to all other routers in the area.",
+   "viDuNghia": "Mỗi router tràn các quảng bá trạng thái liên kết của nó tới mọi router trong vùng."
+  },
+  {
+   "chu": "hello packet",
+   "doc": "/həˈloʊ ˈpækɪt/",
+   "nghia": "gói hello: gói gửi định kỳ để phát hiện và duy trì quan hệ với router láng giềng",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "OSPF routers discover their neighbors by exchanging hello packets.",
+   "viDuNghia": "Router OSPF phát hiện láng giềng bằng cách trao đổi gói hello."
+  },
+  {
+   "chu": "shortest path tree",
+   "doc": "/ˈʃɔːrtɪst pæθ triː/",
+   "nghia": "cây đường ngắn nhất: cây Dijkstra tính ra, gốc là chính router, cho đường ngắn nhất tới mọi đích",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "Allows routers to build shortest path tree with router as root",
+   "viDuNghia": "Cho phép router dựng cây đường ngắn nhất với chính nó làm gốc"
+  },
+  {
+   "chu": "autonomous system",
+   "doc": "/ɔːˈtɑːnəməs ˈsɪstəm/",
+   "nghia": "hệ tự trị (AS): tập mạng do một tổ chức quản lý, có chính sách định tuyến riêng",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "Each ISP is an autonomous system with its own AS number.",
+   "viDuNghia": "Mỗi ISP là một hệ tự trị có số AS riêng."
+  },
+  {
+   "chu": "Border Gateway Protocol",
+   "doc": "/ˈbɔːrdər ˈɡeɪtweɪ ˈproʊtəkɔːl/",
+   "nghia": "BGP: giao thức định tuyến giữa các hệ tự trị, chọn đường theo chính sách và đường đi AS",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "The Border Gateway Protocol exchanges routes between autonomous systems.",
+   "viDuNghia": "BGP trao đổi tuyến đường giữa các hệ tự trị."
+  },
+  {
+   "chu": "interior gateway protocol",
+   "doc": "/ɪnˈtɪriər ˈɡeɪtweɪ ˈproʊtəkɔːl/",
+   "nghia": "giao thức định tuyến trong (IGP): định tuyến bên trong một hệ tự trị (RIP, OSPF)",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "RIP and OSPF are interior gateway protocols.",
+   "viDuNghia": "RIP và OSPF là các giao thức định tuyến trong."
+  },
+  {
+   "chu": "hierarchical routing",
+   "doc": "/ˌhaɪəˈrɑːrkɪkl ˈruːtɪŋ/",
+   "nghia": "định tuyến phân cấp: chia mạng thành vùng, router chỉ cần biết chi tiết trong vùng mình",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "Hierarchical routing reduces the size of routing tables in large networks.",
+   "viDuNghia": "Định tuyến phân cấp giảm kích thước bảng định tuyến trong mạng lớn."
+  },
+  {
+   "chu": "multi-destination routing",
+   "doc": "/ˌmʌlti ˌdestɪˈneɪʃn ˈruːtɪŋ/",
+   "nghia": "định tuyến đa đích: một gói mang danh sách đích, router nhân bản gói theo từng hướng ra",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "Multi-destination routing structure",
+   "viDuNghia": "Cấu trúc định tuyến đa đích"
+  },
+  {
+   "chu": "reverse path forwarding",
+   "doc": "/rɪˈvɜːrs pæθ ˈfɔːrwərdɪŋ/",
+   "nghia": "chuyển tiếp theo đường ngược: chỉ chuyển tiếp gói quảng bá nếu nó tới từ cổng dẫn về nguồn",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "Reverse path forwarding avoids duplicate broadcast packets.",
+   "viDuNghia": "Chuyển tiếp theo đường ngược tránh gói quảng bá bị trùng lặp."
+  },
+  {
+   "chu": "correspondent node",
+   "doc": "/ˌkɔːrəˈspɑːndənt noʊd/",
+   "nghia": "nút tương ứng (IP di động): máy đang liên lạc với một máy di động",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "Correspondent node",
+   "viDuNghia": "Nút tương ứng"
+  },
+  {
+   "chu": "foreign agent",
+   "doc": "/ˈfɔːrən ˈeɪdʒənt/",
+   "nghia": "tác nhân ngoại (IP di động): router ở mạng khách, nhận gói được chuyển tiếp cho máy di động",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "The foreign agent delivers tunneled packets to the visiting mobile host.",
+   "viDuNghia": "Tác nhân ngoại giao các gói qua đường hầm cho máy di động đang ghé thăm."
+  },
+  {
+   "chu": "care-of address",
+   "doc": "/ˌker ˈʌv ˈædres/",
+   "nghia": "địa chỉ tạm trú (IP di động): địa chỉ của máy di động tại mạng đang ghé, tác nhân nhà chuyển tiếp gói tới đó",
+   "nhom": "Định tuyến nâng cao",
+   "viDu": "The home agent tunnels packets to the care-of address of the mobile host.",
+   "viDuNghia": "Tác nhân nhà chuyển gói qua đường hầm tới địa chỉ tạm trú của máy di động."
+  },
+  {
+   "chu": "SYN",
+   "doc": "/sɪn/",
+   "nghia": "cờ SYN: cờ đồng bộ số thứ tự, dùng để mở kết nối TCP",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "A segment with both SYN and ACK set",
+   "viDuNghia": "Một đoạn có đặt cả cờ SYN lẫn ACK"
+  },
+  {
+   "chu": "FIN",
+   "doc": "/fɪn/",
+   "nghia": "cờ FIN: báo bên gửi đã hết dữ liệu, dùng để đóng kết nối TCP",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "Each side sends a FIN to close its direction of the connection.",
+   "viDuNghia": "Mỗi bên gửi FIN để đóng chiều truyền của mình."
+  },
+  {
+   "chu": "maximum segment size",
+   "doc": "/ˈmæksɪməm ˈseɡmənt saɪz/",
+   "nghia": "kích thước đoạn tối đa (MSS): lượng dữ liệu lớn nhất trong một đoạn TCP",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "The maximum segment size is usually 1460 bytes on Ethernet.",
+   "viDuNghia": "Kích thước đoạn tối đa thường là 1460 byte trên Ethernet."
+  },
+  {
+   "chu": "additive increase multiplicative decrease",
+   "doc": "/ˈædətɪv ˈɪnkriːs ˌmʌltɪˈplɪkətɪv ˈdiːkriːs/",
+   "nghia": "AIMD: tăng cửa sổ tắc nghẽn từng chút một, gặp mất gói thì giảm một nửa",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "TCP congestion avoidance follows additive increase multiplicative decrease.",
+   "viDuNghia": "Tránh tắc nghẽn của TCP theo nguyên tắc tăng cộng, giảm nhân."
+  },
+  {
+   "chu": "congestion threshold",
+   "doc": "/kənˈdʒestʃən ˈθreʃhoʊld/",
+   "nghia": "ngưỡng tắc nghẽn (ssthresh): dưới ngưỡng thì khởi động chậm, trên ngưỡng thì tránh tắc nghẽn",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "Reset congestion threshold to the current congestion window size",
+   "viDuNghia": "Đặt lại ngưỡng tắc nghẽn bằng kích thước cửa sổ tắc nghẽn hiện tại"
+  },
+  {
+   "chu": "fast retransmit",
+   "doc": "/fæst ˌriːtrænsˈmɪt/",
+   "nghia": "truyền lại nhanh: nhận ba ACK trùng là truyền lại ngay, không chờ hết giờ",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "Fast retransmit resends a segment after three duplicate ACKs.",
+   "viDuNghia": "Truyền lại nhanh gửi lại đoạn sau ba ACK trùng."
+  },
+  {
+   "chu": "retransmission timeout",
+   "doc": "/ˌriːtrænsˈmɪʃn ˈtaɪmaʊt/",
+   "nghia": "thời gian chờ truyền lại (RTO): tính từ RTT ước lượng; hết giờ chưa có ACK thì gửi lại",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "The retransmission timeout is computed from the estimated RTT and its variation.",
+   "viDuNghia": "Thời gian chờ truyền lại được tính từ RTT ước lượng và độ dao động của nó."
+  },
+  {
+   "chu": "premature timeout",
+   "doc": "/ˌpriːməˈtʃʊr ˈtaɪmaʊt/",
+   "nghia": "hết giờ sớm: đặt thời gian chờ quá ngắn nên truyền lại dù ACK đang trên đường tới",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "Premature Timeout",
+   "viDuNghia": "Hết giờ quá sớm"
+  },
+  {
+   "chu": "Karn's algorithm",
+   "doc": "/kɑːrnz ˈælɡərɪðəm/",
+   "nghia": "thuật toán Karn: không lấy mẫu RTT từ đoạn đã truyền lại và nhân đôi thời gian chờ sau mỗi lần hết giờ",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "Karn's algorithm ignores RTT samples from retransmitted segments.",
+   "viDuNghia": "Thuật toán Karn bỏ qua mẫu RTT của các đoạn đã truyền lại."
+  },
+  {
+   "chu": "Nagle's algorithm",
+   "doc": "/ˈneɪɡlz ˈælɡərɪðəm/",
+   "nghia": "thuật toán Nagle: gom các mẩu dữ liệu nhỏ, chỉ gửi khi đã nhận ACK của đoạn trước",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "Nagle's algorithm reduces the number of tiny segments on the network.",
+   "viDuNghia": "Thuật toán Nagle giảm số đoạn tí hon trên mạng."
+  },
+  {
+   "chu": "silly window syndrome",
+   "doc": "/ˈsɪli ˈwɪndoʊ ˈsɪndroʊm/",
+   "nghia": "hội chứng cửa sổ ngớ ngẩn: bên nhận quảng bá cửa sổ quá nhỏ khiến bên gửi gửi những đoạn tí hon",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "Silly window syndrome occurs when the receiver advertises very small windows.",
+   "viDuNghia": "Hội chứng cửa sổ ngớ ngẩn xảy ra khi bên nhận quảng bá các cửa sổ rất nhỏ."
+  },
+  {
+   "chu": "keepalive",
+   "doc": "/ˈkiːpəlaɪv/",
+   "nghia": "gói giữ kết nối: gói gửi định kỳ khi không có dữ liệu để biết bên kia còn sống",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "TCP keepalive detects a peer that has crashed silently.",
+   "viDuNghia": "Gói giữ kết nối TCP phát hiện bên kia đã sập mà không báo."
+  },
+  {
+   "chu": "QUIC",
+   "doc": "/kwɪk/",
+   "nghia": "QUIC: giao thức truyền tải trên UDP có mã hoá sẵn, nền của HTTP/3",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "QUIC runs over UDP and is the transport for HTTP/3.",
+   "viDuNghia": "QUIC chạy trên UDP và là tầng truyền tải của HTTP/3."
+  },
+  {
+   "chu": "choke packet",
+   "doc": "/tʃoʊk ˈpækɪt/",
+   "nghia": "gói nghẹt: router đang tắc gửi gói báo về nguồn yêu cầu giảm tốc độ",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "Choke packets to the source",
+   "viDuNghia": "Gửi gói nghẹt về nguồn"
+  },
+  {
+   "chu": "backpressure",
+   "doc": "/ˈbækpreʃər/",
+   "nghia": "áp ngược (hop-by-hop): nút tắc báo ngược từng chặng về phía trước nó để làm chậm luồng",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "Hop-by-hop backpressure slows down the upstream nodes one by one.",
+   "viDuNghia": "Áp ngược từng chặng làm chậm các nút phía trước lần lượt từng nút."
+  },
+  {
+   "chu": "load shedding",
+   "doc": "/loʊd ˈʃedɪŋ/",
+   "nghia": "bỏ tải: router quá tải chủ động bỏ bớt gói, ưu tiên bỏ gói ít quan trọng",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "When buffers overflow, routers use load shedding to drop packets.",
+   "viDuNghia": "Khi bộ đệm tràn, router dùng cách bỏ tải để loại gói."
+  },
+  {
+   "chu": "explicit congestion notification",
+   "doc": "/ɪkˈsplɪsɪt kənˈdʒestʃən ˌnoʊtɪfɪˈkeɪʃn/",
+   "nghia": "báo tắc nghẽn tường minh (ECN): router đánh dấu gói thay vì bỏ, bên nhận báo nguồn giảm tốc",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "Explicit congestion notification marks packets instead of dropping them.",
+   "viDuNghia": "Báo tắc nghẽn tường minh đánh dấu gói thay vì bỏ chúng."
+  },
+  {
+   "chu": "hog",
+   "doc": "/hɔːɡ/",
+   "nghia": "chiếm hết (băng thông): một luồng chiếm gần trọn tài nguyên, làm luồng khác bị đói",
+   "nhom": "TCP và tắc nghẽn",
+   "viDu": "High-priority classes can hog all of the bandwidth and starve lower priority classes",
+   "viDuNghia": "Các lớp ưu tiên cao có thể chiếm hết băng thông và làm đói các lớp ưu tiên thấp"
+  },
+  {
+   "chu": "Real-time Transport Protocol",
+   "doc": "/ˈriːəl taɪm ˈtrænspɔːrt ˈproʊtəkɔːl/",
+   "nghia": "RTP: giao thức chở âm thanh, hình ảnh thời gian thực trên UDP, kèm dấu thời gian và số thứ tự",
+   "nhom": "Đa phương tiện và QoS",
+   "viDu": "The Real-time Transport Protocol adds timestamps to audio and video packets.",
+   "viDuNghia": "RTP thêm dấu thời gian vào gói âm thanh và hình ảnh."
+  },
+  {
+   "chu": "Session Initiation Protocol",
+   "doc": "/ˈseʃn ɪˌnɪʃiˈeɪʃn ˈproʊtəkɔːl/",
+   "nghia": "SIP: giao thức thiết lập, điều khiển và kết thúc cuộc gọi VoIP, hội nghị",
+   "nhom": "Đa phương tiện và QoS",
+   "viDu": "The Session Initiation Protocol sets up and tears down VoIP calls.",
+   "viDuNghia": "SIP thiết lập và kết thúc cuộc gọi VoIP."
+  },
+  {
+   "chu": "playout buffer",
+   "doc": "/ˈpleɪaʊt ˈbʌfər/",
+   "nghia": "bộ đệm phát: giữ gói một lúc trước khi phát để san bằng jitter",
+   "nhom": "Đa phương tiện và QoS",
+   "viDu": "A playout buffer smooths out jitter in streaming audio.",
+   "viDuNghia": "Bộ đệm phát san bằng jitter của âm thanh truyền trực tuyến."
+  },
+  {
+   "chu": "integrated services",
+   "doc": "/ˈɪntɪɡreɪtɪd ˈsɜːrvɪsɪz/",
+   "nghia": "dịch vụ tích hợp (IntServ): đặt trước tài nguyên cho từng luồng trên mọi router dọc đường",
+   "nhom": "Đa phương tiện và QoS",
+   "viDu": "Integrated services reserve resources for each flow along the path.",
+   "viDuNghia": "Dịch vụ tích hợp đặt trước tài nguyên cho từng luồng dọc đường đi."
+  },
+  {
+   "chu": "Resource Reservation Protocol",
+   "doc": "/ˈriːsɔːrs ˌrezərˈveɪʃn ˈproʊtəkɔːl/",
+   "nghia": "RSVP: giao thức báo hiệu để đặt trước băng thông cho luồng trong IntServ",
+   "nhom": "Đa phương tiện và QoS",
+   "viDu": "The Resource Reservation Protocol carries reservation requests from receivers to routers.",
+   "viDuNghia": "RSVP mang yêu cầu đặt trước từ bên nhận tới các router."
+  },
+  {
+   "chu": "weighted fair queueing",
+   "doc": "/ˈweɪtɪd fer ˈkjuːɪŋ/",
+   "nghia": "xếp hàng công bằng có trọng số (WFQ): mỗi luồng được phần băng thông theo trọng số của nó",
+   "nhom": "Đa phương tiện và QoS",
+   "viDu": "Weighted fair queueing gives each flow a share of bandwidth proportional to its weight.",
+   "viDuNghia": "WFQ chia cho mỗi luồng phần băng thông tỉ lệ với trọng số của nó."
+  }
+ ]
+}

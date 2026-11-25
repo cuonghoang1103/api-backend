@@ -4,7 +4,7 @@
  "ten": "MAD101 · 2. Thuật toán, số nguyên, quy nạp & đệ quy",
  "moTa": "Toán rời rạc (MAD101), bộ 2: dãy số và hệ thức truy hồi, thuật toán tìm kiếm - sắp xếp và độ phức tạp big-O, số nguyên và phép chia (gcd, mod, hệ đếm), quy nạp, đệ quy, bài toán tiền xu. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "arrow.triangle.2.circlepath",
- "thuTu": -979,
+ "thuTu": -971,
  "tu": [
   {
    "chu": "recurrence relation",

@@ -4,7 +4,7 @@
  "ten": "CSD201 · 2. Cây, đồ thị, bảng băm, nén dữ liệu",
  "moTa": "CSD201 – Cấu trúc dữ liệu và giải thuật (Java), phần 2: cây nhị phân tìm kiếm, AVL, heap, đồ thị (Dijkstra, tô màu, Euler), bảng băm và giải quyết va chạm, nén dữ liệu (run-length, LZW). Từ lấy từ đề FE/PE thật; câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "point.3.connected.trianglepath.dotted",
- "thuTu": -967,
+ "thuTu": -952,
  "tu": [
   {
    "chu": "tree node",

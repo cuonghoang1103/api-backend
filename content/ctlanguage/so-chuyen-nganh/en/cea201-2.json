@@ -4,7 +4,7 @@
  "ten": "CEA201 · 2. Bộ nhớ, cache, lưu trữ và vào/ra",
  "moTa": "Môn Tổ chức & kiến trúc máy tính (CEA201), phần 2: phân cấp bộ nhớ, cache, RAM/ROM/flash, sửa lỗi, đĩa từ, SSD, RAID và các kỹ thuật vào/ra (I/O). Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "memorychip.fill",
- "thuTu": -988,
+ "thuTu": -985,
  "tu": [
   {
    "chu": "memory hierarchy",

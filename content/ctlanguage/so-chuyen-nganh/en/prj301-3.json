@@ -1,0 +1,546 @@
+{
+  "ma": "prj301-3",
+  "nn": "en",
+  "ten": "PRJ301 · 3. HTTP, JDBC, MVC nhiều tầng & bảo mật",
+  "moTa": "Bổ sung PRJ301: dòng trạng thái và header HTTP, mã hoá form, JDBC (DriverManager, Statement, ResultSet, giao tác), kiến trúc MVC nhiều tầng, lỗi thiết kế hay bị hỏi, bảo mật web (IDOR, PRG, băm PBKDF2) và thanh toán thử VNPay trong bài Assignment.",
+  "bieuTuong": "server.rack",
+  "thuTu": -938,
+  "tu": [
+    {
+      "chu": "HEAD request",
+      "doc": "/hed rɪˈkwest/",
+      "nghia": "request HEAD: giống GET nhưng server chỉ trả dòng trạng thái và header, không có thân",
+      "nhom": "Giao thức HTTP",
+      "viDu": "The response from the server to a HEAD request consists of status line and header fields only.",
+      "viDuNghia": "Phản hồi cho request HEAD chỉ gồm dòng trạng thái và các trường header."
+    },
+    {
+      "chu": "request line",
+      "doc": "/rɪˈkwest laɪn/",
+      "nghia": "dòng yêu cầu: dòng đầu request HTTP gồm phương thức, đường dẫn, phiên bản (GET /index.jsp HTTP/1.1)",
+      "nhom": "Giao thức HTTP",
+      "viDu": "The request line is followed by the header fields.",
+      "viDuNghia": "Sau dòng yêu cầu là các trường header."
+    },
+    {
+      "chu": "status line",
+      "doc": "/ˈsteɪtəs laɪn/",
+      "nghia": "dòng trạng thái: dòng đầu phản hồi HTTP, vd HTTP/1.1 200 OK",
+      "nhom": "Giao thức HTTP",
+      "viDu": "The status line contains the protocol version, the status code and the reason phrase.",
+      "viDuNghia": "Dòng trạng thái chứa phiên bản giao thức, mã trạng thái và câu mô tả."
+    },
+    {
+      "chu": "reason phrase",
+      "doc": "/ˈriːzn freɪz/",
+      "nghia": "câu mô tả ngắn đi sau mã trạng thái, vd OK, Not Found",
+      "nhom": "Giao thức HTTP",
+      "viDu": "In \"HTTP/1.1 404 Not Found\", \"Not Found\" is the reason phrase.",
+      "viDuNghia": "Trong \"HTTP/1.1 404 Not Found\", \"Not Found\" là câu mô tả."
+    },
+    {
+      "chu": "Location header",
+      "doc": "/loʊˈkeɪʃn ˈhedər/",
+      "nghia": "header chỉ URL mới khi chuyển hướng (đi kèm mã 302)",
+      "nhom": "Giao thức HTTP",
+      "viDu": "sendRedirect() sets status 302 and the Location header.",
+      "viDuNghia": "sendRedirect() đặt mã 302 và header Location."
+    },
+    {
+      "chu": "Referer header",
+      "doc": "/ˈrefərər ˈhedər/",
+      "nghia": "header cho biết trang trước đã dẫn tới request này",
+      "nhom": "Giao thức HTTP",
+      "viDu": "The Referer header shows which page the user came from.",
+      "viDuNghia": "Header Referer cho biết người dùng đến từ trang nào."
+    },
+    {
+      "chu": "Accept header",
+      "doc": "/əkˈsept ˈhedər/",
+      "nghia": "header client khai kiểu nội dung chấp nhận, vd Accept: application/json",
+      "nhom": "Giao thức HTTP",
+      "viDu": "The browser sends Accept: text/html for normal pages.",
+      "viDuNghia": "Trình duyệt gửi Accept: text/html cho trang thường."
+    },
+    {
+      "chu": "keep-alive",
+      "doc": "/ˌkiːp əˈlaɪv/",
+      "nghia": "giữ kết nối TCP mở để dùng lại cho nhiều request (Connection: keep-alive)",
+      "nhom": "Giao thức HTTP",
+      "viDu": "HTTP/1.1 uses keep-alive connections by default.",
+      "viDuNghia": "HTTP/1.1 mặc định giữ kết nối mở."
+    },
+    {
+      "chu": "header field",
+      "doc": "/ˈhedər fiːld/",
+      "nghia": "trường header: cặp tên–giá trị đi kèm request/response (Host, Content-Type…)",
+      "nhom": "Giao thức HTTP",
+      "viDu": "Body and Header fields",
+      "viDuNghia": "Thân và các trường header."
+    },
+    {
+      "chu": "User-Agent",
+      "doc": "/ˈjuːzər ˈeɪdʒənt/",
+      "nghia": "header cho biết trình duyệt/ứng dụng nào gửi request",
+      "nhom": "Giao thức HTTP",
+      "viDu": "User-agent string",
+      "viDuNghia": "Chuỗi User-Agent."
+    },
+    {
+      "chu": "Content-Length",
+      "doc": "/ˈkɑːntent leŋθ/",
+      "nghia": "header ghi số byte của thân thông điệp",
+      "nhom": "Giao thức HTTP",
+      "viDu": "Content-Length tells the browser how many bytes the body has.",
+      "viDuNghia": "Content-Length cho trình duyệt biết thân có bao nhiêu byte."
+    },
+    {
+      "chu": "Transfer-Encoding",
+      "doc": "/ˈtrænsfɜːr ɪnˈkoʊdɪŋ/",
+      "nghia": "header cách truyền thân; chunked = gửi từng khúc khi chưa biết tổng độ dài",
+      "nhom": "Giao thức HTTP",
+      "viDu": "Transfer-Encoding: chunked is used when the length is unknown in advance.",
+      "viDuNghia": "Transfer-Encoding: chunked dùng khi chưa biết trước độ dài."
+    },
+    {
+      "chu": "Cache-Control",
+      "doc": "/kæʃ kənˈtroʊl/",
+      "nghia": "header điều khiển bộ đệm: no-cache (phải hỏi lại server), no-store, max-age=giây",
+      "nhom": "Giao thức HTTP",
+      "viDu": "Set Cache-Control: no-store on pages that show account data.",
+      "viDuNghia": "Đặt Cache-Control: no-store cho trang hiện dữ liệu tài khoản."
+    },
+    {
+      "chu": "Set-Cookie header",
+      "doc": "/set ˈkʊki ˈhedər/",
+      "nghia": "header server gửi để trình duyệt lưu cookie (kèm Max-Age, HttpOnly, Secure)",
+      "nhom": "Giao thức HTTP",
+      "viDu": "The server sends JSESSIONID in a Set-Cookie header.",
+      "viDuNghia": "Server gửi JSESSIONID trong header Set-Cookie."
+    },
+    {
+      "chu": "JSESSIONID",
+      "doc": "/ˌdʒeɪ ˈseʃn aɪ diː/",
+      "nghia": "tên cookie chứa mã phiên mà Tomcat/Java EE dùng",
+      "nhom": "Giao thức HTTP",
+      "viDu": "The browser sends JSESSIONID back on every request.",
+      "viDuNghia": "Trình duyệt gửi lại JSESSIONID ở mỗi request."
+    },
+    {
+      "chu": "form URL encoding",
+      "doc": "/fɔːrm ˌjuː ɑːr ˈel ɪnˈkoʊdɪŋ/",
+      "nghia": "kiểu application/x-www-form-urlencoded: mã hoá dữ liệu form thành name=value&… (mặc định)",
+      "nhom": "Giao thức HTTP",
+      "viDu": "A normal HTML form posts data with form URL encoding.",
+      "viDuNghia": "Form HTML thường gửi dữ liệu bằng mã hoá URL."
+    },
+    {
+      "chu": "multipart form data",
+      "doc": "/ˈmʌltipɑːrt fɔːrm ˈdeɪtə/",
+      "nghia": "enctype multipart/form-data: bắt buộc khi form tải tệp lên",
+      "nhom": "Giao thức HTTP",
+      "viDu": "Use enctype=\"multipart/form-data\" for a file upload form.",
+      "viDuNghia": "Dùng enctype multipart/form-data cho form tải tệp."
+    },
+    {
+      "chu": "charset",
+      "doc": "/ˈtʃɑːrset/",
+      "nghia": "tham số bảng mã trong Content-Type, vd text/html; charset=UTF-8",
+      "nhom": "Giao thức HTTP",
+      "viDu": "Why is it recommended to set the character encoding to UTF-8 in a JSP page?",
+      "viDuNghia": "Vì sao nên đặt bảng mã UTF-8 trong trang JSP?"
+    },
+    {
+      "chu": "Service Unavailable",
+      "doc": "/ˈsɜːrvɪs ˌʌnəˈveɪləbl/",
+      "nghia": "mã 503: server tạm quá tải hoặc đang bảo trì",
+      "nhom": "Giao thức HTTP",
+      "viDu": "Indicates that the HTTP server is temporarily overloaded, and unable to handle the request.",
+      "viDuNghia": "Cho biết server HTTP tạm quá tải và không xử lý được request."
+    },
+    {
+      "chu": "error-code",
+      "doc": "/ˈerər koʊd/",
+      "nghia": "thẻ trong error-page của web.xml: ánh xạ một mã trạng thái tới trang lỗi",
+      "nhom": "Giao thức HTTP",
+      "viDu": "error-code maps a specific HTTP status code to a designated error page.",
+      "viDuNghia": "error-code ánh xạ một mã trạng thái HTTP tới trang lỗi chỉ định."
+    },
+    {
+      "chu": "localization",
+      "doc": "/ˌloʊkələˈzeɪʃn/",
+      "nghia": "bản địa hoá (l10n): dịch chữ và định dạng ngày, số, tiền theo từng vùng",
+      "nhom": "Giao thức HTTP",
+      "viDu": "Handle internationalization and localization.",
+      "viDuNghia": "Xử lý quốc tế hoá và bản địa hoá."
+    },
+    {
+      "chu": "data compression",
+      "doc": "/ˈdeɪtə kəmˈpreʃn/",
+      "nghia": "nén dữ liệu (gzip) để phản hồi nhẹ hơn khi tải về",
+      "nhom": "Giao thức HTTP",
+      "viDu": "Data Compression - Making downloads smaller.",
+      "viDuNghia": "Nén dữ liệu – làm tệp tải về nhỏ hơn."
+    },
+    {
+      "chu": "JDBC API",
+      "doc": "/ˌdʒeɪ diː biː ˈsiː ˌeɪ piː ˈaɪ/",
+      "nghia": "bộ giao diện Java chuẩn để kết nối và chạy lệnh SQL trên mọi CSDL có driver",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "The JDBC API is an extension of the ODBC API.",
+      "viDuNghia": "JDBC API là phần mở rộng của ODBC API. (phương án sai)"
+    },
+    {
+      "chu": "ODBC",
+      "doc": "/ˌoʊ diː biː ˈsiː/",
+      "nghia": "Open Database Connectivity: chuẩn kết nối CSDL cũ của Microsoft, viết bằng C",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "JDBC is Java's counterpart to ODBC.",
+      "viDuNghia": "JDBC là bản tương ứng của ODBC trong Java."
+    },
+    {
+      "chu": "DriverManager",
+      "doc": "/ˈdraɪvər ˈmænɪdʒər/",
+      "nghia": "lớp JDBC quản driver và mở kết nối bằng getConnection(url, user, pass)",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "Use the getConnection() method of the DriverManager class.",
+      "viDuNghia": "Dùng phương thức getConnection() của lớp DriverManager."
+    },
+    {
+      "chu": "JDBC URL",
+      "doc": "/ˌdʒeɪ diː biː ˈsiː ˌjuː ɑːr ˈel/",
+      "nghia": "chuỗi địa chỉ CSDL, vd jdbc:sqlserver://localhost:1433;databaseName=Shop",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "The JDBC URL names the host, port and database.",
+      "viDuNghia": "JDBC URL ghi máy chủ, cổng và tên CSDL."
+    },
+    {
+      "chu": "Class.forName",
+      "doc": "/klæs fɔːr neɪm/",
+      "nghia": "nạp lớp driver JDBC theo tên (cách cũ, JDBC 4 tự nạp)",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "Class.forName(\"com.microsoft.sqlserver.jdbc.SQLServerDriver\");",
+      "viDuNghia": "Nạp lớp driver SQL Server."
+    },
+    {
+      "chu": "executeQuery",
+      "doc": "/ˈeksɪkjuːt ˈkwɪri/",
+      "nghia": "chạy câu SELECT, trả về ResultSet",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "executeQuery() returns a ResultSet.",
+      "viDuNghia": "executeQuery() trả về một ResultSet."
+    },
+    {
+      "chu": "executeUpdate",
+      "doc": "/ˈeksɪkjuːt ˈʌpdeɪt/",
+      "nghia": "chạy INSERT, UPDATE, DELETE, trả về số dòng bị ảnh hưởng (int)",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "stmt.executeUpdate() returns the number of affected rows.",
+      "viDuNghia": "stmt.executeUpdate() trả số dòng bị ảnh hưởng."
+    },
+    {
+      "chu": "affected rows",
+      "doc": "/əˈfektɪd roʊz/",
+      "nghia": "số dòng bị ảnh hưởng bởi lệnh cập nhật",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "If no rows are affected, the product id does not exist.",
+      "viDuNghia": "Không dòng nào bị ảnh hưởng nghĩa là mã sản phẩm không tồn tại."
+    },
+    {
+      "chu": "CallableStatement",
+      "doc": "/ˈkɔːləbl ˈsteɪtmənt/",
+      "nghia": "đối tượng JDBC gọi thủ tục lưu trữ: {call sp_name(?, ?)}",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "CallableStatement is used to call a stored procedure.",
+      "viDuNghia": "CallableStatement dùng để gọi thủ tục lưu trữ."
+    },
+    {
+      "chu": "parameter placeholder",
+      "doc": "/pəˈræmɪtər ˈpleɪshoʊldər/",
+      "nghia": "dấu ? trong PreparedStatement, gán giá trị bằng setString, setInt theo vị trí",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "ps.setString(1, username) fills the first placeholder.",
+      "viDuNghia": "ps.setString(1, username) điền dấu ? thứ nhất."
+    },
+    {
+      "chu": "SQLException",
+      "doc": "/ˌes kjuː el ɪkˈsepʃn/",
+      "nghia": "ngoại lệ kiểm tra JDBC ném ra khi lỗi kết nối hoặc lỗi câu SQL",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "Catch SQLException and log the error.",
+      "viDuNghia": "Bắt SQLException và ghi log lỗi."
+    },
+    {
+      "chu": "JDBC driver not found",
+      "doc": "/ˌdʒeɪ diː biː ˈsiː ˈdraɪvər nɑːt faʊnd/",
+      "nghia": "lỗi thiếu tệp JAR driver trong thư mục lib (ClassNotFoundException)",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "JDBC driver not found.",
+      "viDuNghia": "Không tìm thấy driver JDBC."
+    },
+    {
+      "chu": "ResultSetMetaData",
+      "doc": "/rɪˈzʌlt set ˈmetəˌdeɪtə/",
+      "nghia": "thông tin về cột của ResultSet: số cột, tên cột, kiểu",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "rs.getMetaData().getColumnCount() returns the number of columns.",
+      "viDuNghia": "Trả số cột của kết quả."
+    },
+    {
+      "chu": "scrollable ResultSet",
+      "doc": "/ˈskroʊləbl rɪˈzʌlt set/",
+      "nghia": "ResultSet cuộn tới lui được (TYPE_SCROLL_INSENSITIVE), không chỉ đi tới",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "A scrollable ResultSet can move back with previous().",
+      "viDuNghia": "ResultSet cuộn được có thể lùi lại bằng previous()."
+    },
+    {
+      "chu": "connection leak",
+      "doc": "/kəˈnekʃn liːk/",
+      "nghia": "rò kết nối: mở Connection mà không đóng, dần làm cạn bể kết nối",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "Closing resources in finally prevents a connection leak.",
+      "viDuNghia": "Đóng tài nguyên trong finally để tránh rò kết nối."
+    },
+    {
+      "chu": "generated key",
+      "doc": "/ˈdʒenəreɪtɪd kiː/",
+      "nghia": "khoá tự sinh (IDENTITY) lấy lại sau INSERT bằng getGeneratedKeys()",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "Use getGeneratedKeys() to read the new order id.",
+      "viDuNghia": "Dùng getGeneratedKeys() để đọc mã đơn mới."
+    },
+    {
+      "chu": "batch update",
+      "doc": "/bætʃ ˈʌpdeɪt/",
+      "nghia": "gom nhiều lệnh addBatch() rồi executeBatch() một lần cho nhanh",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "A batch update inserts all order lines in one round trip.",
+      "viDuNghia": "Cập nhật lô chèn mọi dòng đơn hàng trong một lượt."
+    },
+    {
+      "chu": "roll back a transaction",
+      "doc": "/roʊl bæk ə trænˈzækʃn/",
+      "nghia": "huỷ giao tác khi có lỗi để CSDL quay về trạng thái trước",
+      "nhom": "JDBC và truy cập dữ liệu",
+      "viDu": "Invoke con.commit() or con.rollback().",
+      "viDuNghia": "Gọi con.commit() hoặc con.rollback()."
+    },
+    {
+      "chu": "multi-tier architecture",
+      "doc": "/ˌmʌlti ˈtɪr ˈɑːrkɪtektʃər/",
+      "nghia": "kiến trúc nhiều tầng: tách trình bày, nghiệp vụ, dữ liệu thành các tầng riêng",
+      "nhom": "Kiến trúc MVC nhiều tầng",
+      "viDu": "Utilize a flat architecture to avoid the complexity of multi-tier security.",
+      "viDuNghia": "Dùng kiến trúc phẳng để tránh phức tạp của bảo mật nhiều tầng. (phương án sai)"
+    },
+    {
+      "chu": "business logic layer",
+      "doc": "/ˈbɪznəs ˈlɑːdʒɪk ˈleɪər/",
+      "nghia": "tầng nghiệp vụ: chứa quy tắc tính toán, kiểm tra (service), không chứa SQL hay HTML",
+      "nhom": "Kiến trúc MVC nhiều tầng",
+      "viDu": "Business logic layer",
+      "viDuNghia": "Tầng logic nghiệp vụ."
+    },
+    {
+      "chu": "data access layer",
+      "doc": "/ˈdeɪtə ˈækses ˈleɪər/",
+      "nghia": "tầng truy cập dữ liệu (DAL): các lớp DAO làm việc với CSDL",
+      "nhom": "Kiến trúc MVC nhiều tầng",
+      "viDu": "The data access layer contains the DAO classes.",
+      "viDuNghia": "Tầng truy cập dữ liệu chứa các lớp DAO."
+    },
+    {
+      "chu": "monolithic design",
+      "doc": "/ˌmɑːnəˈlɪθɪk dɪˈzaɪn/",
+      "nghia": "thiết kế nguyên khối: mọi phần dồn chung một khối, không tách tầng",
+      "nhom": "Kiến trúc MVC nhiều tầng",
+      "viDu": "Minimize the use of MVC architecture and revert to a monolithic design for performance.",
+      "viDuNghia": "Giảm dùng MVC và quay về thiết kế nguyên khối để có hiệu năng. (phương án sai)"
+    },
+    {
+      "chu": "pricing logic",
+      "doc": "/ˈpraɪsɪŋ ˈlɑːdʒɪk/",
+      "nghia": "logic tính giá: thuộc tầng Model/service, không viết trong JSP",
+      "nhom": "Kiến trúc MVC nhiều tầng",
+      "viDu": "Embed pricing logic directly in the JSP pages.",
+      "viDuNghia": "Nhúng logic tính giá thẳng vào JSP. (phương án sai)"
+    },
+    {
+      "chu": "data retrieval",
+      "doc": "/ˈdeɪtə rɪˈtriːvl/",
+      "nghia": "truy xuất dữ liệu: lấy dữ liệu từ CSDL",
+      "nhom": "Kiến trúc MVC nhiều tầng",
+      "viDu": "Optimize database queries within the Model to reduce data retrieval times.",
+      "viDuNghia": "Tối ưu truy vấn trong Model để giảm thời gian truy xuất dữ liệu."
+    },
+    {
+      "chu": "user-generated content",
+      "doc": "/ˈjuːzər ˈdʒenəreɪtɪd ˈkɑːntent/",
+      "nghia": "nội dung người dùng tạo ra (bình luận, bài đăng) — phải thoát ký tự khi hiển thị",
+      "nhom": "Kiến trúc MVC nhiều tầng",
+      "viDu": "Place all user-generated content in a single tier to simplify security protocols.",
+      "viDuNghia": "Đặt mọi nội dung người dùng tạo vào một tầng để đơn giản hoá bảo mật. (phương án sai)"
+    },
+    {
+      "chu": "view layer",
+      "doc": "/vjuː ˈleɪər/",
+      "nghia": "tầng hiển thị: các trang JSP chỉ trình bày dữ liệu Model đưa sang",
+      "nhom": "Kiến trúc MVC nhiều tầng",
+      "viDu": "The view layer must not open database connections.",
+      "viDuNghia": "Tầng hiển thị không được mở kết nối CSDL."
+    },
+    {
+      "chu": "front controller",
+      "doc": "/frʌnt kənˈtroʊlər/",
+      "nghia": "bộ điều khiển trước: một servlet nhận MỌI request rồi phân phối cho xử lý tương ứng",
+      "nhom": "Kiến trúc MVC nhiều tầng",
+      "viDu": "A front controller servlet dispatches every request to the right action.",
+      "viDuNghia": "Servlet bộ điều khiển trước chuyển mọi request tới xử lý phù hợp."
+    },
+    {
+      "chu": "DBContext",
+      "doc": "/ˌdiː biː ˈkɑːntekst/",
+      "nghia": "lớp tiện ích tự viết trong bài FPT giữ thông tin và mở kết nối CSDL cho các DAO",
+      "nhom": "Kiến trúc MVC nhiều tầng",
+      "viDu": "Every DAO extends DBContext to get a connection.",
+      "viDuNghia": "Mọi DAO kế thừa DBContext để lấy kết nối."
+    },
+    {
+      "chu": "broken access control",
+      "doc": "/ˈbroʊkən ˈækses kənˈtroʊl/",
+      "nghia": "lỗ hổng kiểm soát truy cập: người dùng làm được việc ngoài quyền (đứng đầu OWASP Top 10)",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "Hiding the admin link is not access control; the servlet must check the role.",
+      "viDuNghia": "Ẩn liên kết admin không phải kiểm soát truy cập; servlet phải kiểm vai trò."
+    },
+    {
+      "chu": "Insecure Direct Object Reference",
+      "doc": "/ˌɪnsɪˈkjʊr dəˈrekt ˈɑːbdʒekt ˈrefrəns/",
+      "nghia": "IDOR: đổi id trên URL là xem/sửa được dữ liệu người khác vì server không kiểm chủ sở hữu",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "Changing ?id=5 to ?id=6 shows another user's booking: an IDOR bug.",
+      "viDuNghia": "Đổi ?id=5 thành ?id=6 thấy lịch đặt của người khác: lỗi IDOR."
+    },
+    {
+      "chu": "OWASP Top 10",
+      "doc": "/ˈoʊwɑːsp tɑːp ten/",
+      "nghia": "danh sách mười rủi ro bảo mật web phổ biến nhất do OWASP công bố",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "Broken access control is number one in the OWASP Top 10.",
+      "viDuNghia": "Lỗi kiểm soát truy cập đứng đầu OWASP Top 10."
+    },
+    {
+      "chu": "login filter",
+      "doc": "/ˈlɔːɡɪn ˈfɪltər/",
+      "nghia": "filter kiểm đã đăng nhập chưa (có user trong session) trước khi vào trang được bảo vệ",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "The login filter checks the session before every protected page.",
+      "viDuNghia": "Filter đăng nhập kiểm phiên trước mọi trang được bảo vệ."
+    },
+    {
+      "chu": "session fixation",
+      "doc": "/ˈseʃn fɪkˈseɪʃn/",
+      "nghia": "cố định phiên: kẻ xấu cài sẵn mã phiên cho nạn nhân; chống bằng cấp mã phiên mới sau đăng nhập",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "Call changeSessionId() after login to prevent session fixation.",
+      "viDuNghia": "Gọi changeSessionId() sau đăng nhập để chống cố định phiên."
+    },
+    {
+      "chu": "output escaping",
+      "doc": "/ˈaʊtpʊt ɪˈskeɪpɪŋ/",
+      "nghia": "thoát ký tự đầu ra: đổi < > & \" thành thực thể HTML trước khi in, chống XSS (c:out, fn:escapeXml)",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "<c:out value=\"${comment}\"/> applies output escaping.",
+      "viDuNghia": "<c:out> tự thoát ký tự khi in bình luận."
+    },
+    {
+      "chu": "role-based filter",
+      "doc": "/ˈroʊl beɪst ˈfɪltər/",
+      "nghia": "filter chặn URL theo vai trò, vd chỉ ADMIN vào /admin/*",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "A role-based filter redirects non-admin users to the login page.",
+      "viDuNghia": "Filter theo vai trò chuyển người không phải admin về trang đăng nhập."
+    },
+    {
+      "chu": "Post/Redirect/Get",
+      "doc": "/poʊst ˌriːdəˈrekt ɡet/",
+      "nghia": "mẫu PRG: xử lý POST xong thì redirect sang trang GET, tránh gửi lại form khi tải lại trang",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "After saving the order, use Post/Redirect/Get so F5 does not submit it twice.",
+      "viDuNghia": "Lưu đơn xong dùng PRG để nhấn F5 không gửi lại lần hai."
+    },
+    {
+      "chu": "double submission",
+      "doc": "/ˈdʌbl səbˈmɪʃn/",
+      "nghia": "gửi trùng: form bị gửi hai lần (tải lại trang, bấm hai lần) tạo hai bản ghi",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "PRG prevents double submission of the booking form.",
+      "viDuNghia": "PRG chặn việc gửi trùng form đặt lịch."
+    },
+    {
+      "chu": "PBKDF2",
+      "doc": "/ˌpiː biː ˌkeɪ diː ef ˈtuː/",
+      "nghia": "hàm dẫn xuất khoá băm mật khẩu có salt và nhiều vòng lặp, có sẵn trong JDK",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "PBKDF2WithHmacSHA256 is available in the JDK as SecretKeyFactory.",
+      "viDuNghia": "PBKDF2WithHmacSHA256 có sẵn trong JDK qua SecretKeyFactory."
+    },
+    {
+      "chu": "iteration count",
+      "doc": "/ˌɪtəˈreɪʃn kaʊnt/",
+      "nghia": "số vòng lặp băm: càng lớn càng chậm cho kẻ dò mật khẩu",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "Store the salt and the iteration count together with the hash.",
+      "viDuNghia": "Lưu salt và số vòng lặp cùng chuỗi băm."
+    },
+    {
+      "chu": "encrypted by default",
+      "doc": "/ɪnˈkrɪptɪd baɪ dɪˈfɔːlt/",
+      "nghia": "mặc định đã mã hoá (cookie, phiên KHÔNG tự mã hoá)",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "Are cookies encrypted by default?",
+      "viDuNghia": "Cookie có được mã hoá mặc định không?"
+    },
+    {
+      "chu": "sandbox payment",
+      "doc": "/ˈsændbɑːks ˈpeɪmənt/",
+      "nghia": "thanh toán thử trên môi trường sandbox của cổng thanh toán, không mất tiền thật",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "Test the checkout with VNPay sandbox payment before the demo.",
+      "viDuNghia": "Thử thanh toán sandbox của VNPay trước buổi demo."
+    },
+    {
+      "chu": "Instant Payment Notification",
+      "doc": "/ˈɪnstənt ˈpeɪmənt ˌnoʊtɪfɪˈkeɪʃn/",
+      "nghia": "IPN: cổng thanh toán gọi thẳng server để báo kết quả giao dịch (nguồn tin cậy hơn trang return)",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "Update the order status from the IPN call, not from the return page.",
+      "viDuNghia": "Cập nhật trạng thái đơn từ lời gọi IPN, không từ trang return."
+    },
+    {
+      "chu": "return URL",
+      "doc": "/rɪˈtɜːrn ˌjuː ɑːr ˈel/",
+      "nghia": "địa chỉ trình duyệt quay về sau khi thanh toán, chỉ để hiện kết quả cho người dùng",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "The return URL only shows the result; it must not mark the order as paid.",
+      "viDuNghia": "Return URL chỉ hiện kết quả, không được đánh dấu đơn đã trả."
+    },
+    {
+      "chu": "secure hash",
+      "doc": "/sɪˈkjʊr hæʃ/",
+      "nghia": "chữ ký băm (HMAC-SHA512) gắn vào URL thanh toán để phát hiện dữ liệu bị sửa",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "Verify the secure hash before trusting the payment result.",
+      "viDuNghia": "Kiểm chữ ký băm trước khi tin kết quả thanh toán."
+    },
+    {
+      "chu": "double booking",
+      "doc": "/ˈdʌbl ˈbʊkɪŋ/",
+      "nghia": "đặt trùng: hai người đặt cùng một chỗ/khung giờ; chặn bằng ràng buộc UNIQUE",
+      "nhom": "Bảo mật và thanh toán",
+      "viDu": "A unique constraint on (doctor, slot) prevents double booking.",
+      "viDuNghia": "Ràng buộc UNIQUE trên (bác sĩ, khung giờ) chặn đặt trùng."
+    }
+  ]
+}

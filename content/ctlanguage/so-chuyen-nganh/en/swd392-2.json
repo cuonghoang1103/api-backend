@@ -4,7 +4,7 @@
  "ten": "SWD392 · 2. Kiến trúc và mẫu thiết kế",
  "moTa": "Kiến trúc và thiết kế phần mềm (SWD392) – phần 2: kiến trúc phần mềm, mẫu kiến trúc, giao tiếp thông điệp, thành phần – cổng, hệ đồng thời, SOA, dòng sản phẩm, ánh xạ CSDL, mẫu thiết kế GoF. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "building.columns.fill",
- "thuTu": -947,
+ "thuTu": -922,
  "tu": [
   {
    "chu": "software architecture",

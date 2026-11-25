@@ -1,0 +1,562 @@
+{
+  "ma": "mma301-2",
+  "nn": "en",
+  "ten": "MMA301 · 2. Bố cục, style & component React Native",
+  "moTa": "Bổ sung MMA301: flexbox trong React Native (hướng, bọc dòng, căn hàng), StyleSheet và kích thước, component lõi (View, Text, Image, TextInput, Touchable, Switch, Modal), thuộc tính danh sách FlatList/SectionList và các yêu cầu bố cục hay gặp trong đề PE.",
+  "bieuTuong": "apps.iphone",
+  "thuTu": -903,
+  "tu": [
+    {
+      "chu": "layout direction",
+      "doc": "/ˈleɪaʊt dəˈrekʃn/",
+      "nghia": "hướng bố cục (direction): thứ tự đặt phần tử con và chữ, mặc định LTR; RTL cho tiếng Ả Rập, Do Thái",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "By default, React Native lays out with LTR layout direction.",
+      "viDuNghia": "Mặc định React Native bố cục theo hướng trái sang phải (LTR)."
+    },
+    {
+      "chu": "left-to-right",
+      "doc": "/ˌleft tə ˈraɪt/",
+      "nghia": "LTR: bố cục và chữ chạy từ trái sang phải",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "Align children from left to right.",
+      "viDuNghia": "Xếp các phần tử con từ trái sang phải."
+    },
+    {
+      "chu": "right-to-left",
+      "doc": "/ˌraɪt tə ˈleft/",
+      "nghia": "RTL: bố cục và chữ chạy từ phải sang trái",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "Layout direction is often used to support RTL (right-to-left) languages such as Arabic or Hebrew.",
+      "viDuNghia": "Hướng bố cục thường dùng để hỗ trợ ngôn ngữ viết từ phải sang trái như Ả Rập, Do Thái."
+    },
+    {
+      "chu": "flexDirection",
+      "doc": "/fleks dəˈrekʃn/",
+      "nghia": "thuộc tính chọn trục chính: column (mặc định trong React Native), row, row-reverse, column-reverse",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "Which statement is TRUE about the row-reverse value of the flexDirection property?",
+      "viDuNghia": "Phát biểu nào ĐÚNG về giá trị row-reverse của thuộc tính flexDirection?"
+    },
+    {
+      "chu": "row-reverse",
+      "doc": "/roʊ rɪˈvɜːrs/",
+      "nghia": "giá trị flexDirection: xếp theo hàng ngang nhưng đảo thứ tự, bắt đầu từ bên phải",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "column-reverse is equivalent to row-reverse but vertically.",
+      "viDuNghia": "column-reverse giống row-reverse nhưng theo chiều dọc."
+    },
+    {
+      "chu": "column-reverse",
+      "doc": "/ˈkɑːləm rɪˈvɜːrs/",
+      "nghia": "giá trị flexDirection: xếp theo cột nhưng từ dưới lên",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "column-reverse stacks the children from the bottom up.",
+      "viDuNghia": "column-reverse xếp các phần tử con từ dưới lên."
+    },
+    {
+      "chu": "flexWrap",
+      "doc": "/fleks ræp/",
+      "nghia": "thuộc tính cho phép phần tử con xuống dòng khi tràn trục chính (wrap, nowrap)",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "If wrapping is enabled, then the next line will start under the first item on the left of the container.",
+      "viDuNghia": "Nếu bật xuống dòng, dòng tiếp theo bắt đầu dưới phần tử đầu tiên bên trái khung chứa."
+    },
+    {
+      "chu": "alignSelf",
+      "doc": "/əˈlaɪn self/",
+      "nghia": "thuộc tính căn RIÊNG một phần tử con theo trục phụ, ghi đè alignItems của cha",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "alignSelf: 'flex-end' moves only this badge to the right.",
+      "viDuNghia": "alignSelf: 'flex-end' chỉ dời nhãn này sang phải."
+    },
+    {
+      "chu": "alignContent",
+      "doc": "/əˈlaɪn ˈkɑːntent/",
+      "nghia": "thuộc tính căn các DÒNG (khi có flexWrap) theo trục phụ",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "alignContent only has an effect when flexWrap is enabled.",
+      "viDuNghia": "alignContent chỉ có tác dụng khi bật flexWrap."
+    },
+    {
+      "chu": "flex property",
+      "doc": "/fleks ˈprɑːpərti/",
+      "nghia": "thuộc tính flex: tỉ lệ phần không gian phần tử chiếm theo trục chính, flex: 1 lấp đầy chỗ trống",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "Use flex: 1 so the list fills the rest of the screen.",
+      "viDuNghia": "Dùng flex: 1 để danh sách lấp phần còn lại của màn hình."
+    },
+    {
+      "chu": "flexGrow",
+      "doc": "/fleks ɡroʊ/",
+      "nghia": "thuộc tính cho phần tử giãn ra chiếm khoảng trống còn lại",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "flexGrow: 1 lets the input take the remaining width.",
+      "viDuNghia": "flexGrow: 1 cho ô nhập chiếm phần chiều ngang còn lại."
+    },
+    {
+      "chu": "space-between",
+      "doc": "/speɪs bɪˈtwiːn/",
+      "nghia": "giá trị justifyContent: phần tử đầu và cuối sát mép, khoảng cách còn lại chia đều ở giữa",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "justifyContent: 'space-between' puts the title on the left and the icon on the right.",
+      "viDuNghia": "space-between đặt tiêu đề bên trái và biểu tượng bên phải."
+    },
+    {
+      "chu": "align children",
+      "doc": "/əˈlaɪn ˈtʃɪldrən/",
+      "nghia": "căn các phần tử con trong khung chứa (alignItems theo trục phụ, justifyContent theo trục chính)",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "Align children within the main axis of our container.",
+      "viDuNghia": "Căn các phần tử con theo trục chính của khung chứa."
+    },
+    {
+      "chu": "grid layout",
+      "doc": "/ɡrɪd ˈleɪaʊt/",
+      "nghia": "bố cục lưới: nhiều cột mỗi hàng; trong FlatList dùng numColumns",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "Display list items in a grid layout with two columns.",
+      "viDuNghia": "Hiển thị danh sách dạng lưới hai cột."
+    },
+    {
+      "chu": "zIndex",
+      "doc": "/ˈzed ˈɪndeks/",
+      "nghia": "thứ tự xếp chồng: phần tử zIndex lớn hơn nằm đè lên trên",
+      "nhom": "Flexbox và hướng bố cục",
+      "viDu": "Give the floating button a higher zIndex.",
+      "viDuNghia": "Đặt zIndex cao hơn cho nút nổi."
+    },
+    {
+      "chu": "aspectRatio",
+      "doc": "/ˈæspekt ˈreɪʃioʊ/",
+      "nghia": "tỉ lệ khung: cố định tỉ lệ rộng/cao, vd aspectRatio: 1 cho ảnh vuông",
+      "nhom": "Style và kích thước",
+      "viDu": "aspectRatio: 16 / 9 keeps the banner the same shape on every phone.",
+      "viDuNghia": "aspectRatio 16/9 giữ khung banner cùng tỉ lệ trên mọi máy."
+    },
+    {
+      "chu": "borderRadius",
+      "doc": "/ˈbɔːrdər ˈreɪdiəs/",
+      "nghia": "bán kính bo góc; bằng nửa cạnh thì thành hình tròn",
+      "nhom": "Style và kích thước",
+      "viDu": "borderRadius: 50 makes a 100 x 100 avatar round.",
+      "viDuNghia": "borderRadius 50 làm ảnh đại diện 100 x 100 thành hình tròn."
+    },
+    {
+      "chu": "fontWeight",
+      "doc": "/fɑːnt weɪt/",
+      "nghia": "độ đậm chữ ('bold', '600'…)",
+      "nhom": "Style và kích thước",
+      "viDu": "Show the price with fontWeight: 'bold'.",
+      "viDuNghia": "Hiện giá với chữ đậm."
+    },
+    {
+      "chu": "StyleSheet",
+      "doc": "/ˈstaɪlʃiːt/",
+      "nghia": "API StyleSheet.create(): khai báo style tập trung, có kiểm tra và tối ưu hơn object thường",
+      "nhom": "Style và kích thước",
+      "viDu": "What is a possible reason for using plain JavaScript objects instead of StyleSheet to define styles?",
+      "viDuNghia": "Lý do nào để dùng object JavaScript thường thay vì StyleSheet khi định nghĩa style?"
+    },
+    {
+      "chu": "inline style object",
+      "doc": "/ˈɪnlaɪn staɪl ˈɑːbdʒekt/",
+      "nghia": "object style viết thẳng trong prop style={{ ... }}, tiện cho style tính động",
+      "nhom": "Style và kích thước",
+      "viDu": "style={{ color: isFavorite ? 'red' : 'gray' }} uses an inline style object.",
+      "viDuNghia": "style={{ color: ... }} dùng object style viết thẳng."
+    },
+    {
+      "chu": "CSS-in-JS",
+      "doc": "/ˌsiː es ˈes ɪn ˌdʒeɪ ˈes/",
+      "nghia": "viết style bằng JavaScript (styled-components, Emotion) thay vì tệp CSS",
+      "nhom": "Style và kích thước",
+      "viDu": "Using CSS-in-JS libraries.",
+      "viDuNghia": "Dùng các thư viện CSS-in-JS."
+    },
+    {
+      "chu": "camelCase property",
+      "doc": "/ˈkæməl keɪs ˈprɑːpərti/",
+      "nghia": "tên thuộc tính style viết kiểu lạc đà: backgroundColor thay vì background-color",
+      "nhom": "Style và kích thước",
+      "viDu": "React Native style names use camelCase properties such as fontSize.",
+      "viDuNghia": "Tên style React Native viết kiểu camelCase như fontSize."
+    },
+    {
+      "chu": "unitless value",
+      "doc": "/ˈjuːnɪtləs ˈvæljuː/",
+      "nghia": "giá trị không ghi đơn vị: width: 100 tính theo điểm độc lập mật độ, không có px",
+      "nhom": "Style và kích thước",
+      "viDu": "All dimensions in React Native are unitless values.",
+      "viDuNghia": "Mọi kích thước trong React Native là giá trị không đơn vị."
+    },
+    {
+      "chu": "percentage dimension",
+      "doc": "/pərˈsentɪdʒ daɪˈmenʃn/",
+      "nghia": "kích thước theo phần trăm của khung cha, vd width: '50%'",
+      "nhom": "Style và kích thước",
+      "viDu": "Give each card a percentage dimension of 48% to fit two per row.",
+      "viDuNghia": "Đặt mỗi thẻ rộng 48% để vừa hai thẻ một hàng."
+    },
+    {
+      "chu": "useWindowDimensions",
+      "doc": "/juːz ˈwɪndoʊ daɪˈmenʃnz/",
+      "nghia": "hook lõi React Native trả width, height cửa sổ và tự cập nhật khi xoay máy",
+      "nhom": "Style và kích thước",
+      "viDu": "The useWindowDimensions hook is part of the core React Native package. True or false?",
+      "viDuNghia": "Hook useWindowDimensions thuộc gói lõi React Native. Đúng hay sai?"
+    },
+    {
+      "chu": "Dimensions API",
+      "doc": "/daɪˈmenʃnz ˌeɪ piː ˈaɪ/",
+      "nghia": "API Dimensions.get('window') lấy kích thước màn hình một lần (không tự cập nhật)",
+      "nhom": "Style và kích thước",
+      "viDu": "Dimensions.get('window').width returns the screen width.",
+      "viDuNghia": "Dimensions.get('window').width trả chiều rộng màn hình."
+    },
+    {
+      "chu": "Platform module",
+      "doc": "/ˈplætfɔːrm ˈmɑːdʒuːl/",
+      "nghia": "module Platform: Platform.OS cho biết đang chạy 'ios' hay 'android', Platform.select chọn giá trị theo nền tảng",
+      "nhom": "Style và kích thước",
+      "viDu": "Use Platform.select to set a different shadow on iOS and Android.",
+      "viDuNghia": "Dùng Platform.select để đặt bóng khác nhau trên iOS và Android."
+    },
+    {
+      "chu": "shadow and elevation",
+      "doc": "/ˈʃædoʊ ənd ˌelɪˈveɪʃn/",
+      "nghia": "bóng đổ: iOS dùng shadowColor, shadowOffset…; Android dùng elevation",
+      "nhom": "Style và kích thước",
+      "viDu": "Cards need shadow props on iOS and elevation on Android.",
+      "viDuNghia": "Thẻ cần thuộc tính shadow trên iOS và elevation trên Android."
+    },
+    {
+      "chu": "neatly and efficiently",
+      "doc": "/ˈniːtli ənd ɪˈfɪʃntli/",
+      "nghia": "gọn gàng và hiệu quả — yêu cầu chấm điểm bố cục trong đề PE",
+      "nhom": "Style và kích thước",
+      "viDu": "Arrange and lay out this screen as neatly and efficiently as possible.",
+      "viDuNghia": "Sắp xếp bố cục màn hình này gọn gàng và hiệu quả nhất có thể."
+    },
+    {
+      "chu": "View component",
+      "doc": "/vjuː kəmˈpoʊnənt/",
+      "nghia": "View: khung chứa cơ bản nhất (giống div), hỗ trợ flexbox, style, chạm",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "View, Text and Image are core components.",
+      "viDuNghia": "View, Text và Image là component lõi."
+    },
+    {
+      "chu": "Text component",
+      "doc": "/tekst kəmˈpoʊnənt/",
+      "nghia": "Text: component bắt buộc để hiện chữ; chữ đặt ngoài Text sẽ báo lỗi",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Text strings must be rendered within a Text component.",
+      "viDuNghia": "Chuỗi chữ phải được hiển thị bên trong component Text."
+    },
+    {
+      "chu": "Image component",
+      "doc": "/ˈɪmɪdʒ kəmˈpoʊnənt/",
+      "nghia": "Image: hiện ảnh từ require('./a.png') hoặc { uri: 'https://...' }, ảnh mạng phải có width, height",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Tapping the jewelry's image switches you to the Detail screen.",
+      "viDuNghia": "Chạm vào ảnh trang sức sẽ chuyển sang màn hình Detail."
+    },
+    {
+      "chu": "resizeMode",
+      "doc": "/ˌriːˈsaɪz moʊd/",
+      "nghia": "prop của Image: cách ảnh co giãn trong khung (cover, contain, stretch, center)",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "resizeMode=\"cover\" fills the box and crops the edges.",
+      "viDuNghia": "resizeMode=\"cover\" phủ kín khung và cắt bớt mép."
+    },
+    {
+      "chu": "image URI",
+      "doc": "/ˈɪmɪdʒ ˌjuː ɑːr ˈaɪ/",
+      "nghia": "đường dẫn ảnh dạng { uri: ... } cho ảnh từ mạng hoặc tệp",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "The real field is \"imageUri\", not \"imageUrl\".",
+      "viDuNghia": "Trường thật là \"imageUri\", không phải \"imageUrl\"."
+    },
+    {
+      "chu": "ImageBackground",
+      "doc": "/ˈɪmɪdʒ ˈbækɡraʊnd/",
+      "nghia": "component ảnh làm nền, đặt được phần tử con lên trên",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Use ImageBackground for the banner with the shop name on top.",
+      "viDuNghia": "Dùng ImageBackground cho banner có tên cửa hàng đè lên trên."
+    },
+    {
+      "chu": "numberOfLines",
+      "doc": "/ˈnʌmbər əv laɪnz/",
+      "nghia": "prop của Text giới hạn số dòng, phần dư bị cắt và có dấu ...",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "numberOfLines={2} truncates a long description.",
+      "viDuNghia": "numberOfLines={2} cắt bớt mô tả dài."
+    },
+    {
+      "chu": "TextInput",
+      "doc": "/tekst ˈɪnpʊt/",
+      "nghia": "ô nhập chữ của React Native; đọc giá trị qua onChangeText",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Which component is used to accept user input? TextInput.",
+      "viDuNghia": "Component nào nhận dữ liệu người dùng nhập? TextInput."
+    },
+    {
+      "chu": "onChangeText",
+      "doc": "/ɑːn tʃeɪndʒ tekst/",
+      "nghia": "prop của TextInput nhận thẳng chuỗi mới mỗi lần gõ",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "onChangeText={text => setText(text)}",
+      "viDuNghia": "Mỗi lần gõ, gán chuỗi mới vào state text."
+    },
+    {
+      "chu": "placeholder text",
+      "doc": "/ˈpleɪshoʊldər tekst/",
+      "nghia": "chữ gợi ý mờ trong ô nhập khi còn trống",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Supports placeholder text.",
+      "viDuNghia": "Hỗ trợ chữ gợi ý."
+    },
+    {
+      "chu": "secureTextEntry",
+      "doc": "/sɪˈkjʊr tekst ˈentri/",
+      "nghia": "prop của TextInput che ký tự (ô mật khẩu)",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Set secureTextEntry on the password field.",
+      "viDuNghia": "Đặt secureTextEntry cho ô mật khẩu."
+    },
+    {
+      "chu": "keyboardType",
+      "doc": "/ˈkiːbɔːrd taɪp/",
+      "nghia": "prop chọn loại bàn phím ảo: numeric, email-address, phone-pad",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "keyboardType=\"numeric\" shows a number pad for the price.",
+      "viDuNghia": "keyboardType=\"numeric\" hiện bàn phím số cho ô giá."
+    },
+    {
+      "chu": "auto-capitalization",
+      "doc": "/ˌɔːtoʊ ˌkæpɪtələˈzeɪʃn/",
+      "nghia": "tự viết hoa chữ đầu (prop autoCapitalize: none, sentences, words)",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Which feature does TextInput support? Auto-capitalization.",
+      "viDuNghia": "TextInput hỗ trợ tính năng nào? Tự viết hoa."
+    },
+    {
+      "chu": "autoFocus",
+      "doc": "/ˈɔːtoʊ ˈfoʊkəs/",
+      "nghia": "prop cho ô nhập tự nhận tiêu điểm và mở bàn phím khi màn hình hiện",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Supports auto focus.",
+      "viDuNghia": "Hỗ trợ tự nhận tiêu điểm."
+    },
+    {
+      "chu": "KeyboardAvoidingView",
+      "doc": "/ˈkiːbɔːrd əˈvɔɪdɪŋ vjuː/",
+      "nghia": "khung tự đẩy nội dung lên để bàn phím ảo không che ô nhập",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Wrap the form in a KeyboardAvoidingView.",
+      "viDuNghia": "Bọc form trong KeyboardAvoidingView."
+    },
+    {
+      "chu": "onPress",
+      "doc": "/ɑːn pres/",
+      "nghia": "prop sự kiện chạm (bấm rồi thả) của Button, Pressable, Touchable…",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "onPress={() => navigation.navigate('Detail', { id })}",
+      "viDuNghia": "Khi bấm thì chuyển sang Detail kèm id."
+    },
+    {
+      "chu": "hitSlop",
+      "doc": "/hɪt slɑːp/",
+      "nghia": "prop mở rộng vùng nhận chạm ra ngoài khung nhìn thấy, giúp nút nhỏ dễ bấm",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "hitSlop={10} makes the small heart icon easier to tap.",
+      "viDuNghia": "hitSlop={10} giúp biểu tượng trái tim nhỏ dễ chạm hơn."
+    },
+    {
+      "chu": "TouchableWithoutFeedback",
+      "doc": "/ˈtʌtʃəbl wɪˈðaʊt ˈfiːdbæk/",
+      "nghia": "vùng chạm không có hiệu ứng nhìn thấy, vd chạm ra ngoài để ẩn bàn phím",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Wrap the screen in TouchableWithoutFeedback to dismiss the keyboard.",
+      "viDuNghia": "Bọc màn hình trong TouchableWithoutFeedback để ẩn bàn phím."
+    },
+    {
+      "chu": "TouchableOpacity",
+      "doc": "/ˈtʌtʃəbl oʊˈpæsəti/",
+      "nghia": "vùng chạm mờ đi khi bấm; cũ hơn Pressable",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Wrap the card in a TouchableOpacity to open the Detail screen.",
+      "viDuNghia": "Bọc thẻ trong TouchableOpacity để mở màn hình Detail."
+    },
+    {
+      "chu": "TouchableHighlight",
+      "doc": "/ˈtʌtʃəbl ˈhaɪlaɪt/",
+      "nghia": "vùng chạm hiện màu nền tối khi đang bấm (underlayColor)",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "TouchableHighlight shows an underlay color while pressed.",
+      "viDuNghia": "TouchableHighlight hiện màu nền khi đang bấm."
+    },
+    {
+      "chu": "Button component",
+      "doc": "/ˈbʌtn kəmˈpoʊnənt/",
+      "nghia": "Button lõi: nút đơn giản, prop title là chữ trên nút, ít tuỳ biến style",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Which prop of the Button component allows you to define the text displayed on the button?",
+      "viDuNghia": "Prop nào của Button cho định nghĩa chữ hiển thị trên nút?"
+    },
+    {
+      "chu": "Switch control",
+      "doc": "/swɪtʃ kənˈtroʊl/",
+      "nghia": "công tắc bật/tắt (component Switch); prop value giữ trạng thái, onValueChange đổi trạng thái",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Which prop of the Switch component controls the state of the switch?",
+      "viDuNghia": "Prop nào của Switch điều khiển trạng thái công tắc?"
+    },
+    {
+      "chu": "Modal component",
+      "doc": "/ˈmoʊdl kəmˈpoʊnənt/",
+      "nghia": "Modal (React Native): lớp nội dung hiện đè lên màn hình; prop visible, animationType",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Show the delete confirmation in a Modal component.",
+      "viDuNghia": "Hiện xác nhận xoá trong Modal."
+    },
+    {
+      "chu": "Alert API",
+      "doc": "/əˈlɜːrt ˌeɪ piː ˈaɪ/",
+      "nghia": "Alert.alert(): hộp thoại hệ thống có tiêu đề và các nút (Cancel, OK)",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Alert.alert('Delete', 'Are you sure?', [...]) asks for confirmation.",
+      "viDuNghia": "Alert.alert hỏi xác nhận trước khi xoá."
+    },
+    {
+      "chu": "favorite icon",
+      "doc": "/ˈfeɪvərɪt ˈaɪkɑːn/",
+      "nghia": "biểu tượng yêu thích (trái tim/ngôi sao) để thêm/bỏ mục khỏi danh sách yêu thích",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "Pressing the favorite icon on the jewelry view adds the jewelry to the favorite list.",
+      "viDuNghia": "Bấm biểu tượng yêu thích ở thẻ trang sức sẽ thêm nó vào danh sách yêu thích."
+    },
+    {
+      "chu": "vector icons",
+      "doc": "/ˈvektər ˈaɪkɑːnz/",
+      "nghia": "bộ biểu tượng dạng font (@expo/vector-icons: Ionicons, MaterialIcons)",
+      "nhom": "Component lõi và nhập liệu",
+      "viDu": "import { Ionicons } from '@expo/vector-icons';",
+      "viDuNghia": "Nhập bộ biểu tượng Ionicons."
+    },
+    {
+      "chu": "numColumns",
+      "doc": "/nʌm ˈkɑːləmz/",
+      "nghia": "prop của FlatList chia danh sách thành nhiều cột (dạng lưới)",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "numColumns={2} displays the fruits in a two-column grid.",
+      "viDuNghia": "numColumns={2} hiển thị trái cây dạng lưới hai cột."
+    },
+    {
+      "chu": "horizontal list",
+      "doc": "/ˌhɔːrəˈzɑːntl lɪst/",
+      "nghia": "danh sách cuộn ngang (prop horizontal của FlatList/ScrollView)",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "Use a horizontal list to create a carousel of images.",
+      "viDuNghia": "Dùng danh sách ngang để tạo băng chuyền ảnh."
+    },
+    {
+      "chu": "ItemSeparatorComponent",
+      "doc": "/ˈaɪtəm ˈsepəreɪtər kəmˈpoʊnənt/",
+      "nghia": "prop vẽ đường/khoảng ngăn giữa các mục (không vẽ trước mục đầu, sau mục cuối)",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "ItemSeparatorComponent",
+      "viDuNghia": "Component ngăn cách giữa các mục."
+    },
+    {
+      "chu": "ListHeaderComponent",
+      "doc": "/lɪst ˈhedər kəmˈpoʊnənt/",
+      "nghia": "prop vẽ phần đầu danh sách (cuộn theo danh sách)",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "Header, footer and separator support.",
+      "viDuNghia": "Hỗ trợ phần đầu, phần cuối và đường ngăn."
+    },
+    {
+      "chu": "ListEmptyComponent",
+      "doc": "/lɪst ˈempti kəmˈpoʊnənt/",
+      "nghia": "prop hiện nội dung khi mảng dữ liệu rỗng, vd \"No favorites yet\"",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "ListEmptyComponent shows a message when the favorite list is empty.",
+      "viDuNghia": "ListEmptyComponent hiện thông báo khi danh sách yêu thích trống."
+    },
+    {
+      "chu": "renderSectionHeader",
+      "doc": "/ˈrendər ˈsekʃn ˈhedər/",
+      "nghia": "prop của SectionList vẽ tiêu đề mỗi nhóm",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "The renderSectionHeader prop is used to render the header of each section in a SectionList.",
+      "viDuNghia": "Prop renderSectionHeader dùng để vẽ tiêu đề mỗi nhóm trong SectionList."
+    },
+    {
+      "chu": "sectional support",
+      "doc": "/ˈsekʃənl səˈpɔːrt/",
+      "nghia": "hỗ trợ chia nhóm có tiêu đề — tính năng của SectionList, FlatList không có",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "Fully cross-platform; Sectional support.",
+      "viDuNghia": "Đa nền tảng hoàn toàn; hỗ trợ chia nhóm."
+    },
+    {
+      "chu": "pull to refresh",
+      "doc": "/pʊl tə rɪˈfreʃ/",
+      "nghia": "kéo xuống để làm mới (prop refreshing + onRefresh hoặc RefreshControl)",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "Pull to refresh support.",
+      "viDuNghia": "Hỗ trợ kéo để làm mới."
+    },
+    {
+      "chu": "onEndReached",
+      "doc": "/ɑːn end riːtʃt/",
+      "nghia": "prop gọi khi cuộn gần cuối danh sách, dùng để tải thêm trang (cuộn vô tận)",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "Load the next page in onEndReached.",
+      "viDuNghia": "Tải trang tiếp theo trong onEndReached."
+    },
+    {
+      "chu": "infinite scroll",
+      "doc": "/ˈɪnfɪnət skroʊl/",
+      "nghia": "cuộn vô tận: tự tải thêm dữ liệu khi người dùng cuộn tới cuối",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "FlatList supports infinite scroll with onEndReached.",
+      "viDuNghia": "FlatList hỗ trợ cuộn vô tận bằng onEndReached."
+    },
+    {
+      "chu": "extraData",
+      "doc": "/ˈekstrə ˈdeɪtə/",
+      "nghia": "prop báo FlatList dựng lại khi dữ liệu ngoài mảng data đổi (vd danh sách yêu thích)",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "Pass favorites as extraData so the heart icons re-render.",
+      "viDuNghia": "Truyền favorites vào extraData để biểu tượng trái tim vẽ lại."
+    },
+    {
+      "chu": "initialNumToRender",
+      "doc": "/ɪˈnɪʃl ˈnʌmbər tə ˈrendər/",
+      "nghia": "prop số mục FlatList dựng ở lần hiển thị đầu",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "Lower initialNumToRender to speed up the first screen.",
+      "viDuNghia": "Giảm initialNumToRender để màn hình đầu hiện nhanh hơn."
+    },
+    {
+      "chu": "getItemLayout",
+      "doc": "/ɡet ˈaɪtəm ˈleɪaʊt/",
+      "nghia": "prop khai sẵn chiều cao từng mục để FlatList khỏi đo, cuộn nhanh hơn",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "getItemLayout skips measuring items of a fixed height.",
+      "viDuNghia": "getItemLayout bỏ bước đo các mục có chiều cao cố định."
+    },
+    {
+      "chu": "virtualized list",
+      "doc": "/ˈvɜːrtʃuəlaɪzd lɪst/",
+      "nghia": "danh sách ảo hoá: chỉ dựng các mục đang thấy trên màn hình nên nhẹ với danh sách dài",
+      "nhom": "Danh sách FlatList và SectionList",
+      "viDu": "FlatList is a virtualized list, unlike ScrollView.",
+      "viDuNghia": "FlatList là danh sách ảo hoá, khác ScrollView."
+    }
+  ]
+}

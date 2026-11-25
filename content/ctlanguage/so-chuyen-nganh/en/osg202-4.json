@@ -1,0 +1,650 @@
+{
+ "ma": "osg202-4",
+ "nn": "en",
+ "ten": "OSG202 · 4. Tiến trình, tín hiệu & đồng bộ trên Linux",
+ "moTa": "Phần thực hành HĐH trên Linux/POSIX của OSG202: vòng đời tiến trình (exec, zombie, mồ côi, init/systemd), tín hiệu (SIGKILL, SIGTERM…), luồng POSIX, khoá nâng cao (spinlock, futex, biến điều kiện), lập lịch CFS và IPC qua pipe, hàng đợi thông điệp.",
+ "bieuTuong": "terminal.fill",
+ "thuTu": -965,
+ "tu": [
+  {
+   "chu": "exec",
+   "doc": "/ɪɡˈzek/",
+   "nghia": "exec: họ lời gọi hệ thống thay ảnh bộ nhớ của tiến trình hiện tại bằng một chương trình mới (PID giữ nguyên)",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "After fork(), the child calls exec() to replace its memory image with a new program.",
+   "viDuNghia": "Sau fork(), tiến trình con gọi exec() để thay ảnh bộ nhớ của nó bằng một chương trình mới."
+  },
+  {
+   "chu": "process ID",
+   "doc": "/ˈprɑːses ˌaɪ ˈdiː/",
+   "nghia": "mã tiến trình (PID): số nguyên duy nhất HĐH gán cho mỗi tiến trình",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "The getpid() call returns the process ID of the calling process.",
+   "viDuNghia": "Lời gọi getpid() trả về mã tiến trình của tiến trình gọi nó."
+  },
+  {
+   "chu": "wait system call",
+   "doc": "/weɪt ˈsɪstəm kɔːl/",
+   "nghia": "lời gọi wait(): tiến trình cha chờ một tiến trình con kết thúc và lấy trạng thái thoát của nó",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "The parent uses the wait system call to collect the exit status of its child.",
+   "viDuNghia": "Tiến trình cha dùng lời gọi wait để lấy trạng thái thoát của tiến trình con."
+  },
+  {
+   "chu": "exit status",
+   "doc": "/ˈeksɪt ˈsteɪtəs/",
+   "nghia": "trạng thái thoát (mã thoát): số tiến trình trả về khi kết thúc; 0 thường nghĩa là thành công",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "An exit status of 0 means the program finished successfully.",
+   "viDuNghia": "Trạng thái thoát 0 nghĩa là chương trình đã chạy xong thành công."
+  },
+  {
+   "chu": "zombie process",
+   "doc": "/ˈzɑːmbi ˈprɑːses/",
+   "nghia": "tiến trình zombie: đã kết thúc nhưng cha chưa gọi wait() nên mục trong bảng tiến trình vẫn còn",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "A zombie process has terminated, but its parent has not yet read its exit status.",
+   "viDuNghia": "Tiến trình zombie đã kết thúc nhưng tiến trình cha chưa đọc trạng thái thoát của nó."
+  },
+  {
+   "chu": "orphan process",
+   "doc": "/ˈɔːrfən ˈprɑːses/",
+   "nghia": "tiến trình mồ côi: tiến trình con còn chạy khi cha đã chết; được init/systemd nhận làm con",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "When the parent exits first, the orphan process is adopted by init.",
+   "viDuNghia": "Khi tiến trình cha thoát trước, tiến trình mồ côi được init nhận nuôi."
+  },
+  {
+   "chu": "reap",
+   "doc": "/riːp/",
+   "nghia": "thu dọn (tiến trình con): gọi wait() để lấy trạng thái thoát và xoá hẳn zombie khỏi bảng tiến trình",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "A well-written server reaps its children so that zombies do not pile up.",
+   "viDuNghia": "Một server viết tốt luôn thu dọn tiến trình con để zombie không chất đống."
+  },
+  {
+   "chu": "init system",
+   "doc": "/ɪˈnɪt ˈsɪstəm/",
+   "nghia": "hệ thống init: tiến trình đầu tiên (PID 1) do nhân khởi chạy, khởi động dịch vụ và nhận nuôi tiến trình mồ côi",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "The init system is the first user-space process started by the kernel.",
+   "viDuNghia": "Hệ thống init là tiến trình không gian người dùng đầu tiên mà nhân khởi chạy."
+  },
+  {
+   "chu": "systemd",
+   "doc": "/ˈsɪstəm diː/",
+   "nghia": "systemd: hệ thống init và quản lý dịch vụ phổ biến trên Linux hiện nay (chạy với PID 1)",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "On most modern distributions, systemd runs as PID 1 and manages services.",
+   "viDuNghia": "Trên hầu hết bản phân phối hiện đại, systemd chạy với PID 1 và quản lý các dịch vụ."
+  },
+  {
+   "chu": "core dump",
+   "doc": "/kɔːr dʌmp/",
+   "nghia": "kết xuất lõi: tệp ghi lại ảnh bộ nhớ của tiến trình lúc bị chết bất thường, dùng để gỡ lỗi",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "The program crashed with a segmentation fault and left a core dump for debugging.",
+   "viDuNghia": "Chương trình sập vì lỗi phân đoạn và để lại một tệp kết xuất lõi để gỡ lỗi."
+  },
+  {
+   "chu": "process hierarchy",
+   "doc": "/ˈprɑːses ˈhaɪərɑːrki/",
+   "nghia": "cây phân cấp tiến trình: quan hệ cha – con giữa các tiến trình (UNIX có, Windows không)",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "In UNIX, a process and all of its descendants form a process hierarchy.",
+   "viDuNghia": "Trong UNIX, một tiến trình cùng mọi hậu duệ của nó tạo thành một cây phân cấp tiến trình."
+  },
+  {
+   "chu": "involuntary",
+   "doc": "/ɪnˈvɑːlənteri/",
+   "nghia": "không tự nguyện (cách kết thúc tiến trình): do lỗi nghiêm trọng hoặc bị tiến trình khác giết",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "Killed by another process (involuntary)",
+   "viDuNghia": "Bị tiến trình khác giết (không tự nguyện)"
+  },
+  {
+   "chu": "command interpreter",
+   "doc": "/kəˈmænd ɪnˈtɜːrprətər/",
+   "nghia": "trình thông dịch lệnh: chương trình đọc và thực thi lệnh người dùng gõ (shell)",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "Loading the command interpreter",
+   "viDuNghia": "Nạp trình thông dịch lệnh"
+  },
+  {
+   "chu": "foreground process",
+   "doc": "/ˈfɔːrɡraʊnd ˈprɑːses/",
+   "nghia": "tiến trình tiền cảnh: tiến trình đang giữ terminal, tương tác trực tiếp với người dùng",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "Pressing Ctrl+C sends SIGINT to the foreground process.",
+   "viDuNghia": "Nhấn Ctrl+C gửi SIGINT tới tiến trình tiền cảnh."
+  },
+  {
+   "chu": "background process",
+   "doc": "/ˈbækɡraʊnd ˈprɑːses/",
+   "nghia": "tiến trình hậu cảnh: chạy không chiếm terminal (vd lệnh kết thúc bằng &)",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "Adding & at the end of a command starts it as a background process.",
+   "viDuNghia": "Thêm & ở cuối lệnh sẽ chạy nó thành tiến trình hậu cảnh."
+  },
+  {
+   "chu": "job control",
+   "doc": "/dʒɑːb kənˈtroʊl/",
+   "nghia": "điều khiển tác vụ: tính năng của shell để tạm dừng, chuyển tiền cảnh/hậu cảnh các tác vụ (fg, bg, Ctrl+Z)",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "Job control lets the user suspend a job with Ctrl+Z and resume it with fg.",
+   "viDuNghia": "Điều khiển tác vụ cho phép người dùng tạm dừng tác vụ bằng Ctrl+Z và chạy tiếp bằng fg."
+  },
+  {
+   "chu": "graceful shutdown",
+   "doc": "/ˈɡreɪsfl ˈʃʌtdaʊn/",
+   "nghia": "tắt êm: chương trình nhận tín hiệu dừng thì làm xong việc dở, đóng kết nối, ghi dữ liệu rồi mới thoát",
+   "nhom": "Vòng đời tiến trình trên Linux",
+   "viDu": "On SIGTERM the server performs a graceful shutdown instead of exiting immediately.",
+   "viDuNghia": "Khi nhận SIGTERM, server tắt êm thay vì thoát ngay lập tức."
+  },
+  {
+   "chu": "signal handler",
+   "doc": "/ˈsɪɡnəl ˈhændlər/",
+   "nghia": "trình xử lý tín hiệu: hàm do chương trình đăng ký, chạy khi tiến trình nhận một tín hiệu",
+   "nhom": "Tín hiệu",
+   "viDu": "The program installs a signal handler to clean up before it exits.",
+   "viDuNghia": "Chương trình cài một trình xử lý tín hiệu để dọn dẹp trước khi thoát."
+  },
+  {
+   "chu": "default action",
+   "doc": "/dɪˈfɔːlt ˈækʃn/",
+   "nghia": "hành động mặc định (của tín hiệu): việc nhân làm khi tiến trình không tự xử lý tín hiệu (kết thúc, bỏ qua, dừng, kết xuất lõi)",
+   "nhom": "Tín hiệu",
+   "viDu": "The default action of SIGSEGV is to terminate the process and dump core.",
+   "viDuNghia": "Hành động mặc định của SIGSEGV là kết thúc tiến trình và kết xuất lõi."
+  },
+  {
+   "chu": "SIGKILL",
+   "doc": "/ˈsɪɡ kɪl/",
+   "nghia": "SIGKILL (tín hiệu 9): giết tiến trình ngay, không thể bắt, chặn hay bỏ qua",
+   "nhom": "Tín hiệu",
+   "viDu": "SIGKILL cannot be caught or ignored, so the process has no chance to clean up.",
+   "viDuNghia": "SIGKILL không thể bắt hay bỏ qua, nên tiến trình không có cơ hội dọn dẹp."
+  },
+  {
+   "chu": "SIGTERM",
+   "doc": "/ˈsɪɡ tɜːrm/",
+   "nghia": "SIGTERM (tín hiệu 15): yêu cầu tiến trình kết thúc một cách lịch sự; bắt được để tắt êm",
+   "nhom": "Tín hiệu",
+   "viDu": "The kill command sends SIGTERM by default.",
+   "viDuNghia": "Lệnh kill mặc định gửi SIGTERM."
+  },
+  {
+   "chu": "SIGINT",
+   "doc": "/ˈsɪɡ ɪnt/",
+   "nghia": "SIGINT: tín hiệu ngắt do người dùng nhấn Ctrl+C ở terminal",
+   "nhom": "Tín hiệu",
+   "viDu": "SIGINT is generated when the user presses Ctrl+C.",
+   "viDuNghia": "SIGINT được sinh ra khi người dùng nhấn Ctrl+C."
+  },
+  {
+   "chu": "SIGCHLD",
+   "doc": "/ˈsɪɡ tʃaɪld/",
+   "nghia": "SIGCHLD: tín hiệu báo tiến trình cha rằng một tiến trình con đã kết thúc hoặc dừng",
+   "nhom": "Tín hiệu",
+   "viDu": "The parent receives SIGCHLD when one of its children terminates.",
+   "viDuNghia": "Tiến trình cha nhận SIGCHLD khi một tiến trình con của nó kết thúc."
+  },
+  {
+   "chu": "SIGSEGV",
+   "doc": "/ˌsɪɡ seɡ ˈviː/",
+   "nghia": "SIGSEGV: tín hiệu lỗi phân đoạn, gửi khi tiến trình truy cập vùng nhớ không hợp lệ",
+   "nhom": "Tín hiệu",
+   "viDu": "Dereferencing a NULL pointer usually causes SIGSEGV.",
+   "viDuNghia": "Truy cập qua con trỏ NULL thường gây ra SIGSEGV."
+  },
+  {
+   "chu": "SIGSTOP",
+   "doc": "/ˈsɪɡ stɑːp/",
+   "nghia": "SIGSTOP: tạm dừng tiến trình, không thể bắt hay bỏ qua; SIGCONT cho chạy tiếp",
+   "nhom": "Tín hiệu",
+   "viDu": "SIGSTOP pauses a process until it receives SIGCONT.",
+   "viDuNghia": "SIGSTOP tạm dừng tiến trình cho tới khi nó nhận SIGCONT."
+  },
+  {
+   "chu": "SIGHUP",
+   "doc": "/ˈsɪɡ hʌp/",
+   "nghia": "SIGHUP: báo terminal điều khiển đã đóng; nhiều daemon dùng nó làm tín hiệu nạp lại cấu hình",
+   "nhom": "Tín hiệu",
+   "viDu": "Many daemons reload their configuration when they receive SIGHUP.",
+   "viDuNghia": "Nhiều daemon nạp lại cấu hình khi nhận SIGHUP."
+  },
+  {
+   "chu": "SIGPIPE",
+   "doc": "/ˈsɪɡ paɪp/",
+   "nghia": "SIGPIPE: gửi khi tiến trình ghi vào pipe hay socket mà đầu đọc đã đóng",
+   "nhom": "Tín hiệu",
+   "viDu": "Writing to a pipe whose reader has exited raises SIGPIPE.",
+   "viDuNghia": "Ghi vào một pipe mà tiến trình đọc đã thoát sẽ phát sinh SIGPIPE."
+  },
+  {
+   "chu": "SIGALRM",
+   "doc": "/ˈsɪɡ əlɑːrm/",
+   "nghia": "SIGALRM: tín hiệu báo hẹn giờ do alarm() đặt đã hết",
+   "nhom": "Tín hiệu",
+   "viDu": "The alarm() call delivers SIGALRM after the given number of seconds.",
+   "viDuNghia": "Lời gọi alarm() gửi SIGALRM sau số giây đã cho."
+  },
+  {
+   "chu": "signal mask",
+   "doc": "/ˈsɪɡnəl mæsk/",
+   "nghia": "mặt nạ tín hiệu: tập tín hiệu đang bị chặn (tạm hoãn chuyển) đối với một luồng",
+   "nhom": "Tín hiệu",
+   "viDu": "A thread can block SIGINT by adding it to its signal mask.",
+   "viDuNghia": "Một luồng có thể chặn SIGINT bằng cách thêm nó vào mặt nạ tín hiệu."
+  },
+  {
+   "chu": "pending signal",
+   "doc": "/ˈpendɪŋ ˈsɪɡnəl/",
+   "nghia": "tín hiệu treo: đã được gửi nhưng chưa chuyển tới tiến trình (vì đang bị chặn)",
+   "nhom": "Tín hiệu",
+   "viDu": "A blocked signal stays as a pending signal until it is unblocked.",
+   "viDuNghia": "Một tín hiệu bị chặn sẽ là tín hiệu treo cho tới khi được bỏ chặn."
+  },
+  {
+   "chu": "errno",
+   "doc": "/ˈɜːr noʊ/",
+   "nghia": "errno: biến chứa mã lỗi của lời gọi hệ thống/hàm thư viện vừa thất bại",
+   "nhom": "Tín hiệu",
+   "viDu": "When open() fails, it returns -1 and sets errno.",
+   "viDuNghia": "Khi open() thất bại, nó trả về -1 và đặt giá trị errno."
+  },
+  {
+   "chu": "EINTR",
+   "doc": "/ˌiː ˈɪntər/",
+   "nghia": "EINTR: mã lỗi cho biết lời gọi hệ thống bị một tín hiệu ngắt giữa chừng, thường cần gọi lại",
+   "nhom": "Tín hiệu",
+   "viDu": "A blocking read() may fail with EINTR if a signal arrives.",
+   "viDuNghia": "Một lệnh read() đang chặn có thể thất bại với EINTR nếu có tín hiệu tới."
+  },
+  {
+   "chu": "reentrant",
+   "doc": "/riˈentrənt/",
+   "nghia": "khả tái nhập: hàm có thể bị gọi lại an toàn khi lần gọi trước chưa xong (vd từ trình xử lý tín hiệu)",
+   "nhom": "Tín hiệu",
+   "viDu": "Only reentrant functions should be called inside a signal handler.",
+   "viDuNghia": "Chỉ nên gọi các hàm khả tái nhập bên trong trình xử lý tín hiệu."
+  },
+  {
+   "chu": "POSIX",
+   "doc": "/ˈpɑːzɪks/",
+   "nghia": "POSIX: bộ chuẩn giao diện HĐH kiểu UNIX (lời gọi hệ thống, shell, luồng) để chương trình chạy được trên nhiều hệ",
+   "nhom": "Luồng POSIX",
+   "viDu": "POSIX defines a standard set of system calls for UNIX-like systems.",
+   "viDuNghia": "POSIX định nghĩa một bộ lời gọi hệ thống chuẩn cho các hệ kiểu UNIX."
+  },
+  {
+   "chu": "pthread",
+   "doc": "/ˈpiː θred/",
+   "nghia": "pthread: thư viện luồng POSIX (pthread_create, pthread_join, pthread_mutex_lock…)",
+   "nhom": "Luồng POSIX",
+   "viDu": "The pthread_create() call starts a new thread in the same process.",
+   "viDuNghia": "Lời gọi pthread_create() khởi động một luồng mới trong cùng tiến trình."
+  },
+  {
+   "chu": "thread pool",
+   "doc": "/θred puːl/",
+   "nghia": "nhóm luồng: tập luồng tạo sẵn, nhận việc từ hàng đợi để tránh chi phí tạo/huỷ luồng liên tục",
+   "nhom": "Luồng POSIX",
+   "viDu": "A web server can use a thread pool instead of creating a thread per request.",
+   "viDuNghia": "Web server có thể dùng nhóm luồng thay vì tạo một luồng cho mỗi yêu cầu."
+  },
+  {
+   "chu": "thread-local storage",
+   "doc": "/θred ˈloʊkl ˈstɔːrɪdʒ/",
+   "nghia": "lưu trữ cục bộ theo luồng: biến mỗi luồng có một bản riêng (vd errno)",
+   "nhom": "Luồng POSIX",
+   "viDu": "errno is kept in thread-local storage, so each thread sees its own value.",
+   "viDuNghia": "errno được giữ trong lưu trữ cục bộ theo luồng, nên mỗi luồng thấy giá trị riêng."
+  },
+  {
+   "chu": "detach",
+   "doc": "/dɪˈtætʃ/",
+   "nghia": "tách (luồng): cho luồng tự giải phóng tài nguyên khi kết thúc, không cần ai join",
+   "nhom": "Luồng POSIX",
+   "viDu": "A detached thread cannot be joined; its resources are freed when it exits.",
+   "viDuNghia": "Luồng đã tách không thể join; tài nguyên được giải phóng khi nó kết thúc."
+  },
+  {
+   "chu": "thread cancellation",
+   "doc": "/θred ˌkænsəˈleɪʃn/",
+   "nghia": "huỷ luồng: yêu cầu một luồng dừng trước khi nó làm xong (ngay lập tức hoặc tại điểm huỷ)",
+   "nhom": "Luồng POSIX",
+   "viDu": "With deferred thread cancellation, the target thread stops only at a cancellation point.",
+   "viDuNghia": "Với huỷ luồng trì hoãn, luồng đích chỉ dừng tại một điểm huỷ."
+  },
+  {
+   "chu": "green thread",
+   "doc": "/ɡriːn θred/",
+   "nghia": "luồng xanh: luồng do thư viện/máy ảo lập lịch trong không gian người dùng, nhân không biết tới",
+   "nhom": "Luồng POSIX",
+   "viDu": "Green threads are scheduled by a runtime library rather than by the kernel.",
+   "viDuNghia": "Luồng xanh được thư viện thời gian chạy lập lịch thay vì nhân."
+  },
+  {
+   "chu": "coroutine",
+   "doc": "/ˈkoʊruːˌtiːn/",
+   "nghia": "coroutine: hàm có thể tạm dừng và chạy tiếp, nhường quyền một cách chủ động (đa nhiệm hợp tác)",
+   "nhom": "Luồng POSIX",
+   "viDu": "A coroutine yields control voluntarily instead of being preempted.",
+   "viDuNghia": "Coroutine tự nguyện nhường quyền điều khiển thay vì bị trưng dụng."
+  },
+  {
+   "chu": "fiber",
+   "doc": "/ˈfaɪbər/",
+   "nghia": "fiber: luồng nhẹ do chương trình tự lập lịch hợp tác (Windows có Fiber API)",
+   "nhom": "Luồng POSIX",
+   "viDu": "Unlike threads, fibers are switched only when the running fiber yields.",
+   "viDuNghia": "Khác với luồng, fiber chỉ được chuyển khi fiber đang chạy tự nhường."
+  },
+  {
+   "chu": "cooperative multitasking",
+   "doc": "/koʊˈɑːpərətɪv ˌmʌltiˈtæskɪŋ/",
+   "nghia": "đa nhiệm hợp tác: mỗi tác vụ tự nhường CPU; một tác vụ lặp vô hạn có thể treo cả hệ",
+   "nhom": "Luồng POSIX",
+   "viDu": "In cooperative multitasking, a task that never yields can freeze the whole system.",
+   "viDuNghia": "Trong đa nhiệm hợp tác, một tác vụ không bao giờ nhường có thể làm treo cả hệ thống."
+  },
+  {
+   "chu": "spinlock",
+   "doc": "/ˈspɪnlɑːk/",
+   "nghia": "khoá quay: luồng chờ bằng cách lặp kiểm tra khoá liên tục (chờ bận); hợp khi khoá được giữ rất ngắn",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "A spinlock wastes CPU time, so it should be held only for very short sections.",
+   "viDuNghia": "Khoá quay tốn thời gian CPU nên chỉ nên giữ trong những đoạn rất ngắn."
+  },
+  {
+   "chu": "futex",
+   "doc": "/ˈfjuːteks/",
+   "nghia": "futex (fast userspace mutex): khoá của Linux, giành được thì xử lý ở không gian người dùng, chỉ nhờ nhân khi phải chờ",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "A futex avoids a system call when the lock is not contended.",
+   "viDuNghia": "Futex tránh được lời gọi hệ thống khi khoá không bị tranh chấp."
+  },
+  {
+   "chu": "condition variable",
+   "doc": "/kənˈdɪʃn ˈveriəbl/",
+   "nghia": "biến điều kiện: cho luồng ngủ chờ tới khi một điều kiện đúng (wait/signal), luôn dùng kèm mutex",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "A consumer waits on a condition variable until the buffer is not empty.",
+   "viDuNghia": "Luồng tiêu thụ chờ trên biến điều kiện cho tới khi bộ đệm không rỗng."
+  },
+  {
+   "chu": "atomic operation",
+   "doc": "/əˈtɑːmɪk ˌɑːpəˈreɪʃn/",
+   "nghia": "thao tác nguyên tử: thực hiện trọn vẹn không thể bị chen ngang giữa chừng",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "Incrementing a shared counter must be an atomic operation to avoid a race condition.",
+   "viDuNghia": "Tăng một bộ đếm dùng chung phải là thao tác nguyên tử để tránh tranh đua."
+  },
+  {
+   "chu": "compare-and-swap",
+   "doc": "/kəmˈper ən swɑːp/",
+   "nghia": "so sánh và hoán đổi (CAS): lệnh nguyên tử chỉ ghi giá trị mới nếu giá trị hiện tại bằng giá trị mong đợi",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "Lock-free stacks are usually built with compare-and-swap.",
+   "viDuNghia": "Ngăn xếp không khoá thường được xây bằng lệnh so sánh và hoán đổi."
+  },
+  {
+   "chu": "memory barrier",
+   "doc": "/ˈmeməri ˈbæriər/",
+   "nghia": "rào bộ nhớ: lệnh buộc CPU/trình biên dịch không đảo thứ tự các thao tác đọc ghi bộ nhớ qua nó",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "A memory barrier ensures that writes before it are visible to other CPUs first.",
+   "viDuNghia": "Rào bộ nhớ bảo đảm các lệnh ghi trước nó được CPU khác thấy trước."
+  },
+  {
+   "chu": "lock contention",
+   "doc": "/lɑːk kənˈtenʃn/",
+   "nghia": "tranh chấp khoá: nhiều luồng cùng chờ một khoá, làm giảm hiệu năng",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "High lock contention can make a multithreaded program slower than a single-threaded one.",
+   "viDuNghia": "Tranh chấp khoá cao có thể làm chương trình đa luồng chậm hơn bản đơn luồng."
+  },
+  {
+   "chu": "lock-free",
+   "doc": "/ˈlɑːk friː/",
+   "nghia": "không khoá: cấu trúc dữ liệu đồng bộ bằng lệnh nguyên tử, không dùng mutex",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "A lock-free queue lets threads make progress without holding a mutex.",
+   "viDuNghia": "Hàng đợi không khoá cho phép các luồng tiến triển mà không giữ mutex."
+  },
+  {
+   "chu": "lock ordering",
+   "doc": "/lɑːk ˈɔːrdərɪŋ/",
+   "nghia": "thứ tự khoá: mọi luồng luôn xin các khoá theo cùng một thứ tự để phá điều kiện chờ vòng",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "Enforcing a global lock ordering prevents circular wait.",
+   "viDuNghia": "Áp một thứ tự khoá chung ngăn được tình trạng chờ vòng."
+  },
+  {
+   "chu": "recursive mutex",
+   "doc": "/rɪˈkɜːrsɪv ˈmjuːteks/",
+   "nghia": "mutex đệ quy: cùng một luồng được khoá nhiều lần mà không tự bế tắc (phải mở khoá đủ số lần)",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "A recursive mutex can be locked again by the thread that already owns it.",
+   "viDuNghia": "Mutex đệ quy có thể được khoá lại bởi chính luồng đang sở hữu nó."
+  },
+  {
+   "chu": "reader-writer lock",
+   "doc": "/ˈriːdər ˈraɪtər lɑːk/",
+   "nghia": "khoá đọc – ghi: cho nhiều luồng đọc cùng lúc nhưng chỉ một luồng ghi độc quyền",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "A reader-writer lock improves performance when reads are much more frequent than writes.",
+   "viDuNghia": "Khoá đọc – ghi tăng hiệu năng khi số lần đọc nhiều hơn hẳn số lần ghi."
+  },
+  {
+   "chu": "priority inversion",
+   "doc": "/praɪˈɔːrəti ɪnˈvɜːrʒn/",
+   "nghia": "đảo ngược ưu tiên: tác vụ ưu tiên cao phải chờ tác vụ ưu tiên thấp đang giữ khoá",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "Priority inversion occurs when a high-priority task waits for a lock held by a low-priority task.",
+   "viDuNghia": "Đảo ngược ưu tiên xảy ra khi tác vụ ưu tiên cao chờ khoá do tác vụ ưu tiên thấp giữ."
+  },
+  {
+   "chu": "priority inheritance",
+   "doc": "/praɪˈɔːrəti ɪnˈherɪtəns/",
+   "nghia": "kế thừa ưu tiên: tác vụ giữ khoá tạm được nâng lên ưu tiên của tác vụ đang chờ, để chống đảo ngược ưu tiên",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "Priority inheritance temporarily raises the priority of the lock holder.",
+   "viDuNghia": "Kế thừa ưu tiên tạm thời nâng độ ưu tiên của tác vụ đang giữ khoá."
+  },
+  {
+   "chu": "lost wakeup",
+   "doc": "/lɔːst ˈweɪkʌp/",
+   "nghia": "mất tín hiệu đánh thức: lệnh wakeup gửi trước khi tiến trình kịp ngủ nên bị mất, tiến trình ngủ mãi",
+   "nhom": "Khoá và đồng bộ nâng cao",
+   "viDu": "The lost wakeup problem happens when a wakeup is sent before the process actually sleeps.",
+   "viDuNghia": "Lỗi mất tín hiệu đánh thức xảy ra khi wakeup được gửi trước khi tiến trình thật sự ngủ."
+  },
+  {
+   "chu": "scheduling policy",
+   "doc": "/ˈskedʒuːlɪŋ ˈpɑːləsi/",
+   "nghia": "chính sách lập lịch: quy tắc chọn tiến trình chạy (Linux: SCHED_OTHER, SCHED_FIFO, SCHED_RR…)",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "The chrt command changes the scheduling policy of a process.",
+   "viDuNghia": "Lệnh chrt đổi chính sách lập lịch của một tiến trình."
+  },
+  {
+   "chu": "Completely Fair Scheduler",
+   "doc": "/kəmˈpliːtli fer ˈskedʒuːlər/",
+   "nghia": "CFS: bộ lập lịch mặc định của Linux (từ 2.6.23), chia CPU công bằng theo thời gian chạy ảo",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "The Completely Fair Scheduler always picks the task with the smallest virtual runtime.",
+   "viDuNghia": "Bộ lập lịch CFS luôn chọn tác vụ có thời gian chạy ảo nhỏ nhất."
+  },
+  {
+   "chu": "virtual runtime",
+   "doc": "/ˈvɜːrtʃuəl ˈrʌntaɪm/",
+   "nghia": "thời gian chạy ảo (vruntime): thời gian CPU đã dùng, có quy đổi theo trọng số độ ưu tiên",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "A task with a lower nice value accumulates virtual runtime more slowly.",
+   "viDuNghia": "Tác vụ có giá trị nice thấp hơn tích luỹ thời gian chạy ảo chậm hơn."
+  },
+  {
+   "chu": "nice value",
+   "doc": "/naɪs ˈvæljuː/",
+   "nghia": "giá trị nice: độ \"nhường nhịn\" của tiến trình, từ -20 (ưu tiên cao) tới 19 (ưu tiên thấp)",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "Raising the nice value of a process lowers its scheduling priority.",
+   "viDuNghia": "Tăng giá trị nice của một tiến trình sẽ hạ độ ưu tiên lập lịch của nó."
+  },
+  {
+   "chu": "real-time scheduling",
+   "doc": "/ˈriːəl taɪm ˈskedʒuːlɪŋ/",
+   "nghia": "lập lịch thời gian thực: bảo đảm tác vụ chạy kịp hạn chót (Linux: SCHED_FIFO, SCHED_RR)",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "Real-time scheduling is used when tasks must meet strict deadlines.",
+   "viDuNghia": "Lập lịch thời gian thực được dùng khi tác vụ phải đáp ứng hạn chót nghiêm ngặt."
+  },
+  {
+   "chu": "real-time priority",
+   "doc": "/ˈriːəl taɪm praɪˈɔːrəti/",
+   "nghia": "độ ưu tiên thời gian thực: mức 1–99 của Linux, luôn được chạy trước mọi tác vụ thường",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "A task with a real-time priority always runs before normal tasks.",
+   "viDuNghia": "Tác vụ có độ ưu tiên thời gian thực luôn chạy trước các tác vụ thường."
+  },
+  {
+   "chu": "run queue",
+   "doc": "/rʌn kjuː/",
+   "nghia": "hàng đợi chạy: danh sách tác vụ sẵn sàng của mỗi CPU, nơi bộ lập lịch chọn tác vụ tiếp theo",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "Each CPU in Linux keeps its own run queue of runnable tasks.",
+   "viDuNghia": "Mỗi CPU trong Linux giữ một hàng đợi chạy riêng gồm các tác vụ chạy được."
+  },
+  {
+   "chu": "CPU affinity",
+   "doc": "/ˌsiː piː ˈjuː əˈfɪnəti/",
+   "nghia": "ái lực CPU: gắn tiến trình chạy trên một tập CPU nhất định để tận dụng cache",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "The taskset command sets the CPU affinity of a process.",
+   "viDuNghia": "Lệnh taskset đặt ái lực CPU cho một tiến trình."
+  },
+  {
+   "chu": "load balancing",
+   "doc": "/loʊd ˈbælənsɪŋ/",
+   "nghia": "cân bằng tải: chuyển tác vụ giữa các CPU để không CPU nào quá tải trong khi CPU khác rảnh",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "The scheduler performs load balancing by migrating tasks from busy CPUs to idle ones.",
+   "viDuNghia": "Bộ lập lịch cân bằng tải bằng cách chuyển tác vụ từ CPU bận sang CPU rảnh."
+  },
+  {
+   "chu": "load average",
+   "doc": "/loʊd ˈævərɪdʒ/",
+   "nghia": "tải trung bình: số tác vụ trung bình đang chạy hoặc chờ trong 1, 5, 15 phút (lệnh uptime)",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "A load average higher than the number of CPUs means tasks are waiting.",
+   "viDuNghia": "Tải trung bình lớn hơn số CPU nghĩa là có tác vụ đang phải chờ."
+  },
+  {
+   "chu": "CPU time",
+   "doc": "/ˌsiː piː ˈjuː taɪm/",
+   "nghia": "thời gian CPU: thời gian CPU thật sự dành cho tiến trình (gồm user time và system time)",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "A process sleeping on I/O uses almost no CPU time.",
+   "viDuNghia": "Tiến trình đang ngủ chờ I/O gần như không dùng thời gian CPU."
+  },
+  {
+   "chu": "wall-clock time",
+   "doc": "/ˈwɔːl klɑːk taɪm/",
+   "nghia": "thời gian thực trôi qua: thời gian đo bằng đồng hồ thật từ lúc bắt đầu tới lúc kết thúc",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "The wall-clock time includes the time spent waiting for I/O.",
+   "viDuNghia": "Thời gian thực trôi qua tính cả thời gian chờ I/O."
+  },
+  {
+   "chu": "timer interrupt",
+   "doc": "/ˈtaɪmər ˈɪntərʌpt/",
+   "nghia": "ngắt đồng hồ: ngắt định kỳ của bộ định thời, cho phép HĐH giành lại CPU để lập lịch",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "Preemptive scheduling relies on the timer interrupt to take the CPU back.",
+   "viDuNghia": "Lập lịch có trưng dụng dựa vào ngắt đồng hồ để lấy lại CPU."
+  },
+  {
+   "chu": "jiffy",
+   "doc": "/ˈdʒɪfi/",
+   "nghia": "jiffy: một nhịp đồng hồ của nhân Linux (1/HZ giây)",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "The Linux kernel counts time in jiffies since boot.",
+   "viDuNghia": "Nhân Linux đếm thời gian theo số jiffy kể từ lúc khởi động."
+  },
+  {
+   "chu": "monotonic clock",
+   "doc": "/ˌmɑːnəˈtɑːnɪk klɑːk/",
+   "nghia": "đồng hồ đơn điệu: chỉ tăng, không bị chỉnh lùi như giờ hệ thống; dùng để đo khoảng thời gian",
+   "nhom": "Lập lịch trên Linux",
+   "viDu": "Use a monotonic clock to measure elapsed time, not the system date.",
+   "viDuNghia": "Hãy dùng đồng hồ đơn điệu để đo thời gian trôi qua, không dùng ngày giờ hệ thống."
+  },
+  {
+   "chu": "pipe",
+   "doc": "/paɪp/",
+   "nghia": "(HĐH) đường ống: kênh một chiều nối đầu ra của tiến trình này vào đầu vào của tiến trình khác",
+   "nhom": "IPC và mô tả tệp",
+   "viDu": "In the command ls|wc -l, a pipe connects the output of ls to the input of wc.",
+   "viDuNghia": "Trong lệnh ls|wc -l, một đường ống nối đầu ra của ls vào đầu vào của wc."
+  },
+  {
+   "chu": "named pipe",
+   "doc": "/neɪmd paɪp/",
+   "nghia": "đường ống có tên (FIFO): pipe xuất hiện như một tệp, các tiến trình không họ hàng cũng dùng được",
+   "nhom": "IPC và mô tả tệp",
+   "viDu": "Unrelated processes can communicate through a named pipe created with mkfifo.",
+   "viDuNghia": "Các tiến trình không họ hàng có thể giao tiếp qua đường ống có tên tạo bằng mkfifo."
+  },
+  {
+   "chu": "message queue",
+   "doc": "/ˈmesɪdʒ kjuː/",
+   "nghia": "hàng đợi thông điệp: cơ chế IPC cho tiến trình gửi và nhận các thông điệp có ranh giới",
+   "nhom": "IPC và mô tả tệp",
+   "viDu": "A message queue keeps messages until the receiving process reads them.",
+   "viDuNghia": "Hàng đợi thông điệp giữ các thông điệp cho tới khi tiến trình nhận đọc chúng."
+  },
+  {
+   "chu": "standard output",
+   "doc": "/ˈstændərd ˈaʊtpʊt/",
+   "nghia": "đầu ra chuẩn (stdout, mô tả tệp 1): mặc định là màn hình terminal",
+   "nhom": "IPC và mô tả tệp",
+   "viDu": "The command writes its result to standard output and its errors to standard error.",
+   "viDuNghia": "Lệnh ghi kết quả ra đầu ra chuẩn và lỗi ra luồng lỗi chuẩn."
+  },
+  {
+   "chu": "redirection",
+   "doc": "/ˌriːdəˈrekʃn/",
+   "nghia": "chuyển hướng (vào/ra): cho đầu vào/ra của lệnh đi tới tệp thay vì terminal (>, >>, <, 2>)",
+   "nhom": "IPC và mô tả tệp",
+   "viDu": "Output redirection with > overwrites the target file.",
+   "viDuNghia": "Chuyển hướng đầu ra bằng > sẽ ghi đè tệp đích."
+  },
+  {
+   "chu": "file descriptor table",
+   "doc": "/faɪl dɪˈskrɪptər ˈteɪbl/",
+   "nghia": "bảng mô tả tệp: bảng của mỗi tiến trình ánh xạ số mô tả tệp tới tệp đang mở",
+   "nhom": "IPC và mô tả tệp",
+   "viDu": "After fork(), the child gets a copy of the parent's file descriptor table.",
+   "viDuNghia": "Sau fork(), tiến trình con nhận một bản sao bảng mô tả tệp của tiến trình cha."
+  },
+  {
+   "chu": "open file table",
+   "doc": "/ˈoʊpən faɪl ˈteɪbl/",
+   "nghia": "bảng tệp mở: bảng chung của nhân lưu vị trí đọc ghi và chế độ của mỗi lần mở tệp",
+   "nhom": "IPC và mô tả tệp",
+   "viDu": "Two descriptors that share an entry in the open file table also share the file offset.",
+   "viDuNghia": "Hai mô tả tệp dùng chung một mục trong bảng tệp mở thì cũng dùng chung vị trí đọc ghi."
+  },
+  {
+   "chu": "close-on-exec",
+   "doc": "/ˌkloʊz ɑːn ɪɡˈzek/",
+   "nghia": "đóng khi exec (O_CLOEXEC): cờ khiến mô tả tệp tự đóng khi tiến trình gọi exec",
+   "nhom": "IPC và mô tả tệp",
+   "viDu": "Setting close-on-exec prevents a file descriptor from leaking into the new program.",
+   "viDuNghia": "Đặt cờ đóng khi exec ngăn mô tả tệp bị rò sang chương trình mới."
+  }
+ ]
+}

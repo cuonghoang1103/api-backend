@@ -1,0 +1,618 @@
+{
+ "ma": "mas291-4",
+ "nn": "en",
+ "ten": "MAS291 · 4. Biến, chọn mẫu, phân phối & hồi quy (bổ sung)",
+ "moTa": "Bổ sung MAS291 từ đề và giáo trình: loại biến và thang đo, quy tắc xác suất, phân phối đồng thời và hiệp phương sai, hình dạng phân phối, các cách chọn mẫu, tính chất ước lượng, cận tin cậy một phía, phân phối khi bình phương và F, kiểm định tỉ lệ gộp, kiểm định độc lập và đọc biểu đồ hồi quy.",
+ "bieuTuong": "sum",
+ "thuTu": -934,
+ "tu": [
+  {
+   "chu": "qualitative variable",
+   "doc": "/ˈkwɑːlɪteɪtɪv ˈveriəbl/",
+   "nghia": "biến định tính: giá trị là nhãn, loại (màu, giới tính), không phải số đo",
+   "nhom": "Loại biến và thang đo",
+   "viDu": "Blood type is a qualitative variable.",
+   "viDuNghia": "Nhóm máu là một biến định tính."
+  },
+  {
+   "chu": "categorical variable",
+   "doc": "/ˌkætəˈɡɔːrɪkl ˈveriəbl/",
+   "nghia": "biến phân loại: biến nhận một trong vài nhóm cố định",
+   "nhom": "Loại biến và thang đo",
+   "viDu": "Gender is a categorical variable with two categories.",
+   "viDuNghia": "Giới tính là biến phân loại có hai nhóm."
+  },
+  {
+   "chu": "discrete quantitative variable",
+   "doc": "/dɪˈskriːt ˈkwɑːntɪteɪtɪv ˈveriəbl/",
+   "nghia": "biến định lượng rời rạc: giá trị đếm được (số con, số lỗi)",
+   "nhom": "Loại biến và thang đo",
+   "viDu": "The number of children in randomly-selected kindergartens in Hanoi.",
+   "viDuNghia": "Số trẻ trong các trường mẫu giáo được chọn ngẫu nhiên ở Hà Nội (biến định lượng rời rạc)."
+  },
+  {
+   "chu": "continuous quantitative variable",
+   "doc": "/kənˈtɪnjuəs ˈkwɑːntɪteɪtɪv ˈveriəbl/",
+   "nghia": "biến định lượng liên tục: giá trị đo được trên một khoảng (chiều cao, thời gian)",
+   "nhom": "Loại biến và thang đo",
+   "viDu": "The heights of randomly-selected students in FPT University.",
+   "viDuNghia": "Chiều cao của sinh viên được chọn ngẫu nhiên ở Đại học FPT (biến định lượng liên tục)."
+  },
+  {
+   "chu": "interval scale",
+   "doc": "/ˈɪntərvl skeɪl/",
+   "nghia": "thang khoảng: hiệu số có nghĩa nhưng không có số 0 tuyệt đối (nhiệt độ °C)",
+   "nhom": "Loại biến và thang đo",
+   "viDu": "Temperature in Celsius is measured on an interval scale.",
+   "viDuNghia": "Nhiệt độ theo độ C được đo trên thang khoảng."
+  },
+  {
+   "chu": "ratio scale",
+   "doc": "/ˈreɪʃioʊ skeɪl/",
+   "nghia": "thang tỉ lệ: có số 0 tuyệt đối nên phép chia có nghĩa (cân nặng, thu nhập)",
+   "nhom": "Loại biến và thang đo",
+   "viDu": "Weight is measured on a ratio scale, so 10 kg is twice 5 kg.",
+   "viDuNghia": "Cân nặng đo trên thang tỉ lệ nên 10 kg gấp đôi 5 kg."
+  },
+  {
+   "chu": "countably infinite",
+   "doc": "/ˈkaʊntəbli ˈɪnfɪnət/",
+   "nghia": "vô hạn đếm được: có vô số giá trị nhưng liệt kê được 0, 1, 2… (như biến Poisson)",
+   "nhom": "Loại biến và thang đo",
+   "viDu": "… has a countable infinite range.",
+   "viDuNghia": "… có miền giá trị vô hạn đếm được."
+  },
+  {
+   "chu": "explanatory variable",
+   "doc": "/ɪkˈsplænətɔːri ˈveriəbl/",
+   "nghia": "biến giải thích: biến dùng để giải thích, dự đoán biến khác (= biến độc lập x)",
+   "nhom": "Loại biến và thang đo",
+   "viDu": "In the regression, study time is the explanatory variable.",
+   "viDuNghia": "Trong hồi quy, thời gian học là biến giải thích."
+  },
+  {
+   "chu": "response variable",
+   "doc": "/rɪˈspɑːns ˈveriəbl/",
+   "nghia": "biến phản hồi: biến kết quả cần dự đoán (= biến phụ thuộc y)",
+   "nhom": "Loại biến và thang đo",
+   "viDu": "The exam score is the response variable.",
+   "viDuNghia": "Điểm thi là biến phản hồi."
+  },
+  {
+   "chu": "lurking variable",
+   "doc": "/ˈlɜːrkɪŋ ˈveriəbl/",
+   "nghia": "biến ẩn: biến không có trong phân tích nhưng ảnh hưởng tới cả x và y",
+   "nhom": "Loại biến và thang đo",
+   "viDu": "A lurking variable can create a correlation without causation.",
+   "viDuNghia": "Biến ẩn có thể tạo ra tương quan mà không có quan hệ nhân quả."
+  },
+  {
+   "chu": "addition rule",
+   "doc": "/əˈdɪʃn ruːl/",
+   "nghia": "quy tắc cộng xác suất: P(A ∪ B) = P(A) + P(B) − P(A ∩ B)",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "By the addition rule, P(A or B) equals P(A) + P(B) minus P(A and B).",
+   "viDuNghia": "Theo quy tắc cộng, P(A hoặc B) bằng P(A) + P(B) trừ P(A và B)."
+  },
+  {
+   "chu": "multiplication rule",
+   "doc": "/ˌmʌltɪplɪˈkeɪʃn ruːl/",
+   "nghia": "quy tắc nhân xác suất: P(A ∩ B) = P(A|B) · P(B)",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "The multiplication rule gives the probability that both events occur.",
+   "viDuNghia": "Quy tắc nhân cho xác suất cả hai biến cố cùng xảy ra."
+  },
+  {
+   "chu": "total probability rule",
+   "doc": "/ˈtoʊtl ˌprɑːbəˈbɪləti ruːl/",
+   "nghia": "công thức xác suất toàn phần: P(B) = Σ P(B|Ai) P(Ai) với các Ai phân hoạch không gian mẫu",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "The total probability rule is used before applying Bayes' theorem.",
+   "viDuNghia": "Công thức xác suất toàn phần được dùng trước khi áp định lý Bayes."
+  },
+  {
+   "chu": "with replacement",
+   "doc": "/wɪð rɪˈpleɪsmənt/",
+   "nghia": "có hoàn lại: lấy ra xong bỏ lại nên các lần lấy độc lập nhau",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "Sampling with replacement keeps the probabilities the same at every draw.",
+   "viDuNghia": "Chọn mẫu có hoàn lại giữ xác suất như nhau ở mỗi lần lấy."
+  },
+  {
+   "chu": "joint probability distribution",
+   "doc": "/dʒɔɪnt ˌprɑːbəˈbɪləti ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối xác suất đồng thời: xác suất cho từng cặp giá trị của hai biến ngẫu nhiên",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "The joint probability distribution of X and Y is given in the table.",
+   "viDuNghia": "Phân phối xác suất đồng thời của X và Y cho trong bảng."
+  },
+  {
+   "chu": "marginal distribution",
+   "doc": "/ˈmɑːrdʒɪnl ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối biên: phân phối của một biến lấy từ phân phối đồng thời bằng cách cộng theo biến kia",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "Summing each row of the joint table gives the marginal distribution of X.",
+   "viDuNghia": "Cộng từng hàng của bảng đồng thời cho ra phân phối biên của X."
+  },
+  {
+   "chu": "covariance",
+   "doc": "/koʊˈveriəns/",
+   "nghia": "hiệp phương sai: đo mức hai biến cùng thay đổi; Cov(X,Y) = E(XY) − E(X)E(Y)",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "If X and Y are independent, their covariance is zero.",
+   "viDuNghia": "Nếu X và Y độc lập thì hiệp phương sai của chúng bằng 0."
+  },
+  {
+   "chu": "memoryless property",
+   "doc": "/ˈmemərələs ˈprɑːpərti/",
+   "nghia": "tính không nhớ: P(X > s + t|X > s) = P(X > t), có ở phân phối mũ và hình học",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "The exponential distribution has the memoryless property.",
+   "viDuNghia": "Phân phối mũ có tính không nhớ."
+  },
+  {
+   "chu": "Poisson process",
+   "doc": "/pwɑːˈsoʊn ˈprɑːses/",
+   "nghia": "quá trình Poisson: các sự kiện xảy ra ngẫu nhiên, độc lập với tốc độ trung bình λ không đổi",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "In a Poisson process, the time between events is exponentially distributed.",
+   "viDuNghia": "Trong quá trình Poisson, thời gian giữa các sự kiện có phân phối mũ."
+  },
+  {
+   "chu": "continuity correction",
+   "doc": "/ˌkɑːntəˈnuːəti kəˈrekʃn/",
+   "nghia": "hiệu chỉnh liên tục: cộng/trừ 0,5 khi xấp xỉ phân phối rời rạc bằng phân phối chuẩn",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "With the continuity correction, P(X ≤ 10) becomes P(Z ≤ (10.5 − μ)/σ).",
+   "viDuNghia": "Với hiệu chỉnh liên tục, P(X ≤ 10) trở thành P(Z ≤ (10,5 − μ)/σ)."
+  },
+  {
+   "chu": "z-score",
+   "doc": "/ˈziː skɔːr/",
+   "nghia": "điểm z: số độ lệch chuẩn một giá trị cách trung bình, z = (x − μ)/σ",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "A z-score of 2 means the value is two standard deviations above the mean.",
+   "viDuNghia": "Điểm z bằng 2 nghĩa là giá trị cao hơn trung bình hai độ lệch chuẩn."
+  },
+  {
+   "chu": "standardize",
+   "doc": "/ˈstændərdaɪz/",
+   "nghia": "chuẩn hoá: đổi biến chuẩn về Z = (X − μ)/σ để tra bảng",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "Reject Ho if the standardized test statistic is greater than 1.645 or less than -1.645.",
+   "viDuNghia": "Bác bỏ H0 nếu thống kê kiểm định đã chuẩn hoá lớn hơn 1,645 hoặc nhỏ hơn -1,645."
+  },
+  {
+   "chu": "standard normal table",
+   "doc": "/ˈstændərd ˈnɔːrml ˈteɪbl/",
+   "nghia": "bảng chuẩn tắc: bảng tra xác suất tích luỹ P(Z ≤ z) của phân phối chuẩn tắc",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "Use the standard normal table to find P(Z < 1.96).",
+   "viDuNghia": "Dùng bảng chuẩn tắc để tìm P(Z < 1,96)."
+  },
+  {
+   "chu": "quantile",
+   "doc": "/ˈkwɑːntaɪl/",
+   "nghia": "phân vị (quantile): giá trị chia phân phối theo một tỉ lệ cho trước (z0.025 = 1,96)",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "The 0.975 quantile of the standard normal distribution is 1.96.",
+   "viDuNghia": "Phân vị 0,975 của phân phối chuẩn tắc là 1,96."
+  },
+  {
+   "chu": "empirical rule",
+   "doc": "/ɪmˈpɪrɪkl ruːl/",
+   "nghia": "quy tắc kinh nghiệm 68–95–99,7: tỉ lệ dữ liệu chuẩn nằm trong 1, 2, 3 độ lệch chuẩn",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "By the empirical rule, about 95% of the data fall within two standard deviations of the mean.",
+   "viDuNghia": "Theo quy tắc 68–95–99,7, khoảng 95% dữ liệu nằm trong hai độ lệch chuẩn quanh trung bình."
+  },
+  {
+   "chu": "Chebyshev's inequality",
+   "doc": "/ˈtʃebɪʃɔːfs ˌɪnɪˈkwɑːləti/",
+   "nghia": "bất đẳng thức Chebyshev: với mọi phân phối, ít nhất 1 − 1/k² dữ liệu nằm trong k độ lệch chuẩn",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "Chebyshev's inequality holds for any distribution, not only the normal one.",
+   "viDuNghia": "Bất đẳng thức Chebyshev đúng với mọi phân phối, không chỉ phân phối chuẩn."
+  },
+  {
+   "chu": "chi-square distribution",
+   "doc": "/ˈkaɪ skwer ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối khi bình phương (χ²): dùng cho khoảng tin cậy phương sai và kiểm định độc lập",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "Chi-square distribution with degree of freedom n-1",
+   "viDuNghia": "Phân phối khi bình phương với n − 1 bậc tự do"
+  },
+  {
+   "chu": "F distribution",
+   "doc": "/ef ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối F: tỉ số hai phương sai mẫu, dùng so sánh hai phương sai và trong ANOVA",
+   "nhom": "Quy tắc và phân phối xác suất",
+   "viDu": "The ratio of two sample variances follows an F distribution.",
+   "viDuNghia": "Tỉ số hai phương sai mẫu tuân theo phân phối F."
+  },
+  {
+   "chu": "skewed",
+   "doc": "/skjuːd/",
+   "nghia": "lệch (phân phối): một đuôi dài hơn đuôi kia; lệch phải thì trung bình > trung vị",
+   "nhom": "Hình dạng dữ liệu",
+   "viDu": "Income data are usually skewed to the right.",
+   "viDuNghia": "Dữ liệu thu nhập thường lệch phải."
+  },
+  {
+   "chu": "skewness",
+   "doc": "/ˈskjuːnəs/",
+   "nghia": "độ lệch: số đo mức bất đối xứng của phân phối",
+   "nhom": "Hình dạng dữ liệu",
+   "viDu": "A skewness of zero indicates a symmetric distribution.",
+   "viDuNghia": "Độ lệch bằng 0 cho thấy phân phối đối xứng."
+  },
+  {
+   "chu": "unimodal",
+   "doc": "/ˌjuːnɪˈmoʊdl/",
+   "nghia": "một đỉnh: biểu đồ tần suất chỉ có một mốt",
+   "nhom": "Hình dạng dữ liệu",
+   "viDu": "The histogram is unimodal and roughly symmetric.",
+   "viDuNghia": "Biểu đồ tần suất có một đỉnh và gần đối xứng."
+  },
+  {
+   "chu": "bimodal",
+   "doc": "/baɪˈmoʊdl/",
+   "nghia": "hai đỉnh: biểu đồ có hai mốt, thường do trộn hai nhóm dữ liệu",
+   "nhom": "Hình dạng dữ liệu",
+   "viDu": "Heights of men and women together form a bimodal histogram.",
+   "viDuNghia": "Chiều cao của cả nam và nữ gộp lại tạo biểu đồ hai đỉnh."
+  },
+  {
+   "chu": "normal probability plot",
+   "doc": "/ˈnɔːrml ˌprɑːbəˈbɪləti plɑːt/",
+   "nghia": "biểu đồ xác suất chuẩn: các điểm gần một đường thẳng thì dữ liệu xấp xỉ chuẩn",
+   "nhom": "Hình dạng dữ liệu",
+   "viDu": "Points close to a straight line on a normal probability plot suggest normality.",
+   "viDuNghia": "Các điểm gần đường thẳng trên biểu đồ xác suất chuẩn gợi ý dữ liệu có phân phối chuẩn."
+  },
+  {
+   "chu": "scatter plot",
+   "doc": "/ˈskætər plɑːt/",
+   "nghia": "biểu đồ phân tán: mỗi cặp (x, y) là một điểm, dùng nhìn quan hệ giữa hai biến",
+   "nhom": "Hình dạng dữ liệu",
+   "viDu": "A scatter plot shows whether two variables have a linear relationship.",
+   "viDuNghia": "Biểu đồ phân tán cho thấy hai biến có quan hệ tuyến tính không."
+  },
+  {
+   "chu": "positive correlation",
+   "doc": "/ˈpɑːzətɪv ˌkɔːrəˈleɪʃn/",
+   "nghia": "tương quan dương: x tăng thì y có xu hướng tăng (r > 0)",
+   "nhom": "Hình dạng dữ liệu",
+   "viDu": "r = 0.802, positive correlation",
+   "viDuNghia": "r = 0,802, tương quan dương"
+  },
+  {
+   "chu": "negative correlation",
+   "doc": "/ˈneɡətɪv ˌkɔːrəˈleɪʃn/",
+   "nghia": "tương quan âm: x tăng thì y có xu hướng giảm (r < 0)",
+   "nhom": "Hình dạng dữ liệu",
+   "viDu": "r = -0.802, negative correlation",
+   "viDuNghia": "r = -0,802, tương quan âm"
+  },
+  {
+   "chu": "fell between",
+   "doc": "/fel bɪˈtwiːn/",
+   "nghia": "nằm trong khoảng (dữ liệu): bao nhiêu phần trăm giá trị rơi vào giữa hai số",
+   "nhom": "Hình dạng dữ liệu",
+   "viDu": "97% of the sampled total compensation values fell between 2181260 and 5836180.",
+   "viDuNghia": "97% giá trị tổng thu nhập trong mẫu nằm trong khoảng 2181260 tới 5836180."
+  },
+  {
+   "chu": "simple random sample",
+   "doc": "/ˈsɪmpl ˈrændəm ˈsæmpl/",
+   "nghia": "mẫu ngẫu nhiên đơn: mọi mẫu cỡ n đều có cùng khả năng được chọn",
+   "nhom": "Chọn mẫu",
+   "viDu": "A simple random sample gives every student the same chance of selection.",
+   "viDuNghia": "Mẫu ngẫu nhiên đơn cho mọi sinh viên cùng cơ hội được chọn."
+  },
+  {
+   "chu": "stratified sampling",
+   "doc": "/ˈstrætɪfaɪd ˈsæmplɪŋ/",
+   "nghia": "chọn mẫu phân tầng: chia tổng thể thành các tầng rồi chọn ngẫu nhiên trong mỗi tầng",
+   "nhom": "Chọn mẫu",
+   "viDu": "Stratified sampling selects students from each faculty separately.",
+   "viDuNghia": "Chọn mẫu phân tầng chọn sinh viên từ mỗi khoa riêng biệt."
+  },
+  {
+   "chu": "cluster sampling",
+   "doc": "/ˈklʌstər ˈsæmplɪŋ/",
+   "nghia": "chọn mẫu cụm: chọn ngẫu nhiên vài cụm (lớp, xã) rồi lấy toàn bộ cá thể trong cụm",
+   "nhom": "Chọn mẫu",
+   "viDu": "Cluster sampling surveys every household in a few randomly chosen villages.",
+   "viDuNghia": "Chọn mẫu cụm khảo sát mọi hộ trong vài làng được chọn ngẫu nhiên."
+  },
+  {
+   "chu": "systematic sampling",
+   "doc": "/ˌsɪstəˈmætɪk ˈsæmplɪŋ/",
+   "nghia": "chọn mẫu hệ thống: chọn cách đều, vd cứ mỗi người thứ 10 trong danh sách",
+   "nhom": "Chọn mẫu",
+   "viDu": "Systematic sampling picks every 10th customer who enters the store.",
+   "viDuNghia": "Chọn mẫu hệ thống lấy mỗi khách thứ 10 vào cửa hàng."
+  },
+  {
+   "chu": "sampling error",
+   "doc": "/ˈsæmplɪŋ ˈerər/",
+   "nghia": "sai số chọn mẫu: chênh lệch giữa thống kê mẫu và tham số tổng thể do chỉ quan sát một mẫu",
+   "nhom": "Chọn mẫu",
+   "viDu": "Larger samples reduce the sampling error.",
+   "viDuNghia": "Mẫu lớn hơn làm giảm sai số chọn mẫu."
+  },
+  {
+   "chu": "nonresponse bias",
+   "doc": "/ˌnɑːnrɪˈspɑːns ˈbaɪəs/",
+   "nghia": "sai lệch do không trả lời: người không trả lời khảo sát khác với người trả lời",
+   "nhom": "Chọn mẫu",
+   "viDu": "A low response rate can cause nonresponse bias.",
+   "viDuNghia": "Tỉ lệ trả lời thấp có thể gây sai lệch do không trả lời."
+  },
+  {
+   "chu": "population parameter",
+   "doc": "/ˌpɑːpjuˈleɪʃn pəˈræmɪtər/",
+   "nghia": "tham số tổng thể: con số mô tả tổng thể (μ, σ, p), thường chưa biết",
+   "nhom": "Chọn mẫu",
+   "viDu": "A population parameter is used to estimate a confidence interval.",
+   "viDuNghia": "Tham số tổng thể được dùng để ước lượng khoảng tin cậy (phát biểu sai: dùng thống kê mẫu để ước lượng tham số)."
+  },
+  {
+   "chu": "sample statistic",
+   "doc": "/ˈsæmpl stəˈtɪstɪk/",
+   "nghia": "thống kê mẫu: con số tính từ mẫu (x̄, s, p̂) dùng ước lượng tham số",
+   "nhom": "Chọn mẫu",
+   "viDu": "The sample mean is a sample statistic that estimates μ.",
+   "viDuNghia": "Trung bình mẫu là thống kê mẫu dùng để ước lượng μ."
+  },
+  {
+   "chu": "point estimation",
+   "doc": "/pɔɪnt ˌestɪˈmeɪʃn/",
+   "nghia": "ước lượng điểm: dùng một giá trị duy nhất để ước lượng tham số",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "Point estimation gives a single number, such as x̄ = 12.5.",
+   "viDuNghia": "Ước lượng điểm cho một con số duy nhất, như x̄ = 12,5."
+  },
+  {
+   "chu": "maximum likelihood estimator",
+   "doc": "/ˈmæksɪməm ˈlaɪklihʊd ˈestɪmeɪtər/",
+   "nghia": "ước lượng hợp lý cực đại (MLE): giá trị tham số làm xác suất quan sát được mẫu lớn nhất",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "The sample mean is the maximum likelihood estimator of the Poisson parameter.",
+   "viDuNghia": "Trung bình mẫu là ước lượng hợp lý cực đại của tham số Poisson."
+  },
+  {
+   "chu": "method of moments",
+   "doc": "/ˈmeθəd əv ˈmoʊmənts/",
+   "nghia": "phương pháp mô-men: cho mô-men mẫu bằng mô-men tổng thể rồi giải ra tham số",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "The method of moments equates the sample mean to the population mean.",
+   "viDuNghia": "Phương pháp mô-men cho trung bình mẫu bằng trung bình tổng thể."
+  },
+  {
+   "chu": "mean squared error",
+   "doc": "/miːn skwerd ˈerər/",
+   "nghia": "sai số bình phương trung bình (MSE): MSE = phương sai + (độ chệch)² của ước lượng",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "An estimator with a smaller mean squared error is preferred.",
+   "viDuNghia": "Ước lượng có sai số bình phương trung bình nhỏ hơn được ưu tiên."
+  },
+  {
+   "chu": "consistent estimator",
+   "doc": "/kənˈsɪstənt ˈestɪmeɪtər/",
+   "nghia": "ước lượng vững: hội tụ về tham số thật khi cỡ mẫu tăng",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "The sample mean is a consistent estimator of μ.",
+   "viDuNghia": "Trung bình mẫu là ước lượng vững của μ."
+  },
+  {
+   "chu": "confidence bound",
+   "doc": "/ˈkɑːnfɪdəns baʊnd/",
+   "nghia": "cận tin cậy (một phía): chỉ đưa cận trên hoặc cận dưới cho tham số",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "95% upper confidence-bound on population proportion p",
+   "viDuNghia": "Cận tin cậy trên 95% cho tỉ lệ tổng thể p"
+  },
+  {
+   "chu": "upper confidence bound",
+   "doc": "/ˈʌpər ˈkɑːnfɪdəns baʊnd/",
+   "nghia": "cận tin cậy trên: tham số nhỏ hơn giá trị này với độ tin cậy cho trước",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "90% upper confidence-bound on population proportion p",
+   "viDuNghia": "Cận tin cậy trên 90% cho tỉ lệ tổng thể p"
+  },
+  {
+   "chu": "lower confidence bound",
+   "doc": "/ˈloʊər ˈkɑːnfɪdəns baʊnd/",
+   "nghia": "cận tin cậy dưới: tham số lớn hơn giá trị này với độ tin cậy cho trước",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "A 95% lower confidence bound uses z = 1.645 instead of 1.96.",
+   "viDuNghia": "Cận tin cậy dưới 95% dùng z = 1,645 thay vì 1,96."
+  },
+  {
+   "chu": "one-sided",
+   "doc": "/ˌwʌn ˈsaɪdɪd/",
+   "nghia": "một phía: khoảng hoặc kiểm định chỉ xét một hướng (lớn hơn hoặc nhỏ hơn)",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "A one-sided interval gives only an upper or a lower limit.",
+   "viDuNghia": "Khoảng một phía chỉ cho giới hạn trên hoặc dưới."
+  },
+  {
+   "chu": "prediction interval",
+   "doc": "/prɪˈdɪkʃn ˈɪntərvl/",
+   "nghia": "khoảng dự đoán: khoảng chứa một quan sát MỚI với độ tin cậy cho trước, rộng hơn khoảng tin cậy",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "A prediction interval for one new value is wider than a confidence interval for the mean.",
+   "viDuNghia": "Khoảng dự đoán cho một giá trị mới rộng hơn khoảng tin cậy cho trung bình."
+  },
+  {
+   "chu": "tolerance interval",
+   "doc": "/ˈtɑːlərəns ˈɪntərvl/",
+   "nghia": "khoảng dung sai: khoảng chứa một tỉ lệ nhất định của tổng thể với độ tin cậy cho trước",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "A tolerance interval covers 99% of the population with 95% confidence.",
+   "viDuNghia": "Khoảng dung sai phủ 99% tổng thể với độ tin cậy 95%."
+  },
+  {
+   "chu": "believable value",
+   "doc": "/bɪˈliːvəbl ˈvæljuː/",
+   "nghia": "giá trị đáng tin (hợp lý): giá trị nằm trong khoảng tin cậy nên chưa thể loại bỏ",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "Maybe. 0.60 is a believable value of the population proportion based on the information above.",
+   "viDuNghia": "Có thể. 0,60 là giá trị hợp lý của tỉ lệ tổng thể dựa trên thông tin trên."
+  },
+  {
+   "chu": "pooled proportion",
+   "doc": "/puːld prəˈpɔːrʃn/",
+   "nghia": "tỉ lệ gộp: tỉ lệ chung của hai mẫu khi kiểm định p1 = p2",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "No, pooled proportion = 0.623 and Z_stat = -4.172",
+   "viDuNghia": "Không, tỉ lệ gộp = 0,623 và Z = -4,172"
+  },
+  {
+   "chu": "paired data",
+   "doc": "/perd ˈdeɪtə/",
+   "nghia": "dữ liệu cặp: hai số đo trên cùng một đối tượng (trước – sau)",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "Before-and-after weights of the same people are paired data.",
+   "viDuNghia": "Cân nặng trước và sau của cùng người là dữ liệu cặp."
+  },
+  {
+   "chu": "independent samples",
+   "doc": "/ˌɪndɪˈpendənt ˈsæmplz/",
+   "nghia": "các mẫu độc lập: hai mẫu chọn riêng, không ghép cặp",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "Use a two-sample t-test for independent samples.",
+   "viDuNghia": "Dùng kiểm định t hai mẫu cho các mẫu độc lập."
+  },
+  {
+   "chu": "unequal variances",
+   "doc": "/ʌnˈiːkwəl ˈveriənsɪz/",
+   "nghia": "phương sai không bằng nhau: hai tổng thể có phương sai khác nhau, không gộp được",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "Welch's t-test is used when the populations have unequal variances.",
+   "viDuNghia": "Kiểm định t Welch được dùng khi các tổng thể có phương sai không bằng nhau."
+  },
+  {
+   "chu": "Welch's t-test",
+   "doc": "/ˈweltʃɪz ˈtiː test/",
+   "nghia": "kiểm định t Welch: so sánh hai trung bình khi phương sai khác nhau, bậc tự do tính gần đúng",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "Welch's t-test does not assume equal variances.",
+   "viDuNghia": "Kiểm định t Welch không giả định phương sai bằng nhau."
+  },
+  {
+   "chu": "F-test",
+   "doc": "/ˈef test/",
+   "nghia": "kiểm định F: so sánh hai phương sai, hoặc kiểm định ý nghĩa mô hình hồi quy/ANOVA",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "An F-test checks whether two populations have equal variances.",
+   "viDuNghia": "Kiểm định F kiểm tra hai tổng thể có phương sai bằng nhau không."
+  },
+  {
+   "chu": "chi-square test",
+   "doc": "/ˈkaɪ skwer test/",
+   "nghia": "kiểm định khi bình phương: so tần số quan sát với tần số kỳ vọng",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "A chi-square test compares observed and expected frequencies.",
+   "viDuNghia": "Kiểm định khi bình phương so sánh tần số quan sát với tần số kỳ vọng."
+  },
+  {
+   "chu": "goodness-of-fit test",
+   "doc": "/ˌɡʊdnəs əv ˈfɪt test/",
+   "nghia": "kiểm định phù hợp: dữ liệu có theo một phân phối giả định không",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "A goodness-of-fit test checks whether a die is fair.",
+   "viDuNghia": "Kiểm định phù hợp kiểm tra một con xúc xắc có cân đối không."
+  },
+  {
+   "chu": "contingency table",
+   "doc": "/kənˈtɪndʒənsi ˈteɪbl/",
+   "nghia": "bảng tiếp liên: bảng đếm theo hai biến phân loại (hàng × cột)",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "A contingency table shows counts by gender and preferred brand.",
+   "viDuNghia": "Bảng tiếp liên cho số đếm theo giới tính và nhãn hàng ưa thích."
+  },
+  {
+   "chu": "test of independence",
+   "doc": "/test əv ˌɪndɪˈpendəns/",
+   "nghia": "kiểm định tính độc lập: hai biến phân loại có liên quan tới nhau không",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "A chi-square test of independence uses a contingency table.",
+   "viDuNghia": "Kiểm định độc lập khi bình phương dùng một bảng tiếp liên."
+  },
+  {
+   "chu": "expected frequency",
+   "doc": "/ɪkˈspektɪd ˈfriːkwənsi/",
+   "nghia": "tần số kỳ vọng: số đếm dự tính nếu giả thuyết H0 đúng",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "Each expected frequency should be at least 5 for the chi-square test.",
+   "viDuNghia": "Mỗi tần số kỳ vọng nên ít nhất bằng 5 để dùng kiểm định khi bình phương."
+  },
+  {
+   "chu": "observed frequency",
+   "doc": "/əbˈzɜːrvd ˈfriːkwənsi/",
+   "nghia": "tần số quan sát: số đếm thực tế trong mẫu",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "The test statistic sums (observed frequency − expected)² / expected.",
+   "viDuNghia": "Thống kê kiểm định cộng (tần số quan sát − kỳ vọng)² / kỳ vọng."
+  },
+  {
+   "chu": "one-way ANOVA",
+   "doc": "/ˌwʌn weɪ ˈænəvə/",
+   "nghia": "ANOVA một yếu tố: so sánh trung bình của ba nhóm trở lên",
+   "nhom": "Ước lượng và kiểm định",
+   "viDu": "One-way ANOVA tests whether three teaching methods give the same mean score.",
+   "viDuNghia": "ANOVA một yếu tố kiểm định ba phương pháp dạy có cùng điểm trung bình không."
+  },
+  {
+   "chu": "fitted value",
+   "doc": "/ˈfɪtɪd ˈvæljuː/",
+   "nghia": "giá trị ước lượng (ŷ): giá trị tính từ đường hồi quy cho một x",
+   "nhom": "Hồi quy",
+   "viDu": "The residual is the observed value minus the fitted value.",
+   "viDuNghia": "Phần dư là giá trị quan sát trừ giá trị ước lượng."
+  },
+  {
+   "chu": "residual plot",
+   "doc": "/rɪˈzɪdʒuəl plɑːt/",
+   "nghia": "biểu đồ phần dư: vẽ phần dư theo x hoặc ŷ để kiểm tra giả định mô hình",
+   "nhom": "Hồi quy",
+   "viDu": "A curved pattern in the residual plot suggests a nonlinear relationship.",
+   "viDuNghia": "Đường cong trong biểu đồ phần dư gợi ý quan hệ phi tuyến."
+  },
+  {
+   "chu": "total sum of squares",
+   "doc": "/ˈtoʊtl sʌm əv skwerz/",
+   "nghia": "tổng bình phương toàn phần (SST): SST = SSR + SSE",
+   "nhom": "Hồi quy",
+   "viDu": "R-squared equals SSR divided by the total sum of squares.",
+   "viDuNghia": "R bình phương bằng SSR chia cho tổng bình phương toàn phần."
+  },
+  {
+   "chu": "regression sum of squares",
+   "doc": "/rɪˈɡreʃn sʌm əv skwerz/",
+   "nghia": "tổng bình phương hồi quy (SSR): phần biến thiên của y được mô hình giải thích",
+   "nhom": "Hồi quy",
+   "viDu": "A large regression sum of squares means the model explains much of the variation.",
+   "viDuNghia": "Tổng bình phương hồi quy lớn nghĩa là mô hình giải thích được nhiều biến thiên."
+  },
+  {
+   "chu": "extrapolation",
+   "doc": "/ɪkˌstræpəˈleɪʃn/",
+   "nghia": "ngoại suy: dùng đường hồi quy dự đoán ngoài khoảng x đã quan sát, dễ sai",
+   "nhom": "Hồi quy",
+   "viDu": "Predicting sales for 2040 from data of 2015–2020 is risky extrapolation.",
+   "viDuNghia": "Dự đoán doanh số năm 2040 từ dữ liệu 2015–2020 là phép ngoại suy rủi ro."
+  },
+  {
+   "chu": "multiple regression",
+   "doc": "/ˈmʌltɪpl rɪˈɡreʃn/",
+   "nghia": "hồi quy bội: mô hình có nhiều biến độc lập",
+   "nhom": "Hồi quy",
+   "viDu": "Multiple regression predicts house prices from area, location and age.",
+   "viDuNghia": "Hồi quy bội dự đoán giá nhà theo diện tích, vị trí và tuổi nhà."
+  }
+ ]
+}

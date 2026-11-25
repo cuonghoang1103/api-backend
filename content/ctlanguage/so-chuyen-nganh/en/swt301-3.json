@@ -4,7 +4,7 @@
  "ten": "SWT301 · 3. Kỹ thuật thiết kế test",
  "moTa": "Thuật ngữ trích từ đề FE/PE thật môn SWT301: hộp đen (EP, BVA, bảng quyết định, chuyển trạng thái, use case), hộp trắng và độ phủ, kỹ thuật dựa trên kinh nghiệm, từ vựng đề PE viết test case. Ví dụ phần lớn là câu hỏi thật trong đề.",
  "bieuTuong": "square.grid.3x3.fill",
- "thuTu": -950,
+ "thuTu": -926,
  "tu": [
   {
    "chu": "test design technique",

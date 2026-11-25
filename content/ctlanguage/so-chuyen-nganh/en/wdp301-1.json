@@ -4,7 +4,7 @@
  "ten": "WDP301 · Dự án phát triển Web",
  "moTa": "Môn Web Development Project (WDP301): dự án web MERN — GitLab, SRS/SDS, chấm LOC, API Node/Express, React, triển khai, CI, tài liệu. Soạn từ syllabus FLM + tài liệu dự án (không phải từ đề thi); câu ví dụ là câu viết tài liệu hoặc nói khi demo.",
  "bieuTuong": "globe",
- "thuTu": -935,
+ "thuTu": -890,
  "tu": [
   {
    "chu": "GitLab",

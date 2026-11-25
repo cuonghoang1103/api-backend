@@ -4,7 +4,7 @@
  "ten": "MMA301 · React Native đa nền tảng",
  "moTa": "Môn Multiplatform Mobile App Development (MMA301): React Native và kiến trúc cầu nối, component lõi, FlatList, Flexbox, React Navigation, AsyncStorage, gọi API và từ vựng yêu cầu trong đề PE. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu thật trong đề.",
  "bieuTuong": "apps.iphone",
- "thuTu": -939,
+ "thuTu": -904,
  "tu": [
   {
    "chu": "cross-platform",

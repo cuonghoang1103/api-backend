@@ -4,7 +4,7 @@
  "ten": "CSD201 · 1. Danh sách, ngăn xếp, hàng đợi, đệ quy",
  "moTa": "CSD201 – Cấu trúc dữ liệu và giải thuật (Java), phần 1: danh sách liên kết, ngăn xếp, hàng đợi, đệ quy, độ phức tạp, sắp xếp và từ hay gặp trong đề PE. Từ lấy từ đề FE/PE thật; câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "list.bullet.indent",
- "thuTu": -968,
+ "thuTu": -953,
  "tu": [
   {
    "chu": "singly linked list",

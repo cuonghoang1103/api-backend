@@ -1,0 +1,794 @@
+{
+ "ma": "mad101-4",
+ "nn": "en",
+ "ten": "MAD101 · 4. Chứng minh, đếm, độ phức tạp & số học",
+ "moTa": "Bổ sung cho MAD101 (sách Rosen): tên các kiểu chứng minh và quy tắc suy diễn có lượng từ, tập hợp, quy tắc đếm, độ tăng của hàm và độ phức tạp, số nguyên tố, đồng dư, mật mã cổ điển, quy nạp cấu trúc và thuật ngữ đồ thị còn thiếu ở ba bộ đầu.",
+ "bieuTuong": "number.square.fill",
+ "thuTu": -969,
+ "tu": [
+  {
+   "chu": "propositional variable",
+   "doc": "/ˌprɒpəˈzɪʃənəl ˈvɛəriəbl/",
+   "nghia": "biến mệnh đề: chữ (p, q, r…) đại diện cho một mệnh đề",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "Let p and q be propositional variables. Construct the truth table of p -> q.",
+   "viDuNghia": "Cho p, q là biến mệnh đề. Lập bảng chân trị của p → q."
+  },
+  {
+   "chu": "compound statement",
+   "doc": "/ˈkɒmpaʊnd ˈsteɪtmənt/",
+   "nghia": "mệnh đề phức hợp: ghép từ mệnh đề đơn bằng phép nối",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "\"If it rains, then I stay home\" is a compound statement.",
+   "viDuNghia": "\"Nếu trời mưa thì tôi ở nhà\" là một mệnh đề phức hợp."
+  },
+  {
+   "chu": "inclusive or",
+   "doc": "/ɪnˈkluːsɪv ɔːr/",
+   "nghia": "hoặc bao hàm (∨): đúng khi ít nhất một vế đúng (khác hoặc loại trừ)",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "In logic, \"or\" means the inclusive or unless stated otherwise.",
+   "viDuNghia": "Trong logic, \"or\" là hoặc bao hàm trừ khi nói khác."
+  },
+  {
+   "chu": "bi-implication",
+   "doc": "/ˌbaɪ ˌɪmplɪˈkeɪʃən/",
+   "nghia": "phép tương đương (↔): đúng khi hai vế cùng chân trị (= biconditional)",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "The bi-implication p <-> q is true when p and q have the same truth value.",
+   "viDuNghia": "Phép tương đương p ↔ q đúng khi p và q cùng chân trị."
+  },
+  {
+   "chu": "precedence of logical operators",
+   "doc": "/ˈprɛsɪdəns ɒv ˈlɒdʒɪkəl ˈɒpəreɪtərz/",
+   "nghia": "thứ tự ưu tiên phép logic: ¬ trước ∧, ∧ trước ∨, rồi →, cuối cùng ↔",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "By the precedence of logical operators, ¬p ∧ q means (¬p) ∧ q.",
+   "viDuNghia": "Theo thứ tự ưu tiên phép logic, ¬p ∧ q nghĩa là (¬p) ∧ q."
+  },
+  {
+   "chu": "logical equivalence",
+   "doc": "/ˈlɒdʒɪkəl ɪˈkwɪvələns/",
+   "nghia": "tương đương logic (≡): hai mệnh đề có cùng chân trị trong mọi trường hợp",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "Find a proposition that is logically equivalent to (p -> q) v (¬p -> q).",
+   "viDuNghia": "Tìm mệnh đề tương đương logic với (p → q) ∨ (¬p → q)."
+  },
+  {
+   "chu": "necessary condition",
+   "doc": "/ˈnɛsəsəri kənˈdɪʃən/",
+   "nghia": "điều kiện cần: trong p → q, q là điều kiện cần của p",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "\"q is a necessary condition for p\" is written p -> q.",
+   "viDuNghia": "\"q là điều kiện cần của p\" được viết p → q."
+  },
+  {
+   "chu": "sufficient condition",
+   "doc": "/səˈfɪʃənt kənˈdɪʃən/",
+   "nghia": "điều kiện đủ: trong p → q, p là điều kiện đủ của q",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "\"p is a sufficient condition for q\" means if p then q.",
+   "viDuNghia": "\"p là điều kiện đủ của q\" nghĩa là nếu p thì q."
+  },
+  {
+   "chu": "iff",
+   "doc": "/ɪf ənd ˈoʊnli ɪf/",
+   "nghia": "iff (if and only if): khi và chỉ khi",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "A number is even iff its last binary digit is 0.",
+   "viDuNghia": "Một số là số chẵn khi và chỉ khi chữ số nhị phân cuối của nó là 0."
+  },
+  {
+   "chu": "contingency",
+   "doc": "/kənˈtɪndʒənsi/",
+   "nghia": "mệnh đề tiếp liên: không phải hằng đúng cũng không phải mâu thuẫn",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "p -> q is a contingency because it can be true or false.",
+   "viDuNghia": "p → q là mệnh đề tiếp liên vì nó có thể đúng hoặc sai."
+  },
+  {
+   "chu": "domain of discourse",
+   "doc": "/doʊˈmeɪn ɒv ˈdɪskɔːrs/",
+   "nghia": "miền xác định (vũ trụ) của lượng từ: tập giá trị biến có thể nhận",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "Translate the sentence, where the domain of discourse consists of all students in your class.",
+   "viDuNghia": "Dịch câu, với miền xác định là mọi sinh viên trong lớp bạn."
+  },
+  {
+   "chu": "truth set",
+   "doc": "/truːθ sɛt/",
+   "nghia": "tập chân lý: tập các phần tử của miền làm vị từ P(x) đúng",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "The truth set of P(x): x^2 = 1 over the integers is {-1, 1}.",
+   "viDuNghia": "Tập chân lý của P(x): x² = 1 trên tập số nguyên là {−1, 1}."
+  },
+  {
+   "chu": "nested quantifier",
+   "doc": "/ˈnɛstɪd ˈkwɒntɪfaɪər/",
+   "nghia": "lượng từ lồng: lượng từ nằm trong phạm vi lượng từ khác (∀x∃y …)",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "The order of nested quantifiers matters: ∀x∃y differs from ∃y∀x.",
+   "viDuNghia": "Thứ tự lượng từ lồng quan trọng: ∀x∃y khác ∃y∀x."
+  },
+  {
+   "chu": "bound variable",
+   "doc": "/baʊnd ˈvɛəriəbl/",
+   "nghia": "biến bị ràng buộc: biến nằm trong phạm vi của một lượng từ",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "In ∀x P(x, y), x is a bound variable and y is a free variable.",
+   "viDuNghia": "Trong ∀x P(x, y), x là biến bị ràng buộc còn y là biến tự do."
+  },
+  {
+   "chu": "existential",
+   "doc": "/ˌɛɡzɪˈstɛnʃəl/",
+   "nghia": "tồn tại (∃): phát biểu \"có ít nhất một\"",
+   "nhom": "Mệnh đề & lượng từ",
+   "viDu": "An existential statement is true if one example makes it true.",
+   "viDuNghia": "Một phát biểu tồn tại là đúng nếu có một ví dụ làm nó đúng."
+  },
+  {
+   "chu": "argument form",
+   "doc": "/ˈɑːrɡjumənt fɔːrm/",
+   "nghia": "dạng lập luận: dãy mệnh đề dùng biến mệnh đề; hợp lệ nếu tiền đề đúng thì kết luận phải đúng",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "An argument form is valid if the conclusion is true whenever all premises are true.",
+   "viDuNghia": "Một dạng lập luận hợp lệ nếu mọi tiền đề đúng thì kết luận đúng."
+  },
+  {
+   "chu": "universal instantiation",
+   "doc": "/ˌjuːnɪˈvɜːrsəl ˌɪnstænʃiˈeɪʃən/",
+   "nghia": "đặc biệt hoá phổ dụng: từ ∀x P(x) suy ra P(c) với c bất kỳ",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "From \"All men are mortal\", universal instantiation gives \"Socrates is mortal\" if Socrates is a man.",
+   "viDuNghia": "Từ \"Mọi người đều chết\", đặc biệt hoá phổ dụng cho \"Socrates sẽ chết\" nếu Socrates là người."
+  },
+  {
+   "chu": "universal generalization",
+   "doc": "/ˌjuːnɪˈvɜːrsəl ˌdʒɛnərəlaɪˈzeɪʃən/",
+   "nghia": "tổng quát hoá phổ dụng: chứng minh P(c) cho c TUỲ Ý thì suy ra ∀x P(x)",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "Universal generalization is used when we prove P(c) for an arbitrary element c.",
+   "viDuNghia": "Tổng quát hoá phổ dụng được dùng khi chứng minh P(c) với phần tử c tuỳ ý."
+  },
+  {
+   "chu": "existential instantiation",
+   "doc": "/ˌɛɡzɪˈstɛnʃəl ˌɪnstænʃiˈeɪʃən/",
+   "nghia": "đặc biệt hoá tồn tại: từ ∃x P(x) suy ra P(c) với một c nào đó",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "Existential instantiation lets us name an element c for which P(c) is true.",
+   "viDuNghia": "Đặc biệt hoá tồn tại cho phép đặt tên một phần tử c làm P(c) đúng."
+  },
+  {
+   "chu": "existential generalization",
+   "doc": "/ˌɛɡzɪˈstɛnʃəl ˌdʒɛnərəlaɪˈzeɪʃən/",
+   "nghia": "tổng quát hoá tồn tại: từ P(c) với một c cụ thể suy ra ∃x P(x)",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "\"Lisa passed the exam, so someone passed the exam\" uses existential generalization.",
+   "viDuNghia": "\"Lisa đậu kỳ thi nên có người đậu\" dùng tổng quát hoá tồn tại."
+  },
+  {
+   "chu": "affirming the conclusion",
+   "doc": "/əˈfɜːrmɪŋ ðə kənˈkluːʒən/",
+   "nghia": "nguỵ biện khẳng định kết luận: từ p → q và q suy ra p (SAI)",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "\"If you do every problem, you will learn. You learned, so you did every problem\" is affirming the conclusion.",
+   "viDuNghia": "\"Nếu làm hết bài thì sẽ hiểu. Bạn đã hiểu nên bạn làm hết bài\" là nguỵ biện khẳng định kết luận."
+  },
+  {
+   "chu": "denying the hypothesis",
+   "doc": "/dɪˈnaɪɪŋ ðə haɪˈpɒθəsɪs/",
+   "nghia": "nguỵ biện phủ định giả thiết: từ p → q và ¬p suy ra ¬q (SAI)",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "Concluding ¬q from p -> q and ¬p is the fallacy of denying the hypothesis.",
+   "viDuNghia": "Suy ra ¬q từ p → q và ¬p là nguỵ biện phủ định giả thiết."
+  },
+  {
+   "chu": "direct proof",
+   "doc": "/dəˈrɛkt pruːf/",
+   "nghia": "chứng minh trực tiếp: giả sử p đúng rồi suy luận từng bước tới q",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "Give a direct proof that the sum of two odd integers is even.",
+   "viDuNghia": "Chứng minh trực tiếp rằng tổng hai số nguyên lẻ là số chẵn."
+  },
+  {
+   "chu": "proof by contraposition",
+   "doc": "/pruːf baɪ ˌkɒntrəpəˈzɪʃən/",
+   "nghia": "chứng minh phản đảo: chứng minh ¬q → ¬p thay cho p → q",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "Prove by contraposition that if n^2 is odd, then n is odd.",
+   "viDuNghia": "Chứng minh bằng phản đảo: nếu n² lẻ thì n lẻ."
+  },
+  {
+   "chu": "proof by contradiction",
+   "doc": "/pruːf baɪ ˌkɒntrəˈdɪkʃən/",
+   "nghia": "chứng minh phản chứng: giả sử điều cần chứng minh sai rồi dẫn tới mâu thuẫn",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "Use a proof by contradiction to show that sqrt(2) is irrational.",
+   "viDuNghia": "Dùng phản chứng để chứng minh √2 là số vô tỉ."
+  },
+  {
+   "chu": "proof by cases",
+   "doc": "/pruːf baɪ ˈkeɪsɪz/",
+   "nghia": "chứng minh theo từng trường hợp: chia thành các trường hợp phủ hết rồi chứng minh từng cái",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "Prove by cases that n^2 + n is even for every integer n (n even or n odd).",
+   "viDuNghia": "Chứng minh theo trường hợp rằng n² + n chẵn với mọi số nguyên n (n chẵn hoặc lẻ)."
+  },
+  {
+   "chu": "vacuous proof",
+   "doc": "/ˈvækjuəs pruːf/",
+   "nghia": "chứng minh rỗng: p → q đúng vì p luôn sai",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "If 1 + 1 = 3, then space aliens exist — this is true by a vacuous proof.",
+   "viDuNghia": "\"Nếu 1 + 1 = 3 thì người ngoài hành tinh tồn tại\" — đúng nhờ chứng minh rỗng."
+  },
+  {
+   "chu": "trivial proof",
+   "doc": "/ˈtrɪviəl pruːf/",
+   "nghia": "chứng minh tầm thường: p → q đúng vì q luôn đúng",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "P(0): \"if a >= b then a^0 >= b^0\" has a trivial proof because 1 >= 1.",
+   "viDuNghia": "P(0): \"nếu a ≥ b thì a⁰ ≥ b⁰\" có chứng minh tầm thường vì 1 ≥ 1."
+  },
+  {
+   "chu": "existence proof",
+   "doc": "/ɪɡˈzɪstəns pruːf/",
+   "nghia": "chứng minh tồn tại: chứng minh có ít nhất một phần tử thoả tính chất",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "An existence proof shows that ∃x P(x) is true.",
+   "viDuNghia": "Chứng minh tồn tại chỉ ra ∃x P(x) đúng."
+  },
+  {
+   "chu": "constructive proof",
+   "doc": "/kənˈstrʌktɪv pruːf/",
+   "nghia": "chứng minh kiến thiết: chỉ ra hẳn một phần tử cụ thể thoả tính chất",
+   "nhom": "Suy diễn & chứng minh",
+   "viDu": "1729 = 10^3 + 9^3 = 12^3 + 1^3 gives a constructive proof.",
+   "viDuNghia": "1729 = 10³ + 9³ = 12³ + 1³ là một chứng minh kiến thiết."
+  },
+  {
+   "chu": "roster method",
+   "doc": "/ˈrɒstər ˈmɛθəd/",
+   "nghia": "cách liệt kê: viết tập bằng cách kể hết phần tử {1, 2, 3}",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "Using the roster method, the set of vowels is {a, e, i, o, u}.",
+   "viDuNghia": "Theo cách liệt kê, tập các nguyên âm là {a, e, i, o, u}."
+  },
+  {
+   "chu": "set builder notation",
+   "doc": "/sɛt ˈbɪldər noʊˈteɪʃən/",
+   "nghia": "ký hiệu chỉ tính chất: {x : P(x)} — tập các x thoả P(x)",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "In set builder notation, the odd positive integers less than 10 are written {x : x is odd and 0 < x < 10}.",
+   "viDuNghia": "Theo ký hiệu chỉ tính chất, các số lẻ dương nhỏ hơn 10 viết {x : x lẻ và 0 < x < 10}."
+  },
+  {
+   "chu": "element of",
+   "doc": "/ˈɛlɪmənt ɒv/",
+   "nghia": "thuộc (∈): a ∈ A đọc là \"a is an element of A\"",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "Is the empty set an element of the power set of A?",
+   "viDuNghia": "Tập rỗng có thuộc tập luỹ thừa của A không?"
+  },
+  {
+   "chu": "superset",
+   "doc": "/ˈsuːpərsɛt/",
+   "nghia": "tập cha (tập chứa): A ⊇ B khi mọi phần tử của B đều thuộc A",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "If B is a subset of A, then A is a superset of B.",
+   "viDuNghia": "Nếu B là tập con của A thì A là tập cha của B."
+  },
+  {
+   "chu": "finite set",
+   "doc": "/ˈfaɪnaɪt sɛt/",
+   "nghia": "tập hữu hạn: có đúng n phần tử với n là số tự nhiên",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "The cardinality of a finite set is the number of its elements.",
+   "viDuNghia": "Lực lượng của tập hữu hạn là số phần tử của nó."
+  },
+  {
+   "chu": "infinite set",
+   "doc": "/ˈɪnfɪnɪt sɛt/",
+   "nghia": "tập vô hạn: không phải tập hữu hạn",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "The set of positive integers is an infinite set.",
+   "viDuNghia": "Tập số nguyên dương là tập vô hạn."
+  },
+  {
+   "chu": "countable set",
+   "doc": "/ˈkaʊntəbl sɛt/",
+   "nghia": "tập đếm được: hữu hạn hoặc có song ánh với tập số nguyên dương",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "The set of rational numbers is a countable set.",
+   "viDuNghia": "Tập số hữu tỉ là tập đếm được."
+  },
+  {
+   "chu": "uncountable set",
+   "doc": "/ʌnˈkaʊntəbl sɛt/",
+   "nghia": "tập không đếm được: vô hạn nhưng không liệt kê thành dãy được (vd ℝ)",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "The set of real numbers is an uncountable set.",
+   "viDuNghia": "Tập số thực là tập không đếm được."
+  },
+  {
+   "chu": "ordered n-tuple",
+   "doc": "/ˈɔːrdərd ɛn ˈtjuːpəl/",
+   "nghia": "bộ n có thứ tự (a₁, …, aₙ): thứ tự các thành phần có ý nghĩa",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "An element of A x B x C is an ordered 3-tuple.",
+   "viDuNghia": "Một phần tử của A × B × C là một bộ 3 có thứ tự."
+  },
+  {
+   "chu": "maximal",
+   "doc": "/ˈmæksɪməl/",
+   "nghia": "lớn nhất (cực đại)",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "Which set has the maximal cardinality?",
+   "viDuNghia": "Tập nào có lực lượng lớn nhất?"
+  },
+  {
+   "chu": "injective",
+   "doc": "/ɪnˈdʒɛktɪv/",
+   "nghia": "đơn ánh: hai phần tử khác nhau có ảnh khác nhau (= one-to-one)",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "Neither surjective nor injective",
+   "viDuNghia": "Không toàn ánh cũng không đơn ánh."
+  },
+  {
+   "chu": "surjection",
+   "doc": "/sərˈdʒɛkʃən/",
+   "nghia": "toàn ánh (danh từ): hàm mà mọi phần tử của tập đích đều là ảnh",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "A function from {a, b} to {1, 2, 3} cannot be a surjection.",
+   "viDuNghia": "Một hàm từ {a, b} vào {1, 2, 3} không thể là toàn ánh."
+  },
+  {
+   "chu": "identity function",
+   "doc": "/aɪˈdɛntɪti ˈfʌŋkʃən/",
+   "nghia": "hàm đồng nhất: ι(x) = x",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "The composition of f and its inverse is the identity function.",
+   "viDuNghia": "Hợp của f với hàm ngược của nó là hàm đồng nhất."
+  },
+  {
+   "chu": "inverse function",
+   "doc": "/ɪnˈvɜːrs ˈfʌŋkʃən/",
+   "nghia": "hàm ngược f⁻¹: chỉ tồn tại khi f là song ánh",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "The inverse function of g does not exist.",
+   "viDuNghia": "Hàm ngược của g không tồn tại."
+  },
+  {
+   "chu": "closed form",
+   "doc": "/kloʊzd fɔːrm/",
+   "nghia": "dạng đóng (công thức tường minh): tính thẳng số hạng thứ n không cần các số hạng trước",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "Find a closed form for the sum 1 + 2 + ... + n.",
+   "viDuNghia": "Tìm dạng đóng của tổng 1 + 2 + … + n."
+  },
+  {
+   "chu": "summation notation",
+   "doc": "/sʌˈmeɪʃən noʊˈteɪʃən/",
+   "nghia": "ký hiệu tổng Σ",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "Express the sum of the first 100 odd numbers using summation notation.",
+   "viDuNghia": "Viết tổng 100 số lẻ đầu tiên bằng ký hiệu tổng."
+  },
+  {
+   "chu": "index of summation",
+   "doc": "/ˈɪndɛks ɒv sʌˈmeɪʃən/",
+   "nghia": "chỉ số tổng: biến chạy (i, j, k) dưới dấu Σ",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "In the sum of i^2 from i = 1 to n, i is the index of summation.",
+   "viDuNghia": "Trong tổng i² với i từ 1 tới n, i là chỉ số tổng."
+  },
+  {
+   "chu": "geometric series",
+   "doc": "/ˌdʒiːəˈmɛtrɪk ˈsɪəriːz/",
+   "nghia": "tổng cấp số nhân: a + ar + … + arⁿ = a(rⁿ⁺¹ − 1)/(r − 1)",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "Use the formula for a geometric series to compute 1 + 2 + 4 + ... + 2^10.",
+   "viDuNghia": "Dùng công thức tổng cấp số nhân để tính 1 + 2 + 4 + … + 2¹⁰."
+  },
+  {
+   "chu": "Fibonacci",
+   "doc": "/ˌfɪbəˈnɑːtʃi/",
+   "nghia": "số Fibonacci: dãy f₀ = 0, f₁ = 1, fₙ = fₙ₋₁ + fₙ₋₂",
+   "nhom": "Tập hợp & hàm",
+   "viDu": "Find the 10th Fibonacci number.",
+   "viDuNghia": "Tìm số Fibonacci thứ 10."
+  },
+  {
+   "chu": "subtraction rule",
+   "doc": "/səbˈtrækʃən ruːl/",
+   "nghia": "quy tắc trừ: |A ∪ B| = |A| + |B| − |A ∩ B| (bỏ phần đếm hai lần)",
+   "nhom": "Quy tắc đếm",
+   "viDu": "In a survey of 1250 people, 650 used Spotify and 450 used iTunes; use the subtraction rule to count users of either.",
+   "viDuNghia": "Khảo sát 1250 người: 650 dùng Spotify, 450 dùng iTunes; dùng quy tắc trừ để đếm số người dùng ít nhất một cái."
+  },
+  {
+   "chu": "inclusion-exclusion principle",
+   "doc": "/ɪnˈkluːʒən ɪkˈskluːʒən ˈprɪnsɪpəl/",
+   "nghia": "nguyên lý bao hàm – loại trừ: đếm hợp nhiều tập bằng cộng, trừ xen kẽ các giao",
+   "nhom": "Quy tắc đếm",
+   "viDu": "By the inclusion-exclusion principle, |A ∪ B ∪ C| = |A| + |B| + |C| - |A∩B| - |A∩C| - |B∩C| + |A∩B∩C|.",
+   "viDuNghia": "Theo nguyên lý bao hàm – loại trừ, |A ∪ B ∪ C| = |A| + |B| + |C| − |A∩B| − |A∩C| − |B∩C| + |A∩B∩C|."
+  },
+  {
+   "chu": "division rule",
+   "doc": "/dɪˈvɪʒən ruːl/",
+   "nghia": "quy tắc chia: mỗi kết quả bị đếm đúng d lần thì chia cho d",
+   "nhom": "Quy tắc đếm",
+   "viDu": "Seating 4 people around a round table has 4!/4 = 6 ways by the division rule.",
+   "viDuNghia": "Xếp 4 người quanh bàn tròn có 4!/4 = 6 cách theo quy tắc chia."
+  },
+  {
+   "chu": "tree diagram",
+   "doc": "/triː ˈdaɪəɡræm/",
+   "nghia": "sơ đồ cây: vẽ mỗi lựa chọn thành một nhánh để đếm",
+   "nhom": "Quy tắc đếm",
+   "viDu": "Use a tree diagram to count the bit strings of length 4 with no two consecutive 1s.",
+   "viDuNghia": "Dùng sơ đồ cây đếm các xâu bit độ dài 4 không có hai số 1 liền nhau."
+  },
+  {
+   "chu": "permutation",
+   "doc": "/ˌpɜːrmjuˈteɪʃən/",
+   "nghia": "hoán vị: một cách sắp thứ tự các phần tử; có n! hoán vị của n phần tử",
+   "nhom": "Quy tắc đếm",
+   "viDu": "How many permutations of the letters ABCDEFG contain the string ABC?",
+   "viDuNghia": "Có bao nhiêu hoán vị của các chữ ABCDEFG chứa chuỗi ABC?"
+  },
+  {
+   "chu": "r-permutation",
+   "doc": "/ɑːr ˌpɜːrmjuˈteɪʃən/",
+   "nghia": "chỉnh hợp chập r: dãy r phần tử khác nhau có thứ tự, P(n, r) = n!/(n − r)!",
+   "nhom": "Quy tắc đếm",
+   "viDu": "How many ways are there to select a first prize, a second prize and a third prize winner from 100 people? (an r-permutation)",
+   "viDuNghia": "Có bao nhiêu cách chọn người giải nhất, nhì, ba trong 100 người? (một chỉnh hợp)"
+  },
+  {
+   "chu": "r-combination",
+   "doc": "/ɑːr ˌkɒmbɪˈneɪʃən/",
+   "nghia": "tổ hợp chập r: tập con r phần tử, không thứ tự, C(n, r) = n!/(r!(n − r)!)",
+   "nhom": "Quy tắc đếm",
+   "viDu": "How many ways are there to choose 5 players from a team of 10? (an r-combination)",
+   "viDuNghia": "Có bao nhiêu cách chọn 5 cầu thủ từ đội 10 người? (một tổ hợp)"
+  },
+  {
+   "chu": "growth of functions",
+   "doc": "/ɡroʊθ ɒv ˈfʌŋkʃənz/",
+   "nghia": "độ tăng của hàm: so sánh hàm tăng nhanh cỡ nào khi n lớn (dùng O, Ω, Θ)",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "The growth of functions is described with big-O, big-Omega and big-Theta notation.",
+   "viDuNghia": "Độ tăng của hàm được mô tả bằng ký hiệu O lớn, Omega lớn và Theta lớn."
+  },
+  {
+   "chu": "big-Omega notation",
+   "doc": "/bɪɡ oʊˈmeɪɡə noʊˈteɪʃən/",
+   "nghia": "ký hiệu Omega lớn Ω: chặn DƯỚI độ tăng — f(x) ≥ C·g(x) khi x đủ lớn",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "f(x) is Ω(g(x)) if g gives a lower bound for f for large x.",
+   "viDuNghia": "f(x) là Ω(g(x)) nếu g là chặn dưới của f khi x lớn."
+  },
+  {
+   "chu": "big-Theta notation",
+   "doc": "/bɪɡ ˈθiːtə noʊˈteɪʃən/",
+   "nghia": "ký hiệu Theta lớn Θ: cùng bậc — vừa O vừa Ω",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "Show that 3x^2 + 8x log x is Θ(x^2).",
+   "viDuNghia": "Chứng minh 3x² + 8x log x là Θ(x²)."
+  },
+  {
+   "chu": "dominant term",
+   "doc": "/ˈdɒmɪnənt tɜːrm/",
+   "nghia": "số hạng trội: số hạng tăng nhanh nhất, quyết định bậc O lớn",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "In n^3 + 100n^2 log n, the dominant term is n^3.",
+   "viDuNghia": "Trong n³ + 100n² log n, số hạng trội là n³."
+  },
+  {
+   "chu": "worst-case complexity",
+   "doc": "/wɜːrst keɪs kəmˈplɛksɪti/",
+   "nghia": "độ phức tạp trường hợp xấu nhất: số phép toán lớn nhất trên mọi đầu vào cỡ n",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "The worst-case complexity of linear search is n comparisons.",
+   "viDuNghia": "Độ phức tạp trường hợp xấu nhất của tìm kiếm tuyến tính là n phép so sánh."
+  },
+  {
+   "chu": "average-case complexity",
+   "doc": "/ˈævərɪdʒ keɪs kəmˈplɛksɪti/",
+   "nghia": "độ phức tạp trung bình: số phép toán trung bình trên mọi đầu vào cỡ n",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "The average-case complexity of linear search is about n/2 comparisons.",
+   "viDuNghia": "Độ phức tạp trung bình của tìm kiếm tuyến tính khoảng n/2 phép so sánh."
+  },
+  {
+   "chu": "quadratic time",
+   "doc": "/kwɒˈdrætɪk taɪm/",
+   "nghia": "thời gian bậc hai Θ(n²) (vd sắp xếp nổi bọt)",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "Bubble sort runs in quadratic time.",
+   "viDuNghia": "Sắp xếp nổi bọt chạy trong thời gian bậc hai."
+  },
+  {
+   "chu": "factorial time",
+   "doc": "/fækˈtɔːriəl taɪm/",
+   "nghia": "thời gian giai thừa Θ(n!): thử mọi hoán vị",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "Trying every route of the traveling salesperson problem takes factorial time.",
+   "viDuNghia": "Thử mọi lộ trình của bài toán người bán hàng tốn thời gian giai thừa."
+  },
+  {
+   "chu": "polynomial time",
+   "doc": "/ˌpɒliˈnoʊmiəl taɪm/",
+   "nghia": "thời gian đa thức O(nᵏ): coi là giải được hiệu quả (tractable)",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "A problem solvable in polynomial time is called tractable.",
+   "viDuNghia": "Bài toán giải được trong thời gian đa thức gọi là dễ giải (tractable)."
+  },
+  {
+   "chu": "tractable",
+   "doc": "/ˈtræktəbl/",
+   "nghia": "dễ giải (tractable): giải được bằng thuật toán thời gian đa thức trong trường hợp xấu nhất",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "Sorting is a tractable problem.",
+   "viDuNghia": "Sắp xếp là bài toán dễ giải."
+  },
+  {
+   "chu": "binary search algorithm",
+   "doc": "/ˈbaɪnəri sɜːrtʃ ˈælɡərɪðəm/",
+   "nghia": "thuật toán tìm kiếm nhị phân: chia đôi dãy đã sắp, so với phần tử giữa",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "Use the binary search algorithm to find the location of 10 in the sequence {1,4,5,7,8,10,12}. How many iterations are needed?",
+   "viDuNghia": "Dùng tìm kiếm nhị phân tìm vị trí của 10 trong dãy {1,4,5,7,8,10,12}. Cần bao nhiêu vòng lặp?"
+  },
+  {
+   "chu": "ternary search",
+   "doc": "/ˈtɜːrnəri sɜːrtʃ/",
+   "nghia": "tìm kiếm tam phân: chia dãy đã sắp làm ba phần mỗi bước",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "Describe a ternary search algorithm that splits the list into three parts.",
+   "viDuNghia": "Mô tả thuật toán tìm kiếm tam phân chia dãy làm ba phần."
+  },
+  {
+   "chu": "maximum element",
+   "doc": "/ˈmæksɪməm ˈɛlɪmənt/",
+   "nghia": "phần tử lớn nhất: thuật toán max duyệt dãy và giữ giá trị lớn nhất đã gặp",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "Describe an algorithm for finding the maximum element in a finite sequence of integers.",
+   "viDuNghia": "Mô tả thuật toán tìm phần tử lớn nhất trong một dãy số nguyên hữu hạn."
+  },
+  {
+   "chu": "greedy change-making algorithm",
+   "doc": "/ˈɡriːdi tʃeɪndʒ ˈmeɪkɪŋ ˈælɡərɪðəm/",
+   "nghia": "thuật toán đổi tiền tham lam: luôn chọn đồng mệnh giá lớn nhất còn dùng được",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "What is the total number of coins when using the greedy change-making algorithm to make change for 67 cents?",
+   "viDuNghia": "Tổng số đồng xu là bao nhiêu khi dùng thuật toán tham lam để đổi 67 xu?"
+  },
+  {
+   "chu": "Tower of Hanoi",
+   "doc": "/ˈtaʊər ɒv həˈnɔɪ/",
+   "nghia": "bài toán tháp Hà Nội: chuyển n đĩa qua cọc, số bước Hₙ = 2Hₙ₋₁ + 1 = 2ⁿ − 1",
+   "nhom": "Thuật toán & độ phức tạp",
+   "viDu": "The Tower of Hanoi puzzle with n disks needs 2^n - 1 moves.",
+   "viDuNghia": "Bài toán tháp Hà Nội với n đĩa cần 2ⁿ − 1 bước."
+  },
+  {
+   "chu": "positive integer",
+   "doc": "/ˈpɒzətɪv ˈɪntɪdʒər/",
+   "nghia": "số nguyên dương: 1, 2, 3, …",
+   "nhom": "Số học & mật mã",
+   "viDu": "Find the smallest positive integer n such that n = 5x + 6y has a nonnegative solution.",
+   "viDuNghia": "Tìm số nguyên dương nhỏ nhất n sao cho n = 5x + 6y có nghiệm không âm."
+  },
+  {
+   "chu": "mod",
+   "doc": "/mɒd/",
+   "nghia": "mod: phép lấy số dư — a mod m là số dư (0 ≤ r < m) khi chia a cho m",
+   "nhom": "Số học & mật mã",
+   "viDu": "Let a = 131 mod 37 and b = -131 mod 37. Find a - b.",
+   "viDuNghia": "Cho a = 131 mod 37 và b = −131 mod 37. Tìm a − b."
+  },
+  {
+   "chu": "binary representation",
+   "doc": "/ˈbaɪnəri ˌrɛprɪzɛnˈteɪʃən/",
+   "nghia": "biểu diễn nhị phân: viết số theo cơ số 2",
+   "nhom": "Số học & mật mã",
+   "viDu": "Convert BC1 in hexadecimal representation to binary representation.",
+   "viDuNghia": "Đổi BC1 ở dạng thập lục phân sang dạng nhị phân."
+  },
+  {
+   "chu": "fundamental theorem of arithmetic",
+   "doc": "/ˌfʌndəˈmɛntəl ˈθɪərəm ɒv əˈrɪθmətɪk/",
+   "nghia": "định lý cơ bản của số học: mọi số nguyên > 1 phân tích DUY NHẤT thành tích các số nguyên tố",
+   "nhom": "Số học & mật mã",
+   "viDu": "By the fundamental theorem of arithmetic, 100 = 2^2 x 5^2 in exactly one way.",
+   "viDuNghia": "Theo định lý cơ bản của số học, 100 = 2² × 5² theo đúng một cách."
+  },
+  {
+   "chu": "sieve of Eratosthenes",
+   "doc": "/sɪv ɒv ˌɛrəˈtɒsθəniːz/",
+   "nghia": "sàng Eratosthenes: gạch bội của từng số nguyên tố để còn lại các số nguyên tố",
+   "nhom": "Số học & mật mã",
+   "viDu": "Use the sieve of Eratosthenes to find all primes not exceeding 100.",
+   "viDuNghia": "Dùng sàng Eratosthenes tìm mọi số nguyên tố không vượt quá 100."
+  },
+  {
+   "chu": "Mersenne prime",
+   "doc": "/mərˈsɛn praɪm/",
+   "nghia": "số nguyên tố Mersenne: số nguyên tố dạng 2ᵖ − 1",
+   "nhom": "Số học & mật mã",
+   "viDu": "2^7 - 1 = 127 is a Mersenne prime.",
+   "viDuNghia": "2⁷ − 1 = 127 là số nguyên tố Mersenne."
+  },
+  {
+   "chu": "twin primes",
+   "doc": "/twɪn praɪmz/",
+   "nghia": "cặp số nguyên tố sinh đôi: hai số nguyên tố hơn kém nhau 2 (3 và 5, 11 và 13)",
+   "nhom": "Số học & mật mã",
+   "viDu": "17 and 19 are twin primes.",
+   "viDuNghia": "17 và 19 là cặp số nguyên tố sinh đôi."
+  },
+  {
+   "chu": "Goldbach",
+   "doc": "/ˈɡoʊldbɑːk/",
+   "nghia": "giả thuyết Goldbach: mọi số chẵn > 2 là tổng hai số nguyên tố (chưa chứng minh)",
+   "nhom": "Số học & mật mã",
+   "viDu": "Goldbach's conjecture states that every even integer greater than 2 is the sum of two primes.",
+   "viDuNghia": "Giả thuyết Goldbach nói mọi số chẵn lớn hơn 2 là tổng của hai số nguyên tố."
+  },
+  {
+   "chu": "Bezout's theorem",
+   "doc": "/beɪˈzuːz ˈθɪərəm/",
+   "nghia": "định lý Bézout: gcd(a, b) = sa + tb với s, t nguyên",
+   "nhom": "Số học & mật mã",
+   "viDu": "Use Bezout's theorem to express gcd(252, 198) as a linear combination of 252 and 198.",
+   "viDuNghia": "Dùng định lý Bézout viết gcd(252, 198) thành tổ hợp tuyến tính của 252 và 198."
+  },
+  {
+   "chu": "check digit",
+   "doc": "/tʃɛk ˈdɪdʒɪt/",
+   "nghia": "chữ số kiểm tra: chữ số thêm vào mã (ISBN, mã vạch) tính bằng đồng dư để phát hiện lỗi gõ",
+   "nhom": "Số học & mật mã",
+   "viDu": "The last digit of an ISBN-10 is a check digit computed modulo 11.",
+   "viDuNghia": "Chữ số cuối của ISBN-10 là chữ số kiểm tra tính theo modulo 11."
+  },
+  {
+   "chu": "affine cipher",
+   "doc": "/əˈfaɪn ˈsaɪfər/",
+   "nghia": "mã affine: mã hoá chữ p thành (ap + b) mod 26, với gcd(a, 26) = 1",
+   "nhom": "Số học & mật mã",
+   "viDu": "Encrypt the message using the affine cipher f(p) = (7p + 3) mod 26.",
+   "viDuNghia": "Mã hoá thông điệp bằng mã affine f(p) = (7p + 3) mod 26."
+  },
+  {
+   "chu": "Collatz",
+   "doc": "/ˈkɒlæts/",
+   "nghia": "giả thuyết Collatz (3x + 1): lặp n/2 nếu chẵn, 3n + 1 nếu lẻ thì luôn về 1 (chưa chứng minh)",
+   "nhom": "Số học & mật mã",
+   "viDu": "The Collatz conjecture says the 3x + 1 sequence always reaches 1.",
+   "viDuNghia": "Giả thuyết Collatz nói dãy 3x + 1 luôn về 1."
+  },
+  {
+   "chu": "well-ordering property",
+   "doc": "/wɛl ˈɔːrdərɪŋ ˈprɒpərti/",
+   "nghia": "tính sắp tốt: mọi tập con khác rỗng của số nguyên không âm đều có phần tử nhỏ nhất",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "The validity of mathematical induction follows from the well-ordering property.",
+   "viDuNghia": "Tính đúng của quy nạp toán học suy ra từ tính sắp tốt."
+  },
+  {
+   "chu": "recursively defined set",
+   "doc": "/rɪˈkɜːrsɪvli dɪˈfaɪnd sɛt/",
+   "nghia": "tập định nghĩa đệ quy: cho phần tử cơ sở và luật tạo phần tử mới từ phần tử đã có",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "Let S be the recursively defined set: (3, 2) is in S; if (a, b) is in S then (a + 2, b + 3) is in S.",
+   "viDuNghia": "Cho S là tập định nghĩa đệ quy: (3, 2) ∈ S; nếu (a, b) ∈ S thì (a + 2, b + 3) ∈ S."
+  },
+  {
+   "chu": "structural induction",
+   "doc": "/ˈstrʌktʃərəl ɪnˈdʌkʃən/",
+   "nghia": "quy nạp cấu trúc: chứng minh cho phần tử cơ sở, rồi chứng minh luật tạo giữ nguyên tính chất",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "Use structural induction to show that every element of S has a + b divisible by 5.",
+   "viDuNghia": "Dùng quy nạp cấu trúc chứng minh mọi phần tử của S có a + b chia hết cho 5."
+  },
+  {
+   "chu": "empty string",
+   "doc": "/ˈɛmpti strɪŋ/",
+   "nghia": "xâu rỗng λ: xâu không có ký tự nào, độ dài 0",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "The empty string is the basis step in the recursive definition of strings.",
+   "viDuNghia": "Xâu rỗng là bước cơ sở trong định nghĩa đệ quy của xâu."
+  },
+  {
+   "chu": "length of a string",
+   "doc": "/lɛŋθ ɒv ə strɪŋ/",
+   "nghia": "độ dài xâu l(w): số ký tự của xâu",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "Give a recursive definition of the length of a string.",
+   "viDuNghia": "Cho định nghĩa đệ quy độ dài của một xâu."
+  },
+  {
+   "chu": "pendant edge",
+   "doc": "/ˈpɛndənt ɛdʒ/",
+   "nghia": "cạnh treo: cạnh nối với một đỉnh treo (đỉnh bậc 1)",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "Removing a pendant edge leaves an isolated vertex.",
+   "viDuNghia": "Bỏ một cạnh treo thì còn lại một đỉnh cô lập."
+  },
+  {
+   "chu": "regular graph",
+   "doc": "/ˈrɛɡjʊlər ɡræf/",
+   "nghia": "đồ thị đều: mọi đỉnh có cùng bậc",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "The complete graph K4 is a 3-regular graph.",
+   "viDuNghia": "Đồ thị đầy đủ K₄ là đồ thị 3-đều."
+  },
+  {
+   "chu": "star graph",
+   "doc": "/stɑːr ɡræf/",
+   "nghia": "đồ thị hình sao: một đỉnh trung tâm nối với mọi đỉnh còn lại",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "A star graph with n leaves has n edges.",
+   "viDuNghia": "Đồ thị hình sao có n lá thì có n cạnh."
+  },
+  {
+   "chu": "bipartition",
+   "doc": "/ˌbaɪpɑːrˈtɪʃən/",
+   "nghia": "phân hoạch hai phía: chia tập đỉnh thành V₁, V₂ sao cho mọi cạnh nối giữa hai phần",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "Find a bipartition of the vertex set to show that the graph is bipartite.",
+   "viDuNghia": "Tìm phân hoạch hai phía của tập đỉnh để chứng tỏ đồ thị là đồ thị hai phía."
+  },
+  {
+   "chu": "vertex-disjoint",
+   "doc": "/ˈvɜːrtɛks dɪsˈdʒɔɪnt/",
+   "nghia": "rời nhau về đỉnh: không có đỉnh chung",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "Choose the correct statement about a graph made of two vertex-disjoint triangles.",
+   "viDuNghia": "Chọn phát biểu đúng về đồ thị gồm hai tam giác không chung đỉnh."
+  },
+  {
+   "chu": "isomorphism",
+   "doc": "/ˌaɪsoʊˈmɔːrfɪzəm/",
+   "nghia": "phép đẳng cấu: song ánh giữa hai tập đỉnh giữ nguyên quan hệ kề",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "The function f with f(a)=y, f(b)=x, f(c)=z, f(d)=t is an isomorphism between G and H.",
+   "viDuNghia": "Hàm f với f(a)=y, f(b)=x, f(c)=z, f(d)=t là một phép đẳng cấu giữa G và H."
+  },
+  {
+   "chu": "m-ary",
+   "doc": "/ˈɛm ˌɛəri/",
+   "nghia": "m-phân: mỗi đỉnh trong có nhiều nhất m con (cây nhị phân là 2-phân)",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "How many vertices are in a full 3-ary tree with 101 leaves?",
+   "viDuNghia": "Một cây 3-phân đầy đủ có 101 lá thì có bao nhiêu đỉnh?"
+  },
+  {
+   "chu": "level-order",
+   "doc": "/ˈlɛvəl ˈɔːrdər/",
+   "nghia": "duyệt theo mức: thăm đỉnh theo từng mức từ gốc xuống (như BFS)",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "List the vertices of the tree in level-order.",
+   "viDuNghia": "Liệt kê các đỉnh của cây theo thứ tự mức."
+  },
+  {
+   "chu": "traveling salesperson problem",
+   "doc": "/ˈtrævəlɪŋ ˈseɪlzpɜːrsən ˈprɒbləm/",
+   "nghia": "bài toán người bán hàng: tìm chu trình Hamilton có tổng trọng số nhỏ nhất",
+   "nhom": "Quy nạp, đệ quy & đồ thị",
+   "viDu": "The traveling salesperson problem asks for the shortest circuit that visits every city exactly once.",
+   "viDuNghia": "Bài toán người bán hàng tìm chu trình ngắn nhất đi qua mỗi thành phố đúng một lần."
+  },
+  {
+   "chu": "non-negative integer",
+   "doc": "/nɒn ˈneɡətɪv ˈɪntɪdʒər/",
+   "nghia": "số nguyên không âm: 0, 1, 2, …",
+   "nhom": "Số học & mật mã",
+   "viDu": "Every n ≥ 12 can be written as n = 4x + 5y with x, y non-negative integers.",
+   "viDuNghia": "Mọi n ≥ 12 viết được thành n = 4x + 5y với x, y là số nguyên không âm."
+  }
+ ]
+}

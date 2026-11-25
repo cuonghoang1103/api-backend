@@ -4,7 +4,7 @@
  "ten": "OSG202 · 3. Hệ thống tệp, vào/ra và đĩa",
  "moTa": "Môn Hệ điều hành (OSG202), phần 3: tệp và thư mục, cách cài đặt hệ thống tệp (FAT, i-node, cấp phát khối), phần mềm vào/ra, lập lịch đĩa, đồng hồ, bảo vệ và bảo mật. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "folder.fill",
- "thuTu": -975,
+ "thuTu": -966,
  "tu": [
   {
    "chu": "file system",

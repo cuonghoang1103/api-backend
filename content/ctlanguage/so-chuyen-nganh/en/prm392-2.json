@@ -1,0 +1,706 @@
+{
+ "ma": "prm392-2",
+ "nn": "en",
+ "ten": "PRM392 · 2. Vòng đời, broadcast, dữ liệu & mạng Android",
+ "moTa": "Bổ sung PRM392: các phương thức vòng đời Activity, broadcast và LocalBroadcastManager, intent action và truyền dữ liệu, widget và giao diện, thông báo, SharedPreferences, SQLite/Room, Retrofit, socket, luồng nền, MVVM và công cụ SDK.",
+ "bieuTuong": "iphone",
+ "thuTu": -905,
+ "tu": [
+  {
+   "chu": "lifecycle hook method",
+   "doc": "/ˈlaɪfsaɪkl hʊk ˈmeθəd/",
+   "nghia": "phương thức móc vòng đời: hàm Android tự gọi khi Activity đổi trạng thái (onCreate, onStop…)",
+   "nhom": "Vòng đời Activity",
+   "viDu": "The UI focus is unchanged and no lifecycle hook methods are called.",
+   "viDuNghia": "Tiêu điểm giao diện không đổi và không phương thức vòng đời nào được gọi."
+  },
+  {
+   "chu": "onCreate",
+   "doc": "/ɑːn kriˈeɪt/",
+   "nghia": "gọi khi Activity được tạo lần đầu: setContentView, khởi tạo view",
+   "nhom": "Vòng đời Activity",
+   "viDu": "Which method must every Activity override to set its layout? onCreate().",
+   "viDuNghia": "Phương thức nào mọi Activity phải ghi đè để đặt layout? onCreate()."
+  },
+  {
+   "chu": "onStart",
+   "doc": "/ɑːn stɑːrt/",
+   "nghia": "gọi khi Activity sắp hiện ra cho người dùng thấy",
+   "nhom": "Vòng đời Activity",
+   "viDu": "onStart() and onStop() mark the visible lifetime.",
+   "viDuNghia": "onStart() và onStop() đánh dấu khoảng đời hiển thị."
+  },
+  {
+   "chu": "onResume",
+   "doc": "/ɑːn rɪˈzuːm/",
+   "nghia": "gọi khi Activity ra tiền cảnh và bắt đầu tương tác với người dùng",
+   "nhom": "Vòng đời Activity",
+   "viDu": "onResume() and onPause() mark the foreground lifetime.",
+   "viDuNghia": "onResume() và onPause() đánh dấu khoảng đời tiền cảnh."
+  },
+  {
+   "chu": "onPause",
+   "doc": "/ɑːn pɔːz/",
+   "nghia": "gọi khi Activity mất tiêu điểm (bị che một phần); phải làm việc rất nhanh ở đây",
+   "nhom": "Vòng đời Activity",
+   "viDu": "Activity.onPause()",
+   "viDuNghia": "Phương thức onPause() của Activity."
+  },
+  {
+   "chu": "onStop",
+   "doc": "/ɑːn stɑːp/",
+   "nghia": "gọi khi Activity không còn hiển thị",
+   "nhom": "Vòng đời Activity",
+   "viDu": "Android immediately shuts down your Activity by calling onStop().",
+   "viDuNghia": "Android tắt ngay Activity bằng cách gọi onStop()."
+  },
+  {
+   "chu": "onDestroy",
+   "doc": "/ɑːn dɪˈstrɔɪ/",
+   "nghia": "gọi trước khi Activity bị huỷ (đóng hẳn hoặc xoay màn hình)",
+   "nhom": "Vòng đời Activity",
+   "viDu": "onCreate() and onDestroy() mark the entire lifetime.",
+   "viDuNghia": "onCreate() và onDestroy() đánh dấu toàn bộ khoảng đời."
+  },
+  {
+   "chu": "onRestart",
+   "doc": "/ɑːn ˌriːˈstɑːrt/",
+   "nghia": "gọi khi Activity đã dừng (onStop) rồi quay lại, trước onStart",
+   "nhom": "Vòng đời Activity",
+   "viDu": "onRestart() is called before onStart() when the user returns.",
+   "viDuNghia": "onRestart() được gọi trước onStart() khi người dùng quay lại."
+  },
+  {
+   "chu": "entire lifetime",
+   "doc": "/ɪnˈtaɪər ˈlaɪftaɪm/",
+   "nghia": "toàn bộ khoảng đời: từ onCreate tới onDestroy",
+   "nhom": "Vòng đời Activity",
+   "viDu": "Entire lifetime",
+   "viDuNghia": "Toàn bộ khoảng đời."
+  },
+  {
+   "chu": "visible lifetime",
+   "doc": "/ˈvɪzəbl ˈlaɪftaɪm/",
+   "nghia": "khoảng đời hiển thị: từ onStart tới onStop",
+   "nhom": "Vòng đời Activity",
+   "viDu": "Visible lifetime",
+   "viDuNghia": "Khoảng đời hiển thị."
+  },
+  {
+   "chu": "foreground lifetime",
+   "doc": "/ˈfɔːrɡraʊnd ˈlaɪftaɪm/",
+   "nghia": "khoảng đời tiền cảnh: từ onResume tới onPause, Activity đang ở trên cùng và nhận thao tác",
+   "nhom": "Vòng đời Activity",
+   "viDu": "Foreground lifetime",
+   "viDuNghia": "Khoảng đời tiền cảnh."
+  },
+  {
+   "chu": "AppCompatActivity",
+   "doc": "/əˈpæt kəmˈpæt ækˈtɪvəti/",
+   "nghia": "lớp Activity của thư viện AndroidX hỗ trợ tính năng mới trên máy Android cũ",
+   "nhom": "Vòng đời Activity",
+   "viDu": "public class MainActivity extends AppCompatActivity",
+   "viDuNghia": "MainActivity kế thừa AppCompatActivity."
+  },
+  {
+   "chu": "setContentView",
+   "doc": "/set ˈkɑːntent vjuː/",
+   "nghia": "gắn layout (hoặc View) làm giao diện của Activity",
+   "nhom": "Vòng đời Activity",
+   "viDu": "setContentView(R.layout.activity_main);",
+   "viDuNghia": "Gắn layout activity_main cho Activity."
+  },
+  {
+   "chu": "findViewById",
+   "doc": "/faɪnd vjuː baɪ aɪ ˈdiː/",
+   "nghia": "tìm View trong layout theo id (R.id...)",
+   "nhom": "Vòng đời Activity",
+   "viDu": "findViewById(R.id.textViewId).text = \"Hello World\";",
+   "viDuNghia": "Tìm TextView theo id rồi gán chữ."
+  },
+  {
+   "chu": "view binding",
+   "doc": "/vjuː ˈbaɪndɪŋ/",
+   "nghia": "sinh lớp binding cho mỗi layout để truy cập view an toàn, thay findViewById",
+   "nhom": "Vòng đời Activity",
+   "viDu": "View binding eliminates a lot of boilerplate code.",
+   "viDuNghia": "View binding loại bỏ nhiều đoạn mã lặp."
+  },
+  {
+   "chu": "data binding",
+   "doc": "/ˈdeɪtə ˈbaɪndɪŋ/",
+   "nghia": "ràng buộc dữ liệu: gắn thẳng dữ liệu ViewModel vào layout XML",
+   "nhom": "Vòng đời Activity",
+   "viDu": "How does data binding benefit MVVM architecture?",
+   "viDuNghia": "Data binding mang lại lợi ích gì cho kiến trúc MVVM?"
+  },
+  {
+   "chu": "boilerplate code",
+   "doc": "/ˈbɔɪlərpleɪt koʊd/",
+   "nghia": "mã lặp khuôn: đoạn mã giống nhau phải viết đi viết lại",
+   "nhom": "Vòng đời Activity",
+   "viDu": "Eliminates a lot of boilerplate code.",
+   "viDuNghia": "Loại bỏ nhiều đoạn mã lặp khuôn."
+  },
+  {
+   "chu": "system broadcast",
+   "doc": "/ˈsɪstəm ˈbrɔːdkæst/",
+   "nghia": "broadcast hệ thống: Android phát khi có sự kiện (pin yếu, bật chế độ máy bay, khởi động xong)",
+   "nhom": "Broadcast và intent",
+   "viDu": "It is an event handler that responds to system-side broadcast announcements.",
+   "viDuNghia": "Nó là hàm xử lý sự kiện đáp lại các thông báo broadcast phía hệ thống."
+  },
+  {
+   "chu": "custom broadcast",
+   "doc": "/ˈkʌstəm ˈbrɔːdkæst/",
+   "nghia": "broadcast tự định nghĩa: app tự phát bằng sendBroadcast với action riêng",
+   "nhom": "Broadcast và intent",
+   "viDu": "System broadcasts are less secure than custom broadcasts.",
+   "viDuNghia": "Broadcast hệ thống kém an toàn hơn broadcast tự định nghĩa (một phương án trong đề)."
+  },
+  {
+   "chu": "normal broadcast",
+   "doc": "/ˈnɔːrml ˈbrɔːdkæst/",
+   "nghia": "broadcast thường: gửi bất đồng bộ cho mọi receiver cùng lúc, không theo thứ tự",
+   "nhom": "Broadcast và intent",
+   "viDu": "Normal Broadcast",
+   "viDuNghia": "Broadcast thường."
+  },
+  {
+   "chu": "ordered broadcast",
+   "doc": "/ˈɔːrdərd ˈbrɔːdkæst/",
+   "nghia": "broadcast có thứ tự: chuyển lần lượt từng receiver theo độ ưu tiên, receiver có thể huỷ giữa chừng",
+   "nhom": "Broadcast và intent",
+   "viDu": "An ordered broadcast is delivered to one receiver at a time.",
+   "viDuNghia": "Broadcast có thứ tự được giao cho từng receiver một."
+  },
+  {
+   "chu": "sendBroadcast",
+   "doc": "/send ˈbrɔːdkæst/",
+   "nghia": "phát một intent dạng broadcast",
+   "nhom": "Broadcast và intent",
+   "viDu": "Using sendBroadcast()",
+   "viDuNghia": "Dùng sendBroadcast()."
+  },
+  {
+   "chu": "onReceive",
+   "doc": "/ɑːn rɪˈsiːv/",
+   "nghia": "phương thức của BroadcastReceiver chạy khi nhận broadcast (trên luồng giao diện)",
+   "nhom": "Broadcast và intent",
+   "viDu": "The onReceive() hook method in a receiver is called back in the UI thread.",
+   "viDuNghia": "Phương thức onReceive() của receiver được gọi lại trên luồng giao diện."
+  },
+  {
+   "chu": "unregister a receiver",
+   "doc": "/ʌnˈredʒɪstər ə rɪˈsiːvər/",
+   "nghia": "huỷ đăng ký receiver (unregisterReceiver) khi Activity dừng để tránh rò bộ nhớ",
+   "nhom": "Broadcast và intent",
+   "viDu": "To unregister the BroadcastReceiver.",
+   "viDuNghia": "Để huỷ đăng ký BroadcastReceiver."
+  },
+  {
+   "chu": "LocalBroadcastManager",
+   "doc": "/ˈloʊkl ˈbrɔːdkæst ˈmænɪdʒər/",
+   "nghia": "lớp gửi broadcast chỉ trong nội bộ một app, không lọt ra ngoài tiến trình (nay đã ngừng dùng)",
+   "nhom": "Broadcast và intent",
+   "viDu": "It performs optimizations for intra-app communication by ensuring intents don't cross process boundaries.",
+   "viDuNghia": "Nó tối ưu giao tiếp trong app bằng cách bảo đảm intent không vượt ranh giới tiến trình."
+  },
+  {
+   "chu": "intra-app communication",
+   "doc": "/ˌɪntrə æp kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "giao tiếp trong nội bộ một ứng dụng",
+   "nhom": "Broadcast và intent",
+   "viDu": "LocalBroadcastManager is designed for intra-app communication.",
+   "viDuNghia": "LocalBroadcastManager dành cho giao tiếp trong nội bộ app."
+  },
+  {
+   "chu": "process boundary",
+   "doc": "/ˈprɑːses ˈbaʊndri/",
+   "nghia": "ranh giới tiến trình: giới hạn giữa hai tiến trình (hai app), dữ liệu qua đó phải qua IPC",
+   "nhom": "Broadcast và intent",
+   "viDu": "Intents don't cross process boundaries.",
+   "viDuNghia": "Intent không vượt ranh giới tiến trình."
+  },
+  {
+   "chu": "intent action",
+   "doc": "/ɪnˈtent ˈækʃn/",
+   "nghia": "hành động của intent: loại thao tác cần làm (ACTION_VIEW, ACTION_SEND, ACTION_DIAL)",
+   "nhom": "Broadcast và intent",
+   "viDu": "The type of operation to be performed, such as ACTION_VIEW, ACTION_SEND, ACTION_DIAL.",
+   "viDuNghia": "Loại thao tác cần làm, như ACTION_VIEW, ACTION_SEND, ACTION_DIAL."
+  },
+  {
+   "chu": "putExtra",
+   "doc": "/pʊt ˈekstrə/",
+   "nghia": "gắn dữ liệu khoá–giá trị vào intent để gửi sang Activity khác",
+   "nhom": "Broadcast và intent",
+   "viDu": "intent.putExtra(\"customer\", \"David Jason\");",
+   "viDuNghia": "Gắn tên khách hàng vào intent."
+  },
+  {
+   "chu": "getIntent",
+   "doc": "/ɡet ɪnˈtent/",
+   "nghia": "Activity được mở lấy lại intent đã gọi nó để đọc dữ liệu extra",
+   "nhom": "Broadcast và intent",
+   "viDu": "Call getIntent(), then getStringExtra() to read the value.",
+   "viDuNghia": "Gọi getIntent() rồi getStringExtra() để đọc giá trị."
+  },
+  {
+   "chu": "startActivityForResult",
+   "doc": "/stɑːrt ækˈtɪvəti fər rɪˈzʌlt/",
+   "nghia": "mở Activity và chờ kết quả trả về (cách cũ; nay dùng Activity Result API)",
+   "nhom": "Broadcast và intent",
+   "viDu": "startActivityForResult",
+   "viDuNghia": "Mở Activity và chờ kết quả."
+  },
+  {
+   "chu": "setResult",
+   "doc": "/set rɪˈzʌlt/",
+   "nghia": "Activity con đặt mã và dữ liệu kết quả trước khi finish()",
+   "nhom": "Broadcast và intent",
+   "viDu": "setResult(RESULT_OK, data); finish();",
+   "viDuNghia": "Đặt kết quả OK kèm dữ liệu rồi đóng Activity."
+  },
+  {
+   "chu": "Parcelable",
+   "doc": "/ˈpɑːrsələbl/",
+   "nghia": "giao diện Android để đóng gói đối tượng truyền qua intent/Bundle (nhanh hơn Serializable)",
+   "nhom": "Broadcast và intent",
+   "viDu": "Make the Product class Parcelable to pass it in an intent.",
+   "viDuNghia": "Cho lớp Product cài Parcelable để truyền qua intent."
+  },
+  {
+   "chu": "fragment arguments",
+   "doc": "/ˈfræɡmənt ˈɑːrɡjumənts/",
+   "nghia": "dữ liệu khởi tạo Fragment truyền bằng Bundle qua setArguments()",
+   "nhom": "Broadcast và intent",
+   "viDu": "Use the Fragment.setArguments(Bundle) method to supply the construction arguments for the fragment.",
+   "viDuNghia": "Dùng Fragment.setArguments(Bundle) để truyền tham số khởi tạo cho fragment."
+  },
+  {
+   "chu": "reside in another app",
+   "doc": "/rɪˈzaɪd ɪn əˈnʌðər æp/",
+   "nghia": "nằm ở (thuộc về) ứng dụng khác",
+   "nhom": "Broadcast và intent",
+   "viDu": "Implicit intents are typically used to interact with components residing in other apps.",
+   "viDuNghia": "Intent ngầm thường dùng để tương tác với component nằm ở app khác."
+  },
+  {
+   "chu": "layout editor",
+   "doc": "/ˈleɪaʊt ˈedɪtər/",
+   "nghia": "trình thiết kế layout kéo-thả của Android Studio",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "Drag each image to the layout editor.",
+   "viDuNghia": "Kéo từng ảnh vào trình thiết kế layout."
+  },
+  {
+   "chu": "RadioGroup",
+   "doc": "/ˈreɪdioʊ ɡruːp/",
+   "nghia": "nhóm RadioButton chỉ cho chọn MỘT; CheckBox cho chọn nhiều",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "Checkboxes enable multiple selections, while a RadioGroup allows only one selection.",
+   "viDuNghia": "CheckBox cho chọn nhiều, còn RadioGroup chỉ cho chọn một."
+  },
+  {
+   "chu": "Spinner widget",
+   "doc": "/ˈspɪnər ˈwɪdʒɪt/",
+   "nghia": "Spinner (Android): widget chọn một giá trị từ danh sách thả xuống",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "Spinner is the Android widget that provides dropdown-list selection.",
+   "viDuNghia": "Spinner là widget Android cho chọn từ danh sách thả xuống."
+  },
+  {
+   "chu": "ImageView",
+   "doc": "/ˈɪmɪdʒ vjuː/",
+   "nghia": "view hiển thị ảnh; thuộc tính scaleType quy định cách co giãn",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "Displays the image centered in the view with fitCenter scaling.",
+   "viDuNghia": "Hiện ảnh ở giữa view và co vừa khung."
+  },
+  {
+   "chu": "CardView",
+   "doc": "/kɑːrd vjuː/",
+   "nghia": "khung thẻ có bo góc và bóng đổ, hay dùng cho mỗi mục của RecyclerView",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "Each product is shown in a CardView.",
+   "viDuNghia": "Mỗi sản phẩm hiện trong một CardView."
+  },
+  {
+   "chu": "AlertDialog.Builder",
+   "doc": "/əˈlɜːrt ˈdaɪəlɔːɡ ˈbɪldər/",
+   "nghia": "lớp dựng hộp thoại cảnh báo: setTitle, setMessage, setPositiveButton",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(this);",
+   "viDuNghia": "Tạo bộ dựng hộp thoại cảnh báo."
+  },
+  {
+   "chu": "Snackbar",
+   "doc": "/ˈsnækbɑːr/",
+   "nghia": "thanh thông báo ngắn ở đáy màn hình, có thể kèm nút hành động (Undo)",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "Show a Snackbar with an Undo action after deleting.",
+   "viDuNghia": "Hiện Snackbar có nút Hoàn tác sau khi xoá."
+  },
+  {
+   "chu": "Toast.makeText",
+   "doc": "/toʊst meɪk tekst/",
+   "nghia": "tạo thông báo nổi ngắn; phải gọi .show() mới hiện",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "Toast.makeText(context, \"Message\", Toast.LENGTH_SHORT).show();",
+   "viDuNghia": "Hiện thông báo ngắn \"Message\"."
+  },
+  {
+   "chu": "app theme",
+   "doc": "/æp θiːm/",
+   "nghia": "giao diện chủ đề cho cả app (Theme.AppCompat.Light.NoActionBar); style áp cho từng view",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "Themes apply to the entire app, while you can apply styles to specific views.",
+   "viDuNghia": "Theme áp cho toàn app, còn style áp cho từng view."
+  },
+  {
+   "chu": "NoActionBar theme",
+   "doc": "/noʊ ˈækʃn bɑːr θiːm/",
+   "nghia": "theme không có thanh action bar mặc định, thường để tự đặt Toolbar",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "Theme.AppCompat.Light.NoActionBar",
+   "viDuNghia": "Theme sáng không có action bar."
+  },
+  {
+   "chu": "NotificationManager",
+   "doc": "/ˌnoʊtɪfɪˈkeɪʃn ˈmænɪdʒər/",
+   "nghia": "dịch vụ hệ thống hiển thị thông báo bằng notify(id, notification)",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "NotificationManager.notify()",
+   "viDuNghia": "Gọi notify() của NotificationManager."
+  },
+  {
+   "chu": "NotificationCompat.Builder",
+   "doc": "/ˌnoʊtɪfɪˈkeɪʃn kəmˈpæt ˈbɪldər/",
+   "nghia": "lớp dựng thông báo tương thích mọi phiên bản: setSmallIcon, setContentTitle",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "new NotificationCompat.Builder(this, CHANNEL_ID).setSmallIcon(R.drawable.ic)",
+   "viDuNghia": "Dựng thông báo cho kênh CHANNEL_ID với biểu tượng nhỏ."
+  },
+  {
+   "chu": "notify",
+   "doc": "/ˈnoʊtɪfaɪ/",
+   "nghia": "phát (hiển thị) một thông báo, hoặc báo cho đối tượng lắng nghe biết có thay đổi",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "Which method displays the notification? Notification.notify()",
+   "viDuNghia": "Phương thức nào hiển thị thông báo?"
+  },
+  {
+   "chu": "Android Nougat",
+   "doc": "/ˈændrɔɪd ˈnuːɡət/",
+   "nghia": "Android 7.0 (API 24); kênh thông báo chỉ có từ Android 8.0 Oreo (API 26)",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "Notification channels are not available on devices running Android 7.0 Nougat (API 24) and lower.",
+   "viDuNghia": "Kênh thông báo không có trên máy chạy Android 7.0 Nougat (API 24) trở xuống."
+  },
+  {
+   "chu": "SharedPreferences.Editor",
+   "doc": "/ʃerd prɪˈfrensɪz ˈedɪtər/",
+   "nghia": "đối tượng ghi SharedPreferences: putString… rồi apply() hoặc commit()",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "SharedPreferences offer a lightweight way to store small amounts of app data persistently.",
+   "viDuNghia": "SharedPreferences là cách nhẹ để lưu bền lượng nhỏ dữ liệu app."
+  },
+  {
+   "chu": "apply method",
+   "doc": "/əˈplaɪ ˈmeθəd/",
+   "nghia": "apply(): lưu SharedPreferences bất đồng bộ, không trả kết quả",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "apply() writes in the background, commit() returns true or false.",
+   "viDuNghia": "apply() ghi ngầm, commit() trả true hoặc false."
+  },
+  {
+   "chu": "commit method",
+   "doc": "/kəˈmɪt ˈmeθəd/",
+   "nghia": "commit(): lưu SharedPreferences đồng bộ, trả về true/false (chặn luồng)",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "commit() blocks the thread until the data is written.",
+   "viDuNghia": "commit() chặn luồng tới khi ghi xong."
+  },
+  {
+   "chu": "SQLiteOpenHelper",
+   "doc": "/ˌes kjuː el aɪt ˈoʊpən ˈhelpər/",
+   "nghia": "lớp trợ giúp tạo và nâng cấp CSDL SQLite (onCreate, onUpgrade)",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "onCreate() and onUpgrade()",
+   "viDuNghia": "Hai phương thức onCreate() và onUpgrade()."
+  },
+  {
+   "chu": "onUpgrade",
+   "doc": "/ɑːn ˈʌpɡreɪd/",
+   "nghia": "gọi khi số phiên bản CSDL tăng, dùng để đổi cấu trúc bảng",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "onUpgrade() runs when the database version number increases.",
+   "viDuNghia": "onUpgrade() chạy khi số phiên bản CSDL tăng."
+  },
+  {
+   "chu": "Cursor object",
+   "doc": "/ˈkɜːrsər ˈɑːbdʒekt/",
+   "nghia": "đối tượng Cursor: duyệt từng dòng kết quả truy vấn SQLite; phải close() sau khi dùng",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "It alleviates the need to explicitly call close() on the Cursor.",
+   "viDuNghia": "Nó giúp khỏi phải tự gọi close() trên Cursor."
+  },
+  {
+   "chu": "ContentValues",
+   "doc": "/ˈkɑːntent ˈvæljuːz/",
+   "nghia": "tập cặp cột–giá trị dùng khi insert/update SQLite hoặc ContentProvider",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "update(Uri uri, ContentValues values, String selection, String[] selectionArgs)",
+   "viDuNghia": "Hàm update nhận URI, các giá trị mới và điều kiện chọn."
+  },
+  {
+   "chu": "Room entity",
+   "doc": "/ruːm ˈentəti/",
+   "nghia": "lớp gắn @Entity: Room ánh xạ thành một bảng SQLite",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "Entities and DAOs are not used in Room database.",
+   "viDuNghia": "Entity và DAO không được dùng trong Room. (Sai)"
+  },
+  {
+   "chu": "DAO",
+   "doc": "/ˌdiː eɪ ˈoʊ/",
+   "nghia": "DAO (Room): giao diện gắn @Dao khai các truy vấn @Query, @Insert, @Delete",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "Each DAO method is annotated with @Query, @Insert or @Delete.",
+   "viDuNghia": "Mỗi phương thức DAO gắn @Query, @Insert hoặc @Delete."
+  },
+  {
+   "chu": "Retrofit builder",
+   "doc": "/ˈretroʊfɪt ˈbɪldər/",
+   "nghia": "Retrofit.Builder: cấu hình baseUrl và converter rồi build() để tạo client",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();",
+   "viDuNghia": "Dựng Retrofit với địa chỉ gốc và bộ chuyển Gson."
+  },
+  {
+   "chu": "converter factory",
+   "doc": "/kənˈvɜːrtər ˈfæktəri/",
+   "nghia": "bộ chuyển đổi của Retrofit: đổi JSON phản hồi thành đối tượng Java/Kotlin (Gson, Moshi)",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "A converter factory and a parser for the response.",
+   "viDuNghia": "Bộ chuyển đổi và trình phân tích phản hồi."
+  },
+  {
+   "chu": "Gson",
+   "doc": "/ˈdʒiː sɑːn/",
+   "nghia": "thư viện Google đổi JSON ↔ đối tượng Java",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "GsonConverterFactory.create()",
+   "viDuNghia": "Tạo bộ chuyển đổi Gson."
+  },
+  {
+   "chu": "Query annotation",
+   "doc": "/ˈkwɪri ˌænəˈteɪʃn/",
+   "nghia": "@Query (Retrofit): gắn tham số thành tham số truy vấn ?key=value trên URL",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "Add a parameter for the query and annotate the parameter with @Query.",
+   "viDuNghia": "Thêm tham số cho truy vấn và gắn @Query cho nó."
+  },
+  {
+   "chu": "Body annotation",
+   "doc": "/ˈbɑːdi ˌænəˈteɪʃn/",
+   "nghia": "@Body (Retrofit): đối tượng gửi làm thân JSON của request POST/PUT",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "What annotation is used in Retrofit to denote a JSON body in a POST request?",
+   "viDuNghia": "Annotation nào dùng trong Retrofit để biểu thị thân JSON trong request POST?"
+  },
+  {
+   "chu": "OkHttp",
+   "doc": "/ˌoʊ ˈkeɪ ˌeɪtʃ tiː tiː ˈpiː/",
+   "nghia": "thư viện HTTP mà Retrofit dùng bên dưới (thêm interceptor, log)",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "Add an OkHttp interceptor to log every request.",
+   "viDuNghia": "Thêm interceptor OkHttp để ghi log mọi request."
+  },
+  {
+   "chu": "ServerSocket",
+   "doc": "/ˈsɜːrvər ˈsɑːkɪt/",
+   "nghia": "socket phía server: mở cổng rồi accept() chờ client kết nối",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "It passively waits for a connection from a client.",
+   "viDuNghia": "Nó thụ động chờ kết nối từ client."
+  },
+  {
+   "chu": "AsyncTask",
+   "doc": "/eɪˈsɪŋk tæsk/",
+   "nghia": "lớp cũ chạy việc nền rồi trả kết quả về luồng giao diện (đã ngừng dùng từ API 30)",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "Call the execute() method on an AsyncTask with the URL.",
+   "viDuNghia": "Gọi execute() trên AsyncTask với URL."
+  },
+  {
+   "chu": "Executor",
+   "doc": "/ɪɡˈzekjətər/",
+   "nghia": "đối tượng Java chạy tác vụ trên nhóm luồng nền, thay cho AsyncTask",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "Run the database query on an Executor, not on the main thread.",
+   "viDuNghia": "Chạy truy vấn CSDL trên Executor, không trên luồng chính."
+  },
+  {
+   "chu": "Looper",
+   "doc": "/ˈluːpər/",
+   "nghia": "vòng lặp thông điệp của một luồng; Handler gửi việc vào Looper của luồng chính",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "new Handler(Looper.getMainLooper()).post(...) updates the UI.",
+   "viDuNghia": "Gửi việc về luồng chính để cập nhật giao diện."
+  },
+  {
+   "chu": "WorkManager",
+   "doc": "/wɜːrk ˈmænɪdʒər/",
+   "nghia": "thư viện Jetpack lên lịch việc nền bảo đảm chạy kể cả khi app tắt",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "Use WorkManager to upload logs once the device is charging.",
+   "viDuNghia": "Dùng WorkManager để tải log lên khi máy đang sạc."
+  },
+  {
+   "chu": "filesystem access",
+   "doc": "/ˈfaɪlsɪstəm ˈækses/",
+   "nghia": "truy cập hệ thống tệp: đọc/ghi tệp thường chậm, không làm trên luồng chính",
+   "nhom": "Lưu trữ và mạng",
+   "viDu": "Filesystem accesses are often relatively slow.",
+   "viDuNghia": "Truy cập hệ thống tệp thường khá chậm."
+  },
+  {
+   "chu": "ViewModel",
+   "doc": "/vjuː ˈmɑːdl/",
+   "nghia": "lớp giữ dữ liệu giao diện, sống qua lần xoay màn hình (Jetpack)",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "The ViewModel holds UI data and survives configuration changes.",
+   "viDuNghia": "ViewModel giữ dữ liệu giao diện và tồn tại qua thay đổi cấu hình."
+  },
+  {
+   "chu": "LiveData",
+   "doc": "/laɪv ˈdeɪtə/",
+   "nghia": "dữ liệu quan sát được, tự báo cho giao diện khi đổi và biết vòng đời",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "The Activity observes LiveData and updates the TextView.",
+   "viDuNghia": "Activity quan sát LiveData và cập nhật TextView."
+  },
+  {
+   "chu": "presenter",
+   "doc": "/prɪˈzentər/",
+   "nghia": "Presenter (MVP): lớp trung gian nhận sự kiện từ View, gọi Model rồi bảo View hiển thị",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "Model - View - Presenter",
+   "viDuNghia": "Mô hình – Giao diện – Presenter."
+  },
+  {
+   "chu": "fine location",
+   "doc": "/faɪn loʊˈkeɪʃn/",
+   "nghia": "quyền vị trí chính xác (GPS) ACCESS_FINE_LOCATION",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "android.permission.ACCESS_FINE_LOCATION",
+   "viDuNghia": "Quyền vị trí chính xác."
+  },
+  {
+   "chu": "coarse location",
+   "doc": "/kɔːrs loʊˈkeɪʃn/",
+   "nghia": "quyền vị trí gần đúng (theo mạng) ACCESS_COARSE_LOCATION",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "android.permission.ACCESS_COARSE_LOCATION",
+   "viDuNghia": "Quyền vị trí gần đúng."
+  },
+  {
+   "chu": "INTERNET permission",
+   "doc": "/ˈɪntərnet pərˈmɪʃn/",
+   "nghia": "quyền mạng android.permission.INTERNET khai trong manifest, thiếu thì mọi request đều lỗi",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "android.permission.INTERNET",
+   "viDuNghia": "Quyền truy cập Internet."
+  },
+  {
+   "chu": "Android SDK",
+   "doc": "/ˈændrɔɪd ˌes diː ˈkeɪ/",
+   "nghia": "bộ công cụ phát triển Android: thư viện, công cụ build, trình giả lập",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "Android SDK and Android Virtual Device (AVD)",
+   "viDuNghia": "Android SDK và thiết bị ảo Android (AVD)."
+  },
+  {
+   "chu": "Android Virtual Device",
+   "doc": "/ˈændrɔɪd ˈvɜːrtʃuəl dɪˈvaɪs/",
+   "nghia": "AVD: cấu hình thiết bị ảo chạy trên emulator",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "Create an Android Virtual Device to test the app.",
+   "viDuNghia": "Tạo thiết bị ảo Android để thử app."
+  },
+  {
+   "chu": "Android Debug Bridge",
+   "doc": "/ˈændrɔɪd diːˈbʌɡ brɪdʒ/",
+   "nghia": "ADB: công cụ dòng lệnh cài app, xem log, điều khiển máy thật/ảo",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "adb install app.apk installs the app on the emulator.",
+   "viDuNghia": "adb install cài app lên trình giả lập."
+  },
+  {
+   "chu": "Dalvik Virtual Machine",
+   "doc": "/ˈdælvɪk ˈvɜːrtʃuəl məˈʃiːn/",
+   "nghia": "máy ảo chạy mã DEX trên Android đời cũ, nay thay bằng Android Runtime (ART)",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "Dalvik Virtual Machine",
+   "viDuNghia": "Máy ảo Dalvik."
+  },
+  {
+   "chu": "Native Development Kit",
+   "doc": "/ˈneɪtɪv dɪˈveləpmənt kɪt/",
+   "nghia": "NDK: bộ công cụ viết một phần app Android bằng C/C++",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "The bulk of these apps are written in C/C++ using the NDK.",
+   "viDuNghia": "Phần lớn các app này viết bằng C/C++ dùng NDK."
+  },
+  {
+   "chu": "versionCode",
+   "doc": "/ˈvɜːrʒn koʊd/",
+   "nghia": "số nguyên phiên bản nội bộ, phải tăng mỗi lần đưa bản mới lên cửa hàng",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "android:versionCode",
+   "viDuNghia": "Thuộc tính versionCode."
+  },
+  {
+   "chu": "versionName",
+   "doc": "/ˈvɜːrʒn neɪm/",
+   "nghia": "chuỗi phiên bản hiện cho người dùng, vd \"1.2.0\"",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "android:versionName",
+   "viDuNghia": "Thuộc tính versionName."
+  },
+  {
+   "chu": "targetSdkVersion",
+   "doc": "/ˈtɑːrɡɪt ˌes diː ˈkeɪ ˈvɜːrʒn/",
+   "nghia": "phiên bản API app được kiểm thử và nhắm tới; minSdkVersion là bản thấp nhất cài được",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "targetSdkVersion",
+   "viDuNghia": "Phiên bản API nhắm tới."
+  },
+  {
+   "chu": "Jetpack Compose",
+   "doc": "/ˈdʒetpæk kəmˈpoʊz/",
+   "nghia": "bộ công cụ dựng giao diện Android kiểu khai báo bằng hàm @Composable (Kotlin)",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "Jetpack Compose builds the UI with composable functions.",
+   "viDuNghia": "Jetpack Compose dựng giao diện bằng các hàm composable."
+  },
+  {
+   "chu": "Material Design",
+   "doc": "/məˈtɪriəl dɪˈzaɪn/",
+   "nghia": "hệ ngôn ngữ thiết kế của Google cho Android (màu, bóng, component)",
+   "nhom": "MVVM và công cụ SDK",
+   "viDu": "Material Design components give the app a consistent look.",
+   "viDuNghia": "Component Material Design cho app vẻ ngoài thống nhất."
+  },
+  {
+   "chu": "CMYK",
+   "doc": "/ˌsiː em waɪ ˈkeɪ/",
+   "nghia": "CMYK: mô hình màu in ấn (lục lam, đỏ tươi, vàng, đen); giao diện màn hình khai báo màu bằng mã Hex / RGB chứ không dùng CMYK",
+   "nhom": "Widget, giao diện và thông báo",
+   "viDu": "CMYK is a colour model for printing, not for screen styling.",
+   "viDuNghia": "CMYK là mô hình màu cho in ấn, không dùng để tạo kiểu trên màn hình."
+  }
+ ]
+}

@@ -4,7 +4,7 @@
  "ten": "PRM392 · Lập trình Android",
  "moTa": "Môn Mobile Programming (PRM392): Activity và vòng đời, Intent, Service, Broadcast Receiver, Content Provider, layout và RecyclerView, SQLite, Shared Preferences, quyền, luồng nền, thông báo, kiến trúc Android. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu hỏi thật trong đề.",
  "bieuTuong": "iphone",
- "thuTu": -940,
+ "thuTu": -906,
  "tu": [
   {
    "chu": "activity",

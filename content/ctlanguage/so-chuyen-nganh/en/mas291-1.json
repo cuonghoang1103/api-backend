@@ -4,7 +4,7 @@
  "ten": "MAS291 · 1. Xác suất & biến ngẫu nhiên",
  "moTa": "Xác suất thống kê (MAS291), bộ 1: phép thử và biến cố, xác suất có điều kiện, biến ngẫu nhiên rời rạc - liên tục, hàm mật độ, hàm phân phối, kỳ vọng, phương sai, các phân phối (nhị thức, Poisson, đều, mũ, chuẩn). Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "dice.fill",
- "thuTu": -959,
+ "thuTu": -937,
  "tu": [
   {
    "chu": "random experiment",

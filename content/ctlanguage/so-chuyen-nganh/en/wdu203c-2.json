@@ -1,0 +1,562 @@
+{
+ "ma": "wdu203c-2",
+ "nn": "en",
+ "ten": "WDU203c · 2. Nghiên cứu người dùng, khảo sát & đánh giá UX",
+ "moTa": "Bổ sung WDU203c: phương pháp nghiên cứu (dân tộc học, quan sát, crowdsourcing), lấy mẫu và thiên kiến khảo sát, kỹ thuật phỏng vấn, phân tích affinity, nguyên mẫu (Wizard of Oz), thước đo khả dụng và phân tích hành vi, nguyên lý thiết kế tương tác — từ đề FE thật.",
+ "bieuTuong": "pencil.and.ruler.fill",
+ "thuTu": -916,
+ "tu": [
+  {
+   "chu": "human-computer interaction",
+   "doc": "/ˈhjuːmən kəmˈpjuːtər ˌɪntərˈækʃn/",
+   "nghia": "HCI: ngành nghiên cứu cách con người tương tác với máy tính",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "User experience research grew out of human-computer interaction.",
+   "viDuNghia": "Nghiên cứu trải nghiệm người dùng ra đời từ ngành HCI."
+  },
+  {
+   "chu": "interaction design",
+   "doc": "/ˌɪntərˈækʃn dɪˈzaɪn/",
+   "nghia": "thiết kế tương tác: thiết kế cách người dùng thao tác và hệ thống phản hồi",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "Interaction design decides what happens when the user taps a button.",
+   "viDuNghia": "Thiết kế tương tác quyết định điều xảy ra khi người dùng chạm nút."
+  },
+  {
+   "chu": "formative work",
+   "doc": "/ˈfɔːrmətɪv wɜːrk/",
+   "nghia": "nghiên cứu hình thành: tìm hiểu nhu cầu trước khi thiết kế",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "By envisioning how a technology might address the needs identified in formative work.",
+   "viDuNghia": "Bằng cách hình dung công nghệ đáp ứng nhu cầu đã tìm thấy trong nghiên cứu hình thành."
+  },
+  {
+   "chu": "ethnographic research",
+   "doc": "/ˌeθnəˈɡræfɪk rɪˈsɜːrtʃ/",
+   "nghia": "nghiên cứu dân tộc học: hoà vào môi trường thật của người dùng để quan sát lâu dài",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "Ethnographic research.",
+   "viDuNghia": "Nghiên cứu dân tộc học."
+  },
+  {
+   "chu": "field observation",
+   "doc": "/fiːld ˌɑːbzərˈveɪʃn/",
+   "nghia": "quan sát thực địa: xem người dùng làm việc ở nơi thật của họ",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "Sit quietly and observe, even if the participant says nothing.",
+   "viDuNghia": "Ngồi yên quan sát, kể cả khi người tham gia không nói gì."
+  },
+  {
+   "chu": "socio-technical system",
+   "doc": "/ˌsoʊsioʊ ˈteknɪkl ˈsɪstəm/",
+   "nghia": "hệ thống xã hội–kỹ thuật: con người, quy trình và công nghệ gắn với nhau",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "A hospital ward is a socio-technical system.",
+   "viDuNghia": "Một khoa bệnh viện là hệ thống xã hội–kỹ thuật."
+  },
+  {
+   "chu": "clickstream analytics",
+   "doc": "/ˈklɪkstriːm ˌænəˈlɪtɪks/",
+   "nghia": "phân tích dòng nhấp: ghi chuỗi thao tác nhấp của người dùng trên trang để tìm hành vi",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "Clickstream analytics",
+   "viDuNghia": "Phân tích dòng nhấp."
+  },
+  {
+   "chu": "experimental trial",
+   "doc": "/ɪkˌsperɪˈmentl ˈtraɪəl/",
+   "nghia": "thử nghiệm có đối chứng: so hai phiên bản trên người dùng thật (như A/B test)",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "Running an experimental trial to see if users like Google with banner ads.",
+   "viDuNghia": "Chạy thử nghiệm để xem người dùng có thích Google có banner quảng cáo không."
+  },
+  {
+   "chu": "crowdsourcing",
+   "doc": "/ˈkraʊdsɔːrsɪŋ/",
+   "nghia": "huy động đám đông: thuê nhiều người trên mạng làm việc nhỏ (khảo sát, gắn nhãn)",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "Crowdsourcing a survey on Mechanical Turk is fast and cheap.",
+   "viDuNghia": "Khảo sát qua Mechanical Turk nhanh và rẻ."
+  },
+  {
+   "chu": "Mechanical Turk",
+   "doc": "/məˈkænɪkl tɜːrk/",
+   "nghia": "nền tảng Amazon thuê người làm việc nhỏ trực tuyến; người làm gọi là Turker",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "How to pay a fair wage to Turkers.",
+   "viDuNghia": "Cách trả lương công bằng cho người làm trên Mechanical Turk."
+  },
+  {
+   "chu": "novice user",
+   "doc": "/ˈnɑːvɪs ˈjuːzər/",
+   "nghia": "người dùng mới, ít kinh nghiệm",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "Are novice Internet shoppers able to complete the checkout process?",
+   "viDuNghia": "Người mới mua sắm trực tuyến có hoàn tất được bước thanh toán không?"
+  },
+  {
+   "chu": "expert user",
+   "doc": "/ˈekspɜːrt ˈjuːzər/",
+   "nghia": "người dùng thành thạo; cần phím tắt, thao tác nhanh",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "Shortcuts help expert users without confusing novices.",
+   "viDuNghia": "Phím tắt giúp người thành thạo mà không làm người mới rối."
+  },
+  {
+   "chu": "self-report",
+   "doc": "/ˌself rɪˈpɔːrt/",
+   "nghia": "tự báo cáo: người tham gia tự ghi lại trải nghiệm (nhật ký, khảo sát)",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "Diary studies let participants self-report over time remotely, without a researcher present.",
+   "viDuNghia": "Nghiên cứu nhật ký cho người tham gia tự ghi lại từ xa, không cần người nghiên cứu."
+  },
+  {
+   "chu": "recall bias",
+   "doc": "/ˈriːkɔːl ˈbaɪəs/",
+   "nghia": "thiên kiến hồi tưởng: nhớ sai hoặc quên dần, nhất là việc làm hằng ngày",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "Memory fades over time, and often doesn't capture routine actions.",
+   "viDuNghia": "Trí nhớ phai theo thời gian và thường bỏ sót việc làm thường ngày."
+  },
+  {
+   "chu": "snowball sampling",
+   "doc": "/ˈsnoʊbɔːl ˈsæmplɪŋ/",
+   "nghia": "lấy mẫu quả cầu tuyết: người trả lời mời tiếp người quen của họ",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "Asking one group of respondents to forward the survey invite to their social networks.",
+   "viDuNghia": "Nhờ một nhóm người trả lời chuyển lời mời khảo sát cho mạng xã hội của họ."
+  },
+  {
+   "chu": "random sampling",
+   "doc": "/ˈrændəm ˈsæmplɪŋ/",
+   "nghia": "lấy mẫu ngẫu nhiên: mọi người trong tổng thể có cơ hội được chọn như nhau",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "Emailing a random sample of employees based on a list provided by HR.",
+   "viDuNghia": "Gửi thư cho mẫu ngẫu nhiên nhân viên theo danh sách của phòng nhân sự."
+  },
+  {
+   "chu": "heterogeneous population",
+   "doc": "/ˌhetərəˈdʒiːniəs ˌpɑːpjuˈleɪʃn/",
+   "nghia": "tổng thể không đồng nhất: nhóm người rất khác nhau, cần mẫu lớn hoặc phân tầng",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "If your population is very heterogeneous.",
+   "viDuNghia": "Nếu tổng thể của bạn rất không đồng nhất."
+  },
+  {
+   "chu": "representative user",
+   "doc": "/ˌreprɪˈzentətɪv ˈjuːzər/",
+   "nghia": "người dùng đại diện: giống đối tượng mục tiêu về đặc điểm chính",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "Recruit test participants who are representative of your target users.",
+   "viDuNghia": "Tuyển người thử đại diện cho người dùng mục tiêu."
+  },
+  {
+   "chu": "satisficing",
+   "doc": "/ˈsætɪsfaɪsɪŋ/",
+   "nghia": "trả lời qua loa: người trả lời chọn đại đáp án \"tạm được\" để xong nhanh",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "Overly familiar to respondents, leading to satisficing.",
+   "viDuNghia": "Quá quen với người trả lời, dẫn tới trả lời qua loa."
+  },
+  {
+   "chu": "cognitive burden",
+   "doc": "/ˈkɑːɡnətɪv ˈbɜːrdn/",
+   "nghia": "gánh nặng nhận thức: câu hỏi/giao diện bắt người dùng nghĩ, nhớ quá nhiều",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "Cognitively burdensome",
+   "viDuNghia": "Gây gánh nặng nhận thức."
+  },
+  {
+   "chu": "response option",
+   "doc": "/rɪˈspɑːns ˈɑːpʃn/",
+   "nghia": "phương án trả lời của câu hỏi khảo sát (phải cân đối, không chồng nhau)",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "Avoid unequal response options.",
+   "viDuNghia": "Tránh các phương án trả lời không cân đối."
+  },
+  {
+   "chu": "Likert scale",
+   "doc": "/ˈlɪkərt skeɪl/",
+   "nghia": "thang Likert: mức độ đồng ý từ \"rất không đồng ý\" tới \"rất đồng ý\"",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "Rate each statement on a five-point Likert scale.",
+   "viDuNghia": "Chấm mỗi câu trên thang Likert năm mức."
+  },
+  {
+   "chu": "double-barreled question",
+   "doc": "/ˌdʌbl ˈbærəld ˈkwestʃən/",
+   "nghia": "câu hỏi hai nòng: hỏi hai ý trong một câu nên người trả lời khó trả lời đúng",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "\"Is the app fast and easy to use?\" is a double-barreled question.",
+   "viDuNghia": "\"App có nhanh và dễ dùng không?\" là câu hỏi hai ý."
+  },
+  {
+   "chu": "operationalization",
+   "doc": "/ˌɑːpəˌreɪʃənələˈzeɪʃn/",
+   "nghia": "thao tác hoá: biến khái niệm trừu tượng thành câu hỏi/chỉ số đo được",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "It's the query that operationalizes the concept of interest and prompts a response.",
+   "viDuNghia": "Đó là câu hỏi thao tác hoá khái niệm cần đo và gợi câu trả lời."
+  },
+  {
+   "chu": "quantifiable data",
+   "doc": "/ˈkwɑːntɪfaɪəbl ˈdeɪtə/",
+   "nghia": "dữ liệu định lượng được: biểu diễn được bằng con số",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "The formal analysis of data that is not all quantified or quantifiable.",
+   "viDuNghia": "Phân tích chính thức dữ liệu không hoàn toàn định lượng hay định lượng được."
+  },
+  {
+   "chu": "non-biasing probe",
+   "doc": "/ˌnɑːn ˈbaɪəsɪŋ proʊb/",
+   "nghia": "câu hỏi gợi mở trung lập: hỏi thêm mà không dẫn dắt (vd \"Bạn kể thêm được không?\")",
+   "nhom": "Phỏng vấn và phân tích",
+   "viDu": "Use non-biasing probes.",
+   "viDuNghia": "Dùng câu hỏi gợi mở không gây thiên kiến."
+  },
+  {
+   "chu": "wrap-up question",
+   "doc": "/ˈræp ʌp ˈkwestʃən/",
+   "nghia": "câu hỏi kết thúc: hỏi người tham gia còn ý nào chưa được nói",
+   "nhom": "Phỏng vấn và phân tích",
+   "viDu": "A wrap-up question asks participants for any additional thoughts that weren't covered.",
+   "viDuNghia": "Câu hỏi kết thúc hỏi thêm những suy nghĩ chưa được đề cập."
+  },
+  {
+   "chu": "catch-all question",
+   "doc": "/ˈkætʃ ɔːl ˈkwestʃən/",
+   "nghia": "câu hỏi gom: câu hỏi chung ở cuối buổi phỏng vấn để không bỏ sót",
+   "nhom": "Phỏng vấn và phân tích",
+   "viDu": "It serves as a catch-all question to ask at the end of an interview.",
+   "viDuNghia": "Nó là câu hỏi gom đặt ở cuối buổi phỏng vấn."
+  },
+  {
+   "chu": "off-script",
+   "doc": "/ˌɔːf ˈskrɪpt/",
+   "nghia": "ra ngoài kịch bản: buổi phỏng vấn đi theo hướng khác bảng câu hỏi để khai thác ý mới",
+   "nhom": "Phỏng vấn và phân tích",
+   "viDu": "The interview itself will often go off-script.",
+   "viDuNghia": "Buổi phỏng vấn thường đi ra ngoài kịch bản."
+  },
+  {
+   "chu": "affinity mapping",
+   "doc": "/əˈfɪnəti ˈmæpɪŋ/",
+   "nghia": "lập sơ đồ tương đồng: dán ghi chú lên tường rồi gom thành cụm theo chủ đề",
+   "nhom": "Phỏng vấn và phân tích",
+   "viDu": "Affinity Mapping",
+   "viDuNghia": "Lập sơ đồ tương đồng."
+  },
+  {
+   "chu": "sticky note",
+   "doc": "/ˈstɪki noʊt/",
+   "nghia": "giấy ghi chú dán: mỗi tờ ghi một ý quan sát được để gom cụm",
+   "nhom": "Phỏng vấn và phân tích",
+   "viDu": "A sticky note on which you write relevant bits from your interview notes.",
+   "viDuNghia": "Tờ giấy dán ghi những ý liên quan trong ghi chép phỏng vấn."
+  },
+  {
+   "chu": "note cluster",
+   "doc": "/noʊt ˈklʌstər/",
+   "nghia": "cụm ghi chú: nhóm ghi chú cùng ý trên tường affinity, có tiêu đề tóm tắt",
+   "nhom": "Phỏng vấn và phân tích",
+   "viDu": "Be willing to move notes and re-form clusters.",
+   "viDuNghia": "Sẵn sàng dời ghi chú và gom lại cụm."
+  },
+  {
+   "chu": "empathy map",
+   "doc": "/ˈempəθi mæp/",
+   "nghia": "bản đồ thấu cảm: người dùng nói gì, nghĩ gì, làm gì, cảm thấy gì",
+   "nhom": "Phỏng vấn và phân tích",
+   "viDu": "Fill in an empathy map after each interview.",
+   "viDuNghia": "Điền bản đồ thấu cảm sau mỗi buổi phỏng vấn."
+  },
+  {
+   "chu": "task analysis",
+   "doc": "/tæsk əˈnæləsɪs/",
+   "nghia": "phân tích tác vụ: chia việc người dùng làm thành các bước để thiết kế",
+   "nhom": "Phỏng vấn và phân tích",
+   "viDu": "Task analysis breaks checkout into its steps.",
+   "viDuNghia": "Phân tích tác vụ chia bước thanh toán thành từng bước."
+  },
+  {
+   "chu": "reframe a problem",
+   "doc": "/ˌriːˈfreɪm ə ˈprɑːbləm/",
+   "nghia": "định khung lại vấn đề: nhìn vấn đề thiết kế theo cách khác",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "To frame or reframe a design problem.",
+   "viDuNghia": "Để định khung hoặc định khung lại một vấn đề thiết kế."
+  },
+  {
+   "chu": "design alternative",
+   "doc": "/dɪˈzaɪn ɔːlˈtɜːrnətɪv/",
+   "nghia": "phương án thiết kế: các cách giải khác nhau để so sánh",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "To evaluate tradeoffs of different alternatives.",
+   "viDuNghia": "Để đánh giá đánh đổi giữa các phương án."
+  },
+  {
+   "chu": "tradeoff",
+   "doc": "/ˈtreɪdɔːf/",
+   "nghia": "sự đánh đổi: được cái này thì mất cái kia",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "To evaluate tradeoffs of different alternatives.",
+   "viDuNghia": "Để đánh giá các đánh đổi của từng phương án."
+  },
+  {
+   "chu": "Wizard of Oz prototype",
+   "doc": "/ˈwɪzərd əv ˈɑːz ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu \"phù thuỷ xứ Oz\": người thật đứng sau giả làm hệ thống (vd giả chatbot, giả nhận giọng nói)",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "Wizard of Oz prototypes are most useful for systems that are hard to build, such as voice assistants.",
+   "viDuNghia": "Nguyên mẫu Wizard of Oz hữu ích nhất cho hệ khó dựng như trợ lý giọng nói."
+  },
+  {
+   "chu": "physical constraint",
+   "doc": "/ˈfɪzɪkl kənˈstreɪnt/",
+   "nghia": "ràng buộc vật lý: kích thước, nơi dùng, tư thế của thiết bị",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "To better envision size or other physical constraints of the technology and its use.",
+   "viDuNghia": "Để hình dung rõ kích thước và ràng buộc vật lý khác của công nghệ."
+  },
+  {
+   "chu": "sketchiness",
+   "doc": "/ˈsketʃinəs/",
+   "nghia": "tính phác thảo: bản thiết kế trông còn thô nên người xem dám góp ý thật",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "Stakeholders give honest feedback if design ideas look sketchy rather than highly polished.",
+   "viDuNghia": "Người xem góp ý thật hơn khi ý tưởng trông còn phác thảo thay vì hoàn thiện."
+  },
+  {
+   "chu": "high-fidelity animation",
+   "doc": "/ˌhaɪ fɪˈdeləti ˌænɪˈmeɪʃn/",
+   "nghia": "hoạt ảnh độ trung thực cao: chuyển động giống sản phẩm thật trong nguyên mẫu",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "High-fidelity animation",
+   "viDuNghia": "Hoạt ảnh độ trung thực cao."
+  },
+  {
+   "chu": "card sorting",
+   "doc": "/kɑːrd ˈsɔːrtɪŋ/",
+   "nghia": "sắp thẻ: người dùng tự gom chủ đề thành nhóm để thiết kế cấu trúc thông tin",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "Card sorting shows how users group the menu items.",
+   "viDuNghia": "Sắp thẻ cho thấy người dùng gom các mục menu thế nào."
+  },
+  {
+   "chu": "information architecture",
+   "doc": "/ˌɪnfərˈmeɪʃn ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc thông tin: cách tổ chức, đặt tên, phân cấp nội dung và điều hướng",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "Good information architecture makes content easy to find.",
+   "viDuNghia": "Kiến trúc thông tin tốt giúp dễ tìm nội dung."
+  },
+  {
+   "chu": "visual hierarchy",
+   "doc": "/ˈvɪʒuəl ˈhaɪərɑːrki/",
+   "nghia": "phân cấp thị giác: kích thước, màu, vị trí cho biết điều gì quan trọng nhất",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "Visual hierarchy guides the eye to the main button first.",
+   "viDuNghia": "Phân cấp thị giác dẫn mắt tới nút chính trước."
+  },
+  {
+   "chu": "Fitts's law",
+   "doc": "/ˈfɪtsɪz lɔː/",
+   "nghia": "định luật Fitts: mục tiêu càng to, càng gần thì càng nhanh chạm/nhấp tới",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "Fitts's law explains why primary buttons should be large.",
+   "viDuNghia": "Định luật Fitts giải thích vì sao nút chính nên to."
+  },
+  {
+   "chu": "Hick's law",
+   "doc": "/ˈhɪks lɔː/",
+   "nghia": "định luật Hick: càng nhiều lựa chọn thì thời gian quyết định càng lâu",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "Hick's law suggests limiting the number of menu options.",
+   "viDuNghia": "Định luật Hick gợi ý giới hạn số mục menu."
+  },
+  {
+   "chu": "progressive disclosure",
+   "doc": "/prəˈɡresɪv dɪsˈkloʊʒər/",
+   "nghia": "hé lộ dần: chỉ hiện tuỳ chọn nâng cao khi người dùng cần",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "Progressive disclosure hides advanced settings behind a \"More\" link.",
+   "viDuNghia": "Hé lộ dần giấu cài đặt nâng cao sau liên kết \"Thêm\"."
+  },
+  {
+   "chu": "Nielsen's heuristics",
+   "doc": "/ˈniːlsənz hjʊˈrɪstɪks/",
+   "nghia": "10 nguyên tắc khả dụng của Jakob Nielsen dùng để đánh giá giao diện",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "To review a UI using Nielsen's 10 heuristics.",
+   "viDuNghia": "Để đánh giá giao diện bằng 10 nguyên tắc của Nielsen."
+  },
+  {
+   "chu": "learnability",
+   "doc": "/ˌlɜːrnəˈbɪləti/",
+   "nghia": "khả năng học: người mới làm quen và dùng được nhanh tới đâu",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "Affordances strongly influence learnability by signaling how to interact with elements.",
+   "viDuNghia": "Affordance ảnh hưởng mạnh tới khả năng học vì gợi ý cách tương tác."
+  },
+  {
+   "chu": "memorability",
+   "doc": "/ˌmemərəˈbɪləti/",
+   "nghia": "khả năng ghi nhớ: lâu không dùng vẫn nhớ cách dùng",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "Memorability matters for apps used only once a month.",
+   "viDuNghia": "Khả năng ghi nhớ quan trọng với app chỉ dùng mỗi tháng một lần."
+  },
+  {
+   "chu": "frequency of errors",
+   "doc": "/ˈfriːkwənsi əv ˈerərz/",
+   "nghia": "tần suất lỗi: số lần người dùng thao tác sai — một thước đo khả dụng",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "Frequency of errors",
+   "viDuNghia": "Tần suất lỗi."
+  },
+  {
+   "chu": "time on task",
+   "doc": "/taɪm ɑːn tæsk/",
+   "nghia": "thời gian hoàn thành tác vụ: số đo hiệu quả trong kiểm thử khả dụng",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "Record time on task for each participant.",
+   "viDuNghia": "Ghi thời gian hoàn thành tác vụ của mỗi người tham gia."
+  },
+  {
+   "chu": "success rate",
+   "doc": "/səkˈses reɪt/",
+   "nghia": "tỉ lệ thành công: phần người tham gia hoàn thành tác vụ",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "The checkout task had an 80% success rate.",
+   "viDuNghia": "Tác vụ thanh toán có tỉ lệ thành công 80%."
+  },
+  {
+   "chu": "subjective reaction",
+   "doc": "/səbˈdʒektɪv riˈækʃn/",
+   "nghia": "phản ứng chủ quan: cảm nhận, mức hài lòng của người dùng (đo bằng SUS, khảo sát)",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "Obtaining quantified measures of participants' subjective reactions to using a system.",
+   "viDuNghia": "Thu số đo định lượng về phản ứng chủ quan của người tham gia khi dùng hệ thống."
+  },
+  {
+   "chu": "system response time",
+   "doc": "/ˈsɪstəm rɪˈspɑːns taɪm/",
+   "nghia": "thời gian phản hồi hệ thống: từ thao tác tới khi có kết quả",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "The time it takes an application to execute some computationally-intensive task.",
+   "viDuNghia": "Thời gian ứng dụng chạy một tác vụ tính toán nặng."
+  },
+  {
+   "chu": "neutral third party",
+   "doc": "/ˈnuːtrəl θɜːrd ˈpɑːrti/",
+   "nghia": "bên thứ ba trung lập: người điều phối test không có quyền lợi gì với kết quả",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "Have user tests conducted by neutral third parties who have no investment in the outcome.",
+   "viDuNghia": "Để bên thứ ba trung lập không có quyền lợi gì với kết quả điều hành buổi test."
+  },
+  {
+   "chu": "Hawthorne effect",
+   "doc": "/ˈhɔːθɔːrn ɪˈfekt/",
+   "nghia": "hiệu ứng Hawthorne: người ta cư xử khác khi biết mình đang bị quan sát",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "The Hawthorne effect makes participants try harder during a test.",
+   "viDuNghia": "Hiệu ứng Hawthorne khiến người tham gia cố gắng hơn khi được test."
+  },
+  {
+   "chu": "eye tracking",
+   "doc": "/ˈaɪ trækɪŋ/",
+   "nghia": "theo dõi ánh mắt: đo người dùng nhìn vào đâu và bao lâu",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "Eye tracking showed that users never looked at the banner.",
+   "viDuNghia": "Theo dõi ánh mắt cho thấy người dùng không nhìn vào banner."
+  },
+  {
+   "chu": "heat map",
+   "doc": "/hiːt mæp/",
+   "nghia": "bản đồ nhiệt: tô màu vùng được nhấp hoặc nhìn nhiều trên trang",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "The heat map shows where users click most.",
+   "viDuNghia": "Bản đồ nhiệt cho thấy nơi người dùng nhấp nhiều nhất."
+  },
+  {
+   "chu": "funnel analysis",
+   "doc": "/ˈfʌnl əˈnæləsɪs/",
+   "nghia": "phân tích phễu: tỉ lệ người dùng rơi rụng qua từng bước (xem → giỏ → thanh toán)",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "Funnel analysis shows most users leave at the payment step.",
+   "viDuNghia": "Phân tích phễu cho thấy phần lớn người dùng rời ở bước thanh toán."
+  },
+  {
+   "chu": "bounce rate",
+   "doc": "/baʊns reɪt/",
+   "nghia": "tỉ lệ thoát: phần người vào trang rồi rời ngay không thao tác gì",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "A high bounce rate on the landing page needs investigation.",
+   "viDuNghia": "Tỉ lệ thoát cao ở trang đích cần được điều tra."
+  },
+  {
+   "chu": "participatory design",
+   "doc": "/pɑːrˈtɪsɪpətɔːri dɪˈzaɪn/",
+   "nghia": "thiết kế có người dùng tham gia: mời người dùng thật cùng ngồi thiết kế với nhóm",
+   "nhom": "Phương pháp nghiên cứu người dùng",
+   "viDu": "Interviews, observations, and participatory design are all established formative research methods.",
+   "viDuNghia": "Phỏng vấn, quan sát và thiết kế có người dùng tham gia đều là phương pháp nghiên cứu định hình đã được công nhận."
+  },
+  {
+   "chu": "pre-testing",
+   "doc": "/ˌpriː ˈtestɪŋ/",
+   "nghia": "thử trước (bảng hỏi): cho vài người làm thử khảo sát để sửa câu khó hiểu trước khi phát rộng",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "Pre-testing a survey is rarely worth the time it takes.",
+   "viDuNghia": "Thử trước một bảng khảo sát hiếm khi đáng thời gian bỏ ra (phát biểu sai)."
+  },
+  {
+   "chu": "operationalize",
+   "doc": "/ˌɒpəˈreɪʃənəlaɪz/",
+   "nghia": "cụ thể hoá (thao tác hoá): biến khái niệm trừu tượng thành câu hỏi / chỉ số đo được",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "A core challenge in survey design is operationalizing abstract concepts so every respondent interprets the question the same way.",
+   "viDuNghia": "Thách thức cốt lõi khi thiết kế khảo sát là cụ thể hoá khái niệm trừu tượng để mọi người trả lời hiểu câu hỏi như nhau."
+  },
+  {
+   "chu": "measurement error",
+   "doc": "/ˈmeʒərmənt ˈerər/",
+   "nghia": "sai số đo lường: câu hỏi (lời, định dạng) không đo đúng khái niệm cần đo",
+   "nhom": "Khảo sát và lấy mẫu",
+   "viDu": "Measurement error occurs when the survey question fails to accurately capture the intended concept.",
+   "viDuNghia": "Sai số đo lường xảy ra khi câu hỏi khảo sát không nắm đúng khái niệm cần đo."
+  },
+  {
+   "chu": "interviewee",
+   "doc": "/ˌɪntərvjuːˈiː/",
+   "nghia": "người được phỏng vấn",
+   "nhom": "Phỏng vấn và phân tích",
+   "viDu": "To dig deeper into the interviewee's responses and gain more detail",
+   "viDuNghia": "Để đào sâu câu trả lời của người được phỏng vấn và có thêm chi tiết"
+  },
+  {
+   "chu": "archetype",
+   "doc": "/ˈɑːrkitaɪp/",
+   "nghia": "hình mẫu điển hình: nhân vật đại diện cho một nhóm người dùng (persona là một archetype)",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "A persona is a fictional archetype representing a segment of real users, based on research.",
+   "viDuNghia": "Persona là một hình mẫu hư cấu đại diện cho một nhóm người dùng thật, dựa trên nghiên cứu."
+  },
+  {
+   "chu": "output modality",
+   "doc": "/ˈaʊtpʊt moʊˈdæləti/",
+   "nghia": "kênh đầu ra: giác quan mà hệ thống dùng để phản hồi người dùng (hình, âm thanh, rung / xúc giác…)",
+   "nhom": "Thiết kế và nguyên mẫu",
+   "viDu": "Audio, visual, and tactile/haptic are all common output modalities in interactive systems.",
+   "viDuNghia": "Âm thanh, hình ảnh và xúc giác/rung đều là kênh đầu ra phổ biến của hệ thống tương tác."
+  },
+  {
+   "chu": "summative testing",
+   "doc": "/ˈsʌmətɪv ˈtestɪŋ/",
+   "nghia": "kiểm thử tổng kết: đo / chứng minh hiệu năng tổng thể của thiết kế đã hoàn chỉnh (thời gian, tỉ lệ làm xong) – khác kiểm thử định hình để tìm lỗi mà sửa",
+   "nhom": "Đánh giá khả dụng và đo lường",
+   "viDu": "Which method is primarily used for summative usability testing to evaluate the overall performance of a design?",
+   "viDuNghia": "Phương pháp nào chủ yếu dùng cho kiểm thử khả dụng tổng kết để đánh giá hiệu suất tổng thể của một thiết kế?"
+  }
+ ]
+}

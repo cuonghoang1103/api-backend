@@ -1,0 +1,970 @@
+{
+ "ma": "pro192-4",
+ "nn": "en",
+ "ten": "PRO192 · 4. JVM, generics, lambda, SOLID & lớp Java",
+ "moTa": "Bổ sung cho PRO192: công cụ JDK và bộ nhớ JVM, StringBuilder và kiểu bọc, lớp lồng và từ khoá final/sealed, ràng buộc tĩnh/động, nguyên lý SOLID, generics, lambda và Stream, các lớp ngoại lệ, Collections và đọc/ghi tệp hay xuất hiện trong đề PE/FE.",
+ "bieuTuong": "cup.and.saucer.fill",
+ "thuTu": -974,
+ "tu": [
+  {
+   "chu": "javac",
+   "doc": "/ˈdʒɑːvæk/",
+   "nghia": "javac: trình biên dịch Java, dịch tệp .java thành bytecode .class",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "javac Welcome.class and java Welcome.java",
+   "viDuNghia": "javac Welcome.class và java Welcome.java (phương án SAI — đúng là javac Welcome.java rồi java Welcome)."
+  },
+  {
+   "chu": "javap",
+   "doc": "/ˈdʒɑːvæp/",
+   "nghia": "javap: công cụ xem cấu trúc và bytecode của tệp .class",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "Run javap -c Hello to see the bytecode instructions of the class.",
+   "viDuNghia": "Chạy javap -c Hello để xem các lệnh bytecode của lớp."
+  },
+  {
+   "chu": "javadoc",
+   "doc": "/ˈdʒɑːvədɒk/",
+   "nghia": "javadoc: công cụ sinh tài liệu HTML từ chú thích /** … */",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "Run javadoc on your source files to generate the API documentation.",
+   "viDuNghia": "Chạy javadoc trên mã nguồn để sinh tài liệu API."
+  },
+  {
+   "chu": "Javadoc comment",
+   "doc": "/ˈdʒɑːvədɒk ˈkɒmɛnt/",
+   "nghia": "chú thích Javadoc: bắt đầu bằng /** và có thẻ @param, @return",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "Unclosed block comment (no */), compiler error. Why others are wrong: (B) standard block comment; (C) Javadoc comment; (D) single-line comment.",
+   "viDuNghia": "Chú thích khối không đóng (thiếu */) gây lỗi biên dịch. Các phương án khác hợp lệ: (B) chú thích khối; (C) chú thích Javadoc; (D) chú thích một dòng."
+  },
+  {
+   "chu": "JAR file",
+   "doc": "/dʒɑːr faɪl/",
+   "nghia": "tệp JAR (Java ARchive): gói nén các tệp .class và tài nguyên để phân phối/chạy",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "Package the application as a JAR file and run it with java -jar app.jar.",
+   "viDuNghia": "Đóng gói ứng dụng thành tệp JAR rồi chạy bằng java -jar app.jar."
+  },
+  {
+   "chu": "JDK tool",
+   "doc": "/ˌdʒeɪ diː ˈkeɪ tuːl/",
+   "nghia": "công cụ JDK: các lệnh đi kèm JDK như javac, java, javap, javadoc, jar",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "javac, javadoc and jar are JDK tools, not part of the JRE.",
+   "viDuNghia": "javac, javadoc và jar là công cụ JDK, không thuộc JRE."
+  },
+  {
+   "chu": "class loader",
+   "doc": "/klɑːs ˈloʊdər/",
+   "nghia": "bộ nạp lớp: phần JVM tìm và nạp tệp .class vào bộ nhớ khi lớp được dùng lần đầu",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "The class loader loads a class the first time it is used.",
+   "viDuNghia": "Bộ nạp lớp nạp một lớp vào lần đầu nó được dùng."
+  },
+  {
+   "chu": "just-in-time compiler",
+   "doc": "/dʒʌst ɪn taɪm kəmˈpaɪlər/",
+   "nghia": "trình biên dịch JIT: JVM dịch bytecode hay chạy thành mã máy lúc chạy để tăng tốc",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "The just-in-time compiler turns frequently used bytecode into native machine code.",
+   "viDuNghia": "Trình biên dịch JIT biến bytecode hay dùng thành mã máy gốc."
+  },
+  {
+   "chu": "heap memory",
+   "doc": "/hiːp ˈmɛməri/",
+   "nghia": "bộ nhớ heap: vùng chứa mọi đối tượng tạo bằng new, do bộ gom rác quản lý",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "It frees heap memory by destroying unreachable objects.",
+   "viDuNghia": "Nó giải phóng bộ nhớ heap bằng cách huỷ các đối tượng không còn tham chiếu tới."
+  },
+  {
+   "chu": "stack memory",
+   "doc": "/stæk ˈmɛməri/",
+   "nghia": "bộ nhớ stack: chứa biến cục bộ và tham chiếu của từng lời gọi phương thức, tự giải phóng khi phương thức kết thúc",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "Local primitive variables are stored in stack memory, while objects live on the heap.",
+   "viDuNghia": "Biến cục bộ kiểu nguyên thuỷ nằm ở stack, còn đối tượng nằm ở heap."
+  },
+  {
+   "chu": "metaspace",
+   "doc": "/ˈmɛtəspeɪs/",
+   "nghia": "metaspace: vùng nhớ JVM (từ Java 8) chứa thông tin lớp, phương thức, hằng",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "Class metadata is stored in metaspace since Java 8.",
+   "viDuNghia": "Từ Java 8, siêu dữ liệu lớp được lưu ở metaspace."
+  },
+  {
+   "chu": "collector",
+   "doc": "/kəˈlɛktər/",
+   "nghia": "(Java) bộ gom: bộ gom rác (garbage collector) · Collector của Stream API gom kết quả (Collectors.toList())",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "The garbage collector cannot deallocate the object until all array elements are explicitly set to different references.",
+   "viDuNghia": "Bộ gom rác không giải phóng được đối tượng cho tới khi mọi phần tử mảng được gán sang tham chiếu khác."
+  },
+  {
+   "chu": "command-line argument",
+   "doc": "/kəˈmɑːnd laɪn ˈɑːrɡjʊmənt/",
+   "nghia": "đối số dòng lệnh: chuỗi truyền vào khi chạy chương trình, nhận qua String[] args",
+   "nhom": "JDK & máy ảo Java",
+   "viDu": "Command-line arguments are passed to main through the args array.",
+   "viDuNghia": "Đối số dòng lệnh được truyền vào main qua mảng args."
+  },
+  {
+   "chu": "string pool",
+   "doc": "/strɪŋ puːl/",
+   "nghia": "vùng hằng chuỗi: chuỗi literal giống nhau dùng chung một đối tượng, vì thế \"a\" == \"a\" có thể đúng",
+   "nhom": "Chuỗi, kiểu bọc & in ấn",
+   "viDu": "Two string literals with the same text refer to the same object in the string pool.",
+   "viDuNghia": "Hai chuỗi literal cùng nội dung trỏ tới cùng một đối tượng trong vùng hằng chuỗi."
+  },
+  {
+   "chu": "StringBuilder",
+   "doc": "/ˈstrɪŋ ˌbɪldər/",
+   "nghia": "StringBuilder: chuỗi sửa được (mutable), nhanh, không đồng bộ luồng",
+   "nhom": "Chuỗi, kiểu bọc & in ấn",
+   "viDu": "StringBuilder s = new StringBuilder(\"123456789\"); s.substring(3,6).delete(1,2).insert(1, \"24\");",
+   "viDuNghia": "Cho StringBuilder s = new StringBuilder(\"123456789\"); rồi s.substring(3,6).delete(1,2).insert(1, \"24\"); (substring trả về String nên lỗi biên dịch)."
+  },
+  {
+   "chu": "StringBuffer",
+   "doc": "/ˈstrɪŋ ˌbʌfər/",
+   "nghia": "StringBuffer: như StringBuilder nhưng các phương thức có synchronized nên an toàn đa luồng, chậm hơn",
+   "nhom": "Chuỗi, kiểu bọc & in ấn",
+   "viDu": "StringBuffer methods are synchronized, so it is thread-safe but slower than StringBuilder.",
+   "viDuNghia": "Phương thức của StringBuffer có synchronized nên an toàn luồng nhưng chậm hơn StringBuilder."
+  },
+  {
+   "chu": "immutability",
+   "doc": "/ɪˌmjuːtəˈbɪlɪti/",
+   "nghia": "tính bất biến: đối tượng không đổi được trạng thái sau khi tạo (String, các lớp bọc)",
+   "nhom": "Chuỗi, kiểu bọc & in ấn",
+   "viDu": "They inherit immutability from the Object class.",
+   "viDuNghia": "Chúng thừa hưởng tính bất biến từ lớp Object. (Phát biểu SAI.)"
+  },
+  {
+   "chu": "autoboxing",
+   "doc": "/ˈɔːtoʊˌbɒksɪŋ/",
+   "nghia": "tự đóng hộp: Java tự đổi kiểu nguyên thuỷ thành lớp bọc (int → Integer)",
+   "nhom": "Chuỗi, kiểu bọc & in ấn",
+   "viDu": "Autoboxing lets you add an int directly to a List<Integer>.",
+   "viDuNghia": "Tự đóng hộp cho phép thêm thẳng một int vào List<Integer>."
+  },
+  {
+   "chu": "unboxing",
+   "doc": "/ʌnˈbɒksɪŋ/",
+   "nghia": "mở hộp: đổi lớp bọc về kiểu nguyên thuỷ (Integer → int); mở hộp null gây NullPointerException",
+   "nhom": "Chuỗi, kiểu bọc & in ấn",
+   "viDu": "Implicit unboxing of wi to compute the multiplication.",
+   "viDuNghia": "Ngầm mở hộp wi để tính phép nhân."
+  },
+  {
+   "chu": "String.format",
+   "doc": "/strɪŋ dɒt ˈfɔːrmæt/",
+   "nghia": "String.format: tạo chuỗi có định dạng giống printf (%-10s, %.2f)",
+   "nhom": "Chuỗi, kiểu bọc & in ấn",
+   "viDu": "String.format(\"%.2f\", 3.14159) returns \"3.14\".",
+   "viDuNghia": "String.format(\"%.2f\", 3.14159) trả về \"3.14\"."
+  },
+  {
+   "chu": "printf method",
+   "doc": "/ˈprɪnt ɛf ˈmɛθəd/",
+   "nghia": "phương thức printf: System.out.printf in có định dạng",
+   "nhom": "Chuỗi, kiểu bọc & in ấn",
+   "viDu": "Use the printf method to print the price with two decimal places.",
+   "viDuNghia": "Dùng phương thức printf để in giá với hai chữ số thập phân."
+  },
+  {
+   "chu": "System.out.println",
+   "doc": "/ˈsɪstəm aʊt ˈprɪnt laɪn/",
+   "nghia": "System.out.println: in giá trị rồi xuống dòng",
+   "nhom": "Chuỗi, kiểu bọc & in ấn",
+   "viDu": "Iterator name = names.iterator(); while(name.hasNext()) System.out.println(name.next());",
+   "viDuNghia": "Lấy iterator của names; trong khi còn phần tử thì in phần tử kế tiếp ra một dòng."
+  },
+  {
+   "chu": "UTF-8",
+   "doc": "/ˌjuː tiː ɛf ˈeɪt/",
+   "nghia": "UTF-8: bảng mã Unicode phổ biến, mỗi ký tự 1–4 byte — nên chỉ rõ khi đọc tệp có tiếng Việt",
+   "nhom": "Chuỗi, kiểu bọc & in ấn",
+   "viDu": "Which line opens data/books.csv for reading line by line in UTF-8 on every machine (Windows included)?",
+   "viDuNghia": "Dòng nào mở data/books.csv để đọc từng dòng theo UTF-8 trên mọi máy (kể cả Windows)?"
+  },
+  {
+   "chu": "object-oriented",
+   "doc": "/ˈɒbdʒɛkt ˈɔːriɛntɪd/",
+   "nghia": "hướng đối tượng: tổ chức chương trình quanh đối tượng có dữ liệu và hành vi",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "Which of the following concepts does not belong to object-oriented programming features?",
+   "viDuNghia": "Khái niệm nào sau đây không thuộc đặc trưng của lập trình hướng đối tượng?"
+  },
+  {
+   "chu": "state and behavior",
+   "doc": "/steɪt ənd bɪˈheɪvjər/",
+   "nghia": "trạng thái và hành vi: thuộc tính (field) và phương thức của một đối tượng",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "An object has state (its fields) and behavior (its methods).",
+   "viDuNghia": "Đối tượng có trạng thái (các field) và hành vi (các phương thức)."
+  },
+  {
+   "chu": "constructor chaining",
+   "doc": "/kənˈstrʌktər ˈtʃeɪnɪŋ/",
+   "nghia": "gọi nối constructor: constructor gọi this(...) hoặc super(...)",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "In Java, constructor chaining always calls the superclass constructor first before executing the subclass constructor's own body.",
+   "viDuNghia": "Trong Java, gọi nối constructor luôn chạy constructor lớp cha trước rồi mới tới thân constructor lớp con."
+  },
+  {
+   "chu": "constructor overloading",
+   "doc": "/kənˈstrʌktər ˌoʊvərˈloʊdɪŋ/",
+   "nghia": "nạp chồng constructor: nhiều constructor khác danh sách tham số",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "Constructor overloading lets you create a Book with or without a price.",
+   "viDuNghia": "Nạp chồng constructor cho phép tạo Book có hoặc không có giá."
+  },
+  {
+   "chu": "method overloading",
+   "doc": "/ˈmɛθəd ˌoʊvərˈloʊdɪŋ/",
+   "nghia": "nạp chồng phương thức: cùng tên, khác danh sách tham số, chọn lúc biên dịch",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "Method overloading, method overriding",
+   "viDuNghia": "Nạp chồng phương thức, ghi đè phương thức."
+  },
+  {
+   "chu": "static initializer block",
+   "doc": "/ˈstætɪk ɪˈnɪʃəlaɪzər blɒk/",
+   "nghia": "khối khởi tạo tĩnh static { … }: chạy một lần khi lớp được nạp",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "A static initializer block runs once when the class is loaded.",
+   "viDuNghia": "Khối khởi tạo tĩnh chạy một lần khi lớp được nạp."
+  },
+  {
+   "chu": "instance initializer block",
+   "doc": "/ˈɪnstəns ɪˈnɪʃəlaɪzər blɒk/",
+   "nghia": "khối khởi tạo thể hiện { … }: chạy mỗi lần tạo đối tượng, trước thân constructor",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "An instance initializer block runs every time an object is created.",
+   "viDuNghia": "Khối khởi tạo thể hiện chạy mỗi lần tạo đối tượng."
+  },
+  {
+   "chu": "varargs",
+   "doc": "/ˈvɑːrɑːrɡz/",
+   "nghia": "tham số biến đổi (int... nums): nhận số lượng đối số tuỳ ý dưới dạng mảng",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "A varargs parameter must be the last parameter of the method.",
+   "viDuNghia": "Tham số biến đổi phải là tham số cuối cùng của phương thức."
+  },
+  {
+   "chu": "final class",
+   "doc": "/ˈfaɪnəl klɑːs/",
+   "nghia": "lớp final: không cho lớp nào kế thừa (vd String)",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "A final class may not contain non-final data fields.",
+   "viDuNghia": "Lớp final không được chứa field không final. (Phát biểu SAI.)"
+  },
+  {
+   "chu": "final method",
+   "doc": "/ˈfaɪnəl ˈmɛθəd/",
+   "nghia": "phương thức final: lớp con không được ghi đè",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "Compile time error indicating that a class with any final methods must be declared final itself",
+   "viDuNghia": "Lỗi biên dịch báo rằng lớp có phương thức final thì chính nó phải là final. (Phương án SAI.)"
+  },
+  {
+   "chu": "sealed class",
+   "doc": "/siːld klɑːs/",
+   "nghia": "lớp sealed (Java 17): chỉ cho các lớp con được liệt kê trong permits kế thừa",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "A sealed class lists the only subclasses that may extend it.",
+   "viDuNghia": "Lớp sealed liệt kê những lớp con duy nhất được kế thừa nó."
+  },
+  {
+   "chu": "record class",
+   "doc": "/ˈrɛkɔːrd klɑːs/",
+   "nghia": "lớp record (Java 16): lớp dữ liệu bất biến, tự sinh constructor, getter, equals, hashCode, toString",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "record Point(int x, int y) {} creates an immutable data class in one line.",
+   "viDuNghia": "record Point(int x, int y) {} tạo lớp dữ liệu bất biến trong một dòng."
+  },
+  {
+   "chu": "inner class",
+   "doc": "/ˈɪnər klɑːs/",
+   "nghia": "lớp trong: lớp lồng không static, gắn với một đối tượng của lớp ngoài",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "An inner class can access the private fields of its outer class.",
+   "viDuNghia": "Lớp trong truy cập được field private của lớp ngoài."
+  },
+  {
+   "chu": "static nested class",
+   "doc": "/ˈstætɪk ˈnɛstɪd klɑːs/",
+   "nghia": "lớp lồng tĩnh: không cần đối tượng lớp ngoài để tạo",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "A static nested class is created without an instance of the outer class.",
+   "viDuNghia": "Lớp lồng tĩnh được tạo mà không cần đối tượng của lớp ngoài."
+  },
+  {
+   "chu": "local class",
+   "doc": "/ˈloʊkəl klɑːs/",
+   "nghia": "lớp cục bộ: lớp khai báo bên trong thân một phương thức",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "Anonymous classes are like local classes except that they do not have a name.",
+   "viDuNghia": "Lớp vô danh giống lớp cục bộ, chỉ khác là không có tên."
+  },
+  {
+   "chu": "anonymous inner class",
+   "doc": "/əˈnɒnɪməs ˈɪnər klɑːs/",
+   "nghia": "lớp trong vô danh: tạo đối tượng của lớp con/hiện thực không đặt tên, ngay tại chỗ",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "Comparator<String> c = new Comparator<>() { ... }; uses an anonymous inner class.",
+   "viDuNghia": "Comparator<String> c = new Comparator<>() { ... }; dùng một lớp trong vô danh."
+  },
+  {
+   "chu": "default method",
+   "doc": "/dɪˈfɔːlt ˈmɛθəd/",
+   "nghia": "phương thức default: phương thức có thân trong interface (Java 8)",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "A default method adds behavior to an interface without breaking existing classes.",
+   "viDuNghia": "Phương thức default thêm hành vi vào interface mà không làm hỏng các lớp cũ."
+  },
+  {
+   "chu": "interface constant",
+   "doc": "/ˈɪntərfeɪs ˈkɒnstənt/",
+   "nghia": "hằng của interface: field trong interface mặc định là public static final",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "Every field declared in an interface is an interface constant.",
+   "viDuNghia": "Mọi field khai trong interface đều là hằng của interface."
+  },
+  {
+   "chu": "marker interface",
+   "doc": "/ˈmɑːrkər ˈɪntərfeɪs/",
+   "nghia": "interface đánh dấu: interface rỗng chỉ để gắn nhãn (Serializable, Cloneable)",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "Serializable is a marker interface with no methods.",
+   "viDuNghia": "Serializable là interface đánh dấu không có phương thức nào."
+  },
+  {
+   "chu": "Cloneable",
+   "doc": "/ˈkloʊnəbl/",
+   "nghia": "Cloneable: interface đánh dấu cho phép gọi clone(); thiếu nó thì ném CloneNotSupportedException",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "A class must implement Cloneable before it can use Object.clone().",
+   "viDuNghia": "Lớp phải hiện thực Cloneable thì mới dùng được Object.clone()."
+  },
+  {
+   "chu": "clone",
+   "doc": "/kloʊn/",
+   "nghia": "clone(): tạo bản sao đối tượng (mặc định là bản sao nông)",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "The default clone() makes a shallow copy of the object.",
+   "viDuNghia": "clone() mặc định tạo bản sao nông của đối tượng."
+  },
+  {
+   "chu": "enum constant",
+   "doc": "/ˈiːnʌm ˈkɒnstənt/",
+   "nghia": "hằng enum: mỗi giá trị khai trong enum (MONDAY, TUESDAY…) là một đối tượng duy nhất",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "Each enum constant is a single instance of the enum type.",
+   "viDuNghia": "Mỗi hằng enum là một thể hiện duy nhất của kiểu enum."
+  },
+  {
+   "chu": "switch expression",
+   "doc": "/swɪtʃ ɪkˈsprɛʃən/",
+   "nghia": "biểu thức switch (Java 14): switch trả về giá trị, dùng mũi tên case X -> … không cần break",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "A switch expression uses case X -> value and does not need break.",
+   "viDuNghia": "Biểu thức switch dùng case X -> giá trị và không cần break."
+  },
+  {
+   "chu": "text block",
+   "doc": "/tɛkst blɒk/",
+   "nghia": "khối văn bản (Java 15): chuỗi nhiều dòng đặt trong ba dấu ngoặc kép \"\"\"",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "A text block makes it easy to write multi-line JSON in Java.",
+   "viDuNghia": "Khối văn bản giúp viết JSON nhiều dòng trong Java dễ dàng."
+  },
+  {
+   "chu": "var keyword",
+   "doc": "/vɑːr ˈkiːwɜːrd/",
+   "nghia": "từ khoá var (Java 10): để trình biên dịch tự suy kiểu biến cục bộ",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "var list = new ArrayList<String>(); lets the compiler infer the type.",
+   "viDuNghia": "var list = new ArrayList<String>(); để trình biên dịch tự suy kiểu."
+  },
+  {
+   "chu": "null check",
+   "doc": "/nʌl tʃɛk/",
+   "nghia": "kiểm tra null: if (x != null) trước khi gọi phương thức trên x",
+   "nhom": "Lớp, phương thức & lớp lồng",
+   "viDu": "Add a null check before calling name.length().",
+   "viDuNghia": "Thêm kiểm tra null trước khi gọi name.length()."
+  },
+  {
+   "chu": "upcasting",
+   "doc": "/ˈʌpkɑːstɪŋ/",
+   "nghia": "ép kiểu lên: gán đối tượng lớp con cho biến lớp cha (luôn an toàn, tự động)",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "Animal a = new Dog(); is an example of upcasting.",
+   "viDuNghia": "Animal a = new Dog(); là ví dụ ép kiểu lên."
+  },
+  {
+   "chu": "downcasting",
+   "doc": "/ˈdaʊnkɑːstɪŋ/",
+   "nghia": "ép kiểu xuống: đổi tham chiếu lớp cha về lớp con, cần ép tường minh và có thể ném ClassCastException",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "Use instanceof before downcasting to avoid a ClassCastException.",
+   "viDuNghia": "Dùng instanceof trước khi ép kiểu xuống để tránh ClassCastException."
+  },
+  {
+   "chu": "static binding",
+   "doc": "/ˈstætɪk ˈbaɪndɪŋ/",
+   "nghia": "ràng buộc tĩnh: chọn phương thức lúc biên dịch (static, private, final, nạp chồng)",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "Overloaded methods are resolved by static binding.",
+   "viDuNghia": "Phương thức nạp chồng được chọn bằng ràng buộc tĩnh."
+  },
+  {
+   "chu": "dynamic binding",
+   "doc": "/daɪˈnæmɪk ˈbaɪndɪŋ/",
+   "nghia": "ràng buộc động (= late binding): chọn phiên bản ghi đè theo kiểu THẬT của đối tượng lúc chạy",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "Dynamic binding decides at run time which overridden method to call.",
+   "viDuNghia": "Ràng buộc động quyết định lúc chạy gọi phương thức ghi đè nào."
+  },
+  {
+   "chu": "late binding",
+   "doc": "/leɪt ˈbaɪndɪŋ/",
+   "nghia": "ràng buộc muộn: tên khác của ràng buộc động",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "Late binding is what makes polymorphism work in Java.",
+   "viDuNghia": "Ràng buộc muộn là thứ làm đa hình hoạt động trong Java."
+  },
+  {
+   "chu": "compile-time polymorphism",
+   "doc": "/kəmˈpaɪl taɪm ˌpɒliˈmɔːrfɪzəm/",
+   "nghia": "đa hình lúc biên dịch: nạp chồng phương thức",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "Compile-time polymorphism",
+   "viDuNghia": "Đa hình lúc biên dịch."
+  },
+  {
+   "chu": "runtime polymorphism",
+   "doc": "/ˈrʌntaɪm ˌpɒliˈmɔːrfɪzəm/",
+   "nghia": "đa hình lúc chạy: ghi đè phương thức + ràng buộc động",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "Runtime polymorphism is achieved through method overriding.",
+   "viDuNghia": "Đa hình lúc chạy đạt được nhờ ghi đè phương thức."
+  },
+  {
+   "chu": "covariant return type",
+   "doc": "/koʊˈvɛəriənt rɪˈtɜːrn taɪp/",
+   "nghia": "kiểu trả về hiệp biến: phương thức ghi đè được trả về kiểu con của kiểu gốc",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "An overriding method can have a different return type than the method it overrides, as long as the new return type is a subtype of the original return type.",
+   "viDuNghia": "Phương thức ghi đè được trả về kiểu khác phương thức gốc, miễn là kiểu con của kiểu trả về gốc."
+  },
+  {
+   "chu": "subtype",
+   "doc": "/ˈsʌbtaɪp/",
+   "nghia": "kiểu con: lớp con hoặc lớp hiện thực một interface",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "A List<String> object can be used wherever its supertype Collection<String> is expected; List is a subtype.",
+   "viDuNghia": "Đối tượng List<String> dùng được ở mọi chỗ cần Collection<String>; List là kiểu con."
+  },
+  {
+   "chu": "supertype",
+   "doc": "/ˈsuːpərtaɪp/",
+   "nghia": "kiểu cha: lớp cha hoặc interface mà một kiểu kế thừa",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "getTotalArea() sums getArea() through the Shape supertype, with no instanceof checks.",
+   "viDuNghia": "getTotalArea() cộng getArea() qua kiểu cha Shape, không cần kiểm instanceof."
+  },
+  {
+   "chu": "method hiding",
+   "doc": "/ˈmɛθəd ˈhaɪdɪŋ/",
+   "nghia": "che phương thức: lớp con khai lại phương thức static cùng chữ ký — không phải ghi đè",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "A static method in a subclass with the same signature causes method hiding, not overriding.",
+   "viDuNghia": "Phương thức static cùng chữ ký ở lớp con gây che phương thức, không phải ghi đè."
+  },
+  {
+   "chu": "variable shadowing",
+   "doc": "/ˈvɛəriəbl ˈʃædoʊɪŋ/",
+   "nghia": "che biến: biến cục bộ/tham số trùng tên field làm field bị che, phải dùng this.x",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "Use this.name = name to avoid variable shadowing in a constructor.",
+   "viDuNghia": "Dùng this.name = name để tránh che biến trong constructor."
+  },
+  {
+   "chu": "accessor method",
+   "doc": "/əkˈsɛsər ˈmɛθəd/",
+   "nghia": "phương thức truy xuất (getter): trả về giá trị field mà không đổi nó",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "An accessor method returns the value of a private field.",
+   "viDuNghia": "Phương thức truy xuất trả về giá trị của field private."
+  },
+  {
+   "chu": "mutator method",
+   "doc": "/ˈmjuːteɪtər ˈmɛθəd/",
+   "nghia": "phương thức thay đổi (setter): đổi giá trị field, thường kèm kiểm tra hợp lệ",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "A mutator method can validate the new value before changing the field.",
+   "viDuNghia": "Phương thức thay đổi có thể kiểm giá trị mới trước khi đổi field."
+  },
+  {
+   "chu": "package-private",
+   "doc": "/ˈpækɪdʒ ˈpraɪvət/",
+   "nghia": "phạm vi gói: không ghi bổ từ truy cập ⇒ chỉ lớp cùng package thấy",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "default (package-private)",
+   "viDuNghia": "mặc định (phạm vi gói)."
+  },
+  {
+   "chu": "default access",
+   "doc": "/dɪˈfɔːlt ˈæksɛs/",
+   "nghia": "truy cập mặc định: tên khác của package-private",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "A member with default access is visible only inside its package.",
+   "viDuNghia": "Thành phần có truy cập mặc định chỉ thấy được trong package của nó."
+  },
+  {
+   "chu": "UML class diagram",
+   "doc": "/ˌjuː ɛm ˈɛl klɑːs ˈdaɪəɡræm/",
+   "nghia": "sơ đồ lớp UML trong đề: - là private, + là public, # là protected, tên: kiểu",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "-list: List<Product> +ProductManager() — read the UML class diagram to write the class.",
+   "viDuNghia": "-list: List<Product> +ProductManager() — đọc sơ đồ lớp UML để viết lớp."
+  },
+  {
+   "chu": "SOLID principles",
+   "doc": "/ˈsɒlɪd ˈprɪnsɪpəlz/",
+   "nghia": "năm nguyên lý SOLID của thiết kế hướng đối tượng: S-O-L-I-D",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "The SOLID principles help keep object-oriented code easy to change.",
+   "viDuNghia": "Năm nguyên lý SOLID giúp mã hướng đối tượng dễ sửa đổi."
+  },
+  {
+   "chu": "single responsibility principle",
+   "doc": "/ˈsɪŋɡl rɪˌspɒnsəˈbɪlɪti ˈprɪnsɪpəl/",
+   "nghia": "nguyên lý đơn trách nhiệm (S): mỗi lớp chỉ có một lý do để thay đổi",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "By the single responsibility principle, input validation should not live in the Book class.",
+   "viDuNghia": "Theo nguyên lý đơn trách nhiệm, việc kiểm dữ liệu nhập không nên nằm trong lớp Book."
+  },
+  {
+   "chu": "open-closed principle",
+   "doc": "/ˈoʊpən kloʊzd ˈprɪnsɪpəl/",
+   "nghia": "nguyên lý đóng – mở (O): mở để mở rộng, đóng để sửa đổi",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "Adding a new Shape subclass without editing old code follows the open-closed principle.",
+   "viDuNghia": "Thêm lớp con Shape mới mà không sửa mã cũ là theo nguyên lý đóng – mở."
+  },
+  {
+   "chu": "Liskov substitution principle",
+   "doc": "/ˈlɪskɒf ˌsʌbstɪˈtjuːʃən ˈprɪnsɪpəl/",
+   "nghia": "nguyên lý thay thế Liskov (L): đối tượng lớp con phải thay được cho lớp cha mà không làm sai chương trình",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "A Square that breaks setWidth() of Rectangle violates the Liskov substitution principle.",
+   "viDuNghia": "Lớp Square làm sai setWidth() của Rectangle là vi phạm nguyên lý thay thế Liskov."
+  },
+  {
+   "chu": "interface segregation principle",
+   "doc": "/ˈɪntərfeɪs ˌsɛɡrɪˈɡeɪʃən ˈprɪnsɪpəl/",
+   "nghia": "nguyên lý tách interface (I): nhiều interface nhỏ tốt hơn một interface lớn",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "Split a fat interface into small ones to follow the interface segregation principle.",
+   "viDuNghia": "Tách interface cồng kềnh thành các interface nhỏ để theo nguyên lý tách interface."
+  },
+  {
+   "chu": "dependency inversion principle",
+   "doc": "/dɪˈpɛndənsi ɪnˈvɜːrʒən ˈprɪnsɪpəl/",
+   "nghia": "nguyên lý đảo phụ thuộc (D): lớp cấp cao phụ thuộc vào trừu tượng (interface), không vào lớp cụ thể",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "By the dependency inversion principle, the service should depend on a Repository interface.",
+   "viDuNghia": "Theo nguyên lý đảo phụ thuộc, service nên phụ thuộc vào interface Repository."
+  },
+  {
+   "chu": "hard-code",
+   "doc": "/ˈhɑːrd koʊd/",
+   "nghia": "viết cứng: ghi thẳng giá trị (đường dẫn, số liệu) vào mã thay vì đọc từ cấu hình/đầu vào",
+   "nhom": "Đa hình & thiết kế hướng đối tượng",
+   "viDu": "Do not hard-code the file path; pass it as a parameter.",
+   "viDuNghia": "Đừng viết cứng đường dẫn tệp; hãy truyền vào dưới dạng tham số."
+  },
+  {
+   "chu": "generic type",
+   "doc": "/dʒəˈnɛrɪk taɪp/",
+   "nghia": "kiểu tổng quát: lớp/interface có tham số kiểu, vd Box<T>, List<E>",
+   "nhom": "Generics & lập trình hàm",
+   "viDu": "List<String> is a generic type instantiated with String.",
+   "viDuNghia": "List<String> là một kiểu tổng quát được gán tham số String."
+  },
+  {
+   "chu": "bounded type parameter",
+   "doc": "/ˈbaʊndɪd taɪp pəˈræmɪtər/",
+   "nghia": "tham số kiểu bị chặn: <T extends Number> — T chỉ được là Number hoặc lớp con",
+   "nhom": "Generics & lập trình hàm",
+   "viDu": "<T extends Comparable<T>> is a bounded type parameter.",
+   "viDuNghia": "<T extends Comparable<T>> là một tham số kiểu bị chặn."
+  },
+  {
+   "chu": "raw type",
+   "doc": "/rɔː taɪp/",
+   "nghia": "kiểu thô: dùng lớp generic mà không ghi tham số kiểu (List thay vì List<String>) — mất kiểm tra kiểu",
+   "nhom": "Generics & lập trình hàm",
+   "viDu": "The class is declared Repository<T> with a private List<T> field, not a raw type.",
+   "viDuNghia": "Lớp được khai Repository<T> với field private List<T>, không phải kiểu thô."
+  },
+  {
+   "chu": "type erasure",
+   "doc": "/taɪp ɪˈreɪʒər/",
+   "nghia": "xoá kiểu: trình biên dịch bỏ thông tin tham số kiểu sau khi kiểm tra, nên lúc chạy List<String> và List<Integer> như nhau",
+   "nhom": "Generics & lập trình hàm",
+   "viDu": "Because of type erasure, you cannot write new T() inside a generic class.",
+   "viDuNghia": "Vì xoá kiểu nên không viết được new T() trong lớp generic."
+  },
+  {
+   "chu": "functional interface",
+   "doc": "/ˈfʌŋkʃənəl ˈɪntərfeɪs/",
+   "nghia": "interface hàm: interface có đúng một phương thức trừu tượng, dùng được với lambda",
+   "nhom": "Generics & lập trình hàm",
+   "viDu": "Comparator and Runnable are functional interfaces.",
+   "viDuNghia": "Comparator và Runnable là các interface hàm."
+  },
+  {
+   "chu": "lambda expression",
+   "doc": "/ˈlæmdə ɪkˈsprɛʃən/",
+   "nghia": "biểu thức lambda: hàm vô danh ngắn gọn (a, b) -> a - b",
+   "nhom": "Generics & lập trình hàm",
+   "viDu": "list.sort((a, b) -> a.getName().compareTo(b.getName())); uses a lambda expression.",
+   "viDuNghia": "list.sort((a, b) -> a.getName().compareTo(b.getName())); dùng một biểu thức lambda."
+  },
+  {
+   "chu": "method reference",
+   "doc": "/ˈmɛθəd ˈrɛfərəns/",
+   "nghia": "tham chiếu phương thức: viết tắt của lambda, vd String::length, System.out::println",
+   "nhom": "Generics & lập trình hàm",
+   "viDu": "list.forEach(System.out::println) uses a method reference.",
+   "viDuNghia": "list.forEach(System.out::println) dùng tham chiếu phương thức."
+  },
+  {
+   "chu": "Stream API",
+   "doc": "/striːm ˌeɪ piː ˈaɪ/",
+   "nghia": "Stream API: xử lý dãy dữ liệu theo chuỗi thao tác filter, map, sorted, collect",
+   "nhom": "Generics & lập trình hàm",
+   "viDu": "Use the Stream API to filter books with a price above 100.",
+   "viDuNghia": "Dùng Stream API lọc các sách giá trên 100."
+  },
+  {
+   "chu": "Runnable interface",
+   "doc": "/ˈrʌnəbl ˈɪntərfeɪs/",
+   "nghia": "interface Runnable: có phương thức run(), mô tả công việc cho một luồng",
+   "nhom": "Generics & lập trình hàm",
+   "viDu": "Pass a Runnable to new Thread(...) and call start().",
+   "viDuNghia": "Truyền một Runnable cho new Thread(...) rồi gọi start()."
+  },
+  {
+   "chu": "synchronized",
+   "doc": "/ˈsɪŋkrənaɪzd/",
+   "nghia": "synchronized: từ khoá khoá đối tượng để mỗi lúc chỉ một luồng chạy đoạn mã đó",
+   "nhom": "Generics & lập trình hàm",
+   "viDu": "They are synchronized for thread safety.",
+   "viDuNghia": "Chúng có synchronized để an toàn luồng."
+  },
+  {
+   "chu": "transient",
+   "doc": "/ˈtrænziənt/",
+   "nghia": "transient: field KHÔNG được ghi khi tuần tự hoá đối tượng",
+   "nhom": "Generics & lập trình hàm",
+   "viDu": "The class can only access transient variables",
+   "viDuNghia": "Lớp chỉ truy cập được biến transient. (Phương án SAI — transient chỉ có nghĩa là không tuần tự hoá.)"
+  },
+  {
+   "chu": "Throwable",
+   "doc": "/ˈθroʊəbl/",
+   "nghia": "Throwable: lớp gốc của mọi lỗi và ngoại lệ (con là Error và Exception)",
+   "nhom": "Ngoại lệ",
+   "viDu": "Both Error and Exception are subclasses of Throwable.",
+   "viDuNghia": "Cả Error và Exception đều là lớp con của Throwable."
+  },
+  {
+   "chu": "Error class",
+   "doc": "/ˈɛrər klɑːs/",
+   "nghia": "lớp Error: lỗi nghiêm trọng của JVM (OutOfMemoryError, StackOverflowError) — không nên bắt",
+   "nhom": "Ngoại lệ",
+   "viDu": "An Error such as OutOfMemoryError should not be caught by normal code.",
+   "viDuNghia": "Lỗi như OutOfMemoryError không nên bị mã thông thường bắt."
+  },
+  {
+   "chu": "try-catch",
+   "doc": "/traɪ kætʃ/",
+   "nghia": "khối try-catch: bọc đoạn mã có thể ném ngoại lệ và xử lý nó",
+   "nhom": "Ngoại lệ",
+   "viDu": "Any method that calls X must use try-catch, specifically catching FileNotFoundException.",
+   "viDuNghia": "Mọi phương thức gọi X phải dùng try-catch, cụ thể là bắt FileNotFoundException."
+  },
+  {
+   "chu": "multi-catch",
+   "doc": "/ˈmʌlti kætʃ/",
+   "nghia": "bắt nhiều ngoại lệ trong một khối catch, các kiểu ngăn bằng dấu gạch đứng (vd IOException và NumberFormatException chung một khối)",
+   "nhom": "Ngoại lệ",
+   "viDu": "A multi-catch block handles several exception types with the same code.",
+   "viDuNghia": "Khối catch nhiều kiểu xử lý vài loại ngoại lệ bằng cùng một đoạn mã."
+  },
+  {
+   "chu": "propagate",
+   "doc": "/ˈprɒpəɡeɪt/",
+   "nghia": "lan truyền (ngoại lệ): ngoại lệ không bắt được sẽ đi ngược lên phương thức gọi",
+   "nhom": "Ngoại lệ",
+   "viDu": "If the method does not catch the exception, it propagates to the caller.",
+   "viDuNghia": "Nếu phương thức không bắt ngoại lệ thì nó lan lên nơi gọi."
+  },
+  {
+   "chu": "rethrow",
+   "doc": "/riːˈθroʊ/",
+   "nghia": "ném lại: bắt ngoại lệ rồi ném tiếp (có thể bọc thành ngoại lệ khác)",
+   "nhom": "Ngoại lệ",
+   "viDu": "Catch the IOException, log it, then rethrow it as a custom exception.",
+   "viDuNghia": "Bắt IOException, ghi log rồi ném lại dưới dạng ngoại lệ tự định nghĩa."
+  },
+  {
+   "chu": "InputMismatchException",
+   "doc": "/ˈɪnpʊt ˌmɪsˈmætʃ ɪkˈsɛpʃən/",
+   "nghia": "InputMismatchException: Scanner ném khi chữ nhập không khớp kiểu cần đọc (nhập \"abc\" cho nextInt)",
+   "nhom": "Ngoại lệ",
+   "viDu": "An InputMismatchException is thrown",
+   "viDuNghia": "Một InputMismatchException được ném ra."
+  },
+  {
+   "chu": "ArrayIndexOutOfBoundsException",
+   "doc": "/əˈreɪ ˈɪndɛks aʊt ɒv baʊndz ɪkˈsɛpʃən/",
+   "nghia": "ArrayIndexOutOfBoundsException: chỉ số mảng âm hoặc ≥ độ dài",
+   "nhom": "Ngoại lệ",
+   "viDu": "Exception in thread \"main\" java.lang.ArrayIndexOutOfBoundsException: 10",
+   "viDuNghia": "Ngoại lệ trong luồng \"main\": java.lang.ArrayIndexOutOfBoundsException: 10."
+  },
+  {
+   "chu": "ConcurrentModificationException",
+   "doc": "/kənˈkʌrənt ˌmɒdɪfɪˈkeɪʃən ɪkˈsɛpʃən/",
+   "nghia": "ConcurrentModificationException: sửa collection (remove) trong lúc đang duyệt bằng for-each",
+   "nhom": "Ngoại lệ",
+   "viDu": "removeByMember() removes every match without ConcurrentModificationException and without skipping adjacent matches.",
+   "viDuNghia": "removeByMember() xoá mọi phần tử khớp mà không gây ConcurrentModificationException và không bỏ sót phần tử liền kề."
+  },
+  {
+   "chu": "EOFException",
+   "doc": "/ˌiː oʊ ˈɛf ɪkˈsɛpʃən/",
+   "nghia": "EOFException: đọc quá cuối luồng nhị phân/đối tượng — thường dùng để biết đã đọc hết tệp",
+   "nhom": "Ngoại lệ",
+   "viDu": "Catch EOFException to stop reading objects at the end of the file.",
+   "viDuNghia": "Bắt EOFException để dừng đọc đối tượng khi tới cuối tệp."
+  },
+  {
+   "chu": "Iterable",
+   "doc": "/ˈɪtərəbl/",
+   "nghia": "Iterable: interface cho phép duyệt bằng vòng for-each (có phương thức iterator())",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Both methods read the items via an enhanced for loop over the catalog itself, relying on Iterable.",
+   "viDuNghia": "Cả hai phương thức đọc phần tử bằng vòng for nâng cao trên chính catalog, nhờ Iterable."
+  },
+  {
+   "chu": "LinkedList",
+   "doc": "/ˈlɪŋkt lɪst/",
+   "nghia": "LinkedList: List dùng danh sách liên kết đôi — chèn/xoá đầu cuối nhanh, truy cập theo chỉ số chậm",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Which of the following statements about ArrayList vs LinkedList is true?",
+   "viDuNghia": "Phát biểu nào đúng về ArrayList so với LinkedList?"
+  },
+  {
+   "chu": "Queue interface",
+   "doc": "/kjuː ˈɪntərfeɪs/",
+   "nghia": "interface Queue: hàng đợi FIFO với offer(), poll(), peek()",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "LinkedList implements the Queue interface.",
+   "viDuNghia": "LinkedList hiện thực interface Queue."
+  },
+  {
+   "chu": "PriorityQueue",
+   "doc": "/praɪˈɒrɪti kjuː/",
+   "nghia": "PriorityQueue: hàng đợi lấy ra phần tử nhỏ nhất (theo thứ tự tự nhiên hoặc Comparator) trước",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Choose a PriorityQueue<Card> for card prioritization based on rank.",
+   "viDuNghia": "Chọn PriorityQueue<Card> để ưu tiên lá bài theo hạng."
+  },
+  {
+   "chu": "LinkedHashMap",
+   "doc": "/ˈlɪŋkt hæʃ mæp/",
+   "nghia": "LinkedHashMap: HashMap giữ thứ tự chèn",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Utilize a LinkedHashMap<Product, WarehouseLocation> to maintain insertion order.",
+   "viDuNghia": "Dùng LinkedHashMap<Product, WarehouseLocation> để giữ thứ tự chèn."
+  },
+  {
+   "chu": "Hashtable",
+   "doc": "/ˈhæʃteɪbl/",
+   "nghia": "Hashtable: Map cũ, đồng bộ luồng, không cho khoá hoặc giá trị null",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Unlike HashMap, Hashtable does not allow null keys or values.",
+   "viDuNghia": "Khác HashMap, Hashtable không cho khoá hoặc giá trị null."
+  },
+  {
+   "chu": "Map.Entry",
+   "doc": "/mæp ˈɛntri/",
+   "nghia": "Map.Entry: một cặp khoá – giá trị khi duyệt Map",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "for (Map.Entry<String, Integer> e : map.entrySet()) prints each key and value.",
+   "viDuNghia": "for (Map.Entry<String, Integer> e : map.entrySet()) in từng khoá và giá trị."
+  },
+  {
+   "chu": "keySet",
+   "doc": "/ˈkiː sɛt/",
+   "nghia": "keySet(): trả về tập các khoá của Map",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "map.keySet() returns all the keys of the map.",
+   "viDuNghia": "map.keySet() trả về mọi khoá của map."
+  },
+  {
+   "chu": "entrySet",
+   "doc": "/ˈɛntri sɛt/",
+   "nghia": "entrySet(): trả về tập các cặp Map.Entry",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Iterate over map.entrySet() when you need both the key and the value.",
+   "viDuNghia": "Duyệt map.entrySet() khi cần cả khoá lẫn giá trị."
+  },
+  {
+   "chu": "containsKey",
+   "doc": "/kənˈteɪnz kiː/",
+   "nghia": "containsKey(k): kiểm Map có khoá k không",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Check map.containsKey(id) before adding a new product.",
+   "viDuNghia": "Kiểm map.containsKey(id) trước khi thêm sản phẩm mới."
+  },
+  {
+   "chu": "getOrDefault",
+   "doc": "/ɡɛt ɔːr dɪˈfɔːlt/",
+   "nghia": "getOrDefault(k, v): lấy giá trị của khoá k, không có thì trả v — tiện cho đếm tần suất",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "count.put(w, count.getOrDefault(w, 0) + 1) counts word frequency.",
+   "viDuNghia": "count.put(w, count.getOrDefault(w, 0) + 1) đếm tần suất từ."
+  },
+  {
+   "chu": "Collections.sort",
+   "doc": "/kəˈlɛkʃənz dɒt sɔːrt/",
+   "nghia": "Collections.sort: sắp xếp List theo thứ tự tự nhiên hoặc Comparator (sắp xếp ổn định)",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Use Collections.sort() with a custom comparator.",
+   "viDuNghia": "Dùng Collections.sort() với một comparator tự viết."
+  },
+  {
+   "chu": "compareTo method",
+   "doc": "/kəmˈpɛər tuː ˈmɛθəd/",
+   "nghia": "phương thức compareTo: trả về âm/0/dương khi đối tượng nhỏ hơn/bằng/lớn hơn đối tượng kia",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Comparable interface and its compareTo method.",
+   "viDuNghia": "Interface Comparable và phương thức compareTo của nó."
+  },
+  {
+   "chu": "equals and hashCode contract",
+   "doc": "/ˈiːkwəlz ənd ˈhæʃkoʊd ˈkɒntrækt/",
+   "nghia": "quy ước equals – hashCode: hai đối tượng equals thì PHẢI có cùng hashCode, không thì HashSet/HashMap chạy sai",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Breaking the equals and hashCode contract lets duplicates appear in a HashSet.",
+   "viDuNghia": "Vi phạm quy ước equals – hashCode làm phần tử trùng xuất hiện trong HashSet."
+  },
+  {
+   "chu": "unmodifiable list",
+   "doc": "/ʌnˈmɒdɪfaɪəbl lɪst/",
+   "nghia": "danh sách không sửa được: List.of() hoặc Collections.unmodifiableList — add/remove ném lỗi",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "listAll() returns an unmodifiable list so callers cannot change the data.",
+   "viDuNghia": "listAll() trả về danh sách không sửa được để nơi gọi không đổi được dữ liệu."
+  },
+  {
+   "chu": "Scanner class",
+   "doc": "/ˈskænər klɑːs/",
+   "nghia": "lớp Scanner (java.util): đọc dữ liệu từ bàn phím hoặc tệp (nextInt, nextLine)",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Which of the following packages contains the Scanner class used to input data via keyboard?",
+   "viDuNghia": "Package nào chứa lớp Scanner dùng để nhập dữ liệu từ bàn phím?"
+  },
+  {
+   "chu": "BufferedReader",
+   "doc": "/ˈbʌfərd ˈriːdər/",
+   "nghia": "BufferedReader: đọc văn bản có bộ đệm, có readLine() đọc từng dòng",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))",
+   "viDuNghia": "new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8)) — đọc tệp từng dòng theo UTF-8."
+  },
+  {
+   "chu": "FileReader",
+   "doc": "/faɪl ˈriːdər/",
+   "nghia": "FileReader: luồng ký tự đọc tệp văn bản (bảng mã mặc định của máy nếu không chỉ rõ)",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "new BufferedReader(new FileReader(f)) — FileReader picks the charset by itself",
+   "viDuNghia": "new BufferedReader(new FileReader(f)) — FileReader tự chọn bảng mã."
+  },
+  {
+   "chu": "FileWriter",
+   "doc": "/faɪl ˈraɪtər/",
+   "nghia": "FileWriter: luồng ký tự ghi tệp văn bản (new FileWriter(f, true) để ghi nối)",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "new FileWriter(\"log.txt\", true) appends to the file instead of overwriting it.",
+   "viDuNghia": "new FileWriter(\"log.txt\", true) ghi nối vào tệp thay vì ghi đè."
+  },
+  {
+   "chu": "PrintWriter",
+   "doc": "/prɪnt ˈraɪtər/",
+   "nghia": "PrintWriter: ghi văn bản tiện lợi với print, println, printf",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Which of the following classes is the superclass of the PrintWriter and FileWriter classes?",
+   "viDuNghia": "Lớp nào là lớp cha của PrintWriter và FileWriter? (Writer)"
+  },
+  {
+   "chu": "buffered stream",
+   "doc": "/ˈbʌfərd striːm/",
+   "nghia": "luồng có bộ đệm: gom dữ liệu thành khối để giảm số lần đọc/ghi đĩa",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Wrap a FileInputStream in a BufferedInputStream to create a buffered stream.",
+   "viDuNghia": "Bọc FileInputStream trong BufferedInputStream để có luồng có bộ đệm."
+  },
+  {
+   "chu": "data stream",
+   "doc": "/ˈdeɪtə striːm/",
+   "nghia": "luồng dữ liệu (DataInputStream/DataOutputStream): đọc/ghi giá trị nguyên thuỷ dạng nhị phân",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "A data stream can write an int and a double in binary form.",
+   "viDuNghia": "Luồng dữ liệu có thể ghi một int và một double ở dạng nhị phân."
+  },
+  {
+   "chu": "caller",
+   "doc": "/ˈkɔːlər/",
+   "nghia": "nơi gọi: đoạn mã gọi một phương thức; throws đẩy ngoại lệ ngược về nơi gọi thay vì tự bắt",
+   "nhom": "Ngoại lệ",
+   "viDu": "The throws clause declares that the method propagates the listed exceptions to its caller instead of catching them.",
+   "viDuNghia": "Mệnh đề throws khai báo phương thức đẩy các ngoại lệ đã liệt kê về nơi gọi thay vì tự bắt."
+  },
+  {
+   "chu": "lexicographic order",
+   "doc": "/ˌleksɪkəˈɡræfɪk ˈɔːrdər/",
+   "nghia": "thứ tự từ điển: so lần lượt từng ký tự theo mã Unicode (String.compareTo), nên chữ HOA đứng trước chữ thường",
+   "nhom": "Chuỗi, kiểu bọc & in ấn",
+   "viDu": "Collections.sort on a List<String> uses String.compareTo, which is lexicographic on Unicode code points.",
+   "viDuNghia": "Collections.sort trên List<String> dùng String.compareTo – so theo thứ tự từ điển của mã Unicode."
+  },
+  {
+   "chu": "RandomAccessFile",
+   "doc": "/ˈrændəm ˈækses faɪl/",
+   "nghia": "RandomAccessFile: lớp Java đọc / ghi tệp ở vị trí bất kỳ (seek), mở với chế độ \"r\" hoặc \"rw\"",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Which line creates an instance of the RandomAccessFile class?",
+   "viDuNghia": "Dòng nào tạo được một thể hiện của lớp RandomAccessFile?"
+  },
+  {
+   "chu": "Fisher-Yates shuffle",
+   "doc": "/ˈfɪʃər ˈjeɪts ˈʃʌfl/",
+   "nghia": "thuật toán xáo Fisher–Yates: đi từ cuối mảng, đổi mỗi phần tử với một vị trí ngẫu nhiên phía trước; mọi hoán vị đồng xác suất (Collections.shuffle dùng cách này)",
+   "nhom": "Collections & đọc/ghi tệp",
+   "viDu": "Collections.shuffle() implements the modern Fisher-Yates algorithm, so every permutation is equally likely.",
+   "viDuNghia": "Collections.shuffle() cài thuật toán Fisher-Yates hiện đại nên mọi hoán vị có xác suất bằng nhau."
+  }
+ ]
+}

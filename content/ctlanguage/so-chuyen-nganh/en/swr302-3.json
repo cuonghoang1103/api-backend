@@ -4,7 +4,7 @@
  "ten": "SWR302 · 3. Mô hình, use case & đặc tả",
  "moTa": "Môn Software Requirements (FPT): use case, sơ đồ ngữ cảnh, DFD, ERD, sơ đồ trạng thái, SRS, user story, thuộc tính chất lượng. Từ trích từ đề FE/PE thật; phần lớn câu ví dụ là câu hỏi thật trong đề.",
  "bieuTuong": "rectangle.connected.to.line.below",
- "thuTu": -954,
+ "thuTu": -931,
  "tu": [
   {
    "chu": "use case diagram",

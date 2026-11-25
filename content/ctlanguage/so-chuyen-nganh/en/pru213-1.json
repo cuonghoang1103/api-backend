@@ -1,0 +1,506 @@
+{
+  "ma": "pru213-1",
+  "nn": "en",
+  "ten": "PRU213 · 1. Lập trình game Unity với C#",
+  "moTa": "Môn Game Programming with C# (PRU213): giao diện Unity Editor, GameObject và component, Transform, prefab và scene, vật lý (Rigidbody, collider, trigger), vòng đời script MonoBehaviour, đầu vào, animation, giao diện UI và gỡ lỗi. Soạn từ syllabus và giáo trình vì môn chưa có đề chữ.",
+  "bieuTuong": "gamecontroller.fill",
+  "thuTu": -895,
+  "tu": [
+    {
+      "chu": "Unity",
+      "doc": "/ˈjuːnəti/",
+      "nghia": "Unity: game engine đa nền tảng, lập trình bằng C#",
+      "nhom": "Unity Editor",
+      "viDu": "Introduction to Unity Interface and Navigation.",
+      "viDuNghia": "Giới thiệu giao diện và cách di chuyển trong Unity."
+    },
+    {
+      "chu": "game engine",
+      "doc": "/ɡeɪm ˈendʒɪn/",
+      "nghia": "bộ máy làm game: lo vẽ hình, vật lý, âm thanh, đầu vào để người làm chỉ viết logic",
+      "nhom": "Unity Editor",
+      "viDu": "Unity is a game engine that builds for PC, mobile and web.",
+      "viDuNghia": "Unity là game engine dựng game cho PC, di động và web."
+    },
+    {
+      "chu": "Unity Editor",
+      "doc": "/ˈjuːnəti ˈedɪtər/",
+      "nghia": "trình soạn của Unity: nơi dựng scene, gắn component, chạy thử game",
+      "nhom": "Unity Editor",
+      "viDu": "Press Play in the Unity Editor to test the scene.",
+      "viDuNghia": "Bấm Play trong Unity Editor để chạy thử scene."
+    },
+    {
+      "chu": "Scene view",
+      "doc": "/siːn vjuː/",
+      "nghia": "cửa sổ dựng cảnh: kéo, xoay, đặt đối tượng",
+      "nhom": "Unity Editor",
+      "viDu": "Move the player in the Scene view with the Move tool.",
+      "viDuNghia": "Di chuyển nhân vật trong Scene view bằng công cụ Move."
+    },
+    {
+      "chu": "Game view",
+      "doc": "/ɡeɪm vjuː/",
+      "nghia": "cửa sổ hiện hình qua camera, đúng như người chơi thấy",
+      "nhom": "Unity Editor",
+      "viDu": "The Game view shows what the camera renders.",
+      "viDuNghia": "Game view hiện những gì camera vẽ ra."
+    },
+    {
+      "chu": "Hierarchy window",
+      "doc": "/ˈhaɪərɑːrki ˈwɪndoʊ/",
+      "nghia": "cửa sổ liệt kê mọi GameObject của scene theo quan hệ cha–con",
+      "nhom": "Unity Editor",
+      "viDu": "Drag the gun onto the player in the Hierarchy window to make it a child.",
+      "viDuNghia": "Kéo khẩu súng vào nhân vật trong Hierarchy để thành đối tượng con."
+    },
+    {
+      "chu": "Project window",
+      "doc": "/ˈprɑːdʒekt ˈwɪndoʊ/",
+      "nghia": "cửa sổ chứa mọi tài nguyên của dự án (script, ảnh, prefab, âm thanh)",
+      "nhom": "Unity Editor",
+      "viDu": "Create a new C# script in the Project window.",
+      "viDuNghia": "Tạo script C# mới trong cửa sổ Project."
+    },
+    {
+      "chu": "Inspector window",
+      "doc": "/ɪnˈspektər ˈwɪndoʊ/",
+      "nghia": "cửa sổ hiện và chỉnh component, thuộc tính của đối tượng đang chọn",
+      "nhom": "Unity Editor",
+      "viDu": "Change the speed value in the Inspector window.",
+      "viDuNghia": "Đổi giá trị speed trong cửa sổ Inspector."
+    },
+    {
+      "chu": "Play mode",
+      "doc": "/pleɪ moʊd/",
+      "nghia": "chế độ chạy thử trong Editor; thay đổi lúc Play mode sẽ mất khi dừng",
+      "nhom": "Unity Editor",
+      "viDu": "Changes made in Play mode are lost when you stop.",
+      "viDuNghia": "Thay đổi trong Play mode sẽ mất khi dừng."
+    },
+    {
+      "chu": "game asset",
+      "doc": "/ɡeɪm ˈæset/",
+      "nghia": "tài nguyên game: mô hình, ảnh, âm thanh, script, prefab trong thư mục Assets",
+      "nhom": "Unity Editor",
+      "viDu": "Import the game assets from the Asset Store.",
+      "viDuNghia": "Nhập tài nguyên game từ Asset Store."
+    },
+    {
+      "chu": "GameObject",
+      "doc": "/ɡeɪm ˈɑːbdʒekt/",
+      "nghia": "đối tượng cơ bản của Unity; tự nó không làm gì, mọi chức năng đến từ component",
+      "nhom": "GameObject, component và scene",
+      "viDu": "Every object in a scene is a GameObject.",
+      "viDuNghia": "Mọi đối tượng trong scene đều là GameObject."
+    },
+    {
+      "chu": "component system",
+      "doc": "/kəmˈpoʊnənt ˈsɪstəm/",
+      "nghia": "hệ component: ghép các thành phần (Transform, Renderer, Collider, script) vào GameObject",
+      "nhom": "GameObject, component và scene",
+      "viDu": "Understanding Unity's Component System.",
+      "viDuNghia": "Hiểu hệ component của Unity."
+    },
+    {
+      "chu": "Transform component",
+      "doc": "/ˈtrænsfɔːrm kəmˈpoʊnənt/",
+      "nghia": "component bắt buộc lưu vị trí, góc xoay, tỉ lệ của GameObject",
+      "nhom": "GameObject, component và scene",
+      "viDu": "transform.position = new Vector3(0, 1, 0);",
+      "viDuNghia": "Đặt đối tượng ở toạ độ (0, 1, 0)."
+    },
+    {
+      "chu": "local space",
+      "doc": "/ˈloʊkl speɪs/",
+      "nghia": "toạ độ cục bộ: tính theo đối tượng cha",
+      "nhom": "GameObject, component và scene",
+      "viDu": "localPosition is measured in local space relative to the parent.",
+      "viDuNghia": "localPosition tính theo toạ độ cục bộ so với cha."
+    },
+    {
+      "chu": "world space",
+      "doc": "/wɜːrld speɪs/",
+      "nghia": "toạ độ thế giới: tính theo gốc của cả scene",
+      "nhom": "GameObject, component và scene",
+      "viDu": "transform.position is measured in world space.",
+      "viDuNghia": "transform.position tính theo toạ độ thế giới."
+    },
+    {
+      "chu": "Vector3",
+      "doc": "/ˈvektər θriː/",
+      "nghia": "kiểu vectơ 3 chiều (x, y, z) dùng cho vị trí, hướng, vận tốc",
+      "nhom": "GameObject, component và scene",
+      "viDu": "Vector3.forward points along the positive z axis.",
+      "viDuNghia": "Vector3.forward chỉ theo chiều dương trục z."
+    },
+    {
+      "chu": "Quaternion",
+      "doc": "/kwəˈtɜːrniən/",
+      "nghia": "kiểu biểu diễn góc xoay trong Unity, tránh lỗi khoá trục của góc Euler",
+      "nhom": "GameObject, component và scene",
+      "viDu": "transform.rotation = Quaternion.Euler(0, 90, 0);",
+      "viDuNghia": "Xoay đối tượng 90 độ quanh trục y."
+    },
+    {
+      "chu": "prefab",
+      "doc": "/ˈpriːfæb/",
+      "nghia": "prefab: mẫu GameObject lưu sẵn để tạo nhiều bản sao giống nhau",
+      "nhom": "GameObject, component và scene",
+      "viDu": "Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);",
+      "viDuNghia": "Tạo viên đạn từ prefab tại nòng súng."
+    },
+    {
+      "chu": "prefab instance",
+      "doc": "/ˈpriːfæb ˈɪnstəns/",
+      "nghia": "bản thể prefab: bản sao trong scene, đổi prefab gốc thì bản sao đổi theo",
+      "nhom": "GameObject, component và scene",
+      "viDu": "Editing the prefab updates every prefab instance.",
+      "viDuNghia": "Sửa prefab gốc thì mọi bản thể đều cập nhật."
+    },
+    {
+      "chu": "scene management",
+      "doc": "/siːn ˈmænɪdʒmənt/",
+      "nghia": "quản lý scene: chuyển màn chơi bằng SceneManager.LoadScene",
+      "nhom": "GameObject, component và scene",
+      "viDu": "SceneManager.LoadScene(\"Level2\") loads the next level.",
+      "viDuNghia": "Nạp màn chơi tiếp theo."
+    },
+    {
+      "chu": "build settings",
+      "doc": "/bɪld ˈsetɪŋz/",
+      "nghia": "cấu hình dựng: danh sách scene và nền tảng đích (Windows, Android, WebGL)",
+      "nhom": "GameObject, component và scene",
+      "viDu": "Add every scene to the build settings before loading it.",
+      "viDuNghia": "Thêm mọi scene vào build settings trước khi nạp."
+    },
+    {
+      "chu": "Sprite Renderer",
+      "doc": "/spraɪt ˈrendərər/",
+      "nghia": "component vẽ ảnh 2D (sprite) cho GameObject",
+      "nhom": "GameObject, component và scene",
+      "viDu": "Change the color of the Sprite Renderer when the player is hit.",
+      "viDuNghia": "Đổi màu Sprite Renderer khi nhân vật trúng đòn."
+    },
+    {
+      "chu": "sprite",
+      "doc": "/spraɪt/",
+      "nghia": "ảnh 2D dùng cho nhân vật, vật thể trong game 2D",
+      "nhom": "GameObject, component và scene",
+      "viDu": "Slice the sprite sheet into separate sprites.",
+      "viDuNghia": "Cắt bảng sprite thành từng sprite riêng."
+    },
+    {
+      "chu": "physics engine",
+      "doc": "/ˈfɪzɪks ˈendʒɪn/",
+      "nghia": "bộ máy vật lý: tính trọng lực, lực, va chạm cho đối tượng có Rigidbody",
+      "nhom": "Vật lý và va chạm",
+      "viDu": "Unity's Physics Engine: Rigid Bodies and Forces.",
+      "viDuNghia": "Bộ máy vật lý của Unity: vật rắn và lực."
+    },
+    {
+      "chu": "Rigidbody",
+      "doc": "/ˈrɪdʒɪd ˌbɑːdi/",
+      "nghia": "component cho đối tượng chịu vật lý (khối lượng, trọng lực, lực)",
+      "nhom": "Vật lý và va chạm",
+      "viDu": "Add a Rigidbody so the ball falls with gravity.",
+      "viDuNghia": "Thêm Rigidbody để quả bóng rơi theo trọng lực."
+    },
+    {
+      "chu": "kinematic body",
+      "doc": "/ˌkɪnəˈmætɪk ˈbɑːdi/",
+      "nghia": "vật động học: Rigidbody không chịu lực, chỉ di chuyển bằng mã",
+      "nhom": "Vật lý và va chạm",
+      "viDu": "A kinematic body is moved by script, not by forces.",
+      "viDuNghia": "Vật động học di chuyển bằng script, không bằng lực."
+    },
+    {
+      "chu": "AddForce",
+      "doc": "/æd fɔːrs/",
+      "nghia": "phương thức đẩy Rigidbody bằng một lực (nhảy, bắn)",
+      "nhom": "Vật lý và va chạm",
+      "viDu": "rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);",
+      "viDuNghia": "Đẩy nhân vật lên để nhảy."
+    },
+    {
+      "chu": "collider",
+      "doc": "/kəˈlaɪdər/",
+      "nghia": "component hình va chạm (Box, Sphere, Capsule, Mesh Collider)",
+      "nhom": "Vật lý và va chạm",
+      "viDu": "Introduction to Physics and Colliders.",
+      "viDuNghia": "Giới thiệu vật lý và collider."
+    },
+    {
+      "chu": "trigger collider",
+      "doc": "/ˈtrɪɡər kəˈlaɪdər/",
+      "nghia": "collider bật Is Trigger: không chặn vật, chỉ báo sự kiện khi có vật đi vào",
+      "nhom": "Vật lý và va chạm",
+      "viDu": "Mark the coin's collider as a trigger collider.",
+      "viDuNghia": "Đặt collider của đồng xu là trigger."
+    },
+    {
+      "chu": "OnCollisionEnter",
+      "doc": "/ɑːn kəˈlɪʒn ˈentər/",
+      "nghia": "hàm sự kiện chạy khi hai collider va chạm thật",
+      "nhom": "Vật lý và va chạm",
+      "viDu": "void OnCollisionEnter2D(Collision2D other) { TakeDamage(); }",
+      "viDuNghia": "Khi va chạm thì nhận sát thương."
+    },
+    {
+      "chu": "OnTriggerEnter",
+      "doc": "/ɑːn ˈtrɪɡər ˈentər/",
+      "nghia": "hàm sự kiện chạy khi một vật đi vào trigger collider",
+      "nhom": "Vật lý và va chạm",
+      "viDu": "Handling Collisions and Triggers.",
+      "viDuNghia": "Xử lý va chạm và trigger."
+    },
+    {
+      "chu": "physics material",
+      "doc": "/ˈfɪzɪks məˈtɪriəl/",
+      "nghia": "vật liệu vật lý: độ ma sát và độ nảy của bề mặt",
+      "nhom": "Vật lý và va chạm",
+      "viDu": "A bouncy physics material makes the ball bounce.",
+      "viDuNghia": "Vật liệu vật lý có độ nảy làm quả bóng nảy lên."
+    },
+    {
+      "chu": "raycast",
+      "doc": "/ˈreɪkæst/",
+      "nghia": "bắn tia: phóng một tia vô hình để kiểm tra trúng vật nào (bắn súng, kiểm chạm đất)",
+      "nhom": "Vật lý và va chạm",
+      "viDu": "Use a raycast to check if the player is on the ground.",
+      "viDuNghia": "Dùng raycast kiểm tra nhân vật có đứng trên đất không."
+    },
+    {
+      "chu": "physics-based puzzle",
+      "doc": "/ˈfɪzɪks beɪst ˈpʌzl/",
+      "nghia": "câu đố dựa trên vật lý: người chơi đẩy, kéo, thả vật để giải",
+      "nhom": "Vật lý và va chạm",
+      "viDu": "Implementing Interactive Physics-Based Puzzles.",
+      "viDuNghia": "Làm câu đố tương tác dựa trên vật lý."
+    },
+    {
+      "chu": "Unity script",
+      "doc": "/ˈjuːnəti skrɪpt/",
+      "nghia": "script Unity (viết bằng C#): lớp kế thừa MonoBehaviour gắn vào GameObject như một component",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "Introduction to C# Programming in Unity.",
+      "viDuNghia": "Giới thiệu lập trình C# trong Unity."
+    },
+    {
+      "chu": "MonoBehaviour",
+      "doc": "/ˈmɑːnoʊ bɪˈheɪvjər/",
+      "nghia": "lớp cơ sở của mọi script gắn vào GameObject (có Start, Update…)",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "public class Player : MonoBehaviour { }",
+      "viDuNghia": "Lớp Player kế thừa MonoBehaviour."
+    },
+    {
+      "chu": "Start method",
+      "doc": "/stɑːrt ˈmeθəd/",
+      "nghia": "Start(): chạy một lần trước khung hình đầu tiên của script",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "Get the Rigidbody in Start().",
+      "viDuNghia": "Lấy Rigidbody trong Start()."
+    },
+    {
+      "chu": "Update method",
+      "doc": "/ˈʌpdeɪt ˈmeθəd/",
+      "nghia": "Update(): chạy mỗi khung hình, dùng đọc đầu vào và logic thường",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "Read keyboard input in Update().",
+      "viDuNghia": "Đọc phím bấm trong Update()."
+    },
+    {
+      "chu": "FixedUpdate",
+      "doc": "/fɪkst ˈʌpdeɪt/",
+      "nghia": "chạy theo nhịp vật lý cố định; đặt mã tác động lên Rigidbody ở đây",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "Apply forces in FixedUpdate, not in Update.",
+      "viDuNghia": "Tác động lực trong FixedUpdate, không trong Update."
+    },
+    {
+      "chu": "Time.deltaTime",
+      "doc": "/taɪm ˈdeltə taɪm/",
+      "nghia": "thời gian (giây) từ khung hình trước; nhân vào tốc độ để chạy đều ở mọi fps",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "transform.Translate(Vector3.right * speed * Time.deltaTime);",
+      "viDuNghia": "Di chuyển đều theo thời gian, không phụ thuộc fps."
+    },
+    {
+      "chu": "frame rate",
+      "doc": "/freɪm reɪt/",
+      "nghia": "tốc độ khung hình (fps)",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "Multiplying by deltaTime makes movement independent of the frame rate.",
+      "viDuNghia": "Nhân với deltaTime làm chuyển động không phụ thuộc tốc độ khung hình."
+    },
+    {
+      "chu": "SerializeField",
+      "doc": "/ˈsɪriəlaɪz fiːld/",
+      "nghia": "[SerializeField]: hiện trường private trong Inspector để chỉnh mà không cần public",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "[SerializeField] private float speed = 5f;",
+      "viDuNghia": "Hiện tốc độ trong Inspector dù là private."
+    },
+    {
+      "chu": "GetComponent",
+      "doc": "/ɡet kəmˈpoʊnənt/",
+      "nghia": "lấy một component khác gắn trên cùng GameObject",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "rb = GetComponent<Rigidbody2D>();",
+      "viDuNghia": "Lấy Rigidbody2D của đối tượng."
+    },
+    {
+      "chu": "Destroy method",
+      "doc": "/dɪˈstrɔɪ ˈmeθəd/",
+      "nghia": "Destroy(obj): xoá GameObject hoặc component, có thể hẹn giờ",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "Destroy(gameObject, 2f) removes the bullet after two seconds.",
+      "viDuNghia": "Xoá viên đạn sau hai giây."
+    },
+    {
+      "chu": "Input class",
+      "doc": "/ˈɪnpʊt klæs/",
+      "nghia": "lớp đọc bàn phím, chuột, cảm ứng (GetKeyDown, GetAxis, GetMouseButton)",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "Scripting Interactivity: Mouse and Keyboard Input.",
+      "viDuNghia": "Viết script tương tác: đầu vào chuột và bàn phím."
+    },
+    {
+      "chu": "GetAxis",
+      "doc": "/ɡet ˈæksɪs/",
+      "nghia": "Input.GetAxis(\"Horizontal\"): giá trị từ -1 tới 1 theo phím trái/phải hoặc cần điều khiển",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "float move = Input.GetAxis(\"Horizontal\");",
+      "viDuNghia": "Đọc hướng di chuyển ngang."
+    },
+    {
+      "chu": "GetKeyDown",
+      "doc": "/ɡet kiː daʊn/",
+      "nghia": "trả true đúng khung hình phím vừa được nhấn",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "if (Input.GetKeyDown(KeyCode.Space)) Jump();",
+      "viDuNghia": "Nhấn phím cách thì nhảy."
+    },
+    {
+      "chu": "touch input",
+      "doc": "/tʌtʃ ˈɪnpʊt/",
+      "nghia": "đầu vào cảm ứng trên điện thoại (Input.touchCount, Touch)",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "User Input Handling: UI Events and Touch Input.",
+      "viDuNghia": "Xử lý đầu vào: sự kiện UI và cảm ứng."
+    },
+    {
+      "chu": "Debug.Log",
+      "doc": "/diːˈbʌɡ lɔːɡ/",
+      "nghia": "in thông báo ra cửa sổ Console để gỡ lỗi",
+      "nhom": "Script C# và vòng đời",
+      "viDu": "Debug.Log(\"Score: \" + score);",
+      "viDuNghia": "In điểm số ra Console."
+    },
+    {
+      "chu": "Animator",
+      "doc": "/ˈænɪmeɪtər/",
+      "nghia": "component chạy hoạt ảnh theo Animator Controller",
+      "nhom": "Animation và giao diện",
+      "viDu": "animator.SetBool(\"isRunning\", true);",
+      "viDuNghia": "Bật hoạt ảnh chạy."
+    },
+    {
+      "chu": "Animator Controller",
+      "doc": "/ˈænɪmeɪtər kənˈtroʊlər/",
+      "nghia": "sơ đồ trạng thái hoạt ảnh (Idle, Run, Jump) và điều kiện chuyển",
+      "nhom": "Animation và giao diện",
+      "viDu": "The Animator Controller switches from Idle to Run when speed > 0.1.",
+      "viDuNghia": "Animator Controller chuyển từ Idle sang Run khi tốc độ lớn hơn 0,1."
+    },
+    {
+      "chu": "animation clip",
+      "doc": "/ˌænɪˈmeɪʃn klɪp/",
+      "nghia": "đoạn hoạt ảnh (đi, nhảy, tấn công) ghi các thay đổi theo thời gian",
+      "nhom": "Animation và giao diện",
+      "viDu": "Introduction to Unity Animation System.",
+      "viDuNghia": "Giới thiệu hệ hoạt ảnh của Unity."
+    },
+    {
+      "chu": "animation parameter",
+      "doc": "/ˌænɪˈmeɪʃn pəˈræmɪtər/",
+      "nghia": "biến (bool, float, trigger) script đặt để Animator chọn chuyển trạng thái",
+      "nhom": "Animation và giao diện",
+      "viDu": "Set the Jump trigger animation parameter from the script.",
+      "viDuNghia": "Đặt tham số trigger Jump từ script."
+    },
+    {
+      "chu": "blend tree",
+      "doc": "/blend triː/",
+      "nghia": "cây pha trộn: trộn mượt nhiều hoạt ảnh theo một giá trị (tốc độ đi → chạy)",
+      "nhom": "Animation và giao diện",
+      "viDu": "A blend tree mixes walk and run by speed.",
+      "viDuNghia": "Cây pha trộn trộn đi và chạy theo tốc độ."
+    },
+    {
+      "chu": "UI Canvas",
+      "doc": "/ˌjuː ˈaɪ ˈkænvəs/",
+      "nghia": "Canvas: vùng chứa mọi phần tử giao diện (nút, chữ, ảnh) của Unity UI",
+      "nhom": "Animation và giao diện",
+      "viDu": "User Interface Design: Buttons, Text, and Images.",
+      "viDuNghia": "Thiết kế giao diện: nút, chữ và ảnh."
+    },
+    {
+      "chu": "Rect Transform",
+      "doc": "/rekt ˈtrænsfɔːrm/",
+      "nghia": "Transform của phần tử UI: vị trí, kích thước, neo theo khung Canvas",
+      "nhom": "Animation và giao diện",
+      "viDu": "Anchor the score text to the top-left with the Rect Transform.",
+      "viDuNghia": "Neo chữ điểm số vào góc trên trái bằng Rect Transform."
+    },
+    {
+      "chu": "TextMeshPro",
+      "doc": "/tekst meʃ proʊ/",
+      "nghia": "hệ hiển thị chữ sắc nét của Unity (TMP_Text)",
+      "nhom": "Animation và giao diện",
+      "viDu": "scoreText.text = \"Score: \" + score;",
+      "viDuNghia": "Cập nhật chữ điểm số bằng TextMeshPro."
+    },
+    {
+      "chu": "EventSystem",
+      "doc": "/ɪˈvent ˈsɪstəm/",
+      "nghia": "đối tượng xử lý sự kiện UI (nhấp, chạm); thiếu nó nút không bấm được",
+      "nhom": "Animation và giao diện",
+      "viDu": "The button does nothing because the scene has no EventSystem.",
+      "viDuNghia": "Nút không phản hồi vì scene thiếu EventSystem."
+    },
+    {
+      "chu": "scoring system",
+      "doc": "/ˈskɔːrɪŋ ˈsɪstəm/",
+      "nghia": "hệ tính điểm: cộng điểm, lưu điểm cao, hiện lên UI",
+      "nhom": "Animation và giao diện",
+      "viDu": "Game Logic and Scoring Systems.",
+      "viDuNghia": "Logic game và hệ tính điểm."
+    },
+    {
+      "chu": "game loop",
+      "doc": "/ɡeɪm luːp/",
+      "nghia": "vòng lặp game: mỗi khung hình đọc đầu vào → cập nhật → vẽ",
+      "nhom": "Animation và giao diện",
+      "viDu": "Update() is called once per frame by the game loop.",
+      "viDuNghia": "Vòng lặp game gọi Update() mỗi khung hình."
+    },
+    {
+      "chu": "particle system",
+      "doc": "/ˈpɑːrtɪkl ˈsɪstəm/",
+      "nghia": "hệ hạt: hiệu ứng khói, lửa, nổ từ nhiều hạt nhỏ",
+      "nhom": "Animation và giao diện",
+      "viDu": "Play the explosion particle system when the enemy dies.",
+      "viDuNghia": "Phát hiệu ứng nổ khi kẻ địch chết."
+    },
+    {
+      "chu": "Audio Source",
+      "doc": "/ˈɔːdioʊ sɔːrs/",
+      "nghia": "component phát âm thanh (AudioClip)",
+      "nhom": "Animation và giao diện",
+      "viDu": "audioSource.PlayOneShot(jumpSound);",
+      "viDuNghia": "Phát âm thanh nhảy một lần."
+    }
+  ]
+}

@@ -1,0 +1,642 @@
+{
+  "ma": "sdn302-2",
+  "nn": "en",
+  "ten": "SDN302 · 2. Express, REST & bảo mật API",
+  "moTa": "Bổ sung SDN302: đối tượng req/res và Router của Express, Express Generator, view engine, ràng buộc REST, mã trạng thái hay gặp trong đề PE, xác thực bằng Passport/JWT/OAuth, CORS, CSRF, băm mật khẩu và các lỗi bảo mật web.",
+  "bieuTuong": "point.3.connected.trianglepath.dotted",
+  "thuTu": -911,
+  "tu": [
+    {
+      "chu": "Express Generator",
+      "doc": "/ɪkˈspres ˈdʒenəreɪtər/",
+      "nghia": "công cụ express-generator: sinh sẵn khung dự án Express (bin/www, routes/, views/, public/)",
+      "nhom": "Ứng dụng Express",
+      "viDu": "Which statements correctly describe the purpose of Express Generator?",
+      "viDuNghia": "Phát biểu nào mô tả đúng mục đích của Express Generator?"
+    },
+    {
+      "chu": "app.use",
+      "doc": "/æp juːz/",
+      "nghia": "app.use(): gắn middleware hoặc router vào ứng dụng, áp cho mọi request khớp tiền tố",
+      "nhom": "Ứng dụng Express",
+      "viDu": "app.use(morgan('dev'));",
+      "viDuNghia": "Gắn middleware morgan chế độ dev cho mọi request."
+    },
+    {
+      "chu": "app.listen",
+      "doc": "/æp ˈlɪsn/",
+      "nghia": "app.listen(port): mở cổng và bắt đầu nhận request",
+      "nhom": "Ứng dụng Express",
+      "viDu": "The app.listen(3000, () => { ... }) statement starts the server.",
+      "viDuNghia": "Câu lệnh app.listen(3000, ...) khởi động server."
+    },
+    {
+      "chu": "request object",
+      "doc": "/rɪˈkwest ˈɑːbdʒekt/",
+      "nghia": "đối tượng req: chứa dữ liệu yêu cầu gửi lên (req.params, req.query, req.body, req.headers)",
+      "nhom": "Ứng dụng Express",
+      "viDu": "Read the movie id from req.params and the filter from req.query.",
+      "viDuNghia": "Đọc id phim từ req.params và bộ lọc từ req.query."
+    },
+    {
+      "chu": "response object",
+      "doc": "/rɪˈspɑːns ˈɑːbdʒekt/",
+      "nghia": "đối tượng res: dùng để trả kết quả (res.status, res.json, res.send, res.render)",
+      "nhom": "Ứng dụng Express",
+      "viDu": "res.status(404).json({ message: 'Class not found' })",
+      "viDuNghia": "Trả mã 404 kèm JSON báo không tìm thấy lớp."
+    },
+    {
+      "chu": "next function",
+      "doc": "/nekst ˈfʌŋkʃn/",
+      "nghia": "hàm next(): chuyển request sang middleware kế tiếp; next(err) nhảy tới middleware xử lý lỗi",
+      "nhom": "Ứng dụng Express",
+      "viDu": "Call next() to pass control to the next middleware.",
+      "viDuNghia": "Gọi next() để chuyển quyền xử lý cho middleware kế tiếp."
+    },
+    {
+      "chu": "middleware pipeline",
+      "doc": "/ˈmɪdlwer ˈpaɪplaɪn/",
+      "nghia": "chuỗi middleware: request đi qua lần lượt từng middleware theo thứ tự app.use",
+      "nhom": "Ứng dụng Express",
+      "viDu": "Express provides a routing system and middleware pipeline to streamline request processing.",
+      "viDuNghia": "Express cung cấp hệ định tuyến và chuỗi middleware để xử lý request gọn gàng."
+    },
+    {
+      "chu": "incoming request",
+      "doc": "/ˈɪnkʌmɪŋ rɪˈkwest/",
+      "nghia": "request gửi đến server từ client",
+      "nhom": "Ứng dụng Express",
+      "viDu": "The middleware logs every incoming request.",
+      "viDuNghia": "Middleware ghi log mọi request gửi đến."
+    },
+    {
+      "chu": "body-parser",
+      "doc": "/ˈbɑːdi ˈpɑːrsər/",
+      "nghia": "middleware đọc thân request (JSON, form) vào req.body; nay có sẵn express.json()",
+      "nhom": "Ứng dụng Express",
+      "viDu": "Using the built-in body-parser module.",
+      "viDuNghia": "Dùng module body-parser có sẵn."
+    },
+    {
+      "chu": "cookie-parser",
+      "doc": "/ˈkʊki ˈpɑːrsər/",
+      "nghia": "middleware đọc cookie của request vào req.cookies",
+      "nhom": "Ứng dụng Express",
+      "viDu": "Cookies are parsed in an Express server using the cookie-parser middleware.",
+      "viDuNghia": "Cookie được đọc trong server Express bằng middleware cookie-parser."
+    },
+    {
+      "chu": "morgan",
+      "doc": "/ˈmɔːrɡən/",
+      "nghia": "middleware morgan ghi log mỗi request (phương thức, đường dẫn, mã trạng thái, thời gian)",
+      "nhom": "Ứng dụng Express",
+      "viDu": "app.use(morgan('dev'));",
+      "viDuNghia": "Gắn morgan để ghi log request ở chế độ dev."
+    },
+    {
+      "chu": "view engine",
+      "doc": "/vjuː ˈendʒɪn/",
+      "nghia": "bộ dựng giao diện phía server (EJS, Pug, Handlebars): ghép dữ liệu vào mẫu rồi trả HTML",
+      "nhom": "Ứng dụng Express",
+      "viDu": "app.set('view engine', 'ejs') makes res.render use EJS templates.",
+      "viDuNghia": "app.set('view engine', 'ejs') cho res.render dùng mẫu EJS."
+    },
+    {
+      "chu": "Pug",
+      "doc": "/pʌɡ/",
+      "nghia": "Pug: template engine viết HTML bằng thụt lề, không cần thẻ đóng",
+      "nhom": "Ứng dụng Express",
+      "viDu": "Client application for pen management (EJS/Handlebars/Pug + Express).",
+      "viDuNghia": "Ứng dụng client quản lý bút (EJS/Handlebars/Pug + Express)."
+    },
+    {
+      "chu": "res.render",
+      "doc": "/res ˈrendər/",
+      "nghia": "phương thức dựng một view với dữ liệu rồi gửi HTML về trình duyệt",
+      "nhom": "Ứng dụng Express",
+      "viDu": "res.render('foods', { foods }) displays the list of foods.",
+      "viDuNghia": "res.render('foods', { foods }) hiển thị danh sách món ăn."
+    },
+    {
+      "chu": "try-catch block",
+      "doc": "/ˌtraɪ ˈkætʃ blɑːk/",
+      "nghia": "khối try-catch: bắt lỗi khi await thao tác cơ sở dữ liệu để trả 500 thay vì sập server",
+      "nhom": "Ứng dụng Express",
+      "viDu": "How do you handle errors in async route handlers? Using a try-catch block.",
+      "viDuNghia": "Xử lý lỗi trong route async thế nào? Dùng khối try-catch."
+    },
+    {
+      "chu": "error event listener",
+      "doc": "/ˈerər ɪˈvent ˈlɪsənər/",
+      "nghia": "hàm lắng nghe sự kiện 'error' của EventEmitter; thiếu nó, lỗi sẽ làm sập tiến trình",
+      "nhom": "Ứng dụng Express",
+      "viDu": "Attaching an error event listener to EventEmitter instances.",
+      "viDuNghia": "Gắn hàm lắng nghe sự kiện lỗi cho các đối tượng EventEmitter."
+    },
+    {
+      "chu": "express.json",
+      "doc": "/ɪkˈspres ˈdʒeɪsən/",
+      "nghia": "middleware có sẵn của Express đọc thân request JSON vào req.body",
+      "nhom": "Ứng dụng Express",
+      "viDu": "Without app.use(express.json()), req.body is undefined.",
+      "viDuNghia": "Thiếu app.use(express.json()) thì req.body là undefined."
+    },
+    {
+      "chu": "express.static",
+      "doc": "/ɪkˈspres ˈstætɪk/",
+      "nghia": "middleware phục vụ tệp tĩnh (ảnh, CSS, JS) từ một thư mục, vd public/",
+      "nhom": "Ứng dụng Express",
+      "viDu": "app.use(express.static('public')) serves the images.",
+      "viDuNghia": "app.use(express.static('public')) phục vụ các ảnh."
+    },
+    {
+      "chu": "route path",
+      "doc": "/ruːt pæθ/",
+      "nghia": "đường dẫn route: phần URL mà route khớp, có thể chứa tham số như /api/showtimes/:showtimeId/seats",
+      "nhom": "Ứng dụng Express",
+      "viDu": "Endpoint: GET /api/showtimes/:showtimeId/seats.",
+      "viDuNghia": "Endpoint: GET /api/showtimes/:showtimeId/seats."
+    },
+    {
+      "chu": "global error handler",
+      "doc": "/ˈɡloʊbl ˈerər ˈhændlər/",
+      "nghia": "middleware lỗi chung (err, req, res, next) đặt cuối cùng, trả một định dạng lỗi thống nhất",
+      "nhom": "Ứng dụng Express",
+      "viDu": "Put the global error handler after all routes.",
+      "viDuNghia": "Đặt middleware lỗi chung sau mọi route."
+    },
+    {
+      "chu": "404 handler",
+      "doc": "/ˌfɔːr oʊ ˈfɔːr ˈhændlər/",
+      "nghia": "middleware cuối cùng trả 404 khi không route nào khớp",
+      "nhom": "Ứng dụng Express",
+      "viDu": "A 404 handler catches requests that match no route.",
+      "viDuNghia": "Middleware 404 bắt các request không khớp route nào."
+    },
+    {
+      "chu": "statelessness",
+      "doc": "/ˈsteɪtləsnəs/",
+      "nghia": "tính phi trạng thái: mỗi request tự mang đủ thông tin, server không nhớ phiên của client",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "Statelessness: Each request from a client to server must contain all the information needed to process it.",
+      "viDuNghia": "Phi trạng thái: mỗi request từ client phải chứa đủ thông tin để xử lý."
+    },
+    {
+      "chu": "cacheability",
+      "doc": "/ˌkæʃəˈbɪləti/",
+      "nghia": "khả năng lưu đệm: phản hồi phải tự khai có được cache hay không",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "Cacheability: Responses must define themselves as cacheable or not.",
+      "viDuNghia": "Khả năng lưu đệm: phản hồi phải tự khai có được cache hay không."
+    },
+    {
+      "chu": "uniform interface",
+      "doc": "/ˈjuːnɪfɔːrm ˈɪntərfeɪs/",
+      "nghia": "giao diện thống nhất: tài nguyên định danh bằng URI, thao tác bằng phương thức HTTP chuẩn",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "Uniform Interface: The interface between client and server must be uniform and consistent.",
+      "viDuNghia": "Giao diện thống nhất: giao diện giữa client và server phải đồng nhất."
+    },
+    {
+      "chu": "client-server architecture",
+      "doc": "/ˈklaɪənt ˈsɜːrvər ˈɑːrkɪtektʃər/",
+      "nghia": "kiến trúc client–server: tách giao diện người dùng khỏi phần lưu trữ, xử lý dữ liệu",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "REST separates concerns using a client-server architecture.",
+      "viDuNghia": "REST tách trách nhiệm bằng kiến trúc client–server."
+    },
+    {
+      "chu": "partial update",
+      "doc": "/ˈpɑːrʃl ˈʌpdeɪt/",
+      "nghia": "cập nhật một phần: chỉ gửi các trường cần đổi (PATCH)",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "PATCH is used for a partial update of a resource.",
+      "viDuNghia": "PATCH dùng để cập nhật một phần tài nguyên."
+    },
+    {
+      "chu": "full replacement",
+      "doc": "/fʊl rɪˈpleɪsmənt/",
+      "nghia": "thay toàn bộ: gửi đủ đối tượng mới để ghi đè tài nguyên cũ (PUT)",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "PUT performs a full replacement of the resource.",
+      "viDuNghia": "PUT thay toàn bộ tài nguyên."
+    },
+    {
+      "chu": "safe method",
+      "doc": "/seɪf ˈmeθəd/",
+      "nghia": "phương thức an toàn: không làm đổi dữ liệu trên server (GET, HEAD)",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "GET is a safe method because it only reads data.",
+      "viDuNghia": "GET là phương thức an toàn vì chỉ đọc dữ liệu."
+    },
+    {
+      "chu": "Conflict status",
+      "doc": "/ˈkɑːnflɪkt ˈsteɪtəs/",
+      "nghia": "mã 409 Conflict: yêu cầu xung đột trạng thái hiện có (trùng, ghế đã đặt)",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "Return 409 if any requested seat is already booked.",
+      "viDuNghia": "Trả 409 nếu có ghế được yêu cầu đã bị đặt."
+    },
+    {
+      "chu": "No Content",
+      "doc": "/noʊ ˈkɑːntent/",
+      "nghia": "mã 204 No Content: thành công nhưng không có thân phản hồi (hay dùng sau DELETE)",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "A successful DELETE can return 204 No Content.",
+      "viDuNghia": "DELETE thành công có thể trả 204 No Content."
+    },
+    {
+      "chu": "Unprocessable Entity",
+      "doc": "/ʌnˈprɑːsesəbl ˈentəti/",
+      "nghia": "mã 422: dữ liệu đúng cú pháp nhưng sai quy tắc nghiệp vụ",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "Some APIs return 422 Unprocessable Entity for validation errors.",
+      "viDuNghia": "Một số API trả 422 cho lỗi kiểm tra dữ liệu."
+    },
+    {
+      "chu": "Too Many Requests",
+      "doc": "/tuː ˈmeni rɪˈkwests/",
+      "nghia": "mã 429: client gửi quá nhiều request, bị giới hạn tần suất",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "The rate limiter responds with 429 Too Many Requests.",
+      "viDuNghia": "Bộ giới hạn tần suất trả 429 Too Many Requests."
+    },
+    {
+      "chu": "Content-Type header",
+      "doc": "/ˈkɑːntent taɪp ˈhedər/",
+      "nghia": "header Content-Type khai kiểu dữ liệu gửi đi, vd application/json",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "POST with Content-Type: application/json.",
+      "viDuNghia": "Gửi POST với Content-Type: application/json."
+    },
+    {
+      "chu": "newly created",
+      "doc": "/ˈnuːli kriˈeɪtɪd/",
+      "nghia": "vừa được tạo: đề thường yêu cầu trả về bản ghi mới tạo kèm mã 201",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "Output: the newly created order's details.",
+      "viDuNghia": "Đầu ra: chi tiết đơn hàng vừa được tạo."
+    },
+    {
+      "chu": "validation error",
+      "doc": "/ˌvælɪˈdeɪʃn ˈerər/",
+      "nghia": "lỗi kiểm tra dữ liệu: dữ liệu gửi lên thiếu hoặc sai định dạng, thường trả 400",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "Business rules: validate classId (400); 404 if class not found.",
+      "viDuNghia": "Quy tắc nghiệp vụ: kiểm tra classId (400); 404 nếu không tìm thấy lớp."
+    },
+    {
+      "chu": "API gateway",
+      "doc": "/ˌeɪ piː ˈaɪ ˈɡeɪtweɪ/",
+      "nghia": "cổng API: điểm vào duy nhất đứng trước nhiều service, lo định tuyến, xác thực, giới hạn tần suất",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "An API Gateway can handle authentication and authorization.",
+      "viDuNghia": "API Gateway có thể lo việc xác thực và phân quyền."
+    },
+    {
+      "chu": "rate limiting",
+      "doc": "/reɪt ˈlɪmɪtɪŋ/",
+      "nghia": "giới hạn tần suất: chặn client gửi quá nhiều request trong một khoảng thời gian",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "An API Gateway can apply rate limiting to API requests.",
+      "viDuNghia": "API Gateway có thể giới hạn tần suất các request API."
+    },
+    {
+      "chu": "load balancer",
+      "doc": "/loʊd ˈbælənsər/",
+      "nghia": "bộ cân bằng tải: chia lưu lượng mạng cho nhiều server",
+      "nhom": "Ràng buộc REST và mã trạng thái",
+      "viDu": "A load balancer distributes network traffic across multiple servers.",
+      "viDuNghia": "Bộ cân bằng tải phân phối lưu lượng mạng cho nhiều server."
+    },
+    {
+      "chu": "Passport.js",
+      "doc": "/ˈpæspɔːrt ˌdʒeɪ ˈes/",
+      "nghia": "Passport: middleware xác thực cho Express, mỗi cách đăng nhập là một strategy",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Passport.js is used for session-based authentication, while JWT is for token-based authentication.",
+      "viDuNghia": "Passport.js dùng cho xác thực theo phiên, còn JWT cho xác thực theo token."
+    },
+    {
+      "chu": "Passport strategy",
+      "doc": "/ˈpæspɔːrt ˈstrætədʒi/",
+      "nghia": "strategy của Passport: một cơ chế đăng nhập cụ thể (local, jwt, facebook-token)",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Which of the following is required to configure the passport-facebook-token strategy?",
+      "viDuNghia": "Yếu tố nào cần để cấu hình strategy passport-facebook-token?"
+    },
+    {
+      "chu": "local strategy",
+      "doc": "/ˈloʊkl ˈstrætədʒi/",
+      "nghia": "strategy đăng nhập bằng tên người dùng và mật khẩu lưu ở chính hệ thống",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "The local strategy checks the username and password against the database.",
+      "viDuNghia": "Strategy local kiểm tên đăng nhập và mật khẩu với cơ sở dữ liệu."
+    },
+    {
+      "chu": "serializeUser",
+      "doc": "/ˈsɪriəlaɪz ˈjuːzər/",
+      "nghia": "passport.serializeUser(): chọn dữ liệu (thường là id) lưu vào session sau khi đăng nhập",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "passport.serializeUser()",
+      "viDuNghia": "passport.serializeUser() lưu id người dùng vào session."
+    },
+    {
+      "chu": "session-based authentication",
+      "doc": "/ˈseʃn beɪst ɔːˌθentɪˈkeɪʃn/",
+      "nghia": "xác thực theo phiên: server lưu phiên, trình duyệt giữ mã phiên trong cookie",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Passport.js is used for session-based authentication.",
+      "viDuNghia": "Passport.js dùng cho xác thực theo phiên."
+    },
+    {
+      "chu": "token-based authentication",
+      "doc": "/ˈtoʊkən beɪst ɔːˌθentɪˈkeɪʃn/",
+      "nghia": "xác thực theo token: client gửi token (JWT) ở mỗi request, server không lưu phiên",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "JWT is for token-based authentication.",
+      "viDuNghia": "JWT dùng cho xác thực theo token."
+    },
+    {
+      "chu": "JWT secret",
+      "doc": "/ˌdʒeɪ ˌdʌbljuː ˈtiː ˈsiːkrət/",
+      "nghia": "khoá bí mật dùng để ký và kiểm chữ ký JWT; để trong biến môi trường, không ghi vào mã",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Sign the token with the JWT secret from process.env.",
+      "viDuNghia": "Ký token bằng khoá bí mật JWT lấy từ process.env."
+    },
+    {
+      "chu": "jwt.sign",
+      "doc": "/ˌdʒeɪ ˌdʌbljuː ˈtiː saɪn/",
+      "nghia": "hàm của thư viện jsonwebtoken tạo token từ payload, khoá bí mật và thời hạn (expiresIn)",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "jwt.sign({ id: user._id, role }, secret, { expiresIn: '1h' })",
+      "viDuNghia": "Tạo token chứa id và vai trò, hết hạn sau 1 giờ."
+    },
+    {
+      "chu": "jwt.verify",
+      "doc": "/ˌdʒeɪ ˌdʌbljuː ˈtiː ˈverɪfaɪ/",
+      "nghia": "hàm kiểm chữ ký và hạn của token; sai hoặc hết hạn thì ném lỗi",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "If jwt.verify throws an error, return 401 Unauthorized.",
+      "viDuNghia": "Nếu jwt.verify ném lỗi thì trả 401 Unauthorized."
+    },
+    {
+      "chu": "Authorization header",
+      "doc": "/ˌɔːθərəˈzeɪʃn ˈhedər/",
+      "nghia": "header Authorization mang thông tin xác thực, vd Authorization: Bearer <token>",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Which HTTP header is used to pass the OAuth token in requests?",
+      "viDuNghia": "Header HTTP nào dùng để truyền token OAuth trong request?"
+    },
+    {
+      "chu": "client ID",
+      "doc": "/ˈklaɪənt ˌaɪ ˈdiː/",
+      "nghia": "mã định danh ứng dụng khi đăng ký với nhà cung cấp OAuth (Facebook, Google)",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Client ID and client secret.",
+      "viDuNghia": "Client ID và client secret."
+    },
+    {
+      "chu": "client secret",
+      "doc": "/ˈklaɪənt ˈsiːkrət/",
+      "nghia": "khoá bí mật của ứng dụng đi kèm client ID, chỉ giữ ở server",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Client ID and client secret are required to configure the strategy.",
+      "viDuNghia": "Cần client ID và client secret để cấu hình strategy."
+    },
+    {
+      "chu": "role-based authorization",
+      "doc": "/ˈroʊl beɪst ˌɔːθərəˈzeɪʃn/",
+      "nghia": "phân quyền theo vai trò: chỉ vai trò được phép (admin, customer) mới gọi được route",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "What is the purpose of role-based authorization?",
+      "viDuNghia": "Mục đích của phân quyền theo vai trò là gì?"
+    },
+    {
+      "chu": "express-session",
+      "doc": "/ɪkˈspres ˈseʃn/",
+      "nghia": "middleware quản lý phiên cho Express: lưu dữ liệu phiên, gửi mã phiên qua cookie",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "express-session stores the logged-in user between requests.",
+      "viDuNghia": "express-session lưu người dùng đã đăng nhập giữa các request."
+    },
+    {
+      "chu": "session store",
+      "doc": "/ˈseʃn stɔːr/",
+      "nghia": "nơi lưu dữ liệu phiên ở server (bộ nhớ, MongoDB, Redis)",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Use a MongoDB session store instead of memory in production.",
+      "viDuNghia": "Dùng kho phiên MongoDB thay bộ nhớ khi chạy thật."
+    },
+    {
+      "chu": "httpOnly cookie",
+      "doc": "/ˌeɪtʃ tiː tiː ˈpiː ˈoʊnli ˈkʊki/",
+      "nghia": "cookie gắn cờ HttpOnly: JavaScript trên trang không đọc được, giảm rủi ro bị XSS lấy cắp",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Store the token in an httpOnly cookie.",
+      "viDuNghia": "Lưu token trong cookie httpOnly."
+    },
+    {
+      "chu": "SameSite attribute",
+      "doc": "/ˈseɪm saɪt ˈætrɪbjuːt/",
+      "nghia": "thuộc tính SameSite của cookie (Strict, Lax, None): hạn chế gửi cookie từ trang khác, chống CSRF",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "The SameSite attribute helps protect against CSRF.",
+      "viDuNghia": "Thuộc tính SameSite giúp chống CSRF."
+    },
+    {
+      "chu": "token expiration",
+      "doc": "/ˈtoʊkən ˌekspəˈreɪʃn/",
+      "nghia": "thời hạn token (expiresIn): hết hạn thì server từ chối, phải đăng nhập hoặc làm mới",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "An expired token returns 401 and the user must sign in again.",
+      "viDuNghia": "Token hết hạn trả 401 và người dùng phải đăng nhập lại."
+    },
+    {
+      "chu": "identity provider",
+      "doc": "/aɪˈdentəti prəˈvaɪdər/",
+      "nghia": "nhà cung cấp danh tính (Google, Facebook) xác thực người dùng cho ứng dụng khác",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Google acts as the identity provider in social login.",
+      "viDuNghia": "Google đóng vai nhà cung cấp danh tính khi đăng nhập bằng mạng xã hội."
+    },
+    {
+      "chu": "social login",
+      "doc": "/ˈsoʊʃl ˈlɔːɡɪn/",
+      "nghia": "đăng nhập bằng tài khoản mạng xã hội qua OAuth",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Use passport-facebook-token for social login.",
+      "viDuNghia": "Dùng passport-facebook-token cho đăng nhập bằng Facebook."
+    },
+    {
+      "chu": "OpenID Connect",
+      "doc": "/ˈoʊpən aɪ diː kəˈnekt/",
+      "nghia": "OIDC: lớp xác thực xây trên OAuth 2.0, trả thêm ID token chứa thông tin người dùng",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "OpenID Connect adds an ID token on top of OAuth 2.0.",
+      "viDuNghia": "OpenID Connect thêm ID token trên nền OAuth 2.0."
+    },
+    {
+      "chu": "ownership check",
+      "doc": "/ˈoʊnərʃɪp tʃek/",
+      "nghia": "kiểm quyền sở hữu: người dùng chỉ được sửa/xoá dữ liệu của chính mình, sai thì 403",
+      "nhom": "Xác thực và phân quyền",
+      "viDu": "Return 403 if the ticket does not belong to the logged-in customer.",
+      "viDuNghia": "Trả 403 nếu vé không thuộc về khách hàng đang đăng nhập."
+    },
+    {
+      "chu": "Cross-Site Request Forgery",
+      "doc": "/ˈkrɔːs saɪt rɪˈkwest ˈfɔːrdʒəri/",
+      "nghia": "CSRF: giả mạo request liên trang — trang độc lừa trình duyệt gửi request kèm cookie của nạn nhân",
+      "nhom": "Bảo mật web",
+      "viDu": "To prevent Cross-Site Request Forgery (CSRF) attacks.",
+      "viDuNghia": "Để ngăn tấn công giả mạo request liên trang (CSRF)."
+    },
+    {
+      "chu": "anti-forgery token",
+      "doc": "/ˌænti ˈfɔːrdʒəri ˈtoʊkən/",
+      "nghia": "token chống giả mạo (CSRF token): mã ngẫu nhiên nhúng trong form, server kiểm trước khi xử lý",
+      "nhom": "Bảo mật web",
+      "viDu": "To validate that the anti-forgery token is present and valid in a form submission.",
+      "viDuNghia": "Để kiểm token chống giả mạo có mặt và hợp lệ trong form gửi lên."
+    },
+    {
+      "chu": "NoSQL injection",
+      "doc": "/ˌnoʊ ˌes kjuː ˈel ɪnˈdʒekʃn/",
+      "nghia": "tiêm NoSQL: gửi toán tử như {\"$ne\": null} vào truy vấn để vượt kiểm tra đăng nhập",
+      "nhom": "Bảo mật web",
+      "viDu": "Validate input types to prevent NoSQL injection.",
+      "viDuNghia": "Kiểm kiểu dữ liệu đầu vào để chặn tiêm NoSQL."
+    },
+    {
+      "chu": "HTTPS",
+      "doc": "/ˌeɪtʃ tiː tiː piː ˈes/",
+      "nghia": "HTTP chạy trên TLS: mã hoá đường truyền và xác thực server bằng chứng chỉ",
+      "nhom": "Bảo mật web",
+      "viDu": "HTTPS uses SSL/TLS certificates to authenticate the server.",
+      "viDuNghia": "HTTPS dùng chứng chỉ SSL/TLS để xác thực server."
+    },
+    {
+      "chu": "transmit sensitive data",
+      "doc": "/trænzˈmɪt ˈsensətɪv ˈdeɪtə/",
+      "nghia": "truyền dữ liệu nhạy cảm (mật khẩu, thẻ) — phải qua kênh mã hoá",
+      "nhom": "Bảo mật web",
+      "viDu": "Providing secure communication when transmitting sensitive data between client and server.",
+      "viDuNghia": "Bảo mật đường truyền khi truyền dữ liệu nhạy cảm giữa client và server."
+    },
+    {
+      "chu": "Access-Control-Allow-Origin",
+      "doc": "/ˈækses kənˈtroʊl əˈlaʊ ˈɔːrɪdʒɪn/",
+      "nghia": "header CORS cho biết nguồn (origin) nào được phép đọc phản hồi",
+      "nhom": "Bảo mật web",
+      "viDu": "Which header does the CORS middleware set? Access-Control-Allow-Origin.",
+      "viDuNghia": "Middleware CORS đặt header nào? Access-Control-Allow-Origin."
+    },
+    {
+      "chu": "Access-Control-Allow-Methods",
+      "doc": "/ˈækses kənˈtroʊl əˈlaʊ ˈmeθədz/",
+      "nghia": "header CORS liệt kê các phương thức HTTP được phép gọi từ nguồn khác",
+      "nhom": "Bảo mật web",
+      "viDu": "Access-Control-Allow-Methods lists GET, POST, PUT and DELETE.",
+      "viDuNghia": "Header này liệt kê GET, POST, PUT và DELETE."
+    },
+    {
+      "chu": "Helmet",
+      "doc": "/ˈhelmɪt/",
+      "nghia": "middleware helmet: tự đặt các header bảo mật HTTP cho ứng dụng Express",
+      "nhom": "Bảo mật web",
+      "viDu": "app.use(helmet()) adds secure HTTP headers.",
+      "viDuNghia": "app.use(helmet()) thêm các header HTTP bảo mật."
+    },
+    {
+      "chu": "express-validator",
+      "doc": "/ɪkˈspres ˈvælɪdeɪtər/",
+      "nghia": "thư viện middleware kiểm và làm sạch dữ liệu request (body('email').isEmail())",
+      "nhom": "Bảo mật web",
+      "viDu": "Use express-validator to reject an invalid email with 400.",
+      "viDuNghia": "Dùng express-validator để từ chối email sai với mã 400."
+    },
+    {
+      "chu": "input sanitization",
+      "doc": "/ˈɪnpʊt ˌsænɪtəˈzeɪʃn/",
+      "nghia": "làm sạch đầu vào: bỏ hoặc thoát ký tự nguy hiểm trước khi lưu/hiển thị",
+      "nhom": "Bảo mật web",
+      "viDu": "Input sanitization removes $ operators from the request body.",
+      "viDuNghia": "Làm sạch đầu vào bỏ các toán tử $ khỏi thân request."
+    },
+    {
+      "chu": "same-origin policy",
+      "doc": "/seɪm ˈɔːrɪdʒɪn ˈpɑːləsi/",
+      "nghia": "chính sách cùng nguồn: trình duyệt chặn trang đọc phản hồi từ nguồn khác; CORS nới lỏng có kiểm soát",
+      "nhom": "Bảo mật web",
+      "viDu": "CORS relaxes the browser's same-origin policy.",
+      "viDuNghia": "CORS nới lỏng chính sách cùng nguồn của trình duyệt."
+    },
+    {
+      "chu": "CORS middleware",
+      "doc": "/kɔːrz ˈmɪdlwer/",
+      "nghia": "middleware cors của Express: đặt các header Access-Control-* cho phép frontend nguồn khác gọi API",
+      "nhom": "Bảo mật web",
+      "viDu": "Sets CORS headers.",
+      "viDuNghia": "Đặt các header CORS."
+    },
+    {
+      "chu": "brute-force attack",
+      "doc": "/ˌbruːt ˈfɔːrs əˈtæk/",
+      "nghia": "tấn công vét cạn: thử liên tục nhiều mật khẩu tới khi đúng",
+      "nhom": "Bảo mật web",
+      "viDu": "Rate limiting on /login slows down a brute-force attack.",
+      "viDuNghia": "Giới hạn tần suất ở /login làm chậm tấn công vét cạn."
+    },
+    {
+      "chu": "Transport Layer Security",
+      "doc": "/ˈtrænspɔːrt ˈleɪər sɪˈkjʊrəti/",
+      "nghia": "TLS: giao thức mã hoá kết nối, thay thế SSL; nền của HTTPS",
+      "nhom": "Bảo mật web",
+      "viDu": "HTTPS is HTTP over Transport Layer Security.",
+      "viDuNghia": "HTTPS là HTTP chạy trên TLS."
+    },
+    {
+      "chu": "precomputed lookup table",
+      "doc": "/ˌpriːkəmˈpjuːtɪd ˈlʊkʌp ˈteɪbl/",
+      "nghia": "bảng tra tính sẵn (rainbow table): bảng băm của mật khẩu phổ biến để dò ngược",
+      "nhom": "Bảo mật web",
+      "viDu": "Salt makes it more difficult for attackers to use precomputed lookup tables to crack the hashed password.",
+      "viDuNghia": "Salt khiến kẻ tấn công khó dùng bảng tra tính sẵn để bẻ mật khẩu đã băm."
+    },
+    {
+      "chu": "hashed password",
+      "doc": "/hæʃt ˈpæswɜːrd/",
+      "nghia": "mật khẩu đã băm: chuỗi băm một chiều lưu thay mật khẩu gốc",
+      "nhom": "Bảo mật web",
+      "viDu": "The seed data's password field is already bcrypt-hashed, so bcrypt.compare() is required.",
+      "viDuNghia": "Trường mật khẩu trong dữ liệu mẫu đã băm bcrypt nên phải dùng bcrypt.compare()."
+    },
+    {
+      "chu": "bcrypt.compare",
+      "doc": "/ˈbiːkrɪpt kəmˈper/",
+      "nghia": "hàm so mật khẩu người dùng nhập với chuỗi băm đã lưu, trả true/false",
+      "nhom": "Bảo mật web",
+      "viDu": "Use bcrypt.compare() to check the password at login.",
+      "viDuNghia": "Dùng bcrypt.compare() để kiểm mật khẩu lúc đăng nhập."
+    },
+    {
+      "chu": "crack a password",
+      "doc": "/kræk ə ˈpæswɜːrd/",
+      "nghia": "bẻ mật khẩu: dò ra mật khẩu gốc từ chuỗi băm",
+      "nhom": "Bảo mật web",
+      "viDu": "Attackers try to crack the hashed password with lookup tables.",
+      "viDuNghia": "Kẻ tấn công cố bẻ mật khẩu đã băm bằng bảng tra."
+    },
+    {
+      "chu": "security measure",
+      "doc": "/sɪˈkjʊrəti ˈmeʒər/",
+      "nghia": "biện pháp bảo mật",
+      "nhom": "Bảo mật web",
+      "viDu": "Which security measure requires users to provide two forms of identification?",
+      "viDuNghia": "Biện pháp bảo mật nào yêu cầu người dùng xuất trình hai yếu tố định danh?"
+    }
+  ]
+}

@@ -4,7 +4,7 @@
  "ten": "DBI202 · 1. Mô hình dữ liệu, ER, chuẩn hoá",
  "moTa": "Môn Database Systems (DBI202), bộ 1: khái niệm CSDL, mô hình ER, mô hình quan hệ và khoá, đại số quan hệ, phụ thuộc hàm, chuẩn hoá. Từ lấy từ đề FE/PE thật của môn; câu ví dụ phần lớn là câu hỏi thật trong đề.",
  "bieuTuong": "cylinder.split.1x2.fill",
- "thuTu": -966,
+ "thuTu": -949,
  "tu": [
   {
    "chu": "database management system",

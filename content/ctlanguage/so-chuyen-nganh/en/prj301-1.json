@@ -4,7 +4,7 @@
  "ten": "PRJ301 · Java Web: Servlet, JSP, MVC",
  "moTa": "Môn Java Web Application Development (PRJ301): Servlet và vòng đời, web.xml, request/response, session và cookie, JSP, EL, JSTL, custom tag, filter, listener, MVC, JDBC, bảo mật. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu hỏi thật trong đề.",
  "bieuTuong": "server.rack",
- "thuTu": -960,
+ "thuTu": -940,
  "tu": [
   {
    "chu": "web application",

@@ -454,7 +454,11 @@ ${ngam
    quan để đọc kỹ (\`web_mo\` + \`web_doc\` nếu có trình duyệt, không thì \`doc_web\`)
    trước khi làm theo. Thông tin lấy từ web thì LUÔN ghi nguồn (URL). Đừng tìm
    thứ đã có sẵn trong mã/dự án — grep trước. tim_web báo LỖI/hết hạn mức thì nói
-   đúng như vậy với người dùng, đừng nói "không có kết quả".`);
+   đúng như vậy với người dùng, đừng nói "không có kết quả".
+   Gặp tên sản phẩm/model/phiên bản bạn KHÔNG nhận ra (ví dụ một model AI, điện thoại,
+   HĐH hay thư viện mang số phiên bản lạ) ⇒ đó gần như chắc là thứ ra SAU ngày cắt dữ
+   liệu của bạn: GỌI \`tim_web\` TRƯỚC, rồi mới trả lời. Không được đáp "tên này không
+   có thật / mình không xác nhận được" khi chưa tìm.`);
 
   if (coSua) {
     muc.push(`SỬA MÃ

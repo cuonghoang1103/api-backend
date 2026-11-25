@@ -106,3 +106,20 @@ test('KHÔNG bắt nhầm câu lập trình thường ngày', () => {
     assert.equal(canTimWeb(c).can, false, `KHÔNG được tra web: "${c}"`);
   }
 });
+
+test('tên model/sản phẩm kèm phiên bản + hỏi hoặc so sánh ⇒ tìm (25/11/2026)', () => {
+  for (const q of [
+    'so sánh cho mình giữa model carbon của gemini và opus5.5 của claude đi',
+    'Gemini 4 Carbon với Claude Opus 5.5 cái nào mạnh hơn',
+    'GPT-6 khác gì GPT-5.6',
+    'iPhone 18 có đáng mua không',
+  ]) assert.equal(canTimWeb(q).can, true, q);
+});
+
+test('tên sản phẩm có số nhưng KHÔNG hỏi/so sánh ⇒ không tìm', () => {
+  for (const q of [
+    'mình đã dùng claude 3 lần hôm qua rồi',
+    'viết hàm đổi windows 11 path sang posix',
+    'có gì mới ở Node 26 không',
+  ]) assert.equal(canTimWeb(q).can, false, q);
+});

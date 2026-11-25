@@ -38,6 +38,18 @@ const THEO_THOI_GIAN = [
 /** Năm từ 2026 trở đi — sau ngày cắt dữ liệu của phần lớn model. */
 const NAM_MOI = /\b20(2[6-9]|[3-9]\d)\b/;
 
+/**
+ * Tên model AI / sản phẩm công nghệ KÈM SỐ PHIÊN BẢN ("Opus 5.5", "opus5.5", "Gemini 4", "GPT-6", "iPhone 18").
+ * 25/11/2026: "so sánh cho mình giữa model carbon của gemini và opus5.5 của claude đi" KHÔNG tìm web (không có từ
+ * thời gian, không dấu hỏi) ⇒ mọi model (kể cả CuongMini Max) đáp "không biết tên này", trong khi claude.ai tìm web
+ * và trả lời được. Model mới ra SAU ngày cắt dữ liệu của chính model trả lời ⇒ không tìm thì chắc chắn không biết.
+ * Chỉ tên hãng/dòng sản phẩm hay đổi đời (không gồm thư viện lập trình như Node/React — "có gì mới ở Node 26 không"
+ * vẫn KHÔNG tìm, xem test). Phải đi kèm câu hỏi HOẶC ý so sánh/chọn — "dùng claude 3 lần" không tìm.
+ */
+const SP_PHIEN_BAN =
+  /(?<![\p{L}])(gemini|claude|opus|sonnet|haiku|fable|gpt|chatgpt|grok|llama|deepseek|qwen|mistral|copilot|iphone|ipad|galaxy|pixel|macos|ios|android|windows|rtx|rx)\s*-?\s*\d+(\.\d+)?/iu;
+const SO_SANH = /(?<![\p{L}])(so sánh|khác gì|khác nhau|nên dùng|nên chọn|nên mua|vs|versus|đánh giá|review|mạnh hơn|tốt hơn|rẻ hơn)(?![\p{L}])/iu;
+
 /** Có địa chỉ web trong câu hỏi ⇒ người dùng đang muốn nói về trang đó. */
 const CO_URL = /https?:\/\/\S+|\bwww\.\S+/i;
 
@@ -104,6 +116,11 @@ export function canTimWeb(cauHoi: string): QuyetDinh {
 
   if (NAM_MOI.test(q)) {
     return { can: true, cauTim: catCauTim(q), viSao: 'hỏi về năm sau ngày cắt dữ liệu' };
+  }
+
+  const sp = q.match(SP_PHIEN_BAN);
+  if (sp && (LA_CAU_HOI.test(thuong) || SO_SANH.test(thuong))) {
+    return { can: true, cauTim: catCauTim(q), viSao: `tên sản phẩm kèm phiên bản: "${sp[0]}"` };
   }
 
   const thoiGian = dau(THEO_THOI_GIAN);

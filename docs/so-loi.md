@@ -1194,3 +1194,10 @@ Mẫu một mục:
 - **Cách sửa:** in đường dẫn dưới `~/Videos/CuongThai-KhoaHoc/<tương đối>` thay vì `abspath`; chạy lại vòng 15:39 ⇒ tải được ngay. Không có r2Url hỏng nào bị ghi (len-r2 chỉ ghi khi tải xong).
 - **Ảnh hưởng:** ~75 phút vòng R2 chạy không; video lồng giọng lại chậm lên web tương ứng.
 - **Bài học:** công cụ nào suy ra tên/khoá từ đường dẫn tương đối thì phải đưa đường dẫn đi qua ĐÚNG gốc nó dùng — không `realpath`/`abspath` khi có symlink; và lượt đầu của vòng mới phải xem ≥1 tập "✓" trước khi bỏ đi.
+
+### 25/11/2026 — CuongMini đáp "không biết" model mới (Gemini 4 Carbon, Opus 5.5) ở mọi nền tảng
+- **Triệu chứng:** "so sánh cho mình giữa model carbon của gemini và opus5.5 của claude đi" ⇒ CuongMini Chat (web/desktop, cả Max) và CLI/extension đáp tên model không có thật; claude.ai tìm web và trả lời được.
+- **Nguyên nhân:** AI Chat chỉ tìm web khi `src/services/search/canTim.ts › canTimWeb` bắt dấu hiệu (nói thẳng / năm ≥2026 / URL / từ thời gian + câu hỏi) — câu không có dấu hiệu nào ⇒ không tìm; model ra sau ngày cắt dữ liệu thì model nào cũng không biết. CLI/extension có `tim_web` nhưng prompt (`src/services/agent/prompt.ts` mục TÌM WEB) không bắt buộc tìm khi gặp tên lạ ⇒ Haiku tự tin đáp "không xác nhận được".
+- **Cách sửa:** luật mới `SP_PHIEN_BAN` (tên model/sản phẩm hay đổi đời + số phiên bản, đi kèm câu hỏi hoặc ý so sánh) + 2 test; prompt agent: gặp tên sản phẩm/phiên bản lạ ⇒ gọi `tim_web` trước, cấm đáp "không có thật" khi chưa tìm.
+- **Ảnh hưởng:** người dùng nhận câu trả lời sai/thiếu cho mọi câu về sản phẩm mới mà không dùng từ "mới nhất".
+- **Bài học:** luật "thà bỏ sót" phải có ngoại lệ cho thứ CHẮC CHẮN sau ngày cắt dữ liệu (tên + số phiên bản lạ); thử bộ lọc bằng đúng câu người dùng gõ, không bằng câu mẫu.

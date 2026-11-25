@@ -25,6 +25,7 @@ import s13 from './linux-bash/s13-bash-nang-cao.mjs';
 import s14 from './linux-bash/s14-linux-chuyen-sau.mjs';
 import s15 from './linux-bash/s15-macos-windows.mjs';
 import s16 from './linux-bash/s16-du-an-cuoi-khoa.mjs';
+import s17 from './linux-bash/s17-phu-luc.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Rocket', sortOrder: 4 },
@@ -66,5 +67,6 @@ export default {
     s14,
     s15,
     s16,
+    s17,
   ],
 };

@@ -1,0 +1,72 @@
+# Chương 7 (cuongthai.com/courses/mongodb) — cụm SHARD thật: 1 config server, 2 shard (+1 shard thêm sau), 1 mongos.
+#   docker compose -p mgo-shard up -d --wait      # chạy; mỗi máy tự khởi tạo replica set một thành viên của nó
+#   docker exec -it mgo-mongos mongosh             # ứng dụng và bạn CHỈ nói chuyện với mongos
+#   docker compose -p mgo-shard --profile them up -d --wait s3   # thêm shard thứ ba (Bài 7.4)
+#   docker compose -p mgo-shard --profile them down -v           # dọn sạch
+# Cho gọn trên laptop: mỗi shard và config server là replica set MỘT thành viên. Máy thật: mỗi cái ba thành viên (Bài 7.1).
+x-mongod: &mongod
+  image: mongo:8.0
+  ulimits:
+    nofile: { soft: 64000, hard: 64000 }
+  mem_limit: 1g
+  networks: [shard]
+x-khoi-tao: &khoi-tao
+  # Lần đầu: rs.initiate một thành viên (tên máy = hostname của container); các lần sau chỉ kiểm.
+  test: ["CMD-SHELL", "mongosh --quiet --port $${CONG} --eval \"try { rs.status().ok } catch (e) { rs.initiate({ _id: '$${RS}', configsvr: $${CFG}, members: [{ _id: 0, host: '$${HOSTNAME}:$${CONG}' }] }).ok }\""]
+  interval: 5s
+  timeout: 10s
+  retries: 30
+services:
+  cfg:
+    <<: *mongod
+    container_name: mgo-cfg
+    hostname: cfg
+    environment: { RS: cfg, CONG: "27019", CFG: "true" }
+    command: ["mongod", "--configsvr", "--replSet", "cfg", "--port", "27019", "--bind_ip_all", "--wiredTigerCacheSizeGB", "0.25"]
+    volumes: [cfg:/data/configdb]
+    healthcheck: *khoi-tao
+  s1:
+    <<: *mongod
+    container_name: mgo-s1
+    hostname: s1
+    environment: { RS: sh1, CONG: "27018", CFG: "false" }
+    command: ["mongod", "--shardsvr", "--replSet", "sh1", "--port", "27018", "--bind_ip_all", "--wiredTigerCacheSizeGB", "0.25"]
+    volumes: [s1:/data/db]
+    healthcheck: *khoi-tao
+  s2:
+    <<: *mongod
+    container_name: mgo-s2
+    hostname: s2
+    environment: { RS: sh2, CONG: "27018", CFG: "false" }
+    command: ["mongod", "--shardsvr", "--replSet", "sh2", "--port", "27018", "--bind_ip_all", "--wiredTigerCacheSizeGB", "0.25"]
+    volumes: [s2:/data/db]
+    healthcheck: *khoi-tao
+  s3:
+    <<: *mongod
+    container_name: mgo-s3
+    hostname: s3
+    profiles: [them]
+    environment: { RS: sh3, CONG: "27018", CFG: "false" }
+    command: ["mongod", "--shardsvr", "--replSet", "sh3", "--port", "27018", "--bind_ip_all", "--wiredTigerCacheSizeGB", "0.25"]
+    volumes: [s3:/data/db]
+    healthcheck: *khoi-tao
+  mongos:
+    <<: *mongod
+    container_name: mgo-mongos
+    hostname: mongos
+    command: ["mongos", "--configdb", "cfg/cfg:27019", "--bind_ip_all"]
+    ports: ["127.0.0.1:47120:27017"]
+    volumes: ["..:/demo:ro"]
+    depends_on:
+      cfg: { condition: service_healthy }
+      s1: { condition: service_healthy }
+      s2: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand({ ping: 1 }).ok"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+networks:
+  shard:
+    name: mgo-shard-net
+volumes: { cfg: {}, s1: {}, s2: {}, s3: {} }

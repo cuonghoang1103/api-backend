@@ -1,0 +1,29 @@
+# Lab khoá MongoDB (cuongthai.com/courses/mongodb) — một máy MongoDB 8.0 chạy dạng replica set MỘT thành viên.
+# Vì sao replica set ngay từ đầu: transaction (Chương 6) và change stream (Chương 10) chỉ chạy trên replica set.
+# Cổng chỉ mở cho 127.0.0.1 — KHÔNG mở ra mạng ngoài (bài học từ làn sóng tống tiền MongoDB 2017, xem Bài 0.8 và Chương 9).
+#   docker compose -p mgo up -d        # chạy
+#   docker exec -it mgo-lab mongosh     # vào vỏ lệnh
+#   docker compose -p mgo down -v      # dọn sạch (xoá cả dữ liệu)
+services:
+  mongo:
+    image: mongo:8.0
+    container_name: mgo-lab
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    # Giới hạn tài nguyên: máy học chạy nhiều thứ cùng lúc — mongod tự đọc giới hạn cgroup để chia WiredTiger cache.
+    mem_limit: 2g
+    memswap_limit: 2g
+    cpus: 2
+    ports:
+      - "127.0.0.1:47017:27017"
+    volumes:
+      - mgo-data:/data/db
+      - ./:/demo:ro
+    healthcheck:
+      # Lần đầu: khởi tạo replica set; các lần sau: chỉ kiểm máy đã là PRIMARY.
+      test: ["CMD", "mongosh", "--quiet", "--eval",
+             "try { rs.status().ok } catch (e) { rs.initiate({_id: 'rs0', members: [{_id: 0, host: 'localhost:27017'}]}).ok }"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+volumes:
+  mgo-data:

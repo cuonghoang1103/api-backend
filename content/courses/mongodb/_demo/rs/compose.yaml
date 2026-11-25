@@ -1,0 +1,66 @@
+# Chương 7 (cuongthai.com/courses/mongodb) — replica set BA máy thật: ba container, ba mongod, một mạng riêng.
+#   docker compose -p mgo-rs up -d --wait      # chạy; r1 tự khởi tạo replica set "rs1" (healthcheck)
+#   docker exec -it mgo-r1 mongosh             # vào vỏ lệnh trên r1
+#   docker compose -p mgo-rs down -v           # dọn sạch (xoá cả dữ liệu)
+# Cổng chỉ mở cho 127.0.0.1 (47101–47103) để thử nối từ máy bạn — xem bẫy "tên máy trong replica set" ở Bài 7.1.
+# Mỗi mongod giới hạn cache 0,25 GB và 1 GB RAM: ba máy cùng chạy trên một laptop vẫn nhẹ.
+x-mongod: &mongod
+  image: mongo:8.0
+  command: ["mongod", "--replSet", "rs1", "--bind_ip_all", "--wiredTigerCacheSizeGB", "0.25"]
+  ulimits:
+    nofile: { soft: 64000, hard: 64000 }   # Docker trên Linux mặc định 1024 — quá thấp cho mongod (Bài 3.5)
+  mem_limit: 1g
+  networks: [rs]
+services:
+  r1:
+    <<: *mongod
+    container_name: mgo-r1
+    hostname: r1
+    ports: ["127.0.0.1:47101:27017"]
+    volumes: [r1:/data/db]
+    networks:
+      rs: {}
+      ud: { ipv4_address: 10.247.71.11 }   # r1 nằm thêm ở mạng ứng dụng "ud" ⇒ lab 7.6 cắt r1 khỏi r2/r3 mà ứng dụng VẪN thấy r1 (split-brain)
+    healthcheck:
+      # Lần đầu: khởi tạo rs1 với TÊN MÁY TRONG MẠNG (r1, r2, r3 — không phải localhost); r1 ưu tiên 2 nên thường là primary.
+      test: ["CMD", "mongosh", "--quiet", "--eval",
+             "try { rs.status().ok } catch (e) { rs.initiate({ _id: 'rs1', members: [ { _id: 0, host: 'r1:27017', priority: 2 }, { _id: 1, host: 'r2:27017' }, { _id: 2, host: 'r3:27017' } ] }).ok }"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+    depends_on: [r2, r3]
+  r2:
+    <<: *mongod
+    container_name: mgo-r2
+    hostname: r2
+    ports: ["127.0.0.1:47102:27017"]
+    volumes: [r2:/data/db]
+  r3:
+    <<: *mongod
+    container_name: mgo-r3
+    hostname: r3
+    ports: ["127.0.0.1:47103:27017"]
+    volumes: [r3:/data/db]
+  r4:
+    # Máy thứ tư — chỉ chạy khi gọi rõ: docker compose -p mgo-rs --profile them up -d r4 (Bài 7.1: thêm thành viên, initial sync)
+    <<: *mongod
+    container_name: mgo-r4
+    hostname: r4
+    profiles: [them]
+    volumes: [r4:/data/db]
+  app:
+    # Ứng dụng Node.js ghi đơn liên tục (Bài 7.2, lab 7.6) — chạy trong CÙNG mạng nên phân giải được r1/r2/r3.
+    #   docker compose -p mgo-rs run --rm app node ghi-lien-tuc.mjs
+    image: node:22-alpine
+    profiles: [app]
+    working_dir: /app
+    volumes: ["../node:/app"]
+    networks: [rs, ud]
+    extra_hosts: ["r1:10.247.71.11"]   # ứng dụng luôn tới r1 qua mạng "ud" (như ứng dụng và r1 cùng một phòng máy)
+networks:
+  rs:
+    name: mgo-rs-net
+  ud:
+    name: mgo-rs-ud
+    ipam: { config: [{ subnet: 10.247.71.0/24 }] }
+volumes: { r1: {}, r2: {}, r3: {}, r4: {} }

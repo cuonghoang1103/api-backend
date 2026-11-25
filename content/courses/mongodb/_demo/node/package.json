@@ -1,0 +1,11 @@
+{
+  "name": "mgo-node-demo",
+  "private": true,
+  "type": "module",
+  "description": "Ví dụ Node.js của khoá MongoDB (cuongthai.com/courses/mongodb). Chạy: npm install rồi node <tệp>.mjs",
+  "dependencies": {
+    "express": "^5.3.0",
+    "mongodb": "^7.9.1",
+    "mongoose": "^9.13.0"
+  }
+}

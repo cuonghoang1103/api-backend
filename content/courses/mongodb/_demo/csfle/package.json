@@ -1,0 +1,10 @@
+{
+  "name": "mgo-csfle-demo",
+  "private": true,
+  "type": "module",
+  "description": "Bài 9.4 — mã hoá theo trường phía client (explicit encryption). npm install rồi node ma-hoa.mjs",
+  "dependencies": {
+    "mongodb": "^7.9.1",
+    "mongodb-client-encryption": "^7.0.0"
+  }
+}

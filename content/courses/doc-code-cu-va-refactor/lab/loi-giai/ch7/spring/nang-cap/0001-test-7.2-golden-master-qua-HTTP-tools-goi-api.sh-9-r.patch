@@ -1,0 +1,51 @@
+From 1a482621ca76997936d7a84689eaef8269cf350c Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:21:03 +0700
+Subject: [PATCH 1/8] =?UTF-8?q?test(7.2):=20golden=20master=20qua=20HTTP?=
+ =?UTF-8?q?=20=E2=80=94=20tools/goi-api.sh=20(9=20request,=20chay=20jar=20?=
+ =?UTF-8?q?that)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ tools/goi-api.sh | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100755 tools/goi-api.sh
+
+diff --git a/tools/goi-api.sh b/tools/goi-api.sh
+new file mode 100755
+index 0000000..9f8fa72
+--- /dev/null
++++ b/tools/goi-api.sh
+@@ -0,0 +1,27 @@
++#!/bin/bash
++# tools/goi-api.sh <tệp ra> — chạy jar trong target/ (JDK theo $JDK, mặc định 17), gọi 9 request thật, ghi mã + thân (bỏ timestamp)
++# Golden master qua HTTP cho API (bài 7.2): MockMvc KHÔNG đi qua trang lỗi /error của Tomcat, curl thì có.
++set -u
++ra=$1; JDK=${JDK:-17}; ten=rfc-api-$$; cong=${CONG:-41881}
++jar=$(ls target/*.jar | grep -v original | head -1)
++docker run -d --rm --name $ten -p 127.0.0.1:$cong:8080 -v "$PWD/target":/app:ro eclipse-temurin:$JDK-jre java -jar /app/$(basename $jar) >/dev/null
++for i in $(seq 60); do curl -s -o /dev/null "http://127.0.0.1:$cong/api/sach" && break; sleep 1; done
++B=http://127.0.0.1:$cong
++goi() { # nhãn, đối số curl
++  local nhan=$1; shift
++  printf '### %s\n' "$nhan"
++  curl -s -w '\n=> %{http_code}\n' "$@" | sed -E 's/"timestamp":"[^"]*"/"timestamp":"<T>"/; s/"instance":"[^"]*"/"instance":"<I>"/'
++}
++{
++goi "GET /api/sach/1" $B/api/sach/1
++goi "GET /api/sach/ (gach cheo cuoi)" $B/api/sach/
++goi "GET /api/sach/99" $B/api/sach/99
++goi "GET /api/quy-dinh" $B/api/quy-dinh
++goi "POST /api/sach khong dang nhap" -X POST -H 'Content-Type: application/json' -d '{"ten":"Git","soLuong":1}' $B/api/sach
++goi "POST /api/sach ten rong (thuthu)" -u thuthu:123456 -X POST -H 'Content-Type: application/json' -d '{"ten":"","soLuong":1}' $B/api/sach
++goi "POST /api/sach JSON hong (thuthu)" -u thuthu:123456 -X POST -H 'Content-Type: application/json' -d '{"ten":' $B/api/sach
++goi "DELETE /api/admin/sach/2 (thuthu)" -u thuthu:123456 -X DELETE $B/api/admin/sach/2
++goi "GET /khong-co" $B/khong-co
++} > "$ra"
++docker logs $ten > "$ra.log" 2>&1; docker stop $ten >/dev/null
++cat "$ra"
+-- 
+2.55.0
+

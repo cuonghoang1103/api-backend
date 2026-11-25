@@ -1,0 +1,98 @@
+From 98ec33f49d591914179c066739be37a0b0cc8392 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:29:42 +0700
+Subject: [PATCH 01/11] test: characterization POST /api/muon (8 test) + jest
+ --runInBand vi test ghi chung tep
+
+---
+ __tests__/muon.dac-ta.test.js | 64 +++++++++++++++++++++++++++++++++++
+ package.json                  |  2 +-
+ 2 files changed, 65 insertions(+), 1 deletion(-)
+ create mode 100644 __tests__/muon.dac-ta.test.js
+
+diff --git a/__tests__/muon.dac-ta.test.js b/__tests__/muon.dac-ta.test.js
+new file mode 100644
+index 0000000..3fe87b7
+--- /dev/null
++++ b/__tests__/muon.dac-ta.test.js
+@@ -0,0 +1,64 @@
++// Characterization test cho POST /api/muon (route của "Lan 05/2019") — viết TRƯỚC khi refactor ở Chương 5.
++// Route ghi thẳng data/phieu.json ⇒ mỗi test khôi phục tệp gốc.
++const fs = require('fs');
++const path = require('path');
++const request = require('supertest');
++const app = require('../app');
++
++const TEP = path.join(__dirname, '..', 'data', 'phieu.json');
++const GOC = fs.readFileSync(TEP, 'utf8');
++const muon = (body) => request(app).post('/api/muon').send(body);
++const phieuTrongTep = () => JSON.parse(fs.readFileSync(TEP, 'utf8'));
++
++beforeEach(() => {
++  fs.writeFileSync(TEP, GOC);
++  jest.useFakeTimers('modern');
++  jest.setSystemTime(new Date('2026-11-24T10:00:00+07:00'));
++});
++afterEach(() => jest.useRealTimers());
++afterAll(() => fs.writeFileSync(TEP, GOC));
++
++test('thiếu tên sách ⇒ 400', async () => {
++  const res = await muon({ docGia: 2 });
++  expect([res.status, res.body]).toEqual([400, { loi: 'thieu docGia hoac sach' }]);
++});
++
++test('độc giả không tồn tại ⇒ 404', async () => {
++  const res = await muon({ docGia: 99, sach: 'Clean Code' });
++  expect([res.status, res.body]).toEqual([404, { loi: 'khong tim thay doc gia' }]);
++});
++
++test('SV không có sách quá hạn ⇒ 201, hạn 14 ngày, ghi phiếu 6', async () => {
++  const res = await muon({ docGia: 2, sach: 'Clean Code' });
++  expect([res.status, res.body]).toEqual([201, { phieu: 6, hanTra: '08/12/2026', phi: 0 }]);
++  expect(phieuTrongTep()[5]).toEqual({ id: 6, sach: 'Clean Code', docGia: 2, hanTra: '2026-12-08T10:00:00+07:00',
++    ngayTra: null, nguoiTao: 'mobile', ghiChu: '' });
++});
++
++test('SV đang giữ sách quá hạn ⇒ 409 (luật 2019 chỉ có ở Node)', async () => {
++  const res = await muon({ docGia: 1, sach: 'Clean Code' });
++  expect([res.status, res.body]).toEqual([409, { loi: 'dang co sach qua han', phieu: 1 }]);
++});
++
++test('GV quá hạn vẫn được mượn, hạn 30 ngày', async () => {
++  const res = await muon({ docGia: 3, sach: 'Clean Code', ghiChu: 'gấp' });
++  expect([res.status, res.body]).toEqual([201, { phieu: 6, hanTra: '24/12/2026', phi: 0 }]);
++  expect(phieuTrongTep()[5].ghiChu).toBe('gấp');
++});
++
++test('KHACH đang giữ 1 cuốn ⇒ 409 (Node so >=, Java so >)', async () => {
++  const res = await muon({ docGia: 4, sach: 'Clean Code' });
++  expect([res.status, res.body]).toEqual([409, { loi: 'vuot qua so sach duoc muon', dangMuon: 1, toiDa: 1 }]);
++});
++
++test('docGia gửi dạng chuỗi vẫn khớp (==), tệp lưu số', async () => {
++  const res = await muon({ docGia: '2', sach: 'Clean Code' });
++  expect(res.status).toBe(201);
++  expect(phieuTrongTep()[5].docGia).toBe(2);
++});
++
++test('SV mượn lần 2 cùng ngày: id tăng tiếp, vẫn được (2 cuốn < 3)', async () => {
++  await muon({ docGia: 2, sach: 'A' });
++  const res = await muon({ docGia: 2, sach: 'B' });
++  expect(res.body).toEqual({ phieu: 7, hanTra: '08/12/2026', phi: 0 });
++});
+diff --git a/package.json b/package.json
+index c5867e7..48d81cc 100644
+--- a/package.json
++++ b/package.json
+@@ -5,7 +5,7 @@
+   "main": "server.js",
+   "scripts": {
+     "start": "node server.js",
+-    "test": "jest"
++    "test": "jest --runInBand"
+   },
+   "engines": {
+     "node": ">=10 <15"
+-- 
+2.55.0
+

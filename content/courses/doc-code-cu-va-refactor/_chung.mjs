@@ -11,9 +11,16 @@
  *
  * ⚠️ Trong template literal: `${` của EL/JSP/shell viết \${ ; không backtick trần (dùng &#96;); gạch chéo ngược viết \\.
  */
-export { java, xml, sql, bash, props, yml, out, tl, giai, esc } from '../spring-boot/_chung.mjs';
+export { java, xml, sql, bash, props, yml, out, tl, giai, esc, js } from '../spring-boot/_chung.mjs';
 
 export const ZIP_LAB = 'https://media.cuongthai.com/files/courses/doc-code-cu-va-refactor/legacy-thu-vien-v1.zip';
+
+/** Repo Node cũ (soạn 24/11/2026 cùng Chương 3): ./lab/legacy-express — API Express 4 kiểu callback, Node 14, moment, Jest 26.
+ *  Gói: (cd lab && zip -qr /tmp/legacy-express-v1.zip legacy-express -x 'legacy-express/node_modules/*') rồi đẩy R2 đúng đường dưới. */
+export const ZIP_EXPRESS = 'https://media.cuongthai.com/files/courses/doc-code-cu-va-refactor/legacy-express-v1.zip';
+
+/** Môi trường chạy thật output từ Chương 3 (máy Linux x86_64 — số đo thời gian khác Mac M1 của chương 0–2). */
+export const MOI_TRUONG_3 = 'Fedora Linux x86_64 · Temurin JDK 8u504 (ảnh maven:3.9-eclipse-temurin-8, Maven 3.9.16) · Temurin JDK 17.0.19 · Tomcat 9.0.124 · MySQL 8.0.46 · Docker Engine 29.6.2 · Node 14.21.3 + Jest 26.6.3 · Testcontainers 2.0.5';
 
 /** Môi trường đã chạy thật mọi output trong khoá (ghi ở đầu mỗi bài có output). */
 export const MOI_TRUONG = 'Mac M1 (arm64) · Zulu JDK 8.0.514 · OpenJDK 21.0.9 · Maven 3.9.11 · Tomcat 9.0.124 / 10.1.62 · MySQL 8.0.46 · Docker Desktop (Engine 29) · Node 26.8.1';

@@ -1,0 +1,150 @@
+From 29c012e116b56d3331d5e6895d80e6b63f8d74cb Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 05:24:47 +0700
+Subject: [PATCH 01/12] chore(6.1): xoa ExportServlet chet tu 2018 (TV-103)
+
+Bang chung: web.xml da comment tu c50e9ac (2018-01-08), GET /export tra 404
+trong access log, JaCoCo luc chay 0/2 ham; ke toan xac nhan da dung bao cao ERP (TV-103).
+Xoa kem: test dac ta, file approved, khoi web.xml da comment, Constants.EXPORT_DIR.
+Khoi phuc neu can: git revert <commit nay>.
+---
+ .../com/thuvien/servlet/ExportServlet.java    | 42 -------------------
+ src/main/java/com/thuvien/util/Constants.java |  1 -
+ src/main/webapp/WEB-INF/web.xml               | 10 -----
+ .../servlet/ExportServletDacTaTest.java       | 29 -------------
+ ...tServletDacTaTest.xuatCsvSach.approved.txt |  7 ----
+ 5 files changed, 89 deletions(-)
+ delete mode 100644 src/main/java/com/thuvien/servlet/ExportServlet.java
+ delete mode 100644 src/test/java/com/thuvien/servlet/ExportServletDacTaTest.java
+ delete mode 100644 src/test/java/com/thuvien/servlet/ExportServletDacTaTest.xuatCsvSach.approved.txt
+
+diff --git a/src/main/java/com/thuvien/servlet/ExportServlet.java b/src/main/java/com/thuvien/servlet/ExportServlet.java
+deleted file mode 100644
+index 29711df..0000000
+--- a/src/main/java/com/thuvien/servlet/ExportServlet.java
++++ /dev/null
+@@ -1,42 +0,0 @@
+-package com.thuvien.servlet;
+-
+-import com.thuvien.util.Constants;
+-import com.thuvien.util.DBUtil;
+-
+-import javax.servlet.ServletException;
+-import javax.servlet.http.HttpServlet;
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
+-import java.io.FileWriter;
+-import java.io.IOException;
+-import java.sql.Connection;
+-import java.sql.ResultSet;
+-import java.sql.Statement;
+-
+-/**
+- * Xuat danh sach sach ra CSV cho phong ke toan (2017).
+- */
+-public class ExportServlet extends HttpServlet {
+-
+-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-        Connection con = null;
+-        Statement st = null;
+-        ResultSet rs = null;
+-        FileWriter fw = null;
+-        try {
+-            con = DBUtil.getConnection();
+-            st = con.createStatement();
+-            rs = st.executeQuery("SELECT * FROM books");
+-            fw = new FileWriter(Constants.EXPORT_DIR + "books.csv");
+-            while (rs.next()) {
+-                fw.write(rs.getString("code") + "," + rs.getString("title") + "," + rs.getInt("quantity") + "\n");
+-            }
+-            response.getWriter().println("OK");
+-        } catch (Exception e) {
+-            e.printStackTrace();
+-        } finally {
+-            if (fw != null) fw.close();
+-            DBUtil.close(rs, st, con);
+-        }
+-    }
+-}
+diff --git a/src/main/java/com/thuvien/util/Constants.java b/src/main/java/com/thuvien/util/Constants.java
+index 1900756..9a36b0a 100644
+--- a/src/main/java/com/thuvien/util/Constants.java
++++ b/src/main/java/com/thuvien/util/Constants.java
+@@ -4,5 +4,4 @@ public class Constants {
+     public static final String SESSION_USER = "user";
+     public static final int PAGE_SIZE = 20;          // khong ai dung
+     public static final String DATE_FORMAT = "dd/MM/yyyy";
+-    public static final String EXPORT_DIR = "C:\\thuvien\\export\\";   // may cua anh Tuan
+ }
+diff --git a/src/main/webapp/WEB-INF/web.xml b/src/main/webapp/WEB-INF/web.xml
+index 82bf7ec..5c32339 100644
+--- a/src/main/webapp/WEB-INF/web.xml
++++ b/src/main/webapp/WEB-INF/web.xml
+@@ -32,16 +32,6 @@
+     <url-pattern>/readers</url-pattern>
+   </servlet-mapping>
+ 
+-  <!-- tam tat 2018
+-  <servlet>
+-    <servlet-name>ExportServlet</servlet-name>
+-    <servlet-class>com.thuvien.servlet.ExportServlet</servlet-class>
+-  </servlet>
+-  <servlet-mapping>
+-    <servlet-name>ExportServlet</servlet-name>
+-    <url-pattern>/export</url-pattern>
+-  </servlet-mapping>
+-  -->
+ 
+   <welcome-file-list>
+     <welcome-file>index.jsp</welcome-file>
+diff --git a/src/test/java/com/thuvien/servlet/ExportServletDacTaTest.java b/src/test/java/com/thuvien/servlet/ExportServletDacTaTest.java
+deleted file mode 100644
+index f39acbd..0000000
+--- a/src/test/java/com/thuvien/servlet/ExportServletDacTaTest.java
++++ /dev/null
+@@ -1,29 +0,0 @@
+-package com.thuvien.servlet;
+-
+-import com.thuvien.testutil.DuLieuTest;
+-import org.approvaltests.Approvals;
+-import org.junit.jupiter.api.Test;
+-
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
+-import java.io.File;
+-import java.io.PrintWriter;
+-import java.io.StringWriter;
+-import java.nio.file.Files;
+-
+-import static org.mockito.Mockito.*;
+-
+-class ExportServletDacTaTest {
+-
+-    @Test
+-    void xuatCsvSach() throws Exception {
+-        DuLieuTest.napLai();
+-        HttpServletResponse res = mock(HttpServletResponse.class);
+-        when(res.getWriter()).thenReturn(new PrintWriter(new StringWriter()));
+-        new ExportServlet().doGet(mock(HttpServletRequest.class), res);
+-
+-        File[] moi = new File(".").listFiles((d, ten) -> ten.endsWith(".csv"));
+-        System.out.println("Tệp CSV vừa sinh: " + moi[0].getName());
+-        Approvals.verify(new String(Files.readAllBytes(moi[0].toPath()), "UTF-8"));
+-    }
+-}
+diff --git a/src/test/java/com/thuvien/servlet/ExportServletDacTaTest.xuatCsvSach.approved.txt b/src/test/java/com/thuvien/servlet/ExportServletDacTaTest.xuatCsvSach.approved.txt
+deleted file mode 100644
+index 235f828..0000000
+--- a/src/test/java/com/thuvien/servlet/ExportServletDacTaTest.xuatCsvSach.approved.txt
++++ /dev/null
+@@ -1,7 +0,0 @@
+-CNTT001,Lập trình Java căn bản,5
+-CNTT002,Cấu trúc dữ liệu và giải thuật,3
+-CNTT003,Clean Code,2
+-CNTT004,Refactoring,2
+-CNTT005,Working Effectively with Legacy Code,1
+-KT001,Kinh tế vi mô,4
+-NN001,Tiếng Nhật sơ cấp 1,6
+-- 
+2.55.0
+

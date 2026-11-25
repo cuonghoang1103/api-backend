@@ -1,0 +1,94 @@
+From 7afac6a869de0134525ebed38f9ed141c5f34638 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:44:46 +0700
+Subject: [PATCH] feat(TV-95): them loai doc gia NCS
+
+---
+ src/main/java/com/thuvien/model/LoaiDocGia.java     |  6 ++++++
+ src/main/java/com/thuvien/model/Reader.java         |  2 +-
+ src/main/webapp/readers.jsp                         |  2 +-
+ src/test/java/com/thuvien/model/LoaiDocGiaTest.java | 11 ++++++++++-
+ 4 files changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/model/LoaiDocGia.java b/src/main/java/com/thuvien/model/LoaiDocGia.java
+index e62dcea..2c01c7e 100644
+--- a/src/main/java/com/thuvien/model/LoaiDocGia.java
++++ b/src/main/java/com/thuvien/model/LoaiDocGia.java
+@@ -15,6 +15,11 @@ public enum LoaiDocGia {
+         public int soNgayMuon() { return 30; }
+         protected Tien phiMoiNgay(int soNgayTre) { return Tien.dong(1000).nhan(soNgayTre); }
+     },
++    NCS {   // TV-95: nghiên cứu sinh — 5 cuốn, 21 ngày, 1.500 đ/ngày, không trần
++        public int toiDa() { return 5; }
++        public int soNgayMuon() { return 21; }
++        protected Tien phiMoiNgay(int soNgayTre) { return Tien.dong(1500).nhan(soNgayTre); }
++    },
+     KHACH {
+         public int toiDa() { return 1; }
+         public int soNgayMuon() { return 7; }
+@@ -35,6 +40,7 @@ public enum LoaiDocGia {
+     public static LoaiDocGia tu(String type) {
+         if (type.equals("SV")) return SV;
+         if (type.equals("GV")) return GV;
++        if (type.equals("NCS")) return NCS;
+         return KHACH;
+     }
+ }
+diff --git a/src/main/java/com/thuvien/model/Reader.java b/src/main/java/com/thuvien/model/Reader.java
+index c14d8c3..6dab1d2 100644
+--- a/src/main/java/com/thuvien/model/Reader.java
++++ b/src/main/java/com/thuvien/model/Reader.java
+@@ -3,7 +3,7 @@ package com.thuvien.model;
+ public class Reader {
+     private int id;
+     private String name;
+-    private String type;   // "SV", "GV", "KHACH"
++    private String type;   // mã loại — danh sách và luật ở LoaiDocGia (SV, GV, NCS, KHACH)
+     private String phone;
+ 
+     public int getId() { return id; }
+diff --git a/src/main/webapp/readers.jsp b/src/main/webapp/readers.jsp
+index 9a9d4a1..14421ab 100644
+--- a/src/main/webapp/readers.jsp
++++ b/src/main/webapp/readers.jsp
+@@ -43,7 +43,7 @@
+ <h3>Thêm độc giả</h3>
+ <form method="post" action="readers">
+   <input type="hidden" name="action" value="add">
+-  Tên <input name="name"> Loại <select name="type"><option>SV</option><option>GV</option><option>KHACH</option></select>
++  Tên <input name="name"> Loại <select name="type"><option>SV</option><option>GV</option><option>NCS</option><option>KHACH</option></select>
+   SĐT <input name="phone"> <button>Thêm</button>
+ </form>
+ </body>
+diff --git a/src/test/java/com/thuvien/model/LoaiDocGiaTest.java b/src/test/java/com/thuvien/model/LoaiDocGiaTest.java
+index 0a1c166..1fbab30 100644
+--- a/src/test/java/com/thuvien/model/LoaiDocGiaTest.java
++++ b/src/test/java/com/thuvien/model/LoaiDocGiaTest.java
+@@ -13,7 +13,8 @@ class LoaiDocGiaTest {
+         assertEquals(LoaiDocGia.GV, LoaiDocGia.tu("GV"));
+         assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("KHACH"));
+         assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("sv"));      // giữ hành vi cũ: phân biệt hoa thường
+-        assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("NCS"));     // loại lạ rơi vào nhánh else
++        assertEquals(LoaiDocGia.NCS, LoaiDocGia.tu("NCS"));       // TV-95
++        assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("HS"));      // loại lạ vẫn rơi vào nhánh else
+         assertThrows(NullPointerException.class, () -> LoaiDocGia.tu(null));
+     }
+ 
+@@ -27,6 +28,14 @@ class LoaiDocGiaTest {
+         assertEquals(Tien.dong(0), LoaiDocGia.KHACH.phiTre(-3));
+     }
+ 
++    @Test
++    void nghienCuuSinh_TV95() {
++        assertEquals(5, LoaiDocGia.NCS.toiDa());
++        assertEquals(21, LoaiDocGia.NCS.soNgayMuon());
++        assertEquals(Tien.dong(13500), LoaiDocGia.NCS.phiTre(9));
++        assertEquals(Tien.dong(67500), LoaiDocGia.NCS.phiTre(45));     // không trần
++    }
++
+     @Test
+     void toiDaVaSoNgay() {
+         assertArrayEquals(new int[]{3, 10, 1}, new int[]{LoaiDocGia.SV.toiDa(), LoaiDocGia.GV.toiDa(), LoaiDocGia.KHACH.toiDa()});
+-- 
+2.55.0
+

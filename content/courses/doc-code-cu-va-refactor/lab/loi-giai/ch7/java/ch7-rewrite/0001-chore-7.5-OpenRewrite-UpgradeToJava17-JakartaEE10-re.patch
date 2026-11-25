@@ -1,0 +1,330 @@
+From be5e8420006c01ea29f45c040c570e628667bc14 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 06:32:42 +0700
+Subject: [PATCH 1/2] =?UTF-8?q?chore(7.5):=20OpenRewrite=20UpgradeToJava17?=
+ =?UTF-8?q?=20+=20JakartaEE10=20(rewrite-migrate-java=203.42.1,=20runNoFor?=
+ =?UTF-8?q?k)=20=E2=80=94=20NGUYEN=20VAN=20may=20sinh?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ pom.xml                                       | 24 +++++++++----------
+ src/main/java/com/thuvien/model/Tien.java     |  2 +-
+ .../java/com/thuvien/servlet/BookServlet.java |  8 +++----
+ .../com/thuvien/servlet/LoginServlet.java     | 12 +++++-----
+ .../com/thuvien/servlet/ReaderServlet.java    |  8 +++----
+ .../com/thuvien/servlet/ReportServlet.java    | 10 ++++----
+ src/main/java/com/thuvien/util/TokenUtil.java |  2 +-
+ src/main/webapp/WEB-INF/web.xml               |  6 ++---
+ .../servlet/BookServletMuonSachTest.java      |  6 ++---
+ .../servlet/BookServletTraSachTest.java       |  6 ++---
+ .../servlet/BookServletXoaSachTest.java       |  6 ++---
+ .../servlet/LoginServletCookieTest.java       | 10 ++++----
+ .../servlet/LoginServletMatKhauTest.java      |  8 +++----
+ .../thuvien/servlet/TimKiemVaDocGiaTest.java  |  8 +++----
+ 14 files changed, 58 insertions(+), 58 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index 8845cee..911f7c9 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -17,21 +17,21 @@
+ 
+   <properties>
+     <pmd.boLuat>tools/smell-pmd.xml</pmd.boLuat>
+-    <maven.compiler.source>1.8</maven.compiler.source>
+-    <maven.compiler.target>1.8</maven.compiler.target>
++    <maven.compiler.source>17</maven.compiler.source>
++    <maven.compiler.target>17</maven.compiler.target>
+   </properties>
+ 
+   <dependencies>
+     <dependency>
+-      <groupId>javax.servlet</groupId>
+-      <artifactId>javax.servlet-api</artifactId>
+-      <version>3.1.0</version>
+-      <scope>provided</scope>
++      <groupId>jakarta.servlet</groupId>
++      <artifactId>jakarta.servlet-api</artifactId>
++      <version>6.0.0</version>
++      <scope>compile</scope>
+     </dependency>
+     <dependency>
+-      <groupId>javax.servlet.jsp</groupId>
+-      <artifactId>javax.servlet.jsp-api</artifactId>
+-      <version>2.3.1</version>
++      <groupId>jakarta.servlet.jsp</groupId>
++      <artifactId>jakarta.servlet.jsp-api</artifactId>
++      <version>3.1.1</version>
+       <scope>provided</scope>
+     </dependency>
+     <dependency>
+@@ -95,12 +95,12 @@
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-compiler-plugin</artifactId>
+-        <version>3.1</version>
++        <version>3.16.0</version>
+       </plugin>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-war-plugin</artifactId>
+-        <version>2.2</version>
++        <version>3.5.1</version>
+       </plugin>
+       <plugin>
+         <groupId>org.pitest</groupId>
+@@ -124,7 +124,7 @@
+         <!-- Chương 4: ngửi smell bằng PMD 7 (mvn pmd:check / pmd:cpd-check) — tools/smell-pmd.xml -->
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-pmd-plugin</artifactId>
+-        <version>3.26.0</version>
++        <version>3.28.0</version>
+         <configuration>
+           <rulesets><ruleset>${pmd.boLuat}</ruleset></rulesets>
+           <targetJdk>1.8</targetJdk>
+diff --git a/src/main/java/com/thuvien/model/Tien.java b/src/main/java/com/thuvien/model/Tien.java
+index 319897c..468ce8c 100644
+--- a/src/main/java/com/thuvien/model/Tien.java
++++ b/src/main/java/com/thuvien/model/Tien.java
+@@ -47,7 +47,7 @@ public final class Tien {
+ 
+     @Override
+     public boolean equals(Object o) {
+-        return o instanceof Tien && ((Tien) o).dong == dong;
++        return o instanceof Tien t && t.dong == dong;
+     }
+ 
+     @Override
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index 3f0e1cf..b8300b4 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -9,10 +9,10 @@ import com.thuvien.util.Html;
+ import org.apache.commons.lang.StringUtils;
+ import org.apache.log4j.Logger;
+ 
+-import javax.servlet.ServletException;
+-import javax.servlet.http.HttpServlet;
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
++import jakarta.servlet.ServletException;
++import jakarta.servlet.http.HttpServlet;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
+ import java.io.IOException;
+ import java.io.PrintWriter;
+ import java.net.URLEncoder;
+diff --git a/src/main/java/com/thuvien/servlet/LoginServlet.java b/src/main/java/com/thuvien/servlet/LoginServlet.java
+index 40d4779..954a972 100644
+--- a/src/main/java/com/thuvien/servlet/LoginServlet.java
++++ b/src/main/java/com/thuvien/servlet/LoginServlet.java
+@@ -5,11 +5,11 @@ import com.thuvien.util.DBUtil;
+ import com.thuvien.util.MatKhau;
+ import com.thuvien.util.TokenUtil;
+ 
+-import javax.servlet.ServletException;
+-import javax.servlet.http.Cookie;
+-import javax.servlet.http.HttpServlet;
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
++import jakarta.servlet.ServletException;
++import jakarta.servlet.http.Cookie;
++import jakarta.servlet.http.HttpServlet;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
+ import java.io.IOException;
+ import org.apache.log4j.Logger;
+ 
+@@ -24,7 +24,7 @@ public class LoginServlet extends HttpServlet {
+ 
+     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+         if ("logout".equals(request.getParameter("action"))) {
+-            request.getSession().invalidate();
++            request.logout();
+             Cookie c = new Cookie("remember", "");
+             c.setMaxAge(0);
+             response.addCookie(c);
+diff --git a/src/main/java/com/thuvien/servlet/ReaderServlet.java b/src/main/java/com/thuvien/servlet/ReaderServlet.java
+index f7b5626..423126f 100644
+--- a/src/main/java/com/thuvien/servlet/ReaderServlet.java
++++ b/src/main/java/com/thuvien/servlet/ReaderServlet.java
+@@ -4,10 +4,10 @@ import com.thuvien.model.Loan;
+ import com.thuvien.model.Reader;
+ import com.thuvien.util.DBUtil;
+ 
+-import javax.servlet.ServletException;
+-import javax.servlet.http.HttpServlet;
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
++import jakarta.servlet.ServletException;
++import jakarta.servlet.http.HttpServlet;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
+ import java.io.IOException;
+ import java.sql.Connection;
+ import java.sql.PreparedStatement;
+diff --git a/src/main/java/com/thuvien/servlet/ReportServlet.java b/src/main/java/com/thuvien/servlet/ReportServlet.java
+index 623e1d8..c68772b 100644
+--- a/src/main/java/com/thuvien/servlet/ReportServlet.java
++++ b/src/main/java/com/thuvien/servlet/ReportServlet.java
+@@ -2,11 +2,11 @@ package com.thuvien.servlet;
+ 
+ import com.thuvien.util.DBUtil;
+ 
+-import javax.servlet.ServletException;
+-import javax.servlet.annotation.WebServlet;
+-import javax.servlet.http.HttpServlet;
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
++import jakarta.servlet.ServletException;
++import jakarta.servlet.annotation.WebServlet;
++import jakarta.servlet.http.HttpServlet;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
+ import java.io.IOException;
+ import java.sql.CallableStatement;
+ import java.sql.Connection;
+diff --git a/src/main/java/com/thuvien/util/TokenUtil.java b/src/main/java/com/thuvien/util/TokenUtil.java
+index a67f24e..098456c 100644
+--- a/src/main/java/com/thuvien/util/TokenUtil.java
++++ b/src/main/java/com/thuvien/util/TokenUtil.java
+@@ -1,7 +1,7 @@
+ package com.thuvien.util;
+ 
+ import java.security.MessageDigest;
+-import javax.xml.bind.DatatypeConverter;
++import jakarta.xml.bind.DatatypeConverter;
+ 
+ /**
+  * Token cho cookie "ghi nho dang nhap". MD5 cua username + "thuvien2016".
+diff --git a/src/main/webapp/WEB-INF/web.xml b/src/main/webapp/WEB-INF/web.xml
+index 5c32339..9459090 100644
+--- a/src/main/webapp/WEB-INF/web.xml
++++ b/src/main/webapp/WEB-INF/web.xml
+@@ -1,8 +1,8 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
++<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+-         version="3.1">
++         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
++         version="6.0">
+   <display-name>Thu vien</display-name>
+ 
+   <servlet>
+diff --git a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+index 6757437..00acdc7 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+@@ -4,9 +4,9 @@ import com.thuvien.testutil.DuLieuTest;
+ import org.junit.jupiter.api.BeforeEach;
+ import org.junit.jupiter.api.Test;
+ 
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
+-import javax.servlet.http.HttpSession;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import jakarta.servlet.http.HttpSession;
+ import java.io.PrintWriter;
+ import java.io.StringWriter;
+ import java.net.URLDecoder;
+diff --git a/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java b/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
+index aecb691..61c42f1 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
+@@ -4,9 +4,9 @@ import com.thuvien.testutil.DuLieuTest;
+ import org.junit.jupiter.api.BeforeEach;
+ import org.junit.jupiter.api.Test;
+ 
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
+-import javax.servlet.http.HttpSession;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import jakarta.servlet.http.HttpSession;
+ import java.net.URLDecoder;
+ import java.time.OffsetDateTime;
+ 
+diff --git a/src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java b/src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java
+index 9b66a75..6c04137 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java
+@@ -4,9 +4,9 @@ import com.thuvien.testutil.DuLieuTest;
+ import org.junit.jupiter.api.BeforeEach;
+ import org.junit.jupiter.api.Test;
+ 
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
+-import javax.servlet.http.HttpSession;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import jakarta.servlet.http.HttpSession;
+ import java.io.PrintWriter;
+ import java.io.StringWriter;
+ 
+diff --git a/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+index bb5a308..7632b57 100644
+--- a/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
++++ b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+@@ -4,11 +4,11 @@ import com.thuvien.util.TokenUtil;
+ import org.junit.jupiter.api.BeforeEach;
+ import org.junit.jupiter.api.Test;
+ 
+-import javax.servlet.RequestDispatcher;
+-import javax.servlet.http.Cookie;
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
+-import javax.servlet.http.HttpSession;
++import jakarta.servlet.RequestDispatcher;
++import jakarta.servlet.http.Cookie;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import jakarta.servlet.http.HttpSession;
+ 
+ import static org.junit.jupiter.api.Assertions.assertThrows;
+ import static org.mockito.Mockito.*;
+diff --git a/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java b/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java
+index 5dd7a0d..f74b21b 100644
+--- a/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java
++++ b/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java
+@@ -5,10 +5,10 @@ import org.junit.jupiter.api.BeforeAll;
+ import org.junit.jupiter.api.BeforeEach;
+ import org.junit.jupiter.api.Test;
+ 
+-import javax.servlet.RequestDispatcher;
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
+-import javax.servlet.http.HttpSession;
++import jakarta.servlet.RequestDispatcher;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import jakarta.servlet.http.HttpSession;
+ 
+ import static org.mockito.Mockito.*;
+ 
+diff --git a/src/test/java/com/thuvien/servlet/TimKiemVaDocGiaTest.java b/src/test/java/com/thuvien/servlet/TimKiemVaDocGiaTest.java
+index fa50885..662b463 100644
+--- a/src/test/java/com/thuvien/servlet/TimKiemVaDocGiaTest.java
++++ b/src/test/java/com/thuvien/servlet/TimKiemVaDocGiaTest.java
+@@ -6,10 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
+ import org.junit.jupiter.api.Test;
+ import org.mockito.ArgumentCaptor;
+ 
+-import javax.servlet.RequestDispatcher;
+-import javax.servlet.http.HttpServletRequest;
+-import javax.servlet.http.HttpServletResponse;
+-import javax.servlet.http.HttpSession;
++import jakarta.servlet.RequestDispatcher;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import jakarta.servlet.http.HttpSession;
+ import java.util.List;
+ import java.util.stream.Collectors;
+ 
+-- 
+2.55.0
+

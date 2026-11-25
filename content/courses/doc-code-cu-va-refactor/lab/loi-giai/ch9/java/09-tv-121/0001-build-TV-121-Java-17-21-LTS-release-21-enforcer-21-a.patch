@@ -1,0 +1,97 @@
+From 10df37011eaaa55fed182da4ad8470b84510a4cb Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 08:41:31 +0700
+Subject: [PATCH] build(TV-121): Java 17 -> 21 LTS (release 21, enforcer [21,),
+ anh dung/chay JDK 21) + NANG-CAP.md moc 4
+
+---
+ Dockerfile  | 6 +++---
+ NANG-CAP.md | 8 +++++---
+ pom.xml     | 6 +++---
+ 3 files changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index ce00f81..046aab0 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,13 +1,13 @@
+-# Bài 7.5 (mốc 3): dựng bằng JDK 17, chạy Tomcat 10.1 + JDK 17 — jakarta.servlet (Jakarta EE 10).
++# Bài 7.5 (mốc 3): Tomcat 10.1 + jakarta.servlet (Jakarta EE 10). TV-121 (bài 9.2): JDK 17 → 21 LTS cả lúc dựng lẫn lúc chạy.
+ # Ảnh này do khoá học thêm vào (Mục 0.1) — dự án gốc không có Docker.
+-FROM maven:3.9-eclipse-temurin-17 AS build
++FROM maven:3.9-eclipse-temurin-21 AS build
+ WORKDIR /src
+ COPY pom.xml .
+ RUN mvn -q -B dependency:go-offline
+ COPY src ./src
+ RUN mvn -q -B package -DskipTests
+ 
+-FROM tomcat:10.1-jdk17-temurin
++FROM tomcat:10.1-jdk21-temurin
+ RUN rm -rf /usr/local/tomcat/webapps/*
+ COPY --from=build /src/target/thuvien.war /usr/local/tomcat/webapps/thuvien.war
+ EXPOSE 8080
+diff --git a/NANG-CAP.md b/NANG-CAP.md
+index d47f4c1..69971a7 100644
+--- a/NANG-CAP.md
++++ b/NANG-CAP.md
+@@ -8,14 +8,16 @@ Java 8 + Tomcat 9 (javax)  ⇒  **Java 17 + Tomcat 10.1 (jakarta, Jakarta EE 10)
+ | 2 | java17 | `release` 17 + enforcer `[17,)`; record/switch mũi tên/instanceof mẫu/HexFormat (commit riêng) | 49 test xanh JDK 17/21; golden master giống hệt |
+ | 3 | jakarta | OpenRewrite `JakartaEE10` (dryRun → đọc patch → apply) + 4 chỗ sửa tay; Tomcat 10.1.62 | 49 test; golden master giống hệt (JDK 17 và 21); e2e Testcontainers 3/3, 0 dòng đổi |
+ 
++| 4 | TV-121 (9.2) | `release` 21 + enforcer `[21,)`, PMD targetJdk 21; Dockerfile dựng `maven:3.9-eclipse-temurin-21`, chạy `tomcat:10.1-jdk21-temurin` | xem PR TV-121 (bài 9.2) |
++
+ ## Việc của người chạy hệ thống
+-- Máy chủ cần **JDK 17+** và **Tomcat 10.1+**. WAR mới KHÔNG chạy trên Tomcat 9 (javax) và JDK 8 (`UnsupportedClassVersionError … 61.0`).
++- Từ TV-121: máy chủ cần **JDK 21+** (trước đó 17+) và **Tomcat 10.1+**. WAR mới KHÔNG chạy trên Tomcat 9 (javax) và JDK 8 (`UnsupportedClassVersionError … 61.0`).
+ - WAR cũ (javax) thả vào `webapps/` của Tomcat 10 vẫn báo "Deployment … finished" nhưng mọi request 500
+   (`ClassNotFoundException: javax.servlet.http.HttpServlet`). Cần quay lại tạm: thả WAR cũ vào `webapps-javaee/` (Tomcat tự chuyển).
+ - Cấu hình DB, URL, cổng: không đổi.
+ 
+ ## Việc của lập trình viên
+-- Máy dev: JDK 17 (Maven chặn JDK cũ bằng enforcer). IDE đặt Project SDK = 17.
++- Máy dev: JDK 21 từ TV-121 (Maven chặn JDK cũ bằng enforcer). IDE đặt Project SDK = 21.
+ - Thư viện servlet/JSP mới: `jakarta.servlet-api 6.0.0` (provided), `jakarta.servlet.jsp-api 3.1.1` (provided),
+   Jakarta Tags 3.0 (`jakarta.servlet.jsp.jstl-api 3.0.2` + `org.glassfish.web:jakarta.servlet.jsp.jstl 3.0.1`).
+ - JSP dùng thẻ c: viết `uri="jakarta.tags.core"`.
+@@ -24,5 +26,5 @@ Java 8 + Tomcat 9 (javax)  ⇒  **Java 17 + Tomcat 10.1 (jakarta, Jakarta EE 10)
+ - `error.jsp` vẫn in stack trace ra trang (CWE-209) — thấy rõ khi trang báo cáo vỡ trong lúc thử; ticket riêng.
+ - Hiển thị tiền/ngày theo Locale: JDK 9+ dùng dữ liệu CLDR ("18.000 ₫" thay "18.000 đ"). Mã hiện tại tự định dạng nên không đổi;
+   ai dùng `NumberFormat.getCurrencyInstance(vi_VN)` phải kiểm lại.
+-- JDK 21 chạy được (đã thử), chưa đặt làm chuẩn. JDK 25 là LTS mới nhất (9/2025) — mốc kế.
++- JDK 21 là chuẩn từ TV-121 (máy chủ của khách chuẩn hoá JDK 21). JDK 25 là LTS mới nhất (9/2025) — mốc kế, cần thử lại phần Locale (COMPAT bị gỡ).
+ - commons-lang 2.6 (2011) còn dùng — nên chuyển commons-lang3.
+diff --git a/pom.xml b/pom.xml
+index c7a1759..7052b83 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -18,7 +18,7 @@
+   <properties>
+     <pmd.boLuat>tools/smell-pmd.xml</pmd.boLuat>
+     <!-- Bài 7.1: release (cờ javac release) thay cho source/target — khoá cả API của JDK đích, không chỉ dạng bytecode -->
+-    <maven.compiler.release>17</maven.compiler.release>
++    <maven.compiler.release>21</maven.compiler.release>
+     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   </properties>
+ 
+@@ -114,7 +114,7 @@
+             <goals><goal>enforce</goal></goals>
+             <configuration>
+               <rules>
+-                <requireJavaVersion><version>[17,)</version></requireJavaVersion>
++                <requireJavaVersion><version>[21,)</version></requireJavaVersion>
+                 <requireMavenVersion><version>[3.6.3,)</version></requireMavenVersion>
+               </rules>
+             </configuration>
+@@ -161,7 +161,7 @@
+         <version>3.26.0</version>
+         <configuration>
+           <rulesets><ruleset>${pmd.boLuat}</ruleset></rulesets>
+-          <targetJdk>17</targetJdk>
++          <targetJdk>21</targetJdk>
+           <linkXRef>false</linkXRef>
+           <printFailingErrors>true</printFailingErrors>
+           <minimumTokens>60</minimumTokens>
+-- 
+2.55.0
+

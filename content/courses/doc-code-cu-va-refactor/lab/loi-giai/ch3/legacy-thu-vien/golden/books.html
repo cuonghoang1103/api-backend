@@ -1,0 +1,145 @@
+
+
+<html>
+<head><title>Sách - Thư viện</title></head>
+<body>
+
+
+<div style="background:#2b5797;color:#fff;padding:8px">
+  <b>THÆ¯ VIá»N</b> |
+  <a style="color:#fff" href="books">SÃ¡ch</a> |
+  <a style="color:#fff" href="readers">Äá»c giáº£</a> |
+  <a style="color:#fff" href="report">QuÃ¡ háº¡n (3)</a> |
+  Xin chÃ o thuthu |
+  <a style="color:#fff" href="login?action=logout">ThoÃ¡t</a>
+</div>
+
+
+<form method="get" action="books">
+  <input name="q" value="">
+  <button>Tìm</button>
+</form>
+<table border="1" cellpadding="4">
+  <tr><th>ID</th><th>Mã</th><th>Tên sách</th><th>Tác giả</th><th>Còn/Tổng</th><th>Mượn</th></tr>
+
+  <tr>
+    <td>1</td>
+    <td>CNTT001</td>
+    <td>Lập trình Java căn bản</td>
+    <td>Phạm Văn Ất</td>
+    <td>3/5</td>
+    <td>
+      <form method="post" action="books" style="margin:0">
+        <input type="hidden" name="action" value="borrow">
+        <input type="hidden" name="bookId" value="1">
+        Mã ĐG: <input name="readerId" size="3">
+        <button>Mượn</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>2</td>
+    <td>CNTT002</td>
+    <td>Cấu trúc dữ liệu và giải thuật</td>
+    <td>Đỗ Xuân Lôi</td>
+    <td>2/3</td>
+    <td>
+      <form method="post" action="books" style="margin:0">
+        <input type="hidden" name="action" value="borrow">
+        <input type="hidden" name="bookId" value="2">
+        Mã ĐG: <input name="readerId" size="3">
+        <button>Mượn</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>3</td>
+    <td>CNTT003</td>
+    <td>Clean Code</td>
+    <td>Robert C. Martin</td>
+    <td>1/2</td>
+    <td>
+      <form method="post" action="books" style="margin:0">
+        <input type="hidden" name="action" value="borrow">
+        <input type="hidden" name="bookId" value="3">
+        Mã ĐG: <input name="readerId" size="3">
+        <button>Mượn</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>4</td>
+    <td>CNTT004</td>
+    <td>Refactoring</td>
+    <td>Martin Fowler</td>
+    <td>2/2</td>
+    <td>
+      <form method="post" action="books" style="margin:0">
+        <input type="hidden" name="action" value="borrow">
+        <input type="hidden" name="bookId" value="4">
+        Mã ĐG: <input name="readerId" size="3">
+        <button>Mượn</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>5</td>
+    <td>CNTT005</td>
+    <td>Working Effectively with Legacy Code</td>
+    <td>Michael Feathers</td>
+    <td>1/1</td>
+    <td>
+      <form method="post" action="books" style="margin:0">
+        <input type="hidden" name="action" value="borrow">
+        <input type="hidden" name="bookId" value="5">
+        Mã ĐG: <input name="readerId" size="3">
+        <button>Mượn</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>6</td>
+    <td>KT001</td>
+    <td>Kinh tế vi mô</td>
+    <td>N. Gregory Mankiw</td>
+    <td>4/4</td>
+    <td>
+      <form method="post" action="books" style="margin:0">
+        <input type="hidden" name="action" value="borrow">
+        <input type="hidden" name="bookId" value="6">
+        Mã ĐG: <input name="readerId" size="3">
+        <button>Mượn</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>7</td>
+    <td>NN001</td>
+    <td>Tiếng Nhật sơ cấp 1</td>
+    <td>Minna no Nihongo</td>
+    <td>5/6</td>
+    <td>
+      <form method="post" action="books" style="margin:0">
+        <input type="hidden" name="action" value="borrow">
+        <input type="hidden" name="bookId" value="7">
+        Mã ĐG: <input name="readerId" size="3">
+        <button>Mượn</button>
+      </form>
+    </td>
+  </tr>
+
+</table>
+<h3>Thêm sách</h3>
+<form method="post" action="books">
+  <input type="hidden" name="action" value="add">
+  Mã <input name="code" size="6"> Tên <input name="title"> Tác giả <input name="author"> SL <input name="quantity" size="3">
+  <button>Thêm</button>
+</form>
+</body>
+</html>

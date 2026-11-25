@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- tools/do-phuc-tap.xml — in độ phức tạp của MỌI hàm (ngưỡng 1) để ghép với churn (lab 4.5). -->
+<ruleset name="do-phuc-tap" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+  <description>Cyclomatic + cognitive cho mọi hàm</description>
+  <rule ref="category/java/design.xml/CyclomaticComplexity">
+    <properties><property name="methodReportLevel" value="1"/><property name="classReportLevel" value="1"/></properties>
+  </rule>
+  <rule ref="category/java/design.xml/CognitiveComplexity">
+    <properties><property name="reportLevel" value="1"/></properties>
+  </rule>
+</ruleset>

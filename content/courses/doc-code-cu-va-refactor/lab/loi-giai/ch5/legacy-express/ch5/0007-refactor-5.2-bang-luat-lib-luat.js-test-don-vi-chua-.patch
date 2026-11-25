@@ -1,0 +1,58 @@
+From bee54a37fde94728647a7a6f5f778f9c155bb7f2 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:35:38 +0700
+Subject: [PATCH 07/11] refactor(5.2): bang luat lib/luat.js + test don vi
+ (chua ai dung)
+
+---
+ __tests__/luat.test.js | 16 ++++++++++++++++
+ lib/luat.js            | 14 ++++++++++++++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 __tests__/luat.test.js
+ create mode 100644 lib/luat.js
+
+diff --git a/__tests__/luat.test.js b/__tests__/luat.test.js
+new file mode 100644
+index 0000000..e7c58bd
+--- /dev/null
++++ b/__tests__/luat.test.js
+@@ -0,0 +1,16 @@
++const { luatCua } = require('../lib/luat');
++
++test('ba loại đúng bảng', () => {
++  expect([luatCua('SV').toiDa, luatCua('GV').toiDa, luatCua('KHACH').toiDa]).toEqual([3, 10, 1]);
++  expect([luatCua('SV').soNgayMuon, luatCua('GV').soNgayMuon, luatCua('KHACH').soNgayMuon]).toEqual([14, 30, 7]);
++});
++
++test('loại lạ rơi vào KHACH như nhánh else cũ', () => {
++  expect(luatCua('NCS')).toBe(luatCua('KHACH'));
++  expect(luatCua(undefined)).toBe(luatCua('KHACH'));
++});
++
++test('khoá kế thừa từ prototype không phải là luật', () => {
++  expect(luatCua('constructor')).toBe(luatCua('KHACH'));
++  expect(luatCua('toString')).toBe(luatCua('KHACH'));
++});
+diff --git a/lib/luat.js b/lib/luat.js
+new file mode 100644
+index 0000000..f362d81
+--- /dev/null
++++ b/lib/luat.js
+@@ -0,0 +1,14 @@
++// Luật theo loại độc giả — MỘT chỗ cho cả lib/phi.js và routes/muon.js (bài 5.2: thay chuỗi if bằng bảng tra).
++// Phải khớp enum LoaiDocGia bên Java; loại lạ tính như KHACH (giữ hành vi cũ của nhánh else).
++var LUAT = {
++  SV: { toiDa: 3, soNgayMuon: 14, phiMotNgay: 2000, phiToiDa: 50000, chanKhiQuaHan: true },
++  GV: { toiDa: 10, soNgayMuon: 30, phiMotNgay: 1000, phiToiDa: Infinity, chanKhiQuaHan: false },
++  KHACH: { toiDa: 1, soNgayMuon: 7, phiMotNgay: 5000, phiToiDa: Infinity, chanKhiQuaHan: true }
++};
++
++function luatCua(loai) {
++  // hasOwnProperty: LUAT['constructor'] hay LUAT['toString'] là hàm kế thừa từ Object.prototype, không phải luật
++  return Object.prototype.hasOwnProperty.call(LUAT, loai) ? LUAT[loai] : LUAT.KHACH;
++}
++
++module.exports = { luatCua: luatCua };
+-- 
+2.55.0
+

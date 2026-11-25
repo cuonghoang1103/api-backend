@@ -1,0 +1,161 @@
+From a1a8337c547aa6a3b82d3bbe438f66f318320c46 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:38:43 +0700
+Subject: [PATCH 15/18] =?UTF-8?q?refactor(5.3):=20Extract=20Class=20MuonTr?=
+ =?UTF-8?q?aService=20=E2=80=94=20servlet=20chi=20con=20doc=20tham=20so=20?=
+ =?UTF-8?q?+=20chuyen=20trang?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../com/thuvien/service/MuonTraService.java   | 54 +++++++++++++++++++
+ .../java/com/thuvien/servlet/BookServlet.java | 49 +++++------------
+ 2 files changed, 67 insertions(+), 36 deletions(-)
+ create mode 100644 src/main/java/com/thuvien/service/MuonTraService.java
+
+diff --git a/src/main/java/com/thuvien/service/MuonTraService.java b/src/main/java/com/thuvien/service/MuonTraService.java
+new file mode 100644
+index 0000000..50edbfb
+--- /dev/null
++++ b/src/main/java/com/thuvien/service/MuonTraService.java
+@@ -0,0 +1,54 @@
++package com.thuvien.service;
++
++import com.thuvien.dao.PhieuMuonDAO;
++import com.thuvien.model.KhoangMuon;
++import com.thuvien.model.LoaiDocGia;
++
++import java.sql.SQLException;
++import java.sql.Timestamp;
++import java.util.Calendar;
++import java.util.function.LongSupplier;
++
++/** Nghiệp vụ mượn/trả, tách khỏi BookServlet (Extract Class — bài 5.3). Không biết gì về HTTP. */
++public class MuonTraService {
++
++    /** Trang đích + thông báo; servlet tự ghép thành redirect. */
++    public static final class KetQua {
++        public final String trang;
++        public final String thongBao;
++        public final boolean thanhCong;
++
++        KetQua(String trang, String thongBao, boolean thanhCong) {
++            this.trang = trang;
++            this.thongBao = thongBao;
++            this.thanhCong = thanhCong;
++        }
++    }
++
++    private final PhieuMuonDAO dao;
++    private final LongSupplier bayGio;
++
++    public MuonTraService(PhieuMuonDAO dao, LongSupplier bayGio) {
++        this.dao = dao;
++        this.bayGio = bayGio;
++    }
++
++    public KetQua muon(String readerId, String bookId) throws SQLException {
++        LoaiDocGia loai = dao.loaiCuaDocGia(readerId);
++        if (loai == null) return new KetQua("books", "Độc giả không tồn tại", false);
++        if (dao.demDangMuon(readerId) > loai.toiDa()) return new KetQua("books", "Vượt quá số sách được mượn", false);   // ">" — BUG TV-41, chưa sửa
++        if (dao.soBanConLai(bookId) <= 0) return new KetQua("books", "Sách đã hết", false);
++        KhoangMuon khoang = KhoangMuon.batDau(Calendar.getInstance(), loai.soNgayMuon());
++        dao.themPhieu(Integer.parseInt(bookId), Integer.parseInt(readerId), khoang);
++        return new KetQua("books", "Mượn thành công", true);
++    }
++
++    public KetQua tra(String loanId) throws SQLException {
++        PhieuMuonDAO.PhieuCanTra phieu = dao.timPhieuCanTra(loanId);
++        if (phieu == null) return new KetQua("readers", "Không tìm thấy phiếu mượn", false);
++        double phi = phieu.phiTre(bayGio.getAsLong());
++        dao.ghiTra(Integer.parseInt(loanId), new Timestamp(bayGio.getAsLong()), phi);
++        dao.congLaiSach(phieu.bookId);
++        return new KetQua("readers", phi > 0 ? "Trả sách. Phí trễ hạn: " + phi : "Trả sách thành công", true);
++    }
++}
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index ee75843..6341a55 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -3,8 +3,7 @@ package com.thuvien.servlet;
+ import com.thuvien.dao.BookDAO;
+ import com.thuvien.dao.PhieuMuonDAO;
+ import com.thuvien.model.Book;
+-import com.thuvien.model.KhoangMuon;
+-import com.thuvien.model.LoaiDocGia;
++import com.thuvien.service.MuonTraService;
+ import com.thuvien.util.DBUtil;
+ import org.apache.commons.lang.StringUtils;
+ import org.apache.log4j.Logger;
+@@ -17,12 +16,9 @@ import java.io.IOException;
+ import java.io.PrintWriter;
+ import java.net.URLEncoder;
+ import java.sql.Connection;
+-import java.sql.PreparedStatement;
+ import java.sql.ResultSet;
+ import java.sql.Statement;
+-import java.sql.Timestamp;
+ import java.util.ArrayList;
+-import java.util.Calendar;
+ import java.util.List;
+ 
+ /**
+@@ -105,42 +101,23 @@ public class BookServlet extends HttpServlet {
+     }
+ 
+     private void muonSach(HttpServletRequest request, HttpServletResponse response, Connection con) throws Exception {
+-        PhieuMuonDAO dao = new PhieuMuonDAO(con);
+         String readerId = request.getParameter("readerId");
+         String bookId = request.getParameter("bookId");
+-        LoaiDocGia loai = dao.loaiCuaDocGia(readerId);
+-        if (loai == null) {
+-            response.sendRedirect("books?msg=" + URLEncoder.encode("Độc giả không tồn tại", "UTF-8"));
+-            return;
+-        }
+-        int dangMuon = dao.demDangMuon(readerId);
+-        if (dangMuon > loai.toiDa()) {
+-            response.sendRedirect("books?msg=" + URLEncoder.encode("Vượt quá số sách được mượn", "UTF-8"));
+-            return;
+-        }
+-        if (dao.soBanConLai(bookId) <= 0) {
+-            response.sendRedirect("books?msg=" + URLEncoder.encode("Sách đã hết", "UTF-8"));
+-            return;
+-        }
+-        KhoangMuon khoang = KhoangMuon.batDau(Calendar.getInstance(), loai.soNgayMuon());
+-        dao.themPhieu(Integer.parseInt(bookId), Integer.parseInt(readerId), khoang);
+-        log.info("borrow book=" + bookId + " reader=" + readerId);
+-        response.sendRedirect("books?msg=" + URLEncoder.encode("Mượn thành công", "UTF-8"));
++        MuonTraService.KetQua kq = dichVu(con).muon(readerId, bookId);
++        if (kq.thanhCong) log.info("borrow book=" + bookId + " reader=" + readerId);
++        chuyenTrang(response, kq);
+     }
+ 
+     private void traSach(HttpServletRequest request, HttpServletResponse response, Connection con) throws Exception {
+-        PhieuMuonDAO dao = new PhieuMuonDAO(con);
+-        String loanId = request.getParameter("loanId");
+-        PhieuMuonDAO.PhieuCanTra phieu = dao.timPhieuCanTra(loanId);
+-        if (phieu == null) {
+-            response.sendRedirect("readers?msg=" + URLEncoder.encode("Không tìm thấy phiếu mượn", "UTF-8"));
+-            return;
+-        }
+-        double phi = phieu.phiTre(bayGio());
+-        dao.ghiTra(Integer.parseInt(loanId), new Timestamp(bayGio()), phi);
+-        dao.congLaiSach(phieu.bookId);
+-        String msg = phi > 0 ? "Trả sách. Phí trễ hạn: " + phi : "Trả sách thành công";
+-        response.sendRedirect("readers?msg=" + URLEncoder.encode(msg, "UTF-8"));
++        chuyenTrang(response, dichVu(con).tra(request.getParameter("loanId")));
++    }
++
++    private MuonTraService dichVu(Connection con) {
++        return new MuonTraService(new PhieuMuonDAO(con), this::bayGio);
++    }
++
++    private static void chuyenTrang(HttpServletResponse response, MuonTraService.KetQua kq) throws IOException {
++        response.sendRedirect(kq.trang + "?msg=" + URLEncoder.encode(kq.thongBao, "UTF-8"));
+     }
+ 
+     private void themSach(HttpServletRequest request, HttpServletResponse response, Connection con) throws Exception {
+-- 
+2.55.0
+

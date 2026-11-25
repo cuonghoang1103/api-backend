@@ -1,0 +1,39 @@
+From ec26c6e8b7a84c4054d36aa8fc6d0f473434d09a Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:32:08 +0700
+Subject: [PATCH 06/11] =?UTF-8?q?refactor(5.1):=20Change=20Function=20Decl?=
+ =?UTF-8?q?aration=20=E2=80=94=20bo=20tham=20so=20chet=20loai=20cua=20taoP?=
+ =?UTF-8?q?hieu?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ routes/muon.js | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/routes/muon.js b/routes/muon.js
+index fe4142f..7d3ff04 100644
+--- a/routes/muon.js
++++ b/routes/muon.js
+@@ -8,7 +8,7 @@ var kho = require('../lib/kho');
+ var router = express.Router();
+ router.use(express.json());
+ 
+-function taoPhieu(dsPhieu, docGiaId, tenSach, loai, ngayMuon, soNgay, nguoiTao, ghiChu) {
++function taoPhieu(dsPhieu, docGiaId, tenSach, ngayMuon, soNgay, nguoiTao, ghiChu) {
+   var id = 0;
+   for (var i = 0; i < dsPhieu.length; i++) if (dsPhieu[i].id > id) id = dsPhieu[i].id;
+   return {
+@@ -46,7 +46,7 @@ router.post('/', function (req, res) {
+       if (quaHan && docGia.loai != 'GV') {
+         return res.status(409).json({ loi: 'dang co sach qua han', phieu: quaHan.id });
+       }
+-      var p = taoPhieu(dsPhieu, docGia.id, tenSach, docGia.loai, new Date(), soNgay, 'mobile', req.body.ghiChu || '');
++      var p = taoPhieu(dsPhieu, docGia.id, tenSach, new Date(), soNgay, 'mobile', req.body.ghiChu || '');
+       dsPhieu.push(p);
+       fs.writeFile(path.join(__dirname, '..', 'data', 'phieu.json'), JSON.stringify(dsPhieu, null, 2), function (err3) {
+         if (err3) return res.status(500).send('loi ghi du lieu');
+-- 
+2.55.0
+

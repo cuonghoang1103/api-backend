@@ -1,0 +1,93 @@
+From d2a5601410df81583ba0a4fd9e3a62b6547436c6 Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:31:28 +0700
+Subject: [PATCH 2/2] =?UTF-8?q?fix(7.3):=20sua=20sau=20OpenRewrite=20?=
+ =?UTF-8?q?=E2=80=94=20khoi=20phuc=202=20nguoi=20dung,=20giu=20/api/sach/?=
+ =?UTF-8?q?=20(TV-120),=20bo=20phu=20thuoc=20thua=20jakarta.validation-api?=
+ =?UTF-8?q?,=20bo=20dong=20chu=20thich=20thua?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+8 test xanh; HTTP giong het ban nang tay (nhanh nang-cap).
+---
+ pom.xml                                              | 4 ----
+ src/main/java/com/thuvien/api/CauHinhBaoMat.java     | 6 ++++--
+ src/main/java/com/thuvien/api/SachController.java    | 3 ++-
+ src/main/java/com/thuvien/api/ThuVienProperties.java | 1 -
+ src/main/resources/application.properties            | 2 --
+ 5 files changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index f998d46..53c9ca0 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -17,10 +17,6 @@
+     <java.version>17</java.version>
+   </properties>
+   <dependencies>
+-    <dependency>
+-      <groupId>jakarta.validation</groupId>
+-      <artifactId>jakarta.validation-api</artifactId>
+-    </dependency>
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId></dependency>
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-data-jpa</artifactId></dependency>
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-validation</artifactId></dependency>
+diff --git a/src/main/java/com/thuvien/api/CauHinhBaoMat.java b/src/main/java/com/thuvien/api/CauHinhBaoMat.java
+index 42de00d..6c67de1 100644
+--- a/src/main/java/com/thuvien/api/CauHinhBaoMat.java
++++ b/src/main/java/com/thuvien/api/CauHinhBaoMat.java
+@@ -28,7 +28,9 @@ public class CauHinhBaoMat {
+     }
+ 
+     @Bean
+-    InMemoryUserDetailsManager inMemoryAuthManager() throws Exception {
+-        return new InMemoryUserDetailsManager(User.builder().username("admin").build());
++    InMemoryUserDetailsManager nguoiDung() {
++        return new InMemoryUserDetailsManager(
++            User.withUsername("thuthu").password("{noop}123456").roles("USER").build(),
++            User.withUsername("admin").password("{noop}admin123").roles("ADMIN").build());
+     }
+ }
+diff --git a/src/main/java/com/thuvien/api/SachController.java b/src/main/java/com/thuvien/api/SachController.java
+index 60d5561..98b788c 100644
+--- a/src/main/java/com/thuvien/api/SachController.java
++++ b/src/main/java/com/thuvien/api/SachController.java
+@@ -19,7 +19,8 @@ public class SachController {
+         this.cauHinh = cauHinh;
+     }
+ 
+-    @GetMapping("/api/sach")
++    /** Spring 6 bỏ khớp dấu "/" cuối. App di động 1.x gọi "/api/sach/" ⇒ giữ CẢ HAI đường, có chủ đích (ghi chú nâng cấp, TV-120). */
++    @GetMapping({"/api/sach", "/api/sach/"})
+     public List<Sach> danhSach() {
+         return kho.findAll();
+     }
+diff --git a/src/main/java/com/thuvien/api/ThuVienProperties.java b/src/main/java/com/thuvien/api/ThuVienProperties.java
+index aae8ee7..c64318e 100644
+--- a/src/main/java/com/thuvien/api/ThuVienProperties.java
++++ b/src/main/java/com/thuvien/api/ThuVienProperties.java
+@@ -3,7 +3,6 @@ package com.thuvien.api;
+ import org.springframework.boot.context.properties.ConfigurationProperties;
+ 
+ /** thuvien.phi-tre-moi-ngay, thuvien.so-ngay-muon trong application.properties. */
+-
+ @ConfigurationProperties("thuvien")
+ public class ThuVienProperties {
+     private final long phiTreMoiNgay;
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+index 03b6a27..171eb07 100644
+--- a/src/main/resources/application.properties
++++ b/src/main/resources/application.properties
+@@ -3,8 +3,6 @@ spring.datasource.url=jdbc:h2:mem:thuvien;DB_CLOSE_DELAY=-1
+ spring.sql.init.mode=always
+ spring.jpa.defer-datasource-initialization=true
+ spring.jpa.hibernate.ddl-auto=create
+-# This property is deprecated: Hibernate no longer supports disabling the use of new ID generator mappings.
+-# spring.jpa.hibernate.use-new-id-generator-mappings=false
+ spring.jpa.open-in-view=false
+ server.max-http-request-header-size=16KB
+ thuvien.phi-tre-moi-ngay=2000
+-- 
+2.55.0
+

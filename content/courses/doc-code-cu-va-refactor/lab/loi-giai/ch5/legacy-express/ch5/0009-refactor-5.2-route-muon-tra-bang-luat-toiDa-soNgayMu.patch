@@ -1,0 +1,51 @@
+From e71f80496a86e64c7135b9ed4d1132f37bfbe857 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:35:59 +0700
+Subject: [PATCH 09/11] refactor(5.2): route muon tra bang luat (toiDa,
+ soNgayMuon, chanKhiQuaHan)
+
+---
+ routes/muon.js | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
+
+diff --git a/routes/muon.js b/routes/muon.js
+index 7d3ff04..ae7b40b 100644
+--- a/routes/muon.js
++++ b/routes/muon.js
+@@ -4,6 +4,7 @@ var moment = require('moment');
+ var fs = require('fs');
+ var path = require('path');
+ var kho = require('../lib/kho');
++var luatCua = require('../lib/luat').luatCua;
+ 
+ var router = express.Router();
+ router.use(express.json());
+@@ -29,21 +30,15 @@ router.post('/', function (req, res) {
+     kho.doc('phieu', function (err2, dsPhieu) {
+       if (err2) return res.status(500).send('loi doc du lieu');
+       var dangMuon = demDangMuon(dsPhieu, docGia);
+-      var toiDa;
+-      var soNgay;
+-      if (docGia.loai == 'SV') {
+-        toiDa = 3; soNgay = 14;
+-      } else if (docGia.loai == 'GV') {
+-        toiDa = 10; soNgay = 30;
+-      } else {
+-        toiDa = 1; soNgay = 7;
+-      }
++      var luat = luatCua(docGia.loai);
++      var toiDa = luat.toiDa;
++      var soNgay = luat.soNgayMuon;
+       if (dangMuon >= toiDa) {
+         return res.status(409).json({ loi: 'vuot qua so sach duoc muon', dangMuon: dangMuon, toiDa: toiDa });
+       }
+       // thu thu yeu cau 2019: dang co sach qua han thi khong cho muon them (tru GV)
+       var quaHan = timPhieuQuaHan(dsPhieu, docGia);
+-      if (quaHan && docGia.loai != 'GV') {
++      if (quaHan && luat.chanKhiQuaHan) {
+         return res.status(409).json({ loi: 'dang co sach qua han', phieu: quaHan.id });
+       }
+       var p = taoPhieu(dsPhieu, docGia.id, tenSach, new Date(), soNgay, 'mobile', req.body.ghiChu || '');
+-- 
+2.55.0
+

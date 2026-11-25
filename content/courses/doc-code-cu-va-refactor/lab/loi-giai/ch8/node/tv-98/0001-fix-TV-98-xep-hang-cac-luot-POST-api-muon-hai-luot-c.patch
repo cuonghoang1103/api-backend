@@ -1,0 +1,129 @@
+From 9ab4ccfbd8a6112fb4114aa197bc4454a8f5bc28 Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 07:21:15 +0700
+Subject: [PATCH] =?UTF-8?q?fix(TV-98):=20xep=20hang=20cac=20luot=20POST=20?=
+ =?UTF-8?q?/api/muon=20=E2=80=94=20hai=20luot=20cung=20luc=20khong=20con?=
+ =?UTF-8?q?=20mat=20phieu?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Test tai hien (bai 5.5) commit cung ban sua: 2 luot -> id 6 va 7; 5 luot (1 luot 404) -> moi phieu 201 deu nam trong tep.
+---
+ __tests__/muon.dong-thoi.test.js | 30 ++++++++++++++++++++++++++++++
+ __tests__/tuan-tu.test.js        | 14 ++++++++++++++
+ lib/tuan-tu.js                   | 16 ++++++++++++++++
+ routes/muon.js                   |  6 ++++--
+ 4 files changed, 64 insertions(+), 2 deletions(-)
+ create mode 100644 __tests__/muon.dong-thoi.test.js
+ create mode 100644 __tests__/tuan-tu.test.js
+ create mode 100644 lib/tuan-tu.js
+
+diff --git a/__tests__/muon.dong-thoi.test.js b/__tests__/muon.dong-thoi.test.js
+new file mode 100644
+index 0000000..5d32ca5
+--- /dev/null
++++ b/__tests__/muon.dong-thoi.test.js
+@@ -0,0 +1,30 @@
++// TV-98 "app báo tạo phiếu nhưng thủ thư không thấy": hai lượt mượn cùng lúc (test tái hiện của bài 5.5, nay commit cùng bản sửa)
++const fs = require('fs');
++const path = require('path');
++const request = require('supertest');
++const app = require('../app');
++
++const TEP = path.join(__dirname, '..', 'data', 'phieu.json');
++const GOC = fs.readFileSync(TEP, 'utf8');
++const muon = (body) => request(app).post('/api/muon').send(body);
++
++beforeEach(() => fs.writeFileSync(TEP, GOC));
++afterAll(() => fs.writeFileSync(TEP, GOC));
++
++test('hai lượt mượn đồng thời ⇒ hai phiếu khác id, tệp có 7 phiếu', async () => {
++  const [a, b] = await Promise.all([
++    muon({ docGia: 2, sach: 'Refactoring' }),
++    muon({ docGia: 3, sach: 'Clean Architecture' }),
++  ]);
++  expect([a.status, b.status]).toEqual([201, 201]);
++  expect([a.body.phieu, b.body.phieu].sort()).toEqual([6, 7]);
++  expect(JSON.parse(fs.readFileSync(TEP, 'utf8'))).toHaveLength(7);
++});
++
++test('năm lượt đồng thời, có lượt bị từ chối ⇒ mọi lượt 201 đều nằm trong tệp', async () => {
++  const kq = await Promise.all([2, 3, 2, 3, 99].map((d, i) => muon({ docGia: d, sach: 'Sach ' + i })));
++  const ds = JSON.parse(fs.readFileSync(TEP, 'utf8'));
++  const daTao = kq.filter((r) => r.status === 201).map((r) => r.body.phieu);
++  expect(daTao.every((id) => ds.some((p) => p.id === id))).toBe(true);
++  expect(ds).toHaveLength(5 + daTao.length);
++});
+diff --git a/__tests__/tuan-tu.test.js b/__tests__/tuan-tu.test.js
+new file mode 100644
+index 0000000..f93162d
+--- /dev/null
++++ b/__tests__/tuan-tu.test.js
+@@ -0,0 +1,14 @@
++// TV-98, góp ý review: lượt xử lý ném lỗi đồng bộ không được làm treo hàng đợi
++const express = require('express');
++const request = require('supertest');
++const tuanTu = require("../lib/tuan-tu");
++
++test('lượt đầu ném lỗi đồng bộ ⇒ lượt sau vẫn được phục vụ', async () => {
++  const app = express();
++  let lan = 0;
++  app.post('/x', tuanTu((req, res) => { lan++; if (lan === 1) throw new Error('loi dong bo'); res.status(201).end(); }));
++  app.use((err, req, res, next) => res.status(500).end());
++  const dau = await request(app).post('/x').timeout(1000).catch((e) => ({ status: 'treo: ' + e.code }));
++  const sau = await request(app).post('/x').timeout(1000).catch((e) => ({ status: 'treo: ' + e.code }));
++  expect([dau.status, sau.status]).toEqual([500, 201]);
++});
+diff --git a/lib/tuan-tu.js b/lib/tuan-tu.js
+new file mode 100644
+index 0000000..ba85c14
+--- /dev/null
++++ b/lib/tuan-tu.js
+@@ -0,0 +1,16 @@
++// TV-98: chay cac luot xu ly LAN LUOT trong mot tien trinh — luot sau bat dau khi luot truoc da tra loi xong.
++// Moi nhanh deu ket thuc res (finish), khach ngat giua chung (close), hoac nem loi dong bo (next(e) => Express tra 500).
++// KHONG bao ve khi chay nhieu tien trinh (cluster/PM2 -i) — xem phan rui ro cua PR.
++var hang = Promise.resolve();
++
++module.exports = function tuanTu(xuLy) {
++  return function (req, res, next) {
++    hang = hang.then(function () {
++      return new Promise(function (xong) {
++        res.on('finish', xong);
++        res.on('close', xong);
++        try { xuLy(req, res); } catch (e) { next(e); }
++      });
++    });
++  };
++};
+diff --git a/routes/muon.js b/routes/muon.js
+index b9a2fcf..3576679 100644
+--- a/routes/muon.js
++++ b/routes/muon.js
+@@ -4,11 +4,13 @@ var moment = require('moment');
+ var kho = require('../lib/kho');
+ var luatCua = require('../lib/luat').luatCua;
+ var SoPhieu = require('../lib/so-phieu');
++var tuanTu = require('../lib/tuan-tu');
+ 
+ var router = express.Router();
+ router.use(express.json());
+ 
+-router.post('/', function (req, res) {
++// TV-98: doc phieu.json -> tinh -> ghi phai xong truoc khi luot sau doc (2 luot cung luc tung cung nhan id 6, mat 1 phieu)
++router.post('/', tuanTu(function (req, res) {
+   var docGiaId = req.body.docGia;
+   var tenSach = req.body.sach;
+   if (!docGiaId || !tenSach) return res.status(400).json({ loi: 'thieu docGia hoac sach' });
+@@ -38,6 +40,6 @@ router.post('/', function (req, res) {
+       });
+     });
+   });
+-});
++}));
+ 
+ module.exports = router;
+-- 
+2.55.0
+

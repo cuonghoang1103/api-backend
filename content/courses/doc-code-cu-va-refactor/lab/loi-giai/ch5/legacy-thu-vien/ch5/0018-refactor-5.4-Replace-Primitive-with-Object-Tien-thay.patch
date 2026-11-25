@@ -1,0 +1,227 @@
+From 4dee1844d2a1ef14ca5624673d367a91902269d4 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:43:02 +0700
+Subject: [PATCH 18/18] =?UTF-8?q?refactor(5.4):=20Replace=20Primitive=20wi?=
+ =?UTF-8?q?th=20Object=20=E2=80=94=20Tien=20thay=20double=20cho=20phi=20tr?=
+ =?UTF-8?q?e=20(in=20kieu=20cu=20de=20giu=20thong=20bao)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../java/com/thuvien/dao/PhieuMuonDAO.java    |  7 ++-
+ .../java/com/thuvien/model/LoaiDocGia.java    | 12 ++--
+ src/main/java/com/thuvien/model/Tien.java     | 57 +++++++++++++++++++
+ .../com/thuvien/service/MuonTraService.java   |  5 +-
+ .../com/thuvien/model/LoaiDocGiaTest.java     | 12 ++--
+ .../thuvien/service/MuonTraServiceTest.java   |  3 +-
+ 6 files changed, 78 insertions(+), 18 deletions(-)
+ create mode 100644 src/main/java/com/thuvien/model/Tien.java
+
+diff --git a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+index 4e8edf3..75ce54d 100644
+--- a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
++++ b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+@@ -2,6 +2,7 @@ package com.thuvien.dao;
+ 
+ import com.thuvien.model.KhoangMuon;
+ import com.thuvien.model.LoaiDocGia;
++import com.thuvien.model.Tien;
+ import com.thuvien.util.DBUtil;
+ 
+ import java.sql.Connection;
+@@ -92,7 +93,7 @@ public class PhieuMuonDAO {
+             return (int) ((bayGio - hanTra.getTime()) / MS_MOT_NGAY);
+         }
+ 
+-        public double phiTre(long bayGio) {
++        public Tien phiTre(long bayGio) {
+             return loai.phiTre(soNgayTre(bayGio));
+         }
+     }
+@@ -110,11 +111,11 @@ public class PhieuMuonDAO {
+         }
+     }
+ 
+-    public void ghiTra(int loanId, Timestamp ngayTra, double phi) throws SQLException {
++    public void ghiTra(int loanId, Timestamp ngayTra, Tien phi) throws SQLException {
+         PreparedStatement ps = con.prepareStatement("UPDATE loans SET return_date = ?, fine = ? WHERE id = ?");
+         try {
+             ps.setTimestamp(1, ngayTra);
+-            ps.setDouble(2, phi);
++            ps.setDouble(2, phi.soDong());   // cột fine vẫn là double — đổi schema là việc khác
+             ps.setInt(3, loanId);
+             ps.executeUpdate();
+         } finally {
+diff --git a/src/main/java/com/thuvien/model/LoaiDocGia.java b/src/main/java/com/thuvien/model/LoaiDocGia.java
+index 440e3af..e62dcea 100644
+--- a/src/main/java/com/thuvien/model/LoaiDocGia.java
++++ b/src/main/java/com/thuvien/model/LoaiDocGia.java
+@@ -8,27 +8,27 @@ public enum LoaiDocGia {
+     SV {
+         public int toiDa() { return 3; }
+         public int soNgayMuon() { return 14; }
+-        protected double phiMoiNgay(int soNgayTre) { return Math.min(soNgayTre * 2000, 50000); }   // trần 50.000 — TV-52
++        protected Tien phiMoiNgay(int soNgayTre) { return Tien.dong(2000).nhan(soNgayTre).khongVuotQua(Tien.dong(50000)); }   // trần 50.000 — TV-52
+     },
+     GV {
+         public int toiDa() { return 10; }
+         public int soNgayMuon() { return 30; }
+-        protected double phiMoiNgay(int soNgayTre) { return soNgayTre * 1000; }
++        protected Tien phiMoiNgay(int soNgayTre) { return Tien.dong(1000).nhan(soNgayTre); }
+     },
+     KHACH {
+         public int toiDa() { return 1; }
+         public int soNgayMuon() { return 7; }
+-        protected double phiMoiNgay(int soNgayTre) { return soNgayTre * 5000; }
++        protected Tien phiMoiNgay(int soNgayTre) { return Tien.dong(5000).nhan(soNgayTre); }
+     };
+ 
+     public abstract int toiDa();
+ 
+     public abstract int soNgayMuon();
+ 
+-    protected abstract double phiMoiNgay(int soNgayTre);
++    protected abstract Tien phiMoiNgay(int soNgayTre);
+ 
+-    public double phiTre(int soNgayTre) {
+-        return soNgayTre > 0 ? phiMoiNgay(soNgayTre) : 0;
++    public Tien phiTre(int soNgayTre) {
++        return soNgayTre > 0 ? phiMoiNgay(soNgayTre) : Tien.KHONG;
+     }
+ 
+     /** Cột readers.type. Giữ đúng hành vi cũ: chuỗi nào không phải "SV"/"GV" đều tính như KHACH; null vẫn ném NullPointerException. */
+diff --git a/src/main/java/com/thuvien/model/Tien.java b/src/main/java/com/thuvien/model/Tien.java
+new file mode 100644
+index 0000000..319897c
+--- /dev/null
++++ b/src/main/java/com/thuvien/model/Tien.java
+@@ -0,0 +1,57 @@
++package com.thuvien.model;
++
++/** Số tiền tính bằng đồng (VND không có đơn vị lẻ) — thay cho double (Replace Primitive with Object — bài 5.4). */
++public final class Tien {
++    public static final Tien KHONG = new Tien(0);
++
++    private final long dong;
++
++    private Tien(long dong) {
++        if (dong < 0) throw new IllegalArgumentException("Tiền âm: " + dong);
++        this.dong = dong;
++    }
++
++    public static Tien dong(long dong) {
++        return dong == 0 ? KHONG : new Tien(dong);
++    }
++
++    public long soDong() {
++        return dong;
++    }
++
++    public Tien nhan(int lan) {
++        return dong(dong * lan);
++    }
++
++    public Tien khongVuotQua(Tien tran) {
++        return dong <= tran.dong ? this : tran;
++    }
++
++    public boolean lonHonKhong() {
++        return dong > 0;
++    }
++
++    /**
++     * Cách in CŨ của double ("18000.0") — giữ để thông báo trả sách không đổi. Đổi sang toString() là đổi hành vi:
++     * làm ở ticket riêng (TV-97) cùng lúc sửa test đặc tả, không lẫn vào refactor này.
++     */
++    public String hienThiKieuCu() {
++        return String.valueOf((double) dong);
++    }
++
++    /** "18.000 đ" — dấu chấm ngăn nghìn kiểu Việt Nam, không phụ thuộc locale của máy chủ. */
++    @Override
++    public String toString() {
++        return String.format("%,d đ", dong).replace(',', '.');
++    }
++
++    @Override
++    public boolean equals(Object o) {
++        return o instanceof Tien && ((Tien) o).dong == dong;
++    }
++
++    @Override
++    public int hashCode() {
++        return Long.hashCode(dong);
++    }
++}
+diff --git a/src/main/java/com/thuvien/service/MuonTraService.java b/src/main/java/com/thuvien/service/MuonTraService.java
+index 50edbfb..5c4628f 100644
+--- a/src/main/java/com/thuvien/service/MuonTraService.java
++++ b/src/main/java/com/thuvien/service/MuonTraService.java
+@@ -3,6 +3,7 @@ package com.thuvien.service;
+ import com.thuvien.dao.PhieuMuonDAO;
+ import com.thuvien.model.KhoangMuon;
+ import com.thuvien.model.LoaiDocGia;
++import com.thuvien.model.Tien;
+ 
+ import java.sql.SQLException;
+ import java.sql.Timestamp;
+@@ -46,9 +47,9 @@ public class MuonTraService {
+     public KetQua tra(String loanId) throws SQLException {
+         PhieuMuonDAO.PhieuCanTra phieu = dao.timPhieuCanTra(loanId);
+         if (phieu == null) return new KetQua("readers", "Không tìm thấy phiếu mượn", false);
+-        double phi = phieu.phiTre(bayGio.getAsLong());
++        Tien phi = phieu.phiTre(bayGio.getAsLong());
+         dao.ghiTra(Integer.parseInt(loanId), new Timestamp(bayGio.getAsLong()), phi);
+         dao.congLaiSach(phieu.bookId);
+-        return new KetQua("readers", phi > 0 ? "Trả sách. Phí trễ hạn: " + phi : "Trả sách thành công", true);
++        return new KetQua("readers", phi.lonHonKhong() ? "Trả sách. Phí trễ hạn: " + phi.hienThiKieuCu() : "Trả sách thành công", true);
+     }
+ }
+diff --git a/src/test/java/com/thuvien/model/LoaiDocGiaTest.java b/src/test/java/com/thuvien/model/LoaiDocGiaTest.java
+index fec9fe5..0a1c166 100644
+--- a/src/test/java/com/thuvien/model/LoaiDocGiaTest.java
++++ b/src/test/java/com/thuvien/model/LoaiDocGiaTest.java
+@@ -19,12 +19,12 @@ class LoaiDocGiaTest {
+ 
+     @Test
+     void phiTre() {
+-        assertEquals(18000.0, LoaiDocGia.SV.phiTre(9));
+-        assertEquals(50000.0, LoaiDocGia.SV.phiTre(40));        // chạm trần
+-        assertEquals(13000.0, LoaiDocGia.GV.phiTre(13));
+-        assertEquals(130000.0, LoaiDocGia.KHACH.phiTre(26));    // không có trần
+-        assertEquals(0.0, LoaiDocGia.SV.phiTre(0));
+-        assertEquals(0.0, LoaiDocGia.KHACH.phiTre(-3));
++        assertEquals(Tien.dong(18000), LoaiDocGia.SV.phiTre(9));
++        assertEquals(Tien.dong(50000), LoaiDocGia.SV.phiTre(40));        // chạm trần
++        assertEquals(Tien.dong(13000), LoaiDocGia.GV.phiTre(13));
++        assertEquals(Tien.dong(130000), LoaiDocGia.KHACH.phiTre(26));    // không có trần
++        assertEquals(Tien.dong(0), LoaiDocGia.SV.phiTre(0));
++        assertEquals(Tien.dong(0), LoaiDocGia.KHACH.phiTre(-3));
+     }
+ 
+     @Test
+diff --git a/src/test/java/com/thuvien/service/MuonTraServiceTest.java b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+index b6911d2..7dba1a8 100644
+--- a/src/test/java/com/thuvien/service/MuonTraServiceTest.java
++++ b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+@@ -2,6 +2,7 @@ package com.thuvien.service;
+ 
+ import com.thuvien.dao.PhieuMuonDAO;
+ import com.thuvien.model.LoaiDocGia;
++import com.thuvien.model.Tien;
+ import org.junit.jupiter.api.Test;
+ 
+ import java.sql.Timestamp;
+@@ -32,7 +33,7 @@ class MuonTraServiceTest {
+         MuonTraService.KetQua kq = dichVu.tra("1");
+         assertEquals("readers", kq.trang);
+         assertEquals("Trả sách. Phí trễ hạn: 18000.0", kq.thongBao);
+-        verify(dao).ghiTra(1, new Timestamp(HOM_NAY), 18000.0);
++        verify(dao).ghiTra(1, new Timestamp(HOM_NAY), Tien.dong(18000));
+         verify(dao).congLaiSach(1);
+     }
+ 
+-- 
+2.55.0
+

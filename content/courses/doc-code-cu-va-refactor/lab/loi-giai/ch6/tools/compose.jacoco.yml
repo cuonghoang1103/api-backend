@@ -1,0 +1,8 @@
+# Bài 6.1 (đặt org.jacoco.agent-0.8.12-runtime.jar vào ./jacoco; chạy: docker compose -f docker-compose.yml -f compose.jacoco.yml up -d --build web)
+# Bài 6.1: gắn JaCoCo agent vào Tomcat lab để biết lớp/hàm nào THẬT SỰ chạy (bằng chứng lúc chạy cho code chết)
+services:
+  web:
+    environment:
+      CATALINA_OPTS: "-javaagent:/jacoco/org.jacoco.agent-0.8.12-runtime.jar=destfile=/jacoco/thuvien.exec,includes=com.thuvien.*"
+    volumes:
+      - ./jacoco:/jacoco

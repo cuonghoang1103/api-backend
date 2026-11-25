@@ -1,0 +1,54 @@
+From 9e9d8daaf1c087af292e5001413330c58109cdbb Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:42:03 +0700
+Subject: [PATCH 10/11] =?UTF-8?q?refactor(5.3):=20Move=20Function=20?=
+ =?UTF-8?q?=E2=80=94=20ghi=20tep=20phieu=20tu=20route=20vao=20kho.ghi?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ lib/kho.js     | 7 ++++++-
+ routes/muon.js | 4 +---
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/lib/kho.js b/lib/kho.js
+index c0f5308..54e9d97 100644
+--- a/lib/kho.js
++++ b/lib/kho.js
+@@ -13,4 +13,9 @@ function doc(ten, cb) {
+   });
+ }
+ 
+-module.exports = { doc: doc };
++// Chuyển từ routes/muon.js (Move Function — bài 5.3): chỉ kho được biết dữ liệu nằm ở tệp nào
++function ghi(ten, ds, cb) {
++  fs.writeFile(path.join(__dirname, '..', 'data', ten + '.json'), JSON.stringify(ds, null, 2), cb);
++}
++
++module.exports = { doc: doc, ghi: ghi };
+diff --git a/routes/muon.js b/routes/muon.js
+index ae7b40b..cda8c9d 100644
+--- a/routes/muon.js
++++ b/routes/muon.js
+@@ -1,8 +1,6 @@
+ // POST /api/muon — app mobile dat muon sach (Lan, 05/2019). Luat lay tu BookServlet + y kien thu thu.
+ var express = require('express');
+ var moment = require('moment');
+-var fs = require('fs');
+-var path = require('path');
+ var kho = require('../lib/kho');
+ var luatCua = require('../lib/luat').luatCua;
+ 
+@@ -43,7 +41,7 @@ router.post('/', function (req, res) {
+       }
+       var p = taoPhieu(dsPhieu, docGia.id, tenSach, new Date(), soNgay, 'mobile', req.body.ghiChu || '');
+       dsPhieu.push(p);
+-      fs.writeFile(path.join(__dirname, '..', 'data', 'phieu.json'), JSON.stringify(dsPhieu, null, 2), function (err3) {
++      kho.ghi('phieu', dsPhieu, function (err3) {
+         if (err3) return res.status(500).send('loi ghi du lieu');
+         res.status(201).json({ phieu: p.id, hanTra: moment(p.hanTra).format('DD/MM/YYYY'), phi: 0 });
+       });
+-- 
+2.55.0
+

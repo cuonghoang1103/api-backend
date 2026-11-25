@@ -1,0 +1,54 @@
+From 68953446864f2985594423dbffc780e77e1dfa2a Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 05:25:09 +0700
+Subject: [PATCH 02/12] chore(6.4): xoa BookDAO.findById,
+ Constants.PAGE_SIZE/DATE_FORMAT (grep 0, JaCoCo 0)
+
+---
+ src/main/java/com/thuvien/dao/BookDAO.java    | 18 ------------------
+ src/main/java/com/thuvien/util/Constants.java |  2 --
+ 2 files changed, 20 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/dao/BookDAO.java b/src/main/java/com/thuvien/dao/BookDAO.java
+index 7f5b648..ce2041e 100644
+--- a/src/main/java/com/thuvien/dao/BookDAO.java
++++ b/src/main/java/com/thuvien/dao/BookDAO.java
+@@ -34,24 +34,6 @@ public class BookDAO {
+         return list;
+     }
+ 
+-    public Book findById(int id) {
+-        Connection con = null;
+-        PreparedStatement ps = null;
+-        ResultSet rs = null;
+-        try {
+-            con = DBUtil.getConnection();
+-            ps = con.prepareStatement("SELECT id, code, title, author, quantity, available FROM books WHERE id = ?");
+-            ps.setInt(1, id);
+-            rs = ps.executeQuery();
+-            if (rs.next()) return map(rs);
+-        } catch (Exception e) {
+-            e.printStackTrace();
+-        } finally {
+-            DBUtil.close(rs, ps, con);
+-        }
+-        return null;
+-    }
+-
+     private Book map(ResultSet rs) throws Exception {
+         Book b = new Book();
+         b.setId(rs.getInt("id"));
+diff --git a/src/main/java/com/thuvien/util/Constants.java b/src/main/java/com/thuvien/util/Constants.java
+index 9a36b0a..9a298e2 100644
+--- a/src/main/java/com/thuvien/util/Constants.java
++++ b/src/main/java/com/thuvien/util/Constants.java
+@@ -2,6 +2,4 @@ package com.thuvien.util;
+ 
+ public class Constants {
+     public static final String SESSION_USER = "user";
+-    public static final int PAGE_SIZE = 20;          // khong ai dung
+-    public static final String DATE_FORMAT = "dd/MM/yyyy";
+ }
+-- 
+2.55.0
+

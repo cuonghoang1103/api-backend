@@ -1,0 +1,57 @@
+From 283985fb6c572fdc5e538ff01c2366a19c273c67 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:32:01 +0700
+Subject: [PATCH 03/11] refactor(5.1): Rename Variable dg -> docGia (F2)
+
+---
+ routes/muon.js | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/routes/muon.js b/routes/muon.js
+index 7b749b5..37766b7 100644
+--- a/routes/muon.js
++++ b/routes/muon.js
+@@ -24,16 +24,16 @@ router.post('/', function (req, res) {
+   if (!docGiaId || !tenSach) return res.status(400).json({ loi: 'thieu docGia hoac sach' });
+   kho.doc('doc-gia', function (err, dsDocGia) {
+     if (err) return res.status(500).send('loi doc du lieu');
+-    var dg = dsDocGia.filter(function (x) { return x.id == docGiaId; })[0];
+-    if (!dg) return res.status(404).json({ loi: 'khong tim thay doc gia' });
++    var docGia = dsDocGia.filter(function (x) { return x.id == docGiaId; })[0];
++    if (!docGia) return res.status(404).json({ loi: 'khong tim thay doc gia' });
+     kho.doc('phieu', function (err2, dsPhieu) {
+       if (err2) return res.status(500).send('loi doc du lieu');
+-      var dangMuon = demDangMuon(dsPhieu, dg);
++      var dangMuon = demDangMuon(dsPhieu, docGia);
+       var toiDa;
+       var soNgay;
+-      if (dg.loai == 'SV') {
++      if (docGia.loai == 'SV') {
+         toiDa = 3; soNgay = 14;
+-      } else if (dg.loai == 'GV') {
++      } else if (docGia.loai == 'GV') {
+         toiDa = 10; soNgay = 30;
+       } else {
+         toiDa = 1; soNgay = 7;
+@@ -43,15 +43,15 @@ router.post('/', function (req, res) {
+       }
+       // thu thu yeu cau 2019: dang co sach qua han thi khong cho muon them (tru GV)
+       for (var j = 0; j < dsPhieu.length; j++) {
+-        if (dsPhieu[j].docGia == dg.id && !dsPhieu[j].ngayTra) {
++        if (dsPhieu[j].docGia == docGia.id && !dsPhieu[j].ngayTra) {
+           if (moment().diff(moment(dsPhieu[j].hanTra), 'days', true) > 0) {
+-            if (dg.loai != 'GV') {
++            if (docGia.loai != 'GV') {
+               return res.status(409).json({ loi: 'dang co sach qua han', phieu: dsPhieu[j].id });
+             }
+           }
+         }
+       }
+-      var p = taoPhieu(dsPhieu, dg.id, tenSach, dg.loai, new Date(), soNgay, 'mobile', req.body.ghiChu || '');
++      var p = taoPhieu(dsPhieu, docGia.id, tenSach, docGia.loai, new Date(), soNgay, 'mobile', req.body.ghiChu || '');
+       dsPhieu.push(p);
+       fs.writeFile(path.join(__dirname, '..', 'data', 'phieu.json'), JSON.stringify(dsPhieu, null, 2), function (err3) {
+         if (err3) return res.status(500).send('loi ghi du lieu');
+-- 
+2.55.0
+

@@ -1,0 +1,87 @@
+From 675c8584f204d541b276a36b168e51a6c7801d96 Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:21:51 +0700
+Subject: [PATCH 4/8] refactor(7.2): Spring Security 5.8.16 +
+ SecurityFilterChain/DSL lambda thay WebSecurityConfigurerAdapter
+
+Van Boot 2.7.18, Java 8. 8 test xanh; HTTP giong buoc truoc (0 deprecation).
+---
+ pom.xml                                       |  2 +
+ .../java/com/thuvien/api/CauHinhBaoMat.java   | 40 ++++++++++---------
+ 2 files changed, 23 insertions(+), 19 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index d639b2d..166e575 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -15,6 +15,8 @@
+   <version>1.4.0</version>
+   <properties>
+     <java.version>1.8</java.version>
++    <!-- Bài 7.2: lên Security 5.8 khi còn ở Boot 2.7 — bản "cầu nối" có sẵn API của 6.0 -->
++    <spring-security.version>5.8.16</spring-security.version>
+   </properties>
+   <dependencies>
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId></dependency>
+diff --git a/src/main/java/com/thuvien/api/CauHinhBaoMat.java b/src/main/java/com/thuvien/api/CauHinhBaoMat.java
+index 9af592d..7a68736 100644
+--- a/src/main/java/com/thuvien/api/CauHinhBaoMat.java
++++ b/src/main/java/com/thuvien/api/CauHinhBaoMat.java
+@@ -1,33 +1,35 @@
+ package com.thuvien.api;
+ 
++import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
+ import org.springframework.http.HttpMethod;
+-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+ import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
++import org.springframework.security.core.userdetails.User;
++import org.springframework.security.core.userdetails.UserDetailsService;
++import org.springframework.security.provisioning.InMemoryUserDetailsManager;
++import org.springframework.security.web.SecurityFilterChain;
+ 
+-/** Công thức Spring Security 5 chép từ StackOverflow năm 2020. */
++/** Bài 7.2: bỏ WebSecurityConfigurerAdapter (deprecated 5.7, gỡ ở 6.0) — khai báo bean, DSL lambda, requestMatchers. */
+ @Configuration
+ @EnableWebSecurity
+-public class CauHinhBaoMat extends WebSecurityConfigurerAdapter {
++public class CauHinhBaoMat {
+ 
+-    @Override
+-    protected void configure(HttpSecurity http) throws Exception {
+-        http.csrf().disable()
+-            .authorizeRequests()
+-                .antMatchers(HttpMethod.GET, "/api/sach/**", "/api/quy-dinh").permitAll()
+-                .antMatchers("/api/admin/**").hasRole("ADMIN")
+-                .anyRequest().authenticated()
+-            .and()
+-            .httpBasic();
++    @Bean
++    SecurityFilterChain chuoiLoc(HttpSecurity http) throws Exception {
++        http.csrf(csrf -> csrf.disable())
++            .authorizeHttpRequests(yeuCau -> yeuCau
++                .requestMatchers(HttpMethod.GET, "/api/sach/**", "/api/quy-dinh").permitAll()
++                .requestMatchers("/api/admin/**").hasRole("ADMIN")
++                .anyRequest().authenticated())
++            .httpBasic(basic -> { });
++        return http.build();
+     }
+ 
+-    @Override
+-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+-        auth.inMemoryAuthentication()
+-            .withUser("thuthu").password("{noop}123456").roles("USER")
+-            .and()
+-            .withUser("admin").password("{noop}admin123").roles("ADMIN");
++    @Bean
++    UserDetailsService nguoiDung() {
++        return new InMemoryUserDetailsManager(
++            User.withUsername("thuthu").password("{noop}123456").roles("USER").build(),
++            User.withUsername("admin").password("{noop}admin123").roles("ADMIN").build());
+     }
+ }
+-- 
+2.55.0
+

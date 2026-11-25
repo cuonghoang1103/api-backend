@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- tools/smell-pmd.xml — bộ luật "ngửi smell" cho Chương 4 (PMD 7). Chỉ các luật đo hình dáng code, không phải luật phong cách. -->
+<ruleset name="smell"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+  <description>Long Method, Complex Method, Long Parameter List, God Class, Data Class, magic literal</description>
+  <rule ref="category/java/design.xml/NcssCount"/>
+  <rule ref="category/java/design.xml/CyclomaticComplexity"/>
+  <rule ref="category/java/design.xml/CognitiveComplexity"/>
+  <rule ref="category/java/design.xml/ExcessiveParameterList">
+    <properties><property name="minimum" value="6"/></properties>   <!-- mặc định PMD là 10; Sonar java:S107 là 7 -->
+  </rule>
+  <rule ref="category/java/bestpractices.xml/AvoidReassigningParameters"/>
+  <rule ref="category/java/design.xml/GodClass"/>
+  <rule ref="category/java/design.xml/DataClass"/>
+  <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts"/>
+  <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals"/>
+</ruleset>

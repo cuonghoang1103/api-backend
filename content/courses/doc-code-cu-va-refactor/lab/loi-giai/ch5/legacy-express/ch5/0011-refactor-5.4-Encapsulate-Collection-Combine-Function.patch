@@ -1,0 +1,170 @@
+From ea68fc002e26378446ec0eb8e37fd71f34e9d278 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:43:48 +0700
+Subject: [PATCH 11/11] =?UTF-8?q?refactor(5.4):=20Encapsulate=20Collection?=
+ =?UTF-8?q?=20+=20Combine=20Functions=20into=20Class=20=E2=80=94=20lib/so-?=
+ =?UTF-8?q?phieu.js?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ __tests__/so-phieu.test.js | 17 +++++++++++++++
+ lib/so-phieu.js            | 44 ++++++++++++++++++++++++++++++++++++++
+ routes/muon.js             | 40 ++++++----------------------------
+ 3 files changed, 67 insertions(+), 34 deletions(-)
+ create mode 100644 __tests__/so-phieu.test.js
+ create mode 100644 lib/so-phieu.js
+
+diff --git a/__tests__/so-phieu.test.js b/__tests__/so-phieu.test.js
+new file mode 100644
+index 0000000..ec4c633
+--- /dev/null
++++ b/__tests__/so-phieu.test.js
+@@ -0,0 +1,17 @@
++const SoPhieu = require('../lib/so-phieu');
++
++const DS = [{ id: 1, docGia: 2, ngayTra: null, hanTra: '2026-11-30T09:00:00+07:00' }, { id: 4, docGia: 2, ngayTra: '2026-11-01', hanTra: '2026-10-01' }];
++
++test('bản sao trả ra không làm đổi sổ', () => {
++  const so = new SoPhieu(DS);
++  so.danhSach().push({ id: 99 });
++  expect(so.danhSach()).toHaveLength(2);
++});
++
++test('mảng gốc truyền vào cũng không bị sửa khi thêm', () => {
++  const goc = DS.slice();
++  const so = new SoPhieu(goc);
++  expect(so.them(2, 'X', new Date('2026-11-24T10:00:00+07:00'), 14, 'mobile', '').id).toBe(5);
++  expect(goc).toHaveLength(2);
++  expect(so.dangMuonCua({ id: 2 })).toBe(2);
++});
+diff --git a/lib/so-phieu.js b/lib/so-phieu.js
+new file mode 100644
+index 0000000..571eb96
+--- /dev/null
++++ b/lib/so-phieu.js
+@@ -0,0 +1,44 @@
++// Sổ phiếu: bọc mảng phiếu đọc từ kho (Encapsulate Collection + Combine Functions into Class — bài 5.4).
++// Giữ phong cách ES5 của repo (var, function, prototype) — quy ước dự án, xem bài 8.1.
++var moment = require('moment');
++
++function SoPhieu(ds) {
++  this._ds = ds.slice();          // bản sao: không ai bên ngoài sửa được mảng bên trong
++}
++
++/** Bản sao để ghi ra kho hay trả cho client — push vào bản sao không làm đổi sổ. */
++SoPhieu.prototype.danhSach = function () {
++  return this._ds.slice();
++};
++
++SoPhieu.prototype.dangMuonCua = function (docGia) {
++  var n = 0;
++  for (var i = 0; i < this._ds.length; i++) {
++    if (this._ds[i].docGia == docGia.id && !this._ds[i].ngayTra) n++;
++  }
++  return n;
++};
++
++/** Phiếu chưa trả đầu tiên đã quá hạn của độc giả, hoặc null. */
++SoPhieu.prototype.quaHanDauTienCua = function (docGia) {
++  for (var i = 0; i < this._ds.length; i++) {
++    var p = this._ds[i];
++    if (p.docGia == docGia.id && !p.ngayTra && moment().diff(moment(p.hanTra), 'days', true) > 0) return p;
++  }
++  return null;
++};
++
++/** Thêm phiếu mới với id = id lớn nhất + 1; trả về phiếu vừa thêm. */
++SoPhieu.prototype.them = function (docGiaId, tenSach, ngayMuon, soNgay, nguoiTao, ghiChu) {
++  var id = 0;
++  for (var i = 0; i < this._ds.length; i++) if (this._ds[i].id > id) id = this._ds[i].id;
++  var p = {
++    id: id + 1, sach: tenSach, docGia: docGiaId,
++    hanTra: moment(ngayMuon).add(soNgay, 'days').format(), ngayTra: null,
++    nguoiTao: nguoiTao, ghiChu: ghiChu
++  };
++  this._ds.push(p);
++  return p;
++};
++
++module.exports = SoPhieu;
+diff --git a/routes/muon.js b/routes/muon.js
+index cda8c9d..b9a2fcf 100644
+--- a/routes/muon.js
++++ b/routes/muon.js
+@@ -3,20 +3,11 @@ var express = require('express');
+ var moment = require('moment');
+ var kho = require('../lib/kho');
+ var luatCua = require('../lib/luat').luatCua;
++var SoPhieu = require('../lib/so-phieu');
+ 
+ var router = express.Router();
+ router.use(express.json());
+ 
+-function taoPhieu(dsPhieu, docGiaId, tenSach, ngayMuon, soNgay, nguoiTao, ghiChu) {
+-  var id = 0;
+-  for (var i = 0; i < dsPhieu.length; i++) if (dsPhieu[i].id > id) id = dsPhieu[i].id;
+-  return {
+-    id: id + 1, sach: tenSach, docGia: docGiaId,
+-    hanTra: moment(ngayMuon).add(soNgay, 'days').format(), ngayTra: null,
+-    nguoiTao: nguoiTao, ghiChu: ghiChu
+-  };
+-}
+-
+ router.post('/', function (req, res) {
+   var docGiaId = req.body.docGia;
+   var tenSach = req.body.sach;
+@@ -27,7 +18,8 @@ router.post('/', function (req, res) {
+     if (!docGia) return res.status(404).json({ loi: 'khong tim thay doc gia' });
+     kho.doc('phieu', function (err2, dsPhieu) {
+       if (err2) return res.status(500).send('loi doc du lieu');
+-      var dangMuon = demDangMuon(dsPhieu, docGia);
++      var so = new SoPhieu(dsPhieu);
++      var dangMuon = so.dangMuonCua(docGia);
+       var luat = luatCua(docGia.loai);
+       var toiDa = luat.toiDa;
+       var soNgay = luat.soNgayMuon;
+@@ -35,13 +27,12 @@ router.post('/', function (req, res) {
+         return res.status(409).json({ loi: 'vuot qua so sach duoc muon', dangMuon: dangMuon, toiDa: toiDa });
+       }
+       // thu thu yeu cau 2019: dang co sach qua han thi khong cho muon them (tru GV)
+-      var quaHan = timPhieuQuaHan(dsPhieu, docGia);
++      var quaHan = so.quaHanDauTienCua(docGia);
+       if (quaHan && luat.chanKhiQuaHan) {
+         return res.status(409).json({ loi: 'dang co sach qua han', phieu: quaHan.id });
+       }
+-      var p = taoPhieu(dsPhieu, docGia.id, tenSach, new Date(), soNgay, 'mobile', req.body.ghiChu || '');
+-      dsPhieu.push(p);
+-      kho.ghi('phieu', dsPhieu, function (err3) {
++      var p = so.them(docGia.id, tenSach, new Date(), soNgay, 'mobile', req.body.ghiChu || '');
++      kho.ghi('phieu', so.danhSach(), function (err3) {
+         if (err3) return res.status(500).send('loi ghi du lieu');
+         res.status(201).json({ phieu: p.id, hanTra: moment(p.hanTra).format('DD/MM/YYYY'), phi: 0 });
+       });
+@@ -50,22 +41,3 @@ router.post('/', function (req, res) {
+ });
+ 
+ module.exports = router;
+-
+-function timPhieuQuaHan(dsPhieu, docGia) {
+-  var quaHan = null;
+-  for (var j = 0; j < dsPhieu.length; j++) {
+-    if (dsPhieu[j].docGia == docGia.id && !dsPhieu[j].ngayTra && moment().diff(moment(dsPhieu[j].hanTra), 'days', true) > 0) {
+-      quaHan = dsPhieu[j];
+-      break;
+-    }
+-  }
+-  return quaHan;
+-}
+-
+-function demDangMuon(dsPhieu, dg) {
+-  var dangMuon = 0;
+-  for (var i = 0; i < dsPhieu.length; i++) {
+-    if (dsPhieu[i].docGia == dg.id && !dsPhieu[i].ngayTra) dangMuon++;
+-  }
+-  return dangMuon;
+-}
+-- 
+2.55.0
+

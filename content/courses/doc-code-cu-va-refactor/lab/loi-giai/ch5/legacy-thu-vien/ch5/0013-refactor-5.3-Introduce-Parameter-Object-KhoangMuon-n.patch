@@ -1,0 +1,98 @@
+From 87a93872651b982cf9a44e5c8cabd185bf1853cb Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:37:42 +0700
+Subject: [PATCH 13/18] refactor(5.3): Introduce Parameter Object KhoangMuon
+ (ngayMuon + hanTra)
+
+---
+ .../java/com/thuvien/dao/PhieuMuonDAO.java    |  7 +++---
+ .../java/com/thuvien/model/KhoangMuon.java    | 23 +++++++++++++++++++
+ .../java/com/thuvien/servlet/BookServlet.java |  7 +++---
+ 3 files changed, 30 insertions(+), 7 deletions(-)
+ create mode 100644 src/main/java/com/thuvien/model/KhoangMuon.java
+
+diff --git a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+index 10712fc..a27b6ab 100644
+--- a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
++++ b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+@@ -1,5 +1,6 @@
+ package com.thuvien.dao;
+ 
++import com.thuvien.model.KhoangMuon;
+ import com.thuvien.model.LoaiDocGia;
+ import com.thuvien.util.DBUtil;
+ 
+@@ -59,13 +60,13 @@ public class PhieuMuonDAO {
+         }
+     }
+ 
+-    public void themPhieu(int bookId, int readerId, Timestamp ngayMuon, Timestamp hanTra) throws SQLException {
++    public void themPhieu(int bookId, int readerId, KhoangMuon khoang) throws SQLException {
+         PreparedStatement ps = con.prepareStatement("INSERT INTO loans(book_id, reader_id, borrow_date, due_date) VALUES (?, ?, ?, ?)");
+         try {
+             ps.setInt(1, bookId);
+             ps.setInt(2, readerId);
+-            ps.setTimestamp(3, ngayMuon);
+-            ps.setTimestamp(4, hanTra);
++            ps.setTimestamp(3, khoang.ngayMuon);
++            ps.setTimestamp(4, khoang.hanTra);
+             ps.executeUpdate();
+         } finally {
+             DBUtil.close(ps);
+diff --git a/src/main/java/com/thuvien/model/KhoangMuon.java b/src/main/java/com/thuvien/model/KhoangMuon.java
+new file mode 100644
+index 0000000..ff8a982
+--- /dev/null
++++ b/src/main/java/com/thuvien/model/KhoangMuon.java
+@@ -0,0 +1,23 @@
++package com.thuvien.model;
++
++import java.sql.Timestamp;
++import java.util.Calendar;
++
++/** Ngày mượn + hạn trả luôn đi cùng nhau (Introduce Parameter Object — bài 5.3). */
++public final class KhoangMuon {
++    public final Timestamp ngayMuon;
++    public final Timestamp hanTra;
++
++    private KhoangMuon(Timestamp ngayMuon, Timestamp hanTra) {
++        this.ngayMuon = ngayMuon;
++        this.hanTra = hanTra;
++    }
++
++    /** Bắt đầu từ thời điểm của lịch truyền vào, cộng số ngày theo lịch (Calendar.DATE) như mã cũ. */
++    public static KhoangMuon batDau(Calendar luc, int soNgay) {
++        Calendar cal = (Calendar) luc.clone();
++        Timestamp tu = new Timestamp(cal.getTimeInMillis());
++        cal.add(Calendar.DATE, soNgay);
++        return new KhoangMuon(tu, new Timestamp(cal.getTimeInMillis()));
++    }
++}
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index b8bfcfb..fb0cb0e 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -3,6 +3,7 @@ package com.thuvien.servlet;
+ import com.thuvien.dao.BookDAO;
+ import com.thuvien.dao.PhieuMuonDAO;
+ import com.thuvien.model.Book;
++import com.thuvien.model.KhoangMuon;
+ import com.thuvien.model.LoaiDocGia;
+ import com.thuvien.util.DBUtil;
+ import org.apache.commons.lang.StringUtils;
+@@ -122,10 +123,8 @@ public class BookServlet extends HttpServlet {
+             response.sendRedirect("books?msg=" + URLEncoder.encode("Sách đã hết", "UTF-8"));
+             return;
+         }
+-        Calendar cal = Calendar.getInstance();
+-        Timestamp now = new Timestamp(cal.getTimeInMillis());
+-        cal.add(Calendar.DATE, loai.soNgayMuon());
+-        dao.themPhieu(Integer.parseInt(bookId), Integer.parseInt(readerId), now, new Timestamp(cal.getTimeInMillis()));
++        KhoangMuon khoang = KhoangMuon.batDau(Calendar.getInstance(), loai.soNgayMuon());
++        dao.themPhieu(Integer.parseInt(bookId), Integer.parseInt(readerId), khoang);
+         log.info("borrow book=" + bookId + " reader=" + readerId);
+         response.sendRedirect("books?msg=" + URLEncoder.encode("Mượn thành công", "UTF-8"));
+     }
+-- 
+2.55.0
+

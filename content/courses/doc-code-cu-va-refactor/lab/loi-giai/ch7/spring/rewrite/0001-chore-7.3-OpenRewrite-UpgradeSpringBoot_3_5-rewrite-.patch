@@ -1,0 +1,190 @@
+From a1571ce4fd593879ac76c57cfe98bae59d754ab3 Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:31:02 +0700
+Subject: [PATCH 1/2] =?UTF-8?q?chore(7.3):=20OpenRewrite=20UpgradeSpringBo?=
+ =?UTF-8?q?ot=5F3=5F5=20(rewrite-spring=206.37.1)=20=E2=80=94=20NGUYEN=20V?=
+ =?UTF-8?q?AN=20may=20sinh,=20CHUA=20sua?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+8/8 test do: InMemoryUserDetailsManager(User.builder().username("admin").build()) — mat nguoi dung + mat khau.
+---
+ pom.xml                                       |  8 +++-
+ .../java/com/thuvien/api/CauHinhBaoMat.java   | 37 ++++++++++---------
+ src/main/java/com/thuvien/api/Sach.java       | 10 ++---
+ .../java/com/thuvien/api/SachController.java  |  2 +-
+ src/main/java/com/thuvien/api/SachMoi.java    |  4 +-
+ .../com/thuvien/api/ThuVienProperties.java    |  3 +-
+ src/main/resources/application.properties     |  7 ++--
+ 7 files changed, 38 insertions(+), 33 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index c11ffb6..f998d46 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -7,16 +7,20 @@
+   <parent>
+     <groupId>org.springframework.boot</groupId>
+     <artifactId>spring-boot-starter-parent</artifactId>
+-    <version>2.5.15</version>
++    <version>3.5.16</version>
+     <relativePath/>
+   </parent>
+   <groupId>com.thuvien</groupId>
+   <artifactId>thuvien-api</artifactId>
+   <version>1.4.0</version>
+   <properties>
+-    <java.version>1.8</java.version>
++    <java.version>17</java.version>
+   </properties>
+   <dependencies>
++    <dependency>
++      <groupId>jakarta.validation</groupId>
++      <artifactId>jakarta.validation-api</artifactId>
++    </dependency>
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId></dependency>
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-data-jpa</artifactId></dependency>
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-validation</artifactId></dependency>
+diff --git a/src/main/java/com/thuvien/api/CauHinhBaoMat.java b/src/main/java/com/thuvien/api/CauHinhBaoMat.java
+index 9af592d..42de00d 100644
+--- a/src/main/java/com/thuvien/api/CauHinhBaoMat.java
++++ b/src/main/java/com/thuvien/api/CauHinhBaoMat.java
+@@ -1,33 +1,34 @@
+ package com.thuvien.api;
+ 
++import static org.springframework.security.config.Customizer.withDefaults;
++
++import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
+ import org.springframework.http.HttpMethod;
+-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+ import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
++import org.springframework.security.core.userdetails.User;
++import org.springframework.security.provisioning.InMemoryUserDetailsManager;
++import org.springframework.security.web.SecurityFilterChain;
+ 
+ /** Công thức Spring Security 5 chép từ StackOverflow năm 2020. */
+ @Configuration
+ @EnableWebSecurity
+-public class CauHinhBaoMat extends WebSecurityConfigurerAdapter {
++public class CauHinhBaoMat {
+ 
+-    @Override
+-    protected void configure(HttpSecurity http) throws Exception {
+-        http.csrf().disable()
+-            .authorizeRequests()
+-                .antMatchers(HttpMethod.GET, "/api/sach/**", "/api/quy-dinh").permitAll()
+-                .antMatchers("/api/admin/**").hasRole("ADMIN")
+-                .anyRequest().authenticated()
+-            .and()
+-            .httpBasic();
++    @Bean
++    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
++        http.csrf(csrf -> csrf.disable())
++            .authorizeHttpRequests(requests -> requests
++                .requestMatchers(HttpMethod.GET, "/api/sach/**", "/api/quy-dinh").permitAll()
++                .requestMatchers("/api/admin/**").hasRole("ADMIN")
++                .anyRequest().authenticated())
++            .httpBasic(withDefaults());
++        return http.build();
+     }
+ 
+-    @Override
+-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+-        auth.inMemoryAuthentication()
+-            .withUser("thuthu").password("{noop}123456").roles("USER")
+-            .and()
+-            .withUser("admin").password("{noop}admin123").roles("ADMIN");
++    @Bean
++    InMemoryUserDetailsManager inMemoryAuthManager() throws Exception {
++        return new InMemoryUserDetailsManager(User.builder().username("admin").build());
+     }
+ }
+diff --git a/src/main/java/com/thuvien/api/Sach.java b/src/main/java/com/thuvien/api/Sach.java
+index 5a10237..18d6a9b 100644
+--- a/src/main/java/com/thuvien/api/Sach.java
++++ b/src/main/java/com/thuvien/api/Sach.java
+@@ -1,10 +1,10 @@
+ package com.thuvien.api;
+ 
+-import javax.persistence.Entity;
+-import javax.persistence.GeneratedValue;
+-import javax.persistence.GenerationType;
+-import javax.persistence.Id;
+-import javax.persistence.Table;
++import jakarta.persistence.Entity;
++import jakarta.persistence.GeneratedValue;
++import jakarta.persistence.GenerationType;
++import jakarta.persistence.Id;
++import jakarta.persistence.Table;
+ 
+ @Entity
+ @Table(name = "sach")
+diff --git a/src/main/java/com/thuvien/api/SachController.java b/src/main/java/com/thuvien/api/SachController.java
+index 3d7cf36..60d5561 100644
+--- a/src/main/java/com/thuvien/api/SachController.java
++++ b/src/main/java/com/thuvien/api/SachController.java
+@@ -3,7 +3,7 @@ package com.thuvien.api;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+-import javax.validation.Valid;
++import jakarta.validation.Valid;
+ 
+ import org.springframework.http.HttpStatus;
+ import org.springframework.http.ResponseEntity;
+diff --git a/src/main/java/com/thuvien/api/SachMoi.java b/src/main/java/com/thuvien/api/SachMoi.java
+index 19e0457..a35f09a 100644
+--- a/src/main/java/com/thuvien/api/SachMoi.java
++++ b/src/main/java/com/thuvien/api/SachMoi.java
+@@ -1,7 +1,7 @@
+ package com.thuvien.api;
+ 
+-import javax.validation.constraints.Min;
+-import javax.validation.constraints.NotBlank;
++import jakarta.validation.constraints.Min;
++import jakarta.validation.constraints.NotBlank;
+ 
+ /** Dữ liệu tạo sách mới (POST /api/sach). */
+ public class SachMoi {
+diff --git a/src/main/java/com/thuvien/api/ThuVienProperties.java b/src/main/java/com/thuvien/api/ThuVienProperties.java
+index 7424ecd..aae8ee7 100644
+--- a/src/main/java/com/thuvien/api/ThuVienProperties.java
++++ b/src/main/java/com/thuvien/api/ThuVienProperties.java
+@@ -1,10 +1,9 @@
+ package com.thuvien.api;
+ 
+ import org.springframework.boot.context.properties.ConfigurationProperties;
+-import org.springframework.boot.context.properties.ConstructorBinding;
+ 
+ /** thuvien.phi-tre-moi-ngay, thuvien.so-ngay-muon trong application.properties. */
+-@ConstructorBinding
++
+ @ConfigurationProperties("thuvien")
+ public class ThuVienProperties {
+     private final long phiTreMoiNgay;
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+index 21de0c4..03b6a27 100644
+--- a/src/main/resources/application.properties
++++ b/src/main/resources/application.properties
+@@ -1,10 +1,11 @@
+ spring.application.name=thuvien-api
+ spring.datasource.url=jdbc:h2:mem:thuvien;DB_CLOSE_DELAY=-1
+-spring.datasource.initialization-mode=always
++spring.sql.init.mode=always
+ spring.jpa.defer-datasource-initialization=true
+ spring.jpa.hibernate.ddl-auto=create
+-spring.jpa.hibernate.use-new-id-generator-mappings=false
++# This property is deprecated: Hibernate no longer supports disabling the use of new ID generator mappings.
++# spring.jpa.hibernate.use-new-id-generator-mappings=false
+ spring.jpa.open-in-view=false
+-server.max-http-header-size=16KB
++server.max-http-request-header-size=16KB
+ thuvien.phi-tre-moi-ngay=2000
+ thuvien.so-ngay-muon=14
+-- 
+2.55.0
+

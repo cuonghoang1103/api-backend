@@ -1,0 +1,94 @@
+From 34c3bd3a1e83f4a75f126ac30503bf34463a199c Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 05:25:39 +0700
+Subject: [PATCH 03/12] =?UTF-8?q?chore(6.4):=20go=20BookServlet.xoaSach=20?=
+ =?UTF-8?q?=E2=80=94=20khong=20co=20nut=20tu=202016,=20noi=20chuoi=20SQL?=
+ =?UTF-8?q?=20(TV-104,=20khach=20xac=20nhan)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../java/com/thuvien/servlet/BookServlet.java |  9 ----
+ .../servlet/BookServletXoaSachTest.java       | 42 +++++++++++++++++++
+ 2 files changed, 42 insertions(+), 9 deletions(-)
+ create mode 100644 src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java
+
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index 6341a55..ff97579 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -85,8 +85,6 @@ public class BookServlet extends HttpServlet {
+                 traSach(request, response, con);
+             } else if (action.equals("add")) {
+                 themSach(request, response, con);
+-            } else if (action.equals("delete")) {
+-                xoaSach(request, response, con);
+             } else {
+                 PrintWriter out = response.getWriter();
+                 out.println("<html><body><h3>Action khong hop le: " + action + "</h3></body></html>");
+@@ -130,13 +128,6 @@ public class BookServlet extends HttpServlet {
+         response.sendRedirect("books?msg=" + URLEncoder.encode("Đã thêm sách", "UTF-8"));
+     }
+ 
+-    private void xoaSach(HttpServletRequest request, HttpServletResponse response, Connection con) throws Exception {
+-        Statement st = con.createStatement();
+-        st.executeUpdate("DELETE FROM books WHERE id = " + request.getParameter("id"));
+-        DBUtil.close(st);
+-        response.sendRedirect("books");
+-    }
+-
+     /** Seam thời gian (Extract and Override Call): test ghi đè hàm này để cố định "bây giờ". */
+     protected long bayGio() {
+         return System.currentTimeMillis();
+diff --git a/src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java b/src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java
+new file mode 100644
+index 0000000..9b66a75
+--- /dev/null
++++ b/src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java
+@@ -0,0 +1,42 @@
++package com.thuvien.servlet;
++
++import com.thuvien.testutil.DuLieuTest;
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++
++import javax.servlet.http.HttpServletRequest;
++import javax.servlet.http.HttpServletResponse;
++import javax.servlet.http.HttpSession;
++import java.io.PrintWriter;
++import java.io.StringWriter;
++
++import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.mockito.Mockito.*;
++
++/** TV-104 (bài 6.4): action=delete không có nút nào từ 2016 và nối chuỗi SQL ⇒ gỡ. Khoá hành vi MỚI: coi như action lạ, không xoá gì. */
++class BookServletXoaSachTest {
++
++    @BeforeEach
++    void chuanBi() throws Exception {
++        DuLieuTest.napLai();
++    }
++
++    @Test
++    void actionDelete_khongConXoaDuoc_TV104() throws Exception {
++        HttpServletRequest req = mock(HttpServletRequest.class);
++        HttpServletResponse res = mock(HttpServletResponse.class);
++        HttpSession session = mock(HttpSession.class);
++        StringWriter body = new StringWriter();
++        when(req.getSession()).thenReturn(session);
++        when(session.getAttribute("user")).thenReturn("thuthu");
++        when(res.getWriter()).thenReturn(new PrintWriter(body, true));
++        when(req.getParameter("action")).thenReturn("delete");
++        when(req.getParameter("id")).thenReturn("0 OR id NOT IN (SELECT book_id FROM loans)");
++        int truoc = DuLieuTest.so("SELECT COUNT(*) FROM books");
++
++        new BookServlet().doPost(req, res);
++
++        assertEquals("<html><body><h3>Action khong hop le: delete</h3></body></html>", body.toString().trim());
++        assertEquals(truoc, DuLieuTest.so("SELECT COUNT(*) FROM books"));
++    }
++}
+-- 
+2.55.0
+

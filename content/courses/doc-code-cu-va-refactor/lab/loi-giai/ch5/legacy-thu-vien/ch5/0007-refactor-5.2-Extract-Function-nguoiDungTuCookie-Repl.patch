@@ -1,0 +1,59 @@
+From ffe54cbd63047c6fdc09dfe43ce1a9b2fd4d9fdb Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:33:46 +0700
+Subject: [PATCH 07/18] refactor(5.2): Extract Function nguoiDungTuCookie +
+ Replace Nested Conditional with Guard Clauses
+
+---
+ .../com/thuvien/servlet/LoginServlet.java     | 31 ++++++++++---------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/servlet/LoginServlet.java b/src/main/java/com/thuvien/servlet/LoginServlet.java
+index 499c628..22da2db 100644
+--- a/src/main/java/com/thuvien/servlet/LoginServlet.java
++++ b/src/main/java/com/thuvien/servlet/LoginServlet.java
+@@ -25,24 +25,27 @@ public class LoginServlet extends HttpServlet {
+             response.sendRedirect("login");
+             return;
+         }
+-        // tu dong dang nhap bang cookie
+-        Cookie[] cookies = request.getCookies();
+-        if (cookies != null) {
+-            for (Cookie c : cookies) {
+-                if (c.getName().equals("remember") && c.getValue().contains(":")) {
+-                    String u = c.getValue().split(":")[0];
+-                    String t = c.getValue().split(":")[1];
+-                    if (TokenUtil.makeToken(u).equals(t)) {
+-                        request.getSession().setAttribute(Constants.SESSION_USER, u);
+-                        response.sendRedirect("books");
+-                        return;
+-                    }
+-                }
+-            }
++        String nguoiDung = nguoiDungTuCookie(request.getCookies());
++        if (nguoiDung != null) {
++            request.getSession().setAttribute(Constants.SESSION_USER, nguoiDung);
++            response.sendRedirect("books");
++            return;
+         }
+         request.getRequestDispatcher("login.jsp").forward(request, response);
+     }
+ 
++    /** Tự đăng nhập bằng cookie "remember" dạng ten:token. Trả null nếu không có cookie hợp lệ. */
++    private String nguoiDungTuCookie(Cookie[] cookies) {
++        if (cookies == null) return null;
++        for (Cookie c : cookies) {
++            if (!c.getName().equals("remember")) continue;
++            if (!c.getValue().contains(":")) continue;
++            String[] phan = c.getValue().split(":");
++            if (TokenUtil.makeToken(phan[0]).equals(phan[1])) return phan[0];
++        }
++        return null;
++    }
++
+     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+         request.setCharacterEncoding("UTF-8");
+         String u = request.getParameter("username");
+-- 
+2.55.0
+

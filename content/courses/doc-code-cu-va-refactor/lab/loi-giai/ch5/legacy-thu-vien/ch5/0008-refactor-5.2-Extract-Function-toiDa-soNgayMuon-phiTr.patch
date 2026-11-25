@@ -1,0 +1,114 @@
+From 3fd2a6ffc1b74f2bf4e99626aacc2a3264eb06b1 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:34:20 +0700
+Subject: [PATCH 08/18] =?UTF-8?q?refactor(5.2):=20Extract=20Function=20toi?=
+ =?UTF-8?q?Da/soNgayMuon/phiTre=20=E2=80=94=20gom=203=20chuoi=20if=20theo?=
+ =?UTF-8?q?=20loai=20ve=20mot=20cho?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../java/com/thuvien/servlet/BookServlet.java | 65 +++++++++++--------
+ 1 file changed, 39 insertions(+), 26 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index e34975d..260ab5e 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -123,14 +123,7 @@ public class BookServlet extends HttpServlet {
+             rsDem.next();
+             int dangMuon = rsDem.getInt(1);
+             rsDem.close();
+-            int toiDa;
+-            if (loai.equals("SV")) {
+-                toiDa = 3;
+-            } else if (loai.equals("GV")) {
+-                toiDa = 10;
+-            } else {
+-                toiDa = 1;
+-            }
++            int toiDa = toiDa(loai);
+             if (dangMuon > toiDa) {
+                 response.sendRedirect("books?msg=" + URLEncoder.encode("Vượt quá số sách được mượn", "UTF-8"));
+                 return;
+@@ -144,13 +137,7 @@ public class BookServlet extends HttpServlet {
+             rsSach.close();
+             Calendar cal = Calendar.getInstance();
+             Timestamp now = new Timestamp(cal.getTimeInMillis());
+-            if (loai.equals("SV")) {
+-                cal.add(Calendar.DATE, 14);
+-            } else if (loai.equals("GV")) {
+-                cal.add(Calendar.DATE, 30);
+-            } else {
+-                cal.add(Calendar.DATE, 7);
+-            }
++            cal.add(Calendar.DATE, soNgayMuon(loai));
+             ps = con.prepareStatement("INSERT INTO loans(book_id, reader_id, borrow_date, due_date) VALUES (?, ?, ?, ?)");
+             ps.setInt(1, Integer.parseInt(bookId));
+             ps.setInt(2, Integer.parseInt(readerId));
+@@ -182,17 +169,7 @@ public class BookServlet extends HttpServlet {
+             rs.close();
+             long treMs = bayGio() - hanTra.getTime();
+             int soNgayTre = (int) (treMs / MS_MOT_NGAY);
+-            double phi = 0;
+-            if (soNgayTre > 0) {
+-                if (loai.equals("SV")) {
+-                    phi = soNgayTre * 2000;
+-                    if (phi > 50000) phi = 50000;
+-                } else if (loai.equals("GV")) {
+-                    phi = soNgayTre * 1000;
+-                } else {
+-                    phi = soNgayTre * 5000;
+-                }
+-            }
++            double phi = phiTre(loai, soNgayTre);
+             ps = con.prepareStatement("UPDATE loans SET return_date = ?, fine = ? WHERE id = ?");
+             ps.setTimestamp(1, new Timestamp(bayGio()));
+             ps.setDouble(2, phi);
+@@ -223,6 +200,42 @@ public class BookServlet extends HttpServlet {
+         response.sendRedirect("books");
+     }
+ 
++    // Ba luật theo loại độc giả — trước đây là ba chuỗi if rải trong muonSach/traSach (Repeated Switches, bài 4.3)
++    static int toiDa(String loai) {
++        if (loai.equals("SV")) {
++            return 3;
++        } else if (loai.equals("GV")) {
++            return 10;
++        } else {
++            return 1;
++        }
++    }
++
++    static int soNgayMuon(String loai) {
++        if (loai.equals("SV")) {
++            return 14;
++        } else if (loai.equals("GV")) {
++            return 30;
++        } else {
++            return 7;
++        }
++    }
++
++    static double phiTre(String loai, int soNgayTre) {
++        double phi = 0;
++        if (soNgayTre > 0) {
++            if (loai.equals("SV")) {
++                phi = soNgayTre * 2000;
++                if (phi > 50000) phi = 50000;
++            } else if (loai.equals("GV")) {
++                phi = soNgayTre * 1000;
++            } else {
++                phi = soNgayTre * 5000;
++            }
++        }
++        return phi;
++    }
++
+     /** Seam thời gian (Extract and Override Call): test ghi đè hàm này để cố định "bây giờ". */
+     protected long bayGio() {
+         return System.currentTimeMillis();
+-- 
+2.55.0
+

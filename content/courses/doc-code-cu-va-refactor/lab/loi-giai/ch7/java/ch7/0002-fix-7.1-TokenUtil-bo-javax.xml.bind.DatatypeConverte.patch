@@ -1,0 +1,50 @@
+From 290b146e5f84fee5f7fa32cfc35b60a2aa676764 Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:09:33 +0700
+Subject: [PATCH 2/7] =?UTF-8?q?fix(7.1):=20TokenUtil=20bo=20javax.xml.bind?=
+ =?UTF-8?q?.DatatypeConverter=20(go=20khoi=20JDK=2011,=20JEP=20320)=20?=
+ =?UTF-8?q?=E2=80=94=20tu=20in=20hex?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+49 test xanh tren JDK 8, 17 va 21 (van release=8). TokenUtilTest.tokenCoDinh khoa gia tri token.
+---
+ src/main/java/com/thuvien/util/TokenUtil.java | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/util/TokenUtil.java b/src/main/java/com/thuvien/util/TokenUtil.java
+index a67f24e..4c22845 100644
+--- a/src/main/java/com/thuvien/util/TokenUtil.java
++++ b/src/main/java/com/thuvien/util/TokenUtil.java
+@@ -1,7 +1,6 @@
+ package com.thuvien.util;
+ 
+ import java.security.MessageDigest;
+-import javax.xml.bind.DatatypeConverter;
+ 
+ /**
+  * Token cho cookie "ghi nho dang nhap". MD5 cua username + "thuvien2016".
+@@ -12,9 +11,18 @@ public class TokenUtil {
+         try {
+             MessageDigest md = MessageDigest.getInstance("MD5");
+             byte[] b = md.digest((username + "thuvien2016").getBytes("UTF-8"));
+-            return DatatypeConverter.printHexBinary(b).toLowerCase();
++            return hex(b);
+         } catch (Exception e) {
+             return "";
+         }
+     }
++
++    /** Thay DatatypeConverter.printHexBinary(b).toLowerCase() — javax.xml.bind bị gỡ khỏi JDK 11 (JEP 320). Lên Java 17 thì dùng HexFormat. */
++    static String hex(byte[] b) {
++        StringBuilder sb = new StringBuilder(b.length * 2);
++        for (byte x : b) {
++            sb.append(Character.forDigit((x >> 4) & 0xF, 16)).append(Character.forDigit(x & 0xF, 16));
++        }
++        return sb.toString();
++    }
+ }
+-- 
+2.55.0
+

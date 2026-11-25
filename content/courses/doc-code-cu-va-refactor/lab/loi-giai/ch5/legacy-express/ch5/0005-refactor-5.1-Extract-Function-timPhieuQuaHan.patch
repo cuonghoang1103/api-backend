@@ -1,0 +1,49 @@
+From a4831f7868933b03baca2210ea13d80bbc53d92d Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:32:06 +0700
+Subject: [PATCH 05/11] refactor(5.1): Extract Function timPhieuQuaHan
+
+---
+ routes/muon.js | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/routes/muon.js b/routes/muon.js
+index c34b369..fe4142f 100644
+--- a/routes/muon.js
++++ b/routes/muon.js
+@@ -42,13 +42,7 @@ router.post('/', function (req, res) {
+         return res.status(409).json({ loi: 'vuot qua so sach duoc muon', dangMuon: dangMuon, toiDa: toiDa });
+       }
+       // thu thu yeu cau 2019: dang co sach qua han thi khong cho muon them (tru GV)
+-      var quaHan = null;
+-      for (var j = 0; j < dsPhieu.length; j++) {
+-        if (dsPhieu[j].docGia == docGia.id && !dsPhieu[j].ngayTra && moment().diff(moment(dsPhieu[j].hanTra), 'days', true) > 0) {
+-          quaHan = dsPhieu[j];
+-          break;
+-        }
+-      }
++      var quaHan = timPhieuQuaHan(dsPhieu, docGia);
+       if (quaHan && docGia.loai != 'GV') {
+         return res.status(409).json({ loi: 'dang co sach qua han', phieu: quaHan.id });
+       }
+@@ -64,6 +58,17 @@ router.post('/', function (req, res) {
+ 
+ module.exports = router;
+ 
++function timPhieuQuaHan(dsPhieu, docGia) {
++  var quaHan = null;
++  for (var j = 0; j < dsPhieu.length; j++) {
++    if (dsPhieu[j].docGia == docGia.id && !dsPhieu[j].ngayTra && moment().diff(moment(dsPhieu[j].hanTra), 'days', true) > 0) {
++      quaHan = dsPhieu[j];
++      break;
++    }
++  }
++  return quaHan;
++}
++
+ function demDangMuon(dsPhieu, dg) {
+   var dangMuon = 0;
+   for (var i = 0; i < dsPhieu.length; i++) {
+-- 
+2.55.0
+

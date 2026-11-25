@@ -1,0 +1,189 @@
+From ec29abb206817063e9da34ce554e9b7288917fba Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 08:37:38 +0700
+Subject: [PATCH] =?UTF-8?q?fix(TV-111):=20JSP=20doi=20vao=20WEB-INF/jsp=20?=
+ =?UTF-8?q?=E2=80=94=20khong=20mo=20thang=20duoc=20nua,=20chi=20di=20qua?=
+ =?UTF-8?q?=20servlet=20(kiem=20dang=20nhap)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../com/thuvien/e2e/MuonSachQuaHttpTest.java  | 20 +++++++++++++------
+ .../java/com/thuvien/servlet/BookServlet.java |  2 +-
+ .../com/thuvien/servlet/LoginServlet.java     |  4 ++--
+ .../com/thuvien/servlet/ReaderServlet.java    |  2 +-
+ .../com/thuvien/servlet/ReportServlet.java    |  2 +-
+ src/main/webapp/{ => WEB-INF/jsp}/books.jsp   |  0
+ src/main/webapp/{ => WEB-INF/jsp}/error.jsp   |  0
+ src/main/webapp/{ => WEB-INF/jsp}/header.jsp  |  0
+ src/main/webapp/{ => WEB-INF/jsp}/login.jsp   |  0
+ src/main/webapp/{ => WEB-INF/jsp}/readers.jsp |  0
+ src/main/webapp/{ => WEB-INF/jsp}/report.jsp  |  0
+ src/main/webapp/WEB-INF/web.xml               |  2 +-
+ .../servlet/LoginServletCookieTest.java       |  2 +-
+ .../servlet/LoginServletMatKhauTest.java      |  2 +-
+ 14 files changed, 22 insertions(+), 14 deletions(-)
+ rename src/main/webapp/{ => WEB-INF/jsp}/books.jsp (100%)
+ rename src/main/webapp/{ => WEB-INF/jsp}/error.jsp (100%)
+ rename src/main/webapp/{ => WEB-INF/jsp}/header.jsp (100%)
+ rename src/main/webapp/{ => WEB-INF/jsp}/login.jsp (100%)
+ rename src/main/webapp/{ => WEB-INF/jsp}/readers.jsp (100%)
+ rename src/main/webapp/{ => WEB-INF/jsp}/report.jsp (100%)
+
+diff --git a/e2e/src/test/java/com/thuvien/e2e/MuonSachQuaHttpTest.java b/e2e/src/test/java/com/thuvien/e2e/MuonSachQuaHttpTest.java
+index ade918e..b2485c7 100644
+--- a/e2e/src/test/java/com/thuvien/e2e/MuonSachQuaHttpTest.java
++++ b/e2e/src/test/java/com/thuvien/e2e/MuonSachQuaHttpTest.java
+@@ -112,12 +112,20 @@ class MuonSachQuaHttpTest {
+     }
+ 
+     @Test
+-    void moThangJsp_khongCanDangNhap() throws Exception {
++    void moThangJsp_khongConMoDuoc_TV111() throws Exception {
+         http = HttpClient.newHttpClient();                   // khách lạ, không cookie
+-        HttpResponse<String> sach = get("books.jsp");
+-        assertEquals(500, sach.statusCode());                // rủi ro trong bản đồ chương 2 (JSP mở thẳng — TV-111, chưa sửa)
+-        assertTrue(sach.body().matches("(?s).*\\(ma loi [0-9a-f]{8}\\).*"));   // TV-109: chỉ còn mã tra cứu
+-        assertFalse(sach.body().contains("Exception"));     // trước TV-109: JasperException + 31 dòng stack trace + mã nguồn JSP
+-        assertEquals(200, get("report.jsp").statusCode());   // report.jsp hiện được cho người lạ
++        // trước TV-111: books.jsp 500 (sau TV-109 chỉ còn mã lỗi), report.jsp 200 — bản đồ rủi ro chương 2
++        for (String jsp : new String[] {"books.jsp", "readers.jsp", "report.jsp", "header.jsp", "login.jsp", "error.jsp", "WEB-INF/jsp/books.jsp"}) {
++            assertEquals(404, get(jsp).statusCode(), jsp);
++        }
++        assertEquals(302, get("books").statusCode());        // qua servlet thì vẫn bị đưa về trang đăng nhập
++    }
++
++    @Test
++    void trangLoiVanChiHienMaTraCuu_TV109() throws Exception {
++        HttpResponse<String> r = get("report?days=abc");    // NumberFormatException không ai bắt ⇒ 500 ⇒ error-page (nay ở WEB-INF/jsp)
++        assertEquals(500, r.statusCode());
++        assertTrue(r.body().matches("(?s).*\\(ma loi [0-9a-f]{8}\\).*"));
++        assertFalse(r.body().contains("Exception"));
+     }
+ }
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index 4720a62..4fb7148 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -70,7 +70,7 @@ public class BookServlet extends HttpServlet {
+             books = new BookDAO().findAll();
+         }
+         request.setAttribute("books", books);
+-        request.getRequestDispatcher("books.jsp").forward(request, response);
++        request.getRequestDispatcher("/WEB-INF/jsp/books.jsp").forward(request, response);
+     }
+ 
+     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+diff --git a/src/main/java/com/thuvien/servlet/LoginServlet.java b/src/main/java/com/thuvien/servlet/LoginServlet.java
+index 46a73e4..1ad06dc 100644
+--- a/src/main/java/com/thuvien/servlet/LoginServlet.java
++++ b/src/main/java/com/thuvien/servlet/LoginServlet.java
+@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
+             response.sendRedirect("books");
+             return;
+         }
+-        request.getRequestDispatcher("login.jsp").forward(request, response);
++        request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+     }
+ 
+     /** Tự đăng nhập bằng cookie "remember" dạng ten:token. Trả null nếu không có cookie hợp lệ. */
+@@ -84,7 +84,7 @@ public class LoginServlet extends HttpServlet {
+             DBUtil.close(rs, st, con);
+         }
+         request.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu");
+-        request.getRequestDispatcher("login.jsp").forward(request, response);
++        request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+     }
+ 
+     /** Nâng cấp dần: người dùng vừa gõ đúng mật khẩu thô ⇒ lưu bản băm. Lỗi ở đây không được chặn đăng nhập. */
+diff --git a/src/main/java/com/thuvien/servlet/ReaderServlet.java b/src/main/java/com/thuvien/servlet/ReaderServlet.java
+index 423126f..76f8171 100644
+--- a/src/main/java/com/thuvien/servlet/ReaderServlet.java
++++ b/src/main/java/com/thuvien/servlet/ReaderServlet.java
+@@ -61,7 +61,7 @@ public class ReaderServlet extends HttpServlet {
+         }
+         request.setAttribute("readers", readers);
+         request.setAttribute("loans", loans);
+-        request.getRequestDispatcher("readers.jsp").forward(request, response);
++        request.getRequestDispatcher("/WEB-INF/jsp/readers.jsp").forward(request, response);
+     }
+ 
+     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+diff --git a/src/main/java/com/thuvien/servlet/ReportServlet.java b/src/main/java/com/thuvien/servlet/ReportServlet.java
+index 5ede76f..6a010d4 100644
+--- a/src/main/java/com/thuvien/servlet/ReportServlet.java
++++ b/src/main/java/com/thuvien/servlet/ReportServlet.java
+@@ -54,6 +54,6 @@ public class ReportServlet extends HttpServlet {
+         }
+         request.setAttribute("rows", rows);
+         request.setAttribute("days", minDays);
+-        request.getRequestDispatcher("/report.jsp").forward(request, response);
++        request.getRequestDispatcher("/WEB-INF/jsp/report.jsp").forward(request, response);
+     }
+ }
+diff --git a/src/main/webapp/books.jsp b/src/main/webapp/WEB-INF/jsp/books.jsp
+similarity index 100%
+rename from src/main/webapp/books.jsp
+rename to src/main/webapp/WEB-INF/jsp/books.jsp
+diff --git a/src/main/webapp/error.jsp b/src/main/webapp/WEB-INF/jsp/error.jsp
+similarity index 100%
+rename from src/main/webapp/error.jsp
+rename to src/main/webapp/WEB-INF/jsp/error.jsp
+diff --git a/src/main/webapp/header.jsp b/src/main/webapp/WEB-INF/jsp/header.jsp
+similarity index 100%
+rename from src/main/webapp/header.jsp
+rename to src/main/webapp/WEB-INF/jsp/header.jsp
+diff --git a/src/main/webapp/login.jsp b/src/main/webapp/WEB-INF/jsp/login.jsp
+similarity index 100%
+rename from src/main/webapp/login.jsp
+rename to src/main/webapp/WEB-INF/jsp/login.jsp
+diff --git a/src/main/webapp/readers.jsp b/src/main/webapp/WEB-INF/jsp/readers.jsp
+similarity index 100%
+rename from src/main/webapp/readers.jsp
+rename to src/main/webapp/WEB-INF/jsp/readers.jsp
+diff --git a/src/main/webapp/report.jsp b/src/main/webapp/WEB-INF/jsp/report.jsp
+similarity index 100%
+rename from src/main/webapp/report.jsp
+rename to src/main/webapp/WEB-INF/jsp/report.jsp
+diff --git a/src/main/webapp/WEB-INF/web.xml b/src/main/webapp/WEB-INF/web.xml
+index 9459090..ea0ef93 100644
+--- a/src/main/webapp/WEB-INF/web.xml
++++ b/src/main/webapp/WEB-INF/web.xml
+@@ -39,6 +39,6 @@
+ 
+   <error-page>
+     <error-code>500</error-code>
+-    <location>/error.jsp</location>
++    <location>/WEB-INF/jsp/error.jsp</location>
+   </error-page>
+ </web-app>
+diff --git a/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+index 5cc0008..65927c6 100644
+--- a/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
++++ b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+@@ -40,7 +40,7 @@ class LoginServletCookieTest {
+         session = mock(HttpSession.class);
+         trangLogin = mock(RequestDispatcher.class);
+         when(req.getSession()).thenReturn(session);
+-        when(req.getRequestDispatcher("login.jsp")).thenReturn(trangLogin);
++        when(req.getRequestDispatcher("/WEB-INF/jsp/login.jsp")).thenReturn(trangLogin);
+     }
+ 
+     private void voiCookie(Cookie... cs) throws Exception {
+diff --git a/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java b/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java
+index f74b21b..bfc89e6 100644
+--- a/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java
++++ b/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java
+@@ -33,7 +33,7 @@ class LoginServletMatKhauTest {
+         res = mock(HttpServletResponse.class);
+         session = mock(HttpSession.class);
+         when(req.getSession()).thenReturn(session);
+-        when(req.getRequestDispatcher("login.jsp")).thenReturn(mock(RequestDispatcher.class));
++        when(req.getRequestDispatcher("/WEB-INF/jsp/login.jsp")).thenReturn(mock(RequestDispatcher.class));
+     }
+ 
+     private void dangNhap(String ten, String matKhau) throws Exception {
+-- 
+2.55.0
+

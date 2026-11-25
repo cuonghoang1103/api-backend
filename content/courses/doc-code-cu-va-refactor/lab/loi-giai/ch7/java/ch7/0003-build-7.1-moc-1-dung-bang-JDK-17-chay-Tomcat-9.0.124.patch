@@ -1,0 +1,39 @@
+From b93229223ccf4e5a86f6a08f84c5655ea0eeb93e Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:11:24 +0700
+Subject: [PATCH 3/7] =?UTF-8?q?build(7.1):=20moc=201=20=E2=80=94=20dung=20?=
+ =?UTF-8?q?bang=20JDK=2017,=20chay=20Tomcat=209.0.124=20tren=20JDK=2017=20?=
+ =?UTF-8?q?(bytecode=20van=20release=208)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+golden master 3 trang giong het; 49 test xanh. Tomcat tu them 7 co --add-opens (JDK_JAVA_OPTIONS trong catalina.sh).
+---
+ Dockerfile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index f4b6734..533b019 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,13 +1,13 @@
+-# Dựng WAR bằng JDK 8 (mã dùng javax.xml.bind — không biên dịch được trên JDK 11+), chạy trên Tomcat 9 (javax.servlet).
++# Bài 7.1: dựng bằng JDK 17 (bytecode vẫn release 8), CHẠY trên Tomcat 9 + JDK 17 — mốc 1: đổi runtime, chưa đổi mã.
+ # Ảnh này do khoá học thêm vào (Mục 0.1) — dự án gốc không có Docker.
+-FROM maven:3.9-eclipse-temurin-8 AS build
++FROM maven:3.9-eclipse-temurin-17 AS build
+ WORKDIR /src
+ COPY pom.xml .
+ RUN mvn -q -B dependency:go-offline
+ COPY src ./src
+ RUN mvn -q -B package -DskipTests
+ 
+-FROM tomcat:9.0-jdk8-temurin
++FROM tomcat:9.0-jdk17-temurin
+ RUN rm -rf /usr/local/tomcat/webapps/*
+ COPY --from=build /src/target/thuvien.war /usr/local/tomcat/webapps/thuvien.war
+ EXPOSE 8080
+-- 
+2.55.0
+

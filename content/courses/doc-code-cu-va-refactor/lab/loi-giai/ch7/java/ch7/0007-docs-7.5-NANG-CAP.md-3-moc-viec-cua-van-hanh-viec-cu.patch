@@ -1,0 +1,52 @@
+From 5014ca7ec7be566bf41d77f8bbbf251af5d39042 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 06:52:28 +0700
+Subject: [PATCH 7/7] =?UTF-8?q?docs(7.5):=20NANG-CAP.md=20=E2=80=94=203=20?=
+ =?UTF-8?q?moc,=20viec=20cua=20van=20hanh,=20viec=20cua=20lap=20trinh=20vi?=
+ =?UTF-8?q?en,=20rui=20ro=20con=20lai?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ NANG-CAP.md | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 NANG-CAP.md
+
+diff --git a/NANG-CAP.md b/NANG-CAP.md
+new file mode 100644
+index 0000000..d47f4c1
+--- /dev/null
++++ b/NANG-CAP.md
+@@ -0,0 +1,28 @@
++# Ghi chú nâng cấp — thuvien 1.0 (Chương 7, 24/11/2026)
++
++Java 8 + Tomcat 9 (javax)  ⇒  **Java 17 + Tomcat 10.1 (jakarta, Jakarta EE 10)**. Ba mốc, mỗi mốc một PR, test xanh sau từng commit.
++
++| Mốc | PR | Thay đổi | Bằng chứng |
++|---|---|---|---|
++| 1 | build | compiler 3.13.0, war 3.4.0, surefire 3.5.2, `release` 8; bỏ `javax.xml.bind` | 49 test xanh trên JDK 8/17/21; golden master giống hệt trên Tomcat 9 + JDK 17 |
++| 2 | java17 | `release` 17 + enforcer `[17,)`; record/switch mũi tên/instanceof mẫu/HexFormat (commit riêng) | 49 test xanh JDK 17/21; golden master giống hệt |
++| 3 | jakarta | OpenRewrite `JakartaEE10` (dryRun → đọc patch → apply) + 4 chỗ sửa tay; Tomcat 10.1.62 | 49 test; golden master giống hệt (JDK 17 và 21); e2e Testcontainers 3/3, 0 dòng đổi |
++
++## Việc của người chạy hệ thống
++- Máy chủ cần **JDK 17+** và **Tomcat 10.1+**. WAR mới KHÔNG chạy trên Tomcat 9 (javax) và JDK 8 (`UnsupportedClassVersionError … 61.0`).
++- WAR cũ (javax) thả vào `webapps/` của Tomcat 10 vẫn báo "Deployment … finished" nhưng mọi request 500
++  (`ClassNotFoundException: javax.servlet.http.HttpServlet`). Cần quay lại tạm: thả WAR cũ vào `webapps-javaee/` (Tomcat tự chuyển).
++- Cấu hình DB, URL, cổng: không đổi.
++
++## Việc của lập trình viên
++- Máy dev: JDK 17 (Maven chặn JDK cũ bằng enforcer). IDE đặt Project SDK = 17.
++- Thư viện servlet/JSP mới: `jakarta.servlet-api 6.0.0` (provided), `jakarta.servlet.jsp-api 3.1.1` (provided),
++  Jakarta Tags 3.0 (`jakarta.servlet.jsp.jstl-api 3.0.2` + `org.glassfish.web:jakarta.servlet.jsp.jstl 3.0.1`).
++- JSP dùng thẻ c: viết `uri="jakarta.tags.core"`.
++
++## Rủi ro còn lại / việc để sau
++- `error.jsp` vẫn in stack trace ra trang (CWE-209) — thấy rõ khi trang báo cáo vỡ trong lúc thử; ticket riêng.
++- Hiển thị tiền/ngày theo Locale: JDK 9+ dùng dữ liệu CLDR ("18.000 ₫" thay "18.000 đ"). Mã hiện tại tự định dạng nên không đổi;
++  ai dùng `NumberFormat.getCurrencyInstance(vi_VN)` phải kiểm lại.
++- JDK 21 chạy được (đã thử), chưa đặt làm chuẩn. JDK 25 là LTS mới nhất (9/2025) — mốc kế.
++- commons-lang 2.6 (2011) còn dùng — nên chuyển commons-lang3.
+-- 
+2.55.0
+

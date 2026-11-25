@@ -1,0 +1,76 @@
+From c628b9c75d4fbd5fbb5c810e85260334e20ed2f4 Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:14:10 +0700
+Subject: [PATCH 4/7] =?UTF-8?q?build(7.1):=20moc=202=20=E2=80=94=20release?=
+ =?UTF-8?q?=2017=20+=20enforcer=20requireJavaVersion=20[17,)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+JDK 8 voi release 17 van BUILD SUCCESS nhung sinh bytecode 52 (bo qua co) — enforcer chan ngay.
+49 test xanh tren JDK 17 va 21.
+---
+ Dockerfile |  2 +-
+ pom.xml    | 22 ++++++++++++++++++++--
+ 2 files changed, 21 insertions(+), 3 deletions(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index 533b019..dd8a08b 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,4 +1,4 @@
+-# Bài 7.1: dựng bằng JDK 17 (bytecode vẫn release 8), CHẠY trên Tomcat 9 + JDK 17 — mốc 1: đổi runtime, chưa đổi mã.
++# Bài 7.1: dựng bằng JDK 17, bytecode release 17 (mốc 2), chạy Tomcat 9 + JDK 17. Từ đây JDK 8 không chạy được WAR nữa.
+ # Ảnh này do khoá học thêm vào (Mục 0.1) — dự án gốc không có Docker.
+ FROM maven:3.9-eclipse-temurin-17 AS build
+ WORKDIR /src
+diff --git a/pom.xml b/pom.xml
+index c9b04cd..f25a9bc 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -18,7 +18,7 @@
+   <properties>
+     <pmd.boLuat>tools/smell-pmd.xml</pmd.boLuat>
+     <!-- Bài 7.1: release (cờ javac release) thay cho source/target — khoá cả API của JDK đích, không chỉ dạng bytecode -->
+-    <maven.compiler.release>8</maven.compiler.release>
++    <maven.compiler.release>17</maven.compiler.release>
+     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   </properties>
+ 
+@@ -93,6 +93,24 @@
+   <build>
+     <finalName>thuvien</finalName>
+     <plugins>
++      <plugin>
++        <!-- Bài 7.1: JDK 8 bỏ qua cờ release 17 mà KHÔNG báo lỗi (sinh bytecode 52) ⇒ chặn ngay từ đầu -->
++        <groupId>org.apache.maven.plugins</groupId>
++        <artifactId>maven-enforcer-plugin</artifactId>
++        <version>3.5.0</version>
++        <executions>
++          <execution>
++            <id>jdk-toi-thieu</id>
++            <goals><goal>enforce</goal></goals>
++            <configuration>
++              <rules>
++                <requireJavaVersion><version>[17,)</version></requireJavaVersion>
++                <requireMavenVersion><version>[3.6.3,)</version></requireMavenVersion>
++              </rules>
++            </configuration>
++          </execution>
++        </executions>
++      </plugin>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-compiler-plugin</artifactId>
+@@ -133,7 +151,7 @@
+         <version>3.26.0</version>
+         <configuration>
+           <rulesets><ruleset>${pmd.boLuat}</ruleset></rulesets>
+-          <targetJdk>1.8</targetJdk>
++          <targetJdk>17</targetJdk>
+           <linkXRef>false</linkXRef>
+           <printFailingErrors>true</printFailingErrors>
+           <minimumTokens>60</minimumTokens>
+-- 
+2.55.0
+

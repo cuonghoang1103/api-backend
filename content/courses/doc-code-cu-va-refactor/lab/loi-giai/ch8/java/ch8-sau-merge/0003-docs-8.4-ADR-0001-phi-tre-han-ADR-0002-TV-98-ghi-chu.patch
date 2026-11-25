@@ -1,0 +1,95 @@
+From 204a98269da01cf96006e1bc144779d14a3c2005 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 07:38:20 +0700
+Subject: [PATCH 3/3] docs(8.4): ADR 0001 phi tre han, ADR 0002 TV-98; ghi chu
+ canh bao o ReportServlet (khong doi hanh vi)
+
+---
+ docs/adr/0001-phi-tre-han-mot-nguon.md        | 21 +++++++++++++++++++
+ .../0002-tv98-xep-hang-trong-tien-trinh.md    | 16 ++++++++++++++
+ docs/adr/README.md                            |  8 +++++++
+ .../com/thuvien/servlet/ReportServlet.java    |  2 ++
+ 4 files changed, 47 insertions(+)
+ create mode 100644 docs/adr/0001-phi-tre-han-mot-nguon.md
+ create mode 100644 docs/adr/0002-tv98-xep-hang-trong-tien-trinh.md
+ create mode 100644 docs/adr/README.md
+
+diff --git a/docs/adr/0001-phi-tre-han-mot-nguon.md b/docs/adr/0001-phi-tre-han-mot-nguon.md
+new file mode 100644
+index 0000000..d9157cf
+--- /dev/null
++++ b/docs/adr/0001-phi-tre-han-mot-nguon.md
+@@ -0,0 +1,21 @@
++# ADR 0001 — Phí trễ hạn: Java (LoaiDocGia) là nguồn đúng; báo cáo chỉ là ước tính
++
++- Trạng thái: Đề xuất (24/11/2026) — chờ khách xác nhận, Q&A #15
++- Người viết: hocvien (đội bảo trì) · Người duyệt: trưởng nhóm, chị Hoa (thủ thư), phòng CTSV (trần phí SV)
++
++## Bối cảnh
++Có BA cách tính phí trễ hạn trong hệ thống, cho cùng một phiếu ra ba con số:
++- Java `LoaiDocGia` (từ TV-45, Hùng 05/2017): SV 2.000 đ/ngày (trần 50.000 đ theo TV-52, ý kiến phòng CTSV), GV 1.000 đ, khách 5.000 đ; ngày lẻ CẮT.
++- `sp_overdue_report` (TV-77, Lan 11/2019): đồng giá 2.000 đ/ngày cho mọi loại, cột tên `est_fine` (ước tính), không trần.
++- API Node `lib/phi.js` (Hùng 2018): làm tròn ngày lẻ LÊN (phiếu 1 lúc 10:00 24/11/2026: Node 20.000 đ, Java 18.000 đ).
++Người viết cả ba đã nghỉ. Thủ thư thu tiền theo màn hình "Trả sách" (Java). Báo cáo quá hạn dùng để gọi nhắc độc giả.
++
++## Quyết định
++1. Số tiền THU là của Java. Mọi chỗ khác hiển thị phí phải khớp Java hoặc ghi rõ "ước tính".
++2. Báo cáo giữ đồng giá trong lúc chờ khách; thêm chú thích "phí ước tính" trên trang (ticket TV-115) — không sửa SQL khi chưa có xác nhận.
++3. API Node đổi sang cắt ngày lẻ như Java (ticket TV-116), vì app hiện "phí dự kiến" cao hơn số thủ thư thu.
++
++## Hệ quả
++- Tốt: một nguồn đúng, mọi lệch đều có ticket. Khi thêm loại độc giả (TV-95) chỉ cần sửa `LoaiDocGia`.
++- Xấu: báo cáo còn sai cho GV/khách tới khi TV-115 xong; độc giả từng thấy "phí dự kiến" Node cao hơn có thể thắc mắc.
++- Nếu khách trả lời "báo cáo phải đúng từng đồng": viết ADR 0002 thay thế mục 2 (gọi Java hoặc đưa bảng giá vào CSDL).
+diff --git a/docs/adr/0002-tv98-xep-hang-trong-tien-trinh.md b/docs/adr/0002-tv98-xep-hang-trong-tien-trinh.md
+new file mode 100644
+index 0000000..5d2b8af
+--- /dev/null
++++ b/docs/adr/0002-tv98-xep-hang-trong-tien-trinh.md
+@@ -0,0 +1,16 @@
++# ADR 0002 — TV-98: xếp hàng POST /api/muon trong một tiến trình, chưa chuyển phieu.json sang MySQL
++
++- Trạng thái: Chấp nhận (24/11/2026) · Liên quan: PR tv-98 (legacy-express), TV-114
++
++## Bối cảnh
++Hai lượt mượn cùng lúc đọc–tính–ghi `data/phieu.json` đè nhau (đo: 2 lượt ⇒ cùng id 6, mất 1 phiếu; 5 lượt ⇒ còn 1).
++Cách sửa "thật" là đưa phiếu vào MySQL chung với ứng dụng Java (giao dịch, khoá dòng) — 3–5 ngày, đổi cả app mobile.
++Production chạy API bằng MỘT tiến trình `node server.js` (xác nhận với IT khách, Q&A #16).
++
++## Quyết định
++Xếp hàng các lượt POST /api/muon trong tiến trình (`lib/tuan-tu.js`). Không đổi định dạng dữ liệu, không đổi API.
++
++## Hệ quả
++- Sửa được ngay (64 dòng, có test tái hiện), lùi được bằng revert.
++- KHÔNG còn đúng nếu chạy nhiều tiến trình (PM2 cluster, 2 container). Ghi vào README phần vận hành; TV-114 theo dõi việc chuyển MySQL.
++- Lượt mượn chậm (tệp lớn, đĩa chậm) làm các lượt sau phải chờ — chưa đo với dữ liệu thật; theo dõi thời gian phản hồi sau khi triển khai.
+diff --git a/docs/adr/README.md b/docs/adr/README.md
+new file mode 100644
+index 0000000..6bb54f8
+--- /dev/null
++++ b/docs/adr/README.md
+@@ -0,0 +1,8 @@
++# Bản ghi quyết định (ADR)
++Mỗi quyết định khó đảo ngược hoặc dễ bị hỏi "sao lại thế này?" ⇒ một tệp `NNNN-ten-ngan.md` (Bối cảnh · Quyết định · Hệ quả · Trạng thái).
++Không sửa ADR đã chấp nhận; quyết định mới thay thế thì viết ADR mới và ghi "Thay thế bởi NNNN" ở ADR cũ.
++
++| Số | Quyết định | Trạng thái |
++|---|---|---|
++| 0001 | Phí trễ hạn: Java là nguồn đúng; báo cáo là ước tính | Đề xuất |
++| 0002 | TV-98: xếp hàng trong tiến trình thay vì chuyển phieu.json sang MySQL ngay | Chấp nhận |
+diff --git a/src/main/java/com/thuvien/servlet/ReportServlet.java b/src/main/java/com/thuvien/servlet/ReportServlet.java
+index c68772b..5ede76f 100644
+--- a/src/main/java/com/thuvien/servlet/ReportServlet.java
++++ b/src/main/java/com/thuvien/servlet/ReportServlet.java
+@@ -33,6 +33,8 @@ public class ReportServlet extends HttpServlet {
+         ResultSet rs = null;
+         try {
+             con = DBUtil.getConnection();
++            // LƯU Ý (TV-77, Lan 11/2019): sp_overdue_report tính ĐỒNG GIÁ 2.000 đ/ngày (cột est_fine = ước tính) — khác LoaiDocGia
++            // (SV/GV/khách, trần SV). Người viết đã nghỉ; chưa rõ cố ý hay sót. Đừng "sửa cho khớp" trước khi xem docs/adr/0001.
+             cs = con.prepareCall("{call sp_overdue_report(?)}");
+             cs.setInt(1, minDays);
+             rs = cs.executeQuery();
+-- 
+2.55.0
+

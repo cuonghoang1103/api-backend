@@ -1,0 +1,56 @@
+From 790ac75794230ce43f9e398fd4bca408de038154 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 07:24:35 +0700
+Subject: [PATCH] fix(TV-109): error.jsp chi hien ma tra cuu, chi tiet loi vao
+ log (CWE-209)
+
+Cung cau voi BookServlet (bai 6.3) de ho tro tim theo mot mau. e2e moThangJsp doi ky vong (truoc: JasperException + stack trace).
+Ngoai pham vi (TV-111): JSP mo thang khong can dang nhap.
+---
+ e2e/src/test/java/com/thuvien/e2e/MuonSachQuaHttpTest.java | 6 ++++--
+ src/main/webapp/error.jsp                                  | 7 ++++++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/e2e/src/test/java/com/thuvien/e2e/MuonSachQuaHttpTest.java b/e2e/src/test/java/com/thuvien/e2e/MuonSachQuaHttpTest.java
+index c3490eb..ade918e 100644
+--- a/e2e/src/test/java/com/thuvien/e2e/MuonSachQuaHttpTest.java
++++ b/e2e/src/test/java/com/thuvien/e2e/MuonSachQuaHttpTest.java
+@@ -26,6 +26,7 @@ import java.sql.ResultSet;
+ import java.time.Duration;
+ 
+ import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.junit.jupiter.api.Assertions.assertFalse;
+ import static org.junit.jupiter.api.Assertions.assertTrue;
+ 
+ /**
+@@ -114,8 +115,9 @@ class MuonSachQuaHttpTest {
+     void moThangJsp_khongCanDangNhap() throws Exception {
+         http = HttpClient.newHttpClient();                   // khách lạ, không cookie
+         HttpResponse<String> sach = get("books.jsp");
+-        assertEquals(500, sach.statusCode());                // rủi ro trong bản đồ chương 2:
+-        assertTrue(sach.body().contains("JasperException"));  // error.jsp in stack trace + mã nguồn JSP
++        assertEquals(500, sach.statusCode());                // rủi ro trong bản đồ chương 2 (JSP mở thẳng — TV-111, chưa sửa)
++        assertTrue(sach.body().matches("(?s).*\\(ma loi [0-9a-f]{8}\\).*"));   // TV-109: chỉ còn mã tra cứu
++        assertFalse(sach.body().contains("Exception"));     // trước TV-109: JasperException + 31 dòng stack trace + mã nguồn JSP
+         assertEquals(200, get("report.jsp").statusCode());   // report.jsp hiện được cho người lạ
+     }
+ }
+diff --git a/src/main/webapp/error.jsp b/src/main/webapp/error.jsp
+index b811ac5..d921ff4 100644
+--- a/src/main/webapp/error.jsp
++++ b/src/main/webapp/error.jsp
+@@ -1,5 +1,10 @@
+ <%@ page isErrorPage="true" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
++<%-- TV-109 (CWE-209): chi tiết lỗi chỉ vào log cho dev; người dùng thấy mã tra cứu, cùng câu với BookServlet (bài 6.3) --%>
++<%
++    String maLoi = java.util.UUID.randomUUID().toString().substring(0, 8);
++    org.apache.log4j.Logger.getLogger("error.jsp").error("loi " + maLoi + " uri=" + request.getAttribute("jakarta.servlet.error.request_uri"), exception);
++%>
+ <html><body>
+ <h2>Có lỗi xảy ra</h2>
+-<pre><% if (exception != null) exception.printStackTrace(new java.io.PrintWriter(out)); %></pre>
++<h3>Loi he thong, vui long thu lai (ma loi <%= maLoi %>)</h3>
+ </body></html>
+-- 
+2.55.0
+

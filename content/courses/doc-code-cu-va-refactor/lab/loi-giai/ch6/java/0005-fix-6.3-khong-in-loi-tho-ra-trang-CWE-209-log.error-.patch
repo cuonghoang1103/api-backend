@@ -1,0 +1,61 @@
+From 4109a10efcf9b7c9241ad1742fd4ba44cbce07be Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 05:27:34 +0700
+Subject: [PATCH 05/12] =?UTF-8?q?fix(6.3):=20khong=20in=20loi=20tho=20ra?=
+ =?UTF-8?q?=20trang=20(CWE-209)=20=E2=80=94=20log.error=20kem=20ma=20tra?=
+ =?UTF-8?q?=20cuu=208=20ky=20tu?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ src/main/java/com/thuvien/servlet/BookServlet.java         | 7 +++++--
+ .../java/com/thuvien/servlet/BookServletMuonSachTest.java  | 6 ++++--
+ 2 files changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index ff97579..c759569 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -20,6 +20,7 @@ import java.sql.ResultSet;
+ import java.sql.Statement;
+ import java.util.ArrayList;
+ import java.util.List;
++import java.util.UUID;
+ 
+ /**
+  * Quan ly sach + muon/tra. (Tuan 2016, Hung sua 2017, Lan sua 2019)
+@@ -90,9 +91,11 @@ public class BookServlet extends HttpServlet {
+                 out.println("<html><body><h3>Action khong hop le: " + action + "</h3></body></html>");
+             }
+         } catch (Exception e) {
+-            e.printStackTrace();
++            // Bài 6.3 (CWE-209): chi tiết lỗi vào log cho dev, người dùng chỉ thấy mã tra cứu
++            String maLoi = UUID.randomUUID().toString().substring(0, 8);
++            log.error("loi " + maLoi + " action=" + action, e);
+             PrintWriter out = response.getWriter();
+-            out.println("<html><body><h3>Loi: " + e.getMessage() + "</h3></body></html>");
++            out.println("<html><body><h3>Loi he thong, vui long thu lai (ma loi " + maLoi + ")</h3></body></html>");
+         } finally {
+             DBUtil.close(con);
+         }
+diff --git a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+index 6caeae8..6757437 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+@@ -123,8 +123,10 @@ class BookServletMuonSachTest {
+ 
+     @Test
+     void bookIdKhongTonTai() throws Exception {
+-        // Không kiểm rs.next() ở câu SELECT available ⇒ JDBC ném lỗi, servlet in nguyên thông điệp
+-        assertEquals("<html><body><h3>Loi: Illegal operation on empty result set.</h3></body></html>", muon("5", "99"));
++        // Không kiểm rs.next() ở câu SELECT available ⇒ JDBC ném lỗi. Bài 6.3 ĐỔI CÓ CHỦ ĐÍCH: trước đây in nguyên
++        // "Loi: Illegal operation on empty result set." — nay chỉ in mã tra cứu, chi tiết nằm trong log
++        String trang = muon("5", "99");
++        assertTrue(trang.matches("<html><body><h3>Loi he thong, vui long thu lai \\(ma loi [0-9a-f]{8}\\)</h3></body></html>"), trang);
+     }
+ 
+     @Test
+-- 
+2.55.0
+

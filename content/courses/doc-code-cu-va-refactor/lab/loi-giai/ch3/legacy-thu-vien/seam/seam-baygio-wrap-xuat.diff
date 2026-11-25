@@ -1,0 +1,88 @@
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index 8e85504..6ca44aa 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -70,7 +70,18 @@ public class BookServlet extends HttpServlet {
+         request.getRequestDispatcher("books.jsp").forward(request, response);
+     }
+ 
++    /** TV-91: ghi nhật ký mọi thao tác POST (wrap method — hàm cũ giữ nguyên, chỉ đổi tên). */
+     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
++        long batDau = System.nanoTime();
++        try {
++            xuLyPost(request, response);
++        } finally {
++            log.info("AUDIT action=" + request.getParameter("action") + " user=" + request.getSession().getAttribute("user")
++                    + " ms=" + (System.nanoTime() - batDau) / 1000000);
++        }
++    }
++
++    private void xuLyPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+         if (request.getSession().getAttribute("user") == null) {
+             response.sendRedirect("login");
+             return;
+@@ -146,7 +157,7 @@ public class BookServlet extends HttpServlet {
+                 String type = rs.getString("type");
+                 Timestamp due = rs.getTimestamp("due_date");
+                 rs.close();
+-                long diff = System.currentTimeMillis() - due.getTime();
++                long diff = bayGio() - due.getTime();
+                 int days = (int) (diff / (1000 * 60 * 60 * 24));
+                 double fine = 0;
+                 if (days > 0) {
+@@ -160,7 +171,7 @@ public class BookServlet extends HttpServlet {
+                     }
+                 }
+                 ps = con.prepareStatement("UPDATE loans SET return_date = ?, fine = ? WHERE id = ?");
+-                ps.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
++                ps.setTimestamp(1, new Timestamp(bayGio()));
+                 ps.setDouble(2, fine);
+                 ps.setInt(3, Integer.parseInt(loanId));
+                 ps.executeUpdate();
+@@ -190,4 +201,9 @@ public class BookServlet extends HttpServlet {
+             DBUtil.close(rs, st, ps, con);
+         }
+     }
++
++    /** Seam thời gian (Extract and Override Call): test ghi đè hàm này để cố định "bây giờ". */
++    protected long bayGio() {
++        return System.currentTimeMillis();
++    }
+ }
+diff --git a/src/main/java/com/thuvien/servlet/ExportServlet.java b/src/main/java/com/thuvien/servlet/ExportServlet.java
+index 29711df..6847081 100644
+--- a/src/main/java/com/thuvien/servlet/ExportServlet.java
++++ b/src/main/java/com/thuvien/servlet/ExportServlet.java
+@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
+ import javax.servlet.http.HttpServletResponse;
+ import java.io.FileWriter;
+ import java.io.IOException;
++import java.io.Writer;
+ import java.sql.Connection;
+ import java.sql.ResultSet;
+ import java.sql.Statement;
+@@ -22,12 +23,12 @@ public class ExportServlet extends HttpServlet {
+         Connection con = null;
+         Statement st = null;
+         ResultSet rs = null;
+-        FileWriter fw = null;
++        Writer fw = null;
+         try {
+             con = DBUtil.getConnection();
+             st = con.createStatement();
+             rs = st.executeQuery("SELECT * FROM books");
+-            fw = new FileWriter(Constants.EXPORT_DIR + "books.csv");
++            fw = moTepXuat();
+             while (rs.next()) {
+                 fw.write(rs.getString("code") + "," + rs.getString("title") + "," + rs.getInt("quantity") + "\n");
+             }
+@@ -39,4 +40,9 @@ public class ExportServlet extends HttpServlet {
+             DBUtil.close(rs, st, con);
+         }
+     }
++
++    /** Seam (Extract and Override Factory Method): test ghi đè để nhận CSV vào bộ nhớ thay vì ổ C: của anh Tuấn. */
++    protected Writer moTepXuat() throws IOException {
++        return new FileWriter(Constants.EXPORT_DIR + "books.csv");
++    }
+ }

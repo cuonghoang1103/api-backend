@@ -1,0 +1,47 @@
+From 351a6642c1445b10bcc359114da78c66e36b8dc0 Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:21:03 +0700
+Subject: [PATCH 2/8] test(7.2): chup tools/http-truoc.txt tren Boot 2.5.15 /
+ JDK 8
+
+---
+ tools/http-truoc.txt | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 tools/http-truoc.txt
+
+diff --git a/tools/http-truoc.txt b/tools/http-truoc.txt
+new file mode 100644
+index 0000000..4f21b7f
+--- /dev/null
++++ b/tools/http-truoc.txt
+@@ -0,0 +1,27 @@
++### GET /api/sach/1
++{"id":1,"ten":"Lập trình Java","tacGia":"Nguyễn Văn A","conLai":3}
++=> 200
++### GET /api/sach/ (gach cheo cuoi)
++[{"id":1,"ten":"Lập trình Java","tacGia":"Nguyễn Văn A","conLai":3},{"id":2,"ten":"Cơ sở dữ liệu","tacGia":"Trần Thị B","conLai":0},{"id":3,"ten":"Mạng máy tính","tacGia":"Lê Văn C","conLai":5}]
++=> 200
++### GET /api/sach/99
++
++=> 404
++### GET /api/quy-dinh
++{"phiTreMoiNgay":2000,"soNgayMuon":14}
++=> 200
++### POST /api/sach khong dang nhap
++{"timestamp":"<T>","status":401,"error":"Unauthorized","path":"/api/sach"}
++=> 401
++### POST /api/sach ten rong (thuthu)
++{"timestamp":"<T>","status":400,"error":"Bad Request","path":"/api/sach"}
++=> 400
++### POST /api/sach JSON hong (thuthu)
++{"timestamp":"<T>","status":400,"error":"Bad Request","path":"/api/sach"}
++=> 400
++### DELETE /api/admin/sach/2 (thuthu)
++{"timestamp":"<T>","status":403,"error":"Forbidden","path":"/api/admin/sach/2"}
++=> 403
++### GET /khong-co
++{"timestamp":"<T>","status":401,"error":"Unauthorized","path":"/khong-co"}
++=> 401
+-- 
+2.55.0
+

@@ -1,0 +1,34 @@
+From f254618ab414e2e699b4d99dc101908e3601d2cf Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:49:14 +0700
+Subject: [PATCH 1/3] =?UTF-8?q?test(7.4):=20bo=20khoa=20cau=20bao=20loi=20?=
+ =?UTF-8?q?cua=20V8=20=E2=80=94=20Node=2016+=20doi=20'Cannot=20read=20prop?=
+ =?UTF-8?q?erty'=20thanh=20'Cannot=20read=20properties=20of=20undefined=20?=
+ =?UTF-8?q?(reading=20...)'?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Chuan bi nang Node: 21 test xanh tren Node 14 VA 22.
+---
+ __tests__/phieu.seam.test.js | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/__tests__/phieu.seam.test.js b/__tests__/phieu.seam.test.js
+index 1b8097a..c8dbd7d 100644
+--- a/__tests__/phieu.seam.test.js
++++ b/__tests__/phieu.seam.test.js
+@@ -17,7 +17,9 @@ test('độc giả đã bị xoá — bản giả THAY HẲN kho: Express in sta
+   kho.doc.mockImplementation((ten, cb) => cb(null, ten === 'phieu' ? [PHIEU_MO_COI] : []));
+   const res = await request(app).get('/api/phieu/9/phi');
+   expect(res.status).toBe(500);
+-  expect(res.text).toContain('TypeError: Cannot read property &#39;ten&#39; of undefined');
++  // Bài 7.4: câu chữ do V8 sinh — Node 14: "Cannot read property 'ten' of undefined",
++  // Node 16+: "Cannot read properties of undefined (reading 'ten')". Khoá điều mình cần (TypeError ở thuộc tính ten), không khoá câu của V8.
++  expect(res.text).toMatch(/TypeError: Cannot read propert(y &#39;ten&#39; of undefined|ies of undefined \(reading &#39;ten&#39;\))/);
+ });
+ 
+ test('độc giả đã bị xoá — kho THẬT, chỉ thêm dữ liệu: hành vi như máy chủ thật', async () => {
+-- 
+2.55.0
+

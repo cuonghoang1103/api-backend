@@ -1,0 +1,38 @@
+From 08fc42dd747ac6b027263b0543970a3d39838065 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 08:39:45 +0700
+Subject: [PATCH 2/3] =?UTF-8?q?test(TV-95):=20NCS=20di=20het=20duong=20tha?=
+ =?UTF-8?q?t=20qua=20CSDL=20=E2=80=94=205=20cuon,=20cuon=20thu=206=20bi=20?=
+ =?UTF-8?q?tu=20choi,=20han=2021=20ngay?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../com/thuvien/servlet/BookServletMuonSachTest.java | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+index 0b8ab2e..d5c031b 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+@@ -147,4 +147,16 @@ class BookServletMuonSachTest {
+         muon("4", "4");
+         assertEquals(7, DuLieuTest.so("SELECT DATEDIFF(due_date, borrow_date) FROM loans WHERE reader_id = 4 AND book_id = 4"));
+     }
++
++    @Test
++    void nghienCuuSinh_muonToiDa5Cuon_han21Ngay_TV95() throws Exception {
++        // Đi hết đường thật: cột readers.type → LoaiDocGia.tu → luật → INSERT + trigger (không chỉ test enum)
++        DuLieuTest.chay("INSERT INTO readers (id, name, type, phone) VALUES (6, 'Vũ Thị Ngọc', 'NCS', '0901000006')");
++        for (String sach : new String[] {"1", "2", "3", "4", "6"}) {
++            assertEquals("books?msg=Mượn thành công", muon("6", sach), "sách " + sach);
++        }
++        assertEquals("books?msg=Vượt quá số sách được mượn", muon("6", "7"));   // cuốn thứ 6
++        assertEquals(5, DuLieuTest.so("SELECT COUNT(*) FROM loans WHERE reader_id = 6 AND return_date IS NULL"));
++        assertEquals(21, DuLieuTest.so("SELECT DATEDIFF(due_date, borrow_date) FROM loans WHERE reader_id = 6 AND book_id = 1"));
++    }
+ }
+-- 
+2.55.0
+

@@ -1,0 +1,76 @@
+From e4985d04c62c3266c593422f3eb7367763119840 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:39:20 +0700
+Subject: [PATCH 16/18] test(5.3): test don vi MuonTraService voi DAO gia
+ (khong can MySQL)
+
+---
+ .../java/com/thuvien/dao/PhieuMuonDAO.java    |  2 +-
+ .../thuvien/service/MuonTraServiceTest.java   | 42 +++++++++++++++++++
+ 2 files changed, 43 insertions(+), 1 deletion(-)
+ create mode 100644 src/test/java/com/thuvien/service/MuonTraServiceTest.java
+
+diff --git a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+index 3f1f544..4e8edf3 100644
+--- a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
++++ b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+@@ -81,7 +81,7 @@ public class PhieuMuonDAO {
+         public final LoaiDocGia loai;
+         public final Timestamp hanTra;
+ 
+-        PhieuCanTra(int bookId, LoaiDocGia loai, Timestamp hanTra) {
++        public PhieuCanTra(int bookId, LoaiDocGia loai, Timestamp hanTra) {
+             this.bookId = bookId;
+             this.loai = loai;
+             this.hanTra = hanTra;
+diff --git a/src/test/java/com/thuvien/service/MuonTraServiceTest.java b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+new file mode 100644
+index 0000000..b6911d2
+--- /dev/null
++++ b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+@@ -0,0 +1,42 @@
++package com.thuvien.service;
++
++import com.thuvien.dao.PhieuMuonDAO;
++import com.thuvien.model.LoaiDocGia;
++import org.junit.jupiter.api.Test;
++
++import java.sql.Timestamp;
++import java.time.OffsetDateTime;
++
++import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.mockito.ArgumentMatchers.*;
++import static org.mockito.Mockito.*;
++
++/** Sau khi tách lớp: luật mượn/trả test được KHÔNG cần MySQL, không cần mock servlet. */
++class MuonTraServiceTest {
++
++    private static final long HOM_NAY = OffsetDateTime.parse("2026-11-24T10:00:00+07:00").toInstant().toEpochMilli();
++    private final PhieuMuonDAO dao = mock(PhieuMuonDAO.class);
++    private final MuonTraService dichVu = new MuonTraService(dao, () -> HOM_NAY);
++
++    @Test
++    void svDangGiu4_biTuChoi_khongGhiGi() throws Exception {
++        when(dao.loaiCuaDocGia("5")).thenReturn(LoaiDocGia.SV);
++        when(dao.demDangMuon("5")).thenReturn(4);
++        assertEquals("Vượt quá số sách được mượn", dichVu.muon("5", "7").thongBao);
++        verify(dao, never()).themPhieu(anyInt(), anyInt(), any());
++    }
++
++    @Test
++    void traTre9Ngay1Gio_phi18000() throws Exception {
++        when(dao.timPhieuCanTra("1")).thenReturn(phieu(LoaiDocGia.SV, "2026-11-15T09:00:00+07:00"));
++        MuonTraService.KetQua kq = dichVu.tra("1");
++        assertEquals("readers", kq.trang);
++        assertEquals("Trả sách. Phí trễ hạn: 18000.0", kq.thongBao);
++        verify(dao).ghiTra(1, new Timestamp(HOM_NAY), 18000.0);
++        verify(dao).congLaiSach(1);
++    }
++
++    private static PhieuMuonDAO.PhieuCanTra phieu(LoaiDocGia loai, String han) {
++        return new PhieuMuonDAO.PhieuCanTra(1, loai, new Timestamp(OffsetDateTime.parse(han).toInstant().toEpochMilli()));
++    }
++}
+-- 
+2.55.0
+

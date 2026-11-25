@@ -1,0 +1,45 @@
+From 744ec020f36a087745cc9c8cc5646b0dbec777a5 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 07:15:19 +0700
+Subject: [PATCH] chore(8.1): .editorconfig mo ta quy uoc dang co (do bang
+ editorconfig-checker, khong doi tep nao)
+
+---
+ .editorconfig | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 .editorconfig
+
+diff --git a/.editorconfig b/.editorconfig
+new file mode 100644
+index 0000000..6e44ce1
+--- /dev/null
++++ b/.editorconfig
+@@ -0,0 +1,25 @@
++# Mô tả quy ước ĐANG CÓ của dự án (đo ở bài 8.1), không phải quy ước mình thích
++root = true
++
++[*]
++charset = utf-8
++end_of_line = lf
++insert_final_newline = true
++trim_trailing_whitespace = true
++
++[*.java]
++indent_style = space
++indent_size = 4
++
++# đo lại: pom.xml, web.xml, db/thuvien.sql thụt 2 (lần đầu đoán 4 ⇒ 60 dòng "sai")
++[*.{xml,sql}]
++indent_style = space
++indent_size = 2
++
++[*.{yml,yaml,json}]
++indent_style = space
++indent_size = 2
++
++# JSP trộn HTML thụt 2 và Java thụt 4 — không ép
++[*.jsp]
++indent_style = space
+-- 
+2.55.0
+

@@ -1,0 +1,7 @@
+[
+  { "id": 1, "sach": "Lập trình Java căn bản", "docGia": 1, "hanTra": "2026-11-15T09:00:00+07:00", "ngayTra": null },
+  { "id": 2, "sach": "Lập trình Java căn bản", "docGia": 2, "hanTra": "2026-11-30T09:00:00+07:00", "ngayTra": null },
+  { "id": 3, "sach": "Cấu trúc dữ liệu và giải thuật", "docGia": 3, "hanTra": "2026-11-11T09:00:00+07:00", "ngayTra": null },
+  { "id": 4, "sach": "Clean Code", "docGia": 4, "hanTra": "2026-10-29T09:00:00+07:00", "ngayTra": null },
+  { "id": 5, "sach": "Tiếng Nhật sơ cấp 1", "docGia": 1, "hanTra": "2026-10-06T09:00:00+07:00", "ngayTra": "2026-10-12T09:00:00+07:00" }
+]

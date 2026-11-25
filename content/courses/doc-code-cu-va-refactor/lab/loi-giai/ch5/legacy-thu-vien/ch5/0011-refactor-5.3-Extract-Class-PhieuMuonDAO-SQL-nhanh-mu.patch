@@ -1,0 +1,186 @@
+From 66506c5e2976b14816b893bd50e5f7fbfbb524f7 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:36:52 +0700
+Subject: [PATCH 11/18] =?UTF-8?q?refactor(5.3):=20Extract=20Class=20PhieuM?=
+ =?UTF-8?q?uonDAO=20=E2=80=94=20SQL=20nhanh=20muon=20(giu=20nguyen=20cau?=
+ =?UTF-8?q?=20SQL)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../java/com/thuvien/dao/PhieuMuonDAO.java    | 74 +++++++++++++++++++
+ .../java/com/thuvien/servlet/BookServlet.java | 68 ++++++-----------
+ 2 files changed, 97 insertions(+), 45 deletions(-)
+ create mode 100644 src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+
+diff --git a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+new file mode 100644
+index 0000000..13cc1be
+--- /dev/null
++++ b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+@@ -0,0 +1,74 @@
++package com.thuvien.dao;
++
++import com.thuvien.model.LoaiDocGia;
++import com.thuvien.util.DBUtil;
++
++import java.sql.Connection;
++import java.sql.PreparedStatement;
++import java.sql.ResultSet;
++import java.sql.SQLException;
++import java.sql.Statement;
++import java.sql.Timestamp;
++
++/**
++ * SQL của chức năng mượn/trả, chuyển nguyên văn từ BookServlet (Extract Class — bài 5.3).
++ * ⚠️ Các câu nối chuỗi được GIỮ NGUYÊN: đổi sang PreparedStatement là đổi hành vi (thông báo lỗi khác) — làm ở bài 6.3 với test riêng.
++ */
++public class PhieuMuonDAO {
++
++    private final Connection con;
++
++    public PhieuMuonDAO(Connection con) {
++        this.con = con;
++    }
++
++    /** Loại của độc giả, hoặc null nếu không có độc giả này. */
++    public LoaiDocGia loaiCuaDocGia(String readerId) throws SQLException {
++        Statement st = con.createStatement();
++        ResultSet rs = null;
++        try {
++            rs = st.executeQuery("SELECT * FROM readers WHERE id = " + readerId);
++            return rs.next() ? LoaiDocGia.tu(rs.getString("type")) : null;
++        } finally {
++            DBUtil.close(rs, st);
++        }
++    }
++
++    public int demDangMuon(String readerId) throws SQLException {
++        Statement st = con.createStatement();
++        ResultSet rs = null;
++        try {
++            rs = st.executeQuery("SELECT COUNT(*) FROM loans WHERE reader_id = " + readerId + " AND return_date IS NULL");
++            rs.next();
++            return rs.getInt(1);
++        } finally {
++            DBUtil.close(rs, st);
++        }
++    }
++
++    /** Giữ nguyên: không kiểm rs.next() ⇒ sách không tồn tại ném "Illegal operation on empty result set." (test bookIdKhongTonTai). */
++    public int soBanConLai(String bookId) throws SQLException {
++        Statement st = con.createStatement();
++        ResultSet rs = null;
++        try {
++            rs = st.executeQuery("SELECT available FROM books WHERE id = " + bookId);
++            rs.next();
++            return rs.getInt(1);
++        } finally {
++            DBUtil.close(rs, st);
++        }
++    }
++
++    public void themPhieu(int bookId, int readerId, Timestamp ngayMuon, Timestamp hanTra) throws SQLException {
++        PreparedStatement ps = con.prepareStatement("INSERT INTO loans(book_id, reader_id, borrow_date, due_date) VALUES (?, ?, ?, ?)");
++        try {
++            ps.setInt(1, bookId);
++            ps.setInt(2, readerId);
++            ps.setTimestamp(3, ngayMuon);
++            ps.setTimestamp(4, hanTra);
++            ps.executeUpdate();
++        } finally {
++            DBUtil.close(ps);
++        }
++    }
++}
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index 9ba606a..10f678a 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -1,6 +1,7 @@
+ package com.thuvien.servlet;
+ 
+ import com.thuvien.dao.BookDAO;
++import com.thuvien.dao.PhieuMuonDAO;
+ import com.thuvien.model.Book;
+ import com.thuvien.model.LoaiDocGia;
+ import com.thuvien.util.DBUtil;
+@@ -104,52 +105,29 @@ public class BookServlet extends HttpServlet {
+     }
+ 
+     private void muonSach(HttpServletRequest request, HttpServletResponse response, Connection con) throws Exception {
+-        Statement st = null;
+-        PreparedStatement ps = null;
+-        ResultSet rsDocGia = null;
+-        ResultSet rsDem = null;
+-        ResultSet rsSach = null;
+-        try {
+-            String readerId = request.getParameter("readerId");
+-            String bookId = request.getParameter("bookId");
+-            st = con.createStatement();
+-            rsDocGia = st.executeQuery("SELECT * FROM readers WHERE id = " + readerId);
+-            if (!rsDocGia.next()) {
+-                response.sendRedirect("books?msg=" + URLEncoder.encode("Độc giả không tồn tại", "UTF-8"));
+-                return;
+-            }
+-            LoaiDocGia loai = LoaiDocGia.tu(rsDocGia.getString("type"));
+-            rsDocGia.close();
+-            rsDem = st.executeQuery("SELECT COUNT(*) FROM loans WHERE reader_id = " + readerId + " AND return_date IS NULL");
+-            rsDem.next();
+-            int dangMuon = rsDem.getInt(1);
+-            rsDem.close();
+-            int toiDa = loai.toiDa();
+-            if (dangMuon > toiDa) {
+-                response.sendRedirect("books?msg=" + URLEncoder.encode("Vượt quá số sách được mượn", "UTF-8"));
+-                return;
+-            }
+-            rsSach = st.executeQuery("SELECT available FROM books WHERE id = " + bookId);
+-            rsSach.next();
+-            if (rsSach.getInt(1) <= 0) {
+-                response.sendRedirect("books?msg=" + URLEncoder.encode("Sách đã hết", "UTF-8"));
+-                return;
+-            }
+-            rsSach.close();
+-            Calendar cal = Calendar.getInstance();
+-            Timestamp now = new Timestamp(cal.getTimeInMillis());
+-            cal.add(Calendar.DATE, loai.soNgayMuon());
+-            ps = con.prepareStatement("INSERT INTO loans(book_id, reader_id, borrow_date, due_date) VALUES (?, ?, ?, ?)");
+-            ps.setInt(1, Integer.parseInt(bookId));
+-            ps.setInt(2, Integer.parseInt(readerId));
+-            ps.setTimestamp(3, now);
+-            ps.setTimestamp(4, new Timestamp(cal.getTimeInMillis()));
+-            ps.executeUpdate();
+-            log.info("borrow book=" + bookId + " reader=" + readerId);
+-            response.sendRedirect("books?msg=" + URLEncoder.encode("Mượn thành công", "UTF-8"));
+-        } finally {
+-            DBUtil.close(rsDocGia, rsDem, rsSach, st, ps);
++        PhieuMuonDAO dao = new PhieuMuonDAO(con);
++        String readerId = request.getParameter("readerId");
++        String bookId = request.getParameter("bookId");
++        LoaiDocGia loai = dao.loaiCuaDocGia(readerId);
++        if (loai == null) {
++            response.sendRedirect("books?msg=" + URLEncoder.encode("Độc giả không tồn tại", "UTF-8"));
++            return;
++        }
++        int dangMuon = dao.demDangMuon(readerId);
++        if (dangMuon > loai.toiDa()) {
++            response.sendRedirect("books?msg=" + URLEncoder.encode("Vượt quá số sách được mượn", "UTF-8"));
++            return;
++        }
++        if (dao.soBanConLai(bookId) <= 0) {
++            response.sendRedirect("books?msg=" + URLEncoder.encode("Sách đã hết", "UTF-8"));
++            return;
+         }
++        Calendar cal = Calendar.getInstance();
++        Timestamp now = new Timestamp(cal.getTimeInMillis());
++        cal.add(Calendar.DATE, loai.soNgayMuon());
++        dao.themPhieu(Integer.parseInt(bookId), Integer.parseInt(readerId), now, new Timestamp(cal.getTimeInMillis()));
++        log.info("borrow book=" + bookId + " reader=" + readerId);
++        response.sendRedirect("books?msg=" + URLEncoder.encode("Mượn thành công", "UTF-8"));
+     }
+ 
+     private void traSach(HttpServletRequest request, HttpServletResponse response, Connection con) throws Exception {
+-- 
+2.55.0
+

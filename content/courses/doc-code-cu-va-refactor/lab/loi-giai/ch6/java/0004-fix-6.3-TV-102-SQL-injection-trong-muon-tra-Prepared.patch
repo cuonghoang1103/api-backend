@@ -1,0 +1,245 @@
+From 868c7b91a4265139baffbe4fd9e27a654372eeb8 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 05:27:01 +0700
+Subject: [PATCH 04/12] =?UTF-8?q?fix(6.3):=20TV-102=20SQL=20injection=20tr?=
+ =?UTF-8?q?ong=20muon/tra=20=E2=80=94=20PreparedStatement=20+=20kiem=20ma?=
+ =?UTF-8?q?=20la=20so?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Test tan cong viet truoc (do tren code cu): SLEEP(1) chay 1002 ms, EXTRACTVALUE lo admin123,
+'0 OR 1=1' tim thay phieu 1. Doi CO CHU DICH: readerId 'abc' -> 'Ma doc gia khong hop le'
+(truoc in loi SQL tho).
+---
+ .../java/com/thuvien/dao/PhieuMuonDAO.java    | 37 +++++++++++--------
+ .../com/thuvien/service/MuonTraService.java   | 20 ++++++++--
+ .../thuvien/service/MuonTraServiceTest.java   |  6 +--
+ .../servlet/BookServletMuonSachTest.java      | 22 ++++++++++-
+ .../servlet/BookServletTraSachTest.java       |  7 ++++
+ 5 files changed, 67 insertions(+), 25 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+index 75ce54d..9e4cb07 100644
+--- a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
++++ b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+@@ -9,12 +9,12 @@ import java.sql.Connection;
+ import java.sql.PreparedStatement;
+ import java.sql.ResultSet;
+ import java.sql.SQLException;
+-import java.sql.Statement;
+ import java.sql.Timestamp;
+ 
+ /**
+  * SQL của chức năng mượn/trả, chuyển nguyên văn từ BookServlet (Extract Class — bài 5.3).
+- * ⚠️ Các câu nối chuỗi được GIỮ NGUYÊN: đổi sang PreparedStatement là đổi hành vi (thông báo lỗi khác) — làm ở bài 6.3 với test riêng.
++ * TV-102 (bài 6.3): mọi tham số đi qua PreparedStatement — tham số là DỮ LIỆU, không bao giờ thành một phần câu SQL.
++ * Mã nhận vào là int: chuỗi người dùng gõ được kiểm ở MuonTraService (không phải số ⇒ "không hợp lệ", không chạm CSDL).
+  */
+ public class PhieuMuonDAO {
+ 
+@@ -27,22 +27,24 @@ public class PhieuMuonDAO {
+     }
+ 
+     /** Loại của độc giả, hoặc null nếu không có độc giả này. */
+-    public LoaiDocGia loaiCuaDocGia(String readerId) throws SQLException {
+-        Statement st = con.createStatement();
++    public LoaiDocGia loaiCuaDocGia(int readerId) throws SQLException {
++        PreparedStatement st = con.prepareStatement("SELECT * FROM readers WHERE id = ?");
+         ResultSet rs = null;
+         try {
+-            rs = st.executeQuery("SELECT * FROM readers WHERE id = " + readerId);
++            st.setInt(1, readerId);
++            rs = st.executeQuery();
+             return rs.next() ? LoaiDocGia.tu(rs.getString("type")) : null;
+         } finally {
+             DBUtil.close(rs, st);
+         }
+     }
+ 
+-    public int demDangMuon(String readerId) throws SQLException {
+-        Statement st = con.createStatement();
++    public int demDangMuon(int readerId) throws SQLException {
++        PreparedStatement st = con.prepareStatement("SELECT COUNT(*) FROM loans WHERE reader_id = ? AND return_date IS NULL");
+         ResultSet rs = null;
+         try {
+-            rs = st.executeQuery("SELECT COUNT(*) FROM loans WHERE reader_id = " + readerId + " AND return_date IS NULL");
++            st.setInt(1, readerId);
++            rs = st.executeQuery();
+             rs.next();
+             return rs.getInt(1);
+         } finally {
+@@ -51,11 +53,12 @@ public class PhieuMuonDAO {
+     }
+ 
+     /** Giữ nguyên: không kiểm rs.next() ⇒ sách không tồn tại ném "Illegal operation on empty result set." (test bookIdKhongTonTai). */
+-    public int soBanConLai(String bookId) throws SQLException {
+-        Statement st = con.createStatement();
++    public int soBanConLai(int bookId) throws SQLException {
++        PreparedStatement st = con.prepareStatement("SELECT available FROM books WHERE id = ?");
+         ResultSet rs = null;
+         try {
+-            rs = st.executeQuery("SELECT available FROM books WHERE id = " + bookId);
++            st.setInt(1, bookId);
++            rs = st.executeQuery();
+             rs.next();
+             return rs.getInt(1);
+         } finally {
+@@ -99,11 +102,12 @@ public class PhieuMuonDAO {
+     }
+ 
+     /** null nếu không có phiếu. Giữ nguyên: KHÔNG lọc return_date IS NULL ⇒ trả lần hai vẫn tìm thấy (test traHaiLanCungMotPhieu). */
+-    public PhieuCanTra timPhieuCanTra(String loanId) throws SQLException {
+-        Statement st = con.createStatement();
++    public PhieuCanTra timPhieuCanTra(int loanId) throws SQLException {
++        PreparedStatement st = con.prepareStatement("SELECT l.*, r.type FROM loans l JOIN readers r ON r.id = l.reader_id WHERE l.id = ?");
+         ResultSet rs = null;
+         try {
+-            rs = st.executeQuery("SELECT l.*, r.type FROM loans l JOIN readers r ON r.id = l.reader_id WHERE l.id = " + loanId);
++            st.setInt(1, loanId);
++            rs = st.executeQuery();
+             if (!rs.next()) return null;
+             return new PhieuCanTra(rs.getInt("book_id"), LoaiDocGia.tu(rs.getString("type")), rs.getTimestamp("due_date"));
+         } finally {
+@@ -124,9 +128,10 @@ public class PhieuMuonDAO {
+     }
+ 
+     public void congLaiSach(int bookId) throws SQLException {
+-        Statement st = con.createStatement();
++        PreparedStatement st = con.prepareStatement("UPDATE books SET available = available + 1 WHERE id = ?");
+         try {
+-            st.executeUpdate("UPDATE books SET available = available + 1 WHERE id = " + bookId);
++            st.setInt(1, bookId);
++            st.executeUpdate();
+         } finally {
+             DBUtil.close(st);
+         }
+diff --git a/src/main/java/com/thuvien/service/MuonTraService.java b/src/main/java/com/thuvien/service/MuonTraService.java
+index 5c4628f..fd8576b 100644
+--- a/src/main/java/com/thuvien/service/MuonTraService.java
++++ b/src/main/java/com/thuvien/service/MuonTraService.java
+@@ -34,22 +34,34 @@ public class MuonTraService {
+         this.bayGio = bayGio;
+     }
+ 
+-    public KetQua muon(String readerId, String bookId) throws SQLException {
++    public KetQua muon(String maDocGia, String maSach) throws SQLException {
++        Integer readerId = soNguyen(maDocGia);
++        if (readerId == null) return new KetQua("books", "Mã độc giả không hợp lệ", false);   // TV-102: không chạm CSDL
++        Integer bookId = soNguyen(maSach);
++        if (bookId == null) return new KetQua("books", "Mã sách không hợp lệ", false);
+         LoaiDocGia loai = dao.loaiCuaDocGia(readerId);
+         if (loai == null) return new KetQua("books", "Độc giả không tồn tại", false);
+         if (dao.demDangMuon(readerId) > loai.toiDa()) return new KetQua("books", "Vượt quá số sách được mượn", false);   // ">" — BUG TV-41, chưa sửa
+         if (dao.soBanConLai(bookId) <= 0) return new KetQua("books", "Sách đã hết", false);
+         KhoangMuon khoang = KhoangMuon.batDau(Calendar.getInstance(), loai.soNgayMuon());
+-        dao.themPhieu(Integer.parseInt(bookId), Integer.parseInt(readerId), khoang);
++        dao.themPhieu(bookId, readerId, khoang);
+         return new KetQua("books", "Mượn thành công", true);
+     }
+ 
+-    public KetQua tra(String loanId) throws SQLException {
++    public KetQua tra(String maPhieu) throws SQLException {
++        Integer loanId = soNguyen(maPhieu);
++        if (loanId == null) return new KetQua("readers", "Mã phiếu không hợp lệ", false);
+         PhieuMuonDAO.PhieuCanTra phieu = dao.timPhieuCanTra(loanId);
+         if (phieu == null) return new KetQua("readers", "Không tìm thấy phiếu mượn", false);
+         Tien phi = phieu.phiTre(bayGio.getAsLong());
+-        dao.ghiTra(Integer.parseInt(loanId), new Timestamp(bayGio.getAsLong()), phi);
++        dao.ghiTra(loanId, new Timestamp(bayGio.getAsLong()), phi);
+         dao.congLaiSach(phieu.bookId);
+         return new KetQua("readers", phi.lonHonKhong() ? "Trả sách. Phí trễ hạn: " + phi.hienThiKieuCu() : "Trả sách thành công", true);
+     }
++
++    /** Chuỗi người dùng gõ ⇒ số nguyên, hoặc null nếu không phải số (kể cả "2 AND SLEEP(1)"). Khoảng trắng hai đầu được bỏ như câu SQL cũ. */
++    static Integer soNguyen(String s) {
++        if (s == null || !s.trim().matches("-?\\d{1,9}")) return null;
++        return Integer.valueOf(s.trim());
++    }
+ }
+diff --git a/src/test/java/com/thuvien/service/MuonTraServiceTest.java b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+index 7dba1a8..c2dc334 100644
+--- a/src/test/java/com/thuvien/service/MuonTraServiceTest.java
++++ b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+@@ -21,15 +21,15 @@ class MuonTraServiceTest {
+ 
+     @Test
+     void svDangGiu4_biTuChoi_khongGhiGi() throws Exception {
+-        when(dao.loaiCuaDocGia("5")).thenReturn(LoaiDocGia.SV);
+-        when(dao.demDangMuon("5")).thenReturn(4);
++        when(dao.loaiCuaDocGia(5)).thenReturn(LoaiDocGia.SV);
++        when(dao.demDangMuon(5)).thenReturn(4);
+         assertEquals("Vượt quá số sách được mượn", dichVu.muon("5", "7").thongBao);
+         verify(dao, never()).themPhieu(anyInt(), anyInt(), any());
+     }
+ 
+     @Test
+     void traTre9Ngay1Gio_phi18000() throws Exception {
+-        when(dao.timPhieuCanTra("1")).thenReturn(phieu(LoaiDocGia.SV, "2026-11-15T09:00:00+07:00"));
++        when(dao.timPhieuCanTra(1)).thenReturn(phieu(LoaiDocGia.SV, "2026-11-15T09:00:00+07:00"));
+         MuonTraService.KetQua kq = dichVu.tra("1");
+         assertEquals("readers", kq.trang);
+         assertEquals("Trả sách. Phí trễ hạn: 18000.0", kq.thongBao);
+diff --git a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+index 0e59a5c..6caeae8 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+@@ -12,6 +12,8 @@ import java.io.StringWriter;
+ import java.net.URLDecoder;
+ 
+ import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.junit.jupiter.api.Assertions.assertFalse;
++import static org.junit.jupiter.api.Assertions.assertTrue;
+ import static org.mockito.ArgumentMatchers.anyString;
+ import static org.mockito.Mockito.*;
+ 
+@@ -97,10 +99,26 @@ class BookServletMuonSachTest {
+         assertEquals(0, DuLieuTest.so("SELECT COUNT(*) FROM loans WHERE reader_id = 5"));
+     }
+ 
++    // ── TV-102 (bài 6.3): test TẤN CÔNG viết trước khi sửa — phải ĐỎ trên code cũ ──
++    @Test
++    void readerIdChuaSQL_khongDuocChay_TV102() throws Exception {
++        long batDau = System.nanoTime();
++        String kq = muon("2 AND SLEEP(1)", "1");
++        long ms = (System.nanoTime() - batDau) / 1_000_000;
++        assertTrue(ms < 500, "câu SQL do người dùng gõ đã chạy trong MySQL (" + ms + " ms)");
++        assertEquals("books?msg=Mã độc giả không hợp lệ", kq);
++    }
++
++    @Test
++    void readerIdChuaSQL_khongLoMatKhau_TV102() throws Exception {
++        String kq = muon("2 AND EXTRACTVALUE(1, CONCAT(0x7e, (SELECT password FROM users WHERE username='admin')))", "1");
++        assertFalse(kq.contains("admin123"), kq);
++    }
++
+     @Test
+     void readerIdKhongPhaiSo() throws Exception {
+-        // Lỗi SQL lọt thẳng ra trang (HTTP 200) — và lộ rằng chữ "abc" bị ghép vào câu SQL (bài 6.3)
+-        assertEquals("<html><body><h3>Loi: Unknown column 'abc' in 'where clause'</h3></body></html>", muon("abc", "4"));
++        // TV-102 ĐỔI CÓ CHỦ ĐÍCH: trước đây in "Loi: Unknown column 'abc' in 'where clause'" — bằng chứng chuỗi bị ghép vào SQL
++        assertEquals("books?msg=Mã độc giả không hợp lệ", muon("abc", "4"));
+     }
+ 
+     @Test
+diff --git a/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java b/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
+index 4d741b6..aecb691 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
+@@ -70,6 +70,13 @@ class BookServletTraSachTest {
+         assertEquals("readers?msg=Trả sách thành công", tra("2"));       // hạn 30/11
+     }
+ 
++    @Test
++    void loanIdChuaSQL_khongTraNhamPhieu_TV102() throws Exception {
++        // code cũ: "... WHERE l.id = 0 OR 1=1" TÌM THẤY phiếu 1 (không ai chọn), rồi mới vỡ ở parseInt ⇒ trang lỗi
++        assertEquals("readers?msg=Mã phiếu không hợp lệ", tra("0 OR 1=1"));
++        assertEquals(0, DuLieuTest.so("SELECT COUNT(*) FROM loans WHERE return_date IS NOT NULL AND fine IS NOT NULL AND id = 1"));
++    }
++
+     @Test
+     void traHaiLanCungMotPhieu() throws Exception {
+         tra("2");
+-- 
+2.55.0
+

@@ -1,0 +1,113 @@
+From 00b0d520cce10c0bcaf448d71db12e2c3a9c5a66 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 08:40:35 +0700
+Subject: [PATCH] test(TV-122): characterization test ReaderServlet truoc khi
+ tach DAO (ca bug CASCADE TV-125)
+
+---
+ .../servlet/ReaderServletDacTaTest.java       | 93 +++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+ create mode 100644 src/test/java/com/thuvien/servlet/ReaderServletDacTaTest.java
+
+diff --git a/src/test/java/com/thuvien/servlet/ReaderServletDacTaTest.java b/src/test/java/com/thuvien/servlet/ReaderServletDacTaTest.java
+new file mode 100644
+index 0000000..8f2bffe
+--- /dev/null
++++ b/src/test/java/com/thuvien/servlet/ReaderServletDacTaTest.java
+@@ -0,0 +1,93 @@
++package com.thuvien.servlet;
++
++import com.thuvien.model.Loan;
++import com.thuvien.model.Reader;
++import com.thuvien.testutil.DuLieuTest;
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++import org.mockito.ArgumentCaptor;
++
++import jakarta.servlet.RequestDispatcher;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import jakarta.servlet.http.HttpSession;
++import java.text.SimpleDateFormat;
++import java.util.List;
++import java.util.stream.Collectors;
++
++import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.mockito.ArgumentMatchers.anyString;
++import static org.mockito.Mockito.*;
++
++/**
++ * TV-122 bước 0: characterization test cho ReaderServlet TRƯỚC khi tách DAO — ghi lại hành vi hiện tại, kể cả bug.
++ * Chạy xanh trên code cũ (commit này không đổi dòng nào trong src/main).
++ */
++class ReaderServletDacTaTest {
++
++    private HttpServletRequest req;
++    private HttpServletResponse res;
++    private RequestDispatcher trang;
++
++    @BeforeEach
++    void chuanBi() throws Exception {
++        DuLieuTest.napLai();
++        req = mock(HttpServletRequest.class);
++        res = mock(HttpServletResponse.class);
++        trang = mock(RequestDispatcher.class);
++        HttpSession session = mock(HttpSession.class);
++        when(req.getSession()).thenReturn(session);
++        when(session.getAttribute("user")).thenReturn("thuthu");
++        when(req.getRequestDispatcher(anyString())).thenReturn(trang);
++    }
++
++    @SuppressWarnings("unchecked")
++    private <T> List<T> thuocTinh(String ten) {
++        ArgumentCaptor<Object> ds = ArgumentCaptor.forClass(Object.class);
++        verify(req).setAttribute(eq(ten), ds.capture());
++        return (List<T>) ds.getValue();
++    }
++
++    @Test
++    void danhSach_docGiaTheoId_phieuDangMuonTheoHanTra() throws Exception {
++        new ReaderServlet().doGet(req, res);
++        List<Reader> docGia = thuocTinh("readers");
++        assertEquals("1 Nguyễn Văn An SV|2 Trần Thị Bình SV|3 Lê Minh Châu GV|4 Phạm Quốc Dũng KHACH|5 Hoàng Gia Huy SV",
++                docGia.stream().map(r -> r.getId() + " " + r.getName() + " " + r.getType()).collect(Collectors.joining("|")));
++        List<Loan> phieu = thuocTinh("loans");
++        SimpleDateFormat f = new SimpleDateFormat("dd/MM");
++        // chỉ phiếu chưa trả (phiếu 5 đã trả bị loại), sắp theo hạn trả tăng dần
++        assertEquals("4 Clean Code Phạm Quốc Dũng 29/10|3 Cấu trúc dữ liệu và giải thuật Lê Minh Châu 11/11"
++                        + "|1 Lập trình Java căn bản Nguyễn Văn An 15/11|2 Lập trình Java căn bản Trần Thị Bình 30/11",
++                phieu.stream().map(l -> l.id + " " + l.bookTitle + " " + l.readerName + " " + f.format(l.dueDate)).collect(Collectors.joining("|")));
++        verify(trang).forward(req, res);
++    }
++
++    @Test
++    void chuaDangNhap_veLogin() throws Exception {
++        when(req.getSession().getAttribute("user")).thenReturn(null);
++        new ReaderServlet().doGet(req, res);
++        verify(res).sendRedirect("login");
++        verify(req, never()).setAttribute(anyString(), any());
++    }
++
++    @Test
++    void xoaDocGiaDangMuon_xoaLuonPhieu_sachKhongVeKho_BUG_TV125() throws Exception {
++        // khoá ngoại loans → readers ON DELETE CASCADE: xoá độc giả 1 xoá luôn phiếu 1 (đang mượn sách 1) và phiếu 5 (lịch sử phí)
++        when(req.getParameter("action")).thenReturn("delete");
++        when(req.getParameter("id")).thenReturn("1");
++        new ReaderServlet().doPost(req, res);
++        assertEquals(0, DuLieuTest.so("SELECT COUNT(*) FROM loans WHERE reader_id = 1"));
++        assertEquals(3, DuLieuTest.so("SELECT available FROM books WHERE id = 1"));   // 5 bản, 2 đang mượn ⇒ 3; bản của phiếu 1 mất luôn
++        verify(res).sendRedirect("readers");
++    }
++
++    @Test
++    void themThieuTen_loiBiNuot_vanVeDanhSach() throws Exception {
++        when(req.getParameter("action")).thenReturn("add");
++        when(req.getParameter("type")).thenReturn("SV");        // name = null ⇒ cột NOT NULL ⇒ SQLException, chỉ printStackTrace
++        new ReaderServlet().doPost(req, res);
++        assertEquals(5, DuLieuTest.so("SELECT COUNT(*) FROM readers"));
++        verify(res).sendRedirect("readers");
++    }
++}
+-- 
+2.55.0
+

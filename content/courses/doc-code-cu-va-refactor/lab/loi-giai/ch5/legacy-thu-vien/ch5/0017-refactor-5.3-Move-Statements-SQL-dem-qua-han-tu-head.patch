@@ -1,0 +1,70 @@
+From 5afc32716ad432262d668248a7adbe5f64937a5a Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:41:26 +0700
+Subject: [PATCH 17/18] =?UTF-8?q?refactor(5.3):=20Move=20Statements=20?=
+ =?UTF-8?q?=E2=80=94=20SQL=20dem=20qua=20han=20tu=20header.jsp=20sang=20Th?=
+ =?UTF-8?q?ongKeDAO=20(golden=20master=203=20trang:=20khong=20khac)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ src/main/java/com/thuvien/dao/ThongKeDAO.java | 26 +++++++++++++++++++
+ src/main/webapp/header.jsp                    | 11 ++------
+ 2 files changed, 28 insertions(+), 9 deletions(-)
+ create mode 100644 src/main/java/com/thuvien/dao/ThongKeDAO.java
+
+diff --git a/src/main/java/com/thuvien/dao/ThongKeDAO.java b/src/main/java/com/thuvien/dao/ThongKeDAO.java
+new file mode 100644
+index 0000000..2cf5130
+--- /dev/null
++++ b/src/main/java/com/thuvien/dao/ThongKeDAO.java
+@@ -0,0 +1,26 @@
++package com.thuvien.dao;
++
++import com.thuvien.util.DBUtil;
++
++import java.sql.Connection;
++import java.sql.ResultSet;
++import java.sql.SQLException;
++import java.sql.Statement;
++
++/** Số liệu cho thanh menu — chuyển từ scriptlet trong header.jsp (Move Statements — bài 5.3). */
++public class ThongKeDAO {
++
++    /** Số phiếu đang quá hạn. Ném SQLException như scriptlet cũ (trang lỗi error.jsp vẫn bắt). */
++    public int demQuaHan() throws SQLException {
++        Connection con = DBUtil.getConnection();
++        Statement st = null;
++        ResultSet rs = null;
++        try {
++            st = con.createStatement();
++            rs = st.executeQuery("SELECT COUNT(*) FROM loans WHERE return_date IS NULL AND due_date < NOW()");
++            return rs.next() ? rs.getInt(1) : 0;
++        } finally {
++            DBUtil.close(rs, st, con);
++        }
++    }
++}
+diff --git a/src/main/webapp/header.jsp b/src/main/webapp/header.jsp
+index c56f58d..44867a9 100644
+--- a/src/main/webapp/header.jsp
++++ b/src/main/webapp/header.jsp
+@@ -1,12 +1,5 @@
+-<%@ page import="java.sql.*, com.thuvien.util.DBUtil" %>
+-<%
+-    int quaHan = 0;
+-    Connection hc = DBUtil.getConnection();
+-    Statement hs = hc.createStatement();
+-    ResultSet hr = hs.executeQuery("SELECT COUNT(*) FROM loans WHERE return_date IS NULL AND due_date < NOW()");
+-    if (hr.next()) quaHan = hr.getInt(1);
+-    hr.close(); hs.close(); hc.close();
+-%>
++<%@ page import="com.thuvien.dao.ThongKeDAO" %>
++<% int quaHan = new ThongKeDAO().demQuaHan(); %>
+ <div style="background:#2b5797;color:#fff;padding:8px">
+   <b>THƯ VIỆN</b> |
+   <a style="color:#fff" href="books">Sách</a> |
+-- 
+2.55.0
+

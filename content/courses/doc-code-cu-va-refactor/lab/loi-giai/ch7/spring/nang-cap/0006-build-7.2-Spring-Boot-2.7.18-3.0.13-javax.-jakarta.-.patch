@@ -1,0 +1,134 @@
+From 6e8c3ea30153b8d276da6c3f921a1b10a443c865 Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:24:21 +0700
+Subject: [PATCH 6/8] =?UTF-8?q?build(7.2):=20Spring=20Boot=202.7.18=20->?=
+ =?UTF-8?q?=203.0.13=20=E2=80=94=20javax.*=20->=20jakarta.*,=20bo=20@Const?=
+ =?UTF-8?q?ructorBinding,=202=20property?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+17 loi bien dich (javax.persistence/validation, @ConstructorBinding chi con cho ham dung).
+Test dac ta bat: GET /api/sach/ 200 -> 404 (Spring 6 bo khop dau / cuoi) — giu ca hai duong co chu dich (TV-120).
+migrator: bo use-new-id-generator-mappings, server.max-http-header-size -> max-http-request-header-size.
+8 test xanh; HTTP giong buoc truoc.
+---
+ pom.xml                                              |  4 +---
+ src/main/java/com/thuvien/api/Sach.java              | 10 +++++-----
+ src/main/java/com/thuvien/api/SachController.java    |  5 +++--
+ src/main/java/com/thuvien/api/SachMoi.java           |  4 ++--
+ src/main/java/com/thuvien/api/ThuVienProperties.java |  2 --
+ src/main/resources/application.properties            |  3 +--
+ 6 files changed, 12 insertions(+), 16 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index 753a772..0ab2f87 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -7,7 +7,7 @@
+   <parent>
+     <groupId>org.springframework.boot</groupId>
+     <artifactId>spring-boot-starter-parent</artifactId>
+-    <version>2.7.18</version>
++    <version>3.0.13</version>
+     <relativePath/>
+   </parent>
+   <groupId>com.thuvien</groupId>
+@@ -15,8 +15,6 @@
+   <version>1.4.0</version>
+   <properties>
+     <java.version>17</java.version>
+-    <!-- Bài 7.2: lên Security 5.8 khi còn ở Boot 2.7 — bản "cầu nối" có sẵn API của 6.0 -->
+-    <spring-security.version>5.8.16</spring-security.version>
+   </properties>
+   <dependencies>
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId></dependency>
+diff --git a/src/main/java/com/thuvien/api/Sach.java b/src/main/java/com/thuvien/api/Sach.java
+index 5a10237..18d6a9b 100644
+--- a/src/main/java/com/thuvien/api/Sach.java
++++ b/src/main/java/com/thuvien/api/Sach.java
+@@ -1,10 +1,10 @@
+ package com.thuvien.api;
+ 
+-import javax.persistence.Entity;
+-import javax.persistence.GeneratedValue;
+-import javax.persistence.GenerationType;
+-import javax.persistence.Id;
+-import javax.persistence.Table;
++import jakarta.persistence.Entity;
++import jakarta.persistence.GeneratedValue;
++import jakarta.persistence.GenerationType;
++import jakarta.persistence.Id;
++import jakarta.persistence.Table;
+ 
+ @Entity
+ @Table(name = "sach")
+diff --git a/src/main/java/com/thuvien/api/SachController.java b/src/main/java/com/thuvien/api/SachController.java
+index 3d7cf36..98b788c 100644
+--- a/src/main/java/com/thuvien/api/SachController.java
++++ b/src/main/java/com/thuvien/api/SachController.java
+@@ -3,7 +3,7 @@ package com.thuvien.api;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+-import javax.validation.Valid;
++import jakarta.validation.Valid;
+ 
+ import org.springframework.http.HttpStatus;
+ import org.springframework.http.ResponseEntity;
+@@ -19,7 +19,8 @@ public class SachController {
+         this.cauHinh = cauHinh;
+     }
+ 
+-    @GetMapping("/api/sach")
++    /** Spring 6 bỏ khớp dấu "/" cuối. App di động 1.x gọi "/api/sach/" ⇒ giữ CẢ HAI đường, có chủ đích (ghi chú nâng cấp, TV-120). */
++    @GetMapping({"/api/sach", "/api/sach/"})
+     public List<Sach> danhSach() {
+         return kho.findAll();
+     }
+diff --git a/src/main/java/com/thuvien/api/SachMoi.java b/src/main/java/com/thuvien/api/SachMoi.java
+index 19e0457..a35f09a 100644
+--- a/src/main/java/com/thuvien/api/SachMoi.java
++++ b/src/main/java/com/thuvien/api/SachMoi.java
+@@ -1,7 +1,7 @@
+ package com.thuvien.api;
+ 
+-import javax.validation.constraints.Min;
+-import javax.validation.constraints.NotBlank;
++import jakarta.validation.constraints.Min;
++import jakarta.validation.constraints.NotBlank;
+ 
+ /** Dữ liệu tạo sách mới (POST /api/sach). */
+ public class SachMoi {
+diff --git a/src/main/java/com/thuvien/api/ThuVienProperties.java b/src/main/java/com/thuvien/api/ThuVienProperties.java
+index 7424ecd..c64318e 100644
+--- a/src/main/java/com/thuvien/api/ThuVienProperties.java
++++ b/src/main/java/com/thuvien/api/ThuVienProperties.java
+@@ -1,10 +1,8 @@
+ package com.thuvien.api;
+ 
+ import org.springframework.boot.context.properties.ConfigurationProperties;
+-import org.springframework.boot.context.properties.ConstructorBinding;
+ 
+ /** thuvien.phi-tre-moi-ngay, thuvien.so-ngay-muon trong application.properties. */
+-@ConstructorBinding
+ @ConfigurationProperties("thuvien")
+ public class ThuVienProperties {
+     private final long phiTreMoiNgay;
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+index 67e536a..171eb07 100644
+--- a/src/main/resources/application.properties
++++ b/src/main/resources/application.properties
+@@ -3,8 +3,7 @@ spring.datasource.url=jdbc:h2:mem:thuvien;DB_CLOSE_DELAY=-1
+ spring.sql.init.mode=always
+ spring.jpa.defer-datasource-initialization=true
+ spring.jpa.hibernate.ddl-auto=create
+-spring.jpa.hibernate.use-new-id-generator-mappings=false
+ spring.jpa.open-in-view=false
+-server.max-http-header-size=16KB
++server.max-http-request-header-size=16KB
+ thuvien.phi-tre-moi-ngay=2000
+ thuvien.so-ngay-muon=14
+-- 
+2.55.0
+

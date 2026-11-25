@@ -1,0 +1,95 @@
+From 5095466039a466d58451d334d33138e55a935fd0 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:28:24 +0700
+Subject: [PATCH 05/18] refactor(5.1): Replace Magic Literal MS_MOT_NGAY +
+ Split Variable rs
+
+---
+ .../java/com/thuvien/servlet/BookServlet.java | 33 ++++++++++---------
+ 1 file changed, 18 insertions(+), 15 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index 1a46189..e34975d 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -28,6 +28,7 @@ import java.util.List;
+ public class BookServlet extends HttpServlet {
+ 
+     private static Logger log = Logger.getLogger(BookServlet.class);
++    private static final long MS_MOT_NGAY = 24L * 60 * 60 * 1000;
+ 
+     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+         if (request.getSession().getAttribute("user") == null) {
+@@ -104,22 +105,24 @@ public class BookServlet extends HttpServlet {
+     private void muonSach(HttpServletRequest request, HttpServletResponse response, Connection con) throws Exception {
+         Statement st = null;
+         PreparedStatement ps = null;
+-        ResultSet rs = null;
++        ResultSet rsDocGia = null;
++        ResultSet rsDem = null;
++        ResultSet rsSach = null;
+         try {
+             String readerId = request.getParameter("readerId");
+             String bookId = request.getParameter("bookId");
+             st = con.createStatement();
+-            rs = st.executeQuery("SELECT * FROM readers WHERE id = " + readerId);
+-            if (!rs.next()) {
++            rsDocGia = st.executeQuery("SELECT * FROM readers WHERE id = " + readerId);
++            if (!rsDocGia.next()) {
+                 response.sendRedirect("books?msg=" + URLEncoder.encode("Độc giả không tồn tại", "UTF-8"));
+                 return;
+             }
+-            String loai = rs.getString("type");
+-            rs.close();
+-            rs = st.executeQuery("SELECT COUNT(*) FROM loans WHERE reader_id = " + readerId + " AND return_date IS NULL");
+-            rs.next();
+-            int dangMuon = rs.getInt(1);
+-            rs.close();
++            String loai = rsDocGia.getString("type");
++            rsDocGia.close();
++            rsDem = st.executeQuery("SELECT COUNT(*) FROM loans WHERE reader_id = " + readerId + " AND return_date IS NULL");
++            rsDem.next();
++            int dangMuon = rsDem.getInt(1);
++            rsDem.close();
+             int toiDa;
+             if (loai.equals("SV")) {
+                 toiDa = 3;
+@@ -132,13 +135,13 @@ public class BookServlet extends HttpServlet {
+                 response.sendRedirect("books?msg=" + URLEncoder.encode("Vượt quá số sách được mượn", "UTF-8"));
+                 return;
+             }
+-            rs = st.executeQuery("SELECT available FROM books WHERE id = " + bookId);
+-            rs.next();
+-            if (rs.getInt(1) <= 0) {
++            rsSach = st.executeQuery("SELECT available FROM books WHERE id = " + bookId);
++            rsSach.next();
++            if (rsSach.getInt(1) <= 0) {
+                 response.sendRedirect("books?msg=" + URLEncoder.encode("Sách đã hết", "UTF-8"));
+                 return;
+             }
+-            rs.close();
++            rsSach.close();
+             Calendar cal = Calendar.getInstance();
+             Timestamp now = new Timestamp(cal.getTimeInMillis());
+             if (loai.equals("SV")) {
+@@ -157,7 +160,7 @@ public class BookServlet extends HttpServlet {
+             log.info("borrow book=" + bookId + " reader=" + readerId);
+             response.sendRedirect("books?msg=" + URLEncoder.encode("Mượn thành công", "UTF-8"));
+         } finally {
+-            DBUtil.close(rs, st, ps);
++            DBUtil.close(rsDocGia, rsDem, rsSach, st, ps);
+         }
+     }
+ 
+@@ -178,7 +181,7 @@ public class BookServlet extends HttpServlet {
+             Timestamp hanTra = rs.getTimestamp("due_date");
+             rs.close();
+             long treMs = bayGio() - hanTra.getTime();
+-            int soNgayTre = (int) (treMs / (1000 * 60 * 60 * 24));
++            int soNgayTre = (int) (treMs / MS_MOT_NGAY);
+             double phi = 0;
+             if (soNgayTre > 0) {
+                 if (loai.equals("SV")) {
+-- 
+2.55.0
+

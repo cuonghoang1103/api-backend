@@ -1,0 +1,39 @@
+From dfcfd2eb511e50a380a972c6e91f2e80956586a0 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:45:07 +0700
+Subject: [PATCH] feat(TV-95): them NCS vao bang luat
+
+---
+ __tests__/luat.test.js | 3 ++-
+ lib/luat.js            | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/__tests__/luat.test.js b/__tests__/luat.test.js
+index e7c58bd..1e7836e 100644
+--- a/__tests__/luat.test.js
++++ b/__tests__/luat.test.js
+@@ -6,7 +6,8 @@ test('ba loại đúng bảng', () => {
+ });
+ 
+ test('loại lạ rơi vào KHACH như nhánh else cũ', () => {
+-  expect(luatCua('NCS')).toBe(luatCua('KHACH'));
++  expect(luatCua('HS')).toBe(luatCua('KHACH'));
++  expect(luatCua('NCS').soNgayMuon).toBe(21);   // TV-95
+   expect(luatCua(undefined)).toBe(luatCua('KHACH'));
+ });
+ 
+diff --git a/lib/luat.js b/lib/luat.js
+index f362d81..7e2d2eb 100644
+--- a/lib/luat.js
++++ b/lib/luat.js
+@@ -3,6 +3,7 @@
+ var LUAT = {
+   SV: { toiDa: 3, soNgayMuon: 14, phiMotNgay: 2000, phiToiDa: 50000, chanKhiQuaHan: true },
+   GV: { toiDa: 10, soNgayMuon: 30, phiMotNgay: 1000, phiToiDa: Infinity, chanKhiQuaHan: false },
++  NCS: { toiDa: 5, soNgayMuon: 21, phiMotNgay: 1500, phiToiDa: Infinity, chanKhiQuaHan: true },   // TV-95 (chặn khi quá hạn như SV — đã hỏi BA)
+   KHACH: { toiDa: 1, soNgayMuon: 7, phiMotNgay: 5000, phiToiDa: Infinity, chanKhiQuaHan: true }
+ };
+ 
+-- 
+2.55.0
+

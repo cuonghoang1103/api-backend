@@ -1,0 +1,136 @@
+From c2c0e249708fac6a7568e4dbabfe279086515702 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 05:27:47 +0700
+Subject: [PATCH 06/12] =?UTF-8?q?fix(6.3):=20thoat=20HTML=20o=20books.jsp?=
+ =?UTF-8?q?=20(msg,=20q,=20ma/ten/tac=20gia)=20va=20thong=20bao=20action?=
+ =?UTF-8?q?=20la=20=E2=80=94=20XSS=20phan=20chieu=20+=20luu=20tru?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../java/com/thuvien/servlet/BookServlet.java |  3 +-
+ src/main/java/com/thuvien/util/Html.java      | 29 +++++++++++++++++++
+ src/main/webapp/books.jsp                     | 12 ++++----
+ src/test/java/com/thuvien/util/HtmlTest.java  | 17 +++++++++++
+ 4 files changed, 54 insertions(+), 7 deletions(-)
+ create mode 100644 src/main/java/com/thuvien/util/Html.java
+ create mode 100644 src/test/java/com/thuvien/util/HtmlTest.java
+
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index c759569..f9d21ca 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -5,6 +5,7 @@ import com.thuvien.dao.PhieuMuonDAO;
+ import com.thuvien.model.Book;
+ import com.thuvien.service.MuonTraService;
+ import com.thuvien.util.DBUtil;
++import com.thuvien.util.Html;
+ import org.apache.commons.lang.StringUtils;
+ import org.apache.log4j.Logger;
+ 
+@@ -88,7 +89,7 @@ public class BookServlet extends HttpServlet {
+                 themSach(request, response, con);
+             } else {
+                 PrintWriter out = response.getWriter();
+-                out.println("<html><body><h3>Action khong hop le: " + action + "</h3></body></html>");
++                out.println("<html><body><h3>Action khong hop le: " + Html.thoat(action) + "</h3></body></html>");
+             }
+         } catch (Exception e) {
+             // Bài 6.3 (CWE-209): chi tiết lỗi vào log cho dev, người dùng chỉ thấy mã tra cứu
+diff --git a/src/main/java/com/thuvien/util/Html.java b/src/main/java/com/thuvien/util/Html.java
+new file mode 100644
+index 0000000..125b0a6
+--- /dev/null
++++ b/src/main/java/com/thuvien/util/Html.java
+@@ -0,0 +1,29 @@
++package com.thuvien.util;
++
++/**
++ * Thoát chữ trước khi in vào HTML (bài 6.3 — chống XSS). Chỉ đổi 5 ký tự có nghĩa trong HTML;
++ * KHÔNG dùng StringEscapeUtils.escapeHtml của commons-lang 2.6 vì nó đổi cả chữ Việt có dấu thành &#7889;… (trang vẫn
++ * hiện đúng nhưng golden master đổi từng byte và trang nặng thêm).
++ */
++public final class Html {
++
++    public static String thoat(Object giaTri) {
++        if (giaTri == null) return "";
++        String s = String.valueOf(giaTri);
++        StringBuilder sb = new StringBuilder(s.length() + 16);
++        for (int i = 0; i < s.length(); i++) {
++            char c = s.charAt(i);
++            switch (c) {
++                case '&': sb.append("&amp;"); break;
++                case '<': sb.append("&lt;"); break;
++                case '>': sb.append("&gt;"); break;
++                case '"': sb.append("&quot;"); break;
++                case '\'': sb.append("&#39;"); break;
++                default: sb.append(c);
++            }
++        }
++        return sb.toString();
++    }
++
++    private Html() { }
++}
+diff --git a/src/main/webapp/books.jsp b/src/main/webapp/books.jsp
+index 4a5258a..62e27d2 100644
+--- a/src/main/webapp/books.jsp
++++ b/src/main/webapp/books.jsp
+@@ -1,14 +1,14 @@
+ <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+-<%@ page import="java.util.*, com.thuvien.model.Book" %>
++<%@ page import="java.util.*, com.thuvien.model.Book, com.thuvien.util.Html" %>
+ <html>
+ <head><title>Sách - Thư viện</title></head>
+ <body>
+ <%@ include file="header.jsp" %>
+ <% if (request.getParameter("msg") != null) { %>
+-  <p style="color:green"><%= request.getParameter("msg") %></p>
++  <p style="color:green"><%= Html.thoat(request.getParameter("msg")) %></p>
+ <% } %>
+ <form method="get" action="books">
+-  <input name="q" value="<%= request.getParameter("q") == null ? "" : request.getParameter("q") %>">
++  <input name="q" value="<%= Html.thoat(request.getParameter("q")) %>">
+   <button>Tìm</button>
+ </form>
+ <table border="1" cellpadding="4">
+@@ -19,9 +19,9 @@
+ %>
+   <tr>
+     <td><%= b.getId() %></td>
+-    <td><%= b.getCode() %></td>
+-    <td><%= b.getTitle() %></td>
+-    <td><%= b.getAuthor() %></td>
++    <td><%= Html.thoat(b.getCode()) %></td>
++    <td><%= Html.thoat(b.getTitle()) %></td>
++    <td><%= Html.thoat(b.getAuthor()) %></td>
+     <td><%= b.getAvailable() %>/<%= b.getQuantity() %></td>
+     <td>
+       <form method="post" action="books" style="margin:0">
+diff --git a/src/test/java/com/thuvien/util/HtmlTest.java b/src/test/java/com/thuvien/util/HtmlTest.java
+new file mode 100644
+index 0000000..cfb68c2
+--- /dev/null
++++ b/src/test/java/com/thuvien/util/HtmlTest.java
+@@ -0,0 +1,17 @@
++package com.thuvien.util;
++
++import org.junit.jupiter.api.Test;
++
++import static org.junit.jupiter.api.Assertions.assertEquals;
++
++class HtmlTest {
++
++    @Test
++    void thoatThe_vaNhay_giuChuViet() {
++        assertEquals("&lt;img src=x onerror=alert(1)&gt;", Html.thoat("<img src=x onerror=alert(1)>"));
++        assertEquals("&quot; onfocus=&quot;alert(1)", Html.thoat("\" onfocus=\"alert(1)"));
++        assertEquals("Lập trình Java &amp; &#39;Clean Code&#39;", Html.thoat("Lập trình Java & 'Clean Code'"));
++        assertEquals("", Html.thoat(null));
++        assertEquals("5", Html.thoat(5));
++    }
++}
+-- 
+2.55.0
+

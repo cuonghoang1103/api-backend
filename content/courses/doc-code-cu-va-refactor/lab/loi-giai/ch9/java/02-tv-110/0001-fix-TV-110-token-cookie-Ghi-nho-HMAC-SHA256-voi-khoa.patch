@@ -1,0 +1,263 @@
+From 00a457583131af0e035baebfb696266049624552 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 08:36:40 +0700
+Subject: [PATCH] fix(TV-110): token cookie Ghi nho = HMAC-SHA256 voi khoa tu
+ bien moi truong, bo bi mat viet cung 'thuvien2016'; cookie HttpOnly
+
+---
+ .env.example                                  |  3 ++
+ .gitignore                                    |  1 +
+ docker-compose.yml                            |  3 ++
+ .../com/thuvien/servlet/LoginServlet.java     |  5 ++-
+ src/main/java/com/thuvien/util/TokenUtil.java | 38 ++++++++++++++++---
+ .../servlet/LoginServletCookieTest.java       | 32 ++++++++++++++++
+ .../com/thuvien/util/TokenUtilDacTaTest.java  | 30 +++++++++++++--
+ .../java/com/thuvien/util/TokenUtilTest.java  |  9 ++++-
+ 8 files changed, 109 insertions(+), 12 deletions(-)
+ create mode 100644 .env.example
+
+diff --git a/.env.example b/.env.example
+new file mode 100644
+index 0000000..cdfb72d
+--- /dev/null
++++ b/.env.example
+@@ -0,0 +1,3 @@
++# Chep thanh .env (da nam trong .gitignore) roi dien gia tri that. KHONG commit .env.
++# Tao khoa: openssl rand -hex 32
++THUVIEN_REMEMBER_KEY=
+diff --git a/.gitignore b/.gitignore
+index 8931c3c..bb14a82 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -4,3 +4,4 @@ target/
+ *.iml
+ *.received.*
+ C:*
++.env
+diff --git a/docker-compose.yml b/docker-compose.yml
+index 05cc13d..0f5ae17 100644
+--- a/docker-compose.yml
++++ b/docker-compose.yml
+@@ -22,6 +22,9 @@ services:
+       # allowPublicKeyRetrieval=true: driver 5.1 + MySQL 8 (caching_sha2_password) không có nó thì lỗi
+       # "Public Key Retrieval is not allowed" mỗi khi MySQL vừa khởi động lại — xem bài 1.4. CHỈ dùng cho lab.
+       DB_URL: "jdbc:mysql://db:3306/thuvien?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true"
++      # TV-110: khoa HMAC cho cookie "Ghi nho" — lay tu tep .env (KHONG commit), tao bang: openssl rand -hex 32
++      # Bo trong ⇒ tinh nang "Ghi nho" tat, dang nhap thuong van chay.
++      THUVIEN_REMEMBER_KEY: "${THUVIEN_REMEMBER_KEY:-}"
+     ports:
+       - "18080:8080"
+     depends_on:
+diff --git a/src/main/java/com/thuvien/servlet/LoginServlet.java b/src/main/java/com/thuvien/servlet/LoginServlet.java
+index 77e1810..46a73e4 100644
+--- a/src/main/java/com/thuvien/servlet/LoginServlet.java
++++ b/src/main/java/com/thuvien/servlet/LoginServlet.java
+@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
+             if (!c.getName().equals("remember")) continue;
+             String[] phan = c.getValue().split(":", -1);   // TV-96: đúng "ten:token" — thiếu token hay thừa đuôi đều bỏ qua
+             if (phan.length != 2) continue;
+-            if (TokenUtil.makeToken(phan[0]).equals(phan[1])) return phan[0];
++            if (TokenUtil.khop(phan[0], phan[1])) return phan[0];   // TV-110: HMAC, so thoi gian khong doi
+         }
+         return null;
+     }
+@@ -69,9 +69,10 @@ public class LoginServlet extends HttpServlet {
+                 if (MatKhau.nenBamLai(rs.getString("password"))) bamLai(con, rs.getInt("id"), p);
+                 request.getSession().setAttribute(Constants.SESSION_USER, rs.getString("username"));
+                 request.getSession().setAttribute("role", rs.getString("role"));
+-                if (request.getParameter("remember") != null) {
++                if (request.getParameter("remember") != null && TokenUtil.batGhiNho()) {   // TV-110: chua cau hinh khoa ⇒ khong phat cookie
+                     Cookie c = new Cookie("remember", rs.getString("username") + ":" + TokenUtil.makeToken(rs.getString("username")));
+                     c.setMaxAge(60 * 60 * 24 * 30);
++                    c.setHttpOnly(true);   // TV-110: JavaScript (XSS) khong doc duoc cookie
+                     response.addCookie(c);
+                 }
+                 response.sendRedirect("books");
+diff --git a/src/main/java/com/thuvien/util/TokenUtil.java b/src/main/java/com/thuvien/util/TokenUtil.java
+index 065fcaf..975b345 100644
+--- a/src/main/java/com/thuvien/util/TokenUtil.java
++++ b/src/main/java/com/thuvien/util/TokenUtil.java
+@@ -1,21 +1,47 @@
+ package com.thuvien.util;
+ 
+-import java.security.MessageDigest;
+ import java.nio.charset.StandardCharsets;
++import java.security.MessageDigest;
+ import java.util.HexFormat;
++import javax.crypto.Mac;
++import javax.crypto.spec.SecretKeySpec;
+ 
+ /**
+- * Token cho cookie "ghi nho dang nhap". MD5 cua username + "thuvien2016".
++ * Token cho cookie "ghi nho dang nhap" = HMAC-SHA256(khoa, username), khoa lay tu bien moi truong THUVIEN_REMEMBER_KEY
++ * (hoac -Dthuvien.remember.key). TV-110: truoc day la MD5(username + "thuvien2016") — ai doc duoc ma nguon deu tu duc duoc cookie admin.
++ * Khong co khoa (hoac khoa ngan hon 32 ky tu) ⇒ tat "ghi nho": makeToken tra null, khop luon false.
++ * Doi khoa = moi cookie cu het hieu luc (cach thu hoi duy nhat hien co — xem TV-123).
+  */
+ public class TokenUtil {
+ 
++    static final int DO_DAI_KHOA_TOI_THIEU = 32;
++
++    static String khoa() {
++        String k = System.getProperty("thuvien.remember.key", System.getenv("THUVIEN_REMEMBER_KEY"));
++        return k != null && k.length() >= DO_DAI_KHOA_TOI_THIEU ? k : null;
++    }
++
++    public static boolean batGhiNho() {
++        return khoa() != null;
++    }
++
++    /** null neu chua cau hinh khoa. */
+     public static String makeToken(String username) {
++        String k = khoa();
++        if (k == null) return null;
+         try {
+-            MessageDigest md = MessageDigest.getInstance("MD5");
+-            byte[] b = md.digest((username + "thuvien2016").getBytes(StandardCharsets.UTF_8));
+-            return HexFormat.of().formatHex(b);
++            Mac mac = Mac.getInstance("HmacSHA256");
++            mac.init(new SecretKeySpec(k.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
++            return HexFormat.of().formatHex(mac.doFinal(username.getBytes(StandardCharsets.UTF_8)));
+         } catch (Exception e) {
+-            return "";
++            throw new IllegalStateException("khong tao duoc HMAC-SHA256", e);
+         }
+     }
++
++    /** So token trong thoi gian khong doi (MessageDigest.isEqual) — khong lo so ky tu dung qua thoi gian tra loi. */
++    public static boolean khop(String username, String token) {
++        String dung = makeToken(username);
++        return dung != null && token != null
++                && MessageDigest.isEqual(dung.getBytes(StandardCharsets.US_ASCII), token.getBytes(StandardCharsets.US_ASCII));
++    }
+ }
+diff --git a/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+index b32b9d2..5cc0008 100644
+--- a/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
++++ b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+@@ -1,6 +1,8 @@
+ package com.thuvien.servlet;
+ 
+ import com.thuvien.util.TokenUtil;
++import org.junit.jupiter.api.AfterAll;
++import org.junit.jupiter.api.BeforeAll;
+ import org.junit.jupiter.api.BeforeEach;
+ import org.junit.jupiter.api.Test;
+ 
+@@ -21,6 +23,16 @@ class LoginServletCookieTest {
+     private HttpSession session;
+     private RequestDispatcher trangLogin;
+ 
++    @BeforeAll
++    static void datKhoa() {
++        System.setProperty("thuvien.remember.key", "khoa-thu-chi-dung-cho-test-0123456789abcdef");   // TV-110
++    }
++
++    @AfterAll
++    static void xoaKhoa() {
++        System.clearProperty("thuvien.remember.key");
++    }
++
+     @BeforeEach
+     void chuanBi() {
+         req = mock(HttpServletRequest.class);
+@@ -83,4 +95,24 @@ class LoginServletCookieTest {
+         voiCookie(new Cookie("remember", "admin:"));
+         verify(trangLogin).forward(req, res);
+     }
++
++    @Test
++    void cookieDucTuBiMatCu_khongConDangNhap_TV110() throws Exception {
++        // md5("admin" + "thuvien2016") — cookie admin ai doc ma nguon cung tu duc duoc (bai 8.5: 302 /books)
++        voiCookie(new Cookie("remember", "admin:a316eabce65f3759e1ce2d96db99486c"));
++        verify(trangLogin).forward(req, res);
++        verify(session, never()).setAttribute(anyString(), any());
++    }
++
++    @Test
++    void chuaCauHinhKhoa_cookieNaoCungBiBoQua_TV110() throws Exception {
++        String dung = "thuthu:" + TokenUtil.makeToken("thuthu");
++        System.clearProperty("thuvien.remember.key");
++        try {
++            voiCookie(new Cookie("remember", dung));
++            verify(trangLogin).forward(req, res);
++        } finally {
++            datKhoa();
++        }
++    }
+ }
+diff --git a/src/test/java/com/thuvien/util/TokenUtilDacTaTest.java b/src/test/java/com/thuvien/util/TokenUtilDacTaTest.java
+index 763423b..69c7577 100644
+--- a/src/test/java/com/thuvien/util/TokenUtilDacTaTest.java
++++ b/src/test/java/com/thuvien/util/TokenUtilDacTaTest.java
+@@ -1,14 +1,38 @@
+ package com.thuvien.util;
+ 
++import org.junit.jupiter.api.AfterEach;
+ import org.junit.jupiter.api.Test;
+ 
+ import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.junit.jupiter.api.Assertions.assertNotEquals;
++import static org.junit.jupiter.api.Assertions.assertNull;
+ 
++/** TV-110: token = HMAC-SHA256(khoa, username). Gia tri mong doi tinh bang cong cu KHAC (openssl), khong chep tu chinh code. */
+ class TokenUtilDacTaTest {
+ 
++    static final String KHOA_TEST = "khoa-thu-chi-dung-cho-test-0123456789abcdef";
++
++    @AfterEach
++    void xoaKhoa() {
++        System.clearProperty("thuvien.remember.key");
++    }
++
++    @Test
++    void tokenCuaAdmin_laHmacSha256_TV110() {
++        // printf 'admin' | openssl dgst -sha256 -hmac 'khoa-thu-chi-dung-cho-test-0123456789abcdef'
++        System.setProperty("thuvien.remember.key", KHOA_TEST);
++        assertEquals("8300c6842be45044399efd0b703567fb317e6e90539c193fa9d5cfeb54cbc6a0", TokenUtil.makeToken("admin"));
++    }
++
++    @Test
++    void khongConLaMd5BiMatVietCung_TV110() {
++        System.setProperty("thuvien.remember.key", KHOA_TEST);
++        assertNotEquals("a316eabce65f3759e1ce2d96db99486c", TokenUtil.makeToken("admin"));   // MD5("admin" + "thuvien2016")
++    }
++
+     @Test
+-    void tokenCuaAdmin() {
+-        // Đặc tả hành vi HIỆN TẠI (MD5 của username + "thuvien2016") — không phải hành vi đúng
+-        assertEquals("a316eabce65f3759e1ce2d96db99486c", TokenUtil.makeToken("admin"));
++    void khoaNganHon32KyTu_tatGhiNho_TV110() {
++        System.setProperty("thuvien.remember.key", "thuvien2016");
++        assertNull(TokenUtil.makeToken("admin"));
+     }
+ }
+diff --git a/src/test/java/com/thuvien/util/TokenUtilTest.java b/src/test/java/com/thuvien/util/TokenUtilTest.java
+index 35e92bf..43bff69 100644
+--- a/src/test/java/com/thuvien/util/TokenUtilTest.java
++++ b/src/test/java/com/thuvien/util/TokenUtilTest.java
+@@ -1,13 +1,20 @@
+ package com.thuvien.util;
+ 
++import org.junit.After;
+ import org.junit.Test;
+ 
+ import static org.junit.Assert.assertEquals;
+ 
+ public class TokenUtilTest {
+ 
++    @After
++    public void xoaKhoa() {
++        System.clearProperty("thuvien.remember.key");
++    }
++
+     @Test
+     public void tokenCoDinh() {
+-        assertEquals(32, TokenUtil.makeToken("admin").length());
++        System.setProperty("thuvien.remember.key", TokenUtilDacTaTest.KHOA_TEST);
++        assertEquals(64, TokenUtil.makeToken("admin").length());   // TV-110: HMAC-SHA256 = 32 byte = 64 ky tu hex (MD5 cu: 32)
+     }
+ }
+-- 
+2.55.0
+

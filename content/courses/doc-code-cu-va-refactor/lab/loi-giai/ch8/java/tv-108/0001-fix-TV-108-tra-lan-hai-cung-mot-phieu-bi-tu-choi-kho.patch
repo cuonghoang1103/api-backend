@@ -1,0 +1,109 @@
+From 52a1c5499e613823b2c6ae083a048049f5b86974 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 07:18:29 +0700
+Subject: [PATCH] fix(TV-108): tra lan hai cung mot phieu bi tu choi, khong
+ cong sach ma
+
+UPDATE loans ... WHERE id = ? AND return_date IS NULL; 0 dong => 'Phieu nay da tra roi', khong cong available.
+Test: traHaiLanCungMotPhieu (khoa hanh vi cu tu bai 3.1) doi ky vong; MuonTraServiceTest them 1 ca 0 dong.
+---
+ src/main/java/com/thuvien/dao/PhieuMuonDAO.java          | 9 +++++----
+ src/main/java/com/thuvien/service/MuonTraService.java    | 2 +-
+ .../java/com/thuvien/service/MuonTraServiceTest.java     | 9 +++++++++
+ .../java/com/thuvien/servlet/BookServletTraSachTest.java | 9 ++++-----
+ 4 files changed, 19 insertions(+), 10 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+index 2d1ec5d..f895f31 100644
+--- a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
++++ b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+@@ -101,7 +101,7 @@ public class PhieuMuonDAO {
+         }
+     }
+ 
+-    /** null nếu không có phiếu. Giữ nguyên: KHÔNG lọc return_date IS NULL ⇒ trả lần hai vẫn tìm thấy (test traHaiLanCungMotPhieu). */
++    /** null nếu không có phiếu. Không lọc return_date: phiếu đã trả vẫn tìm thấy — chặn trả lần hai nằm ở ghiTra (TV-108). */
+     public PhieuCanTra timPhieuCanTra(int loanId) throws SQLException {
+         PreparedStatement st = con.prepareStatement("SELECT l.*, r.type FROM loans l JOIN readers r ON r.id = l.reader_id WHERE l.id = ?");
+         ResultSet rs = null;
+@@ -115,13 +115,14 @@ public class PhieuMuonDAO {
+         }
+     }
+ 
+-    public void ghiTra(int loanId, Timestamp ngayTra, Tien phi) throws SQLException {
+-        PreparedStatement ps = con.prepareStatement("UPDATE loans SET return_date = ?, fine = ? WHERE id = ?");
++    /** Số dòng đã ghi: 0 nghĩa là phiếu đã trả trước đó (TV-108 — kể cả hai cú bấm cùng lúc, vì MySQL khoá dòng khi UPDATE). */
++    public int ghiTra(int loanId, Timestamp ngayTra, Tien phi) throws SQLException {
++        PreparedStatement ps = con.prepareStatement("UPDATE loans SET return_date = ?, fine = ? WHERE id = ? AND return_date IS NULL");
+         try {
+             ps.setTimestamp(1, ngayTra);
+             ps.setDouble(2, phi.soDong());   // cột fine vẫn là double — đổi schema là việc khác
+             ps.setInt(3, loanId);
+-            ps.executeUpdate();
++            return ps.executeUpdate();
+         } finally {
+             DBUtil.close(ps);
+         }
+diff --git a/src/main/java/com/thuvien/service/MuonTraService.java b/src/main/java/com/thuvien/service/MuonTraService.java
+index 05a07aa..221ef87 100644
+--- a/src/main/java/com/thuvien/service/MuonTraService.java
++++ b/src/main/java/com/thuvien/service/MuonTraService.java
+@@ -44,7 +44,7 @@ public class MuonTraService {
+         PhieuMuonDAO.PhieuCanTra phieu = dao.timPhieuCanTra(loanId);
+         if (phieu == null) return new KetQua("readers", "Không tìm thấy phiếu mượn", false);
+         Tien phi = phieu.phiTre(bayGio.getAsLong());
+-        dao.ghiTra(loanId, new Timestamp(bayGio.getAsLong()), phi);
++        if (dao.ghiTra(loanId, new Timestamp(bayGio.getAsLong()), phi) == 0) return new KetQua("readers", "Phiếu này đã trả rồi", false);
+         dao.congLaiSach(phieu.bookId);
+         return new KetQua("readers", phi.lonHonKhong() ? "Trả sách. Phí trễ hạn: " + phi.hienThiKieuCu() : "Trả sách thành công", true);
+     }
+diff --git a/src/test/java/com/thuvien/service/MuonTraServiceTest.java b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+index ec564d0..d1bbf22 100644
+--- a/src/test/java/com/thuvien/service/MuonTraServiceTest.java
++++ b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+@@ -30,6 +30,7 @@ class MuonTraServiceTest {
+     @Test
+     void traTre9Ngay1Gio_phi18000() throws Exception {
+         when(dao.timPhieuCanTra(1)).thenReturn(phieu(LoaiDocGia.SV, "2026-11-15T09:00:00+07:00"));
++        when(dao.ghiTra(anyInt(), any(), any())).thenReturn(1);
+         MuonTraService.KetQua kq = dichVu.tra("1");
+         assertEquals("readers", kq.trang());
+         assertEquals("Trả sách. Phí trễ hạn: 18000.0", kq.thongBao());
+@@ -37,6 +38,14 @@ class MuonTraServiceTest {
+         verify(dao).congLaiSach(1);
+     }
+ 
++    @Test
++    void ghiTraKhongDongNao_daTraRoi_khongCongSach_TV108() throws Exception {
++        when(dao.timPhieuCanTra(1)).thenReturn(phieu(LoaiDocGia.SV, "2026-11-30T09:00:00+07:00"));
++        when(dao.ghiTra(anyInt(), any(), any())).thenReturn(0);   // lượt kia đã ghi trước
++        assertEquals("Phiếu này đã trả rồi", dichVu.tra("1").thongBao());
++        verify(dao, never()).congLaiSach(anyInt());
++    }
++
+     private static PhieuMuonDAO.PhieuCanTra phieu(LoaiDocGia loai, String han) {
+         return new PhieuMuonDAO.PhieuCanTra(1, loai, new Timestamp(OffsetDateTime.parse(han).toInstant().toEpochMilli()));
+     }
+diff --git a/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java b/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
+index 61c42f1..472c078 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
+@@ -78,11 +78,10 @@ class BookServletTraSachTest {
+     }
+ 
+     @Test
+-    void traHaiLanCungMotPhieu() throws Exception {
++    void traHaiLanCungMotPhieu_lanHaiBiTuChoi_TV108() throws Exception {
+         tra("2");
+-        // Không kiểm return_date IS NULL ⇒ trả lần 2 vẫn "thành công" và cộng thêm 1 bản sách ma
+-        assertEquals("readers?msg=Trả sách thành công", tra("2"));
+-        // sách 1: 5 bản, phiếu 1 vẫn đang giữ 1 bản ⇒ thật ra còn 4 — nhưng CSDL ghi 5
+-        assertEquals(5, DuLieuTest.so("SELECT available FROM books WHERE id = 1"));
++        assertEquals("readers?msg=Phiếu này đã trả rồi", tra("2"));
++        // sách 1: 5 bản, phiếu 1 vẫn đang giữ 1 bản ⇒ còn 4 (trước TV-108: CSDL ghi 5 — một bản sách ma)
++        assertEquals(4, DuLieuTest.so("SELECT available FROM books WHERE id = 1"));
+     }
+ }
+-- 
+2.55.0
+

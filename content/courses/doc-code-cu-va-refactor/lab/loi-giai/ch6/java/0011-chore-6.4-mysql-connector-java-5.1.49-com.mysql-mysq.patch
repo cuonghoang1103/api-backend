@@ -1,0 +1,43 @@
+From 4be74aa9cfd6763fd2b827dbbf8a59f56619209d Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 05:36:42 +0700
+Subject: [PATCH 11/12] chore(6.4): mysql-connector-java 5.1.49 ->
+ com.mysql:mysql-connector-j 9.7.0; db.driver com.mysql.cj.jdbc.Driver
+
+49 test xanh tren Java 8; golden master 3 trang giong het; ngay han tra tren trang khop CSDL.
+---
+ pom.xml                          | 7 ++++---
+ src/main/resources/db.properties | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index c1e626d..748e427 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -40,9 +40,10 @@
+       <version>1.2</version>
+     </dependency>
+     <dependency>
+-      <groupId>mysql</groupId>
+-      <artifactId>mysql-connector-java</artifactId>
+-      <version>5.1.49</version>
++      <!-- Bài 6.4: Connector/J 5.1 hết hỗ trợ (CVE-2023-22102, CVE-2019-2692). Từ 8.0.31 đổi tọa độ sang com.mysql:mysql-connector-j. -->
++      <groupId>com.mysql</groupId>
++      <artifactId>mysql-connector-j</artifactId>
++      <version>9.7.0</version>
+     </dependency>
+     <dependency>
+       <!-- Bài 6.2/6.4: log4j 1.x hết hỗ trợ từ 2015 (6 CVE). reload4j = bản tiếp nối 1.2.x của tác giả gốc log4j,
+diff --git a/src/main/resources/db.properties b/src/main/resources/db.properties
+index aa1bd4a..56933f9 100644
+--- a/src/main/resources/db.properties
++++ b/src/main/resources/db.properties
+@@ -1,4 +1,4 @@
+-db.driver=com.mysql.jdbc.Driver
++db.driver=com.mysql.cj.jdbc.Driver
+ db.url=jdbc:mysql://localhost:3306/thuvien?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+ db.user=root
+ db.password=123456
+-- 
+2.55.0
+

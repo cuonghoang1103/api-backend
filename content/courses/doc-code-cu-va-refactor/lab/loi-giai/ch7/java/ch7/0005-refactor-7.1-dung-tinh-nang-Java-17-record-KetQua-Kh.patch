@@ -1,0 +1,200 @@
+From f449d8f82682ab3741f81e4d28caa433a681e55f Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:15:00 +0700
+Subject: [PATCH 5/7] =?UTF-8?q?refactor(7.1):=20dung=20tinh=20nang=20Java?=
+ =?UTF-8?q?=2017=20=E2=80=94=20record=20KetQua/KhoangMuon,=20switch=20mui?=
+ =?UTF-8?q?=20ten,=20instanceof=20mau,=20HexFormat?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Commit RIENG sau khi da len release 17 (khong tron vao commit nang cap). 49 test xanh JDK 17 + 21.
+---
+ src/main/java/com/thuvien/dao/PhieuMuonDAO.java   |  4 ++--
+ src/main/java/com/thuvien/model/KhoangMuon.java   |  9 +--------
+ src/main/java/com/thuvien/model/Tien.java         |  2 +-
+ .../java/com/thuvien/service/MuonTraService.java  | 12 +-----------
+ .../java/com/thuvien/servlet/BookServlet.java     |  4 ++--
+ src/main/java/com/thuvien/util/Html.java          | 12 ++++++------
+ src/main/java/com/thuvien/util/TokenUtil.java     | 15 ++++-----------
+ .../com/thuvien/service/MuonTraServiceTest.java   |  6 +++---
+ 8 files changed, 20 insertions(+), 44 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+index 9e4cb07..2d1ec5d 100644
+--- a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
++++ b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+@@ -71,8 +71,8 @@ public class PhieuMuonDAO {
+         try {
+             ps.setInt(1, bookId);
+             ps.setInt(2, readerId);
+-            ps.setTimestamp(3, khoang.ngayMuon);
+-            ps.setTimestamp(4, khoang.hanTra);
++            ps.setTimestamp(3, khoang.ngayMuon());
++            ps.setTimestamp(4, khoang.hanTra());
+             ps.executeUpdate();
+         } finally {
+             DBUtil.close(ps);
+diff --git a/src/main/java/com/thuvien/model/KhoangMuon.java b/src/main/java/com/thuvien/model/KhoangMuon.java
+index ff8a982..c8c0813 100644
+--- a/src/main/java/com/thuvien/model/KhoangMuon.java
++++ b/src/main/java/com/thuvien/model/KhoangMuon.java
+@@ -4,14 +4,7 @@ import java.sql.Timestamp;
+ import java.util.Calendar;
+ 
+ /** Ngày mượn + hạn trả luôn đi cùng nhau (Introduce Parameter Object — bài 5.3). */
+-public final class KhoangMuon {
+-    public final Timestamp ngayMuon;
+-    public final Timestamp hanTra;
+-
+-    private KhoangMuon(Timestamp ngayMuon, Timestamp hanTra) {
+-        this.ngayMuon = ngayMuon;
+-        this.hanTra = hanTra;
+-    }
++public record KhoangMuon(Timestamp ngayMuon, Timestamp hanTra) {
+ 
+     /** Bắt đầu từ thời điểm của lịch truyền vào, cộng số ngày theo lịch (Calendar.DATE) như mã cũ. */
+     public static KhoangMuon batDau(Calendar luc, int soNgay) {
+diff --git a/src/main/java/com/thuvien/model/Tien.java b/src/main/java/com/thuvien/model/Tien.java
+index 319897c..468ce8c 100644
+--- a/src/main/java/com/thuvien/model/Tien.java
++++ b/src/main/java/com/thuvien/model/Tien.java
+@@ -47,7 +47,7 @@ public final class Tien {
+ 
+     @Override
+     public boolean equals(Object o) {
+-        return o instanceof Tien && ((Tien) o).dong == dong;
++        return o instanceof Tien t && t.dong == dong;
+     }
+ 
+     @Override
+diff --git a/src/main/java/com/thuvien/service/MuonTraService.java b/src/main/java/com/thuvien/service/MuonTraService.java
+index fd8576b..05a07aa 100644
+--- a/src/main/java/com/thuvien/service/MuonTraService.java
++++ b/src/main/java/com/thuvien/service/MuonTraService.java
+@@ -14,17 +14,7 @@ import java.util.function.LongSupplier;
+ public class MuonTraService {
+ 
+     /** Trang đích + thông báo; servlet tự ghép thành redirect. */
+-    public static final class KetQua {
+-        public final String trang;
+-        public final String thongBao;
+-        public final boolean thanhCong;
+-
+-        KetQua(String trang, String thongBao, boolean thanhCong) {
+-            this.trang = trang;
+-            this.thongBao = thongBao;
+-            this.thanhCong = thanhCong;
+-        }
+-    }
++    public record KetQua(String trang, String thongBao, boolean thanhCong) { }
+ 
+     private final PhieuMuonDAO dao;
+     private final LongSupplier bayGio;
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index 3f0e1cf..c61c05d 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -108,7 +108,7 @@ public class BookServlet extends HttpServlet {
+         String readerId = request.getParameter("readerId");
+         String bookId = request.getParameter("bookId");
+         MuonTraService.KetQua kq = dichVu(con).muon(readerId, bookId);
+-        if (kq.thanhCong) log.info("borrow book=" + bookId + " reader=" + readerId);
++        if (kq.thanhCong()) log.info("borrow book=" + bookId + " reader=" + readerId);
+         chuyenTrang(response, kq);
+     }
+ 
+@@ -121,7 +121,7 @@ public class BookServlet extends HttpServlet {
+     }
+ 
+     private static void chuyenTrang(HttpServletResponse response, MuonTraService.KetQua kq) throws IOException {
+-        response.sendRedirect(kq.trang + "?msg=" + URLEncoder.encode(kq.thongBao, "UTF-8"));
++        response.sendRedirect(kq.trang() + "?msg=" + URLEncoder.encode(kq.thongBao(), "UTF-8"));
+     }
+ 
+     private void themSach(HttpServletRequest request, HttpServletResponse response, Connection con) throws Exception {
+diff --git a/src/main/java/com/thuvien/util/Html.java b/src/main/java/com/thuvien/util/Html.java
+index 125b0a6..a1dede8 100644
+--- a/src/main/java/com/thuvien/util/Html.java
++++ b/src/main/java/com/thuvien/util/Html.java
+@@ -14,12 +14,12 @@ public final class Html {
+         for (int i = 0; i < s.length(); i++) {
+             char c = s.charAt(i);
+             switch (c) {
+-                case '&': sb.append("&amp;"); break;
+-                case '<': sb.append("&lt;"); break;
+-                case '>': sb.append("&gt;"); break;
+-                case '"': sb.append("&quot;"); break;
+-                case '\'': sb.append("&#39;"); break;
+-                default: sb.append(c);
++                case '&' -> sb.append("&amp;");
++                case '<' -> sb.append("&lt;");
++                case '>' -> sb.append("&gt;");
++                case '"' -> sb.append("&quot;");
++                case '\'' -> sb.append("&#39;");
++                default -> sb.append(c);
+             }
+         }
+         return sb.toString();
+diff --git a/src/main/java/com/thuvien/util/TokenUtil.java b/src/main/java/com/thuvien/util/TokenUtil.java
+index 4c22845..065fcaf 100644
+--- a/src/main/java/com/thuvien/util/TokenUtil.java
++++ b/src/main/java/com/thuvien/util/TokenUtil.java
+@@ -1,6 +1,8 @@
+ package com.thuvien.util;
+ 
+ import java.security.MessageDigest;
++import java.nio.charset.StandardCharsets;
++import java.util.HexFormat;
+ 
+ /**
+  * Token cho cookie "ghi nho dang nhap". MD5 cua username + "thuvien2016".
+@@ -10,19 +12,10 @@ public class TokenUtil {
+     public static String makeToken(String username) {
+         try {
+             MessageDigest md = MessageDigest.getInstance("MD5");
+-            byte[] b = md.digest((username + "thuvien2016").getBytes("UTF-8"));
+-            return hex(b);
++            byte[] b = md.digest((username + "thuvien2016").getBytes(StandardCharsets.UTF_8));
++            return HexFormat.of().formatHex(b);
+         } catch (Exception e) {
+             return "";
+         }
+     }
+-
+-    /** Thay DatatypeConverter.printHexBinary(b).toLowerCase() — javax.xml.bind bị gỡ khỏi JDK 11 (JEP 320). Lên Java 17 thì dùng HexFormat. */
+-    static String hex(byte[] b) {
+-        StringBuilder sb = new StringBuilder(b.length * 2);
+-        for (byte x : b) {
+-            sb.append(Character.forDigit((x >> 4) & 0xF, 16)).append(Character.forDigit(x & 0xF, 16));
+-        }
+-        return sb.toString();
+-    }
+ }
+diff --git a/src/test/java/com/thuvien/service/MuonTraServiceTest.java b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+index c2dc334..ec564d0 100644
+--- a/src/test/java/com/thuvien/service/MuonTraServiceTest.java
++++ b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+@@ -23,7 +23,7 @@ class MuonTraServiceTest {
+     void svDangGiu4_biTuChoi_khongGhiGi() throws Exception {
+         when(dao.loaiCuaDocGia(5)).thenReturn(LoaiDocGia.SV);
+         when(dao.demDangMuon(5)).thenReturn(4);
+-        assertEquals("Vượt quá số sách được mượn", dichVu.muon("5", "7").thongBao);
++        assertEquals("Vượt quá số sách được mượn", dichVu.muon("5", "7").thongBao());
+         verify(dao, never()).themPhieu(anyInt(), anyInt(), any());
+     }
+ 
+@@ -31,8 +31,8 @@ class MuonTraServiceTest {
+     void traTre9Ngay1Gio_phi18000() throws Exception {
+         when(dao.timPhieuCanTra(1)).thenReturn(phieu(LoaiDocGia.SV, "2026-11-15T09:00:00+07:00"));
+         MuonTraService.KetQua kq = dichVu.tra("1");
+-        assertEquals("readers", kq.trang);
+-        assertEquals("Trả sách. Phí trễ hạn: 18000.0", kq.thongBao);
++        assertEquals("readers", kq.trang());
++        assertEquals("Trả sách. Phí trễ hạn: 18000.0", kq.thongBao());
+         verify(dao).ghiTra(1, new Timestamp(HOM_NAY), Tien.dong(18000));
+         verify(dao).congLaiSach(1);
+     }
+-- 
+2.55.0
+

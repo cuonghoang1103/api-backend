@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`danh sách quá hạn 1`] = `
+Array [
+  Object {
+    "capNhat": "10:00 24/11/2026",
+    "docGia": "Nguyễn Văn An",
+    "loai": "SV",
+    "phi": 20000,
+    "phieu": 1,
+    "sach": "Lập trình Java căn bản",
+  },
+  Object {
+    "capNhat": "10:00 24/11/2026",
+    "docGia": "Lê Minh Châu",
+    "loai": "GV",
+    "phi": 14000,
+    "phieu": 3,
+    "sach": "Cấu trúc dữ liệu và giải thuật",
+  },
+  Object {
+    "capNhat": "10:00 24/11/2026",
+    "docGia": "Phạm Quốc Dũng",
+    "loai": "KHACH",
+    "phi": 135000,
+    "phieu": 4,
+    "sach": "Clean Code",
+  },
+]
+`;

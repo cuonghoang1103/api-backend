@@ -1,0 +1,1832 @@
+From 1e316316431229cd8e17810ce1c0a906000a0012 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 07:19:40 +0700
+Subject: [PATCH] style: google-java-format 1.27.0 --aosp, chay 2 luot (may
+ sinh, khong sua tay)
+
+---
+ src/main/java/com/thuvien/dao/BookDAO.java    |   9 +-
+ .../java/com/thuvien/dao/PhieuMuonDAO.java    |  56 ++++++---
+ src/main/java/com/thuvien/dao/ThongKeDAO.java |   5 +-
+ src/main/java/com/thuvien/model/Book.java     |  59 ++++++++--
+ .../java/com/thuvien/model/KhoangMuon.java    |   4 +-
+ .../java/com/thuvien/model/LoaiDocGia.java    |  51 ++++++--
+ src/main/java/com/thuvien/model/Reader.java   |  41 +++++--
+ src/main/java/com/thuvien/model/Tien.java     |  10 +-
+ .../com/thuvien/service/MuonTraService.java   |  24 +++-
+ .../java/com/thuvien/servlet/BookServlet.java |  54 ++++++---
+ .../com/thuvien/servlet/LoginServlet.java     |  33 ++++--
+ .../com/thuvien/servlet/ReaderServlet.java    |  24 +++-
+ .../com/thuvien/servlet/ReportServlet.java    |   7 +-
+ .../java/com/thuvien/tools/BamMatKhauCu.java  |  23 ++--
+ src/main/java/com/thuvien/util/DBUtil.java    |  12 +-
+ src/main/java/com/thuvien/util/Html.java      |   8 +-
+ src/main/java/com/thuvien/util/MatKhau.java   |  34 ++++--
+ src/main/java/com/thuvien/util/TokenUtil.java |   6 +-
+ .../com/thuvien/model/LoaiDocGiaTest.java     |  25 ++--
+ .../thuvien/service/MuonTraServiceTest.java   |  17 +--
+ .../servlet/BookServletMuonSachTest.java      | 111 +++++++++++++-----
+ .../servlet/BookServletTraSachTest.java       |  56 +++++----
+ .../servlet/BookServletXoaSachTest.java       |  21 ++--
+ .../servlet/LoginServletCookieTest.java       |  26 ++--
+ .../servlet/LoginServletMatKhauTest.java      |  28 +++--
+ .../thuvien/servlet/TimKiemVaDocGiaTest.java  |  37 ++++--
+ .../java/com/thuvien/testutil/DuLieuTest.java |  12 +-
+ src/test/java/com/thuvien/util/HtmlTest.java  |  11 +-
+ .../java/com/thuvien/util/MatKhauTest.java    |   6 +-
+ .../com/thuvien/util/TokenUtilDacTaTest.java  |   4 +-
+ .../java/com/thuvien/util/TokenUtilTest.java  |   4 +-
+ 31 files changed, 570 insertions(+), 248 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/dao/BookDAO.java b/src/main/java/com/thuvien/dao/BookDAO.java
+index ce2041e..6ff6f8a 100644
+--- a/src/main/java/com/thuvien/dao/BookDAO.java
++++ b/src/main/java/com/thuvien/dao/BookDAO.java
+@@ -9,9 +9,7 @@ import java.sql.ResultSet;
+ import java.util.ArrayList;
+ import java.util.List;
+ 
+-/**
+- * Bat dau tach DAO (2018) — moi lam duoc findAll, cac ham khac van nam trong BookServlet.
+- */
++/** Bat dau tach DAO (2018) — moi lam duoc findAll, cac ham khac van nam trong BookServlet. */
+ public class BookDAO {
+ 
+     public List<Book> findAll() {
+@@ -21,7 +19,10 @@ public class BookDAO {
+         ResultSet rs = null;
+         try {
+             con = DBUtil.getConnection();
+-            ps = con.prepareStatement("SELECT id, code, title, author, quantity, available FROM books ORDER BY id");
++            ps =
++                    con.prepareStatement(
++                            "SELECT id, code, title, author, quantity, available FROM books ORDER"
++                                    + " BY id");
+             rs = ps.executeQuery();
+             while (rs.next()) {
+                 list.add(map(rs));
+diff --git a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+index f895f31..a75560e 100644
+--- a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
++++ b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+@@ -12,9 +12,10 @@ import java.sql.SQLException;
+ import java.sql.Timestamp;
+ 
+ /**
+- * SQL của chức năng mượn/trả, chuyển nguyên văn từ BookServlet (Extract Class — bài 5.3).
+- * TV-102 (bài 6.3): mọi tham số đi qua PreparedStatement — tham số là DỮ LIỆU, không bao giờ thành một phần câu SQL.
+- * Mã nhận vào là int: chuỗi người dùng gõ được kiểm ở MuonTraService (không phải số ⇒ "không hợp lệ", không chạm CSDL).
++ * SQL của chức năng mượn/trả, chuyển nguyên văn từ BookServlet (Extract Class — bài 5.3). TV-102
++ * (bài 6.3): mọi tham số đi qua PreparedStatement — tham số là DỮ LIỆU, không bao giờ thành một
++ * phần câu SQL. Mã nhận vào là int: chuỗi người dùng gõ được kiểm ở MuonTraService (không phải số ⇒
++ * "không hợp lệ", không chạm CSDL).
+  */
+ public class PhieuMuonDAO {
+ 
+@@ -40,7 +41,9 @@ public class PhieuMuonDAO {
+     }
+ 
+     public int demDangMuon(int readerId) throws SQLException {
+-        PreparedStatement st = con.prepareStatement("SELECT COUNT(*) FROM loans WHERE reader_id = ? AND return_date IS NULL");
++        PreparedStatement st =
++                con.prepareStatement(
++                        "SELECT COUNT(*) FROM loans WHERE reader_id = ? AND return_date IS NULL");
+         ResultSet rs = null;
+         try {
+             st.setInt(1, readerId);
+@@ -52,7 +55,10 @@ public class PhieuMuonDAO {
+         }
+     }
+ 
+-    /** Giữ nguyên: không kiểm rs.next() ⇒ sách không tồn tại ném "Illegal operation on empty result set." (test bookIdKhongTonTai). */
++    /**
++     * Giữ nguyên: không kiểm rs.next() ⇒ sách không tồn tại ném "Illegal operation on empty result
++     * set." (test bookIdKhongTonTai).
++     */
+     public int soBanConLai(int bookId) throws SQLException {
+         PreparedStatement st = con.prepareStatement("SELECT available FROM books WHERE id = ?");
+         ResultSet rs = null;
+@@ -67,7 +73,10 @@ public class PhieuMuonDAO {
+     }
+ 
+     public void themPhieu(int bookId, int readerId, KhoangMuon khoang) throws SQLException {
+-        PreparedStatement ps = con.prepareStatement("INSERT INTO loans(book_id, reader_id, borrow_date, due_date) VALUES (?, ?, ?, ?)");
++        PreparedStatement ps =
++                con.prepareStatement(
++                        "INSERT INTO loans(book_id, reader_id, borrow_date, due_date) VALUES (?, ?,"
++                                + " ?, ?)");
+         try {
+             ps.setInt(1, bookId);
+             ps.setInt(2, readerId);
+@@ -91,7 +100,10 @@ public class PhieuMuonDAO {
+             this.hanTra = hanTra;
+         }
+ 
+-        /** Số ngày trễ, CẮT phần lẻ (9 ngày 1 giờ ⇒ 9). Node làm tròn lên — lệch đã ghi ở bài 3.1, chưa sửa. */
++        /**
++         * Số ngày trễ, CẮT phần lẻ (9 ngày 1 giờ ⇒ 9). Node làm tròn lên — lệch đã ghi ở bài 3.1,
++         * chưa sửa.
++         */
+         public int soNgayTre(long bayGio) {
+             return (int) ((bayGio - hanTra.getTime()) / MS_MOT_NGAY);
+         }
+@@ -101,26 +113,41 @@ public class PhieuMuonDAO {
+         }
+     }
+ 
+-    /** null nếu không có phiếu. Không lọc return_date: phiếu đã trả vẫn tìm thấy — chặn trả lần hai nằm ở ghiTra (TV-108). */
++    /**
++     * null nếu không có phiếu. Không lọc return_date: phiếu đã trả vẫn tìm thấy — chặn trả lần hai
++     * nằm ở ghiTra (TV-108).
++     */
+     public PhieuCanTra timPhieuCanTra(int loanId) throws SQLException {
+-        PreparedStatement st = con.prepareStatement("SELECT l.*, r.type FROM loans l JOIN readers r ON r.id = l.reader_id WHERE l.id = ?");
++        PreparedStatement st =
++                con.prepareStatement(
++                        "SELECT l.*, r.type FROM loans l JOIN readers r ON r.id = l.reader_id WHERE"
++                                + " l.id = ?");
+         ResultSet rs = null;
+         try {
+             st.setInt(1, loanId);
+             rs = st.executeQuery();
+             if (!rs.next()) return null;
+-            return new PhieuCanTra(rs.getInt("book_id"), LoaiDocGia.tu(rs.getString("type")), rs.getTimestamp("due_date"));
++            return new PhieuCanTra(
++                    rs.getInt("book_id"),
++                    LoaiDocGia.tu(rs.getString("type")),
++                    rs.getTimestamp("due_date"));
+         } finally {
+             DBUtil.close(rs, st);
+         }
+     }
+ 
+-    /** Số dòng đã ghi: 0 nghĩa là phiếu đã trả trước đó (TV-108 — kể cả hai cú bấm cùng lúc, vì MySQL khoá dòng khi UPDATE). */
++    /**
++     * Số dòng đã ghi: 0 nghĩa là phiếu đã trả trước đó (TV-108 — kể cả hai cú bấm cùng lúc, vì
++     * MySQL khoá dòng khi UPDATE).
++     */
+     public int ghiTra(int loanId, Timestamp ngayTra, Tien phi) throws SQLException {
+-        PreparedStatement ps = con.prepareStatement("UPDATE loans SET return_date = ?, fine = ? WHERE id = ? AND return_date IS NULL");
++        PreparedStatement ps =
++                con.prepareStatement(
++                        "UPDATE loans SET return_date = ?, fine = ? WHERE id = ? AND return_date IS"
++                                + " NULL");
+         try {
+             ps.setTimestamp(1, ngayTra);
+-            ps.setDouble(2, phi.soDong());   // cột fine vẫn là double — đổi schema là việc khác
++            ps.setDouble(2, phi.soDong()); // cột fine vẫn là double — đổi schema là việc khác
+             ps.setInt(3, loanId);
+             return ps.executeUpdate();
+         } finally {
+@@ -129,7 +156,8 @@ public class PhieuMuonDAO {
+     }
+ 
+     public void congLaiSach(int bookId) throws SQLException {
+-        PreparedStatement st = con.prepareStatement("UPDATE books SET available = available + 1 WHERE id = ?");
++        PreparedStatement st =
++                con.prepareStatement("UPDATE books SET available = available + 1 WHERE id = ?");
+         try {
+             st.setInt(1, bookId);
+             st.executeUpdate();
+diff --git a/src/main/java/com/thuvien/dao/ThongKeDAO.java b/src/main/java/com/thuvien/dao/ThongKeDAO.java
+index 2cf5130..0502a51 100644
+--- a/src/main/java/com/thuvien/dao/ThongKeDAO.java
++++ b/src/main/java/com/thuvien/dao/ThongKeDAO.java
+@@ -17,7 +17,10 @@ public class ThongKeDAO {
+         ResultSet rs = null;
+         try {
+             st = con.createStatement();
+-            rs = st.executeQuery("SELECT COUNT(*) FROM loans WHERE return_date IS NULL AND due_date < NOW()");
++            rs =
++                    st.executeQuery(
++                            "SELECT COUNT(*) FROM loans WHERE return_date IS NULL AND due_date <"
++                                    + " NOW()");
+             return rs.next() ? rs.getInt(1) : 0;
+         } finally {
+             DBUtil.close(rs, st, con);
+diff --git a/src/main/java/com/thuvien/model/Book.java b/src/main/java/com/thuvien/model/Book.java
+index 24a5b76..7ccce02 100644
+--- a/src/main/java/com/thuvien/model/Book.java
++++ b/src/main/java/com/thuvien/model/Book.java
+@@ -8,16 +8,51 @@ public class Book {
+     private int quantity;
+     private int available;
+ 
+-    public int getId() { return id; }
+-    public void setId(int id) { this.id = id; }
+-    public String getCode() { return code; }
+-    public void setCode(String code) { this.code = code; }
+-    public String getTitle() { return title; }
+-    public void setTitle(String title) { this.title = title; }
+-    public String getAuthor() { return author; }
+-    public void setAuthor(String author) { this.author = author; }
+-    public int getQuantity() { return quantity; }
+-    public void setQuantity(int quantity) { this.quantity = quantity; }
+-    public int getAvailable() { return available; }
+-    public void setAvailable(int available) { this.available = available; }
++    public int getId() {
++        return id;
++    }
++
++    public void setId(int id) {
++        this.id = id;
++    }
++
++    public String getCode() {
++        return code;
++    }
++
++    public void setCode(String code) {
++        this.code = code;
++    }
++
++    public String getTitle() {
++        return title;
++    }
++
++    public void setTitle(String title) {
++        this.title = title;
++    }
++
++    public String getAuthor() {
++        return author;
++    }
++
++    public void setAuthor(String author) {
++        this.author = author;
++    }
++
++    public int getQuantity() {
++        return quantity;
++    }
++
++    public void setQuantity(int quantity) {
++        this.quantity = quantity;
++    }
++
++    public int getAvailable() {
++        return available;
++    }
++
++    public void setAvailable(int available) {
++        this.available = available;
++    }
+ }
+diff --git a/src/main/java/com/thuvien/model/KhoangMuon.java b/src/main/java/com/thuvien/model/KhoangMuon.java
+index c8c0813..4f98280 100644
+--- a/src/main/java/com/thuvien/model/KhoangMuon.java
++++ b/src/main/java/com/thuvien/model/KhoangMuon.java
+@@ -6,7 +6,9 @@ import java.util.Calendar;
+ /** Ngày mượn + hạn trả luôn đi cùng nhau (Introduce Parameter Object — bài 5.3). */
+ public record KhoangMuon(Timestamp ngayMuon, Timestamp hanTra) {
+ 
+-    /** Bắt đầu từ thời điểm của lịch truyền vào, cộng số ngày theo lịch (Calendar.DATE) như mã cũ. */
++    /**
++     * Bắt đầu từ thời điểm của lịch truyền vào, cộng số ngày theo lịch (Calendar.DATE) như mã cũ.
++     */
+     public static KhoangMuon batDau(Calendar luc, int soNgay) {
+         Calendar cal = (Calendar) luc.clone();
+         Timestamp tu = new Timestamp(cal.getTimeInMillis());
+diff --git a/src/main/java/com/thuvien/model/LoaiDocGia.java b/src/main/java/com/thuvien/model/LoaiDocGia.java
+index e62dcea..0ee28fc 100644
+--- a/src/main/java/com/thuvien/model/LoaiDocGia.java
++++ b/src/main/java/com/thuvien/model/LoaiDocGia.java
+@@ -1,24 +1,48 @@
+ package com.thuvien.model;
+ 
+ /**
+- * Loại độc giả và luật đi kèm (Replace Conditional with Polymorphism — bài 5.2).
+- * Thêm một loại = thêm một hằng ở đây; trình biên dịch bắt phải cài đủ ba luật.
++ * Loại độc giả và luật đi kèm (Replace Conditional with Polymorphism — bài 5.2). Thêm một loại =
++ * thêm một hằng ở đây; trình biên dịch bắt phải cài đủ ba luật.
+  */
+ public enum LoaiDocGia {
+     SV {
+-        public int toiDa() { return 3; }
+-        public int soNgayMuon() { return 14; }
+-        protected Tien phiMoiNgay(int soNgayTre) { return Tien.dong(2000).nhan(soNgayTre).khongVuotQua(Tien.dong(50000)); }   // trần 50.000 — TV-52
++        public int toiDa() {
++            return 3;
++        }
++
++        public int soNgayMuon() {
++            return 14;
++        }
++
++        protected Tien phiMoiNgay(int soNgayTre) {
++            return Tien.dong(2000).nhan(soNgayTre).khongVuotQua(Tien.dong(50000));
++        } // trần 50.000 — TV-52
+     },
+     GV {
+-        public int toiDa() { return 10; }
+-        public int soNgayMuon() { return 30; }
+-        protected Tien phiMoiNgay(int soNgayTre) { return Tien.dong(1000).nhan(soNgayTre); }
++        public int toiDa() {
++            return 10;
++        }
++
++        public int soNgayMuon() {
++            return 30;
++        }
++
++        protected Tien phiMoiNgay(int soNgayTre) {
++            return Tien.dong(1000).nhan(soNgayTre);
++        }
+     },
+     KHACH {
+-        public int toiDa() { return 1; }
+-        public int soNgayMuon() { return 7; }
+-        protected Tien phiMoiNgay(int soNgayTre) { return Tien.dong(5000).nhan(soNgayTre); }
++        public int toiDa() {
++            return 1;
++        }
++
++        public int soNgayMuon() {
++            return 7;
++        }
++
++        protected Tien phiMoiNgay(int soNgayTre) {
++            return Tien.dong(5000).nhan(soNgayTre);
++        }
+     };
+ 
+     public abstract int toiDa();
+@@ -31,7 +55,10 @@ public enum LoaiDocGia {
+         return soNgayTre > 0 ? phiMoiNgay(soNgayTre) : Tien.KHONG;
+     }
+ 
+-    /** Cột readers.type. Giữ đúng hành vi cũ: chuỗi nào không phải "SV"/"GV" đều tính như KHACH; null vẫn ném NullPointerException. */
++    /**
++     * Cột readers.type. Giữ đúng hành vi cũ: chuỗi nào không phải "SV"/"GV" đều tính như KHACH;
++     * null vẫn ném NullPointerException.
++     */
+     public static LoaiDocGia tu(String type) {
+         if (type.equals("SV")) return SV;
+         if (type.equals("GV")) return GV;
+diff --git a/src/main/java/com/thuvien/model/Reader.java b/src/main/java/com/thuvien/model/Reader.java
+index c14d8c3..cfb3bb5 100644
+--- a/src/main/java/com/thuvien/model/Reader.java
++++ b/src/main/java/com/thuvien/model/Reader.java
+@@ -3,15 +3,38 @@ package com.thuvien.model;
+ public class Reader {
+     private int id;
+     private String name;
+-    private String type;   // "SV", "GV", "KHACH"
++    private String type; // "SV", "GV", "KHACH"
+     private String phone;
+ 
+-    public int getId() { return id; }
+-    public void setId(int id) { this.id = id; }
+-    public String getName() { return name; }
+-    public void setName(String name) { this.name = name; }
+-    public String getType() { return type; }
+-    public void setType(String type) { this.type = type; }
+-    public String getPhone() { return phone; }
+-    public void setPhone(String phone) { this.phone = phone; }
++    public int getId() {
++        return id;
++    }
++
++    public void setId(int id) {
++        this.id = id;
++    }
++
++    public String getName() {
++        return name;
++    }
++
++    public void setName(String name) {
++        this.name = name;
++    }
++
++    public String getType() {
++        return type;
++    }
++
++    public void setType(String type) {
++        this.type = type;
++    }
++
++    public String getPhone() {
++        return phone;
++    }
++
++    public void setPhone(String phone) {
++        this.phone = phone;
++    }
+ }
+diff --git a/src/main/java/com/thuvien/model/Tien.java b/src/main/java/com/thuvien/model/Tien.java
+index 468ce8c..203c8a5 100644
+--- a/src/main/java/com/thuvien/model/Tien.java
++++ b/src/main/java/com/thuvien/model/Tien.java
+@@ -1,6 +1,9 @@
+ package com.thuvien.model;
+ 
+-/** Số tiền tính bằng đồng (VND không có đơn vị lẻ) — thay cho double (Replace Primitive with Object — bài 5.4). */
++/**
++ * Số tiền tính bằng đồng (VND không có đơn vị lẻ) — thay cho double (Replace Primitive with Object
++ * — bài 5.4).
++ */
+ public final class Tien {
+     public static final Tien KHONG = new Tien(0);
+ 
+@@ -32,8 +35,9 @@ public final class Tien {
+     }
+ 
+     /**
+-     * Cách in CŨ của double ("18000.0") — giữ để thông báo trả sách không đổi. Đổi sang toString() là đổi hành vi:
+-     * làm ở ticket riêng (TV-97) cùng lúc sửa test đặc tả, không lẫn vào refactor này.
++     * Cách in CŨ của double ("18000.0") — giữ để thông báo trả sách không đổi. Đổi sang toString()
++     * là đổi hành vi: làm ở ticket riêng (TV-97) cùng lúc sửa test đặc tả, không lẫn vào refactor
++     * này.
+      */
+     public String hienThiKieuCu() {
+         return String.valueOf((double) dong);
+diff --git a/src/main/java/com/thuvien/service/MuonTraService.java b/src/main/java/com/thuvien/service/MuonTraService.java
+index 221ef87..6cf2f76 100644
+--- a/src/main/java/com/thuvien/service/MuonTraService.java
++++ b/src/main/java/com/thuvien/service/MuonTraService.java
+@@ -14,7 +14,7 @@ import java.util.function.LongSupplier;
+ public class MuonTraService {
+ 
+     /** Trang đích + thông báo; servlet tự ghép thành redirect. */
+-    public record KetQua(String trang, String thongBao, boolean thanhCong) { }
++    public record KetQua(String trang, String thongBao, boolean thanhCong) {}
+ 
+     private final PhieuMuonDAO dao;
+     private final LongSupplier bayGio;
+@@ -26,12 +26,15 @@ public class MuonTraService {
+ 
+     public KetQua muon(String maDocGia, String maSach) throws SQLException {
+         Integer readerId = soNguyen(maDocGia);
+-        if (readerId == null) return new KetQua("books", "Mã độc giả không hợp lệ", false);   // TV-102: không chạm CSDL
++        if (readerId == null)
++            return new KetQua("books", "Mã độc giả không hợp lệ", false); // TV-102: không chạm CSDL
+         Integer bookId = soNguyen(maSach);
+         if (bookId == null) return new KetQua("books", "Mã sách không hợp lệ", false);
+         LoaiDocGia loai = dao.loaiCuaDocGia(readerId);
+         if (loai == null) return new KetQua("books", "Độc giả không tồn tại", false);
+-        if (dao.demDangMuon(readerId) > loai.toiDa()) return new KetQua("books", "Vượt quá số sách được mượn", false);   // ">" — BUG TV-41, chưa sửa
++        if (dao.demDangMuon(readerId) > loai.toiDa())
++            return new KetQua(
++                    "books", "Vượt quá số sách được mượn", false); // ">" — BUG TV-41, chưa sửa
+         if (dao.soBanConLai(bookId) <= 0) return new KetQua("books", "Sách đã hết", false);
+         KhoangMuon khoang = KhoangMuon.batDau(Calendar.getInstance(), loai.soNgayMuon());
+         dao.themPhieu(bookId, readerId, khoang);
+@@ -44,12 +47,21 @@ public class MuonTraService {
+         PhieuMuonDAO.PhieuCanTra phieu = dao.timPhieuCanTra(loanId);
+         if (phieu == null) return new KetQua("readers", "Không tìm thấy phiếu mượn", false);
+         Tien phi = phieu.phiTre(bayGio.getAsLong());
+-        if (dao.ghiTra(loanId, new Timestamp(bayGio.getAsLong()), phi) == 0) return new KetQua("readers", "Phiếu này đã trả rồi", false);
++        if (dao.ghiTra(loanId, new Timestamp(bayGio.getAsLong()), phi) == 0)
++            return new KetQua("readers", "Phiếu này đã trả rồi", false);
+         dao.congLaiSach(phieu.bookId);
+-        return new KetQua("readers", phi.lonHonKhong() ? "Trả sách. Phí trễ hạn: " + phi.hienThiKieuCu() : "Trả sách thành công", true);
++        return new KetQua(
++                "readers",
++                phi.lonHonKhong()
++                        ? "Trả sách. Phí trễ hạn: " + phi.hienThiKieuCu()
++                        : "Trả sách thành công",
++                true);
+     }
+ 
+-    /** Chuỗi người dùng gõ ⇒ số nguyên, hoặc null nếu không phải số (kể cả "2 AND SLEEP(1)"). Khoảng trắng hai đầu được bỏ như câu SQL cũ. */
++    /**
++     * Chuỗi người dùng gõ ⇒ số nguyên, hoặc null nếu không phải số (kể cả "2 AND SLEEP(1)"). Khoảng
++     * trắng hai đầu được bỏ như câu SQL cũ.
++     */
+     static Integer soNguyen(String s) {
+         if (s == null || !s.trim().matches("-?\\d{1,9}")) return null;
+         return Integer.valueOf(s.trim());
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index 4720a62..e1143f2 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -6,13 +6,15 @@ import com.thuvien.model.Book;
+ import com.thuvien.service.MuonTraService;
+ import com.thuvien.util.DBUtil;
+ import com.thuvien.util.Html;
+-import org.apache.commons.lang.StringUtils;
+-import org.apache.log4j.Logger;
+ 
+ import jakarta.servlet.ServletException;
+ import jakarta.servlet.http.HttpServlet;
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
++
++import org.apache.commons.lang.StringUtils;
++import org.apache.log4j.Logger;
++
+ import java.io.IOException;
+ import java.io.PrintWriter;
+ import java.net.URLEncoder;
+@@ -23,14 +25,13 @@ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.UUID;
+ 
+-/**
+- * Quan ly sach + muon/tra. (Tuan 2016, Hung sua 2017, Lan sua 2019)
+- */
++/** Quan ly sach + muon/tra. (Tuan 2016, Hung sua 2017, Lan sua 2019) */
+ public class BookServlet extends HttpServlet {
+ 
+     private static Logger log = Logger.getLogger(BookServlet.class);
+ 
+-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
++    protected void doGet(HttpServletRequest request, HttpServletResponse response)
++            throws ServletException, IOException {
+         if (request.getSession().getAttribute("user") == null) {
+             response.sendRedirect("login");
+             return;
+@@ -45,8 +46,11 @@ public class BookServlet extends HttpServlet {
+             ResultSet rs = null;
+             try {
+                 con = DBUtil.getConnection();
+-                // Lab 6.4: q là DỮ LIỆU. % và _ người dùng gõ vẫn là ký tự đại diện của LIKE — y như trước
+-                st = con.prepareStatement("SELECT * FROM books WHERE title LIKE ? OR author LIKE ?");
++                // Lab 6.4: q là DỮ LIỆU. % và _ người dùng gõ vẫn là ký tự đại diện của LIKE — y
++                // như trước
++                st =
++                        con.prepareStatement(
++                                "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?");
+                 st.setString(1, "%" + q + "%");
+                 st.setString(2, "%" + q + "%");
+                 log.debug("tim sach q=" + q);
+@@ -73,7 +77,8 @@ public class BookServlet extends HttpServlet {
+         request.getRequestDispatcher("books.jsp").forward(request, response);
+     }
+ 
+-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
++    protected void doPost(HttpServletRequest request, HttpServletResponse response)
++            throws ServletException, IOException {
+         if (request.getSession().getAttribute("user") == null) {
+             response.sendRedirect("login");
+             return;
+@@ -91,20 +96,27 @@ public class BookServlet extends HttpServlet {
+                 themSach(request, response, con);
+             } else {
+                 PrintWriter out = response.getWriter();
+-                out.println("<html><body><h3>Action khong hop le: " + Html.thoat(action) + "</h3></body></html>");
++                out.println(
++                        "<html><body><h3>Action khong hop le: "
++                                + Html.thoat(action)
++                                + "</h3></body></html>");
+             }
+         } catch (Exception e) {
+             // Bài 6.3 (CWE-209): chi tiết lỗi vào log cho dev, người dùng chỉ thấy mã tra cứu
+             String maLoi = UUID.randomUUID().toString().substring(0, 8);
+             log.error("loi " + maLoi + " action=" + action, e);
+             PrintWriter out = response.getWriter();
+-            out.println("<html><body><h3>Loi he thong, vui long thu lai (ma loi " + maLoi + ")</h3></body></html>");
++            out.println(
++                    "<html><body><h3>Loi he thong, vui long thu lai (ma loi "
++                            + maLoi
++                            + ")</h3></body></html>");
+         } finally {
+             DBUtil.close(con);
+         }
+     }
+ 
+-    private void muonSach(HttpServletRequest request, HttpServletResponse response, Connection con) throws Exception {
++    private void muonSach(HttpServletRequest request, HttpServletResponse response, Connection con)
++            throws Exception {
+         String readerId = request.getParameter("readerId");
+         String bookId = request.getParameter("bookId");
+         MuonTraService.KetQua kq = dichVu(con).muon(readerId, bookId);
+@@ -112,7 +124,8 @@ public class BookServlet extends HttpServlet {
+         chuyenTrang(response, kq);
+     }
+ 
+-    private void traSach(HttpServletRequest request, HttpServletResponse response, Connection con) throws Exception {
++    private void traSach(HttpServletRequest request, HttpServletResponse response, Connection con)
++            throws Exception {
+         chuyenTrang(response, dichVu(con).tra(request.getParameter("loanId")));
+     }
+ 
+@@ -120,13 +133,20 @@ public class BookServlet extends HttpServlet {
+         return new MuonTraService(new PhieuMuonDAO(con), this::bayGio);
+     }
+ 
+-    private static void chuyenTrang(HttpServletResponse response, MuonTraService.KetQua kq) throws IOException {
++    private static void chuyenTrang(HttpServletResponse response, MuonTraService.KetQua kq)
++            throws IOException {
+         response.sendRedirect(kq.trang() + "?msg=" + URLEncoder.encode(kq.thongBao(), "UTF-8"));
+     }
+ 
+-    private void themSach(HttpServletRequest request, HttpServletResponse response, Connection con) throws Exception {
+-        PreparedStatement st = con.prepareStatement("INSERT INTO books(code, title, author, quantity, available) VALUES (?, ?, ?, ?, ?)");
+-        int soLuong = Integer.parseInt(request.getParameter("quantity"));   // không phải số ⇒ trang lỗi, như trước
++    private void themSach(HttpServletRequest request, HttpServletResponse response, Connection con)
++            throws Exception {
++        PreparedStatement st =
++                con.prepareStatement(
++                        "INSERT INTO books(code, title, author, quantity, available) VALUES (?, ?,"
++                                + " ?, ?, ?)");
++        int soLuong =
++                Integer.parseInt(
++                        request.getParameter("quantity")); // không phải số ⇒ trang lỗi, như trước
+         st.setString(1, request.getParameter("code"));
+         st.setString(2, request.getParameter("title"));
+         st.setString(3, request.getParameter("author"));
+diff --git a/src/main/java/com/thuvien/servlet/LoginServlet.java b/src/main/java/com/thuvien/servlet/LoginServlet.java
+index 954a972..d54aa85 100644
+--- a/src/main/java/com/thuvien/servlet/LoginServlet.java
++++ b/src/main/java/com/thuvien/servlet/LoginServlet.java
+@@ -10,9 +10,10 @@ import jakarta.servlet.http.Cookie;
+ import jakarta.servlet.http.HttpServlet;
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+-import java.io.IOException;
++
+ import org.apache.log4j.Logger;
+ 
++import java.io.IOException;
+ import java.sql.Connection;
+ import java.sql.PreparedStatement;
+ import java.sql.ResultSet;
+@@ -22,7 +23,8 @@ public class LoginServlet extends HttpServlet {
+ 
+     private static final Logger log = Logger.getLogger(LoginServlet.class);
+ 
+-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
++    protected void doGet(HttpServletRequest request, HttpServletResponse response)
++            throws ServletException, IOException {
+         if ("logout".equals(request.getParameter("action"))) {
+             request.logout();
+             Cookie c = new Cookie("remember", "");
+@@ -52,7 +54,8 @@ public class LoginServlet extends HttpServlet {
+         return null;
+     }
+ 
+-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
++    protected void doPost(HttpServletRequest request, HttpServletResponse response)
++            throws ServletException, IOException {
+         request.setCharacterEncoding("UTF-8");
+         String u = request.getParameter("username");
+         String p = request.getParameter("password");
+@@ -61,7 +64,8 @@ public class LoginServlet extends HttpServlet {
+         ResultSet rs = null;
+         try {
+             con = DBUtil.getConnection();
+-            // TV-105 (bài 6.3): tìm theo tên bằng tham số; so mật khẩu trong Java (không để MySQL so kiểu không phân biệt hoa/thường)
++            // TV-105 (bài 6.3): tìm theo tên bằng tham số; so mật khẩu trong Java (không để MySQL
++            // so kiểu không phân biệt hoa/thường)
+             st = con.prepareStatement("SELECT * FROM users WHERE username = ?");
+             st.setString(1, u);
+             rs = st.executeQuery();
+@@ -70,7 +74,12 @@ public class LoginServlet extends HttpServlet {
+                 request.getSession().setAttribute(Constants.SESSION_USER, rs.getString("username"));
+                 request.getSession().setAttribute("role", rs.getString("role"));
+                 if (request.getParameter("remember") != null) {
+-                    Cookie c = new Cookie("remember", rs.getString("username") + ":" + TokenUtil.makeToken(rs.getString("username")));
++                    Cookie c =
++                            new Cookie(
++                                    "remember",
++                                    rs.getString("username")
++                                            + ":"
++                                            + TokenUtil.makeToken(rs.getString("username")));
+                     c.setMaxAge(60 * 60 * 24 * 30);
+                     response.addCookie(c);
+                 }
+@@ -86,14 +95,22 @@ public class LoginServlet extends HttpServlet {
+         request.getRequestDispatcher("login.jsp").forward(request, response);
+     }
+ 
+-    /** Nâng cấp dần: người dùng vừa gõ đúng mật khẩu thô ⇒ lưu bản băm. Lỗi ở đây không được chặn đăng nhập. */
++    /**
++     * Nâng cấp dần: người dùng vừa gõ đúng mật khẩu thô ⇒ lưu bản băm. Lỗi ở đây không được chặn
++     * đăng nhập.
++     */
+     private static void bamLai(Connection con, int id, String matKhau) {
+-        try (PreparedStatement up = con.prepareStatement("UPDATE users SET password = ? WHERE id = ?")) {
++        try (PreparedStatement up =
++                con.prepareStatement("UPDATE users SET password = ? WHERE id = ?")) {
+             up.setString(1, MatKhau.bam(matKhau));
+             up.setInt(2, id);
+             up.executeUpdate();
+         } catch (SQLException e) {
+-            log.warn("chua bam lai duoc mat khau user " + id + " (da chay db/migrations/V6_3__mat_khau_bam.sql chua?): " + e.getMessage());
++            log.warn(
++                    "chua bam lai duoc mat khau user "
++                            + id
++                            + " (da chay db/migrations/V6_3__mat_khau_bam.sql chua?): "
++                            + e.getMessage());
+         }
+     }
+ }
+diff --git a/src/main/java/com/thuvien/servlet/ReaderServlet.java b/src/main/java/com/thuvien/servlet/ReaderServlet.java
+index 423126f..40a87a2 100644
+--- a/src/main/java/com/thuvien/servlet/ReaderServlet.java
++++ b/src/main/java/com/thuvien/servlet/ReaderServlet.java
+@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
+ import jakarta.servlet.http.HttpServlet;
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
++
+ import java.io.IOException;
+ import java.sql.Connection;
+ import java.sql.PreparedStatement;
+@@ -18,7 +19,8 @@ import java.util.List;
+ 
+ public class ReaderServlet extends HttpServlet {
+ 
+-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
++    protected void doGet(HttpServletRequest request, HttpServletResponse response)
++            throws ServletException, IOException {
+         if (request.getSession().getAttribute("user") == null) {
+             response.sendRedirect("login");
+             return;
+@@ -41,8 +43,11 @@ public class ReaderServlet extends HttpServlet {
+                 readers.add(r);
+             }
+             rs.close();
+-            rs = st.executeQuery("SELECT l.*, b.title, r.name FROM loans l JOIN books b ON b.id = l.book_id "
+-                    + "JOIN readers r ON r.id = l.reader_id WHERE l.return_date IS NULL ORDER BY l.due_date");
++            rs =
++                    st.executeQuery(
++                            "SELECT l.*, b.title, r.name FROM loans l JOIN books b ON b.id ="
++                                    + " l.book_id JOIN readers r ON r.id = l.reader_id WHERE"
++                                    + " l.return_date IS NULL ORDER BY l.due_date");
+             while (rs.next()) {
+                 Loan l = new Loan();
+                 l.id = rs.getInt("id");
+@@ -64,7 +69,8 @@ public class ReaderServlet extends HttpServlet {
+         request.getRequestDispatcher("readers.jsp").forward(request, response);
+     }
+ 
+-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
++    protected void doPost(HttpServletRequest request, HttpServletResponse response)
++            throws ServletException, IOException {
+         if (request.getSession().getAttribute("user") == null) {
+             response.sendRedirect("login");
+             return;
+@@ -76,14 +82,20 @@ public class ReaderServlet extends HttpServlet {
+         try {
+             con = DBUtil.getConnection();
+             if ("add".equals(action)) {
+-                st = con.prepareStatement("INSERT INTO readers(name, type, phone) VALUES (?, ?, ?)");
++                st =
++                        con.prepareStatement(
++                                "INSERT INTO readers(name, type, phone) VALUES (?, ?, ?)");
+                 st.setString(1, request.getParameter("name"));
+                 st.setString(2, request.getParameter("type"));
+                 st.setString(3, request.getParameter("phone"));
+                 st.executeUpdate();
+             } else if ("delete".equals(action)) {
+                 st = con.prepareStatement("DELETE FROM readers WHERE id = ?");
+-                st.setInt(1, Integer.parseInt(request.getParameter("id")));   // "0 OR 1=1" ⇒ NumberFormatException, không xoá gì
++                st.setInt(
++                        1,
++                        Integer.parseInt(
++                                request.getParameter(
++                                        "id"))); // "0 OR 1=1" ⇒ NumberFormatException, không xoá gì
+                 st.executeUpdate();
+             }
+         } catch (Exception e) {
+diff --git a/src/main/java/com/thuvien/servlet/ReportServlet.java b/src/main/java/com/thuvien/servlet/ReportServlet.java
+index c68772b..ad190cc 100644
+--- a/src/main/java/com/thuvien/servlet/ReportServlet.java
++++ b/src/main/java/com/thuvien/servlet/ReportServlet.java
+@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
+ import jakarta.servlet.http.HttpServlet;
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
++
+ import java.io.IOException;
+ import java.sql.CallableStatement;
+ import java.sql.Connection;
+@@ -20,13 +21,15 @@ import java.util.Map;
+ @WebServlet("/report")
+ public class ReportServlet extends HttpServlet {
+ 
+-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
++    protected void doGet(HttpServletRequest request, HttpServletResponse response)
++            throws ServletException, IOException {
+         if (request.getSession().getAttribute("user") == null) {
+             response.sendRedirect("login");
+             return;
+         }
+         int minDays = 1;
+-        if (request.getParameter("days") != null) minDays = Integer.parseInt(request.getParameter("days"));
++        if (request.getParameter("days") != null)
++            minDays = Integer.parseInt(request.getParameter("days"));
+         List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+         Connection con = null;
+         CallableStatement cs = null;
+diff --git a/src/main/java/com/thuvien/tools/BamMatKhauCu.java b/src/main/java/com/thuvien/tools/BamMatKhauCu.java
+index 9378eb5..26a2a0b 100644
+--- a/src/main/java/com/thuvien/tools/BamMatKhauCu.java
++++ b/src/main/java/com/thuvien/tools/BamMatKhauCu.java
+@@ -9,19 +9,25 @@ import java.sql.ResultSet;
+ import java.sql.Statement;
+ 
+ /**
+- * Chạy MỘT LẦN sau migration V6_3 (bài 6.3): băm mọi mật khẩu còn lưu thô — kể cả tài khoản lâu không đăng nhập,
+- * thứ mà "nâng cấp dần khi đăng nhập" không bao giờ chạm tới. Chạy lại không đổi gì (đã băm thì bỏ qua).
++ * Chạy MỘT LẦN sau migration V6_3 (bài 6.3): băm mọi mật khẩu còn lưu thô — kể cả tài khoản lâu
++ * không đăng nhập, thứ mà "nâng cấp dần khi đăng nhập" không bao giờ chạm tới. Chạy lại không đổi
++ * gì (đã băm thì bỏ qua).
+  */
+ public final class BamMatKhauCu {
+ 
+     public static void main(String[] args) throws Exception {
+         int daBam = 0, boQua = 0;
+         try (Connection con = DBUtil.getConnection();
+-             Statement st = con.createStatement();
+-             ResultSet rs = st.executeQuery("SELECT id, username, password FROM users ORDER BY id");
+-             PreparedStatement up = con.prepareStatement("UPDATE users SET password = ? WHERE id = ?")) {
++                Statement st = con.createStatement();
++                ResultSet rs =
++                        st.executeQuery("SELECT id, username, password FROM users ORDER BY id");
++                PreparedStatement up =
++                        con.prepareStatement("UPDATE users SET password = ? WHERE id = ?")) {
+             while (rs.next()) {
+-                if (!MatKhau.nenBamLai(rs.getString("password"))) { boQua++; continue; }
++                if (!MatKhau.nenBamLai(rs.getString("password"))) {
++                    boQua++;
++                    continue;
++                }
+                 up.setString(1, MatKhau.bam(rs.getString("password")));
+                 up.setInt(2, rs.getInt("id"));
+                 up.executeUpdate();
+@@ -29,8 +35,9 @@ public final class BamMatKhauCu {
+                 System.out.println("da bam: " + rs.getString("username"));
+             }
+         }
+-        System.out.println("xong: " + daBam + " tai khoan da bam, " + boQua + " bo qua (da bam tu truoc)");
++        System.out.println(
++                "xong: " + daBam + " tai khoan da bam, " + boQua + " bo qua (da bam tu truoc)");
+     }
+ 
+-    private BamMatKhauCu() { }
++    private BamMatKhauCu() {}
+ }
+diff --git a/src/main/java/com/thuvien/util/DBUtil.java b/src/main/java/com/thuvien/util/DBUtil.java
+index 73cf929..a84b44f 100644
+--- a/src/main/java/com/thuvien/util/DBUtil.java
++++ b/src/main/java/com/thuvien/util/DBUtil.java
+@@ -5,9 +5,7 @@ import java.sql.Connection;
+ import java.sql.DriverManager;
+ import java.util.Properties;
+ 
+-/**
+- * Lay ket noi CSDL. Viet nam 2016, "tam thoi" — chua co connection pool.
+- */
++/** Lay ket noi CSDL. Viet nam 2016, "tam thoi" — chua co connection pool. */
+ public class DBUtil {
+ 
+     private static Properties props = null;
+@@ -19,9 +17,13 @@ public class DBUtil {
+                 InputStream in = DBUtil.class.getClassLoader().getResourceAsStream("db.properties");
+                 props.load(in);
+             }
+-            String url = System.getenv("DB_URL") != null ? System.getenv("DB_URL") : props.getProperty("db.url");
++            String url =
++                    System.getenv("DB_URL") != null
++                            ? System.getenv("DB_URL")
++                            : props.getProperty("db.url");
+             Class.forName(props.getProperty("db.driver"));
+-            return DriverManager.getConnection(url, props.getProperty("db.user"), props.getProperty("db.password"));
++            return DriverManager.getConnection(
++                    url, props.getProperty("db.user"), props.getProperty("db.password"));
+         } catch (Exception e) {
+             e.printStackTrace();
+             return null;
+diff --git a/src/main/java/com/thuvien/util/Html.java b/src/main/java/com/thuvien/util/Html.java
+index a1dede8..4be30e1 100644
+--- a/src/main/java/com/thuvien/util/Html.java
++++ b/src/main/java/com/thuvien/util/Html.java
+@@ -1,9 +1,9 @@
+ package com.thuvien.util;
+ 
+ /**
+- * Thoát chữ trước khi in vào HTML (bài 6.3 — chống XSS). Chỉ đổi 5 ký tự có nghĩa trong HTML;
+- * KHÔNG dùng StringEscapeUtils.escapeHtml của commons-lang 2.6 vì nó đổi cả chữ Việt có dấu thành &#7889;… (trang vẫn
+- * hiện đúng nhưng golden master đổi từng byte và trang nặng thêm).
++ * Thoát chữ trước khi in vào HTML (bài 6.3 — chống XSS). Chỉ đổi 5 ký tự có nghĩa trong HTML; KHÔNG
++ * dùng StringEscapeUtils.escapeHtml của commons-lang 2.6 vì nó đổi cả chữ Việt có dấu thành
++ * &#7889;… (trang vẫn hiện đúng nhưng golden master đổi từng byte và trang nặng thêm).
+  */
+ public final class Html {
+ 
+@@ -25,5 +25,5 @@ public final class Html {
+         return sb.toString();
+     }
+ 
+-    private Html() { }
++    private Html() {}
+ }
+diff --git a/src/main/java/com/thuvien/util/MatKhau.java b/src/main/java/com/thuvien/util/MatKhau.java
+index 5390dc4..c700920 100644
+--- a/src/main/java/com/thuvien/util/MatKhau.java
++++ b/src/main/java/com/thuvien/util/MatKhau.java
+@@ -1,17 +1,18 @@
+ package com.thuvien.util;
+ 
+-import javax.crypto.SecretKeyFactory;
+-import javax.crypto.spec.PBEKeySpec;
+ import java.nio.charset.StandardCharsets;
+ import java.security.MessageDigest;
+ import java.security.SecureRandom;
+ import java.util.Base64;
+ 
++import javax.crypto.SecretKeyFactory;
++import javax.crypto.spec.PBEKeySpec;
++
+ /**
+  * Băm mật khẩu (bài 6.3 / TV-105). PBKDF2-HMAC-SHA256 có sẵn trong JDK 8 — không thêm thư viện.
+- * Dạng lưu: pbkdf2-sha256$<số vòng>$<muối base64>$<băm base64> — tiền tố cho phép đổi thuật toán/số vòng về sau
+- * (cùng ý với "{bcrypt}…" của Spring Security DelegatingPasswordEncoder).
+- * Số vòng 600.000: khuyến nghị cho PBKDF2-HMAC-SHA256 của OWASP Password Storage Cheat Sheet.
++ * Dạng lưu: pbkdf2-sha256$<số vòng>$<muối base64>$<băm base64> — tiền tố cho phép đổi thuật toán/số
++ * vòng về sau (cùng ý với "{bcrypt}…" của Spring Security DelegatingPasswordEncoder). Số vòng
++ * 600.000: khuyến nghị cho PBKDF2-HMAC-SHA256 của OWASP Password Storage Cheat Sheet.
+  */
+ public final class MatKhau {
+ 
+@@ -25,19 +26,28 @@ public final class MatKhau {
+         return TIEN_TO + "$" + SO_VONG + "$" + b64(muoi) + "$" + b64(tinh(matKhau, muoi, SO_VONG));
+     }
+ 
+-    /** So mật khẩu gõ vào với giá trị trong cột password — chấp nhận cả mật khẩu thô đời cũ (để nâng cấp dần). */
++    /**
++     * So mật khẩu gõ vào với giá trị trong cột password — chấp nhận cả mật khẩu thô đời cũ (để nâng
++     * cấp dần).
++     */
+     public static boolean khop(String matKhau, String daLuu) {
+         if (matKhau == null || daLuu == null) return false;
+         if (!daLuu.startsWith(TIEN_TO + "$")) {
+-            return MessageDigest.isEqual(matKhau.getBytes(StandardCharsets.UTF_8), daLuu.getBytes(StandardCharsets.UTF_8));
++            return MessageDigest.isEqual(
++                    matKhau.getBytes(StandardCharsets.UTF_8),
++                    daLuu.getBytes(StandardCharsets.UTF_8));
+         }
+         String[] p = daLuu.split("\\$");
+         if (p.length != 4) return false;
+         byte[] muoi = Base64.getDecoder().decode(p[2]);
+-        return MessageDigest.isEqual(tinh(matKhau, muoi, Integer.parseInt(p[1])), Base64.getDecoder().decode(p[3]));
++        return MessageDigest.isEqual(
++                tinh(matKhau, muoi, Integer.parseInt(p[1])), Base64.getDecoder().decode(p[3]));
+     }
+ 
+-    /** true nếu giá trị đang lưu là mật khẩu thô hoặc băm với số vòng cũ ⇒ nên băm lại khi người dùng vừa gõ đúng. */
++    /**
++     * true nếu giá trị đang lưu là mật khẩu thô hoặc băm với số vòng cũ ⇒ nên băm lại khi người
++     * dùng vừa gõ đúng.
++     */
+     public static boolean nenBamLai(String daLuu) {
+         return daLuu == null || !daLuu.startsWith(TIEN_TO + "$" + SO_VONG + "$");
+     }
+@@ -45,7 +55,9 @@ public final class MatKhau {
+     private static byte[] tinh(String matKhau, byte[] muoi, int soVong) {
+         try {
+             PBEKeySpec spec = new PBEKeySpec(matKhau.toCharArray(), muoi, soVong, 256);
+-            return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(spec).getEncoded();
++            return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
++                    .generateSecret(spec)
++                    .getEncoded();
+         } catch (Exception e) {
+             throw new IllegalStateException("JDK thiếu PBKDF2WithHmacSHA256", e);
+         }
+@@ -55,5 +67,5 @@ public final class MatKhau {
+         return Base64.getEncoder().withoutPadding().encodeToString(b);
+     }
+ 
+-    private MatKhau() { }
++    private MatKhau() {}
+ }
+diff --git a/src/main/java/com/thuvien/util/TokenUtil.java b/src/main/java/com/thuvien/util/TokenUtil.java
+index 065fcaf..3ced87b 100644
+--- a/src/main/java/com/thuvien/util/TokenUtil.java
++++ b/src/main/java/com/thuvien/util/TokenUtil.java
+@@ -1,12 +1,10 @@
+ package com.thuvien.util;
+ 
+-import java.security.MessageDigest;
+ import java.nio.charset.StandardCharsets;
++import java.security.MessageDigest;
+ import java.util.HexFormat;
+ 
+-/**
+- * Token cho cookie "ghi nho dang nhap". MD5 cua username + "thuvien2016".
+- */
++/** Token cho cookie "ghi nho dang nhap". MD5 cua username + "thuvien2016". */
+ public class TokenUtil {
+ 
+     public static String makeToken(String username) {
+diff --git a/src/test/java/com/thuvien/model/LoaiDocGiaTest.java b/src/test/java/com/thuvien/model/LoaiDocGiaTest.java
+index 0a1c166..81f1fa5 100644
+--- a/src/test/java/com/thuvien/model/LoaiDocGiaTest.java
++++ b/src/test/java/com/thuvien/model/LoaiDocGiaTest.java
+@@ -1,9 +1,9 @@
+ package com.thuvien.model;
+ 
+-import org.junit.jupiter.api.Test;
+-
+ import static org.junit.jupiter.api.Assertions.*;
+ 
++import org.junit.jupiter.api.Test;
++
+ /** Test đơn vị cho luật theo loại — chạy trong mili giây, không cần CSDL hay mock servlet. */
+ class LoaiDocGiaTest {
+ 
+@@ -12,25 +12,32 @@ class LoaiDocGiaTest {
+         assertEquals(LoaiDocGia.SV, LoaiDocGia.tu("SV"));
+         assertEquals(LoaiDocGia.GV, LoaiDocGia.tu("GV"));
+         assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("KHACH"));
+-        assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("sv"));      // giữ hành vi cũ: phân biệt hoa thường
+-        assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("NCS"));     // loại lạ rơi vào nhánh else
++        assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("sv")); // giữ hành vi cũ: phân biệt hoa thường
++        assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("NCS")); // loại lạ rơi vào nhánh else
+         assertThrows(NullPointerException.class, () -> LoaiDocGia.tu(null));
+     }
+ 
+     @Test
+     void phiTre() {
+         assertEquals(Tien.dong(18000), LoaiDocGia.SV.phiTre(9));
+-        assertEquals(Tien.dong(50000), LoaiDocGia.SV.phiTre(40));        // chạm trần
++        assertEquals(Tien.dong(50000), LoaiDocGia.SV.phiTre(40)); // chạm trần
+         assertEquals(Tien.dong(13000), LoaiDocGia.GV.phiTre(13));
+-        assertEquals(Tien.dong(130000), LoaiDocGia.KHACH.phiTre(26));    // không có trần
++        assertEquals(Tien.dong(130000), LoaiDocGia.KHACH.phiTre(26)); // không có trần
+         assertEquals(Tien.dong(0), LoaiDocGia.SV.phiTre(0));
+         assertEquals(Tien.dong(0), LoaiDocGia.KHACH.phiTre(-3));
+     }
+ 
+     @Test
+     void toiDaVaSoNgay() {
+-        assertArrayEquals(new int[]{3, 10, 1}, new int[]{LoaiDocGia.SV.toiDa(), LoaiDocGia.GV.toiDa(), LoaiDocGia.KHACH.toiDa()});
+-        assertArrayEquals(new int[]{14, 30, 7},
+-                new int[]{LoaiDocGia.SV.soNgayMuon(), LoaiDocGia.GV.soNgayMuon(), LoaiDocGia.KHACH.soNgayMuon()});
++        assertArrayEquals(
++                new int[] {3, 10, 1},
++                new int[] {LoaiDocGia.SV.toiDa(), LoaiDocGia.GV.toiDa(), LoaiDocGia.KHACH.toiDa()});
++        assertArrayEquals(
++                new int[] {14, 30, 7},
++                new int[] {
++                    LoaiDocGia.SV.soNgayMuon(),
++                    LoaiDocGia.GV.soNgayMuon(),
++                    LoaiDocGia.KHACH.soNgayMuon()
++                });
+     }
+ }
+diff --git a/src/test/java/com/thuvien/service/MuonTraServiceTest.java b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+index d1bbf22..963df93 100644
+--- a/src/test/java/com/thuvien/service/MuonTraServiceTest.java
++++ b/src/test/java/com/thuvien/service/MuonTraServiceTest.java
+@@ -1,21 +1,23 @@
+ package com.thuvien.service;
+ 
++import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.mockito.ArgumentMatchers.*;
++import static org.mockito.Mockito.*;
++
+ import com.thuvien.dao.PhieuMuonDAO;
+ import com.thuvien.model.LoaiDocGia;
+ import com.thuvien.model.Tien;
++
+ import org.junit.jupiter.api.Test;
+ 
+ import java.sql.Timestamp;
+ import java.time.OffsetDateTime;
+ 
+-import static org.junit.jupiter.api.Assertions.assertEquals;
+-import static org.mockito.ArgumentMatchers.*;
+-import static org.mockito.Mockito.*;
+-
+ /** Sau khi tách lớp: luật mượn/trả test được KHÔNG cần MySQL, không cần mock servlet. */
+ class MuonTraServiceTest {
+ 
+-    private static final long HOM_NAY = OffsetDateTime.parse("2026-11-24T10:00:00+07:00").toInstant().toEpochMilli();
++    private static final long HOM_NAY =
++            OffsetDateTime.parse("2026-11-24T10:00:00+07:00").toInstant().toEpochMilli();
+     private final PhieuMuonDAO dao = mock(PhieuMuonDAO.class);
+     private final MuonTraService dichVu = new MuonTraService(dao, () -> HOM_NAY);
+ 
+@@ -41,12 +43,13 @@ class MuonTraServiceTest {
+     @Test
+     void ghiTraKhongDongNao_daTraRoi_khongCongSach_TV108() throws Exception {
+         when(dao.timPhieuCanTra(1)).thenReturn(phieu(LoaiDocGia.SV, "2026-11-30T09:00:00+07:00"));
+-        when(dao.ghiTra(anyInt(), any(), any())).thenReturn(0);   // lượt kia đã ghi trước
++        when(dao.ghiTra(anyInt(), any(), any())).thenReturn(0); // lượt kia đã ghi trước
+         assertEquals("Phiếu này đã trả rồi", dichVu.tra("1").thongBao());
+         verify(dao, never()).congLaiSach(anyInt());
+     }
+ 
+     private static PhieuMuonDAO.PhieuCanTra phieu(LoaiDocGia loai, String han) {
+-        return new PhieuMuonDAO.PhieuCanTra(1, loai, new Timestamp(OffsetDateTime.parse(han).toInstant().toEpochMilli()));
++        return new PhieuMuonDAO.PhieuCanTra(
++                1, loai, new Timestamp(OffsetDateTime.parse(han).toInstant().toEpochMilli()));
+     }
+ }
+diff --git a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+index 00acdc7..66d2103 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+@@ -1,25 +1,27 @@
+ package com.thuvien.servlet;
+ 
++import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.junit.jupiter.api.Assertions.assertFalse;
++import static org.junit.jupiter.api.Assertions.assertTrue;
++import static org.mockito.ArgumentMatchers.anyString;
++import static org.mockito.Mockito.*;
++
+ import com.thuvien.testutil.DuLieuTest;
+-import org.junit.jupiter.api.BeforeEach;
+-import org.junit.jupiter.api.Test;
+ 
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import jakarta.servlet.http.HttpSession;
++
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++
+ import java.io.PrintWriter;
+ import java.io.StringWriter;
+ import java.net.URLDecoder;
+ 
+-import static org.junit.jupiter.api.Assertions.assertEquals;
+-import static org.junit.jupiter.api.Assertions.assertFalse;
+-import static org.junit.jupiter.api.Assertions.assertTrue;
+-import static org.mockito.ArgumentMatchers.anyString;
+-import static org.mockito.Mockito.*;
+-
+ /**
+- * Characterization test cho nhánh action=borrow của BookServlet.doPost.
+- * Ghi lại hành vi HIỆN TẠI, kể cả bug. Test nào khoá bug thì tên có hậu tố _BUG + mã ticket.
++ * Characterization test cho nhánh action=borrow của BookServlet.doPost. Ghi lại hành vi HIỆN TẠI,
++ * kể cả bug. Test nào khoá bug thì tên có hậu tố _BUG + mã ticket.
+  */
+ class BookServletMuonSachTest {
+ 
+@@ -39,28 +41,43 @@ class BookServletMuonSachTest {
+         when(res.getWriter()).thenReturn(new PrintWriter(body, true));
+     }
+ 
+-    /** Gọi doPost như Tomcat gọi; trả về chuỗi redirect đã giải mã, hoặc body HTML nếu không redirect. */
++    /**
++     * Gọi doPost như Tomcat gọi; trả về chuỗi redirect đã giải mã, hoặc body HTML nếu không
++     * redirect.
++     */
+     private String muon(String readerId, String bookId) throws Exception {
+         when(req.getParameter("action")).thenReturn("borrow");
+         when(req.getParameter("readerId")).thenReturn(readerId);
+         when(req.getParameter("bookId")).thenReturn(bookId);
+         StringBuilder redirect = new StringBuilder();
+-        doAnswer(inv -> redirect.append((String) inv.getArgument(0))).when(res).sendRedirect(anyString());
++        doAnswer(inv -> redirect.append((String) inv.getArgument(0)))
++                .when(res)
++                .sendRedirect(anyString());
+         servlet.doPost(req, res);
+-        return redirect.length() > 0 ? URLDecoder.decode(redirect.toString(), "UTF-8") : body.toString().trim();
++        return redirect.length() > 0
++                ? URLDecoder.decode(redirect.toString(), "UTF-8")
++                : body.toString().trim();
+     }
+ 
+     @Test
+     void muonThanhCong_themPhieu_vaTriggerTruSoSach() throws Exception {
+         assertEquals("books?msg=Mượn thành công", muon("5", "4"));
+-        assertEquals(1, DuLieuTest.so("SELECT COUNT(*) FROM loans WHERE reader_id = 5 AND book_id = 4 AND return_date IS NULL"));
+-        assertEquals(1, DuLieuTest.so("SELECT available FROM books WHERE id = 4"));   // 2 → 1, do trigger
++        assertEquals(
++                1,
++                DuLieuTest.so(
++                        "SELECT COUNT(*) FROM loans WHERE reader_id = 5 AND book_id = 4 AND"
++                                + " return_date IS NULL"));
++        assertEquals(
++                1, DuLieuTest.so("SELECT available FROM books WHERE id = 4")); // 2 → 1, do trigger
+     }
+ 
+     @Test
+     void hanTraCuaSinhVien_la14Ngay() throws Exception {
+         muon("5", "4");
+-        assertEquals(14, DuLieuTest.so("SELECT DATEDIFF(due_date, borrow_date) FROM loans WHERE reader_id = 5"));
++        assertEquals(
++                14,
++                DuLieuTest.so(
++                        "SELECT DATEDIFF(due_date, borrow_date) FROM loans WHERE reader_id = 5"));
+     }
+ 
+     @Test
+@@ -70,25 +87,35 @@ class BookServletMuonSachTest {
+ 
+     @Test
+     void sinhVienDangMuon3_vanMuonDuocCuonThu4_BUG_TV41() throws Exception {
+-        muon("5", "4"); muon("5", "5"); muon("5", "6");   // SV 5: 0 → 3 cuốn
+-        assertEquals("books?msg=Mượn thành công", muon("5", "2"));   // luật nói tối đa 3; code so "> max"
+-        assertEquals(4, DuLieuTest.so("SELECT COUNT(*) FROM loans WHERE reader_id = 5 AND return_date IS NULL"));
++        muon("5", "4");
++        muon("5", "5");
++        muon("5", "6"); // SV 5: 0 → 3 cuốn
++        assertEquals(
++                "books?msg=Mượn thành công", muon("5", "2")); // luật nói tối đa 3; code so "> max"
++        assertEquals(
++                4,
++                DuLieuTest.so(
++                        "SELECT COUNT(*) FROM loans WHERE reader_id = 5 AND return_date IS NULL"));
+     }
+ 
+     @Test
+     void sinhVienDangMuon4_biTuChoi() throws Exception {
+-        muon("5", "4"); muon("5", "5"); muon("5", "6"); muon("5", "2");
++        muon("5", "4");
++        muon("5", "5");
++        muon("5", "6");
++        muon("5", "2");
+         assertEquals("books?msg=Vượt quá số sách được mượn", muon("5", "7"));
+     }
+ 
+     @Test
+     void khachDangMuon1_vanMuonDuocCuonThu2_BUG_TV41() throws Exception {
+-        assertEquals("books?msg=Mượn thành công", muon("4", "4"));   // KHACH: luật 1, đang có 1 (phiếu 4)
++        assertEquals(
++                "books?msg=Mượn thành công", muon("4", "4")); // KHACH: luật 1, đang có 1 (phiếu 4)
+     }
+ 
+     @Test
+     void sachHet() throws Exception {
+-        muon("5", "5");                                            // sách 5 chỉ có 1 bản
++        muon("5", "5"); // sách 5 chỉ có 1 bản
+         assertEquals("books?msg=Sách đã hết", muon("2", "5"));
+     }
+ 
+@@ -111,40 +138,62 @@ class BookServletMuonSachTest {
+ 
+     @Test
+     void readerIdChuaSQL_khongLoMatKhau_TV102() throws Exception {
+-        String kq = muon("2 AND EXTRACTVALUE(1, CONCAT(0x7e, (SELECT password FROM users WHERE username='admin')))", "1");
++        String kq =
++                muon(
++                        "2 AND EXTRACTVALUE(1, CONCAT(0x7e, (SELECT password FROM users WHERE"
++                                + " username='admin')))",
++                        "1");
+         assertFalse(kq.contains("admin123"), kq);
+     }
+ 
+     @Test
+     void readerIdKhongPhaiSo() throws Exception {
+-        // TV-102 ĐỔI CÓ CHỦ ĐÍCH: trước đây in "Loi: Unknown column 'abc' in 'where clause'" — bằng chứng chuỗi bị ghép vào SQL
++        // TV-102 ĐỔI CÓ CHỦ ĐÍCH: trước đây in "Loi: Unknown column 'abc' in 'where clause'" — bằng
++        // chứng chuỗi bị ghép vào SQL
+         assertEquals("books?msg=Mã độc giả không hợp lệ", muon("abc", "4"));
+     }
+ 
+     @Test
+     void bookIdKhongTonTai() throws Exception {
+-        // Không kiểm rs.next() ở câu SELECT available ⇒ JDBC ném lỗi. Bài 6.3 ĐỔI CÓ CHỦ ĐÍCH: trước đây in nguyên
+-        // "Loi: Illegal operation on empty result set." — nay chỉ in mã tra cứu, chi tiết nằm trong log
++        // Không kiểm rs.next() ở câu SELECT available ⇒ JDBC ném lỗi. Bài 6.3 ĐỔI CÓ CHỦ ĐÍCH:
++        // trước đây in nguyên
++        // "Loi: Illegal operation on empty result set." — nay chỉ in mã tra cứu, chi tiết nằm trong
++        // log
+         String trang = muon("5", "99");
+-        assertTrue(trang.matches("<html><body><h3>Loi he thong, vui long thu lai \\(ma loi [0-9a-f]{8}\\)</h3></body></html>"), trang);
++        assertTrue(
++                trang.matches(
++                        "<html><body><h3>Loi he thong, vui long thu lai \\(ma loi"
++                                + " [0-9a-f]{8}\\)</h3></body></html>"),
++                trang);
+     }
+ 
+     @Test
+     void giangVienDangMuon2_vanMuonDuoc() throws Exception {
+-        muon("3", "4"); muon("3", "5");                            // GV 3: 1 → 3 cuốn
++        muon("3", "4");
++        muon("3", "5"); // GV 3: 1 → 3 cuốn
+         assertEquals("books?msg=Mượn thành công", muon("3", "6"));
+     }
+ 
+     @Test
+     void hanTraCuaGiangVien_la30Ngay() throws Exception {
+         muon("3", "4");
+-        assertEquals(30, DuLieuTest.so("SELECT DATEDIFF(due_date, borrow_date) FROM loans WHERE reader_id = 3 AND book_id = 4"));
++        assertEquals(
++                30,
++                DuLieuTest.so(
++                        "SELECT DATEDIFF(due_date, borrow_date) FROM loans WHERE reader_id = 3 AND"
++                                + " book_id = 4"));
+     }
+ 
+     @Test
+     void hanTraCuaKhach_la7Ngay() throws Exception {
+-        DuLieuTest.chay("UPDATE loans SET return_date = '2026-11-01 09:00:00' WHERE id = 4");   // KHACH 4 trả hết
++        DuLieuTest.chay(
++                "UPDATE loans SET return_date = '2026-11-01 09:00:00' WHERE id = 4"); // KHACH 4 trả
++        // hết
+         muon("4", "4");
+-        assertEquals(7, DuLieuTest.so("SELECT DATEDIFF(due_date, borrow_date) FROM loans WHERE reader_id = 4 AND book_id = 4"));
++        assertEquals(
++                7,
++                DuLieuTest.so(
++                        "SELECT DATEDIFF(due_date, borrow_date) FROM loans WHERE reader_id = 4 AND"
++                                + " book_id = 4"));
+     }
+ }
+diff --git a/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java b/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
+index 472c078..b427688 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletTraSachTest.java
+@@ -1,31 +1,35 @@
+ package com.thuvien.servlet;
+ 
++import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.mockito.ArgumentMatchers.anyString;
++import static org.mockito.Mockito.*;
++
+ import com.thuvien.testutil.DuLieuTest;
+-import org.junit.jupiter.api.BeforeEach;
+-import org.junit.jupiter.api.Test;
+ 
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import jakarta.servlet.http.HttpSession;
++
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++
+ import java.net.URLDecoder;
+ import java.time.OffsetDateTime;
+ 
+-import static org.junit.jupiter.api.Assertions.assertEquals;
+-import static org.mockito.ArgumentMatchers.anyString;
+-import static org.mockito.Mockito.*;
+-
+ /** Characterization test nhánh action=return — nhờ seam bayGio() mà "hôm nay" cố định. */
+ class BookServletTraSachTest {
+ 
+     // "Hôm nay" của test: 24/11/2026 10:00 giờ Việt Nam
+-    private static final long HOM_NAY = OffsetDateTime.parse("2026-11-24T10:00:00+07:00").toInstant().toEpochMilli();
+-
+-    private final BookServlet servlet = new BookServlet() {
+-        @Override
+-        protected long bayGio() {
+-            return HOM_NAY;
+-        }
+-    };
++    private static final long HOM_NAY =
++            OffsetDateTime.parse("2026-11-24T10:00:00+07:00").toInstant().toEpochMilli();
++
++    private final BookServlet servlet =
++            new BookServlet() {
++                @Override
++                protected long bayGio() {
++                    return HOM_NAY;
++                }
++            };
+     private HttpServletRequest req;
+     private HttpServletResponse res;
+ 
+@@ -43,7 +47,9 @@ class BookServletTraSachTest {
+         when(req.getParameter("action")).thenReturn("return");
+         when(req.getParameter("loanId")).thenReturn(loanId);
+         StringBuilder redirect = new StringBuilder();
+-        doAnswer(inv -> redirect.append((String) inv.getArgument(0))).when(res).sendRedirect(anyString());
++        doAnswer(inv -> redirect.append((String) inv.getArgument(0)))
++                .when(res)
++                .sendRedirect(anyString());
+         servlet.doPost(req, res);
+         return URLDecoder.decode(redirect.toString(), "UTF-8");
+     }
+@@ -51,37 +57,43 @@ class BookServletTraSachTest {
+     @Test
+     void sinhVienTre9Ngay1Gio() throws Exception {
+         // Java CẮT phần lẻ ngày: 9 ngày × 2000. (API Node làm tròn lên: 20000 — bài 3.1)
+-        assertEquals("readers?msg=Trả sách. Phí trễ hạn: 18000.0", tra("1"));       // hạn 15/11 09:00
++        assertEquals("readers?msg=Trả sách. Phí trễ hạn: 18000.0", tra("1")); // hạn 15/11 09:00
+     }
+ 
+     @Test
+     void giangVienTre13Ngay1Gio() throws Exception {
+-        assertEquals("readers?msg=Trả sách. Phí trễ hạn: 13000.0", tra("3"));       // hạn 11/11 09:00
++        assertEquals("readers?msg=Trả sách. Phí trễ hạn: 13000.0", tra("3")); // hạn 11/11 09:00
+     }
+ 
+     @Test
+     void khachTre26Ngay1Gio() throws Exception {
+         // KHACH 5000/ngày, KHÔNG có trần (chỉ SV có trần 50000 — quyết định TV-52)
+-        assertEquals("readers?msg=Trả sách. Phí trễ hạn: 130000.0", tra("4"));       // hạn 29/10 09:00
++        assertEquals("readers?msg=Trả sách. Phí trễ hạn: 130000.0", tra("4")); // hạn 29/10 09:00
+     }
+ 
+     @Test
+     void chuaToiHan() throws Exception {
+-        assertEquals("readers?msg=Trả sách thành công", tra("2"));       // hạn 30/11
++        assertEquals("readers?msg=Trả sách thành công", tra("2")); // hạn 30/11
+     }
+ 
+     @Test
+     void loanIdChuaSQL_khongTraNhamPhieu_TV102() throws Exception {
+-        // code cũ: "... WHERE l.id = 0 OR 1=1" TÌM THẤY phiếu 1 (không ai chọn), rồi mới vỡ ở parseInt ⇒ trang lỗi
++        // code cũ: "... WHERE l.id = 0 OR 1=1" TÌM THẤY phiếu 1 (không ai chọn), rồi mới vỡ ở
++        // parseInt ⇒ trang lỗi
+         assertEquals("readers?msg=Mã phiếu không hợp lệ", tra("0 OR 1=1"));
+-        assertEquals(0, DuLieuTest.so("SELECT COUNT(*) FROM loans WHERE return_date IS NOT NULL AND fine IS NOT NULL AND id = 1"));
++        assertEquals(
++                0,
++                DuLieuTest.so(
++                        "SELECT COUNT(*) FROM loans WHERE return_date IS NOT NULL AND fine IS NOT"
++                                + " NULL AND id = 1"));
+     }
+ 
+     @Test
+     void traHaiLanCungMotPhieu_lanHaiBiTuChoi_TV108() throws Exception {
+         tra("2");
+         assertEquals("readers?msg=Phiếu này đã trả rồi", tra("2"));
+-        // sách 1: 5 bản, phiếu 1 vẫn đang giữ 1 bản ⇒ còn 4 (trước TV-108: CSDL ghi 5 — một bản sách ma)
++        // sách 1: 5 bản, phiếu 1 vẫn đang giữ 1 bản ⇒ còn 4 (trước TV-108: CSDL ghi 5 — một bản
++        // sách ma)
+         assertEquals(4, DuLieuTest.so("SELECT available FROM books WHERE id = 1"));
+     }
+ }
+diff --git a/src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java b/src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java
+index 6c04137..19fd668 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletXoaSachTest.java
+@@ -1,19 +1,24 @@
+ package com.thuvien.servlet;
+ 
++import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.mockito.Mockito.*;
++
+ import com.thuvien.testutil.DuLieuTest;
+-import org.junit.jupiter.api.BeforeEach;
+-import org.junit.jupiter.api.Test;
+ 
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import jakarta.servlet.http.HttpSession;
++
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++
+ import java.io.PrintWriter;
+ import java.io.StringWriter;
+ 
+-import static org.junit.jupiter.api.Assertions.assertEquals;
+-import static org.mockito.Mockito.*;
+-
+-/** TV-104 (bài 6.4): action=delete không có nút nào từ 2016 và nối chuỗi SQL ⇒ gỡ. Khoá hành vi MỚI: coi như action lạ, không xoá gì. */
++/**
++ * TV-104 (bài 6.4): action=delete không có nút nào từ 2016 và nối chuỗi SQL ⇒ gỡ. Khoá hành vi MỚI:
++ * coi như action lạ, không xoá gì.
++ */
+ class BookServletXoaSachTest {
+ 
+     @BeforeEach
+@@ -36,7 +41,9 @@ class BookServletXoaSachTest {
+ 
+         new BookServlet().doPost(req, res);
+ 
+-        assertEquals("<html><body><h3>Action khong hop le: delete</h3></body></html>", body.toString().trim());
++        assertEquals(
++                "<html><body><h3>Action khong hop le: delete</h3></body></html>",
++                body.toString().trim());
+         assertEquals(truoc, DuLieuTest.so("SELECT COUNT(*) FROM books"));
+     }
+ }
+diff --git a/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+index 7632b57..ed1da20 100644
+--- a/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
++++ b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+@@ -1,8 +1,9 @@
+ package com.thuvien.servlet;
+ 
++import static org.junit.jupiter.api.Assertions.assertThrows;
++import static org.mockito.Mockito.*;
++
+ import com.thuvien.util.TokenUtil;
+-import org.junit.jupiter.api.BeforeEach;
+-import org.junit.jupiter.api.Test;
+ 
+ import jakarta.servlet.RequestDispatcher;
+ import jakarta.servlet.http.Cookie;
+@@ -10,10 +11,13 @@ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import jakarta.servlet.http.HttpSession;
+ 
+-import static org.junit.jupiter.api.Assertions.assertThrows;
+-import static org.mockito.Mockito.*;
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
+ 
+-/** Characterization test cho đăng nhập bằng cookie "remember" (LoginServlet.doGet) — viết TRƯỚC khi gỡ if lồng (bài 5.2). Không cần CSDL. */
++/**
++ * Characterization test cho đăng nhập bằng cookie "remember" (LoginServlet.doGet) — viết TRƯỚC khi
++ * gỡ if lồng (bài 5.2). Không cần CSDL.
++ */
+ class LoginServletCookieTest {
+ 
+     private final LoginServlet servlet = new LoginServlet();
+@@ -46,7 +50,9 @@ class LoginServletCookieTest {
+ 
+     @Test
+     void tokenDung_dangNhapVaVeTrangSach() throws Exception {
+-        voiCookie(new Cookie("JSESSIONID", "x"), new Cookie("remember", "thuthu:" + TokenUtil.makeToken("thuthu")));
++        voiCookie(
++                new Cookie("JSESSIONID", "x"),
++                new Cookie("remember", "thuthu:" + TokenUtil.makeToken("thuthu")));
+         verify(session).setAttribute("user", "thuthu");
+         verify(res).sendRedirect("books");
+         verify(trangLogin, never()).forward(req, res);
+@@ -67,7 +73,9 @@ class LoginServletCookieTest {
+ 
+     @Test
+     void cookieThuHaiDung_vanDangNhap() throws Exception {
+-        voiCookie(new Cookie("remember", "admin:sai"), new Cookie("remember", "admin:" + TokenUtil.makeToken("admin")));
++        voiCookie(
++                new Cookie("remember", "admin:sai"),
++                new Cookie("remember", "admin:" + TokenUtil.makeToken("admin")));
+         verify(session).setAttribute("user", "admin");
+     }
+ 
+@@ -81,6 +89,8 @@ class LoginServletCookieTest {
+     @Test
+     void dauHaiChamCuoi_nemLoi_BUG() {
+         // "admin:".split(":") chỉ có MỘT phần tử ⇒ [1] ném lỗi, Tomcat trả 500
+-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> voiCookie(new Cookie("remember", "admin:")));
++        assertThrows(
++                ArrayIndexOutOfBoundsException.class,
++                () -> voiCookie(new Cookie("remember", "admin:")));
+     }
+ }
+diff --git a/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java b/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java
+index f74b21b..bfd5f8d 100644
+--- a/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java
++++ b/src/test/java/com/thuvien/servlet/LoginServletMatKhauTest.java
+@@ -1,16 +1,17 @@
+ package com.thuvien.servlet;
+ 
++import static org.mockito.Mockito.*;
++
+ import com.thuvien.testutil.DuLieuTest;
+-import org.junit.jupiter.api.BeforeAll;
+-import org.junit.jupiter.api.BeforeEach;
+-import org.junit.jupiter.api.Test;
+ 
+ import jakarta.servlet.RequestDispatcher;
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import jakarta.servlet.http.HttpSession;
+ 
+-import static org.mockito.Mockito.*;
++import org.junit.jupiter.api.BeforeAll;
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
+ 
+ /** Đăng nhập bằng mật khẩu (LoginServlet.doPost) — bài 6.3 / TV-105. Cần CSDL lab. */
+ class LoginServletMatKhauTest {
+@@ -22,13 +23,16 @@ class LoginServletMatKhauTest {
+ 
+     @BeforeAll
+     static void cotDuRong() throws Exception {
+-        // migration của bài 6.3 (db/migrations/V6_3__mat_khau_bam.sql) — chạy lại nhiều lần vẫn được
++        // migration của bài 6.3 (db/migrations/V6_3__mat_khau_bam.sql) — chạy lại nhiều lần vẫn
++        // được
+         DuLieuTest.chay("ALTER TABLE users MODIFY password VARCHAR(255) NOT NULL");
+     }
+ 
+     @BeforeEach
+     void chuanBi() throws Exception {
+-        DuLieuTest.chay("UPDATE users SET password = 'admin123' WHERE username = 'admin'");   // như dump gốc: mật khẩu thô
++        DuLieuTest.chay(
++                "UPDATE users SET password = 'admin123' WHERE username = 'admin'"); // như dump gốc:
++        // mật khẩu thô
+         req = mock(HttpServletRequest.class);
+         res = mock(HttpServletResponse.class);
+         session = mock(HttpSession.class);
+@@ -64,7 +68,8 @@ class LoginServletMatKhauTest {
+ 
+     @Test
+     void matKhauKhacChuHoa_khongVaoDuoc_TV105() throws Exception {
+-        // code cũ: MySQL so bằng collation utf8_general_ci ⇒ "ADMIN123" và "admin123   " cũng vào. Đổi CÓ CHỦ ĐÍCH.
++        // code cũ: MySQL so bằng collation utf8_general_ci ⇒ "ADMIN123" và "admin123   " cũng vào.
++        // Đổi CÓ CHỦ ĐÍCH.
+         dangNhap("admin", "ADMIN123");
+         verify(res, never()).sendRedirect(anyString());
+     }
+@@ -72,9 +77,12 @@ class LoginServletMatKhauTest {
+     @Test
+     void sauLanDangNhapDau_matKhauDuocBam_TV105() throws Exception {
+         dangNhap("admin", "admin123");
+-        org.junit.jupiter.api.Assertions.assertEquals(1,
+-                DuLieuTest.so("SELECT COUNT(*) FROM users WHERE username = 'admin' AND password LIKE 'pbkdf2-sha256$600000$%'"));
+-        dangNhap("admin", "admin123");   // lần hai: so với bản băm
++        org.junit.jupiter.api.Assertions.assertEquals(
++                1,
++                DuLieuTest.so(
++                        "SELECT COUNT(*) FROM users WHERE username = 'admin' AND password LIKE"
++                                + " 'pbkdf2-sha256$600000$%'"));
++        dangNhap("admin", "admin123"); // lần hai: so với bản băm
+         verify(res, times(2)).sendRedirect("books");
+     }
+ }
+diff --git a/src/test/java/com/thuvien/servlet/TimKiemVaDocGiaTest.java b/src/test/java/com/thuvien/servlet/TimKiemVaDocGiaTest.java
+index 662b463..e791a66 100644
+--- a/src/test/java/com/thuvien/servlet/TimKiemVaDocGiaTest.java
++++ b/src/test/java/com/thuvien/servlet/TimKiemVaDocGiaTest.java
+@@ -1,23 +1,28 @@
+ package com.thuvien.servlet;
+ 
++import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.mockito.ArgumentMatchers.anyString;
++import static org.mockito.Mockito.*;
++
+ import com.thuvien.model.Book;
+ import com.thuvien.testutil.DuLieuTest;
+-import org.junit.jupiter.api.BeforeEach;
+-import org.junit.jupiter.api.Test;
+-import org.mockito.ArgumentCaptor;
+ 
+ import jakarta.servlet.RequestDispatcher;
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import jakarta.servlet.http.HttpSession;
++
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++import org.mockito.ArgumentCaptor;
++
+ import java.util.List;
+ import java.util.stream.Collectors;
+ 
+-import static org.junit.jupiter.api.Assertions.assertEquals;
+-import static org.mockito.ArgumentMatchers.anyString;
+-import static org.mockito.Mockito.*;
+-
+-/** Lab 6.4 — injection còn lại sau bài 6.3: ô tìm kiếm sách (BookServlet.doGet) và thêm/xoá độc giả (ReaderServlet). */
++/**
++ * Lab 6.4 — injection còn lại sau bài 6.3: ô tìm kiếm sách (BookServlet.doGet) và thêm/xoá độc giả
++ * (ReaderServlet).
++ */
+ class TimKiemVaDocGiaTest {
+ 
+     private HttpServletRequest req;
+@@ -40,7 +45,8 @@ class TimKiemVaDocGiaTest {
+         new BookServlet().doGet(req, res);
+         ArgumentCaptor<Object> ds = ArgumentCaptor.forClass(Object.class);
+         verify(req).setAttribute(eq("books"), ds.capture());
+-        return ((List<Book>) ds.getValue()).stream().map(Book::getTitle).collect(Collectors.toList());
++        return ((List<Book>) ds.getValue())
++                .stream().map(Book::getTitle).collect(Collectors.toList());
+     }
+ 
+     @Test
+@@ -50,12 +56,18 @@ class TimKiemVaDocGiaTest {
+ 
+     @Test
+     void timKiemUnion_khongLoBangUsers_lab64() throws Exception {
+-        assertEquals("[]", timSach("zzz' UNION SELECT id, username, password, role, 0, 0 FROM users -- ").toString());
++        assertEquals(
++                "[]",
++                timSach("zzz' UNION SELECT id, username, password, role, 0, 0 FROM users -- ")
++                        .toString());
+     }
+ 
+     @Test
+     void timChuCoDauNhay_khongLoi_lab64() throws Exception {
+-        assertEquals("[]", timSach("O'Reilly").toString());   // code cũ: lỗi cú pháp SQL, nuốt im ⇒ cũng ra [] — giữ nguyên
++        assertEquals(
++                "[]",
++                timSach("O'Reilly")
++                        .toString()); // code cũ: lỗi cú pháp SQL, nuốt im ⇒ cũng ra [] — giữ nguyên
+     }
+ 
+     @Test
+@@ -65,7 +77,8 @@ class TimKiemVaDocGiaTest {
+         when(req.getParameter("type")).thenReturn("KHACH");
+         when(req.getParameter("phone")).thenReturn("0909");
+         new ReaderServlet().doPost(req, res);
+-        // code cũ: câu INSERT vỡ ở dấu nháy, lỗi bị nuốt ⇒ thủ thư thấy trang tải lại mà không có ai được thêm
++        // code cũ: câu INSERT vỡ ở dấu nháy, lỗi bị nuốt ⇒ thủ thư thấy trang tải lại mà không có
++        // ai được thêm
+         assertEquals(1, DuLieuTest.so("SELECT COUNT(*) FROM readers WHERE name = 'Mary O''Brien'"));
+     }
+ 
+diff --git a/src/test/java/com/thuvien/testutil/DuLieuTest.java b/src/test/java/com/thuvien/testutil/DuLieuTest.java
+index 0d8f9aa..24408ea 100644
+--- a/src/test/java/com/thuvien/testutil/DuLieuTest.java
++++ b/src/test/java/com/thuvien/testutil/DuLieuTest.java
+@@ -14,7 +14,8 @@ public final class DuLieuTest {
+     public static void napLai() throws Exception {
+         InputStream in = DuLieuTest.class.getResourceAsStream("/du-lieu-test.sql");
+         String all = new Scanner(in, "UTF-8").useDelimiter("\\A").next();
+-        try (Connection con = DBUtil.getConnection(); Statement st = con.createStatement()) {
++        try (Connection con = DBUtil.getConnection();
++                Statement st = con.createStatement()) {
+             for (String cau : all.split(";\\s*\n")) {
+                 String sql = cau.replaceAll("(?m)^--.*$", "").trim();
+                 if (!sql.isEmpty()) st.executeUpdate(sql);
+@@ -24,7 +25,9 @@ public final class DuLieuTest {
+ 
+     /** Một giá trị số duy nhất từ câu SELECT. */
+     public static int so(String sql) throws Exception {
+-        try (Connection con = DBUtil.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
++        try (Connection con = DBUtil.getConnection();
++                Statement st = con.createStatement();
++                ResultSet rs = st.executeQuery(sql)) {
+             rs.next();
+             return rs.getInt(1);
+         }
+@@ -32,10 +35,11 @@ public final class DuLieuTest {
+ 
+     /** Chạy một câu cập nhật để dựng tình huống riêng của một test. */
+     public static void chay(String sql) throws Exception {
+-        try (Connection con = DBUtil.getConnection(); Statement st = con.createStatement()) {
++        try (Connection con = DBUtil.getConnection();
++                Statement st = con.createStatement()) {
+             st.executeUpdate(sql);
+         }
+     }
+ 
+-    private DuLieuTest() { }
++    private DuLieuTest() {}
+ }
+diff --git a/src/test/java/com/thuvien/util/HtmlTest.java b/src/test/java/com/thuvien/util/HtmlTest.java
+index cfb68c2..d218e43 100644
+--- a/src/test/java/com/thuvien/util/HtmlTest.java
++++ b/src/test/java/com/thuvien/util/HtmlTest.java
+@@ -1,16 +1,19 @@
+ package com.thuvien.util;
+ 
+-import org.junit.jupiter.api.Test;
+-
+ import static org.junit.jupiter.api.Assertions.assertEquals;
+ 
++import org.junit.jupiter.api.Test;
++
+ class HtmlTest {
+ 
+     @Test
+     void thoatThe_vaNhay_giuChuViet() {
+-        assertEquals("&lt;img src=x onerror=alert(1)&gt;", Html.thoat("<img src=x onerror=alert(1)>"));
++        assertEquals(
++                "&lt;img src=x onerror=alert(1)&gt;", Html.thoat("<img src=x onerror=alert(1)>"));
+         assertEquals("&quot; onfocus=&quot;alert(1)", Html.thoat("\" onfocus=\"alert(1)"));
+-        assertEquals("Lập trình Java &amp; &#39;Clean Code&#39;", Html.thoat("Lập trình Java & 'Clean Code'"));
++        assertEquals(
++                "Lập trình Java &amp; &#39;Clean Code&#39;",
++                Html.thoat("Lập trình Java & 'Clean Code'"));
+         assertEquals("", Html.thoat(null));
+         assertEquals("5", Html.thoat(5));
+     }
+diff --git a/src/test/java/com/thuvien/util/MatKhauTest.java b/src/test/java/com/thuvien/util/MatKhauTest.java
+index 4d1257a..be659be 100644
+--- a/src/test/java/com/thuvien/util/MatKhauTest.java
++++ b/src/test/java/com/thuvien/util/MatKhauTest.java
+@@ -1,15 +1,15 @@
+ package com.thuvien.util;
+ 
+-import org.junit.jupiter.api.Test;
+-
+ import static org.junit.jupiter.api.Assertions.*;
+ 
++import org.junit.jupiter.api.Test;
++
+ class MatKhauTest {
+ 
+     @Test
+     void bamHaiLan_khacNhau_vanKhop() {
+         String a = MatKhau.bam("123456"), b = MatKhau.bam("123456");
+-        assertNotEquals(a, b);                       // muối ngẫu nhiên ⇒ hai người cùng mật khẩu không lộ nhau
++        assertNotEquals(a, b); // muối ngẫu nhiên ⇒ hai người cùng mật khẩu không lộ nhau
+         assertTrue(a.startsWith("pbkdf2-sha256$600000$"));
+         assertTrue(MatKhau.khop("123456", a) && MatKhau.khop("123456", b));
+         assertFalse(MatKhau.khop("1234567", a));
+diff --git a/src/test/java/com/thuvien/util/TokenUtilDacTaTest.java b/src/test/java/com/thuvien/util/TokenUtilDacTaTest.java
+index 763423b..3c70c26 100644
+--- a/src/test/java/com/thuvien/util/TokenUtilDacTaTest.java
++++ b/src/test/java/com/thuvien/util/TokenUtilDacTaTest.java
+@@ -1,9 +1,9 @@
+ package com.thuvien.util;
+ 
+-import org.junit.jupiter.api.Test;
+-
+ import static org.junit.jupiter.api.Assertions.assertEquals;
+ 
++import org.junit.jupiter.api.Test;
++
+ class TokenUtilDacTaTest {
+ 
+     @Test
+diff --git a/src/test/java/com/thuvien/util/TokenUtilTest.java b/src/test/java/com/thuvien/util/TokenUtilTest.java
+index 35e92bf..e72d9e3 100644
+--- a/src/test/java/com/thuvien/util/TokenUtilTest.java
++++ b/src/test/java/com/thuvien/util/TokenUtilTest.java
+@@ -1,9 +1,9 @@
+ package com.thuvien.util;
+ 
+-import org.junit.Test;
+-
+ import static org.junit.Assert.assertEquals;
+ 
++import org.junit.Test;
++
+ public class TokenUtilTest {
+ 
+     @Test
+-- 
+2.55.0
+

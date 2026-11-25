@@ -1,0 +1,113 @@
+diff --git a/src/main/java/com/thuvien/service/KiemTraQuaHan.java b/src/main/java/com/thuvien/service/KiemTraQuaHan.java
+new file mode 100644
+index 0000000..1728f76
+--- /dev/null
++++ b/src/main/java/com/thuvien/service/KiemTraQuaHan.java
+@@ -0,0 +1,23 @@
++package com.thuvien.service;
++
++import java.sql.Timestamp;
++import java.util.List;
++
++/**
++ * TV-90: độc giả còn phiếu quá hạn thì không được mượn thêm.
++ * Sprout class — logic MỚI viết ở lớp riêng, không phụ thuộc servlet/CSDL, test được trong vài mili giây.
++ */
++public final class KiemTraQuaHan {
++
++    /** @param hanTraChuaTra hạn trả của các phiếu CHƯA trả; @param bayGio mốc thời gian (ms) */
++    public static boolean coPhieuQuaHan(List<Timestamp> hanTraChuaTra, long bayGio) {
++        for (Timestamp han : hanTraChuaTra) {
++            if (han.getTime() < bayGio) {
++                return true;
++            }
++        }
++        return false;
++    }
++
++    private KiemTraQuaHan() { }
++}
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index a3b7577..986b6d1 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -2,6 +2,7 @@ package com.thuvien.servlet;
+ 
+ import com.thuvien.dao.BookDAO;
+ import com.thuvien.model.Book;
++import com.thuvien.service.KiemTraQuaHan;
+ import com.thuvien.util.DBUtil;
+ import org.apache.commons.lang.StringUtils;
+ import org.apache.log4j.Logger;
+@@ -94,6 +95,10 @@ public class BookServlet extends HttpServlet {
+                 }
+                 String type = rs.getString("type");
+                 rs.close();
++                if (KiemTraQuaHan.coPhieuQuaHan(hanTraChuaTra(con, readerId), bayGio())) {   // TV-90 (sprout)
++                    response.sendRedirect("books?msg=" + URLEncoder.encode("Còn phiếu quá hạn", "UTF-8"));
++                    return;
++                }
+                 rs = st.executeQuery("SELECT COUNT(*) FROM loans WHERE reader_id = " + readerId + " AND return_date IS NULL");
+                 rs.next();
+                 int dangMuon = rs.getInt(1);
+@@ -191,6 +196,18 @@ public class BookServlet extends HttpServlet {
+         }
+     }
+ 
++    /** TV-90: hạn trả các phiếu chưa trả — code mới dùng PreparedStatement, không nối chuỗi. */
++    private List<Timestamp> hanTraChuaTra(Connection con, String readerId) throws Exception {
++        List<Timestamp> kq = new ArrayList<Timestamp>();
++        try (PreparedStatement p = con.prepareStatement("SELECT due_date FROM loans WHERE reader_id = ? AND return_date IS NULL")) {
++            p.setInt(1, Integer.parseInt(readerId));
++            try (ResultSet r = p.executeQuery()) {
++                while (r.next()) kq.add(r.getTimestamp(1));
++            }
++        }
++        return kq;
++    }
++
+     /** Seam thời gian (Extract and Override Call): test ghi đè hàm này để cố định "bây giờ". */
+     protected long bayGio() {
+         return System.currentTimeMillis();
+diff --git a/src/test/java/com/thuvien/service/KiemTraQuaHanTest.java b/src/test/java/com/thuvien/service/KiemTraQuaHanTest.java
+new file mode 100644
+index 0000000..67c5b6a
+--- /dev/null
++++ b/src/test/java/com/thuvien/service/KiemTraQuaHanTest.java
+@@ -0,0 +1,36 @@
++package com.thuvien.service;
++
++import org.junit.jupiter.api.Test;
++
++import java.sql.Timestamp;
++import java.util.Arrays;
++import java.util.Collections;
++
++import static org.junit.jupiter.api.Assertions.assertFalse;
++import static org.junit.jupiter.api.Assertions.assertTrue;
++
++class KiemTraQuaHanTest {
++
++    private static final long BAY_GIO = Timestamp.valueOf("2026-11-24 10:00:00").getTime();
++
++    @Test
++    void khongCoPhieuNao() {
++        assertFalse(KiemTraQuaHan.coPhieuQuaHan(Collections.<Timestamp>emptyList(), BAY_GIO));
++    }
++
++    @Test
++    void moiPhieuConHan() {
++        assertFalse(KiemTraQuaHan.coPhieuQuaHan(Arrays.asList(Timestamp.valueOf("2026-11-30 09:00:00")), BAY_GIO));
++    }
++
++    @Test
++    void dungMocHanChuaTinhQuaHan() {
++        assertFalse(KiemTraQuaHan.coPhieuQuaHan(Arrays.asList(new Timestamp(BAY_GIO)), BAY_GIO));
++    }
++
++    @Test
++    void motPhieuQuaHanLaDu() {
++        assertTrue(KiemTraQuaHan.coPhieuQuaHan(Arrays.asList(
++                Timestamp.valueOf("2026-11-30 09:00:00"), Timestamp.valueOf("2026-11-15 09:00:00")), BAY_GIO));
++    }
++}

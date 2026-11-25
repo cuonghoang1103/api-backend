@@ -1,0 +1,185 @@
+From 6dd25ca078f8dead2de1703ed1f1ceeb3c07a38c Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 09:10:03 +0700
+Subject: [PATCH] =?UTF-8?q?docs(9.3):=20README=20viet=20lai,=20docs/ban-do?=
+ =?UTF-8?q?.md=20(Mermaid),=20RUI-RO.md=20=E2=80=94=20ban=20giao=20sprint?=
+ =?UTF-8?q?=209?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ README.md      | 62 ++++++++++++++++++++++++++++++++++++++++++++++----
+ RUI-RO.md      | 30 ++++++++++++++++++++++++
+ docs/ban-do.md | 52 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 140 insertions(+), 4 deletions(-)
+ create mode 100644 RUI-RO.md
+ create mode 100644 docs/ban-do.md
+
+diff --git a/README.md b/README.md
+index ccad8de..ee8aa3b 100644
+--- a/README.md
++++ b/README.md
+@@ -1,7 +1,61 @@
+-# Thu vien
++# Thư viện — quản lý mượn/trả sách (Servlet/JSP)
+ 
+-Phan mem quan ly thu vien.
++Ứng dụng web nội bộ của thư viện trường (từ 2016): sách, độc giả, mượn/trả, phí trễ hạn, báo cáo quá hạn.
++Đi kèm một API Node riêng cho app mobile (repo `legacy-express`) — **luật mượn nằm ở CẢ HAI repo** (xem `docs/ban-do.md`).
+ 
+-Chay bang Tomcat. DB: xem file sql trong thu muc db.
++| | |
++|---|---|
++| Ngôn ngữ / runtime | Java 21 (từ TV-121), Jakarta Servlet 6.0 / JSP 3.1, JDBC thuần (không ORM) |
++| Máy chủ | Tomcat 10.1 (jakarta — WAR **không** chạy trên Tomcat 9) |
++| CSDL | MySQL 8.0, một schema `thuvien` (dump: `db/thuvien.sql`) |
++| Build | Maven 3.9 (`mvn -B package` ⇒ `target/thuvien.war`) |
+ 
+-Lien he: Tuan
++## Chạy nhanh bằng Docker (chỉ cần Docker)
++```bash
++cp .env.example .env                                   # khoá cookie "Ghi nhớ" — để trống thì tính năng Ghi nhớ tắt
++sed -i "s/^THUVIEN_REMEMBER_KEY=.*/THUVIEN_REMEMBER_KEY=$(openssl rand -hex 32)/" .env   # macOS: sed -i ''
++docker compose up -d --build                           # MySQL 18306, web 18080 — lần đầu tải ảnh nền + thư viện Maven (lâu tuỳ mạng); máy đã có đệm: ~30 s
++docker compose ps                                      # db: healthy, web: running
++```
++Mở <http://localhost:18080/thuvien> — tài khoản thử: `thuthu` / `123456` (thủ thư), `admin` / `admin123`.
++Cổng 18080/18306 bận ⇒ sửa phần `ports:` trong `docker-compose.yml` (đừng commit).
++
++## Chạy test
++```bash
++docker compose up -d db                                # test đơn vị dùng MySQL thật, nạp lại dữ liệu test trước mỗi test
++DB_URL='jdbc:mysql://localhost:18306/thuvien?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true' \
++  mvn -B test                                          # cần JDK 21 (enforcer chặn JDK cũ hơn)
++mvn -B -f e2e/pom.xml test                             # e2e qua HTTP: Testcontainers tự dựng MySQL + Tomcat (cần Docker)
++B=http://localhost:18080/thuvien bash tools/golden.sh /tmp/gm && diff -r golden /tmp/gm   # golden master 3 trang — phải rỗng
++```
++Mốc sau sprint 9: xem mục "Mốc kiểm" cuối tệp. Đỏ ở máy bạn mà xanh ở mốc ⇒ xem "Lỗi hay gặp".
++
++## Cấu hình
++| Biến môi trường | Ý nghĩa | Mặc định |
++|---|---|---|
++| `DB_URL` | JDBC URL (ghi đè `db.url` trong `src/main/resources/db.properties`) | `jdbc:mysql://localhost:3306/thuvien…` |
++| `THUVIEN_REMEMBER_KEY` | khoá HMAC cho cookie "Ghi nhớ" (≥ 32 ký tự). Đổi khoá = mọi người phải đăng nhập lại | trống ⇒ tắt "Ghi nhớ" |
++
++Tài khoản CSDL của lab là `root/123456` — **chỉ cho lab**, máy chủ thật dùng tài khoản riêng.
++Triển khai lên máy đã có CSDL cũ: chạy `db/migrations/V6_3__mat_khau_bam.sql` TRƯỚC khi thả WAR mới (cột mật khẩu đủ chỗ cho bản băm).
++
++## Lỗi hay gặp
++| Triệu chứng | Nguyên nhân | Cách xử lý |
++|---|---|---|
++| `Detected JDK version 17… is not in the allowed range [21,)` | máy dev còn JDK 17 | cài JDK 21, đặt `JAVA_HOME`; IDE: Project SDK = 21 |
++| Mọi request 500, log `ClassNotFoundException: javax.servlet…` | thả WAR cũ (javax) vào Tomcat 10 | dùng WAR mới, hoặc tạm thả WAR cũ vào `webapps-javaee/` |
++| Test đỏ hàng loạt `Communications link failure` | chưa chạy `docker compose up -d db` hoặc sai `DB_URL` | xem mục Chạy test |
++| `Public Key Retrieval is not allowed` | MySQL 8 vừa khởi động lại | giữ `allowPublicKeyRetrieval=true` trong URL **của lab** |
++| Nạp lại dump báo lỗi 1304 | dump không có `DROP PROCEDURE` | `tools/golden.sh` đã thêm dòng xoá trước khi nạp |
++| Chữ Việt thành `?` khi nạp dữ liệu bằng tay | client `mysql` mặc định latin1 | thêm `--default-character-set=utf8mb4` |
++
++## Bản đồ, quyết định, rủi ro
++- `docs/ban-do.md` — sơ đồ hệ thống, 3 luồng chính, bảng chính, chỗ nguy hiểm (đọc 10 phút).
++- `docs/adr/` — quyết định khó đảo ngược (phí trễ hạn, hàng đợi TV-98).
++- `NANG-CAP.md` — các mốc nâng Java/Tomcat và việc của vận hành.
++- `RUI-RO.md` — nợ kỹ thuật và rủi ro còn lại, đã xếp ưu tiên. **Đọc trước khi nhận ticket mới.**
++
++## Quy trình đóng góp
++Một ticket = một nhánh `tv-NNN` từ `main` = một PR < 200 dòng, mô tả theo `.github/pull_request_template.md` (nguyên nhân gốc · phạm vi ảnh hưởng · cách kiểm · rủi ro).
++Theo `.editorconfig` và `tools/checkstyle-du-an.xml` (cổng chặn: 0 vi phạm). Không format lại cả tệp.
++Commit: `loại(TV-NNN): mô tả không dấu` như lịch sử đang có.
+diff --git a/RUI-RO.md b/RUI-RO.md
+new file mode 100644
+index 0000000..a051310
+--- /dev/null
++++ b/RUI-RO.md
+@@ -0,0 +1,30 @@
++# Rủi ro còn lại và nợ kỹ thuật — sau sprint 9 (24/11/2026)
++
++Xếp theo **mức hại × khả năng xảy ra**, không theo độ dễ. P1 = nên vào sprint kế; P2 = trong quý; P3 = khi chạm tới.
++Mỗi dòng có bằng chứng (lệnh/test/bài) để người sau tự kiểm lại, không phải tin lời.
++
++| Ưu tiên | Ticket | Rủi ro | Bằng chứng | Đề xuất |
++|---|---|---|---|---|
++| P1 | TV-124 | Không phân quyền: `role` lưu vào session nhưng không nơi nào kiểm — tài khoản thủ thư làm được mọi việc của admin; đăng nhập bằng cookie còn không đặt `role` | `git grep -n role -- src/main` ⇒ đúng 1 dòng (LoginServlet ghi) | Bộ lọc kiểm quyền cho xoá độc giả/thêm sách; hỏi PO ma trận quyền trước |
++| P1 | TV-125 | Xoá độc giả xoá luôn phiếu đang mượn + lịch sử phí (FK `ON DELETE CASCADE`); sách đang mượn không bao giờ về kho | test `xoaDocGiaDangMuon_…_BUG_TV125` | Chặn xoá khi còn phiếu mở; đổi FK sang RESTRICT bằng migration; xoá mềm |
++| P1 | TV-123 | Cookie "Ghi nhớ" (HMAC, TV-110) không có hạn và không thu hồi riêng được — lộ cookie là dùng mãi tới khi đổi khoá | `TokenUtil` chỉ ký tên; `setMaxAge` chỉ là gợi ý cho trình duyệt | Token ngẫu nhiên lưu phía máy chủ (bảng) có hạn, thu hồi khi đổi mật khẩu |
++| P2 | TV-114 | Phiếu ở hai nơi: bảng `loans` (web) và `data/phieu.json` (API mobile) — số liệu lệch; nhiều tiến trình Node sẽ mất phiếu lại | ADR 0002 | Chuyển API sang MySQL |
++| P2 | TV-116 | Node làm tròn ngày trễ LÊN, Java CẮT xuống — cùng phiếu, app báo 20.000 đ, quầy thu 18.000 đ | test bài 3.1 | Thống nhất theo ADR 0001 (Java) |
++| P2 | TV-106 | Dò tên đăng nhập qua thời gian trả lời: tên có thật ~0,7 s (PBKDF2), tên không có 3 ms | đo ở bài 6.3 | Băm giả khi tên không tồn tại |
++| P2 | TV-115 / TV-97 | Báo cáo quá hạn ghi phí đồng giá như phí thật; thông báo trả sách in "18000.0" | ADR 0001; test `BookServletTraSachTest` | Chú thích "ước tính"; in bằng `Tien.toString()` ("18.000 đ") |
++| P3 | — | Lỗi bị nuốt ở `ReaderServlet`/`ReportServlet` (`printStackTrace`): thủ thư thấy trang tải lại như thành công | test `themThieuTen_loiBiNuot_vanVeDanhSach` | Mẫu "mã lỗi + log" của BookServlet (bài 6.3) |
++| P3 | — | Trang lỗi mặc định của Tomcat (404…) in phiên bản `Apache Tomcat/10.1.62` — giúp kẻ tấn công tra CVE | `curl -s …/thuvien/khong-co \| grep Tomcat` (thử clone sạch, 9.3) | `ErrorReportValve` với `showServerInfo="false"` trong server.xml của ảnh |
++| P3 | — | `DBUtil` mở kết nối mới mỗi request, không pool; `getConnection` trả `null` khi lỗi | đọc `util/DBUtil.java` | HikariCP qua JNDI của Tomcat |
++| P3 | — | commons-lang 2.6 (2011) chỉ còn dùng cho `StringUtils.isNotBlank` ở BookServlet | `git grep -n commons.lang` | Thay bằng `!q.isBlank()` (Java 11+) rồi gỡ thư viện |
++| P3 | — | API Node còn Express 4; Jest 30 kéo 18 cảnh báo moderate (chỉ dev) | `npm audit`, nhánh `thu-express5` | Express 5 theo hướng dẫn di trú (bài 7.4) |
++| P3 | — | JDK 25 là LTS mới nhất; Locale COMPAT bị gỡ ở 25 | NANG-CAP.md mốc 4 | Mốc nâng kế, thử lại phần định dạng ngày/tiền |
++| P3 | — | Cột `loans.fine` là DOUBLE | schema | Đổi DECIMAL/BIGINT khi có migration lớn |
++
++## Đã đóng trong sprint 9
++TV-41 (giới hạn mượn), TV-110 (cookie giả được), TV-111 (JSP mở thẳng), TV-113 (trả sách không trong giao dịch), TV-117 (menu lỗi font),
++TV-95 (loại NCS — web + API), TV-122 (tách DocGiaDAO), TV-121 (Java 21). Chi tiết: PR từng ticket.
++
++## Việc của vận hành khi triển khai bản sprint 9
++1. Máy chủ JDK 21 + Tomcat 10.1 (TV-121).
++2. Đặt biến môi trường `THUVIEN_REMEMBER_KEY` (≥ 32 ký tự, `openssl rand -hex 32`) — thiếu thì "Ghi nhớ" tắt; **mọi cookie cũ hết hiệu lực**, báo người dùng đăng nhập lại (TV-110).
++3. Không cần migration CSDL mới trong sprint này (V6_3 của Chương 6 vẫn phải chạy nếu máy chủ chưa chạy).
+diff --git a/docs/ban-do.md b/docs/ban-do.md
+new file mode 100644
+index 0000000..41fb4d2
+--- /dev/null
++++ b/docs/ban-do.md
+@@ -0,0 +1,52 @@
++# Bản đồ một trang — thư viện (cập nhật sau sprint 9, 24/11/2026)
++
++## Hệ thống (C4 mức container)
++```mermaid
++flowchart LR
++  TT([Thủ thư — trình duyệt]) -->|HTTP, phiên JSESSIONID| WEB[thuvien.war<br/>Tomcat 10.1 · Java 21]
++  SV([Độc giả — app mobile]) -->|HTTP JSON| API[legacy-express<br/>Node 24 · Express 4]
++  WEB -->|JDBC| DB[(MySQL 8.0<br/>schema thuvien)]
++  API -->|đọc/ghi tệp| JSON[(data/phieu.json)]
++  KT([Kế toán]) -.->|xuất CSV — ĐÃ GỠ ở 6.1| WEB
++```
++Hai nơi giữ luật mượn: `model/LoaiDocGia.java` (web) và `lib/luat.js` (API). **Đổi luật phải đổi cả hai** (TV-41 chỉ sửa web; TV-95 sửa cả hai).
++Hai nơi giữ phiếu: bảng `loans` (web) và `data/phieu.json` (API) — chưa đồng bộ (TV-114).
++
++## Điểm vào (web)
++| URL | Lớp | Ghi chú |
++|---|---|---|
++| `/login` | `servlet/LoginServlet` | đăng nhập, cookie "Ghi nhớ" (HMAC — TV-110), đăng xuất |
++| `/books` | `servlet/BookServlet` | danh sách/tìm sách; POST `action=borrow/return/add` → `service/MuonTraService` → `dao/PhieuMuonDAO` |
++| `/readers` | `servlet/ReaderServlet` | độc giả + phiếu đang mượn → `dao/DocGiaDAO` (TV-122) |
++| `/report` | `servlet/ReportServlet` (`@WebServlet`) | báo cáo quá hạn → stored procedure `sp_overdue_report` |
++| JSP | `WEB-INF/jsp/*.jsp` | chỉ hiện qua forward của servlet (TV-111); `header.jsp` include ở mọi trang |
++
++## Ba luồng chính
++```mermaid
++sequenceDiagram
++  participant B as Trình duyệt
++  participant S as BookServlet
++  participant M as MuonTraService
++  participant D as PhieuMuonDAO
++  participant Q as MySQL
++  B->>S: POST /books action=borrow readerId bookId
++  S->>M: muon(maDocGia, maSach)
++  M->>D: loaiCuaDocGia, demDangMuon, soBanConLai
++  M->>D: themPhieu
++  D->>Q: INSERT loans (trigger trg_loans_ai trừ available)
++  B->>S: POST /books action=return loanId
++  S->>M: tra(maPhieu) → phí = LoaiDocGia.phiTre(số ngày trễ, CẮT phần lẻ)
++  M->>D: traPhieu — MỘT giao dịch: UPDATE loans … AND return_date IS NULL; UPDATE books available+1 (TV-108, TV-113)
++```
++Luồng 3 — báo cáo quá hạn: `ReportServlet` → `CALL sp_overdue_report(days)` → `report.jsp`. Phí trong báo cáo là **ước tính đồng giá 2.000 đ/ngày**, khác phí thật (ADR 0001).
++
++## Bảng chính
++`books` (available do trigger trừ khi mượn, Java cộng khi trả) · `readers` (`type` = SV/GV/NCS/KHACH, chuỗi lạ ⇒ KHACH) ·
++`loans` (khoá ngoại tới readers **ON DELETE CASCADE** — TV-125) · `users` (mật khẩu PBKDF2 hoặc thô cũ, nâng cấp khi đăng nhập; `role` có lưu nhưng **không nơi nào kiểm** — TV-124).
++
++## Chỗ nguy hiểm (đọc trước khi sửa)
++1. Xoá độc giả xoá luôn phiếu đang mượn và lịch sử phí (CASCADE) — TV-125.
++2. Mọi tài khoản đăng nhập được đều làm được mọi việc (không phân quyền) — TV-124.
++3. Luật ở hai repo; phiếu ở hai nơi — TV-114.
++4. Lỗi trong `ReaderServlet`/`ReportServlet` bị nuốt (`printStackTrace`), người dùng thấy trang tải lại như thành công.
++5. `DBUtil` mở kết nối mới mỗi request, không pool.
+-- 
+2.55.0
+

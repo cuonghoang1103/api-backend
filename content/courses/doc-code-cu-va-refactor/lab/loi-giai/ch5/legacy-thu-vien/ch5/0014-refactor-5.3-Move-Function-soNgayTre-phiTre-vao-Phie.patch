@@ -1,0 +1,66 @@
+From 6563f5b461e60c175ae3db8d3cd28123fb821bb6 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:37:48 +0700
+Subject: [PATCH 14/18] refactor(5.3): Move Function soNgayTre/phiTre vao
+ PhieuCanTra (het Feature Envy)
+
+---
+ src/main/java/com/thuvien/dao/PhieuMuonDAO.java    | 11 +++++++++++
+ src/main/java/com/thuvien/servlet/BookServlet.java |  5 +----
+ 2 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+index a27b6ab..3f1f544 100644
+--- a/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
++++ b/src/main/java/com/thuvien/dao/PhieuMuonDAO.java
+@@ -17,6 +17,8 @@ import java.sql.Timestamp;
+  */
+ public class PhieuMuonDAO {
+ 
++    private static final long MS_MOT_NGAY = 24L * 60 * 60 * 1000;
++
+     private final Connection con;
+ 
+     public PhieuMuonDAO(Connection con) {
+@@ -84,6 +86,15 @@ public class PhieuMuonDAO {
+             this.loai = loai;
+             this.hanTra = hanTra;
+         }
++
++        /** Số ngày trễ, CẮT phần lẻ (9 ngày 1 giờ ⇒ 9). Node làm tròn lên — lệch đã ghi ở bài 3.1, chưa sửa. */
++        public int soNgayTre(long bayGio) {
++            return (int) ((bayGio - hanTra.getTime()) / MS_MOT_NGAY);
++        }
++
++        public double phiTre(long bayGio) {
++            return loai.phiTre(soNgayTre(bayGio));
++        }
+     }
+ 
+     /** null nếu không có phiếu. Giữ nguyên: KHÔNG lọc return_date IS NULL ⇒ trả lần hai vẫn tìm thấy (test traHaiLanCungMotPhieu). */
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index fb0cb0e..ee75843 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -31,7 +31,6 @@ import java.util.List;
+ public class BookServlet extends HttpServlet {
+ 
+     private static Logger log = Logger.getLogger(BookServlet.class);
+-    private static final long MS_MOT_NGAY = 24L * 60 * 60 * 1000;
+ 
+     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+         if (request.getSession().getAttribute("user") == null) {
+@@ -137,9 +136,7 @@ public class BookServlet extends HttpServlet {
+             response.sendRedirect("readers?msg=" + URLEncoder.encode("Không tìm thấy phiếu mượn", "UTF-8"));
+             return;
+         }
+-        long treMs = bayGio() - phieu.hanTra.getTime();
+-        int soNgayTre = (int) (treMs / MS_MOT_NGAY);
+-        double phi = phieu.loai.phiTre(soNgayTre);
++        double phi = phieu.phiTre(bayGio());
+         dao.ghiTra(Integer.parseInt(loanId), new Timestamp(bayGio()), phi);
+         dao.congLaiSach(phieu.bookId);
+         String msg = phi > 0 ? "Trả sách. Phí trễ hạn: " + phi : "Trả sách thành công";
+-- 
+2.55.0
+

@@ -1,0 +1,26 @@
+From 359b06f4cdfa3aafd7e2b01b5cca15c583e38472 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 08:38:59 +0700
+Subject: [PATCH 1/2] =?UTF-8?q?fix(TV-117):=20header.jsp=20khai=20bao=20pa?=
+ =?UTF-8?q?geEncoding=20UTF-8=20=E2=80=94=20menu=20het=20loi=20font?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ src/main/webapp/WEB-INF/jsp/header.jsp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main/webapp/WEB-INF/jsp/header.jsp b/src/main/webapp/WEB-INF/jsp/header.jsp
+index dc315b4..cdb6d71 100644
+--- a/src/main/webapp/WEB-INF/jsp/header.jsp
++++ b/src/main/webapp/WEB-INF/jsp/header.jsp
+@@ -1,4 +1,4 @@
+-<%@ page import="com.thuvien.dao.ThongKeDAO, com.thuvien.util.Html" %>
++<%@ page pageEncoding="UTF-8" import="com.thuvien.dao.ThongKeDAO, com.thuvien.util.Html" %><%-- TV-117: tệp include tĩnh vẫn cần khai báo mã hoá riêng; thiếu nó Jasper đọc tệp theo ISO-8859-1 ⇒ menu lỗi font. Cùng dòng với import để không sinh thêm dòng trống --%>
+ <% int quaHan = new ThongKeDAO().demQuaHan(); %>
+ <div style="background:#2b5797;color:#fff;padding:8px">
+   <b>THƯ VIỆN</b> |
+-- 
+2.55.0
+

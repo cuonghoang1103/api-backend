@@ -1,0 +1,30 @@
+From 89fdc56565f2df58bf9b85e6154741bd3b6ee76d Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:25:07 +0700
+Subject: [PATCH 7/8] =?UTF-8?q?build(7.2):=20Spring=20Boot=203.0.13=20->?=
+ =?UTF-8?q?=203.5.16=20=E2=80=94=200=20loi,=200=20deprecation,=208=20test?=
+ =?UTF-8?q?=20xanh,=20HTTP=20giong=20het?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ pom.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pom.xml b/pom.xml
+index 0ab2f87..8c087e7 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -7,7 +7,7 @@
+   <parent>
+     <groupId>org.springframework.boot</groupId>
+     <artifactId>spring-boot-starter-parent</artifactId>
+-    <version>3.0.13</version>
++    <version>3.5.16</version>
+     <relativePath/>
+   </parent>
+   <groupId>com.thuvien</groupId>
+-- 
+2.55.0
+

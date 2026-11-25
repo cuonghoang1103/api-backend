@@ -1,0 +1,60 @@
+From 3f5a8f131fd1c02a6d2af674f355efe3829c47f7 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:44:41 +0700
+Subject: [PATCH] =?UTF-8?q?fix(TV-41):=20toi=20da=20N=20cuon=20nghia=20la?=
+ =?UTF-8?q?=20N=20(>=20thanh=20>=3D)=20=E2=80=94=20cap=20nhat=202=20test?=
+ =?UTF-8?q?=20dac=20ta=20co=20chu=20dich?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ src/main/java/com/thuvien/service/MuonTraService.java  |  2 +-
+ .../com/thuvien/servlet/BookServletMuonSachTest.java   | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/service/MuonTraService.java b/src/main/java/com/thuvien/service/MuonTraService.java
+index 221ef87..fa9022c 100644
+--- a/src/main/java/com/thuvien/service/MuonTraService.java
++++ b/src/main/java/com/thuvien/service/MuonTraService.java
+@@ -31,7 +31,7 @@ public class MuonTraService {
+         if (bookId == null) return new KetQua("books", "Mã sách không hợp lệ", false);
+         LoaiDocGia loai = dao.loaiCuaDocGia(readerId);
+         if (loai == null) return new KetQua("books", "Độc giả không tồn tại", false);
+-        if (dao.demDangMuon(readerId) > loai.toiDa()) return new KetQua("books", "Vượt quá số sách được mượn", false);   // ">" — BUG TV-41, chưa sửa
++        if (dao.demDangMuon(readerId) >= loai.toiDa()) return new KetQua("books", "Vượt quá số sách được mượn", false);   // TV-41: đủ toiDa là dừng
+         if (dao.soBanConLai(bookId) <= 0) return new KetQua("books", "Sách đã hết", false);
+         KhoangMuon khoang = KhoangMuon.batDau(Calendar.getInstance(), loai.soNgayMuon());
+         dao.themPhieu(bookId, readerId, khoang);
+diff --git a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+index 00acdc7..0b8ab2e 100644
+--- a/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
++++ b/src/test/java/com/thuvien/servlet/BookServletMuonSachTest.java
+@@ -69,10 +69,10 @@ class BookServletMuonSachTest {
+     }
+ 
+     @Test
+-    void sinhVienDangMuon3_vanMuonDuocCuonThu4_BUG_TV41() throws Exception {
++    void sinhVienDangMuon3_biTuChoiCuonThu4_TV41() throws Exception {
+         muon("5", "4"); muon("5", "5"); muon("5", "6");   // SV 5: 0 → 3 cuốn
+-        assertEquals("books?msg=Mượn thành công", muon("5", "2"));   // luật nói tối đa 3; code so "> max"
+-        assertEquals(4, DuLieuTest.so("SELECT COUNT(*) FROM loans WHERE reader_id = 5 AND return_date IS NULL"));
++        assertEquals("books?msg=Vượt quá số sách được mượn", muon("5", "2"));   // TV-41: tối đa 3 nghĩa là 3
++        assertEquals(3, DuLieuTest.so("SELECT COUNT(*) FROM loans WHERE reader_id = 5 AND return_date IS NULL"));
+     }
+ 
+     @Test
+@@ -82,8 +82,8 @@ class BookServletMuonSachTest {
+     }
+ 
+     @Test
+-    void khachDangMuon1_vanMuonDuocCuonThu2_BUG_TV41() throws Exception {
+-        assertEquals("books?msg=Mượn thành công", muon("4", "4"));   // KHACH: luật 1, đang có 1 (phiếu 4)
++    void khachDangMuon1_biTuChoiCuonThu2_TV41() throws Exception {
++        assertEquals("books?msg=Vượt quá số sách được mượn", muon("4", "4"));   // KHACH: luật 1, đang có 1 (phiếu 4)
+     }
+ 
+     @Test
+-- 
+2.55.0
+

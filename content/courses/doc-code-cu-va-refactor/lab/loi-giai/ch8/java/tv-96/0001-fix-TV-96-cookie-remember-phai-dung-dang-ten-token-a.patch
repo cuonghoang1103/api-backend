@@ -1,0 +1,69 @@
+From 325ad217f3466a640f2e6522afe5153f416b0d51 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 07:22:51 +0700
+Subject: [PATCH] =?UTF-8?q?fix(TV-96):=20cookie=20remember=20phai=20dung?=
+ =?UTF-8?q?=20dang=20ten:token=20=E2=80=94=20'admin:'=20khong=20con=20500,?=
+ =?UTF-8?q?=20duoi=20thua=20khong=20con=20dang=20nhap?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Hai test _BUG khoa hanh vi cu (bai 5.2) doi ten + dao ky vong. Ngoai pham vi (ticket rieng TV-110): bi mat co dinh trong TokenUtil + MD5 => gia duoc cookie cho bat ky ai doc duoc ma nguon.
+---
+ .../java/com/thuvien/servlet/LoginServlet.java     |  4 ++--
+ .../thuvien/servlet/LoginServletCookieTest.java    | 14 +++++++-------
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/servlet/LoginServlet.java b/src/main/java/com/thuvien/servlet/LoginServlet.java
+index 954a972..77e1810 100644
+--- a/src/main/java/com/thuvien/servlet/LoginServlet.java
++++ b/src/main/java/com/thuvien/servlet/LoginServlet.java
+@@ -45,8 +45,8 @@ public class LoginServlet extends HttpServlet {
+         if (cookies == null) return null;
+         for (Cookie c : cookies) {
+             if (!c.getName().equals("remember")) continue;
+-            if (!c.getValue().contains(":")) continue;
+-            String[] phan = c.getValue().split(":");
++            String[] phan = c.getValue().split(":", -1);   // TV-96: đúng "ten:token" — thiếu token hay thừa đuôi đều bỏ qua
++            if (phan.length != 2) continue;
+             if (TokenUtil.makeToken(phan[0]).equals(phan[1])) return phan[0];
+         }
+         return null;
+diff --git a/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+index 7632b57..b32b9d2 100644
+--- a/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
++++ b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import jakarta.servlet.http.HttpSession;
+ 
+-import static org.junit.jupiter.api.Assertions.assertThrows;
+ import static org.mockito.Mockito.*;
+ 
+ /** Characterization test cho đăng nhập bằng cookie "remember" (LoginServlet.doGet) — viết TRƯỚC khi gỡ if lồng (bài 5.2). Không cần CSDL. */
+@@ -72,15 +71,16 @@ class LoginServletCookieTest {
+     }
+ 
+     @Test
+-    void duoiThua_vanDangNhap_BUG() throws Exception {
+-        // split(":")[1] chỉ lấy đoạn thứ hai ⇒ "admin:<token>:rac" vẫn được nhận
++    void duoiThua_khongDangNhap_TV96() throws Exception {
+         voiCookie(new Cookie("remember", "admin:" + TokenUtil.makeToken("admin") + ":rac"));
+-        verify(session).setAttribute("user", "admin");
++        verify(trangLogin).forward(req, res);
++        verify(session, never()).setAttribute(anyString(), any());
+     }
+ 
+     @Test
+-    void dauHaiChamCuoi_nemLoi_BUG() {
+-        // "admin:".split(":") chỉ có MỘT phần tử ⇒ [1] ném lỗi, Tomcat trả 500
+-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> voiCookie(new Cookie("remember", "admin:")));
++    void dauHaiChamCuoi_hienTrangLogin_TV96() throws Exception {
++        // trước TV-96: "admin:".split(":")[1] ném ArrayIndexOutOfBounds ⇒ 500 + stack trace
++        voiCookie(new Cookie("remember", "admin:"));
++        verify(trangLogin).forward(req, res);
+     }
+ }
+-- 
+2.55.0
+

@@ -1,0 +1,44 @@
+From 39c4f8ad7b0bbb3f64f727536814042b18e6f712 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:32:03 +0700
+Subject: [PATCH 04/11] =?UTF-8?q?refactor(5.1):=20tach=20truy=20van=20khoi?=
+ =?UTF-8?q?=20return=20(Separate=20Query)=20=E2=80=94=20chuan=20bi=20Extra?=
+ =?UTF-8?q?ct?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ routes/muon.js | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/routes/muon.js b/routes/muon.js
+index 37766b7..c34b369 100644
+--- a/routes/muon.js
++++ b/routes/muon.js
+@@ -42,15 +42,16 @@ router.post('/', function (req, res) {
+         return res.status(409).json({ loi: 'vuot qua so sach duoc muon', dangMuon: dangMuon, toiDa: toiDa });
+       }
+       // thu thu yeu cau 2019: dang co sach qua han thi khong cho muon them (tru GV)
++      var quaHan = null;
+       for (var j = 0; j < dsPhieu.length; j++) {
+-        if (dsPhieu[j].docGia == docGia.id && !dsPhieu[j].ngayTra) {
+-          if (moment().diff(moment(dsPhieu[j].hanTra), 'days', true) > 0) {
+-            if (docGia.loai != 'GV') {
+-              return res.status(409).json({ loi: 'dang co sach qua han', phieu: dsPhieu[j].id });
+-            }
+-          }
++        if (dsPhieu[j].docGia == docGia.id && !dsPhieu[j].ngayTra && moment().diff(moment(dsPhieu[j].hanTra), 'days', true) > 0) {
++          quaHan = dsPhieu[j];
++          break;
+         }
+       }
++      if (quaHan && docGia.loai != 'GV') {
++        return res.status(409).json({ loi: 'dang co sach qua han', phieu: quaHan.id });
++      }
+       var p = taoPhieu(dsPhieu, docGia.id, tenSach, docGia.loai, new Date(), soNgay, 'mobile', req.body.ghiChu || '');
+       dsPhieu.push(p);
+       fs.writeFile(path.join(__dirname, '..', 'data', 'phieu.json'), JSON.stringify(dsPhieu, null, 2), function (err3) {
+-- 
+2.55.0
+

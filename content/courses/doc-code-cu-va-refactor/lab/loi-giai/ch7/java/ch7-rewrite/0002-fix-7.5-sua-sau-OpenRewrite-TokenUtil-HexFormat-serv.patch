@@ -1,0 +1,114 @@
+From 4623744ca41550c2f9f6264ffb3c757b3e37589d Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:40:05 +0700
+Subject: [PATCH 2/2] =?UTF-8?q?fix(7.5):=20sua=20sau=20OpenRewrite=20?=
+ =?UTF-8?q?=E2=80=94=20TokenUtil=20HexFormat,=20servlet-api=20ve=20provide?=
+ =?UTF-8?q?d,=20JSTL=201.2=20->=20Jakarta=20Tags=203.0=20(+=20uri=20jakart?=
+ =?UTF-8?q?a.tags.core,=20loai=20el-api),=20Dockerfile=20Tomcat=2010.1?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+49 test xanh; golden master 3 trang giong het tren Tomcat 10.1.62/JDK 17; e2e (Ch3) 3/3 xanh, 0 dong doi.
+---
+ Dockerfile                                    |  4 ++--
+ pom.xml                                       | 18 ++++++++++++++----
+ src/main/java/com/thuvien/util/TokenUtil.java |  7 ++++---
+ src/main/webapp/report.jsp                    |  2 +-
+ 4 files changed, 21 insertions(+), 10 deletions(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index f4b6734..777b321 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,13 +1,13 @@
+ # Dựng WAR bằng JDK 8 (mã dùng javax.xml.bind — không biên dịch được trên JDK 11+), chạy trên Tomcat 9 (javax.servlet).
+ # Ảnh này do khoá học thêm vào (Mục 0.1) — dự án gốc không có Docker.
+-FROM maven:3.9-eclipse-temurin-8 AS build
++FROM maven:3.9-eclipse-temurin-17 AS build
+ WORKDIR /src
+ COPY pom.xml .
+ RUN mvn -q -B dependency:go-offline
+ COPY src ./src
+ RUN mvn -q -B package -DskipTests
+ 
+-FROM tomcat:9.0-jdk8-temurin
++FROM tomcat:10.1-jdk17-temurin
+ RUN rm -rf /usr/local/tomcat/webapps/*
+ COPY --from=build /src/target/thuvien.war /usr/local/tomcat/webapps/thuvien.war
+ EXPOSE 8080
+diff --git a/pom.xml b/pom.xml
+index 911f7c9..2e0347c 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -26,7 +26,7 @@
+       <groupId>jakarta.servlet</groupId>
+       <artifactId>jakarta.servlet-api</artifactId>
+       <version>6.0.0</version>
+-      <scope>compile</scope>
++      <scope>provided</scope>
+     </dependency>
+     <dependency>
+       <groupId>jakarta.servlet.jsp</groupId>
+@@ -35,9 +35,19 @@
+       <scope>provided</scope>
+     </dependency>
+     <dependency>
+-      <groupId>javax.servlet</groupId>
+-      <artifactId>jstl</artifactId>
+-      <version>1.2</version>
++      <!-- Bài 7.5: JSTL 1.2 dùng javax.servlet.jsp.tagext ⇒ Tomcat 10 lỗi NoClassDefFoundError ở trang có thẻ c:. Jakarta Tags 3.0 = API + bản cài đặt. -->
++      <groupId>jakarta.servlet.jsp.jstl</groupId>
++      <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
++      <version>3.0.2</version>
++      <exclusions>
++        <!-- Tomcat 10.1 đã có EL 5.0 — đừng nhét bản thứ hai vào WEB-INF/lib -->
++        <exclusion><groupId>jakarta.el</groupId><artifactId>jakarta.el-api</artifactId></exclusion>
++      </exclusions>
++    </dependency>
++    <dependency>
++      <groupId>org.glassfish.web</groupId>
++      <artifactId>jakarta.servlet.jsp.jstl</artifactId>
++      <version>3.0.1</version>
+     </dependency>
+     <dependency>
+       <!-- Bài 6.4: Connector/J 5.1 hết hỗ trợ (CVE-2023-22102, CVE-2019-2692). Từ 8.0.31 đổi tọa độ sang com.mysql:mysql-connector-j. -->
+diff --git a/src/main/java/com/thuvien/util/TokenUtil.java b/src/main/java/com/thuvien/util/TokenUtil.java
+index 098456c..065fcaf 100644
+--- a/src/main/java/com/thuvien/util/TokenUtil.java
++++ b/src/main/java/com/thuvien/util/TokenUtil.java
+@@ -1,7 +1,8 @@
+ package com.thuvien.util;
+ 
+ import java.security.MessageDigest;
+-import jakarta.xml.bind.DatatypeConverter;
++import java.nio.charset.StandardCharsets;
++import java.util.HexFormat;
+ 
+ /**
+  * Token cho cookie "ghi nho dang nhap". MD5 cua username + "thuvien2016".
+@@ -11,8 +12,8 @@ public class TokenUtil {
+     public static String makeToken(String username) {
+         try {
+             MessageDigest md = MessageDigest.getInstance("MD5");
+-            byte[] b = md.digest((username + "thuvien2016").getBytes("UTF-8"));
+-            return DatatypeConverter.printHexBinary(b).toLowerCase();
++            byte[] b = md.digest((username + "thuvien2016").getBytes(StandardCharsets.UTF_8));
++            return HexFormat.of().formatHex(b);
+         } catch (Exception e) {
+             return "";
+         }
+diff --git a/src/main/webapp/report.jsp b/src/main/webapp/report.jsp
+index 571a2ca..6159336 100644
+--- a/src/main/webapp/report.jsp
++++ b/src/main/webapp/report.jsp
+@@ -1,5 +1,5 @@
+ <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
++<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+ <html>
+ <head><title>Quá hạn - Thư viện</title></head>
+ <body>
+-- 
+2.55.0
+

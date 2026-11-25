@@ -1,0 +1,85 @@
+From d4a57a02fce0e63d369b580359388e788f31c466 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:27:14 +0700
+Subject: [PATCH 02/18] =?UTF-8?q?refactor(5.1):=20Slide=20Statements=20?=
+ =?UTF-8?q?=E2=80=94=20st/ps/rs=20ve=20tung=20nhanh=20cua=20doPost?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../java/com/thuvien/servlet/BookServlet.java | 25 ++++++++++++++-----
+ 1 file changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index a3b7577..540f5a7 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -78,12 +78,13 @@ public class BookServlet extends HttpServlet {
+         request.setCharacterEncoding("UTF-8");
+         String action = request.getParameter("action");
+         Connection con = null;
+-        Statement st = null;
+-        PreparedStatement ps = null;
+-        ResultSet rs = null;
+         try {
+             con = DBUtil.getConnection();
+             if (action.equals("borrow")) {
++              Statement st = null;
++              PreparedStatement ps = null;
++              ResultSet rs = null;
++              try {
+                 String readerId = request.getParameter("readerId");
+                 String bookId = request.getParameter("bookId");
+                 st = con.createStatement();
+@@ -134,7 +135,14 @@ public class BookServlet extends HttpServlet {
+                 ps.executeUpdate();
+                 log.info("borrow book=" + bookId + " reader=" + readerId);
+                 response.sendRedirect("books?msg=" + URLEncoder.encode("Mượn thành công", "UTF-8"));
++              } finally {
++                DBUtil.close(rs, st, ps);
++              }
+             } else if (action.equals("return")) {
++              Statement st = null;
++              PreparedStatement ps = null;
++              ResultSet rs = null;
++              try {
+                 String loanId = request.getParameter("loanId");
+                 st = con.createStatement();
+                 rs = st.executeQuery("SELECT l.*, r.type FROM loans l JOIN readers r ON r.id = l.reader_id WHERE l.id = " + loanId);
+@@ -167,16 +175,21 @@ public class BookServlet extends HttpServlet {
+                 st.executeUpdate("UPDATE books SET available = available + 1 WHERE id = " + bookId);
+                 String msg = fine > 0 ? "Trả sách. Phí trễ hạn: " + fine : "Trả sách thành công";
+                 response.sendRedirect("readers?msg=" + URLEncoder.encode(msg, "UTF-8"));
++              } finally {
++                DBUtil.close(rs, st, ps);
++              }
+             } else if (action.equals("add")) {
+-                st = con.createStatement();
++                Statement st = con.createStatement();
+                 st.executeUpdate("INSERT INTO books(code, title, author, quantity, available) VALUES ('"
+                         + request.getParameter("code") + "', '" + request.getParameter("title") + "', '"
+                         + request.getParameter("author") + "', " + request.getParameter("quantity") + ", "
+                         + request.getParameter("quantity") + ")");
++                DBUtil.close(st);
+                 response.sendRedirect("books?msg=" + URLEncoder.encode("Đã thêm sách", "UTF-8"));
+             } else if (action.equals("delete")) {
+-                st = con.createStatement();
++                Statement st = con.createStatement();
+                 st.executeUpdate("DELETE FROM books WHERE id = " + request.getParameter("id"));
++                DBUtil.close(st);
+                 response.sendRedirect("books");
+             } else {
+                 PrintWriter out = response.getWriter();
+@@ -187,7 +200,7 @@ public class BookServlet extends HttpServlet {
+             PrintWriter out = response.getWriter();
+             out.println("<html><body><h3>Loi: " + e.getMessage() + "</h3></body></html>");
+         } finally {
+-            DBUtil.close(rs, st, ps, con);
++            DBUtil.close(con);
+         }
+     }
+ 
+-- 
+2.55.0
+

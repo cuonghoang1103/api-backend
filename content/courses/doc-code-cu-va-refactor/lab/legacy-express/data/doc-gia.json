@@ -1,0 +1,6 @@
+[
+  { "id": 1, "ten": "Nguyễn Văn An", "loai": "SV" },
+  { "id": 2, "ten": "Trần Thị Bình", "loai": "SV" },
+  { "id": 3, "ten": "Lê Minh Châu", "loai": "GV" },
+  { "id": 4, "ten": "Phạm Quốc Dũng", "loai": "KHACH" }
+]

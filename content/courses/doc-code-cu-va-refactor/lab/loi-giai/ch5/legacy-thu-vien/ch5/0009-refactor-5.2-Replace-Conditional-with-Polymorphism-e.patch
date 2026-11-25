@@ -1,0 +1,166 @@
+From 83e39208c3d6f79833591ce579a96f87de737533 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:35:00 +0700
+Subject: [PATCH 09/18] =?UTF-8?q?refactor(5.2):=20Replace=20Conditional=20?=
+ =?UTF-8?q?with=20Polymorphism=20=E2=80=94=20enum=20LoaiDocGia,=20ham=20ti?=
+ =?UTF-8?q?nh=20uy=20quyen?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../java/com/thuvien/model/LoaiDocGia.java    | 40 +++++++++++++++++++
+ .../java/com/thuvien/servlet/BookServlet.java | 32 +++------------
+ .../com/thuvien/model/LoaiDocGiaTest.java     | 36 +++++++++++++++++
+ 3 files changed, 81 insertions(+), 27 deletions(-)
+ create mode 100644 src/main/java/com/thuvien/model/LoaiDocGia.java
+ create mode 100644 src/test/java/com/thuvien/model/LoaiDocGiaTest.java
+
+diff --git a/src/main/java/com/thuvien/model/LoaiDocGia.java b/src/main/java/com/thuvien/model/LoaiDocGia.java
+new file mode 100644
+index 0000000..440e3af
+--- /dev/null
++++ b/src/main/java/com/thuvien/model/LoaiDocGia.java
+@@ -0,0 +1,40 @@
++package com.thuvien.model;
++
++/**
++ * Loại độc giả và luật đi kèm (Replace Conditional with Polymorphism — bài 5.2).
++ * Thêm một loại = thêm một hằng ở đây; trình biên dịch bắt phải cài đủ ba luật.
++ */
++public enum LoaiDocGia {
++    SV {
++        public int toiDa() { return 3; }
++        public int soNgayMuon() { return 14; }
++        protected double phiMoiNgay(int soNgayTre) { return Math.min(soNgayTre * 2000, 50000); }   // trần 50.000 — TV-52
++    },
++    GV {
++        public int toiDa() { return 10; }
++        public int soNgayMuon() { return 30; }
++        protected double phiMoiNgay(int soNgayTre) { return soNgayTre * 1000; }
++    },
++    KHACH {
++        public int toiDa() { return 1; }
++        public int soNgayMuon() { return 7; }
++        protected double phiMoiNgay(int soNgayTre) { return soNgayTre * 5000; }
++    };
++
++    public abstract int toiDa();
++
++    public abstract int soNgayMuon();
++
++    protected abstract double phiMoiNgay(int soNgayTre);
++
++    public double phiTre(int soNgayTre) {
++        return soNgayTre > 0 ? phiMoiNgay(soNgayTre) : 0;
++    }
++
++    /** Cột readers.type. Giữ đúng hành vi cũ: chuỗi nào không phải "SV"/"GV" đều tính như KHACH; null vẫn ném NullPointerException. */
++    public static LoaiDocGia tu(String type) {
++        if (type.equals("SV")) return SV;
++        if (type.equals("GV")) return GV;
++        return KHACH;
++    }
++}
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index 260ab5e..b9719cd 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -2,6 +2,7 @@ package com.thuvien.servlet;
+ 
+ import com.thuvien.dao.BookDAO;
+ import com.thuvien.model.Book;
++import com.thuvien.model.LoaiDocGia;
+ import com.thuvien.util.DBUtil;
+ import org.apache.commons.lang.StringUtils;
+ import org.apache.log4j.Logger;
+@@ -200,40 +201,17 @@ public class BookServlet extends HttpServlet {
+         response.sendRedirect("books");
+     }
+ 
+-    // Ba luật theo loại độc giả — trước đây là ba chuỗi if rải trong muonSach/traSach (Repeated Switches, bài 4.3)
++    // Ba luật theo loại độc giả — giờ uỷ quyền cho LoaiDocGia (bước kế: inline rồi xoá)
+     static int toiDa(String loai) {
+-        if (loai.equals("SV")) {
+-            return 3;
+-        } else if (loai.equals("GV")) {
+-            return 10;
+-        } else {
+-            return 1;
+-        }
++        return LoaiDocGia.tu(loai).toiDa();
+     }
+ 
+     static int soNgayMuon(String loai) {
+-        if (loai.equals("SV")) {
+-            return 14;
+-        } else if (loai.equals("GV")) {
+-            return 30;
+-        } else {
+-            return 7;
+-        }
++        return LoaiDocGia.tu(loai).soNgayMuon();
+     }
+ 
+     static double phiTre(String loai, int soNgayTre) {
+-        double phi = 0;
+-        if (soNgayTre > 0) {
+-            if (loai.equals("SV")) {
+-                phi = soNgayTre * 2000;
+-                if (phi > 50000) phi = 50000;
+-            } else if (loai.equals("GV")) {
+-                phi = soNgayTre * 1000;
+-            } else {
+-                phi = soNgayTre * 5000;
+-            }
+-        }
+-        return phi;
++        return LoaiDocGia.tu(loai).phiTre(soNgayTre);
+     }
+ 
+     /** Seam thời gian (Extract and Override Call): test ghi đè hàm này để cố định "bây giờ". */
+diff --git a/src/test/java/com/thuvien/model/LoaiDocGiaTest.java b/src/test/java/com/thuvien/model/LoaiDocGiaTest.java
+new file mode 100644
+index 0000000..fec9fe5
+--- /dev/null
++++ b/src/test/java/com/thuvien/model/LoaiDocGiaTest.java
+@@ -0,0 +1,36 @@
++package com.thuvien.model;
++
++import org.junit.jupiter.api.Test;
++
++import static org.junit.jupiter.api.Assertions.*;
++
++/** Test đơn vị cho luật theo loại — chạy trong mili giây, không cần CSDL hay mock servlet. */
++class LoaiDocGiaTest {
++
++    @Test
++    void docTuCotType() {
++        assertEquals(LoaiDocGia.SV, LoaiDocGia.tu("SV"));
++        assertEquals(LoaiDocGia.GV, LoaiDocGia.tu("GV"));
++        assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("KHACH"));
++        assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("sv"));      // giữ hành vi cũ: phân biệt hoa thường
++        assertEquals(LoaiDocGia.KHACH, LoaiDocGia.tu("NCS"));     // loại lạ rơi vào nhánh else
++        assertThrows(NullPointerException.class, () -> LoaiDocGia.tu(null));
++    }
++
++    @Test
++    void phiTre() {
++        assertEquals(18000.0, LoaiDocGia.SV.phiTre(9));
++        assertEquals(50000.0, LoaiDocGia.SV.phiTre(40));        // chạm trần
++        assertEquals(13000.0, LoaiDocGia.GV.phiTre(13));
++        assertEquals(130000.0, LoaiDocGia.KHACH.phiTre(26));    // không có trần
++        assertEquals(0.0, LoaiDocGia.SV.phiTre(0));
++        assertEquals(0.0, LoaiDocGia.KHACH.phiTre(-3));
++    }
++
++    @Test
++    void toiDaVaSoNgay() {
++        assertArrayEquals(new int[]{3, 10, 1}, new int[]{LoaiDocGia.SV.toiDa(), LoaiDocGia.GV.toiDa(), LoaiDocGia.KHACH.toiDa()});
++        assertArrayEquals(new int[]{14, 30, 7},
++                new int[]{LoaiDocGia.SV.soNgayMuon(), LoaiDocGia.GV.soNgayMuon(), LoaiDocGia.KHACH.soNgayMuon()});
++    }
++}
+-- 
+2.55.0
+

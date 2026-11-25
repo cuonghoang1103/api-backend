@@ -1,0 +1,80 @@
+From 0a28b51533cd7098a61036bd2293200793666825 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:35:04 +0700
+Subject: [PATCH 10/18] =?UTF-8?q?refactor(5.2):=20Inline=20Function=20toiD?=
+ =?UTF-8?q?a/soNgayMuon/phiTre=20=E2=80=94=20goi=20thang=20LoaiDocGia?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../java/com/thuvien/servlet/BookServlet.java | 23 ++++---------------
+ 1 file changed, 5 insertions(+), 18 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index b9719cd..9ba606a 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -118,13 +118,13 @@ public class BookServlet extends HttpServlet {
+                 response.sendRedirect("books?msg=" + URLEncoder.encode("Độc giả không tồn tại", "UTF-8"));
+                 return;
+             }
+-            String loai = rsDocGia.getString("type");
++            LoaiDocGia loai = LoaiDocGia.tu(rsDocGia.getString("type"));
+             rsDocGia.close();
+             rsDem = st.executeQuery("SELECT COUNT(*) FROM loans WHERE reader_id = " + readerId + " AND return_date IS NULL");
+             rsDem.next();
+             int dangMuon = rsDem.getInt(1);
+             rsDem.close();
+-            int toiDa = toiDa(loai);
++            int toiDa = loai.toiDa();
+             if (dangMuon > toiDa) {
+                 response.sendRedirect("books?msg=" + URLEncoder.encode("Vượt quá số sách được mượn", "UTF-8"));
+                 return;
+@@ -138,7 +138,7 @@ public class BookServlet extends HttpServlet {
+             rsSach.close();
+             Calendar cal = Calendar.getInstance();
+             Timestamp now = new Timestamp(cal.getTimeInMillis());
+-            cal.add(Calendar.DATE, soNgayMuon(loai));
++            cal.add(Calendar.DATE, loai.soNgayMuon());
+             ps = con.prepareStatement("INSERT INTO loans(book_id, reader_id, borrow_date, due_date) VALUES (?, ?, ?, ?)");
+             ps.setInt(1, Integer.parseInt(bookId));
+             ps.setInt(2, Integer.parseInt(readerId));
+@@ -165,12 +165,12 @@ public class BookServlet extends HttpServlet {
+                 return;
+             }
+             int bookId = rs.getInt("book_id");
+-            String loai = rs.getString("type");
++            LoaiDocGia loai = LoaiDocGia.tu(rs.getString("type"));
+             Timestamp hanTra = rs.getTimestamp("due_date");
+             rs.close();
+             long treMs = bayGio() - hanTra.getTime();
+             int soNgayTre = (int) (treMs / MS_MOT_NGAY);
+-            double phi = phiTre(loai, soNgayTre);
++            double phi = loai.phiTre(soNgayTre);
+             ps = con.prepareStatement("UPDATE loans SET return_date = ?, fine = ? WHERE id = ?");
+             ps.setTimestamp(1, new Timestamp(bayGio()));
+             ps.setDouble(2, phi);
+@@ -201,19 +201,6 @@ public class BookServlet extends HttpServlet {
+         response.sendRedirect("books");
+     }
+ 
+-    // Ba luật theo loại độc giả — giờ uỷ quyền cho LoaiDocGia (bước kế: inline rồi xoá)
+-    static int toiDa(String loai) {
+-        return LoaiDocGia.tu(loai).toiDa();
+-    }
+-
+-    static int soNgayMuon(String loai) {
+-        return LoaiDocGia.tu(loai).soNgayMuon();
+-    }
+-
+-    static double phiTre(String loai, int soNgayTre) {
+-        return LoaiDocGia.tu(loai).phiTre(soNgayTre);
+-    }
+-
+     /** Seam thời gian (Extract and Override Call): test ghi đè hàm này để cố định "bây giờ". */
+     protected long bayGio() {
+         return System.currentTimeMillis();
+-- 
+2.55.0
+

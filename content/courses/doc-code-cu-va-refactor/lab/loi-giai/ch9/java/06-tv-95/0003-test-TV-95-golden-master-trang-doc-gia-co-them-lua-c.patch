@@ -1,0 +1,26 @@
+From c6de6a9abdbf909b80f189b5765fdda4e6389dd2 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 09:09:53 +0700
+Subject: [PATCH 3/3] test(TV-95): golden master trang doc gia co them lua chon
+ NCS (doi co chu dich, da duyet)
+
+---
+ golden/readers.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/golden/readers.html b/golden/readers.html
+index d09391a..8c73dd8 100644
+--- a/golden/readers.html
++++ b/golden/readers.html
+@@ -118,7 +118,7 @@
+ <h3>Thêm độc giả</h3>
+ <form method="post" action="readers">
+   <input type="hidden" name="action" value="add">
+-  Tên <input name="name"> Loại <select name="type"><option>SV</option><option>GV</option><option>KHACH</option></select>
++  Tên <input name="name"> Loại <select name="type"><option>SV</option><option>GV</option><option>NCS</option><option>KHACH</option></select>
+   SĐT <input name="phone"> <button>Thêm</button>
+ </form>
+ </body>
+-- 
+2.55.0
+

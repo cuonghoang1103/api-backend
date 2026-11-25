@@ -1,0 +1,50 @@
+From 19419e6b8cfd8e578cd3bdb2bef5d3b2c3505593 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 07:26:54 +0700
+Subject: [PATCH] =?UTF-8?q?chore(8.1):=20checkstyle-du-an.xml=20=E2=80=94?=
+ =?UTF-8?q?=20luat=20mo=20ta=20quy=20uoc=20dang=20co=20(0=20vi=20pham),=20?=
+ =?UTF-8?q?chan=20code=20moi=20lech?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ tools/checkstyle-du-an.xml | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 tools/checkstyle-du-an.xml
+
+diff --git a/tools/checkstyle-du-an.xml b/tools/checkstyle-du-an.xml
+new file mode 100644
+index 0000000..1f3c93f
+--- /dev/null
++++ b/tools/checkstyle-du-an.xml
+@@ -0,0 +1,26 @@
++<?xml version="1.0"?>
++<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN" "https://checkstyle.org/dtds/configuration_1_3.dtd">
++<!-- mvn org.apache.maven.plugins:maven-checkstyle-plugin:3.6.0:check -Dcheckstyle.config.location=tools/checkstyle-du-an.xml -Dcheckstyle.includeTestSourceDirectory=true -->
++<!-- Quy ước ĐANG CÓ của thuvien (đo ở bài 8.1) — chặn code mới làm lệch, không bắt sửa code cũ -->
++<module name="Checker">
++  <property name="charset" value="UTF-8"/>
++  <module name="FileTabCharacter"/>
++  <module name="NewlineAtEndOfFile"><property name="lineSeparator" value="lf"/></module>
++  <module name="RegexpSingleline">
++    <property name="format" value="\s+$"/><property name="message" value="Khoảng trắng cuối dòng"/>
++  </module>
++  <module name="RegexpSingleline">
++    <property name="format" value="[‪-‮⁦-⁩]"/><property name="message" value="Ký tự điều khiển hai chiều (Trojan Source)"/>
++  </module>
++  <module name="LineLength"><property name="max" value="200"/></module>
++  <module name="TreeWalker">
++    <module name="AvoidStarImport"/>
++    <module name="UnusedImports"/>
++    <module name="RightCurly"/>
++    <module name="Indentation"><property name="basicOffset" value="4"/><property name="caseIndent" value="4"/></module>
++    <module name="MethodName"/>
++    <module name="TypeName"/>
++    <module name="EqualsHashCode"/>
++    <module name="NeedBraces"><property name="allowSingleLineStatement" value="true"/></module>
++  </module>
++</module>
+-- 
+2.55.0
+

@@ -1,0 +1,51 @@
+From 8f7434def4e20357aae93fd950e0e09ff14fbc22 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 07:34:34 +0700
+Subject: [PATCH 2/3] chore(8.3): mau mo ta PR 4 muc + tools/mo-ta-pr.sh sinh
+ khung tu nhanh
+
+---
+ .github/pull_request_template.md | 13 +++++++++++++
+ tools/mo-ta-pr.sh                | 10 ++++++++++
+ 2 files changed, 23 insertions(+)
+ create mode 100644 .github/pull_request_template.md
+ create mode 100755 tools/mo-ta-pr.sh
+
+diff --git a/.github/pull_request_template.md b/.github/pull_request_template.md
+new file mode 100644
+index 0000000..9faa6f6
+--- /dev/null
++++ b/.github/pull_request_template.md
+@@ -0,0 +1,13 @@
++## [TV-___] <một dòng: hành vi sau khi merge>
++
++### 1. Nguyên nhân gốc
++<!-- Vì sao lỗi xảy ra (dòng nào, điều kiện nào) — không phải "đã sửa lỗi X" -->
++
++### 2. Phạm vi ảnh hưởng
++<!-- Code: ai gọi hàm đã đổi (git grep) · Dữ liệu: đã hỏng chưa, bao nhiêu (truy vấn) · Người dùng: ai thấy gì khác · Hệ thống khác: job, báo cáo, app -->
++
++### 3. Cách kiểm
++<!-- Test mới/đổi (đỏ trước khi sửa, xanh sau) · lệnh đã chạy + kết quả · bằng chứng thủ công (curl, ảnh) -->
++
++### 4. Rủi ro và đường lùi
++<!-- Điều có thể sai · cách lùi (revert an toàn? cần lùi dữ liệu?) · ngoài phạm vi: ticket riêng -->
+diff --git a/tools/mo-ta-pr.sh b/tools/mo-ta-pr.sh
+new file mode 100755
+index 0000000..9e6a51b
+--- /dev/null
++++ b/tools/mo-ta-pr.sh
+@@ -0,0 +1,10 @@
++#!/bin/bash
++# tools/mo-ta-pr.sh <nhánh gốc> — in khung mô tả PR từ nhánh hiện tại: commit, tệp, test đổi, kết quả test lần cuối (target/surefire-reports)
++goc=${1:-main}
++echo "## $(git log -1 --format=%s | sed -E 's/^fix\((TV-[0-9]+)\): /[\1] /')"
++echo; echo "Commit:"; git log --reverse --format='- %h %s' "$goc"..
++echo; echo "Tệp thay đổi:"; git diff --stat "$goc"... | sed 's/^/    /'
++echo; echo "Test thêm/đổi:"; git diff "$goc"... -- 'src/test/**/*.java' 'e2e/**/*.java' | grep -E '^[-+] +void [a-zA-Z0-9_]+\(' | sed -E 's/^([-+]) +void ([a-zA-Z0-9_]+).*/    \1 \2/'
++t=$(cat target/surefire-reports/*.txt 2>/dev/null | grep -E '^Tests run' | awk -F'[ ,]+' '{r+=$3; f+=$5; e+=$7} END {if (r) print r" test, "f" fail, "e" error"}')
++echo; echo "Kết quả test lần cuối trên máy: ${t:-(chưa chạy)}"
++echo; sed -n '/^### 1/,$p' .github/pull_request_template.md
+-- 
+2.55.0
+

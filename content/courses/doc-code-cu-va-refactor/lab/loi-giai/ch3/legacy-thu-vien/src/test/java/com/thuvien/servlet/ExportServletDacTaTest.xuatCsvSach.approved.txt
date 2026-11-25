@@ -1,0 +1,7 @@
+CNTT001,Lập trình Java căn bản,5
+CNTT002,Cấu trúc dữ liệu và giải thuật,3
+CNTT003,Clean Code,2
+CNTT004,Refactoring,2
+CNTT005,Working Effectively with Legacy Code,1
+KT001,Kinh tế vi mô,4
+NN001,Tiếng Nhật sơ cấp 1,6

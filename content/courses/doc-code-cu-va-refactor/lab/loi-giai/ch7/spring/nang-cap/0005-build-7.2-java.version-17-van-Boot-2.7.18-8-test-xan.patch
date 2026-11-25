@@ -1,0 +1,30 @@
+From 8a048aadd53974d21b8b6a4813aa57812f66fdf1 Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:22:18 +0700
+Subject: [PATCH 5/8] =?UTF-8?q?build(7.2):=20java.version=2017=20(van=20Bo?=
+ =?UTF-8?q?ot=202.7.18)=20=E2=80=94=208=20test=20xanh,=20HTTP=20giong=20he?=
+ =?UTF-8?q?t?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ pom.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pom.xml b/pom.xml
+index 166e575..753a772 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -14,7 +14,7 @@
+   <artifactId>thuvien-api</artifactId>
+   <version>1.4.0</version>
+   <properties>
+-    <java.version>1.8</java.version>
++    <java.version>17</java.version>
+     <!-- Bài 7.2: lên Security 5.8 khi còn ở Boot 2.7 — bản "cầu nối" có sẵn API của 6.0 -->
+     <spring-security.version>5.8.16</spring-security.version>
+   </properties>
+-- 
+2.55.0
+

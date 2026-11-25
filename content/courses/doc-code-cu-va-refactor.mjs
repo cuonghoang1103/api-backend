@@ -12,9 +12,16 @@ import { khung } from './_chung/khung.mjs';
 import s00 from './doc-code-cu-va-refactor/s00-bat-dau.mjs';
 import s01 from './doc-code-cu-va-refactor/s01-dung-chay.mjs';
 import s02 from './doc-code-cu-va-refactor/s02-ban-do.mjs';
+import s03 from './doc-code-cu-va-refactor/s03-luoi-an-toan.mjs';
+import s04 from './doc-code-cu-va-refactor/s04-smell.mjs';
+import s05 from './doc-code-cu-va-refactor/s05-refactor.mjs';
+import s06 from './doc-code-cu-va-refactor/s06-code-chet-bao-mat.mjs';
+import s07 from './doc-code-cu-va-refactor/s07-nang-cap.mjs';
+import s08 from './doc-code-cu-va-refactor/s08-sua-loi-nguoi-khac.mjs';
+import s09 from './doc-code-cu-va-refactor/s09-du-an-cuoi-khoa.mjs';
 
 // Các chương đã soạn chi tiết thay phần tử tương ứng của khung (giữ nguyên slug bài + title chương).
-const DA_SOAN = [s00, s01, s02];
+const DA_SOAN = [s00, s01, s02, s03, s04, s05, s06, s07, s08, s09];
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },

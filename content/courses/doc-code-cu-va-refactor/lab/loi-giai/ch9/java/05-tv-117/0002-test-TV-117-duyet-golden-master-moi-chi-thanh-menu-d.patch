@@ -1,0 +1,88 @@
+From 25a950d4b3d028f5ed215e732048e6c907229526 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 09:09:53 +0700
+Subject: [PATCH 2/2] =?UTF-8?q?test(TV-117):=20duyet=20golden=20master=20m?=
+ =?UTF-8?q?oi=20=E2=80=94=20chi=20thanh=20menu=20doi=20chu=20(6=20dong/tra?=
+ =?UTF-8?q?ng)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ golden/books.html         | 12 ++++++------
+ golden/readers.html       | 12 ++++++------
+ golden/report_days_1.html | 12 ++++++------
+ 3 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/golden/books.html b/golden/books.html
+index ecce465..43459db 100644
+--- a/golden/books.html
++++ b/golden/books.html
+@@ -6,12 +6,12 @@
+ 
+ 
+ <div style="background:#2b5797;color:#fff;padding:8px">
+-  <b>THÆ¯ VIá»N</b> |
+-  <a style="color:#fff" href="books">SÃ¡ch</a> |
+-  <a style="color:#fff" href="readers">Äá»c giáº£</a> |
+-  <a style="color:#fff" href="report">QuÃ¡ háº¡n (3)</a> |
+-  Xin chÃ o thuthu |
+-  <a style="color:#fff" href="login?action=logout">ThoÃ¡t</a>
++  <b>THƯ VIỆN</b> |
++  <a style="color:#fff" href="books">Sách</a> |
++  <a style="color:#fff" href="readers">Độc giả</a> |
++  <a style="color:#fff" href="report">Quá hạn (3)</a> |
++  Xin chào thuthu |
++  <a style="color:#fff" href="login?action=logout">Thoát</a>
+ </div>
+ 
+ 
+diff --git a/golden/readers.html b/golden/readers.html
+index 5f5cfce..d09391a 100644
+--- a/golden/readers.html
++++ b/golden/readers.html
+@@ -6,12 +6,12 @@
+ 
+ 
+ <div style="background:#2b5797;color:#fff;padding:8px">
+-  <b>THÆ¯ VIá»N</b> |
+-  <a style="color:#fff" href="books">SÃ¡ch</a> |
+-  <a style="color:#fff" href="readers">Äá»c giáº£</a> |
+-  <a style="color:#fff" href="report">QuÃ¡ háº¡n (3)</a> |
+-  Xin chÃ o thuthu |
+-  <a style="color:#fff" href="login?action=logout">ThoÃ¡t</a>
++  <b>THƯ VIỆN</b> |
++  <a style="color:#fff" href="books">Sách</a> |
++  <a style="color:#fff" href="readers">Độc giả</a> |
++  <a style="color:#fff" href="report">Quá hạn (3)</a> |
++  Xin chào thuthu |
++  <a style="color:#fff" href="login?action=logout">Thoát</a>
+ </div>
+ 
+ 
+diff --git a/golden/report_days_1.html b/golden/report_days_1.html
+index ce0a25b..c09d0d1 100644
+--- a/golden/report_days_1.html
++++ b/golden/report_days_1.html
+@@ -6,12 +6,12 @@
+ 
+ 
+ <div style="background:#2b5797;color:#fff;padding:8px">
+-  <b>THÆ¯ VIá»N</b> |
+-  <a style="color:#fff" href="books">SÃ¡ch</a> |
+-  <a style="color:#fff" href="readers">Äá»c giáº£</a> |
+-  <a style="color:#fff" href="report">QuÃ¡ háº¡n (3)</a> |
+-  Xin chÃ o thuthu |
+-  <a style="color:#fff" href="login?action=logout">ThoÃ¡t</a>
++  <b>THƯ VIỆN</b> |
++  <a style="color:#fff" href="books">Sách</a> |
++  <a style="color:#fff" href="readers">Độc giả</a> |
++  <a style="color:#fff" href="report">Quá hạn (3)</a> |
++  Xin chào thuthu |
++  <a style="color:#fff" href="login?action=logout">Thoát</a>
+ </div>
+ 
+ <h3>Phiếu quá hạn từ 1 ngày</h3>
+-- 
+2.55.0
+

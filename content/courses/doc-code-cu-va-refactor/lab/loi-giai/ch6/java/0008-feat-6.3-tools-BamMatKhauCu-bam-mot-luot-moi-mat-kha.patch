@@ -1,0 +1,60 @@
+From a8f870324f99015e98c50a607513845170e5e582 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 05:30:38 +0700
+Subject: [PATCH 08/12] =?UTF-8?q?feat(6.3):=20tools/BamMatKhauCu=20?=
+ =?UTF-8?q?=E2=80=94=20bam=20mot=20luot=20moi=20mat=20khau=20con=20tho=20(?=
+ =?UTF-8?q?chay=20sau=20migration=20V6=5F3)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../java/com/thuvien/tools/BamMatKhauCu.java  | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 src/main/java/com/thuvien/tools/BamMatKhauCu.java
+
+diff --git a/src/main/java/com/thuvien/tools/BamMatKhauCu.java b/src/main/java/com/thuvien/tools/BamMatKhauCu.java
+new file mode 100644
+index 0000000..9378eb5
+--- /dev/null
++++ b/src/main/java/com/thuvien/tools/BamMatKhauCu.java
+@@ -0,0 +1,36 @@
++package com.thuvien.tools;
++
++import com.thuvien.util.DBUtil;
++import com.thuvien.util.MatKhau;
++
++import java.sql.Connection;
++import java.sql.PreparedStatement;
++import java.sql.ResultSet;
++import java.sql.Statement;
++
++/**
++ * Chạy MỘT LẦN sau migration V6_3 (bài 6.3): băm mọi mật khẩu còn lưu thô — kể cả tài khoản lâu không đăng nhập,
++ * thứ mà "nâng cấp dần khi đăng nhập" không bao giờ chạm tới. Chạy lại không đổi gì (đã băm thì bỏ qua).
++ */
++public final class BamMatKhauCu {
++
++    public static void main(String[] args) throws Exception {
++        int daBam = 0, boQua = 0;
++        try (Connection con = DBUtil.getConnection();
++             Statement st = con.createStatement();
++             ResultSet rs = st.executeQuery("SELECT id, username, password FROM users ORDER BY id");
++             PreparedStatement up = con.prepareStatement("UPDATE users SET password = ? WHERE id = ?")) {
++            while (rs.next()) {
++                if (!MatKhau.nenBamLai(rs.getString("password"))) { boQua++; continue; }
++                up.setString(1, MatKhau.bam(rs.getString("password")));
++                up.setInt(2, rs.getInt("id"));
++                up.executeUpdate();
++                daBam++;
++                System.out.println("da bam: " + rs.getString("username"));
++            }
++        }
++        System.out.println("xong: " + daBam + " tai khoan da bam, " + boQua + " bo qua (da bam tu truoc)");
++    }
++
++    private BamMatKhauCu() { }
++}
+-- 
+2.55.0
+

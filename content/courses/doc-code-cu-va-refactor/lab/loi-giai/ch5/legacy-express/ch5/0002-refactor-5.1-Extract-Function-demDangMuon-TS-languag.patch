@@ -1,0 +1,41 @@
+From ea20eab3e08c32cc2692013a862f622fe0fd811b Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:31:59 +0700
+Subject: [PATCH 02/11] refactor(5.1): Extract Function demDangMuon (TS
+ language service)
+
+---
+ routes/muon.js | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/routes/muon.js b/routes/muon.js
+index 7281ea3..7b749b5 100644
+--- a/routes/muon.js
++++ b/routes/muon.js
+@@ -28,10 +28,7 @@ router.post('/', function (req, res) {
+     if (!dg) return res.status(404).json({ loi: 'khong tim thay doc gia' });
+     kho.doc('phieu', function (err2, dsPhieu) {
+       if (err2) return res.status(500).send('loi doc du lieu');
+-      var dangMuon = 0;
+-      for (var i = 0; i < dsPhieu.length; i++) {
+-        if (dsPhieu[i].docGia == dg.id && !dsPhieu[i].ngayTra) dangMuon++;
+-      }
++      var dangMuon = demDangMuon(dsPhieu, dg);
+       var toiDa;
+       var soNgay;
+       if (dg.loai == 'SV') {
+@@ -65,3 +62,11 @@ router.post('/', function (req, res) {
+ });
+ 
+ module.exports = router;
++
++function demDangMuon(dsPhieu, dg) {
++  var dangMuon = 0;
++  for (var i = 0; i < dsPhieu.length; i++) {
++    if (dsPhieu[i].docGia == dg.id && !dsPhieu[i].ngayTra) dangMuon++;
++  }
++  return dangMuon;
++}
+-- 
+2.55.0
+

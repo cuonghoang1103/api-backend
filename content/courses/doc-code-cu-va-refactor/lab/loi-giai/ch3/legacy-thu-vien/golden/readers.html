@@ -1,0 +1,125 @@
+
+
+<html>
+<head><title>Độc giả - Thư viện</title></head>
+<body>
+
+
+<div style="background:#2b5797;color:#fff;padding:8px">
+  <b>THÆ¯ VIá»N</b> |
+  <a style="color:#fff" href="books">SÃ¡ch</a> |
+  <a style="color:#fff" href="readers">Äá»c giáº£</a> |
+  <a style="color:#fff" href="report">QuÃ¡ háº¡n (3)</a> |
+  Xin chÃ o thuthu |
+  <a style="color:#fff" href="login?action=logout">ThoÃ¡t</a>
+</div>
+
+
+<h3>Độc giả</h3>
+<table border="1" cellpadding="4">
+  <tr><th>ID</th><th>Tên</th><th>Loại</th><th>SĐT</th><th></th></tr>
+
+  <tr>
+    <td>1</td><td>Nguyễn Văn An</td><td>SV</td><td>0901000001</td>
+    <td>
+      <form method="post" action="readers" style="margin:0">
+        <input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="1">
+        <button>Xoá</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>2</td><td>Trần Thị Bình</td><td>SV</td><td>0901000002</td>
+    <td>
+      <form method="post" action="readers" style="margin:0">
+        <input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="2">
+        <button>Xoá</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>3</td><td>Lê Minh Châu</td><td>GV</td><td>0901000003</td>
+    <td>
+      <form method="post" action="readers" style="margin:0">
+        <input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="3">
+        <button>Xoá</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>4</td><td>Phạm Quốc Dũng</td><td>KHACH</td><td>0901000004</td>
+    <td>
+      <form method="post" action="readers" style="margin:0">
+        <input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="4">
+        <button>Xoá</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>5</td><td>Hoàng Gia Huy</td><td>SV</td><td>0901000005</td>
+    <td>
+      <form method="post" action="readers" style="margin:0">
+        <input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="5">
+        <button>Xoá</button>
+      </form>
+    </td>
+  </tr>
+
+</table>
+<h3>Đang mượn</h3>
+<table border="1" cellpadding="4">
+  <tr><th>Phiếu</th><th>Sách</th><th>Độc giả</th><th>Hạn trả</th><th></th></tr>
+
+  <tr>
+    <td>4</td><td>Clean Code</td><td>Phạm Quốc Dũng</td><td><NGAY></td>
+    <td>
+      <form method="post" action="books" style="margin:0">
+        <input type="hidden" name="action" value="return"><input type="hidden" name="loanId" value="4">
+        <button>Trả</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>3</td><td>Cấu trúc dữ liệu và giải thuật</td><td>Lê Minh Châu</td><td><NGAY></td>
+    <td>
+      <form method="post" action="books" style="margin:0">
+        <input type="hidden" name="action" value="return"><input type="hidden" name="loanId" value="3">
+        <button>Trả</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>1</td><td>Lập trình Java căn bản</td><td>Nguyễn Văn An</td><td><NGAY></td>
+    <td>
+      <form method="post" action="books" style="margin:0">
+        <input type="hidden" name="action" value="return"><input type="hidden" name="loanId" value="1">
+        <button>Trả</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>2</td><td>Lập trình Java căn bản</td><td>Trần Thị Bình</td><td><NGAY></td>
+    <td>
+      <form method="post" action="books" style="margin:0">
+        <input type="hidden" name="action" value="return"><input type="hidden" name="loanId" value="2">
+        <button>Trả</button>
+      </form>
+    </td>
+  </tr>
+
+</table>
+<h3>Thêm độc giả</h3>
+<form method="post" action="readers">
+  <input type="hidden" name="action" value="add">
+  Tên <input name="name"> Loại <select name="type"><option>SV</option><option>GV</option><option>KHACH</option></select>
+  SĐT <input name="phone"> <button>Thêm</button>
+</form>
+</body>
+</html>

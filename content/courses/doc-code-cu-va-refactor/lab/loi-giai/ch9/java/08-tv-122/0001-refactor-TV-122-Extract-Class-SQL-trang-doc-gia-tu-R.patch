@@ -1,0 +1,195 @@
+From e13eb0364b82e1138fabf8223d6615a75b6c8fd3 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 08:41:06 +0700
+Subject: [PATCH] =?UTF-8?q?refactor(TV-122):=20Extract=20Class=20=E2=80=94?=
+ =?UTF-8?q?=20SQL=20trang=20doc=20gia=20tu=20ReaderServlet=20sang=20DocGia?=
+ =?UTF-8?q?DAO=20(chuyen=20nguyen=20van,=20khong=20doi=20hanh=20vi)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ src/main/java/com/thuvien/dao/DocGiaDAO.java  | 77 +++++++++++++++++++
+ .../com/thuvien/servlet/ReaderServlet.java    | 49 +++---------
+ 2 files changed, 86 insertions(+), 40 deletions(-)
+ create mode 100644 src/main/java/com/thuvien/dao/DocGiaDAO.java
+
+diff --git a/src/main/java/com/thuvien/dao/DocGiaDAO.java b/src/main/java/com/thuvien/dao/DocGiaDAO.java
+new file mode 100644
+index 0000000..3d7d292
+--- /dev/null
++++ b/src/main/java/com/thuvien/dao/DocGiaDAO.java
+@@ -0,0 +1,77 @@
++package com.thuvien.dao;
++
++import com.thuvien.model.Loan;
++import com.thuvien.model.Reader;
++
++import java.sql.Connection;
++import java.sql.PreparedStatement;
++import java.sql.ResultSet;
++import java.sql.SQLException;
++import java.util.ArrayList;
++import java.util.List;
++
++/**
++ * SQL của trang độc giả, chuyển NGUYÊN VĂN từ ReaderServlet (Extract Class — TV-122, cùng kiểu PhieuMuonDAO của bài 5.3).
++ * Nhận Connection từ ngoài: người gọi mở/đóng (một kết nối cho cả request, như code cũ).
++ */
++public class DocGiaDAO {
++
++    private final Connection con;
++
++    public DocGiaDAO(Connection con) {
++        this.con = con;
++    }
++
++    public List<Reader> danhSach() throws SQLException {
++        List<Reader> readers = new ArrayList<Reader>();
++        try (PreparedStatement st = con.prepareStatement("SELECT * FROM readers ORDER BY id"); ResultSet rs = st.executeQuery()) {
++            while (rs.next()) {
++                Reader r = new Reader();
++                r.setId(rs.getInt("id"));
++                r.setName(rs.getString("name"));
++                r.setType(rs.getString("type"));
++                r.setPhone(rs.getString("phone"));
++                readers.add(r);
++            }
++        }
++        return readers;
++    }
++
++    /** Phiếu chưa trả, hạn trả sớm nhất lên đầu. */
++    public List<Loan> phieuDangMuon() throws SQLException {
++        List<Loan> loans = new ArrayList<Loan>();
++        try (PreparedStatement st = con.prepareStatement("SELECT l.*, b.title, r.name FROM loans l JOIN books b ON b.id = l.book_id "
++                + "JOIN readers r ON r.id = l.reader_id WHERE l.return_date IS NULL ORDER BY l.due_date");
++             ResultSet rs = st.executeQuery()) {
++            while (rs.next()) {
++                Loan l = new Loan();
++                l.id = rs.getInt("id");
++                l.bookId = rs.getInt("book_id");
++                l.readerId = rs.getInt("reader_id");
++                l.bookTitle = rs.getString("title");
++                l.readerName = rs.getString("name");
++                l.borrowDate = rs.getTimestamp("borrow_date");
++                l.dueDate = rs.getTimestamp("due_date");
++                loans.add(l);
++            }
++        }
++        return loans;
++    }
++
++    public void them(String name, String type, String phone) throws SQLException {
++        try (PreparedStatement st = con.prepareStatement("INSERT INTO readers(name, type, phone) VALUES (?, ?, ?)")) {
++            st.setString(1, name);
++            st.setString(2, type);
++            st.setString(3, phone);
++            st.executeUpdate();
++        }
++    }
++
++    /** CẢNH BÁO (TV-125, chưa sửa): khoá ngoại ON DELETE CASCADE xoá luôn phiếu của độc giả, kể cả phiếu đang mượn. */
++    public void xoa(int id) throws SQLException {
++        try (PreparedStatement st = con.prepareStatement("DELETE FROM readers WHERE id = ?")) {
++            st.setInt(1, id);
++            st.executeUpdate();
++        }
++    }
++}
+diff --git a/src/main/java/com/thuvien/servlet/ReaderServlet.java b/src/main/java/com/thuvien/servlet/ReaderServlet.java
+index 76f8171..330f1fe 100644
+--- a/src/main/java/com/thuvien/servlet/ReaderServlet.java
++++ b/src/main/java/com/thuvien/servlet/ReaderServlet.java
+@@ -1,5 +1,6 @@
+ package com.thuvien.servlet;
+ 
++import com.thuvien.dao.DocGiaDAO;
+ import com.thuvien.model.Loan;
+ import com.thuvien.model.Reader;
+ import com.thuvien.util.DBUtil;
+@@ -10,9 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import java.io.IOException;
+ import java.sql.Connection;
+-import java.sql.PreparedStatement;
+-import java.sql.ResultSet;
+-import java.sql.Statement;
+ import java.util.ArrayList;
+ import java.util.List;
+ 
+@@ -26,38 +24,15 @@ public class ReaderServlet extends HttpServlet {
+         List<Reader> readers = new ArrayList<Reader>();
+         List<Loan> loans = new ArrayList<Loan>();
+         Connection con = null;
+-        Statement st = null;
+-        ResultSet rs = null;
+         try {
+             con = DBUtil.getConnection();
+-            st = con.createStatement();
+-            rs = st.executeQuery("SELECT * FROM readers ORDER BY id");
+-            while (rs.next()) {
+-                Reader r = new Reader();
+-                r.setId(rs.getInt("id"));
+-                r.setName(rs.getString("name"));
+-                r.setType(rs.getString("type"));
+-                r.setPhone(rs.getString("phone"));
+-                readers.add(r);
+-            }
+-            rs.close();
+-            rs = st.executeQuery("SELECT l.*, b.title, r.name FROM loans l JOIN books b ON b.id = l.book_id "
+-                    + "JOIN readers r ON r.id = l.reader_id WHERE l.return_date IS NULL ORDER BY l.due_date");
+-            while (rs.next()) {
+-                Loan l = new Loan();
+-                l.id = rs.getInt("id");
+-                l.bookId = rs.getInt("book_id");
+-                l.readerId = rs.getInt("reader_id");
+-                l.bookTitle = rs.getString("title");
+-                l.readerName = rs.getString("name");
+-                l.borrowDate = rs.getTimestamp("borrow_date");
+-                l.dueDate = rs.getTimestamp("due_date");
+-                loans.add(l);
+-            }
++            DocGiaDAO dao = new DocGiaDAO(con);
++            readers = dao.danhSach();
++            loans = dao.phieuDangMuon();
+         } catch (Exception e) {
+             e.printStackTrace();
+         } finally {
+-            DBUtil.close(rs, st, con);
++            DBUtil.close(con);
+         }
+         request.setAttribute("readers", readers);
+         request.setAttribute("loans", loans);
+@@ -72,24 +47,18 @@ public class ReaderServlet extends HttpServlet {
+         request.setCharacterEncoding("UTF-8");
+         String action = request.getParameter("action");
+         Connection con = null;
+-        PreparedStatement st = null;
+         try {
+             con = DBUtil.getConnection();
++            DocGiaDAO dao = new DocGiaDAO(con);
+             if ("add".equals(action)) {
+-                st = con.prepareStatement("INSERT INTO readers(name, type, phone) VALUES (?, ?, ?)");
+-                st.setString(1, request.getParameter("name"));
+-                st.setString(2, request.getParameter("type"));
+-                st.setString(3, request.getParameter("phone"));
+-                st.executeUpdate();
++                dao.them(request.getParameter("name"), request.getParameter("type"), request.getParameter("phone"));
+             } else if ("delete".equals(action)) {
+-                st = con.prepareStatement("DELETE FROM readers WHERE id = ?");
+-                st.setInt(1, Integer.parseInt(request.getParameter("id")));   // "0 OR 1=1" ⇒ NumberFormatException, không xoá gì
+-                st.executeUpdate();
++                dao.xoa(Integer.parseInt(request.getParameter("id")));   // "0 OR 1=1" ⇒ NumberFormatException, không xoá gì
+             }
+         } catch (Exception e) {
+             e.printStackTrace();
+         } finally {
+-            DBUtil.close(st, con);
++            DBUtil.close(con);
+         }
+         response.sendRedirect("readers");
+     }
+-- 
+2.55.0
+

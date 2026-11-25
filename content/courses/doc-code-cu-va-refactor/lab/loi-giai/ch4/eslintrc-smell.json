@@ -1,0 +1,66 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "__tests__/"
+  ],
+  "rules": {
+    "complexity": [
+      "warn",
+      10
+    ],
+    "max-params": [
+      "warn",
+      4
+    ],
+    "max-lines-per-function": [
+      "warn",
+      {
+        "max": 30,
+        "skipBlankLines": true,
+        "skipComments": true
+      }
+    ],
+    "max-depth": [
+      "warn",
+      3
+    ],
+    "max-nested-callbacks": [
+      "warn",
+      2
+    ],
+    "no-magic-numbers": [
+      "warn",
+      {
+        "ignore": [
+          0,
+          1,
+          -1,
+          2,
+          200,
+          201,
+          400,
+          404,
+          409,
+          500,
+          3000
+        ],
+        "ignoreArrayIndexes": true
+      }
+    ],
+    "eqeqeq": "warn",
+    "no-unused-vars": [
+      "warn",
+      {
+        "args": "all"
+      }
+    ]
+  }
+}

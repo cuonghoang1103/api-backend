@@ -1,0 +1,106 @@
+From 0a1ce92beb088985b39836ebeba32443d73b5e6a Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:28:20 +0700
+Subject: [PATCH 04/18] =?UTF-8?q?refactor(5.1):=20Rename=20Variable=20?=
+ =?UTF-8?q?=E2=80=94=20loai/toiDa/phi/soNgayTre/hanTra?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../java/com/thuvien/servlet/BookServlet.java | 48 +++++++++----------
+ 1 file changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/src/main/java/com/thuvien/servlet/BookServlet.java b/src/main/java/com/thuvien/servlet/BookServlet.java
+index 43398a4..1a46189 100644
+--- a/src/main/java/com/thuvien/servlet/BookServlet.java
++++ b/src/main/java/com/thuvien/servlet/BookServlet.java
+@@ -114,21 +114,21 @@ public class BookServlet extends HttpServlet {
+                 response.sendRedirect("books?msg=" + URLEncoder.encode("Độc giả không tồn tại", "UTF-8"));
+                 return;
+             }
+-            String type = rs.getString("type");
++            String loai = rs.getString("type");
+             rs.close();
+             rs = st.executeQuery("SELECT COUNT(*) FROM loans WHERE reader_id = " + readerId + " AND return_date IS NULL");
+             rs.next();
+             int dangMuon = rs.getInt(1);
+             rs.close();
+-            int max;
+-            if (type.equals("SV")) {
+-                max = 3;
+-            } else if (type.equals("GV")) {
+-                max = 10;
++            int toiDa;
++            if (loai.equals("SV")) {
++                toiDa = 3;
++            } else if (loai.equals("GV")) {
++                toiDa = 10;
+             } else {
+-                max = 1;
++                toiDa = 1;
+             }
+-            if (dangMuon > max) {
++            if (dangMuon > toiDa) {
+                 response.sendRedirect("books?msg=" + URLEncoder.encode("Vượt quá số sách được mượn", "UTF-8"));
+                 return;
+             }
+@@ -141,9 +141,9 @@ public class BookServlet extends HttpServlet {
+             rs.close();
+             Calendar cal = Calendar.getInstance();
+             Timestamp now = new Timestamp(cal.getTimeInMillis());
+-            if (type.equals("SV")) {
++            if (loai.equals("SV")) {
+                 cal.add(Calendar.DATE, 14);
+-            } else if (type.equals("GV")) {
++            } else if (loai.equals("GV")) {
+                 cal.add(Calendar.DATE, 30);
+             } else {
+                 cal.add(Calendar.DATE, 7);
+@@ -174,29 +174,29 @@ public class BookServlet extends HttpServlet {
+                 return;
+             }
+             int bookId = rs.getInt("book_id");
+-            String type = rs.getString("type");
+-            Timestamp due = rs.getTimestamp("due_date");
++            String loai = rs.getString("type");
++            Timestamp hanTra = rs.getTimestamp("due_date");
+             rs.close();
+-            long diff = bayGio() - due.getTime();
+-            int days = (int) (diff / (1000 * 60 * 60 * 24));
+-            double fine = 0;
+-            if (days > 0) {
+-                if (type.equals("SV")) {
+-                    fine = days * 2000;
+-                    if (fine > 50000) fine = 50000;
+-                } else if (type.equals("GV")) {
+-                    fine = days * 1000;
++            long treMs = bayGio() - hanTra.getTime();
++            int soNgayTre = (int) (treMs / (1000 * 60 * 60 * 24));
++            double phi = 0;
++            if (soNgayTre > 0) {
++                if (loai.equals("SV")) {
++                    phi = soNgayTre * 2000;
++                    if (phi > 50000) phi = 50000;
++                } else if (loai.equals("GV")) {
++                    phi = soNgayTre * 1000;
+                 } else {
+-                    fine = days * 5000;
++                    phi = soNgayTre * 5000;
+                 }
+             }
+             ps = con.prepareStatement("UPDATE loans SET return_date = ?, fine = ? WHERE id = ?");
+             ps.setTimestamp(1, new Timestamp(bayGio()));
+-            ps.setDouble(2, fine);
++            ps.setDouble(2, phi);
+             ps.setInt(3, Integer.parseInt(loanId));
+             ps.executeUpdate();
+             st.executeUpdate("UPDATE books SET available = available + 1 WHERE id = " + bookId);
+-            String msg = fine > 0 ? "Trả sách. Phí trễ hạn: " + fine : "Trả sách thành công";
++            String msg = phi > 0 ? "Trả sách. Phí trễ hạn: " + phi : "Trả sách thành công";
+             response.sendRedirect("readers?msg=" + URLEncoder.encode(msg, "UTF-8"));
+         } finally {
+             DBUtil.close(rs, st, ps);
+-- 
+2.55.0
+

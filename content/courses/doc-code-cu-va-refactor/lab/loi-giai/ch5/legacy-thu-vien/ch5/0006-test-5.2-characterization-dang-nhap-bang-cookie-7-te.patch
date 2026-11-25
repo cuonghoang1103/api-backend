@@ -1,0 +1,106 @@
+From dee56bc715dc07b8d4e5f8dc8cc9178b887ece83 Mon Sep 17 00:00:00 2001
+From: hocvien <hocvien@lab.local>
+Date: Tue, 24 Nov 2026 04:33:24 +0700
+Subject: [PATCH 06/18] test(5.2): characterization dang nhap bang cookie (7
+ test, khong can CSDL)
+
+---
+ .../servlet/LoginServletCookieTest.java       | 86 +++++++++++++++++++
+ 1 file changed, 86 insertions(+)
+ create mode 100644 src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+
+diff --git a/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+new file mode 100644
+index 0000000..bb5a308
+--- /dev/null
++++ b/src/test/java/com/thuvien/servlet/LoginServletCookieTest.java
+@@ -0,0 +1,86 @@
++package com.thuvien.servlet;
++
++import com.thuvien.util.TokenUtil;
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++
++import javax.servlet.RequestDispatcher;
++import javax.servlet.http.Cookie;
++import javax.servlet.http.HttpServletRequest;
++import javax.servlet.http.HttpServletResponse;
++import javax.servlet.http.HttpSession;
++
++import static org.junit.jupiter.api.Assertions.assertThrows;
++import static org.mockito.Mockito.*;
++
++/** Characterization test cho đăng nhập bằng cookie "remember" (LoginServlet.doGet) — viết TRƯỚC khi gỡ if lồng (bài 5.2). Không cần CSDL. */
++class LoginServletCookieTest {
++
++    private final LoginServlet servlet = new LoginServlet();
++    private HttpServletRequest req;
++    private HttpServletResponse res;
++    private HttpSession session;
++    private RequestDispatcher trangLogin;
++
++    @BeforeEach
++    void chuanBi() {
++        req = mock(HttpServletRequest.class);
++        res = mock(HttpServletResponse.class);
++        session = mock(HttpSession.class);
++        trangLogin = mock(RequestDispatcher.class);
++        when(req.getSession()).thenReturn(session);
++        when(req.getRequestDispatcher("login.jsp")).thenReturn(trangLogin);
++    }
++
++    private void voiCookie(Cookie... cs) throws Exception {
++        when(req.getCookies()).thenReturn(cs.length == 0 ? null : cs);
++        servlet.doGet(req, res);
++    }
++
++    @Test
++    void khongCoCookie_hienTrangLogin() throws Exception {
++        voiCookie();
++        verify(trangLogin).forward(req, res);
++        verify(session, never()).setAttribute(anyString(), any());
++    }
++
++    @Test
++    void tokenDung_dangNhapVaVeTrangSach() throws Exception {
++        voiCookie(new Cookie("JSESSIONID", "x"), new Cookie("remember", "thuthu:" + TokenUtil.makeToken("thuthu")));
++        verify(session).setAttribute("user", "thuthu");
++        verify(res).sendRedirect("books");
++        verify(trangLogin, never()).forward(req, res);
++    }
++
++    @Test
++    void tokenSai_hienTrangLogin() throws Exception {
++        voiCookie(new Cookie("remember", "admin:00000000000000000000000000000000"));
++        verify(trangLogin).forward(req, res);
++        verify(session, never()).setAttribute(anyString(), any());
++    }
++
++    @Test
++    void khongCoDauHaiCham_boQua() throws Exception {
++        voiCookie(new Cookie("remember", "admin"));
++        verify(trangLogin).forward(req, res);
++    }
++
++    @Test
++    void cookieThuHaiDung_vanDangNhap() throws Exception {
++        voiCookie(new Cookie("remember", "admin:sai"), new Cookie("remember", "admin:" + TokenUtil.makeToken("admin")));
++        verify(session).setAttribute("user", "admin");
++    }
++
++    @Test
++    void duoiThua_vanDangNhap_BUG() throws Exception {
++        // split(":")[1] chỉ lấy đoạn thứ hai ⇒ "admin:<token>:rac" vẫn được nhận
++        voiCookie(new Cookie("remember", "admin:" + TokenUtil.makeToken("admin") + ":rac"));
++        verify(session).setAttribute("user", "admin");
++    }
++
++    @Test
++    void dauHaiChamCuoi_nemLoi_BUG() {
++        // "admin:".split(":") chỉ có MỘT phần tử ⇒ [1] ném lỗi, Tomcat trả 500
++        assertThrows(ArrayIndexOutOfBoundsException.class, () -> voiCookie(new Cookie("remember", "admin:")));
++    }
++}
+-- 
+2.55.0
+

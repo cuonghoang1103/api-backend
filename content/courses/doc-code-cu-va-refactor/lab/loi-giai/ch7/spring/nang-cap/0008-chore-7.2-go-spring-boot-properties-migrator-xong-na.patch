@@ -1,0 +1,26 @@
+From 445eade24af7444dbdbfc6e97f5cab8160404a59 Mon Sep 17 00:00:00 2001
+From: Hoc Vien <hocvien@example.com>
+Date: Tue, 24 Nov 2026 06:25:07 +0700
+Subject: [PATCH 8/8] chore(7.2): go spring-boot-properties-migrator (xong nang
+ cap, khong de lai production)
+
+---
+ pom.xml | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index 8c087e7..53c9ca0 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -21,8 +21,6 @@
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-data-jpa</artifactId></dependency>
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-validation</artifactId></dependency>
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-security</artifactId></dependency>
+-    <!-- TẠM trong lúc nâng cấp (bài 7.2): in báo cáo property đổi tên/bị gỡ lúc khởi động. Gỡ khi xong. -->
+-    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-properties-migrator</artifactId><scope>runtime</scope></dependency>
+     <dependency><groupId>com.h2database</groupId><artifactId>h2</artifactId><scope>runtime</scope></dependency>
+     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
+     <dependency><groupId>org.springframework.security</groupId><artifactId>spring-security-test</artifactId><scope>test</scope></dependency>
+-- 
+2.55.0
+

@@ -114,3 +114,48 @@ Luyện nói có thể dùng CuongMini/AI nói trong CT Language. Mẫu email/ch
 - 22/11/2026: **Mục 0** (`s00-bat-dau.mjs`: tak-0-8, tak-0-9, tak-0-1) và **Chương 1** (`s01-doc-tieng-anh-ky-thuat.mjs`: tak-1-1 … tak-1-4 + quiz 10 câu tak-1-5, type QUIZ) đã soạn chi tiết.
   Tiện ích chung: `_chung.mjs` (mau, saiDung, tuVung, Q). Tệp khoá ghép chương vào khung THEO SLUG (`ghep()`): bài đã soạn thay bài khung,
   bài chưa có giữ "Đang soạn", slug lạ ⇒ ném lỗi lúc nạp. Chương 2–8 vẫn là khung.
+- 24/11/2026 (agent tak, máy nhà): **Chương 2** (`s02-ticket-bug-report.mjs`: tak-2-1 … tak-2-4 + quiz 10 câu tak-2-5). Lab chạy thật:
+  API `labflow-mini.mjs` (Node, 0 gói, cổng 41812) có 5 lỗi cài sẵn + lộ stack trace; mã nguồn in nguyên văn trong 2.4, bản sửa + output thật
+  trong đáp án che. Bản gốc + kịch bản chạy lại: máy nhà `~/vbg-dp/scratchpad/tak/lab/` (chay-lab2.sh, out-lab2*.txt).
+  Mỗi chương từ nay có mục 🎤 "Phỏng vấn viên sẽ hỏi" (5 câu tiếng Anh + đáp án mẫu) trong bài lab, góc hacker có nguồn khi chạm dữ liệu.
+- 24/11/2026 (agent tak): **Chương 3** (`s03-commit-pr-review.mjs`: tak-3-1 … tak-3-4 + quiz 10 câu tak-3-5). Chạy thật: hook `commit-msg`
+  tự viết (in nguyên văn trong 3.1, cho qua fixup!/Merge/Revert như commitlint), repo git tạm với ngày cố định ⇒ mã băm tái lập được;
+  thử biên tìm ra page=-1 trả phiếu 3–7 (slice âm) ⇒ thành mục "Risks" của PR mẫu và góp ý review. Kịch bản: `chay-lab3.sh`, `chay-lab34.sh`.
+- 24/11/2026 (agent tak): **Chương 4** (`s04-email-chat.mjs`: tak-4-1 … tak-4-6 + quiz 10 câu tak-4-7). Chạy thật: công cụ `kiem-email.mjs`
+  (Node, 0 gói, in nguyên văn trong 4.6; bắt tiêu đề mơ hồ, đề nghị bị chôn, ASAP/EOD, giờ thiếu múi giờ, xin lỗi lặp, chat "hi" trơ trọi…)
+  và `mui-gio.mjs` (đổi giờ ICT/JST/IST/Berlin/London/NY/SF — lễ Tạ ơn 26/11/2026, giờ mùa hè Berlin 30/3/2027). Mẫu email + output
+  được SINH tự động vào tệp chương (p0) từ máy nhà `~/vbg-dp/scratchpad/tak/lab/ch4/` (mau/, lab46/, out-*.txt) ⇒ khớp từng byte.
+  Đáp án mẫu các bài thực hành cũng qua công cụ (0 cảnh báo). 🎤 5 câu hành vi tiếng Anh (OJT) ở 4.6.
+- 24/11/2026 (agent tak): **Chương 5** (`s05-qa-list-spec.mjs`: tak-5-1 … tak-5-4 + quiz 10 câu tak-5-5). Chạy thật: công cụ `kiem-qa.mjs`
+  (Node, 0 gói, ~100 dòng, in nguyên văn trong 5.4; kiểm Q&A list CSV: mã Q-NNN, một câu/dòng, câu hỏi mở, thiếu đề xuất/tham chiếu/hạn,
+  từ mơ hồ, trạng thái Answered≠Closed, quá hạn, câu trùng; `--open` in danh sách câu mở cho email) + `kiem-email.mjs` của Ch4;
+  spec mẫu `srs-reservation-v0.3/v0.4.txt` (mô-đun đặt trước thiết bị, ~3 trang, 14 vùng mơ hồ cài sẵn) so bằng `git diff --no-index`.
+  Mẫu + output SINH vào tệp chương (p0) bằng `gen-p0.mjs` từ máy nhà `~/vbg-dp/scratchpad/tak/lab/ch5/` (chay-ch5.sh chạy lại tất cả).
+- 24/11/2026 (agent tak): **Chương 6** (`s06-noi-standup-demo-hop.mjs`: tak-6-1 … tak-6-5 + quiz 10 câu tak-6-6). Chạy thật: công cụ `kiem-noi.mjs`
+  (Node, 0 gói, ~100 dòng, in nguyên văn trong 6.5; ba chế độ standup/demo/minutes: thời lượng + số từ mỗi phút, từ che trạng thái (almost done, %, try, ASAP),
+  lỗi kiểu người Việt (Yesterday I fix, discuss about…), câu > 25 từ, khuôn từng loại, action item thiếu @người/ngày/múi giờ) + `nghe.py`
+  (faster-whisper small.en, CPU, ngoại tuyến, tất định). Giọng mẫu eSpeak NG đọc câu đúng/câu kiểu người Việt ⇒ Whisper nghe "fifteen" nhấn sai thành 50,
+  "thirteenth" mất -nth thành 30th, "fixed… merged" nuốt đuôi thành "pick… murr", nhưng vẫn đoán đúng "cache/width/height" đọc sai (⇒ Whisper chỉ là ngưỡng
+  tối thiểu); tên Linh/Minh thành Lynn/Min; giọng máy Mỹ đọc nhanh làm số dính số thứ tự ("350. 2." ⇒ 352). Mẫu + output SINH vào tệp chương (p0) bằng
+  `gen-p0.mjs` từ máy nhà `~/vbg-dp/scratchpad/tak/lab/ch6/` (chay-ch6.sh chạy lại tất cả; chạy hai lần cho kết quả y hệt).
+  Chưa có tệp âm thanh mẫu đăng web (khung kế hoạch ghi "file âm thanh mẫu TTS") — bài dùng lệnh espeak-ng/say để người học tự tạo; nếu muốn đăng .wav thì
+  lấy ở lab/ch6/am/ (giọng máy, chỉ hợp để luyện số).
+- 24/11/2026 (agent tak): **Chương 7** (`s07-tu-vung-phat-am.mjs`: tak-7-1 … tak-7-4 + quiz 10 câu tak-7-5). Chạy thật: `dem-tu.mjs` (Node, 0 gói,
+  in nguyên văn ở 7.1; đếm họ từ nghề theo 5 tình huống + cụm động từ) trên lịch sử commit thật actions/cache (671 commit) + oh-my-zsh và 628 NEWS/CHANGELOG
+  của /usr/share/doc; `kiem-thuat-ngu.mjs` (39 dòng, in nguyên văn ở 7.4; so bản chép Whisper với danh sách thuật ngữ, đếm số lần xuất hiện; `--csv` xuất thẻ
+  Anki/Quizlet); 100 mẫu câu qua `kiem-email.mjs` Ch4 (100/100, lượt đầu bắt "I'm off tomorrow" ⇒ đã sửa); eSpeak NG đọc đúng/kiểu Việt ⇒ Whisper:
+  từ đơn (cache→CASH, deploy kiểu Việt→"The Lawyer"), trong câu 17/20 (queue→"QA", Azure→"Azura", archive→"achieve"), 10 thuật ngữ Spring/Node 6/10
+  (CORS=cores, PostgreSQL máy đọc sai, OAuth mất O, nối âm "bean at"). Mẫu + output SINH vào tệp chương (p0) bằng `gen-p0.mjs` từ máy nhà
+  `~/vbg-dp/scratchpad/tak/lab/ch7/` (chay-ch7.sh chạy lại tất cả; hai lần cho kết quả y hệt). Góc hacker: typosquatting crossenv (npm, 8/2017).
+- 24/11/2026 (agent tak): **Chương 8** (`s08-bai-test-capstone.mjs`: tak-8-1 … tak-8-3, quiz 20 câu tak-8-4, + bài MỚI **tak-8-5-phong-van-ojt**
+  — slug mới đã thêm vào khung ở tệp khoá, đứng SAU quiz để không đổi slug tak-8-4-tong-ket). Chạy thật: `cham-de.mjs` (chấm đề luyện 26 câu A–C, chỉ bài cần
+  đọc lại), `cham-tuan.mjs` (chấm 13 sản phẩm của tuần UAT bằng hook commit-msg Ch3 + kiem-email Ch4 + kiem-qa Ch5 + kiem-noi Ch6 + `kiem-phieu.mjs` mới cho
+  bug report/PR), `nhat-ky.mjs` (sổ luyện 15 phút/ngày: chuỗi ngày, phút theo kỹ năng, cảnh báo kỹ năng bị bỏ) — cả bốn in nguyên văn; bản nháp tuần 1/13,
+  bản mẫu 13/13; Whisper nghe standup/demo mẫu (Priya→"Prius", "at 11:01"→"NAB1101", TC-41→"TC40 1"); 8.5: Java 21 HashMap (khoá thiếu equals/hashCode,
+  khoá bị đổi sau put), PostgreSQL 16 EXPLAIN 200.000 dòng (Seq Scan / Index Scan / lower() bỏ chỉ mục) và deadlock hai phiên; tám đáp án D-E-T qua
+  eSpeak→Whisper→kiem-thuat-ngu 16/18 ("approve endpoint"→"approving point" do nối âm; "n plus 1" do mẫu chấp nhận hẹp) → 18/18 sau khi sửa.
+  Thông tin quy trình FPT Software ghi rõ KHÔNG chính thức (tra 20/11/2026), kiểm lại với HR. Góc bảo mật: Toyota T-Connect (7/10/2022, thầu phụ đăng khoá
+  lên GitHub), Contagious Interview (Unit 42, 21/11/2023), Ronin/Axie (The Block 6/7/2022). Mẫu + output SINH vào tệp chương (p0) bằng `gen-p0.mjs` từ máy
+  nhà `~/vbg-dp/scratchpad/tak/lab/ch8/` (chay-ch8.sh chạy lại tất cả; hai lần y hệt trừ số tiến trình PostgreSQL trong thông báo deadlock).
+- **Bàn giao:** cả 9 mục (46 bài) đã có nội dung web. Việc còn lại: PHA B — video tak-* (chưa bắt đầu; chưa có KE-HOACH-TA-DI-LAM.md, src/khung/tak/,
+  tsconfig.tak.json). Bài quiz (tak-1-5, 2-5, 3-5, 4-7, 5-5, 6-6, 7-5, 8-4) không làm video.

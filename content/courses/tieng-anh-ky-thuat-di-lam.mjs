@@ -11,6 +11,13 @@
 import { khung } from './_chung/khung.mjs';
 import s00 from './tieng-anh-ky-thuat-di-lam/s00-bat-dau.mjs';
 import s01 from './tieng-anh-ky-thuat-di-lam/s01-doc-tieng-anh-ky-thuat.mjs';
+import s02 from './tieng-anh-ky-thuat-di-lam/s02-ticket-bug-report.mjs';
+import s03 from './tieng-anh-ky-thuat-di-lam/s03-commit-pr-review.mjs';
+import s04 from './tieng-anh-ky-thuat-di-lam/s04-email-chat.mjs';
+import s05 from './tieng-anh-ky-thuat-di-lam/s05-qa-list-spec.mjs';
+import s06 from './tieng-anh-ky-thuat-di-lam/s06-noi-standup-demo-hop.mjs';
+import s07 from './tieng-anh-ky-thuat-di-lam/s07-tu-vung-phat-am.mjs';
+import s08 from './tieng-anh-ky-thuat-di-lam/s08-bai-test-capstone.mjs';
 
 /* Ghép chương đã soạn vào khung THEO SLUG: bài đã soạn thay bài khung, bài chưa soạn giữ nguyên "Đang soạn"; title chương giữ của khung. */
 function ghep(khungChuong, that) {
@@ -22,6 +29,13 @@ function ghep(khungChuong, that) {
 function ghepChuong(sections) {
   sections[0] = ghep(sections[0], s00);
   sections[1] = ghep(sections[1], s01);
+  sections[2] = ghep(sections[2], s02);
+  sections[3] = ghep(sections[3], s03);
+  sections[4] = ghep(sections[4], s04);
+  sections[5] = ghep(sections[5], s05);
+  sections[6] = ghep(sections[6], s06);
+  sections[7] = ghep(sections[7], s07);
+  sections[8] = ghep(sections[8], s08);
   return sections;
 }
 
@@ -105,6 +119,7 @@ export default {
       ['tuan-mo-phong', 'Capstone — a simulated work week in English', 'Dự án cuối khoá — một tuần làm việc mô phỏng bằng tiếng Anh', 'Mỗi ngày một nhóm việc · Nộp bài viết + ghi âm · Rubric chấm từng sản phẩm'],
       ['tu-cham', 'Self-review, feedback and your next 3 months of practice', 'Tự chấm, nhận phản hồi và kế hoạch luyện 3 tháng tới', 'So bài đầu khoá và cuối khoá · Kế hoạch 15 phút/ngày · Liên kết interview-prep ch8 khi chuẩn bị phỏng vấn'],
       ['tong-ket', 'Final quiz', 'Kiểm tra tổng kết', '20 câu trộn cả khoá: đọc, viết, chọn câu phù hợp tình huống'],
+      ['phong-van-ojt', 'The English interview for an OJT place at FPT Software: technical answers, a full mock interview, questions to ask', 'Phỏng vấn tiếng Anh xin OJT ở FPT Software: trả lời câu kỹ thuật, một buổi phỏng vấn thử trọn vẹn, câu nên hỏi lại', 'Khuôn D-E-T cho câu kỹ thuật · Tám câu hay gặp có bằng chứng chạy thật · Buổi phỏng vấn thử trọn vẹn · Góc bảo mật phỏng vấn giả'],
     ]],
   ])),
 };

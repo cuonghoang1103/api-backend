@@ -1187,3 +1187,10 @@ Mẫu một mục:
 - **Cách sửa:** đọc IP mới ở `GET /api/v1/instances/` (`public_ipaddr` — `/api/v0/instances/` đã bị khai tử), sửa `HostName` hai máy, `ssh-keygen -R` khoá cũ, `systemctl --user restart vbg-giong@t{1..6} vbg-render@t{1..7} vbg-render@t{10..17}` ⇒ làn nhận việc lại sau 1 phút. Dữ liệu `/root` (model, vbg, `.r2-tam.env`) còn nguyên.
 - **Ảnh hưởng:** ~45 phút vast9 không làm gì (vẫn tính tiền), các tập đang chạy dở phải làm lại.
 - **Bài học:** kiểm hằng giờ thấy ssh timeout ⇒ việc đầu tiên là so `public_ipaddr` trên API với `HostName`, đừng đoán máy chết. Khoá ssh của Mac không vào được IP mới ⇒ đo vast9 qua `ssh linux-nha 'ssh vast9 …'`.
+
+### 25/11/2026 — vòng đẩy lại R2 hỏng 31/31 tập (đường dẫn thật /mnt/kioxia)
+- **Triệu chứng:** `~/agent-nha/r2/vong-lai.sh` (linux-nha) từ 14:26 báo `✗ BỎ QUA … (tải lên R2 hỏng 3 lần)` mọi tập, lỗi `@aws-sdk XML parse error: mismatched tags <hr> and </body>` (R2 trả trang lỗi HTML).
+- **Nguyên nhân:** script lập danh sách bằng `os.path.abspath(d)` ⇒ đường dẫn thật `/mnt/kioxia/CuongThai-KhoaHoc-videos/…` (`~/Videos/CuongThai-KhoaHoc` là symlink sang ổ Kioxia); `len-r2.mts` tạo key R2 bằng `path.relative(GOC = ~/Videos/CuongThai-KhoaHoc, thu)` ⇒ key thành `videos/bai-giang/../../../mnt/kioxia/…` ⇒ R2 từ chối.
+- **Cách sửa:** in đường dẫn dưới `~/Videos/CuongThai-KhoaHoc/<tương đối>` thay vì `abspath`; chạy lại vòng 15:39 ⇒ tải được ngay. Không có r2Url hỏng nào bị ghi (len-r2 chỉ ghi khi tải xong).
+- **Ảnh hưởng:** ~75 phút vòng R2 chạy không; video lồng giọng lại chậm lên web tương ứng.
+- **Bài học:** công cụ nào suy ra tên/khoá từ đường dẫn tương đối thì phải đưa đường dẫn đi qua ĐÚNG gốc nó dùng — không `realpath`/`abspath` khi có symlink; và lượt đầu của vòng mới phải xem ≥1 tập "✓" trước khi bỏ đi.

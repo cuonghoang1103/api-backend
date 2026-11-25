@@ -62,7 +62,7 @@ export default {
     "csi106-11-1-database": { yt: "OqjJjpjDRLc", credit: "IBM Technology — What is a Relational Database?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/11-co-so-du-lieu/11-03-co-so-du-lieu-mo-hinh-quan-he-7360a915.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 12 — An toàn & đạo đức
-    "csi106-12-0-slides-an-toan-dao-duc": { yt: "bPVaOlJ6ln0", credit: "CrashCourse — Cybersecurity: Crash Course Computer Science #31" },
+    "csi106-12-0-slides-an-toan-dao-duc": { yt: "bPVaOlJ6ln0", credit: "CrashCourse — Cybersecurity: Crash Course Computer Science #31", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/12-an-toan-dao-duc/12-01-slide-an-toan-dao-duc-d6ae41d1.mp4' }, defaultVideoTrack: 'VI'},
     "csi106-12-1-security-ethics": { yt: "jhXCTbFnK8o", credit: "CrashCourse — Cryptography: Crash Course Computer Science #33" },
 
     // Chương 13 — Nhập môn AI

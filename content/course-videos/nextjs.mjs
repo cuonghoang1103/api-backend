@@ -24,7 +24,7 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Giới thiệu ─────────────────────────────────────────────── */
-    'nextjs-0-1-gioi-thieu': { yt: 'Tn6-PIqc4UM', credit: 'Fireship — React in 100 Seconds' },
+    'nextjs-0-1-gioi-thieu': { yt: 'Tn6-PIqc4UM', credit: 'Fireship — React in 100 Seconds', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-03-gioi-thieu-a90cb840.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-0-2-react-vs-nextjs': { yt: 'x7cQ3mrcKaY', credit: 'JSConf — Pete Hunt: React: Rethinking best practices -- JSConf EU', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-04-react-vs-nextjs-ca5ddae1.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-0-3-cai-dat': { yt: 'Sklc_fQBmcs', credit: 'Fireship — Next.js in 100 Seconds // Plus Full Beginner\'s Tutorial', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-05-cai-dat-c3fb108a.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-0-4-cach-hoc': { yt: '7DC3ZrxvUUU', credit: 'Codevolution — Next.js 15 Tutorial - 4 - Before We Start', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-06-cach-hoc-f7bc2b74.mp4' }, defaultVideoTrack: 'VI'},
@@ -166,5 +166,6 @@ export default {
     'nextjs-20-4-vps-stale-build': { yt: 'DCJiQBag6Fs', credit: 'ByteGrad — Dockerize Next.js 16 & Deploy To VPS (+ Custom Domain, SSL, CDN Cloudflare, Docker Compose)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-04-vps-stale-build-49dc5006.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-20-5-quy-trinh-an-toan': { yt: 'ipDdja_PduE', credit: 'ByteGrad — Next.js + Postgres Dev / Prod (VPS Coolify, Prisma, Migrations)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-05-quy-trinh-an-toan-a27a0acd.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-0-0-bat-dau-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-02-bat-dau-tai-day-2-13c2dbb6.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-0-0-bat-dau-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-01-bat-dau-tai-day-1-1745f44a.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

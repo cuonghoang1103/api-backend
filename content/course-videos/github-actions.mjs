@@ -34,7 +34,7 @@ export default {
     'ga-0-4-ban-do': { yt: 'Xwpi0ITkL3U', credit: "DevOps Directive — Complete GitHub Actions Course - From BEGINNER to PRO", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-07-ban-do-000c3691.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 1 — Tệp workflow, và những cái bẫy tới từ YAML ── */
-    'ga-1-0-slides': { yt: 'PG19_K1300A', credit: "DevTips Daily — Triggers & Events in GitHub Actions (push, pull_request, cron & more)" },
+    'ga-1-0-slides': { yt: 'PG19_K1300A', credit: "DevTips Daily — Triggers & Events in GitHub Actions (push, pull_request, cron & more)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-01-slide-chuong-1-169ba826.mp4' }, defaultVideoTrack: 'VI'},
     'ga-1-1-la-yaml': { yt: '1uFVr15xDGg', credit: "TechWorld with Nana — Yaml Tutorial | Learn YAML in 18 mins", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-02-la-yaml-b1ad07fe.mp4' }, defaultVideoTrack: 'VI'},
     'ga-1-2-kich-hoat': { yt: '3tC42nIui6A', credit: "Testing Mini Bytes — Part 3 - Workflow Triggers | Different Types of Triggers in Github Actions | Scheduling Workflow |" },
     'ga-1-3-lich-cron': { yt: 'kh7piyS2XeE', credit: "Talking tech with Techielass — Schedule GitHub Actions Using Cron Expressions" },
@@ -132,7 +132,7 @@ export default {
     'ga-13-4-mo-rong': { yt: 'nrnMNre9v3A', credit: "Mathis Van Eetvelde — Self-host your Github Actions runners on Kubernetes NOW!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-05-mo-rong-bbdd01a6.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 14 — Cổng chất lượng, bảo mật chuỗi cung ứng & phát hành ── */
-    'ga-14-0-slides': { yt: '19l6sLyR3zo', credit: "NDC Conferences — Beyond the Commit: Weaponizing and Hardening GitHub Actions - Niek Palm - NDC Security 2026" },
+    'ga-14-0-slides': { yt: '19l6sLyR3zo', credit: "NDC Conferences — Beyond the Commit: Weaponizing and Hardening GitHub Actions - Niek Palm - NDC Security 2026", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-01-slide-chuong-14-b5809c0b.mp4' }, defaultVideoTrack: 'VI'},
     'ga-14-1-cong-chat-luong': { yt: 'ZTbM-h9RZOo', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 6 - Repository Rulesets", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-02-cong-chat-luong-c993d167.mp4' }, defaultVideoTrack: 'VI'},
     'ga-14-2-bao-mat-chuoi-cung-ung': { yt: 'pTKS99Nfaxw', credit: "fwd:cloudsec — Vulnerabilities and Misconfigurations in GitHub Actions - Rojan Rijal", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-03-bao-mat-chuoi-cung-ung-66932091.mp4' }, defaultVideoTrack: 'VI'},
     'ga-14-3-phat-hanh': { yt: 'mah8PV6ugNY', credit: "Dave's Dev Channel — Automate your GitHub Actions Releases (with Semantic Release)!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-04-phat-hanh-6bc65eea.mp4' }, defaultVideoTrack: 'VI'},

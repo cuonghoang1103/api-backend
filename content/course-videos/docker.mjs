@@ -19,13 +19,13 @@ export default {
     /* ── Mục 0 — Docker giải quyết gì, và cài đặt ── */
     'dk-0-5-bat-dau-tai-day': { yt: '3N3n9FzebAA', credit: "dotconferences — dotScale 2013 - Solomon Hykes - Why we built Docker", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-01-bat-dau-tai-day-e2e7f706.mp4' }, defaultVideoTrack: 'VI'},
     'dk-0-6-bat-dau-khi-khong-co': { yt: 'zFa9_K8BS8I', credit: "TechWorld with Nana — Learn Docker in 2026 - Complete Roadmap Beginner to Pro", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-02-bat-dau-khi-khong-co-4af94ed7.mp4' }, defaultVideoTrack: 'VI'},
-    'dk-0-0-slides': { yt: 'xfBbLg6-4xY', credit: "Việt Nguyễn AI — Tất tần tật về Docker trong 10 phút" },
+    'dk-0-0-slides': { yt: 'xfBbLg6-4xY', credit: "Việt Nguyễn AI — Tất tần tật về Docker trong 10 phút", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-03-slide-muc-0-16c23193.mp4' }, defaultVideoTrack: 'VI'},
     'dk-0-1-van-de': { yt: 'ZZ10b63xnQc', credit: "KodeKloud — Docker Explained for Absolute Beginners [2026]", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-04-van-de-952a9b4a.mp4' }, defaultVideoTrack: 'VI'},
     'dk-0-2-cai-dat': { yt: 'Ic48-WLhtHg', credit: "Hỏi Dân IT — #2 GETTING STARTED VỚI DOCKER DESKTOP -  CHUẨN BỊ MÔI TRƯỜNG CHO DOCKER |Docker Siêu Dễ Cho Beginner", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-05-cai-dat-d859476c.mp4' }, defaultVideoTrack: 'VI'},
     'dk-0-3-nam-phut': { yt: 'krHjeCT8g3s', credit: "Hỏi Dân IT — #3 HELLO WORLD VỚI DOCKER - CHẠY ỨNG DỤNG ĐẦU TIÊN BẰNG DOCKER | Docker Siêu Dễ Cho Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-06-nam-phut-c773c026.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 1 — Container & image: mô hình tư duy ── */
-    'dk-1-0-slides': { yt: 'sK5i-N34im8', credit: "Docker — Cgroups, namespaces, and beyond: what are containers made from?" },
+    'dk-1-0-slides': { yt: 'sK5i-N34im8', credit: "Docker — Cgroups, namespaces, and beyond: what are containers made from?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-01-slide-chuong-1-84b84846.mp4' }, defaultVideoTrack: 'VI'},
     'dk-1-1-container-la-gi': { yt: '8fi7uSYlOdc', credit: "GOTO Conferences — Containers From Scratch • Liz Rice • GOTO 2018", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-02-container-la-gi-582522a4.mp4' }, defaultVideoTrack: 'VI'},
     'dk-1-2-tang-anh': { yt: 'U_9o_KtffNM', credit: "Krish Dinesh — How Docker REALLY Edits Files 😳 | OverlayFS, COW & Whiteout Explained", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-03-tang-anh-546bf54f.mp4' }, defaultVideoTrack: 'VI'},
     'dk-1-3-vong-doi': { yt: 'Orrwfu1lvS8', credit: "CNCF [Cloud Native Computing Foundation] — PID 1, SIG Handling, Hooks & Probes: Managing Container Lifecycle Correctly - Anmol Krishan Sachdeva", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-04-vong-doi-0a601470.mp4' }, defaultVideoTrack: 'VI'},
@@ -33,7 +33,7 @@ export default {
     'dk-1-5-ngan-xep-runtime': { yt: 'RyXL1zOa8Bw', credit: "CNCF [Cloud Native Computing Foundation] — OCI, CRI, ??: Making Sense of the Container Runtime Landscape in Kubernetes - Phil Estes, IBM", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-06-ngan-xep-runtime-86ec1ed5.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 2 — Chạy container ── */
-    'dk-2-0-slides': { yt: 'QTnVztPl2Uw', credit: "Elton Stoneman — Learn Docker in a Month of Lunches: DIAMOL 01" },
+    'dk-2-0-slides': { yt: 'QTnVztPl2Uw', credit: "Elton Stoneman — Learn Docker in a Month of Lunches: DIAMOL 01", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-01-slide-chuong-2-d1c7cc4a.mp4' }, defaultVideoTrack: 'VI'},
     'dk-2-1-docker-run': { yt: 'pry-Vs4Ew6Y', credit: "DheerajTechInsight — Docker CLI Explained | run, exec, logs & inspect (Daily Docker Commands) | Cloud & Devops", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-02-docker-run-4f53f3f3.mp4' }, defaultVideoTrack: 'VI'},
     'dk-2-2-quan-sat': { yt: 'lZvPcj9kMz4', credit: "DevOps Journey — Using Docker Inspection like a Boss", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-03-quan-sat-ad36fd15.mp4' }, defaultVideoTrack: 'VI'},
     'dk-2-3-vao-ben-trong': { yt: 'tLK9nNFHWH8', credit: "TechWorld with Nana — Debugging Docker Containers with docker exec and docker logs || Docker Tutorial 5", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-04-vao-ben-trong-11b1897b.mp4' }, defaultVideoTrack: 'VI'},
@@ -41,7 +41,7 @@ export default {
     'dk-2-5-gioi-han-restart': { yt: 'mgMhQo279Xk', credit: "Leela Web Dev — 45. Docker HEALTHCHECK Instruction Explained with Examples - #docker", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-06-gioi-han-restart-07b12045.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 3 — Image & registry ── */
-    'dk-3-0-slides': { yt: 'F1aMrAqUjQk', credit: "Elton Stoneman — DIAMOL 04: Sharing images with Docker Hub and other registries" },
+    'dk-3-0-slides': { yt: 'F1aMrAqUjQk', credit: "Elton Stoneman — DIAMOL 04: Sharing images with Docker Hub and other registries", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-01-slide-chuong-3-1c958ab3.mp4' }, defaultVideoTrack: 'VI'},
     'dk-3-1-ten-anh': { yt: 'CvSFl4jI8Hg', credit: "Docker — Container Images Deep Dive (DockerCon 2023)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-02-ten-anh-2bcf08a1.mp4' }, defaultVideoTrack: 'VI'},
     'dk-3-2-tag-digest': { yt: 'AiAU7wnPCrQ', credit: "anthonywritescode — docker pull by sha256 digest (advanced) anthony explains #537", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-03-tag-digest-28a813ea.mp4' }, defaultVideoTrack: 'VI'},
     'dk-3-3-registry': { yt: 'TGLfQZ9qRaI', credit: "package main — Self-Hosting a Container Registry", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-04-registry-da86f6f7.mp4' }, defaultVideoTrack: 'VI'},
@@ -65,7 +65,7 @@ export default {
     'dk-5-5-chan-doan-dung-cham': { yt: '3B89b_gXAPU', credit: "Ardan Labs — Docker BuildKit Tutorial: Why do we need a new Docker Builder?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-06-chan-doan-dung-cham-36fa5176.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 6 — Ảnh nhỏ và an toàn ── */
-    'dk-6-0-slides': { yt: '8vXoMqWgbQQ', credit: "TechWorld with Nana — Top 8 Docker Best Practices for using Docker in Production" },
+    'dk-6-0-slides': { yt: '8vXoMqWgbQQ', credit: "TechWorld with Nana — Top 8 Docker Best Practices for using Docker in Production", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-01-slide-chuong-6-06c9f338.mp4' }, defaultVideoTrack: 'VI'},
     'dk-6-1-multi-stage': { yt: 'V0kTEk7YA70', credit: "Raghav Dua — Docker Multistage builds explained in 8 minutes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-02-multi-stage-47873f12.mp4' }, defaultVideoTrack: 'VI'},
     'dk-6-2-chon-anh-nen': { yt: '82ZCJw9poxM', credit: "DevOps & AI Toolkit — Containers Are Not VMs! Which Base Container (Docker) Images Should We Use?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-03-chon-anh-nen-5f9a43d8.mp4' }, defaultVideoTrack: 'VI'},
     'dk-6-3-cat-kich-thuoc': { yt: 't779DVjCKCs', credit: "Better Stack — Docker Image BEST Practices - From 1.2GB to 10MB", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-04-cat-kich-thuoc-42f5cd5f.mp4' }, defaultVideoTrack: 'VI'},
@@ -89,7 +89,7 @@ export default {
     'dk-8-5-chan-doan-mang': { yt: 'wqtEUFDdZXU', credit: "VirtualizationHowto — Netshoot Docker container for Docker compose networking host troubleshooting", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-06-chan-doan-mang-5b984876.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 9 — Docker Compose ── */
-    'dk-9-0-slides': { yt: 'WX0YLs1Jnjs', credit: "Hỏi Dân IT — #10 DOCKER COMPOSE -  Dung Hợp Ứng Dụng Docker Thành Duy Nhất | Docker Siêu Dễ Cho Beginners" },
+    'dk-9-0-slides': { yt: 'WX0YLs1Jnjs', credit: "Hỏi Dân IT — #10 DOCKER COMPOSE -  Dung Hợp Ứng Dụng Docker Thành Duy Nhất | Docker Siêu Dễ Cho Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-01-slide-chuong-9-50afc5a2.mp4' }, defaultVideoTrack: 'VI'},
     'dk-9-1-file-dau-tien': { yt: 'HGKfE-cn9y4', credit: "typecraft — Master Docker Compose the Way I Wish I Did – Docker for Newbs EP 2", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-02-file-dau-tien-f123364f.mp4' }, defaultVideoTrack: 'VI'},
     'dk-9-2-tra-cuu-dich-vu': { yt: 'n7fuMqisdR4', credit: "Sarvin Style Coding — Docker Compose Tutorial for Beginners (2026) | Run Multiple Containers with YAML", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-03-tra-cuu-dich-vu-fb17806d.mp4' }, defaultVideoTrack: 'VI'},
     'dk-9-3-thu-tu-khoi-dong': { yt: 'jf6sQsz0M1M', credit: "TECH SCHOOL — [Backend #25] How to write docker-compose file and control service start-up orders with wait-for.sh", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-04-thu-tu-khoi-dong-4107d086.mp4' }, defaultVideoTrack: 'VI'},
@@ -105,7 +105,7 @@ export default {
     'dk-10-5-nginx-lap-rap': { yt: 'J9jKKeV1XVE', credit: "Programonaut — How to Secure Your Applications with HTTPS Using Docker, NGINX, and Let's Encrypt", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-06-nginx-lap-rap-9c924fd7.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 11 — Chạy trên production ── */
-    'dk-11-0-slides': { yt: 'F-9KWQByeU0', credit: "Dreams of Code — Setting up a production ready VPS is a lot easier than I thought." },
+    'dk-11-0-slides': { yt: 'F-9KWQByeU0', credit: "Dreams of Code — Setting up a production ready VPS is a lot easier than I thought.", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-01-slide-chuong-11-dd057a54.mp4' }, defaultVideoTrack: 'VI'},
     'dk-11-1-restart': { yt: 'CsIZy4mBM5A', credit: "DheerajTechInsight — Docker Healthchecks & Restart Policies Explained | Make Containers Production-Ready | Cloud & Devops", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-02-restart-14f735f0.mp4' }, defaultVideoTrack: 'VI'},
     'dk-11-2-han-muc-137': { yt: '1wH0KyQ5kiE', credit: "Mr. Singh — Resource Managment in Docker -12 | how to limit CPU and memory in a container| Resource Utilisation", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-03-han-muc-137-4492eb54.mp4' }, defaultVideoTrack: 'VI'},
     'dk-11-3-log': { yt: 'Zlj39xXPu2k', credit: "Better Stack — Docker Logging - \"docker logs\" Command | Log Drivers | Logging Strategies", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-04-log-660a78ad.mp4' }, defaultVideoTrack: 'VI'},
@@ -113,7 +113,7 @@ export default {
     'dk-11-5-dia-giam-sat': { yt: 'w77eQ8LMn8g', credit: "kubernetesWay — Docker Maintenance | How to fix the running out of disk space error in Docker?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-06-dia-giam-sat-4d558fad.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 12 — Chẩn đoán container ── */
-    'dk-12-0-slides': { yt: 'dLlxAzKVZNg', credit: "Docker — Debugging Innovation with Docker (DockerCon 2023)" },
+    'dk-12-0-slides': { yt: 'dLlxAzKVZNg', credit: "Docker — Debugging Innovation with Docker (DockerCon 2023)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-01-slide-chuong-12-3731ed53.mp4' }, defaultVideoTrack: 'VI'},
     'dk-12-1-phuong-phap': { yt: 'DK1ew1HpmeY', credit: "Docker — Troubleshooting Tips from a Docker Support Engineer", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-02-phuong-phap-97be4202.mp4' }, defaultVideoTrack: 'VI'},
     'dk-12-2-khong-khoi-dong': { yt: 'kkV6z4bNBGw', credit: "DotComIt — How to Debug a Docker Container that Doesn't Start?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-03-khong-khoi-dong-36b3d7ed.mp4' }, defaultVideoTrack: 'VI'},
     'dk-12-3-khoi-dong-roi-chet': { yt: 'PYssZ081c3I', credit: "NextOps Videos — 11 Troubleshooting Docker Containers - Container Logs, Restart Policies", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-04-khoi-dong-roi-chet-0524fe40.mp4' }, defaultVideoTrack: 'VI'},
@@ -121,28 +121,28 @@ export default {
     'dk-12-5-ket-khoa': { yt: 'fqMOX6JJhGo', credit: "freeCodeCamp.org — Docker Tutorial for Beginners - A Full DevOps Course on How to Run Applications in Containers", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-06-ket-khoa-a26725d8.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 13 — Docker trong vòng lặp phát triển hằng ngày ── */
-    'dk-13-0-slides': { yt: 'zkMRWDQV4Tg', credit: "ArjanCodes — How To Use Docker To Make Local Development A Breeze" },
+    'dk-13-0-slides': { yt: 'zkMRWDQV4Tg', credit: "ArjanCodes — How To Use Docker To Make Local Development A Breeze", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-01-slide-chuong-13-ea0188bb.mp4' }, defaultVideoTrack: 'VI'},
     'dk-13-1-dev-containers': { yt: 'kPMA9cnpScU', credit: "Syntax — you should be using dev containers", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-02-dev-containers-ef16afe9.mp4' }, defaultVideoTrack: 'VI'},
     'dk-13-2-hot-reload-debug': { yt: 'u1q8AyNMxd4', credit: "Docker — Deciding Between Volumes, Bind Mounts, and Compose Watch (DockerCon 2023)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-03-hot-reload-debug-532a02fe.mp4' }, defaultVideoTrack: 'VI'},
     'dk-13-3-db-that-cho-test': { yt: 'sNg0bnMF_qY', credit: "Dreams of Code — Testcontainers have forever changed the way I write tests", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-04-db-that-cho-test-4ad9ab78.mp4' }, defaultVideoTrack: 'VI'},
     'dk-13-4-mac-windows': { yt: 'gcacQ29AjOo', credit: "Bret Fisher — Docker Desktop for macOS Setup and Tips", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-05-mac-windows-8ea32dd1.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 14 — Docker cho mọi việc: công cụ, tự host & AI ── */
-    'dk-14-0-slides': { yt: 'RUqGlWr5LBA', credit: "NetworkChuck — 18 Weird and Wonderful ways I use Docker" },
+    'dk-14-0-slides': { yt: 'RUqGlWr5LBA', credit: "NetworkChuck — 18 Weird and Wonderful ways I use Docker", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-01-slide-chuong-14-14b0d20f.mp4' }, defaultVideoTrack: 'VI'},
     'dk-14-1-cong-cu-khong-cai': { yt: 'Iz7HkvitqQE', credit: "Pablo's Spot — Productivity with Containers - AWS Command Line Interface using Docker Container", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-02-cong-cu-khong-cai-47927ab8.mp4' }, defaultVideoTrack: 'VI'},
     'dk-14-2-kho-du-lieu-mot-lenh': { yt: 'Hs9Fh1fr5s8', credit: "Caleb Curry — Run Postgres in a Docker Container (Easiest PostgreSQL Setup)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-03-kho-du-lieu-mot-lenh-1ecd8494.mp4' }, defaultVideoTrack: 'VI'},
     'dk-14-3-tu-host': { yt: 'AjWonyr8nxI', credit: "Christian Lempa — Caddy: Everyone Says It’s the EASIEST… I Tested It", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-04-tu-host-a6328e21.mp4' }, defaultVideoTrack: 'VI'},
     'dk-14-4-gpu-ai': { yt: '4YA1n2zs6XA', credit: "Techno Tim — Run AI Models with Docker - No Setup, No Headaches" },
 
     /* ── Chương 15 — Nâng cao: build, bảo mật & vượt khỏi một máy ── */
-    'dk-15-0-slides': { yt: 'V4f_sHTzvCI', credit: "Bret Fisher — Docker Production Best Practices from Bret Fisher at DockerCon" },
+    'dk-15-0-slides': { yt: 'V4f_sHTzvCI', credit: "Bret Fisher — Docker Production Best Practices from Bret Fisher at DockerCon", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-01-slide-chuong-15-faae2d3f.mp4' }, defaultVideoTrack: 'VI'},
     'dk-15-1-buildx-bake': { yt: '99QLREnqL7A', credit: "Bret Fisher — Docker Build the best way with Docker Bake", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-02-buildx-bake-1d7a71e6.mp4' }, defaultVideoTrack: 'VI'},
     'dk-15-2-rootless-podman': { yt: 'jeTKgAEyhsA', credit: "The Linux Foundation — Rootless Containers from Scratch - Liz Rice, Aqua Security", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-03-rootless-podman-dbb2e6eb.mp4' }, defaultVideoTrack: 'VI'},
     'dk-15-3-swarm': { yt: '_YsPt7dIvqU', credit: "Christian Lempa — Docker Swarm Mode: EASY Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-04-swarm-7d862698.mp4' }, defaultVideoTrack: 'VI'},
     'dk-15-4-kubernetes': { yt: 'ZW_ONm4-WdM', credit: "Christian Lempa — From Docker to Kubernetes with ease! // Helm + Kompose Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-05-kubernetes-ea0e887f.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 16 — Dự án cuối khoá: đóng gói và đưa một ứng dụng thật lên production ── */
-    'dk-16-0-slides': { yt: 'lEcULR30-GM', credit: "freeCodeCamp.org — Master Full-Stack Docker & CI/CD – Build a Production-Ready Pipeline" },
+    'dk-16-0-slides': { yt: 'lEcULR30-GM', credit: "freeCodeCamp.org — Master Full-Stack Docker & CI/CD – Build a Production-Ready Pipeline", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/16-du-an-cuoi-khoa/16-01-slide-chuong-16-79c34010.mp4' }, defaultVideoTrack: 'VI'},
     'dk-16-1-dong-goi': { yt: 'Zgx0o8QjJk4', credit: "Bret Fisher — Docker and Node.js Best Practices from Bret Fisher at DockerCon", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/16-du-an-cuoi-khoa/16-02-dong-goi-9d365c4d.mp4' }, defaultVideoTrack: 'VI'},
     'dk-16-2-compose-dev-prod': { yt: 'T--X3v2pwtU', credit: "Nick Janetakis — Best Practices Around Production Ready Web Apps with Docker Compose", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/16-du-an-cuoi-khoa/16-03-compose-dev-prod-dc3eba8b.mp4' }, defaultVideoTrack: 'VI'},
     'dk-16-3-ci-ghcr-deploy': { yt: '-NH8Urs4ST0', credit: "Nick Janetakis — Build Git Tagged Multi-Arch Docker Images with GitHub Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/16-du-an-cuoi-khoa/16-04-ci-ghcr-deploy-e674829b.mp4' }, defaultVideoTrack: 'VI'},

@@ -7,7 +7,7 @@ export default {
   courseSlug: 'mathematics-for-engineering',
   defaultVideoTrack: 'YT',
   lessons: {
-    "mae101-gioi-thieu": { yt: "WUvTyaaNkzM", credit: "3Blue1Brown — The essence of calculus" },
+    "mae101-gioi-thieu": { yt: "WUvTyaaNkzM", credit: "3Blue1Brown — The essence of calculus", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/mathematics-for-engineering/00-gioi-thieu-mon-hoc/00-01-gioi-thieu-ban-do-mon-05f9b69b.mp4' }, defaultVideoTrack: 'VI'},
     "mae101-dieu-kien-qua-mon": { yt: "jJxjFv_IqM4", credit: "The Math Sorcerer — Six Things That Will Get You An A in Calculus" },
     "mae101-chuan-dau-ra": { yt: "kjBOesZCoqc", credit: "3Blue1Brown — Essence of linear algebra preview" },
     "mae101-tai-lieu": { yt: "N0NOm4kWKy4", credit: "The Math Sorcerer — How To Self-Study Calculus FAST (From Zero)" },

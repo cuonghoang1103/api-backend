@@ -86,12 +86,12 @@ export default {
     "cea201-15-0c-slides-da-loi-cache-va-khong-dong-nhat": { yt: "w1pTBzHu4bI", credit: "Onur Mutlu Lectures — Computer Architecture - Lecture 19b: Heterogeneous Multi-Core Systems (ETH Zürich, Fall 2018)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/15-song-song-da-nhan/15-03-da-loi-cache-va-khong-dong-nhat-4d45eb26.mp4' }, defaultVideoTrack: 'VI'},
     // Practical Assembly Language with MARIE
     "cea201-asm-a-slides-hop-ngu-chi-thi-macro": { yt: "ZBOfeiRN3T8", credit: "Daniel Ross — Learn Assembly Programming - Instructions, Mnemonics, Operands, and Opcodes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/16-hop-ngu-marie/16-01-hop-ngu-chi-thi-macro-f279cdbe.mp4' }, defaultVideoTrack: 'VI'},
-    "cea201-asm-b-slides-trinh-dich-lien-ket-tai": { yt: "N2y6csonII4", credit: "EngMicroLectures — Compiling, assembling, and linking" },
+    "cea201-asm-b-slides-trinh-dich-lien-ket-tai": { yt: "N2y6csonII4", credit: "EngMicroLectures — Compiling, assembling, and linking", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/16-hop-ngu-marie/16-02-trinh-dich-lien-ket-nap-bced3de0.mp4' }, defaultVideoTrack: 'VI'},
     // Final Exam
     "cea201-final-exam-fe": { yt: "ZMSdU9DLbrU", credit: "Unify Study — Computer Organization and Architecture in One Class - Marathon |Computer Architecture Series - Day 3" },
     'cea201-cs2-so-hoc-so-nguyen': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/19-chuyen-sau/19-02-so-hoc-so-nguyen-70fc669a.mp4' }, defaultVideoTrack: 'VI'},
     'cea201-cs3-dau-phay-dong-ieee754': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/19-chuyen-sau/19-03-dau-phay-dong-ieee754-e5e28799.mp4' }, defaultVideoTrack: 'VI'},
     'cea201-cs4-khoi-dieu-khien-vi-chuong-trinh': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/19-chuyen-sau/19-04-khoi-dieu-khien-vi-chuong-trinh-9987b497.mp4' }, defaultVideoTrack: 'VI'},
-    'cea201-cs1-he-dem': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/19-chuyen-sau/19-01-he-dem-094155a7.mp4' }, defaultVideoTrack: 'VI' },
+    'cea201-cs1-he-dem': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/19-chuyen-sau/19-01-he-dem-094155a7.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

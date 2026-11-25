@@ -1215,3 +1215,10 @@ Mẫu một mục:
 - **Cách sửa:** chép bổ sung `rsync -a --update` khung từ linux-nha trước MỖI tập (không xoá gì); đã kéo đủ khung osd; vòng đêm khởi động lại sau khi tập đang render xong.
 - **Ảnh hưởng:** mất 1 lượt render Mac (~50 phút); tập được trả khoá, làn máy nhà render lại.
 - **Bài học:** máy phụ kéo việc từ máy chính phải đồng bộ MỌI phụ thuộc theo bản mới nhất, không chỉ "có/không có thư mục".
+
+### 26/11/2026 — khởi động lại vòng render đêm Mac giết ngang tập vừa nhận, khoá treo trên linux-nha
+- **Triệu chứng:** sau `launchctl kickstart -k` lúc 06:56, `render-khoa/dbi-8-b-2` còn trên linux-nha mà không làn nào giữ ⇒ tập bị bỏ ngoài hàng.
+- **Nguyên nhân:** lệnh chờ dò `■ dbi-7-b` trong 3 dòng cuối log; vòng cũ đã nhận tập kế (`▶ dbi-8-b-2` 06:55) ⇒ kill giữa lúc render, bẫy nhả khoá không chạy (SIGKILL).
+- **Cách sửa:** nhả khoá tay (`rmdir render-khoa/dbi-8-b-2`); lần sau chỉ khởi động lại khi KHÔNG có `lam-bai.mts` đang chạy, hoặc ngoài giờ 23–07.
+- **Ảnh hưởng:** ~1 phút render Mac bỏ đi; không mất dữ liệu.
+- **Bài học:** khởi động lại tiến trình kéo việc phải chờ trạng thái rảnh thật (không có tiến trình con), không chờ theo dòng log.

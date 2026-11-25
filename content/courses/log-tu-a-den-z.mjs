@@ -24,6 +24,8 @@
  * 24/11/2026 (agent lgz): Chương 4 SOẠN CHI TIẾT (log-tu-a-den-z/s04-ma-su-kien.mjs + s04/; output thật _demo/s04/ trên 17 + 40 tệp EVTX mẫu công khai, đọc bằng evtx-rec trong PowerShell 7).
  * 24/11/2026 (agent lgz): Chương 17 SOẠN CHI TIẾT (log-tu-a-den-z/s17-phong-van.mjs + s17/; output thật _demo/s17/tra-loi.sh trên gói log mẫu + đoạn log thật của Ch7–16).
  * 24/11/2026 (agent lgz): Chương 14 SOẠN CHI TIẾT (log-tu-a-den-z/s14-dieu-tra.mjs + s14/; output thật _demo/s14/ — log sinh tất định tao-vu.py (vu14/lab14) + EVTX mẫu công khai + 6 quy tắc SigmaHQ; chạy lại: bash _demo/s14/chay-s14.bash).
+ * 25/11/2026 (agent Mac tiếp quản lgz): Chương 6 SOẠN CHI TIẾT (log-tu-a-den-z/s06-macos.mjs + s06/; output thật _demo/s06/ chạy trên MacBook macOS 27.2.1,
+ *   đã ẩn danh — chạy lại: zsh _demo/s06/chay-s06.zsh rồi node scripts/log-khoa/sinh-ma.mjs).
  * 24/11/2026 (agent lgz): Chương 18 SOẠN CHI TIẾT (log-tu-a-den-z/s18-du-an.mjs + s18/; output thật _demo/s18/ — bộ su-co18 sinh tất định bởi tao-su-co.py (vps01 + router + Windows, 8 định dạng)
  *   + Loki 3.7.10; chạy lại: bash _demo/s18/chay-s18.bash).
  * Ảnh bìa: scripts/covers/log-tu-a-den-z.png (course-cover-offline.mjs, logo tự vẽ scripts/icons/log-lines.svg).
@@ -37,6 +39,7 @@ import S02 from './log-tu-a-den-z/s02-do-nghe.mjs';
 import S03 from './log-tu-a-den-z/s03-event-viewer.mjs';
 import S04 from './log-tu-a-den-z/s04-ma-su-kien.mjs';
 import S05 from './log-tu-a-den-z/s05-dong-lenh-sysmon.mjs';
+import S06 from './log-tu-a-den-z/s06-macos.mjs';
 import S07 from './log-tu-a-den-z/s07-journald.mjs';
 import S08 from './log-tu-a-den-z/s08-linux-varlog.mjs';
 import S10 from './log-tu-a-den-z/s10-web-ung-dung.mjs';
@@ -276,5 +279,5 @@ export default {
       ['tu-dung-kich-ban', 'Bonus — Generate your own incident dataset in your lab and swap it with a friend', 'Phần thêm — Tự dựng bộ dữ liệu sự cố trong lab của bạn rồi đổi cho bạn bè điều tra', 'Chỉ dùng máy của mình, mạng lab tách biệt · Atomic Red Team ở mức chạy test có sẵn · Viết đáp án trước, đổi cho người khác · ↪ Mô phỏng đối thủ chuyên sâu: /courses/blue-team-siem › siem-4-4-mo-phong'],
       ['thi-cuoi', 'Final exam', 'Bài thi cuối khoá', '30 câu tổng hợp mọi chương, có giải thích'],
     ]],
-  ]), [S00, S01, S02, S03, S04, S05, S07, S08, S09, S10, S11, S12, S13, S14, S15, S16, S17, S18]),
+  ]), [S00, S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12, S13, S14, S15, S16, S17, S18]),
 };

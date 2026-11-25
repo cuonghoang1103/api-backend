@@ -1,0 +1,22 @@
+$ for t in debug info default error fault; do log emit --subsystem com.example.loglab --category demo --type $t "muc $t: don hang 1042 da thanh toan"; done
+$ log emit --subsystem com.example.loglab --category demo --public "muc default, co --public: don hang 1042"
+$ sleep 2; log show --last 1m --style compact --predicate 'subsystem == "com.example.loglab"'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:29:54.866 Df log[24197:1785d9] [com.example.loglab:demo] <private>
+2026-11-25 12:29:54.872 E  log[24198:1785db] [com.example.loglab:demo] <private>
+2026-11-25 12:29:54.880 F  log[24193:1785dc] [com.example.loglab:demo] <private>
+2026-11-25 12:29:54.891 Df log[24199:1785e1] [com.example.loglab:demo] muc default, co --public: don hang 1042
+$ log show --last 1m --info --debug --style compact --predicate 'subsystem == "com.example.loglab"'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:29:54.855 I  log[24196:1785d7] [com.example.loglab:demo] <private>
+2026-11-25 12:29:54.866 Df log[24197:1785d9] [com.example.loglab:demo] <private>
+2026-11-25 12:29:54.872 E  log[24198:1785db] [com.example.loglab:demo] <private>
+2026-11-25 12:29:54.880 F  log[24193:1785dc] [com.example.loglab:demo] <private>
+2026-11-25 12:29:54.891 Df log[24199:1785e1] [com.example.loglab:demo] muc default, co --public: don hang 1042
+$ ( log stream --style compact --level debug --predicate 'subsystem == "com.example.loglab"' & P=$!; sleep 2; log emit --subsystem com.example.loglab --category demo --type debug --public "debug: chi thay khi dang stream"; log emit --subsystem com.example.loglab --category demo --type info --public "info: luu trong bo nho"; sleep 2; kill $P )
+Filtering the log data using "subsystem == "com.example.loglab""
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:01.180 Db log[24225:17886b] [com.example.loglab:demo] debug: chi thay khi dang stream
+2026-11-25 12:30:01.189 I  log[24226:17886d] [com.example.loglab:demo] info: luu trong bo nho
+$ sleep 1; log show --last 1m --info --debug --style compact --predicate 'subsystem == "com.example.loglab" AND eventMessage CONTAINS "stream"'
+Timestamp               Ty Process[PID:TID]

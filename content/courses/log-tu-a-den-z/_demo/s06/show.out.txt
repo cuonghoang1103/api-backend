@@ -1,0 +1,46 @@
+$ log show --last 1m | wc -l; log show --last 1m --info --debug | wc -l
+   39784
+   61552
+$ log show --last 10m --style default --predicate 'subsystem == "com.example.shopmac" AND category == "db"'
+Timestamp                       Thread     Type        Activity             PID    TTL  
+2026-11-25 12:30:06.215098+0700 0x1788b0   Error       0x0                  24233  0    shopmac: [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:06.215110+0700 0x1788b0   Fault       0x57fa21             24233  14   shopmac: [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+$ log show --last 10m --style syslog --predicate 'subsystem == "com.example.shopmac" AND category == "db"'
+Timestamp                       (process)[PID]    
+2026-11-25 12:30:06.215098+0700  localhost shopmac[24233]: [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:06.215110+0700  localhost shopmac[24233]: [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+$ log show --last 10m --timezone UTC --style compact --predicate 'subsystem == "com.example.shopmac" AND category == "db"'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 05:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 05:30:06.215 F  shopmac[24233:1788b0] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+$ log show --last 10m --source --predicate 'process == "motep" AND eventMessage BEGINSWITH "M"' | cut -c1-200
+Timestamp                       Thread     Type        Activity             PID    TTL  
+2026-11-25 12:30:18.171203+0700 0x178a4f   Default     0x0                  24299  0    <motep`main (motep.swift:8)> motep: [com.example.motep:config] Mở tệp cấu hình tot.txt
+2026-11-25 12:30:18.182378+0700 0x178a5a   Default     0x0                  24303  0    <motep`main (motep.swift:8)> motep: [com.example.motep:config] Mở tệp cấu hình hong.txt
+$ log show --last 10m --style ndjson --predicate 'subsystem == "com.example.shopmac"' | tail -2 | cut -c1-160
+{"timezoneName":"","messageType":"Default","eventType":"logEvent","source":null,"launchPersonaName":"","formatString":"Token = %{private,mask.hash}s","userID":5
+{"count":7,"finished":1}
+$ log show --last 10m --style ndjson --predicate 'subsystem == "com.example.shopmac"' | jq -r 'select(.eventMessage) | [.timestamp[11:23], .messageType, .category, .eventMessage] | @tsv'
+12:30:06.215	Default	network	Đăng nhập: email=<private> mã đơn=1042
+12:30:06.215	Default	network	Liên hệ hỗ trợ: hotro@example.com
+12:30:06.215	Default	network	Liên hệ hỗ trợ (đánh dấu private): <private>
+12:30:06.215	Error	network	Hết thời gian chờ sau 30 s tới api.example.com
+12:30:06.215	Error	db	Mở CSDL thất bại: disk I/O error
+12:30:06.215	Fault	db	Tệp CSDL hỏng, mã 11
+12:30:06.215	Default	network	Token = <mask.hash: 'CJIOsApAzMFHH6Y3d7R+5w=='>
+$ log show --last 10m --style ndjson --predicate 'subsystem == "com.example.shopmac"' | jq -r 'select(.messageType) | .messageType' | sort | uniq -c
+   4 Default
+   2 Error
+   1 Fault
+$ log show --process shopmac --last 10m --style compact | tail -2
+2026-11-25 12:30:06.215 A  shopmac[24233:1788b0] (libsystem_trace.dylib) Activity for state dumps
+2026-11-25 12:30:06.215 Df shopmac[24233:1788b0] [com.example.shopmac:network] Token = <mask.hash: 'CJIOsApAzMFHH6Y3d7R+5w=='>
+$ log show --last 1m --style compact | tail -n +2 | awk '{print $1, $2}' | grep -vc '^20'
+4383
+$ ./shopmac khach@example.com >/dev/null; log collect --last 2m --output ./ca-may.logarchive; du -sh ca-may.logarchive
+Archive successfully written to ./ca-may.logarchive
+243M	ca-may.logarchive
+$ log show --archive ./ca-may.logarchive --style compact --predicate 'subsystem == "com.example.shopmac" AND messageType == fault'; rm -rf ./ca-may.logarchive
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:06.215 F  shopmac[24233:1788b0] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+2026-11-25 12:30:36.738 F  shopmac[24422:178c26] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11

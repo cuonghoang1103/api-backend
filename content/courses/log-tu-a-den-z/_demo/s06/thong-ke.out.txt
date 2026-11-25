@@ -1,0 +1,23 @@
+$ log stats --overview | sed -n '1,22p'
+== archive =============================================================
+size:               2.311.133.248 bytes
+                    9.143.019.588 bytes (uncompressed)
+start:              Fri Nov 13 09:30:29 2026
+end:                Wed Nov 25 12:42:29 2026
+statedump:          262.615
+
+events:             [       total        log      trace   signpost       loss ]
+                    [  58.554.758 50.077.710          0  5.872.326        315 ]
+
+activity:           [      create transition     action ]
+                    [   2.341.334          0        141 ]
+
+log messages:       [     default       info      debug      error      fault ]
+                    [  35.438.233  5.234.844    128.697  8.435.271  6.712.991 ]
+
+ttl:                [        1day      3days      7days     14days     30days ]
+                    [   3.256.375  5.314.963  7.493.167  9.393.930    124.688 ]
+
+processes:          
+          [        events (%total),    total bytes (%total),                           image UUID, image ]
+          [     6.609.517 ( 11.3%),  2.478.547.208 ( 27.1%), 00000000-0000-4000-8000-000000000001, SimRenderServer ]

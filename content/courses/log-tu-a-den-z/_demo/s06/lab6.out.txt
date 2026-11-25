@@ -1,0 +1,65 @@
+$ pmset -g log | head -2 | cut -c1-44
+PM ASL data store: /var/log/powermanagement
+2026-11-18 12:47:54 +0700 Assertions        
+$ pmset -g log | awk -v tu="$(date -v-7d +%F)" '$1 >= tu && ($4=="Sleep" || $4=="Wake" || $4=="DarkWake") {n[$1" "$4]++} END {for (k in n) print k, n[k]}' | sort
+2026-11-21 DarkWake 21
+2026-11-21 Sleep 22
+2026-11-21 Wake 22
+2026-11-22 DarkWake 72
+2026-11-22 Sleep 76
+2026-11-22 Wake 81
+2026-11-23 DarkWake 6
+2026-11-23 Sleep 6
+2026-11-23 Wake 7
+$ pmset -g log | awk '$4=="Sleep" || $4=="Wake"' | tail -4 | cut -c1-150
+2026-11-23 07:02:14 +0700 Wake Requests       	[*process=dasd request=SleepService deltaSecs=935 wakeAt=2026-11-23 07:17:49 info="com.apple.dasd:501:c
+2026-11-23 08:42:28 +0700 Sleep               	Entering Sleep state due to 'Sleep Service Back to Sleep':TCPKeepAlive=active Using AC (Charge:100%) 95
+2026-11-23 08:42:30 +0700 Wake Requests       	[*process=dasd request=SleepService deltaSecs=957 wakeAt=2026-11-23 08:58:27 info="com.apple.dasd:501:c
+2026-11-23 10:32:51 +0700 Wake                	DarkWake to FullWake from Deep Idle [CDNVA] : due to UserActivity Assertion Using AC (Charge:100%)     
+$ log show --last 7d --style compact --predicate 'process == "loginwindow" AND eventMessage CONTAINS "sendDistributedNotification: com.apple.screenIs"' | grep -oE '^[0-9-]+ [0-9:]{8}|screenIs(Un)?[Ll]ocked' | paste - - | tail -6
+2026-11-23 00:21:04	screenIsLocked
+2026-11-23 10:32:55	screenIsUnlocked
+2026-11-24 13:07:36	screenIsLocked
+2026-11-24 13:25:51	screenIsUnlocked
+2026-11-24 19:18:44	screenIsLocked
+2026-11-24 19:19:04	screenIsUnlocked
+$ log show --last 7d --style compact --predicate 'process == "sudo"' | tail -n +2 | wc -l
+       0
+$ last | grep -E '^(reboot|shutdown)' | head -4
+reboot time                                Tue Nov 24 19:16
+reboot time                                Tue Nov 17 15:27
+shutdown time                              Tue Nov 17 15:26
+reboot time                                Mon Nov  9 21:55
+$ last | grep -B1 -A1 'crash' | head -6
+reboot time                                Tue Nov 24 19:16
+root       console                         Tue Nov 24 19:06 - crash  (00:09)
+sv         ttys002                         Tue Nov 24 15:14 - 15:14  (00:00)
+--
+sv         ttys017                         Mon Nov  9 21:37 - 21:37  (00:00)
+sv         ttys016                         Mon Nov  9 21:37 - crash  (00:18)
+$ log show --start '2026-11-24 19:09:00' --end '2026-11-24 19:16:30' --style ndjson | jq -r 'select(.timestamp) | .timestamp[0:16]' | awk '$0 > "2026-11-24 19:18" {exit} {n[$0]++} END {for (k in n) print n[k], k}' | sort -k2
+5568 2026-11-24 19:09
+3023 2026-11-24 19:10
+4206 2026-11-24 19:16
+24597 2026-11-24 19:17
+126102 2026-11-24 19:18
+$ log show --start '2026-11-24 19:10:20' --end '2026-11-24 19:10:40' --style compact --predicate '(process == "suhelperd" AND (eventMessage CONTAINS "Rebooting" OR eventMessage CONTAINS "reboot3")) OR eventType == timesyncEvent' | cut -c1-150
+Timestamp               Ty Process[PID:TID]
+2026-11-24 19:10:22.622 Df suhelperd[590:4937320] [com.apple.SoftwareUpdate:SoftwareUpdate] SUHelper: Rebooting (success = 1, night install = 0, shutd
+2026-11-24 19:10:22.627 Df suhelperd[590:4937320] [com.apple.SoftwareUpdate:SoftwareUpdate] Calling reboot3(0x8000000000000000)
+2026-11-24 19:10:22.673 Ts [0:0] === system wallclock time adjusted
+2026-11-24 19:10:26.916 Ts [0:0] === system wallclock time adjusted
+$ grep -E '^2026-11-24 19:(0[5-9]|1[0-9])' /var/log/install.log | grep -E 'Installed "|Rebooting|reboot3' | cut -c1-170
+2026-11-24 19:09:32+07 macbook-lab system_installd[68396]: Installed "Command Line Tools for Xcode 27.2" (27.2)
+2026-11-24 19:10:22+07 macbook-lab Software Update[69863]: SUOSUPostLogoutInstallOperation: Rebooting (success = 1, displayAsleep = 0, shutdown = 0)
+2026-11-24 19:10:22+07 macbook-lab softwareupdated[67314]: SUUpdateServiceDaemon: Rebooting (success = 1, nightInstall = 0, displayAsleep = 0, shutdown = 0)
+2026-11-24 19:10:22+07 macbook-lab suhelperd[590]: SUHelper: Rebooting (success = 1, night install = 0, shutdown = 0)
+2026-11-24 19:10:22+07 macbook-lab suhelperd[590]: Calling reboot3(0x8000000000000000)
+2026-11-24 19:18:06+07 macbook-lab system_installd[861]: Installed "RosettaUpdateAuto" ()
+$ pmset -g log | grep -E '^2026-11-24 19:0' | grep -E 'SoftwareUpdate' | cut -c1-170 | head -3
+2026-11-24 19:03:14 +0700 Assertions          	PID 51839(SoftwareUpdateNotificationManag) Created SoftwareUpdateTask "com.apple.SoftwareUpdate.BeforePostlogout" 00:00:00 
+2026-11-24 19:04:05 +0700 Assertions          	PID 51839(SoftwareUpdateNotificationManag) Released SoftwareUpdateTask "com.apple.SoftwareUpdate.BeforePostlogout" 00:00:51
+2026-11-24 19:06:14 +0700 Assertions          	PID 51839(SoftwareUpdateNotificationManag) ClientDied PreventUserIdleSystemSleep "com.apple.SoftwareUpdateNotificationManag
+$ grep '^2026-11-24 19:10:22' /var/log/install.log | grep -oE 'MSU_UPDATE_[0-9A-Z]+_patch_[0-9.]+' | sort -u; sw_vers -productVersion
+MSU_UPDATE_26B131_patch_27.2.1
+27.2.1

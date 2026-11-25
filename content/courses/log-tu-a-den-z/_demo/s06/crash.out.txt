@@ -1,0 +1,80 @@
+$ printf 'ten=shop\ncong=8080\n' > tot.txt; printf 'ten=shop\ncong=80 80\n' > hong.txt; swiftc -g -o motep motep.swift && echo "dich xong"
+dich xong
+$ ./motep tot.txt
+motep: cổng 8080
+$ ./motep hong.txt; echo "exit=$?"
+motep/motep.swift:11: Fatal error: Unexpectedly found nil while unwrapping an Optional value
+exit=133
+$ sleep 8; ls -t ~/Library/Logs/DiagnosticReports | grep '^motep' | head -1
+motep-2026-11-25-123018.ips
+$ F=$(ls -t ~/Library/Logs/DiagnosticReports/motep-*.ips | head -1); head -1 "$F" | jq .
+{
+  "app_name": "motep",
+  "timestamp": "2026-11-25 12:30:18.00 +0700",
+  "app_version": "",
+  "slice_uuid": "00000000-0000-4000-8000-000000000001",
+  "build_version": "",
+  "platform": 1,
+  "share_with_app_devs": 1,
+  "is_first_party": 1,
+  "bug_type": "309",
+  "os_version": "macOS 27.2.1 (26B131)",
+  "roots_installed": 0,
+  "incident_id": "00000000-0000-4000-8000-000000000002",
+  "name": "motep"
+}
+$ F=$(ls -t ~/Library/Logs/DiagnosticReports/motep-*.ips | head -1); sed 1d "$F" | jq '{procName, procPath, parentProc, responsibleProc, userID, procLaunch, captureTime, exception, termination, faultingThread}'
+{
+  "procName": "motep",
+  "procPath": "/private/tmp/*/motep",
+  "parentProc": "Exited process",
+  "responsibleProc": "iTerm2",
+  "userID": 501,
+  "procLaunch": "2026-11-25 12:30:18.1781 +0700",
+  "captureTime": "2026-11-25 12:30:18.2416 +0700",
+  "exception": {
+    "codes": "0x0000000000000001, 0x0000000185901d78",
+    "rawCodes": [
+      1,
+      6535781752
+    ],
+    "type": "EXC_BREAKPOINT",
+    "signal": "SIGTRAP"
+  },
+  "termination": {
+    "flags": 0,
+    "code": 5,
+    "namespace": "SIGNAL",
+    "indicator": "Trace/BPT trap: 5",
+    "byProc": "exc handler",
+    "byPid": 24303
+  },
+  "faultingThread": 0
+}
+$ F=$(ls -t ~/Library/Logs/DiagnosticReports/motep-*.ips | head -1); sed 1d "$F" | jq -r '.threads[.faultingThread].frames[0:4][] | "\(.imageIndex)  \(.symbol)  \(.sourceFile // "")  \(.sourceLine // "")"'
+1  closure #1 in closure #1 in _assertionFailure(_:_:file:line:flags:)    
+1  _assertionFailure(_:_:file:line:flags:)    
+0  main  motep.swift  11
+2  start    
+$ F=$(ls -t ~/Library/Logs/DiagnosticReports/motep-*.ips | head -1); sed 1d "$F" | jq -r '.usedImages[0:3][] | .name'
+motep
+libswiftCore.dylib
+dyld
+$ log show --last 2m --style compact --predicate '(process == "motep" AND NOT eventMessage BEGINSWITH "Retrieve") OR (process == "kernel" AND eventMessage CONTAINS "motep") OR (process == "osanalyticshelper" AND eventMessage BEGINSWITH "Saved")' | cut -c1-190
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:17.851 Df kernel[0:178a4d] (AppleMobileFileIntegrity) AMFI: '/private/tmp/loglab
+2026-11-25 12:30:17.851 Df kernel[0:178a4d] (AppleMobileFileIntegrity) AMFI: '/private/tmp/loglab
+2026-11-25 12:30:18.171 Df motep[24299:178a4f] [com.example.motep:config] Mở tệp cấu hình tot.txt
+2026-11-25 12:30:18.171 Df motep[24299:178a4f] [com.example.motep:config] Lắng nghe cổng 8080
+2026-11-25 12:30:18.182 Df motep[24303:178a5a] [com.example.motep:config] Mở tệp cấu hình hong.txt
+2026-11-25 12:30:18.182 Df motep[24303:178a5a] (libswiftCore.dylib) motep/motep.swift:11: Fatal error: Unexpectedly found nil while unwrapping an Optional value
+2026-11-25 12:30:18.182 Df kernel[0:178a5a] (AppleMobileFileIntegrity) AMFI: Denying core dump for pid 24303 (motep)
+2026-11-25 12:30:18.182 Df kernel[0:178a5a] motep[24303] Corpse allowed 1 of 5
+2026-11-25 12:30:18.257 Df kernel[0:178a6b] (Sandbox) Sandbox: ReportCrashService(24305) allow file-read-data /private/tmp/loglab
+2026-11-25 12:30:18.526 Df kernel[0:178a64] (Sandbox) 3 duplicate reports for Sandbox: ReportCrashService(24305) allow file-read-data /private/tmp/loglab
+2026-11-25 12:30:18.556 Df kernel[0:178a6b] (Sandbox) Sandbox: ReportCrashService(24305) allow file-read-data /private/tmp/loglab
+2026-11-25 12:30:18.562 Df kernel[0:178a64] (Sandbox) 3 duplicate reports for Sandbox: ReportCrashService(24305) allow file-read-data /private/tmp/loglab
+2026-11-25 12:30:18.783 Df osanalyticshelper[1078:1787df] (OSAnalytics) Saved type '309(<private>)' report (2 of max 25) at /Users/sv/Library/Logs/DiagnosticReports/motep-2026-11-25-12301
+$ ls ~/Library/Logs/DiagnosticReports | sed -E 's/.*\.//' | sort | uniq -c
+  23 ips
+   1 Retired

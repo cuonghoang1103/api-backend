@@ -1,0 +1,112 @@
+$ last | head -6
+sv         ttys002                         Wed Nov 25 11:28   still logged in
+sv         ttys001                         Tue Nov 24 19:49 - 19:49  (00:00)
+sv         ttys000                         Tue Nov 24 19:19   still logged in
+sv         console                         Tue Nov 24 19:18   still logged in
+reboot time                                Tue Nov 24 19:16
+root       console                         Tue Nov 24 19:06 - crash  (00:09)
+$ last | grep -E '^(reboot|shutdown)' | head -4
+reboot time                                Tue Nov 24 19:16
+reboot time                                Tue Nov 17 15:27
+shutdown time                              Tue Nov 17 15:26
+reboot time                                Mon Nov  9 21:55
+$ log show --last 7d --style compact --predicate 'process == "sudo"' | wc -l
+       1
+$ logger -p authpriv.notice -t sudo "sv : TTY=ttys009 ; PWD=/Users/sv ; USER=root ; COMMAND=/bin/cat /etc/master.passwd"
+$ sleep 1; log show --last 30s --style compact --predicate 'process == "sudo"'
+Timestamp               Ty Process[PID:TID]
+$ log show --last 30s --style compact --predicate 'eventMessage CONTAINS "COMMAND=/bin/cat"' | grep -v 'log run'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:31:24.390 Df logger[24544:179275] sv : TTY=ttys009 ; PWD=/Users/sv ; USER=root ; COMMAND=/bin/cat /etc/master.passwd
+$ log show --last 30s --style ndjson --predicate 'process == "logger" AND eventMessage CONTAINS "TTY="' | jq '{processImagePath, processID, userID, messageType, subsystem, eventMessage}'
+{
+  "processImagePath": "/usr/bin/logger",
+  "processID": 24544,
+  "userID": 501,
+  "messageType": "Default",
+  "subsystem": "",
+  "eventMessage": "sv : TTY=ttys009 ; PWD=/Users/sv ; USER=root ; COMMAND=/bin/cat /etc/master.passwd"
+}
+{
+  "processImagePath": null,
+  "processID": null,
+  "userID": null,
+  "messageType": null,
+  "subsystem": null,
+  "eventMessage": null
+}
+$ log show --last 1h --style ndjson --predicate 'subsystem == "com.apple.TCC" AND eventMessage BEGINSWITH "AUTHREQ_"' | jq -r 'select(.eventMessage) | .eventMessage' > tcc.txt; wc -l < tcc.txt
+    6356
+$ grep -oE 'AUTHREQ_[A-Z]+' tcc.txt | sort | uniq -c
+1598 AUTHREQ_ATTRIBUTION
+1598 AUTHREQ_CTX
+1598 AUTHREQ_RESULT
+1562 AUTHREQ_SUBJECT
+$ grep '^AUTHREQ_CTX' tcc.txt | grep -oE 'service=kTCCService[A-Za-z]+' | sort | uniq -c | sort -nr | head -6
+1535 service=kTCCServiceListenEvent
+  35 service=kTCCServiceAddressBook
+   8 service=kTCCServiceCalendar
+   7 service=kTCCServiceReminders
+   5 service=kTCCServiceSystemPolicyAllFiles
+   2 service=kTCCServiceSystemPolicyDownloadsFolder
+$ grep '^AUTHREQ_RESULT' tcc.txt | grep -oE 'authValue=[0-9]' | sort | uniq -c
+1525 authValue=0
+  34 authValue=1
+  39 authValue=2
+$ M=$(grep '^AUTHREQ_ATTRIBUTION' tcc.txt | grep 'accessing={TCCDProcess: identifier=com.apple.' | head -1 | grep -oE 'msgID=[0-9.]+'); grep "$M," tcc.txt | grep -v SUBJECT | cut -c1-330; rm -f tcc.txt
+AUTHREQ_CTX: msgID=616.4689, function=<private>, service=kTCCServiceListenEvent, preflight=yes, query=1, client_dict=(null), daemon_dict=<private>
+AUTHREQ_ATTRIBUTION: msgID=616.4689, attribution={responsible={TCCDProcess: identifier=com.googlecode.iterm2, pid=1273, auid=501, euid=501, responsible_path=/Applications/iTerm.app/Contents/MacOS/iTerm2, binary_path=/Applications/iTerm.app/Contents/MacOS/iTerm2}, accessing={TCCDProcess: identifier=com.apple.osascript, pid=7785, 
+AUTHREQ_RESULT: msgID=616.4689, authValue=0, authReason=4, authVersion=1, desired_auth=0, error=(null),
+$ spctl --status
+assessments enabled
+$ spctl -a -vv -t execute ./motep
+./motep: rejected
+$ spctl -a -vv /System/Applications/Calculator.app
+/System/Applications/Calculator.app: accepted
+source=Apple System
+origin=macOS Software Signing
+$ cp motep motep-tai; xattr -w com.apple.quarantine "0083;$(printf %x $(date +%s));Safari;" motep-tai; xattr -l motep-tai | cut -c1-80; spctl -a -vv -t execute motep-tai; rm -f motep-tai
+com.apple.provenance: 
+com.apple.quarantine: 0083;6b0672b2;Safari;
+motep-tai: rejected
+$ log show --last 30m --style compact --predicate 'process == "syspolicyd" AND eventMessage CONTAINS "(id: motep)"' | head -3 | cut -c1-200
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:05:30.884 Df syspolicyd[709:168812] [com.apple.syspolicy.exec:default] GK evaluateScanResult: 2, PST: (path: d7254f6204df57b0), (team: (null)), (id: motep), (bundle_id: NOT_A_BUNDLE), 0,
+2026-11-25 12:05:30.885 Df syspolicyd[709:168812] [com.apple.syspolicy.exec:default] Found provenance data on target: TA(3b5f546468950ba7, 2), PST: (path: d7254f6204df57b0), (team: (null)), (id: motep
+$ xprotect version
+Version: 5377 Installed: 2026-11-20 20:31:48 +0000
+$ grep -E 'Installed "XProtect' /var/log/install.log | tail -3
+2026-11-11 05:53:04+07 macbook-lab system_installd[61954]: Installed "XProtectPlistConfigData" (5372)
+2026-11-21 11:53:43+07 macbook-lab system_installd[6716]: Installed "XProtectPlistConfigData" (5377)
+2026-11-21 11:53:53+07 macbook-lab system_installd[6716]: Installed "XProtectPayloads" (171)
+$ launchctl print gui/$(id -u) | sed -n '1,9p'
+gui/501 = {
+	type = login
+	handle = 100015
+	active count = 468
+	service count = 467
+	active service count = 223
+	creator = loginwindow[620]
+	creator euid = 0
+	session = Aqua
+$ ls ~/Library/LaunchAgents /Library/LaunchAgents /Library/LaunchDaemons | grep -c 'plist$'
+17
+$ plutil -lint vi-du-launchagent.plist; plutil -p vi-du-launchagent.plist
+vi-du-launchagent.plist: OK
+{
+  "Label" => "com.example.capnhat"
+  "ProgramArguments" => [
+    0 => "/bin/sh"
+    1 => "-c"
+    2 => "~/Library/Application Support/capnhat/chay.sh"
+  ]
+  "RunAtLoad" => true
+  "StartInterval" => 3600
+}
+$ log show --last 1d --style compact --predicate 'subsystem == "com.apple.backgroundtaskmanagement" AND eventMessage BEGINSWITH "register"' | head -3 | cut -c1-200
+Timestamp               Ty Process[PID:TID]
+2026-11-24 21:12:48.042 Df backgroundtaskmanagementd[734:347da] [com.apple.backgroundtaskmanagement:main] registerItem: uid=501, type=spotlight, parentURL=<private>, url=<private>, config=(null)
+2026-11-24 21:12:48.048 Df backgroundtaskmanagementd[734:347da] [com.apple.backgroundtaskmanagement:main] registerLaunchItem: found existing item: uuid=00000000-0000-4000-8000-000000000001, name=OOoSp
+$ log show --last 5m --style compact --predicate 'process == "log" AND eventMessage BEGINSWITH "log run"' | tail -2 | cut -c1-230
+2026-11-25 12:31:32.457 Df log[24654:179406] [com.apple.log:] log run noninteractively, parent: 24652 (zsh), args: 'log' 'show' '--last' '1d' '--style' 'compact' '--predicate' 'subsystem == "com.apple.backgroundtaskmanagement" AND
+2026-11-25 12:31:33.736 Df log[24662:179438] [com.apple.log:] log run noninteractively, parent: 24660 (zsh), args: 'log' 'show' '--last' '5m' '--style' 'compact' '--predicate' 'process == "log" AND eventMessage BEGINSWITH "log run

@@ -1,0 +1,16 @@
+$ swiftc -O -o shopmac shopmac.swift && ./shopmac khach@example.com
+shopmac: xong
+$ sleep 1; log show --last 1m --info --debug --style compact --predicate 'subsystem == "com.example.shopmac"'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:06.215 I  shopmac[24233:1788b0] [com.example.shopmac:network] Bắt đầu đồng bộ đơn hàng
+2026-11-25 12:30:06.215 Df shopmac[24233:1788b0] [com.example.shopmac:network] Đăng nhập: email=<private> mã đơn=1042
+2026-11-25 12:30:06.215 Df shopmac[24233:1788b0] [com.example.shopmac:network] Liên hệ hỗ trợ: hotro@example.com
+2026-11-25 12:30:06.215 Df shopmac[24233:1788b0] [com.example.shopmac:network] Liên hệ hỗ trợ (đánh dấu private): <private>
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:network] Hết thời gian chờ sau 30 s tới api.example.com
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:06.215 F  shopmac[24233:1788b0] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+2026-11-25 12:30:06.215 Df shopmac[24233:1788b0] [com.example.shopmac:network] Token = <mask.hash: 'CJIOsApAzMFHH6Y3d7R+5w=='>
+$ logger -t backup-dem "Sao luu xong: 1,2 GB, 41 s"
+$ sleep 1; log show --last 30s --style syslog --predicate 'process == "logger"'
+Timestamp                       (process)[PID]    
+2026-11-25 12:30:08.038088+0700  localhost logger[24245]: Sao luu xong: 1,2 GB, 41 s

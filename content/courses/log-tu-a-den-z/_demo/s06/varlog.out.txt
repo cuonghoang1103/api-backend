@@ -1,0 +1,33 @@
+$ ls /var/log | tr '\n' ' ' | fold -w 150; echo
+apache2 asl com.apple.wifi.analytics com.apple.wifivelocity com.apple.xpc.launchd CoreDuet cups DiagnosticMessages dm fsck_apfs_error.log fsck_apfs.lo
+g fsck_hfs.log install.log keybagd.log.0 mDNSResponder powermanagement ppp PrivacyPreservingMeasurement shutdown_monitor.log system.log system.log.0.g
+z system.log.1.gz system.log.2.gz system.log.3.gz system.log.4.gz system.log.5.gz system.log.6.gz uucp wifi.log wifi.log.0.bz2 wifi.log.1.bz2 wifi.log
+.10.bz2 wifi.log.2.bz2 wifi.log.3.bz2 wifi.log.4.bz2 wifi.log.5.bz2 wifi.log.6.bz2 wifi.log.7.bz2 wifi.log.8.bz2 wifi.log.9.bz2 
+$ wc -l /var/log/system.log /var/log/install.log
+      95 /var/log/system.log
+  291987 /var/log/install.log
+  292082 total
+$ awk '{print $5}' /var/log/system.log | sed -E 's/\[[0-9]+\]:?//' | sort | uniq -c | sort -nr | head -4
+  67 syslogd
+  10 selected
+  10 appear
+   3 output
+$ tail -n 3 /var/log/system.log
+Nov 25 12:15:54 macbook-lab syslogd[580]: ASL Sender Statistics
+Nov 25 12:28:34 macbook-lab syslogd[580]: ASL Sender Statistics
+Nov 25 12:40:34 macbook-lab syslogd[580]: ASL Sender Statistics
+$ zcat /var/log/system.log.0.gz | head -2
+zcat: can't stat: /var/log/system.log.0.gz (/var/log/system.log.0.gz.Z): No such file or directory
+$ gzcat /var/log/system.log.0.gz | head -2
+Nov 24 00:02:27 macbook-lab syslogd[398]: ASL Sender Statistics
+Nov 24 00:21:04 macbook-lab syslogd[398]: ASL Sender Statistics
+$ grep -E 'Installed "' /var/log/install.log | tail -4 | cut -c1-150
+2026-11-21 11:53:43+07 macbook-lab system_installd[6716]: Installed "XProtectPlistConfigData" (5377)
+2026-11-21 11:53:53+07 macbook-lab system_installd[6716]: Installed "XProtectPayloads" (171)
+2026-11-24 19:09:32+07 macbook-lab system_installd[68396]: Installed "Command Line Tools for Xcode 27.2" (27.2)
+2026-11-24 19:18:06+07 macbook-lab system_installd[861]: Installed "RosettaUpdateAuto" ()
+$ ls /Library/Logs/DiagnosticReports | sed -E 's/.*\.//' | sort | uniq -c
+  11 diag
+   1 DiagnosticLogs
+   2 ips
+   1 Retired

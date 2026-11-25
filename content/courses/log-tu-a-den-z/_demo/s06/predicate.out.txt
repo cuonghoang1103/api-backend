@@ -1,0 +1,72 @@
+$ log show --last 15m --style compact --predicate 'subsystem == "com.example.shopmac" AND category == "db"'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:06.215 F  shopmac[24233:1788b0] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+2026-11-25 12:30:36.738 E  shopmac[24422:178c26] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:36.738 F  shopmac[24422:178c26] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+$ log show --last 15m --style compact --predicate 'subsystem == "com.example.shopmac" AND messageType >= error'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:network] Hết thời gian chờ sau 30 s tới api.example.com
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:06.215 F  shopmac[24233:1788b0] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+2026-11-25 12:30:36.738 E  shopmac[24422:178c26] [com.example.shopmac:network] Hết thời gian chờ sau 30 s tới api.example.com
+2026-11-25 12:30:36.738 E  shopmac[24422:178c26] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:36.738 F  shopmac[24422:178c26] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+$ log show --last 15m --style compact --predicate 'p=shopmac AND type>=error'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:network] Hết thời gian chờ sau 30 s tới api.example.com
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:06.215 F  shopmac[24233:1788b0] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+2026-11-25 12:30:36.738 E  shopmac[24422:178c26] [com.example.shopmac:network] Hết thời gian chờ sau 30 s tới api.example.com
+2026-11-25 12:30:36.738 E  shopmac[24422:178c26] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:36.738 F  shopmac[24422:178c26] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+$ log show --last 15m --style compact --predicate 'subsystem == "com.example.shopmac" AND eventMessage CONTAINS "csdl"'
+Timestamp               Ty Process[PID:TID]
+$ log show --last 15m --style compact --predicate 'subsystem == "com.example.shopmac" AND eventMessage CONTAINS[c] "csdl"'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:06.215 F  shopmac[24233:1788b0] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+2026-11-25 12:30:36.738 E  shopmac[24422:178c26] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:36.738 F  shopmac[24422:178c26] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+$ log show --last 15m --style compact --predicate 'subsystem == "com.example.shopmac" AND eventMessage CONTAINS[cd] "het thoi gian"'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:network] Hết thời gian chờ sau 30 s tới api.example.com
+2026-11-25 12:30:36.738 E  shopmac[24422:178c26] [com.example.shopmac:network] Hết thời gian chờ sau 30 s tới api.example.com
+$ log show --last 15m --style compact --predicate 'eventMessage CONTAINS "csdl"' | cut -c1-230
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:17:25.660 Df log[21598:17309c] [com.apple.log:] log run noninteractively, parent: 21592 (zsh), args: '/usr/bin/log' 'show' '--last' '15m' '--style' 'compact' '--predicate' 'eventMessage CONTAINS "csdl"'
+2026-11-25 12:17:28.203 Df log[21603:1730e2] [com.apple.log:] log run noninteractively, parent: 21592 (zsh), args: '/usr/bin/log' 'show' '--last' '15m' '--style' 'compact' '--predicate' 'subsystem == "com.example.shopmac" AND even
+2026-11-25 12:30:42.952 Df log[24453:178d66] [com.apple.log:] log run noninteractively, parent: 24280 (zsh), args: 'log' 'show' '--last' '15m' '--style' 'compact' '--predicate' 'subsystem == "com.example.shopmac" AND eventMessage 
+2026-11-25 12:30:43.705 Df log[24456:178d78] [com.apple.log:] log run noninteractively, parent: 24280 (zsh), args: 'log' 'show' '--last' '15m' '--style' 'compact' '--predicate' 'subsystem == "com.example.shopmac" AND eventMessage 
+2026-11-25 12:30:45.194 Df log[24462:178dc1] [com.apple.log:] log run noninteractively, parent: 24460 (zsh), args: 'log' 'show' '--last' '15m' '--style' 'compact' '--predicate' 'eventMessage CONTAINS "csdl"'
+$ log show --last 15m --style compact --predicate 'subsystem BEGINSWITH "com.example." AND NOT category IN {"network", "demo"}'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:06.215 F  shopmac[24233:1788b0] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+2026-11-25 12:30:18.171 Df motep[24299:178a4f] [com.example.motep:config] Mở tệp cấu hình tot.txt
+2026-11-25 12:30:18.171 Df motep[24299:178a4f] [com.example.motep:config] Lắng nghe cổng 8080
+2026-11-25 12:30:18.182 Df motep[24303:178a5a] [com.example.motep:config] Mở tệp cấu hình hong.txt
+2026-11-25 12:30:36.738 E  shopmac[24422:178c26] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:36.738 F  shopmac[24422:178c26] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+$ log show --last 15m --style compact --predicate 'subsystem == "com.example.shopmac" AND eventMessage MATCHES ".* [0-9]+ s .*"'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:network] Hết thời gian chờ sau 30 s tới api.example.com
+2026-11-25 12:30:36.738 E  shopmac[24422:178c26] [com.example.shopmac:network] Hết thời gian chờ sau 30 s tới api.example.com
+$ log show --last 15m --style compact --predicate 'senderImagePath ENDSWITH "libswiftCore.dylib" AND eventMessage CONTAINS "Fatal error"' | cut -c1-200
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:18.182 Df motep[24303:178a5a] (libswiftCore.dylib) motep/motep.swift:11: Fatal error: Unexpectedly found nil while unwrapping an Optional value
+$ log show --last 15m --style compact --predicate 'subsystem = "com.example.shopmac" and category = db'
+Timestamp               Ty Process[PID:TID]
+2026-11-25 12:30:06.215 E  shopmac[24233:1788b0] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:06.215 F  shopmac[24233:1788b0] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+2026-11-25 12:30:36.738 E  shopmac[24422:178c26] [com.example.shopmac:db] Mở CSDL thất bại: disk I/O error
+2026-11-25 12:30:36.738 F  shopmac[24422:178c26] [com.example.shopmac:db] Tệp CSDL hỏng, mã 11
+$ log show --last 15m --style compact --predicate 'subsystem == com.example.shopmac'
+log: invalid predicate:
+no such field: com.example.shopmac
+$ time (log show --last 3h --style compact --predicate 'eventMessage CONTAINS "screenIsLocked"' | wc -l)
+       5
+( log show --last 3h --style compact --predicate  | wc -l; )  20.23s user 3.92s system 96% cpu 24.923 total
+$ time (log show --last 3h --style compact --predicate 'process == "loginwindow" AND eventMessage CONTAINS "screenIsLocked"' | wc -l)
+       1
+( log show --last 3h --style compact --predicate  | wc -l; )  0.78s user 0.46s system 53% cpu 2.318 total

@@ -1,0 +1,35 @@
+$ sw_vers
+ProductName:		macOS
+ProductVersion:		27.2.1
+BuildVersion:		26B131
+$ zsh -f -c 'type log; log show --last 1m'
+log is a shell builtin
+zsh:log:1: too many arguments
+$ grep -n -A1 'Disable the log builtin' /etc/zshrc
+12:# Disable the log builtin, so we don't conflict with /usr/bin/log
+13-disable log
+$ type log
+log is /usr/bin/log
+$ ls -l /var/db/diagnostics | head -12
+total 26064
+-rw-r--r--     1 root  admin   119027 Nov 25 12:04 diagnosticd.0.log
+drwxr-xr-x     2 root  admin       64 Oct 27  2025 HighVolume
+drwxr-xr-x     2 root  admin       64 Nov 24 19:17 logd
+-rw-r--r--     1 root  admin   425756 Nov 25 12:28 logd_helper.0.log
+-rw-r--r--     1 root  admin   436954 Nov 25 12:28 logd.0.log
+-rw-r--r--     1 root  admin  4774742 Nov 25 12:28 logdata.statistics.0.jsonl
+-rw-r--r--     1 root  admin   157062 Nov 25 12:28 logdata.statistics.0.txt
+-rw-r--r--     1 root  admin  5246607 Nov 18 03:46 logdata.statistics.1.jsonl
+-rw-r--r--     1 root  admin  1049647 Nov 25 08:30 logdata.statistics.1.txt
+drwxr-xr-x    53 root  admin     1696 Nov 25 12:25 Persist
+-rw-r--r--     1 root  admin       94 Mar 20  2025 roles.plist
+$ ls /var/db/diagnostics/Persist | head -3; ls /var/db/diagnostics/Persist | wc -l
+0000000000003853.tracev3
+0000000000003854.tracev3
+0000000000003855.tracev3
+      51
+$ du -sh /var/db/diagnostics /var/db/uuidtext 2>/dev/null
+2.2G	/var/db/diagnostics
+1.0G	/var/db/uuidtext
+$ log config --status
+log: Must be root to run 'config' command

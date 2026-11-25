@@ -26,6 +26,7 @@ import s12 from './spring-boot/s12-openapi-react.mjs';
 import s13 from './spring-boot/s13-redis-cache.mjs';
 import s14 from './spring-boot/s14-viec-nen.mjs';
 import s15 from './spring-boot/s15-quan-sat.mjs';
+import s16 from './spring-boot/s16-hieu-nang.mjs';
 import s17 from './spring-boot/s17-docker-ci.mjs';
 import s18 from './spring-boot/s18-capstone.mjs';
 import s19 from './spring-boot/s19-thymeleaf.mjs';
@@ -216,6 +217,7 @@ sections[12] = s12;   // soạn 24/11/2026 (agent sb)
 sections[13] = s13;   // soạn 24/11/2026 (agent sb)
 sections[14] = s14;   // soạn 24/11/2026 (agent sb)
 sections[15] = s15;   // soạn 24/11/2026 (agent sb)
+sections[16] = s16;   // soạn 24–25/11/2026 (agent sb + Mac)
 sections[17] = s17;   // soạn 24/11/2026 (agent sb)
 sections[18] = s18;   // soạn 24/11/2026 (agent sb)
 sections[19] = s19;   // chương bổ sung 22/11 (HSF302)

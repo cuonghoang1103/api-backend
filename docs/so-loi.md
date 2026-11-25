@@ -1180,3 +1180,10 @@ Mẫu một mục:
 - **Cách sửa:** đổi sang `awk … > f.tam && mv -f f.tam f` (đổi tên nguyên tử, người đọc luôn thấy bản cũ hoặc bản mới trọn vẹn); để 5 tập kia chạy xong (giọng cuong6 mới, video được render lại cho khớp).
 - **Ảnh hưởng:** ~5 lượt làn giọng + 5 lượt render tốn thêm; không mất dữ liệu.
 - **Bài học:** tệp hàng có nhiều tiến trình đọc thì không ghi đè tại chỗ — ghi tệp tạm rồi `mv` (luật "ghi tại chỗ" chỉ dành cho bind-mount file đơn như nginx.conf).
+
+### 25/11/2026 — máy thuê vast9 đổi IP, 21 làn treo ~45 phút
+- **Triệu chứng:** từ ~13:05 không làn `vbg-*@t*` nào báo xong; `ssh vast9` timeout; API Vast vẫn báo `running` nhưng `gpu_util 0`, `cpu_util 0`.
+- **Nguyên nhân:** máy chủ Vast khởi động lại container (chỉ còn 9 tiến trình, `/tmp` sạch) và đổi IP công khai 201.188.90.0 → 201.188.93.115 (cổng 20515 giữ nguyên); `HostName` trong `~/.ssh/config` (Mac + linux-nha) vẫn trỏ IP cũ ⇒ mọi lệnh ssh của làn treo chờ.
+- **Cách sửa:** đọc IP mới ở `GET /api/v1/instances/` (`public_ipaddr` — `/api/v0/instances/` đã bị khai tử), sửa `HostName` hai máy, `ssh-keygen -R` khoá cũ, `systemctl --user restart vbg-giong@t{1..6} vbg-render@t{1..7} vbg-render@t{10..17}` ⇒ làn nhận việc lại sau 1 phút. Dữ liệu `/root` (model, vbg, `.r2-tam.env`) còn nguyên.
+- **Ảnh hưởng:** ~45 phút vast9 không làm gì (vẫn tính tiền), các tập đang chạy dở phải làm lại.
+- **Bài học:** kiểm hằng giờ thấy ssh timeout ⇒ việc đầu tiên là so `public_ipaddr` trên API với `HostName`, đừng đoán máy chết. Khoá ssh của Mac không vào được IP mới ⇒ đo vast9 qua `ssh linux-nha 'ssh vast9 …'`.

@@ -6,12 +6,22 @@
  * web-foundations 1.2 (cài VS Code nhập môn) và 11.5 (regex vừa đủ), docker 13.2 (debugger trong container), log-tu-a-den-z ch2.
  * Kế hoạch + bảng phủ: content/courses/ide-va-do-nghe-dev/_KE-HOACH.md. Soạn theo content/courses/docker/_HOP-DONG.md.
  * 22/11/2026: Mục 0 + Chương 1 đã soạn (ide-va-do-nghe-dev/s00, s01), ghép bằng ghep() cuối tệp.
+ * 24/11/2026: ĐÃ SOẠN Chương 2 (ide-va-do-nghe-dev/s02-intellij.mjs), thêm bài ide-2-8-ai-tro-ly (AI trợ lý trong IDE) đứng sau 2.5.
+ * 24/11/2026: ĐÃ SOẠN Chương 3 (ide-va-do-nghe-dev/s03-terminal.mjs) — 5 bài theo khung, giữ slug.
+ * 24/11/2026: ĐÃ SOẠN Chương 4 (ide-va-do-nghe-dev/s04-regex.mjs) — 7 bài theo khung, giữ slug.
+ * 24/11/2026: ĐÃ SOẠN Chương 6 (ide-va-do-nghe-dev/s06-may-moi.mjs) — 6 bài theo khung, giữ slug.
  * 22/11/2026: ĐÃ SOẠN Mục 0 + Chương 1 (ide-va-do-nghe-dev/s00-bat-dau.mjs, s01-vscode.mjs), ghép vào khung bằng ghep() cuối tệp.
  * Khi soạn một chương: thay phần tử trong `sections` bằng tệp chương thật, GIỮ NGUYÊN slug bài và title chương.
  */
 import { khung } from './_chung/khung.mjs';
 import s00 from './ide-va-do-nghe-dev/s00-bat-dau.mjs';
 import s01 from './ide-va-do-nghe-dev/s01-vscode.mjs';
+import s02 from './ide-va-do-nghe-dev/s02-intellij.mjs';
+import s03 from './ide-va-do-nghe-dev/s03-terminal.mjs';
+import s04 from './ide-va-do-nghe-dev/s04-regex.mjs';
+import s05 from './ide-va-do-nghe-dev/s05-git-ide.mjs';
+import s06 from './ide-va-do-nghe-dev/s06-may-moi.mjs';
+import s07 from './ide-va-do-nghe-dev/s07-du-an-cuoi.mjs';
 
 const COURSE = {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -93,13 +103,30 @@ const COURSE = {
   ]),
 };
 
-/** Ghép chương đã soạn vào khung: bài cùng slug thay bài khung; GIỮ title chương và thứ tự bài của khung. */
+/**
+ * Ghép chương đã soạn vào khung: bài cùng slug thay bài khung; GIỮ title chương và thứ tự bài của khung.
+ * Bài THÊM ngoài khung (slug mới, vd ide-2-8-ai-tro-ly) được chèn ngay sau bài đứng trước nó trong tệp chương.
+ */
 function ghep(sec, soan) {
   const theoSlug = new Map(soan.lessons.map((l) => [l.slug, l]));
-  for (const l of soan.lessons) if (!sec.lessons.some((k) => k.slug === l.slug)) throw new Error('ide: slug lạ ' + l.slug);
-  return { ...sec, description: soan.description || sec.description, lessons: sec.lessons.map((l) => theoSlug.get(l.slug) || l) };
+  const coTrongKhung = new Set(sec.lessons.map((l) => l.slug));
+  const lessons = sec.lessons.map((l) => theoSlug.get(l.slug) || l);
+  soan.lessons.forEach((l, i) => {
+    if (coTrongKhung.has(l.slug)) return;
+    if (!/^ide-\d+-\d+-[a-z0-9-]+$/.test(l.slug)) throw new Error('ide: slug lạ ' + l.slug);
+    const truoc = i > 0 ? soan.lessons[i - 1].slug : null;
+    const viTri = truoc ? lessons.findIndex((x) => x.slug === truoc) + 1 : 0;
+    lessons.splice(viTri, 0, l);
+  });
+  return { ...sec, description: soan.description || sec.description, lessons };
 }
 COURSE.sections[0] = ghep(COURSE.sections[0], s00);   // Mục 0 soạn 22/11/2026
-COURSE.sections[1] = ghep(COURSE.sections[1], s01);   // Chương 1 soạn 22/11/2026 — chương 2–7 còn là khung
+COURSE.sections[1] = ghep(COURSE.sections[1], s01);   // Chương 1 soạn 22/11/2026
+COURSE.sections[2] = ghep(COURSE.sections[2], s02);   // Chương 2 soạn 24/11/2026 (+ bài thêm ide-2-8-ai-tro-ly)
+COURSE.sections[3] = ghep(COURSE.sections[3], s03);   // Chương 3 soạn 24/11/2026
+COURSE.sections[4] = ghep(COURSE.sections[4], s04);   // Chương 4 soạn 24/11/2026
+COURSE.sections[5] = ghep(COURSE.sections[5], s05);   // Chương 5 soạn 24/11/2026
+COURSE.sections[6] = ghep(COURSE.sections[6], s06);   // Chương 6 soạn 24/11/2026
+COURSE.sections[7] = ghep(COURSE.sections[7], s07);   // Chương 7 soạn 24/11/2026 — khoá đủ 8 phần
 
 export default COURSE;

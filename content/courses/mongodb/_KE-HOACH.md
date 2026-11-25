@@ -262,3 +262,16 @@ KHÔNG lấy được: bài Guardian "Bye bye Mongo, Hello Postgres" (403 + arch
     Mọi đáp án thực hành có số đã chạy thật (10.1 hỏng 1 byte, 10.2 trễ nhân bản rs3 + oplog exporter, 10.3 bulkWrite upsert, 10.5 bucket 440→441, 10.6 FCV cao hơn binary).
   * Nguồn GET kiểm 24/11 (thêm): lifecycles (6.0 EOL 31/07/2025…9.0 09/2026), pricing Atlas (Free 512 MB, Flex $0.011/h ≤ $30, M10 $0.08/h ~$56.94), timeseries-limitations, Debezium MongoDB, ulimit.
   * Phiên sau: Chương 11 (đề dự án, PE, phỏng vấn — lưu ý _du-an.mjs đã có mốc) HOẶC Pha B video (47+ tập chưa làm; chưa xếp giọng id nào). mgo-lab đã docker stop.
+- 25/11 (phiên 13, agent Mac tiếp quản — gói Claude máy nhà hết; demo vẫn chạy trên máy nhà, mgo-lab 8.0.38): Chương 11 XONG (web). `s11-du-an-phong-van.mjs` + `s11/`
+  (11.1 hồ sơ nộp + yêu cầu phi chức năng có số + SO-DO.md + rubric 100 điểm quy đổi rubric bảo vệ; 11.2 đề PE CT Cinema 180 phút chấm tự động; 11.3 40 câu phỏng vấn
+  + 5 demo một phút + 2 bài thiết kế + STAR; 11.4 thi cuối khoá QUIZ 30 câu, passingScore 70). Import S11 trong mongodb.mjs.
+  * Tệp mới _demo/: kiem-du-an.js (tự kiểm CHỈ ĐỌC: validator, hình dạng, cỡ, $indexStats, explain truy vấn chính, replica set, write concern, auth/bindIp/TLS),
+    truy-van-ctshop.js, pe11/ (nap.js tất định LCG 20261125; cham.sh + cham.js chỉ giữ md5 đáp án; dong.js 4 tiến trình chờ mốc T0; loi-giai/ 10/10; bai-lam-ngay-tho/ 4,65).
+    Bài 11.1/11.2 đọc tệp _demo bằng fs lúc nạp module (không chép tay) ⇒ sửa nap.js là PHẢI tính lại băm (chạy cham.js với GHI_DAP=1) + chạy lại kịch bản.
+  * Kịch bản: máy nhà ~/vbg-dp/scratchpad/mgo/demo/s11/s11-{1-tu-kiem,2-pe,3-phong-van}.txt; output gộp vào _ma.mjs bằng cách THÊM 3 khoá (không sinh lại cả tệp,
+    vì bản Mac đã thay bí mật giả bằng chỗ giữ chỗ lúc gom 25/11).
+  * Phát hiện đưa vào bài: explain KHÔNG tính vào $indexStats (index mới báo "chưa dùng" tới khi có find thật); w:3 trên 1 máy ⇒ MongoWriteConcernError nhưng tài liệu vẫn ghi (đếm 1);
+    "ghe.ma"+"ghe.trangThai" 594 suất vs $elemMatch 34; mảng viết sẵn 1 phim vs $all 5; con trỏ keyset thiếu _id đi hết trang ra 30/35 vé; tháng UTC dời 4 vé 850.000 đ
+    của suất 00:30 01/12 sang tháng 11 + đẻ dòng R6 2026-10; kiểm-rồi-ghi bán trùng ~30 ghế/40 suất; biến tên `tls` trong script mongosh đụng module tls có sẵn ([object Object]).
+  * Nguồn GET kiểm 25/11: FTC 12/04/2018 (Uber 2016 — khoá truy cập đăng lên trang chia sẻ mã, 25M+22M+600k, trả 100.000 USD, công bố 11/2017).
+  * Kiểm: content-check 0 lỗi (89 bài, 2,93 triệu ký tự); lang-check 0 bài nặng; depth đạt mọi sàn. Video Pha B chưa làm. mgo-lab đã docker stop, pe11 đã drop.

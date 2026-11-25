@@ -27,6 +27,7 @@ import S07 from './mongodb/s07-replica-sharding.mjs';
 import S08 from './mongodb/s08-ung-dung.mjs';
 import S09 from './mongodb/s09-bao-mat.mjs';
 import S10 from './mongodb/s10-van-hanh.mjs';
+import S11 from './mongodb/s11-du-an-phong-van.mjs';
 // Dự án xuyên suốt khoá (docs/du-an-hop-dong.md v1): duAn + bài mốc mgo-moc-N (trước quiz chương) + bài mgo-bao-ve-du-an.
 import duAn, { baiMoc, baiBaoVe, MOC_THEO_CHUONG } from './mongodb/_du-an.mjs';
 
@@ -174,6 +175,6 @@ export default {
     requirements: 'Biết dùng terminal và Docker cơ bản; đọc được JavaScript (mongosh là vỏ JavaScript). SQL cơ bản giúp so sánh nhưng không bắt buộc. Chương 8 cần Node.js (Express) hoặc Java (Spring Boot) cơ bản.',
     documentsNote: 'Tài liệu chính: mongodb.com/docs/manual • "MongoDB: The Definitive Guide" 3rd ed. (O’Reilly) • MongoDB University (learn.mongodb.com) • mongoosejs.com/docs • docs.spring.io/spring-data/mongodb • jepsen.io/analyses (MongoDB 3.4, 4.2.6) • "Designing Data-Intensive Applications" (Kleppmann).',
   },
-  sections: ganDuAn(thay(KHUNG, [S00, S01, S02, S03, S04, S05, S06, S07, S08, S09, S10])),
+  sections: ganDuAn(thay(KHUNG, [S00, S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11])),
   duAn,
 };

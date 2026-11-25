@@ -23,10 +23,11 @@ import s06 from './fullstack-project/s06-frontend.mjs';
 import s07 from './fullstack-project/s07-realtime.mjs';
 import s08 from './fullstack-project/s08-test.mjs';
 import s09 from './fullstack-project/s09-docker.mjs';
+import s10 from './fullstack-project/s10-ci.mjs';
 
 /** Bài ĐÃ SOẠN (fullstack-project/sNN-*.mjs, cùng slug) thay bài khung; bài chưa soạn giữ khung. Tiêu đề chương giữ nguyên từ khung.
  *  Chương soạn xong được thêm bài quiz fp-N-5-quiz (slug mới, không trùng). Kế hoạch: fullstack-project/_KE-HOACH.md. */
-const DA_SOAN = [s00, s01, s02, s03, s04, s05, s06, s07, s08, s09];
+const DA_SOAN = [s00, s01, s02, s03, s04, s05, s06, s07, s08, s09, s10];
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },

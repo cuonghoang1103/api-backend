@@ -1,0 +1,11 @@
+$ ls /etc/ssh/sshd_config.d/; cat /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
+60-cloudimg-settings.conf
+PasswordAuthentication no
+$ printf 'PasswordAuthentication yes\nKbdInteractiveAuthentication no\n' | sudo tee /etc/ssh/sshd_config.d/10-lab.conf
+PasswordAuthentication yes
+KbdInteractiveAuthentication no
+$ sudo systemctl restart ssh && sudo sshd -T | grep -i '^passwordauthentication'
+passwordauthentication yes
+$ ssh -tt -b 192.168.56.20 hv@192.168.56.10 'sleep 2; exit' >/dev/null; echo "phiên tương tác của hv xong"   # ← trên máy keodo
+phiên tương tác của hv xong
+Connection to 192.168.56.10 closed.

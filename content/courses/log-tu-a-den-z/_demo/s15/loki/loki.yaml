@@ -1,0 +1,32 @@
+# Loki 3.7 một tiến trình, lưu trên đĩa — đủ cho lab và công ty nhỏ. Production lớn: object storage (S3/MinIO) + chế độ tách thành phần.
+auth_enabled: false
+memberlist:
+  bind_addr: [127.0.0.1]
+server:
+  http_listen_port: 3100
+  log_level: warn
+common:
+  path_prefix: /loki
+  replication_factor: 1
+  instance_addr: 127.0.0.1   # netns chung chỉ có lo ⇒ phải chỉ rõ địa chỉ
+  ring: { kvstore: { store: inmemory } }
+  storage:
+    filesystem: { chunks_directory: /loki/chunks, rules_directory: /loki/rules }
+ingester:
+  wal:
+    disk_full_threshold: 0.97   # mặc định 0.9: đĩa máy lab đã đầy 91% ⇒ Loki tự hãm ghi (xem Bài 15.1)
+schema_config:
+  configs:
+    - from: 2026-01-01
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index: { prefix: index_, period: 24h }
+limits_config:
+  retention_period: 168h          # giữ 7 ngày rồi xoá (compactor làm việc này)
+  reject_old_samples: true
+  reject_old_samples_max_age: 168h
+compactor:
+  working_directory: /loki/compactor
+  retention_enabled: true
+  delete_request_store: filesystem

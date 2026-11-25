@@ -1,0 +1,20 @@
+$ es '_query?format=txt' -d '{"query":"FROM filebeat-* | WHERE event.dataset == \"system.auth\" AND system.auth.ssh.event == \"Failed\" | EVAL dai = LENGTH(user.name) | STATS lan = COUNT(*) BY user.name, dai | SORT lan DESC | LIMIT 4"}'
+      lan      |   user.name   |      dai      
+---------------+---------------+---------------
+29             | test          |5              
+25             | admin         |6              
+23             |root           |4              
+22             | oracle        |7              
+$ kql 'user.name : "git"'
+KQL: user.name : "git"
+Số kết quả (Discover): 0 — "No results match your search criteria"
+$ kql 'user.name : " git"' 'source.ip,user.name'
+KQL: user.name : " git"
+Số kết quả (Discover): 20
+  Nov 20, 2026 @ 02:14:09.000 | 198.51.100.23 | git
+  Nov 20, 2026 @ 02:14:05.000 | 198.51.100.23 | git
+  Nov 20, 2026 @ 02:13:40.000 | 203.0.113.70 | git
+$ kql 'event.original : *invalid\ user\ git*'
+Kibana báo lỗi: Unable to retrieve search results
+$ es 'filebeat-*/_mapping/field/event.original' | jq -c '.[].mappings'
+{"event.original":{"full_name":"event.original","mapping":{"original":{"type":"keyword","index":false,"doc_values":false,"ignore_above":1024}}}}

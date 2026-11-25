@@ -1,0 +1,14 @@
+PS> ./tai-mau-ch5.ps1 -Ra ./sm
+OK   firefox-comhijack-11-13-7-1.evtx
+OK   lsass-mimikatz-10.evtx
+OK   mimikatz-github-3-10.evtx
+OK   mshta-task-1-3-11.evtx
+OK   panache-art.evtx
+OK   panache-edr.evtx
+OK   powercat-1-3.evtx
+OK   psinject-7-8-10.evtx
+OK   rotten-potato-1-8-3.evtx
+OK   sysmon-unload.evtx
+OK   uacme-22.evtx
+OK   webshell-1-10.evtx
+OK   wmiexec-whoami.evtx

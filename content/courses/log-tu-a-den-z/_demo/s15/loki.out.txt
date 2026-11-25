@@ -1,0 +1,93 @@
+$ docker exec lgz-c15-net wget -qO- 127.0.0.1:12345/api/v0/web/components | jq -r '.[] | "\(.localID)\t\(.health.state)"'
+loki.relabel.journal	healthy
+discovery.docker.lab	healthy
+discovery.relabel.lab	healthy
+loki.write.trung_tam	healthy
+loki.process.authlog	healthy
+loki.source.journal.vm	healthy
+loki.process.json	healthy
+loki.source.docker.lab	healthy
+local.file_match.authlog	healthy
+loki.source.file.authlog	healthy
+$ logcli labels
+container
+filename
+host
+job
+level
+service_name
+unit
+$ logcli labels unit --since 1h
+init.scope
+ssh.service
+systemd-journald.service
+$ logcli series --since 1h '{job=~".+"}' | sort
+{container="lgz-c15-api", job="docker", level="info", service_name="lgz-c15-api"}
+{host="lab15", job="journal", level="error", service_name="journal"}
+{host="lab15", job="journal", level="info", service_name="journal", unit="init.scope"}
+{host="lab15", job="journal", level="info", service_name="journal", unit="ssh.service"}
+{host="lab15", job="journal", level="info", service_name="journal", unit="systemd-journald.service"}
+{host="lab15", job="journal", level="info", service_name="journal"}
+{host="lab15", job="journal", level="notice", service_name="journal", unit="ssh.service"}
+{host="lab15", job="journal", level="notice", service_name="journal", unit="systemd-journald.service"}
+{host="lab15", job="journal", level="warning", service_name="journal"}
+$ for i in $(seq 40); do goi /api/orders; done; goi /admin/fail-on; for i in $(seq 5); do goi /api/pay; done; goi /admin/fail-off; goi /khong-co; do_ssh 3 root; do_ssh 2 an; sleep 4; echo xong
+xong
+$ logcli query --since 5m --limit 3 '{container="lgz-c15-api"}'
+2026-11-24T02:10:55Z {} {"time":"2026-11-24T02:10:55.895Z","svc":"shop-api","level":"info","msg":"request","rid":"d0f85fed","method":"GET","path":"/healthz","status":200,"ms":0.1}
+2026-11-24T02:10:42Z {} {"time":"2026-11-24T02:10:42.515Z","svc":"shop-api","level":"info","msg":"request","rid":"02e4122c","method":"GET","path":"/khong-co","status":404,"ms":0.1}
+2026-11-24T02:10:42Z {} {"time":"2026-11-24T02:10:42.474Z","svc":"shop-api","level":"info","msg":"request","rid":"2152437f","method":"GET","path":"/admin/fail-off","status":200,"ms":0.1}
+$ logcli query --since 5m --limit 3 '{container="lgz-c15-api", level="error"}'
+2026-11-24T02:10:42Z {} {"time":"2026-11-24T02:10:42.435Z","svc":"shop-api","level":"error","msg":"request","rid":"1cc761cb","method":"GET","path":"/api/pay","status":502,"ms":0.1,"err":"ECONNREFUSED payment-gw:9000"}
+2026-11-24T02:10:42Z {} {"time":"2026-11-24T02:10:42.393Z","svc":"shop-api","level":"error","msg":"request","rid":"d0ec1a55","method":"GET","path":"/api/pay","status":502,"ms":0.1,"err":"ECONNREFUSED payment-gw:9000"}
+2026-11-24T02:10:42Z {} {"time":"2026-11-24T02:10:42.353Z","svc":"shop-api","level":"error","msg":"request","rid":"5e48ebda","method":"GET","path":"/api/pay","status":502,"ms":0.1,"err":"ECONNREFUSED payment-gw:9000"}
+$ logcli query --since 5m --limit 3 '{container="lgz-c15-api"} | json | status >= 500 | line_format "{{.time}} {{.method}} {{.path}} {{.status}} err={{.err}}"'
+2026-11-24T02:10:42Z {rid="1cc761cb", time="2026-11-24T02:10:42.435Z"} 2026-11-24T02:10:42.435Z GET /api/pay 502 err=ECONNREFUSED payment-gw:9000
+2026-11-24T02:10:42Z {rid="d0ec1a55", time="2026-11-24T02:10:42.393Z"} 2026-11-24T02:10:42.393Z GET /api/pay 502 err=ECONNREFUSED payment-gw:9000
+2026-11-24T02:10:42Z {rid="5e48ebda", time="2026-11-24T02:10:42.353Z"} 2026-11-24T02:10:42.353Z GET /api/pay 502 err=ECONNREFUSED payment-gw:9000
+$ logcli query --since 5m --limit 3 '{container="lgz-c15-api"} | json | path != "/healthz" | ms > 40 | line_format "{{.rid}} {{.path}} {{.ms}} ms"'
+2026-11-24T02:10:42Z {ms="43.4", rid="700f3ca6", time="2026-11-24T02:10:42.038Z"} 700f3ca6 /api/orders 43.4 ms
+2026-11-24T02:10:41Z {ms="43.3", rid="c21fe410", time="2026-11-24T02:10:41.950Z"} c21fe410 /api/orders 43.3 ms
+2026-11-24T02:10:41Z {ms="41.3", rid="0214517d", time="2026-11-24T02:10:41.867Z"} 0214517d /api/orders 41.3 ms
+$ logcli query --since 10m --limit 5 '{unit="ssh.service"} |~ "Failed password|Accepted" | regexp "(?P<ket_qua>Failed|Accepted) password for (invalid user )?(?P<user>\\S+) from (?P<ip>\\S+)" | line_format "{{.ket_qua}} user={{.user}} ip={{.ip}}"'
+2026-11-24T02:10:55Z {user="an"}   Failed user=an ip=127.0.0.1
+2026-11-24T02:10:54Z {user="an"}   Failed user=an ip=127.0.0.1
+2026-11-24T02:10:51Z {user="root"} Failed user=root ip=127.0.0.1
+2026-11-24T02:10:47Z {user="root"} Failed user=root ip=127.0.0.1
+2026-11-24T02:10:43Z {user="root"} Failed user=root ip=127.0.0.1
+$ logcli instant-query 'sum by (user) (count_over_time({unit="ssh.service"} |= "Failed password" | regexp "for (invalid user )?(?P<user>\\S+) from" [10m]))' | jq -c '.[] | {metric, value: .value[1]}'
+{"metric":{"user":"admin"},"value":"4"}
+{"metric":{"user":"an"},"value":"2"}
+{"metric":{"user":"root"},"value":"3"}
+$ logcli instant-query 'sum by (status) (count_over_time({container="lgz-c15-api"} | json | path != "/healthz" [5m]))' | jq -c '.[] | {metric, value: .value[1]}'
+{"metric":{},"value":"1"}
+{"metric":{"status":"200"},"value":"72"}
+{"metric":{"status":"404"},"value":"1"}
+{"metric":{"status":"502"},"value":"5"}
+$ logcli instant-query 'quantile_over_time(0.95, {container="lgz-c15-api"} | json | path="/api/orders" | unwrap ms [5m])' | jq 'length'
+40
+$ logcli instant-query 'quantile_over_time(0.95, {container="lgz-c15-api"} | json | path="/api/orders" | unwrap ms [5m]) by (path)' | jq -c '.[] | {metric, value: .value[1]}'
+{"metric":{"path":"/api/orders"},"value":"44.39999999999999"}
+$ logcli instant-query 'sort_desc(topk(3, sum by (path) (count_over_time({container="lgz-c15-api"} | json [5m]))))' | jq -c '.[] | {metric, value: .value[1]}'
+{"metric":{"path":"/api/orders"},"value":"40"}
+{"metric":{"path":"/healthz"},"value":"12"}
+{"metric":{"path":"/api/pay"},"value":"5"}
+$ logcli query --limit 2 --from 2026-11-19T17:00:00Z --to 2026-11-20T17:00:00Z '{job="file", host="web-01"} |= "Accepted"'
+2026-11-20T02:02:11Z {} Nov 20 09:02:11 web-01 sshd[52001]: Accepted publickey for deploy from 192.0.2.10 port 51122 ssh2: ED25519 SHA256:Gm0fakefakefakefakefakefakefakefakefake
+$ logcli query --since 1h '{job="file"}' 2>&1 | wc -l
+0
+$ logcli series --since 1h --analyze-labels '{job=~".+"}' 2>&1
+Total Streams:  10
+Unique Labels:  6
+
+Label Name    Unique Values  Found In Streams
+level         4              10
+unit          3              5
+job           2              10
+service_name  2              10
+host          1              8
+container     1              2
+$ lcurl -u admin:$GF_SECURITY_ADMIN_PASSWORD 127.0.0.1:3000/api/datasources | jq -c '.[] | {name, type, url, isDefault}'
+{"name":"Loki","type":"loki","url":"http://127.0.0.1:3100","isDefault":true}
+$ lcurl -u admin:$GF_SECURITY_ADMIN_PASSWORD -H 'content-type: application/json' 127.0.0.1:3000/api/ds/query -d '{"from":"now-5m","to":"now","queries":[{"refId":"A","datasource":{"uid":"loki-lab"},"expr":"sum(count_over_time({container=\"lgz-c15-api\", level=\"error\"}[5m]))","queryType":"instant"}]}' | jq -c '.results.A.frames[0].data.values'
+[[1795486264606],[5]]

@@ -1,0 +1,24 @@
+$ awk '$9 >= 500 {print substr($4, 14, 2) "h"}' web/access.log | sort | uniq -c
+    137 14h
+$ awk '$9 >= 500 {print substr($4, 14, 4) "x", $9}' web/access.log | sort | uniq -c
+     80 14:0x 502
+     57 14:0x 504
+$ awk '$9 >= 500 {split($7, p, "?"); print p[1]}' web/access.log | sort | uniq -c | sort -rn | head -5
+     65 /api/v1/feed
+     41 /api/v1/notifications
+     31 /api/v1/me
+$ jq -r 'select(.level >= 50) | .err.message' app/app.jsonl | sort | uniq -c
+     25 connect ECONNREFUSED 10.0.0.20:5432
+$ jq -r 'select(.level >= 50) | .time / 1000 | floor | strflocaltime("%H:%M:%S")' app/app.jsonl | sed -n '1p;$p'
+14:04:25
+14:08:20
+$ jq -c 'select(.reqId == "req-00387") | {reqId, msg, url: .req.url, code: .err.code}' app/app.jsonl
+{"reqId":"req-00387","msg":"database query failed","url":"/api/v1/me","code":"ECONNREFUSED"}
+$ grep 'Accepted' linux/auth.log
+Nov 20 09:02:11 web-01 sshd[52001]: Accepted publickey for deploy from 192.0.2.10 port 51122 ssh2: ED25519 SHA256:Gm0fakefakefakefakefakefakefakefakefake
+$ grep 'Failed password' linux/auth.log | grep -oE 'from [0-9.]+' | sort | uniq -c | sort -rn | head -3
+     74 from 203.0.113.66
+     45 from 203.0.113.70
+     41 from 198.51.100.23
+$ awk '/Failed password/ {for (i = 1; i <= NF; i++) if ($i == "from") sai[$(i+1)]++} /Accepted/ {for (i = 1; i <= NF; i++) if ($i == "from") print $(i+1), "vào được, trước đó sai", sai[$(i+1)] + 0, "lần"}' linux/auth.log
+192.0.2.10 vào được, trước đó sai 0 lần

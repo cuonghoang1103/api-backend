@@ -1,0 +1,85 @@
+$ node har.mjs login,me,orders,report shop.har
+đã ghi shop.har
+$ jq '.log | {version, creator, browser, pages: (.pages | length), entries: (.entries | length)}' shop.har
+{
+  "version": "1.2",
+  "creator": {
+    "name": "Playwright",
+    "version": "1.61.0"
+  },
+  "browser": {
+    "name": "chromium",
+    "version": "150.0.7871.128"
+  },
+  "pages": 1,
+  "entries": 10
+}
+$ jq '.log.entries[] | select(.request.url | endswith("/api/me")) | {startedDateTime, time, serverIPAddress, request: {method: .request.method, url: .request.url, headersSize: .request.headersSize}, response: {status: .response.status, statusText: .response.statusText, bodySize: .response.bodySize}, timings}' shop.har
+{
+  "startedDateTime": "2026-11-23T23:32:43.091Z",
+  "time": 2.749,
+  "serverIPAddress": "127.0.0.1",
+  "request": {
+    "method": "GET",
+    "url": "http://api.lgz.test:41902/api/me",
+    "headersSize": 467
+  },
+  "response": {
+    "status": 401,
+    "statusText": "Unauthorized",
+    "bodySize": 36
+  },
+  "timings": {
+    "dns": -1,
+    "connect": -1,
+    "ssl": -1,
+    "send": 0,
+    "wait": 0.422,
+    "receive": 2.327
+  }
+}
+$ jq -r '.log.entries[] | [.response.status, .request.method, (.time | round), (.request.url | sub("\\?.*"; "?…"))] | @tsv' shop.har
+200	GET	2	http://shop.lgz.test:41901/?…
+404	GET	2	http://shop.lgz.test:41901/img/logo-moi.png
+200	GET	7	http://shop.lgz.test:41901/app.min.js
+204	POST	2	http://shop.lgz.test:41901/csp
+200	POST	5	http://api.lgz.test:41902/api/login
+200	GET	2	http://api.lgz.test:41902/api/search?…
+200	GET	3	http://api.lgz.test:41902/api/products
+401	GET	3	http://api.lgz.test:41902/api/me
+-1	GET	-1	http://api.lgz.test:41902/api/orders
+504	GET	2005	http://api.lgz.test:41902/api/report
+$ jq -r '.log.entries[] | select(.response.status >= 400 or .response.status <= 0) | [.response.status, (.response._failureText // .response.statusText), .request.url] | @tsv' shop.har
+404	Not Found	http://shop.lgz.test:41901/img/logo-moi.png
+401	Unauthorized	http://api.lgz.test:41902/api/me
+-1	net::ERR_FAILED	http://api.lgz.test:41902/api/orders
+504	Gateway Timeout	http://api.lgz.test:41902/api/report
+$ jq -r '[.log.entries[] | {t: (.time | round), u: .request.url}] | sort_by(-.t) | .[0:3][] | "\(.t) ms  \(.u)"' shop.har
+2005 ms  http://api.lgz.test:41902/api/report
+7 ms  http://shop.lgz.test:41901/app.min.js
+5 ms  http://api.lgz.test:41902/api/login
+$ jq -r '.log.entries[] | select(.response.status >= 400) | "\(.response.status)  \([.response.headers[] | select(.name | test("x-request-id|www-authenticate"; "i")) | "\(.name)=\(.value)"] | join("  "))  body=\(.response.content.text)"' shop.har
+404  X-Request-Id=860cda7e12e1c96b  body=bm90IGZvdW5k
+401  WWW-Authenticate=Bearer error="invalid_token", error_description="The access token expired"  X-Request-Id=9a5aa79b29d1c730  body={"error":"invalid_token"}
+504  X-Request-Id=d8c22017e716fc77  body={"error":"gateway_timeout"}
+$ bash tim-bi-mat.bash shop.har
+      6 eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdi5sYWI
+      4 "name":"Authorization","value":"B
+      1 token=eyJhbG
+      1 \"password\":\"MatKhau_GIA_123
+      1 "name":"Set-Cookie","value":"s
+$ jq '.log.entries |= map(.request.headers |= map(select(.name | test("^(cookie|authorization)$"; "i") | not)) | .response.headers |= map(select(.name | test("^set-cookie$"; "i") | not)) | .request.cookies = [] | .response.cookies = [])' shop.har > shop.sanitized.har; bash tim-bi-mat.bash shop.sanitized.har
+      2 eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdi5sYWI
+      1 token=eyJhbG
+      1 \"password\":\"MatKhau_GIA_123
+$ jq -f che-har.jq shop.har > shop.sach.har; bash tim-bi-mat.bash shop.sach.har; echo "còn lại: $(bash tim-bi-mat.bash shop.sach.har | wc -l) mẫu"
+còn lại: 0 mẫu
+$ jq -r '.log.entries[] | select(.request.url | test("/api/(login|search)")) | .request.url, (.request.postData.text // "-"), (.response.content.text // "-")' shop.sach.har
+http://api.lgz.test:41902/api/login
+{"email":"sv.lab9@example.com","password":"[DA-CHE]"}
+{"token":"[DA-CHE]"}
+http://api.lgz.test:41902/api/search?q=ban+phim&token=[DA-CHE]
+-
+{"q":"ban phim","ketQua":[]}
+$ grep -o 'sv\.lab9@example\.com' shop.sach.har | wc -l
+3

@@ -1,0 +1,20 @@
+$ cat ~/spam.py
+# spam.py — ghi 30000 dòng thật nhanh, chờ 31 giây (hết cửa sổ 30 s), rồi ghi thêm một dòng
+import time
+for i in range(30000): print(f"spam line {i}", flush=True)
+time.sleep(31)
+print("done after the window", flush=True)
+$ sudo systemd-run --unit=lu-mac-dinh --wait -q python3 ~/spam.py
+$ journalctl -u lu-mac-dinh --no-pager -q | wc -l
+10004
+$ journalctl -u lu-mac-dinh --no-pager -q | tail -n 3
+Nov 24 04:21:37 lab7 systemd-journald[6645]: Suppressed 20000 messages from lu-mac-dinh.service
+Nov 24 04:21:37 lab7 python3[7459]: done after the window
+Nov 24 04:21:37 lab7 systemd[1]: lu-mac-dinh.service: Deactivated successfully.
+$ sudo systemd-run --unit=lu-1000 -p LogRateLimitIntervalSec=30s -p LogRateLimitBurst=1000 --wait -q python3 ~/spam.py
+$ journalctl -u lu-1000 --no-pager -q | wc -l
+1004
+$ journalctl -u lu-1000 --no-pager -q | tail -n 3
+Nov 24 04:22:09 lab7 systemd-journald[6645]: Suppressed 29000 messages from lu-1000.service
+Nov 24 04:22:09 lab7 python3[7616]: done after the window
+Nov 24 04:22:09 lab7 systemd[1]: lu-1000.service: Deactivated successfully.

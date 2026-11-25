@@ -1,0 +1,5 @@
+$ journalctl --list-boots
+IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY
+  0 1c03b0ee7b0c4c0980383ff645a74d1a Tue 2026-11-24 16:49:01 UTC Tue 2026-11-24 16:49:01 UTC
+$ journalctl -b -1 -n 6 --no-pager
+No journal boot entry found from the specified boot offset (-1).

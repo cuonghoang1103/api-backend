@@ -1,0 +1,102 @@
+# Cảnh báo từ log (Bài 15.5) — nạp bằng provisioning để có trong Git, không bấm tay trên giao diện.
+apiVersion: 1
+contactPoints:
+  - orgId: 1
+    name: dien-thoai
+    receivers:
+      - uid: ntfy-lab15
+        type: webhook
+        settings:
+          url: http://127.0.0.1:2586/lab15-canh-bao?template=grafana   # ntfy tự dựng; điện thoại theo dõi chủ đề này
+          httpMethod: POST
+policies:
+  - orgId: 1
+    receiver: dien-thoai
+    group_by: [alertname]
+    group_wait: 10s        # lab: gửi nhanh. Production thường 30s
+    group_interval: 1m
+    repeat_interval: 4h
+groups:
+  - orgId: 1
+    name: lab15
+    folder: Lab 15
+    interval: 30s
+    rules:
+      - uid: ssh-that-bai
+        title: SSH thất bại tăng vọt
+        condition: C
+        for: 0s
+        noDataState: OK          # không có dòng "Failed password" nào = bình thường, KHÔNG phải lỗi
+        execErrState: Error
+        labels: { muc: canh-bao }
+        annotations:
+          summary: 'SSH thất bại {{ $values.B.Value }} lần trong 5 phút trên {{ $labels.host }}'
+          viec_can_lam: 'Xem IP nguồn: {host="lab15"} |= "Failed password" — chặn nếu không phải người nhà (Bài 8.3)'
+        data:
+          - refId: A
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: loki-lab
+            model:
+              expr: 'sum by (host) (count_over_time({job="journal", unit="ssh.service"} |= "Failed password" [5m]))'
+              queryType: instant
+          - refId: B
+            datasourceUid: __expr__
+            model: { type: reduce, expression: A, reducer: last }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: B
+              conditions: [{ evaluator: { type: gt, params: [10] } }]
+      - uid: api-5xx
+        title: API trả 5xx
+        condition: C
+        for: 1m                  # phải kéo dài 1 phút mới báo — một lần chập chờn thì thôi
+        noDataState: OK
+        execErrState: Error
+        labels: { muc: nghiem-trong }
+        annotations:
+          summary: 'shop-api trả {{ $values.B.Value }} lỗi 5xx trong 5 phút'
+          viec_can_lam: 'Mở {container="lgz-c15-api"} | json | status >= 500, đọc trường err (Bài 10.4)'
+        data:
+          - refId: A
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: loki-lab
+            model:
+              expr: 'sum(count_over_time({container="lgz-c15-api"} | json | status >= 500 [5m]))'
+              queryType: instant
+          - refId: B
+            datasourceUid: __expr__
+            model: { type: reduce, expression: A, reducer: last }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: B
+              conditions: [{ evaluator: { type: gt, params: [5] } }]
+      - uid: api-im-lang
+        title: shop-api im lặng
+        condition: C
+        for: 0s
+        noDataState: OK          # absent_over_time chỉ trả số khi KHÔNG có log; có log ⇒ rỗng ⇒ OK
+        execErrState: Error
+        labels: { muc: nghiem-trong }
+        annotations:
+          summary: 'Không có dòng log nào từ shop-api trong 2 phút (production: 15 phút)'
+          viec_can_lam: 'docker ps / docker logs lgz-c15-api; kiểm Alloy còn chạy không (Bài 15.1)'
+        data:
+          - refId: A
+            relativeTimeRange: { from: 120, to: 0 }
+            datasourceUid: loki-lab
+            model:
+              expr: 'absent_over_time({container="lgz-c15-api"}[2m])'
+              queryType: instant
+          - refId: B
+            datasourceUid: __expr__
+            model: { type: reduce, expression: A, reducer: last }
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: B
+              conditions: [{ evaluator: { type: gt, params: [0] } }]

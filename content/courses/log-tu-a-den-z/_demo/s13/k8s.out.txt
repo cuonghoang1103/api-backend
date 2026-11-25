@@ -1,0 +1,153 @@
+$ kubectl version 2>/dev/null | head -1; kubectl get nodes
+Client Version: v1.33.5+k3s1
+NAME    STATUS   ROLES                  AGE     VERSION
+lab13   Ready    control-plane,master   4m10s   v1.33.5+k3s1
+$ kubectl create namespace lab13 && kubectl -n lab13 create configmap ma-c13 --from-file=c13/app.js --from-file=c13/an-ram.js
+namespace/lab13 created
+configmap/ma-c13 created
+$ kubectl apply -f k8s/orders.yaml && kubectl -n lab13 rollout status deploy/orders --timeout=60s
+deployment.apps/orders created
+Waiting for deployment "orders" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "orders" rollout to finish: 1 of 2 updated replicas are available...
+deployment "orders" successfully rolled out
+$ sleep 5; kubectl -n lab13 get pods -o wide | awk '{print $1, $2, $3, $4, $5}' | column -t
+NAME                    READY  STATUS   RESTARTS  AGE
+orders-fcbdf6758-78fsz  1/1    Running  0         6s
+orders-fcbdf6758-dj65s  1/1    Running  0         6s
+$ kubectl -n lab13 logs deploy/orders --tail 3
+Found 2 pods, using pod/orders-fcbdf6758-78fsz
+{"time":"2026-11-24T00:09:51.381Z","level":"info","svc":"orders","msg":"order created","orderId":1011}
+WARN slow query 444 ms
+{"time":"2026-11-24T00:09:51.682Z","level":"info","svc":"orders","msg":"idle"}
+$ kubectl -n lab13 logs -l app=orders --prefix --tail 2
+[pod/orders-fcbdf6758-dj65s/api] WARN slow query 444 ms
+[pod/orders-fcbdf6758-dj65s/api] {"time":"2026-11-24T00:09:51.686Z","level":"info","svc":"orders","msg":"idle"}
+[pod/orders-fcbdf6758-78fsz/api] WARN slow query 444 ms
+[pod/orders-fcbdf6758-78fsz/api] {"time":"2026-11-24T00:09:51.682Z","level":"info","svc":"orders","msg":"idle"}
+$ kubectl -n lab13 logs -l app=orders --timestamps --tail 1
+2026-11-24T00:09:51.682304686Z {"time":"2026-11-24T00:09:51.682Z","level":"info","svc":"orders","msg":"idle"}
+2026-11-24T00:09:51.686389100Z {"time":"2026-11-24T00:09:51.686Z","level":"info","svc":"orders","msg":"idle"}
+$ kubectl -n lab13 logs -l app=orders --since 3s | wc -l
+8
+$ kubectl apply -f k8s/hong.yaml; sleep 75
+pod/orders-loi created
+pod/an-ram created
+pod/anh-sai created
+pod/xong-viec created
+$ kubectl -n lab13 get pods
+NAME                     READY   STATUS             RESTARTS      AGE
+an-ram                   0/1     CrashLoopBackOff   3 (32s ago)   75s
+anh-sai                  0/1     ImagePullBackOff   0             75s
+orders-fcbdf6758-78fsz   1/1     Running            0             82s
+orders-fcbdf6758-dj65s   1/1     Running            0             82s
+orders-loi               0/1     CrashLoopBackOff   3 (34s ago)   75s
+xong-viec                0/1     CrashLoopBackOff   3 (36s ago)   75s
+$ kubectl -n lab13 logs orders-loi | head -2
+FATAL: thiếu biến môi trường DB_URL
+Error: config: DB_URL is required
+$ kubectl -n lab13 logs orders-loi --previous | head -2
+FATAL: thiếu biến môi trường DB_URL
+Error: config: DB_URL is required
+$ kubectl -n lab13 describe pod orders-loi | sed -n '/^Containers:/,/^Conditions:/p' | grep -E 'State|Reason|Exit Code|Started|Finished|Restart Count|Ready'
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Tue, 24 Nov 2026 00:10:35 +0000
+      Finished:     Tue, 24 Nov 2026 00:10:35 +0000
+    Ready:          False
+    Restart Count:  3
+$ kubectl -n lab13 describe pod an-ram | grep -E -A4 'Last State'
+    Last State:     Terminated
+      Reason:       OOMKilled
+      Exit Code:    137
+      Started:      Tue, 24 Nov 2026 00:10:36 +0000
+      Finished:     Tue, 24 Nov 2026 00:10:37 +0000
+$ kubectl -n lab13 logs an-ram --previous | tail -2
+held 40 MB
+held 48 MB
+$ kubectl -n lab13 logs anh-sai
+Error from server (BadRequest): container "web" in pod "anh-sai" is waiting to start: trying and failing to pull image
+$ kubectl -n lab13 get events --field-selector involvedObject.name=anh-sai --sort-by=.lastTimestamp -o custom-columns=LAST:.lastTimestamp,TYPE:.type,REASON:.reason,COUNT:.count,MESSAGE:.message | cut -c1-170
+LAST                   TYPE      REASON      COUNT    MESSAGE
+<nil>                  Normal    Scheduled   <none>   Successfully assigned lab13/anh-sai to lab13
+2026-11-24T00:10:30Z   Normal    Pulling     3        Pulling image "registry.invalid/lab13/web:1.0"
+2026-11-24T00:10:30Z   Warning   Failed      3        Failed to pull image "registry.invalid/lab13/web:1.0": failed to pull and unpack image "registry.invalid/lab13/web:1
+2026-11-24T00:10:30Z   Warning   Failed      3        Error: ErrImagePull
+2026-11-24T00:10:58Z   Normal    BackOff     4        Back-off pulling image "registry.invalid/lab13/web:1.0"
+2026-11-24T00:10:58Z   Warning   Failed      4        Error: ImagePullBackOff
+$ kubectl -n lab13 get events --field-selector involvedObject.name=orders-loi --sort-by=.lastTimestamp -o custom-columns=LAST:.lastTimestamp,TYPE:.type,REASON:.reason,COUNT:.count,MESSAGE:.message | cut -c1-150
+LAST                   TYPE      REASON      COUNT    MESSAGE
+<nil>                  Normal    Scheduled   <none>   Successfully assigned lab13/orders-loi to lab13
+2026-11-24T00:10:35Z   Normal    Pulled      4        Container image "node:22-alpine" already present on machine
+2026-11-24T00:10:35Z   Normal    Created     4        Created container: api
+2026-11-24T00:10:35Z   Normal    Started     4        Started container api
+2026-11-24T00:11:06Z   Warning   BackOff     6        Back-off restarting failed container api in pod orders-loi_lab13(cc8a87ba-5a17-4a14-b7cc-fd327e1
+$ kubectl -n lab13 get events --field-selector type=Warning -o custom-columns=OBJECT:.involvedObject.name,REASON:.reason,COUNT:.count
+OBJECT       REASON    COUNT
+an-ram       BackOff   6
+anh-sai      Failed    3
+anh-sai      Failed    3
+anh-sai      Failed    4
+orders-loi   BackOff   6
+xong-viec    BackOff   6
+$ kubectl -n lab13 describe pod xong-viec | grep -E -A3 '^    (State|Last State)'
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Tue, 24 Nov 2026 00:10:33 +0000
+$ kubectl -n lab13 logs xong-viec
+bao cao ngay: 42 don hang
+xong
+$ kubectl -n lab13 get pod an-ram -o jsonpath='{.status.containerStatuses[0].lastState.terminated}' | jq -c '{reason, exitCode, startedAt, finishedAt}'
+{"reason":"OOMKilled","exitCode":137,"startedAt":"2026-11-24T00:10:36Z","finishedAt":"2026-11-24T00:10:37Z"}
+$ kubectl apply -f k8s/hai-container.yaml; sleep 25
+pod/web-sidecar created
+pod/song-do created
+$ kubectl -n lab13 logs web-sidecar | tail -2
+Defaulted container "nginx" out of: nginx, goi-thu
+127.0.0.1 - - [24/Nov/2026:00:11:13 +0000] "GET /khong-co HTTP/1.1" 404 153 "-" "Wget" "-"
+127.0.0.1 - - [24/Nov/2026:00:11:13 +0000] "GET / HTTP/1.1" 200 615 "-" "Wget" "-"
+$ kubectl -n lab13 logs web-sidecar -c goi-thu
+goi-thu: lan 1 xong
+goi-thu: lan 2 xong
+goi-thu: lan 3 xong
+$ kubectl -n lab13 logs web-sidecar --all-containers --prefix | grep -v 'notice' | tail -4
+[pod/web-sidecar/nginx] 127.0.0.1 - - [24/Nov/2026:00:11:13 +0000] "GET / HTTP/1.1" 200 615 "-" "Wget" "-"
+[pod/web-sidecar/goi-thu] goi-thu: lan 1 xong
+[pod/web-sidecar/goi-thu] goi-thu: lan 2 xong
+[pod/web-sidecar/goi-thu] goi-thu: lan 3 xong
+$ kubectl -n lab13 get pod song-do -o custom-columns=NAME:.metadata.name,RESTARTS:.status.containerStatuses[0].restartCount,LAST:.status.containerStatuses[0].lastState.terminated.reason,EXIT:.status.containerStatuses[0].lastState.terminated.exitCode
+NAME      RESTARTS   LAST        EXIT
+song-do   2          Completed   0
+$ kubectl -n lab13 get events --field-selector involvedObject.name=song-do --sort-by=.lastTimestamp -o custom-columns=REASON:.reason,COUNT:.count,MESSAGE:.message | grep -E 'Unhealthy|Killing' | cut -c1-140
+Unhealthy   6        Liveness probe failed: HTTP probe failed with statuscode: 404
+Killing     3        Container api failed liveness probe, will be restarted
+$ kubectl -n lab13 logs song-do --previous | grep healthz | tail -2
+2026/11/24 00:11:29 [error] 31#31: *2 open() "/usr/share/nginx/html/healthz" failed (2: No such file or directory), client: 10.42.0.1, server: localhost, request: "GET /healthz HTTP/1.1", host: "10.42.0.18:80"
+10.42.0.1 - - [24/Nov/2026:00:11:29 +0000] "GET /healthz HTTP/1.1" 404 153 "-" "kube-probe/1.33" "-"
+$ docker exec lgz-k3s sh -c 'ls /var/log/pods | grep lab13'
+lab13_an-ram_aca35049-de78-4c59-b84f-a41c667f8ad2
+lab13_anh-sai_795527a3-5b23-4184-8b4f-2d833dee44d7
+lab13_orders-fcbdf6758-78fsz_bd3857e2-5b78-4a6d-9a91-0edbb85fc74c
+lab13_orders-fcbdf6758-dj65s_7241469a-0203-4d26-985c-8eaab254e15c
+lab13_orders-loi_cc8a87ba-5a17-4a14-b7cc-fd327e1aff57
+lab13_song-do_05b9ec42-7244-4ed4-b311-c6af8d1d8dc1
+lab13_web-sidecar_51893438-e678-40d8-8a00-f822e144a586
+lab13_xong-viec_b9096841-4f26-4a6d-8c7b-fb7e35216860
+$ docker exec lgz-k3s sh -c 'ls -l /var/log/containers | grep orders-loi | sed "s/.*orders-loi/orders-loi/"'
+orders-loi_cc8a87ba-5a17-4a14-b7cc-fd327e1aff57/api/4.log
+$ docker exec lgz-k3s sh -c 'ls /var/log/pods/lab13_orders-loi_*/api/'
+4.log
+$ docker exec lgz-k3s sh -c 'head -2 /var/log/pods/lab13_orders-loi_*/api/*.log'
+2026-11-24T00:11:20.963167865Z stderr F FATAL: thiếu biến môi trường DB_URL
+2026-11-24T00:11:20.963197779Z stderr F Error: config: DB_URL is required
+$ docker exec lgz-k3s sh -c 'tail -1 /var/log/pods/lab13_web-sidecar_*/nginx/0.log'
+2026-11-24T00:11:13.941368151Z stdout F 127.0.0.1 - - [24/Nov/2026:00:11:13 +0000] "GET / HTTP/1.1" 200 615 "-" "Wget" "-"
+$ kubectl -n lab13 delete pod orders-loi --wait=true >/dev/null; kubectl -n lab13 logs orders-loi
+error: error from server (NotFound): pods "orders-loi" not found in namespace "lab13"
+$ sleep 20; docker exec lgz-k3s sh -c 'ls /var/log/pods | grep -c orders-loi'
+0

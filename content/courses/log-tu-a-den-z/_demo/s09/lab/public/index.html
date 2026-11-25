@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><title>Shop Lab 9</title>
+<link rel="icon" href="data:,">
+</head><body>
+<h1>Shop Lab 9</h1>
+<button id="pay">Thanh toán</button>
+<img id="logo" src="/img/logo-moi.png" alt="logo">
+<script src="/app.min.js"></script>
+<script>/* script nội tuyến của một plugin chat — CSP sẽ chặn */ console.log('chat widget loaded');</script>
+<script nonce="lab9">shop.chay(new URLSearchParams(location.search).get('kb') || 'me');</script>
+</body></html>

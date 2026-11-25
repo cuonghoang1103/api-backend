@@ -1,0 +1,5 @@
+[Unit]
+Description=Báo cáo log buổi sáng
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/bao-cao-sang.sh

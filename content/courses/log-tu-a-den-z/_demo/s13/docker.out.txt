@@ -1,0 +1,177 @@
+$ docker run -d --name lgz-orders --label lgz=c13 --init -e DB_URL=postgres://db:5432/shop -v ./app.js:/app/app.js:ro node:22-alpine node /app/app.js >/dev/null; sleep 4.5
+$ docker logs lgz-orders
+{"time":"2026-11-24T00:04:25.454Z","level":"info","svc":"orders","msg":"started","pid":7,"node":"v22.23.5"}
+{"time":"2026-11-24T00:04:25.758Z","level":"info","svc":"orders","msg":"order created","orderId":1001}
+{"time":"2026-11-24T00:04:26.058Z","level":"info","svc":"orders","msg":"order created","orderId":1002}
+{"time":"2026-11-24T00:04:26.358Z","level":"info","svc":"orders","msg":"order created","orderId":1003}
+WARN slow query 148 ms
+{"time":"2026-11-24T00:04:26.959Z","level":"info","svc":"orders","msg":"order created","orderId":1005}
+{"time":"2026-11-24T00:04:27.260Z","level":"info","svc":"orders","msg":"order created","orderId":1006}
+{"time":"2026-11-24T00:04:27.561Z","level":"info","svc":"orders","msg":"order created","orderId":1007}
+WARN slow query 296 ms
+{"time":"2026-11-24T00:04:28.161Z","level":"info","svc":"orders","msg":"order created","orderId":1009}
+{"time":"2026-11-24T00:04:28.461Z","level":"info","svc":"orders","msg":"order created","orderId":1010}
+{"time":"2026-11-24T00:04:28.762Z","level":"info","svc":"orders","msg":"order created","orderId":1011}
+WARN slow query 444 ms
+{"time":"2026-11-24T00:04:29.063Z","level":"info","svc":"orders","msg":"idle"}
+$ docker logs --tail 3 lgz-orders
+{"time":"2026-11-24T00:04:28.762Z","level":"info","svc":"orders","msg":"order created","orderId":1011}
+WARN slow query 444 ms
+{"time":"2026-11-24T00:04:29.063Z","level":"info","svc":"orders","msg":"idle"}
+$ docker logs -t --tail 2 lgz-orders
+2026-11-24T00:04:29.063109370Z WARN slow query 444 ms
+2026-11-24T00:04:29.063269671Z {"time":"2026-11-24T00:04:29.063Z","level":"info","svc":"orders","msg":"idle"}
+$ docker logs lgz-orders 2>/dev/null | wc -l
+11
+$ docker logs lgz-orders 2>&1 >/dev/null
+WARN slow query 148 ms
+WARN slow query 296 ms
+WARN slow query 444 ms
+$ docker logs lgz-orders 2>/dev/null | jq -c 'select(.msg == "order created") | {time, orderId}' | head -3
+{"time":"2026-11-24T00:04:25.758Z","orderId":1001}
+{"time":"2026-11-24T00:04:26.058Z","orderId":1002}
+{"time":"2026-11-24T00:04:26.358Z","orderId":1003}
+$ docker logs --since 3s lgz-orders 2>&1 | wc -l
+12
+$ docker inspect -f '{{.HostConfig.LogConfig.Type}} {{.HostConfig.LogConfig.Config}}' lgz-orders
+json-file map[max-file:3 max-size:10m]
+$ docker run -d --name lgz-dem --label lgz=c13 -v ./dem.py:/w/dem.py:ro lgz-lab:1 python3 /w/dem.py >/dev/null; sleep 3; docker logs lgz-dem | wc -l
+0
+$ sleep 3.5; docker logs -t lgz-dem
+2026-11-24T00:04:35.159175973Z tick 1
+2026-11-24T00:04:35.159214432Z tick 2
+2026-11-24T00:04:35.159228163Z tick 3
+2026-11-24T00:04:35.159230413Z tick 4
+2026-11-24T00:04:35.159232332Z tick 5
+$ docker run -d --name lgz-dem-u --label lgz=c13 -e PYTHONUNBUFFERED=1 -v ./dem.py:/w/dem.py:ro lgz-lab:1 python3 /w/dem.py >/dev/null; timeout 3.5 docker logs -f -t lgz-dem-u
+2026-11-24T00:04:36.846965145Z tick 1
+2026-11-24T00:04:37.847096887Z tick 2
+2026-11-24T00:04:38.847171550Z tick 3
+2026-11-24T00:04:39.847261099Z tick 4
+$ date +%s > .t0; docker run -d --name lgz-orders-loi --label lgz=c13 --restart on-failure:3 -v ./app.js:/app/app.js:ro node:22-alpine node /app/app.js >/dev/null; sleep 9
+$ docker ps -a --filter name=lgz-orders-loi --format '{{.Names}}  {{.Status}}'
+lgz-orders-loi  Exited (1) 7 seconds ago
+$ docker inspect -f 'RestartCount={{.RestartCount}} ExitCode={{.State.ExitCode}} OOMKilled={{.State.OOMKilled}}' lgz-orders-loi
+RestartCount=3 ExitCode=1 OOMKilled=false
+$ docker logs lgz-orders-loi
+FATAL: thiếu biến môi trường DB_URL
+Error: config: DB_URL is required
+    at Object.<anonymous> (/app/app.js:6:17)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Object..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Function._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49
+FATAL: thiếu biến môi trường DB_URL
+Error: config: DB_URL is required
+    at Object.<anonymous> (/app/app.js:6:17)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Object..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Function._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49
+FATAL: thiếu biến môi trường DB_URL
+Error: config: DB_URL is required
+    at Object.<anonymous> (/app/app.js:6:17)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Object..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Function._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49
+FATAL: thiếu biến môi trường DB_URL
+Error: config: DB_URL is required
+    at Object.<anonymous> (/app/app.js:6:17)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Object..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Function._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49
+$ docker logs -t lgz-orders-loi 2>&1 | grep FATAL
+2026-11-24T00:04:40.577148016Z FATAL: thiếu biến môi trường DB_URL
+2026-11-24T00:04:40.806868237Z FATAL: thiếu biến môi trường DB_URL
+2026-11-24T00:04:41.142767587Z FATAL: thiếu biến môi trường DB_URL
+2026-11-24T00:04:41.677643438Z FATAL: thiếu biến môi trường DB_URL
+$ docker events --since "$(cat .t0)" --until "$(date +%s)" --filter label=lgz=c13 --filter type=container --format '{{.Time}} {{.Actor.Attributes.name}} {{.Action}} exitCode={{.Actor.Attributes.exitCode}}' | awk '{ $1 = strftime("%H:%M:%S", $1); print }' | grep -v 'exitCode= *$' | grep -v 'exec_'
+07:04:40 lgz-orders-loi create exitCode=<no value>
+07:04:40 lgz-orders-loi start exitCode=<no value>
+07:04:40 lgz-orders-loi die exitCode=1
+07:04:40 lgz-orders-loi start exitCode=<no value>
+07:04:40 lgz-orders-loi die exitCode=1
+07:04:41 lgz-orders-loi start exitCode=<no value>
+07:04:41 lgz-orders-loi die exitCode=1
+07:04:41 lgz-orders-loi start exitCode=<no value>
+07:04:41 lgz-orders-loi die exitCode=1
+07:04:41 lgz-dem-u die exitCode=0
+$ date +%s > .t1; docker run --name lgz-x0 --label lgz=c13 alpine true; docker run --name lgz-x1 --label lgz=c13 -v ./app.js:/app/app.js:ro node:22-alpine node /app/app.js 2>/dev/null; echo "mã thoát lệnh run: $?"
+mã thoát lệnh run: 1
+$ docker run --name lgz-x137 --label lgz=c13 -m 64m --memory-swap 64m -v ./an-ram.js:/a.js:ro node:22-alpine node /a.js | tail -2; echo "mã thoát lệnh run: ${PIPESTATUS[0]}"
+held 40 MB
+held 48 MB
+mã thoát lệnh run: 137
+$ docker run --name lgz-x139 --label lgz=c13 lgz-lab:1 python3 -c 'import ctypes; print("đọc địa chỉ 0..."); ctypes.string_at(0)'; echo "mã thoát lệnh run: $?"
+mã thoát lệnh run: 139
+$ docker run -d --name lgz-stop --label lgz=c13 alpine sleep 600 >/dev/null; s=$(date +%s.%N); docker stop lgz-stop >/dev/null; printf 'docker stop mất %.1f s\n' "$(echo "$(date +%s.%N) - $s" | bc)"
+docker stop mất 10.2 s
+$ docker run -d --name lgz-stop-init --label lgz=c13 --init alpine sleep 600 >/dev/null; s=$(date +%s.%N); docker stop lgz-stop-init >/dev/null; printf 'docker stop mất %.1f s\n' "$(echo "$(date +%s.%N) - $s" | bc)"
+docker stop mất 0.1 s
+$ for c in lgz-x0 lgz-x1 lgz-x137 lgz-x139 lgz-stop lgz-stop-init; do docker inspect -f '{{printf "%-14s" .Name}} ExitCode={{.State.ExitCode}}  OOMKilled={{.State.OOMKilled}}  Error="{{.State.Error}}"' $c; done
+/lgz-x0        ExitCode=0  OOMKilled=false  Error=""
+/lgz-x1        ExitCode=1  OOMKilled=false  Error=""
+/lgz-x137      ExitCode=137  OOMKilled=true  Error=""
+/lgz-x139      ExitCode=139  OOMKilled=false  Error=""
+/lgz-stop      ExitCode=137  OOMKilled=false  Error=""
+/lgz-stop-init ExitCode=143  OOMKilled=false  Error=""
+$ sleep 1; docker events --since "$(cat .t1)" --until "$(date +%s)" --filter label=lgz=c13 --filter type=container --format '{{.Time}} {{.Actor.Attributes.name}} {{.Action}} {{.Actor.Attributes.exitCode}} {{.Actor.Attributes.signal}}' | awk '{ $1 = strftime("%H:%M:%S", $1); print }' | grep -E ' (oom|kill|die|stop) '
+07:04:49 lgz-x0 die 0 <no value>
+07:04:50 lgz-x1 die 1 <no value>
+07:04:51 lgz-x137 oom <no value> <no value>
+07:04:51 lgz-x137 die 137 <no value>
+07:04:51 lgz-x139 die 139 <no value>
+07:04:51 lgz-stop kill <no value> 15
+07:05:01 lgz-stop kill <no value> 9
+07:05:01 lgz-stop stop <no value> <no value>
+07:05:01 lgz-stop die 137 <no value>
+07:05:02 lgz-stop-init kill <no value> 15
+07:05:02 lgz-stop-init stop <no value> <no value>
+07:05:02 lgz-stop-init die 143 <no value>
+$ docker run -d --name lgz-nolog --label lgz=c13 --log-driver none alpine echo xin chao >/dev/null; sleep 1; docker logs lgz-nolog
+Error response from daemon: configured logging driver does not support reading
+$ docker rm -f lgz-orders >/dev/null; docker logs lgz-orders
+Error response from daemon: No such container: lgz-orders
+$ docker compose up -d --quiet-pull 2>/dev/null; sleep 5; docker compose logs --no-color | head -4
+api-1  | {"time":"2026-11-24T00:05:04.931Z","level":"info","svc":"orders","msg":"started","pid":7,"node":"v22.23.5"}
+api-1  | {"time":"2026-11-24T00:05:05.236Z","level":"info","svc":"orders","msg":"order created","orderId":1001}
+api-1  | {"time":"2026-11-24T00:05:05.536Z","level":"info","svc":"orders","msg":"order created","orderId":1002}
+api-1  | {"time":"2026-11-24T00:05:05.836Z","level":"info","svc":"orders","msg":"order created","orderId":1003}
+$ docker compose logs --no-color -t | sort -k3 | cut -c1-100 | head -8
+worker-1  | 2026-11-24T00:05:04.907799444Z tick 1
+api-1  | 2026-11-24T00:05:04.935272391Z {"time":"2026-11-24T00:05:04.931Z","level":"info","svc":"ord
+api-1  | 2026-11-24T00:05:05.236332430Z {"time":"2026-11-24T00:05:05.236Z","level":"info","svc":"ord
+api-1  | 2026-11-24T00:05:05.536856582Z {"time":"2026-11-24T00:05:05.536Z","level":"info","svc":"ord
+api-1  | 2026-11-24T00:05:05.837287687Z {"time":"2026-11-24T00:05:05.836Z","level":"info","svc":"ord
+worker-1  | 2026-11-24T00:05:05.907900882Z tick 2
+api-1  | 2026-11-24T00:05:06.137934889Z WARN slow query 148 ms
+api-1  | 2026-11-24T00:05:06.437723445Z {"time":"2026-11-24T00:05:06.437Z","level":"info","svc":"ord
+$ docker compose logs --no-color -t --tail 2 api
+api-1  | 2026-11-24T00:05:08.541569635Z WARN slow query 444 ms
+api-1  | 2026-11-24T00:05:08.541749860Z {"time":"2026-11-24T00:05:08.541Z","level":"info","svc":"orders","msg":"idle"}
+$ docker compose logs --no-color --no-log-prefix worker
+tick 1
+tick 2
+tick 3
+tick 4
+tick 5
+$ docker compose ps -a --format 'table {{.Service}}\t{{.Status}}'
+SERVICE   STATUS
+api       Exited (0) 1 second ago
+worker    Exited (0) Less than a second ago
+$ docker compose down 2>/dev/null; docker rm -f $(docker ps -aq --filter label=lgz=c13) >/dev/null; rm -f .t0 .t1; docker ps -a --filter label=lgz=c13 --format '{{.Names}}' | wc -l
+0

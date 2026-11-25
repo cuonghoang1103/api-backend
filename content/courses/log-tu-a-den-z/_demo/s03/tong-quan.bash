@@ -1,0 +1,7 @@
+# 3.1 — dạo một vòng "cây" Event Viewer bằng bộ EVTX mẫu công khai: tệp nào là kênh (log) nào, mỗi kênh có bao nhiêu sự kiện, ai (provider) ghi vào.
+ls -l mau | awk 'NR>1 {printf "%12s  %s\n", $5, $9}'
+@ps Get-ChildItem mau/*.evtx | ForEach-Object { $r = evtx-rec $_.FullName 2>$null | ConvertFrom-Json; [pscustomobject]@{ Tep = $_.Name.Substring(0,[math]::Min(44,$_.Name.Length)); Kenh = ($r.kenh | Sort-Object -Unique) -join ','; SuKien = $r.Count; Tu = ($r.t | Sort-Object)[0].ToString('yyyy-MM-dd'); Den = ($r.t | Sort-Object)[-1].ToString('yyyy-MM-dd') } } | Format-Table -AutoSize
+@ps evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Group-Object nguon | Sort-Object Count -Descending | Select-Object -First 12 Count,Name | Format-Table -AutoSize
+@ps evtx-rec mau/dbc-many-events-application.evtx | ConvertFrom-Json | Group-Object nguon | Sort-Object Count -Descending | Select-Object -First 10 Count,Name | Format-Table -AutoSize
+@ps $r = 'dbc-many-events-system.evtx','dbc-many-events-application.evtx' | ForEach-Object { evtx-rec "mau/$_" | ConvertFrom-Json }; "Tong: $($r.Count) su kien | Critical/Error/Warning: $(($r | Where-Object muc -in 'Critical','Error','Warning').Count)"; $r | Where-Object muc -in 'Critical','Error','Warning' | Group-Object kenh,muc | Select-Object Count,Name | Format-Table -AutoSize
+@ps evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object muc -in 'Critical','Error','Warning' | Group-Object nguon,id | Sort-Object Count -Descending | Select-Object -First 8 Count,Name | Format-Table -AutoSize

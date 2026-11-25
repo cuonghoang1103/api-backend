@@ -1,0 +1,83 @@
+$ journalctl -u shop-api -n 2 --no-pager -o short
+Nov 24 04:18:38 lab7 shop-api[424]: GET /api/products 200
+Nov 24 04:18:38 lab7 shop-api[424]: GET /api/orders/1074 200
+$ journalctl -u shop-api -n 2 --no-pager -o short-iso
+2026-11-24T04:18:38+07:00 lab7 shop-api[424]: GET /api/products 200
+2026-11-24T04:18:38+07:00 lab7 shop-api[424]: GET /api/orders/1074 200
+$ journalctl -u shop-api -n 2 --no-pager -o short-iso --utc
+2026-11-23T21:18:38+00:00 lab7 shop-api[424]: GET /api/products 200
+2026-11-23T21:18:38+00:00 lab7 shop-api[424]: GET /api/orders/1074 200
+$ journalctl -u shop-api -n 2 --no-pager -o short-precise
+Nov 24 04:18:38.993359 lab7 shop-api[424]: GET /api/products 200
+Nov 24 04:18:38.999677 lab7 shop-api[424]: GET /api/orders/1074 200
+$ journalctl -u shop-api -n 2 --no-pager -o short-monotonic
+[  346.954301] lab7 shop-api[424]: GET /api/products 200
+[  346.960619] lab7 shop-api[424]: GET /api/orders/1074 200
+$ journalctl -u shop-api -n 2 --no-pager -o cat
+GET /api/products 200
+GET /api/orders/1074 200
+$ journalctl -u shop-api -n 2 --no-pager -o with-unit
+Tue 2026-11-24 04:18:41 +07 lab7 shop-api.service[424]: GET /api/products 200
+Tue 2026-11-24 04:18:41 +07 lab7 shop-api.service[424]: GET /api/orders/1075 200
+$ journalctl -u shop-api -n 1 -o json
+{"_CMDLINE":"/usr/bin/python3 /opt/shop/api.py","_CAP_EFFECTIVE":"0","_PID":"424","_SELINUX_CONTEXT":"unconfined\n","_RUNTIME_SCOPE":"system","_BOOT_ID":"76d1fcc4629949cca375d6dda1b59a50","PRIORITY":"6","MESSAGE":"GET /api/orders/1075 200","_HOSTNAME":"lab7","_SYSTEMD_CGROUP":"/system.slice/shop-api.service","__SEQNUM_ID":"7cbcc78059de43d2930efcf8561b1d27","SYSLOG_FACILITY":"3","_MACHINE_ID":"595503c52a37410aae2b32f4ffddfa26","_STREAM_ID":"720d5385d7744277b22c107da78b1453","_UID":"999","_SYSTEMD_UNIT":"shop-api.service","_SYSTEMD_SLICE":"system.slice","_GID":"991","__SEQNUM":"7547","SYSLOG_IDENTIFIER":"shop-api","__REALTIME_TIMESTAMP":"1795468721009401","_SYSTEMD_INVOCATION_ID":"6f090b12fdf54a1d84fd23095782d72e","__CURSOR":"s=7cbcc78059de43d2930efcf8561b1d27;i=1d7b;b=76d1fcc4629949cca375d6dda1b59a50;m=14ccdd68;t=660f8235232f9;x=91e405470a8173cf","_EXE":"/usr/bin/python3.12","__MONOTONIC_TIMESTAMP":"348970344","_TRANSPORT":"stdout","_COMM":"python3"}
+$ journalctl -u shop-api -n 1 -o json --output-fields=MESSAGE,PRIORITY,_PID
+{"PRIORITY":"6","MESSAGE":"GET /api/orders/1075 200","__CURSOR":"s=7cbcc78059de43d2930efcf8561b1d27;i=1d7b;b=76d1fcc4629949cca375d6dda1b59a50;m=14ccdd68;t=660f8235232f9;x=91e405470a8173cf","__MONOTONIC_TIMESTAMP":"348970344","__SEQNUM_ID":"7cbcc78059de43d2930efcf8561b1d27","__REALTIME_TIMESTAMP":"1795468721009401","_BOOT_ID":"76d1fcc4629949cca375d6dda1b59a50","__SEQNUM":"7547","_PID":"424"}
+$ journalctl -u shop-api -n 1 -o json | jq -r '(.__REALTIME_TIMESTAMP | tonumber / 1000000 | todate) + " " + .MESSAGE'
+2026-11-23T21:18:41Z GET /api/orders/1075 200
+$ journalctl -F _SYSTEMD_UNIT | sort | head -n 12
+apparmor.service
+cloud-config.service
+cloud-final.service
+cloud-init-local.service
+cloud-init.service
+dbus.service
+esm-cache.service
+init.scope
+pollinate.service
+session-10.scope
+session-100.scope
+session-101.scope
+$ journalctl -F PRIORITY | sort | tr '\n' ' '; echo
+2 3 4 5 6 7 
+$ journalctl -b -F _COMM | sort | tr '\n' ' '; echo
+(sd-pam) (systemd) (udev-worker) apparmor.system cat dbus-daemon fsck.ext4 gpasswd logger passwd python3 snapd snapd-apparmor sshd sudo systemd systemd-journal systemd-logind systemd-network systemd-resolve systemd-timesyn systemd-udevd tee useradd usermod 
+$ journalctl -b -o json | jq -r 'select((.PRIORITY | tonumber) <= 3) | ._SYSTEMD_UNIT // .SYSLOG_IDENTIFIER' | sort | uniq -c | sort -nr
+jq: error (at <stdin>:1230): null (null) cannot be parsed as a number
+jq: error (at <stdin>:1451): null (null) cannot be parsed as a number
+jq: error (at <stdin>:1674): null (null) cannot be parsed as a number
+     20 shop-api.service
+      5 kernel
+      1 init.scope
+$ journalctl -b -o json | jq -r 'select(.PRIORITY == null) | ._COMM // .SYSLOG_IDENTIFIER' | sort | uniq -c
+      3 logger
+$ journalctl -b -o json | jq -r 'select((.PRIORITY // "6" | tonumber) <= 3) | ._SYSTEMD_UNIT // .SYSLOG_IDENTIFIER' | sort | uniq -c | sort -nr
+     20 shop-api.service
+      5 kernel
+      1 init.scope
+$ journalctl -b -u shop-api -o json | jq -r '.MESSAGE' | grep -oE '^(GET [^ ]+|order [0-9]+ failed|login failed)' | sed -E 's/[0-9]+/N/g' | sort | uniq -c | sort -nr
+    171 GET /api/products
+    151 GET /api/orders/N
+     20 order N failed
+      4 login failed
+$ journalctl -b -u shop-api -p err -o json | jq -s 'length'
+20
+$ printf 'scan \xff\xfe from 203.0.113.7\n' | systemd-cat -t binary-thu
+$ journalctl -t binary-thu -n 1 --no-pager
+Nov 24 04:18:43 lab7 binary-thu[5435]: [24B blob data]
+$ journalctl -t binary-thu -n 1 -o json --output-fields=MESSAGE
+{"__SEQNUM_ID":"7cbcc78059de43d2930efcf8561b1d27","_BOOT_ID":"76d1fcc4629949cca375d6dda1b59a50","__REALTIME_TIMESTAMP":"1795468723055164","__MONOTONIC_TIMESTAMP":"351016106","__SEQNUM":"7674","MESSAGE":[115,99,97,110,32,255,254,32,102,114,111,109,32,50,48,51,46,48,46,49,49,51,46,55],"__CURSOR":"s=7cbcc78059de43d2930efcf8561b1d27;i=1dfa;b=76d1fcc4629949cca375d6dda1b59a50;m=14ec14aa;t=660f823716a3c;x=fdd1768bf256eac8"}
+$ journalctl -t binary-thu -n 1 -o json | jq -r '.MESSAGE | if type == "array" then implode else . end'
+scan ÿþ from 203.0.113.7
+$ mkdir -p ~/bang-chung && sudo cp /var/log/journal/$(cat /etc/machine-id)/system@*.journal ~/bang-chung/ && sudo chown hv ~/bang-chung/* && ls ~/bang-chung | head -n 3
+system@2443b43690e8483584cc9a72e868317a-00000000000007db-000660f805b6be31.journal
+system@744c0c0439664cfcbda3b1c07408a827-0000000000000c1d-000660f80825cbee.journal
+system@744c0c0439664cfcbda3b1c07408a827-000000000000103d-000660f8090c25d9.journal
+$ journalctl -D ~/bang-chung --list-boots
+IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY
+ -2 8e9dd18ad4674e15a1c5bf5128fad52b Tue 2026-11-24 04:10:24 +07 Tue 2026-11-24 04:10:57 +07
+ -1 af99b13c75cd45d2b3a439b2563c598d Tue 2026-11-24 04:11:05 +07 Tue 2026-11-24 04:12:50 +07
+  0 76d1fcc4629949cca375d6dda1b59a50 Tue 2026-11-24 04:12:53 +07 Tue 2026-11-24 04:13:02 +07
+$ journalctl -D ~/bang-chung -u shop-worker -n 2 --no-pager
+Nov 24 04:13:02 lab7 python3[560]:   File "<string>", line 1, in <module>
+Nov 24 04:13:02 lab7 python3[560]: FileNotFoundError: [Errno 2] No such file or directory: '/etc/shop/worker.json'

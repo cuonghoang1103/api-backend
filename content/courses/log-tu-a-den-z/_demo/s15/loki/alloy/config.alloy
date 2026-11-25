@@ -1,0 +1,83 @@
+// Grafana Alloy 1.22 — một agent thu ba loại nguồn rồi đẩy về Loki.
+// ① Log container: chỉ container có nhãn lgz.c15 (đừng thu cả máy của người khác).
+discovery.docker "lab" {
+  host = "unix:///var/run/docker.sock"
+  filter {
+    name   = "label"
+    values = ["lgz.c15=1"]
+  }
+}
+discovery.relabel "lab" {
+  targets = discovery.docker.lab.targets
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = "/(.*)"
+    target_label  = "container"
+  }
+}
+loki.source.docker "lab" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = discovery.relabel.lab.output
+  labels     = { job = "docker" }
+  forward_to = [loki.process.json.receiver]
+}
+// Bóc level từ JSON thành NHÃN (ít giá trị: info/warn/error) — các trường còn lại để trong dòng.
+loki.process "json" {
+  stage.json {
+    expressions = { level = "level" }
+  }
+  stage.labels {
+    values = { level = "" }
+  }
+  forward_to = [loki.write.trung_tam.receiver]
+}
+
+// ② Journal của "máy Linux" (thư mục journal gắn chỉ đọc từ container lgz-c15-vm).
+loki.relabel "journal" {
+  forward_to = []
+  rule {
+    source_labels = ["__journal__systemd_unit"]
+    target_label  = "unit"
+  }
+  rule {
+    source_labels = ["__journal__hostname"]
+    target_label  = "host"
+  }
+  rule {
+    source_labels = ["__journal_priority_keyword"]
+    target_label  = "level"
+  }
+}
+loki.source.journal "vm" {
+  path          = "/var/log/journal"
+  max_age       = "12h"
+  relabel_rules = loki.relabel.journal.rules
+  labels        = { job = "journal" }
+  forward_to    = [loki.write.trung_tam.receiver]
+}
+
+// ③ Tệp log văn bản cũ (auth.log của gói log mẫu, ngày 20/11) — phải lấy GIỜ TRONG DÒNG, không phải giờ đọc.
+local.file_match "authlog" {
+  path_targets = [{ "__path__" = "/mau/linux/auth.log", job = "file", host = "web-01" }]
+}
+loki.source.file "authlog" {
+  targets    = local.file_match.authlog.targets
+  forward_to = [loki.process.authlog.receiver]
+}
+loki.process "authlog" {
+  stage.regex {
+    expression = "^(?P<ts>\\w{3} [ \\d]\\d \\d\\d:\\d\\d:\\d\\d) "
+  }
+  stage.timestamp {
+    source   = "ts"
+    format   = "Jan _2 15:04:05"     // syslog cổ: không năm, không múi giờ
+    location = "Asia/Ho_Chi_Minh"   // máy web-01 đặt giờ Việt Nam
+  }
+  forward_to = [loki.write.trung_tam.receiver]
+}
+
+loki.write "trung_tam" {
+  endpoint {
+    url = "http://127.0.0.1:3100/loki/api/v1/push"
+  }
+}

@@ -1,0 +1,60 @@
+$ docker run -d --name lgz-agh --label lgz=1 -p 127.0.0.1:41153:53/udp -p 127.0.0.1:41130:3000 adguard/adguardhome:v1.0.0 | cut -c1-12
+e1dbac9cbe04
+$ sleep 4; curl -s -X POST -H 'Content-Type: application/json' -d '{"web":{"ip":"0.0.0.0","port":3000},"dns":{"ip":"0.0.0.0","port":53},"username":"an","password":"LabAdguard-11"}' http://127.0.0.1:41130/control/install/configure; echo
+OK
+$ sleep 3; MK='LabAdguard-11'; curl -s -u an:$MK -X POST -H 'Content-Type: application/json' -d '{"rules":["||quang-cao.example^","||theo-doi.example^"]}' http://127.0.0.1:41130/control/filtering/set_rules; echo "đã thêm 2 luật chặn"
+đã thêm 2 luật chặn
+$ for n in vnexpress.net quang-cao.example theo-doi.example vnexpress.net; do echo "$n → $(dig @127.0.0.1 -p 41153 +short $n A | head -n 1)"; done
+vnexpress.net → 111.65.250.2
+quang-cao.example → 0.0.0.0
+theo-doi.example → 0.0.0.0
+vnexpress.net → 111.65.250.2
+$ curl -s -u an:$MK 'http://127.0.0.1:41130/control/querylog?limit=1' | jq '.data[0]'
+{
+  "answer": [
+    {
+      "type": "A",
+      "value": "111.65.250.2",
+      "ttl": 14248
+    }
+  ],
+  "answer_dnssec": false,
+  "cached": true,
+  "client": "172.17.0.1",
+  "client_info": {
+    "whois": {},
+    "name": "",
+    "disallowed_rule": "172.17.0.1",
+    "disallowed": false
+  },
+  "client_proto": "",
+  "elapsedMs": "0.047669",
+  "question": {
+    "class": "IN",
+    "name": "vnexpress.net",
+    "type": "A"
+  },
+  "reason": "NotFilteredNotFound",
+  "rules": [],
+  "status": "NOERROR",
+  "time": "2026-11-24T04:39:47.478995752Z",
+  "upstream": "https://cloudflare-dns.com:443/dns-query"
+}
+$ curl -s -u an:$MK 'http://127.0.0.1:41130/control/querylog?limit=20' | jq -r '.data[] | select(.question.type=="A") | [.time[11:19], .client, .question.name, .reason, (.cached|tostring), (.answer[0].value // "-")] | @tsv'
+04:39:47	172.17.0.1	vnexpress.net	NotFilteredNotFound	true	111.65.250.2
+04:39:47	172.17.0.1	theo-doi.example	FilteredBlackList	false	0.0.0.0
+04:39:47	172.17.0.1	quang-cao.example	FilteredBlackList	false	0.0.0.0
+04:39:47	172.17.0.1	vnexpress.net	NotFilteredNotFound	false	111.65.250.2
+$ curl -s -u an:$MK 'http://127.0.0.1:41130/control/querylog?response_status=blocked' | jq -r '.data[].question.name' | sort | uniq -c
+      1 quang-cao.example
+      1 theo-doi.example
+$ docker exec lgz-agh ls -l /opt/adguardhome/work/data/; docker restart lgz-agh >/dev/null; sleep 3; docker exec lgz-agh sh -c 'wc -l /opt/adguardhome/work/data/querylog.json; head -c 330 /opt/adguardhome/work/data/querylog.json'; echo
+total 32
+drwx------    1 root     root             0 Nov 24 04:39 filters
+-rw-------    1 root     root         16384 Nov 24 04:39 sessions.db
+-rw-------    1 root     root         16384 Nov 24 04:39 stats.db
+4 /opt/adguardhome/work/data/querylog.json
+{"T":"2026-11-24T04:39:47.408845362Z","QH":"vnexpress.net","QT":"A","QC":"IN","CP":"","Upstream":"https://cloudflare-dns.com:443/dns-query","Answer":"kWuBgAABAAEAAAABCXZuZXhwcmVzcwNuZXQAAAEAAcAMAAEAAQAAN6gABG9B+gIAACkE0AAAAAAAAA==","IP":"172.17.0.1","Result":{},"Elapsed":154794238}
+{"T":"2026-11-24T04:39:47.432315035Z","QH":"qua
+$ docker rm -f lgz-agh >/dev/null && echo "đã dọn lgz-agh"
+đã dọn lgz-agh

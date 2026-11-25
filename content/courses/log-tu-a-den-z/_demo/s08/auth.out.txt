@@ -1,0 +1,96 @@
+$ sudo useradd -m -s /bin/bash -G sudo an && echo 'an:An-Lab-2026!' | sudo chpasswd && sudo useradd -m -s /bin/bash dev && echo 'dev:Dev-Lab-2026!' | sudo chpasswd; id an; id dev
+uid=1001(an) gid=1001(an) groups=1001(an),27(sudo)
+uid=1002(dev) gid=1002(dev) groups=1002(dev)
+$ sudo grep -E 'useradd|chpasswd|usermod' /var/log/auth.log | tail -6
+2026-11-24T05:15:32.884433+07:00 lab7 sudo:       hv : PWD=/home/hv ; USER=root ; COMMAND=/usr/sbin/useradd -m -s /bin/bash dev
+2026-11-24T05:15:32.904448+07:00 lab7 useradd[15270]: new group: name=dev, GID=1002
+2026-11-24T05:15:32.904517+07:00 lab7 useradd[15270]: new user: name=dev, UID=1002, GID=1002, home=/home/dev, shell=/bin/bash, from=none
+2026-11-24T05:15:32.952801+07:00 lab7 sudo:       hv : PWD=/home/hv ; USER=root ; COMMAND=/usr/sbin/chpasswd
+2026-11-24T05:15:32.973366+07:00 lab7 chpasswd[15280]: pam_unix(chpasswd:chauthtok): password changed for dev
+2026-11-24T05:15:33.100495+07:00 lab7 sudo:       hv : PWD=/home/hv ; USER=root ; COMMAND=/usr/bin/grep -E useradd|chpasswd|usermod /var/log/auth.log
+$ sshpass -p 'Dev-Lab-2026!' ssh -o StrictHostKeyChecking=no -b 192.168.56.20 dev@192.168.56.10 'echo "dev vào được: $(hostname)"'   # ← trên máy keodo
+dev vào được: lab7
+$ sshpass -p 'doan-bua' ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no -b 192.168.56.88 dev@192.168.56.10 true; echo "exit=$?"   # ← trên máy keodo
+Permission denied, please try again.
+exit=5
+$ for u in oracle postgres; do sshpass -p '123456' ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no -b 192.168.56.88 $u@192.168.56.10 true; done; echo xong   # ← trên máy keodo
+Permission denied, please try again.
+Permission denied, please try again.
+xong
+$ sshpass -p 'toor' ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no -b 192.168.56.88 root@192.168.56.10 true; echo "exit=$?"   # ← trên máy keodo
+Permission denied, please try again.
+exit=5
+$ ssh -b 192.168.56.20 hv@192.168.56.10 true; echo "hv bằng khoá: exit=$?"   # ← trên máy keodo
+hv bằng khoá: exit=0
+$ sshpass -p 'Dev-Lab-2026!' ssh -o StrictHostKeyChecking=no -b 192.168.56.88 dev@192.168.56.10 true; echo "từ .88, mật khẩu đúng: exit=$?"   # ← trên máy keodo
+từ .88, mật khẩu đúng: exit=0
+$ sshpass -p 'An-Lab-2026!' ssh -tt -o StrictHostKeyChecking=no -b 192.168.56.20 an@192.168.56.10 "echo 'An-Lab-2026!' | sudo -S -p '' systemctl restart rsyslog; echo 'sai-roi' | sudo -S -k -p '' cat /etc/shadow; true" 2>&1 | tr -d '\r' | grep -v '^$'   # ← trên máy keodo
+Sorry, try again.
+sudo: no password was provided
+sudo: 1 incorrect password attempt
+Connection to 192.168.56.10 closed.
+$ sshpass -p 'Dev-Lab-2026!' ssh -tt -o StrictHostKeyChecking=no -b 192.168.56.20 dev@192.168.56.10 "echo 'Dev-Lab-2026!' | sudo -S -p '' cat /etc/shadow; echo 'sai' | su -c id an; true" 2>&1 | tr -d '\r' | grep -v '^$'   # ← trên máy keodo
+dev is not in the sudoers file.
+Password: su: Authentication failure
+Connection to 192.168.56.10 closed.
+$ sudo grep -E 'sshd\[[0-9]+\]: (Accepted|Failed|Invalid|Connection closed|Disconnected)' /var/log/auth.log | grep -v ' 172\.17\.' | tail -12
+2026-11-24T05:15:43.682876+07:00 lab7 sshd[15367]: Connection closed by invalid user postgres 192.168.56.88 port 40327 [preauth]
+2026-11-24T05:15:45.905914+07:00 lab7 sshd[15382]: Failed password for root from 192.168.56.88 port 48111 ssh2
+2026-11-24T05:15:46.985599+07:00 lab7 sshd[15382]: Failed password for root from 192.168.56.88 port 48111 ssh2
+2026-11-24T05:15:46.991703+07:00 lab7 sshd[15382]: Connection closed by authenticating user root 192.168.56.88 port 48111 [preauth]
+2026-11-24T05:15:47.315259+07:00 lab7 sshd[15398]: Accepted publickey for hv from 192.168.56.20 port 46727 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+2026-11-24T05:15:47.544510+07:00 lab7 sshd[15431]: Disconnected from user hv 192.168.56.20 port 46727
+2026-11-24T05:15:47.916349+07:00 lab7 sshd[15433]: Accepted password for dev from 192.168.56.88 port 46175 ssh2
+2026-11-24T05:15:48.106415+07:00 lab7 sshd[15465]: Disconnected from user dev 192.168.56.88 port 46175
+2026-11-24T05:15:48.486810+07:00 lab7 sshd[15472]: Accepted password for an from 192.168.56.20 port 58917 ssh2
+2026-11-24T05:15:50.545162+07:00 lab7 sshd[15504]: Disconnected from user an 192.168.56.20 port 58917
+2026-11-24T05:15:50.956178+07:00 lab7 sshd[15528]: Accepted password for dev from 192.168.56.20 port 47673 ssh2
+2026-11-24T05:15:54.287827+07:00 lab7 sshd[15550]: Disconnected from user dev 192.168.56.20 port 47673
+$ sudo grep -E ' (sudo|su)(\[[0-9]+\])?: ' /var/log/auth.log | grep -E '(an|dev) :|su|for \[an\]' | tail -9
+2026-11-24T05:15:50.543981+07:00 lab7 sudo:       an : 1 incorrect password attempt ; TTY=pts/0 ; PWD=/home/an ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+2026-11-24T05:15:51.077436+07:00 lab7 sudo:      dev : user NOT in sudoers ; TTY=pts/0 ; PWD=/home/dev ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+2026-11-24T05:15:51.104037+07:00 lab7 su: pam_unix(su:auth): authentication failure; logname=dev uid=1002 euid=0 tty= ruser=dev rhost=  user=an
+2026-11-24T05:15:53.286464+07:00 lab7 su[15555]: FAILED SU (to an) dev on none
+2026-11-24T05:15:54.416293+07:00 lab7 sudo:       hv : PWD=/home/hv ; USER=root ; COMMAND=/usr/bin/grep -E 'sshd\\[[0-9]+\\]: (Accepted|Failed|Invalid|Connection closed|Disconnected)' /var/log/auth.log
+2026-11-24T05:15:54.416984+07:00 lab7 sudo: pam_unix(sudo:session): session opened for user root(uid=0) by hv(uid=1000)
+2026-11-24T05:15:54.419127+07:00 lab7 sudo: pam_unix(sudo:session): session closed for user root
+2026-11-24T05:15:54.552778+07:00 lab7 sudo:       hv : PWD=/home/hv ; USER=root ; COMMAND=/usr/bin/grep -E ' (sudo|su)(\\[[0-9]+\\])?: ' /var/log/auth.log
+2026-11-24T05:15:54.553000+07:00 lab7 sudo: pam_unix(sudo:session): session opened for user root(uid=0) by hv(uid=1000)
+$ sudo grep -E 'systemd-logind|pam_unix\(sshd:session\)' /var/log/auth.log | grep -E ' (an|dev)' | tail -4
+2026-11-24T05:15:50.545578+07:00 lab7 sshd[15472]: pam_unix(sshd:session): session closed for user an
+2026-11-24T05:15:50.957027+07:00 lab7 sshd[15528]: pam_unix(sshd:session): session opened for user dev(uid=1002) by dev(uid=0)
+2026-11-24T05:15:50.960049+07:00 lab7 systemd-logind[432]: New session 334 of user dev.
+2026-11-24T05:15:54.288162+07:00 lab7 sshd[15528]: pam_unix(sshd:session): session closed for user dev
+$ sudo grep -cE 'Failed password|Invalid user' /var/log/auth.log; sudo grep -c 'Failed password' /var/log/auth.log
+24
+20
+$ sudo grep 'Failed password' /var/log/auth.log | grep -oE 'from [0-9.]+' | sort | uniq -c | sort -rn
+     15 from 192.168.56.88
+$ sudo grep 'Failed password' /var/log/auth.log | awk '{for(i=1;i<=NF;i++) if($i=="for"){u=($(i+1)=="invalid")?$(i+3):$(i+1)}; print u}' | sort | uniq -c | sort -rn
+     11 root
+      4 dev
+      3 oracle
+      2 postgres
+      2 admin
+$ sudo awk '/Failed password/{for(i=1;i<=NF;i++) if($i=="from") sai[$(i+1)]++} /Accepted/{for(i=1;i<=NF;i++) if($i=="from"){ip=$(i+1); if(sai[ip]>0) print "ĐỎ: " ip " vào được sau " sai[ip] " lần sai —", $0}}' /var/log/auth.log | cut -c1-160
+ĐỎ: 192.168.56.88 vào được sau 15 lần sai — 2026-11-24T05:15:47.916349+07:00 lab7 sshd[15433]: Accepted password for dev from 192.168.56.88 port 461
+$ sudo journalctl _COMM=sshd -q --no-pager -o short-iso --since '-10min' | grep -E 'Invalid user' | tail -2
+2026-11-24T05:15:36+07:00 lab7 sshd[15359]: Invalid user oracle from 192.168.56.88 port 36977
+2026-11-24T05:15:39+07:00 lab7 sshd[15367]: Invalid user postgres from 192.168.56.88 port 40327
+$ sudo journalctl _COMM=sudo -q --no-pager -o json --since '-10min' | jq -r 'select(.MESSAGE|test("^ *(an|dev) :")) | "\(._PID) \(.MESSAGE)"'
+14717       an : TTY=pts/0 ; PWD=/home/an ; USER=root ; COMMAND=/usr/bin/systemctl restart cron
+14721       an : 1 incorrect password attempt ; TTY=pts/0 ; PWD=/home/an ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+14762      dev : user NOT in sudoers ; TTY=pts/0 ; PWD=/home/dev ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+15507       an : TTY=pts/0 ; PWD=/home/an ; USER=root ; COMMAND=/usr/bin/systemctl restart rsyslog
+15522       an : 1 incorrect password attempt ; TTY=pts/0 ; PWD=/home/an ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+15553      dev : user NOT in sudoers ; TTY=pts/0 ; PWD=/home/dev ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+$ docker run --rm rockylinux:9 bash -c 'dnf -q -y install rsyslog openssh-server >/dev/null 2>&1; grep -n "^authpriv" /etc/rsyslog.conf; grep -E "^#?SyslogFacility|^#?LogLevel" /etc/ssh/sshd_config'
+52:authpriv.* action(type="omfile" file="/var/log/secure")
+#SyslogFacility AUTH
+#LogLevel INFO
+$ sudo sshd -T | grep -E '^(syslogfacility|loglevel|maxauthtries|permitrootlogin|passwordauthentication)'
+maxauthtries 6
+permitrootlogin without-password
+passwordauthentication yes
+loglevel INFO
+syslogfacility AUTH

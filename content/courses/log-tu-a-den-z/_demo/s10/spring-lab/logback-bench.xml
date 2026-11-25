@@ -1,0 +1,7 @@
+<configuration>
+  <!-- Cho LogBench: mức INFO ⇒ mọi lệnh debug() đều KHÔNG in; ta chỉ đo cái giá "gọi mà không in" -->
+  <appender name="OUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder><pattern>%msg%n</pattern></encoder>
+  </appender>
+  <root level="INFO"><appender-ref ref="OUT"/></root>
+</configuration>

@@ -1,0 +1,32 @@
+$ : > logs/rum.log; : > logs/csp.log
+$ BAM=1 CHO=1500 node console.mjs pay,reject,storm,pii > /dev/null; sleep 1; wc -l logs/rum.log logs/csp.log
+   6 logs/rum.log
+   1 logs/csp.log
+   7 total
+$ jq -c '{loai, tin, vitri}' logs/rum.log
+{"loai":"error","tin":"Error: không tải được hồ sơ [EMAIL] (http://shop.lgz.test:41901/ho-so?token=[CHE]","vitri":"(src/app.js:46:57)"}
+{"loai":"error","tin":"Error: vẽ ô sản phẩm #0 thất bại","vitri":"(src/app.js:47:88)"}
+{"loai":"error","tin":"Error: vẽ ô sản phẩm #1 thất bại","vitri":"(src/app.js:47:88)"}
+{"loai":"error","tin":"Error: vẽ ô sản phẩm #2 thất bại","vitri":"(src/app.js:47:88)"}
+{"loai":"unhandledrejection","tin":"TypeError: Cannot read properties of null (reading 'ma')","vitri":null}
+{"loai":"error","tin":"TypeError: Cannot read properties of undefined (reading 'items')","vitri":"(src/app.js:8:14)"}
+$ jq -c 'select(.tin | test("items")) | .stackGoc' logs/rum.log
+["TypeError: Cannot read properties of undefined (reading 'items')","    at m (src/app.js:8:14)","    at d (src/app.js:13:16)","    at HTMLButtonElement.<anonymous> (src/app.js:45:95)"]
+$ jq -c 'select(.tin | test("hồ sơ")) | {tin, trang}' logs/rum.log
+{"tin":"Error: không tải được hồ sơ [EMAIL] (http://shop.lgz.test:41901/ho-so?token=[CHE]","trang":"http://shop.lgz.test:41901/?kb=pay,reject,storm,pii"}
+$ jq '."csp-report" | {"violated-directive", "blocked-uri", "source-file", "line-number", disposition}' logs/csp.log
+{
+  "violated-directive": "script-src-elem",
+  "blocked-uri": "inline",
+  "source-file": "http://shop.lgz.test:41901/",
+  "line-number": 9,
+  "disposition": "enforce"
+}
+$ grep -c 'logo-moi' logs/rum.log; grep 'logo-moi' logs/web.log | tail -n 1
+0
+127.0.0.1 - - [2026-11-23T23:33:29.534Z] "GET /img/logo-moi.png HTTP/1.1" 404 - "http://shop.lgz.test:41901/?kb=pay,reject,storm,pii" "Mozilla/5.0 (X11; Linux x86_64) AppleWeb" rt=0.000 rid=33c165efcf44729d
+$ head -c 9000 /dev/zero | tr '\0' a | curl -s -o /dev/null -w '%{http_code}\n' --data-binary @- http://127.0.0.1:41901/rum
+413
+$ curl -s -o /dev/null -w '%{http_code}\n' -H 'Content-Type: application/json' --data '{"loai":"error","tin":"Lỗi nghiêm trọng! Gọi ngay 0900 000 000 để được hỗ trợ","tep":"http://shop.lgz.test:41901/app.min.js","dong":1,"cot":1}' http://127.0.0.1:41901/rum; tail -n 1 logs/rum.log | jq -c '{ip, tin, ua}'
+204
+{"ip":"127.0.0.1","tin":"Lỗi nghiêm trọng! Gọi ngay 0900 000 000 để được hỗ trợ","ua":null}

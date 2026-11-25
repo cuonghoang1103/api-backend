@@ -1,0 +1,53 @@
+PS> evtx-rec mau/system.evtx | ConvertFrom-Json | Where-Object id -eq 7045 | Group-Object { '{0} | {1} | {2}' -f $_.data.ServiceType, $_.data.StartType, ($_.data.ImagePath -replace '\\[^\\]*$','') } | Sort-Object Count -Descending | Select-Object -First 5 Count,@{n='ServiceType | StartType | Thu muc';e={$_.Name}} | Format-Table -AutoSize
+Count ServiceType | StartType | Thu muc
+----- ---------------------------------
+   18 kernel mode driver | demand start | \SystemRoot\System32\drivers
+    4 user mode service | auto start | "C:\Program Files\VMware\VMware Tools
+    2 kernel mode driver | system start | \SystemRoot\system32\DRIVERS
+    1 kernel mode driver | auto start | \SystemRoot\system32\DRIVERS
+    1 kernel mode driver | system start | C:\ProgramData\Microsoft\Windows Defender\Definition Updates\{FECC34CE-6F3A-4333-8B1F-7DC44A1461EC}
+PS> evtx-rec tc/psexec-7045-7036.evtx | ConvertFrom-Json | Where-Object id -ne 104 | ForEach-Object { '{0}  {1}  {2}' -f $_.t.ToString('HH:mm:ss.fff'), $_.id, (($_.data.PSObject.Properties | Where-Object Name -ne 'Binary' | ForEach-Object { '{0}={1}' -f $_.Name, $_.Value }) -join '  ') }
+09:27:56.082  7045  ServiceName=PSEXESVC  ImagePath=%SystemRoot%\PSEXESVC.exe  ServiceType=user mode service  StartType=demand start  AccountName=LocalSystem
+09:27:56.102  7036  param1=PSEXESVC  param2=running
+09:27:56.248  7036  param1=PSEXESVC  param2=stopped
+PS> evtx-rec tc/psexec-msf-system.evtx | ConvertFrom-Json | ForEach-Object { $e = $_; $d = $e.data; '{0}  {1,-4} {2}' -f $e.t.ToString('HH:mm:ss'), $e.id, $(switch ($e.id) { 104 { 'xoá log ' + $d.Channel + ' bởi ' + $d.SubjectUserName } 7045 { $d.ServiceName + ' | ' + $d.ImagePath + ' | ' + $d.AccountName } 7036 { $d.param1 + ' -> ' + $d.param2 } 7009 { 'chờ ' + $d.param1 + ' ms mà ' + $d.param2 + ' không phản hồi' } }) }
+03:40:41  104  xoá log System bởi IEUser
+03:41:02  7045 KgXItsbKgTJzdzwl | %SYSTEMROOT%\duKhLYUX.exe | LocalSystem
+03:41:02  7036 KgXItsbKgTJzdzwl -> running
+03:41:02  7036 KgXItsbKgTJzdzwl -> stopped
+03:41:03  7036 Application Experience -> running
+03:41:13  7045 hgabms | cmd.exe /c echo hgabms > \\.\pipe\hgabms | LocalSystem
+03:41:13  7009 chờ 30000 ms mà hgabms không phản hồi
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object id -eq 7040 | Group-Object { '{0}: {1} -> {2}' -f $_.data.param1, $_.data.param2, $_.data.param3 } | Sort-Object Count -Descending | Select-Object -First 5 Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+  377 Windows Modules Installer: auto start -> demand start
+  376 Windows Modules Installer: demand start -> auto start
+   12 Background Intelligent Transfer Service: demand start -> auto start
+   12 Background Intelligent Transfer Service: auto start -> demand start
+    2 Microsoft .NET Framework NGEN v2.0.50727_X86: demand start -> auto start
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object id -eq 7036 | Group-Object { $_.data.param1 } | Sort-Object Count -Descending | Select-Object -First 6 Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+  222 Multimedia Class Scheduler
+  202 TCP/IP NetBIOS Helper
+  159 WinHTTP Web Proxy Auto-Discovery Service
+  150 Application Experience
+  146 Microsoft .NET Framework NGEN v4.0.30319_X86
+  114 Windows Modules Installer
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object { $_.id -eq 7036 -and $_.data.param1 -eq 'Windows Update' } | Select-Object -First 6 | ForEach-Object { '{0}  {1}' -f $_.t.ToString('MM-dd HH:mm:ss'), $_.data.param2 }
+10-23 16:22:40  running
+10-23 16:26:41  stopped
+10-23 16:26:49  running
+10-23 17:28:22  stopped
+10-23 17:38:37  running
+10-23 17:48:30  stopped
+PS> evtx-rec mau/Application.evtx mau/dbc-many-events-application.evtx 2>$null | ConvertFrom-Json | Where-Object { $_.id -eq 1000 -and $_.nguon -eq 'Application Error' } | ForEach-Object { $d = $_.data.'#text'; [pscustomobject]@{ Luc = $_.t.ToString('yyyy-MM-dd'); App = $d[0]; Module = $d[3]; Ma = $d[6]; DuongDan = $d[10] } } | Format-Table -AutoSize
+Luc        App            Module         Ma       DuongDan
+---        ---            ------         --       --------
+2011-08-28 adberdr813.exe msvcrt.dll     c0000005 C:\Users\nromanoff\Downloads\adberdr813.exe
+2011-09-08 mcupdmgr.exe   unknown        c0000005 c:\PROGRA~1\mcafee\msc\mcupdmgr.exe
+2012-04-04 svchost.exe    svchost.exe    c0000005 c:\windows\system32\dllhost\svchost.exe
+2016-08-18 rundll32.exe   KERNELBASE.dll c0000005 C:\Windows\system32\rundll32.exe
+$ evtx-rec mau/*.evtx tc/*.evtx 2>/dev/null | jq -r 'select(.id==7034 or .id==7031 or (.id==1026 and (.nguon|test("NET Runtime")))) | .id' | wc -l
+0

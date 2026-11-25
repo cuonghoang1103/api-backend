@@ -1,0 +1,12 @@
+$ cd /lab/ra && python3 /lab/s18/tao-su-co.py lan1 && python3 /lab/s18/tao-su-co.py lan2 && (cd lan1/su-co18 && find . -type f -print0 | sort -z | xargs -0 sha256sum) > h1 && (cd lan2/su-co18 && find . -type f -print0 | sort -z | xargs -0 sha256sum) > h2 && cmp h1 h2 && echo "hai lần sinh: giống từng byte ($(wc -l < h1) tệp)"
+su-co18: 24 tệp, 5.0 MB → /lab/ra/lan1/su-co18
+su-co18: 24 tệp, 5.0 MB → /lab/ra/lan2/su-co18
+hai lần sinh: giống từng byte (24 tệp)
+$ cd /lab/ra && sed 's|^# 2i) Thứ Hai 23/11|ssh_vao(vn("2026-11-22 03:05:00"), "minh", "203.0.113.99", cach="password", dai=120)   # SỰ KIỆN CỦA BẠN\n# 2i) Thứ Hai 23/11|' /lab/s18/tao-su-co.py > cua-toi.py && grep -n 'SỰ KIỆN CỦA BẠN' cua-toi.py | cut -c1-110 && python3 cua-toi.py lan3
+291:ssh_vao(vn("2026-11-22 03:05:00"), "minh", "203.0.113.99", cach="password", dai=120)   # SỰ KIỆN CỦA
+su-co18: 24 tệp, 5.0 MB → /lab/ra/lan3/su-co18
+$ cd /lab/ra/lan3/su-co18/vps01 && grep -h '203.0.113.99' var/log/auth.log* | cut -c1-120; grep -c '203.0.113.99' journal/vps01-journal.json
+2026-11-22T03:05:00.025379+07:00 vps01 sshd[1369666]: Accepted password for minh from 203.0.113.99 port 47711 ssh2
+2026-11-22T03:07:00.012009+07:00 vps01 sshd[1369666]: Received disconnect from 203.0.113.99 port 47711:11: disconnected
+2026-11-22T03:07:00.026458+07:00 vps01 sshd[1369666]: Disconnected from user minh 203.0.113.99 port 47711
+3

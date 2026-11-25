@@ -1,0 +1,18 @@
+$ grep -n -A3 '<filter' logback-loc.xml
+36:    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+37-      <level>WARN</level>
+38-    </filter>
+39-    <encoder>
+$ docker rm -f lgz-spring > /dev/null 2>&1; rm -rf logs; mkdir logs; docker run -d --name lgz-spring --memory 2g --memory-swap 2g --cpus 2 --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar --logging.config=file:logback-loc.xml > /dev/null && sleep 12
+$ for i in 7 8 13; do curl -s -o /dev/null -w "đơn $i: %{http_code}\n" http://127.0.0.1:41081/api/orders/$i; done; sleep 1; wc -l logs/shop.log logs/shop-severe.log
+đơn 7: 200
+đơn 8: 200
+đơn 13: 500
+   71 logs/shop.log
+   57 logs/shop-severe.log
+  128 total
+$ cut -c1-130 logs/shop-severe.log | grep -v '^\s'
+2026-11-24T14:50:13.133Z ERROR [http-nio-8080-exec-4] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/].[dispatcherS
+java.lang.NumberFormatException: For input string: "13.5"
+$ docker rm -f lgz-spring > /dev/null; echo "đã xoá lgz-spring"
+đã xoá lgz-spring

@@ -1,0 +1,23 @@
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object nguon -eq 'Microsoft-Windows-WindowsUpdateClient' | Group-Object id | Sort-Object Count -Descending | Select-Object Count,@{n='Id';e={$_.Name}} | Format-Table -AutoSize
+Count Id
+----- --
+  409 19
+  345 18
+   26 27
+    6 21
+    3 22
+    3 28
+    1 17
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object { $_.nguon -eq 'Microsoft-Windows-WindowsUpdateClient' -and $_.id -eq 19 } | Select-Object -Last 3 @{n='UTC';e={$_.t.ToString('yyyy-MM-dd HH:mm')}},may,@{n='Ban cap nhat';e={$_.data.updateTitle.Substring(0,[math]::Min(80,$_.data.updateTitle.Length))}} | Format-Table -AutoSize
+UTC              may      Ban cap nhat
+---              ---      ------------
+2016-09-20 13:11 IE10Win7 Security Update for Windows 7 (KB3177186)
+2016-09-20 13:11 IE10Win7 Security Update for Windows 7 (KB3184122)
+2016-09-20 13:11 IE10Win7 Definition Update for Windows Defender - KB915597 (Definition 1.227.2715.0)
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object { $_.nguon -eq 'Microsoft-Windows-WindowsUpdateClient' -and $_.id -in 21,22,27 } | Select-Object -First 4 @{n='UTC';e={$_.t.ToString('yyyy-MM-dd HH:mm')}},may,id,@{n='Data';e={(($_.data.PSObject.Properties.Value -join ' | ') -replace '\s+',' ').Substring(0,[math]::Min(60,(($_.data.PSObject.Properties.Value -join ' | ') -replace '\s+',' ').Length))}} | Format-Table -AutoSize
+UTC              may     id Data
+---              ---     -- ----
+2013-10-23 17:27 IE8Win7 21  - Update for Windows 7 (KB2502285) - Security Update for Wi
+2013-10-23 17:27 IE8Win7 27
+2013-10-23 17:48 IE8Win7 21  - Update for Windows 7 (KB971033) - Windows Internet Explor
+2013-10-23 17:48 IE8Win7 27

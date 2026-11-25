@@ -1,0 +1,55 @@
+PS> Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx | Group-Object MachineName, LogName | Sort-Object Count -Descending | Format-Table Count, Name -AutoSize
+Count Name
+----- ----
+  584 slad1.saclink.csus.edu, Security
+   66 slad3.saclink.csus.edu, Security
+    2 AA-PH-6L8JKH2.saclink.csus.edu, Application
+    1 AA-PH-6L8JKH2.saclink.csus.edu, System
+PS> Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx | Group-Object MachineName | ForEach-Object { $t = $_.Group.TimeCreated | Measure-Object -Minimum -Maximum; '{0,-32} {1:HH:mm:ss} → {2:HH:mm:ss} UTC  ({3} sự kiện)' -f $_.Name, $t.Minimum, $t.Maximum, $_.Count }
+AA-PH-6L8JKH2.saclink.csus.edu   00:01:08 → 00:04:33 UTC  (3 sự kiện)
+slad1.saclink.csus.edu           23:20:54 → 23:21:26 UTC  (584 sự kiện)
+slad3.saclink.csus.edu           00:16:05 → 00:16:08 UTC  (66 sự kiện)
+PS> $e = Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4625 } -MaxEvents 1; $r = ([xml]$e.ToXml()).Event.RenderingInfo; [pscustomobject]@{ Culture = $r.Culture; Level = $r.Level; Task = $r.Task; Opcode = $r.Opcode; Channel = $r.Channel; Provider = $r.Provider; Keyword = $r.Keywords.Keyword; 'Message (dòng 1)' = ($r.Message -split "`n")[0] } | Format-List
+Culture          : en-US
+Level            : Information
+Task             : Logon
+Opcode           : Info
+Channel          : Security
+Provider         : Microsoft Windows security auditing.
+Keyword          : Audit Failure
+Message (dòng 1) : An account failed to log on.
+PS> Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx | Group-Object { [bool]$_.Message } | Format-Table @{n='Có Message?'; e={$_.Name}}, Count -AutoSize
+Có Message? Count
+----------- -----
+True          653
+PS> (Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4625 } -MaxEvents 1).Message -split "`n" | Select-Object -First 24
+An account failed to log on.
+
+Subject:
+	Security ID:		S-1-0-0
+	Account Name:		-
+	Account Domain:		-
+	Logon ID:		0x0
+
+Logon Type:			3
+
+Account For Which Logon Failed:
+	Security ID:		S-1-0-0
+	Account Name:		CTX-WS16-FS-T3$
+	Account Domain:		CSUS
+
+Failure Information:
+	Failure Reason:		Unknown user name or bad password.
+	Status:			0xC000006D
+	Sub Status:		0xC000006A
+
+Process Information:
+	Caller Process ID:	0x0
+	Caller Process Name:	-
+PS> Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4625 } | Group-Object MachineName, { $_.Properties[19].Value }, { $_.Properties[5].Value } | Sort-Object Count -Descending | Format-Table Count, Name -AutoSize
+Count Name
+----- ----
+   71 slad1.saclink.csus.edu, 10.115.247.239, psadmin
+   56 slad1.saclink.csus.edu, 10.115.55.139, CTX-WS16-FS-T3$
+    2 slad1.saclink.csus.edu, 10.115.247.238, psadmin
+    1 slad1.saclink.csus.edu, 130.86.9.236, chadkramer

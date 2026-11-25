@@ -1,0 +1,24 @@
+# Filebeat 9.5: hai module có sẵn — nginx (access/error) và system (auth/syslog). Module = input + ingest pipeline bóc trường ECS.
+filebeat.modules:
+  - module: nginx
+    access:
+      enabled: true
+      var.paths: ["/mau/web/access.log"]
+    error:
+      enabled: false
+  - module: system
+    auth:
+      enabled: true
+      var.paths: ["/mau/linux/auth.log"]
+      var.timezone: "Asia/Ho_Chi_Minh"     # auth.log cổ không ghi múi giờ
+    syslog:
+      enabled: false
+output.elasticsearch:
+  hosts: ["http://127.0.0.1:9200"]
+  username: elastic
+  password: lab15-elastic-chi-o-may-minh
+setup.kibana:
+  host: "http://127.0.0.1:5601"
+  username: elastic
+  password: lab15-elastic-chi-o-may-minh
+logging.level: warning

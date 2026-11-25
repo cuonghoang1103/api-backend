@@ -1,0 +1,29 @@
+Task	Subcategory	Category
+12288	Security State Change	System
+12289	Security System Extension	System
+12290	System Integrity	System
+12292	Other System Events	System
+12544	Logon	Logon/Logoff
+12545	Logoff	Logon/Logoff
+12546	Account Lockout	Logon/Logoff
+12548	Special Logon	Logon/Logoff
+12551	Other Logon/Logoff Events	Logon/Logoff
+12800	File System	Object Access
+12801	Registry	Object Access
+12803	SAM	Object Access
+12804	Other Object Access Events	Object Access
+12808	File Share	Object Access
+12809	Filtering Platform Packet Drop	Object Access
+12810	Filtering Platform Connection	Object Access
+13056	Sensitive Privilege Use	Privilege Use
+13312	Process Creation	Detailed Tracking
+13313	Process Termination	Detailed Tracking
+13568	Audit Policy Change	Policy Change
+13569	Authentication Policy Change	Policy Change
+13573	Other Policy Change Events	Policy Change
+13824	User Account Management	Account Management
+13826	Security Group Management	Account Management
+14080	Directory Service Access	DS Access
+14336	Credential Validation	Account Logon
+14337	Kerberos Service Ticket Operations	Account Logon
+14339	Kerberos Authentication Service	Account Logon

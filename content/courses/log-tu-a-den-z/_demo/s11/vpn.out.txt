@@ -1,0 +1,125 @@
+$ sudo sed 's/^PrivateKey = .*/PrivateKey = (đã che — bí mật, không bao giờ dán vào log hay ticket)/' /etc/wireguard/wg0.conf
+[Interface]
+Address = 10.66.0.1/24
+ListenPort = 51820
+PrivateKey = (đã che — bí mật, không bao giờ dán vào log hay ticket)
+
+[Peer]
+# android-7f3a
+PublicKey = a8byVqJ0krx9puyG4N3jupwjHxt4yuNeRp7jp6ZmPyk=
+AllowedIPs = 10.66.0.2/32
+$ sudo wg-quick up wg0; sudo wg show wg0
+[#] ip link add wg0 type wireguard
+[#] wg setconf wg0 /dev/fd/63
+[#] ip -4 address add 10.66.0.1/24 dev wg0
+[#] ip link set mtu 1420 up dev wg0
+interface: wg0
+  public key: H/aUnYXk1n91W8FgpdqYPQ9IcJ5p5ZPkA595BjM+rXY=
+  private key: (hidden)
+  listening port: 51820
+
+peer: a8byVqJ0krx9puyG4N3jupwjHxt4yuNeRp7jp6ZmPyk=
+  allowed ips: 10.66.0.2/32
+$ sudo wg-quick up wg0 >/dev/null 2>&1; ping -c 2 -W 2 10.66.0.1 | tail -n 2   # ← trên android-7f3a
+2 packets transmitted, 2 received, 0% packet loss, time 1002ms
+rtt min/avg/max/mdev = 1.398/1.876/2.355/0.478 ms
+$ sudo wg show wg0
+interface: wg0
+  public key: H/aUnYXk1n91W8FgpdqYPQ9IcJ5p5ZPkA595BjM+rXY=
+  private key: (hidden)
+  listening port: 51820
+
+peer: a8byVqJ0krx9puyG4N3jupwjHxt4yuNeRp7jp6ZmPyk=
+  endpoint: 192.168.56.142:32901
+  allowed ips: 10.66.0.2/32
+  latest handshake: 2 seconds ago
+  transfer: 404 B received, 348 B sent
+$ sudo wg show wg0 latest-handshakes | while read -r k t; do echo "$(echo "$k" | cut -c1-10)…  $(date -d @"$t" '+%F %T')"; done; sudo wg show wg0 dump | tail -n 1 | cut -f3-7
+a8byVqJ0kr…  2026-11-24 12:28:36
+192.168.56.142:32901	10.66.0.2/32	1795498116	404	348
+$ sudo journalctl -k --since "-3 min" --no-pager -o cat | grep -i wireguard || echo "(nhân không ghi dòng nào về WireGuard)"
+wireguard: wg0: Invalid handshake initiation from 192.168.56.66:41064
+wireguard: wg0: Receiving handshake initiation from peer 3 (192.168.56.142:42248)
+wireguard: wg0: Sending handshake response to peer 3 (192.168.56.142:42248)
+wireguard: wg0: Keypair 4 created for peer 3
+$ echo 'module wireguard +p' | sudo tee /sys/kernel/debug/dynamic_debug/control
+module wireguard +p
+$ sudo wg-quick up wg0 >/dev/null 2>&1; ping -c 2 -W 2 10.66.0.1 | tail -n 2   # ← trên keodo
+2 packets transmitted, 0 received, 100% packet loss, time 1033ms
+$ sudo wg-quick down wg0 >/dev/null 2>&1; sudo wg-quick up wg0 >/dev/null 2>&1; ping -c 1 -W 2 10.66.0.1 | tail -n 1   # ← trên android-7f3a
+rtt min/avg/max/mdev = 2.200/2.200/2.200/0.000 ms
+$ sudo dmesg -T | grep "wireguard: wg0" | tail -n 8 | cut -c1-150
+[Tue Nov 24 12:26:33 2026] wireguard: wg0: Invalid handshake initiation from 192.168.56.66:41064
+[Tue Nov 24 12:26:36 2026] wireguard: wg0: Receiving handshake initiation from peer 3 (192.168.56.142:42248)
+[Tue Nov 24 12:26:36 2026] wireguard: wg0: Sending handshake response to peer 3 (192.168.56.142:42248)
+[Tue Nov 24 12:26:36 2026] wireguard: wg0: Keypair 4 created for peer 3
+[Tue Nov 24 12:28:38 2026] wireguard: wg0: Invalid handshake initiation from 192.168.56.66:47370
+[Tue Nov 24 12:28:42 2026] wireguard: wg0: Receiving handshake initiation from peer 4 (192.168.56.142:49180)
+[Tue Nov 24 12:28:42 2026] wireguard: wg0: Sending handshake response to peer 4 (192.168.56.142:49180)
+[Tue Nov 24 12:28:42 2026] wireguard: wg0: Keypair 6 created for peer 4
+$ echo 'module wireguard -p' | sudo tee /sys/kernel/debug/dynamic_debug/control >/dev/null; sudo wg show wg0 | grep -E "^peer|endpoint|latest handshake"
+peer: a8byVqJ0krx9puyG4N3jupwjHxt4yuNeRp7jp6ZmPyk=
+  endpoint: 192.168.56.142:49180
+  latest handshake: Now
+$ sudo wg show wg0 | grep -E "endpoint|latest handshake|transfer"
+  endpoint: 192.168.56.142:49180
+  latest handshake: 41 seconds ago
+  transfer: 680 B received, 1.28 KiB sent
+$ sudo grep -vE '^(ca|cert|key)|^#' /etc/openvpn/server/lab.conf | tr '\n' ' '; echo; sudo systemctl start openvpn-server@lab; sleep 2; systemctl is-active openvpn-server@lab
+port 1194 proto udp dev tun dh none crl-verify crl.pem server 10.8.0.0 255.255.255.0 keepalive 10 60 status /run/openvpn-server/status-lab.log 10 status-version 2 verb 3
+active
+$ sudo openvpn --config lab.ovpn --daemon --log /tmp/ovpn.log; sleep 6; sudo grep -E "Peer Connection Initiated|Initialization Sequence Completed" /tmp/ovpn.log | cut -c21-   # ← trên android-7f3a
+[server] Peer Connection Initiated with [AF_INET]192.168.56.10:1194
+Initialization Sequence Completed
+$ sudo timeout 20 openvpn --config lab.ovpn --connect-retry-max 1 --log /tmp/ovpn.log; sudo grep -E "TLS Error|TLS handshake|SIGTERM|SIGUSR1" /tmp/ovpn.log | head -n 3 | cut -c21-   # ← trên keodo
+SIGTERM received, sending exit notification to peer
+SIGTERM[soft,exit-with-notification] received, process exiting
+$ sudo journalctl -u openvpn-server@lab --since "-2 min" --no-pager -o short-iso | grep -E "Peer Connection Initiated|pool returned|VERIFY|CRL|TLS Error|TLS handshake failed" | sed -E 's/^(\S+) \S+ \S+ /\1 /' | cut -c1-200
+2026-11-24T12:29:23+07:00 CRL: loaded 1 CRLs from file crl.pem
+2026-11-24T12:29:26+07:00 192.168.56.142:39083 VERIFY OK: depth=1, CN=lab-ca
+2026-11-24T12:29:26+07:00 192.168.56.142:39083 VERIFY OK: depth=0, CN=android
+2026-11-24T12:29:26+07:00 192.168.56.142:39083 [android] Peer Connection Initiated with [AF_INET]192.168.56.142:39083
+2026-11-24T12:29:26+07:00 android/192.168.56.142:39083 MULTI_sva: pool returned IPv4=10.8.0.6, IPv6=(Not enabled)
+2026-11-24T12:29:32+07:00 192.168.56.66:47588 VERIFY ERROR: depth=0, error=certificate revoked: CN=keodo, serial=213151197993495695620480342385124702468
+2026-11-24T12:29:32+07:00 192.168.56.66:47588 TLS Error: TLS object -> incoming plaintext read error
+2026-11-24T12:29:32+07:00 192.168.56.66:47588 TLS Error: TLS handshake failed
+$ sudo cat /run/openvpn-server/status-lab.log
+TITLE,OpenVPN 2.6.19 x86_64-pc-linux-gnu [SSL (OpenSSL)] [LZO] [LZ4] [EPOLL] [PKCS11] [MH/PKTINFO] [AEAD] [DCO]
+TIME,2026-11-24 12:29:46,1795498186
+HEADER,CLIENT_LIST,Common Name,Real Address,Virtual Address,Virtual IPv6 Address,Bytes Received,Bytes Sent,Connected Since,Connected Since (time_t),Username,Client ID,Peer ID,Data Channel Cipher
+CLIENT_LIST,android,192.168.56.142:39083,10.8.0.6,,3256,3244,2026-11-24 12:29:26,1795498166,UNDEF,0,0,AES-256-GCM
+HEADER,ROUTING_TABLE,Virtual Address,Common Name,Real Address,Last Ref,Last Ref (time_t)
+ROUTING_TABLE,10.8.0.6,android,192.168.56.142:39083,2026-11-24 12:29:26,1795498166
+GLOBAL_STATS,Max bcast/mcast queue length,1
+GLOBAL_STATS,dco_enabled,0
+END
+$ sudo pkill -x openvpn; sleep 3; echo "android ngắt OpenVPN"   # ← trên android-7f3a
+android ngắt OpenVPN
+$ sudo journalctl -u openvpn-server@lab --since "-1 min" --no-pager -o short-iso | grep -iE "exit|SIGTERM" | sed -E 's/^(\S+) \S+ \S+ /\1 /' | cut -c1-200 | tail -n 2; sudo grep -c CLIENT_LIST /run/openvpn-server/status-lab.log
+2026-11-24T12:29:54+07:00 android/192.168.56.142:39083 CC-EEN exit message received by peer
+2026-11-24T12:29:54+07:00 android/192.168.56.142:39083 Delayed exit in 5 seconds
+2
+PS> Add-VpnConnection -Name 'VPN-Cong-Ty' -ServerAddress 192.168.56.10 -TunnelType Sstp -AuthenticationMethod MSChapv2 -EncryptionLevel Required -Force -PassThru | Select-Object Name,ServerAddress,TunnelType
+
+Name        ServerAddress TunnelType
+----        ------------- ----------
+VPN-Cong-Ty 192.168.56.10 Sstp
+PS> rasdial 'VPN-Cong-Ty' an MatKhauGia-11; "rasdial thoát với mã $LASTEXITCODE"
+Connecting to VPN-Cong-Ty...A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+rasdial thoát với mã -2147014836
+PS> Get-WinEvent -FilterHashtable @{LogName='Application'; ProviderName='RasClient'} -MaxEvents 3 | Sort-Object TimeCreated | Select-Object TimeCreated,Id,@{n='Message';e={($_.Message -replace '\s+',' ').Substring(0,[Math]::Min(300,($_.Message -replace '\s+',' ').Length))}} | Format-List
+
+
+TimeCreated : 11/24/2026 12:30:04 PM
+Id          : 20221
+Message     : CoId={C804D744-E2AB-4497-A58E-FB7D097A5F3F}: The user SYSTEM has started dialing a VPN connection using a per-user connection profile named VPN-Cong-Ty. The connection settings are:
+              Dial-in User = *\an VpnStrategy = SSTP DataEncryption = Require PrerequisiteEntry = AutoLogon = No UseRasCredentials =
+
+TimeCreated : 11/24/2026 12:30:04 PM
+Id          : 20222
+Message     : CoId={C804D744-E2AB-4497-A58E-FB7D097A5F3F}: The user SYSTEM is trying to establish a link to the Remote Access Server for the connection named VPN-Cong-Ty using the following device:
+              Server address/Phone Number = 192.168.56.10 Device = WAN Miniport (SSTP) Port = VPN1-1 MediaType = VPN.
+
+TimeCreated : 11/24/2026 12:30:25 PM
+Id          : 20227
+Message     : CoId={C804D744-E2AB-4497-A58E-FB7D097A5F3F}: The user SYSTEM dialed a connection named VPN-Cong-Ty which has failed. The error code returned on failure is -2147014836.

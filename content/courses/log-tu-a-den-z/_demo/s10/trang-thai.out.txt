@@ -1,0 +1,50 @@
+$ awk '{print $9}' logs/access.log | sort | uniq -c | sort -k2n
+    375 200
+      1 202
+      2 400
+     13 401
+      1 403
+      8 404
+      1 413
+      6 429
+      1 499
+     29 500
+     20 502
+      1 504
+$ grep -m1 '" 400 ' logs/access.log
+172.17.0.1 - - [23/Nov/2026:20:34:36 +0000] "GET /static/..%2f..%2f..%2fetc%2fpasswd HTTP/1.1" 400 157 "-" "-" rt=0.000 urt=- rid=56dead95c8a00c0296052e9374fa92bc
+$ grep -m1 '" 401 ' logs/access.log
+192.0.2.51 - - [23/Nov/2026:20:34:39 +0000] "POST /api/login HTTP/1.1" 401 42 "-" "python-requests/2.32.3" rt=0.002 urt=0.001 rid=dd81654a6048eea8c313f9774542de7e
+$ grep -m1 '" 403 ' logs/access.log
+203.0.113.66 - - [23/Nov/2026:20:34:36 +0000] "GET /admin/ HTTP/1.1" 403 153 "-" "Mozilla/5.00 (Nikto/2.5.0) (Evasions:None) (Test:000003)" rt=0.000 urt=- rid=43c1d56bdd02438808af9dd6c7cd7476
+$ grep -m1 '" 413 ' logs/access.log
+198.51.100.17 - - [23/Nov/2026:20:34:46 +0000] "POST /api/login HTTP/1.1" 413 585 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36" rt=0.000 urt=- rid=3a951bdc80d349db21684b0f764b95da
+$ grep -m1 '" 429 ' logs/access.log
+192.0.2.51 - - [23/Nov/2026:20:34:40 +0000] "POST /api/login HTTP/1.1" 429 169 "-" "python-requests/2.32.3" rt=0.000 urt=- rid=e7c8a8512693e20a0ce70d7c3c521637
+$ grep -m1 '" 499 ' logs/access.log
+198.51.100.23 - - [23/Nov/2026:20:34:41 +0000] "GET /api/report HTTP/1.1" 499 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36" rt=0.500 urt=0.500 rid=acffa123cf21ec5dc0e4bc6dd073ac4a
+$ grep -m1 '" 500 ' logs/access.log
+198.51.100.23 - - [23/Nov/2026:20:34:33 +0000] "GET /api/orders/1007 HTTP/1.1" 500 37 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36" rt=0.030 urt=0.030 rid=54e843c7f3025d4f7f57dbacf67cfaea
+$ grep -m1 '" 502 ' logs/access.log
+198.51.100.10 - - [23/Nov/2026:20:35:01 +0000] "GET /api/report HTTP/1.1" 502 559 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36" rt=0.191 urt=0.191 rid=f4295b8dd1472afadd4953daf44faf70
+$ grep -m1 '" 504 ' logs/access.log
+198.51.100.17 - - [23/Nov/2026:20:34:46 +0000] "GET /api/export HTTP/1.1" 504 569 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36" rt=5.000 urt=5.000 rid=005eb0318c50bbe489317b1b962d00ea
+$ grep -m1 'upstream timed out' logs/error.log
+2026/11/23 20:34:46 [error] 30#30: *111 upstream timed out (110: Operation timed out) while reading response header from upstream, client: 198.51.100.17, server: , request: "GET /api/export HTTP/1.1", upstream: "http://127.0.0.1:3000/api/export", host: "127.0.0.1:41080"
+$ grep -m1 'connect() failed' logs/error.log
+2026/11/23 20:35:01 [error] 30#30: *209 connect() failed (111: Connection refused) while connecting to upstream, client: 198.51.100.11, server: , request: "GET /api/products HTTP/1.1", upstream: "http://127.0.0.1:3000/api/products", host: "127.0.0.1:41080"
+$ grep -m1 'limiting requests' logs/error.log
+2026/11/23 20:34:40 [error] 30#30: *89 limiting requests, excess: 3.900 by zone "login", client: 192.0.2.51, server: , request: "POST /api/login HTTP/1.1", host: "127.0.0.1:41080"
+$ grep -m1 'too large body' logs/error.log
+2026/11/23 20:34:46 [error] 30#30: *134 client intended to send too large body: 2024 bytes, client: 198.51.100.17, server: , request: "POST /api/login HTTP/1.1", host: "127.0.0.1:41080"
+$ grep -m1 'access forbidden' logs/error.log
+2026/11/23 20:34:36 [error] 30#30: *36 access forbidden by rule, client: 203.0.113.66, server: , request: "GET /admin/ HTTP/1.1", host: "127.0.0.1:41080"
+$ awk '$9 == 404 {split($NF, a, "="); print ($(NF-1) == "urt=-" ? "nginx tu tra" : "app tra"), $7}' logs/access.log
+nginx tu tra /.env
+nginx tu tra /.git/config
+nginx tu tra /wp-login.php
+nginx tu tra /phpmyadmin/
+nginx tu tra /server-status
+nginx tu tra /backup.zip
+nginx tu tra /config.php.bak
+nginx tu tra /actuator/env

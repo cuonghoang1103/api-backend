@@ -1,0 +1,7 @@
+# 10.7 — Log4Shell an toàn: cùng một dòng log, Log4j 2.14.1 (lỗi) vs 2.17.1 (đã vá). Container KHÔNG có mạng (--network none).
+ls lib-2.14.1 lib-2.17.1
+docker run --rm --network none --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint javac maven:3.9-eclipse-temurin-21 -proc:none -cp 'lib-2.17.1/*' -d out Demo.java && ls out
+docker run --rm --network none --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint java maven:3.9-eclipse-temurin-21 -Dlog4j.configurationFile=log4j2.xml -cp 'lib-2.14.1/*:out' Demo 'Mozilla/5.0 ${java:version} ${env:HOSTNAME}'
+docker run --rm --network none --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint java maven:3.9-eclipse-temurin-21 -Dlog4j.configurationFile=log4j2.xml -cp 'lib-2.17.1/*:out' Demo 'Mozilla/5.0 ${java:version} ${env:HOSTNAME}'
+docker run --rm --network none --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint java maven:3.9-eclipse-temurin-21 -Dlog4j.configurationFile=log4j2.xml -cp 'lib-2.14.1/*:out' Demo '${jndi:ldap://127.0.0.1:1389/a}' 2>&1 | grep -vE '^\s+at ' | cut -c1-200
+docker run --rm --network none --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint java maven:3.9-eclipse-temurin-21 -Dlog4j.configurationFile=log4j2.xml -cp 'lib-2.17.1/*:out' Demo '${jndi:ldap://127.0.0.1:1389/a}' 2>&1 | grep -vE '^\s+at ' | cut -c1-200

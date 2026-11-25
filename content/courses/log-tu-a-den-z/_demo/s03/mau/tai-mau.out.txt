@@ -1,0 +1,19 @@
+PS> ./tai-mau.ps1 -Ra ./mau      # lần đầu: tải ~78 MB; lần sau: chỉ kiểm lại SHA256
+OK    1,052,672  2-system-Microsoft-Windows-LiveId%4Operational.evtx
+OK   12,652,544  2-system-Security-dirty.evtx
+OK    1,052,672  2-vss_0-Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+OK    1,118,208  2-vss_7-System.evtx
+OK    4,198,400  Application.evtx
+OK    4,329,472  Archive-ForwardedEvents-test.evtx
+OK    2,166,784  dbc-many-events-application.evtx
+OK   10,555,392  dbc-many-events-security.evtx
+OK    4,263,936  dbc-many-events-system.evtx
+OK       69,632  defender-1116-1117.evtx
+OK    2,166,784  defender-1151.evtx
+OK       69,632  firewall-2004.evtx
+OK       69,632  powershell-openssh-install.evtx
+OK    2,166,784  security.evtx
+OK   31,526,912  security_big_sample.evtx
+OK    1,118,208  sysmon.evtx
+OK    1,118,208  system.evtx
+17 tệp, 0 lỗi — thư mục ./mau

@@ -1,0 +1,96 @@
+$ dmesg | head -n 2
+dmesg: read kernel buffer failed: Operation not permitted
+$ sysctl kernel.dmesg_restrict
+kernel.dmesg_restrict = 1
+$ sudo dmesg | head -n 3
+[    0.000000] Linux version 6.8.0-147-generic (buildd@lcy02-amd64-081) (x86_64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #147-Ubuntu SMP PREEMPT_DYNAMIC Thu Sep 24 11:33:16 UTC 2026 (Ubuntu 6.8.0-147.147-generic 6.8.12)
+[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-6.8.0-147-generic root=PARTUUID=74f72b74-a39f-45f1-93bd-9bb2dba3e5e6 ro console=tty1 console=ttyS0 panic=-1
+[    0.000000] KERNEL supported cpus:
+$ sudo dmesg -T | head -n 3
+[Tue Nov 24 04:12:52 2026] Linux version 6.8.0-147-generic (buildd@lcy02-amd64-081) (x86_64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #147-Ubuntu SMP PREEMPT_DYNAMIC Thu Sep 24 11:33:16 UTC 2026 (Ubuntu 6.8.0-147.147-generic 6.8.12)
+[Tue Nov 24 04:12:52 2026] Command line: BOOT_IMAGE=/vmlinuz-6.8.0-147-generic root=PARTUUID=74f72b74-a39f-45f1-93bd-9bb2dba3e5e6 ro console=tty1 console=ttyS0 panic=-1
+[Tue Nov 24 04:12:52 2026] KERNEL supported cpus:
+$ sudo dmesg -T --level=err,warn | head -n 5
+[Tue Nov 24 04:12:52 2026] unchecked MSR access error: WRMSR to 0x38f (tried to write 0x00010007000000ff) at rIP: 0xffffffff8c0c8c74 (native_write_msr+0x4/0x40)
+[Tue Nov 24 04:12:52 2026] Call Trace:
+[Tue Nov 24 04:12:52 2026]  <TASK>
+[Tue Nov 24 04:12:52 2026]  ? __intel_pmu_enable_all.isra.0+0x7c/0xf0
+[Tue Nov 24 04:12:52 2026]  intel_pmu_enable_all+0x15/0x20
+$ journalctl -k -b -n 3 --no-pager
+Nov 24 04:24:04 lab7 kernel: EXT4-fs (dm-0): unmounting filesystem 4921e5aa-39d7-458a-b78b-d4cd5e32644a.
+Nov 24 04:24:04 lab7 kernel: Buffer I/O error on dev dm-0, logical block 0, lost sync page write
+Nov 24 04:24:04 lab7 kernel: EXT4-fs (dm-0): I/O error while writing superblock
+$ sudo dmesg -T | grep 'usb 1-1' | head -n 5
+[Tue Nov 24 04:12:54 2026] usb 1-1: new high-speed USB device number 2 using xhci_hcd
+[Tue Nov 24 04:12:54 2026] usb 1-1: New USB device found, idVendor=0627, idProduct=0001, bcdDevice= 0.00
+[Tue Nov 24 04:12:54 2026] usb 1-1: New USB device strings: Mfr=1, Product=3, SerialNumber=10
+[Tue Nov 24 04:12:54 2026] usb 1-1: Product: QEMU USB Tablet
+[Tue Nov 24 04:12:54 2026] usb 1-1: Manufacturer: QEMU
+$ journalctl -k -b -g 'usb 1-1' --no-pager
+-- No entries --
+$ date '+%F %T' > /tmp/moc-cg
+$ sudo systemd-run --unit=an-ram -p MemoryMax=60M -p MemorySwapMax=0 --wait python3 -c 'import itertools; a = [bytearray(5 << 20) for _ in itertools.count()]' 2>&1 | tail -n 7
+Running as unit: an-ram.service; invocation ID: c8d14aa0f77e442cb0762102292709de
+Finished with result: oom-kill
+Main processes terminated with: code=killed/status=KILL
+Service runtime: 30ms
+CPU time consumed: 30ms
+Memory peak: 1.3M
+Memory swap peak: 0B
+$ journalctl -u an-ram -b -n 4 --no-pager -o short-iso
+2026-11-24T04:24:23+07:00 lab7 systemd[1]: Started an-ram.service - /usr/bin/python3 -c "import itertools; a = [bytearray(5 << 20) for _ in itertools.count()]".
+2026-11-24T04:24:23+07:00 lab7 systemd[1]: an-ram.service: A process of this unit has been killed by the OOM killer.
+2026-11-24T04:24:23+07:00 lab7 systemd[1]: an-ram.service: Main process exited, code=killed, status=9/KILL
+2026-11-24T04:24:23+07:00 lab7 systemd[1]: an-ram.service: Failed with result 'oom-kill'.
+$ journalctl -k -b --since "$(cat /tmp/moc-cg)" -g 'oom|Killed process' --no-pager -o short-iso
+2026-11-24T04:24:23+07:00 lab7 kernel: python3 invoked oom-killer: gfp_mask=0xcc0(GFP_KERNEL), order=0, oom_score_adj=0
+2026-11-24T04:24:23+07:00 lab7 kernel:  oom_kill_process+0x118/0x280
+2026-11-24T04:24:23+07:00 lab7 kernel: [  pid  ]   uid  tgid total_vm      rss rss_anon rss_file rss_shmem pgtables_bytes swapents oom_score_adj name
+2026-11-24T04:24:23+07:00 lab7 kernel: oom-kill:constraint=CONSTRAINT_MEMCG,nodemask=(null),cpuset=/,mems_allowed=0,oom_memcg=/system.slice/an-ram.service,task_memcg=/system.slice/an-ram.service,task=python3,pid=10774,uid=0
+2026-11-24T04:24:23+07:00 lab7 kernel: Memory cgroup out of memory: Killed process 10774 (python3) total-vm:76596kB, anon-rss:61184kB, file-rss:6272kB, shmem-rss:0kB, UID:0 pgtables:188kB oom_score_adj:0
+$ date '+%F %T' > /tmp/moc-oom
+$ sudo systemd-run --unit=an-het-ram --wait python3 -c 'import itertools; a = [bytearray(20 << 20) for _ in itertools.count()]' 2>&1 | tail -n 7
+Running as unit: an-het-ram.service; invocation ID: f4337bc6eddc46fb9da8d8977d24196f
+Finished with result: oom-kill
+Main processes terminated with: code=killed/status=KILL
+Service runtime: 529ms
+CPU time consumed: 341ms
+Memory peak: 796.2M
+Memory swap peak: 0B
+$ journalctl -k -b --since "$(cat /tmp/moc-oom)" --no-pager -o short-iso | grep -E 'invoked oom-killer|Out of memory|oom-kill:|Free swap|Node 0 Normal free' | cut -c1-230
+2026-11-24T04:24:23+07:00 lab7 kernel: python3 invoked oom-killer: gfp_mask=0xcc0(GFP_KERNEL), order=0, oom_score_adj=0
+2026-11-24T04:24:23+07:00 lab7 kernel: oom-kill:constraint=CONSTRAINT_MEMCG,nodemask=(null),cpuset=/,mems_allowed=0,oom_memcg=/system.slice/an-ram.service,task_memcg=/system.slice/an-ram.service,task=python3,pid=10774,uid=0
+2026-11-24T04:24:24+07:00 lab7 kernel: python3 invoked oom-killer: gfp_mask=0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), order=0, oom_score_adj=0
+2026-11-24T04:24:24+07:00 lab7 kernel: Free swap  = 0kB
+2026-11-24T04:24:24+07:00 lab7 kernel: oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=/,mems_allowed=0,global_oom,task_memcg=/system.slice/an-het-ram.service,task=python3,pid=10879,uid=0
+2026-11-24T04:24:24+07:00 lab7 kernel: Out of memory: Killed process 10879 (python3) total-vm:834468kB, anon-rss:813312kB, file-rss:0kB, shmem-rss:0kB, UID:0 pgtables:1660kB oom_score_adj:0
+$ python3 -c 'import ctypes; ctypes.string_at(0)'; echo "exit=$?"
+bash: line 1: 10966 Segmentation fault      (core dumped) python3 -c 'import ctypes; ctypes.string_at(0)'
+exit=139
+$ journalctl -k -b -g segfault -n 1 --no-pager -o short-iso
+2026-11-24T04:24:25+07:00 lab7 kernel: python3[10966]: segfault at 0 ip 000071de4818badd sp 00007ffc297130e8 error 4 in libc.so.6[71de48028000+189000] likely on CPU 1 (core 1, socket 0)
+$ date '+%F %T' > /tmp/moc-io
+$ truncate -s 64M /tmp/dia.img && sudo losetup -f --show /tmp/dia.img > /tmp/loop && cat /tmp/loop
+/dev/loop0
+$ sudo mkfs.ext4 -q $(cat /tmp/loop) && sudo dmsetup create dia-hong --table "0 131072 linear $(cat /tmp/loop) 0" && sudo mkdir -p /mnt/hong && sudo mount -o errors=remount-ro /dev/mapper/dia-hong /mnt/hong && findmnt -no SOURCE,OPTIONS /mnt/hong
+/dev/mapper/dia-hong rw,relatime,errors=remount-ro
+$ sudo dmsetup suspend dia-hong && sudo dmsetup reload dia-hong --table '0 131072 error' && sudo dmsetup resume dia-hong
+$ sudo sh -c 'echo hello > /mnt/hong/a.txt; sync'; ls /mnt/hong; sleep 10
+sh: 1: cannot create /mnt/hong/a.txt: Input/output error
+ls: cannot open directory '/mnt/hong': Input/output error
+$ sudo touch /mnt/hong/b.txt
+touch: cannot touch '/mnt/hong/b.txt': Input/output error
+$ journalctl -k -b --since "$(cat /tmp/moc-io)" --no-pager -o short-iso | grep -E 'I/O error|EXT4-fs|Aborting journal|Remount' | head -n 14 | cut -c1-200
+2026-11-24T04:24:25+07:00 lab7 kernel: EXT4-fs (dm-0): mounted filesystem f6825126-cf2c-4c7a-b7d1-68b9976c9885 r/w with ordered data mode. Quota mode: none.
+2026-11-24T04:24:26+07:00 lab7 kernel: Buffer I/O error on dev dm-0, logical block 0, lost sync page write
+2026-11-24T04:24:26+07:00 lab7 kernel: EXT4-fs (dm-0): I/O error while writing superblock
+2026-11-24T04:24:26+07:00 lab7 kernel: Buffer I/O error on dev dm-0, logical block 4, async page read
+2026-11-24T04:24:26+07:00 lab7 kernel: EXT4-fs error (device dm-0): __ext4_find_entry:1689: inode #2: comm sh: reading directory lblock 0
+2026-11-24T04:24:26+07:00 lab7 kernel: Aborting journal on device dm-0-8.
+2026-11-24T04:24:26+07:00 lab7 kernel: Buffer I/O error on dev dm-0, logical block 15, lost sync page write
+2026-11-24T04:24:26+07:00 lab7 kernel: JBD2: I/O error when updating journal superblock for dm-0-8.
+2026-11-24T04:24:26+07:00 lab7 kernel: Buffer I/O error on dev dm-0, logical block 0, lost sync page write
+2026-11-24T04:24:26+07:00 lab7 kernel: EXT4-fs (dm-0): I/O error while writing superblock
+2026-11-24T04:24:26+07:00 lab7 kernel: EXT4-fs (dm-0): Remounting filesystem read-only
+$ sudo umount -l /mnt/hong; sudo dmsetup remove dia-hong; sudo losetup -d $(cat /tmp/loop); rm /tmp/dia.img; sudo systemctl reset-failed an-ram an-het-ram; echo don-xong
+don-xong

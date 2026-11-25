@@ -1,0 +1,117 @@
+$ psql -d shop -Atc "SELECT count(*), pg_size_pretty(pg_total_relation_size('orders')) FROM orders"
+2000000|327 MB
+$ psql -qc "ALTER SYSTEM SET log_min_duration_statement = '50ms'" -c "SELECT pg_reload_conf()"
+ pg_reload_conf
+----------------
+ t
+(1 row)
+$ export PGPASSWORD=App-Lab-2026 PGAPPNAME=shop-api; psql -h 10.20.0.50 -U app -d shop -c '\timing on' \
+  -c "SELECT id, total FROM orders WHERE customer_email = 'khach4242@example.com' ORDER BY created_at DESC LIMIT 3" \
+  -c "SELECT id, total FROM orders WHERE id = 4242"
+Timing is on.
+   id    |  total
+---------+---------
+ 1594318 | 4767000
+  544318 | 4767000
+ 1094318 | 4767000
+(3 rows)
+
+Time: 72.327 ms
+  id  |  total
+------+---------
+ 4242 | 1955000
+(1 row)
+
+Time: 0.380 ms
+$ tail -n 2 log/$(ls -t log | grep '\.log$' | head -1)
+2026-11-24 15:57:28.186 +07 [1] LOG:  parameter "log_min_duration_statement" changed to "50ms"
+2026-11-24 15:57:28.360 +07 [87] app@shop app=shop-api client=10.20.0.50 LOG:  duration: 72.117 ms  statement: SELECT id, total FROM orders WHERE customer_email = 'khach4242@example.com' ORDER BY created_at DESC LIMIT 3
+$ export PGPASSWORD=App-Lab-2026 PGAPPNAME=shop-api; echo "SELECT id, total FROM orders WHERE customer_email = \$1 ORDER BY created_at DESC LIMIT 3 \bind 'khach777@example.com' \g" | psql -h 10.20.0.50 -U app -d shop -q >/dev/null
+$ tail -n 2 log/$(ls -t log | grep '\.log$' | head -1)
+2026-11-24 15:57:28.632 +07 [108] app@shop app=shop-api client=10.20.0.50 LOG:  duration: 77.067 ms  execute <unnamed>: SELECT id, total FROM orders WHERE customer_email = $1 ORDER BY created_at DESC LIMIT 3
+2026-11-24 15:57:28.632 +07 [108] app@shop app=shop-api client=10.20.0.50 DETAIL:  Parameters: $1 = 'khach777@example.com'
+$ psql -qc "ALTER SYSTEM SET shared_preload_libraries = pg_stat_statements, auto_explain" \
+  -c "ALTER SYSTEM SET auto_explain.log_min_duration = '50ms'" \
+  -c "ALTER SYSTEM SET auto_explain.log_analyze = on" \
+  -c "ALTER SYSTEM SET auto_explain.log_buffers = on" \
+  -c "ALTER SYSTEM SET auto_explain.log_timing = off"
+$ psql -d shop -qc 'CREATE EXTENSION IF NOT EXISTS pg_stat_statements' -c 'SELECT pg_stat_statements_reset()' >/dev/null; psql -Atc 'SHOW shared_preload_libraries'
+pg_stat_statements, auto_explain
+$ export PGPASSWORD=App-Lab-2026 PGAPPNAME=shop-api; psql -h 10.20.0.50 -U app -d shop -qc "SELECT id, total FROM orders WHERE customer_email = 'khach4242@example.com' ORDER BY created_at DESC LIMIT 3" >/dev/null
+$ tail -n 22 log/$(ls -t log | grep '\.log$' | head -1)
+2026-11-24 15:57:29.906 +07 [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-24 15:57:29.912 +07 [36] LOG:  database system was shut down at 2026-11-24 15:57:29 +07
+2026-11-24 15:57:29.920 +07 [1] LOG:  database system is ready to accept connections
+2026-11-24 15:57:31.614 +07 [79] app@shop app=shop-api client=10.20.0.50 LOG:  duration: 87.906 ms  plan:
+	Query Text: SELECT id, total FROM orders WHERE customer_email = 'khach4242@example.com' ORDER BY created_at DESC LIMIT 3
+	Limit  (cost=47780.89..47781.24 rows=3 width=22) (actual rows=3 loops=1)
+	  Buffers: shared hit=74 read=36364
+	  ->  Gather Merge  (cost=47780.89..47784.86 rows=34 width=22) (actual rows=3 loops=1)
+	        Workers Planned: 2
+	        Workers Launched: 2
+	        Buffers: shared hit=74 read=36364
+	        ->  Sort  (cost=46780.87..46780.91 rows=17 width=22) (actual rows=3 loops=3)
+	              Sort Key: created_at DESC
+	              Sort Method: top-N heapsort  Memory: 25kB
+	              Buffers: shared hit=74 read=36364
+	              Worker 0:  Sort Method: top-N heapsort  Memory: 25kB
+	              Worker 1:  Sort Method: top-N heapsort  Memory: 25kB
+	              ->  Parallel Seq Scan on orders  (cost=0.00..46780.65 rows=17 width=22) (actual rows=13 loops=3)
+	                    Filter: (customer_email = 'khach4242@example.com'::text)
+	                    Rows Removed by Filter: 666653
+	                    Buffers: shared read=36364
+2026-11-24 15:57:31.614 +07 [79] app@shop app=shop-api client=10.20.0.50 LOG:  duration: 90.439 ms  statement: SELECT id, total FROM orders WHERE customer_email = 'khach4242@example.com' ORDER BY created_at DESC LIMIT 3
+$ export PGPASSWORD=App-Lab-2026 PGAPPNAME=bao-cao-doanh-thu; pgbench -h 10.20.0.50 -U app -n -f /lab/nghin-vet-cat.sql -c 2 -j 2 -t 300 shop 2>&1 | grep -E 'transactions actually|latency average'
+number of transactions actually processed: 600/600
+latency average = 15.796 ms
+$ grep -c 'bao-cao-doanh-thu' log/$(ls -t log | grep '\.log$' | head -1)
+0
+$ psql -d shop -c "SELECT calls, round(total_exec_time) AS total_ms, round(mean_exec_time::numeric, 1) AS mean_ms, round(max_exec_time::numeric, 1) AS max_ms, left(regexp_replace(query, '\s+', ' ', 'g'), 70) AS query FROM pg_stat_statements WHERE dbid = (SELECT oid FROM pg_database WHERE datname = 'shop') ORDER BY total_exec_time DESC LIMIT 4"
+ calls | total_ms | mean_ms | max_ms |                                 query
+-------+----------+---------+--------+------------------------------------------------------------------------
+   600 |     9016 |    15.0 |   34.1 | SELECT sum(total) FROM orders WHERE id BETWEEN $1 AND $2 + $3
+     1 |       88 |    87.9 |   87.9 | SELECT id, total FROM orders WHERE customer_email = $1 ORDER BY create
+     1 |        0 |     0.1 |    0.1 | SELECT pg_stat_statements_reset()
+(3 rows)
+$ L=$(ls -t log/*.log | head -1); a=$(stat -c %s $L); pgbench -n -S -c 4 -j 2 -T 10 bench 2>&1 | grep '^tps'; echo "log tăng: $(( ($(stat -c %s $L) - a) / 1024 )) KiB"
+tps = 64960.659078 (without initial connection time)
+log tăng: 0 KiB
+$ psql -qc "ALTER SYSTEM SET log_min_duration_statement = 0" -c "SELECT pg_reload_conf()"
+ pg_reload_conf
+----------------
+ t
+(1 row)
+$ L=$(ls -t log/*.log | head -1); J=$(ls -t log/*.json | head -1); a=$(stat -c %s $L); b=$(stat -c %s $J); pgbench -n -S -c 4 -j 2 -T 10 bench 2>&1 | grep '^tps'; echo "log tăng: $(( ($(stat -c %s $L) - a) / 1024 / 1024 )) MiB (.log) + $(( ($(stat -c %s $J) - b) / 1024 / 1024 )) MiB (.json)"
+tps = 40874.646156 (without initial connection time)
+log tăng: 9 MiB (.log) + 9 MiB (.json)
+$ tail -n 2 log/$(ls -t log | grep '\.log$' | head -1)
+2026-11-24 15:57:58.744 +07 [181] postgres@bench app=pgbench client=[local] LOG:  duration: 0.023 ms  statement: SELECT abalance FROM pgbench_accounts WHERE aid = 103998;
+2026-11-24 15:57:58.747 +07 [183] postgres@bench app=pgbench client=[local] LOG:  duration: 0.186 ms  statement: SELECT abalance FROM pgbench_accounts WHERE aid = 674201;
+$ psql -qc "ALTER SYSTEM SET log_min_duration_statement = '50ms'" -c "SELECT pg_reload_conf()"
+ pg_reload_conf
+----------------
+ t
+(1 row)
+$ pgbadger -q -j 2 -f jsonlog -d shop -u app -o /tmp/bao-cao.txt log/postgresql-*.json; grep -A 9 -m1 '^- Slowest queries' /tmp/bao-cao.txt | cut -c1-150
+- Slowest queries ------------------------------------------------------
+
+Rank     Duration (s)     Query
+1) 90ms database: shop, user: app, remote: 10.20.0.50, app: shop-api - SELECT id, total FROM orders WHERE customer_email = 'khach4242@example.com' ORD
+--
+2) 87ms database: shop, user: app, remote: 10.20.0.50, app: shop-api - Query Text: SELECT id, total FROM orders WHERE customer_email = 'khach4242@exam
+Limit  (cost=47780.89..47781.24 rows=3 width=22) (actual rows=3 loops=1)
+  Buffers: shared hit=74 read=36364
+  ->  Gather Merge  (cost=47780.89..47784.86 rows=34 width=22) (actual rows=3 loops=1)
+        Workers Planned: 2
+$ grep -A 8 -m1 '^- Queries that took up the most time' /tmp/bao-cao.txt | grep -vE '^\s+-> |^  Buffers|^ +(Workers|Buffers)' | cut -c1-150
+- Queries that took up the most time (N) -------------------------------
+
+Rank     Total duration      Times executed     Min/Max/Avg duration (s)     Query
+1) 239ms - 3 - 72ms/90ms/79ms - select id, total from orders where customer_email = ? order by created_at desc limit ?;
+--
+	- Example 1: 90ms - database: shop, user: app, remote: 10.20.0.50, app: shop-api, log file: log/postgresql-2026-11-24_155729.json - SELECT id, total
+	- Example 2: 77ms - database: shop, user: app, remote: 10.20.0.50, app: shop-api, bind query: yes, log file: log/postgresql-2026-11-24_155726.json -
+	- Example 3: 72ms - database: shop, user: app, remote: 10.20.0.50, app: shop-api, log file: log/postgresql-2026-11-24_155726.json - SELECT id, total
+2) 87ms - 1 - 87ms/87ms/87ms - Query Text: SELECT id, total FROM orders WHERE customer_email = 'khach4242@example.com' ORDER BY created_at DESC LIMIT
+$ pgbadger -q -j 2 -f jsonlog -d shop -u app -o /tmp/bao-cao.html log/postgresql-*.json; ls -lh /tmp/bao-cao.html | awk '{print $5, $9}'
+877K /tmp/bao-cao.html

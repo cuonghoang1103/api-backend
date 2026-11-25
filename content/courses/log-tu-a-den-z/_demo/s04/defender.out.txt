@@ -1,0 +1,51 @@
+PS> evtx-rec tc/defender-5007.evtx | ConvertFrom-Json | ForEach-Object { $c = $(if ($_.data.'New Value') { 'THÊM ' + $_.data.'New Value' } else { 'BỎ   ' + $_.data.'Old Value' }); '{0}  {1}' -f $_.t.ToString('HH:mm:ss'), ($c -replace 'HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\','') }
+08:44:06  BỎ   Exclusions\Paths\C:\TOOLS\mimikatz.exe = 0x0
+08:44:27  THÊM Exclusions\Paths\C:\TOOLS\mimikatz = 0x0
+08:44:51  THÊM Exclusions\Processes\virus.exe = 0x0
+08:45:04  THÊM Exclusions\Extensions\.mimi = 0x0
+PS> evtx-rec tc/defender-atomic-1116-1117.evtx | ConvertFrom-Json | Sort-Object t | ForEach-Object { '{0}  {1}  {2,-32} {3}' -f $_.t.ToString('HH:mm:ss'), $_.id, $_.data.'Threat Name', (($_.data.Path -replace '^.*atomics\\','') -replace '->.*','') }
+20:40:00  1116  Trojan:PowerShell/Powersploit.M  T1056\Get-Keystrokes.ps1
+20:40:16  1116  Trojan:XML/Exeselrun.gen!A       T1086\payloads\test.xsl
+20:41:16  1116  HackTool:JS/Jsprat               T1100\shells\b.jsp
+20:41:17  1116  Backdoor:ASP/Ace.T               T1100\shells\cmd.aspx
+20:41:48  1116  Trojan:Win32/Sehyioa.A!cl        T1218\src\Win32\T1218-2.dll
+20:51:50  1117  Trojan:PowerShell/Powersploit.M  T1056\Get-Keystrokes.ps1
+20:51:50  1116  HackTool:JS/Jsprat               T1100\shells\b.jsp
+20:53:31  1117  Backdoor:ASP/Ace.T               T1100\shells\cmd.aspx
+20:53:31  1117  Trojan:Win32/Sehyioa.A!cl        T1218\src\Win32\T1218-2.dll
+20:53:31  1117  HackTool:JS/Jsprat               T1100\shells\b.jsp
+20:53:31  1117  Trojan:XML/Exeselrun.gen!A       T1086\payloads\test.xsl
+PS> evtx-rec tc/defender-atomic-1116-1117.evtx | ConvertFrom-Json | Where-Object id -eq 1117 | Select-Object -First 1 | ForEach-Object { $_.data | Format-List 'Threat Name','Severity Name','Category Name','Process Name','Detection User','Action ID','Error Code','Error Description','Remediation User','Signature Version' }
+Threat Name       : Trojan:PowerShell/Powersploit.M
+Severity Name     : Severe
+Category Name     : Trojan
+Process Name      : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Detection User    : MSEDGEWIN10\IEUser
+Action ID         : 2
+Error Code        : 0x80508023
+Error Description : The program could not find the malware and other potentially unwanted software on this device.
+Remediation User  : NT AUTHORITY\SYSTEM
+Signature Version : AV: 1.297.1333.0, AS: 1.297.1333.0, NIS: 0.0.0.0
+PS> $e = evtx-rec tc/defender-atomic-1116-1117.evtx | ConvertFrom-Json; $xl = $e | Where-Object id -eq 1117 | ForEach-Object { $_.data.'Threat Name' }; $e | Where-Object id -eq 1116 | Group-Object { $_.data.'Threat Name' } | ForEach-Object { '{0,-32} phát hiện {1} lần · có 1117: {2}' -f $_.Name, $_.Count, ($xl -contains $_.Name) }
+Backdoor:ASP/Ace.T               phát hiện 1 lần · có 1117: True
+HackTool:JS/Jsprat               phát hiện 2 lần · có 1117: True
+Trojan:PowerShell/Powersploit.M  phát hiện 1 lần · có 1117: True
+Trojan:Win32/Sehyioa.A!cl        phát hiện 1 lần · có 1117: True
+Trojan:XML/Exeselrun.gen!A       phát hiện 1 lần · có 1117: True
+$ evtx-rec mau/*.evtx tc/*.evtx 2>/dev/null | jq -r 'select(.id==5001 and (.nguon|test("Defender"))) | .id' | wc -l
+0
+PS> evtx-rec mau/system.evtx mau/2-vss_7-System.evtx 2>$null | ConvertFrom-Json | Where-Object { $_.nguon -match 'WindowsUpdateClient' -and $_.id -in 19,20 } | Group-Object id | Select-Object Count,@{n='Id';e={$_.Name}} | Format-Table -AutoSize
+Count Id
+----- --
+  253 19
+    7 20
+PS> evtx-rec mau/system.evtx mau/2-vss_7-System.evtx 2>$null | ConvertFrom-Json | Where-Object { $_.nguon -match 'WindowsUpdateClient' -and $_.id -eq 20 } | ForEach-Object { '{0}  {1}  {2}' -f $_.t.ToString('yyyy-MM-dd'), $_.data.errorCode, ($_.data.updateTitle -replace ' for x64-based Systems','') }
+2017-07-23  0x80248007  2017-07 Cumulative Update for Windows 10 Version 1703 (KB4025342)
+2017-07-24  0x80248007  2017-07 Cumulative Update for Windows 10 Version 1703 (KB4025342)
+2017-07-27  0x80248007  2017-07 Cumulative Update for Windows 10 Version 1703 (KB4025342)
+2017-07-31  0x80248007  2017-07 Cumulative Update for Windows 10 Version 1703 (KB4025342)
+2017-12-18  0x80246013  Windows Malicious Software Removal Tool for Windows 8, 8.1, 10 and Windows Server 2012, 2012 R2, 2016 x64 Edition - October 2017 (KB890830)
+2018-07-12  0x8024001e  9NBLGGH3FL3T-Microsoft.VCLibs.120.00.Universal
+2018-07-12  0x8024001e  9WZDNCRFJ3PS-Microsoft.RemoteDesktop
+PS> $ok = @(evtx-rec mau/system.evtx 2>$null | ConvertFrom-Json | Where-Object { $_.nguon -match 'WindowsUpdateClient' -and $_.id -eq 19 -and $_.data.updateTitle -match 'KB4025342' }); 'KB4025342 cài thành công (19): {0} lần; sự kiện cuối của log: {1}' -f $ok.Count, (evtx-rec mau/system.evtx 2>$null | ConvertFrom-Json | Select-Object -Last 1).t.ToString('yyyy-MM-dd')
+KB4025342 cài thành công (19): 0 lần; sự kiện cuối của log: 2018-03-06

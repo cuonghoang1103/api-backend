@@ -1,0 +1,18 @@
+$ timeout 400 bash -c 'while :; do goi /api/orders; goi /api/pay; sleep 2; done' >/dev/null 2>&1 & echo $! > .luu-luong.pid; echo "lưu lượng bình thường chạy tới 400 s"
+lưu lượng bình thường chạy tới 400 s
+$ cp ../lab15/bay-nodata.yaml grafana/alerting/; docker restart lgz-c15-grafana >/dev/null; until gf /api/health 2>/dev/null | grep -q '"database": *"ok"'; do sleep 2; done; sleep 5; date +%s > .t0; date -u +%T; trang_thai; echo
+02:17:22
+SSH thất bại tăng vọt=inactive API trả 5xx=inactive shop-api im lặng=inactive SSH (để noData mặc định)=inactive 
+$ sleep 240; date -u +%T; trang_thai; echo
+02:21:22
+SSH thất bại tăng vọt=inactive API trả 5xx=inactive shop-api im lặng=inactive SSH (để noData mặc định)=inactive 
+$ gf /api/prometheus/grafana/api/v1/rules | jq -r '.data.groups[].rules[] | select(.name | test("mặc định")) | .alerts[]? | "\(.labels.alertname)  \(.state)  \(.labels.datasource_uid // "")"'
+SSH (để noData mặc định)  NoData  loki-lab
+$ dien_thoai
+02:17:50  🚨 [FIRING:1] DatasourceNoData (loki-lab Lab 15 canh-bao A SSH (để noData mặc định))
+$ lcurl "127.0.0.1:2586/lab15-canh-bao/json?poll=1&since=$(cat .t0)" | jq -r '.message' | grep -E '^ - (alertname|rulename|datasource_uid)' | sort -u
+ - alertname = DatasourceNoData
+ - datasource_uid = loki-lab
+ - rulename = SSH (để noData mặc định)
+$ kill "$(cat .luu-luong.pid)" 2>/dev/null; rm grafana/alerting/bay-nodata.yaml; docker restart lgz-c15-grafana >/dev/null; echo "đã dừng lưu lượng, gỡ luật bẫy"
+đã dừng lưu lượng, gỡ luật bẫy

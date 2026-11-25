@@ -1,0 +1,20 @@
+# Lab 13 — stack "shop" có ba dịch vụ cứ chết. Chỉ được dùng lệnh ĐỌC: ps, logs, inspect, events. Không mở tệp nguồn trước khi trả lời.
+name: lab13
+services:
+  api:
+    image: node:22-alpine
+    init: true
+    restart: on-failure:3
+    volumes: ["./app.js:/app/app.js:ro"]
+    command: ["node", "/app/app.js"]
+  worker:
+    image: node:22-alpine
+    restart: on-failure:2
+    mem_limit: 64m
+    memswap_limit: 64m
+    volumes: ["./an-ram.js:/app/an-ram.js:ro"]
+    command: ["node", "/app/an-ram.js"]
+  thumb:
+    image: python:3.13-alpine
+    volumes: ["./thumb.py:/app/thumb.py:ro"]
+    command: ["python3", "/app/thumb.py"]

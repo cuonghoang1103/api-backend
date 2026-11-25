@@ -1,0 +1,21 @@
+$ sudo ls -l /var/log/journal/$(cat /etc/machine-id)/fss
+-rw-------+ 1 root systemd-journal 482 Nov 24 04:19 /var/log/journal/595503c52a37410aae2b32f4ffddfa26/fss
+$ sudo journalctl --rotate
+$ sudo journalctl --verify --verify-key=$(cat ~/fss-key.txt) 2>&1 | grep -E 'system@|system.journal' | tail -n 2
+PASS: /var/log/journal/595503c52a37410aae2b32f4ffddfa26/system@7cbcc78059de43d2930efcf8561b1d27-0000000000009535-000660f825d40957.journal
+PASS: /var/log/journal/595503c52a37410aae2b32f4ffddfa26/system.journal
+$ F=$(sudo ls -t /var/log/journal/$(cat /etc/machine-id)/ | grep '^system@' | head -n 1); sudo cp /var/log/journal/$(cat /etc/machine-id)/$F /tmp/sua.journal; sudo chmod 644 /tmp/sua.journal; echo $F
+system@7cbcc78059de43d2930efcf8561b1d27-0000000000014a36-000660f82bfd07a4.journal
+$ grep -c -a 'order 1[0-9]* failed' /tmp/sua.journal
+1
+$ sudo python3 -c "p = '/tmp/sua.journal'; b = open(p, 'rb').read(); i = b.find(b' failed: database'); print('offset', i); open(p, 'r+b').write(b[:i] + b' passed: database' + b[i + 17:])"
+offset 318570
+$ journalctl --file /tmp/sua.journal -g 'passed: database' -n 1 --no-pager
+Nov 24 04:21:28 lab7 shop-api[424]: order 1061 passed: database timeout after 5000 ms (pool 10/10 busy)
+$ journalctl --verify --file /tmp/sua.journal 2>&1 | tail -n 3
+Journal file /tmp/sua.journal has sealing enabled but verification key has not been passed using --verify-key=.
+FAIL: /tmp/sua.journal (Required key not available)
+$ journalctl --verify --verify-key=$(cat ~/fss-key.txt) --file /tmp/sua.journal 2>&1 | tail -n 3
+04dc10: Invalid object contents: Bad message
+File corruption detected at /tmp/sua.journal:318480 (of 8388608 bytes, 3%).
+FAIL: /tmp/sua.journal (Bad message)

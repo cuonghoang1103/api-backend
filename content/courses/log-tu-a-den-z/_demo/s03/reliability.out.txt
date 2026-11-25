@@ -1,0 +1,60 @@
+PS> evtx-rec mau/Application.evtx mau/dbc-many-events-application.evtx | ConvertFrom-Json | Where-Object { ($_.id -eq 1000 -and $_.nguon -eq 'Application Error') -or ($_.id -eq 1002 -and $_.nguon -eq 'Application Hang') } | Group-Object nguon,{ $_.data.'#text'[0] } | Sort-Object Count -Descending | Select-Object -First 10 Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+    1 Application Error, adberdr813.exe
+    1 Application Error, mcupdmgr.exe
+    1 Application Error, rundll32.exe
+    1 Application Error, svchost.exe
+PS> evtx-rec mau/Application.evtx | ConvertFrom-Json | Where-Object { $_.id -eq 1000 -and $_.nguon -eq 'Application Error' } | Select-Object -First 1 | ForEach-Object { $d = $_.data.'#text'; "Luc: $($_.t.ToString('s'))Z  may: $($_.may)"; $ten = 'Ung dung','Phien ban','Dau thoi gian','Module loi','Phien ban module','Dau thoi gian module','Ma ngoai le','Offset','PID (hex)','Gio bat dau','Duong dan','Duong dan module','Report Id'; for ($i = 0; $i -lt [math]::Min($d.Count,$ten.Count); $i++) { "{0,-22} = {1}" -f $ten[$i], $d[$i] } }
+Luc: 2011-08-28T22:35:36Z  may: WKS-WIN732BITA.shieldbase.local
+Ung dung               = adberdr813.exe
+Phien ban              = 1.5.0.7
+Dau thoi gian          = 478250fd
+Module loi             = msvcrt.dll
+Phien ban module       = 7.0.7600.16385
+Dau thoi gian module   = 4a5bda6f
+Ma ngoai le            = c0000005
+Offset                 = 00018e17
+PID (hex)              = abc
+Gio bat dau            = 01cc65d2cc9abadf
+Duong dan              = C:\Users\nromanoff\Downloads\adberdr813.exe
+Duong dan module       = C:\Windows\system32\msvcrt.dll
+Report Id              = 0c2126c7-d1c6-11e0-b45f-005056a51269
+PS> evtx-rec mau/Application.evtx | ConvertFrom-Json | Where-Object { $_.id -eq 1001 -and $_.nguon -eq 'Windows Error Reporting' } | Group-Object { $_.data.'#text'[2] } | Sort-Object Count -Descending | Select-Object -First 6 Count,@{n='Loai su kien WER';e={$_.Name}} | Format-Table -AutoSize
+Count Loai su kien WER
+----- ----------------
+    3 APPCRASH
+    3 PnPDriverNotFound
+    2 BEX
+    2 PnPGenericDriverFound
+    2 PnPRequestAdditionalSoftware
+    2 ShellBrowserCancel
+PS> evtx-rec mau/Application.evtx | ConvertFrom-Json | Where-Object { $_.id -eq 1001 -and $_.nguon -eq 'Windows Error Reporting' -and $_.data.'#text'[2] -eq 'APPCRASH' } | Select-Object -First 1 | ForEach-Object { "Luc: $($_.t.ToString('s'))Z"; $_.data.'#text' | ForEach-Object -Begin { $i = 0 } -Process { if ($_ -ne '') { "  [{0,2}] {1}" -f $i, $_ }; $i++ } }
+Luc: 2011-08-28T22:35:45Z
+  [ 1] 0
+  [ 2] APPCRASH
+  [ 3] Not available
+  [ 4] 0
+  [ 5] adberdr813.exe
+  [ 6] 1.5.0.7
+  [ 7] 478250fd
+  [ 8] msvcrt.dll
+  [ 9] 7.0.7600.16385
+  [10] 4a5bda6f
+  [11] c0000005
+  [12] 00018e17
+  [16] C:\ProgramData\Microsoft\Windows\WER\ReportArchive\AppCrash_adberdr813.exe_4e6f6a6fc187a212f1b1b22f543c633f36ebbe_0cd92e4e
+  [18] 0
+  [19] 0c2126c7-d1c6-11e0-b45f-005056a51269
+  [20] 0
+PS> evtx-rec mau/Application.evtx mau/dbc-many-events-application.evtx | ConvertFrom-Json | Where-Object { $_.muc -in 'Critical','Error' -or ($_.id -eq 1000 -and $_.nguon -eq 'Application Error') } | Group-Object { $_.may }, { $_.t.ToString('yyyy-MM') } | Sort-Object Count -Descending | Select-Object -First 8 Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+   36 IE8Win7, 2014-11
+   19 WKS-WIN732BITA.shieldbase.local, 2011-07
+    9 WKS-WIN732BITA.shieldbase.local, 2010-11
+    8 WKS-WIN732BITA.shieldbase.local, 2011-08
+    6 WKS-WIN732BITA.shieldbase.local, 2012-02
+    3 WIN-V5T3CSP8U4H, 2010-11
+    2 IE10Win7, 2016-08
+    2 WKS-WIN732BITA.shieldbase.local, 2012-03

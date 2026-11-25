@@ -1,0 +1,4 @@
+$ journalctl -t systemd-timedated --no-pager -q | tail -n 3
+Nov 24 04:25:08 lab7 systemd-timedated[11445]: systemd-timesyncd.service: Disabling unit.
+Nov 24 04:25:09 lab7 systemd-timedated[11445]: Set NTP to disabled.
+Nov 25 03:11:40 lab7 systemd-timedated[11445]: Changed local time to Wed 2026-11-25 03:11:40 +07

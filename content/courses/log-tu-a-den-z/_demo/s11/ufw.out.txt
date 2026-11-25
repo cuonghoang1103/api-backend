@@ -1,0 +1,94 @@
+$ sudo ufw default deny incoming; sudo ufw allow 22/tcp; sudo ufw allow from 192.168.56.1 to any port 514 proto udp; sudo ufw limit 80/tcp
+Default incoming policy changed to 'deny'
+(be sure to update your rules accordingly)
+Rules updated
+Rules updated (v6)
+Rules updated
+Rules updated
+Rules updated (v6)
+$ sudo ufw --force enable; sudo ufw status verbose
+Firewall is active and enabled on system startup
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), disabled (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+22/tcp                     ALLOW IN    Anywhere
+514/udp                    ALLOW IN    192.168.56.1
+80/tcp                     LIMIT IN    Anywhere
+22/tcp (v6)                ALLOW IN    Anywhere (v6)
+80/tcp (v6)                LIMIT IN    Anywhere (v6)
+$ sudo nmap -sS -Pn -n --top-ports 25 192.168.56.10 | grep -E "open|scanned"   # ← trên keodo
+22/tcp   open     ssh
+80/tcp   open     http
+Nmap done: 1 IP address (1 host up) scanned in 1.51 seconds
+$ sudo ls -l /var/log/ufw.log; sudo tail -n 2 /var/log/ufw.log
+-rw-r----- 1 syslog adm 2561 Nov 24 12:18 /var/log/ufw.log
+2026-11-24T12:18:17.946533+07:00 lab7 kernel: [UFW BLOCK] IN=ens4 OUT= MAC=52:54:00:56:00:10:52:54:00:56:00:66:08:00 SRC=192.168.56.66 DST=192.168.56.10 LEN=44 TOS=0x00 PREC=0x00 TTL=57 ID=45653 PROTO=TCP SPT=57786 DPT=199 WINDOW=1024 RES=0x00 SYN URGP=0
+2026-11-24T12:18:17.947483+07:00 lab7 kernel: [UFW BLOCK] IN=ens4 OUT= MAC=52:54:00:56:00:10:52:54:00:56:00:66:08:00 SRC=192.168.56.66 DST=192.168.56.10 LEN=44 TOS=0x00 PREC=0x00 TTL=52 ID=48405 PROTO=TCP SPT=57786 DPT=110 WINDOW=1024 RES=0x00 SYN URGP=0
+$ sudo journalctl -k -g "UFW BLOCK" --since "-2 min" --no-pager -o short-iso | tail -n 1; sudo grep -c "UFW BLOCK" /var/log/kern.log /var/log/syslog /var/log/ufw.log
+2026-11-24T12:18:17+07:00 lab7 kernel: [UFW BLOCK] IN=ens4 OUT= MAC=52:54:00:56:00:10:52:54:00:56:00:66:08:00 SRC=192.168.56.66 DST=192.168.56.10 LEN=44 TOS=0x00 PREC=0x00 TTL=52 ID=48405 PROTO=TCP SPT=57786 DPT=110 WINDOW=1024 RES=0x00 SYN URGP=0
+/var/log/kern.log:10
+/var/log/syslog:10
+/var/log/ufw.log:10
+$ sudo grep "UFW BLOCK" /var/log/ufw.log | grep -o 'SRC=[^ ]*' | sort | uniq -c
+     10 SRC=192.168.56.66
+$ sudo grep "UFW BLOCK" /var/log/ufw.log | grep -oE 'DPT=[0-9]+' | sort -t= -k2 -n | uniq | tr '\n' ' '; echo
+DPT=21 DPT=110 DPT=199 DPT=443 DPT=587 DPT=993 DPT=995 DPT=1723 DPT=5900 DPT=8888
+$ sudo iptables -S ufw-logging-deny; sudo iptables -S ufw-after-logging-input
+-N ufw-logging-deny
+-A ufw-logging-deny -m conntrack --ctstate INVALID -m limit --limit 3/min --limit-burst 10 -j RETURN
+-A ufw-logging-deny -m limit --limit 3/min --limit-burst 10 -j LOG --log-prefix "[UFW BLOCK] "
+-N ufw-after-logging-input
+-A ufw-after-logging-input -m limit --limit 3/min --limit-burst 10 -j LOG --log-prefix "[UFW BLOCK] "
+$ sudo nmap -sS -Pn -n -p 1-1000 192.168.56.10 | grep -E "open|scanned"   # ← trên keodo
+22/tcp open  ssh
+80/tcp open  http
+Nmap done: 1 IP address (1 host up) scanned in 4.52 seconds
+$ sudo grep -c "UFW BLOCK" /var/log/ufw.log; sudo dmesg | grep -m1 -o "ufw.*callbacks suppressed" || echo "(không có dòng suppressed)"
+0
+(không có dòng suppressed)
+$ for i in $(seq 1 10); do curl -s -o /dev/null -m 2 -w "%{http_code} " http://192.168.56.10/; done; echo   # ← trên android-7f3a
+200 200 200 200 200 000 000 000 000 000
+$ sudo grep -E "UFW (LIMIT BLOCK|ALLOW)" /var/log/ufw.log | tail -n 2; sudo grep -c "UFW LIMIT BLOCK" /var/log/ufw.log
+2026-11-24T12:18:26.217360+07:00 lab7 kernel: [UFW LIMIT BLOCK] IN=ens4 OUT= MAC=52:54:00:56:00:10:52:54:00:56:00:42:08:00 SRC=192.168.56.142 DST=192.168.56.10 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=42447 DF PROTO=TCP SPT=58360 DPT=80 WINDOW=64240 RES=0x00 SYN URGP=0
+2026-11-24T12:18:26.226818+07:00 lab7 kernel: [UFW LIMIT BLOCK] IN=ens4 OUT= MAC=52:54:00:56:00:10:52:54:00:56:00:42:08:00 SRC=192.168.56.142 DST=192.168.56.10 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=11559 DF PROTO=TCP SPT=58368 DPT=80 WINDOW=64240 RES=0x00 SYN URGP=0
+5
+$ sudo ufw logging medium; sudo truncate -s 0 /var/log/ufw.log
+Logging enabled
+$ curl -s -o /dev/null -w "%{http_code}\n" http://192.168.56.10/   # ← trên android-7f3a
+000
+$ sudo grep -o "\[UFW [A-Z ]*\].*DPT=80 " /var/log/ufw.log | head -n 2
+[UFW AUDIT] IN=ens4 OUT= MAC=52:54:00:56:00:10:52:54:00:56:00:42:08:00 SRC=192.168.56.142 DST=192.168.56.10 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=2176 DF PROTO=TCP SPT=58384 DPT=80
+[UFW LIMIT BLOCK] IN=ens4 OUT= MAC=52:54:00:56:00:10:52:54:00:56:00:42:08:00 SRC=192.168.56.142 DST=192.168.56.10 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=2176 DF PROTO=TCP SPT=58384 DPT=80
+$ sudo ufw logging low
+Logging enabled
+$ sudo nft add table inet lab; sudo nft add chain inet lab vao '{ type filter hook input priority 0; policy accept; }'; sudo nft add rule inet lab vao tcp dport 23 limit rate 5/minute log prefix \"lab-telnet: \" level info; sudo nft add rule inet lab vao tcp dport 23 drop; sudo nft list chain inet lab vao   # ← trên keodo
+table inet lab {
+	chain vao {
+		type filter hook input priority filter; policy accept;
+		tcp dport 23 limit rate 5/minute burst 5 packets log prefix "lab-telnet: " level info
+		tcp dport 23 drop
+	}
+}
+$ for i in $(seq 1 12); do nc -z -w1 192.168.56.66 23; done; echo "đã thử 12 lần"   # ← trên android-7f3a
+đã thử 12 lần
+$ sudo journalctl -k -g "lab-telnet" --since "-1 min" --no-pager -o short-iso | tail -n 2; sudo journalctl -k -g "lab-telnet" --since "-1 min" --no-pager | grep -c lab-telnet; sudo nft list chain inet lab vao | grep -E "limit|drop"   # ← trên keodo
+2026-11-24T12:18:31+07:00 keodo kernel: lab-telnet: IN=ens4 OUT= MAC=52:54:00:56:00:66:52:54:00:56:00:42:08:00 SRC=192.168.56.142 DST=192.168.56.66 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=37816 DF PROTO=TCP SPT=36226 DPT=23 WINDOW=64240 RES=0x00 SYN URGP=0
+2026-11-24T12:18:32+07:00 keodo kernel: lab-telnet: IN=ens4 OUT= MAC=52:54:00:56:00:66:52:54:00:56:00:42:08:00 SRC=192.168.56.142 DST=192.168.56.66 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=25918 DF PROTO=TCP SPT=36240 DPT=23 WINDOW=64240 RES=0x00 SYN URGP=0
+5
+		tcp dport 23 limit rate 5/minute burst 5 packets log prefix "lab-telnet: " level info
+		tcp dport 23 drop
+$ sudo nft delete table inet lab; sudo iptables -A INPUT -p tcp --dport 2323 -m limit --limit 3/min --limit-burst 3 -j LOG --log-prefix "lab-2323: " --log-level 6; sudo iptables -A INPUT -p tcp --dport 2323 -j DROP; sudo iptables -L INPUT -n -v --line-numbers   # ← trên keodo
+Chain INPUT (policy ACCEPT 8 packets, 936 bytes)
+num   pkts bytes target     prot opt in     out     source               destination
+1        0     0 LOG        6    --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:2323 limit: avg 3/min burst 3 LOG flags 0 level 6 prefix "lab-2323: "
+2        0     0 DROP       6    --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:2323
+$ for i in $(seq 1 8); do nc -z -w1 192.168.56.66 2323; done; echo "đã thử 8 lần"   # ← trên android-7f3a
+đã thử 8 lần
+$ sudo journalctl -k -g "lab-2323" --since "-1 min" --no-pager | grep -c lab-2323; sudo iptables -L INPUT -n -v | grep -E "LOG|DROP"   # ← trên keodo
+3
+    3   180 LOG        6    --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:2323 limit: avg 3/min burst 3 LOG flags 0 level 6 prefix "lab-2323: "
+    8   480 DROP       6    --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:2323

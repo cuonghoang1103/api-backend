@@ -1,0 +1,39 @@
+$ cd vu14/logsrv/web01 && grep -oE 'Accepted \S+ for \S+ from \S+' auth-syslog.log | sort | uniq -c | sort -rn
+     20 Accepted publickey for deploy from 10.0.5.20
+      3 Accepted publickey for an from 10.0.5.31
+      1 Accepted password for deploy from 203.0.113.77
+$ cd vu14/logsrv/web01 && grep -E 'Accepted \S+ for deploy ' auth-syslog.log | cut -c12-13 | sort | uniq -c
+      1 02
+     10 08
+     10 13
+$ cd vu14/logsrv/web01 && grep -E 'Accepted ' auth-syslog.log | awk '{split($0, a, "Accepted "); split(a[2], b, " "); k = b[1] " " b[3] " " b[5]} $1 < "2026-11-19" {nen[k] = 1; next} !(k in nen) {print "MỚI:", substr($1, 1, 19), k}'
+MỚI: 2026-11-19T02:14:01 password deploy 203.0.113.77
+$ cd vu14 && grep -vE '^#' geo.csv
+10.0.0.0/8,LAN,mạng nội bộ công ty
+203.0.113.0/26,VN,nhà mạng VN (khách thật)
+203.0.113.64/26,DE,VPS Frankfurt
+198.51.100.0/25,BR,nhà mạng Brazil
+198.51.100.128/25,US,proxy dân dụng Mỹ
+192.0.2.0/24,NL,VPS Amsterdam
+$ cd vu14 && python3 /lab/s14/mau/di-chuyen.py web01/var/log/shop/app.jsonl geo.csv
+lan@mail.example   11-18 18:02:44Z VN 203.0.113.23    → 11-18 18:20:45Z US 198.51.100.165  |  13327 km trong  18.0 phút ⇒    44384 km/h
+hoa@mail.example   11-18 07:12:40Z VN 203.0.113.58    → 11-18 18:24:54Z US 198.51.100.168  |  13327 km trong 672.2 phút ⇒     1189 km/h
+hoa@mail.example   11-18 18:24:54Z US 198.51.100.168  → 11-18 23:24:41Z VN 203.0.113.26    |  13327 km trong 299.8 phút ⇒     2667 km/h
+lan@mail.example   11-18 18:20:45Z US 198.51.100.165  → 11-19 02:21:50Z VN 203.0.113.21    |  13327 km trong 481.1 phút ⇒     1662 km/h
+$ cd vu14 && jq -r 'select(.user == "lan@mail.example" and .msg == "login ok") | [(.time / 1000 | floor | todate), .ip] | @tsv' web01/var/log/shop/app.jsonl | tail -n 4
+2026-11-18T03:53:19Z	203.0.113.26
+2026-11-18T18:02:44Z	203.0.113.23
+2026-11-18T18:20:45Z	198.51.100.165
+2026-11-19T02:21:50Z	203.0.113.21
+$ cd vu14/web01/var/log && jq -r 'select(.reqId == "0eaea4ce741d937dffaea1d394d5986a") | .msg' shop/app.jsonl; grep -c 'rid=0eaea4ce741d937dffaea1d394d5986a' nginx/access.log; awk '$1 == "198.51.100.165" {print $4, $6, $7, $9}' nginx/access.log | tail -n 3
+login ok
+1
+[19/Nov/2026:01:30:47 "POST /api/login 401
+[19/Nov/2026:01:32:46 "POST /api/login 401
+[19/Nov/2026:01:34:46 "POST /api/login 401
+$ evtx-rec tc/rdp-tunnel-4624.evtx | jq -r 'select(.data.LogonType == 10 or .data.LogonType == 2) | [.t[0:19], .data.LogonType, .data.IpAddress, .data.TargetUserName, .data.LogonProcessName] | @tsv'
+2019-02-13T15:19:51	2	127.0.0.1	IEUser	User32
+2019-02-13T15:26:53	10	127.0.0.1	IEUser	User32
+2019-02-13T15:29:40	2	127.0.0.1	IEUser	User32
+$ evtx-rec tc/rdp-tunnel-4624.evtx | jq -r 'select(.data.TargetUserName == "sshd_server") | [.t[0:19], .data.LogonType, .data.TargetUserName] | @tsv'
+2019-02-13T15:15:08	5	sshd_server

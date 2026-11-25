@@ -1,0 +1,16 @@
+$ node --version
+v22.23.5
+$ node app-ro.mjs | jq -c 'select(.msg=="đăng nhập") | {url: .req.url, authorization: .req.headers.authorization, cookie: .req.headers.cookie, body}'
+{"url":"/api/login?token=sk_test_GIA_TOKEN·VIDU_51a9","authorization":"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1XzQyIn0.GIA-chu-ky","cookie":"sid=GIA-phien-7f3c","body":{"email":"an.nguyen@example.com","password":"MatKhau-GIA-123"}}
+$ node app-ro.mjs | grep -o 'MatKhau-GIA-123\|sk_test_GIA_TOKEN·VIDU_51a9\|GIA-phien-7f3c\|Bearer [^"]*' | sort | uniq -c
+      2 Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1XzQyIn0.GIA-chu-ky
+      2 GIA-phien-7f3c
+      1 MatKhau-GIA-123
+      2 sk_test_GIA_TOKEN·VIDU_51a9
+$ node app-che.mjs | jq -c 'select(.msg=="đăng nhập") | {url: .req.url, authorization: .req.headers.authorization, cookie: .req.headers.cookie, body, userId}'
+{"url":"/api/login","authorization":"[ĐÃ CHE]","cookie":"[ĐÃ CHE]","body":{"email":"an.nguyen@example.com","password":"[ĐÃ CHE]"},"userId":"u_42"}
+$ node app-che.mjs | grep -c 'MatKhau-GIA-123\|sk_test_GIA_TOKEN·VIDU_51a9\|GIA-phien-7f3c\|Bearer '
+0
+$ node winston-che.mjs
+{"card":{"cardNumber":"[ĐÃ CHE]","last4":"1111"},"headers":{"authorization":"[ĐÃ CHE]"},"level":"info","message":"thanh toán","userId":"u_42"}
+{"level":"info","message":"đăng nhập thất bại cho password=MatKhau-GIA-123"}

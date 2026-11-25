@@ -1,0 +1,78 @@
+$ evtx-dau mau/*.evtx
+2-system-Microsoft-Windows-Live... ElfFile v3.1  chunk dùng  16 (đầu 14, cuối  13)  bản ghi kế #2394      cờ 0x1 DIRTY
+2-system-Security-dirty.evtx       ElfFile v3.1  chunk dùng 180 (đầu  0, cuối 179)  bản ghi kế #14427     cờ 0x1 DIRTY
+2-vss_0-Microsoft-Windows-Termi... ElfFile v3.1  chunk dùng  16 (đầu 10, cuối   9)  bản ghi kế #308335    cờ 0x1 DIRTY
+2-vss_7-System.evtx                ElfFile v3.1  chunk dùng   4 (đầu  0, cuối   3)  bản ghi kế #371       cờ 0x1 DIRTY
+Application.evtx                   ElfFile v3.1  chunk dùng  50 (đầu  0, cuối  49)  bản ghi kế #6166      cờ 0x1 DIRTY
+Archive-ForwardedEvents-test.evtx  ElfFile v3.1  chunk dùng  66 (đầu  0, cuối  65)  bản ghi kế #127639584 cờ 0x0
+dbc-many-events-application.evtx   ElfFile v3.1  chunk dùng  21 (đầu  0, cuối  20)  bản ghi kế #2217      cờ 0x0
+dbc-many-events-security.evtx      ElfFile v3.1  chunk dùng 158 (đầu  0, cuối 157)  bản ghi kế #13224     cờ 0x0
+dbc-many-events-system.evtx        ElfFile v3.1  chunk dùng  60 (đầu  0, cuối  59)  bản ghi kế #8415      cờ 0x0
+defender-1116-1117.evtx            ElfFile v3.2  chunk dùng   1 (đầu  0, cuối   0)  bản ghi kế #7         cờ 0x0
+defender-1151.evtx                 ElfFile v3.2  chunk dùng  23 (đầu  0, cuối  22)  bản ghi kế #456       cờ 0x0
+firewall-2004.evtx                 ElfFile v3.1  chunk dùng   1 (đầu  0, cuối   0)  bản ghi kế #2         cờ 0x0
+powershell-openssh-install.evtx    ElfFile v3.2  chunk dùng   1 (đầu  0, cuối   0)  bản ghi kế #31        cờ 0x0
+security_big_sample.evtx           ElfFile v3.1  chunk dùng 481 (đầu  0, cuối 480)  bản ghi kế #289157    cờ 0x0
+security.evtx                      ElfFile v3.1  chunk dùng  26 (đầu  0, cuối  25)  bản ghi kế #2226      cờ 0x1 DIRTY
+sysmon.evtx                        ElfFile v3.1  chunk dùng   1 (đầu  0, cuối   0)  bản ghi kế #1742      cờ 0x1 DIRTY
+system.evtx                        ElfFile v3.1  chunk dùng   3 (đầu  0, cuối   2)  bản ghi kế #309       cờ 0x1 DIRTY
+PS> Get-ChildItem mau/*.evtx | ForEach-Object { [pscustomobject]@{ Tep = $_.Name.Substring(0,[math]::Min(34,$_.Name.Length)); Byte = $_.Length; 'Tru 4096, chia 65536' = ($_.Length - 4096) / 65536 } } | Format-Table -AutoSize
+Tep                                    Byte Tru 4096, chia 65536
+---                                    ---- --------------------
+2-system-Microsoft-Windows-LiveId%  1052672                   16
+2-system-Security-dirty.evtx       12652544                  193
+2-vss_0-Microsoft-Windows-Terminal  1052672                   16
+2-vss_7-System.evtx                 1118208                   17
+Application.evtx                    4198400                   64
+Archive-ForwardedEvents-test.evtx   4329472                   66
+dbc-many-events-application.evtx    2166784                   33
+dbc-many-events-security.evtx      10555392                  161
+dbc-many-events-system.evtx         4263936                   65
+defender-1116-1117.evtx               69632                    1
+defender-1151.evtx                  2166784                   33
+firewall-2004.evtx                    69632                    1
+powershell-openssh-install.evtx       69632                    1
+security_big_sample.evtx           31526912                  481
+security.evtx                       2166784                   33
+sysmon.evtx                         1118208                   17
+system.evtx                         1118208                   17
+PS> $r = evtx-rec mau/security_big_sample.evtx | ConvertFrom-Json; $a = ($r.t | Measure-Object -Minimum -Maximum); $gio = ($a.Maximum - $a.Minimum).TotalHours; $mb = (Get-Item mau/security_big_sample.evtx).Length / 1MB; "{0:N0} su kien | {1:N1} MB | tu {2:yyyy-MM-dd HH:mm} den {3:yyyy-MM-dd HH:mm} UTC = {4:N1} gio" -f $r.Count, $mb, $a.Minimum, $a.Maximum, $gio; "{0:N0} su kien/gio | ~{1:N0} byte/su kien | 20 MB chua duoc ~{2:N1} gio" -f ($r.Count/$gio), ((Get-Item mau/security_big_sample.evtx).Length/$r.Count), ($gio*20/$mb)
+62,031 su kien | 30.1 MB | tu 2016-10-06 01:47 den 2016-10-07 09:38 UTC = 31.9 gio
+1,947 su kien/gio | ~508 byte/su kien | 20 MB chua duoc ~21.2 gio
+PS> evtx-rec mau/security_big_sample.evtx | ConvertFrom-Json | Group-Object id | Sort-Object Count -Descending | Select-Object -First 8 Count,@{n='Id';e={$_.Name}},@{n='PhanTram';e={'{0:P0}' -f ($_.Count/62031)}} | Format-Table -AutoSize
+Count Id   PhanTram
+----- --   --------
+22517 5156 36%
+ 9310 5152 15%
+ 8488 5158 14%
+ 8312 5157 13%
+ 3648 4624 6%
+ 3642 4634 6%
+ 2814 4672 5%
+ 1537 5140 2%
+$ evtx-rec mau/2-system-Security-dirty.evtx mau/sysmon.evtx 'mau/2-vss_0-Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx' 2>&1 >/dev/null | cut -c1-160
+[evtx-rec] mau/sysmon.evtx: bỏ qua bản ghi hỏng — Failed to parse chunk number 9: Failed to parse chunk header: Invalid EVTX chunk header ma
+[evtx-rec] mau/sysmon.evtx: bỏ qua bản ghi hỏng — Failed to parse chunk number 10: Failed to parse chunk header: Invalid EVTX chunk header m
+[evtx-rec] mau/sysmon.evtx: bỏ qua bản ghi hỏng — Failed to parse chunk number 11: Failed to parse chunk header: Invalid EVTX chunk header m
+[evtx-rec] mau/sysmon.evtx: tổng 8 bản ghi/chunk hỏng bị bỏ qua
+[evtx-rec] mau/2-vss_0-Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx: bỏ qua bản ghi hỏng — Failed to parse record number
+[evtx-rec] mau/2-vss_0-Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx: bỏ qua bản ghi hỏng — Failed to read the record at
+[evtx-rec] mau/2-vss_0-Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx: tổng 2 bản ghi/chunk hỏng bị bỏ qua
+PS> evtx-rec mau/2-system-Security-dirty.evtx | ConvertFrom-Json | Group-Object may | Select-Object Count,Name | Format-Table -AutoSize; evtx-rec mau/2-system-Security-dirty.evtx | ConvertFrom-Json | Where-Object id -in 1100,1102,1104,1105,4608,4616 | Sort-Object rec | Select-Object -First 9 @{n='UTC';e={$_.t.ToString('yyyy-MM-dd HH:mm:ss')}},id,may | Format-Table -AutoSize
+Count Name
+----- ----
+14495 DESKTOP-0QT8017
+  126 WIN-LL0C19JS506
+
+
+UTC                   id may
+---                   -- ---
+2018-07-28 07:24:49 4608 WIN-LL0C19JS506
+2018-07-28 07:27:15 1100 WIN-LL0C19JS506
+2018-07-28 07:27:31 4608 DESKTOP-0QT8017
+2018-07-28 00:36:44 4616 DESKTOP-0QT8017
+2018-07-28 00:36:44 4616 DESKTOP-0QT8017
+2018-07-28 01:06:39 1100 DESKTOP-0QT8017
+2018-07-28 01:06:39 4616 DESKTOP-0QT8017
+2018-07-28 01:07:05 4608 DESKTOP-0QT8017
+2018-07-28 01:09:54 1100 DESKTOP-0QT8017

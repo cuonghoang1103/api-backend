@@ -1,0 +1,6 @@
+$ sudo usermod -L -e 1 test && sudo pkill -KILL -u test; sudo mv /home/test/.ssh/authorized_keys /root/bang-chung-authorized_keys-test; sudo chage -l test | grep -E 'Account expires'; sudo passwd -S test
+Account expires						: Jan 02, 1970
+test L 2026-11-24 0 99999 7 -1
+$ sudo grep -E 'usermod|lock' /var/log/auth.log | tail -2 | cut -c1-150
+2026-11-24T05:55:03.400379+07:00 lab7 usermod[6266]: lock user 'test' password
+2026-11-24T05:55:03.590469+07:00 lab7 sudo:       hv : PWD=/home/hv ; USER=root ; COMMAND=/usr/bin/grep -E usermod|lock /var/log/auth.log

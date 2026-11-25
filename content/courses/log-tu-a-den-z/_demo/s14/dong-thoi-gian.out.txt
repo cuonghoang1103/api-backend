@@ -1,0 +1,75 @@
+$ cd vu14/web01/var/log && grep -m1 '192.0.2.10' nginx/access.log | cut -c1-60; grep -m1 'audit_enabled=0' audit/audit.log | cut -c1-48; grep -m1 'Accepted password' /lab/vu14/logsrv/web01/auth-syslog.log | cut -c1-32; jq -c 'select(.user == "hoa@mail.example" and (.ip | startswith("198.")) and .msg == "login ok") | {time}' shop/app.jsonl
+192.0.2.10 - - [19/Nov/2026:02:31:12 +0700] "GET /uploads/an
+type=CONFIG_CHANGE msg=audit(1795029750.764:1281
+2026-11-19T02:14:01.035745+07:00
+{"time":1795026294695}
+$ date -u -d '19 Nov 2026 02:31:12 +0700' +%FT%TZ; date -u -d @1795029750 +%FT%TZ; date -u -d '2026-11-19T02:14:01.078999+07:00' +%FT%TZ; date -u -d @$((1795026294695 / 1000)) +%FT%TZ
+2026-11-18T19:31:12Z
+2026-11-18T19:22:30Z
+2026-11-18T19:14:01Z
+2026-11-18T18:24:54Z
+$ cd vu14 && python3 /lab/s14/mau/dong-thoi-gian.py . 203.0.113.77 198.51.100.165 198.51.100.168 192.0.2.10 sysupdate auid=1001 kworkerd dbus-sync rsyslogd 'COMMAND=/usr/bin/bash' IM_LANG HOI_PHUC > /lab/ra/dtg.tsv; wc -l < /lab/ra/dtg.tsv
+46
+$ cut -f1-4 /lab/ra/dtg.tsv | cut -c1-150
+2026-11-18 18:06:47Z	app.jsonl	web01	app login failed user=kh0064@mail.example ip=198.51.100.165 reqId=fb81667e…  [×28 tới 18:34:54]
+2026-11-18 18:06:47Z	nginx	web01	198.51.100.165 POST /api/login → 401 (38 byte)  [×28 tới 18:34:54]
+2026-11-18 18:20:45Z	app.jsonl	web01	app login ok user=lan@mail.example ip=198.51.100.165 reqId=0eaea4ce…  [×2 tới 18:24:54]
+2026-11-18 18:20:45Z	nginx	web01	198.51.100.165 POST /api/login → 200 (412 byte)  [×2 tới 18:24:54]
+2026-11-18 18:40:03Z	logsrv*	web01	sshd: Invalid user admin from 203.0.113.77 port 50000  [×20 tới 18:40:14]
+2026-11-18 18:40:03Z	logsrv*	web01	sshd: Failed password for invalid user admin from 203.0.113.77 port 50000 ssh2  [×20 tới 18:40:14]
+2026-11-18 18:40:03Z	logsrv*	web01	sshd: Connection closed by invalid user admin 203.0.113.77 port 50000 [preauth]  [×20 tới 18:40:14]
+2026-11-18 18:40:03Z	logsrv*	web01	sshd: Failed password for root from 203.0.113.77 port 50001 ssh2  [×5 tới 18:40:08]
+2026-11-18 18:40:03Z	logsrv*	web01	sshd: Connection closed by authenticating user root 203.0.113.77 port 50001 [preauth]  [×5 tới 18:40:08]
+2026-11-18 18:57:05Z	logsrv*	web01	sshd: Invalid user admin from 203.0.113.77 port 50100  [×20 tới 18:57:16]
+2026-11-18 18:57:05Z	logsrv*	web01	sshd: Failed password for invalid user admin from 203.0.113.77 port 50100 ssh2  [×20 tới 18:57:16]
+2026-11-18 18:57:05Z	logsrv*	web01	sshd: Connection closed by invalid user admin 203.0.113.77 port 50100 [preauth]  [×20 tới 18:57:16]
+2026-11-18 18:57:05Z	logsrv*	web01	sshd: Failed password for root from 203.0.113.77 port 50101 ssh2  [×5 tới 18:57:10]
+2026-11-18 18:57:05Z	logsrv*	web01	sshd: Connection closed by authenticating user root 203.0.113.77 port 50101 [preauth]  [×5 tới 18:57:10]
+2026-11-18 19:14:00Z	logsrv*	web01	sshd: Invalid user admin from 203.0.113.77 port 50200  [×20 tới 19:14:11]
+2026-11-18 19:14:00Z	logsrv*	web01	sshd: Failed password for invalid user admin from 203.0.113.77 port 50200 ssh2  [×20 tới 19:14:11]
+2026-11-18 19:14:00Z	logsrv*	web01	sshd: Connection closed by invalid user admin 203.0.113.77 port 50200 [preauth]  [×20 tới 19:14:11]
+2026-11-18 19:14:00Z	logsrv*	web01	sshd: Failed password for root from 203.0.113.77 port 50201 ssh2  [×4 tới 19:14:05]
+2026-11-18 19:14:00Z	logsrv*	web01	sshd: Connection closed by authenticating user root 203.0.113.77 port 50201 [preauth]  [×4 tới 19:14:05]
+2026-11-18 19:14:01Z	logsrv*	web01	sshd: Accepted password for deploy from 203.0.113.77 port 50202 ssh2
+2026-11-18 19:15:02Z	logsrv*	web01	sudo:   deploy : TTY=pts/1 ; PWD=/home/deploy ; USER=root ; COMMAND=/usr/bin/bash
+2026-11-18 19:15:03Z	audit.log	web01	auditd USER_CMD auid=1001
+2026-11-18 19:16:02Z	audit.log	web01	auditd ADD_USER auid=1001 op=add-user
+2026-11-18 19:16:02Z	logsrv*	web01	useradd: new group: name=sysupdate, GID=1003
+2026-11-18 19:16:02Z	logsrv*	web01	useradd: new user: name=sysupdate, UID=1003, GID=1003, home=/home/sysupdate, shell=/bin/bash, from=/dev/pts/1
+2026-11-18 19:16:05Z	audit.log	web01	auditd ADD_GROUP auid=1001 op=add-user-to-group grp="sudo" acct="sysupdate"
+2026-11-18 19:16:05Z	logsrv*	web01	usermod: add 'sysupdate' to group 'sudo'
+2026-11-18 19:16:05Z	logsrv*	web01	usermod: add 'sysupdate' to shadow group 'sudo'
+2026-11-18 19:16:11Z	logsrv*	web01	chpasswd: pam_unix(chpasswd:chauthtok): password changed for sysupdate
+2026-11-18 19:17:10Z	audit.log	web01	auditd SYSCALL auid=1001 comm="bash" key="ssh_keys"
+2026-11-18 19:18:40Z	audit.log	web01	auditd SYSCALL auid=1001 comm="curl" key="tai_ve"
+2026-11-18 19:18:40Z	audit.log	web01	auditd EXECVE a3="http://203.0.113.77:8000/k"
+2026-11-18 19:19:05Z	audit.log	web01	auditd SYSCALL auid=1001 comm="bash" key="cron"
+2026-11-18 19:20:12Z	audit.log	web01	auditd SYSCALL auid=1001 comm="bash" key="systemd"
+2026-11-18 19:20:15Z	syslog	web01	systemd: Started dbus-sync.service - D-Bus session sync helper.
+2026-11-18 19:22:30Z	audit.log	web01	auditd CONFIG_CHANGE op=set audit_enabled=0 auid=1001
+2026-11-18 19:24:08Z	syslog	web01	rsyslogd: [rsyslogd] exiting on signal 15.
+2026-11-18 19:24:10Z	syslog	web01	rsyslogd: [rsyslogd] start
+2026-11-18 19:25:01Z	syslog	web01	CRON: (root) CMD (/tmp/.x/kworkerd -q >/dev/null 2>&1)  [×110 tới 04:30:01]
+2026-11-18 19:31:12Z	nginx	web01	192.0.2.10 GET /uploads/anh-2041.php?c=id → 200 (180 byte)
+2026-11-18 19:31:52Z	nginx	web01	192.0.2.10 GET /uploads/anh-2041.php?c=uname+-a → 200 (270 byte)
+2026-11-18 19:32:32Z	nginx	web01	192.0.2.10 GET /uploads/anh-2041.php?c=ls+-la+/var/www/shop/exports → 200 (360 byte)  [×2 tới 19:33:12]
+2026-11-18 19:47:13Z	nginx	web01	192.0.2.10 GET /exports/khach-hang-2026-11.csv.gz → 200 (18,874,211 byte)
+2026-11-18 19:48:30Z	nginx	web01	192.0.2.10 GET /uploads/anh-2041.php?c=rm+-f+/var/www/shop/exports/khach-hang-2026-11.csv.gz → 200 (0 byte)
+2026-11-18 19:54:10Z	canh-bao	logsrv	canh-bao: [IM_LANG] web01 không gửi dòng nào trong 30 phút (dòng cuối 2026-11-19T02:24:10+07:00)
+2026-11-19 02:31:05Z	canh-bao	logsrv	canh-bao: [HOI_PHUC] web01 gửi lại sau 7 giờ 6 phút 55 giây
+$ cut -f2 /lab/ra/dtg.tsv | sort | uniq -c | sort -rn
+     22 logsrv*
+      9 audit.log
+      7 nginx
+      4 syslog
+      2 canh-bao
+      2 app.jsonl
+$ grep -rn 'anh-2041' vu14 | cut -d: -f1 | sort | uniq -c
+      1 vu14/thu-thap/stat.txt
+      5 vu14/web01/var/log/nginx/access.log
+$ grep -h 'auid=1001' vu14/web01/var/log/audit/audit.log | grep -oE 'type=[A-Z_]+' | sort | uniq -c
+      1 type=ADD_GROUP
+      1 type=ADD_USER
+      1 type=CONFIG_CHANGE
+      4 type=SYSCALL
+      1 type=USER_CMD

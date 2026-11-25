@@ -1,0 +1,138 @@
+PS> Get-NetFirewallProfile | Select-Object Name,Enabled,LogFileName,LogMaxSizeKilobytes,LogAllowed,LogBlocked | Format-Table -AutoSize
+
+Name    Enabled LogFileName                                           LogMaxSizeKilobytes LogAllowed LogBlocked
+----    ------- -----------                                           ------------------- ---------- ----------
+Domain     True %systemroot%\system32\LogFiles\Firewall\pfirewall.log               16384       True       True
+Private    True %systemroot%\system32\LogFiles\Firewall\pfirewall.log               16384       True       True
+Public     True %systemroot%\system32\LogFiles\Firewall\pfirewall.log               16384       True       True
+PS> Set-NetFirewallProfile -All -LogBlocked True -LogAllowed True -LogMaxSizeKilobytes 16384; netsh advfirewall show currentprofile logging
+
+Public Profile Settings:
+----------------------------------------------------------------------
+LogAllowedConnections                 Enable
+LogDroppedConnections                 Enable
+FileName                              %systemroot%\system32\LogFiles\Firewall\pfirewall.log
+MaxFileSize                           16384
+Ok.
+$ sudo nmap -sS -Pn -n --top-ports 25 192.168.56.177 | grep -E "^[0-9]|scanned|filtered ports"   # ← trên keodo
+21/tcp   filtered ftp
+22/tcp   open     ssh
+23/tcp   filtered telnet
+25/tcp   filtered smtp
+53/tcp   filtered domain
+80/tcp   filtered http
+110/tcp  filtered pop3
+111/tcp  filtered rpcbind
+135/tcp  filtered msrpc
+139/tcp  filtered netbios-ssn
+143/tcp  filtered imap
+199/tcp  filtered smux
+443/tcp  filtered https
+445/tcp  filtered microsoft-ds
+587/tcp  filtered submission
+993/tcp  filtered imaps
+995/tcp  filtered pop3s
+1025/tcp filtered NFS-or-IIS
+1720/tcp filtered h323q931
+1723/tcp filtered pptp
+3306/tcp filtered mysql
+3389/tcp filtered ms-wbt-server
+5900/tcp filtered vnc
+8080/tcp filtered http-proxy
+8888/tcp filtered sun-answerbook
+Nmap done: 1 IP address (1 host up) scanned in 1.50 seconds
+$ timeout 4 curl -s -o /dev/null -w "%{http_code}\n" http://192.168.56.177/; nc -vz -w2 192.168.56.177 445 2>&1   # ← trên android-7f3a
+nc: connect to 192.168.56.177 port 445 (tcp) timed out: Operation now in progress
+PS> $f = "$env:SystemRoot\System32\LogFiles\Firewall\pfirewall.log"; Get-Item $f | Select-Object Length,LastWriteTime; Get-Content $f -TotalCount 6
+
+Length LastWriteTime
+------ -------------
+  1182 11/24/2026 12:16:36 PM
+#Version: 1.5
+#Software: Microsoft Windows Firewall
+#Time Format: Local
+#Fields: date time action protocol src-ip dst-ip src-port dst-port size tcpflags tcpsyn tcpack tcpwin icmptype icmpcode info path pid
+
+2026-11-24 12:16:11 ALLOW TCP 192.168.56.10 192.168.56.177 53002 22 0 - 0 0 0 - - - RECEIVE 6744
+PS> Get-Content "$env:SystemRoot\System32\LogFiles\Firewall\pfirewall.log" | Select-String ' DROP TCP 192.168.56.66 ' | Select-Object -First 4
+
+2026-11-24 12:16:18 DROP TCP 192.168.56.66 192.168.56.177 57387 445 44 S 4029473535 0 1024 - - - RECEIVE 4
+2026-11-24 12:16:18 DROP TCP 192.168.56.66 192.168.56.177 57387 135 44 S 4029473535 0 1024 - - - RECEIVE 972
+2026-11-24 12:16:19 DROP TCP 192.168.56.66 192.168.56.177 57389 135 44 S 4029604605 0 1024 - - - RECEIVE 972
+2026-11-24 12:16:19 DROP TCP 192.168.56.66 192.168.56.177 57389 445 44 S 4029604605 0 1024 - - - RECEIVE 4
+PS> Get-Content "$env:SystemRoot\System32\LogFiles\Firewall\pfirewall.log" | Select-String ' ALLOW TCP 192.168.56.10 .* 22 ' | Select-Object -First 2
+
+2026-11-24 12:16:11 ALLOW TCP 192.168.56.10 192.168.56.177 53002 22 0 - 0 0 0 - - - RECEIVE 6744
+PS> $h = 'date','time','action','protocol','srcip','dstip','srcport','dstport','size','tcpflags','tcpsyn','tcpack','tcpwin','icmptype','icmpcode','info','path','pid'; $d = Get-Content "$env:SystemRoot\System32\LogFiles\Firewall\pfirewall.log" | Where-Object { $_ -and $_ -notmatch '^#' } | ConvertFrom-Csv -Delimiter ' ' -Header $h; $d | Group-Object action,srcip | Sort-Object Count -Descending | Select-Object Count,Name | Format-Table -AutoSize
+
+Count Name
+----- ----
+    6 DROP, 192.168.56.66
+    5 ALLOW, 192.168.56.10
+    2 DROP, 192.168.56.142
+PS> $h = 'date','time','action','protocol','srcip','dstip','srcport','dstport','size','tcpflags','tcpsyn','tcpack','tcpwin','icmptype','icmpcode','info','path','pid'; $d = Get-Content "$env:SystemRoot\System32\LogFiles\Firewall\pfirewall.log" | Where-Object { $_ -and $_ -notmatch '^#' } | ConvertFrom-Csv -Delimiter ' ' -Header $h; $d | Where-Object { $_.action -eq 'DROP' -and $_.dstip -eq '192.168.56.177' } | Group-Object srcip | ForEach-Object { [pscustomobject]@{ Nguon = $_.Name; Goi = $_.Count; SoCong = ($_.Group.dstport | Sort-Object -Unique).Count; Dau = $_.Group[0].time; Cuoi = $_.Group[-1].time } } | Format-Table -AutoSize
+
+Nguon          Goi SoCong Dau      Cuoi
+-----          --- ------ ---      ----
+192.168.56.66    6      3 12:16:18 12:16:19
+192.168.56.142   2      1 12:16:23 12:16:25
+PS> auditpol /set /subcategory:"Filtering Platform Connection" /success:enable /failure:enable; auditpol /get /subcategory:"Filtering Platform Connection"
+The command was successfully executed.
+
+System audit policy
+
+Category/Subcategory                      Setting
+Object Access
+  Filtering Platform Connection           Success and Failure
+$ sudo nmap -sS -Pn -n -p 135,445,3389,5985 192.168.56.177 | grep -E "^[0-9]"   # ← trên keodo
+135/tcp  filtered msrpc
+445/tcp  filtered microsoft-ds
+3389/tcp filtered ms-wbt-server
+5985/tcp open     wsman
+PS> $e = Get-WinEvent -FilterHashtable @{LogName='Security'; Id=5157} -MaxEvents 20 | Where-Object { $_.Message -match '192.168.56.66' } | Select-Object -First 1; $e.TimeCreated; $e.Message -split "`r?`n" | Where-Object { $_.Trim() } | Select-Object -First 16
+
+Tuesday, November 24, 2026 12:16:59 PM
+The Windows Filtering Platform has blocked a connection.
+Application Information:
+	Process ID:		972
+	Application Name:	\device\harddiskvolume1\windows\system32\svchost.exe
+Network Information:
+	Direction:		Inbound
+	Source Address:		192.168.56.66
+	Source Port:		61718
+	Destination Address:	192.168.56.177
+	Destination Port:		135
+	Protocol:		6
+	Interface Index:		4
+Filter Information:
+	Filter Origin:		Query User Default
+	Filter Run-Time ID:	71619
+	Layer Name:		Receive/Accept
+PS> $x = [xml](Get-WinEvent -FilterHashtable @{LogName='Security'; Id=5156} -MaxEvents 30 | Where-Object { $_.Message -match '192.168.56.10' } | Select-Object -First 1).ToXml(); $x.Event.EventData.Data | Where-Object { $_.Name -in 'Application','Direction','SourceAddress','SourcePort','DestAddress','DestPort','Protocol' } | Format-Table Name,'#text' -AutoSize
+
+Name          #text
+----          -----
+Application   \device\harddiskvolume1\windows\system32\openssh\sshd.exe
+Direction     %%14592
+SourceAddress 192.168.56.10
+SourcePort    57108
+DestAddress   192.168.56.177
+DestPort      22
+Protocol      6
+PS> Get-WinEvent -FilterHashtable @{LogName='Security'; Id=5156,5157; StartTime=(Get-Date).AddMinutes(-3)} | Group-Object Id | Select-Object Count,Name
+
+Count Name
+----- ----
+   12 5156
+    8 5157
+PS> Get-WinEvent -ListLog Security | Select-Object LogName,RecordCount,FileSize,MaximumSizeInBytes,LogMode
+
+
+LogName            : Security
+RecordCount        : 2744
+FileSize           : 2166784
+MaximumSizeInBytes : 20971520
+LogMode            : Circular
+PS> auditpol /set /subcategory:"Filtering Platform Connection" /success:disable /failure:disable | Out-Null; auditpol /get /subcategory:"Filtering Platform Connection" | Select-String Filtering
+
+  Filtering Platform Connection           No Auditing

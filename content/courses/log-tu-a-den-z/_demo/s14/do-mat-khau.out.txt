@@ -1,0 +1,54 @@
+$ cd vu14/web01/var/log && grep '"POST /api/login[^"]*" 401' nginx/access.log | awk '{print substr($4, 2, 14) "h"}' | uniq -c | sort -rn | head -n 4
+    598 19/Nov/2026:01h
+      2 18/Nov/2026:06h
+      2 17/Nov/2026:07h
+      1 18/Nov/2026:12h
+$ cd vu14/web01/var/log && jq -r 'select(.msg == "login failed") | [(.time / 1000 | floor | todate[0:13]), .ip, .user] | @tsv' shop/app.jsonl | awk '$1 == "2026-11-18T18" {n++; ip[$2]++; u[$3]++} END {print n, "lần hỏng |", length(ip), "IP |", length(u), "tài khoản"}'
+598 lần hỏng | 40 IP | 598 tài khoản
+$ cd vu14/web01/var/log && jq -r 'select(.msg == "login failed" and (.ip | startswith("198.51.100.1"))) | .user' shop/app.jsonl | sort | uniq -c | awk '{print $1}' | sort -n | uniq -c
+    598 1
+$ cd vu14/web01/var/log && jq -r 'select(.msg == "login failed" and (.ip | startswith("198.51.100.1"))) | .reason' shop/app.jsonl | sort | uniq -c
+    356 bad_password
+    242 no_such_user
+$ cd vu14/web01/var/log && jq -r 'select(.msg == "login ok" and (.ip | startswith("198.51.100.1"))) | [(.time / 1000 | floor | todate), .user, .ip, .reqId] | @tsv' shop/app.jsonl
+2026-11-18T18:20:45Z	lan@mail.example	198.51.100.165	0eaea4ce741d937dffaea1d394d5986a
+2026-11-18T18:24:54Z	hoa@mail.example	198.51.100.168	17b0cefa5108bf3d10f8ca80e30019c2
+$ cd vu14/web01/var/log && grep -c '"POST /api/login[^"]*" [0-9]* [0-9]* "-" "python-requests' nginx/access.log
+90
+$ cd vu14/logsrv/web01 && grep -oE 'Failed password for (invalid user )?\S+ from \S+' auth-syslog.log | awk '{print $NF}' | sort | uniq -c | sort -rn | head -n 5
+     74 203.0.113.77
+      7 198.51.100.97
+      7 198.51.100.88
+      7 198.51.100.86
+      7 198.51.100.28
+$ cd vu14/logsrv/web01 && grep 'from 203.0.113.77' auth-syslog.log | grep -oE 'Failed password for (invalid user )?\S+' | awk '{print $NF}' | sort | uniq -c | awk '{print $1 " lần/tài khoản"}' | sort | uniq -c
+      1 2 lần/tài khoản
+     24 3 lần/tài khoản
+$ cd vu14/logsrv/web01 && grep 'Failed password.*from 203.0.113.77' auth-syslog.log | cut -c1-16 | uniq -c
+     25 2026-11-19T01:40
+     25 2026-11-19T01:57
+     24 2026-11-19T02:14
+$ cd vu14/logsrv/web01 && grep -E 'Accepted \S+ for \S+ from 203\.0\.113\.77' auth-syslog.log
+2026-11-19T02:14:01.035745+07:00 web01 sshd[3045102]: Accepted password for deploy from 203.0.113.77 port 50202 ssh2
+$ cd vu14/web01/var/log && grep -c '203.0.113.77' auth.log
+0
+$ cd vu14/logsrv/web01 && grep -E 'Failed password' auth-syslog.log | awk '{ip = $(NF-3); h = substr($1, 1, 13); u = $(NF-5); k = ip " " h; if (!((k, u) in da)) {da[k, u] = 1; so[k]++}} END {for (k in so) if (so[k] >= 10) print so[k], "tài khoản khác nhau |", k}' | sort -rn
+25 tài khoản khác nhau | 203.0.113.77 2026-11-19T01
+24 tài khoản khác nhau | 203.0.113.77 2026-11-19T02
+PS> evtx-rec tc/kerberos-spray-4771.evtx | ConvertFrom-Json | Where-Object id -in 4768, 4771 | Select-Object @{n='Gio'; e={$_.t.ToString('HH:mm:ss.fff')}}, id, @{n='TaiKhoan'; e={$_.data.TargetUserName}}, @{n='Status'; e={$_.data.Status}}, @{n='IP'; e={$_.data.IpAddress}} | Format-Table -AutoSize
+Gio            id TaiKhoan      Status IP
+---            -- --------      ------ --
+20:29:36.414 4768 HD01          0x6    172.16.66.1
+20:29:36.414 4768 admin         0x6    172.16.66.1
+20:29:36.414 4768 svc-02        0x6    172.16.66.1
+20:29:36.414 4768 HD02          0x6    172.16.66.1
+20:29:36.414 4768 svc-01        0x6    172.16.66.1
+20:29:36.415 4768 bob           0x6    172.16.66.1
+20:29:36.415 4768 admin02       0x6    172.16.66.1
+20:29:36.425 4771 Administrator 0x18   172.16.66.1
+20:29:36.425 4771 backdoor      0x18   172.16.66.1
+20:29:36.434 4768 normal        0x0    172.16.66.1
+20:29:36.437 4768 normal        0x0    ::ffff:172.16.66.1
+$ evtx-rec tc/local-4776-4625.evtx | jq -r '[.data.TargetUserName, .data.SubStatus, .data.ProcessName] | @tsv' | sort | uniq -c
+      8 Admin	0xc000006a	C:\\Users\\Admin\\Desktop\\AccountRestore.bin\\AccountRestore.exe
+      8 Administrator	0xc000006a	C:\\Users\\Admin\\Desktop\\AccountRestore.bin\\AccountRestore.exe

@@ -1,0 +1,13 @@
+$ sudo journalctl -b -3 -n 3 --no-pager
+Nov 24 04:09:51 lab7 shop-api[1372]: GET /api/products 200
+Nov 24 04:09:51 lab7 shop-api[1372]: GET /api/orders/1020 200
+Nov 24 04:09:53 lab7 shop-api[1372]: GET /api/products 200
+$ sudo journalctl -b -3 -u shop-api -q | wc -l
+40
+$ sudo journalctl -b -2 -g 'uncleanly|not properly' --no-pager
+Nov 24 04:10:24 lab7 systemd-journald[126]: File /var/log/journal/595503c52a37410aae2b32f4ffddfa26/system.journal corrupted or uncleanly shut down, renaming and replacing.
+Nov 24 04:10:24 lab7 kernel: FAT-fs (vda15): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+Nov 24 04:10:32 lab7 systemd-journald[126]: File /var/log/journal/595503c52a37410aae2b32f4ffddfa26/user-1000.journal corrupted or uncleanly shut down, renaming and replacing.
+$ sudo journalctl -b -2 -n 2 --no-pager
+Nov 24 04:10:57 lab7 sudo[784]: pam_unix(sudo:session): session opened for user root(uid=0) by hv(uid=1000)
+Nov 24 04:10:57 lab7 systemd-journald[126]: Journal stopped

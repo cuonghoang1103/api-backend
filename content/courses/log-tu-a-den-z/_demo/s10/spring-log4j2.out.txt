@@ -1,0 +1,25 @@
+$ diff ../spring/pom.xml pom.xml
+16,19c16,22
+<     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-webmvc</artifactId></dependency>
+<     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId></dependency>
+<     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-opentelemetry</artifactId></dependency>
+<     <dependency><groupId>net.logstash.logback</groupId><artifactId>logstash-logback-encoder</artifactId><version>8.1</version></dependency>
+---
+>     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-webmvc</artifactId>
+>       <exclusions><exclusion><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-logging</artifactId></exclusion></exclusions></dependency>
+>     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId>
+>       <exclusions><exclusion><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-logging</artifactId></exclusion></exclusions></dependency>
+>     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-opentelemetry</artifactId>
+>       <exclusions><exclusion><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-logging</artifactId></exclusion></exclusions></dependency>
+>     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-log4j2</artifactId></dependency>
+$ unzip -l target/shop-1.0.jar | grep -oE '[a-z0-9.-]*(slf4j|logback|log4j)[a-z0-9.-]*\.jar' | sort
+log4j-api-2.25.5.jar
+log4j-core-2.25.5.jar
+log4j-jul-2.25.5.jar
+log4j-slf4j2-impl-2.25.5.jar
+slf4j-api-2.0.18.jar
+$ docker run -d --name lgz-spring --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar > /dev/null && sleep 8
+$ curl -s http://127.0.0.1:41081/api/orders/7 > /dev/null; docker logs lgz-spring 2>&1 | grep -E 'Started ShopApplication|load order' | cut -c1-200
+2026-11-23T20:49:50.802Z  INFO 1 --- [shop] [           main] [                                                 ] v.l.s.ShopApplication                    : Started ShopApplication in 1.493 seconds (p
+2026-11-23T20:49:57.036Z  INFO 1 --- [shop] [nio-8080-exec-1] [fd08a07eb8a9ff0c7b622a713bfd8d47-fc5aea0a31bebfb4] v.l.s.OrderController                    : load order id=7
+$ docker rm -f lgz-spring > /dev/null

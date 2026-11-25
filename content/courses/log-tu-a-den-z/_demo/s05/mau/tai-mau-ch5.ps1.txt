@@ -1,0 +1,28 @@
+# tai-mau-ch5.ps1 — tải 13 tệp EVTX MẪU SYSMON công khai cho Chương 5 (log thật do cộng đồng điều tra số chia sẻ) và kiểm SHA256.
+# Nguồn: github.com/Yamato-Security/hayabusa-sample-evtx — gom từ EVTX-ATTACK-SAMPLES (Samir Bousseaden) và EVTX-to-MITRE-Attack (mdecrevoisier).
+# Mỗi tệp là log của một kịch bản nhỏ trong lab của tác giả — KHÔNG phải mã độc. ~3 MB.
+# Chạy: PowerShell 5.1 (Windows) hoặc PowerShell 7 (Windows/macOS/Linux):  .\tai-mau-ch5.ps1 -Ra C:\lab\sm
+param([string]$Ra = (Join-Path (Get-Location) "sm"))
+$ProgressPreference = "SilentlyContinue"
+New-Item -ItemType Directory -Force $Ra | Out-Null
+$ds = @(
+  @('firefox-comhijack-11-13-7-1.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/Persistence/persist_firefox_comhijack_sysmon_11_13_7_1.evtx', '5EFDBE9D51C06538D20DB3D132594326FBFF8AC8B98C542805AAEB90779B9CDE'),
+  @('lsass-mimikatz-10.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/Credential%20Access/sysmon_10_lsass_mimikatz_sekurlsa_logonpasswords.evtx', '9A1689574ED08C1FB18E7FF3F3BED612109AEDCB7BF8EFBF3537D756E669E96F'),
+  @('mimikatz-github-3-10.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/Credential%20Access/sysmon_3_10_Invoke-Mimikatz_hosted_Github.evtx', '59C28FF11E4B9B329EE6B0859A5514F772913E95EF9BA8F94C46E02C4D78BE17'),
+  @('mshta-task-1-3-11.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/Execution/exec_persist_rundll32_mshta_scheduledtask_sysmon_1_3_11.evtx', 'FB5679AEC77DC45A35902F705B513811DFEA0F2F93C9C8503464A20270C3222F'),
+  @('panache-art.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/AutomatedTestingTools/PanacheSysmon_vs_AtomicRedTeam01.evtx', '6903DFF9F218FA027C704C8C445B74E08B952C8D71BE79BD0327F1E792D4AA01'),
+  @('panache-edr.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/AutomatedTestingTools/panache_sysmon_vs_EDRTestingScript.evtx', '9C1371A0632DE15095B6FFE2E38991B764D4BEADDB1722178E93AA476F83F52F'),
+  @('powercat-1-3.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/Lateral%20Movement/powercat_revShell_sysmon_1_3.evtx', '914D90705F1F94E7CFF9B8D074E9ED0FAB4D35449BF1B18D9F37EA6AFD3E84DF'),
+  @('psinject-7-8-10.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/Defense%20Evasion/de_unmanagedpowershell_psinject_sysmon_7_8_10.evtx', '13099E0DD75DD4222C289864902CB12D0C63777F689709A36531FAE3E2E43C05'),
+  @('rotten-potato-1-8-3.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/Privilege%20Escalation/privesc_rotten_potato_from_webshell_metasploit_sysmon_1_8_3.evtx', '03D1D202BDF50F7290DA06E816DDF9535705F90ACEBBB0CCAE7D2E62DCBF6699'),
+  @('sysmon-unload.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-to-MITRE-Attack/TA0005-Defense%20Evasion/T1562.001-Impair%20Defenses-Disable%20or%20Modify%20tool/ID1-SYSMON%20driver%20unload%20%28FilterManager%29.evtx', 'C78F416491C0442E435FF99B4C1ABB0EDB66F137218E623DFBB25EE5C487C817'),
+  @('uacme-22.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/Privilege%20Escalation/Sysmon_UACME_22.evtx', '45F90C35F977592FA8A5FD5205E73FADE980D633BAE219DFAEB65DE8A27BA18C'),
+  @('webshell-1-10.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/Lateral%20Movement/LM_typical_IIS_webshell_sysmon_1_10_traces.evtx', '6F1CB3C435389D961261CCFBB2C4562B156D4160319FE4736CE1506A43327C7B'),
+  @('wmiexec-whoami.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-ATTACK-SAMPLES/Lateral%20Movement/LM_wmiexec_impacket_sysmon_whoami.evtx', '21B8852B2B386F4D3F6F0C8A7304DE8E628BB43CFA23888AB317B95B784FFE59')
+)
+foreach ($d in $ds) {
+  $p = Join-Path $Ra $d[0]
+  if (-not (Test-Path $p)) { Invoke-WebRequest -UseBasicParsing -Uri $d[1] -OutFile $p }
+  $h = (Get-FileHash -Algorithm SHA256 $p).Hash
+  '{0}  {1}' -f $(if ($h -eq $d[2]) { 'OK ' } else { 'SAI' }), $d[0]
+}

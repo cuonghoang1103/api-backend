@@ -1,0 +1,7 @@
+<configuration>
+  <!-- Lời giải 🧪 10.7 câu 3: mức DEBUG ⇒ MỌI lệnh debug() đều được ghi, đích là /dev/null (đo cái giá ghi thật, không làm đầy đĩa) -->
+  <appender name="OUT" class="ch.qos.logback.core.FileAppender"><file>/dev/null</file>
+    <encoder><pattern>%msg%n</pattern></encoder>
+  </appender>
+  <root level="DEBUG"><appender-ref ref="OUT"/></root>
+</configuration>

@@ -1,0 +1,46 @@
+$ ls /lab/ra/*.jsonl | wc -l; cat /lab/ra/*.jsonl | wc -l
+57
+120390
+$ python3 s14/mau/sigma-mini.py s14/mau/sigma/win_security_audit_log_cleared.json /lab/ra/*.jsonl
+  KHỚP clear-104-1102.jsonl:2  2021-10-25T18:09:51 FS03.offsec.lan 1102 SubjectUserName=admmig
+  KHỚP clear-1102.jsonl:1  2019-03-19T23:35:07 PC01.example.corp 1102 SubjectUserName=user01
+  KHỚP hidden-user-4720.jsonl:1  2022-01-24T17:03:24 fs03vuln.offsec.lan 1102 SubjectUserName=admmig
+  KHỚP kerberos-spray-4771.jsonl:1  2020-07-22T20:29:27 01566s-win16-ir.threebeesco.com 1102 SubjectUserName=a-jbrown
+  KHỚP security_big_sample.jsonl:1  2016-10-06T01:47:07 WIN-WFBHIBE5GXZ.example.co.jp 1102 SubjectUserName=Administrator
+  KHỚP spray-4625.jsonl:1  2019-04-30T19:27:00 DESKTOP-JR78RLP 1102 SubjectUserName=jwrig
+Security Eventlog Cleared [high] → 7 sự kiện khớp
+$ python3 s14/mau/sigma-mini.py s14/mau/sigma/win_system_eventlog_cleared.json /lab/ra/*.jsonl
+  KHỚP clear-104-1102.jsonl:3  2021-10-25T18:11:09 FS03.offsec.lan 104 SubjectUserName=admmig Channel=Application
+  KHỚP clear-104-1102.jsonl:4  2021-10-25T18:11:09 FS03.offsec.lan 104 SubjectUserName=admmig Channel=ForwardedEvents
+  KHỚP clear-104-1102.jsonl:5  2021-10-25T18:11:09 FS03.offsec.lan 104 SubjectUserName=admmig Channel=HardwareEvents
+  KHỚP clear-104-1102.jsonl:6  2021-10-25T18:11:09 FS03.offsec.lan 104 SubjectUserName=admmig Channel=Internet Explorer
+  KHỚP clear-104-1102.jsonl:7  2021-10-25T18:11:09 FS03.offsec.lan 104 SubjectUserName=admmig Channel=Key Management Service
+  KHỚP clear-104-1102.jsonl:8  2021-10-25T18:11:09 FS03.offsec.lan 104 SubjectUserName=admmig Channel=Microsoft-Management-UI/Admin
+Eventlog Cleared [medium] → 89 sự kiện khớp
+$ cat /lab/ra/*.jsonl | jq -r 'select(.id == 104 and .nguon == "Microsoft-Windows-Eventlog") | [.kenh, .data.Channel] | @tsv' | awk -F'\t' '{print "kênh ghi:", $1, "| log bị xoá:", ($2 == "System" || $2 == "Security" ? $2 : "(kênh khác)")}' | sort | uniq -c
+     91 kênh ghi: System | log bị xoá: (kênh khác)
+      6 kênh ghi: System | log bị xoá: System
+$ python3 s14/mau/sigma-mini.py s14/mau/sigma/win_security_user_added_to_local_administrators.json /lab/ra/*.jsonl
+  KHỚP 2-system-Security-dirty.jsonl:9903  2019-02-25T19:59:19 DESKTOP-0QT8017 4732 TargetUserName=Administrators SubjectUserName=Administrator
+  KHỚP 2-system-Security-dirty.jsonl:9904  2019-02-25T19:59:20 DESKTOP-0QT8017 4732 TargetUserName=Administrators SubjectUserName=Administrator
+  KHỚP 2-system-Security-dirty.jsonl:9905  2019-02-25T19:59:20 DESKTOP-0QT8017 4732 TargetUserName=Administrators SubjectUserName=Administrator
+  KHỚP 2-system-Security-dirty.jsonl:10178  2019-02-25T20:07:32 DESKTOP-0QT8017 4732 TargetUserName=Administrators SubjectUserName=Administrator
+  KHỚP admin-4732.jsonl:2  2020-07-12T05:14:30 jump01.offsec.lan 4732 TargetUserName=Administrators SubjectUserName=admmig
+  KHỚP hidden-user-4720.jsonl:10  2022-01-24T17:03:25 fs03vuln.offsec.lan 4732 TargetUserName=Administrators SubjectUserName=admmig
+User Added to Local Administrator Group [medium] → 8 sự kiện khớp
+$ python3 s14/mau/sigma-mini.py s14/mau/sigma/win_system_susp_service_installation_folder.json /lab/ra/*.jsonl
+  KHỚP system.jsonl:1130  2017-07-30T12:33:09 DESKTOP-2KGM189 7045 ServiceName=Pathfinder ImagePath="C:\Users\tony\AppData\Local\Temp\pytest-of-tony\pytest-0\test_agent_u
+Service Installation in Suspicious Folder [medium] → 1 sự kiện khớp
+$ python3 s14/mau/sigma-mini.py s14/mau/sigma/win_security_susp_failed_logon_reasons.json /lab/ra/*.jsonl
+Account Tampering - Suspicious Failed Logon Reasons [medium] → 0 sự kiện khớp
+$ cat /lab/ra/*.jsonl | jq -r 'select(.id == 4625) | .data.SubStatus' | sort | uniq -c | sort -rn | head -n 5
+   3637 0xc000006a
+     75 null
+     74 0xc0000064
+      2 0xc0000072
+      2 0x0
+$ cat /lab/ra/*.jsonl | jq -c 'select(.id == 4625 and .data.SubStatus == "0xc0000072") | {t: .t[0:19], may, d: (.data | {TargetUserName, SubjectUserSid, LogonType, IpAddress})}'
+{"t":"2016-09-19T16:50:08","may":"DESKTOP-M5SN04R","d":{"TargetUserName":"Administrator","SubjectUserSid":"S-1-0-0","LogonType":3,"IpAddress":"192.168.198.149"}}
+{"t":"2016-09-19T16:50:08","may":"DESKTOP-M5SN04R","d":{"TargetUserName":"Administrator","SubjectUserSid":"S-1-0-0","LogonType":3,"IpAddress":"192.168.198.149"}}
+$ python3 s14/mau/sigma-mini.py s14/mau/sigma/lnx_sshd_susp_ssh.json vu14/logsrv/web01/auth-syslog.log lab14/api02/var/log/auth.log
+Suspicious OpenSSH Daemon Error [medium] → 0 sự kiện khớp

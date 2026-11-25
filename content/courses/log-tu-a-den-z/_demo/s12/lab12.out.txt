@@ -1,0 +1,130 @@
+$ docker compose -f lab12/compose.yaml ps --format 'table {{.Service}}\t{{.Image}}\t{{.Status}}'
+SERVICE   IMAGE            STATUS
+api       node:22-alpine   Up 2 seconds
+db        lgz-pg12:1       Up 22 seconds
+$ docker exec lgz-lab12api node tai.mjs
+503 request, 0 lỗi, 22.0 s
+$ grep -m 2 '"rid"' lab12/app/logs/api.log
+{"time":"2026-11-24T08:55:57.224Z","level":"info","svc":"shop-api","rid":"8842fccb","method":"GET","route":"/api/orders/:id","status":200,"ms":39.544}
+{"time":"2026-11-24T08:55:57.229Z","level":"info","svc":"shop-api","rid":"40b2379c","method":"GET","route":"/api/orders/:id","status":200,"ms":45.233}
+$ jq -s -r 'map(select(.ms)) | group_by(.route)[] | (map(.ms) | sort) as $m | [.[0].route, length, $m[length / 2 | floor], $m[length * 0.95 | floor], $m[-1]] | @tsv' lab12/app/logs/api.log | (echo -e 'route\tn\tp50_ms\tp95_ms\tmax_ms'; cat) | column -t
+route             n    p50_ms   p95_ms   max_ms
+/api/orders       200  405.182  584.596  706.534
+/api/orders/:id   300  1.438    6.607    53.887
+/api/stats/today  3    325.891  389.787  389.787
+$ jq -r 'select(.route == "/api/orders") | [.ms, .rid] | @tsv' lab12/app/logs/api.log | sort -rn | head -3
+706.534	725b2f74
+646.86	8bad2e9b
+617.313	f8b3bbde
+$ RID=$(jq -r 'select(.route == "/api/orders") | [.ms, .rid] | @tsv' lab12/app/logs/api.log | sort -rn | head -1 | cut -f2); docker exec -u postgres lgz-lab12db sh -c "grep -h -A 18 'rid=$RID' /var/lib/postgresql/data/log/*.log" | cut -c1-190
+2026-11-24 15:56:13.760 +07 [78] app@shop app=shop-api client=::1 LOG:  duration: 701.443 ms  execute <unnamed>: /* rid=725b2f74,route=/api/orders */ SELECT id, total, status, created_at FRO
+2026-11-24 15:56:13.760 +07 [78] app@shop app=shop-api client=::1 DETAIL:  Parameters: $1 = 'khach34903@example.com'
+2026-11-24 15:56:13.761 +07 [78] app@shop app=shop-api client=::1 LOG:  duration: 701.434 ms  plan:
+	Query Text: /* rid=725b2f74,route=/api/orders */ SELECT id, total, status, created_at FROM orders WHERE customer_email = $1 ORDER BY created_at DESC LIMIT 20
+	Query Parameters: $1 = 'khach34903@example.com'
+	Limit  (cost=47781.02..47783.35 rows=20 width=28) (actual rows=20 loops=1)
+	  Buffers: shared hit=17270 read=19131
+	  ->  Gather Merge  (cost=47781.02..47784.98 rows=34 width=28) (actual rows=20 loops=1)
+	        Workers Planned: 2
+	        Workers Launched: 1
+	        Buffers: shared hit=17270 read=19131
+	        ->  Sort  (cost=46780.99..46781.04 rows=17 width=28) (actual rows=15 loops=2)
+	              Sort Key: created_at DESC
+	              Sort Method: quicksort  Memory: 26kB
+	              Buffers: shared hit=17270 read=19131
+	              Worker 0:  Sort Method: quicksort  Memory: 26kB
+	              ->  Parallel Seq Scan on orders  (cost=0.00..46780.65 rows=17 width=28) (actual rows=20 loops=2)
+	                    Filter: (customer_email = 'khach34903@example.com'::text)
+	                    Rows Removed by Filter: 999980
+	                    Buffers: shared hit=17233 read=19131
+2026-11-24 15:56:13.865 +07 [79] app@shop app=shop-api client=::1 LOG:  duration: 315.557 ms  execute <unnamed>: /* rid=a04d5bfb,route=/api/orders */ SELECT id, total, status, created_at FRO
+2026-11-24 15:56:13.865 +07 [79] app@shop app=shop-api client=::1 DETAIL:  Parameters: $1 = 'khach32417@example.com'
+$ cat log/postgresql-*.log | grep -c 'duration: '
+409
+$ grep -oE 'duration: [0-9.]+ ms  (statement|execute <unnamed>): /\* rid=[0-9a-f]+,route=[^ ]+' log/postgresql-*.log | grep -oE 'route=[^ ]+' | sort | uniq -c
+    200 route=/api/orders
+      3 route=/api/stats/today
+$ pgbadger -q -j 2 -f jsonlog -o /tmp/r.txt log/postgresql-*.json; grep -A 7 -m1 '^- Queries that took up the most time' /tmp/r.txt | grep -vE '^\s+(->|Buffers|Workers|Sort|Filter|Rows)' | cut -c1-170
+- Queries that took up the most time (N) -------------------------------
+
+Rank     Total duration      Times executed     Min/Max/Avg duration (s)     Query
+1) 1m23s - 200 - 207ms/701ms/417ms - select id, total, status, created_at from orders where customer_email = ? order by created_at desc limit ?;
+--
+	- Example 1: 701ms - database: shop, user: app, app: shop-api, bind query: yes, log file: log/postgresql-2026-11-24_155544.json - /* rid=725b2f74,route=/api/orders */ SE
+	- Example 2: 645ms - database: shop, user: app, app: shop-api, bind query: yes, log file: log/postgresql-2026-11-24_155544.json - /* rid=8bad2e9b,route=/api/orders */ SE
+	- Example 3: 612ms - database: shop, user: app, app: shop-api, bind query: yes, log file: log/postgresql-2026-11-24_155544.json - /* rid=f8b3bbde,route=/api/orders */ SE
+$ psql -d shop -c "SELECT calls, round(total_exec_time) AS total_ms, round(mean_exec_time::numeric, 1) AS mean_ms, left(regexp_replace(query, '\s+', ' ', 'g'), 80) AS query FROM pg_stat_statements WHERE calls > 1 ORDER BY total_exec_time DESC LIMIT 3"
+ calls | total_ms | mean_ms |                                      query
+-------+----------+---------+----------------------------------------------------------------------------------
+   200 |    83482 |   417.4 | /* rid=0f74dbb7,route=/api/orders */ SELECT id, total, status, created_at FROM o
+     3 |      923 |   307.7 | /* rid=c8334586,route=/api/stats/today */ SELECT count(*) AS n, sum(total) AS re
+   300 |      177 |     0.6 | /* rid=40b2379c,route=/api/orders/:id */ SELECT id, customer_email, total, statu
+(3 rows)
+$ PGPASSWORD=App-Lab-2026 psql -h localhost -U app -d shop -c "EXPLAIN (ANALYZE, BUFFERS, COSTS OFF) SELECT id, total, status, created_at FROM orders WHERE customer_email = 'khach4242@example.com' ORDER BY created_at DESC LIMIT 20" | grep -vE '^\s*$'
+                                         QUERY PLAN
+--------------------------------------------------------------------------------------------
+ Limit (actual time=74.600..79.283 rows=20 loops=1)
+   Buffers: shared hit=16141 read=20297
+   ->  Gather Merge (actual time=74.599..79.278 rows=20 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=16141 read=20297
+         ->  Sort (actual time=70.779..70.781 rows=10 loops=3)
+               Sort Key: created_at DESC
+               Sort Method: quicksort  Memory: 26kB
+               Buffers: shared hit=16141 read=20297
+               Worker 0:  Sort Method: quicksort  Memory: 25kB
+               Worker 1:  Sort Method: quicksort  Memory: 25kB
+               ->  Parallel Seq Scan on orders (actual time=11.424..70.694 rows=13 loops=3)
+                     Filter: (customer_email = 'khach4242@example.com'::text)
+                     Rows Removed by Filter: 666653
+                     Buffers: shared hit=16067 read=20297
+ Planning:
+   Buffers: shared hit=83 read=9
+ Planning Time: 3.454 ms
+ Execution Time: 79.368 ms
+(20 rows)
+$ PGPASSWORD=App-Lab-2026 PGAPPNAME=dba-an psql -h localhost -U app -d shop -c 'CREATE INDEX CONCURRENTLY orders_email_created_idx ON orders (customer_email, created_at DESC)'
+CREATE INDEX
+$ grep -h 'app=dba-an' log/postgresql-*.log | cut -c1-200
+2026-11-24 15:56:25.179 +07 [511] app@shop app=dba-an client=::1 LOG:  statement: CREATE INDEX CONCURRENTLY orders_email_created_idx ON orders (customer_email, created_at DESC)
+2026-11-24 15:56:26.181 +07 [511] app@shop app=dba-an client=::1 LOG:  process 511 still waiting for ShareUpdateExclusiveLock on relation 16424 of database 16385 after 1000.067 ms
+2026-11-24 15:56:26.181 +07 [511] app@shop app=dba-an client=::1 DETAIL:  Process holding the lock: 482. Wait queue: 511.
+2026-11-24 15:56:26.181 +07 [511] app@shop app=dba-an client=::1 STATEMENT:  CREATE INDEX CONCURRENTLY orders_email_created_idx ON orders (customer_email, created_at DESC)
+2026-11-24 15:56:26.182 +07 [511] app@shop app=dba-an client=::1 LOG:  process 511 acquired ShareUpdateExclusiveLock on relation 16424 of database 16385 after 1001.575 ms
+2026-11-24 15:56:26.182 +07 [511] app@shop app=dba-an client=::1 STATEMENT:  CREATE INDEX CONCURRENTLY orders_email_created_idx ON orders (customer_email, created_at DESC)
+2026-11-24 15:56:31.035 +07 [511] app@shop app=dba-an client=::1 LOG:  duration: 5855.478 ms
+$ PGPASSWORD=App-Lab-2026 psql -h localhost -U app -d shop -c "EXPLAIN (ANALYZE, BUFFERS, COSTS OFF) SELECT id, total, status, created_at FROM orders WHERE customer_email = 'khach4242@example.com' ORDER BY created_at DESC LIMIT 20" | grep -vE '^\s*$'
+                                              QUERY PLAN
+------------------------------------------------------------------------------------------------------
+ Limit (actual time=0.046..0.147 rows=20 loops=1)
+   Buffers: shared hit=6 read=17
+   ->  Index Scan using orders_email_created_idx on orders (actual time=0.045..0.144 rows=20 loops=1)
+         Index Cond: (customer_email = 'khach4242@example.com'::text)
+         Buffers: shared hit=6 read=17
+ Planning:
+   Buffers: shared hit=121 read=3
+ Planning Time: 0.529 ms
+ Execution Time: 0.187 ms
+(9 rows)
+$ docker exec lgz-lab12api node tai.mjs
+503 request, 0 lỗi, 0.9 s
+$ jq -s -r 'map(select(.ms)) | group_by(.route)[] | (map(.ms) | sort) as $m | [.[0].route, length, $m[length / 2 | floor], $m[length * 0.95 | floor], $m[-1]] | @tsv' lab12/app/logs/api.log | (echo -e 'route\tn\tp50_ms\tp95_ms\tmax_ms'; cat) | column -t
+route             n    p50_ms   p95_ms   max_ms
+/api/orders       200  1.344    3.465    42.425
+/api/orders/:id   300  1.853    4.494    41.124
+/api/stats/today  3    281.754  296.401  296.401
+$ echo "dòng duration trước: $(cat /tmp/truoc.txt), sau: $(cat log/postgresql-*.log | grep -c 'duration: ')"; grep -h 'duration: ' log/postgresql-*.log | tail -n 3 | cut -c1-170
+dòng duration trước: 410, sau: 416
+2026-11-24 15:56:32.129 +07 [545] app@shop app=shop-api client=::1 LOG:  duration: 281.330 ms  statement: /* rid=07cc69df,route=/api/stats/today */ SELECT count(*) AS n,
+2026-11-24 15:56:32.147 +07 [547] app@shop app=shop-api client=::1 LOG:  duration: 288.995 ms  plan:
+2026-11-24 15:56:32.147 +07 [547] app@shop app=shop-api client=::1 LOG:  duration: 296.067 ms  statement: /* rid=b15cacfe,route=/api/stats/today */ SELECT count(*) AS n,
+$ psql -d shop -c "SELECT calls, round(total_exec_time) AS total_ms, round(mean_exec_time::numeric, 2) AS mean_ms, left(regexp_replace(query, '\s+', ' ', 'g'), 80) AS query FROM pg_stat_statements WHERE calls > 1 ORDER BY total_exec_time DESC LIMIT 3"
+ calls | total_ms | mean_ms |                                      query
+-------+----------+---------+----------------------------------------------------------------------------------
+     3 |      820 |  273.42 | /* rid=b15cacfe,route=/api/stats/today */ SELECT count(*) AS n, sum(total) AS re
+   300 |      319 |    1.06 | /* rid=5437ec32,route=/api/orders/:id */ SELECT id, customer_email, total, statu
+   200 |       15 |    0.07 | /* rid=c9e7a9c6,route=/api/orders */ SELECT id, total, status, created_at FROM o
+(3 rows)
+$ docker ps -a --filter name=lgz-lab12 --format '{{.Names}}' | wc -l
+0

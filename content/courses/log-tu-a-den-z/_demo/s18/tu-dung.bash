@@ -1,0 +1,4 @@
+# 18.6 — Tự dựng bộ dữ liệu: bộ sinh tất định (chạy hai lần ⇒ giống từng byte), rồi chèn MỘT sự kiện của riêng bạn và kiểm nó xuất hiện ở đúng các nguồn
+cd /lab/ra && python3 /lab/s18/tao-su-co.py lan1 && python3 /lab/s18/tao-su-co.py lan2 && (cd lan1/su-co18 && find . -type f -print0 | sort -z | xargs -0 sha256sum) > h1 && (cd lan2/su-co18 && find . -type f -print0 | sort -z | xargs -0 sha256sum) > h2 && cmp h1 h2 && echo "hai lần sinh: giống từng byte ($(wc -l < h1) tệp)"
+cd /lab/ra && sed 's|^# 2i) Thứ Hai 23/11|ssh_vao(vn("2026-11-22 03:05:00"), "minh", "203.0.113.99", cach="password", dai=120)   # SỰ KIỆN CỦA BẠN\n# 2i) Thứ Hai 23/11|' /lab/s18/tao-su-co.py > cua-toi.py && grep -n 'SỰ KIỆN CỦA BẠN' cua-toi.py | cut -c1-110 && python3 cua-toi.py lan3
+cd /lab/ra/lan3/su-co18/vps01 && grep -h '203.0.113.99' var/log/auth.log* | cut -c1-120; grep -c '203.0.113.99' journal/vps01-journal.json

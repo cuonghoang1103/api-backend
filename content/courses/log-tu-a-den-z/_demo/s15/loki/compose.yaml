@@ -1,0 +1,67 @@
+# Bộ lab 1 (Bài 15.2): Loki + Alloy + Grafana + một API Node + một "máy Linux" có systemd.
+# Mọi dịch vụ dùng CHUNG một netns (dịch vụ net, --network none): gọi nhau bằng 127.0.0.1, không mở cổng ra máy thật.
+# Máy của bạn muốn mở Grafana trên trình duyệt: thêm ports: ["127.0.0.1:43000:3000"] vào net và bỏ network_mode: none.
+name: lgz-c15
+services:
+  net:
+    image: alpine:latest
+    container_name: lgz-c15-net
+    hostname: lab15           # mọi dịch vụ chung netns ⇒ chung tên máy (UTS) này
+    network_mode: none
+    command: sleep infinity
+    init: true
+  loki:
+    image: grafana/loki:3.7.10
+    container_name: lgz-c15-loki
+    network_mode: service:net
+    command: -config.file=/etc/loki/loki.yaml
+    volumes: [./loki.yaml:/etc/loki/loki.yaml:ro, loki-data:/loki]
+  alloy:
+    image: grafana/alloy:v1.22.0
+    container_name: lgz-c15-alloy
+    network_mode: service:net
+    command: run --server.http.listen-addr=127.0.0.1:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
+    volumes:
+      - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro   # đọc log container — quyền này = root trên máy, xem Góc hacker
+      - vm-journal:/var/log/journal:ro
+      - ./mau:/mau:ro
+      - alloy-data:/var/lib/alloy/data
+  grafana:
+    image: grafana/grafana:13.2.6
+    container_name: lgz-c15-grafana
+    network_mode: service:net
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: lab15-chi-dung-o-may-minh
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+      GF_NEWS_NEWS_FEED_ENABLED: "false"
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"   # lab không có Internet: đừng thử tải plugin
+    volumes: [./grafana:/etc/grafana/provisioning:ro]
+  api:
+    image: node:22-alpine
+    container_name: lgz-c15-api
+    network_mode: none        # riêng netns; gọi nó bằng docker exec (discovery.docker bỏ qua container "mượn" netns của container khác)
+    labels: { lgz.c15: "1" }
+    environment: { PORT: "3080" }
+    volumes: [./app/app.js:/app/app.js:ro]
+    command: node /app/app.js
+    healthcheck:              # như bộ cân bằng tải hỏi thăm mỗi 15 s ⇒ app luôn có log, "im lặng" mới có nghĩa
+      test: ["CMD", "wget", "-qO-", "127.0.0.1:3080/healthz"]
+      interval: 15s
+  ntfy:
+    image: binwiederhier/ntfy:v2.38.1
+    container_name: lgz-c15-ntfy
+    network_mode: service:net
+    command: serve --listen-http 127.0.0.1:2586
+  vm:
+    build: ./vm
+    image: lgz-c15-vm:1
+    container_name: lgz-c15-vm
+    network_mode: service:net
+    privileged: true          # systemd làm PID 1 cần cgroup — CHỈ trên máy lab
+    cgroup: private
+    tmpfs: [/run, /run/lock]
+    volumes: [vm-journal:/var/log/journal]
+volumes: { loki-data: {}, alloy-data: {}, vm-journal: {} }

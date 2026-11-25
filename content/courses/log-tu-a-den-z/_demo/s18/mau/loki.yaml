@@ -1,0 +1,25 @@
+# Loki 3.7 một tiến trình cho Lab 18 (dựa trên cấu hình Chương 15). Khác Ch15: NHẬN dòng cũ (bằng chứng có thể cũ hơn 7 ngày khi bạn làm lab)
+# và không xoá theo hạn — kho bằng chứng thì không tự xoá.
+auth_enabled: false
+memberlist:
+  bind_addr: [127.0.0.1]
+server:
+  http_listen_port: 3100
+  log_level: warn
+common:
+  path_prefix: /loki
+  replication_factor: 1
+  instance_addr: 127.0.0.1
+  ring: { kvstore: { store: inmemory } }
+  storage:
+    filesystem: { chunks_directory: /loki/chunks, rules_directory: /loki/rules }
+schema_config:
+  configs:
+    - from: 2026-01-01
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index: { prefix: index_, period: 24h }
+limits_config:
+  reject_old_samples: false
+  max_query_lookback: 0s

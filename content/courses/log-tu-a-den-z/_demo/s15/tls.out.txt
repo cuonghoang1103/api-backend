@@ -1,0 +1,23 @@
+$ openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:P-256 -nodes -days 30 -subj "/CN=CA Lab 15" -keyout ca.key -out ca.crt 2>/dev/null; openssl x509 -in ca.crt -noout -subject -enddate
+subject=CN=CA Lab 15
+notAfter=Dec 24 02:25:03 2026 GMT
+$ openssl req -newkey ec -pkeyopt ec_paramgen_curve:P-256 -nodes -subj "/CN=log.lab15.lan" -addext "subjectAltName=DNS:log.lab15.lan,IP:127.0.0.1" -keyout may-chu-log.key -out mc.csr 2>/dev/null; openssl x509 -req -in mc.csr -CA ca.crt -CAkey ca.key -copy_extensions copy -days 30 -out may-chu-log.crt 2>&1; openssl x509 -in may-chu-log.crt -noout -ext subjectAltName
+Certificate request self-signature ok
+subject=CN=log.lab15.lan
+X509v3 Subject Alternative Name: 
+    DNS:log.lab15.lan, IP Address:127.0.0.1
+$ openssl req -newkey ec -pkeyopt ec_paramgen_curve:P-256 -nodes -subj "/CN=PC-KETOAN-07" -keyout may-nay.key -out mn.csr 2>/dev/null; openssl x509 -req -in mn.csr -CA ca.crt -CAkey ca.key -days 30 -out may-nay.crt 2>&1
+Certificate request self-signature ok
+subject=CN=PC-KETOAN-07
+$ chmod 755 .; chmod 644 ./*.key ./*.crt; docker run -d --name lgz-c15-tls --network none -v ./loki-tls.yaml:/etc/loki/l.yaml:ro -v .:/tls:ro grafana/loki:3.7.10 -config.file=/etc/loki/l.yaml >/dev/null; n=0; until docker run --rm --network container:lgz-c15-tls -v .:/tls:ro curlimages/curl:8.11.1 -s --cacert /tls/ca.crt --cert /tls/may-nay.crt --key /tls/may-nay.key https://127.0.0.1:3443/ready 2>/dev/null | grep -q ready; do n=$((n+1)); [ $n -gt 40 ] && { docker logs lgz-c15-tls 2>&1 | tail -2; break; }; sleep 2; done; echo "Loki TLS sẵn sàng"
+Loki TLS sẵn sàng
+$ docker run --rm --network container:lgz-c15-tls curlimages/curl:8.11.1 -s -o /dev/null -w 'http thường: %{http_code}\n' http://127.0.0.1:3443/ready
+http thường: 400
+$ docker run --rm --network container:lgz-c15-tls -v .:/tls:ro curlimages/curl:8.11.1 -sS --cacert /tls/ca.crt https://127.0.0.1:3443/ready 2>&1 | tail -1
+curl: (56) OpenSSL SSL_read: OpenSSL/3.3.2: error:0A00045C:SSL routines::tlsv13 alert certificate required, errno 0
+$ T=$(date +%s%N); docker run --rm --network container:lgz-c15-tls -v .:/tls:ro curlimages/curl:8.11.1 -s -w 'có chứng chỉ máy khách: %{http_code}\n' --cacert /tls/ca.crt --cert /tls/may-nay.crt --key /tls/may-nay.key -H 'content-type: application/json' https://127.0.0.1:3443/loki/api/v1/push -d "{\"streams\":[{\"stream\":{\"job\":\"windows\",\"channel\":\"Security\",\"event_id\":\"4625\",\"host\":\"PC-KETOAN-07\"},\"values\":[[\"$T\",\"{\\\"event_id\\\":4625,\\\"computer\\\":\\\"PC-KETOAN-07\\\",\\\"message\\\":\\\"An account failed to log on.\\\"}\"]]}]}"
+có chứng chỉ máy khách: 204
+$ sleep 2; docker run --rm --network container:lgz-c15-tls -v .:/tls:ro curlimages/curl:8.11.1 -s --cacert /tls/ca.crt --cert /tls/may-nay.crt --key /tls/may-nay.key -G https://127.0.0.1:3443/loki/api/v1/query_range --data-urlencode 'query={job="windows", event_id="4625"}' --data-urlencode 'limit=1' | jq -c '.data.result[] | {stream, line: .values[0][1]}'
+{"stream":{"channel":"Security","detected_level":"unknown","event_id":"4625","host":"PC-KETOAN-07","job":"windows","service_name":"windows"},"line":"{\"event_id\":4625,\"computer\":\"PC-KETOAN-07\",\"message\":\"An account failed to log on.\"}"}
+$ docker rm -f lgz-c15-tls >/dev/null; echo đã dọn
+đã dọn

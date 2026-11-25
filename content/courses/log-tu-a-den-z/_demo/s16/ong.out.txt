@@ -1,0 +1,12 @@
+$ docker run -d --name lgz-c16-alloy --network none -v "$PWD/../quet":/q:ro -v "$PWD":/c:ro grafana/alloy:v1.22.0 run /c/che.alloy --storage.path=/tmp/a >/dev/null; sleep 10
+$ docker logs lgz-c16-alloy 2>&1 | grep -o 'entry=".*" entry_timestamp' | sed 's/^entry="//; s/" entry_timestamp$//; s/\\"/"/g' > da-che.txt; wc -l < da-che.txt
+702
+$ grep -E 'CCCD|S3|Stripe|ghp_|access_token' da-che.txt
+2026-11-23 08:10:00 INFO  dang-ky - khách mới: Nguyễn Văn An, CCCD [CHE], thẻ [CHE]
+{"time": "2026-11-23T08:00:57Z", "level": "debug", "msg": "gọi S3", "aws_access_key_id": "[CHE]", "aws_secret_access_key": "[CHE]"}
+10.0.0.20 - - [23/Nov/2026:08:02:00 +0700] "GET /api/me?access_token=[CHE] HTTP/1.1" 200 88 "-" "Mozilla/5.0"
+{"time": "2026-11-23T08:03:32Z", "level": "error", "msg": "Stripe lỗi", "key": "[CHE]"}
+{"time": "2026-11-23T08:05:01Z", "level": "info", "msg": "kéo mã nguồn", "remote": "https://ghp_[CHE]@github.com/cty/du-an.git"}
+$ docker run --rm --network none -v "$PWD":/q -v "$PWD/../quet/luat-viet.toml":/luat.toml:ro -w /q zricethezav/gitleaks:v8.30.1 dir da-che.txt --no-banner --no-color -c /luat.toml 2>&1 | tail -1
+3:00AM INF no leaks found
+$ docker rm -f lgz-c16-alloy >/dev/null; rm -f da-che.txt

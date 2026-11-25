@@ -1,0 +1,96 @@
+$ systemctl status shop-api --no-pager | head -n 4
+● shop-api.service - Shop API (Lab 7)
+     Loaded: loaded (/etc/systemd/system/shop-api.service; enabled; preset: enabled)
+     Active: active (running) since Wed 2026-11-25 03:12:05 +07; 11s ago
+   Main PID: 18996 (python3)
+$ systemctl show shop-api -p NRestarts -p MemoryMax -p MemoryPeak
+NRestarts=1
+MemoryPeak=10645504
+MemoryMax=157286400
+$ journalctl --list-boots | tail -n 2
+IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY
+  0 76d1fcc4629949cca375d6dda1b59a50 Tue 2026-11-24 04:13:02 +07 Wed 2026-11-25 03:12:17 +07
+$ journalctl -u shop-api --since '03:11:58' --until '03:12:06' --no-pager
+Nov 25 03:11:59 lab7 shop-api[424]: GET /api/products 200
+Nov 25 03:11:59 lab7 shop-api[424]: GET /api/orders/1083 200
+Nov 25 03:12:00 lab7 shop-api[424]: nightly report started
+Nov 25 03:12:00 lab7 shop-api[424]: report: loaded 10 MiB of orders
+Nov 25 03:12:01 lab7 shop-api[424]: report: loaded 40 MiB of orders
+Nov 25 03:12:01 lab7 shop-api[424]: report: loaded 70 MiB of orders
+Nov 25 03:12:01 lab7 shop-api[424]: GET /api/products 200
+Nov 25 03:12:01 lab7 shop-api[424]: GET /api/orders/1084 200
+Nov 25 03:12:02 lab7 shop-api[424]: report: loaded 100 MiB of orders
+Nov 25 03:12:02 lab7 shop-api[424]: report: loaded 130 MiB of orders
+Nov 25 03:12:03 lab7 systemd[1]: shop-api.service: A process of this unit has been killed by the OOM killer.
+Nov 25 03:12:03 lab7 systemd[1]: shop-api.service: Main process exited, code=killed, status=9/KILL
+Nov 25 03:12:03 lab7 systemd[1]: shop-api.service: Failed with result 'oom-kill'.
+Nov 25 03:12:05 lab7 systemd[1]: shop-api.service: Scheduled restart job, restart counter is at 1.
+Nov 25 03:12:05 lab7 systemd[1]: Started shop-api.service - Shop API (Lab 7).
+Nov 25 03:12:05 lab7 shop-api[18996]: shop-api 1.4.2 starting, pid=18996, db=10.0.0.5
+Nov 25 03:12:05 lab7 shop-api[18996]: GET /api/products 200
+Nov 25 03:12:05 lab7 shop-api[18996]: GET /api/orders/1086 200
+$ journalctl -p warning --since '03:11' --until '03:13' --no-pager
+Nov 25 03:11:47 lab7 shop-api[424]: order 1077 failed: database timeout after 5000 ms (pool 10/10 busy)
+Nov 25 03:12:03 lab7 kernel: python3 invoked oom-killer: gfp_mask=0xcc0(GFP_KERNEL), order=0, oom_score_adj=0
+Nov 25 03:12:03 lab7 kernel: CPU: 1 PID: 18323 Comm: python3 Not tainted 6.8.0-147-generic #147-Ubuntu
+Nov 25 03:12:03 lab7 kernel: Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+Nov 25 03:12:03 lab7 kernel: Call Trace:
+Nov 25 03:12:03 lab7 kernel:  <TASK>
+Nov 25 03:12:03 lab7 kernel:  dump_stack_lvl+0x76/0xa0
+Nov 25 03:12:03 lab7 kernel:  dump_stack+0x10/0x20
+Nov 25 03:12:03 lab7 kernel:  dump_header+0x49/0x210
+Nov 25 03:12:03 lab7 kernel:  oom_kill_process+0x118/0x280
+Nov 25 03:12:03 lab7 kernel:  out_of_memory+0x103/0x350
+Nov 25 03:12:03 lab7 kernel:  mem_cgroup_out_of_memory+0x145/0x170
+Nov 25 03:12:03 lab7 kernel:  try_charge_memcg+0x6d6/0x7d0
+Nov 25 03:12:03 lab7 kernel:  ? vma_alloc_folio+0x7a/0xd0
+Nov 25 03:12:03 lab7 kernel:  __mem_cgroup_charge+0x45/0xc0
+Nov 25 03:12:03 lab7 kernel:  do_anonymous_page+0xb2/0x430
+Nov 25 03:12:03 lab7 kernel:  handle_pte_fault+0x1cb/0x1d0
+Nov 25 03:12:03 lab7 kernel:  __handle_mm_fault+0x654/0x790
+Nov 25 03:12:03 lab7 kernel:  handle_mm_fault+0x18a/0x380
+Nov 25 03:12:03 lab7 kernel:  do_user_addr_fault+0x169/0x670
+Nov 25 03:12:03 lab7 kernel:  exc_page_fault+0x83/0x1b0
+Nov 25 03:12:03 lab7 kernel:  asm_exc_page_fault+0x27/0x30
+Nov 25 03:12:03 lab7 kernel: RIP: 0033:0x7f611998984a
+Nov 25 03:12:03 lab7 kernel: Code: c5 fe 7f 07 c5 fe 7f 47 20 c5 fe 7f 47 40 c5 fe 7f 47 60 c5 f8 77 c3 66 0f 1f 84 00 00 00 00 00 40 0f b6 c6 48 89 d1 48 89 fa <f3> aa 48 89 d0 c5 f8 77 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90
+Nov 25 03:12:03 lab7 kernel: RSP: 002b:00007f6118bfe5d8 EFLAGS: 00010206
+Nov 25 03:12:03 lab7 kernel: RAX: 0000000000000000 RBX: 00007f61192820b0 RCX: 0000000000986010
+Nov 25 03:12:03 lab7 kernel: RDX: 00007f61057fc010 RSI: 0000000000000000 RDI: 00007f6105876000
+Nov 25 03:12:03 lab7 kernel: RBP: 00007f6118bfe6a0 R08: 00000000ffffffff R09: 0000000000000000
+Nov 25 03:12:03 lab7 kernel: R10: 0000000000000022 R11: 0000000000000246 R12: 0000000000a00000
+Nov 25 03:12:03 lab7 kernel: R13: 00007f611962c598 R14: 0000000000000000 R15: 0000000000000001
+Nov 25 03:12:03 lab7 kernel:  </TASK>
+Nov 25 03:12:03 lab7 kernel: Memory cgroup out of memory: Killed process 424 (python3) total-vm:327788kB, anon-rss:152960kB, file-rss:4352kB, shmem-rss:0kB, UID:999 pgtables:404kB oom_score_adj:0
+Nov 25 03:12:03 lab7 systemd[1]: shop-api.service: Main process exited, code=killed, status=9/KILL
+Nov 25 03:12:03 lab7 systemd[1]: shop-api.service: Failed with result 'oom-kill'.
+Nov 25 03:12:03 lab7 systemd[1]: shop-report.service: Failed with result 'exit-code'.
+Nov 25 03:12:03 lab7 systemd[1]: Failed to start shop-report.service - Nightly report of shop-api (Lab 7).
+Nov 25 03:12:11 lab7 shop-api[18996]: order 1089 failed: database timeout after 5000 ms (pool 10/10 busy)
+$ journalctl -k --since '03:11' --until '03:13' -g 'Killed process|oom-kill:' --no-pager -o short-precise
+Nov 25 03:12:03.274608 lab7 kernel: oom-kill:constraint=CONSTRAINT_MEMCG,nodemask=(null),cpuset=/,mems_allowed=0,oom_memcg=/system.slice/shop-api.service,task_memcg=/system.slice/shop-api.service,task=python3,pid=424,uid=999
+Nov 25 03:12:03.274614 lab7 kernel: Memory cgroup out of memory: Killed process 424 (python3) total-vm:327788kB, anon-rss:152960kB, file-rss:4352kB, shmem-rss:0kB, UID:999 pgtables:404kB oom_score_adj:0
+$ journalctl -u shop-report --since '03:11' --no-pager
+Nov 25 03:12:00 lab7 systemd[1]: Starting shop-report.service - Nightly report of shop-api (Lab 7)...
+Nov 25 03:12:03 lab7 systemd[1]: shop-report.service: Main process exited, code=exited, status=52/n/a
+Nov 25 03:12:03 lab7 systemd[1]: shop-report.service: Failed with result 'exit-code'.
+Nov 25 03:12:03 lab7 systemd[1]: Failed to start shop-report.service - Nightly report of shop-api (Lab 7).
+$ systemctl list-timers shop-report.timer --no-pager
+NEXT                        LEFT LAST                         PASSED UNIT              ACTIVATES
+Thu 2026-11-26 03:12:00 +07  23h Wed 2026-11-25 03:12:00 +07 17s ago shop-report.timer shop-report.service
+
+1 timers listed.
+Pass --all to see loaded but inactive timers, too.
+$ journalctl -u shop-api --since '03:11' --until '03:13' -o json | jq -r '[._PID, ._SYSTEMD_INVOCATION_ID // "-"] | @tsv' | uniq -c
+     28 424	6f090b12fdf54a1d84fd23095782d72e
+      5 1	-
+     15 18996	595192f990f7490a9cc5a8096d7402e0
+$ journalctl -u shop-api --since '03:11:58' --until '03:12:04' -o json | jq -r 'select(.MESSAGE | test("report")) | (.__MONOTONIC_TIMESTAMP | tonumber / 1e6 | tostring) + "s " + .MESSAGE'
+757.437836s nightly report started
+757.441434s report: loaded 10 MiB of orders
+758.05347s report: loaded 40 MiB of orders
+758.664397s report: loaded 70 MiB of orders
+759.27471s report: loaded 100 MiB of orders
+759.886113s report: loaded 130 MiB of orders
+$ journalctl -u shop-api -p debug..debug --since today --no-pager -q | wc -l
+5

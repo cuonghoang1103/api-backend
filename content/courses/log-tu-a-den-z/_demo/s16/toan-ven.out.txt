@@ -1,0 +1,58 @@
+$ may -u an 'echo sai-mat-khau | sudo -S -k true 2>&1 | tail -1; echo MatKhauLab-15 | sudo -S -k true 2>/dev/null && echo "sudo OK"'
+sudo: 1 incorrect password attempt
+sudo OK
+$ may 'ls -l /var/log/auth.log /var/log/syslog; ls -ld /var/log/journal; getent group adm systemd-journal'
+-rw-r-----. 1 syslog adm 1111 Nov 24 09:57 /var/log/auth.log
+-rw-r-----. 1 syslog adm 1129 Nov 24 09:57 /var/log/syslog
+drwxr-sr-x+ 1 root systemd-journal 64 Nov 24 09:57 /var/log/journal
+adm:x:4:ubuntu,syslog
+systemd-journal:x:999:
+$ may -u dev 'id; tail -2 /var/log/auth.log; journalctl -q -n 2 --no-pager _COMM=sudo'
+uid=1002(dev) gid=1002(dev) groups=1002(dev)
+tail: cannot open '/var/log/auth.log' for reading: Permission denied
+No journal files were opened due to insufficient permissions.
+$ may 'usermod -aG adm dev'; may -u dev 'grep "sudo:" /var/log/auth.log | grep -v usermod | head -2 | cut -c1-120'
+2026-11-24T09:57:31.574717+07:00 may16 sudo: pam_unix(sudo:auth): authentication failure; logname= uid=1001 euid=0 tty= 
+2026-11-24T09:57:33.499213+07:00 may16 sudo: pam_unix(sudo:auth): conversation failed
+$ may 'gpasswd -d dev adm'
+Removing user dev from group adm
+$ may 'mkdir -p /var/log/shop; umask 022; echo "{\"msg\":\"đăng nhập\",\"userId\":\"u_42\",\"email\":\"an@example.com\"}" >> /var/log/shop/app.log; ls -l /var/log/shop/app.log'
+-rw-r--r--. 1 root root 65 Nov 24 09:57 /var/log/shop/app.log
+$ may -u dev 'cat /var/log/shop/app.log'
+{"msg":"đăng nhập","userId":"u_42","email":"an@example.com"}
+$ may 'chown root:adm /var/log/shop/app.log; chmod 0640 /var/log/shop/app.log; printf "/var/log/shop/*.log {\n  daily\n  rotate 14\n  compress\n  delaycompress\n  missingok\n  create 0640 root adm\n}\n" > /etc/logrotate.d/shop; logrotate -f /etc/logrotate.d/shop; ls -l /var/log/shop/'
+total 4
+-rw-r-----. 1 root adm  0 Nov 24 09:57 app.log
+-rw-r-----. 1 root adm 65 Nov 24 09:57 app.log.1
+$ may -u dev 'cat /var/log/shop/app.log.1'
+cat: /var/log/shop/app.log.1: Permission denied
+$ may 'cd /var/log/shop; chattr +a app.log; lsattr app.log; echo "{\"msg\":\"dòng mới\"}" >> app.log && echo "ghi thêm: được"; echo x > app.log; : > app.log; rm app.log; mv app.log app.cu; wc -l app.log'
+-----a---------------- app.log
+ghi thêm: được
+bash: line 1: app.log: Operation not permitted
+bash: line 1: app.log: Operation not permitted
+rm: cannot remove 'app.log': Operation not permitted
+mv: cannot move 'app.log' to 'app.cu': Operation not permitted
+1 app.log
+$ may 'logrotate -f /etc/logrotate.d/shop 2>&1 | head -3'
+error: failed to rename /var/log/shop/app.log to /var/log/shop/app.log.1: Operation not permitted
+$ may 'chattr -a /var/log/shop/app.log && echo "root gỡ +a: được" && lsattr /var/log/shop/app.log'
+root gỡ +a: được
+---------------------- /var/log/shop/app.log
+$ may 'cd /tmp; journalctl -q --no-pager -o short-iso _COMM=sudo > sudo.log; wc -l < sudo.log; python3 /lab/toan-ven/chuoi-bam.py ky sudo.log sudo.chuoi.log; cut -c1-150 sudo.chuoi.log | head -3'
+7
+băm cuối: a8146f1c8a5f869e
+2026-11-24T09:57:31+07:00 may16 sudo[192]: pam_unix(sudo:auth): authentication failure; logname= uid=1001 euid=0 tty= ruser=an rhost=  user=an |h=9df3
+2026-11-24T09:57:33+07:00 may16 sudo[192]: pam_unix(sudo:auth): conversation failed |h=58521de6937b591e
+2026-11-24T09:57:33+07:00 may16 sudo[192]: pam_unix(sudo:auth): auth could not identify password for [an] |h=b3897b8f9f1003e7
+$ may 'cd /tmp; python3 /lab/toan-ven/chuoi-bam.py kiem sudo.chuoi.log'
+✓ 7 dòng khớp chuỗi, băm cuối a8146f1c8a5f869e
+$ may 'cd /tmp; sed -i "s/: 1 incorrect password attempt ;/: session opened ;/" sudo.chuoi.log; python3 /lab/toan-ven/chuoi-bam.py kiem sudo.chuoi.log'
+✗ dòng 4 không khớp chuỗi: 2026-11-24T09:57:33+07:00 may16 sudo[192]:       an : session opened ;
+$ may 'cd /tmp; cut -d"|" -f1 sudo.chuoi.log | sed "s/ $//" > sua.log; python3 /lab/toan-ven/chuoi-bam.py ky sua.log sudo.chuoi.log >/dev/null; python3 /lab/toan-ven/chuoi-bam.py kiem sudo.chuoi.log; M=$(python3 /lab/toan-ven/chuoi-bam.py ky sudo.log /dev/null | cut -d" " -f3); python3 /lab/toan-ven/chuoi-bam.py kiem sudo.chuoi.log $M'
+✓ 7 dòng khớp chuỗi, băm cuối 07a5a9ad649ffc60
+✓ 7 dòng khớp chuỗi, băm cuối 07a5a9ad649ffc60
+✗ băm cuối KHÁC mốc đã gửi đi (a8146f1c8a5f869e) ⇒ cả chuỗi đã bị tính lại
+$ may 'mkdir -p /bang-chung && cd /var/log && tar --sort=name -czf /bang-chung/may16-auth-$(date +%Y%m%d).tar.gz auth.log* shop/ && cd /bang-chung && sha256sum *.tar.gz | tee SHA256SUMS && cp -a *.tar.gz /tmp/ban-sao.tar.gz && sha256sum /tmp/ban-sao.tar.gz | cut -c1-20'
+3acf1e071940a04fc5894cf26bd2effeb6fa9c8f54b88f8ff16e7929cee574fc  may16-auth-20261124.tar.gz
+3acf1e071940a04fc589

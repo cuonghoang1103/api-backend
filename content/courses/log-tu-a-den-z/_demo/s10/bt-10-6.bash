@@ -1,0 +1,16 @@
+# Lời giải 🧪 bài 10.6 — chạy thật 24/11/2026. Thư mục làm việc: bản sao spring-lab, đã chép bt-10-6/logback-spring.xml vào src/main/resources rồi mvn package (container 2 GB).
+grep -n -A12 'springProfile name="prod"' src/main/resources/logback-spring.xml
+docker rm -f lgz-spring > /dev/null 2>&1; rm -rf logs; mkdir logs; docker run -d --name lgz-spring --memory 2g --memory-swap 2g --cpus 2 --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar > /dev/null && sleep 12
+curl -s -o /dev/null http://127.0.0.1:41081/api/orders/7; sleep 1; docker logs lgz-spring 2>&1 | grep -E 'profile|load order'
+docker rm -f lgz-spring > /dev/null; rm -rf logs; mkdir logs; docker run -d --name lgz-spring --memory 2g --memory-swap 2g --cpus 2 --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar --spring.profiles.active=prod > /dev/null && sleep 12
+curl -s -o /dev/null http://127.0.0.1:41081/api/orders/7; sleep 1; echo "màn hình: $(docker logs lgz-spring 2>&1 | grep -c ' - ') dòng log"; grep -E 'profile|load order' logs/shop.log | cut -c1-150
+for i in $(seq 1 400); do curl -s -o /dev/null http://127.0.0.1:41081/api/orders/$i; done; sleep 2; ls -l logs | tail -n +2 | awk '{print $5, $9}'
+du -cb logs/*.gz | tail -n 1
+docker rm -f lgz-spring > /dev/null; rm -rf logs; mkdir logs; docker run -d --name lgz-spring --memory 2g --memory-swap 2g --cpus 2 --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar > /dev/null && sleep 12
+curl -s -o /dev/null -X POST 'http://127.0.0.1:41081/api/orders/7/confirm?email=an@example.com'; sleep 1; echo "additivity=true  · màn hình: $(docker logs lgz-spring 2>&1 | grep -c 'sending confirmation') · shop.log: $(grep -c 'sending confirmation' logs/shop.log)"
+docker rm -f lgz-spring > /dev/null; rm -rf logs; mkdir logs; docker run -d --name lgz-spring --memory 2g --memory-swap 2g --cpus 2 --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -DADDITIVITY=false -jar target/shop-1.0.jar > /dev/null && sleep 12
+curl -s -o /dev/null -X POST 'http://127.0.0.1:41081/api/orders/7/confirm?email=an@example.com'; sleep 1; echo "additivity=false · màn hình: $(docker logs lgz-spring 2>&1 | grep -c 'sending confirmation') · shop.log: $(grep -c 'sending confirmation' logs/shop.log)"
+diff logback-spring.xml logback-sach.xml | grep -E '^[<>] +<logger'
+docker rm -f lgz-spring > /dev/null; rm -rf logs; mkdir logs; docker run -d --name lgz-spring --memory 2g --memory-swap 2g --cpus 2 --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar --logging.config=file:logback-sach.xml > /dev/null && sleep 12
+curl -s -o /dev/null -X POST 'http://127.0.0.1:41081/api/orders/7/confirm?email=an@example.com'; sleep 1; echo "logger không appender · màn hình: $(docker logs lgz-spring 2>&1 | grep -c 'sending confirmation') · shop.log: $(grep -c 'sending confirmation' logs/shop.log)"
+docker rm -f lgz-spring > /dev/null; echo "đã xoá lgz-spring"

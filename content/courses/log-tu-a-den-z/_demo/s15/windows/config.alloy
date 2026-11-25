@@ -1,0 +1,50 @@
+// Grafana Alloy trên máy Windows (C:\Program Files\GrafanaLabs\Alloy\config.alloy) — gửi sự kiện về Loki trung tâm qua TLS hai chiều.
+// Chỉ lấy kênh có giá trị điều tra; mỗi kênh một khối. use_incoming_timestamp = true: dùng GIỜ CỦA SỰ KIỆN, không phải giờ đọc.
+loki.source.windowsevent "security" {
+  eventlog_name          = "Security"
+  // 4624/4625 đăng nhập, 4672 quyền đặc biệt, 4688 tạo tiến trình, 4720/4732 tài khoản/nhóm, 4740 khoá, 1102 xoá log
+  xpath_query            = "*[System[(EventID=4624 or EventID=4625 or EventID=4672 or EventID=4688 or EventID=4720 or EventID=4732 or EventID=4740 or EventID=1102)]]"
+  use_incoming_timestamp = true
+  labels                 = { job = "windows", channel = "Security" }
+  forward_to             = [loki.process.windows.receiver]
+}
+loki.source.windowsevent "system" {
+  eventlog_name          = "System"
+  xpath_query            = "*[System[(Level=1 or Level=2 or Level=3 or EventID=7045 or EventID=104)]]"   // lỗi/cảnh báo + cài dịch vụ + xoá log System
+  use_incoming_timestamp = true
+  labels                 = { job = "windows", channel = "System" }
+  forward_to             = [loki.process.windows.receiver]
+}
+loki.source.windowsevent "sysmon" {
+  eventlog_name          = "Microsoft-Windows-Sysmon/Operational"
+  use_incoming_timestamp = true
+  labels                 = { job = "windows", channel = "Sysmon" }
+  forward_to             = [loki.process.windows.receiver]
+}
+loki.source.windowsevent "powershell" {
+  eventlog_name          = "Microsoft-Windows-PowerShell/Operational"
+  xpath_query            = "*[System[(EventID=4104)]]"   // Script Block Logging
+  use_incoming_timestamp = true
+  labels                 = { job = "windows", channel = "PowerShell" }
+  forward_to             = [loki.process.windows.receiver]
+}
+// Mỗi sự kiện ra một dòng JSON (event_id, level, computer, event_data…). Đưa event_id thành NHÃN: ít giá trị, hay lọc.
+loki.process "windows" {
+  stage.json {
+    expressions = { event_id = "event_id", computer = "computer" }
+  }
+  stage.labels {
+    values = { event_id = "", host = "computer" }
+  }
+  forward_to = [loki.write.trung_tam.receiver]
+}
+loki.write "trung_tam" {
+  endpoint {
+    url = "https://log.lab15.lan:3443/loki/api/v1/push"
+    tls_config {
+      ca_file   = "C:\\ProgramData\\Alloy\\ca.crt"        // tin máy chủ log
+      cert_file = "C:\\ProgramData\\Alloy\\may-nay.crt"   // máy chủ log tin LẠI máy này
+      key_file  = "C:\\ProgramData\\Alloy\\may-nay.key"
+    }
+  }
+}

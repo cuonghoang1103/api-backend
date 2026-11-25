@@ -1,0 +1,4 @@
+# Sửa lệch giờ: Filebeat đọc auth.log chép từ máy giờ Việt Nam ⇒ cho Filebeat biết múi giờ của NGUỒN.
+services:
+  filebeat:
+    environment: { TZ: Asia/Ho_Chi_Minh }

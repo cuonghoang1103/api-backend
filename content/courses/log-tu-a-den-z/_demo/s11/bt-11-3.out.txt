@@ -1,0 +1,20 @@
+PS> New-NetFirewallRule -Name lab-8080 -DisplayName 'lab 8080' -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow | Out-Null; Set-NetFirewallRule -Name lab-8080 -LocalPort 8081; Remove-NetFirewallRule -Name lab-8080; Set-NetFirewallProfile -Name Private -Enabled False; Set-NetFirewallProfile -Name Private -Enabled True; Start-Sleep 2
+PS> Get-WinEvent -LogName 'Microsoft-Windows-Windows Firewall With Advanced Security/Firewall' -MaxEvents 8 | Sort-Object TimeCreated | Select-Object TimeCreated,Id,@{n='Message';e={($_.Message -split "`r?`n")[0]}} | Format-Table -AutoSize -Wrap
+
+TimeCreated              Id Message
+-----------              -- -------
+11/24/2026 12:16:10 PM 2082 A Windows Defender Firewall setting in the Public profile has changed.
+11/24/2026 12:16:10 PM 2082 A Windows Defender Firewall setting in the Public profile has changed.
+11/24/2026 12:16:10 PM 2082 A Windows Defender Firewall setting in the Public profile has changed.
+11/24/2026 12:55:38 PM 2097 A rule has been added to the Windows Defender Firewall exception list.
+11/24/2026 12:55:46 PM 2099 A rule has been modified in the Windows Defender Firewall exception list.
+11/24/2026 12:55:46 PM 2052 A rule has been deleted in the Windows Defender Firewall exception list.
+11/24/2026 12:55:46 PM 2082 A Windows Defender Firewall setting in the Private profile has changed.
+11/24/2026 12:55:46 PM 2082 A Windows Defender Firewall setting in the Private profile has changed.
+PS> $h = 'date','time','action','protocol','srcip','dstip','srcport','dstport','size','tcpflags','tcpsyn','tcpack','tcpwin','icmptype','icmpcode','info','path','pid'; $d = Get-Content "$env:SystemRoot\System32\LogFiles\Firewall\pfirewall.log" | Where-Object { $_ -and $_ -notmatch '^#' } | ConvertFrom-Csv -Delimiter ' ' -Header $h; $d | Where-Object action -eq 'DROP' | Group-Object dstport | Sort-Object Count -Descending | Select-Object -First 5 Count,Name
+
+Count Name
+----- ----
+    8 445
+    4 135
+    2 139

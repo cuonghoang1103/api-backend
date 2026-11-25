@@ -1,0 +1,14 @@
+$ journalctl --list-boots | tail -n 3
+ -2 6a8b2ff86ddf403cace4ac14cf627166 Tue 2026-11-24 23:50:03 +07 Tue 2026-11-24 23:50:32 +07
+ -1 c4334b2a2d3e4079a4b4cdb916da2550 Tue 2026-11-24 23:50:35 +07 Tue 2026-11-24 23:50:41 +07
+  0 c21a6cfd9f834959a302445ef18ff23f Tue 2026-11-24 23:51:10 +07 Tue 2026-11-24 23:51:24 +07
+$ journalctl -b -1 -n 4 --no-pager
+Nov 24 23:50:41 lab7 systemd-logind[532]: New session 1 of user hv.
+Nov 24 23:50:41 lab7 systemd[1]: Finished user-runtime-dir@1000.service - User Runtime Directory /run/user/1000.
+Nov 24 23:50:41 lab7 systemd[1]: Starting user@1000.service - User Manager for UID 1000...
+Nov 24 23:50:41 lab7 (systemd)[688]: pam_unix(systemd-user:session): session opened for user hv(uid=1000) by hv(uid=0)
+$ journalctl -b -g 'uncleanly|corrupted' --no-pager
+Nov 24 23:51:10 lab7 systemd-journald[129]: File /var/log/journal/595503c52a37410aae2b32f4ffddfa26/system.journal corrupted or uncleanly shut down, renaming and replacing.
+Nov 24 23:51:18 lab7 systemd-journald[129]: File /var/log/journal/595503c52a37410aae2b32f4ffddfa26/user-1000.journal corrupted or uncleanly shut down, renaming and replacing.
+$ journalctl -b -2 -t sudo -g reboot --no-pager
+Nov 24 23:50:32 lab7 sudo[818]:       hv : PWD=/home/hv ; USER=root ; COMMAND=/usr/bin/systemctl reboot

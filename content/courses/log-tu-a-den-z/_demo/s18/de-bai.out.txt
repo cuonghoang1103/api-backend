@@ -1,0 +1,71 @@
+$ cat su-co18/DE-BAI.txt
+SỰ CỐ HOA SEN TRAVEL — bộ dữ liệu dự án cuối khoá (Chương 18, khoá 'Đọc & làm chủ log từ A–Z', cuongthai.com).
+Thứ Hai 23/11/2026 08:33 (+07:00): báo cáo buổi sáng trên PC-DEV01 của Minh (lập trình viên) có sự kiện 4740 — tài khoản minh bị khoá lúc tối thứ Bảy,
+khi không ai ở văn phòng. An (quản trị) vào vps01, thu thập log 08:41–09:06 và giao cho bạn. Công ty: 6 người, một VPS và một văn phòng.
+
+  vps01  192.0.2.10   Ubuntu 24.04 — sshd, cron, rsyslog + journald, nginx 1.24 (+ PHP-FPM 8.3 cho blog WordPress), Docker:
+                      tour-api (Node.js 22 + pino, cổng 3000 sau nginx), tour-db (PostgreSQL 16, cổng 5432 chỉ mở 127.0.0.1). WireGuard wg0 = 10.8.0.1.
+  rt01   192.0.2.200  router văn phòng (kiểu OpenWrt): dnsmasq (DHCP + DNS, ghi truy vấn), tường lửa, WireGuard 10.8.0.2 ↔ vps01. LAN 10.20.0.0/24.
+  PC-DEV01 10.20.0.15 Windows 11 của Minh (bản xuất Security log JSON, xem pc-dev01/XUAT.ps1.txt).
+  Người dùng thật trên vps01: an (quản trị, sudo), minh (lập trình), deploy (tài khoản triển khai). Văn phòng ra Internet bằng 192.0.2.200.
+
+Nguồn: vps01/var/log (auth.log*, syslog*, nginx), vps01/journal/vps01-journal.json (journalctl -o json), vps01/postgresql/log/*.csv (csvlog),
+       vps01/var/lib/docker/containers/<id>/<id>-json.log (log của tour-api), vps01/thu-thap/ (output lệnh An chạy), rt01/logread.txt + rt01/thu-thap/,
+       pc-dev01/security.jsonl.
+Nhiệm vụ: trả lời 15 câu hỏi của bài 18.1 bằng bằng chứng (trích dòng log), dựng dòng thời gian UTC, gắn ATT&CK, viết báo cáo (bài 18.3–18.5).
+Quy tắc: KHÔNG mở lời giải trước khi tự làm xong. Mọi giờ trong báo cáo ghi theo UTC. Đây là dữ liệu SINH (tao-su-co.py) — không có người thật nào bị hại.
+$ cd su-co18 && find . -type f -printf '%s %p\n' | sed -E 's|\./||; s/[0-9a-f]{64}/<id>/g' | sort -k2 | awk '{printf "%9d  %s\n", $1, $2}'
+     1919  DE-BAI.txt
+    29127  pc-dev01/security.jsonl
+      876  pc-dev01/XUAT.ps1.txt
+   311087  rt01/logread.txt
+      732  rt01/thu-thap/firewall.txt
+   565584  vps01/journal/vps01-journal.json
+     1900  vps01/postgresql/log/postgresql-Sat.csv
+     1443  vps01/postgresql/log/postgresql-Thu.csv
+     1440  vps01/postgresql/log/postgresql-Tue.csv
+     7278  vps01/postgresql/log/postgresql-Wed.csv
+      400  vps01/thu-thap/cron.d.txt
+      287  vps01/thu-thap/docker-ps.txt
+      135  vps01/thu-thap/env.txt
+       78  vps01/thu-thap/id-deploy.txt
+      202  vps01/thu-thap/README.txt
+      307  vps01/thu-thap/sshd-T.txt
+      903  vps01/thu-thap/stat.txt
+  1013326  vps01/var/lib/docker/containers/<id>/<id>-json.log
+    76751  vps01/var/log/auth.log
+   118190  vps01/var/log/auth.log.1
+  2783863  vps01/var/log/nginx/access.log
+      432  vps01/var/log/nginx/error.log
+    30485  vps01/var/log/syslog
+    23899  vps01/var/log/syslog.1
+$ cd su-co18/vps01 && head -n 1 var/log/auth.log.1 && head -n 1 var/log/syslog.1 | cut -c1-120
+2026-11-15T00:02:07.002315+07:00 vps01 sshd[1282]: Invalid user ftpuser from 198.18.75.246 port 58503
+2026-11-15T00:17:01.005712+07:00 vps01 CRON[3268]: (root) CMD (cd / && run-parts --report /etc/cron.hourly)
+$ cd su-co18/vps01 && head -n 1 journal/vps01-journal.json | jq -c '{__REALTIME_TIMESTAMP, SYSLOG_IDENTIFIER, _PID, MESSAGE}'
+{"__REALTIME_TIMESTAMP":"1794675727002315","SYSLOG_IDENTIFIER":"sshd","_PID":"1282","MESSAGE":"Invalid user ftpuser from 198.18.75.246 port 58503"}
+$ cd su-co18/vps01 && head -n 1 var/log/nginx/access.log && cut -c1-110 var/log/nginx/error.log
+100.103.149.108 - - [15/Nov/2026:00:02:08 +0700] "GET /api/tours?q=nui HTTP/1.1" 200 4075 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0 Safari/537.36" rid=6d0d591be600361be9e0cd14872a9011 rt=0.037
+2026/11/22 02:12:48 [error] 1187#1187: *48211 FastCGI sent in stderr: "PHP message: PHP Warning:  Undefined ar
+$ cd su-co18/vps01 && sed -n 2p var/lib/docker/containers/*/*-json.log | cut -c1-230
+{"log":"{\"level\":30,\"time\":1794998381052,\"pid\":1,\"hostname\":\"96a3ac629f32\",\"reqId\":\"8353593a9f891845d3c47c9384639287\",\"req\":{\"method\":\"GET\",\"url\":\"/api/tours/122\"},\"res\":{\"statusCode\":200},\"responseTim
+$ cd su-co18/vps01 && head -n 3 postgresql/log/postgresql-Tue.csv | cut -c1-200
+2026-11-17 02:22:49.652 UTC,,,3758,"172.18.0.1:40488",6afbba79.eae,1,"",2026-11-17 02:22:49 UTC,,0,LOG,00000,"connection received: host=172.18.0.1 port=40488",,,,,,,,,"","not initialized",,0
+2026-11-17 02:22:49.658 UTC,"tour_admin","tour",3758,"172.18.0.1:40488",6afbba79.eae,2,"authentication",2026-11-17 02:22:49 UTC,3/337,0,LOG,00000,"connection authenticated: identity=""tour_admin"" met
+2026-11-17 02:22:49.659 UTC,"tour_admin","tour",3758,"172.18.0.1:40488",6afbba79.eae,3,"authentication",2026-11-17 02:22:49 UTC,3/303,0,LOG,00000,"connection authorized: user=tour_admin database=tour
+$ cd su-co18 && head -n 1 rt01/logread.txt && sed -n 200p rt01/logread.txt
+Sun Nov 15 00:58:27 2026 kern.warn kernel: [1360084.000665] wg-lan: IN=wg0 OUT=br-lan MAC= SRC=10.8.0.1 DST=10.20.0.20 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=6547 DF PROTO=TCP SPT=51298 DPT=873 WINDOW=64240 RES=0x00 SYN URGP=0
+Mon Nov 16 11:36:10 2026 daemon.info dnsmasq[1432]: forwarded www.youtube.com to 1.1.1.1
+$ cd su-co18 && head -n 1 pc-dev01/security.jsonl | jq -c '{TimeCreated, Id, RecordId, MachineName, Data: (.Data | {TargetUserName, LogonType, IpAddress})}'
+{"TimeCreated":"2026-11-16T01:20:57.0000000Z","Id":4624,"RecordId":183901,"MachineName":"PC-DEV01","Data":{"TargetUserName":"minh","LogonType":"2","IpAddress":"127.0.0.1"}}
+$ cd su-co18 && wc -l vps01/var/log/auth.log* vps01/var/log/syslog* vps01/journal/*.json vps01/var/log/nginx/*.log rt01/logread.txt pc-dev01/security.jsonl | sed -E 's/[0-9a-f]{64}/<id>/g'
+    642 vps01/var/log/auth.log
+    985 vps01/var/log/auth.log.1
+    236 vps01/var/log/syslog
+    210 vps01/var/log/syslog.1
+   2217 vps01/journal/vps01-journal.json
+  10687 vps01/var/log/nginx/access.log
+      1 vps01/var/log/nginx/error.log
+   3328 rt01/logread.txt
+     55 pc-dev01/security.jsonl
+  18361 total

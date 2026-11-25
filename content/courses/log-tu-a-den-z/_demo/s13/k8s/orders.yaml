@@ -1,0 +1,18 @@
+# 13.2 — Deployment "orders" khoẻ (2 bản), đọc log bằng -l / deploy/ / --prefix.
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: orders, namespace: lab13 }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: orders } }
+  template:
+    metadata: { labels: { app: orders } }
+    spec:
+      containers:
+        - name: api
+          image: node:22-alpine
+          imagePullPolicy: Never
+          command: ["node", "/app/app.js"]
+          env: [{ name: DB_URL, value: "postgres://db:5432/shop" }, { name: KEEP_ALIVE, value: "1" }]
+          volumeMounts: [{ name: ma, mountPath: /app }]
+      volumes: [{ name: ma, configMap: { name: ma-c13 } }]

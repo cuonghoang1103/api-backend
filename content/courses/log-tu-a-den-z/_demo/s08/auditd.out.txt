@@ -1,0 +1,189 @@
+$ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y auditd 2>&1 | grep -E '^Setting up (auditd|libauparse)'; auditctl -v 2>/dev/null || sudo auditctl -v
+Setting up libauparse0t64:amd64 (1:3.1.2-2.1ubuntu0.1) ...
+Setting up auditd (1:3.1.2-2.1ubuntu0.1) ...
+auditctl version 3.1.2
+$ sudo auditctl -s
+enabled 1
+failure 1
+pid 18198
+rate_limit 0
+backlog_limit 8192
+lost 1349
+backlog 0
+backlog_wait_time 60000
+backlog_wait_time_actual 0
+loginuid_immutable 0 unlocked
+$ sudo auditctl -l
+No rules
+$ cat s08/50-lab.rules
+## /etc/audit/rules.d/50-lab.rules — quy tắc kiểm toán của lab (nạp bằng: sudo augenrules --load)
+## Theo dõi TỆP: -w <đường> -p <r|w|x|a> -k <khoá để tìm lại>
+-w /etc/passwd -p wa -k identity
+-w /etc/group -p wa -k identity
+-w /etc/shadow -p rwa -k shadow
+-w /etc/sudoers -p wa -k sudoers
+-w /etc/sudoers.d/ -p wa -k sudoers
+-w /etc/ssh/sshd_config -p wa -k sshd_cfg
+## Theo SYSCALL: mọi chương trình do NGƯỜI THẬT chạy (auid >= 1000, đã đăng nhập) — kể cả khi đã sudo lên root
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=unset -k exec_nguoi
+## Ai đụng vào chính bộ kiểm toán
+-w /etc/audit/ -p wa -k audit_cfg
+-w /usr/sbin/auditctl -p x -k audit_tool
+$ sudo cp s08/50-lab.rules /etc/audit/rules.d/ && sudo augenrules --load >/dev/null && sudo auditctl -l
+-w /etc/passwd -p wa -k identity
+-w /etc/group -p wa -k identity
+-w /etc/shadow -p rwa -k shadow
+-w /etc/sudoers -p wa -k sudoers
+-w /etc/sudoers.d -p wa -k sudoers
+-w /etc/ssh/sshd_config -p wa -k sshd_cfg
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F key=exec_nguoi
+-w /etc/audit -p wa -k audit_cfg
+-w /usr/sbin/auditctl -p x -k audit_tool
+$ sshpass -p 'Dev-Lab-2026!' ssh -o StrictHostKeyChecking=no -b 192.168.56.20 dev@192.168.56.10 'cat /etc/shadow; id; uname -r; true'   # ← trên máy keodo
+uid=1002(dev) gid=1002(dev) groups=1002(dev)
+6.8.0-149-generic
+cat: /etc/shadow: Permission denied
+$ sshpass -p 'An-Lab-2026!' ssh -tt -o StrictHostKeyChecking=no -b 192.168.56.20 an@192.168.56.10 "echo 'An-Lab-2026!' | sudo -S -p '' bash -c 'useradd -m -s /bin/bash backup2; echo \"dev ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/dev'; true" 2>&1 | tr -d '\r' | grep -v '^$'   # ← trên máy keodo
+Connection to 192.168.56.10 closed.
+$ sudo grep -E 'key="shadow"' /var/log/audit/audit.log | tail -1
+type=SYSCALL msg=audit(1795472665.510:10329): arch=c000003e syscall=257 success=yes exit=6 a0=ffffff9c a1=7125323d0360 a2=80000 a3=0 items=1 ppid=18472 pid=18473 auid=1000 uid=1000 gid=1000 euid=0 suid=0 fsuid=0 egid=1000 sgid=1000 fsgid=1000 tty=(none) ses=373 comm="sudo" exe="/usr/bin/sudo" subj=unconfined key="shadow"ARCH=x86_64 SYSCALL=openat AUID="hv" UID="hv" GID="hv" EUID="root" SUID="root" FSUID="root" EGID="hv" SGID="hv" FSGID="hv"
+$ sudo grep -A4 "$(sudo grep -E 'key="shadow"' /var/log/audit/audit.log | tail -1 | grep -oE 'audit\([0-9.:]+\)')" /var/log/audit/audit.log | head -5
+type=SYSCALL msg=audit(1795472665.677:10376): arch=c000003e syscall=257 success=yes exit=6 a0=ffffff9c a1=7d59f21d0360 a2=80000 a3=0 items=1 ppid=18502 pid=18503 auid=1000 uid=1000 gid=1000 euid=0 suid=0 fsuid=0 egid=1000 sgid=1000 fsgid=1000 tty=(none) ses=374 comm="sudo" exe="/usr/bin/sudo" subj=unconfined key="shadow"ARCH=x86_64 SYSCALL=openat AUID="hv" UID="hv" GID="hv" EUID="root" SUID="root" FSUID="root" EGID="hv" SGID="hv" FSGID="hv"
+type=CWD msg=audit(1795472665.677:10376): cwd="/home/hv"
+type=PATH msg=audit(1795472665.677:10376): item=0 name="/etc/shadow" inode=3118 dev=fd:01 mode=0100640 ouid=0 ogid=42 rdev=00:00 nametype=NORMAL cap_fp=0 cap_fi=0 cap_fe=0 cap_fver=0 cap_frootid=0OUID="root" OGID="shadow"
+type=PROCTITLE msg=audit(1795472665.677:10376): proctitle=7375646F0067726570002D45006B65793D22736861646F7722002F7661722F6C6F672F61756469742F61756469742E6C6F67
+type=USER_ACCT msg=audit(1795472665.677:10377): pid=18503 uid=1000 auid=1000 ses=374 subj=unconfined msg='op=PAM:accounting grantors=pam_permit acct="hv" exe="/usr/bin/sudo" hostname=? addr=? terminal=? res=success'UID="hv" AUID="hv"
+$ sudo ausearch --input-logs -k shadow -i --just-one 2>/dev/null | head -12
+----
+type=PROCTITLE msg=audit(11/24/26 05:24:23.973:10138) : proctitle=/sbin/auditctl -R /etc/audit/audit.rules 
+type=PATH msg=audit(11/24/26 05:24:23.973:10138) : item=0 name=/etc/ inode=36 dev=fd:01 mode=dir,755 ouid=root ogid=root rdev=00:00 nametype=PARENT cap_fp=none cap_fi=none cap_fe=0 cap_fver=0 cap_frootid=0 
+type=CWD msg=audit(11/24/26 05:24:23.973:10138) : cwd=/home/hv 
+type=SOCKADDR msg=audit(11/24/26 05:24:23.973:10138) : saddr={ saddr_fam=netlink nlnk-fam=16 nlnk-pid=0 } 
+type=SYSCALL msg=audit(11/24/26 05:24:23.973:10138) : arch=x86_64 syscall=sendto success=yes exit=1076 a0=0x3 a1=0x7ffc29c707e0 a2=0x434 a3=0x0 items=1 ppid=18336 pid=18350 auid=hv uid=root gid=root euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=(none) ses=368 comm=auditctl exe=/usr/sbin/auditctl subj=unconfined key=(null) 
+type=CONFIG_CHANGE msg=audit(11/24/26 05:24:23.973:10138) : auid=hv ses=368 subj=unconfined op=add_rule key=shadow list=exit res=yes 
+$ sudo ausearch --input-logs -k shadow --format text 2>/dev/null | tail -2
+At 05:24:25 11/24/26 hv, acting as root, successfully opened-file /etc/shadow using /usr/sbin/sshd
+At 05:24:25 11/24/26 hv successfully opened-file /etc/shadow using /usr/bin/sudo
+$ sudo ausearch --input-logs -k sudoers --format text 2>/dev/null
+At 05:24:23 11/24/26 hv, acting as root, successfully add_rule sudoers using /usr/sbin/auditctl
+At 05:24:23 11/24/26 hv, acting as root, successfully add_rule sudoers using /usr/sbin/auditctl
+At 05:24:25 11/24/26 an, acting as root, successfully opened-file /etc/sudoers.d/dev using bash
+$ sudo ausearch --input-logs -k identity --format text 2>/dev/null | tail -4
+At 05:24:25 11/24/26 an, acting as root, successfully opened-file /etc/passwd using /usr/sbin/useradd
+At 05:24:25 11/24/26 an, acting as root, successfully opened-file /etc/group using /usr/sbin/useradd
+At 05:24:25 11/24/26 an, acting as root, successfully renamed /etc/passwd+ to /etc/passwd using /usr/sbin/useradd
+At 05:24:25 11/24/26 an, acting as root, successfully renamed /etc/group+ to /etc/group using /usr/sbin/useradd
+$ sudo ausearch --input-logs -k exec_nguoi -ua 1001 --format text 2>/dev/null | tail -6
+At 05:24:25 11/24/26 an, acting as root, unsuccessfully executed 
+At 05:24:25 11/24/26 an, acting as root, unsuccessfully executed 
+At 05:24:25 11/24/26 an, acting as root, unsuccessfully executed 
+At 05:24:25 11/24/26 an, acting as root, unsuccessfully executed 
+At 05:24:25 11/24/26 an, acting as root, unsuccessfully executed 
+At 05:24:25 11/24/26 an, acting as root, unsuccessfully executed 
+$ sudo ausearch --input-logs -k exec_nguoi -ua 1001 -i 2>/dev/null | grep -E '^type=SYSCALL' | grep useradd | grep -oE '(auid|uid|euid|exe|comm)=[^ ]+' | tr '\n' ' '; echo
+auid=an uid=root euid=root uid=root uid=root comm=useradd exe=/usr/sbin/useradd auid=an uid=root euid=root uid=root uid=root comm=useradd exe=/usr/sbin/useradd auid=an uid=root euid=root uid=root uid=root comm=useradd exe=/usr/sbin/useradd auid=an uid=root euid=root uid=root uid=root comm=useradd exe=/usr/sbin/useradd auid=an uid=root euid=root uid=root uid=root comm=useradd exe=/usr/sbin/useradd auid=an uid=root euid=root uid=root uid=root comm=useradd exe=/usr/sbin/useradd auid=an uid=root euid=root uid=root uid=root comm=useradd exe=/usr/sbin/useradd auid=an uid=root euid=root uid=root uid=root comm=useradd exe=/usr/sbin/useradd 
+$ sudo aureport --input-logs --summary 2>/dev/null | head -20
+
+Summary Report
+======================
+Range of time in logs: 11/24/26 05:24:23.185 - 11/24/26 05:24:26.708
+Selected time for report: 11/24/26 05:24:23 - 11/24/26 05:24:26.708
+Number of changes in configuration: 16
+Number of changes to accounts, groups, or roles: 3
+Number of logins: 1
+Number of failed logins: 2
+Number of authentications: 3
+Number of failed authentications: 0
+Number of users: 4
+Number of terminals: 9
+Number of host names: 4
+Number of executables: 27
+Number of commands: 37
+Number of files: 55
+Number of AVC's: 0
+Number of MAC events: 0
+Number of failed syscalls: 41
+$ sudo aureport --input-logs -au -i 2>/dev/null | tail -5
+# date time acct host term exe success event
+============================================
+1. 11/24/26 05:24:24 dev 192.168.56.20 ssh /usr/sbin/sshd yes 10161
+2. 11/24/26 05:24:25 an 192.168.56.20 ssh /usr/sbin/sshd yes 10215
+3. 11/24/26 05:24:25 an ? /dev/pts/0 /usr/bin/sudo yes 10265
+$ sudo aureport --input-logs --failed --summary -i 2>/dev/null | head -12
+
+Failed Summary Report
+======================
+Range of time in logs: 11/24/26 05:24:23.185 - 11/24/26 05:24:26.970
+Selected time for report: 11/24/26 05:24:23 - 11/24/26 05:24:26.970
+Number of changes in configuration: 0
+Number of changes to accounts, groups, or roles: 0
+Number of logins: 0
+Number of failed logins: 2
+Number of authentications: 0
+Number of failed authentications: 0
+Number of users: 4
+$ sudo aureport --input-logs -x --summary -i 2>/dev/null | head -12
+
+Executable Summary Report
+=================================
+total  file
+=================================
+161  /usr/sbin/sshd
+153  /usr/bin/sudo
+140  /usr/bin/dash
+56  /usr/bin/env
+43  /usr/bin/uname
+28  /usr/bin/bash
+17  /usr/sbin/useradd
+$ sudo aureport --input-logs -k --summary 2>/dev/null
+
+Key Summary Report
+===========================
+total  key
+===========================
+458  exec_nguoi
+58  shadow
+6  identity
+3  sudoers
+1  sshd_cfg
+1  audit_cfg
+1  audit_tool
+$ sshpass -p 'An-Lab-2026!' ssh -tt -o StrictHostKeyChecking=no -b 192.168.56.20 an@192.168.56.10 "echo 'An-Lab-2026!' | sudo -S -p '' auditctl -e 0; true" 2>&1 | tr -d '\r' | grep -v '^$'   # ← trên máy keodo
+enabled 0
+failure 1
+pid 18198
+rate_limit 0
+backlog_limit 8192
+lost 1349
+backlog 0
+backlog_wait_time 60000
+backlog_wait_time_actual 0
+Connection to 192.168.56.10 closed.
+$ sudo ausearch --input-logs -m CONFIG_CHANGE -i 2>/dev/null | tail -3
+type=SOCKADDR msg=audit(11/24/26 05:24:27.680:10937) : saddr={ saddr_fam=netlink nlnk-fam=16 nlnk-pid=0 } 
+type=SYSCALL msg=audit(11/24/26 05:24:27.680:10937) : arch=x86_64 syscall=sendto success=yes exit=60 a0=0x3 a1=0x7ffdc02a10d0 a2=0x3c a3=0x0 items=0 ppid=18837 pid=18838 auid=an uid=root gid=root euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=pts1 ses=386 comm=auditctl exe=/usr/sbin/auditctl subj=unconfined key=(null) 
+type=CONFIG_CHANGE msg=audit(11/24/26 05:24:27.680:10937) : op=set audit_enabled=0 old=1 auid=an ses=386 subj=unconfined res=yes 
+$ sudo auditctl -e 1 >/dev/null; sudo auditctl -e 2
+enabled 2
+failure 1
+pid 18198
+rate_limit 0
+backlog_limit 8192
+lost 1349
+backlog 0
+backlog_wait_time 60000
+backlog_wait_time_actual 0
+$ sudo auditctl -e 0; sudo auditctl -D; sudo auditctl -w /tmp -p w; echo "exit=$?"
+Error sending enable request (Operation not permitted)
+There was an error while processing parameters
+Error deleting rule (Operation not permitted)
+There was an error while processing parameters
+The audit system is in immutable mode, no rule changes allowed
+exit=1
+$ sudo systemctl stop auditd; systemctl show auditd -p RefuseManualStop
+RefuseManualStop=no
+$ sudo auditctl -s | grep -E '^(enabled|failure|backlog_limit|lost)'
+enabled 2
+failure 1
+backlog_limit 8192
+lost 1349

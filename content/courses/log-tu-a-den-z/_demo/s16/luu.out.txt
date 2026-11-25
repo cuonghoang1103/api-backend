@@ -1,0 +1,45 @@
+$ may 'grep -vE "^#|^$" /etc/logrotate.conf | head -6; echo "--- rsyslog:"; grep -vE "^#|^$" /etc/logrotate.d/rsyslog | head -12'
+weekly
+su root adm
+rotate 4
+create
+include /etc/logrotate.d
+--- rsyslog:
+/var/log/syslog
+/var/log/mail.log
+/var/log/kern.log
+/var/log/auth.log
+/var/log/user.log
+/var/log/cron.log
+{
+	rotate 4
+	weekly
+	missingok
+	notifempty
+	compress
+$ may 'systemd-analyze cat-config systemd/journald.conf | grep -E "^#?(SystemMaxUse|MaxRetentionSec|MaxFileSec)="; journalctl --disk-usage'
+#SystemMaxUse=
+#MaxRetentionSec=
+#MaxFileSec=1month
+Archived and active journals take up 8.0M in the file system.
+$ docker run --rm grafana/loki:3.7.10 -config.file=/etc/loki/local-config.yaml -print-config-stderr -verify-config 2>&1 | grep -E "^\s+(retention_period|retention_enabled|delete_request_store):" | sort -u
+  delete_request_store: ""
+  retention_enabled: false
+  retention_period: 0s
+$ docker create --name lgz-c16-thu alpine >/dev/null; docker inspect -f "{{.HostConfig.LogConfig.Type}} {{.HostConfig.LogConfig.Config}}" lgz-c16-thu; docker rm lgz-c16-thu >/dev/null
+json-file map[max-file:3 max-size:10m]
+$ may 'mkdir -p /var/log/thu; printf "/var/log/thu/app.log {\n  daily\n  rotate 3\n  compress\n  missingok\n  dateext\n  dateformat -%%Y%%m%%d-%%s\n}\n" > /etc/logrotate.d/thu; for ngay in 1 2 3 4 5; do echo "dòng log ngày $ngay" >> /var/log/thu/app.log; logrotate -f /etc/logrotate.d/thu; sleep 1; done; ls /var/log/thu/ | sed "s/-[0-9]\{10\}/-<giây>/"'
+app.log-20261124-<giây>.gz
+app.log-20261124-<giây>.gz
+app.log-20261124-<giây>.gz
+$ may 'for f in /var/log/thu/*.gz; do zcat $f; done'
+dòng log ngày 3
+dòng log ngày 4
+dòng log ngày 5
+$ python3 luu/ke-hoach-luu.py
+loại                    mục đích                        nóng  lạnh  GB nóng  GB lạnh
+debug/trace ứng dụng    gỡ lỗi                            3n    0n      0.8      0.0
+access log web          gỡ lỗi + bảo mật                 30n  335n      5.2     19.3
+auth/sudo/audit         bảo mật, pháp lý (12 tháng)      90n  275n      3.6      3.6
+nhật ký thao tác admin  kiểm toán, hợp đồng              90n  640n      0.9      2.1
+tổng                                                             10.5     25.1   (giữ hết mọi thứ 1 năm ở tầng nóng: 181 GB)

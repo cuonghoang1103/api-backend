@@ -1,0 +1,41 @@
+$ node console.mjs me,warn
+[error  ] (network) Failed to load resource: the server responded with a status of 404 (Not Found)   logo-moi.png
+[error  ] (security) Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'nonce-lab9''. Either the 'unsafe-inline' keyword, a hash ('sha256-2YSpeaLDtTFCe6FQfrtJPiFLY+RhfeoR7AN9PIVAe5Q='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked.   ?kb=me,warn
+[info   ] [boot] Shop Lab 9 v1.4.2 khởi động, kịch bản = me,warn   app.js:27
+[verbose] [boot] cấu hình {API: http://api.lgz.test:41902, coToken: true}   app.js:28
+[info   ] [products] tải 3 sản phẩm   app.js:37
+[error  ] (network) Failed to load resource: the server responded with a status of 401 (Unauthorized)   me
+[error  ] [api] GET /api/me → 401 {"error":"invalid_token"}   app.js:20
+[warning] [cart] giỏ hàng lưu ở localStorage đã cũ 31 ngày, bỏ qua   app.js:44
+$ KHONG_MAP=1 BAM=1 CHO=500 node console.mjs pay | tail -n 5
+[info   ] [cart] thanh toán C-1042   app.min.js:1
+[error  ] Uncaught TypeError: Cannot read properties of undefined (reading 'items')   app.min.js:1
+              at m (app.min.js:1:939)
+              at d (app.min.js:1:1041)
+              at (anonymous) (app.min.js:1:2364)
+$ BAM=1 CHO=500 node console.mjs pay | tail -n 5
+[info   ] [cart] thanh toán C-1042   app.js:12
+[error  ] Uncaught TypeError: Cannot read properties of undefined (reading 'items')   app.js:8
+              at m (app.js:8)
+              at d (app.js:13)
+              at (anonymous) (app.js:45)
+$ CHO=3500 node console.mjs orders,report,reject | grep -v 'Content Security\|logo-moi\|\[boot\]\|products'
+[error  ] (javascript) Access to fetch at 'http://api.lgz.test:41902/api/orders' from origin 'http://shop.lgz.test:41901' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.   ?kb=orders,report,reject
+[error  ] (network) Failed to load resource: net::ERR_FAILED   orders
+[error  ] [orders] không gọi được API: Failed to fetch   app.js:40
+[error  ] (network) Failed to load resource: the server responded with a status of 504 (Gateway Timeout)   report
+[error  ] [api] GET /api/report → 504 {"error":"gateway_timeout"}   app.js:20
+[error  ] (network) Failed to load resource: the server responded with a status of 404 (Not Found)   coupon
+[error  ] [api] GET /api/coupon → 404 {"error":"not_found"}   app.js:20
+[error  ] Uncaught (in promise) TypeError: Cannot read properties of null (reading 'ma')   app.js:48
+              at (anonymous) (app.js:48)
+$ grep '/api/orders' logs/api.log | tail -n 1
+127.0.0.1 - - [2026-11-23T23:32:27.229Z] "GET /api/orders HTTP/1.1" 500 - "http://shop.lgz.test:41901/" "Mozilla/5.0 (X11; Linux x86_64) AppleWeb" rt=0.000 rid=8c044d0d308d5bd2
+$ grep '"/api/orders"' logs/app.log | tail -n 1 | jq -c '{level, reqId, msg}'
+{"level":50,"reqId":"8c044d0d308d5bd2","msg":"TypeError: Cannot read properties of undefined (reading 'userId')"}
+$ head -c 220 public/app.min.js; echo
+(()=>{var s=new Map,w=10;function f(e,t,n,o){return`${e}|${t}|${n}:${o}`}function c(e){return String(e).replace(/eyJ[\w-]+\.[\w-]+\.[\w-]+/g,"[JWT]").replace(/([?&](token|code|password|key)=)[^&\s]+/gi,"$1[CHE]").replace
+$ jq -c '{version, sources, names: (.names | length), coNguon: (.sourcesContent | length)}' public/app.min.js.map
+{"version":3,"sources":["../src/bat-loi.js","../src/app.js"],"names":33,"coNguon":2}
+$ curl -s -o /dev/null -w '%{http_code} %{content_type} %{size_download} byte\n' http://127.0.0.1:41901/app.min.js.map
+200 application/json 8239 byte

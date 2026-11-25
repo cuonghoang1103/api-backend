@@ -1,0 +1,78 @@
+$ node net.mjs me,orders,report,slow
+Name          Method  Status                             Type      Initiator    Size    Time  Waterfall
+shop.lgz.test GET     200 OK                             document  other       0.8 kB    2 ms  █
+logo-moi.png  GET     404 Not Found                      image     (index)     0.2 kB    6 ms  █
+app.min.js    GET     200 OK                             script    (index)     3.1 kB    6 ms  █
+rum           POST    204 No Content                     ping      bat-loi.js:27  0.1 kB    3 ms  █
+csp           POST    204 No Content                     other     (index)     0.1 kB    2 ms  █
+products      GET     200 OK                             fetch     app.js:18   0.5 kB    5 ms  █
+products      OPTIONS 204 No Content                     other     Preflight   0.0 kB    3 ms  █
+me            GET     401 Unauthorized                   fetch     app.js:18   0.5 kB    3 ms  █
+me            OPTIONS 204 No Content                     other     Preflight   0.0 kB    1 ms  █
+orders        GET     CORS error                         fetch     app.js:18        -    3 ms  █
+orders        OPTIONS 204 No Content                     other     Preflight   0.0 kB    1 ms  █
+report        GET     504 Gateway Timeout                fetch     app.js:18   0.4 kB 2005 ms  █████████████████████
+report        OPTIONS 204 No Content                     other     Preflight   0.0 kB    1 ms  █
+slow          GET     200 OK                             fetch     app.js:18   0.4 kB  802 ms                        ████████
+slow          OPTIONS 204 No Content                     other     Preflight   0.0 kB    1 ms                        █
+$ curl -sk -o /dev/null --resolve bank.lgz.test:41903:127.0.0.1 -w 'dns=%{time_namelookup} tcp=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} tong=%{time_total} (giây)\n' https://bank.lgz.test:41903/
+dns=0.000012 tcp=0.000136 tls=0.003219 ttfb=0.003731 tong=0.003751 (giây)
+$ CHI_TIET=/api/slow node net.mjs slow | sed -n '/──/,$p'
+── GET http://api.lgz.test:41902/api/slow
+   Waiting for server response (TTFB)     801 ms
+   Content Download                         1 ms
+   Kết nối mới? có (TCP vừa mở)   remote: 127.0.0.1:41902
+   Request headers:
+     Accept: */*
+     Accept-Encoding: gzip, deflate
+     Accept-Language: vi-VN
+     Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdi5sYWI5QGV4YW1wbGUuY29tIiwiZXhwIjoxNzk1MzkyMDAwfQ.GIA_TOKEN·VIDU_chu_ky
+     Connection: keep-alive
+     Host: api.lgz.test:41902
+     Origin: http://shop.lgz.test:41901
+     Referer: http://shop.lgz.test:41901/
+     User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36
+   Response headers:
+     Transfer-Encoding: chunked
+     X-Request-Id: 470d1e8c1bfc56d5
+     Access-Control-Expose-Headers: X-Request-Id
+     Connection: keep-alive
+     Access-Control-Allow-Credentials: true
+     Access-Control-Allow-Origin: http://shop.lgz.test:41901
+     Keep-Alive: timeout=5
+     Date: Mon, 23 Nov 2026 23:32:35 GMT
+     Content-Type: application/json
+     Access-Control-Allow-Headers: Authorization, Content-Type
+$ CURL=/api/me node net.mjs me | sed -n '/Copy as cURL/,$p'
+── Copy as cURL (bash):
+curl 'http://api.lgz.test:41902/api/me' \
+  -H 'Accept: */*' \
+  -H 'Accept-Language: vi-VN' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdi5sYWI5QGV4YW1wbGUuY29tIiwiZXhwIjoxNzk1MzkyMDAwfQ.GIA_TOKEN·VIDU_chu_ky' \
+  -H 'Origin: http://shop.lgz.test:41901' \
+  -H 'Referer: http://shop.lgz.test:41901/' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36'
+$ node -e "import('./mo.mjs').then((m) => console.log(m.TOKEN_CU))" > token-cu.txt; cut -d. -f2 token-cu.txt | base64 -d 2>/dev/null; echo
+{"sub":"sv.lab9@example.com","exp":1795392000}
+$ curl -si --resolve api.lgz.test:41902:127.0.0.1 http://api.lgz.test:41902/api/me -H "Authorization: Bearer $(cat token-cu.txt)" -H 'Origin: http://shop.lgz.test:41901'
+HTTP/1.1 401 Unauthorized
+X-Request-Id: 170b7b64b5760e80
+WWW-Authenticate: Bearer error="invalid_token", error_description="The access token expired"
+Access-Control-Allow-Origin: http://shop.lgz.test:41901
+Access-Control-Allow-Headers: Authorization, Content-Type
+Access-Control-Expose-Headers: X-Request-Id
+Access-Control-Allow-Credentials: true
+Content-Type: application/json
+Date: Mon, 23 Nov 2026 23:32:42 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"error":"invalid_token"}
+$ RID=$(curl -si --resolve api.lgz.test:41902:127.0.0.1 http://api.lgz.test:41902/api/me -H "Authorization: Bearer $(cat token-cu.txt)" | grep -i '^x-request-id' | tr -d '\r' | cut -d' ' -f2); echo "rid=$RID"; grep -h "$RID" logs/api.log logs/app.log
+rid=263df69bb100b7e2
+127.0.0.1 - - [2026-11-23T23:32:42.434Z] "GET /api/me HTTP/1.1" 401 - "-" "curl/8.18.0" rt=0.000 rid=263df69bb100b7e2
+{"level":40,"time":1795476762434,"reqId":"263df69bb100b7e2","msg":"token hết hạn","path":"/api/me"}
+$ grep '/api/report' logs/api.log | tail -n 1; grep '"/api/report"' logs/app.log | tail -n 1 | jq -r .msg
+127.0.0.1 - - [2026-11-23T23:32:33.436Z] "GET /api/report HTTP/1.1" 504 - "http://shop.lgz.test:41901/" "Mozilla/5.0 (X11; Linux x86_64) AppleWeb" rt=2.003 rid=c373f9c50df84bf6
+upstream timed out (2000 ms) calling report-svc 127.0.0.1:41904

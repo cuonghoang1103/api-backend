@@ -1,0 +1,6 @@
+$ sudo ausearch --input-logs -f thu-khi-auditd-tat --format text
+At 05:25:08 11/24/26 hv, acting as root, successfully deleted /etc/sudoers.d/thu-khi-auditd-tat using /usr/bin/rm
+$ sudo journalctl -k -q --no-pager -o cat --since "-10min" | grep -E "kauditd_printk_skb" | head -3
+kauditd_printk_skb: 74 callbacks suppressed
+kauditd_printk_skb: 45 callbacks suppressed
+kauditd_printk_skb: 206 callbacks suppressed

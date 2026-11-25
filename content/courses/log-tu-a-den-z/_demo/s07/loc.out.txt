@@ -1,0 +1,143 @@
+$ journalctl --list-boots
+IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY
+ -3 0d099d528cf8468ca02a170f8e0f5b27 Tue 2026-11-24 04:07:42 +07 Tue 2026-11-24 04:09:53 +07
+ -2 8e9dd18ad4674e15a1c5bf5128fad52b Tue 2026-11-24 04:10:24 +07 Tue 2026-11-24 04:10:57 +07
+ -1 af99b13c75cd45d2b3a439b2563c598d Tue 2026-11-24 04:11:05 +07 Tue 2026-11-24 04:12:50 +07
+  0 76d1fcc4629949cca375d6dda1b59a50 Tue 2026-11-24 04:12:53 +07 Tue 2026-11-24 04:18:15 +07
+$ journalctl -b -1 -n 6 --no-pager
+Nov 24 04:12:50 lab7 systemd[1]: Reached target reboot.target - System Reboot.
+Nov 24 04:12:50 lab7 systemd[1]: Shutting down.
+Nov 24 04:12:50 lab7 systemd-shutdown[1]: Syncing filesystems and block devices.
+Nov 24 04:12:50 lab7 systemd-shutdown[1]: Sending SIGTERM to remaining processes...
+Nov 24 04:12:50 lab7 systemd-journald[742]: Received SIGTERM from PID 1 (systemd-shutdow).
+Nov 24 04:12:50 lab7 systemd-journald[742]: Journal stopped
+$ journalctl -b -3 -n 3 --no-pager
+Nov 24 04:09:51 lab7 shop-api[1372]: GET /api/products 200
+Nov 24 04:09:51 lab7 shop-api[1372]: GET /api/orders/1020 200
+Nov 24 04:09:53 lab7 shop-api[1372]: GET /api/products 200
+$ systemctl status shop-worker --no-pager
+× shop-worker.service - Shop email worker (Lab 7)
+     Loaded: loaded (/etc/systemd/system/shop-worker.service; enabled; preset: enabled)
+     Active: failed (Result: exit-code) since Tue 2026-11-24 04:13:03 +07; 5min ago
+   Duration: 89ms
+    Process: 560 ExecStart=/usr/bin/python3 -c import json; cfg = json.load(open('/etc/shop/worker.json')); print(cfg) (code=exited, status=1/FAILURE)
+   Main PID: 560 (code=exited, status=1/FAILURE)
+        CPU: 88ms
+
+Nov 24 04:13:02 lab7 systemd[1]: shop-worker.service: Main process exited, code=exited, status=1/FAILURE
+Nov 24 04:13:02 lab7 systemd[1]: shop-worker.service: Failed with result 'exit-code'.
+Nov 24 04:13:03 lab7 systemd[1]: shop-worker.service: Scheduled restart job, restart counter is at 5.
+Nov 24 04:13:03 lab7 systemd[1]: shop-worker.service: Start request repeated too quickly.
+Nov 24 04:13:03 lab7 systemd[1]: shop-worker.service: Failed with result 'exit-code'.
+Nov 24 04:13:03 lab7 systemd[1]: Failed to start shop-worker.service - Shop email worker (Lab 7).
+$ journalctl -b -u shop-worker --no-pager | head -n 14
+Nov 24 04:12:56 lab7 systemd[1]: Started shop-worker.service - Shop email worker (Lab 7).
+Nov 24 04:12:56 lab7 python3[427]: Traceback (most recent call last):
+Nov 24 04:12:56 lab7 python3[427]:   File "<string>", line 1, in <module>
+Nov 24 04:12:56 lab7 python3[427]: FileNotFoundError: [Errno 2] No such file or directory: '/etc/shop/worker.json'
+Nov 24 04:12:56 lab7 systemd[1]: shop-worker.service: Main process exited, code=exited, status=1/FAILURE
+Nov 24 04:12:56 lab7 systemd[1]: shop-worker.service: Failed with result 'exit-code'.
+Nov 24 04:12:57 lab7 systemd[1]: shop-worker.service: Scheduled restart job, restart counter is at 1.
+Nov 24 04:12:58 lab7 systemd[1]: Started shop-worker.service - Shop email worker (Lab 7).
+Nov 24 04:12:58 lab7 python3[537]: Traceback (most recent call last):
+Nov 24 04:12:58 lab7 python3[537]:   File "<string>", line 1, in <module>
+Nov 24 04:12:58 lab7 python3[537]: FileNotFoundError: [Errno 2] No such file or directory: '/etc/shop/worker.json'
+Nov 24 04:12:58 lab7 systemd[1]: shop-worker.service: Main process exited, code=exited, status=1/FAILURE
+Nov 24 04:12:58 lab7 systemd[1]: shop-worker.service: Failed with result 'exit-code'.
+Nov 24 04:12:59 lab7 systemd[1]: shop-worker.service: Scheduled restart job, restart counter is at 2.
+$ journalctl -b -u shop-worker -p err --no-pager
+Nov 24 04:13:03 lab7 systemd[1]: Failed to start shop-worker.service - Shop email worker (Lab 7).
+$ journalctl -b -p err --no-pager | head -n 8
+Nov 24 04:12:54 lab7 kernel: I/O error, dev fd0, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+Nov 24 04:12:54 lab7 kernel: I/O error, dev fd0, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+Nov 24 04:12:54 lab7 kernel: I/O error, dev fd0, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+Nov 24 04:12:54 lab7 kernel: I/O error, dev fd0, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+Nov 24 04:12:54 lab7 kernel: I/O error, dev fd0, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+Nov 24 04:13:03 lab7 systemd[1]: Failed to start shop-worker.service - Shop email worker (Lab 7).
+Nov 24 04:13:04 lab7 shop-api[424]: order 1005 failed: database timeout after 5000 ms (pool 10/10 busy)
+Nov 24 04:13:10 lab7 shop-api[424]: order 1008 failed: database timeout after 5000 ms (pool 10/10 busy)
+$ journalctl -b -p warning..warning -n 3 --no-pager
+Nov 24 04:14:15 lab7 shop-api[424]: login failed user=admin reason=bad_password
+Nov 24 04:15:35 lab7 shop-api[424]: login failed user=admin reason=bad_password
+Nov 24 04:16:56 lab7 shop-api[424]: login failed user=admin reason=bad_password
+$ journalctl -u shop-api --since '10 min ago' -n 3 --no-pager
+Nov 24 04:18:12 lab7 shop-api[424]: GET /api/orders/1061 200
+Nov 24 04:18:14 lab7 shop-api[424]: GET /api/products 200
+Nov 24 04:18:14 lab7 shop-api[424]: order 1062 failed: database timeout after 5000 ms (pool 10/10 busy)
+$ journalctl -t sudo -n 2 --no-pager
+Nov 24 04:14:18 lab7 sudo[2441]: pam_unix(sudo:session): session opened for user root(uid=0) by hv(uid=1000)
+Nov 24 04:14:18 lab7 sudo[2441]: pam_unix(sudo:session): session closed for user root
+$ journalctl _SYSTEMD_UNIT=shop-api.service PRIORITY=3 -n 2 --no-pager
+Nov 24 04:18:04 lab7 shop-api[424]: order 1057 failed: database timeout after 5000 ms (pool 10/10 busy)
+Nov 24 04:18:14 lab7 shop-api[424]: order 1062 failed: database timeout after 5000 ms (pool 10/10 busy)
+$ journalctl _SYSTEMD_UNIT=shop-api.service _SYSTEMD_UNIT=shop-worker.service -b -p err -n 3 --no-pager
+Nov 24 04:17:28 lab7 shop-api[424]: order 1039 failed: database timeout after 5000 ms (pool 10/10 busy)
+Nov 24 04:18:04 lab7 shop-api[424]: order 1057 failed: database timeout after 5000 ms (pool 10/10 busy)
+Nov 24 04:18:14 lab7 shop-api[424]: order 1062 failed: database timeout after 5000 ms (pool 10/10 busy)
+$ journalctl -b _SYSTEMD_UNIT=shop-worker.service + _SYSTEMD_UNIT=shop-api.service PRIORITY=3 --no-pager | head -n 5
+Nov 24 04:12:56 lab7 python3[427]: Traceback (most recent call last):
+Nov 24 04:12:56 lab7 python3[427]:   File "<string>", line 1, in <module>
+Nov 24 04:12:56 lab7 python3[427]: FileNotFoundError: [Errno 2] No such file or directory: '/etc/shop/worker.json'
+Nov 24 04:12:58 lab7 python3[537]: Traceback (most recent call last):
+Nov 24 04:12:58 lab7 python3[537]:   File "<string>", line 1, in <module>
+$ journalctl -b _SYSTEMD_UNIT=shop-worker.service -n 2 --no-pager
+Nov 24 04:13:02 lab7 python3[560]:   File "<string>", line 1, in <module>
+Nov 24 04:13:02 lab7 python3[560]: FileNotFoundError: [Errno 2] No such file or directory: '/etc/shop/worker.json'
+$ journalctl -b -u shop-worker -n 1 -o verbose --output-fields=UNIT,_SYSTEMD_UNIT,_PID,MESSAGE
+Tue 2026-11-24 04:13:03.277865 +07 [s=7cbcc78059de43d2930efcf8561b1d27;i=15e1;b=76d1fcc4629949cca375d6dda1b59a50;m=ab7db5;t=660f80f30d347;x=f1e351db4430a1bb]
+    UNIT=shop-worker.service
+    _PID=1
+    _SYSTEMD_UNIT=init.scope
+    MESSAGE=Failed to start shop-worker.service - Shop email worker (Lab 7).
+$ journalctl -b -u shop-worker -g FileNotFoundError -n 1 -o json | jq -c '{PRIORITY, _TRANSPORT, MESSAGE}'
+{"PRIORITY":"6","_TRANSPORT":"stdout","MESSAGE":"FileNotFoundError: [Errno 2] No such file or directory: '/etc/shop/worker.json'"}
+$ journalctl -b -q -g 'database timeout' | wc -l
+20
+$ journalctl -b -q -g 'DATABASE TIMEOUT' | wc -l
+0
+$ journalctl -b -q -g 'Database Timeout' --case-sensitive=false | wc -l
+20
+$ journalctl -b -u shop-api -g 'order 10[0-4][0-9] failed' -n 3 --no-pager
+Nov 24 04:17:28 lab7 shop-api[424]: order 1039 failed: database timeout after 5000 ms (pool 10/10 busy)
+Nov 24 04:17:20 lab7 shop-api[424]: order 1035 failed: database timeout after 5000 ms (pool 10/10 busy)
+Nov 24 04:17:18 lab7 shop-api[424]: order 1034 failed: database timeout after 5000 ms (pool 10/10 busy)
+$ timeout 7 journalctl -f -u shop-api
+Nov 24 04:18:08 lab7 shop-api[424]: GET /api/orders/1059 200
+Nov 24 04:18:10 lab7 shop-api[424]: GET /api/products 200
+Nov 24 04:18:10 lab7 shop-api[424]: GET /api/orders/1060 200
+Nov 24 04:18:12 lab7 shop-api[424]: GET /api/products 200
+Nov 24 04:18:12 lab7 shop-api[424]: GET /api/orders/1061 200
+Nov 24 04:18:14 lab7 shop-api[424]: GET /api/products 200
+Nov 24 04:18:14 lab7 shop-api[424]: order 1062 failed: database timeout after 5000 ms (pool 10/10 busy)
+Nov 24 04:18:16 lab7 shop-api[424]: GET /api/products 200
+Nov 24 04:18:16 lab7 shop-api[424]: GET /api/orders/1063 200
+Nov 24 04:18:16 lab7 shop-api[424]: login failed user=admin reason=bad_password
+Nov 24 04:18:18 lab7 shop-api[424]: GET /api/products 200
+Nov 24 04:18:18 lab7 shop-api[424]: GET /api/orders/1064 200
+Nov 24 04:18:20 lab7 shop-api[424]: GET /api/products 200
+Nov 24 04:18:20 lab7 shop-api[424]: GET /api/orders/1065 200
+Nov 24 04:18:22 lab7 shop-api[424]: GET /api/products 200
+Nov 24 04:18:22 lab7 shop-api[424]: GET /api/orders/1066 200
+$ journalctl -r -u shop-api -n 3 --no-pager
+Nov 24 04:18:22 lab7 shop-api[424]: GET /api/orders/1066 200
+Nov 24 04:18:22 lab7 shop-api[424]: GET /api/products 200
+Nov 24 04:18:20 lab7 shop-api[424]: GET /api/orders/1065 200
+$ journalctl -xeu shop-worker --no-pager | tail -n 14
+Nov 24 04:13:03 lab7 systemd[1]: shop-worker.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ The unit shop-worker.service has entered the 'failed' state with result 'exit-code'.
+Nov 24 04:13:03 lab7 systemd[1]: Failed to start shop-worker.service - Shop email worker (Lab 7).
+░░ Subject: A start job for unit shop-worker.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit shop-worker.service has finished with a failure.
+░░ 
+░░ The job identifier is 1159 and the job result is failed.
+$ journalctl _PID=1 -b -n 3 --no-pager
+Nov 24 04:18:24 lab7 systemd[1]: Started session-114.scope - Session 114 of User hv.
+Nov 24 04:18:24 lab7 systemd[1]: session-114.scope: Deactivated successfully.
+Nov 24 04:18:25 lab7 systemd[1]: Started session-115.scope - Session 115 of User hv.

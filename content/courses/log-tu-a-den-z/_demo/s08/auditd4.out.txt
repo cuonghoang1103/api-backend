@@ -1,0 +1,18 @@
+$ ausyscall 257; ausyscall 59
+openat
+execve
+$ echo 7375646F0067726570002D45006B65793D22736861646F7722002F7661722F6C6F672F61756469742F61756469742E6C6F67 | xxd -r -p | tr '\0' ' '; echo
+sudo grep -E key="shadow" /var/log/audit/audit.log
+$ sudo ausearch --input-logs -k shadow --format text 2>/dev/null | awk '{for(i=1;i<=NF;i++) if($i=="using") print $(i+1)}' | sort | uniq -c | sort -rn
+    281 /usr/sbin/sshd
+    115 /usr/bin/sudo
+     42 /usr/lib/systemd/systemd-executor
+      5 /usr/sbin/chpasswd
+      4 /usr/sbin/useradd
+      3 /usr/sbin/usermod
+      2 /usr/sbin/auditctl
+      2 /usr/bin/cat
+      1 frontend
+      1 dpkg-preconfigu
+      1 /usr/bin/passwd
+      1 /usr/bin/chage

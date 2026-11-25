@@ -1,0 +1,11 @@
+$ docker run -d --name lgz-c16-ng --network none -v "$PWD/nginx.conf":/etc/nginx/nginx.conf:ro nginx:1.27-alpine sh -c 'rm /var/log/nginx/*.log; nginx -g "daemon off;"' >/dev/null; sleep 1
+$ docker exec lgz-c16-ng sh -c 'wget -qO- "http://127.0.0.1:8080/reset?email=an%40example.com&token=GIA-reset-9c1e77" >/dev/null; wget -qO- "http://127.0.0.1:8080/oauth/callback?code=GIA-oauth-31f&state=xyz" >/dev/null; wget -qO- "http://127.0.0.1:8080/san-pham?trang=2" >/dev/null'
+$ docker exec lgz-c16-ng cat /var/log/nginx/combined.log
+127.0.0.1 - - [24/Nov/2026:02:56:46 +0000] "GET /reset?email=an%40example.com&token=GIA-reset-9c1e77 HTTP/1.1" 200 3 "-" "Wget"
+127.0.0.1 - - [24/Nov/2026:02:56:46 +0000] "GET /oauth/callback?code=GIA-oauth-31f&state=xyz HTTP/1.1" 200 3 "-" "Wget"
+127.0.0.1 - - [24/Nov/2026:02:56:46 +0000] "GET /san-pham?trang=2 HTTP/1.1" 200 3 "-" "Wget"
+$ docker exec lgz-c16-ng cat /var/log/nginx/che.log
+127.0.0.1 - - [24/Nov/2026:02:56:46 +0000] "GET /reset?email=an%40example.com&token=[CHE] HTTP/1.1" 200 3 "-" "Wget"
+127.0.0.1 - - [24/Nov/2026:02:56:46 +0000] "GET /oauth/callback?code=[CHE]&state=xyz HTTP/1.1" 200 3 "-" "Wget"
+127.0.0.1 - - [24/Nov/2026:02:56:46 +0000] "GET /san-pham?trang=2 HTTP/1.1" 200 3 "-" "Wget"
+$ docker rm -f lgz-c16-ng >/dev/null

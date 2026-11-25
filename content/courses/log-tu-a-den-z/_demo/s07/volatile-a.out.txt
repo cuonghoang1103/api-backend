@@ -1,0 +1,12 @@
+$ sudo mkdir -p /etc/systemd/journald.conf.d
+$ printf '[Journal]\nStorage=volatile\n' | sudo tee /etc/systemd/journald.conf.d/50-thu-volatile.conf
+[Journal]
+Storage=volatile
+$ sudo systemctl restart systemd-journald
+$ sudo journalctl --disk-usage
+Archived and active journals take up 34.4M in the file system.
+$ sudo ls /run/log/journal/
+595503c52a37410aae2b32f4ffddfa26
+$ logger -t thu 'GHI-TRUOC-KHI-KHOI-DONG-LAI'
+$ sudo journalctl -t thu -n 1
+Nov 24 04:10:57 lab7 thu[865]: GHI-TRUOC-KHI-KHOI-DONG-LAI

@@ -1,0 +1,13 @@
+## /etc/audit/rules.d/50-lab.rules — quy tắc kiểm toán của lab (nạp bằng: sudo augenrules --load)
+## Theo dõi TỆP: -w <đường> -p <r|w|x|a> -k <khoá để tìm lại>
+-w /etc/passwd -p wa -k identity
+-w /etc/group -p wa -k identity
+-w /etc/shadow -p rwa -k shadow
+-w /etc/sudoers -p wa -k sudoers
+-w /etc/sudoers.d/ -p wa -k sudoers
+-w /etc/ssh/sshd_config -p wa -k sshd_cfg
+## Theo SYSCALL: mọi chương trình do NGƯỜI THẬT chạy (auid >= 1000, đã đăng nhập) — kể cả khi đã sudo lên root
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=unset -k exec_nguoi
+## Ai đụng vào chính bộ kiểm toán
+-w /etc/audit/ -p wa -k audit_cfg
+-w /usr/sbin/auditctl -p x -k audit_tool

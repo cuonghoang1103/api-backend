@@ -1,0 +1,7 @@
+[Unit]
+Description=Chạy báo cáo log lúc 07:30 mỗi ngày
+[Timer]
+OnCalendar=*-*-* 07:30:00
+Persistent=true
+[Install]
+WantedBy=timers.target

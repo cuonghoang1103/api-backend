@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- logback-lab.xml — cấu hình Logback "đi làm" của Chương 10 (bật bằng tham số logging.config=classpath:logback-lab.xml).
+     Ở dự án thật đặt tên logback-spring.xml thì Spring Boot tự nạp. -->
+<configuration>
+  <property name="LOG_DIR" value="${LOG_DIR:-logs}"/>
+
+  <!-- 1) Màn hình: ngắn gọn, có requestId từ MDC -->
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} %-5level [%thread] [rid=%X{requestId:-}] %logger{20} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- 2) Tệp văn bản xoay vòng: theo NGÀY và theo DUNG LƯỢNG, giữ 14 ngày, tổng tối đa 100KB (lab; thật: vài GB) -->
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_DIR}/shop.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_DIR}/shop.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+      <maxFileSize>20KB</maxFileSize>
+      <maxHistory>14</maxHistory>
+      <totalSizeCap>100KB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level [%thread] [rid=%X{requestId:-}] %logger - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- 3) Tệp JSON cho máy đọc (Loki/ELK — Chương 15): mỗi sự kiện một dòng, MDC thành trường riêng -->
+  <appender name="JSON" class="ch.qos.logback.core.FileAppender">
+    <file>${LOG_DIR}/shop.json</file>
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+  </appender>
+
+  <!-- Bẫy additivity: logger con có appender riêng VÀ vẫn đẩy lên root ⇒ mỗi dòng in 2 lần trên màn hình.
+       Sửa: additivity="false" (chạy với -DADDITIVITY=false để thấy khác biệt) -->
+  <logger name="vn.lab.shop.MailService" level="INFO" additivity="${ADDITIVITY:-true}">
+    <appender-ref ref="CONSOLE"/>
+  </logger>
+
+  <!-- Mức theo package: thư viện ồn thì nâng lên WARN -->
+  <logger name="org.apache.catalina" level="WARN"/>
+
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="FILE"/>
+    <appender-ref ref="JSON"/>
+  </root>
+</configuration>

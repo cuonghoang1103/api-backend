@@ -1,0 +1,14 @@
+# Lab nhỏ 13.1 — hai dịch vụ ghi log cùng lúc để thấy compose logs trộn dòng.
+name: lgz-c13
+services:
+  api:
+    image: node:22-alpine
+    init: true
+    environment: { DB_URL: "postgres://db:5432/shop" }
+    volumes: ["./app.js:/app/app.js:ro"]
+    command: ["node", "/app/app.js"]
+  worker:
+    image: lgz-lab:1
+    environment: { PYTHONUNBUFFERED: "1" }
+    volumes: ["./dem.py:/w/dem.py:ro"]
+    command: ["python3", "/w/dem.py"]

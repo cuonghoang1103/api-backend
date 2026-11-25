@@ -1,0 +1,65 @@
+PS> Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx -FilterXPath "*[System[EventID=4625] and EventData[Data[@Name='SubStatus']='0xc000006a']]" | Measure-Object | Select-Object -ExpandProperty Count
+57
+PS> Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx -FilterXPath "*[System[EventID=4625] and EventData[Data[@Name='SubStatus']!='0xc000006a']]" | Group-Object { $_.Properties[9].Value } | Format-Table Count, Name -AutoSize
+Count Name
+----- ----
+   73 0xc0000064
+PS> Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx -FilterXPath "*[System[EventID=4624 and Computer='slad3.saclink.csus.edu']]" | Measure-Object | Select-Object -ExpandProperty Count
+61
+PS> Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx -FilterXPath "*[System[EventID=4624]]" | Group-Object { $_.Properties[8].Value } | Sort-Object Count -Descending | Format-Table Count, @{n='LogonType'; e={$_.Name}} -AutoSize
+Count LogonType
+----- ---------
+  429 3
+PS> Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx -FilterXPath "*[System[TimeCreated[timediff(@SystemTime) <= 600000]]]" -Now ([datetime]'2019-11-09 00:01:30') | Format-Table TimeCreated, Id, ProviderName -AutoSize
+TimeCreated           Id ProviderName
+-----------           -- ------------
+11/9/2019 12:01:08 AM 16 Microsoft-Windows-Kernel-General
+PS> Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx -FilterXPath "*[EventData[Data[@Name='TargetUserName' and contains(., 'admin')]]]"
+Get-WinEventMau: [mô phỏng Get-WinEvent] The specified query is invalid — XPath của Event Log chỉ là tập con XPath 1.0: không có contains(), starts-with()…
+PS> $q = '<QueryList><Query Id="0"><Select Path="Security">*[System[EventID=4624 or EventID=4625]]</Select><Suppress Path="Security">*[EventData[Data[@Name="SubStatus"]="0xc0000064"]]</Suppress></Query></QueryList>'; Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx -FilterXml $q | Group-Object Id, { $_.Properties[5].Value } | Sort-Object Count -Descending | Select-Object -First 6 Count, Name | Format-Table -AutoSize
+Count Name
+----- ----
+   56 4625, CTX-WS16-FS-T3$
+   36 4624, univ-svc-servicenow
+   34 4624, univ-svc-idm
+   21 4624, LIB-3-GPST013SD$
+   21 4624, IRT-DA-CATDVLPR$
+   20 4624, ABA-GK9VMN2$
+PS> $q = '<QueryList><Query Id="0"><Select Path="Security">*[System[(EventID=4728 or EventID=4732 or EventID=4756)]]</Select><Select Path="Security">*[System[EventID=4720 or EventID=4738]]</Select></Query></QueryList>'; Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx -FilterXml $q -Oldest | Format-Table TimeCreated, Id, MachineName -AutoSize
+TimeCreated             Id MachineName
+-----------             -- -----------
+11/8/2019 11:20:55 PM 4756 slad1.saclink.csus.edu
+11/8/2019 11:20:55 PM 4756 slad1.saclink.csus.edu
+11/8/2019 11:20:55 PM 4728 slad1.saclink.csus.edu
+11/8/2019 11:20:55 PM 4728 slad1.saclink.csus.edu
+11/8/2019 11:20:55 PM 4728 slad1.saclink.csus.edu
+11/8/2019 11:20:55 PM 4728 slad1.saclink.csus.edu
+11/8/2019 11:21:09 PM 4720 slad1.saclink.csus.edu
+11/8/2019 11:21:09 PM 4738 slad1.saclink.csus.edu
+11/8/2019 11:21:09 PM 4738 slad1.saclink.csus.edu
+11/8/2019 11:21:09 PM 4738 slad1.saclink.csus.edu
+11/8/2019 11:21:09 PM 4738 slad1.saclink.csus.edu
+11/8/2019 11:21:09 PM 4738 slad1.saclink.csus.edu
+11/8/2019 11:21:11 PM 4756 slad1.saclink.csus.edu
+11/8/2019 11:21:11 PM 4728 slad1.saclink.csus.edu
+11/8/2019 11:21:11 PM 4728 slad1.saclink.csus.edu
+11/8/2019 11:21:11 PM 4756 slad1.saclink.csus.edu
+11/8/2019 11:21:11 PM 4728 slad1.saclink.csus.edu
+11/8/2019 11:21:11 PM 4728 slad1.saclink.csus.edu
+PS> function ConvertFrom-EventData { process { $o = [ordered]@{ Luc = $_.TimeCreated; Id = $_.Id; May = $_.MachineName }; foreach ($d in ([xml]$_.ToXml()).Event.EventData.Data) { $o[$d.Name] = $d.'#text' }; [pscustomobject]$o } }; Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx -FilterXPath "*[System[EventID=4728 or EventID=4756]]" -Oldest | ConvertFrom-EventData | Format-Table Luc, Id, SubjectUserName, MemberName, TargetUserName -AutoSize
+Luc                     Id SubjectUserName MemberName                                                    TargetUserName
+---                     -- --------------- ----------                                                    --------------
+11/8/2019 11:20:55 PM 4756 univ-svc-idm    CN=madilynloughlin,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu univ-all
+11/8/2019 11:20:55 PM 4756 univ-svc-idm    CN=madilynloughlin,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu univ-studentapplicant-all
+11/8/2019 11:20:55 PM 4728 univ-svc-idm    CN=madilynloughlin,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu univ-idm-pw-exp2
+11/8/2019 11:20:55 PM 4728 univ-svc-idm    CN=madilynloughlin,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu univ-person-all
+11/8/2019 11:20:55 PM 4728 univ-svc-idm    CN=madilynloughlin,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu univ-idm-pw-lock1
+11/8/2019 11:20:55 PM 4728 univ-svc-idm    CN=madilynloughlin,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu univ-official-all
+11/8/2019 11:21:11 PM 4756 univ-svc-idm    CN=justinwalberg,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu   univ-studentapplicant-all
+11/8/2019 11:21:11 PM 4728 univ-svc-idm    CN=justinwalberg,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu   univ-official-all
+11/8/2019 11:21:11 PM 4728 univ-svc-idm    CN=justinwalberg,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu   univ-idm-pw-lock1
+11/8/2019 11:21:11 PM 4756 univ-svc-idm    CN=justinwalberg,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu   univ-all
+11/8/2019 11:21:11 PM 4728 univ-svc-idm    CN=justinwalberg,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu   univ-idm-pw-exp2
+11/8/2019 11:21:11 PM 4728 univ-svc-idm    CN=justinwalberg,OU=users,OU=univ,DC=saclink,DC=csus,DC=edu   univ-person-all
+PS> (Get-WinEventMau tc/smb-doan-mk-4625.evtx -FilterXPath "Event/System[EventID=4625]").Count
+3561

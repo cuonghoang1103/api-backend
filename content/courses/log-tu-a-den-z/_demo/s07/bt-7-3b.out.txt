@@ -1,0 +1,17 @@
+$ systemctl --version | head -n 1
+systemd 255 (255.4-1ubuntu8.19)
+$ journalctl -F SYSLOG_IDENTIFIER | sort | tr '\n' ' '; echo
+kiem-dia q4-blob sshd sudo systemd systemd-journald systemd-update-utmp usermod 
+$ journalctl -u ssh -F SYSLOG_IDENTIFIER | sort | tr '\n' ' '; echo
+kiem-dia q4-blob sshd sudo systemd systemd-journald systemd-update-utmp usermod 
+$ journalctl _SYSTEMD_UNIT=ssh.service -F SYSLOG_IDENTIFIER | sort | tr '\n' ' '; echo
+
+Extraneous arguments starting with '_SYSTEMD_UNIT=ssh.service'
+$ journalctl -p crit -F SYSLOG_IDENTIFIER | sort | tr '\n' ' '; echo
+kiem-dia q4-blob sshd sudo systemd systemd-journald systemd-update-utmp usermod 
+$ journalctl -p crit -o json | jq -r '.SYSLOG_IDENTIFIER' | sort -u
+kiem-dia
+$ journalctl -u ssh -o json | jq -r '.SYSLOG_IDENTIFIER' | sort -u | tr '\n' ' '; echo
+sshd systemd 
+$ journalctl -t kiem-dia -o json --output-fields=_SYSTEMD_UNIT,_TRANSPORT,PRIORITY | jq -c '{_SYSTEMD_UNIT,_TRANSPORT,PRIORITY}'
+{"_SYSTEMD_UNIT":"init.scope","_TRANSPORT":"syslog","PRIORITY":"2"}

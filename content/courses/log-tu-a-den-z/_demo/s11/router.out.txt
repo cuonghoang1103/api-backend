@@ -1,0 +1,99 @@
+$ grep DESCRIPTION /etc/openwrt_release; uptime   # ← trên router wrt-nha
+DISTRIB_DESCRIPTION='OpenWrt 25.12.6 r33311-981c978eff'
+ 11:54:20 up 0 min,  load average: 0.05, 0.01, 0.00
+$ logread | wc -l; logread | head -n 3   # ← trên router wrt-nha
+677
+Tue Nov 24 11:53:51 2026 kern.notice kernel: [    0.000000] Linux version 6.12.112 (builder@buildhost) (x86_64-openwrt-linux-musl-gcc (OpenWrt GCC 14.3.0 r33311-981c978eff) 14.3.0, GNU ld (GNU Binutils) 2.44) #0 SMP Sat Oct 17 21:45:38 2026
+Tue Nov 24 11:53:51 2026 kern.info kernel: [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz root=PARTUUID=011cbbbd-02 rootwait console=tty1 console=ttyS0,115200n8 noinitrd
+Tue Nov 24 11:53:51 2026 kern.info kernel: [    0.000000] BIOS-provided physical RAM map:
+$ logread -e dnsmasq-dhcp | tail -n 4   # ← trên router wrt-nha
+Tue Nov 24 11:54:23 2026 daemon.info dnsmasq-dhcp[1]: read /etc/ethers - 0 addresses
+Tue Nov 24 11:54:24 2026 daemon.info dnsmasq-dhcp[1]: DHCPREQUEST(br-lan) 192.168.56.142 52:54:00:56:00:42
+Tue Nov 24 11:54:24 2026 daemon.info dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.56.142 52:54:00:56:00:42 android-7f3a
+Tue Nov 24 11:54:24 2026 daemon.info dnsmasq-dhcp[1]: read /etc/ethers - 0 addresses
+$ cat /tmp/dhcp.leases   # ← trên router wrt-nha
+1795539264 52:54:00:56:00:42 192.168.56.142 android-7f3a ff:b5:5e:67:ff:00:02:00:00:ab:11:96:6b:40:3f:46:31:89:61
+1795539263 52:54:00:56:00:77 192.168.56.177 LAPTOP-AN 01:52:54:00:56:00:77
+$ awk '{ print strftime("%Y-%m-%d %H:%M:%S", $1), $2, $3, $4 }' /tmp/dhcp.leases   # ← trên router wrt-nha
+2026-11-24 23:54:24 52:54:00:56:00:42 192.168.56.142 android-7f3a
+2026-11-24 23:54:23 52:54:00:56:00:77 192.168.56.177 LAPTOP-AN
+$ ip neigh show dev br-lan | grep -v FAILED   # ← trên router wrt-nha
+192.168.56.177 lladdr 52:54:00:56:00:77 ref 1 used 0/0/0 probes 1 REACHABLE
+192.168.56.10 lladdr 52:54:00:56:00:10 ref 1 used 0/0/0 probes 4 REACHABLE
+192.168.56.142 lladdr 52:54:00:56:00:42 ref 1 used 0/0/0 probes 1 REACHABLE
+fe80::5054:ff:fe56:42 lladdr 52:54:00:56:00:42 ref 1 used 0/0/0 probes 4 REACHABLE
+fe80::9e85:e7d1:6dca:6bd lladdr 52:54:00:56:00:77 used 0/0/0 probes 1 STALE
+fd94:cd0f:2bc2::177 lladdr 52:54:00:56:00:77 ref 1 used 0/0/0 probes 1 DELAY
+$ logread -e hostapd | tail -n 4   # ← trên router wrt-nha
+Tue Nov 24 11:53:53 2026 daemon.notice hostapd: phy0-ap0: AP-STA-CONNECTED a6:3c:91:7e:22:5b auth_alg=open
+Tue Nov 24 11:53:53 2026 daemon.info hostapd: phy0-ap0: STA a6:3c:91:7e:22:5b RADIUS: starting accounting session C6E73AB13361A071
+Tue Nov 24 11:53:53 2026 daemon.info hostapd: phy0-ap0: STA a6:3c:91:7e:22:5b WPA: pairwise key handshake completed (RSN)
+Tue Nov 24 11:53:53 2026 daemon.notice hostapd: phy0-ap0: EAPOL-4WAY-HS-COMPLETED a6:3c:91:7e:22:5b
+$ iw dev phy0-ap0 station dump | grep -E "^Station|connected time|signal:"   # ← trên router wrt-nha
+Station a6:3c:91:7e:22:5b (on phy0-ap0)
+	signal:  	-27 dBm
+	connected time:	38 seconds
+$ logread -e hostapd | tail -n 6   # ← trên router wrt-nha
+Tue Nov 24 11:54:34 2026 daemon.info hostapd: phy0-ap0: STA a6:3c:91:7e:22:5b IEEE 802.11: associated (aid 1)
+Tue Nov 24 11:54:34 2026 daemon.notice hostapd: phy0-ap0: AP-STA-POSSIBLE-PSK-MISMATCH a6:3c:91:7e:22:5b
+Tue Nov 24 11:54:35 2026 daemon.notice hostapd: phy0-ap0: AP-STA-POSSIBLE-PSK-MISMATCH a6:3c:91:7e:22:5b
+Tue Nov 24 11:54:36 2026 daemon.notice hostapd: phy0-ap0: AP-STA-POSSIBLE-PSK-MISMATCH a6:3c:91:7e:22:5b
+Tue Nov 24 11:54:37 2026 daemon.notice hostapd: phy0-ap0: AP-STA-POSSIBLE-PSK-MISMATCH a6:3c:91:7e:22:5b
+Tue Nov 24 11:54:43 2026 daemon.info hostapd: phy0-ap0: STA a6:3c:91:7e:22:5b IEEE 802.11: deauthenticated due to local deauth request
+$ for p in admin 123456 password; do curl -s -o /dev/null -w "%{http_code} " -d "luci_username=root&luci_password=$p" http://192.168.56.1/cgi-bin/luci/; done; echo   # ← trên keodo
+403 403 403
+$ sshpass -p admin ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password root@192.168.56.1 true; echo "mã thoát $?"   # ← trên keodo
+mã thoát 5
+Permission denied, please try again.
+$ logread | grep -E "luci: failed|Bad password|Pubkey auth|Password auth succeeded" | tail -n 6   # ← trên router wrt-nha
+Tue Nov 24 11:54:50 2026 authpriv.warn dispatcher.uc: luci: failed login on / for root from 192.168.56.66
+Tue Nov 24 11:54:50 2026 authpriv.warn dispatcher.uc: luci: failed login on / for root from 192.168.56.66
+Tue Nov 24 11:54:50 2026 authpriv.warn dispatcher.uc: luci: failed login on / for root from 192.168.56.66
+Tue Nov 24 11:54:50 2026 authpriv.warn dropbear[4224]: Bad password attempt for 'root' from 192.168.56.66:46888
+Tue Nov 24 11:54:51 2026 authpriv.warn dropbear[4224]: Bad password attempt for 'root' from 192.168.56.66:46888
+Tue Nov 24 11:54:51 2026 authpriv.notice dropbear[4225]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY from 192.168.56.10:45826
+$ upnpc -u http://192.168.56.1:5000/rootDesc.xml -e game -a 192.168.56.142 2323 2323 TCP | tail -n 1   # ← trên android-7f3a
+external :2323 TCP is redirected to internal 192.168.56.142:2323 (duration=604800)
+$ upnpc -u http://192.168.56.1:5000/rootDesc.xml -e x -a 192.168.56.142 22 22 TCP | tail -n 1   # ← trên android-7f3a
+AddPortMapping(22, 22, 192.168.56.142) failed with code 606 (Action not authorized)
+$ logread -e miniupnpd | grep -E "AddPortMapping|redirecting|not permitted|denied|returned" | tail -n 4   # ← trên router wrt-nha
+Tue Nov 24 11:54:51 2026 daemon.info miniupnpd[3591]: AddPortMapping: ext port 2323 to 192.168.56.142:2323 protocol TCP for: game leaseduration=604800 rhost=
+Tue Nov 24 11:54:51 2026 daemon.info miniupnpd[3591]: redirecting port 2323 to 192.168.56.142:2323 protocol TCP for: game
+Tue Nov 24 11:54:52 2026 daemon.info miniupnpd[3591]: SOAPAction: urn:schemas-upnp-org:service:WANIPConnection:1#AddPortMapping
+Tue Nov 24 11:54:52 2026 daemon.info miniupnpd[3591]: AddPortMapping: ext port 22 to 192.168.56.142:22 protocol TCP for: x leaseduration=604800 rhost=
+$ cat /var/run/miniupnpd.leases; nft list chain inet fw4 upnp_prerouting | grep dport   # ← trên router wrt-nha
+TCP:2323:192.168.56.142:2323:1796100891:game
+		iif "eth1" @nh,72,8 0x6 th dport 2323 dnat ip to 192.168.56.142:2323
+$ cat /etc/rsyslog.d/10-nhan-router.conf
+# /etc/rsyslog.d/10-nhan-router.conf — máy Linux trong nhà NHẬN syslog của router (UDP 514), mỗi thiết bị một tệp
+module(load="imudp")
+template(name="theoThietBi" type="string" string="/var/log/remote/%HOSTNAME%.log")
+ruleset(name="tuThietBiMang") {
+  action(type="omfile" dynaFile="theoThietBi" fileCreateMode="0640" fileGroup="adm")
+  stop
+}
+input(type="imudp" port="514" ruleset="tuThietBiMang")
+$ sudo systemctl restart rsyslog && ss -ulnp | grep ':514 '
+UNCONN 0      0                           0.0.0.0:514       0.0.0.0:*
+UNCONN 0      0                              [::]:514          [::]:*
+$ uci set system.@system[0].log_ip=192.168.56.10; uci set system.@system[0].log_proto=udp; uci commit system; reload_config; sleep 6; logger -t thu-gui "xin chào từ router"   # ← trên router wrt-nha
+$ sudo ls -l /var/log/remote/; sudo tail -n 2 /var/log/remote/wrt-nha.log
+total 4
+-rw-r----- 1 syslog adm 1279 Nov 24 11:54 wrt-nha.log
+2026-11-24T11:54:59+07:00 wrt-nha thu-gui: xin chào từ router
+2026-11-24T11:54:59+07:00 wrt-nha dropbear[4240]: Exit (root) from <192.168.56.10:45860>: Exited normally
+$ logread | wc -l; reboot   # ← trên router wrt-nha
+885
+$ uptime; logread | wc -l; logread | grep -c "xin chào từ router"   # ← trên router wrt-nha
+ 11:55:52 up 0 min,  load average: 0.04, 0.01, 0.00
+642
+0
+$ sudo grep -c "xin chào từ router" /var/log/remote/wrt-nha.log; sudo grep -n -E "xin chào|shutdown|Logread connected" /var/log/remote/wrt-nha.log | cut -c1-150
+1
+1:2026-11-24T11:54:55+07:00 wrt-nha logread[4625]: Logread connected to 192.168.56.10:514 via udp
+12:2026-11-24T11:54:59+07:00 wrt-nha thu-gui: xin chào từ router
+16:2026-11-24T11:55:01+07:00 wrt-nha procd: - shutdown -
+31:2026-11-24T11:55:19+07:00 wrt-nha logread[1394]: Logread connected to 192.168.56.10:514 via udp
+45:2026-11-24T11:55:19+07:00 wrt-nha miniupnpd[2773]: sendto(udp_shutdown=9) to [FF02::C]: Address not available
+46:2026-11-24T11:55:19+07:00 wrt-nha miniupnpd[2773]: sendto(udp_shutdown=9) to [FF05::C]: Address not available
+47:2026-11-24T11:55:19+07:00 wrt-nha miniupnpd[2773]: sendto(udp_shutdown=9) to [FF0E::C]: Address not available

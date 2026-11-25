@@ -1,0 +1,32 @@
+$ grep -m2 '"level":50' logs/app.log | docker exec -i lgz-node node_modules/.bin/pino-pretty --colorize false --ignore req.headers,pid,hostname | head -n 14
+[20:34:33.798] ERROR: inventory call failed
+    service: "shop-api"
+    req: {
+      "id": "54e843c7f3025d4f7f57dbacf67cfaea",
+      "method": "GET",
+      "url": "/api/orders/1007",
+      "remoteAddress": "::ffff:127.0.0.1",
+      "remotePort": 59570
+    }
+    orderId: 1007
+    err: {
+      "type": "TypeError",
+      "message": "fetch failed: connect ECONNREFUSED 127.0.0.1:41999",
+      "stack":
+$ docker exec lgz-node node -e "require('pino')({base: {service: 'shop-api'}}).error({orderId: 1007}, 'inventory call failed')"
+{"level":50,"time":1795466231868,"service":"shop-api","orderId":1007,"msg":"inventory call failed"}
+$ docker exec lgz-node node -e "const w = require('winston'); w.createLogger({format: w.format.combine(w.format.timestamp(), w.format.json()), defaultMeta: {service: 'shop-api'}, transports: [new w.transports.Console()]}).error('inventory call failed', {orderId: 1007})"
+{"level":"error","message":"inventory call failed","orderId":1007,"service":"shop-api","timestamp":"2026-11-23T20:37:11.962Z"}
+$ docker exec lgz-node node app.js 2>&1 | head -n 6
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1941:16)
+$ docker exec lgz-node node -e "fetch('http://10.255.255.1/').catch(e => console.log(e.message, '<-', e.cause.code, e.cause.message))"
+fetch failed <- UND_ERR_CONNECT_TIMEOUT Connect Timeout Error (attempted address: 10.255.255.1:80, timeout: 10000ms)
+$ docker exec lgz-node node -e "fetch('http://127.0.0.1:41999/').catch(e => console.log(e.message, '<-', e.cause.code, e.cause.message))"
+fetch failed <- ECONNREFUSED connect ECONNREFUSED 127.0.0.1:41999
+$ docker exec lgz-node node -e "fetch('http://kho.invalid/').catch(e => console.log(e.message, '<-', e.cause.code, e.cause.message))"
+fetch failed <- ENOTFOUND getaddrinfo ENOTFOUND kho.invalid

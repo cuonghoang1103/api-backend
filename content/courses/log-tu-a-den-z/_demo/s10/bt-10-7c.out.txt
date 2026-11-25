@@ -1,0 +1,11 @@
+$ grep -E 'root|file' logback-bench-debug.xml
+  <appender name="OUT" class="ch.qos.logback.core.FileAppender"><file>/dev/null</file>
+  <root level="DEBUG"><appender-ref ref="OUT"/></root>
+$ docker run --rm --memory 2g --memory-swap 2g --cpus 2 --user "$(id -u):$(id -g)" -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -Dlogback.configurationFile=logback-bench.xml -Dloader.main=vn.lab.shop.LogBench -cp target/shop-1.0.jar org.springframework.boot.loader.launch.PropertiesLauncher
+debug("..." + cart)        :   561.47 ms
+debug("... {}", cart)       :     0.21 ms
+if (isDebugEnabled()) ...   :     0.18 ms
+$ docker run --rm --memory 2g --memory-swap 2g --cpus 2 --user "$(id -u):$(id -g)" -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -Dlogback.configurationFile=logback-bench-debug.xml -Dloader.main=vn.lab.shop.LogBench -cp target/shop-1.0.jar org.springframework.boot.loader.launch.PropertiesLauncher
+debug("..." + cart)        :   870.16 ms
+debug("... {}", cart)       :   838.58 ms
+if (isDebugEnabled()) ...   :   888.75 ms

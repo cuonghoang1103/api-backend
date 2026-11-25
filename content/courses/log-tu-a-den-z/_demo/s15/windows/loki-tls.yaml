@@ -1,0 +1,20 @@
+# Loki nhận log qua HTTPS và BẮT BUỘC chứng chỉ máy khách (mTLS) — máy nào không có chứng chỉ do CA lab ký thì không đẩy được.
+auth_enabled: false
+memberlist: { bind_addr: [127.0.0.1] }
+server:
+  http_listen_port: 3443
+  log_level: warn
+  http_tls_config:
+    cert_file: /tls/may-chu-log.crt
+    key_file: /tls/may-chu-log.key
+    client_auth_type: RequireAndVerifyClientCert
+    client_ca_file: /tls/ca.crt
+common:
+  path_prefix: /loki
+  replication_factor: 1
+  instance_addr: 127.0.0.1
+  ring: { kvstore: { store: inmemory } }
+  storage: { filesystem: { chunks_directory: /loki/chunks, rules_directory: /loki/rules } }
+ingester: { wal: { disk_full_threshold: 0.97 } }
+schema_config:
+  configs: [{ from: 2026-01-01, store: tsdb, object_store: filesystem, schema: v13, index: { prefix: index_, period: 24h } }]

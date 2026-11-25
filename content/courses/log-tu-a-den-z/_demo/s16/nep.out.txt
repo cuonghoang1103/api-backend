@@ -1,0 +1,43 @@
+$ may 'cp /lab/nep/bao-cao-sang.sh /usr/local/sbin/; cp /lab/nep/bao-cao-sang.service /lab/nep/bao-cao-sang.timer /etc/systemd/system/; printf "location /api/thanh-toan { return 502; }\n" > /etc/nginx/default.d-loi.conf; sed -i "s|^\tlocation / {|\tinclude /etc/nginx/default.d-loi.conf;\n\tlocation / {|" /etc/nginx/sites-enabled/default; nginx -t 2>&1 | tail -1; systemctl reload nginx'
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+$ may 'printf "[Unit]\nDescription=Hàng đợi gửi email của shop\n[Service]\nExecStart=/bin/sh -c \"echo không kết nối được SMTP 10.0.0.25:587 >&2; exit 1\"\n" > /etc/systemd/system/shop-mail.service; systemctl daemon-reload; systemctl start shop-mail; systemctl is-failed shop-mail'
+failed
+$ may 'bash /lab/nep/gay-su-kien.sh 3 2 && bao-cao-sang.sh "1 hour ago" > /dev/null && echo "lần chạy đầu: đã lưu số đếm"'
+lần chạy đầu: đã lưu số đếm
+$ may 'sleep 60; bash /lab/nep/gay-su-kien.sh 9 6; bao-cao-sang.sh "1 hour ago"'
+== Báo cáo log may16 — từ 2026-11-24 08:59:16 tới 2026-11-24 09:59:16
+    12  SSH sai mật khẩu
+             12 127.0.0.1
+     2  SSH đăng nhập được
+     2  sudo sai mật khẩu
+              an : PWD=/home/an ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+              an : 1 incorrect password attempt; USER=root ; COMMAND=/usr/bin/true
+              an : PWD=/home/an ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+     2  đổi tài khoản/nhóm
+     1  dịch vụ đang hỏng
+        shop-mail.service
+     7  dòng journal mức warning trở lên
+              6 ssh.service
+              1 init.scope
+     0  OOM / lỗi đĩa (nhân)
+    95  đĩa / đã dùng (%)  ⚠
+    17  /var/log (MB)
+     8  nginx 5xx
+              8 502 /api/thanh-toan
+     1  IP quét (≥20 lần 404)
+            110 127.0.0.1
+== Khác lần trước (20261124-0957):
+       3 → 12     SSH sai mật khẩu
+       1 → 2      SSH đăng nhập được
+       4 → 7      dòng journal mức warning trở lên
+       2 → 8      nginx 5xx
+       1 → 2      sudo sai mật khẩu
+$ may 'systemctl enable --now bao-cao-sang.timer 2>&1 | tail -1; systemctl list-timers bao-cao-sang.timer --no-pager | head -2'
+Created symlink /etc/systemd/system/timers.target.wants/bao-cao-sang.timer → /etc/systemd/system/bao-cao-sang.timer.
+NEXT                        LEFT LAST PASSED UNIT               ACTIVATES
+Wed 2026-11-25 07:30:00 +07  21h -         - bao-cao-sang.timer bao-cao-sang.service
+$ may 'systemctl start bao-cao-sang.service; journalctl -q -u bao-cao-sang.service -o cat --no-pager | head -4'
+Starting bao-cao-sang.service - Báo cáo log buổi sáng...
+== Báo cáo log may16 — từ 2026-11-23 09:59:17 tới 2026-11-24 09:59:17
+    12  SSH sai mật khẩu
+             12 127.0.0.1

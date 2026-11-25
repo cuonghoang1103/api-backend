@@ -1,0 +1,17 @@
+# Kiem-DoPhu.ps1 — "máy này đang GHI những gì?" Đọc log Security, đếm theo Task (= subcategory của Advanced Audit Policy) và kiểm 3 thứ hay bị tắt.
+# Trên Windows (PowerShell admin):  .\Kiem-DoPhu.ps1                      — đọc log Security của chính máy
+# Trên tệp .evtx (mọi hệ điều hành):  .\Kiem-DoPhu.ps1 -Tep C:\lab\security.evtx
+param([string]$Tep, [string]$Bang = (Join-Path $PSScriptRoot 'task-subcategory.tsv'))
+$ten = @{}; Import-Csv $Bang -Delimiter "`t" | ForEach-Object { $ten[[int]$_.Task] = '{0} › {1}' -f $_.Category, $_.Subcategory }
+$doc = if (Get-Command Get-WinEventMau -ErrorAction SilentlyContinue) { 'Get-WinEventMau' } else { 'Get-WinEvent' }
+$ev = if ($Tep) { & $doc -Path $Tep -ErrorAction SilentlyContinue } else { & $doc -LogName Security -MaxEvents 50000 -ErrorAction SilentlyContinue }
+$ev = @($ev | Where-Object LogName -eq 'Security')
+foreach ($may in ($ev | Group-Object MachineName | Sort-Object Count -Descending)) {
+  '== {0}: {1} sự kiện, {2:yyyy-MM-dd} → {3:yyyy-MM-dd}' -f $may.Name, $may.Count, ($may.Group.TimeCreated | Measure-Object -Minimum).Minimum, ($may.Group.TimeCreated | Measure-Object -Maximum).Maximum
+  $may.Group | Where-Object ProviderName -eq 'Microsoft-Windows-Security-Auditing' | Group-Object Task | Sort-Object Count -Descending |
+    ForEach-Object { '  {0,6}  {1,-48} {2}' -f $_.Count, $(if ($ten[[int]$_.Name]) { $ten[[int]$_.Name] } else { "Task $($_.Name)" }), (($_.Group.Id | Sort-Object -Unique) -join ' ') }
+  $p = @($may.Group | Where-Object Id -eq 4688)
+  $cl = @($p | Where-Object { $x = ([xml]$_.ToXml()).Event.EventData.Data | Where-Object Name -eq 'CommandLine'; $x -and $x.'#text' })
+  '  ⇒ 4688 (Process Creation): {0}' -f $(if (-not $p) { 'KHÔNG có — chưa bật audit Process Creation' } elseif (-not $cl) { "$($p.Count) sự kiện nhưng KHÔNG có CommandLine — chưa bật 'Include command line in process creation events'" } else { "$($p.Count) sự kiện, $($cl.Count) có CommandLine" })
+  '  ⇒ 4625 (đăng nhập hỏng): {0}' -f $(if ($may.Group.Id -contains 4625) { 'có' } else { 'KHÔNG có trong khoảng log này (máy không bị dò, hoặc Logon chỉ bật Success)' })
+}

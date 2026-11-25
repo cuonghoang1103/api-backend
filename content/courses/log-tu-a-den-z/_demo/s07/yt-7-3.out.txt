@@ -1,0 +1,21 @@
+$ journalctl -u ssh -n 1 -o json | jq -c 'keys'
+["CODE_FILE","CODE_FUNC","CODE_LINE","INVOCATION_ID","JOB_ID","JOB_RESULT","JOB_TYPE","MESSAGE","MESSAGE_ID","PRIORITY","SYSLOG_FACILITY","SYSLOG_IDENTIFIER","TID","UNIT","_AUDIT_LOGINUID","_AUDIT_SESSION","_BOOT_ID","_CAP_EFFECTIVE","_CMDLINE","_COMM","_GID","_HOSTNAME","_MACHINE_ID","_PID","_RUNTIME_SCOPE","_SELINUX_CONTEXT","_SOURCE_REALTIME_TIMESTAMP","_SYSTEMD_CGROUP","_SYSTEMD_SLICE","_SYSTEMD_UNIT","_TRANSPORT","_UID","__CURSOR","__MONOTONIC_TIMESTAMP","__REALTIME_TIMESTAMP","__SEQNUM","__SEQNUM_ID"]
+$ journalctl -u ssh -o json | jq -r '[(.__REALTIME_TIMESTAMP | tonumber / 1000000 | todate), ._SYSTEMD_UNIT, .MESSAGE] | @csv' | tail -n 3
+"2026-11-24T17:12:25Z","ssh.service","Server listening on 0.0.0.0 port 22."
+"2026-11-24T17:12:25Z","ssh.service","Server listening on :: port 22."
+"2026-11-24T17:12:25Z","init.scope","Started ssh.service - OpenBSD Secure Shell server."
+$ journalctl -b -o json | jq -r '[._COMM, .MESSAGE] | @csv' > /tmp/b.csv; echo "thoát $?"; wc -l < /tmp/b.csv
+jq: error (at <stdin>:81): array ([108,111,10...) is not valid in a csv row
+thoát 0
+86
+$ journalctl -b -o json | jq -r '[._COMM, (.MESSAGE | if type == "array" then implode else . end)] | @csv' | grep -c .
+87
+$ journalctl -b -o json | jq -r 'select(.MESSAGE | strings | test("listening|full"; "i")) | .MESSAGE'
+Listening on ssh.socket - OpenBSD Secure Shell server socket.
+systemd-update-utmp-runlevel.service: Deactivated successfully.
+Server listening on 0.0.0.0 port 22.
+Server listening on :: port 22.
+ssh.service: Deactivated successfully.
+Server listening on 0.0.0.0 port 22.
+Server listening on :: port 22.
+disk /data 97% full

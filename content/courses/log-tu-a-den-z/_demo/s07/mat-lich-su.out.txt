@@ -1,0 +1,7 @@
+$ journalctl --list-boots
+IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY
+  0 76d1fcc4629949cca375d6dda1b59a50 Tue 2026-11-24 04:13:02 +07 Wed 2026-11-25 03:12:37 +07
+$ journalctl --disk-usage
+Archived and active journals take up 57.6M in the file system.
+$ journalctl -u spam -u spam-mac-dinh -u spam-1000 -u lu-mac-dinh -u lu-1000 -q | wc -l
+75236

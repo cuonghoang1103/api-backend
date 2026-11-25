@@ -1,0 +1,16 @@
+# Winlogbeat 9.x trên Windows (C:\Program Files\Winlogbeat\winlogbeat.yml) — MẪU theo tài liệu Elastic, kiểm bằng:
+#   .\winlogbeat.exe test config -c .\winlogbeat.yml     và     .\winlogbeat.exe test output
+winlogbeat.event_logs:
+  - name: Security
+    event_id: 4624, 4625, 4672, 4688, 4720, 4732, 4740, 1102
+    ignore_older: 72h            # lần chạy đầu: đừng đẩy cả năm log cũ
+  - name: System
+    level: critical, error, warning
+  - name: Microsoft-Windows-Sysmon/Operational
+  - name: Microsoft-Windows-PowerShell/Operational
+    event_id: 4104
+output.elasticsearch:
+  hosts: ["https://log.lab15.lan:9200"]
+  username: winlogbeat_writer     # người dùng CHỈ có quyền ghi index winlogbeat-*, không phải elastic
+  password: "${WLB_PASSWORD}"     # để trong keystore: .\winlogbeat.exe keystore add WLB_PASSWORD
+  ssl.certificate_authorities: ['C:\ProgramData\Winlogbeat\ca.crt']

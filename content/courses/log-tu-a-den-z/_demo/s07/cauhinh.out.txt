@@ -1,0 +1,56 @@
+$ journalctl -b -u systemd-journald --no-pager -o cat | head -n 6
+Collecting audit messages is disabled.
+Journal started
+Runtime Journal (/run/log/journal/595503c52a37410aae2b32f4ffddfa26) is 2.4M, max 19.2M, 16.8M free.
+Time spent on flushing to /var/log/journal/595503c52a37410aae2b32f4ffddfa26 is 24.005ms for 598 entries.
+System Journal (/var/log/journal/595503c52a37410aae2b32f4ffddfa26) is 43.0M, max 686.9M, 643.8M free.
+Received client request to flush runtime journal.
+$ systemd-analyze cat-config systemd/journald.conf | grep -E '^#?(Storage|SystemMaxUse|SystemKeepFree|SystemMaxFileSize|MaxRetentionSec|MaxFileSec|RateLimitIntervalSec|RateLimitBurst|SyncIntervalSec|ForwardToSyslog|Seal|Compress)='
+#Storage=auto
+#Compress=yes
+#Seal=yes
+#SyncIntervalSec=5m
+#RateLimitIntervalSec=30s
+#RateLimitBurst=10000
+#SystemMaxUse=
+#SystemKeepFree=
+#SystemMaxFileSize=
+#MaxRetentionSec=
+#MaxFileSec=1month
+#ForwardToSyslog=no
+ForwardToSyslog=yes
+$ sudo mkdir -p /etc/systemd/journald.conf.d
+$ printf '[Journal]\nSystemMaxUse=60M\nSystemMaxFileSize=8M\nMaxRetentionSec=1month\n' | sudo tee /etc/systemd/journald.conf.d/60-gioi-han.conf
+[Journal]
+SystemMaxUse=60M
+SystemMaxFileSize=8M
+MaxRetentionSec=1month
+$ sudo systemctl restart systemd-journald
+$ journalctl -u systemd-journald -n 2 --no-pager -o cat
+Journal started
+System Journal (/var/log/journal/595503c52a37410aae2b32f4ffddfa26) is 39.4M, max 60.0M, 20.5M free.
+$ sudo journalctl --rotate
+$ journalctl --disk-usage
+Archived and active journals take up 40.1M in the file system.
+$ sudo journalctl --vacuum-size=40M
+Deleted archived journal /var/log/journal/595503c52a37410aae2b32f4ffddfa26/system@7cbcc78059de43d2930efcf8561b1d27-0000000000001208-000660f80e95882b.journal (2.8M).
+Vacuuming done, freed 2.8M of archived journals from /var/log/journal/595503c52a37410aae2b32f4ffddfa26.
+Vacuuming done, freed 0B of archived journals from /run/log/journal.
+Vacuuming done, freed 0B of archived journals from /var/log/journal.
+$ sudo journalctl --vacuum-time=7d
+Vacuuming done, freed 0B of archived journals from /run/log/journal.
+Vacuuming done, freed 0B of archived journals from /var/log/journal/595503c52a37410aae2b32f4ffddfa26.
+Vacuuming done, freed 0B of archived journals from /var/log/journal.
+$ journalctl --disk-usage
+Archived and active journals take up 37.2M in the file system.
+$ sudo journalctl --verify 2>&1 | tail -n 3
+PASS: /var/log/journal/595503c52a37410aae2b32f4ffddfa26/user-1000.journal
+PASS: /var/log/journal/595503c52a37410aae2b32f4ffddfa26/system.journal
+PASS: /var/log/journal/595503c52a37410aae2b32f4ffddfa26/user-1000@7cbcc78059de43d2930efcf8561b1d27-00000000000015ae-000660f80f1dba32.journal
+$ sudo journalctl --setup-keys 2>/dev/null | tee ~/fss-key.txt
+74872d-53973d-420fe5-db51f3/1e70d5-35a4e900
+$ sudo systemctl restart systemd-journald
+$ logger -t thu-niem-phong 'dong ghi sau khi bat niem phong'
+$ journalctl -u systemd-journald -n 2 --no-pager -o cat
+Journal started
+System Journal (/var/log/journal/595503c52a37410aae2b32f4ffddfa26) is 37.2M, max 60.0M, 22.7M free.

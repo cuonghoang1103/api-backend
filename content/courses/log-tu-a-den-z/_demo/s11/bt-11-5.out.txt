@@ -1,0 +1,10 @@
+$ tshark -r c11.pcap -Y 'dns.flags.response == 0' -T fields -e frame.number -e dns.qry.name -e dns.qry.type 2>/dev/null
+23	example.com	1
+24	example.com	28
+$ tshark -r c11.pcap -Y 'tcp.flags.syn == 1 && tcp.flags.ack == 0' -T fields -e ip.dst -e tcp.dstport 2>/dev/null | sort | uniq -c
+      1 172.66.147.243	443
+      1 192.168.56.1	8081
+      2 192.168.56.10	80
+$ tshark -r c11.pcap -Y 'http.request' -T fields -e frame.time -e http.request.uri -e http.user_agent 2>/dev/null | cut -c13-
+ 12:20:07.345729000 +07	/	curl/8.5.0
+ 12:20:07.360936000 +07	/khong-co?ma=abc	curl/8.5.0

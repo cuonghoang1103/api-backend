@@ -1,0 +1,14 @@
+# .gitleaks.toml — luật mặc định của gitleaks + 2 luật riêng cho dữ liệu cá nhân Việt Nam (gitleaks không có sẵn)
+[extend]
+useDefault = true
+
+[[rules]]
+id = "cccd-viet-nam"
+description = "Số CCCD 12 chữ số (mã tỉnh 001–096) đứng sau chữ CCCD"
+regex = '''(?i)cccd[^0-9]{0,5}(0[0-9]{2}[0-9]{9})'''
+secretGroup = 1
+
+[[rules]]
+id = "so-the-16"
+description = "Số thẻ 16 chữ số (có thể có dấu cách hoặc gạch)"
+regex = '''\b(?:4[0-9]{3}|5[1-5][0-9]{2})(?:[ -]?[0-9]{4}){3}\b'''

@@ -1,0 +1,12 @@
+$ sudo journalctl -t thu
+-- No entries --
+$ sudo journalctl --list-boots
+IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY
+ -2 0d099d528cf8468ca02a170f8e0f5b27 Tue 2026-11-24 04:07:42 +07 Tue 2026-11-24 04:09:53 +07
+ -1 8e9dd18ad4674e15a1c5bf5128fad52b Tue 2026-11-24 04:10:24 +07 Tue 2026-11-24 04:10:57 +07
+  0 af99b13c75cd45d2b3a439b2563c598d Tue 2026-11-24 04:11:05 +07 Tue 2026-11-24 04:11:19 +07
+$ sudo rm /etc/systemd/journald.conf.d/50-thu-volatile.conf
+$ sudo systemctl restart systemd-journald
+$ sudo journalctl --flush
+$ sudo journalctl --disk-usage
+Archived and active journals take up 37.9M in the file system.

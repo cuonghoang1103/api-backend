@@ -1,0 +1,12 @@
+[Unit]
+# shop-worker: chết ngay vì thiếu /etc/shop/worker.json (lỗi cố ý cho bài 7.2)
+Description=Shop email worker (Lab 7)
+
+[Service]
+User=shop
+ExecStart=/usr/bin/python3 -c "import json; cfg = json.load(open('/etc/shop/worker.json')); print(cfg)"
+Restart=on-failure
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

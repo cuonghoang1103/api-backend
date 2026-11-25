@@ -1,0 +1,20 @@
+# bước	kỹ thuật	tên (ATT&CK v19.2, kiểm 24/11/2026)	chiến thuật	tệp log (trong su-co18/)	mẫu grep -E
+1	T1595.002	Vulnerability Scanning (sqlmap vào /api/tours)	Reconnaissance	vps01/var/log/nginx/access.log	sqlmap
+2	T1110.003	Password Spraying (SSH, 3 IP, 12 tài khoản)	Credential Access	vps01/journal/vps01-journal.json	Failed password.*203\.0\.113\.5[0-2]
+3	T1078.003	Valid Accounts: Local Accounts (deploy)	Initial Access	vps01/journal/vps01-journal.json	Accepted password for deploy
+4	T1133	External Remote Services (SSH mật khẩu mở ra Internet)	Initial Access	vps01/thu-thap/sshd-T.txt	^passwordauthentication yes
+5	T1611	Escape to Host (docker run -v /:/host)	Privilege Escalation	vps01/journal/vps01-journal.json	Started docker-b0a903430d8b
+6	T1053.003	Scheduled Task/Job: Cron	Persistence	vps01/var/log/syslog.1	RELOAD \(/etc/cron.d/apt-compat\)
+7	T1036.005	Match Legitimate Resource Name or Location (apt-compat)	Stealth	vps01/thu-thap/cron.d.txt	apt-compat$
+8	T1105	Ingress Tool Transfer (curl … | sh mỗi 10 phút)	Command and Control	vps01/var/log/syslog	cdn-update\.example\.net
+9	T1018	Remote System Discovery (DNS ngược cả /24)	Discovery	rt01/logread.txt	query\[PTR\].*from 10\.8\.0\.1
+10	T1046	Network Service Discovery (SYN 445/3389/22)	Discovery	rt01/logread.txt	SRC=10\.8\.0\.1 .*DPT=(445|3389|22) 
+11	T1110.001	Password Guessing (SMB vào PC-DEV01)	Credential Access	pc-dev01/security.jsonl	"Id":4625.*10\.8\.0\.1
+12	T1505.003	Web Shell (cache.php)	Persistence	vps01/var/log/nginx/access.log	cache\.php
+13	T1070.006	Timestomp (mtime 02/11, Birth 21/11)	Stealth	vps01/thu-thap/stat.txt	^Modify: 2026-11-02
+14	T1685.006	Clear Linux or Mac System Logs (sed -i auth.log)	Defense Impairment	vps01/thu-thap/stat.txt	Birth: 2026-11-21 23:19
+15	T1552.001	Credentials In Files (.env đọc được bởi mọi người)	Credential Access	vps01/thu-thap/env.txt	-rw-r--r--.*\.env
+16	T1213.006	Data from Information Repositories: Databases (COPY khach_hang)	Collection	vps01/postgresql/log/postgresql-Sat.csv	COPY \(SELECT ho_ten
+17	T1560.001	Archive via Utility (kh.csv.gz)	Collection	vps01/var/log/nginx/access.log	kh\.csv\.gz
+18	T1041	Exfiltration Over C2 Channel (tải qua chính web server)	Exfiltration	vps01/var/log/nginx/access.log	kh\.csv\.gz HTTP/1\.1" 200
+19	T1070.004	File Deletion (kh.csv.gz 404 sau đó)	Stealth	vps01/var/log/nginx/access.log	kh\.csv\.gz HTTP/1\.1" 404

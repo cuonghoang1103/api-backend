@@ -1,0 +1,13 @@
+$ cat iis.ps1
+$f = 'windows/u_ex261120.log'
+$cols = ((Get-Content $f -TotalCount 10 | Where-Object { $_ -like '#Fields:*' }) -replace '^#Fields: ' -split ' ')
+Get-Content $f | Where-Object { $_ -notlike '#*' } |
+  ConvertFrom-Csv -Delimiter ' ' -Header $cols |
+  Where-Object { [int]$_.'sc-status' -ge 500 } |
+  Group-Object 'cs-uri-stem' | Sort-Object Count -Descending | Select-Object Count, Name
+$ pwsh -NoProfile -File iis.ps1
+Count Name
+----- ----
+   13 /portal/report.aspx
+$ pwsh -NoProfile -c "$PSVersionTable.PSVersion.ToString()"
+7.4.2

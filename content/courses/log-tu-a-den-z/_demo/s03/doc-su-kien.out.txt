@@ -1,0 +1,124 @@
+$ evtx-xml mau/dbc-many-events-system.evtx 258
+<Event xmlns="http://schemas.microsoft.com/win/2004/08/events/event">
+  <System>
+    <Provider Name="USER32"/>
+    <EventID Qualifiers="32768">1074</EventID>
+    <Level>4</Level>
+    <Task>0</Task>
+    <Keywords>0x80000000000000</Keywords>
+    <TimeCreated SystemTime="2013-10-23T16:18:09.0000000Z"/>
+    <EventRecordID>258</EventRecordID>
+    <Channel>System</Channel>
+    <Computer>37L4247D28-05</Computer>
+    <Security UserID="S-1-5-18"/>
+  </System>
+  <EventData>
+    <Data>C:\Windows\system32\winlogon.exe (37L4247D28-05)</Data>
+    <Data>WIN-QALA5Q3KJ43</Data>
+    <Data>Operating System: Upgrade (Planned)</Data>
+    <Data>0x80020003</Data>
+    <Data>restart</Data>
+    <Data></Data>
+    <Data>NT AUTHORITY\SYSTEM</Data>
+    <Binary>0300028000000000000000000000000000000000000000000000000000000000</Binary>
+  </EventData>
+</Event>
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object rec -eq 258 | Format-List t,kenh,nguon,id,muc,task,kw,rec,may,sid
+t     : 10/23/2013 4:18:09 PM
+kenh  : System
+nguon : USER32
+id    : 1074
+muc   : Information
+task  : 0
+kw    : 0x80000000000000
+rec   : 258
+may   : 37L4247D28-05
+sid   : S-1-5-18
+$ evtx-xml mau/security.evtx 1288
+<Event xmlns="http://schemas.microsoft.com/win/2004/08/events/event">
+  <System>
+    <Provider Name="Microsoft-Windows-Security-Auditing" Guid="{54849625-5478-4994-a5ba-3e3b0328c30d}"/>
+    <EventID>4624</EventID>
+    <Version>0</Version>
+    <Level>0</Level>
+    <Task>12544</Task>
+    <Opcode>0</Opcode>
+    <Keywords>0x8020000000000000</Keywords>
+    <TimeCreated SystemTime="2016-07-16T22:13:49.9166581Z"/>
+    <EventRecordID>1288</EventRecordID>
+    <Correlation/>
+    <Execution ProcessID="504" ThreadID="3692"/>
+    <Channel>Security</Channel>
+    <Computer>WIN-03DLIIOFRRA</Computer>
+    <Security/>
+  </System>
+  <EventData>
+    <Data Name="SubjectUserSid">S-1-5-18</Data>
+    <Data Name="SubjectUserName">WIN-03DLIIOFRRA$</Data>
+    <Data Name="SubjectDomainName">WORKGROUP</Data>
+    <Data Name="SubjectLogonId">0x3e7</Data>
+    <Data Name="TargetUserSid">S-1-5-21-2603537626-3982775912-406486804-1000</Data>
+    <Data Name="TargetUserName">fsir</Data>
+    <Data Name="TargetDomainName">WIN-03DLIIOFRRA</Data>
+    <Data Name="TargetLogonId">0xa113ac</Data>
+    <Data Name="LogonType">7</Data>
+    <Data Name="LogonProcessName">User32 </Data>
+    <Data Name="AuthenticationPackageName">Negotiate</Data>
+    <Data Name="WorkstationName">WIN-03DLIIOFRRA</Data>
+    <Data Name="LogonGuid">{00000000-0000-0000-0000-000000000000}</Data>
+    <Data Name="TransmittedServices">-</Data>
+    <Data Name="LmPackageName">-</Data>
+    <Data Name="KeyLength">0</Data>
+    <Data Name="ProcessId">0x1c8</Data>
+    <Data Name="ProcessName">C:\Windows\System32\winlogon.exe</Data>
+    <Data Name="IpAddress">127.0.0.1</Data>
+    <Data Name="IpPort">0</Data>
+  </EventData>
+</Event>
+PS> evtx-rec mau/system.evtx | ConvertFrom-Json | Where-Object id -eq 1 | Group-Object nguon | Select-Object Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+    1 Lfsvc
+  208 Microsoft-Windows-Kernel-General
+    2 Microsoft-Windows-Power-Troubleshooter
+PS> evtx-rec mau/dbc-many-events-application.evtx | ConvertFrom-Json | Where-Object id -eq 1000 | Group-Object nguon | Select-Object Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+    1 Application Error
+    1 Interactive Services detection
+  121 Microsoft-Windows-LoadPerf
+   13 VMware Tools
+PS> evtx-rec mau/security.evtx mau/Archive-ForwardedEvents-test.evtx | ConvertFrom-Json | Where-Object kenh -eq 'Security' | Group-Object kw | Sort-Object Count -Descending | Select-Object Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+ 2744 0x8020000000000000
+  130 0x8010000000000000
+   37 0x4020000000000000
+PS> evtx-rec mau/Archive-ForwardedEvents-test.evtx | ConvertFrom-Json | Where-Object id -in 4624,4625 | Group-Object id,kw | Select-Object Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+  429 4624, 0x8020000000000000
+  130 4625, 0x8010000000000000
+$ evtx-xml mau/sysmon.evtx 1742 | sed -n 1,22p
+<Event xmlns="http://schemas.microsoft.com/win/2004/08/events/event">
+  <System>
+    <Provider Name="Microsoft-Windows-Sysmon" Guid="{5770385f-c22a-43e0-bf4c-06f5698ffbd9}"/>
+    <EventID>1</EventID>
+    <Version>5</Version>
+    <Level>4</Level>
+    <Task>1</Task>
+    <Opcode>0</Opcode>
+    <Keywords>0x8000000000000000</Keywords>
+    <TimeCreated SystemTime="2017-12-26T13:10:29.1368792Z"/>
+    <EventRecordID>1742</EventRecordID>
+    <Correlation/>
+    <Execution ProcessID="2284" ThreadID="5252"/>
+    <Channel>Microsoft-Windows-Sysmon/Operational</Channel>
+    <Computer>DESKTOP-2KGM189</Computer>
+    <Security UserID="S-1-5-18"/>
+  </System>
+  <EventData>
+    <Data Name="UtcTime">2017-12-26 13:10:29.134</Data>
+    <Data Name="ProcessGuid">{94f748d5-4a45-5a42-0000-0010d265f20f}</Data>
+    <Data Name="ProcessId">9112</Data>
+    <Data Name="Image">C:\Windows\SysWOW64\PING.EXE</Data>

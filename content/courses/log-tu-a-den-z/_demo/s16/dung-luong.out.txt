@@ -1,0 +1,29 @@
+$ awk '{ b += length($0) + 1 } END { printf "%d dòng, %.0f byte/dòng\n", NR, b/NR }' $GOI/web/access.log; awk '{ b += length($0) + 1 } END { printf "%d dòng, %.0f byte/dòng\n", NR, b/NR }' $GOI/app/app.jsonl
+4105 dòng, 202 byte/dòng
+742 dòng, 206 byte/dòng
+$ python3 -c 'rps=50; dong=1+2; byte=204; ngay=rps*86400*dong*byte/1e9; print(f"{rps} req/s × {dong} dòng × {byte} B = {ngay:.2f} GB/ngày thô, {ngay*30:.0f} GB/30 ngày")'
+50 req/s × 3 dòng × 204 B = 2.64 GB/ngày thô, 79 GB/30 ngày
+$ f=$GOI/web/access.log; t=$(wc -c < $f); g=$(gzip -6 -c $f | wc -c); z=$(zstd -3 -q -c $f | wc -c); echo "thô $t B · gzip -6 $g B ($(( t / g ))×) · zstd -3 $z B ($(( t / z ))×)"
+thô 829422 B · gzip -6 38931 B (21×) · zstd -3 50673 B (16×)
+$ LOG_LEVEL=info node muc-log.mjs | wc -lc
+   1000  158890
+$ LOG_LEVEL=debug node muc-log.mjs | wc -lc
+   5000  962450
+$ docker run -d --name lgz-c16-ng2 --network none -v "$PWD/nginx.conf":/etc/nginx/nginx.conf:ro nginx:1.27-alpine sh -c 'rm /var/log/nginx/*.log; nginx -g "daemon off;"' >/dev/null; sleep 1
+$ docker exec lgz-c16-ng2 sh -c 'for i in $(seq 600); do wget -qO- 127.0.0.1:8080/health >/dev/null; done; for i in $(seq 400); do wget -qO- 127.0.0.1:8080/api/san-pham/$i >/dev/null; done; for i in $(seq 12); do wget -qO- 127.0.0.1:8080/api/loi >/dev/null 2>&1; done; true'
+$ docker exec lgz-c16-ng2 sh -c 'cd /var/log/nginx; wc -l day-du.log gon.log; echo "--- gon.log theo loại:"; awk "{print \$9, (\$7 ~ /health/ ? \"/health\" : \$7 ~ /loi/ ? \"/api/loi\" : \"/api/san-pham\")}" gon.log | sort | uniq -c'
+     1012 day-du.log
+       58 gon.log
+     1070 total
+--- gon.log theo loại:
+     46 200 /api/san-pham
+     12 502 /api/loi
+$ docker rm -f lgz-c16-ng2 >/dev/null
+$ curl -s https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCloudWatch/current/ap-southeast-1/index.json -o cw.json; jq -r .publicationDate cw.json
+2026-11-19T17:10:40Z
+$ jq -r '. as $r | .products | to_entries[] | select(.value.attributes.usagetype | test("^APS1-(DataProcessing|DataProcessingIA|TimedStorage)-(Bytes|ByteHrs)$")) | .key as $k | "\(.value.attributes.usagetype)  \([$r.terms.OnDemand[$k][].priceDimensions[] | "\(.pricePerUnit.USD) USD/\(.unit)"] | join(", "))"' cw.json; rm cw.json
+APS1-DataProcessing-Bytes  0.7000000000 USD/GB
+APS1-TimedStorage-ByteHrs  0.0300000000 USD/GB-Mo
+APS1-DataProcessingIA-Bytes  0.3500000000 USD/GB
+$ python3 -c 'gb=(50*86400*3*204/1e9)*30; print(f"{gb:.0f} GB/tháng: nạp {gb*0.70:.0f} USD, lưu 30 ngày ~{gb*0.15*0.03:.2f} USD (nén ~15%) — nạp là khoản lớn")'
+79 GB/tháng: nạp 56 USD, lưu 30 ngày ~0.36 USD (nén ~15%) — nạp là khoản lớn

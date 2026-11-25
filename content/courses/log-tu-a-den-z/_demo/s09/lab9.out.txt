@@ -1,0 +1,48 @@
+$ jq -r '.log.entries[] | [.response.status, (.response._failureText // ""), (.time | round), .request.method, (.request.url | sub("\\?.*"; "?…"))] | @tsv' lab9/lab9.har
+200		2	GET	http://shop.lgz.test:41901/?…
+404		3	GET	http://shop.lgz.test:41901/img/logo-moi.png
+200		8	GET	http://shop.lgz.test:41901/app.min.js
+204		2	POST	http://shop.lgz.test:41901/csp
+200		6	POST	http://api.lgz.test:41902/api/login
+200		3	GET	http://api.lgz.test:41902/api/search?…
+200		3	GET	http://api.lgz.test:41902/api/products
+401		3	GET	http://api.lgz.test:41902/api/me
+-1	net::ERR_FAILED	-1	GET	http://api.lgz.test:41902/api/orders
+504		2004	GET	http://api.lgz.test:41902/api/report
+$ jq -r '.log.entries[] | select(.request.url | endswith("/api/me")) | .request.headers[] | select(.name == "Authorization") | .value' lab9/lab9.har | cut -d. -f2 | base64 -d 2>/dev/null; echo
+{"sub":"sv.lab9@example.com","exp":1795392000}
+$ jq -r '.log.entries[] | select(.request.url | endswith("/api/login")) | .response.content.text | fromjson | .token' lab9/lab9.har | cut -d. -f2 | base64 -d 2>/dev/null; echo
+{"sub":"sv.lab9@example.com","exp":1795477713}
+$ jq -r '.log.entries[] | select(.request.url | endswith("/api/me")) | .response.headers[] | select(.name | test("www-authenticate|x-request-id"; "i")) | "\(.name): \(.value)"' lab9/lab9.har
+WWW-Authenticate: Bearer error="invalid_token", error_description="The access token expired"
+X-Request-Id: caa75cb6623e3ea9
+$ jq -r '.log.entries[] | select(.request.url | endswith("/api/orders")) | {status: .response.status, loi: .response._failureText, headers: (.response.headers | length)}' lab9/lab9.har
+{
+  "status": -1,
+  "loi": "net::ERR_FAILED",
+  "headers": 0
+}
+$ grep '/api/orders' lab9/api.log
+127.0.0.1 - - [2026-11-23T23:33:33.113Z] "OPTIONS /api/orders HTTP/1.1" 204 - "http://shop.lgz.test:41901/" "Mozilla/5.0 (X11; Linux x86_64) AppleWeb" rt=0.000 rid=1c14cff22389dc00
+127.0.0.1 - - [2026-11-23T23:33:33.114Z] "GET /api/orders HTTP/1.1" 500 - "http://shop.lgz.test:41901/" "Mozilla/5.0 (X11; Linux x86_64) AppleWeb" rt=0.000 rid=ac6daedcbd098e1f
+$ jq -c 'select(.path == "/api/orders") | {level, reqId, msg}' lab9/app.log
+{"level":50,"reqId":"ac6daedcbd098e1f","msg":"TypeError: Cannot read properties of undefined (reading 'userId')"}
+$ jq -r '.log.entries[] | select(.request.url | endswith("/api/report")) | "time=\(.time | round) ms  wait=\(.timings.wait | round) ms  status=\(.response.status)  rid=\(.response.headers[] | select(.name == "X-Request-Id") | .value)"' lab9/lab9.har
+time=2004 ms  wait=2002 ms  status=504  rid=771cc35e8d510a86
+$ grep '/api/report' lab9/api.log; jq -r 'select(.path == "/api/report") | .msg' lab9/app.log
+127.0.0.1 - - [2026-11-23T23:33:33.117Z] "OPTIONS /api/report HTTP/1.1" 204 - "http://shop.lgz.test:41901/" "Mozilla/5.0 (X11; Linux x86_64) AppleWeb" rt=0.000 rid=26e714451262d707
+127.0.0.1 - - [2026-11-23T23:33:35.119Z] "GET /api/report HTTP/1.1" 504 - "http://shop.lgz.test:41901/" "Mozilla/5.0 (X11; Linux x86_64) AppleWeb" rt=2.001 rid=771cc35e8d510a86
+upstream timed out (2000 ms) calling report-svc 127.0.0.1:41904
+$ grep -c 'token=' lab9/api.log; grep -o '"GET /api/search[^ ]*' lab9/api.log | cut -c1-72
+1
+"GET /api/search?q=ban+phim&token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdi5sY
+$ bash tim-bi-mat.bash lab9/lab9.har
+      6 eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdi5sYWI
+      4 "name":"Authorization","value":"B
+      1 token=eyJhbG
+      1 \"password\":\"MatKhau_GIA_123
+      1 "name":"Set-Cookie","value":"s
+$ jq -f che-har.jq lab9/lab9.har > lab9/lab9.sach.har; bash tim-bi-mat.bash lab9/lab9.sach.har; echo "mẫu bí mật còn lại: $(bash tim-bi-mat.bash lab9/lab9.sach.har | wc -l)"
+mẫu bí mật còn lại: 0
+$ jq -r '.log.entries[] | select(.request.url | endswith("/api/login")) | .startedDateTime' lab9/lab9.har
+2026-11-23T23:33:33.090Z

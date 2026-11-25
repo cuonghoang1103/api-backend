@@ -1,0 +1,79 @@
+$ sudo usermod -aG systemd-journal hv
+$ sudo systemctl start ssh
+$ sleep 2
+$ sudo systemctl restart ssh
+$ journalctl -u ssh -n 3 --no-pager -o short
+Nov 24 17:12:25 lab7 sshd[71]: Server listening on 0.0.0.0 port 22.
+Nov 24 17:12:25 lab7 sshd[71]: Server listening on :: port 22.
+Nov 24 17:12:25 lab7 systemd[1]: Started ssh.service - OpenBSD Secure Shell server.
+$ TZ='<+07>-7' journalctl -u ssh -n 3 --no-pager -o short-iso
+2026-11-25T00:12:25+07:00 lab7 sshd[71]: Server listening on 0.0.0.0 port 22.
+2026-11-25T00:12:25+07:00 lab7 sshd[71]: Server listening on :: port 22.
+2026-11-25T00:12:25+07:00 lab7 systemd[1]: Started ssh.service - OpenBSD Secure Shell server.
+$ TZ='<+07>-7' journalctl -u ssh -n 3 --no-pager -o short-iso --utc
+2026-11-24T17:12:25+00:00 lab7 sshd[71]: Server listening on 0.0.0.0 port 22.
+2026-11-24T17:12:25+00:00 lab7 sshd[71]: Server listening on :: port 22.
+2026-11-24T17:12:25+00:00 lab7 systemd[1]: Started ssh.service - OpenBSD Secure Shell server.
+$ journalctl -u ssh -n 3 --no-pager -o short-monotonic
+[571476.448221] lab7 sshd[71]: Server listening on 0.0.0.0 port 22.
+[571476.448736] lab7 sshd[71]: Server listening on :: port 22.
+[571476.448773] lab7 systemd[1]: Started ssh.service - OpenBSD Secure Shell server.
+$ cat /proc/uptime
+571477.64 2657304.69
+$ journalctl -F _SYSTEMD_UNIT | sort
+init.scope
+ssh.service
+systemd-journald.service
+systemd-update-utmp-runlevel.service
+systemd-update-utmp.service
+$ journalctl -F PRIORITY | sort | tr '\n' ' '; echo
+4 5 6 
+$ journalctl -p 0..2 -F _SYSTEMD_UNIT
+init.scope
+ssh.service
+systemd-update-utmp-runlevel.service
+systemd-update-utmp.service
+systemd-journald.service
+$ logger -p user.crit -t kiem-dia 'disk /data 97% full'
+$ journalctl -F PRIORITY | sort | tr '\n' ' '; echo
+2 4 5 6 
+$ journalctl -p 0..2 -F _SYSTEMD_UNIT
+init.scope
+ssh.service
+systemd-update-utmp-runlevel.service
+systemd-update-utmp.service
+systemd-journald.service
+$ journalctl -p 0..2 -o json | jq -r '._SYSTEMD_UNIT // ("(không unit) " + .SYSLOG_IDENTIFIER)' | sort | uniq -c
+      1 init.scope
+$ journalctl -p crit --no-pager
+Nov 24 17:12:28 lab7 kiem-dia[92]: disk /data 97% full
+$ journalctl -b -o json | jq -r '._TRANSPORT // "?"' | sort | uniq -c | sort -rn
+     59 journal
+     17 syslog
+      4 driver
+$ journalctl -k --no-pager | head -n 3
+-- No entries --
+$ printf 'login that bai tu 198.51.100.9 user=\xc3\x28dmin\n' | systemd-cat -t q4-blob
+$ journalctl -t q4-blob --no-pager
+Nov 24 17:12:30 lab7 q4-blob[117]: [42B blob data]
+$ journalctl -t q4-blob -o json | jq -r '.MESSAGE | test("login")'
+jq: error (at <stdin>:1): array ([108,111,10...) cannot be matched, as it is not a string
+$ journalctl -t q4-blob -o json | jq -r '.MESSAGE | if type == "array" then implode else . end | select(test("login"))'
+login that bai tu 198.51.100.9 user=Ã(dmin
+$ journalctl -b -o json | jq -r 'select(.MESSAGE | type == "array") | .SYSLOG_IDENTIFIER' | sort | uniq -c
+      1 q4-blob
+$ sudo cp -a /var/log/journal /tmp/copy && sudo chown -R hv /tmp/copy && find /tmp/copy -type f | sed 's|.*/||'
+user-1001.journal
+system.journal
+$ journalctl -D /tmp/copy --list-boots
+IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY
+  0 1c03b0ee7b0c4c0980383ff645a74d1a Tue 2026-11-24 17:12:02 UTC Tue 2026-11-24 17:12:31 UTC
+$ journalctl --list-boots
+IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY
+  0 1c03b0ee7b0c4c0980383ff645a74d1a Tue 2026-11-24 17:12:02 UTC Tue 2026-11-24 17:12:31 UTC
+$ journalctl -D /tmp/copy -q | wc -l; journalctl -q | wc -l
+83
+87
+$ journalctl -D /tmp/copy -n 1 --no-pager; journalctl -n 1 --no-pager
+Nov 24 17:12:31 lab7 sudo[133]: pam_unix(sudo:session): session opened for user root(uid=0) by root(uid=1001)
+Nov 24 17:12:31 lab7 sudo[135]: pam_unix(sudo:session): session closed for user root

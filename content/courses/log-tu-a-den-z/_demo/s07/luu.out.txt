@@ -1,0 +1,92 @@
+$ journalctl --disk-usage
+Hint: You are currently not seeing messages from other users and the system.
+      Users in groups 'adm', 'systemd-journal' can see all messages.
+      Pass -q to turn off this notice.
+Archived and active journals take up 20.9M in the file system.
+$ ls -l /var/log/journal/
+total 4
+drwxr-sr-x+ 2 root systemd-journal 4096 Nov 24 04:13 595503c52a37410aae2b32f4ffddfa26
+$ cat /etc/machine-id
+595503c52a37410aae2b32f4ffddfa26
+$ sudo ls -l /var/log/journal/$(cat /etc/machine-id)/
+total 49628
+-rw-r-----+ 1 root systemd-journal 8388608 Nov 24 04:14 system.journal
+-rw-r-----+ 1 root systemd-journal 8388608 Nov 24 04:10 system@000660f805ba2c95-4c4607645be2f255.journal~
+-rw-r-----+ 1 root systemd-journal 8388608 Nov 24 04:11 system@2443b43690e8483584cc9a72e868317a-00000000000007db-000660f805b6be31.journal
+-rw-r-----+ 1 root systemd-journal 8388608 Nov 24 04:11 system@744c0c0439664cfcbda3b1c07408a827-0000000000000c1d-000660f80825cbee.journal
+-rw-r-----+ 1 root systemd-journal 8388608 Nov 24 04:12 system@744c0c0439664cfcbda3b1c07408a827-000000000000103d-000660f8090c25d9.journal
+-rw-r-----+ 1 root systemd-journal 8388608 Nov 24 04:13 system@7cbcc78059de43d2930efcf8561b1d27-0000000000001208-000660f80e95882b.journal
+-rw-r-----+ 1 root systemd-journal 8388608 Nov 24 04:14 user-1000.journal
+-rw-r-----+ 1 root systemd-journal 8388608 Nov 24 04:10 user-1000@000660f8063aafb1-c56fe66f198da2c6.journal~
+-rw-r-----+ 1 root systemd-journal 8388608 Nov 24 04:11 user-1000@2443b43690e8483584cc9a72e868317a-0000000000000b81-000660f8063aae90.journal
+-rw-r-----+ 1 root systemd-journal 8388608 Nov 24 04:13 user-1000@744c0c0439664cfcbda3b1c07408a827-000000000000103c-000660f809092eca.journal
+$ sudo head -c 8 /var/log/journal/$(cat /etc/machine-id)/system.journal; echo
+LPKSHHRH
+$ sudo grep -c 'shop-api' /var/log/journal/$(cat /etc/machine-id)/system.journal
+3
+$ systemd-analyze cat-config systemd/journald.conf | grep -v '^#' | grep .
+[Journal]
+[Journal]
+ForwardToSyslog=yes
+$ sudo usermod -aG systemd-journal hv
+$ id
+uid=1000(hv) gid=1000(hv) groups=1000(hv),999(systemd-journal)
+$ journalctl --disk-usage
+Archived and active journals take up 48.4M in the file system.
+$ journalctl -u shop-api -n 1 -o verbose
+Tue 2026-11-24 04:14:00.921750 +07 [s=7cbcc78059de43d2930efcf8561b1d27;i=1836;b=76d1fcc4629949cca375d6dda1b59a50;m=41b1105;t=660f812a06696;x=873a6fb64dd01e93]
+    PRIORITY=6
+    _SELINUX_CONTEXT=unconfined
+    _SYSTEMD_SLICE=system.slice
+    _BOOT_ID=76d1fcc4629949cca375d6dda1b59a50
+    _MACHINE_ID=595503c52a37410aae2b32f4ffddfa26
+    _HOSTNAME=lab7
+    _RUNTIME_SCOPE=system
+    SYSLOG_FACILITY=3
+    _TRANSPORT=stdout
+    _STREAM_ID=720d5385d7744277b22c107da78b1453
+    SYSLOG_IDENTIFIER=shop-api
+    _PID=424
+    _UID=999
+    _GID=991
+    _COMM=python3
+    _EXE=/usr/bin/python3.12
+    _CMDLINE=/usr/bin/python3 /opt/shop/api.py
+    _CAP_EFFECTIVE=0
+    _SYSTEMD_CGROUP=/system.slice/shop-api.service
+    _SYSTEMD_UNIT=shop-api.service
+    _SYSTEMD_INVOCATION_ID=6f090b12fdf54a1d84fd23095782d72e
+    MESSAGE=GET /api/orders/1033 200
+$ logger -t sshd 'Accepted password for root from 203.0.113.9 port 50122 ssh2'
+$ journalctl -b -t sshd -g 203.0.113.9 -n 1 --no-pager
+Nov 24 04:14:01 lab7 sshd[2127]: Accepted password for root from 203.0.113.9 port 50122 ssh2
+$ journalctl -b -t sshd -g 203.0.113.9 -n 1 -o verbose --output-fields=SYSLOG_IDENTIFIER,MESSAGE,_UID,_COMM,_EXE,_TRANSPORT
+Tue 2026-11-24 04:14:01.696162 +07 [s=7cbcc78059de43d2930efcf8561b1d27;i=1872;b=76d1fcc4629949cca375d6dda1b59a50;m=426e244;t=660f812ac37d6;x=fc1b7cc71942818f]
+    _UID=1000
+    _TRANSPORT=syslog
+    SYSLOG_IDENTIFIER=sshd
+    MESSAGE=Accepted password for root from 203.0.113.9 port 50122 ssh2
+    _COMM=logger
+    _EXE=/usr/bin/logger
+$ printf 'MESSAGE=order 1042 paid\nORDER_ID=1042\nAMOUNT_VND=350000\n_PID=1\n_UID=0\n' | logger --journald
+$ journalctl ORDER_ID=1042 -n 1 -o verbose --output-fields=MESSAGE,ORDER_ID,AMOUNT_VND,_PID,_UID,_COMM
+Tue 2026-11-24 04:14:02.096161 +07 [s=7cbcc78059de43d2930efcf8561b1d27;i=1891;b=76d1fcc4629949cca375d6dda1b59a50;m=42cfda1;t=660f812b25333;x=8784584d5d42edfa]
+    _UID=1000
+    MESSAGE=order 1042 paid
+    ORDER_ID=1042
+    AMOUNT_VND=350000
+    _PID=2203
+$ echo 'backup: disk 91% full' | systemd-cat -t backup -p warning
+$ journalctl -t backup -n 1 -o json-pretty --output-fields=MESSAGE,PRIORITY,SYSLOG_IDENTIFIER,_TRANSPORT
+{
+	"__MONOTONIC_TIMESTAMP" : "70329500",
+	"__CURSOR" : "s=7cbcc78059de43d2930efcf8561b1d27;i=18a6;b=76d1fcc4629949cca375d6dda1b59a50;m=431249c;t=660f812b67a2e;x=b7c15cc3eefe3d02",
+	"_TRANSPORT" : "stdout",
+	"__SEQNUM" : "6310",
+	"MESSAGE" : "backup: disk 91% full",
+	"__SEQNUM_ID" : "7cbcc78059de43d2930efcf8561b1d27",
+	"__REALTIME_TIMESTAMP" : "1795468442368558",
+	"SYSLOG_IDENTIFIER" : "backup",
+	"_BOOT_ID" : "76d1fcc4629949cca375d6dda1b59a50",
+	"PRIORITY" : "4"
+}

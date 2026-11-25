@@ -1,0 +1,32 @@
+$ cd vu14 && grep -v '^#' /lab/s14/mau/attack-vu14.tsv | while IFS=$'\t' read -r b kt ten ct tp tep mau; do n=$(grep -cE -- "$mau" "$tep"); printf '%-3s %-10s %-21s %-7s %s\n' "$b" "$kt" "$ct" "$([ "$n" -gt 0 ] && echo "CÓ $n" || echo 'KHÔNG')" "$(echo "$tep" | sed 's|.*/||')"; done
+1   T1110.004  Credential Access     CÓ 598 app.jsonl
+2   T1078      Initial Access        CÓ 2   app.jsonl
+3   T1110.003  Credential Access     CÓ 74  auth-syslog.log
+4   T1133      Initial Access        CÓ 1   auth-syslog.log
+5   T1548.003  Privilege Escalation  CÓ 1   auth-syslog.log
+6   T1136.001  Persistence           CÓ 1   auth-syslog.log
+7   T1098      Persistence           CÓ 1   auth-syslog.log
+8   T1098.004  Persistence           CÓ 1   audit.log
+9   T1105      Command and Control   CÓ 1   audit.log
+10  T1053.003  Persistence           CÓ 1   audit.log
+11  T1543.002  Persistence           CÓ 1   audit.log
+12  T1036.004  Stealth               CÓ 111 syslog
+13  T1685.004  Defense Impairment    CÓ 1   audit.log
+14  T1685.006  Defense Impairment    KHÔNG  auth.log
+15  T1070.003  Stealth               KHÔNG  auth.log
+16  T1685      Defense Impairment    CÓ 1   syslog
+17  T1505.003  Persistence           CÓ 5   access.log
+18  T1041      Exfiltration          CÓ 1   access.log
+19  T1070.004  Stealth               CÓ 1   access.log
+$ cd vu14 && grep -v '^#' /lab/s14/mau/attack-vu14.tsv | cut -f4 | sort | uniq -c | sort -rn
+      6 Persistence
+      3 Stealth
+      3 Defense Impairment
+      2 Initial Access
+      2 Credential Access
+      1 Privilege Escalation
+      1 Exfiltration
+      1 Command and Control
+$ cd vu14 && grep -v '^#' /lab/s14/mau/attack-vu14.tsv | while IFS=$'\t' read -r b kt ten ct tp tep mau; do n=$(grep -cE -- "$mau" "$tep"); [ "$n" -eq 0 ] && echo "bước $b $kt — không có dòng log trực tiếp; bằng chứng thay thế ở thu-thap/stat.txt: $(grep -cE 'sinh 2026-11-19 02:23|bash_history -> /dev/null' thu-thap/stat.txt) dòng"; done; true
+bước 14 T1685.006 — không có dòng log trực tiếp; bằng chứng thay thế ở thu-thap/stat.txt: 2 dòng
+bước 15 T1070.003 — không có dòng log trực tiếp; bằng chứng thay thế ở thu-thap/stat.txt: 2 dòng

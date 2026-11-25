@@ -1,0 +1,73 @@
+$ docker logs lgz-mysql 2>&1 | grep -E 'ready for connections.*port: 3306' | cut -c1-200
+2026-11-24T08:49:44.513427Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.4.13'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
+2026-11-24T08:49:44.513544Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock
+$ mysql -t -e "SHOW GLOBAL VARIABLES WHERE Variable_name IN ('log_error','log_error_verbosity','slow_query_log','slow_query_log_file','long_query_time','general_log','general_log_file','log_output','log_queries_not_using_indexes','log_timestamps','system_time_zone')"
++-------------------------------+--------------------------------------+
+| Variable_name                 | Value                                |
++-------------------------------+--------------------------------------+
+| general_log                   | OFF                                  |
+| general_log_file              | /var/lib/mysql/78acffcb45d7.log      |
+| log_error                     | stderr                               |
+| log_error_verbosity           | 2                                    |
+| log_output                    | FILE                                 |
+| log_queries_not_using_indexes | OFF                                  |
+| log_timestamps                | UTC                                  |
+| long_query_time               | 10.000000                            |
+| slow_query_log                | OFF                                  |
+| slow_query_log_file           | /var/lib/mysql/78acffcb45d7-slow.log |
+| system_time_zone              | +07                                  |
++-------------------------------+--------------------------------------+
+$ mysql -uapp -psai-roi -h127.0.0.1 shop -e 'SELECT 1'
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1045 (28000): Access denied for user 'app'@'127.0.0.1' (using password: YES)
+$ docker logs lgz-mysql 2>&1 | grep -c 'Access denied'
+0
+$ mysql -e "SET PERSIST log_error_verbosity = 3"
+$ mysql -uapp -psai-roi -h127.0.0.1 shop -e 'SELECT 1'; mysql -ughost -pabc -h127.0.0.1 -e 'SELECT 1'
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1045 (28000): Access denied for user 'app'@'127.0.0.1' (using password: YES)
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1045 (28000): Access denied for user 'ghost'@'127.0.0.1' (using password: YES)
+$ docker logs lgz-mysql 2>&1 | grep 'Access denied' | cut -c1-200
+2026-11-24T08:49:49.719304Z 12 [Note] [MY-010926] [Server] Access denied for user 'app'@'127.0.0.1' (using password: YES)
+2026-11-24T08:49:49.740059Z 13 [Note] [MY-010926] [Server] Access denied for user 'ghost'@'127.0.0.1' (using password: YES)
+$ mysql -e "SET GLOBAL slow_query_log = ON; SET GLOBAL long_query_time = 0.2; SET GLOBAL log_queries_not_using_indexes = ON"
+$ mysql -uapp -pApp-Lab-2026 -h127.0.0.1 shop -e "SELECT id, total FROM orders WHERE customer_email = 'khach4242@example.com' LIMIT 3; SELECT SLEEP(0.25); SELECT id FROM orders WHERE id = 4242" 2>&1 | grep -v Warning
+id	total
+44318	4767000
+94318	4767000
+144318	4767000
+SLEEP(0.25)
+0
+id
+4242
+$ F=$(mysql -Nse 'SELECT @@slow_query_log_file'); tail -n 16 $F
+/usr/sbin/mysqld, Version: 8.4.13 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+# Time: 2026-11-24T08:49:50.050090Z
+# User@Host: app[app] @  [127.0.0.1]  Id:    15
+# Query_time: 0.035382  Lock_time: 0.000002 Rows_sent: 3  Rows_examined: 144318
+use shop;
+SET timestamp=1795510190;
+SELECT id, total FROM orders WHERE customer_email = 'khach4242@example.com' LIMIT 3;
+# Time: 2026-11-24T08:49:50.301077Z
+# User@Host: app[app] @  [127.0.0.1]  Id:    15
+# Query_time: 0.250901  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 1
+SET timestamp=1795510190;
+SELECT SLEEP(0.25);
+$ command -v mysqldumpslow pt-query-digest || echo 'ảnh mysql:8.4 không kèm mysqldumpslow/pt-query-digest'
+ảnh mysql:8.4 không kèm mysqldumpslow/pt-query-digest
+$ F=$(mysql -Nse 'SELECT @@slow_query_log_file'); grep -E '^# Query_time' $F | awk '{print "Query_time=" $3, "Rows_examined=" $9}'
+Query_time=0.035382 Rows_examined=144318
+Query_time=0.250901 Rows_examined=1
+$ mysql -e "SET GLOBAL general_log = ON"; mysql -uapp -pApp-Lab-2026 -h127.0.0.1 shop -e "SELECT count(*) FROM orders WHERE total > 4000000" 2>&1 | grep -v Warning; mysql -e "SET GLOBAL general_log = OFF"
+count(*)
+120000
+$ F=$(mysql -Nse 'SELECT @@general_log_file'); tail -n 6 $F | cut -c1-160
+2026-11-24T08:49:50.685877Z	   19 Query	select @@version_comment limit 1
+2026-11-24T08:49:50.686042Z	   19 Query	SELECT count(*) FROM orders WHERE total > 4000000
+2026-11-24T08:49:50.762019Z	   19 Quit
+2026-11-24T08:49:50.769988Z	   20 Connect	root@localhost on  using Socket
+2026-11-24T08:49:50.770101Z	   20 Query	select @@version_comment limit 1
+2026-11-24T08:49:50.770218Z	   20 Query	SET GLOBAL general_log = OFF

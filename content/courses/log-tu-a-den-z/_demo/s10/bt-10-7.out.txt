@@ -1,0 +1,15 @@
+$ grep -n 'userId' src/main/java/vn/lab/shop/RequestIdFilter.java
+15:/** Lời giải 🧪 10.7 câu 1: thêm userId (lab: lấy từ header X-User-Id) bên cạnh requestId. */
+29:            MDC.put("userId", user);
+36:            MDC.remove("userId");      // câu 2: biến dòng này thành chú thích để thấy rò
+$ docker rm -f lgz-spring > /dev/null 2>&1; rm -rf logs; mkdir logs; docker run -d --name lgz-spring --memory 2g --memory-swap 2g --cpus 2 --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar --logging.config=classpath:logback-lab.xml > /dev/null && sleep 12
+$ curl -s -X POST -H 'X-Request-Id: req-uid00001' -H 'X-User-Id: an' 'http://127.0.0.1:41081/api/orders/7/confirm?email=an@example.com'; echo; sleep 1; docker logs lgz-spring 2>&1 | grep 'rid=req-uid00001'
+ok
+15:17:57.848 INFO  [http-nio-8080-exec-1] [rid=req-uid00001] [uid=an] v.l.s.OrderController - confirm order id=7
+15:17:57.854 INFO  [mail-1] [rid=req-uid00001] [uid=an] v.l.shop.MailService - sending confirmation mail for order 7 to a***@example.com
+15:17:57.854 INFO  [mail-1] [rid=req-uid00001] [uid=an] v.l.shop.MailService - sending confirmation mail for order 7 to a***@example.com
+$ jq -c 'select(.requestId == "req-uid00001") | {thread_name, message, requestId, userId}' logs/shop.json
+{"thread_name":"http-nio-8080-exec-1","message":"confirm order id=7","requestId":"req-uid00001","userId":"an"}
+{"thread_name":"mail-1","message":"sending confirmation mail for order 7 to a***@example.com","requestId":"req-uid00001","userId":"an"}
+$ docker rm -f lgz-spring > /dev/null; echo "đã xoá lgz-spring"
+đã xoá lgz-spring

@@ -1,0 +1,12 @@
+$ curl -s -u elastic:$ELASTIC_PASSWORD localhost:45601/api/alerting/rule_types | jq -r '.[] | select(.id|test("es-query|logs.alert|index-threshold")) | "\(.id)\t\(.minimum_license_required)\t\(.name)"'
+.index-threshold	basic	Index threshold
+.es-query	basic	Elasticsearch query
+logs.alert.document.count	basic	Log threshold
+$ curl -s -u elastic:$ELASTIC_PASSWORD localhost:45601/api/actions/connector_types | jq -r '.[] | select(.id|test("^\\.(server-log|index|webhook|email|slack|teams|pagerduty)$")) | "\(.id)\t\(.minimum_license_required)\tdùng được=\(.enabled_in_license)"'
+.email	gold	dùng được=false
+.index	basic	dùng được=true
+.pagerduty	gold	dùng được=false
+.server-log	basic	dùng được=true
+.slack	gold	dùng được=false
+.webhook	gold	dùng được=false
+.teams	gold	dùng được=false

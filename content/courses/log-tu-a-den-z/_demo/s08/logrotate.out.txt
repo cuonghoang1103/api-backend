@@ -1,0 +1,157 @@
+$ grep -vE '^#|^$' /etc/logrotate.conf
+weekly
+su root adm
+rotate 4
+create
+include /etc/logrotate.d
+$ cat /etc/logrotate.d/rsyslog
+/var/log/syslog
+/var/log/mail.log
+/var/log/kern.log
+/var/log/auth.log
+/var/log/user.log
+/var/log/cron.log
+{
+	rotate 4
+	weekly
+	missingok
+	notifempty
+	compress
+	delaycompress
+	sharedscripts
+	postrotate
+		/usr/lib/rsyslog/rsyslog-rotate
+	endscript
+}
+$ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nginx 2>&1 | grep -E '^Setting up nginx '; cat /etc/logrotate.d/nginx
+Setting up nginx (1.24.0-2ubuntu7.21) ...
+/var/log/nginx/*.log {
+	daily
+	missingok
+	rotate 14
+	compress
+	delaycompress
+	notifempty
+	create 0640 www-data adm
+	sharedscripts
+	prerotate
+		if [ -d /etc/logrotate.d/httpd-prerotate ]; then \
+			run-parts /etc/logrotate.d/httpd-prerotate; \
+		fi \
+	endscript
+	postrotate
+		invoke-rc.d nginx rotate >/dev/null 2>&1
+	endscript
+}
+$ systemctl list-timers logrotate.timer --no-pager | head -2; systemctl cat logrotate.timer | grep -E '^On|^Accuracy|^Randomized|^Persistent'; systemctl cat logrotate.service | grep -E '^ExecStart|^Nice|^IOSched'
+NEXT                        LEFT LAST                        PASSED UNIT            ACTIVATES
+Wed 2026-11-25 00:00:00 +07  18h Tue 2026-11-24 04:50:48 +07      - logrotate.timer logrotate.service
+OnCalendar=daily
+AccuracySec=1h
+Persistent=true
+ExecStart=/usr/sbin/logrotate /etc/logrotate.conf
+Nice=19
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+$ sudo install -d -o hv -g adm -m 0750 /var/log/shopapp && cat s08/shop-create.conf
+# /etc/logrotate.d/shop (bản A) — create nhưng QUÊN báo ứng dụng mở lại tệp
+/var/log/shopapp/app.log {
+    create 0640 hv adm
+    rotate 3
+    missingok
+    notifempty
+}
+$ sudo cp s08/shop-create.conf /etc/logrotate.d/shop && sudo logrotate -d /etc/logrotate.d/shop 2>&1 | grep -vE '^$|^Handling 1 logs|reading config|Allocating|Ignoring|acquired lock'
+warning: logrotate in debug mode does nothing except printing debug messages!  Consider using verbose mode (-v) instead if this is not what you want.
+Reading state from file: /var/lib/logrotate/status
+state file /var/lib/logrotate/status does not exist
+rotating pattern: /var/log/shopapp/app.log  1048576 bytes (3 rotations)
+empty log files are not rotated, old logs are removed
+considering log /var/log/shopapp/app.log
+  log /var/log/shopapp/app.log does not exist -- skipping
+Creating new state
+$ setsid nohup python3 s08/ghi.py /var/log/shopapp/app.log 2000 8 >/dev/null 2>&1 < /dev/null & sleep 3; sudo logrotate -v -f /etc/logrotate.d/shop 2>&1 | grep -E 'rotating|renaming|creating|log does not need'; ls -l /proc/$(pgrep -f '^python3 .*ghi.py')/fd | grep shopapp
+rotating pattern: /var/log/shopapp/app.log  forced from command line (3 rotations)
+  log needs rotating
+rotating log /var/log/shopapp/app.log, log->rotateCount is 3
+renaming /var/log/shopapp/app.log.3 to /var/log/shopapp/app.log.4 (rotatecount 3, logstart 1, i 3), 
+renaming /var/log/shopapp/app.log.2 to /var/log/shopapp/app.log.3 (rotatecount 3, logstart 1, i 2), 
+renaming /var/log/shopapp/app.log.1 to /var/log/shopapp/app.log.2 (rotatecount 3, logstart 1, i 1), 
+renaming /var/log/shopapp/app.log to /var/log/shopapp/app.log.1
+creating new /var/log/shopapp/app.log mode = 0640 uid = 1000 gid = 4
+l-wx------ 1 hv hv 64 Nov 24 05:26 3 -> /var/log/shopapp/app.log.1
+$ sleep 7; ls -l /var/log/shopapp/; python3 s08/dem.py /var/log/shopapp/app.log.tong /var/log/shopapp/app.log /var/log/shopapp/app.log.1
+total 376
+-rw-r----- 1 hv adm      0 Nov 24 05:26 app.log
+-rw-rw-r-- 1 hv hv  380394 Nov 24 05:26 app.log.1
+-rw-rw-r-- 1 hv hv       6 Nov 24 05:26 app.log.tong
+đã ghi 15660 dòng · thấy 15660 · mất 0 · trùng 0
+$ sudo rm -f /var/log/shopapp/* && cat s08/shop-hup.conf | grep -A3 postrotate
+# /etc/logrotate.d/shop (bản B) — create + postrotate gửi SIGHUP: ứng dụng mở tệp MỚI theo tên
+/var/log/shopapp/app.log {
+    create 0640 hv adm
+    rotate 3
+--
+    postrotate
+        pkill -HUP -f '^python3 .*ghi.py /var/log/shopapp/app.log' || true
+    endscript
+}
+$ sudo cp s08/shop-hup.conf /etc/logrotate.d/shop; setsid nohup python3 s08/ghi.py /var/log/shopapp/app.log 2000 8 >/dev/null 2>&1 < /dev/null & sleep 3; sudo logrotate -f /etc/logrotate.d/shop; sleep 7; ls -l /var/log/shopapp/; python3 s08/dem.py /var/log/shopapp/app.log.tong /var/log/shopapp/app.log /var/log/shopapp/app.log.1
+total 380
+-rw-r----- 1 hv adm 241361 Nov 24 05:26 app.log
+-rw-rw-r-- 1 hv hv  139533 Nov 24 05:26 app.log.1
+-rw-rw-r-- 1 hv hv       6 Nov 24 05:26 app.log.tong
+đã ghi 15680 dòng · thấy 15680 · mất 0 · trùng 0
+$ sudo rm -f /var/log/shopapp/* && sudo cp s08/shop-copy.conf /etc/logrotate.d/shop; setsid nohup python3 s08/ghi.py /var/log/shopapp/app.log 200000 8 >/dev/null 2>&1 < /dev/null & sleep 3; sudo logrotate -f /etc/logrotate.d/shop; sleep 7; ls -l /var/log/shopapp/; python3 s08/dem.py /var/log/shopapp/app.log.tong /var/log/shopapp/app.log /var/log/shopapp/app.log.1
+total 28720
+-rw-rw-r-- 1 hv hv 18124001 Nov 24 05:26 app.log
+-rw-rw-r-- 1 hv hv 11276895 Nov 24 05:26 app.log.1
+-rw-rw-r-- 1 hv hv        8 Nov 24 05:26 app.log.tong
+đã ghi 1132000 dòng · thấy 1130000 · mất 2000 · trùng 0 · mất từ dòng 438001 tới 440000
+$ sudo rm -f /var/log/shopapp/* && sudo chmod 0770 /var/log/shopapp && echo x > /var/log/shopapp/app.log && sudo logrotate -f /etc/logrotate.d/shop; echo "exit=$?"
+error: skipping "/var/log/shopapp/app.log" because parent directory has insecure permissions (It's world writable or writable by group which is not "root") Set "su" directive in config file to tell logrotate which user/group should be used for rotation.
+exit=1
+$ cat s08/shop-day-du.conf
+# /etc/logrotate.d/shop (bản cuối) — như dùng thật: hằng ngày HOẶC khi quá 50M, giữ 14 bản, nén trễ 1 bản, tên theo ngày
+/var/log/shopapp/*.log {
+    su hv adm
+    daily
+    maxsize 50M
+    rotate 14
+    dateext
+    dateformat -%Y%m%d-%s
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 0640 hv adm
+    sharedscripts
+    postrotate
+        pkill -HUP -f '^python3 .*ghi.py /var/log/shopapp/' || true
+    endscript
+}
+$ sudo cp s08/shop-day-du.conf /etc/logrotate.d/shop && sudo logrotate -d /etc/logrotate.d/shop 2>&1 | grep -iE 'error|insecure|switching|rotating pattern'
+rotating pattern: /var/log/shopapp/*.log  after 1 days (14 rotations)
+switching euid from 0 to 1000 and egid from 0 to 4 (pid 20371)
+switching euid from 1000 to 0 and egid from 4 to 0 (pid 20371)
+$ setsid nohup python3 s08/ghi.py /var/log/shopapp/app.log 2000 12 >/dev/null 2>&1 < /dev/null & for i in 1 2 3; do sleep 3; sudo logrotate -f /etc/logrotate.d/shop; done; sleep 4; ls -l /var/log/shopapp/
+total 324
+-rw-r----- 1 hv adm 142000 Nov 24 05:26 app.log
+-rw-rw-r-- 1 hv adm  15360 Nov 24 05:26 app.log-20261124-1795472807.gz
+-rw-r----- 1 hv adm  15219 Nov 24 05:26 app.log-20261124-1795472810.gz
+-rw-r----- 1 hv adm 148500 Nov 24 05:26 app.log-20261124-1795472813
+-rw-rw-r-- 1 hv hv       6 Nov 24 05:26 app.log.tong
+$ sudo grep shopapp /var/lib/logrotate/status
+"/var/log/shopapp/app.log" 2026-11-24-5:26:53
+$ sudo logrotate -d /etc/logrotate.conf 2>&1 | grep -A2 '/var/log/shopapp/\*.log' | head -4
+rotating pattern: /var/log/shopapp/*.log  after 1 days (14 rotations)
+empty log files are not rotated, log files >= 52428800 are rotated earlier, old logs are removed
+switching euid from 0 to 1000 and egid from 0 to 4 (pid 20504)
+$ setsid nohup python3 s08/ghi.py /var/log/shopapp/app.log 200000 20 >/dev/null 2>&1 < /dev/null & sleep 4; rm /var/log/shopapp/app.log; sleep 2; df -m /var/log | tail -1; ls -l /proc/$(pgrep -f '^python3 .*ghi.py')/fd | grep deleted; sudo find /proc/[0-9]*/fd -lname '*(deleted)' 2>/dev/null | grep -v -e '/proc/self' | head -3
+/dev/root           6870   958      5896  14% /
+l-wx------ 1 hv hv 64 Nov 24 05:27 3 -> /var/log/shopapp/app.log (deleted)
+/proc/20529/fd/3
+$ sleep 4; df -m /var/log | tail -1; sudo kill -HUP $(pgrep -f '^python3 .*ghi.py'); sleep 1; df -m /var/log | tail -1; pkill -f '^python3 .*ghi.py'; sleep 1; df -m /var/log | tail -1
+/dev/root           6870   971      5883  15% /
+/dev/root           6870   938      5917  14% /
+/dev/root           6870   938      5917  14% /

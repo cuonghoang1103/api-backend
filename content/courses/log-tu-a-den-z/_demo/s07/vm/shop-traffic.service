@@ -1,0 +1,10 @@
+[Unit]
+Description=Fake traffic for shop-api (Lab 7)
+After=shop-api.service
+
+[Service]
+ExecStart=/bin/bash -c 'i=0; while :; do i=$((i+1)); curl -s -o /dev/null http://127.0.0.1:8080/api/products; curl -s -o /dev/null http://127.0.0.1:8080/api/orders/$((1000 + i % 97)); [ $((i % 40)) = 0 ] && curl -s -o /dev/null "http://127.0.0.1:8080/login?user=admin"; sleep 2; done'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

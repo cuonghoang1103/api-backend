@@ -1,0 +1,76 @@
+PS> evtx-rec tc/hidden-user-4720.evtx | ConvertFrom-Json | Where-Object id -ne 4656 | ForEach-Object { '{0}  {1}  {2}' -f $_.t.ToString('HH:mm:ss.fff'), $_.id, (@($_.data.TargetUserName, $_.data.MemberSid, $_.data.CommandLine) | Where-Object { $_ -and $_ -ne '-' } | Select-Object -First 1) }
+17:03:24.224  1102
+17:03:24.794  4688  CreateHiddenAccount_upx_v0.2.exe  -u 3teamssixf -p Passw0rd
+17:03:24.845  4688  netdom query pdc
+17:03:25.001  4728  None
+17:03:25.002  4720  3teamssixf$
+17:03:25.002  4722  3teamssixf$
+17:03:25.002  4738  3teamssixf$
+17:03:25.002  4724  3teamssixf$
+17:03:25.004  4732  Administrators
+17:03:25.008  4733  Administrators
+17:03:25.009  4729  None
+17:03:25.009  4726  3teamssixf$
+17:03:25.009  4660
+17:03:25.012  4688  regedit /s .sTRmxJkRFoTFaPRXBeavZhjaAYNvpYko.reg
+17:03:25.035  4738  3teamssixf$
+17:03:25.039  4688  netdom query pdc
+PS> evtx-rec tc/hidden-user-4720.evtx | ConvertFrom-Json | Where-Object id -in 4720,4738 | ForEach-Object { [pscustomobject]@{ Id = $_.id; User = $_.data.TargetUserName; OldUac = $_.data.OldUacValue; NewUac = $_.data.NewUacValue; Flags = ($_.data.UserAccountControl -replace '\s+',' ').Trim() } } | Format-Table -AutoSize
+  Id User        OldUac NewUac Flags
+  -- ----        ------ ------ -----
+4720 3teamssixf$ 0x0    0x15   %%2080 %%2082 %%2084
+4738 3teamssixf$ 0x15   0x210  %%2048 %%2050 %%2089
+4738 3teamssixf$ 0x10   0x10   -
+PS> evtx-rec tc/pwnever-4738.evtx | ConvertFrom-Json | ForEach-Object { [pscustomobject]@{ Luc = $_.t.ToString('s'); Ai = $_.data.SubjectUserName; User = $_.data.TargetUserName; OldUac = $_.data.OldUacValue; NewUac = $_.data.NewUacValue; Flags = ($_.data.UserAccountControl -replace '\s+',' ').Trim() } } | Format-Table -AutoSize
+Luc                 Ai     User  OldUac NewUac Flags
+---                 --     ----  ------ ------ -----
+2021-02-08T12:08:43 admmig hack1 0x10   0x210  %%2089
+2021-02-08T12:08:45 admmig hack1 0x210  0x10   %%2057
+PS> evtx-rec tc/user-4720-4726.evtx | ConvertFrom-Json | ForEach-Object { [pscustomobject]@{ Luc = $_.t.ToString('s'); Id = $_.id; Ai = $_.data.SubjectUserName; User = $_.data.TargetUserName } } | Format-Table -AutoSize
+Luc                   Id Ai          User
+---                   -- --          ----
+2020-07-12T05:10:08 4720 lambda-user admin-kriss
+2020-07-12T05:11:26 4726 lambda-user admin-kriss
+PS> evtx-rec tc/admin-4732.evtx | ConvertFrom-Json | ForEach-Object { [pscustomobject]@{ Luc = $_.t.ToString('s'); Ai = $_.data.SubjectUserName; Nhom = $_.data.TargetUserName; Ai_Duoc_Them = $_.data.MemberSid } } | Format-Table -AutoSize
+Luc                 Ai     Nhom             Ai_Duoc_Them
+---                 --     ----             ------------
+2020-07-12T05:12:58 admmig Users            S-1-5-21-1470532092-3758209836-3742276719-1001
+2020-07-12T05:14:30 admmig Administrators   S-1-5-21-1470532092-3758209836-3742276719-1001
+2020-07-12T05:14:44 admmig Backup Operators S-1-5-21-1470532092-3758209836-3742276719-1001
+PS> Get-Content /lab/ra/d.jsonl | ConvertFrom-Json | Where-Object id -in 4720,4722,4724,4725,4726,4731,4732,4738,4781 | Group-Object { $_.t.ToString('yyyy-MM-dd') } | Select-Object Count,@{n='Ngay';e={$_.Name}},@{n='CacId';e={ ($_.Group.id | Sort-Object -Unique) -join ',' }} | Format-Table -AutoSize
+Count Ngay       CacId
+----- ----       -----
+   75 2018-07-28 4720,4722,4724,4725,4726,4731,4732,4738,4781
+    2 2018-12-29 4724,4738
+    4 2019-02-25 4732
+PS> Get-Content /lab/ra/d.jsonl | ConvertFrom-Json | Where-Object { $_.id -in 4720,4722,4725,4732 -and $_.t -lt [datetime]'2018-07-29' } | Select-Object -First 9 | ForEach-Object { '{0}  {1}  {2,-18} {3}' -f $_.t.ToString('HH:mm:ss'), $_.id, $_.data.SubjectUserName, $_.data.TargetUserName }
+07:24:50  4732  MINWINPC$          IIS_IUSRS
+07:24:50  4720  MINWINPC$          WDAGUtilityAccount
+07:24:59  4732  MINWINPC$          Users
+07:24:59  4732  MINWINPC$          Users
+07:24:59  4725  MINWINPC$          Administrator
+07:24:59  4725  MINWINPC$          Guest
+07:27:40  4720  WIN-LL0C19JS506$   defaultuser0
+07:27:40  4732  WIN-LL0C19JS506$   Users
+07:27:40  4722  WIN-LL0C19JS506$   defaultuser0
+PS> Get-Content /lab/ra/d.jsonl | ConvertFrom-Json | Where-Object id -eq 4672 | Group-Object { $_.data.SubjectUserName } | Sort-Object Count -Descending | Select-Object -First 6 Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+ 2314 SYSTEM
+   50 DWM-3
+   48 DWM-2
+   35 Administrator
+   28 DWM-1
+   14 LOCAL SERVICE
+PS> Get-Content /lab/ra/d.jsonl | ConvertFrom-Json | Where-Object { $_.id -eq 4672 -and $_.data.SubjectUserName -eq 'Administrator' } | Select-Object -First 1 | ForEach-Object { $_.data.PrivilegeList -split '\s+' | Where-Object { $_ } }
+SeSecurityPrivilege
+SeBackupPrivilege
+SeRestorePrivilege
+SeTakeOwnershipPrivilege
+SeDebugPrivilege
+SeSystemEnvironmentPrivilege
+SeLoadDriverPrivilege
+SeImpersonatePrivilege
+SeDelegateSessionUserImpersonatePrivilege
+$ evtx-rec mau/*.evtx tc/*.evtx 2>/dev/null | jq -r 'select(.id==4740 or .id==4767) | .id' | wc -l
+0

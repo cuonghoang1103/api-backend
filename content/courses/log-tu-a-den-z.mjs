@@ -17,6 +17,15 @@
  *   · web-security 9.1 (log bảo mật không lộ dữ liệu) · privacy-data-law 5.2 · cloud-aws 10.1/10.4 · kubernetes 9.2.
  * 22/11/2026: Mục 0 + Chương 1 + Chương 2 SOẠN CHI TIẾT (log-tu-a-den-z/s00-*.mjs, s01-*.mjs, s02-*.mjs; lệnh + output thật ở
  *   log-tu-a-den-z/_ma.mjs do scripts/log-khoa/chay-demo.sh sinh; gói log mẫu tất định: log-tu-a-den-z/_demo/tao-goi-log.py).
+ * 24/11/2026 (agent lgz): Chương 12 SOẠN CHI TIẾT (log-tu-a-den-z/s12-csdl.mjs + s12/; output thật _demo/s12/: PostgreSQL 17.12 + pgAudit + pgBadger,
+ *   MySQL 8.4.13, SQL Server 2022 CU28, Lab 12 Node + pg — chạy lại: bash _demo/s12/chay-s12.bash <thư mục>).
+ * 24/11/2026 (agent lgz): Chương 3 SOẠN CHI TIẾT (log-tu-a-den-z/s03-event-viewer.mjs + s03/; output thật _demo/s03/ trên bộ EVTX mẫu công khai 17 tệp, đọc bằng evtx-rec trong PowerShell 7 — không có máy Windows).
+ * 24/11/2026 (agent lgz): Chương 5 SOẠN CHI TIẾT (log-tu-a-den-z/s05-dong-lenh-sysmon.mjs + s05/; output thật _demo/s05/ — Get-WinEventMau (mô phỏng Get-WinEvent) trên 17 + 40 + 13 tệp EVTX mẫu công khai, PowerShell 7).
+ * 24/11/2026 (agent lgz): Chương 4 SOẠN CHI TIẾT (log-tu-a-den-z/s04-ma-su-kien.mjs + s04/; output thật _demo/s04/ trên 17 + 40 tệp EVTX mẫu công khai, đọc bằng evtx-rec trong PowerShell 7).
+ * 24/11/2026 (agent lgz): Chương 17 SOẠN CHI TIẾT (log-tu-a-den-z/s17-phong-van.mjs + s17/; output thật _demo/s17/tra-loi.sh trên gói log mẫu + đoạn log thật của Ch7–16).
+ * 24/11/2026 (agent lgz): Chương 14 SOẠN CHI TIẾT (log-tu-a-den-z/s14-dieu-tra.mjs + s14/; output thật _demo/s14/ — log sinh tất định tao-vu.py (vu14/lab14) + EVTX mẫu công khai + 6 quy tắc SigmaHQ; chạy lại: bash _demo/s14/chay-s14.bash).
+ * 24/11/2026 (agent lgz): Chương 18 SOẠN CHI TIẾT (log-tu-a-den-z/s18-du-an.mjs + s18/; output thật _demo/s18/ — bộ su-co18 sinh tất định bởi tao-su-co.py (vps01 + router + Windows, 8 định dạng)
+ *   + Loki 3.7.10; chạy lại: bash _demo/s18/chay-s18.bash).
  * Ảnh bìa: scripts/covers/log-tu-a-den-z.png (course-cover-offline.mjs, logo tự vẽ scripts/icons/log-lines.svg).
  */
 import { khung } from './_chung/khung.mjs';
@@ -25,6 +34,21 @@ import { khung } from './_chung/khung.mjs';
 import S00 from './log-tu-a-den-z/s00-bat-dau.mjs';
 import S01 from './log-tu-a-den-z/s01-nen-tang.mjs';
 import S02 from './log-tu-a-den-z/s02-do-nghe.mjs';
+import S03 from './log-tu-a-den-z/s03-event-viewer.mjs';
+import S04 from './log-tu-a-den-z/s04-ma-su-kien.mjs';
+import S05 from './log-tu-a-den-z/s05-dong-lenh-sysmon.mjs';
+import S07 from './log-tu-a-den-z/s07-journald.mjs';
+import S08 from './log-tu-a-den-z/s08-linux-varlog.mjs';
+import S10 from './log-tu-a-den-z/s10-web-ung-dung.mjs';
+import S11 from './log-tu-a-den-z/s11-mang.mjs';
+import S09 from './log-tu-a-den-z/s09-trinh-duyet.mjs';
+import S12 from './log-tu-a-den-z/s12-csdl.mjs';
+import S13 from './log-tu-a-den-z/s13-container-cloud.mjs';
+import S14 from './log-tu-a-den-z/s14-dieu-tra.mjs';
+import S15 from './log-tu-a-den-z/s15-tap-trung-canh-bao.mjs';
+import S16 from './log-tu-a-den-z/s16-van-hanh.mjs';
+import S17 from './log-tu-a-den-z/s17-phong-van.mjs';
+import S18 from './log-tu-a-den-z/s18-du-an.mjs';
 
 function thay(sections, chuong) {
   const moi = new Map(chuong.flatMap((c) => c.lessons).map((l) => [l.slug, l]));
@@ -252,5 +276,5 @@ export default {
       ['tu-dung-kich-ban', 'Bonus — Generate your own incident dataset in your lab and swap it with a friend', 'Phần thêm — Tự dựng bộ dữ liệu sự cố trong lab của bạn rồi đổi cho bạn bè điều tra', 'Chỉ dùng máy của mình, mạng lab tách biệt · Atomic Red Team ở mức chạy test có sẵn · Viết đáp án trước, đổi cho người khác · ↪ Mô phỏng đối thủ chuyên sâu: /courses/blue-team-siem › siem-4-4-mo-phong'],
       ['thi-cuoi', 'Final exam', 'Bài thi cuối khoá', '30 câu tổng hợp mọi chương, có giải thích'],
     ]],
-  ]), [S00, S01, S02]),
+  ]), [S00, S01, S02, S03, S04, S05, S07, S08, S09, S10, S11, S12, S13, S14, S15, S16, S17, S18]),
 };

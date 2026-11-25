@@ -1,0 +1,57 @@
+PS> evtx-rec mau/2-vss_7-System.evtx | ConvertFrom-Json | Where-Object { $_.rec -ge 361 -and $_.rec -le 390 -and $_.id -in 1074,6006,6005,6013,109,13,12,172 } | Sort-Object t | ForEach-Object { '{0}  {1,-15} {2}' -f $_.t.ToString('HH:mm:ss.fff'), ($_.nguon -replace 'Microsoft-Windows-',''), $_.id }
+00:41:00.567  User32          1074
+00:41:38.474  EventLog        6006
+00:41:43.200  Kernel-Power    109
+00:41:44.511  Kernel-General  13
+00:41:50.944  Kernel-General  12
+00:41:52.858  Kernel-Power    172
+00:41:59.878  EventLog        6005
+00:41:59.878  EventLog        6013
+PS> evtx-rec mau/2-vss_7-System.evtx | ConvertFrom-Json | Where-Object rec -eq 361 | ForEach-Object { $_.data | Format-List param1,param2,param3,param4,param5,param6,param7 }
+param1 : c:\windows\system32\svchost.exe (DESKTOP-1N4R894)
+param2 : DESKTOP-1N4R894
+param3 : Operating System: Service pack (Planned)
+param4 : 0x80020010
+param5 : restart
+param6 :
+param7 : NT AUTHORITY\SYSTEM
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object id -eq 1074 | Group-Object { $d = $_.data.'#text'; '{0} | {1} | {2}' -f (($d[0] -replace ' \(.*','') -split '\\')[-1], $d[4], $d[2] } | Sort-Object Count -Descending | Select-Object -First 7 Count,@{n='Tien trinh | Kieu | Ly do';e={$_.Name}} | Format-Table -AutoSize
+Count Tien trinh | Kieu | Ly do
+----- -------------------------
+   18 winlogon.exe | restart | No title for this reason could be found
+    7 Explorer.EXE | power off | Other (Unplanned)
+    7 Explorer.EXE | restart | Other (Unplanned)
+    7 winlogon.exe | power off | No title for this reason could be found
+    6 Explorer.EXE | restart | Operating System: Recovery (Planned)
+    4 TrustedInstaller.exe | restart | Operating System: Upgrade (Planned)
+    3 Explorer.EXE | shutdown | Other (Unplanned)
+PS> foreach ($f in 'mau/system.evtx','mau/2-vss_7-System.evtx','mau/dbc-many-events-system.evtx') { $truoc = $null; $bat = 0; evtx-rec $f 2>$null | ConvertFrom-Json | Where-Object id -in 6005,6006,6008,41 | Sort-Object t | ForEach-Object { if ($_.id -eq 6005 -and $truoc -eq 6005) { $bat++ }; $truoc = $_.id }; '{0,-32} khởi động không có 6006 trước đó: {1}' -f $f, $bat }
+mau/system.evtx                  khởi động không có 6006 trước đó: 0
+mau/2-vss_7-System.evtx          khởi động không có 6006 trước đó: 0
+mau/dbc-many-events-system.evtx  khởi động không có 6006 trước đó: 1
+PS> evtx-rec mau/system.evtx | ConvertFrom-Json | Where-Object { $_.rec -ge 533 -and $_.rec -le 541 -and $_.id -in 42,107,1,6013 } | Sort-Object rec | ForEach-Object { '{0}  {1,-15} {2,-4} {3}' -f $_.t.ToString('MM-dd HH:mm:ss'), ($_.nguon -replace 'Microsoft-Windows-',''), $_.id, $(if ($_.id -eq 6013) { 'uptime ' + $_.data.'#text'[4] + ' giây' } else { ($_.data | ConvertTo-Json -Compress) -replace '"Programmed[^,]*,','' }) }
+07-20 16:21:24  Kernel-General  1    {"NewTime":"2017-07-20T16:21:24.272Z","OldTime":"2017-07-20T16:06:17.4045842Z","Reason":1}
+07-20 16:22:16  Kernel-Power    42   {"TargetState":2,"EffectiveState":2,"Reason":7,"Flags":0,"TransitionsToOn":1}
+07-20 16:42:16  Kernel-General  1    {"NewTime":"2017-07-20T16:42:16.5Z","OldTime":"2017-07-20T16:22:16.5175621Z","Reason":2}
+07-23 07:16:49  EventLog        6013 uptime 249221 giây
+07-20 16:42:30  Kernel-Power    107  {"TargetState":2,"EffectiveState":2,"WakeFromState":2,"WakeRequesterTypeAc":0,"WakeRequesterTypeDc":0}
+07-23 07:16:49  Kernel-General  1    {"NewTime":"2017-07-23T07:16:49.5Z","OldTime":"2017-07-20T16:42:30.07346Z","Reason":2}
+PS> evtx-rec mau/2-vss_7-System.evtx | ConvertFrom-Json | Where-Object id -eq 6013 | ForEach-Object { $s = [int]$_.data.'#text'[4]; '{0}  uptime {1,7} giây = {2:N1} ngày' -f $_.t.ToString('MM-dd HH:mm'), $s, ($s / 86400) } | Select-Object -First 9
+07-06 18:40  uptime      13 giây = 0.0 ngày
+07-06 19:00  uptime    1176 giây = 0.0 ngày
+07-07 19:00  uptime   87576 giây = 1.0 ngày
+07-08 19:00  uptime  173975 giây = 2.0 ngày
+07-09 19:00  uptime  260375 giây = 3.0 ngày
+07-10 19:00  uptime  346776 giây = 4.0 ngày
+07-11 19:00  uptime  433175 giây = 5.0 ngày
+07-12 00:41  uptime       9 giây = 0.0 ngày
+07-12 19:00  uptime   65890 giây = 0.8 ngày
+PS> evtx-rec mau/system.evtx | ConvertFrom-Json | Where-Object id -eq 6013 | Select-Object -First 1 | ForEach-Object { $_.data.'#text' -join ' | ' }
+ |  |  |  | 14 | 60 | 480 Pacific Standard Time
+$ evtx-rec mau/*.evtx tc/*.evtx 2>/dev/null | jq -r 'select((.id==41 and (.nguon|test("Kernel-Power"))) or .id==6008 or (.id==1001 and (.nguon|test("BugCheck|WER-SystemErrorReporting")))) | .id' | wc -l
+0
+PS> evtx-rec mau/Application.evtx mau/dbc-many-events-application.evtx 2>$null | ConvertFrom-Json | Where-Object id -eq 1001 | Group-Object kenh,nguon | Select-Object Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+  167 Application, Microsoft-Windows-LoadPerf
+   63 Application, Windows Error Reporting

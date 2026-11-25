@@ -1,0 +1,24 @@
+$ docker run -d --name lgz-httpd -p 127.0.0.1:41082:80 httpd:2.4-alpine > /dev/null && sleep 2
+$ curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:41082/
+200
+$ curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:41082/khong-co.html
+404
+$ curl -s -o /dev/null -w '%{http_code}\n' -H 'User-Agent: lab-client/1.0' 'http://127.0.0.1:41082/cgi-bin/test?id=1'
+404
+$ docker logs lgz-httpd 2> /dev/null
+172.17.0.1 - - [23/Nov/2026:20:37:25 +0000] "GET / HTTP/1.1" 200 191
+172.17.0.1 - - [23/Nov/2026:20:37:25 +0000] "GET /khong-co.html HTTP/1.1" 404 236
+172.17.0.1 - - [23/Nov/2026:20:37:25 +0000] "GET /cgi-bin/test?id=1 HTTP/1.1" 404 236
+$ docker logs lgz-httpd 2>&1 > /dev/null
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.17.0.3. Set the 'ServerName' directive globally to suppress this message
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.17.0.3. Set the 'ServerName' directive globally to suppress this message
+[Mon Nov 23 20:37:23.104274 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.71 (Unix) configured -- resuming normal operations
+[Mon Nov 23 20:37:23.104309 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+$ docker exec lgz-httpd grep -nE '^\s*(LogFormat|CustomLog|ErrorLog|LogLevel)' /usr/local/apache2/conf/httpd.conf
+317:ErrorLog /proc/self/fd/2
+324:LogLevel warn
+331:    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+332:    LogFormat "%h %l %u %t \"%r\" %>s %b" common
+336:      LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O" combinedio
+346:    CustomLog /proc/self/fd/1 common
+$ docker rm -f lgz-httpd > /dev/null

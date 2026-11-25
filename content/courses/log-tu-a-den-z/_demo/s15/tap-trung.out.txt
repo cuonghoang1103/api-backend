@@ -1,0 +1,53 @@
+$ docker compose ps --format '{{.Name}}  {{.Image}}  {{.Status}}'
+lgz-c15-alloy  grafana/alloy:v1.22.0  Up 48 seconds
+lgz-c15-api  node:22-alpine  Up 48 seconds (healthy)
+lgz-c15-grafana  grafana/grafana:13.2.6  Up 48 seconds
+lgz-c15-loki  grafana/loki:3.7.10  Up 48 seconds
+lgz-c15-net  alpine:latest  Up 48 seconds
+lgz-c15-ntfy  binwiederhier/ntfy:v2.38.1  Up 48 seconds
+lgz-c15-vm  lgz-c15-vm:1  Up 48 seconds
+$ do_ssh 4 admin; docker exec lgz-c15-vm journalctl -u ssh --no-pager | grep -c 'Failed password'
+4
+$ sleep 3; logcli query --since 10m '{host="lab15", unit="ssh.service"} |= "Failed password"'
+2026-11-24T02:08:55Z {} Failed password for invalid user admin from 127.0.0.1 port 39352 ssh2
+2026-11-24T02:08:51Z {} Failed password for invalid user admin from 127.0.0.1 port 37840 ssh2
+2026-11-24T02:08:49Z {} Failed password for invalid user admin from 127.0.0.1 port 37830 ssh2
+2026-11-24T02:08:46Z {} Failed password for invalid user admin from 127.0.0.1 port 37818 ssh2
+$ docker exec lgz-c15-vm sh -c 'journalctl --rotate >/dev/null 2>&1; journalctl --vacuum-time=1s 2>&1 | grep -E "^Deleted|freed" | sed "s#/[0-9a-f]\{32\}/#/<machine-id>/#"'
+Deleted archived journal /var/log/journal/<machine-id>/system@1fd3a6ab5ed542af9e9f5a5f79079888-000000000000102a-000660fc2dbc3eb2.journal (5.1M).
+Vacuuming done, freed 5.1M of archived journals from /var/log/journal/adc567ce22f6436cbc9d296df5767328.
+Vacuuming done, freed 0B of archived journals from /run/log/journal.
+Vacuuming done, freed 0B of archived journals from /var/log/journal.
+$ docker exec lgz-c15-vm journalctl -u ssh --no-pager | grep -c 'Failed password'
+0
+$ logcli query --since 10m '{host="lab15", unit="ssh.service"} |= "Failed password"' | wc -l
+4
+$ docker stop lgz-c15-loki >/dev/null; date -u +%T; for i in $(seq 30); do goi /api/orders?mat-mang=$i; done; logcli query --since 1m '{container="lgz-c15-api"}' 2>&1 | tail -1
+02:09:01
+2026/11/24 02:09:03 Query failed: run out of attempts while querying the server
+$ docker exec lgz-c15-net wget -qO- 127.0.0.1:12345/metrics | grep -E '^loki_write_(batch_retries_total|request_duration_seconds_count|sent_entries_total)' | sed -E 's/component_id="[^"]*",component_path="[^"]*",host="[^"]*",?//; s/\{\}//'
+loki_write_batch_retries_total 3
+loki_write_request_duration_seconds_count{status_code="-1"} 3
+loki_write_request_duration_seconds_count{status_code="204"} 15
+loki_write_sent_entries_total 4417
+$ sleep 30; docker start lgz-c15-loki >/dev/null; until docker exec lgz-c15-net wget -qO- 127.0.0.1:3100/ready 2>/dev/null | grep -q ready; do sleep 2; done; date -u +%T; sleep 20; logcli query --since 5m --limit 100 '{container="lgz-c15-api"} |= "mat-mang"' | wc -l
+02:09:52
+30
+$ logcli instant-query 'sum(count_over_time({container="lgz-c15-api"} |= "mat-mang" [5m]))'
+[
+  {
+    "metric": {},
+    "value": [
+      1795486212.931,
+      "30"
+    ]
+  }
+]
+$ docker exec lgz-c15-net wget -qO- 127.0.0.1:12345/metrics | grep -E '^loki_write_(batch_retries_total|request_duration_seconds_count|sent_entries_total)' | sed -E 's/component_id="[^"]*",component_path="[^"]*",host="[^"]*",?//; s/\{\}//'; docker exec lgz-c15-net wget -qO- 127.0.0.1:12345/metrics | grep -E '^loki_write_dropped_entries_total' | awk '{s+=$2} END {print "loki_write_dropped_entries_total (mọi lý do) =", s}'
+loki_write_batch_retries_total 6
+loki_write_request_duration_seconds_count{status_code="-1"} 6
+loki_write_request_duration_seconds_count{status_code="204"} 18
+loki_write_sent_entries_total 4580
+loki_write_dropped_entries_total (mọi lý do) = 0
+$ docker run -d --name lgz-c15-loki-macdinh --network none grafana/loki:3.7.10 >/dev/null; sleep 25; docker logs lgz-c15-loki-macdinh 2>&1 | grep -m1 'disk usage' | sed 's/ ts=[^ ]*//'; docker rm -f lgz-c15-loki-macdinh >/dev/null
+level=warn caller=wal.go:215 msg="disk usage exceeded threshold, throttling writes" usage_percent=91.55% threshold_percent=90.00% component=wal

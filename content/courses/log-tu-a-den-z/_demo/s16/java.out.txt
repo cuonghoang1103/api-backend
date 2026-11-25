@@ -1,0 +1,10 @@
+$ java -version 2>&1 | head -1
+openjdk version "21.0.13.1" 2026-11-17 LTS
+$ java -cp 'lib/*' -Dlogback.configurationFile=raw.xml Login.java
+09:56:43.620 INFO  auth - nhận yêu cầu đăng nhập LoginRequest[email=an@example.com, password=MatKhau-GIA-123]
+09:56:43.624 INFO  auth - nhận yêu cầu đăng nhập LoginRequest[email=an@example.com, password=***]
+09:56:43.624 WARN  auth - gọi cổng thanh toán thất bại: url=https://pay.example/api?amount=50000&token=GIA-tok-77a
+$ java -cp 'lib/*' -Dlogback.configurationFile=logback.xml Login.java
+09:56:44.342 INFO  auth - nhận yêu cầu đăng nhập LoginRequest[email=an@example.com, password=***]
+09:56:44.345 INFO  auth - nhận yêu cầu đăng nhập LoginRequest[email=an@example.com, password=***]
+09:56:44.346 WARN  auth - gọi cổng thanh toán thất bại: url=https://pay.example/api?amount=50000&token=***

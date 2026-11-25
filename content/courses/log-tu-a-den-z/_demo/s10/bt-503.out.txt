@@ -1,0 +1,11 @@
+$ grep -n 'limit_req' nginx.conf
+20:  limit_req_zone $binary_remote_addr zone=login:1m rate=5r/m;
+28:      limit_req zone=login burst=3 nodelay;
+29:      # limit_req_status 429;
+$ for i in 1 2 3 4 5 6; do curl -s -o /dev/null -w '%{http_code} ' -X POST -d '{"user":"an"}' http://127.0.0.1:41080/api/login; done; echo
+401 401 401 401 503 503 
+$ grep '" 503 ' logs/access.log | head -2
+172.17.0.1 - - [24/Nov/2026:03:25:09 +0000] "POST /api/login HTTP/1.1" 503 197 "-" "curl/8.18.0" rt=0.000 urt=- rid=7bfc0deebc2270b65cb42f8a165b2c81
+172.17.0.1 - - [24/Nov/2026:03:25:09 +0000] "POST /api/login HTTP/1.1" 503 197 "-" "curl/8.18.0" rt=0.000 urt=- rid=ff816f033d721f46b12bbb969ace05de
+$ grep -m1 'limiting requests' logs/error.log
+2026/11/24 03:25:09 [error] 31#31: *11 limiting requests, excess: 4.000 by zone "login", client: 172.17.0.1, server: , request: "POST /api/login HTTP/1.1", host: "127.0.0.1:41080"

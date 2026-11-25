@@ -1,0 +1,34 @@
+# tai-mau.ps1 — tải bộ EVTX MẪU CÔNG KHAI dùng cho Chương 3–5 (log thật của máy Windows thật, do cộng đồng điều tra số chia sẻ) và kiểm SHA256.
+# Nguồn: github.com/omerbenamram/evtx (thư mục samples, giấy phép MIT/Apache-2.0) và github.com/Yamato-Security/hayabusa-sample-evtx
+#        (gom từ DeepBlueCLI của Eric Conrad/SANS và EVTX-to-MITRE-Attack của mdecrevoisier). ~78 MB.
+# Chạy: PowerShell 5.1 (Windows) hoặc PowerShell 7 (Windows/macOS/Linux):  .\tai-mau.ps1 -Ra C:\lab\mau
+param([string]$Ra = (Join-Path (Get-Location) "mau"))
+$ProgressPreference = "SilentlyContinue"   # thanh tiến trình làm Invoke-WebRequest của PowerShell 5.1 chậm hàng chục lần
+New-Item -ItemType Directory -Force $Ra | Out-Null
+$ds = @(
+  @('2-system-Microsoft-Windows-LiveId%4Operational.evtx', 'https://raw.githubusercontent.com/omerbenamram/evtx/master/samples/2-system-Microsoft-Windows-LiveId%254Operational.evtx', 'AC8CC0AADACCB9358A2C459E3E3C22E8F7EE6D2962A2BF46BA12688252E6A7DB'),
+  @('2-system-Security-dirty.evtx', 'https://raw.githubusercontent.com/omerbenamram/evtx/master/samples/2-system-Security-dirty.evtx', '0D4B19D89A5CBA2766D6AC7E008C0673087A8E2DC731F7969345CC4D45277C76'),
+  @('2-vss_0-Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx', 'https://raw.githubusercontent.com/omerbenamram/evtx/master/samples/2-vss_0-Microsoft-Windows-TerminalServices-RemoteConnectionManager%254Operational.evtx', 'F498C1C45739F2F71207B78B7CCE57F483C2DDD99C74D34D284D9FE401E8C587'),
+  @('2-vss_7-System.evtx', 'https://raw.githubusercontent.com/omerbenamram/evtx/master/samples/2-vss_7-System.evtx', 'CA02FD8CE4F38082A7C5FF2B649DF1D5F343CC1E651CB2F599EABF921BC15827'),
+  @('Application.evtx', 'https://raw.githubusercontent.com/omerbenamram/evtx/master/samples/Application.evtx', '01807B966DFF841E192595E5A6F0AEC65FE0F6CF0631409BD9774D0829A5A777'),
+  @('Archive-ForwardedEvents-test.evtx', 'https://raw.githubusercontent.com/omerbenamram/evtx/master/samples/Archive-ForwardedEvents-test.evtx', '098A5130841DF80A01B0343CA24D4A63A9C5F8423B346E3C0B94EDA1E41DA6CE'),
+  @('dbc-many-events-application.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/DeepBlueCLI/many-events-application.evtx', '358A6D18E110457A5FC70D32E88FB1FFB75A16F4616258D73E381C849A88BFCC'),
+  @('dbc-many-events-security.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/DeepBlueCLI/many-events-security.evtx', 'E1BB83D4583AAEE2144F37AFD8CE9B647AE7F34A636B85CE4A75683FBA93F30E'),
+  @('dbc-many-events-system.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/DeepBlueCLI/many-events-system.evtx', 'CAC38C40A0420F2D1C71F6DD13143EDAB1EAD77B9BB4CF6E9CEA34C9F3BCF3DA'),
+  @('defender-1116-1117.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-to-MITRE-Attack/Antivirus/ID1116-1117-Defender%20threat%20detected.evtx', '6B1CCE6CBB972596EC9361DE93163FC6173C52E0E7C23C890BD99F9F42928862'),
+  @('defender-1151.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-to-MITRE-Attack/Antivirus/ID1151-Defender%20health%20status.evtx', 'D82F06D31BCFCCA406BFF1EA9974BF834FDFD61D293F83664796978BCF42D00F'),
+  @('firewall-2004.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-to-MITRE-Attack/TA0005-Defense%20Evasion/T1562.004-Impair%20Defenses-Disable%20or%20Modify%20System%20Firewall/ID2004-New%20firewall%20rule%20created%20by%20PowerShell.evtx', '46728952607B8C3006268AF50A78469CE5AD66C9AE37324530756015BD3D5F92'),
+  @('powershell-openssh-install.evtx', 'https://raw.githubusercontent.com/Yamato-Security/hayabusa-sample-evtx/main/EVTX-to-MITRE-Attack/TA0008-Lateral%20Movement/T1021.004-Remote%20Service%20SSH/ID4103-4104-OpenSSH%20server%20install.evtx', '83214B4391C5F6AD24544B045D386C835CED033279A75F294B01E804897575FB'),
+  @('security.evtx', 'https://raw.githubusercontent.com/omerbenamram/evtx/master/samples/security.evtx', '5F29A03CF8C1B4BFBD82C4074CCC81ECFE85D7EE15375AFC352ED5025C9A4D8D'),
+  @('security_big_sample.evtx', 'https://raw.githubusercontent.com/omerbenamram/evtx/master/samples/security_big_sample.evtx', 'B3F8498D8A99740F7381518FD332CBB67C0BFED0A5B4320D407E485B3EE682FB'),
+  @('sysmon.evtx', 'https://raw.githubusercontent.com/omerbenamram/evtx/master/samples/sysmon.evtx', 'E1817FD7241AD2B5B9660E179ADEC878D157F1FA25333E52AEF263C69BCD970B'),
+  @('system.evtx', 'https://raw.githubusercontent.com/omerbenamram/evtx/master/samples/system.evtx', '60E5FD8F10A3DEECD58BD7BEE2E03B1308D190FD13B52908BE9D576C7F5D6623')
+)
+$loi = 0
+foreach ($d in $ds) {
+  $tep = Join-Path $Ra $d[0]
+  if (-not (Test-Path -LiteralPath $tep)) { Invoke-WebRequest -Uri $d[1] -OutFile $tep -UseBasicParsing }
+  $h = (Get-FileHash -LiteralPath $tep -Algorithm SHA256).Hash
+  if ($h -eq $d[2]) { "OK   {0,10:N0}  {1}" -f (Get-Item -LiteralPath $tep).Length, $d[0] } else { "SAI  {0}  (hash {1})" -f $d[0], $h; $loi++ }
+}
+"{0} tệp, {1} lỗi — thư mục {2}" -f $ds.Count, $loi, $Ra

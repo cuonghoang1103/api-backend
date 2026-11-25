@@ -1,0 +1,45 @@
+$ docker logs lgz-mssql 2>&1 | grep -E 'Microsoft SQL Server 2022|Logging SQL Server messages in file' | cut -c1-160
+
+2026-11-24 15:50:56.93 Server      Microsoft SQL Server 2022 (RTM-CU28) (KB5125472) - 16.0.4325.4 (X64)
+
+2026-11-24 15:50:56.94 Server      Logging SQL Server messages in file '/var/opt/mssql/log/errorlog'.
+$ ls -l /var/opt/mssql/log/ | grep -iE 'errorlog|\.xel' | head -5
+-rw-r-----. 1 mssql mssql  77824 Nov 24 15:50 HkEngineEventFile_0_134399838579580000.xel
+-rw-r-----. 1 mssql mssql  28024 Nov 24 15:51 errorlog
+-rw-r-----. 1 mssql mssql      0 Nov 24 15:50 errorlog.1
+-rw-r-----. 1 mssql mssql 126976 Nov 24 15:51 system_health_0_134399838640020000.xel
+$ export PATH=$PATH:/opt/mssql-tools18/bin; sqlcmd -C -S 127.0.0.1 -U app -P sai-roi -Q 'SELECT 1'
+Sqlcmd: Error: Microsoft ODBC Driver 18 for SQL Server : Login failed for user 'app'..
+$ export PATH=$PATH:/opt/mssql-tools18/bin; sqlcmd -C -S 127.0.0.1 -U khongco -P abc -Q 'SELECT 1'
+Sqlcmd: Error: Microsoft ODBC Driver 18 for SQL Server : Login failed for user 'khongco'..
+$ export PATH=$PATH:/opt/mssql-tools18/bin; sqlcmd -C -S 127.0.0.1 -U app -P 'App-Lab-2026!' -d shopp -Q 'SELECT 1'
+Sqlcmd: Error: Microsoft ODBC Driver 18 for SQL Server : Cannot open database "shopp" requested by the login. The login failed..
+Sqlcmd: Error: Microsoft ODBC Driver 18 for SQL Server : Login failed for user 'app'..
+$ export PATH=$PATH:/opt/mssql-tools18/bin; sqlcmd -C -S 127.0.0.1 -U intern -P 'Intern-Lab-2026!' -Q 'SELECT 1'
+Sqlcmd: Error: Microsoft ODBC Driver 18 for SQL Server : Login failed for user 'intern'. Reason: The account is disabled..
+$ grep -A1 -E 'Error: 18(456|470)' /var/opt/mssql/log/errorlog | grep -v '^--' | cut -c1-200
+2026-11-24 15:51:07.83 Logon       Error: 18456, Severity: 14, State: 8.
+2026-11-24 15:51:07.83 Logon       Login failed for user 'app'. Reason: Password did not match that for the login provided. [CLIENT: 127.0.0.1]
+2026-11-24 15:51:07.94 Logon       Error: 18456, Severity: 14, State: 5.
+2026-11-24 15:51:07.94 Logon       Login failed for user 'khongco'. Reason: Could not find a login matching the name provided. [CLIENT: 127.0.0.1]
+2026-11-24 15:51:08.05 Logon       Error: 18456, Severity: 14, State: 38.
+2026-11-24 15:51:08.05 Logon       Login failed for user 'app'. Reason: Failed to open the explicitly specified database 'shopp'. [CLIENT: 127.0.0.1]
+2026-11-24 15:51:08.16 Logon       Error: 18470, Severity: 14, State: 1.
+2026-11-24 15:51:08.16 Logon       Login failed for user 'intern'. Reason: The account is disabled. [CLIENT: 127.0.0.1]
+$ grep -oE 'Error: 18[0-9]+, Severity: 14, State: [0-9]+' /var/opt/mssql/log/errorlog | sort | uniq -c
+      1 Error: 18456, Severity: 14, State: 38
+      1 Error: 18456, Severity: 14, State: 5
+      1 Error: 18456, Severity: 14, State: 8
+      1 Error: 18470, Severity: 14, State: 1
+$ export PATH=$PATH:/opt/mssql-tools18/bin; sqlcmd -C -I -S 127.0.0.1 -U sa -P 'Sa-Lab-2026!' -W -s ' | ' -Q "SET NOCOUNT ON; DECLARE @t TABLE (LogDate datetime, ProcessInfo nvarchar(50), Text nvarchar(max)); INSERT @t EXEC sp_readerrorlog 0, 1, N'Login failed'; SELECT CONVERT(char(19), LogDate, 120) AS LogDate, ProcessInfo, LEFT(Text, 110) AS Text FROM @t"
+LogDate ProcessInfo Text
+------- ----------- ----
+2026-11-24 15:51:07 Logon Login failed for user 'app'. Reason: Password did not match that for the login provided. [CLIENT: 127.0.0.1]
+2026-11-24 15:51:07 Logon Login failed for user 'khongco'. Reason: Could not find a login matching the name provided. [CLIENT: 127.0.0.1
+2026-11-24 15:51:08 Logon Login failed for user 'app'. Reason: Failed to open the explicitly specified database 'shopp'. [CLIENT: 127.0.
+2026-11-24 15:51:08 Logon Login failed for user 'intern'. Reason: The account is disabled. [CLIENT: 127.0.0.1]
+$ export PATH=$PATH:/opt/mssql-tools18/bin; sqlcmd -C -I -S 127.0.0.1 -U sa -P 'Sa-Lab-2026!' -W -Q "SET NOCOUNT ON; SELECT name, CASE WHEN is_disabled = 1 THEN 'disabled' ELSE 'enabled' END AS trang_thai FROM sys.server_principals WHERE name IN ('app','intern')"
+name trang_thai
+---- ----------
+app enabled
+intern disabled

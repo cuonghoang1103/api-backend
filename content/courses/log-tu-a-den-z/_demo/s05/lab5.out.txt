@@ -1,0 +1,68 @@
+PS> /lab/ra/Bao-CaoSang.ps1 -Tep mau/dbc-many-events-system.evtx, mau/dbc-many-events-security.evtx, mau/dbc-many-events-application.evtx -May IE10Win7 -Now '2016-09-20 08:00'
+BÁO CÁO SÁNG — IE10Win7 — 2016-09-19 08:00 → 2016-09-20 08:00 (24 giờ)
+
+[1] Đăng nhập hỏng (4625): 0
+
+[2] Dịch vụ mới cài (7045): 9
+    21:23:37  aCshIvAdgRYNApEv  [demand start, LocalSystem]  %COMSPEC% /b /c start /b /min powershell.exe -nop -w hidden …
+    21:13:04  hmoopk  [demand start, LocalSystem]  cmd.exe /c echo hmoopk > \\.\pipe\hmoopk
+    21:12:45  xnQMIQKvTLVeKYjo  [demand start, LocalSystem]  %SYSTEMROOT%\LCCxAHbh.exe
+    21:12:10  adsymn  [demand start, LocalSystem]  cmd.exe /c echo adsymn > \\.\pipe\adsymn
+    21:08:05  KAyUYDrNOKClCGXL  [demand start, LocalSystem]  %SYSTEMROOT%\BRMPXyFc.exe
+    21:00:23  QPFRRKggYorFrGnJ  [demand start, LocalSystem]  %SYSTEMROOT%\OJuUfMOy.exe
+    20:59:41  TDhDnlnsrKrQVnjY  [demand start, LocalSystem]  %COMSPEC% /b /c start /b /min powershell.exe -nop -w hidden …
+    20:38:04  DrzkXznQhkKgYssd  [demand start, LocalSystem]  %COMSPEC% /b /c start /b /min powershell.exe -nop -w hidden …
+    20:36:09  zIGuwymOgHZnXZPm  [demand start, LocalSystem]  %COMSPEC% /b /c start /b /min powershell.exe -nop -w hidden …
+
+[3] Tắt/khởi động (1074 → 6006 … 6005; 6008/41 = tắt bất thường): 1 lần khởi động
+    09-19 15:11:49  1074 power off — IE10WIN7\IEUser qua Explorer.EXE — Other (Unplanned)
+    09-19 15:12:14  1074 power off — IE10WIN7\IEUser qua winlogon.exe — No title for this reason could be found
+    09-19 15:12:15  6006 Event Log dừng (tắt sạch)
+    09-19 15:13:03  6005 Event Log chạy (vừa khởi động)
+
+[4] Sập/treo (1000 sập, 1002 treo, 7031/7034 dịch vụ chết): 0
+PS> /lab/ra/Bao-CaoSang.ps1 -Tep mau/dbc-many-events-system.evtx, mau/dbc-many-events-security.evtx, mau/dbc-many-events-application.evtx -May IE10Win7 -Now '2016-08-19 08:00'
+BÁO CÁO SÁNG — IE10Win7 — 2016-08-18 08:00 → 2016-08-19 08:00 (24 giờ)
+
+[1] Đăng nhập hỏng (4625): 0
+
+[2] Dịch vụ mới cài (7045): 13
+    20:40:21  SYyGmEHvgHiGYApk  [demand start, LocalSystem]  %COMSPEC% /b /c start /b /min powershell.exe -nop -w hidden …
+    20:24:48  tLVOxEmULrqimOQr  [demand start, LocalSystem]  %SYSTEMROOT%\tnKMiZjQ.exe
+    20:22:36  JDFZBLLIkXqjccos  [demand start, LocalSystem]  %SYSTEMROOT%\zqvbnLTK.exe
+    20:14:12  riddDteHwMfqxVOk  [demand start, LocalSystem]  %SYSTEMROOT%\GbzflpZs.exe
+    20:12:53  GWRhKCtKcmQarQUS  [demand start, LocalSystem]  %SYSTEMROOT%\frlCVwVW.exe
+    20:11:24  VdhURnHArteGncWS  [demand start, LocalSystem]  %SYSTEMROOT%\dQGFdDtG.exe
+    20:10:06  mHPhVsrnnbYuDOWj  [demand start, LocalSystem]  %SYSTEMROOT%\AFDvMJdc.exe
+    20:04:19  XCKcRAHmHLAkajXO  [demand start, LocalSystem]  %SYSTEMROOT%\kAtEspLd.exe
+    20:03:18  yagfag  [demand start, LocalSystem]  cmd.exe /c echo yagfag > \\.\pipe\yagfag
+    19:59:33  IixaZHzxvTaopUGI  [demand start, LocalSystem]  %SYSTEMROOT%\ijQzlbXC.exe
+    15:32:23  Google Update Service (gupdatem)  [demand start, LocalSystem]  "C:\Program Files\Google\Update\GoogleUpdate.exe" /medsvc
+    15:32:23  Google Update Service (gupdate)  [auto start, LocalSystem]  "C:\Program Files\Google\Update\GoogleUpdate.exe" /svc
+    14:49:42  Intel(R) PRO/1000 NDIS 6 Adapter Driver  [demand start, ]  system32\DRIVERS\E1G60I32.sys
+
+[3] Tắt/khởi động (1074 → 6006 … 6005; 6008/41 = tắt bất thường): 6 lần khởi động
+    08-18 14:47:18  1074 restart — IE10WIN7\IEUser qua rundll32.exe — Hardware: Installation (Planned)
+    08-18 14:47:20  6006 Event Log dừng (tắt sạch)
+    08-18 14:47:20  1074 restart — IE10WIN7\IEUser qua winlogon.exe — No title for this reason could be found
+    08-18 14:47:36  6005 Event Log chạy (vừa khởi động)
+    08-18 14:48:29  1074 power off — IE10WIN7\IEUser qua Explorer.EXE — Other (Unplanned)
+    08-18 14:48:31  1074 power off — IE10WIN7\IEUser qua winlogon.exe — No title for this reason could be found
+    08-18 14:48:31  6006 Event Log dừng (tắt sạch)
+    08-18 14:49:38  6005 Event Log chạy (vừa khởi động)
+    08-18 15:28:10  1074 power off — IE10WIN7\IEUser qua Explorer.EXE — Other (Unplanned)
+    08-18 15:28:34  1074 power off — IE10WIN7\IEUser qua winlogon.exe — No title for this reason could be found
+    08-18 15:28:38  6006 Event Log dừng (tắt sạch)
+    08-18 15:29:27  6005 Event Log chạy (vừa khởi động)
+    08-18 16:51:57  1074 restart — IE10WIN7\IEUser qua Explorer.EXE — Operating System: Recovery (Planned)
+    08-18 16:52:20  1074 restart — IE10WIN7\IEUser qua winlogon.exe — No title for this reason could be found
+    08-18 16:52:36  6006 Event Log dừng (tắt sạch)
+    08-18 16:52:58  6005 Event Log chạy (vừa khởi động)
+    08-18 18:46:20  6005 Event Log chạy (vừa khởi động)
+    08-18 19:55:27  1074 restart — IE10WIN7\IEUser qua Explorer.EXE — Other (Unplanned)
+    08-18 19:55:29  1074 restart — IE10WIN7\IEUser qua winlogon.exe — No title for this reason could be found
+    08-18 19:55:33  6006 Event Log dừng (tắt sạch)
+    08-18 19:55:49  6005 Event Log chạy (vừa khởi động)
+
+[4] Sập/treo (1000 sập, 1002 treo, 7031/7034 dịch vụ chết): 1
+       1 × 1000 | rundll32.exe

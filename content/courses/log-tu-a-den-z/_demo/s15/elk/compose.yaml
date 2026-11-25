@@ -1,0 +1,49 @@
+# Bộ lab 2 (Bài 15.3): Elasticsearch + Kibana + Filebeat 9.5.7, một netns chung (không mở cổng ra ngoài).
+# Máy yếu (< 8 GB RAM) ⇒ dùng bộ lab 1 (Loki). Trên máy của bạn muốn mở Kibana: thêm ports ["127.0.0.1:45601:5601"] vào net, bỏ network_mode: none.
+name: lgz-c15e
+services:
+  net:
+    image: alpine:latest
+    container_name: lgz-c15e-net
+    network_mode: none
+    command: sleep infinity
+    init: true
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.7
+    container_name: lgz-c15e-es
+    network_mode: service:net
+    environment:
+      discovery.type: single-node
+      network.host: 127.0.0.1
+      ES_JAVA_OPTS: -Xms1g -Xmx1g          # heap cố định 1 GB — đừng để mặc định ăn nửa RAM máy
+      ELASTIC_PASSWORD: lab15-elastic-chi-o-may-minh
+      xpack.security.enabled: "true"       # vẫn bật xác thực; chỉ tắt TLS vì mọi thứ ở 127.0.0.1
+      xpack.security.http.ssl.enabled: "false"
+      xpack.security.transport.ssl.enabled: "false"
+      xpack.license.self_generated.type: basic
+      cluster.routing.allocation.disk.threshold_enabled: "false"   # đĩa lab đầy 91% ⇒ ES sẽ khoá chỉ mục (xem bài)
+    volumes: [es-data:/usr/share/elasticsearch/data]
+    mem_limit: 2g
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.5.7
+    container_name: lgz-c15e-kibana
+    network_mode: service:net
+    environment:
+      SERVER_HOST: 127.0.0.1
+      ELASTICSEARCH_HOSTS: http://127.0.0.1:9200
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: lab15-kibana-chi-o-may-minh
+      TELEMETRY_OPTIN: "false"
+      XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: lab15-khoa-32-ky-tu-chi-dung-o-may-nha
+    mem_limit: 1536m
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:9.5.7
+    container_name: lgz-c15e-filebeat
+    network_mode: service:net
+    user: root
+    command: filebeat -e --strict.perms=false
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./mau:/mau:ro
+      - fb-data:/usr/share/filebeat/data
+volumes: { es-data: {}, fb-data: {} }

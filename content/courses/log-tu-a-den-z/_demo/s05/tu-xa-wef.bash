@@ -1,0 +1,8 @@
+# 5.7 — Đọc log máy khác: Get-WinEvent -ComputerName / Invoke-Command và Windows Event Forwarding (WEF). Không có miền Windows để chạy thật;
+# phần chạy thật: tệp mau/Archive-ForwardedEvents-test.evtx = bản lưu kênh ForwardedEvents của một máy GOM (collector) thật, nhận log từ nhiều máy.
+@ps Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx | Group-Object MachineName, LogName | Sort-Object Count -Descending | Format-Table Count, Name -AutoSize
+@ps Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx | Group-Object MachineName | ForEach-Object { $t = $_.Group.TimeCreated | Measure-Object -Minimum -Maximum; '{0,-32} {1:HH:mm:ss} → {2:HH:mm:ss} UTC  ({3} sự kiện)' -f $_.Name, $t.Minimum, $t.Maximum, $_.Count }
+@ps $e = Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4625 } -MaxEvents 1; $r = ([xml]$e.ToXml()).Event.RenderingInfo; [pscustomobject]@{ Culture = $r.Culture; Level = $r.Level; Task = $r.Task; Opcode = $r.Opcode; Channel = $r.Channel; Provider = $r.Provider; Keyword = $r.Keywords.Keyword; 'Message (dòng 1)' = ($r.Message -split "`n")[0] } | Format-List
+@ps Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx | Group-Object { [bool]$_.Message } | Format-Table @{n='Có Message?'; e={$_.Name}}, Count -AutoSize
+@ps (Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4625 } -MaxEvents 1).Message -split "`n" | Select-Object -First 24
+@ps Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4625 } | Group-Object MachineName, { $_.Properties[19].Value }, { $_.Properties[5].Value } | Sort-Object Count -Descending | Format-Table Count, Name -AutoSize

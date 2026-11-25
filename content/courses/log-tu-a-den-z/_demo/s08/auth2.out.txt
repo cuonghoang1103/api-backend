@@ -1,0 +1,28 @@
+$ sudo grep -c 'Failed password' /var/log/auth.log; sudo grep -c 'Failed password' /var/log/auth.log; sudo grep -c 'Failed password' /var/log/auth.log
+196
+197
+198
+$ sudo grep 'Failed password' /var/log/auth.log | tail -1 | cut -c1-150
+2026-11-24T05:56:52.229986+07:00 lab7 sudo:       hv : PWD=/home/hv ; USER=root ; COMMAND=/usr/bin/grep 'Failed password' /var/log/auth.log
+$ sudo awk '$1>="2026-11-24T05:15:30" && $1<"2026-11-24T05:15:56"' /var/log/auth.log > a83.log; wc -l < a83.log; grep -c 'Failed password' a83.log; grep -c 'sshd\[[0-9]*\]: Failed password' a83.log
+239
+12
+7
+$ grep 'sshd\[[0-9]*\]: Failed password' a83.log | grep -oE 'from [0-9.]+' | sort | uniq -c | sort -rn
+      7 from 192.168.56.88
+$ grep 'sshd\[[0-9]*\]: Failed password' a83.log | awk '{for(i=1;i<=NF;i++) if($i=="for"){u=($(i+1)=="invalid")?$(i+3):$(i+1)}; print u}' | sort | uniq -c | sort -rn
+      2 root
+      2 oracle
+      2 dev
+      1 postgres
+$ grep 'sshd\[[0-9]*\]: Failed password' a83.log | grep -oE 'sshd\[[0-9]+\]' | sort | uniq -c
+      2 sshd[15347]
+      2 sshd[15359]
+      1 sshd[15367]
+      2 sshd[15382]
+$ grep -E 'sshd\[[0-9]+\]: Invalid user' a83.log | cut -c1-120
+2026-11-24T05:15:36.658808+07:00 lab7 sshd[15359]: Invalid user oracle from 192.168.56.88 port 36977
+2026-11-24T05:15:39.466724+07:00 lab7 sshd[15367]: Invalid user postgres from 192.168.56.88 port 40327
+$ awk '/sshd\[[0-9]+\]: Failed password/{for(i=1;i<=NF;i++) if($i=="from") sai[$(i+1)]++} /sshd\[[0-9]+\]: Accepted/{for(i=1;i<=NF;i++) if($i=="from"){ip=$(i+1); if(sai[ip]>0) print "ĐỎ: " ip " vào được sau " sai[ip] " lần sai —", substr($0,1,26), $(i-3), $(i-1)}}' a83.log
+ĐỎ: 192.168.56.88 vào được sau 7 lần sai — 2026-11-24T05:15:47.916349 password dev
+$ rm a83.log

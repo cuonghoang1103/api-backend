@@ -1,0 +1,66 @@
+PS> Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx | Group-Object Id | Sort-Object Count -Descending | Select-Object -First 6 Count, Name | Format-Table -AutoSize
+Count Name
+----- ----
+  429 4624
+  130 4625
+   59 4648
+    8 4728
+    8 4737
+    5 4738
+PS> (Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4625 }).Count
+130
+PS> (Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4624, 4625 }).Count
+559
+PS> Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4625; TargetUserName = 'psadmin' } -MaxEvents 1 -Verbose 4>&1 | Select-Object -First 1
+Constructed structured query: <QueryList><Query Id="0" Path="file://mau/Archive-ForwardedEvents-test.evtx"><Select Path="*">*[System[(EventID=4625)]][EventData[(Data[@Name='TargetUserName']='psadmin')]]</Select></Query></QueryList>
+PS> Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4625 } | Group-Object { '{0} <- {1}' -f $_.Properties[5].Value, $_.Properties[19].Value } | Sort-Object Count -Descending | Select-Object -First 5 Count, Name | Format-Table -AutoSize
+Count Name
+----- ----
+   71 psadmin <- 10.115.247.239
+   56 CTX-WS16-FS-T3$ <- 10.115.55.139
+    2 psadmin <- 10.115.247.238
+    1 chadkramer <- 130.86.9.236
+PS> Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4625 } | Measure-Object TimeCreated -Minimum -Maximum | Format-List Count, Minimum, Maximum
+Count   : 130
+Minimum : 11/8/2019 11:20:54 PM
+Maximum : 11/8/2019 11:21:26 PM
+PS> (Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Id = 4625; StartTime = [datetime]'2019-11-08 23:21:00'; EndTime = [datetime]'2019-11-08 23:21:59' }).Count
+119
+PS> (Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Data = '10.115.247.238' }).Count
+20
+PS> Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Level = 4 }
+TimeCreated           Id LevelDisplayName ProviderName
+-----------           -- ---------------- ------------
+11/9/2019 12:01:08 AM 16 Information      Microsoft-Windows-Kernel-General
+PS> Get-WinEventMau mau/Archive-ForwardedEvents-test.evtx | Group-Object Level, LevelDisplayName | Format-Table Count, Name -AutoSize
+Count Name
+----- ----
+  650 0, Information
+    2 2, Error
+    1 4, Information
+PS> Get-WinEventMau -FilterHashtable @{ Path = 'mau/dbc-many-events-system.evtx'; Level = 1, 2 } | Group-Object ProviderName, Id | Sort-Object Count -Descending | Select-Object -First 6 Count, Name | Format-Table -AutoSize
+Count Name
+----- ----
+   25 Service Control Manager, 7011
+    8 Service Control Manager, 7009
+    4 Microsoft-Windows-DistributedCOM, 10010
+    4 Service Control Manager, 7023
+    2 Service Control Manager, 7043
+    1 NetBT, 4321
+PS> (Get-WinEventMau -FilterHashtable @{ Path = 'mau/dbc-many-events-system.evtx'; ProviderName = 'Microsoft-Windows-Kernel-General'; Id = 12, 13 } -Oldest | Select-Object -First 4 | Format-Table TimeCreated, Id, MachineName | Out-String).Trim()
+TimeCreated           Id MachineName
+-----------           -- -----------
+7/14/2009 4:56:50 AM  13 37L4247D28-05
+10/23/2013 4:15:33 PM 12 37L4247D28-05
+10/23/2013 4:18:12 PM 13 IE8Win7
+10/23/2013 4:18:26 PM 12 IE8Win7
+PS> Get-WinEventMau -FilterHashtable @{ Path = 'mau/Archive-ForwardedEvents-test.evtx'; Keywords = 4503599627370496 } | Group-Object Id | Format-Table Count, Name -AutoSize
+Count Name
+----- ----
+  130 4625
+PS> Get-WinEventMau -FilterHashtable @{ Path = 'mau/dbc-many-events-security.evtx', 'mau/dbc-many-events-application.evtx'; Id = 4625 } | Group-Object LogName, ProviderName | Format-Table Count, Name -AutoSize
+Count Name
+----- ----
+   38 Application, Microsoft-Windows-EventSystem
+PS> ConvertTo-EvtXPath @{ LogName = 'Security'; Id = 4625, 4771; StartTime = [datetime]'2026-11-24 08:00'; IpAddress = '203.0.113.66' }
+*[System[(EventID=4625 or EventID=4771) and TimeCreated[@SystemTime>='2026-11-24T08:00:00.000Z']]][EventData[(Data[@Name='IpAddress']='203.0.113.66')]]

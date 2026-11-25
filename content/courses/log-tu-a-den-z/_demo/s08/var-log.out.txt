@@ -1,0 +1,127 @@
+$ . /etc/os-release; echo "$PRETTY_NAME"; uname -r
+Ubuntu 24.04.5 LTS
+6.8.0-149-generic
+$ ls -l /var/log
+total 544
+lrwxrwxrwx  1 root root                39 Nov  5 18:23 README -> ../../usr/share/doc/systemd/README.logs
+-rw-r--r--  1 root root               722 Nov 24 04:07 alternatives.log
+-rw-r-----  1 root adm               2259 Nov 24 04:24 apport.log
+drwxr-xr-x  2 root root              4096 Nov 24 04:52 apt
+-rw-rw----  1 root utmp               768 Nov 24 04:50 btmp
+-rw-r-----  1 root adm              20890 Nov 24 04:47 cloud-init-output.log
+-rw-r-----  1 root adm             373928 Nov 24 04:47 cloud-init.log
+drwxr-xr-x  2 root root              4096 Sep  4 04:11 dist-upgrade
+-rw-r-----  1 root adm              50278 Nov 24 04:50 dmesg
+-rw-r--r--  1 root root             30024 Nov 24 04:52 dpkg.log
+drwxr-sr-x+ 3 root systemd-journal   4096 Nov 24 04:07 journal
+-rw-rw-r--  1 root utmp            292292 Nov 24 04:52 lastlog
+drwx------  2 root root              4096 Nov 24 04:07 private
+drwxr-x---  2 root adm               4096 Nov 25  2026 unattended-upgrades
+-rw-rw-r--  1 root utmp             16512 Nov 24 04:52 wtmp
+$ ls /var/log/syslog /var/log/auth.log /var/log/messages /var/log/secure
+ls: cannot access '/var/log/syslog': No such file or directory
+ls: cannot access '/var/log/auth.log': No such file or directory
+ls: cannot access '/var/log/messages': No such file or directory
+ls: cannot access '/var/log/secure': No such file or directory
+$ systemctl status rsyslog --no-pager; dpkg -l rsyslog logrotate 2>&1 | tail -2
+Unit rsyslog.service could not be found.
+dpkg-query: no packages found matching rsyslog
+dpkg-query: no packages found matching logrotate
+$ journalctl -t sshd --since today -q --no-pager | grep -E 'Accepted|Invalid|Failed' | tail -4
+Nov 24 04:52:44 lab7 sshd[3112]: Accepted publickey for hv from 172.17.0.1 port 45208 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+Nov 24 04:52:44 lab7 sshd[3137]: Accepted publickey for hv from 172.17.0.1 port 45222 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+Nov 24 04:52:44 lab7 sshd[3162]: Accepted publickey for hv from 172.17.0.1 port 45226 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+Nov 24 04:52:44 lab7 sshd[3189]: Accepted publickey for hv from 172.17.0.1 port 45230 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+$ file /var/log/wtmp /var/log/btmp /var/log/lastlog /var/log/journal/*/system.journal
+/var/log/wtmp:                                                    data
+/var/log/btmp:                                                    regular file, no read permission
+/var/log/lastlog:                                                 data
+/var/log/journal/595503c52a37410aae2b32f4ffddfa26/system.journal: Journal file, Mon Nov 23 21:47:09 2026, online, sealed, keyed hash siphash24, compressed zstd, compact, header size 0x110, entries 0x6e8
+$ last -n 6
+hv       pts/0        192.168.56.20    Tue Nov 24 04:52 - 04:52  (00:00)
+hv       pts/0        192.168.56.20    Tue Nov 24 04:50 - 04:50  (00:00)
+reboot   system boot  6.8.0-149-generi Tue Nov 24 04:47   still running
+reboot   system boot  6.8.0-147-generi Tue Nov 24 04:12 - 04:41  (00:28)
+reboot   system boot  6.8.0-147-generi Tue Nov 24 04:11 - 04:12  (00:01)
+reboot   system boot  6.8.0-147-generi Tue Nov 24 04:10 - 04:11  (00:00)
+
+wtmp begins Tue Nov 24 04:07:41 2026
+$ last -x reboot shutdown -n 4
+reboot   system boot  6.8.0-149-generi Tue Nov 24 04:47   still running
+shutdown system down  6.8.0-147-generi Tue Nov 24 04:41 - 04:47  (00:05)
+reboot   system boot  6.8.0-147-generi Tue Nov 24 04:12 - 04:41  (00:28)
+shutdown system down  6.8.0-147-generi Tue Nov 24 04:12 - 04:12  (00:00)
+
+wtmp begins Tue Nov 24 04:07:41 2026
+$ sudo lastb
+admin    ssh:notty    192.168.56.88    Tue Nov 24 04:50 - 04:50  (00:00)
+admin    ssh:notty    192.168.56.88    Tue Nov 24 04:50 - 04:50  (00:00)
+
+btmp begins Tue Nov 24 04:50:42 2026
+$ lastlog | head -4; lastlog -u hv
+Username         Port     From                                       Latest
+root                                                                **Never logged in**
+daemon                                                              **Never logged in**
+bin                                                                 **Never logged in**
+Username         Port     From                                       Latest
+hv               pts/0    192.168.56.20                             Tue Nov 24 04:52:42 +0700 2026
+$ sudo utmpdump /var/log/wtmp 2>/dev/null | tail -2
+[7] [03057] [ts/0] [hv      ] [pts/0       ] [192.168.56.20       ] [192.168.56.20  ] [2026-11-23T21:52:42,146868+00:00]
+[8] [03057] [    ] [        ] [pts/0       ] [                    ] [0.0.0.0        ] [2026-11-23T21:52:44,150253+00:00]
+$ grep ' install ' /var/log/dpkg.log | tail -4
+2026-11-24 04:50:46 install rsyslog:amd64 <none> 8.2312.0-3ubuntu9.4
+2026-11-24 04:52:40 install libmagic-mgc:amd64 <none> 1:5.45-3build1
+2026-11-24 04:52:40 install libmagic1t64:amd64 <none> 1:5.45-3build1
+2026-11-24 04:52:40 install file:amd64 <none> 1:5.45-3build1
+$ tail -6 /var/log/apt/history.log
+
+Start-Date: 2026-11-24  04:52:40
+Commandline: apt-get install -y -q file
+Requested-By: hv (1000)
+Install: libmagic-mgc:amd64 (1:5.45-3build1, automatic), file:amd64 (1:5.45-3build1), libmagic1t64:amd64 (1:5.45-3build1, automatic)
+End-Date: 2026-11-24  04:52:41
+$ sudo grep -E 'Cloud-init v.*(running|finished)' /var/log/cloud-init.log | tail -2
+2026-11-23 21:47:15,539 - log_util.py[DEBUG]: Cloud-init v. 26.2-0ubuntu1~24.04.2 running 'modules:final' at Mon, 23 Nov 2026 21:47:15 +0000. Up 7.52 seconds.
+2026-11-23 21:47:15,584 - log_util.py[DEBUG]: Cloud-init v. 26.2-0ubuntu1~24.04.2 finished at Mon, 23 Nov 2026 21:47:15 +0000. Datasource DataSourceNoCloud [seed=/dev/vdb].  Up 7.59 seconds
+$ sudo apt-get install -y rsyslog logrotate 2>&1 | grep -E '^(Setting up|Created symlink)'
+Setting up logrotate (3.21.0-2build1) ...
+Created symlink /etc/systemd/system/timers.target.wants/logrotate.timer → /usr/lib/systemd/system/logrotate.timer.
+
+Setting up rsyslog (8.2312.0-3ubuntu9.4) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/dmesg.service → /usr/lib/systemd/system/dmesg.service.
+
+Created symlink /etc/systemd/system/syslog.service → /usr/lib/systemd/system/rsyslog.service.
+
+Created symlink /etc/systemd/system/multi-user.target.wants/rsyslog.service → /usr/lib/systemd/system/rsyslog.service.
+$ ls -l /var/log | grep -E 'syslog|auth|kern|cron|mail'
+-rw-r-----  1 syslog adm                988 Nov 24 04:52 auth.log
+-rw-r-----  1 syslog adm                492 Nov 24 04:52 kern.log
+-rw-r-----  1 syslog adm               1664 Nov 24 04:52 syslog
+$ sshpass -p 'sai-mat-khau' ssh -o StrictHostKeyChecking=no -o PubkeyAuthentication=no -b 192.168.56.88 admin@192.168.56.10 true; echo "exit=$?"   # ← trên máy keodo
+Permission denied, please try again.
+exit=5
+$ sudo grep -h 'admin' /var/log/auth.log | tail -3
+2026-11-24T04:52:52.496170+07:00 lab7 sshd[3821]: Failed password for invalid user admin from 192.168.56.88 port 55623 ssh2
+2026-11-24T04:52:52.504231+07:00 lab7 sshd[3821]: Connection closed by invalid user admin 192.168.56.88 port 55623 [preauth]
+2026-11-24T04:52:52.638423+07:00 lab7 sudo:       hv : PWD=/home/hv ; USER=root ; COMMAND=/usr/bin/grep -h admin /var/log/auth.log
+$ grep -vE '^#|^$' /etc/rsyslog.d/50-default.conf
+auth,authpriv.*			/var/log/auth.log
+*.*;auth,authpriv.none		-/var/log/syslog
+kern.*				-/var/log/kern.log
+mail.*				-/var/log/mail.log
+mail.err			/var/log/mail.err
+*.emerg				:omusrmsg:*
+$ docker run --rm rockylinux:9 bash -c 'dnf -q -y install rsyslog >/dev/null 2>&1; cat /etc/redhat-release; grep -E "^[a-z*].*(/var/log|:omusrmsg)" /etc/rsyslog.conf'
+Rocky Linux release 9.9 (Blue Onyx)
+*.info;mail.none;authpriv.none;cron.none action(type="omfile" file="/var/log/messages")
+authpriv.* action(type="omfile" file="/var/log/secure")
+mail.* action(type="omfile" file="/var/log/maillog" sync="on")
+cron.* action(type="omfile" file="/var/log/cron")
+uucp,news.crit action(type="omfile" file="/var/log/spooler")
+local7.* action(type="omfile" file="/var/log/boot.log")
+$ docker run --rm fedora:44 bash -c 'cat /etc/fedora-release; rpm -q rsyslog; for f in /usr/bin/last /usr/bin/lastlog2 /usr/bin/wtmpdb; do echo "$f ← $(dnf -q repoquery --qf "%{name}\n" --whatprovides $f 2>/dev/null | sort -u | tr "\n" " ")"; done'
+Fedora release 44 (Forty Four)
+package rsyslog is not installed
+/usr/bin/last ← util-linux 
+/usr/bin/lastlog2 ← util-linux 
+/usr/bin/wtmpdb ← 

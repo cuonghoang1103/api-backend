@@ -1,0 +1,27 @@
+$ awk '{for (i = 1; i <= NF; i++) if ($i ~ /^rt=/) {s[$9] += substr($i, 4); n[$9]++}} END {for (k in s) printf "%s %4d req  tb %.3f s\n", k, n[k], s[k] / n[k]}' logs/access.log | sort
+200  375 req  tb 0.243 s
+202    1 req  tb 0.010 s
+400    2 req  tb 0.000 s
+401   13 req  tb 0.001 s
+403    1 req  tb 0.000 s
+404    8 req  tb 0.000 s
+413    1 req  tb 0.000 s
+429    6 req  tb 0.000 s
+499    1 req  tb 0.500 s
+500   29 req  tb 0.004 s
+502   20 req  tb 0.010 s
+504    1 req  tb 5.000 s
+$ grep '" 504 ' logs/access.log | grep -o 'rid=.*'
+rid=005eb0318c50bbe489317b1b962d00ea
+$ grep 'upstream timed out' logs/error.log | grep -o '\*[0-9]*'
+*111
+$ grep -F '*111 ' logs/error.log
+2026/11/23 20:34:46 [error] 30#30: *111 upstream timed out (110: Operation timed out) while reading response header from upstream, client: 198.51.100.17, server: , request: "GET /api/export HTTP/1.1", upstream: "http://127.0.0.1:3000/api/export", host: "127.0.0.1:41080"
+$ jq -s 'map(.uri |= split("?")[0]) | group_by(.uri) | map(select(length >= 5) | {uri: .[0].uri, n: length, tb: ((map(.rt) | add / length) * 1000 | round / 1000)}) | sort_by(-.tb) | .[] | "\(.uri) \(.n) req tb \(.tb) s"' -r logs/access.json
+/api/report 63 req tb 1.366 s
+/api/products 302 req tb 0.019 s
+/api/login 20 req tb 0.001 s
+/ 29 req tb 0 s
+$ grep -c 'prematurely closed' logs/error.log; grep -c 'connect() failed' logs/error.log
+1
+19

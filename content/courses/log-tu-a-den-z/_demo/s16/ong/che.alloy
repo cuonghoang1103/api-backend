@@ -1,0 +1,25 @@
+// che.alloy — lớp che THỨ HAI, ở đường ống: Alloy đọc tệp log, thay bí mật/dữ liệu cá nhân trước khi gửi đi (ở đây in ra loki.echo thay vì gửi Loki)
+local.file_match "app" {
+  path_targets = [{"__path__" = "/q/logs/*.log"}]
+}
+loki.source.file "app" {
+  targets       = local.file_match.app.targets
+  forward_to    = [loki.process.che.receiver]
+  tail_from_end = false
+}
+loki.process "che" {
+  stage.replace {                       // khoá bí mật trong JSON: "…key…": "giá trị" ⇒ "[CHE]"
+    expression = `"(?:aws_secret_access_key|aws_access_key_id|key|password|token)":\s*"([^"]+)"`
+    replace    = "[CHE]"
+  }
+  stage.replace {                       // token trong URL
+    expression = `(?:access_token|token|ghp)[=_]([A-Za-z0-9._-]{8,})`
+    replace    = "[CHE]"
+  }
+  stage.replace {                       // CCCD 12 số và số thẻ 16 số
+    expression = `(?i)cccd\s*(\d{12})|(\d{4} \d{4} \d{4} \d{4})`
+    replace    = "[CHE]"
+  }
+  forward_to = [loki.echo.ra.receiver]
+}
+loki.echo "ra" { }

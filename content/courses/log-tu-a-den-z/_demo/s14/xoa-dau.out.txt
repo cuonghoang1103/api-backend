@@ -1,0 +1,47 @@
+$ cd vu14 && wc -l web01/var/log/auth.log logsrv/web01/auth-syslog.log
+  1936 web01/var/log/auth.log
+  2446 logsrv/web01/auth-syslog.log
+  4382 total
+$ cd vu14 && grep -E 'sshd|sudo|CRON\[[0-9]+\]: pam_unix|useradd|usermod|chpasswd' logsrv/web01/auth-syslog.log | grep -vxFf web01/var/log/auth.log | awk '{print substr($1, 1, 16)}' | uniq -c
+     70 2026-11-19T01:40
+     70 2026-11-19T01:57
+     69 2026-11-19T02:14
+      2 2026-11-19T02:15
+      5 2026-11-19T02:16
+$ cd vu14 && grep -E 'sshd|sudo|CRON\[[0-9]+\]: pam_unix|useradd|usermod|chpasswd' logsrv/web01/auth-syslog.log | grep -vxFf web01/var/log/auth.log | sed -E 's/^\S+ \S+ ([a-z]+)(\[[0-9]+\])?: +/\1: /' | awk '{print $1, $2, $3}' | sort | uniq -c | sort -rn
+     74 sshd: Failed password
+     74 sshd: Connection closed
+     60 sshd: Invalid user
+      2 usermod: add 'sysupdate'
+      1 useradd: new user:
+      1 useradd: new group:
+      1 sudo: pam_unix(sudo:session): session
+      1 sudo: deploy :
+      1 sshd: Accepted password
+      1 chpasswd: pam_unix(chpasswd:chauthtok): password
+$ cd vu14/web01/var/log && awk '/sshd\[[0-9]+\]: Accepted/ {match($3, /[0-9]+/); ok[substr($3, RSTART, RLENGTH)] = 1} /sshd\[[0-9]+\]: pam_unix\(sshd:session\): session opened/ {match($3, /[0-9]+/); p = substr($3, RSTART, RLENGTH); if (!(p in ok)) print "MỒ CÔI:", $0}' auth.log
+MỒ CÔI: 2026-11-19T02:14:01.078999+07:00 web01 sshd[3045102]: pam_unix(sshd:session): session opened for user deploy(uid=1001) by deploy(uid=0)
+$ cd vu14/logsrv/web01 && awk '{s = substr($1, 1, 19); x = s; gsub(/[-T:]/, " ", x); t = mktime(x); if (NR > 1 && t - tr >= 3600) printf "LẶNG %d phút: %s → %s\n", (t - tr) / 60, truoc, s; tr = t; truoc = s}' auth-syslog.log
+LẶNG 426 phút: 2026-11-19T02:24:08 → 2026-11-19T09:31:00
+$ cd vu14/web01/var/log/audit && awk -F'[(:.]' '{t = $2; if (NR > 1 && t - tr > 3700) print "auditd LẶNG", int((t - tr) / 60), "phút:", tr, "→", t; tr = t}' audit.log | while read a b c d e f g; do echo "$a $b $c $d $(TZ='<+07>-7' date -d @$e '+%d/%m %H:%M:%S') → $(TZ='<+07>-7' date -d @$g '+%d/%m %H:%M:%S')"; done
+auditd LẶNG 427 phút: 19/11 02:22:30 → 19/11 09:29:31
+$ cd vu14/logsrv && cat canh-bao.log
+2026-11-19T02:54:10+07:00 logsrv canh-bao: [IM_LANG] web01 không gửi dòng nào trong 30 phút (dòng cuối 2026-11-19T02:24:10+07:00)
+2026-11-19T09:31:05+07:00 logsrv canh-bao: [HOI_PHUC] web01 gửi lại sau 7 giờ 6 phút 55 giây
+$ cd vu14/web01/var/log && grep rsyslogd syslog
+2026-11-19T02:24:08.025884+07:00 web01 rsyslogd: [origin software="rsyslogd" swVersion="8.2312.0" x-pid="611" x-info="https://www.rsyslog.com"] exiting on signal 15.
+2026-11-19T02:24:10.007370+07:00 web01 rsyslogd: [origin software="rsyslogd" swVersion="8.2312.0" x-pid="3045390" x-info="https://www.rsyslog.com"] start
+$ cd vu14/thu-thap && sed -n '/stat -c/,/var\/log\/syslog$/p;/bash_history/,/root\/.bash_history$/p' stat.txt
+web01:~$ sudo stat -c '%i | %s byte | sinh %w | sửa %y | %n' /var/log/auth.log /var/log/syslog
+262455 | 232075 byte | sinh 2026-11-19 02:23:05.660127311 +0700 | sửa 2026-11-19 09:31:02.118422790 +0700 | /var/log/auth.log
+262170 | 50177 byte | sinh 2026-11-01 00:00:01.204511873 +0700 | sửa 2026-11-19 09:35:01.330981244 +0700 | /var/log/syslog
+web01:~$ ls -la /home/deploy/.bash_history /root/.bash_history
+lrwxrwxrwx 1 deploy deploy 9 2026-11-19 02:15:00 /home/deploy/.bash_history -> /dev/null
+-rw------- 1 root   root   0 2026-11-19 02:23:41 /root/.bash_history
+$ evtx-rec tc/clear-1102.evtx tc/clear-104.evtx tc/svc-7045.evtx | jq -r 'select(.id == 1102 or .id == 104) | [.t[0:19], .may, .kenh, .id, .data.SubjectUserName, .data.Channel // "Security", .rec] | @tsv'
+2019-03-19T23:35:07	PC01.example.corp	Security	1102	user01	Security	452811
+2019-03-19T23:34:25	PC01.example.corp	System	104	user01	System	27736
+2020-07-11T21:49:56	fs02.offsec.lan	System	104	admmig	System	9458
+$ evtx-rec tc/svc-7045.evtx | jq -r '[.t[0:19], .id, .data.SubjectUserName // .data.ServiceName] | @tsv'
+2020-07-11T21:49:56	104	admmig
+2020-07-11T21:50:07	7045	bad-task

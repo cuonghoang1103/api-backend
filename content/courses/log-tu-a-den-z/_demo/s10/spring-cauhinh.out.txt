@@ -1,0 +1,46 @@
+$ unzip -l target/shop-1.0.jar | grep -oE '[a-z0-9.-]*(slf4j|logback|log4j)[a-z0-9.-]*\.jar' | sort
+jul-to-slf4j-2.0.18.jar
+log4j-api-2.25.5.jar
+log4j-to-slf4j-2.25.5.jar
+logback-classic-1.5.38.jar
+logback-core-1.5.38.jar
+logstash-logback-encoder-8.1.jar
+slf4j-api-2.0.18.jar
+$ docker rm -f lgz-spring 2> /dev/null; rm -rf logs; mkdir logs
+$ docker run -d --name lgz-spring --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar --logging.config=classpath:logback-lab.xml > /dev/null && sleep 8
+$ curl -s -H 'X-Request-Id: req-7f3a91c2' http://127.0.0.1:41081/api/orders/7; echo
+{"id":7,"total":120000}
+$ curl -s -X POST -H 'X-Request-Id: req-c0ffee01' 'http://127.0.0.1:41081/api/orders/7/confirm?email=an@example.com'; echo
+ok
+$ docker logs lgz-spring 2>&1 | grep -E 'rid=req-'
+20:37:49.954 INFO  [http-nio-8080-exec-1] [rid=req-7f3a91c2] v.l.s.OrderController - load order id=7
+20:37:49.971 INFO  [http-nio-8080-exec-2] [rid=req-c0ffee01] v.l.s.OrderController - confirm order id=7
+20:37:49.974 INFO  [mail-1] [rid=req-c0ffee01] v.l.shop.MailService - sending confirmation mail for order 7 to a***@example.com
+20:37:49.974 INFO  [mail-1] [rid=req-c0ffee01] v.l.shop.MailService - sending confirmation mail for order 7 to a***@example.com
+$ curl -s -H 'X-Request-Id: <script>' http://127.0.0.1:41081/api/orders/9 > /dev/null; docker logs lgz-spring 2>&1 | grep 'order id=9'
+20:37:49.993 INFO  [http-nio-8080-exec-3] [rid=eb707eb2-7de6-4800-9184-208046c90171] v.l.s.OrderController - load order id=9
+$ tail -n 2 logs/shop.log
+2026-11-23T20:37:49.974Z INFO  [mail-1] [rid=req-c0ffee01] vn.lab.shop.MailService - sending confirmation mail for order 7 to a***@example.com
+2026-11-23T20:37:49.993Z INFO  [http-nio-8080-exec-3] [rid=eb707eb2-7de6-4800-9184-208046c90171] vn.lab.shop.OrderController - load order id=9
+$ for i in $(seq 1 400); do curl -s -o /dev/null http://127.0.0.1:41081/api/orders/$i; done; ls -l logs | tail -n +2 | awk '{print $5, $9}'
+4861 shop.2026-11-23.0.log.gz
+4728 shop.2026-11-23.1.log.gz
+4716 shop.2026-11-23.2.log.gz
+143030 shop.json
+3773 shop.log
+$ zcat logs/shop.*.0.log.gz | head -n 2
+2026-11-23T20:37:42.699Z INFO  [main] [rid=] vn.lab.shop.ShopApplication - Starting ShopApplication v1.0 using Java 21.0.12.1 with PID 1 (/app/target/shop-1.0.jar started by ubuntu in /app)
+2026-11-23T20:37:42.708Z INFO  [main] [rid=] vn.lab.shop.ShopApplication - No active profile set, falling back to 1 default profile: "default"
+$ docker rm -f lgz-spring > /dev/null; docker run -d --name lgz-spring --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -DADDITIVITY=false -jar target/shop-1.0.jar --logging.config=classpath:logback-lab.xml > /dev/null && sleep 8
+$ curl -s -X POST -H 'X-Request-Id: req-c0ffee02' 'http://127.0.0.1:41081/api/orders/7/confirm?email=an@example.com' > /dev/null; docker logs lgz-spring 2>&1 | grep -E 'rid=req-c0ffee02'
+20:38:01.459 INFO  [http-nio-8080-exec-1] [rid=req-c0ffee02] v.l.s.OrderController - confirm order id=7
+20:38:01.464 INFO  [mail-1] [rid=req-c0ffee02] v.l.shop.MailService - sending confirmation mail for order 7 to a***@example.com
+$ docker rm -f lgz-spring > /dev/null; ls extra/
+slf4j-simple-2.0.18.jar
+$ docker run --rm --user "$(id -u):$(id -g)" -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -Dloader.path=extra -cp target/shop-1.0.jar org.springframework.boot.loader.launch.PropertiesLauncher 2>&1 | grep -E 'SLF4J|IllegalStateException|LoggerFactory is not' | head -n 6
+SLF4J(W): Class path contains multiple SLF4J providers.
+SLF4J(W): Found provider [org.slf4j.simple.SimpleServiceProvider@7a187f14]
+SLF4J(W): Found provider [ch.qos.logback.classic.spi.LogbackServiceProvider@6f195bc3]
+SLF4J(W): See https://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J(I): Actual provider is of type [org.slf4j.simple.SimpleServiceProvider@7a187f14]
+Caused by: java.lang.IllegalStateException: LoggerFactory is not a Logback LoggerContext but Logback is on the classpath. Either remove Logback or the competing implementation (class org.slf4j.simple.SimpleLoggerFactory loaded from file:/app/extra/slf4j-simple-2.0.18.jar). If you are using WebLogic you will need to add 'org.slf4j' to prefer-application-packages in WEB-INF/weblogic.xml

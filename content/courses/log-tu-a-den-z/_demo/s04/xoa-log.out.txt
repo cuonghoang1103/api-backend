@@ -1,0 +1,75 @@
+PS> evtx-rec tc/clear-104-1102.evtx | ConvertFrom-Json | Group-Object kenh,id | Select-Object Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+    1 Security, 1102
+   90 System, 104
+PS> evtx-rec tc/clear-104-1102.evtx | ConvertFrom-Json | Select-Object -First 3 | ForEach-Object { [pscustomobject]@{ Luc = $_.t.ToString('s'); Kenh = $_.kenh; Id = $_.id; Rec = $_.rec; Ai = '{0}\{1}' -f $_.data.SubjectDomainName, $_.data.SubjectUserName; LogBiXoa = $_.data.Channel } } | Format-Table -AutoSize
+Luc                 Kenh       Id    Rec Ai            LogBiXoa
+---                 ----       --    --- --            --------
+2021-10-25T18:04:30 System    104   5073 OFFSEC\admmig System
+2021-10-25T18:09:51 Security 1102 109054 OFFSEC\admmig
+2021-10-25T18:11:09 System    104   5074 OFFSEC\admmig Application
+PS> $e = evtx-rec tc/clear-104-1102.evtx | ConvertFrom-Json | Where-Object id -eq 104; '{0} sự kiện 104: lần 1 lúc {1}; {2} lần còn lại từ {3} tới {4}' -f $e.Count, $e[0].t.ToString('HH:mm:ss'), ($e.Count - 1), $e[1].t.ToString('HH:mm:ss'), $e[-1].t.ToString('HH:mm:ss'); ($e | Group-Object { $_.data.SubjectUserName }).Name
+90 sự kiện 104: lần 1 lúc 18:04:30; 89 lần còn lại từ 18:11:09 tới 18:11:12
+admmig
+PS> evtx-rec tc/clear-4688-native.evtx | ConvertFrom-Json | Where-Object { $_.data.NewProcessName -like '*wevtutil.exe' } | ForEach-Object { '{0}  {1,-8} {2}' -f $_.t.ToString('HH:mm:ss.fff'), $_.data.SubjectUserName, ($_.data.CommandLine -replace '"C:\\Windows\\system32\\wevtutil.exe"\s+','wevtutil ') }
+19:07:25.659  admmig   wevtutil cl RTWorkQueueTheading
+19:07:25.706  admmig   wevtutil cl Security
+19:07:25.737  admmig   wevtutil cl Setup
+19:07:25.784  admmig   wevtutil cl SmbWmiAnalytic
+19:07:25.831  admmig   wevtutil cl System
+19:07:25.862  admmig   wevtutil cl SystemEventsBroker
+19:07:25.909  admmig   wevtutil cl TabletPC_InputPanel_Channel
+19:07:25.940  admmig   wevtutil cl TabletPC_InputPanel_Channel/IHM
+19:07:25.971  admmig   wevtutil cl UIManager_Channel
+19:07:26.002  admmig   wevtutil cl WINDOWS_KS_CHANNEL
+19:07:26.034  admmig   wevtutil cl WINDOWS_WMPHOTO_CHANNEL
+19:07:26.065  admmig   wevtutil cl "Windows PowerShell"
+19:07:26.112  admmig   wevtutil cl Windows.Globalization/Analytic
+19:07:26.143  admmig   wevtutil cl WitnessClientAdmin
+PS> evtx-rec tc/dung-eventlog.evtx | ConvertFrom-Json | Where-Object id -in 104,7040 | ForEach-Object { '{0}  {1,-5} {2}' -f $_.t.ToString('HH:mm:ss'), $_.id, $(if ($_.id -eq 7040) { '{0}: {1} -> {2}' -f $_.data.param1, $_.data.param2, $_.data.param3 } else { 'xoá log ' + $_.data.Channel + ' bởi ' + $_.data.SubjectUserName }) }
+21:04:25  104   xoá log System bởi jwrig
+21:04:32  7040  Windows Event Log: auto start -> disabled
+21:04:51  7040  Windows Event Log: disabled -> auto start
+PS> $g = @{}; Get-Content /lab/s04/guid-auditpol.tsv | Where-Object { $_ -notmatch '^#' } | ForEach-Object { $k, $v = $_ -split "`t"; $g[$k] = $v }; evtx-rec tc/audit-4719.evtx | ConvertFrom-Json | Select-Object -First 12 | ForEach-Object { '{0}  {1,-28} {2}' -f $_.t.ToString('HH:mm:ss'), $g[$_.data.SubcategoryGuid.Trim('{}').Substring(0,8)], $_.data.AuditPolicyChanges }
+18:30:36  Security State Change        %%8448
+18:30:36  Security System Extension    %%8448, %%8450
+18:30:36  System Integrity             %%8448, %%8450
+18:30:36  Other System Events          %%8448, %%8450
+18:30:36  Logon                        %%8448, %%8450
+18:30:36  Account Lockout              %%8448, %%8450
+18:30:36  Special Logon                %%8448, %%8450
+18:30:36  Other Logon/Logoff Events    %%8448, %%8450
+18:30:36  File System                  %%8448, %%8450
+18:30:36  Registry                     %%8448
+18:30:36  Kernel Object                %%8448, %%8450
+18:30:36  SAM                          %%8448, %%8450
+PS> $e = evtx-rec tc/audit-4719.evtx | ConvertFrom-Json; '{0} nhóm con bị đổi trong {1} giây, bởi {2}' -f $e.Count, ($e[-1].t - $e[0].t).TotalSeconds, (($e.data.SubjectUserName | Sort-Object -Unique) -join ',')
+30 nhóm con bị đổi trong 0 giây, bởi admmig
+PS> evtx-rec mau/dbc-many-events-security.evtx | ConvertFrom-Json | Where-Object id -eq 4719 | Select-Object -First 3 | ForEach-Object { '{0}  {1}  {2}  {3}' -f $_.t.ToString('s'), $_.data.SubjectUserName, $_.data.SubcategoryGuid, $_.data.AuditPolicyChanges }
+2016-08-18T15:43:46  IE10WIN7$  {0cce9210-69ae-11d9-bed3-505054503030}  %%8448
+2016-08-18T15:43:46  IE10WIN7$  {0cce9212-69ae-11d9-bed3-505054503030}  %%8448, %%8450
+2016-08-18T15:43:46  IE10WIN7$  {0cce9214-69ae-11d9-bed3-505054503030}  %%8448, %%8450
+PS> evtx-rec tc/time-4616.evtx | ConvertFrom-Json | Where-Object id -eq 4616 | ForEach-Object { [pscustomobject]@{ Ai = $_.data.SubjectUserName; Truoc = ([datetime]$_.data.PreviousTime).ToString('MM-dd HH:mm:ss'); Sau = ([datetime]$_.data.NewTime).ToString('MM-dd HH:mm:ss'); Lech_giay = [math]::Round((([datetime]$_.data.NewTime) - ([datetime]$_.data.PreviousTime)).TotalSeconds, 1); Tien_trinh = ($_.data.ProcessName -split '\\')[-1] } } | Format-Table -AutoSize
+Ai            Truoc          Sau              Lech_giay Tien_trinh
+--            -----          ---              --------- ----------
+admmig        11-24 15:47:00 11-27 15:47:00  259200.000 powershell.exe
+admmig        11-27 15:47:00 11-27 15:47:00       0.000 powershell.exe
+LOCAL SERVICE 11-27 15:47:00 11-24 15:43:16 -259423.800 svchost.exe
+LOCAL SERVICE 11-24 15:43:16 11-24 15:43:16      -0.000 svchost.exe
+LOCAL SERVICE 11-24 15:48:05 11-24 15:48:15      10.200 svchost.exe
+LOCAL SERVICE 11-24 15:48:15 11-24 15:48:15      -0.000 svchost.exe
+admmig        11-24 15:48:33 11-24 15:48:25      -8.100 dllhost.exe
+admmig        11-24 15:48:24 11-24 15:48:25       0.000 dllhost.exe
+PS> evtx-rec mau/security.evtx | ConvertFrom-Json | Where-Object id -eq 4616 | ForEach-Object { [math]::Round((([datetime]$_.data.NewTime) - ([datetime]$_.data.PreviousTime)).TotalSeconds) } | Group-Object { if ([math]::Abs($_) -lt 5) { 'lệch < 5 giây' } else { 'lệch ' + $_ + ' giây' } } | Select-Object Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+   18 lệch < 5 giây
+    1 lệch 12056 giây
+    1 lệch 14400 giây
+    1 lệch 210286 giây
+    1 lệch 253347 giây
+    1 lệch 2593 giây
+    1 lệch 524570 giây
+    1 lệch 6195 giây
+    1 lệch 77622 giây

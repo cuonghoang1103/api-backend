@@ -1,0 +1,38 @@
+# Bao-CaoSang.ps1 — "báo cáo buổi sáng" cho một máy Windows: 24 giờ qua có ai đăng nhập hỏng, dịch vụ mới, khởi động lại, ứng dụng sập không?
+# Trên Windows (PowerShell chạy admin để đọc Security):   .\Bao-CaoSang.ps1                 (log của chính máy, 24 giờ tính tới bây giờ)
+#                                                         .\Bao-CaoSang.ps1 -Gio 72 | Out-File bao-cao.txt
+# Trên tệp .evtx đã xuất (mọi hệ điều hành, cần Get-WinEventMau của khoá nếu không phải Windows):
+#                                                         .\Bao-CaoSang.ps1 -Tep sys.evtx,sec.evtx,app.evtx -May IE10Win7 -Now '2016-09-20 08:00'
+param([string[]]$Tep, [string]$May, [datetime]$Now = (Get-Date), [int]$Gio = 24)
+$tu = $Now.AddHours(-$Gio)
+function Doc([string]$Log, [int[]]$Id) {
+  $h = @{ Id = $Id; StartTime = $tu; EndTime = $Now }
+  $r = if ($Tep) { $h.Path = $Tep; Get-WinEventMau -FilterHashtable $h -ErrorAction SilentlyContinue | Where-Object LogName -eq $Log }
+       else { $h.LogName = $Log; Get-WinEvent -FilterHashtable $h -ErrorAction SilentlyContinue }
+  if ($May) { $r = $r | Where-Object MachineName -eq $May }
+  $r | ForEach-Object { $d = [ordered]@{ Luc = $_.TimeCreated; Id = $_.Id; Nguon = $_.ProviderName }
+    # Data có tên (<Data Name="ServiceName">) ⇒ d.ServiceName; Data không tên (1000, 1074 trên Win7…) ⇒ d.p0, d.p1…
+    $i = 0
+    foreach ($n in ([xml]$_.ToXml()).SelectNodes("//*[local-name()='EventData']/*[local-name()='Data']")) {
+      $k = $n.GetAttribute('Name'); if (-not $k) { $k = 'p' + $i }; $d[$k] = $n.InnerText; $i++ }
+    [pscustomobject]$d }
+}
+'BÁO CÁO SÁNG — {0} — {1:yyyy-MM-dd HH:mm} → {2:yyyy-MM-dd HH:mm} ({3} giờ)' -f $(if ($May) { $May } else { $env:COMPUTERNAME }), $tu, $Now, $Gio
+
+$f = @(Doc Security 4625)
+"`n[1] Đăng nhập hỏng (4625): $($f.Count)"
+$f | Group-Object TargetUserName, IpAddress, SubStatus, LogonType | Sort-Object Count -Descending |
+  ForEach-Object { '    {0,4} × {1}' -f $_.Count, ($_.Name -replace ', ', ' | ') }
+
+$s = @(Doc System 7045)
+"`n[2] Dịch vụ mới cài (7045): $($s.Count)"
+$s | ForEach-Object { '    {0:HH:mm:ss}  {1}  [{2}, {3}]  {4}' -f $_.Luc, $_.ServiceName, $_.StartType, $_.AccountName, $(if ($_.ImagePath.Length -gt 60) { $_.ImagePath.Substring(0, 60) + '…' } else { $_.ImagePath }) }
+
+$b = @(Doc System 6005, 6006, 6008, 41, 1074) | Sort-Object Luc
+"`n[3] Tắt/khởi động (1074 → 6006 … 6005; 6008/41 = tắt bất thường): $(@($b | Where-Object Id -eq 6005).Count) lần khởi động"
+$b | ForEach-Object { $e = $_; '    {0:MM-dd HH:mm:ss}  {1,-4} {2}' -f $e.Luc, $e.Id, $(switch ($e.Id) { 1074 { "$($e.p4) — $($e.p6) qua $(($e.p0 -split ' ')[0] -replace '.*\\','') — $($e.p2)" } 6006 { 'Event Log dừng (tắt sạch)' } 6005 { 'Event Log chạy (vừa khởi động)' } 6008 { 'LẦN TẮT TRƯỚC KHÔNG SẠCH' } 41 { 'Kernel-Power 41: khởi động lại khi chưa tắt sạch' } }) }
+
+$c = @(Doc Application 1000, 1002 | Where-Object Nguon -in 'Application Error', 'Application Hang') + @(Doc System 7031, 7034)   # ID 1000 còn do nhà cung cấp khác ghi (Bài 3.6)
+"`n[4] Sập/treo (1000 sập, 1002 treo, 7031/7034 dịch vụ chết): $($c.Count)"
+$c | Group-Object Id, { if ($_.Id -in 1000, 1002) { $_.p0 } else { $_.param1 } } | Sort-Object Count -Descending | Select-Object -First 8 |
+  ForEach-Object { '    {0,4} × {1}' -f $_.Count, ($_.Name -replace ', ', ' | ') }

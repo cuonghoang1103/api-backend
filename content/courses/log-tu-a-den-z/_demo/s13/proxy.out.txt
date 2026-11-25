@@ -1,0 +1,76 @@
+$ docker network create --subnet 10.113.0.0/24 lgz-c13p >/dev/null && mkdir -p logs && echo "mạng lgz-c13p sẵn sàng"
+mạng lgz-c13p sẵn sàng
+$ docker run -d --name lgz-app --network lgz-c13p --ip 10.113.0.20 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w node:22-alpine node app.mjs >/dev/null
+$ docker run -d --name lgz-goc --network lgz-c13p --ip 10.113.0.10 -v "$PWD/origin.conf":/etc/nginx/conf.d/default.conf:ro -v "$PWD/logs":/var/log/nginx nginx:1.27-alpine >/dev/null
+$ docker run -d --name lgz-edge --network lgz-c13p --ip 10.113.0.5 -v "$PWD/edge.conf":/etc/nginx/conf.d/default.conf:ro -v "$PWD/logs/edge":/var/log/nginx nginx:1.27-alpine >/dev/null; sleep 2; echo "edge, gốc, app đã chạy"
+edge, gốc, app đã chạy
+$ khach 10.113.0.101 'http://10.113.0.5/?cong=80'; echo; khach 10.113.0.101 'http://10.113.0.5/?cong=8080'
+{"ban_la":"10.113.0.101"}
+{"ban_la":"10.113.0.101"}
+$ tail -n 1 logs/goc-sai.log logs/goc-dung.log
+==> logs/goc-sai.log <==
+10.113.0.5 real_from=10.113.0.5 [24/Nov/2026:00:28:31 +0000] "GET /?cong=80 HTTP/1.0" 200 xff="10.113.0.101" cfip="10.113.0.101" ray=11268eb2ad23e6a058642abcb7c63a0d-SIN
+
+==> logs/goc-dung.log <==
+10.113.0.101 real_from=10.113.0.5 [24/Nov/2026:00:28:32 +0000] "GET /?cong=8080 HTTP/1.0" 200 xff="10.113.0.101" cfip="10.113.0.101" ray=811e36af87122bdcc5f9449103f9adfa-SIN
+$ docker logs lgz-app 2>&1 | tail -2
+{"cong":3000,"ip":"10.113.0.101","ips":["10.113.0.101","10.113.0.5"],"xff":"10.113.0.101, 10.113.0.5","ray":"11268eb2ad23e6a058642abcb7c63a0d-SIN","method":"GET","path":"/","status":200}
+{"cong":3001,"ip":"10.113.0.101","ips":["10.113.0.101"],"xff":"10.113.0.101","ray":"811e36af87122bdcc5f9449103f9adfa-SIN","method":"GET","path":"/","status":200}
+$ khach 10.113.0.66 -H 'X-Forwarded-For: 203.0.113.7' 'http://10.113.0.5/?cong=80'; echo; khach 10.113.0.66 -H 'X-Forwarded-For: 203.0.113.7' 'http://10.113.0.5/?cong=8080'
+{"ban_la":"203.0.113.7"}
+{"ban_la":"10.113.0.66"}
+$ tail -1 logs/edge/edge.log; tail -1 logs/goc-sai.log; tail -1 logs/goc-dung.log
+10.113.0.66 [24/Nov/2026:00:28:34 +0000] "GET /?cong=8080 HTTP/1.1" 200 ray=ffbd524e7ad6a678f255a91aa9d4e17b-SIN xff_vao="203.0.113.7"
+10.113.0.5 real_from=10.113.0.5 [24/Nov/2026:00:28:33 +0000] "GET /?cong=80 HTTP/1.0" 200 xff="203.0.113.7, 10.113.0.66" cfip="10.113.0.66" ray=b2662d98fc906f376eb83c7b5ffadc8a-SIN
+10.113.0.66 real_from=10.113.0.5 [24/Nov/2026:00:28:34 +0000] "GET /?cong=8080 HTTP/1.0" 200 xff="203.0.113.7, 10.113.0.66" cfip="10.113.0.66" ray=ffbd524e7ad6a678f255a91aa9d4e17b-SIN
+$ docker logs lgz-app 2>&1 | tail -2 | jq -c '{cong, ip, ips, xff}'
+{"cong":3000,"ip":"203.0.113.7","ips":["203.0.113.7","10.113.0.66","10.113.0.5"],"xff":"203.0.113.7, 10.113.0.66, 10.113.0.5"}
+{"cong":3001,"ip":"10.113.0.66","ips":["10.113.0.66"],"xff":"10.113.0.66"}
+$ khach 10.113.0.66 -H 'CF-Connecting-IP: 198.51.100.9' -H 'X-Forwarded-For: 198.51.100.9' 'http://10.113.0.10:8080/'; echo; tail -1 logs/goc-dung.log
+{"ban_la":"10.113.0.66"}
+10.113.0.66 real_from=10.113.0.66 [24/Nov/2026:00:28:34 +0000] "GET / HTTP/1.1" 200 xff="198.51.100.9" cfip="198.51.100.9" ray=-
+$ for i in 1 2 3 4 5 6 7 8; do khach 10.113.0.66 -o /dev/null -w '%{http_code} ' -X POST -H "X-Forwarded-For: 203.0.113.$i" 'http://10.113.0.5/login?cong=80'; done; echo
+401 401 401 401 401 401 401 401 
+$ for i in 1 2 3 4 5 6 7 8; do khach 10.113.0.66 -o /dev/null -w '%{http_code} ' -X POST -H "X-Forwarded-For: 203.0.113.$i" 'http://10.113.0.5/login?cong=8080'; done; echo
+401 401 401 401 401 429 429 429 
+$ docker logs lgz-app 2>&1 | jq -rR 'fromjson? | select(.path == "/login") | "\(.cong) ip=\(.ip) \(.status)"' | sort | uniq -c
+      1 3000 ip=203.0.113.1 401
+      1 3000 ip=203.0.113.2 401
+      1 3000 ip=203.0.113.3 401
+      1 3000 ip=203.0.113.4 401
+      1 3000 ip=203.0.113.5 401
+      1 3000 ip=203.0.113.6 401
+      1 3000 ip=203.0.113.7 401
+      1 3000 ip=203.0.113.8 401
+      5 3001 ip=10.113.0.66 401
+      3 3001 ip=10.113.0.66 429
+$ docker logs lgz-app 2>&1 | grep -m1 -A3 ValidationError | cut -c1-160
+ValidationError: The Express 'trust proxy' setting is true, which allows anyone to trivially bypass IP-based rate limiting. See https://express-rate-limit.githu
+    at Object.trustProxy (file:///w/node_modules/express-rate-limit/dist/index.mjs:342:13)
+    at wrappedValidations.<computed> [as trustProxy] (file:///w/node_modules/express-rate-limit/dist/index.mjs:685:22)
+    at Object.keyGenerator (file:///w/node_modules/express-rate-limit/dist/index.mjs:794:20)
+$ khach 10.113.0.101 -i 'http://10.113.0.5/loi?cong=8080' | grep -iE '^HTTP|"error"'; docker stop lgz-app >/dev/null; khach 10.113.0.101 'http://10.113.0.5/?cong=8080'
+HTTP/1.1 500 Internal Server Error
+{"error":"TypeError: cannot read properties of undefined"}
+Loi may chu goc. Ray ID: 2e6e49d7b774776b20e3acd2b0f9628f-SIN
+$ R=$(grep -o 'ray=[0-9a-f]*-SIN' logs/edge/edge.log | tail -1 | cut -d= -f2); echo "Ray ID khách báo: $R"; grep -h "$R" logs/edge/edge.log logs/goc-dung.log; grep -c "$R" logs/goc-dung.log
+Ray ID khách báo: 2e6e49d7b774776b20e3acd2b0f9628f-SIN
+10.113.0.101 [24/Nov/2026:00:29:36 +0000] "GET /?cong=8080 HTTP/1.1" 502 ray=2e6e49d7b774776b20e3acd2b0f9628f-SIN xff_vao="-"
+10.113.0.101 real_from=10.113.0.5 [24/Nov/2026:00:29:36 +0000] "GET /?cong=8080 HTTP/1.0" 502 xff="10.113.0.101" cfip="10.113.0.101" ray=2e6e49d7b774776b20e3acd2b0f9628f-SIN
+1
+$ R=$(grep '/loi' logs/edge/edge.log | grep -o 'ray=[0-9a-f]*-SIN' | tail -1 | cut -d= -f2); grep -h "$R" logs/goc-dung.log; docker logs lgz-app 2>&1 | grep "$R" | jq -c '{ray, path, status}'
+10.113.0.101 real_from=10.113.0.5 [24/Nov/2026:00:28:46 +0000] "GET /loi?cong=8080 HTTP/1.0" 500 xff="10.113.0.101" cfip="10.113.0.101" ray=375c4c394d09b7a21f8ee8615149d5bd-SIN
+{"ray":"375c4c394d09b7a21f8ee8615149d5bd-SIN","path":"/loi","status":500}
+$ curl -s https://www.cloudflare.com/ips-v4 | head -3; echo; curl -s https://www.cloudflare.com/ips-v4 | grep -c .
+173.245.48.0/20
+103.21.244.0/22
+103.22.200.0/22
+
+15
+$ curl -s https://www.cloudflare.com/ips-v4 | awk 'NF {print "set_real_ip_from " $1 ";"}' | head -3; echo 'real_ip_header CF-Connecting-IP;'
+set_real_ip_from 173.245.48.0/20;
+set_real_ip_from 103.21.244.0/22;
+set_real_ip_from 103.22.200.0/22;
+real_ip_header CF-Connecting-IP;
+$ docker rm -f lgz-app lgz-goc lgz-edge >/dev/null; docker network rm lgz-c13p >/dev/null; echo "đã dọn"
+đã dọn

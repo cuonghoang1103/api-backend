@@ -1,0 +1,44 @@
+$ docker run -d --name lgz-spring --memory 2g --memory-swap 2g --cpus 2 --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar > /dev/null && sleep 10
+$ curl -s http://127.0.0.1:41081/api/v2/orders/13; echo
+{"error":"internal"}
+$ docker logs lgz-spring 2>&1 | awk '/order 13 failed/,0' | grep -E 'Caused by|vn\.lab\.shop' | cut -c1-140
+2026-11-24T14:23:19.008Z ERROR 1 --- [shop] [nio-8080-exec-1] [4eb0e97e32f2dba07d9c21bdcb758b3c-ea8cd65582d81fd8] vn.lab.shop.OrderControlle
+vn.lab.shop.OrderService$OrderLoadException: cannot load order 13
+	at vn.lab.shop.OrderService.load(OrderService.java:16) ~[!/:1.0]
+	at vn.lab.shop.OrderController.orderV2(OrderController.java:33) ~[!/:1.0]
+	at vn.lab.shop.RequestIdFilter.doFilterInternal(RequestIdFilter.java:29) ~[!/:1.0]
+Caused by: java.lang.IllegalStateException: bad price row for order 13
+	at vn.lab.shop.PriceRepository.read(OrderService.java:31) ~[!/:1.0]
+	at vn.lab.shop.OrderService.load(OrderService.java:14) ~[!/:1.0]
+Caused by: java.lang.NumberFormatException: For input string: "13.5"
+	at vn.lab.shop.PriceRepository.read(OrderService.java:28) ~[!/:1.0]
+$ curl -s -X POST -H 'Content-Type: application/json' -d '{"configuredLevel":"DEBUG"}' -o /dev/null -w '%{http_code}\n' http://127.0.0.1:41081/actuator/loggers/org.springframework.web
+204
+$ N0=$(docker logs lgz-spring 2>&1 | wc -l); curl -s http://127.0.0.1:41081/api/orders/9 > /dev/null; sleep 1; N1=$(docker logs lgz-spring 2>&1 | wc -l); echo "thêm $((N1 - N0)) dòng"; docker logs lgz-spring 2>&1 | tail -n $((N1 - N0)) | sed -E 's/^\S+ +([A-Z]+) .*\] ([^ ]+) +: (.{0,58}).*/\1 \2 : \3/'
+thêm 6 dòng
+DEBUG o.s.web.servlet.DispatcherServlet : GET "/api/orders/9", parameters={}
+DEBUG s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to vn.lab.shop.OrderController#order(long)
+INFO vn.lab.shop.OrderController : load order id=9
+DEBUG m.m.a.RequestResponseBodyMethodProcessor : Using 'text/plain', given [*/*] and supported [text/plain,
+DEBUG m.m.a.RequestResponseBodyMethodProcessor : Writing ["{"id":9,"total":120000}"]
+DEBUG o.s.web.servlet.DispatcherServlet : Completed 200 OK
+$ curl -s -X POST -H 'Content-Type: application/json' -d '{"configuredLevel":null}' -o /dev/null -w '%{http_code}\n' http://127.0.0.1:41081/actuator/loggers/org.springframework.web
+204
+$ N0=$(docker logs lgz-spring 2>&1 | wc -l); curl -s http://127.0.0.1:41081/api/orders/9 > /dev/null; sleep 1; N1=$(docker logs lgz-spring 2>&1 | wc -l); echo "thêm $((N1 - N0)) dòng"; docker logs lgz-spring 2>&1 | tail -n $((N1 - N0)) | grep -c DEBUG
+thêm 1 dòng
+0
+$ docker run --rm --memory 2g --memory-swap 2g --cpus 2 --network container:lgz-spring --user "$(id -u):$(id -g)" -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar 2>&1 | sed -n '/APPLICATION FAILED TO START/,$p'
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+$ docker run --rm --memory 2g --memory-swap 2g --cpus 2 --network container:lgz-spring --user "$(id -u):$(id -g)" -v "$PWD":/app -w /app --entrypoint timeout maven:3.9-eclipse-temurin-21 25 java -jar target/shop-1.0.jar --spring.profiles.active=prod --server.port=8082 2>&1 | grep -o 'The following .*profile.*'
+The following 1 profile is active: "prod"
+$ docker rm -f lgz-spring > /dev/null; echo "đã xoá lgz-spring"
+đã xoá lgz-spring

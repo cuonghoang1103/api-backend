@@ -1,0 +1,43 @@
+$ sudo ausearch --input-logs -k shadow -ua 1002 -sv no --format text
+At 05:24:24 11/24/26 dev unsuccessfully opened-file /etc/shadow using /usr/bin/cat
+$ sudo ausearch --input-logs -k shadow -ua 1002 -sv no -i | grep -E '^type=(SYSCALL|PATH)' | grep -oE '(syscall|success|exit|auid|uid|comm|name)=[^ ]+' | tr '\n' ' '; echo
+name=/etc/shadow uid=root syscall=openat success=no exit=EACCES(Permission auid=dev uid=dev uid=dev uid=dev uid=dev comm=cat 
+$ sudo ausearch --input-logs -k exec_nguoi -ua 1001 -sv yes --format text | tail -5
+At 05:24:27 11/24/26 an, acting as root, successfully executed /etc/update-motd.d/92-unattended-upgrades 
+At 05:24:27 11/24/26 an, acting as root, successfully executed /usr/share/unattended-upgrades/update-motd-unattended-upgrades 
+At 05:24:27 11/24/26 an successfully executed /bin/bash 
+At 05:24:27 11/24/26 an successfully executed /usr/bin/sudo 
+At 05:24:27 11/24/26 an, acting as root, successfully executed /usr/sbin/auditctl 
+$ sudo ausearch --input-logs -k exec_nguoi -ua 1002 -sv yes -i | grep '^type=EXECVE' | tail -3
+type=EXECVE msg=audit(11/24/26 05:24:24.663:10207) : argc=2 a0=cat a1=/etc/shadow 
+type=EXECVE msg=audit(11/24/26 05:24:24.664:10209) : argc=1 a0=id 
+type=EXECVE msg=audit(11/24/26 05:24:24.665:10210) : argc=2 a0=uname a1=-r 
+$ systemctl is-active auditd; sudo auditctl -s | grep -E '^(enabled|pid)'
+inactive
+enabled 2
+pid 0
+$ sudo journalctl -k --since '-10min' -q --no-pager -o cat | grep -m2 'type=1305\|auditd'
+audit: type=1305 audit(1795472653.030:9933): op=set audit_pid=0 old=16267 auid=4294967295 ses=4294967295 subj=unconfined res=1
+audit: type=1131 audit(1795472653.031:9934): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=unconfined msg='unit=auditd comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+$ sudo touch /etc/sudoers.d/thu-khi-auditd-tat; sudo journalctl -k --since '-1min' -q --no-pager -o cat | grep -E 'key="sudoers"' | tail -1 | cut -c1-200
+$ sudo systemctl start auditd; sleep 1; systemctl is-active auditd; sudo rm /etc/sudoers.d/thu-khi-auditd-tat
+active
+$ sudo ausearch --input-logs -m DAEMON_END,DAEMON_START -i | grep -E 'DAEMON_(END|START)' | tail -2 | cut -c1-220
+type=DAEMON_END msg=audit(11/24/26 05:24:28.277:9999) : op=terminate auid=root uid=root ses=unset pid=1 subj=unconfined res=success 
+type=DAEMON_START msg=audit(11/24/26 05:25:07.085:8429) : op=start ver=3.1.2 format=enriched kernel=6.8.0-149-generic auid=unset pid=19336 uid=root ses=unset subj=unconfined  res=success 
+$ docker run --rm rockylinux:9 bash -c 'dnf -q -y install audit >/dev/null 2>&1; grep -E "RefuseManualStop|ExecStart=" /usr/lib/systemd/system/auditd.service; grep -E "^(log_file|max_log_file|num_logs|max_log_file_action|space_left_action|disk_full_action) " /etc/audit/auditd.conf'
+RefuseManualStop=yes
+ExecStart=/sbin/auditd
+log_file = /var/log/audit/audit.log
+max_log_file = 8
+num_logs = 5
+max_log_file_action = ROTATE
+space_left_action = SYSLOG
+disk_full_action = SUSPEND
+$ grep -E '^(log_file|max_log_file|num_logs|max_log_file_action|space_left_action|disk_full_action) ' /etc/audit/auditd.conf 2>/dev/null || sudo grep -E '^(log_file|max_log_file|num_logs|max_log_file_action|space_left_action|disk_full_action) ' /etc/audit/auditd.conf
+log_file = /var/log/audit/audit.log
+max_log_file = 8
+num_logs = 5
+max_log_file_action = ROTATE
+space_left_action = SYSLOG
+disk_full_action = SUSPEND

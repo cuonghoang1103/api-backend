@@ -1,0 +1,8 @@
+[Unit]
+Description=Run the nightly report at 03:12
+
+[Timer]
+OnCalendar=*-*-* 03:12:00
+
+[Install]
+WantedBy=timers.target

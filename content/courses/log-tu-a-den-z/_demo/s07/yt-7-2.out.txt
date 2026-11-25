@@ -1,0 +1,12 @@
+$ sudo usermod -aG systemd-journal hv
+$ id -u hv
+1001
+$ logger -t ghi-chu 'hv kiem tra cau hinh luc nua dem'
+$ journalctl _UID=$(id -u hv) --since '1 hour ago' --no-pager
+Nov 24 16:52:46 lab7 sudo[46]:       hv : PWD=/home/hv ; USER=root ; COMMAND=/usr/sbin/usermod -aG systemd-journal hv
+Nov 24 16:52:46 lab7 sudo[46]: pam_unix(sudo:session): session opened for user root(uid=0) by root(uid=1001)
+Nov 24 16:52:46 lab7 sudo[46]: pam_unix(sudo:session): session closed for user root
+Nov 24 16:52:46 lab7 ghi-chu[57]: hv kiem tra cau hinh luc nua dem
+$ journalctl -u ssh --since yesterday --no-pager | tail -n 2
+Nov 24 16:52:46 lab7 sshd[44]: Server listening on :: port 22.
+Nov 24 16:52:46 lab7 systemd[1]: Started ssh.service - OpenBSD Secure Shell server.

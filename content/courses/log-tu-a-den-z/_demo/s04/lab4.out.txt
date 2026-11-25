@@ -1,0 +1,48 @@
+PS> Get-ChildItem tc/*.evtx | ForEach-Object { $f = $_.Name; evtx-rec $_.FullName 2>$null | ConvertFrom-Json | ForEach-Object { [pscustomobject]@{ K = $_.kenh -replace 'Microsoft-Windows-',''; Id = $_.id; F = $f } } } | Group-Object K,Id | Where-Object { $_.Name -match ', (4624|4625|4672|4688|4697|4698|4702|4719|4720|4722|4726|4732|4738|4778|4779|4825|1102|104|7036|7040|7045|1116|1117|5007|1149|21|24|25|4104|4616)$' } | Sort-Object { [int]($_.Name -split ', ')[1] } | ForEach-Object { '{0,-52} {1,5}  ví dụ: {2}' -f $_.Name, $_.Count, $_.Group[0].F }
+TerminalServices-LocalSessionManager/Operational, 21     5  ví dụ: rdp-21-25.evtx
+TerminalServices-LocalSessionManager/Operational, 24     6  ví dụ: rdp-21-25.evtx
+TerminalServices-LocalSessionManager/Operational, 25     2  ví dụ: rdp-21-25.evtx
+System, 104                                             95  ví dụ: clear-104-1102.evtx
+Security, 1102                                           6  ví dụ: clear-104-1102.evtx
+Windows Defender/Operational, 1116                       6  ví dụ: defender-atomic-1116-1117.evtx
+Windows Defender/Operational, 1117                       5  ví dụ: defender-atomic-1116-1117.evtx
+TerminalServices-RemoteConnectionManager/Operational, 1149    11  ví dụ: rdp-1149-nhieu-may.evtx
+PowerShell/Operational, 4104                            68  ví dụ: ps-obfuscation.evtx
+Security, 4616                                           8  ví dụ: time-4616.evtx
+Security, 4624                                          29  ví dụ: logon2-chrome.evtx
+Security, 4625                                        3585  ví dụ: han-che-4625.evtx
+Security, 4688                                          51  ví dụ: clear-4688-native.evtx
+Security, 4697                                           1  ví dụ: rdp-hijack-yamato.evtx
+Security, 4698                                           2  ví dụ: apt-4720-4698.evtx
+Security, 4702                                           1  ví dụ: task-4624-4702.evtx
+Security, 4719                                          30  ví dụ: audit-4719.evtx
+Security, 4720                                           6  ví dụ: apt-4720-4698.evtx
+Security, 4722                                           2  ví dụ: guest-4722.evtx
+Security, 4726                                           2  ví dụ: hidden-user-4720.evtx
+Security, 4732                                           7  ví dụ: admin-4732.evtx
+Security, 4738                                           4  ví dụ: hidden-user-4720.evtx
+Security, 4778                                           2  ví dụ: rdp-hijack-4778-4779.evtx
+Security, 4779                                           1  ví dụ: rdp-hijack-4778-4779.evtx
+Security, 4825                                           2  ví dụ: rdp-4825.evtx
+Windows Defender/Operational, 5007                       4  ví dụ: defender-5007.evtx
+System, 7036                                            11  ví dụ: eventlog-crash-7036.evtx
+System, 7040                                             2  ví dụ: dung-eventlog.evtx
+System, 7045                                             4  ví dụ: psexec-7045-7036.evtx
+PS> 'A', (evtx-rec tc/smb-doan-mk-4625.evtx | ConvertFrom-Json | Select-Object -Index 1000 | Select-Object t,id,kenh,may,@{n='d';e={$_.data | Select-Object TargetUserName,LogonType,Status,SubStatus,IpAddress,WorkstationName}} | ConvertTo-Json -Compress -Depth 3)
+A
+{"t":"2016-09-19T16:50:51.1613388Z","id":4625,"kenh":"Security","may":"DESKTOP-M5SN04R","d":{"TargetUserName":"Administrator","LogonType":3,"Status":"0xc000006d","SubStatus":"0xc000006a","IpAddress":"192.168.198.149","WorkstationName":"jTcVeB8f2Rs3Bldo"}}
+PS> 'B', (evtx-rec tc/psexec-msf-system.evtx | ConvertFrom-Json | Where-Object id -eq 7045 | Select-Object -First 1 t,id,kenh,@{n='d';e={$_.data}} | ConvertTo-Json -Compress -Depth 3)
+B
+{"t":"2016-09-21T03:41:02.5429687Z","id":7045,"kenh":"System","d":{"ServiceName":"KgXItsbKgTJzdzwl","ImagePath":"%SYSTEMROOT%\\duKhLYUX.exe","ServiceType":"user mode service","StartType":"demand start","AccountName":"LocalSystem"}}
+PS> 'C', (evtx-rec tc/rdp-hijack-yamato.evtx | ConvertFrom-Json | Where-Object id -eq 4697 | Select-Object t,id,kenh,@{n='d';e={$_.data | Select-Object SubjectUserName,ServiceName,ServiceFileName,ServiceStartType,ServiceAccount}} | ConvertTo-Json -Compress -Depth 3)
+C
+{"t":"2022-02-08T20:33:10.9182672Z","id":4697,"kenh":"Security","d":{"SubjectUserName":"user","ServiceName":"rdphijack2","ServiceFileName":"cmd.exe /k tscon 2 /dest rdp-tcp#14","ServiceStartType":3,"ServiceAccount":"LocalSystem"}}
+PS> 'D', (evtx-rec tc/new-user.evtx | ConvertFrom-Json | Where-Object { $_.id -eq 4732 -and $_.data.TargetUserName -eq 'Administrators' } | Select-Object t,id,kenh,may,@{n='d';e={$_.data | Select-Object SubjectUserName,TargetUserName,MemberSid}} | ConvertTo-Json -Compress -Depth 3)
+D
+{"t":"2013-10-23T16:22:40.00475Z","id":4732,"kenh":"Security","may":"IE8Win7","d":{"SubjectUserName":"WIN-QALA5Q3KJ43$","TargetUserName":"Administrators","MemberSid":"S-1-5-21-3463664321-2923530833-3546627382-1000"}}
+PS> 'E', (evtx-rec tc/guest-4722.evtx | ConvertFrom-Json | Select-Object t,id,kenh,may,@{n='d';e={$_.data | Select-Object SubjectUserName,TargetUserName,TargetSid}} | ConvertTo-Json -Compress -Depth 3)
+E
+{"t":"2020-07-12T05:49:36.9982423Z","id":4722,"kenh":"Security","may":"jump01.offsec.lan","d":{"SubjectUserName":"admmig","TargetUserName":"Guest","TargetSid":"S-1-5-21-1470532092-3758209836-3742276719-501"}}
+PS> 'F', (evtx-rec tc/clear-1102.evtx | ConvertFrom-Json | Where-Object id -eq 1102 | Select-Object t,id,kenh,may,@{n='d';e={$_.data}} | ConvertTo-Json -Compress -Depth 3)
+F
+{"t":"2019-03-19T23:35:07.5242021Z","id":1102,"kenh":"Security","may":"PC01.example.corp","d":{"SubjectUserSid":"S-1-5-21-1587066498-1489273250-1035260531-1106","SubjectUserName":"user01","SubjectDomainName":"EXAMPLE","SubjectLogonId":"0x17dad"}}

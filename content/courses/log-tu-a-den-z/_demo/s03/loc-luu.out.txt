@@ -1,0 +1,42 @@
+PS> $r = evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json; $cuoi = ($r.t | Measure-Object -Maximum).Maximum; "Su kien cuoi: $($cuoi.ToString('yyyy-MM-dd HH:mm:ss')) UTC"; $r | Where-Object { $_.muc -in 'Critical','Error','Warning' -and $_.t -ge $cuoi.AddDays(-7) } | Group-Object muc,nguon,id | Sort-Object Count -Descending | Select-Object Count,Name | Format-Table -AutoSize
+Su kien cuoi: 2016-09-20 15:45:22 UTC
+
+Count Name
+----- ----
+   20 Warning, Microsoft-Windows-DNS-Client, 1014
+   19 Error, Service Control Manager, 7011
+    6 Error, Service Control Manager, 7009
+    1 Warning, Microsoft-Windows-Time-Service, 36
+    1 Warning, PNPMEM, 0
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object id -in 1074,6005,6006,6008,41 | Group-Object id | Select-Object Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+   66 1074
+   38 6005
+   37 6006
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object sid | Group-Object sid | Sort-Object Count -Descending | Select-Object -First 5 Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+ 2618 S-1-5-18
+  263 S-1-5-20
+  226 S-1-5-19
+   85 S-1-5-21-3463664321-2923530833-3546627382-1000
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object { ($_.data.PSObject.Properties.Value -join ' ') -match 'KB2' } | Select-Object -First 4 @{n='Luc';e={$_.t.ToString('yyyy-MM-dd HH:mm')}},nguon,id,@{n='Data';e={(($_.data.PSObject.Properties.Value -join ' | ') -replace '\s+',' ').Substring(0,70)}} | Format-Table -AutoSize
+Luc              nguon                                 id Data
+---              -----                                 -- ----
+2013-10-23 16:30 Microsoft-Windows-WindowsUpdateClient 18 ‎Thursday, ‎October ‎24, ‎2013 | 3:00 AM | - Update for Windows 7 (KB2
+2013-10-23 16:30 Microsoft-Windows-WindowsUpdateClient 18 ‎Thursday, ‎October ‎24, ‎2013 | 3:00 AM | - Update for Windows 7 (KB2
+2013-10-23 16:33 Microsoft-Windows-WindowsUpdateClient 18 ‎Thursday, ‎October ‎24, ‎2013 | 3:00 AM | - Update for Windows 7 (KB2
+2013-10-23 16:33 Microsoft-Windows-WindowsUpdateClient 18 ‎Thursday, ‎October ‎24, ‎2013 | 3:00 AM | - Security Update for Windo
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object id -eq 1074 | Select-Object -First 20 @{n='Luc';e={$_.t.ToString('s')}},may,@{n='TienTrinh';e={$_.data.'#text'[0]}},@{n='LyDo';e={$_.data.'#text'[2]}},@{n='Kieu';e={$_.data.'#text'[4]}},@{n='NguoiDung';e={$_.data.'#text'[6]}} | Export-Csv -NoTypeInformation -Encoding utf8 ra/1074.csv; Get-Content ra/1074.csv -TotalCount 4; (Import-Csv ra/1074.csv).Count
+"Luc","may","TienTrinh","LyDo","Kieu","NguoiDung"
+"2013-10-23T16:18:09","37L4247D28-05","C:\Windows\system32\winlogon.exe (37L4247D28-05)","Operating System: Upgrade (Planned)","restart","NT AUTHORITY\SYSTEM"
+"2013-10-23T17:26:35","IE8Win7","Explorer.EXE","Operating System: Recovery (Planned)","restart","IE8Win7\IEUser"
+"2013-10-23T17:27:31","IE8Win7","C:\Windows\system32\winlogon.exe (WIN-QALA5Q3KJ43)","No title for this reason could be found","restart","IE8Win7\IEUser"
+20
+$ evtx-rec mau/dbc-many-events-system.evtx | jq -r 'select(.muc=="Error") | "\(.nguon) \(.id)"' | sort | uniq -c | sort -rn | head -5
+     25 Service Control Manager 7011
+      8 Service Control Manager 7009
+      4 Service Control Manager 7023
+      4 Microsoft-Windows-DistributedCOM 10010
+      2 Service Control Manager 7043

@@ -1,0 +1,6 @@
+$ sudo timedatectl set-ntp true; sleep 8; date
+Tue Nov 24 12:35:23 +07 2026
+$ sudo timedatectl set-ntp true; sleep 8; date   # ← trên android-7f3a
+Tue Nov 24 12:35:31 +07 2026
+$ /etc/init.d/sysntpd start; sleep 8; date   # ← trên router wrt-nha
+Tue Nov 24 12:35:40 +07 2026

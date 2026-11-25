@@ -1,0 +1,123 @@
+$ sudo awk '$1>="2026-11-24T22:40" && $1<"2026-11-25T08:30"' /var/log/auth.log > dem8.log; wc -l < dem8.log; head -2 dem8.log; tail -1 dem8.log
+677
+2026-11-24T22:41:00.001698+07:00 lab7 sudo: pam_unix(sudo:session): session closed for user root
+2026-11-24T22:41:00.004836+07:00 lab7 sshd[3873]: Received disconnect from 172.17.0.1 port 39722:11: disconnected by user
+2026-11-25T07:58:00.820504+07:00 lab7 sudo: pam_unix(sudo:session): session closed for user root
+$ grep -oE 'sshd\[[0-9]+\]: [A-Z][a-z]+( [a-z]+)?' dem8.log | sed -E 's/sshd\[[0-9]+\]: //' | sort | uniq -c | sort -rn | head -8
+    172 Failed password
+     47 Invalid user
+     40 Connection closed
+     24 Received disconnect
+     24 Disconnected from
+     12 Disconnecting invalid
+      8 Accepted publickey
+      4 Disconnecting authenticating
+$ grep -cE 'Failed password' dem8.log; grep -cE 'Invalid user' dem8.log
+172
+47
+$ grep -E 'Failed password' dem8.log | grep -oE 'from [0-9.]+' | sort | uniq -c | sort -rn
+    136 from 192.168.56.66
+     25 from 192.168.56.88
+     11 from 192.168.56.77
+$ awk '/Failed password/{h=substr($1,9,2)"/"substr($1,12,2)"h"; for(i=1;i<=NF;i++) if($i=="from") ip=$(i+1); c[ip"  "h]++} END{for(k in c) print c[k]"\t"k}' dem8.log | sort -t$'\t' -k2
+136	192.168.56.66  24/23h
+11	192.168.56.77  25/03h
+25	192.168.56.88  25/01h
+$ grep 'Failed password' dem8.log | awk '{for(i=1;i<=NF;i++) if($i=="for"){u=($(i+1)=="invalid")?$(i+3):$(i+1)}; print u}' | sort | uniq -c | sort -rn | head -8
+     34 user
+     34 ubuntu
+     34 root
+     34 admin
+     11 test
+      1 www-data
+      1 ubuntu1
+      1 ts3
+$ grep 'Failed password' dem8.log | grep 192.168.56.66 | awk '{print substr($1,12,8)}' | sed -n '1p;$p'; grep 'Failed password' dem8.log | grep 192.168.56.77 | awk '{print substr($1,12,8)}' | tr '\n' ' '; echo
+23:05:02
+23:08:46
+03:41:02 03:41:08 03:41:15 03:41:24 03:41:31 03:41:38 03:41:44 03:41:51 03:41:58 03:42:06 03:42:12 
+$ grep -E 'Accepted' dem8.log
+2026-11-24T22:41:00.427690+07:00 lab7 sshd[3922]: Accepted password for an from 192.168.56.20 port 47291 ssh2
+2026-11-24T22:41:00.803547+07:00 lab7 sshd[3972]: Accepted publickey for hv from 172.17.0.1 port 39732 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+2026-11-24T23:08:47.932513+07:00 lab7 sshd[4644]: Accepted publickey for hv from 172.17.0.1 port 58660 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+2026-11-25T01:21:20.503921+07:00 lab7 sshd[4999]: Accepted publickey for hv from 172.17.0.1 port 40536 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+2026-11-25T03:42:17.098361+07:00 lab7 sshd[5263]: Accepted password for test from 192.168.56.77 port 47931 ssh2
+2026-11-25T03:42:17.643875+07:00 lab7 sshd[5299]: Accepted password for test from 192.168.56.77 port 57385 ssh2
+2026-11-25T03:42:17.849565+07:00 lab7 sshd[5334]: Accepted publickey for hv from 172.17.0.1 port 33068 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+2026-11-25T03:52:00.315376+07:00 lab7 sshd[5373]: Accepted publickey for test from 192.168.56.77 port 38205 ssh2: ED25519 SHA256:Thc+lqQJaytwfxm04Ah1Ps07M5eeGpmHl0L1zG9B77U
+2026-11-25T03:52:00.514773+07:00 lab7 sshd[5404]: Accepted publickey for hv from 172.17.0.1 port 33084 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+2026-11-25T07:58:00.312414+07:00 lab7 sshd[5436]: Accepted publickey for hv from 192.168.56.20 port 41913 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+2026-11-25T07:58:00.515773+07:00 lab7 sshd[5463]: Accepted publickey for hv from 172.17.0.1 port 33088 ssh2: ED25519 SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY
+$ awk '/Failed password/{for(i=1;i<=NF;i++) if($i=="from") sai[$(i+1)]++} /Accepted/{for(i=1;i<=NF;i++) if($i=="from"){ip=$(i+1); if(sai[ip]>0) print "ĐỎ: " ip " vào được sau " sai[ip] " lần sai —", substr($0,1,26), $(i-3), $(i-1)}}' dem8.log
+ĐỎ: 192.168.56.77 vào được sau 11 lần sai — 2026-11-25T03:42:17.098361 password test
+ĐỎ: 192.168.56.77 vào được sau 11 lần sai — 2026-11-25T03:42:17.643875 password test
+ĐỎ: 192.168.56.77 vào được sau 11 lần sai — 2026-11-25T03:52:00.315376 publickey test
+$ grep -E 'useradd|chpasswd|COMMAND=/usr/bin/bash' dem8.log | cut -c1-170
+2026-11-24T22:41:00.624514+07:00 lab7 sudo:       an : TTY=pts/0 ; PWD=/home/an ; USER=root ; COMMAND=/usr/bin/bash -c 'useradd -m -s /bin/bash -c "tai khoan thu cho dev"
+2026-11-24T22:41:00.652549+07:00 lab7 useradd[3960]: new group: name=test, GID=1004
+2026-11-24T22:41:00.652675+07:00 lab7 useradd[3960]: new user: name=test, UID=1004, GID=1004, home=/home/test, shell=/bin/bash, from=none
+2026-11-24T22:41:00.710007+07:00 lab7 chpasswd[3969]: pam_unix(chpasswd:chauthtok): password changed for test
+$ grep -E 'sudo: +test|pam_unix\(sshd:session\).*test|systemd-logind.*test' dem8.log | cut -c1-150
+2026-11-25T03:42:17.099010+07:00 lab7 sshd[5263]: pam_unix(sshd:session): session opened for user test(uid=1004) by test(uid=0)
+2026-11-25T03:42:17.117074+07:00 lab7 systemd-logind[465]: New session 17 of user test.
+2026-11-25T03:42:17.293344+07:00 lab7 sshd[5263]: pam_unix(sshd:session): session closed for user test
+2026-11-25T03:42:17.644591+07:00 lab7 sshd[5299]: pam_unix(sshd:session): session opened for user test(uid=1004) by test(uid=0)
+2026-11-25T03:42:17.646681+07:00 lab7 systemd-logind[465]: New session 19 of user test.
+2026-11-25T03:42:17.755361+07:00 lab7 sudo:     test : command not allowed ; TTY=pts/0 ; PWD=/home/test ; USER=root ; COMMAND=list
+2026-11-25T03:42:17.758797+07:00 lab7 sshd[5299]: pam_unix(sshd:session): session closed for user test
+2026-11-25T03:52:00.316202+07:00 lab7 sshd[5373]: pam_unix(sshd:session): session opened for user test(uid=1004) by test(uid=0)
+2026-11-25T03:52:00.318411+07:00 lab7 systemd-logind[465]: New session 22 of user test.
+2026-11-25T03:52:00.427924+07:00 lab7 sshd[5373]: pam_unix(sshd:session): session closed for user test
+$ sudo last -F -w test; sudo lastb -w | awk 'NF>8{print $3}' | sort | uniq -c | sort -rn
+test     pts/0        192.168.56.77    Wed Nov 25 03:52:00 2026 - Wed Nov 25 03:52:00 2026  (00:00)
+test     pts/0        192.168.56.77    Wed Nov 25 03:42:17 2026 - Wed Nov 25 03:42:17 2026  (00:00)
+
+wtmp begins Tue Nov 24 04:07:41 2026
+    160 192.168.56.66
+     70 192.168.56.88
+     11 192.168.56.77
+$ sudo ausearch --input-logs -ua test --format text 2>/dev/null | grep -vE 'acting as root|/usr/lib/systemd|/proc/self|/bin/systemctl' | cut -c1-140
+At 03:42:17 11/25/26 test successfully executed /bin/bash 
+At 03:42:17 11/25/26 test successfully logged-in /dev/pts/0 using /usr/sbin/sshd
+At 03:42:17 11/25/26 test successfully executed /bin/bash 
+At 03:42:17 11/25/26 test successfully executed /usr/bin/id 
+At 03:42:17 11/25/26 test successfully executed /usr/bin/uname 
+At 03:42:17 11/25/26 test successfully executed /usr/bin/grep 
+At 03:42:17 11/25/26 test successfully executed /usr/bin/ls 
+At 03:42:17 11/25/26 test successfully executed /usr/bin/cat 
+At 03:42:17 11/25/26 test unsuccessfully opened-file /etc/shadow using /usr/bin/cat
+At 03:42:17 11/25/26 test successfully executed /usr/bin/sudo 
+At 03:42:17 11/25/26 test successfully opened-file /etc/shadow using /usr/bin/sudo
+At 03:42:17 11/25/26 test successfully opened-file /etc/shadow using /usr/bin/sudo
+At 03:42:17 11/25/26 test successfully authenticated test using /usr/bin/sudo
+At 03:42:17 11/25/26 test successfully opened-file /etc/shadow using /usr/bin/sudo
+At 03:42:17 11/25/26 test successfully was-authorized test using /usr/bin/sudo
+At 03:42:17 11/25/26 test unsuccessfully ran-command list using /usr/bin/sudo
+At 03:42:17 11/25/26 test successfully executed /usr/bin/mkdir 
+At 03:42:17 11/25/26 test successfully executed /usr/bin/tee 
+At 03:42:17 11/25/26 test successfully executed /usr/bin/chmod 
+At 03:52:00 11/25/26 test successfully logged-in /dev/pts/0 using /usr/sbin/sshd
+At 03:52:00 11/25/26 test successfully executed /bin/bash 
+At 03:52:00 11/25/26 test successfully executed /usr/bin/head 
+At 03:52:00 11/25/26 test successfully executed /usr/bin/w 
+At 03:52:00 11/25/26 test successfully executed /usr/bin/head 
+$ sudo ausearch --input-logs -k identity -ts 11/24/2026 22:40:00 --format text 2>&1 | head -2; sudo ausearch --input-logs -k identity -ts 11/24/26 22:40:00 --format text 2>/dev/null | cut -c1-140 | sort -u | head -6
+Error parsing start date (11/24/2026)
+At 22:41:00 11/24/26 an, acting as root, successfully opened-file /etc/group using /usr/sbin/useradd
+At 22:41:00 11/24/26 an, acting as root, successfully opened-file /etc/passwd using /usr/sbin/useradd
+At 22:41:00 11/24/26 an, acting as root, successfully renamed /etc/group+ to /etc/group using /usr/sbin/useradd
+At 22:41:00 11/24/26 an, acting as root, successfully renamed /etc/passwd+ to /etc/passwd using /usr/sbin/useradd
+$ sudo ls -la /home/test/.ssh; sudo cat /home/test/.ssh/authorized_keys | cut -c1-40,80-; sudo ssh-keygen -lf /home/test/.ssh/authorized_keys
+total 12
+drwxrwxr-x 2 test test 4096 Nov 25  2026 .
+drwxr-x--- 4 test test 4096 Nov 25  2026 ..
+-rw------- 1 test test   88 Nov 25  2026 authorized_keys
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICbe9 x@kali
+256 SHA256:Thc+lqQJaytwfxm04Ah1Ps07M5eeGpmHl0L1zG9B77U x@kali (ED25519)
+$ grep 'Accepted publickey for test' dem8.log | grep -oE 'ED25519 SHA256:[^ ]+'
+ED25519 SHA256:Thc+lqQJaytwfxm04Ah1Ps07M5eeGpmHl0L1zG9B77U
+$ sudo journalctl -u ssh -q --no-pager --since '2026-11-24 22:40' --until '2026-11-25 08:30' | grep -c 'Failed password'; sudo journalctl -u ssh -q --no-pager -o short-iso | grep 'Accepted publickey for test' | cut -c1-100
+172
+2026-11-25T03:52:00+07:00 lab7 sshd[5373]: Accepted publickey for test from 192.168.56.77 port 38205
+$ rm dem8.log
+

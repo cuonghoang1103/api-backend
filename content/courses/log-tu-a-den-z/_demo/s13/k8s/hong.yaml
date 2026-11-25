@@ -1,0 +1,44 @@
+# 13.2 — bốn pod hỏng có chủ đích: thiếu biến môi trường (exit 1), vượt RAM (OOMKilled 137), ảnh không tồn tại,
+# và một pod làm xong việc rồi thoát 0 — với restartPolicy Always (mặc định) thì cũng thành CrashLoopBackOff.
+apiVersion: v1
+kind: Pod
+metadata: { name: orders-loi, namespace: lab13, labels: { app: orders-loi } }
+spec:
+  containers:
+    - name: api
+      image: node:22-alpine
+      imagePullPolicy: Never
+      command: ["node", "/app/app.js"]
+      volumeMounts: [{ name: ma, mountPath: /app }]
+  volumes: [{ name: ma, configMap: { name: ma-c13 } }]
+---
+apiVersion: v1
+kind: Pod
+metadata: { name: an-ram, namespace: lab13 }
+spec:
+  containers:
+    - name: an-ram
+      image: node:22-alpine
+      imagePullPolicy: Never
+      command: ["node", "/app/an-ram.js"]
+      resources: { limits: { memory: 64Mi } }
+      volumeMounts: [{ name: ma, mountPath: /app }]
+  volumes: [{ name: ma, configMap: { name: ma-c13 } }]
+---
+apiVersion: v1
+kind: Pod
+metadata: { name: anh-sai, namespace: lab13 }
+spec:
+  containers:
+    - name: web
+      image: registry.invalid/lab13/web:1.0
+---
+apiVersion: v1
+kind: Pod
+metadata: { name: xong-viec, namespace: lab13 }
+spec:
+  containers:
+    - name: bao-cao
+      image: alpine:latest
+      imagePullPolicy: Never
+      command: ["sh", "-c", "echo 'bao cao ngay: 42 don hang'; echo xong"]

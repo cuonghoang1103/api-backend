@@ -1,0 +1,9 @@
+<!-- logback.xml — %replace là LƯỚI AN TOÀN cuối (regex trên chuỗi đã định dạng), không thay cho việc không log bí mật -->
+<configuration>
+  <appender name="OUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} %-5level %logger - %replace(%msg){'(password|token)=[^&amp;\s,\]]+', '$1=***'}%n</pattern>
+    </encoder>
+  </appender>
+  <root level="INFO"><appender-ref ref="OUT"/></root>
+</configuration>

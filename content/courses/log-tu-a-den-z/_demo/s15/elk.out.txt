@@ -1,0 +1,83 @@
+$ docker compose ps --format '{{.Name}}  {{.Status}}'
+lgz-c15e-es  Up About a minute
+lgz-c15e-filebeat  Up 21 seconds
+lgz-c15e-kibana  Up 51 seconds
+lgz-c15e-net  Up About a minute
+$ docker stats --no-stream --format '{{.Name}}  {{.MemUsage}}' lgz-c15e-es lgz-c15e-kibana lgz-c15e-filebeat
+lgz-c15e-es  1.628GiB / 2GiB
+lgz-c15e-kibana  1.316GiB / 1.5GiB
+lgz-c15e-filebeat  164.4MiB / 31.17GiB
+$ es '_cat/indices/.ds-filebeat-*?v&h=index,docs.count,store.size'
+index                                docs.count store.size
+.ds-filebeat-9.5.7-2026.11.24-000001       4268      1.5mb
+$ es 'filebeat-*/_search?size=1&q=event.dataset:nginx.access&sort=@timestamp:desc' | jq '.hits.hits[0]._source | {"@timestamp", "source.ip": .source.ip, "http.request.method": .http.request.method, "url.original": .url.original, "http.response.status_code": .http.response.status_code, "user_agent.name": .user_agent.name, "event.original": .event.original}'
+{
+  "@timestamp": "2026-11-20T16:57:07.000Z",
+  "source.ip": "198.51.100.103",
+  "http.request.method": "GET",
+  "url.original": "/static/app.js",
+  "http.response.status_code": 200,
+  "user_agent.name": "Mobile Safari",
+  "event.original": "198.51.100.103 - - [20/Nov/2026:23:57:07 +0700] \"GET /static/app.js HTTP/1.1\" 200 182000 \"-\" \"Mozilla/5.0 (iPhone; CPU iPhone OS 19_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/19.1 Mobile/15E148 Safari/604.1\""
+}
+$ es 'filebeat-*/_search?size=1&q=event.dataset:system.auth%20AND%20source.ip:198.51.100.23&sort=@timestamp:desc' | jq -c '.hits.hits[0]._source | {"@timestamp", tz: .event.timezone, user: .user.name, ip: .source.ip, ssh: .system.auth.ssh.event}'
+{"@timestamp":"2026-11-20T02:14:09.000Z","tz":"+00:00","user":" git","ip":"198.51.100.23","ssh":"Failed"}
+$ grep 'from 198.51.100.23' mau/linux/auth.log | tail -1
+Nov 20 02:14:09 web-01 sshd[41443]: Failed password for invalid user git from 198.51.100.23 port 44719 ssh2
+$ kql 'event.dataset : "system.auth" and system.auth.ssh.event : "Failed"' 'source.ip,user.name'
+KQL: event.dataset : "system.auth" and system.auth.ssh.event : "Failed"
+Số kết quả (Discover): 160
+  Nov 20, 2026 @ 09:14:09.000 | 198.51.100.23 | git
+  Nov 20, 2026 @ 09:14:07.000 | 198.51.100.23 | ubuntu
+  Nov 20, 2026 @ 09:14:05.000 | 198.51.100.23 | git
+$ docker compose -f compose.yaml -f tz.yaml stop filebeat >/dev/null 2>&1; es '_data_stream/filebeat-9.5.7' -XDELETE; echo; docker compose -f compose.yaml -f tz.yaml rm -f -v filebeat >/dev/null 2>&1; docker volume rm lgz-c15e_fb-data >/dev/null; docker compose -f compose.yaml -f tz.yaml up -d filebeat 2>/dev/null; for i in $(seq 40); do [ "$(es 'filebeat-*/_count' | jq .count)" = 4268 ] && break; sleep 3; done; es 'filebeat-*/_count' | jq -c '{count}'
+{"acknowledged":true}
+{"count":4268}
+$ es 'filebeat-*/_search?size=1&q=event.dataset:system.auth%20AND%20source.ip:198.51.100.23&sort=@timestamp:desc' | jq -c '.hits.hits[0]._source | {"@timestamp", tz: .event.timezone, user: .user.name, ip: .source.ip, ssh: .system.auth.ssh.event}'
+{"@timestamp":"2026-11-20T02:14:09.000+07:00","tz":"+07:00","user":" git","ip":"198.51.100.23","ssh":"Failed"}
+$ kql 'event.dataset : "system.auth" and system.auth.ssh.event : "Failed"' 'source.ip,user.name'
+KQL: event.dataset : "system.auth" and system.auth.ssh.event : "Failed"
+Số kết quả (Discover): 160
+  Nov 20, 2026 @ 02:14:09.000 | 198.51.100.23 | git
+  Nov 20, 2026 @ 02:14:07.000 | 198.51.100.23 | ubuntu
+  Nov 20, 2026 @ 02:14:05.000 | 198.51.100.23 | git
+$ kql 'event.dataset : "nginx.access" and http.response.status_code >= 500' 'source.ip,url.original,http.response.status_code'
+KQL: event.dataset : "nginx.access" and http.response.status_code >= 500
+Số kết quả (Discover): 137
+  Nov 20, 2026 @ 14:08:29.000 | 192.0.2.19 | /api/v1/feed | 502
+  Nov 20, 2026 @ 14:08:27.000 | 198.51.100.118 | /api/v1/feed | 502
+  Nov 20, 2026 @ 14:08:26.000 | 192.0.2.30 | /api/v1/feed | 502
+$ kql 'url.original : /api/v1/auth/* and not http.response.status_code : 200' 'source.ip,url.original,http.response.status_code'
+KQL: url.original : /api/v1/auth/* and not http.response.status_code : 200
+Số kết quả (Discover): 423
+  Nov 20, 2026 @ 22:35:39.000 | 192.0.2.49 | /api/v1/auth/login | 404
+  Nov 20, 2026 @ 15:53:46.000 | 192.0.2.25 | /api/v1/auth/login | 404
+  Nov 20, 2026 @ 10:47:57.000 | 198.51.100.106 | /api/v1/auth/login | 404
+$ kql 'source.ip : "203.0.113.0/24" and event.dataset : "nginx.access"' 'source.ip,url.original,user_agent.original'
+KQL: source.ip : "203.0.113.0/24" and event.dataset : "nginx.access"
+Số kết quả (Discover): 422
+  Nov 20, 2026 @ 02:41:21.000 | 203.0.113.66 | /api/v1/auth/login | python-requests/2.32.3
+  Nov 20, 2026 @ 02:41:17.000 | 203.0.113.66 | /api/v1/auth/login | python-requests/2.32.3
+  Nov 20, 2026 @ 02:41:12.000 | 203.0.113.66 | /api/v1/auth/login | python-requests/2.32.3
+$ kql 'user_agent.original : *python* or user_agent.original : *sqlmap*' 'source.ip,user_agent.original'
+KQL: user_agent.original : *python* or user_agent.original : *sqlmap*
+Số kết quả (Discover): 422
+  Nov 20, 2026 @ 02:41:21.000 | 203.0.113.66 | python-requests/2.32.3
+  Nov 20, 2026 @ 02:41:17.000 | 203.0.113.66 | python-requests/2.32.3
+  Nov 20, 2026 @ 02:41:12.000 | 203.0.113.66 | python-requests/2.32.3
+$ kql 'http.response.status_code >= 500 and not url.original : /api/*'
+KQL: http.response.status_code >= 500 and not url.original : /api/*
+Số kết quả (Discover): 0 — "No results match your search criteria"
+$ kql 'status : 500'
+KQL: status : 500
+Số kết quả (Discover): 0 — "No results match your search criteria"
+$ es '_query?format=txt' -d '{"query":"FROM filebeat-* | WHERE event.dataset == \"system.auth\" AND system.auth.ssh.event == \"Failed\" | STATS lan = COUNT(*) BY source.ip | SORT lan DESC | LIMIT 5"}'
+      lan      |   source.ip   
+---------------+---------------
+74             |203.0.113.66   
+45             |203.0.113.70   
+41             |198.51.100.23  
+$ es '_query?format=txt' -d '{"query":"FROM filebeat-* | WHERE event.dataset == \"nginx.access\" | EVAL gio = DATE_TRUNC(1 hour, @timestamp) | STATS loi5xx = COUNT(*) WHERE http.response.status_code >= 500, tong = COUNT(*) BY gio | WHERE loi5xx > 0 | SORT gio"}'
+    loi5xx     |     tong      |          gio           
+---------------+---------------+------------------------
+137            |332            |2026-11-20T07:00:00.000Z

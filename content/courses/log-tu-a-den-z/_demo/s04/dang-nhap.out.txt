@@ -1,0 +1,88 @@
+PS> Get-Content /lab/ra/d.jsonl | ConvertFrom-Json | Where-Object id -eq 4624 | Group-Object { $_.data.LogonType } | Sort-Object Count -Descending | Select-Object Count,@{n='LogonType';e={$_.Name}} | Format-Table -AutoSize
+Count LogonType
+----- ---------
+ 2342 5
+  219 2
+   22 3
+   14 0
+   11 10
+    7 7
+    6 11
+PS> Get-Content /lab/ra/d.jsonl | ConvertFrom-Json | Where-Object { $_.id -eq 4624 -and $_.data.LogonType -eq 10 } | ForEach-Object { [pscustomobject]@{ Luc = $_.t.ToString('s'); User = $_.data.TargetUserName; IP = $_.data.IpAddress; May = $_.data.WorkstationName; LogonId = $_.data.TargetLogonId } } | Format-Table -AutoSize
+Luc                 User          IP              May             LogonId
+---                 ----          --              ---             -------
+2018-07-28T00:41:18 Administrator 118.93.18.141   WIN-LL0C19JS506 0x21f3a2
+2018-07-28T01:08:02 Administrator 118.93.18.141   DESKTOP-0QT8017 0x40d3a
+2018-07-28T08:10:54 Administrator 118.93.18.141   DESKTOP-0QT8017 0x28733
+2018-07-28T08:21:51 Administrator 118.93.18.141   DESKTOP-0QT8017 0x288f5
+2018-07-28T08:24:42 Administrator 118.93.18.141   DESKTOP-0QT8017 0x286a7
+2019-01-15T20:12:38 Administrator 173.255.138.161 DESKTOP-0QT8017 0x2ab9fca
+2019-02-25T18:16:23 Administrator 47.190.48.109   DESKTOP-0QT8017 0x7ac7caf
+2019-02-25T20:04:20 Administrator 162.210.195.168 DESKTOP-0QT8017 0x7e56b11
+2019-02-25T20:06:08 Administrator 162.210.195.168 DESKTOP-0QT8017 0x30663
+2019-02-25T20:34:54 Administrator 162.210.195.168 DESKTOP-0QT8017 0xe834e
+2019-03-20T20:57:44 Administrator 173.255.138.141 DESKTOP-0QT8017 0x39ef9
+PS> Get-Content /lab/ra/d.jsonl | ConvertFrom-Json | Where-Object { $_.data.TargetLogonId -eq '0x7ac7caf' -or $_.data.SubjectLogonId -eq '0x7ac7caf' } | Group-Object id | Select-Object Count,@{n='EventID';e={$_.Name}},@{n='DauTien';e={$_.Group[0].t.ToString('HH:mm:ss')}},@{n='CuoiCung';e={$_.Group[-1].t.ToString('HH:mm:ss')}} | Format-Table -AutoSize
+Count EventID DauTien  CuoiCung
+----- ------- -------  --------
+    1 4624    18:16:23 18:16:23
+    1 4647    20:00:58 20:00:58
+    1 4672    18:16:23 18:16:23
+    3 4732    19:59:19 19:59:20
+   10 4798    18:27:01 18:27:14
+    1 5058    19:59:18 19:59:18
+    2 5059    19:59:18 19:59:18
+    1 5061    19:59:18 19:59:18
+PS> Get-Content /lab/ra/d.jsonl | ConvertFrom-Json | Where-Object { $_.data.SubjectLogonId -eq '0x7ac7caf' -and $_.id -in 4732,4798 } | ForEach-Object { '{0}  {1}  {2}  {3}' -f $_.t.ToString('HH:mm:ss'), $_.id, $_.data.TargetUserName, $_.data.MemberSid } | Select-Object -Unique
+18:27:01  4798  Administrator
+18:27:01  4798  Guest
+18:27:14  4798  Administrator
+18:27:14  4798  Guest
+19:59:19  4732  Administrators  S-1-12-1-2721035522-1313226148-3908702397-3748655314
+19:59:20  4732  Administrators  S-1-12-1-631744430-1094866078-783528853-879076081
+19:59:20  4732  Administrators  S-1-12-1-567334943-1312603556-2128478857-1632454919
+PS> Get-Content /lab/ra/d.jsonl | ConvertFrom-Json | Where-Object rec -in 10512,10513 | ForEach-Object { [pscustomobject]@{ Rec = $_.rec; User = $_.data.TargetUserName; Type = $_.data.LogonType; LogonId = $_.data.TargetLogonId; Linked = $_.data.TargetLinkedLogonId; Elevated = $_.data.ElevatedToken } } | Format-Table -AutoSize
+  Rec User                        Type LogonId  Linked   Elevated
+  --- ----                        ---- -------  ------   --------
+10512 sbouvier@magnetic4nsics.com    2 0x281fc7 0x28267e %%1842
+10513 sbouvier@magnetic4nsics.com    2 0x28267e 0x281fc7 %%1843
+PS> Get-Content /lab/ra/d.jsonl | ConvertFrom-Json | Where-Object id -in 4624,4634,4647 | Group-Object id | Select-Object Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+ 2621 4624
+  182 4634
+   15 4647
+PS> $e = Get-Content /lab/ra/smb.jsonl | ConvertFrom-Json; $e.Count; $e[0].t.ToString('o'); $e[-1].t.ToString('o'); ($e | Group-Object { $_.data.IpAddress }).Name
+3561
+2016-09-19T16:50:06.4778789Z
+2016-09-19T16:52:49.3996746Z
+192.168.198.149
+PS> Get-Content /lab/ra/smb.jsonl | ConvertFrom-Json | Group-Object { '{0} {1} {2} {3}' -f $_.data.LogonType, $_.data.Status, $_.data.SubStatus, $_.data.TargetUserName } | Select-Object Count,@{n='Type Status SubStatus User';e={$_.Name}} | Format-Table -AutoSize
+Count Type Status SubStatus User
+----- --------------------------
+    1 3 0xc000006d 0xc0000064 JcDfcZTc
+ 3558 3 0xc000006d 0xc000006a Administrator
+    2 3 0xc000006e 0xc0000072 Administrator
+PS> Get-Content /lab/ra/smb.jsonl | ConvertFrom-Json | Group-Object { $_.t.ToString('HH:mm') } | Select-Object Count,@{n='Phut';e={$_.Name}} | Format-Table -AutoSize
+Count Phut
+----- ----
+ 1198 16:50
+ 1299 16:51
+ 1064 16:52
+PS> Get-Content /lab/ra/smb.jsonl | ConvertFrom-Json | Select-Object -First 4 | ForEach-Object { '{0}  May={1}  Proc={2}  Pkg={3}' -f $_.t.ToString('HH:mm:ss.fff'), $_.data.WorkstationName, $_.data.LogonProcessName.Trim(), $_.data.AuthenticationPackageName }
+16:50:06.477  May=6hgtmVlrrFuWtO65  Proc=NtLmSsp  Pkg=NTLM
+16:50:06.513  May=gC4ymsKbxVGScMgY  Proc=NtLmSsp  Pkg=NTLM
+16:50:06.588  May=f2q1tdAUlxHGfGH6  Proc=NtLmSsp  Pkg=NTLM
+16:50:06.637  May=3EPNzcwy7tOAADWx  Proc=NtLmSsp  Pkg=NTLM
+PS> evtx-rec mau/Archive-ForwardedEvents-test.evtx | ConvertFrom-Json | Where-Object id -eq 4625 | Group-Object { '{0} {1} {2}' -f $_.data.SubStatus, $_.data.WorkstationName, $_.data.TargetUserName } | Sort-Object Count -Descending | Select-Object -First 6 Count,@{n='SubStatus May User';e={$_.Name}} | Format-Table -AutoSize
+Count SubStatus May User
+----- ------------------
+   71 0xc0000064 IRT-PA-IDM2 psadmin
+   56 0xc000006a CTX-WS16-FS-T3 CTX-WS16-FS-T3$
+    2 0xc0000064 IRT-PA-IDM1 psadmin
+    1 0xc000006a SLAD1 chadkramer
+PS> evtx-rec tc/han-che-4625.evtx | ConvertFrom-Json | Where-Object id -eq 4625 | ForEach-Object { [pscustomobject]@{ Luc = $_.t.ToString('s'); User = $_.data.TargetUserName; Type = $_.data.LogonType; Status = $_.data.Status; Sub = $_.data.SubStatus; IP = $_.data.IpAddress } } | Format-Table -AutoSize
+Luc                 User Type Status     Sub IP
+---                 ---- ---- ------     --- --
+2021-10-23T21:50:11 -      10 0xc000006e 0x0 10.23.23.9
+2021-10-23T21:51:57 -      10 0xc000006e 0x0 10.23.23.9

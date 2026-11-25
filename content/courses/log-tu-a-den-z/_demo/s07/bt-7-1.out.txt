@@ -1,0 +1,55 @@
+$ ls -ld /var/log/journal /run/log/journal
+drwxr-sr-x+ 2 root systemd-journal 40 Nov 24 16:31 /run/log/journal
+drwxr-sr-x+ 3 root systemd-journal 60 Nov 24 16:31 /var/log/journal
+$ systemd-analyze cat-config systemd/journald.conf | grep -v '^#' | grep .
+[Journal]
+[Journal]
+ForwardToSyslog=yes
+$ systemctl --version | head -n 1
+systemd 255 (255.4-1ubuntu8.19)
+$ id
+uid=1001(hv) gid=1001(hv) groups=1001(hv)
+$ journalctl --disk-usage
+Hint: You are currently not seeing messages from other users and the system.
+      Users in groups 'adm', 'systemd-journal' can see all messages.
+      Pass -q to turn off this notice.
+Archived and active journals take up 8.0M in the file system.
+$ sudo usermod -aG systemd-journal hv
+$ id
+uid=1001(hv) gid=1001(hv) groups=1001(hv),999(systemd-journal)
+$ journalctl --disk-usage
+Archived and active journals take up 16.0M in the file system.
+$ journalctl -u ssh -g Accepted -n 1 -o verbose --output-fields=MESSAGE,PRIORITY,SYSLOG_IDENTIFIER,SYSLOG_FACILITY,_PID,_UID,_COMM,_EXE,_SYSTEMD_UNIT,_TRANSPORT
+Tue 2026-11-24 16:31:55.652176 UTC [s=a3c5351190d34e42ace55196078689fb;i=47;b=1c03b0ee7b0c4c0980383ff645a74d1a;m=847dd11da2;t=661083fa4a9f0;x=f6d45a5858486bdb]
+    PRIORITY=6
+    _UID=0
+    _TRANSPORT=syslog
+    SYSLOG_FACILITY=4
+    SYSLOG_IDENTIFIER=sshd
+    _COMM=sshd
+    _SYSTEMD_UNIT=ssh.service
+    MESSAGE=Accepted publickey for hv from 127.0.0.1 port 44960 ssh2: ED25519 SHA256:Y5hIwgWF+nhY6Tch3iGlzhVanQHdNAqGWZ2YV5f+T3g
+    _PID=66
+$ logger -t sshd 'Accepted password for root from 203.0.113.9 port 50122 ssh2'
+$ journalctl -t sshd -g Accepted --no-pager
+Nov 24 16:31:55 lab7 sshd[66]: Accepted publickey for hv from 127.0.0.1 port 44960 ssh2: ED25519 SHA256:Y5hIwgWF+nhY6Tch3iGlzhVanQHdNAqGWZ2YV5f+T3g
+Nov 24 16:32:14 lab7 sshd[110]: Accepted password for root from 203.0.113.9 port 50122 ssh2
+$ journalctl _SYSTEMD_UNIT=ssh.service -g Accepted --no-pager
+Nov 24 16:31:55 lab7 sshd[66]: Accepted publickey for hv from 127.0.0.1 port 44960 ssh2: ED25519 SHA256:Y5hIwgWF+nhY6Tch3iGlzhVanQHdNAqGWZ2YV5f+T3g
+$ journalctl -t sshd -g Accepted --no-pager -o verbose --output-fields=_UID,_COMM,_SYSTEMD_UNIT | grep -E '^ +_|^[A-Z][a-z]{2} '
+Tue 2026-11-24 16:31:55.652176 UTC [s=a3c5351190d34e42ace55196078689fb;i=47;b=1c03b0ee7b0c4c0980383ff645a74d1a;m=847dd11da2;t=661083fa4a9f0;x=f6d45a5858486bdb]
+    _UID=0
+    _COMM=sshd
+    _SYSTEMD_UNIT=ssh.service
+Tue 2026-11-24 16:32:14.673145 UTC [s=a3c5351190d34e42ace55196078689fb;i=51;b=1c03b0ee7b0c4c0980383ff645a74d1a;m=847ef358bc;t=6610840c6e509;x=18c2eb6a219a22ca]
+    _UID=1001
+    _COMM=logger
+$ printf 'MESSAGE=deploy xong ban 1.4.2\nTICKET=OJT-17\n' | logger --journald
+$ journalctl TICKET=OJT-17 -o verbose --output-fields=MESSAGE,TICKET,_UID,_TRANSPORT --no-pager
+Tue 2026-11-24 16:32:15.406681 UTC [s=a3c5351190d34e42ace55196078689fb;i=52;b=1c03b0ee7b0c4c0980383ff645a74d1a;m=847efe8a1d;t=6610840d2166b;x=c6527fb7cf89e925]
+    _UID=1001
+    MESSAGE=deploy xong ban 1.4.2
+    TICKET=OJT-17
+    _TRANSPORT=journal
+$ journalctl -F TICKET
+OJT-17

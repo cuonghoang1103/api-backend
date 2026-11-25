@@ -1,0 +1,70 @@
+PS> Get-WinEventMau tc/clear-4688-native.evtx -Oldest -MaxEvents 6 | ForEach-Object { '{0:HH:mm:ss.fff}  {1}  {2}' -f $_.TimeCreated, $_.Properties[1].Value, $_.Properties[8].Value }
+19:07:25.659  admmig  "C:\Windows\system32\wevtutil.exe"  cl RTWorkQueueTheading
+19:07:25.674  admmig  \??\C:\Windows\system32\conhost.exe 0xffffffff
+19:07:25.706  admmig  "C:\Windows\system32\wevtutil.exe"  cl Security
+19:07:25.706  admmig  \??\C:\Windows\system32\conhost.exe 0xffffffff
+19:07:25.737  admmig  "C:\Windows\system32\wevtutil.exe"  cl Setup
+19:07:25.737  admmig  \??\C:\Windows\system32\conhost.exe 0xffffffff
+PS> $p = Get-WinEventMau tc/clear-4688-native.evtx | Where-Object { $_.Properties[5].Value -like '*wevtutil.exe' }; '{0} lần wevtutil, {1:HH:mm:ss.fff} → {2:HH:mm:ss.fff}' -f $p.Count, ($p.TimeCreated | Measure-Object -Minimum).Minimum, ($p.TimeCreated | Measure-Object -Maximum).Maximum
+14 lần wevtutil, 19:07:25.659 → 19:07:26.143
+PS> Get-WinEventMau tc/clear-4688-native.evtx -MaxEvents 1 | ForEach-Object { ([xml]$_.ToXml()).Event.EventData.Data | Format-Table Name, '#text' -AutoSize }
+Name               #text
+----               -----
+SubjectUserSid     S-1-5-21-4230534742-2542757381-3142984815-1111
+SubjectUserName    admmig
+SubjectDomainName  OFFSEC
+SubjectLogonId     0x1caf291
+NewProcessId       0x414
+NewProcessName     C:\Windows\System32\conhost.exe
+TokenElevationType %%1936
+ProcessId          0xbb4
+CommandLine        \??\C:\Windows\system32\conhost.exe 0xffffffff
+TargetUserSid      S-1-0-0
+TargetUserName     -
+TargetDomainName   -
+TargetLogonId      0x0
+PS> Get-WinEventMau mau/security_big_sample.evtx -FilterXPath "*[System[EventID=4688]]" | Group-Object { ($_.Properties[5].Value -split '\\')[-1] } | Sort-Object Count -Descending | Select-Object -First 8 Count, Name | Format-Table -AutoSize
+Count Name
+----- ----
+  149 wevtutil.exe
+  146 SLUI.exe
+   32 RacAgent.exe
+   32 taskeng.exe
+    7 TrustedInstaller.exe
+    4 logon.scr
+    4 LogonUI.exe
+    3 cmd.exe
+PS> $w = Get-WinEventMau mau/security_big_sample.evtx -FilterXPath "*[System[EventID=4688]]" | Where-Object { $_.Properties[5].Value -like '*wevtutil.exe' }; $w | Select-Object -First 1 | ForEach-Object { ([xml]$_.ToXml()).Event.EventData.Data | Format-Table Name, '#text' -AutoSize }
+Name               #text
+----               -----
+SubjectUserSid     S-1-5-21-1524084746-3249201829-3114449661-500
+SubjectUserName    Administrator
+SubjectDomainName  EXAMPLE
+SubjectLogonId     0x32cfb
+NewProcessId       0xba4
+NewProcessName     C:\Windows\System32\wevtutil.exe
+TokenElevationType %%1936
+ProcessId          0xb74
+PS> $w = Get-WinEventMau mau/security_big_sample.evtx -FilterXPath "*[System[EventID=4688]]" | Where-Object { $_.Properties[5].Value -like '*wevtutil.exe' }; $w | Group-Object { $_.TimeCreated.ToString('yyyy-MM-dd HH:00') } | Select-Object -First 6 Count, Name | Format-Table -AutoSize
+Count Name
+----- ----
+  149 2016-10-06 01:00
+PS> Get-WinEventMau -FilterHashtable @{ Path = 'mau/security_big_sample.evtx'; Id = 1102 } | Format-List TimeCreated, Id, @{n='SubjectUserName'; e={$_.Properties[1].Value}}, @{n='SubjectLogonId'; e={$_.Properties[3].Value}}
+TimeCreated     : 10/6/2016 1:47:07 AM
+Id              : 1102
+SubjectUserName : Administrator
+SubjectLogonId  : 0x32cfb
+PS> Get-WinEventMau -FilterHashtable @{ Path = 'mau/security_big_sample.evtx'; Id = 4688; StartTime = [datetime]'2016-10-06 01:47:00'; EndTime = [datetime]'2016-10-06 01:47:10' } | Group-Object { ($_.Properties[5].Value -split '\\')[-1] }, { $_.Properties[3].Value } | Format-Table Count, Name -AutoSize
+Count Name
+----- ----
+    1 bcdedit.exe, 0x32cfb
+    2 cmd.exe, 0x32cfb
+  149 wevtutil.exe, 0x32cfb
+PS> (Get-WinEventMau mau/security_big_sample.evtx -Oldest -MaxEvents 1).TimeCreated.ToString('yyyy-MM-dd HH:mm:ss.fff')
+2016-10-06 01:47:07.166
+PS> Get-WinEventMau -FilterHashtable @{ Path = 'mau/dbc-many-events-security.evtx'; Id = 4688 } | Group-Object MachineName, Version, { if ($_.Properties.Count -gt 8 -and $_.Properties[8].Value) { 'có CommandLine' } else { 'không CommandLine' } } | Format-Table Count, Name -AutoSize
+Count Name
+----- ----
+  675 IE10Win7, 0, không CommandLine
+ 7472 IE10Win7, 1, có CommandLine
+  199 IE10Win7, 1, không CommandLine

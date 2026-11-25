@@ -1,0 +1,53 @@
+$ head -n 1 logs/app.log
+{"level":30,"time":1795466071243,"service":"shop-api","port":3000,"msg":"server started"}
+$ jq -c 'select(.level >= 50) | .msg' logs/app.log | sort | uniq -c
+jq: parse error: Invalid numeric literal at line 109, column 10
+      4 "inventory call failed"
+      4 "request errored"
+$ grep -c -v '^{' logs/app.log
+13
+$ jq -R 'fromjson? | .level' logs/app.log | sort -n | uniq -c
+    351 30
+     26 40
+     58 50
+$ jq -R -c 'fromjson? | select(.level >= 50 and .err) | {t: (.time / 1000 | floor | todate), msg, url: .req.url, err: .err.message}' logs/app.log | head -n 2
+{"t":"2026-11-23T20:34:33Z","msg":"inventory call failed","url":"/api/orders/1007","err":"fetch failed: connect ECONNREFUSED 127.0.0.1:41999"}
+{"t":"2026-11-23T20:34:33Z","msg":"request errored","url":"/api/orders/1007","err":"failed with status code 500"}
+$ jq -R -r 'fromjson? | select(.err) | .err.stack' logs/app.log | head -n 7
+TypeError: fetch failed
+    at node:internal/deps/undici/undici:15456:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async route (/w/app.js:36:17)
+caused by: Error: connect ECONNREFUSED 127.0.0.1:41999
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1638:16)
+Error: failed with status code 500
+$ grep -n -v '^{' logs/app.log | head -n 14
+109:/w/app.js:44
+110:    Promise.reject(new Error('cache warmup failed: redis not ready')); // quên await/catch ⇒ sập cả tiến trình
+111:                   ^
+112:
+113:Error: cache warmup failed: redis not ready
+114:    at route (/w/app.js:44:20)
+115:    at Server.<anonymous> (/w/app.js:50:54)
+116:    at Server.emit (node:events:519:28)
+117:    at parserOnIncoming (node:_http_server:1186:12)
+118:    at HTTPParser.parserOnHeadersComplete (node:_http_common:125:17)
+119:
+120:Node.js v22.23.5
+121:2026-11-23T20:35:01Z supervisor: app exited with code 1, restarting in 3s
+$ RID=$(awk '$9 == 500 {print $NF}' logs/access.log | head -n 1 | cut -d= -f2); echo "rid = $RID"; grep -c "$RID" logs/access.log logs/app.log
+rid = 54e843c7f3025d4f7f57dbacf67cfaea
+logs/access.log:1
+logs/app.log:2
+$ RID=$(awk '$9 == 500 {print $NF}' logs/access.log | head -n 1 | cut -d= -f2); jq -R -c --arg r "$RID" 'fromjson? | select(.req.id == $r) | {level, msg, status: .res.statusCode, ms: .responseTime, err: .err.message}' logs/app.log
+{"level":50,"msg":"inventory call failed","status":null,"ms":null,"err":"fetch failed: connect ECONNREFUSED 127.0.0.1:41999"}
+{"level":50,"msg":"request errored","status":500,"ms":29,"err":"failed with status code 500"}
+$ grep -A1 -B1 'supervisor' logs/app.log | cut -c1-160
+Node.js v22.23.5
+2026-11-23T20:35:01Z supervisor: app exited with code 1, restarting in 3s
+{"level":30,"time":1795466104522,"service":"shop-api","port":3000,"msg":"server started"}
+$ awk '$9 == 502' logs/access.log | awk '{print $4}' | sort | uniq -c
+      4 [23/Nov/2026:20:35:01
+      7 [23/Nov/2026:20:35:02
+      6 [23/Nov/2026:20:35:03
+      3 [23/Nov/2026:20:35:04

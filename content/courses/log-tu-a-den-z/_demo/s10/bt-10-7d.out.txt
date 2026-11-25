@@ -1,0 +1,6 @@
+$ docker run --rm --network none --memory 512m --memory-swap 512m --cpus 1 --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint javac maven:3.9-eclipse-temurin-21 -proc:none -cp 'lib-2.17.1/*' -d out Demo.java && ls out
+Demo.class
+$ docker run --rm --network none --memory 512m --memory-swap 512m --cpus 1 --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint java maven:3.9-eclipse-temurin-21 -Dlog4j.configurationFile=log4j2.xml -cp 'lib-2.14.1/*:out' Demo 'user=${sys:user.name} os=${sys:os.name}'
+15:07:41 INFO  login failed, user-agent=user=ubuntu os=Linux
+$ docker run --rm --network none --memory 512m --memory-swap 512m --cpus 1 --hostname lab --add-host lab:127.0.0.1 --user "$(id -u):$(id -g)" -v "$PWD":/w -w /w --entrypoint java maven:3.9-eclipse-temurin-21 -Dlog4j.configurationFile=log4j2.xml -cp 'lib-2.17.1/*:out' Demo 'user=${sys:user.name} os=${sys:os.name}'
+15:07:45 INFO  login failed, user-agent=user=${sys:user.name} os=${sys:os.name}

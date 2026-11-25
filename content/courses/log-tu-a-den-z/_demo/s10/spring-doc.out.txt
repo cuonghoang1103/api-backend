@@ -1,0 +1,61 @@
+$ docker run -d --name lgz-spring --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar > /dev/null && sleep 8
+$ docker logs lgz-spring 2>&1 | grep -E 'Starting ShopApplication|Tomcat started|Started ShopApplication' | cut -c1-230
+2026-11-23T20:37:31.274Z  INFO 1 --- [shop] [           main] [                                                 ] vn.lab.shop.ShopApplication              : Starting ShopApplication v1.0 using Java 21.0.12.1 with PID 1 (/app/targe
+2026-11-23T20:37:32.905Z  INFO 1 --- [shop] [           main] [                                                 ] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-11-23T20:37:32.913Z  INFO 1 --- [shop] [           main] [                                                 ] vn.lab.shop.ShopApplication              : Started ShopApplication in 1.996 seconds (process running for 2.409)
+$ curl -s http://127.0.0.1:41081/api/orders/7; echo
+{"id":7,"total":120000}
+$ docker logs lgz-spring 2>&1 | grep 'load order id=7'
+2026-11-23T20:37:38.651Z  INFO 1 --- [shop] [nio-8080-exec-1] [fe066a29a71403aae7dd6135ac21eb2d-5f1d14e229393112] vn.lab.shop.OrderController              : load order id=7
+$ curl -s http://127.0.0.1:41081/api/orders/13; echo
+{"timestamp":"2026-11-23T20:37:38.701Z","status":500,"error":"Internal Server Error","path":"/api/orders/13"}
+$ docker logs lgz-spring 2>&1 | grep -A6 'with root cause' | cut -c1-260
+2026-11-23T20:37:38.692Z ERROR 1 --- [shop] [nio-8080-exec-2] [                                                 ] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request proc
+
+java.lang.NumberFormatException: For input string: "13.5"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67) ~[na:na]
+	at java.base/java.lang.Integer.parseInt(Integer.java:662) ~[na:na]
+	at java.base/java.lang.Integer.parseInt(Integer.java:778) ~[na:na]
+	at vn.lab.shop.PriceRepository.read(OrderService.java:28) ~[!/:1.0]
+$ curl -s http://127.0.0.1:41081/api/v2/orders/13; echo
+{"error":"internal"}
+$ docker logs lgz-spring 2>&1 | awk '/order 13 failed/,0' | grep -vE '^\s+at (org\.apache|org\.springframework|jakarta|java\.base/jdk|java\.base/java\.lang\.reflect)'
+2026-11-23T20:37:38.742Z ERROR 1 --- [shop] [nio-8080-exec-3] [41e0a22dfe10108e8017c3bbf024c547-296ca6957e3f7970] vn.lab.shop.OrderController              : order 13 failed
+
+vn.lab.shop.OrderService$OrderLoadException: cannot load order 13
+	at vn.lab.shop.OrderService.load(OrderService.java:16) ~[!/:1.0]
+	at vn.lab.shop.OrderController.orderV2(OrderController.java:33) ~[!/:1.0]
+	at vn.lab.shop.RequestIdFilter.doFilterInternal(RequestIdFilter.java:29) ~[!/:1.0]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.IllegalStateException: bad price row for order 13
+	at vn.lab.shop.PriceRepository.read(OrderService.java:31) ~[!/:1.0]
+	at vn.lab.shop.OrderService.load(OrderService.java:14) ~[!/:1.0]
+	... 50 common frames omitted
+Caused by: java.lang.NumberFormatException: For input string: "13.5"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67) ~[na:na]
+	at java.base/java.lang.Integer.parseInt(Integer.java:662) ~[na:na]
+	at java.base/java.lang.Integer.parseInt(Integer.java:778) ~[na:na]
+	at vn.lab.shop.PriceRepository.read(OrderService.java:28) ~[!/:1.0]
+	... 51 common frames omitted
+$ docker logs lgz-spring 2>&1 | awk '/order 13 failed/,0' | grep -cE '^\s+at '
+57
+$ curl -s http://127.0.0.1:41081/actuator/loggers/vn.lab.shop; echo
+{"configuredLevel":"INFO","effectiveLevel":"INFO"}
+$ curl -s -X POST -H 'Content-Type: application/json' -d '{"configuredLevel":"DEBUG"}' -o /dev/null -w '%{http_code}\n' http://127.0.0.1:41081/actuator/loggers/vn.lab.shop
+204
+$ curl -s http://127.0.0.1:41081/api/orders/8 > /dev/null; docker logs lgz-spring 2>&1 | grep -E 'order id=8|order 8$'
+2026-11-23T20:37:38.869Z  INFO 1 --- [shop] [nio-8080-exec-8] [6d80912b090c397860791adf23078cdb-2deba4c9dc108bae] vn.lab.shop.OrderController              : load order id=8
+2026-11-23T20:37:38.870Z DEBUG 1 --- [shop] [nio-8080-exec-8] [6d80912b090c397860791adf23078cdb-2deba4c9dc108bae] vn.lab.shop.OrderService                 : cache miss for order 8
+$ curl -s -X POST -H 'Content-Type: application/json' -d '{"configuredLevel":null}' -o /dev/null -w '%{http_code}\n' http://127.0.0.1:41081/actuator/loggers/vn.lab.shop
+204
+$ docker run --rm --network container:lgz-spring --user "$(id -u):$(id -g)" -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar 2>&1 | sed -n '/APPLICATION FAILED TO START/,$p'
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.

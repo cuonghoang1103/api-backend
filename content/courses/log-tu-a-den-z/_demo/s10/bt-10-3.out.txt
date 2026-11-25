@@ -1,0 +1,16 @@
+$ awk '!/^#/ {print substr($2, 1, 2)}' windows/u_ex261120.log | sort | uniq -c | sort -rn | head -n 3
+     28 06
+     28 04
+     28 03
+$ awk '!/^#/ {print substr($2, 1, 2)}' windows/u_ex261120.log | sort | uniq -c | sort -rn | head -n 3 | awk '{printf "%s req  %s:00 UTC = %02d:00 gio VN\n", $1, $2, ($2 + 7) % 24}'
+28 req  06:00 UTC = 13:00 gio VN
+28 req  04:00 UTC = 11:00 gio VN
+28 req  03:00 UTC = 10:00 gio VN
+$ awk '!/^#/ && $5 == "/portal/report.aspx" {printf "%.3f s  %s  %s %s\n", $15 / 1000, $12, $1, $2}' windows/u_ex261120.log | sort -rn | head -n 5
+11.331 s  500  2026-11-20 11:07:55
+11.000 s  500  2026-11-20 03:23:21
+10.362 s  500  2026-11-20 01:12:28
+8.631 s  500  2026-11-20 08:41:06
+8.321 s  500  2026-11-20 06:13:08
+$ awk '!/^#/ {print substr($2, 1, 2)}' windows/u_ex261120.log | sort | uniq -c | sort -rn | sed -n 4p
+     27 02

@@ -1,0 +1,86 @@
+$ ls -l mau | awk 'NR>1 {printf "%12s  %s\n", $5, $9}'
+     1052672  2-system-Microsoft-Windows-LiveId%4Operational.evtx
+    12652544  2-system-Security-dirty.evtx
+     1052672  2-vss_0-Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx
+     1118208  2-vss_7-System.evtx
+     4198400  Application.evtx
+     4329472  Archive-ForwardedEvents-test.evtx
+     2166784  dbc-many-events-application.evtx
+    10555392  dbc-many-events-security.evtx
+     4263936  dbc-many-events-system.evtx
+       69632  defender-1116-1117.evtx
+     2166784  defender-1151.evtx
+       69632  firewall-2004.evtx
+       69632  powershell-openssh-install.evtx
+    31526912  security_big_sample.evtx
+     2166784  security.evtx
+     1118208  sysmon.evtx
+     1118208  system.evtx
+PS> Get-ChildItem mau/*.evtx | ForEach-Object { $r = evtx-rec $_.FullName 2>$null | ConvertFrom-Json; [pscustomobject]@{ Tep = $_.Name.Substring(0,[math]::Min(44,$_.Name.Length)); Kenh = ($r.kenh | Sort-Object -Unique) -join ','; SuKien = $r.Count; Tu = ($r.t | Sort-Object)[0].ToString('yyyy-MM-dd'); Den = ($r.t | Sort-Object)[-1].ToString('yyyy-MM-dd') } } | Format-Table -AutoSize
+Tep                                          Kenh                                                                   SuKien Tu         Den
+---                                          ----                                                                   ------ --         ---
+2-system-Microsoft-Windows-LiveId%4Operation Microsoft-Windows-LiveId/Operational                                      399 2019-03-08 2019-03-20
+2-system-Security-dirty.evtx                 Security                                                                14621 2018-07-28 2019-03-20
+2-vss_0-Microsoft-Windows-TerminalServices-R Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational   1795 2018-08-02 2018-08-07
+2-vss_7-System.evtx                          System                                                                   1160 2018-07-06 2018-08-08
+Application.evtx                             Application                                                              6419 2010-11-10 2012-04-07
+Archive-ForwardedEvents-test.evtx            Application,Security,System                                               653 2019-11-08 2019-11-09
+dbc-many-events-application.evtx             Application                                                              2216 2013-10-23 2016-09-20
+dbc-many-events-security.evtx                Security                                                                13223 2013-10-23 2016-09-20
+dbc-many-events-system.evtx                  System                                                                   8414 2009-07-14 2016-09-20
+defender-1116-1117.evtx                      Microsoft-Windows-Windows Defender/Operational                              6 2020-12-11 2020-12-11
+defender-1151.evtx                           Microsoft-Windows-Windows Defender/Operational                            455 2020-06-23 2020-12-11
+firewall-2004.evtx                           Microsoft-Windows-Windows Firewall With Advanced Security/Firewall          1 2021-02-02 2021-02-02
+powershell-openssh-install.evtx              Microsoft-Windows-PowerShell/Operational                                   30 2021-04-22 2021-04-22
+security_big_sample.evtx                     Security                                                                62031 2016-10-06 2016-10-07
+security.evtx                                Security                                                                 2261 2016-07-08 2017-04-14
+sysmon.evtx                                  Microsoft-Windows-Sysmon/Operational                                      358 2017-12-26 2018-03-06
+system.evtx                                  System                                                                   1881 2017-07-12 2018-03-06
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Group-Object nguon | Sort-Object Count -Descending | Select-Object -First 12 Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+ 5620 Service Control Manager
+  793 Microsoft-Windows-WindowsUpdateClient
+  575 Microsoft-Windows-UserPnp
+  263 Microsoft-Windows-DNS-Client
+  183 Microsoft-Windows-Kernel-General
+  180 EventLog
+  135 netvsc
+   76 Microsoft-Windows-FilterManager
+   75 Microsoft-Windows-Dhcp-Client
+   75 Microsoft-Windows-DHCPv6-Client
+   70 Microsoft-Windows-Winlogon
+   68 USER32
+PS> evtx-rec mau/dbc-many-events-application.evtx | ConvertFrom-Json | Group-Object nguon | Sort-Object Count -Descending | Select-Object -First 10 Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+  418 Microsoft-Windows-Security-SPP
+  317 MsiInstaller
+  291 Microsoft-Windows-LoadPerf
+  151 ESENT
+  151 Microsoft-Windows-RestartManager
+   88 .NET Runtime Optimization Service
+   87 Microsoft-Windows-User Profiles Service
+   76 Microsoft-Windows-WMI
+   76 Microsoft-Windows-Winlogon
+   71 VSS
+PS> $r = 'dbc-many-events-system.evtx','dbc-many-events-application.evtx' | ForEach-Object { evtx-rec "mau/$_" | ConvertFrom-Json }; "Tong: $($r.Count) su kien | Critical/Error/Warning: $(($r | Where-Object muc -in 'Critical','Error','Warning').Count)"; $r | Where-Object muc -in 'Critical','Error','Warning' | Group-Object kenh,muc | Select-Object Count,Name | Format-Table -AutoSize
+Tong: 10630 su kien | Critical/Error/Warning: 419
+
+Count Name
+----- ----
+   40 Application, Error
+   61 Application, Warning
+   46 System, Error
+  272 System, Warning
+PS> evtx-rec mau/dbc-many-events-system.evtx | ConvertFrom-Json | Where-Object muc -in 'Critical','Error','Warning' | Group-Object nguon,id | Sort-Object Count -Descending | Select-Object -First 8 Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+  263 Microsoft-Windows-DNS-Client, 1014
+   25 Service Control Manager, 7011
+    8 Service Control Manager, 7009
+    6 PNPMEM, 0
+    4 Microsoft-Windows-DistributedCOM, 10010
+    4 Service Control Manager, 7023
+    2 Service Control Manager, 7043
+    2 USER32, 1073

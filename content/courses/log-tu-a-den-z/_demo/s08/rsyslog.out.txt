@@ -1,0 +1,175 @@
+$ grep -vE '^#|^$' /etc/rsyslog.conf
+module(load="imuxsock") # provides support for local system logging
+module(load="imklog" permitnonkernelfacility="on")
+$RepeatedMsgReduction on
+$FileOwner syslog
+$FileGroup adm
+$FileCreateMode 0640
+$DirCreateMode 0755
+$Umask 0022
+$PrivDropToUser syslog
+$PrivDropToGroup syslog
+$WorkDirectory /var/spool/rsyslog
+$IncludeConfig /etc/rsyslog.d/*.conf
+$ systemd-analyze cat-config systemd/journald.conf | grep -E '^# /|^ForwardToSyslog'
+# /etc/systemd/journald.conf
+# /etc/ if the original file is shipped in /usr/), or by creating "drop-ins" in
+# /etc/systemd/journald.conf.d/60-gioi-han.conf
+# /usr/lib/systemd/journald.conf.d/syslog.conf
+ForwardToSyslog=yes
+$ ls -l /dev/log /run/systemd/journal/syslog
+lrwxrwxrwx 1 root root 28 Nov 24 04:47 /dev/log -> /run/systemd/journal/dev-log
+srw-rw-rw- 1 root root  0 Nov 24 05:11 /run/systemd/journal/syslog
+$ cat s08/30-shop.conf
+# /etc/rsyslog.d/30-shop.conf — local3 = ứng dụng "shop" của lab (facility tự chọn cho ứng dụng: local0…local7)
+template(name="shopJson" type="list" option.jsonf="on") {
+  property(outname="time"     name="timereported" dateFormat="rfc3339" format="jsonf")
+  property(outname="host"     name="hostname"            format="jsonf")
+  property(outname="app"      name="programname"         format="jsonf")
+  property(outname="pid"      name="procid"              format="jsonf")
+  property(outname="severity" name="syslogseverity-text" format="jsonf")
+  property(outname="msg"      name="msg"                 format="jsonf")
+}
+local3.warning    /var/log/shop/canh-bao.log
+local3.=debug     stop
+local3.*          action(type="omfile" file="/var/log/shop/shop.log")
+local3.*          action(type="omfile" file="/var/log/shop/shop.json" template="shopJson")
+local3.*          stop
+$ sudo cp s08/30-shop.conf /etc/rsyslog.d/ && sudo rsyslogd -N1 && sudo systemctl restart rsyslog
+rsyslogd: version 8.2312.0, config validation run (level 1), master config /etc/rsyslog.conf
+rsyslogd: End of config validation run. Bye.
+$ for m in debug info notice warning err crit; do logger -p local3.$m -t shop "thu muc $m"; done; sleep 1
+$ sudo cat /var/log/shop/shop.log
+2026-11-24T05:11:09.716881+07:00 lab7 shop: thu muc info
+2026-11-24T05:11:09.718054+07:00 lab7 shop: thu muc notice
+2026-11-24T05:11:09.719437+07:00 lab7 shop: thu muc warning
+2026-11-24T05:11:09.721106+07:00 lab7 shop: thu muc err
+2026-11-24T05:11:09.722275+07:00 lab7 shop: thu muc crit
+$ sudo cat /var/log/shop/canh-bao.log
+2026-11-24T05:11:09.719437+07:00 lab7 shop: thu muc warning
+2026-11-24T05:11:09.721106+07:00 lab7 shop: thu muc err
+2026-11-24T05:11:09.722275+07:00 lab7 shop: thu muc crit
+$ sudo head -2 /var/log/shop/shop.json; sudo jq -r 'select(.severity=="err") | "\(.time) \(.msg)"' /var/log/shop/shop.json
+{"time":"2026-11-24T05:11:09.716881+07:00", "host":"lab7", "app":"shop", "pid":"-", "severity":"info", "msg":" thu muc info"}
+{"time":"2026-11-24T05:11:09.718054+07:00", "host":"lab7", "app":"shop", "pid":"-", "severity":"notice", "msg":" thu muc notice"}
+2026-11-24T05:11:09.721106+07:00  thu muc err
+$ sudo grep -c 'thu muc' /var/log/syslog
+0
+$ logger -p local3.info -t 'shop[4242]' "dat hang #1001 thanh cong"; sleep 1; sudo tail -1 /var/log/shop/shop.json
+{"time":"2026-11-24T05:11:11.443466+07:00", "host":"lab7", "app":"shop", "pid":"4242", "severity":"info", "msg":" dat hang #1001 thanh cong"}
+$ sudo timeout 8 tcpdump -i ens3 -nn -A -c 1 'udp port 514' 2>/dev/null & sleep 2; logger --server 10.0.2.2 --udp -p local3.err -t shop "reset mat khau cho an@vd.vn token=GIA_TOKEN·VIDU_9f3c"; wait $!
+05:11:14.597949 IP 10.0.2.15.44492 > 10.0.2.2.514: SYSLOG local3.error, length: 168
+E...=.@.@..F
+...
+..........
+<155>1 2026-11-24T05:11:14.597916+07:00 lab7 shop - - [timeQuality tzKnown="1" isSynced="1" syncAccuracy="208000"] reset mat khau cho an@vd.vn token=GIA_TOKEN·VIDU_9f3c
+$ cat /var/log/remote/lab7/shop.log   # ← trên máy chủ log
+2026-11-24T05:11:14.597916+07:00 lab7 shop [nhận 2026-11-23T22:11:14.614044+00:00 qua imudp] reset mat khau cho an@vd.vn token=GIA_TOKEN·VIDU_9f3c
+$ python3 s08/bom.py udp 200000
+udp: gửi 200000 dòng trong 0.48 s
+$ python3 s08/bom.py tcp 200000
+tcp: gửi 200000 dòng trong 0.26 s
+$ sleep 5; for p in udp tcp; do f=/var/log/remote/lab7/bom-$p.log; echo "$p: nhận $(wc -l < $f) / 200000 dòng, số lớn nhất $(grep -o 'so [0-9]*' $f | cut -d' ' -f2 | sort -n | tail -1)"; done   # ← trên máy chủ log
+udp: nhận 200000 / 200000 dòng, số lớn nhất 200000
+tcp: nhận 200000 / 200000 dòng, số lớn nhất 200000
+$ cat s08/90-gui-udp.conf
+# /etc/rsyslog.d/20-gui-di.conf (bản 1) — gửi MỌI thứ sang máy chủ log bằng UDP: nhanh, không hàng đợi, mất là mất
+*.* action(type="omfwd" target="10.0.2.2" port="514" protocol="udp")
+$ sudo cp s08/90-gui-udp.conf /etc/rsyslog.d/90-gui-di.conf && sudo systemctl restart rsyslog; sleep 1; logger -p local3.err -t shop "qua rsyslog: local3"; logger -p user.err -t shop "qua rsyslog: user"; sleep 2
+$ grep 'qua rsyslog' /var/log/remote/lab7/shop.log   # ← trên máy chủ log
+2026-11-24T05:11:22+00:00 lab7 shop: [nhận 2026-11-23T22:11:22.393799+00:00 qua imudp]  qua rsyslog: user
+$ ls /etc/rsyslog.d/
+21-cloudinit.conf
+30-shop.conf
+50-default.conf
+90-gui-di.conf
+$ sudo mv /etc/rsyslog.d/90-gui-di.conf /etc/rsyslog.d/20-gui-di.conf && sudo systemctl restart rsyslog; sleep 1; logger -p local3.err -t shop "qua rsyslog lan 2: local3"; sleep 2
+$ grep 'qua rsyslog' /var/log/remote/lab7/shop.log   # ← trên máy chủ log
+2026-11-24T05:11:22+00:00 lab7 shop: [nhận 2026-11-23T22:11:22.393799+00:00 qua imudp]  qua rsyslog: user
+2026-11-24T05:11:25+00:00 lab7 shop: [nhận 2026-11-23T22:11:25.797166+00:00 qua imudp]  qua rsyslog lan 2: local3
+$ sudo timeout 8 tcpdump -i ens3 -nn -A -c 1 'udp port 514' 2>/dev/null | tail -1 & sleep 2; logger -p local3.err -t shop "dinh dang khi rsyslog chuyen di"; wait $!
+........E..<30>Nov 24 05:11:28 lab7 shop-api[424]: GET /api/products 200
+$ kill -STOP $(pgrep -x rsyslogd); echo "máy chủ log TẠM DỪNG (đơ, không đọc socket)"   # ← trên máy chủ log
+máy chủ log TẠM DỪNG (đơ, không đọc socket)
+$ python3 s08/bom.py udp 200000; sleep 1
+udp: gửi 200000 dòng trong 0.30 s
+$ kill -CONT $(pgrep -x rsyslogd); sleep 4; f=/var/log/remote/lab7/bom-udp.log; echo "udp khi máy nhận đơ: nhận $(( $(wc -l < $f) - 200000 )) / 200000 dòng"   # ← trên máy chủ log
+udp khi máy nhận đơ: nhận 217 / 200000 dòng
+$ kill -STOP $(pgrep -x rsyslogd); setsid sh -c 'sleep 5; kill -CONT $(pgrep -x rsyslogd)' >/dev/null 2>&1 < /dev/null & echo "máy chủ log TẠM DỪNG 5 giây"   # ← trên máy chủ log
+máy chủ log TẠM DỪNG 5 giây
+$ python3 s08/bom.py tcp 200000
+tcp: gửi 200000 dòng trong 5.05 s
+$ sleep 4; f=/var/log/remote/lab7/bom-tcp.log; echo "tcp khi máy nhận đơ: nhận $(( $(wc -l < $f) - 200000 )) / 200000 dòng"   # ← trên máy chủ log
+tcp khi máy nhận đơ: nhận 200000 / 200000 dòng
+$ cat s08/90-gui-tcp.conf
+# /etc/rsyslog.d/20-gui-di.conf (bản 2) — TCP + hàng đợi có đĩa đỡ: máy chủ log tắt thì GIỮ lại, bật lên thì gửi bù
+*.* action(type="omfwd" target="10.0.2.2" port="514" protocol="tcp"
+           template="RSYSLOG_SyslogProtocol23Format"
+           queue.type="LinkedList" queue.filename="gui_di" queue.maxDiskSpace="200m"
+           queue.saveOnShutdown="on" action.resumeRetryCount="-1" action.resumeInterval="5")
+$ sudo cp s08/90-gui-tcp.conf /etc/rsyslog.d/20-gui-di.conf && sudo rsyslogd -N1 2>&1 | tail -1 && sudo systemctl restart rsyslog; sleep 2; logger -t shop "kiem tra tcp"
+rsyslogd: End of config validation run. Bye.
+$ kill $(cat /run/rsyslogd.pid); sleep 2; pgrep -x rsyslogd || echo "máy chủ log ĐÃ TẮT"   # ← trên máy chủ log
+máy chủ log ĐÃ TẮT
+$ for i in 1 2 3; do logger -p local3.warning -t shop "don hang loi so $i luc may chu log tat"; sleep 1; done; sleep 6
+$ sudo journalctl -u rsyslog --since '-30s' -q --no-pager -o cat | grep -E 'suspended|closed connection' | cut -c1-120
+rsyslogd: omfwd: remote server at 10.0.2.2:514 seems to have closed connection. This often happens when the remote peer 
+omfwd: remote server at 10.0.2.2:514 seems to have closed connection. This often happens when the remote peer (or an int
+action 'action-0-builtin:omfwd' suspended (module 'builtin:omfwd'), retry 0. There should be messages before this one gi
+$ rsyslogd -i /run/rsyslogd.pid; sleep 15; grep -c 'luc may chu log tat' /var/log/remote/lab7/shop.log; grep -o 'so [0-9] luc may chu log tat' /var/log/remote/lab7/shop.log   # ← trên máy chủ log
+3
+so 1 luc may chu log tat
+so 2 luc may chu log tat
+so 3 luc may chu log tat
+$ cat s08/90-gui-relp.conf
+# /etc/rsyslog.d/20-gui-di.conf (bản 2b) — RELP: như TCP nhưng bên nhận XÁC NHẬN từng dòng ⇒ không mất dòng khi kết nối đứt
+module(load="omrelp")
+*.* action(type="omrelp" target="10.0.2.2" port="2514"
+           queue.type="LinkedList" queue.filename="gui_relp" queue.saveOnShutdown="on"
+           action.resumeRetryCount="-1" action.resumeInterval="5")
+$ sudo cp s08/90-gui-relp.conf /etc/rsyslog.d/20-gui-di.conf && sudo rsyslogd -N1 2>&1 | tail -1 && sudo systemctl restart rsyslog; sleep 2; logger -t shop "kiem tra relp"
+rsyslogd: End of config validation run. Bye.
+$ kill $(cat /run/rsyslogd.pid); sleep 2; pgrep -x rsyslogd || echo "máy chủ log ĐÃ TẮT"   # ← trên máy chủ log
+máy chủ log ĐÃ TẮT
+$ for i in 4 5 6; do logger -p local3.warning -t shop "don hang loi so $i luc may chu log tat"; sleep 1; done; sleep 6
+$ sudo ls -l /var/spool/rsyslog/
+total 0
+$ rsyslogd -i /run/rsyslogd.pid; sleep 15; grep -o 'so [0-9] luc may chu log tat' /var/log/remote/lab7/shop.log   # ← trên máy chủ log
+so 1 luc may chu log tat
+so 2 luc may chu log tat
+so 3 luc may chu log tat
+so 4 luc may chu log tat
+so 5 luc may chu log tat
+so 6 luc may chu log tat
+$ cat s08/90-gui-tls.conf
+# /etc/rsyslog.d/20-gui-di.conf (bản 3) — TLS cổng 6514, KIỂM chứng chỉ máy chủ: phải do CA của lab ký VÀ mang tên logsrv.lab
+global(DefaultNetstreamDriverCAFile="/etc/rsyslog-tls/ca.pem")
+*.* action(type="omfwd" target="10.0.2.2" port="6514" protocol="tcp"
+           template="RSYSLOG_SyslogProtocol23Format"
+           StreamDriver="gtls" StreamDriverMode="1"
+           StreamDriverAuthMode="x509/name" StreamDriverPermittedPeers="logsrv.lab"
+           queue.type="LinkedList" queue.filename="gui_tls" action.resumeRetryCount="-1")
+$ sudo cp s08/90-gui-tls.conf /etc/rsyslog.d/20-gui-di.conf && sudo rsyslogd -N1 2>&1 | tail -1 && sudo systemctl restart rsyslog; sleep 3
+rsyslogd: error: defaultnetstreamdrivercafile file '/etc/rsyslog-tls/ca.pem' could not be accessed: Permission denied [v8.2312.0 try https://www.rsyslog.com/e/2039 ]
+$ sudo journalctl -u rsyslog --since '-10s' -q --no-pager -o cat | grep -m2 -E 'error|Permission'
+rsyslogd: error: defaultnetstreamdrivercafile file '/etc/rsyslog-tls/ca.pem' could not be accessed: Permission denied [v8.2312.0 try https://www.rsyslog.com/e/2039 ]
+error: defaultnetstreamdrivercafile file '/etc/rsyslog-tls/ca.pem' could not be accessed: Permission denied [v8.2312.0 try https://www.rsyslog.com/e/2039 ]
+$ sudo journalctl -k --since '-15s' -q --no-pager -o cat | grep -m1 'apparmor="DENIED"'
+audit: type=1400 audit(1795471963.035:9327): apparmor="DENIED" operation="open" class="file" profile="rsyslogd" name="/etc/rsyslog-tls/ca.pem" pid=13965 comm="rsyslogd" requested_mask="r" denied_mask="r" fsuid=0 ouid=0
+$ echo '/etc/rsyslog-tls/** r,' | sudo tee -a /etc/apparmor.d/local/usr.sbin.rsyslogd && sudo apparmor_parser -r /etc/apparmor.d/usr.sbin.rsyslogd && sudo systemctl restart rsyslog; sleep 3; sudo journalctl -u rsyslog --since '-5s' -q --no-pager -o cat | grep -c -i error
+/etc/rsyslog-tls/** r,
+0
+$ sudo rm -f /tmp/tls.pcap; sudo timeout 10 tcpdump -U -i ens3 -nn 'tcp port 6514' -w /tmp/tls.pcap 2>/dev/null & sleep 2; logger -p local3.err -t shop "reset mat khau cho binh@vd.vn token=GIA_TOKEN·VIDU_77aa"; wait $!; echo "gói bắt được: $(sudo tcpdump -nn -r /tmp/tls.pcap 2>/dev/null | wc -l), chứa token rõ chữ: $(sudo tcpdump -nn -A -r /tmp/tls.pcap 2>/dev/null | grep -c GIA_TOKEN·VIDU)"
+gói bắt được: 22, chứa token rõ chữ: 0
+$ sleep 2; grep binh@ /var/log/remote/lab7/shop.log   # ← trên máy chủ log
+2026-11-24T05:12:51.806603+07:00 lab7 shop [nhận 2026-11-23T22:12:51.821009+00:00 qua tls]  reset mat khau cho binh@vd.vn token=GIA_TOKEN·VIDU_77aa
+$ sudo sed -i 's/PermittedPeers="logsrv.lab"/PermittedPeers="logsrv.that"/' /etc/rsyslog.d/20-gui-di.conf && sudo systemctl restart rsyslog; sleep 3; logger -t shop "thu ten sai"; sleep 6; sudo journalctl -u rsyslog --since '-12s' -q --no-pager -o cat | grep -m2 -iE 'not permitted|peer|certificate|name'
+warning: certificate file is not set [v8.2312.0 try https://www.rsyslog.com/e/2330 ]
+rsyslogd: error: peer name not authorized -  not permitted to talk to it. Names: DNSname: logsrv.lab; CN: logsrv.lab;  [v8.2312.0 try https://www.rsyslog.com/e/2088 ]
+$ sudo sed -i 's/PermittedPeers="logsrv.that"/PermittedPeers="logsrv.lab"/' /etc/rsyslog.d/20-gui-di.conf && sudo systemctl restart rsyslog; sleep 8; logger -t shop "ten dung lai"
+$ docker run --rm rockylinux:9 bash -c 'dnf -q -y install rsyslog >/dev/null 2>&1; grep -E "^module|^#### MODULES" /etc/rsyslog.conf; ls -l /dev/log 2>&1 | head -1'
+#### MODULES ####
+module(load="builtin:omfile" Template="RSYSLOG_TraditionalFileFormat")
+module(load="imuxsock"    # provides support for local system logging (e.g. via logger command)
+module(load="imjournal"             # provides access to the systemd journal
+ls: cannot access '/dev/log': No such file or directory

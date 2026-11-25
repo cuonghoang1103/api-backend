@@ -1,0 +1,39 @@
+$ head -n 5 windows/u_ex261120.log
+#Software: Microsoft Internet Information Services 10.0
+#Version: 1.0
+#Date: 2026-11-20 00:00:01
+#Fields: date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Referer) sc-status sc-substatus sc-win32-status time-taken
+2026-11-20 00:03:53 10.0.0.5 GET /api/orders - 443 - 192.0.2.10 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64) - 200 0 0 144
+$ grep -m1 '^#Fields' windows/u_ex261120.log | tr ' ' '\n' | tail -n +2 | nl
+     1	date
+     2	time
+     3	s-ip
+     4	cs-method
+     5	cs-uri-stem
+     6	cs-uri-query
+     7	s-port
+     8	cs-username
+     9	c-ip
+    10	cs(User-Agent)
+    11	cs(Referer)
+    12	sc-status
+    13	sc-substatus
+    14	sc-win32-status
+    15	time-taken
+$ awk '!/^#/ {print $12 "." $13}' windows/u_ex261120.log | sort | uniq -c | sort -rn
+    280 200.0
+     13 500.0
+      7 404.0
+$ awk '!/^#/ && $12 >= 500 {print $1, $2, $5, $12, $15 " ms"}' windows/u_ex261120.log | head -n 4
+2026-11-20 01:12:28 /portal/report.aspx 500 10362 ms
+2026-11-20 02:25:02 /portal/report.aspx 500 4653 ms
+2026-11-20 03:23:21 /portal/report.aspx 500 11000 ms
+2026-11-20 03:28:36 /portal/report.aspx 500 5602 ms
+$ awk '!/^#/ {s[$5] += $15; n[$5]++} END {for (k in s) printf "%-22s %4d req  tb %5.0f ms\n", k, n[k], s[k] / n[k]}' windows/u_ex261120.log | sort -k4 -rn
+/portal/report.aspx      43 req  tb  2189 ms
+/portal/login.aspx       41 req  tb   197 ms
+/portal/home.aspx        59 req  tb   151 ms
+/old-page.aspx            7 req  tb   116 ms
+/images/logo.png         48 req  tb   157 ms
+/api/orders              55 req  tb   154 ms
+/                        47 req  tb   176 ms

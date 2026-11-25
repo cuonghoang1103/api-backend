@@ -1,0 +1,28 @@
+$ awk '{print $9}' logs/access.log | sort | uniq -c | sort -rn | head -n 4
+    376 200
+     29 500
+     20 502
+     13 401
+$ awk '$7 ~ /^\/api\/report/ {print $(NF-2), $(NF-1), $9}' logs/access.log | sort -t= -k2 -rn | head -n 4
+rt=1.797 urt=1.797 200
+rt=1.796 urt=1.796 200
+rt=1.789 urt=1.789 200
+rt=1.787 urt=1.787 200
+$ awk '$9 == 502' logs/access.log | awk '{print $4}' | sort | uniq -c
+      4 [23/Nov/2026:20:35:01
+      7 [23/Nov/2026:20:35:02
+      6 [23/Nov/2026:20:35:03
+      3 [23/Nov/2026:20:35:04
+$ awk '$9 == 502 {split($7, p, "?"); print p[1]}' logs/access.log | sort | uniq -c | sort -rn
+     13 /api/products
+      5 /api/report
+      1 /api/orders/1015
+      1 /api/orders/1001
+$ grep -E 'prematurely|timed out' logs/error.log | cut -c1-150
+2026/11/23 20:34:46 [error] 30#30: *111 upstream timed out (110: Operation timed out) while reading response header from upstream, client: 198.51.100.
+2026/11/23 20:35:01 [error] 30#30: *205 upstream prematurely closed connection while reading response header from upstream, client: 198.51.100.10, ser
+$ grep -E '" (499|504) ' logs/access.log | awk '{print $4, $1, $9, $7, $(NF-2), $(NF-1)}'
+[23/Nov/2026:20:34:41 198.51.100.23 499 /api/report rt=0.500 urt=0.500
+[23/Nov/2026:20:34:46 198.51.100.17 504 /api/export rt=5.000 urt=5.000
+$ TZ=Asia/Ho_Chi_Minh date -d '2026-11-23 20:35:01Z' '+%d/%m/%Y %H:%M:%S %Z'
+24/11/2026 03:35:01 +07

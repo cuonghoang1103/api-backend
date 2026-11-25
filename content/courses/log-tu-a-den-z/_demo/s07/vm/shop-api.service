@@ -1,0 +1,16 @@
+[Unit]
+Description=Shop API (Lab 7)
+After=network.target
+
+[Service]
+User=shop
+Environment=PYTHONUNBUFFERED=1 DB_HOST=10.0.0.5
+ExecStart=/usr/bin/python3 /opt/shop/api.py
+SyslogIdentifier=shop-api
+Restart=always
+RestartSec=2
+MemoryMax=150M
+MemorySwapMax=0
+
+[Install]
+WantedBy=multi-user.target

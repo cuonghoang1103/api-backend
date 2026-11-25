@@ -1,0 +1,5 @@
+# 18.4 — Dòng thời gian đa nguồn (UTC, router đã sửa lệch 97 s) + gắn ATT&CK + kiểm mỗi kỹ thuật có ít nhất một dòng log làm bằng chứng
+cd s18/mau && python3 dong-thoi-gian18.py /lab/su-co18 97 2026-11-21T14:00:00Z 2026-11-23T02:10:00Z 203.0.113.5 198.51.100.77 'NOT in sudoers' docker-b0a9 apt-compat B0A903430D8B 'query[PTR] 1.0.20.10' 'DPT=445' 'DPT=3389' 'DPT=22 ' 'app=psql' 'user=postgres' 'cdn-update' | cut -c1-175
+python3 s18/mau/dong-thoi-gian18.py su-co18 0 2026-11-21T15:00:00Z 2026-11-21T17:00:00Z 'SPT=37255 ' 'IpPort":"37255' 'IpPort=37255' | cut -f1,2,4 | cut -c1-120; python3 s18/mau/dong-thoi-gian18.py su-co18 97 2026-11-21T15:00:00Z 2026-11-21T17:00:00Z 'SPT=37255 ' 'IpPort=37255' | cut -f1,2,4 | cut -c1-120
+tail -n +2 s18/mau/attack-su-co18.tsv | awk -F'\t' '{printf "%-10s %-19s %s\n", $2, $4, $3}'
+tail -n +2 s18/mau/attack-su-co18.tsv | while IFS="$(printf '\t')" read -r b k ten ct tep mau; do printf '%-10s %4s  %s\n' "$k" "$(grep -cE -- "$mau" "su-co18/$tep")" "$tep"; done

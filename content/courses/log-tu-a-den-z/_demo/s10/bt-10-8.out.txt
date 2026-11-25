@@ -1,0 +1,32 @@
+$ jq -c '{"@timestamp": .time, "source.ip": .ip, "http.request.method": .method, "url.original": .uri, "http.response.status_code": .status, "event.duration": (.rt * 1e9 | round), "user_agent.original": .ua, "trace.id": .rid}' logs/access.json > ecs.json; wc -l < ecs.json; jq -s '[.[]."http.response.status_code" | type] | unique' ecs.json
+458
+[
+  "number"
+]
+$ jq -c 'select(."http.response.status_code" == 500)' ecs.json | head -n 1 | jq .
+{
+  "@timestamp": "2026-11-24T15:32:11+00:00",
+  "source.ip": "198.51.100.23",
+  "http.request.method": "GET",
+  "url.original": "/api/orders/1007",
+  "http.response.status_code": 500,
+  "event.duration": 40000000,
+  "user_agent.original": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36",
+  "trace.id": "9fcbd09be086b1d7e99c96f63e26d61f"
+}
+$ jq -R -r '. as $l | try (fromjson | empty) catch $l' logs/app.log | wc -l; jq -R -r '. as $l | try (fromjson | empty) catch $l' logs/app.log | sed -n '1p;$p'
+13
+/w/app.js:44
+2026-11-24T15:32:39Z supervisor: app exited with code 1, restarting in 3s
+$ jq -R -r 'fromjson? | paths(scalars) as $p | "\($p | map(tostring) | join("."))\t\(getpath($p) | type)"' logs/app.log | sort -u | cut -f1 | uniq -d | wc -l
+0
+$ jq -R -r 'fromjson? | .res.statusCode | type' logs/app.log | sort | uniq -c
+     46 null
+    389 number
+$ jq -R -r 'fromjson? | select(.res.statusCode == null) | .msg' logs/app.log | sort | uniq -c | sort -rn
+     29 inventory call failed
+     13 login failed: bad credentials
+      2 server started
+      2 request aborted
+$ jq -r '[(.rt | type), (.urt | type)] | join(" ")' logs/access.json | sort | uniq -c
+    458 number string

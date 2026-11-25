@@ -1,0 +1,13 @@
+$ journalctl --fields | wc -l
+53
+$ journalctl -u ssh -g 'Started' -n 1 -o verbose --output-fields=MESSAGE,MESSAGE_ID,UNIT,_PID,_COMM --no-pager
+Tue 2026-11-24 16:31:44.183282 UTC [s=a3c5351190d34e42ace55196078689fb;i=3f;b=1c03b0ee7b0c4c0980383ff645a74d1a;m=847d221ff2;t=661083ef5ac40;x=6261e5f3ae65b50d]
+    _PID=1
+    _COMM=systemd
+    MESSAGE_ID=39f53479d3a045ac8e11786248231fbf
+    UNIT=ssh.service
+    MESSAGE=Started ssh.service - OpenBSD Secure Shell server.
+$ journalctl MESSAGE_ID=39f53479d3a045ac8e11786248231fbf -o short --no-pager | tail -n 3
+Nov 24 16:31:21 lab7 systemd[1]: Reached target graphical.target - Graphical Interface.
+Nov 24 16:31:21 lab7 systemd[1]: Finished systemd-update-utmp-runlevel.service - Record Runlevel Change in UTMP.
+Nov 24 16:31:44 lab7 systemd[1]: Started ssh.service - OpenBSD Secure Shell server.

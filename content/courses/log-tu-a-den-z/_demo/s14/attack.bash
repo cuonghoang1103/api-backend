@@ -1,0 +1,4 @@
+# 14.6 — gắn từng bước của vụ web01 vào ATT&CK v19.2 và hỏi: "mình CÓ log để thấy bước này không?" (độ phủ = coverage).
+cd vu14 && grep -v '^#' /lab/s14/mau/attack-vu14.tsv | while IFS=$'\t' read -r b kt ten ct tp tep mau; do n=$(grep -cE -- "$mau" "$tep"); printf '%-3s %-10s %-21s %-7s %s\n' "$b" "$kt" "$ct" "$([ "$n" -gt 0 ] && echo "CÓ $n" || echo 'KHÔNG')" "$(echo "$tep" | sed 's|.*/||')"; done
+cd vu14 && grep -v '^#' /lab/s14/mau/attack-vu14.tsv | cut -f4 | sort | uniq -c | sort -rn
+cd vu14 && grep -v '^#' /lab/s14/mau/attack-vu14.tsv | while IFS=$'\t' read -r b kt ten ct tp tep mau; do n=$(grep -cE -- "$mau" "$tep"); [ "$n" -eq 0 ] && echo "bước $b $kt — không có dòng log trực tiếp; bằng chứng thay thế ở thu-thap/stat.txt: $(grep -cE 'sinh 2026-11-19 02:23|bash_history -> /dev/null' thu-thap/stat.txt) dòng"; done; true

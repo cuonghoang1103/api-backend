@@ -1,0 +1,92 @@
+$ docker network create lgz-c13a >/dev/null; docker run -d --name lgz-moto --network lgz-c13a motoserver/moto:5.1.18 >/dev/null; sleep 3; python3 tao-mau.py mau
+14 sự kiện CloudTrail, 108 dòng flow log
+$ aws --version | cut -d" " -f1-2
+aws-cli/2.32.0 Python/3.13.9
+$ aws logs create-log-group --log-group-name /lab13/orders && aws logs create-log-stream --log-group-name /lab13/orders --log-stream-name orders-api-7f9c && aws logs describe-log-groups --query 'logGroups[].{group:logGroupName,retention:retentionInDays}' --output table
+--------------------------------
+|       DescribeLogGroups      |
++----------------+-------------+
+|      group     |  retention  |
++----------------+-------------+
+|  /lab13/orders |  None       |
++----------------+-------------+
+$ t=$(date +%s%3N); jq -nc --argjson t "$t" '[{timestamp:$t, message:({level:"info",msg:"order created",orderId:1001,ms:31}|tojson)}, {timestamp:($t+5), message:({level:"error",msg:"db timeout",ms:5003}|tojson)}, {timestamp:($t+9), message:({level:"info",msg:"order created",orderId:1002,ms:27}|tojson)}]' > ev.json; aws logs put-log-events --log-group-name /lab13/orders --log-stream-name orders-api-7f9c --log-events file:///dev/stdin < ev.json --query rejectedLogEventsInfo
+null
+$ aws logs get-log-events --log-group-name /lab13/orders --log-stream-name orders-api-7f9c --query 'events[].[timestamp,message]' --output text
+1795479619472	{"level":"info","msg":"order created","orderId":1001,"ms":31}
+1795479619477	{"level":"error","msg":"db timeout","ms":5003}
+1795479619481	{"level":"info","msg":"order created","orderId":1002,"ms":27}
+$ aws logs filter-log-events --log-group-name /lab13/orders --filter-pattern '{ $.level = "error" }' --query 'length(events)'
+3
+$ aws logs filter-log-events --log-group-name /lab13/orders --query 'events[].message' --output json | jq -r '.[] | fromjson | select(.level == "error") | "\(.msg) \(.ms) ms"'
+db timeout 5003 ms
+$ aws logs put-retention-policy --log-group-name /lab13/orders --retention-in-days 14 && aws logs describe-log-groups --query 'logGroups[].{group:logGroupName,retention:retentionInDays}' --output table
+--------------------------------
+|       DescribeLogGroups      |
++----------------+-------------+
+|      group     |  retention  |
++----------------+-------------+
+|  /lab13/orders |  14         |
++----------------+-------------+
+$ aws s3 mb s3://lab13-trail >/dev/null && aws cloudtrail create-trail --name org-trail --s3-bucket-name lab13-trail --query Name --output text && aws cloudtrail start-logging --name org-trail && aws cloudtrail get-trail-status --name org-trail --query '{IsLogging:IsLogging}'
+org-trail
+{
+    "IsLogging": true
+}
+$ aws cloudtrail stop-logging --name org-trail && aws cloudtrail get-trail-status --name org-trail --query '{IsLogging:IsLogging,StopLoggingTime:StopLoggingTime}'
+{
+    "IsLogging": false,
+    "StopLoggingTime": "2026-11-24T00:20:36+00:00"
+}
+$ jq '.Records | length' mau/cloudtrail-20261123.json
+14
+$ jq -c '.Records[0] | {eventTime, eventSource, eventName, user: .userIdentity.userName, sourceIPAddress, result: .responseElements.ConsoleLogin, mfa: .additionalEventData.MFAUsed}' mau/cloudtrail-20261123.json
+{"eventTime":"2026-11-23T01:58:02Z","eventSource":"signin.amazonaws.com","eventName":"ConsoleLogin","user":"an","sourceIPAddress":"198.51.100.20","result":"Success","mfa":"Yes"}
+$ jq -r '.Records[] | [.eventTime[11:19], .userIdentity.userName, .sourceIPAddress, .eventName, (.errorCode // "-")] | @tsv' mau/cloudtrail-20261123.json | column -t
+01:58:02  an         198.51.100.20  ConsoleLogin                    -
+02:03:40  an         198.51.100.20  DescribeLogGroups               -
+02:41:07  ci-deploy  203.0.113.50   GetCallerIdentity               -
+02:41:12  ci-deploy  203.0.113.50   ListBuckets                     -
+02:41:20  ci-deploy  203.0.113.50   ListUsers                       AccessDenied
+02:41:23  ci-deploy  203.0.113.50   ListRoles                       AccessDenied
+02:41:26  ci-deploy  203.0.113.50   GetAccountAuthorizationDetails  AccessDenied
+02:41:29  ci-deploy  203.0.113.50   ListAttachedUserPolicies        AccessDenied
+02:42:05  ci-deploy  203.0.113.50   DescribeTrails                  -
+02:42:09  ci-deploy  203.0.113.50   StopLogging                     -
+02:42:31  ci-deploy  203.0.113.50   DeleteFlowLogs                  -
+02:43:02  ci-deploy  203.0.113.50   GetBucketAcl                    -
+02:43:40  ci-deploy  203.0.113.50   RunInstances                    Client.UnauthorizedOperation
+08:12:55  an         198.51.100.20  StartLogging                    -
+$ jq -r '.Records[] | select(.errorCode == "AccessDenied") | .userIdentity.accessKeyId + " " + .sourceIPAddress' mau/cloudtrail-20261123.json | sort | uniq -c
+      4 AKIAIOSFODNN7EXAMPLE 203.0.113.50
+$ jq -r '.Records[] | select(.eventName | test("^(StopLogging|DeleteTrail|UpdateTrail|PutEventSelectors|DeleteFlowLogs|DeleteLogGroup)$")) | "\(.eventTime) \(.userIdentity.userName) \(.sourceIPAddress) \(.eventName) \(.requestParameters | tostring)"' mau/cloudtrail-20261123.json
+2026-11-23T02:42:09Z ci-deploy 203.0.113.50 StopLogging {"name":"arn:aws:cloudtrail:ap-southeast-1:111122223333:trail/org-trail"}
+2026-11-23T02:42:31Z ci-deploy 203.0.113.50 DeleteFlowLogs {"flowLogIds":["fl-0abc1234def567890"]}
+$ jq -c '.Records[] | select(.eventName == "RunInstances") | {eventTime, errorCode, req: .requestParameters}' mau/cloudtrail-20261123.json
+{"eventTime":"2026-11-23T02:43:40Z","errorCode":"Client.UnauthorizedOperation","req":{"instanceType":"p4d.24xlarge","minCount":8}}
+$ jq -r '.Records[] | select(.userIdentity.accessKeyId == "AKIAIOSFODNN7EXAMPLE") | .userAgent' mau/cloudtrail-20261123.json | sort | uniq -c | cut -c1-90
+     11 aws-cli/2.32.0 md/awscrt#0.27.6 ua/2.1 os/linux#6.8.0 md/arch#x86_64 lang/python#3
+$ head -3 mau/flow-20261123.log
+version account-id interface-id srcaddr dstaddr srcport dstport protocol packets bytes start end action log-status
+2 111122223333 eni-0a1b2c3d4e5f60718 198.51.100.60 10.0.1.15 40589 443 6 20 8159 1795399200 1795399260 ACCEPT OK
+2 111122223333 eni-0a1b2c3d4e5f60718 198.51.100.83 10.0.1.15 53443 443 6 17 49112 1795399260 1795399320 ACCEPT OK
+$ awk 'NR > 1 {print $13, $7}' mau/flow-20261123.log | sort | uniq -c | sort -rn
+     60 REJECT 22
+     40 ACCEPT 443
+      6 ACCEPT 5432
+      2 - -
+$ awk 'NR > 1 && $13 == "REJECT" {print $4}' mau/flow-20261123.log | sort | uniq -c | sort -rn
+     40 203.0.113.50
+     20 203.0.113.77
+$ awk 'NR > 1 && $13 == "ACCEPT" && $7 == 5432 {printf "%s %s -> %s:%s %s gói %s byte\n", strftime("%H:%M:%S", $11, 1), $4, $5, $7, $9, $10}' mau/flow-20261123.log
+02:40:00 203.0.113.50 -> 10.0.2.30:5432 15 gói 2469 byte
+02:40:30 203.0.113.50 -> 10.0.2.30:5432 10 gói 3557 byte
+02:41:00 203.0.113.50 -> 10.0.2.30:5432 24 gói 4625 byte
+02:41:30 203.0.113.50 -> 10.0.2.30:5432 20 gói 3964 byte
+02:42:00 203.0.113.50 -> 10.0.2.30:5432 23 gói 2984 byte
+02:42:30 203.0.113.50 -> 10.0.2.30:5432 24 gói 5281 byte
+$ awk 'NR > 1 && $14 != "OK"' mau/flow-20261123.log
+2 111122223333 eni-0f9e8d7c6b5a40312 - - - - - - - 1795400400 1795400460 - NODATA
+2 111122223333 eni-0f9e8d7c6b5a40312 - - - - - - - 1795400460 1795400520 - SKIPDATA
+$ docker rm -f lgz-moto >/dev/null; docker network rm lgz-c13a >/dev/null; rm -f ev.json; echo "đã dọn"
+đã dọn

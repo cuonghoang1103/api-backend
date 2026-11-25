@@ -1,0 +1,31 @@
+$ RID=$(awk '$9 == 502 {print $NF}' logs/access.log | head -n 1 | cut -d= -f2); echo "rid = $RID"; grep -c "$RID" logs/access.log logs/app.log
+rid = 8252e2696d7cd3d549eefe2de303ec12
+logs/access.log:1
+logs/app.log:0
+$ awk '$9 == 502 {print $4, $7}' logs/access.log | head -n 3
+[24/Nov/2026:14:08:59 /api/report
+[24/Nov/2026:14:08:59 /api/products
+[24/Nov/2026:14:09:00 /api/products
+$ jq -R -r 'fromjson? | select(.level >= 50) | .req.url // "(không có req)" | sub("[0-9]+$"; ":id")' logs/app.log | sort | uniq -c
+     58 /api/orders/:id
+$ jq -R -r 'fromjson? | select(.msg == "request errored") | .req.url | sub("[0-9]+$"; ":id")' logs/app.log | sort | uniq -c
+     29 /api/orders/:id
+$ docker exec lgz-node node -e "require('net').connect(5432, 'db')" 2>&1 | head -n 8
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: getaddrinfo ENOTFOUND db
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)
+Emitted 'error' event on Socket instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+$ sed -i "s/redact: \['req.headers.authorization', /redact: [/" app.js && grep -n 'redact:' app.js && docker exec lgz-node pkill -x node && sleep 4
+10:  redact: ['req.headers.cookie'], // không bao giờ ghi token/cookie
+$ curl -s -o /dev/null -w '%{http_code}\n' -H 'Authorization: Bearer GIA_TOKEN·VIDU' http://127.0.0.1:41080/api/products; sleep 1; grep -o '"authorization":"[^"]*"' logs/app.log | tail -n 1
+200
+"authorization":"Bearer GIA_TOKEN·VIDU"
+$ sed -i "s/redact: \[/redact: ['req.headers.authorization', /" app.js && grep -n 'redact:' app.js && docker exec lgz-node pkill -x node && sleep 4
+10:  redact: ['req.headers.authorization', 'req.headers.cookie'], // không bao giờ ghi token/cookie
+$ curl -s -o /dev/null -w '%{http_code}\n' -H 'Authorization: Bearer GIA_TOKEN·VIDU' http://127.0.0.1:41080/api/products; sleep 1; grep -o '"authorization":"[^"]*"' logs/app.log | tail -n 1
+200
+"authorization":"[Redacted]"

@@ -1,0 +1,42 @@
+$ docker rm -f lgz-spring 2> /dev/null; rm -rf logs; mkdir logs
+$ docker run -d --name lgz-spring --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar --logging.config=classpath:logback-lab.xml > /dev/null && sleep 8
+$ curl -s -X POST -H 'X-Request-Id: req-c0ffee01' 'http://127.0.0.1:41081/api/orders/7/confirm?email=an@example.com'; echo
+ok
+$ jq -c 'select(.requestId == "req-c0ffee01") | {"@timestamp", level, thread_name, logger_name, message, requestId, traceId, spanId}' logs/shop.json
+{"@timestamp":"2026-11-23T20:38:10.757435046Z","level":"INFO","thread_name":"http-nio-8080-exec-1","logger_name":"vn.lab.shop.OrderController","message":"confirm order id=7","requestId":"req-c0ffee01","traceId":"1c0d1fec2a92ead86e6986275e76d3d2","spanId":"fe3fb82219dbb426"}
+{"@timestamp":"2026-11-23T20:38:10.762068752Z","level":"INFO","thread_name":"mail-1","logger_name":"vn.lab.shop.MailService","message":"sending confirmation mail for order 7 to a***@example.com","requestId":"req-c0ffee01","traceId":"1c0d1fec2a92ead86e6986275e76d3d2","spanId":"fe3fb82219dbb426"}
+$ docker rm -f lgz-spring > /dev/null; docker run -d --name lgz-spring -e MDC_DECORATOR=false -e JAVA_TOOL_OPTIONS=-DADDITIVITY=false --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar --logging.config=classpath:logback-lab.xml > /dev/null && sleep 8
+$ curl -s -X POST -H 'X-Request-Id: req-c0ffee03' 'http://127.0.0.1:41081/api/orders/7/confirm?email=an@example.com' > /dev/null; docker logs lgz-spring 2>&1 | grep -E 'confirm|sending' | tail -n 3
+20:38:19.334 INFO  [http-nio-8080-exec-1] [rid=req-c0ffee03] v.l.s.OrderController - confirm order id=7
+20:38:19.338 INFO  [mail-1] [rid=] v.l.shop.MailService - sending confirmation mail for order 7 to a***@example.com
+$ docker rm -f lgz-spring > /dev/null; docker run -d --name lgz-spring --user "$(id -u):$(id -g)" -p 127.0.0.1:41081:8080 -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -jar target/shop-1.0.jar --logging.structured.format.console=ecs > /dev/null && sleep 8
+$ curl -s -H 'X-Request-Id: req-ecs00001' http://127.0.0.1:41081/api/orders/7 > /dev/null; docker logs lgz-spring 2>&1 | grep 'load order' | jq .
+{
+  "@timestamp": "2026-11-23T20:38:27.888293213Z",
+  "log": {
+    "level": "INFO",
+    "logger": "vn.lab.shop.OrderController"
+  },
+  "process": {
+    "pid": 1,
+    "thread": {
+      "name": "http-nio-8080-exec-1"
+    }
+  },
+  "service": {
+    "name": "shop",
+    "version": "1.0",
+    "node": {}
+  },
+  "message": "load order id=7",
+  "traceId": "860db1e798ff1d9e2d0a5a4de59e9c16",
+  "spanId": "9343e5af4b5eaefe",
+  "requestId": "req-ecs00001",
+  "ecs": {
+    "version": "8.11"
+  }
+}
+$ docker rm -f lgz-spring > /dev/null; docker run --rm --user "$(id -u):$(id -g)" -v "$PWD":/app -w /app --entrypoint java maven:3.9-eclipse-temurin-21 -Dlogback.configurationFile=logback-bench.xml -Dloader.main=vn.lab.shop.LogBench -cp target/shop-1.0.jar org.springframework.boot.loader.launch.PropertiesLauncher
+debug("..." + cart)        :   342.40 ms
+debug("... {}", cart)       :     0.12 ms
+if (isDebugEnabled()) ...   :     0.09 ms

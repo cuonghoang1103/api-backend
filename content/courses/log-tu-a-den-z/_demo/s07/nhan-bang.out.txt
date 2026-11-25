@@ -1,0 +1,4 @@
+$ journalctl -k -b --since "$(cat /tmp/moc-oom)" --no-pager -o cat | sed 's/^\[ *//' | awk '$1 ~ /^[0-9]+\]$/ {print $5, $NF}' | sort -n | tail -n 3
+2336 unattended-upgr
+16864 python3
+203328 python3

@@ -1,0 +1,72 @@
+$ sudo timeout 20 tcpdump -i ens3 -n -s 0 -w /tmp/c11.pcap 'not port 22' 2>/tmp/td.err & sleep 2; curl -s -o /dev/null -w "%{http_code}\n" http://192.168.56.10/; curl -s -o /dev/null -w "%{http_code}\n" "http://192.168.56.10/khong-co?ma=abc"; curl -s -m 3 -o /dev/null http://192.168.56.1:8081/; echo "curl cổng 8081: mã thoát $?"; curl -s -o /dev/null -w "%{http_code}\n" https://example.com/; wait; cat /tmp/td.err   # ← trên android-7f3a
+200
+404
+curl cổng 8081: mã thoát 7
+200
+tcpdump: listening on ens3, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+55 packets captured
+55 packets received by filter
+0 packets dropped by kernel
+$ capinfos -c -u -a -e c11.pcap
+File name:           c11.pcap
+Number of packets:   55
+Capture duration:    3.003510 seconds
+First packet time:   2026-11-24 12:20:07.344244
+Last packet time:    2026-11-24 12:20:10.347754
+$ tcpdump -nn -r c11.pcap 2>/dev/null | head -n 8
+12:20:07.344244 IP 192.168.56.142.52494 > 192.168.56.10.80: Flags [S], seq 180958608, win 64240, options [mss 1460,sackOK,TS val 1849207641 ecr 0,nop,wscale 7], length 0
+12:20:07.345566 IP 192.168.56.10.80 > 192.168.56.142.52494: Flags [S.], seq 1421323229, ack 180958609, win 65160, options [mss 1460,sackOK,TS val 3114197877 ecr 1849207641,nop,wscale 7], length 0
+12:20:07.345615 IP 192.168.56.142.52494 > 192.168.56.10.80: Flags [.], ack 1, win 502, options [nop,nop,TS val 1849207643 ecr 3114197877], length 0
+12:20:07.345729 IP 192.168.56.142.52494 > 192.168.56.10.80: Flags [P.], seq 1:77, ack 1, win 502, options [nop,nop,TS val 1849207643 ecr 3114197877], length 76: HTTP: GET / HTTP/1.1
+12:20:07.346261 IP 192.168.56.10.80 > 192.168.56.142.52494: Flags [.], ack 77, win 509, options [nop,nop,TS val 3114197878 ecr 1849207643], length 0
+12:20:07.347891 IP 192.168.56.10.80 > 192.168.56.142.52494: Flags [P.], seq 1:863, ack 77, win 509, options [nop,nop,TS val 3114197880 ecr 1849207643], length 862: HTTP: HTTP/1.1 200 OK
+12:20:07.347932 IP 192.168.56.142.52494 > 192.168.56.10.80: Flags [.], ack 863, win 496, options [nop,nop,TS val 1849207645 ecr 3114197880], length 0
+12:20:07.348235 IP 192.168.56.142.52494 > 192.168.56.10.80: Flags [F.], seq 77, ack 863, win 496, options [nop,nop,TS val 1849207645 ecr 3114197880], length 0
+$ tcpdump -nn -r c11.pcap 'tcp[tcpflags] & tcp-rst != 0' 2>/dev/null
+reading from file c11.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+12:20:07.379224 IP 192.168.56.1.8081 > 192.168.56.142.55800: Flags [R.], seq 0, ack 4115384715, win 0, length 0
+$ tshark -r c11.pcap -Y 'dns.flags.response == 1' -T fields -e frame.time -e ip.dst -e dns.qry.name -e dns.a 2>/dev/null | cut -c13-
+ 12:20:07.423539000 +07	192.168.56.142	example.com
+ 12:20:07.425615000 +07	192.168.56.142	example.com	172.66.147.243,104.20.23.154
+$ tshark -r c11.pcap -Y 'http.request || http.response' -T fields -e frame.number -e ip.src -e tcp.srcport -e http.request.method -e http.request.uri -e http.response.code -e http.time 2>/dev/null
+4	192.168.56.142	52494	GET	/
+6	192.168.56.10	80			200	0.002162000
+14	192.168.56.142	52506	GET	/khong-co?ma=abc
+16	192.168.56.10	80			404	0.001078000
+$ tshark -r c11.pcap -Y 'http.response.code >= 400' 2>/dev/null
+   16   0.017770 192.168.56.10 → 192.168.56.142 HTTP 392 HTTP/1.1 404 Not Found  (text/html)
+$ tshark -r c11.pcap -q -z follow,tcp,ascii,1 2>/dev/null | head -n 16
+
+===================================================================
+Follow: tcp,ascii
+Filter: tcp.stream eq 1
+Node 0: 192.168.56.142:52506
+Node 1: 192.168.56.10:80
+91
+GET /khong-co?ma=abc HTTP/1.1
+Host: 192.168.56.10
+User-Agent: curl/8.5.0
+Accept: */*
+
+
+	326
+HTTP/1.1 404 Not Found
+Server: nginx/1.24.0 (Ubuntu)
+$ sudo tail -n 2 /var/log/nginx/access.log
+192.168.56.142 - - [24/Nov/2026:12:20:07 +0700] "GET / HTTP/1.1" 200 615 "-" "curl/8.5.0"
+192.168.56.142 - - [24/Nov/2026:12:20:07 +0700] "GET /khong-co?ma=abc HTTP/1.1" 404 162 "-" "curl/8.5.0"
+$ tshark -r c11.pcap -Y 'tls.handshake.type == 1' -T fields -e ip.dst -e tls.handshake.extensions_server_name 2>/dev/null; tshark -r c11.pcap -Y 'tls.app_data' 2>/dev/null | head -n 2 | cut -c1-120
+172.66.147.243	example.com
+   34   0.153309 172.66.147.243 → 192.168.56.142 TLSv1.3 1253 Application Data
+   36   0.188420 192.168.56.142 → 172.66.147.243 TLSv1.3 134 Change Cipher Spec, Application Data
+$ tshark -r c11.pcap -q -z conv,tcp 2>/dev/null | sed -n '1,12p'
+================================================================================
+TCP Conversations
+Filter:<No Filter>
+                                                           |       <-      | |       ->      | |     Total     |    Relative    |   Duration   |
+                                                           | Frames  Bytes | | Frames  Bytes | | Frames  Bytes |      Start     |              |
+192.168.56.142:47688       <-> 172.66.147.243:443              14 6157 bytes      13 1519 bytes      27 7676 bytes     0.082017000         0.1681
+192.168.56.142:52494       <-> 192.168.56.10:80                 4 1134 bytes       6 480 bytes      10 1614 bytes     0.000000000         0.0162
+192.168.56.142:52506       <-> 192.168.56.10:80                 4 598 bytes       6 495 bytes      10 1093 bytes     0.015972000         0.0026
+192.168.56.142:55800       <-> 192.168.56.1:8081                1 54 bytes        1 74 bytes        2 128 bytes     0.033431000         0.0015
+================================================================================

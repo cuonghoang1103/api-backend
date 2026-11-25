@@ -1,0 +1,9 @@
+$ MOZ_LOG='timestamp,nsHostResolver:5,nsHttp:3' MOZ_LOG_FILE=$PWD/ff.log timeout 90 firefox --headless --no-remote --profile "$PWD/ffp" --screenshot "$PWD/ff.png" http://mat-tich.lgz.test/ > /dev/null 2>&1; ls ff.log* | head -n 3; wc -l < ff.log.moz_log
+ff.log.child-1.moz_log
+ff.log.moz_log
+1847
+$ grep -h 'mat-tich' ff.log.moz_log | grep -E 'uri=|failure|status 8' | head -n 4 | cut -c1-176
+2026-11-23 23:38:45.930504 UTC - [Parent 1505667: Main Thread]: E/nsHttp uri=http://mat-tich.lgz.test/
+2026-11-23 23:38:45.930813 UTC - [Parent 1505667: Main Thread]: E/nsHttp uri=http://mat-tich.lgz.test/
+2026-11-23 23:38:45.938887 UTC - [Parent 1505667: DNS Resolver #1]: E/nsHostResolver DNS resolve task - lookup completed for host [mat-tich.lgz.test]: failure: unknown host.
+2026-11-23 23:38:45.939151 UTC - [Parent 1505667: DNS Resolver #2]: D/nsHostResolver nsHostResolver::CompleteLookupByType record 7f8f6a69f370 [mat-tich.lgz.test] status 8000fff

@@ -1,0 +1,17 @@
+$ docker run -d --name lgz-httpd -p 127.0.0.1:41082:80 httpd:2.4-alpine > /dev/null && sleep 2
+$ docker exec lgz-httpd sed -i 's/CustomLog \/proc\/self\/fd\/1 common/CustomLog \/proc\/self\/fd\/1 combined/' /usr/local/apache2/conf/httpd.conf
+$ docker exec lgz-httpd grep -n '^\s*CustomLog' /usr/local/apache2/conf/httpd.conf
+346:    CustomLog /proc/self/fd/1 combined
+$ docker exec lgz-httpd httpd -k graceful && sleep 2
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.17.0.3. Set the 'ServerName' directive globally to suppress this message
+$ curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:41082/
+200
+$ curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:41082/khong-co.html
+404
+$ curl -s -o /dev/null -w '%{http_code}\n' -H 'User-Agent: lab-client/1.0' 'http://127.0.0.1:41082/cgi-bin/test?id=1'
+404
+$ docker logs lgz-httpd 2> /dev/null
+172.17.0.1 - - [24/Nov/2026:03:50:40 +0000] "GET / HTTP/1.1" 200 191 "-" "curl/8.18.0"
+172.17.0.1 - - [24/Nov/2026:03:50:40 +0000] "GET /khong-co.html HTTP/1.1" 404 236 "-" "curl/8.18.0"
+172.17.0.1 - - [24/Nov/2026:03:50:40 +0000] "GET /cgi-bin/test?id=1 HTTP/1.1" 404 236 "-" "lab-client/1.0"
+$ docker rm -f lgz-httpd > /dev/null

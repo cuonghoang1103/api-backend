@@ -1,0 +1,46 @@
+$ psql -Atc 'SHOW log_statement'
+ddl
+$ grep -h 'statement: ' log/postgresql-*.log | cut -c1-170
+2026-11-24 15:58:53.020 +07 [69] an@shop app=DBeaver 25.2.0 - Main <shop> client=10.20.0.15 LOG:  statement: CREATE INDEX ON orders_old (created_at)
+2026-11-24 15:58:53.142 +07 [77] app@shop app=DBeaver 25.2.0 - SQLEditor <shop> client=10.20.0.23 LOG:  statement: DROP TABLE coupons
+$ grep -h '\[[0-9]*\] app@shop' log/postgresql-*.log | grep -E 'authorized|statement' | cut -c1-200
+2026-11-24 15:58:53.140 +07 [77] app@shop app=[unknown] client=10.20.0.23 LOG:  connection authorized: user=app database=shop application_name=DBeaver 25.2.0 - SQLEditor <shop>
+2026-11-24 15:58:53.142 +07 [77] app@shop app=DBeaver 25.2.0 - SQLEditor <shop> client=10.20.0.23 LOG:  statement: DROP TABLE coupons
+$ grep -c 'DELETE' log/postgresql-*.log
+0
+$ psql -qc "ALTER SYSTEM SET log_statement = 'mod'" -c "SELECT pg_reload_conf()"
+ pg_reload_conf
+----------------
+ t
+(1 row)
+$ grep -hE 'statement: (DELETE|DO)' log/postgresql-*.log | cut -c1-170
+2026-11-24 15:58:53.758 +07 [122] app@shop app=DBeaver 25.2.0 - SQLEditor <shop> client=10.20.0.23 LOG:  statement: DELETE FROM orders_old WHERE id > 90
+$ psql -d shop -Atc "SELECT count(*) FROM orders_old"
+50
+$ psql -d shop -qc 'CREATE EXTENSION IF NOT EXISTS pgaudit' -c "ALTER SYSTEM SET pgaudit.log = 'write, ddl, role'" -c "ALTER SYSTEM SET pgaudit.log_relation = on" -c "SELECT pg_reload_conf()"
+ pg_reload_conf
+----------------
+ t
+(1 row)
+$ grep -h 'AUDIT:' log/postgresql-*.log | cut -c1-230
+2026-11-24 15:58:54.231 +07 [153] app@shop app=DBeaver 25.2.0 - SQLEditor <shop> client=10.20.0.23 LOG:  AUDIT: SESSION,1,1,WRITE,DELETE,TABLE,public.orders_old,DELETE FROM orders_old WHERE id > 40,<not logged>
+$ psql -d shop -qc 'CREATE ROLE auditor NOLOGIN' -c 'GRANT SELECT ON customers TO auditor' -c "ALTER SYSTEM SET pgaudit.role = 'auditor'" -c "SELECT pg_reload_conf()"
+ pg_reload_conf
+----------------
+ t
+(1 row)
+$ grep -h 'AUDIT: OBJECT' log/postgresql-*.log | cut -c1-230
+2026-11-24 15:58:54.575 +07 [177] an@shop app=DBeaver 25.2.0 - Main <shop> client=10.20.0.15 LOG:  AUDIT: OBJECT,1,1,READ,SELECT,TABLE,public.customers,"SELECT full_name, phone FROM customers WHERE email = 'binh@example.com'",<not
+$ psql -qc "ALTER ROLE intern PASSWORD 'Intern-Moi-2026!'"
+$ psql -qc "ALTER ROLE intern PASSWORD 'Intern-Moi-2026!' VALID UNTL 'infinity'"
+ERROR:  syntax error at or near "UNTL"
+LINE 1: ...TER ROLE intern PASSWORD 'Intern-Moi-2026!' VALID UNTL 'infi...
+                                                             ^
+$ L=$(ls -t log/*.log | head -1); tail -n +$(( $(cat /tmp/moc) + 1 )) $L | grep -iE 'password|STATEMENT' | cut -c1-200
+2026-11-24 15:58:55.369 +07 [205] postgres@postgres app=psql client=[local] LOG:  statement: ALTER ROLE intern PASSWORD 'Intern-Moi-2026!'
+2026-11-24 15:58:55.374 +07 [205] postgres@postgres app=psql client=[local] LOG:  AUDIT: SESSION,1,1,ROLE,ALTER ROLE,,,ALTER ROLE intern PASSWORD <REDACTED>,<not logged>
+2026-11-24 15:58:55.483 +07 [213] postgres@postgres app=psql client=[local] STATEMENT:  ALTER ROLE intern PASSWORD 'Intern-Moi-2026!' VALID UNTL 'infinity'
+$ grep -h 'Intern-Moi' log/postgresql-*.json | jq -r '.message // empty, .statement // empty' | sort -u
+ALTER ROLE intern PASSWORD 'Intern-Moi-2026!' VALID UNTL 'infinity'
+statement: ALTER ROLE intern PASSWORD 'Intern-Moi-2026!'
+syntax error at or near "UNTL"

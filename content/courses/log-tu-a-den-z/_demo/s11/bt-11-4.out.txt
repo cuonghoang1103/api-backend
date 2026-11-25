@@ -1,0 +1,19 @@
+$ cat /etc/rsyslog.d/20-ufw.conf | grep -v '^#'
+:msg,contains,"[UFW " /var/log/ufw.log
+$ sudo nmap -sS -Pn -n --top-ports 100 192.168.56.10 | grep -E "scanned"   # ← trên keodo
+Nmap done: 1 IP address (1 host up) scanned in 8.95 seconds
+$ sudo grep -c "UFW BLOCK" /var/log/ufw.log
+10
+$ sudo nmap -sS -Pn -n --top-ports 100 192.168.56.10 | grep -E "scanned"   # ← trên keodo
+Nmap done: 1 IP address (1 host up) scanned in 2.09 seconds
+$ sudo grep -c "UFW BLOCK" /var/log/ufw.log
+10
+$ sudo awk '/UFW BLOCK/ {for (i = 1; i <= NF; i++) {if ($i ~ /^SRC=/) s = $i; if ($i ~ /^DPT=/) d = $i} print s, d}' /var/log/ufw.log | sort -u | awk '{print $1}' | uniq -c | sort -rn | head -n 3
+     10 SRC=192.168.56.66
+$ sudo nft add table inet lab; sudo nft add chain inet lab vao '{ type filter hook input priority 0; policy accept; }'; sudo nft add rule inet lab vao tcp dport 22 ct state new limit rate 10/minute log prefix \"ssh-moi: \" accept; sudo nft list chain inet lab vao | grep ssh-moi   # ← trên keodo
+		tcp dport 22 ct state new limit rate 10/minute burst 5 packets log prefix "ssh-moi: " accept
+$ timeout 5 bash -c 'echo > /dev/tcp/192.168.56.66/22' && echo "kết nối 22 được"   # ← trên android-7f3a
+kết nối 22 được
+$ sudo journalctl -k -g ssh-moi --since "-1 min" --no-pager -o cat | cut -c1-110; sudo nft delete table inet lab   # ← trên keodo
+ssh-moi: IN=ens4 OUT= MAC=52:54:00:56:00:66:52:54:00:56:00:42:08:00 SRC=192.168.56.142 DST=192.168.56.66 LEN=6
+ssh-moi: IN=ens3 OUT= MAC=52:54:00:12:34:56:52:55:0a:00:02:02:08:00 SRC=172.17.0.1 DST=10.0.2.15 LEN=44 TOS=0x

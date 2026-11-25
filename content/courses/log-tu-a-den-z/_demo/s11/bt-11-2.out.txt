@@ -1,0 +1,18 @@
+PS> Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-DNS-Client/Operational'; Id=3008; StartTime=(Get-Date).AddHours(-1)} | ForEach-Object { ($_.Message -split ' ')[7].TrimEnd(',') } | Group-Object | Sort-Object Count -Descending | Select-Object -First 10 Count,Name
+
+Count Name
+----- ----
+   45 v10.events.data.microsoft.com
+   36 wpad
+   16 _ldap._tcp.dc._msdcs.lan
+   14 github.com
+   14 cp801.prod.do.dsp.mp.microsoft.com
+   12 LAPTOP-AN
+   10 tas01.cwsapp.update.microsoft.com
+    8 geover.prod.do.dsp.mp.microsoft.com
+    8 1D.tlu.dl.delivery.mp.microsoft.com
+    8 fe2cr.update.microsoft.com
+$ sudo awk '/ is NXDOMAIN/ {split($5, a, "/"); print a[1]}' /var/log/remote/wrt-nha.log | sort | uniq -c
+     36 192.168.56.142
+$ sudo awk '$6 == "query[TXT]" {split($7, n, "."); printf "%s", n[1]}' /var/log/remote/wrt-nha.log | tr a-z A-Z | awk '{ s = $0; while (length(s) % 8) s = s "="; print s }' | base32 -d; echo
+tai-khoan=an;mat-khau=LabGia-123;the=4111111111111111

@@ -1,0 +1,3 @@
+$ sudo journalctl -u openvpn-server@lab --since -24h | grep "VERIFY ERROR" | grep -o "CN=[^,]*" | sort | uniq -c
+      3 CN=keodo
+PS> '{0:X}' -f (-2147014836 -band 0xFFFFFFFF); [ComponentModel.Win32Exception]::new(0x274C).Message

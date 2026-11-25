@@ -1,0 +1,8 @@
+$ mkdir -p lab9; : > logs/api.log; : > logs/app.log
+$ node har.mjs login,me,orders,report lab9/lab9.har; cp logs/api.log logs/app.log lab9/; wc -l lab9/*
+đã ghi lab9/lab9.har
+   11 lab9/api.log
+    3 lab9/app.log
+    0 lab9/lab9.har
+ 1130 lab9/lab9.sach.har
+ 1144 total

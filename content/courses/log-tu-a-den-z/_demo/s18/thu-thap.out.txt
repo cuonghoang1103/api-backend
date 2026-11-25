@@ -1,0 +1,66 @@
+$ cd su-co18 && find . -type f -print0 | sort -z | xargs -0 sha256sum > /lab/ra/SHA256SUMS && wc -l < /lab/ra/SHA256SUMS && grep -E 'auth\.log\.1|security\.jsonl' /lab/ra/SHA256SUMS
+24
+9a5481c733f22873c13b546b9fffe1c58146ec90beaf7995eb405efd97a0fdff  ./pc-dev01/security.jsonl
+e1349ff0f3f97b837c526e0e19755ede19ad516629d35677d88accf700c460e6  ./vps01/var/log/auth.log.1
+PS> (Get-FileHash -Algorithm SHA256 su-co18/vps01/var/log/auth.log.1).Hash.ToLower()
+e1349ff0f3f97b837c526e0e19755ede19ad516629d35677d88accf700c460e6
+$ cd su-co18 && sha256sum -c --quiet /lab/ra/SHA256SUMS && echo "toàn vẹn: mọi tệp khớp"
+toàn vẹn: mọi tệp khớp
+$ cp -r su-co18 /lab/ra/ban-sao && sed -i 's/198\.51\.100\.77/198.51.100.78/' /lab/ra/ban-sao/vps01/var/log/nginx/access.log && cd /lab/ra/ban-sao && sha256sum -c --quiet /lab/ra/SHA256SUMS; echo "mã thoát: $?"
+./vps01/var/log/nginx/access.log: FAILED
+sha256sum: WARNING: 1 computed checksum did NOT match
+mã thoát: 1
+$ cd su-co18 && grep -m1 'NOT in sudoers' vps01/var/log/auth.log.1 | cut -c1-32 && date -u -d "$(grep -m1 'NOT in sudoers' vps01/var/log/auth.log.1 | cut -d' ' -f1)" +%FT%TZ
+2026-11-21T22:42:31.016171+07:00
+2026-11-21T15:42:31Z
+$ cd su-co18 && grep -m1 'cache.php' vps01/var/log/nginx/access.log | grep -oE '\[[^]]+\]' && date -u -d '21 Nov 2026 23:06:02 +0700' +%FT%TZ
+[21/Nov/2026:23:06:02 +0700]
+2026-11-21T16:06:02Z
+$ cd su-co18 && cut -c1-19 vps01/var/log/nginx/error.log && date -u -d "$(cut -c1-19 vps01/var/log/nginx/error.log | tr / -) +0700" +%FT%TZ
+2026/11/22 02:12:48
+2026-11-21T19:12:48Z
+$ cd su-co18 && grep -m1 'NOT in sudoers' vps01/journal/vps01-journal.json | jq -r '.__REALTIME_TIMESTAMP | tonumber / 1e6 | floor | todate'
+2026-11-21T15:42:31Z
+$ cd su-co18 && grep -m1 'level\\":40' vps01/var/lib/docker/containers/*/*-json.log | jq -r '.time, (.log | fromjson | .time), (.log | fromjson | .time / 1000 | floor | todate)'
+2026-11-18T13:30:45.025798404Z
+1795008645025
+2026-11-18T13:30:45Z
+$ cd su-co18 && grep -m1 'COPY' vps01/postgresql/log/postgresql-Sat.csv | cut -d, -f1
+2026-11-21 19:14:27.353 UTC
+$ cd su-co18 && grep -m1 'DPT=445' rt01/logread.txt | cut -c1-24
+Sat Nov 21 22:53:33 2026
+$ cd su-co18 && grep -m1 '"Id":4740' pc-dev01/security.jsonl | jq -r .TimeCreated
+2026-11-21T15:57:53.4420000Z
+$ python3 s18/mau/lech-dong-ho.py su-co18
+cổng nguồn  router (giờ máy rt01)   Windows 4625 (UTC)          router − Windows
+     37255  Sat Nov 21 22:54:53 2026  2026-11-21 15:56:30.210000Z     -97.2 s
+     34212  Sat Nov 21 22:54:59 2026  2026-11-21 15:56:36.936000Z     -97.9 s
+     59807  Sat Nov 21 22:55:07 2026  2026-11-21 15:56:45.008000Z     -98.0 s
+     49427  Sat Nov 21 22:55:14 2026  2026-11-21 15:56:51.870000Z     -97.9 s
+... 15 cặp khớp; router − Windows từ -98.1 s tới -97.2 s
+⇒ đồng hồ rt01 CHẬM ≈ 97 s: giờ thật = giờ router + 97 s, rồi −7 giờ ra UTC
+$ python3 s18/mau/nap-loki.py su-co18 97
+  {may="PC-DEV01", nguon="win"}      55 dòng
+  {may="rt01", nguon="rt01"}    3328 dòng
+  {may="tour-api", nguon="app"}    3029 dòng
+  {may="tour-db", nguon="pg"}      47 dòng
+  {may="vps01", nguon="journal"}    2217 dòng
+  {may="vps01", nguon="nginx"}   10687 dòng
+  {may="vps01", nguon="nginx-err"}       1 dòng
+đã nạp 19364 dòng vào 7 luồng
+đã đẩy xuống kho (POST /flush) — hỏi được
+$ python3 s18/mau/logql.py 'sum by (nguon) (count_over_time({vu="su-co18"} |= "10.8.0.1" [1m]))' 2026-11-21T15:50:00Z 2026-11-21T16:05:00Z
+{"nguon": "rt01"} 15:53=254 15:56=6 15:57=5 15:58=8 15:59=2 (5 điểm ≠ 0)
+{"nguon": "win"} 15:57=5 15:58=8 15:59=2 (3 điểm ≠ 0)
+$ python3 s18/mau/logql.py '{vu="su-co18"} |~ "(?i)b0a903430d8b" != "connecting to shim" != "shim disconnected"' 2026-11-21T15:00:00Z 2026-11-21T17:00:00Z 8
+11-21 15:44:30Z vps01/journal  systemd: Started docker-b0a903430d8bff87c85332b1d444d151085b39c9e599855fdefba2dd580378a9.scope - libcontainer container b0a903430d8bff87c85332b1d444d1
+11-21 15:56:30Z PC-DEV01/win  4625 TargetUserName=Administrator TargetDomainName=WORKGROUP SubStatus=0xc0000072 WorkstationName=B0A903430D8B IpAddress=10.8.0.1 IpPort=37255
+11-21 15:56:36Z PC-DEV01/win  4625 TargetUserName=admin TargetDomainName=WORKGROUP SubStatus=0xc0000064 WorkstationName=B0A903430D8B IpAddress=10.8.0.1 IpPort=34212
+11-21 15:56:45Z PC-DEV01/win  4625 TargetUserName=hoasen TargetDomainName=WORKGROUP SubStatus=0xc0000064 WorkstationName=B0A903430D8B IpAddress=10.8.0.1 IpPort=59807
+11-21 15:56:51Z PC-DEV01/win  4625 TargetUserName=minh TargetDomainName=WORKGROUP SubStatus=0xc000006a WorkstationName=B0A903430D8B IpAddress=10.8.0.1 IpPort=49427
+11-21 15:56:59Z PC-DEV01/win  4625 TargetUserName=minh TargetDomainName=WORKGROUP SubStatus=0xc000006a WorkstationName=B0A903430D8B IpAddress=10.8.0.1 IpPort=51466
+11-21 15:57:05Z PC-DEV01/win  4625 TargetUserName=minh TargetDomainName=WORKGROUP SubStatus=0xc000006a WorkstationName=B0A903430D8B IpAddress=10.8.0.1 IpPort=39448
+11-21 15:57:12Z PC-DEV01/win  4625 TargetUserName=minh TargetDomainName=WORKGROUP SubStatus=0xc000006a WorkstationName=B0A903430D8B IpAddress=10.8.0.1 IpPort=58513
+(8 dòng)
+$ python3 s18/mau/logql.py 'sum by (may) (count_over_time({vu="su-co18"} |~ "203\\.0\\.113\\.5[0-2]|198\\.51\\.100\\.77" [1h]))' 2026-11-21T14:00:00Z 2026-11-22T00:00:00Z 30 3600
+{"may": "vps01"} 15:00=46 16:00=130 17:00=4 20:00=12 (4 điểm ≠ 0)

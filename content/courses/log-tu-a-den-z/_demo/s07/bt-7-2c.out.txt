@@ -1,0 +1,11 @@
+$ journalctl --list-boots | tail -n 3
+ -2 c930e4d366cd415c8ad0dfc1b7d567d1 Tue 2026-11-24 16:25:02 +07 Tue 2026-11-24 16:26:15 +07
+ -1 6a8b2ff86ddf403cace4ac14cf627166 Tue 2026-11-24 23:50:03 +07 Tue 2026-11-24 23:50:32 +07
+  0 c4334b2a2d3e4079a4b4cdb916da2550 Tue 2026-11-24 23:50:35 +07 Tue 2026-11-24 23:50:47 +07
+$ journalctl -b -1 -n 6 --no-pager
+Nov 24 23:50:32 lab7 systemd[1]: Reached target reboot.target - System Reboot.
+Nov 24 23:50:32 lab7 systemd[1]: Shutting down.
+Nov 24 23:50:32 lab7 systemd-shutdown[1]: Syncing filesystems and block devices.
+Nov 24 23:50:32 lab7 systemd-shutdown[1]: Sending SIGTERM to remaining processes...
+Nov 24 23:50:32 lab7 systemd-journald[128]: Received SIGTERM from PID 1 (systemd-shutdow).
+Nov 24 23:50:32 lab7 systemd-journald[128]: Journal stopped

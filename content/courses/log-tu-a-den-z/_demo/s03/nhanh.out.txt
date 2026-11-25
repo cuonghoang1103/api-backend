@@ -1,0 +1,77 @@
+PS> Get-ChildItem mau/*.evtx | ForEach-Object { evtx-rec $_.FullName 2>$null | ConvertFrom-Json | Select-Object -First 1 kenh } | Where-Object kenh -notin 'System','Application','Security','Setup','ForwardedEvents' | Sort-Object kenh -Unique | Format-Table -AutoSize
+kenh
+----
+Microsoft-Windows-LiveId/Operational
+Microsoft-Windows-PowerShell/Operational
+Microsoft-Windows-Sysmon/Operational
+Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational
+Microsoft-Windows-Windows Defender/Operational
+Microsoft-Windows-Windows Firewall With Advanced Security/Firewall
+PS> evtx-rec 'mau/2-vss_0-Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx' 2>$null | ConvertFrom-Json | Where-Object id -eq 1149 | ForEach-Object { [pscustomobject]@{ Luc = $_.t; Id = $_.id; User = $_.data.Param1; Domain = $_.data.Param2; IPNguon = $_.data.Param3 } } | Format-Table -AutoSize
+Luc                   Id User          Domain          IPNguon
+---                   -- ----          ------          -------
+8/7/2018 6:37:12 PM 1149 mpowers       MAGNETIC-DESKTO 174.127.93.2
+8/7/2018 6:41:49 PM 1149 mpowers       MAGNETIC-DESKTO 174.127.93.2
+8/7/2018 7:12:04 PM 1149 administrator                 31.14.75.59
+8/7/2018 7:14:52 PM 1149 A                             103.11.244.223
+8/7/2018 7:19:42 PM 1149 Administrator DESKTOP-1N4R894 31.14.75.59
+PS> evtx-rec mau/powershell-openssh-install.evtx | ConvertFrom-Json | Group-Object kenh,id | Select-Object Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+   23 Microsoft-Windows-PowerShell/Operational, 4103
+    4 Microsoft-Windows-PowerShell/Operational, 4104
+    1 Microsoft-Windows-PowerShell/Operational, 40961
+    1 Microsoft-Windows-PowerShell/Operational, 40962
+    1 Microsoft-Windows-PowerShell/Operational, 53504
+PS> evtx-rec mau/powershell-openssh-install.evtx | ConvertFrom-Json | Where-Object id -eq 4104 | Select-Object -First 3 | ForEach-Object { "{0} | {1}" -f $_.t, ($_.data.ScriptBlockText -replace '\s+',' ').Substring(0,[math]::Min(110,($_.data.ScriptBlockText -replace '\s+',' ').Length)) }
+4/22/2021 10:02:14 AM | Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+4/22/2021 10:04:16 AM | prompt
+4/22/2021 10:04:37 AM | Write-Host 'Final result: 1';
+PS> evtx-rec mau/defender-1116-1117.evtx | ConvertFrom-Json | ForEach-Object { [pscustomobject]@{ Luc = $_.t; Id = $_.id; Muc = $_.muc; Ten = $_.data.'Threat Name'; Tep = $_.data.Path; HanhDong = $_.data.'Action Name' } } | Format-Table -AutoSize
+Luc                      Id Muc         Ten                       Tep                                                                                      HanhD
+                                                                                                                                                           ong
+---                      -- ---         ---                       ---                                                                                      -----
+12/11/2020 12:28:01 PM 1116 Warning     HackTool:Win64/Mikatz!dha file:_C:\Users\admmig\Documents\mimidrv.sys                                              Not …
+12/11/2020 12:28:01 PM 1116 Warning     HackTool:Win32/Mimikatz.D file:_C:\Users\admmig\Documents\mimikatz.exe                                             Not …
+12/11/2020 12:28:01 PM 1116 Warning     HackTool:Win64/Mikatz!dha file:_C:\Users\admmig\Documents\mimidrv.sys; file:_C:\Users\admmig\Documents\mimilib.dll Not …
+12/11/2020 12:28:43 PM 1116 Warning     HackTool:Win32/Mimikatz.D file:_C:\Users\admmig\Documents\mimikatz.exe                                             Not …
+12/11/2020 12:28:44 PM 1117 Information HackTool:Win32/Mimikatz.D file:_C:\Users\admmig\Documents\mimikatz.exe                                             Quar…
+12/11/2020 12:28:44 PM 1116 Warning     HackTool:Win32/Mimikatz.D file:_C:\Users\admmig\Documents\mimikatz.exe                                             Not …
+PS> evtx-rec mau/defender-1151.evtx | ConvertFrom-Json | Select-Object -Last 1 | ForEach-Object { $_.data.PSObject.Properties | Where-Object Name -match 'Version|RTP state|Last quick scan|AV signature age|BM state|Product status' | Select-Object Name,Value } | Format-Table -AutoSize
+Name                              Value
+----                              -----
+Platform version                  4.18.2011.6
+Engine version                    1.1.17600.5
+NRI engine version                1.1.17600.5
+AV security intelligence version  1.327.2245.0
+AS security intelligence version  1.327.2245.0
+NRI security intelligence version 1.327.2245.0
+RTP state                         Enabled
+BM state                          Enabled
+Last quick scan age               2
+Last quick scan start time        12/9/2020 3:47:26 AM
+Last quick scan end time          12/9/2020 3:48:25 AM
+Last quick scan source            2
+Product status                    0x00080000
+PS> evtx-rec mau/firewall-2004.evtx | ConvertFrom-Json | Select-Object -First 1 | ForEach-Object { $_.kenh; $_.data | Format-List RuleName,ApplicationPath,Direction,Protocol,LocalPorts,Action,ModifyingUser,ModifyingApplication }
+Microsoft-Windows-Windows Firewall With Advanced Security/Firewall
+
+RuleName             : Gentil-rule
+ApplicationPath      : C:\Program Files\IDM\idm.exe
+Direction            : 2
+Protocol             : 256
+LocalPorts           :
+Action               : 2
+ModifyingUser        : S-1-5-21-4230534742-2542757381-3142984815-1111
+ModifyingApplication : C:\Windows\System32\wbem\WmiPrvSE.exe
+PS> evtx-rec mau/sysmon.evtx 2>$null | ConvertFrom-Json | Group-Object id | Sort-Object Count -Descending | Select-Object Count,@{n='Id';e={$_.Name}} | Format-Table -AutoSize
+Count Id
+----- --
+  227 1
+   60 10
+   34 11
+   24 13
+    8 12
+    2 3
+    2 15
+    1 16

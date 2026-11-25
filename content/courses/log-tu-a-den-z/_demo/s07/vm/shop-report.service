@@ -1,0 +1,6 @@
+[Unit]
+Description=Nightly report of shop-api (Lab 7)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/curl -s -m 60 http://127.0.0.1:8080/report

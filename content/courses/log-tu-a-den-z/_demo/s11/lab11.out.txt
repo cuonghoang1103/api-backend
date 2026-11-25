@@ -1,0 +1,58 @@
+$ sudo wc -l /var/log/remote/wrt-nha.log /var/log/ufw.log; sudo head -n 2 /var/log/remote/wrt-nha.log
+  257 /var/log/remote/wrt-nha.log
+    7 /var/log/ufw.log
+  264 total
+2026-11-24T12:31:21+07:00 wrt-nha dropbear[4637]: Child connection from 192.168.56.10:55136
+2026-11-24T12:31:21+07:00 wrt-nha dropbear[4637]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:fxala9FA0SEh/EWxrbqWgBlzZVKHnM0ee4nV/hPs4DY from 192.168.56.10:55136
+$ sudo grep -E "DHCP(ACK|REQUEST).*192.168.56.142" /var/log/remote/wrt-nha.log
+2026-11-24T20:47:20+07:00 wrt-nha dnsmasq-dhcp[1]: DHCPREQUEST(br-lan) 192.168.56.142 52:54:00:56:00:42
+2026-11-24T20:47:20+07:00 wrt-nha dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.56.142 52:54:00:56:00:42 android-7f3a
+$ sudo awk '$6 ~ /^query\[/ && $9 == "192.168.56.142" {k = split($7, n, "."); print n[k-1] "." n[k]}' /var/log/remote/wrt-nha.log | sort | uniq -c | sort -rn
+     14 android-7f3a.lan
+      6 cdn-lab.test
+      2 exfil-lab.test
+      1 zalo.me
+      1 youtube.com
+      1 vnexpress.net
+      1 shopee.vn
+$ sudo awk '$6 == "query[A]" && $7 == "update.cdn-lab.test" {print substr($1, 12, 8)}' /var/log/remote/wrt-nha.log | tr '\n' ' '; echo
+21:15:00 21:15:20 21:15:40 21:16:00 21:16:20 21:16:40
+$ sudo grep "SRC=192.168.56.142" /var/log/ufw.log | grep -oE "^\S+|DPT=[0-9]+" | paste - - | awk '{print substr($1, 12, 8), $2}'
+22:03:00 DPT=8080
+22:03:00 DPT=3389
+22:03:00 DPT=23
+22:03:01 DPT=23
+22:03:01 DPT=3389
+22:03:01 DPT=8080
+$ sudo grep "Chan-telnet" /var/log/remote/wrt-nha.log | grep -oE "^\S+|SRC=\S+|DST=\S+|DPT=[0-9]+" | paste - - - - | awk '{print substr($1, 12, 8), $2, $3, $4}'
+22:03:01 SRC=192.168.56.142 DST=198.51.100.23 DPT=23
+22:03:01 SRC=192.168.56.142 DST=198.51.100.24 DPT=23
+22:03:01 SRC=192.168.56.142 DST=203.0.113.9 DPT=23
+$ sudo grep -E "miniupnpd.*(AddPortMapping|redirecting)" /var/log/remote/wrt-nha.log | sed -E 's/^.{11}(.{8})\S* \S+ /\1 /'
+22:03:01 miniupnpd[3405]: SOAPAction: urn:schemas-upnp-org:service:WANIPConnection:1#AddPortMapping
+22:03:01 miniupnpd[3405]: AddPortMapping: ext port 2323 to 192.168.56.142:2323 protocol TCP for: svc leaseduration=604800 rhost=
+22:03:01 miniupnpd[3405]: redirecting port 2323 to 192.168.56.142:2323 protocol TCP for: svc
+$ sudo grep -E "dropbear.*(Bad password|Child connection from 192.168.56.142)" /var/log/remote/wrt-nha.log | sed -E 's/^.{11}(.{8})\S* \S+ /\1 /'
+23:41:00 dropbear[3550]: Child connection from 192.168.56.142:47780
+23:41:00 dropbear[3550]: Bad password attempt for 'root' from 192.168.56.142:47780
+23:41:01 dropbear[3550]: Bad password attempt for 'root' from 192.168.56.142:47780
+23:41:01 dropbear[3551]: Child connection from 192.168.56.142:47786
+23:41:01 dropbear[3551]: Bad password attempt for 'root' from 192.168.56.142:47786
+23:41:01 dropbear[3552]: Child connection from 192.168.56.142:47794
+23:41:01 dropbear[3552]: Bad password attempt for 'root' from 192.168.56.142:47794
+$ sudo awk '$6 == "query[TXT]" && $9 == "192.168.56.142" {print $7}' /var/log/remote/wrt-nha.log
+mrqw42bnmjqtuidbnyqdaojqgezdgnbvgy3twidcnfxgqibqhe.1.t.exfil-lab.test
+ytemzugu3doob3ebrwq2jaga4tqnzwgu2dgmrr.2.t.exfil-lab.test
+$ sudo awk '$6 == "query[TXT]" && $9 == "192.168.56.142" {split($7, n, "."); printf "%s", n[1]}' /var/log/remote/wrt-nha.log | tr a-z A-Z | awk '{ s = $0; while (length(s) % 8) s = s "="; print s }' | base32 -d; echo
+danh-ba: an 0901234567; binh 0912345678; chi 0987654321
+PS> Get-Content "$env:SystemRoot\System32\LogFiles\Firewall\pfirewall.log" | Select-String '192.168.56.142 192.168.56.177' | Select-Object -Last 2 | ForEach-Object Line
+2026-11-24 12:34:15 DROP TCP 192.168.56.142 192.168.56.177 57782 445 44 S 3407280941 0 1024 - - - RECEIVE 4
+2026-11-24 12:34:16 DROP TCP 192.168.56.142 192.168.56.177 57784 445 44 S 3407149871 0 1024 - - - RECEIVE 4
+$ { sudo awk '{t = substr($1, 12, 8)} $4 ~ /^DHCPACK/ && $5 == "192.168.56.142" {print t, "router  DHCP: android-7f3a nhận IP .142"} $6 == "query[A]" && $7 == "update.cdn-lab.test" && !b++ {print t, "router  DNS: lần gọi về đầu tiên update.cdn-lab.test"} /Chan-telnet/ && /SRC=192.168.56.142/ && !t2++ {print t, "router  tường lửa chặn telnet ra Internet"} /AddPortMapping: ext port 2323/ {print t, "router  UPnP mở cổng 2323 từ Internet về máy"} $6 == "query[TXT]" && !x++ {print t, "router  DNS TXT dài bắt đầu (exfil-lab.test)"} /Bad password/ && !p++ {print t, "router  thử mật khẩu SSH của router"}' /var/log/remote/wrt-nha.log; sudo awk '/SRC=192.168.56.142/ && !u++ {print substr($1, 12, 8), "lab7    ufw chặn quét cổng"}' /var/log/ufw.log; } | sort
+20:47:20 router  DHCP: android-7f3a nhận IP .142
+21:15:00 router  DNS: lần gọi về đầu tiên update.cdn-lab.test
+22:03:00 lab7    ufw chặn quét cổng
+22:03:01 router  UPnP mở cổng 2323 từ Internet về máy
+22:03:01 router  tường lửa chặn telnet ra Internet
+23:41:00 router  DNS TXT dài bắt đầu (exfil-lab.test)
+23:41:00 router  thử mật khẩu SSH của router

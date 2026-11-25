@@ -1,0 +1,42 @@
+$ may 'bash /lab/lab16/pha-lab16.sh'
+đã cài 7 lỗi
+$ may 'bash /lab/lab16/kiem-lab16.sh'
+✗ app.log không cho 'người khác' đọc (quyền 644) — chmod 0640 + chown root:adm, và 'create 0640 root adm' trong logrotate
+✗ không còn bí mật dạng rõ trong /var/log/shop và /var/log/nginx — che ở nguồn (redact, log_format), rồi XỬ LÝ dữ liệu đã lọt
+✗ có luật logrotate cho /var/log/shop — thêm /etc/logrotate.d/shop (daily, rotate, compress, create)
+✓ logrotate -d chạy không lỗi
+✓ nginx -t hợp lệ (sửa log_format không làm hỏng web)
+✗ request mới có ?token= KHÔNG lọt vào access.log (thử thật) — log_format che bằng map (bài 16.3)
+✗ journald lưu xuống đĩa (không volatile) — xoá drop-in Storage=volatile, đặt Storage=persistent + SystemMaxUse
+✗ dev không thuộc nhóm adm — gpasswd -d dev adm; cho xem log qua kho trung tâm (Grafana viewer) thay vì vào máy
+✗ không có bản sao log ai cũng đọc được trong /tmp — xoá, hoặc để nơi 0700 + băm SHA256
+✗ auth/syslog được đẩy ra khỏi máy (rsyslog forward) — thêm *.* @@may-log:6514 (TLS ở bài 15.1) — log trên chính máy không phải bằng chứng
+== 2/10 đạt
+$ may 'ls -l /var/log/shop/ /tmp/sao-luu-log.tar.gz; grep -c . /var/log/shop/app.log; grep -o "token=[^ ]*" /var/log/nginx/access.log | head -1'
+-rw-r--r--. 1 root root 9376 Nov 24 09:59 /tmp/sao-luu-log.tar.gz
+
+/var/log/shop/:
+total 332
+-rw-r--r--. 1 root root 338162 Nov 24 09:59 app.log
+3002
+token=GIA-reset-9c1e77
+$ may 'bash /lab/lab16/sua-lab16.sh'
+rsyslogd: End of config validation run. Bye.
+đã sửa
+$ may 'bash /lab/lab16/kiem-lab16.sh'
+✓ app.log không cho 'người khác' đọc (quyền 640)
+✓ không còn bí mật dạng rõ trong /var/log/shop và /var/log/nginx
+✓ có luật logrotate cho /var/log/shop
+✓ logrotate -d chạy không lỗi
+✓ nginx -t hợp lệ (sửa log_format không làm hỏng web)
+✓ request mới có ?token= KHÔNG lọt vào access.log (thử thật)
+✓ journald lưu xuống đĩa (không volatile)
+✓ dev không thuộc nhóm adm
+✓ không có bản sao log ai cũng đọc được trong /tmp
+✓ auth/syslog được đẩy ra khỏi máy (rsyslog forward)
+== 10/10 đạt
+$ may 'grep -E "password|Stripe" /var/log/shop/app.log; tail -1 /var/log/nginx/access.log | cut -c1-90; ls /var/log/journal/*/ | head -2'
+{"time":"2026-11-23T08:01:12Z","level":"debug","msg":"đăng nhập","body":{"email":"an@example.com","password":"[ĐÃ CHE]"}}
+{"time":"2026-11-23T08:01:13Z","level":"error","msg":"Stripe lỗi","key":"[ĐÃ CHE]"}
+127.0.0.1 - - [24/Nov/2026:02:59:24 +0000] "GET /kiem?token=[CHE] HTTP/1.1" 404 162 "-" "P
+system.journal

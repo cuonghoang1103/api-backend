@@ -22,6 +22,12 @@ import s08 from './spring-boot/s08-flyway.mjs';
 import s09 from './spring-boot/s09-security-jwt.mjs';
 import s10 from './spring-boot/s10-hacker.mjs';
 import s11 from './spring-boot/s11-test.mjs';
+import s12 from './spring-boot/s12-openapi-react.mjs';
+import s13 from './spring-boot/s13-redis-cache.mjs';
+import s14 from './spring-boot/s14-viec-nen.mjs';
+import s15 from './spring-boot/s15-quan-sat.mjs';
+import s17 from './spring-boot/s17-docker-ci.mjs';
+import s18 from './spring-boot/s18-capstone.mjs';
 import s19 from './spring-boot/s19-thymeleaf.mjs';
 import s20 from './spring-boot/s20-mongodb.mjs';
 import s21 from './spring-boot/s21-react-spring.mjs';
@@ -206,6 +212,12 @@ sections[8] = s08;
 sections[9] = s09;
 sections[10] = s10;
 sections[11] = s11;
+sections[12] = s12;   // soạn 24/11/2026 (agent sb)
+sections[13] = s13;   // soạn 24/11/2026 (agent sb)
+sections[14] = s14;   // soạn 24/11/2026 (agent sb)
+sections[15] = s15;   // soạn 24/11/2026 (agent sb)
+sections[17] = s17;   // soạn 24/11/2026 (agent sb)
+sections[18] = s18;   // soạn 24/11/2026 (agent sb)
 sections[19] = s19;   // chương bổ sung 22/11 (HSF302)
 sections[20] = s20;   // chương bổ sung 22/11 (MongoDB)
 sections[21] = s21;   // chương bổ sung 22/11 (SBA301: React ↔ Spring)

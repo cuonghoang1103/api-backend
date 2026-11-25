@@ -1208,3 +1208,10 @@ Mẫu một mục:
 - **Cách sửa:** đếm ký tự thật (`LC_ALL=C tr -d '[:space:]' | wc -c` > 30), kiểm `status == SUCCESS` của bước sửa, lời dặn sửa phải đủ dài; gỡ dấu 25 tập, vòng soát lại mỗi giờ cho tới khi soát thật đủ.
 - **Ảnh hưởng:** không lỗi kiến thức nào lọt lên web (chưa tập nào render xong); tốn thêm ~25 lượt soát.
 - **Bài học:** công cụ gọi AI theo hạn mức phải coi "trả về rỗng/không SUCCESS" là THẤT BẠI, không phải "không có lỗi"; trên macOS mọi `tr`/`sed` đụng chữ Việt chạy với `LC_ALL=C` hoặc dùng python.
+
+### 26/11/2026 — render đêm trên Mac LOI vì khung Mac cũ hơn máy nhà (osd-8-4)
+- **Triệu chứng:** `render-dem-mac.log` 06:17 `■ osd-8-4 LOI render` — webpack `Can't resolve '../../khung/osd/tuKiemOsd'`.
+- **Nguyên nhân:** `video-bai-giang/scratchpad/render-dem-mac.sh` chỉ chép `src/khung/<tiền tố>` từ linux-nha khi Mac CHƯA có thư mục đó; Mac đã có `khung/osd` bản cũ nên tệp mới agent máy nhà thêm sau không về.
+- **Cách sửa:** chép bổ sung `rsync -a --update` khung từ linux-nha trước MỖI tập (không xoá gì); đã kéo đủ khung osd; vòng đêm khởi động lại sau khi tập đang render xong.
+- **Ảnh hưởng:** mất 1 lượt render Mac (~50 phút); tập được trả khoá, làn máy nhà render lại.
+- **Bài học:** máy phụ kéo việc từ máy chính phải đồng bộ MỌI phụ thuộc theo bản mới nhất, không chỉ "có/không có thư mục".

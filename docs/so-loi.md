@@ -1201,3 +1201,10 @@ Mẫu một mục:
 - **Cách sửa:** luật mới `SP_PHIEN_BAN` (tên model/sản phẩm hay đổi đời + số phiên bản, đi kèm câu hỏi hoặc ý so sánh) + 2 test; prompt agent: gặp tên sản phẩm/phiên bản lạ ⇒ gọi `tim_web` trước, cấm đáp "không có thật" khi chưa tìm.
 - **Ảnh hưởng:** người dùng nhận câu trả lời sai/thiếu cho mọi câu về sản phẩm mới mà không dùng từ "mới nhất".
 - **Bài học:** luật "thà bỏ sót" phải có ngoại lệ cho thứ CHẮC CHẮN sau ngày cắt dữ liệu (tên + số phiên bản lạ); thử bộ lọc bằng đúng câu người dùng gõ, không bằng câu mẫu.
+
+### 26/11/2026 — soát kiến thức Sonnet "qua" 25 tập mà không soát gì (hết hạn mức 5 giờ)
+- **Triệu chứng:** 25 tập Agile/Spring Boot có dấu `.soat.ok` nhưng tệp nhận xét chỉ có khoảng trắng; vòng soát lại báo "OK" liên tục từ ~01:50.
+- **Nguyên nhân:** `soat-sua.sh` (scratchpad phiên điều phối) kiểm `[ -s nhận-xét ]` — Antigravity hết hạn mức 5 giờ nhóm Claude trả `response` rỗng nhưng tệp vẫn có ký tự xuống dòng ⇒ coi là có nhận xét ⇒ chạy bước "sửa" với nhận xét rỗng ⇒ gắn đã soát. Lúc gỡ dấu lại dính thêm `tr: Illegal byte sequence` (tr của macOS với chữ có dấu khi không đặt `LC_ALL=C`).
+- **Cách sửa:** đếm ký tự thật (`LC_ALL=C tr -d '[:space:]' | wc -c` > 30), kiểm `status == SUCCESS` của bước sửa, lời dặn sửa phải đủ dài; gỡ dấu 25 tập, vòng soát lại mỗi giờ cho tới khi soát thật đủ.
+- **Ảnh hưởng:** không lỗi kiến thức nào lọt lên web (chưa tập nào render xong); tốn thêm ~25 lượt soát.
+- **Bài học:** công cụ gọi AI theo hạn mức phải coi "trả về rỗng/không SUCCESS" là THẤT BẠI, không phải "không có lỗi"; trên macOS mọi `tr`/`sed` đụng chữ Việt chạy với `LC_ALL=C` hoặc dùng python.

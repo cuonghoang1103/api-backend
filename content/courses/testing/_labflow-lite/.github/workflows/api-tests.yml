@@ -1,0 +1,37 @@
+name: API tests (Postman)
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  newman:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --omit=dev
+      - name: Start the API in the background
+        run: |
+          ALLOW_RESET=1 PORT=4173 node postman/server.js > api.log 2>&1 &
+          for i in $(seq 30); do curl -sf http://localhost:4173/api/health && exit 0; sleep 1; done
+          echo "API did not start"; cat api.log; exit 1
+      - name: Run the collection
+        run: >
+          npx --yes newman@6.2.3 run postman/labflow.postman_collection.json
+          -e postman/ci.postman_environment.json
+          --env-var "password=${{ secrets.LABFLOW_DEMO_PASSWORD }}"
+          --reporters cli,junit
+          --reporter-junit-export reports/newman.xml
+      - name: Keep the report, green or red
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report
+          path: |
+            reports/newman.xml
+            api.log

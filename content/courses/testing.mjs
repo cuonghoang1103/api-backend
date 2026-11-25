@@ -2,6 +2,7 @@
  * Testing — khoá học CuongThai (Courses, GENERAL). SOẠN TRỌN 31/10–01/11/2026: Mục 0 + Chương 1–11 (./testing/s00-intro.mjs … s10-tdd-doi-that.mjs,
  * s11-du-an-cuoi-khoa.mjs — dự án cuối khoá US-11, bài thi cuối khoá 18 câu, học tiếp). Dự án xuyên khoá LabFlow Lite (./testing/_labflow-lite);
  * slide deck tst-* ở scripts/slides-src, ảnh R2 images/academy/TST/v1 (bản dựng lại: VER trong testing/_slides.mjs). Quy trình soạn: testing/_HOP-DONG.md.
+ * 24/11/2026 (agent pmn): thêm Chương 10B — Postman và Newman (./testing/s10b-postman.mjs, 8 bài) chèn giữa Ch10 và Ch11; tiêu đề các chương cũ giữ nguyên.
  * Khung 24/09/2026 đã thay hết bằng chương thật (title chương giữ nguyên như khung — seeder neo chương bằng tiêu đề).
  */
 import s00 from './testing/s00-intro.mjs';
@@ -15,6 +16,7 @@ import s07 from './testing/s07-e2e.mjs';
 import s08 from './testing/s08-chat-luong.mjs';
 import s09 from './testing/s09-ci.mjs';
 import s10 from './testing/s10-tdd-doi-that.mjs';
+import s10b from './testing/s10b-postman.mjs';
 import s11 from './testing/s11-du-an-cuoi-khoa.mjs';
 
 export default {
@@ -34,5 +36,5 @@ export default {
     requirements: 'Biết JavaScript cơ bản (hàm, mảng, object, import/export, try/catch) và dùng được terminal; cần Node.js 22.12 trở lên (bài 0.3 hướng dẫn cài). Không cần biết gì về testing, TypeScript, React, Docker hay SQL — chương nào dùng tới thì dạy tới đó. Khoá tự đủ; nếu đang học SWT301 (Software Testing) trên Academy thì hai bên bổ sung nhau: SWT301 dạy lý thuyết ISTQB và thiết kế test case trên giấy/Report 5.x, khoá này biến chính các kỹ thuật đó (phân vùng, giá trị biên, bảng quyết định…) thành test tự động chạy thật trên dự án LabFlow Lite.',
     documentsNote: 'Tài liệu chính: vitest.dev • jestjs.io • testing-library.com • playwright.dev • testcontainers.com • martinfowler.com/testing.',
   },
-  sections: [s00, s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11],
+  sections: [s00, s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s10b, s11],
 };

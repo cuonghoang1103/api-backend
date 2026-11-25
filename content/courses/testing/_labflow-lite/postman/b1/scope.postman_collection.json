@@ -1,0 +1,18 @@
+{
+  "info": { "name": "Variable scopes", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "variable": [ { "key": "who", "value": "collection" } ],
+  "item": [
+    {
+      "name": "Who wins?",
+      "event": [
+        { "listen": "prerequest", "script": { "exec": [
+          "if (pm.globals.get('useLocal') === 'yes') pm.variables.set('who', 'local');"
+        ] } },
+        { "listen": "test", "script": { "exec": [
+          "console.log('who=' + pm.variables.get('who') + ' sent=' + pm.request.url.query.get('who'));"
+        ] } }
+      ],
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/health?who={{who}}" }
+    }
+  ]
+}

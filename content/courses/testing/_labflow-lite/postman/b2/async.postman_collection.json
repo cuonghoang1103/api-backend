@@ -1,0 +1,39 @@
+{
+  "info": {
+    "name": "Async",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "T7 sendRequest inside pm.test",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/health"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('T7a callback assertion, no done', () => {",
+              "  pm.sendRequest(pm.variables.replaceIn('{{baseUrl}}') + '/api/admin/bookings', (err, res) => {",
+              "    console.log('callback ran, code', res.code);",
+              "    pm.expect(res.code).to.eql(200);",
+              "  });",
+              "});",
+              "pm.test('T7b same, with done', (done) => {",
+              "  pm.sendRequest(pm.variables.replaceIn('{{baseUrl}}') + '/api/admin/bookings', (err, res) => {",
+              "    try { pm.expect(res.code).to.eql(200); done(); } catch (e) { done(e); }",
+              "  });",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [],
+  "variable": []
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Login as an
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/login
+  body: json
+  auth: none
+}
+
+body:json {
+  { "username": "an", "password": "labflow-demo" }
+}
+
+script:post-response {
+  bru.setVar("token", res.body.token);
+}
+
+tests {
+  test("200 and a token", function () {
+    expect(res.status).to.equal(200);
+    expect(res.body.token).to.be.a("string");
+  });
+}

@@ -1,0 +1,71 @@
+{
+  "info": {
+    "name": "C OAuth client credentials",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Report: all bookings",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/admin/bookings"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 for the bot', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (pm.collectionVariables.get('token')) return;",
+          "pm.sendRequest({",
+          "  url: pm.variables.replaceIn('{{baseUrl}}/oauth/token'),",
+          "  method: 'POST',",
+          "  header: { Authorization: 'Basic ' + btoa(pm.variables.get('clientId') + ':' + pm.variables.get('clientSecret')) },",
+          "  body: { mode: 'urlencoded', urlencoded: [{ key: 'grant_type', value: 'client_credentials' }] },",
+          "}, (err, res) => {",
+          "  console.log(res.code, 'scope', res.json().scope, 'type', res.json().token_type);",
+          "  pm.collectionVariables.set('token', res.json().access_token);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "clientId",
+      "value": "report-bot"
+    },
+    {
+      "key": "clientSecret",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}

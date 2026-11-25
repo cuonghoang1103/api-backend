@@ -1,0 +1,26 @@
+@baseUrl = http://localhost:43180
+
+# @name login
+POST {{baseUrl}}/api/login
+Content-Type: application/json
+
+{ "username": "an", "password": "labflow-demo" }
+
+?? status == 200
+
+###
+# @name create
+POST {{baseUrl}}/api/bookings
+Authorization: Bearer {{login.token}}
+Content-Type: application/json
+
+{ "lab": "BE-302", "date": "2026-12-02", "start": "09:00", "end": "10:00", "seats": 12 }
+
+?? status == 201
+?? header location == /api/bookings/{{create.id}}
+
+###
+GET {{baseUrl}}/api/bookings/1
+Authorization: Bearer not-a-jwt
+
+?? status == 401

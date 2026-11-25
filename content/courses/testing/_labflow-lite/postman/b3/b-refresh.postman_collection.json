@@ -1,0 +1,113 @@
+{
+  "info": {
+    "name": "B refresh in pre-request",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Read 1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/bookings"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Read 2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/bookings"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Read 3",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/bookings"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const exp = Number(pm.collectionVariables.get('tokenExp') || 0);",
+          "if (Date.now() < exp - 1000) return;            // still valid for more than 1 s",
+          "pm.sendRequest({",
+          "  url: pm.variables.replaceIn('{{baseUrl}}/api/login'),",
+          "  method: 'POST',",
+          "  header: { 'Content-Type': 'application/json' },",
+          "  body: { mode: 'raw', raw: JSON.stringify({ username: 'an', password: pm.variables.get('password') }) },",
+          "}, (err, res) => {",
+          "  if (err) throw err;",
+          "  const body = res.json();",
+          "  pm.collectionVariables.set('token', body.token);",
+          "  pm.collectionVariables.set('tokenExp', String(Date.now() + body.expiresIn * 1000));",
+          "  console.log('new token, valid', body.expiresIn, 's');",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "password",
+      "value": "labflow-demo"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "tokenExp",
+      "value": ""
+    }
+  ]
+}

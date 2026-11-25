@@ -1,0 +1,21 @@
+meta {
+  name: Bad token is refused
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/bookings/{{bookingId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: not-a-jwt
+}
+
+tests {
+  test("401", function () {
+    expect(res.status).to.equal(401);
+  });
+}

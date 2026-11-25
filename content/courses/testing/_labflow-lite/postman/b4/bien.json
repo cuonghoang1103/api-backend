@@ -1,0 +1,152 @@
+[
+ {
+  "case": "open at 07:00",
+  "lab": "BE-101",
+  "start": "07:00",
+  "end": "07:30",
+  "seats": 20,
+  "user": "an",
+  "expectStatus": 201,
+  "expectCode": "CONFIRMED"
+ },
+ {
+  "case": "before opening",
+  "lab": "BE-102",
+  "start": "06:30",
+  "end": "07:30",
+  "seats": 20,
+  "user": "an",
+  "expectStatus": 422,
+  "expectCode": "OUTSIDE_HOURS"
+ },
+ {
+  "case": "last slot",
+  "lab": "BE-103",
+  "start": "20:30",
+  "end": "21:00",
+  "seats": 20,
+  "user": "an",
+  "expectStatus": 201,
+  "expectCode": "CONFIRMED"
+ },
+ {
+  "case": "after closing",
+  "lab": "BE-104",
+  "start": "20:30",
+  "end": "21:30",
+  "seats": 20,
+  "user": "an",
+  "expectStatus": 422,
+  "expectCode": "OUTSIDE_HOURS"
+ },
+ {
+  "case": "exactly 4 hours",
+  "lab": "BE-105",
+  "start": "08:00",
+  "end": "12:00",
+  "seats": 20,
+  "user": "an",
+  "expectStatus": 201,
+  "expectCode": "CONFIRMED"
+ },
+ {
+  "case": "4.5 hours",
+  "lab": "BE-106",
+  "start": "08:00",
+  "end": "12:30",
+  "seats": 20,
+  "user": "an",
+  "expectStatus": 422,
+  "expectCode": "TOO_LONG"
+ },
+ {
+  "case": "end = start",
+  "lab": "BE-107",
+  "start": "09:00",
+  "end": "09:00",
+  "seats": 20,
+  "user": "an",
+  "expectStatus": 422,
+  "expectCode": "END_BEFORE_START"
+ },
+ {
+  "case": "off grid",
+  "lab": "BE-108",
+  "start": "09:10",
+  "end": "10:00",
+  "seats": 20,
+  "user": "an",
+  "expectStatus": 422,
+  "expectCode": "OFF_GRID"
+ },
+ {
+  "case": "30 seats student",
+  "lab": "BE-109",
+  "start": "09:00",
+  "end": "10:00",
+  "seats": 30,
+  "user": "an",
+  "expectStatus": 201,
+  "expectCode": "CONFIRMED"
+ },
+ {
+  "case": "31 seats student",
+  "lab": "BE-110",
+  "start": "09:00",
+  "end": "10:00",
+  "seats": 31,
+  "user": "an",
+  "expectStatus": 201,
+  "expectCode": "PENDING"
+ },
+ {
+  "case": "31 seats lecturer",
+  "lab": "BE-111",
+  "start": "09:00",
+  "end": "10:00",
+  "seats": 31,
+  "user": "thay",
+  "expectStatus": 201,
+  "expectCode": "CONFIRMED"
+ },
+ {
+  "case": "0 seats",
+  "lab": "BE-112",
+  "start": "09:00",
+  "end": "10:00",
+  "seats": 0,
+  "user": "an",
+  "expectStatus": 400,
+  "expectCode": "VALIDATION"
+ },
+ {
+  "case": "200 seats",
+  "lab": "BE-113",
+  "start": "09:00",
+  "end": "10:00",
+  "seats": 200,
+  "user": "thay",
+  "expectStatus": 201,
+  "expectCode": "CONFIRMED"
+ },
+ {
+  "case": "201 seats",
+  "lab": "BE-114",
+  "start": "09:00",
+  "end": "10:00",
+  "seats": 201,
+  "user": "thay",
+  "expectStatus": 400,
+  "expectCode": "VALIDATION"
+ },
+ {
+  "case": "hour 24",
+  "lab": "BE-115",
+  "start": "23:30",
+  "end": "24:00",
+  "seats": 20,
+  "user": "an",
+  "expectStatus": 400,
+  "expectCode": "VALIDATION"
+ }
+]

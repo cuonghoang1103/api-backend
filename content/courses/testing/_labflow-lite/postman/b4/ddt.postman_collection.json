@@ -1,0 +1,73 @@
+{
+  "info": {
+    "name": "Booking rules, one row per case",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Book one row",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/bookings",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"lab\": \"{{lab}}\",\n  \"date\": \"2026-12-01\",\n  \"start\": \"{{start}}\",\n  \"end\": \"{{end}}\",\n  \"seats\": {{seats}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const who = pm.iterationData.get('user');",
+              "pm.sendRequest({",
+              "  url: pm.variables.replaceIn('{{baseUrl}}/api/login'), method: 'POST',",
+              "  header: { 'Content-Type': 'application/json' },",
+              "  body: { mode: 'raw', raw: JSON.stringify({ username: who, password: 'labflow-demo' }) },",
+              "}, (err, res) => pm.variables.set('token', res.json().token));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const want = Number(pm.iterationData.get('expectStatus'));",
+              "const code = pm.iterationData.get('expectCode');",
+              "pm.test(pm.iterationData.get('case') + ' → ' + want + ' ' + code, () => {",
+              "  pm.response.to.have.status(want);",
+              "  const b = pm.response.json();",
+              "  pm.expect(want === 201 ? b.status : b.error.code).to.eql(code);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [],
+  "variable": []
+}

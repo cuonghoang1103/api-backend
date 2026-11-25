@@ -1,0 +1,30 @@
+meta {
+  name: Create booking
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/bookings
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  { "lab": "BE-301", "date": "2026-12-02", "start": "09:00", "end": "10:00", "seats": 12 }
+}
+
+script:post-response {
+  bru.setVar("bookingId", res.body.id);
+}
+
+tests {
+  test("201 + Location", function () {
+    expect(res.status).to.equal(201);
+    expect(res.headers.location).to.equal("/api/bookings/" + res.body.id);
+  });
+}

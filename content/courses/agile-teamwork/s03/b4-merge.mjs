@@ -1,0 +1,112 @@
+/**
+ * 3.4 — Merge và cùng giải xung đột (agl-3-4-merge). Soạn 24/11/2026, agent agt.
+ * Lab chạy THẬT (git 2.55.0): kb-merge.sh cuoi (C1 + C2 cùng thêm vào cuối routes.js/menu.js ⇒ xung đột; cách vội vỡ cú pháp, CI đỏ;
+ * cách đúng), kb-merge.sh khung (trưởng nhóm dọn chỗ trước ở planning ⇒ 0 xung đột), kb-merge.sh kieu merge|squash (hình dạng main,
+ * revert một màn), ci/tep-nong.mjs. Ranh giới: đọc dấu xung đột, ba chiến lược merge ⇒ Git 3.3, 6.3, 18.2; tần suất merge ⇒ bài 0.9.
+ */
+import { bang, cl, note, phongVan, thuatNgu, tomTat, giai, js, out, ag, cs, vo } from '../_chung.mjs';
+import { MA, RA } from './_ma.mjs';
+
+export const L34 = (en) => {
+  const t = (a, b) => (en ? a : b);
+  const mc = RA.mergeCuoi;
+  return vo(en, 'Chapter 3 · Lesson 3.4', 'Chương 3 · Bài 3.4', `
+<h2>${t('3.4 — Merging and resolving conflicts together', '3.4 — Merge và cùng giải xung đột')}</h2>
+<p class="lead">${t(
+    'The Git course teaches you to read conflict markers and choose between merge, squash and rebase. A leader needs three more things: <strong>a merge policy the whole team follows, a rule for who resolves a conflict, and a way to make most conflicts never happen.</strong> This lesson produces all three from one day of LabFlow, including the mistake most students make when a conflict appears ten minutes before a deadline.',
+    'Khoá Git dạy bạn đọc dấu xung đột và chọn giữa merge, squash và rebase. Trưởng nhóm cần thêm ba thứ: <strong>một chính sách merge cả nhóm theo, một luật ai giải xung đột, và một cách làm cho phần lớn xung đột không bao giờ xảy ra.</strong> Bài này rút ra cả ba từ một ngày của LabFlow, kể cả lỗi mà đa số sinh viên mắc khi xung đột hiện ra mười phút trước hạn nộp.')}</p>
+${note(t('Before this lesson: ', 'Học trước: ') + cs('git', 'git-3-3-xung-dot', t('Git 3.3 — reading a conflict', 'Git 3.3 — đọc một xung đột')) + ' · ' + cs('git', 'git-6-3-chien-luoc-merge', t('Git 6.3 — three merge strategies', 'Git 6.3 — ba chiến lược merge')) + ' · ' + ag('agl-0-9-bat-dau-khi-khong-co', t('0.9 — why long-lived branches hide damage', '0.9 — vì sao nhánh sống lâu giấu hư hỏng')) + '.')}
+
+<h3>${t('Everyday picture: two people editing one shopping list', 'Liên tưởng đời thường: hai người cùng sửa một danh sách đi chợ')}</h3>
+<p>${t(
+    'Mum writes "eggs" on the last line of the shopping list on the fridge. At the same time, on a photo of the same list, Dad writes "fish" on the last line. Merging the two lists is easy for a human — both items go on the list — but a machine that compares lines only sees two different things written on the <em>same</em> line and asks: which one? That is most of the conflicts in a student project: not disagreement, just two people appending to the end of the same file.',
+    'Mẹ viết "trứng" vào dòng cuối danh sách đi chợ dán trên tủ lạnh. Cùng lúc, trên ảnh chụp của chính danh sách đó, bố viết "cá" vào dòng cuối. Con người gộp hai danh sách rất dễ — cả hai món đều lên danh sách — nhưng máy so dòng chỉ thấy hai thứ khác nhau viết vào <em>cùng</em> một dòng và hỏi: lấy cái nào? Phần lớn xung đột trong đồ án sinh viên là như thế: không phải bất đồng, chỉ là hai người cùng thêm vào cuối một tệp.')}</p>
+
+<h3>${t('Lab 1 — the conflict, and the hurried "fix"', 'Lab 1 — xung đột, và cách "sửa" vội')}</h3>
+<p>${t('C1 (S22 booking) and C2 (S20 room search) both work in the <code>dat-lich</code> area. Each adds a route at the end of <code>dat-lich/routes.js</code> and a menu item at the end of the student menu. C1’s PR is merged first. C2’s PR now says "This branch has conflicts"; C2 updates the branch:', 'C1 (S22 đặt lịch) và C2 (S20 tìm phòng) cùng làm ở miền <code>dat-lich</code>. Mỗi người thêm một route vào cuối <code>dat-lich/routes.js</code> và một mục vào cuối menu sinh viên. PR của C1 merge trước. PR của C2 giờ báo "This branch has conflicts"; C2 cập nhật nhánh:')}</p>
+${out(mc.split('### Cách vội')[0].replace(/^### .*\n/, ''))}
+<p>${t('Both sides are additions for two different screens, so "keep both" sounds right. The hurried way is to delete the three marker lines and keep everything:', 'Hai phía đều là phần thêm cho hai màn khác nhau, nên "giữ cả hai" nghe có vẻ đúng. Cách vội là xoá ba dòng đánh dấu và giữ mọi thứ:')}</p>
+${out(mc.split('### Cách vội')[1].split('### Cách đúng')[0].replace(/^[^\n]*\n/, ''))}
+<p>${t('For the menu that worked by luck (two array items). For the route file it produced two <code>export default [</code> and an <code>import</code> inside an array — not JavaScript. Step 2 of the team CI caught it. (Without CI, the first person to notice would have been the lecturer opening the demo.) The right way is to resolve by <em>meaning</em>: one list of imports, one array, both routes — and a 30-second call to C1 to confirm the menu order:', 'Với menu, cách đó may mà đúng (hai phần tử mảng). Với tệp route, nó sinh ra hai <code>export default [</code> và một <code>import</code> nằm trong mảng — không phải JavaScript. Bước 2 của CI nhóm đã bắt được. (Không có CI, người đầu tiên phát hiện sẽ là giảng viên lúc mở bản demo.) Cách đúng là giải theo <em>nghĩa</em>: một danh sách import, một mảng, đủ hai route — và một cuộc gọi 30 giây cho C1 để xác nhận thứ tự mục menu:')}</p>
+${out(mc.split('### Cách đúng')[1].split('\nC3 (main)$ node ci/tep-nong')[0].replace(/^[^\n]*\n/, ''))}
+
+<h3>${t('Who resolves? The team rule', 'Ai giải? Luật của nhóm')}</h3>
+${bang([t('Situation', 'Tình huống'), t('Who', 'Ai làm'), t('How', 'Cách làm')], [
+    [t('Your PR conflicts with main', 'PR của bạn xung đột với main'), t('You — the author of the later PR', 'Bạn — tác giả của PR sau'), t('Update your branch (<code>git merge origin/main</code>), resolve, run <code>ci/ci.sh</code>, push. Never ask the person who merged first to "undo theirs".', 'Cập nhật nhánh (<code>git merge origin/main</code>), giải, chạy <code>ci/ci.sh</code>, push. Không bao giờ xin người merge trước "gỡ phần của họ ra".')],
+    [t('The other side is code you do not understand', 'Phía kia là code bạn không hiểu'), t('You + the owner of the other side, together', 'Bạn + chủ của phía kia, cùng nhau'), t('Call or sit together for 10 minutes. Guessing at someone else’s logic is how features silently disappear.', 'Gọi hoặc ngồi cùng 10 phút. Đoán logic của người khác là cách các tính năng lặng lẽ biến mất.')],
+    [t('Conflict in a shared file (menu, routes, CI, schema)', 'Xung đột ở tệp chung (menu, route, CI, lược đồ)'), t('Author resolves; leader reviews', 'Tác giả giải; trưởng nhóm review'), t('The PR must show the resolution; the leader checks nothing of the other side was lost.', 'PR phải thể hiện chỗ giải; trưởng nhóm soát không mất gì của phía kia.')],
+    [t('"Accept mine" / "accept theirs" on a whole file', '"Accept mine" / "accept theirs" cho cả tệp'), t('Nobody, unless the other side is truly obsolete', 'Không ai, trừ khi phía kia thật sự đã lỗi thời'), t('One click deletes a teammate’s work without a trace in the diff they will read.', 'Một cú bấm xoá công của đồng đội mà không để dấu vết trong diff họ sẽ đọc.')],
+  ])}
+${cl('warn', `<p>${t('Merge <code>origin/main</code> into your branch rather than rebasing it once a reviewer has started reading: a rebase rewrites the commits they commented on and forces a force-push (', 'Merge <code>origin/main</code> vào nhánh thay vì rebase một khi người review đã bắt đầu đọc: rebase viết lại chính những commit họ đã nhận xét và buộc phải force-push (')}${cs('git', 'git-8-2-force-with-lease', 'Git 8.2')}${t('). With squash merging (below) the extra merge commit disappears from main anyway.', '). Với merge kiểu squash (bên dưới), commit merge thừa đó đằng nào cũng biến mất khỏi main.')}</p>`)}
+
+<h3>${t('Lab 2 — find the hot files, then plan them away', 'Lab 2 — tìm tệp nóng, rồi lập kế hoạch để né chúng')}</h3>
+<p>${t('Conflicts happen in files that many people edit. Git’s history tells you which ones:', 'Xung đột xảy ra ở những tệp nhiều người cùng sửa. Lịch sử Git cho bạn biết đó là tệp nào:')}</p>
+${js(MA.tepNong)}
+${out('C3 (main)$ node ci/tep-nong.mjs' + mc.split('\nC3 (main)$ node ci/tep-nong.mjs')[1])}
+<p>${t('Two files out of 36, touched by four or five people: the menu and the route index. Every new screen edits them. The leader’s move is to edit them <em>once, for everyone, before the sprint starts</em>: at planning, after the screens of the iteration are assigned, the leader opens a small PR that registers every planned route and menu item with a placeholder page. Then each member only edits their own page.', 'Hai tệp trên 36, bị bốn năm người chạm: menu và tệp gom route. Màn mới nào cũng sửa chúng. Nước đi của trưởng nhóm là sửa chúng <em>một lần, cho cả nhóm, trước khi sprint bắt đầu</em>: ở buổi planning, sau khi chia màn của iteration, trưởng nhóm mở một PR nhỏ đăng ký sẵn mọi route và mục menu đã lên kế hoạch, kèm trang giữ chỗ. Sau đó mỗi người chỉ sửa trang của chính mình.')}</p>
+${out(RA.mergeKhung.split('### 13:35')[0].replace(/^### .*\n/, ''))}
+<p>${t('Same day, same two branches, same merge order:', 'Cùng ngày, cùng hai nhánh, cùng thứ tự merge:')}</p>
+${out(RA.mergeKhung.split('### 13:35')[1].replace(/^[^\n]*\n/, ''))}
+${cl('info', `<p>${t('Zero conflicts, and C2’s PR diff is exactly one file: <em>their</em> screen. This is the same idea as a "walking skeleton": wire the whole structure first, then fill it. Two more ways to cool down hot files, in order of preference: (1) give each area its own file — LabFlow already does this for routes per domain, which is why C4’s new <code>muon-tra</code> area never conflicted with anyone; (2) when appending is unavoidable, insert in a sorted position instead of at the end, so two additions rarely touch the same lines.', 'Không xung đột nào, và diff PR của C2 đúng một tệp: màn <em>của mình</em>. Đây cũng là ý tưởng "bộ khung biết đi" (walking skeleton): nối toàn bộ cấu trúc trước, rồi mới lấp đầy. Thêm hai cách làm nguội tệp nóng, theo thứ tự nên dùng: (1) cho mỗi miền một tệp riêng — LabFlow đã làm vậy với route theo miền, nên miền <code>muon-tra</code> mới của C4 chưa bao giờ xung đột với ai; (2) khi buộc phải thêm, chèn vào vị trí theo thứ tự thay vì vào cuối, để hai lần thêm hiếm khi chạm cùng dòng.')}</p>`)}
+
+<h3>${t('The merge policy: squash for feature PRs', 'Chính sách merge: squash cho PR tính năng')}</h3>
+<p>${t('Same day (C4’s S30, then C1’s S22 with the migration fix from 3.3), merged two ways. With merge commits:', 'Cùng một ngày (S30 của C4, rồi S22 của C1 kèm bản sửa migration ở 3.3), merge theo hai cách. Bằng merge commit:')}</p>
+${out(RA.kieuMerge)}
+<p>${t('With squash merge — one commit per PR, the PR number in the title (the helper C3 is kept as a trailer, see the last command below):', 'Bằng squash merge — mỗi PR một commit, số PR trong tiêu đề (người giúp C3 được giữ ở dòng cuối, xem lệnh cuối bên dưới):')}</p>
+${out(RA.kieuSquash.split('\nC3 (main)$ git revert')[0])}
+<p>${t('And when S30 turns out to be broken the evening before the demo, removing the whole screen is one command (the rest of main is untouched):', 'Và khi tối trước buổi demo phát hiện S30 hỏng, gỡ cả màn ra là một lệnh (phần còn lại của main không bị đụng):')}</p>
+${out('C3 (main)$ git revert' + RA.kieuSquash.split('\nC3 (main)$ git revert')[1])}
+${cl('danger', `<p>${t('Look at the first line of the revert’s file list: <code>V3__muon_tra.sql</code> is deleted. On a fresh database that is fine; on the shared demo database the table stays and Flyway stays silent — lesson 3.3, Lab 2. If the reverted PR had a migration that already reached a shared database, follow the revert with a new forward migration (or keep the migration file and revert only the code).', 'Nhìn dòng đầu danh sách tệp của bản revert: <code>V3__muon_tra.sql</code> bị xoá. Với CSDL mới thì không sao; với CSDL demo dùng chung, bảng vẫn còn và Flyway im lặng — bài 3.3, Lab 2. Nếu PR bị revert có migration đã chạm CSDL dùng chung, theo sau bản revert bằng một migration mới đi tới (hoặc giữ tệp migration, chỉ revert phần code).')}</p>`)}
+${bang([t('LabFlow policy', 'Chính sách LabFlow'), t('Reason', 'Lý do')], [
+    [t('Squash and merge for every feature/fix PR (disable the other buttons in repo settings)', 'Squash and merge cho mọi PR feat/fix (tắt các nút còn lại trong cài đặt repo)'), t('One commit per ticket on main: readable log, one-command revert of a screen, clean per-screen contribution report (3.1).', 'Mỗi ticket một commit trên main: log dễ đọc, revert một màn bằng một lệnh, báo cáo đóng góp theo màn sạch (3.1).')],
+    [t('Squash title = PR title in commit format; keep Co-authored-by', 'Tiêu đề squash = tiêu đề PR theo mẫu commit; giữ Co-authored-by'), t('The squash commit is the only one that survives — it must pass the 3.1 rules.', 'Commit squash là commit duy nhất còn lại — nó phải qua luật 3.1.')],
+    [t('Delete the branch after merge; never keep working on it', 'Xoá nhánh sau khi merge; không làm tiếp trên nhánh đó'), t('GitHub warns that continuing on a squashed branch re-introduces already-squashed commits and repeated conflicts.', 'GitHub cảnh báo làm tiếp trên nhánh đã squash sẽ đưa lại các commit đã gộp và xung đột lặp lại.')],
+    [t('Update branches daily; merge within 3 days', 'Cập nhật nhánh hằng ngày; merge trong 3 ngày'), t('Lesson 0.9: the longer a branch lives, the more it hides.', 'Bài 0.9: nhánh sống càng lâu càng giấu nhiều thứ.')],
+  ])}
+
+<h3>${t('At work', 'Đi làm')}</h3>
+<p>${t(
+    'Companies decide the merge strategy per repository; some keep merge commits because the customer audits the full history, others squash. What is universal: you resolve the conflicts of <em>your</em> PR, you never discard a teammate’s change without asking, and when a conflict touches code you do not own you message its author before touching it ("your change to <code>PricingService</code> conflicts with mine on line 80 — can we look together for 5 minutes?"). Resolving silently and wrongly is the classic way a fixed bug comes back in the next release.',
+    'Công ty quyết chiến lược merge theo từng repo; có nơi giữ merge commit vì khách kiểm toán toàn bộ lịch sử, có nơi squash. Điều ở đâu cũng đúng: bạn giải xung đột của PR <em>của bạn</em>, không bao giờ bỏ thay đổi của đồng đội mà không hỏi, và khi xung đột chạm code không phải của mình thì nhắn tác giả trước khi đụng vào ("thay đổi của anh ở <code>PricingService</code> xung đột với của em ở dòng 80 — mình xem cùng 5 phút được không ạ?"). Giải lặng lẽ và sai là cách kinh điển để một lỗi đã sửa quay lại ở bản phát hành sau.')}</p>
+
+<h3>🧪 ${t('Exercise', 'Bài tập')}</h3>
+<p>${t('Iteration 3 of LabFlow adds S34 (report a broken device, C5), S35 (maintenance board, C5) and S36 (maintenance history, C3) — all in a new <code>bao-tri</code> area, all with student or technician menu items. Write (a) the list of files the leader’s skeleton PR at planning should touch, and (b) the files each member’s PR will then touch. Which of them can still conflict?', 'Iteration 3 của LabFlow thêm S34 (báo hỏng thiết bị, C5), S35 (bảng bảo trì, C5) và S36 (lịch sử bảo trì, C3) — đều ở miền mới <code>bao-tri</code>, đều có mục menu cho sinh viên hoặc kỹ thuật viên. Viết (a) danh sách tệp mà PR khung của trưởng nhóm ở buổi planning cần chạm, và (b) các tệp mà PR của từng người sẽ chạm sau đó. Tệp nào còn có thể xung đột?')}</p>
+${giai(t('Answer', 'Đáp án'), `<p>${t('(a) Skeleton PR: <code>fe/src/routes.js</code> (import the new area), <code>fe/src/modules/bao-tri/routes.js</code> (three routes), placeholder pages <code>S34.js</code>, <code>S35.js</code>, <code>S36.js</code>, <code>fe/src/menu.js</code> (three items), <code>docs/phan-cong.csv</code> (three rows, with owners). If the area needs tables, the leader can also reserve migration numbers — but only if each migration merges in order; otherwise leave migrations to the members and rely on CI step 3.', '(a) PR khung: <code>fe/src/routes.js</code> (import miền mới), <code>fe/src/modules/bao-tri/routes.js</code> (ba route), trang giữ chỗ <code>S34.js</code>, <code>S35.js</code>, <code>S36.js</code>, <code>fe/src/menu.js</code> (ba mục), <code>docs/phan-cong.csv</code> (ba dòng, có chủ màn). Nếu miền cần bảng, trưởng nhóm có thể giữ chỗ cả số migration — nhưng chỉ khi các migration merge đúng thứ tự; không thì để thành viên tự tạo và dựa vào bước 3 của CI.')}</p>
+<p>${t('(b) C5: <code>S34.js</code>, then <code>S35.js</code> (two PRs); C3: <code>S36.js</code>; plus each one’s back-end files and migrations. Still able to conflict: migrations (semantic — CI step 3 catches it), any shared back-end file such as a common enum of device states that both S34 and S35 extend. Put such an enum in the skeleton too.', '(b) C5: <code>S34.js</code>, rồi <code>S35.js</code> (hai PR); C3: <code>S36.js</code>; cộng tệp back-end và migration của từng người. Vẫn có thể xung đột: migration (ngữ nghĩa — bước 3 của CI bắt), và tệp back-end dùng chung như một enum trạng thái thiết bị mà cả S34 lẫn S35 cùng mở rộng. Đưa luôn enum đó vào PR khung.')}</p>`)}
+
+${phongVan([
+    [t('"Tell me about a merge conflict you resolved."', '"Kể về một xung đột merge bạn đã giải."'), t('STAR: two teammates appended routes to the same file; the later PR conflicted. Deleting the markers kept both sides but broke the syntax — our CI test caught it. I resolved by meaning, confirmed the order with the other author, and afterwards, as leader, pre-registered all routes of the next iteration at planning, which removed that class of conflict.', 'STAR: hai bạn cùng thêm route vào một tệp; PR sau bị xung đột. Xoá dấu đánh dấu thì giữ được cả hai phía nhưng vỡ cú pháp — test trong CI đã bắt được. Tôi giải theo nghĩa, xác nhận thứ tự với tác giả bên kia, và sau đó, với vai trưởng nhóm, đăng ký sẵn mọi route của iteration sau ở buổi planning, loại bỏ hẳn kiểu xung đột đó.')],
+    [t('"Squash, merge commit or rebase — which do you prefer?"', '"Squash, merge commit hay rebase — bạn chọn cái nào?"'), t('For a small team with one-ticket PRs, squash: one commit per change on main, easy revert and history. Merge commits when the individual commits matter or the history is audited; rebase-merge when the team writes clean commits and wants a linear log. The important part is one policy enforced in the repository settings.', 'Với nhóm nhỏ, PR một ticket: squash — main mỗi thay đổi một commit, dễ revert, dễ đọc lịch sử. Merge commit khi từng commit có giá trị riêng hoặc lịch sử bị kiểm toán; rebase-merge khi nhóm viết commit sạch và muốn log thẳng. Quan trọng là một chính sách duy nhất, cưỡng chế trong cài đặt repo.')],
+    [t('"Who should resolve a conflict between two PRs?"', '"Ai nên giải xung đột giữa hai PR?"'), t('The author of the PR that is merged later, because the earlier one is already on main — together with the other author whenever their logic is involved.', 'Tác giả của PR merge sau, vì PR trước đã nằm trên main — cùng với tác giả bên kia mỗi khi đụng tới logic của họ.')],
+    [t('"How do you reduce merge conflicts in a team?"', '"Làm sao giảm xung đột merge trong nhóm?"'), t('Small PRs merged within days; split work by feature so people own different files; find the hot files from history and restructure or pre-fill them at planning; no drive-by reformatting.', 'PR nhỏ, merge trong vài ngày; chia việc theo tính năng để mỗi người giữ tệp khác nhau; tìm tệp nóng từ lịch sử rồi tách hoặc điền sẵn ở planning; không tiện tay định dạng lại.')],
+  ], en)}
+
+${thuatNgu([
+    [t('conflict markers', 'dấu xung đột'), t('<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> lines Git writes into the file.', 'Các dòng <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> Git ghi vào tệp.')],
+    [t('hot file', 'tệp nóng'), t('A file edited by many members; where conflicts concentrate.', 'Tệp bị nhiều thành viên sửa; nơi xung đột tập trung.')],
+    ['walking skeleton', t('The whole structure wired end to end before features are filled in.', 'Toàn bộ cấu trúc được nối từ đầu tới cuối trước khi lấp tính năng.')],
+    ['squash merge', t('All commits of a PR become one commit on main.', 'Mọi commit của PR thành một commit trên main.')],
+    ['merge commit', t('A commit with two parents joining a branch into main.', 'Commit có hai cha nối một nhánh vào main.')],
+    ['revert', t('A new commit that undoes an earlier one.', 'Một commit mới hoàn tác một commit trước.')],
+    ['accept mine / theirs', t('Keep one side of a conflict wholesale.', 'Giữ nguyên một phía của xung đột.')],
+  ], en)}
+
+${tomTat([
+    t('Most student conflicts are two people appending to the same file — not disagreement.', 'Phần lớn xung đột của sinh viên là hai người cùng thêm vào một tệp — không phải bất đồng.'),
+    t('Resolve by meaning, not by deleting markers; then run CI — "keep both" broke the syntax here.', 'Giải theo nghĩa, không phải xoá dấu đánh dấu; rồi chạy CI — "giữ cả hai" đã làm vỡ cú pháp ở đây.'),
+    t('The later PR’s author resolves, with the other author when their logic is involved; nobody "accepts theirs" blindly.', 'Tác giả PR sau giải, cùng tác giả bên kia khi đụng logic của họ; không ai "accept theirs" mù quáng.'),
+    t('Find hot files from history; the leader pre-registers routes and menu items at planning ⇒ zero conflicts.', 'Tìm tệp nóng từ lịch sử; trưởng nhóm đăng ký sẵn route và mục menu ở planning ⇒ không xung đột.'),
+    t('Squash-merge feature PRs: one commit per ticket, one-command revert — but a reverted migration still lives in the shared database.', 'Squash-merge PR tính năng: mỗi ticket một commit, revert một lệnh — nhưng migration đã revert vẫn sống trong CSDL dùng chung.'),
+  ], en)}
+<p>${t('Next: ', 'Bài tiếp: ')}${ag('agl-3-5-lab', t('3.5 — Lab: a day of pull requests on LabFlow', '3.5 — Lab: một ngày pull request của LabFlow'))}.</p>
+`);
+};
+
+export default {
+  title: '3.4 — Merging and resolving conflicts together|||3.4 — Merge và cùng giải xung đột',
+  slug: 'agl-3-4-merge',
+  type: 'LESSON',
+  isFreePreview: true,
+  description: 'Luật nhóm về xung đột và merge, chạy thật trên LabFlow: hai người cùng thêm vào cuối routes.js/menu.js ⇒ xung đột; cách vội (xoá dấu, giữ hết) vỡ cú pháp và CI bắt; giải theo nghĩa; ai giải; tìm tệp nóng từ lịch sử và PR khung ở planning ⇒ 0 xung đột; chính sách squash merge, revert một màn bằng một lệnh và cái bẫy migration đã revert.',
+  content: L34(true) + L34(false),
+};

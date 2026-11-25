@@ -4,6 +4,43 @@
  * dạy lại phần viết yêu cầu, trỏ sang SWR302. Dùng CT Work (/work) trên chính trang này để thực hành. Xem _chung/khung.mjs.
  */
 import { khung } from './_chung/khung.mjs';
+import s00 from './agile-teamwork/s00-bat-dau.mjs';
+import s01 from './agile-teamwork/s01-agile-scrum-kanban.mjs';
+import s02 from './agile-teamwork/s02-ticket-uoc-luong.mjs';
+import s03 from './agile-teamwork/s03-nhanh-commit-pr.mjs';
+import s04 from './agile-teamwork/s04-code-review.mjs';
+import s05 from './agile-teamwork/s05-tai-lieu.mjs';
+import s06 from './agile-teamwork/s06-hop-giao-tiep.mjs';
+import s07 from './agile-teamwork/s07-vai-tro-khac.mjs';
+import s08 from './agile-teamwork/s08-90-ngay.mjs';
+import s09 from './agile-teamwork/s09-quy-trinh-outsourcing.mjs';
+import s10 from './agile-teamwork/s10-an-ninh-thong-tin.mjs';
+import s11 from './agile-teamwork/s11-khach-nhat-my.mjs';
+import s12 from './agile-teamwork/s12-du-an-cuoi.mjs';
+
+/* Ghép chương đã soạn vào khung THEO SLUG (như tieng-anh-ky-thuat-di-lam): bài đã soạn thay bài khung, bài chưa soạn giữ "Đang soạn";
+   title chương giữ của khung. Chương đã soạn: 9, 10, 11 (agent agl) + Mục 0, 1, 2, 3, 4, 5, 6, 7, 8, 12 (agent agt) — 24/11/2026. */
+function ghep(khungChuong, that) {
+  const m = new Map(that.lessons.map((l) => [l.slug, l]));
+  for (const slug of m.keys()) if (!khungChuong.lessons.some((l) => l.slug === slug)) throw new Error(`agl: slug ${slug} không có trong khung`);
+  return { ...khungChuong, description: that.description || khungChuong.description, lessons: khungChuong.lessons.map((l) => m.get(l.slug) ?? l) };
+}
+function ghepChuong(sections) {
+  sections[0] = ghep(sections[0], s00);   // Mục 0 — agent agt, 24/11/2026
+  sections[1] = ghep(sections[1], s01);   // Chương 1 — agent agt, 24/11/2026 (thêm agl-1-5-lab, agl-1-6-quiz)
+  sections[2] = ghep(sections[2], s02);   // Chương 2 — agent agt, 24/11/2026 (thêm agl-2-5-lab, agl-2-6-quiz)
+  sections[3] = ghep(sections[3], s03);   // Chương 3 — agent agt, 24/11/2026 (thêm agl-3-5-lab, agl-3-6-quiz)
+  sections[4] = ghep(sections[4], s04);   // Chương 4 — agent agt, 24/11/2026 (thêm agl-4-5-lab, agl-4-6-quiz)
+  sections[5] = ghep(sections[5], s05);   // Chương 5 — agent agt, 24/11/2026 (thêm agl-5-5-lab, agl-5-6-quiz)
+  sections[6] = ghep(sections[6], s06);   // Chương 6 — agent agt, 24/11/2026 (thêm agl-6-5-thanh-vien, agl-6-6-lab, agl-6-7-quiz)
+  sections[7] = ghep(sections[7], s07);   // Chương 7 — agent agt, 24/11/2026 (thêm agl-7-5-lab, agl-7-6-quiz)
+  sections[8] = ghep(sections[8], s08);   // Chương 8 — agent agt, 24/11/2026 (thêm agl-8-5-lab, agl-8-6-quiz)
+  sections[9] = ghep(sections[9], s09);
+  sections[10] = ghep(sections[10], s10);
+  sections[11] = ghep(sections[11], s11);
+  sections[12] = ghep(sections[12], s12); // Chương 12 — agent agt, 24/11/2026 (slug agl-9-*; thêm agl-9-5-de-thi, agl-9-6-quiz-tong). PHẢI chạy SAU giuSlugDuAnCuoi.
+  return sections;
+}
 
 // 20/11/2026 (bảng soát khoảng trống P0-3): chèn 3 chương mới (9 quy trình dự án outsourcing · 10 an ninh thông tin khi đi làm ·
 // 11 làm việc với khách Nhật/Mỹ) TRƯỚC dự án cuối khoá. Dự án cuối khoá nay hiển thị là "Chương 12" nhưng GIỮ slug cũ `agl-9-*`
@@ -31,7 +68,7 @@ export default {
     requirements: 'Biết Git và GitHub cơ bản (khoá Git trên trang này). Đang hoặc sắp làm đồ án nhóm / thực tập.',
     documentsNote: 'Tài liệu chính: scrumguides.org • agilemanifesto.org • Google Engineering Practices (code review) • conventionalcommits.org • adr.github.io • ISO/IEC 27001:2022 (tóm tắt chính thức của ISO) • NIST SP 800-50 (đào tạo nhận thức an ninh) • Nghị định 13/2023/NĐ-CP • môn SWR302, SWT301, PMG201c ở Academy.',
   },
-  sections: giuSlugDuAnCuoi(khung('agl', [
+  sections: ghepChuong(giuSlugDuAnCuoi(khung('agl', [
     ['Section 0 — Working in a software team', 'Mục 0 — Làm việc trong một đội phần mềm', 'Vì sao kỹ năng làm nhóm quyết định việc bạn có được giữ lại.', [
       ['bat-dau-tai-day', 'Start here (1/2) — How real software teams work, and why interviews probe it', 'Bắt đầu tại đây (1/2) — Đội phần mềm thật làm việc thế nào, vì sao phỏng vấn dò điều này', 'Một ngày của lập trình viên · Lịch sử: waterfall → Agile Manifesto 2001 → Scrum · Câu hỏi phỏng vấn hành vi'],
       ['bat-dau-khi-khong-co', 'Start here (2/2) — Team failures: missed deadlines, merge hell, silent blockers', 'Bắt đầu tại đây (2/2) — Đội hỏng: trễ hạn, địa ngục merge, người bí mà im lặng', 'Tình huống đồ án nhóm (minh hoạ) · Sự cố thật có nguồn · Lộ trình học'],
@@ -43,48 +80,65 @@ export default {
       ['scrum', 'Scrum events and artifacts', 'Sự kiện và sản phẩm của Scrum', 'Sprint · Planning · Daily · Review · Retro'],
       ['kanban', 'Kanban and flow', 'Kanban và dòng chảy công việc', 'Giới hạn WIP · Cycle time'],
       ['chon', 'Choosing for your team', 'Chọn cho đội của bạn', 'Nhóm 4–5 SV · Đội công ty'],
+      ['lab', 'Lab: Sprint 0 for LabFlow', 'Lab: Sprint 0 cho LabFlow', 'Lịch sprint .ics · Bảng có WIP · Thoả thuận + DoD · Đọc ba burndown'],
+      ['quiz', 'Chapter 1 quiz', 'Kiểm tra Chương 1', '10 câu: Tuyên ngôn · Scrum 2020 · Little · burndown · chọn cho SWP391'],
     ]],
     ['Chapter 2 — Tickets and estimation', 'Chương 2 — Ticket và ước lượng', 'Từ user story tới việc làm được trong một ngày.', [
       ['ticket', 'Writing tickets people can pick up', 'Viết ticket ai cũng nhận làm được', 'Tiêu đề · Bối cảnh · Tiêu chí chấp nhận · Nối SWR302 user story'],
       ['chia-nho', 'Breaking work down', 'Chia nhỏ công việc', 'Epic → story → task · Lát cắt dọc'],
       ['uoc-luong', 'Estimation: story points and planning poker', 'Ước lượng: story point và planning poker', 'Vì sao không ước giờ · Velocity'],
       ['ct-work', 'Running it in CT Work', 'Vận hành trên CT Work', 'Backlog · Board · Sprint · Báo cáo'],
+      ['lab', 'Lab: the iteration-1 backlog for LabFlow', 'Lab: backlog iteration 1 cho LabFlow', 'Mỗi màn một ticket · Script soát · Cân LOC · Poker · Nhập CT Work, bắt đầu sprint 1'],
+      ['quiz', 'Chapter 2 quiz', 'Kiểm tra Chương 2', '10 câu: tiêu chí kiểm được · lát dọc · mỏ neo · velocity · dự báo có xác suất'],
     ]],
     ['Chapter 3 — Branches, commits and pull requests', 'Chương 3 — Nhánh, commit và pull request', 'Quy trình Git cho đội — trỏ khoá Git.', [
       ['quy-uoc', 'Team conventions: branches and commits', 'Quy ước đội: nhánh và commit', 'Tên nhánh theo ticket · Conventional Commits'],
       ['pr-tot', 'Opening a PR that is easy to review', 'Mở PR dễ review', 'Nhỏ · Mô tả · Ảnh chụp · Tự review trước'],
       ['ci', 'CI checks as a teammate', 'CI như một đồng đội', 'Check bắt buộc · Trỏ khoá GitHub Actions'],
       ['merge', 'Merging and resolving conflicts together', 'Merge và cùng giải xung đột', 'Squash · Rebase · Ai giải'],
+      ['lab', 'Lab: a day of pull requests on LabFlow', 'Lab: một ngày pull request của LabFlow', 'Luật vào repo · Khoá main · CI cục bộ · Diễn tập ba tai nạn'],
+      ['quiz', 'Chapter 3 quiz', 'Kiểm tra Chương 3', '10 câu: scope ticket · hook vs CI · PR to · hai migration V3 · revert migration · giải theo nghĩa'],
     ]],
     ['Chapter 4 — Code review', 'Chương 4 — Code review', 'Viết review có ích và nhận review không tự ái.', [
       ['muc-dich', 'What code review is for', 'Code review để làm gì', 'Chất lượng · Chia sẻ kiến thức · Không phải bắt lỗi người'],
       ['viet-review', 'Writing useful review comments', 'Viết nhận xét review có ích', 'Cụ thể · Hỏi thay vì ra lệnh · Mức độ (nit/blocker)'],
       ['nhan-review', 'Receiving feedback well', 'Nhận góp ý cho tốt', 'Không tự ái · Hỏi lại · Cảm ơn'],
       ['checklist', 'A review checklist', 'Checklist review', 'Đúng · Dễ đọc · Test · Bảo mật · Hiệu năng'],
+      ['lab', 'Lab: a review day on LabFlow', 'Lab: một ngày review của LabFlow', 'Xoay vòng cả kỳ · CODEOWNERS · Review PR của trưởng nhóm · Trả lời review · Soát năm PR'],
+      ['quiz', 'Chapter 4 quiz', 'Kiểm tra Chương 4', '10 câu: điểm chết một người duyệt · nhãn và phán quyết · luồng chặn · IDOR · goto fail · duyệt cũ bị bỏ'],
     ]],
     ['Chapter 5 — Technical writing', 'Chương 5 — Viết tài liệu kỹ thuật', 'README, ADR, RFC và báo cáo sự cố.', [
       ['readme', 'READMEs that get people running', 'README giúp người khác chạy được ngay', 'Cài đặt · Chạy · Cấu trúc · Đóng góp'],
       ['adr', 'Architecture decision records', 'Ghi quyết định kiến trúc (ADR)', 'Bối cảnh · Quyết định · Hệ quả'],
       ['rfc', 'Design docs and RFCs', 'Tài liệu thiết kế và RFC', 'Vấn đề · Phương án · Đánh đổi'],
       ['postmortem', 'Incident postmortems', 'Báo cáo sau sự cố (postmortem)', 'Dòng thời gian · Nguyên nhân gốc · Không đổ lỗi'],
+      ['lab', 'Lab: LabFlow’s documentation set', 'Lab: bộ tài liệu của LabFlow', 'README chạy trên máy sạch · Sổ ADR · RFC · Postmortem · Một bước CI cho mọi tài liệu'],
+      ['quiz', 'Chapter 5 quiz', 'Kiểm tra Chương 5', '10 câu: README máy sạch · bảng sinh tự động · thay ADR · ràng buộc cứng · che dữ liệu · thời gian phát hiện'],
     ]],
     ['Chapter 6 — Meetings and communication', 'Chương 6 — Họp và giao tiếp', 'Ít họp hơn, họp ra kết quả hơn.', [
       ['standup', 'Standups that take 10 minutes', 'Standup 10 phút', 'Hôm qua · Hôm nay · Vướng gì'],
       ['planning-retro', 'Planning and retrospectives that change something', 'Planning và retro thay đổi được điều gì đó', 'Mục tiêu sprint · Hành động cụ thể'],
       ['bao-cao', 'Reporting progress and risk', 'Báo cáo tiến độ và rủi ro', 'Báo sớm khi trễ · Tin xấu nói trước'],
       ['tu-xa', 'Remote and async communication', 'Giao tiếp từ xa và bất đồng bộ', 'Viết tin nhắn tự đủ · Múi giờ · Tiếng Anh công việc'],
+      ['thanh-vien', 'When a teammate is late, silent or in conflict', 'Khi một thành viên trễ, im lặng hoặc xung đột', 'Năm nguyên nhân · Bậc thang xử lý · 1:1 · Xung đột trong PR · Khi nào báo giảng viên'],
+      ['lab', 'Lab: LabFlow’s communication kit', 'Lab: bộ giao tiếp của LabFlow', 'Thoả thuận giao tiếp · Năng lực planning · Chuẩn bị daily · Báo cáo tuần tự soát · Cảnh báo sớm'],
+      ['quiz', 'Chapter 6 quiz', 'Kiểm tra Chương 6', '10 câu: Daily Scrum · lời nói và dữ liệu · cam kết theo năng lực · retro · báo cáo · tin nhắn · thành viên'],
     ]],
     ['Chapter 7 — Working with other roles', 'Chương 7 — Làm việc với các vai trò khác', 'Tester, BA, designer, khách hàng.', [
       ['tester', 'Developers and testers', 'Lập trình viên và tester', 'Bug report tốt · Tái hiện · Nối SWT301'],
       ['ba-po', 'Developers, BAs and product owners', 'Lập trình viên, BA và PO', 'Hỏi rõ yêu cầu · Nối SWR302'],
       ['designer', 'Developers and designers', 'Lập trình viên và designer', 'Đọc Figma · Thương lượng chi tiết'],
       ['khach-hang', 'Talking to clients and stakeholders', 'Nói chuyện với khách hàng và các bên liên quan', 'Tránh thuật ngữ · Đặt kỳ vọng'],
+      ['lab', 'Lab: one week with four roles', 'Lab: một tuần với bốn vai', 'Report chạy lại được · Sổ câu hỏi + bảng ví dụ · Spec màn · Thư + dự báo · kiem-vai.sh'],
+      ['quiz', 'Chapter 7 quiz', 'Kiểm tra Chương 7', '10 câu: múi giờ staging · severity/priority · câu hỏi đóng · ví dụ biên · ai KHÔNG được · tương phản · dự báo · pipefail'],
     ]],
     ['Chapter 8 — Your first 90 days', 'Chương 8 — 90 ngày đầu ở công ty', 'Thực tập và công việc đầu tiên.', [
       ['onboarding', 'Onboarding: reading a big codebase', 'Làm quen: đọc codebase lớn', 'Chạy được trước · Bản đồ repo · Hỏi đúng người'],
       ['hoi', 'Asking good questions', 'Hỏi câu hỏi tốt', 'Đã thử gì · Ngữ cảnh · Quy tắc 30 phút'],
       ['viec-dau', 'Your first tickets', 'Những ticket đầu tiên', 'Nhỏ và chắc · Giao đúng hạn'],
       ['phat-trien', 'Growing: feedback, 1:1s and career', 'Phát triển: phản hồi, 1:1 và sự nghiệp', 'Xin phản hồi · Ghi nhận thành tích'],
+      ['lab', 'Lab: your first two weeks, checked', 'Lab: hai tuần đầu, có kiểm', 'Hồ sơ hai tuần · kiem-2-tuan.sh · Bộ đón thành viên SWP391 · Bộ chuẩn bị OJT'],
+      ['quiz', 'Chapter 8 quiz', 'Kiểm tra Chương 8', '10 câu: thứ tự tuần đầu · hỏi ai · bản đồ grep · XY · nhật ký hỏi · token · test đỏ trước · mục tiêu kiểm được'],
     ]],
     ['Chapter 9 — How outsourcing projects really run', 'Chương 9 — Quy trình dự án outsourcing trong thực tế', 'Ngày đầu OJT ở công ty outsourcing: tài liệu BD/DD, test spec Excel, Q&A list, báo cáo ngày, hourensou.', [
       ['mo-hinh-hop-dong', 'Contract models and roles: ODC, fixed price, T&M, onsite/offshore, BrSE', 'Mô hình hợp đồng và vai trò: ODC, trọn gói, T&M, onsite/offshore, BrSE', 'Mỗi mô hình ảnh hưởng thế nào tới việc của dev (phạm vi cứng, CR, giờ công) · Vai trò BrSE (kỹ sư cầu nối) với khách Nhật, PM, QA, tester · Liên tưởng: thầu xây nhà trọn gói vs thuê thợ theo ngày · Tình huống OJT: vì sao "làm thêm một nút nhỏ" lại phải qua CR'],
@@ -116,11 +170,13 @@ export default {
       ['lab', 'Lab: role-play a Japanese client review and a US client demo', 'Lab: đóng vai họp review với khách Nhật và demo với khách Mỹ', 'Có kịch bản và rubric · Đạt khi: biên bản họp đúng mẫu, mọi yêu cầu mới được ghi thành Q&A hoặc CR'],
       ['quiz', 'Chapter 11 quiz', 'Kiểm tra Chương 11', '10 câu: đọc lời từ chối gián tiếp · nội dung minutes · xử lý yêu cầu ngoài phạm vi'],
     ]],
-    ['Chapter 12 — Capstone: run a sprint for a team project', 'Chương 12 — Dự án cuối khoá: điều hành một sprint cho dự án nhóm', 'Một sprint trọn vẹn cho đồ án "Đặt lịch phòng khám".', [
+    ['Chapter 12 — Capstone: run a sprint for a team project', 'Chương 12 — Dự án cuối khoá: điều hành một sprint cho dự án nhóm', 'Một sprint trọn vẹn của LabFlow: planning, ba tuần daily/PR/review, review–retro–báo cáo, STAR, đề thi có giờ.', [
       ['chuan-bi', 'Backlog, sprint goal and planning', 'Backlog, mục tiêu sprint và planning', 'Trên CT Work · Ước lượng'],
       ['thuc-hien', 'Daily work: PRs, reviews, standups', 'Công việc hằng ngày: PR, review, standup', 'Mô phỏng 2 tuần'],
       ['ket-thuc', 'Review, retro and report', 'Review, retro và báo cáo', 'Demo · Rút kinh nghiệm · Báo cáo tiến độ'],
       ['tong-ket', 'Checklist and interview stories', 'Checklist và câu chuyện phỏng vấn', 'Kể về làm nhóm theo STAR'],
+      ['de-thi', 'Timed exam: lead sprint 4', 'Đề thi có giờ: dẫn sprint 4', 'Kiểu PE 120 phút · Rubric · Lời giải chạy thật'],
+      ['quiz-tong', 'Final quiz', 'Kiểm tra tổng', '20 câu kiểu FE trải cả khoá'],
     ]],
-  ])),
+  ]))),
 };

@@ -1173,3 +1173,10 @@ Mẫu một mục:
 - **Cách sửa:** `reportCompressedSize: !process.env.CI` (cạnh `sourcemap: !process.env.CI`), phát hành lại.
 - **Ảnh hưởng:** app CuongThai bản mới chậm ra vài giờ; app CT Work 1.0.12 không ảnh hưởng.
 - **Bài học:** đỉnh bộ nhớ của `vite build` trên CI gồm cả bước báo cáo — tắt mọi thứ CI vứt đi (sourcemap, gzip report) trước khi nâng heap.
+
+### 25/11/2026 — điều phối video — 5 làn giọng nhận lại tập ĐÃ XONG khi gỡ hàng loạt
+- **Triệu chứng:** 07:48 chạy `dp-lam-lai.sh <id> giong` liền 106 tập (đợt lồng giọng node·ts·auth·apid·dkr·gha·ngx) ⇒ 5 làn nhận `dbi-0-a`, `dbi-8-3`, `swr-pe25-4a`, `swt-8-2a`, `swt-lab2-8b` (đã có giọng + video từ 24–26/10), không nằm trong danh sách.
+- **Nguyên nhân:** `video-bai-giang/scratchpad/dp-lam-lai.sh` (phần chạy trên linux-nha) ghi tệp hàng bằng `awk … > f.tam && cat f.tam > f` ⇒ có khoảnh khắc `hang-giong-xong.txt` bị cắt rỗng/dở; `giong.sh` 12 làn đọc lại mỗi 20 s thấy tập "chưa xong" và lấy theo thứ tự ưu tiên `swt- fer- swr- dbi-`.
+- **Cách sửa:** đổi sang `awk … > f.tam && mv -f f.tam f` (đổi tên nguyên tử, người đọc luôn thấy bản cũ hoặc bản mới trọn vẹn); để 5 tập kia chạy xong (giọng cuong6 mới, video được render lại cho khớp).
+- **Ảnh hưởng:** ~5 lượt làn giọng + 5 lượt render tốn thêm; không mất dữ liệu.
+- **Bài học:** tệp hàng có nhiều tiến trình đọc thì không ghi đè tại chỗ — ghi tệp tạm rồi `mv` (luật "ghi tại chỗ" chỉ dành cho bind-mount file đơn như nginx.conf).

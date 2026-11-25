@@ -6,8 +6,26 @@
  * Khác các khoá khung khác: đây là khoá DỰ ÁN — người học tự gõ 100% một ứng dụng full-stack từ số 0 (React +
  * Node/Express + PostgreSQL/Prisma), mỗi chương là một chặng có checkpoint tự kiểm ở cuối chương; lời giải mẫu sẽ
  * thêm sau khi soạn chi tiết.
+ *
+ * 24/11/2026 (agent fsp): bắt đầu soạn chi tiết theo debug-co-phuong-phap (ml-en/ml-vi, output chạy thật, lời giải che bằng <details>).
+ * Dự án mẫu "ChiaSe" chạy thật trên máy nhà (Node 22.22.2, PostgreSQL 18.7, Vite 8.3.8, TypeScript 7.0.2); mỗi chương có hộp
+ * "Nếu làm bằng Spring Boot" trỏ đúng bài của khoá spring-boot (phục vụ đồ án SWP391 React + Spring Boot + PostgreSQL).
  */
 import { khung } from './_chung/khung.mjs';
+import { ghep } from './fullstack-project/_chung.mjs';
+import s00 from './fullstack-project/s00-bat-dau.mjs';
+import s01 from './fullstack-project/s01-ke-hoach.mjs';
+import s02 from './fullstack-project/s02-nen-backend.mjs';
+import s03 from './fullstack-project/s03-xac-thuc.mjs';
+import s04 from './fullstack-project/s04-bai-viet.mjs';
+import s05 from './fullstack-project/s05-binh-luan.mjs';
+import s06 from './fullstack-project/s06-frontend.mjs';
+import s07 from './fullstack-project/s07-realtime.mjs';
+import s08 from './fullstack-project/s08-test.mjs';
+
+/** Bài ĐÃ SOẠN (fullstack-project/sNN-*.mjs, cùng slug) thay bài khung; bài chưa soạn giữ khung. Tiêu đề chương giữ nguyên từ khung.
+ *  Chương soạn xong được thêm bài quiz fp-N-5-quiz (slug mới, không trùng). Kế hoạch: fullstack-project/_KE-HOACH.md. */
+const DA_SOAN = [s00, s01, s02, s03, s04, s05, s06, s07, s08];
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -23,7 +41,7 @@ export default {
     shortDescription: 'Type every line yourself: React + Node/Express + PostgreSQL/Prisma, auth, image uploads, comments, light realtime, tests, Docker, CI and a real VPS deploy — one project, one checkpoint per chapter.|||Tự gõ từng dòng: React + Node/Express + PostgreSQL/Prisma, xác thực, upload ảnh, bình luận, realtime nhẹ, test, Docker, CI và deploy VPS thật — một dự án, mỗi chương một checkpoint.',
     description: 'Khoá KHÔNG có video giảng lý thuyết dài dòng — đây là một dự án bạn tự gõ 100% từ dòng lệnh đầu tiên tới lúc production trả lời trên một tên miền thật. Ứng dụng đích: một mạng chia sẻ bài viết nhỏ — đăng ký/đăng nhập, bài viết kèm ảnh (lưu trên Cloudflare R2/S3), bình luận, thông báo realtime nhẹ bằng Socket.IO — được test, đóng gói Docker, chạy CI trên GitHub Actions và deploy lên VPS. Mỗi chương là một chặng khép kín, kết thúc bằng một checkpoint bạn tự chấm được (một lệnh curl, một dòng log, một trang chạy được) trước khi sang chương sau. Lời giải mẫu từng chương sẽ được thêm sau, để bạn tự làm trước khi so.',
     whatYouLearn: 'Lên kế hoạch và thiết kế schema cho một sản phẩm nhỏ trước khi viết dòng code đầu tiên; dựng backend Express/TypeScript + PostgreSQL/Prisma từ hai lệnh init; làm xác thực JWT có refresh, upload ảnh lên object storage, phân trang và validate dữ liệu đúng chuẩn; nối một frontend React gọi API thật; thêm realtime nhẹ; viết test (unit, integration với DB thật, API); đóng gói Docker cho cả hai dịch vụ; dựng pipeline GitHub Actions chặn merge khi test đỏ; và tự deploy lên VPS có domain + HTTPS — rồi biết cách tự kiểm mỗi bước bằng checkpoint thay vì đoán.',
-    requirements: 'Đã học (hoặc học song song) các khoá nền: React, Node.js, PostgreSQL/Prisma ORM, Git. Nên biết Docker và GitHub Actions trước khi tới Chương 9–10, nhưng khoá này nhắc lại đủ để không bị kẹt. Đây KHÔNG phải khoá học khái niệm — nó giả định bạn đã học khái niệm ở các khoá kia và giờ ráp chúng lại thành một sản phẩm thật.',
+    requirements: 'Biết JavaScript cơ bản (biến, hàm, mảng, đối tượng, async/await), dùng được terminal và Git ở mức commit/push. Mỗi bài nhắc lại ĐỦ phần khái niệm cần dùng ngay tại chỗ, rồi dẫn link sang bài chuyên sâu của các khoá React, Node.js, PostgreSQL, Prisma ORM, Docker, GitHub Actions khi bạn muốn hiểu sâu hơn. Cần một máy có Node 22, Git và Docker (Mục 0 hướng dẫn kiểm).',
     documentsNote: 'Tài liệu chính: đối chiếu lại với các khoá React, Node.js, PostgreSQL, Prisma ORM, Docker và GitHub Actions trên chính trang này — dự án này là bài tập lớn dùng chung kiến thức của cả sáu khoá đó, không dạy lại từ đầu.',
   },
   sections: khung('fp', [
@@ -99,5 +117,5 @@ export default {
       ['smoke-rollback', 'Smoke-testing production and a rollback plan', 'Kiểm nhanh production và kế hoạch rollback', 'curl vài route chính sau deploy · Ghi lại cách quay về bản chạy trước · Log ở đâu khi có lỗi'],
       ['tong-ket', 'Capstone checklist: what "done" looks like', 'Checklist tổng kết: "xong" trông như thế nào', 'Danh sách năng lực đã có sau cả khoá · Việc tiếp theo nếu muốn mở rộng dự án · Nơi lời giải mẫu sẽ xuất hiện'],
     ]],
-  ]),
+  ]).map((sec, i) => (DA_SOAN[i] ? ghep(sec, DA_SOAN[i]) : sec)),
 };

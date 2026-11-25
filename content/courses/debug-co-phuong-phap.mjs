@@ -14,9 +14,19 @@ import { ghep } from './debug-co-phuong-phap/_chung.mjs';
 import s00 from './debug-co-phuong-phap/s00-bat-dau.mjs';
 import s01 from './debug-co-phuong-phap/s01-tu-duy.mjs';
 import s02 from './debug-co-phuong-phap/s02-stack-trace.mjs';
+import s03 from './debug-co-phuong-phap/s03-debugger-vscode.mjs';
+import s04 from './debug-co-phuong-phap/s04-debugger-intellij.mjs';
+import s05 from './debug-co-phuong-phap/s05-debugger-devtools.mjs';
+import s06 from './debug-co-phuong-phap/s06-api-http.mjs';
+import s07 from './debug-co-phuong-phap/s07-co-so-du-lieu.mjs';
+import s08 from './debug-co-phuong-phap/s08-bat-dinh.mjs';
+import s09 from './debug-co-phuong-phap/s09-hom-qua-con-chay.mjs';
+import s10 from './debug-co-phuong-phap/s10-production.mjs';
+import s11 from './debug-co-phuong-phap/s11-bao-cao.mjs';
+import s12 from './debug-co-phuong-phap/s12-du-an-cuoi.mjs';
 
 /** Bài ĐÃ SOẠN (debug-co-phuong-phap/sNN-*.mjs, cùng slug) thay bài khung; bài chưa soạn giữ khung. Tiêu đề chương giữ nguyên từ khung. */
-const DA_SOAN = [s00, s01, s02];
+const DA_SOAN = [s00, s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12];
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },

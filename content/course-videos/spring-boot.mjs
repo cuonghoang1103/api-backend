@@ -51,5 +51,12 @@ export default {
     'sb-8-5-lab-8': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/08-flyway/08-05-lab-8-84685484.mp4' }, defaultVideoTrack: 'VI'},
     'sb-9-2-password-encoder': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/09-security-jwt/09-02-password-encoder-8064125c.mp4' }, defaultVideoTrack: 'VI'},
     'sb-9-3-dang-nhap-jwt': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/09-security-jwt/09-03-dang-nhap-jwt-01f7f61a.mp4' }, defaultVideoTrack: 'VI'},
+    'sb-0-8-bat-dau-tai-day': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/00-vi-sao-spring-boot/00-01-bat-dau-tai-day-fc17598c.mp4' }, defaultVideoTrack: 'VI' },
+    'sb-2-1-stream-api': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/02-java-hien-dai-2/02-01-stream-api-27a92ef8.mp4' }, defaultVideoTrack: 'VI' },
+    'sb-2-2-optional': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/02-java-hien-dai-2/02-02-optional-ab74e05c.mp4' }, defaultVideoTrack: 'VI' },
+    'sb-4-6-lab-4': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/04-rest-controller/04-06-lab-4-72cb3a8e.mp4' }, defaultVideoTrack: 'VI' },
+    'sb-6-5-transaction': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/06-jpa-postgresql/06-05-transaction-ef502fe0.mp4' }, defaultVideoTrack: 'VI' },
+    'sb-7-4-isolation': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/07-jpa-chuyen-sau/07-04-isolation-468b805f.mp4' }, defaultVideoTrack: 'VI' },
+    'sb-9-1-security-filter-chain': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/spring-boot/09-security-jwt/09-01-security-filter-chain-b1f4cc26.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

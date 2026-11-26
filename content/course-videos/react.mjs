@@ -106,7 +106,7 @@ export default {
 
     /* ── Chương 12 — React 19 & concurrent ── */
     'rx-12-0-slides': { yt: 'B_2E96URooA', credit: "React Conf — Async React", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-01-slide-chuong-12-7276e2b5.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-12-1-suspense-use': { yt: 't6MeFVF3V9I', credit: "Jack Herrington — Warning: React 19's use Hook Can Impact App Performance", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-02-suspense-use-0ffcdece.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-12-1-suspense-use': { yt: 't6MeFVF3V9I', credit: "Jack Herrington — Warning: React 19's use Hook Can Impact App Performance", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-02-suspense-use-690e1622.mp4' }, defaultVideoTrack: 'VI'},
     'rx-12-2-transition': { yt: 'lDukIAymutM', credit: "Academind — useTransition() vs useDeferredValue | React 18", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-03-transition-fe478548.mp4' }, defaultVideoTrack: 'VI'},
     'rx-12-3-actions': { yt: 'I3AsmAWWGEs', credit: "Callstack — Modern React Patterns: Concurrent Rendering, Actions & What’s Next | Aurora Scharff at RUC 2025", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-04-actions-57fc226c.mp4' }, defaultVideoTrack: 'VI'},
     'rx-12-4-compiler-rsc': { yt: 'T-rHmWSZajc', credit: "React Conferences by GitNation — Nadia Makarevich – How React Compiler Performs on Real Code, React Advanced 2024", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-05-compiler-rsc-c3718722.mp4' }, defaultVideoTrack: 'VI'},

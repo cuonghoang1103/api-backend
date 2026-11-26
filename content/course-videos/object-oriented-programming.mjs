@@ -102,7 +102,7 @@ export default {
     'pro192-lab-8-collections': { yt: 'H62Jfv1DJlU', credit: 'Coding with John — Map and HashMap in Java - Full Tutorial', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/08-java-collections/08-51-lab-8-collections-tron-0f33897b.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-slide-cs5-1': { yt: 'e2zmmkc5xI0', credit: 'Oracle Developers — Java Bytecode Crash Course', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-15-slide-cs5-1-jvm-tron-e4b5b4c1.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-luyen-pe-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-04-luyen-pe-2-tron-74d71835.mp4' }, defaultVideoTrack: 'VI'},
-    'pro192-slide-cs5-2': { yt: 'kwFP-zCLV2M', credit: 'Java — Mastering JVM Memory Troubleshooting - From OutOfMemoryErrors to Leaks', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-15-slide-cs5-2-jvm-tron-0cf30315.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-slide-cs5-2': { yt: 'kwFP-zCLV2M', credit: 'Java — Mastering JVM Memory Troubleshooting - From OutOfMemoryErrors to Leaks', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-15-slide-cs5-2-jvm-b-93d0e4c0.mp4' }, defaultVideoTrack: 'VI'},
     // YouTube bổ sung 31/10/2026
     'pro192-slide-pro2-1': { yt: 'fQKbV-NeY18', credit: 'Amit Thinks — Install NetBeans IDE 27 with Java JDK 24 on Windows 11 | Beginner\'s Guide (2025)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-03-cai-moi-truong-087fe194.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-on-ch6': { yt: 'XhH93_woZIY', credit: 'Bro Code — Java custom exceptions 🛑', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/06-xu-ly-ngoai-le/06-03-thuc-hanh-tron-1ed79134.mp4' }, defaultVideoTrack: 'VI'},
@@ -117,7 +117,7 @@ export default {
     'pro192-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-tai-lieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-luyen-pe-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-03-luyen-pe-1-tron-2c85c9ac.mp4' }, defaultVideoTrack: 'VI'},
-    'pro192-luyen-pe-3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-05-luyen-pe-3-tron-e5574da9.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-luyen-pe-3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-05-luyen-pe-3-c-795f5d0b.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-luyen-pe-4': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-06-luyen-pe-4-tron-2dc540fa.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

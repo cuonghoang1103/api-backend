@@ -124,7 +124,7 @@ jobs:
     name: Dựng ${{ matrix.ten }}
     needs: kiem-tra
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 40
+    timeout-minutes: 60   # 26/11: macOS 0.5.231 chạm 40 phút (lần chạy lại 34,5 phút) ⇒ bị huỷ, phải rerun
     strategy:
       # Một nền tảng hỏng thì hai nền tảng kia VẪN dựng xong. Mặc định của
       # GitHub là huỷ hết — mà thà có hai bản còn hơn không có bản nào.

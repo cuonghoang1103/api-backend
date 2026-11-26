@@ -271,7 +271,7 @@ if (KHONG_CHO) {
 // ─── 9. Chờ và KIỂM LẠI ───────────────────────────────────────────
 process.stdout.write('  Đang dựng');
 let ketQua = null;
-for (let i = 0; i < 120; i += 1) {           // 120 × 15s = 30 phút
+for (let i = 0; i < 300; i += 1) {           // 300 × 15s = 75 phút (26/11: job macOS có trần 60 phút + công bố)
   await new Promise((r) => setTimeout(r, 15000));
   const t = JSON.parse(thu('gh', ['run', 'view', String(run.databaseId),
     '--json', 'status,conclusion']) || '{}');
@@ -280,7 +280,7 @@ for (let i = 0; i < 120; i += 1) {           // 120 × 15s = 30 phút
 }
 console.log('');
 if (ketQua !== 'success') {
-  chet(`Lượt dựng kết thúc: ${ketQua ?? 'quá 30 phút chưa xong'}`,
+  chet(`Lượt dựng kết thúc: ${ketQua ?? 'quá 75 phút chưa xong'}`,
     `Xem log: gh run view ${run.databaseId} --log-failed`);
 }
 ok('Dựng xong cả ba nền tảng');

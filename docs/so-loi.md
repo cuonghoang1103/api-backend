@@ -1257,3 +1257,10 @@ Mẫu một mục:
 - **Cách sửa:** `~/agent-nha/r2/vong-lai2.sh` nhận thêm tập không `r2Url` nếu bài web đã có `vi.url` (đọc `content/course-videos/<khoá>.mjs`), video render từ 25/11 và `r2Goc` lệch; chạy thử ra 159 tập (82 PG, 43 DBI, 34 tập khoá khác), đang đẩy trong tmux `r2-lai`.
 - **Ảnh hưởng:** video giọng mới DBI/PG trễ lên web khoảng 1 ngày; không mất video nào (bản cũ vẫn phát).
 - **Bài học:** hai bộ lọc bổ sung nhau phải được kiểm bằng phép đếm chéo "đã render − đã lên R2" theo đúng danh sách việc (ở đây `ll5-db.txt`), không tin dòng log "0 tập sót" của từng vòng.
+
+### 26/11/2026 — phát hành app CuongThai 0.5.231 hỏng giữa chừng: job macOS bị huỷ vì quá 40 phút
+- **Triệu chứng:** `phat-hanh:ca-hai` báo "quá 30 phút chưa xong" rồi dừng; run 45814635022 kết thúc `cancelled` ở bước "Dựng" của job macOS (11:57→12:37), bước công bố bị bỏ qua ⇒ người dùng vẫn ở 0.5.230.
+- **Nguyên nhân:** `.github/workflows/desktop-release.yml:127` đặt `timeout-minutes: 40` cho job dựng, trong khi macOS đã lên ~35 phút (lượt 24/11 tổng 36 phút); runner chậm hơn một chút là chạm trần. `desktop/scripts/phat-hanh.mjs:274` chỉ chờ 30 phút nên còn báo hỏng sớm hơn cả workflow.
+- **Cách sửa:** `gh run rerun --failed` (macOS 34,5 phút ⇒ công bố đủ 16 tệp, có `latest-mac.yml` + 2 `.zip`); nâng trần job lên 60 phút và thời gian chờ của script lên 75 phút.
+- **Ảnh hưởng:** bản 0.5.231 trễ ~40 phút; app CT Work 1.0.13 không bị ảnh hưởng.
+- **Bài học:** trần thời gian phải để dư theo số đo thực tế (≥1,5× lượt chậm nhất), và thời gian chờ của script phải dài hơn trần của workflow mà nó canh.

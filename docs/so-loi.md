@@ -1222,3 +1222,10 @@ Mẫu một mục:
 - **Cách sửa:** nhả khoá tay (`rmdir render-khoa/dbi-8-b-2`); lần sau chỉ khởi động lại khi KHÔNG có `lam-bai.mts` đang chạy, hoặc ngoài giờ 23–07.
 - **Ảnh hưởng:** ~1 phút render Mac bỏ đi; không mất dữ liệu.
 - **Bài học:** khởi động lại tiến trình kéo việc phải chờ trạng thái rảnh thật (không có tiến trình con), không chờ theo dòng log.
+
+### 26/11/2026 — bộ chạy Antigravity coi "hết hạn mức 5 giờ" là tập hỏng ⇒ rụng 16 tập Spring Boot
+- **Triệu chứng:** 02:00–02:20 ba luồng `agy-sb*` báo liền `■ sb-19..21-* LOI (thiếu tệp)` rồi `HET`; 16/64 tập không được soạn, 6 giờ không ai biết.
+- **Nguyên nhân:** `chay.sh` (scratchpad phiên điều phối) gọi `agy -p` một lần; Gemini trả `429 RESOURCE_EXHAUSTED … Resets in 1h55m` ⇒ không có tệp ⇒ đánh LOI và đi tiếp tập sau (cũng 429) cho tới hết danh sách.
+- **Cách sửa:** gặp `RESOURCE_EXHAUSTED` ⇒ đọc "Resets in", ngủ tới giờ hồi (+5 phút) rồi soạn lại ĐÚNG tập đó; chạy lại 3 luồng cho 16 tập còn thiếu.
+- **Ảnh hưởng:** chậm Spring Boot ~6 giờ; không hỏng dữ liệu.
+- **Bài học:** cùng lớp lỗi với "soát rỗng khi hết hạn mức": mọi vòng gọi AI theo hạn mức phải phân biệt "hết lượt" (chờ, thử lại) với "làm hỏng" (bỏ qua).

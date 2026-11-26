@@ -1236,3 +1236,10 @@ Mẫu một mục:
 - **Cách sửa:** rút tiêu đề 14.4; đổi thành `\\u0000` (hiện chữ); thêm 2 phép kiểm cấp bài (title > 255, chuỗi có NUL) vào `scripts/course-content-check.mjs` — đã thử: bản cũ của `_ma.mjs` bị bắt ❌.
 - **Ảnh hưởng:** 1 bài MongoDB thiếu trên web, 1 bài Log giữ tiêu đề cũ, tới lần deploy kế; không mất dữ liệu.
 - **Bài học:** "deploy xanh" có thể kèm `WARN seed … rc=1` — luôn đọc dòng đó; `_ma.mjs` sinh từ `gen-ma.mjs` nên bộ sinh phải thoát NUL, không thì chạy lại sẽ tái phát.
+
+### 26/11/2026 — bộ soát khoá dm5 gắn "ok" cho Mục 0 và Chương 10 khi Sonnet báo 22 + 25 lỗi
+- **Triệu chứng:** log `soat-dm5` ghi "ch0 soát xong: 0 lỗi" và "ch10 … 0 lỗi" rồi `ok` ngay, bỏ qua bước Gemini sửa, dù `soat-0.md`/`soat-10.md` có hơn 20 nhận xét.
+- **Nguyên nhân:** `soat.sh` (scratchpad phiên điều phối) đếm nhận xét bằng regex neo đầu dòng `^\[SAI\]…`; hai chương đó Sonnet đánh số `1. [SAI] …` hoặc bọc backtick nên đếm ra 0 ⇒ coi là sạch.
+- **Cách sửa:** đếm bằng `grep -cE '\[(SAI|LUAT|THIEU|MAU|KHO)\]'` (không neo), giữ `soat-N.md` có sẵn để không soát lại tốn hạn mức, chạy lại bước sửa cho ch0 + ch10 — cả hai đã sửa rồi qua `kiem.mjs`.
+- **Ảnh hưởng:** không lọt gì lên web (khoá chưa deploy); trễ ~25 phút.
+- **Bài học:** bộ đếm kết quả AI phải chịu được biến thể định dạng (đánh số, backtick); "0 lỗi" từ một tệp nhận xét KHÔNG rỗng là dấu hiệu đếm sai — nên đối chiếu số dòng không rỗng với số đếm.

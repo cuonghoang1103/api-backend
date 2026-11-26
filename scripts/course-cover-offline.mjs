@@ -106,6 +106,8 @@ const KHOA = [
   ['doc-code-cu-va-refactor', 'code-refactor', 'A78BFA', 'Legacy Code', 'Read · Test · Refactor · Upgrade'],
   ['tieng-anh-ky-thuat-di-lam', 'chat-bubbles', '38BDF8', 'English at Work', 'Tickets · PRs · Emails · Stand-ups'],
   ['ide-va-do-nghe-dev', 'terminal-window', '10B981', 'IDE & Dev Toolbox', 'VS Code · IntelliJ · Terminal · Regex'],
+  // 26/11/2026 — khoá "Đồ án một mình đóng 5 vai"; logo tự vẽ (scripts/icons/five-roles.svg: năm người), không dùng logo hãng.
+  ['du-an-mot-minh-5-vai', 'five-roles', '7C3AED', 'Solo Project, 5 Roles', 'PM · BA · Backend · Frontend · QA'],
 ];
 
 const esc = (s) => String(s)

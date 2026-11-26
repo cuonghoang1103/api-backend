@@ -1229,3 +1229,10 @@ Mẫu một mục:
 - **Cách sửa:** gặp `RESOURCE_EXHAUSTED` ⇒ đọc "Resets in", ngủ tới giờ hồi (+5 phút) rồi soạn lại ĐÚNG tập đó; chạy lại 3 luồng cho 16 tập còn thiếu.
 - **Ảnh hưởng:** chậm Spring Boot ~6 giờ; không hỏng dữ liệu.
 - **Bài học:** cùng lớp lỗi với "soát rỗng khi hết hạn mức": mọi vòng gọi AI theo hạn mức phải phân biệt "hết lượt" (chờ, thử lại) với "làm hỏng" (bỏ qua).
+
+### 26/11/2026 — seed prod bỏ câm 2 bài: tiêu đề Log 14.4 dài 268 ký tự + ký tự NUL trong MongoDB 5.3
+- **Triệu chứng:** deploy e1ea7941f xanh nhưng `seed-courses.log` có `P2000 value too long` (lesson.update) và `22021 invalid byte sequence … 0x00` (lesson.create); `log-14-4-xoa-dau-vet` không cập nhật, `mgo-5-3-bieu-thuc` không lên web.
+- **Nguyên nhân:** `content/courses/log-tu-a-den-z/s14/log-14-4-xoa-dau-vet.mjs:11` title EN|||VI 268 > VarChar(255); `content/courses/mongodb/_ma.mjs:35` chép output mongosh `'\u0000'` vào chuỗi JS ⇒ thành ký tự NUL thật. `course-content-check.mjs` chỉ kiểm độ dài tiêu đề KHOÁ, không kiểm bài, không kiểm NUL.
+- **Cách sửa:** rút tiêu đề 14.4; đổi thành `\\u0000` (hiện chữ); thêm 2 phép kiểm cấp bài (title > 255, chuỗi có NUL) vào `scripts/course-content-check.mjs` — đã thử: bản cũ của `_ma.mjs` bị bắt ❌.
+- **Ảnh hưởng:** 1 bài MongoDB thiếu trên web, 1 bài Log giữ tiêu đề cũ, tới lần deploy kế; không mất dữ liệu.
+- **Bài học:** "deploy xanh" có thể kèm `WARN seed … rc=1` — luôn đọc dòng đó; `_ma.mjs` sinh từ `gen-ma.mjs` nên bộ sinh phải thoát NUL, không thì chạy lại sẽ tái phát.

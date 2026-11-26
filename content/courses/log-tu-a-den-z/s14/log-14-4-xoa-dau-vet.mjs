@@ -8,7 +8,7 @@
 import { lenh, nguon, lienKet, kv } from '../_chung.mjs';
 
 export default {
-  title: '14.4 — When attackers delete logs: 1102/104, truncated auth.log, wiped history, time gaps, stopped auditd, journal verify errors|||14.4 — Khi kẻ tấn công xoá log: 1102/104, auth.log bị cắt, history bị xoá, khoảng trống thời gian, auditd bị dừng, journal verify báo lỗi',
+  title: '14.4 — When attackers delete logs: 1102/104, truncated auth.log, wiped history, stopped auditd|||14.4 — Khi kẻ tấn công xoá log: 1102/104, auth.log bị cắt, history bị xoá, auditd bị dừng',
   slug: 'log-14-4-xoa-dau-vet',
   type: 'LESSON',
   isFreePreview: true,

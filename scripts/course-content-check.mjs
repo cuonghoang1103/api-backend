@@ -73,6 +73,10 @@ for (const sec of sections) {
     const so = cnt(c, /<span\b/g), sc = cnt(c, /<\/span>/g);
     if (so !== sc) errs.push(`span ${so}/${sc}`);
     if (!l.title.includes('|||')) errs.push('title thiếu |||');
+    // 26/11: seed prod CHẾT câm 2 bài — lesson.title VarChar(255) (P2000) và ký tự NUL trong content (Postgres 22021)
+    if (l.title.length > 255) errs.push(`title ${l.title.length} ký tự > 255 (VarChar) — seed sẽ bỏ bài này`);
+    let nul = false; JSON.stringify(l, (_k, v) => { if (typeof v === 'string' && v.includes('\0')) nul = true; return v; });
+    if (nul) errs.push('có ký tự NUL (\\u0000) — Postgres từ chối; viết "\\\\u0000" nếu muốn hiện chữ');
     if (l.quiz) {
       l.quiz.questions.forEach((q, i) => {
         if (!q.question.includes('|||')) errs.push(`q${i} thiếu |||`);

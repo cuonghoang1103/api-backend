@@ -1264,3 +1264,10 @@ Mẫu một mục:
 - **Cách sửa:** `gh run rerun --failed` (macOS 34,5 phút ⇒ công bố đủ 16 tệp, có `latest-mac.yml` + 2 `.zip`); nâng trần job lên 60 phút và thời gian chờ của script lên 75 phút.
 - **Ảnh hưởng:** bản 0.5.231 trễ ~40 phút; app CT Work 1.0.13 không bị ảnh hưởng.
 - **Bài học:** trần thời gian phải để dư theo số đo thực tế (≥1,5× lượt chậm nhất), và thời gian chờ của script phải dài hơn trần của workflow mà nó canh.
+
+### 26/11/2026 — bài web có video "ghép trọn" (-tron) vẫn phát giọng cũ dù các phần đã lồng giọng lại
+- **Triệu chứng:** sau khi gắn lô 159 tập giọng mới, 24 bài web (5 DBI202, Git ch16–18, SDN302, OSG202, CSD201, SWR302, SSL/SSG) vẫn trỏ URL cũ; `gan-web` báo "gắn N bài" nhưng phép đối chiếu URL ⇄ lô mới lệch 24.
+- **Nguyên nhân:** bài có nhiều phần được `xuat/ghep-phan.mts` ghép thành thư mục `<bài>-tron/` và web gắn bản ghép; lượt render lại chỉ làm mới các PHẦN (và ghi đè `thong-tin.json` làm rơi cờ `boQuaWeb`), không ai ghép lại bản `-tron` ⇒ `gan-web` (sắp xếp `-tron` sau cùng) vẫn chọn bản ghép cũ.
+- **Cách sửa:** chạy lại `ghep-phan.mts` trên máy nhà cho 7 bản có đủ phần giọng mới (5 DBI + git 16.2 + SDN G12) ⇒ vòng `vong-lai2.sh` đẩy R2 ⇒ `gan-web`; 16 bản còn lại chờ đủ phần (thiếu tệp phần gốc trên máy nhà hoặc phần chưa render lại).
+- **Ảnh hưởng:** 24 bài trễ giọng mới; không mất video.
+- **Bài học:** lồng giọng lại một tập có phần ⇒ danh sách việc phải gồm bước ghép `-tron`; kiểm bằng phép đối chiếu "URL bài web ∈ lô vừa đẩy", không bằng số dòng "gắn N bài" của `gan-web`.

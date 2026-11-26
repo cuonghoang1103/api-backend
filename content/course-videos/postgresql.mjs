@@ -17,7 +17,7 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Giới thiệu ── */
-    "postgresql-0-1-gioi-thieu": { yt: "n2Fluyr3lbc", credit: "Fireship — PostgreSQL in 100 Seconds", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/postgresql/00-gioi-thieu-huong-dan-hoc/00-01-ve-khoa-hoc-ban-do-8058ab94.mp4' }, defaultVideoTrack: 'VI'},
+    "postgresql-0-1-gioi-thieu": { yt: "n2Fluyr3lbc", credit: "Fireship — PostgreSQL in 100 Seconds", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/postgresql/00-gioi-thieu-huong-dan-hoc/00-01-ve-khoa-hoc-ban-do-f4c02aca.mp4' }, defaultVideoTrack: 'VI'},
     "postgresql-0-2-cach-hoc": { yt: "qw--VYLpxG4", credit: "freeCodeCamp.org — Learn PostgreSQL Tutorial - Full Course for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/postgresql/00-gioi-thieu-huong-dan-hoc/00-02-cach-hoc-go-chay-doc-ke-hoach-tron-24a8ea0e.mp4' }, defaultVideoTrack: 'VI'},
     "postgresql-0-3-cai-dat": { yt: "dVBNUow7GOE", credit: "LinkedIn Learning — SQL Tutorial - INSTALLING POSTGRES and Using PSQL", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/postgresql/00-gioi-thieu-huong-dan-hoc/00-04-cai-dat-docker-ket-noi-tron-d137c6f3.mp4' }, defaultVideoTrack: 'VI'},
     "postgresql-0-4-mo-hinh": { yt: "Q56kljmIN14", credit: "Hussein Nasser — PostgreSQL Internal Architecture Explained", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/postgresql/00-gioi-thieu-huong-dan-hoc/00-06-may-chu-client-ket-noi-tron-f79cb368.mp4' }, defaultVideoTrack: 'VI'},

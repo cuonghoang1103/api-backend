@@ -20,7 +20,7 @@ export default {
     'tst-2-1-async': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-01-test-ma-bat-dong-bo-7d6ea6d3.mp4' }, defaultVideoTrack: 'VI'},
     'tst-2-2-thoi-gian': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-02-kiem-soat-thoi-gian-6dec79d9.mp4' }, defaultVideoTrack: 'VI'},
     'tst-2-3-loi': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-03-test-loi-nhanh-that-bai-e8646900.mp4' }, defaultVideoTrack: 'VI'},
-    'tst-2-4-ngau-nhien': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-04-ngau-nhien-bat-dinh-b1722761.mp4' }, defaultVideoTrack: 'VI'},
+    'tst-2-4-ngau-nhien': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-04-ngau-nhien-bat-dinh-700cb8bb.mp4' }, defaultVideoTrack: 'VI'},
     'tst-2-5-lab-bat-dong-bo': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-05-lab-2-bat-dong-bo-a2817904.mp4' }, defaultVideoTrack: 'VI'},
     'tst-3-1-phan-loai': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-01-stub-mock-spy-fake-2745a39e.mp4' }, defaultVideoTrack: 'VI'},
     'tst-3-2-mock-module': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-02-mock-module-va-http-4cdc8b1a.mp4' }, defaultVideoTrack: 'VI'},
@@ -67,6 +67,6 @@ export default {
     'tst-10-3-review': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-03-review-d0035185.mp4' }, defaultVideoTrack: 'VI'},
     'tst-10-5-lab-tdd-code-cu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-05-lab-10-tdd-code-cu-49df5b91.mp4' }, defaultVideoTrack: 'VI'},
     'tst-11-1-ke-hoach': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-01-ke-hoach-b9905f95.mp4' }, defaultVideoTrack: 'VI'},
-    'tst-7-2-luong': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-02-luong-nguoi-dung-1ea6de82.mp4' }, defaultVideoTrack: 'VI' },
+    'tst-7-2-luong': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-02-luong-nguoi-dung-1ea6de82.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

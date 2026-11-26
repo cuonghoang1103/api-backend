@@ -22,7 +22,7 @@ export default {
   category: { slug: 'career', name: 'Nghề nghiệp', icon: 'Briefcase', sortOrder: 7 },
   course: {
     slug: 'du-an-mot-minh-5-vai',
-    title: 'Solo Team Project: Run a 5-Role Software Project like a Company|||Đồ án một mình đóng 5 vai — vận hành dự án như một công ty',
+    title: 'Solo Team Project: Run a 5-Role Software Project like a Company',
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',

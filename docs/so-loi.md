@@ -1243,3 +1243,10 @@ Mẫu một mục:
 - **Cách sửa:** đếm bằng `grep -cE '\[(SAI|LUAT|THIEU|MAU|KHO)\]'` (không neo), giữ `soat-N.md` có sẵn để không soát lại tốn hạn mức, chạy lại bước sửa cho ch0 + ch10 — cả hai đã sửa rồi qua `kiem.mjs`.
 - **Ảnh hưởng:** không lọt gì lên web (khoá chưa deploy); trễ ~25 phút.
 - **Bài học:** bộ đếm kết quả AI phải chịu được biến thể định dạng (đánh số, backtick); "0 lỗi" từ một tệp nhận xét KHÔNG rỗng là dấu hiệu đếm sai — nên đối chiếu số dòng không rỗng với số đếm.
+
+### 26/11/2026 — deploy beef72535 xanh nhưng khoá mới du-an-mot-minh-5-vai không lên web
+- **Triệu chứng:** deploy báo "XONG", chỉ có một dòng `WARN CuongThai course seed reported errors (rc=1)`; `seed-courses.log` ghi `✗ course.title phải là tên tiếng Anh NGẮN, KHÔNG "|||"` cho `du-an-mot-minh-5-vai`.
+- **Nguyên nhân:** `content/courses/du-an-mot-minh-5-vai.mjs:25` đặt `course.title` song ngữ `EN|||VI`; `scripts/course-seed.mjs:94` từ chối cả khoá. `course-content-check.mjs` không có luật này nên kiểm trước commit vẫn ✅.
+- **Cách sửa:** title chỉ còn tên tiếng Anh; thêm phép kiểm `course.title` chứa `|||` vào `scripts/course-content-check.mjs` (thử bản cũ ⇒ ❌); deploy lại.
+- **Ảnh hưởng:** khoá mới trễ lên web thêm một lượt deploy (~1 giờ); không ảnh hưởng khoá khác.
+- **Bài học:** mọi luật "từ chối" của `course-seed.mjs` phải có bản sao trong bộ kiểm trước commit; sau deploy luôn grep `✗` trong `seed-courses.log`, không chỉ nhìn "XONG".

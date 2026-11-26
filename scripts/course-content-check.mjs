@@ -53,6 +53,11 @@ if (mod.course) {
       console.log(`❌ course.${truong}: ${v.length} ký tự > ${max} (VarChar(${max})) — seed sẽ CHẾT, rút ngắn trước khi deploy`);
     }
   }
+  // 26/11: course-seed.mjs TỪ CHỐI cả khoá nếu course.title có ||| (tên tiếng Anh ngắn) — deploy vẫn xanh, khoá không lên web
+  if (typeof mod.course.title === 'string' && mod.course.title.includes('|||')) {
+    bad++;
+    console.log('❌ course.title có "|||" — course-seed bỏ CẢ KHOÁ; dùng tên tiếng Anh ngắn, không song ngữ');
+  }
 }
 const cnt = (s, re) => (s.match(re) ?? []).length;
 for (const sec of sections) {

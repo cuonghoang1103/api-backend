@@ -1,6 +1,6 @@
 {
   "name": "cuongthai-desktop",
-  "version": "0.5.230",
+  "version": "0.5.231",
   "ctworkVersion": "1.0.13",
   "private": true,
   "description": "Ứng dụng desktop CuongThai — Electron + React + TypeScript",

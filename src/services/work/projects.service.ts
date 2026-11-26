@@ -388,6 +388,18 @@ export async function updateProject(
         input.settings = { ...input.settings, doneRequirements: { fieldIds: ids, typeKeys: typeKeys?.length ? typeKeys : null } };
       }
     }
+    // 26/11/2026: giới hạn WIP — 'warn' (mặc định, chỉ tô đỏ trên board) | 'block' (máy chủ chặn kéo thêm thẻ vào cột đã đầy).
+    if ('wipMode' in input.settings) {
+      const m = (input.settings as { wipMode?: unknown }).wipMode;
+      input.settings = { ...input.settings, wipMode: m === 'block' ? 'block' : null };
+    }
+    // 26/11/2026: dải thông báo đầu dự án (vd "Solo · 1 người đóng 5 vai") — chữ ≤ 200, tone info|solo|warn; rỗng ⇒ tắt.
+    if ('banner' in input.settings) {
+      const raw = (input.settings as { banner?: { text?: unknown; tone?: unknown } | null }).banner;
+      const text = typeof raw?.text === 'string' ? raw.text.trim().slice(0, 200) : '';
+      const tone = raw?.tone === 'solo' || raw?.tone === 'warn' ? raw.tone : 'info';
+      input.settings = { ...input.settings, banner: text ? { text, tone } : null };
+    }
     // CTW cổng nộp bài: chuẩn hoá cấu hình (mặc định TẮT; min 1–20; mode soft|hard).
     if ('submitGate' in input.settings) {
       input.settings = { ...input.settings, submitGate: cleanSubmitGate((input.settings as { submitGate?: unknown }).submitGate) };

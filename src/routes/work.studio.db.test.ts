@@ -399,10 +399,55 @@ describe('CT Work — lớp studio S1 (HTTP + DB thật)', { skip: !RUN }, () =>
     // t2 có phê duyệt APPROVED nhưng nội dung đã đổi ⇒ vẫn chặn, duyệt lại thì qua.
     const stale = await call(owner, 'POST', `/projects/${clPid}/issues/${t2}/move`, { statusId: done });
     assert.equal(stale.code, 'WORK_TRANSITION_APPROVAL');
+    // 26/11: người xin không tự đứng tên duyệt.
+    assert.equal((await call(ba, 'POST', `/projects/${clPid}/approvals`, { issueNumber: t2, approverIds: [ba.id, member2.id] })).code, 'WORK_SELF_APPROVER');
     const again = (await call(ba, 'POST', `/projects/${clPid}/approvals`, { issueNumber: t2, approverIds: [member2.id] })).data;
     await call(member2, 'POST', `/projects/${clPid}/approvals/${again.id}/decide`, { decision: 'APPROVE' });
     assert.equal((await call(owner, 'POST', `/projects/${clPid}/issues/${t2}/move`, { statusId: done })).status, 200);
     // Trả về tự do.
+    assert.equal((await call(owner, 'PUT', `/projects/${clPid}/workflows/${wf.id}/transitions`, { mode: 'free' })).status, 200);
+  });
+
+  it('WIP chặn cứng (26/11): wipMode=block + giới hạn 1 ⇒ thẻ thứ hai vào cột bị chặn; tắt ⇒ chỉ cảnh báo', async () => {
+    const prog = statusOf(cl, 'In Progress');
+    assert.equal((await call(owner, 'PATCH', `/projects/${clPid}/statuses/${prog}`, { wipLimit: 1 })).status, 200);
+    assert.equal((await call(owner, 'PATCH', `/projects/${clPid}`, { settings: { wipMode: 'block' } })).status, 200);
+    const mk = async (title: string) => (await call(owner, 'POST', `/projects/${clPid}/issues`, { typeId: typeId(cl, 'TASK'), title })).data.number;
+    // Dọn cột: đưa mọi thẻ đang In Progress về To Do trước khi đo.
+    const todo = statusOf(cl, 'To Do');
+    for (const it of await prisma.workIssue.findMany({ where: { projectId: clPid, statusId: prog, deletedAt: null }, select: { number: true } })) {
+      await call(owner, 'POST', `/projects/${clPid}/issues/${it.number}/move`, { statusId: todo });
+    }
+    const a = await mk('WIP a'); const b = await mk('WIP b');
+    assert.equal((await call(owner, 'POST', `/projects/${clPid}/issues/${a}/move`, { statusId: prog })).status, 200);
+    const full = await call(owner, 'POST', `/projects/${clPid}/issues/${b}/move`, { statusId: prog });
+    assert.equal(full.code, 'WORK_WIP_LIMIT');
+    assert.equal((await call(owner, 'PATCH', `/projects/${clPid}`, { settings: { wipMode: null } })).status, 200);
+    assert.equal((await call(owner, 'POST', `/projects/${clPid}/issues/${b}/move`, { statusId: prog })).status, 200);
+    assert.equal((await call(owner, 'PATCH', `/projects/${clPid}/statuses/${prog}`, { wipLimit: null })).status, 200);
+  });
+
+  it('luật notAssignee (26/11): người được giao không tự chuyển sang Done — kể cả ADMIN là người được giao; người khác chuyển được', async () => {
+    const wf = cl.workflows.find((w: any) => w.isDefault);
+    const done = statusOf(cl, 'Done');
+    const prog = statusOf(cl, 'In Progress');
+    const r = await call(owner, 'PUT', `/projects/${clPid}/workflows/${wf.id}/transitions`, {
+      mode: 'restricted',
+      transitions: wf.statuses.map((st: any) => ({ from: null, to: st.id, rules: st.id === done ? { notAssignee: true } : null })),
+    });
+    assert.equal(r.status, 200, JSON.stringify(r.raw));
+    const cfg = (await call(owner, 'GET', `/projects/${clPid}`)).data;
+    assert.deepEqual(cfg.workflows.find((w: any) => w.isDefault).transitions.find((t: any) => t.toStatusId === done).rules, { notAssignee: true });
+    const t = (await call(owner, 'POST', `/projects/${clPid}/issues`, { typeId: typeId(cl, 'TASK'), title: 'Self-approve guard', assigneeId: dev.id })).data.number;
+    assert.equal((await call(dev, 'POST', `/projects/${clPid}/issues/${t}/move`, { statusId: prog })).status, 200);
+    const self = await call(dev, 'POST', `/projects/${clPid}/issues/${t}/move`, { statusId: done });
+    assert.equal(self.status, 400);
+    assert.equal(self.code, 'WORK_TRANSITION_SELF');
+    // ADMIN cũng không vượt khi chính mình là người được giao.
+    await call(owner, 'PATCH', `/projects/${clPid}/issues/${t}`, { assigneeId: owner.id });
+    assert.equal((await call(owner, 'POST', `/projects/${clPid}/issues/${t}/move`, { statusId: done })).code, 'WORK_TRANSITION_SELF');
+    await call(owner, 'PATCH', `/projects/${clPid}/issues/${t}`, { assigneeId: dev.id });
+    assert.equal((await call(owner, 'POST', `/projects/${clPid}/issues/${t}/move`, { statusId: done })).status, 200);
     assert.equal((await call(owner, 'PUT', `/projects/${clPid}/workflows/${wf.id}/transitions`, { mode: 'free' })).status, 200);
   });
 

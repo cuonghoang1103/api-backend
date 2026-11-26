@@ -1280,7 +1280,7 @@ router.put('/projects/:pid/workflows/:wfId/transitions', asyncHandler(async (req
     transitions: z.array(z.object({
       from: id.nullable(), to: id,
       // Luật của luồng chuyển (đợt S1): cần phê duyệt / chỉ bộ phận X.
-      rules: z.object({ requireApproval: z.boolean().optional(), teamIds: z.array(id).max(20).optional() }).nullable().optional(),
+      rules: z.object({ requireApproval: z.boolean().optional(), notAssignee: z.boolean().optional(), teamIds: z.array(id).max(20).optional() }).nullable().optional(),
     })).max(500).optional(),
   }), req.body);
   await custom.setTransitions(callerId(req), idParam(req, 'pid'), idParam(req, 'wfId'), body);

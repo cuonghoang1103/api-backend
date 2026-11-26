@@ -233,6 +233,8 @@ export const agile: Strings<typeof En> = {
   actionFromCard: 'Tạo việc cần làm',
   assignee: 'Người làm',
   unassigned: 'Chưa giao',
+  nextSprint: 'Vào sprint kế tiếp',
+  nextSprintTip: 'Thẻ hành động vào thẳng sprint đang lên kế hoạch kế tiếp (chưa có sprint nào ⇒ nằm ở backlog).',
   addAction: 'Thêm & tạo thẻ',
   actionCreated: 'Đã tạo {k}',
   aiSummary: 'Tóm tắt AI',

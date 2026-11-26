@@ -45,6 +45,8 @@ export const actionInput = z.object({
   cardId: z.number().int().positive().nullable().optional(),
   assigneeId: z.number().int().positive().nullable().optional(),
   createIssue: z.boolean().default(true),
+  /** 26/11/2026: thẻ hành động vào thẳng sprint PLANNED kế tiếp (không có ⇒ ở backlog như cũ). */
+  nextSprint: z.boolean().optional(),
   typeId: z.number().int().positive().optional(),
 });
 
@@ -274,6 +276,7 @@ export async function addAction(userId: number, projectId: number, retroId: numb
   }
   let issueId: number | null = null;
   let issueNumber: number | null = null;
+  let sprintName: string | null = null;
   if (input.createIssue) {
     const type = input.typeId
       ? await prisma.workIssueType.findFirst({ where: { id: input.typeId, projectId, archived: false }, select: { id: true } })
@@ -282,8 +285,12 @@ export async function addAction(userId: number, projectId: number, retroId: numb
     if (!type) throw new BadRequestError('This project has no issue type for action items', 'WORK_RETRO_NO_TYPE');
     const { createIssueAs } = await import('./issues.service.js');
     const desc = `Action item from retro "${r.title}".`;
+    const next = input.nextSprint
+      ? await prisma.workSprint.findFirst({ where: { projectId, state: 'PLANNED' }, orderBy: [{ startAt: { sort: 'asc', nulls: 'last' } }, { position: 'asc' }, { id: 'asc' }], select: { id: true, name: true } })
+      : null;
+    sprintName = next?.name ?? null;
     const issue = await createIssueAs(userId, projectId, {
-      typeId: type.id, title: input.title, assigneeId: input.assigneeId ?? undefined,
+      typeId: type.id, title: input.title, assigneeId: input.assigneeId ?? undefined, sprintId: next?.id ?? undefined,
       descriptionJson: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: desc }] }] },
     });
     issueId = issue.id;
@@ -291,7 +298,7 @@ export async function addAction(userId: number, projectId: number, retroId: numb
   }
   const act = await prisma.workRetroAction.create({ data: { retroId: r.id, cardId: input.cardId ?? null, title: input.title, assigneeId: input.assigneeId ?? null, issueId, createdById: userId } });
   emitAgile(projectId, 'retro', r.id, 'action');
-  return { id: act.id, issueNumber };
+  return { id: act.id, issueNumber, sprintName };
 }
 
 export async function deleteAction(userId: number, projectId: number, retroId: number, actionId: number) {

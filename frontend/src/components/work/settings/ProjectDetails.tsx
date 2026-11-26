@@ -10,6 +10,7 @@ import { useProjectInvalidate } from './useProjectInvalidate';
 import { ProjectIdentity } from './ProjectIdentity';
 import { wt, wfmt } from '@/components/work/i18n';
 import { ProjectCoverPicker } from './ProjectCoverPicker'; // UX-D
+import { readBanner, ProjectBanner, type BannerTone } from '../ProjectBanner';
 
 const TEMPLATE_LABEL: Record<ProjectConfig['template'], string> = {
   get BLANK() { return wt('settings.tplBLANK'); },
@@ -99,6 +100,7 @@ export default function ProjectDetails({ config, slug }: { config: ProjectConfig
     <ProjectIdentity config={config} slug={slug} />
     <AiGuidelines config={config} slug={slug} />
     <DefinitionOfDone config={config} slug={slug} />
+    <BannerSetting config={config} slug={slug} />
     <DoneRules config={config} slug={slug} />
     <TeamRules config={config} slug={slug} />
     </>
@@ -320,6 +322,54 @@ function TeamRules({ config, slug }: { config: ProjectConfig; slug: string }) {
           <Switch checked={on} onChange={(v) => save.mutate(v)} disabled={!canEdit || save.isPending} label={wt('settings.allowMembersSprints')} />
         </div>
       </div>
+    </Section>
+  );
+}
+
+/**
+ * Dải thông báo đầu dự án (settings.banner) — 26/11/2026. Mẫu nhanh "Solo · 1 người đóng 5 vai" cho đồ án một người
+ * dùng nhiều tài khoản vai (luật trung thực: ai xem bảng cũng biết ngay).
+ */
+function BannerSetting({ config, slug }: { config: ProjectConfig; slug: string }) {
+  const invalidate = useProjectInvalidate(config.id, slug);
+  const canEdit = config.permissions.settings;
+  const saved = readBanner(config.settings);
+  const [text, setText] = useState(saved?.text ?? '');
+  const [tone, setTone] = useState<BannerTone>(saved?.tone ?? 'info');
+  useEffect(() => { const b = readBanner(config.settings); setText(b?.text ?? ''); setTone(b?.tone ?? 'info'); }, [config.settings]);
+  const dirty = text.trim() !== (saved?.text ?? '') || (text.trim() !== '' && tone !== (saved?.tone ?? 'info'));
+  const save = useMutation({
+    mutationFn: () => workApi.updateProject(config.id, { settings: { banner: text.trim() ? { text: text.trim(), tone } : null } }),
+    onSuccess: () => { toast.success(text.trim() ? wt('settings.bannerSaved') : wt('settings.bannerOff')); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('settings.bannerFailed'))),
+  });
+  const preview = text.trim() ? { ...config, settings: { ...config.settings, banner: { text: text.trim(), tone } } } : null;
+  return (
+    <Section title={wt('settings.banner')} description={wt('settings.bannerDesc')}>
+      {canEdit ? (
+        <form className="max-w-[640px] space-y-3" onSubmit={(e) => { e.preventDefault(); if (dirty && !save.isPending) save.mutate(); }}>
+          <Field label={wt('settings.bannerText')} hint={`${wfmt.number(text.length)} / 200`}>
+            <input className="w-input" maxLength={200} value={text} onChange={(e) => setText(e.target.value)} placeholder={wt('settings.bannerPlaceholder')} />
+          </Field>
+          <div className="flex flex-wrap items-center gap-2">
+            <Select className="w-auto" value={tone} onChange={(e) => setTone(e.target.value as BannerTone)}>
+              <option value="info">{wt('settings.bannerInfo')}</option>
+              <option value="solo">{wt('settings.bannerSolo')}</option>
+              <option value="warn">{wt('settings.bannerWarn')}</option>
+            </Select>
+            <button type="button" className="w-btn w-btn-sm" onClick={() => { setText(wt('settings.bannerSoloText')); setTone('solo'); }}>{wt('settings.bannerUseSolo')}</button>
+          </div>
+          {preview && <div className="overflow-hidden rounded-md border border-[var(--w-border)]"><ProjectBanner config={preview} /></div>}
+          <button type="submit" className="w-btn w-btn-primary" disabled={!dirty || save.isPending}>
+            {save.isPending && <Spinner size={12} />}
+            {wt('settings.bannerSave')}
+          </button>
+        </form>
+      ) : saved ? (
+        <div className="max-w-[640px] overflow-hidden rounded-md border border-[var(--w-border)]"><ProjectBanner config={config} /></div>
+      ) : (
+        <p className="text-[13px] text-[var(--w-text-3)]">{wt('settings.bannerNone')}</p>
+      )}
     </Section>
   );
 }

@@ -174,8 +174,15 @@ export async function updateReview(userId: number, projectId: number, number: nu
   for (const k of ['method', 'size', 'meetingAt', 'meetingMinutes', 'reworkMinutes', 'decision'] as const) if (patch[k] !== undefined) (data as Record<string, unknown>)[k] = patch[k];
   for (const k of ['workProduct', 'prUrl', 'entryCriteria', 'exitCriteria', 'notes'] as const) if (patch[k] !== undefined) (data as Record<string, unknown>)[k] = patch[k]?.trim() || null;
   if (patch.prUrl && !/^https?:\/\//i.test(patch.prUrl)) throw new BadRequestError('The pull request link must start with http(s)://', 'VALIDATION_ERROR');
+  if (patch.decision !== undefined) await assertNotAuthor(s.id, userId, 'set the decision of');
   await prisma.workReviewSession.update({ where: { id: s.id }, data });
   return getReview(userId, projectId, number);
+}
+
+/** 26/11/2026: tác giả sản phẩm được review KHÔNG tự ra quyết định / tự đóng phiên review của mình. */
+async function assertNotAuthor(sessionId: number, userId: number, what: string) {
+  const author = await prisma.workReviewParticipant.count({ where: { sessionId, userId, role: 'AUTHOR' } });
+  if (author) throw new AppError(`The author cannot ${what} their own review — the moderator or another reviewer has to`, 403, 'WORK_REVIEW_SELF');
 }
 
 export async function setParticipants(userId: number, projectId: number, number: number, list: Array<{ userId: number; role: string; prepMinutes?: number | null }>) {
@@ -224,6 +231,9 @@ export async function transitionReview(userId: number, projectId: number, number
   if (!s) throw new NotFoundError('Review not found');
   if (!(REVIEW_FLOW[s.status as ReviewStatus] ?? []).includes(to)) throw new ConflictError(`A review in ${s.status} cannot move to ${to}`);
   if (to === 'CLOSED') {
+    if (s.participants.some((p) => p.userId === userId && p.role === 'AUTHOR')) {
+      throw new AppError('The author cannot close their own review — the moderator or another reviewer has to', 403, 'WORK_REVIEW_SELF');
+    }
     const why = closeBlockers({ decision: s.decision, items: s.items, participants: s.participants });
     if (why.length) throw new AppError(`Cannot close the review yet: ${why.join(', ')}`, 409, 'WORK_REVIEW_NOT_READY', { blockers: why });
     if (s.decision === 'REINSPECT') throw new AppError('The decision is "re-inspect" — move it to Rework and hold the meeting again instead of closing', 409, 'WORK_REVIEW_REINSPECT');

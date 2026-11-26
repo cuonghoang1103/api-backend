@@ -9,7 +9,7 @@ import { AlertTriangle, ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, workError, type ProjectConfig } from '@/lib/work-api';
 import { Spinner } from '../ui';
-import { Section, Select } from './shared';
+import { Section, Select, Switch } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
 import { wt } from '@/components/work/i18n';
 
@@ -82,6 +82,7 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
   const addCol = () => setDraft((d) => ({ ...d, cols: [...d.cols, { uid: uid(), name: wt('pboard.newColumn'), wip: '' }] }));
 
   return (
+    <>
     <Section
       title={wt('pboard.title')}
       description={wt('pboard.desc')}
@@ -214,6 +215,30 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
             </button>
           </div>
         )}
+      </div>
+    </Section>
+    <WipMode config={config} slug={slug} />
+    </>
+  );
+}
+
+/**
+ * Giới hạn WIP chặn cứng (settings.wipMode = 'block', 26/11/2026): máy chủ từ chối kéo thêm thẻ vào cột đã đủ WIP
+ * (board, sửa hàng loạt, AI, MCP đều như nhau). Tắt = chỉ tô đỏ cột như cũ.
+ */
+function WipMode({ config, slug }: { config: ProjectConfig; slug: string }) {
+  const invalidate = useProjectInvalidate(config.id, slug);
+  const on = (config.settings as { wipMode?: unknown })?.wipMode === 'block';
+  const save = useMutation({
+    mutationFn: (v: boolean) => workApi.updateProject(config.id, { settings: { wipMode: v ? 'block' : null } }),
+    onSuccess: (_d, v) => { toast.success(v ? wt('pboard.wipBlockOn') : wt('pboard.wipBlockOff')); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('pboard.wipBlockFailed'))),
+  });
+  return (
+    <Section title={wt('pboard.wipBlock')} description={wt('pboard.wipBlockDesc')}>
+      <div className="flex items-center gap-3 text-[13px]">
+        <Switch checked={on} disabled={!config.permissions.settings || save.isPending} onChange={(v) => save.mutate(v)} label={wt('pboard.wipBlock')} />
+        <span className="text-[var(--w-text-2)]">{on ? wt('pboard.wipBlockStateOn') : wt('pboard.wipBlockStateOff')}</span>
       </div>
     </Section>
   );

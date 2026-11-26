@@ -109,6 +109,7 @@ export async function assertDoneRequirements(tx: Tx, projectId: number, issueId:
  *
  * Luật của dòng khớp (WorkTransition.rules — đợt S1, trước đó là cột chết):
  *   - teamIds: chỉ thành viên các bộ phận này (hoặc ADMIN dự án) được chuyển;
+ *   - notAssignee: người đang được giao thẻ không được tự chuyển (không tự duyệt việc của mình);
  *   - requireApproval: thẻ phải có một phê duyệt ISSUE đã APPROVED mà nội dung
  *     chưa đổi kể từ lúc ký (hash còn khớp) — ADMIN cũng không vượt được.
  * Dòng cụ thể (from = trạng thái hiện tại) thắng dòng "từ bất kỳ đâu". Chỉ áp
@@ -129,6 +130,12 @@ async function assertTransitionAllowed(
   const rules = transitionRulesOf((rows.find((r) => r.fromStatusId === fromStatusId) ?? rows[0]).rules);
   if (!hasRules(rules) || !ctx || (ctx.actor.kind !== 'USER' && ctx.actor.kind !== 'AI' && ctx.actor.kind !== 'AGENT') || !ctx.actor.userId) return;
   const userId = ctx.actor.userId;
+  if (rules.notAssignee) {
+    const it = await tx.workIssue.findUnique({ where: { id: ctx.issueId }, select: { assigneeId: true } });
+    if (it?.assigneeId === userId) {
+      throw new BadRequestError('The assignee cannot make this status change — someone else has to review and move it', 'WORK_TRANSITION_SELF');
+    }
+  }
   if (rules.teamIds?.length) {
     const access = await loadProjectAccess(userId, ctx.projectId);
     if (access?.role !== 'ADMIN') {
@@ -153,6 +160,27 @@ async function assertTransitionAllowed(
         'WORK_TRANSITION_APPROVAL',
       );
     }
+  }
+}
+
+/**
+ * Giới hạn WIP CHẶN CỨNG (26/11/2026) — chỉ khi settings.wipMode = 'block'; mặc định chỉ cảnh báo trên board như cũ.
+ * Cột = cột board chứa trạng thái đích (boardColumns: settings.boardColumns hoặc theo trạng thái); đếm mọi thẻ chưa xoá
+ * của dự án đang ở các trạng thái của cột đó. Kéo trong CÙNG cột (đổi trạng thái con) không bị chặn. Luật tự động không bị chặn.
+ */
+async function assertWipLimit(tx: Tx, projectId: number, issueId: number, fromStatusId: number, toStatusId: number) {
+  const p = await tx.workProject.findUnique({ where: { id: projectId }, select: { settings: true } });
+  if ((p?.settings as { wipMode?: unknown } | null)?.wipMode !== 'block') return;
+  const workflows = await tx.workWorkflow.findMany({
+    where: { projectId },
+    select: { id: true, isDefault: true, statuses: { orderBy: { position: 'asc' }, select: { id: true, name: true, category: true, wipLimit: true } } },
+  });
+  const { boardColumns } = await import('./projects.service.js');
+  const col = boardColumns(workflows, p?.settings).find((c) => c.statusIds.includes(toStatusId));
+  if (!col || col.wipLimit == null || col.statusIds.includes(fromStatusId)) return;
+  const n = await tx.workIssue.count({ where: { projectId, deletedAt: null, statusId: { in: col.statusIds }, id: { not: issueId } } });
+  if (n >= col.wipLimit) {
+    throw new BadRequestError(`"${col.name}" is at its WIP limit (${n}/${col.wipLimit}) — finish something there first`, 'WORK_WIP_LIMIT');
   }
 }
 
@@ -507,6 +535,7 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, rawAc
 
     if (toStatusId !== undefined && toStatusId !== before.statusId && target) {
       await assertTransitionAllowed(tx, workflowId, before.statusId, toStatusId, { issueId, projectId: before.projectId, actor });
+      if (actor.kind === 'USER' || actor.kind === 'AI' || actor.kind === 'AGENT') await assertWipLimit(tx, before.projectId, issueId, before.statusId, toStatusId);
       track('statusId', before.statusId, toStatusId);
       data.statusId = toStatusId;
       // Vào cột DONE thì ghi thời điểm xong; rời DONE thì xoá — báo cáo

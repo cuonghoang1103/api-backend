@@ -174,9 +174,11 @@ export function approvalForClient<T extends {
  * CLIENT — không thì 400 WORK_APPROVER_NOT_CLIENT_VISIBLE (tiêu đề phê duyệt + thông
  * báo sẽ lộ đối tượng nội bộ cho khách).
  */
-async function assertApprovers(projectId: number, ids: number[], target: { pageVisibility?: string; issueShared?: boolean; crShared?: boolean } = {}) {
-  const { pageVisibility, issueShared, crShared } = target;
+async function assertApprovers(projectId: number, ids: number[], target: { pageVisibility?: string; issueShared?: boolean; crShared?: boolean; requesterId?: number } = {}) {
+  const { pageVisibility, issueShared, crShared, requesterId } = target;
   if (!ids.length) throw new BadRequestError('Add at least one approver', 'WORK_NO_APPROVERS');
+  // 26/11/2026: không tự duyệt yêu cầu của chính mình (dự án một người đóng nhiều vai dùng tài khoản vai khác để duyệt).
+  if (requesterId !== undefined && ids.includes(requesterId)) throw new BadRequestError('You cannot approve your own request — pick someone else as approver', 'WORK_SELF_APPROVER');
   if (ids.length > MAX_APPROVERS) throw new BadRequestError(`At most ${MAX_APPROVERS} approvers`, 'WORK_LIMIT');
   for (const uid of ids) {
     const a = await loadProjectAccess(uid, projectId);
@@ -292,7 +294,7 @@ export async function createApproval(userId: number, projectId: number, input: C
   const issue = await prisma.workIssue.findFirst({ where: { projectId, number: input.issueNumber, deletedAt: null }, select: { id: true, number: true, title: true, clientVisible: true } });
   if (!issue) throw new NotFoundError('Issue not found');
   const approverIds = [...new Set(input.approverIds)];
-  await assertApprovers(projectId, approverIds, { issueShared: issue.clientVisible });
+  await assertApprovers(projectId, approverIds, { issueShared: issue.clientVisible, requesterId: userId });
   const vi = (await projectLanguage(projectId)) === 'vi';
   const id = await prisma.$transaction(async (tx) => {
     // Một đối tượng chỉ một yêu cầu đang chờ — hai yêu cầu song song thì không biết cái nào có hiệu lực.
@@ -322,7 +324,7 @@ async function createDocApproval(userId: number, projectId: number, access: Proj
   if (!page) throw new NotFoundError('Document not found');
   if (page.status === 'ARCHIVED') throw new BadRequestError('Archived documents cannot be sent for approval — restore it to Draft first', 'WORK_PAGE_ARCHIVED');
   const approverIds = [...new Set(input.approverIds)];
-  await assertApprovers(projectId, approverIds, { pageVisibility: page.visibility });
+  await assertApprovers(projectId, approverIds, { pageVisibility: page.visibility, requesterId: userId });
   const vi = (await projectLanguage(projectId)) === 'vi';
   const id = await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM work_pages WHERE id = ${page.id} FOR UPDATE`;
@@ -359,7 +361,7 @@ export async function createCrApproval(
   if (!cr) throw new NotFoundError('Change request not found');
   if (!crCanRequestApproval(cr.status)) throw new ConflictError(`This change request is ${cr.status.toLowerCase().replace('_', ' ')} and cannot be sent for approval`);
   const approverIds = [...new Set(input.approverIds)];
-  await assertApprovers(projectId, approverIds, { crShared: cr.clientVisible });
+  await assertApprovers(projectId, approverIds, { crShared: cr.clientVisible, requesterId: userId });
   const id = await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM work_change_requests WHERE id = ${cr.id} FOR UPDATE`;
     const open = await tx.workApproval.count({ where: { changeRequestId: cr.id, status: 'PENDING' } });

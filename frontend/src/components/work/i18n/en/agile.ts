@@ -235,6 +235,8 @@ export const agile = {
   actionFromCard: 'Make action item',
   assignee: 'Assignee',
   unassigned: 'Unassigned',
+  nextSprint: 'Into the next sprint',
+  nextSprintTip: 'The action issue goes straight into the next planned sprint (none planned ⇒ it stays in the backlog).',
   addAction: 'Add & create issue',
   actionCreated: 'Created {k}',
   aiSummary: 'AI summary',

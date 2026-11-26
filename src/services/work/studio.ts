@@ -144,13 +144,18 @@ export function stageActivationBlocker(stages: StageLite[], targetId: number): S
 
 // ─── Luật của luồng chuyển (WorkTransition.rules) ────────────────
 
-export interface TransitionRules { requireApproval?: boolean; teamIds?: number[] }
+/**
+ * notAssignee (26/11/2026): người đang được giao thẻ KHÔNG được tự chuyển (vd Review → Done, Retest → Closed) — "không tự duyệt
+ * việc của mình", cả ADMIN cũng không vượt. Dùng cho dự án một người đóng nhiều vai (5 tài khoản vai) lẫn nhóm thật.
+ */
+export interface TransitionRules { requireApproval?: boolean; teamIds?: number[]; notAssignee?: boolean }
 
 /** Chuẩn hoá rules từ JSON lưu trong DB (sai kiểu ⇒ bỏ). */
 export function transitionRulesOf(raw: unknown): TransitionRules {
   const r = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
   const out: TransitionRules = {};
   if (r.requireApproval === true) out.requireApproval = true;
+  if (r.notAssignee === true) out.notAssignee = true;
   if (Array.isArray(r.teamIds)) {
     const ids = [...new Set(r.teamIds.filter((x): x is number => Number.isInteger(x) && x > 0))];
     if (ids.length) out.teamIds = ids;
@@ -159,5 +164,5 @@ export function transitionRulesOf(raw: unknown): TransitionRules {
 }
 
 export function hasRules(r: TransitionRules): boolean {
-  return r.requireApproval === true || !!r.teamIds?.length;
+  return r.requireApproval === true || r.notAssignee === true || !!r.teamIds?.length;
 }

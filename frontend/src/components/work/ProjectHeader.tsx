@@ -15,6 +15,7 @@
  *   · Tên workspace chỉ hiện khi còn dư chỗ; luôn có trong tooltip của tên dự án.
  */
 
+import { ProjectBanner } from './ProjectBanner';
 import Link from 'next/link';
 import { useCallback, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { ChevronRight, CircleHelp, Lock, LockOpen, MoreHorizontal } from 'lucide-react';
@@ -235,6 +236,7 @@ export default function ProjectHeader({ config, title, children, extra, tools = 
         )}
       </header>
       <EditLockBanner config={config} />
+      <ProjectBanner config={config} />
     </>
   );
 }

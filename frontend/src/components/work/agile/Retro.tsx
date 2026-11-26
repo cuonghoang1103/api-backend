@@ -178,11 +178,12 @@ export function RetroBoard({ pid, rid, config, onBack }: { pid: number; rid: num
   const [actionTitle, setActionTitle] = useState('');
   const [actionCard, setActionCard] = useState<number | null>(null);
   const [assignee, setAssignee] = useState<number | ''>('');
+  const [nextSprint, setNextSprint] = useState(true);
   const [aiActions, setAiActions] = useState<Array<{ title?: string }>>([]);
   const lock = useMutation({ mutationFn: (locked: boolean) => agileApi.retroUpdate(pid, rid, { locked }), onSuccess: refresh, onError: err });
   const addAction = useMutation({
-    mutationFn: (t: string) => agileApi.actionAdd(pid, rid, { title: t, cardId: actionCard, assigneeId: assignee || null, createIssue: true }),
-    onSuccess: (x) => { toast.success(wt('agile.actionCreated', { k: `${config.key}-${x.issueNumber}` })); setActionTitle(''); setActionCard(null); refresh(); },
+    mutationFn: (t: string) => agileApi.actionAdd(pid, rid, { title: t, cardId: actionCard, assigneeId: assignee || null, createIssue: true, nextSprint }),
+    onSuccess: (x) => { toast.success(wt('agile.actionCreated', { k: `${config.key}-${x.issueNumber}` }) + (x.sprintName ? ` → ${x.sprintName}` : '')); setActionTitle(''); setActionCard(null); refresh(); },
     onError: err,
   });
   const delAction = useMutation({ mutationFn: (aid: number) => agileApi.actionDelete(pid, rid, aid), onSuccess: refresh, onError: err });
@@ -234,6 +235,9 @@ export function RetroBoard({ pid, rid, config, onBack }: { pid: number; rid: num
                 <option value="">{wt('agile.unassigned')}</option>
                 {config.members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER').map((m) => <option key={m.id} value={m.id}>{userName(m)}</option>)}
               </Select>
+              <label className="flex items-center gap-1.5 text-[12.5px] text-[var(--w-text-2)]" title={wt('agile.nextSprintTip')}>
+                <input type="checkbox" className="accent-[var(--w-accent)]" checked={nextSprint} onChange={(e) => setNextSprint(e.target.checked)} /> {wt('agile.nextSprint')}
+              </label>
               <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={!actionTitle.trim() || addAction.isPending} onClick={() => addAction.mutate(actionTitle.trim())} data-testid="retro-add-action">{wt('agile.addAction')}</button>
             </div>
           )}

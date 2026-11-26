@@ -157,6 +157,9 @@ describe('CT Work — đợt 6: review/inspection, baseline, quản lý test chu
     const blocked = await call(owner, 'POST', `/projects/${pid}/reviews/${num}/transition`, { to: 'CLOSED' });
     assert.equal(blocked.status, 409);
     assert.equal(blocked.code, 'WORK_REVIEW_NOT_READY');
+    // 26/11: tác giả (staff) không tự ra quyết định / tự đóng phiên review của mình.
+    assert.equal((await call(staff, 'PATCH', `/projects/${pid}/reviews/${num}`, { decision: 'ACCEPT' })).code, 'WORK_REVIEW_SELF');
+    assert.equal((await call(staff, 'POST', `/projects/${pid}/reviews/${num}/transition`, { to: 'CLOSED' })).code, 'WORK_REVIEW_SELF');
     ok(await call(owner, 'PATCH', `/projects/${pid}/reviews/${num}`, { meetingMinutes: 60, decision: 'REINSPECT' }));
     assert.equal((await call(owner, 'POST', `/projects/${pid}/reviews/${num}/transition`, { to: 'CLOSED' })).code, 'WORK_REVIEW_REINSPECT');
     ok(await call(owner, 'PATCH', `/projects/${pid}/reviews/${num}`, { decision: 'ACCEPT_WITH_CHANGES' }));

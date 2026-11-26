@@ -4,6 +4,8 @@
  * Luật của MỘT mũi tên trong quy trình (lớp studio S1 — WorkTransition.rules):
  *   · requireApproval — thẻ phải có yêu cầu phê duyệt ĐÃ DUYỆT mới đi được
  *     (mô-đun approvals; ADMIN cũng không vượt);
+ *   · notAssignee — người đang được giao thẻ không tự chuyển được (không tự duyệt
+ *     việc của mình; luôn có, không cần mô-đun — 26/11/2026);
  *   · teamIds — chỉ thành viên các bộ phận này mới chuyển được (mô-đun teams;
  *     ADMIN dự án vượt được).
  * Server kiểm ở issueChange.ts; ở đây chỉ sửa bản nháp (lưu cùng nút Save
@@ -18,8 +20,9 @@ import { TeamChip, studioOn, useWorkspaceTeams } from '../studio/shared';
 import type { TransitionDraft } from './useTransitionDraft';
 import { wt } from '@/components/work/i18n';
 
-export function rulesAvailable(config: ProjectConfig): boolean {
-  return studioOn(config, 'approvals') || studioOn(config, 'teams');
+// notAssignee không cần mô-đun nào ⇒ luôn có ít nhất một luật để đặt.
+export function rulesAvailable(_config: ProjectConfig): boolean {
+  return true;
 }
 
 export default function TransitionRulesFields({ config, draft, edgeKey, canEdit }: { config: ProjectConfig; draft: TransitionDraft; edgeKey: string; canEdit: boolean }) {
@@ -28,7 +31,6 @@ export default function TransitionRulesFields({ config, draft, edgeKey, canEdit 
   const teams = useWorkspaceTeams(config.workspace.id, teamsOn);
   const pop = useToggle();
   const ref = useRef<HTMLButtonElement>(null);
-  if (!approvalsOn && !teamsOn) return null;
   const r = draft.rules.get(edgeKey) ?? {};
   const restricted = draft.mode === 'restricted';
   const set = (patch: Partial<typeof r>) => draft.setRule(edgeKey, { ...r, ...patch });
@@ -37,6 +39,13 @@ export default function TransitionRulesFields({ config, draft, edgeKey, canEdit 
   return (
     <div className="space-y-2.5">
       {!restricted && <p className="text-[12px] text-[var(--w-text-3)]">{wt('wf.rulesApply')}</p>}
+      <label className={`flex items-start gap-2 text-[13px] ${canEdit && restricted ? 'cursor-pointer' : ''}`}>
+        <input type="checkbox" className="mt-0.5 accent-[var(--w-accent)]" checked={!!r.notAssignee} disabled={!canEdit || !restricted} onChange={(e) => set({ notAssignee: e.target.checked })} />
+        <span>
+          {wt('wf.notAssignee')}
+          <span className="block text-[12px] text-[var(--w-text-3)]">{wt('wf.notAssigneeDesc')}</span>
+        </span>
+      </label>
       {approvalsOn && (
         <label className={`flex items-start gap-2 text-[13px] ${canEdit && restricted ? 'cursor-pointer' : ''}`}>
           <input type="checkbox" className="mt-0.5 accent-[var(--w-accent)]" checked={!!r.requireApproval} disabled={!canEdit || !restricted} onChange={(e) => set({ requireApproval: e.target.checked })} />
@@ -82,6 +91,7 @@ export function rulesSummary(config: ProjectConfig, draft: TransitionDraft, key:
   const r = draft.rules.get(key);
   if (!r) return '';
   const parts: string[] = [];
+  if (r.notAssignee) parts.push(wt('wf.byOthers'));
   if (r.requireApproval && studioOn(config, 'approvals')) parts.push(wt('wf.needsApproval'));
   if (r.teamIds?.length && studioOn(config, 'teams')) parts.push(wt('wf.onlyX', { x: r.teamIds.map((id) => teamKeys.get(id) ?? '?').join(', ') }));
   return parts.join(' · ');

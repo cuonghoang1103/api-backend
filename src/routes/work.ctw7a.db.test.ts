@@ -444,6 +444,14 @@ describe('CT Work đợt 7a — OKR, planning poker, retro, timer (HTTP + DB th�
     const iss = await prisma.workIssue.findFirstOrThrow({ where: { projectId: pid, number: act.data.issueNumber } });
     assert.equal(iss.title, 'Require one review per PR');
     assert.equal(iss.assigneeId, dev2.id);
+    assert.equal(iss.sprintId, null);
+    // 26/11: nextSprint ⇒ thẻ vào sprint PLANNED kế tiếp.
+    await call(owner, 'POST', `/projects/${pid}/sprints`, { name: 'Sprint retro-next' });
+    const plan = await prisma.workSprint.findFirstOrThrow({ where: { projectId: pid, state: 'PLANNED' }, orderBy: [{ startAt: { sort: 'asc', nulls: 'last' } }, { position: 'asc' }, { id: 'asc' }] });
+    const act2 = await call(dev, 'POST', `/projects/${pid}/retros/${rid}/actions`, { title: 'Pair on flaky tests', nextSprint: true });
+    assert.equal(act2.status, 201, JSON.stringify(act2.raw));
+    assert.equal(act2.data.sprintName, plan.name);
+    assert.equal((await prisma.workIssue.findFirstOrThrow({ where: { projectId: pid, number: act2.data.issueNumber } })).sprintId, plan.id);
     const d = (await retroOf(teacher)).data;
     assert.equal(d.locked, true);
     assert.equal(d.actions[0].issue.number, act.data.issueNumber);

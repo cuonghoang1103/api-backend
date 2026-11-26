@@ -90,7 +90,7 @@ export interface WorkspaceDetail {
 
 export interface WorkStatus { id: number; name: string; category: StatusCategory; color: string; position: number; wipLimit: number | null }
 /** Luật của luồng chuyển (S1): cần phê duyệt thẻ / chỉ thành viên các bộ phận. `{}` = không luật. */
-export interface TransitionRules { requireApproval?: boolean; teamIds?: number[] }
+export interface TransitionRules { requireApproval?: boolean; notAssignee?: boolean; teamIds?: number[] }
 export interface WorkTransition { id: number; fromStatusId: number | null; toStatusId: number; name: string | null; rules?: TransitionRules }
 export interface WorkWorkflow { id: number; name: string; isDefault: boolean; statuses: WorkStatus[]; transitions: WorkTransition[] }
 /** Bố cục sơ đồ: statusId → toạ độ (lưu trong project.settings.workflowLayout[wfId]). */

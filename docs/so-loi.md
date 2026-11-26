@@ -1250,3 +1250,10 @@ Mẫu một mục:
 - **Cách sửa:** title chỉ còn tên tiếng Anh; thêm phép kiểm `course.title` chứa `|||` vào `scripts/course-content-check.mjs` (thử bản cũ ⇒ ❌); deploy lại.
 - **Ảnh hưởng:** khoá mới trễ lên web thêm một lượt deploy (~1 giờ); không ảnh hưởng khoá khác.
 - **Bài học:** mọi luật "từ chối" của `course-seed.mjs` phải có bản sao trong bộ kiểm trước commit; sau deploy luôn grep `✗` trong `seed-courses.log`, không chỉ nhìn "XONG".
+
+### 26/11/2026 — 159 video lồng giọng lại (125 DBI202/PostgreSQL) render xong nhưng không bao giờ lên R2
+- **Triệu chứng:** 131/376 tập DBI/PG đã render giọng mới, mà web vẫn phát giọng cũ; `tu-day-r2.log` báo "không có tập sót", `day-lai.log` báo "vòng: 0 tập" suốt nhiều giờ.
+- **Nguyên nhân:** lượt render lại ghi mới `thong-tin.json` MẤT `r2Url`. Máy nhà có hai vòng đẩy: `~/agent-nha/r2/tu-day-r2-nha.mjs` bỏ bài web ĐÃ có `vi.url` (để khỏi đẩy phần a/b/c thừa), còn `vong-lai.sh` (đẩy lại tập lồng giọng) chỉ nhận tập CÒN `r2Url` ⇒ tập thay video rơi vào khe giữa hai luật.
+- **Cách sửa:** `~/agent-nha/r2/vong-lai2.sh` nhận thêm tập không `r2Url` nếu bài web đã có `vi.url` (đọc `content/course-videos/<khoá>.mjs`), video render từ 25/11 và `r2Goc` lệch; chạy thử ra 159 tập (82 PG, 43 DBI, 34 tập khoá khác), đang đẩy trong tmux `r2-lai`.
+- **Ảnh hưởng:** video giọng mới DBI/PG trễ lên web khoảng 1 ngày; không mất video nào (bản cũ vẫn phát).
+- **Bài học:** hai bộ lọc bổ sung nhau phải được kiểm bằng phép đếm chéo "đã render − đã lên R2" theo đúng danh sách việc (ở đây `ll5-db.txt`), không tin dòng log "0 tập sót" của từng vòng.

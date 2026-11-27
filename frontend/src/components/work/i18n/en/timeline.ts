@@ -34,4 +34,12 @@ export const timeline = {
   blocks: '{a} blocks {b}',
   fromChildren: ' (from child issues)',
   pctDone: '{n}% done',
+  // dm5 G1 (A17): cổng có ngày kế hoạch
+  gatePlanned: 'Stage {n}. {name} · planned {from} – {to}',
+  gateLate: 'late',
+  lgGate: 'Stage gate (planned)',
+  plannedStart: 'Planned start',
+  plannedEnd: 'Planned end (gate date)',
+  plannedBad: 'The planned start must be on or before the end',
+  plannedRange: 'Planned {a} – {b}',
 };

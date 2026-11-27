@@ -2,7 +2,7 @@
 
 /**
  * CT Work đợt 3B (09/10/2026) — "FPT reports": mọi tệp Excel nộp trường ngoài kiểm thử (5.1–5.3 ở trang Tests).
- * Tab nằm trong `?tab=` (wbs | tracking | weekly | ai | course) để link chia sẻ được; `?issue=N` mở ngăn kéo thẻ.
+ * Tab nằm trong `?tab=` (wbs | tracking | weekly | ai | qna | submit | course) để link chia sẻ được; `?issue=N` mở ngăn kéo thẻ.
  *   • WBS (A3)            — cây 1.0/1.1, độ phức tạp → man-day, effort dự kiến/thực tế.
  *   • Project tracking (A23) — SEP490 Report2 / SWP391 Template1 / Template4 / Product+Summary.
  *   • Weekly report (A21) — mỗi tuần một kỳ lưu được, tự điền, xuất "Week n".
@@ -25,6 +25,7 @@ import { CourseTab, TrackingTab } from '@/components/work/school/TrackingTab';
 import WeeklyTab from '@/components/work/school/WeeklyTab';
 import AiUsageTab from '@/components/work/school/AiUsageTab';
 import QnaTab from '@/components/work/school/QnaTab';
+import SubmitCheckTab from '@/components/work/school/SubmitCheckTab'; // dm5 G2 (B14): soát trước nộp
 import GradesTab from '@/components/work/teaching/GradesTab'; // CTW đợt 5: điểm rubric
 import Week1Tab from '@/components/work/classroom/Week1Tab'; // CTW đợt 5: tuần 1 làm gì
 import { wt } from '@/components/work/i18n';
@@ -35,6 +36,7 @@ const TABS = [
   { id: 'weekly', get label() { return wt('school.tabWeeklyReport'); } },
   { id: 'ai', get label() { return wt('school.tabAiUsage'); } },
   { id: 'qna', get label() { return wt('school.tabQALog'); } },
+  { id: 'submit', get label() { return wt('g2.tabSubmit'); } },
   { id: 'course', get label() { return wt('school.tabCourseGroup'); } },
   // CTW đợt 5: "Tuần 1 làm gì" + điểm rubric (giảng viên chấm, sinh viên xem khi đã công bố).
   { id: 'week1', get label() { return wt('classroom.week1Tab'); } },
@@ -84,6 +86,7 @@ function SchoolView({ config, pid }: { config: ProjectConfig; pid: number }) {
         {tab === 'weekly' && <WeeklyTab pid={pid} canEdit={canEdit} />}
         {tab === 'ai' && <AiUsageTab pid={pid} canEdit={canEdit} />}
         {tab === 'qna' && <QnaTab pid={pid} canEdit={canEdit} />}
+        {tab === 'submit' && <SubmitCheckTab pid={pid} />}
         {tab === 'course' && <CourseTab pid={pid} />}
         {tab === 'week1' && <Week1Tab pid={pid} />}
         {tab === 'grades' && <GradesTab pid={pid} />}

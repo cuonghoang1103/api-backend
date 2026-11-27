@@ -162,4 +162,11 @@ export const meeting2: Strings<typeof En> = {
   reminderMin: 'Nhắc trước (phút, 0 = tắt)',
   remindChat: 'Đăng nhắc họp vào #general',
   settingsHint: 'Bản chép lời được giữ sau khi xoá audio. Mỗi đoạn khoảng 90 giây.',
+  // dm5 G1 (A21): loại góp ý trong biên bản
+  kindLbl: 'Loại',
+  kindTip: '"Tạo thẻ" sẽ sinh gì từ dòng này: thẻ Task hoặc Bug, yêu cầu thay đổi (CR), hay câu hỏi Q&A',
+  kind_TASK: 'Task',
+  kind_BUG: 'Bug / lỗi',
+  kind_CR: 'Yêu cầu thay đổi',
+  kind_QUESTION: 'Câu hỏi Q&A',
 };

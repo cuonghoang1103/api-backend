@@ -32,6 +32,7 @@ import { govApi, govKeys } from '@/lib/work-s3b-api';
 import { ScoreBadge } from '../governance/shared';
 import { wt } from '@/components/work/i18n';
 import { LicenseWidget, MyTimerWidget, OkrWidget, PassRateWidget, SeverityWidget } from './widgets7c'; // CTW đợt 7c
+import { EarlyWarnings, RagWidget } from './widgetsDm5'; // dm5 G1: RAG (A19) + cảnh báo sớm (A18)
 
 // ─── Danh mục widget ─────────────────────────────────────────────
 
@@ -62,12 +63,14 @@ export const WIDGET_META: Record<WidgetKind, { label: string; description: strin
   license_expiring: { get label() { return wt('c7c.wl_lic'); }, get description() { return wt('c7c.wd_lic'); }, get defaultTitle() { return wt('c7c.wl_lic'); }, usesQuery: false },
   my_timer: { get label() { return wt('c7c.wl_timer'); }, get description() { return wt('c7c.wd_timer'); }, get defaultTitle() { return wt('c7c.wl_timer'); }, usesQuery: false },
   okr: { get label() { return wt('c7c.wl_okr'); }, get description() { return wt('c7c.wd_okr'); }, get defaultTitle() { return wt('c7c.wl_okr'); }, usesQuery: false },
+  // dm5 G1 (A19): RAG dự án 4 chiều + % hoàn thành có trọng số.
+  rag: { get label() { return wt('dash.l_rag'); }, get description() { return wt('dash.d_rag'); }, get defaultTitle() { return wt('dash.t_rag'); }, usesQuery: false },
 };
 
 export const WIDGET_KINDS: WidgetKind[] = [
   'kpis', 'burndown', 'cfd', 'throughput', 'cycle_time', 'aging_wip', 'velocity', 'release_burnup', 'workload', 'overdue',
   'filter', 'counter', 'pie', 'bar', 'created_resolved', 'my_issues', 'health', 'top_risks', 'text',
-  'okr', 'test_pass_rate', 'defects_by_severity', 'license_expiring', 'my_timer',
+  'okr', 'test_pass_rate', 'defects_by_severity', 'license_expiring', 'my_timer', 'rag',
 ];
 
 export const GROUP_BY_OPTIONS: Array<{ value: GroupBy; label: string }> = [
@@ -407,7 +410,7 @@ function CreatedResolvedWidget({ pid, jql, days, title }: { pid: number; jql: st
 
 // ─── Sức khoẻ ────────────────────────────────────────────────────
 
-function HealthWidget({ pid, onOpenIssue }: { pid: number; onOpenIssue: (n: number) => void }) {
+function HealthWidget({ pid, config, onOpenIssue }: { pid: number; config?: ProjectConfig; onOpenIssue: (n: number) => void }) {
   const q = useQuery({ queryKey: [...wk.reports(pid), 'insights'], queryFn: () => workApi.insights(pid), staleTime: 30_000 });
   if (q.isLoading) return <Loading />;
   if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
@@ -431,6 +434,8 @@ function HealthWidget({ pid, onOpenIssue }: { pid: number; onOpenIssue: (n: numb
           {risk.atRisk ? wt('dash.atRiskPace') : wt('dash.onTrackDot')}
         </p>
       )}
+      {/* dm5 G1 (A18): Blocked > 24h · P1–P2 đứng yên > 48h · burndown phẳng · thêm phạm vi sau Start */}
+      <EarlyWarnings pid={pid} config={config} />
       {attention.length > 0 && (
         <div className="-mx-1">
           {attention.map((i) => (
@@ -474,7 +479,8 @@ export function WidgetBody({ w, pid, config, lk, onOpenIssue }: {
     case 'bar': return <BarWidget pid={pid} jql={jql} groupBy={w.groupBy ?? 'status'} title={title} />;
     case 'created_resolved': return <CreatedResolvedWidget pid={pid} jql={jql} days={w.days ?? 30} title={title} />;
     case 'burndown': return <SprintBurndownChart pid={pid} sprintId={w.sprintId} bare height={200} />;
-    case 'health': return <HealthWidget pid={pid} onOpenIssue={onOpenIssue} />;
+    case 'health': return <HealthWidget pid={pid} config={config} onOpenIssue={onOpenIssue} />;
+    case 'rag': return <RagWidget pid={pid} />;
     case 'text': return <TextWidget text={w.text} />;
     case 'top_risks': return <TopRisksWidget pid={pid} config={config} />;
     case 'kpis': return <KpiStrip pid={pid} config={config} />;

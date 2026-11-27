@@ -7,6 +7,7 @@
  * dòng worklog nên ở đây chỉ việc invalidate thẻ.
  */
 
+import { g4Api, HATS, type Hat } from '@/lib/work-dm5g4-api';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -20,6 +21,9 @@ import { ConfirmDialog } from './settings/shared';
 import { Dialog, Spinner, UserAvatar, relativeTime } from './ui';
 import { wt, wfmt } from '@/components/work/i18n';
 import { IssueTimer } from './agile/Timer'; // CTW đợt 7a: bấm giờ trên thẻ
+
+/** dm5 G4 (C5): tên năm mũ vai. */
+const HAT_NAME: Record<Hat, string> = { C1: 'C1 PM', C2: 'C2 BA', C3: 'C3 Dev BE', C4: 'C4 Dev FE', C5: 'C5 QA' };
 
 // ─── Định dạng thời lượng ────────────────────────────────────────
 
@@ -75,6 +79,8 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
   // CTW đợt 4 (A24): Activity + Work Product theo sheet TimeLogs — mặc định gợi ý từ tiêu đề thẻ.
   const [activity, setActivity] = useState('');
   const [workProduct, setWorkProduct] = useState('');
+  // dm5 G4 (C5): mũ vai C1–C5 lúc ghi giờ (trống = máy suy từ activity + nhãn).
+  const [hat, setHat] = useState<Hat | ''>('');
   const defaults = useQuery({ queryKey: workCtw4Keys.worklogDefaults(pid, issue.number), queryFn: () => workCtw4Api.worklogDefaults(pid, issue.number), enabled: open, staleTime: 60_000 });
   useEffect(() => {
     if (!open || !defaults.data) return;
@@ -88,6 +94,7 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
     setActivity(defaults.data?.activity ?? '');
     setWorkProduct(defaults.data?.workProduct ?? '');
     setSpent('');
+    setHat('');
     setStarted(nowLocalInput());
     setNote('');
     setMode('auto');
@@ -110,7 +117,8 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
       remaining: mode === 'set' ? remainingMin! : mode,
       activity: activity || null,
       workProduct: workProduct.trim() || null,
-    }),
+      ...(hat ? { hat } : {}),
+    } as Parameters<typeof workApi.addWorklog>[2]),
     onSuccess: () => {
       toast.success(wt('time.logged', { t: fmtMinutes(minutes) }));
       qc.invalidateQueries({ queryKey: wk.issue(pid, issue.number) });
@@ -206,6 +214,13 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
           </div>
         </div>
         <p className="-mt-2 text-[12px] text-[var(--w-text-3)]">{wt('time.productHint')}</p>
+        <div>
+          <label className="w-label" htmlFor="w-lt-hat">{wt('g4.hatLabel')}</label>
+          <select id="w-lt-hat" className="w-input" value={hat} onChange={(e) => setHat(e.target.value as Hat | '')} data-testid="worklog-hat">
+            <option value="">{wt('g4.hatAuto')}</option>
+            {HATS.map((h) => <option key={h} value={h}>{HAT_NAME[h]}</option>)}
+          </select>
+        </div>
 
         <div>
           <label className="w-label" htmlFor="w-lt-note">{wt('time.workDesc')}</label>
@@ -280,6 +295,12 @@ function WorklogItem({ log, pid, num, canDelete, canEditMeta }: { log: Worklog; 
     onSuccess: () => { qc.invalidateQueries({ queryKey: wk.worklogs(pid, num) }); qc.invalidateQueries({ queryKey: workCtw4Keys.timeByActivity(pid) }); },
     onError: (err) => toast.error(workError(err, wt('time.activityFailed'))),
   });
+  const hatMeta = useMutation({
+    mutationFn: (h: Hat | null) => g4Api.setWorklogHat(pid, num, log.id, h),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: wk.worklogs(pid, num) }); qc.invalidateQueries({ queryKey: ['work', 'project', pid, 'g4', 'roles'] }); },
+    onError: (err) => toast.error(workError(err)),
+  });
+  const logHat = (log as Worklog & { hat?: Hat | null }).hat ?? null;
   const del = useMutation({
     mutationFn: () => workApi.deleteWorklog(pid, num, log.id),
     onSuccess: () => {
@@ -321,6 +342,12 @@ function WorklogItem({ log, pid, num, canDelete, canEditMeta }: { log: Worklog; 
             <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 font-medium text-[var(--w-text-2)]">{log.activity}</span>
           ) : null}
           {log.workProduct && <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 text-[var(--w-text-2)]" title={wt('time.workProduct')}>{log.workProduct}</span>}
+          {canEditMeta ? (
+            <select aria-label={wt('g4.hatLabel')} className="w-input !h-[24px] !w-auto !py-0 !text-[11.5px]" value={logHat ?? ''} disabled={hatMeta.isPending} onChange={(e) => hatMeta.mutate((e.target.value || null) as Hat | null)}>
+              <option value="">{wt('g4.hatAuto')}</option>
+              {HATS.map((h) => <option key={h} value={h}>{HAT_NAME[h]}</option>)}
+            </select>
+          ) : logHat ? <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 font-medium text-[var(--w-text-2)]">{HAT_NAME[logHat]}</span> : null}
         </div>
         {log.note && <p className="mt-0.5 whitespace-pre-wrap break-words text-[13px] text-[var(--w-text-2)]">{log.note}</p>}
       </div>

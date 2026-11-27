@@ -38,10 +38,11 @@ export interface UseCaseInput {
   description?: string | null; preconditions?: string | null; postconditions?: string | null; normalFlow?: string | null;
   alternativeFlows?: string | null; exceptionFlows?: string | null; priority?: UcPriority; issueNumber?: number | null; ruleNumbers?: number[];
 }
-export type SrsFillSection = 'actors' | 'useCases' | 'screensFlow' | 'screenAuthorization' | 'nonUi' | 'ucSpecs' | 'businessRules';
+export type SrsFillSection = 'actors' | 'useCases' | 'screensFlow' | 'screenAuthorization' | 'nonUi' | 'ucSpecs' | 'businessRules' | 'nfr' | 'systemMessages';
 export const SRS_SECTION_LABEL: Record<SrsFillSection, string> = {
   actors: 'Actors', useCases: 'Use Cases (UC)', screensFlow: 'Screens Flow', screenAuthorization: 'Screen Authorization',
   nonUi: 'Non-UI Functions', ucSpecs: 'Use Case Specifications', businessRules: 'Business Rules',
+  nfr: 'Quality Attributes (NFR)', systemMessages: 'System Messages', // dm5 G2 (B10, B9)
 };
 
 // ─── RTM ─────────────────────────────────────────────────────────
@@ -61,7 +62,13 @@ export interface RtmRow {
 }
 export interface RtmData {
   rows: RtmRow[];
-  summary: { rows: number; useCases: number; requirements: number; withTests: number; testedPct: number; passing: number; withGaps: number; gaps: Record<GapCode, number> };
+  summary: {
+    rows: number; useCases: number; requirements: number; withTests: number; testedPct: number; passing: number; withGaps: number; gaps: Record<GapCode, number>;
+    /** dm5 G2 (B13): 4 chỉ số phủ. */
+    coverage?: { ucCodedNoSds: string[]; ucTestedNoSt: string[]; brTotal: number; brCovered: number; brCoveredPct: number; brUncovered: string[]; orphanTests: number };
+  };
+  /** dm5 G2 (B13): NFR → Meter → Test. */
+  nfrs?: Array<{ key: string; title: string; characteristic: string; sub: string | null; scale: string; meter: string; must: string; plan: string; wish: string; verification: string; tests: string[]; result: string }>;
   rules: Array<{ key: string; name: string; usedIn: string[]; unit: string[]; integration: string[]; system: string[]; covered: boolean }>;
   orphans: Array<{ kind: 'XRAY' | 'UNIT' | 'IT' | 'ST'; ref: string; name: string }>;
   gapLabels: Record<GapCode, string>;
@@ -83,15 +90,20 @@ export interface DefectInfo {
   isBug: boolean; severity: Severity | null; activity: string | null; product: string | null; productDetails: string | null;
   source: { reviewId: number; findingId: string } | null;
   options: { severities: Severity[]; activities: string[]; products: string[] };
+  /** dm5 G3 (D8): cờ Leakage đặt tay (null = tự suy) + giá trị hiệu lực DRE dùng. */
+  leakageFlag?: boolean | null; leakage?: boolean;
 }
 export interface QuestionView {
   number: number; key: string; legacy: boolean; question: string; details: string | null; askedOn: string; askedBy: string | null; askedTo: string | null;
   priority: 'LOW' | 'MEDIUM' | 'HIGH'; priorityText: string; due: string | null; status: string; statusText: 'Open' | 'Closed' | 'Cancelled';
   answer: string | null; answeredAt: string | null; version: number; overdue: boolean;
+  /** dm5 G2 (B6): đề xuất + 2 phương án + mã đích (BR-03 / UC-05 / SM-02); noTarget = đã đóng mà chưa gắn đích. */
+  proposal?: string | null; optionA?: string | null; optionB?: string | null; targetRef?: string | null; noTarget?: boolean;
 }
 export interface QuestionInput {
   question?: string; details?: string | null; askedOn?: string; askedBy?: string | null; askedTo?: string | null;
   priority?: 'LOW' | 'MEDIUM' | 'HIGH'; due?: string | null; status?: 'OPEN' | 'ANSWERED' | 'CANCELLED'; answer?: string | null; version?: number;
+  proposal?: string | null; optionA?: string | null; optionB?: string | null; targetRef?: string | null;
 }
 export const TL_ACTIVITIES = ['Training', 'Analyzing', 'Designing', 'Coding', 'Testing', 'Deploying'] as const;
 export const WORK_PRODUCTS = ['Software Package', 'Report1 (Intro)', 'Report2 (Plan)', 'Report3 (SRS)', 'Report4 (SDS)', 'Report5 (Test)', 'Report6 (Guides)', 'Report7 (Final)'] as const;
@@ -145,17 +157,17 @@ export const workCtw4Api = {
   removeTraceLink: (pid: number, id: number) => d<{ deleted: boolean }>(api.delete(`${B}/${pid}/trace-links/${id}`)),
   // Defect log
   defect: (pid: number, num: number) => d<DefectInfo>(api.get(`${B}/${pid}/issues/${num}/defect`)),
-  setDefect: (pid: number, num: number, body: Partial<{ severity: Severity | null; activity: string | null; product: string | null; productDetails: string | null }>) => d<DefectInfo>(api.put(`${B}/${pid}/issues/${num}/defect`, body)),
+  setDefect: (pid: number, num: number, body: Partial<{ severity: Severity | null; activity: string | null; product: string | null; productDetails: string | null; leakage: boolean | null }>) => d<DefectInfo>(api.put(`${B}/${pid}/issues/${num}/defect`, body)),
   bugFromFinding: (pid: number, reviewId: number, findingId: string) => d<{ created: boolean; number: number; key: string; title: string }>(api.post(`${B}/${pid}/spec-reviews/${reviewId}/findings/${findingId}/bug`)),
   // Q&A
-  qna: (pid: number, status: 'open' | 'closed' | 'all' = 'all') => d<{ items: QuestionView[]; counts: { total: number; open: number; overdue: number; legacy: number }; canEdit: boolean; canAnswer: boolean }>(api.get(`${B}/${pid}/qna`, { params: { status } })),
+  qna: (pid: number, status: 'open' | 'closed' | 'all' = 'all') => d<{ items: QuestionView[]; counts: { total: number; open: number; overdue: number; legacy: number; noTarget?: number }; canEdit: boolean; canAnswer: boolean; targetRule?: 'warn' | 'block' }>(api.get(`${B}/${pid}/qna`, { params: { status } })),
   createQuestion: (pid: number, body: QuestionInput & { question: string }) => d<QuestionView>(api.post(`${B}/${pid}/qna`, body)),
   updateQuestion: (pid: number, n: number, body: QuestionInput) => d<QuestionView>(api.patch(`${B}/${pid}/qna/${n}`, body)),
   deleteQuestion: (pid: number, n: number) => d<{ deleted: boolean }>(api.delete(`${B}/${pid}/qna/${n}`)),
   convertQuestion: (pid: number, n: number) => d<QuestionView>(api.post(`${B}/${pid}/qna/${n}/convert`)),
   // Report 7
   finalDoc: (pid: number) => d<{ doc: TiptapDoc; merged: number[]; missing: number[]; title: string }>(api.get(`${B}/${pid}/final-report`)),
-  assembleFinal: (pid: number, version?: number) => d<{ merged: number[]; missing: number[]; changed: boolean; page: WorkPageDetail }>(api.post(`${B}/${pid}/final-report/assemble`, version !== undefined ? { version } : {})),
+  assembleFinal: (pid: number, version?: number) => d<{ merged: number[]; missing: number[]; changed: boolean; page: WorkPageDetail; checks?: import('./work-dm5b-api').FinalCheck[] }>(api.post(`${B}/${pid}/final-report/assemble`, version !== undefined ? { version } : {})),
   exportFinal: async (pid: number, format: 'docx' | 'pdf', diagrams: Array<string | null>) =>
     fileOf(await api.post(`${B}/${pid}/final-report/export`, { format, diagrams }, { responseType: 'blob', timeout: 180_000 }), `Report7.${format}`),
   // Giờ theo activity

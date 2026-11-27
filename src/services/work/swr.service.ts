@@ -732,6 +732,7 @@ export async function sixLinksData(projectId: number) {
     features, featureLinks: links, useCases: srs.useCases.map((u) => ({ ...u, issueId: ucIssue.get(u.id) ?? null })), rules: srs.rules,
     requirements: reqs, dataElements: elements, glossary, priorityRows: rows, declared: settings.declaredCounts, actual: actualCounts(srs, reqs),
     actors: srs.actors, screens: srs.screens, systemName: p.name, ignoredNouns: settings.ignoredNouns, issueParent: new Map(issues.map((i) => [i.id, i.parentId])),
+    messageNumbers: (srs.systemMessages ?? []).filter((m) => m.status !== 'PROPOSED').map((m) => m.number),
   });
   return { ...result, declared: settings.declaredCounts, actual: actualCounts(srs, reqs), projectName: p.name, key: p.key };
 }

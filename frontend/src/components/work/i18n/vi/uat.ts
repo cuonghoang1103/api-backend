@@ -45,4 +45,15 @@ export const uat: Strings<typeof En> = {
   backPortal: 'Về cổng khách',
   printPdf: 'In / Lưu PDF',
   notAvail: 'Không xem được biên bản',
+  // ── dm5 G3 (27/11/2026) ──
+  rating: 'Mức hài lòng',
+  ratingOf: '{n} / 5',
+  ratingAsk: 'Bạn hài lòng với bản này tới đâu? (1–5, không bắt buộc)',
+  testerCode: 'Mã người thử',
+  testerCodeHint: 'Mã ẩn danh như P1 — không ghi tên hay email.',
+  revokeOnClose: 'Đóng quyền người thử khi UAT được duyệt',
+  revokeOnCloseDesc: 'Lời mời khách còn treo bị thu hồi và người thử đã ký mất quyền vào cổng (vẫn được ghi trên biên bản).',
+  revoked: 'Đã đóng quyền',
+  restore: 'Mở lại quyền',
+  restored: 'Đã mở lại quyền',
 };

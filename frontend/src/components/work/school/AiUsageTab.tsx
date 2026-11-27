@@ -73,7 +73,7 @@ export default function AiUsageTab({ pid, canEdit }: { pid: number; canEdit: boo
               <div className="overflow-x-auto rounded-[8px] border border-[var(--w-border)]">
                 <table className="w-full min-w-[1240px] border-separate border-spacing-0 text-[12.5px]">
                   <thead className="bg-[#fff59d] text-left text-[11.5px] text-[#3d3a00]">
-                    <tr>{['Date', 'SDLC phase', 'Task / activity', 'AI tool', 'AI output', 'Your validation / modification', 'Evidence', 'Measure', 'Value', 'Risks / limitations', ''].map((h) => <th key={h} className="px-2 py-1.5 font-semibold">{h}</th>)}</tr>
+                    <tr>{['Date', 'SDLC phase', 'Task / activity', 'AI tool', 'AI output', 'Your validation / modification', wt('g4.decision'), 'Evidence', 'Measure', 'Value', 'Risks / limitations', ''].map((h) => <th key={h} className="px-2 py-1.5 font-semibold">{h}</th>)}</tr>
                   </thead>
                   <tbody>
                     {g.rows.map((l) => (
@@ -88,6 +88,13 @@ export default function AiUsageTab({ pid, canEdit }: { pid: number; canEdit: boo
                         <Cell w={120} v={l.tool} ro={!canEdit} label={wt('school.aiTool')} max={120} onCommit={(v) => v && patch(l, { tool: v })} />
                         <Cell w={190} v={l.output} ro={!canEdit} label={wt('school.aiOutput')} onCommit={(v) => patch(l, { output: v || null })} />
                         <Cell w={210} v={l.validation} ro={!canEdit} label={wt('school.validation')} warn={!l.validation} onCommit={(v) => patch(l, { validation: v || null })} />
+                        {/* dm5 G4 (C7): Chấp nhận / Bác bỏ / Một phần — bản xuất ghi vào đầu cột Validation. */}
+                        <td className="border-t border-[var(--w-border)] px-1 py-1">
+                          <select className="w-input h-[28px] w-[118px] text-[12px]" disabled={!canEdit} value={l.decision ?? ''} aria-label={wt('g4.decision')} onChange={(e) => patch(l, { decision: (e.target.value || null) as AiUsageLog['decision'] })} data-testid="ai-usage-decision">
+                            <option value="">{wt('g4.decNone')}</option>
+                            {(['ACCEPTED', 'PARTIAL', 'REJECTED'] as const).map((x) => <option key={x} value={x}>{wt(`g4.dec_${x}`)}</option>)}
+                          </select>
+                        </td>
                         <Cell w={140} v={l.evidence} ro={!canEdit} label={wt('school.evidence')} max={1000} onCommit={(v) => patch(l, { evidence: v || null })} />
                         <Cell w={120} v={l.measure} ro={!canEdit} label={wt('school.measure')} max={300} onCommit={(v) => patch(l, { measure: v || null })} />
                         <td className="border-t border-[var(--w-border)] px-1 py-1">

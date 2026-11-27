@@ -37,4 +37,12 @@ export const timeline: Strings<typeof En> = {
   blocks: '{a} chặn {b}',
   fromChildren: ' (từ thẻ con)',
   pctDone: 'xong {n}%',
+  // dm5 G1 (A17): cổng có ngày kế hoạch
+  gatePlanned: 'Giai đoạn {n}. {name} · kế hoạch {from} – {to}',
+  gateLate: 'trễ',
+  lgGate: 'Cổng giai đoạn (kế hoạch)',
+  plannedStart: 'Bắt đầu (kế hoạch)',
+  plannedEnd: 'Kết thúc / ngày cổng (kế hoạch)',
+  plannedBad: 'Ngày bắt đầu phải trước hoặc bằng ngày kết thúc',
+  plannedRange: 'Kế hoạch {a} – {b}',
 };

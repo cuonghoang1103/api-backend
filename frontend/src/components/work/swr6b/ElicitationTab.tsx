@@ -10,7 +10,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Bot, Check, FileText, Mic, Plus, Quote, Sparkles, Trash2, X } from 'lucide-react';
+import { Bot, Check, FileText, MessageCircleQuestion, Mic, Plus, Quote, Sparkles, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { workError } from '@/lib/work-api';
@@ -20,6 +20,7 @@ import { useWT, wt, type WKey } from '@/components/work/i18n';
 import { Dialog, EmptyState, Field, PageLoading, Spinner } from '../ui';
 import { Chip, downloadFile, fmtDay, LifecycleChip, Note, Section, TabIntro, TableFrame, TD, TextArea, TH, TYPE_KEY, use6bRefresh } from './shared';
 import AiStakeholderPanel from '../c8c/AiStakeholderPanel';
+import { workDm5bApi } from '@/lib/work-dm5b-api'; // dm5 G2 (B5): câu hỏi mở ⇒ sổ Q&A
 import type { AiTurn } from '@/lib/work-c8c-api';
 
 export const TECH_KEY: Record<Technique, WKey> = {
@@ -102,11 +103,19 @@ function SessionPanel({ pid, n, base, onOpenIssue, onDeleted }: { pid: number; n
   const [dirty, setDirty] = useState(false);
   useEffect(() => { if (q.data && !dirty) setF(q.data); }, [q.data, dirty]);
   const upd = (patch: Partial<SessionDetail>) => { setF((x) => (x ? { ...x, ...patch } : x)); setDirty(true); };
+  const toQna = useMutation({
+    mutationFn: (qid: string) => workDm5bApi.questionToQna(pid, n, qid),
+    onSuccess: (r, qid) => {
+      setF((x) => (x ? { ...x, questions: x.questions.map((y) => (y.id === qid ? { ...y, qna: r.question.key } : y)) } : x));
+      toast.success(wt('g2.toQnaDone', { key: r.question.key }));
+    },
+    onError: (e) => toast.error(workError(e, wt('school.qSaveFailed'))),
+  });
   const save = useMutation({
     mutationFn: () => {
       const body: SessionBody = {
         title: f!.title, technique: f!.technique, status: f!.status, scheduledAt: f!.scheduledAt, durationMin: f!.durationMin, location: f!.location, objective: f!.objective,
-        plan: f!.plan, notes: f!.notes, outcome: f!.outcome, aiSimulated: f!.aiSimulated, questions: f!.questions.map((x) => ({ id: x.id, text: x.text, answer: x.answer })),
+        plan: f!.plan, notes: f!.notes, outcome: f!.outcome, aiSimulated: f!.aiSimulated, questions: f!.questions.map((x) => ({ id: x.id, text: x.text, answer: x.answer, ...(x.qna ? { qna: x.qna } : {}) })),
         participants: f!.participants.map((p) => ({ stakeholder: p.key, rolePlayed: p.rolePlayed })), rev: f!.rev,
       };
       return workSwr6bApi.updateSession(pid, n, body);
@@ -197,6 +206,8 @@ function SessionPanel({ pid, n, base, onOpenIssue, onDeleted }: { pid: number; n
                 <span className="mt-1.5 w-6 shrink-0 text-right text-[12px] tabular-nums text-[var(--w-text-3)]">{i + 1}.</span>
                 <label className="sr-only" htmlFor={`q-${i}`}>{wt('elic.question')} {i + 1}</label>
                 <input id={`q-${i}`} className="w-input-bare flex-1 text-[13px] font-medium" readOnly={ro} value={x.text} onChange={(e) => upd({ questions: f.questions.map((y, k) => (k === i ? { ...y, text: e.target.value } : y)) })} />
+                {x.qna ? <Chip tone="blue">{wt('g2.inQna', { key: x.qna })}</Chip>
+                  : !ro && x.id && !dirty && <button type="button" className="w-btn w-btn-ghost w-btn-sm" title={wt('g2.toQna')} disabled={toQna.isPending} onClick={() => toQna.mutate(x.id)}><MessageCircleQuestion size={13} /> {wt('g2.toQna')}</button>}
                 {!ro && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`${wt('common.remove')} ${i + 1}`} onClick={() => upd({ questions: f.questions.filter((_, k) => k !== i) })}><X size={13} /></button>}
               </div>
               <label className="sr-only" htmlFor={`a-${i}`}>{wt('elic.answer')} {i + 1}</label>

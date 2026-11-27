@@ -501,12 +501,13 @@ const meetingDelete = defineTool({
 
 const qnaUpdate = defineTool({
   name: 'qna_update', title: 'Edit a Q&A question', group: 'planning',
-  description: 'Edits a Q&A log entry: question, details, asked on/by/to, priority, due date, status, answer. Only the fields you pass change.',
+  description: 'Edits a Q&A log entry: question, details, asked on/by/to, priority, due date, status, answer, proposal, optionA, optionB, targetRef (BR-03 / UC-05 / SM-02 the answer changes). Only the fields you pass change.',
   write: true,
   input: z.object({
     project: projectArg, question: numRef('Question'), text: z.string().min(1).max(255).optional().describe('The question itself'), details: z.string().max(10_000).nullable().optional(),
     askedOn: ymd.optional(), askedBy: z.string().max(120).nullable().optional(), askedTo: z.string().max(120).nullable().optional(),
     priority: z.enum(QA_PRIORITIES).optional(), due: ymd.nullable().optional(), status: z.enum(QUESTION_STATUSES).optional(), answer: z.string().max(20_000).nullable().optional(),
+    proposal: z.string().max(10_000).nullable().optional(), optionA: z.string().max(10_000).nullable().optional(), optionB: z.string().max(10_000).nullable().optional(), targetRef: z.string().max(60).nullable().optional(),
   }),
   run: async (ctx, a) => {
     requireWrite(ctx);

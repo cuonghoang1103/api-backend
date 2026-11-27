@@ -42,9 +42,25 @@ export async function createProject(
     kind?: ProjectKind;
     /** Ghi đè bật/tắt từng mô-đun lúc tạo (sau mặc định theo loại). */
     modules?: Partial<Record<string, boolean>>;
+    /** dm5 G4 (A25): bộ mẫu trong THƯ VIỆN MẪU (projectBlueprints.ts) + bật/tắt từng nhóm tính năng. */
+    blueprint?: string | null;
+    groups?: Partial<Record<string, boolean>> | null;
+    /** dm5 G4 (A25): chép CẤU HÌNH (không thẻ/worklog/thành viên) từ dự án mẫu cùng không gian. */
+    fromProjectId?: number | null;
+    copyDocBodies?: boolean;
   },
 ) {
   await requireWorkspace(userId, workspaceId, 'workspace.createProject');
+  // dm5 G4 (A25): mẫu gốc / loại / mô-đun lấy từ bộ mẫu hoặc dự án mẫu — đầu vào của người tạo về tên/mã vẫn giữ.
+  const bp = await import('./projectBlueprint.service.js');
+  if (input.fromProjectId) {
+    await bp.assertTemplateSource(userId, input.fromProjectId, workspaceId);
+    const src = await prisma.workProject.findUniqueOrThrow({ where: { id: input.fromProjectId }, select: { type: true, kind: true, settings: true } });
+    input = { ...input, blueprint: null, template: 'BLANK', type: src.type as ProjectType, kind: src.kind as ProjectKind, modules: { ...(((src.settings as { modules?: Record<string, boolean> } | null)?.modules) ?? {}), ...(input.modules ?? {}) }, firstSprint: false };
+  } else if (input.blueprint) {
+    const base = bp.blueprintCreateBase(input.blueprint, input.groups);
+    input = { ...input, template: base.template, type: base.type, kind: base.kind, modules: { ...base.modules, ...(input.modules ?? {}) } };
+  }
   const key = input.key.trim().toUpperCase();
   if (!PROJECT_KEY_RE.test(key)) {
     throw new BadRequestError('Project key must be 2–10 letters or digits and start with a letter (e.g. SWP)', 'WORK_BAD_KEY');
@@ -93,6 +109,9 @@ export async function createProject(
       const ws = await prisma.workSpace.findUniqueOrThrow({ where: { id: workspaceId }, select: { slug: true } });
       await seedSwr302(userId, created.id, { wsSlug: ws.slug, key: created.key });
     }
+    // dm5 G4 (A25): chép cấu hình từ dự án mẫu / phủ bộ mẫu — SAU khi dự án + seed của mẫu gốc đã có.
+    if (input.fromProjectId) return { ...created, setup: await bp.cloneProjectConfig(userId, input.fromProjectId, created.id, { copyDocBodies: input.copyDocBodies === true }) };
+    if (input.blueprint) return { ...created, setup: await bp.applyBlueprint(userId, created.id, input.blueprint, input.groups) };
     return created;
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
@@ -379,13 +398,20 @@ export async function updateProject(
     input.settings = rest;
     // Điều kiện Done: chỉ nhận trường của CHÍNH dự án này, loại thẻ là chuỗi.
     if ('doneRequirements' in input.settings) {
-      const raw = input.settings.doneRequirements as { fieldIds?: unknown; typeKeys?: unknown } | null;
+      const raw = input.settings.doneRequirements as { fieldIds?: unknown; typeKeys?: unknown; requireCiGreen?: unknown; requirePr?: unknown } | null;
       if (raw !== null) {
         const ids = Array.isArray(raw?.fieldIds) ? [...new Set(raw.fieldIds.filter((x): x is number => Number.isInteger(x)))] : [];
         const own = ids.length ? await prisma.workCustomField.count({ where: { projectId, id: { in: ids } } }) : 0;
         if (own !== ids.length) throw new BadRequestError('Some required fields do not belong to this project', 'WORK_BAD_FIELD');
         const typeKeys = Array.isArray(raw?.typeKeys) ? raw.typeKeys.filter((x): x is string => typeof x === 'string').slice(0, 20) : null;
-        input.settings = { ...input.settings, doneRequirements: { fieldIds: ids, typeKeys: typeKeys?.length ? typeKeys : null } };
+        // dm5 G1 (A2): cờ "PR gắn thẻ phải CI xanh" (+ "phải có PR") — fieldIds rỗng vẫn giữ được cờ CI.
+        const ci = raw?.requireCiGreen === true;
+        input.settings = {
+          ...input.settings,
+          doneRequirements: ids.length || ci
+            ? { fieldIds: ids, typeKeys: typeKeys?.length ? typeKeys : null, ...(ci ? { requireCiGreen: true, requirePr: raw?.requirePr === true } : {}) }
+            : null,
+        };
       }
     }
     // 26/11/2026: giới hạn WIP — 'warn' (mặc định, chỉ tô đỏ trên board) | 'block' (máy chủ chặn kéo thêm thẻ vào cột đã đầy).
@@ -417,6 +443,11 @@ export async function updateProject(
       if (t.length > 20_000) throw new BadRequestError('AI instructions are limited to 20,000 characters', 'WORK_BAD_AI_INSTRUCTIONS');
       input.settings = { ...input.settings, aiInstructions: t || null };
     }
+    input.settings = (await import('./qualitySettings.js')).normalizeQualitySettings(input.settings); // dm5 G3: reviewChecklists · reviewCoolOffHours · testGate · uatRevokeOnClose
+    input.settings = (await import('./dm5g4Rules.js')).normalizeG4Settings(input.settings); // dm5 G4: aiReviewMode · present · roleAlert · codeHealth · releaseRequireGreenCi
+    input.settings = (await import('./qna.service.js')).normalizeQnaSettings(input.settings); // dm5 G2: qnaRequireTarget (block | null = cảnh báo)
+    // dm5 G1: DoR, WIP chéo cột, sức chứa × tập trung, RAG, trần Must, cổng giai đoạn, trần hành động retro.
+    input.settings = await (await import('./dm5a.service.js')).normalizeProcessSettings(projectId, input.settings);
     const cur = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } });
     data.settings = { ...((cur.settings as object) ?? {}), ...input.settings } as Prisma.InputJsonValue;
   }

@@ -377,8 +377,12 @@ class Parser {
       || ((this.is('KEY') || this.is('INDEX')) && (this.isIdent(this.peek(1)) || this.isOp('(', 1)) && !this.isTypeWord(1))
       || this.is('FULLTEXT') || this.is('SPATIAL') || (this.is('LIKE') && this.c.dialect !== 'sqlserver');
   }
-  /** "index INT" — cột tên index (hiếm) chứ không phải INDEX name (…). */
-  private isTypeWord(k: number) { const t = this.peek(k); return t.t === 'word' && /^(INT|INTEGER|BIGINT|VARCHAR|NVARCHAR|TEXT|CHAR|SMALLINT|TINYINT|DECIMAL|NUMERIC|BIT|BOOLEAN|DATE|DATETIME|DATETIME2|TIMESTAMP|FLOAT|REAL)$/.test(t.u) && !this.isOp('(', k + 1); }
+  /**
+   * "index INT" / "key VARCHAR(80)" — cột tên index/key chứ không phải INDEX name (…). dm5 G2 (27/11/2026): trước đây kiểu có
+   * tham số ("key VARCHAR(80)") bị coi là KEY <tên> (…) của MySQL ⇒ bảng settings(key …) mất sạch cột. Phân biệt: sau "(" của
+   * kiểu là SỐ (VARCHAR(80)), sau "(" của chỉ mục là tên cột (KEY text (col)).
+   */
+  private isTypeWord(k: number) { const t = this.peek(k); return t.t === 'word' && /^(INT|INTEGER|BIGINT|VARCHAR|NVARCHAR|TEXT|CHAR|SMALLINT|TINYINT|DECIMAL|NUMERIC|BIT|BOOLEAN|DATE|DATETIME|DATETIME2|TIMESTAMP|FLOAT|REAL)$/.test(t.u) && (!this.isOp('(', k + 1) || this.peek(k + 2).t === 'number'); }
 
   private tableElement(table: Table) {
     if (this.isConstraintStart()) { this.tableConstraint(table); return; }

@@ -18,6 +18,7 @@ import zlib from 'node:zlib';
 import { mmId, mmLabel, mermaidKind, typeFromMermaid, type DiagramType } from './diagram.js';
 import { analyzeSql, DIALECT_LABEL, joinMeta, toMermaid } from './sqlDesign/index.js';
 import { mbText, WORK_LIMITS } from './limits.js';
+import { lintPlantUml, PLANTUML_EXT, typeFromPlantUml } from './plantuml.js';
 
 export const MAX_IMPORT_BYTES = WORK_LIMITS.importBytes;
 /** Trần XML giải nén của một trang draw.io (chống zip/deflate bomb) — tối thiểu 16 MB như trước. */
@@ -362,7 +363,7 @@ export function extractMermaid(text: string, index = 0): { mermaid: string; bloc
 }
 
 export interface ImportResult {
-  format: 'MERMAID' | 'EXCALIDRAW' | 'SQL';
+  format: 'MERMAID' | 'EXCALIDRAW' | 'SQL' | 'PLANTUML';
   type: DiagramType;
   source: string;
   title: string;
@@ -375,7 +376,19 @@ export function importFile(input: { fileName: string; content: string; base64?: 
   const name = input.fileName.toLowerCase();
   const buf = input.base64 ? Buffer.from(input.content, 'base64') : Buffer.from(input.content, 'utf8');
   if (buf.length > MAX_IMPORT_BYTES) throw new ImportError(`The file is too large (max ${mbText(MAX_IMPORT_BYTES)})`);
-  const title = input.fileName.replace(/\.(drawio|xml|excalidraw|json|mmd|mermaid|md|png|svg|sql|ddl)(\.(xml|png|svg))?$/i, '').replace(/[_-]+/g, ' ').trim().slice(0, 180) || 'Imported diagram';
+  const title = input.fileName.replace(/^.*\//, '').replace(/\.(drawio|xml|excalidraw|json|mmd|mermaid|md|png|svg|sql|ddl|puml|plantuml|pu|iuml|wsd)(\.(xml|png|svg))?$/i, '').replace(/[_-]+/g, ' ').trim().slice(0, 180) || 'Imported diagram';
+  // dm5 G2 (B18): .puml ⇒ sơ đồ PlantUML (nguồn nguyên văn; SVG vẽ ở máy render tự host). Trước đây tệp này rơi xuống nhánh
+  // Mermaid và thành một "Mermaid" rác loại OTHER.
+  if (PLANTUML_EXT.test(name) || /^\s*@start(uml|mindmap|gantt|salt|json|yaml)\b/m.test(buf.toString('utf8', 0, 4000))) {
+    const src = buf.toString('utf8').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+    const blocks = src.match(/^\s*@start\w+/gm)?.length ?? 0;
+    const lint = lintPlantUml(src);
+    if (!blocks) throw new ImportError('No @startuml … @enduml block found in this PlantUML file');
+    const notes = [`Kept as PlantUML (${blocks} diagram block${blocks > 1 ? 's' : ''}) — the picture is drawn by the server's own PlantUML renderer.`];
+    if (!lint.ok) notes.push(`${lint.errors.length} problem(s): line ${lint.errors[0].line}: ${lint.errors[0].message}`);
+    if (lint.errors.some((e) => /not allowed/.test(e.message))) throw new ImportError(lint.errors.find((e) => /not allowed/.test(e.message))!.message);
+    return { format: 'PLANTUML', type: typeFromPlantUml(src), source: src, title, fidelity: { kept: blocks, merged: [], dropped: [], notes } };
+  }
   // Tệp .sql (CREATE TABLE…) ⇒ sơ đồ CSDL dạng SQL (Database designer), hoặc Mermaid ERD nếu người chọn.
   if (/\.(sql|ddl)$/.test(name)) {
     const sql = buf.toString('utf8').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');

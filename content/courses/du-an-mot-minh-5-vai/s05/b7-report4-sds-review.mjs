@@ -65,8 +65,8 @@ ${bang(
 <p>${t(
     'Just like Chapter 4\'s Requirements Review (',
     'Y hệt quy trình Review Yêu cầu ở Chương 4 (')}${dm('dm5-4-7-review-cheo-yeu-cau', t('Lesson 4.7', 'Bài 4.7'))}${t(
-    '), the author of a design MUST NEVER rubber-stamp their own SDS 2 minutes after writing it! Take a <strong>cooling-off break (≥ 2 hours or overnight)</strong>, then open CT Work <code>reviews</code> and rotate hats through this <strong>10-Point Design Review Checklist</strong>:',
-    '), tác giả bản thiết kế TUYỆT ĐỐI KHÔNG tự ký duyệt SDS 2 phút sau khi viết xong! Hãy <strong>nghỉ để đầu óc nguội (≥ 2 giờ hoặc qua đêm)</strong>, rồi mở trang <code>reviews</code> trên CT Work và xoay mũ quét trọn <strong>Checklist Design Review 10 điểm</strong> sau:')}</p>
+    '), the author of a design MUST NEVER rubber-stamp their own SDS 2 minutes after writing it! Take a <strong>cooling-off break (≥ 2 hours or overnight)</strong>, then open CT Work <code>reviews</code> (pick the built-in checklist <code>DESIGN_REVIEW_10</code>, add the designer account as participant role <strong>AUTHOR</strong>, and let the project cool-off in Docs › Reviews › "Project checklists &amp; cool-off" block an early decision) and rotate hats through this <strong>10-Point Design Review Checklist</strong>:',
+    '), tác giả bản thiết kế TUYỆT ĐỐI KHÔNG tự ký duyệt SDS 2 phút sau khi viết xong! Hãy <strong>nghỉ để đầu óc nguội (≥ 2 giờ hoặc qua đêm)</strong>, rồi mở trang <code>reviews</code> trên CT Work (chọn checklist có sẵn <code>DESIGN_REVIEW_10</code>, thêm tài khoản người thiết kế làm người tham gia vai <strong>AUTHOR</strong>, và để khoảng nghỉ của dự án ở Docs › Reviews › "Project checklists &amp; cool-off" chặn việc chốt sớm) và xoay mũ quét trọn <strong>Checklist Design Review 10 điểm</strong> sau:')}</p>
 
 ${out(t(`DESIGN REVIEW RECORD — [Project Code] — Report 4 SDS Draft
 =========================================================================

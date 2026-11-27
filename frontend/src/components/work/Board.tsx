@@ -34,6 +34,7 @@ import {
 import { allowedTargets, wk, type Lookups } from './hooks';
 import { IssueTypeIcon, StatusBadge, StatusGlyph, UserAvatar } from './ui';
 import { CardBody } from './board/BoardCard';
+import { CardAgeBadge, CardAgesCtx, useCardAges } from './board/CardAge'; // dm5 G1 (A18)
 import BoardToolbar from './board/BoardToolbar';
 import { TeamsCtx, TruncatedStrip, studioOn, useWorkspaceTeams } from './studio/shared';
 import {
@@ -71,7 +72,7 @@ function SortableCard({ issue, lk, onOpen, disabled, subtasks, inDone, showParen
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
-      className={cn('cursor-grab rounded-[8px] outline-none focus-visible:ring-2 focus-visible:ring-[var(--w-accent-border)] active:cursor-grabbing', isDragging && 'opacity-35 [&>div]:border-dashed [&>div]:shadow-none')}
+      className={cn('relative cursor-grab rounded-[8px] outline-none focus-visible:ring-2 focus-visible:ring-[var(--w-accent-border)] active:cursor-grabbing', isDragging && 'opacity-35 [&>div]:border-dashed [&>div]:shadow-none')}
       {...attributes}
       // UX-A ARIA: dnd-kit gán role=button, mà thẻ có nút sub-task bên trong (nested-interactive).
       // Thẻ là một NHÓM có tên (mã + tiêu đề); Enter mở thẻ, Space nhấc lên kéo như cũ.
@@ -88,6 +89,7 @@ function SortableCard({ issue, lk, onOpen, disabled, subtasks, inDone, showParen
       }}
     >
       <CardBody issue={issue} lk={lk} subtasks={subtasks} inDoneColumn={inDone} onOpen={onOpen} showParent={showParent} />
+      <CardAgeBadge number={issue.number} inDone={inDone} />
     </div>
   );
 }
@@ -226,6 +228,7 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
   const qc = useQueryClient();
   const pid = config.id;
   const canDrag = config.permissions.transition;
+  const cardAges = useCardAges(pid); // dm5 G1 (A18): tuổi thẻ ở cột hiện tại
   const lsKey = `ctwork:board:${pid}`;
   const [group, setGroupState] = useState<GroupBy>('none');
   const [quick, setQuick] = useState<QuickFilters>(EMPTY_QUICK);
@@ -467,6 +470,7 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
         leading={toolbarLeading}
       />
       <TruncatedStrip data={data} />
+      <CardAgesCtx.Provider value={cardAges}>
       <DndContext sensors={sensors} collisionDetection={closestCorners} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
         <div className="min-h-0 flex-1 overflow-auto [scrollbar-gutter:stable]">
           <div className="flex min-h-full min-w-max flex-col px-4 pb-4">
@@ -547,6 +551,7 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
           {active ? <div style={{ width: COL_W - 12 }} className="cursor-grabbing"><CardBody issue={active} lk={lk} dragging /></div> : null}
         </DragOverlay>
       </DndContext>
+      </CardAgesCtx.Provider>
     </div>
     </TeamsCtx.Provider>
   );

@@ -16,7 +16,7 @@ import { displayName } from './common.js';
 import { renderDocx, renderPdf, type ExportMeta, type FinalCover } from './docExport.js';
 import { decodeDiagram } from './docs3a.service.js';
 import { getTemplate } from './docTemplates.js';
-import { assembleFinal, FINAL_PARTS, type FinalSource } from './finalReport.js';
+import { assembleFinal, FINAL_PARTS, finalChecks, type FinalFacts, type FinalSource } from './finalReport.js';
 import { docCtx, getPage, updatePage } from './pages.service.js';
 import { findReportPage, projectImage, srsCtx } from './srs.service.js';
 
@@ -30,6 +30,41 @@ async function sources(userId: number, projectId: number): Promise<FinalSource[]
     out.push({ n: part.n, doc: page.contentJson, label: `Doc ${page.number}${page.currentVersion ? ` v${page.currentVersion}` : ''}` });
   }
   return out;
+}
+
+/** dm5 G2 (B19): số liệu thật để đối soát — sổ mã (FE/UC/BR/SM), số test 5.1/5.2/5.3, tổng giờ log. KHÔNG kiểm quyền. */
+export async function finalFacts(projectId: number): Promise<FinalFacts> {
+  const { roundStatus } = await import('./rtm.service.js');
+  const [fe, uc, br, sm, unit, mods, logged] = await Promise.all([
+    prisma.workFeature.findMany({ where: { projectId }, select: { number: true, name: true } }),
+    prisma.workUseCase.findMany({ where: { projectId, status: { not: 'PROPOSED' } }, select: { number: true, name: true } }),
+    prisma.workBusinessRule.findMany({ where: { projectId, status: { not: 'PROPOSED' } }, select: { number: true, name: true } }),
+    prisma.workSystemMessage.findMany({ where: { projectId, status: { not: 'PROPOSED' } }, select: { number: true, text: true } }),
+    prisma.workUnitCase.findMany({ where: { function: { projectId } }, select: { result: true } }),
+    prisma.workItModule.findMany({ where: { projectId }, select: { kind: true, cases: { select: { rounds: true } } } }),
+    prisma.workWorklog.aggregate({ where: { issue: { projectId } }, _sum: { minutes: true } }),
+  ]);
+  const lvl = (kind: string) => {
+    const st = mods.filter((m) => m.kind === kind).flatMap((m) => m.cases.map((c) => roundStatus(c.rounds)));
+    return { total: st.length, passed: st.filter((s) => s === 'Passed').length };
+  };
+  return {
+    registers: {
+      FE: new Map(fe.map((x) => [x.number, x.name])), UC: new Map(uc.map((x) => [x.number, x.name])),
+      BR: new Map(br.map((x) => [x.number, x.name])), SM: new Map(sm.map((x) => [x.number, x.text])),
+    },
+    tests: { unit: { total: unit.length, passed: unit.filter((c) => c.result === 'P').length }, integration: lvl('INT'), system: lvl('SYS') },
+    loggedHours: (logged._sum.minutes ?? 0) / 60,
+  };
+}
+
+/** Đối soát Report 1–6 (không ghép, không ghi). */
+export async function checkFinal(userId: number, projectId: number) {
+  await srsCtx(userId, projectId, 'view');
+  await docCtx(userId, projectId);
+  const src = await sources(userId, projectId);
+  const checks = finalChecks(src, await finalFacts(projectId));
+  return { checks, errors: checks.filter((c) => c.severity === 'error').length, warnings: checks.filter((c) => c.severity === 'warning').length, reports: src.map((s) => s.n) };
 }
 
 /** Bản Final trong bộ nhớ: nội dung trang Report 7 (hoặc mẫu) đã ghép Report 1–6. */
@@ -50,14 +85,17 @@ export async function assembleFinalPage(userId: number, projectId: number, input
   if (!r7) throw new NotFoundError('This project has no Report 7 page — create it from the "FPT Capstone" template first');
   const page = await getPage(userId, projectId, r7.number);
   if (!page.canEdit) throw new ForbiddenError('You can read this page but not edit it');
-  const r = assembleFinal(page.contentJson, await sources(userId, projectId));
-  if (!r.merged.length) return { ...r, page, changed: false };
+  const src = await sources(userId, projectId);
+  const r = assembleFinal(page.contentJson, src);
+  // dm5 G2 (B19): đối soát chéo TRƯỚC khi ghép — có lỗi vẫn ghép, kết quả trả kèm để giao diện hiện banner.
+  const checks = finalChecks(src, await finalFacts(projectId));
+  if (!r.merged.length) return { ...r, page, changed: false, checks };
   const updated = await updatePage(userId, projectId, r7.number, {
     contentJson: r.doc, version: input.version ?? page.version,
     versionNote: `Assembled final report from ${r.notes.join(', ')}`.slice(0, 500),
   });
   await auditProject(projectId, { actorId: userId, action: 'docs.assemble', targetType: 'page', targetId: page.id, summary: `Assembled Report 7 from ${r.merged.map((n) => `Report ${n}`).join(', ')}` });
-  return { ...r, page: updated, changed: true };
+  return { ...r, page: updated, changed: true, checks };
 }
 
 /** Bìa Final: thông tin môn học/nhóm (tab Course & group của đợt 3B), thiếu thì lấy thành viên dự án. */

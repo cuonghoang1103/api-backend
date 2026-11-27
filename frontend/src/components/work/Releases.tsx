@@ -25,6 +25,8 @@ import { Dialog, EmptyState, Field, formatDate, IssueTypeIcon, Popover, Spinner,
 import { AddToCalendar } from './ctw';
 import { ReleaseBurnupChart } from './charts/FlowCharts';
 import { wt } from '@/components/work/i18n';
+import { FREEZE_LEVELS, g4Api, versionG4, type FreezeLevel } from '@/lib/work-dm5g4-api';
+import { CiChip } from './code/g4Parts';
 
 function todayStr(): string {
   const t = new Date();
@@ -70,8 +72,16 @@ function VersionDialog({ open, onClose, pid, version }: { open: boolean; onClose
   const [description, setDescription] = useState('');
   const [start, setStart] = useState('');
   const [release, setRelease] = useState('');
+  // dm5 G4 (D14): đóng băng + tag + SHA.
+  const [freeze, setFreeze] = useState<FreezeLevel>('NONE');
+  const [tag, setTag] = useState('');
+  const [sha, setSha] = useState('');
   useEffect(() => {
     if (!open) return;
+    const g = versionG4(version);
+    setFreeze(g.freezeLevel ?? 'NONE');
+    setTag(g.gitTag ?? '');
+    setSha(g.commitSha ?? '');
     setName(version?.name ?? '');
     setDescription(version?.description ?? '');
     setStart(dateInput(version?.startDate));
@@ -83,8 +93,8 @@ function VersionDialog({ open, onClose, pid, version }: { open: boolean; onClose
   const badDates = !!start && !!release && start > release;
   const save = useMutation({
     mutationFn: () => {
-      const body = { name: name.trim(), description: description.trim() || null, startDate: start || null, releaseDate: release || null };
-      return version ? workApi.updateVersion(pid, version.id, body) : workApi.createVersion(pid, body);
+      const body = { name: name.trim(), description: description.trim() || null, startDate: start || null, releaseDate: release || null, freezeLevel: freeze, gitTag: tag.trim() || null, commitSha: sha.trim() || null };
+      return version ? g4Api.updateVersion(pid, version.id, body) : g4Api.createVersion(pid, body);
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: wk.versions(pid) });
@@ -112,6 +122,20 @@ function VersionDialog({ open, onClose, pid, version }: { open: boolean; onClose
         <Field label={wt('common.description')}>
           <textarea className="w-input min-h-[80px] py-2" value={description} onChange={(e) => setDescription(e.target.value)} placeholder={wt('releases.descPh')} />
         </Field>
+        <Field label={wt('g4.freeze')} hint={wt(`g4.fzHint_${freeze}` as 'g4.fzHint_NONE')}>
+          <select className="w-input" value={freeze} onChange={(e) => setFreeze(e.target.value as FreezeLevel)} data-testid="version-freeze">
+            {FREEZE_LEVELS.map((f) => <option key={f} value={f}>{wt(`g4.fz_${f}` as 'g4.fz_NONE')}</option>)}
+          </select>
+        </Field>
+        <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
+          <Field label={wt('g4.gitTag')}>
+            <input className="w-input font-mono" value={tag} onChange={(e) => setTag(e.target.value)} maxLength={100} placeholder="v1.0.0" />
+          </Field>
+          <Field label={wt('g4.commitSha')}>
+            <input className="w-input font-mono" value={sha} onChange={(e) => setSha(e.target.value.trim())} maxLength={64} placeholder="a1b2c3d" />
+          </Field>
+        </div>
+        <p className="-mt-2 text-[11.5px] text-[var(--w-text-3)]">{wt('g4.tagShaHint')}</p>
         <div className="mt-5 flex justify-end gap-2">
           <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="submit" className="w-btn w-btn-primary" disabled={!name.trim() || badDates || save.isPending}>
@@ -132,6 +156,8 @@ function ReleaseDialog({ open, onClose, pid, version, versions }: {
   const qc = useQueryClient();
   const [date, setDate] = useState(todayStr());
   const [target, setTarget] = useState<string>('none');
+  const [tag, setTag] = useState('');
+  const [sha, setSha] = useState('');
   const others = useMemo(() => versions.filter((v) => v.status === 'UNRELEASED' && v.id !== version?.id), [versions, version]);
   const unfinished = version ? version.total - version.done : 0;
   // Chỉ đặt mặc định lúc mở — danh sách tải lại (realtime) không được xoá lựa chọn của người dùng.
@@ -142,11 +168,13 @@ function ReleaseDialog({ open, onClose, pid, version, versions }: {
     if (!open) return;
     setDate(dateInput(versionDate) || todayStr());
     setTarget(firstOther ? String(firstOther) : 'none');
+    setTag(versionG4(version).gitTag ?? '');
+    setSha(versionG4(version).commitSha ?? '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, versionId]);
 
   const release = useMutation({
-    mutationFn: () => workApi.releaseVersion(pid, version!.id, { moveUnresolvedTo: target === 'none' ? null : Number(target), releaseDate: date || null }),
+    mutationFn: () => g4Api.releaseVersion(pid, version!.id, { moveUnresolvedTo: target === 'none' ? null : Number(target), releaseDate: date || null, gitTag: tag.trim() || null, commitSha: sha.trim() || null }),
     onSuccess: (r) => {
       qc.invalidateQueries({ queryKey: wk.versions(pid) });
       qc.invalidateQueries({ queryKey: wk.issues(pid) });
@@ -174,6 +202,11 @@ function ReleaseDialog({ open, onClose, pid, version, versions }: {
       <Field label={wt('releases.releaseDate')}>
         <input type="date" className="w-input" value={date} onChange={(e) => setDate(e.target.value)} />
       </Field>
+      {/* dm5 G4 (D14): tag + SHA của bản phát hành; máy chủ ghi CI ở đúng SHA (chặn nếu dự án bật "cần CI xanh"). */}
+      <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
+        <Field label={wt('g4.gitTag')}><input className="w-input font-mono" value={tag} onChange={(e) => setTag(e.target.value)} maxLength={100} placeholder="v1.0.0" /></Field>
+        <Field label={wt('g4.commitSha')}><input className="w-input font-mono" value={sha} onChange={(e) => setSha(e.target.value.trim())} maxLength={64} placeholder="a1b2c3d" /></Field>
+      </div>
       {unfinished > 0 ? (
         <Field
           label={wt('releases.moveUnfinished', { count: unfinished })}
@@ -592,6 +625,15 @@ export function VersionDetail({ config, pid, lk, versionId, onBack, onOpenIssue 
             <h1 className="text-[20px] font-semibold">{v.name}</h1>
             <VersionStatusBadge status={v.status} />
             {summary?.overdue && <span className="rounded-[4px] bg-[color-mix(in_srgb,var(--w-red)_14%,transparent)] px-1.5 py-0.5 text-[10.5px] font-semibold uppercase text-[var(--w-red)]">{wt('common.overdue')}</span>}
+            {/* dm5 G4 (D14): mức đóng băng + tag/SHA + CI lúc phát hành. */}
+            {(versionG4(v).freezeLevel ?? 'NONE') !== 'NONE' && (
+              <span className="rounded-[4px] bg-[color-mix(in_srgb,var(--w-blue,#2563eb)_14%,transparent)] px-1.5 py-0.5 text-[11px] font-semibold text-[var(--w-blue,#2563eb)]" title={wt(`g4.fzHint_${versionG4(v).freezeLevel}` as 'g4.fzHint_NONE')} data-testid="version-freeze-badge">
+                {wt(`g4.fz_${versionG4(v).freezeLevel}` as 'g4.fz_NONE')}
+              </span>
+            )}
+            {versionG4(v).gitTag && <span className="rounded-[4px] border border-[var(--w-border)] px-1.5 py-0.5 font-mono text-[11px]">{versionG4(v).gitTag}</span>}
+            {versionG4(v).commitSha && <span className="font-mono text-[11px] text-[var(--w-text-3)]">{versionG4(v).commitSha!.slice(0, 12)}</span>}
+            {versionG4(v).releaseCi && versionG4(v).releaseCi !== 'unknown' && <CiChip state={versionG4(v).releaseCi} />}
           </div>
           <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px] text-[var(--w-text-2)]">
             {v.startDate && <span>{wt('releases.startOn', { date: formatDate(v.startDate) })}</span>}

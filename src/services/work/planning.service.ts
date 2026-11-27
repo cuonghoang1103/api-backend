@@ -9,7 +9,7 @@
 
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
-import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
+import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { PUBLIC_USER, displayName } from './common.js';
 import { emitWorkEvent, type WorkActor } from './events.js';
 import { applyIssueChange } from './issueChange.js';
@@ -17,6 +17,8 @@ import { CARD_SELECT, toCard } from './issues.service.js';
 import { loadProjectAccess, requireProject, requireWorkspace } from './permissions.js';
 import { projectMembers } from './projects.service.js';
 import { estimateOf, estimationOf, vnDay } from './sprints.service.js';
+import { ciOfSha, FREEZE_LEVELS, g4SettingsOf, GIT_TAG_RE, SHA_RE, type FreezeLevel } from './dm5g4Rules.js';
+import { auditProject } from './audit.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
 const DAY = 86_400_000;
@@ -29,7 +31,25 @@ export const VERSION_STATUSES = ['UNRELEASED', 'RELEASED', 'ARCHIVED'] as const;
 const VERSION_SELECT = {
   id: true, name: true, description: true, startDate: true, releaseDate: true, status: true, releasedAt: true,
   releaseNotes: true, position: true, createdAt: true,
+  // dm5 G4 (D14): đóng băng + git tag/SHA + CI ở SHA lúc release.
+  freezeLevel: true, gitTag: true, commitSha: true, releaseCi: true,
 } satisfies Prisma.WorkVersionSelect;
+
+/** dm5 G4 (D14): kiểm + chuẩn hoá tag / SHA (null = xoá). */
+function tagShaData(input: { gitTag?: string | null; commitSha?: string | null }) {
+  const d: { gitTag?: string | null; commitSha?: string | null } = {};
+  if (input.gitTag !== undefined) {
+    const t = input.gitTag?.trim() || null;
+    if (t && !GIT_TAG_RE.test(t)) throw new BadRequestError('Git tag may only contain letters, digits, ".", "-", "_" and "/" (e.g. v1.0.0)', 'WORK_BAD_TAG');
+    d.gitTag = t;
+  }
+  if (input.commitSha !== undefined) {
+    const c = input.commitSha?.trim().toLowerCase() || null;
+    if (c && !SHA_RE.test(c)) throw new BadRequestError('Commit SHA must be 7–64 hex characters', 'WORK_BAD_SHA');
+    d.commitSha = c;
+  }
+  return d;
+}
 
 /** Tiến độ từng version: đếm thẻ tầng 0 (giống sprint — việc con không đếm đôi). */
 export async function listVersions(userId: number, projectId: number) {
@@ -63,7 +83,7 @@ function dateOrNull(s: string | null | undefined): Date | null | undefined {
   return new Date(`${s}T00:00:00Z`);
 }
 
-export async function createVersion(userId: number, projectId: number, input: { name: string; description?: string | null; startDate?: string | null; releaseDate?: string | null }) {
+export async function createVersion(userId: number, projectId: number, input: { name: string; description?: string | null; startDate?: string | null; releaseDate?: string | null; freezeLevel?: FreezeLevel; gitTag?: string | null; commitSha?: string | null }) {
   await requireProject(userId, projectId, 'sprint.manage');
   const name = input.name.trim().slice(0, 60);
   if (!name) throw new BadRequestError('Version name is required', 'WORK_NAME_REQUIRED');
@@ -73,7 +93,10 @@ export async function createVersion(userId: number, projectId: number, input: { 
   const max = await prisma.workVersion.aggregate({ where: { projectId }, _max: { position: true } });
   try {
     const v = await prisma.workVersion.create({
-      data: { projectId, name, description: input.description?.trim() || null, startDate: start, releaseDate: release, position: (max._max.position ?? -1) + 1 },
+      data: {
+        projectId, name, description: input.description?.trim() || null, startDate: start, releaseDate: release, position: (max._max.position ?? -1) + 1,
+        ...(input.freezeLevel && (FREEZE_LEVELS as readonly string[]).includes(input.freezeLevel) ? { freezeLevel: input.freezeLevel } : {}), ...tagShaData(input),
+      },
       select: VERSION_SELECT,
     });
     emitWorkEvent({ type: 'project.updated', projectId, actor: userActor(userId) });
@@ -86,7 +109,7 @@ export async function createVersion(userId: number, projectId: number, input: { 
 
 export async function updateVersion(
   userId: number, projectId: number, versionId: number,
-  input: { name?: string; description?: string | null; startDate?: string | null; releaseDate?: string | null; status?: 'UNRELEASED' | 'ARCHIVED'; releaseNotes?: string | null },
+  input: { name?: string; description?: string | null; startDate?: string | null; releaseDate?: string | null; status?: 'UNRELEASED' | 'ARCHIVED'; releaseNotes?: string | null; freezeLevel?: FreezeLevel; gitTag?: string | null; commitSha?: string | null },
 ) {
   await requireProject(userId, projectId, 'sprint.manage');
   const v = await prisma.workVersion.findFirst({ where: { id: versionId, projectId } });
@@ -101,6 +124,12 @@ export async function updateVersion(
   if (input.startDate !== undefined) data.startDate = dateOrNull(input.startDate);
   if (input.releaseDate !== undefined) data.releaseDate = dateOrNull(input.releaseDate);
   if (input.releaseNotes !== undefined) data.releaseNotes = input.releaseNotes?.slice(0, 50_000) || null;
+  // dm5 G4 (D14): Feature / Code / Hard freeze (chặn ở cửa ghi — versionFreeze.ts) + tag/SHA.
+  if (input.freezeLevel !== undefined) {
+    if (!(FREEZE_LEVELS as readonly string[]).includes(input.freezeLevel)) throw new BadRequestError('Freeze level must be NONE, FEATURE, CODE or HARD', 'WORK_BAD_FREEZE');
+    data.freezeLevel = input.freezeLevel;
+  }
+  Object.assign(data, tagShaData(input));
   // "Bỏ phát hành" (RELEASED → UNRELEASED) được phép — phát hành nhầm là chuyện thường.
   if (input.status !== undefined) {
     data.status = input.status;
@@ -111,6 +140,9 @@ export async function updateVersion(
   if (s && r && s > r) throw new BadRequestError('Start date must be before the release date', 'WORK_BAD_DATES');
   try {
     const out = await prisma.workVersion.update({ where: { id: v.id }, data, select: VERSION_SELECT });
+    if (input.freezeLevel !== undefined && input.freezeLevel !== v.freezeLevel) {
+      await auditProject(projectId, { actorId: userId, action: 'version.freeze', targetType: 'version', targetId: v.id, summary: `${out.name}: freeze ${v.freezeLevel} → ${input.freezeLevel}` });
+    }
     emitWorkEvent({ type: 'project.updated', projectId, actor: userActor(userId) });
     return out;
   } catch (e) {
@@ -123,11 +155,22 @@ export async function updateVersion(
  * Phát hành: thẻ chưa xong phải đi đâu đó — sang version khác hoặc bỏ khỏi
  * version. Phát hành mà để thẻ dở dang nằm lại thì release notes nói dối.
  */
-export async function releaseVersion(userId: number, projectId: number, versionId: number, input: { moveUnresolvedTo: number | null; releaseDate?: string | null }) {
+export async function releaseVersion(userId: number, projectId: number, versionId: number, input: { moveUnresolvedTo: number | null; releaseDate?: string | null; gitTag?: string | null; commitSha?: string | null }) {
   await requireProject(userId, projectId, 'sprint.manage');
   const v = await prisma.workVersion.findFirst({ where: { id: versionId, projectId } });
   if (!v) throw new NotFoundError('Version not found');
   if (v.status === 'RELEASED') throw new BadRequestError('This version is already released', 'WORK_VERSION_RELEASED');
+  // dm5 G3 (D2): test gate — tiêu chí RA của Test Plan chưa đạt ⇒ 409 WORK_TEST_GATE (settings.testGate='block'; 'warn' chỉ trả).
+  const testGate = await (await import('./testMgmt.service.js')).assertTestGate(prisma, versionId);
+  // dm5 G4 (D14): git tag + SHA của bản phát hành; CI ở đúng SHA đó (PR có headSha khớp) ghi vào version.
+  const tag = tagShaData(input);
+  const sha = tag.commitSha !== undefined ? tag.commitSha : v.commitSha;
+  const pulls = sha ? await prisma.workGitPull.findMany({ where: { projectId, headSha: { startsWith: sha.slice(0, 7) } }, select: { number: true, headSha: true, ciState: true, ciUrl: true, ciAt: true }, take: 20 }) : [];
+  const ci = ciOfSha(sha, pulls);
+  const p = await prisma.workProject.findUnique({ where: { id: projectId }, select: { settings: true } });
+  if (g4SettingsOf(p?.settings).releaseRequireGreenCi && sha && (ci.state === 'failure' || ci.state === 'pending')) {
+    throw new AppError(`CI is ${ci.state} at ${sha.slice(0, 12)}${ci.pr ? ` (PR #${ci.pr})` : ''} — release a commit with green CI, or turn off "Release needs green CI"`, 409, 'WORK_RELEASE_CI');
+  }
   if (input.moveUnresolvedTo !== null) {
     if (input.moveUnresolvedTo === versionId) throw new BadRequestError('Pick a different version for unfinished issues', 'WORK_BAD_VERSION');
     const target = await prisma.workVersion.findFirst({ where: { id: input.moveUnresolvedTo, projectId, status: 'UNRELEASED' } });
@@ -137,11 +180,11 @@ export async function releaseVersion(userId: number, projectId: number, versionI
   for (const i of open) await applyIssueChange(i.id, { fixVersionId: input.moveUnresolvedTo }, userActor(userId));
   const out = await prisma.workVersion.update({
     where: { id: v.id },
-    data: { status: 'RELEASED', releasedAt: new Date(), releaseDate: dateOrNull(input.releaseDate) ?? v.releaseDate ?? new Date(`${vnDay()}T00:00:00Z`) },
+    data: { status: 'RELEASED', releasedAt: new Date(), releaseDate: dateOrNull(input.releaseDate) ?? v.releaseDate ?? new Date(`${vnDay()}T00:00:00Z`), ...tag, releaseCi: sha ? ci.state : null },
     select: VERSION_SELECT,
   });
   emitWorkEvent({ type: 'project.updated', projectId, actor: userActor(userId) });
-  return { version: out, moved: open.length };
+  return { version: out, moved: open.length, ci: sha ? { sha, ...ci } : null, testGate };
 }
 
 export async function deleteVersion(userId: number, projectId: number, versionId: number) {
@@ -219,7 +262,10 @@ export async function timeline(userId: number, projectId: number) {
       return a && b && !a.done && a.due && b.start && b.start < a.due;
     })
     .map((d) => ({ from: d.from, to: d.to }));
-  return { items, dependencies: deps, criticalPath: cp.path, criticalDays: cp.days, conflicts };
+  // dm5 G1 (A17): giai đoạn / cổng có ngày kế hoạch — timeline vẽ thành dải mốc; trễ ⇒ đỏ.
+  const { timelineStages } = await import('./dm5a.service.js');
+  const stages = (await timelineStages(projectId)).filter((s) => s.plannedStart || s.plannedEnd);
+  return { items, dependencies: deps, criticalPath: cp.path, criticalDays: cp.days, conflicts, stages };
 }
 
 /** Thời lượng (ngày, tối thiểu 1) của một thẻ trên timeline. */
@@ -354,7 +400,12 @@ export async function capacity(userId: number, projectId: number, q: { sprintId?
         utilization: capacityHours ? round1((loadHours / capacityHours) * 100) : null,
       };
     });
-  return { from, to, unit: mode, sprintId: sprintId ?? null, members: rows };
+  // dm5 G1 (A15): tổng sức chứa × hệ số tập trung so với khối việc (giờ) — cùng ngưỡng với hộp thoại sprint.
+  const { capacityOf, capacityVerdict } = await import('./dm5Rules.js');
+  const proj = await prisma.workProject.findUnique({ where: { id: projectId }, select: { settings: true } });
+  const totalCap = rows.some((r) => r.capacityHours !== null) ? round1(rows.reduce((s, r) => s + (r.capacityHours ?? 0), 0)) : null;
+  const focus = capacityVerdict({ estimateHours: rows.reduce((s, r) => s + r.loadHours, 0), capacityHours: totalCap, settings: capacityOf(proj?.settings) });
+  return { from, to, unit: mode, sprintId: sprintId ?? null, members: rows, focus };
 }
 
 export async function setCapacity(userId: number, projectId: number, memberId: number, hoursPerDay: number | null) {
@@ -411,7 +462,7 @@ export async function deleteTimeOff(userId: number, workspaceId: number, id: num
 
 const WORKLOG_SELECT = {
   id: true, minutes: true, startedAt: true, note: true, source: true, createdAt: true, userId: true, user: { select: PUBLIC_USER },
-  activity: true, workProduct: true,
+  activity: true, workProduct: true, hat: true,
 } satisfies Prisma.WorkWorklogSelect;
 
 export async function listWorklogs(userId: number, projectId: number, number: number) {
@@ -427,9 +478,10 @@ export async function listWorklogs(userId: number, projectId: number, number: nu
  */
 export async function addWorklog(
   userId: number, projectId: number, number: number,
-  input: { minutes: number; startedAt?: string; note?: string | null; remaining?: 'auto' | 'keep' | number; activity?: string | null; workProduct?: string | null },
+  input: { minutes: number; startedAt?: string; note?: string | null; remaining?: 'auto' | 'keep' | number; activity?: string | null; workProduct?: string | null; hat?: string | null },
 ) {
   const access = await requireProject(userId, projectId, 'issue.edit');
+  if (input.hat && !/^C[1-5]$/.test(input.hat)) throw new BadRequestError('Role must be C1–C5', 'WORK_BAD_WORKLOG');
   const isAgent = access.principal === 'AGENT';
   if (!Number.isInteger(input.minutes) || input.minutes < 1 || input.minutes > 24 * 60) throw new BadRequestError('Time spent must be between 1 minute and 24 hours', 'WORK_BAD_WORKLOG');
   const startedAt = input.startedAt ? new Date(input.startedAt) : new Date();
@@ -445,7 +497,7 @@ export async function addWorklog(
     const cur = await tx.workIssue.findUniqueOrThrow({ where: { id: issue.id }, select: { timeSpentMin: true, remainingEstimateMin: true } });
     // source MANUAL: người hoặc agent tự ghi; AGENT_AUTO chỉ do job timesheet agent sinh từ lease (A12).
     // CTW đợt 4 (A24): Activity (danh sách sheet TimeLogs) + Work Product — người chọn, không thì bản xuất suy từ tiêu đề thẻ.
-    const created = await tx.workWorklog.create({ data: { issueId: issue.id, userId, minutes: input.minutes, startedAt, note: input.note?.trim().slice(0, 1000) || null, source: 'MANUAL', activity: input.activity || null, workProduct: input.workProduct?.trim().slice(0, 120) || null }, select: WORKLOG_SELECT });
+    const created = await tx.workWorklog.create({ data: { issueId: issue.id, userId, minutes: input.minutes, startedAt, note: input.note?.trim().slice(0, 1000) || null, source: 'MANUAL', activity: input.activity || null, workProduct: input.workProduct?.trim().slice(0, 120) || null, hat: input.hat || null }, select: WORKLOG_SELECT });
     let remaining = cur.remainingEstimateMin;
     if (input.remaining === 'auto' || input.remaining === undefined) remaining = cur.remainingEstimateMin === null ? null : Math.max(0, cur.remainingEstimateMin - input.minutes);
     else if (typeof input.remaining === 'number') remaining = Math.max(0, Math.round(input.remaining));

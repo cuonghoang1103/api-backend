@@ -79,6 +79,9 @@ const crFields = {
   alternatives: text(10_000),
   ownerId: id.nullable().optional(),
   requesterId: id.nullable().optional(),
+  // dm5 G4 (C8): ma trận ảnh hưởng 6 chiều + ≤ 3 phương án (dm5g4Rules › cleanImpactMatrix / cleanCrOptions kẹp chi tiết).
+  impactMatrix: z.record(z.string().max(20), z.object({ level: z.string().max(10), note: z.string().max(1000).nullable().optional() })).nullable().optional(),
+  options: z.array(z.object({ title: z.string().max(200), effortDays: z.number().min(0).max(1000).nullable().optional(), pros: z.string().max(1000).nullable().optional(), cons: z.string().max(1000).nullable().optional(), chosen: z.boolean().optional() })).max(3).nullable().optional(),
 };
 
 router.get('/projects/:pid/changes', asyncHandler(async (req, res) => {
@@ -141,6 +144,15 @@ router.post('/projects/:pid/changes/:num/implement', asyncHandler(async (req, re
   }), req.body);
   ok(res, await crs.createImplementationIssues(callerId(req), P(req, 'pid'), P(req, 'num'), items), 201);
 }));
+// dm5 G4 (C8): tách CR con (CR-3a/b) + checklist đồng bộ 5 điểm sau khi duyệt (agent bị chặn /sync — AGENT_DENIED_ROUTES).
+router.post('/projects/:pid/changes/:num/split', asyncHandler(async (req, res) => {
+  const { parts } = parse(z.object({ parts: z.array(z.object({ title: z.string().min(1).max(255), impactScope: text(10_000), scheduleDays: z.number().int().min(-3650).max(3650).nullable().optional() })).min(1).max(5) }), req.body);
+  ok(res, await crs.splitChangeRequest(callerId(req), P(req, 'pid'), P(req, 'num'), parts), 201);
+}));
+router.put('/projects/:pid/changes/:num/sync', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ srsRoc: z.boolean().optional(), trackingQna: z.boolean().optional(), trackingIssues: z.boolean().optional(), trackingWbs: z.boolean().optional(), rtm: z.boolean().optional(), note: z.string().max(1000).nullable().optional() }), req.body);
+  ok(res, await crs.setChangeRequestSync(callerId(req), P(req, 'pid'), P(req, 'num'), body));
+}));
 // Khu "Change requests" + "Risks" trong chi tiết thẻ (mô-đun tắt ⇒ null, không lỗi).
 router.get('/projects/:pid/issues/:num/governance', asyncHandler(async (req, res) => {
   ok(res, await crs.issueGovernance(callerId(req), P(req, 'pid'), P(req, 'num')));
@@ -159,6 +171,7 @@ const raidFields = {
   response: z.enum(RAID_RESPONSES).nullable().optional(),
   mitigation: text(20_000),
   trigger: text(5000),
+  contingency: text(20_000), // dm5 G4 (C10): Plan B
   reviewDate: day.nullable().optional(),
   // Đợt S4: rủi ro được nêu trong báo cáo tuần cho khách (raid.service chỉ nhận với loại RISK).
   clientVisible: z.boolean().optional(),
@@ -195,6 +208,11 @@ router.delete('/projects/:pid/raid/:num', asyncHandler(async (req, res) => {
 router.post('/projects/:pid/raid/:num/links', asyncHandler(async (req, res) => {
   const body = parse(z.object({ issueNumber: id.optional(), stageId: id.optional(), crNumber: id.optional() }), req.body);
   ok(res, await raid.addRaidLink(callerId(req), P(req, 'pid'), P(req, 'num'), body), 201);
+}));
+// dm5 G4 (C10): Risk/Issue ⇒ thẻ + liên kết (use=contingency ⇒ thẻ "Plan B").
+router.post('/projects/:pid/raid/:num/to-issue', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ title: z.string().max(255).nullable().optional(), typeKey: z.string().max(20).nullable().optional(), assigneeId: id.nullable().optional(), dueDate: day.nullable().optional(), use: z.enum(['mitigation', 'contingency']).optional() }), req.body ?? {});
+  ok(res, await raid.raidToIssue(callerId(req), P(req, 'pid'), P(req, 'num'), body), 201);
 }));
 router.delete('/projects/:pid/raid/:num/links/:linkId', asyncHandler(async (req, res) => {
   ok(res, await raid.removeRaidLink(callerId(req), P(req, 'pid'), P(req, 'num'), P(req, 'linkId')));
@@ -249,7 +267,8 @@ router.put('/projects/:pid/meetings/:num/attendees', asyncHandler(async (req, re
 }));
 router.put('/projects/:pid/meetings/:num/actions', asyncHandler(async (req, res) => {
   const { items } = parse(z.object({
-    items: z.array(z.object({ id: id.optional(), text: z.string().min(1).max(500), assigneeId: id.nullable().optional(), dueDate: day.nullable().optional() })).max(100),
+    // dm5 G1 (A21): mỗi việc có loại TASK | BUG | CR | QUESTION ⇒ "Create" sinh đúng loại (thẻ / CR / câu hỏi Q&A).
+    items: z.array(z.object({ id: id.optional(), text: z.string().min(1).max(500), assigneeId: id.nullable().optional(), dueDate: day.nullable().optional(), kind: z.enum(['TASK', 'BUG', 'CR', 'QUESTION']).optional() })).max(100),
   }), req.body);
   ok(res, await meetings.setActions(callerId(req), P(req, 'pid'), P(req, 'num'), items));
 }));

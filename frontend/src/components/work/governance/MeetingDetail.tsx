@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { isAiQuotaError, userName, workError, type ProjectConfig, type TiptapDoc } from '@/lib/work-api';
-import { MEETING_TYPE_LABEL, govApi, govKeys, type MeetingDetail as MD } from '@/lib/work-s3b-api';
+import { MEETING_TYPE_LABEL, govApi, govKeys, type MeetingActionKind, type MeetingDetail as MD } from '@/lib/work-s3b-api';
 import RichEditor, { RichView } from '../RichEditor';
 import { EmptyState, PageLoading, Spinner, StatusBadge, UserAvatar } from '../ui';
 import { ConfirmDialog } from '../settings/shared';
@@ -28,7 +28,7 @@ import { PersonSelect, Section, fmtMeetingTime, useGovInvalidate } from './share
 import { AddToCalendar, JoinMeetingButton } from '../ctw';
 import { CloudMeetingButtons } from '../cloud/CloudMeetingButtons'; // CTW đợt 8a
 import { usePanes } from '../shell/panes';
-import { wt, wfmt } from '@/components/work/i18n';
+import { wt, wfmt, type WKey } from '@/components/work/i18n';
 import { MeetingK2Main, MeetingK2Side } from '../meetings2/MeetingRoom'; // CTW K-2: điểm danh, ghi âm, transcript, biên bản AI
 import { MeetingExtras } from '../c8c/RecurringMeetings';
 
@@ -91,23 +91,25 @@ function Decisions({ config, m }: { config: ProjectConfig; m: MD }) {
   );
 }
 
-type Row = { id?: number; text: string; assigneeId: number | null; dueDate: string };
+type Row = { id?: number; text: string; assigneeId: number | null; dueDate: string; kind: MeetingActionKind };
+// dm5 G1 (A21): mỗi góp ý trong biên bản chọn loại — "Create" sinh đúng thứ (thẻ Task/Bug, CR, câu hỏi Q&A).
+const ACTION_KINDS: MeetingActionKind[] = ['TASK', 'BUG', 'CR', 'QUESTION'];
 
 function Actions({ config, m }: { config: ProjectConfig; m: MD }) {
   const invalidate = useGovInvalidate(config.id);
-  const fromM = (): Row[] => m.actions.map((a) => ({ id: a.id, text: a.text, assigneeId: a.assignee?.id ?? null, dueDate: a.dueDate ?? '' }));
+  const fromM = (): Row[] => m.actions.map((a) => ({ id: a.id, text: a.text, assigneeId: a.assignee?.id ?? null, dueDate: a.dueDate ?? '', kind: a.kind ?? 'TASK' }));
   const [rows, setRows] = useState<Row[]>(fromM);
   useEffect(() => setRows(fromM()), [m.actions]); // eslint-disable-line react-hooks/exhaustive-deps
   const [proposals, setProposals] = useState<Array<{ text: string; assigneeId: number | null; on: boolean }> | null>(null);
   const dirty = JSON.stringify(rows) !== JSON.stringify(fromM());
   const save = useMutation({
-    mutationFn: (r: Row[]) => govApi.setActions(config.id, m.number, r.filter((x) => x.text.trim()).map((x) => ({ id: x.id, text: x.text.trim(), assigneeId: x.assigneeId, dueDate: x.dueDate || null }))),
+    mutationFn: (r: Row[]) => govApi.setActions(config.id, m.number, r.filter((x) => x.text.trim()).map((x) => ({ id: x.id, text: x.text.trim(), assigneeId: x.assigneeId, dueDate: x.dueDate || null, kind: x.kind }))),
     onSuccess: () => { toast.success(wt('gov.actionsSaved')); invalidate(); },
     onError: (err) => toast.error(workError(err, wt('gov.saveActionsFailed'))),
   });
   const create = useMutation({
     mutationFn: () => govApi.createIssues(config.id, m.number),
-    onSuccess: (r) => { toast.success(wt('gov.createdKeys', { keys: r.created.map((c) => c.key).join(', ') })); invalidate(); },
+    onSuccess: (r) => { toast.success(wt('gov.createdKeys', { keys: [...r.created.map((c) => c.key), ...(r.others ?? []).map((o) => o.ref)].join(', ') })); invalidate(); },
     onError: (err) => toast.error(workError(err, wt('gov.createIssuesFailed'))),
   });
   const suggest = useMutation({
@@ -119,7 +121,8 @@ function Actions({ config, m }: { config: ProjectConfig; m: MD }) {
     onError: (err) => toast.error(isAiQuotaError(err) ? wt('gov.aiQuota') : workError(err, wt('gov.aiReadFailed'))),
   });
   const issueByAction = new Map(m.actions.map((a) => [a.id, a.issue]));
-  const open = m.actions.filter((a) => !a.issue).length;
+  const refByAction = new Map(m.actions.map((a) => [a.id, a.createdRef ?? null]));
+  const open = m.actions.filter((a) => !a.issue && !a.createdRef).length;
   const base = `/work/${config.workspace.slug}/${config.key}`;
   return (
     <Section
@@ -143,7 +146,7 @@ function Actions({ config, m }: { config: ProjectConfig; m: MD }) {
           </ul>
           <div className="mt-2 flex gap-2">
             <button type="button" className="w-btn w-btn-sm" onClick={() => setProposals(null)}>{wt('gov.dismiss')}</button>
-            <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={!proposals.some((p) => p.on)} onClick={() => { setRows((r) => [...r, ...proposals.filter((p) => p.on).map((p) => ({ text: p.text, assigneeId: p.assigneeId, dueDate: '' }))]); setProposals(null); }}>{wt('gov.addToActions')}</button>
+            <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={!proposals.some((p) => p.on)} onClick={() => { setRows((r) => [...r, ...proposals.filter((p) => p.on).map((p) => ({ text: p.text, assigneeId: p.assigneeId, dueDate: '', kind: 'TASK' as const }))]); setProposals(null); }}>{wt('gov.addToActions')}</button>
           </div>
         </div>
       )}
@@ -151,14 +154,22 @@ function Actions({ config, m }: { config: ProjectConfig; m: MD }) {
         <ul className="space-y-2" data-testid="meeting-actions">
           {rows.map((r, i) => {
             const issue = r.id ? issueByAction.get(r.id) : null;
+            const ref = r.id ? refByAction.get(r.id) ?? null : null;
+            const made = !!issue || !!ref;
             return (
-              <li key={r.id ?? `n${i}`} className="grid grid-cols-1 gap-2 rounded-[8px] border border-[var(--w-border)] p-2 md:grid-cols-[minmax(0,1fr)_170px_150px_auto] md:items-center md:border-0 md:p-0">
-                <input className="w-input min-w-0" value={r.text} maxLength={500} disabled={!m.canEdit || !!issue} onChange={(e) => setRows((a) => a.map((x, j) => (j === i ? { ...x, text: e.target.value } : x)))} aria-label={wt('gov.actionItem')} placeholder={wt('gov.whatNeedsDoing')} />
-                <PersonSelect config={config} value={r.assigneeId} onChange={(v) => setRows((a) => a.map((x, j) => (j === i ? { ...x, assigneeId: v } : x)))} label={wt('gov.ownerLbl')} empty={wt('gov.noOwner')} disabled={!m.canEdit || !!issue} />
-                <input type="date" className="w-input" value={r.dueDate} disabled={!m.canEdit || !!issue} onChange={(e) => setRows((a) => a.map((x, j) => (j === i ? { ...x, dueDate: e.target.value } : x)))} aria-label={wt('common.dueDate')} />
+              <li key={r.id ?? `n${i}`} className="grid grid-cols-1 gap-2 rounded-[8px] border border-[var(--w-border)] p-2 md:grid-cols-[110px_minmax(0,1fr)_170px_150px_auto] md:items-center md:border-0 md:p-0">
+                <select className="w-input" value={r.kind} disabled={!m.canEdit || made} aria-label={wt('meeting2.kindLbl')} title={wt('meeting2.kindTip')}
+                  onChange={(e) => setRows((a) => a.map((x, j) => (j === i ? { ...x, kind: e.target.value as MeetingActionKind } : x)))}>
+                  {ACTION_KINDS.map((k) => <option key={k} value={k}>{wt(`meeting2.kind_${k}` as WKey)}</option>)}
+                </select>
+                <input className="w-input min-w-0" value={r.text} maxLength={500} disabled={!m.canEdit || made} onChange={(e) => setRows((a) => a.map((x, j) => (j === i ? { ...x, text: e.target.value } : x)))} aria-label={wt('gov.actionItem')} placeholder={wt('gov.whatNeedsDoing')} />
+                <PersonSelect config={config} value={r.assigneeId} onChange={(v) => setRows((a) => a.map((x, j) => (j === i ? { ...x, assigneeId: v } : x)))} label={wt('gov.ownerLbl')} empty={wt('gov.noOwner')} disabled={!m.canEdit || made} />
+                <input type="date" className="w-input" value={r.dueDate} disabled={!m.canEdit || made} onChange={(e) => setRows((a) => a.map((x, j) => (j === i ? { ...x, dueDate: e.target.value } : x)))} aria-label={wt('common.dueDate')} />
                 <span className="flex items-center justify-end gap-1.5">
                   {issue ? (
                     <Link href={`${base}/issue/${issue.number}`} className="flex items-center gap-1.5 text-[12px]"><span className="font-mono text-[var(--w-accent-text)] hover:underline">{issue.key}</span><StatusBadge status={issue.status} /></Link>
+                  ) : ref ? (
+                    <Link href={ref.startsWith('CR-') ? `${base}/changes/${ref.slice(3)}` : `${base}/school?tab=qna`} className="font-mono text-[12px] text-[var(--w-accent-text)] hover:underline">{ref}</Link>
                   ) : m.canEdit ? (
                     <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('gov.removeAction')} onClick={() => setRows((a) => a.filter((_, j) => j !== i))}><X size={13} /></button>
                   ) : null}
@@ -170,7 +181,7 @@ function Actions({ config, m }: { config: ProjectConfig; m: MD }) {
       ) : <p className="text-[13px] text-[var(--w-text-3)]">{wt('gov.noActions')}</p>}
       {m.canEdit && (
         <div className="mt-3 flex flex-wrap gap-2">
-          <button type="button" className="w-btn w-btn-sm" disabled={rows.length >= 100} onClick={() => setRows((a) => [...a, { text: '', assigneeId: null, dueDate: '' }])} data-testid="meeting-add-action"><Plus size={13} /> {wt('gov.addAction')}</button>
+          <button type="button" className="w-btn w-btn-sm" disabled={rows.length >= 100} onClick={() => setRows((a) => [...a, { text: '', assigneeId: null, dueDate: '', kind: 'TASK' }])} data-testid="meeting-add-action"><Plus size={13} /> {wt('gov.addAction')}</button>
           {dirty && <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={save.isPending} onClick={() => save.mutate(rows)} data-testid="meeting-save-actions">{save.isPending ? <Spinner size={12} /> : <Save size={13} />} {wt('gov.saveActions')}</button>}
         </div>
       )}

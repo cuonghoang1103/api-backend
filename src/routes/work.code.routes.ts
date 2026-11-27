@@ -8,7 +8,8 @@
  *   GET  /projects/:pid/code/activity?actor&branch&from&to&kind&before&limit
  *   GET  /projects/:pid/code/branches
  *   GET  /projects/:pid/code/pulls?state=open|merged|closed|all
- *   GET  /projects/:pid/code/issues/:num                      panel Development (commit nhóm theo PR/nhánh)
+ *   GET  /projects/:pid/code/issues/:num                      panel Development (commit nhóm theo PR/nhánh) + ci (dm5 G4)
+ *   GET  /projects/:pid/code/health                           dm5 G4 (D13): sức khoẻ repo 5 mục
  *   GET  /projects/:pid/code/source/meta|refs|tree|blob|commits?provider&ref&path
  *   GET  /projects/:pid/code/source/commit/:sha
  *   GET  /projects/:pid/code/source/pull/:n | pull/:n/files | compare?base&head   (27/10/2026)
@@ -79,6 +80,11 @@ router.get('/projects/:pid/code/pulls', asyncHandler(async (req, res) => {
   ok(res, await code.pulls(callerId(req), P(req, 'pid'), state));
 }));
 
+// dm5 G4 (D13): 5 mục vệ sinh repo (.gitignore, .env.example, PR template, CI, branch protection) — chỉ đọc.
+router.get('/projects/:pid/code/health', asyncHandler(async (req, res) => {
+  ok(res, await code.repoHealth(callerId(req), P(req, 'pid')));
+}));
+
 router.get('/projects/:pid/code/issues/:num', asyncHandler(async (req, res) => {
   ok(res, await code.issueDev(callerId(req), P(req, 'pid'), P(req, 'num')));
 }));
@@ -121,7 +127,8 @@ router.get('/projects/:pid/code/source/compare', asyncHandler(async (req, res) =
 // 27/10/2026: CuongMini review code (PR số `pr`, hoặc thẻ `issue` ⇒ PR/nhánh của thẻ). Quyền + trần ở codeReview.service;
 // kết quả là phiên review (GET /reviews/:num như cũ) + bình luận nội bộ vào thẻ. Agent bị chặn ở AGENT_DENIED_ROUTES + service.
 router.post('/projects/:pid/code/review', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ pr: id.optional(), issue: id.optional(), notify: z.boolean().optional(), postToGithub: z.boolean().optional() }).refine((b) => b.pr || b.issue, 'Pick a pull request or an issue'), req.body ?? {});
+  // dm5 G4 (D11): mode=critic ⇒ AI chỉ phản biện (không code vá); bỏ trống ⇒ settings.aiReviewMode của dự án.
+  const body = parse(z.object({ pr: id.optional(), issue: id.optional(), notify: z.boolean().optional(), postToGithub: z.boolean().optional(), mode: z.enum(['critic', 'full']).optional() }).refine((b) => b.pr || b.issue, 'Pick a pull request or an issue'), req.body ?? {});
   const { runCodeReview } = await import('../services/work/codeReview.service.js');
   ok(res, await runCodeReview(callerId(req), P(req, 'pid'), body), 201);
 }));

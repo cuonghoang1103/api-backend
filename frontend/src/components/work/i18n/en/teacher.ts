@@ -167,4 +167,18 @@ export const teacher = {
   forPerson: 'For {name}',
   publishAll: 'Publish all drafts of {m}',
   notAvailBody: 'Grades are visible to the project team and the lecturer.',
+  // ── dm5 G3 (27/11/2026) — tự chấm của sinh viên ──
+  selfTitle: 'Self-assessment',
+  selfDesc: 'Score your own work with the rubric before the defense. It never replaces or changes the lecturer’s grade — both are shown side by side.',
+  selfRubric: 'Rubric',
+  selfTemplate: 'Template: {n}',
+  selfFor: 'For',
+  selfTeam: 'Whole team',
+  selfMe: 'Myself',
+  selfSave: 'Save self-assessment',
+  selfSaved: 'Self-assessment saved',
+  selfNone: 'No self-assessment yet.',
+  selfBy: 'by {n}',
+  selfVsTeacher: 'Lecturer: {t}',
+  selfDelete: 'Delete',
 };

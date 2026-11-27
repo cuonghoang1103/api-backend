@@ -24,6 +24,7 @@ import HealthTab from '@/components/work/reports/HealthTab';
 import WeeklyReportTab from '@/components/work/reports/WeeklyReportTab';
 import TimeTab from '@/components/work/reports/TimeTab';
 import CapacityTab from '@/components/work/reports/CapacityTab';
+import RolesTab from '@/components/work/reports/RolesTab'; // dm5 G4 (C5): giờ theo vai C1–C5
 import IssueDrawer from '@/components/work/IssueDrawer';
 import { ClientWeeklyTab, SteeringTab } from '@/components/work/reports/S4ReportTabs';
 import { studioOn } from '@/components/work/studio/shared';
@@ -45,6 +46,8 @@ const TABS = [
   { id: 'epics', get label() { return wt('rep.tab_epics'); } },
   { id: 'contributions', get label() { return wt('rep.tab_contributions'); } },
   { id: 'time', get label() { return wt('rep.tab_time'); } },
+  // dm5 G4 (C5): giờ theo 5 mũ C1–C5 mỗi tuần + cảnh báo QA thấp / quá giờ.
+  { id: 'roles', get label() { return wt('g4.tabRoles'); } },
   { id: 'capacity', get label() { return wt('rep.tab_capacity'); } },
   // CTW-28 A15: chỉ hiện khi dự án có AI agent (lọc trong ReportsView).
   { id: 'agents', get label() { return wt('rep.tab_agents'); } },
@@ -66,7 +69,7 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
   const hasAgents = projectHasAgents(config) && config.role !== 'CLIENT' && !config.clientView;
   // CTW Đóng góp: khách không thấy số liệu đóng góp của đội (máy chủ cũng chặn 403).
   const teamSide = config.role !== 'CLIENT' && !config.clientView;
-  const tabs = TABS.filter((t) => (reportsOn || !S4_TABS.has(t.id)) && (t.id !== 'agents' || hasAgents) && (t.id !== 'contributions' || teamSide) && ((t.id !== 'flow' && t.id !== 'release') || teamSide));
+  const tabs = TABS.filter((t) => (reportsOn || !S4_TABS.has(t.id)) && (t.id !== 'agents' || hasAgents) && (t.id !== 'contributions' || teamSide) && ((t.id !== 'flow' && t.id !== 'release' && t.id !== 'roles') || teamSide));
   const raw = search?.get('tab');
   const tab: TabId = tabs.some((t) => t.id === raw) ? (raw as TabId) : 'health';
   const setTab = useCallback((id: TabId) => {
@@ -134,6 +137,7 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
           {tab === 'epics' && <EpicsTab pid={pid} config={config} lk={lk} />}
           {tab === 'contributions' && <ContribView pid={pid} config={config} />}
           {tab === 'time' && <TimeTab pid={pid} config={config} onOpenIssue={setIssue} />}
+          {tab === 'roles' && <RolesTab pid={pid} config={config} />}
           {tab === 'capacity' && <CapacityTab pid={pid} config={config} />}
           {tab === 'agents' && hasAgents && <ProjectAgentsReport config={config} />}
           {tab === 'client' && reportsOn && <ClientWeeklyTab config={config} />}

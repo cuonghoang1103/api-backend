@@ -24,9 +24,10 @@ import { isClientScoped, requireProject, type ProjectAccess } from './permission
 import { projectLanguage } from './projectLanguage.js';
 import { generateDesign, toUnitMatrix, toXray, type DesignCase, type Technique, TECHNIQUE_SHORT } from './testDesign.js';
 import {
-  cycleStats, defectStats, defectTrend, DEFAULT_CRITERIA, DEFAULT_ESTIMATION, estimateTesting, evaluateExit, retestStats, riskLevel,
-  RISK_TEST_POLICY, sCurve, tsrMarkdown, type DefectRow, type EstimationInput, type ExitCriteria,
+  cycleStats, defectStats, defectTrend, DEFAULT_CRITERIA, DEFAULT_ESTIMATION, estimateTesting, evaluateEntry, evaluateExit, isLeakage, normalizeEntry,
+  retestStats, riskLevel, RISK_TEST_POLICY, sCurve, SUGGESTED_ENTRY, tsrMarkdown, type DefectRow, type EntryCriterion, type EstimationInput, type ExitCriteria,
 } from './testMetrics.js';
+import { qualitySettingsOf, type TestGateMode } from './qualitySettings.js';
 import { trashGraph } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
 
 type Tx = Prisma.TransactionClient;
@@ -180,6 +181,8 @@ export interface PlanSettings {
   scopeIn?: string; scopeOut?: string; approach?: string; environment?: string; suspension?: string; resumption?: string;
   deliverables?: string; schedule?: string; risks?: string; variances?: string;
   criteria?: ExitCriteria; estimation?: Partial<EstimationInput>;
+  /** dm5 G3 (D2): tiêu chí VÀO (bắt đầu vòng test) + version mà kế hoạch này kiểm (cổng Release đọc). */
+  entry?: EntryCriterion[]; versionId?: number | null;
 }
 
 export async function getPlanSettings(userId: number, projectId: number, planId: number) {
@@ -187,13 +190,26 @@ export async function getPlanSettings(userId: number, projectId: number, planId:
   const p = await prisma.workTestPlan.findFirst({ where: { id: planId, projectId }, select: { id: true, name: true, settings: true } });
   if (!p) throw new NotFoundError('Test plan not found');
   const s = (p.settings ?? {}) as PlanSettings;
-  return { id: p.id, name: p.name, settings: { ...s, criteria: { ...DEFAULT_CRITERIA, ...(s.criteria ?? {}) }, estimation: { ...DEFAULT_ESTIMATION, ...(s.estimation ?? {}) } } };
+  let entry: EntryCriterion[] = [];
+  try { entry = normalizeEntry(s.entry); } catch { entry = []; }
+  return {
+    id: p.id, name: p.name,
+    settings: { ...s, entry, versionId: s.versionId ?? null, criteria: { ...DEFAULT_CRITERIA, ...(s.criteria ?? {}) }, estimation: { ...DEFAULT_ESTIMATION, ...(s.estimation ?? {}) } },
+    suggestedEntry: SUGGESTED_ENTRY,
+    gate: await planGate(prisma, projectId, p.id),
+  };
 }
 
 export async function savePlanSettings(userId: number, projectId: number, planId: number, settings: PlanSettings) {
   await ctx(userId, projectId, 'issue.edit');
   const p = await prisma.workTestPlan.findFirst({ where: { id: planId, projectId }, select: { id: true, settings: true } });
   if (!p) throw new NotFoundError('Test plan not found');
+  if (settings.entry !== undefined) {
+    try { settings = { ...settings, entry: normalizeEntry(settings.entry) }; } catch (err) { throw new BadRequestError((err as Error).message, 'VALIDATION_ERROR'); }
+  }
+  if (settings.versionId !== undefined && settings.versionId !== null && !(await prisma.workVersion.count({ where: { id: settings.versionId, projectId } }))) {
+    throw new BadRequestError('Version not found in this project', 'WORK_BAD_VERSION');
+  }
   const merged = { ...((p.settings ?? {}) as PlanSettings), ...settings };
   await prisma.workTestPlan.update({ where: { id: p.id }, data: { settings: merged as Prisma.InputJsonValue } });
   return getPlanSettings(userId, projectId, planId);
@@ -201,33 +217,37 @@ export async function savePlanSettings(userId: number, projectId: number, planId
 
 // ═══ GIÁM SÁT & KIỂM SOÁT (T7, T8, B9) ═══════════════════════════
 
-async function gather(projectId: number, planId: number | null) {
-  const plan = planId ? await prisma.workTestPlan.findFirst({ where: { id: planId, projectId }, select: { id: true, name: true, settings: true, cases: { select: { testCaseId: true } } } }) : null;
+type Db = Tx | typeof prisma;
+
+async function gather(projectId: number, planId: number | null, db: Db = prisma) {
+  const plan = planId ? await db.workTestPlan.findFirst({ where: { id: planId, projectId }, select: { id: true, name: true, settings: true, cases: { select: { testCaseId: true } } } }) : null;
   if (planId && !plan) throw new NotFoundError('Test plan not found');
-  const cycles = await prisma.workTestCycle.findMany({ where: { projectId, ...(plan ? { planId: plan.id } : {}) }, select: { id: true, name: true, state: true, startAt: true, endAt: true, createdAt: true } });
-  const runs = cycles.length ? await prisma.workTestRun.findMany({ where: { cycleId: { in: cycles.map((c) => c.id) } }, select: { cycleId: true, testCaseId: true, status: true, executedAt: true } }) : [];
-  const bugs = await prisma.workIssue.findMany({
+  const cycles = await db.workTestCycle.findMany({ where: { projectId, ...(plan ? { planId: plan.id } : {}) }, select: { id: true, name: true, state: true, startAt: true, endAt: true, createdAt: true } });
+  const runs = cycles.length ? await db.workTestRun.findMany({ where: { cycleId: { in: cycles.map((c) => c.id) } }, select: { cycleId: true, testCaseId: true, status: true, executedAt: true } }) : [];
+  const bugs = await db.workIssue.findMany({
     where: { projectId, deletedAt: null, type: { key: 'BUG' } }, take: 5000,
     select: {
       id: true, number: true, title: true, createdAt: true, resolvedAt: true, defectInfo: true,
       components: { select: { component: { select: { name: true } } }, take: 1 },
       parent: { select: { title: true } },
+      labels: { select: { label: { select: { name: true } } } },
     },
   });
   // Mở lại = lịch sử trạng thái có lần đi khỏi DONE (resolution bị xoá).
-  const reopenedIds = new Set((await prisma.workHistory.findMany({ where: { issueId: { in: bugs.map((b) => b.id) }, field: 'resolution', toValue: null, fromValue: { not: null } }, select: { issueId: true } })).map((h) => h.issueId));
+  const reopenedIds = new Set((await db.workHistory.findMany({ where: { issueId: { in: bugs.map((b) => b.id) }, field: 'resolution', toValue: null, fromValue: { not: null } }, select: { issueId: true } })).map((h) => h.issueId));
   const defects: Array<DefectRow & { number: number; title: string }> = bugs.map((b) => ({
     number: b.number, title: b.title,
     severity: b.defectInfo?.severity ?? null, activity: b.defectInfo?.activity ?? null,
     module: b.components[0]?.component.name ?? b.defectInfo?.product ?? b.parent?.title ?? null,
     open: !b.resolvedAt, createdAt: b.createdAt, resolvedAt: b.resolvedAt,
     rootCause: b.defectInfo?.rootCause ?? null, injectedPhase: b.defectInfo?.injectedPhase ?? null, reopened: reopenedIds.has(b.id),
+    leakage: isLeakage({ leakage: b.defectInfo?.leakage, activity: b.defectInfo?.activity, labels: b.labels.map((l) => l.label.name) }),
   }));
   return { plan, cycles, runs, defects };
 }
 
-async function requirementCoverage(projectId: number) {
-  const reqs = await prisma.workIssue.findMany({
+async function requirementCoverage(projectId: number, db: Db = prisma) {
+  const reqs = await db.workIssue.findMany({
     where: { projectId, deletedAt: null, type: { key: { in: ['REQUIREMENT', 'STORY'] } } },
     select: { id: true, linksIn: { where: { type: 'TESTS', fromIssue: { deletedAt: null } }, select: { fromIssue: { select: { testCase: { select: { id: true } } } } } } },
   });
@@ -235,7 +255,7 @@ async function requirementCoverage(projectId: number) {
   // Lần chạy mới nhất của mỗi case (theo updatedAt).
   const latest = new Map<number, string>();
   if (caseIds.length) {
-    const runs = await prisma.workTestRun.findMany({ where: { testCaseId: { in: caseIds } }, orderBy: { updatedAt: 'desc' }, select: { testCaseId: true, status: true } });
+    const runs = await db.workTestRun.findMany({ where: { testCaseId: { in: caseIds } }, orderBy: { updatedAt: 'desc' }, select: { testCaseId: true, status: true } });
     for (const r of runs) if (!latest.has(r.testCaseId)) latest.set(r.testCaseId, r.status);
   }
   const covered = reqs.filter((r) => r.linksIn.length).length;
@@ -245,6 +265,85 @@ async function requirementCoverage(projectId: number) {
   }).length;
   const pct = (a: number) => (reqs.length ? Math.round((a / reqs.length) * 1000) / 10 : null);
   return { requirements: reqs.length, covered, verified, pct: pct(covered), verifiedPct: pct(verified) };
+}
+
+// ═══ CỔNG KIỂM THỬ — dm5 G3 (D2) ═════════════════════════════════
+
+/** Tiêu chí VÀO + RA của một kế hoạch, tính trên dữ liệu thật (đọc qua `db` — dùng được trong transaction của Release). */
+export async function planGate(db: Db, projectId: number, planId: number | null) {
+  const { plan, cycles, runs, defects } = await gather(projectId, planId, db);
+  const settings = (plan?.settings ?? {}) as PlanSettings;
+  const coverage = await requirementCoverage(projectId, db);
+  const openSev = (sv: string) => defects.filter((d) => d.open && d.severity === sv).length;
+  const stats = cycleStats(cycles, runs);
+  const last = stats[stats.length - 1] ?? null;
+  const exit = evaluateExit(settings.criteria ?? {}, { passRate: last?.passRate ?? null, openCritical: openSev('CRITICAL'), openMajor: openSev('MAJOR'), reqCoverage: coverage.pct, executed: last?.progress ?? null });
+  let entryList: EntryCriterion[] = [];
+  try { entryList = normalizeEntry(settings.entry); } catch { entryList = []; }
+  // Smoke: case loại SMOKE của kế hoạch — lần chạy mới nhất phải PASS cả, không FAIL.
+  const caseIds = plan ? plan.cases.map((c) => c.testCaseId) : [];
+  const smokeCases = caseIds.length ? await db.workTestCase.findMany({ where: { id: { in: caseIds }, testType: 'SMOKE', issue: { deletedAt: null } }, select: { id: true } }) : [];
+  const latest = new Map<number, string>();
+  if (smokeCases.length) for (const r of await db.workTestRun.findMany({ where: { testCaseId: { in: smokeCases.map((c) => c.id) } }, orderBy: { updatedAt: 'desc' }, select: { testCaseId: true, status: true } })) if (!latest.has(r.testCaseId)) latest.set(r.testCaseId, r.status);
+  const planReviewed = (await db.workReviewSession.count({ where: { projectId, deletedAt: null, checklistKey: 'TEST_PLAN', status: 'CLOSED', decision: { in: ['ACCEPT', 'ACCEPT_WITH_CHANGES'] } } })) > 0;
+  const entry = evaluateEntry(entryList, {
+    cases: caseIds.length, reqCoverage: coverage.pct, openCritical: openSev('CRITICAL'),
+    smoke: { cases: smokeCases.length, passed: smokeCases.filter((c) => latest.get(c.id) === 'PASS').length, failed: smokeCases.filter((c) => latest.get(c.id) === 'FAIL').length },
+    planReviewed,
+  });
+  return { planId: plan?.id ?? null, planName: plan?.name ?? null, versionId: settings.versionId ?? null, entry, exit };
+}
+
+async function gateMode(db: Db, projectId: number): Promise<TestGateMode | null> {
+  const p = await db.workProject.findUnique({ where: { id: projectId }, select: { settings: true } });
+  return qualitySettingsOf(p?.settings).testGate;
+}
+
+const failedRows = (rows: Array<{ met: boolean; kind?: string; key?: string; target: string; actual: string; text?: string | null }>) =>
+  rows.filter((r) => !r.met).map((r) => ({ criterion: r.kind ?? r.key ?? '', target: r.target, actual: r.actual, text: r.text ?? null }));
+
+/**
+ * Cycle PLANNED → bắt đầu chạy (đổi trạng thái tay hoặc ghi kết quả lần chạy đầu tiên). settings.testGate='block' và tiêu
+ * chí VÀO của kế hoạch chưa đạt ⇒ 409 WORK_TEST_GATE. Cycle không gắn kế hoạch / kế hoạch không khai entry ⇒ qua.
+ */
+export async function assertCycleEntryGate(projectId: number, cycleId: number) {
+  const mode = await gateMode(prisma, projectId);
+  if (!mode) return { mode, met: true, failed: [] as ReturnType<typeof failedRows> };
+  const c = await prisma.workTestCycle.findFirst({ where: { id: cycleId, projectId }, select: { planId: true, state: true, name: true } });
+  if (!c?.planId || c.state !== 'PLANNED') return { mode, met: true, failed: [] as ReturnType<typeof failedRows> };
+  const g = await planGate(prisma, projectId, c.planId);
+  const failed = failedRows(g.entry.rows);
+  if (failed.length && mode === 'block') {
+    throw new AppError(`Entry criteria of test plan "${g.planName}" are not met (${failed.map((f) => f.criterion).join(', ')}) — the cycle "${c.name}" cannot start yet`, 409, 'WORK_TEST_GATE', { gate: 'ENTRY', planId: g.planId, failed });
+  }
+  return { mode, met: !failed.length, failed };
+}
+
+/**
+ * Cổng phát hành cho planning.service › releaseVersion (G4 gọi — G3 KHÔNG sửa releaseVersion). settings.testGate='block'
+ * ⇒ mọi kế hoạch kiểm version này (settings.versionId) phải đạt tiêu chí RA; không kế hoạch nào nhắm version ⇒ xét các
+ * kế hoạch còn mở có vòng chạy; dự án chưa có kế hoạch nào ⇒ xét toàn dự án với tiêu chí mặc định. Chưa đạt ⇒ 409
+ * WORK_TEST_GATE. 'warn' ⇒ trả danh sách cảnh báo, không ném. Đọc qua `tx` ⇒ gọi được trong transaction của Release.
+ */
+export async function assertTestGate(tx: Db, versionId: number) {
+  const v = await tx.workVersion.findUnique({ where: { id: versionId }, select: { id: true, projectId: true, name: true } });
+  if (!v) throw new NotFoundError('Version not found');
+  const mode = await gateMode(tx, v.projectId);
+  if (!mode) return { mode, met: true, plans: [] as Array<{ planId: number | null; planName: string | null; failed: ReturnType<typeof failedRows> }> };
+  const plans = await tx.workTestPlan.findMany({ where: { projectId: v.projectId, archivedAt: null }, select: { id: true, settings: true, _count: { select: { cycles: true } } } });
+  const targeted = plans.filter((p) => ((p.settings ?? {}) as PlanSettings).versionId === v.id);
+  const scope: Array<number | null> = targeted.length ? targeted.map((p) => p.id) : plans.filter((p) => p._count.cycles > 0).map((p) => p.id);
+  if (!scope.length) scope.push(null);
+  const out: Array<{ planId: number | null; planName: string | null; failed: ReturnType<typeof failedRows> }> = [];
+  for (const pid of scope) {
+    const g = await planGate(tx, v.projectId, pid);
+    out.push({ planId: g.planId, planName: g.planName, failed: failedRows(g.exit.rows) });
+  }
+  const bad = out.filter((p) => p.failed.length);
+  if (bad.length && mode === 'block') {
+    throw new AppError(`Exit criteria are not met for ${v.name}: ${bad.map((p) => `${p.planName ?? 'all tests'} (${p.failed.map((f) => f.criterion).join(', ')})`).join('; ')} — finish testing or switch the test gate to "warn"`, 409, 'WORK_TEST_GATE', { gate: 'EXIT', versionId: v.id, plans: bad });
+  }
+  return { mode, met: !bad.length, plans: out };
 }
 
 export async function qualityDashboard(userId: number, projectId: number, q: { planId?: number | null; days?: number } = {}) {
@@ -272,6 +371,9 @@ export async function qualityDashboard(userId: number, projectId: number, q: { p
     sCurve: lastCycle ? { cycle: { id: lastCycle.id, name: lastCycle.name }, points: sCurve(lastCycle, runs) } : null,
     defects: ds, defectTrend: defectTrend(defects, Math.min(90, Math.max(7, q.days ?? 30))),
     coverage, exit,
+    // dm5 G3 (D2): tiêu chí VÀO của kế hoạch + chế độ cổng (settings.testGate).
+    entry: plan ? (await planGate(prisma, projectId, plan.id)).entry : null,
+    testGate: await gateMode(prisma, projectId),
     estimation: { ...estimation, recordedMinutes: estSum._sum.estimateMin ?? 0, casesWithEstimate: estSum._count.estimateMin },
     levels: levels.map((l) => ({ level: l.level ?? 'UNSPECIFIED', cases: l._count._all })).sort((a, b) => b.cases - a.cases),
   };
@@ -560,4 +662,44 @@ export async function deleteExploratory(userId: number, projectId: number, numbe
   await ctx(userId, projectId, 'issue.edit');
   await prisma.workExploratorySession.deleteMany({ where: { projectId, number } });
   return { ok: true };
+}
+
+// ═══ D4 — 6 nhóm ca kiểm thử của một yêu cầu + lint bước test (dm5 G3) ═══════════
+
+/**
+ * Panel "Test" của thẻ Req/Story: thẻ TEST liên kết (TESTS) chia theo 6 nhóm Happy · Empty · Boundary · Conflict · Security
+ * · Adjacent (đếm theo NHÃN thẻ — `labels = Boundary` trong JQL ra đúng số này), nhóm còn thiếu, và lint từng thẻ TEST
+ * (tiền điều kiện viết lẫn vào bước, bước thiếu kết quả mong đợi).
+ */
+export async function requirementTestGroups(userId: number, projectId: number, number: number) {
+  const access = await ctx(userId, projectId);
+  const { countTestGroups, lintTestSteps } = await import('./fptTests.js');
+  const req = await prisma.workIssue.findFirst({
+    where: { projectId, number, deletedAt: null },
+    select: {
+      id: true, type: { select: { key: true } },
+      linksIn: {
+        where: { type: 'TESTS', fromIssue: { deletedAt: null } },
+        select: {
+          fromIssue: {
+            select: {
+              number: true, title: true, labels: { select: { label: { select: { name: true } } } },
+              testCase: { select: { id: true, preconditions: true, testType: true, steps: { orderBy: { position: 'asc' }, select: { action: true, expected: true } } } },
+            },
+          },
+        },
+      },
+    },
+  });
+  if (!req) throw new NotFoundError('Issue not found');
+  const tests = req.linksIn.map((l) => l.fromIssue).filter((i) => i.testCase);
+  const latest = new Map<number, string>();
+  const ids = tests.map((t) => t.testCase!.id);
+  if (ids.length) for (const r of await prisma.workTestRun.findMany({ where: { testCaseId: { in: ids } }, orderBy: { updatedAt: 'desc' }, select: { testCaseId: true, status: true } })) if (!latest.has(r.testCaseId)) latest.set(r.testCaseId, r.status);
+  const rows = tests.map((t) => ({
+    key: `${access.key}-${t.number}`, number: t.number, title: t.title, labels: t.labels.map((l) => l.label.name),
+    testType: t.testCase!.testType, lastStatus: latest.get(t.testCase!.id) ?? null,
+    lint: lintTestSteps({ preconditions: t.testCase!.preconditions, steps: t.testCase!.steps }),
+  }));
+  return { requirement: `${access.key}-${number}`, isRequirement: ['REQUIREMENT', 'STORY'].includes(req.type.key), tests: rows, ...countTestGroups(rows) };
 }

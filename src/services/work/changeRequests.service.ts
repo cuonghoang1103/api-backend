@@ -33,6 +33,7 @@ import { createIssueAs } from './issues.service.js';
 import { canDeleteGovernance, governanceAccess, loadProjectAccess, assertHumanActor } from './permissions.js';
 import { tiptapToText } from './tiptapText.js';
 import { trashSoft } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
+import { childCrKey, cleanCrOptions, cleanImpactMatrix, cleanSyncChecklist, impactOverall, IMPACT_DIMENSIONS, SYNC_ITEMS, SYNC_LABEL, syncDone, type ImpactMatrix } from './dm5g4Rules.js';
 
 const DAY = 86_400_000;
 
@@ -41,13 +42,18 @@ const CR_LIST_SELECT = {
   clientVisible: true, submittedAt: true, decidedAt: true, implementedAt: true, createdAt: true, updatedAt: true,
   owner: { select: PUBLIC_USER }, requester: { select: PUBLIC_USER },
   approvals: { where: { status: 'PENDING' }, select: { id: true }, take: 1 },
+  // dm5 G4 (C8): CR con (CR-3a/b) + mức ảnh hưởng chung.
+  parentId: true, parent: { select: { number: true } }, impactMatrix: true,
 } satisfies Prisma.WorkChangeRequestSelect;
 
-function listRow(r: Prisma.WorkChangeRequestGetPayload<{ select: typeof CR_LIST_SELECT }>, now: Date) {
-  const { approvals, ...rest } = r;
+function listRow(r: Prisma.WorkChangeRequestGetPayload<{ select: typeof CR_LIST_SELECT }>, now: Date, splitKey: string | null = null) {
+  const { approvals, parent, impactMatrix, ...rest } = r;
   return {
     ...rest,
     key: `CR-${r.number}`,
+    parentNumber: parent?.number ?? null,
+    splitKey,
+    impactLevel: impactOverall(impactMatrix as ImpactMatrix | null),
     pendingApprovalId: approvals[0]?.id ?? null,
     // Tuổi của CR đang chờ quyết định (từ lúc gửi) — cùng số với luật portfolio.
     waitingDays: crPending(r.status) && r.submittedAt ? Math.floor((now.getTime() - r.submittedAt.getTime()) / DAY) : null,
@@ -63,8 +69,12 @@ export async function listChangeRequests(userId: number, projectId: number, q: {
     select: CR_LIST_SELECT,
   });
   const now = new Date();
+  // CR con: "CR-3a", "CR-3b" theo thứ tự số trong cùng CR cha.
+  const kids = new Map<number, number[]>();
+  for (const r of [...all].sort((a, b) => a.number - b.number)) if (r.parentId) kids.set(r.parentId, [...(kids.get(r.parentId) ?? []), r.id]);
+  const split = (r: (typeof all)[number]) => (r.parentId && r.parent ? childCrKey(r.parent.number, kids.get(r.parentId)!.indexOf(r.id)) : null);
   return {
-    items: all.filter((r) => !q.status || r.status === q.status).map((r) => listRow(r, now)),
+    items: all.filter((r) => !q.status || r.status === q.status).map((r) => listRow(r, now, split(r))),
     totals: crTotals(all),
     canEdit: ctx.canEdit,
     canRequestApproval: ctx.canEdit && ctx.access.modules.approvals,
@@ -88,6 +98,9 @@ export interface CrInput {
   ownerId?: number | null;
   requesterId?: number | null;
   sourceIssueNumber?: number | null;
+  /** dm5 G4 (C8): ma trận ảnh hưởng 6 chiều + tối đa 3 phương án. */
+  impactMatrix?: unknown;
+  options?: unknown;
 }
 
 async function assertPerson(projectId: number, uid: number | null | undefined, what: string) {
@@ -124,6 +137,8 @@ function dataOf(input: CrInput) {
   if (input.costCurrency !== undefined) d.costCurrency = input.costCurrency?.trim().slice(0, 16) || null;
   if (input.ownerId !== undefined) d.ownerId = input.ownerId;
   if (input.requesterId !== undefined) d.requesterId = input.requesterId;
+  if (input.impactMatrix !== undefined) { const m = cleanImpactMatrix(input.impactMatrix); d.impactMatrix = m ? (m as unknown as Prisma.InputJsonValue) : Prisma.DbNull; }
+  if (input.options !== undefined) { const o = cleanCrOptions(input.options); d.options = o ? (o as unknown as Prisma.InputJsonValue) : Prisma.DbNull; }
   return d;
 }
 
@@ -171,6 +186,8 @@ export async function getChangeRequest(userId: number, projectId: number, number
     select: {
       ...CR_LIST_SELECT,
       descriptionJson: true, reason: true, impactScope: true, impactRisk: true, alternatives: true, clientSharedAt: true, version: true,
+      options: true, syncChecklist: true,
+      children: { where: { deletedAt: null }, orderBy: { number: 'asc' }, select: { id: true, number: true, title: true, status: true } },
       createdById: true, createdBy: { select: PUBLIC_USER },
       sourceIssue: { select: { number: true, title: true, deletedAt: true } },
       links: {
@@ -187,10 +204,24 @@ export async function getChangeRequest(userId: number, projectId: number, number
   });
   if (!cr) throw new NotFoundError('Change request not found');
   const now = new Date();
-  const { links, raidLinks, sourceIssue, ...rest } = cr;
+  const { links, raidLinks, sourceIssue, children, options, syncChecklist, ...rest } = cr;
   const key = ctx.access.key;
+  // dm5 G4 (C8): khoá con "CR-3a" của chính CR này (nếu là CR con).
+  let splitKey: string | null = null;
+  if (rest.parentId && rest.parent) {
+    const sib = await prisma.workChangeRequest.findMany({ where: { parentId: rest.parentId, deletedAt: null }, orderBy: { number: 'asc' }, select: { id: true } });
+    splitKey = childCrKey(rest.parent.number, Math.max(0, sib.findIndex((x) => x.id === cr.id)));
+  }
   return {
-    ...listRow(rest, now),
+    ...listRow(rest, now, splitKey),
+    impactMatrix: (rest.impactMatrix as ImpactMatrix | null) ?? null, impactDimensions: IMPACT_DIMENSIONS,
+    options: (options as unknown[] | null) ?? [],
+    children: children.map((c, i) => ({ number: c.number, key: `CR-${c.number}`, splitKey: childCrKey(cr.number, i), title: c.title, status: c.status })),
+    syncChecklist: syncChecklist ?? null,
+    syncItems: SYNC_ITEMS.map((k) => ({ key: k, label: SYNC_LABEL[k], done: (syncChecklist as Record<string, unknown> | null)?.[k] === true })),
+    syncDone: syncDone(syncChecklist), syncTotal: SYNC_ITEMS.length,
+    // Checklist đồng bộ chỉ có nghĩa khi CR đã được duyệt.
+    syncOpen: cr.status === 'APPROVED' || cr.status === 'IMPLEMENTED',
     sourceIssue: sourceIssue && !sourceIssue.deletedAt ? { number: sourceIssue.number, title: sourceIssue.title, key: `${key}-${sourceIssue.number}` } : null,
     links: links
       .filter((l) => !l.issue || !l.issue.deletedAt)
@@ -422,4 +453,48 @@ export async function crForClient(crId: number) {
     },
   });
   return c ? { ...c, key: `CR-${c.number}` } : null;
+}
+
+// ─── dm5 G4 (C8): tách CR con + checklist đồng bộ khi Approve ──────
+
+/** Tách một CR thành 2–5 CR con (CR-3a, CR-3b…): mỗi con là CR DRAFT riêng (duyệt riêng), giữ người yêu cầu / chủ / mức khẩn. */
+export async function splitChangeRequest(userId: number, projectId: number, number: number, parts: Array<{ title: string; impactScope?: string | null; scheduleDays?: number | null }>) {
+  await govCtx(userId, projectId, 'changeRequests', { edit: true });
+  const cr = await prisma.workChangeRequest.findFirst({ where: { projectId, number, deletedAt: null }, select: { id: true, number: true, title: true, status: true, parentId: true, urgency: true, ownerId: true, requesterId: true, sourceIssueId: true } });
+  if (!cr) throw new NotFoundError('Change request not found');
+  if (cr.parentId) throw new BadRequestError('This is already a sub-request — split the parent change request instead', 'WORK_CR_SPLIT_NESTED');
+  if (cr.status === 'IMPLEMENTED' || cr.status === 'REJECTED') throw new ConflictError('Implemented or rejected change requests cannot be split');
+  const clean = parts.map((p) => ({ ...p, title: p.title.trim().slice(0, 255) })).filter((p) => p.title);
+  if (clean.length < 1 || clean.length > 5) throw new BadRequestError('Split into 1–5 parts', 'VALIDATION_ERROR');
+  const existing = await prisma.workChangeRequest.count({ where: { parentId: cr.id, deletedAt: null } });
+  if (existing + clean.length > 26) throw new BadRequestError('Too many sub-requests', 'WORK_LIMIT');
+  const created: number[] = [];
+  await prisma.$transaction(async (tx) => {
+    for (const p of clean) {
+      const n = await nextNumber(tx, 'cr', projectId);
+      await tx.workChangeRequest.create({
+        data: {
+          projectId, number: n, title: p.title, parentId: cr.id, urgency: cr.urgency, ownerId: cr.ownerId ?? userId, requesterId: cr.requesterId, sourceIssueId: cr.sourceIssueId,
+          impactScope: p.impactScope?.trim() || null, scheduleDays: p.scheduleDays ?? null, reason: `Split from CR-${cr.number}: ${cr.title}`.slice(0, 10_000), createdById: userId,
+        },
+      });
+      created.push(n);
+    }
+  });
+  emitWorkEvent({ type: 'governance.updated', projectId, entity: 'cr', number, action: 'updated', actor: { kind: 'USER', userId } });
+  await auditProject(projectId, { actorId: userId, action: 'cr.split', targetType: 'change_request', targetId: cr.id, summary: `Split CR-${number} into ${created.map((n, i) => `CR-${n} (${childCrKey(number, existing + i)})`).join(', ')}`.slice(0, 300) });
+  return { created: created.map((n, i) => ({ number: n, key: `CR-${n}`, splitKey: childCrKey(number, existing + i) })), changeRequest: await getChangeRequest(userId, projectId, number) };
+}
+
+/** Checklist đồng bộ 5 điểm sau khi CR được duyệt: SRS RoC · Tracking Q&A · Tracking Issues · Tracking WBS · RTM. */
+export async function setChangeRequestSync(userId: number, projectId: number, number: number, input: Record<string, unknown>) {
+  await govCtx(userId, projectId, 'changeRequests', { edit: true });
+  const cr = await prisma.workChangeRequest.findFirst({ where: { projectId, number, deletedAt: null }, select: { id: true, status: true, syncChecklist: true } });
+  if (!cr) throw new NotFoundError('Change request not found');
+  if (cr.status !== 'APPROVED' && cr.status !== 'IMPLEMENTED') throw new ConflictError('The sync checklist opens once the change request is approved');
+  const next = cleanSyncChecklist(input, cr.syncChecklist, userId);
+  await prisma.workChangeRequest.update({ where: { id: cr.id }, data: { syncChecklist: next as unknown as Prisma.InputJsonValue } });
+  emitWorkEvent({ type: 'governance.updated', projectId, entity: 'cr', number, action: 'updated', actor: { kind: 'USER', userId } });
+  await auditProject(projectId, { actorId: userId, action: 'cr.sync', targetType: 'change_request', targetId: cr.id, summary: `CR-${number}: sync checklist ${syncDone(next)}/${SYNC_ITEMS.length}` });
+  return getChangeRequest(userId, projectId, number);
 }

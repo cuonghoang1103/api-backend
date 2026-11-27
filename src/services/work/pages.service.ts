@@ -314,6 +314,14 @@ export async function createPage(userId: number, projectId: number, input: Creat
   }
   await assertStage(projectId, stageId);
   if (!title) title = 'Untitled';
+  // dm5 G2 (B15): trang từ mẫu ADR ⇒ số ADR-00n tự tăng trong dự án (tiêu đề + dòng "ADR-<số>" của mẫu).
+  if ((await import('./adr.js')).isAdrTemplate(input.templateKey)) {
+    const adr = await import('./adr.js');
+    const prev = await prisma.workPage.findMany({ where: { projectId, deletedAt: null, OR: [{ templateKey: { in: [...adr.ADR_TEMPLATES] } }, { title: { startsWith: 'ADR-' } }] }, select: { title: true }, take: 2000 });
+    const n = Math.max(0, ...prev.map((p) => adr.adrNumberOf(p.title) ?? 0)) + 1;
+    title = adr.adrTitle(n, input.title?.trim() ?? ''); // không gõ tiêu đề ⇒ "ADR-00n: New decision" (không lấy tên mẫu)
+    doc = adr.numberAdrDoc(doc as Parameters<typeof adr.numberAdrDoc>[0], n);
+  }
   const { json, text } = normDoc(doc);
   const page = await prisma.$transaction(async (tx) => {
     await lockProject(tx, projectId);

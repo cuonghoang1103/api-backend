@@ -28,6 +28,8 @@ export default function AiReviewButton({ pid, reviewsHref, pr, issue, compact, c
   const qc = useQueryClient();
   const [busy, setBusy] = useState(false);
   const [notify, setNotify] = useState(true);
+  // dm5 G4 (D11): "chỉ phản biện" — bỏ trống = theo settings.aiReviewMode của dự án (server quyết).
+  const [critic, setCritic] = useState<boolean | null>(null);
   const [done, setDone] = useState<AiReviewResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,7 +37,7 @@ export default function AiReviewButton({ pid, reviewsHref, pr, issue, compact, c
     setBusy(true);
     setError(null);
     try {
-      const r = await codeApi.aiReview(pid, { ...(pr ? { pr } : {}), ...(issue ? { issue } : {}), notify });
+      const r = await codeApi.aiReview(pid, { ...(pr ? { pr } : {}), ...(issue ? { issue } : {}), notify, ...(critic !== null ? { mode: critic ? 'critic' as const : 'full' as const } : {}) });
       setDone(r);
       void qc.invalidateQueries({ queryKey: ['work', 'project', pid] });
       void qc.invalidateQueries({ queryKey: codeKeys.all(pid) });
@@ -53,6 +55,7 @@ export default function AiReviewButton({ pid, reviewsHref, pr, issue, compact, c
         <Sparkles size={12} className="shrink-0 text-[var(--w-accent-text)]" aria-hidden="true" />
         <span className={cn('font-medium', done.verdict === 'CHANGES' ? 'text-[var(--w-red,#dc2626)]' : done.verdict === 'APPROVE' ? 'text-[var(--w-green)]' : 'text-[var(--w-text-2)]')}>{verdict}</span>
         <span className="text-[var(--w-text-3)]">· {wt('code.aiReviewDone', { key: done.key, n: done.findings })}</span>
+        {done.mode === 'critic' && <span className="rounded-full bg-[var(--w-sunken)] px-1.5 text-[11px] text-[var(--w-text-2)]">{wt('g4.modeCritic')}</span>}
         <Link href={`${reviewsHref}?review=${done.review}`} className="font-medium text-[var(--w-accent-text)] hover:underline">{wt('code.aiReviewOpen')}</Link>
       </div>
     );
@@ -69,6 +72,12 @@ export default function AiReviewButton({ pid, reviewsHref, pr, issue, compact, c
           <label className="inline-flex items-center gap-1 text-[11.5px] text-[var(--w-text-2)]">
             <input type="checkbox" checked={notify} onChange={(e) => setNotify(e.target.checked)} />
             {wt('code.aiReviewNotify')}
+          </label>
+        )}
+        {!compact && !busy && (
+          <label className="inline-flex items-center gap-1 text-[11.5px] text-[var(--w-text-2)]" title={wt('g4.modeHint')}>
+            <input type="checkbox" checked={critic === true} onChange={(e) => setCritic(e.target.checked)} data-testid="ai-review-critic" />
+            {wt('g4.modeCritic')}
           </label>
         )}
       </div>

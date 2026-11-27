@@ -301,7 +301,7 @@ describe('CTW Diagram — Report 3/4 + khối nhúng', () => {
     assert.ok(titles.includes('2.1 Booking'), titles.join('|'));
     assert.ok(titles.includes('2.1.2 Sequence Diagram'));
     assert.ok(!titles.includes('2.1 Feature name'));
-    const capIdx = doc.content!.findIndex((b) => b.type === 'paragraph' && /Figure: D-5 UC-05 Reserve Lab/.test(b.content?.[0]?.text ?? ''));
+    const capIdx = doc.content!.findIndex((b) => b.type === 'paragraph' && /Figure \d+: D-5 UC-05 Reserve Lab/ /* dm5 G2 (B18): đánh số theo thứ tự */.test(b.content?.[0]?.text ?? ''));
     assert.ok(capIdx > 0);
     assert.equal(titles[titles.length - 1], '3. Class Specifications');
   });

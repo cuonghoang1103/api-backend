@@ -90,7 +90,13 @@ export interface WorkspaceDetail {
 
 export interface WorkStatus { id: number; name: string; category: StatusCategory; color: string; position: number; wipLimit: number | null }
 /** Luật của luồng chuyển (S1): cần phê duyệt thẻ / chỉ thành viên các bộ phận. `{}` = không luật. */
-export interface TransitionRules { requireApproval?: boolean; notAssignee?: boolean; teamIds?: number[] }
+export interface TransitionRules {
+  requireApproval?: boolean; notAssignee?: boolean; teamIds?: number[];
+  /** dm5 G1 (A6): bình luận xác nhận của bộ phận (rỗng = bất kỳ ai khác người được giao) sau khi vào trạng thái nguồn. */
+  requireComment?: { teamIds: number[] };
+  /** dm5 G1 (A6): làm nguội — ít nhất N giờ ở trạng thái nguồn. */
+  minHoursInFrom?: number;
+}
 export interface WorkTransition { id: number; fromStatusId: number | null; toStatusId: number; name: string | null; rules?: TransitionRules }
 export interface WorkWorkflow { id: number; name: string; isDefault: boolean; statuses: WorkStatus[]; transitions: WorkTransition[] }
 /** Bố cục sơ đồ: statusId → toạ độ (lưu trong project.settings.workflowLayout[wfId]). */
@@ -650,7 +656,9 @@ export type WidgetKind = 'filter' | 'pie' | 'bar' | 'counter' | 'created_resolve
   // UX-B: biểu đồ dòng chảy + KPI + tải theo người + việc trễ (số liệu ở work-uxb-api.ts).
   | 'kpis' | 'cfd' | 'throughput' | 'cycle_time' | 'aging_wip' | 'velocity' | 'release_burnup' | 'workload' | 'overdue'
   // CTW đợt 7c (C3): số liệu ở work-c7c-api.ts (OKR + đồng hồ đọc API đợt 7a).
-  | 'test_pass_rate' | 'defects_by_severity' | 'license_expiring' | 'my_timer' | 'okr';
+  | 'test_pass_rate' | 'defects_by_severity' | 'license_expiring' | 'my_timer' | 'okr'
+  // dm5 G1 (A19): RAG dự án (work-dm5a-api.ts).
+  | 'rag';
 export interface DashboardWidget {
   id: string; kind: WidgetKind; title: string; query?: string; groupBy?: GroupBy; sprintId?: number | null; versionId?: number | null; days?: number; text?: string; size?: 'half' | 'full';
 }
@@ -670,13 +678,20 @@ export interface TimelineItem {
 }
 export interface TimelineData {
   items: TimelineItem[]; dependencies: Array<{ from: number; to: number }>; criticalPath: number[]; criticalDays: number; conflicts: Array<{ from: number; to: number }>;
+  /** dm5 G1 (A17): giai đoạn / cổng có ngày kế hoạch; late = quá ngày kết thúc mà chưa xong (hoặc xong muộn). */
+  stages?: Array<{ id: number; n: number; name: string; status: StageStatus; plannedStart: string | null; plannedEnd: string | null; startedAt: string | null; completedAt: string | null; late: boolean }>;
 }
 export interface CapacityRow {
   user: Pick<WorkUser, 'id' | 'username' | 'fullName' | 'displayName' | 'avatarUrl'>;
   hoursPerDay: number | null; workingDays: number; timeOff: Array<{ id: number; start: string; end: string; note: string | null }>;
   capacityHours: number | null; issues: number; loadHours: number; loadPoints: number; utilization: number | null;
 }
-export interface CapacityData { from: string; to: string; unit: EstimationUnit; sprintId: number | null; members: CapacityRow[] }
+export interface CapacityData { from: string; to: string; unit: EstimationUnit; sprintId: number | null; members: CapacityRow[]; /** dm5 G1 (A15) */ focus?: CapacityVerdict }
+/** dm5 G1 (A15): ước lượng (giờ) so với sức chứa × hệ số tập trung. */
+export interface CapacityVerdict {
+  estimateHours: number; capacityHours: number | null; focusFactor: number; focusedHours: number | null; pct: number | null;
+  cautionPct: number; warnPct: number; level: 'GREEN' | 'AMBER' | 'RED' | null; over: boolean;
+}
 export interface TimeOffEntry { id: number; userId: number; startDate: string; endDate: string; note: string | null; user: WorkUser }
 export interface Worklog { id: number; minutes: number; startedAt: string; note: string | null; createdAt: string; userId: number; user: WorkUser; /** CTW đợt 4 (A24) */ activity?: string | null; workProduct?: string | null }
 export interface TimeReport {
@@ -1374,6 +1389,9 @@ export interface WorkStage {
   startedAt: string | null;
   completedAt: string | null;
   createdAt: string;
+  /** dm5 G1 (A17): ngày kế hoạch (ISO). */
+  plannedStart?: string | null;
+  plannedEnd?: string | null;
 }
 export interface StageSummary extends WorkStage {
   gateIssueKey: string | null;
@@ -1517,8 +1535,8 @@ export const workStudioApi = {
 
   // Giai đoạn + cổng
   stages: (pid: number) => d<StageSummary[]>(api.get(`${B}/projects/${pid}/stages`)),
-  createStage: (pid: number, body: { n?: number; slug: string; name: string; gateIssueNumber?: number | null }) => d<WorkStage>(api.post(`${B}/projects/${pid}/stages`, body)),
-  updateStage: (pid: number, sid: number, body: { n?: number; slug?: string; name?: string; gateIssueNumber?: number | null }) => d<WorkStage>(api.patch(`${B}/projects/${pid}/stages/${sid}`, body)),
+  createStage: (pid: number, body: { n?: number; slug: string; name: string; gateIssueNumber?: number | null; plannedStart?: string | null; plannedEnd?: string | null }) => d<WorkStage>(api.post(`${B}/projects/${pid}/stages`, body)),
+  updateStage: (pid: number, sid: number, body: { n?: number; slug?: string; name?: string; gateIssueNumber?: number | null; plannedStart?: string | null; plannedEnd?: string | null }) => d<WorkStage>(api.patch(`${B}/projects/${pid}/stages/${sid}`, body)),
   deleteStage: (pid: number, sid: number) => d(api.delete(`${B}/projects/${pid}/stages/${sid}`)),
   /** 409 WORK_STAGE_BLOCKED (data.blockingStage) khi giai đoạn trước chưa DONE; ADMIN gửi override.reason để vượt (ghi audit). */
   activateStage: (pid: number, sid: number, override?: { reason: string }) => d<WorkStage>(api.post(`${B}/projects/${pid}/stages/${sid}/activate`, override ? { override } : {})),
@@ -1770,6 +1788,8 @@ export interface PortalRequestDetail {
 }
 export interface PortalUat {
   round: number; environment: string | null; build: string | null; conditions: string | null;
+  /** dm5 G3 (D10): điểm hài lòng 1–5 + mã ẩn danh người thử. */
+  rating?: number | null; testerCode?: string | null;
   version: { id: number; name: string; releaseDate: string | null } | null; stage: { id: number; n: number; name: string } | null;
   items: Array<{ number: number; key: string; title: string; done: boolean; status: { name: string; category: StatusCategory }; type: { key: string; name: string } }>;
   itemCount: number;
@@ -1809,6 +1829,7 @@ export interface PortalCertificate {
   requestedAt: string; decidedAt: string | null;
   items: PortalUat['items']; results: { total: number; passed: number; failed: number };
   documents: PortalUat['pages']; files: PortalUat['files']; conditions: string | null; findings: PortalUat['createdIssues'];
+  rating?: number | null; testerCode?: string | null; // dm5 G3 (D10)
   conclusion: 'ACCEPTED' | 'ACCEPTED_WITH_CONDITIONS' | 'NOT_ACCEPTED' | 'PENDING';
   signatures: Array<{ name: string; side: 'CLIENT' | 'VENDOR'; decision: string; at: string; signature: string | null; comment: string | null }>;
   contentHash: string | null; contentChanged: boolean; viewer: PortalViewer; generatedAt: string;
@@ -1837,11 +1858,11 @@ export const workPortalApi = {
     d<{ number: number; title: string; status: PageStatus; visibility: PageVisibility; contentJson: TiptapDoc | null; updatedAt: string; stage: string | null; owner: WorkUser | null }>(api.get(`${B}/projects/${pid}/portal/documents/${num}${asQ(asClient)}`)),
   deliverables: (pid: number, asClient?: boolean) => d<PortalDeliverables>(api.get(`${B}/projects/${pid}/portal/deliverables${asQ(asClient)}`)),
   activity: (pid: number, asClient?: boolean) => d<{ viewer: PortalViewer; items: PortalActivityItem[] }>(api.get(`${B}/projects/${pid}/portal/activity${asQ(asClient)}`)),
-  clients: (pid: number) => d<{ clients: Array<WorkUser & { email?: string }>; pendingInvites: Array<{ id: number; email: string; expiresAt: string }> }>(api.get(`${B}/projects/${pid}/portal/clients`)),
+  clients: (pid: number) => d<{ clients: Array<WorkUser & { email?: string; portalRevoked?: boolean }>; pendingInvites: Array<{ id: number; email: string; expiresAt: string }> }>(api.get(`${B}/projects/${pid}/portal/clients`)),
   invite: (pid: number, emails: string[]) => d<Array<{ email: string; status: 'ADDED' | 'ALREADY_MEMBER' | 'INVITED' }>>(api.post(`${B}/projects/${pid}/portal/invite`, { emails })),
-  createUat: (pid: number, body: { title?: string; description?: string | null; versionId?: number | null; stageId?: number | null; issueNumbers: number[]; pageNumbers?: number[]; attachmentIds?: number[]; approverIds: number[]; environment?: string | null; build?: string | null; dueAt?: string | null }) =>
+  createUat: (pid: number, body: { title?: string; description?: string | null; versionId?: number | null; stageId?: number | null; issueNumbers: number[]; pageNumbers?: number[]; attachmentIds?: number[]; approverIds: number[]; environment?: string | null; build?: string | null; dueAt?: string | null; testerCode?: string | null }) =>
     d<PortalApproval>(api.post(`${B}/projects/${pid}/portal/uat`, body)),
-  decideUat: (pid: number, id: number, body: { decision: 'APPROVE' | 'REJECT'; comment?: string | null; conditions?: string | null; points?: Array<{ title: string; kind: 'BUG' | 'CHANGE'; detail?: string | null }> }) =>
+  decideUat: (pid: number, id: number, body: { decision: 'APPROVE' | 'REJECT'; comment?: string | null; conditions?: string | null; points?: Array<{ title: string; kind: 'BUG' | 'CHANGE'; detail?: string | null }>; rating?: number | null }) =>
     d<PortalApproval>(api.post(`${B}/projects/${pid}/portal/uat/${id}/decide`, body)),
   certificate: (pid: number, id: number, asClient?: boolean) => d<PortalCertificate>(api.get(`${B}/projects/${pid}/portal/uat/${id}/certificate${asQ(asClient)}`)),
   // Nhân viên: chia sẻ thẻ / tệp

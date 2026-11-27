@@ -17,6 +17,7 @@ import { wk } from './hooks';
 import { Dialog, Field, Spinner } from './ui';
 import AiMarkdown from './ai/AiMarkdown';
 import UpgradeDialog from './ai/UpgradeDialog';
+import SprintGuards from './SprintGuards'; // dm5 G1: DoR · sức chứa × tập trung · tỉ lệ Must
 import { wt, wfmt } from '@/components/work/i18n';
 
 const DURATIONS = [
@@ -95,6 +96,7 @@ export function StartSprintDialog({ open, onClose, pid, sprint, issueCount, poin
         {wt('sprint.commit', { count: issueCount, points, unit: unitLabel(unit) })}
         {issueCount === 0 && <span className="mt-1 block text-[var(--w-orange)]">{wt('sprint.emptyWarn')}</span>}
       </p>
+      <SprintGuards pid={pid} sprintId={sprint.id} open={open} />
       <Field label={wt('sprint.name')}><input className="w-input" value={name} maxLength={100} onChange={(e) => setName(e.target.value)} /></Field>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <Field label={wt('sprint.duration')}>
@@ -325,6 +327,7 @@ export function PlanSprintDialog({ open, onClose, pid, sprint, issueKey }: {
             <p className="text-[13px] leading-relaxed text-[var(--w-text-2)]">
               {wt('sprint.planIntro')}
             </p>
+            <SprintGuards pid={pid} sprintId={sprint.id} open={open} />
 
             {/* Velocity */}
             <div className="grid grid-cols-3 gap-2">

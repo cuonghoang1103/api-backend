@@ -68,6 +68,7 @@ import * as approvals from '../services/work/approvals.service.js';
 import * as handoffs from '../services/work/handoffs.service.js';
 import * as pages from '../services/work/pages.service.js';
 import * as portal from '../services/work/portal.service.js';
+import { isPortalRevoked } from '../services/work/portalNotify.js'; // dm5 G3 (D10)
 import { moveIssueToProject } from '../services/work/issueMove.service.js';
 import { normalizeIssueRefBody, resolveParentId, typeIdFromKey } from '../services/work/issueRefs.js';
 import portfolioRoutes from './work.portfolio.routes.js';
@@ -108,6 +109,8 @@ import ctw7cRoutes from './work.ctw7c.routes.js'; // CTW đợt 7c: bảo mật 
 import ctw8aRoutes, { ctw8aPublicRoutes } from './work.ctw8a.routes.js'; // CTW đợt 8a: kết nối Microsoft 365 / Google (OAuth theo người)
 import ctw8bRoutes, { ctw8bPublicRoutes } from './work.ctw8b.routes.js'; // CTW đợt 8b: Notion, Slack, trình soạn báo cáo + lịch tự gửi
 import ctw8cRoutes from './work.ctw8c.routes.js'; // CTW đợt 8c: họp định kỳ + mẫu, RSVP cổng khách, ảnh Mermaid, SARIF/V(G), SWR R13/R24/R26/R28
+import dm5aRoutes from './work.dm5a.routes.js'; // dm5 G1: cổng quy trình & nhịp vận hành (DoR, CI, RAG, cảnh báo sớm, số liệu retro)
+import dm5bRoutes from './work.dm5b.routes.js'; // dm5 G2: hồ sơ SRS/SDS/Report 2-3-4-6-7 & truy vết (SM-xx, bảng CSDL 7 cột, đối soát Report 7, soát trước nộp)
 import ctw9aRoutes from './work.ctw9a.routes.js'; // CTW đợt 9a: lớp học — bảng tin, tài liệu lớp, lịch lớp + điểm danh
 import ctw9bRoutes from './work.ctw9b.routes.js'; // CTW đợt 9b: lớp học — bài tập, nộp/trả bài, sổ điểm
 import ctw9cRoutes from './work.ctw9c.routes.js'; // CTW đợt 9c: lớp học — quiz trắc nghiệm tự chấm
@@ -116,6 +119,7 @@ import aiUsageRoutes from './work.aiUsage.routes.js'; // CTW đợt 8B (19/10/20
 import taoCuongMiniRoutes from './work.taoCuongMini.routes.js'; // 20/10/2026: "Create with CuongMini" — dựng dự án/không gian từ đề bài
 import xemTepRoutes from './work.xemTep.routes.js'; // 20/10/2026: trình xem tệp trong trang — /content (chữ) + /preview (docx/xlsx)
 import feedRoutes from './work.feed.routes.js'; // 21/10/2026: Bảng tin nhóm (Team Feed) — không gian + dự án
+import dm5g4Routes from './work.dm5g4.routes.js'; // dm5 G4: thư viện mẫu dự án, giờ theo vai C1–C5
 import { enterProjectScope } from '../services/work/aiUsage.service.js';
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
@@ -327,6 +331,10 @@ router.use('/projects/:pid', asyncHandler(async (req, _res, next) => {
   if (access && isClientScoped(access) && !clientPortalRouteAllowed(req.method, req.path)) {
     throw new AppError('This part of the project is not available in the client portal', 403, 'CLIENT_PORTAL_ONLY');
   }
+  // dm5 G3 (D10): khách đã bị thu hồi quyền cổng sau UAT (settings.portalRevokedUserIds) ⇒ mọi tuyến của dự án đóng.
+  if (access && isClientScoped(access) && (await isPortalRevoked(pid, uid))) {
+    throw new AppError('Your access to this client portal was closed after the acceptance test — ask the project team to restore it', 403, 'WORK_PORTAL_REVOKED');
+  }
   // Đợt 8B: lời gọi model của trợ lý AI trong request này thuộc dự án pid (sổ AI usage).
   if (access) enterProjectScope(pid);
   next();
@@ -491,7 +499,13 @@ router.post('/workspaces/:wsId/projects', asyncHandler(async (req, res) => {
     // Lớp studio: loại dự án ⇒ mô-đun mặc định; `modules` ghi đè từng mô-đun.
     kind: z.enum(PROJECT_KINDS).optional(),
     modules: z.record(z.enum(STUDIO_MODULES), z.boolean()).optional(),
-  }), req.body);
+    // dm5 G4 (A25): thư viện mẫu (blueprint + nhóm bật/tắt) hoặc chép cấu hình từ dự án mẫu.
+    blueprint: z.string().max(40).nullable().optional(),
+    groups: z.record(z.string().max(20), z.boolean()).nullable().optional(),
+    fromProjectId: id.nullable().optional(),
+    configOnly: z.boolean().optional(),
+    copyDocBodies: z.boolean().optional(),
+  }).refine((b) => !(b.blueprint && b.fromProjectId), 'Pick a template set OR a project to copy, not both'), req.body);
   ok(res, await projects.createProject(callerId(req), idParam(req, 'wsId'), body), 201);
 }));
 
@@ -1280,7 +1294,12 @@ router.put('/projects/:pid/workflows/:wfId/transitions', asyncHandler(async (req
     transitions: z.array(z.object({
       from: id.nullable(), to: id,
       // Luật của luồng chuyển (đợt S1): cần phê duyệt / chỉ bộ phận X.
-      rules: z.object({ requireApproval: z.boolean().optional(), notAssignee: z.boolean().optional(), teamIds: z.array(id).max(20).optional() }).nullable().optional(),
+      rules: z.object({
+        requireApproval: z.boolean().optional(), notAssignee: z.boolean().optional(), teamIds: z.array(id).max(20).optional(),
+        // dm5 G1 (A6): xác nhận bằng bình luận của bộ phận X sau khi vào trạng thái nguồn + làm nguội N giờ.
+        requireComment: z.object({ teamIds: z.array(id).max(20) }).optional(),
+        minHoursInFrom: z.number().min(0).max(720).optional(),
+      }).nullable().optional(),
     })).max(500).optional(),
   }), req.body);
   await custom.setTransitions(callerId(req), idParam(req, 'pid'), idParam(req, 'wfId'), body);
@@ -1398,11 +1417,17 @@ router.delete('/projects/:pid/dashboards/:dashId', asyncHandler(async (req, res)
 
 const ymd = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD');
 
+// dm5 G4 (D14): đóng băng + git tag + SHA.
+const versionG4 = {
+  freezeLevel: z.enum(['NONE', 'FEATURE', 'CODE', 'HARD']).optional(),
+  gitTag: z.string().max(100).nullable().optional(),
+  commitSha: z.string().max(64).nullable().optional(),
+};
 router.get('/projects/:pid/versions', asyncHandler(async (req, res) => {
   ok(res, await planning.listVersions(callerId(req), idParam(req, 'pid')));
 }));
 router.post('/projects/:pid/versions', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ name: z.string().min(1).max(60), description: z.string().max(5000).nullable().optional(), startDate: ymd.nullable().optional(), releaseDate: ymd.nullable().optional() }), req.body);
+  const body = parse(z.object({ name: z.string().min(1).max(60), description: z.string().max(5000).nullable().optional(), startDate: ymd.nullable().optional(), releaseDate: ymd.nullable().optional(), ...versionG4 }), req.body);
   ok(res, await planning.createVersion(callerId(req), idParam(req, 'pid'), body), 201);
 }));
 router.get('/projects/:pid/versions/:versionId', asyncHandler(async (req, res) => {
@@ -1413,11 +1438,12 @@ router.patch('/projects/:pid/versions/:versionId', asyncHandler(async (req, res)
     name: z.string().min(1).max(60).optional(), description: z.string().max(5000).nullable().optional(),
     startDate: ymd.nullable().optional(), releaseDate: ymd.nullable().optional(),
     status: z.enum(['UNRELEASED', 'ARCHIVED']).optional(), releaseNotes: z.string().max(50_000).nullable().optional(),
+    ...versionG4,
   }), req.body);
   ok(res, await planning.updateVersion(callerId(req), idParam(req, 'pid'), idParam(req, 'versionId'), body));
 }));
 router.post('/projects/:pid/versions/:versionId/release', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ moveUnresolvedTo: id.nullable(), releaseDate: ymd.nullable().optional() }), req.body);
+  const body = parse(z.object({ moveUnresolvedTo: id.nullable(), releaseDate: ymd.nullable().optional(), gitTag: versionG4.gitTag, commitSha: versionG4.commitSha }), req.body);
   ok(res, await planning.releaseVersion(callerId(req), idParam(req, 'pid'), idParam(req, 'versionId'), body));
 }));
 router.delete('/projects/:pid/versions/:versionId', asyncHandler(async (req, res) => {
@@ -1466,6 +1492,7 @@ router.post('/projects/:pid/issues/:num/worklogs', asyncHandler(async (req, res)
     minutes: z.number().int().min(1).max(1440), startedAt: z.string().datetime({ offset: true }).optional(), note: z.string().max(1000).nullable().optional(),
     remaining: z.union([z.enum(['auto', 'keep']), z.number().int().min(0).max(100_000)]).optional(),
     activity: z.enum(TL_ACTIVITIES).nullable().optional(), workProduct: z.string().max(120).nullable().optional(), // CTW đợt 4 (A24)
+    hat: z.enum(['C1', 'C2', 'C3', 'C4', 'C5']).nullable().optional(), // dm5 G4 (C5): mũ vai lúc ghi giờ
   }), req.body);
   ok(res, await planning.addWorklog(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body), 201);
 }));
@@ -1878,15 +1905,17 @@ router.put('/workspaces/:wsId/teams/:teamId/queue/:issueId/assignee', asyncHandl
 // ─── Giai đoạn + cổng ──────────────────────────────────────────────
 
 const stageSlug = z.string().min(1).max(80);
+// dm5 G1 (A17): ngày kế hoạch của giai đoạn / cổng (G0…SEP-M6).
+const stageDay = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD').nullable().optional();
 router.get('/projects/:pid/stages', asyncHandler(async (req, res) => {
   ok(res, await stages.listStages(callerId(req), idParam(req, 'pid')));
 }));
 router.post('/projects/:pid/stages', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ n: z.number().int().min(0).max(999).optional(), slug: stageSlug, name: z.string().min(1).max(160), gateIssueNumber: id.nullable().optional() }), req.body);
+  const body = parse(z.object({ n: z.number().int().min(0).max(999).optional(), slug: stageSlug, name: z.string().min(1).max(160), gateIssueNumber: id.nullable().optional(), plannedStart: stageDay, plannedEnd: stageDay }), req.body);
   ok(res, await stages.createStage(callerId(req), idParam(req, 'pid'), body), 201);
 }));
 router.patch('/projects/:pid/stages/:sid', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ n: z.number().int().min(0).max(999).optional(), slug: stageSlug.optional(), name: z.string().min(1).max(160).optional(), gateIssueNumber: id.nullable().optional() }), req.body);
+  const body = parse(z.object({ n: z.number().int().min(0).max(999).optional(), slug: stageSlug.optional(), name: z.string().min(1).max(160).optional(), gateIssueNumber: id.nullable().optional(), plannedStart: stageDay, plannedEnd: stageDay }), req.body);
   ok(res, await stages.updateStage(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'), body));
 }));
 router.delete('/projects/:pid/stages/:sid', asyncHandler(async (req, res) => {
@@ -2208,8 +2237,20 @@ router.post('/projects/:pid/portal/uat', asyncHandler(async (req, res) => {
     environment: z.string().max(200).nullable().optional(),
     build: z.string().max(120).nullable().optional(),
     dueAt: z.coerce.date().nullable().optional(),
+    testerCode: z.string().max(12).nullable().optional(), // dm5 G3 (D10): mã ẩn danh người thử (P1…)
   }), req.body);
   ok(res, await portal.createUat(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+// dm5 G3 (D10): đội đọc danh sách phiên UAT (rating, mã người thử, kết luận) · sửa mã người thử. Dưới /portal ⇒ agent bị cấm sẵn.
+router.get('/projects/:pid/portal/uat', asyncHandler(async (req, res) => {
+  ok(res, await portal.listUats(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/portal/clients/:uid/restore', asyncHandler(async (req, res) => {
+  ok(res, await portal.restorePortalAccess(callerId(req), idParam(req, 'pid'), idParam(req, 'uid')));
+}));
+router.patch('/projects/:pid/portal/uat/:aid', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ testerCode: z.string().max(12).nullable().optional() }), req.body ?? {});
+  ok(res, await portal.updateUat(callerId(req), idParam(req, 'pid'), idParam(req, 'aid'), body));
 }));
 router.post('/projects/:pid/portal/uat/:aid/decide', asyncHandler(async (req, res) => {
   const body = parse(z.object({
@@ -2217,6 +2258,7 @@ router.post('/projects/:pid/portal/uat/:aid/decide', asyncHandler(async (req, re
     comment: z.string().max(5000).nullable().optional(),
     conditions: z.string().max(5000).nullable().optional(),
     points: z.array(z.object({ title: z.string().min(1).max(255), kind: z.enum(['BUG', 'CHANGE']), detail: z.string().max(5000).nullable().optional() })).max(30).optional(),
+    rating: z.number().int().min(1).max(5).nullable().optional(), // dm5 G3 (D10): điểm hài lòng 1–5
   }), req.body);
   if (asClient(req)) throw new BadRequestError('Preview as client is read-only', 'WORK_PREVIEW_READONLY');
   ok(res, await portal.decideUat(callerId(req), idParam(req, 'pid'), idParam(req, 'aid'), body, { ip: req.ip ?? null }));
@@ -2296,6 +2338,10 @@ router.use(ctw8aRoutes);
 router.use(ctw8bRoutes);
 // CTW đợt 8c: họp định kỳ RRULE + mẫu chương trình, RSVP khách, ảnh Mermaid vẽ sẵn, phân tích tĩnh + V(G), SWR302 (work.ctw8c.routes.ts).
 router.use(ctw8cRoutes);
+// dm5 G1 (27/11/2026): tuyến ĐỌC của cổng quy trình — guards sprint, cảnh báo sớm, RAG, MoSCoW, tuổi thẻ, số liệu retro (work.dm5a.routes.ts).
+router.use(dm5aRoutes);
+// dm5 G2 (27/11/2026): System Messages, Report 4/6 fill, đối soát Report 7, soát trước nộp, ADR, elicitation → Q&A, RACI theo vai (work.dm5b.routes.ts).
+router.use(dm5bRoutes);
 // CTW đợt 9a: Stream lớp (thông báo hẹn giờ, bình luận, tệp), tài liệu theo chủ đề/tuần, buổi học định kỳ + điểm danh mã/QR — work.ctw9a.routes.ts.
 router.use(ctw9aRoutes);
 // CTW đợt 9b: bài tập lớp (giao/nộp/chấm/trả, nhận xét riêng) + sổ điểm (xlsx vào/ra) — work.ctw9b.routes.ts.
@@ -2312,5 +2358,7 @@ router.use(taoCuongMiniRoutes);
 router.use(xemTepRoutes);
 // 21/10/2026: Bảng tin nhóm (Team Feed) — /feed/** (top-level ⇒ agent bị agentTopRouteAllowed chặn; service chặn lần nữa).
 router.use(feedRoutes);
+// dm5 G4 (27/11/2026): /project-blueprints · /workspaces/:wsId/projects/preview (top-level ⇒ agent bị chặn) · /projects/:pid/reports/hours-by-role.
+router.use(dm5g4Routes);
 
 export default router;

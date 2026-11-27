@@ -16,14 +16,15 @@ import { ATTITUDES, QUADRANTS, STAKEHOLDER_KINDS, workSwr6bApi, workSwr6bKeys, t
 import { wt, type WKey } from '@/components/work/i18n';
 import { Dialog, EmptyState, Field, PageLoading, Spinner } from '../ui';
 import { RowActions } from '../swr/shared';
+import { workDm5bApi } from '@/lib/work-dm5b-api'; // dm5 G2 (B2)
 import { Chip, Note, Section, TabIntro, TableFrame, TD, TextArea, TH, use6bRefresh } from './shared';
 
 export const QUADRANT_KEY: Record<Quadrant, WKey> = { MANAGE_CLOSELY: 'elic.qManage', KEEP_SATISFIED: 'elic.qSatisfied', KEEP_INFORMED: 'elic.qInformed', MONITOR: 'elic.qMonitor' };
 const QUADRANT_TONE: Record<Quadrant, 'red' | 'orange' | 'blue' | 'muted'> = { MANAGE_CLOSELY: 'red', KEEP_SATISFIED: 'orange', KEEP_INFORMED: 'blue', MONITOR: 'muted' };
 export const ATTITUDE_KEY: Record<Attitude, WKey> = { CHAMPION: 'elic.atChampion', SUPPORTER: 'elic.atSupporter', NEUTRAL: 'elic.atNeutral', CRITIC: 'elic.atCritic', BLOCKER: 'elic.atBlocker' };
-const KIND_KEY: Record<string, WKey> = { PERSON: 'elic.kPerson', GROUP: 'elic.kGroup', ORG: 'elic.kOrg' };
+const KIND_KEY: Record<string, WKey> = { PERSON: 'elic.kPerson', GROUP: 'elic.kGroup', ORG: 'elic.kOrg', ROLE: 'g2.kRole' };
 const WARN_KEY: Record<string, WKey> = { NO_CHAMPION: 'elic.wNoChampion', NO_DECIDER: 'elic.wNoDecider', POWERFUL_CRITIC: 'elic.wPowerfulCritic', UNRATED: 'elic.wUnrated' };
-const RACI_PROBLEM_KEY: Record<string, WKey> = { NO_A: 'elic.raciNoA', MANY_A: 'elic.raciManyA', NO_R: 'elic.raciNoR' };
+const RACI_PROBLEM_KEY: Record<string, WKey> = { NO_A: 'elic.raciNoA', MANY_A: 'elic.raciManyA', NO_R: 'elic.raciNoR', ONE_ROLE_MAJORITY_A: 'g2.raciOneRole' };
 
 const EMPTY = {
   name: '', role: '', organization: '', kind: 'PERSON', userClass: '', influence: 3, interest: 3, attitude: '' as '' | Attitude, isChampion: false,
@@ -171,15 +172,24 @@ function RaciMatrix({ pid }: { pid: number }) {
   const q = useQuery({ queryKey: workSwr6bKeys.raci(pid), queryFn: () => workSwr6bApi.raci(pid) });
   const [name, setName] = useState('');
   const add = useMutation({ mutationFn: (b: { name?: string; defaults?: boolean }) => workSwr6bApi.addRaciActivity(pid, b), onSuccess: () => { refresh(); setName(''); }, onError: (e) => toast.error(workError(e, wt('swr.saveFailed'))) });
+  const hats = useMutation({ mutationFn: () => workDm5bApi.seedHats(pid), onSuccess: (x) => { refresh(); toast.success(wt('g2.seedHatsDone', { n: x.added })); }, onError: (e) => toast.error(workError(e, wt('swr.saveFailed'))) });
+  const preset = useMutation({ mutationFn: () => workDm5bApi.raciPreset(pid, 'report2'), onSuccess: (x) => { refresh(); toast.success(wt('g2.presetDone', { n: x.added })); }, onError: (e) => toast.error(workError(e, wt('swr.saveFailed'))) });
   const set = useMutation({ mutationFn: (b: { activityId: number; stakeholder: number; role: RaciRole | null }) => workSwr6bApi.setRaci(pid, b), onSuccess: () => refresh(), onError: (e) => toast.error(workError(e, wt('swr.saveFailed'))) });
   const del = useMutation({ mutationFn: (id: number) => workSwr6bApi.deleteRaciActivity(pid, id), onSuccess: () => refresh(), onError: (e) => toast.error(workError(e, wt('common.couldNotDelete'))) });
   const cell = useMemo(() => new Map((q.data?.cells ?? []).map((c) => [`${c.activityId}:${c.stakeholderId}`, c.role])), [q.data]);
   if (!q.data) return null;
   const r = q.data;
   return (
-    <Section id="raci-h" title={wt('elic.raciTitle')} actions={r.canEdit && !r.activities.length ? <button type="button" className="w-btn w-btn-sm" onClick={() => add.mutate({ defaults: true })}>{wt('elic.raciDefaults')}</button> : undefined}>
+    <Section id="raci-h" title={wt('elic.raciTitle')} actions={r.canEdit ? (
+      <span className="flex flex-wrap gap-1.5">
+        {!r.activities.length && <button type="button" className="w-btn w-btn-sm" onClick={() => add.mutate({ defaults: true })}>{wt('elic.raciDefaults')}</button>}
+        {/* dm5 G2 (B2): 5 mũ C1–C5 (stakeholder ROLE) + 8 gói việc của Report 2 §3 ⇒ RACI theo vai, Report 2 điền R/A/C/I. */}
+        <button type="button" className="w-btn w-btn-sm" disabled={hats.isPending} onClick={() => hats.mutate()}>{wt('g2.seedHats')}</button>
+        <button type="button" className="w-btn w-btn-sm" disabled={preset.isPending} onClick={() => preset.mutate()}>{wt('g2.presetReport2')}</button>
+      </span>
+    ) : undefined}>
       <p className="text-[12.5px] text-[var(--w-text-2)]">{wt('elic.raciIntro')}</p>
-      {r.problems.length > 0 && <Note tone="warn">{r.problems.map((p) => wt(RACI_PROBLEM_KEY[p.code], { activity: p.activity, count: p.count })).join(' · ')}</Note>}
+      {r.problems.length > 0 && <Note tone="warn">{r.problems.map((p) => wt(RACI_PROBLEM_KEY[p.code] ?? 'elic.raciNoA', { activity: p.activity, count: p.count, stakeholder: (p as { stakeholder?: string }).stakeholder ?? '' })).join(' · ')}</Note>}
       {r.activities.length > 0 && (
         <TableFrame label={wt('elic.raciTitle')} maxH="none">
           <table className="w-full border-separate border-spacing-0">

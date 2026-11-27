@@ -59,4 +59,15 @@ export const sprint = {
   explaining: 'Explaining…',
   explainAgain: 'Explain again',
   explain: 'Explain this plan',
+  // dm5 G1 — bảng kiểm sprint (SprintGuards.tsx)
+  gTitle: 'Sprint checks',
+  gChecking: 'Checking readiness and capacity…',
+  gNotReady: '{count} issue is not Ready (Definition of Ready)|{count} issues are not Ready (Definition of Ready)',
+  gAllReady: 'Every open issue meets the Definition of Ready',
+  gCapacity: 'Estimate {est}h of {cap}h focused capacity ({raw}h × focus {focus}) — {pct}%',
+  gOver: 'over the {warn}% limit — cut scope or move work out',
+  gUnestimated: '{count} issue has no hour estimate|{count} issues have no hour estimate',
+  gNoCapacity: 'Estimate {est}h — set hours per day in Reports › Capacity to compare with capacity',
+  gMust: 'Must-have work is {pct}% of the effort (limit {cap}%)',
+  gMustOver: 'Too much Must — if anything slips there is no slack; move some to Should',
 };

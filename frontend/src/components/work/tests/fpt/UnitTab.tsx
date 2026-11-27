@@ -20,6 +20,7 @@ import FptDocDialog from './FptDocDialog';
 import FptImportDialog from './FptImportDialog';
 import { ExportButton, InlineText, ResultBar, Stat } from './shared';
 import UnitMatrix from './UnitMatrix';
+import { UnitAutomationButton, UnitLintButton } from './UnitAutomation'; // dm5 G3 (D5 + D4)
 import TrashLink from './TrashLink';
 import { afterDelete } from '../../settings/binApi';
 import { KpiRow } from '../../KpiTile';
@@ -97,6 +98,8 @@ export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: n
           )}
           <button type="button" className="w-btn w-btn-sm" onClick={() => setDocOpen(true)}><FileText size={13} /> <span className="hidden sm:inline">{wt('fpt.coverChanges')}</span></button>
           {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}><FileUp size={13} /> <span className="hidden sm:inline">{wt('common.import')}</span></button>}
+          {fns.length > 0 && <UnitLintButton pid={pid} />}
+          {canEdit && fns.length > 0 && <UnitAutomationButton pid={pid} />}
           <ExportButton pid={pid} report="unit" label={wt('fpt.export51')} />
           {canEdit && <TrashLink />}
         </div>

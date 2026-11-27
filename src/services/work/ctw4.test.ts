@@ -165,7 +165,8 @@ describe('CTW đợt 4 — RTM (rtm.ts)', () => {
     assert.equal(s.gaps.NO_SDS, 1);
     const buf = writeXlsx(buildRtmSheets({ projectName: 'LabFlow', rows: [a, b], rules: [{ key: 'BR-01', name: 'Password', usedIn: ['UC-01'], unit: ['AuthService.login (4)'], integration: [], system: [], covered: true }], orphans: [{ kind: 'UNIT', ref: 'X.y', name: 'y' }], generated: '2026-10-09' }));
     const sheets = readXlsx(buf);
-    assert.deepEqual(sheets.map((x) => x.name), ['RTM', 'BR Coverage', 'Untraced Tests', 'Summary']);
+    // dm5 G2 (B13): thêm sheet NFR (NFR → Meter → Test) giữa BR Coverage và Untraced Tests.
+    assert.deepEqual(sheets.map((x) => x.name), ['RTM', 'BR Coverage', 'NFR', 'Untraced Tests', 'Summary']);
     const rtm = sheets[0];
     const head = RTM_HEADERS.map((_, i) => rtm.text(2, i + 1));
     assert.deepEqual(head.slice(0, 14), ['Req ID', 'Requirement', 'Feature', 'Related BR/NFR', 'SRS UC §', 'Screen (SRS §3)', 'SDS §', 'Class.method', 'Unit Test', 'Integration Test', 'System Test', 'Iteration', 'Status', 'Notes']);

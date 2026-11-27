@@ -42,7 +42,7 @@ export const REVIEW_ROLES: ReviewRole[] = ['MODERATOR', 'AUTHOR', 'REVIEWER', 'S
 export const REVIEW_STATUSES: ReviewStatus[] = ['PLANNING', 'PREPARATION', 'MEETING', 'REWORK', 'FOLLOW_UP', 'CLOSED'];
 export const SEVERITIES: Severity[] = ['CRITICAL', 'MAJOR', 'MINOR', 'TRIVIAL'];
 
-export interface Checklist { key: string; kind: ReviewKind; name: string; source: string; sizeUnit: 'PAGE' | 'LOC'; sections: Array<{ name: string; items: number }>; items: number }
+export interface Checklist { key: string; kind: ReviewKind; name: string; source: string; sizeUnit: 'PAGE' | 'LOC'; sections: Array<{ name: string; items: number; questions?: string[] }>; items: number; custom?: boolean }
 export interface ReviewMetrics {
   size: number | null; sizeUnit: 'PAGE' | 'LOC'; participants: number; prepHours: number; meetingHours: number; effortHours: number; reworkHours: number;
   defects: number; majorDefects: number; checklistProgress: number; rate: number | null; rateTooFast: boolean; density: number | null; efficiency: number | null;
@@ -60,6 +60,8 @@ export interface Review {
   entryCriteria: string | null; exitCriteria: string | null; notes: string | null; createdAt: string; updatedAt: string; closedAt: string | null;
   participants: Array<{ id: number; userId: number; role: ReviewRole; prepMinutes: number | null; user: WorkUser | null }>;
   items: ReviewItem[]; metrics: ReviewMetrics; next: ReviewStatus[]; closeBlockers: string[]; canEdit: boolean;
+  /** dm5 G3: mẫu cấp dự án + "làm nguội" (settings.reviewCoolOffHours). */
+  checklistCustom?: boolean; coolOff?: { hours: number; readyAt: string; remainingMinutes: number } | null;
 }
 export interface ReviewCreate {
   title: string; kind: ReviewKind; method: ReviewMethod; checklistKey: string; pageNumber?: number | null; workProduct?: string | null; prUrl?: string | null;
@@ -93,7 +95,7 @@ export interface CrImpact {
 export type Technique = 'EP_BVA' | 'DECISION_TABLE' | 'STATE_TRANSITION' | 'PAIRWISE';
 export const TECHNIQUES: Technique[] = ['EP_BVA', 'DECISION_TABLE', 'STATE_TRANSITION', 'PAIRWISE'];
 export const TEST_LEVELS = ['COMPONENT', 'INTEGRATION', 'SYSTEM', 'ACCEPTANCE'] as const;
-export const TEST_TYPES = ['FUNCTIONAL', 'NON_FUNCTIONAL', 'STRUCTURAL', 'CONFIRMATION', 'REGRESSION', 'SMOKE'] as const;
+export const TEST_TYPES = ['FUNCTIONAL', 'NON_FUNCTIONAL', 'STRUCTURAL', 'CONFIRMATION', 'REGRESSION', 'SMOKE', 'SECURITY'] as const;
 export const ROOT_CAUSES = ['REQUIREMENT', 'DESIGN', 'CODING', 'ENVIRONMENT', 'DATA', 'TEST', 'THIRD_PARTY', 'OTHER'] as const;
 export const PHASES = ['REQUIREMENT', 'DESIGN', 'CODING', 'UNIT_TEST', 'INTEGRATION', 'SYSTEM_TEST', 'ACCEPTANCE', 'PRODUCTION'] as const;
 export interface DesignCase { id: string; title: string; inputs: Record<string, string>; expected: string; type: 'N' | 'A' | 'B'; steps?: Array<{ action: string; expected: string }>; tags: string[] }
@@ -109,6 +111,8 @@ export interface QualityDashboard {
   defectTrend: Array<{ day: string; opened: number; closed: number; openTotal: number }>;
   coverage: { requirements: number; covered: number; verified: number; pct: number | null; verifiedPct: number | null };
   exit: { met: boolean; rows: Array<{ key: string; target: string; actual: string; met: boolean }> };
+  /** dm5 G3 (D2): tiêu chí VÀO của kế hoạch + chế độ cổng. */
+  entry?: EntryEval | null; testGate?: 'block' | 'warn' | null;
   estimation: {
     params: Estimation; testCases: number; executions: number; durationDays: number; formula: string; recordedMinutes: number; casesWithEstimate: number;
     effort: { designDays: number; executeDays: number; overheadDays: number; totalDays: number; totalHours: number };
@@ -120,7 +124,15 @@ export interface Criteria { passRate: number; maxOpenCritical: number; maxOpenMa
 export interface PlanSettings {
   scopeIn?: string; scopeOut?: string; approach?: string; environment?: string; suspension?: string; resumption?: string;
   deliverables?: string; schedule?: string; risks?: string; variances?: string; criteria: Criteria; estimation: Estimation;
+  /** dm5 G3 (D2) */
+  entry?: EntryCriterion[]; versionId?: number | null;
 }
+export type EntryKind = 'CASES_READY' | 'REQ_COVERAGE' | 'MAX_OPEN_CRITICAL' | 'SMOKE_PASSED' | 'PLAN_REVIEWED' | 'MANUAL';
+export const ENTRY_KINDS: EntryKind[] = ['CASES_READY', 'REQ_COVERAGE', 'MAX_OPEN_CRITICAL', 'SMOKE_PASSED', 'PLAN_REVIEWED', 'MANUAL'];
+export interface EntryCriterion { kind: EntryKind; target?: number | null; text?: string | null; done?: boolean | null }
+export interface EntryEval { met: boolean; rows: Array<{ kind: EntryKind; target: string; actual: string; met: boolean; text: string | null }> }
+export interface PlanGate { planId: number | null; planName: string | null; versionId: number | null; entry: EntryEval; exit: QualityDashboard['exit'] }
+export interface PlanSettingsView { id: number; name: string; settings: PlanSettings; suggestedEntry?: EntryCriterion[]; gate?: PlanGate }
 export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 export interface RiskRow {
   number: number; key: string; title: string; category: string | null; likelihood: number | null; impact: number | null; score: number | null; level: RiskLevel | null;
@@ -177,9 +189,9 @@ export const q6Api = {
   // Monitoring
   attributes: (pid: number) => d<Array<{ number: number; title: string; level: string | null; testType: string | null; technique: string | null; estimateMin: number | null }>>(api.get(`${P(pid)}/tests-attributes`)),
   setAttributes: (pid: number, body: { numbers: number[]; level?: string | null; testType?: string | null; technique?: string | null; estimateMin?: number | null }) => d<{ updated: number }>(api.patch(`${P(pid)}/tests-attributes`, body)),
-  planSettings: (pid: number, planId: number) => d<{ id: number; name: string; settings: PlanSettings }>(api.get(`${P(pid)}/test-plans/${planId}/settings`)),
+  planSettings: (pid: number, planId: number) => d<PlanSettingsView>(api.get(`${P(pid)}/test-plans/${planId}/settings`)),
   savePlanSettings: (pid: number, planId: number, body: Partial<Omit<PlanSettings, 'criteria' | 'estimation'>> & { criteria?: Partial<Criteria>; estimation?: Partial<Estimation> }) =>
-    d<{ id: number; name: string; settings: PlanSettings }>(api.put(`${P(pid)}/test-plans/${planId}/settings`, body)),
+    d<PlanSettingsView>(api.put(`${P(pid)}/test-plans/${planId}/settings`, body)),
   quality: (pid: number, planId?: number | null) => d<QualityDashboard>(api.get(`${P(pid)}/test-quality`, { params: planId ? { planId } : {} })),
   risks: (pid: number) => d<RiskMatrix>(api.get(`${P(pid)}/test-risks`)),
   saveRisk: (pid: number, body: { number?: number | null; title?: string; likelihood?: number | null; impact?: number | null; riskKind?: 'PRODUCT' | 'PROJECT' | null; mitigation?: string | null; issueNumbers?: number[] }) =>

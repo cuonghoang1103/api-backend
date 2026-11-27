@@ -321,7 +321,7 @@ describe('CT Work — Diagram Studio + AI vẽ sơ đồ (HTTP + DB thật)', { 
     assert.ok(f4.data.filled.includes('detailedDesign'), JSON.stringify(f4.data));
     const p4 = JSON.stringify((await call(staff, 'GET', `/projects/${pid}/pages/${pageOf('fpt-report4-sds')}`)).data.contentJson);
     assert.match(p4, /Booking/);
-    assert.match(p4, /Figure: D-\d+ UC-01 Reserve Lab/);
+    assert.match(p4, /Figure \d+: D-\d+ UC-01 Reserve Lab/); // dm5 G2 (B18): Figure n theo thứ tự trong Report
     const afterRtm = await call(staff, 'GET', `/projects/${pid}/rtm`);
     const row2 = afterRtm.data.rows.find((x: any) => x.reqId === 'UC-01');
     assert.ok(!row2.gaps.includes('NO_SEQUENCE'));

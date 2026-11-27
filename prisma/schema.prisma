@@ -11006,6 +11006,8 @@ model WorkProject {
   staticFindings      WorkStaticFinding[]
   codeComplexity      WorkCodeComplexity[]
   diagramRenders      WorkDiagramRender[]
+  // ── dm5 G2 ── sổ System Messages SM-xx (Report 3 §5.2)
+  systemMessages      WorkSystemMessage[]      @relation("WorkSystemMessageProject")
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -11949,6 +11951,8 @@ model WorkAiUsageLog {
   issueId    Int?     @map("issue_id")
   userId     Int?     @map("user_id")
   userName   String?  @map("user_name") @db.VarChar(120)
+  /// dm5 G4 (C7): người dùng làm gì với đầu ra AI — ACCEPTED | REJECTED | PARTIAL. null = chưa quyết.
+  decision   String?  @db.VarChar(10)
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
@@ -12068,6 +12072,13 @@ model WorkVersion {
   releaseNotes String?   @map("release_notes") @db.Text
   position     Int       @default(0)
   createdAt    DateTime  @default(now()) @map("created_at")
+  // ── dm5 G4 ── (D14) mức đóng băng: NONE | FEATURE (chặn Req/Story mới) | CODE (chỉ Bug P0–P1) | HARD (khoá hết)
+  freezeLevel  String    @default("NONE") @map("freeze_level") @db.VarChar(8)
+  /// Git tag của bản phát hành (vd v1.0.0) + SHA commit được tag — ghi vào release notes.
+  gitTag       String?   @map("git_tag") @db.VarChar(100)
+  commitSha    String?   @map("commit_sha") @db.VarChar(64)
+  /// Trạng thái CI ở commitSha lúc Release (success | failure | pending | neutral | unknown).
+  releaseCi    String?   @map("release_ci") @db.VarChar(16)
 
   project           WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
   issues            WorkIssue[]
@@ -12094,6 +12105,8 @@ model WorkWorklog {
   /// và sản phẩm công việc (Report1…7 / mô-đun). null ⇒ bản xuất suy từ tiêu đề thẻ như trước.
   activity    String?  @db.VarChar(16)
   workProduct String?  @map("work_product") @db.VarChar(120)
+  /// dm5 G4 (C5): "mũ" vai lúc ghi giờ — C1 PM · C2 BA · C3 BE · C4 FE · C5 QA. null ⇒ suy từ activity + nhãn BE/FE.
+  hat         String?  @db.VarChar(4)
   createdAt   DateTime @default(now()) @map("created_at")
 
   issue WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
@@ -12627,18 +12640,21 @@ model WorkTeamMember {
 /// status: NOT_STARTED | ACTIVE | GATE_REVIEW | DONE. Sang DONE CHỈ qua phê
 /// duyệt cổng (WorkApproval targetType STAGE_GATE).
 model WorkStage {
-  id          Int       @id @default(autoincrement())
-  projectId   Int       @map("project_id")
-  n           Int
-  slug        String    @db.VarChar(80)
-  name        String    @db.VarChar(160)
-  status      String    @default("NOT_STARTED") @db.VarChar(16)
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  n            Int
+  slug         String    @db.VarChar(80)
+  name         String    @db.VarChar(160)
+  status       String    @default("NOT_STARTED") @db.VarChar(16)
   /// Thẻ "cổng chất lượng" của giai đoạn (checklist điều kiện ra).
-  gateIssueId Int?      @map("gate_issue_id")
-  startedAt   DateTime? @map("started_at")
-  completedAt DateTime? @map("completed_at")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  gateIssueId  Int?      @map("gate_issue_id")
+  startedAt    DateTime? @map("started_at")
+  completedAt  DateTime? @map("completed_at")
+  /// dm5 G1 (A17): ngày kế hoạch của cổng/giai đoạn (G0…SEP-M6) — timeline vẽ theo, trễ ⇒ đỏ.
+  plannedStart DateTime? @map("planned_start") @db.Date
+  plannedEnd   DateTime? @map("planned_end") @db.Date
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
 
   project           WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
   gateIssue         WorkIssue?              @relation("WorkStageGateIssue", fields: [gateIssueId], references: [id], onDelete: SetNull)
@@ -12962,6 +12978,9 @@ model WorkUatRequest {
   conditions      String?  @db.Text
   /// number[] — thẻ BUG/CR tự sinh khi khách từ chối.
   createdIssueIds Json     @default("[]") @map("created_issue_ids")
+  // ── dm5 G3 ── (D10) điểm hài lòng 1–5 khách chấm khi quyết + mã ẩn danh người thử (P1, P2…) ghi lên biên bản.
+  rating          Int?
+  testerCode      String?  @map("tester_code") @db.VarChar(12)
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
@@ -13019,8 +13038,19 @@ model WorkChangeRequest {
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
   deletedAt       DateTime? @map("deleted_at")
+  // ── dm5 G4 ── (C8) phân tích ảnh hưởng 6 chiều có cấu trúc, 3 phương án, CR con, checklist đồng bộ khi Approve
+  /// { scope, schedule, cost, quality, risk, docs } — mỗi chiều { level: NONE|LOW|MEDIUM|HIGH, note }.
+  impactMatrix    Json?     @map("impact_matrix")
+  /// [{ key: A|B|C, title, effortDays?, pros?, cons?, chosen? }] — tối đa 3.
+  options         Json?
+  /// CR cha (CR-01 ⇒ CR-01a/b). Xoá cha ⇒ con thành CR độc lập.
+  parentId        Int?      @map("parent_id")
+  /// Checklist đồng bộ 5 điểm lúc Approve: { srsRoc, trackingQna, trackingIssues, trackingWbs, rtm } (boolean) + at/byId.
+  syncChecklist   Json?     @map("sync_checklist")
 
   project     WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  parent      WorkChangeRequest?      @relation("CrParent", fields: [parentId], references: [id], onDelete: SetNull)
+  children    WorkChangeRequest[]     @relation("CrParent")
   requester   User?                   @relation("WorkCrRequester", fields: [requesterId], references: [id], onDelete: SetNull)
   owner       User?                   @relation("WorkCrOwner", fields: [ownerId], references: [id], onDelete: SetNull)
   createdBy   User?                   @relation("WorkCrCreator", fields: [createdById], references: [id], onDelete: SetNull)
@@ -13031,6 +13061,7 @@ model WorkChangeRequest {
 
   @@unique([projectId, number], name: "uk_work_cr_number", map: "uk_work_cr_number")
   @@index([projectId, status], name: "idx_work_cr_project")
+  @@index([parentId], map: "idx_work_cr_parent")
   @@map("work_change_requests")
 }
 
@@ -13085,6 +13116,8 @@ model WorkRaidItem {
   clientVisible     Boolean   @default(false) @map("client_visible")
   /// Đợt 6 (T9): rủi ro PRODUCT (chất lượng sản phẩm ⇒ kiểm thử theo rủi ro) | PROJECT. Null = chưa phân loại.
   riskKind          String?   @map("risk_kind") @db.VarChar(8)
+  /// dm5 G4 (C10): kế hoạch dự phòng (Plan B) — làm gì KHI rủi ro xảy ra (khác mitigation = làm gì để nó đừng xảy ra).
+  contingency       String?   @db.Text
   createdById       Int?      @map("created_by_id")
   closedAt          DateTime? @map("closed_at")
   version           Int       @default(0)
@@ -13245,6 +13278,9 @@ model WorkMeetingAction {
   assigneeId Int?      @map("assignee_id")
   dueDate    DateTime? @map("due_date") @db.Date
   issueId    Int?      @map("issue_id")
+  /// dm5 G1 (A21): loại góp ý TASK | BUG | CR | QUESTION ⇒ "Create" sinh đúng loại; createdRef = "CR-3" / "Q-7" khi không phải thẻ.
+  kind       String    @default("TASK") @db.VarChar(12)
+  createdRef String?   @map("created_ref") @db.VarChar(24)
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime  @updatedAt @map("updated_at")
 
@@ -14418,6 +14454,8 @@ model WorkDefectInfo {
   testLevel       String?  @map("test_level") @db.VarChar(16)
   fixNote         String?  @map("fix_note") @db.Text
   reviewSessionId Int?     @map("review_session_id")
+  // ── dm5 G3 ── (D8) cờ Leakage: lỗi lọt tới khách/nghiệm thu. NULL = suy như cũ (activity AT hoặc nhãn "Leakage").
+  leakage         Boolean?
   updatedAt       DateTime @updatedAt @map("updated_at")
 
   issue   WorkIssue   @relation("WorkDefectInfoIssue", fields: [issueId], references: [id], onDelete: Cascade)
@@ -14440,11 +14478,47 @@ model WorkRaidQuestion {
   answer       String?   @db.Text
   answeredAt   DateTime? @map("answered_at")
   answeredById Int?      @map("answered_by_id")
+  // ── dm5 G2 ── (27/11/2026) B6: đề xuất của người hỏi + 2 phương án + mã đích (BR-03 / UC-05 / SM-02) — Q&A chỉ
+  // đóng "sạch" khi đã gắn đích (settings.qnaRequireTarget = 'block' ⇒ chặn, mặc định cảnh báo).
+  proposal     String?   @db.Text
+  optionA      String?   @map("option_a") @db.Text
+  optionB      String?   @map("option_b") @db.Text
+  targetRef    String?   @map("target_ref") @db.VarChar(60)
 
   raid WorkRaidItem @relation(fields: [raidId], references: [id], onDelete: Cascade)
 
   @@map("work_raid_questions")
 }
+
+// ── dm5 G2 ── (27/11/2026) B9: sổ System Messages (SM-<number>, bảng "5.2 System Messages" của Report 3).
+/// msgType ERROR | WARNING | INFO | CONFIRMATION | SUCCESS; context = màn/thao tác hiện thông báo; text = nội dung
+/// (ngôn ngữ chính của tài liệu), textEn = bản tiếng Anh tuỳ chọn; httpStatus = mã HTTP API trả kèm (tuỳ chọn).
+/// useCaseIds = UC dùng thông báo (WorkUseCase.id) — mảng, không FK (UC xoá ⇒ lọc khi đọc). status như UC/BR:
+/// PROPOSED (agent/AI đề xuất, KHÔNG vào tài liệu) | DRAFT | APPROVED.
+model WorkSystemMessage {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  number      Int
+  msgType     String   @default("ERROR") @map("msg_type") @db.VarChar(16)
+  context     String?  @db.Text
+  text        String   @db.Text
+  textEn      String?  @map("text_en") @db.Text
+  httpStatus  Int?     @map("http_status")
+  useCaseIds  Int[]    @default([]) @map("use_case_ids")
+  status      String   @default("DRAFT") @db.VarChar(10)
+  aiModel     String?  @map("ai_model") @db.VarChar(80)
+  createdById Int?     @map("created_by_id")
+  version     Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation("WorkSystemMessageProject", fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, number], name: "uk_work_system_message_number", map: "uk_work_system_message_number")
+  @@map("work_system_messages")
+}
+
+// ── hết dm5 G2 ──
 
 // ── hết CTW đợt 4 ──
 
@@ -15306,6 +15380,8 @@ model WorkGrade {
   comment       String?   @db.Text
   total         Float?
   graderId      Int       @map("grader_id")
+  // ── dm5 G3 ── (D17) TEACHER = giảng viên chấm · SELF = sinh viên tự chấm (subjectKey tiền tố "S:", không đè điểm GV).
+  kind          String    @default("TEACHER") @db.VarChar(8)
   publishedAt   DateTime? @map("published_at")
   version       Int       @default(1)
   createdAt     DateTime  @default(now()) @map("created_at")
@@ -16448,6 +16524,9 @@ model WorkRetroAction {
   issueId     Int?     @map("issue_id")
   createdById Int?     @map("created_by_id")
   createdAt   DateTime @default(now()) @map("created_at")
+  /// dm5 G1 (A12): dấu hiệu kích hoạt ("khi nào biết phải làm") + cách kiểm chứng ở sprint sau.
+  trigger     String?  @db.VarChar(500)
+  verify      String?  @db.VarChar(500)
 
   retro WorkRetro @relation(fields: [retroId], references: [id], onDelete: Cascade)
 

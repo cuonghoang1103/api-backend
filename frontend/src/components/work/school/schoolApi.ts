@@ -58,8 +58,10 @@ export interface WeeklyListItem { id: number; weekStart: string; weekNo: number 
 export interface AiUsageLog {
   id: number; usedAt: string; phase: string; task: string; tool: string; output: string | null; validation: string | null; evidence: string | null;
   measure: string | null; value: number | null; risks: string | null; source: 'AUTO' | 'MANUAL'; issueId: number | null; userName: string | null; weekNo: number | null;
+  /** dm5 G4 (C7): người dùng làm gì với đầu ra AI; sourceKey review:<n> = phiên AI review code. */
+  decision?: 'ACCEPTED' | 'REJECTED' | 'PARTIAL' | null; sourceKey?: string | null;
 }
-export type AiUsageInput = { usedAt: string; phase: string; task: string; tool: string; output?: string | null; validation?: string | null; evidence?: string | null; measure?: string | null; value?: number | null; risks?: string | null };
+export type AiUsageInput = { usedAt: string; phase: string; task: string; tool: string; output?: string | null; validation?: string | null; evidence?: string | null; measure?: string | null; value?: number | null; risks?: string | null; decision?: 'ACCEPTED' | 'REJECTED' | 'PARTIAL' | null };
 
 export const TRACKING_VARIANTS = [
   { id: 'SEP490', title: 'SEP490 — Report2 Project Tracking', sheets: 'Scope · WBS · Q&A · TimeLogs · Defects · Issues', from: 'stages, issues, WBS estimates, worklogs, bugs and the RAID log (Q&A = RAID items in category "Q&A")' },

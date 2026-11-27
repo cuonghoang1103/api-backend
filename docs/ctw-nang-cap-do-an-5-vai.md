@@ -286,3 +286,180 @@ Test: `work.code.db.test.ts`, `work.codeReview.db.test.ts`, `work.githubApp.db.t
 
 Thứ tự ghép đề xuất: **G2 trước** (gần hết P0, ít đụng ai) · G1 · G3 · G4. Mỗi gói: test DB của vùng + `npx tsc --noEmit` + `(cd frontend && npx tsc --noEmit && npm run build)` + `registry.test.ts`;
 sửa giao diện CT Work ⇒ sau deploy chạy `npm run phat-hanh:ca-hai` (CLAUDE.md). Sau mỗi gói, sửa bài học tương ứng (§3.2 + chỗ bài nói "nếu CT Work chưa có… ghi tay") để bài chỉ đúng nút thật.
+
+## Kết quả G1 — Cổng quy trình & nhịp vận hành (27/11/2026)
+
+Migration `20261127130100_dm5_g1_process_gates` (chỉ ADD): `work_retro_actions` +trigger/verify · `work_stages` +planned_start/planned_end ·
+`work_meeting_actions` +kind (mặc định TASK) +created_ref. Mã: `src/services/work/dm5Rules.ts` (thuần) + `dm5a.service.ts` (DB, cổng gọi từ
+`issueChange.ts`) + tuyến đọc `src/routes/work.dm5a.routes.ts`. Mọi khoá settings mới THIẾU = tắt ⇒ dự án cũ không đổi hành vi (có test).
+
+| # | TT | Cách dùng trên web | MCP |
+|---|---|---|---|
+| A14 DoR | ✓ | Cài đặt › Chi tiết › **Definition of Ready** (trường · loại thẻ · trạng thái đích · "prototype đã duyệt"). Kéo thẻ thiếu ⇒ 400 `WORK_READY_REQUIREMENTS` (REST, sửa hàng loạt, MCP `transition`). Hộp thoại Bắt đầu / Lập kế hoạch sprint hiện "N thẻ chưa Ready" | `sprint_current` trả `notReady` + `guards` |
+| A2 cổng CI | ✓ | Cài đặt › Chi tiết › **CI xanh trước khi Done** (+ "bắt buộc có PR"). PR gắn thẻ CI failure/pending ⇒ `WORK_DONE_CI`; PR đóng không merge bị bỏ qua; CI chưa báo/neutral ⇒ qua | qua `transition` |
+| A6 | ✓ | Workflow › chọn mũi tên › **Bắt buộc có bình luận xác nhận** (bộ phận, rỗng = ai khác người được giao; chỉ tính bình luận người SAU lúc vào trạng thái nguồn) + **Làm nguội N giờ** (đọc WorkHistory). Mã `WORK_TRANSITION_COMMENT` / `WORK_TRANSITION_COOLOFF`; ADMIN không vượt | — |
+| A4 | ✓ | Cài đặt › Board › **Chặn WIP chéo cột** (Khi cột A có ≥ N thẻ ⇒ chặn kéo vào cột B; N trống = WIP của cột A). `WORK_WIP_LIMIT`, không phụ thuộc công tắc chặn cứng | — |
+| A15 | ✓ | Cài đặt › Chi tiết › **Sức chứa & hệ số tập trung** (focus 0,1–1, cam/đỏ %). Hộp thoại sprint: "Ước lượng Xh / Yh sức chứa tập trung — Z%", đỏ khi > ngưỡng. `GET /capacity` trả thêm `focus` | `sprint_current.guards.capacity` |
+| A17 | ✓ | Giai đoạn › Sửa giai đoạn › ngày kế hoạch bắt đầu/kết thúc; dòng giai đoạn đỏ khi trễ. Timeline: vạch đứt + mốc ◆ ở ngày cổng, đỏ khi trễ | — |
+| A18 | ✓ | JQL `flaggedSince < -24h` (+ ORDER BY). Board: huy hiệu tuổi thẻ ⌛Nd (≥ 2 ngày, cam ≥ 5, đỏ ≥ 10). Widget **Sức khoẻ** có dòng cảnh báo sớm: Blocked > 24h · P1–P2 đứng yên > 48h · burndown phẳng ≥ 3 ngày · thêm N điểm sau Start (bấm ⇒ danh sách JQL) | — |
+| A19 | ✓ | Dashboard › Thêm widget **RAG dự án** (tiến độ · phạm vi · chất lượng · công sức; tổng = tệ nhất; % hoàn thành có trọng số 0/20/50/75/100). Ngưỡng: Cài đặt › Chi tiết › **Ngưỡng RAG** | — |
+| A21 | ✓ | Họp › Việc cần làm: cột **Loại** Task / Bug / Yêu cầu thay đổi / Câu hỏi Q&A ⇒ "Tạo thẻ" sinh thẻ Task/Bug, CR-n (changeRequests.service), Q-n (qna.service); bấm lại không nhân đôi; thiếu mô-đun CR ⇒ báo trước, không tạo dở | `meeting_add_actions` nhận `kind`; `meeting_create_issues` trả cả CR/Q |
+| A12 | ✓ | Retro › Hành động có ô **Dấu hiệu** + **Cách kiểm chứng** (vào mô tả thẻ); trần `retroActionCap` (Cài đặt › Chi tiết › Nhịp & cổng; 0 = tắt; mẫu SWP391/Capstone = 2) ⇒ `WORK_RETRO_ACTION_CAP`. Khối **Số liệu sprint**: Done/Planned, giờ log/ước, Bug theo activity (lọt = AT), % PR CI xanh lượt đầu, PR lớn nhất | `retro_session` action `facts`, `add_action` nhận trigger/verify |
+| A22 | ✓ | Trần Must (`moscowCapPct`, mặc định 60, 0 = tắt): dải cảnh báo đầu Backlog + dòng trong hộp thoại sprint | `sprint_current.guards.mustPct` |
+| A23 | ✓ | Cài đặt › Chi tiết › Nhịp & cổng › **Giai đoạn chưa mở thì chặn việc của nó** ⇒ thẻ của giai đoạn NOT_STARTED không rời To Do (`WORK_STAGE_NOT_ACTIVE`) | — |
+| A7 | ✓ | Mẫu SWP391 + CAPSTONE: luồng Bug Retest → Closed có `notAssignee` (dev được giao không tự đóng) — dự án tạo MỚI | — |
+
+Ước lượng/giới hạn đã chọn (ghi rõ): "% PR CI xanh lượt đầu" = CI success và KHÔNG có lượt đẩy nào lên nhánh sau khi mở PR
+(CT Work không lưu lịch sử từng lượt chạy CI); `retroActionCap` mặc định TẮT cho dự án cũ (bật sẵn 2 ở mẫu mới) để không
+vỡ retro đang có; lỗi cổng mới giữ câu tiếng Anh có chi tiết (như WORK_DONE_REQUIREMENTS/WORK_WIP_LIMIT cũ).
+
+Test: `WORK_DB_TEST=1 npx tsx --test src/routes/work.dm5a.db.test.ts` (19/19) · `npx tsx --test src/services/work/dm5Rules.test.ts`
++ `jql.test.ts` (flaggedSince) + `studio.test.ts` + `permissions.test.ts` + `toolRegistry/registry.test.ts` xanh · hồi quy DB: issueChange,
+ctw7a, planning, studio, s3b, tests, mcp, docs3a, ctw6, agents xanh.
+
+## Kết quả G3 — Kiểm thử, review & UAT (27/11/2026)
+
+Migration `20261127130300_dm5_g3_test_uat` (chỉ ADD): `work_defect_info.leakage` BOOL NULL · `work_uat_requests.rating` INT NULL +
+`tester_code` VARCHAR(12) · `work_grades.kind` VARCHAR(8) DEFAULT 'TEACHER'. Khoá settings mới chuẩn hoá ở `qualitySettings.ts`
+(`updateProject` gọi đúng 1 dòng): `reviewChecklists`, `reviewCoolOffHours`, `testGate` (block|warn), `uatRevokeOnClose`, `portalRevokedUserIds`.
+
+| # | TT | Làm gì · đường đi trên web · MCP |
+|---|---|---|
+| B4 | ✓ | 4 bộ dựng sẵn `REBUTTAL_10` (10) · `REQ_REVIEW_STRIDE` (8 + 4 STRIDE-lite) · `DESIGN_REVIEW_10` (10) · `PR_SELF_4PASS` (4 lượt/9 câu), song ngữ, lấy nguyên văn bài s01/b5 · s04/b7 · s05/b7 · s06/b5. Mẫu cấp dự án khoá `P_…` (Docs › Reviews › **Checklist của dự án & làm nguội**, chép được từ bộ dựng sẵn); làm nguội N giờ ⇒ 409 `WORK_REVIEW_COOLOFF` khi đặt quyết định sớm (chi tiết phiên hiện dải đếm ngược, nút quyết định khoá). MCP `review_manage create checklistKey=P_…` |
+| D2 | ✓ | `TEST_TYPES += SECURITY`. Test Plan `entry[]` (CASES_READY · REQ_COVERAGE · MAX_OPEN_CRITICAL · SMOKE_PASSED · PLAN_REVIEWED · MANUAL) + `versionId`. `testGate='block'` ⇒ cycle PLANNED → bắt đầu (đổi tay **và** ghi kết quả lần chạy đầu) ⇒ 409 `WORK_TEST_GATE`; `warn` chỉ cảnh báo. **`assertTestGate(tx, versionId)`** trong `testMgmt.service.ts` cho G4 gọi trong `releaseVersion` (đọc qua tx; kế hoạch nhắm version ⇒ xét chúng; không có ⇒ các kế hoạch có vòng chạy; không kế hoạch ⇒ toàn dự án, tiêu chí mặc định; trả `{mode, met, plans}`). Web: Tests › Quality › thẻ **Cổng kiểm thử**. MCP `test_extras action=plan_settings` / `case_attributes` |
+| D5 | ✓ | `POST /fpt-tests/unit/automation-import`: JUnit (Surefire) `…UTCIDnn` hoặc `[n]` ⇒ P/F + ngày đúng UTCID; JaCoCo/lcov % + SHA ⇒ dòng `Automation:` trong Notes Statistics 5.1; trả test không khớp (lý do) + UTCID chưa có test; `dryRun`. Web: Tests › Unit test 5.1 › **Nhập JUnit / JaCoCo**. MCP `test_extras action=automation_import` |
+| D4 | ✓ | Lint 5.1 (`GET /fpt-tests/unit/lint`: thiếu A/B, A<N, UTCID không đánh dấu, trùng, tiền điều kiện lẫn vào Condition) — nút **Soát Report 5.1**. Thẻ Req/Story có khung **Nhóm ca kiểm thử** (6 nhóm theo nhãn, cả nhãn tiếng Việt; nhóm thiếu; lint bước test). MCP `unit_lint`, `test_groups` |
+| D8 | ✓ | Cờ `leakage` (null = suy AT / nhãn "Leakage" ⇒ số cũ không đổi), đồng bộ nhãn `Leakage`, lịch sử `defectLeakage`; DRE/leakage tab Quality theo cờ; sheet Defects ghi "Leakage" đầu Notes. Web: khung Defect của thẻ Bug. MCP `defect_set leakage` |
+| D10 | ✓ | `testerCode` (P1…, chặn tên/email) khi tạo UAT + sửa (`PATCH /portal/uat/:aid`); khách chấm 1–5 khi quyết (Reject vẫn bắt lý do); biên bản in có mã + điểm; `GET /portal/uat` + `ctwork_read what=uat` (number = biên bản). `uatRevokeOnClose` ⇒ thu hồi lời mời CLIENT còn treo + đưa người thử vào `portalRevokedUserIds` ⇒ 403 `WORK_PORTAL_REVOKED` ở mọi tuyến dự án, hết thông báo; ADMIN mở lại (`POST /portal/clients/:uid/restore`). **Cố ý không gỡ vai CLIENT**: gỡ thì khách là MEMBER không gian thoát cách ly và vào ngầm dự án mở. Web: Cổng khách (nhân viên) — ô mã người thử, công tắc đóng quyền, nhãn "Đã đóng quyền" + Mở lại |
+| D17 | ✓ | `PUT/DELETE /grades/self` (kind SELF, subjectKey `S<người>:…`): ADMIN/MEMBER tự chấm theo rubric GV đã dùng hoặc mẫu SWP391/SEP490; không đè/không công bố/không vào tổng hợp hub giảng viên; GV thấy chỉ đọc. Web: School › Grades › **Tự chấm** (hiện cạnh điểm GV) |
+
+Test: `npx tsx --test src/services/work/dm5g3.test.ts` (14/14) · `WORK_DB_TEST=1 npx tsx --test src/routes/work.dm5g3.db.test.ts` (7/7) · hồi quy xanh:
+ctw6, ctw6b, tests, portal, portal6a, fpt, fpt3b, ctw5, permissions, registry, fptTests, teachingRules, portal.test, i18n.test (frontend).
+`work.ctw4.db.test.ts` đỏ 1 ca A19 RTM: sheet `NFR` mới trong xlsx RTM — thay đổi của G2, không phải G3.
+
+## Kết quả G4 — Code, phát hành, báo cáo theo vai, CR/RAID & thư viện mẫu (27/11/2026)
+
+Migration `20261127130400_dm5_g4_code_release_cr` (chỉ ADD): `work_versions` +freeze_level (NONE) +git_tag +commit_sha +release_ci ·
+`work_worklogs` +hat · `work_ai_usage_logs` +decision · `work_change_requests` +impact_matrix +options +parent_id (FK tự trỏ `CrParent`,
+SET NULL) +sync_checklist · `work_raid_items` +contingency. Phần thuần: `dm5g4Rules.ts`, `projectBlueprints.ts`; DB: `projectBlueprint.service.ts`,
+`versionFreeze.ts` + sửa trong code / codeReview / planning / changeRequests / raid / timeActivity / contribExport / fptReports / ai service.
+Khoá settings mới (chuẩn hoá `normalizeG4Settings`, `updateProject` gọi 1 dòng): `aiReviewMode` critic|full · `present` · `roleAlert`
+{qaMinPct 15, maxWeekHours 30} · `codeHealth` {branchMaxDays 3, prMaxLines 400} · `releaseRequireGreenCi`.
+
+| # | TT | Cách dùng trên web | MCP (không lệnh mới) |
+|---|---|---|---|
+| A2 hiển thị | ✓ | Chip CI xanh/đỏ/vàng ở Code › Pull request và panel **Development** của thẻ (CI gộp của thẻ = PR mở tệ nhất); bấm mở lượt chạy CI | dev_activity / code_read như cũ |
+| D12 | ✓ | Code › Nhánh: cờ "Mở N ngày (quá 3)"; Code › Pull request: "PR lớn · N dòng (quá 400)" + dòng tổng; ngưỡng `settings.codeHealth` | — |
+| D13 | ✓ | Code › Hoạt động: thẻ **Sức khoẻ repo** 5 mục (.gitignore · .env.example · PR template · CI workflow · bảo vệ nhánh — đọc trường `protected` của API nhánh; không đọc được ⇒ "Không rõ") | `GET /code/health` |
+| D11 | ✓ | Nút CuongMini review: ô **Chỉ phản biện**; mặc định theo `settings.aiReviewMode`. Prompt thêm luật mentor + máy gỡ mọi khối mã/dòng mã, gợi ý có mã ⇒ câu hỏi gợi mở theo loại phát hiện | `code_review` / `review_manage ai_code_review` +`mode` |
+| C7 | ✓ | Mỗi phiên AI review ⇒ 1 dòng School › **AI usage** (nguồn `review:<n>`, PR, LOC); cột **Quyết định** Chấp nhận/Một phần/Bác bỏ; xuất 10 cột ghi "Decision: …" đầu cột Validation | `fpt_reports_manage` (PATCH ai-usage nhận `decision`) |
+| D14 | ✓ | Releases › Sửa version: **Đóng băng** Feature (chặn Req/Story/Epic) · Code (chỉ Bug P0–P1) · Hard; Git tag + SHA; hộp Release nhận tag/SHA ⇒ ghi `releaseCi` (PR có headSha khớp), `releaseRequireGreenCi` ⇒ 409 `WORK_RELEASE_CI`; release notes AI có dòng tag + SHA do mã viết; `releaseVersion` gọi `assertTestGate` (G3) ⇒ 409 `WORK_TEST_GATE`, trả `testGate`. ⚠ Chốt chặn thẻ vào version đóng băng là `assertVersionFreeze` (versionFreeze.ts, có test) — **cần nối 2 dòng trong issueChange.ts (G1 sở hữu)**, xem dưới | `version_manage` +`freezeLevel`/`gitTag`/`commitSha`, release trả `ci` |
+| C5 | ✓ | Log time: ô **Vai (mũ)** C1–C5 (trống = suy activity + nhãn C1…C5/PM·BA·BE·FE·QA); sửa mũ ở dòng worklog; Reports › **Giờ theo vai** (tuần × 5 mũ, %, cảnh báo QA thấp / quá giờ, lọc người); Đóng góp xlsx thêm sheet **By role** | `export_file kind=contrib_xlsx`; `GET /reports/hours-by-role` |
+| C3 | ✓ | Weekly Report mục I/III: "WBS 1.2.3" đầu cột Notes (cột Task giữ đúng tên việc), việc ngoài WBS ghi "not in WBS" | `weekly_report_generate` |
+| C8 | ✓ | Trang CR: **Phân tích ảnh hưởng 6 chiều** (mức + ghi chú) + **3 phương án** A/B/C; **Tách** ⇒ CR con CR-na/nb (một cấp); sau Approve: **Checklist đồng bộ 5 điểm** (SRS RoC · Tracking Q&A/Issues/WBS · RTM; agent bị chặn) | `change_request_manage` +impactMatrix/options; `governance_extras` +`cr_split`/`cr_sync` |
+| C10 | ✓ | RAID: ô **Plan B (dự phòng)**; nút **Tạo thẻ** / **Thẻ cho Plan B** (thẻ + liên kết + lịch sử) | `raid_create/update` +contingency; `governance_extras` +`raid_to_issue` |
+| D15 | ✓ | Reports › Trình chiếu: thẻ **Thời gian bảo vệ** (thời lượng, mốc phút, link Plan B; ADMIN lưu `settings.present`); khi chiếu: đồng hồ + vạch mốc + "Quá giờ" + nút Plan B (phím T) | — |
+| D16 | ✓ | Luyện bảo vệ: đồng hồ **40 giây** mỗi câu + khung **PREP**; hội đồng trả "Model answer (PREP)" + "Evidence to show" — link sâu do `aiLienKet` dựng (thẻ/Docs/trang mục có thật) | — |
+| C12 | ✓ | — | `export_file` +`contrib_xlsx` · `contrib_pdf` · `test_cycle` (cycleId, format) · `meeting_minutes` (meeting) · `review` (review) |
+| A25 + thư viện mẫu | ✓ | Tạo dự án › **Thư viện mẫu**: SWP391 nhóm 5 · SWP391 một mình 5 vai · SEP490 · OJT · Scrum chung — đứng TRÊN mẫu cố định (SWP391/CAPSTONE/COMPANY/BLANK), tích bật/tắt 10 nhóm (luồng + WIP + luật, loại thẻ, trường, nhãn, cổng G1/G3/G4, họp định kỳ, giai đoạn có ngày, bộ Docs 6 mẫu, DoD + checklist review, mô-đun), **Xem trước** trước khi tạo. Hoặc **Chép cấu hình từ một dự án** (luồng/luật/loại/nhãn/component/trường/settings đổi id trường + trạng thái/mẫu thẻ/giai đoạn/cây Docs tiêu đề; tuỳ chọn chép nội dung Docs) — không thẻ/worklog/sprint/thành viên/người duyệt | `create_project` +`blueprint`/`groups`/`fromProject`/`copyDocBodies`/`dryRun`; `GET /project-blueprints`, `POST /workspaces/:ws/projects/preview` |
+
+Bộ SOLO5 (khớp khoá `du-an-mot-minh-5-vai`): trường Evidence · Ready (DoR) · Role (C1–C5) · MoSCoW · Complexity · Planned LOC · Pull request;
+nhãn Req/Task/Q&A/Defect/Leakage/TechDebt/BE/FE/C1…C5; To Do → In Progress (WIP 2) → In Review (WIP 2) → Done (chỉ từ In Review,
+`notAssignee`); Done rules Evidence + `requireCiGreen`; DoR; `wipMode=block` + `wipGuards` In Review ⇒ In Progress; capacity 0,6/75/85;
+RAG; Must 60%; `stageGateBlocksWork`; retro trần 2; `testGate=block`; làm nguội review 12 h; `aiReviewMode=critic`; `roleAlert`; banner Solo;
+họp Daily T2–T6 8:30 · giữa tuần T4 · review + retro CN; giai đoạn G0 → Iteration 1–3 → bảo vệ (ngày theo tuần); Docs "Project kit".
+Khoá G1/G3 lấy đúng tên trong mục Kết quả G1/G3; bộ áp đi qua `updateProject` nên chạy đủ bộ chuẩn hoá của từng gói.
+
+**Việc cho người ghép (issueChange.ts — G1 sở hữu, G4 không sửa):** thêm 2 lời gọi `assertVersionFreeze` (import từ `./versionFreeze.js`):
+- tạo thẻ (cạnh `if (input.fixVersionId) await assertVersion(...)`, ~dòng 338):
+  `if (input.fixVersionId) await assertVersionFreeze(tx, { projectId: input.projectId, versionId: input.fixVersionId, typeId: input.typeId, priority: input.priority ?? PRIORITY_DEFAULT, actor });`
+- đổi version (trong `if (patch.fixVersionId !== undefined && …)`, sau `assertVersion`):
+  `if (patch.fixVersionId !== null) await assertVersionFreeze(tx, { projectId: before.projectId, versionId: patch.fixVersionId, typeId: before.typeId, priority: patch.priority ?? before.priority, actor, issueKey: … });`
+Test REST `D14 qua REST` trong `work.dm5g4.db.test.ts` tự bật khi issueChange.ts có chuỗi `assertVersionFreeze`.
+
+Bỏ / giới hạn có chủ ý: tuổi nhánh tính từ lần đầu CT Work thấy nhánh (webhook), không phải commit đầu; CI ở SHA chỉ biết khi SHA là
+headSha của một PR (CT Work không lưu CI theo từng commit); checklist đồng bộ CR không chặn chuyển IMPLEMENTED (chỉ hiện tiến độ);
+mốc trình chiếu lưu cấp dự án (một bộ / dự án).
+
+Test: `npx tsx --test src/services/work/dm5g4Rules.test.ts` (21/21) · `WORK_DB_TEST=1 npx tsx --test src/routes/work.dm5g4.db.test.ts`
+(21 xanh + 1 bỏ qua chờ nối issueChange): tạo từ cả 5 bộ (không nhóm nào lỗi), SOLO chạy thật (WIP 2, WORK_TRANSITION_SELF,
+WORK_DONE_REQUIREMENTS), tắt nhóm, chép cấu hình (0 thẻ, Done rules chặn đúng trường MỚI), CI/nhánh/PR, sức khoẻ repo, critic + AI Usage,
+freeze/tag/SHA/CI, test gate G3, giờ theo vai + sheet By role, WBS weekly, CR 6 chiều/tách/sync, RAID Plan B ⇒ thẻ, settings present.
+Hồi quy: registry, permissions, codeReview, fptReports, githubApp (thuần) + codeReview, code, planning, fpt, fpt3b, contrib, githubApp, s3b, s4, ctw9b (DB).
+
+## Kết quả G2 — Hồ sơ SRS/SDS/Report 2-3-4-6-7 & truy vết (27/11/2026)
+
+Migration `20261127130200_dm5_g2_ho_so` (chỉ ADD): bảng `work_system_messages` (+ back-relation `WorkProject.systemMessages`),
+`work_raid_questions` (+proposal, option_a, option_b, target_ref). Route mới: `src/routes/work.dm5b.routes.ts` (1 dòng `router.use`).
+MCP: KHÔNG thêm lệnh — chỉ action (ghi ở `docs/cuongmini-ctwork-parity.md`).
+
+| # | Tính năng | TT | Web (đường đi) · MCP |
+|---|---|---|---|
+| B9 | Sổ System Messages SM-xx (loại · ngữ cảnh · nội dung · EN · HTTP · UC dùng), agent ⇒ đề xuất, mã nhắc mà không có, Report 3 §5.2 | ✓ | Requirements › **System messages** · `swr_extras system_message_add/update`, `swr_delete system_message`, `ctwork_read system_messages` |
+| B10 | Report 3: §4.2.x NFR (Ambition·Scale·Meter·Minimum(Must)·Goal(Plan)·Wish·Verification; đặc tính ngoài mẫu ⇒ 4.2.n), §5.1 BR theo nhóm (hàng nhóm gộp 3 ô) | ✓ | Docs › Report 3 › ⋯ › Fill from structured requirements · `report3_fill_page` (sections `nfr`, `systemMessages`) |
+| B8 | Lint UC trong Six links (link 2): SYSTEM_SUBJECT, STEP_REF_UNKNOWN, CODE_IN_POSTCONDITION (cảnh báo) + SM_UNKNOWN (lỗi) | ✓ | SWR › Six links · `swr_six_links` |
+| B16 | Bảng "1.3 Database Design" 7 cột + Constraints từ sơ đồ SQL hoặc Flyway của repo; LabFlow 15 bảng ⇒ 15 bảng, tên cột nguyên văn; điền lại giữ mô tả người gõ | ✓ | Diagrams › (sơ đồ SQL) › **Database design tables** · Docs › Report 4 › ⋯ · `diagram_extras db_design_table` |
+| B17 | Điền nháp Report 4: §1.3 (B16) + sơ đồ đã duyệt + §3 Class Specifications theo package Spring Boot (thuộc tính/phương thức đọc từ mã) | ✓ | Docs › Report 4 › ⋯ › Fill Report 4 (/ from the repository) · `docs_extras report4_fill` |
+| B13 | RTM: 4 chỉ số phủ (UC coded thiếu SDS · UC tested thiếu ST · % BR có test · test mồ côi) + bảng/sheet NFR → Meter → Test | ✓ | Requirements › Traceability (ô chỉ số + bảng NFR) · xlsx sheet `NFR` + Summary · `rtm_get` |
+| B19 | Report 7 đối soát trước ghép: mã FE/UC/BR/SM lạ/trùng/lệch tên, LI trùng, số test + % pass Phần V vs 5.1/5.2/5.3, effort Phần II vs worklog > 5%, chữ mẫu sót; có lỗi vẫn ghép + hộp đỏ | ✓ | Docs › Report 7 › ⋯ › Check before assembling / Assemble · `final_report_assemble` (trả `checks`), `ctwork_read final_checks` |
+| B21 | Record of Changes thêm dòng A/M/D từ CR IMPLEMENTED có ref tới tài liệu (DOC = trang; SRS nhận cả UC/BR/REQ) | ✓ | Docs › ⋯ › Fill from project data (Record of Changes) · `docs_extras autofill` |
+| B2 | Stakeholder kiểu ROLE (5 mũ C1–C5), luật ONE_ROLE_MAJORITY_A (> 50%), gói việc Report 2; Report 2 §3 điền R/A/C/I: `roles` (5 cột mũ) / `honest` (Sinh viên + Supervisor, mặc định khi 1 SV + có mũ, kèm ghi chú) / `people` | ✓ | SWR › Stakeholders › RACI: Add the 5 hats · Add Report 2 work packages · Docs › Report 2 › ⋯ › Fill RACI · `swr_extras seed_hats`, `raci_activity_add preset=report2`, `docs_extras autofill raciMode` |
+| B3 | Autofill Report 1/2 qua MCP | ✓ | `docs_extras autofill` |
+| B5/B6 | Q&A + Đề xuất, Phương án A/B, Mã đích (BR/UC/SM/FE/thẻ, kiểm tồn tại); đóng thiếu đích ⇒ cảnh báo, `settings.qnaRequireTarget='block'` ⇒ 409 `WORK_QNA_TARGET`; sheet Q&A ghi thêm vào Notes (giữ 8 cột mẫu); câu hỏi elicitation ⇒ Q&A (đánh dấu Q-n, đẩy lại không nhân đôi) | ✓ | School › Q&A · SWR › Elicitation › câu hỏi › Push to Q&A · `qna_ask/qna_answer/qna_update`, `swr_extras qna_from_elicitation` |
+| B14 | Soát trước nộp: tên UC ↔ thẻ ↔ WBS + 10 lỗi bút đỏ (xanh/đỏ/chưa áp dụng) | ✓ | School › **Submission check** · `ctwork_read submit_check` |
+| B15 | ADR-00n tự tăng (mẫu `adr`, `sep490-adr`), "Superseded by"/"Supersedes" + ADR cũ ARCHIVED | ✓ | Docs › New page › ADR · ⋯ › Mark as superseded by… · `docs_extras adr_supersede` |
+| B18 | PlantUML thật: định dạng PLANTUML, nhập `.puml` (tệp / `repoPath`), chặn `!include`, SVG ở máy render tự host (`PLANTUML_SERVER_URL`) đã làm sạch, trình soạn + xem trước, khối `plantuml` trong Report, chú thích "Figure n" theo thứ tự | ✓ (cần máy render) | Diagrams › Import (.puml) · `diagram_extras import (repoPath)` |
+| B20 | Report 6: khung User Manual actor → màn (tên đúng `WorkSrsScreen`), giữ mục đã viết, cảnh báo tiêu đề lệch (gợi ý tên gần nhất) | ✓ | Docs › Report 6 › ⋯ · `docs_extras report6_fill` |
+| B23 | 6 mẫu nhóm "SEP490 kit": Project Charter, Report 5.0 Test Plan, ADR SEP490, Checklist 10 lỗi bút đỏ, Go/No-Go 10 điểm, Front-end Design §1.2.2 | ✓ | Docs › New page › Templates |
+
+Sửa lỗi có sẵn (ghi `docs/so-loi.md`): mô tả `.puml` sai của `diagram_extras` (+ nhập `.puml` thành Mermaid rác); parser SQL nuốt cột `key VARCHAR(80)`.
+
+Test: `npx tsx --test src/services/work/dm5b.test.ts` (23 — SM, NFR/BR + .docx, lint, RTM, bảng CSDL LabFlow 15 bảng, Java, Report 7,
+CR, RACI, ADR, User Guide, PlantUML) · `WORK_DB_TEST=1 npx tsx --test src/routes/work.dm5b.db.test.ts` (13 qua HTTP thật) + ctw4/ctw4b/
+docs3a/diagramsSql/ctw6b db test xanh. Phần bỏ/giới hạn: B19 chỉ đọc số test/effort theo bảng có cột Total/Passed/Pass rate/Effort hoặc
+câu "N test cases … X%"; B18 cần dựng `plantuml/plantuml-server` và đặt `PLANTUML_SERVER_URL` trên VPS (chưa cấu hình ⇒ 503, nguồn vẫn
+hiện); bản .docx in khối PlantUML dạng mã (chưa nhúng ảnh SVG).
+
+## Nghiệm thu ghép (27/11/2026)
+
+Ghép 4 gói trong cây chính, kiểm trên CSDL TEST SẠCH dựng từ migration (`scripts/db-test-tu-migration.mjs`, giống job CI
+`work-db-tests`) + Redis cục bộ tạm (CI có service redis; thiếu Redis thì `ctw7c`/`crm.db` treo chờ kết nối lại).
+
+| Lệnh | Kết quả |
+|---|---|
+| `npx tsc --noEmit` (backend) | sạch |
+| `(cd frontend && npx tsc --noEmit)` | sạch |
+| `npm test` | 2216/2216 xanh (lượt đầu đỏ `crm.db.test` vì Redis tắt — chạy lại có Redis: 9/9) |
+| `npm run test:work-db` (CSDL tạm) | 86/87 tệp xanh lượt đầu; tệp đỏ duy nhất `work.docs.db.test.ts` (đếm mẫu) đã sửa ⇒ 11/11; r2-tripwire 0 kết nối |
+| `work.dm5g4.db.test.ts` | 22/22 (ca "D14 qua REST" tự bật sau khi nối issueChange) |
+| `work.routes.db.test.ts` | 16/16 trên CSDL sạch — 15 ca đỏ trước đó là dữ liệu sót CSDL dev (slug `-3-3`), không phải lỗi đợt này |
+| `work.ctw7c.db.test.ts` | 21/21, ~278 s (chậm do Redis cục bộ tắt + back-off kết nối lại, không do dm5) |
+| `(cd frontend && npm run build)` | xanh |
+| `next lint` trên 114 tệp frontend của đợt | 0 lỗi mới (1 lỗi có sẵn ở HEAD: `QualityTab.tsx` `Estimation` no-redeclare) |
+| `prisma migrate diff` CSDL dev ↔ schema | 0 dòng `work_*` (phần lệch còn lại là lệch cũ ngoài CT Work) |
+
+Đã sửa khi ghép:
+- `issueChange.ts`: nối `assertVersionFreeze` (G4 D14) ở `createIssue` và nhánh đổi `fixVersionId` của `applyIssueChange` (có `issueKey`
+  cho audit vượt của ADMIN).
+- Schema MCP rỗng (`schemaModel.test.ts`): `create_project.groups` và `change_request_manage.impactMatrix` dùng `z.record` — bộ chuyển
+  `zodToJsonSchema` không có nhánh ZodRecord ⇒ `{}`. Đổi sang `z.object` khoá cố định (10 nhóm bộ mẫu / 6 chiều ảnh hưởng).
+- Test đếm mẫu Docs 50 ⇒ 56 (+6 mẫu SEP490 kit, G2 B23) ở `docs.test.ts` (2 chỗ) và `work.docs.db.test.ts`; mẫu
+  `sep490-red-pen-checklist.md` chỉ có 1 đề mục (luật mẫu ≥ 2) ⇒ thêm "## 1. The ten checks" + "## 2. Result and sign-off"
+  (cả `frontend/public` và `content/` — test đòi hai bản giống hệt).
+- `SelfGrades.tsx`: phụ thuộc `useMemo` đổi mỗi lần render (cảnh báo exhaustive-deps).
+- `work.ctw4.db.test.ts` (sheet `NFR`) và `work.dm5b.db.test.ts:186` đã được gói G2 sửa trước khi ghép — kiểm lại xanh.
+
+Commit: danh sách tệp ở `scratchpad/ctw-dm5-tep-commit.txt` của phiên điều phối; `frontend/src/components/work/Board.tsx` đi bằng patch
+riêng (chỉ hunk huy hiệu tuổi thẻ A18; hunk `boardCollision` là của phiên khác).
+
+**PlantUML (B18) — KHÔNG sửa compose.** `deploy-nha.sh` chỉ `docker compose up -d --no-build --remove-orphans backend frontend`, và
+`docker-compose.yml` trên VPS (`/home/deployer/repo`) không được script đồng bộ (chỉ `nginx.conf`) ⇒ thêm service vào compose của repo
+không tới VPS và không tự chạy. Mặc định URL nội bộ khi env trống cũng sai: backend sẽ gọi một host không tồn tại thay vì báo 503 sạch.
+Việc tay (một lần, khi muốn bật vẽ SVG — không gửi sơ đồ ra máy ngoài):
+1. VPS: `docker run -d --name cuonghoangdev_plantuml --restart unless-stopped --network cuonghoangdev_backend --memory 384m
+   --memory-swap 384m -e JAVA_OPTS="-Xmx256m" plantuml/plantuml-server:jetty` (KHÔNG `-p`, chỉ mạng nội bộ; container ngoài compose
+   nên `--remove-orphans` không xoá nó).
+2. Thêm `PLANTUML_SERVER_URL=http://cuonghoangdev_plantuml:8080` vào `/opt/cuonghoangdev/.env` (backend nhận qua `env_file`).
+3. Tạo lại backend có nạp env (`docker compose -p cuonghoangdev up -d --no-build backend`) hoặc chờ lần deploy sau.
+4. Kiểm: `docker exec cuonghoangdev_backend curl -s -o /dev/null -w '%{http_code}' http://cuonghoangdev_plantuml:8080/` ⇒ 200;
+   Diagrams › sơ đồ PlantUML hiện SVG. Chưa làm ⇒ nguồn vẫn lưu/nhập/vào Report, xem trước báo 503.

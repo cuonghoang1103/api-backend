@@ -20,7 +20,7 @@
 
 import type { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
-import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
+import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
 import { auditProject } from './audit.js';
 import { displayName, PUBLIC_USER } from './common.js';
@@ -28,11 +28,12 @@ import { FROM_CLIENT_LABEL, type ApprovalMode, type PortalRequestKind } from './
 import { currentTargetHash, signedHash } from './approvalContent.js';
 import { afterCreate, approvalForClient, approvalTargetSharedWithClient, createApprovalTx, decideApproval } from './approvals.service.js';
 import { clientPeopleIds, maskUser, TEAM_NAME, type PeopleFilter } from './clientPeople.js';
-import { emitWorkEvent } from './events.js';
+import { emitWorkEvent, evictFromProject } from './events.js';
+import { qualitySettingsOf } from './qualitySettings.js';
 import { createIssue } from './issueChange.js';
 import { notifyWork } from './notify.js';
 import { actionableSteps, can, canViewPage, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess, assertHumanActor } from './permissions.js';
-import { clientMemberIds, notifyClientsOfProject, portalPath } from './portalNotify.js';
+import { clientMemberIds, isPortalRevoked, notifyClientsOfProject, portalPath, portalRevokedIdsOf } from './portalNotify.js';
 import { assertModule } from './studio.js';
 import { gateEvidence } from './gateEvidence.js';
 
@@ -56,6 +57,7 @@ export async function portalCtx(userId: number, projectId: number, opts: { asCli
   const access = await requireProject(userId, projectId, 'project.view');
   assertModule(access, 'clientPortal');
   const scoped = isClientScoped(access);
+  if (scoped && (await isPortalRevoked(projectId, userId))) throw new AppError('Your access to this client portal was closed after the acceptance test — ask the project team to restore it', 403, 'WORK_PORTAL_REVOKED');
   const preview = !scoped && opts.asClient === true;
   const clientView = scoped || preview;
   // Xem trước: không thêm chính nhân viên vào tập — thấy ĐÚNG như khách thấy.
@@ -353,7 +355,7 @@ const PORTAL_APPROVAL_SELECT = {
   changeRequestId: true,
   changeRequest: { select: { id: true, number: true, title: true, clientVisible: true } },
   steps: { orderBy: [{ position: 'asc' as const }, { id: 'asc' as const }], select: { id: true, approverId: true, position: true, decision: true, comment: true, decidedAt: true, contentHash: true, approver: { select: PUBLIC_USER } } },
-  uat: { select: { id: true, round: true, environment: true, build: true, conditions: true, itemIssueIds: true, pageNumbers: true, attachmentIds: true, createdIssueIds: true, version: { select: { id: true, name: true, releaseDate: true } }, stage: { select: { id: true, n: true, name: true } } } },
+  uat: { select: { id: true, round: true, environment: true, build: true, conditions: true, itemIssueIds: true, pageNumbers: true, attachmentIds: true, createdIssueIds: true, rating: true, testerCode: true, version: { select: { id: true, name: true, releaseDate: true } }, stage: { select: { id: true, n: true, name: true } } } },
 } satisfies Prisma.WorkApprovalSelect;
 
 type PortalApprovalRow = Prisma.WorkApprovalGetPayload<{ select: typeof PORTAL_APPROVAL_SELECT }>;
@@ -419,6 +421,8 @@ async function uatDetail(ctx: PortalCtx, u: NonNullable<PortalApprovalRow['uat']
     : [[], [], []];
   return {
     round: u.round, environment: u.environment, build: u.build, conditions: u.conditions,
+    // dm5 G3 (D10): điểm hài lòng 1–5 + mã ẩn danh người thử (P1…) — không bao giờ là tên/email thật.
+    rating: u.rating, testerCode: u.testerCode,
     version: u.version, stage: u.stage ? { id: u.stage.id, n: u.stage.n, name: u.stage.name } : null,
     items: items.map((i) => ({ number: i.number, key: `${ctx.access.key}-${i.number}`, title: i.title, done: !!i.resolvedAt, status: i.status, type: i.type })),
     itemCount: ids.length,
@@ -584,7 +588,9 @@ export async function listClients(userId: number, projectId: number) {
       ? prisma.workInvite.findMany({ where: { projectId, projectRole: 'CLIENT', revokedAt: null, expiresAt: { gt: new Date() }, email: { not: null } }, select: { id: true, email: true, expiresAt: true, usedCount: true, maxUses: true } })
       : Promise.resolve([]),
   ]);
-  return { clients: users, pendingInvites: invites.filter((i) => i.usedCount < i.maxUses) };
+  const p = await prisma.workProject.findUnique({ where: { id: projectId }, select: { settings: true } });
+  const revoked = new Set(portalRevokedIdsOf(p?.settings));
+  return { clients: users.map((u) => ({ ...u, portalRevoked: revoked.has(u.id) })), pendingInvites: invites.filter((i) => i.usedCount < i.maxUses) };
 }
 
 export async function inviteClients(userId: number, projectId: number, emails: string[]) {
@@ -612,6 +618,16 @@ export interface CreateUatInput {
   environment?: string | null;
   build?: string | null;
   dueAt?: Date | null;
+  /** dm5 G3 (D10): mã ẩn danh người thử của phiên (P1, P2…) — ghi lên biên bản thay cho tên thật. */
+  testerCode?: string | null;
+}
+
+/** Mã người thử: 1–12 ký tự chữ HOA/số/gạch (P1, P-02, UAT1) — chặn tên/email thật lọt vào biên bản. */
+export const TESTER_CODE_RE = /^[A-Z][A-Z0-9-]{0,11}$/;
+function testerCodeOf(v: string | null | undefined): string | null {
+  const t = v?.trim().toUpperCase() || null;
+  if (t && !TESTER_CODE_RE.test(t)) throw new BadRequestError('Tester code must be a short anonymous label like P1 or P-02 (no names or emails)', 'WORK_UAT_TESTER_CODE');
+  return t;
 }
 
 export async function createUat(userId: number, projectId: number, input: CreateUatInput) {
@@ -637,6 +653,7 @@ export async function createUat(userId: number, projectId: number, input: Create
     if (ok !== attIds.length) throw new BadRequestError('Attached files must be shared with the client', 'WORK_UAT_FILES');
   }
   if (input.versionId && !(await prisma.workVersion.count({ where: { id: input.versionId, projectId } }))) throw new BadRequestError('Version not found', 'WORK_BAD_VERSION');
+  const testerCode = testerCodeOf(input.testerCode);
   if (input.stageId && !(await prisma.workStage.count({ where: { id: input.stageId, projectId } }))) throw new BadRequestError('Stage not found', 'WORK_BAD_STAGE');
   const approverIds = [...new Set(input.approverIds)];
   if (!approverIds.length) throw new BadRequestError('Pick who signs off (usually the client)', 'WORK_NO_APPROVERS');
@@ -663,7 +680,7 @@ export async function createUat(userId: number, projectId: number, input: Create
       data: {
         projectId, approvalId: aid, versionId: input.versionId ?? null, stageId: input.stageId ?? null, round,
         environment: input.environment?.trim().slice(0, 200) || null, build: input.build?.trim().slice(0, 120) || null,
-        itemIssueIds: items.map((i) => i.id), pageNumbers: pageNums, attachmentIds: attIds,
+        itemIssueIds: items.map((i) => i.id), pageNumbers: pageNums, attachmentIds: attIds, testerCode,
       },
     });
     // Chữ ký gốc: băm cả bộ hạng mục lúc gửi (createApprovalTx chưa thấy bản ghi UAT).
@@ -679,6 +696,8 @@ export interface UatDecisionInput {
   comment?: string | null;
   conditions?: string | null;
   points?: Array<{ title: string; kind: 'BUG' | 'CHANGE'; detail?: string | null }>;
+  /** dm5 G3 (D10): điểm hài lòng 1–5 (tuỳ chọn, cả khi duyệt lẫn từ chối). */
+  rating?: number | null;
 }
 
 /**
@@ -694,10 +713,12 @@ export async function decideUat(userId: number, projectId: number, approvalId: n
   const comment = input.comment?.trim() || null;
   const points = (input.points ?? []).map((p) => ({ ...p, title: p.title.trim() })).filter((p) => p.title);
   if (input.decision === 'REJECT' && !comment) throw new BadRequestError('Say why you are rejecting', 'WORK_REJECT_REASON');
+  if (input.rating !== undefined && input.rating !== null && !(Number.isInteger(input.rating) && input.rating >= 1 && input.rating <= 5)) throw new BadRequestError('Satisfaction is a score from 1 to 5', 'WORK_UAT_RATING');
   const conditions = input.decision === 'APPROVE' ? input.conditions?.trim().slice(0, 5000) || null : null;
   const stepComment = conditions ? [comment, `Conditions: ${conditions}`].filter(Boolean).join('\n') : comment;
   await decideApproval(userId, projectId, approvalId, { decision: input.decision, comment: stepComment }, { ip: meta.ip, viaUat: true });
   const after = await prisma.workApproval.findUniqueOrThrow({ where: { id: approvalId }, select: { status: true } });
+  if (typeof input.rating === 'number') await prisma.workUatRequest.update({ where: { id: u.id }, data: { rating: input.rating } });
   if (conditions) {
     const prev = await prisma.workUatRequest.findUniqueOrThrow({ where: { id: u.id }, select: { conditions: true } });
     await prisma.workUatRequest.update({ where: { id: u.id }, data: { conditions: [prev.conditions, conditions].filter(Boolean).join('\n') } });
@@ -720,8 +741,105 @@ export async function decideUat(userId: number, projectId: number, approvalId: n
   } else if (after.status === 'APPROVED') {
     await auditProject(projectId, { actorId: userId, action: 'portal.uat_accept', targetType: 'approval', targetId: approvalId, summary: `UAT accepted${conditions ? ' with conditions' : ''}: ${u.approval.title}` });
     await notifyClientsOfProject(projectId, userId, { kind: 'stage', title: u.approval.title, section: 'approvals', message: 'The acceptance certificate is available in the client portal.' });
+    // dm5 G3 (D10): settings.uatRevokeOnClose ⇒ chốt phiên xong thì thu hồi lời mời khách còn treo + quyền cổng của người thử.
+    // Dựng phản hồi TRƯỚC khi thu hồi — người vừa ký chính là người thử, vẫn phải nhận kết quả lần ký này.
+    const proj = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } });
+    if (qualitySettingsOf(proj.settings).uatRevokeOnClose) {
+      const out = await getPortalApproval(userId, projectId, approvalId);
+      await revokeUatAccess(projectId, approvalId, userId);
+      return out;
+    }
   }
   return getPortalApproval(userId, projectId, approvalId);
+}
+
+/**
+ * dm5 G3 (D10): thu hồi quyền tạm của người thử UAT sau khi phiên được DUYỆT (bài s09/b6: "revoke/expire temporary UAT
+ * accounts right after sign-off"). (1) mọi lời mời CLIENT của dự án còn hiệu lực ⇒ revokedAt; (2) khách ĐỨNG TÊN DUYỆT
+ * phiên này mà không còn bước duyệt nào đang chờ trong dự án ⇒ vào settings.portalRevokedUserIds: mọi tuyến dự án trả
+ * 403 WORK_PORTAL_REVOKED, hết thông báo. KHÔNG gỡ vai CLIENT: gỡ vai thì khách là MEMBER không gian thoát cách ly và vào
+ * ngầm được dự án mở cho không gian; giữ vai thì chữ ký/biên bản vẫn ghi đúng phía khách. Đội không bao giờ bị thu hồi.
+ */
+export async function revokeUatAccess(projectId: number, approvalId: number, actorId: number) {
+  const now = new Date();
+  const [steps, clientIds] = await Promise.all([
+    prisma.workApprovalStep.findMany({ where: { approvalId }, select: { approverId: true } }),
+    clientMemberIds(projectId),
+  ]);
+  const testers = [...new Set(steps.map((s) => s.approverId))].filter((id) => clientIds.includes(id));
+  const invites = await prisma.workInvite.updateMany({ where: { projectId, projectRole: 'CLIENT', revokedAt: null, expiresAt: { gt: now } }, data: { revokedAt: now } });
+  const removed: number[] = [];
+  for (const uid of testers) {
+    const pending = await prisma.workApprovalStep.count({ where: { approverId: uid, decidedAt: null, approval: { projectId, status: 'PENDING' } } });
+    if (!pending) removed.push(uid);
+  }
+  if (removed.length) {
+    await prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM work_projects WHERE id = ${projectId} FOR UPDATE`;
+      const cur = await tx.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } });
+      const settings = { ...((cur.settings as Record<string, unknown>) ?? {}), portalRevokedUserIds: [...new Set([...portalRevokedIdsOf(cur.settings), ...removed])] };
+      await tx.workProject.update({ where: { id: projectId }, data: { settings: settings as Prisma.InputJsonValue } });
+    });
+    for (const uid of removed) evictFromProject(projectId, uid);
+  }
+  await auditProject(projectId, {
+    actorId, action: 'portal.uat_revoke', targetType: 'approval', targetId: approvalId,
+    summary: `UAT closed — revoked ${invites.count} pending client invite${invites.count === 1 ? '' : 's'} and portal access of ${removed.length} tester${removed.length === 1 ? '' : 's'}`,
+    detail: { invites: invites.count, removedUserIds: removed },
+  });
+  return { invitesRevoked: invites.count, testersRemoved: removed.length };
+}
+
+/** dm5 G3 (D10): trả lại quyền cổng cho khách đã bị thu hồi (ADMIN dự án). */
+export async function restorePortalAccess(userId: number, projectId: number, clientId: number) {
+  const ctx = await portalCtx(userId, projectId);
+  assertStaff(ctx);
+  if (ctx.access.role !== 'ADMIN') throw new ForbiddenError('Only a project admin can restore client access');
+  const restored = await prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT id FROM work_projects WHERE id = ${projectId} FOR UPDATE`;
+    const cur = await tx.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } });
+    const ids = portalRevokedIdsOf(cur.settings);
+    if (!ids.includes(clientId)) return false;
+    await tx.workProject.update({ where: { id: projectId }, data: { settings: { ...((cur.settings as Record<string, unknown>) ?? {}), portalRevokedUserIds: ids.filter((x) => x !== clientId) } as Prisma.InputJsonValue } });
+    return true;
+  });
+  if (!restored) throw new NotFoundError('This client\'s portal access is not revoked');
+  await auditProject(projectId, { actorId: userId, action: 'portal.restore', targetType: 'user', targetId: clientId, summary: 'Restored client portal access' });
+  return { restored: true };
+}
+
+/** dm5 G3 (D10): nhân viên đổi mã người thử của phiên (biên bản đọc lại ngay). */
+export async function updateUat(userId: number, projectId: number, approvalId: number, input: { testerCode?: string | null }) {
+  const ctx = await portalCtx(userId, projectId);
+  assertStaff(ctx);
+  if (!can(ctx.access.role, 'approval.create')) throw new ForbiddenError('You cannot change sign-offs in this project');
+  const u = await prisma.workUatRequest.findFirst({ where: { approvalId, projectId }, select: { id: true } });
+  if (!u) throw new NotFoundError('UAT sign-off not found');
+  if (input.testerCode !== undefined) await prisma.workUatRequest.update({ where: { id: u.id }, data: { testerCode: testerCodeOf(input.testerCode) } });
+  return getPortalApproval(userId, projectId, approvalId);
+}
+
+/** dm5 G3 (D10): danh sách phiên UAT cho đội (ctwork_read what=uat) — chỉ đọc; ghi/quyết định vẫn chỉ trên cổng. */
+export async function listUats(userId: number, projectId: number) {
+  const ctx = await portalCtx(userId, projectId);
+  assertStaff(ctx);
+  const rows = await prisma.workUatRequest.findMany({
+    where: { projectId }, orderBy: { id: 'desc' }, take: 200,
+    select: {
+      approvalId: true, round: true, environment: true, build: true, conditions: true, rating: true, testerCode: true, createdAt: true,
+      itemIssueIds: true, createdIssueIds: true,
+      version: { select: { name: true } }, stage: { select: { n: true, name: true } },
+      approval: { select: { title: true, status: true, decidedAt: true, steps: { select: { decision: true, comment: true, decidedAt: true, approverId: true } } } },
+    },
+  });
+  const clients = new Set(ctx.clientIds);
+  return rows.map((r) => ({
+    approvalId: r.approvalId, title: r.approval.title, status: r.approval.status, round: r.round,
+    milestone: r.version?.name ?? (r.stage ? `${r.stage.n}. ${r.stage.name}` : null), environment: r.environment, build: r.build,
+    testerCode: r.testerCode, rating: r.rating, conditions: r.conditions, createdAt: r.createdAt, decidedAt: r.approval.decidedAt,
+    items: ((r.itemIssueIds as number[]) ?? []).length, createdIssues: ((r.createdIssueIds as number[]) ?? []).length,
+    decisions: r.approval.steps.filter((s) => s.decidedAt).map((s) => ({ side: clients.has(s.approverId) ? 'CLIENT' : 'VENDOR', decision: s.decision, comment: s.comment, at: s.decidedAt })),
+  }));
 }
 
 /**
@@ -757,6 +875,8 @@ export async function uatCertificate(userId: number, projectId: number, approval
     documents: a.uat.pages,
     files: a.uat.files,
     conditions: a.uat.conditions,
+    // dm5 G3 (D10): biên bản in kèm điểm hài lòng + mã người thử.
+    rating: a.uat.rating, testerCode: a.uat.testerCode,
     findings: a.uat.createdIssues,
     conclusion: a.status === 'APPROVED' ? (a.uat.conditions ? 'ACCEPTED_WITH_CONDITIONS' : 'ACCEPTED') : a.status === 'REJECTED' ? 'NOT_ACCEPTED' : 'PENDING',
     signatures: decided.map((s) => ({ name: userName(s.approver), side: s.isClient ? 'CLIENT' : 'VENDOR', decision: s.decision, at: s.decidedAt, signature: s.signature, comment: s.comment })),

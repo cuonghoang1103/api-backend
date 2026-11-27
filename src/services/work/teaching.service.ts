@@ -168,7 +168,7 @@ async function buildRows(userId: number, ids: number[]): Promise<GroupRow[]> {
     prisma.workStage.findMany({ where: { projectId: { in: ids } }, orderBy: [{ projectId: 'asc' }, { n: 'asc' }], select: { projectId: true, n: true, name: true, status: true } }),
     prisma.workRaidItem.findMany({ where: { projectId: { in: ids }, deletedAt: null, type: 'QUESTION', status: 'OPEN' }, select: { projectId: true, createdAt: true } }),
     prisma.workRaidItem.findMany({ where: { projectId: { in: ids }, deletedAt: null, type: 'RISK', status: { in: ['OPEN', 'MONITORING'] } }, select: { projectId: true, probability: true, impact: true } }),
-    prisma.workGrade.findMany({ where: { projectId: { in: ids } }, orderBy: { updatedAt: 'desc' }, select: { projectId: true, publishedAt: true, milestone: true } }),
+    prisma.workGrade.findMany({ where: { projectId: { in: ids }, kind: 'TEACHER' }, orderBy: { updatedAt: 'desc' }, select: { projectId: true, publishedAt: true, milestone: true } }),
     docStates(ids, mondayOf(today)),
   ]);
   const cnt = (g: Array<{ projectId: number; _count: { _all: number } }>, id: number) => g.find((x) => x.projectId === id)?._count._all ?? 0;
@@ -317,7 +317,7 @@ export async function exportOverviewXlsx(userId: number, f: OverviewFilter) {
     row += 1;
   }
   const grades = await prisma.workGrade.findMany({
-    where: { projectId: { in: o.groups.map((x) => x.projectId) } }, orderBy: [{ projectId: 'asc' }, { milestone: 'asc' }, { subjectKey: 'asc' }],
+    where: { projectId: { in: o.groups.map((x) => x.projectId) }, kind: 'TEACHER' }, orderBy: [{ projectId: 'asc' }, { milestone: 'asc' }, { subjectKey: 'asc' }],
     select: { projectId: true, milestone: true, subjectUserId: true, total: true, publishedAt: true, rubric: { select: { name: true } } },
   });
   const gs = new XSheet('Grades');
@@ -515,13 +515,16 @@ export async function gradesView(userId: number, projectId: number) {
   if (access.role !== 'TEACHER' && access.role !== 'ADMIN' && access.role !== 'MEMBER') {
     throw new AppError('Grades are visible to the project team and the lecturer', 403, 'WORK_GRADES_FORBIDDEN');
   }
-  const [grades, team, stages, project] = await Promise.all([
-    prisma.workGrade.findMany({ where: { projectId }, orderBy: [{ milestone: 'asc' }, { subjectKey: 'asc' }], select: { ...GRADE_SELECT, rubric: { select: RUBRIC_SELECT } } }),
+  const [allGrades, team, stages, project] = await Promise.all([
+    prisma.workGrade.findMany({ where: { projectId }, orderBy: [{ milestone: 'asc' }, { subjectKey: 'asc' }], select: { ...GRADE_SELECT, kind: true, rubric: { select: RUBRIC_SELECT } } }),
     teamOf(projectId),
     prisma.workStage.findMany({ where: { projectId }, orderBy: { n: 'asc' }, select: { id: true, n: true, name: true } }),
     prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { template: true, fptReportDoc: { select: { subjectCode: true } }, classGroup: { select: { class: { select: { subject: true } } } } } }),
   ]);
-  const graders = new Map((await prisma.user.findMany({ where: { id: { in: [...new Set(grades.map((g) => g.graderId))] } }, select: PUBLIC_USER })).map((u) => [u.id, u]));
+  // dm5 G3 (D17): điểm SELF (sinh viên tự chấm) tách riêng — không bao giờ lẫn vào điểm giảng viên.
+  const grades = allGrades.filter((g) => g.kind !== 'SELF');
+  const selfRows = allGrades.filter((g) => g.kind === 'SELF');
+  const graders = new Map((await prisma.user.findMany({ where: { id: { in: [...new Set(allGrades.map((g) => g.graderId))] } }, select: PUBLIC_USER })).map((u) => [u.id, u]));
   const visible = grades.filter((g) => canSeeGrade(viewer, g)).map((g) => ({
     ...g, rubric: { ...g.rubric, criteria: crit(g.rubric.criteria) }, grader: graders.get(g.graderId) ?? null,
     // Sinh viên không thấy số phiên bản / bản nháp; giảng viên thấy hết.
@@ -538,6 +541,15 @@ export async function gradesView(userId: number, projectId: number) {
     team: team.map((m) => ({ id: m.id, name: displayName(m), username: m.username, avatarUrl: m.avatarUrl })),
     stages,
     rubrics: mine.map((r) => ({ ...r, criteria: crit(r.criteria) })),
+    // dm5 G3 (D17): tự chấm — đội + giảng viên đều thấy (để so với điểm thật); rubric tự chấm được = rubric GV đã dùng trong
+    // dự án + mẫu SWP391/SEP490 theo môn.
+    selfGrades: selfRows.map((g) => ({ ...g, rubric: { ...g.rubric, criteria: crit(g.rubric.criteria) }, grader: graders.get(g.graderId) ?? null, mine: g.graderId === userId })),
+    selfRubrics: {
+      used: [...new Map(grades.map((g) => [g.rubric.id, { ...g.rubric, criteria: crit(g.rubric.criteria) }])).values()],
+      templates: RUBRIC_TEMPLATES.filter((t) => t.subject === subject || ((subject === 'CAPSTONE' || subject === 'ISP490') && t.subject === 'SEP490'))
+        .map((t) => ({ key: t.key, name: t.name, scaleMax: t.scaleMax, milestones: t.milestones, criteria: t.criteria })),
+    },
+    canSelfGrade: access.role === 'ADMIN' || access.role === 'MEMBER',
     milestoneHints: RUBRIC_TEMPLATES.filter((t) => t.subject === subject || (subject === 'CAPSTONE' && t.subject === 'SEP490') || (subject === 'ISP490' && t.subject === 'SEP490')).flatMap((t) => t.milestones),
   };
 }
@@ -553,7 +565,7 @@ export async function saveGrade(userId: number, projectId: number, input: GradeI
   const milestone = String(input.milestone ?? '').trim().slice(0, 80);
   if (!milestone) throw new BadRequestError('Name the milestone (e.g. SWP-M1 or Report 3)', 'WORK_GRADE_BAD');
   const rubric = await prisma.workRubric.findFirst({
-    where: { id: input.rubricId, OR: [{ ownerId: userId }, { grades: { some: { projectId } } }] },
+    where: { id: input.rubricId, OR: [{ ownerId: userId }, { grades: { some: { projectId, kind: 'TEACHER' } } }] },
     select: { id: true, criteria: true, scaleMax: true, archivedAt: true, ownerId: true },
   });
   if (!rubric) throw new NotFoundError('Rubric not found');
@@ -572,7 +584,7 @@ export async function saveGrade(userId: number, projectId: number, input: GradeI
   const subjectKey = gradeSubjectKey(subjectUserId);
   const now = new Date();
   const g = await prisma.$transaction(async (tx) => {
-    const cur = await tx.workGrade.findFirst({ where: { projectId, rubricId: rubric.id, milestone, subjectKey }, select: { id: true, publishedAt: true, version: true } });
+    const cur = await tx.workGrade.findFirst({ where: { projectId, rubricId: rubric.id, milestone, subjectKey, kind: 'TEACHER' }, select: { id: true, publishedAt: true, version: true } });
     const publishedAt = input.publish === true ? (cur?.publishedAt ?? now) : input.publish === false ? null : cur?.publishedAt ?? null;
     const data = { scores: scores as Prisma.InputJsonValue, notes: notes as Prisma.InputJsonValue, comment, total, graderId: userId, stageId: input.stageId ?? null, publishedAt };
     const saved = cur
@@ -585,6 +597,70 @@ export async function saveGrade(userId: number, projectId: number, input: GradeI
   });
   if (g.becamePublished) await notifyPublished(userId, projectId, [g.saved]);
   return g.saved;
+}
+
+// ═══ Tự chấm của sinh viên — dm5 G3 (D17) ═════════════════════════
+
+export interface SelfGradeInput {
+  rubricId?: number | null; templateKey?: string | null; milestone: string; subjectUserId?: number | null;
+  scores: Record<string, unknown>; notes?: Record<string, unknown>; comment?: string | null;
+}
+
+/** Khoá chủ thể của điểm tự chấm: "S<người chấm>:<TEAM|U…>" — cùng ràng buộc duy nhất với điểm GV mà không bao giờ trùng. */
+export const selfSubjectKey = (graderId: number, subjectUserId: number | null) => `S${graderId}:${gradeSubjectKey(subjectUserId)}`;
+
+/**
+ * Sinh viên (ADMIN/MEMBER của dự án, người thật) tự chấm theo rubric trước khi bảo vệ (s10/b6 · s11/b4). Rubric: một rubric
+ * giảng viên đã dùng trong dự án, hoặc mẫu SWP391/SEP490 (tạo bản rubric riêng của sinh viên, templateKey giữ nguồn).
+ * Chủ thể: cả nhóm hoặc chính mình. KHÔNG đụng điểm giảng viên, không công bố, không thông báo.
+ */
+export async function saveSelfGrade(userId: number, projectId: number, input: SelfGradeInput) {
+  const access = await gradeGate(userId, projectId);
+  if (access.role !== 'ADMIN' && access.role !== 'MEMBER') throw new AppError('Self-assessment is for the student team (project admins and members)', 403, 'WORK_GRADES_FORBIDDEN');
+  const milestone = String(input.milestone ?? '').trim().slice(0, 80);
+  if (!milestone) throw new BadRequestError('Name the milestone (e.g. SWP-M3 or Final defense)', 'WORK_GRADE_BAD');
+  const subjectUserId = input.subjectUserId ?? null;
+  if (subjectUserId !== null && subjectUserId !== userId) throw new BadRequestError('You can self-assess yourself or the whole team, not another member', 'WORK_GRADE_BAD');
+  let rubric: { id: number; criteria: unknown; scaleMax: number } | null = null;
+  if (input.rubricId) {
+    rubric = await prisma.workRubric.findFirst({
+      where: { id: input.rubricId, OR: [{ grades: { some: { projectId, kind: 'TEACHER' } } }, { ownerId: userId, grades: { some: { projectId, kind: 'SELF' } } }] },
+      select: { id: true, criteria: true, scaleMax: true },
+    });
+    if (!rubric) throw new NotFoundError('Rubric not found — use a rubric your lecturer used in this project, or a template');
+  } else if (input.templateKey) {
+    const tpl = rubricTemplate(input.templateKey);
+    if (!tpl) throw new BadRequestError('Unknown rubric template', 'WORK_RUBRIC_BAD');
+    rubric = await prisma.workRubric.findFirst({ where: { ownerId: userId, templateKey: tpl.key, archivedAt: null, name: { startsWith: 'Self-check · ' } }, select: { id: true, criteria: true, scaleMax: true } })
+      ?? await prisma.workRubric.create({
+        data: { ownerId: userId, name: `Self-check · ${tpl.name}`.slice(0, 120), subject: tpl.subject, description: tpl.description.slice(0, 4000), criteria: tpl.criteria as unknown as Prisma.InputJsonValue, scaleMax: tpl.scaleMax, templateKey: tpl.key },
+        select: { id: true, criteria: true, scaleMax: true },
+      });
+  } else {
+    throw new BadRequestError('Pick a rubric or a template', 'WORK_GRADE_BAD');
+  }
+  const criteria = crit(rubric.criteria);
+  const scores = wrapRubric(() => validateScores(criteria, input.scores, rubric!.scaleMax));
+  const keys = new Set(criteria.map((c) => c.key));
+  const notes = Object.fromEntries(Object.entries(input.notes ?? {}).filter(([k, v]) => keys.has(k) && typeof v === 'string' && v.trim()).map(([k, v]) => [k, String(v).trim().slice(0, 2000)]));
+  const total = weightedTotal(criteria, scores);
+  const comment = input.comment?.trim().slice(0, 8000) || null;
+  const subjectKey = selfSubjectKey(userId, subjectUserId);
+  return prisma.$transaction(async (tx) => {
+    const cur = await tx.workGrade.findFirst({ where: { projectId, rubricId: rubric!.id, milestone, subjectKey }, select: { id: true } });
+    const data = { scores: scores as Prisma.InputJsonValue, notes: notes as Prisma.InputJsonValue, comment, total, graderId: userId, kind: 'SELF', publishedAt: null };
+    const saved = cur
+      ? await tx.workGrade.update({ where: { id: cur.id }, data: { ...data, version: { increment: 1 } }, select: { ...GRADE_SELECT, kind: true } })
+      : await tx.workGrade.create({ data: { projectId, rubricId: rubric!.id, milestone, subjectKey, subjectUserId, ...data }, select: { ...GRADE_SELECT, kind: true } });
+    await tx.workGradeHistory.create({ data: { gradeId: saved.id, action: cur ? 'EDIT' : 'CREATE', scores: scores as Prisma.InputJsonValue, total, comment, publishedAt: null, actorId: userId } });
+    return saved;
+  });
+}
+
+export async function deleteSelfGrade(userId: number, projectId: number, gradeId: number) {
+  await gradeGate(userId, projectId);
+  const r = await prisma.workGrade.deleteMany({ where: { id: gradeId, projectId, kind: 'SELF', graderId: userId } });
+  if (!r.count) throw new NotFoundError('Self-assessment not found');
 }
 
 async function notifyPublished(userId: number, projectId: number, grades: Array<{ milestone: string; subjectUserId: number | null }>) {
@@ -607,7 +683,7 @@ export async function setPublished(userId: number, projectId: number, input: { i
   const access = await gradeGate(userId, projectId);
   if (!canGrade(access.role)) throw new AppError('Only the lecturer (Teacher role) can publish grades', 403, 'WORK_GRADES_FORBIDDEN');
   const ids = [...new Set(input.ids)].slice(0, 200);
-  const rows = await prisma.workGrade.findMany({ where: { id: { in: ids }, projectId }, select: { id: true, scores: true, total: true, comment: true, publishedAt: true, milestone: true, subjectUserId: true } });
+  const rows = await prisma.workGrade.findMany({ where: { id: { in: ids }, projectId, kind: 'TEACHER' }, select: { id: true, scores: true, total: true, comment: true, publishedAt: true, milestone: true, subjectUserId: true } });
   if (rows.length !== ids.length) throw new NotFoundError('Grade not found');
   const now = new Date();
   const changed = rows.filter((r) => !!r.publishedAt !== input.published);
@@ -635,7 +711,7 @@ export async function gradeHistory(userId: number, projectId: number, gradeId: n
 export async function deleteGrade(userId: number, projectId: number, gradeId: number) {
   const access = await gradeGate(userId, projectId);
   if (!canGrade(access.role)) throw new AppError('Only the lecturer can delete grades', 403, 'WORK_GRADES_FORBIDDEN');
-  const g = await prisma.workGrade.findFirst({ where: { id: gradeId, projectId }, select: { id: true, publishedAt: true } });
+  const g = await prisma.workGrade.findFirst({ where: { id: gradeId, projectId, kind: 'TEACHER' }, select: { id: true, publishedAt: true } });
   if (!g) throw new NotFoundError('Grade not found');
   if (g.publishedAt) throw new ConflictError('Unpublish the grade before deleting it');
   await prisma.workGrade.delete({ where: { id: g.id } });

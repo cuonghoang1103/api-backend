@@ -69,12 +69,14 @@ function DecideBox({ pid, a, onDone }: { pid: number; a: PortalApproval; onDone:
   const [comment, setComment] = useState('');
   const [conditions, setConditions] = useState('');
   const [points, setPoints] = useState<Point[]>([]);
+  const [rating, setRating] = useState<number | null>(null); // dm5 G3 (D10)
   const decide = useMutation({
     mutationFn: async () => {
       if (isUat) {
         return workPortalApi.decideUat(pid, a.id, {
           decision: mode!, comment: comment || null, conditions: mode === 'APPROVE' ? conditions || null : null,
           points: mode === 'REJECT' ? points.filter((p) => p.title.trim()).map((p) => ({ title: p.title.trim(), kind: p.kind, detail: p.detail || null })) : undefined,
+          rating,
         });
       }
       return workStudioApi.decideApproval(pid, a.id, { decision: mode!, comment: comment || null });
@@ -102,6 +104,19 @@ function DecideBox({ pid, a, onDone }: { pid: number; a: PortalApproval; onDone:
         <span className="mb-1 block text-[12.5px] font-medium">{mode === 'REJECT' ? wt('portal.reasonReq') : wt('portal.commentOpt')}</span>
         <textarea className="w-input min-h-[70px] py-2" value={comment} onChange={(e) => setComment(e.target.value)} data-testid="portal-decide-comment" />
       </label>
+      {isUat && (
+        <fieldset className="block" data-testid="portal-uat-rating">
+          <legend className="mb-1 block text-[12.5px] font-medium">{wt('uat.ratingAsk')}</legend>
+          <div className="flex gap-1" role="radiogroup" aria-label={wt('uat.rating')}>
+            {[1, 2, 3, 4, 5].map((n) => (
+              <button key={n} type="button" role="radio" aria-checked={rating === n} onClick={() => setRating(rating === n ? null : n)}
+                className={`h-8 w-8 rounded-[6px] border text-[13px] font-semibold ${rating !== null && n <= rating ? 'border-[var(--w-accent)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border)] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]'}`}>
+                {n}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+      )}
       {isUat && mode === 'APPROVE' && (
         <label className="block">
           <span className="mb-1 block text-[12.5px] font-medium">{wt('portal.condOpt')}</span>
@@ -200,6 +215,12 @@ export function PortalApprovalDialog({ pid, id, asClient, config, onClose }: { p
                 <p className="mt-2 text-[12.5px] text-[var(--w-text-2)]">{wt('portal.attached', { s: [...a.uat.pages.map((p) => p.title), ...a.uat.files.map((f) => f.fileName)].join(' · ') })}</p>
               )}
               {a.uat.conditions && <p className="mt-2 text-[13px]"><b>{wt('portal.conditions')}</b> {a.uat.conditions}</p>}
+              {(a.uat.rating || a.uat.testerCode) && (
+                <p className="mt-2 text-[12.5px] text-[var(--w-text-2)]" data-testid="portal-uat-meta">
+                  {a.uat.testerCode && <span className="mr-3"><b>{wt('uat.testerCode')}:</b> {a.uat.testerCode}</span>}
+                  {a.uat.rating && <span><b>{wt('uat.rating')}:</b> {wt('uat.ratingOf', { n: a.uat.rating })}</span>}
+                </p>
+              )}
               {a.uat.createdIssues.length > 0 && (
                 <div className="mt-3">
                   <div className="mb-1 text-[12.5px] font-medium">{wt('portal.raised')}</div>

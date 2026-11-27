@@ -172,7 +172,7 @@ export function ImportDialog({ pid, open, onClose, onDone }: { pid: number; open
       footer={<><button type="button" className="w-btn" onClick={onClose}>{t('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" disabled={!file || run.isPending} onClick={() => run.mutate()}>{run.isPending ? <Spinner size={12} /> : null} {t('diagram.import')}</button></>}>
       <p className="mb-3 text-[13px] text-[var(--w-text-2)]">{t('diagram.importIntro')}</p>
       <Field label={t('diagram.fileField')}>
-        <input type="file" className="w-input" accept=".drawio,.xml,.png,.svg,.excalidraw,.json,.mmd,.mermaid,.md,.txt,.sql,.ddl" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+        <input type="file" className="w-input" accept=".drawio,.xml,.png,.svg,.excalidraw,.json,.mmd,.mermaid,.md,.txt,.sql,.ddl,.puml,.plantuml,.pu,.iuml,.wsd" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
       </Field>
       {isEx && <label className="mt-2 flex items-center gap-2 text-[13px]"><input type="checkbox" checked={toMermaid} onChange={(e) => setToMermaid(e.target.checked)} /> {t('diagram.convertToMermaid')}</label>}
       {isSql && <p className="mt-2 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px] text-[var(--w-text-2)]">{t('dbd.importSqlHint')}</p>}

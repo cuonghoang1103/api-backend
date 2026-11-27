@@ -20,6 +20,7 @@ import { workError, type ProjectConfig } from '@/lib/work-api';
 import { fmtMoney, s4Api, s4Keys, type PresentPayload } from '@/lib/work-s4-api';
 import { EmptyState, PageLoading } from '../ui';
 import { wt } from '@/components/work/i18n';
+import { PresentTimerBar, PresentTimerSettings } from './PresentTimer'; // dm5 G4 (D15)
 
 type Slide = { id: string; title: string; body: ReactNode };
 
@@ -232,6 +233,7 @@ export default function PresentView({ config }: { config: ProjectConfig }) {
               </ul>
             )}
           </div>
+          <PresentTimerSettings config={config} />
           <div className="flex flex-wrap gap-2">
             <button type="button" className="w-btn w-btn-primary" onClick={() => { setI(0); setPlaying(true); }} data-testid="present-start"><Play size={14} />{wt('rep.pvStart', { count: slides.length })}</button>
             <Link href={`/work/${config.workspace.slug}/${config.key}/reports?tab=steering`} className="w-btn"><ArrowLeft size={14} />{wt('rep.pvBack')}</Link>
@@ -247,7 +249,9 @@ export default function PresentView({ config }: { config: ProjectConfig }) {
     <div ref={stage} className="w-safe-all fixed inset-0 z-[80] flex flex-col bg-[var(--w-panel)] text-[var(--w-text)]" role="region" aria-roledescription="presentation" aria-label={wt('rep.pvAria', { n: config.name })} data-testid="present-stage">
       <div className="flex shrink-0 items-center gap-2 px-[clamp(12px,3vw,40px)] pt-[clamp(10px,2vw,24px)]">
         <span className="min-w-0 truncate text-[clamp(11px,1vw,14px)] font-medium text-[var(--w-text-3)]">{config.name} · {p.mode === 'client' ? wt('rep.pvClientSafe') : wt('docs.internalTag')}</span>
-        <span className="ml-auto text-[12px] tabular-nums text-[var(--w-text-3)]" data-testid="slide-counter">{i + 1} / {slides.length}</span>
+        <span className="ml-auto" />
+        <PresentTimerBar config={config} />
+        <span className="text-[12px] tabular-nums text-[var(--w-text-3)]" data-testid="slide-counter">{i + 1} / {slides.length}</span>
         <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" aria-label={wt('rep.pvFull')} onClick={toggleFull}><Maximize2 size={14} /></button>
         <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" aria-label={wt('rep.pvLeave')} onClick={() => { if (document.fullscreenElement) void document.exitFullscreen().catch(() => {}); setPlaying(false); }}><X size={15} /></button>
       </div>

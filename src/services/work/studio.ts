@@ -148,7 +148,16 @@ export function stageActivationBlocker(stages: StageLite[], targetId: number): S
  * notAssignee (26/11/2026): người đang được giao thẻ KHÔNG được tự chuyển (vd Review → Done, Retest → Closed) — "không tự duyệt
  * việc của mình", cả ADMIN cũng không vượt. Dùng cho dự án một người đóng nhiều vai (5 tài khoản vai) lẫn nhóm thật.
  */
-export interface TransitionRules { requireApproval?: boolean; teamIds?: number[]; notAssignee?: boolean }
+export interface TransitionRules {
+  requireApproval?: boolean; teamIds?: number[]; notAssignee?: boolean;
+  /**
+   * dm5 G1 (A6, 27/11/2026): phải có BÌNH LUẬN xác nhận SAU lần thẻ vào trạng thái nguồn — của thành viên các bộ phận
+   * `teamIds` (vd QA); teamIds rỗng ⇒ của bất kỳ ai KHÁC người đang được giao. ADMIN cũng không vượt.
+   */
+  requireComment?: { teamIds: number[] };
+  /** dm5 G1 (A6): "làm nguội" — thẻ phải nằm ở trạng thái nguồn ít nhất N giờ (1–720) mới được chuyển. */
+  minHoursInFrom?: number;
+}
 
 /** Chuẩn hoá rules từ JSON lưu trong DB (sai kiểu ⇒ bỏ). */
 export function transitionRulesOf(raw: unknown): TransitionRules {
@@ -160,9 +169,19 @@ export function transitionRulesOf(raw: unknown): TransitionRules {
     const ids = [...new Set(r.teamIds.filter((x): x is number => Number.isInteger(x) && x > 0))];
     if (ids.length) out.teamIds = ids;
   }
+  if (r.requireComment && typeof r.requireComment === 'object') {
+    const raw = (r.requireComment as { teamIds?: unknown }).teamIds;
+    const ids = Array.isArray(raw) ? [...new Set(raw.filter((x): x is number => Number.isInteger(x) && (x as number) > 0))].slice(0, 20) : [];
+    out.requireComment = { teamIds: ids };
+  } else if (r.requireComment === true) {
+    out.requireComment = { teamIds: [] };
+  }
+  if (typeof r.minHoursInFrom === 'number' && Number.isFinite(r.minHoursInFrom) && r.minHoursInFrom > 0) {
+    out.minHoursInFrom = Math.min(720, Math.round(r.minHoursInFrom * 10) / 10);
+  }
   return out;
 }
 
 export function hasRules(r: TransitionRules): boolean {
-  return r.requireApproval === true || r.notAssignee === true || !!r.teamIds?.length;
+  return r.requireApproval === true || r.notAssignee === true || !!r.teamIds?.length || !!r.requireComment || !!r.minHoursInFrom;
 }

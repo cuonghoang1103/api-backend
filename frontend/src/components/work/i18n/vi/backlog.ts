@@ -52,4 +52,6 @@ export const backlog: Strings<typeof En> = {
   planAi: 'Lên kế hoạch bằng AI',
   quickPh: 'Cần làm gì? Nhấn Enter để tạo',
   ptsUnit: 'điểm',
+  // dm5 G1 (A22)
+  moscowOver: 'Việc Must chiếm {pct}% effort đang mở — vượt trần {cap}%. Trễ một việc Must là không còn đệm: chuyển bớt sang Should.',
 };

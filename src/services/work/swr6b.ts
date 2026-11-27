@@ -25,7 +25,13 @@ import { XSheet, type XStyle } from './xlsxStyled.js';
 
 // ─── Stakeholder ─────────────────────────────────────────────────
 
-export const STAKEHOLDER_KINDS = ['PERSON', 'GROUP', 'ORG'] as const;
+/** dm5 G2 (B2): ROLE = một "mũ" (vai nội bộ C1 Leader/PM … C5 QA) — làm một mình vẫn có RACI theo vai. */
+export const STAKEHOLDER_KINDS = ['PERSON', 'GROUP', 'ORG', 'ROLE'] as const;
+/** 5 mũ của khoá "Một mình đóng 5 vai" (màu/tên thống nhất với bài học). */
+export const FIVE_HATS = [
+  { name: 'C1 Leader/PM', role: 'Project leader & manager' }, { name: 'C2 BA', role: 'Business analyst' },
+  { name: 'C3 Dev BE', role: 'Back-end developer' }, { name: 'C4 Dev FE', role: 'Front-end developer' }, { name: 'C5 QA/Tester', role: 'QA & release quality' },
+] as const;
 export type StakeholderKind = (typeof STAKEHOLDER_KINDS)[number];
 export const ATTITUDES = ['CHAMPION', 'SUPPORTER', 'NEUTRAL', 'CRITIC', 'BLOCKER'] as const;
 export type Attitude = (typeof ATTITUDES)[number];
@@ -80,10 +86,19 @@ export const DEFAULT_RACI_ACTIVITIES = [
   'Approve the requirements baseline', 'Decide on change requests', 'Accept the delivered product',
 ];
 
-export interface RaciProblem { activity: string; code: 'NO_A' | 'MANY_A' | 'NO_R'; count: number }
-/** Mỗi hoạt động: đúng MỘT A (người chịu trách nhiệm cuối), ít nhất một R. */
-export function raciProblems(activities: Array<{ id: number; name: string }>, cells: Array<{ activityId: number; role: string }>): RaciProblem[] {
+export interface RaciProblem { activity: string; code: 'NO_A' | 'MANY_A' | 'NO_R' | 'ONE_ROLE_MAJORITY_A'; count: number; stakeholder?: string }
+/**
+ * Mỗi hoạt động: đúng MỘT A (người chịu trách nhiệm cuối), ít nhất một R. dm5 G2 (B2): một stakeholder/vai giữ > 50% chữ A của
+ * cả ma trận (≥ 2 hoạt động có A) ⇒ ONE_ROLE_MAJORITY_A (count = %) — dấu hiệu một mũ ôm hết trách nhiệm cuối.
+ */
+export function raciProblems(activities: Array<{ id: number; name: string }>, cells: Array<{ activityId: number; role: string; stakeholderId?: number }>, names?: Map<number, string>): RaciProblem[] {
   const out: RaciProblem[] = [];
+  const withA = activities.filter((a) => cells.some((c) => c.activityId === a.id && c.role === 'A'));
+  if (withA.length >= 2) {
+    const per = new Map<number, number>();
+    for (const c of cells) if (c.role === 'A' && c.stakeholderId !== undefined && activities.some((a) => a.id === c.activityId)) per.set(c.stakeholderId, (per.get(c.stakeholderId) ?? 0) + 1);
+    for (const [sid, n] of per) if (n / withA.length > 0.5) out.push({ activity: '', code: 'ONE_ROLE_MAJORITY_A', count: Math.round((n / withA.length) * 100), stakeholder: names?.get(sid) ?? `#${sid}` });
+  }
   for (const a of activities) {
     const mine = cells.filter((c) => c.activityId === a.id);
     const as = mine.filter((c) => c.role === 'A').length;
@@ -157,7 +172,8 @@ export const sessionQuestionInput = z.object({
   text: z.string().trim().min(1).max(1000),
   answer: z.string().max(8000).nullable().optional(),
 });
-export interface SessionQuestion { id: string; text: string; answer: string | null }
+/** dm5 G2 (B5): qna = câu hỏi mở đã đẩy sang sổ Q&A ("Q-12") — giữ qua các lần sửa phiên. */
+export interface SessionQuestion { id: string; text: string; answer: string | null; qna?: string | null }
 
 /** Câu hỏi có id ổn định (q1, q2… — giữ id cũ, cấp id mới cho câu mới). */
 export function normalizeQuestions(raw: unknown): SessionQuestion[] {
@@ -172,7 +188,8 @@ export function normalizeQuestions(raw: unknown): SessionQuestion[] {
     if (!id) { let n = out.length + 1; while (used.has(`q${n}`)) n++; id = `q${n}`; }
     used.add(id);
     const answer = typeof q.answer === 'string' && q.answer.trim() ? q.answer.trim().slice(0, 8000) : null;
-    out.push({ id, text, answer });
+    const qna = typeof (q as { qna?: unknown }).qna === 'string' && /^Q-\d{1,7}$/.test((q as { qna: string }).qna) ? (q as { qna: string }).qna : null;
+    out.push({ id, text, answer, ...(qna ? { qna } : {}) });
   }
   return out;
 }

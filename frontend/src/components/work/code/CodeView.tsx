@@ -20,6 +20,7 @@ import { safeHref } from './codeText';
 import { codeApi, codeKeys, type CodeOverview } from './codeApi';
 import { ProviderIcon } from './parts';
 import ActivityTab from './ActivityTab';
+import { RepoHealthCard } from './g4Parts';
 import BranchesTab from './BranchesTab';
 import PullsTab from './PullsTab';
 import SourceTab from './SourceTab';
@@ -144,7 +145,11 @@ export default function CodeView({ config, pid, onOpenIssue }: { config: Project
       )}
 
       {tab === 'activity' && (
-        <ActivityTab pid={pid} projectKey={config.key} initialEvent={search?.get('event') ?? null} onIssue={onOpenIssue} onCommit={openCommit} onBranchSource={openRef} />
+        <>
+          {/* dm5 G4 (D13): 5 mục vệ sinh repo trên nhánh mặc định. */}
+          <RepoHealthCard pid={pid} />
+          <ActivityTab pid={pid} projectKey={config.key} initialEvent={search?.get('event') ?? null} onIssue={onOpenIssue} onCommit={openCommit} onBranchSource={openRef} />
+        </>
       )}
       {tab === 'branches' && (
         <BranchesTab pid={pid} projectKey={config.key} onIssue={onOpenIssue} onSource={openRef} onCommit={openCommit} onPulls={() => go('pulls')} />

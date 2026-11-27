@@ -169,4 +169,18 @@ export const teacher: Strings<typeof En> = {
   forPerson: 'Cho {name}',
   publishAll: 'Công bố mọi bản nháp của {m}',
   notAvailBody: 'Điểm chỉ hiện với nhóm dự án và giảng viên.',
+  // ── dm5 G3 (27/11/2026) — tự chấm của sinh viên ──
+  selfTitle: 'Tự chấm',
+  selfDesc: 'Tự chấm bài theo rubric trước buổi bảo vệ. Không bao giờ thay hay sửa điểm giảng viên — hai điểm hiện cạnh nhau.',
+  selfRubric: 'Rubric',
+  selfTemplate: 'Mẫu: {n}',
+  selfFor: 'Cho',
+  selfTeam: 'Cả nhóm',
+  selfMe: 'Bản thân',
+  selfSave: 'Lưu điểm tự chấm',
+  selfSaved: 'Đã lưu điểm tự chấm',
+  selfNone: 'Chưa có điểm tự chấm.',
+  selfBy: 'của {n}',
+  selfVsTeacher: 'Giảng viên: {t}',
+  selfDelete: 'Xoá',
 };

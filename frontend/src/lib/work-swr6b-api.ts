@@ -20,7 +20,7 @@ const fileOf = (res: { headers: Record<string, unknown>; data: unknown }, fallba
 
 export const ATTITUDES = ['CHAMPION', 'SUPPORTER', 'NEUTRAL', 'CRITIC', 'BLOCKER'] as const;
 export type Attitude = (typeof ATTITUDES)[number];
-export const STAKEHOLDER_KINDS = ['PERSON', 'GROUP', 'ORG'] as const;
+export const STAKEHOLDER_KINDS = ['PERSON', 'GROUP', 'ORG', 'ROLE'] as const; // dm5 G2 (B2): ROLE = mũ nội bộ C1–C5
 export type Quadrant = 'MANAGE_CLOSELY' | 'KEEP_SATISFIED' | 'KEEP_INFORMED' | 'MONITOR';
 export const QUADRANTS: Quadrant[] = ['KEEP_SATISFIED', 'MANAGE_CLOSELY', 'MONITOR', 'KEEP_INFORMED'];
 
@@ -47,7 +47,8 @@ export interface Raci {
 export const TECHNIQUES = ['INTERVIEW', 'WORKSHOP', 'SURVEY', 'OBSERVATION', 'DOCUMENT_ANALYSIS', 'PROTOTYPE'] as const;
 export type Technique = (typeof TECHNIQUES)[number];
 export type SessionStatus = 'PLANNED' | 'DONE' | 'CANCELLED';
-export interface SessionQuestion { id: string; text: string; answer: string | null }
+/** dm5 G2 (B5): qna = câu đã đẩy sang sổ Q&A ("Q-12"). */
+export interface SessionQuestion { id: string; text: string; answer: string | null; qna?: string | null }
 export interface SessionRow {
   number: number; key: string; title: string; technique: Technique; status: SessionStatus; scheduledAt: string | null; durationMin: number | null; aiSimulated: boolean;
   meetingId: number | null; surveyId: number | null; participants: Array<{ key: string; name: string; role: string | null; rolePlayed: string | null }>;

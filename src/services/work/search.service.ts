@@ -223,6 +223,8 @@ export const WIDGET_KINDS = [
   'kpis', 'cfd', 'throughput', 'cycle_time', 'aging_wip', 'velocity', 'release_burnup', 'workload', 'overdue',
   // CTW đợt 7c (C3): tỉ lệ đạt test, lỗi theo mức nghiêm trọng, giấy phép sắp hết hạn, đồng hồ của tôi, OKR (API đợt 7a).
   'test_pass_rate', 'defects_by_severity', 'license_expiring', 'my_timer', 'okr',
+  // dm5 G1 (A19): RAG dự án 4 chiều + % hoàn thành có trọng số (GET /projects/:pid/rag).
+  'rag',
 ] as const;
 export interface Widget {
   id: string;

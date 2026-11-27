@@ -1,0 +1,35 @@
+import type { g2 as En } from '../en/g2';
+import type { Strings } from '../core';
+
+/** dm5 G2 (27/11/2026). */
+export const g2: Strings<typeof En> = {
+  tabMessages: 'Thông báo hệ thống',
+  smIntro: 'Mỗi tình huống một thông báo (SM-xx) — bảng "5.2 System Messages" của Report 3. Nhắc mã trong luồng use case ("LabFlow hiện SM-03").',
+  smAdd: 'Thêm thông báo', smEdit: 'Sửa {key}', smType: 'Loại thông báo', smContext: 'Ngữ cảnh (màn / thao tác)', smText: 'Nội dung', smTextEn: 'Nội dung tiếng Anh (tuỳ chọn)',
+  smHttp: 'Mã HTTP (tuỳ chọn)', smUseCases: 'Use case dùng thông báo', smUseCasesHint: 'Mã cách nhau bằng dấu phẩy: UC-01, UC-03', smNone: 'Chưa có thông báo hệ thống',
+  smNoneBody: 'Thêm các thông báo lỗi, cảnh báo, xác nhận, thành công mà màn hình hiện — mỗi tình huống một thông báo.',
+  smUnknown: 'Use case nhắc mà sổ chưa có: {list}', smMentioned: 'Được nhắc trong {list}', smSaveFailed: 'Không lưu được thông báo', smDeleted: 'Đã xoá thông báo',
+  smDeleteConfirm: 'Xoá {key}?', smApprove: 'Duyệt', smUnused: 'Chưa use case nào dùng',
+  t_ERROR: 'Lỗi', t_WARNING: 'Cảnh báo', t_INFO: 'Thông tin', t_CONFIRMATION: 'Xác nhận', t_SUCCESS: 'Thành công',
+  gSystemSubject: 'dùng chữ "System" {n} lần — hãy ghi tên hệ thống', gStepRef: 'luồng phụ/ngoại lệ trỏ tới bước {list} mà Normal Flow không có',
+  gCodeInPost: 'Postconditions có {list} — bỏ business rule và thông báo ra, chỉ mô tả trạng thái dữ liệu', gSmUnknown: 'nhắc {list} — sổ thông báo không có',
+  covTitle: 'Chỉ số phủ', covCodedNoSds: 'UC đã code mà thiếu SDS', covTestedNoSt: 'UC đã test mà thiếu System Test', covBr: 'Business rule có test', covOrphans: 'Test mồ côi',
+  nfrTitle: 'NFR → đo lường → test', nfrCol: 'NFR', nfrMeter: 'Cách đo', nfrMust: 'Must', nfrPlan: 'Plan', nfrTests: 'Test / phép đo', nfrResult: 'Kết quả', nfrNone: 'Chưa có NFR có số đo.',
+  fillReport4: 'Điền Report 4 (bảng CSDL, sơ đồ, lớp)', fillReport4Repo: 'Điền Report 4 từ repo (Flyway + Java)', fillReport6: 'Điền hướng dẫn sử dụng từ màn hình SRS',
+  filledR4: 'Đã điền: {what}', skippedR4: 'Bỏ qua: {what}', r6Added: 'Đã thêm {n} mục', r6Nothing: 'Hướng dẫn sử dụng đã đủ mọi màn của SRS',
+  r6Warn: 'Đề mục không khớp màn nào của SRS: {list}', fillRaciHonest: 'Điền RACI — trung thực (sinh viên + supervisor)', fillRaciRoles: 'Điền RACI — nội bộ theo mũ (C1–C5)',
+  checkFinal: 'Đối soát trước khi ghép', checksTitle: 'Đối soát chéo Report 1–6', checksClean: 'Không thấy vấn đề — các Report khớp dữ liệu dự án.',
+  checksErrors: '{n} lỗi · {w} cảnh báo — bản Final vẫn đã ghép; sửa các mục này trước khi nộp.', reportN: 'Report {n}',
+  adrSupersede: 'Đánh dấu bị thay bởi…', adrSupersedeTitle: 'Bị thay bởi ADR nào?', adrPick: 'ADR mới', adrDone: '{old} nay bị thay bởi {by}',
+  recheck: 'Soát lại',
+  tabSubmit: 'Soát trước nộp', submitIntro: 'Mười lỗi giảng viên hay khoanh bút đỏ nhất — soát với dữ liệu dự án trước khi nộp.',
+  submitPassed: '{p} đạt · {f} cần sửa · {n} chưa áp dụng', submitNa: 'Chưa áp dụng', submitUcNames: 'Use case ↔ thẻ ↔ WBS',
+  qaProposal: 'Đề xuất', qaOptionA: 'Phương án A', qaOptionB: 'Phương án B', qaTarget: 'Mã đích', qaTargetHint: 'BR-03 / UC-05 / SM-02 / FE-1 / mã thẻ — câu trả lời làm đổi mục nào',
+  qaNoTarget: 'Đã đóng mà chưa gắn mã đích', qaNoTargetCount: '{n} câu đã đóng chưa gắn mã đích', qaBlockHint: 'Dự án yêu cầu gắn mã đích trước khi đóng câu hỏi.',
+  toQna: 'Đẩy sang Q&A', toQnaDone: 'Đã ghi thành {key}', inQna: 'Đã ở Q&A: {key}',
+  seedHats: 'Thêm 5 mũ (C1–C5)', seedHatsDone: 'Đã thêm {n} mũ', presetReport2: 'Thêm gói việc Report 2', presetDone: 'Đã thêm {n} hoạt động',
+  kRole: 'Vai / mũ', raciOneRole: '{stakeholder} giữ {count}% chữ A — một mũ ôm gần hết quyết định',
+  pumlFailed: 'Không vẽ được sơ đồ PlantUML',
+  dbTables: 'Bảng thiết kế CSDL', dbTablesTitle: 'Thiết kế CSDL — {n} bảng', dbToReport4: 'Đưa vào Report 4 §1.3', dbPut: 'Đã điền Report 4 §1.3 ({n} bảng)',
+  dbConstraints: 'Ràng buộc', dbProblems: 'Lỗi khi đọc SQL: {list}',
+};

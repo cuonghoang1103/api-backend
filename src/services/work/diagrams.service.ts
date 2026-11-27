@@ -39,6 +39,7 @@ import {
   type BuiltDiagram, type DataModel,
 } from './diagramGen.js';
 import { importFile, ImportError } from './diagramImport.js';
+import { lintPlantUml, MAX_PLANTUML, typeFromPlantUml } from './plantuml.js'; // dm5 G2 (B18)
 import { findClassCandidates, findCompose, findEntityCandidates, findPrisma, findSqlMigrations, readMany, repoFor } from './diagramRepo.js';
 import { plainText } from './docExport.js';
 import { analyzeSql, lintModel, splitMeta, sqlToMermaid } from './sqlDesign/index.js';
@@ -176,7 +177,7 @@ export async function getDiagram(userId: number, projectId: number, number: numb
     issue: links.issue(d.issueId), useCase: links.useCase(d.useCaseId), page: links.page(d.pageNumber),
     createdBy: names.get(d.createdById ?? 0) ?? null, updatedBy: names.get(d.updatedById ?? d.createdById ?? 0) ?? null,
     source: cur?.source ?? '', origin: originOf(cur?.origin), previewImageId: cur?.previewImageId ?? null,
-    lint: d.format === 'MERMAID' ? lintMermaid(cur?.source ?? '') : d.format === 'SQL' ? sqlLint(cur?.source ?? '') : null,
+    lint: d.format === 'MERMAID' ? lintMermaid(cur?.source ?? '') : d.format === 'SQL' ? sqlLint(cur?.source ?? '') : d.format === 'PLANTUML' ? lintPlantUml(cur?.source ?? '') : null,
     versions: versions.map((v) => ({ number: v.number, note: v.note, state: v.state, author: names.get(v.authorId ?? 0) ?? null, aiModel: v.aiModel, createdAt: v.createdAt, generator: originOf(v.origin)?.generator ?? null, assumptions: originOf(v.origin)?.assumptions?.length ?? 0 })),
     proposals: pending.map((v) => ({ number: v.number, note: v.note, author: names.get(v.authorId ?? 0) ?? null, createdAt: v.createdAt, source: v.source, origin: originOf(v.origin) })),
     comments: comments.map((c) => ({ id: c.id, parentId: c.parentId, versionNumber: c.versionNumber, anchor: c.anchor, body: c.body, resolved: !!c.resolvedAt, createdAt: c.createdAt, author: names.get(c.authorId ?? 0) ?? null, mine: c.authorId === userId })),
@@ -229,6 +230,14 @@ function checkSource(format: DiagramFormat, source: string): string {
     if (s.length > MAX_SOURCE) throw new BadRequestError(`The SQL is too long (max ${MAX_SOURCE} characters)`, 'WORK_DIAGRAM_BAD_SOURCE');
     return s;
   }
+  if (format === 'PLANTUML') {
+    const s = String(source ?? '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').trim();
+    if (!s) throw new BadRequestError('The diagram is empty', 'WORK_DIAGRAM_BAD_SOURCE');
+    if (s.length > MAX_PLANTUML) throw new BadRequestError(`The diagram is too long (max ${MAX_PLANTUML} characters)`, 'WORK_DIAGRAM_BAD_SOURCE');
+    const bad = lintPlantUml(s).errors.find((e) => /not allowed/.test(e.message));
+    if (bad) throw new BadRequestError(`Line ${bad.line}: ${bad.message}`, 'WORK_DIAGRAM_BAD_SOURCE');
+    return `${s}\n`;
+  }
   if (format === 'EXCALIDRAW') {
     const n = normalizeExcalidraw(source);
     if (!n.ok) throw new BadRequestError(n.error, 'WORK_DIAGRAM_BAD_SOURCE');
@@ -278,7 +287,7 @@ export async function createDiagram(userId: number, projectId: number, input: Di
   const ctx = await diagramCtx(userId, projectId, 'edit');
   const format: DiagramFormat = input.format ?? 'MERMAID';
   const source = checkSource(format, input.source ?? '');
-  const type: DiagramType = input.type ?? (format === 'EXCALIDRAW' ? 'WHITEBOARD' : format === 'SQL' ? 'ERD' : typeFromMermaid(source));
+  const type: DiagramType = input.type ?? (format === 'EXCALIDRAW' ? 'WHITEBOARD' : format === 'SQL' ? 'ERD' : format === 'PLANTUML' ? typeFromPlantUml(source) : typeFromMermaid(source));
   const title = (input.title ?? '').trim().slice(0, 200) || `${DIAGRAM_TYPE_LABEL[type]} diagram`;
   const [issueId, useCaseId, pageNumber, previewImageId] = await Promise.all([
     issueIdFor(projectId, input.issueNumber), ucIdFor(projectId, input.useCase), pageFor(projectId, input.pageNumber), previewFor(projectId, input.previewImageId),
@@ -372,6 +381,11 @@ export async function setApproval(userId: number, projectId: number, number: num
     const cur = await prisma.workDiagramVersion.findFirst({ where: { diagramId: d.id, number: d.currentVersion }, select: { source: true } });
     const lint = sqlLint(cur?.source ?? '');
     if (!lint.ok) throw new AppError(`Fix the SQL before approving it: ${lint.errors.slice(0, 3).map((e) => `line ${e.line}: ${e.message}`).join('; ')}`, 422, 'WORK_DIAGRAM_INVALID', { errors: lint.errors });
+  }
+  if (input.approve && d.format === 'PLANTUML') {
+    const cur = await prisma.workDiagramVersion.findFirst({ where: { diagramId: d.id, number: d.currentVersion }, select: { source: true } });
+    const lint = lintPlantUml(cur?.source ?? '');
+    if (!lint.ok) throw new AppError(`Fix the diagram before approving it: ${lint.errors.slice(0, 3).map((e) => `line ${e.line}: ${e.message}`).join('; ')}`, 422, 'WORK_DIAGRAM_INVALID', { errors: lint.errors });
   }
   if (input.approve && d.format === 'MERMAID') {
     const cur = await prisma.workDiagramVersion.findFirst({ where: { diagramId: d.id, number: d.currentVersion }, select: { source: true } });
@@ -504,7 +518,7 @@ async function placedOf(d: Row, version: number | null): Promise<PlacedDiagram |
   // Sơ đồ SQL đi vào Docs / Report 3-4 dưới dạng Mermaid ERD sinh từ chính SQL đó (máy chủ và trình duyệt cùng một bộ sinh).
   const isSql = d.format === 'SQL';
   return {
-    id: d.id, number: d.number, title: d.title, type: d.diagramType as DiagramType, format: isSql ? 'MERMAID' : d.format as 'MERMAID' | 'EXCALIDRAW', version: v.number,
+    id: d.id, number: d.number, title: d.title, type: d.diagramType as DiagramType, format: isSql ? 'MERMAID' : d.format as 'MERMAID' | 'EXCALIDRAW' | 'PLANTUML', version: v.number,
     source: isSql ? sqlToMermaid(v.source) ?? 'erDiagram' : v.source,
     feature: d.feature ?? uc?.feature ?? null, useCase: uc ? { number: uc.number, name: uc.name } : null, previewImageId: v.previewImageId,
   };

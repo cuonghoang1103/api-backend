@@ -18,6 +18,8 @@ import { requireProject } from './permissions.js';
 export const worklogMetaInput = z.object({
   activity: z.enum(TL_ACTIVITIES).nullable().optional(),
   workProduct: z.string().max(120).nullable().optional(),
+  /** dm5 G4 (C5): mũ vai C1–C5 (null = suy từ activity + nhãn). */
+  hat: z.enum(['C1', 'C2', 'C3', 'C4', 'C5']).nullable().optional(),
 });
 
 /** Gợi ý mặc định cho ô Activity / Work Product khi mở form ghi giờ của một thẻ. */
@@ -45,8 +47,9 @@ export async function setWorklogMeta(userId: number, projectId: number, number: 
     data: {
       ...(input.activity !== undefined ? { activity: input.activity } : {}),
       ...(input.workProduct !== undefined ? { workProduct: input.workProduct?.trim().slice(0, 120) || null } : {}),
+      ...(input.hat !== undefined ? { hat: input.hat } : {}),
     },
-    select: { id: true, minutes: true, startedAt: true, note: true, activity: true, workProduct: true },
+    select: { id: true, minutes: true, startedAt: true, note: true, activity: true, workProduct: true, hat: true },
   });
   emitWorkEvent({ type: 'issue.updated', projectId, issueId: log.issueId, actor: { kind: 'USER', userId }, changes: [] });
   return row;
@@ -84,4 +87,31 @@ export async function hoursByActivity(userId: number, projectId: number, q: { fr
     byActivity: TL_ACTIVITIES.map((a) => ({ activity: a, hours: h(byActivity.get(a) ?? 0) })),
     byPerson: [...byPerson.entries()].map(([person, m]) => ({ person, hours: Object.fromEntries(TL_ACTIVITIES.map((a) => [a, h(m.get(a) ?? 0)])) })),
   };
+}
+
+/**
+ * dm5 G4 (C5): GIỜ THEO VAI / TUẦN (một người đóng 5 vai C1–C5). Mũ mỗi lần ghi = chọn tay (worklog.hat) > nhãn C1…C5 /
+ * PM·BA·BE·FE·QA của thẻ > activity (+ nhãn FE / chữ UI trong tiêu đề). Cảnh báo theo `settings.roleAlert`
+ * (QA < qaMinPct% tuần, tổng > maxWeekHours giờ/tuần — mặc định 15% / 30 h). `userId` lọc một người (mặc định cả dự án).
+ */
+export async function hoursByRole(userId: number, projectId: number, q: { from?: string; to?: string; userId?: number } = {}) {
+  await requireProject(userId, projectId, 'project.view');
+  const { g4SettingsOf, hatOf, roleWeekly } = await import('./dm5g4Rules.js');
+  const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } });
+  const range = {
+    ...(q.from ? { gte: new Date(`${q.from}T00:00:00+07:00`) } : {}),
+    ...(q.to ? { lt: new Date(new Date(`${q.to}T00:00:00+07:00`).getTime() + 86_400_000) } : {}),
+  };
+  const logs = await prisma.workWorklog.findMany({
+    where: { issue: { projectId, deletedAt: null }, ...(q.from || q.to ? { startedAt: range } : {}), ...(q.userId ? { userId: q.userId } : {}) },
+    take: 20_000,
+    select: { minutes: true, startedAt: true, hat: true, activity: true, issue: { select: { title: true, type: { select: { key: true } }, labels: { select: { label: { select: { name: true } } } } } } },
+  });
+  let guessed = 0;
+  const rows = logs.map((l) => {
+    const r = hatOf({ hat: l.hat, activity: l.activity ?? activityOf(l.issue.title, l.issue.type.key), labels: l.issue.labels.map((x) => x.label.name), title: l.issue.title, typeKey: l.issue.type.key });
+    if (r.source !== 'set') guessed += l.minutes;
+    return { minutes: l.minutes, startedAt: l.startedAt, hat: r.hat };
+  });
+  return { ...roleWeekly(rows, g4SettingsOf(p.settings).roleAlert), guessedHours: Math.round((guessed / 60) * 100) / 100 };
 }

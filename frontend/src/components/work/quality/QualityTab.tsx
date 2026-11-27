@@ -23,6 +23,7 @@ import KpiTile, { KpiRow } from '../KpiTile';
 import { EmptyState, PageLoading } from '../ui';
 import { useWT, type WKey } from '../i18n';
 import { Badge, Card, Labeled, NumberInput, Segmented, Tbl, Td, Th, pct } from './qui';
+import { TestGateCard } from './G3Quality'; // dm5 G3 (D2)
 
 const SEV_COLOR: Record<string, string> = { CRITICAL: 'var(--w-red)', MAJOR: 'var(--w-orange)', MINOR: 'var(--w-yellow)', TRIVIAL: 'var(--w-text-3)', '—': 'var(--w-border-strong)' };
 
@@ -57,6 +58,7 @@ export default function QualityTab({ config, pid }: { config: ProjectConfig; pid
             <ExitCard d={d} hasPlan={!!planId} />
             <Estimation pid={pid} planId={planId} d={d} canEdit={config.permissions.editIssues} />
           </div>
+          <TestGateCard config={config} pid={pid} planId={planId} />
           <PlanDoc pid={pid} planId={planId} canEdit={config.permissions.editIssues} />
           <Tsr pid={pid} planId={planId} />
           <Attributes pid={pid} canEdit={config.permissions.editIssues} />

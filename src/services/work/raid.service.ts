@@ -36,6 +36,7 @@ import { trashSoft } from './trashBin.service.js'; // 22/10/2026: thùng rác d�
 const RAID_SELECT = {
   id: true, number: true, type: true, title: true, description: true, category: true, status: true, probability: true, impact: true, clientVisible: true,
   response: true, mitigation: true, trigger: true, reviewDate: true, closedAt: true, createdAt: true, updatedAt: true, version: true, createdById: true,
+  contingency: true, // dm5 G4 (C10): Plan B
   owner: { select: PUBLIC_USER },
   _count: { select: { links: true } },
 } satisfies Prisma.WorkRaidItemSelect;
@@ -110,6 +111,8 @@ export interface RaidInput {
   response?: RaidResponse | null;
   mitigation?: string | null;
   trigger?: string | null;
+  /** dm5 G4 (C10): kế hoạch dự phòng (Plan B) khi rủi ro xảy ra. */
+  contingency?: string | null;
   reviewDate?: Date | null;
   /** Đợt S4: được nêu trong báo cáo tuần cho khách (chỉ RISK; chỉ khi lịch báo cáo bật include risks). */
   clientVisible?: boolean;
@@ -146,6 +149,7 @@ export async function createRaid(userId: number, projectId: number, input: RaidI
         category: input.category?.trim().slice(0, 60) || null, ownerId: input.ownerId ?? userId, status,
         probability: input.probability ?? null, impact: input.impact ?? null, response: input.response ?? null,
         mitigation: input.mitigation?.trim() || null, trigger: input.trigger?.trim() || null, reviewDate: input.reviewDate ?? null,
+        contingency: input.contingency?.trim() || null,
         createdById: userId, closedAt: raidClosed(status) ? new Date() : null, clientVisible: input.clientVisible === true && input.type === 'RISK',
       },
       select: { id: true, number: true },
@@ -227,6 +231,7 @@ export async function updateRaid(userId: number, projectId: number, number: numb
     ...(input.response !== undefined ? { response: input.response } : {}),
     ...(input.mitigation !== undefined ? { mitigation: input.mitigation?.trim() || null } : {}),
     ...(input.trigger !== undefined ? { trigger: input.trigger?.trim() || null } : {}),
+    ...(input.contingency !== undefined ? { contingency: input.contingency?.trim() || null } : {}),
     ...(input.reviewDate !== undefined ? { reviewDate: input.reviewDate } : {}),
     // Đợt S4: chỉ rủi ro (RISK) mới được nêu trong báo cáo khách; đổi loại khác RISK ⇒ tự bỏ cờ.
     ...(input.clientVisible !== undefined || type !== 'RISK' ? { clientVisible: type === 'RISK' && (input.clientVisible ?? cur.clientVisible) } : {}),
@@ -403,4 +408,36 @@ async function emailOnly(userId: number, subject: string, url: string) {
     lines: ['Một mục RAID (rủi ro · giả định · vấn đề · phụ thuộc) bạn phụ trách đã đến ngày xem lại.'],
     cta: { label: 'Mở sổ RAID', url: frontendUrl(url) }, secondary: [`${subject} — a RAID item you own is due for review.`],
   });
+}
+
+// ─── dm5 G4 (C10): Risk / Issue ⇒ thẻ ────────────────────────────
+
+/**
+ * Tạo một thẻ từ dòng RAID (vd "Plan B: chuẩn bị clip demo") rồi liên kết hai chiều (RAID link + lịch sử). Mặc định tiêu đề
+ * theo loại: RISK ⇒ "Mitigate R-n: …" (mô tả = mitigation / Plan B), ISSUE ⇒ "Resolve I-n: …", DEPENDENCY ⇒ "Follow up D-n: …".
+ */
+export async function raidToIssue(userId: number, projectId: number, number: number, input: { title?: string | null; typeKey?: string | null; assigneeId?: number | null; dueDate?: Date | null; use?: 'mitigation' | 'contingency' } = {}) {
+  const ctx = await govCtx(userId, projectId, 'raid', { edit: true });
+  const r = await findRaid(projectId, number);
+  const key = `${RAID_PREFIX[r.type as RaidType] ?? 'R'}-${number}`;
+  const verb = r.type === 'RISK' ? (input.use === 'contingency' ? 'Plan B for' : 'Mitigate') : r.type === 'ISSUE' ? 'Resolve' : r.type === 'DEPENDENCY' ? 'Follow up' : 'Validate';
+  const title = (input.title?.trim() || `${verb} ${key}: ${r.title}`).slice(0, 255);
+  const body = (input.use === 'contingency' ? r.contingency : r.mitigation) ?? r.description ?? '';
+  const types = await prisma.workIssueType.findMany({ where: { projectId, archived: false, level: 0 }, orderBy: { position: 'asc' }, select: { id: true, key: true } });
+  const type = types.find((t) => t.key === (input.typeKey ?? 'TASK')) ?? types.find((t) => t.key === 'TASK') ?? types[0];
+  if (!type) throw new BadRequestError('This project has no issue type for the work', 'WORK_BAD_TYPE');
+  const { createIssueAs } = await import('./issues.service.js');
+  const text = [`From ${key} (${r.type.toLowerCase()}): ${r.title}`, body.trim()].filter(Boolean).join('\n\n');
+  const issue = await createIssueAs(userId, projectId, {
+    typeId: type.id, title,
+    descriptionJson: { type: 'doc', content: text.split('\n\n').map((t) => ({ type: 'paragraph', content: [{ type: 'text', text: t.slice(0, 5000) }] })) } as Prisma.InputJsonValue,
+    assigneeId: input.assigneeId ?? r.ownerId ?? undefined, dueDate: input.dueDate ?? undefined,
+  });
+  await prisma.$transaction([
+    prisma.workRaidLink.create({ data: { raidId: r.id, issueId: issue.id, createdById: userId } }),
+    prisma.workRaidHistory.create({ data: { raidId: r.id, actorId: userId, field: 'link', toValue: `issue #${issue.number} (created)` } }),
+  ]);
+  emitWorkEvent({ type: 'governance.updated', projectId, entity: 'raid', number, action: 'links', actor: { kind: 'USER', userId } });
+  await auditProject(projectId, { actorId: userId, action: 'raid.to_issue', targetType: 'raid', targetId: r.id, summary: `Created ${ctx.access.key}-${issue.number} from ${key}`.slice(0, 300) });
+  return { issue: { number: issue.number, key: `${ctx.access.key}-${issue.number}`, title: issue.title }, raid: await getRaid(userId, projectId, number) };
 }

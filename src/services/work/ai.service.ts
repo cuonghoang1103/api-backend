@@ -26,6 +26,7 @@ import { goiAiCtWork, type CongCtWork } from './aiCong.js';
 import { kiemHanMucAi, taiTroChoGiaoDien, taiTroCua } from './aiTaiTro.js';
 import { docTepChoModel, ganDauTep, MAX_AI_FILES, tachDauTep, type TepRef } from './aiTep.js';
 import { LINK_VA_SO_DO_DOC, lienKetHoa } from './aiLienKet.js';
+import { releaseHeader } from './dm5g4Rules.js';
 import { isProEffective } from '../pro.service.js';
 import { displayName } from './common.js';
 import { foldVi } from './fold.js';
@@ -702,6 +703,8 @@ export async function chat(
       await threads.markFailed(questionId, err);
       throw err;
     }
+    // dm5 G4 (D16): "Evidence to show" ⇒ link sâu do MÃ dựng (thẻ/Docs/trang mục có thật).
+    reply = await lienKetHoa(reply, access, (await linksFor(access)).slug);
     const answer = await threads.addMessage(thread.id, { role: 'assistant', title: 'Panel', content: reply });
     return { reply, actions: [], quota: await aiQuota(userId, projectId), threadId: thread.id, question: userMsg, answer };
   }
@@ -1220,10 +1223,12 @@ The student defends THESE screens/functions (their own work):
 ${scope}
 How to run the session:
 - Ask exactly ONE question per turn. Rotate topics: requirements & business rules, use cases & screen flow, database design & ERD, state machines, transactions & concurrency (e.g. two users booking the same slot), security & authorization, testing (unhappy cases, test cases, defects vs leakage), deployment, teamwork & Git, responsible AI use. Prefer questions about THEIR screens; sometimes ask "show me the code / table / test for X".
-- After each answer: give "**Score: n/10**", then "**Good:**" (1–2 points), "**Missing:**" (what a strict lecturer would still expect), "**Model answer:**" (3–5 lines, concrete, in the student's language), then "**Next question:**".
+- After each answer: give "**Score: n/10**", then "**Good:**" (1–2 points), "**Missing:**" (what a strict lecturer would still expect), "**Model answer (PREP):**" in four short lines — **P**oint (the answer in one sentence) · **R**eason (why) · **E**xample (a concrete screen, table, test or commit from THEIR project) · **P**oint (restate) — then "**Evidence to show:**" (1–3 references to their own artefacts: issue keys like KEY-12, [[doc:n]] pages, [[page:requirements]] / [[page:tests]] / [[page:diagrams]] — only items listed in the scope or the session; the server turns them into links), then "**Next question:**".
+- Answers are timed: the student has about 40 seconds per answer. If an answer is clearly much longer than ~100 words or rambles, say so under "Missing" and show the PREP version.
 - If the answer is vague, a follow-up that digs deeper counts as the next question. If the student says they don't know, show the model answer and move on kindly.
 - Never invent facts about their code; when you need a detail, ask them.
 ${instructions ? `${instructionsBlock(instructions)}\n` : ''}LANGUAGE: speak Vietnamese by default (the student defends at FPT University); keep technical terms in English. Switch to English only if the student answers in English.
+${LINK_VA_SO_DO_DOC}
 ${khuonTraLoi({ reads: false, actions: false })}`;
 }
 
@@ -1232,7 +1237,7 @@ ${khuonTraLoi({ reads: false, actions: false })}`;
  * focus: C1…C5 (vai) · 'me' (việc giao cho mình) · 'all'.
  */
 export async function startDefense(userId: number, projectId: number, input: { focus?: string | null; visibility?: 'PROJECT' | 'PRIVATE' }) {
-  await requireProject(userId, projectId, 'ai.use');
+  const access = await requireProject(userId, projectId, 'ai.use');
   const focus = /^(C[1-5]|me|all)$/i.test(input.focus ?? '') ? String(input.focus) : 'me';
   const label = focus === 'me' ? 'my screens' : focus === 'all' ? 'whole project' : focus.toUpperCase();
   const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { name: true, settings: true } });
@@ -1247,7 +1252,7 @@ export async function startDefense(userId: number, projectId: number, input: { f
     await threads.markFailed(kickoff.id, err);
     throw err;
   }
-  await threads.addMessage(t.id, { role: 'assistant', title: 'Panel', content: reply });
+  await threads.addMessage(t.id, { role: 'assistant', title: 'Panel', content: await lienKetHoa(reply, access, (await linksFor(access)).slug) });
   return threads.getThread(userId, projectId, t.id);
 }
 
@@ -1760,7 +1765,7 @@ export async function weeklyReport(userId: number, projectId: number, input: { a
  */
 export async function releaseNotes(userId: number, projectId: number, versionId: number, input: { audience: 'users' | 'team'; language?: 'en' | 'vi' }) {
   const access = await requireProject(userId, projectId, 'ai.use');
-  const version = await prisma.workVersion.findFirst({ where: { id: versionId, projectId }, select: { name: true, releaseDate: true, description: true } });
+  const version = await prisma.workVersion.findFirst({ where: { id: versionId, projectId }, select: { name: true, releaseDate: true, description: true, gitTag: true, commitSha: true, releaseCi: true } });
   if (!version) throw new NotFoundError('Version not found');
   const issues = await prisma.workIssue.findMany({
     where: { projectId, fixVersionId: versionId, deletedAt: null, type: { level: { gte: 0 } } },
@@ -1779,7 +1784,9 @@ export async function releaseNotes(userId: number, projectId: number, versionId:
   const tone = input.audience === 'users' ? 'end users (plain language, benefits, no issue keys)' : 'the team (keep issue keys, group by type)';
   const system = `Write release notes for ${tone}. Use ONLY the finished issues listed — never invent features. Markdown with sections such as "New", "Improvements", "Bug fixes" (omit empty sections). ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"notes":"markdown"}`;
   const out = parseJson(await ask(userId, projectId, system, facts, 1800, 'work_digest'), z.object({ notes: z.string() }));
-  return { notes: out.notes, quota: await aiQuota(userId, projectId) };
+  // dm5 G4 (D14): dòng tag + SHA + CI do MÃ viết (model không được đoán số commit).
+  const head = releaseHeader({ name: version.name, gitTag: version.gitTag, commitSha: version.commitSha, releaseCi: version.releaseCi });
+  return { notes: head ? `${head}\n\n${out.notes}` : out.notes, quota: await aiQuota(userId, projectId) };
 }
 
 // ─── Lập kế hoạch sprint theo velocity (4.7) ─────────────────────

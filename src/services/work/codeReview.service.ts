@@ -36,6 +36,7 @@ import { addComment } from './issues.service.js';
 import { assertHumanActor, canAiCodeReview, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
 import { projectLanguage } from './projectLanguage.js';
 import { checklistItems } from './reviewRules.js';
+import { criticize, CRITIC_RULES, g4SettingsOf } from './dm5g4Rules.js';
 
 // ─── Trần ─────────────────────────────────────────────────────────
 
@@ -182,13 +183,17 @@ const inflight = new Map<string, Promise<CodeReviewOutcome>>();
 export interface CodeReviewOutcome {
   review: number; key: string; url: string; verdict: CodeReviewResult['verdict']; findings: number; blockers: number;
   issue: string | null; issueNumber: number | null; commented: boolean; notified: boolean; target: string; reused?: boolean; githubReviewUrl?: string | null;
+  /** dm5 G4 (D11). */
+  mode?: 'critic' | 'full';
 }
 
-export async function runCodeReview(userId: number, projectId: number, input: { pr?: number | null; issue?: number | null; notify?: boolean; postToGithub?: boolean }): Promise<CodeReviewOutcome> {
+export async function runCodeReview(userId: number, projectId: number, input: { pr?: number | null; issue?: number | null; notify?: boolean; postToGithub?: boolean; mode?: 'critic' | 'full' }): Promise<CodeReviewOutcome> {
   await assertHumanActor(userId, 'request AI code reviews');
   const access = await requireProject(userId, projectId, 'project.view');
   if (access.role === 'CLIENT' || isClientScoped(access)) throw new AppError('Code reviews are only available to the project team', 403, 'WORK_CODE_FORBIDDEN');
-  const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true, leadId: true, workspace: { select: { slug: true } } } });
+  const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true, leadId: true, settings: true, workspace: { select: { slug: true } } } });
+  // dm5 G4 (D11): "chỉ phản biện" (mentor) — tham số `mode`, không có ⇒ settings.aiReviewMode của dự án.
+  const mode: 'critic' | 'full' = input.mode ?? g4SettingsOf(project.settings).aiReviewMode;
   const t = await resolveTarget(projectId, project.key, input);
 
   // Quyền theo NGƯỜI: trưởng dự án / trưởng bộ phận của thẻ hoặc người làm / tác giả PR.
@@ -203,10 +208,10 @@ export async function runCodeReview(userId: number, projectId: number, input: { 
   if (!allowed) throw new ForbiddenError('Only the project admin, the project lead, a team lead or the lecturer can ask CuongMini to review code');
 
   // Hai cú bấm liền nhau cùng đích ⇒ một lượt (không trả tiền hai lần).
-  const flightKey = `${projectId}:${t.kind}:${t.prNumber ?? t.branch}:${t.issueNumber ?? ''}`;
+  const flightKey = `${projectId}:${t.kind}:${t.prNumber ?? t.branch}:${t.issueNumber ?? ''}:${mode}`;
   const flying = inflight.get(flightKey);
   if (flying) return flying;
-  const p = doReview(userId, access, project, t, issueRow, memberIds, input.notify === true, input.postToGithub !== false);
+  const p = doReview(userId, access, project, t, issueRow, memberIds, input.notify === true, input.postToGithub !== false, mode);
   inflight.set(flightKey, p);
   try {
     return await p;
@@ -217,7 +222,7 @@ export async function runCodeReview(userId: number, projectId: number, input: { 
 
 async function doReview(
   userId: number, access: ProjectAccess, project: { key: string; workspace: { slug: string } }, t: Target,
-  issueRow: { id: number; number: number; title: string; assigneeId: number | null } | null, memberIds: number[], notify: boolean, postToGithub = true,
+  issueRow: { id: number; number: number; title: string; assigneeId: number | null } | null, memberIds: number[], notify: boolean, postToGithub = true, mode: 'critic' | 'full' = 'full',
 ): Promise<CodeReviewOutcome> {
   const projectId = access.projectId;
   const key = project.key;
@@ -296,13 +301,14 @@ async function doReview(
 
   let text: string;
   let model: string | null;
+  const system = mode === 'critic' ? `${reviewSystem(language)}\n\n${CRITIC_RULES}` : reviewSystem(language);
   try {
     if (askOverride) {
-      text = await askOverride(reviewSystem(language), user);
+      text = await askOverride(system, user);
       model = 'test-model';
     } else {
       const r = await goiAiCtWork({
-        system: reviewSystem(language), messages: [{ role: 'user', content: user }], maxTokens: 6000, userId,
+        system, messages: [{ role: 'user', content: user }], maxTokens: 6000, userId,
         purpose: 'work_spec_review', nang: true, timeoutMs: 180_000, maxRetries: 1,
       });
       text = r.text;
@@ -316,7 +322,10 @@ async function doReview(
   let parsed: unknown;
   try { parsed = extractJson(text); } catch { parsed = null; }
   if (!parsed || typeof parsed !== 'object') throw new AppError('CuongMini returned an unreadable review — try again', 502, 'WORK_AI_REVIEW_FAILED');
-  const result = parseCodeReview(parsed, index);
+  // dm5 G4 (D11): chế độ phản biện — model có lỡ viết mã thì máy gỡ hết và ép gợi ý thành câu hỏi gợi mở.
+  const parsedResult = parseCodeReview(parsed, index);
+  const critic = mode === 'critic' ? criticize(parsedResult, language) : null;
+  const result = critic ?? parsedResult;
 
   // ── Lưu phiên review ──
   const vi = language === 'vi';
@@ -346,6 +355,7 @@ async function doReview(
     result.summary,
     `${vi ? 'Đã đọc diff' : 'Diff read'}: ${diff.included.length}/${files.length} ${vi ? 'tệp' : 'files'}${diff.omitted.length ? ` · ${vi ? 'chưa đọc' : 'not read'}: ${diff.omitted.join(', ')}` : ''}${hostTruncated ? ` · ${vi ? 'GitHub/GitLab đã cắt bớt diff' : 'the code host cut part of the diff'}` : ''}`,
     headSha ? `Head: ${headSha}` : '',
+    mode === 'critic' ? `${vi ? 'Chế độ: chỉ phản biện (không viết mã sửa thay)' : 'Mode: critic only (no code written for you)'}${critic?.codeRemoved ? ` · ${vi ? 'đã gỡ' : 'removed'} ${critic.codeRemoved} ${vi ? 'đoạn mã khỏi đầu ra' : 'code fragments from the output'}` : ''}` : '',
     result.dropped || result.linesCleared ? `${vi ? 'Đã bỏ' : 'Dropped'} ${result.dropped} ${vi ? 'phát hiện trỏ ra ngoài diff' : 'findings outside the diff'}, ${vi ? 'gỡ' : 'cleared'} ${result.linesCleared} ${vi ? 'số dòng không có trong diff' : 'line numbers not in the diff'}.` : '',
     result.nextSteps.length ? `${vi ? 'Bước tiếp theo' : 'Next steps'}:\n${result.nextSteps.map((s, i) => `${i + 1}. ${s}`).join('\n')}` : '',
     model ? `Model: ${model}` : '',
@@ -374,6 +384,27 @@ async function doReview(
     detail: { model, verdict: result.verdict, findings: result.findings.length, headSha, files: files.length, read: diff.included.length },
   });
   emitWorkEvent({ type: 'project.updated', projectId, actor: { kind: 'USER', userId } });
+
+  // dm5 G4 (C7): mỗi phiên AI review = một dòng sổ AI Usage (SWP391) — nguồn `review:<số>`, người dùng tự đánh dấu
+  // Chấp nhận / Bác bỏ / Một phần (cột decision) sau khi đọc góp ý.
+  try {
+    const me = await prisma.user.findUnique({ where: { id: userId }, select: { username: true, fullName: true, displayName: true } });
+    const vnToday = new Date(new Date(Date.now() + 7 * 3_600_000).toISOString().slice(0, 10));
+    await prisma.workAiUsageLog.upsert({
+      where: { uk_work_ai_usage_source: { projectId, sourceKey: `review:${number}` } },
+      update: {},
+      create: {
+        projectId, source: 'AUTO', sourceKey: `review:${number}`, usedAt: vnToday, phase: 'Implementation',
+        task: `Code review ${issue ? `${key}-${issue.number} · ` : ''}${title}`.slice(0, 300), tool: `CuongMini code review${model ? ` (${model})` : ''}`.slice(0, 120),
+        output: `${result.verdict} · ${result.findings.length} findings (${result.findings.filter((f) => f.severity === 'BLOCKER').length} blockers)${mode === 'critic' ? ' · critic mode' : ''}`.slice(0, 4000),
+        evidence: [`/work/${project.workspace.slug}/${key}/reviews?review=${number}`, prUrl].filter(Boolean).join(' · ').slice(0, 1000),
+        measure: `${files.length} files · ${loc} LOC reviewed`.slice(0, 300), issueId: issue?.id ?? issueRow?.id ?? null,
+        userId, userName: me ? (me.displayName || me.fullName || me.username) : null,
+      },
+    });
+  } catch (err) {
+    logger.warn('[work] code review: không ghi được sổ AI Usage', { projectId, err: (err as Error).message });
+  }
 
   // ── Đăng lên PR GitHub (dự án dùng GitHub App): review COMMENT, inline chỉ dòng trong diff — không APPROVE, không merge ──
   let githubReviewUrl: string | null = null;
@@ -418,6 +449,6 @@ async function doReview(
   return {
     review: number, key: reviewKey, url, verdict: result.verdict, findings: result.findings.length,
     blockers: result.findings.filter((f) => f.severity === 'BLOCKER').length,
-    issue: issue ? `${key}-${issue.number}` : null, issueNumber: issue?.number ?? null, commented, notified, target: title, githubReviewUrl,
+    issue: issue ? `${key}-${issue.number}` : null, issueNumber: issue?.number ?? null, commented, notified, target: title, githubReviewUrl, mode,
   };
 }

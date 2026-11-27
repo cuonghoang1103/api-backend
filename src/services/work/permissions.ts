@@ -747,6 +747,8 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['*', /^\/share-links(\/.*)?$/],
   ['PUT', /^\/issues\/\d+\/client-visible$/], ['*', /^\/attachments\/\d+\/client$/],
   ['PUT', /^\/changes\/\d+\/client-visible$/], ['POST', /^\/changes\/\d+\/approval$/],
+  // dm5 G4 (C8): checklist đồng bộ sau duyệt = NGƯỜI xác nhận đã cập nhật SRS/Tracking/RTM.
+  ['PUT', /^\/changes\/\d+\/sync$/],
   ['*', /^\/meetings\/\d+\/(share|invites)$/],
   // Duyệt / quyết định
   ['POST', /^\/approvals\/\d+\/decide$/], ['POST', /^\/stages\/\d+\/(request-gate|activate)$/],
@@ -827,6 +829,8 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['DELETE', /^\/fpt-tests\/(unit|integration|system|changes)\/\d+$/], ['DELETE', /^\/pages\/\d+$/], ['DELETE', /^\/raid\/\d+$/],
   ['DELETE', /^\/meetings\/\d+$/], ['DELETE', /^\/qna\/\d+$/], ['DELETE', /^\/diagrams\/\d+$/], ['DELETE', /^\/test-cycles\/\d+$/],
   ['DELETE', /^\/resources\/\d+$/], ['DELETE', /^\/srs\/(actors|use-cases|rules|screens|functions)\/\d+$/],
+  // dm5 G2 (27/11/2026): sổ System Messages SM-xx (mã "SM-03" hoặc số).
+  ['DELETE', /^\/srs\/messages\/[^/]+$/],
   // 21/10/2026 đợt 2: SWR302 (feature + liên kết, ưu tiên, glossary, dictionary, stakeholder, elicitation, nguồn, khảo sát, mockup,
   // NFR), Change Request, review, test plan, test design.
   ['DELETE', /^\/swr\/(features(\/[^/]+\/links)?|priority\/rows|glossary|dictionary|stakeholders|elicitation|origins|surveys|mockups|nfr)\/[^/]+$/i],

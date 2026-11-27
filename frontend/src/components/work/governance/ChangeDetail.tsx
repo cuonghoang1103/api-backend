@@ -27,6 +27,7 @@ import { ApprovalPill, Pill, useStudioInvalidate } from '../studio/shared';
 import { CrStatusPill, Kv, PersonSelect, ScoreBadge, Section, fmtCost, fmtDays, useGovInvalidate } from './shared';
 import { wt } from '@/components/work/i18n';
 import { CrAffected } from '../quality/BaselinesTab'; // CTW đợt 6
+import { CrSplit, CrStructured, CrSync } from './CrG4'; // dm5 G4 (C8)
 
 type Form = Required<Pick<CrPatch, 'title' | 'reason' | 'urgency' | 'impactScope' | 'scheduleDays' | 'costAmount' | 'costCurrency' | 'impactRisk' | 'alternatives' | 'ownerId' | 'requesterId'>>;
 
@@ -346,7 +347,11 @@ export default function ChangeDetail({ config, num }: { config: ProjectConfig; n
         </div>
 
         <Analysis config={config} cr={cr} />
+        {/* dm5 G4 (C8): ma trận 6 chiều + 3 phương án · CR con · checklist đồng bộ sau duyệt. */}
+        <CrStructured config={config} cr={cr} />
+        <CrSplit config={config} cr={cr} />
         <Approvals config={config} cr={cr} openId={openId} setOpenId={setOpenId} />
+        <CrSync config={config} cr={cr} />
         <Implementation config={config} cr={cr} />
         <Affected config={config} cr={cr} />
         {/* CTW đợt 6 (R22): CR ↔ yêu cầu/UC/BR/tài liệu bị ảnh hưởng — mở khoá sửa mục đã baseline khi CR được duyệt. */}

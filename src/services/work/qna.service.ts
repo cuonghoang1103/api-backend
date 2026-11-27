@@ -44,8 +44,56 @@ export const questionInput = z.object({
   ownerId: z.number().int().positive().nullable().optional(),
   status: z.enum(QUESTION_STATUSES).optional(),
   answer: z.string().max(20_000).nullable().optional(),
+  // dm5 G2 (B6): đề xuất của người hỏi + 2 phương án + mã đích (BR-03 / UC-05 / SM-02 / FE-1 / KEY-12).
+  proposal: z.string().max(10_000).nullable().optional(),
+  optionA: z.string().max(10_000).nullable().optional(),
+  optionB: z.string().max(10_000).nullable().optional(),
+  targetRef: z.string().trim().max(60).nullable().optional(),
 });
 export type QuestionInput = z.infer<typeof questionInput>;
+
+/** "br3" / "BR-03" / "uc 5" ⇒ "BR-03" / "UC-05"; "FE-2"; "KEY-12" giữ. Không đúng mẫu ⇒ null. */
+export function normalizeTargetRef(ref: string, projectKey: string): string | null {
+  const v = ref.trim().toUpperCase();
+  let m = /^(BR|UC|SM)\s*-?\s*0*(\d{1,4})$/.exec(v);
+  if (m) return `${m[1]}-${m[2].padStart(2, '0')}`;
+  m = /^FE\s*-?\s*0*(\d{1,5})$/.exec(v);
+  if (m) return `FE-${m[1]}`;
+  m = new RegExp(`^${projectKey}\\s*-\\s*(\\d{1,7})$`).exec(v);
+  if (m) return `${projectKey}-${m[1]}`;
+  return null;
+}
+
+/** Mã đích phải TỒN TẠI trong dự án (BR/UC/SM/FE/thẻ). */
+async function checkTarget(projectId: number, ref: string | null | undefined): Promise<string | null | undefined> {
+  if (ref === undefined) return undefined;
+  if (ref === null || !ref.trim()) return null;
+  const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true } });
+  const k = normalizeTargetRef(ref, p.key);
+  if (!k) throw new BadRequestError('Target must be a code like BR-03, UC-05, SM-02, FE-1 or an issue key', 'WORK_QNA_BAD_TARGET');
+  const n = Number(/(\d+)$/.exec(k)![1]);
+  const found = k.startsWith('BR-') ? await prisma.workBusinessRule.count({ where: { projectId, number: n } })
+    : k.startsWith('UC-') ? await prisma.workUseCase.count({ where: { projectId, number: n } })
+      : k.startsWith('SM-') ? await prisma.workSystemMessage.count({ where: { projectId, number: n } })
+        : k.startsWith('FE-') ? await prisma.workFeature.count({ where: { projectId, number: n } })
+          : await prisma.workIssue.count({ where: { projectId, number: n, deletedAt: null } });
+  if (!found) throw new BadRequestError(`${k} does not exist in this project`, 'WORK_QNA_BAD_TARGET');
+  return k;
+}
+
+/** dm5 G2 (B6): chuẩn hoá khoá settings của Q&A (gọi một dòng trong projects.service › updateProject). */
+export function normalizeQnaSettings<T extends Record<string, unknown>>(settings: T): T {
+  if (!('qnaRequireTarget' in settings)) return settings;
+  return { ...settings, qnaRequireTarget: settings.qnaRequireTarget === 'block' ? 'block' : null };
+}
+
+/** dm5 G2 (B6): đóng Q&A khi chưa gắn mã đích — settings.qnaRequireTarget 'block' ⇒ chặn (409), mặc định chỉ cảnh báo. */
+async function targetRule(projectId: number): Promise<'warn' | 'block'> {
+  const p = await prisma.workProject.findUnique({ where: { id: projectId }, select: { settings: true } });
+  return (p?.settings as { qnaRequireTarget?: unknown } | null)?.qnaRequireTarget === 'block' ? 'block' : 'warn';
+}
+const closesClean = (status: string) => status === 'ANSWERED' || status === 'CLOSED';
+const NO_TARGET_MSG = 'Link the answer to the requirement it changed (BR-xx / UC-xx / SM-xx) before closing this question';
 
 async function qaCtx(userId: number, projectId: number, mode: 'view' | 'edit' | 'answer' = 'view') {
   const access = await requireProject(userId, projectId, 'project.view');
@@ -87,9 +135,24 @@ function present(r: Row) {
     version: r.version,
     createdById: r.createdById,
     overdue: !!r.reviewDate && dayOf(r.reviewDate)! < vnDay() && qaStatusText(r.status) === 'Open',
+    proposal: q?.proposal ?? null,
+    optionA: q?.optionA ?? null,
+    optionB: q?.optionB ?? null,
+    targetRef: q?.targetRef ?? null,
+    /** Đã đóng (trả lời) mà chưa gắn mã đích — người chấm hỏi "câu trả lời này đổi BR/UC nào?". */
+    noTarget: !legacy && closesClean(r.status) && !q?.targetRef,
   };
 }
 export type QuestionView = ReturnType<typeof present>;
+
+/** Cột "Notes" của sheet Q&A (Project Tracking): câu trả lời (hoặc chi tiết) + mã đích + đề xuất + phương án A/B — sheet giữ 8 cột của mẫu. */
+export function qaNotes(x: Pick<QuestionView, 'answer' | 'details' | 'targetRef' | 'proposal' | 'optionA' | 'optionB'>): string {
+  return [
+    x.answer, x.answer ? null : x.details,
+    x.targetRef ? `Target: ${x.targetRef}` : null, x.proposal ? `Proposal: ${x.proposal}` : null,
+    x.optionA ? `Option A: ${x.optionA}` : null, x.optionB ? `Option B: ${x.optionB}` : null,
+  ].filter(Boolean).join('\n').slice(0, 4000);
+}
 
 /** Đọc thô (KHÔNG kiểm quyền) — sheet Q&A của Project Tracking dùng chung. */
 export async function loadQuestions(projectId: number): Promise<QuestionView[]> {
@@ -106,7 +169,8 @@ export async function listQuestions(userId: number, projectId: number, q: { stat
   const items = all.filter((x) => !q.status || q.status === 'all' || (q.status === 'open' ? x.statusText === 'Open' : x.statusText !== 'Open')).reverse();
   return {
     items,
-    counts: { total: all.length, open: all.filter((x) => x.statusText === 'Open').length, overdue: all.filter((x) => x.overdue).length, legacy: all.filter((x) => x.legacy).length },
+    counts: { total: all.length, open: all.filter((x) => x.statusText === 'Open').length, overdue: all.filter((x) => x.overdue).length, legacy: all.filter((x) => x.legacy).length, noTarget: all.filter((x) => x.noTarget).length },
+    targetRule: await targetRule(projectId),
     canEdit: ctx.canEdit, canAnswer: ctx.canAnswer,
   };
 }
@@ -132,6 +196,8 @@ export async function createQuestion(userId: number, projectId: number, input: Q
   }
   const me = await prisma.user.findUnique({ where: { id: userId }, select: { username: true, fullName: true, displayName: true } });
   const status = input.status ?? (input.answer?.trim() ? 'ANSWERED' : 'OPEN');
+  const targetRef = await checkTarget(projectId, input.targetRef);
+  if (closesClean(status) && !targetRef && (await targetRule(projectId)) === 'block') throw new AppError(NO_TARGET_MSG, 409, 'WORK_QNA_TARGET');
   const row = await prisma.$transaction(async (tx) => {
     const number = await nextNumber(tx, 'raid', projectId);
     const r = await tx.workRaidItem.create({
@@ -146,6 +212,7 @@ export async function createQuestion(userId: number, projectId: number, input: Q
         raidId: r.id, askedOn: asDate(input.askedOn) ?? new Date(`${vnDay()}T00:00:00Z`), askedBy: (input.askedBy?.trim() || (me ? displayName(me) : null))?.slice(0, 120) ?? null,
         askedTo: input.askedTo?.trim().slice(0, 120) || null, priority: input.priority ?? 'MEDIUM',
         answer: input.answer?.trim() || null, answeredAt: input.answer?.trim() ? new Date() : null, answeredById: input.answer?.trim() ? userId : null,
+        proposal: input.proposal?.trim() || null, optionA: input.optionA?.trim() || null, optionB: input.optionB?.trim() || null, targetRef: targetRef ?? null,
       },
     });
     await tx.workRaidHistory.create({ data: { raidId: r.id, actorId: userId, field: 'created', toValue: `QUESTION · ${status}` } });
@@ -160,13 +227,16 @@ export async function createQuestion(userId: number, projectId: number, input: Q
 export async function updateQuestion(userId: number, projectId: number, number: number, input: Partial<QuestionInput> & { version?: number }) {
   const ctx = await qaCtx(userId, projectId, 'answer');
   const cur = await findRow(projectId, number);
-  const onlyAnswer = Object.keys(input).every((k) => ['answer', 'status', 'version'].includes(k));
+  const onlyAnswer = Object.keys(input).every((k) => ['answer', 'status', 'version', 'targetRef'].includes(k));
   if (!ctx.canEdit && !onlyAnswer) throw new ForbiddenError('You can answer this question but not change it');
   if (cur.type !== 'QUESTION') throw new BadRequestError('This is an older Q&A entry in the RAID log — convert it to a question first', 'WORK_QA_LEGACY');
   let status = input.status ?? cur.status;
   const answer = input.answer !== undefined ? (input.answer?.trim() || null) : undefined;
   if (answer && input.status === undefined && cur.status === 'OPEN') status = 'ANSWERED';
   if (!(QUESTION_STATUSES as readonly string[]).includes(status)) throw new BadRequestError(`Status ${status} is not valid for a question`, 'VALIDATION_ERROR');
+  const targetRef = await checkTarget(projectId, input.targetRef);
+  const finalTarget = targetRef !== undefined ? targetRef : cur.question?.targetRef ?? null;
+  if (closesClean(status) && !closesClean(cur.status) && !finalTarget && (await targetRule(projectId)) === 'block') throw new AppError(NO_TARGET_MSG, 409, 'WORK_QNA_TARGET');
   const closed = (s: string) => s !== 'OPEN';
   const raidData: Prisma.WorkRaidItemUncheckedUpdateManyInput = {
     ...(input.question !== undefined ? { title: input.question.trim().slice(0, 255) } : {}),
@@ -176,7 +246,11 @@ export async function updateQuestion(userId: number, projectId: number, number: 
     status,
     ...(closed(status) && !closed(cur.status) ? { closedAt: new Date() } : !closed(status) && closed(cur.status) ? { closedAt: null } : {}),
   };
-  const qData: { askedOn?: Date; askedBy?: string | null; askedTo?: string | null; priority?: string; answer?: string | null; answeredAt?: Date | null; answeredById?: number | null } = {
+  const qData: { askedOn?: Date; askedBy?: string | null; askedTo?: string | null; priority?: string; answer?: string | null; answeredAt?: Date | null; answeredById?: number | null; proposal?: string | null; optionA?: string | null; optionB?: string | null; targetRef?: string | null } = {
+    ...(input.proposal !== undefined ? { proposal: input.proposal?.trim() || null } : {}),
+    ...(input.optionA !== undefined ? { optionA: input.optionA?.trim() || null } : {}),
+    ...(input.optionB !== undefined ? { optionB: input.optionB?.trim() || null } : {}),
+    ...(targetRef !== undefined ? { targetRef } : {}),
     ...(input.askedOn !== undefined ? { askedOn: asDate(input.askedOn)! } : {}),
     ...(input.askedBy !== undefined ? { askedBy: input.askedBy?.trim().slice(0, 120) || null } : {}),
     ...(input.askedTo !== undefined ? { askedTo: input.askedTo?.trim().slice(0, 120) || null } : {}),
@@ -187,6 +261,7 @@ export async function updateQuestion(userId: number, projectId: number, number: 
   if (status !== cur.status) changes.push({ field: 'status', fromValue: cur.status, toValue: status });
   if (answer !== undefined && answer !== (cur.question?.answer ?? null)) changes.push({ field: 'answer', fromValue: cur.question?.answer?.slice(0, 2000) ?? null, toValue: answer?.slice(0, 2000) ?? null });
   if (input.question !== undefined && input.question.trim() !== cur.title) changes.push({ field: 'title', fromValue: cur.title, toValue: input.question.trim() });
+  if (targetRef !== undefined && targetRef !== (cur.question?.targetRef ?? null)) changes.push({ field: 'target', fromValue: cur.question?.targetRef ?? null, toValue: targetRef });
   await prisma.$transaction(async (tx) => {
     const r = await tx.workRaidItem.updateMany({ where: { id: cur.id, ...(input.version !== undefined ? { version: input.version } : {}) }, data: { ...raidData, version: { increment: 1 } } });
     if (!r.count) throw new ConflictError('Someone else changed this question — reload to see their version');

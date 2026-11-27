@@ -49,4 +49,6 @@ export const backlog = {
   planAi: 'Plan with AI',
   quickPh: 'What needs to be done? Press Enter to create',
   ptsUnit: 'pts',
+  // dm5 G1 (A22)
+  moscowOver: 'Must-have work is {pct}% of the open effort — above the {cap}% limit. If one Must slips there is no slack: move some to Should.',
 };

@@ -78,7 +78,7 @@ router.get('/projects/:pid/pages/:num/record-of-changes', asyncHandler(async (re
   ok(res, await docs.pageRecordOfChanges(callerId(req), P(req, 'pid'), P(req, 'num')));
 }));
 router.post('/projects/:pid/pages/:num/autofill', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ version: z.number().int().nonnegative().optional(), sections: z.array(z.enum(docs.FILL_SECTIONS)).max(10).optional() }), req.body ?? {});
+  const body = parse(z.object({ version: z.number().int().nonnegative().optional(), sections: z.array(z.enum(docs.FILL_SECTIONS)).max(10).optional(), raciMode: z.enum(['people', 'roles', 'honest']).optional() }), req.body ?? {});
   ok(res, await docs.autofillPage(callerId(req), P(req, 'pid'), P(req, 'num'), body));
 }));
 

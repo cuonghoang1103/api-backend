@@ -26,8 +26,10 @@ import { PRODUCTS, productOf } from './fptReports.js';
 import { assertHumanActor, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
 import { projectLanguage } from './projectLanguage.js';
 import {
-  checklistByKey, checklistItems, CHECKLISTS, closeBlockers, REVIEW_FLOW, reviewMetrics, reviewMinutesMarkdown, type ReviewStatus,
+  checklistByKey, CHECKLISTS, closeBlockers, projectChecklistTemplate, REVIEW_FLOW, reviewMetrics, reviewMinutesMarkdown, templateItems,
+  type ChecklistTemplate, type ReviewStatus,
 } from './reviewRules.js';
+import { coolOffRemainingMs, qualitySettingsOf } from './qualitySettings.js';
 import { baselineHash, diffBaselines, itemHash, signoffOutcome, type BaselineItem, type BaselineKind } from './baselineRules.js';
 import { trashSoft } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
 
@@ -58,9 +60,36 @@ const usersById = async (ids: number[]) => new Map((await prisma.user.findMany({
 
 // ═══ REVIEW / INSPECTION ═════════════════════════════════════════
 
-export function listChecklists(language: 'vi' | 'en' = 'en') {
+/** dm5 G3: mẫu checklist cấp dự án (settings.reviewChecklists) + cài đặt "làm nguội". */
+async function projectQuality(projectId: number) {
+  const p = await prisma.workProject.findUnique({ where: { id: projectId }, select: { settings: true } });
+  return qualitySettingsOf(p?.settings);
+}
+async function projectChecklists(projectId: number): Promise<ChecklistTemplate[]> {
+  return (await projectQuality(projectId)).reviewChecklists.map(projectChecklistTemplate);
+}
+/** Mẫu dựng sẵn trước, rồi mẫu của dự án (khoá P_…). */
+async function resolveChecklist(projectId: number, key: string): Promise<(ChecklistTemplate & { custom: boolean }) | null> {
+  const builtin = checklistByKey(key);
+  if (builtin) return { ...builtin, custom: false };
+  const own = (await projectChecklists(projectId)).find((c) => c.key === key);
+  return own ? { ...own, custom: true } : null;
+}
+
+export async function listChecklists(language: 'vi' | 'en' = 'en', projectId?: number) {
   const i = language === 'vi' ? 1 : 0;
-  return CHECKLISTS.map((c) => ({ key: c.key, kind: c.kind, name: c.name[i], source: c.source, sizeUnit: c.sizeUnit, sections: c.sections.map((s) => ({ name: s.name[i], items: s.items.length })), items: checklistItems(c.key, language).length }));
+  const view = (c: ChecklistTemplate, custom: boolean) => ({
+    key: c.key, kind: c.kind, name: c.name[i], source: c.source, sizeUnit: c.sizeUnit, custom,
+    sections: c.sections.map((s) => ({ name: s.name[i], items: s.items.length, questions: s.items.map((q) => q[i]) })),
+    items: templateItems(c, language).length,
+  });
+  const own = projectId ? await projectChecklists(projectId) : [];
+  return [...CHECKLISTS.map((c) => view(c, false)), ...own.map((c) => view(c, true))];
+}
+
+export async function listChecklistsFor(userId: number, projectId: number, language: 'vi' | 'en' = 'en') {
+  await teamCtx(userId, projectId);
+  return listChecklists(language, projectId);
 }
 
 export interface ReviewInput {
@@ -104,10 +133,14 @@ export async function getReview(userId: number, projectId: number, number: numbe
   const bugs = new Map((await prisma.workIssue.findMany({ where: { id: { in: bugIds } }, select: { id: true, number: true, title: true, resolvedAt: true, deletedAt: true } })).map((b) => [b.id, b]));
   const page = s.pageId ? await prisma.workPage.findFirst({ where: { id: s.pageId, projectId }, select: { number: true, title: true, deletedAt: true } }) : null;
   const metrics = reviewMetrics({ size: s.size, sizeUnit: s.sizeUnit as 'PAGE' | 'LOC', meetingMinutes: s.meetingMinutes, reworkMinutes: s.reworkMinutes, participants: s.participants, items: s.items });
-  const c = checklistByKey(s.checklistKey);
+  const c = await resolveChecklist(projectId, s.checklistKey);
+  const coolHours = (await projectQuality(projectId)).reviewCoolOffHours;
+  const coolLeft = coolOffRemainingMs(s.createdAt, coolHours);
   return {
     number: s.number, key: `REV-${s.number}`, projectKey: access.key, title: s.title, kind: s.kind, method: s.method,
-    checklistKey: s.checklistKey, checklistName: c ? c.name[0] : s.checklistKey, checklistSource: c?.source ?? null,
+    checklistKey: s.checklistKey, checklistName: c ? c.name[0] : s.checklistKey, checklistSource: c?.source ?? null, checklistCustom: !!c?.custom,
+    // dm5 G3 (B4): "làm nguội" — quyết định chỉ đặt được sau N giờ kể từ lúc mở phiên (settings.reviewCoolOffHours).
+    coolOff: coolHours ? { hours: coolHours, readyAt: new Date(+s.createdAt + coolHours * 3_600_000), remainingMinutes: Math.max(0, Math.ceil(coolLeft / 60_000)) } : null,
     page: page && !page.deletedAt ? { number: page.number, title: page.title } : null,
     workProduct: s.workProduct, prUrl: s.prUrl, size: s.size, sizeUnit: s.sizeUnit, status: s.status, decision: s.decision,
     meetingAt: s.meetingAt, meetingMinutes: s.meetingMinutes, reworkMinutes: s.reworkMinutes,
@@ -126,7 +159,7 @@ export async function getReview(userId: number, projectId: number, number: numbe
 export async function createReview(userId: number, projectId: number, input: ReviewInput) {
   await assertHumanActor(userId, 'run review meetings');
   const access = await teamCtx(userId, projectId, 'issue.edit');
-  const c = checklistByKey(input.checklistKey);
+  const c = await resolveChecklist(projectId, input.checklistKey);
   if (!c) throw new BadRequestError('Unknown checklist', 'VALIDATION_ERROR');
   if (input.kind === 'CODE' && input.prUrl && !/^https?:\/\//i.test(input.prUrl)) throw new BadRequestError('The pull request link must start with http(s)://', 'VALIDATION_ERROR');
   let pageId: number | null = null, workProduct = input.workProduct?.trim() || null;
@@ -139,7 +172,7 @@ export async function createReview(userId: number, projectId: number, input: Rev
   const participants = input.participants?.length ? input.participants : [{ userId, role: 'MODERATOR' }];
   await assertMembers(projectId, participants.map((p) => p.userId));
   const language = input.language ?? ((await projectLanguage(projectId)) === 'vi' ? 'vi' : 'en');
-  const items = checklistItems(c.key, language);
+  const items = templateItems(c, language);
   const number = await prisma.$transaction(async (tx) => {
     const n = await nextNo(tx, 'review', projectId);
     await tx.workReviewSession.create({
@@ -175,8 +208,22 @@ export async function updateReview(userId: number, projectId: number, number: nu
   for (const k of ['workProduct', 'prUrl', 'entryCriteria', 'exitCriteria', 'notes'] as const) if (patch[k] !== undefined) (data as Record<string, unknown>)[k] = patch[k]?.trim() || null;
   if (patch.prUrl && !/^https?:\/\//i.test(patch.prUrl)) throw new BadRequestError('The pull request link must start with http(s)://', 'VALIDATION_ERROR');
   if (patch.decision !== undefined) await assertNotAuthor(s.id, userId, 'set the decision of');
+  if (patch.decision) await assertCooledOff(projectId, s.createdAt);
   await prisma.workReviewSession.update({ where: { id: s.id }, data });
   return getReview(userId, projectId, number);
+}
+
+/**
+ * dm5 G3 (B4): khoảng nghỉ "làm nguội" — làm một mình 5 vai thì tác giả và người duyệt là cùng một bộ não; đặt quyết
+ * định ngay sau khi mở phiên là tự đóng dấu. settings.reviewCoolOffHours = N ⇒ trước N giờ kể từ lúc mở phiên ⇒ 409.
+ */
+async function assertCooledOff(projectId: number, openedAt: Date) {
+  const hours = (await projectQuality(projectId)).reviewCoolOffHours;
+  const left = coolOffRemainingMs(openedAt, hours);
+  if (left > 0) {
+    const readyAt = new Date(+openedAt + hours! * 3_600_000);
+    throw new AppError(`Cooling-off: this project waits ${hours} h after a review is opened before a decision can be set — try again after ${readyAt.toISOString().replace('T', ' ').slice(0, 16)} UTC`, 409, 'WORK_REVIEW_COOLOFF', { hours, readyAt, remainingMinutes: Math.ceil(left / 60_000) });
+  }
 }
 
 /** 26/11/2026: tác giả sản phẩm được review KHÔNG tự ra quyết định / tự đóng phiên review của mình. */
@@ -302,7 +349,7 @@ export async function exportReviewMinutes(userId: number, projectId: number, num
   const access = await teamCtx(userId, projectId);
   const r = await getReview(userId, projectId, number);
   const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { name: true, key: true } });
-  const c = checklistByKey(r.checklistKey);
+  const c = await resolveChecklist(projectId, r.checklistKey);
   const md = reviewMinutesMarkdown({
     language, project,
     session: { key: r.key, title: r.title, kind: r.kind, method: r.method, checklistName: c ? c.name[language === 'vi' ? 1 : 0] : r.checklistKey, workProduct: r.workProduct, prUrl: r.prUrl, status: r.status, decision: r.decision, meetingAt: r.meetingAt, entryCriteria: r.entryCriteria, exitCriteria: r.exitCriteria, notes: r.notes },

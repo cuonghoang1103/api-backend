@@ -86,12 +86,24 @@ export const RETRO_TEMPLATES: Record<RetroTemplate, string[]> = {
   SSC: ['START', 'STOP', 'CONTINUE'], MSG: ['MAD', 'SAD', 'GLAD'], FOUR_L: ['LIKED', 'LEARNED', 'LACKED', 'LONGED_FOR'],
 };
 export interface RetroCard { id: number; column: string; body: string; groupId: number | null; position: number; votes: number; myVotes: number; mine: boolean; author: WorkUser | null; createdAt?: string }
-export interface RetroAction { id: number; cardId: number | null; title: string; assignee: WorkUser | null; issue: { id: number; number: number; title: string; status: { name: string; category: string } } | null; createdAt: string }
+export interface RetroAction { id: number; cardId: number | null; title: string; /** dm5 G1 (A12) */ trigger?: string | null; verify?: string | null; assignee: WorkUser | null; issue: { id: number; number: number; title: string; status: { name: string; category: string } } | null; createdAt: string }
 export interface Retro {
   id: number; projectId: number; title: string; template: RetroTemplate; columns: string[]; sprint: { id: number; name: string; state: string } | null;
   anonymous: boolean; votesPerPerson: number; lockAt: string | null; locked: boolean; lockedManually: boolean; summary: string | null; summaryAt: string | null; createdAt: string;
   facilitator: WorkUser | null; me: { canWrite: boolean; canFacilitate: boolean; canUseAi: boolean; votesLeft: number; votesUsed: number };
   cards: RetroCard[]; actions: RetroAction[];
+  /** dm5 G1 (A12): trần hành động mỗi retro (settings.retroActionCap); null = không trần. */
+  actionCap?: number | null;
+}
+/** dm5 G1 (A12): số liệu sprint cho retro — GET /projects/:pid/retros/:rid/facts. */
+export interface RetroFacts {
+  sprint: { id: number; name: string; state: string; startAt: string | null; endAt: string | null } | null;
+  unit?: 'POINTS' | 'HOURS';
+  done?: { points: number; planned: number; pct: number | null; issuesDone: number; issuesTotal: number; issuesCommitted: number; added: number };
+  hours?: { logged: number; estimated: number; pct: number | null };
+  bugs?: { total: number; byActivity: Record<string, number>; leakage: number };
+  ciFirstTry?: { pct: number | null; green: number; withCi: number; pulls: number; method: string };
+  biggestPr?: { number: number; title: string; url: string | null; lines: number } | null;
 }
 export interface RetroRow { id: number; title: string; template: RetroTemplate; anonymous: boolean; sprint: { id: number; name: string | null } | null; locked: boolean; lockAt: string | null; cards: number; actions: number; hasSummary: boolean; createdBy: WorkUser | null; createdAt: string }
 
@@ -152,7 +164,8 @@ export const agileApi = {
   cardUpdate: (pid: number, rid: number, cid: number, body: { body?: string; column?: string; groupId?: number | null }) => d<{ ok: true }>(api.patch(`${P(pid)}/retros/${rid}/cards/${cid}`, body)),
   cardDelete: (pid: number, rid: number, cid: number) => d<{ ok: true }>(api.delete(`${P(pid)}/retros/${rid}/cards/${cid}`)),
   cardVote: (pid: number, rid: number, cid: number, delta: 1 | -1) => d<{ votesLeft: number; mine: number }>(api.post(`${P(pid)}/retros/${rid}/cards/${cid}/vote`, { delta })),
-  actionAdd: (pid: number, rid: number, body: { title: string; cardId?: number | null; assigneeId?: number | null; createIssue?: boolean; nextSprint?: boolean }) => d<{ id: number; issueNumber: number | null; sprintName?: string | null }>(api.post(`${P(pid)}/retros/${rid}/actions`, body)),
+  retroFacts: (pid: number, rid: number) => d<RetroFacts>(api.get(`${P(pid)}/retros/${rid}/facts`)),
+  actionAdd: (pid: number, rid: number, body: { title: string; cardId?: number | null; assigneeId?: number | null; createIssue?: boolean; nextSprint?: boolean; trigger?: string | null; verify?: string | null }) => d<{ id: number; issueNumber: number | null; sprintName?: string | null }>(api.post(`${P(pid)}/retros/${rid}/actions`, body)),
   actionDelete: (pid: number, rid: number, aid: number) => d<{ ok: true }>(api.delete(`${P(pid)}/retros/${rid}/actions/${aid}`)),
   retroSummary: (pid: number, rid: number, language: 'en' | 'vi') => d<{ summary: string; actions: Array<{ type: string; title?: string; assignee?: string }> }>(api.post(`${P(pid)}/retros/${rid}/summary`, { language })),
   retroExport: (pid: number, rid: number) => download(`${P(pid)}/retros/${rid}/export.docx`, 'retro.docx'),

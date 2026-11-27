@@ -14,6 +14,7 @@ import { q6Api, q6Keys, REVIEW_METHODS, type ReviewKind, type ReviewMethod, type
 import { Dialog, EmptyState, PageLoading } from '../ui';
 import { useWT, type WKey } from '../i18n';
 import { Badge, Labeled, NumberInput, Segmented, Tbl, Td, Th, type Tone } from './qui';
+import { ReviewSettingsButton } from './G3Quality'; // dm5 G3 (B4)
 
 export const STATUS_TONE: Record<string, Tone> = { PLANNING: 'muted', PREPARATION: 'blue', MEETING: 'accent', REWORK: 'orange', FOLLOW_UP: 'yellow', CLOSED: 'green' };
 export const DECISION_TONE: Record<string, Tone> = { ACCEPT: 'green', ACCEPT_WITH_CHANGES: 'yellow', REINSPECT: 'red' };
@@ -30,7 +31,10 @@ export default function ReviewList({ config, pid, onOpen }: { config: ProjectCon
     <div className="flex flex-col gap-3" data-testid="q6-review-list">
       <div className="flex items-center justify-between gap-2">
         <p className="max-w-[760px] text-[12.5px] text-[var(--w-text-2)]">{t('q6.noReviewsBody')}</p>
-        {canEdit && <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setOpen(true)} data-testid="q6-new-review"><Plus size={14} /> {t('q6.newReview')}</button>}
+        <div className="flex shrink-0 items-center gap-1.5">
+          <ReviewSettingsButton config={config} pid={pid} />
+          {canEdit && <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setOpen(true)} data-testid="q6-new-review"><Plus size={14} /> {t('q6.newReview')}</button>}
+        </div>
       </div>
       {!rows.length ? (
         <EmptyState icon={<ClipboardCheck size={20} />} title={t('q6.noReviews')} body={t('q6.noReviewsBody')} />
@@ -113,7 +117,7 @@ function NewReviewDialog({ config, pid, onClose, onCreated }: { config: ProjectC
         </Labeled>
         <Labeled label={t('q6.checklist')} className="sm:col-span-2" hint={chosen ? t('q6.checklistSource', { s: chosen.source }) : undefined}>
           <select className="w-input" value={chosen?.key ?? ''} onChange={(e) => setChecklistKey(e.target.value)} data-testid="q6-checklist">
-            {options.map((c) => <option key={c.key} value={c.key}>{c.name} ({c.items})</option>)}
+            {options.map((c) => <option key={c.key} value={c.key}>{c.name} ({c.items}){c.custom ? ` · ${t('q6.g3ProjectTag')}` : ''}</option>)}
           </select>
         </Labeled>
         {kind === 'DOC' ? (

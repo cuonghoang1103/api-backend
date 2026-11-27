@@ -31,6 +31,7 @@ const SLUG_RE = /^[a-z0-9][a-z0-9-]{0,79}$/;
 
 const STAGE_SELECT = {
   id: true, n: true, slug: true, name: true, status: true, gateIssueId: true, startedAt: true, completedAt: true, createdAt: true,
+  plannedStart: true, plannedEnd: true, // dm5 G1 (A17)
   gateIssue: { select: { id: true, number: true, title: true, resolvedAt: true } },
 } satisfies Prisma.WorkStageSelect;
 
@@ -79,7 +80,19 @@ async function gateIssueIdOf(projectId: number, number: number | null | undefine
   return i.id;
 }
 
-export async function createStage(userId: number, projectId: number, input: { n?: number; slug: string; name: string; gateIssueNumber?: number | null }) {
+/** dm5 G1 (A17): ngày kế hoạch "YYYY-MM-DD" | null ⇒ Date (UTC 00:00) | null; undefined = không đổi. Bắt đầu ≤ kết thúc. */
+function plannedDates(input: { plannedStart?: string | null; plannedEnd?: string | null }, cur?: { plannedStart: Date | null; plannedEnd: Date | null }) {
+  const conv = (v: string | null | undefined) => (v === undefined ? undefined : v === null || v === '' ? null : new Date(`${v.slice(0, 10)}T00:00:00Z`));
+  const start = conv(input.plannedStart);
+  const end = conv(input.plannedEnd);
+  for (const d of [start, end]) if (d && Number.isNaN(d.getTime())) throw new BadRequestError('Planned dates must be YYYY-MM-DD', 'WORK_BAD_DATES');
+  const s = start === undefined ? cur?.plannedStart ?? null : start;
+  const e = end === undefined ? cur?.plannedEnd ?? null : end;
+  if (s && e && s > e) throw new BadRequestError('The planned start must be on or before the planned end', 'WORK_BAD_DATES');
+  return { ...(start !== undefined ? { plannedStart: start } : {}), ...(end !== undefined ? { plannedEnd: end } : {}) };
+}
+
+export async function createStage(userId: number, projectId: number, input: { n?: number; slug: string; name: string; gateIssueNumber?: number | null; plannedStart?: string | null; plannedEnd?: string | null }) {
   await requireStages(userId, projectId, 'stage.manage');
   const slug = input.slug.trim().toLowerCase();
   if (!SLUG_RE.test(slug)) throw new BadRequestError('Stage slug must be lowercase letters, digits and dashes', 'WORK_BAD_SLUG');
@@ -91,7 +104,7 @@ export async function createStage(userId: number, projectId: number, input: { n?
   const n = input.n ?? (last ? last.n + 1 : 0);
   try {
     const s = await prisma.workStage.create({
-      data: { projectId, n, slug, name, gateIssueId: (await gateIssueIdOf(projectId, input.gateIssueNumber)) ?? null },
+      data: { projectId, n, slug, name, gateIssueId: (await gateIssueIdOf(projectId, input.gateIssueNumber)) ?? null, ...plannedDates(input) },
       select: STAGE_SELECT,
     });
     emitWorkEvent({ type: 'stage.updated', projectId, stageId: s.id, status: s.status, actor: { kind: 'USER', userId } });
@@ -103,10 +116,10 @@ export async function createStage(userId: number, projectId: number, input: { n?
 }
 
 /** Sửa tên/slug/số thứ tự/thẻ cổng. Trạng thái KHÔNG đổi ở đây (có route riêng). */
-export async function updateStage(userId: number, projectId: number, stageId: number, input: { n?: number; slug?: string; name?: string; gateIssueNumber?: number | null }) {
+export async function updateStage(userId: number, projectId: number, stageId: number, input: { n?: number; slug?: string; name?: string; gateIssueNumber?: number | null; plannedStart?: string | null; plannedEnd?: string | null }) {
   await requireStages(userId, projectId, 'stage.manage');
-  await findStage(projectId, stageId);
-  const data: Prisma.WorkStageUncheckedUpdateInput = {};
+  const cur = await findStage(projectId, stageId);
+  const data: Prisma.WorkStageUncheckedUpdateInput = { ...plannedDates(input, cur) };
   if (input.slug !== undefined) {
     const slug = input.slug.trim().toLowerCase();
     if (!SLUG_RE.test(slug)) throw new BadRequestError('Stage slug must be lowercase letters, digits and dashes', 'WORK_BAD_SLUG');

@@ -463,6 +463,8 @@ export async function updateCycle(
   if (input.environment !== undefined) data.environment = input.environment?.trim() || null;
   if (input.build !== undefined) data.build = input.build?.trim() || null;
   if (input.state !== undefined) {
+    // dm5 G3 (D2): rời PLANNED = bắt đầu vòng test ⇒ tiêu chí VÀO của kế hoạch (settings.testGate='block' ⇒ 409).
+    if (c.state === 'PLANNED' && input.state !== 'PLANNED') await (await import('./testMgmt.service.js')).assertCycleEntryGate(projectId, cycleId);
     data.state = input.state;
     if (input.state !== 'PLANNED' && !c.startAt) data.startAt = new Date();
     data.endAt = input.state === 'DONE' ? new Date() : null;
@@ -541,6 +543,8 @@ async function markExecuted(tx: Prisma.TransactionClient, runId: number, cycleId
 export async function updateRun(userId: number, projectId: number, runId: number, input: { status?: RunStatus; comment?: string | null; assigneeId?: number | null; reset?: boolean }) {
   await requireProject(userId, projectId, 'issue.transition');
   const r = await findRun(projectId, runId);
+  // dm5 G3 (D2): kết quả đầu tiên tự đẩy cycle PLANNED → IN_PROGRESS ⇒ cùng cổng tiêu chí VÀO.
+  if (input.status !== undefined && r.cycle.state === 'PLANNED') await (await import('./testMgmt.service.js')).assertCycleEntryGate(projectId, r.cycleId);
   await prisma.$transaction(async (tx) => {
     if (input.reset) {
       // "Chạy lại": xoá kết quả từng bước, giữ bug đã ghi nhận (lịch sử).
@@ -570,6 +574,7 @@ export async function updateStepResult(userId: number, projectId: number, runId:
   const r = await findRun(projectId, runId);
   const step = await prisma.workTestStepResult.findFirst({ where: { id: stepId, runId }, select: { id: true } });
   if (!step) throw new NotFoundError('Step not found');
+  if (input.status !== undefined && r.cycle.state === 'PLANNED') await (await import('./testMgmt.service.js')).assertCycleEntryGate(projectId, r.cycleId); // dm5 G3 (D2)
   let derived: RunStatus | null = null;
   await prisma.$transaction(async (tx) => {
     await tx.workTestStepResult.update({

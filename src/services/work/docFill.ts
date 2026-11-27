@@ -20,7 +20,7 @@ export interface VersionLite {
   contentJson: unknown;
 }
 
-export interface ChangeRow { date: string; action: 'A' | 'M' | 'D'; inCharge: string; description: string }
+export interface ChangeRow { date: string; action: 'A' | 'M' | 'D'; inCharge: string; description: string; /** ms — để trộn dòng phiên bản với dòng CR theo thời gian. */ at?: number }
 
 const ddmmyyyy = (d: Date) => `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 
@@ -54,20 +54,21 @@ export function recordOfChanges(versions: VersionLite[]): ChangeRow[] {
     const cur = sectionsOf(v.contentJson);
     const inCharge = v.author ?? '';
     const date = ddmmyyyy(v.createdAt);
+    const at = v.createdAt.getTime();
     const note = v.note?.replace(/^Created from template “.*”$/, '').trim() || '';
     if (!prev || v.kind === 'CREATE') {
-      rows.push({ date, action: 'A', inCharge, description: note || (cur.size ? `First version: ${list([...cur.keys()])}` : 'First version') });
+      rows.push({ date, at, action: 'A', inCharge, description: note || (cur.size ? `First version: ${list([...cur.keys()])}` : 'First version') });
     } else if (v.kind === 'RESTORE') {
-      rows.push({ date, action: 'M', inCharge, description: note || 'Restored an earlier version' });
+      rows.push({ date, at, action: 'M', inCharge, description: note || 'Restored an earlier version' });
     } else {
       const added = [...cur.keys()].filter((k) => !prev!.has(k));
       const removed = [...prev.keys()].filter((k) => !cur.has(k));
       const changed = [...cur.keys()].filter((k) => prev!.has(k) && prev!.get(k) !== cur.get(k));
       const out: ChangeRow[] = [];
-      if (added.length) out.push({ date, action: 'A', inCharge, description: `Added ${list(added)}` });
-      if (removed.length) out.push({ date, action: 'D', inCharge, description: `Deleted ${list(removed)}` });
-      if (changed.length) out.push({ date, action: 'M', inCharge, description: `Updated ${list(changed)}` });
-      if (!out.length) out.push({ date, action: 'M', inCharge, description: 'Edited the document' });
+      if (added.length) out.push({ date, at, action: 'A', inCharge, description: `Added ${list(added)}` });
+      if (removed.length) out.push({ date, at, action: 'D', inCharge, description: `Deleted ${list(removed)}` });
+      if (changed.length) out.push({ date, at, action: 'M', inCharge, description: `Updated ${list(changed)}` });
+      if (!out.length) out.push({ date, at, action: 'M', inCharge, description: 'Edited the document' });
       // Ghi chú người viết ("Save version…") nói đúng ý hơn danh sách mục ⇒ thay mô tả dòng đầu.
       if (note) out[0].description = note;
       rows.push(...out);
@@ -75,6 +76,32 @@ export function recordOfChanges(versions: VersionLite[]): ChangeRow[] {
     prev = cur;
   }
   return rows;
+}
+
+// ─── dm5 G2 (B21): Record of Changes từ Change Request đã IMPLEMENTED ─
+
+export interface CrLite { number: number; title: string; reason: string | null; implementedAt: Date; inCharge: string | null; refs: string[] }
+
+/** A/M/D của một CR suy từ chữ (tiêu đề + lý do): thêm ⇒ A, bỏ/xoá ⇒ D, còn lại ⇒ M. */
+export function crAction(text: string): 'A' | 'M' | 'D' {
+  const v = text.toLowerCase();
+  if (/\b(remove[sd]?|delete[sd]?|drop(?:ped|s)?|retire[sd]?|deprecate[sd]?)\b|\b(xo[áa]|bỏ|loại bỏ|gỡ)\b/.test(v)) return 'D';
+  if (/\b(add(?:s|ed)?|new|introduce[sd]?|create[sd]?)\b|\b(thêm|bổ sung|tạo mới)\b/.test(v)) return 'A';
+  return 'M';
+}
+
+/** Mỗi CR đã IMPLEMENTED một dòng: "CR-4: <tiêu đề> (UC-03, BR-02)". */
+export function crChangeRows(crs: CrLite[]): ChangeRow[] {
+  return [...crs].sort((a, b) => a.implementedAt.getTime() - b.implementedAt.getTime() || a.number - b.number).map((c) => ({
+    date: ddmmyyyy(c.implementedAt), at: c.implementedAt.getTime(), action: crAction(`${c.title} ${c.reason ?? ''}`), inCharge: c.inCharge ?? '',
+    description: `CR-${c.number}: ${c.title}${c.refs.length ? ` (${c.refs.slice(0, 8).join(', ')}${c.refs.length > 8 ? '…' : ''})` : ''}`.slice(0, 600),
+  }));
+}
+
+/** Trộn dòng phiên bản trang + dòng CR theo thời gian (giữ thứ tự gốc khi cùng lúc: phiên bản trước, CR sau). */
+export function mergeChangeRows(versionRows: ChangeRow[], crRows: ChangeRow[]): ChangeRow[] {
+  const tagged = [...versionRows.map((r, i) => ({ r, k: 0, i })), ...crRows.map((r, i) => ({ r, k: 1, i }))];
+  return tagged.sort((a, b) => (a.r.at ?? 0) - (b.r.at ?? 0) || a.k - b.k || a.i - b.i).map((x) => x.r);
 }
 
 // ─── Bảng sau đề mục ─────────────────────────────────────────────
@@ -170,6 +197,70 @@ export function raciTable(old: PmNode | null, people: string[]): PmNode | null {
     const ci = oldHead.indexOf(p);
     return ci > 0 ? (prev[ri + 1]?.[ci] ?? '') : '';
   })]));
+}
+
+// ─── dm5 G2 (B2): RACI Report 2 §3 theo VAI ──────────────────────
+
+export type RaciMode = 'people' | 'roles' | 'honest';
+export const RACI_MODES: RaciMode[] = ['people', 'roles', 'honest'];
+export interface RaciMatrixLite {
+  activities: Array<{ id: number; name: string }>;
+  stakeholders: Array<{ id: number; name: string; kind: string; userId: number | null; role: string | null }>;
+  cells: Array<{ activityId: number; stakeholderId: number; role: string }>;
+}
+export interface RaciPerson { userId: number; name: string; lecturer: boolean }
+
+/** Gộp nhiều mũ thành một cột (chế độ trung thực): A thắng R thắng C thắng I. */
+export function mergeRaci(roles: string[]): string {
+  for (const r of ['A', 'R', 'C', 'I']) if (roles.includes(r)) return r;
+  return '';
+}
+const SUPERVISOR_RE = /supervisor|lecturer|mentor|advisor|giảng viên|gvhd|teacher/i;
+/** Hoạt động yêu cầu mặc định (SWR) — thuộc RACI của SRS, không phải gói việc Report 2. */
+const REQ_ACTIVITIES = new Set(['elicit requirements', 'analyze and model requirements', 'write the srs', 'review and validate requirements', 'approve the requirements baseline', 'decide on change requests', 'accept the delivered product']);
+export const REPORT2_PACKAGES = ['Project Planning & Tracking', 'Prepare Project Introduction Document', 'Prepare SRS Document', 'Prepare SDS Document', 'Software Testing Documentation', 'Software User Guide', 'Final Report', 'Presentation Slide'];
+
+/**
+ * Bảng RACI Report 2 §3: hàng = gói việc của mẫu (giữ hàng người đã gõ) + hoạt động tự thêm trong ma trận RACI (trừ hoạt
+ * động yêu cầu mặc định của SRS). Cột theo chế độ:
+ *   roles   một cột mỗi stakeholder kiểu ROLE (5 mũ C1–C5) — RACI NỘI BỘ để điều phối, không nộp
+ *   honest  một cột mỗi người thật (gộp mọi mũ của người đó: A > R > C > I) + cột "Supervisor" — bản NỘP trường khi làm một mình
+ *   people  một cột mỗi người thật (như cũ), ô lấy từ ma trận nếu có
+ * Ô ma trận không có ⇒ giữ ô cũ cùng tên cột (không xoá chữ người đã gõ).
+ */
+export function raciReport2Table(old: PmNode | null, o: { mode: RaciMode; people: RaciPerson[]; matrix: RaciMatrixLite }): PmNode | null {
+  const prev = old ? tableRowsText(old) : [];
+  const oldHead = prev[0] ?? [];
+  const base = prev.length > 1 ? prev.slice(1).map((r) => r[0] ?? '').filter(Boolean) : [...REPORT2_PACKAGES];
+  const extra = o.matrix.activities.filter((a) => !REQ_ACTIVITIES.has(a.name.trim().toLowerCase()) && !base.some((b) => b.trim().toLowerCase() === a.name.trim().toLowerCase())).map((a) => a.name);
+  const packages = [...base, ...extra];
+  const actOf = new Map(o.matrix.activities.map((a) => [a.name.trim().toLowerCase(), a.id]));
+  const roleOf = (activityId: number | undefined, ids: number[]) => (activityId === undefined ? '' : mergeRaci(o.matrix.cells.filter((c) => c.activityId === activityId && ids.includes(c.stakeholderId)).map((c) => c.role)));
+  const hats = o.matrix.stakeholders.filter((s) => s.kind === 'ROLE');
+  const students = o.people.filter((p) => !p.lecturer);
+  const lecturerIds = new Set(o.people.filter((p) => p.lecturer).map((p) => p.userId));
+  /** stakeholder của một người: PERSON gắn userId + mũ ROLE gắn userId (một người duy nhất ⇒ mọi mũ chưa gắn ai). */
+  const idsOfPerson = (p: RaciPerson) => o.matrix.stakeholders.filter((s) => s.userId === p.userId || (s.kind === 'ROLE' && s.userId === null && students.length === 1)).map((s) => s.id);
+  const supervisorIds = o.matrix.stakeholders.filter((s) => (s.userId !== null && lecturerIds.has(s.userId)) || SUPERVISOR_RE.test(`${s.name} ${s.role ?? ''}`)).map((s) => s.id);
+  let cols: Array<{ head: string; ids: number[] }>;
+  if (o.mode === 'roles') cols = hats.map((h) => ({ head: h.name, ids: [h.id] }));
+  else if (o.mode === 'honest') cols = [...students.map((p) => ({ head: p.name, ids: idsOfPerson(p) })), { head: 'Supervisor', ids: supervisorIds }];
+  else cols = students.map((p) => ({ head: p.name, ids: idsOfPerson(p) }));
+  if (!cols.length) return null;
+  return buildTable(['Work Package', ...cols.map((c) => c.head)], packages.map((wp) => {
+    const ri = prev.findIndex((r, i) => i > 0 && (r[0] ?? '').trim().toLowerCase() === wp.trim().toLowerCase());
+    return [wp, ...cols.map((c) => {
+      const v = roleOf(actOf.get(wp.trim().toLowerCase()), c.ids);
+      if (v) return v;
+      const ci = oldHead.indexOf(c.head);
+      return ci > 0 && ri > 0 ? (prev[ri]?.[ci] ?? '') : '';
+    })];
+  }));
+}
+
+/** Câu ghi chú dưới bảng RACI trung thực (bài s01/b6): một người luân phiên các mũ. */
+export function honestRaciNote(hats: string[]): string {
+  return `Note: this is a one-person project — the student rotates across the ${hats.length ? hats.join(', ') : 'BA, Architect, Developer and QA'} hats; the internal per-hat RACI is kept in CT Work.`;
 }
 
 export const changesTable = (rows: ChangeRow[]) => buildTable(['Date', 'A* M, D', 'In charge', 'Change Description'], rows.map((r) => [r.date, r.action, r.inCharge, r.description]));

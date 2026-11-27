@@ -32,7 +32,7 @@ import * as t from '../services/work/testMgmt.service.js';
 import { CHECKLIST_KEYS, ITEM_RESULTS, REVIEW_KINDS, REVIEW_METHODS, REVIEW_ROLES, REVIEW_STATUSES, REVIEW_DECISIONS } from '../services/work/reviewRules.js';
 import { BASELINE_KINDS } from '../services/work/baselineRules.js';
 import { TECHNIQUES } from '../services/work/testDesign.js';
-import { PHASES, ROOT_CAUSES, TEST_LEVELS, TEST_TYPES } from '../services/work/testMetrics.js';
+import { ENTRY_KINDS, PHASES, ROOT_CAUSES, TEST_LEVELS, TEST_TYPES } from '../services/work/testMetrics.js';
 import { SEVERITIES } from '../services/work/srs.js';
 
 const router = Router();
@@ -70,15 +70,17 @@ function sendFile(res: Response, out: { buffer: Buffer; file: string }, format: 
 // ═══ Review / inspection ═════════════════════════════════════════
 
 router.get('/projects/:pid/review-checklists', asyncHandler(async (req, res) => {
-  P(req, 'pid');
-  ok(res, q.listChecklists(parse(z.object({ lang }), req.query).lang ?? 'en'));
+  // dm5 G3: kèm mẫu cấp dự án (settings.reviewChecklists, khoá P_…) — chỉ người của đội thấy (như listReviews).
+  ok(res, await q.listChecklistsFor(callerId(req), P(req, 'pid'), parse(z.object({ lang }), req.query).lang ?? 'en'));
 }));
 router.get('/projects/:pid/reviews', asyncHandler(async (req, res) => {
   ok(res, await q.listReviews(callerId(req), P(req, 'pid')));
 }));
 router.post('/projects/:pid/reviews', asyncHandler(async (req, res) => {
   const body = parse(z.object({
-    title: z.string().trim().min(1).max(200), kind: z.enum(REVIEW_KINDS), method: z.enum(REVIEW_METHODS), checklistKey: z.enum(CHECKLIST_KEYS),
+    title: z.string().trim().min(1).max(200), kind: z.enum(REVIEW_KINDS), method: z.enum(REVIEW_METHODS),
+    // dm5 G3: mẫu dựng sẵn (CHECKLIST_KEYS) hoặc mẫu cấp dự án "P_…" — service kiểm có thật không.
+    checklistKey: z.union([z.enum(CHECKLIST_KEYS), z.string().regex(/^P_[A-Z0-9_]{1,30}$/)]),
     pageNumber: z.number().int().positive().nullable().optional(), workProduct: txt(200), prUrl: txt(500),
     size: z.number().min(0).max(1_000_000).nullable().optional(), meetingAt: z.coerce.date().nullable().optional(),
     entryCriteria: txt(4000), exitCriteria: txt(4000),
@@ -199,6 +201,10 @@ router.post('/projects/:pid/test-designs/:num/export', asyncHandler(async (req, 
 
 // ═══ Thuộc tính test case + kế hoạch ═════════════════════════════
 
+// dm5 G3 (D4): 6 nhóm ca kiểm thử (Happy/Empty/Boundary/Conflict/Security/Adjacent) + lint bước của thẻ Req.
+router.get('/projects/:pid/test-groups/:num', asyncHandler(async (req, res) => {
+  ok(res, await t.requirementTestGroups(callerId(req), P(req, 'pid'), P(req, 'num')));
+}));
 router.get('/projects/:pid/tests-attributes', asyncHandler(async (req, res) => {
   ok(res, await t.caseAttributes(callerId(req), P(req, 'pid')));
 }));
@@ -230,6 +236,11 @@ router.put('/projects/:pid/test-plans/:planId/settings', asyncHandler(async (req
   const b = parse(z.object({
     scopeIn: s(8000), scopeOut: s(8000), approach: s(8000), environment: s(4000), suspension: s(4000), resumption: s(4000),
     deliverables: s(4000), schedule: s(4000), risks: s(8000), variances: s(8000), criteria: criteria.optional(), estimation: estimation.optional(),
+    // dm5 G3 (D2): tiêu chí VÀO + version kế hoạch này kiểm (cổng Release). Chi tiết kiểm ở testMetrics.normalizeEntry.
+    entry: z.array(z.object({
+      kind: z.enum(ENTRY_KINDS), target: z.number().min(0).max(100_000).nullable().optional(), text: z.string().max(300).nullable().optional(), done: z.boolean().nullable().optional(),
+    })).max(20).optional(),
+    versionId: z.number().int().positive().nullable().optional(),
   }), req.body ?? {});
   ok(res, await t.savePlanSettings(callerId(req), P(req, 'pid'), P(req, 'planId'), b));
 }));

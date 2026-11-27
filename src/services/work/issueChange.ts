@@ -28,6 +28,9 @@ import { assertSubmitGate } from './submitGate.js';
 import { currentTargetHash, signedHash } from './approvalContent.js';
 // Đợt S6: nguồn gốc AI + luật "AI-assisted work needs an independent reviewer".
 import { AI_SOURCE, assertAiIndependentReview, assistantModel, provenanceValue } from './provenance.js';
+// dm5 G1 (27/11/2026): DoR · CI xanh trước Done · bình luận xác nhận + làm nguội · WIP chéo cột · cổng giai đoạn.
+import { assertCiGate, assertCommentAndCoolOff, assertReadyGate, assertStageOpen, assertWipGuards } from './dm5a.service.js';
+import { assertVersionFreeze } from './versionFreeze.js';
 
 type Tx = Prisma.TransactionClient;
 
@@ -79,8 +82,11 @@ async function assertStatusInWorkflow(tx: Tx, statusId: number, workflowId: numb
   return st;
 }
 
-/** Cài đặt dự án: trường phải có giá trị trước khi thẻ vào cột DONE (vd Evidence — Definition of Done SWP391). */
-export interface DoneRequirements { fieldIds: number[]; typeKeys?: string[] | null }
+/**
+ * Cài đặt dự án: trường phải có giá trị trước khi thẻ vào cột DONE (vd Evidence — Definition of Done SWP391).
+ * dm5 G1 (A2): `requireCiGreen` ⇒ PR gắn thẻ phải CI xanh; `requirePr` ⇒ thẻ không có PR cũng bị chặn (dm5a.service › assertCiGate).
+ */
+export interface DoneRequirements { fieldIds: number[]; typeKeys?: string[] | null; requireCiGreen?: boolean; requirePr?: boolean }
 
 /**
  * Chặn chuyển sang DONE khi thiếu trường bắt buộc (25/09/2026). Chạy TRONG cửa ghi
@@ -112,6 +118,8 @@ export async function assertDoneRequirements(tx: Tx, projectId: number, issueId:
  *   - notAssignee: người đang được giao thẻ không được tự chuyển (không tự duyệt việc của mình);
  *   - requireApproval: thẻ phải có một phê duyệt ISSUE đã APPROVED mà nội dung
  *     chưa đổi kể từ lúc ký (hash còn khớp) — ADMIN cũng không vượt được.
+ *   - requireComment {teamIds} (dm5 G1 · A6): bình luận xác nhận của bộ phận X SAU lần vào trạng thái nguồn;
+ *   - minHoursInFrom (dm5 G1 · A6): làm nguội — nằm ở trạng thái nguồn ≥ N giờ. Cả hai ADMIN cũng không vượt.
  * Dòng cụ thể (from = trạng thái hiện tại) thắng dòng "từ bất kỳ đâu". Chỉ áp
  * cho người và AI; luật tự động/hệ thống không bị chặn (cùng lý do Done rules).
  */
@@ -161,6 +169,7 @@ async function assertTransitionAllowed(
       );
     }
   }
+  await assertCommentAndCoolOff(tx, { issueId: ctx.issueId, fromStatusId, rules });
 }
 
 /**
@@ -336,6 +345,8 @@ export async function createIssue(input: CreateIssueInput, rawActor: WorkActor) 
     // Epic không nằm trong sprint.
     if (type.level === 1) sprintId = null;
     if (input.fixVersionId) await assertVersion(tx, input.projectId, input.fixVersionId);
+    // G4 D14: version đóng băng (Feature/Code/Hard) chặn loại thẻ / mức ưu tiên không hợp lệ.
+    if (input.fixVersionId) await assertVersionFreeze(tx, { projectId: input.projectId, versionId: input.fixVersionId, typeId: input.typeId, priority: input.priority ?? PRIORITY_DEFAULT, actor });
     if (input.teamId) await assertTeam(tx, input.projectId, input.teamId);
     if (input.stageId) await assertStage(tx, input.projectId, input.stageId);
 
@@ -484,6 +495,12 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, rawAc
 
     if (patch.fixVersionId !== undefined && patch.fixVersionId !== before.fixVersionId) {
       if (patch.fixVersionId !== null) await assertVersion(tx, before.projectId, patch.fixVersionId);
+      if (patch.fixVersionId !== null) {
+        await assertVersionFreeze(tx, {
+          projectId: before.projectId, versionId: patch.fixVersionId, typeId: before.typeId,
+          priority: patch.priority ?? before.priority, actor, issueKey: `${before.project.key}-${before.number}`,
+        });
+      }
       track('fixVersionId', before.fixVersionId, patch.fixVersionId);
       data.fixVersionId = patch.fixVersionId;
     }
@@ -535,7 +552,25 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, rawAc
 
     if (toStatusId !== undefined && toStatusId !== before.statusId && target) {
       await assertTransitionAllowed(tx, workflowId, before.statusId, toStatusId, { issueId, projectId: before.projectId, actor });
-      if (actor.kind === 'USER' || actor.kind === 'AI' || actor.kind === 'AGENT') await assertWipLimit(tx, before.projectId, issueId, before.statusId, toStatusId);
+      const byPerson = actor.kind === 'USER' || actor.kind === 'AI' || actor.kind === 'AGENT';
+      if (byPerson) await assertWipLimit(tx, before.projectId, issueId, before.statusId, toStatusId);
+      // ── dm5 G1: cổng quy trình (chỉ người/AI/agent — luật tự động và hệ thống không bị chặn, như Done rules) ──
+      if (byPerson) {
+        const proj = await tx.workProject.findUnique({ where: { id: before.projectId }, select: { settings: true } });
+        const issueKey = `${before.project.key}-${before.number}`;
+        await assertWipGuards(tx, { projectId: before.projectId, settings: proj?.settings, issueId, fromStatusId: before.statusId, toStatusId });
+        await assertReadyGate(tx, {
+          projectId: before.projectId, settings: proj?.settings, issueId, typeKey: before.type.key, issueKey,
+          fromCategory: before.status.category, toStatusId, toCategory: target.category,
+        });
+        await assertStageOpen(tx, {
+          settings: proj?.settings, stageId: data.stageId !== undefined ? (data.stageId as number | null) : before.stageId, issueKey,
+          fromCategory: before.status.category, toCategory: target.category,
+        });
+        if (target.category === 'DONE' && before.status.category !== 'DONE') {
+          await assertCiGate(tx, { projectId: before.projectId, settings: proj?.settings, number: before.number, issueKey });
+        }
+      }
       track('statusId', before.statusId, toStatusId);
       data.statusId = toStatusId;
       // Vào cột DONE thì ghi thời điểm xong; rời DONE thì xoá — báo cáo

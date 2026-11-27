@@ -163,4 +163,13 @@ export const wf = {
   restrictC: 'To keep work moving, the diagram starts from a linear flow — each status to the next one in board order, and any status back to',
   plusDrawn: ', plus the transition you just drew',
   editFreely: 'Edit it freely; nothing is saved until you click',
+  // dm5 G1 (A6): bình luận xác nhận + làm nguội
+  requireComment: 'Require a confirming comment',
+  requireCommentDesc: 'Someone has to comment AFTER the issue entered this status before it can move on (e.g. QA confirms the retest). Admins cannot skip this.',
+  commentFrom: 'Comment from',
+  commentAnyone: 'anyone other than the assignee',
+  coolOff: 'Cool-off (hours in the source status)',
+  coolOffDesc: 'The issue must stay in the source status at least this long before this move — e.g. sleep on a self-review. Empty = no cool-off.',
+  needsComment: 'Needs a comment',
+  coolOffN: 'Cool-off {n}h',
 };

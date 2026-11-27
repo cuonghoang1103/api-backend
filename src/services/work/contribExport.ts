@@ -118,6 +118,31 @@ export async function exportXlsx(userId: number, projectId: number, q: ContribQu
     sheets.push(pr, com);
   }
 
+  // ── dm5 G4 (C5): By role — giờ theo mũ C1–C5 mỗi tuần trong khoảng đang xuất (một người đóng 5 vai vẫn ra 5 dòng).
+  try {
+    const { hoursByRole } = await import('./timeActivity.service.js');
+    const r = await hoursByRole(userId, projectId, { from: s.window.fromDay, to: s.window.toDay });
+    const br = new XSheet('By role');
+    br.width(1, 14);
+    br.set(1, 1, 'Week of', H);
+    r.hats.forEach((h, i) => br.set(1, 2 + i * 2, `${h.hat} ${h.label} (h)`, H).set(1, 3 + i * 2, `${h.hat} %`, H).width(2 + i * 2, 14).width(3 + i * 2, 8));
+    const tc = 2 + r.hats.length * 2;
+    br.set(1, tc, 'Total (h)', H).set(1, tc + 1, 'Alerts', H).width(tc, 10).width(tc + 1, 60);
+    br.height(1, 32);
+    r.weeks.forEach((w, i) => {
+      br.set(i + 2, 1, w.weekStart, C);
+      r.hats.forEach((h, j) => br.set(i + 2, 2 + j * 2, w.hours[h.hat], N).set(i + 2, 3 + j * 2, w.pct[h.hat], N));
+      br.set(i + 2, tc, w.totalHours, N).set(i + 2, tc + 1, w.alerts.map((a) => a.message).join('; ') || '—', { ...C, align: { wrap: true, v: 'top' } });
+    });
+    const tr = r.weeks.length + 2;
+    br.set(tr, 1, 'Total', { ...C, font: { b: true } });
+    r.hats.forEach((h, j) => br.set(tr, 2 + j * 2, r.totals.hours[h.hat], N).set(tr, 3 + j * 2, r.totals.pct[h.hat], N));
+    br.set(tr, tc, r.totals.totalHours, N);
+    br.set(tr + 2, 1, `Role per log = the role picked when logging, else the card label (C1…C5 / PM·BA·BE·FE·QA), else the activity. ${r.guessedHours} h were inferred. Alerts: QA below ${r.thresholds.qaMinPct}% of a week · more than ${r.thresholds.maxWeekHours} h in a week (C1–C5 split real hours, they never add hours).`, MUTED).merge(tr + 2, 1, tr + 2, tc + 1);
+    br.height(tr + 2, 40);
+    sheets.push(br);
+  } catch { /* không chặn bản xuất đóng góp */ }
+
   // ── Definitions
   const def = new XSheet('Definitions');
   def.width(1, 22).width(2, 110);

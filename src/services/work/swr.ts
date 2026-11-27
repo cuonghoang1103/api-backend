@@ -17,7 +17,7 @@ import { plainText } from './docExport.js';
 import { buildTable, replaceTableAfterHeading, tableRowsText } from './docFill.js';
 import type { DataModel } from './diagramGen.js';
 import {
-  brKey, findHeading, inDocument, refsIn, sectionEnd, ucKey,
+  brKey, findHeading, inDocument, refsIn, sectionEnd, smKey, ucKey,
   type ActorLite, type RuleLite, type UseCaseLite,
 } from './srs.js';
 import { XSheet, type XStyle } from './xlsxStyled.js';
@@ -359,6 +359,64 @@ export interface SixLinksInput {
   ignoredNouns: string[];
   /** Thẻ (id) ⇒ cha (id) để FR dưới một epic đã gắn FE coi như truy được. */
   issueParent?: Map<number, number | null>;
+  /** dm5 G2 (B9/B8): số SM-xx đang có trong sổ System Messages. undefined = không xét SM_UNKNOWN. */
+  messageNumbers?: number[];
+}
+
+// ─── dm5 G2 (B8): lint đặc tả use case — "6 Luật Vàng" của bài s04/b2 ─────────
+
+/** Số bước của Normal Flow: dòng bắt đầu "1." / "2)" / "Step 3:" ⇒ {1,2,3}. */
+export function normalFlowSteps(flow: string | null | undefined): Set<number> {
+  const out = new Set<number>();
+  for (const line of String(flow ?? '').split(/\r?\n/)) {
+    const m = /^\s*(?:step\s*)?(\d{1,3})\s*[.):]/i.exec(line);
+    if (m) out.add(Number(m[1]));
+  }
+  return out;
+}
+
+/** Mã bước trong luồng phụ/ngoại lệ: "2A", "3A1", "2E1", "8E2." ⇒ [{ code, step }]. */
+export function stepPointers(text: string | null | undefined): Array<{ code: string; step: number }> {
+  const out: Array<{ code: string; step: number }> = [];
+  const seen = new Set<string>();
+  for (const m of String(text ?? '').matchAll(/(?<![A-Za-z0-9.-])(\d{1,3})([AE])(\d{0,2})(?![A-Za-z0-9])/g)) {
+    const code = `${m[1]}${m[2]}${m[3]}`;
+    if (seen.has(code)) continue;
+    seen.add(code);
+    out.push({ code, step: Number(m[1]) });
+  }
+  return out;
+}
+
+/**
+ * Ba luật lint cho mỗi UC (cảnh báo, không làm trượt liên kết — trừ SM_UNKNOWN là lỗi tham chiếu như BR_UNKNOWN):
+ *   SYSTEM_SUBJECT        luồng dùng chữ "System"/"the system" thay vì tên hệ thống (bài: Ctrl+F "System" phải ra 0)
+ *   STEP_REF_UNKNOWN      luồng phụ/ngoại lệ trỏ tới bước "4A"/"8E1" mà Normal Flow không có bước 4/8
+ *   CODE_IN_POSTCONDITION Postconditions chứa mã BR-xx / SM-xx (hậu điều kiện chỉ mô tả trạng thái dữ liệu)
+ *   SM_UNKNOWN            luồng nhắc SM-xx mà sổ System Messages không có
+ */
+export function ucLint(u: UseCaseLite, o: { systemName?: string; messageNumbers?: number[] } = {}): LinkGap[] {
+  const gaps: LinkGap[] = [];
+  const ref = ucKey(u.number);
+  const flows = [u.description, u.preconditions, u.normalFlow, u.alternativeFlows, u.exceptionFlows, u.postconditions].filter(Boolean).join('\n');
+  if (!/\bsystem\b/i.test(o.systemName ?? '')) {
+    const hits = [...flows.matchAll(/\bsystem\b(?!\s+messages?\b)/gi)].length;
+    if (hits) gaps.push({ ref, detail: `uses the word "System" ${hits} time(s) — write the system's name${o.systemName ? ` ("${o.systemName}")` : ''} instead`, severity: 'warning', code: 'SYSTEM_SUBJECT', params: { n: hits, name: o.systemName ?? '' } });
+  }
+  const steps = normalFlowSteps(u.normalFlow);
+  if (steps.size) {
+    const bad = stepPointers(`${u.alternativeFlows ?? ''}\n${u.exceptionFlows ?? ''}`).filter((p) => !steps.has(p.step)).map((p) => p.code);
+    if (bad.length) gaps.push({ ref, detail: `alternative/exception flow points to step ${bad.join(', ')} — the Normal Flow has no such step`, severity: 'warning', code: 'STEP_REF_UNKNOWN', params: { list: bad.join(', ') } });
+  }
+  const post = u.postconditions ?? '';
+  const codes = [...refsIn(post, 'BR').map(brKey), ...refsIn(post, 'SM').map(smKey)];
+  if (codes.length) gaps.push({ ref, detail: `Postconditions mention ${codes.join(', ')} — keep business rules and messages out; describe the stored data state only`, severity: 'warning', code: 'CODE_IN_POSTCONDITION', params: { list: codes.join(', ') } });
+  if (o.messageNumbers) {
+    const have = new Set(o.messageNumbers);
+    const unknown = refsIn(flows, 'SM').filter((n) => !have.has(n));
+    if (unknown.length) gaps.push({ ref, detail: `mentions ${unknown.map(smKey).join(', ')} — no such system message`, severity: 'error', code: 'SM_UNKNOWN', params: { list: unknown.map(smKey).join(', ') } });
+  }
+  return gaps;
 }
 
 export function sixLinks(d: SixLinksInput): { links: LinkResult[]; passed: number; ok: boolean } {
@@ -389,6 +447,7 @@ export function sixLinks(d: SixLinksInput): { links: LinkResult[]; passed: numbe
     if (unknown.length) l2.push({ ref: ucKey(u.number), detail: `mentions ${unknown.map(brKey).join(', ')} — no such rule`, severity: 'error', code: 'BR_UNKNOWN', params: { list: unknown.map(brKey).join(', ') } });
     if (unlinked.length) l2.push({ ref: ucKey(u.number), detail: `flow mentions ${unlinked.map(brKey).join(', ')} but the Business Rules field does not list it`, severity: 'error', code: 'BR_UNLISTED', params: { list: unlinked.map(brKey).join(', ') } });
     if (!u.ruleNumbers.length && !mentioned.length) l2.push({ ref: ucKey(u.number), detail: 'names no business rule', severity: 'warning', code: 'UC_NO_BR' });
+    l2.push(...ucLint(u, { systemName: d.systemName, messageNumbers: d.messageNumbers }));
   }
   for (const r of inDocument(d.rules)) if (!used.has(r.number)) l2.push({ ref: brKey(r.number), detail: `${r.name}: no use case references this rule`, severity: 'warning', code: 'BR_UNUSED', params: { name: r.name } });
   const r2 = res('UC_BR', ucs.length, l2);

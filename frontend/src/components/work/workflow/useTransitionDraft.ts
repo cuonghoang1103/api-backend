@@ -46,7 +46,7 @@ export function useTransitionDraft(wf: WorkWorkflow, pid: number, onSaved: () =>
   const initialPairs = useMemo(() => new Set(sig ? sig.split(',') : []), [sig]);
   const statusSig = wf.statuses.map((s) => s.id).sort((a, b) => a - b).join(',');
   const rulesSig = JSON.stringify(wf.transitions
-    .filter((t) => t.rules && (t.rules.requireApproval || t.rules.notAssignee || t.rules.teamIds?.length))
+    .filter((t) => t.rules && hasAnyRule(t.rules))
     .map((t) => [pairKey(t.fromStatusId, t.toStatusId), cleanRules(t.rules!)])
     .sort((a, b) => String(a[0]).localeCompare(String(b[0]))));
   const initialRules = useMemo(() => new Map<string, TransitionRules>(JSON.parse(rulesSig) as Array<[string, TransitionRules]>), [rulesSig]);
@@ -55,7 +55,7 @@ export function useTransitionDraft(wf: WorkWorkflow, pid: number, onSaved: () =>
   const setRule = useCallback((key: string, r: TransitionRules) => setRules((m) => {
     const n = new Map(m);
     const c = cleanRules(r);
-    if (c.requireApproval || c.notAssignee || c.teamIds?.length) n.set(key, c); else n.delete(key);
+    if (hasAnyRule(c)) n.set(key, c); else n.delete(key);
     return n;
   }), []);
 
@@ -122,7 +122,15 @@ function cleanRules(r: TransitionRules): TransitionRules {
   if (r.notAssignee) out.notAssignee = true;
   const ids = [...new Set(r.teamIds ?? [])].sort((a, b) => a - b);
   if (ids.length) out.teamIds = ids;
+  // dm5 G1 (A6)
+  if (r.requireComment) out.requireComment = { teamIds: [...new Set(r.requireComment.teamIds ?? [])].sort((a, b) => a - b) };
+  if (r.minHoursInFrom && r.minHoursInFrom > 0) out.minHoursInFrom = Math.min(720, r.minHoursInFrom);
   return out;
+}
+
+/** Mũi tên có ít nhất một luật (để giữ trong bản nháp / gửi đi). */
+export function hasAnyRule(r: TransitionRules): boolean {
+  return !!(r.requireApproval || r.notAssignee || r.teamIds?.length || r.requireComment || (r.minHoursInFrom && r.minHoursInFrom > 0));
 }
 
 function rulesSigOf(m: Map<string, TransitionRules>, pairs: Set<string>): string {

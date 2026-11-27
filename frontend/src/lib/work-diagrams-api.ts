@@ -14,7 +14,7 @@ export const DIAGRAM_TYPES = [
   'GANTT', 'JOURNEY', 'TIMELINE', 'MINDMAP', 'SCREEN_FLOW', 'FLOWCHART', 'WHITEBOARD', 'OTHER',
 ] as const;
 export type DiagramType = (typeof DIAGRAM_TYPES)[number];
-export type DiagramFormat = 'MERMAID' | 'EXCALIDRAW' | 'SQL';
+export type DiagramFormat = 'MERMAID' | 'EXCALIDRAW' | 'SQL' | 'PLANTUML'; // PLANTUML: dm5 G2 (B18)
 export type DiagramStatus = 'PROPOSED' | 'DRAFT' | 'APPROVED';
 export const GENERATABLE = ['SEQUENCE', 'USE_CASE', 'ERD', 'CLASS', 'ACTIVITY', 'STATE', 'SCREEN_FLOW', 'DEPLOYMENT', 'ARCHITECTURE', 'DATA_FLOW'] as const;
 export type GeneratableType = (typeof GENERATABLE)[number];

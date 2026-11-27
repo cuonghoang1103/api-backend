@@ -64,11 +64,18 @@ import * as swr from '../swr.service.js';
 import { RACI_ROLES } from '../swr6b.js';
 import * as elic from '../swrElic.service.js';
 import * as pack from '../swrPack.service.js';
+// dm5 G2 (27/11/2026): System Messages, Report 2/4/6 fill, soát trước nộp, ADR, bảng CSDL 7 cột.
+import * as dm5b from '../dm5b.service.js';
+import * as docs3a from '../docs3a.service.js';
+import * as finalRep from '../finalReport.service.js';
+import * as sds from '../sds.service.js';
+import { SM_TYPES } from '../srs.js';
+import * as sysMsg from '../srsMessages.service.js';
 import { CLASS_SUBJECTS } from '../teachingRules.js';
 import * as autoTests from '../testAutomation.service.js';
 import * as stat from '../staticAnalysis.service.js';
 import * as okr from '../okr.service.js';
-import { PHASES, ROOT_CAUSES, TEST_LEVELS } from '../testMetrics.js';
+import { ENTRY_KINDS, PHASES, ROOT_CAUSES, TEST_LEVELS, TEST_TYPES } from '../testMetrics.js';
 import * as t from '../testMgmt.service.js';
 import * as tests from '../tests.service.js';
 import * as uxc from '../uxc.service.js';
@@ -232,10 +239,15 @@ const classQuiz = defineTool({
 
 const swrExtras = defineTool({
   name: 'swr_extras', title: 'SWR302 extras (RACI, seeding, estimation, quality, proposals)', group: 'srs',
-  description: 'action: raci_activity_add (name, or defaults=true for the standard activities) | raci_set (activityId, stakeholder SH-2, role R/A/C/I or null) | seed_priority (kind FE/UC — one priority row per feature/use case) | seed_stakeholders (from SRS actors) | estimation_set (estimationJson = {counts, project, factors, minutes} as on the Estimation tab) | quality_mark (requirement issue, criteria [{criterion, value true/false/null}]) | proposal_add (session ELC-1; title, text, reqType, priority, stakeholder) | nfr_from_template (template key, title) | mockup_submit (mockup id, share) | elicitation_meeting (session ELC-1; meeting number to link, or createMeeting=true).',
+  description: 'action: raci_activity_add (name, or defaults=true for the standard activities, or preset requirements/report2 — the 8 Report 2 §3 work packages) | raci_set (activityId, stakeholder SH-2, role R/A/C/I or null) | seed_hats (the 5 internal hats C1 Leader/PM … C5 QA/Tester as ROLE stakeholders) | seed_priority (kind FE/UC — one priority row per feature/use case) | seed_stakeholders (from SRS actors) | estimation_set (estimationJson = {counts, project, factors, minutes} as on the Estimation tab) | quality_mark (requirement issue, criteria [{criterion, value true/false/null}]) | proposal_add (session ELC-1; title, text, reqType, priority, stakeholder) | nfr_from_template (template key, title) | mockup_submit (mockup id, share) | elicitation_meeting (session ELC-1; meeting number to link, or createMeeting=true) | qna_from_elicitation (session ELC-1, questionId q3; targetRef BR-03/UC-05, askedTo, due — pushes an open elicitation question to the Q&A log) | system_message_add (text; msgType ERROR/WARNING/INFO/CONFIRMATION/SUCCESS, context, textEn, httpStatus, useCases ["UC-03"]) | system_message_update (message SM-03; same fields, status DRAFT/APPROVED). Read the register: ctwork_read system_messages; delete: swr_delete kind system_message.',
   write: true, personOnly: true,
   input: z.object({
-    project: projectArg, action: z.enum(['raci_activity_add', 'raci_set', 'seed_priority', 'seed_stakeholders', 'estimation_set', 'quality_mark', 'proposal_add', 'nfr_from_template', 'mockup_submit', 'elicitation_meeting']),
+    project: projectArg, action: z.enum(['raci_activity_add', 'raci_set', 'seed_hats', 'seed_priority', 'seed_stakeholders', 'estimation_set', 'quality_mark', 'proposal_add', 'nfr_from_template', 'mockup_submit', 'elicitation_meeting', 'qna_from_elicitation', 'system_message_add', 'system_message_update']),
+    preset: z.enum(['requirements', 'report2']).optional(), questionId: z.string().regex(/^q\d{1,4}$/).optional(), targetRef: z.string().max(60).nullable().optional(),
+    askedTo: z.string().max(120).nullable().optional(), due: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+    message: z.union([z.number().int().positive(), z.string().max(12)]).optional(), msgType: z.enum(SM_TYPES).optional(), context: z.string().max(2000).nullable().optional(),
+    textEn: z.string().max(4000).nullable().optional(), httpStatus: z.number().int().min(100).max(599).nullable().optional(),
+    useCases: z.array(z.union([z.number().int().positive(), z.string().max(12)])).max(60).optional(), status: z.enum(['DRAFT', 'APPROVED']).optional(),
     meeting: z.number().int().positive().nullable().optional(), createMeeting: z.boolean().optional(),
     name: z.string().max(160).optional(), defaults: z.boolean().optional(), activityId: z.number().int().positive().optional(),
     stakeholder: z.union([z.number().int().positive(), z.string().max(12)]).optional(), role: z.enum(RACI_ROLES).nullable().optional(), kind: z.enum(['FE', 'UC']).optional(),
@@ -249,7 +261,25 @@ const swrExtras = defineTool({
     await requirePerson(ctx, 'edit requirements');
     const P = (m: string, p: string) => hit(ctx, a.project, m, p);
     switch (a.action) {
-      case 'raci_activity_add': { const p = await P('POST', '/swr/raci/activities'); return { added: await elic.addRaciActivity(ctx.userId, p.id, defined({ name: a.name, defaults: a.defaults })) }; }
+      case 'raci_activity_add': {
+        if (a.preset) { const p = await P('POST', '/swr/raci/activities/preset'); return { added: await elic.addRaciActivity(ctx.userId, p.id, { preset: a.preset }) }; }
+        const p = await P('POST', '/swr/raci/activities'); return { added: await elic.addRaciActivity(ctx.userId, p.id, defined({ name: a.name, defaults: a.defaults })) };
+      }
+      case 'seed_hats': { const p = await P('POST', '/swr/stakeholders/seed-hats'); return { seeded: await elic.seedHats(ctx.userId, p.id) }; }
+      case 'qna_from_elicitation': {
+        const s = numOf(need(a.session, 'session'), 'elicitation session');
+        const qid = need(a.questionId, 'questionId');
+        const p = await P('POST', `/swr/elicitation/${s}/questions/${qid}/qna`);
+        const r = await elic.questionToQna(ctx.userId, p.id, s, qid, defined({ targetRef: a.targetRef, askedTo: a.askedTo, due: a.due }));
+        return { question: r.question.key, created: r.created, status: r.question.statusText };
+      }
+      case 'system_message_add': case 'system_message_update': {
+        const body = defined({ msgType: a.msgType, context: a.context, text: a.text ?? undefined, textEn: a.textEn, httpStatus: a.httpStatus, useCases: a.useCases, status: a.status });
+        if (a.action === 'system_message_add') { const p = await P('POST', '/srs/messages'); return { message: await sysMsg.createSystemMessage(ctx.userId, p.id, { ...body, text: need(a.text ?? undefined, 'text') } as Parameters<typeof sysMsg.createSystemMessage>[2]) }; }
+        const m = need(a.message, 'message');
+        const p = await P('PATCH', `/srs/messages/${m}`);
+        return { message: await sysMsg.updateSystemMessage(ctx.userId, p.id, m, body as Parameters<typeof sysMsg.updateSystemMessage>[3]) };
+      }
       case 'raci_set': { const p = await P('PUT', '/swr/raci/cells'); return { set: await elic.setRaciCell(ctx.userId, p.id, { activityId: need(a.activityId, 'activityId'), stakeholder: need(a.stakeholder, 'stakeholder'), role: a.role ?? null }) }; }
       case 'seed_priority': { const p = await P('POST', '/swr/priority/seed'); return { seeded: await swr.seedPriorityRows(ctx.userId, p.id, need(a.kind, 'kind')) }; }
       case 'seed_stakeholders': { const p = await P('POST', '/swr/stakeholders/seed-actors'); return { seeded: await elic.seedFromActors(ctx.userId, p.id) }; }
@@ -488,24 +518,49 @@ function anchorQuote(doc: unknown, quote: string, anchorId: string): unknown | n
 
 const docsExtras = defineTool({
   name: 'docs_extras', title: 'Docs extras (inline comments, live editing)', group: 'docs',
-  description: 'action: inline_comment (page, quote = exact text inside ONE paragraph of the page, markdown = the comment) — highlights that passage and attaches the comment, like selecting text on the web | live_editing (page, enabled) — turns real-time co-editing of a page on/off (page owner or admin).',
+  description: 'action: inline_comment (page, quote = exact text inside ONE paragraph of the page, markdown = the comment) — highlights that passage and attaches the comment, like selecting text on the web | live_editing (page, enabled) — turns real-time co-editing of a page on/off (page owner or admin) | autofill (page; sections recordOfChanges/team/risks/schedule/raci, raciMode people/roles/honest — fills a Report 1/2 page from project data; Record of Changes includes implemented change requests) | report4_fill (parts database/diagrams/classes; diagram D-n of the SQL design or fromRepo=true — a 7-column table per database table in §1.3, approved diagrams, §3 class specifications by Spring Boot package) | report6_fill (User Manual frame per actor → screen; warns about headings that do not match an SRS screen) | adr_supersede (page = the old ADR, by = the new ADR page). Each fill saves ONE new page version (restorable from History); page is optional for report4_fill / report6_fill (the project\'s Report 4 / 6 page).',
   write: true,
-  input: z.object({ project: projectArg, action: z.enum(['inline_comment', 'live_editing']), page: z.number().int().positive(), quote: z.string().min(1).max(500).optional(), markdown: z.string().min(1).max(10_000).optional(), enabled: z.boolean().optional() }),
+  input: z.object({
+    project: projectArg, action: z.enum(['inline_comment', 'live_editing', 'autofill', 'report4_fill', 'report6_fill', 'adr_supersede']), page: z.number().int().positive().optional(),
+    quote: z.string().min(1).max(500).optional(), markdown: z.string().min(1).max(10_000).optional(), enabled: z.boolean().optional(),
+    sections: z.array(z.enum(docs3a.FILL_SECTIONS)).max(10).optional(), raciMode: z.enum(['people', 'roles', 'honest']).optional(),
+    parts: z.array(z.enum(sds.REPORT4_PARTS)).max(3).optional(), diagram: z.number().int().positive().optional(), fromRepo: z.boolean().optional(), by: z.number().int().positive().optional(),
+  }),
   run: async (ctx, a) => {
     W(ctx);
-    if (a.action === 'live_editing') {
-      const p = await projectFor(ctx, a.project, [['PUT', `/pages/${a.page}/collab`]]);
-      return { page: a.page, liveEditing: await collab.setPageCollab(ctx.userId, p.id, a.page, need(a.enabled, 'enabled')) };
+    if (a.action === 'autofill') {
+      const pg = need(a.page, 'page');
+      const p = await projectFor(ctx, a.project, [['POST', `/pages/${pg}/autofill`]]);
+      const r = await docs3a.autofillPage(ctx.userId, p.id, pg, defined({ sections: a.sections, raciMode: a.raciMode }));
+      return { page: pg, filled: r.filled, version: (r.page as { currentVersion?: number }).currentVersion ?? null };
     }
-    const p = await projectFor(ctx, a.project, [['PATCH', `/pages/${a.page}`], ['POST', `/pages/${a.page}/inline-comments`]]);
+    if (a.action === 'report4_fill') {
+      const p = await projectFor(ctx, a.project, [['POST', '/sds/report4/fill']]);
+      return sds.fillReport4(ctx.userId, p.id, { parts: a.parts, diagram: a.diagram ?? null, fromRepo: a.fromRepo, page: a.page ?? null });
+    }
+    if (a.action === 'report6_fill') {
+      const p = await projectFor(ctx, a.project, [['POST', '/report6/fill']]);
+      return dm5b.fillReport6(ctx.userId, p.id, { page: a.page ?? null });
+    }
+    if (a.action === 'adr_supersede') {
+      const pg = need(a.page, 'page');
+      const p = await projectFor(ctx, a.project, [['POST', `/pages/${pg}/adr/supersede`]]);
+      return dm5b.supersedeAdr(ctx.userId, p.id, pg, need(a.by, 'by'));
+    }
+    const page = need(a.page, 'page');
+    if (a.action === 'live_editing') {
+      const p = await projectFor(ctx, a.project, [['PUT', `/pages/${page}/collab`]]);
+      return { page, liveEditing: await collab.setPageCollab(ctx.userId, p.id, page, need(a.enabled, 'enabled')) };
+    }
+    const p = await projectFor(ctx, a.project, [['PATCH', `/pages/${page}`], ['POST', `/pages/${page}/inline-comments`]]);
     const quote = need(a.quote, 'quote');
-    const cur = await pages.getPage(ctx.userId, p.id, a.page) as { contentJson: unknown; version: number };
+    const cur = await pages.getPage(ctx.userId, p.id, page) as { contentJson: unknown; version: number };
     const anchorId = `cm${randomBytes(6).toString('hex')}`;
     const next = anchorQuote(cur.contentJson, quote, anchorId);
     if (!next) throw bad('That exact text was not found inside a single paragraph of the page (or it already has a comment) — quote a shorter passage exactly as written');
-    await pages.updatePage(ctx.userId, p.id, a.page, { contentJson: next, baseVersion: cur.version });
-    const c = await collab.addInlineComment(ctx.userId, p.id, a.page, { anchorId, quote, bodyJson: docOf(need(a.markdown, 'markdown')) });
-    return { page: a.page, comment: (c as { id: number }).id, anchor: anchorId };
+    await pages.updatePage(ctx.userId, p.id, page, { contentJson: next, baseVersion: cur.version });
+    const c = await collab.addInlineComment(ctx.userId, p.id, page, { anchorId, quote, bodyJson: docOf(need(a.markdown, 'markdown')) });
+    return { page, comment: (c as { id: number }).id, anchor: anchorId };
   },
 });
 
@@ -758,13 +813,17 @@ const formManage = defineTool({
 
 const governanceExtras = defineTool({
   name: 'governance_extras', title: 'RAID links, starter risks, Q&A ⇒ issue, CR scope', group: 'planning',
-  description: 'action: raid_link (RAID item; issue, stageId or CR number) | raid_unlink (RAID item, link id) | raid_starter (adds the standard starter risks) | qna_convert (old Q&A note ⇒ a proper Q&A entry) | cr_affected (CR; items [{kind REQ/UC/BR/DOC, ref}] — the baseline items the change touches) | cr_implement (CR; items [{title, description, type, assignee, dueDate}] ⇒ implementation issues).',
+  description: 'action: raid_link (RAID item; issue, stageId or CR number) | raid_unlink (RAID item, link id) | raid_starter (adds the standard starter risks) | raid_to_issue (RAID item ⇒ new issue linked to it; use=mitigation|contingency (Plan B), optional title/type/assignee/dueDate) | qna_convert (old Q&A note ⇒ a proper Q&A entry) | cr_affected (CR; items [{kind REQ/UC/BR/DOC, ref}] — the baseline items the change touches) | cr_implement (CR; items [{title, description, type, assignee, dueDate}] ⇒ implementation issues) | cr_split (CR; parts [{title, impactScope?, scheduleDays?}] ⇒ sub-requests CR-na/nb) | cr_sync (approved CR; sync {srsRoc, trackingQna, trackingIssues, trackingWbs, rtm, note} — the 5-point update checklist; people only). The structured impact matrix (6 dimensions) and options A/B/C are fields of change_request_manage.',
   write: true,
   input: z.object({
-    project: projectArg, action: z.enum(['raid_link', 'raid_unlink', 'raid_starter', 'qna_convert', 'cr_affected', 'cr_implement']),
+    project: projectArg, action: z.enum(['raid_link', 'raid_unlink', 'raid_starter', 'raid_to_issue', 'qna_convert', 'cr_affected', 'cr_implement', 'cr_split', 'cr_sync']),
     item: z.union([z.number().int().positive(), z.string().max(12)]).optional(), issue: issueArg.optional(), stageId: z.number().int().positive().optional(), crNumber: z.number().int().positive().optional(), linkId: z.number().int().positive().optional(),
     refs: z.array(z.object({ kind: z.enum(BASELINE_KINDS), ref: z.string().min(1).max(40) })).max(200).optional(),
     items: z.array(z.object({ title: z.string().min(1).max(255), description: z.string().max(10_000).nullable().optional(), type: z.string().max(20).optional(), assignee: z.string().max(254).optional(), dueDate: ymd.nullable().optional() })).max(20).optional(),
+    // dm5 G4 (C8/C10)
+    use: z.enum(['mitigation', 'contingency']).optional(), title: z.string().max(255).optional(), type: z.string().max(20).optional(), assignee: z.string().max(254).optional(), dueDate: ymd.nullable().optional(),
+    parts: z.array(z.object({ title: z.string().min(1).max(255), impactScope: z.string().max(10_000).nullable().optional(), scheduleDays: z.number().int().min(-3650).max(3650).nullable().optional() })).max(5).optional(),
+    sync: z.object({ srsRoc: z.boolean().optional(), trackingQna: z.boolean().optional(), trackingIssues: z.boolean().optional(), trackingWbs: z.boolean().optional(), rtm: z.boolean().optional(), note: z.string().max(1000).nullable().optional() }).optional(),
   }),
   run: async (ctx, a) => {
     W(ctx);
@@ -774,6 +833,19 @@ const governanceExtras = defineTool({
       case 'raid_link': { const r = n(); const p = await hit(ctx, a.project, 'POST', `/raid/${r}/links`); return { linked: await raid.addRaidLink(ctx.userId, p.id, r, defined({ issueNumber: a.issue !== undefined ? issueNumber(p0.key, a.issue) : undefined, stageId: a.stageId, crNumber: a.crNumber })) }; }
       case 'raid_unlink': { const r = n(); const l = need(a.linkId, 'linkId'); const p = await hit(ctx, a.project, 'DELETE', `/raid/${r}/links/${l}`); return { unlinked: await raid.removeRaidLink(ctx.userId, p.id, r, l) }; }
       case 'raid_starter': { const p = await hit(ctx, a.project, 'POST', '/raid/starter'); return { added: await raid.importStarterRisks(ctx.userId, p.id) }; }
+      case 'raid_to_issue': {
+        const r = n();
+        const p = await hit(ctx, a.project, 'POST', `/raid/${r}/to-issue`);
+        const out = await raid.raidToIssue(ctx.userId, p.id, r, { use: a.use, title: a.title ?? null, typeKey: a.type ?? null, assigneeId: a.assignee ? await assigneeIdOf(ctx, p0, a.assignee) : null, dueDate: a.dueDate ? new Date(`${a.dueDate}T00:00:00Z`) : null });
+        return { issue: out.issue };
+      }
+      case 'cr_split': { const r = n(); const p = await hit(ctx, a.project, 'POST', `/changes/${r}/split`); return { split: (await crs.splitChangeRequest(ctx.userId, p.id, r, need(a.parts, 'parts'))).created }; }
+      case 'cr_sync': {
+        await requirePerson(ctx, 'confirm the change-request sync checklist');
+        const r = n(); const p = await hit(ctx, a.project, 'PUT', `/changes/${r}/sync`);
+        const cr = await crs.setChangeRequestSync(ctx.userId, p.id, r, need(a.sync, 'sync'));
+        return { syncDone: cr.syncDone, syncTotal: cr.syncTotal };
+      }
       case 'qna_convert': { const r = n(); const p = await hit(ctx, a.project, 'POST', `/qna/${r}/convert`); return { converted: await qna.convertLegacy(ctx.userId, p.id, r) }; }
       case 'cr_affected': { const r = n(); const p = await hit(ctx, a.project, 'PUT', `/changes/${r}/affected`); return { affected: await q.setCrRefs(ctx.userId, p.id, r, need(a.refs, 'refs')) }; }
       case 'cr_implement': {
@@ -789,16 +861,24 @@ const governanceExtras = defineTool({
 
 const diagramExtras = defineTool({
   name: 'diagram_extras', title: 'Diagram comments, versions, embed, import', group: 'docs',
-  description: 'action: comment_add (diagram; text, parent comment, anchor) | comment_update (diagram, comment; text, resolved) | version_restore (diagram, version) | embed (diagram ⇒ Docs page, mode latest/pinned, heading) | import (fileName + content of a .drawio / .mmd / .puml file, base64 flag, to mermaid/native, title). Approving a diagram and accepting AI proposals stay on the web; delete a comment: ctwork_delete.',
+  description: 'action: comment_add (diagram; text, parent comment, anchor) | comment_update (diagram, comment; text, resolved) | version_restore (diagram, version) | embed (diagram ⇒ Docs page, mode latest/pinned, heading) | import (fileName + content of a .drawio / .excalidraw / .mmd / .md / .sql / .puml file, base64 flag, to mermaid/native, title — or repoPath = a file of the connected repository, e.g. docs/uml/booking.puml; .puml stays PlantUML) | db_design_table (diagram = a SQL / Database-designer diagram, or fromRepo=true for the Flyway migrations of the connected repo; write=true puts one 7-column table per database table — No · Field · PK · FK · UN · NN · Description + Constraints — into Report 4 §1.3 (page optional), otherwise returns the tables). Approving a diagram and accepting AI proposals stay on the web; delete a comment: ctwork_delete.',
   write: true,
   input: z.object({
-    project: projectArg, action: z.enum(['comment_add', 'comment_update', 'version_restore', 'embed', 'import']), diagram: z.number().int().positive().optional(),
+    project: projectArg, action: z.enum(['comment_add', 'comment_update', 'version_restore', 'embed', 'import', 'db_design_table']), diagram: z.number().int().positive().optional(),
+    fromRepo: z.boolean().optional(), write: z.boolean().optional(), repoPath: z.string().max(500).optional(),
     text: z.string().max(10_000).optional(), parent: z.number().int().positive().optional(), anchor: z.string().max(160).nullable().optional(), comment: z.number().int().positive().optional(), resolved: z.boolean().optional(),
     version: z.number().int().positive().optional(), page: z.number().int().positive().optional(), mode: z.enum(['latest', 'pinned']).optional(), heading: z.string().max(255).nullable().optional(),
     fileName: z.string().max(255).optional(), content: z.string().max(9_000_000).optional(), base64: z.boolean().optional(), to: z.enum(['mermaid', 'native']).optional(), title: z.string().max(255).nullable().optional(),
   }),
   run: async (ctx, a) => {
+    if (a.action === 'import' && a.repoPath) { const p = await hit(ctx, a.project, 'POST', '/diagrams/import-repo'); return { imported: await (await import('../plantumlDiagrams.service.js')).importFromRepo(ctx.userId, p.id, { path: a.repoPath, title: a.title ?? null, to: a.to }) }; }
     if (a.action === 'import') { const p = await hit(ctx, a.project, 'POST', '/diagrams/import'); return { imported: await dg.importDiagram(ctx.userId, p.id, defined({ fileName: need(a.fileName, 'fileName'), content: need(a.content, 'content'), base64: a.base64, to: a.to, title: a.title }) as Parameters<typeof dg.importDiagram>[2]) }; }
+    if (a.action === 'db_design_table') {
+      if (a.write) { const p = await hit(ctx, a.project, 'POST', '/sds/db-design/fill'); return sds.fillDbDesignPage(ctx.userId, p.id, { diagram: a.diagram ?? null, fromRepo: a.fromRepo, page: a.page ?? null }); }
+      const p = await hit(ctx, a.project, 'GET', '/sds/db-design');
+      const r = await sds.dbDesign(ctx.userId, p.id, { diagram: a.diagram ?? null, fromRepo: a.fromRepo });
+      return untrusted('database design', json({ source: r.source, tables: r.tables.map((tb) => ({ table: tb.name, fields: tb.fields.map((f) => [f.no, f.field, f.pk ? 'X' : '', f.fk ? 'X' : '', f.un ? 'X' : '', f.nn ? 'X' : '', f.description]), constraints: tb.constraints })) }));
+    }
     const n = need(a.diagram, 'diagram');
     switch (a.action) {
       case 'comment_add': { const p = await hit(ctx, a.project, 'POST', `/diagrams/${n}/comments`); return { comment: await dg.addComment(ctx.userId, p.id, n, { body: need(a.text, 'text'), parentId: a.parent ?? null, anchor: a.anchor ?? null }) }; }
@@ -812,10 +892,20 @@ const diagramExtras = defineTool({
 
 const testExtras = defineTool({
   name: 'test_extras', title: 'Test extras (import, risks, defect analysis, flaky)', group: 'tests',
-  description: 'action: import_tests (rows [{title, preconditions, steps [{action, data, expected}], requirements}] ⇒ Xray test cases) | risk_save (number to edit; title, likelihood 1–5, impact 1–5, riskKind PRODUCT/PROJECT, mitigation, issues) | defect_analysis (bug issue; rootCause, injectedPhase, detectedByTool, testLevel, fixNote) | reset_flaky (automated test id) | finding (static-analysis finding id; findingAction ignore / reopen / issue = file a bug).',
+  description: 'action: import_tests (rows [{title, preconditions, steps [{action, data, expected}], requirements}] ⇒ Xray test cases) | risk_save (number to edit; title, likelihood 1–5, impact 1–5, riskKind PRODUCT/PROJECT, mitigation, issues) | defect_analysis (bug issue; rootCause, injectedPhase, detectedByTool, testLevel, fixNote) | reset_flaky (automated test id) | finding (static-analysis finding id; findingAction ignore / reopen / issue = file a bug) | plan_settings (plan id; entry criteria [{kind CASES_READY/REQ_COVERAGE/MAX_OPEN_CRITICAL/SMOKE_PASSED/PLAN_REVIEWED/MANUAL, target, text, done}], exit criteria {passRate, maxOpenCritical, maxOpenMajor, reqCoverage, minExecuted}, versionId, IEEE 829 text fields; omit everything to just read the plan + gate) | case_attributes (issues = test numbers; level, testType incl. SECURITY, technique, estimateMin) | automation_import (Report 5.1: JUnit/Surefire XML in report, optional JaCoCo/lcov in coverage, commitSha, executedAt; tests named with UTCIDnn or [n] fill P/F; dryRun to preview) | unit_lint (Report 5.1 lint: missing A/B cases, unmarked UTCIDs, duplicates, preconditions inside Condition rows) | test_groups (issue = a requirement: its linked tests per Happy/Empty/Boundary/Conflict/Security/Adjacent label + step lint).',
   write: true,
   input: z.object({
-    project: projectArg, action: z.enum(['import_tests', 'risk_save', 'defect_analysis', 'reset_flaky', 'finding']),
+    project: projectArg, action: z.enum(['import_tests', 'risk_save', 'defect_analysis', 'reset_flaky', 'finding', 'plan_settings', 'case_attributes', 'automation_import', 'unit_lint', 'test_groups']),
+    // dm5 G3: plan_settings · case_attributes · automation_import · unit_lint · test_groups
+    plan: z.number().int().positive().optional(),
+    entry: z.array(z.object({ kind: z.enum(ENTRY_KINDS), target: z.number().min(0).max(100_000).nullable().optional(), text: z.string().max(300).nullable().optional(), done: z.boolean().nullable().optional() })).max(20).optional(),
+    criteria: z.object({ passRate: z.number().min(0).max(100).nullable().optional(), maxOpenCritical: z.number().int().min(0).max(1000).nullable().optional(), maxOpenMajor: z.number().int().min(0).max(1000).nullable().optional(), reqCoverage: z.number().min(0).max(100).nullable().optional(), minExecuted: z.number().min(0).max(100).nullable().optional() }).optional(),
+    versionId: z.number().int().positive().nullable().optional(),
+    scopeIn: z.string().max(8000).optional(), scopeOut: z.string().max(8000).optional(), approach: z.string().max(8000).optional(), environment: z.string().max(4000).optional(),
+    suspension: z.string().max(4000).optional(), resumption: z.string().max(4000).optional(),
+    level: z.enum(TEST_LEVELS).nullable().optional(), testType: z.enum(TEST_TYPES).nullable().optional(), technique: z.string().max(16).nullable().optional(), estimateMin: z.number().int().min(0).max(10_000).nullable().optional(),
+    report: z.string().max(8 * 1024 * 1024).optional(), coverage: z.string().max(8 * 1024 * 1024).nullable().optional(), commitSha: z.string().max(64).nullable().optional(),
+    executedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(), dryRun: z.boolean().optional(),
     finding: z.number().int().positive().optional(), findingAction: z.enum(['ignore', 'reopen', 'issue']).optional(),
     rows: z.array(z.object({ title: z.string().min(1).max(255), preconditions: z.string().max(10_000).nullable().optional(), steps: z.array(z.object({ action: z.string().max(5000), data: z.string().max(5000).nullable().optional(), expected: z.string().max(5000).nullable().optional() })).max(100).optional(), requirements: z.array(z.string().max(20)).max(50).optional() })).max(500).optional(),
     number: z.number().int().positive().optional(), title: z.string().max(255).optional(), likelihood: z.number().int().min(1).max(5).nullable().optional(), impact: z.number().int().min(1).max(5).nullable().optional(),
@@ -839,6 +929,26 @@ const testExtras = defineTool({
         return { finding: act === 'issue' ? await stat.findingToIssue(ctx.userId, p.id, f) : await stat.setFindingStatus(ctx.userId, p.id, f, act === 'ignore' ? 'IGNORED' : 'OPEN') };
       }
       case 'reset_flaky': { const id = need(a.autoTest, 'autoTest'); const p = await hit(ctx, a.project, 'POST', `/test-automation/tests/${id}/reset-flaky`); return { reset: await autoTests.resetFlaky(ctx.userId, p.id, id) }; }
+      case 'plan_settings': {
+        const plan = need(a.plan, 'plan');
+        const patch = defined({ entry: a.entry, criteria: a.criteria, versionId: a.versionId, scopeIn: a.scopeIn, scopeOut: a.scopeOut, approach: a.approach, environment: a.environment, suspension: a.suspension, resumption: a.resumption });
+        if (!Object.keys(patch).length) { const p = await hit(ctx, a.project, 'GET', `/test-plans/${plan}/settings`); return { plan: await t.getPlanSettings(ctx.userId, p.id, plan) }; }
+        const p = await hit(ctx, a.project, 'PUT', `/test-plans/${plan}/settings`);
+        return { plan: await t.savePlanSettings(ctx.userId, p.id, plan, patch as Parameters<typeof t.savePlanSettings>[3]) };
+      }
+      case 'case_attributes': {
+        const p = await hit(ctx, a.project, 'PATCH', '/tests-attributes');
+        const numbers = need(a.issues, 'issues').map((i) => issueNumber(p0.key, i));
+        return await t.setCaseAttributes(ctx.userId, p.id, numbers, defined({ level: a.level, testType: a.testType, technique: a.technique, estimateMin: a.estimateMin }));
+      }
+      case 'automation_import': {
+        const p = await hit(ctx, a.project, 'POST', '/fpt-tests/unit/automation-import');
+        const { importUnitAutomation, automationImportInput } = await import('../fptTests.service.js');
+        const body = automationImportInput.parse(defined({ report: need(a.report, 'report'), coverage: a.coverage, commitSha: a.commitSha, executedAt: a.executedAt, dryRun: a.dryRun }));
+        return { import: await importUnitAutomation(ctx.userId, p.id, body) };
+      }
+      case 'unit_lint': { const p = await hit(ctx, a.project, 'GET', '/fpt-tests/unit/lint'); const { unitLint } = await import('../fptTests.service.js'); return { lint: await unitLint(ctx.userId, p.id) }; }
+      case 'test_groups': { const n = issueNumber(p0.key, need(a.issue, 'issue')); const p = await hit(ctx, a.project, 'GET', `/test-groups/${n}`); return { groups: await t.requirementTestGroups(ctx.userId, p.id, n) }; }
     }
     throw bad('Unknown action');
   },
@@ -887,19 +997,22 @@ const ctworkDelete = defineTool({
   },
 });
 
-const READ_WHAT = ['dashboards', 'filters', 'baselines', 'exploratory', 'wbs', 'desk_queue', 'desk_problems', 'handoffs', 'peer_rounds', 'meeting_series', 'weekly_reports', 'ai_usage', 'report_doc', 'estimation', 'status_report'] as const;
+const READ_WHAT = ['dashboards', 'filters', 'baselines', 'exploratory', 'wbs', 'desk_queue', 'desk_problems', 'handoffs', 'peer_rounds', 'meeting_series', 'weekly_reports', 'ai_usage', 'report_doc', 'estimation', 'status_report', 'uat', 'submit_check', 'system_messages', 'final_checks'] as const;
 const READ_ROUTE: Record<(typeof READ_WHAT)[number], string> = {
   dashboards: '/dashboards', filters: '/filters', baselines: '/timeline/baselines', exploratory: '/exploratory', wbs: '/wbs', desk_queue: '/desk/queue', desk_problems: '/desk/problems',
   handoffs: '/handoffs', peer_rounds: '/contrib/peer/rounds', meeting_series: '/meeting-series', weekly_reports: '/fpt-reports/weekly', ai_usage: '/fpt-reports/ai-usage',
   report_doc: '/fpt-reports/doc', estimation: '/swr/estimation', status_report: '/swr/status-report',
+  uat: '/portal/uat', // dm5 G3 (D10): chỉ đọc; quyết định UAT vẫn chỉ trên cổng khách
+  submit_check: '/submit-check', system_messages: '/srs/messages', final_checks: '/final-report/checks', // dm5 G2
 };
 const ctworkRead = defineTool({
   name: 'ctwork_read', title: 'Read other project data', group: 'planning',
-  description: 'Reads one list (with ids for the *_manage / ctwork_delete tools): dashboards | filters | baselines | exploratory (number = one session) | wbs | desk_queue | desk_problems (number = one problem) | handoffs | peer_rounds (number = one round) | meeting_series | weekly_reports | ai_usage | report_doc (course/group info) | estimation | status_report.',
+  description: 'Reads one list (with ids for the *_manage / ctwork_delete tools): dashboards | filters | baselines | exploratory (number = one session) | wbs | desk_queue | desk_problems (number = one problem) | handoffs | peer_rounds (number = one round) | meeting_series | weekly_reports | ai_usage | report_doc (course/group info) | estimation | status_report | uat (UAT sign-offs with satisfaction 1–5, tester code, verdicts; number = approval id ⇒ its acceptance certificate — read-only, decisions stay in the client portal) | submit_check (pre-submission check: UC names ↔ issues ↔ WBS + the 10 red-pen errors, each green/red with details) | system_messages (SM-xx register for Report 3 §5.2, with codes mentioned but missing) | final_checks (Report 7 cross-checks: unknown/duplicate codes, test numbers vs 5.1/5.2/5.3, effort vs work logs, template text).',
   write: false,
   input: z.object({ project: projectArg, what: z.enum(READ_WHAT), number: z.number().int().positive().optional() }),
   run: async (ctx, a) => {
-    const route = a.number && ['exploratory', 'desk_problems', 'peer_rounds'].includes(a.what) ? `${READ_ROUTE[a.what]}/${a.number}` : READ_ROUTE[a.what];
+    const route = a.what === 'uat' && a.number ? `/portal/uat/${a.number}/certificate`
+      : a.number && ['exploratory', 'desk_problems', 'peer_rounds'].includes(a.what) ? `${READ_ROUTE[a.what]}/${a.number}` : READ_ROUTE[a.what];
     const p = await projectFor(ctx, a.project, [['GET', route]]);
     const u = ctx.userId;
     const data: unknown = await ({
@@ -909,6 +1022,8 @@ const ctworkRead = defineTool({
       handoffs: () => handoffs.listProjectHandoffs(u, p.id, {}), peer_rounds: () => (a.number ? peer.getRound(u, p.id, a.number) : peer.listRounds(u, p.id)),
       meeting_series: () => series.listSeries(u, p.id), weekly_reports: () => rep.listWeekly(u, p.id), ai_usage: () => rep.listAiUsage(u, p.id),
       report_doc: () => rep.getReportDoc(u, p.id), estimation: () => pack.getEstimation(u, p.id), status_report: () => pack.getStatusReport(u, p.id),
+      uat: async () => { const portal = await import('../portal.service.js'); return a.number ? portal.uatCertificate(u, p.id, a.number) : portal.listUats(u, p.id); },
+      submit_check: () => dm5b.submitCheck(u, p.id), system_messages: () => sysMsg.listSystemMessages(u, p.id), final_checks: () => finalRep.checkFinal(u, p.id),
     } as Record<string, () => Promise<unknown>>)[a.what]();
     const text = json(data);
     return untrusted(a.what, text.length > 60_000 ? `${text.slice(0, 60_000)}\n… (cut)` : text);

@@ -559,7 +559,7 @@ const waitEvents = defineTool({
 const createProjectTool = defineTool({
   name: 'create_project',
   title: 'Create project',
-  description: 'Creates a new project in one of your workspaces (by slug). PEOPLE only — agent tokens are refused. Template: "SWR302" auto-seeds the Requirements assignment (weeks 2→9, one epic per deliverable, the SWR302 package page and 5 Wiegers template pages); "SWT301" the testing lab; "CAPSTONE" a graduation project; "BLANK" stays empty. key = 2–10 letters/digits starting with a letter (e.g. "TP2"). kind defaults from the template (as on the web) and sets the default modules; modules turns extra ones on/off (e.g. {"docs":true,"meetings":true,"reports":true}). Returns the project key, its modules and web URL.',
+  description: 'Creates a new project in one of your workspaces (by slug). PEOPLE only — agent tokens are refused. Template: "SWR302" auto-seeds the Requirements assignment (weeks 2→9, one epic per deliverable, the SWR302 package page and 5 Wiegers template pages); "SWT301" the testing lab; "CAPSTONE" a graduation project; "BLANK" stays empty. key = 2–10 letters/digits starting with a letter (e.g. "TP2"). kind defaults from the template (as on the web) and sets the default modules; modules turns extra ones on/off (e.g. {"docs":true,"meetings":true,"reports":true}). Returns the project key, its modules and web URL. TEMPLATE LIBRARY (dm5): blueprint = SWP391_TEAM5 | SWP391_SOLO5 (one person, 5 roles C1–C5) | SEP490 | OJT | SCRUM sets workflow + WIP + transition rules, issue types, custom fields, labels, process gates (Done/DoR/WIP/capacity/RAG/MoSCoW/test gate), recurring meetings, stages, a Docs template kit and checklists; groups turns a group off ({"cadence":false}). fromProject = key of a project in the same workspace to copy ONLY its configuration (no issues/members). dryRun: true ⇒ returns the preview (and the list of blueprints) without creating anything — show it to the user first.',
   write: true,
   group: 'planning',
   input: z.object({
@@ -572,6 +572,17 @@ const createProjectTool = defineTool({
     modules: z.object(Object.fromEntries(STUDIO_MODULES.map((m) => [m, z.boolean().optional()])) as Record<(typeof STUDIO_MODULES)[number], z.ZodOptional<z.ZodBoolean>>)
       .partial().optional().describe(`Turn modules on/off at creation: ${STUDIO_MODULES.join(', ')}`),
     description: z.string().max(5000).optional(),
+    // dm5 G4 (A25): thư viện mẫu + chép cấu hình (không thêm lệnh mới).
+    blueprint: z.enum(['SWP391_TEAM5', 'SWP391_SOLO5', 'SEP490', 'OJT', 'SCRUM']).optional(),
+    // Khoá cố định (không z.record): schema JSON phải có `properties` cho model OpenAI/Anthropic (schemaModel.test.ts).
+    groups: z.object({
+      workflow: z.boolean().optional(), types: z.boolean().optional(), fields: z.boolean().optional(), labels: z.boolean().optional(),
+      gates: z.boolean().optional(), cadence: z.boolean().optional(), stages: z.boolean().optional(), docs: z.boolean().optional(),
+      checklists: z.boolean().optional(), modules: z.boolean().optional(),
+    }).optional().describe('Feature groups to turn off, e.g. {"cadence":false,"docs":false} (missing = on)'),
+    fromProject: z.string().min(2).max(10).optional().describe('Key of a project in the same workspace — copy its configuration only'),
+    copyDocBodies: z.boolean().optional().describe('fromProject: also copy the Docs page contents (default: titles only)'),
+    dryRun: z.boolean().optional().describe('Preview only — nothing is created'),
   }),
   run: async (ctx, a) => {
     if (ctx.agent) throw new ForbiddenError('Agents cannot create projects — ask the workspace owner to create it.');
@@ -580,12 +591,23 @@ const createProjectTool = defineTool({
       select: { id: true, slug: true },
     });
     if (!ws) throw new NotFoundError(`Workspace "${a.workspace}" not found, or you are not a member of it.`);
+    if (a.blueprint && a.fromProject) throw new ForbiddenError('Pick a blueprint OR fromProject, not both');
+    const src = a.fromProject ? await prisma.workProject.findFirst({ where: { workspaceId: ws.id, key: a.fromProject.trim().toUpperCase(), deletedAt: null }, select: { id: true } }) : null;
+    if (a.fromProject && !src) throw new NotFoundError(`Project ${a.fromProject} not found in ${ws.slug}`);
+    const bp = await import('../../services/work/projectBlueprint.service.js');
+    if (a.dryRun) {
+      return src
+        ? { dryRun: true, preview: await bp.previewFromProject(ctx.userId, ws.id, src.id) }
+        : a.blueprint ? { dryRun: true, preview: bp.blueprintPreview(a.blueprint, a.groups) } : { dryRun: true, blueprints: bp.listBlueprints().map((b) => ({ key: b.key, name: b.name, description: b.description })) };
+    }
     const p = await createProject(ctx.userId, ws.id, {
       key: a.key, name: a.name, type: a.type, template: a.template, description: a.description ?? null,
       kind: a.kind ?? kindFromTemplate(a.template), modules: a.modules ?? {},
+      blueprint: a.blueprint ?? null, groups: a.groups ?? null, fromProjectId: src?.id ?? null, copyDocBodies: a.copyDocBodies,
     });
     const on = Object.entries(p.modules).filter(([, v]) => v).map(([k]) => k);
-    return { projectKey: p.key, name: p.name, workspace: ws.slug, template: a.template, kind: p.kind, modules: on, url: `/work/${ws.slug}/${p.key}` };
+    const setup = 'setup' in p ? p.setup : null;
+    return { projectKey: p.key, name: p.name, workspace: ws.slug, template: a.template, kind: p.kind, modules: on, url: `/work/${ws.slug}/${p.key}`, ...(setup ? { setup } : {}) };
   },
 });
 

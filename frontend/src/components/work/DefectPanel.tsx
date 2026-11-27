@@ -70,7 +70,18 @@ export default function DefectPanel({ pid, num, editable }: { pid: number; num: 
           onChange={(e) => setDetails(e.target.value)}
           onBlur={() => { if (details.trim() !== (d.productDetails ?? '')) save.mutate({ productDetails: details.trim() || null }); }} />
       </Row>
+      {/* dm5 G3 (D8): cờ Leakage — Tự suy (Activity AT / nhãn "Leakage") · Lọt tới khách · Đội tự bắt. */}
+      <Row label={wt('q6.g3Leakage')} id={`w-def-leak-${num}`}>
+        <select id={`w-def-leak-${num}`} className={sel} disabled={!editable || save.isPending} data-testid="defect-leakage"
+          value={d.leakageFlag === true ? 'yes' : d.leakageFlag === false ? 'no' : ''}
+          onChange={(e) => save.mutate({ leakage: e.target.value === 'yes' ? true : e.target.value === 'no' ? false : null })}>
+          <option value="">{wt('q6.g3LeakageAuto')}{d.leakageFlag == null && d.leakage ? ` (${wt('q6.g3LeakageYes')})` : ''}</option>
+          <option value="yes">{wt('q6.g3LeakageYes')}</option>
+          <option value="no">{wt('q6.g3LeakageNo')}</option>
+        </select>
+      </Row>
       <p className="mt-1 text-[11.5px] text-[var(--w-text-2)]">Severity is how bad the defect is; Priority is when to fix it.</p>
+      <p className="text-[11.5px] text-[var(--w-text-3)]">{wt('q6.g3LeakageHint')}</p>
     </section>
   );
 }

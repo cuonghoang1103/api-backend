@@ -292,3 +292,17 @@ describe('meta cuối nguồn', () => {
     assert.deepEqual(splitMeta('SELECT 1;\n-- ctw:meta {oops').meta, {});
   });
 });
+
+describe('dm5 G2 (27/11/2026): cột tên "key"/"index" có kiểu tham số', () => {
+  it('settings(key VARCHAR(80) PRIMARY KEY, …) đọc đủ cột — không bị coi là KEY <tên> (…) của MySQL', () => {
+    const r = parseSql('CREATE TABLE settings (\n  key VARCHAR(80) PRIMARY KEY,\n  value TEXT NOT NULL\n);', { dialect: 'postgres' });
+    assert.deepEqual(r.errors, []);
+    assert.deepEqual(r.model.tables[0].columns.map((c) => c.name), ['key', 'value']);
+    assert.deepEqual(r.model.tables[0].primaryKey?.columns, ['key']);
+  });
+  it('MySQL KEY idx (col) vẫn là chỉ mục', () => {
+    const r = parseSql('CREATE TABLE t (\n  id INT PRIMARY KEY,\n  name VARCHAR(20),\n  KEY idx_name (name)\n);', { dialect: 'mysql' });
+    assert.deepEqual(r.model.tables[0].columns.map((c) => c.name), ['id', 'name']);
+    assert.equal(r.model.tables[0].indexes[0]?.name, 'idx_name');
+  });
+});

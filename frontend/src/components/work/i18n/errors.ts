@@ -34,6 +34,9 @@ const BY_CODE: Record<string, WKey> = {
   WORK_APPROVAL_NOT_YOUR_TURN: 'errors.notYourTurn',
   // CTW đợt 6
   WORK_BASELINED: 'q6.errBaselined',
+  // dm5 G3 (27/11/2026)
+  WORK_REVIEW_COOLOFF: 'q6.errCoolOff',
+  WORK_TEST_GATE: 'q6.errTestGate',
   WORK_REVIEW_NOT_READY: 'q6.errReviewNotReady',
   WORK_REVIEW_REINSPECT: 'q6.errReviewReinspect',
   // CTW đợt 9c: quiz lớp học

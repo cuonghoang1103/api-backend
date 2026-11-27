@@ -14,6 +14,8 @@ import { userName, workApi, workError, workPortalApi, workPortalKeys, type Proje
 import { Dialog, Spinner, UserAvatar } from '../ui';
 import { Select } from '../settings/shared';
 import { wt } from '@/components/work/i18n';
+import { g3Api, qualitySettingsOf } from '@/lib/work-g3-api'; // dm5 G3 (D10)
+import { wk } from '../hooks';
 
 function UatDialog({ pid, open, onClose, clients }: { pid: number; open: boolean; onClose: () => void; clients: Array<{ id: number; username: string; displayName: string | null; fullName: string | null; avatarUrl: string | null }> }) {
   const qc = useQueryClient();
@@ -27,11 +29,12 @@ function UatDialog({ pid, open, onClose, clients }: { pid: number; open: boolean
   const [title, setTitle] = useState('');
   const [env, setEnv] = useState('');
   const [build, setBuild] = useState('');
+  const [testerCode, setTesterCode] = useState(''); // dm5 G3 (D10)
   const toggle = (arr: number[], v: number) => (arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
   const create = useMutation({
     mutationFn: () => workPortalApi.createUat(pid, {
       title: title || undefined, issueNumbers: picked, pageNumbers: pages, approverIds: approvers.length ? approvers : clients.map((c) => c.id),
-      versionId: versionId || null, environment: env || null, build: build || null,
+      versionId: versionId || null, environment: env || null, build: build || null, testerCode: testerCode.trim() || null,
     }),
     onSuccess: () => { toast.success(wt('portal.uatRequested')); qc.invalidateQueries({ queryKey: workPortalKeys.all(pid) }); onClose(); setPicked([]); setPages([]); },
     onError: (err) => toast.error(workError(err, wt('portal.uatFailed'))),
@@ -58,6 +61,10 @@ function UatDialog({ pid, open, onClose, clients }: { pid: number; open: boolean
           <label className="block"><span className="mb-1 block text-[12.5px] font-medium">{wt('tests.environment')}</span><input className="w-input" value={env} onChange={(e) => setEnv(e.target.value)} placeholder="Staging" /></label>
           <label className="block"><span className="mb-1 block text-[12.5px] font-medium">{wt('tests.build')}</span><input className="w-input" value={build} onChange={(e) => setBuild(e.target.value)} placeholder="1.0.0-rc1" /></label>
         </div>
+        <label className="block"><span className="mb-1 block text-[12.5px] font-medium">{wt('uat.testerCode')}</span>
+          <input className="w-input w-[160px] font-mono uppercase" value={testerCode} maxLength={12} onChange={(e) => setTesterCode(e.target.value.toUpperCase())} placeholder="P1" data-testid="portal-uat-tester" />
+          <span className="mt-1 block text-[11.5px] text-[var(--w-text-3)]">{wt('uat.testerCodeHint')}</span>
+        </label>
         <fieldset>
           <legend className="mb-1 text-[12.5px] font-medium">{wt('portal.itemsAccept')}</legend>
           <div className="max-h-[200px] space-y-0.5 overflow-y-auto rounded-[8px] border border-[var(--w-border)] p-1.5" data-testid="portal-uat-items-pick">
@@ -106,6 +113,18 @@ export function StaffPanel({ config, pid, onPreview }: { config: ProjectConfig; 
   });
   const isAdmin = config.role === 'ADMIN';
   const list = clients.data?.clients ?? [];
+  // dm5 G3 (D10): đóng quyền người thử khi UAT được duyệt + mở lại quyền cho từng khách.
+  const revokeOn = qualitySettingsOf(config.settings).uatRevokeOnClose;
+  const setRevoke = useMutation({
+    mutationFn: (on: boolean) => g3Api.saveQualitySettings(pid, { uatRevokeOnClose: on }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: wk.project(pid) }),
+    onError: (err) => toast.error(workError(err)),
+  });
+  const restore = useMutation({
+    mutationFn: (uid: number) => g3Api.restoreClient(pid, uid),
+    onSuccess: () => { toast.success(wt('uat.restored')); qc.invalidateQueries({ queryKey: [...workPortalKeys.all(pid), 'clients'] }); },
+    onError: (err) => toast.error(workError(err)),
+  });
   return (
     <section className="w-card mb-5 p-4 md:p-5">
       <div className="flex flex-wrap items-center gap-2">
@@ -124,6 +143,8 @@ export function StaffPanel({ config, pid, onPreview }: { config: ProjectConfig; 
           {list.map((c) => (
             <li key={c.id} className="flex items-center gap-1.5 rounded-full border border-[var(--w-border)] py-0.5 pl-0.5 pr-2.5 text-[12.5px]">
               <UserAvatar user={c} size={20} />{userName(c)}{c.email && <span className="text-[var(--w-text-3)] max-sm:hidden">{c.email}</span>}
+              {c.portalRevoked && <span className="rounded-[4px] bg-[var(--w-hover)] px-1 text-[11px] text-[var(--w-text-3)]">{wt('uat.revoked')}</span>}
+              {c.portalRevoked && isAdmin && <button type="button" className="text-[11.5px] text-[var(--w-accent-text)] hover:underline" disabled={restore.isPending} onClick={() => restore.mutate(c.id)}>{wt('uat.restore')}</button>}
             </li>
           ))}
           {(clients.data?.pendingInvites ?? []).map((i) => (
@@ -137,7 +158,13 @@ export function StaffPanel({ config, pid, onPreview }: { config: ProjectConfig; 
           <button type="submit" className="w-btn" disabled={!email.trim() || invite.isPending}><MailPlus size={13} /> {wt('portal.inviteClient')}</button>
         </form>
       )}
-      <UatDialog pid={pid} open={uat} onClose={() => setUat(false)} clients={list} />
+      {isAdmin && (
+        <label className="mt-3 flex items-start gap-2 text-[12.5px]" data-testid="portal-uat-revoke-toggle">
+          <input type="checkbox" className="mt-0.5" checked={revokeOn} disabled={setRevoke.isPending} onChange={(e) => setRevoke.mutate(e.target.checked)} />
+          <span><span className="font-medium">{wt('uat.revokeOnClose')}</span><span className="block text-[11.5px] text-[var(--w-text-3)]">{wt('uat.revokeOnCloseDesc')}</span></span>
+        </label>
+      )}
+      <UatDialog pid={pid} open={uat} onClose={() => setUat(false)} clients={list.filter((c) => !c.portalRevoked)} />
     </section>
   );
 }

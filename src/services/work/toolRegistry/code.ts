@@ -163,12 +163,12 @@ const codeReviewAsk = defineTool({
   name: 'code_review', title: 'CuongMini code review', group: 'issues',
   description: 'Full code review of PR `pr` or of the PR/branch of `issue`: saves a review (findings file:line, acceptance criteria) and comments on the issue for the member. Only for the project admin, lead, team lead or lecturer.',
   write: true, personOnly: true, surfaces: { mcp: false, builtin: false },
-  input: z.object({ project: projectArg, pr: z.number().int().positive().optional(), issue: issueArg.optional(), notify: z.boolean().optional() }),
+  input: z.object({ project: projectArg, pr: z.number().int().positive().optional(), issue: issueArg.optional(), notify: z.boolean().optional(), mode: z.enum(['critic', 'full']).optional().describe('critic = mentor mode: no code, guiding questions only') }),
   run: async (ctx, a) => {
     if (!a.pr && a.issue === undefined) throw new BadRequestError('code_review needs pr or issue', 'VALIDATION_ERROR');
     const p = await projectFor(ctx, a.project, [['POST', '/code/review']]);
     const { runCodeReview } = await import('../codeReview.service.js');
-    const r = await runCodeReview(ctx.userId, p.id, { pr: a.pr ?? null, issue: a.issue !== undefined ? issueNumber(p.key, a.issue) : null, notify: a.notify === true });
+    const r = await runCodeReview(ctx.userId, p.id, { pr: a.pr ?? null, issue: a.issue !== undefined ? issueNumber(p.key, a.issue) : null, notify: a.notify === true, mode: a.mode });
     // `number` = thẻ đã nhận bình luận ⇒ nút "Open" của thẻ đề xuất mở đúng thẻ đó.
     return { review: r.key, url: r.url, verdict: r.verdict, findings: r.findings, blockers: r.blockers, issue: r.issue, commented: r.commented, ...(r.issueNumber ? { number: r.issueNumber } : {}) };
   },

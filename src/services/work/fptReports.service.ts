@@ -26,10 +26,11 @@ import {
   type Sep490Input, type TimeLogRow, type WbsResult, type WbsSourceIssue, type WeeklyData,
 } from './fptReports.js';
 import { requireProject } from './permissions.js';
-import { loadQuestions } from './qna.service.js';
+import { loadQuestions, qaNotes } from './qna.service.js';
 import { projectMembers } from './projects.service.js';
 import { addDays, dayInZone, projectTimezone, zonedMidnight } from './projectTime.js';
 import { writeXlsx } from './xlsxStyled.js';
+import { isLeakage } from './testMetrics.js'; // dm5 G3 (D8)
 
 const touch = (projectId: number, userId: number) => emitWorkEvent({ type: 'project.updated', projectId, actor: { kind: 'USER', userId } });
 const iso = (d: Date | null | undefined) => (d ? d.toISOString().slice(0, 10) : null);
@@ -341,7 +342,7 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
     const old = x.legacy ? legacyById.get(x.number) : undefined;
     return old
       ? { date: dayInZone(old.createdAt, tz), question: old.title, by: nameOf(old.createdBy), to: nameOf(old.owner), priority: prio(old), due: iso(old.reviewDate), status: old.status === 'INVALID' ? 'Cancelled' : closed(old.status) ? 'Closed' : 'Open', notes: old.mitigation ?? old.description ?? '' }
-      : { date: x.askedOn, question: x.question, by: x.askedBy ?? '', to: x.askedTo ?? '', priority: x.priorityText, due: x.due, status: x.statusText, notes: [x.answer, x.answer ? null : x.details].filter(Boolean).join('\n').slice(0, 4000) };
+      : { date: x.askedOn, question: x.question, by: x.askedBy ?? '', to: x.askedTo ?? '', priority: x.priorityText, due: x.due, status: x.statusText, notes: qaNotes(x) }; // dm5 G2 (B6): + mã đích, đề xuất, phương án A/B
   });
   const issuesLog: IssueLogRow[] = raid.filter((r) => r.type === 'ISSUE' && !isQa(r)).map((r) => ({
     date: dayInZone(r.createdAt, tz), issue: r.title, type: r.category ?? '', priority: prio(r), created: nameOf(r.createdBy), owner: nameOf(r.owner),
@@ -389,7 +390,7 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
       reporter: { select: { username: true, fullName: true, displayName: true } }, assignee: { select: { username: true, fullName: true, displayName: true } },
       labels: { select: { label: { select: { name: true } } } }, components: { select: { component: { select: { name: true } } } },
       defectOf: { select: { runId: true }, take: 1 },
-      defectInfo: { select: { severity: true, activity: true, product: true, productDetails: true, sourceReviewId: true } },
+      defectInfo: { select: { severity: true, activity: true, product: true, productDetails: true, sourceReviewId: true, leakage: true } },
     },
   });
   const defects: DefectRow[] = bugs.map((b) => {
@@ -408,7 +409,8 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
       date: dayInZone(b.createdAt, tz), description: `${p.key}-${b.number} ${b.title}`, activity: di?.activity ?? activity,
       product: di?.product ?? productOf(`${b.title} ${labels.join(' ')} ${comps.join(' ')}`),
       productDetails: di?.productDetails ?? comps.join(', '), assigner: nameOf(b.reporter), assignee: nameOf(b.assignee), status, updated: dayInZone(b.updatedAt, tz),
-      notes: [sev, b.defectOf.length ? 'Found in a test run' : '', di?.sourceReviewId ? 'Found in a spec review' : ''].filter(Boolean).join(' · '),
+      // dm5 G3 (D8): "Leakage" ở đầu Notes khi lỗi lọt (cờ / activity AT / nhãn) ⇒ đếm được bằng COUNTIF như số DRE trên CT Work.
+      notes: [isLeakage({ leakage: di?.leakage, activity: di?.activity ?? activity, labels: b.labels.map((l) => l.label.name) }) ? 'Leakage' : '', sev, b.defectOf.length ? 'Found in a test run' : '', di?.sourceReviewId ? 'Found in a spec review' : ''].filter(Boolean).join(' · '),
     };
   });
 
@@ -489,6 +491,13 @@ export async function composeWeekly(projectId: number, weekStartRaw: string): Pr
     teamMembers(projectId),
   ]);
 
+  // dm5 G4 (C3): mục I/III ghi số WBS (1.2.3) đầu cột Notes + đối soát với Scope (việc không có trong WBS ⇒ "not in WBS").
+  // Cột Task giữ đúng tên việc (khớp tên trong WBS/SRS — giảng viên dò theo tên).
+  const wbsOf = new Map<number, string>();
+  try {
+    for (const r of (await loadWbs(projectId)).result.rows) wbsOf.set(r.number, r.wbs);
+  } catch { /* WBS lỗi không chặn báo cáo tuần */ }
+  const wbsNote = (n: number) => (wbsOf.has(n) ? `WBS ${wbsOf.get(n)}` : wbsOf.size ? 'not in WBS' : '');
   const hours = new Map<number, { min: number; who: Set<string> }>();
   for (const l of logs) {
     const h = hours.get(l.issueId) ?? { min: 0, who: new Set<string>() };
@@ -503,7 +512,7 @@ export async function composeWeekly(projectId: number, weekStartRaw: string): Pr
       task: i.title,
       inCharge: nameOf(i.assignee) || [...(h?.who ?? [])].join(', '),
       status: done ? 'Completed' : i.status.category === 'IN_PROGRESS' || h ? 'In Progress' : 'Pending',
-      notes: [`${p.key}-${i.number}`, h ? `${Math.round((h.min / 60) * 10) / 10}h logged` : ''].filter(Boolean).join(' · '),
+      notes: [wbsNote(i.number), `${p.key}-${i.number}`, h ? `${Math.round((h.min / 60) * 10) / 10}h logged` : ''].filter(Boolean).join(' · '),
     };
   });
   const raidStatus = (r: { status: string; closedAt: Date | null }) => (r.closedAt && r.closedAt < to ? 'Completed' : r.status === 'MONITORING' ? 'In Progress' : 'Pending');
@@ -514,7 +523,7 @@ export async function composeWeekly(projectId: number, weekStartRaw: string): Pr
   const plan: WeeklyData['plan'] = upcoming.map((i) => ({
     task: i.title, inCharge: nameOf(i.assignee),
     deadline: iso(i.dueDate) ?? (i.sprint?.endAt ? dayInZone(i.sprint.endAt, tz) : ''),
-    notes: `${p.key}-${i.number}`,
+    notes: [wbsNote(i.number), `${p.key}-${i.number}`].filter(Boolean).join(' · '),
   }));
   const matters: WeeklyData['matters'] = raid
     .filter((r) => r.type !== 'ISSUE' && r.createdAt >= from)
@@ -631,6 +640,8 @@ export async function exportWeekly(userId: number, projectId: number, ids?: numb
 const aiOut = (r: Prisma.WorkAiUsageLogGetPayload<object>) => ({
   id: r.id, usedAt: iso(r.usedAt)!, phase: r.phase, task: r.task, tool: r.tool, output: r.output, validation: r.validation, evidence: r.evidence,
   measure: r.measure, value: r.value, risks: r.risks, source: r.source as 'AUTO' | 'MANUAL', issueId: r.issueId, userName: r.userName,
+  // dm5 G4 (C7): Chấp nhận / Bác bỏ / Một phần đầu ra AI; sourceKey review:<n> = phiên AI review code.
+  decision: (r.decision ?? null) as 'ACCEPTED' | 'REJECTED' | 'PARTIAL' | null, sourceKey: r.sourceKey,
 });
 
 export async function listAiUsage(userId: number, projectId: number) {
@@ -717,6 +728,7 @@ export const aiUsageInput = z.object({
   measure: z.string().trim().max(300).nullable().optional(),
   value: z.number().int().min(1).max(5).nullable().optional(),
   risks: z.string().max(4000).nullable().optional(),
+  decision: z.enum(['ACCEPTED', 'REJECTED', 'PARTIAL']).nullable().optional(),
 });
 const blank = (v: string | null | undefined) => (v === undefined ? undefined : v?.trim() ? v.trim() : null);
 
@@ -729,6 +741,7 @@ export async function createAiUsage(userId: number, projectId: number, input: z.
       projectId, source: 'MANUAL', usedAt: toDate(input.usedAt)!, phase: input.phase, task: input.task, tool: input.tool,
       output: blank(input.output) ?? null, validation: blank(input.validation) ?? null, evidence: blank(input.evidence) ?? null,
       measure: blank(input.measure) ?? null, value: input.value ?? null, risks: blank(input.risks) ?? null, userId, userName: me ? displayName(me) : null,
+      decision: input.decision ?? null,
     },
   });
   touch(projectId, userId);
@@ -752,6 +765,7 @@ export async function updateAiUsage(userId: number, projectId: number, id: numbe
       ...(input.measure !== undefined ? { measure: blank(input.measure) } : {}),
       ...(input.value !== undefined ? { value: input.value } : {}),
       ...(input.risks !== undefined ? { risks: blank(input.risks) } : {}),
+      ...(input.decision !== undefined ? { decision: input.decision } : {}),
     },
   });
   touch(projectId, userId);
@@ -778,7 +792,10 @@ export async function exportAiUsage(userId: number, projectId: number) {
     const n = weekNumber(day, doc.week1Start);
     const key = n && n > 0 ? `n${String(n).padStart(3, '0')}` : `d${mondayOf(day)}`;
     if (!groups.has(key)) groups.set(key, { weekNo: n && n > 0 ? n : null, label: n && n > 0 ? `Week ${n}` : `Week ${ddmmyyyy(mondayOf(day)).slice(0, 5)}`, rows: [] });
-    groups.get(key)!.rows.push({ usedAt: day, phase: r.phase, task: r.task, tool: r.tool, output: r.output, validation: r.validation, evidence: r.evidence, measure: r.measure, value: r.value, risks: r.risks });
+    // dm5 G4 (C7): mẫu 10 cột không có cột quyết định ⇒ ghi vào đầu cột "Student's Validation / Modification".
+    const decided = r.decision ? `Decision: ${r.decision === 'ACCEPTED' ? 'Accepted' : r.decision === 'REJECTED' ? 'Rejected' : 'Partially accepted'}` : null;
+    const validation = [decided, r.validation].filter(Boolean).join(' — ') || null;
+    groups.get(key)!.rows.push({ usedAt: day, phase: r.phase, task: r.task, tool: r.tool, output: r.output, validation, evidence: r.evidence, measure: r.measure, value: r.value, risks: r.risks });
   }
   const weeks = [...groups.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([, v]) => v);
   const students = doc.students.length ? doc.students : members.map((m) => ({ code: '', name: m.name, role: m.role, aiTools: '' }));

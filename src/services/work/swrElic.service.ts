@@ -33,8 +33,9 @@ import {
   checkProposals, DEFAULT_RACI_ACTIVITIES, elcKey, elicitationReportDoc, normalizeQuestions, normalizeSurveyQuestions, parseSurveyQuestions,
   proposalsOut, proposalsPrompt, quadrantOf, QUADRANTS, raciProblems, RACI_ROLES, registerWarnings, sessionQuestionInput, SESSION_STATUSES,
   shKey, shLabel, shNumber, sourceLines, sourceText, STAKEHOLDER_KINDS, ATTITUDES, summarizeSurvey, surveyQuestion, surveySheets, svKey,
-  TECHNIQUES, validateAnswers, QUESTION_BANK, type ReportData, type SessionQuestion, type StakeholderLite, type Technique, elcNumber,
+  TECHNIQUES, validateAnswers, QUESTION_BANK, type ReportData, type SessionQuestion, type StakeholderLite, type Technique, elcNumber, FIVE_HATS,
 } from './swr6b.js';
+import { REPORT2_PACKAGES } from './docFill.js';
 import { LIFECYCLE_LABEL, PRIORITY3, REQ_TYPES, type Lifecycle } from './swr.js';
 import { AI_TURNS_MAX, parseTurns, stakeholderPrompt, turnsAsTranscript, type AiTurn } from './swrPack.js';
 import { writeXlsx } from './xlsxStyled.js';
@@ -176,6 +177,53 @@ export async function deleteStakeholder(userId: number, projectId: number, ref: 
   return { deleted: true };
 }
 
+/**
+ * dm5 G2 (B5): đẩy một câu hỏi MỞ của phiên elicitation sang sổ Q&A (RAID loại QUESTION) — kèm nguồn ELC-n, người được hỏi
+ * (người tham gia đầu tiên), mã đích BR/UC nếu biết. Câu hỏi của phiên được đánh dấu "Q-n" (đẩy lại ⇒ trả Q&A đã có).
+ */
+export async function questionToQna(userId: number, projectId: number, ref: number | string, questionId: string, input: { targetRef?: string | null; askedTo?: string | null; due?: string | null; proposal?: string | null } = {}) {
+  await edit(userId, projectId);
+  const s = await sessionByRef(projectId, ref);
+  const qs = normalizeQuestions(s.questions);
+  const q = qs.find((x) => x.id === questionId);
+  if (!q) throw new NotFoundError(`Question ${questionId} not found in ${elcKey(s.number)}`);
+  const qna = await import('./qna.service.js');
+  if (q.qna) {
+    const n = Number(q.qna.slice(2));
+    const existing = await qna.getQuestion(userId, projectId, n).catch(() => null);
+    if (existing) return { question: existing, created: false };
+  }
+  const parts = await prisma.workElicitationParticipant.findMany({ where: { sessionId: s.id }, include: { stakeholder: { select: { name: true, role: true } } }, take: 1 });
+  const askedTo = input.askedTo ?? (parts[0] ? `${parts[0].stakeholder.name}${parts[0].rolePlayed || parts[0].stakeholder.role ? ` (${parts[0].rolePlayed || parts[0].stakeholder.role})` : ''}` : null);
+  const created = await qna.createQuestion(userId, projectId, {
+    question: q.text.slice(0, 255),
+    details: [`From ${elcKey(s.number)} ${s.title}${s.objective ? ` — objective: ${s.objective.slice(0, 300)}` : ''}`, q.text.length > 255 ? q.text : null, q.answer ? `Partial answer in the session: ${q.answer}` : null].filter(Boolean).join('\n'),
+    askedTo: askedTo?.slice(0, 120) ?? null, due: input.due ?? null, targetRef: input.targetRef ?? null, proposal: input.proposal ?? null,
+    // Câu hỏi đẩy sang Q&A là câu còn MỞ — câu trả lời dở nằm trong chi tiết, không đóng Q&A.
+    status: 'OPEN',
+  });
+  const next = qs.map((x) => (x.id === q.id ? { ...x, qna: created.key } : x));
+  await prisma.workElicitationSession.update({ where: { id: s.id }, data: { questions: next as unknown as Prisma.InputJsonValue, rev: { increment: 1 } } });
+  touch(projectId, userId);
+  return { question: created, created: true };
+}
+
+/**
+ * dm5 G2 (B2): tạo 5 mũ C1–C5 (stakeholder kiểu ROLE) chưa có trong sổ. Dự án đúng một sinh viên ⇒ mũ gắn vào người đó
+ * (Report 2 chế độ "trung thực" gộp các mũ thành một cột tên sinh viên).
+ */
+export async function seedHats(userId: number, projectId: number) {
+  await edit(userId, projectId, { noAgent: RACI_DENY });
+  const [have, students] = await Promise.all([
+    prisma.workStakeholder.findMany({ where: { projectId }, select: { name: true } }),
+    prisma.workProjectMember.findMany({ where: { projectId, role: { in: ['ADMIN', 'MEMBER'] }, user: { kind: { not: 'AGENT' } } }, select: { userId: true } }),
+  ]);
+  const owner = students.length === 1 ? students[0].userId : null;
+  const add = FIVE_HATS.filter((h) => !have.some((x) => x.name.toLowerCase() === h.name.toLowerCase()));
+  for (const h of add) await createStakeholder(userId, projectId, { name: h.name, kind: 'ROLE', role: h.role, userId: owner, influence: 4, interest: 5 } as Parameters<typeof createStakeholder>[2]);
+  return { added: add.length, owner };
+}
+
 /** Tạo stakeholder từ các actor PERSON chưa có trong sổ (lớp người dùng = tên actor). */
 export async function seedFromActors(userId: number, projectId: number) {
   await edit(userId, projectId);
@@ -194,22 +242,25 @@ export async function getRaci(userId: number, projectId: number) {
   const ctx = await view(userId, projectId);
   const [activities, stakeholders] = await Promise.all([
     prisma.workRaciActivity.findMany({ where: { projectId }, orderBy: [{ position: 'asc' }, { id: 'asc' }], include: { cells: true } }),
-    prisma.workStakeholder.findMany({ where: { projectId }, orderBy: [{ position: 'asc' }, { number: 'asc' }], select: { id: true, number: true, name: true, role: true } }),
+    prisma.workStakeholder.findMany({ where: { projectId }, orderBy: [{ position: 'asc' }, { number: 'asc' }], select: { id: true, number: true, name: true, role: true, kind: true, userId: true } }),
   ]);
   const cells = activities.flatMap((a) => a.cells.map((c) => ({ activityId: a.id, stakeholderId: c.stakeholderId, role: c.role })));
   return {
     activities: activities.map((a) => ({ id: a.id, name: a.name, position: a.position })),
-    stakeholders: stakeholders.map((s) => ({ id: s.id, key: shKey(s.number), name: s.name, role: s.role })),
-    cells, problems: raciProblems(activities, cells), defaults: DEFAULT_RACI_ACTIVITIES,
+    stakeholders: stakeholders.map((s) => ({ id: s.id, key: shKey(s.number), name: s.name, role: s.role, kind: s.kind, userId: s.userId })),
+    cells, problems: raciProblems(activities, cells, new Map(stakeholders.map((s) => [s.id, s.name]))), defaults: DEFAULT_RACI_ACTIVITIES,
     canEdit: ctx.canEdit && !ctx.isAgent,
   };
 }
 
 const RACI_DENY = 'An AI agent cannot change who is responsible or accountable — a person decides';
 
-export async function addRaciActivity(userId: number, projectId: number, input: { name?: string; defaults?: boolean }) {
+export async function addRaciActivity(userId: number, projectId: number, input: { name?: string; defaults?: boolean; preset?: 'requirements' | 'report2' }) {
   await edit(userId, projectId, { noAgent: RACI_DENY });
-  const names = input.defaults ? DEFAULT_RACI_ACTIVITIES : input.name?.trim() ? [input.name.trim().slice(0, 160)] : [];
+  // dm5 G2 (B2): preset report2 = 8 gói việc của mẫu Report 2 §3 (hàng của bảng RACI nộp trường).
+  const preset = input.preset ?? (input.defaults ? 'requirements' : null);
+  const names = preset === 'report2' ? REPORT2_PACKAGES : preset === 'requirements' ? DEFAULT_RACI_ACTIVITIES : input.name?.trim() ? [input.name.trim().slice(0, 160)] : [];
+  input = { ...input, defaults: !!preset };
   if (!names.length) throw new BadRequestError('Give an activity name', 'VALIDATION_ERROR');
   let pos = ((await prisma.workRaciActivity.aggregate({ where: { projectId }, _max: { position: true } }))._max.position ?? -1) + 1;
   let added = 0;
@@ -315,8 +366,14 @@ export async function createSession(userId: number, projectId: number, input: Se
 export async function updateSession(userId: number, projectId: number, ref: number | string, input: Partial<SessionInput> & { rev?: number }) {
   await edit(userId, projectId);
   const cur = await sessionByRef(projectId, ref);
+  const data = sessionData(input);
+  // dm5 G2 (B5): câu hỏi đã đẩy sang Q&A giữ dấu "Q-n" khi client lưu lại danh sách (client cũ không gửi trường qna).
+  if (data.questions) {
+    const prev = new Map(normalizeQuestions(cur.questions).filter((x) => x.qna).map((x) => [x.id, x.qna]));
+    data.questions = (data.questions as unknown as SessionQuestion[]).map((x) => (x.qna || !prev.has(x.id) ? x : { ...x, qna: prev.get(x.id) })) as unknown as Prisma.InputJsonValue;
+  }
   await prisma.$transaction(async (tx) => {
-    const r = await tx.workElicitationSession.updateMany({ where: { id: cur.id, ...(input.rev !== undefined ? { rev: input.rev } : {}) }, data: { ...(sessionData(input) as Prisma.WorkElicitationSessionUncheckedUpdateManyInput), rev: { increment: 1 } } });
+    const r = await tx.workElicitationSession.updateMany({ where: { id: cur.id, ...(input.rev !== undefined ? { rev: input.rev } : {}) }, data: { ...(data as Prisma.WorkElicitationSessionUncheckedUpdateManyInput), rev: { increment: 1 } } });
     if (!r.count) throw new ConflictError('Someone else changed this session — reload to see their version');
     if (input.participants) await setParticipants(tx, projectId, cur.id, input.participants);
   });

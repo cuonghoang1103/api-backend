@@ -18,6 +18,7 @@ import { Dialog, EmptyState, Field, PageLoading, Spinner } from '@/components/wo
 import { Select } from '@/components/work/settings/shared';
 import { useWT, type WKey } from '@/components/work/i18n';
 import { teachingApi, teachingKeys, type Grade, type GradesView, type Rubric } from './teachingApi';
+import SelfGrades from './SelfGrades'; // dm5 G3 (D17)
 
 const total = (r: Rubric, scores: Record<string, number | null | undefined>) => {
   if (r.criteria.some((c) => scores[c.key] === undefined || scores[c.key] === null || Number.isNaN(scores[c.key]))) return null;
@@ -231,6 +232,7 @@ export default function GradesTab({ pid }: { pid: number }) {
           </section>
         );
       })}
+      <SelfGrades pid={pid} view={v} />
       {teacher && <GradeDialog pid={pid} view={v} open={dialog.open} start={dialog.start} onClose={() => setDialog({ open: false, start: null })} />}
       <HistoryDialog pid={pid} grade={hist} onClose={() => setHist(null)} />
     </div>

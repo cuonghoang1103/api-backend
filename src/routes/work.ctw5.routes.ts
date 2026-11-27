@@ -147,6 +147,13 @@ router.put('/projects/:pid/grades', asyncHandler(async (req, res) => ok(res, awa
 router.post('/projects/:pid/grades/publish', asyncHandler(async (req, res) => {
   ok(res, await teaching.setPublished(callerId(req), P(req, 'pid'), parse(z.object({ ids: z.array(id).min(1).max(200), published: z.boolean() }).strict(), req.body ?? {})));
 }));
+// dm5 G3 (D17): sinh viên tự chấm theo rubric (kind SELF) — không đè điểm giảng viên.
+const selfGradeBody = z.object({
+  rubricId: id.nullable().optional(), templateKey: z.string().max(32).nullable().optional(), milestone: z.string().min(1).max(80), subjectUserId: id.nullable().optional(),
+  scores: z.record(z.union([z.number(), z.null()])), notes: z.record(z.string().max(2000)).optional(), comment: z.string().max(8000).nullable().optional(),
+}).strict();
+router.put('/projects/:pid/grades/self', asyncHandler(async (req, res) => ok(res, await teaching.saveSelfGrade(callerId(req), P(req, 'pid'), parse(selfGradeBody, req.body ?? {})))));
+router.delete('/projects/:pid/grades/self/:gid', asyncHandler(async (req, res) => { await teaching.deleteSelfGrade(callerId(req), P(req, 'pid'), P(req, 'gid')); ok(res, { deleted: true }); }));
 router.get('/projects/:pid/grades/:gid/history', asyncHandler(async (req, res) => ok(res, await teaching.gradeHistory(callerId(req), P(req, 'pid'), P(req, 'gid')))));
 router.delete('/projects/:pid/grades/:gid', asyncHandler(async (req, res) => { await teaching.deleteGrade(callerId(req), P(req, 'pid'), P(req, 'gid')); ok(res, { deleted: true }); }));
 

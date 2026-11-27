@@ -20,6 +20,7 @@ import {
 import { auditProject } from './audit.js';
 import type { PublicUser } from './common.js';
 import { trashGraph } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
+import { pct, retroActionCapOf } from './dm5Rules.js'; // dm5 G1 (A12)
 
 export const retroInput = z.object({
   title: z.string().trim().min(1).max(120),
@@ -48,6 +49,9 @@ export const actionInput = z.object({
   /** 26/11/2026: thẻ hành động vào thẳng sprint PLANNED kế tiếp (không có ⇒ ở backlog như cũ). */
   nextSprint: z.boolean().optional(),
   typeId: z.number().int().positive().optional(),
+  /** dm5 G1 (A12): dấu hiệu kích hoạt ("khi thấy X thì làm") + cách kiểm chứng ở sprint sau. */
+  trigger: z.string().trim().max(500).nullable().optional(),
+  verify: z.string().trim().max(500).nullable().optional(),
 });
 
 const RETRO_SELECT = {
@@ -163,7 +167,7 @@ export async function getRetro(userId: number, projectId: number, retroId: numbe
   const [cards, votes, actions] = await Promise.all([
     prisma.workRetroCard.findMany({ where: { retroId: r.id }, orderBy: [{ position: 'asc' }, { id: 'asc' }], select: { id: true, column: true, body: true, authorId: true, groupId: true, position: true, createdAt: true } }),
     prisma.workRetroVote.findMany({ where: { card: { retroId: r.id } }, select: { cardId: true, userId: true, count: true } }),
-    prisma.workRetroAction.findMany({ where: { retroId: r.id }, orderBy: { id: 'asc' }, select: { id: true, cardId: true, title: true, assigneeId: true, issueId: true, createdAt: true } }),
+    prisma.workRetroAction.findMany({ where: { retroId: r.id }, orderBy: { id: 'asc' }, select: { id: true, cardId: true, title: true, assigneeId: true, issueId: true, createdAt: true, trigger: true, verify: true } }),
   ]);
   const total = new Map<number, number>();
   const mine = new Map<number, number>();
@@ -188,7 +192,9 @@ export async function getRetro(userId: number, projectId: number, retroId: numbe
     facilitator: r.createdById ? users.get(r.createdById) ?? null : null,
     me: { canWrite: a.canWrite && !locked, canFacilitate: facilitator, canUseAi: a.canWrite, votesLeft: votesLeft(r.votesPerPerson, used), votesUsed: used },
     cards: cards.map((c) => cardView(c, { viewerId: userId, anonymous: r.anonymous, author: (users.get(c.authorId) ?? null) as PublicUser | null, votes: total.get(c.id) ?? 0, myVotes: mine.get(c.id) ?? 0 })),
-    actions: actions.map((x) => ({ id: x.id, cardId: x.cardId, title: x.title, assignee: x.assigneeId ? users.get(x.assigneeId) ?? null : null, issue: x.issueId ? issues.get(x.issueId) ?? null : null, createdAt: x.createdAt })),
+    actions: actions.map((x) => ({ id: x.id, cardId: x.cardId, title: x.title, trigger: x.trigger, verify: x.verify, assignee: x.assigneeId ? users.get(x.assigneeId) ?? null : null, issue: x.issueId ? issues.get(x.issueId) ?? null : null, createdAt: x.createdAt })),
+    // dm5 G1 (A12): trần số hành động mỗi retro (settings.retroActionCap; null = không trần).
+    actionCap: retroActionCapOf((await prisma.workProject.findUnique({ where: { id: projectId }, select: { settings: true } }))?.settings),
   };
 }
 
@@ -274,6 +280,14 @@ export async function addAction(userId: number, projectId: number, retroId: numb
   if (input.cardId && !(await prisma.workRetroCard.findFirst({ where: { id: input.cardId, retroId: r.id }, select: { id: true } }))) {
     throw new BadRequestError('Note not found in this retro', 'WORK_RETRO_BAD_CARD');
   }
+  // dm5 G1 (A12): "ít mà làm thật" — trần hành động mỗi retro (settings.retroActionCap, mặc định tắt; mẫu SWP391/Capstone = 2).
+  const cap = retroActionCapOf((await prisma.workProject.findUnique({ where: { id: projectId }, select: { settings: true } }))?.settings);
+  if (cap !== null && (await prisma.workRetroAction.count({ where: { retroId: r.id } })) >= cap) {
+    throw new AppError(
+      `This retro already has ${cap} action item${cap === 1 ? '' : 's'} — the project caps it at ${cap} so each one really gets done. Remove one, or raise the cap in Project settings → Details.`,
+      400, 'WORK_RETRO_ACTION_CAP', { cap },
+    );
+  }
   let issueId: number | null = null;
   let issueNumber: number | null = null;
   let sprintName: string | null = null;
@@ -284,19 +298,21 @@ export async function addAction(userId: number, projectId: number, retroId: numb
         ?? (await prisma.workIssueType.findFirst({ where: { projectId, level: 0, archived: false }, orderBy: { position: 'asc' }, select: { id: true } }));
     if (!type) throw new BadRequestError('This project has no issue type for action items', 'WORK_RETRO_NO_TYPE');
     const { createIssueAs } = await import('./issues.service.js');
-    const desc = `Action item from retro "${r.title}".`;
+    const desc = [`Action item from retro "${r.title}".`, input.trigger ? `Trigger: ${input.trigger}` : '', input.verify ? `How we verify: ${input.verify}` : ''].filter(Boolean).join('\n');
     const next = input.nextSprint
       ? await prisma.workSprint.findFirst({ where: { projectId, state: 'PLANNED' }, orderBy: [{ startAt: { sort: 'asc', nulls: 'last' } }, { position: 'asc' }, { id: 'asc' }], select: { id: true, name: true } })
       : null;
     sprintName = next?.name ?? null;
     const issue = await createIssueAs(userId, projectId, {
       typeId: type.id, title: input.title, assigneeId: input.assigneeId ?? undefined, sprintId: next?.id ?? undefined,
-      descriptionJson: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: desc }] }] },
+      descriptionJson: { type: 'doc', content: desc.split('\n').map((line) => ({ type: 'paragraph', content: [{ type: 'text', text: line }] })) },
     });
     issueId = issue.id;
     issueNumber = issue.number;
   }
-  const act = await prisma.workRetroAction.create({ data: { retroId: r.id, cardId: input.cardId ?? null, title: input.title, assigneeId: input.assigneeId ?? null, issueId, createdById: userId } });
+  const act = await prisma.workRetroAction.create({
+    data: { retroId: r.id, cardId: input.cardId ?? null, title: input.title, assigneeId: input.assigneeId ?? null, issueId, createdById: userId, trigger: input.trigger || null, verify: input.verify || null },
+  });
   emitAgile(projectId, 'retro', r.id, 'action');
   return { id: act.id, issueNumber, sprintName };
 }
@@ -314,7 +330,7 @@ export async function deleteAction(userId: number, projectId: number, retroId: n
 // ─── Tóm tắt AI + xuất ───────────────────────────────────────────
 
 /** Ghi chú cho AI: thẻ theo cột, có số vote, gom nhóm — KHÔNG có tên người (kể cả retro không ẩn danh). */
-export function retroNotes(columns: readonly string[], cards: Array<{ id: number; column: string; body: string; groupId: number | null; votes: number }>, actions: Array<{ title: string }>): string {
+export function retroNotes(columns: readonly string[], cards: Array<{ id: number; column: string; body: string; groupId: number | null; votes: number }>, actions: Array<{ title: string; trigger?: string | null; verify?: string | null }>): string {
   const lines: string[] = [];
   for (const col of columns) {
     const heads = cards.filter((c) => c.column === col && !c.groupId).sort((a, b) => b.votes - a.votes);
@@ -327,7 +343,7 @@ export function retroNotes(columns: readonly string[], cards: Array<{ id: number
       for (const k of kids) lines.push(`  - ${k.body}`);
     }
   }
-  if (actions.length) { lines.push('## Action items already agreed'); for (const a of actions) lines.push(`- ${a.title}`); }
+  if (actions.length) { lines.push('## Action items already agreed'); for (const a of actions) lines.push(`- ${a.title}${a.trigger ? ` (trigger: ${a.trigger})` : ''}${a.verify ? ` (verify: ${a.verify})` : ''}`); }
   return lines.join('\n');
 }
 
@@ -370,7 +386,11 @@ export function retroMarkdown(v: Awaited<ReturnType<typeof getRetro>>, projectKe
   }
   out.push('## Action items', '');
   if (!v.actions.length) out.push('_None._');
-  for (const a of v.actions) out.push(`- ${a.title}${a.issue ? ` (${projectKey}-${a.issue.number})` : ''}${a.assignee ? ` — @${a.assignee.username}` : ''}`);
+  for (const a of v.actions) {
+    out.push(`- ${a.title}${a.issue ? ` (${projectKey}-${a.issue.number})` : ''}${a.assignee ? ` — @${a.assignee.username}` : ''}`);
+    if (a.trigger) out.push(`  - Trigger: ${a.trigger}`);
+    if (a.verify) out.push(`  - How we verify: ${a.verify}`);
+  }
   if (v.summary) out.push('', '## AI summary', '', v.summary);
   return out.join('\n');
 }
@@ -384,4 +404,66 @@ export async function exportDocx(userId: number, projectId: number, retroId: num
   const buffer = await renderDocx(doc, { title: v.title, projectName: p.name, projectKey: p.key, docLabel: `RETRO-${v.id}`, version: null, date: new Date(), capstone: false }, { cover: false, toc: false, stripGuides: false, resolveImage: async () => null });
   const safe = v.title.replace(/[^\p{L}\p{N} _-]+/gu, '').trim().slice(0, 60) || `retro-${v.id}`;
   return { buffer, fileName: `${p.key} ${safe}.docx` };
+}
+
+// ─── dm5 G1 (A12): bảng số liệu sprint cho retro ─────────────────
+
+/**
+ * Số liệu thật của sprint gắn retro (không gắn ⇒ sprint ACTIVE/CLOSED gần nhất), để thảo luận dựa trên số chứ không
+ * dựa trên cảm giác:
+ *   - Done/Planned: điểm/giờ hoàn thành so với cam kết lúc Start + số thẻ (báo cáo chụp lúc đóng, hoặc tính hiện tại);
+ *   - giờ đã log trong khung sprint so với ước lượng gốc của thẻ trong sprint;
+ *   - Bug tạo trong khung sprint theo activity (Unit test / Code review / AT = Leakage…);
+ *   - PR mở trong khung sprint gắn thẻ của sprint: % CI xanh "lượt đầu" (CI xanh và KHÔNG có lượt đẩy nào lên nhánh sau khi
+ *     mở PR — CT Work không lưu lịch sử từng lượt chạy CI nên đây là ước lượng gần đúng, ghi rõ trong `ciFirstTry.method`),
+ *     PR lớn nhất (dòng thêm + xoá).
+ */
+export async function retroFacts(userId: number, projectId: number, retroId: number) {
+  const { r } = await retroFor(userId, projectId, retroId);
+  const sprint = r.sprintId
+    ? await prisma.workSprint.findFirst({ where: { id: r.sprintId, projectId }, select: { id: true, name: true, state: true, startAt: true, endAt: true, completedAt: true, committedPoints: true, completedPoints: true, report: true } })
+    : await prisma.workSprint.findFirst({ where: { projectId, state: { in: ['ACTIVE', 'CLOSED'] } }, orderBy: [{ startAt: 'desc' }, { id: 'desc' }], select: { id: true, name: true, state: true, startAt: true, endAt: true, completedAt: true, committedPoints: true, completedPoints: true, report: true } });
+  if (!sprint) return { sprint: null };
+  const { computeSprintReport } = await import('./sprints.service.js');
+  type Rep = { completed: Array<{ id: number; number: number; points: number }>; incomplete: Array<{ id: number; number: number; points: number }>; added: number[]; committedPoints: number; completedPoints: number; unit: string };
+  const stored = sprint.report as Partial<Rep> | null;
+  const rep: Rep = sprint.state === 'CLOSED' && stored?.completed ? stored as Rep : await computeSprintReport(projectId, sprint.id);
+  const ids = [...rep.completed, ...rep.incomplete].map((i) => i.id);
+  const numbers = [...rep.completed, ...rep.incomplete].map((i) => i.number);
+  const from = sprint.startAt ?? new Date(0);
+  const to = sprint.completedAt ?? sprint.endAt ?? new Date();
+  const [est, logged, bugs, pulls] = await Promise.all([
+    prisma.workIssue.aggregate({ where: { id: { in: ids.length ? ids : [-1] } }, _sum: { originalEstimateMin: true } }),
+    prisma.workWorklog.aggregate({ where: { issue: { projectId, OR: [{ id: { in: ids.length ? ids : [-1] } }, { parentId: { in: ids.length ? ids : [-1] } }] }, startedAt: { gte: from, lte: to } }, _sum: { minutes: true } }),
+    prisma.workIssue.findMany({ where: { projectId, deletedAt: null, type: { key: 'BUG' }, createdAt: { gte: from, lte: to } }, select: { id: true, defectInfo: { select: { activity: true } } } }),
+    prisma.workGitPull.findMany({
+      where: { projectId, openedAt: { gte: from, lte: to }, ...(numbers.length ? { issueNumbers: { hasSome: numbers } } : {}) },
+      select: { number: true, title: true, headRef: true, openedAt: true, ciState: true, additions: true, deletions: true, url: true },
+      take: 200,
+    }),
+  ]);
+  const byActivity: Record<string, number> = {};
+  for (const b of bugs) { const k = b.defectInfo?.activity || 'UNKNOWN'; byActivity[k] = (byActivity[k] ?? 0) + 1; }
+  // CI xanh lượt đầu ≈ CI success + không có lượt đẩy nào lên nhánh của PR sau lúc mở.
+  let firstTry = 0, withCi = 0;
+  for (const p of pulls) {
+    if (!p.ciState) continue;
+    withCi += 1;
+    if (p.ciState !== 'success') continue;
+    const pushes = p.headRef ? await prisma.workGitEvent.count({ where: { projectId, kind: 'push', ref: p.headRef, occurredAt: { gt: p.openedAt } } }) : 0;
+    if (!pushes) firstTry += 1;
+  }
+  const biggest = pulls.map((p) => ({ number: p.number, title: p.title, url: p.url, lines: (p.additions ?? 0) + (p.deletions ?? 0) })).sort((a, b) => b.lines - a.lines)[0] ?? null;
+  const estH = Math.round(((est._sum.originalEstimateMin ?? 0) / 60) * 10) / 10;
+  const logH = Math.round(((logged._sum.minutes ?? 0) / 60) * 10) / 10;
+  const committedIssues = rep.completed.length + rep.incomplete.length - rep.added.length;
+  return {
+    sprint: { id: sprint.id, name: sprint.name, state: sprint.state, startAt: sprint.startAt, endAt: sprint.endAt },
+    unit: rep.unit,
+    done: { points: rep.completedPoints, planned: rep.committedPoints, pct: pct(rep.completedPoints, rep.committedPoints), issuesDone: rep.completed.length, issuesTotal: rep.completed.length + rep.incomplete.length, issuesCommitted: Math.max(0, committedIssues), added: rep.added.length },
+    hours: { logged: logH, estimated: estH, pct: pct(logH, estH) },
+    bugs: { total: bugs.length, byActivity, leakage: byActivity.AT ?? 0 },
+    ciFirstTry: { pct: pct(firstTry, withCi), green: firstTry, withCi, pulls: pulls.length, method: 'ci_success_without_later_push' },
+    biggestPr: biggest,
+  };
 }

@@ -24,6 +24,7 @@ import { ConfirmDialog, Select } from '../settings/shared';
 import { Pill } from '../studio/shared';
 import { LEVEL_COLOR, PersonSelect, RaidStatusPill, ScoreBadge, levelOf, useGovInvalidate } from './shared';
 import { wt } from '@/components/work/i18n';
+import { g4Api } from '@/lib/work-dm5g4-api';
 import ChartFrame from '../charts/ChartFrame';
 import DataTable, { type DataColumn } from '../table/DataTable';
 import { resolveColor } from '../charts/exportChart';
@@ -131,15 +132,17 @@ function Matrix({ m, cell, onCell }: { m: number[][]; cell: { p: number; i: numb
 
 // ─── Form ────────────────────────────────────────────────────────
 
-type Form = { type: RaidType; title: string; description: string; category: string; ownerId: number | null; status: string; probability: number | null; impact: number | null; response: RaidResponse | null; mitigation: string; trigger: string; reviewDate: string; clientVisible: boolean };
-const emptyForm = (type: RaidType): Form => ({ type, title: '', description: '', category: '', ownerId: null, status: type === 'ASSUMPTION' ? 'UNVALIDATED' : 'OPEN', probability: null, impact: null, response: null, mitigation: '', trigger: '', reviewDate: '', clientVisible: false });
+type Form = { type: RaidType; title: string; description: string; category: string; ownerId: number | null; status: string; probability: number | null; impact: number | null; response: RaidResponse | null; mitigation: string; trigger: string; reviewDate: string; clientVisible: boolean; contingency: string };
+const emptyForm = (type: RaidType): Form => ({ type, title: '', description: '', category: '', ownerId: null, status: type === 'ASSUMPTION' ? 'UNVALIDATED' : 'OPEN', probability: null, impact: null, response: null, mitigation: '', trigger: '', reviewDate: '', clientVisible: false, contingency: '' });
 const formOf = (r: RaidDetail): Form => ({
   type: r.type, title: r.title, description: r.description ?? '', category: r.category ?? '', ownerId: r.owner?.id ?? null, status: r.status,
   probability: r.probability, impact: r.impact, response: r.response, mitigation: r.mitigation ?? '', trigger: r.trigger ?? '', reviewDate: r.reviewDate ?? '', clientVisible: !!r.clientVisible,
+  contingency: (r as { contingency?: string | null }).contingency ?? '', // dm5 G4 (C10)
 });
 const toPatch = (f: Form): RaidPatch & { type: RaidType; title: string } => ({
   type: f.type, title: f.title.trim(), description: f.description.trim() || null, category: f.category.trim() || null, ownerId: f.ownerId, status: f.status,
   probability: f.probability, impact: f.impact, response: f.response, mitigation: f.mitigation.trim() || null, trigger: f.trigger.trim() || null, reviewDate: f.reviewDate || null, clientVisible: f.type === 'RISK' && f.clientVisible,
+  ...({ contingency: f.contingency.trim() || null } as object),
 });
 
 function RaidForm({ config, f, set, ro, creating }: { config: ProjectConfig; f: Form; set: (p: Partial<Form>) => void; ro: boolean; creating?: boolean }) {
@@ -200,6 +203,12 @@ function RaidForm({ config, f, set, ro, creating }: { config: ProjectConfig; f: 
       <Field label={f.type === 'RISK' ? wt('gov.mitigation') : f.type === 'ASSUMPTION' ? wt('gov.howValidate') : wt('gov.actionPlan')}>
         <textarea className="w-input" rows={2} maxLength={20000} disabled={ro} value={f.mitigation} onChange={(e) => set({ mitigation: e.target.value })} />
       </Field>
+      {/* dm5 G4 (C10): Plan B — làm gì KHI rủi ro xảy ra (khác mitigation: làm gì để nó đừng xảy ra). */}
+      {(f.type === 'RISK' || f.type === 'DEPENDENCY') && (
+        <Field label={wt('g4.contingency')}>
+          <textarea className="w-input" rows={2} maxLength={20000} disabled={ro} value={f.contingency} placeholder={wt('g4.contingencyPh')} onChange={(e) => set({ contingency: e.target.value })} data-testid="raid-contingency" />
+        </Field>
+      )}
       <Field label={wt('gov.reviewBy')} hint={wt('gov.reviewHint')}>
         <input type="date" className="w-input !w-[180px]" value={f.reviewDate} disabled={ro} onChange={(e) => set({ reviewDate: e.target.value })} data-testid="raid-review" />
       </Field>
@@ -261,6 +270,12 @@ function RaidItemDialog({ config, num, onClose }: { config: ProjectConfig; num: 
     onError: (err) => toast.error(workError(err, wt('desk.linkFailed'))),
   });
   const unlink = useMutation({ mutationFn: (id: number) => govApi.unlinkRaid(pid, num!, id), onSuccess: () => invalidate(), onError: (err) => toast.error(workError(err)) });
+  // dm5 G4 (C10): Risk/Issue ⇒ thẻ + liên kết (Plan B ⇒ thẻ "Plan B for R-n").
+  const toIssue = useMutation({
+    mutationFn: (use: 'mitigation' | 'contingency') => g4Api.raidToIssue(pid, num!, { use }),
+    onSuccess: (x) => { toast.success(wt('g4.toIssueDone', { key: x.issue.key })); invalidate(); },
+    onError: (err) => toast.error(workError(err)),
+  });
   const del = useMutation({
     mutationFn: () => govApi.deleteRaid(pid, num!),
     onSuccess: () => { toast.success(wt('gov.deleted')); setConfirmDel(false); invalidate(); onClose(); },
@@ -317,6 +332,10 @@ function RaidItemDialog({ config, num, onClose }: { config: ProjectConfig; num: 
                   </Select>
                 ) : <input className="w-input !w-[150px]" value={linkVal} onChange={(e) => setLinkVal(e.target.value)} placeholder={linkKind === 'cr' ? 'CR-3' : `${config.key}-12`} aria-label={wt('common.key')} />}
                 <button type="button" className="w-btn w-btn-sm" disabled={!linkVal || link.isPending} onClick={() => link.mutate()}><Link2 size={13} /> {wt('desk.link')}</button>
+                <span className="ml-auto flex gap-1.5">
+                  <button type="button" className="w-btn w-btn-sm" disabled={toIssue.isPending} onClick={() => toIssue.mutate('mitigation')} data-testid="raid-to-issue"><Plus size={13} /> {wt('g4.toIssue')}</button>
+                  {r.type === 'RISK' && f.contingency.trim() && <button type="button" className="w-btn w-btn-sm" disabled={toIssue.isPending || dirty} onClick={() => toIssue.mutate('contingency')}><Plus size={13} /> {wt('g4.toIssuePlanB')}</button>}
+                </span>
               </div>
             )}
           </section>

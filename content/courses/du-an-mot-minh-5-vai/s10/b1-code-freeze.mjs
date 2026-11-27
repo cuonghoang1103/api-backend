@@ -54,6 +54,7 @@ ${bang(
     [t('<strong>3. Hard Freeze</strong><br>(Release Lock)', '<strong>3. Hard Freeze</strong><br>(Khoá cứng bản nộp)'), t('Last 48 hours / Day -2 to 0 (Week 10 Day 4–5 before Day 0 gate)', '48 giờ cuối / Ngày -2 đến 0 (Tuần 10 Ngày 4–5 trước cổng Ngày 0)'), t('Documentation updates (Report 6/7, slides), seed data script verification, recording Plan-B video.', 'Cập nhật tài liệu (Report 6/7, slide), kiểm thử script dữ liệu seed, quay video dự phòng Plan B.'), t('ANY edit to application source code — unless an emergency P0 crash blocks the core demo AND passes full regression.', 'MỌI sửa đổi mã nguồn ứng dụng — trừ khi nổ crash P0 chặn luồng demo lõi VÀ chạy lại đủ hồi quy.'), `${mu('C1', en)}`]
   ]
 )}
+${note(t('<strong>On CT Work the funnel is a switch, not a promise:</strong> open the release version (e.g. <code>iter3</code>) and set its <strong>Freeze</strong> — <em>Feature freeze</em> blocks new Requirement/Story cards, <em>Code freeze</em> lets only P0–P1 bugs in, <em>Hard freeze</em> locks it. Move the switch on the dates above so your tired 01:30 self cannot sneak a "small feature" in.', '<strong>Trên CT Work, phễu khoá là một công tắc chứ không phải lời hứa:</strong> mở version phát hành (vd <code>iter3</code>) và đặt <strong>Freeze</strong> — <em>Feature freeze</em> chặn thẻ Requirement/Story mới, <em>Code freeze</em> chỉ cho lỗi P0–P1 vào, <em>Hard freeze</em> khoá hẳn. Gạt công tắc đúng các mốc ngày ở bảng trên để chính bạn lúc 1:30 sáng mệt mỏi không lén nhét được "tính năng nhỏ" nào.'))}
 
 <h3>${t('3. Ruthless Triage: Deciding what to FIX vs. what to DEFER after Code Freeze', '3. Phân loại dứt khoát (Triage): Lỗi nào PHẢI SỬA, lỗi nào ĐỂ LẠI sau Code Freeze')}</h3>
 <p>${t(
@@ -102,7 +103,7 @@ ${bang(
 </ul>
 
 <h3>${t('6. Fillable Go / No-Go Release Readiness Gate (reusable for any project)', '6. Mẫu cổng kiểm duyệt Go / No-Go điền được (dùng lại cho mọi dự án)')}</h3>
-<p>${t('Paste this checklist into a CT Work <code>docs</code> page (e.g., <code>10-Release-Go-No-Go-Checklist</code>) under hat C1 48 hours before tagging. Every "BLOCKER" row must be YES to declare <strong>GO</strong>:', 'Dán bảng kiểm này vào trang <code>docs</code> trên CT Work (vd <code>10-Release-Go-No-Go-Checklist</code>) dưới mũ C1 trước khi gắn tag 48 giờ. Mọi dòng "CHẶN" phải là CÓ mới được tuyên bố <strong>GO</strong>:')}</p>
+<p>${t('Paste this checklist into a CT Work <code>docs</code> page (e.g., <code>10-Release-Go-No-Go-Checklist</code>) under hat C1 48 hours before tagging, and mirror the BLOCKER rows into the <strong>gate checklist of the release stage</strong> on CT Work (each item with its evidence link) — that gate is where the Go/No-Go decision is recorded. Every "BLOCKER" row must be YES to declare <strong>GO</strong>:', 'Dán bảng kiểm này vào trang <code>docs</code> trên CT Work (vd <code>10-Release-Go-No-Go-Checklist</code>) dưới mũ C1 trước khi gắn tag 48 giờ, và chép các dòng CHẶN sang <strong>checklist cổng của chặng phát hành</strong> trên CT Work (mỗi mục kèm link bằng chứng) — cổng đó là nơi ghi quyết định Go/No-Go. Mọi dòng "CHẶN" phải là CÓ mới được tuyên bố <strong>GO</strong>:')}</p>
 
 ${out(`[GO / NO-GO RELEASE GATE — Project: ___________ | Release/Tag: _________ | Date: __/__/____]
 Owner: C1 Leader/PM | Independent Verifier: C5 QA (after cooling-off gap)

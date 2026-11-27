@@ -145,8 +145,10 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/reports/client-weekly/send'], ['POST', '/reports/client-weekly/polish'], ['PUT', '/reports/client-weekly/schedule'], ['GET', '/reports/client-weekly/schedule'],
     // Cổng khách & chia sẻ
     ['GET', '/portal/overview'], ['POST', '/portal/invite'], ['POST', '/portal/uat'], ['POST', '/portal/uat/4/decide'], ['POST', '/portal/requests'],
+    // dm5 G3 (D10): sửa mã người thử + đọc danh sách UAT (quyết định có thể thu hồi quyền cổng của khách — uatRevokeOnClose).
+    ['PATCH', '/portal/uat/4'], ['GET', '/portal/uat'], ['POST', '/portal/clients/7/restore'], ['PUT', '/grades/self'], ['DELETE', '/grades/self/3'],
     ['POST', '/share-links'], ['DELETE', '/share-links/2'],
-    ['PUT', '/issues/12/client-visible'], ['PATCH', '/attachments/5/client'], ['PUT', '/changes/2/client-visible'], ['POST', '/changes/2/approval'],
+    ['PUT', '/issues/12/client-visible'], ['PATCH', '/attachments/5/client'], ['PUT', '/changes/2/client-visible'], ['POST', '/changes/2/approval'], ['PUT', '/changes/2/sync'],
     ['POST', '/meetings/3/share'], ['POST', '/meetings/3/invites'],
     // Duyệt / quyết
     ['POST', '/approvals/7/decide'], ['POST', '/stages/2/request-gate'], ['POST', '/stages/2/activate'],
@@ -204,7 +206,7 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     // 22/10/2026: thùng rác dữ liệu + yêu cầu xoá chờ duyệt — agent không xem/khôi phục/xoá vĩnh viễn, không đọc yêu cầu
     ['GET', '/trash/data'], ['POST', '/trash/data/3/restore'], ['DELETE', '/trash/data/3'], ['GET', '/trash/requests'],
     ['DELETE', '/pages/2'], ['DELETE', '/raid/3'], ['DELETE', '/meetings/3'], ['DELETE', '/qna/3'], ['DELETE', '/diagrams/3'],
-    ['DELETE', '/test-cycles/3'], ['DELETE', '/resources/3'], ['DELETE', '/srs/use-cases/3'], ['DELETE', '/srs/actors/3'],
+    ['DELETE', '/test-cycles/3'], ['DELETE', '/resources/3'], ['DELETE', '/srs/use-cases/3'], ['DELETE', '/srs/actors/3'], ['DELETE', '/srs/messages/SM-03'], ['DELETE', '/srs/messages/3'],
     // 21/10/2026 đợt 2
     ['DELETE', '/swr/features/FE-3'], ['DELETE', '/swr/features/3/links/9'], ['DELETE', '/swr/priority/rows/4'], ['DELETE', '/swr/glossary/2'],
     ['DELETE', '/swr/dictionary/2'], ['DELETE', '/swr/stakeholders/SH-2'], ['DELETE', '/swr/elicitation/ELC-1'], ['DELETE', '/swr/origins/5'],

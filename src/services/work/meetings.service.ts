@@ -48,7 +48,7 @@ const MEETING_LIST_SELECT = {
   seriesId: true, seriesDetached: true, templateKey: true, // CTW đợt 8c
   organizer: { select: PUBLIC_USER },
   attendees: { orderBy: { id: 'asc' }, select: { user: { select: PUBLIC_USER } } },
-  actions: { select: { id: true, issueId: true } },
+  actions: { select: { id: true, issueId: true, createdRef: true } },
 } satisfies Prisma.WorkMeetingSelect;
 
 type ListRow = Prisma.WorkMeetingGetPayload<{ select: typeof MEETING_LIST_SELECT }>;
@@ -62,7 +62,7 @@ function listRow(m: ListRow) {
     provider: meetingProvider(m.meetingUrl),
     attendees: attendees.map((a) => a.user),
     actionCount: actions.length,
-    actionsOpen: actions.filter((a) => !a.issueId).length,
+    actionsOpen: actions.filter((a) => !a.issueId && !a.createdRef).length,
   };
 }
 
@@ -215,7 +215,7 @@ export async function getMeeting(userId: number, projectId: number, number: numb
       actions: {
         orderBy: [{ position: 'asc' }, { id: 'asc' }],
         select: {
-          id: true, position: true, text: true, dueDate: true, issueId: true,
+          id: true, position: true, text: true, dueDate: true, issueId: true, kind: true, createdRef: true,
           assignee: { select: PUBLIC_USER },
           issue: { select: { number: true, title: true, deletedAt: true, resolvedAt: true, status: { select: { name: true, category: true } } } },
         },
@@ -225,7 +225,7 @@ export async function getMeeting(userId: number, projectId: number, number: numb
   if (!m) throw new NotFoundError('Meeting not found');
   const clientIds = new Set((await prisma.workProjectMember.findMany({ where: { projectId, role: 'CLIENT' }, select: { userId: true } })).map((x) => x.userId));
   const { actions, previous, series, occurrenceDate, ...rest } = m;
-  const base = listRow({ ...rest, actions: actions.map((a) => ({ id: a.id, issueId: a.issueId })) });
+  const base = listRow({ ...rest, actions: actions.map((a) => ({ id: a.id, issueId: a.issueId, createdRef: a.createdRef })) });
   const { describeRecurrence, normalizeRecurrence } = await import('./meetingSeries.js');
   const seriesInfo = series ? (() => {
     try { const rec = normalizeRecurrence(series.recurrence); return { id: series.id, title: series.title, rrule: series.rrule, summary: describeRecurrence(rec, 'en'), summaryVi: describeRecurrence(rec, 'vi'), ended: !!series.endedAt, occurrenceDate, detached: m.seriesDetached }; } catch { return null; }
@@ -238,6 +238,7 @@ export async function getMeeting(userId: number, projectId: number, number: numb
     hasClients: m.attendees.some((a) => clientIds.has(a.user.id)),
     actions: actions.map((a) => ({
       id: a.id, position: a.position, text: a.text, dueDate: dayOf(a.dueDate), assignee: a.assignee,
+      kind: (a.kind as MeetingActionKind) ?? 'TASK', createdRef: a.createdRef,
       issue: a.issue && !a.issue.deletedAt ? { number: a.issue.number, key: `${ctx.access.key}-${a.issue.number}`, title: a.issue.title, done: !!a.issue.resolvedAt, status: a.issue.status } : null,
     })),
     previous: previous && !previous.deletedAt ? { number: previous.number, title: previous.title, startsAt: previous.startsAt } : null,
@@ -310,10 +311,14 @@ export async function setAttendees(userId: number, projectId: number, number: nu
   return getMeeting(userId, projectId, number);
 }
 
+/** dm5 G1 (A21): loại góp ý trong biên bản — quyết định "Create" sinh thẻ Task, thẻ Bug, CR hay câu hỏi Q&A. */
+export const MEETING_ACTION_KINDS = ['TASK', 'BUG', 'CR', 'QUESTION'] as const;
+export type MeetingActionKind = (typeof MEETING_ACTION_KINDS)[number];
+
 /** Thay cả danh sách việc cần làm (giữ id + thẻ đã tạo của việc còn trong danh sách). */
 export async function setActions(
   userId: number, projectId: number, number: number,
-  items: Array<{ id?: number; text: string; assigneeId?: number | null; dueDate?: Date | null }>,
+  items: Array<{ id?: number; text: string; assigneeId?: number | null; dueDate?: Date | null; kind?: MeetingActionKind }>,
 ) {
   await govCtx(userId, projectId, 'meetings', { edit: true });
   const m = await findMeeting(projectId, number);
@@ -332,7 +337,7 @@ export async function setActions(
   await prisma.$transaction(async (tx) => {
     await tx.workMeetingAction.deleteMany({ where: { meetingId: m.id, id: { notIn: [...keep].length ? [...keep] : [-1] } } });
     for (const [position, it] of items.entries()) {
-      const data = { text: it.text.trim().slice(0, 500), assigneeId: it.assigneeId ?? null, dueDate: it.dueDate ?? null, position };
+      const data = { text: it.text.trim().slice(0, 500), assigneeId: it.assigneeId ?? null, dueDate: it.dueDate ?? null, position, ...(it.kind ? { kind: it.kind } : {}) };
       if (it.id) await tx.workMeetingAction.update({ where: { id: it.id }, data });
       else await tx.workMeetingAction.create({ data: { ...data, meetingId: m.id } });
     }
@@ -406,15 +411,39 @@ export async function createIssuesFromActions(userId: number, projectId: number,
     return teamCache.get(uid)!;
   };
   const actions = await prisma.workMeetingAction.findMany({
-    where: { meetingId: m.id, issueId: null, ...(actionIds?.length ? { id: { in: actionIds } } : {}) },
+    where: { meetingId: m.id, issueId: null, createdRef: null, ...(actionIds?.length ? { id: { in: actionIds } } : {}) },
     orderBy: [{ position: 'asc' }, { id: 'asc' }],
   });
   if (!actions.length) throw new BadRequestError('Every action item already has an issue', 'WORK_NOTHING_TO_DO');
   const types = await prisma.workIssueType.findMany({ where: { projectId, archived: false, level: 0 }, orderBy: { id: 'asc' }, select: { id: true, key: true } });
   const type = types.find((t) => t.key === 'TASK') ?? types[0];
   if (!type) throw new BadRequestError('This project has no issue type for action items', 'WORK_BAD_TYPE');
-  const created: Array<{ actionId: number; number: number; key: string; title: string }> = [];
+  // dm5 G1 (A21): kiểm trước khi tạo bất cứ thứ gì — không tạo dở một nửa danh sách rồi mới báo thiếu mô-đun.
+  const bugType = types.find((t) => t.key === 'BUG');
+  if (actions.some((a) => a.kind === 'BUG') && !bugType) throw new BadRequestError('This project has no Bug issue type — change those action items to Task', 'WORK_BAD_TYPE');
+  if (actions.some((a) => a.kind === 'CR') && !ctx.access.modules.changeRequests) {
+    throw new BadRequestError('Change requests are turned off for this project — turn the module on, or change those action items to Task', 'MODULE_DISABLED');
+  }
+  const origin = `Raised in meeting M-${m.number}: ${m.title} (${dayInZone(m.startsAt, m.timezone)}).`;
+  const created: Array<{ actionId: number; number: number; key: string; title: string; kind?: MeetingActionKind }> = [];
+  const others: Array<{ actionId: number; kind: MeetingActionKind; ref: string; title: string; number: number }> = [];
   for (const a of actions) {
+    if (a.kind === 'CR') {
+      const { createChangeRequest } = await import('./changeRequests.service.js');
+      const cr = await createChangeRequest(userId, projectId, { title: a.text.slice(0, 255), reason: origin, ownerId: a.assigneeId ?? undefined, useTemplate: true }) as { number: number; title: string };
+      const ref = `CR-${cr.number}`;
+      await prisma.workMeetingAction.update({ where: { id: a.id }, data: { createdRef: ref } });
+      others.push({ actionId: a.id, kind: 'CR', ref, title: cr.title, number: cr.number });
+      continue;
+    }
+    if (a.kind === 'QUESTION') {
+      const { createQuestion } = await import('./qna.service.js');
+      const q = await createQuestion(userId, projectId, { question: a.text.slice(0, 255), details: origin, ownerId: a.assigneeId ?? null, due: a.dueDate ? a.dueDate.toISOString().slice(0, 10) : null }) as { number: number; question?: string; title?: string };
+      const ref = `Q-${q.number}`;
+      await prisma.workMeetingAction.update({ where: { id: a.id }, data: { createdRef: ref } });
+      others.push({ actionId: a.id, kind: 'QUESTION', ref, title: a.text.slice(0, 255), number: q.number });
+      continue;
+    }
     let assigneeId: number | undefined;
     if (a.assigneeId) {
       const acc = await loadProjectAccess(a.assigneeId, projectId);
@@ -422,7 +451,7 @@ export async function createIssuesFromActions(userId: number, projectId: number,
     }
     const teamId = await teamOf(assigneeId);
     const issue = await createIssueAs(userId, projectId, {
-      typeId: type.id, title: a.text.slice(0, 255),
+      typeId: a.kind === 'BUG' && bugType ? bugType.id : type.id, title: a.text.slice(0, 255),
       descriptionJson: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: `Action item from meeting M-${m.number}: ${m.title} (${dayInZone(m.startsAt, m.timezone)}).` }] }] } as Prisma.InputJsonValue,
       assigneeId, dueDate: a.dueDate ?? undefined,
       // CTW-17: kế thừa ngữ cảnh họp (null = để trống ⇒ không gửi trường).
@@ -431,11 +460,11 @@ export async function createIssuesFromActions(userId: number, projectId: number,
       ...(defaults.labelIds?.length ? { labelIds: defaults.labelIds } : {}),
     });
     await prisma.workMeetingAction.update({ where: { id: a.id }, data: { issueId: issue.id } });
-    created.push({ actionId: a.id, number: issue.number, key: `${ctx.access.key}-${issue.number}`, title: issue.title });
+    created.push({ actionId: a.id, number: issue.number, key: `${ctx.access.key}-${issue.number}`, title: issue.title, kind: a.kind === 'BUG' ? 'BUG' : 'TASK' });
   }
   emitWorkEvent({ type: 'governance.updated', projectId, entity: 'meeting', number, action: 'actions', actor: { kind: 'USER', userId } });
-  await auditProject(projectId, { actorId: userId, action: 'meeting.issues', targetType: 'meeting', targetId: m.id, summary: `Created ${created.length} issue${created.length === 1 ? '' : 's'} from meeting M-${number}: ${created.map((c) => c.key).join(', ')}`.slice(0, 300) });
-  return { created, applied: { sprintId, stageId, teamId: defaults.teamId ?? null, parentId: defaults.parentId ?? null }, meeting: await getMeeting(userId, projectId, number) };
+  await auditProject(projectId, { actorId: userId, action: 'meeting.issues', targetType: 'meeting', targetId: m.id, summary: `Created ${created.length + others.length} item${created.length + others.length === 1 ? '' : 's'} from meeting M-${number}: ${[...created.map((c) => c.key), ...others.map((o) => o.ref)].join(', ')}`.slice(0, 300) });
+  return { created, others, applied: { sprintId, stageId, teamId: defaults.teamId ?? null, parentId: defaults.parentId ?? null }, meeting: await getMeeting(userId, projectId, number) };
 }
 
 /**
@@ -694,7 +723,7 @@ export async function portalMeeting(userId: number, projectId: number, number: n
     },
   });
   if (!m) throw new NotFoundError('Meeting not found');
-  const r = listRow({ ...m, actions: m.actions.map((a) => ({ id: a.id, issueId: a.issueId })) });
+  const r = listRow({ ...m, actions: m.actions.map((a) => ({ id: a.id, issueId: a.issueId, createdRef: null })) });
   const shared = m.minutesShared;
   const me = ctx.clientView && !ctx.preview
     ? await prisma.workMeetingAttendee.findUnique({ where: { uk_work_meeting_attendee: { meetingId: m.id, userId } }, select: { rsvp: true, rsvpNote: true, rsvpAt: true } })

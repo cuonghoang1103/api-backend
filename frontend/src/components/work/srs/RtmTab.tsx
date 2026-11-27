@@ -93,6 +93,15 @@ export default function RtmTab({ pid, onOpenIssue, onOpenUc }: { pid: number; on
         <KpiTile label={wt('srs.fullyTested')} value={s.passing} hint={wt('srs.runPassing')} tone={s.passing ? 'green' : undefined} />
         <KpiTile label={wt('srs.withGaps')} value={s.withGaps} tone={s.withGaps ? 'orange' : 'green'} onClick={() => setGap(gap === 'ANY' ? null : 'ANY')} pressed={gap === 'ANY'} title={wt('srs.onlyGaps')} />
       </div>
+      {s.coverage && (
+        // dm5 G2 (B13): 4 chỉ số phủ người chấm SEP490 soi — cùng số ở sheet Summary của tệp xuất.
+        <section aria-label={wt('g2.covTitle')} className="grid grid-cols-2 gap-2 md:grid-cols-4" data-testid="rtm-coverage">
+          <KpiTile size="sm" label={wt('g2.covCodedNoSds')} value={s.coverage.ucCodedNoSds.length} hint={s.coverage.ucCodedNoSds.slice(0, 6).join(', ') || '—'} tone={s.coverage.ucCodedNoSds.length ? 'orange' : 'green'} />
+          <KpiTile size="sm" label={wt('g2.covTestedNoSt')} value={s.coverage.ucTestedNoSt.length} hint={s.coverage.ucTestedNoSt.slice(0, 6).join(', ') || '—'} tone={s.coverage.ucTestedNoSt.length ? 'orange' : 'green'} />
+          <KpiTile size="sm" label={wt('g2.covBr')} value={s.coverage.brTotal ? `${s.coverage.brCoveredPct}%` : '—'} hint={`${s.coverage.brCovered}/${s.coverage.brTotal}${s.coverage.brUncovered.length ? ` · ${s.coverage.brUncovered.slice(0, 5).join(', ')}` : ''}`} tone={!s.coverage.brTotal ? undefined : s.coverage.brCoveredPct >= 80 ? 'green' : s.coverage.brCoveredPct >= 50 ? 'yellow' : 'red'} />
+          <KpiTile size="sm" label={wt('g2.covOrphans')} value={s.coverage.orphanTests} tone={s.coverage.orphanTests ? 'orange' : 'green'} />
+        </section>
+      )}
       {q.data.sixLinks && (
         // CTW đợt 4b (R23): sáu liên kết người chấm SWR302 dò — cùng bảng nằm ở sheet "Six links" của tệp xuất.
         <p className="flex flex-wrap items-center gap-2 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2 text-[12.5px]">
@@ -191,6 +200,28 @@ export default function RtmTab({ pid, onOpenIssue, onOpenUc }: { pid: number; on
             </section>
           )}
         </div>
+      )}
+      {!!q.data.nfrs?.length && (
+        <section aria-labelledby="nfrtrace" className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] p-3">
+          <h2 id="nfrtrace" className="mb-2 text-[13px] font-semibold">{wt('g2.nfrTitle')}</h2>
+          <TableFrame label={wt('g2.nfrTitle')} maxH="360px">
+            <table className="w-full min-w-[820px] border-separate border-spacing-0">
+              <thead><tr>{[wt('g2.nfrCol'), wt('g2.nfrMeter'), wt('g2.nfrMust'), wt('g2.nfrPlan'), wt('g2.nfrTests'), wt('g2.nfrResult')].map((h, i) => <th key={i} scope="col" className={TH}>{h}</th>)}</tr></thead>
+              <tbody>
+                {q.data.nfrs.map((n) => (
+                  <tr key={n.key}>
+                    <td className={`${TD} max-w-[260px]`}><span className="font-mono text-[12px]">{n.key}</span> {n.title}<div className="text-[12px] text-[var(--w-text-2)]">{n.scale}</div></td>
+                    <td className={`${TD} max-w-[240px] text-[12.5px]`}>{n.meter}</td>
+                    <td className={`${TD} whitespace-nowrap`}>{n.must}</td>
+                    <td className={`${TD} whitespace-nowrap`}>{n.plan}</td>
+                    <td className={`${TD} text-[12px]`}>{n.tests.length ? n.tests.map((x) => <div key={x}>{x}</div>) : <span className="text-[var(--w-text-3)]">—</span>}</td>
+                    <td className={TD}><Chip tone={/failing|No test/.test(n.result) ? 'orange' : /passed/.test(n.result) ? 'green' : 'muted'}>{n.result}</Chip></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </TableFrame>
+        </section>
       )}
       <TraceDialog pid={pid} row={trace} onClose={() => setTrace(null)} />
     </div>

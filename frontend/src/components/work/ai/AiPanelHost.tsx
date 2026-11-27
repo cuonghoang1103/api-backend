@@ -41,6 +41,7 @@ import { inAppPath, isModifiedClick } from './links';
 import { tachGoiYHienThi } from '@/lib/cuongmini/goiYBuocTiep';
 import { useLayoutPrefs } from '../shell/panes';
 import { wt, wfmt } from '@/components/work/i18n';
+import DefenseCoach from './DefenseCoach'; // dm5 G4 (D16): đồng hồ 40 s + khung PREP
 
 // ─── Kiểu + lưu trữ ──────────────────────────────────────────────
 
@@ -717,6 +718,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                   </button>
                 )}
               </div>
+              {thread?.mode === 'DEFENSE' && <DefenseCoach turnKey={thread.messageCount} busy={!!waiting} />}
               {files.length > 0 && (
                 <div className="mb-2 flex flex-wrap gap-1.5" data-testid="ai-draft-files">
                   {files.map((f) => (

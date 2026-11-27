@@ -201,6 +201,11 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
     let lo = today - 30, hi = today + 90;
     for (const s of spans.values()) { lo = Math.min(lo, s.start - 14); hi = Math.max(hi, s.end + 30); }
     for (const v of markers.data?.versions ?? []) if (v.release) hi = Math.max(hi, toDay(v.release) + 7);
+    // dm5 G1 (A17): cổng có ngày kế hoạch cũng phải nằm trong khung.
+    for (const g of data?.stages ?? []) {
+      if (g.plannedStart) lo = Math.min(lo, toDay(g.plannedStart) - 7);
+      if (g.plannedEnd) hi = Math.max(hi, toDay(g.plannedEnd) + 7);
+    }
     const pad = zoom === 'quarters' ? 60 : zoom === 'months' ? 21 : 7;
     lo -= pad; hi += pad;
     lo -= (utc(lo).getUTCDay() + 6) % 7; // về thứ Hai
@@ -449,7 +454,8 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
 
   const bodyH = Math.max(rows.length * ROW_H, 120);
   const mk = markers.data;
-  const hasMarks = !!mk && (mk.sprints.some((x) => x.start && x.end) || mk.versions.some((x) => x.release) || mk.stages.some((x) => x.start));
+  const plannedGates = (data?.stages ?? []).filter((g) => g.plannedEnd || g.plannedStart); // dm5 G1 (A17)
+  const hasMarks = !!mk && (mk.sprints.some((x) => x.start && x.end) || mk.versions.some((x) => x.release) || mk.stages.some((x) => x.start) || plannedGates.length > 0);
   const headH = HEADER_H + (hasMarks ? MARK_H : 0);
   const weekendBg = zoom === 'quarters'
     ? undefined
@@ -592,6 +598,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
         {baselineId && <span className="inline-flex items-center gap-1.5"><span className="h-[4px] w-4 rounded-full bg-[var(--w-text-3)] opacity-60" aria-hidden="true" />{wt('uxc.lgBaseline')}</span>}
         <span className="inline-flex items-center gap-1.5"><span className="h-3 w-[2px] bg-[var(--w-accent)]" aria-hidden="true" />{wt('common.today')}</span>
         {(markers.data?.versions.length ?? 0) > 0 && <span className="inline-flex items-center gap-1.5"><Flag size={11} className="text-[var(--w-epic,var(--w-accent))]" aria-hidden="true" />{wt('uxc.lgRelease')}</span>}
+        {(data.stages?.some((g) => g.plannedEnd || g.plannedStart) ?? false) && <span className="inline-flex items-center gap-1.5"><span className="h-[7px] w-[7px] rotate-45 bg-[var(--w-text-3)]" aria-hidden="true" />{wt('timeline.lgGate')}<span className="h-[7px] w-[7px] rotate-45 bg-[var(--w-red)]" aria-hidden="true" />{wt('timeline.gateLate')}</span>}
       </div>
 
       {!rows.length ? (
@@ -626,6 +633,19 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                 {/* UX-C: dải mốc — sprint (dải), giai đoạn (dải viền), version (cờ ở ngày phát hành) */}
                 {hasMarks && mk && (
                   <div className="absolute inset-x-0 bottom-0 border-t border-[var(--w-border)]" style={{ height: MARK_H }} aria-label={wt('uxc.markersLane')} role="group">
+                    {/* dm5 G1 (A17): giai đoạn theo NGÀY KẾ HOẠCH — vạch đứt dưới đáy + mốc ◆ ở ngày kết thúc; trễ ⇒ đỏ */}
+                    {plannedGates.map((g) => {
+                      const a = g.plannedStart ? toDay(g.plannedStart) : toDay(g.plannedEnd!);
+                      const b = g.plannedEnd ? toDay(g.plannedEnd) : a;
+                      const color = g.late ? 'var(--w-red)' : g.status === 'DONE' ? 'var(--w-green)' : 'var(--w-text-3)';
+                      const tip = wt('timeline.gatePlanned', { n: g.n, name: g.name, from: shortDate(a), to: shortDate(b) }) + (g.late ? ` · ${wt('timeline.gateLate')}` : '');
+                      return (
+                        <span key={`pg${g.id}`} title={tip} aria-label={tip}>
+                          <span className="absolute bottom-[1px] h-0 border-t-2 border-dashed" style={{ left: xOf(a), width: Math.max(dw, (b - a + 1) * dw), borderColor: color }} />
+                          <span className="absolute bottom-[-3px] z-[2] h-[9px] w-[9px] -translate-x-1/2 rotate-45 rounded-[1px]" style={{ left: xOf(b) + dw / 2, background: color }} data-testid={g.late ? 'gate-late' : 'gate'} />
+                        </span>
+                      );
+                    })}
                     {mk.stages.filter((x) => x.start).map((st) => {
                       const a = toDay(st.start!), b = st.end ? toDay(st.end) : Math.max(a, today);
                       return <span key={`st${st.id}`} className="absolute top-[3px] flex h-[16px] items-center overflow-hidden whitespace-nowrap rounded-[4px] border border-[var(--w-border-strong)] px-1 text-[10.5px] text-[var(--w-text-2)]" style={{ left: xOf(a), width: Math.max(dw, (b - a + 1) * dw) }} title={`${wt('uxc.stage')} ${st.n}. ${st.name}`}>{st.n}. {st.name}</span>;

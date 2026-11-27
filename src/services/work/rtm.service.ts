@@ -19,8 +19,8 @@ import { issueRefsIn, textBlocks } from './specFidelity.js';
 import { brKey, inDocument, refsIn, ucKey, ucMissing, ucSpecSection } from './srs.js';
 import { loadSrs, srsCtx } from './srs.service.js';
 import {
-  buildRtmSheets, evaluateRow, filterRows, GAP_CODES, GAP_LABEL, summarize,
-  type GapCode, type Orphan, type RtmRow, type RuleCoverage, type TestSet,
+  buildRtmSheets, evaluateRow, filterRows, GAP_CODES, GAP_LABEL, nfrTraceRows, summarize,
+  type GapCode, type NfrTraceRow, type Orphan, type RtmRow, type RuleCoverage, type TestSet,
 } from './rtm.js';
 import { writeXlsx } from './xlsxStyled.js';
 
@@ -87,7 +87,7 @@ async function scanDocs(projectId: number, key: string) {
   return { byUc, byIssue, byIssueId, byRule };
 }
 
-const roundStatus = (rounds: unknown): string | null => {
+export const roundStatus = (rounds: unknown): string | null => {
   const list = Array.isArray(rounds) ? (rounds as Array<{ status?: string | null }>) : [];
   for (let i = list.length - 1; i >= 0; i--) if (list[i]?.status) return String(list[i].status);
   return null;
@@ -99,6 +99,8 @@ export interface RtmData {
   rows: RtmRow[];
   rules: RuleCoverage[];
   orphans: Orphan[];
+  /** dm5 G2 (B13): NFR có số đo ⇒ đo lường ⇒ test. */
+  nfrs: NfrTraceRow[];
 }
 
 /** Dựng toàn bộ RTM (KHÔNG kiểm quyền — nơi gọi kiểm). */
@@ -298,7 +300,9 @@ export async function loadRtm(projectId: number): Promise<RtmData> {
     ...unitSets.filter((u) => !matchedUnit.has(u.id)).map((u) => ({ kind: 'UNIT' as const, ref: u.set.ref!, name: u.set.name })),
     ...moduleSets.filter((m) => !matchedModule.has(m.id)).map((m) => ({ kind: m.kind, ref: m.set.name, name: `${m.set.cases} case(s)` })),
   ];
-  return { projectName: project.name, key, rows, rules, orphans };
+  // dm5 G2 (B13): NFR (thẻ có WorkNfrSpec) — test gắn vào thẻ NFR đã nằm trong dòng REQ của chính thẻ đó.
+  const nfrs = nfrTraceRows(srs.nfrs ?? [], rows);
+  return { projectName: project.name, key, rows, rules, orphans, nfrs };
 }
 
 export const rtmQuery = z.object({
@@ -313,9 +317,10 @@ export async function getRtm(userId: number, projectId: number, q: z.infer<typeo
   const d = await loadRtm(projectId);
   return {
     rows: filterRows(d.rows, { gap: (q.gap as GapCode | 'ANY' | undefined) ?? null, status: q.status ?? null, text: q.q ?? null, kind: q.kind ?? null }),
-    summary: summarize(d.rows),
+    summary: summarize(d.rows, { rules: d.rules, orphans: d.orphans }),
     rules: d.rules,
     orphans: d.orphans,
+    nfrs: d.nfrs,
     gapLabels: GAP_LABEL,
     // CTW đợt 4b (R23): sáu liên kết người chấm SWR302 dò — tóm tắt cạnh RTM, chi tiết ở trang Wiegers.
     sixLinks: await (await import('./swr.service.js')).sixLinksData(projectId).then((x) => ({ passed: x.passed, ok: x.ok, links: x.links.map((l) => ({ n: l.n, key: l.key, title: l.title, ok: l.ok, errors: l.gaps.filter((g) => g.severity === 'error').length })) })).catch(() => null),
@@ -329,7 +334,7 @@ export async function exportRtm(userId: number, projectId: number) {
   const swr = await import('./swr.service.js');
   const { sixLinksSheet } = await import('./swr.js');
   const six = await swr.sixLinksData(projectId);
-  const buffer = writeXlsx([...buildRtmSheets({ projectName: d.projectName, rows: d.rows, rules: d.rules, orphans: d.orphans, generated: new Date().toISOString().slice(0, 10) }), sixLinksSheet(six, d.projectName)], { title: `RTM — ${d.projectName}`, creator: 'CT Work' });
+  const buffer = writeXlsx([...buildRtmSheets({ projectName: d.projectName, rows: d.rows, rules: d.rules, orphans: d.orphans, nfrs: d.nfrs, generated: new Date().toISOString().slice(0, 10) }), sixLinksSheet(six, d.projectName)], { title: `RTM — ${d.projectName}`, creator: 'CT Work' });
   return { buffer, file: `${d.key}_RTM.xlsx` };
 }
 

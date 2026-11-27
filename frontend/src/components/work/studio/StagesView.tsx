@@ -179,6 +179,17 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
             )}
             {s.startedAt && <span>{wt('studio.startedD', { d: formatDate(s.startedAt) })}</span>}
             {s.completedAt && <span>{wt('studio.doneD', { d: formatDate(s.completedAt) })}</span>}
+            {/* dm5 G1 (A17): ngày kế hoạch; quá hạn mà chưa xong (hoặc xong muộn) ⇒ đỏ */}
+            {(s.plannedStart || s.plannedEnd) && (() => {
+              const end = s.plannedEnd?.slice(0, 10) ?? null;
+              const today = new Date().toISOString().slice(0, 10);
+              const late = !!end && (s.status === 'DONE' ? !!s.completedAt && s.completedAt.slice(0, 10) > end : today > end);
+              return (
+                <span className={late ? 'font-medium text-[var(--w-red)]' : undefined} data-testid={late ? 'stage-late' : 'stage-planned'}>
+                  {wt('timeline.plannedRange', { a: s.plannedStart ? formatDate(s.plannedStart) : '…', b: s.plannedEnd ? formatDate(s.plannedEnd) : '…' })}{late ? ` · ${wt('timeline.gateLate')}` : ''}
+                </span>
+              );
+            })()}
           </div>
 
           {docs && docs.length > 0 && (
@@ -300,18 +311,23 @@ function StageDialog({ open, onClose, config, stage, nextN }: { open: boolean; o
   const [slug, setSlug] = useState('');
   const [slugTouched, setSlugTouched] = useState(false);
   const [n, setN] = useState(nextN);
+  // dm5 G1 (A17): ngày kế hoạch của giai đoạn / cổng.
+  const [pStart, setPStart] = useState('');
+  const [pEnd, setPEnd] = useState('');
   useEffect(() => {
     if (!open) return;
     setName(stage?.name ?? ''); setSlug(stage?.slug ?? ''); setSlugTouched(!!stage); setN(stage?.n ?? nextN);
+    setPStart(stage?.plannedStart?.slice(0, 10) ?? ''); setPEnd(stage?.plannedEnd?.slice(0, 10) ?? '');
   }, [open, stage, nextN]);
+  const dates = { plannedStart: pStart || null, plannedEnd: pEnd || null };
   const save = useMutation({
     mutationFn: () => (stage
-      ? workStudioApi.updateStage(config.id, stage.id, { name: name.trim(), slug, n })
-      : workStudioApi.createStage(config.id, { name: name.trim(), slug, n })),
+      ? workStudioApi.updateStage(config.id, stage.id, { name: name.trim(), slug, n, ...dates })
+      : workStudioApi.createStage(config.id, { name: name.trim(), slug, n, ...dates })),
     onSuccess: () => { toast.success(stage ? wt('studio.stageUpdated') : wt('studio.stageAdded')); invalidate(); onClose(); },
     onError: (err) => toast.error(workError(err, wt('studio.saveStageFailed'))),
   });
-  const ok = name.trim() && /^[a-z0-9][a-z0-9-]{0,79}$/.test(slug);
+  const ok = name.trim() && /^[a-z0-9][a-z0-9-]{0,79}$/.test(slug) && !(pStart && pEnd && pStart > pEnd);
   return (
     <Dialog
       open={open}
@@ -332,6 +348,10 @@ function StageDialog({ open, onClose, config, stage, nextN }: { open: boolean; o
       <Field label="Slug" hint={wt('studio.slugHint')}>
         <input className="w-input font-mono" maxLength={80} value={slug} onChange={(e) => { setSlugTouched(true); setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')); }} />
       </Field>
+      <div className="grid grid-cols-2 gap-x-3">
+        <Field label={wt('timeline.plannedStart')}><input type="date" className="w-input" value={pStart} onChange={(e) => setPStart(e.target.value)} /></Field>
+        <Field label={wt('timeline.plannedEnd')} hint={pStart && pEnd && pStart > pEnd ? wt('timeline.plannedBad') : undefined}><input type="date" className="w-input" value={pEnd} onChange={(e) => setPEnd(e.target.value)} /></Field>
+      </div>
     </Dialog>
   );
 }

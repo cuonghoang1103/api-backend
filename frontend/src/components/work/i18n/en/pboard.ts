@@ -29,4 +29,17 @@ export const pboard = {
   chooseCol: 'Choose a column…',
   untitledCol: 'Untitled column',
   unassigned: '{count} status is not on any column — issues in it would disappear from the board.|{count} statuses are not on any column — issues in them would disappear from the board.',
+  // dm5 G1 (A4): WIP chéo cột + (A18) tuổi thẻ
+  guardsTitle: 'Cross-column WIP guards',
+  guardsDesc: 'Stop pulling new work while a downstream column is full — e.g. "In Review" full ⇒ nothing new into "In Progress". Enforced everywhere (board, bulk edit, AI, MCP), independent of the hard WIP switch above.',
+  guardWhen: 'When',
+  guardFull: 'has at least',
+  guardLimit: 'Limit',
+  guardNoWip: 'limit',
+  guardBlocks: 'issues, block moves into',
+  guardNeedLimit: 'This column has no WIP limit — enter one',
+  guardsNone: 'No cross-column guards.',
+  guardAdd: 'Add guard',
+  guardsSaved: 'WIP guards saved',
+  ageDays: '{n}d in this column',
 };

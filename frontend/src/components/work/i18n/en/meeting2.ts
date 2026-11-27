@@ -160,4 +160,11 @@ export const meeting2 = {
   reminderMin: 'Remind before (minutes, 0 = off)',
   remindChat: 'Also post the reminder in #general',
   settingsHint: 'Transcripts are kept after the audio is deleted. Each chunk is about 90 seconds.',
+  // dm5 G1 (A21): loại góp ý trong biên bản
+  kindLbl: 'Kind',
+  kindTip: 'What "Create issues" makes from this item: a Task or Bug issue, a change request, or a Q&A question',
+  kind_TASK: 'Task',
+  kind_BUG: 'Bug / defect',
+  kind_CR: 'Change request',
+  kind_QUESTION: 'Q&A question',
 };

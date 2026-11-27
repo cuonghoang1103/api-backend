@@ -68,10 +68,14 @@ const updateSection = defineTool({
 
 // ─── Xuất tệp: trả link tải ──────────────────────────────────────
 
-export const EXPORT_KINDS = ['unit_test', 'integration_test', 'system_test', 'project_tracking', 'weekly_report', 'ai_usage', 'wbs', 'page_docx', 'page_pdf', 'rtm', 'report3_docx', 'report3_pdf', 'final_docx', 'final_pdf'] as const;
+export const EXPORT_KINDS = [
+  'unit_test', 'integration_test', 'system_test', 'project_tracking', 'weekly_report', 'ai_usage', 'wbs', 'page_docx', 'page_pdf', 'rtm', 'report3_docx', 'report3_pdf', 'final_docx', 'final_pdf',
+  // dm5 G4 (C12): tuyến web có sẵn nhưng trước đây MCP không phát được link.
+  'contrib_xlsx', 'contrib_pdf', 'test_cycle', 'meeting_minutes', 'review',
+] as const;
 
 /** Tuyến REST (sau /projects/:pid) + mô tả của từng loại tệp. Một chỗ — export_file và test cùng đọc. */
-export function exportRoute(kind: (typeof EXPORT_KINDS)[number], o: { module?: string; variant?: string; weeklyIds?: number[]; page?: number }): { path: string; file: string } {
+export function exportRoute(kind: (typeof EXPORT_KINDS)[number], o: { module?: string; variant?: string; weeklyIds?: number[]; page?: number; cycleId?: number; meeting?: number; review?: number; format?: 'docx' | 'pdf' | 'xlsx' | 'csv'; from?: string; to?: string; lang?: 'vi' | 'en' }): { path: string; file: string } {
   const q = (obj: Record<string, string | undefined>) => {
     const s = new URLSearchParams(Object.entries(obj).filter(([, v]) => v !== undefined && v !== '') as Array<[string, string]>).toString();
     return s ? `?${s}` : '';
@@ -90,6 +94,24 @@ export function exportRoute(kind: (typeof EXPORT_KINDS)[number], o: { module?: s
     case 'report3_pdf': return { path: '/srs/report3/export.pdf', file: 'Report 3 Software Requirement Specification (.pdf)' };
     case 'final_docx': return { path: '/final-report/export.docx', file: 'Report 7 Final Project Report (.docx)' };
     case 'final_pdf': return { path: '/final-report/export.pdf', file: 'Report 7 Final Project Report (.pdf)' };
+    // dm5 G4 (C12)
+    case 'contrib_xlsx': return { path: `/contrib/export.xlsx${q({ from: o.from, to: o.to, lang: o.lang })}`, file: 'Team contributions incl. "By role" sheet (.xlsx)' };
+    case 'contrib_pdf': return { path: `/contrib/export.pdf${q({ from: o.from, to: o.to })}`, file: 'Team contributions, one page (.pdf)' };
+    case 'test_cycle': {
+      if (!o.cycleId) throw new BadRequestError('Say which test cycle to export (cycleId)', 'VALIDATION_ERROR');
+      const f = o.format === 'pdf' || o.format === 'csv' ? o.format : 'xlsx';
+      return { path: `/test-cycles/${o.cycleId}/export${q({ format: f })}`, file: `Test cycle #${o.cycleId} report (.${f})` };
+    }
+    case 'meeting_minutes': {
+      if (!o.meeting) throw new BadRequestError('Say which meeting (meeting number)', 'VALIDATION_ERROR');
+      const f = o.format === 'pdf' ? 'pdf' : 'docx';
+      return { path: `/meetings/${o.meeting}/minutes-export${q({ format: f, lang: o.lang })}`, file: `Minutes of M-${o.meeting} (.${f})` };
+    }
+    case 'review': {
+      if (!o.review) throw new BadRequestError('Say which review session (review number)', 'VALIDATION_ERROR');
+      const f = o.format === 'pdf' ? 'pdf' : 'docx';
+      return { path: `/reviews/${o.review}/export${q({ format: f, lang: o.lang })}`, file: `Review REV-${o.review} minutes (.${f})` };
+    }
     case 'page_docx':
     case 'page_pdf': {
       if (!o.page) throw new BadRequestError('Say which page to export (page number)', 'VALIDATION_ERROR');
@@ -103,13 +125,18 @@ const routeOnly = (path: string) => path.replace(/\?.*$/, '');
 
 const exportFile = defineTool({
   name: 'export_file', title: 'Get a download link', group: 'export',
-  description: 'Returns a download link for a file CT Work generates in the official FPT templates: unit_test / integration_test / system_test (Reports 5.1–5.3, Excel), project_tracking (variant SWP391 | SEP490 | SWP391_T1 | ISSUES), weekly_report, ai_usage, wbs, page_docx / page_pdf (one Docs page as Word or PDF), rtm (traceability matrix, Excel), report3_docx / report3_pdf (Report 3 SRS from the structured requirements), final_docx / final_pdf (Report 7 Final). The link needs the same login (web cookie, or Authorization: Bearer <token>). LIMITATION of page_docx / page_pdf: Mermaid diagram blocks come out as their source code with a caption, not as pictures (the server cannot render Mermaid); Excalidraw diagrams and uploaded images are pictures. Tell the user to export from the page in the web app (Export → Word/PDF) when they need the Mermaid diagrams drawn.',
+  description: 'Returns a download link for a file CT Work generates in the official FPT templates: unit_test / integration_test / system_test (Reports 5.1–5.3, Excel), project_tracking (variant SWP391 | SEP490 | SWP391_T1 | ISSUES), weekly_report, ai_usage, wbs, page_docx / page_pdf (one Docs page as Word or PDF), rtm (traceability matrix, Excel), report3_docx / report3_pdf (Report 3 SRS from the structured requirements), final_docx / final_pdf (Report 7 Final), contrib_xlsx / contrib_pdf (team contributions; the xlsx has a "By role" sheet with hours per role C1–C5 per week; from/to YYYY-MM-DD), test_cycle (cycleId; format xlsx|pdf|csv), meeting_minutes (meeting number; format docx|pdf), review (review session number; format docx|pdf). The link needs the same login (web cookie, or Authorization: Bearer <token>). LIMITATION of page_docx / page_pdf: Mermaid diagram blocks come out as their source code with a caption, not as pictures (the server cannot render Mermaid); Excalidraw diagrams and uploaded images are pictures. Tell the user to export from the page in the web app (Export → Word/PDF) when they need the Mermaid diagrams drawn.',
   write: false,
   input: z.object({
     project: projectArg, kind: z.enum(EXPORT_KINDS),
     module: z.string().max(120).optional().describe('unit_test: only this module'),
     variant: z.enum(TRACKING_VARIANTS).optional(), weeklyIds: z.array(z.number().int().positive()).max(60).optional(),
     page: z.number().int().positive().optional().describe('page_docx / page_pdf: page number'),
+    cycleId: z.number().int().positive().optional().describe('test_cycle: test cycle id'),
+    meeting: z.number().int().positive().optional().describe('meeting_minutes: meeting number (M-n)'),
+    review: z.number().int().positive().optional().describe('review: review session number (REV-n)'),
+    format: z.enum(['docx', 'pdf', 'xlsx', 'csv']).optional(), from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(), to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    lang: z.enum(['vi', 'en']).optional(),
   }),
   run: async (ctx, a) => {
     const r = exportRoute(a.kind, a);
@@ -143,7 +170,7 @@ export function sprintTrongTam<T extends { startAt: Date | null; endAt: Date | n
 
 const sprintCurrent = defineTool({
   name: 'sprint_current', title: 'Current sprint', group: 'planning',
-  description: 'The active sprint: goal, dates, pace (remaining vs days left, computed by CT Work) and its issues with status, assignee and points. Also lists planned sprints.',
+  description: 'The active sprint: goal, dates, pace (remaining vs days left, computed by CT Work) and its issues with status, assignee and points; notReady = issues failing the Definition of Ready, guards = estimate vs capacity × focus factor and Must share. Also lists planned sprints.',
   write: false,
   input: z.object({ project: projectArg }),
   run: async (ctx, a) => {
@@ -177,7 +204,11 @@ const sprintCurrent = defineTool({
       activeSprintPace(p.id),
     ]);
     const rows = issues.map((i) => ({ key: `${p.key}-${i.number}`, title: i.title, type: i.type.key, status: i.status.name, category: i.status.category, assignee: i.assignee ? `${i.assignee.kind === 'AGENT' ? '🤖 ' : ''}${i.assignee.username}` : null, points: i.storyPoints, blocked: !!i.flaggedAt }));
-    return `Active sprint "${active.name}" (${rows.length} issues). Numbers are computed by CT Work.\n${untrusted('current sprint', json({ sprint: { name: active.name, goal: active.goal, startAt: active.startAt, endAt: active.endAt }, pace, issues: rows, planned }))}`;
+    // dm5 G1: thẻ chưa Ready (DoR) + ước lượng so với sức chứa × tập trung + tỉ lệ Must — cùng số với hộp thoại sprint trên web.
+    const { sprintGuards } = await import('../dm5a.service.js');
+    const g = await sprintGuards(ctx.userId, p.id, active.id).catch(() => null);
+    const guards = g ? { notReady: g.notReady.map((x) => ({ key: x.key, missing: x.missing })), capacity: g.capacity, mustPct: g.moscow.enabled ? g.moscow.mustPct : null } : null;
+    return `Active sprint "${active.name}" (${rows.length} issues). Numbers are computed by CT Work.${g?.notReady.length ? ` ${g.notReady.length} issue(s) are not Ready (Definition of Ready).` : ''}\n${untrusted('current sprint', json({ sprint: { name: active.name, goal: active.goal, startAt: active.startAt, endAt: active.endAt }, pace, issues: rows, planned, notReady: guards?.notReady ?? [], guards }))}`;
   },
 });
 
@@ -231,11 +262,14 @@ async function memberIdByUsername(projectId: number, username: string | null | u
 
 const meetingAddActions = defineTool({
   name: 'meeting_add_actions', title: 'Add action items to a meeting', group: 'planning',
-  description: 'Appends action items (text, optional owner username and due date) to a meeting\'s minutes. Existing action items are kept. Then meeting_create_issues turns them into issues.',
+  description: 'Appends action items (text, optional owner username, due date and kind TASK | BUG | CR | QUESTION — default TASK) to a meeting\'s minutes. Existing action items are kept. Then meeting_create_issues turns each into the right thing: a Task or Bug issue, a change request (CR-n) or a Q&A question (Q-n).',
   write: true,
   input: z.object({
     project: projectArg, meeting: meetingRef,
-    actions: z.array(z.object({ text: z.string().min(1).max(500), owner: z.string().max(60).nullable().optional(), dueDate: dateArg.nullable().optional() })).min(1).max(50),
+    actions: z.array(z.object({
+      text: z.string().min(1).max(500), owner: z.string().max(60).nullable().optional(), dueDate: dateArg.nullable().optional(),
+      kind: z.enum(['TASK', 'BUG', 'CR', 'QUESTION']).optional().describe('dm5: what "create" makes — Task/Bug issue, change request or Q&A question'),
+    })).min(1).max(50),
   }),
   run: async (ctx, a) => {
     requireWrite(ctx);
@@ -243,17 +277,17 @@ const meetingAddActions = defineTool({
     const p = await projectFor(ctx, a.project, [['PUT', `/meetings/${n}/actions`]]);
     const cur = await meetings.getMeeting(ctx.userId, p.id, n);
     const items = [
-      ...cur.actions.map((x) => ({ id: x.id, text: x.text, assigneeId: x.assignee?.id ?? null, dueDate: x.dueDate ? new Date(`${x.dueDate}T00:00:00Z`) : null })),
-      ...await Promise.all(a.actions.map(async (x) => ({ text: x.text, assigneeId: await memberIdByUsername(p.id, x.owner), dueDate: x.dueDate ? new Date(`${x.dueDate}T00:00:00Z`) : null }))),
+      ...cur.actions.map((x) => ({ id: x.id, text: x.text, assigneeId: x.assignee?.id ?? null, dueDate: x.dueDate ? new Date(`${x.dueDate}T00:00:00Z`) : null, kind: x.kind })),
+      ...await Promise.all(a.actions.map(async (x) => ({ text: x.text, assigneeId: await memberIdByUsername(p.id, x.owner), dueDate: x.dueDate ? new Date(`${x.dueDate}T00:00:00Z`) : null, kind: x.kind ?? 'TASK' as const }))),
     ];
     const m = await meetings.setActions(ctx.userId, p.id, n, items);
-    return { meeting: m.key, actions: m.actions.map((x) => ({ id: x.id, text: x.text, issue: x.issue?.key ?? null })) };
+    return { meeting: m.key, actions: m.actions.map((x) => ({ id: x.id, text: x.text, kind: x.kind, issue: x.issue?.key ?? x.createdRef ?? null })) };
   },
 });
 
 const meetingIssues = defineTool({
   name: 'meeting_create_issues', title: 'Create issues from meeting action items', group: 'planning',
-  description: 'Creates one issue per action item that has no issue yet (all, or the given action ids). Owner and due date carry over; sprint/stage follow the meeting date. Running it twice does not duplicate.',
+  description: 'Creates one item per action item that has nothing yet (all, or the given action ids): a Task or Bug issue, or — by the action kind — a change request (CR-n) / Q&A question (Q-n). Owner and due date carry over; sprint/stage follow the meeting date. Running it twice does not duplicate.',
   write: true,
   input: z.object({ project: projectArg, meeting: meetingRef, actionIds: z.array(z.number().int().positive()).max(100).optional() }),
   run: async (ctx, a) => {
@@ -261,7 +295,7 @@ const meetingIssues = defineTool({
     const n = meetingNo(a.meeting);
     const p = await projectFor(ctx, a.project, [['POST', `/meetings/${n}/actions/issues`]]);
     const r = await meetings.createIssuesFromActions(ctx.userId, p.id, n, a.actionIds);
-    return { created: r.created.map((c) => ({ key: c.key, title: c.title })) };
+    return { created: [...r.created.map((c) => ({ key: c.key, kind: c.kind ?? 'TASK', title: c.title })), ...r.others.map((o) => ({ key: o.ref, kind: o.kind, title: o.title }))] };
   },
 });
 
@@ -279,6 +313,7 @@ const raidFields = {
   owner: z.string().max(60).nullable().optional().describe('Owner username'), status: z.string().max(20).optional(),
   probability: scale.nullable().optional(), impact: scale.nullable().optional(), response: z.enum(RAID_RESPONSES).nullable().optional(),
   mitigation: z.string().max(5000).nullable().optional(), trigger: z.string().max(2000).nullable().optional(), reviewDate: dateArg.nullable().optional(),
+  contingency: z.string().max(5000).nullable().optional().describe('Plan B — what to do WHEN the risk happens'),
 };
 
 async function raidInput(p: ProjectHit, a: { owner?: string | null; reviewDate?: string | null } & Record<string, unknown>) {

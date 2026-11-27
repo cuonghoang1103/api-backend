@@ -20,6 +20,7 @@ import { EmptyState, PageLoading, UserAvatar } from '../ui';
 import { useWT, type WKey } from '../i18n';
 import { Badge, Card, Labeled, NumberInput, Segmented, Tbl, Td, Th } from './qui';
 import { DECISION_TONE, STATUS_TONE } from './ReviewList';
+import { CoolOffNotice } from './G3Quality'; // dm5 G3 (B4)
 
 export default function ReviewDetail({ config, pid, num, onBack, onOpenIssue }: { config: ProjectConfig; pid: number; num: number; onBack: () => void; onOpenIssue: (n: number) => void }) {
   const { t, locale } = useWT();
@@ -137,8 +138,9 @@ function InfoCard({ r, editable, canEdit, onPatch }: { r: Review; editable: bool
           <Labeled label={t('q6.reworkMinutes')}><NumberInput label={t('q6.reworkMinutes')} disabled={!editable} value={r.reworkMinutes} min={0} onChange={(v) => onPatch({ reworkMinutes: v })} /></Labeled>
         </div>
         <Labeled label={t('q6.decision')} className="sm:col-span-2">
+          <CoolOffNotice coolOff={r.coolOff} />
           <Segmented<ReviewDecision>
-            label={t('q6.decision')} disabled={!editable} value={r.decision} onChange={(v) => onPatch({ decision: v })} testId="q6-decision"
+            label={t('q6.decision')} disabled={!editable || (r.coolOff?.remainingMinutes ?? 0) > 0} value={r.decision} onChange={(v) => onPatch({ decision: v })} testId="q6-decision"
             options={(['ACCEPT', 'ACCEPT_WITH_CHANGES', 'REINSPECT'] as const).map((d) => ({ value: d, label: t(`q6.dec${d}` as WKey), tone: DECISION_TONE[d] }))}
           />
         </Labeled>

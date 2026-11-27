@@ -183,10 +183,10 @@ const swrMockupUpdate = defineTool({
   },
 });
 
-const SWR_DEL = ['feature', 'feature_link', 'priority_row', 'glossary', 'dictionary', 'stakeholder', 'elicitation', 'origin', 'survey', 'mockup', 'nfr', 'raci_activity'] as const;
+const SWR_DEL = ['feature', 'feature_link', 'priority_row', 'glossary', 'dictionary', 'stakeholder', 'elicitation', 'origin', 'survey', 'mockup', 'nfr', 'raci_activity', 'system_message'] as const;
 const swrDelete = defineTool({
   name: 'swr_delete', title: 'Delete a SWR302 item', group: 'srs',
-  description: 'DESTRUCTIVE: deletes a SWR302 item — kind feature (FE-3) | feature_link (link id, with feature) | priority_row (row id) | glossary / dictionary (id or name) | stakeholder (SH-2) | elicitation (ELC-1) | origin (requirement source id) | survey (SV-1) | mockup (id) | nfr (requirement issue number) | raci_activity (activity id). The user must confirm.',
+  description: 'DESTRUCTIVE: deletes a SWR302 item — kind feature (FE-3) | feature_link (link id, with feature) | priority_row (row id) | glossary / dictionary (id or name) | stakeholder (SH-2) | elicitation (ELC-1) | origin (requirement source id) | survey (SV-1) | mockup (id) | nfr (requirement issue number) | raci_activity (activity id) | system_message (SM-03). The user must confirm.',
   ...DEL,
   input: z.object({ project: projectArg, kind: z.enum(SWR_DEL), item: ref('Id / number / key / name of the item'), feature: ref('feature_link: the feature (FE-3)').optional() }),
   run: async (ctx, a) => {
@@ -211,6 +211,8 @@ const swrDelete = defineTool({
       mockup: async () => [`/swr/mockups/${n('mockup')}`, () => deep.deleteMockup(ctx.userId, p0.id, n('mockup'))],
       nfr: async () => { const num = issueNumber(p0.key, a.item); return [`/swr/nfr/${num}`, () => deep.deleteNfr(ctx.userId, p0.id, num)]; },
       raci_activity: async () => [`/swr/raci/activities/${n('activity')}`, () => elic.deleteRaciActivity(ctx.userId, p0.id, n('activity'))],
+      // dm5 G2: sổ System Messages (Report 3 §5.2).
+      system_message: async () => { const m = String(a.item); return [`/srs/messages/${m}`, async () => (await import('../srsMessages.service.js')).deleteSystemMessage(ctx.userId, p0.id, m)]; },
     };
     const [path, go] = await route[a.kind]();
     await projectFor(ctx, a.project, [['DELETE', path]]);
@@ -271,7 +273,7 @@ const changeRequests = defineTool({
 const CR_ACTIONS = ['create', 'update', 'submit', 'withdraw', 'implemented', 'link', 'unlink', 'request_approval'] as const;
 const crManage = defineTool({
   name: 'change_request_manage', title: 'Create / edit / submit a change request', group: 'planning',
-  description: 'action create (title + fields) | update (fields) | submit (DRAFT ⇒ SUBMITTED) | withdraw (back to DRAFT) | implemented (after approval) | link / unlink an issue (role AFFECTED or IMPLEMENTS; unlink by link id) | request_approval (approvers by username). Fields: description (Markdown), reason, urgency, impactScope, scheduleDays, costAmount, costCurrency, impactRisk, alternatives, owner. Approving or rejecting is done by the approver.',
+  description: 'action create (title + fields) | update (fields) | submit (DRAFT ⇒ SUBMITTED) | withdraw (back to DRAFT) | implemented (after approval) | link / unlink an issue (role AFFECTED or IMPLEMENTS; unlink by link id) | request_approval (approvers by username). Fields: description (Markdown), reason, urgency, impactScope, scheduleDays, costAmount, costCurrency, impactRisk, alternatives, owner, impactMatrix ({scope|schedule|cost|quality|risk|docs: {level NONE/LOW/MEDIUM/HIGH, note}}), options ([{title, effortDays, pros, cons, chosen}] max 3 — A/B/C). Split into sub-requests / sync checklist: governance_extras cr_split / cr_sync. Approving or rejecting is done by the approver.',
   write: true, personOnly: true,
   input: z.object({
     project: projectArg, action: z.enum(CR_ACTIONS), number: ref('CR number (all actions except create)').optional(),
@@ -281,6 +283,12 @@ const crManage = defineTool({
     impactRisk: z.string().max(10_000).nullable().optional(), alternatives: z.string().max(10_000).nullable().optional(), owner: z.string().max(254).optional().describe('"me" | username'),
     issue: issueArg.optional().describe('link: the issue'), role: z.enum(CR_LINK_ROLES).optional(), linkId: z.number().int().positive().optional(),
     approvers: z.array(z.string().min(1).max(254)).max(10).optional(),
+    // Sáu chiều cố định (không z.record): schema JSON phải có `properties` cho model OpenAI/Anthropic (schemaModel.test.ts).
+    impactMatrix: (() => {
+      const dim = z.object({ level: z.string().max(10).describe('NONE | LOW | MEDIUM | HIGH'), note: z.string().max(1000).nullable().optional() }).optional();
+      return z.object({ scope: dim, schedule: dim, cost: dim, quality: dim, risk: dim, docs: dim }).nullable().optional();
+    })(),
+    options: z.array(z.object({ title: z.string().max(200), effortDays: z.number().min(0).max(1000).nullable().optional(), pros: z.string().max(1000).nullable().optional(), cons: z.string().max(1000).nullable().optional(), chosen: z.boolean().optional() })).max(3).nullable().optional(),
   }),
   run: async (ctx, a) => {
     await requirePerson(ctx, 'manage change requests');
@@ -292,6 +300,7 @@ const crManage = defineTool({
       ...(a.scheduleDays !== undefined ? { scheduleDays: a.scheduleDays } : {}), ...(a.costAmount !== undefined ? { costAmount: a.costAmount } : {}),
       ...(a.costCurrency !== undefined ? { costCurrency: a.costCurrency } : {}), ...(a.impactRisk !== undefined ? { impactRisk: a.impactRisk } : {}),
       ...(a.alternatives !== undefined ? { alternatives: a.alternatives } : {}), ...(a.owner !== undefined ? { ownerId: await assigneeIdOf(ctx, p0, a.owner) } : {}),
+      ...(a.impactMatrix !== undefined ? { impactMatrix: a.impactMatrix } : {}), ...(a.options !== undefined ? { options: a.options } : {}),
     });
     if (a.action === 'create') {
       if (!a.title) throw new BadRequestError('create needs a title', 'VALIDATION_ERROR');
@@ -669,14 +678,16 @@ const pokerSession = defineTool({
 
 const retroSession = defineTool({
   name: 'retro_session', title: 'Run a retro board', group: 'planning',
-  description: 'action create (title, template SSC…, sprint id, anonymous, votes per person) | update (title, sprint, anonymous, votes, locked) | card_update (your card: body, column) | add_action (title, assignee, createIssue default true). Cards and votes: retro_card_add / retro_vote.',
+  description: 'action create (title, template SSC…, sprint id, anonymous, votes per person) | update (title, sprint, anonymous, votes, locked) | card_update (your card: body, column) | add_action (title, assignee, createIssue default true, trigger, verify — the project may cap actions per retro) | facts (read-only: Done/Planned, hours logged vs estimated, bugs by activity, % PRs green on first CI run, biggest PR for the retro sprint). Cards and votes: retro_card_add / retro_vote.',
   write: true, personOnly: true,
   input: z.object({
-    project: projectArg, action: z.enum(['create', 'update', 'card_update', 'add_action']), retro: z.number().int().positive().optional(),
+    project: projectArg, action: z.enum(['create', 'update', 'card_update', 'add_action', 'facts']), retro: z.number().int().positive().optional(),
     title: z.string().min(1).max(255).optional(), template: z.string().max(20).optional(), sprintId: z.number().int().positive().nullable().optional(),
     anonymous: z.boolean().optional(), votesPerPerson: z.number().int().min(1).max(20).optional(), locked: z.boolean().optional(),
     card: z.number().int().positive().optional(), body: z.string().min(1).max(1000).optional(), column: z.string().max(16).optional(),
     assignee: z.string().max(254).optional(), createIssue: z.boolean().optional(),
+    trigger: z.string().max(500).optional().describe('add_action: the signal that tells you to act'),
+    verify: z.string().max(500).optional().describe('add_action: how next sprint checks it worked'),
   }),
   run: async (ctx, a) => {
     await requirePerson(ctx, 'run retros');
@@ -688,6 +699,10 @@ const retroSession = defineTool({
       return { created: r.id };
     }
     if (!a.retro) throw new BadRequestError(`${a.action} needs the retro id`, 'VALIDATION_ERROR');
+    if (a.action === 'facts') {
+      await projectFor(ctx, a.project, [['GET', `/retros/${a.retro}/facts`]]);
+      return untrusted('retro facts', JSON.stringify(await retro.retroFacts(ctx.userId, p0.id, a.retro)));
+    }
     if (a.action === 'update') {
       await projectFor(ctx, a.project, [['PATCH', `/retros/${a.retro}`]]);
       await retro.updateRetro(ctx.userId, p0.id, a.retro, retro.retroPatch.parse(patchOf({ title: a.title, sprintId: a.sprintId, anonymous: a.anonymous, votesPerPerson: a.votesPerPerson, locked: a.locked }, [])));
@@ -701,7 +716,7 @@ const retroSession = defineTool({
     }
     if (!a.title) throw new BadRequestError('add_action needs a title', 'VALIDATION_ERROR');
     await projectFor(ctx, a.project, [['POST', `/retros/${a.retro}/actions`]]);
-    const r = await retro.addAction(ctx.userId, p0.id, a.retro, retro.actionInput.parse({ title: a.title, assigneeId: a.assignee ? await assigneeIdOf(ctx, p0, a.assignee) : null, createIssue: a.createIssue }));
+    const r = await retro.addAction(ctx.userId, p0.id, a.retro, retro.actionInput.parse({ title: a.title, assigneeId: a.assignee ? await assigneeIdOf(ctx, p0, a.assignee) : null, createIssue: a.createIssue, trigger: a.trigger, verify: a.verify }));
     return { added: r };
   },
 });
@@ -769,6 +784,7 @@ const reviewManage = defineTool({
     numbers: z.array(z.number().int().positive()).max(10).optional().describe('ai_review_queue: only these issues'),
     pr: z.number().int().positive().optional().describe('ai_code_review: pull request number'), issue: issueArg.optional().describe('ai_code_review: issue whose PR/branch to review'),
     notify: z.boolean().optional().describe('ai_code_review: also ping the member'),
+    mode: z.enum(['critic', 'full']).optional().describe('ai_code_review: critic = mentor mode, no code written, every suggestion is a guiding question (default: project setting)'),
     title: z.string().min(1).max(200).optional(), kind: z.enum(REVIEW_KINDS).optional(), method: z.enum(REVIEW_METHODS).optional(), checklistKey: z.string().max(40).optional(),
     page: z.number().int().positive().optional(), workProduct: z.string().max(200).optional(), prUrl: z.string().max(500).optional(), size: z.number().min(0).max(1_000_000).optional(),
     meetingAt: z.string().max(40).optional(), meetingMinutes: z.number().int().min(0).max(100_000).optional(), reworkMinutes: z.number().int().min(0).max(100_000).optional(),
@@ -792,7 +808,7 @@ const reviewManage = defineTool({
       if (!a.pr && a.issue === undefined) throw new BadRequestError('ai_code_review needs pr or issue', 'VALIDATION_ERROR');
       const p = await projectFor(ctx, a.project, [['POST', '/code/review']]);
       const { runCodeReview } = await import('../codeReview.service.js');
-      return runCodeReview(ctx.userId, p.id, { pr: a.pr ?? null, issue: a.issue !== undefined ? issueNumber(p.key, a.issue) : null, notify: a.notify === true }) as unknown as Record<string, unknown>;
+      return runCodeReview(ctx.userId, p.id, { pr: a.pr ?? null, issue: a.issue !== undefined ? issueNumber(p.key, a.issue) : null, notify: a.notify === true, mode: a.mode }) as unknown as Record<string, unknown>;
     }
     if (a.action === 'create') {
       if (!a.title || !a.kind || !a.method || !a.checklistKey) throw new BadRequestError('create needs title, kind, method and checklistKey', 'VALIDATION_ERROR');
@@ -873,12 +889,13 @@ const versions = defineTool({
 
 const versionManage = defineTool({
   name: 'version_manage', title: 'Create / edit / release a version', group: 'planning',
-  description: 'action create (name, description, start/release date) | update (name, description, dates, release notes, status UNRELEASED/ARCHIVED) | release (unresolved issues move to moveTo version, or stay with none).',
+  description: 'action create (name, description, start/release date) | update (name, description, dates, release notes, status UNRELEASED/ARCHIVED, freezeLevel NONE/FEATURE/CODE/HARD, gitTag, commitSha) | release (unresolved issues move to moveTo version, or stay with none; gitTag + commitSha of the release — CI at that SHA is recorded, and blocks when the project requires green CI). FEATURE freeze blocks new requirements/stories in the version, CODE allows only P0–P1 bugs, HARD blocks everything (project admins can override).',
   write: true, personOnly: true,
   input: z.object({
     project: projectArg, action: z.enum(['create', 'update', 'release']), version: versionRef.optional(), name: z.string().min(1).max(60).optional(),
     description: z.string().max(5000).nullable().optional(), startDate: ymd.nullable().optional(), releaseDate: ymd.nullable().optional(),
     releaseNotes: z.string().max(50_000).nullable().optional(), status: z.enum(['UNRELEASED', 'ARCHIVED']).optional(), moveTo: versionRef.optional(),
+    freezeLevel: z.enum(['NONE', 'FEATURE', 'CODE', 'HARD']).optional(), gitTag: z.string().max(100).nullable().optional(), commitSha: z.string().max(64).nullable().optional(),
   }),
   run: async (ctx, a) => {
     await requirePerson(ctx, 'manage versions');
@@ -887,19 +904,19 @@ const versionManage = defineTool({
     if (a.action === 'create') {
       if (!a.name) throw new BadRequestError('create needs a name', 'VALIDATION_ERROR');
       const p = await projectFor(ctx, a.project, [['POST', '/versions']]);
-      const v = await planning.createVersion(ctx.userId, p.id, { name: a.name, description: a.description ?? null, startDate: a.startDate ?? null, releaseDate: a.releaseDate ?? null }) as { id: number };
+      const v = await planning.createVersion(ctx.userId, p.id, { name: a.name, description: a.description ?? null, startDate: a.startDate ?? null, releaseDate: a.releaseDate ?? null, freezeLevel: a.freezeLevel, gitTag: a.gitTag, commitSha: a.commitSha }) as { id: number };
       return { created: v.id };
     }
     if (a.version === undefined) throw new BadRequestError(`${a.action} needs the version`, 'VALIDATION_ERROR');
     const id = await versionIdOf(p0.id, a.version);
     if (a.action === 'update') {
       const p = await projectFor(ctx, a.project, [['PATCH', `/versions/${id}`]]);
-      await planning.updateVersion(ctx.userId, p.id, id, patchOf({ name: a.name, description: a.description, startDate: a.startDate, releaseDate: a.releaseDate, releaseNotes: a.releaseNotes, status: a.status }, []) as Parameters<typeof planning.updateVersion>[3]);
+      await planning.updateVersion(ctx.userId, p.id, id, patchOf({ name: a.name, description: a.description, startDate: a.startDate, releaseDate: a.releaseDate, releaseNotes: a.releaseNotes, status: a.status, freezeLevel: a.freezeLevel, gitTag: a.gitTag, commitSha: a.commitSha }, []) as Parameters<typeof planning.updateVersion>[3]);
       return { updated: id };
     }
     const p = await projectFor(ctx, a.project, [['POST', `/versions/${id}/release`]]);
-    await planning.releaseVersion(ctx.userId, p.id, id, { moveUnresolvedTo: a.moveTo !== undefined ? await versionIdOf(p0.id, a.moveTo) : null, releaseDate: a.releaseDate });
-    return { released: id };
+    const r = await planning.releaseVersion(ctx.userId, p.id, id, { moveUnresolvedTo: a.moveTo !== undefined ? await versionIdOf(p0.id, a.moveTo) : null, releaseDate: a.releaseDate, gitTag: a.gitTag, commitSha: a.commitSha });
+    return { released: id, ci: r.ci };
   },
 });
 

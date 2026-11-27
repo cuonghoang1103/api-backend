@@ -2,7 +2,7 @@
 
 /**
  * CT Work đợt 4 (09/10/2026) — /work/<slug>/<KEY>/requirements: SRS CÓ CẤU TRÚC theo mẫu FPT Report 3 + RTM.
- * Tab trong `?tab=` (use-cases | actors | rules | screens | authorization | non-ui | traceability) để chia sẻ link;
+ * Tab trong `?tab=` (use-cases | actors | rules | screens | authorization | non-ui | messages | traceability) để chia sẻ link;
  * `?uc=N` mở đặc tả một UC, `?issue=N` mở ngăn kéo thẻ.
  * Hành động: Draft from issue (AI ⇒ đề xuất), Fill the Report 3 page (một phiên bản mới), Export Report 3 (.docx/.pdf —
  * vẽ sẵn sơ đồ Mermaid ở trình duyệt rồi gửi kèm như xuất trang Docs của đợt 3A).
@@ -27,6 +27,7 @@ import UseCasesTab, { SuggestDialog } from '@/components/work/srs/UseCasesTab';
 import { ActorsTab, FunctionsTab, RulesTab } from '@/components/work/srs/CatalogTabs';
 import { AuthMatrixTab, ScreensTab } from '@/components/work/srs/ScreensTab';
 import RtmTab from '@/components/work/srs/RtmTab';
+import MessagesTab from '@/components/work/srs/MessagesTab'; // dm5 G2 (B9): sổ System Messages SM-xx
 import { wt } from '@/components/work/i18n';
 
 const TABS = [
@@ -36,6 +37,7 @@ const TABS = [
   { id: 'screens', get label() { return wt('srs.tabScreensFlow'); } },
   { id: 'authorization', get label() { return wt('srs.tabScreenAuthorization'); } },
   { id: 'non-ui', get label() { return wt('srs.tabNonUiFunctions'); } },
+  { id: 'messages', get label() { return wt('g2.tabMessages'); } },
   { id: 'traceability', get label() { return wt('srs.tabTraceabilityRtm'); } },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
@@ -135,6 +137,7 @@ function RequirementsView({ config, pid }: { config: ProjectConfig; pid: number 
           {tab === 'screens' && <ScreensTab pid={pid} data={data} />}
           {tab === 'authorization' && <AuthMatrixTab pid={pid} data={data} />}
           {tab === 'non-ui' && <FunctionsTab pid={pid} data={data} />}
+          {tab === 'messages' && <MessagesTab pid={pid} data={data} />}
           {tab === 'traceability' && <RtmTab pid={pid} onOpenIssue={(n) => setParam({ issue: String(n) }, true)} onOpenUc={(n) => setParam({ tab: null, uc: String(n) })} />}
         </div>
       </div>

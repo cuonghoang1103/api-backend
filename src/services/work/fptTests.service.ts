@@ -1183,3 +1183,97 @@ export async function aiSuggest(userId: number, projectId: number, id: number, i
 }
 
 export { defaultSheetName };
+
+// ═══ dm5 G3 (27/11/2026) — D5 nhập JUnit/JaCoCo vào 5.1 · D4 lint ma trận ═════════════════════════════════════════
+
+const AUTO_LIMIT_BYTES = 8 * 1024 * 1024;
+
+export const automationImportInput = z.object({
+  /** JUnit XML (Surefire/Gradle) — hoặc JSON Playwright/Jest; dạng tự nhận. */
+  report: z.string().min(1).max(AUTO_LIMIT_BYTES),
+  format: z.enum(['AUTO', 'JUNIT', 'PLAYWRIGHT', 'JEST']).optional(),
+  /** JaCoCo XML / lcov / Cobertura / Istanbul summary (tuỳ chọn) ⇒ % phủ dòng/nhánh vào Notes. */
+  coverage: z.string().max(AUTO_LIMIT_BYTES).nullable().optional(),
+  coverageFormat: z.enum(['AUTO', 'LCOV', 'JACOCO', 'COBERTURA', 'ISTANBUL']).optional(),
+  commitSha: z.string().trim().regex(/^[0-9a-f]{7,64}$/i, 'commitSha must be a git SHA (7–64 hex)').nullable().optional(),
+  executedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+  /** Chỉ xem trước: trả kết quả khớp, KHÔNG ghi. */
+  dryRun: z.boolean().optional(),
+  /** Ghi dòng "Automation: …" vào Notes của Statistics 5.1 (mặc định có). */
+  writeNotes: z.boolean().optional(),
+});
+
+/**
+ * Nạp kết quả JUnit (Surefire XML) + độ phủ JaCoCo + SHA commit vào ma trận Report 5.1: test có `UTCIDnn` (hoặc chỉ số
+ * tham số hoá `[n]`) trong tên ⇒ ghi P/F + ngày chạy của đúng UTCID; % phủ + SHA ⇒ một dòng "Automation:" trong Notes
+ * (sheet Statistics). Trả danh sách test KHÔNG khớp được và UTCID của hàm đã khớp mà không có test nào — đúng câu hội
+ * đồng hỏi "con số này có khớp GitHub Actions không?".
+ */
+export async function importUnitAutomation(userId: number, projectId: number, input: z.infer<typeof automationImportInput>) {
+  await requireProject(userId, projectId, 'issue.edit');
+  const { parseReport, parseCoverage } = await import('./testResults.js');
+  const { matchJUnitToUnit, automationNoteLine, mergeAutomationNote } = await import('./fptTests.js');
+  let parsed: ReturnType<typeof parseReport>;
+  try { parsed = parseReport(input.report, input.format ?? 'AUTO'); } catch (err) { throw new BadRequestError((err as Error).message || 'Unreadable test report', 'WORK_AUTOMATION_BAD_REPORT'); }
+  let coverage: ReturnType<typeof parseCoverage> | null = null;
+  if (input.coverage?.trim()) {
+    try { coverage = parseCoverage(input.coverage, input.coverageFormat ?? 'AUTO'); } catch (err) { throw new BadRequestError((err as Error).message || 'Unreadable coverage report', 'WORK_AUTOMATION_BAD_COVERAGE'); }
+  }
+  const fns = await prisma.workUnitFunction.findMany({
+    where: { projectId }, orderBy: [{ position: 'asc' }, { id: 'asc' }],
+    select: { id: true, moduleName: true, methodName: true, cases: { orderBy: [{ position: 'asc' }, { id: 'asc' }], select: { id: true, note: true } } },
+  });
+  if (!fns.length) throw new BadRequestError('This project has no Report 5.1 functions yet — create them first (Tests › Unit test 5.1)', 'WORK_AUTOMATION_NO_FUNCTIONS');
+  const m = matchJUnitToUnit(fns.map((f) => ({ id: f.id, moduleName: f.moduleName, methodName: f.methodName, caseIds: f.cases.map((c) => c.id) })), parsed.results);
+  const fnName = new Map(fns.map((f) => [f.id, `${f.moduleName}.${f.methodName}`]));
+  const date = input.executedAt ?? new Date().toISOString().slice(0, 10);
+  const passed = m.updates.filter((u) => u.result === 'P').length;
+  const failed = m.updates.length - passed;
+  const note = automationNoteLine({
+    date, format: parsed.format === 'JUNIT' ? 'JUnit' : parsed.format === 'PLAYWRIGHT' ? 'Playwright' : 'Jest', matched: m.updates.length, total: parsed.results.length - m.skipped,
+    passed, failed, linePct: coverage?.linePct ?? null, branchPct: coverage?.branchPct ?? null, coverageFormat: coverage?.format === 'JACOCO' ? 'JaCoCo' : coverage?.format ?? null, commitSha: input.commitSha ?? null,
+  });
+  const summary = {
+    format: parsed.format, tests: parsed.results.length, skipped: m.skipped, matched: m.updates.length, passed, failed,
+    unmatched: m.unmatched, missing: m.missing, coverage: coverage ? { format: coverage.format, linePct: coverage.linePct, branchPct: coverage.branchPct } : null,
+    commitSha: input.commitSha ?? null, executedAt: date, note, dryRun: input.dryRun === true,
+    updates: m.updates.map((u) => ({ function: fnName.get(u.functionId) ?? String(u.functionId), utcid: u.utcid, result: u.result, test: u.test })),
+  };
+  if (input.dryRun) return summary;
+  const noteOf = new Map(fns.flatMap((f) => f.cases.map((c) => [c.id, c.note] as const)));
+  await prisma.$transaction(async (tx) => {
+    for (const u of m.updates) {
+      const keepNote = noteOf.get(u.caseId);
+      await tx.workUnitCase.update({
+        where: { id: u.caseId },
+        data: { result: u.result, executedAt: toDate(date), ...(u.result === 'F' && !keepNote?.trim() && u.message ? { note: `JUnit: ${u.message}`.slice(0, 2000) } : {}) },
+      });
+    }
+    for (const fid of new Set(m.updates.map((u) => u.functionId))) await tx.workUnitFunction.update({ where: { id: fid }, data: { updatedAt: new Date() } });
+    if (input.writeNotes !== false) {
+      const cur = await tx.workFptTestDoc.findUnique({ where: { projectId }, select: { unitNotes: true } });
+      const unitNotes = mergeAutomationNote(cur?.unitNotes, note);
+      await tx.workFptTestDoc.upsert({ where: { projectId }, create: { projectId, unitNotes }, update: { unitNotes } });
+    }
+  }, { timeout: 30_000 });
+  touch(projectId, userId);
+  const { auditProject } = await import('./audit.js');
+  await auditProject(projectId, { actorId: userId, action: 'fpt.unit_automation', targetType: 'project', targetId: projectId, summary: `Report 5.1: ${m.updates.length} UTCID result(s) from ${parsed.format}${input.commitSha ? ` @ ${input.commitSha.slice(0, 12)}` : ''}`, detail: { unmatched: m.unmatched.length, missing: m.missing.length } });
+  return summary;
+}
+
+/** D4: lint toàn bộ ma trận 5.1 của dự án (tab Unit test hiện danh sách này). */
+export async function unitLint(userId: number, projectId: number) {
+  await requireProject(userId, projectId, 'project.view');
+  const { lintUnitFunctions } = await import('./fptTests.js');
+  const fns = await prisma.workUnitFunction.findMany({
+    where: { projectId }, orderBy: [{ position: 'asc' }, { id: 'asc' }],
+    select: {
+      id: true, moduleName: true, methodName: true, preCondition: true,
+      rows: { select: { id: true, section: true, groupName: true, label: true, value: true } },
+      cases: { orderBy: [{ position: 'asc' }, { id: 'asc' }], select: { id: true, type: true, marks: { select: { rowId: true } } } },
+    },
+  });
+  const issues = lintUnitFunctions(fns.map((f) => ({ ...f, cases: f.cases.map((c) => ({ id: c.id, type: c.type, rowIds: c.marks.map((x) => x.rowId) })) })));
+  return { functions: fns.length, issues };
+}

@@ -11,6 +11,7 @@
  */
 
 import type { Prisma } from '@prisma/client';
+import { isLeakage, LEAKAGE_LABEL } from './testMetrics.js';
 import { z } from 'zod';
 import { prisma } from '../../config/database.js';
 import { BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
@@ -28,15 +29,18 @@ export const defectInput = z.object({
   activity: z.enum(DEFECT_ACTIVITIES).nullable().optional(),
   product: z.enum(PRODUCTS).nullable().optional(),
   productDetails: z.string().max(300).nullable().optional(),
+  /** dm5 G3 (D8): cờ Leakage — true/false đặt tay; null = suy (activity AT / nhãn "Leakage"). Đồng bộ nhãn Leakage của thẻ. */
+  leakage: z.boolean().nullable().optional(),
 });
 export type DefectInput = z.infer<typeof defectInput>;
 
-const FIELD_LABEL: Record<keyof DefectInput, string> = { severity: 'severity', activity: 'defectActivity', product: 'defectProduct', productDetails: 'defectProductDetails' };
+type TextField = Exclude<keyof DefectInput, 'leakage'>;
+const FIELD_LABEL: Record<TextField, string> = { severity: 'severity', activity: 'defectActivity', product: 'defectProduct', productDetails: 'defectProductDetails' };
 
 async function bugOf(projectId: number, number: number) {
   const i = await prisma.workIssue.findFirst({
     where: { projectId, number, deletedAt: null },
-    select: { id: true, number: true, title: true, type: { select: { key: true } }, defectInfo: true },
+    select: { id: true, number: true, title: true, type: { select: { key: true } }, defectInfo: true, labels: { select: { label: { select: { name: true } } } } },
   });
   if (!i) throw new NotFoundError('Issue not found');
   return i;
@@ -47,9 +51,12 @@ export async function getDefect(userId: number, projectId: number, number: numbe
   await requireProject(userId, projectId, 'project.view');
   const i = await bugOf(projectId, number);
   const d = i.defectInfo;
+  const labels = i.labels.map((l) => l.label.name);
   return {
     isBug: i.type.key === 'BUG',
     severity: d?.severity ?? null, activity: d?.activity ?? null, product: d?.product ?? null, productDetails: d?.productDetails ?? null,
+    // dm5 G3 (D8): cờ đặt tay (null = suy) + giá trị hiệu lực mà DRE/sheet Defects dùng.
+    leakageFlag: d?.leakage ?? null, leakage: isLeakage({ leakage: d?.leakage, activity: d?.activity, labels }),
     source: d?.sourceReviewId ? { reviewId: d.sourceReviewId, findingId: d.sourceFindingId } : null,
     options: { severities: SEVERITIES, activities: DEFECT_ACTIVITIES, products: PRODUCTS },
   };
@@ -60,22 +67,39 @@ export async function setDefect(userId: number, projectId: number, number: numbe
   const i = await bugOf(projectId, number);
   if (i.type.key !== 'BUG') throw new BadRequestError('Severity and defect fields are only for Bug issues', 'WORK_NOT_A_BUG');
   const cur = i.defectInfo;
-  const next: Record<string, string | null> = {};
-  for (const k of Object.keys(FIELD_LABEL) as Array<keyof DefectInput>) {
+  const next: Record<string, string | boolean | null> = {};
+  for (const k of Object.keys(FIELD_LABEL) as TextField[]) {
     if (input[k] === undefined) continue;
     const v = typeof input[k] === 'string' ? (input[k] as string).trim().slice(0, 300) || null : null;
     if ((cur?.[k] ?? null) !== v) next[k] = v;
   }
+  if (input.leakage !== undefined && (cur?.leakage ?? null) !== input.leakage) next.leakage = input.leakage;
   if (Object.keys(next).length) {
     const actorKind = access.principal === 'AGENT' ? 'AGENT' : 'USER';
-    await prisma.$transaction([
-      prisma.workDefectInfo.upsert({ where: { issueId: i.id }, create: { issueId: i.id, projectId, ...next }, update: next }),
-      prisma.workHistory.createMany({ data: Object.entries(next).map(([k, v]) => ({ issueId: i.id, actorId: userId, actorKind, field: FIELD_LABEL[k as keyof DefectInput], fromValue: (cur?.[k as keyof DefectInput] as string | null | undefined) ?? null, toValue: v })) }),
-      prisma.workIssue.update({ where: { id: i.id }, data: { version: { increment: 1 } } }),
-    ]);
+    const str = (v: unknown) => (v === null || v === undefined ? null : String(v));
+    await prisma.$transaction(async (tx) => {
+      await tx.workDefectInfo.upsert({ where: { issueId: i.id }, create: { issueId: i.id, projectId, ...next }, update: next });
+      await tx.workHistory.createMany({ data: Object.entries(next).map(([k, v]) => ({ issueId: i.id, actorId: userId, actorKind, field: k === 'leakage' ? 'defectLeakage' : FIELD_LABEL[k as TextField], fromValue: str(cur?.[k as keyof typeof cur]), toValue: str(v) })) });
+      if ('leakage' in next && next.leakage !== null) await syncLeakageLabel(tx, projectId, i.id, next.leakage === true);
+      await tx.workIssue.update({ where: { id: i.id }, data: { version: { increment: 1 } } });
+    });
     emitWorkEvent({ type: 'issue.updated', projectId, issueId: i.id, actor: { kind: 'USER', userId }, changes: [] });
   }
   return getDefect(userId, projectId, number);
+}
+
+/**
+ * dm5 G3 (D8): cờ Leakage ⇄ nhãn "Leakage" của thẻ (khoá học dạy lọc bằng nhãn; JQL `labels = Leakage` phải khớp số DRE).
+ * Bật cờ ⇒ gắn nhãn (tạo nhãn dự án nếu chưa có); tắt cờ ⇒ gỡ nhãn. Cờ về null (suy) ⇒ để nguyên nhãn.
+ */
+async function syncLeakageLabel(tx: Prisma.TransactionClient, projectId: number, issueId: number, on: boolean) {
+  const existing = await tx.workLabel.findFirst({ where: { projectId, name: { equals: LEAKAGE_LABEL, mode: 'insensitive' } }, select: { id: true } });
+  if (on) {
+    const label = existing ?? await tx.workLabel.create({ data: { projectId, name: LEAKAGE_LABEL, color: '#e5484d' }, select: { id: true } });
+    await tx.workIssueLabel.createMany({ data: [{ issueId, labelId: label.id }], skipDuplicates: true });
+  } else if (existing) {
+    await tx.workIssueLabel.deleteMany({ where: { issueId, labelId: existing.id } });
+  }
 }
 
 /** Sổ defect của dự án (mọi Bug) — dùng chung giao diện, lệnh registry và sheet Defects. */
@@ -88,6 +112,7 @@ export async function defectLog(userId: number, projectId: number, q: { severity
       number: true, title: true, priority: true, createdAt: true, resolvedAt: true,
       status: { select: { name: true, category: true } }, defectInfo: true,
       assignee: { select: { username: true, fullName: true, displayName: true } }, reporter: { select: { username: true, fullName: true, displayName: true } },
+      labels: { select: { label: { select: { name: true } } } },
     },
   });
   return rows.map((r) => ({
@@ -95,6 +120,7 @@ export async function defectLog(userId: number, projectId: number, q: { severity
     severity: r.defectInfo?.severity ?? null, severityLabel: r.defectInfo?.severity ? SEVERITY_LABEL[r.defectInfo.severity as keyof typeof SEVERITY_LABEL] : null,
     activity: r.defectInfo?.activity ?? null, product: r.defectInfo?.product ?? null, productDetails: r.defectInfo?.productDetails ?? null,
     fromReview: !!r.defectInfo?.sourceReviewId,
+    leakage: isLeakage({ leakage: r.defectInfo?.leakage, activity: r.defectInfo?.activity, labels: r.labels.map((l) => l.label.name) }),
     assignee: r.assignee ? displayName(r.assignee) : null, reporter: r.reporter ? displayName(r.reporter) : null,
     createdAt: r.createdAt, resolvedAt: r.resolvedAt,
   }));

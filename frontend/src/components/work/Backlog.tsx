@@ -9,6 +9,7 @@
  * - Bảng epic bên trái: tiến độ + lọc theo epic.
  */
 
+import MoscowStrip from './MoscowStrip'; // dm5 G1 (A22)
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   closestCenter, DndContext, DragOverlay, KeyboardSensor, PointerSensor, useDroppable, useSensor, useSensors,
@@ -481,6 +482,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
         className="space-y-5 px-4 pb-28 pt-4"
         onKeyDown={(e) => { if (e.key === 'Escape' && selected.size && !document.querySelector('[role="dialog"]')) setSelected(new Set()); }}
       >
+        <MoscowStrip pid={config.id} />
         {data.sprints.map((s) => {
           const t = totals.get(s.id) ?? EMPTY_TOTALS;
           const isCollapsed = collapsed.has(s.id);

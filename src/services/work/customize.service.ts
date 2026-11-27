@@ -156,6 +156,8 @@ export async function setTransitions(
     const r = transitionRulesOf(t.rules ?? {});
     if (r.requireApproval) assertModule(access, 'approvals');
     if (r.teamIds?.length) { assertModule(access, 'teams'); r.teamIds.forEach((x) => allTeamIds.add(x)); }
+    // dm5 G1 (A6): bình luận xác nhận của bộ phận X — bộ phận phải thuộc không gian (rỗng = bất kỳ ai khác người được giao).
+    if (r.requireComment?.teamIds.length) { assertModule(access, 'teams'); r.requireComment.teamIds.forEach((x) => allTeamIds.add(x)); }
   }
   if (allTeamIds.size) {
     const found = await prisma.workTeam.count({ where: { id: { in: [...allTeamIds] }, workspaceId: access.workspaceId } });

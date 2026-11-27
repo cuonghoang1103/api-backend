@@ -16,6 +16,7 @@ import { codeApi, codeKeys, type IssueDevGroup } from './code/codeApi';
 import AiReviewButton from './code/AiReviewButton';
 import { PrState, WhoChip } from './code/parts';
 import { safeHref } from './code/codeText';
+import { CiChip } from './code/g4Parts';
 import { relativeTime, Spinner } from './ui';
 import { wt } from '@/components/work/i18n';
 
@@ -30,6 +31,8 @@ function GroupBlock({ g, codeHref, defaultOpen }: { g: IssueDevGroup; codeHref: 
     <>
       <PrState state={g.state} compact />
       <span className="min-w-0 flex-1 truncate text-[12.5px] font-medium" title={g.title}>{g.number ? <span className="mr-1 font-mono text-[11.5px] text-[var(--w-text-3)]">#{g.number}</span> : null}{g.title}</span>
+      {/* dm5 G4 (A2): CI của PR. */}
+      <CiChip state={g.ciState} compact />
     </>
   ) : g.kind === 'BRANCH' ? (
     <>
@@ -106,7 +109,7 @@ export default function DevelopmentPanel({ pid, num, issueKey, canAiReview = fal
         <p className="text-[12px] leading-relaxed text-[var(--w-text-3)]">{wt('dev.includeKey', { k: issueKey })}</p>
       ) : (
         <>
-          <p className="mb-1.5 text-[12px] text-[var(--w-text-2)]">{counts}</p>
+          <p className="mb-1.5 flex flex-wrap items-center gap-2 text-[12px] text-[var(--w-text-2)]">{counts}<CiChip state={d.ci} /></p>
           <ul className="space-y-1.5">
             {d.groups.map((g, i) => <GroupBlock key={g.key} g={g} codeHref={d.codeHref} defaultOpen={i === 0} />)}
           </ul>

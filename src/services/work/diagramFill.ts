@@ -14,7 +14,7 @@
 
 import { plainText } from './docExport.js';
 import type { PmNode } from './docMarkdown.js';
-import { diagramKey, embedAlt, embedSource, parseEmbed, type DiagramType } from './diagram.js';
+import { diagramKey, embedAlt, embedHeader, embedSource, EMBED_RE, parseEmbed, type DiagramType } from './diagram.js';
 import { findHeading, sectionEnd } from './srs.js';
 
 export interface PlacedDiagram {
@@ -22,7 +22,7 @@ export interface PlacedDiagram {
   number: number;
   title: string;
   type: DiagramType;
-  format: 'MERMAID' | 'EXCALIDRAW';
+  format: 'MERMAID' | 'EXCALIDRAW' | 'PLANTUML';
   version: number;
   source: string;
   feature?: string | null;
@@ -34,7 +34,8 @@ export interface PlacedDiagram {
 
 const t = (text: string): PmNode => ({ type: 'text', text });
 const heading = (level: number, text: string): PmNode => ({ type: 'heading', attrs: { level }, content: [t(text)] });
-const CAPTION_RE = /^Figure\s*:?\s*D-\d+\b/;
+// dm5 G2 (B18): chú thích có thể đã đánh số theo thứ tự trong Report ("Figure 3: D-4 …").
+const CAPTION_RE = /^Figure\s*\d*\s*:?\s*D-\d+\b/;
 
 const isGuide = (n: PmNode) => n.type === 'blockquote' && /^\s*(Guide|Purpose|Hướng dẫn|Mục đích)\s*:/i.test(plainText(n));
 /** Khối do CT Work đặt (khối Mermaid có dòng nhúng / ảnh có alt ctw-diagram / dòng chú thích "Figure: D-n"). */
@@ -52,6 +53,12 @@ export function blocksFor(d: PlacedDiagram, projectId: number, mode: 'latest' | 
   const cap: PmNode = { type: 'paragraph', content: [{ type: 'text', text: captionOf(d), marks: [{ type: 'italic' }] }] };
   if (d.format === 'MERMAID') {
     return [{ type: 'codeBlock', attrs: { language: 'mermaid' }, content: [t(embedSource(d, d.version, d.source, mode))] }, cap];
+  }
+  // dm5 G2 (B18): PlantUML ⇒ khối code `plantuml` (dòng nhúng là chú thích `'` của PlantUML; nguồn giữ nguyên để dán lại được).
+  if (d.format === 'PLANTUML') {
+    const head = embedHeader(d, d.version, mode).replace(/^%%/, "'");
+    const body = String(d.source).replace(/\r\n?/g, '\n').split('\n').filter((l) => !EMBED_RE.test(l)).join('\n');
+    return [{ type: 'codeBlock', attrs: { language: 'plantuml' }, content: [t(`${head}\n${body}`)] }, cap];
   }
   if (d.previewImageId) {
     return [{ type: 'image', attrs: { src: `/api/v1/work/projects/${projectId}/images/${d.previewImageId}`, alt: embedAlt(d, d.version, mode), title: `${diagramKey(d.number)} ${d.title}` } }, cap];
@@ -139,6 +146,25 @@ export const FILL_LABEL = {
 export type FillPart = keyof typeof FILL_LABEL;
 
 /** Đặt sơ đồ đã duyệt vào bản sao nội dung trang Report 3 hoặc 4 (biến đổi tại chỗ). Trả các phần đã đặt. */
+/**
+ * dm5 G2 (B18): đánh số "Figure n" theo thứ tự xuất hiện trong trang cho MỌI chú thích sơ đồ do CT Work đặt
+ * ("Figure: D-4 …" / "Figure 2: D-4 …" ⇒ "Figure 1: D-4 …"). Trả số chú thích.
+ */
+export function numberFigures(doc: PmNode): number {
+  let n = 0;
+  const walk = (node: PmNode) => {
+    if (node.type === 'paragraph' && CAPTION_RE.test(plainText(node).trim())) {
+      n++;
+      const first = node.content?.[0];
+      if (first && typeof first.text === 'string') first.text = first.text.replace(/^Figure\s*\d*\s*:?\s*/, `Figure ${n}: `);
+      return;
+    }
+    for (const c of node.content ?? []) walk(c);
+  };
+  walk(doc);
+  return n;
+}
+
 export function applyDiagramFill(doc: PmNode, report: 3 | 4, diagrams: PlacedDiagram[], projectId: number): FillPart[] {
   const of = (...types: DiagramType[]) => diagrams.filter((d) => types.includes(d.type));
   const done: FillPart[] = [];
@@ -153,6 +179,7 @@ export function applyDiagramFill(doc: PmNode, report: 3 | 4, diagrams: PlacedDia
     if (fillSection(doc, /^Database Design$/i, of('ERD'), projectId)) done.push('database');
     if (fillDetailedDesign(doc, of('CLASS'), of('SEQUENCE'), projectId)) done.push('detailedDesign');
   }
+  if (done.length) numberFigures(doc);
   return done;
 }
 
@@ -167,8 +194,8 @@ export function syncEmbedsInDoc(doc: PmNode, d: PlacedDiagram, projectId: number
   const walk = (n: PmNode) => {
     if (n.type === 'codeBlock') {
       const e = parseEmbed(plainText(n));
-      if (e && e.id === d.id && e.mode === 'latest' && d.format === 'MERMAID') {
-        const next = embedSource(d, d.version, d.source, 'latest');
+      if (e && e.id === d.id && e.mode === 'latest' && (d.format === 'MERMAID' || d.format === 'PLANTUML')) {
+        const next = d.format === 'PLANTUML' ? plainText(blocksFor(d, projectId, 'latest')[0]) : embedSource(d, d.version, d.source, 'latest');
         if (plainText(n) !== next) { n.content = [t(next)]; changed++; }
       }
       return;

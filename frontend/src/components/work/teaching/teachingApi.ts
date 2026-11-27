@@ -63,6 +63,10 @@ export interface GradesView {
   stages: Array<{ id: number; n: number; name: string }>;
   rubrics: Rubric[];
   milestoneHints: string[];
+  /** dm5 G3 (D17): sinh viên tự chấm (kind SELF) — không lẫn điểm giảng viên. */
+  selfGrades?: Array<Grade & { kind: 'SELF'; mine: boolean }>;
+  selfRubrics?: { used: Rubric[]; templates: Array<{ key: string; name: string; scaleMax: number; milestones: string[]; criteria: RubricCriterion[] }> };
+  canSelfGrade?: boolean;
 }
 export interface GradeInput { rubricId: number; milestone: string; stageId?: number | null; subjectUserId?: number | null; scores: Record<string, number | null>; notes?: Record<string, string>; comment?: string | null; publish?: boolean }
 export interface GradeHistoryRow { id: number; action: string; scores: Record<string, number>; total: number | null; comment: string | null; publishedAt: string | null; createdAt: string; actor: WorkUser | null }

@@ -22,6 +22,8 @@ const FIX_TAB: Record<string, string> = { FE_UC: 'features', UC_BR: 'requirement
 const GAP_TEXT: Record<string, WKey> = {
   FE_NO_UC: 'swr.gFeNoUc', BR_UNKNOWN: 'swr.gBrUnknown', BR_UNLISTED: 'swr.gBrUnlisted', UC_NO_BR: 'swr.gUcNoBr', BR_UNUSED: 'swr.gBrUnused',
   FR_UNTRACED: 'swr.gFrUntraced', NOUN_MISSING: 'swr.gNounMissing', ROW_GONE: 'swr.gRowGone', ROW_BAD: 'swr.gRowBad', COUNT_MISMATCH: 'swr.gCountMismatch',
+  // dm5 G2 (B8): lint use case + mã SM không tồn tại.
+  SYSTEM_SUBJECT: 'g2.gSystemSubject', STEP_REF_UNKNOWN: 'g2.gStepRef', CODE_IN_POSTCONDITION: 'g2.gCodeInPost', SM_UNKNOWN: 'g2.gSmUnknown',
 };
 /** Chỗ đứt dịch theo mã (máy chủ gửi kèm câu tiếng Anh — dùng khi mã lạ). */
 export function gapText(g: LinkGap): string {

@@ -11,7 +11,8 @@
  */
 
 /** SQL (17/10/2026): sơ đồ CSDL viết bằng SQL thật (CREATE TABLE…) — ERD vẽ từ đó; xem sqlDesign/. */
-export const DIAGRAM_FORMATS = ['MERMAID', 'EXCALIDRAW', 'SQL'] as const;
+/** PLANTUML (dm5 G2, 27/11/2026): nguồn .puml lưu nguyên văn, SVG vẽ ở máy render tự host — xem plantuml.ts. */
+export const DIAGRAM_FORMATS = ['MERMAID', 'EXCALIDRAW', 'SQL', 'PLANTUML'] as const;
 export type DiagramFormat = (typeof DIAGRAM_FORMATS)[number];
 
 export const DIAGRAM_TYPES = [
@@ -452,9 +453,10 @@ export function checkDiagram(c: CheckInput): CheckResult {
 
 // ─── Khối nhúng trong Docs ───────────────────────────────────────
 
-export const EMBED_RE = /^\s*%%\s*ctw-diagram:(\d+)@(latest|\d+)\b/;
+// Mermaid chú thích bằng `%%`, PlantUML bằng `'` (dm5 G2) — cùng một dòng nhúng.
+export const EMBED_RE = /^\s*(?:%%|')\s*ctw-diagram:(\d+)@(latest|\d+)\b/;
 /** Dòng nhúng ở BẤT KỲ dòng nào (nó đứng SAU front-matter nếu sơ đồ có `---title---`). */
-export const EMBED_LINE_RE = /^\s*%%\s*ctw-diagram:(\d+)@(latest|\d+)\b/m;
+export const EMBED_LINE_RE = /^\s*(?:%%|')\s*ctw-diagram:(\d+)@(latest|\d+)\b/m;
 
 /** Dòng nhúng: `%% ctw-diagram:<id>@latest D-3 v4 — <title>` (chú thích — mermaid bỏ qua). */
 export function embedHeader(d: { id: number; number: number; title: string }, version: number, mode: 'latest' | 'pinned'): string {

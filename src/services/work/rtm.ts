@@ -92,20 +92,77 @@ export function evaluateRow(r: Omit<RtmRow, 'status' | 'gaps'>): Pick<RtmRow, 's
 export interface RuleCoverage { key: string; name: string; usedIn: string[]; unit: string[]; integration: string[]; system: string[]; covered: boolean }
 export interface Orphan { kind: 'XRAY' | 'UNIT' | 'IT' | 'ST'; ref: string; name: string }
 
+/**
+ * dm5 G2 (B13): 4 chỉ số phủ người chấm SEP490 soi (bài s04/b6 · s11/b1):
+ *   ucCodedNoSds  UC đã có code (commit/PR hoặc thẻ xong) mà KHÔNG có mục SDS nào (thiết kế bị bỏ qua)
+ *   ucTestedNoSt  UC đã có test (Unit/IT/Xray) mà KHÔNG có System Test (5.3) nào
+ *   brCoveredPct  % Business Rule có ít nhất một test (Unit/IT/ST)
+ *   orphanTests   số test không truy ngược được về yêu cầu nào
+ */
+export interface RtmCoverage {
+  ucCodedNoSds: string[]; ucTestedNoSt: string[];
+  brTotal: number; brCovered: number; brCoveredPct: number; brUncovered: string[];
+  orphanTests: number;
+}
+
 export interface RtmSummary {
   rows: number; useCases: number; requirements: number;
   withTests: number; testedPct: number; passing: number; withGaps: number;
   gaps: Record<GapCode, number>;
+  coverage: RtmCoverage;
 }
 
-export function summarize(rows: RtmRow[]): RtmSummary {
+export function coverageOf(rows: RtmRow[], rules: RuleCoverage[] = [], orphans: Orphan[] = []): RtmCoverage {
+  const ucs = rows.filter((r) => r.kind === 'UC');
+  const coded = (r: RtmRow) => r.code.commits + r.code.prs > 0 || r.issueDone;
+  const anyTest = (r: RtmRow) => r.unit.length + r.integration.length + r.system.length + r.xray.length > 0;
+  const brCovered = rules.filter((r) => r.covered).length;
+  return {
+    ucCodedNoSds: ucs.filter((r) => coded(r) && !r.sds.length).map((r) => r.reqId),
+    ucTestedNoSt: ucs.filter((r) => anyTest(r) && !r.system.length).map((r) => r.reqId),
+    brTotal: rules.length, brCovered, brCoveredPct: rules.length ? Math.round((brCovered / rules.length) * 100) : 0,
+    brUncovered: rules.filter((r) => !r.covered).map((r) => r.key),
+    orphanTests: orphans.length,
+  };
+}
+
+export function summarize(rows: RtmRow[], extra: { rules?: RuleCoverage[]; orphans?: Orphan[] } = {}): RtmSummary {
   const gaps = Object.fromEntries(GAP_CODES.map((g) => [g, rows.filter((r) => r.gaps.includes(g)).length])) as Record<GapCode, number>;
   const withTests = rows.filter((r) => !r.gaps.includes('NO_TEST')).length;
   return {
     rows: rows.length, useCases: rows.filter((r) => r.kind === 'UC').length, requirements: rows.filter((r) => r.kind === 'REQ').length,
     withTests, testedPct: rows.length ? Math.round((withTests / rows.length) * 100) : 0,
     passing: rows.filter((r) => r.status === 'Tested').length, withGaps: rows.filter((r) => r.gaps.length).length, gaps,
+    coverage: coverageOf(rows, extra.rules, extra.orphans),
   };
+}
+
+// ─── dm5 G2 (B13): NFR → Đo lường → Test ─────────────────────────
+
+export interface NfrTraceRow {
+  key: string; title: string; characteristic: string; sub: string | null; scale: string; meter: string;
+  must: string; plan: string; wish: string; verification: string; tests: string[]; result: string;
+}
+
+const COMP: Record<string, string> = { '<=': '≤', '>=': '≥', '=': '=' };
+const nval = (comparator: string, v: number | null, unit: string | null) => (v === null ? '' : `${COMP[comparator] ?? comparator} ${Number.isInteger(v) ? v : Math.round(v * 1000) / 1000}${unit ? ` ${unit}` : ''}`);
+
+/** NFR có số đo (WorkNfrSpec) + dòng RTM của chính thẻ NFR (test gắn vào thẻ) ⇒ một dòng sheet NFR. */
+export function nfrTraceRows(nfrs: Array<{ key: string; number: number; title: string; spec: { characteristic: string; subCharacteristic: string | null; scale: string; meter: string; unit: string | null; comparator: string; mustValue: number | null; planValue: number | null; wishValue: number | null; verification: string } }>, rows: RtmRow[]): NfrTraceRow[] {
+  return nfrs.map((n) => {
+    const r = rows.find((x) => x.issueNumber === n.number);
+    const tests = r ? [
+      ...r.xray.map((x) => `${x.key}${x.last ? ` [${x.last}]` : ' [not run]'}`), ...r.unit.map(setText), ...r.integration.map(setText), ...r.system.map(setText),
+    ] : [];
+    const t = r ? testSummary(r) : null;
+    const result = !t || !t.total ? (n.spec.verification === 'TEST' ? 'No test yet' : `Verify by ${n.spec.verification.toLowerCase()}`)
+      : t.failed ? `${t.failed} failing` : t.notRun ? `${t.run}/${t.total} run` : `All ${t.total} passed`;
+    return {
+      key: n.key, title: n.title, characteristic: n.spec.characteristic, sub: n.spec.subCharacteristic, scale: n.spec.scale, meter: n.spec.meter,
+      must: nval(n.spec.comparator, n.spec.mustValue, n.spec.unit), plan: nval(n.spec.comparator, n.spec.planValue, n.spec.unit), wish: nval(n.spec.comparator, n.spec.wishValue, n.spec.unit),
+      verification: n.spec.verification, tests, result,
+    };
+  });
 }
 
 /** Lọc như màn hình: chỗ hở, trạng thái, chữ (mã/tên/feature). */
@@ -191,6 +248,22 @@ function orphanSheet(orphans: Orphan[]): XSheet {
   return sh;
 }
 
+function nfrSheet(nfrs: NfrTraceRow[]): XSheet {
+  const sh = new XSheet('NFR');
+  [11, 30, 20, 34, 34, 14, 14, 14, 14, 40, 16].forEach((w, i) => sh.width(i + 1, w));
+  ['NFR ID', 'Requirement', 'Characteristic', 'Scale', 'Meter (how it is measured)', 'Must', 'Plan', 'Wish', 'Verification', 'Tests / measurements', 'Result'].forEach((h, i) => sh.set(1, i + 1, h, HEAD));
+  nfrs.forEach((n, k) => {
+    const noTest = n.verification === 'TEST' && !n.tests.length;
+    [[n.key, CENTER], [n.title, CELL], [`${n.characteristic.replace(/_/g, ' ').toLowerCase()}${n.sub ? ` — ${n.sub}` : ''}`, CELL], [n.scale, CELL], [n.meter, CELL],
+      [n.must, CENTER], [n.plan, CENTER], [n.wish, CENTER], [n.verification.charAt(0) + n.verification.slice(1).toLowerCase(), CENTER],
+      [n.tests.join('\n'), noTest ? GAP : CELL], [n.result, /failing|No test/.test(n.result) ? GAP : CENTER]]
+      .forEach(([v, s], i) => sh.set(2 + k, i + 1, v as string, s as XStyle));
+  });
+  if (!nfrs.length) sh.set(2, 1, 'No measurable NFR yet — add one under Requirements › Quality (NFR) with scale, meter and Must/Plan values.', CELL);
+  sh.freeze = { col: 2, row: 2 };
+  return sh;
+}
+
 function summarySheet(s: RtmSummary, projectName: string, generated: string): XSheet {
   const sh = new XSheet('Summary');
   sh.width(1, 40); sh.width(2, 14);
@@ -201,14 +274,23 @@ function summarySheet(s: RtmSummary, projectName: string, generated: string): XS
     ['Requirements with at least one test', s.withTests], ['Test coverage (%)', s.testedPct], ['Requirements fully tested', s.passing],
     ['Requirements with gaps', s.withGaps],
     ...GAP_CODES.map((g) => [`  ${GAP_LABEL[g]}`, s.gaps[g]] as [string, number]),
+    // dm5 G2 (B13): 4 chỉ số phủ.
+    ['Coverage indicators', ''],
+    ['  UC coded but without an SDS section', s.coverage.ucCodedNoSds.length],
+    ['  UC tested but without a System Test (5.3)', s.coverage.ucTestedNoSt.length],
+    ['  Business rules covered by a test (%)', s.coverage.brTotal ? s.coverage.brCoveredPct : 'n/a'],
+    ['  Untraced (orphan) tests', s.coverage.orphanTests],
   ];
   ['Measure', 'Value'].forEach((h, i) => sh.set(4, i + 1, h, HEAD));
   lines.forEach(([k, v], i) => { sh.set(5 + i, 1, k, CELL); sh.set(5 + i, 2, v, CENTER); });
   return sh;
 }
 
-export function buildRtmSheets(input: { projectName: string; rows: RtmRow[]; rules: RuleCoverage[]; orphans: Orphan[]; generated: string }): XSheet[] {
-  return [rtmSheet(input.rows, input.projectName), rulesSheet(input.rules), orphanSheet(input.orphans), summarySheet(summarize(input.rows), input.projectName, input.generated)];
+export function buildRtmSheets(input: { projectName: string; rows: RtmRow[]; rules: RuleCoverage[]; orphans: Orphan[]; generated: string; nfrs?: NfrTraceRow[] }): XSheet[] {
+  return [
+    rtmSheet(input.rows, input.projectName), rulesSheet(input.rules), nfrSheet(input.nfrs ?? []), orphanSheet(input.orphans),
+    summarySheet(summarize(input.rows, { rules: input.rules, orphans: input.orphans }), input.projectName, input.generated),
+  ];
 }
 
 /** Một sheet "RTM" để gắn vào CUỐI Project Tracking SEP490 (hướng dẫn RTM: không chèn giữa 6 sheet mẫu). */

@@ -194,17 +194,119 @@ export const CHECKLISTS: ChecklistTemplate[] = [
       ] },
     ],
   },
+  // ── dm5 G3 (27/11/2026) — bốn bộ của khoá "Một mình đóng 5 vai" (s01/b5 · s04/b7 · s05/b7 · s06/b5) ──
+  {
+    key: 'REBUTTAL_10', kind: 'CODE', sizeUnit: 'LOC', source: 'Solo 5-hat project, lesson 1.5 — 10-point adversarial self-review (before every merge / Done)',
+    name: ['10-point adversarial self-review', 'Checklist phản biện 10 điểm'],
+    sections: [
+      { name: ['Scope & spec', 'Phạm vi & đặc tả'], items: [
+        ['Scope match: does the change touch ONLY this card\'s requirement, with no unrelated drive-by edits?', 'Đúng phạm vi: thay đổi CHỈ chạm đúng yêu cầu của thẻ này, không sửa lan man ngoài lề?'],
+        ['Diff size: is the PR ≤ 300–400 lines (or explicitly split) and readable in ≤ 45 minutes?', 'Cỡ diff vừa phải: PR ≤ 300–400 dòng (hoặc đã tách rõ), đọc soát trọn trong ≤ 45 phút?'],
+        ['Spec & BR sync: does the behaviour match BR-xx and SM-xx — and if a rule changed, was the SRS updated the same day?', 'Khớp spec & BR: hành vi đúng BR-xx và SM-xx — nếu đổi luật đã cập nhật SRS trong ngày?'],
+      ] },
+      { name: ['Hunt for what is missing', 'Đi săn chỗ thiếu'], items: [
+        ['Backend auth: does every endpoint check JWT + role + ownership on the server (not UI-only)?', 'Quyền ở backend: mọi endpoint kiểm JWT + vai + chủ sở hữu ở server (không chỉ ẩn UI)?'],
+        ['Unhappy cases: are empty/spaces, boundary, invalid state and duplicate submit handled cleanly?', 'Đủ unhappy case: xử lý sạch rỗng/dấu cách, giá trị biên, sai trạng thái và bấm gửi đúp?'],
+        ['Data integrity: does the migration run on a fresh DB, constraints enforce the truth, and history is never hard-deleted?', 'Toàn vẹn dữ liệu: migration chạy sạch trên DB mới, constraint bảo vệ sự thật, không xoá cứng lịch sử?'],
+        ['UI 4 states: are Loading, Empty, Error (mapped from backend codes) and Populated all verified?', 'Đủ 4 trạng thái UI: đã kiểm Đang tải, Rỗng, Lỗi (ánh xạ đúng mã BE) và Có dữ liệu?'],
+        ['Clean code & security: zero secrets, zero debug logs, zero hard-coded URLs/BR numbers, CI green?', 'Code sạch & an ninh: không secret, không log rác, không hard-code URL/con số BR, CI xanh?'],
+      ] },
+      { name: ['Evidence', 'Bằng chứng'], items: [
+        ['Real evidence: is a screenshot / test output / curl log attached to the card?', 'Bằng chứng thật: đã gắn ảnh chụp / output test / log curl vào thẻ?'],
+        ['AI critique log: was the adversarial-critic prompt run (no AI code copied) and its findings recorded?', 'Nhật ký AI soi: đã chạy prompt AI phản biện (không chép code AI) và ghi lại phát hiện?'],
+      ] },
+    ],
+  },
+  {
+    key: 'REQ_REVIEW_STRIDE', kind: 'DOC', sizeUnit: 'PAGE', source: 'Solo 5-hat project, lesson 4.7 — 8-question dual interrogation + STRIDE-lite (12 checks)',
+    name: ['Requirement review: 8 questions + STRIDE-lite', 'Review yêu cầu: 8 câu tra vấn + STRIDE-lite'],
+    sections: [
+      { name: ['Dev feasibility (C3/C4)', 'Khả thi phía Dev (C3/C4)'], items: [
+        ['Data & concurrency: does every input exist in the data dictionary/ERD, and is the "two users click at once" case (atomic transaction, DB-conflict exception) specified?', 'Dữ liệu & đồng thời: mọi trường có trong Data Dictionary/ERD, và ca "2 người bấm cùng lúc" (transaction nguyên tử, ngoại lệ xung đột DB) đã ghi rõ?'],
+        ['State transitions: are precondition states explicit, with a 409 exception flow when the action is called from an illegal previous state?', 'Chuyển trạng thái: tiền điều kiện ghi rõ trạng thái, có luồng ngoại lệ 409 khi gọi từ trạng thái cũ không hợp lệ?'],
+        ['External dependencies: if email/payment/AI/IoT is down or times out, is there a secondary actor and an explicit fallback/retry exception flow?', 'Dịch vụ ngoài: Email/Thanh toán/AI/IoT sập hoặc timeout thì có Secondary Actor và luồng ngoại lệ fallback/thử lại rõ ràng?'],
+        ['UI states & paging: are Empty, Loading, Field error, Conflict and server-side search/filter/sort/paging specified with the exact SM-xx placement?', 'Trạng thái UI & phân trang: đã đặc tả Rỗng, Đang tải, Lỗi trường, Xung đột và Tìm/Lọc/Sắp/Phân trang phía server, đúng vị trí SM-xx?'],
+      ] },
+      { name: ['QA testability (C5) & PM scope (C1)', 'Kiểm được (C5) & phạm vi (C1)'], items: [
+        ['Ambiguity hunt: zero weasel words (fast, easy, user-friendly, reasonable, valid, appropriate, several, etc., and/or) without a measure?', 'Săn từ mơ hồ: 0 từ cảm tính (nhanh, dễ dùng, thân thiện, hợp lý, hợp lệ, phù hợp, một vài, v.v., và/hoặc) không kèm số đo?'],
+        ['Boundaries (EP/BVA): can exact test values be computed now — inclusive vs exclusive (< vs ≤, [start, end)), exact min/max?', 'Giá trị biên (EP/BVA): tính ngay được bộ giá trị test — đóng hay mở (< hay ≤, [start, end)), min/max chính xác?'],
+        ['Cross-document consistency: do UC names, BR, SM, postconditions and AC match 100% (no orphan/ghost codes, postcondition never contradicts an alternative flow)?', 'Nhất quán chéo tài liệu: tên UC, BR, SM, postcondition và AC khớp 100% (không mã mồ côi/ma, postcondition không đá luồng thay thế)?'],
+        ['Scope & Definition of Ready: is it a Must-have in scope, mockup approved, open Q&A closed or flagged, sized ≤ 3 days?', 'Phạm vi & DoR: thuộc Must-have, mockup đã duyệt, Q&A mở đã đóng hoặc gắn cờ, vừa cỡ ≤ 3 ngày?'],
+      ] },
+      { name: ['STRIDE-lite (5 minutes)', 'STRIDE-lite (5 phút)'], items: [
+        ['Identity & ownership (spoofing / elevation): if user A puts user B\'s id in the URL/JSON or calls an admin endpoint with a student token, does the spec require 403/404?', 'Danh tính & sở hữu (giả mạo / leo quyền): User A đổi id sang của User B trên URL/JSON hoặc dùng token Student gọi API Admin, đặc tả có bắt chặn 403/404?'],
+        ['Tampering & replay: can a single-use token (QR, reset link) be replayed, a negative number submitted, or a closed resource id forged?', 'Sửa đổi & phát lại: có thể dùng lại token một lần (QR, link reset), gửi số âm, hoặc giả ID tài nguyên đã đóng không?'],
+        ['Repudiation: does the spec mandate an append-only audit log entry (who, when, before/after) for every sensitive decision?', 'Chối bỏ: đặc tả có bắt buộc ghi audit log chỉ thêm (ai, lúc nào, trước/sau) cho mọi quyết định nhạy cảm?'],
+        ['Information disclosure & abuse: does "forgot password" reveal which emails exist, do errors leak SQL/stack traces, can an AI endpoint leak data across roles?', 'Rò rỉ & lạm dụng: "Quên mật khẩu" có lộ email nào tồn tại, câu lỗi có lộ SQL/stack trace, endpoint AI có lộ dữ liệu sang vai khác?'],
+      ] },
+    ],
+  },
+  {
+    key: 'DESIGN_REVIEW_10', kind: 'DOC', sizeUnit: 'PAGE', source: 'Solo 5-hat project, lesson 5.7 — 10-point Report 4 (SDS) design review',
+    name: ['10-point design review (Report 4 SDS)', 'Design review 10 điểm (Report 4 SDS)'],
+    sections: [
+      { name: ['Architecture & data', 'Kiến trúc & dữ liệu'], items: [
+        ['Architecture (C1/C3): are all HLD blocks complete, with ADR-001/002 linked?', 'Kiến trúc (C1/C3): đủ các khối HLD + gắn liên kết ADR-001/002?'],
+        ['Modularity (C3): are the module boundary rules respected, with zero cycles in the package diagram?', 'Tính module (C3): giữ đủ nguyên tắc ranh giới, 0 vòng tròn ở Package Diagram?'],
+        ['Database (C3): one unified USERS table, UTC timestamptz, constraints matching the migrations?', 'CSDL (C3): một bảng USERS thống nhất, UTC timestamptz, constraint khớp migration?'],
+        ['Concurrency (C3/C5): exclusion constraint / idempotency key / optimistic version present where two writers can collide?', 'Đồng thời (C3/C5): có exclusion constraint / Idempotency-Key / @Version ở chỗ hai người cùng ghi?'],
+        ['API contract (C3/C4): does OpenAPI match the SDS, with exact SM-xx codes and no "200 with an error inside"?', 'Hợp đồng API (C3/C4): OpenAPI khớp SDS, đúng mã SM-xx, không lỗi trả 200?'],
+      ] },
+      { name: ['Frontend, diagrams & security', 'Frontend, sơ đồ & bảo mật'], items: [
+        ['Frontend (C4): does the feature folder layout match the SDS, with state buckets and the 5 UI states defined?', 'Frontend (C4): cấu trúc thư mục feature khớp SDS, rõ nhóm state và 5 trạng thái UI?'],
+        ['Diagrams (C3): ≤ 10 lifelines, class/method names matching the code, alt/else error branches shown?', 'Sơ đồ (C3): ≤ 10 lifeline, tên lớp/hàm khớp code, có nhánh lỗi alt/else?'],
+        ['Security (C5): all six STRIDE letters checked (JWT/BOLA, narrow DTOs, audit log, HttpOnly refresh, rate limit / circuit breaker, backend RBAC)?', 'Bảo mật (C5): đã soát đủ 6 chữ STRIDE (JWT/BOLA, DTO gọn, audit log, HttpOnly refresh, rate limit/circuit breaker, RBAC backend)?'],
+        ['RTM & format (C1): is every coded/planned UC mapped in the RTM, with captions and the .puml sources in Git?', 'RTM & trình bày (C1): mọi UC đã code/lên kế hoạch đều vào RTM, có caption và .puml trong Git?'],
+        ['Class specs (C3): grouped by layer, no getter/setter spam, no dead classes?', 'Đặc tả lớp (C3): nhóm theo tầng, bỏ getter/setter thừa, không lớp chết?'],
+      ] },
+    ],
+  },
+  {
+    key: 'PR_SELF_4PASS', kind: 'CODE', sizeUnit: 'LOC', source: 'Solo 5-hat project, lesson 6.5 — next-day 4-pass PR self-review (30–45 min, ≤ 400 lines)',
+    name: ['PR self-review in 4 passes', 'Tự review PR 4 lượt'],
+    sections: [
+      { name: ['Pass 1 — scope & design (5 min)', 'Lượt 1 — phạm vi & thiết kế (5 phút)'], items: [
+        ['Does every touched file belong to THIS card, matching its AC, BR-xx and the SRS/SDS?', 'Mọi tệp sửa đều thuộc đúng thẻ này, khớp AC, BR-xx và SRS/SDS?'],
+        ['Are module dependencies still one-way, and business numbers read from configuration instead of hard-coded?', 'Phụ thuộc module vẫn một chiều, con số nghiệp vụ đọc từ cấu hình chứ không hard-code?'],
+      ] },
+      { name: ['Pass 2 — security & data integrity (10 min)', 'Lượt 2 — bảo mật & toàn vẹn dữ liệu (10 phút)'], items: [
+        ['Does every endpoint enforce auth + role + object ownership (OWASP API1 BOLA) on the server?', 'Mọi endpoint kiểm xác thực + vai + quyền sở hữu đối tượng (OWASP API1 BOLA) trên server?'],
+        ['No string-concatenated SQL/JPQL, DTOs instead of entities, and the transaction covers the main write + audit?', 'Không nối chuỗi SQL/JPQL, trả DTO thay vì entity, transaction bao đủ ghi chính + audit?'],
+      ] },
+      { name: ['Pass 3 — boundaries & concurrency (10 min)', 'Lượt 3 — biên & đồng thời (10 phút)'], items: [
+        ['Empty/whitespace, max length, off-by-one, invalid state transitions, double-click submit and two parallel requests all handled?', 'Rỗng/dấu cách, quá dài, lệch một, chuyển trạng thái sai, bấm đúp và 2 request song song đều được xử lý?'],
+        ['Does the UI map every backend error code (409/422…) cleanly?', 'UI ánh xạ đủ từng mã lỗi backend (409/422…)?'],
+      ] },
+      { name: ['Pass 4 — tests & cleanliness (10 min)', 'Lượt 4 — test & độ sạch mã (10 phút)'], items: [
+        ['Do the tests cover unhappy paths, and would they FAIL if the core business rule were deleted?', 'Test có kiểm unhappy path, và sẽ ĐỎ nếu xoá luật nghiệp vụ chính?'],
+        ['Zero leftover console.log/debug prints, commented-out dead code or secrets?', 'Không còn console.log/log gỡ lỗi, code chết bị comment hay bí mật?'],
+        ['Only after the 4 manual passes: was the AI critic run (no code written by AI) and every finding accepted or rejected with a reason?', 'Chỉ SAU 4 lượt tự soi: đã chạy AI phản biện (không để AI viết code) và mỗi điểm AI nêu đều chấp nhận/bác bỏ kèm lý do?'],
+      ] },
+    ],
+  },
 ];
 
 export const CHECKLIST_KEYS = CHECKLISTS.map((c) => c.key) as [string, ...string[]];
 export const checklistByKey = (k: string) => CHECKLISTS.find((c) => c.key === k) ?? null;
 
+/** dm5 G3: mẫu cấp dự án (settings.reviewChecklists) đổi sang cùng dạng với mẫu dựng sẵn — câu một ngôn ngữ dùng cho cả hai. */
+export function projectChecklistTemplate(c: { key: string; name: string; kind: 'DOC' | 'CODE'; sections: Array<{ name: string; items: string[] }> }): ChecklistTemplate {
+  return {
+    key: c.key, kind: c.kind, sizeUnit: c.kind === 'CODE' ? 'LOC' : 'PAGE', source: 'Project checklist (Settings › reviewChecklists)',
+    name: [c.name, c.name], sections: c.sections.map((s) => ({ name: [s.name, s.name], items: s.items.map((q) => [q, q] as Q) })),
+  };
+}
+
+/** Câu hỏi của một mẫu bất kỳ (dựng sẵn hoặc cấp dự án) theo ngôn ngữ. */
+export function templateItems(c: ChecklistTemplate, language: 'vi' | 'en'): Array<{ section: string; question: string }> {
+  const i = language === 'vi' ? 1 : 0;
+  return c.sections.flatMap((s) => s.items.map((q) => ({ section: s.name[i], question: q[i] })));
+}
+
 /** Câu hỏi của một mẫu theo ngôn ngữ — dùng khi mở phiên (chép vào work_review_items). */
 export function checklistItems(key: string, language: 'vi' | 'en'): Array<{ section: string; question: string }> {
   const c = checklistByKey(key);
-  if (!c) return [];
-  const i = language === 'vi' ? 1 : 0;
-  return c.sections.flatMap((s) => s.items.map((q) => ({ section: s.name[i], question: q[i] })));
+  return c ? templateItems(c, language) : [];
 }
 
 // ─── Số đo ───────────────────────────────────────────────────────

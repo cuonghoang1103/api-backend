@@ -62,4 +62,15 @@ export const sprint: Strings<typeof En> = {
   explaining: 'Đang giải thích…',
   explainAgain: 'Giải thích lại',
   explain: 'Giải thích kế hoạch này',
+  // dm5 G1 — bảng kiểm sprint (SprintGuards.tsx)
+  gTitle: 'Bảng kiểm sprint',
+  gChecking: 'Đang kiểm Ready và sức chứa…',
+  gNotReady: '{count} thẻ chưa Ready (Definition of Ready)',
+  gAllReady: 'Mọi thẻ đang mở đều đạt Definition of Ready',
+  gCapacity: 'Ước lượng {est} giờ / {cap} giờ sức chứa tập trung ({raw} giờ × hệ số {focus}) — {pct}%',
+  gOver: 'vượt ngưỡng {warn}% — bớt phạm vi hoặc dời bớt việc',
+  gUnestimated: '{count} thẻ chưa ước lượng giờ',
+  gNoCapacity: 'Ước lượng {est} giờ — đặt giờ/ngày ở Báo cáo › Capacity để so với sức chứa',
+  gMust: 'Việc Must chiếm {pct}% effort (trần {cap}%)',
+  gMustOver: 'Quá nhiều Must — trễ một việc là không còn đệm; chuyển bớt sang Should',
 };

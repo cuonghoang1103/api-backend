@@ -218,6 +218,7 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
       </div>
     </Section>
     <WipMode config={config} slug={slug} />
+    <WipGuards config={config} slug={slug} />
     </>
   );
 }
@@ -239,6 +240,77 @@ function WipMode({ config, slug }: { config: ProjectConfig; slug: string }) {
       <div className="flex items-center gap-3 text-[13px]">
         <Switch checked={on} disabled={!config.permissions.settings || save.isPending} onChange={(v) => save.mutate(v)} label={wt('pboard.wipBlock')} />
         <span className="text-[var(--w-text-2)]">{on ? wt('pboard.wipBlockStateOn') : wt('pboard.wipBlockStateOff')}</span>
+      </div>
+    </Section>
+  );
+}
+
+/**
+ * dm5 G1 (A4): WIP CHÉO CỘT (settings.wipGuards) — "cột A đầy ⇒ không kéo thêm vào cột B" (vd In Review đầy ⇒ không nhận việc
+ * mới vào Doing). Giới hạn = số riêng của luật, bỏ trống ⇒ WIP của cột A. Máy chủ chặn ở mọi đường (WORK_WIP_LIMIT),
+ * không phụ thuộc công tắc chặn cứng ở trên.
+ */
+function WipGuards({ config, slug }: { config: ProjectConfig; slug: string }) {
+  const invalidate = useProjectInvalidate(config.id, slug);
+  const canEdit = config.permissions.settings;
+  const saved = useMemo(() => {
+    const raw = (config.settings as { wipGuards?: unknown } | null)?.wipGuards;
+    return (Array.isArray(raw) ? raw : []).map((g: { whenColumn?: string; blocksColumn?: string; limit?: number | null }) => ({
+      when: g.whenColumn ?? '', blocks: g.blocksColumn ?? '', limit: g.limit == null ? '' : String(g.limit),
+    }));
+  }, [config.settings]);
+  const [rows, setRows] = useState(saved);
+  useEffect(() => setRows(saved), [saved]);
+  const cols = config.boardColumns.map((c) => c.name);
+  const dirty = JSON.stringify(rows) !== JSON.stringify(saved);
+  const valid = rows.every((r) => r.when && r.blocks && r.when !== r.blocks && (!r.limit || Number(r.limit) >= 1));
+  const save = useMutation({
+    mutationFn: () => workApi.updateProject(config.id, {
+      settings: { wipGuards: rows.length ? rows.map((r) => ({ whenColumn: r.when, blocksColumn: r.blocks, limit: r.limit ? Number(r.limit) : null })) : null },
+    }),
+    onSuccess: () => { toast.success(wt('pboard.guardsSaved')); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('pboard.wipBlockFailed'))),
+  });
+  const wipOf = (name: string) => config.boardColumns.find((c) => c.name === name)?.wipLimit ?? null;
+  return (
+    <Section title={wt('pboard.guardsTitle')} description={wt('pboard.guardsDesc')}>
+      <div className="max-w-[640px] space-y-2">
+        {rows.map((r, i) => (
+          <div key={i} className="flex flex-wrap items-center gap-2 text-[13px]">
+            <span className="text-[var(--w-text-2)]">{wt('pboard.guardWhen')}</span>
+            <Select aria-label={wt('pboard.guardWhen')} value={r.when} disabled={!canEdit} className="h-8 w-[150px]" onChange={(e) => setRows((x) => x.map((y, j) => (j === i ? { ...y, when: e.target.value } : y)))}>
+              <option value="">—</option>
+              {cols.map((c) => <option key={c} value={c}>{c}</option>)}
+            </Select>
+            <span className="text-[var(--w-text-2)]">{wt('pboard.guardFull')}</span>
+            <input type="number" min={1} max={500} aria-label={wt('pboard.guardLimit')} placeholder={wipOf(r.when) == null ? wt('pboard.guardNoWip') : String(wipOf(r.when))}
+              className="w-input h-8 w-[84px]" value={r.limit} disabled={!canEdit} onChange={(e) => setRows((x) => x.map((y, j) => (j === i ? { ...y, limit: e.target.value } : y)))} />
+            <span className="text-[var(--w-text-2)]">{wt('pboard.guardBlocks')}</span>
+            <Select aria-label={wt('pboard.guardBlocks')} value={r.blocks} disabled={!canEdit} className="h-8 w-[150px]" onChange={(e) => setRows((x) => x.map((y, j) => (j === i ? { ...y, blocks: e.target.value } : y)))}>
+              <option value="">—</option>
+              {cols.filter((c) => c !== r.when).map((c) => <option key={c} value={c}>{c}</option>)}
+            </Select>
+            {canEdit && (
+              <button type="button" className="w-btn w-btn-ghost w-btn-sm" aria-label={wt('common.remove')} onClick={() => setRows((x) => x.filter((_, j) => j !== i))}>
+                <Trash2 size={13} />
+              </button>
+            )}
+            {r.when && !r.limit && wipOf(r.when) == null && <span className="text-[12px] text-[var(--w-orange)]">{wt('pboard.guardNeedLimit')}</span>}
+          </div>
+        ))}
+        {!rows.length && <p className="text-[12.5px] text-[var(--w-text-3)]">{wt('pboard.guardsNone')}</p>}
+        {canEdit && (
+          <div className="flex items-center gap-2 pt-1">
+            <button type="button" className="w-btn w-btn-sm" disabled={rows.length >= 10} onClick={() => setRows((x) => [...x, { when: '', blocks: '', limit: '' }])}>
+              <Plus size={13} /> {wt('pboard.guardAdd')}
+            </button>
+            {dirty && (
+              <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={!valid || save.isPending} onClick={() => save.mutate()}>
+                {save.isPending && <Spinner size={12} />} {wt('common.save')}
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </Section>
   );

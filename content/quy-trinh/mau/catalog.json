@@ -262,6 +262,42 @@
       "titleVi": "SWR302 (Wiegers) — Từ điển dữ liệu",
       "titleEn": "SWR302 (Wiegers) — Data Dictionary",
       "group": "SWR302 (Wiegers)"
+    },
+    {
+      "key": "sep490-project-charter",
+      "titleVi": "SEP490 — Điều lệ dự án (Project Charter)",
+      "titleEn": "Project Charter (SEP490)",
+      "group": "SEP490 kit"
+    },
+    {
+      "key": "sep490-test-plan",
+      "titleVi": "SEP490 — Report 5.0: Kế hoạch kiểm thử",
+      "titleEn": "Report 5.0 – Test Plan (SEP490)",
+      "group": "SEP490 kit"
+    },
+    {
+      "key": "sep490-adr",
+      "titleVi": "SEP490 — ADR (quyết định kiến trúc, đánh số tự động)",
+      "titleEn": "Architecture Decision Record (SEP490)",
+      "group": "SEP490 kit"
+    },
+    {
+      "key": "sep490-red-pen-checklist",
+      "titleVi": "SEP490 — Checklist 10 lỗi bút đỏ trước khi nộp",
+      "titleEn": "Pre-submission checklist – 10 red-pen errors (SEP490)",
+      "group": "SEP490 kit"
+    },
+    {
+      "key": "sep490-go-no-go",
+      "titleVi": "SEP490 — Go/No-Go phát hành 10 điểm",
+      "titleEn": "Release Go/No-Go – 10 points (SEP490)",
+      "group": "SEP490 kit"
+    },
+    {
+      "key": "sep490-fe-design",
+      "titleVi": "SEP490 — Thiết kế Front-end (Report 4 §1.2.2)",
+      "titleEn": "Front-end Design – Report 4 §1.2.2 (SEP490)",
+      "group": "SEP490 kit"
     }
   ]
 }

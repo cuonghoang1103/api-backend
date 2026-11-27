@@ -348,6 +348,8 @@ const FIELD_ALIASES: Record<string, string> = {
   team: 'team', teams: 'team', department: 'team',
   stage: 'stage', phase: 'stage',
   flagged: 'flagged', flag: 'flagged', blocked: 'flagged',
+  // dm5 G1 (A18): lúc gắn cờ Blocked — `flaggedSince < -24h` = bị chặn quá một ngày.
+  flaggedsince: 'flaggedsince', 'flagged since': 'flaggedsince', flaggedat: 'flaggedsince', blockedsince: 'flaggedsince',
   fixversion: 'fixversion', fixversions: 'fixversion', 'fix version': 'fixversion', version: 'fixversion', release: 'fixversion',
   // CTW-28 (A13): người được giao là NGƯỜI hay AI AGENT — `assigneeKind = AGENT`.
   assigneekind: 'assigneekind', 'assignee kind': 'assigneekind', assigneetype: 'assigneekind',
@@ -380,7 +382,7 @@ export function projectScope(q: JqlQuery): { include: string[] | null; exclude: 
 export const JQL_FIELDS = [
   'key', 'summary', 'description', 'text', 'comment', 'status', 'statusCategory', 'type', 'priority', 'assignee', 'reporter',
   'labels', 'component', 'sprint', 'parent', 'points', 'created', 'updated', 'due', 'resolved', 'watcher', 'project',
-  'team', 'stage', 'fixVersion', 'flagged', 'assigneeKind',
+  'team', 'stage', 'fixVersion', 'flagged', 'flaggedSince', 'assigneeKind',
 ];
 export const JQL_FUNCTIONS = ['currentUser()', 'agents()', 'people()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'releasedVersions()', 'unreleasedVersions()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
 
@@ -668,8 +670,9 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
       case 'created':
       case 'updated':
       case 'due':
-      case 'resolved': {
-        const col = field === 'created' ? 'createdAt' : field === 'updated' ? 'updatedAt' : field === 'due' ? 'dueDate' : 'resolvedAt';
+      case 'resolved':
+      case 'flaggedsince': {
+        const col = field === 'created' ? 'createdAt' : field === 'updated' ? 'updatedAt' : field === 'due' ? 'dueDate' : field === 'flaggedsince' ? 'flaggedAt' : 'resolvedAt';
         if (empty) return { [col]: null };
         if (notEmpty) return { [col]: { not: null } };
         if (!['=', '!=', '>', '>=', '<', '<='].includes(op)) return fail(`Use =, <, <=, >, >= with dates`, pos);
@@ -721,6 +724,7 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
     updated: (dir) => ({ updatedAt: dir }),
     due: (dir) => ({ dueDate: { sort: dir, nulls: 'last' } }),
     resolved: (dir) => ({ resolvedAt: { sort: dir, nulls: 'last' } }),
+    flaggedsince: (dir) => ({ flaggedAt: { sort: dir, nulls: 'last' } }), // dm5 G1 (A18)
     points: (dir) => ({ storyPoints: { sort: dir, nulls: 'last' } }),
     summary: (dir) => ({ title: dir }),
     status: (dir) => ({ statusId: dir }),

@@ -42,6 +42,9 @@ function Certificate({ c }: { c: PortalCertificate }) {
           <tr><th>{wt('uat.partyBSupplier')}</th><td>{c.vendor}</td></tr>
           <tr><th>{wt('uat.envBuild')}</th><td>{[c.environment, c.build].filter(Boolean).join(' · ') || '—'}</td></tr>
           <tr><th>{wt('uat.reqDecided')}</th><td>{fmt(c.requestedAt)} · {fmt(c.decidedAt)}</td></tr>
+          {/* dm5 G3 (D10): mã người thử ẩn danh + điểm hài lòng */}
+          {c.testerCode && <tr><th>{wt('uat.testerCode')}</th><td>{c.testerCode}</td></tr>}
+          {c.rating != null && <tr><th>{wt('uat.rating')}</th><td>{wt('uat.ratingOf', { n: c.rating })}</td></tr>}
         </tbody>
       </table>
 

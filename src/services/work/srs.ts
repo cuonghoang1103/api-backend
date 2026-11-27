@@ -36,9 +36,14 @@ export const SEVERITY_LABEL: Record<Severity, string> = { CRITICAL: 'Critical', 
 const pad = (n: number) => String(n).padStart(2, '0');
 export const ucKey = (n: number) => `UC-${pad(n)}`;
 export const brKey = (n: number) => `BR-${pad(n)}`;
+/** dm5 G2 (B9): System Message — "SM-01" như bảng 5.2 của mẫu Report 3. */
+export const smKey = (n: number) => `SM-${pad(n)}`;
+export const SM_TYPES = ['ERROR', 'WARNING', 'INFO', 'CONFIRMATION', 'SUCCESS'] as const;
+export type SmType = (typeof SM_TYPES)[number];
+export const SM_TYPE_LABEL: Record<SmType, string> = { ERROR: 'Error', WARNING: 'Warning', INFO: 'Information', CONFIRMATION: 'Confirmation', SUCCESS: 'Success' };
 
 /** "UC-03" / "uc3" / "3" / 3 ⇒ 3 (null nếu không phải). */
-export function refNumber(ref: unknown, prefix: 'UC' | 'BR'): number | null {
+export function refNumber(ref: unknown, prefix: 'UC' | 'BR' | 'SM'): number | null {
   if (typeof ref === 'number') return Number.isInteger(ref) && ref > 0 ? ref : null;
   const m = new RegExp(`^\\s*(?:${prefix}\\s*-?\\s*)?0*(\\d{1,5})\\s*$`, 'i').exec(String(ref ?? ''));
   const n = m ? Number(m[1]) : NaN;
@@ -46,7 +51,7 @@ export function refNumber(ref: unknown, prefix: 'UC' | 'BR'): number | null {
 }
 
 /** Mọi mã UC-xx / BR-xx nhắc trong một đoạn chữ (để tự dò truy vết). */
-export function refsIn(text: string, prefix: 'UC' | 'BR'): number[] {
+export function refsIn(text: string, prefix: 'UC' | 'BR' | 'SM'): number[] {
   const re = new RegExp(`(?<![A-Za-z0-9])${prefix}-?(\\d{1,4})(?![0-9])`, 'gi');
   return [...new Set([...String(text ?? '').matchAll(re)].map((m) => Number(m[1])))];
 }
@@ -64,6 +69,16 @@ export interface RuleLite { id: number; number: number; name: string; definition
 export interface ScreenLite { id: number; name: string; feature: string | null; description: string | null; position: number }
 export interface ScreenLinkLite { fromId: number; toId: number; label: string | null }
 export interface FunctionLite { id: number; feature: string | null; name: string; description: string | null; position: number }
+/** dm5 G2 (B9): một dòng sổ System Messages. */
+export interface SystemMessageLite {
+  id: number; number: number; msgType: string; context: string | null; text: string; textEn: string | null;
+  httpStatus: number | null; useCaseIds: number[]; status: string;
+}
+/** dm5 G2 (B10): NFR có số đo (WorkNfrSpec) đi vào "4.2 Quality Attribute". */
+export interface NfrFillLite {
+  key: string; number: number; title: string;
+  spec: { characteristic: string; subCharacteristic: string | null; scale: string; meter: string; unit: string | null; comparator: string; mustValue: number | null; planValue: number | null; wishValue: number | null; conditions: string | null; verification: string };
+}
 export interface SrsData {
   actors: ActorLite[];
   useCases: UseCaseLite[];
@@ -73,6 +88,9 @@ export interface SrsData {
   /** [screenId, actorId] có dấu X. */
   auth: Array<[number, number]>;
   functions: FunctionLite[];
+  /** dm5 G2 — không có (dữ liệu cũ/test) ⇒ phần đó không điền. */
+  systemMessages?: SystemMessageLite[];
+  nfrs?: NfrFillLite[];
 }
 
 /** UC/BR đi vào tài liệu: bỏ đề xuất chưa duyệt. */
@@ -166,9 +184,138 @@ export function useCasesTable(ucs: UseCaseLite[]): PmNode {
   return buildTable(['ID', 'Use Case', 'Feature', 'Use Case Description'], rows);
 }
 
+/** Thứ tự nhóm BR của Wiegers (Facts → Constraints → Action enablers → Inferences → Computations), rồi nhóm tự đặt (ABC), cuối là chưa phân nhóm. */
+const BR_CATEGORY_ORDER = ['fact', 'constraint', 'action enabler', 'inference', 'computation'];
+const catRank = (c: string | null) => {
+  const v = (c ?? '').trim().toLowerCase().replace(/[_-]+/g, ' ').replace(/s$/, '');
+  if (!v) return 1000;
+  const i = BR_CATEGORY_ORDER.findIndex((k) => v === k || v.startsWith(k));
+  return i >= 0 ? i : 100;
+};
+const catLabel = (c: string | null) => {
+  const v = (c ?? '').trim();
+  if (!v) return 'Uncategorized';
+  return /^[A-Z_]+$/.test(v) ? v.charAt(0) + v.slice(1).toLowerCase().replace(/_/g, ' ') : v;
+};
+
+/**
+ * Bảng "5.1 Business Rules": đúng 3 cột của mẫu. dm5 G2 (B10): khi có BR mang nhóm (category) ⇒ xếp theo nhóm, mỗi nhóm mở bằng
+ * một hàng tiêu đề gộp 3 ô ("Constraints") — bảng vẫn 3 cột như mẫu. Không BR nào có nhóm ⇒ y như cũ (theo số).
+ */
 export function rulesTable(rules: RuleLite[]): PmNode {
-  const rows = inDocument(rules).sort((a, b) => a.number - b.number).map((r) => [brKey(r.number), r.name, r.definition ?? '']);
-  return buildTable(['ID', 'Rule Name', 'Rule Definition'], rows);
+  const list = inDocument(rules).sort((a, b) => a.number - b.number);
+  if (!list.some((r) => r.category?.trim())) return buildTable(['ID', 'Rule Name', 'Rule Definition'], list.map((r) => [brKey(r.number), r.name, r.definition ?? '']));
+  const groups = new Map<string, { rank: number; label: string; items: RuleLite[] }>();
+  for (const r of list) {
+    const label = catLabel(r.category);
+    const k = label.toLowerCase().replace(/[_\s-]+/g, ' ').replace(/s$/, '');
+    if (!groups.has(k)) groups.set(k, { rank: catRank(r.category), label, items: [] });
+    groups.get(k)!.items.push(r);
+  }
+  const head = (x: string) => cell('tableHeader', cellParas(x, true));
+  const rows: PmNode[] = [{ type: 'tableRow', content: [head('ID'), head('Rule Name'), head('Rule Definition')] }];
+  for (const g of [...groups.values()].sort((a, b) => a.rank - b.rank || a.label.localeCompare(b.label))) {
+    rows.push({ type: 'tableRow', content: [cell('tableCell', cellParas(g.label, true), 3)] });
+    for (const r of g.items) rows.push({ type: 'tableRow', content: [cell('tableCell', cellParas(brKey(r.number))), cell('tableCell', cellParas(r.name)), cell('tableCell', cellParas(r.definition))] });
+  }
+  return { type: 'table', content: rows };
+}
+
+// ─── dm5 G2 (B9): System Messages ────────────────────────────────
+
+/** Bảng "5.2 System Messages" — 4 cột đúng mẫu: ID · Message Type · Context · Content. Context kèm UC dùng + mã HTTP. */
+export function systemMessagesTable(msgs: SystemMessageLite[], ucNumberOf: (id: number) => number | null): PmNode {
+  const rows = inDocument(msgs).sort((a, b) => a.number - b.number).map((m) => {
+    const ucs = m.useCaseIds.map(ucNumberOf).filter((n): n is number => n !== null).sort((a, b) => a - b).map(ucKey);
+    const ctx = [m.context?.trim() ?? '', ucs.length ? `Used in: ${ucs.join(', ')}` : '', m.httpStatus ? `HTTP ${m.httpStatus}` : ''].filter(Boolean).join('\n');
+    const content = [m.text.trim(), m.textEn?.trim() ? `EN: ${m.textEn.trim()}` : ''].filter(Boolean).join('\n');
+    return [smKey(m.number), SM_TYPE_LABEL[m.msgType as SmType] ?? m.msgType, ctx, content];
+  });
+  return buildTable(['ID', 'Message Type', 'Context', 'Content'], rows);
+}
+
+// ─── dm5 G2 (B10): NFR ⇒ "4.2 Quality Attribute" ─────────────────
+
+/** Đặc tính ISO 25010 ⇒ mục con của mẫu Report 3 (4.2.1–4.2.4). Đặc tính khác ⇒ mục mới "4.2.n <tên>". */
+const NFR_SECTIONS: Array<{ iso: string[]; match: RegExp }> = [
+  { iso: ['PERFORMANCE_EFFICIENCY'], match: /^Performance(\s+Efficiency)?$/i },
+  { iso: ['SECURITY'], match: /^Security(\s*(&|and)\s*Privacy)?$/i },
+  { iso: ['RELIABILITY'], match: /^Reliability(\s*(&|and)\s*Availability)?$/i },
+  { iso: ['INTERACTION_CAPABILITY'], match: /^Usability$/i },
+];
+const ISO_TITLE: Record<string, string> = {
+  FUNCTIONAL_SUITABILITY: 'Functional Suitability', PERFORMANCE_EFFICIENCY: 'Performance Efficiency', COMPATIBILITY: 'Compatibility',
+  INTERACTION_CAPABILITY: 'Usability', RELIABILITY: 'Reliability & Availability', SECURITY: 'Security & Privacy',
+  MAINTAINABILITY: 'Maintainability', FLEXIBILITY: 'Portability & Flexibility', SAFETY: 'Safety',
+};
+const fmtNum = (v: number) => (Number.isInteger(v) ? String(v) : String(Math.round(v * 1000) / 1000));
+const VERIFY_TEXT: Record<string, string> = { TEST: 'Test', ANALYSIS: 'Analysis', INSPECTION: 'Inspection', DEMONSTRATION: 'Demonstration' };
+
+/** Bảng NFR kiểu Planguage: ID · Ambition · Scale · Meter · Minimum (Must) · Goal (Plan) · Wish · Verification. */
+export function nfrTable(nfrs: NfrFillLite[]): PmNode {
+  const val = (s: NfrFillLite['spec'], v: number | null) => (v === null ? '' : `${s.comparator} ${fmtNum(v)}${s.unit ? ` ${s.unit}` : ''}`);
+  return buildTable(['ID', 'Ambition', 'Scale', 'Meter', 'Minimum (Must)', 'Goal (Plan)', 'Wish', 'Verification'], nfrs.map((n) => [
+    n.key, `${n.title}${n.spec.subCharacteristic ? ` (${n.spec.subCharacteristic})` : ''}`,
+    `${n.spec.scale}${n.spec.conditions?.trim() ? `\nConditions: ${n.spec.conditions.trim()}` : ''}`, n.spec.meter,
+    val(n.spec, n.spec.mustValue), val(n.spec, n.spec.planValue), val(n.spec, n.spec.wishValue), VERIFY_TEXT[n.spec.verification] ?? n.spec.verification,
+  ]));
+}
+
+/** Thân trực tiếp (trước đề mục con đầu tiên) của đề mục i: thay bảng đầu tiên, chưa có ⇒ chèn sau ghi chú hướng dẫn. */
+function putTableInBody(blocks: PmNode[], i: number, table: PmNode) {
+  let bodyEnd = i + 1;
+  while (bodyEnd < blocks.length && blocks[bodyEnd].type !== 'heading') bodyEnd++;
+  const ti = blocks.slice(i + 1, bodyEnd).findIndex((b) => b.type === 'table');
+  if (ti >= 0) { blocks[i + 1 + ti] = table; return; }
+  let at = i + 1;
+  while (at < bodyEnd && isGuide(blocks[at])) at++;
+  blocks.splice(at, 0, table);
+}
+
+/**
+ * Điền NFR vào "4.2 Quality Attribute" (không có thì "4. Non-Functional Requirements"): mỗi mục con của mẫu một bảng các NFR
+ * của đặc tính đó; đặc tính không có mục ⇒ thêm "4.2.n <tên>" cuối mục. Mục con không có NFR ⇒ để nguyên chữ người viết.
+ */
+export function fillNfrSection(doc: PmNode, nfrs: NfrFillLite[]): boolean {
+  if (!nfrs.length) return false;
+  const blocks = doc.content ?? [];
+  let p = findHeading(blocks, /^Quality Attributes?$/i);
+  if (p < 0) p = findHeading(blocks, /^Non-?Functional Requirements$/i);
+  if (p < 0) return false;
+  const pLevel = headingLevel(blocks[p]);
+  const pNum = /^(\d+(?:\.\d+)*)/.exec(plainText(blocks[p]).trim())?.[1] ?? null;
+  const placed = new Set<string>();
+  const byIso = (iso: string[]) => nfrs.filter((n) => iso.includes(n.spec.characteristic));
+  for (const sec of NFR_SECTIONS) {
+    const items = byIso(sec.iso);
+    if (!items.length) continue;
+    const end = sectionEnd(blocks, p);
+    let hi = -1;
+    for (let k = p + 1; k < end; k++) if (blocks[k].type === 'heading' && headingLevel(blocks[k]) === pLevel + 1 && sec.match.test(stripNum(plainText(blocks[k])))) { hi = k; break; }
+    if (hi < 0) continue;
+    putTableInBody(blocks, hi, nfrTable(items));
+    sec.iso.forEach((x) => placed.add(x));
+  }
+  const rest = nfrs.filter((n) => !placed.has(n.spec.characteristic));
+  const isoOrder = [...new Set(rest.map((n) => n.spec.characteristic))];
+  for (const iso of isoOrder) {
+    const end = sectionEnd(blocks, p);
+    const title = ISO_TITLE[iso] ?? iso;
+    // Đã có mục cùng tên (lần điền trước) ⇒ thay bảng trong đó.
+    let hi = -1;
+    let kids = 0;
+    for (let k = p + 1; k < end; k++) {
+      if (blocks[k].type !== 'heading' || headingLevel(blocks[k]) !== pLevel + 1) continue;
+      kids++;
+      if (stripNum(plainText(blocks[k])).toLowerCase() === title.toLowerCase()) hi = k;
+    }
+    const table = nfrTable(rest.filter((n) => n.spec.characteristic === iso));
+    if (hi >= 0) { putTableInBody(blocks, hi, table); continue; }
+    const h = heading(Math.min(pLevel + 1, 6), `${pNum ? `${pNum}.${kids + 1} ` : ''}${title}`);
+    blocks.splice(end, 0, h, table);
+  }
+  doc.content = blocks;
+  return true;
 }
 
 export function functionsTable(fns: FunctionLite[]): PmNode {
@@ -276,11 +423,12 @@ function fillUcSpecs(doc: PmNode, nodes: PmNode[]): boolean {
   return true;
 }
 
-export const SRS_FILL_SECTIONS = ['actors', 'useCases', 'screensFlow', 'screenAuthorization', 'nonUi', 'ucSpecs', 'businessRules'] as const;
+export const SRS_FILL_SECTIONS = ['actors', 'useCases', 'screensFlow', 'screenAuthorization', 'nonUi', 'ucSpecs', 'businessRules', 'nfr', 'systemMessages'] as const;
 export type SrsFillSection = (typeof SRS_FILL_SECTIONS)[number];
 export const SRS_SECTION_LABEL: Record<SrsFillSection, string> = {
   actors: 'Actors', useCases: 'Use Cases (UC)', screensFlow: 'Screens Flow', screenAuthorization: 'Screen Authorization',
   nonUi: 'Non-UI Functions', ucSpecs: 'Use Case Specifications', businessRules: 'Business Rules',
+  nfr: 'Quality Attributes (NFR)', systemMessages: 'System Messages',
 };
 
 /**
@@ -299,6 +447,11 @@ export function applySrsFill(doc: PmNode, d: SrsData, only?: SrsFillSection[]): 
   if (want('nonUi') && d.functions.length && replaceTableAfterHeading(doc, /^Non-?UI Functions$/i, () => functionsTable(d.functions))) done.push('nonUi');
   if (want('ucSpecs') && ucs.length && fillUcSpecs(doc, ucSpecSection({ actors: d.actors, useCases: ucs, rules }).nodes)) done.push('ucSpecs');
   if (want('businessRules') && rules.length && replaceTableAfterHeading(doc, /^Business Rules$/i, () => rulesTable(rules))) done.push('businessRules');
+  // dm5 G2 (B10, B9): NFR có số đo ⇒ 4.2.x; sổ System Messages ⇒ 5.2.
+  if (want('nfr') && d.nfrs?.length && fillNfrSection(doc, d.nfrs)) done.push('nfr');
+  const msgs = inDocument(d.systemMessages ?? []);
+  const ucNo = new Map(d.useCases.map((u) => [u.id, u.number]));
+  if (want('systemMessages') && msgs.length && replaceTableAfterHeading(doc, /^System Messages$/i, () => systemMessagesTable(msgs, (id) => ucNo.get(id) ?? null))) done.push('systemMessages');
   return done;
 }
 

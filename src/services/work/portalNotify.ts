@@ -58,6 +58,20 @@ export async function clientMemberIds(projectId: number): Promise<number[]> {
   return ws.map((m) => m.userId);
 }
 
+/**
+ * dm5 G3 (D10): khách đã bị THU HỒI quyền cổng (settings.portalRevokedUserIds — UAT chốt với uatRevokeOnClose). Vai CLIENT
+ * vẫn giữ (để họ VẪN bị cách ly như khách — gỡ vai thì MEMBER không gian lại vào ngầm được dự án mở) và lịch sử/biên bản vẫn
+ * nhận họ là phía khách; chỉ là mọi tuyến dự án trả 403 WORK_PORTAL_REVOKED và không còn thông báo nào tới họ.
+ */
+export function portalRevokedIdsOf(settings: unknown): number[] {
+  const raw = (settings as { portalRevokedUserIds?: unknown } | null)?.portalRevokedUserIds;
+  return Array.isArray(raw) ? [...new Set(raw.filter((x): x is number => Number.isInteger(x) && x > 0))].slice(0, 500) : [];
+}
+export async function isPortalRevoked(projectId: number, userId: number): Promise<boolean> {
+  const p = await prisma.workProject.findUnique({ where: { id: projectId }, select: { settings: true } });
+  return portalRevokedIdsOf(p?.settings).includes(userId);
+}
+
 const PROJECT_URL_RE = /^\/work\/([^/?#]+)\/([^/?#]+)(?:[/?#].*)?$/;
 
 /**
@@ -76,6 +90,7 @@ export async function routeForClient<T extends WorkNotifyLike>(args: T): Promise
   if (!project) return args;
   const access = await loadProjectAccess(args.receiverId, project.id);
   if (!access || !isClientScoped(access)) return args;
+  if (await isPortalRevoked(project.id, args.receiverId)) return null; // dm5 G3 (D10): quyền cổng đã thu hồi
 
   const base = { issueKey: project.key, projectName: project.name, portal: true };
   const slug = project.workspace.slug;
@@ -136,9 +151,10 @@ export async function notifyClientsOfProject(
   only?: number[],
 ): Promise<number> {
   try {
-    const ids = (only ?? (await clientMemberIds(projectId))).filter((id) => id !== senderId);
+    const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true, name: true, settings: true, workspace: { select: { slug: true } } } });
+    const revoked = new Set(portalRevokedIdsOf(p.settings)); // dm5 G3 (D10)
+    const ids = (only ?? (await clientMemberIds(projectId))).filter((id) => id !== senderId && !revoked.has(id));
     if (!ids.length) return 0;
-    const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true, name: true, workspace: { select: { slug: true } } } });
     const { notifyWork } = await import('./notify.js');
     for (const receiverId of ids) {
       await notifyWork({

@@ -20,9 +20,11 @@ import { displayName } from './common.js';
 import { DOC_IMAGE_SRC_RE, type PmNode } from './docMarkdown.js';
 import { renderDocx, renderPdf, type ExportImage } from './docExport.js';
 import {
-  changesTable, raciTable, recordOfChanges, replaceTableAfterHeading, risksTable, scheduleTable, teamTable,
-  type ChangeRow, type StageLite,
+  changesTable, crChangeRows, honestRaciNote, mergeChangeRows, raciReport2Table, raciTable, recordOfChanges, replaceTableAfterHeading, risksTable,
+  RACI_MODES, scheduleTable, teamTable,
+  type ChangeRow, type CrLite, type RaciMatrixLite, type RaciMode, type RaciPerson, type StageLite,
 } from './docFill.js';
+import { brKey, findHeading, sectionEnd, ucKey } from './srs.js';
 import { docCtx, getPage, updatePage } from './pages.service.js';
 import { docAccess, isClientScoped, requireProject } from './permissions.js';
 import { tooLargeMessage, WORK_LIMITS } from './limits.js';
@@ -200,13 +202,50 @@ export async function pageRecordOfChanges(userId: number, projectId: number, num
     where: { pageId: page.id }, orderBy: { n: 'asc' },
     select: { n: true, kind: true, note: true, createdAt: true, contentJson: true, author: { select: { username: true, fullName: true, displayName: true } } },
   });
-  return recordOfChanges(versions.map((v) => ({ ...v, author: v.author ? displayName(v.author) : null })));
+  const rows = recordOfChanges(versions.map((v) => ({ ...v, author: v.author ? displayName(v.author) : null })));
+  // dm5 G2 (B21): CR đã IMPLEMENTED có liệt kê mục của tài liệu này (trang · UC/BR/thẻ yêu cầu với SRS) ⇒ thêm dòng A/M/D.
+  return mergeChangeRows(rows, crChangeRows(await implementedCrsFor(projectId, { id: page.id, templateKey: page.templateKey ?? null, title: page.title })));
+}
+
+/** Trang này là SRS (Report 3 / mẫu srs / SWR SRS) ⇒ CR ảnh hưởng UC/BR/thẻ yêu cầu cũng tính cho nó. */
+const isSrsPage = (p: { templateKey: string | null; title: string }) => /^(fpt-report3-srs|srs|swr-srs|swr-use-cases|swr-business-rules)$/.test(p.templateKey ?? '') || /report\s*3\b|software requirement spec/i.test(p.title);
+
+/** CR trạng thái IMPLEMENTED ảnh hưởng tài liệu: ref DOC = trang này; SRS ⇒ thêm ref UC/BR/REQ. KHÔNG kiểm quyền. */
+export async function implementedCrsFor(projectId: number, page: { id: number; templateKey: string | null; title: string }): Promise<CrLite[]> {
+  const kinds = isSrsPage(page) ? ['DOC', 'UC', 'BR', 'REQ'] : ['DOC'];
+  const refs = await prisma.workCrAffectedRef.findMany({ where: { projectId, kind: { in: kinds } }, select: { changeRequestId: true, kind: true, refId: true } });
+  const relevant = refs.filter((r) => r.kind !== 'DOC' || r.refId === page.id);
+  const crIds = [...new Set(relevant.map((r) => r.changeRequestId))];
+  if (!crIds.length) return [];
+  const crs = await prisma.workChangeRequest.findMany({
+    where: { id: { in: crIds }, projectId, status: 'IMPLEMENTED', deletedAt: null },
+    select: { id: true, number: true, title: true, reason: true, implementedAt: true, updatedAt: true, owner: { select: { username: true, fullName: true, displayName: true } }, requester: { select: { username: true, fullName: true, displayName: true } } },
+  });
+  // Mỗi CR phải có ÍT NHẤT một ref liên quan tới tài liệu này (DOC trỏ đúng trang, hoặc UC/BR/REQ khi là SRS).
+  const touching = new Set(relevant.map((r) => r.changeRequestId));
+  const ucIds = relevant.filter((r) => r.kind === 'UC').map((r) => r.refId);
+  const brIds = relevant.filter((r) => r.kind === 'BR').map((r) => r.refId);
+  const reqIds = relevant.filter((r) => r.kind === 'REQ').map((r) => r.refId);
+  const [ucs, brs, reqs, proj] = await Promise.all([
+    ucIds.length ? prisma.workUseCase.findMany({ where: { id: { in: ucIds } }, select: { id: true, number: true } }) : [],
+    brIds.length ? prisma.workBusinessRule.findMany({ where: { id: { in: brIds } }, select: { id: true, number: true } }) : [],
+    reqIds.length ? prisma.workIssue.findMany({ where: { id: { in: reqIds } }, select: { id: true, number: true } }) : [],
+    prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true } }),
+  ]);
+  const label = (r: { kind: string; refId: number }) => r.kind === 'UC' ? (ucs.find((u) => u.id === r.refId) ? ucKey(ucs.find((u) => u.id === r.refId)!.number) : null)
+    : r.kind === 'BR' ? (brs.find((b) => b.id === r.refId) ? brKey(brs.find((b) => b.id === r.refId)!.number) : null)
+      : r.kind === 'REQ' ? (reqs.find((q) => q.id === r.refId) ? `${proj.key}-${reqs.find((q) => q.id === r.refId)!.number}` : null) : null;
+  return crs.filter((c) => touching.has(c.id)).map((c) => ({
+    number: c.number, title: c.title, reason: c.reason, implementedAt: c.implementedAt ?? c.updatedAt,
+    inCharge: c.owner ? displayName(c.owner) : c.requester ? displayName(c.requester) : null,
+    refs: relevant.filter((r) => r.changeRequestId === c.id).map(label).filter((x): x is string => !!x),
+  }));
 }
 
 const ROLE_LABEL: Record<string, string> = { TEACHER: 'Lecturer', ADMIN: 'Member', MEMBER: 'Member' };
 
 async function projectFacts(projectId: number) {
-  const [project, members, risks, stages, versions] = await Promise.all([
+  const [project, members, risks, stages, versions, raciActs, stakeholders] = await Promise.all([
     prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { leadId: true } }),
     prisma.workProjectMember.findMany({
       where: { projectId, role: { in: ['ADMIN', 'MEMBER', 'TEACHER'] }, user: { kind: { not: 'AGENT' } } },
@@ -223,6 +262,9 @@ async function projectFacts(projectId: number) {
       select: { n: true, name: true, issues: { where: { deletedAt: null }, orderBy: { id: 'asc' }, take: 200, select: { title: true, dueDate: true, originalEstimateMin: true, type: { select: { key: true } } } } },
     }),
     prisma.workVersion.findMany({ where: { projectId }, orderBy: [{ releaseDate: { sort: 'asc', nulls: 'last' } }, { position: 'asc' }], select: { name: true, releaseDate: true, status: true } }),
+    // dm5 G2 (B2): ma trận RACI (SWR) + stakeholder (kể cả mũ ROLE C1–C5) cho Report 2 §3.
+    prisma.workRaciActivity.findMany({ where: { projectId }, orderBy: [{ position: 'asc' }, { id: 'asc' }], include: { cells: true } }),
+    prisma.workStakeholder.findMany({ where: { projectId }, orderBy: [{ position: 'asc' }, { number: 'asc' }], select: { id: true, name: true, kind: true, userId: true, role: true } }),
   ]);
   // Trưởng nhóm lên đầu, giảng viên cuối — đúng thứ tự bảng Project Team của mẫu.
   const order = (m: { role: string; userId: number }) => (m.userId === project.leadId ? 0 : m.role === 'TEACHER' ? 2 : 1);
@@ -233,8 +275,37 @@ async function projectFacts(projectId: number) {
     n: s.n, name: s.name,
     issues: s.issues.map((i) => ({ title: i.title, isEpic: i.type.key === 'EPIC', effortDays: i.originalEstimateMin ? i.originalEstimateMin / 60 / 8 : null, due: i.dueDate })),
   }));
-  return { team, risks, stages: stageRows, versions };
+  const raci: { matrix: RaciMatrixLite; people: RaciPerson[] } = {
+    matrix: {
+      activities: raciActs.map((a) => ({ id: a.id, name: a.name })), stakeholders,
+      cells: raciActs.flatMap((a) => a.cells.map((c) => ({ activityId: a.id, stakeholderId: c.stakeholderId, role: c.role }))),
+    },
+    people: [...members].sort((a, b) => order(a) - order(b)).map((m) => ({ userId: m.userId, name: displayName(m.user), lecturer: m.role === 'TEACHER' })),
+  };
+  return { team, risks, stages: stageRows, versions, raci };
 }
+
+/** Chế độ RACI mặc định: có mũ ROLE + đúng một sinh viên ⇒ "honest" (bản nộp); có mũ ROLE ⇒ people; không ⇒ people. */
+export function defaultRaciMode(raci: { matrix: RaciMatrixLite; people: RaciPerson[] }): RaciMode {
+  const hats = raci.matrix.stakeholders.some((s) => s.kind === 'ROLE');
+  return hats && raci.people.filter((p) => !p.lecturer).length === 1 ? 'honest' : 'people';
+}
+
+/** Thêm/thay đoạn ghi chú ngay sau bảng RACI (chế độ honest). */
+function putRaciNote(doc: PmNode, note: string) {
+  const blocks = doc.content ?? [];
+  const i = findHeading(blocks, /^Responsibility Assignments$/i);
+  if (i < 0) return;
+  const end = sectionEnd(blocks, i);
+  const ti = blocks.slice(i + 1, end).findIndex((b) => b.type === 'table');
+  if (ti < 0) return;
+  const at = i + 1 + ti + 1;
+  const isNote = (b: PmNode | undefined) => b?.type === 'paragraph' && /^Note: this is a one-person project/.test(((b.content ?? [])[0] as { text?: string } | undefined)?.text ?? '');
+  const para: PmNode = { type: 'paragraph', content: [{ type: 'text', text: note, marks: [{ type: 'italic' }] }] };
+  if (isNote(blocks[at])) blocks[at] = para; else blocks.splice(at, 0, para);
+  doc.content = blocks;
+}
+export { RACI_MODES };
 
 export const FILL_SECTIONS = ['recordOfChanges', 'team', 'risks', 'schedule', 'raci'] as const;
 export type FillSection = (typeof FILL_SECTIONS)[number];
@@ -242,7 +313,11 @@ export type FillSection = (typeof FILL_SECTIONS)[number];
 /** Áp các phần điền vào một bản sao nội dung. THUẦN phần biến đổi — tách ra để test không cần DB. */
 export function applyFill(
   doc: PmNode,
-  facts: { changes: ChangeRow[]; team: Array<{ name: string; role: string }>; risks: Parameters<typeof risksTable>[0]; stages: StageLite[]; versions: Parameters<typeof scheduleTable>[1] },
+  facts: {
+    changes: ChangeRow[]; team: Array<{ name: string; role: string }>; risks: Parameters<typeof risksTable>[0]; stages: StageLite[]; versions: Parameters<typeof scheduleTable>[1];
+    /** dm5 G2 (B2): có ⇒ RACI theo ma trận (vai/người/trung thực); không ⇒ như cũ (cột = người, giữ ô). */
+    raci?: { matrix: RaciMatrixLite; people: RaciPerson[]; mode?: RaciMode };
+  },
   only?: FillSection[],
 ): FillSection[] {
   const want = (s: FillSection) => !only?.length || only.includes(s);
@@ -252,17 +327,23 @@ export function applyFill(
   if (want('risks') && facts.risks.length && replaceTableAfterHeading(doc, /^Project Risks$/i, () => risksTable(facts.risks))) filled.push('risks');
   if (want('schedule') && (facts.stages.length || facts.versions.length) && replaceTableAfterHeading(doc, /^(Cost & Time Estimations?|Scope & Estimation)$/i, () => scheduleTable(facts.stages, facts.versions))) filled.push('schedule');
   const people = facts.team.filter((m) => m.role !== 'Lecturer').map((m) => m.name);
-  if (want('raci') && people.length && replaceTableAfterHeading(doc, /^Responsibility Assignments$/i, (old) => raciTable(old, people))) filled.push('raci');
+  if (want('raci') && facts.raci && (facts.raci.matrix.activities.length || facts.raci.matrix.stakeholders.some((s) => s.kind === 'ROLE'))) {
+    const mode = facts.raci.mode ?? defaultRaciMode(facts.raci);
+    if (replaceTableAfterHeading(doc, /^Responsibility Assignments$/i, (old) => raciReport2Table(old, { mode, people: facts.raci!.people, matrix: facts.raci!.matrix }))) {
+      filled.push('raci');
+      if (mode === 'honest') putRaciNote(doc, honestRaciNote(facts.raci.matrix.stakeholders.filter((s) => s.kind === 'ROLE').map((s) => s.name)));
+    }
+  } else if (want('raci') && people.length && replaceTableAfterHeading(doc, /^Responsibility Assignments$/i, (old) => raciTable(old, people))) filled.push('raci');
   return filled;
 }
 
-export async function autofillPage(userId: number, projectId: number, num: number, input: { version?: number; sections?: FillSection[] }) {
+export async function autofillPage(userId: number, projectId: number, num: number, input: { version?: number; sections?: FillSection[]; raciMode?: RaciMode }) {
   await docCtx(userId, projectId);
   const page = await getPage(userId, projectId, num);
   if (!page.canEdit) throw new ForbiddenError('You can read this page but not edit it');
   const [changes, facts] = await Promise.all([pageRecordOfChanges(userId, projectId, num), projectFacts(projectId)]);
   const doc = JSON.parse(JSON.stringify(page.contentJson ?? { type: 'doc', content: [] })) as PmNode;
-  const filled = applyFill(doc, { changes, ...facts }, input.sections);
+  const filled = applyFill(doc, { changes, ...facts, raci: { ...facts.raci, mode: input.raciMode } }, input.sections);
   if (!filled.length) return { filled, page };
   const updated = await updatePage(userId, projectId, num, {
     contentJson: doc, version: input.version ?? page.version,

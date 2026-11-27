@@ -250,6 +250,18 @@ export async function listRefs(t: RepoTarget): Promise<Array<{ name: string; sha
   return (Array.isArray(r) ? r : []).map((b) => ({ name: String(b.name), sha: b.commit?.id ? String(b.commit.id) : null }));
 }
 
+/** dm5 G4 (D13): nhánh có bật bảo vệ không — trường `protected` của API nhánh (đọc được với token chỉ đọc). Lỗi ⇒ null. */
+export async function branchProtected(t: RepoTarget, branch: string): Promise<boolean | null> {
+  try {
+    const r = t.provider === 'GITHUB'
+      ? await getJson<any>(t, `/repos/${t.repo}/branches/${encodeURIComponent(branch)}`, 300_000)
+      : await getJson<any>(t, `/projects/${encodeURIComponent(t.repo)}/repository/branches/${encodeURIComponent(branch)}`, 300_000);
+    return typeof r?.protected === 'boolean' ? r.protected : null;
+  } catch {
+    return null;
+  }
+}
+
 export interface TreeEntry { name: string; path: string; type: 'dir' | 'file' | 'symlink' | 'submodule'; size: number | null }
 
 export async function tree(t: RepoTarget, ref: string, path: string): Promise<TreeEntry[]> {

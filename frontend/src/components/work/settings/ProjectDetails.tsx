@@ -11,6 +11,7 @@ import { ProjectIdentity } from './ProjectIdentity';
 import { wt, wfmt } from '@/components/work/i18n';
 import { ProjectCoverPicker } from './ProjectCoverPicker'; // UX-D
 import { readBanner, ProjectBanner, type BannerTone } from '../ProjectBanner';
+import ProcessGates from './ProcessGates'; // dm5 G1
 
 const TEMPLATE_LABEL: Record<ProjectConfig['template'], string> = {
   get BLANK() { return wt('settings.tplBLANK'); },
@@ -102,6 +103,8 @@ export default function ProjectDetails({ config, slug }: { config: ProjectConfig
     <DefinitionOfDone config={config} slug={slug} />
     <BannerSetting config={config} slug={slug} />
     <DoneRules config={config} slug={slug} />
+    {/* dm5 G1: DoR · CI xanh trước Done · sức chứa × tập trung · trần Must · cổng giai đoạn · trần retro · ngưỡng RAG */}
+    <ProcessGates config={config} slug={slug} />
     <TeamRules config={config} slug={slug} />
     </>
   );
@@ -243,7 +246,12 @@ function DoneRules({ config, slug }: { config: ProjectConfig; slug: string }) {
   const types = config.issueTypes.filter((t) => t.key !== 'EPIC');
 
   const save = useMutation({
-    mutationFn: () => workApi.updateProject(config.id, { settings: { doneRequirements: fieldIds.length ? { fieldIds, typeKeys: typeKeys.length ? typeKeys : null } : null } }),
+    mutationFn: () => {
+      // dm5 G1 (A2): giữ nguyên cờ "PR phải CI xanh" (sửa ở mục Cổng quy trình) khi lưu danh sách trường.
+      const ci = (config.settings?.doneRequirements as { requireCiGreen?: boolean; requirePr?: boolean } | null | undefined) ?? {};
+      const flags = ci.requireCiGreen ? { requireCiGreen: true, requirePr: !!ci.requirePr } : {};
+      return workApi.updateProject(config.id, { settings: { doneRequirements: fieldIds.length || ci.requireCiGreen ? { fieldIds, typeKeys: typeKeys.length ? typeKeys : null, ...flags } : null } });
+    },
     onSuccess: () => { toast.success(fieldIds.length ? wt('settings.doneRulesSaved') : wt('settings.doneRulesOff')); invalidate(); },
     onError: (err) => toast.error(workError(err, wt('settings.doneRulesFailed'))),
   });

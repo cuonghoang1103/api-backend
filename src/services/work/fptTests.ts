@@ -1380,3 +1380,157 @@ export function detectReport(sheets: RSheet[]): 'unit' | 'integration' | 'system
 
 /** Excel serial helper xuất ra cho test. */
 export const _excelSerial = excelSerial;
+
+// ═══ dm5 G3 (27/11/2026) — D5: JUnit/Surefire ⇒ ma trận 5.1 · D4: lint test viết tay ═══════════════════════════════
+
+/**
+ * Quy ước tên test (bài s09/b3): tên phương thức test HOẶC classname chứa `UTCIDnn` (vd `login_UTCID03`,
+ * `@DisplayName("UTCID03 …")`), hoặc test tham số hoá JUnit 5 `login(String)[3]` ⇒ UTCID03. Hàm 5.1 được nhận ra khi
+ * `methodName` (bỏ dấu/ký tự lạ, không phân biệt hoa thường) nằm trong tên test hoặc classname; nhiều hàm khớp ⇒ hàm có
+ * tên DÀI nhất, rồi lọc theo `moduleName` trong classname. Dự án chỉ có một hàm 5.1 ⇒ mọi test có UTCID thuộc hàm đó.
+ */
+export interface UnitMatchFn { id: number; moduleName: string; methodName: string; caseIds: number[] }
+export interface UnitMatchInput { suite: string | null; name: string; status: 'PASS' | 'FAIL' | 'SKIP'; message?: string | null }
+export type UnitUnmatchedReason = 'NO_FUNCTION' | 'NO_UTCID' | 'UTCID_NOT_FOUND';
+
+const normId = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const utcidLabel = (n: number) => `UTCID${String(n).padStart(2, '0')}`;
+
+export function caseIndexOfTest(name: string, suite: string | null): number | null {
+  const m = /UTCID[\s_-]*0*(\d{1,3})/i.exec(`${name} ${suite ?? ''}`);
+  if (m) return Number(m[1]) || null;
+  const p = /\[(\d{1,3})\]\s*$/.exec(name.trim());
+  return p ? Number(p[1]) || null : null;
+}
+
+export function matchJUnitToUnit(fns: UnitMatchFn[], results: UnitMatchInput[]) {
+  const byFn = fns.map((f) => ({ f, method: normId(f.methodName), module: normId(f.moduleName.replace(/\.(java|ts|js|cs|py)$/i, '')) }));
+  const updates = new Map<number, { functionId: number; caseId: number; utcid: string; result: 'P' | 'F'; test: string; message: string | null }>();
+  const unmatched: Array<{ test: string; reason: UnitUnmatchedReason }> = [];
+  let skipped = 0;
+  for (const r of results) {
+    const label = `${r.suite ? `${r.suite}.` : ''}${r.name}`.slice(0, 300);
+    if (r.status === 'SKIP') { skipped++; continue; }
+    const hay = normId(`${r.suite ?? ''} ${r.name}`);
+    const nameOnly = normId(r.name);
+    let cands = byFn.filter((x) => x.method && (nameOnly.includes(x.method) || hay.includes(x.method)));
+    if (cands.length > 1) {
+      const longest = Math.max(...cands.map((x) => x.method.length));
+      cands = cands.filter((x) => x.method.length === longest);
+    }
+    if (cands.length > 1) {
+      const suite = normId(r.suite ?? '');
+      const byModule = cands.filter((x) => x.module && suite.includes(x.module));
+      if (byModule.length) cands = byModule;
+    }
+    if (!cands.length && fns.length === 1) cands = byFn;
+    if (cands.length !== 1) { unmatched.push({ test: label, reason: 'NO_FUNCTION' }); continue; }
+    const fn = cands[0].f;
+    const n = caseIndexOfTest(r.name, r.suite);
+    if (!n) { unmatched.push({ test: label, reason: 'NO_UTCID' }); continue; }
+    const caseId = fn.caseIds[n - 1];
+    if (!caseId) { unmatched.push({ test: label, reason: 'UTCID_NOT_FOUND' }); continue; }
+    const result = r.status === 'FAIL' ? 'F' : 'P';
+    const prev = updates.get(caseId);
+    // Hai test cùng trỏ một UTCID: một cái đỏ là UTCID đỏ.
+    if (!prev || (prev.result === 'P' && result === 'F')) updates.set(caseId, { functionId: fn.id, caseId, utcid: utcidLabel(n), result, test: label, message: r.message?.slice(0, 300) ?? null });
+  }
+  const touched = new Set([...updates.values()].map((u) => u.functionId));
+  const missing = fns.filter((f) => touched.has(f.id)).flatMap((f) => f.caseIds.map((cid, i) => ({ cid, i, f })).filter(({ cid }) => !updates.has(cid))
+    .map(({ i, f: x }) => ({ functionId: x.id, function: `${x.moduleName}.${x.methodName}`, utcid: utcidLabel(i + 1) })));
+  return { updates: [...updates.values()], unmatched, skipped, missing };
+}
+
+/** Một dòng "Automation:" trong Notes của Statistics 5.1 (thay dòng cũ, giữ chữ người dùng). */
+export function automationNoteLine(a: { date: string; format: string; matched: number; total: number; passed: number; failed: number; linePct?: number | null; branchPct?: number | null; coverageFormat?: string | null; commitSha?: string | null }): string {
+  const cov = a.linePct != null ? ` · ${a.coverageFormat ?? 'Coverage'} line ${a.linePct}%${a.branchPct != null ? `, branch ${a.branchPct}%` : ''}` : '';
+  const sha = a.commitSha ? ` · commit ${a.commitSha.slice(0, 12)}` : '';
+  return `Automation: ${a.format} ${a.date} — ${a.matched}/${a.total} UTCID matched (${a.passed} P, ${a.failed} F)${cov}${sha}`;
+}
+export function mergeAutomationNote(notes: string | null | undefined, line: string): string {
+  const kept = (notes ?? '').split('\n').filter((l) => !/^Automation:/.test(l.trim()));
+  while (kept.length && !kept[kept.length - 1].trim()) kept.pop();
+  return [...kept, line].join('\n').slice(0, 4000);
+}
+
+/**
+ * D4 — lint ma trận 5.1 viết tay (s01/b4 · s09/b2): những lỗi giảng viên bắt khi chấm Report 5.1.
+ *   NO_ABNORMAL / NO_BOUNDARY  — hàm thiếu ca A / ca B (FPT CheckList_UT_Blackbox: "abnormal ≥ normal", có giá trị biên)
+ *   ABNORMAL_LT_NORMAL          — số ca A < số ca N
+ *   CASE_NO_CONDITION / CASE_NO_CONFIRM — UTCID không có dấu O ở Condition / Confirmation
+ *   DUPLICATE_CASE              — hai UTCID đánh dấu y hệt nhau (cùng Condition + Confirmation)
+ *   PRECONDITION_IN_CONDITIONS  — điều kiện tiên quyết ("đã đăng nhập", "user is logged in"…) viết lẫn vào dòng Condition
+ *                                 thay vì ô Pre-condition của hàm
+ *   NO_PRECONDITION_FIELD       — có nhóm dòng tên "Precondition" mà ô Pre-condition của hàm để trống
+ */
+export type UnitLintCode = 'NO_ABNORMAL' | 'NO_BOUNDARY' | 'ABNORMAL_LT_NORMAL' | 'CASE_NO_CONDITION' | 'CASE_NO_CONFIRM' | 'DUPLICATE_CASE' | 'PRECONDITION_IN_CONDITIONS' | 'NO_PRECONDITION_FIELD';
+export interface UnitLintFn {
+  id: number; moduleName: string; methodName: string; preCondition: string | null;
+  rows: Array<{ id: number; section: string; groupName: string; label: string | null; value: string | null }>;
+  cases: Array<{ id: number; type: string; rowIds: number[] }>;
+}
+export const PRECONDITION_RE = /\b(precondition|pre-condition|given that|is logged in|logged[- ]in|signed in|has (an )?account|exists in (the )?(db|database))\b|tiền điều kiện|đã đăng nhập|đã có tài khoản|đã tồn tại trong/i;
+
+export function lintUnitFunctions(fns: UnitLintFn[]) {
+  const out: Array<{ functionId: number; function: string; code: UnitLintCode; utcids?: string[]; detail?: string }> = [];
+  for (const f of fns) {
+    const name = `${f.moduleName}.${f.methodName}`;
+    const push = (code: UnitLintCode, extra: { utcids?: string[]; detail?: string } = {}) => out.push({ functionId: f.id, function: name, code, ...extra });
+    if (!f.cases.length) continue;
+    const n = f.cases.filter((c) => c.type === 'N').length, a = f.cases.filter((c) => c.type === 'A').length, b = f.cases.filter((c) => c.type === 'B').length;
+    if (!a) push('NO_ABNORMAL');
+    if (!b) push('NO_BOUNDARY');
+    if (a && a < n) push('ABNORMAL_LT_NORMAL', { detail: `N=${n}, A=${a}` });
+    const section = new Map(f.rows.map((r) => [r.id, r.section]));
+    const noCond = f.cases.map((c, i) => ({ c, i })).filter(({ c }) => !c.rowIds.some((r) => section.get(r) === 'COND')).map(({ i }) => utcidLabel(i + 1));
+    const noConf = f.cases.map((c, i) => ({ c, i })).filter(({ c }) => !c.rowIds.some((r) => section.get(r) === 'CONFIRM')).map(({ i }) => utcidLabel(i + 1));
+    if (noCond.length) push('CASE_NO_CONDITION', { utcids: noCond });
+    if (noConf.length) push('CASE_NO_CONFIRM', { utcids: noConf });
+    const sig = new Map<string, number[]>();
+    f.cases.forEach((c, i) => { const k = [...c.rowIds].sort((x, y) => x - y).join(','); if (k) sig.set(k, [...(sig.get(k) ?? []), i]); });
+    const dups = [...sig.values()].filter((v) => v.length > 1).flat().map((i) => utcidLabel(i + 1));
+    if (dups.length) push('DUPLICATE_CASE', { utcids: dups });
+    const isPreGroup = (g: string) => /pre-?condition|tiền điều kiện/i.test(g);
+    const leaked = f.rows.filter((r) => r.section === 'COND' && !isPreGroup(r.groupName) && PRECONDITION_RE.test(`${r.label ?? ''} ${r.value ?? ''}`));
+    if (leaked.length) push('PRECONDITION_IN_CONDITIONS', { detail: leaked.map((r) => `${r.groupName}: ${(r.value ?? r.label ?? '').slice(0, 60)}`).slice(0, 3).join(' | ') });
+    if (f.rows.some((r) => isPreGroup(r.groupName)) && !f.preCondition?.trim()) push('NO_PRECONDITION_FIELD');
+  }
+  return out;
+}
+
+/**
+ * D4 — 6 nhóm ca kiểm thử của một yêu cầu (s09/b2): đếm thẻ TEST liên kết theo NHÃN (không phân biệt hoa thường, nhận cả
+ * tiếng Việt). Nhóm nào 0 ⇒ "missing". Một thẻ có thể thuộc nhiều nhóm.
+ */
+export const TEST_GROUPS = ['Happy', 'Empty', 'Boundary', 'Conflict', 'Security', 'Adjacent'] as const;
+const GROUP_ALIASES: Record<(typeof TEST_GROUPS)[number], RegExp> = {
+  Happy: /^(happy|happy[- ]?path|normal|đúng|luồng chính)$/i,
+  Empty: /^(empty|blank|null|rỗng|trống)$/i,
+  Boundary: /^(boundary|bva|edge|biên|giá trị biên)$/i,
+  Conflict: /^(conflict|concurrency|duplicate|xung đột|đồng thời|trùng)$/i,
+  Security: /^(security|auth|bola|idor|bảo mật|phân quyền)$/i,
+  Adjacent: /^(adjacent|regression|side[- ]?effect|lân cận|liền kề|hồi quy)$/i,
+};
+export function testGroupOf(label: string): (typeof TEST_GROUPS)[number] | null {
+  const l = label.trim();
+  return TEST_GROUPS.find((g) => GROUP_ALIASES[g].test(l)) ?? null;
+}
+export function countTestGroups(tests: Array<{ key: string; labels: string[] }>) {
+  const groups = TEST_GROUPS.map((g) => ({ group: g, tests: tests.filter((t) => t.labels.some((l) => testGroupOf(l) === g)).map((t) => t.key) }));
+  return {
+    groups: groups.map((g) => ({ group: g.group, count: g.tests.length, tests: g.tests })),
+    missing: groups.filter((g) => !g.tests.length).map((g) => g.group),
+    ungrouped: tests.filter((t) => !t.labels.some((l) => testGroupOf(l))).map((t) => t.key),
+  };
+}
+
+/** D4 — lint thẻ TEST (Xray): điều kiện tiên quyết viết lẫn vào BƯỚC thay vì ô Preconditions; bước thiếu kết quả mong đợi. */
+export function lintTestSteps(t: { preconditions: string | null; steps: Array<{ action: string; expected: string | null }> }) {
+  const out: Array<{ code: 'PRECONDITION_IN_STEPS' | 'STEP_NO_EXPECTED' | 'NO_STEPS'; steps?: number[] }> = [];
+  if (!t.steps.length) return [{ code: 'NO_STEPS' as const }];
+  const pre = t.steps.map((s, i) => ({ s, i })).filter(({ s, i }) => i < 2 && PRECONDITION_RE.test(s.action)).map(({ i }) => i + 1);
+  if (pre.length) out.push({ code: 'PRECONDITION_IN_STEPS', steps: pre });
+  const noExp = t.steps.map((s, i) => ({ s, i })).filter(({ s }) => !s.expected?.trim()).map(({ i }) => i + 1);
+  if (noExp.length) out.push({ code: 'STEP_NO_EXPECTED', steps: noExp });
+  return out;
+}

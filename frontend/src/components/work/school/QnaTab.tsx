@@ -24,11 +24,12 @@ const STATUS_TONE: Record<string, string> = {
 };
 const PRIORITY_TONE: Record<string, string> = { High: 'text-[var(--w-red-text)]', Medium: 'text-[var(--w-text)]', Low: 'text-[var(--w-text-2)]' };
 
-interface Form { question: string; details: string; askedBy: string; askedTo: string; priority: 'LOW' | 'MEDIUM' | 'HIGH'; due: string; status: 'OPEN' | 'ANSWERED' | 'CANCELLED'; answer: string; askedOn: string }
-const empty = (): Form => ({ question: '', details: '', askedBy: '', askedTo: '', priority: 'MEDIUM', due: '', status: 'OPEN', answer: '', askedOn: '' });
+interface Form { question: string; details: string; askedBy: string; askedTo: string; priority: 'LOW' | 'MEDIUM' | 'HIGH'; due: string; status: 'OPEN' | 'ANSWERED' | 'CANCELLED'; answer: string; askedOn: string; proposal: string; optionA: string; optionB: string; targetRef: string }
+const empty = (): Form => ({ question: '', details: '', askedBy: '', askedTo: '', priority: 'MEDIUM', due: '', status: 'OPEN', answer: '', askedOn: '', proposal: '', optionA: '', optionB: '', targetRef: '' });
 const toForm = (q: QuestionView): Form => ({
   question: q.question, details: q.details ?? '', askedBy: q.askedBy ?? '', askedTo: q.askedTo ?? '', priority: q.priority, due: q.due ?? '',
   status: (['OPEN', 'ANSWERED', 'CANCELLED'].includes(q.status) ? q.status : 'OPEN') as Form['status'], answer: q.answer ?? '', askedOn: q.askedOn,
+  proposal: q.proposal ?? '', optionA: q.optionA ?? '', optionB: q.optionB ?? '', targetRef: q.targetRef ?? '',
 });
 
 function QuestionDialog({ pid, open, onClose, editing, canEdit }: { pid: number; open: boolean; onClose: () => void; editing: QuestionView | null; canEdit: boolean }) {
@@ -41,10 +42,12 @@ function QuestionDialog({ pid, open, onClose, editing, canEdit }: { pid: number;
   const answerOnly = !!editing && !canEdit;
   const save = useMutation({
     mutationFn: () => {
-      if (answerOnly) return workCtw4Api.updateQuestion(pid, editing!.number, { answer: f.answer.trim() || null, status: f.status, version: editing!.version });
+      if (answerOnly) return workCtw4Api.updateQuestion(pid, editing!.number, { answer: f.answer.trim() || null, status: f.status, targetRef: f.targetRef.trim() || null, version: editing!.version });
       const body: QuestionInput & { question: string } = {
         question: f.question.trim(), details: f.details.trim() || null, askedBy: f.askedBy.trim() || null, askedTo: f.askedTo.trim() || null,
         priority: f.priority, due: f.due || null, answer: f.answer.trim() || null, ...(f.askedOn ? { askedOn: f.askedOn } : {}),
+        // dm5 G2 (B6): đề xuất + 2 phương án + mã đích.
+        proposal: f.proposal.trim() || null, optionA: f.optionA.trim() || null, optionB: f.optionB.trim() || null, targetRef: f.targetRef.trim() || null,
       };
       return editing ? workCtw4Api.updateQuestion(pid, editing.number, { ...body, status: f.status, version: editing.version }) : workCtw4Api.createQuestion(pid, body);
     },
@@ -87,6 +90,11 @@ function QuestionDialog({ pid, open, onClose, editing, canEdit }: { pid: number;
               <Field label={wt('common.dueDate')}><input type="date" className="w-input" value={f.due} onChange={(e) => set('due', e.target.value)} /></Field>
               {editing && <Field label={wt('school.dateAsked')}><input type="date" className="w-input" value={f.askedOn} onChange={(e) => set('askedOn', e.target.value)} /></Field>}
             </div>
+            <Field label={wt('g2.qaProposal')}><textarea className="w-input !h-auto py-2" rows={2} maxLength={10000} value={f.proposal} onChange={(e) => set('proposal', e.target.value)} /></Field>
+            <div className="grid gap-x-3 sm:grid-cols-2">
+              <Field label={wt('g2.qaOptionA')}><textarea className="w-input !h-auto py-2" rows={2} maxLength={10000} value={f.optionA} onChange={(e) => set('optionA', e.target.value)} /></Field>
+              <Field label={wt('g2.qaOptionB')}><textarea className="w-input !h-auto py-2" rows={2} maxLength={10000} value={f.optionB} onChange={(e) => set('optionB', e.target.value)} /></Field>
+            </div>
           </>
         )}
         {editing && (
@@ -98,6 +106,9 @@ function QuestionDialog({ pid, open, onClose, editing, canEdit }: { pid: number;
         )}
         <Field label={wt('school.answer')} hint={wt('school.answerHint')}>
           <textarea className="w-input !h-auto py-2" rows={4} maxLength={20000} value={f.answer} onChange={(e) => set('answer', e.target.value)} />
+        </Field>
+        <Field label={wt('g2.qaTarget')} hint={wt('g2.qaTargetHint')}>
+          <input className="w-input font-mono" maxLength={60} value={f.targetRef} onChange={(e) => set('targetRef', e.target.value)} placeholder="BR-03" />
         </Field>
       </form>
     </Dialog>
@@ -147,6 +158,8 @@ export default function QnaTab({ pid, canEdit: canEditProject }: { pid: number; 
         <span><b className="tabular-nums text-[var(--w-text)]">{counts.open}</b> {wt('school.fOpen')}</span>
         <span className={counts.overdue ? 'text-[var(--w-red-text)]' : ''}><b className="tabular-nums">{counts.overdue}</b> {wt('school.overdueLower')}</span>
         {counts.legacy > 0 && <span><b className="tabular-nums text-[var(--w-text)]">{counts.legacy}</b> {wt('school.legacyN')}</span>}
+        {!!counts.noTarget && <span className="text-[var(--w-orange-text)]">{wt('g2.qaNoTargetCount', { n: counts.noTarget })}</span>}
+        {q.data.targetRule === 'block' && <span>{wt('g2.qaBlockHint')}</span>}
       </div>
       {!items.length ? (
         <EmptyState icon={<MessageCircleQuestion size={28} />} title={filter === 'all' ? wt('school.noQ') : filter === 'open' ? wt('school.noOpenQ') : wt('school.noClosedQ')} body={wt('school.noQBody')} />
@@ -172,7 +185,12 @@ export default function QnaTab({ pid, canEdit: canEditProject }: { pid: number; 
                   <td className={cn('px-3 py-2', PRIORITY_TONE[x.priorityText])}>{x.priorityText}</td>
                   <td className={cn('whitespace-nowrap px-3 py-2 tabular-nums', x.overdue ? 'font-medium text-[var(--w-red-text)]' : 'text-[var(--w-text-2)]')}>{x.due ?? '—'}{x.overdue ? ` · ${wt('school.overdueLower')}` : ''}</td>
                   <td className="px-3 py-2"><span className={cn('rounded-[4px] px-1.5 py-0.5 text-[12px] font-medium', STATUS_TONE[x.statusText])}>{x.statusText}</span></td>
-                  <td className="max-w-[320px] px-3 py-2 text-[var(--w-text-2)]"><div className="line-clamp-3 whitespace-pre-wrap">{x.answer ?? '—'}</div></td>
+                  <td className="max-w-[320px] px-3 py-2 text-[var(--w-text-2)]">
+                    <div className="line-clamp-3 whitespace-pre-wrap">{x.answer ?? '—'}</div>
+                    {x.targetRef && <div className="mt-0.5 font-mono text-[11.5px] text-[var(--w-accent-text,var(--w-text))]">→ {x.targetRef}</div>}
+                    {x.noTarget && <div className="mt-0.5 text-[11.5px] text-[var(--w-orange-text)]">{wt('g2.qaNoTarget')}</div>}
+                    {(x.optionA || x.optionB) && <div className="mt-0.5 text-[11.5px]">A: {x.optionA ?? '—'} · B: {x.optionB ?? '—'}</div>}
+                  </td>
                   <td className="whitespace-nowrap px-2 py-1.5 text-right">
                     {x.legacy ? (
                       canEdit && <button type="button" className="w-btn w-btn-sm" disabled={convert.isPending} onClick={() => convert.mutate(x.number)}>{wt('school.convert')}</button>

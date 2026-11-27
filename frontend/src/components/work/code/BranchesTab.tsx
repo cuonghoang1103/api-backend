@@ -11,6 +11,7 @@ import { wt, wfmt } from '../i18n';
 import { codeApi, codeKeys } from './codeApi';
 import { BranchName, IssueChips, PrState, Sha, WhoChip } from './parts';
 import { safeHref } from './codeText';
+import { WarnFlag } from './g4Parts';
 
 export default function BranchesTab({ pid, projectKey, onIssue, onSource, onCommit, onPulls }: {
   pid: number; projectKey: string; onIssue: (n: number) => void; onSource: (ref: string) => void; onCommit: (sha: string) => void; onPulls: () => void;
@@ -42,6 +43,8 @@ export default function BranchesTab({ pid, projectKey, onIssue, onSource, onComm
         )}
       </div>
 
+      {/* dm5 G4 (D12): nhánh sống quá N ngày chưa merge. */}
+      {!!q.data?.staleCount && <p className="text-[12.5px] text-[var(--w-amber-text,#b45309)]" data-testid="branch-stale-note">{wt('g4.staleCount', { count: q.data.staleCount, max: q.data.health.branchMaxDays })}</p>}
       {!items.length ? (
         <div className="rounded-[10px] border border-dashed border-[var(--w-border-strong)] px-6 py-10 text-center">
           <FolderGit2 size={22} className="mx-auto text-[var(--w-text-3)]" aria-hidden="true" />
@@ -68,6 +71,7 @@ export default function BranchesTab({ pid, projectKey, onIssue, onSource, onComm
                     <div className="flex items-center gap-2">
                       <BranchName name={b.name} deleted={b.deleted} onClick={b.deleted ? undefined : () => onSource(b.name)} />
                       {b.deleted && <span className="rounded-full bg-[color-mix(in_srgb,var(--w-red)_12%,transparent)] px-1.5 text-[11px] font-medium text-[var(--w-red-text)]">{wt('code.deleted')}</span>}
+                      {b.stale && <WarnFlag text={wt('g4.staleBranch', { n: b.ageDays, max: q.data!.health.branchMaxDays })} />}
                     </div>
                   </td>
                   <td className="max-w-[340px] px-3 py-2.5">

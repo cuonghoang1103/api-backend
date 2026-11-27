@@ -27,7 +27,9 @@ import { Switch } from '../settings/shared';
 import { wk } from '../hooks';
 import { Dialog, Field, Spinner } from '../ui';
 import { Select } from '../settings/shared';
-import { wt } from '@/components/work/i18n';
+import { wt, useWT } from '@/components/work/i18n';
+import { g4Api, g4Keys, type BlueprintGroup, type BlueprintKey } from '@/lib/work-dm5g4-api';
+import { Copy, Library } from 'lucide-react';
 
 interface TemplateCard {
   key: ProjectTemplate;
@@ -111,9 +113,26 @@ export default function CreateProjectDialog({
   const [sample, setSample] = useState(false);
   const [sampleTouched, setSampleTouched] = useState(false);
   const [more, setMore] = useState(false);
+  // dm5 G4 (A25): thư viện mẫu (bộ + nhóm bật/tắt) hoặc chép cấu hình từ một dự án.
+  const { locale } = useWT();
+  const [bp, setBp] = useState<BlueprintKey | null>(null);
+  const [bpGroups, setBpGroups] = useState<Partial<Record<BlueprintGroup, boolean>>>({});
+  const [copyFrom, setCopyFrom] = useState<number | null>(null);
+  const [copyBodies, setCopyBodies] = useState(false);
 
   // Dự án đầu tiên của người dùng ⇒ mặc định bật dữ liệu mẫu.
   const wsList = useQuery({ queryKey: wk.workspaces, queryFn: workApi.workspaces, enabled: open, staleTime: 30_000 });
+  const usableWs = wsList.data?.find((w) => w.role !== 'GUEST');
+  const wsIdForLib = workspaceId ?? usableWs?.id ?? null;
+  const wsSlugForLib = slug ?? usableWs?.slug ?? null;
+  const library = useQuery({ queryKey: g4Keys.blueprints, queryFn: g4Api.blueprints, enabled: open, staleTime: 10 * 60_000 });
+  const wsDetail = useQuery({ queryKey: wk.workspace(wsSlugForLib ?? ''), queryFn: () => workApi.workspaceBySlug(wsSlugForLib!), enabled: open && step === 1 && !!wsSlugForLib, staleTime: 30_000 });
+  const previewKey = bp ? `bp:${bp}:${JSON.stringify(bpGroups)}` : copyFrom ? `p:${copyFrom}` : '';
+  const preview = useQuery({
+    queryKey: g4Keys.preview(wsIdForLib ?? 0, previewKey),
+    queryFn: () => g4Api.preview(wsIdForLib!, bp ? { blueprint: bp, groups: bpGroups } : { fromProjectId: copyFrom! }),
+    enabled: open && step === 2 && !!wsIdForLib && !!previewKey, staleTime: 60_000,
+  });
   const firstProject = wsList.data ? wsList.data.reduce((n, w) => n + w.projectCount, 0) === 0 : !workspaceId;
 
   useEffect(() => {
@@ -126,6 +145,7 @@ export default function CreateProjectDialog({
     setName(''); setKey(''); setKeyTouched(false);
     setType(TEMPLATES.find((t) => t.key === (initialTemplate ?? 'SWP391'))?.type ?? 'SCRUM');
     setVisibility('WORKSPACE'); setDescription(''); setSampleTouched(false); setMore(false);
+    setBp(null); setBpGroups({}); setCopyFrom(null); setCopyBodies(false);
   }, [open, initialTemplate]);
   useEffect(() => {
     if (open && !sampleTouched) setSample(firstProject);
@@ -146,10 +166,17 @@ export default function CreateProjectDialog({
   const create = useMutation({
     mutationFn: async () => {
       const ws = await ensureWorkspace();
-      const p = await workApi.createProject(ws.id, {
-        name: name.trim(), key, type, template, visibility, description: description.trim() || null,
-        kind, modules,
-      });
+      const p = bp || copyFrom
+        ? await g4Api.createProject(ws.id, {
+          name: name.trim(), key, type, template, visibility, description: description.trim() || null,
+          ...(bp ? { blueprint: bp, groups: bpGroups } : { fromProjectId: copyFrom, configOnly: true, copyDocBodies: copyBodies }),
+        })
+        : await workApi.createProject(ws.id, {
+          name: name.trim(), key, type, template, visibility, description: description.trim() || null,
+          kind, modules,
+        });
+      const skipped = (p as { setup?: import('@/lib/work-dm5g4-api').SetupSummary }).setup?.skipped ?? [];
+      if (skipped.length) toast.warning(wt('g4.setupSkipped', { list: skipped.map((x) => `${x.group}: ${x.reason}`).join('; ') }));
       let sampled = 0;
       if (sample) {
         try { sampled = (await workApi.addSampleData(p.id)).issues; } catch (err) {
@@ -188,6 +215,7 @@ export default function CreateProjectDialog({
   const picked = TEMPLATES.find((t) => t.key === template)!;
 
   const pickTemplate = (t: TemplateCard) => {
+    setBp(null); setCopyFrom(null);
     setTemplate(t.key);
     // Đổi sang/khỏi CAPSTONE ⇒ đặt lại mô-đun theo loại + mẫu (người dùng vẫn đổi được ở Project settings).
     if (t.key === 'CAPSTONE') { setKind('SCHOOL'); setModules(modulesForTemplate('SCHOOL', 'CAPSTONE')); }
@@ -204,6 +232,15 @@ export default function CreateProjectDialog({
     setStep(2);
   };
   const onModules = S1_MODULES.filter((m) => modules[m.key]);
+  const pickedBp = library.data?.find((b) => b.key === bp) ?? null;
+  const pickBlueprint = (k: BlueprintKey) => {
+    const b = library.data?.find((x) => x.key === k);
+    setBp(k); setBpGroups({}); setCopyFrom(null);
+    if (b) { setTemplate(b.base.template); setType(b.base.type === 'TESTING' ? 'SCRUM' : b.base.type); setKind(b.base.kind); }
+    setStep(2);
+  };
+  const pickCopy = (id: number) => { setCopyFrom(id); setBp(null); setStep(2); };
+  const copyProjects = (wsDetail.data?.projects ?? []).filter((p) => !(p as { archived?: boolean }).archived);
 
   return (
     <Dialog open={open} onClose={onClose} title={step === 0 ? wt('create.titleKind') : step === 1 ? wt('create.titleTpl') : wt('create.titleName')} width={660}>
@@ -249,6 +286,32 @@ export default function CreateProjectDialog({
         </div>
       ) : step === 1 ? (
         <div>
+          {/* dm5 G4 (A25): thư viện mẫu cố định + chép cấu hình từ dự án mẫu. */}
+          {!!library.data?.length && (
+            <div className="mb-4" data-testid="blueprint-library">
+              <h3 className="mb-1 flex items-center gap-1.5 text-[13px] font-semibold"><Library size={14} aria-hidden="true" /> {wt('g4.library')}</h3>
+              <p className="mb-2 text-[12px] text-[var(--w-text-2)]">{wt('g4.libraryIntro')}</p>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {library.data.map((b) => (
+                  <button key={b.key} type="button" onClick={() => pickBlueprint(b.key)} aria-pressed={bp === b.key} data-testid={`blueprint-${b.key}`}
+                    className={cn('rounded-[8px] border px-3 py-2.5 text-left transition-colors', bp === b.key ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' : 'border-[var(--w-border-strong)] hover:bg-[var(--w-hover)]')}>
+                    <span className="block text-[13px] font-medium">{locale === 'vi' ? b.nameVi : b.name}</span>
+                    <span className="mt-0.5 line-clamp-3 block text-[12px] leading-snug text-[var(--w-text-2)]">{locale === 'vi' ? b.descriptionVi : b.description}</span>
+                  </button>
+                ))}
+              </div>
+              {copyProjects.length > 0 && (
+                <div className="mt-2 rounded-[8px] border border-[var(--w-border-strong)] px-3 py-2.5">
+                  <span className="flex items-center gap-1.5 text-[13px] font-medium"><Copy size={13} aria-hidden="true" /> {wt('g4.copyFrom')}</span>
+                  <span className="mt-0.5 block text-[12px] text-[var(--w-text-2)]">{wt('g4.copyHint')}</span>
+                  <Select className="mt-2" value={copyFrom ?? ''} onChange={(e) => e.target.value && pickCopy(Number(e.target.value))} aria-label={wt('g4.copyPick')} data-testid="copy-from-project">
+                    <option value="">{wt('g4.copyPick')}</option>
+                    {copyProjects.map((p) => <option key={p.id} value={p.id}>{p.key} · {p.name}</option>)}
+                  </Select>
+                </div>
+              )}
+            </div>
+          )}
           <p className="mb-3 text-[13px] text-[var(--w-text-2)]">
             {wt('create.tplIntro')}
           </p>
@@ -301,6 +364,57 @@ export default function CreateProjectDialog({
             </span>
             <span className="flex shrink-0 items-center gap-1 text-[12px] text-[var(--w-accent-text)]">{wt('create.changeTemplate')}</span>
           </button>
+          {(bp || copyFrom) && (
+            <div className="mb-3 rounded-[8px] border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-3 py-2.5" data-testid="blueprint-setup">
+              <div className="flex items-center gap-2">
+                <span className="min-w-0 flex-1 text-[13px] font-medium">
+                  {bp && pickedBp ? wt('g4.usingBlueprint', { name: locale === 'vi' ? pickedBp.nameVi : pickedBp.name }) : wt('g4.copyFrom')}
+                </span>
+                <button type="button" className="text-[12px] text-[var(--w-accent-text)] hover:underline" onClick={() => { setBp(null); setCopyFrom(null); }}>{wt('g4.clearBlueprint')}</button>
+              </div>
+              {bp && pickedBp && (
+                <fieldset className="mt-2">
+                  <legend className="mb-1 text-[12px] font-medium text-[var(--w-text-2)]">{wt('g4.groups')}</legend>
+                  <div className="grid grid-cols-1 gap-x-3 gap-y-1 sm:grid-cols-2">
+                    {pickedBp.groups.map((g) => (
+                      <label key={g.key} className="flex items-start gap-1.5 text-[12.5px]">
+                        <input type="checkbox" className="mt-0.5" checked={bpGroups[g.key] !== false} onChange={(e) => setBpGroups((x) => ({ ...x, [g.key]: e.target.checked }))} data-testid={`bp-group-${g.key}`} />
+                        <span>{locale === 'vi' ? g.labelVi : g.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+              )}
+              {copyFrom && (
+                <label className="mt-2 flex items-center gap-1.5 text-[12.5px]">
+                  <input type="checkbox" checked={copyBodies} onChange={(e) => setCopyBodies(e.target.checked)} /> {wt('g4.copyBodies')}
+                </label>
+              )}
+              <details className="mt-2" open>
+                <summary className="cursor-pointer text-[12px] font-medium text-[var(--w-text-2)]">{wt('g4.preview')}</summary>
+                {preview.isLoading ? <p className="mt-1 text-[12px] text-[var(--w-text-3)]">{wt('g4.previewLoading')}</p> : preview.data ? (
+                  preview.data.kind === 'project' ? (
+                    <ul className="mt-1 max-h-[200px] space-y-0.5 overflow-y-auto text-[12px] text-[var(--w-text-2)]">
+                      {preview.data.copies.workflows.map((w) => <li key={w.name}><b className="font-medium">{w.name}:</b> {w.statuses.join(' → ')}</li>)}
+                      <li>{preview.data.copies.issueTypes.join(', ')}</li>
+                      <li>{preview.data.copies.fields.join(', ')}</li>
+                      <li>{wt('create.modules')}: {preview.data.copies.settings.join(', ')}</li>
+                      <li className="text-[var(--w-text-3)]">{wt('g4.notCopied', { n: preview.data.notCopied.issues })}</li>
+                    </ul>
+                  ) : (
+                    <ul className="mt-1 max-h-[220px] space-y-1 overflow-y-auto text-[12px]" data-testid="blueprint-preview">
+                      {preview.data.groups.filter((g) => g.enabled && g.items.length).map((g) => (
+                        <li key={g.key}>
+                          <span className="font-medium">{locale === 'vi' ? g.labelVi : g.label}</span>
+                          <ul className="ml-3 list-disc pl-3 text-[var(--w-text-2)]">{g.items.slice(0, 8).map((it) => <li key={it} className="[overflow-wrap:anywhere]">{it}</li>)}</ul>
+                        </li>
+                      ))}
+                    </ul>
+                  )
+                ) : null}
+              </details>
+            </div>
+          )}
           <p className="-mt-1 mb-3 flex flex-wrap items-center gap-x-1.5 text-[12px] text-[var(--w-text-3)]">
             <span>{wt('create.typeLabel')} <b className="font-medium text-[var(--w-text-2)]">{KIND_INFO[kind].label}</b></span>
             <span aria-hidden="true">·</span>

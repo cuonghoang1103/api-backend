@@ -219,7 +219,11 @@ export interface MeetingAction {
   dueDate: string | null;
   assignee: WorkUser | null;
   issue: { number: number; key: string; title: string; done: boolean; status: { name: string; category: StatusCategory } } | null;
+  /** dm5 G1 (A21): loại góp ý ⇒ "Create" sinh thẻ Task / Bug, CR hay câu hỏi Q&A; createdRef = "CR-3" / "Q-7". */
+  kind?: MeetingActionKind;
+  createdRef?: string | null;
 }
+export type MeetingActionKind = 'TASK' | 'BUG' | 'CR' | 'QUESTION';
 
 export interface MeetingDetail extends Omit<MeetingRow, 'attendees'> {
   agendaJson: TiptapDoc | null;
@@ -342,10 +346,10 @@ export const govApi = {
   updateMeeting: (pid: number, num: number, body: MeetingPatch & { version?: number }) => d<MeetingDetail>(api.patch(`${B}/projects/${pid}/meetings/${num}`, body)),
   deleteMeeting: (pid: number, num: number) => d<{ deleted: true }>(api.delete(`${B}/projects/${pid}/meetings/${num}`)),
   setAttendees: (pid: number, num: number, userIds: number[]) => d<MeetingDetail>(api.put(`${B}/projects/${pid}/meetings/${num}/attendees`, { userIds })),
-  setActions: (pid: number, num: number, items: Array<{ id?: number; text: string; assigneeId?: number | null; dueDate?: string | null }>) =>
+  setActions: (pid: number, num: number, items: Array<{ id?: number; text: string; assigneeId?: number | null; dueDate?: string | null; kind?: MeetingActionKind }>) =>
     d<MeetingDetail>(api.put(`${B}/projects/${pid}/meetings/${num}/actions`, { items })),
   createIssues: (pid: number, num: number, actionIds?: number[]) =>
-    d<{ created: Array<{ actionId: number; number: number; key: string; title: string }>; meeting: MeetingDetail }>(api.post(`${B}/projects/${pid}/meetings/${num}/actions/issues`, { actionIds })),
+    d<{ created: Array<{ actionId: number; number: number; key: string; title: string; kind?: MeetingActionKind }>; others?: Array<{ actionId: number; kind: MeetingActionKind; ref: string; title: string; number: number }>; meeting: MeetingDetail }>(api.post(`${B}/projects/${pid}/meetings/${num}/actions/issues`, { actionIds })),
   suggestActions: (pid: number, num: number) =>
     d<{ reply: string; proposals: Array<{ text: string; assigneeId: number | null; dueDate: string | null }> }>(api.post(`${B}/projects/${pid}/meetings/${num}/actions/suggest`, {})),
   shareMinutes: (pid: number, num: number, shared: boolean) => d<MeetingDetail>(api.post(`${B}/projects/${pid}/meetings/${num}/share`, { shared })),

@@ -166,4 +166,13 @@ export const wf: Strings<typeof En> = {
   restrictC: 'Để công việc vẫn chạy, sơ đồ bắt đầu từ luồng tuyến tính — mỗi trạng thái sang trạng thái kế tiếp theo thứ tự board, và mọi trạng thái quay về',
   plusDrawn: ', cộng luồng chuyển bạn vừa vẽ',
   editFreely: 'Sửa tuỳ ý; chưa bấm thì chưa lưu gì:',
+  // dm5 G1 (A6): bình luận xác nhận + làm nguội
+  requireComment: 'Bắt buộc có bình luận xác nhận',
+  requireCommentDesc: 'Phải có người bình luận SAU khi thẻ vào trạng thái này thì mới chuyển tiếp được (vd QA xác nhận đã retest). Quản trị cũng không bỏ qua được.',
+  commentFrom: 'Bình luận của',
+  commentAnyone: 'bất kỳ ai khác người được giao',
+  coolOff: 'Làm nguội (số giờ ở trạng thái nguồn)',
+  coolOffDesc: 'Thẻ phải nằm ở trạng thái nguồn ít nhất từng ấy giờ mới được chuyển — vd để một đêm rồi mới tự review. Để trống = không làm nguội.',
+  needsComment: 'Cần bình luận',
+  coolOffN: 'Nguội {n} giờ',
 };

@@ -40,7 +40,8 @@ export const workDocs3aApi = {
     return { blob: res.data as Blob, fileName: name };
   },
   recordOfChanges: (pid: number, num: number) => d<ChangeRow[]>(api.get(`${B}/${pid}/pages/${num}/record-of-changes`)),
-  autofill: (pid: number, num: number, body: { version?: number; sections?: FillSection[] }) =>
+  /** dm5 G2 (B2): raciMode — people (cột = người) | roles (5 mũ C1–C5, nội bộ) | honest (sinh viên + Supervisor, bản nộp). */
+  autofill: (pid: number, num: number, body: { version?: number; sections?: FillSection[]; raciMode?: 'people' | 'roles' | 'honest' }) =>
     d<{ filled: FillSection[]; page: WorkPageDetail }>(api.post(`${B}/${pid}/pages/${num}/autofill`, body)),
 };
 

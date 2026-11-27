@@ -32,4 +32,17 @@ export const pboard: Strings<typeof En> = {
   chooseCol: 'Chọn cột…',
   untitledCol: 'Cột chưa đặt tên',
   unassigned: '{count} trạng thái chưa thuộc cột nào — thẻ ở đó sẽ biến khỏi board.',
+  // dm5 G1 (A4): WIP chéo cột + (A18) tuổi thẻ
+  guardsTitle: 'Chặn WIP chéo cột',
+  guardsDesc: 'Không kéo việc mới khi cột phía sau đã đầy — vd "In Review" đầy ⇒ không nhận thêm vào "In Progress". Áp ở mọi đường (board, sửa hàng loạt, AI, MCP), không phụ thuộc công tắc chặn cứng ở trên.',
+  guardWhen: 'Khi',
+  guardFull: 'có từ',
+  guardLimit: 'Giới hạn',
+  guardNoWip: 'giới hạn',
+  guardBlocks: 'thẻ, chặn kéo vào',
+  guardNeedLimit: 'Cột này chưa có giới hạn WIP — nhập một số',
+  guardsNone: 'Chưa có luật chặn chéo cột nào.',
+  guardAdd: 'Thêm luật',
+  guardsSaved: 'Đã lưu luật WIP chéo cột',
+  ageDays: '{n} ngày ở cột này',
 };

@@ -231,3 +231,13 @@ describe('JQL — CTW-28 assigneeKind + agents()/people() (A13)', () => {
     assert.throws(() => w('assignee = agent()'), /Unknown function agent\(\)/);
   });
 });
+
+describe('dm5 G1 (A18) — flaggedSince', () => {
+  it('flaggedSince < -24h ⇒ flaggedAt < now − 24h; IS EMPTY ⇒ chưa gắn cờ; ORDER BY flaggedSince', () => {
+    const now = new Date('2026-11-27T12:00:00Z');
+    const c = compileJql(parseJql('flaggedSince < -24h ORDER BY flaggedSince'), { ...ctx, now });
+    assert.deepEqual(c.where, { flaggedAt: { lt: new Date('2026-11-26T12:00:00Z') } });
+    assert.deepEqual(c.orderBy[0], { flaggedAt: { sort: 'asc', nulls: 'last' } });
+    assert.deepEqual(w('"flagged since" IS EMPTY'), { flaggedAt: null });
+  });
+});

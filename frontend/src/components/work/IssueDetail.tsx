@@ -40,6 +40,7 @@ import HeaderTools from './shell/HeaderTools';
 import { Crumb, CrumbSep } from './ProjectHeader';
 import { TimeTrackingBlock } from './TimeTracking';
 import DefectPanel from './DefectPanel'; // CTW đợt 4 (A16+B5): Severity/Activity/Product của thẻ Bug
+import { ReqTestGroups } from './quality/G3Quality'; // dm5 G3 (D4): 6 nhóm ca kiểm thử của thẻ Req/Story
 import DevelopmentPanel from './DevelopmentPanel';
 import IssueAgentActivity from './agents/IssueAgentActivity';
 import { IssueApprovals, IssueHandoffs, MoveIssueDialog, StagePicker, TeamPicker } from './studio/IssueStudio';
@@ -684,6 +685,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         </Prop>
         <CustomFieldsGroup pid={pid} num={num} typeKey={type?.key} config={config} editable={editable} />
         {type?.key === 'BUG' && <DefectPanel pid={pid} num={num} editable={editable} />}
+        {(type?.key === 'REQUIREMENT' || type?.key === 'STORY') && <ReqTestGroups pid={pid} num={num} />}
         <TimeTrackingBlock pid={pid} issue={issue} config={config} />
         <DevelopmentPanel pid={pid} num={num} issueKey={lk.issueKey(num)} canAiReview={!!config.permissions.aiCodeReview} />
       </PropGroup>

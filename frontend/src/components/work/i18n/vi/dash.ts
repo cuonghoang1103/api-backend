@@ -120,4 +120,17 @@ export const dash: Strings<typeof En> = {
   startRecommended: 'Bắt đầu với widget gợi ý',
   recommendedBody: 'Số thẻ mở và quá hạn, biểu đồ trạng thái và người được giao, tạo so với giải quyết, thẻ đang mở của bạn và sức khoẻ dự án.',
   dashCreated: 'Đã tạo dashboard “{n}”',
+  // dm5 G1: widget RAG (A19) + cảnh báo sớm (A18)
+  l_rag: 'RAG dự án',
+  d_rag: 'Đỏ / cam / xanh theo tiến độ, phạm vi, chất lượng, công sức (tổng = chiều tệ nhất) + % hoàn thành có trọng số',
+  t_rag: 'RAG dự án',
+  rag_GREEN: 'Xanh',
+  rag_AMBER: 'Cam',
+  rag_RED: 'Đỏ',
+  ragCompletion: '% hoàn thành có trọng số',
+  ragThresholds: 'cam ≥ {a} · đỏ ≥ {r}',
+  ew_BLOCKED_24H: '{count} thẻ bị chặn quá 24 giờ',
+  ew_HIGH_IDLE_48H: '{count} thẻ ưu tiên cao đứng yên quá 48 giờ',
+  ew_BURNDOWN_FLAT: 'Burndown đi ngang {n} ngày',
+  ew_SCOPE_ADDED: '{count} thẻ (+{p} điểm) được thêm sau khi sprint bắt đầu',
 };

@@ -86,13 +86,19 @@ const ISSUE_REF = { select: { number: true, title: true, type: { select: { key: 
 
 /** Dữ liệu thô cho srs.ts (KHÔNG kiểm quyền — nơi gọi kiểm). */
 export async function loadSrs(projectId: number): Promise<SrsData & { key: string; issueOf: Map<number, { number: number; title: string } | null> }> {
-  const [project, actors, ucs, rules, screens, functions] = await Promise.all([
+  const [project, actors, ucs, rules, screens, functions, messages, nfrRows] = await Promise.all([
     prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true } }),
     prisma.workSrsActor.findMany({ where: { projectId }, orderBy: [{ position: 'asc' }, { id: 'asc' }] }),
     prisma.workUseCase.findMany({ where: { projectId }, orderBy: { number: 'asc' }, include: { rules: { select: { rule: { select: { number: true } } } }, issue: { select: { number: true, title: true, deletedAt: true } } } }),
     prisma.workBusinessRule.findMany({ where: { projectId }, orderBy: { number: 'asc' } }),
     prisma.workSrsScreen.findMany({ where: { projectId }, orderBy: [{ position: 'asc' }, { id: 'asc' }], include: { linksOut: true, auth: true } }),
     prisma.workSrsFunction.findMany({ where: { projectId }, orderBy: [{ position: 'asc' }, { id: 'asc' }] }),
+    // dm5 G2: sổ System Messages (B9) + NFR có số đo (B10) — đi vào Report 3 §5.2 / §4.2.
+    prisma.workSystemMessage.findMany({ where: { projectId }, orderBy: { number: 'asc' } }),
+    prisma.workIssue.findMany({
+      where: { projectId, deletedAt: null, nfrSpec: { isNot: null } }, orderBy: { number: 'asc' }, take: 500,
+      select: { number: true, title: true, requirementInfo: { select: { lifecycle: true } }, nfrSpec: true },
+    }),
   ]);
   const issueOf = new Map(ucs.map((u) => [u.id, u.issue && !u.issue.deletedAt ? { number: u.issue.number, title: u.issue.title } : null]));
   return {
@@ -112,6 +118,18 @@ export async function loadSrs(projectId: number): Promise<SrsData & { key: strin
     links: screens.flatMap((s) => s.linksOut.map((l) => ({ fromId: l.fromId, toId: l.toId, label: l.label }))),
     auth: screens.flatMap((s) => s.auth.map((a) => [a.screenId, a.actorId] as [number, number])),
     functions: functions.map((f) => ({ id: f.id, feature: f.feature, name: f.name, description: f.description, position: f.position })),
+    systemMessages: messages.map((m) => ({
+      id: m.id, number: m.number, msgType: m.msgType, context: m.context, text: m.text, textEn: m.textEn, httpStatus: m.httpStatus,
+      useCaseIds: m.useCaseIds.filter((id) => ucs.some((u) => u.id === id)), status: m.status,
+    })),
+    nfrs: nfrRows.filter((r) => r.nfrSpec && r.requirementInfo?.lifecycle !== 'DELETED' && r.requirementInfo?.lifecycle !== 'REJECTED').map((r) => ({
+      key: `${project.key}-${r.number}`, number: r.number, title: r.title,
+      spec: {
+        characteristic: r.nfrSpec!.characteristic, subCharacteristic: r.nfrSpec!.subCharacteristic, scale: r.nfrSpec!.scale, meter: r.nfrSpec!.meter,
+        unit: r.nfrSpec!.unit, comparator: r.nfrSpec!.comparator, mustValue: r.nfrSpec!.mustValue, planValue: r.nfrSpec!.planValue,
+        wishValue: r.nfrSpec!.wishValue, conditions: r.nfrSpec!.conditions, verification: r.nfrSpec!.verification,
+      },
+    })),
   };
 }
 

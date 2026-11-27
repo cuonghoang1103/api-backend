@@ -38,6 +38,11 @@ interface TemplateSpec {
   settings: Record<string, unknown>;
   /** Tạo sẵn "Sprint 1" (chưa bắt đầu) — mẫu Scrum của môn học hứa điều này. */
   firstSprint?: boolean;
+  /**
+   * dm5 G1 (A7, 27/11/2026): luồng Bug "Retest → Closed" có luật notAssignee — người đang được giao (dev sửa lỗi) KHÔNG tự đóng
+   * lỗi của mình; QA/người khác retest rồi đóng. Bật cho mẫu đồ án (SWP391, CAPSTONE).
+   */
+  qaClosesBugs?: boolean;
   /** Trường tuỳ chỉnh dựng sẵn (vd MoSCoW của SWR302). */
   customFields?: Array<{ name: string; kind: 'SELECT'; options: Array<{ id: string; label: string; color: string }>; typeKeys: IssueTypeKey[] | null }>;
 }
@@ -81,13 +86,15 @@ export function templateSpec(template: ProjectTemplate, type: ProjectType): Temp
     case 'SWT301':
       return { statuses, types: [...BASE_TYPES, 'TEST'], bugWorkflow: BUG_LIFECYCLE, settings: { ...base, estimation: 'HOURS' } };
     case 'SWP391':
-      return { statuses, types: BASE_TYPES, bugWorkflow: BUG_LIFECYCLE, settings: base, firstSprint: type === 'SCRUM' };
+      // dm5 G1: retro tối đa 2 hành động (A12), dev không tự đóng Bug (A7).
+      return { statuses, types: BASE_TYPES, bugWorkflow: BUG_LIFECYCLE, settings: { ...base, retroActionCap: 2 }, firstSprint: type === 'SCRUM', qaClosesBugs: true };
     case 'CAPSTONE':
       // CTW đợt 3A: đồ án tốt nghiệp FPT. Ước lượng theo GIỜ (Report 2 tính man-day = giờ/8); Requirement + Test cho
       // SRS/RTM/5.1–5.3; vòng đời Bug có Retest. Sprint = Iteration 1–3 do capstone.service.ts dựng (không "Sprint 1").
       return {
         statuses, types: ['EPIC', 'REQUIREMENT', 'STORY', 'TASK', 'BUG', 'TEST', 'SUBTASK'], bugWorkflow: BUG_LIFECYCLE,
-        settings: { ...base, estimation: 'HOURS', capstone: { course: 'SEP490' } },
+        settings: { ...base, estimation: 'HOURS', capstone: { course: 'SEP490' }, retroActionCap: 2 },
+        qaClosesBugs: true,
       };
     case 'FREELANCE':
       return { statuses, types: BASE_TYPES, settings: { ...base, estimation: 'HOURS', sprintLengthDays: 7 } };
@@ -147,7 +154,11 @@ export async function seedProjectConfig(
       ['Closed', 'Reopened'],
     ];
     await tx.workTransition.createMany({
-      data: flow.map(([from, to]) => ({ workflowId: bug.id, fromStatusId: id(from), toStatusId: id(to), name: to })),
+      data: flow.map(([from, to]) => ({
+        workflowId: bug.id, fromStatusId: id(from), toStatusId: id(to), name: to,
+        // dm5 G1 (A7): dev không tự đóng Defect — Retest → Closed phải do người KHÁC người được giao.
+        ...(spec.qaClosesBugs && from === 'Retest' && to === 'Closed' ? { rules: { notAssignee: true } } : {}),
+      })),
     });
   }
 

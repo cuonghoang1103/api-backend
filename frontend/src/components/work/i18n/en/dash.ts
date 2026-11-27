@@ -117,4 +117,17 @@ export const dash = {
   startRecommended: 'Start with recommended widgets',
   recommendedBody: 'Open and overdue counts, status and assignee charts, created vs resolved, your open issues and project health.',
   dashCreated: 'Dashboard “{n}” created',
+  // dm5 G1: widget RAG (A19) + cảnh báo sớm (A18)
+  l_rag: 'Project RAG',
+  d_rag: 'Red / amber / green on schedule, scope, quality and effort (overall = the worst) plus weighted % complete',
+  t_rag: 'Project RAG',
+  rag_GREEN: 'Green',
+  rag_AMBER: 'Amber',
+  rag_RED: 'Red',
+  ragCompletion: 'Weighted % complete',
+  ragThresholds: 'amber ≥ {a} · red ≥ {r}',
+  ew_BLOCKED_24H: '{count} issue blocked for more than 24h|{count} issues blocked for more than 24h',
+  ew_HIGH_IDLE_48H: '{count} high-priority issue untouched for 48h+|{count} high-priority issues untouched for 48h+',
+  ew_BURNDOWN_FLAT: 'Burndown has been flat for {n} days',
+  ew_SCOPE_ADDED: '{count} issue (+{p} pts) added after the sprint started|{count} issues (+{p} pts) added after the sprint started',
 };

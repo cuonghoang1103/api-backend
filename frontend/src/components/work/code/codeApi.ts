@@ -48,15 +48,23 @@ export interface BranchItem {
   name: string; provider: GitProvider; headSha: string | null; lastCommit: { title: string; url: string | null } | null; lastAuthor: Who | null;
   lastPushAt: string | null; commitCount: number; deleted: boolean; deletedAt: string | null; issueNumbers: number[];
   pr: { number: number; title: string; url: string | null; state: string } | null; legacy: boolean;
+  /** dm5 G4 (D12): tuổi nhánh (ngày, từ lần đầu CT Work thấy) + cờ sống quá N ngày. */
+  ageDays: number; stale: boolean; firstSeenAt: string;
 }
+/** dm5 G4: CI gộp của PR (webhook check_suite/check_run). */
+export type CiState = 'success' | 'failure' | 'pending' | 'neutral' | string | null;
+export interface CodeHealthSettings { branchMaxDays: number; prMaxLines: number }
+export interface RepoHealthItem { key: 'gitignore' | 'envExample' | 'prTemplate' | 'ci' | 'branchProtection'; state: 'ok' | 'missing' | 'unknown'; detail: string }
 export interface PullItem {
   provider: GitProvider; number: number; title: string; url: string | null; state: string; author: Who | null; reviewers: Who[];
   headRef: string | null; baseRef: string | null; issueNumbers: number[]; additions: number | null; deletions: number | null; changedFiles: number | null;
   mergedBy: Who | null; openedAt: string; mergedAt: string | null; closedAt: string | null; legacy: boolean;
+  /** dm5 G4 (A2 + D12). */
+  ciState: CiState; ciUrl: string | null; ciAt: string | null; headSha: string | null; lines: number; large: boolean;
 }
 export interface IssueDevCommit { sha: string; title: string; url: string | null; at: string | null; author: Who; branch: string | null }
-export interface IssueDevGroup { kind: 'PR' | 'BRANCH' | 'OTHER'; key: string; title: string; url: string | null; state: string | null; ref: string | null; number: number | null; author: Who | null; deleted: boolean; commits: IssueDevCommit[] }
-export interface IssueDev { connected: boolean; codeHref: string; counts: { prs: number; branches: number; commits: number }; groups: IssueDevGroup[] }
+export interface IssueDevGroup { kind: 'PR' | 'BRANCH' | 'OTHER'; key: string; title: string; url: string | null; state: string | null; ref: string | null; number: number | null; author: Who | null; deleted: boolean; commits: IssueDevCommit[]; ciState?: CiState; ciUrl?: string | null }
+export interface IssueDev { connected: boolean; codeHref: string; counts: { prs: number; branches: number; commits: number }; groups: IssueDevGroup[]; ci?: CiState }
 
 export interface RepoMeta { provider: GitProvider; repo: string; hasToken: boolean; defaultBranch: string; private: boolean; description: string | null; webUrl: string }
 export interface TreeEntry { name: string; path: string; type: 'dir' | 'file' | 'symlink' | 'submodule'; size: number | null }
@@ -69,6 +77,7 @@ export interface CommitDetail extends SourceCommit { parents: string[]; stats: {
 export interface AiReviewResult {
   review: number; key: string; url: string; verdict: 'APPROVE' | 'CHANGES' | 'COMMENT'; findings: number; blockers: number;
   issue: string | null; issueNumber: number | null; commented: boolean; notified: boolean; target: string;
+  mode?: 'critic' | 'full';
 }
 
 /** 27/10/2026: CuongMini làm thay trưởng nhóm — review cột Review (gói đề xuất) + chế độ tự động. */
@@ -97,9 +106,11 @@ export const codeApi = {
   status: (pid: number) => d<{ connected: boolean; providers: GitProvider[] }>(api.get(`${P(pid)}/code/status`)),
   overview: (pid: number) => d<CodeOverview>(api.get(`${P(pid)}/code/overview`)),
   activity: (pid: number, q: ActivityQuery) => d<ActivityPage>(api.get(`${P(pid)}/code/activity${qs({ ...q })}`)),
-  branches: (pid: number) => d<{ items: BranchItem[]; issues: Record<number, IssueRef> }>(api.get(`${P(pid)}/code/branches`)),
+  branches: (pid: number) => d<{ items: BranchItem[]; issues: Record<number, IssueRef>; health: CodeHealthSettings; staleCount: number }>(api.get(`${P(pid)}/code/branches`)),
   pulls: (pid: number, state: 'open' | 'merged' | 'closed' | 'all') =>
-    d<{ items: PullItem[]; counts: { open: number; merged: number; closed: number }; issues: Record<number, IssueRef> }>(api.get(`${P(pid)}/code/pulls${qs({ state })}`)),
+    d<{ items: PullItem[]; counts: { open: number; merged: number; closed: number }; issues: Record<number, IssueRef>; health: CodeHealthSettings; largeCount: number }>(api.get(`${P(pid)}/code/pulls${qs({ state })}`)),
+  /** dm5 G4 (D13): 5 mục vệ sinh repo. */
+  health: (pid: number) => d<{ connected: boolean; defaultBranch: string | null; items: RepoHealthItem[] }>(api.get(`${P(pid)}/code/health`)),
   issueDev: (pid: number, num: number) => d<IssueDev>(api.get(`${P(pid)}/code/issues/${num}`)),
   meta: (pid: number, provider?: GitProvider) => d<RepoMeta>(api.get(`${P(pid)}/code/source/meta${qs({ provider })}`)),
   refs: (pid: number, provider?: GitProvider) => d<Array<{ name: string; sha: string | null }>>(api.get(`${P(pid)}/code/source/refs${qs({ provider })}`)),
@@ -107,7 +118,7 @@ export const codeApi = {
   blob: (pid: number, q: { ref?: string; path?: string; provider?: GitProvider }) => d<BlobView>(api.get(`${P(pid)}/code/source/blob${qs(q)}`)),
   commits: (pid: number, q: { ref?: string; path?: string; provider?: GitProvider }) => d<{ ref: string; items: SourceCommit[] }>(api.get(`${P(pid)}/code/source/commits${qs(q)}`)),
   commit: (pid: number, sha: string, provider?: GitProvider) => d<CommitDetail>(api.get(`${P(pid)}/code/source/commit/${encodeURIComponent(sha)}${qs({ provider })}`)),
-  aiReview: (pid: number, body: { pr?: number; issue?: number; notify?: boolean }) => d<AiReviewResult>(api.post(`${P(pid)}/code/review`, body, { timeout: 240_000 })),
+  aiReview: (pid: number, body: { pr?: number; issue?: number; notify?: boolean; mode?: 'critic' | 'full' }) => d<AiReviewResult>(api.post(`${P(pid)}/code/review`, body, { timeout: 240_000 })),
   reviewQueue: (pid: number, body: { numbers?: number[]; max?: number } = {}) =>
     d<{ items: QueueItem[]; remaining: number; reviewColumn: boolean }>(api.post(`${P(pid)}/code/review/queue`, body, { timeout: 280_000 })),
   reviewQueueApply: (pid: number, items: Array<{ number: number; decision: CardDecision; comment?: string | null }>) =>
@@ -137,4 +148,5 @@ export const codeKeys = {
   blob: (pid: number, ref: string, path: string) => ['work', 'project', pid, 'code', 'blob', ref, path] as const,
   commits: (pid: number, ref: string, path: string) => ['work', 'project', pid, 'code', 'commits', ref, path] as const,
   commit: (pid: number, sha: string) => ['work', 'project', pid, 'code', 'commit', sha] as const,
+  health: (pid: number) => ['work', 'project', pid, 'code', 'health'] as const,
 };

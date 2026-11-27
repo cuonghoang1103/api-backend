@@ -42,4 +42,15 @@ export const uat = {
   backPortal: 'Back to portal',
   printPdf: 'Print / Save as PDF',
   notAvail: 'Certificate not available',
+  // ── dm5 G3 (27/11/2026) ──
+  rating: 'Satisfaction',
+  ratingOf: '{n} / 5',
+  ratingAsk: 'How satisfied are you with this release? (1–5, optional)',
+  testerCode: 'Tester code',
+  testerCodeHint: 'Anonymous label like P1 — never a name or email.',
+  revokeOnClose: 'Close tester access when a UAT is accepted',
+  revokeOnCloseDesc: 'Pending client invites are revoked and the testers who signed lose portal access (they stay recorded on the certificate).',
+  revoked: 'Access closed',
+  restore: 'Restore access',
+  restored: 'Access restored',
 };

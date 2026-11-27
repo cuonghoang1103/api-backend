@@ -13,7 +13,8 @@
  */
 
 export const TEST_LEVELS = ['COMPONENT', 'INTEGRATION', 'SYSTEM', 'ACCEPTANCE'] as const;
-export const TEST_TYPES = ['FUNCTIONAL', 'NON_FUNCTIONAL', 'STRUCTURAL', 'CONFIRMATION', 'REGRESSION', 'SMOKE'] as const;
+// dm5 G3 (D2): + SECURITY (kiểm thử bảo mật — OWASP/STRIDE, khác NON_FUNCTIONAL chung chung).
+export const TEST_TYPES = ['FUNCTIONAL', 'NON_FUNCTIONAL', 'STRUCTURAL', 'CONFIRMATION', 'REGRESSION', 'SMOKE', 'SECURITY'] as const;
 export const ROOT_CAUSES = ['REQUIREMENT', 'DESIGN', 'CODING', 'ENVIRONMENT', 'DATA', 'TEST', 'THIRD_PARTY', 'OTHER'] as const;
 export const PHASES = ['REQUIREMENT', 'DESIGN', 'CODING', 'UNIT_TEST', 'INTEGRATION', 'SYSTEM_TEST', 'ACCEPTANCE', 'PRODUCTION'] as const;
 export type TestLevel = (typeof TEST_LEVELS)[number];
@@ -83,6 +84,18 @@ export function sCurve(cycle: CycleRow, runs: RunRow[], today = new Date()) {
 export interface DefectRow {
   severity: string | null; activity: string | null; module: string | null; open: boolean; createdAt: Date; resolvedAt: Date | null;
   rootCause: string | null; injectedPhase: string | null; reopened: boolean;
+  /** dm5 G3 (D8): cờ Leakage ĐÃ suy (isLeakage). Thiếu ⇒ như cũ: activity AT. */
+  leakage?: boolean | null;
+}
+
+/**
+ * dm5 G3 (D8): lỗi "lọt" (leakage) = lỗi khách/nghiệm thu bắt được thay vì đội. Cờ trên defect thắng; cờ trống ⇒ suy như
+ * trước 27/11 (activity AT) hoặc thẻ mang nhãn "Leakage" (cách khoá học dạy) ⇒ dữ liệu cũ giữ nguyên số DRE.
+ */
+export const LEAKAGE_LABEL = 'Leakage';
+export function isLeakage(d: { leakage?: boolean | null; activity?: string | null; labels?: string[] }): boolean {
+  if (d.leakage === true || d.leakage === false) return d.leakage;
+  return d.activity === 'AT' || (d.labels ?? []).some((l) => l.trim().toLowerCase() === 'leakage');
 }
 
 export function defectStats(defects: DefectRow[]) {
@@ -91,8 +104,10 @@ export function defectStats(defects: DefectRow[]) {
     for (const d of list) { const k = key(d) ?? '—'; const v = m.get(k) ?? { total: 0, open: 0 }; v.total++; if (d.open) v.open++; m.set(k, v); }
     return [...m.entries()].map(([k, v]) => ({ key: k, ...v })).sort((a, b) => b.total - a.total);
   };
-  const withPhase = defects.filter((d) => d.activity);
-  const escaped = withPhase.filter((d) => d.activity === 'AT').length;
+  // DRE = 1 − leakage/tổng ≡ Defect/(Defect+Leakage). Mẫu số: bug đã phân loại (có activity hoặc đã gắn cờ lọt).
+  const lk = (d: DefectRow) => (d.leakage === true || d.leakage === false ? d.leakage : d.activity === 'AT');
+  const withPhase = defects.filter((d) => d.activity || d.leakage === true);
+  const escaped = withPhase.filter(lk).length;
   const closed = defects.filter((d) => !d.open && d.resolvedAt);
   const ages = closed.map((d) => (+d.resolvedAt! - +d.createdAt) / 86400_000);
   return {
@@ -199,6 +214,58 @@ export function evaluateExit(c: ExitCriteria, actual: { passRate: number | null;
     { key: 'reqCoverage', target: `≥ ${k.reqCoverage}%`, actual: actual.reqCoverage == null ? '—' : `${actual.reqCoverage}%`, met: actual.reqCoverage != null && actual.reqCoverage >= k.reqCoverage },
   ];
   return { criteria: k, rows, met: rows.every((r) => r.met) };
+}
+
+// ─── Tiêu chí VÀO (entry criteria) — dm5 G3 (D2) ────────────────
+//
+// IEEE 829 §8.x "Item pass/fail + suspension/resumption" và ISTQB "entry criteria" = điều kiện được BẮT ĐẦU chạy một vòng
+// test. Mỗi điều kiện là một dòng đo được (máy tự tính) hoặc MANUAL (người tick, kèm chữ). Kế hoạch không khai `entry`
+// ⇒ không có điều kiện ⇒ luôn đạt (dữ liệu cũ không bị chặn khi bật settings.testGate).
+
+export const ENTRY_KINDS = ['CASES_READY', 'REQ_COVERAGE', 'MAX_OPEN_CRITICAL', 'SMOKE_PASSED', 'PLAN_REVIEWED', 'MANUAL'] as const;
+export type EntryKind = (typeof ENTRY_KINDS)[number];
+export interface EntryCriterion { kind: EntryKind; target?: number | null; text?: string | null; done?: boolean | null }
+/** Bộ gợi ý khi người dùng bấm "Dùng mặc định" (không tự áp). */
+export const SUGGESTED_ENTRY: EntryCriterion[] = [
+  { kind: 'CASES_READY', target: 1 }, { kind: 'REQ_COVERAGE', target: 80 }, { kind: 'MAX_OPEN_CRITICAL', target: 0 },
+  { kind: 'PLAN_REVIEWED' }, { kind: 'MANUAL', text: 'Test environment and test data are ready' },
+];
+
+export function normalizeEntry(raw: unknown): EntryCriterion[] {
+  if (raw === null || raw === undefined) return [];
+  if (!Array.isArray(raw)) throw new Error('entry must be a list');
+  if (raw.length > 20) throw new Error('At most 20 entry criteria');
+  return raw.map((r, i) => {
+    const o = (r ?? {}) as Record<string, unknown>;
+    if (!(ENTRY_KINDS as readonly unknown[]).includes(o.kind)) throw new Error(`Entry criterion ${i + 1}: unknown kind`);
+    const kind = o.kind as EntryKind;
+    const text = typeof o.text === 'string' ? o.text.replace(/\s+/g, ' ').trim().slice(0, 300) : '';
+    if (kind === 'MANUAL') {
+      if (!text) throw new Error(`Entry criterion ${i + 1}: a manual criterion needs its text`);
+      return { kind, text, done: o.done === true };
+    }
+    const max = kind === 'REQ_COVERAGE' ? 100 : 100_000;
+    const def = kind === 'CASES_READY' ? 1 : kind === 'REQ_COVERAGE' ? 80 : 0;
+    const t = o.target === undefined || o.target === null || o.target === '' ? def : Number(o.target);
+    if (kind !== 'SMOKE_PASSED' && kind !== 'PLAN_REVIEWED' && (!Number.isFinite(t) || t < 0 || t > max)) throw new Error(`Entry criterion ${i + 1}: target must be between 0 and ${max}`);
+    return { kind, ...(kind === 'SMOKE_PASSED' || kind === 'PLAN_REVIEWED' ? {} : { target: Math.round(t * 10) / 10 }), ...(text ? { text } : {}) };
+  });
+}
+
+export interface EntryActual { cases: number; reqCoverage: number | null; openCritical: number; smoke: { cases: number; passed: number; failed: number }; planReviewed: boolean }
+
+export function evaluateEntry(entry: EntryCriterion[], a: EntryActual) {
+  const rows = entry.map((c) => {
+    switch (c.kind) {
+      case 'CASES_READY': return { kind: c.kind, target: `≥ ${c.target ?? 1}`, actual: String(a.cases), met: a.cases >= (c.target ?? 1), text: c.text ?? null };
+      case 'REQ_COVERAGE': return { kind: c.kind, target: `≥ ${c.target ?? 80}%`, actual: a.reqCoverage == null ? '—' : `${a.reqCoverage}%`, met: a.reqCoverage != null && a.reqCoverage >= (c.target ?? 80), text: c.text ?? null };
+      case 'MAX_OPEN_CRITICAL': return { kind: c.kind, target: `≤ ${c.target ?? 0}`, actual: String(a.openCritical), met: a.openCritical <= (c.target ?? 0), text: c.text ?? null };
+      case 'SMOKE_PASSED': return { kind: c.kind, target: 'PASS', actual: a.smoke.cases ? `${a.smoke.passed}/${a.smoke.cases}` : '—', met: a.smoke.cases > 0 && a.smoke.passed === a.smoke.cases && a.smoke.failed === 0, text: c.text ?? null };
+      case 'PLAN_REVIEWED': return { kind: c.kind, target: 'ACCEPT', actual: a.planReviewed ? 'ACCEPT' : '—', met: a.planReviewed, text: c.text ?? null };
+      default: return { kind: c.kind, target: '✓', actual: c.done ? '✓' : '—', met: c.done === true, text: c.text ?? null };
+    }
+  });
+  return { rows, met: rows.every((r) => r.met) };
 }
 
 // ─── Test Summary Report (IEEE 829-2008 §11 / ISO 29119-3) ───────

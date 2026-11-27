@@ -105,7 +105,7 @@ const rtmGet = defineTool({
       code: x.code, unit: x.unit.map((s) => `${s.ref} ${s.passed}/${s.cases}`), integration: x.integration.map((s) => `${s.name} ${s.passed}/${s.cases}`),
       system: x.system.map((s) => `${s.name} ${s.passed}/${s.cases}`), xray: x.xray.map((t) => `${t.key}:${t.last ?? 'not run'}`), bugs: x.bugs.map((b) => `${b.key}${b.open ? ' (open)' : ''}`),
     }));
-    return `RTM — numbers computed by CT Work (${r.rows.length} rows${r.rows.length > 120 ? ', first 120 shown' : ''}).\n${untrusted('traceability matrix', json({ summary: r.summary, rows, untracedTests: r.orphans.slice(0, 50) }))}`;
+    return `RTM — numbers computed by CT Work (${r.rows.length} rows${r.rows.length > 120 ? ', first 120 shown' : ''}). summary.coverage = the 4 coverage indicators (UC coded without SDS, UC tested without System Test, % business rules with a test, untraced tests).\n${untrusted('traceability matrix', json({ summary: r.summary, rows, untracedTests: r.orphans.slice(0, 50), nfr: r.nfrs.slice(0, 60) }))}`;
   },
 });
 
@@ -296,18 +296,19 @@ const traceAdd = defineTool({
 
 const defectSet = defineTool({
   name: 'defect_set', title: 'Set defect fields of a bug', group: 'tests',
-  description: 'Sets Severity (CRITICAL/MAJOR/MINOR/TRIVIAL — how bad the defect is, not its priority), Activity (Review/UT/IT/ST/AT), Product and Product details on a Bug issue.',
+  description: 'Sets Severity (CRITICAL/MAJOR/MINOR/TRIVIAL — how bad the defect is, not its priority), Activity (Review/UT/IT/ST/AT), Product and Product details on a Bug issue. leakage true/false marks a defect that escaped to the client/acceptance (adds/removes the "Leakage" label; DRE counts it); null = infer from Activity AT.',
   write: true,
   input: z.object({
     project: projectArg, issue: issueArg, severity: z.enum(SEVERITIES).nullable().optional(), activity: z.enum(DEFECT_ACTIVITIES).nullable().optional(),
     product: z.enum(PRODUCTS).nullable().optional(), productDetails: z.string().max(300).nullable().optional(),
+    leakage: z.boolean().nullable().optional(),
   }),
   run: async (ctx, a) => {
     requireWrite(ctx);
     // Đường REST tương đương để chốt rào chắn agent (số thẻ không đổi kết quả của chốt).
     const p = await projectFor(ctx, a.project, [['PUT', '/issues/0/defect']]);
     const n = issueNumber(p.key, a.issue);
-    const r = await defects.setDefect(ctx.userId, p.id, n, { severity: a.severity, activity: a.activity, product: a.product, productDetails: a.productDetails });
+    const r = await defects.setDefect(ctx.userId, p.id, n, { severity: a.severity, activity: a.activity, product: a.product, productDetails: a.productDetails, leakage: a.leakage });
     return { issue: `${p.key}-${n}`, ...r, options: undefined };
   },
 });
@@ -326,30 +327,33 @@ const findingBug = defineTool({
 
 const qnaAsk = defineTool({
   name: 'qna_ask', title: 'Log a question in the Q&A log', group: 'planning',
-  description: 'Adds a question for the lecturer or client to the Q&A log (date, asked by, asked to, priority, due date).',
+  description: 'Adds a question for the lecturer or client to the Q&A log (date, asked by, asked to, priority, due date) — with the asker\'s proposal, options A/B and the target code the answer will change (BR-03 / UC-05 / SM-02 / FE-1 / issue key).',
   write: true,
-  input: z.object({ project: projectArg, question: z.string().min(1).max(255), details: z.string().max(10_000).optional(), askedTo: z.string().max(120).optional(), askedBy: z.string().max(120).optional(), priority: z.enum(['LOW', 'MEDIUM', 'HIGH']).optional(), due: dateArg.optional() }),
+  input: z.object({
+    project: projectArg, question: z.string().min(1).max(255), details: z.string().max(10_000).optional(), askedTo: z.string().max(120).optional(), askedBy: z.string().max(120).optional(), priority: z.enum(['LOW', 'MEDIUM', 'HIGH']).optional(), due: dateArg.optional(),
+    proposal: z.string().max(10_000).optional(), optionA: z.string().max(10_000).optional(), optionB: z.string().max(10_000).optional(), targetRef: z.string().max(60).optional(),
+  }),
   run: async (ctx, a) => {
     requireWrite(ctx);
     const p = await projectFor(ctx, a.project, [['POST', '/qna']]);
-    const q = await qna.createQuestion(ctx.userId, p.id, { question: a.question, details: a.details ?? null, askedTo: a.askedTo ?? null, askedBy: a.askedBy ?? null, priority: a.priority, due: a.due ?? null });
+    const q = await qna.createQuestion(ctx.userId, p.id, { question: a.question, details: a.details ?? null, askedTo: a.askedTo ?? null, askedBy: a.askedBy ?? null, priority: a.priority, due: a.due ?? null, proposal: a.proposal ?? null, optionA: a.optionA ?? null, optionB: a.optionB ?? null, targetRef: a.targetRef ?? null });
     return { asked: q.key, status: q.statusText };
   },
 });
 
 const qnaAnswer = defineTool({
   name: 'qna_answer', title: 'Record the answer to a question', group: 'planning',
-  description: 'Records the answer to a Q&A question (marks it answered), or changes its status (OPEN / ANSWERED / CANCELLED).',
+  description: 'Records the answer to a Q&A question (marks it answered), or changes its status (OPEN / ANSWERED / CANCELLED). targetRef = the BR/UC/SM the answer changed — the project may require it before closing (WORK_QNA_TARGET).',
   write: true,
-  input: z.object({ project: projectArg, question: z.union([z.number().int().positive(), z.string().min(1).max(12)]).describe('Number (4) or key ("Q-4")'), answer: z.string().max(20_000).optional(), status: z.enum(QUESTION_STATUSES).optional() }),
+  input: z.object({ project: projectArg, question: z.union([z.number().int().positive(), z.string().min(1).max(12)]).describe('Number (4) or key ("Q-4")'), answer: z.string().max(20_000).optional(), status: z.enum(QUESTION_STATUSES).optional(), targetRef: z.string().max(60).optional() }),
   run: async (ctx, a) => {
     requireWrite(ctx);
     const n = typeof a.question === 'number' ? a.question : Number(/(\d+)\s*$/.exec(a.question)?.[1] ?? NaN);
     if (!Number.isInteger(n) || n <= 0) throw new BadRequestError(`"${String(a.question)}" is not a question`, 'VALIDATION_ERROR');
     const p = await projectFor(ctx, a.project, [['PATCH', `/qna/${n}`]]);
-    if (a.answer === undefined && a.status === undefined) throw new BadRequestError('Give an answer or a status', 'VALIDATION_ERROR');
-    const q = await qna.updateQuestion(ctx.userId, p.id, n, { ...(a.answer !== undefined ? { answer: a.answer } : {}), ...(a.status ? { status: a.status } : {}) });
-    return { question: q.key, status: q.statusText, answer: q.answer };
+    if (a.answer === undefined && a.status === undefined && a.targetRef === undefined) throw new BadRequestError('Give an answer, a status or a targetRef', 'VALIDATION_ERROR');
+    const q = await qna.updateQuestion(ctx.userId, p.id, n, { ...(a.answer !== undefined ? { answer: a.answer } : {}), ...(a.status ? { status: a.status } : {}), ...(a.targetRef !== undefined ? { targetRef: a.targetRef } : {}) });
+    return { question: q.key, status: q.statusText, answer: q.answer, targetRef: q.targetRef, ...(q.noTarget ? { warning: 'Closed without a target code (BR/UC/SM) — set targetRef so the grader can trace the answer' } : {}) };
   },
 });
 
@@ -370,7 +374,7 @@ const worklogActivity = defineTool({
 
 const fillReport3 = defineTool({
   name: 'report3_fill_page', title: 'Fill the Report 3 page from the structured SRS', group: 'docs',
-  description: 'Writes the actors, use case list, screens flow, screen authorization, non-UI functions, use case specifications and business rules into the project\'s Report 3 (SRS) page, under the template headings. Saves one new page version (restorable from History).',
+  description: 'Writes the actors, use case list, screens flow, screen authorization, non-UI functions, use case specifications, business rules (grouped by category), measurable NFRs (4.2 Quality Attribute: scale · meter · Must → Minimum · Plan → Goal · Wish) and the System Messages register (5.2, SM-xx) into the project\'s Report 3 (SRS) page, under the template headings. Saves one new page version (restorable from History).',
   write: true,
   input: z.object({ project: projectArg, sections: z.array(z.enum(SRS_FILL_SECTIONS)).max(10).optional() }),
   run: async (ctx, a) => {
@@ -385,14 +389,14 @@ const fillReport3 = defineTool({
 
 const assembleFinal = defineTool({
   name: 'final_report_assemble', title: 'Assemble the Report 7 final report', group: 'docs',
-  description: 'Merges the latest Reports 1–6 of the project into the Report 7 Final page (acknowledgement and definitions kept), as one new page version. Export it with export_file kind final_docx / final_pdf.',
+  description: 'Merges the latest Reports 1–6 of the project into the Report 7 Final page (acknowledgement and definitions kept), as one new page version, and returns CROSS-CHECKS run before merging: FE/UC/BR/SM/LI codes that do not exist or are defined twice, names that differ, test totals and pass rates in Part V vs the 5.1/5.2/5.3 data, effort in Part II vs work logs (> 5%), template text left. Errors do not block the merge — report them to the user. Check without merging: ctwork_read final_checks. Export with export_file kind final_docx / final_pdf.',
   write: true,
   input: z.object({ project: projectArg }),
   run: async (ctx, a) => {
     requireWrite(ctx);
     const p = await projectFor(ctx, a.project, [['POST', '/final-report/assemble']]);
     const r = await final.assembleFinalPage(ctx.userId, p.id);
-    return { merged: r.merged.map((n) => `Report ${n}`), missing: r.missing.map((n) => `Report ${n}`), changed: r.changed };
+    return { merged: r.merged.map((n) => `Report ${n}`), missing: r.missing.map((n) => `Report ${n}`), changed: r.changed, checks: r.checks };
   },
 });
 

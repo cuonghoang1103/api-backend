@@ -1278,3 +1278,17 @@ Mẫu một mục:
 - **Cách sửa:** user chạy `sudo btrfs subvolume delete` 3 snapshot cũ nhất (giữ 16/11 + 23/11) ⇒ ổ `/` từ 21G lên 142G sau ~1 phút btrfs dọn ngầm.
 - **Ảnh hưởng:** render dừng/chập chờn từ ~00:20 tới 11:35 27/11 (hàng render ~230 tập).
 - **Bài học:** ổ btrfs có snapshot thì "xoá/nén file" không giải phóng chỗ — kiểm `ls /.snapshots` + `btrfs filesystem df /` TRƯỚC khi dọn; cần giới hạn số snapshot giữ lại (2) ở job tạo snapshot.
+
+### 27/11/2026 — MCP `diagram_extras` hứa nhận `.puml` nhưng tệp PlantUML thành "Mermaid" rác
+- **Triệu chứng:** mô tả lệnh `diagram_extras` (`src/services/work/toolRegistry/parity3.ts:792`) ghi `import (… .drawio / .mmd / .puml file …)`; CuongMini nhập `booking.puml` ⇒ sơ đồ định dạng MERMAID loại OTHER không vẽ được, không báo lỗi.
+- **Nguyên nhân:** `DIAGRAM_FORMATS` chỉ có MERMAID/EXCALIDRAW/SQL (`diagram.ts:14`); `importFile` (`diagramImport.ts:~400`) không có nhánh PlantUML nên `.puml` rơi xuống nhánh cuối `extractMermaid` và coi cả tệp là Mermaid.
+- **Cách sửa (dm5 G2):** thêm định dạng `PLANTUML` thật — nhập `.puml/.plantuml/.pu/.iuml/.wsd` (từ tệp hoặc `repoPath` của repo), lint @startuml/@enduml, chặn `!include`, SVG vẽ ở máy render tự host (`PLANTUML_SERVER_URL`, `plantuml.ts`) đã làm sạch, Diagram Studio có trình soạn + xem trước, đưa vào Report dạng khối `plantuml` + "Figure n". Mô tả lệnh sửa cho khớp.
+- **Ảnh hưởng:** mọi lần nhập `.puml` trước 27/11 tạo sơ đồ hỏng (cần nhập lại); không mất dữ liệu.
+- **Bài học:** mô tả lệnh MCP là hợp đồng với model — mỗi định dạng ghi trong mô tả phải có test nhập thật (`dm5b.test.ts` › B18 nhập `.puml`).
+
+### 27/11/2026 — Database designer đọc `settings(key VARCHAR(80) PRIMARY KEY, …)` thành bảng KHÔNG có cột nào
+- **Triệu chứng:** bảng `settings` của migration LabFlow ra 0 cột, lỗi "Expected a column name — found \"80\""; bảng CSDL 7 cột của Report 4 thiếu cả bảng.
+- **Nguyên nhân:** `sqlDesign/parser.ts › isTypeWord` (dòng ~381) coi kiểu CÓ tham số (`VARCHAR(80)`) là KHÔNG phải kiểu (`!this.isOp('(', k + 1)`), nên `key VARCHAR(80)` bị hiểu là chỉ mục MySQL `KEY <tên> (…)` và cả định nghĩa cột bị nuốt.
+- **Cách sửa (dm5 G2):** kiểu theo sau bởi `(` vẫn là kiểu nếu sau `(` là SỐ (`VARCHAR(80)`); `KEY text (col)` vẫn là chỉ mục. Đồng bộ bản chép frontend bằng `node scripts/dong-bo-sql-design.mjs`; test hồi quy trong `sqlDesign/parser.test.ts`.
+- **Ảnh hưởng:** mọi sơ đồ SQL/Flyway có cột tên `key`/`index` kèm kiểu tham số mất cột đó (ERD, bản xuất, lint).
+- **Bài học:** từ khoá không dành riêng (`key`, `index`) làm tên cột là chuyện thường ở PostgreSQL — fixture thật (LabFlow 15 bảng) bắt được thứ test tay bỏ sót.

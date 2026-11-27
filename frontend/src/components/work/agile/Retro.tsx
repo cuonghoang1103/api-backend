@@ -17,6 +17,7 @@ import { Dialog, EmptyState, Field, PageLoading, UserAvatar } from '../ui';
 import { Select } from '../settings/shared';
 import { useWT, wt } from '../i18n';
 import type { WKey } from '../i18n';
+import RetroFacts from './RetroFacts'; // dm5 G1 (A12)
 
 const colLabel = (c: string) => wt(`agile.col_${c}` as WKey);
 
@@ -179,11 +180,14 @@ export function RetroBoard({ pid, rid, config, onBack }: { pid: number; rid: num
   const [actionCard, setActionCard] = useState<number | null>(null);
   const [assignee, setAssignee] = useState<number | ''>('');
   const [nextSprint, setNextSprint] = useState(true);
+  // dm5 G1 (A12): dấu hiệu kích hoạt + cách kiểm chứng cho mỗi hành động.
+  const [trigger, setTrigger] = useState('');
+  const [verify, setVerify] = useState('');
   const [aiActions, setAiActions] = useState<Array<{ title?: string }>>([]);
   const lock = useMutation({ mutationFn: (locked: boolean) => agileApi.retroUpdate(pid, rid, { locked }), onSuccess: refresh, onError: err });
   const addAction = useMutation({
-    mutationFn: (t: string) => agileApi.actionAdd(pid, rid, { title: t, cardId: actionCard, assigneeId: assignee || null, createIssue: true, nextSprint }),
-    onSuccess: (x) => { toast.success(wt('agile.actionCreated', { k: `${config.key}-${x.issueNumber}` }) + (x.sprintName ? ` → ${x.sprintName}` : '')); setActionTitle(''); setActionCard(null); refresh(); },
+    mutationFn: (t: string) => agileApi.actionAdd(pid, rid, { title: t, cardId: actionCard, assigneeId: assignee || null, createIssue: true, nextSprint, trigger: trigger.trim() || null, verify: verify.trim() || null }),
+    onSuccess: (x) => { toast.success(wt('agile.actionCreated', { k: `${config.key}-${x.issueNumber}` }) + (x.sprintName ? ` → ${x.sprintName}` : '')); setActionTitle(''); setActionCard(null); setTrigger(''); setVerify(''); refresh(); },
     onError: err,
   });
   const delAction = useMutation({ mutationFn: (aid: number) => agileApi.actionDelete(pid, rid, aid), onSuccess: refresh, onError: err });
@@ -214,15 +218,27 @@ export function RetroBoard({ pid, rid, config, onBack }: { pid: number; rid: num
         {r.columns.map((c) => <Column key={c} col={c} retro={r} pid={pid} onAction={(card) => { setActionTitle(card.body.slice(0, 200)); setActionCard(card.id); }} />)}
       </div>
 
+      <RetroFacts pid={pid} rid={rid} />
+
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)] p-3">
-          <h3 className="mb-2 text-[13px] font-semibold">{wt('agile.actions')}</h3>
+          <h3 className="mb-2 flex items-baseline gap-2 text-[13px] font-semibold">
+            {wt('agile.actions')}
+            {r.actionCap != null && <span className={cn('text-[11.5px] font-normal', r.actions.length >= r.actionCap ? 'text-[var(--w-orange)]' : 'text-[var(--w-text-3)]')}>{wt('agile.actionCap', { n: r.actions.length, cap: r.actionCap })}</span>}
+          </h3>
           {!r.actions.length && <p className="text-[13px] text-[var(--w-text-3)]">{wt('agile.noActions')}</p>}
           <ul className="space-y-1.5">
             {r.actions.map((a) => (
               <li key={a.id} className="flex items-center gap-2 text-[13px]">
                 {a.issue ? <a className="shrink-0 font-medium hover:underline" href={`/work/${config.workspace.slug}/${config.key}/issue/${a.issue.number}`}>{config.key}-{a.issue.number}</a> : null}
-                <span className="min-w-0 flex-1 truncate">{a.title}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate">{a.title}</span>
+                  {(a.trigger || a.verify) && (
+                    <span className="block text-[11.5px] text-[var(--w-text-3)]">
+                      {a.trigger && <>{wt('agile.trigger')}: {a.trigger}</>}{a.trigger && a.verify && ' · '}{a.verify && <>{wt('agile.verify')}: {a.verify}</>}
+                    </span>
+                  )}
+                </span>
                 {a.assignee && <UserAvatar user={a.assignee} size={18} />}
                 {r.me.canUseAi && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('agile.delete')} onClick={() => delAction.mutate(a.id)}><Trash2 size={12} /></button>}
               </li>
@@ -238,7 +254,12 @@ export function RetroBoard({ pid, rid, config, onBack }: { pid: number; rid: num
               <label className="flex items-center gap-1.5 text-[12.5px] text-[var(--w-text-2)]" title={wt('agile.nextSprintTip')}>
                 <input type="checkbox" className="accent-[var(--w-accent)]" checked={nextSprint} onChange={(e) => setNextSprint(e.target.checked)} /> {wt('agile.nextSprint')}
               </label>
-              <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={!actionTitle.trim() || addAction.isPending} onClick={() => addAction.mutate(actionTitle.trim())} data-testid="retro-add-action">{wt('agile.addAction')}</button>
+              <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={!actionTitle.trim() || addAction.isPending || (r.actionCap != null && r.actions.length >= r.actionCap)} onClick={() => addAction.mutate(actionTitle.trim())} data-testid="retro-add-action">{wt('agile.addAction')}</button>
+              <div className="grid w-full gap-2 sm:grid-cols-2">
+                <input className="w-input" value={trigger} maxLength={500} placeholder={wt('agile.triggerPh')} aria-label={wt('agile.trigger')} onChange={(e) => setTrigger(e.target.value)} />
+                <input className="w-input" value={verify} maxLength={500} placeholder={wt('agile.verifyPh')} aria-label={wt('agile.verify')} onChange={(e) => setVerify(e.target.value)} />
+              </div>
+              {r.actionCap != null && r.actions.length >= r.actionCap && <p className="w-full text-[12px] text-[var(--w-orange)]">{wt('agile.actionCapReached', { cap: r.actionCap })}</p>}
             </div>
           )}
         </section>

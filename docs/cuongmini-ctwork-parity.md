@@ -123,6 +123,13 @@ Nếu sau này cần mở thêm một việc ở bảng này, làm theo kiểu l
 (Executed By ⇒ `fpt_unit_update_function`, xoá/ẩn UTCID ⇒ `fpt_unit_delete_cases notRun=true`…), mô tả `fpt_unit_delete_cases` có
 các chữ "remove / delete / hide UTCID", kỹ năng `ctwork_huong_dan` có từ khoá "xoá UTCID / ẩn UTCID / dòng nháp".
 
+**dm5 G4 (27/11/2026) — KHÔNG thêm lệnh, chỉ thêm `action` / tham số:** `governance_extras` +`raid_to_issue` · +`cr_split` ·
++`cr_sync` (chỉ người) · `change_request_manage` +`impactMatrix` (6 chiều) +`options` (A/B/C) · `raid_create`/`raid_update`
++`contingency` (Plan B) · `version_manage` +`freezeLevel`/`gitTag`/`commitSha` (release trả `ci` ở SHA) · `code_review` /
+`review_manage ai_code_review` +`mode` (`critic` = chỉ phản biện, không viết mã) · `export_file` kind +`contrib_xlsx` · `contrib_pdf` ·
+`test_cycle` · `meeting_minutes` · `review` · `create_project` +`blueprint` (thư viện mẫu 5 bộ) · `groups` · `fromProject` (chép cấu hình)
+· `dryRun` (xem trước).
+
 ## 4. Repo chưa có trên máy
 
 `project_repos` trả các repo của dự án (kết nối GitHub/GitLab trên trang Code + link github/gitlab/bitbucket trong
@@ -556,6 +563,8 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 | DELETE | `/projects/:pid/changes/:num/links/:linkId` | ✅ | change_request_manage |
 | POST | `/projects/:pid/changes/:num/implement` | ✅ | governance_extras |
 | PUT | `/projects/:pid/changes/:num/affected` | ✅ | governance_extras |
+| POST | `/projects/:pid/changes/:num/split` | ✅ | governance_extras `cr_split` (dm5 G4 — CR con CR-na/nb) |
+| PUT | `/projects/:pid/changes/:num/sync` | ✅ | governance_extras `cr_sync` (dm5 G4 — checklist đồng bộ 5 điểm sau duyệt; chỉ NGƯỜI, agent bị AGENT_DENIED_ROUTES) |
 
 ### chat — 15 tool · 5 chỉ người · 0 thiếu
 
@@ -680,6 +689,10 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
+| POST | `/projects/:pid/diagrams/import-repo` | ✅ | diagram_extras (action import + repoPath — dm5 G2 B18: .puml/.mmd/.sql/.drawio từ repo) |
+| POST | `/projects/:pid/diagrams/plantuml/render` | ✅ | (chỉ xem trước SVG — đọc; không cần lệnh) |
+| POST | `/projects/:pid/sds/db-design/fill` | ✅ | diagram_extras (action db_design_table + write=true — dm5 G2 B16: bảng 7 cột Report 4 §1.3) |
+| POST | `/projects/:pid/sds/report4/fill` | ✅ | docs_extras (action report4_fill — dm5 G2 B17) |
 | POST | `/projects/:pid/diagrams` | ✅ | diagram_sql_create |
 | POST | `/projects/:pid/diagrams/generate` | ✅ | diagram_generate |
 | POST | `/projects/:pid/diagrams/import` | ✅ | diagram_extras |
@@ -741,6 +754,7 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
+| POST | `/projects/:pid/report6/fill` | ✅ | docs_extras (action report6_fill — dm5 G2 B20: khung User Manual actor → màn) |
 | POST | `/projects/:pid/final-report/assemble` | ✅ | final_report_assemble |
 | POST | `/projects/:pid/final-report/export` | ✅ | export_file |
 
@@ -803,6 +817,7 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 | POST | `/projects/:pid/fpt-tests/unit` | ✅ | fpt_unit_create_function |
 | PATCH | `/projects/:pid/fpt-tests/unit/:fid` | ✅ | fpt_unit_update_function |
 | DELETE | `/projects/:pid/fpt-tests/unit/:fid` | ✅ | fpt_unit_delete_function |
+| POST | `/projects/:pid/fpt-tests/unit/automation-import` | ✅ | test_extras (action automation_import — dm5 G3, JUnit/JaCoCo/SHA ⇒ 5.1) |
 | PUT | `/projects/:pid/fpt-tests/unit/:fid/matrix` | ✅ | fpt_unit_add_cases, fpt_unit_mark, fpt_unit_record_results, fpt_unit_update_rows, fpt_unit_delete_rows, fpt_unit_delete_cases, fpt_unit_move |
 | POST | `/projects/:pid/fpt-tests/unit/:fid/duplicate` | ✅ | fpt_unit_duplicate_function |
 | POST | `/projects/:pid/fpt-tests/unit/:fid/ai-suggest` | ✅ | fpt_unit_suggest |
@@ -839,6 +854,8 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 | PUT | `/projects/:pid/grades` | 👤 | finance / client / external integration or export |
 | POST | `/projects/:pid/grades/publish` | 👤 | finance / client / external integration or export |
 | DELETE | `/projects/:pid/grades/:gid` | 👤 | finance / client / external integration or export |
+| PUT | `/projects/:pid/grades/self` | 👤 | grades (dm5 G3 — sinh viên tự chấm theo rubric, chỉ trên web) |
+| DELETE | `/projects/:pid/grades/self/:gid` | 👤 | grades (dm5 G3) |
 
 ### handoffs — 3 tool · 0 chỉ người · 0 thiếu
 
@@ -976,7 +993,7 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 | PATCH | `/projects/:pid/meetings/:num` | ✅ | meeting_update |
 | DELETE | `/projects/:pid/meetings/:num` | ✅ | meeting_delete |
 | PUT | `/projects/:pid/meetings/:num/attendees` | ✅ | meeting_attendees_set |
-| PUT | `/projects/:pid/meetings/:num/actions` | ✅ | meeting_add_actions |
+| PUT | `/projects/:pid/meetings/:num/actions` | ✅ | meeting_add_actions (dm5 G1: `kind` TASK/BUG/CR/QUESTION ⇒ meeting_create_issues sinh thẻ Task/Bug, CR-n, Q-n) |
 | POST | `/projects/:pid/meetings/:num/actions/issues` | ✅ | meeting_create_issues |
 | POST | `/projects/:pid/meetings/:num/actions/suggest` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 | POST | `/projects/:pid/meetings/:num/share` | 👤 | client-facing |
@@ -1027,6 +1044,8 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
+| POST | `/projects/:pid/pages/:num/autofill` | ✅ | docs_extras (action autofill + raciMode — dm5 G2 B3/B2/B21; trước chỉ có trên web) |
+| POST | `/projects/:pid/pages/:num/adr/supersede` | ✅ | docs_extras (action adr_supersede — dm5 G2 B15) |
 | POST | `/projects/:pid/pages` | ✅ | docs_draft_page |
 | PATCH | `/projects/:pid/pages/:num` | ✅ | docs_page_update, docs_update_section |
 | POST | `/projects/:pid/pages/:num/request-approval` | ✅ | approval_request |
@@ -1070,6 +1089,7 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 | POST | `/projects/:pid/portal/invite` | 👤 | finance / client / external integration or export |
 | POST | `/projects/:pid/portal/uat` | 👤 | finance / client / external integration or export |
 | POST | `/projects/:pid/portal/uat/:aid/decide` | 👤 | finance / client / external integration or export |
+| PATCH | `/projects/:pid/portal/uat/:aid` | 👤 | client portal (dm5 G3 — mã người thử; đọc UAT: `ctwork_read what=uat`) |
 | POST | `/projects/:pid/portal/desk/requests` | 👤 | finance / client / external integration or export |
 | POST | `/projects/:pid/portal/desk/requests/:num/csat` | 👤 | finance / client / external integration or export |
 | POST | `/projects/:pid/portal/resources/:id/open` | 👤 | finance / client / external integration or export |
@@ -1096,6 +1116,7 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 | DELETE | `/projects/:pid/raid/:num` | ✅ | raid_delete |
 | POST | `/projects/:pid/raid/:num/links` | ✅ | governance_extras |
 | DELETE | `/projects/:pid/raid/:num/links/:linkId` | ✅ | governance_extras |
+| POST | `/projects/:pid/raid/:num/to-issue` | ✅ | governance_extras `raid_to_issue` (dm5 G4 — Risk/Issue ⇒ thẻ; use=contingency ⇒ thẻ Plan B) |
 
 ### report-builder — 0 tool · 6 chỉ người · 0 thiếu
 
@@ -1160,7 +1181,7 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 | PATCH | `/projects/:pid/retros/:rid/cards/:cid` | ✅ | retro_session |
 | DELETE | `/projects/:pid/retros/:rid/cards/:cid` | ✅ | agile_delete |
 | POST | `/projects/:pid/retros/:rid/cards/:cid/vote` | ✅ | retro_vote |
-| POST | `/projects/:pid/retros/:rid/actions` | ✅ | retro_session |
+| POST | `/projects/:pid/retros/:rid/actions` | ✅ | retro_session (dm5 G1: trigger, verify; trần `retroActionCap` ⇒ WORK_RETRO_ACTION_CAP; action `facts` đọc số liệu sprint) |
 | DELETE | `/projects/:pid/retros/:rid/actions/:aid` | ✅ | agile_delete |
 | POST | `/projects/:pid/retros/:rid/summary` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 
@@ -1229,6 +1250,9 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
+| POST | `/projects/:pid/srs/messages` | ✅ | swr_extras (action system_message_add — dm5 G2 B9: sổ SM-xx, Report 3 §5.2) |
+| PATCH | `/projects/:pid/srs/messages/:ref` | ✅ | swr_extras (action system_message_update — dm5 G2) |
+| DELETE | `/projects/:pid/srs/messages/:ref` | ✅ | swr_delete (kind system_message — DESTRUCTIVE, personOnly; agent: AGENT_DENIED_ROUTES) |
 | POST | `/projects/:pid/srs/actors` | ✅ | srs_add_actor |
 | PATCH | `/projects/:pid/srs/actors/:id` | ✅ | srs_actor_update |
 | DELETE | `/projects/:pid/srs/actors/:id` | ✅ | srs_delete |
@@ -1285,6 +1309,9 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
+| POST | `/projects/:pid/swr/elicitation/:ref/questions/:qid/qna` | ✅ | swr_extras (action qna_from_elicitation — dm5 G2 B5) |
+| POST | `/projects/:pid/swr/stakeholders/seed-hats` | ✅ | swr_extras (action seed_hats — dm5 G2 B2, personOnly) |
+| POST | `/projects/:pid/swr/raci/activities/preset` | ✅ | swr_extras (action raci_activity_add + preset — dm5 G2 B2) |
 | POST | `/projects/:pid/swr/features` | ✅ | swr_feature_add |
 | PATCH | `/projects/:pid/swr/features/:fe` | ✅ | swr_feature_update |
 | DELETE | `/projects/:pid/swr/features/:fe` | ✅ | swr_delete |
@@ -1377,7 +1404,7 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 | POST | `/projects/:pid/test-plans` | ✅ | test_plan_manage |
 | PATCH | `/projects/:pid/test-plans/:planId` | ✅ | test_plan_manage |
 | DELETE | `/projects/:pid/test-plans/:planId` | ✅ | test_plan_delete |
-| PUT | `/projects/:pid/test-plans/:planId/settings` | 👤 | project configuration / data import |
+| PUT | `/projects/:pid/test-plans/:planId/settings` | ✅ | test_extras (action plan_settings — dm5 G3: entry/exit criteria, versionId) |
 
 ### test-risks — 1 tool · 0 chỉ người · 0 thiếu
 
@@ -1410,7 +1437,7 @@ Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người")
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| PATCH | `/projects/:pid/tests-attributes` | 👤 | project configuration / data import |
+| PATCH | `/projects/:pid/tests-attributes` | ✅ | test_extras (action case_attributes — dm5 G3, gồm testType SECURITY) |
 
 ### timeline — 2 tool · 0 chỉ người · 0 thiếu
 

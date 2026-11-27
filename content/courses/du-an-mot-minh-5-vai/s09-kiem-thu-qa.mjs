@@ -129,7 +129,7 @@ const QUIZ9 = [
       'Inviting 2–3 real outside participants (classmates/lab staff/lecturer) using synthetic demo accounts on staging|||Mời 2–3 người ngoài thật (bạn học/nhân viên lab/giảng viên) dùng tài khoản demo giả trên staging',
       'Giving goal-oriented task cards without step-by-step click hints and observing silently with hands behind your back|||Phát phiếu nhiệm vụ theo mục tiêu không chỉ nút từng bước và ngồi im lặng khoanh tay quan sát',
       'Running UAT yourself (or pointing at every button for your friend while using real student emails/PII on staging) and treating new feature wishes as Critical bugs|||Tự mình đóng vai khách chạy UAT (hoặc chỉ tay từng nút cho bạn bấm kèm nạp email/PII sinh viên thật lên staging) và gom luôn ý muốn thêm tính năng mới vào lỗi Critical',
-      'Logging Critical/High UAT findings as <code>DF-xx</code> to fix before Final Package while recording new feature wishes as future CRs|||Ghi lỗi Critical/High từ UAT thành <code>DF-xx</code> để sửa trước Final Package còn ý muốn tính năng mới tách sang backlog CR',
+      'Logging Critical/High UAT findings as Bug cards (<code>LF-n</code>) to fix before Final Package while recording new feature wishes as future CRs|||Ghi lỗi Critical/High từ UAT thành thẻ Bug (<code>LF-n</code>) để sửa trước Final Package còn ý muốn tính năng mới tách sang backlog CR',
     ],
     2,
     'Self-UAT, hand-holding, real PII on staging, and mixing CR wishes with Critical bugs are the classic UAT red flags (lesson of NHS NPfIT &amp; UAT best practices). Lesson 9.6.|||Tự làm UAT, chỉ tay từng nút, dùng dữ liệu cá nhân thật trên staging và trộn CR với lỗi Critical là các cờ đỏ UAT kinh điển (bài học NHS NPfIT &amp; chuẩn UAT). Bài 9.6.'),

@@ -40,6 +40,8 @@ import { DIALECT_LABEL, splitMeta, sqlToMermaid } from '@/lib/sqlDesign';
 import { GenerateDialog, ImportDialog, InsertDialog, NewDialog, typeKey } from './dialogs';
 import { download, fileSlug, isDarkTheme, renderDiagramSvg, standaloneSvg, svgToPngBlob, type ParseResult, type Variant } from './render';
 import { useStoreMermaidRender } from '../c8c/mermaidRender';
+import DbDesignDialog from './DbDesignDialog'; // dm5 G2 (B16): bảng 7 cột Report 4 §1.3 từ sơ đồ SQL
+import PlantUmlEditor from './PlantUmlEditor'; // dm5 G2 (B18): sơ đồ PlantUML (SVG từ máy render tự host)
 
 const ExcalidrawEditor = dynamic(() => import('./ExcalidrawEditor'), { ssr: false, loading: () => <div className="grid h-full place-items-center"><Spinner /></div> });
 // Database designer (Monaco + ERD) nạp lười: chỉ khi mở một sơ đồ SQL.
@@ -200,6 +202,7 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged, lay, setLay
   const lg = useMinWidth(1024);
   const [sqlA, setSqlA] = useState<Analysis | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
+  const [dbOpen, setDbOpen] = useState(false);
   const sqlRef = useRef<SqlDesignerHandle | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const exRef = useRef<ExcalidrawHandle | null>(null);
@@ -348,12 +351,15 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged, lay, setLay
             ))}
           </div>
         )}
+        {d.format === 'SQL' && <button type="button" className="w-btn w-btn-sm" onClick={() => setDbOpen(true)} title={t('g2.dbTables')}><Database size={13} /> <span className="max-lg:hidden">{t('g2.dbTables')}</span></button>}
         {d.format === 'MERMAID' && d.type === 'ERD' && d.canEdit && !viewing && <button type="button" className="w-btn w-btn-sm" disabled={toSql.isPending} onClick={() => toSql.mutate()} title={t('dbd.toSqlHint')}>{toSql.isPending ? <Spinner size={12} /> : <Database size={13} />} <span className="max-lg:hidden">{t('dbd.toSql')}</span></button>}
         {d.format !== 'EXCALIDRAW' && <button type="button" className="w-btn w-btn-sm" aria-pressed={showCode} onClick={() => setShowCode((v) => !v)} title={d.format === 'SQL' ? t('dbd.codeToggleSql') : undefined}><Code2 size={13} /> <span className="max-sm:hidden">{d.format === 'SQL' ? 'SQL' : t('diagram.code')}</span></button>}
         <button type="button" className="w-btn w-btn-sm" aria-pressed={lay.focus} onClick={() => setLay({ focus: !lay.focus })} title={t('dbd.focusHint')}><Eye size={13} /> <span className="max-lg:hidden">{t('dbd.focus')}</span></button>
         <button type="button" className="w-btn w-btn-sm" aria-pressed={panelOpen} onClick={() => setPanelOpen((v) => !v)} aria-label={t('diagram.sidePanel')} title={t('diagram.sidePanel')}><PanelRight size={13} /></button>
         <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-pressed={maximised} onClick={toggleMax} aria-label={maximised ? t('dbd.restoreSize') : t('dbd.maximise')} title={`${maximised ? t('dbd.restoreSize') : t('dbd.maximise')} (F)`}>{maximised ? <Minimize2 size={14} /> : <Maximize2 size={14} />}</button>
-        <ExportMenu format={d.format} onPick={exportAs} />
+        {d.format === 'PLANTUML'
+          ? <button type="button" className="w-btn w-btn-sm" onClick={() => download(new Blob([source], { type: 'text/plain;charset=utf-8' }), `${fileSlug(d.key, d.title)}.puml`)}>.puml</button>
+          : <ExportMenu format={d.format} onPick={exportAs} />}
         {d.status !== 'PROPOSED' && <button type="button" className="w-btn w-btn-sm" onClick={() => setInsert(true)}>{t('diagram.insertShort')}</button>}
         {d.canApprove && d.status !== 'PROPOSED' && (
           d.status === 'APPROVED' && d.approvedVersion === d.currentVersion
@@ -384,6 +390,8 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged, lay, setLay
           {d.format === 'MERMAID' ? (
             <MermaidEditor showCode={showCode} source={source} readOnly={readOnly} variant={variant} onChange={(v) => setDraft(v)} onParsed={setParsed} label={`${d.key} ${d.title}`}
               codeW={lay.codeW} onCodeW={(w) => setLay({ codeW: w })} onToggleCode={() => setShowCode((v) => !v)} fitKey={`${number}-${viewing?.number ?? 'cur'}`} maximised={maximised} onToggleMaximise={toggleMax} />
+          ) : d.format === 'PLANTUML' ? (
+            <PlantUmlEditor pid={pid} source={source} readOnly={readOnly} onChange={(v) => setDraft(v)} label={`${d.key} ${d.title}`} showCode={showCode} />
           ) : d.format === 'SQL' ? (
             <SqlDesigner handleRef={sqlRef} source={source} readOnly={readOnly} dark={dark} variant={variant} label={`${d.key} ${d.title}`} onChange={(v) => setDraft(v)}
               codeOpen={showCode} codeW={lay.codeW} onCodeW={(w) => setLay({ codeW: w })} onToggleCode={() => setShowCode((v) => !v)}
@@ -416,6 +424,7 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged, lay, setLay
         </aside>
       </div>
       {insert && <InsertDialog pid={pid} diagram={d} open={insert} onClose={() => setInsert(false)} />}
+      {d.format === 'SQL' && dbOpen && <DbDesignDialog pid={pid} diagram={d.number} open={dbOpen} onClose={() => setDbOpen(false)} canEdit={d.canEdit} />}
       {d.format === 'SQL' && exportOpen && <SqlExportDialog open={exportOpen} onClose={() => setExportOpen(false)} model={sqlRef.current?.model() ?? sqlA?.parse.model ?? { dialect: 'sqlserver', tables: [], enums: [] }} title={d.title} pid={pid} issueNumber={d.issue?.number ?? null} />}
       <Dialog open={confirmDelete} onClose={() => setConfirmDelete(false)} title={t('diagram.deleteTitle', { key: d.key })} width={420}
         footer={<><button type="button" className="w-btn" onClick={() => setConfirmDelete(false)}>{t('common.cancel')}</button><button type="button" className="w-btn w-btn-danger" disabled={del.isPending} onClick={() => del.mutate()}>{t('diagram.delete')}</button></>}>
@@ -486,7 +495,7 @@ function InfoPanel({ d, base, parsed, sql }: { d: DiagramDetail; base: string; p
   return (
     <div className="flex flex-col gap-3">
       <dl className="grid grid-cols-[96px_1fr] gap-x-2 gap-y-1.5 text-[12.5px]">
-        <dt className="text-[var(--w-text-3)]">{t('diagram.format')}</dt><dd>{d.format === 'MERMAID' ? 'Mermaid' : d.format === 'SQL' ? `SQL${sql ? ` · ${DIALECT_LABEL[sql.parse.dialect]}` : ''}` : 'Excalidraw'}</dd>
+        <dt className="text-[var(--w-text-3)]">{t('diagram.format')}</dt><dd>{d.format === 'MERMAID' ? 'Mermaid' : d.format === 'SQL' ? `SQL${sql ? ` · ${DIALECT_LABEL[sql.parse.dialect]}` : ''}` : d.format === 'PLANTUML' ? 'PlantUML' : 'Excalidraw'}</dd>
         {d.format === 'SQL' && sql && <><dt className="text-[var(--w-text-3)]">{t('dbd.design')}</dt><dd>{t('dbd.tablesN', { count: sql.parse.model.tables.length })} · {t('dbd.checksN', { count: sql.lint.length })}</dd></>}
         {d.useCase && <><dt className="text-[var(--w-text-3)]">{t('diagram.useCase')}</dt><dd><Link className="text-[var(--w-accent-text)] hover:underline" href={`${base}/requirements?uc=${d.useCase.number}`}>{d.useCase.key} {d.useCase.name}</Link></dd></>}
         {d.issue && <><dt className="text-[var(--w-text-3)]">{t('diagram.issue')}</dt><dd><Link className="text-[var(--w-accent-text)] hover:underline" href={`${base}/issue/${d.issue.number}`}>{d.issue.key} {d.issue.title}</Link></dd></>}

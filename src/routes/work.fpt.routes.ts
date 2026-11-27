@@ -67,6 +67,9 @@ router.post(`${B}/unit`, asyncHandler(async (req, res) => {
   const body = parse(fpt.functionInput.extend({ starter: z.boolean().optional() }), req.body);
   ok(res, await fpt.createFunction(callerId(req), P(req, 'pid'), body), 201);
 }));
+// dm5 G3: D5 nạp JUnit/JaCoCo/SHA vào ma trận 5.1 (dryRun = xem trước) · D4 lint ma trận 5.1. Đặt TRƯỚC /unit/:fid.
+router.post(`${B}/unit/automation-import`, asyncHandler(async (req, res) => ok(res, await fpt.importUnitAutomation(callerId(req), P(req, 'pid'), parse(fpt.automationImportInput, req.body ?? {})))));
+router.get(`${B}/unit/lint`, asyncHandler(async (req, res) => ok(res, await fpt.unitLint(callerId(req), P(req, 'pid')))));
 router.get(`${B}/unit/:fid`, asyncHandler(async (req, res) => ok(res, await fpt.getFunction(callerId(req), P(req, 'pid'), P(req, 'fid')))));
 router.patch(`${B}/unit/:fid`, asyncHandler(async (req, res) => {
   const body = parse(fpt.functionInput.partial(), req.body);

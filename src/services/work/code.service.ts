@@ -27,6 +27,13 @@ import * as src from './gitSource.js';
 import { agentForbidden, requireProject, type ProjectAccess } from './permissions.js';
 import { projectMembers } from './projects.service.js';
 import { vnDay } from './sprints.service.js';
+import { branchFlags, g4SettingsOf, prFlags, repoHealthOf } from './dm5g4Rules.js';
+
+/** dm5 G4 (D12): ngưỡng "nhánh sống quá N ngày" / "PR quá N dòng" của dự án (settings.codeHealth). */
+async function healthSettings(projectId: number) {
+  const p = await prisma.workProject.findUnique({ where: { id: projectId }, select: { settings: true } });
+  return g4SettingsOf(p?.settings).codeHealth;
+}
 
 export type Provider = 'GITHUB' | 'GITLAB';
 interface ConnConfig { chatChannelId?: number | null; notify?: boolean; webBase?: string | null }
@@ -281,13 +288,21 @@ export async function activity(userId: number, projectId: number, q: ActivityQue
 export async function branches(userId: number, projectId: number) {
   await codeGate(userId, projectId);
   const ctx = await loadCtx(projectId);
-  const [rows, open, legacy] = await Promise.all([
+  const [rows, open, legacy, health, mergedRefs] = await Promise.all([
     prisma.workGitBranch.findMany({ where: { projectId }, orderBy: [{ lastPushAt: { sort: 'desc', nulls: 'last' } }, { name: 'asc' }], take: 500 }),
     prisma.workGitPull.findMany({ where: { projectId, state: { in: ['open', 'draft'] } }, select: { number: true, title: true, url: true, state: true, headRef: true, provider: true } }),
     prisma.workDevActivity.findMany({ where: { projectId, kind: 'BRANCH' }, select: { title: true, url: true, author: true, createdAt: true, issue: { select: { number: true } } } }),
+    healthSettings(projectId),
+    prisma.workGitPull.findMany({ where: { projectId, state: 'merged', headRef: { not: null } }, select: { headRef: true, provider: true } }),
   ]);
   const prOf = new Map(open.filter((p) => p.headRef).map((p) => [`${p.provider}:${p.headRef}`, p]));
+  const merged = new Set(mergedRefs.map((m) => `${m.provider}:${m.headRef}`));
+  const { gh, gl } = await connections(projectId);
+  const defaultBranch = (gh?.config as { defaultBranch?: string } | null)?.defaultBranch ?? (gl?.config as { defaultBranch?: string } | null)?.defaultBranch ?? null;
   const items = rows.map((b) => ({
+    // dm5 G4 (D12): tuổi nhánh (từ lần đầu CT Work thấy nó) + cờ "sống quá N ngày" (chưa xoá, chưa merge, không phải nhánh chính).
+    ...branchFlags({ name: b.name, createdAt: b.createdAt, deleted: !!b.deletedAt, merged: merged.has(`${b.provider}:${b.name}`) && !prOf.has(`${b.provider}:${b.name}`) }, defaultBranch, health),
+    firstSeenAt: b.createdAt.toISOString(),
     name: b.name, provider: b.provider, headSha: b.headSha, lastCommit: b.lastCommitTitle ? { title: b.lastCommitTitle, url: b.lastCommitUrl } : null,
     lastAuthor: b.lastAuthorLogin || b.lastAuthorName || b.lastAuthorEmail ? who(ctx, { login: b.lastAuthorLogin, name: b.lastAuthorName, email: b.lastAuthorEmail }) : null,
     lastPushAt: b.lastPushAt?.toISOString() ?? null, commitCount: b.commitCount, deleted: !!b.deletedAt, deletedAt: b.deletedAt?.toISOString() ?? null,
@@ -299,13 +314,14 @@ export async function branches(userId: number, projectId: number) {
     if (known.has(l.title)) continue;
     known.add(l.title);
     items.push({
+      ageDays: 0, stale: false, firstSeenAt: l.createdAt.toISOString(),
       name: l.title, provider: l.url.includes('github.com') ? 'GITHUB' : 'GITLAB', headSha: null, lastCommit: null,
       lastAuthor: l.author ? who(ctx, { login: l.author }) : null, lastPushAt: l.createdAt.toISOString(), commitCount: 0, deleted: false, deletedAt: null,
       issueNumbers: [l.issue.number], pr: null, legacy: true,
     });
   }
   items.sort((a, b) => Number(a.deleted) - Number(b.deleted) || (b.lastPushAt ?? '').localeCompare(a.lastPushAt ?? ''));
-  return { items, issues: await issueRefs(projectId, ctx.key, items.flatMap((i) => i.issueNumbers)) };
+  return { items, health, staleCount: items.filter((i) => i.stale).length, issues: await issueRefs(projectId, ctx.key, items.flatMap((i) => i.issueNumbers)) };
 }
 
 // ─── Pull request ────────────────────────────────────────────────
@@ -313,11 +329,14 @@ export async function branches(userId: number, projectId: number) {
 export async function pulls(userId: number, projectId: number, state: 'open' | 'merged' | 'closed' | 'all' = 'all') {
   await codeGate(userId, projectId);
   const ctx = await loadCtx(projectId);
-  const [rows, legacy] = await Promise.all([
+  const [rows, legacy, health] = await Promise.all([
     prisma.workGitPull.findMany({ where: { projectId }, orderBy: [{ openedAt: 'desc' }], take: 500 }),
     prisma.workDevContribution.findMany({ where: { projectId, kind: 'PR' }, orderBy: { occurredAt: 'desc' }, take: 500 }),
+    healthSettings(projectId),
   ]);
   const all = rows.map((p) => ({
+    // dm5 G4 (A2 hiển thị + D12): CI gộp từ webhook check_suite/check_run + cờ PR quá N dòng.
+    ciState: p.ciState, ciUrl: p.ciUrl, ciAt: p.ciAt?.toISOString() ?? null, headSha: p.headSha, ...prFlags(p, health),
     provider: p.provider, number: p.number, title: p.title, url: p.url, state: p.state,
     author: p.authorLogin ? who(ctx, { login: p.authorLogin }) : null, reviewers: p.reviewers.map((r) => who(ctx, { login: r })),
     headRef: p.headRef, baseRef: p.baseRef, issueNumbers: p.issueNumbers, additions: p.additions, deletions: p.deletions, changedFiles: p.changedFiles,
@@ -330,6 +349,7 @@ export async function pulls(userId: number, projectId: number, state: 'open' | '
     if (n === null || known.has(`${c.provider}:${n}`)) continue;
     known.add(`${c.provider}:${n}`);
     all.push({
+      ciState: null, ciUrl: null, ciAt: null, headSha: null, ...prFlags({ additions: c.additions, deletions: c.deletions }, health),
       provider: c.provider, number: n, title: (c.title ?? '').replace(/^[#!]\d+\s*/, ''), url: c.url, state: c.state ?? 'open',
       author: c.authorLogin || c.authorName ? who(ctx, { login: c.authorLogin, name: c.authorName, email: c.authorEmail }) : null, reviewers: [],
       headRef: null, baseRef: null, issueNumbers: c.issueNumbers, additions: c.additions, deletions: c.deletions, changedFiles: c.filesChanged,
@@ -341,7 +361,7 @@ export async function pulls(userId: number, projectId: number, state: 'open' | '
   const items = all
     .filter((p) => state === 'all' || (state === 'open' ? p.state === 'open' || p.state === 'draft' : p.state === state))
     .sort((a, b) => b.openedAt.localeCompare(a.openedAt));
-  return { items, counts, issues: await issueRefs(projectId, ctx.key, items.flatMap((i) => i.issueNumbers)) };
+  return { items, counts, health, largeCount: items.filter((i) => i.large && (i.state === 'open' || i.state === 'draft')).length, issues: await issueRefs(projectId, ctx.key, items.flatMap((i) => i.issueNumbers)) };
 }
 
 // ─── Panel Development trong thẻ ─────────────────────────────────
@@ -386,13 +406,17 @@ export async function issueDev(userId: number, projectId: number, number: number
   const knownBranch = new Set(branchRows.map((b) => b.name));
   const legacyBranches = legacy.filter((l) => l.kind === 'BRANCH' && !knownBranch.has(l.title));
 
-  type Group = { kind: 'PR' | 'BRANCH' | 'OTHER'; key: string; title: string; url: string | null; state: string | null; ref: string | null; number: number | null; author: Who | null; deleted: boolean; commits: C[] };
+  type Group = {
+    kind: 'PR' | 'BRANCH' | 'OTHER'; key: string; title: string; url: string | null; state: string | null; ref: string | null; number: number | null; author: Who | null; deleted: boolean; commits: C[];
+    /** dm5 G4 (A2): CI của PR (success | failure | pending | neutral | null = chưa có dữ liệu). */
+    ciState?: string | null; ciUrl?: string | null;
+  };
   const groups: Group[] = [];
   const used = new Set<string>();
   for (const p of prs) {
     const cs = p.headRef ? commits.filter((c) => c.branch === p.headRef) : [];
     if (p.headRef) used.add(p.headRef);
-    groups.push({ kind: 'PR', key: `pr-${p.provider}-${p.number}`, title: p.title, url: p.url, state: p.state, ref: p.headRef, number: p.number, author: p.authorLogin ? who(ctx, { login: p.authorLogin }) : null, deleted: false, commits: cs });
+    groups.push({ kind: 'PR', key: `pr-${p.provider}-${p.number}`, title: p.title, url: p.url, state: p.state, ref: p.headRef, number: p.number, author: p.authorLogin ? who(ctx, { login: p.authorLogin }) : null, deleted: false, commits: cs, ciState: p.ciState, ciUrl: p.ciUrl });
   }
   for (const l of legacyPrs) {
     groups.push({ kind: 'PR', key: `lpr-${l.id}`, title: l.title.replace(/^[#!]\d+\s*/, ''), url: l.url, state: l.state, ref: null, number: prNumberOf(l.externalId), author: l.author ? who(ctx, { login: l.author }) : null, deleted: false, commits: [] });
@@ -413,12 +437,42 @@ export async function issueDev(userId: number, projectId: number, number: number
   const orphan = rest.filter((c) => !c.branch);
   if (orphan.length) groups.push({ kind: 'OTHER', key: 'other', title: '', url: null, state: null, ref: null, number: null, author: null, deleted: false, commits: orphan });
 
+  // dm5 G4 (A2): CI gộp của thẻ = PR mở tệ nhất (failure > pending > success); không PR mở ⇒ PR mới nhất.
+  const openPrs = prs.filter((p) => p.state === 'open' || p.state === 'draft');
+  const pick = (openPrs.length ? openPrs : prs.slice(0, 1)).map((p) => p.ciState).filter((x): x is string => !!x);
+  const ci = pick.includes('failure') ? 'failure' : pick.includes('pending') ? 'pending' : pick.includes('success') ? 'success' : pick[0] ?? null;
   return {
     connected: !!(gh || gl),
     codeHref: `/work/${ctx.slug}/${ctx.key}/code`,
     counts: { prs: prs.length + legacyPrs.length, branches: groups.filter((g) => g.kind === 'BRANCH').length, commits: commits.length },
+    ci,
     groups,
   };
+}
+
+// ─── dm5 G4 (D13): sức khoẻ repo ─────────────────────────────────
+
+/** 5 mục vệ sinh repo trên nhánh mặc định: .gitignore · .env.example · PR template · CI workflow · branch protection. */
+export async function repoHealth(userId: number, projectId: number) {
+  await codeGate(userId, projectId);
+  const { gh, gl } = await connections(projectId);
+  if (!gh && !gl) return { connected: false, items: [] as ReturnType<typeof repoHealthOf>, defaultBranch: null as string | null };
+  let t: src.RepoTarget;
+  try { t = await target(projectId); } catch { return { connected: true, defaultBranch: null, items: repoHealthOf({ rootFiles: [], githubFiles: [], workflowFiles: [], protection: null, defaultBranch: 'main', readable: false }) }; }
+  let defaultBranch = 'main';
+  try { defaultBranch = (await src.repoMeta(t)).defaultBranch; } catch { /* repo riêng không token ⇒ readable=false bên dưới */ }
+  const list = async (path: string) => { try { return (await src.tree(t, defaultBranch, path)).map((e) => e.name); } catch { return null; } };
+  const root = await list('');
+  if (!root) return { connected: true, defaultBranch, items: repoHealthOf({ rootFiles: [], githubFiles: [], workflowFiles: [], protection: null, defaultBranch, readable: false }) };
+  const hasGithub = root.some((f) => f.toLowerCase() === '.github');
+  const [ghFiles, wf, protection] = await Promise.all([
+    hasGithub ? list('.github') : Promise.resolve([] as string[]),
+    hasGithub ? list('.github/workflows') : Promise.resolve([] as string[]),
+    src.branchProtected(t, defaultBranch),
+  ]);
+  // GitLab: CI là .gitlab-ci.yml ở gốc.
+  const workflowFiles = [...(wf ?? []), ...root.filter((f) => f === '.gitlab-ci.yml')];
+  return { connected: true, defaultBranch, items: repoHealthOf({ rootFiles: root, githubFiles: ghFiles ?? [], workflowFiles, protection, defaultBranch, readable: true }) };
 }
 
 // ─── Mã nguồn (proxy) ────────────────────────────────────────────

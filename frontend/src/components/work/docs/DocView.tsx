@@ -50,6 +50,7 @@ import { FileDown, Gauge, Wand2 } from 'lucide-react';
 import { mermaidPngsOf, saveBlob, workDocs3aApi } from '@/lib/work-docs3a-api';
 import { useStoreDocMermaid } from '../c8c/mermaidRender';
 import { SRS_SECTION_LABEL, workCtw4Api } from '@/lib/work-ctw4-api'; // CTW đợt 4: Report 3 từ SRS có cấu trúc, ghép Report 7
+import { useDm5bDocActions } from './Dm5bDocActions'; // dm5 G2: điền Report 2/4/6, đối soát Report 7, ADR
 import { ListTree, Layers, PanelRightClose, PanelRightOpen, SpellCheck } from 'lucide-react';
 import { PaneDrawer, useLayoutPrefs, type PaneState } from '../shell/panes';
 import { wt } from '@/components/work/i18n';
@@ -317,8 +318,14 @@ export default function DocView({ config, num, details, focus = false }: { confi
       accept(r.page);
       qc.invalidateQueries({ queryKey: workDocsKeys.versions(pid, num) });
       toast.success(wt('docs.assembled', { r: r.merged.join(', '), missing: r.missing.length ? wt('docs.missingR', { m: r.missing.join(', ') }) : '' }));
+      dm5b.showChecks(r.checks); // dm5 G2 (B19): đối soát chéo — có lỗi ⇒ hộp liệt kê (bản Final vẫn đã ghép)
     },
     onError: (err) => toast.error(workError(err, errCode(err) === 'WORK_PAGE_CONFLICT' ? wt('docs.conflictReload') : wt('docs.assembleFailed'))),
+  });
+  // dm5 G2 (27/11/2026): nút điền Report 2 (RACI) / 4 / 6, đối soát Report 7, ADR — xem Dm5bDocActions.tsx.
+  const dm5b = useDm5bDocActions({
+    pid, num, templateKey: page?.templateKey ?? null, title: page?.title ?? '', editable,
+    flush, baseVersion: () => base.current ?? undefined, reload: () => reloadFromServer(), MenuItem, close: () => setMore(false),
   });
   const exportFinal = useMutation({
     mutationFn: async (format: 'docx' | 'pdf') => {
@@ -605,6 +612,7 @@ export default function DocView({ config, num, details, focus = false }: { confi
             {page.templateKey === 'fpt-report3-srs' && editable && <MenuItem icon={Wand2} label={wt('docs.fillSrs')} onClick={() => { setMore(false); fillSrs.mutate(); }} />}
             {page.templateKey === 'fpt-report3-srs' && <MenuItem icon={ListTree} label={wt('docs.openReq')} onClick={() => { setMore(false); router.push(`/work/${config.workspace.slug}/${config.key}/requirements`); }} />}
             {page.templateKey === 'fpt-report7-final-report' && editable && <MenuItem icon={Layers} label={wt('docs.assembleFrom')} onClick={() => { setMore(false); assembleFinal.mutate(); }} />}
+            {dm5b.menu}
             {page.templateKey === 'fpt-report7-final-report' && <MenuItem icon={FileDown} label={exportFinal.isPending ? wt('docs.exportingFinal') : wt('docs.exportFinalDocx')} onClick={() => { setMore(false); exportFinal.mutate('docx'); }} />}
             {page.templateKey === 'fpt-report7-final-report' && <MenuItem icon={FileDown} label={wt('docs.exportFinalPdf')} onClick={() => { setMore(false); exportFinal.mutate('pdf'); }} />}
             {/* Đợt S5c: AI tóm tắt trang (đọc qua quyền của người bấm; không đề xuất gì). */}
@@ -725,6 +733,7 @@ export default function DocView({ config, num, details, focus = false }: { confi
         beforeRun={flush}
         onApplied={() => { void reloadFromServer(); qc.invalidateQueries({ queryKey: workDocsKeys.versions(pid, num) }); }}
       />
+      {dm5b.dialogs}
       <DocHistory open={history} onClose={() => setHistory(false)} pid={pid} page={page} canRestore={page.canManage && editable} onRestored={(p) => { qc.setQueryData(key, p); qc.invalidateQueries({ queryKey: workDocsKeys.list(pid) }); }} />
       <RequestApprovalDialog
         open={asking}

@@ -13,6 +13,7 @@ import { codeApi, codeKeys, type PullItem } from './codeApi';
 import AiReviewButton from './AiReviewButton';
 import { BranchName, IssueChips, LineDelta, prIcon, WhoChip } from './parts';
 import { safeHref } from './codeText';
+import { CiChip, WarnFlag } from './g4Parts';
 
 type St = 'open' | 'merged' | 'closed' | 'all';
 
@@ -47,6 +48,8 @@ export default function PullsTab({ pid, projectKey, state, onState, focus, onIss
         ))}
       </div>
 
+      {/* dm5 G4 (D12): PR đang mở quá N dòng đổi. */}
+      {!!q.data?.largeCount && <p className="text-[12.5px] text-[var(--w-amber-text,#b45309)]" data-testid="pr-large-note">{wt('g4.largeCount', { count: q.data.largeCount, max: q.data.health.prMaxLines })}</p>}
       {q.isLoading ? (
         <div className="flex justify-center py-12"><Spinner /></div>
       ) : q.isError ? (
@@ -70,6 +73,9 @@ export default function PullsTab({ pid, projectKey, state, onState, focus, onIss
                       <a href={safeHref(p.url)} target="_blank" rel="noopener noreferrer" className="min-w-0 text-[14px] font-semibold hover:text-[var(--w-accent-text)] hover:underline">{p.title}</a>
                     ) : <span className="min-w-0 text-[14px] font-semibold">{p.title}</span>}
                     {p.state === 'draft' && <span className="rounded-full border border-[var(--w-border-strong)] px-1.5 text-[11px] text-[var(--w-text-2)]">{wt('code.stDraft')}</span>}
+                    {/* dm5 G4 (A2): CI của PR · (D12) PR quá N dòng. */}
+                    <CiChip state={p.ciState} url={p.ciUrl} />
+                    {p.large && (p.state === 'open' || p.state === 'draft') && <WarnFlag text={wt('g4.largePr', { n: p.lines, max: q.data!.health.prMaxLines })} />}
                     <IssueChips nums={p.issueNumbers} refs={q.data!.issues} projectKey={projectKey} onOpen={onIssue} />
                   </div>
                   <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-[var(--w-text-2)]">

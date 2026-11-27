@@ -9,7 +9,7 @@ import { timTheoChu, type PhienCu } from 'ct-lenh';
 import type { CoDong } from './coDong';
 import { KetNoiLoi } from './ketNoi';
 import { KhoChat, type InfoLoi, type WsLoi } from './kho';
-import { MODEL_DU_PHONG, tenModel, moPhien } from './lenh';
+import { MODEL_DU_PHONG, datVaiCli, tenModel, moPhien } from './lenh';
 import { timTrinhDuyet } from '../../cuongmini-core/src/timTrinhDuyet';
 import { docCaiDat, nenBatTrinhDuyet } from './caiDat';
 import { L } from './i18n';
@@ -59,9 +59,16 @@ export async function khoiDongPhien(nguoi: NguoiDung, co: CoDong, thuMuc: string
   if (co.tiepTuc) {
     const tenDuAn = path.basename(thuMuc);
     const ds = await kn.goi<PhienCu[]>('agent:dsPhien').catch(() => [] as PhienCu[]);
-    const p = ds.filter((x) => !x.luuTru && x.duAn === tenDuAn).sort((a, b) => b.luucLuc - a.luucLuc)[0];
+    // Chế độ đóng vai: `-c --vai C3` ⇒ việc gần nhất của ĐÚNG phiên vai C3 (5 phiên vai cùng một thư mục).
+    const cung = ds.filter((x) => !x.luuTru && x.duAn === tenDuAn && (!co.vai || x.vai === co.vai));
+    const p = cung.sort((a, b) => b.luucLuc - a.luucLuc)[0];
     if (!p) canhBao.push(L(`Chưa có việc nào đã lưu của thư mục "${tenDuAn}" — bắt đầu việc mới.`, `No saved task for folder "${tenDuAn}" — starting a new one.`));
     else await moPhien(p.id, p.tieuDe, { kho, kn, xoaManHinh: () => undefined }).catch((e: Error) => canhBao.push(e.message));
+  }
+  // Chế độ đóng vai: `--vai C3` thắng vai đã lưu của việc vừa mở (-c).
+  if (co.vai && kho.S.vai !== co.vai) {
+    const ok = await datVaiCli(co.vai, { kho, kn }, true);
+    if (!ok) canhBao.push(L('Lõi này chưa hỗ trợ --vai — cập nhật CuongMini.', 'This core does not support --vai yet — update CuongMini.'));
   }
   return { kn, kho, canhBao };
 }

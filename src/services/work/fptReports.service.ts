@@ -28,6 +28,7 @@ import {
 import { requireProject } from './permissions.js';
 import { loadQuestions, qaNotes } from './qna.service.js';
 import { projectMembers } from './projects.service.js';
+import { isHat, soloBat, tenTheoVai, vaiCuaNhieuThe, type Hat } from './vaiDong.js';
 import { addDays, dayInZone, projectTimezone, zonedMidnight } from './projectTime.js';
 import { writeXlsx } from './xlsxStyled.js';
 import { isLeakage } from './testMetrics.js'; // dm5 G3 (D8)
@@ -76,12 +77,29 @@ export async function loadReportDoc(projectId: number) {
 /** Thành viên NGƯỜI có quyền ghi (ADMIN/MEMBER, kể cả thành viên ngầm của dự án mở cho không gian; không agent,
  *  không khách/giảng viên/người xem) — điền sẵn danh sách sinh viên / điểm cá nhân. */
 async function teamMembers(projectId: number): Promise<Array<{ userId: number; name: string; role: string }>> {
+  const solo = await soloBat(projectId);
   const people = (await projectMembers(projectId)).filter((p) => p.role === 'ADMIN' || p.role === 'MEMBER');
   const humans = new Set((await prisma.user.findMany({ where: { id: { in: people.map((p) => p.id) }, kind: 'HUMAN' }, select: { id: true } })).map((u) => u.id));
   return people
     .filter((p) => humans.has(p.id))
     .sort((a, b) => Number(b.role === 'ADMIN') - Number(a.role === 'ADMIN'))
-    .map((p) => ({ userId: p.id, name: displayName(p), role: p.role === 'ADMIN' ? 'Leader' : 'Member' }));
+    .map((p) => ({ userId: p.id, name: displayName(p), role: p.role === 'ADMIN' ? 'Leader' : 'Member' }))
+    // Chế độ đóng vai (vaiDong.ts): ghi rõ một sinh viên đóng cả 5 vai — không bao giờ trình bày như 5 người.
+    .map((m, _i, all) => (solo && all.length === 1 ? { ...m, role: 'Leader · 1 student plays all 5 roles (C1–C5)' } : m));
+}
+
+/**
+ * Chế độ đóng vai: tên người kèm vai "Tên (role C3 · BE)" theo vai ghi trên thẻ (trường Role / nhãn C1…C5) hoặc vai lúc
+ * ghi giờ. Dự án không bật ⇒ tên giữ nguyên (hành vi cũ).
+ */
+async function soloNamer(projectId: number, issueIds: number[]) {
+  const on = await soloBat(projectId);
+  const hats = on ? await vaiCuaNhieuThe(projectId, issueIds) : new Map<number, Hat>();
+  return (u: Who, issueId?: number | null, hat?: string | null) => {
+    const n = nameOf(u);
+    if (!on || !n) return n;
+    return tenTheoVai(n, isHat(hat) ? hat : issueId ? hats.get(issueId) ?? null : null);
+  };
 }
 
 export async function getReportDoc(userId: number, projectId: number) {
@@ -283,6 +301,7 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
     }),
   ]);
   type Iss = (typeof issues)[number];
+  const who = await soloNamer(projectId, issues.map((i) => i.id));
   const scopeStatus = (i: Pick<Iss, 'resolution' | 'status'>) => (i.resolution && /won.?t|cancel|duplicate|reject/i.test(i.resolution) ? 'Cancelled'
     : i.status.category === 'DONE' ? 'Completed' : i.status.category === 'IN_PROGRESS' ? 'In Progress' : 'Pending');
   const scope: ScopeRow[] = [];
@@ -293,7 +312,7 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
       scope.push({
         wbs: num.join('.'), title: it.title, bold: false,
         estDays: w ? (w.plannedTotal || null) : it.originalEstimateMin ? pds(it.originalEstimateMin) : null,
-        inCharge: nameOf(it.assignee), deadline: weekLabelOf(iso(it.dueDate), doc.week1Start), status: scopeStatus(it),
+        inCharge: who(it.assignee, it.id), deadline: weekLabelOf(iso(it.dueDate), doc.week1Start), status: scopeStatus(it),
         actualDays: w ? (w.actualTotal || null) : it.timeSpentMin ? pds(it.timeSpentMin) : null, notes: `${p.key}-${it.number}`,
       });
       if (depth < 2) pushTree(all.filter((c) => c.parentId === it.id), all, num, depth + 1);
@@ -314,7 +333,7 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
     const tops = epics.length ? epics : issues.filter((i) => !i.parentId);
     tops.slice(0, 200).forEach((e, k) => {
       const w = rowById.get(e.id);
-      scope.push({ wbs: `${k + 1}.0`, title: e.title, bold: true, estDays: w?.plannedTotal || null, inCharge: nameOf(e.assignee), deadline: weekLabelOf(iso(e.dueDate), doc.week1Start), status: scopeStatus(e), actualDays: w?.actualTotal || null, notes: `${p.key}-${e.number}` });
+      scope.push({ wbs: `${k + 1}.0`, title: e.title, bold: true, estDays: w?.plannedTotal || null, inCharge: who(e.assignee, e.id), deadline: weekLabelOf(iso(e.dueDate), doc.week1Start), status: scopeStatus(e), actualDays: w?.actualTotal || null, notes: `${p.key}-${e.number}` });
       if (epics.length) pushTree(issues.filter((c) => c.parentId === e.id), issues, [k + 1], 1);
     });
   }
@@ -357,7 +376,7 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
       orderBy: { startedAt: 'asc' },
       take: 10_000,
       select: {
-        minutes: true, startedAt: true, note: true, createdAt: true, userId: true, activity: true, workProduct: true,
+        minutes: true, startedAt: true, note: true, createdAt: true, userId: true, activity: true, workProduct: true, hat: true, issueId: true,
         user: { select: { username: true, fullName: true, displayName: true } },
         issue: { select: { number: true, title: true, type: { select: { key: true } }, stage: { select: { name: true } }, parent: { select: { title: true } } } },
       },
@@ -365,12 +384,13 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
     prisma.workTimesheet.findMany({ where: { projectId }, select: { userId: true, weekStart: true, status: true } }),
   ]);
   const sheetStatus = new Map(sheets.map((s) => [`${s.userId}|${iso(s.weekStart)}`, s.status]));
+  const whoLog = await soloNamer(projectId, [...new Set(logs.map((l) => l.issueId))]);
   const timelogs: TimeLogRow[] = logs.map((l) => {
     const day = dayInZone(l.startedAt, tz);
     const st = sheetStatus.get(`${l.userId}|${mondayOf(day)}`);
     const text = `${l.issue.title} ${l.issue.stage?.name ?? ''} ${l.issue.parent?.title ?? ''}`;
     return {
-      date: day, reporter: nameOf(l.user), task: `${p.key}-${l.issue.number} ${l.issue.title}`, hours: Math.round((l.minutes / 60) * 100) / 100,
+      date: day, reporter: whoLog(l.user, l.issueId, l.hat), task: `${p.key}-${l.issue.number} ${l.issue.title}`, hours: Math.round((l.minutes / 60) * 100) / 100,
       // CTW đợt 4 (A24): Activity / Work Product người ghi giờ chọn thắng phần suy từ tiêu đề thẻ.
       activity: l.activity ?? activityOf(l.issue.title, l.issue.type.key), type: workTypeOf(l.issue.title),
       product: l.workProduct && (PRODUCTS as readonly string[]).includes(l.workProduct) ? l.workProduct : productOf(`${l.workProduct ?? ''} ${text}`),
@@ -385,7 +405,7 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
     orderBy: { number: 'asc' },
     take: 5000,
     select: {
-      number: true, title: true, createdAt: true, updatedAt: true, resolution: true, assigneeId: true,
+      id: true, number: true, title: true, createdAt: true, updatedAt: true, resolution: true, assigneeId: true,
       status: { select: { name: true, category: true } },
       reporter: { select: { username: true, fullName: true, displayName: true } }, assignee: { select: { username: true, fullName: true, displayName: true } },
       labels: { select: { label: { select: { name: true } } } }, components: { select: { component: { select: { name: true } } } },
@@ -393,6 +413,9 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
       defectInfo: { select: { severity: true, activity: true, product: true, productDetails: true, sourceReviewId: true, leakage: true } },
     },
   });
+  const whoBug = await soloNamer(projectId, bugs.map((b) => b.id));
+  // Người báo lỗi: vai lúc TẠO thẻ (lịch sử "created" ghi vai đang đóng), thường là C5 QA.
+  const createdRole = new Map((await prisma.workHistory.findMany({ where: { issueId: { in: bugs.map((b) => b.id) }, field: 'created', actingRole: { not: null } }, select: { issueId: true, actingRole: true } })).map((h) => [h.issueId, h.actingRole]));
   const defects: DefectRow[] = bugs.map((b) => {
     const labels = b.labels.map((l) => l.label.name.toLowerCase());
     const has = (re: RegExp) => labels.some((l) => re.test(l));
@@ -408,7 +431,7 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
     return {
       date: dayInZone(b.createdAt, tz), description: `${p.key}-${b.number} ${b.title}`, activity: di?.activity ?? activity,
       product: di?.product ?? productOf(`${b.title} ${labels.join(' ')} ${comps.join(' ')}`),
-      productDetails: di?.productDetails ?? comps.join(', '), assigner: nameOf(b.reporter), assignee: nameOf(b.assignee), status, updated: dayInZone(b.updatedAt, tz),
+      productDetails: di?.productDetails ?? comps.join(', '), assigner: whoBug(b.reporter, null, createdRole.get(b.id) ?? null), assignee: whoBug(b.assignee, b.id), status, updated: dayInZone(b.updatedAt, tz),
       // dm5 G3 (D8): "Leakage" ở đầu Notes khi lỗi lọt (cờ / activity AT / nhãn) ⇒ đếm được bằng COUNTIF như số DRE trên CT Work.
       notes: [isLeakage({ leakage: di?.leakage, activity: di?.activity ?? activity, labels: b.labels.map((l) => l.label.name) }) ? 'Leakage' : '', sev, b.defectOf.length ? 'Found in a test run' : '', di?.sourceReviewId ? 'Found in a spec review' : ''].filter(Boolean).join(' · '),
     };
@@ -451,7 +474,7 @@ export async function composeWeekly(projectId: number, weekStartRaw: string): Pr
   const [logs, touched, raid, flagged, upcoming, members] = await Promise.all([
     prisma.workWorklog.findMany({
       where: { issue: { projectId, deletedAt: null }, startedAt: { gte: from, lt: to } },
-      select: { minutes: true, issueId: true, user: person },
+      select: { minutes: true, issueId: true, hat: true, user: person },
     }),
     prisma.workIssue.findMany({
       where: {
@@ -474,7 +497,7 @@ export async function composeWeekly(projectId: number, weekStartRaw: string): Pr
     prisma.workIssue.findMany({
       where: { projectId, deletedAt: null, flaggedAt: { not: null, lt: to } },
       orderBy: { number: 'asc' }, take: 30,
-      select: { number: true, title: true, flagReason: true, status: { select: { category: true } }, assignee: person },
+      select: { id: true, number: true, title: true, flagReason: true, status: { select: { category: true } }, assignee: person },
     }),
     prisma.workIssue.findMany({
       where: {
@@ -486,7 +509,7 @@ export async function composeWeekly(projectId: number, weekStartRaw: string): Pr
       },
       orderBy: [{ dueDate: 'asc' }, { number: 'asc' }],
       take: 30,
-      select: { number: true, title: true, dueDate: true, sprint: { select: { endAt: true } }, assignee: person },
+      select: { id: true, number: true, title: true, dueDate: true, sprint: { select: { endAt: true } }, assignee: person },
     }),
     teamMembers(projectId),
   ]);
@@ -498,11 +521,12 @@ export async function composeWeekly(projectId: number, weekStartRaw: string): Pr
     for (const r of (await loadWbs(projectId)).result.rows) wbsOf.set(r.number, r.wbs);
   } catch { /* WBS lỗi không chặn báo cáo tuần */ }
   const wbsNote = (n: number) => (wbsOf.has(n) ? `WBS ${wbsOf.get(n)}` : wbsOf.size ? 'not in WBS' : '');
+  const who = await soloNamer(projectId, [...new Set([...touched.map((i) => i.id), ...flagged.map((i) => i.id), ...upcoming.map((i) => i.id)])]);
   const hours = new Map<number, { min: number; who: Set<string> }>();
   for (const l of logs) {
     const h = hours.get(l.issueId) ?? { min: 0, who: new Set<string>() };
     h.min += l.minutes;
-    h.who.add(nameOf(l.user));
+    h.who.add(who(l.user, l.issueId, l.hat));
     hours.set(l.issueId, h);
   }
   const status: WeeklyData['status'] = touched.map((i) => {
@@ -510,7 +534,7 @@ export async function composeWeekly(projectId: number, weekStartRaw: string): Pr
     const done = i.status.category === 'DONE' && i.resolvedAt && i.resolvedAt < to;
     return {
       task: i.title,
-      inCharge: nameOf(i.assignee) || [...(h?.who ?? [])].join(', '),
+      inCharge: who(i.assignee, i.id) || [...(h?.who ?? [])].join(', '),
       status: done ? 'Completed' : i.status.category === 'IN_PROGRESS' || h ? 'In Progress' : 'Pending',
       notes: [wbsNote(i.number), `${p.key}-${i.number}`, h ? `${Math.round((h.min / 60) * 10) / 10}h logged` : ''].filter(Boolean).join(' · '),
     };
@@ -518,10 +542,10 @@ export async function composeWeekly(projectId: number, weekStartRaw: string): Pr
   const raidStatus = (r: { status: string; closedAt: Date | null }) => (r.closedAt && r.closedAt < to ? 'Completed' : r.status === 'MONITORING' ? 'In Progress' : 'Pending');
   const issues: WeeklyData['issues'] = [
     ...raid.filter((r) => r.type === 'ISSUE').map((r) => ({ issue: r.title, owner: nameOf(r.owner), status: raidStatus(r), notes: (r.mitigation ?? r.description ?? '').slice(0, 2000) })),
-    ...flagged.map((i) => ({ issue: `${p.key}-${i.number} ${i.title} (blocked)`, owner: nameOf(i.assignee), status: i.status.category === 'DONE' ? 'Completed' : 'In Progress', notes: i.flagReason ?? '' })),
+    ...flagged.map((i) => ({ issue: `${p.key}-${i.number} ${i.title} (blocked)`, owner: who(i.assignee, i.id), status: i.status.category === 'DONE' ? 'Completed' : 'In Progress', notes: i.flagReason ?? '' })),
   ];
   const plan: WeeklyData['plan'] = upcoming.map((i) => ({
-    task: i.title, inCharge: nameOf(i.assignee),
+    task: i.title, inCharge: who(i.assignee, i.id),
     deadline: iso(i.dueDate) ?? (i.sprint?.endAt ? dayInZone(i.sprint.endAt, tz) : ''),
     notes: [wbsNote(i.number), `${p.key}-${i.number}`].filter(Boolean).join(' · '),
   }));

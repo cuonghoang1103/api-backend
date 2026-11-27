@@ -319,12 +319,16 @@ async function projectContext(access: ProjectAccess, focusText: string) {
     + `${i.parent ? ` parent=${project.key}-${i.parent.number}` : ''}${i.dueDate ? ` due=${i.dueDate.toISOString().slice(0, 10)}` : ''}`
     + `${i.sprintId ? ` sprint=${sprints.find((s) => s.id === i.sprintId)?.name ?? 'closed'}` : ''}`);
   const instructions = aiInstructionsOf(project.settings);
+  // Chế độ đóng vai (vaiDong.ts): người hỏi đang đóng vai C1–C5 ⇒ một dòng gợi ý theo vai (một sinh viên đóng 5 vai).
+  const { GOI_Y_VAI, nhanVai, vaiDangDong } = await import('./vaiDong.js');
+  const vai = await vaiDangDong(access.projectId);
   return {
     project,
     instructions,
     text: [
       `Project ${project.key} "${project.name}" (${project.type}, template ${project.template}). ${clip(project.description, 400)}`,
       ...(instructions ? [instructionsBlock(instructions)] : []),
+      ...(vai ? [`Acting role: the student is acting as ${nhanVai(vai)} (one student plays all 5 roles C1–C5 on one account; never describe them as separate people). ${GOI_Y_VAI[vai]}`] : []),
       `Issue types: ${project.issueTypes.map((t) => `${t.key} (${t.level === 1 ? 'epic' : t.level === -1 ? 'sub-task' : 'standard'})`).join(', ')}.`,
       `Statuses: ${[...new Set(statuses.map((s) => s.name))].join(', ')}.`,
       `Members who can be assigned: ${members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER').map((m) => `@${m.username} (${displayName(m)})`).join(', ') || 'none'}.`,

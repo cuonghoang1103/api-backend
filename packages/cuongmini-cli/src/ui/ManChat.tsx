@@ -727,9 +727,9 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     }
     void kn.goi<PhienCu[]>('agent:dsPhien').then((tat) => {
       const ds0 = locPhien(tat, '');
-      const tao = (q: string): MucMenu[] => (q ? tat.filter((p) => !p.luuTru && chuanHoa(`${p.tieuDe} ${p.duAn ?? ''}`).includes(chuanHoa(q))) : ds0)
+      const tao = (q: string): MucMenu[] => (q ? tat.filter((p) => !p.luuTru && chuanHoa(`${p.tieuDe} ${p.duAn ?? ''} ${p.vai ?? ''}`).includes(chuanHoa(q))) : ds0)
         .slice(0, 40)
-        .map((p) => ({ nhan: `${p.ghim ? '📌 ' : ''}${p.tieuDe || L('Việc chưa đặt tên', 'Untitled task')}`, mo: `${p.duAn ? `${p.duAn} · ` : ''}${tuongDoi(p.luucLuc)} · ${L(`${p.soTinNhan} tin`, `${p.soTinNhan} message${p.soTinNhan === 1 ? '' : 's'}`)}`, giaTri: p.id }));
+        .map((p) => ({ nhan: `${p.ghim ? '📌 ' : ''}${p.tieuDe || L('Việc chưa đặt tên', 'Untitled task')}`, mo: `${p.vai ? `${L('vai', 'role')} ${p.vai} · ` : ''}${p.duAn ? `${p.duAn} · ` : ''}${tuongDoi(p.luucLuc)} · ${L(`${p.soTinNhan} tin`, `${p.soTinNhan} message${p.soTinNhan === 1 ? '' : 's'}`)}`, giaTri: p.id }));
       if (!tat.length) { kho.thongBao(L('Chưa có việc nào được lưu.', 'No saved tasks yet.')); return; }
       menu({
         tieuDe: L('Mở lại việc cũ', 'Resume a task'), ds: tao(''), coLoc: true, boLoc: tao,

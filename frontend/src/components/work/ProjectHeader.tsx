@@ -29,6 +29,7 @@ import { cn } from '@/lib/utils';
 import { Popover, ProjectMark, useToggle } from './ui';
 import { wt } from '@/components/work/i18n';
 import ProjectCover from './cover/ProjectCover'; // UX-D
+import VaiPicker from './VaiPicker'; // 27/11/2026: chế độ đóng vai — chọn vai C1–C5
 
 export function Crumb({ href, children, className, title }: { href: string; children: ReactNode; className?: string; title?: string }) {
   return (
@@ -204,6 +205,7 @@ export default function ProjectHeader({ config, title, children, extra, tools = 
 
   const actions = (
     <div ref={actRef} className={cn('w-header-actions flex shrink-0 items-center gap-1.5', layout.stack && 'flex-wrap justify-end')}>
+      <VaiPicker config={config} />
       {tools && <AiButton config={config} />}
       {children}
       {tools && <MoreMenu config={config} items={more} />}

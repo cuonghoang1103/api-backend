@@ -96,7 +96,8 @@ const REVIEW_FLOW: BpStatus[] = [
   { name: 'To Do', category: 'TODO' }, { name: 'In Progress', category: 'IN_PROGRESS', wipLimit: 2 },
   { name: 'In Review', category: 'IN_PROGRESS', wipLimit: 2 }, { name: 'Done', category: 'DONE' },
 ];
-/** Done CHỈ từ In Review, và người đang được giao không tự đóng (cần tài khoản vai khác — xem bài s00/s01). */
+/** Done CHỈ từ In Review, và người đang được giao không tự đóng — dự án SOLO5 so theo VAI (chế độ đóng vai, vaiDong.ts):
+ *  thẻ Role C3 thì phải đổi sang vai khác (C5 QA) mới đóng được. Dự án nhóm vẫn so theo người. */
 const DONE_FROM_REVIEW = [{ to: 'Done', onlyFrom: ['In Review'], rules: { notAssignee: true } }];
 
 const DOD_COMMON = ['Acceptance criteria verified (Given/When/Then)', 'Evidence attached (screenshot / test run / PR link)', 'Code reviewed and merged with green CI', 'No open P0–P1 bug linked'];
@@ -292,8 +293,8 @@ export const BLUEPRINTS: Blueprint[] = [
   {
     key: 'SWP391_SOLO5',
     name: 'SWP391 · one person, 5 roles', nameVi: 'SWP391 · một mình đóng 5 vai',
-    description: 'Matches the course "Du an mot minh 5 vai": C1 PM · C2 BA · C3 Dev BE · C4 Dev FE · C5 QA. Done rules with Evidence, hard WIP 2, the assignee cannot close their own card (use the 5 role accounts), Daily / mid-week / Sunday review-retro, gates G0 → defence, critic-only AI review, hours-by-role alerts.',
-    descriptionVi: 'Khớp khoá "Dự án một mình 5 vai": C1 PM · C2 BA · C3 Dev BE · C4 Dev FE · C5 QA. Done rules có Evidence, WIP 2 chặn cứng, người được giao không tự đóng thẻ (dùng 5 tài khoản vai), Daily / giữa tuần / review-retro Chủ nhật, gate G0 → bảo vệ, AI review chỉ phản biện, cảnh báo giờ theo vai.',
+    description: 'Matches the course "Du an mot minh 5 vai": C1 PM · C2 BA · C3 Dev BE · C4 Dev FE · C5 QA. Done rules with Evidence, hard WIP 2, the assignee cannot close their own card while acting in the role of the card (one account, switch the acting role C1–C5), Daily / mid-week / Sunday review-retro, gates G0 → defence, critic-only AI review, hours-by-role alerts.',
+    descriptionVi: 'Khớp khoá "Dự án một mình 5 vai": C1 PM · C2 BA · C3 Dev BE · C4 Dev FE · C5 QA. Done rules có Evidence, WIP 2 chặn cứng, người được giao không tự đóng thẻ khi đang đóng đúng vai của thẻ (một tài khoản, đổi vai C1–C5), Daily / giữa tuần / review-retro Chủ nhật, gate G0 → bảo vệ, AI review chỉ phản biện, cảnh báo giờ theo vai.',
     base: { template: 'SWP391', type: 'SCRUM', kind: 'SCHOOL' },
     workflow: { statuses: REVIEW_FLOW, rules: DONE_FROM_REVIEW },
     types: ['REQUIREMENT', 'TEST'],
@@ -311,6 +312,8 @@ export const BLUEPRINTS: Blueprint[] = [
       testGate: 'block', reviewCoolOffHours: 12,
       aiReviewMode: 'critic', roleAlert: { qaMinPct: 15, maxWeekHours: 30 }, codeHealth: { branchMaxDays: 3, prMaxLines: 400 },
       banner: { text: 'Solo · 1 person plays 5 roles (C1 PM · C2 BA · C3 BE · C4 FE · C5 QA)', tone: 'solo' },
+      // Chế độ đóng vai (27/11/2026): một tài khoản, chọn vai C1–C5 trên header — luật tách quyền so theo vai.
+      soloRoles: { enabled: true },
     },
     cadence: CADENCE_SOLO,
     stages: STAGES_ITER,

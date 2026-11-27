@@ -140,6 +140,12 @@ export async function exportXlsx(userId: number, projectId: number, q: ContribQu
     br.set(tr, tc, r.totals.totalHours, N);
     br.set(tr + 2, 1, `Role per log = the role picked when logging, else the card label (C1…C5 / PM·BA·BE·FE·QA), else the activity. ${r.guessedHours} h were inferred. Alerts: QA below ${r.thresholds.qaMinPct}% of a week · more than ${r.thresholds.maxWeekHours} h in a week (C1–C5 split real hours, they never add hours).`, MUTED).merge(tr + 2, 1, tr + 2, tc + 1);
     br.height(tr + 2, 40);
+    // Chế độ đóng vai (vaiDong.ts): bản nộp phải nói rõ đây là MỘT sinh viên đóng 5 vai, không phải 5 người.
+    const { soloBat, SOLO_NOTE_EN, SOLO_NOTE_VI } = await import('./vaiDong.js');
+    if (await soloBat(projectId)) {
+      br.set(tr + 3, 1, q.lang === 'vi' ? SOLO_NOTE_VI : SOLO_NOTE_EN, { ...MUTED, font: { b: true } }).merge(tr + 3, 1, tr + 3, tc + 1);
+      br.height(tr + 3, 32);
+    }
     sheets.push(br);
   } catch { /* không chặn bản xuất đóng góp */ }
 

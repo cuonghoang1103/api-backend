@@ -5,6 +5,7 @@
 import { cheDoTuChu, type CheDoQuyen } from './cheDo';
 import { phimDanAnh } from './banPhim';
 import { L } from './i18n';
+import { docVai, type Vai } from '../../../desktop/src/main/agent/vaiCtwork';
 
 declare const __PHIEN_BAN__: string | undefined;
 export const PHIEN_BAN: string = typeof __PHIEN_BAN__ === 'string' ? __PHIEN_BAN__ : '0.0.0-dev';
@@ -34,6 +35,8 @@ export interface CoDong {
   chiTiet?: boolean;
   /** `--no-fullscreen` (false) / `--fullscreen` (true) — thắng cài đặt `toanManHinh`. */
   toanManHinh?: boolean;
+  /** `--vai C3`: chế độ đóng vai CT Work — phiên đóng vai C1–C5 (đồ án một mình 5 vai). */
+  vai?: Vai;
   loi?: string;
 }
 
@@ -77,6 +80,15 @@ export function phanTichCo(argv: readonly string[]): CoDong {
         break;
       }
       case '-r': case '--resume': ra.chonViecCu = true; break;
+      case '--vai': case '--role': {
+        const v = giaTriLien ?? canGiaTri(ten, i);
+        if (v === null) return ra;
+        if (giaTriLien === undefined) i += 1;
+        const vai = docVai(v);
+        if (!vai) { ra.loi = L(`--vai nhận C1, C2, C3, C4 hoặc C5 (Leader · BA · BE · FE · QA), nhận "${v}".`, `--vai takes C1, C2, C3, C4 or C5 (Leader · BA · BE · FE · QA), got "${v}".`); return ra; }
+        ra.vai = vai;
+        break;
+      }
       case '--verbose': case '--chi-tiet': ra.chiTiet = true; break;
       case '--no-fullscreen': case '--khong-toan-man-hinh': ra.toanManHinh = false; break;
       case '--fullscreen': case '--toan-man-hinh': ra.toanManHinh = true; break;
@@ -134,6 +146,7 @@ Cách dùng:
 Cờ:
   -c, --tiep-tuc                 Mở lại việc gần nhất của thư mục này
   -r, --resume                   Chọn một việc cũ để mở lại
+  --vai <C1..C5>                 Đóng vai CT Work cho phiên (đồ án một mình 5 vai): C1 Leader · C2 BA · C3 BE · C4 FE · C5 QA
   -m, --model <tên>              Chọn model (vd: sonnet-5, opus-4-8, gpt-sol)
       --che-do <chế độ>          hoi · ke-hoach · tu-sua · tu-dong · bo-qua-het
                                  (mặc định: hoi — đủ công cụ, mỗi lần sửa/chạy lệnh vẫn hỏi;
@@ -170,6 +183,7 @@ Usage:
 Flags:
   -c, --tiep-tuc, --continue     Continue the most recent task in this folder
   -r, --resume                   Pick an earlier task to resume
+  --vai <C1..C5>                 Act in a CT Work role for this session (solo 5-role project): C1 Leader · C2 BA · C3 BE · C4 FE · C5 QA
   -m, --model <name>             Choose a model (e.g. sonnet-5, opus-4-8, gpt-sol)
       --che-do <mode>            hoi (ask) · ke-hoach (plan) · tu-sua (edits) · tu-dong (auto) · bo-qua-het (bypass)
                                  (default: hoi — all tools, asks before each edit/command;

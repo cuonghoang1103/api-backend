@@ -19,6 +19,7 @@ import { projectMembers } from './projects.service.js';
 import { estimateOf, estimationOf, vnDay } from './sprints.service.js';
 import { ciOfSha, FREEZE_LEVELS, g4SettingsOf, GIT_TAG_RE, SHA_RE, type FreezeLevel } from './dm5g4Rules.js';
 import { auditProject } from './audit.js';
+import { vaiDangDong } from './vaiDong.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
 const DAY = 86_400_000;
@@ -483,6 +484,8 @@ export async function addWorklog(
   const access = await requireProject(userId, projectId, 'issue.edit');
   if (input.hat && !/^C[1-5]$/.test(input.hat)) throw new BadRequestError('Role must be C1–C5', 'WORK_BAD_WORKLOG');
   const isAgent = access.principal === 'AGENT';
+  // Chế độ đóng vai: ô Vai (mũ) để trống ⇒ lấy vai đang đóng (vaiDong.ts). Agent không có vai.
+  const hat = input.hat || (isAgent ? null : await vaiDangDong(projectId));
   if (!Number.isInteger(input.minutes) || input.minutes < 1 || input.minutes > 24 * 60) throw new BadRequestError('Time spent must be between 1 minute and 24 hours', 'WORK_BAD_WORKLOG');
   const startedAt = input.startedAt ? new Date(input.startedAt) : new Date();
   if (Number.isNaN(startedAt.getTime())) throw new BadRequestError('Invalid start time', 'WORK_BAD_WORKLOG');
@@ -497,13 +500,13 @@ export async function addWorklog(
     const cur = await tx.workIssue.findUniqueOrThrow({ where: { id: issue.id }, select: { timeSpentMin: true, remainingEstimateMin: true } });
     // source MANUAL: người hoặc agent tự ghi; AGENT_AUTO chỉ do job timesheet agent sinh từ lease (A12).
     // CTW đợt 4 (A24): Activity (danh sách sheet TimeLogs) + Work Product — người chọn, không thì bản xuất suy từ tiêu đề thẻ.
-    const created = await tx.workWorklog.create({ data: { issueId: issue.id, userId, minutes: input.minutes, startedAt, note: input.note?.trim().slice(0, 1000) || null, source: 'MANUAL', activity: input.activity || null, workProduct: input.workProduct?.trim().slice(0, 120) || null, hat: input.hat || null }, select: WORKLOG_SELECT });
+    const created = await tx.workWorklog.create({ data: { issueId: issue.id, userId, minutes: input.minutes, startedAt, note: input.note?.trim().slice(0, 1000) || null, source: 'MANUAL', activity: input.activity || null, workProduct: input.workProduct?.trim().slice(0, 120) || null, hat: hat || null }, select: WORKLOG_SELECT });
     let remaining = cur.remainingEstimateMin;
     if (input.remaining === 'auto' || input.remaining === undefined) remaining = cur.remainingEstimateMin === null ? null : Math.max(0, cur.remainingEstimateMin - input.minutes);
     else if (typeof input.remaining === 'number') remaining = Math.max(0, Math.round(input.remaining));
     await tx.workIssue.update({ where: { id: issue.id }, data: { timeSpentMin: cur.timeSpentMin + input.minutes, remainingEstimateMin: remaining, version: { increment: 1 } } });
     await tx.workHistory.create({
-      data: { issueId: issue.id, actorId: userId, actorKind: isAgent ? 'AGENT' : 'USER', field: 'timeSpentMin', fromValue: String(cur.timeSpentMin), toValue: String(cur.timeSpentMin + input.minutes) },
+      data: { issueId: issue.id, actorId: userId, actorKind: isAgent ? 'AGENT' : 'USER', field: 'timeSpentMin', fromValue: String(cur.timeSpentMin), toValue: String(cur.timeSpentMin + input.minutes), ...(hat && !isAgent ? { actingRole: hat } : {}) },
     });
     return created;
   });

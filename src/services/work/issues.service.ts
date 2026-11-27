@@ -32,6 +32,7 @@ import { chanNoiDungXau } from '../locNoiDung.js';
 import { threadRootOf } from './commentThreads.js';
 import { assertCommentFileRoom, attachDrafts, COMMENT_FILE_SELECT, commentFilesFor, queueTranscriptions, refreshCommentText } from './commentFiles.service.js';
 import { tooLargeMessage, WORK_LIMITS } from './limits.js';
+import { vaiGhi } from './vaiDong.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
 /**
@@ -608,7 +609,7 @@ export async function listHistory(userId: number, projectId: number, number: num
     where: { issueId: id },
     orderBy: { createdAt: 'desc' },
     take: 300,
-    select: { id: true, field: true, fromValue: true, toValue: true, actorKind: true, createdAt: true, actor: { select: PUBLIC_USER } },
+    select: { id: true, field: true, fromValue: true, toValue: true, actorKind: true, actingRole: true, createdAt: true, actor: { select: PUBLIC_USER } },
   });
 }
 
@@ -627,6 +628,7 @@ function commentBody(bodyJson: unknown, allowEmpty = false) {
 const COMMENT_SELECT = {
   id: true, bodyJson: true, isAi: true, visibility: true, createdAt: true, editedAt: true, author: { select: PUBLIC_USER },
   parentId: true, // K-1
+  actingRole: true, // chế độ đóng vai: "Tên (vai C3 · BE)" cạnh tên người viết
 } satisfies Prisma.WorkCommentSelect;
 
 export async function listComments(userId: number, projectId: number, number: number) {
@@ -686,10 +688,11 @@ export async function addComment(
     if (!parentId) throw new BadRequestError('The comment you are replying to was not found', 'WORK_BAD_PARENT');
   }
   let voiceIds: number[] = [];
+  const vaiC = await vaiGhi(projectId); // chế độ đóng vai: vai C1–C5 của người viết (vaiDong.ts)
   const comment = await prisma.$transaction(async (tx) => {
     // Bình luận AI soạn: vẫn ghi người đã duyệt (authorId) nhưng đánh dấu isAi —
     // hiện là "CT Work AI" và không tính vào số bình luận của ai.
-    const c = await tx.workComment.create({ data: { issueId: id, authorId: userId, isAi: via === 'AI', bodyJson, bodyText, visibility: vis, parentId }, select: COMMENT_SELECT });
+    const c = await tx.workComment.create({ data: { issueId: id, authorId: userId, isAi: via === 'AI', bodyJson, bodyText, visibility: vis, parentId, ...vaiC }, select: COMMENT_SELECT });
     if (attachmentIds.length) {
       voiceIds = (await attachDrafts(tx, { userId, issueId: id, commentId: c.id, attachmentIds })).voiceIds;
       await refreshCommentText(c.id, tx);

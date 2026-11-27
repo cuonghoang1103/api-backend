@@ -32,6 +32,8 @@ import type { CommentVisibility } from '@/lib/work-api';
 import { VungAnhXemDuoc } from './xemTep/XemTep'; // 20/10/2026: bấm ảnh trong bình luận ⇒ xem ngay
 import { wt, wfmt } from '@/components/work/i18n';
 import { mb, workLimits } from '@/lib/work-limits';
+import { isVai } from '@/lib/work-vai'; // chế độ đóng vai: chip "C3 · BE" cạnh tên
+import { VaiChip } from './VaiPicker';
 
 function CommentComposer({ config, pid, num, clientShared, parent, onDone }: {
   config: ProjectConfig; pid: number; num: number; clientShared: boolean;
@@ -247,6 +249,7 @@ function CommentItem({ c, config, pid, num, onReply, reply }: { c: ThreadComment
       <div className="min-w-0 flex-1">
         <div className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px]">
           <span className="whitespace-nowrap font-semibold text-[var(--w-text)]">{c.isAi ? 'CT Work AI' : userName(c.author)}</span>
+          {isVai(c.actingRole) && <VaiChip vai={c.actingRole} />}
           <span className="whitespace-nowrap text-[var(--w-text-3)]" title={new Date(c.createdAt).toLocaleString('en-US')}>{relativeTime(c.createdAt)}</span>
           {c.editedAt && <span className="text-[var(--w-text-3)]">{wt('detail.edited')}</span>}
           {portalStaff(config) && (c.visibility === 'PUBLIC' ? <ClientPill label={wt('detail.replyClient')} /> : <InternalPill label={wt('detail.internalNote')} />)}
@@ -352,7 +355,7 @@ function HistoryItem({ h, lk, config }: { h: HistoryEntry; lk: Lookups; config: 
     <li className="flex gap-3 text-[13px]">
       <UserAvatar user={h.actor} size={20} className="mt-0.5" />
       <div className="min-w-0 flex-1 leading-relaxed text-[var(--w-text-2)]">
-        <span className="font-medium text-[var(--w-text)]">{who}</span> {d.text}
+        <span className="font-medium text-[var(--w-text)]">{who}</span>{isVai(h.actingRole) && <VaiChip vai={h.actingRole} className="ml-1 align-[1px]" />} {d.text}
         <span className="ml-2 text-[12px] text-[var(--w-text-3)]" title={new Date(h.createdAt).toLocaleString(wfmt.intl())}>{relativeTime(h.createdAt)}</span>
         {d.from !== undefined && (
           <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[12px]">

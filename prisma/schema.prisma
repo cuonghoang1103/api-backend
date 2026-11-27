@@ -11343,6 +11343,8 @@ model WorkComment {
   deletedAt  DateTime? @map("deleted_at")
   /// CTW đợt 5b K-1: trả lời theo luồng — MỘT cấp như Jira/GitHub (trả lời một trả lời ⇒ server gắn vào gốc).
   parentId   Int?      @map("parent_id")
+  /// Chế độ đóng vai (27/11/2026): vai C1–C5 của người viết lúc bình luận. null = không có vai.
+  actingRole String?   @map("acting_role") @db.VarChar(4)
 
   issue       WorkIssue             @relation(fields: [issueId], references: [id], onDelete: Cascade)
   author      User?                 @relation("WorkCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
@@ -11410,14 +11412,16 @@ model WorkAttachment {
 /// Lịch sử từng trường. actorKind: USER | AI | AUTOMATION | SYSTEM — để
 /// trang đóng góp thành viên không tính công của AI cho người bấm.
 model WorkHistory {
-  id        Int      @id @default(autoincrement())
-  issueId   Int      @map("issue_id")
-  actorId   Int?     @map("actor_id")
-  actorKind String   @default("USER") @map("actor_kind") @db.VarChar(16)
-  field     String   @db.VarChar(40)
-  fromValue String?  @map("from_value") @db.Text
-  toValue   String?  @map("to_value") @db.Text
-  createdAt DateTime @default(now()) @map("created_at")
+  id         Int      @id @default(autoincrement())
+  issueId    Int      @map("issue_id")
+  actorId    Int?     @map("actor_id")
+  actorKind  String   @default("USER") @map("actor_kind") @db.VarChar(16)
+  field      String   @db.VarChar(40)
+  fromValue  String?  @map("from_value") @db.Text
+  toValue    String?  @map("to_value") @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  /// Chế độ đóng vai (27/11/2026): vai C1–C5 đang đóng lúc thay đổi (dự án bật settings.soloRoles). null = không có vai.
+  actingRole String?  @map("acting_role") @db.VarChar(4)
 
   issue WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
   actor User?     @relation("WorkHistoryActor", fields: [actorId], references: [id], onDelete: SetNull)
@@ -11612,6 +11616,8 @@ model WorkTestRun {
   gherkin         String?   @db.Text
   /// CTW đợt 8c (T10): WorkTestCase.version lúc tạo run; ghi lại lúc chạy ⇒ "chạy bản test nào trên build nào".
   testCaseVersion Int?      @map("test_case_version")
+  /// Chế độ đóng vai (27/11/2026): vai C1–C5 của người ghi kết quả (thường C5 QA).
+  executedRole    String?   @map("executed_role") @db.VarChar(4)
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
@@ -12258,6 +12264,8 @@ model WorkAuditLog {
   targetId    Int?     @map("target_id")
   summary     String   @db.VarChar(500)
   detail      Json?
+  /// Chế độ đóng vai (27/11/2026): vai C1–C5 của người làm lúc ghi nhật ký. null = không có vai.
+  actingRole  String?  @map("acting_role") @db.VarChar(4)
   createdAt   DateTime @default(now()) @map("created_at")
 
   workspace WorkSpace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
@@ -14566,11 +14574,13 @@ model WorkReviewSession {
 
 /// Vai trong phiên: MODERATOR | AUTHOR | REVIEWER | SCRIBE | READER. prepMinutes = công chuẩn bị (số đo hiệu suất).
 model WorkReviewParticipant {
-  id          Int    @id @default(autoincrement())
-  sessionId   Int    @map("session_id")
-  userId      Int    @map("user_id")
-  role        String @db.VarChar(12)
-  prepMinutes Int?   @map("prep_minutes")
+  id          Int     @id @default(autoincrement())
+  sessionId   Int     @map("session_id")
+  userId      Int     @map("user_id")
+  role        String  @db.VarChar(12)
+  prepMinutes Int?    @map("prep_minutes")
+  /// Chế độ đóng vai (27/11/2026): vai C1–C5 người này đóng trong phiên (AUTHOR C3, REVIEWER C5…).
+  hat         String? @db.VarChar(4)
 
   session WorkReviewSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 

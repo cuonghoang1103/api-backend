@@ -789,7 +789,7 @@ const reviewManage = defineTool({
     page: z.number().int().positive().optional(), workProduct: z.string().max(200).optional(), prUrl: z.string().max(500).optional(), size: z.number().min(0).max(1_000_000).optional(),
     meetingAt: z.string().max(40).optional(), meetingMinutes: z.number().int().min(0).max(100_000).optional(), reworkMinutes: z.number().int().min(0).max(100_000).optional(),
     entryCriteria: z.string().max(4000).optional(), exitCriteria: z.string().max(4000).optional(), notes: z.string().max(10_000).optional(),
-    participants: z.array(z.object({ user: z.string().min(1).max(254), role: z.enum(REVIEW_ROLES), prepMinutes: z.number().int().min(0).max(100_000).optional() })).max(30).optional(),
+    participants: z.array(z.object({ user: z.string().min(1).max(254), role: z.enum(REVIEW_ROLES), prepMinutes: z.number().int().min(0).max(100_000).optional(), hat: z.enum(['C1', 'C2', 'C3', 'C4', 'C5']).optional().describe('solo 5-role project: the role this person plays in the review (AUTHOR C3, REVIEWER C5…)') })).max(30).optional(),
     items: z.array(z.object({ id: z.number().int().positive(), result: z.enum(ITEM_RESULTS).nullable().optional(), line: z.string().max(60).optional(), note: z.string().max(4000).optional(), severity: z.string().max(20).nullable().optional() })).max(300).optional(),
     addQuestions: z.array(z.object({ section: z.string().min(1).max(120), question: z.string().min(1).max(1000) })).max(50).optional(),
     to: z.enum(REVIEW_STATUSES).optional(), item: z.number().int().positive().optional().describe('defect: the NG item id'),
@@ -798,7 +798,7 @@ const reviewManage = defineTool({
     await requirePerson(ctx, 'run reviews');
     W(ctx);
     const p0 = await projectFor(ctx, a.project, []);
-    const people = async () => Promise.all((a.participants ?? []).map(async (x) => ({ userId: (await assigneeIdOf(ctx, p0, x.user))!, role: x.role, prepMinutes: x.prepMinutes ?? null })));
+    const people = async () => Promise.all((a.participants ?? []).map(async (x) => ({ userId: (await assigneeIdOf(ctx, p0, x.user))!, role: x.role, prepMinutes: x.prepMinutes ?? null, hat: x.hat ?? null })));
     if (a.action === 'ai_review_queue') {
       const p = await projectFor(ctx, a.project, [['POST', '/code/review/queue']]);
       const { reviewQueue } = await import('../reviewHangLoat.service.js');
@@ -816,7 +816,7 @@ const reviewManage = defineTool({
       const r = await q.createReview(ctx.userId, p.id, {
         title: a.title, kind: a.kind, method: a.method, checklistKey: a.checklistKey, pageNumber: a.page ?? null, workProduct: a.workProduct ?? null, prUrl: a.prUrl ?? null,
         size: a.size ?? null, meetingAt: a.meetingAt ? new Date(a.meetingAt) : null, entryCriteria: a.entryCriteria ?? null, exitCriteria: a.exitCriteria ?? null,
-        participants: a.participants ? (await people()).map(({ userId, role }) => ({ userId, role })) : undefined,
+        participants: a.participants ? (await people()).map(({ userId, role, hat }) => ({ userId, role, hat })) : undefined,
       } as Parameters<typeof q.createReview>[2]) as { number: number };
       return { created: r.number };
     }

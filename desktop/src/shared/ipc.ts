@@ -1138,6 +1138,8 @@ export const agentTraLoiHoiSchema = z.object({
 export const agentHuyChoSchema = z.object({ cuocId: cuocIdSchema, id: z.string().min(1).max(32), cach: z.enum(['boCho', 'xongNgay']).optional() });
 export const agentHuyHenSchema = z.object({ cuocId: cuocIdSchema, id: z.string().min(1).max(32).optional() });
 export const agentDoiTenPhienMangSchema = z.object({ cuocId: cuocIdSchema, ten: z.string().min(1).max(60) });
+/** Chế độ đóng vai (27/11/2026, main/agent/vaiCtwork.ts): đặt / bỏ vai CT Work C1–C5 của cuộc. */
+export const agentDatVaiSchema = z.object({ cuocId: cuocIdSchema, vai: z.enum(['C1', 'C2', 'C3', 'C4', 'C5']).nullable(), tenPhien: z.string().max(60).optional() });
 export const agentThemTienToSchema = z.object({ cuocId: cuocIdSchema, tienTo: z.string().min(1).max(80) });
 export interface AgentLuaChon { nhan: string; moTa?: string }
 export interface AgentCauHoi { cauHoi: string; tieuDe?: string; luaChon: AgentLuaChon[]; nhieu?: boolean }
@@ -1266,6 +1268,8 @@ export interface AgentPhien {
   ghim?: boolean;
   /** Đã cất khỏi danh sách thường. KHÔNG phải xoá — mở lại được bất cứ lúc nào. */
   luuTru?: boolean;
+  /** Chế độ đóng vai (27/11/2026): vai CT Work C1–C5 của phiên. */
+  vai?: string | null;
 }
 
 /**
@@ -2070,6 +2074,9 @@ export const INVOKE_CHANNELS = {
   'agent:henCho': agentCuocSchema,
   'agent:dsPhienMang': agentCuocSchema,
   'agent:doiTenPhienMang': agentDoiTenPhienMangSchema,
+  'agent:datVai': agentDatVaiSchema,
+  'agent:doiTenPhienCuoc': agentDoiTenPhienMangSchema,
+  'agent:layVai': agentCuocSchema,
   'agent:themTienTo': agentThemTienToSchema,
   /* Đợt 4: gõ thêm khi agent đang chạy · điều khiển máy tính · hẹn đã lỡ lúc tắt. */
   'agent:chenTin': agentChenTinSchema,

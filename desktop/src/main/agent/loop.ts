@@ -80,6 +80,7 @@ import { chayVongCucBo, type TinNhanCucBo } from '../aiCucBo/agentCucBo';
 import { promptCode, TEN_TOOL_CUC_BO, toolCucBo } from '../aiCucBo/promptCode';
 import { batChoCode } from '../aiCucBo/quanLy';
 import type { MaModel } from '../aiCucBo/kho';
+import { ghiChuVai, nhanVaiNgan, vaiCuaCuoc } from './vaiCtwork';
 
 /**
  * Trần vòng lặp phía app — LƯỚI ĐỠ, không phải chốt chặn thật.
@@ -442,6 +443,11 @@ datBoTimPhien((cuocId) => {
 export function cuocCuaPhien(phienId: string): string | null {
   for (const c of cuoc.values()) if (c.phienId === phienId) return c.id;
   return null;
+}
+
+/** Phiên (file trên đĩa) mà cuộc đang ghi vào — chế độ đóng vai lưu vai theo phiên. */
+export function phienIdCuaCuoc(cuocId: string): string | null {
+  return cuoc.get(cuocId)?.phienId ?? null;
 }
 
 /**
@@ -1349,7 +1355,12 @@ export async function chayLuot(
   /* ĐỢT 6: AGENTS.md của NHÓM (trang Docs "AGENTS.md — …" của dự án CT Work đã gắn) gộp với AGENTS.md cục bộ — cục bộ
      thắng khi trùng mục; đệm theo phiên bản trang; Docs tắt / chưa nối ⇒ bỏ qua êm (trần 8 s). */
   const gop = boiCanh.goc ? await ghiChuGop(boiCanh.goc, ghiChuCucBo).catch(() => null) : null;
-  const ghiChuDuAn = gop ? { ten: gop.ten, noiDung: gop.noiDung } : ghiChuCucBo;
+  const ghiChuGoc = gop ? { ten: gop.ten, noiDung: gop.noiDung } : ghiChuCucBo;
+  /* Chế độ đóng vai (vaiCtwork.ts): phiên có vai C1–C5 ⇒ ghép một đoạn gợi ý theo vai vào ghi chú dự án của lượt. */
+  const vaiLuot = vaiCuaCuoc(c.id);
+  const ghiChuDuAn = vaiLuot
+    ? { ten: ghiChuGoc?.ten ?? `CT Work · ${nhanVaiNgan(vaiLuot)}`, noiDung: [ghiChuGoc?.noiDung, ghiChuVai(vaiLuot)].filter(Boolean).join('\n\n') }
+    : ghiChuGoc;
   if (gop?.nhom && !daBaoNhom.has(c.id)) {
     daBaoNhom.add(c.id);
     phat({ loai: 'ctwHuongDanNhom', nguon: gop.nhom.nguon, laAgents: gop.nhom.laAgents });
@@ -2156,7 +2167,7 @@ async function chayToolMcpCoDuyet(
    */
   const ctw = laCtworkTinCay(t.server);
   if (ctw && t.chiDoc) {
-    const kq0 = await goiToolMcp(ten, args, signal);
+    const kq0 = await goiToolMcp(ten, args, signal, vaiCuaCuoc(c.id));
     if (kq0.loi) baoLoiCtwork(kq0.noiDung);
     const dep = tomTatKetQua(t.tenGoc, kq0.noiDung, kq0.loi);
     return {
@@ -2216,8 +2227,8 @@ async function chayToolMcpCoDuyet(
   // `signal`: người dùng bấm dừng ⇒ lời gọi MCP đang chờ bị huỷ ngay (và
   // server được báo `notifications/cancelled`), không đứng chờ hết 60 giây.
   const kq = tep
-    ? { anh: [], ...(await guiTepLenCtwork(args, tep, (tool, a) => goiToolMcpTrucTiep(t.server, tool, a, signal))) }
-    : await goiToolMcp(ten, args, signal);
+    ? { anh: [], ...(await guiTepLenCtwork(args, tep, (tool, a) => goiToolMcpTrucTiep(t.server, tool, a, signal, vaiCuaCuoc(c.id)))) }
+    : await goiToolMcp(ten, args, signal, vaiCuaCuoc(c.id));
   if (tep && !kq.loi) kq.noiDung = `Đã đính kèm ${tep.ten} (${coChu(tep.kichThuoc)}).\n${kq.noiDung}`;
   const h = hanMucMcp();
   if (ctw) {

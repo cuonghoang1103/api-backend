@@ -125,6 +125,7 @@ import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
 import { WORK_LIMITS } from '../services/work/limits.js';
+import { chayVoiVai, kiemVaiKhai, nhacTraiVai } from '../services/work/vaiDong.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
@@ -310,6 +311,18 @@ router.use(editLock.editLockGuard());
 // 22/10/2026 — CuongMini được tài trợ (aiTaiTro.ts): mỗi request chạy trong ngữ cảnh có IP chống spam + dự án của tuyến,
 // để "một câu hỏi = một lần đếm" dù model được gọi nhiều vòng, và mọi service AI biết dự án để xét tài trợ.
 router.use((req, _res, next) => chayTrongLuot(ipChongSpam(req), Number(/^\/projects\/(\d+)(?:\/|$)/.exec(req.path)?.[1]) || null, next));
+// 27/11/2026 — CHẾ ĐỘ ĐÓNG VAI (vaiDong.ts): header `X-CTW-Vai: C3` = vai người gọi đang đóng ở yêu cầu này. Chỉ có
+// hiệu lực ở dự án bật settings.soloRoles; agent gửi vai ⇒ 403 WORK_ROLE_AGENT; vai lạ ⇒ 400 WORK_BAD_ROLE.
+// Lệnh ghi trái vai (vd tạo test case khi đang C3) ⇒ header trả lời `X-CTW-Vai-Nhac: C5` — giao diện nhắc nhẹ, không chặn.
+router.use((req, res, next) => {
+  let vai: ReturnType<typeof kiemVaiKhai>;
+  try { vai = kiemVaiKhai(req.headers['x-ctw-vai'], !!req.agent); } catch (err) { return next(err); }
+  if (vai && req.method !== 'GET' && req.method !== 'HEAD') {
+    const dung = nhacTraiVai(req.path.replace(/^\/projects\/\d+/, ''), vai);
+    if (dung) res.setHeader('X-CTW-Vai-Nhac', dung.join(','));
+  }
+  chayVoiVai(vai, next);
+});
 
 // Cổng khách (đợt S2b): khách bị cách ly (vai CLIENT ở dự án bật clientPortal) chỉ
 // gọi được tuyến trong DANH SÁCH TRẮNG (permissions.ts clientPortalRouteAllowed).

@@ -22,6 +22,7 @@ import { addLink, createIssueAs, updateIssueAs } from './issues.service.js';
 import { requireProject } from './permissions.js';
 import { logger } from '../../utils/logger.js';
 import { emitAutomationSignal } from './automationSignals.js';
+import { vaiDangDong } from './vaiDong.js';
 import { trashGraph } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
@@ -535,7 +536,10 @@ export function deriveRunStatus(steps: string[]): RunStatus {
 }
 
 async function markExecuted(tx: Prisma.TransactionClient, runId: number, cycleId: number, userId: number, status: string) {
-  await tx.workTestRun.update({ where: { id: runId }, data: { status, executedById: userId, executedAt: new Date() } });
+  // Chế độ đóng vai: ghi vai của người bấm kết quả (thường C5 QA); dự án không bật ⇒ null.
+  const cy = await tx.workTestCycle.findUnique({ where: { id: cycleId }, select: { projectId: true } });
+  const vai = await vaiDangDong(cy?.projectId);
+  await tx.workTestRun.update({ where: { id: runId }, data: { status, executedById: userId, executedAt: new Date(), executedRole: vai } });
   // Chạy test đầu tiên của một cycle đang PLANNED ⇒ cycle tự sang IN_PROGRESS.
   await tx.workTestCycle.updateMany({ where: { id: cycleId, state: 'PLANNED' }, data: { state: 'IN_PROGRESS', startAt: new Date() } });
 }
@@ -549,7 +553,7 @@ export async function updateRun(userId: number, projectId: number, runId: number
     if (input.reset) {
       // "Chạy lại": xoá kết quả từng bước, giữ bug đã ghi nhận (lịch sử).
       await tx.workTestStepResult.updateMany({ where: { runId }, data: { status: 'TODO', actual: null } });
-      await tx.workTestRun.update({ where: { id: runId }, data: { status: 'TODO', executedAt: null, executedById: null } });
+      await tx.workTestRun.update({ where: { id: runId }, data: { status: 'TODO', executedAt: null, executedById: null, executedRole: null } });
     }
     if (input.status !== undefined) await markExecuted(tx, runId, r.cycleId, userId, input.status);
     const data: Prisma.WorkTestRunUncheckedUpdateInput = {};

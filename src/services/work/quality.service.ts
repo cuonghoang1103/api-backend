@@ -32,6 +32,7 @@ import {
 import { coolOffRemainingMs, qualitySettingsOf } from './qualitySettings.js';
 import { baselineHash, diffBaselines, itemHash, signoffOutcome, type BaselineItem, type BaselineKind } from './baselineRules.js';
 import { trashSoft } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
+import { isHat, nhanVai, tacGiaDuocDuyet, tenTheoVai, vaiDangDong } from './vaiDong.js';
 
 type Tx = Prisma.TransactionClient;
 
@@ -96,7 +97,7 @@ export interface ReviewInput {
   title: string; kind: 'DOC' | 'CODE'; method: string; checklistKey: string;
   pageNumber?: number | null; workProduct?: string | null; prUrl?: string | null; size?: number | null;
   meetingAt?: Date | null; entryCriteria?: string | null; exitCriteria?: string | null;
-  participants?: Array<{ userId: number; role: string }>; language?: 'vi' | 'en';
+  participants?: Array<{ userId: number; role: string; hat?: string | null }>; language?: 'vi' | 'en';
 }
 
 async function sessionOf(projectId: number, number: number) {
@@ -145,7 +146,7 @@ export async function getReview(userId: number, projectId: number, number: numbe
     workProduct: s.workProduct, prUrl: s.prUrl, size: s.size, sizeUnit: s.sizeUnit, status: s.status, decision: s.decision,
     meetingAt: s.meetingAt, meetingMinutes: s.meetingMinutes, reworkMinutes: s.reworkMinutes,
     entryCriteria: s.entryCriteria, exitCriteria: s.exitCriteria, notes: s.notes, createdAt: s.createdAt, updatedAt: s.updatedAt, closedAt: s.closedAt,
-    participants: s.participants.map((p) => ({ id: p.id, userId: p.userId, role: p.role, prepMinutes: p.prepMinutes, user: users.get(p.userId) ?? null })),
+    participants: s.participants.map((p) => ({ id: p.id, userId: p.userId, role: p.role, prepMinutes: p.prepMinutes, hat: p.hat, user: users.get(p.userId) ?? null })),
     items: s.items.map((i) => {
       const b = i.defectIssueId ? bugs.get(i.defectIssueId) : null;
       return { id: i.id, position: i.position, section: i.section, question: i.question, result: i.result, line: i.line, note: i.note, severity: i.severity, defect: b && !b.deletedAt ? { number: b.number, key: `${access.key}-${b.number}`, title: b.title, done: !!b.resolvedAt } : null };
@@ -170,6 +171,9 @@ export async function createReview(userId: number, projectId: number, input: Rev
     workProduct ??= `Doc ${p.number}: ${p.title}`.slice(0, 200);
   }
   const participants = input.participants?.length ? input.participants : [{ userId, role: 'MODERATOR' }];
+  // Chế độ đóng vai: dòng của CHÍNH người mở phiên không ghi vai ⇒ lấy vai đang đóng (AUTHOR C3, REVIEWER C5…).
+  const vai = await vaiDangDong(projectId);
+  const hatOf = (p: { userId: number; hat?: string | null }) => (isHat(p.hat) ? p.hat : p.userId === userId ? vai : null);
   await assertMembers(projectId, participants.map((p) => p.userId));
   const language = input.language ?? ((await projectLanguage(projectId)) === 'vi' ? 'vi' : 'en');
   const items = templateItems(c, language);
@@ -181,7 +185,7 @@ export async function createReview(userId: number, projectId: number, input: Rev
         pageId, workProduct, prUrl: input.prUrl?.trim() || null, size: input.size ?? null, sizeUnit: c.sizeUnit,
         meetingAt: input.meetingAt ?? null, entryCriteria: input.entryCriteria?.trim() || null, exitCriteria: input.exitCriteria?.trim() || null,
         createdById: userId,
-        participants: { create: [...new Map(participants.map((p) => [`${p.userId}:${p.role}`, p])).values()].map((p) => ({ userId: p.userId, role: p.role })) },
+        participants: { create: [...new Map(participants.map((p) => [`${p.userId}:${p.role}`, p])).values()].map((p) => ({ userId: p.userId, role: p.role, hat: hatOf(p) })) },
         items: { create: items.map((q, position) => ({ position, section: q.section, question: q.question })) },
       },
     });
@@ -207,7 +211,7 @@ export async function updateReview(userId: number, projectId: number, number: nu
   for (const k of ['method', 'size', 'meetingAt', 'meetingMinutes', 'reworkMinutes', 'decision'] as const) if (patch[k] !== undefined) (data as Record<string, unknown>)[k] = patch[k];
   for (const k of ['workProduct', 'prUrl', 'entryCriteria', 'exitCriteria', 'notes'] as const) if (patch[k] !== undefined) (data as Record<string, unknown>)[k] = patch[k]?.trim() || null;
   if (patch.prUrl && !/^https?:\/\//i.test(patch.prUrl)) throw new BadRequestError('The pull request link must start with http(s)://', 'VALIDATION_ERROR');
-  if (patch.decision !== undefined) await assertNotAuthor(s.id, userId, 'set the decision of');
+  if (patch.decision !== undefined) await assertNotAuthor(projectId, s.id, userId, 'set the decision of');
   if (patch.decision) await assertCooledOff(projectId, s.createdAt);
   await prisma.workReviewSession.update({ where: { id: s.id }, data });
   return getReview(userId, projectId, number);
@@ -226,21 +230,34 @@ async function assertCooledOff(projectId: number, openedAt: Date) {
   }
 }
 
-/** 26/11/2026: tác giả sản phẩm được review KHÔNG tự ra quyết định / tự đóng phiên review của mình. */
-async function assertNotAuthor(sessionId: number, userId: number, what: string) {
-  const author = await prisma.workReviewParticipant.count({ where: { sessionId, userId, role: 'AUTHOR' } });
-  if (author) throw new AppError(`The author cannot ${what} their own review — the moderator or another reviewer has to`, 403, 'WORK_REVIEW_SELF');
+/**
+ * 26/11/2026: tác giả sản phẩm được review KHÔNG tự ra quyết định / tự đóng phiên review của mình.
+ * 27/11/2026 — chế độ đóng vai: dự án bật soloRoles + người gọi đóng vai KHÁC vai tác giả đã ghi (C3 viết, C5 duyệt) ⇒ cho.
+ */
+async function assertNotAuthor(projectId: number, sessionId: number, userId: number, what: string) {
+  const authors = await prisma.workReviewParticipant.findMany({ where: { sessionId, userId, role: 'AUTHOR' }, select: { hat: true } });
+  if (!authors.length) return;
+  const vai = await vaiDangDong(projectId);
+  if (tacGiaDuocDuyet(authors.map((a) => a.hat), vai)) return;
+  const tag = authors.map((a) => a.hat).filter(isHat);
+  throw new AppError(
+    vai && tag.includes(vai)
+      ? `You wrote this as ${nhanVai(vai)} — the author role cannot ${what} its own review. Switch to another role (e.g. C5 QA or C1 PM) to do it`
+      : `The author cannot ${what} their own review — the moderator or another reviewer has to`,
+    403, 'WORK_REVIEW_SELF',
+  );
 }
 
-export async function setParticipants(userId: number, projectId: number, number: number, list: Array<{ userId: number; role: string; prepMinutes?: number | null }>) {
+export async function setParticipants(userId: number, projectId: number, number: number, list: Array<{ userId: number; role: string; prepMinutes?: number | null; hat?: string | null }>) {
   await teamCtx(userId, projectId, 'issue.edit');
   const s = await sessionOf(projectId, number);
   if (s.status === 'CLOSED') throw new ConflictError('This review is closed');
   await assertMembers(projectId, list.map((p) => p.userId));
   const uniq = [...new Map(list.map((p) => [`${p.userId}:${p.role}`, p])).values()];
+  const vai = await vaiDangDong(projectId);
   await prisma.$transaction([
     prisma.workReviewParticipant.deleteMany({ where: { sessionId: s.id } }),
-    prisma.workReviewParticipant.createMany({ data: uniq.map((p) => ({ sessionId: s.id, userId: p.userId, role: p.role, prepMinutes: p.prepMinutes ?? null })) }),
+    prisma.workReviewParticipant.createMany({ data: uniq.map((p) => ({ sessionId: s.id, userId: p.userId, role: p.role, prepMinutes: p.prepMinutes ?? null, hat: isHat(p.hat) ? p.hat : p.userId === userId ? vai : null })) }),
   ]);
   return getReview(userId, projectId, number);
 }
@@ -278,9 +295,7 @@ export async function transitionReview(userId: number, projectId: number, number
   if (!s) throw new NotFoundError('Review not found');
   if (!(REVIEW_FLOW[s.status as ReviewStatus] ?? []).includes(to)) throw new ConflictError(`A review in ${s.status} cannot move to ${to}`);
   if (to === 'CLOSED') {
-    if (s.participants.some((p) => p.userId === userId && p.role === 'AUTHOR')) {
-      throw new AppError('The author cannot close their own review — the moderator or another reviewer has to', 403, 'WORK_REVIEW_SELF');
-    }
+    await assertNotAuthor(projectId, s.id, userId, 'close');
     const why = closeBlockers({ decision: s.decision, items: s.items, participants: s.participants });
     if (why.length) throw new AppError(`Cannot close the review yet: ${why.join(', ')}`, 409, 'WORK_REVIEW_NOT_READY', { blockers: why });
     if (s.decision === 'REINSPECT') throw new AppError('The decision is "re-inspect" — move it to Rework and hold the meeting again instead of closing', 409, 'WORK_REVIEW_REINSPECT');
@@ -353,7 +368,7 @@ export async function exportReviewMinutes(userId: number, projectId: number, num
   const md = reviewMinutesMarkdown({
     language, project,
     session: { key: r.key, title: r.title, kind: r.kind, method: r.method, checklistName: c ? c.name[language === 'vi' ? 1 : 0] : r.checklistKey, workProduct: r.workProduct, prUrl: r.prUrl, status: r.status, decision: r.decision, meetingAt: r.meetingAt, entryCriteria: r.entryCriteria, exitCriteria: r.exitCriteria, notes: r.notes },
-    participants: r.participants.map((p) => ({ name: p.user ? displayName(p.user) : `#${p.userId}`, role: p.role, prepMinutes: p.prepMinutes })),
+    participants: r.participants.map((p) => ({ name: tenTheoVai(p.user ? displayName(p.user) : `#${p.userId}`, isHat(p.hat) ? p.hat : null), role: p.role, prepMinutes: p.prepMinutes })),
     items: r.items.map((i) => ({ section: i.section, question: i.question, result: i.result, line: i.line, note: i.note, severity: i.severity, defectKey: i.defect?.key ?? null })),
     metrics: r.metrics,
   });

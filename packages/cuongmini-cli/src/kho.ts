@@ -126,6 +126,10 @@ export interface TrangThaiChat {
   luotCuoi: { luc: number; thoiLuong: number; loi: boolean; /** Đợt 6: lượt kết thúc bằng `xong` (không phải dừng/lỗi). */ xong?: boolean } | null;
   muc: MucGhi[];
   tieuDe: string;
+  /** Chế độ đóng vai CT Work (27/11/2026): vai C1–C5 của phiên (`/vai`, `--vai`) — null = không vai. */
+  vai: string | null;
+  /** Người dùng đã tự `/rename` trong tiến trình này ⇒ `/vai` không đè tên phiên. */
+  daDoiTen: boolean;
   cauHoiCuoi: string;
   choDuyetKeHoach: boolean;
   /** Lượt /plan vừa xong ⇒ hiện câu hỏi "Làm theo kế hoạch?". */
@@ -176,7 +180,7 @@ export function trangThaiDau(): TrangThaiChat {
   return {
     bang: [], khoaBang: 0, dangChay: false, batDauLuot: 0, pha: 'cho', toolDang: '', toolCuoi: '', buoc: null,
     chuDangViet: '', toolChay: [], choDuyet: [], keHoach: [], fileDaSua: {}, tienPhien: 0, soFileDaSua: 0,
-    nguCanh: null, goiYTiep: [], hoiGanCtw: null, hanMucPhanTram: null, luotCuoi: null, muc: [], tieuDe: '', cauHoiCuoi: '', choDuyetKeHoach: false, hoiDuyetKeHoach: false,
+    nguCanh: null, goiYTiep: [], hoiGanCtw: null, hanMucPhanTram: null, luotCuoi: null, muc: [], tieuDe: '', vai: null, daDoiTen: false, cauHoiCuoi: '', choDuyetKeHoach: false, hoiDuyetKeHoach: false,
     daCompact: false, chiTiet: false, loiCanXuLy: null, chenTraVe: null, choChiDan: false, nghiThat: false, moiCong: null, daMoiCong: false, hoiQuayVe: null, ws: null, info: null, lenhDuAn: [], daBaoTrinhDuyet: false, agentPhu: [], lenhNen: [],
     toolCho: null, tokenRa: 0, kyTuRa: 0, coTienTrinh: false, tienLuot: 0, hoi: null, henCho: { cho: [], hen: [] }, daNhacNguCanh: 0,
   };

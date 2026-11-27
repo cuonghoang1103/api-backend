@@ -22,6 +22,13 @@ Mẫu một mục:
 - **Ảnh hưởng:** máy thuê ngồi chờ ~1 giờ (~$0,6).
 - **Bài học:** deploy dày ⇒ phải dọn ảnh/cache sau mỗi lượt; cảnh báo phải bắt "chậm bất thường", không chỉ "bằng 0".
 
+### 27/11/2026 — Quy trình agent (worktree) — `prisma generate` trong worktree ghi đè Prisma client của cây chính
+- **Triệu chứng:** sau khi thêm cột vào `schema.prisma` trong worktree `.claude/worktrees/agent-…` và chạy `npx prisma generate`, `node_modules/.prisma/client/schema.prisma` của CÂY CHÍNH có `acting_role` dù `prisma/schema.prisma` của cây chính không có — dev server / test của phiên khác sẽ SELECT cột không tồn tại.
+- **Nguyên nhân:** worktree lồng trong repo và không có `node_modules` riêng ⇒ Node/Prisma tìm `@prisma/client` ngược lên thư mục cha = `node_modules` của cây chính; `prisma generate` ghi client vào đúng chỗ đó.
+- **Cách sửa:** chép `node_modules/@prisma/client` vào `node_modules` của worktree (đã gitignore) rồi generate lại ⇒ client nằm trong worktree; dựng lại client cây chính từ schema cây chính (`prisma generate --schema <cây chính>/prisma/schema.prisma`). Đợt "Chế độ đóng vai" (nhánh worktree-agent-a916b4e7b3c5895f3).
+- **Ảnh hưởng:** client cây chính lệch schema vài phút (đã dựng lại ngay, không phiên nào báo lỗi).
+- **Bài học:** worktree đổi `schema.prisma` ⇒ phải có `@prisma/client` RIÊNG trước khi generate (như `kiem-ci-truoc-push.sh` tự `prisma generate` cho worktree của nó); kiểm `node -e "require.resolve('@prisma/client')"` trỏ vào worktree.
+
 ### 18/11/2026 — Hạ tầng video — cầu đồng bộ Mac→máy nhà xoá slide của agent máy nhà ⇒ 111 tập render LOI
 - **Triệu chứng:** Spring Boot gần như không có video dù giọng đã xong; 111 tập render LOI trong ngày (75 tập "404 public/bai/<id>/slides/NNN.webp" — đúng các khoá twc/dkr/gha/dvp/sb mới giao agent nhà 17/11; 36 tập khác do ổ vast7 đầy 96%).
 - **Nguyên nhân:** `~/Documents/video-bai-giang/scratchpad/dong-bo-linux.sh` › `day_bai()` đẩy `public/bai/<id>/` từ Mac sang máy nhà bằng `rsync --delete`, chỉ bỏ qua tiền tố agent nhà cũ; 17/11 điều phối giao thêm twc nxj prisma sio dkr gha lxb dvp ngx obj sb dsi ivp cho agent nhà, thêm vào `day_ma` (mã) nhưng QUÊN `day_bai` ⇒ mỗi vòng Mac xoá slide agent vừa dựng.

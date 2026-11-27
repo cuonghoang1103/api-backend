@@ -12,6 +12,7 @@ import { wt, wfmt } from '@/components/work/i18n';
 import { ProjectCoverPicker } from './ProjectCoverPicker'; // UX-D
 import { readBanner, ProjectBanner, type BannerTone } from '../ProjectBanner';
 import ProcessGates from './ProcessGates'; // dm5 G1
+import { soloRolesOn } from '../VaiPicker'; // 27/11/2026: chế độ đóng vai
 
 const TEMPLATE_LABEL: Record<ProjectConfig['template'], string> = {
   get BLANK() { return wt('settings.tplBLANK'); },
@@ -102,6 +103,7 @@ export default function ProjectDetails({ config, slug }: { config: ProjectConfig
     <AiGuidelines config={config} slug={slug} />
     <DefinitionOfDone config={config} slug={slug} />
     <BannerSetting config={config} slug={slug} />
+    <SoloRolesSetting config={config} slug={slug} />
     <DoneRules config={config} slug={slug} />
     {/* dm5 G1: DoR · CI xanh trước Done · sức chứa × tập trung · trần Must · cổng giai đoạn · trần retro · ngưỡng RAG */}
     <ProcessGates config={config} slug={slug} />
@@ -329,6 +331,28 @@ function TeamRules({ config, slug }: { config: ProjectConfig; slug: string }) {
           {save.isPending && <Spinner size={12} />}
           <Switch checked={on} onChange={(v) => save.mutate(v)} disabled={!canEdit || save.isPending} label={wt('settings.allowMembersSprints')} />
         </div>
+      </div>
+    </Section>
+  );
+}
+
+/**
+ * Chế độ đóng vai (settings.soloRoles) — 27/11/2026: một tài khoản đóng 5 vai C1–C5; luật tách quyền so theo vai.
+ * Chỉ ADMIN dự án đổi (cùng quyền project.settings của PATCH /projects/:pid). Bộ mẫu "SWP391 một mình 5 vai" bật sẵn.
+ */
+function SoloRolesSetting({ config, slug }: { config: ProjectConfig; slug: string }) {
+  const invalidate = useProjectInvalidate(config.id, slug);
+  const on = soloRolesOn(config);
+  const save = useMutation({
+    mutationFn: (v: boolean) => workApi.updateProject(config.id, { settings: { soloRoles: v ? { enabled: true } : null } }),
+    onSuccess: (_r, v) => { toast.success(v ? wt('vai.settingsOn') : wt('vai.settingsOff')); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('vai.settingsFailed'))),
+  });
+  return (
+    <Section title={wt('vai.settingsTitle')} description={wt('vai.settingsDesc')}>
+      <div className="max-w-[640px] space-y-2">
+        <Switch checked={on} onChange={(v) => save.mutate(v)} disabled={!config.permissions.settings || save.isPending} label={wt('vai.settingsToggle')} />
+        {on && <p className="text-[12.5px] text-[var(--w-text-3)]">{wt('vai.honest')}</p>}
       </div>
     </Section>
   );

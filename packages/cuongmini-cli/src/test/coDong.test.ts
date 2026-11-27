@@ -49,3 +49,12 @@ test('chế độ quyền: xoay vòng 5 chế độ, bí danh', () => {
   assert.equal(cheDoTuChu('???'), null);
   assert.equal(moTaCheDo('lạ').id, 'hoi');
 });
+
+test('cờ --vai (chế độ đóng vai CT Work): C3 / qa / --vai=2; vai lạ ⇒ lỗi', () => {
+  assert.equal(phanTichCo(['--vai', 'C3']).vai, 'C3');
+  assert.equal(phanTichCo(['--vai', 'qa', '-c']).vai, 'C5');
+  assert.equal(phanTichCo(['--vai=2']).vai, 'C2');
+  assert.equal(phanTichCo(['--role', 'leader']).vai, 'C1');
+  assert.match(phanTichCo(['--vai', 'C9']).loi ?? '', /C1, C2, C3, C4 hoặc C5/);
+  assert.match(phanTichCo(['--vai']).loi ?? '', /cần một giá trị/);
+});

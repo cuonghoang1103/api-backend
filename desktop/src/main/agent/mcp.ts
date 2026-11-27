@@ -42,6 +42,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { API_ORIGIN } from '../config';
 import { daDuyet, ghiDuyet } from './duyetDuAn';
+import { metaVai, vaiCuaCuoc, type Vai } from './vaiCtwork';
 import {
   KetNoiMcp, LoiHttp, kieuCua, laLenhTaiGoi, taoHttp, taoSse, taoStdio,
   type CauHinhServer, type KieuKetNoi, type VanChuyen,
@@ -928,7 +929,7 @@ function ghiMotLuot(): boolean {
 // ─── Gọi tool ──────────────────────────────────────────────────────
 
 export async function goiToolMcp(
-  ten: string, args: Record<string, unknown>, signal?: AbortSignal,
+  ten: string, args: Record<string, unknown>, signal?: AbortSignal, vai?: Vai | null,
 ): Promise<KetQuaChuyen> {
   if (!ghiMotLuot()) {
     return {
@@ -937,7 +938,16 @@ export async function goiToolMcp(
       anh: [], loi: true,
     };
   }
-  return goiThat(ten, args, signal);
+  return goiThat(ten, args, signal, vai);
+}
+
+/**
+ * Chế độ đóng vai (27/11/2026, `vaiCtwork.ts`): `tools/call` của CT Work (server tin cậy) mang `_meta["ctwork/vai"]`.
+ * `vai` undefined ⇒ vai cuối của tiến trình (CLI: một cuộc/tiến trình); null ⇒ không gửi vai.
+ */
+function thamSoGoi(server: string, tenGoc: string, args: Record<string, unknown>, vai?: Vai | null): Record<string, unknown> {
+  const meta = laCtworkTinCay(server) ? metaVai(vai === undefined ? vaiCuaCuoc() : vai) : undefined;
+  return { name: tenGoc, arguments: args ?? {}, ...(meta ? { _meta: meta } : {}) };
 }
 
 /**
@@ -946,7 +956,7 @@ export async function goiToolMcp(
  * bấm của người dùng hoặc đã có đệm 5 phút). Gọi được cả tool không lọt vào trần 40 tool gửi model.
  */
 export async function goiToolMcpTrucTiep(
-  server: string, tenGoc: string, args: Record<string, unknown>, signal?: AbortSignal,
+  server: string, tenGoc: string, args: Record<string, unknown>, signal?: AbortSignal, vai?: Vai | null,
 ): Promise<KetQuaChuyen> {
   const s = dangChay.get(server);
   if (!s || s.ketNoi.daDong) {
@@ -955,14 +965,14 @@ export async function goiToolMcpTrucTiep(
   }
   if (!s.tool.some((t) => t.tenGoc === tenGoc)) return loiChu(`LỖI: server "${server}" không có tool "${tenGoc}".`);
   try {
-    const kq = await s.ketNoi.goi('tools/call', { name: tenGoc, arguments: args ?? {} }, s.hanGoiMs, signal);
+    const kq = await s.ketNoi.goi('tools/call', thamSoGoi(server, tenGoc, args, vai), s.hanGoiMs, signal);
     return chuyenKetQua(kq, server);
   } catch (err) {
     if (s.kieu === 'http' && err instanceof LoiHttp && err.status === 404 && !signal?.aborted) {
       try {
         s.ketNoi.vc.quenPhien?.();
         await batTay(s.ketNoi, s.hanGoiMs);
-        return chuyenKetQua(await s.ketNoi.goi('tools/call', { name: tenGoc, arguments: args ?? {} }, s.hanGoiMs, signal), server);
+        return chuyenKetQua(await s.ketNoi.goi('tools/call', thamSoGoi(server, tenGoc, args, vai), s.hanGoiMs, signal), server);
       } catch (e2) { return loiChu(`LỖI khi gọi ${tenGoc}: ${(e2 as Error).message}`); }
     }
     return loiChu(`LỖI khi gọi ${tenGoc}: ${(err as Error).message}`);
@@ -976,7 +986,7 @@ function loiChu(noiDung: string): KetQuaChuyen {
   return { noiDung, anh: [], loi: true };
 }
 
-async function goiThat(ten: string, args: Record<string, unknown>, signal?: AbortSignal): Promise<KetQuaChuyen> {
+async function goiThat(ten: string, args: Record<string, unknown>, signal?: AbortSignal, vai?: Vai | null): Promise<KetQuaChuyen> {
   /* Đợt 6: tool ở MỤC LỤC (đã nạp theo nhu cầu) cũng gọi được. */
   const t = timToolMcp(ten);
   if (!t) return loiChu(`LỖI: không có tool MCP tên "${ten}".`);
@@ -986,7 +996,7 @@ async function goiThat(ten: string, args: Record<string, unknown>, signal?: Abor
     return loiChu(`LỖI: server MCP "${t.server}" không còn chạy${tt?.loi ? ` (${tt.loi})` : ''}. Bấm "Nạp lại" trong bảng MCP.`);
   }
 
-  const goiMot = () => s.ketNoi.goi('tools/call', { name: t.tenGoc, arguments: args ?? {} }, s.hanGoiMs, signal);
+  const goiMot = () => s.ketNoi.goi('tools/call', thamSoGoi(t.server, t.tenGoc, args, vai), s.hanGoiMs, signal);
   try {
     let kq: unknown;
     try {

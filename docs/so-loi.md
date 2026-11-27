@@ -8,6 +8,13 @@
 Mẫu một mục:
 
 ```
+### 27/11/2026 — Máy Mac — đĩa đầy 100% (còn 143 MB) ⇒ Postgres local chỉ đọc, Docker Desktop treo
+- **Triệu chứng:** test CSDL báo `could not open file "base/5/2601": Read-only file system`; `docker ps` treo; `df` /System/Volumes/Data còn 143 MiB.
+- **Nguyên nhân:** thư mục build `frontend/.next` (~12–13 GB/cây) nằm lại trong 7 worktree agent cũ `.claude/worktrees/agent-*` + cache webpack Remotion `video-bai-giang/node_modules/.cache/webpack` 8,5 GB; ổ ảo Docker.raw gặp lúc hết chỗ ⇒ VM chuyển chỉ đọc.
+- **Cách sửa:** xoá `.next` của 6 worktree agent đã xong + cache Remotion > 6 giờ ⇒ còn trống 55 GB. Docker Desktop vẫn treo (quit không ăn) ⇒ cần khởi động lại hẳn.
+- **Ảnh hưởng:** test CSDL của đợt "Chế độ đóng vai" chưa chạy được; render đêm trên Mac có thể đã lỗi ghi.
+- **Bài học:** agent worktree chạy `next build` để lại ~13 GB mỗi cây ⇒ sau khi bàn giao phải xoá `.next` của worktree; lượt kiểm định kỳ nên đọc cả `df` của Mac, không chỉ máy nhà.
+
 ### 19/11/2026 — Máy nhà — ổ đầy vì ảnh Docker của các lượt deploy ⇒ render dừng ~1 giờ
 - **Triệu chứng:** từ 04:35 gần như không render xong tập nào (ok-1h 15 ⇒ 2) dù hàng render 142; làn render log "đĩa còn 22G — tạm chờ".
 - **Nguyên nhân:** `deploy-nha.sh` dựng ảnh ở máy nhà mỗi lượt (~5,8 GB/SHA); 18–19/11 chạy ~10 lượt ⇒ 19 cặp tag cũ + cache build 102 GB ⇒ `/` còn 22 GB < ngưỡng `DP_DIA_TOI_THIEU=25` của `dieu-phoi-linux/render.sh:78`. Bộ canh lỗi chỉ báo khi ok-1h = 0 nên không kêu.

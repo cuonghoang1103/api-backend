@@ -757,6 +757,8 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['*', /^\/chat-hooks(\/.*)?$/], ['*', /^\/webhooks(\/.*)?$/], ['*', /^\/github(\/.*)?$/], ['*', /^\/gitlab(\/.*)?$/],
   // 19/10/2026: token Figma chỉ đọc của dự án (trợ lý AI đọc link Figma) — cấu hình, agent không xem/đổi.
   ['*', /^\/figma(\/.*)?$/],
+  // 27/11/2026: dời toàn bộ lịch dự án = cấu hình dự án (requireProject project.settings cũng chặn).
+  ['POST', /^\/schedule\/shift$/],
   ['*', /^\/automation(\/.*)?$/],
   // CTW đợt 7c: sổ tài sản/giấy phép (chi phí, hợp đồng) — agent chỉ ĐỌC; xuất tệp giấy phép là xuất dữ liệu.
   ['POST', /^\/assets(\/.*)?$/], ['PATCH', /^\/assets(\/.*)?$/], ['PUT', /^\/assets(\/.*)?$/], ['DELETE', /^\/assets(\/.*)?$/], ['GET', /^\/assets-export$/],

@@ -78,6 +78,7 @@ import * as okr from '../okr.service.js';
 import { ENTRY_KINDS, PHASES, ROOT_CAUSES, TEST_LEVELS, TEST_TYPES } from '../testMetrics.js';
 import * as t from '../testMgmt.service.js';
 import * as tests from '../tests.service.js';
+import { shiftProjectSchedule } from '../scheduleShift.service.js';
 import * as uxc from '../uxc.service.js';
 import { assigneeIdOf, sprintIdOf, sprintRefArg } from './personOps.js';
 import { defineTool, mcpOnly, type ToolDef } from './types.js';
@@ -706,21 +707,28 @@ const resourceExtras = defineTool({
 
 const planningExtras = defineTool({
   name: 'planning_extras', title: 'Timeline baselines and saved filters', group: 'planning',
-  description: 'action: baseline_add (name, note — snapshots the timeline to compare later) | filter_save (id to replace; name, JQL query, shared) | okr_objective (project objective: cycleId, name = title, note = description, owner). Read: ctwork_read baselines / filters; delete: ctwork_delete.',
+  description: 'action: baseline_add (name, note — snapshots the timeline to compare later) | filter_save (id to replace; name, JQL query, shared) | okr_objective (project objective: cycleId, name = title, note = description, owner) | schedule_shift (ADMIN: move EVERY open date of the project — unresolved issues start/due, uncompleted sprints, unreleased versions, test cycles, open stages, RAID review dates, FPT report week 1 — by `days` (±) OR so the earliest open sprint starts on `firstSprintStart` YYYY-MM-DD; done items stay; meetings are not moved. Run with dryRun true first and show the counts; ask the user before the real run). Read: ctwork_read baselines / filters; delete: ctwork_delete.',
   write: true,
   input: z.object({
-    project: projectArg, action: z.enum(['baseline_add', 'filter_save', 'okr_objective']), id: z.number().int().positive().optional(), name: z.string().min(1).max(200),
+    project: projectArg, action: z.enum(['baseline_add', 'filter_save', 'okr_objective', 'schedule_shift']), id: z.number().int().positive().optional(), name: z.string().min(1).max(200).optional(),
+    days: z.number().int().min(-730).max(730).optional(), firstSprintStart: ymd.optional(), dryRun: z.boolean().optional(),
     note: z.string().max(5000).nullable().optional(), query: z.string().max(4000).optional(), shared: z.boolean().optional(), cycleId: z.number().int().positive().optional(), owner: z.string().max(254).optional(),
   }),
   run: async (ctx, a) => {
-    if (a.action === 'baseline_add') { const p = await hit(ctx, a.project, 'POST', '/timeline/baselines'); return { baseline: await uxc.createBaseline(ctx.userId, p.id, { name: a.name.slice(0, 120), note: a.note?.slice(0, 500) ?? null }) }; }
+    if (a.action === 'schedule_shift') {
+      if ((a.days === undefined) === (a.firstSprintStart === undefined)) throw bad('schedule_shift needs days OR firstSprintStart');
+      const p = await hit(ctx, a.project, 'POST', '/schedule/shift');
+      return { shift: await shiftProjectSchedule(ctx.userId, p.id, { days: a.days, firstSprintStart: a.firstSprintStart, dryRun: a.dryRun }) };
+    }
+    const name = need(a.name, 'name');
+    if (a.action === 'baseline_add') { const p = await hit(ctx, a.project, 'POST', '/timeline/baselines'); return { baseline: await uxc.createBaseline(ctx.userId, p.id, { name: name.slice(0, 120), note: a.note?.slice(0, 500) ?? null }) }; }
     if (a.action === 'okr_objective') {
       const p = await hit(ctx, a.project, 'POST', '/okrs/objectives');
-      const body = okr.objectiveInput.parse(defined({ cycleId: need(a.cycleId, 'cycleId'), title: a.name, description: a.note, ownerId: a.owner ? await assigneeIdOf(ctx, p, a.owner) : undefined }));
+      const body = okr.objectiveInput.parse(defined({ cycleId: need(a.cycleId, 'cycleId'), title: name, description: a.note, ownerId: a.owner ? await assigneeIdOf(ctx, p, a.owner) : undefined }));
       return { objective: await okr.createObjective(ctx.userId, { projectId: p.id }, body) };
     }
     const p = await hit(ctx, a.project, 'POST', '/filters');
-    return { filter: await search.saveFilter(ctx.userId, p.id, { id: a.id, name: a.name.slice(0, 100), query: need(a.query, 'query'), shared: a.shared }) };
+    return { filter: await search.saveFilter(ctx.userId, p.id, { id: a.id, name: name.slice(0, 100), query: need(a.query, 'query'), shared: a.shared }) };
   },
 });
 

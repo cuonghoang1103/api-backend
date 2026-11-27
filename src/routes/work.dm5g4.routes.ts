@@ -6,6 +6,7 @@
  *   GET  /project-blueprints                              thư viện mẫu (5 bộ + nhóm tính năng + xem trước)
  *   POST /workspaces/:wsId/projects/preview               { blueprint, groups } | { fromProjectId } ⇒ xem trước, KHÔNG ghi
  *   GET  /projects/:pid/reports/hours-by-role?from&to&userId   C5: giờ theo vai C1–C5/tuần + cảnh báo
+ *   POST /projects/:pid/schedule/shift { days | firstSprintStart, dryRun }   dời mọi mốc ngày còn mở (ADMIN; agent cấm)
  *
  * Agent: hai tuyến đầu nằm NGOÀI /projects/:pid ⇒ bị chặn mặc định (agentTopRouteAllowed fail-closed); tuyến báo cáo chỉ đọc.
  */
@@ -16,6 +17,7 @@ import { asyncHandler, BadRequestError, UnauthorizedError } from '../middleware/
 import * as bp from '../services/work/projectBlueprint.service.js';
 import { hoursByRole } from '../services/work/timeActivity.service.js';
 import { requireWorkspace } from '../services/work/permissions.js';
+import { shiftProjectSchedule } from '../services/work/scheduleShift.service.js';
 
 const router = Router();
 
@@ -55,6 +57,12 @@ router.post('/workspaces/:wsId/projects/preview', asyncHandler(async (req, res) 
 router.get('/projects/:pid/reports/hours-by-role', asyncHandler(async (req, res) => {
   const q = parse(z.object({ from: day.optional(), to: day.optional(), userId: id.optional() }), req.query);
   ok(res, await hoursByRole(callerId(req), parse(id, req.params.pid), q));
+}));
+
+router.post('/projects/:pid/schedule/shift', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ days: z.number().int().min(-730).max(730).optional(), firstSprintStart: day.optional(), dryRun: z.boolean().optional() })
+    .refine((b) => (b.days === undefined) !== (b.firstSprintStart === undefined), 'Pass days OR firstSprintStart'), req.body ?? {});
+  ok(res, await shiftProjectSchedule(callerId(req), parse(id, req.params.pid), body));
 }));
 
 export default router;

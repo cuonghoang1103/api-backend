@@ -180,7 +180,7 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['GET', '/contrib/summary'], ['GET', '/contrib/members/3'], ['GET', '/contrib/export.xlsx'], ['PUT', '/contrib/peer/rounds/2/reviews/3'], ['GET', '/contrib'],    // CTW K-2: ghi âm / điểm danh / RSVP / cấu hình họp / duyệt biên bản AI
     ['POST', '/meetings/3/recordings'], ['POST', '/meetings/3/recordings/2/chunks'], ['GET', '/meetings/3/recordings/2/chunks/0/audio'],
     ['DELETE', '/meetings/3/recordings/2/audio'], ['PUT', '/meetings/3/attendance'], ['POST', '/meetings/3/rsvp'], ['POST', '/meetings/3/join'],
-    ['PUT', '/meeting-settings'], ['POST', '/meetings/3/minutes-ai/4/apply'], ['POST', '/meetings/3/minutes-ai/4/dismiss'],
+    ['POST', '/schedule/shift'], ['PUT', '/meeting-settings'], ['POST', '/meetings/3/minutes-ai/4/apply'], ['POST', '/meetings/3/minutes-ai/4/dismiss'],
     // CTW đợt 7b
     ['POST', '/forms/F-1/status'], ['POST', '/forms/2/rotate'], ['DELETE', '/forms/F-1'], ['POST', '/imports'], ['GET', '/intake/channels'],
     ['POST', '/intake/channels/3/simulate'], ['POST', '/intake/proposals/4/decide'], ['POST', '/kb/articles'], ['DELETE', '/kb/categories/2'],

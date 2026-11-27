@@ -21,6 +21,8 @@ import { useWT, type WKey } from '../i18n';
 import { Badge, Card, Labeled, NumberInput, Segmented, Tbl, Td, Th } from './qui';
 import { DECISION_TONE, STATUS_TONE } from './ReviewList';
 import { CoolOffNotice } from './G3Quality'; // dm5 G3 (B4)
+import { isVai, nhanVai, VAI, type Vai } from '@/lib/work-vai'; // 27/11/2026: chế độ đóng vai
+import { soloRolesOn } from '../VaiPicker';
 
 export default function ReviewDetail({ config, pid, num, onBack, onOpenIssue }: { config: ProjectConfig; pid: number; num: number; onBack: () => void; onOpenIssue: (n: number) => void }) {
   const { t, locale } = useWT();
@@ -166,8 +168,10 @@ const toLocalInput = (iso: string) => {
 
 function Participants({ config, pid, num, r, editable, onSaved }: { config: ProjectConfig; pid: number; num: number; r: Review; editable: boolean; onSaved: (r: Review) => void }) {
   const { t } = useWT();
-  type Row = { userId: number; role: ReviewRole; prepMinutes: number | null };
-  const initial = useMemo<Row[]>(() => r.participants.map((p) => ({ userId: p.userId, role: p.role, prepMinutes: p.prepMinutes })), [r.participants]);
+  type Row = { userId: number; role: ReviewRole; prepMinutes: number | null; hat?: Vai | null };
+  // Chế độ đóng vai: mỗi dòng ghi vai người đó đóng trong phiên (AUTHOR C3, REVIEWER C5…) — tác giả không tự quyết dưới vai tác giả.
+  const solo = soloRolesOn(config);
+  const initial = useMemo<Row[]>(() => r.participants.map((p) => ({ userId: p.userId, role: p.role, prepMinutes: p.prepMinutes, ...(solo ? { hat: isVai(p.hat) ? p.hat : null } : {}) })), [r.participants, solo]);
   const [rows, setRows] = useState<Row[]>(initial);
   useEffect(() => setRows(initial), [initial]);
   const dirty = JSON.stringify(rows) !== JSON.stringify(initial);
@@ -187,6 +191,12 @@ function Participants({ config, pid, num, r, editable, onSaved }: { config: Proj
               <select aria-label={t('q6.colType')} className="w-input w-[150px]" disabled={!editable} value={p.role} onChange={(e) => setRows(rows.map((x, k) => (k === i ? { ...x, role: e.target.value as ReviewRole } : x)))}>
                 {REVIEW_ROLES.map((ro) => <option key={ro} value={ro}>{t(`q6.role${ro}` as WKey)}</option>)}
               </select>
+              {solo && (
+                <select aria-label={t('vai.label')} className="w-input w-[120px]" disabled={!editable} value={p.hat ?? ''} onChange={(e) => setRows(rows.map((x, k) => (k === i ? { ...x, hat: isVai(e.target.value) ? e.target.value : null } : x)))}>
+                  <option value="">{t('vai.none')}</option>
+                  {VAI.map((v) => <option key={v} value={v}>{nhanVai(v)}</option>)}
+                </select>
+              )}
               <NumberInput label={t('q6.prepMinutes')} placeholder={t('q6.prepMinutes')} className="w-[130px]" disabled={!editable} value={p.prepMinutes} min={0} onChange={(v) => setRows(rows.map((x, k) => (k === i ? { ...x, prepMinutes: v } : x)))} />
               {editable && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={t('q6.removeParticipant', { n: name(p.userId) })} onClick={() => setRows(rows.filter((_, k) => k !== i))}><X size={14} /></button>}
             </li>

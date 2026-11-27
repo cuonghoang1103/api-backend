@@ -152,7 +152,7 @@ ${note(t(
 ${bang(
   [t('Chapters', 'Chương'), t('Main hats active', 'Chiếc mũ chính'), t('Core deliverable on LabFlow', 'Sản phẩm tạo ra trên LabFlow')],
   [
-    [t('Section 0 — Start here', 'Mục 0 — Bắt đầu tại đây'), `${mu('C1', en)}`, t('Workspace LF #2, 5 role accounts, GitHub repo, study schedule', 'Không gian LF #2, 5 tài khoản vai, repo GitHub, lịch học')],
+    [t('Section 0 — Start here', 'Mục 0 — Bắt đầu tại đây'), `${mu('C1', en)}`, t('Workspace LF #2, one account + role mode C1–C5, GitHub repo, study schedule', 'Không gian LF #2, một tài khoản + chế độ đóng vai C1–C5, repo GitHub, lịch học')],
     [t('Ch 1 — Five hats &amp; rules', 'Ch 1 — Năm chiếc mũ &amp; luật đổi mũ'), `${mu('C1', en)} ${mu('C2', en)} ${mu('C3', en)} ${mu('C4', en)} ${mu('C5', en)}`, t('RACI matrix, hat-switching checklist, weekly time-box', 'Bảng RACI, checklist đổi mũ, lịch khung giờ tuần')],
     [t('Ch 2–3 — Plan &amp; company rhythm', 'Ch 2–3 — Lập kế hoạch &amp; nhịp doanh nghiệp'), `${mu('C1', en)}`, t('Project Charter, WBS, RAID, PT26/Template6 (plus SEP490 Report 1–2 practice), CR process', 'Điều lệ dự án, WBS, RAID, PT26/Template6 (luyện thêm khung Report 1–2 SEP490), quy trình CR')],
     [t('Ch 4 — Requirements', 'Ch 4 — Yêu cầu phần mềm'), `${mu('C2', en)}`, t('Q&amp;A list, UC specs, BR-01..14, wireframes, SRS (Template1 / Report 3 frame) + RTM', 'Q&amp;A list, đặc tả UC, BR-01..14, wireframe, SRS (Template1 / khung Report 3) + RTM')],

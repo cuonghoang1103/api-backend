@@ -33,7 +33,7 @@ declare module 'ct-lenh' {
   export type MucGhi = { kieu: string; text?: string; ten?: string; tomTat?: string; [k: string]: unknown };
   export function dsCauHoi(muc: readonly MucGhi[]): Array<{ k: number; text: string }>;
   export function moTaDsCauHoi(ds: Array<{ k: number; text: string }>): string;
-  export interface PhienCu { id: string; tieuDe: string; duAn: string | null; luucLuc: number; soTinNhan: number; ghim?: boolean; luuTru?: boolean }
+  export interface PhienCu { id: string; tieuDe: string; duAn: string | null; luucLuc: number; soTinNhan: number; ghim?: boolean; luuTru?: boolean; vai?: string | null }
   export function locPhien(ds: readonly PhienCu[], tuKhoa: string): PhienCu[];
   export function chonPhien(ds: readonly PhienCu[], thamSo: string): PhienCu | null;
   export function moTaDsPhien(ds: readonly PhienCu[]): string;

@@ -37,6 +37,7 @@ import { kiemMay } from './doctor';
 import { chepChu, lenhMoTay } from './heThong';
 import type { KetNoiLoi } from './ketNoi';
 import type { KhoChat } from './kho';
+import { docVai, laTenTuVai, nhanVaiNgan, tenPhienTheoVai, VAI_NGAN, type Vai } from '../../../desktop/src/main/agent/vaiCtwork';
 
 export interface ModelMuc {
   id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean;
@@ -307,6 +308,8 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       S.ws = await kn.apTrinhDuyet().catch(() => S.ws) as typeof S.ws;
       b.xoaManHinh();
       kho.xoaBang();
+      // Chế độ đóng vai: việc mới vẫn trong phiên vai này ⇒ ghi lại vai + tên cho phiên mới.
+      if (S.vai) await datVaiCli(S.vai as Vai, b, true);
       return;
 
     case '/exit': b.thoat(); return;
@@ -469,7 +472,39 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       const ten = thamSo.trim();
       if (!ten) { traLoi(L('Gõ tên: `/rename backend-api`', 'Give a name: `/rename backend-api`')); return; }
       const m = await kn.goi<{ ten: string; id: string } | null>('agent:doiTenPhienMang', { ten: ten.slice(0, 60) }).catch(() => null);
-      if (m) { kho.S.tieuDe = ten; kho.thongBao(L(`Đã đặt tên phiên: ${m.ten} (${m.id})`, `Session renamed: ${m.ten} (${m.id})`), 'ok'); } else traLoi(L('Không đổi được tên (lõi cũ?).', 'Could not rename (old core?).'));
+      if (m) {
+        kho.S.tieuDe = ten;
+        kho.S.daDoiTen = true; // /vai không đè tên người dùng tự đặt
+        // Ghi cả vào nhãn phiên đã lưu ⇒ /resume thấy đúng tên (lõi cũ không có kênh này thì thôi).
+        await kn.goi('agent:doiTenPhienCuoc', { ten: ten.slice(0, 60) }).catch(() => undefined);
+        kho.thongBao(L(`Đã đặt tên phiên: ${m.ten} (${m.id})`, `Session renamed: ${m.ten} (${m.id})`), 'ok');
+      } else traLoi(L('Không đổi được tên (lõi cũ?).', 'Could not rename (old core?).'));
+      return;
+    }
+
+    case '/vai': {
+      /* Chế độ đóng vai CT Work (27/11/2026): một tài khoản đóng 5 vai — mỗi phiên một vai (C1 Leader · C2 BA · C3 BE ·
+         C4 FE · C5 QA). Mọi lệnh ghi CT Work của phiên mang vai này; luật tách quyền phía máy chủ so theo vai. */
+      const t = thamSo.trim();
+      if (!t) {
+        b.chon({
+          tieuDe: L('Đóng vai CT Work cho phiên này', 'Act in a CT Work role for this session'),
+          moTa: S.vai ? L(`Đang đóng vai ${S.vai}`, `Acting as ${S.vai}`) : L('Chưa chọn vai', 'No role yet'),
+          than: L(
+            'Một tài khoản, năm vai. Mỗi thay đổi CT Work của phiên ghi lại vai; người được giao không tự đóng thẻ dưới đúng vai của thẻ, tác giả không tự duyệt review dưới vai tác giả — đổi vai khác (vd C5 QA) để duyệt.',
+            'One account, five roles. Every CT Work change from this session records the role; the assignee cannot close a card while acting in its role, and the author cannot approve their own review in the author role — switch (e.g. to C5 QA) to review.',
+          ),
+          ds: [
+            ...VAI_CT.map((v) => ({ nhan: `${v} ${VAI_NGAN_CT[v]}${S.vai === v ? L(' (đang)', ' (current)') : ''}`, giaTri: v, mo: moTaVai(v) })),
+            { nhan: L('Bỏ vai', 'No role'), giaTri: 'off', mo: L('luật so theo người như dự án nhóm', 'rules compare people, as in a team project') },
+          ],
+          khiChon: async (g) => { await datVaiCli(g === 'off' ? null : g as Vai, b); },
+        });
+        return;
+      }
+      const v = docVai(t);
+      if (v === undefined) { traLoi(L(`Không rõ vai "${t}". Có: C1 Leader · C2 BA · C3 BE · C4 FE · C5 QA, hoặc \`/vai off\`.`, `Unknown role "${t}". Use C1 Leader · C2 BA · C3 BE · C4 FE · C5 QA, or \`/vai off\`.`)); return; }
+      await datVaiCli(v, b);
       return;
     }
 
@@ -950,11 +985,47 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
   }
 }
 
+const VAI_CT = ['C1', 'C2', 'C3', 'C4', 'C5'] as const;
+const VAI_NGAN_CT = VAI_NGAN;
+function moTaVai(v: Vai): string {
+  return {
+    C1: L('sprint, WBS, rủi ro, CR, họp, báo cáo tuần', 'sprints, WBS, risks, CRs, meetings, weekly report'),
+    C2: L('yêu cầu, use case, business rule, Q&A', 'requirements, use cases, business rules, Q&A'),
+    C3: L('code backend, API, CSDL, unit test', 'backend code, APIs, database, unit tests'),
+    C4: L('màn hình, UI, test front-end', 'screens, UI, front-end tests'),
+    C5: L('test case, chạy test, lỗi, UAT, duyệt review', 'test cases, runs, defects, UAT, review decisions'),
+  }[v];
+}
+
+/**
+ * Chế độ đóng vai: đặt vai CT Work của phiên (null = bỏ). Chưa `/rename` ⇒ tự đặt tên phiên "<tên người> · C3 BE"
+ * (tên tự đặt theo vai cũ thì đổi theo vai mới). Lưu vào nhãn phiên ⇒ `/resume`, `-c` mở lại đúng vai.
+ */
+export async function datVaiCli(vai: Vai | null, b: Pick<BoiCanhLenh, 'kho' | 'kn'>, imLang = false): Promise<boolean> {
+  const { kho, kn } = b;
+  const S = kho.S;
+  const nguoi = (kn as { nguoi?: { fullName?: string | null; username?: string } }).nguoi;
+  const tenNguoi = nguoi?.fullName?.trim().split(/\s+/).pop() || nguoi?.username || 'CuongMini';
+  const tuDat = !S.daDoiTen && (!S.tieuDe || laTenTuVai(S.tieuDe));
+  const tenPhien = vai && tuDat ? tenPhienTheoVai(tenNguoi, vai) : undefined;
+  const r = await kn.goi<{ vai: string | null; ten: string | null } | null>('agent:datVai', { vai, ...(tenPhien ? { tenPhien } : {}) }).catch(() => null);
+  if (!r) { if (!imLang) kho.thongBao(L('Lõi này chưa hỗ trợ đóng vai — cập nhật CuongMini (`cuongmini update`).', 'This core does not support roles yet — update CuongMini (`cuongmini update`).'), 'loi'); return false; }
+  S.vai = vai;
+  if (r.ten) S.tieuDe = r.ten;
+  if (!imLang) {
+    kho.thongBao(vai
+      ? L(`Đang đóng vai ${nhanVaiNgan(vai)} — mọi lệnh ghi CT Work của phiên này ghi vai ${vai}.${r.ten ? ` Tên phiên: ${r.ten}.` : ''}`, `Acting as ${nhanVaiNgan(vai)} — every CT Work change from this session records ${vai}.${r.ten ? ` Session name: ${r.ten}.` : ''}`)
+      : L('Đã bỏ vai — luật CT Work so theo người như cũ.', 'Role cleared — CT Work rules compare people again.'), 'ok');
+  }
+  kho.bao(true);
+  return true;
+}
+
 /** Mở một việc cũ vào cuộc hiện tại và in lại hội thoại của nó. */
 export async function moPhien(id: string, tieuDe: string, b: Pick<BoiCanhLenh, 'kho' | 'kn' | 'xoaManHinh'>): Promise<boolean> {
   const { kho, kn } = b;
   if (kho.S.dangChay) { kho.thongBao(L('Việc này đang chạy — dừng (esc) hoặc đợi xong rồi mới mở việc khác.', 'A task is running — stop it (esc) or wait before opening another.'), 'loi'); return false; }
-  const r = await kn.goi<{ muc: Array<{ kieu: string; text?: string; ten?: string; tomTat?: string }> } | null>('agent:moPhien', { id });
+  const r = await kn.goi<{ muc: Array<{ kieu: string; text?: string; ten?: string; tomTat?: string }>; vai?: string | null } | null>('agent:moPhien', { id });
   if (!r) { kho.thongBao(L('Không mở được việc này (file phiên đã mất).', 'Could not open this task (session file is gone).'), 'loi'); return false; }
   b.xoaManHinh();
   kho.xoaBang();
@@ -966,7 +1037,10 @@ export async function moPhien(id: string, tieuDe: string, b: Pick<BoiCanhLenh, '
     else if (m.kieu === 'tool') { kho.them({ loai: 'tool', ten: m.ten ?? '', tomTat: m.tomTat ?? '', hong: false, moRong: false }); S.muc.push({ kieu: 'tool', ten: m.ten, tomTat: m.tomTat }); }
   }
   if (tieuDe) S.tieuDe = tieuDe;
-  kho.thongBao(L(`↺ Đã mở lại việc cũ${tieuDe ? ` "${tieuDe}"` : ''} — hỏi tiếp là CuongMini nhớ toàn bộ ngữ cảnh.`, `↺ Resumed${tieuDe ? ` "${tieuDe}"` : ''} — CuongMini remembers the full context.`), 'ok');
+  // Chế độ đóng vai: lõi đã đặt lại vai của phiên (hoặc bỏ). Tên đã có không bị /vai đè trừ khi là tên tự sinh theo vai.
+  S.vai = r.vai ?? null;
+  S.daDoiTen = Boolean(tieuDe) && !laTenTuVai(tieuDe);
+  kho.thongBao(L(`↺ Đã mở lại việc cũ${tieuDe ? ` "${tieuDe}"` : ''}${S.vai ? ` · vai ${S.vai}` : ''} — hỏi tiếp là CuongMini nhớ toàn bộ ngữ cảnh.`, `↺ Resumed${tieuDe ? ` "${tieuDe}"` : ''}${S.vai ? ` · role ${S.vai}` : ''} — CuongMini remembers the full context.`), 'ok');
   // Mở việc cũ = lõi nạp lại cuộc ⇒ gửi lại quyền trình duyệt, rồi đọc workspace mới.
   await kn.apTrinhDuyet().catch(() => undefined);
   try { S.ws = await kn.goi('agent:getWorkspace'); } catch { /* giữ ws cũ */ }

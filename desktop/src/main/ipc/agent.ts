@@ -38,8 +38,9 @@ import {
   xoaHoiThoai, type SuKienAgent,
   dsQuyenLauCua, xoaQuyenLauCua, veCongChinh, chayLuotCucBo, datCongPhuCua, veAnthropic,
   datTomTatCua, hoiThoaiCua, nguCanhChiTietCua, henChoCua, phatNen, phatNenTho, themTienToCua,
-  chenTinCua, cuocCuaPhien, datMayTinh, mayTinhDangBat, duAnCtworkCuaCuoc, datDungChiDan,
+  chenTinCua, cuocCuaPhien, datMayTinh, mayTinhDangBat, duAnCtworkCuaCuoc, datDungChiDan, phienIdCuaCuoc,
 } from '../agent/loop';
+import { datVaiCuoc, laVai, vaiCuaCuoc } from '../agent/vaiCtwork';
 import { hoTro as mayHoTro, kiemQuyen as kiemQuyenMay } from '../agent/mayTinh';
 import { datNoiLuuHen, dsHenLo, ganHenChoCuoc, napHenDaLuu, xuLyHenLo } from '../agent/choHen';
 import { chanDoan, goiCompact } from '../agent/lenhMayChu';
@@ -52,8 +53,8 @@ import { cai, napChiMuc, tim } from '../agent/khoKyNang';
 import { WEB_ORIGIN } from '../config';
 import { dsWorktree, taoWorktree, xoaWorktree } from '../agent/worktree';
 import {
-  danhSachPhien, datGhimPhien, datLuuTruPhien, docPhien, doiTenPhien, dungLaiHienThi,
-  nhanBanPhien, xoaPhien,
+  danhSachPhien, datGhimPhien, datLuuTruPhien, datVaiPhien, docPhien, doiTenPhien, dungLaiHienThi,
+  nhanBanPhien, vaiCuaPhien, xoaPhien,
 } from '../agent/phien';
 import { datDinhKem, datDinhKemTuDuong } from '../agent/dinhKem';
 import { hoanTacTatCa, luiFileVeLuot } from '../agent/tools';
@@ -603,6 +604,29 @@ export function registerAgentHandlers(): void {
   });
   handle('agent:themTienTo', ({ cuocId, tienTo }) => themTienToCua(cuocId, tienTo));
 
+  /* Chế độ đóng vai (27/11/2026, agent/vaiCtwork.ts): vai CT Work C1–C5 của cuộc — đi kèm mọi lời gọi CT Work
+     (`_meta["ctwork/vai"]`), lưu vào nhãn phiên (mở lại bằng /resume, -c), đặt tên phiên "<tên> · C3 BE" khi người
+     dùng chưa tự đặt tên (`tenPhien` = tên hiện tại; tên tự sinh theo vai cũ thì đổi theo vai mới). */
+  handle('agent:datVai', async ({ cuocId, vai, tenPhien }) => {
+    datVaiCuoc(cuocId, vai);
+    const phienId = phienIdCuaCuoc(cuocId);
+    if (phienId) await datVaiPhien(phienId, vai).catch(() => undefined);
+    // Tên phiên do NƠI GỌI quyết (CLI: "<tên người> · C3 BE" khi chưa /rename) — lõi chỉ ghi cả tên mạng lẫn nhãn phiên.
+    const ten = tenPhien?.trim() || null;
+    if (ten) {
+      doiTenPhienMang(cuocId, ten);
+      if (phienId) await doiTenPhien(phienId, ten).catch(() => undefined);
+    }
+    return { vai, ten, phienId };
+  });
+  /* /rename của CLI: ghi tên vào NHÃN phiên đã lưu (không chỉ tên mạng) ⇒ /resume thấy đúng tên. */
+  handle('agent:doiTenPhienCuoc', async ({ cuocId, ten }) => {
+    const phienId = phienIdCuaCuoc(cuocId);
+    if (phienId) await doiTenPhien(phienId, ten);
+    return { phienId };
+  });
+  handle('agent:layVai', ({ cuocId }) => ({ vai: vaiCuaCuoc(cuocId) }));
+
   handle('agent:send', async ({ cuocId, text, anh, chiDoc }, event) => {
     await chayCho(cuocId, text, anh, event, false, chiDoc === true);
   });
@@ -771,12 +795,15 @@ export function registerAgentHandlers(): void {
 
   handle('agent:dsPhien', (): Promise<AgentPhien[]> => danhSachPhien());
 
-  handle('agent:moPhien', async ({ cuocId, id }): Promise<{ muc: AgentMucKhoiPhuc[] } | null> => {
+  handle('agent:moPhien', async ({ cuocId, id }): Promise<{ muc: AgentMucKhoiPhuc[]; vai?: string | null } | null> => {
     const p = await docPhien(id);
     if (!p) return null;
     // Nạp VÀO tab hiện tại; tab giữ nguyên id của nó, chỉ `phienId` đổi.
     napPhien(cuocId, p.id, p.hoiThoai, p.duAn, p.goc ?? null);
-    return { muc: dungLaiHienThi(p.hoiThoai) };
+    // Chế độ đóng vai: mở lại đúng vai đã lưu của phiên (không có ⇒ bỏ vai của cuộc).
+    const vai = await vaiCuaPhien(p.id).catch(() => null);
+    datVaiCuoc(cuocId, laVai(vai) ? vai : null);
+    return { muc: dungLaiHienThi(p.hoiThoai), vai: laVai(vai) ? vai : null };
   });
 
   handle('agent:doiTenPhien', ({ id, ten }) => doiTenPhien(id, ten));

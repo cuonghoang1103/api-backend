@@ -70,6 +70,8 @@ export interface TomTatPhien {
   ghim?: boolean;
   /** Cất đi khỏi danh sách thường, KHÔNG xoá. */
   luuTru?: boolean;
+  /** Chế độ đóng vai (27/11/2026, `vaiCtwork.ts`): vai CT Work C1–C5 của phiên — `/resume`, `-c` mở lại đúng vai. */
+  vai?: string | null;
 }
 
 interface FilePhien extends TomTatPhien {
@@ -111,6 +113,8 @@ interface NhanPhien {
   ten?: string;
   ghim?: boolean;
   luuTru?: boolean;
+  /** Vai CT Work C1–C5 (chế độ đóng vai) — người dùng đặt bằng `/vai`, cùng hạng với tên tự đặt. */
+  vai?: string;
 }
 type BangNhan = Record<string, NhanPhien>;
 
@@ -154,6 +158,7 @@ async function suaNhan(id: string, sua: VaNhan): Promise<void> {
     if (!moi.ten) delete moi.ten;
     if (!moi.ghim) delete moi.ghim;
     if (!moi.luuTru) delete moi.luuTru;
+    if (!moi.vai) delete moi.vai;
     if (Object.keys(moi).length === 0) delete b[id];
     else b[id] = moi as NhanPhien;   // mọi trường `undefined` vừa bị xoá ở trên
 
@@ -180,6 +185,16 @@ export async function datGhimPhien(id: string, ghim: boolean): Promise<void> {
 
 export async function datLuuTruPhien(id: string, luuTru: boolean): Promise<void> {
   await suaNhan(id, { luuTru });
+}
+
+/** Chế độ đóng vai: vai CT Work của phiên (null = bỏ). Nằm ở `nhan.json` nên agent lưu phiên không đè. */
+export async function datVaiPhien(id: string, vai: string | null): Promise<void> {
+  await suaNhan(id, { vai: vai && /^C[1-5]$/.test(vai) ? vai : undefined });
+}
+
+/** Vai đã lưu của phiên (đọc nhãn) — null khi chưa đặt. */
+export async function vaiCuaPhien(id: string): Promise<string | null> {
+  return (await docNhan())[id]?.vai ?? null;
 }
 
 /**
@@ -313,6 +328,7 @@ export async function danhSachPhien(): Promise<TomTatPhien[]> {
           soTinNhan: j.soTinNhan ?? 0,
           ghim: n.ghim === true,
           luuTru: n.luuTru === true,
+          vai: n.vai ?? null,
         });
       }
     } catch {
@@ -336,6 +352,7 @@ export async function docPhien(id: string): Promise<FilePhien | null> {
       tieuDe: n.ten ?? String(j.tieuDe ?? ''),
       ghim: n.ghim === true,
       luuTru: n.luuTru === true,
+      vai: n.vai ?? null,
       duAn: j.duAn ?? null,
       goc: j.goc ?? null,
       luucLuc: j.luucLuc ?? 0,
@@ -351,7 +368,7 @@ export async function xoaPhien(id: string): Promise<void> {
   await fs.rm(duongDan(id), { force: true });
   // Dọn cả nhãn. Bỏ sót thì id đã xoá vẫn nằm trong `nhan.json` mãi mãi, và
   // một phiên MỚI tình cờ trùng id sẽ thừa hưởng cái ghim của người đã chết.
-  await suaNhan(id, { ten: undefined, ghim: false, luuTru: false });
+  await suaNhan(id, { ten: undefined, ghim: false, luuTru: false, vai: undefined });
 }
 
 /**

@@ -446,6 +446,7 @@ export async function updateProject(
     input.settings = (await import('./qualitySettings.js')).normalizeQualitySettings(input.settings); // dm5 G3: reviewChecklists · reviewCoolOffHours · testGate · uatRevokeOnClose
     input.settings = (await import('./dm5g4Rules.js')).normalizeG4Settings(input.settings); // dm5 G4: aiReviewMode · present · roleAlert · codeHealth · releaseRequireGreenCi
     input.settings = (await import('./qna.service.js')).normalizeQnaSettings(input.settings); // dm5 G2: qnaRequireTarget (block | null = cảnh báo)
+    input.settings = (await import('./vaiDong.js')).normalizeSoloSettings(input.settings); // 27/11: chế độ đóng vai soloRoles { enabled }
     // dm5 G1: DoR, WIP chéo cột, sức chứa × tập trung, RAG, trần Must, cổng giai đoạn, trần hành động retro.
     input.settings = await (await import('./dm5a.service.js')).normalizeProcessSettings(projectId, input.settings);
     const cur = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } });

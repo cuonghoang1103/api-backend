@@ -27,6 +27,7 @@ export const LENH_CLI: LenhGachCli[] = [
   { ten: '/terminal-setup', get mo() { return L('Cài Shift+Enter xuống dòng cho terminal hoặc xem hướng dẫn', 'Set up Shift+Enter for newlines in your terminal'); }, khac: ['/caiterminal'], nhom: 'cong-cu' },
   { ten: '/add-dir', get mo() { return L('Cho agent đọc/sửa thêm một thư mục ngoài dự án', 'Let the agent work in an extra directory'); }, khac: ['/themthumuc'], get thamSo() { return L('<đường dẫn>', '<path>'); }, nhom: 'lam-viec' },
   { ten: '/copy', get mo() { return L('Chép câu trả lời (cuối, hoặc thứ N từ cuối) · q = câu hỏi · all = cả hội thoại', 'Copy an answer (last, or Nth from last) · q = a question · all = whole conversation'); }, khac: ['/chep'], thamSo: '[N|q [N]|all]', nhom: 'lam-viec' },
+  { ten: '/vai', get mo() { return L('Đóng vai CT Work cho phiên (một mình 5 vai): C1 Leader · C2 BA · C3 BE · C4 FE · C5 QA — lưu theo phiên', 'Act in a CT Work role for this session (solo 5 roles): C1 Leader · C2 BA · C3 BE · C4 FE · C5 QA — saved with the session'); }, khac: ['/role'], thamSo: '[C1..C5|off]', nhom: 'phien' },
   { ten: '/mouse', get mo() { return L('Bắt chuột ở toàn màn hình (mặc định TẮT: bôi đen chép tự nhiên, con lăn vẫn cuộn)', 'Capture the mouse in fullscreen (default OFF: select & copy naturally, the wheel still scrolls)'); }, khac: ['/chuot'], thamSo: '[on|off]', nhom: 'phien' },
 ];
 

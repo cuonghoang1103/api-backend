@@ -284,6 +284,8 @@ export interface WorkComment {
   createdAt: string;
   editedAt: string | null;
   author: WorkUser | null;
+  /** Chế độ đóng vai (27/11/2026): vai C1–C5 người viết đang đóng (dự án bật soloRoles). */
+  actingRole?: string | null;
   /** Cảm xúc (👍 🎉 …) — thứ tự cố định theo REACTION_EMOJIS. */
   reactions?: CommentReaction[];
 }
@@ -323,6 +325,8 @@ export interface HistoryEntry {
   fromValue: string | null;
   toValue: string | null;
   actorKind: 'USER' | 'AI' | 'AUTOMATION' | 'SYSTEM';
+  /** Chế độ đóng vai (27/11/2026): vai C1–C5 lúc thay đổi. */
+  actingRole?: string | null;
   createdAt: string;
   actor: WorkUser | null;
 }

@@ -19,6 +19,7 @@ import { logger } from '../../utils/logger.js';
 import { BadRequestError, ConflictError, NotFoundError } from '../../middleware/errorHandler.js';
 import { PRIORITY_DEFAULT, PRIORITY_MAX, PRIORITY_MIN } from './constants.js';
 import { emitWorkEvent, type FieldChange, type WorkActor, type WorkEvent } from './events.js';
+import { nhanVai, notAssigneeTheoVai, vaiCuaThe, vaiDangDong, vaiGhi } from './vaiDong.js';
 import { agentOptionsOf, can, loadProjectAccess, principalOf } from './permissions.js';
 import { rankAfter, rankBetween, rankInitial } from './rank.js';
 import { tiptapToText } from './tiptapText.js';
@@ -141,7 +142,19 @@ async function assertTransitionAllowed(
   if (rules.notAssignee) {
     const it = await tx.workIssue.findUnique({ where: { id: ctx.issueId }, select: { assigneeId: true } });
     if (it?.assigneeId === userId) {
-      throw new BadRequestError('The assignee cannot make this status change — someone else has to review and move it', 'WORK_TRANSITION_SELF');
+      // 27/11/2026 — chế độ đóng vai (vaiDong.ts): một người đóng 5 vai ⇒ so theo VAI. Thẻ ghi vai được giao (Role C1–C5 /
+      // nhãn C1…C5); đóng vai KHÁC (vd C5 QA duyệt thẻ C3) ⇒ cho, đúng vai đó ⇒ chặn. Không có vai ⇒ chặn như cũ.
+      const vai = ctx.actor.kind === 'AGENT' ? null : await vaiDangDong(ctx.projectId);
+      const kq = notAssigneeTheoVai(vai ? await vaiCuaThe(tx, ctx.projectId, ctx.issueId) : null, vai);
+      if (kq === 'same-role') {
+        throw new BadRequestError(`You are acting as ${nhanVai(vai!)}, the role this card is assigned to — switch to another role (e.g. C5 QA) to review and move it`, 'WORK_TRANSITION_SELF');
+      }
+      if (kq === 'no-card-role') {
+        throw new BadRequestError('The assignee cannot make this status change — set the card\'s Role (C1–C5) so CT Work knows which role did the work, then move it while acting as another role', 'WORK_TRANSITION_SELF');
+      }
+      if (kq !== 'allow') {
+        throw new BadRequestError('The assignee cannot make this status change — someone else has to review and move it', 'WORK_TRANSITION_SELF');
+      }
     }
   }
   if (rules.teamIds?.length) {
@@ -383,8 +396,9 @@ export async function createIssue(input: CreateIssueInput, rawActor: WorkActor) 
       },
     });
 
+    const vaiH = actor.kind === 'USER' || actor.kind === 'AI' ? await vaiGhi(input.projectId) : {};
     await tx.workHistory.create({
-      data: { issueId: created.id, actorId: actor.userId, actorKind: actor.kind, field: 'created', toValue: `${number}` },
+      data: { issueId: created.id, actorId: actor.userId, actorKind: actor.kind, field: 'created', toValue: `${number}`, ...vaiH },
     });
     if (aiMark) {
       await tx.workHistory.create({
@@ -630,9 +644,11 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, rawAc
     }
 
     if (changes.length) {
+      // Chế độ đóng vai: vai C1–C5 đang đóng đi kèm mỗi dòng lịch sử (luật tự động / hệ thống không có vai).
+      const vaiH = actor.kind === 'USER' || actor.kind === 'AI' ? await vaiGhi(before.projectId) : {};
       await tx.workHistory.createMany({
         data: changes.map((c) => ({
-          issueId, actorId: actor.userId, actorKind: actor.kind, field: c.field, fromValue: c.from, toValue: c.to,
+          issueId, actorId: actor.userId, actorKind: actor.kind, field: c.field, fromValue: c.from, toValue: c.to, ...vaiH,
         })),
       });
     }

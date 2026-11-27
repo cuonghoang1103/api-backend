@@ -27,6 +27,7 @@ import {
 import { mcpCommands, runGuarded } from '../services/work/toolRegistry/index.js';
 import { clientOfToken, recordToolCall, runInAiScope } from '../services/work/aiUsage.service.js';
 import type { ToolDef } from './tools/types.js';
+import { cauNhacTraiVai, chayVoiVai, kiemVaiKhai, nhacTraiVai, vaiYeuCau } from '../services/work/vaiDong.js';
 
 export const SERVER_INFO = { name: 'ctwork', title: 'CT Work', version: '1.0.0' } as const;
 
@@ -81,6 +82,19 @@ async function callTool(ctx: McpCtx, params: Record<string, unknown>) {
   const name = typeof params.name === 'string' ? params.name : '';
   const tool = TOOL_BY_NAME.get(name);
   if (!tool) return { rpcError: { code: RPC.INVALID_PARAMS, message: `Unknown tool: ${name || '(none)'}` } };
+  // 27/11/2026 — chế độ đóng vai: `_meta["ctwork/vai"]` của lời gọi thắng header `X-CTW-Vai` của kết nối (CLI đổi vai
+  // bằng /vai giữa phiên mà không nối lại). Agent ⇒ WORK_ROLE_AGENT. Xem services/work/vaiDong.ts.
+  const meta = params._meta as Record<string, unknown> | undefined;
+  if (meta && typeof meta === 'object' && 'ctwork/vai' in meta) {
+    let vai: ReturnType<typeof kiemVaiKhai>;
+    try { vai = kiemVaiKhai(meta['ctwork/vai'], !!ctx.agent); } catch (err) { return { result: { content: [{ type: 'text', text: errorText(err) }], isError: true } }; }
+    return chayVoiVai(vai, () => callToolInRole(ctx, tool, params));
+  }
+  return callToolInRole(ctx, tool, params);
+}
+
+async function callToolInRole(ctx: McpCtx, tool: ToolDef, params: Record<string, unknown>) {
+  const name = tool.name;
   const wait = takeCallSlot(ctx.tokenId);
   if (wait !== null) {
     return { rpcError: { code: RPC.RATE_LIMITED, message: `Rate limit: at most ${MCP_CALLS_PER_MINUTE} tool calls per minute per token. Retry after ${Math.ceil(wait / 1000)} s.`, data: { retryAfterMs: wait } } };
@@ -95,7 +109,11 @@ async function callTool(ctx: McpCtx, params: Record<string, unknown>) {
     await recordToolCall({ client, userId: ctx.userId, tool: tool.name, write: tool.write, hits: r.hits, args, error: r.error, durationMs: Date.now() - t0 });
     if (r.error !== undefined) throw r.error;
     const out = r.result as Awaited<ReturnType<ToolDef['run']>>;
-    const text = typeof out === 'string' ? out : JSON.stringify(out, null, 2);
+    let text = typeof out === 'string' ? out : JSON.stringify(out, null, 2);
+    // Nhắc nhẹ khi lệnh ghi trái vai (không chặn) — cùng bảng với header X-CTW-Vai-Nhac của REST.
+    const vai = vaiYeuCau();
+    const dung = vai ? nhacTraiVai(tool.name, vai, tool.write) : null;
+    if (vai && dung) text += `\n\n${cauNhacTraiVai(vai, dung)}`;
     return { result: { content: [{ type: 'text', text }], isError: false } };
   } catch (err) {
     const status = (err as { statusCode?: number }).statusCode;
@@ -278,12 +296,20 @@ router.all('/', async (req: Request, res: Response) => {
     tokenId: req.workToken!.id,
     signal: abort.signal,
   };
+  // Chế độ đóng vai: header X-CTW-Vai của kết nối (token người). Agent gửi vai ⇒ 403.
+  let vai: ReturnType<typeof kiemVaiKhai>;
+  try { vai = kiemVaiKhai(req.headers['x-ctw-vai'], !!req.agent); } catch (err) {
+    const e = err as { statusCode?: number; message?: string; code?: string };
+    return httpError(res, e.statusCode === 403 ? 403 : 400, e.statusCode === 403 ? RPC.FORBIDDEN : RPC.INVALID_REQUEST, `${e.code ? `${e.code}: ` : ''}${e.message ?? 'Bad role'}`);
+  }
   const msgs = Array.isArray(body) ? body.slice(0, 20) : [body];
   const out: RpcResponse[] = [];
-  for (const m of msgs) {
-    const r = await handleMessage(ctx, m);
-    if (r) out.push(r);
-  }
+  await chayVoiVai(vai, async () => {
+    for (const m of msgs) {
+      const r = await handleMessage(ctx, m);
+      if (r) out.push(r);
+    }
+  });
   if (abort.signal.aborted) return;
   if (!out.length) return void res.status(202).end();
   res.status(200).json(Array.isArray(body) ? out : out[0]);

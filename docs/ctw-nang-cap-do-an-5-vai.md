@@ -420,6 +420,73 @@ docs3a/diagramsSql/ctw6b db test xanh. Phần bỏ/giới hạn: B19 chỉ đọ
 câu "N test cases … X%"; B18 cần dựng `plantuml/plantuml-server` và đặt `PLANTUML_SERVER_URL` trên VPS (chưa cấu hình ⇒ 503, nguồn vẫn
 hiện); bản .docx in khối PlantUML dạng mã (chưa nhúng ảnh SVG).
 
+## Kết quả — Chế độ đóng vai: MỘT tài khoản đóng 5 vai (27/11/2026)
+
+Câu hỏi của user: làm đồ án "một mình 5 vai" bằng MỘT tài khoản (chủ dự án) mà vẫn giữ luật tách quyền, nộp + báo cáo trung
+thực, và mở 5 phiên CuongMini CLI đặt tên theo vai, lưu hội thoại, mở lại làm tiếp. Trước đây bài học bắt tạo 5 tài khoản vì
+`notAssignee` (người được giao không tự chuyển) và `WORK_REVIEW_SELF` (tác giả không tự duyệt) so theo USER.
+
+**Thiết kế (vì sao chọn vậy).** Vai đi THEO TỪNG YÊU CẦU — header `X-CTW-Vai: C3` (MCP: header của kết nối hoặc
+`params._meta["ctwork/vai"]` của từng `tools/call`), KHÔNG lưu "vai hiện tại" ở máy chủ: 5 phiên CLI chạy song song cùng một
+token, lưu theo người × dự án thì phiên này đổi vai làm hỏng phiên kia. Web nhớ vai theo dự án ở trình duyệt (localStorage) và gắn
+header vào mọi yêu cầu của dự án đó. Chỉ có hiệu lực khi dự án bật `settings.soloRoles.enabled` (ADMIN dự án đổi — cùng quyền
+`project.settings`; bộ mẫu SOLO5 bật sẵn). Không có vai / dự án không bật ⇒ hành vi cũ (so theo người). Token AI agent gửi vai ⇒
+403 `WORK_ROLE_AGENT`; vai lạ ⇒ 400 `WORK_BAD_ROLE`. Không có user giả: mọi bản ghi vẫn mang userId thật, vai là thông tin THÊM.
+
+| Phần | Tệp chính |
+|---|---|
+| Lõi máy chủ (ALS, luật thuần, vai của thẻ, gợi ý theo vai) | `src/services/work/vaiDong.ts` (+ `vaiDong.test.ts`) |
+| Middleware REST + nhắc trái vai `X-CTW-Vai-Nhac` | `src/routes/work.routes.ts` (sau `chayTrongLuot`), CORS `src/index.ts` |
+| MCP header + `_meta` + câu nhắc trong kết quả | `src/mcp/server.ts`, `src/mcp/issueView.ts` (comment/history ghi "(role C3)") |
+| notAssignee theo vai | `src/services/work/issueChange.ts` › `assertTransitionAllowed` |
+| WORK_REVIEW_SELF theo vai + `hat` từng người tham gia | `src/services/work/quality.service.ts`, `work.ctw6.routes.ts`, `toolRegistry/parity2.ts` (`review_manage participants[].hat`) |
+| Ghi vai | lịch sử thẻ (`issueChange.ts`, `planning.service.ts`), bình luận (`issues.service.ts`), worklog `hat` (để trống ⇒ vai đang đóng), audit (`audit.ts`), lần chạy test `executed_role` (`tests.service.ts`) |
+| Bản xuất trung thực | `fptReports.service.ts` (Project Tracking: Scope/TimeLogs/Issues, Weekly Report; thành viên "Leader · 1 student plays all 5 roles (C1–C5)"), `contribExport.ts` (sheet By role + ghi chú), biên bản review |
+| Web | `frontend/src/lib/work-vai.ts`, `components/work/VaiPicker.tsx` (header), `IssueActivity.tsx` (chip vai), `settings/ProjectDetails.tsx` (bật/tắt), `quality/ReviewDetail.tsx` (cột vai), proxy `app/api/v1/[[...path]]/route.ts`, i18n `vai` (vi+en) |
+| CLI + lõi | `desktop/src/main/agent/vaiCtwork.ts` (+ test), `mcp.ts` (`_meta`), `loop.ts` (gợi ý theo vai vào ghi chú dự án của lượt), `phien.ts` (vai trong `nhan.json`), `ipc/agent.ts` (`agent:datVai`, `agent:layVai`, `agent:doiTenPhienCuoc`, `moPhien` trả vai), `packages/cuongmini-cli` (`--vai`, `/vai`, thanh trạng thái, `/resume`, `-c --vai`) |
+| Migration | `20261127150000_ctw_vai_dong` (chỉ ADD cột NULL: `work_history/work_audit_logs/work_comments.acting_role`, `work_review_participants.hat`, `work_test_runs.executed_role`) |
+
+Luật theo vai (chỉ khi dự án bật):
+- **notAssignee:** người được giao đang đóng ĐÚNG vai ghi trên thẻ (trường `Role (C1–C5)` của bộ SOLO5, hoặc nhãn C1…C5) ⇒
+  `WORK_TRANSITION_SELF` ("you are acting as C3 · BE…"); đóng vai KHÁC ⇒ qua. Thẻ không ghi vai ⇒ chặn kèm gợi ý đặt Role (không
+  đoán từ tiêu đề). Không có vai ⇒ chặn như cũ.
+- **WORK_REVIEW_SELF:** mỗi người tham gia review có `hat`; dòng của chính người mở phiên không ghi ⇒ lấy vai đang đóng. Tác giả
+  được ra quyết định / đóng phiên CHỈ khi đang đóng vai khác MỌI vai tác giả đã ghi; dòng tác giả không ghi vai ⇒ vẫn chặn.
+- **Không đổi:** phê duyệt (approval, `WORK_SELF_APPROVER`) vẫn cần người thật thứ hai (giảng viên) — vai không tự duyệt cho nhau;
+  làm nguội review 12 h, Done rules, WIP… giữ nguyên.
+- **Nhắc nhẹ (không chặn):** lệnh ghi trái vai (test/fpt_unit/fpt_it/UAT/defect ⇒ C5; SRS/SWR/Q&A ⇒ C2 hoặc C1; sprint/RAID/CR/họp/WBS/
+  weekly ⇒ C1) ⇒ web hiện toast "Đổi sang C5"; MCP thêm một câu "Role note: …" vào kết quả.
+
+### Hướng dẫn dùng từng bước (cho user)
+1. **Bật chế độ.** Dự án tạo từ mẫu "SWP391 · một mình 5 vai" đã bật sẵn. Dự án khác: *Cài đặt › Chi tiết › Chế độ đóng vai (một
+   người, năm vai)* → bật (ADMIN). Chỉ cần MỘT tài khoản — của bạn.
+2. **Chọn vai trên web.** Thanh tiêu đề dự án có nút "Chọn vai" / "Đang đóng vai C3 · BE" (màu theo vai). Phím tắt **Alt+1…5**,
+   **Alt+0** bỏ vai. Vai nhớ theo dự án trên trình duyệt này.
+3. **Đặt Role cho thẻ.** Trường *Role (C1–C5)* = vai làm việc đó (vd C3). Code xong ở C3, kéo sang In Review; bấm **Alt+5** rồi
+   kéo In Review → Done dưới vai C5 QA. Lịch sử thẻ ghi "(vai C3 · BE)" → "(vai C5 · QA)".
+4. **Review.** Mở phiên review với chính bạn là AUTHOR (cột Vai = C3) và REVIEWER (C5) (+ MODERATOR C1). Quyết định / đóng phiên
+   khi đang đóng C5 (hoặc C1); đang C3 sẽ bị chặn `WORK_REVIEW_SELF`.
+5. **Log giờ.** Ô *Vai (mũ)* để trống ⇒ tự lấy vai đang đóng; Reports › Giờ theo vai chia đúng 5 mũ.
+6. **CuongMini CLI 5 phiên.** `/ctwork` một lần (token cá nhân). Mỗi vai một cửa sổ: `cuongmini --vai C1` … `cuongmini --vai C5`
+   — phiên tự đặt tên "<tên bạn> · C3 BE" (nếu chưa `/rename`), thanh trạng thái hiện `◆ C3 BE`, mọi lệnh ghi CT Work mang vai C3,
+   trợ lý nhận gợi ý theo vai (C5 tập trung test, độc lập với tác giả). Đổi vai giữa chừng: `/vai C4` (không đối số ⇒ menu;
+   `/vai off` bỏ). Mai làm tiếp: `/resume` (danh sách hiện "vai C3") hoặc `cuongmini -c --vai C3` (việc gần nhất của đúng phiên C3
+   trong thư mục). `/rename` vẫn thắng và nay ghi cả vào nhãn phiên đã lưu.
+7. **Nộp/báo cáo.** Project Tracking, Weekly Report, sổ đóng góp, biên bản review tự ghi "Tên SV (role C3 · BE)" và "1 student plays
+   all 5 roles" — không bao giờ thành 5 người. Report 2 §3 dùng RACI `honest` như trước.
+
+Test: `npx tsx --test src/services/work/vaiDong.test.ts` (8) · `WORK_DB_TEST=1 npx tsx --test src/routes/work.vaiDong.db.test.ts` (10:
+SOLO bật sẵn/chuẩn hoá; vai lạ 400, agent 403 REST + MCP; notAssignee C3 chặn / không vai chặn / C5 qua + lịch sử ghi vai; thẻ không
+Role; tắt chế độ ⇒ như cũ; WORK_REVIEW_SELF theo vai + dự án không bật ⇒ như cũ; bình luận/worklog/audit mang vai; nhắc trái vai;
+MCP `_meta` + header; bản xuất ghi "(role C3 · BE)") · `(cd desktop && npx vitest run src/main/agent/vaiCtwork.test.ts)` (4) · CLI
+`coDong.test.ts` (`--vai`) + `lenhTatCa.test.ts` (`/vai C3|qa|off|C9`, `/rename` ghi nhãn phiên). Không thêm lệnh MCP nào (chỉ
+`hat` trong `review_manage`), không thêm trang dưới `app/work` (bộ chọn nằm ở header) ⇒ không đụng `tuyenCtWork.ts`.
+
+Giới hạn có chủ ý: CLI đổi vai cho MỘT tiến trình (lời gọi `/ctwork` qua menu dùng vai cuối của tiến trình); app desktop nhiều tab
+dùng chung lõi — vai theo cuộc cho lời gọi của agent, menu `/ctwork` dùng vai đặt sau cùng. Lịch sử của vài đường ghi phụ (đính kèm,
+cờ, web link, sprint hàng loạt) chưa mang vai — audit + lịch sử chuyển trạng thái/trường của thẻ đã mang. Biểu đồ Report chưa tách
+theo vai ngoài "Giờ theo vai".
+
 ## Nghiệm thu ghép (27/11/2026)
 
 Ghép 4 gói trong cây chính, kiểm trên CSDL TEST SẠCH dựng từ migration (`scripts/db-test-tu-migration.mjs`, giống job CI

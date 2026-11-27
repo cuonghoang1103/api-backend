@@ -188,7 +188,7 @@ ${tomTat([
   t('Separate locked decisions (modular monolith, hand-coding, honesty) from Week-1 lecturer Q&A items (PostgreSQL approval, MaxLOC table, BR-01..14 numbers).', 'Tách rõ quyết định đã chốt (modular monolith, tự code tay, trung thực) khỏi các mục cần hỏi giảng viên Tuần 1 (duyệt PostgreSQL, bảng MaxLOC, số BR-01..14).'),
   t('Never skip the Security and Recorded Traps tables — they prevent the top bugs examiners test during defense.', 'Tuyệt đối không bỏ qua bảng Bảo mật và Những cái bẫy — chúng chặn đúng những lỗi hội đồng hay kiểm nhất khi bảo vệ.')
 ], en)}
-<p>${t('Next: ', 'Bài tiếp: ')}${dm('dm5-0-4-dung-cong-ty-mot-nguoi', t('0.4 — Setting up your "one-person company": CT Work, 5 role accounts, GitHub & rituals', '0.4 — Dựng "công ty một người": CT Work, 5 tài khoản vai, GitHub, chat & lịch họp'))}.</p>
+<p>${t('Next: ', 'Bài tiếp: ')}${dm('dm5-0-4-dung-cong-ty-mot-nguoi', t('0.4 — Setting up your "one-person company": CT Work (one account, 5 roles), GitHub & rituals', '0.4 — Dựng "công ty một người": CT Work (một tài khoản, 5 vai), GitHub, chat & lịch họp'))}.</p>
 `);
 };
 

@@ -141,7 +141,7 @@ export async function issueMarkdown(ctx: McpCtx, p: ProjectHit, number: number, 
     body.push(`## Comments (${comments.length})`);
     const threads = buildThreads(comments.slice(-50));
     const one = (c: (typeof comments)[number], reply: boolean) => {
-      const head = `${reply ? '#### ↳ reply' : '###'} comment #${c.id} · ${c.author ? who(c.author) : 'someone'} · ${c.createdAt.toISOString()} · ${c.visibility}${c.isAi ? ' · AI-drafted' : ''}`;
+      const head = `${reply ? '#### ↳ reply' : '###'} comment #${c.id} · ${c.author ? who(c.author) : 'someone'}${c.actingRole ? ` (role ${c.actingRole})` : ''} · ${c.createdAt.toISOString()} · ${c.visibility}${c.isAi ? ' · AI-drafted' : ''}`;
       const lines = [md(c.bodyJson) || (c.attachments.length ? '' : '(empty)')];
       for (const f of c.attachments) {
         if (f.voice) {
@@ -161,7 +161,7 @@ export async function issueMarkdown(ctx: McpCtx, p: ProjectHit, number: number, 
     for (const h of history.slice(0, 40)) {
       const from = h.field === 'statusId' ? statusName(h.fromValue) : h.fromValue;
       const to = h.field === 'statusId' ? statusName(h.toValue) : h.toValue;
-      body.push(`- ${h.createdAt.toISOString()} ${h.actor ? `@${h.actor.username}` : 'system'} [${h.actorKind}] ${h.field}: ${from ?? '—'} → ${to ?? '—'}`);
+      body.push(`- ${h.createdAt.toISOString()} ${h.actor ? `@${h.actor.username}` : 'system'}${h.actingRole ? ` (role ${h.actingRole})` : ''} [${h.actorKind}] ${h.field}: ${from ?? '—'} → ${to ?? '—'}`);
     }
   }
   if (worklogs) {

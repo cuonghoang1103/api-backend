@@ -53,6 +53,8 @@ const TRA: Record<string, unknown> = {
   'agent:khoTim': [],
   'agent:dsPhienMang': { toi: { id: 'abc123', ten: 'cli·duan' }, ds: [{ id: 'def456', ten: 'desktop·api', noi: 'desktop', thuMuc: '/tmp/api', trangThai: 'ranh' }] },
   'agent:doiTenPhienMang': { id: 'abc123', ten: 'backend' },
+  'agent:datVai': { vai: 'C3', ten: 'Thử · C3 BE', phienId: 'p1' },
+  'agent:doiTenPhienCuoc': { phienId: 'p1' },
   'agent:themTienTo': { ok: true, khoa: 'tien-to:npm test' },
   'agent:dsWorktree': [{ duongDan: '/tmp/duan', nhanh: 'main', laChinh: true, cuaApp: false, dangDung: true }],
   'agent:taoWorktree': { ok: true },
@@ -105,6 +107,7 @@ const THAM_SO: Record<string, string[]> = {
   '/mcp': ['mo', 'mở', 'nap'], '/copy': ['1', 'q', 'all'], '/browser': ['on', 'off'], '/fullscreen': ['on', 'off'], '/mouse': ['on', 'off'],
   '/language': ['en', 'vi'], '/theme': ['sang', 'dark'], '/add-dir': ['..'], '/ctwork': ['doc', 'ghi', 'off', 'du-an', 'sprint', 'the LF-18', 'gio LF-18 1.5h đọc JWT', 'tu-ghi on', 'ket-noi'],
   '/issue': ['LF-18'],
+  '/vai': ['C3', 'qa', 'off', 'C9'],
 };
 
 test('mọi lệnh `/` trong /help: không ném, có phản hồi, giữ tham số — VI + EN', async () => {
@@ -139,6 +142,11 @@ test('mọi lệnh `/` trong /help: không ném, có phản hồi, giữ tham s�
         if (cau === '/quyen add npm run lint') assert.match(kenh('agent:themTienTo'), /npm run lint/);
         if (cau === '/quyen xoa 1') assert.match(kenh('agent:xoaQuyenLau'), /npm test/, '/quyen xoa <số> ⇒ đúng mục số đó');
         if (cau === '/rename backend api') assert.match(kenh('agent:doiTenPhienMang'), /backend api/);
+        if (cau === '/rename backend api') assert.match(kenh('agent:doiTenPhienCuoc'), /backend api/, '/rename ghi cả nhãn phiên (để /resume thấy)');
+        if (cau === '/vai C3') { assert.match(kenh('agent:datVai'), /"vai":"C3"/); assert.match(kenh('agent:datVai'), /· C3 BE/, 'chưa /rename ⇒ tự đặt tên phiên theo vai'); assert.equal(b.kho.S.vai, 'C3'); }
+        if (cau === '/vai qa') assert.match(kenh('agent:datVai'), /"vai":"C5"/);
+        if (cau === '/vai off') assert.match(kenh('agent:datVai'), /"vai":null/);
+        if (cau === '/vai C9') assert.equal(kenh('agent:datVai'), '', 'vai lạ không gọi lõi');
         if (cau === '/worktree tinh-nang-a') assert.match(kenh('agent:taoWorktree'), /tinh-nang-a/);
         if (cau === '/hen huy h1') assert.match(kenh('agent:huyHen'), /h1/);
         if (cau === '/ctwork ghi') assert.match(kenh('agent:ctwork'), /"quyen":"ghi"/);

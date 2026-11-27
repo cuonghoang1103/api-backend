@@ -15,6 +15,7 @@ import { bocDong, bocVan, duoiMarkdown } from '../markdown';
 import { cauTrangThai, dichLyDo, dichMoTaCho, giay, SAO, TOOL_LENH } from '../trangThai';
 import { dongTieuDeTool, veDauRa, veKeHoach, veTool } from '../veBang';
 import type { ONhap } from './soanThao';
+import { VAI_NGAN, type Vai } from '../../../../desktop/src/main/agent/vaiCtwork';
 
 const XAM = THUONG_HIEU.vien;
 
@@ -311,6 +312,9 @@ export function GoiYView({ ds, chon, rong, kieu }: { ds: MucGoiY[]; chon: number
 
 // ─── Chân trang ──────────────────────────────────────────────────
 
+/** Cùng màu trường Role (C1–C5) của bộ mẫu SOLO5 trên web, sáng hơn cho nền terminal tối. */
+const MAU_VAI: Record<string, string> = { C1: '#a78bfa', C2: '#22d3ee', C3: '#60a5fa', C4: '#4ade80', C5: '#facc15' };
+
 export function ChanTrang({ S, rong, model, muc, nhac, ctw, goiYPhim }: {
   S: TrangThaiChat; rong: number; model: string; muc: string; nhac: string;
   /** Đợt 5: dòng CT Work (dự án · sprint · còn N ngày · ▶ thẻ) — chữ trơn từ `veDongCtw`. */
@@ -319,7 +323,9 @@ export function ChanTrang({ S, rong, model, muc, nhac, ctw, goiYPhim }: {
   goiYPhim?: boolean;
 }) {
   const cd = moTaCheDo(S.ws?.cheDoQuyen);
-  const trai = `${mau(cd.mau)(`${cd.icon} ${cd.ten}`)} ${mo('(shift+tab)')}${S.ws?.choTrinhDuyet ? ` ${mau('#e08a63')('🌐')}` : ''}${goiYPhim ? mo(L(' · ? phím tắt', ' · ? for shortcuts')) : ''}`;
+  // Chế độ đóng vai CT Work: chip vai luôn hiện đầu chân trang (không bị bỏ khi chật).
+  const chipVai = S.vai ? `${mau(MAU_VAI[S.vai] ?? '#a78bfa')(`◆ ${S.vai} ${VAI_NGAN[S.vai as Vai] ?? ''}`.trimEnd())}  ` : '';
+  const trai = `${chipVai}${mau(cd.mau)(`${cd.icon} ${cd.ten}`)} ${mo('(shift+tab)')}${S.ws?.choTrinhDuyet ? ` ${mau('#e08a63')('🌐')}` : ''}${goiYPhim ? mo(L(' · ? phím tắt', ' · ? for shortcuts')) : ''}`;
   const giua = `${mau(THUONG_HIEU.xanhNhat)(model)}${mo(` · ${muc}`)}`;
   /* QA 5c: phần phải KHÔNG còn bỏ cả cụm khi chật — trước đây thêm "context 83%" là cả "thư mục ⎇ nhánh · context · ~$"
      biến mất ở 120 cột, đúng lúc ngữ cảnh/tiền đáng xem nhất. Nay bỏ dần theo độ ưu tiên: thư mục ⎇ nhánh → hạn mức →

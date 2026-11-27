@@ -429,7 +429,7 @@ export function chonPhien(ds: readonly AgentPhien[], thamSo: string): AgentPhien
 export function moTaDsPhien(ds: readonly AgentPhien[]): string {
   if (ds.length === 0) return 'Không có việc nào khớp.';
   return '**Việc đã lưu** — gõ `/resume <số>` để mở vào tab này:\n\n'
-    + ds.map((p, i) => `${i + 1}. ${p.ghim ? '📌 ' : ''}${p.tieuDe || 'Việc chưa đặt tên'}${p.duAn ? ` · \`${p.duAn}\`` : ''} · ${new Date(p.luucLuc).toLocaleDateString('vi-VN')}`).join('\n');
+    + ds.map((p, i) => `${i + 1}. ${p.ghim ? '📌 ' : ''}${p.vai ? `[${p.vai}] ` : ''}${p.tieuDe || 'Việc chưa đặt tên'}${p.duAn ? ` · \`${p.duAn}\`` : ''} · ${new Date(p.luucLuc).toLocaleDateString('vi-VN')}`).join('\n');
 }
 
 // ─── /export ─────────────────────────────────────────────────

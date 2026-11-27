@@ -105,10 +105,10 @@ export function dsCauHoiEn(ds: ReadonlyArray<{ k: number; text: string }>): stri
     + ds.slice(-15).map((c) => `${c.k}. ${c.text.replace(/\s+/g, ' ').slice(0, 90)}${c.text.length > 90 ? '…' : ''}`).join('\n');
 }
 
-export function dsPhienEn(ds: ReadonlyArray<{ tieuDe: string; duAn: string | null; luucLuc: number; ghim?: boolean }>): string {
+export function dsPhienEn(ds: ReadonlyArray<{ tieuDe: string; duAn: string | null; luucLuc: number; ghim?: boolean; vai?: string | null }>): string {
   if (!ds.length) return 'No matching tasks.';
   return '**Saved tasks** — type `/resume <n>` to open one here:\n\n'
-    + ds.map((p, i) => `${i + 1}. ${p.ghim ? '📌 ' : ''}${p.tieuDe || 'Untitled task'}${p.duAn ? ` · \`${p.duAn}\`` : ''} · ${new Date(p.luucLuc).toLocaleDateString('en-US')}`).join('\n');
+    + ds.map((p, i) => `${i + 1}. ${p.ghim ? '📌 ' : ''}${p.vai ? `[${p.vai}] ` : ''}${p.tieuDe || 'Untitled task'}${p.duAn ? ` · \`${p.duAn}\`` : ''} · ${new Date(p.luucLuc).toLocaleDateString('en-US')}`).join('\n');
 }
 
 /**

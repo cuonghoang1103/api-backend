@@ -130,6 +130,8 @@ các chữ "remove / delete / hide UTCID", kỹ năng `ctwork_huong_dan` có t�
 `test_cycle` · `meeting_minutes` · `review` · `create_project` +`blueprint` (thư viện mẫu 5 bộ) · `groups` · `fromProject` (chép cấu hình)
 · `dryRun` (xem trước).
 
+**Chế độ đóng vai (27/11/2026) — KHÔNG thêm lệnh:** vai C1–C5 đi theo lời gọi (header `X-CTW-Vai` của kết nối hoặc `params._meta["ctwork/vai"]` của `tools/call`; token agent ⇒ `WORK_ROLE_AGENT`) · `review_manage participants[]` +`hat` · lệnh ghi trái vai ⇒ câu "Role note: …" cuối kết quả. Chi tiết: `docs/ctw-nang-cap-do-an-5-vai.md` › Kết quả — Chế độ đóng vai.
+
 ## 4. Repo chưa có trên máy
 
 `project_repos` trả các repo của dự án (kết nối GitHub/GitLab trên trang Code + link github/gitlab/bitbucket trong

@@ -13,6 +13,7 @@ import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { requireWorkspace } from './permissions.js';
 import { displayName } from './common.js';
+import { vaiDangDong } from './vaiDong.js';
 
 export interface AuditEntry {
   workspaceId: number;
@@ -43,8 +44,11 @@ export async function audit(e: AuditEntry): Promise<void> {
       actorName = `🤖 ${displayName(actor)} (on behalf of ${displayName(actor.workAgent.owner)})`;
       detail = { ...(detail ?? {}), agent: { id: actor.workAgent.id, ownerId: actor.workAgent.ownerId } };
     }
+    // Chế độ đóng vai (vaiDong.ts): vai C1–C5 của người làm, khi dự án bật soloRoles và yêu cầu có header X-CTW-Vai.
+    const vai = actor?.kind === 'AGENT' ? null : await vaiDangDong(e.projectId);
     await prisma.workAuditLog.create({
       data: {
+        actingRole: vai,
         workspaceId: e.workspaceId, projectId: e.projectId ?? null, actorId: e.actorId, actorName: actorName ? actorName.slice(0, 100) : null,
         action: e.action.slice(0, 48), targetType: e.targetType ?? null, targetId: e.targetId ?? null,
         summary: e.summary.slice(0, 500), detail: (detail ?? undefined) as Prisma.InputJsonValue | undefined,
@@ -74,7 +78,7 @@ export async function listAudit(userId: number, workspaceId: number, q: { projec
     },
     orderBy: { id: 'desc' },
     take: limit + 1,
-    select: { id: true, projectId: true, actorId: true, actorName: true, action: true, targetType: true, targetId: true, summary: true, detail: true, createdAt: true },
+    select: { id: true, projectId: true, actorId: true, actorName: true, actingRole: true, action: true, targetType: true, targetId: true, summary: true, detail: true, createdAt: true },
   });
   const projects = await prisma.workProject.findMany({ where: { workspaceId }, select: { id: true, key: true, name: true } });
   return {

@@ -1,5 +1,6 @@
 import axios, { type AxiosError, type AxiosInstance } from 'axios';
 import { lamMoiPhien, xuLyHetPhien } from '@/lib/hetPhien';
+import { baoNhacTuPhanHoi, vaiChoUrl } from './work-vai';
 import type { ApiResponse, AuthResponse, NoteFull, ChuongTrinhDaoTao } from '@/types';
 import type { ReactionType, ReactionBreakdown } from '@/types/social';
 import type { GopYKhoa, TrangGopYKhoa, GuiGopYKhoa, DoiChieuGopYKhoa } from '@/lib/gopYKhoa';
@@ -138,7 +139,14 @@ api.interceptors.request.use((config) => {
       delete h['content-type'];
     }
   }
+  // CT Work — chế độ đóng vai (lib/work-vai.ts): vai C1–C5 đang đóng của dự án đi kèm mọi yêu cầu của dự án đó.
+  const vai = vaiChoUrl(config.url);
+  if (vai && config.headers) (config.headers as unknown as Record<string, unknown>)['X-CTW-Vai'] = vai;
   return config;
+});
+api.interceptors.response.use((response) => {
+  baoNhacTuPhanHoi(response.config?.url, response.headers?.['x-ctw-vai-nhac']);
+  return response;
 });
 
 // ─── Silent session refresh ──────────────────────────────────

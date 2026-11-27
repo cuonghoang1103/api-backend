@@ -58,14 +58,14 @@ export interface Review {
   page: { number: number; title: string } | null; workProduct: string | null; prUrl: string | null; size: number | null; sizeUnit: 'PAGE' | 'LOC';
   status: ReviewStatus; decision: ReviewDecision | null; meetingAt: string | null; meetingMinutes: number | null; reworkMinutes: number | null;
   entryCriteria: string | null; exitCriteria: string | null; notes: string | null; createdAt: string; updatedAt: string; closedAt: string | null;
-  participants: Array<{ id: number; userId: number; role: ReviewRole; prepMinutes: number | null; user: WorkUser | null }>;
+  participants: Array<{ id: number; userId: number; role: ReviewRole; prepMinutes: number | null; hat?: string | null; user: WorkUser | null }>;
   items: ReviewItem[]; metrics: ReviewMetrics; next: ReviewStatus[]; closeBlockers: string[]; canEdit: boolean;
   /** dm5 G3: mẫu cấp dự án + "làm nguội" (settings.reviewCoolOffHours). */
   checklistCustom?: boolean; coolOff?: { hours: number; readyAt: string; remainingMinutes: number } | null;
 }
 export interface ReviewCreate {
   title: string; kind: ReviewKind; method: ReviewMethod; checklistKey: string; pageNumber?: number | null; workProduct?: string | null; prUrl?: string | null;
-  size?: number | null; meetingAt?: string | null; entryCriteria?: string | null; exitCriteria?: string | null; participants?: Array<{ userId: number; role: ReviewRole }>; language?: 'vi' | 'en';
+  size?: number | null; meetingAt?: string | null; entryCriteria?: string | null; exitCriteria?: string | null; participants?: Array<{ userId: number; role: ReviewRole; hat?: string | null }>; language?: 'vi' | 'en';
 }
 
 // ─── Baseline ────────────────────────────────────────────────────
@@ -160,7 +160,7 @@ export const q6Api = {
   updateReview: (pid: number, n: number, body: Partial<Pick<Review, 'title' | 'method' | 'workProduct' | 'prUrl' | 'size' | 'meetingAt' | 'meetingMinutes' | 'reworkMinutes' | 'entryCriteria' | 'exitCriteria' | 'notes' | 'decision'>>) =>
     d<Review>(api.patch(`${P(pid)}/reviews/${n}`, body)),
   deleteReview: (pid: number, n: number) => d<{ ok: true }>(api.delete(`${P(pid)}/reviews/${n}`)),
-  participants: (pid: number, n: number, items: Array<{ userId: number; role: ReviewRole; prepMinutes?: number | null }>) => d<Review>(api.put(`${P(pid)}/reviews/${n}/participants`, { items })),
+  participants: (pid: number, n: number, items: Array<{ userId: number; role: ReviewRole; prepMinutes?: number | null; hat?: string | null }>) => d<Review>(api.put(`${P(pid)}/reviews/${n}/participants`, { items })),
   saveItems: (pid: number, n: number, body: { items?: Array<{ id: number; result?: ItemResult | null; line?: string | null; note?: string | null; severity?: Severity | null }>; add?: Array<{ section: string; question: string }> }) =>
     d<Review>(api.put(`${P(pid)}/reviews/${n}/items`, body)),
   transition: (pid: number, n: number, to: ReviewStatus) => d<Review>(api.post(`${P(pid)}/reviews/${n}/transition`, { to })),

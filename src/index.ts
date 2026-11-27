@@ -363,12 +363,15 @@ const corsOptions: cors.CorsOptions = {
     'cf-turnstile-response',
     'X-Client-Platform',
     'X-CT-App',
+    // CT Work — chế độ đóng vai (vaiDong.ts): vai C1–C5 đang đóng của yêu cầu.
+    'X-CTW-Vai',
   ],
   exposedHeaders: [
     'X-Request-ID',
     'Content-Range',
     'Accept-Ranges',
     'Content-Length',
+    'X-CTW-Vai-Nhac',
   ],
   maxAge: 86400, // Preflight cache 24h
 };

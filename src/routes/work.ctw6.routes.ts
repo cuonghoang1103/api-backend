@@ -84,7 +84,7 @@ router.post('/projects/:pid/reviews', asyncHandler(async (req, res) => {
     pageNumber: z.number().int().positive().nullable().optional(), workProduct: txt(200), prUrl: txt(500),
     size: z.number().min(0).max(1_000_000).nullable().optional(), meetingAt: z.coerce.date().nullable().optional(),
     entryCriteria: txt(4000), exitCriteria: txt(4000),
-    participants: z.array(z.object({ userId: z.number().int().positive(), role: z.enum(REVIEW_ROLES) })).max(30).optional(), language: lang,
+    participants: z.array(z.object({ userId: z.number().int().positive(), role: z.enum(REVIEW_ROLES), hat: z.enum(['C1', 'C2', 'C3', 'C4', 'C5']).nullable().optional() })).max(30).optional(), language: lang,
   }), req.body ?? {});
   ok(res, await q.createReview(callerId(req), P(req, 'pid'), body), 201);
 }));
@@ -104,7 +104,7 @@ router.delete('/projects/:pid/reviews/:num', asyncHandler(async (req, res) => {
   ok(res, await q.deleteReview(callerId(req), P(req, 'pid'), P(req, 'num')));
 }));
 router.put('/projects/:pid/reviews/:num/participants', asyncHandler(async (req, res) => {
-  const { items } = parse(z.object({ items: z.array(z.object({ userId: z.number().int().positive(), role: z.enum(REVIEW_ROLES), prepMinutes: minutes })).min(1).max(30) }), req.body ?? {});
+  const { items } = parse(z.object({ items: z.array(z.object({ userId: z.number().int().positive(), role: z.enum(REVIEW_ROLES), prepMinutes: minutes, hat: z.enum(['C1', 'C2', 'C3', 'C4', 'C5']).nullable().optional() })).min(1).max(30) }), req.body ?? {});
   ok(res, await q.setParticipants(callerId(req), P(req, 'pid'), P(req, 'num'), items));
 }));
 router.put('/projects/:pid/reviews/:num/items', asyncHandler(async (req, res) => {

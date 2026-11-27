@@ -58,6 +58,10 @@ async function proxyRequest(
   const range = request.headers.get("range");
   if (range) headers["Range"] = range;
 
+  // CT Work — chế độ đóng vai: vai C1–C5 đang đóng (lib/work-vai.ts ⇒ src/services/work/vaiDong.ts).
+  const vai = request.headers.get("x-ctw-vai");
+  if (vai) headers["X-CTW-Vai"] = vai.slice(0, 8);
+
   // Read body as ArrayBuffer to avoid any text encoding corruption.
   // This is safe for all content types including multipart/form-data.
   const body = await request.arrayBuffer();
@@ -108,8 +112,11 @@ async function toNextResponse(response: Response): Promise<NextResponse> {
   // dropped the real one, so backend token rotation never reached the
   // browser. Appending the raw Set-Cookie header preserves all attributes.
   const setCookieHeaders = response.headers.getSetCookie?.() ?? [];
+  // CT Work — chế độ đóng vai: nhắc nhẹ khi lệnh ghi trái vai (vd "C5" khi tạo test case lúc đang C3).
+  const vaiNhac = response.headers.get("x-ctw-vai-nhac");
   const forwardSetCookies = (next: NextResponse) => {
     for (const sc of setCookieHeaders) next.headers.append("set-cookie", sc);
+    if (vaiNhac) next.headers.set("x-ctw-vai-nhac", vaiNhac);
   };
 
   // For JSON responses: parse and return as NextResponse.json

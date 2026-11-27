@@ -1271,3 +1271,10 @@ Mẫu một mục:
 - **Cách sửa:** chạy lại `ghep-phan.mts` trên máy nhà cho 7 bản có đủ phần giọng mới (5 DBI + git 16.2 + SDN G12) ⇒ vòng `vong-lai2.sh` đẩy R2 ⇒ `gan-web`; 16 bản còn lại chờ đủ phần (thiếu tệp phần gốc trên máy nhà hoặc phần chưa render lại).
 - **Ảnh hưởng:** 24 bài trễ giọng mới; không mất video.
 - **Bài học:** lồng giọng lại một tập có phần ⇒ danh sách việc phải gồm bước ghép `-tron`; kiểm bằng phép đối chiếu "URL bài web ∈ lô vừa đẩy", không bằng số dòng "gắn N bài" của `gan-web`.
+
+### 27/11/2026 — ổ máy nhà kẹt 21–25G, render dừng, dọn Docker/xoá video/nén log đều không lấy lại chỗ
+- **Triệu chứng:** `canh-loi.log` báo ổ `/` < 25G nhiều lượt liền; `don-cache-docker.sh` thu 0 byte, xoá 88 video gốc (7GB) không đổi gì, nén 15GB log agent còn làm ổ TỤT thêm 3GB.
+- **Nguyên nhân:** ổ `/` là btrfs có snapshot `/home` hằng tuần (`/.snapshots/home-*`, cũ nhất 26/10) giữ mọi khối đã xoá — gồm cả video còn ở `/home` trước khi chuyển sang Kioxia 16/11. Video gốc hiện nằm ở `/mnt/kioxia` (ổ khác); build cache Docker 176G là "Shared" với ảnh nên prune không thu được gì.
+- **Cách sửa:** user chạy `sudo btrfs subvolume delete` 3 snapshot cũ nhất (giữ 16/11 + 23/11) ⇒ ổ `/` từ 21G lên 142G sau ~1 phút btrfs dọn ngầm.
+- **Ảnh hưởng:** render dừng/chập chờn từ ~00:20 tới 11:35 27/11 (hàng render ~230 tập).
+- **Bài học:** ổ btrfs có snapshot thì "xoá/nén file" không giải phóng chỗ — kiểm `ls /.snapshots` + `btrfs filesystem df /` TRƯỚC khi dọn; cần giới hạn số snapshot giữ lại (2) ở job tạo snapshot.

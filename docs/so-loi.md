@@ -1292,3 +1292,10 @@ Mẫu một mục:
 - **Cách sửa (dm5 G2):** kiểu theo sau bởi `(` vẫn là kiểu nếu sau `(` là SỐ (`VARCHAR(80)`); `KEY text (col)` vẫn là chỉ mục. Đồng bộ bản chép frontend bằng `node scripts/dong-bo-sql-design.mjs`; test hồi quy trong `sqlDesign/parser.test.ts`.
 - **Ảnh hưởng:** mọi sơ đồ SQL/Flyway có cột tên `key`/`index` kèm kiểu tham số mất cột đó (ERD, bản xuất, lint).
 - **Bài học:** từ khoá không dành riêng (`key`, `index`) làm tên cột là chuyện thường ở PostgreSQL — fixture thật (LabFlow 15 bảng) bắt được thứ test tay bỏ sót.
+
+### 27/11/2026 — video render ở máy nhà từ 24/11 không về Mac/không lên web (bộ đồng bộ báo "đẩy mã lỗi" mỗi phút)
+- **Triệu chứng:** `video-bai-giang/scratchpad/dong-bo-linux.log` lặp `⚠ đẩy mã lỗi` từ 24/11 19:24; các tập PG thi cuối khoá (18-*) đã có r2Url ở nhà nhưng Mac không có thư mục ⇒ `gan-web` không thấy ⇒ không lên web.
+- **Nguyên nhân:** `dong-bo-linux.sh › day_ma` chạy `rsync --delete` vào `linux-nha:~/vbg-dp/`; ở đó có thư mục rỗng `.rtq-tak/v71` thuộc **root** (tạo 24/11 19:23) ⇒ `rmdir … Permission denied` ⇒ rsync thoát 1 ⇒ `mot_vong` `return 1` TRƯỚC bước kéo thông tin — cả vòng chết câm, chỉ còn một dòng log.
+- **Cách sửa:** thêm `--exclude /.rtq-tak` vào `day_ma` (bản lưu `dong-bo-linux.bak-2711.sh`), dừng vòng cũ bằng tệp `.dung`, chạy lại `nohup`. Không cần sudo.
+- **Ảnh hưởng:** 3 ngày video mới không tự lên web (phải gắn tay); cảnh báo `canh-loi` không bắt vì nó canh máy nhà, không canh Mac.
+- **Bài học:** vòng đồng bộ có `return 1` sớm phải BÁO ĐỘNG khi lỗi lặp (≥ N lần liên tiếp), không chỉ ghi log; `rsync --delete` vào thư mục người khác (root/docker) cũng ghi được ⇒ loại trừ thư mục lạ ở gốc.

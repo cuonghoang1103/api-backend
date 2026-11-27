@@ -68,7 +68,7 @@ export default {
     'tw-6-1-mot-lop': { yt: 'MAtaT8BZEAo', credit: 'Tailwind Labs — Theming Tailwind with CSS Variables', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/06-bien-css-theme/06-01-mot-lop-9966e3ea.mp4' }, defaultVideoTrack: 'VI'},       // Theming Tailwind with CSS Variables
     'tw-6-2-bay-alpha': { yt: 'gfYJvTBu_sk', credit: 'Thirus — Add Custom Colors in Tailwind CSS v4', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/06-bien-css-theme/06-02-bay-alpha-7164f23a.mp4' }, defaultVideoTrack: 'VI'},     // Add Custom Colors in Tailwind CSS v4
     'tw-6-3-cau-truc': { yt: 'AJL1KbKrtAA', credit: 'Muslim Helalee — Variables - Tailwind CSS for Devs in a Hurry', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/06-bien-css-theme/06-03-cau-truc-999cfc47.mp4' }, defaultVideoTrack: 'VI'},      // Variables - Tailwind CSS for Devs in a Hurry
-    'tw-6-4-khi-nao-khong': { yt: 'TavBrPEqkbY', credit: 'Skies Dev — How to Create Themes with Tailwind CSS' }, // How to Create Themes with Tailwind CSS
+    'tw-6-4-khi-nao-khong': { yt: 'TavBrPEqkbY', credit: 'Skies Dev — How to Create Themes with Tailwind CSS', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/06-bien-css-theme/06-04-khi-nao-khong-898cec0e.mp4' }, defaultVideoTrack: 'VI'}, // How to Create Themes with Tailwind CSS
     'tw-6-5-di-tru': { yt: 'TFfWsOa5GfE', credit: 'Jamie Barton — Dynamic Theme Switching with CSS Variables and Tailwind', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/06-bien-css-theme/06-05-di-tru-cac8a485.mp4' }, defaultVideoTrack: 'VI'},        // Dynamic Theme Switching with CSS Variables and Tailwind
 
     /* ── Chương 7 — @layer, và cơ chế thật sự của nó ── */
@@ -102,6 +102,6 @@ export default {
     /* ── Chương 11 — Cái sống sót qua đo đạc ── */
     'tw-11-1-song-qua': { yt: '9I3JQ1q4IMk', credit: 'Coder Coder — Tailwind CSS v4 for Beginners | Full Course 2026', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/11-song-qua-do-luong/11-01-song-qua-8debb390.mp4' }, defaultVideoTrack: 'VI'}, // Tailwind CSS v4 for Beginners | Full Course 2026
     'tw-0-0-start-here-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-01-tailwind-la-gi-dcca7564.mp4' }, defaultVideoTrack: 'VI'},
-    'tw-0-0-start-here-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-02-can-biet-gi-truoc-e6257398.mp4' }, defaultVideoTrack: 'VI' },
+    'tw-0-0-start-here-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-02-can-biet-gi-truoc-e6257398.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

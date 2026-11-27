@@ -132,5 +132,10 @@ export default {
     'wf-13-4-mocking-ci': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-04-mocking-ci-cdac17e9.mp4' }, defaultVideoTrack: 'VI'},
     'wf-14-1-build': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-01-ban-dung-production-92cc5bec.mp4' }, defaultVideoTrack: 'VI'},
     'wf-14-4-performance': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-04-do-hieu-nang-af4b4acf.mp4' }, defaultVideoTrack: 'VI'},
+    'wf-15-1-rendering-pipeline': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/15-browser-internals/15-01-tu-html-toi-diem-anh-75b990c3.mp4' }, defaultVideoTrack: 'VI' },
+    'wf-15-2-error-handling': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/15-browser-internals/15-02-loi-la-mot-phan-cua-thiet-ke-ce91d43d.mp4' }, defaultVideoTrack: 'VI' },
+    'wf-15-3-iterables-generators': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/15-browser-internals/15-03-iterable-va-generator-f3ce5443.mp4' }, defaultVideoTrack: 'VI' },
+    'wf-15-4-memory-leaks': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/15-browser-internals/15-04-bo-nho-va-ro-ri-90a8fb8f.mp4' }, defaultVideoTrack: 'VI' },
+    'wf-15-5-dates-timezones': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/15-browser-internals/15-05-ngay-gio-va-mui-gio-383e245e.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

@@ -1,8 +1,8 @@
 {
-  "version": "0.6.9",
-  "sha256": "91c8fe923bcceb1cc9ccc27e765a899e32e3503c2f05c8b7abe5301158555b7f",
-  "size": 1975366,
+  "version": "0.7.0",
+  "sha256": "67d57e137d619a7535dea8b3a4b1b0999eaf3a70cae158ec0d58ee3840c4f2a8",
+  "size": 1978644,
   "file": "cuongmini-latest.tgz",
-  "date": "2026-11-24T14:43:25.104Z",
+  "date": "2026-11-27T23:53:39.800Z",
   "node": ">=20"
 }

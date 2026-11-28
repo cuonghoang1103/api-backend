@@ -31,9 +31,10 @@ export const SACH = 'sach1';
 /**
  * Mọi khoá kiểu sách dùng chung bảng tiến độ này: IELTS Tập 1 (sach1), IELTS Tập 2 (sach2, 12/11/2026 —
  * khoá riêng `/language/en/ielts/tap-2`, id `t2dN-…`), IELTS Tập 3 (sach3, 18/11/2026 — `/ielts/tap-3`, id `t3dN-…`), IELTS Tập 4 (sach4, `/ielts/tap-4`, id `t4dN-…`), IELTS Tập 5 (sach5, 24/11/2026, `/ielts/tap-5`, id `t5dN-…`), tiếng Nhật Dekiru (dekiru1), JP (jp1), CH (ch1).
+ * 1000 câu nền — dịch 2 chiều (caunen1, 28/11/2026, `/language/en/cau-nen`): bai cnN / cnN-<bước>, baitap cnN-kiem, kehoach the-N (thẻ ôn lặp nén).
  * Cột `stage` là VARCHAR(12) ⇒ thêm khoá mới chỉ cần thêm chuỗi ở đây, không migration.
  */
-export const CAC_SACH = [SACH, 'sach2', 'sach3', 'sach4', 'sach5', 'giaotiep1', 'dekiru1', 'jp1', 'ch1'] as const;
+export const CAC_SACH = [SACH, 'sach2', 'sach3', 'sach4', 'sach5', 'giaotiep1', 'caunen1', 'dekiru1', 'jp1', 'ch1'] as const;
 const laMaSach = (v: string): boolean => (CAC_SACH as readonly string[]).includes(v);
 export const PHAN_SACH = ['bai', 'baitap', 'kehoach'] as const;
 

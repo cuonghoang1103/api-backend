@@ -12,6 +12,7 @@
  */
 import type { Lesson } from '@/components/sach-hoc/types';
 import { chenLuyenNho, chenHinh } from './luyenNho';
+import { chenLuyenCau } from './luyenCau';
 
 /**
  * Nội dung bài n + bài "Chữ Hán của lớp" (hanLop.ts) chèn sau `bN-kanji` —
@@ -37,7 +38,12 @@ export function loadBai(n: number): Promise<Lesson[]> | null {
     n >= 4 && n <= 9 ? import('./kiemTraBai49').then((m) => (m as unknown as Record<string, Lesson[]>)[`KIEM_TRA_B${n}`]) : [],
     n === 7 ? import('./thiCuoiKy123').then((m) => m.THI_CUOI_KY_123) : [],
   ]).then((x) => x.flat());
-  return p && Promise.all([p, import('./hanLop'), hinh, them]).then(([ls, h, hi, th]) => chenLuyenNho(n, chenHinh(n, [...h.chenHanLop(n, ls), ...th], hi)));
+  // + 🔁 Luyện câu 2 chiều + ✍️ Tập viết (luyenCau.ts — Bài 1–10, 28/11/2026), chèn sau mục Luyện nhớ.
+  const lc = n >= 1 && n <= 3 ? import('./luyenCauB13').then((m) => m.LUYEN_CAU[n])
+    : n >= 4 && n <= 7 ? import('./luyenCauB47').then((m) => m.LUYEN_CAU[n])
+    : n >= 8 && n <= 10 ? import('./luyenCauB810').then((m) => m.LUYEN_CAU[n])
+    : Promise.resolve(undefined);
+  return p && Promise.all([p, import('./hanLop'), hinh, them, lc]).then(([ls, h, hi, th, l]) => chenLuyenCau(n, chenLuyenNho(n, chenHinh(n, [...h.chenHanLop(n, ls), ...th], hi)), l));
 }
 
 /** Bài "Theo slide lớp" (slideB45/slideB67) chia về đúng bài theo id: Slot 1–4 = Bài 4; Slot 10–14 + tổng hợp B6 = Bài 6. */

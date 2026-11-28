@@ -342,3 +342,176 @@ export function routePacket(routers, start, dst, ttl) {
     cur = best.via;
   }
 }
+
+/* ─────────── Chương 1 · 2 · 9 · 16 (thêm 28/11/2026): chẩn đoán máy trạm, phiên IOS, soát cấu hình, mạng nhỏ ─────────── */
+/** Chẩn đoán theo thứ tự lệnh của bài 1.3: h = { inet:'192.168.1.10/24'|null, gateway:'192.168.1.1'|null, pingGateway, pingIp, pingName }.
+ *  Trả 'no-address' · 'dhcp-failed' · 'no-gateway' · 'gateway-not-local' · 'lan' · 'upstream' · 'dns' · 'application'. */
+export function diagnoseHost(h) {
+  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }
+  // Step 1 — ip addr show: is there an address at all, and is it a self-assigned 169.254.x.x (DHCP never answered)?
+  if (!h.inet) return 'no-address';
+  var parts = h.inet.split('/'), ip = parts[0], len = +parts[1];
+  if (ip.indexOf('169.254.') === 0) return 'dhcp-failed';
+  // Step 2 — ip route show: is there a "default via", and is that gateway INSIDE my own network (the AND test)?
+  if (!h.gateway) return 'no-gateway';
+  var m = len === 0 ? 0 : (0xFFFFFFFF << (32 - len)) >>> 0;
+  if (((toInt(ip) & m) >>> 0) !== ((toInt(h.gateway) & m) >>> 0)) return 'gateway-not-local';
+  // Steps 3, 4, 5 — ping the gateway, ping an ADDRESS on the Internet, and only then ping a NAME.
+  if (!h.pingGateway) return 'lan';
+  if (!h.pingIp) return 'upstream';
+  if (!h.pingName) return 'dns';
+  return 'application';
+}
+/** Mô phỏng một phiên CLI Cisco IOS (tập lệnh rút gọn của Chương 2): trả { prompt, rejected:[chỉ số lệnh bị từ chối], loggedOut }. */
+export function iosSession(hostname, cmds) {
+  var name = hostname, mode = 'user', rejected = [], i;
+  var GLOBAL = /^(enable secret|enable password|service password-encryption|banner motd|no ip domain-lookup|ip domain-name|ip default-gateway|username|crypto key generate rsa)\b/;
+  var LINE = /^(password|login|login local|transport input|logging synchronous|exec-timeout)\b/;
+  var IFACE = /^(ip address|no shutdown|shutdown|description)\b/;
+  var PRIV_ONLY = /^(show (running-config|run|startup-config|start)\b|copy |erase |reload\b)/;
+  for (i = 0; i < cmds.length; i++) {
+    var c = String(cmds[i]).trim().replace(/\s+/g, ' '), low = c.toLowerCase(), ok = true;
+    var exec = mode === 'user' || mode === 'priv';
+    if (low === 'enable' || low === 'en') { if (mode === 'user') mode = 'priv'; else if (!exec) ok = false; }
+    else if (low === 'disable') { if (mode === 'priv') mode = 'user'; else if (!exec) ok = false; }
+    else if (low === 'configure terminal' || low === 'conf t') { if (mode === 'priv') mode = 'config'; else ok = false; }
+    else if (low === 'exit') {
+      if (exec) return { prompt: null, rejected: rejected, loggedOut: true }; // exit from an EXEC mode ends the session
+      mode = mode === 'config' ? 'priv' : 'config';
+    }
+    else if (low === 'end') { if (exec) ok = false; else mode = 'priv'; }
+    else if (/^(line (console|con) 0|line vty \d+ \d+)$/.test(low)) { if (exec) ok = false; else mode = 'config-line'; }
+    else if (/^(interface|int) \S+/.test(low)) { if (exec) ok = false; else mode = 'config-if'; }
+    else if (/^hostname \S+$/.test(low)) { if (mode === 'config') name = c.split(' ')[1]; else ok = false; }
+    else if (/^do (show|ping|copy)\b/.test(low)) { if (exec) ok = false; }
+    else if (/^(show|ping)\b/.test(low) || /^(copy|erase|reload)\b/.test(low)) {
+      if (!exec) ok = false;                                       // an EXEC command in a configuration mode
+      else if (mode === 'user' && PRIV_ONLY.test(low)) ok = false; // show run, copy, erase, reload need privileged EXEC
+    }
+    else if (GLOBAL.test(low)) { if (mode !== 'config') ok = false; }
+    else if (LINE.test(low)) { if (mode !== 'config-line') ok = false; }
+    else if (IFACE.test(low)) { if (mode !== 'config-if') ok = false; }
+    else ok = false;
+    if (!ok) rejected.push(i);
+  }
+  var suffix = { user: '>', priv: '#', config: '(config)#', 'config-line': '(config-line)#', 'config-if': '(config-if)#' }[mode];
+  return { prompt: name + suffix, rejected: rejected, loggedOut: false };
+}
+/** Soát bảo mật một đoạn running-config của switch có 16 dòng vty (0–15). Trả các mã phát hiện theo thứ tự nghiêm trọng cố định. */
+export function auditSwitch(text) {
+  var lines = String(text).split('\n'), sec = null, con = null, vtys = [], top = [], i;
+  for (i = 0; i < lines.length; i++) {
+    var raw = lines[i].replace(/\s+$/, '');
+    if (!raw || raw.charAt(0) === '!') { sec = null; continue; }
+    if (/^\s/.test(raw)) { if (sec) sec.sub.push(raw.trim().toLowerCase()); continue; }
+    var t = raw.trim().toLowerCase(), mv = /^line vty (\d+) (\d+)$/.exec(t);
+    top.push(t); sec = null;
+    if (/^line (console|con) 0$/.test(t)) { con = { sub: [] }; sec = con; }
+    else if (mv) { sec = { from: +mv[1], to: +mv[2], sub: [] }; vtys.push(sec); }
+  }
+  function has(arr, re) { for (var k = 0; k < arr.length; k++) if (re.test(arr[k])) return true; return false; }
+  var out = [];
+  if (!con || !has(con.sub, /^login( local)?$/)) out.push('console-no-login');
+  if (vtys.some(function (v) { return !has(v.sub, /^login( local)?$/); })) out.push('vty-no-login');
+  if (has(top, /^enable password /)) out.push('enable-password');
+  if (!has(top, /^enable secret /)) out.push('no-enable-secret');
+  if (!vtys.length || vtys.some(function (v) { return !has(v.sub, /^transport input ssh$/); })) out.push('telnet-allowed');
+  var covered = {};
+  vtys.forEach(function (v) { for (var n = v.from; n <= v.to; n++) covered[n] = true; });
+  for (i = 0; i <= 15; i++) if (!covered[i]) { out.push('vty-partial'); break; }
+  if (!has(top, /^service password-encryption$/)) out.push('no-password-encryption');
+  if (!has(top, /^banner motd /)) out.push('no-banner');
+  return out;
+}
+/** Máy trạm gửi tới `target` thế nào: host = { ip, prefix, gateway|null }. Trả 'local' · 'via-gateway' · 'no-gateway' · 'gateway-not-local'. */
+export function hostReach(host, target) {
+  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }
+  var m = host.prefix === 0 ? 0 : (0xFFFFFFFF << (32 - host.prefix)) >>> 0;
+  var mine = (toInt(host.ip) & m) >>> 0;
+  if (((toInt(target) & m) >>> 0) === mine) return 'local';                    // same network by MY OWN mask: ARP for the target itself
+  if (!host.gateway) return 'no-gateway';
+  if (((toInt(host.gateway) & m) >>> 0) !== mine) return 'gateway-not-local'; // it would need a gateway to reach its gateway: no frame is built
+  return 'via-gateway';
+}
+/** Lab 2.1 (một subnet: PC-A, S1, R1; R1 ra Internet): net = { 'PC-A':{ip,prefix,gw}, S1:{ip,prefix,gw,up}, R1:{ip,prefix,up} }.
+ *  labPing(net, from, to) với from ∈ {PC-A,S1}, to ∈ {PC-A,S1,R1,INTERNET} ⇒ 'ok' · 'source-down' · 'no-gateway' · 'gateway-not-local' · 'no-reply'. */
+export function labPing(net, from, to) {
+  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }
+  function same(a, b, len) { var m = len === 0 ? 0 : (0xFFFFFFFF << (32 - len)) >>> 0; return ((toInt(a) & m) >>> 0) === ((toInt(b) & m) >>> 0); }
+  function isUp(name) { return !!net[name] && net[name].up !== false; }
+  function byIp(ip) { for (var k in net) if (net[k].ip === ip) return k; return null; }
+  var R = net.R1, src = net[from];
+  if (!isUp(from)) return 'source-down';                       // a shut SVI: the switch has no IP presence at all
+  var dstIp = to === 'INTERNET' ? '8.8.8.8' : net[to].ip;
+  // Forward path, decided by the SENDER with its OWN mask.
+  if (same(src.ip, dstIp, src.prefix)) {
+    var nb = byIp(dstIp);
+    if (!nb || !isUp(nb)) return 'no-reply';                    // ARP for the target gets no answer
+  } else {
+    if (!src.gw) return 'no-gateway';
+    if (!same(src.ip, src.gw, src.prefix)) return 'gateway-not-local';
+    if (byIp(src.gw) !== 'R1' || !isUp('R1')) return 'no-reply'; // ARP for the gateway gets no answer
+    if (to !== 'INTERNET' && (!same(R.ip, dstIp, R.prefix) || !isUp(to))) return 'no-reply';
+  }
+  // Return path: the replier decides with ITS own mask; the Internet's reply comes back through R1.
+  if (to === 'INTERNET' || to === 'R1') return same(R.ip, src.ip, R.prefix) ? 'ok' : 'no-reply';
+  var back = net[to];
+  if (same(back.ip, src.ip, back.prefix)) return 'ok';
+  if (!back.gw || !same(back.ip, back.gw, back.prefix) || byIp(back.gw) !== 'R1' || !isUp('R1')) return 'no-reply';
+  return same(R.ip, src.ip, R.prefix) ? 'ok' : 'no-reply';
+}
+/** Đọc kết xuất `show ip interface brief` ⇒ [{ iface, verdict }] với verdict 'ok' · 'admin-down' · 'layer1' · 'layer2'. */
+export function ifaceVerdicts(text) {
+  var out = [], lines = String(text).split('\n');
+  for (var i = 0; i < lines.length; i++) {
+    var l = lines[i].trim();
+    if (!l || /^Interface\s/.test(l)) continue;
+    var tk = l.split(/\s+/), v;
+    if (/administratively down/.test(l)) v = 'admin-down';                 // somebody typed shutdown: a decision, not a fault
+    else {
+      var st = tk[tk.length - 2], pr = tk[tk.length - 1];                   // Status = layer 1, Protocol = layer 2
+      v = st === 'up' && pr === 'up' ? 'ok' : st === 'up' ? 'layer2' : 'layer1';
+    }
+    out.push({ iface: tk[0], verdict: v });
+  }
+  return out;
+}
+/** SSH trên IOS còn thiếu gì: dev = { hostname, domain, rsaBits, sshVersion, users:[…], vtyLogin:'local'|'line'|null, vtyTransport:'ssh'|'all'|'telnet'|null }. */
+export function sshMissing(dev) {
+  var out = [];
+  if (!dev.hostname || dev.hostname === 'Router' || dev.hostname === 'Switch') out.push('hostname');
+  if (!dev.domain) out.push('domain-name');
+  if (!dev.rsaBits) out.push('rsa-key'); else if (dev.rsaBits < 2048) out.push('rsa-key-weak');
+  if (dev.sshVersion !== 2) out.push('ssh-version-2');
+  if (!dev.users || !dev.users.length) out.push('username');
+  if (dev.vtyLogin !== 'local') out.push('login-local');
+  if (dev.vtyTransport !== 'ssh') out.push('transport-ssh');
+  return out;
+}
+/** Đếm cổng switch cho văn phòng nhỏ: s = { users, printers, phones, cameras, aps, uplinks, phonePassThrough }.
+ *  Điện thoại IP có cổng PC đi xuyên ⇒ PC cắm sau điện thoại, cặp đó tốn MỘT cổng; điện thoại dư (không có PC đi kèm) vẫn tốn cổng riêng.
+ *  Trả { ports, size } (size: 8/16/24/48, hoặc null nếu > 48 — phải nhiều switch). */
+export function portsNeeded(s) {
+  var phonePorts = s.phonePassThrough ? Math.max(0, s.phones - s.users) : s.phones;
+  var ports = s.users + phonePorts + s.printers + s.cameras + s.aps + s.uplinks;
+  var sizes = [8, 16, 24, 48], size = null;
+  for (var i = 0; i < sizes.length; i++) if (sizes[i] >= ports) { size = sizes[i]; break; }
+  return { ports: ports, size: size };
+}
+/** Đọc một dòng kết quả thăm dò (Chương 16): mã của `curl -s -o /dev/null -w "%{http_code}"` hoặc một dòng của `nc -vz`.
+ *  Trả 'reachable' · 'not-mounted' · 'server-error' · 'client-error' · 'no-answer' · 'listening' · 'refused' · 'filtered'. */
+export function probeVerdict(line) {
+  var l = String(line).trim();
+  if (/^\d{3}$/.test(l)) {
+    var n = +l;
+    if (n === 0) return 'no-answer';                          // curl prints 000 when no HTTP response came back at all
+    if (n === 404) return 'not-mounted';                      // the server answered: nothing is mounted at that path
+    if (n >= 500) return 'server-error';                      // the server answered and then failed
+    if (n < 400 || n === 401 || n === 403) return 'reachable'; // 2xx/3xx, and 401/403: the path works, auth is a separate question
+    return 'client-error';
+  }
+  if (/succeeded|open$/i.test(l)) return 'listening';
+  if (/refused/i.test(l)) return 'refused';                   // the machine answered at once: nothing listens on that port
+  if (/timed out|timeout/i.test(l)) return 'filtered';        // nobody answered: something swallowed the packet
+  return 'no-answer';
+}

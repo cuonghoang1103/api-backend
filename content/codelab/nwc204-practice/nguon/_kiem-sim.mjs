@@ -72,4 +72,48 @@ const net = { R1: { connected: ['10.0.1.0/24'], routes: [{ net: '0.0.0.0/0', via
 assert.deepEqual(S.routePacket(net, 'R1', '10.0.3.7', 8), { path: ['R1', 'R2', 'R3'], result: 'delivered', at: 'R3' });
 assert.equal(S.routePacket(net, 'R1', '10.0.3.7', 2).result, 'ttl-expired');
 assert.equal(S.routePacket(net, 'R3', '10.0.9.9', 8).result, 'unreachable');
+// Chương 1 — bảng quyết định của bài 1.3
+assert.equal(S.diagnoseHost({ inet: null }), 'no-address');
+assert.equal(S.diagnoseHost({ inet: '169.254.20.7/16', gateway: null }), 'dhcp-failed');
+assert.equal(S.diagnoseHost({ inet: '192.168.1.10/24', gateway: null }), 'no-gateway');
+assert.equal(S.diagnoseHost({ inet: '192.168.1.10/24', gateway: '192.168.2.1' }), 'gateway-not-local');
+assert.equal(S.diagnoseHost({ inet: '192.168.1.10/24', gateway: '192.168.1.1', pingGateway: false }), 'lan');
+assert.equal(S.diagnoseHost({ inet: '192.168.1.10/24', gateway: '192.168.1.1', pingGateway: true, pingIp: true, pingName: false }), 'dns');
+// Chương 2 — ví dụ mẫu bài 2.1 và bẫy exit (từ config-if, lần exit THỨ BA là đăng xuất)
+assert.deepEqual(S.iosSession('Switch', ['enable', 'configure terminal', 'hostname S1', 'line console 0', 'exit', 'end']), { prompt: 'S1#', rejected: [], loggedOut: false });
+assert.deepEqual(S.iosSession('S1', ['en', 'conf t', 'interface vlan 1', 'show ip interface brief', 'do show ip interface brief']), { prompt: 'S1(config-if)#', rejected: [3], loggedOut: false });
+assert.equal(S.iosSession('S1', ['enable', 'conf t', 'int fa0/1', 'exit', 'exit', 'exit']).loggedOut, true);
+assert.deepEqual(S.iosSession('S1', ['show running-config', 'enable', 'hostname X']).rejected, [0, 2]);
+// Chương 2 — cấu hình của bài tập 2.2 (a)
+assert.deepEqual(S.auditSwitch('hostname SW\nenable password cisco\nline console 0\n password cisco\nline vty 0 4\n password cisco\n login\n transport input all'), ['console-no-login', 'enable-password', 'no-enable-secret', 'telnet-allowed', 'vty-partial', 'no-password-encryption', 'no-banner']);
+assert.deepEqual(S.auditSwitch('hostname S1\nenable secret 5 $1$x\nservice password-encryption\nbanner motd ^Authorised only^\nline console 0\n password 7 0822\n login\nline vty 0 15\n login local\n transport input ssh'), []);
+// Chương 2 bài tập 2.3 (b) và Lab 2.1 thí nghiệm 3–4
+const pc = { ip: '10.10.5.40', prefix: 24, gateway: '10.10.6.1' };
+assert.deepEqual(['10.10.5.1', '10.10.6.1', '8.8.8.8'].map((t) => S.hostReach(pc, t)), ['local', 'gateway-not-local', 'gateway-not-local']);
+assert.equal(S.hostReach({ ip: '192.168.10.3', prefix: 16, gateway: '192.168.10.1' }, '192.168.10.1'), 'local');
+assert.equal(S.hostReach({ ip: '192.168.10.3', prefix: 24, gateway: '192.168.10.1' }, '8.8.8.8'), 'via-gateway');
+// Lab 2.1 — sáu thí nghiệm "làm hỏng có chủ đích" của bài 9.3
+const lab = () => ({ 'PC-A': { ip: '192.168.10.3', prefix: 24, gw: '192.168.10.1' }, S1: { ip: '192.168.10.2', prefix: 24, gw: '192.168.10.1', up: true }, R1: { ip: '192.168.10.1', prefix: 24, up: true } });
+const tat = ['R1', 'S1', 'INTERNET'];
+assert.deepEqual(tat.map((t) => S.labPing(lab(), 'PC-A', t)), ['ok', 'ok', 'ok']);
+let L2 = lab(); L2.R1.up = false;                     // 1. shut R1 G0/0/0
+assert.deepEqual(tat.map((t) => S.labPing(L2, 'PC-A', t)), ['no-reply', 'ok', 'no-reply']);
+L2 = lab(); L2.S1.gw = null;                          // 2. bỏ ip default-gateway của S1: trong subnet vẫn chạy
+assert.deepEqual([S.labPing(L2, 'S1', 'PC-A'), S.labPing(L2, 'S1', 'R1'), S.labPing(L2, 'S1', 'INTERNET'), S.labPing(L2, 'PC-A', 'S1')], ['ok', 'ok', 'no-gateway', 'ok']);
+L2 = lab(); L2['PC-A'].prefix = 16;                   // 3. sai mặt nạ /16: vẫn tới R1
+assert.deepEqual(tat.map((t) => S.labPing(L2, 'PC-A', t)), ['ok', 'ok', 'ok']);
+L2 = lab(); L2['PC-A'].gw = '192.168.11.1';           // 4. gateway ngoài subnet
+assert.deepEqual(tat.map((t) => S.labPing(L2, 'PC-A', t)), ['ok', 'ok', 'gateway-not-local']);
+L2 = lab(); L2.S1.up = false;                         // SVI chưa no shutdown
+assert.deepEqual([S.labPing(L2, 'PC-A', 'S1'), S.labPing(L2, 'S1', 'R1')], ['no-reply', 'source-down']);
+// Chương 2 bài 2.4 — ba dòng, ba chẩn đoán
+assert.deepEqual(S.ifaceVerdicts('Interface IP-Address OK? Method Status Protocol\nVlan1 192.168.1.2 YES manual up up\nFa0/2 unassigned YES unset down down\nFa0/3 unassigned YES unset administratively down down\nSe0/0/0 10.0.0.1 YES manual up down'), [{ iface: 'Vlan1', verdict: 'ok' }, { iface: 'Fa0/2', verdict: 'layer1' }, { iface: 'Fa0/3', verdict: 'admin-down' }, { iface: 'Se0/0/0', verdict: 'layer2' }]);
+// Chương 9 — năm điều kiện SSH + login local + transport input ssh
+assert.deepEqual(S.sshMissing({ hostname: 'Router', domain: null, rsaBits: 0, sshVersion: 1, users: [], vtyLogin: 'line', vtyTransport: 'all' }), ['hostname', 'domain-name', 'rsa-key', 'ssh-version-2', 'username', 'login-local', 'transport-ssh']);
+assert.deepEqual(S.sshMissing({ hostname: 'R1', domain: 'lab.local', rsaBits: 2048, sshVersion: 2, users: ['admin'], vtyLogin: 'local', vtyTransport: 'ssh' }), []);
+// Chương 16 — đếm cổng và đọc kết quả thăm dò
+assert.deepEqual(S.portsNeeded({ users: 25, printers: 1, phones: 3, cameras: 1, aps: 0, uplinks: 1, phonePassThrough: false }), { ports: 31, size: 48 });
+assert.deepEqual(S.portsNeeded({ users: 25, printers: 1, phones: 3, cameras: 1, aps: 0, uplinks: 1, phonePassThrough: true }), { ports: 28, size: 48 });
+assert.deepEqual(S.portsNeeded({ users: 12, printers: 1, phones: 0, cameras: 0, aps: 1, uplinks: 1, phonePassThrough: false }), { ports: 15, size: 16 });
+assert.deepEqual(['200', '401', '404', '502', '000', 'Connection to 127.0.0.1 22 port [tcp/ssh] succeeded!', 'nc: connect to 127.0.0.1 port 9 (tcp) failed: Connection refused', 'nc: connect to 10.0.0.5 port 22 (tcp) failed: Connection timed out'].map(S.probeVerdict), ['reachable', 'reachable', 'not-mounted', 'server-error', 'no-answer', 'listening', 'refused', 'filtered']);
 console.log('✓ _sim.mjs: mọi phép kiểm qua');

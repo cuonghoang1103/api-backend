@@ -5,6 +5,13 @@
 > Ngắn gọn, mỗi mục 5 dòng. Mới nhất ở TRÊN. Bài học lớn về quy trình deploy vẫn nằm ở bảng
 > "Known Error Patterns" trong `CLAUDE.md` — sổ này gom MỌI lỗi, kể cả lỗi nhỏ.
 
+### 28/11/2026 — App CT Language — thêm tiếng Nhật xong, "Luyện câu Dekiru" hiện "Dữ liệu mẫu" 2 bài (Release: mục bị ẩn 10 phút)
+- **Triệu chứng:** soát bản 1.0.4 trên máy ảo: thêm tiếng Nhật ⇒ tab Học ⇒ thẻ Dekiru gắn nhãn "Dữ liệu mẫu", "0/2 bài"; mở lại app thì đủ 10 bài. Log: `NSURLErrorDomain -999 "đã hủy"` cho `/ctlanguage/cau-nen?nn=ja`.
+- **Nguyên nhân:** `ios-app/…/CauNen/KhoCauNenCTL.swift › tai()` gọi mạng ngay trong `.task(id: nn)` của `HocCTL`/`LuyenCTL` (có `.id(nn)`); đổi/thêm ngôn ngữ dựng lại màn ⇒ task bị huỷ ⇒ URLSession -999 ⇒ nhánh `catch` coi như "máy chủ không có": DEBUG đặt dữ liệu mẫu, Release đặt `.khong` + khoá hỏi lại 10 phút.
+- **Cách sửa:** gọi mạng trong `Task { … }.value` (không kế thừa việc huỷ của màn) + `laHuy(error)` ⇒ trả trạng thái cũ, không khoá; test `testLoiHuyKhongPhaiMayChuKhongCo`. Commit ios-app (sau 70e3e7f). Kiểm lại đúng luồng trên máy ảo: đủ 10 bài.
+- **Ảnh hưởng:** bản 1.0.4 (17) ĐÃ NỘP DUYỆT trước bản sửa ⇒ người mới thêm tiếng Nhật có thể không thấy mục Dekiru trong 10 phút đầu; sửa đi theo bản phát hành sau.
+- **Bài học:** `catch` của lời gọi mạng phải tách lỗi HUỶ khỏi lỗi máy chủ/mạng — nhất là khi lỗi đó bật trạng thái "không có" kèm khoá thời gian; tải dữ liệu dùng chung không nên gắn vòng đời một màn có `.id()`.
+
 ### 28/11/2026 — Video (giọng) — trailer PostgreSQL đọc bằng GIỌNG CŨ `cuong3` thay vì giọng mới `cuong8`
 - **Triệu chứng:** user nghe trailer: "sao dùng lại giọng cũ? giọng mới nhất đã train đâu?".
 - **Nguyên nhân:** lấy khuôn tệp việc từ `~/video-bai-giang/viec-web-9-5.json` (soạn thời giọng cũ, `ckpt: cuong3_giong.pt`, ref cũ); `doc.py:15` còn lùi về `cuong_giong_6000.pt` khi thiếu ckpt — không có gì chặn giọng cũ.

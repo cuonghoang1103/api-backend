@@ -1,0 +1,166 @@
+import type { NgayCauNen } from '../kieu';
+
+const WHEN = 'The app + V-s + when + I + V (lỗi xảy ra khi …)';
+const TRIED = 'I\'ve tried + V-ing …, but it still doesn\'t work.';
+const EXP = 'It should + V … · But instead, … (mong đợi ≠ thực tế)';
+const ASK = 'Could you take a look? · Could you walk me through it?';
+const MAYBE = 'It might be + N · Try + V-ing …';
+const POL = 'Sorry to bother you. · Do you have a few minutes?';
+const PRIO = 'This bug is critical / isn\'t urgent.';
+
+export const NGAY_27: NgayCauNen = {
+  n: 27,
+  ten: 'Thực tập IT (2): báo lỗi & xin giúp',
+  mucTieu: 'Mô tả một lỗi đủ rõ để người khác sửa được (khi nào xảy ra, mong đợi gì, thực tế ra sao, đã thử gì) và nhờ đồng nghiệp giúp một cách lịch sự.',
+  bai: {
+    y: [
+      'Một báo lỗi tốt có **4 phần**: **lỗi xảy ra khi nào** (The app crashes **when** I click Save) · **mong đợi** (It **should** go to the home page) · **thực tế** (**But instead**, the screen goes blank) · **đã thử gì** (I\'ve tried restarting it, but…).',
+      'Mô tả lỗi dùng **hiện tại đơn** (lỗi lặp lại mỗi lần): The app **crashes** when I **click** Save. — không phải ~~is crash~~.',
+      'Đã thử: **I\'ve tried + V-ing** (try + V-ing = thử làm xem sao). Vẫn không được: **it still doesn\'t work**.',
+      'Đoán nguyên nhân mềm mỏng: **It might be a cache issue.** · gợi ý: **Try clearing the cache.**',
+      'Nhờ giúp: mở bằng **Sorry to bother you. Do you have a few minutes?** rồi **Could you take a look?** — kết bằng **Thanks, it works now!**',
+    ],
+    khung: [
+      { mau: WHEN, vi: 'lỗi xảy ra khi …' },
+      { mau: EXP, vi: 'lẽ ra phải … / nhưng thực tế …' },
+      { mau: TRIED, vi: 'em đã thử … nhưng vẫn không được' },
+      { mau: MAYBE, vi: 'có thể là do … / thử … xem' },
+      { mau: POL, vi: 'xin lỗi làm phiền / anh có vài phút không' },
+      { mau: ASK, vi: 'anh xem giúp / giải thích giúp em' },
+      { mau: PRIO, vi: 'mức độ nghiêm trọng' },
+    ],
+    soSanh: [
+      { vi: 'Ứng dụng bị crash khi em bấm nút Lưu.', tungChu: 'App is crash when I click button Save.', en: 'The app crashes when I click the Save button.', viSao: 'crash là động từ (crashes); tên nút đứng trước button.' },
+      { vi: 'Em đã thử khởi động lại nhưng vẫn không được.', tungChu: 'I tried restart but still not OK.', en: 'I\'ve tried restarting it, but it still doesn\'t work.', viSao: 'try + V-ing (thử xem sao); "vẫn không được" = it still doesn\'t work.' },
+      { vi: 'Anh xem giúp em được không ạ?', tungChu: 'You see help me can?', en: 'Could you take a look?', viSao: '"xem giúp" = take a look; see chỉ là "nhìn thấy".' },
+      { vi: 'Em không hiểu đoạn code này làm gì.', tungChu: 'I don\'t understand this code do what.', en: 'I don\'t understand what this code does.', viSao: 'Câu hỏi nằm trong câu ⇒ what + S + V (does).' },
+    ],
+    viDu: [
+      { en: 'The app crashes when I click the Save button.', vi: 'Ứng dụng bị crash khi em bấm nút Lưu.' },
+      { en: 'It should go to the home page. But instead, the screen goes blank.', vi: 'Lẽ ra nó phải sang trang chủ. Nhưng thực tế màn hình trắng trơn.' },
+      { en: 'I\'ve tried restarting it, but it still doesn\'t work.', vi: 'Em đã thử khởi động lại nhưng vẫn không được.' },
+      { en: 'Sorry to bother you. Could you take a look?', vi: 'Xin lỗi làm phiền anh. Anh xem giúp em được không?' },
+    ],
+    meo: [
+      'Trước khi nhờ ai, chuẩn bị sẵn: **ảnh chụp màn hình + file log + các bước tái hiện**. Người hướng dẫn quý thực tập sinh nói được **I\'ve tried A and B** hơn là chỉ "It doesn\'t work."',
+      'Câu "**It works on my machine**" là câu đùa kinh điển của dân IT — nói thì được, nhưng đừng dùng để né lỗi.',
+    ],
+  },
+  nguPhap: [
+    { t: 'h', text: '1. Khung một báo lỗi (bug report)' },
+    {
+      t: 'sodo', kind: 'flow', title: 'Bốn phần của bug report',
+      steps: [
+        { label: 'Khi nào', sub: 'The app crashes when I click Save.' },
+        { label: 'Mong đợi', sub: 'It should save the file.' },
+        { label: 'Thực tế', sub: 'But instead, I get an error.' },
+        { label: 'Đã thử', sub: 'I\'ve tried restarting it.' },
+      ],
+    },
+    {
+      t: 'table', head: ['Mục trong ticket', 'Câu mẫu'],
+      rows: [
+        ['**Steps to reproduce** (các bước)', '1. Log in. 2. Open Settings. 3. Click Save.'],
+        ['**Expected result** (mong đợi)', 'It **should** save the changes.'],
+        ['**Actual result** (thực tế)', 'The page **goes blank**. / I **get** an error.'],
+        ['**Environment** (môi trường)', 'Chrome on Windows 11, staging server.'],
+        ['**Notes** (ghi chú)', 'This **only happens** on Safari. · It **started after** yesterday\'s update.'],
+      ],
+    },
+    { t: 'h', text: '2. Nhờ giúp — từ mở lời tới cảm ơn' },
+    {
+      t: 'table', head: ['Bước', 'Câu', 'Nghĩa'],
+      rows: [
+        ['Mở lời', 'Sorry to bother you. Do you have a few minutes?', 'Xin lỗi làm phiền, anh có vài phút không?'],
+        ['Nói vấn đề', 'I\'ve been stuck on this bug for two hours.', 'Em kẹt lỗi này hai tiếng rồi.'],
+        ['Đã thử', 'I\'ve tried clearing the cache, but it still doesn\'t work.', 'Em đã thử xoá cache nhưng vẫn không được.'],
+        ['Nhờ', 'Could you take a look? · Could you walk me through it?', 'Anh xem giúp · giải thích giúp em'],
+        ['Cảm ơn', 'Thanks, it works now! I learned a lot.', 'Cảm ơn anh, chạy rồi! Em học được nhiều.'],
+      ],
+    },
+    { t: 'note', title: 'Lỗi người Việt hay mắc', items: ['~~The app is crash~~ → The app **crashes**', '~~I tried restart~~ → I\'ve tried **restarting**', '~~It has error~~ → **There\'s an error** / I **get** an error', '~~Can you see my bug?~~ → Could you **take a look at** my bug?', '~~I don\'t understand what does this code~~ → what this code **does**'] },
+  ],
+  tuVung: [
+    { w: 'crash', loai: 'v/n', vi: 'sập, văng (ứng dụng)', anh: 'collision', ex: 'The game crashed again.', exVi: 'Game lại văng rồi.' },
+    { w: 'screenshot', loai: 'n', vi: 'ảnh chụp màn hình', anh: 'camera-with-flash', ex: 'Send me a screenshot.', exVi: 'Gửi mình ảnh chụp màn hình.' },
+    { w: 'log', loai: 'n', vi: 'nhật ký hệ thống', anh: 'ledger', ex: 'Check the logs first.', exVi: 'Xem log trước đã.' },
+    { w: 'reproduce', loai: 'v', vi: 'tái hiện (lỗi)', anh: 'clockwise-vertical-arrows', ex: 'I can reproduce it every time.', exVi: 'Lần nào tôi cũng tái hiện được.' },
+    { w: 'expected', loai: 'adj', vi: 'mong đợi', anh: 'bullseye', ex: 'This is the expected result.', exVi: 'Đây là kết quả mong đợi.' },
+    { w: 'blank', loai: 'adj', vi: 'trống trơn', anh: 'white-large-square', ex: 'The page is blank.', exVi: 'Trang trắng trơn.' },
+    { w: 'cache', loai: 'n', vi: 'bộ nhớ đệm', anh: 'card-file-box', ex: 'Clear your browser cache.', exVi: 'Xoá cache trình duyệt đi.' },
+    { w: 'critical', loai: 'adj', vi: 'nghiêm trọng', anh: 'police-car-light', ex: 'This is a critical bug.', exVi: 'Đây là lỗi nghiêm trọng.' },
+    { w: 'urgent', loai: 'adj', vi: 'gấp', anh: 'high-voltage', ex: 'Is it urgent?', exVi: 'Có gấp không?' },
+    { w: 'config', loai: 'n', vi: 'cấu hình', anh: 'gear', ex: 'The config file is wrong.', exVi: 'File cấu hình bị sai.' },
+    { w: 'environment variable', loai: 'n', vi: 'biến môi trường', anh: 'control-knobs', ex: 'Set the environment variable first.', exVi: 'Đặt biến môi trường trước đã.' },
+    { w: 'access', loai: 'n', vi: 'quyền truy cập', anh: 'unlocked', ex: 'I don\'t have access to this page.', exVi: 'Tôi không có quyền vào trang này.' },
+    { w: 'repo', loai: 'n', vi: 'kho mã (repository)', anh: 'file-cabinet', ex: 'Clone the repo first.', exVi: 'Clone repo về trước.' },
+    { w: 'attach', loai: 'v', vi: 'đính kèm', anh: 'paperclip', ex: 'Please attach your CV.', exVi: 'Vui lòng đính kèm CV.' },
+    { w: 'browser', loai: 'n', vi: 'trình duyệt', anh: 'globe-with-meridians', ex: 'Which browser do you use?', exVi: 'Bạn dùng trình duyệt nào?' },
+    { w: 'walk through', loai: 'phr', vi: 'giải thích từng bước', anh: 'footprints', ex: 'Let me walk you through it.', exVi: 'Để tôi hướng dẫn bạn từng bước.' },
+  ],
+  hoiThoai: {
+    tieuDe: 'Nhờ mentor xem lỗi',
+    luot: [
+      { vai: 'A', ten: 'Vy (thực tập)', en: 'Sorry to bother you. Do you have a few minutes?', vi: 'Em xin lỗi làm phiền anh. Anh có vài phút không ạ?' },
+      { vai: 'B', ten: 'Anh Tùng (mentor)', en: 'Sure. What\'s up?', vi: 'Được. Có chuyện gì thế?' },
+      { vai: 'A', ten: 'Vy (thực tập)', en: 'The app crashes when I click the Save button. It only happens on Safari.', vi: 'Ứng dụng bị crash khi em bấm nút Lưu. Chỉ bị trên Safari thôi ạ.' },
+      { vai: 'B', ten: 'Anh Tùng (mentor)', en: 'What have you tried so far?', vi: 'Em đã thử những gì rồi?' },
+      { vai: 'A', ten: 'Vy (thực tập)', en: 'I\'ve tried restarting it, but it still doesn\'t work. I\'ve attached a screenshot.', vi: 'Em đã thử khởi động lại nhưng vẫn không được. Em đính kèm ảnh chụp rồi ạ.' },
+      { vai: 'B', ten: 'Anh Tùng (mentor)', en: 'It might be a cache issue. Try clearing the cache.', vi: 'Có thể do cache. Em thử xoá cache xem.' },
+      { vai: 'A', ten: 'Vy (thực tập)', en: 'Thanks, it works now! Next time, I\'ll check the cache first.', vi: 'Cảm ơn anh, chạy rồi ạ! Lần sau em sẽ kiểm tra cache trước.' },
+    ],
+  },
+  viet: {
+    y: [
+      'Tiêu đề ticket = **một câu ngắn nêu triệu chứng + điều kiện**: "App crashes when saving on Safari" — không viết "Bug!!!" hay "Help".',
+      'Các bước tái hiện viết **đánh số, mệnh lệnh**: 1. Log in. 2. Open Settings. 3. Click Save.',
+      'Tách **Expected** và **Actual** thành hai dòng riêng — người đọc thấy ngay chỗ khác nhau.',
+      'Đọc lại một lần như thể bạn là người chưa biết gì về lỗi này.',
+    ],
+    chinhTa: ['~~crashs~~ → **crashes**', '~~occured~~ → **occurred** (hai c, hai r)', '~~enviroment~~ → **environment**', '~~recieve an error~~ → **receive / get** an error'],
+    de: 'Viết **một bug report 5 dòng** cho một lỗi bạn từng gặp khi làm bài (hoặc tự nghĩ ra): tiêu đề, các bước, mong đợi, thực tế, đã thử gì.',
+    mau: [
+      { en: 'Title: Login fails when the password has a space.', vi: 'Tiêu đề: Đăng nhập lỗi khi mật khẩu có dấu cách.' },
+      { en: 'Steps: Open the login page, enter a password with a space, and click Log in.', vi: 'Các bước: Mở trang đăng nhập, nhập mật khẩu có dấu cách, bấm Đăng nhập.' },
+      { en: 'Expected: I should see the home page.', vi: 'Mong đợi: Phải vào được trang chủ.' },
+      { en: 'Actual: I get an error that says wrong password.', vi: 'Thực tế: Hiện lỗi báo sai mật khẩu.' },
+      { en: 'Notes: I\'ve tried it on Chrome and Safari, and it happens on both.', vi: 'Ghi chú: Em đã thử trên Chrome và Safari, cả hai đều bị.' },
+    ],
+  },
+  cau: [
+    { id: 'cn27-01', vi: 'Ứng dụng bị crash khi em bấm nút Lưu.', en: 'The app crashes when I click the Save button.', alt: ['The app crashes when I click Save.', 'The app crashes when I press the Save button.'], khung: WHEN, loi: '~~The app is crash~~' },
+    { id: 'cn27-02', vi: 'Anh xem giúp em được không ạ?', en: 'Could you take a look?', alt: ['Can you take a look?', 'Could you have a look?', 'Could you take a look at it?'], khung: ASK },
+    { id: 'cn27-03', vi: 'Thông báo lỗi ghi là connection refused.', en: 'The error message says connection refused.', alt: ['It says connection refused.'], khung: 'The error message says …' },
+    { id: 'cn27-04', vi: 'Em đã thử khởi động lại nhưng vẫn không được.', en: 'I\'ve tried restarting it, but it still doesn\'t work.', alt: ['I tried restarting it, but it still doesn\'t work.', 'I\'ve tried restarting, but it still doesn\'t work.'], khung: TRIED },
+    { id: 'cn27-05', vi: 'Lỗi này chỉ xảy ra trên Safari.', en: 'This bug only happens on Safari.', alt: ['This only happens in Safari.', 'This bug only happens in Safari.'], khung: 'S + only + V-s + on / in …' },
+    { id: 'cn27-06', vi: 'Trên máy em thì chạy bình thường.', en: 'It works fine on my machine.', alt: ['It works on my machine.', 'It works fine on my computer.'], khung: 'It works (fine) on …' },
+    { id: 'cn27-07', vi: 'Em không tái hiện được lỗi này.', en: 'I can\'t reproduce this bug.', alt: ['I can\'t reproduce the bug.', 'I can\'t reproduce it.'], khung: 'I can\'t + V' },
+    { id: 'cn27-08', vi: 'Các bước để tái hiện lỗi là gì?', en: 'What are the steps to reproduce it?', alt: ['What are the steps to reproduce the bug?', 'How can I reproduce it?'], khung: 'What are the steps to + V?' },
+    { id: 'cn27-09', vi: 'Lẽ ra nó phải chuyển sang trang chủ.', en: 'It should go to the home page.', alt: ['It\'s supposed to go to the home page.', 'It should take me to the home page.'], khung: EXP },
+    { id: 'cn27-10', vi: 'Nhưng thực tế thì màn hình trắng trơn.', en: 'But instead, the screen goes blank.', alt: ['But the screen goes blank.', 'But instead, I get a blank screen.', 'But I just see a blank screen.'], khung: EXP, goi: 'trở nên trống = goes blank' },
+    { id: 'cn27-11', vi: 'Lỗi bắt đầu từ bản cập nhật hôm qua.', en: 'The bug started after yesterday\'s update.', alt: ['The bug started with yesterday\'s update.', 'This started after yesterday\'s update.'], khung: 'S + started after + N' },
+    { id: 'cn27-12', vi: 'Em đính kèm ảnh chụp màn hình rồi ạ.', en: 'I\'ve attached a screenshot.', alt: ['I attached a screenshot.', 'I\'ve attached a screenshot of the error.'], khung: 'I\'ve + V3 (đã làm xong, kết quả đang có)' },
+    { id: 'cn27-13', vi: 'Em gửi anh file log nhé.', en: 'I\'ll send you the log file.', alt: ['Let me send you the log file.', 'I\'ll send you the logs.'], khung: 'I\'ll + send + you + N' },
+    { id: 'cn27-14', vi: 'Em không hiểu đoạn code này làm gì.', en: 'I don\'t understand what this code does.', alt: ['I don\'t understand what this part of the code does.'], khung: 'I don\'t understand + what + S + V', loi: '~~what does this code~~' },
+    { id: 'cn27-15', vi: 'Anh giải thích từng bước cho em được không?', en: 'Could you walk me through it?', alt: ['Could you explain it to me?', 'Can you walk me through it?', 'Could you explain it step by step?'], khung: ASK },
+    { id: 'cn27-16', vi: 'Em tìm trên Google rồi nhưng không thấy gì.', en: 'I\'ve searched on Google, but I couldn\'t find anything.', alt: ['I googled it, but I couldn\'t find anything.', 'I searched online, but I didn\'t find anything.'], khung: TRIED },
+    { id: 'cn27-17', vi: 'Em xin lỗi vì làm phiền anh.', en: 'Sorry to bother you.', alt: ['Sorry for bothering you.', 'I\'m sorry to bother you.'], khung: POL },
+    { id: 'cn27-18', vi: 'Anh có vài phút không ạ?', en: 'Do you have a few minutes?', alt: ['Do you have a minute?', 'Have you got a few minutes?'], khung: POL },
+    { id: 'cn27-19', vi: 'Em bị kẹt ở lỗi này hai tiếng rồi.', en: 'I\'ve been stuck on this bug for two hours.', alt: ['I\'ve been stuck on this for two hours.'], khung: 'I\'ve been stuck on + N + for + thời gian' },
+    { id: 'cn27-20', vi: 'Có thể là do cache.', en: 'It might be a cache issue.', alt: ['Maybe it\'s a cache problem.', 'It could be the cache.', 'It might be caused by the cache.'], khung: MAYBE },
+    { id: 'cn27-21', vi: 'Em thử xoá cache xem.', en: 'Try clearing the cache.', alt: ['Try clearing your cache.', 'Why don\'t you try clearing the cache?'], khung: MAYBE },
+    { id: 'cn27-22', vi: 'Lỗi này nghiêm trọng, phải sửa ngay.', en: 'This bug is critical. We need to fix it now.', alt: ['This is a critical bug. We need to fix it right away.', 'This bug is critical, so we need to fix it now.'], khung: PRIO },
+    { id: 'cn27-23', vi: 'Lỗi này không gấp, để sprint sau cũng được.', en: 'This bug isn\'t urgent. It can wait until next sprint.', alt: ['It\'s not urgent. It can wait until the next sprint.', 'This isn\'t urgent, so it can wait until next sprint.'], khung: PRIO },
+    { id: 'cn27-24', vi: 'Em tạo một ticket cho lỗi này nhé.', en: 'I\'ll create a ticket for this bug.', alt: ['I\'ll open a ticket for this bug.', 'Let me create a ticket for this bug.'], khung: 'I\'ll + V (nhận việc)' },
+    { id: 'cn27-25', vi: 'Ai đã sửa file cấu hình vậy?', en: 'Who changed the config file?', alt: ['Who changed the configuration file?', 'Who edited the config file?'], khung: 'Who + V2 + N? (hỏi chủ ngữ — không cần did)' },
+    { id: 'cn27-26', vi: 'Hình như ai đó đã xoá biến môi trường.', en: 'I think someone deleted the environment variable.', alt: ['It looks like someone deleted the environment variable.', 'I think somebody deleted the environment variable.'], khung: 'I think / It looks like + S + V2' },
+    { id: 'cn27-27', vi: 'Em sửa rồi, anh kiểm tra lại giúp em.', en: 'It\'s fixed now. Could you check again?', alt: ['It\'s fixed now. Can you check it again?', 'I\'ve fixed it. Could you test it again?', 'I\'ve fixed it. Could you check again?'], khung: ASK },
+    { id: 'cn27-28', vi: 'Lỗi vẫn còn.', en: 'The bug is still there.', alt: ['It\'s still happening.', 'The problem is still there.'], khung: 'S + be + still there' },
+    { id: 'cn27-29', vi: 'Cảm ơn anh, giờ chạy được rồi.', en: 'Thanks, it works now.', alt: ['Thank you, it works now.', 'Thanks, it\'s working now.'], khung: 'Thanks, it works now.' },
+    { id: 'cn27-30', vi: 'Em học được nhiều từ lỗi này.', en: 'I learned a lot from this bug.', alt: ['I\'ve learned a lot from this bug.'], khung: 'S + learned a lot from + N' },
+    { id: 'cn27-31', vi: 'Lần sau em sẽ xem log trước.', en: 'Next time, I\'ll check the logs first.', alt: ['Next time I\'ll read the logs first.', 'Next time, I\'ll look at the logs first.'], khung: 'Next time, I\'ll + V' },
+    { id: 'cn27-32', vi: 'Web tải rất chậm khi có nhiều người dùng.', en: 'The website is very slow when there are many users.', alt: ['The website loads very slowly when there are a lot of users.', 'The site gets really slow when many people use it.'], khung: WHEN },
+    { id: 'cn27-33', vi: 'Em có cần quyền admin không ạ?', en: 'Do I need admin access?', alt: ['Do I need admin rights?', 'Do I need admin permissions?'], khung: 'Do I need + N?' },
+    { id: 'cn27-34', vi: 'Anh cấp quyền vào repo cho em được không ạ?', en: 'Could you give me access to the repo?', alt: ['Can you give me access to the repo?', 'Could you give me access to the repository?'], khung: ASK },
+  ],
+};

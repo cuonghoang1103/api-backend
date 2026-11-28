@@ -33,6 +33,8 @@ export function napNgay(n: number): Promise<NgayCauNen> | null {
     case 24: return import('./ngay24').then((m) => m.NGAY_24);
     case 25: return import('./ngay25').then((m) => m.NGAY_25);
     case 26: return import('./ngay26').then((m) => m.NGAY_26);
+    case 27: return import('./ngay27').then((m) => m.NGAY_27);
+    case 28: return import('./ngay28').then((m) => m.NGAY_28);
     default: return null;
   }
 }

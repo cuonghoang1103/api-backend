@@ -32,6 +32,9 @@ const ChiaDongTu = dynamic(() => import('./nhat/ChiaDongTu'), { ssr: false, load
 // Luyện bảng chữ cái kiểu Tofugu / kana.pro (09/11/2026).
 const LuyenKana = dynamic(() => import('./nhat/LuyenKana'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải bộ luyện bảng chữ…</div> });
 const OnTapThe = dynamic(() => import('./nhat/OnTapThe'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải bộ thẻ…</div> });
+// 🔁 Luyện câu 2 chiều + ✍️ giấy ô vuông viết tay (khoá Dekiru, 28/11/2026) — chunk riêng, chỉ tải khi mở mục.
+const LuyenCau = dynamic(() => import('./nhat/LuyenCau'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải bộ luyện câu…</div> });
+const GiayViet = dynamic(() => import('./nhat/GiayViet'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải giấy viết…</div> });
 // Tra cứu từ vựng cả khoá — cũng chỉ ở một mục tra cứu.
 const TraTuVung = dynamic(() => import('./TraTuVung'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải…</div> });
 
@@ -620,6 +623,28 @@ function ReadKanji({ b }: { b: Extract<Block, { t: 'readkanji' }> }) {
   );
 }
 
+/**
+ * 🔗 Nút mở một mục khác của cùng khoá (khối `moBai`, 28/11/2026): bắn sự kiện `sachhoc:mo-bai` (CoursePage nghe và
+ * chuyển bài tại chỗ, không tải lại trang). Mục không có trong khoá đang mở thì nút bị ẩn.
+ */
+function MoBai({ b }: { b: Extract<Block, { t: 'moBai' }> }) {
+  const course = useCourse();
+  const ds = b.items.filter((x) => !course || course.allLessons.some((l) => l.id === x.id));
+  if (!ds.length) return null;
+  return (
+    <div className={s.moBai}>
+      {b.title && <div className={s.moBaiTitle}>{b.title}</div>}
+      <div className={s.moBaiList}>
+        {ds.map((x) => (
+          <button key={x.id} type="button" className={s.moBaiBtn} onClick={() => window.dispatchEvent(new CustomEvent('sachhoc:mo-bai', { detail: x.id }))}>
+            <b>{x.label}</b>{x.vi && <small>{x.vi}</small>}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function renderBlock2(b: Block, i: number) {
   switch (b.t) {
     case 'passage': return <Passage key={i} b={b} />;
@@ -643,6 +668,9 @@ export function renderBlock2(b: Block, i: number) {
     case 'slides': return <BoSlide key={b.id} b={b} />;
     case 'sodo': return <SoDo key={i} b={b} />;
     case 'figure': return <HinhTask1 key={i} b={b} />;
+    case 'luyenCau': return <LuyenCau key={b.id} b={b} />;
+    case 'giayViet': return <GiayViet key={b.id} b={b} />;
+    case 'moBai': return <MoBai key={i} b={b} />;
     default: return null;
   }
 }

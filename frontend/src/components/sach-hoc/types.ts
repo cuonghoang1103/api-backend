@@ -126,7 +126,23 @@ export type Block =
    * FigureView của kho luyện IELTS (SVG, số liệu tự đặt). Dùng thay `chart` khi cần tròn/bảng/quy trình/bản đồ.
    */
   | { t: 'figure'; fig: Figure }
+  /**
+   * 🔁 Luyện câu 2 chiều (28/11/2026, khoá Dekiru) — nhat/LuyenCau.tsx: Việt→Nhật (viết tay / gõ, chấm kana–kanji),
+   * Nhật→Việt (chọn nghĩa), nghe–chép, nói theo (máy chấm phát âm), từ vựng của bài, bản xem gọn / in.
+   * `bai` = số bài (để lấy từ vựng của bài + chữ Hán để chấm). Tiến độ lưu theo nội dung câu (localStorage).
+   */
+  | { t: 'luyenCau'; id: string; bai: number; title?: string; cau: CauLuyen[] }
+  /** 🔗 Nút mở một mục KHÁC của cùng khoá (`id` = id bài, như `?bai=`) — để liên kết thay vì chép lại nội dung. */
+  | { t: 'moBai'; title?: string; items: { id: string; label: string; vi?: string }[] }
+  /**
+   * ✍️ Giấy ô vuông (原稿用紙) viết tay — nhat/GiayViet.tsx. `kieu: 'chep'` = mỗi câu mẫu một hàng: dòng trên có chữ
+   * mờ để tô, dòng dưới tự viết. `kieu: 'doan'` = đề + gợi ý + giấy trống, bài mẫu ẩn tới khi bấm. Có bản in.
+   */
+  | { t: 'giayViet'; id: string; kieu: 'chep' | 'doan'; title: string; de?: string; goiY?: string[]; mau: Ex[]; dong?: number }
   | SoDo;
+
+/** Một câu của khối `luyenCau`. `ja` có furigana `{漢字|かな}`; `alt` = cách viết khác cũng đúng; `np` = mẫu câu (nhãn lọc). */
+export type CauLuyen = { vi: string; ja: string; ro: string; alt?: string[]; np?: string; goi?: string };
 
 /**
  * 🧭 Sơ đồ minh hoạ (12/11/2026 — "bài học có sơ đồ cho dễ học"), vẽ bằng SVG/CSS, theo nền sáng/tối:

@@ -138,6 +138,15 @@ export default function CoursePage({ course, lessonExtra }: {
   const open = useCallback((l: Lesson) => {
     if (isReady(l)) go({ t: 'lesson', id: l.id });
   }, [go]);
+  // Khối 🔗 moBai (Blocks2.tsx, 28/11/2026) bắn `sachhoc:mo-bai` với id bài ⇒ mở bài đó tại chỗ.
+  useEffect(() => {
+    const h = (e: Event) => {
+      const id = (e as CustomEvent<string>).detail;
+      if (typeof id === 'string' && READY_LESSONS.some((l) => l.id === id)) go({ t: 'lesson', id });
+    };
+    window.addEventListener('sachhoc:mo-bai', h);
+    return () => window.removeEventListener('sachhoc:mo-bai', h);
+  }, [go, READY_LESSONS]);
 
   const lesson = view.t === 'lesson' ? course.allLessons.find((l) => l.id === view.id) ?? INTRO : null;
   // Thẻ bài đang MỞ trong mục lục: người dùng chọn (dayMo) ⇒ buổi chứa bài đang mở ⇒ buổi đang xem ⇒ buổi đầu chưa xong.

@@ -54,7 +54,7 @@ type GiongCham = 'uk' | 'us' | 'ja' | 'zh';
 const GIONG_MAU = { uk: 'uk-nu', us: 'us-nu', ja: 'ja-nu', zh: 'zh-nu' } as const;
 const bare = (t: string) => t.replace(/\{([^|}]+)\|[^}]+\}/g, '$1');
 
-function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string }; giong: GiongCham }) {
+function MotCau({ it, giong, onDiem }: { it: { text: string; ipa: string; vi?: string }; giong: GiongCham; onDiem?: (tong: number) => void }) {
   const ngoai = giong === 'ja' || giong === 'zh';
   const [busy, setBusy] = useState(false);
   const [url, setUrl] = useState<string | null>(null);
@@ -72,7 +72,7 @@ function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string };
       fd.append('giong', giong);
       const r = await api.post('/ielts/ai/cham-phat-am', fd, { headers: { 'Content-Type': 'multipart/form-data' }, ...AI_TIMEOUT });
       const d = r.data?.data as { ketQua: KetQua | null; lyDo?: string };
-      if (d?.ketQua) setKq(d.ketQua); else setErr(LOI[d?.lyDo ?? ''] ?? 'Chưa chấm được, thử lại nhé.');
+      if (d?.ketQua) { setKq(d.ketQua); onDiem?.(d.ketQua.diem.tong); } else setErr(LOI[d?.lyDo ?? ''] ?? 'Chưa chấm được, thử lại nhé.');
     } catch (e) {
       const m = (e as { response?: { status?: number; data?: { message?: string } } })?.response;
       setErr(m?.status === 401 ? 'Đăng nhập để chấm phát âm.' : m?.data?.message || 'Không gửi được bản ghi. Thử lại nhé.');
@@ -175,6 +175,15 @@ function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string };
       )}
     </div>
   );
+}
+
+/**
+ * MỘT câu luyện phát âm theo thứ tiếng của khoá đang mở (28/11/2026 — khối Luyện câu 2 chiều dùng cho nút "Nói theo").
+ * `onDiem` (tuỳ chọn) nhận điểm tổng 0–100 sau mỗi lần chấm.
+ */
+export function CauPhatAm({ text, ro, vi, onDiem }: { text: string; ro: string; vi?: string; onDiem?: (tong: number) => void }) {
+  const nn = ngonNguKhoa();
+  return <MotCau it={{ text, ipa: ro, vi }} giong={nn === 'en' ? 'uk' : nn} onDiem={onDiem} />;
 }
 
 export default function PhatAm({ b }: { b: Extract<Block, { t: 'phatam' }> }) {

@@ -135,7 +135,8 @@ const courseData = {
   description: c.description ?? null,
   whatYouLearn: c.whatYouLearn ?? null,
   requirements: c.requirements ?? null,
-  documentsNote: c.documentsNote ?? null,
+  // `documents: [{ title, url, mo_ta, loai, nhom }]` (có cấu trúc, 28/11/2026) ⇒ JSON vào cùng cột; web đọc bằng docTaiLieuKhoa().
+  documentsNote: Array.isArray(c.documents) && c.documents.length ? JSON.stringify(c.documents) : (c.documentsNote ?? null),
   thumbnailUrl: c.thumbnailUrl ?? null,
   level: c.level ?? 'BEGINNER', language: c.language ?? 'Vietnamese',
   accessType: 'FREE', isFree: true, price: 0,

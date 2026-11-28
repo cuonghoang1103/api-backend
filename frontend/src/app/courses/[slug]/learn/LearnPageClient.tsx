@@ -7,7 +7,7 @@ import Link from 'next/link';
 import {
   ChevronLeft, ChevronRight, CheckCircle, Circle, Lock, Menu, X,
   Download, BookOpen, Loader2, Play, ChevronDown, ChevronUp, ArrowLeft,
-  Code2, ExternalLink, FileText, Github, Award, Ticket, Eye
+  Code2, ExternalLink, FileText, Github, Award, Ticket, Eye, Map as MapIcon
 } from 'lucide-react';
 import GopYNhanhBai from '@/components/courses/gop-y/GopYNhanhBai';
 import { coursesApi, certificatesApi } from '@/lib/api';
@@ -25,6 +25,8 @@ import MucLucVideo from '@/components/academy/giaSu/MucLucVideo';
 import LenhTrongVideo from '@/components/academy/giaSu/LenhTrongVideo';
 import { useNutHoiSlide } from '@/components/academy/giaSu/nutHoiSlide';
 import LuyenTapCodeLab from '@/components/courses/LuyenTapCodeLab';
+import { KhoiTaiLieuBen, ThuVienTaiLieu } from '@/components/courses/tai-lieu/TaiLieuKhoa';
+import SoDoKhoa from '@/components/courses/so-do/SoDoKhoa';
 import DuAnTrongBai from '@/components/courses/du-an/DuAnTrongBai';
 import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
 import LessonPdfViewer from './LessonPdfViewer';
@@ -244,9 +246,13 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   // Course-level documents (the fixed "Tài liệu" area shown at the top of
   // Course Content, above the chapters).
   const [courseDocs, setCourseDocs] = useState<
-    Array<{ id: number; title: string; fileUrl: string; fileType?: string | null; fileSizeBytes: number }>
+    Array<{ id: number; title: string; fileUrl: string; fileType?: string | null; fileSizeBytes: number; createdAt?: string }>
   >([]);
-  const [docsOpen, setDocsOpen] = useState(true);
+  // Ngăn "Tài liệu khoá học" (thư viện kiểu Classroom) — xem components/courses/tai-lieu/TaiLieuKhoa.tsx.
+  const [thuVienMo, setThuVienMo] = useState(false);
+  const dongThuVien = useCallback(() => setThuVienMo(false), []);
+  // 🗺 Sơ đồ lộ trình cả khoá (kiểu roadmap.sh) — mở từ nút "Lộ trình" trên thanh đầu trang.
+  const [soDoMo, setSoDoMo] = useState(false);
   // Document id currently being resolved for in-browser preview (spinner on
   // its "Xem" button while we fetch the signed URL for the office viewer).
   const [previewingDocId, setPreviewingDocId] = useState<number | null>(null);
@@ -445,6 +451,8 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
 
   const isCompleted = (lessonId: number) =>
     progress.find(p => p.lessonId === lessonId)?.isCompleted || false;
+  // Bản ổn định cho sơ đồ lộ trình (chỉ đổi khi tiến độ đổi ⇒ sơ đồ không dựng lại mỗi lần render).
+  const daXongBai = useCallback((lessonId: number) => progress.some(p => p.lessonId === lessonId && p.isCompleted), [progress]);
 
   const markComplete = async () => {
     if (!course || !currentLesson || savingProgress) return;
@@ -775,11 +783,60 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
               aria-pressed={locale === 'vi'}
             >VN</button>
           </div>
+          <button
+            type="button"
+            onClick={() => setSoDoMo(true)}
+            className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/50 bg-amber-400/10 px-2.5 py-1 text-xs font-semibold text-tone-amber transition-colors hover:bg-amber-400/20"
+            title={locale === 'en' ? 'Course roadmap' : 'Sơ đồ lộ trình cả khoá'}
+          >
+            <MapIcon className="h-3.5 w-3.5" /> <span className="hidden sm:inline">{locale === 'en' ? 'Roadmap' : 'Lộ trình'}</span>
+          </button>
           <Link href="/my-courses" className="text-sm text-neon-violet hover:text-neon-indigo transition-colors">
             My Courses
           </Link>
         </div>
       </header>
+
+      {soDoMo && (
+        <div className="fixed inset-0 z-[80] overflow-y-auto bg-black/55 p-2 backdrop-blur-[2px] sm:p-6" role="dialog" aria-modal="true"
+          aria-label={locale === 'en' ? 'Course roadmap' : 'Lộ trình khoá học'}
+          onKeyDown={(e) => { if (e.key === 'Escape' && !document.querySelector('[aria-modal="true"][role="dialog"] aside')) setSoDoMo(false); }}
+          onClick={(e) => { if (e.target === e.currentTarget) setSoDoMo(false); }}>
+          <div className="relative mx-auto max-w-[1240px]">
+            <button type="button" onClick={() => setSoDoMo(false)} aria-label={locale === 'en' ? 'Close' : 'Đóng'}
+              className="absolute -top-1 right-0 z-10 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 sm:-right-3 sm:-top-3">
+              <X className="h-4 w-4" />
+            </button>
+            <SoDoKhoa
+              slug={slug}
+              sections={course.sections}
+              xong={daXongBai}
+              hienTai={currentLesson?.id ?? null}
+              lang={locale === 'en' ? 'en' : 'vi'}
+              yeuCau={course.requirements ? course.requirements.split(/\n+|•/).map(x => x.replace(/^[-*\s]+/, '').trim()).filter(x => x.length > 3).slice(0, 4) : undefined}
+              hocDuoc={course.whatYouLearn ? course.whatYouLearn.split(/\n+|;\s+|•/).map(x => x.replace(/^[-*\s]+/, '').trim()).filter(x => x.length > 3).slice(0, 4) : undefined}
+              onVaoHoc={(id) => {
+                const f = flatLessons.find(x => x.lesson.id === id);
+                setSoDoMo(false);
+                if (f) { void selectLesson(f.lesson); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      <ThuVienTaiLieu
+        mo={thuVienMo}
+        dong={dongThuVien}
+        tenKhoa={pickLang(course.title, locale)}
+        ghiChu={course.documentsNote}
+        tep={courseDocs}
+        coTheXem={(d) => previewKind(d) !== null}
+        dangXemId={previewingDocId}
+        onXem={(d) => { void previewDocument(d); }}
+        linkTai={(d) => coursesApi.downloadDocumentUrl(d.id)}
+        laAdmin={Boolean(course.isAdmin)}
+      />
 
       <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* Sidebar */}
@@ -787,66 +844,9 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
           <div className="p-4">
             <h2 className="font-semibold text-text-primary text-sm mb-4">Course Content</h2>
             <div className="space-y-1">
-              {/* Fixed COURSE-LEVEL documents — top of Course Content, above chapters. */}
-              {(courseDocs.length > 0 || (course as { documentsNote?: string }).documentsNote) && (
-                <div className="border border-neon-violet/30 rounded-xl overflow-hidden bg-neon-violet/[0.04]">
-                  <button
-                    onClick={() => setDocsOpen(o => !o)}
-                    className="w-full flex items-center justify-between p-3 hover:bg-white/5 transition-colors text-left"
-                  >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-base">📁</span>
-                      <p className="text-sm font-medium text-text-primary truncate">Tài liệu{courseDocs.length > 0 ? ` (${courseDocs.length})` : ''}</p>
-                    </div>
-                    {docsOpen
-                      ? <ChevronUp className="w-4 h-4 text-text-muted shrink-0" />
-                      : <ChevronDown className="w-4 h-4 text-text-muted shrink-0" />
-                    }
-                  </button>
-                  {docsOpen && (
-                    <div className="divide-y divide-darkborder/10">
-                      {(course as { documentsNote?: string }).documentsNote && (
-                        <p className="p-3 pl-4 text-xs text-text-secondary whitespace-pre-wrap leading-relaxed">
-                          {(course as { documentsNote?: string }).documentsNote}
-                        </p>
-                      )}
-                      {courseDocs.map(doc => {
-                        const canPreview = previewKind(doc) !== null;
-                        return (
-                          <div key={doc.id} className="flex items-center gap-1 p-3 pl-4 hover:bg-darkbg/50 transition-colors">
-                            <a
-                              href={coursesApi.downloadDocumentUrl(doc.id)}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2.5 text-left flex-1 min-w-0"
-                            >
-                              <span className="shrink-0">{doc.fileType === 'link' ? '🔗' : '📄'}</span>
-                              <span className="text-sm text-text-secondary truncate flex-1">{doc.title}</span>
-                            </a>
-                            {canPreview && (
-                              <button
-                                type="button"
-                                onClick={() => previewDocument(doc)}
-                                disabled={previewingDocId === doc.id}
-                                title="Xem trực tiếp, không cần tải về"
-                                className="shrink-0 p-1.5 rounded-lg text-text-muted hover:text-neon-violet hover:bg-neon-violet/10 transition-colors disabled:opacity-50"
-                              >
-                                {previewingDocId === doc.id
-                                  ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                  : <Eye className="w-3.5 h-3.5" />}
-                              </button>
-                            )}
-                            <a href={coursesApi.downloadDocumentUrl(doc.id)} target="_blank" rel="noopener noreferrer"
-                              title="Tải về" className="shrink-0 p-1.5 rounded-lg text-text-muted hover:text-text-primary">
-                              <Download className="w-3.5 h-3.5" />
-                            </a>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
+              {/* 📁 Tài liệu khoá học (28/11/2026) — thẻ gọn ở đầu Course Content; bấm ⇒ thư viện kiểu Classroom
+                  (link tham chiếu bấm được, mở tab mới + tệp tải về có xem trước). Luôn hiện, kể cả khi trống. */}
+              <KhoiTaiLieuBen ghiChu={course.documentsNote} tep={courseDocs} onMo={() => setThuVienMo(true)} />
               {course.sections?.map(section => (
                 <div key={section.id} className="border border-darkborder/20 rounded-xl overflow-hidden">
                   <button

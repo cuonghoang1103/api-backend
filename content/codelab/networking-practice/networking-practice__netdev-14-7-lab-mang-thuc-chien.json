@@ -1,0 +1,671 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-14-7-lab-mang-thuc-chien",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-14-7-lab-mang-thuc-chien"
+  },
+  "exercises": [
+    {
+      "title": "Real-world 1 — Write firstMatch(rules, packet): which school rule blocked you?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "firewall rules",
+        "first match"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The \"school network in a box\" of lesson 14.2, read with its real counters:</p><pre>Chain CHAN (1 references)\nnum   pkts bytes target     prot opt in     out     source               destination         \n1        1    78 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53\n2        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53\n3        1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  \"social.test\" ALGO name bm reject-with tcp-reset\n4        3   180 DROP       all  --  *      *       0.0.0.0/0            198.18.0.20         \n5        3   180 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports  !80,443,587,993\n6        1    33 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0           </pre><p>Write <code>firstMatch(rulesText, packet)</code> for <code>packet = { proto: \"tcp\" | \"udp\", dst, dport, sni? }</code>. Walk the numbered rule lines top to bottom (columns: num pkts bytes target prot opt in out source destination, then match options) and return <code>{ rule, target }</code> for the FIRST rule that matches, or <code>{ rule: 0, target: \"ACCEPT\" }</code> if none does. A rule matches when ALL of its conditions hold:</p>\n<ul>\n<li><code>prot</code> is <code>all</code> or equals packet.proto; <code>destination</code> is <code>0.0.0.0/0</code> or equals packet.dst;</li>\n<li><code>dpt:N</code> ⇒ packet.dport is N; <code>multiport dports A,B,…</code> ⇒ dport in the list, and with a leading <code>!</code> ⇒ dport NOT in the list;</li>\n<li><code>STRING match \"x\"</code> ⇒ packet.sni is exactly x.</li>\n</ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Mạng trường trong hộp\" của bài 14.2, đọc kèm bộ đếm thật:</p><pre>Chain CHAN (1 references)\nnum   pkts bytes target     prot opt in     out     source               destination         \n1        1    78 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53\n2        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53\n3        1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  \"social.test\" ALGO name bm reject-with tcp-reset\n4        3   180 DROP       all  --  *      *       0.0.0.0/0            198.18.0.20         \n5        3   180 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports  !80,443,587,993\n6        1    33 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0           </pre><p>Viết <code>firstMatch(rulesText, packet)</code> với <code>packet = { proto: \"tcp\" | \"udp\", dst, dport, sni? }</code>. Đi qua các dòng luật có số từ trên xuống (cột: num pkts bytes target prot opt in out source destination, rồi các tuỳ chọn khớp) và trả <code>{ rule, target }</code> của luật ĐẦU TIÊN khớp, hoặc <code>{ rule: 0, target: \"ACCEPT\" }</code> nếu không luật nào khớp. Một luật khớp khi MỌI điều kiện của nó đúng:</p>\n<ul>\n<li><code>prot</code> là <code>all</code> hoặc bằng packet.proto; <code>destination</code> là <code>0.0.0.0/0</code> hoặc bằng packet.dst;</li>\n<li><code>dpt:N</code> ⇒ packet.dport là N; <code>multiport dports A,B,…</code> ⇒ dport nằm trong danh sách, có dấu <code>!</code> phía trước ⇒ dport KHÔNG nằm trong danh sách;</li>\n<li><code>STRING match \"x\"</code> ⇒ packet.sni đúng bằng x.</li>\n</ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "firstMatch(\"Chain CHAN (1 references)\\nnum   pkts bytes target     prot opt in     out     source               destination         \\n1        1    78 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53\\n2        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53\\n3        1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  \\\"social.test\\\" ALGO name bm reject-with tcp-reset\\n4        3   180 DROP       all  --  *      *       0.0.0.0/0            198.18.0.20         \\n5        3   180 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports  !80,443,587,993\\n6        1    33 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0           \", {\"proto\":\"udp\",\"dst\":\"8.8.8.8\",\"dport\":53})",
+          "output": "{\"rule\":1,\"target\":\"DROP\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split each line on whitespace; the destination is column 10 (index 9) and everything after it is match options.|||Tách mỗi dòng theo khoảng trắng; destination là cột 10 (chỉ số 9) và mọi thứ sau nó là tuỳ chọn khớp.",
+        "Skip the \"Chain\" and header lines: only lines whose first word is a number are rules.|||Bỏ dòng \"Chain\" và dòng tiêu đề: chỉ dòng có từ đầu là số mới là luật.",
+        "Order matters: the first match wins, so rule 1 catches DNS before anything else sees it.|||Thứ tự quan trọng: luật khớp đầu tiên thắng, nên luật 1 bắt DNS trước khi luật nào khác kịp thấy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function firstMatch(rulesText, p) {\n  return { rule: 0, target: \"ACCEPT\" };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function firstMatch(rulesText, p) {\n  var lines = String(rulesText).split('\\n');\n  for (var i = 0; i < lines.length; i++) {\n    var w = lines[i].trim().split(/\\s+/);\n    if (!/^\\d+$/.test(w[0]) || w.length < 10) continue; // only numbered rule lines\n    var num = Number(w[0]), target = w[3], prot = w[4], dst = w[9], extra = w.slice(10).join(' ');\n    if (prot !== 'all' && prot !== p.proto) continue;\n    if (dst !== '0.0.0.0/0' && dst !== p.dst) continue;\n    var m = /dpt:(\\d+)/.exec(extra);\n    if (m && Number(m[1]) !== p.dport) continue;\n    var mp = /multiport dports\\s+(!?)([\\d,]+)/.exec(extra);\n    if (mp) {\n      var inList = mp[2].split(',').map(Number).indexOf(p.dport) >= 0;\n      if (mp[1] === '!' ? inList : !inList) continue; // \"!list\" matches every port NOT in the list\n    }\n    var s = /STRING match\\s+\"([^\"]+)\"/.exec(extra);\n    if (s && p.sni !== s[1]) continue; // the SNI is cleartext in the ClientHello, so a string match can see it\n    return { rule: num, target: target };\n  }\n  return { rule: 0, target: 'ACCEPT' }; // no rule matched: the packet goes on\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This table explains a whole bad week at once: outside DNS is dropped (rule 1), social.test dies by SNI (rule 3), the VPN server's IP is blackholed (rule 4), every port but 80/443/587/993 is closed (rule 5) — so SSH on 22 fails and SSH on 993 works — and all other UDP is dropped (rule 6), which is why WireGuard gets \"0 B received\" while OpenVPN over TCP 443 connects. Reading the rules, not guessing, is what lets you work inside the policy.</p>",
+      "solutionExplanationHtmlVi": "<p>Bảng này giải thích cả một tuần tệ hại cùng lúc: DNS bên ngoài bị bỏ (luật 1), social.test chết vì SNI (luật 3), IP của máy chủ VPN bị chặn (luật 4), mọi cổng trừ 80/443/587/993 đều đóng (luật 5) — nên SSH cổng 22 hỏng còn SSH cổng 993 chạy — và mọi UDP khác bị bỏ (luật 6), đó là lý do WireGuard báo \"0 B received\" trong khi OpenVPN qua TCP 443 nối được. Đọc luật, không đoán, là thứ giúp bạn làm việc bên trong chính sách.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: DNS to an outside resolver",
+              "vi": "Ca 1: DNS tới resolver bên ngoài"
+            },
+            "goi": "firstMatch(\"Chain CHAN (1 references)\\nnum   pkts bytes target     prot opt in     out     source               destination         \\n1        1    78 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53\\n2        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53\\n3        1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  \\\"social.test\\\" ALGO name bm reject-with tcp-reset\\n4        3   180 DROP       all  --  *      *       0.0.0.0/0            198.18.0.20         \\n5        3   180 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports  !80,443,587,993\\n6        1    33 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0           \", {\"proto\":\"udp\",\"dst\":\"8.8.8.8\",\"dport\":53})",
+            "mongDoi": {
+              "rule": 1,
+              "target": "DROP"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: HTTPS to social.test",
+              "vi": "Ca 2: HTTPS tới social.test"
+            },
+            "goi": "firstMatch(\"Chain CHAN (1 references)\\nnum   pkts bytes target     prot opt in     out     source               destination         \\n1        1    78 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53\\n2        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53\\n3        1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  \\\"social.test\\\" ALGO name bm reject-with tcp-reset\\n4        3   180 DROP       all  --  *      *       0.0.0.0/0            198.18.0.20         \\n5        3   180 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports  !80,443,587,993\\n6        1    33 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0           \", {\"proto\":\"tcp\",\"dst\":\"198.18.0.10\",\"dport\":443,\"sni\":\"social.test\"})",
+            "mongDoi": {
+              "rule": 3,
+              "target": "REJECT"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: SSH on port 22",
+              "vi": "Ca 3: SSH ở cổng 22"
+            },
+            "goi": "firstMatch(\"Chain CHAN (1 references)\\nnum   pkts bytes target     prot opt in     out     source               destination         \\n1        1    78 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53\\n2        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53\\n3        1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  \\\"social.test\\\" ALGO name bm reject-with tcp-reset\\n4        3   180 DROP       all  --  *      *       0.0.0.0/0            198.18.0.20         \\n5        3   180 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports  !80,443,587,993\\n6        1    33 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0           \", {\"proto\":\"tcp\",\"dst\":\"198.18.0.30\",\"dport\":22})",
+            "mongDoi": {
+              "rule": 5,
+              "target": "DROP"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden: WireGuard over UDP 51820",
+              "vi": "Ẩn: WireGuard qua UDP 51820"
+            },
+            "goi": "firstMatch(\"Chain CHAN (1 references)\\nnum   pkts bytes target     prot opt in     out     source               destination         \\n1        1    78 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53\\n2        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53\\n3        1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  \\\"social.test\\\" ALGO name bm reject-with tcp-reset\\n4        3   180 DROP       all  --  *      *       0.0.0.0/0            198.18.0.20         \\n5        3   180 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports  !80,443,587,993\\n6        1    33 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0           \", {\"proto\":\"udp\",\"dst\":\"198.18.0.30\",\"dport\":51820})",
+            "mongDoi": {
+              "rule": 6,
+              "target": "DROP"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: OpenVPN over TCP 443",
+              "vi": "Ẩn: OpenVPN qua TCP 443"
+            },
+            "goi": "firstMatch(\"Chain CHAN (1 references)\\nnum   pkts bytes target     prot opt in     out     source               destination         \\n1        1    78 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53\\n2        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53\\n3        1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  \\\"social.test\\\" ALGO name bm reject-with tcp-reset\\n4        3   180 DROP       all  --  *      *       0.0.0.0/0            198.18.0.20         \\n5        3   180 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports  !80,443,587,993\\n6        1    33 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0           \", {\"proto\":\"tcp\",\"dst\":\"198.18.0.30\",\"dport\":443})",
+            "mongDoi": {
+              "rule": 0,
+              "target": "ACCEPT"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: SSH on the side door, port 993",
+              "vi": "Ẩn: SSH qua cửa phụ, cổng 993"
+            },
+            "goi": "firstMatch(\"Chain CHAN (1 references)\\nnum   pkts bytes target     prot opt in     out     source               destination         \\n1        1    78 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53\\n2        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53\\n3        1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  \\\"social.test\\\" ALGO name bm reject-with tcp-reset\\n4        3   180 DROP       all  --  *      *       0.0.0.0/0            198.18.0.20         \\n5        3   180 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports  !80,443,587,993\\n6        1    33 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0           \", {\"proto\":\"tcp\",\"dst\":\"198.18.0.30\",\"dport\":993})",
+            "mongDoi": {
+              "rule": 0,
+              "target": "ACCEPT"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: HTTPS to the blocked VPN address",
+              "vi": "Ẩn: HTTPS tới địa chỉ VPN bị chặn"
+            },
+            "goi": "firstMatch(\"Chain CHAN (1 references)\\nnum   pkts bytes target     prot opt in     out     source               destination         \\n1        1    78 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53\\n2        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53\\n3        1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  \\\"social.test\\\" ALGO name bm reject-with tcp-reset\\n4        3   180 DROP       all  --  *      *       0.0.0.0/0            198.18.0.20         \\n5        3   180 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports  !80,443,587,993\\n6        1    33 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0           \", {\"proto\":\"tcp\",\"dst\":\"198.18.0.20\",\"dport\":443})",
+            "mongDoi": {
+              "rule": 4,
+              "target": "DROP"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "firstMatch(\"Chain CHAN (1 references)\\nnum   pkts bytes target     prot opt in     out     source               destination         \\n1        1    78 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            udp dpt:53\\n2        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53\\n3        1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  \\\"social.test\\\" ALGO name bm reject-with tcp-reset\\n4        3   180 DROP       all  --  *      *       0.0.0.0/0            198.18.0.20         \\n5        3   180 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports  !80,443,587,993\\n6        1    33 DROP       udp  --  *      *       0.0.0.0/0            0.0.0.0/0           \", {\"proto\":\"tcp\",\"dst\":\"198.18.0.10\",\"dport\":443,\"sni\":\"news.test\"})",
+            "mongDoi": {
+              "rule": 0,
+              "target": "ACCEPT"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading \"!80,443,587,993\" as \"block these ports\" — the ! means every OTHER port.|||Đọc \"!80,443,587,993\" thành \"chặn các cổng này\" — dấu ! nghĩa là mọi cổng KHÁC."
+        },
+        {
+          "loi": "Continuing after the first match, so a later rule overrides an earlier one.|||Tiếp tục duyệt sau luật khớp đầu tiên, khiến luật sau đè luật trước."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Real-world 2 — Write homeReach(wanIp, seenIp): will a port forward ever work?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "CGNAT",
+        "port forwarding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lesson 14.6, measured: the home router's WAN interface has <code>100.64.0.2</code>, while a server on the Internet says the visit came from <code>198.18.0.40</code>. Write <code>homeReach(wanIp, seenIp)</code> returning:</p>\n<ul>\n<li><code>cgnat</code> — wanIp is in <code>100.64.0.0/10</code> (the shared address space for carrier-grade NAT, RFC 6598);</li>\n<li><code>privateWan</code> — wanIp is in 10/8, 172.16/12 or 192.168/16 (another router in front of yours);</li>\n<li><code>behindProviderNat</code> — wanIp ≠ seenIp;</li>\n<li><code>portForwardWorks</code> — true only if none of the three above is true.</li>\n</ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 14.6, đo thật: interface WAN của router nhà mang <code>100.64.0.2</code>, trong khi một máy chủ trên Internet nói lượt truy cập đến từ <code>198.18.0.40</code>. Viết <code>homeReach(wanIp, seenIp)</code> trả về:</p>\n<ul>\n<li><code>cgnat</code> — wanIp nằm trong <code>100.64.0.0/10</code> (dải địa chỉ dùng chung cho NAT cấp nhà mạng, RFC 6598);</li>\n<li><code>privateWan</code> — wanIp nằm trong 10/8, 172.16/12 hoặc 192.168/16 (có thêm một router đứng trước router của bạn);</li>\n<li><code>behindProviderNat</code> — wanIp ≠ seenIp;</li>\n<li><code>portForwardWorks</code> — chỉ true khi cả ba điều trên đều sai.</li>\n</ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "homeReach(\"100.64.0.2\", \"198.18.0.40\")",
+          "output": "{\"cgnat\":true,\"privateWan\":false,\"behindProviderNat\":true,\"portForwardWorks\":false}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "/10 means the first 10 bits: 100.64.0.0 – 100.127.255.255.|||/10 nghĩa là 10 bit đầu: 100.64.0.0 – 100.127.255.255.",
+        "Compare (ip AND mask) with (network AND mask) as 32-bit unsigned numbers.|||So (ip AND mặt nạ) với (mạng AND mặt nạ) dưới dạng số 32 bit không dấu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function homeReach(wanIp, seenIp) {\n  return { cgnat: false, privateWan: false, behindProviderNat: false, portForwardWorks: true };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function homeReach(wanIp, seenIp) {\n  function n(ip) { var p = ip.split('.').map(Number); return ((p[0] << 24) >>> 0) + (p[1] << 16) + (p[2] << 8) + p[3]; }\n  function inNet(ip, net, len) { var m = len === 0 ? 0 : (0xFFFFFFFF << (32 - len)) >>> 0; return ((n(ip) & m) >>> 0) === ((n(net) & m) >>> 0); }\n  var cgnat = inNet(wanIp, '100.64.0.0', 10); // RFC 6598 shared address space\n  var priv = inNet(wanIp, '10.0.0.0', 8) || inNet(wanIp, '172.16.0.0', 12) || inNet(wanIp, '192.168.0.0', 16);\n  var behind = wanIp !== seenIp; // the Internet sees a different address than the router owns\n  return { cgnat: cgnat, privateWan: priv, behindProviderNat: behind, portForwardWorks: !cgnat && !priv && !behind };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Behind CGNAT nobody on the Internet can start a connection to your house, so a port forward on your own router can never work. The fix is to connect OUT — an SSH reverse tunnel or a VPN peer to a VPS — which is exactly how Lab 14 showed the demo from home without opening any port.</p>",
+      "solutionExplanationHtmlVi": "<p>Sau CGNAT, không ai trên Internet mở được kết nối vào nhà bạn, nên mở cổng trên router của mình không bao giờ chạy được. Cách sửa là nối RA ngoài — đường hầm SSH ngược hoặc một peer VPN tới VPS — đúng như Lab 14 đã cho xem bản demo từ nhà mà không mở cổng nào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: the real home router of Lab 14",
+              "vi": "Ca 1: router nhà thật của Lab 14"
+            },
+            "goi": "homeReach(\"100.64.0.2\", \"198.18.0.40\")",
+            "mongDoi": {
+              "cgnat": true,
+              "privateWan": false,
+              "behindProviderNat": true,
+              "portForwardWorks": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: homeReach(\"203.0.113.45\", \"203.0.113.45\")",
+              "vi": "Ca 2"
+            },
+            "goi": "homeReach(\"203.0.113.45\", \"203.0.113.45\")",
+            "mongDoi": {
+              "cgnat": false,
+              "privateWan": false,
+              "behindProviderNat": false,
+              "portForwardWorks": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "homeReach(\"192.168.1.2\", \"203.0.113.45\")",
+            "mongDoi": {
+              "cgnat": false,
+              "privateWan": true,
+              "behindProviderNat": true,
+              "portForwardWorks": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "homeReach(\"100.127.255.254\", \"198.51.100.7\")",
+            "mongDoi": {
+              "cgnat": true,
+              "privateWan": false,
+              "behindProviderNat": true,
+              "portForwardWorks": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "homeReach(\"100.128.0.1\", \"100.128.0.1\")",
+            "mongDoi": {
+              "cgnat": false,
+              "privateWan": false,
+              "behindProviderNat": false,
+              "portForwardWorks": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "homeReach(\"172.31.0.9\", \"172.31.0.9\")",
+            "mongDoi": {
+              "cgnat": false,
+              "privateWan": true,
+              "behindProviderNat": false,
+              "portForwardWorks": false
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating 100.64.x.x as a public address because it is not RFC 1918.|||Coi 100.64.x.x là địa chỉ công cộng vì nó không thuộc RFC 1918."
+        },
+        {
+          "loi": "Configuring a port forward for hours when the provider NAT makes it impossible.|||Cấu hình mở cổng hàng giờ trong khi NAT của nhà mạng khiến việc đó bất khả."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Real-world 3 — The TTL rule that spots a hotspot",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "TTL fingerprinting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The school gateway also counts packets by TTL, for real:<pre> pkts bytes target     prot opt in     out     source               destination         \n    2   110 DROP       all  --  sv0    *       0.0.0.0/0            0.0.0.0/0            TTL match TTL == 63\n    0     0 DROP       all  --  sv0    *       0.0.0.0/0            0.0.0.0/0            TTL match TTL == 127</pre>Linux, Android, iOS and macOS start packets at TTL 64; Windows at 128. Every router — including a phone sharing its connection — subtracts one. Fill in what the gateway sees and whether these rules drop it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Gateway của trường còn đếm gói theo TTL, thật:<pre> pkts bytes target     prot opt in     out     source               destination         \n    2   110 DROP       all  --  sv0    *       0.0.0.0/0            0.0.0.0/0            TTL match TTL == 63\n    0     0 DROP       all  --  sv0    *       0.0.0.0/0            0.0.0.0/0            TTL match TTL == 127</pre>Linux, Android, iOS và macOS bắt đầu gói ở TTL 64; Windows ở 128. Mỗi router — kể cả điện thoại đang chia sẻ mạng — trừ đi một. Điền TTL gateway thấy và các luật này có bỏ gói không.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Start from 64 or 128, then subtract the number of routers in between.",
+        "The phone is a router for the laptop behind it."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Real-world 3 — The TTL rule that spots a hotspot\n\nAnswer in the answer panel (no code needed).\n\n1. TTL seen at the school gatewayTTL mà gateway của trường thấy\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Real-world 3 — The TTL rule that spots a hotspot — answer key\n\n1. TTL seen at the school gatewayTTL mà gateway của trường thấy\n   - r1.t: 64\n   - r1.x: no\n   - r2.t: 63\n   - r2.x: yes\n   - r3.t: 127\n   - r3.x: yes\n   - r4.t: 128\n   - r4.x: no\n   One extra hop leaves a fingerprint: 63 or 127 means \"something routed this before it reached me\". That is all the rule needs to spot a shared connection. Where the school forbids sharing, the answer is to follow the policy, not to defeat the counter.VI: Một chặng thêm để lại dấu vân tay: 63 hay 127 nghĩa là \"có thứ đã định tuyến gói này trước khi tới tôi\". Luật chỉ cần thế để nhận ra mạng đang bị chia sẻ. Ở nơi trường cấm chia sẻ, cách đúng là theo chính sách, không phải lừa bộ đếm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One extra hop leaves a fingerprint: 63 or 127 means \"something routed this before it reached me\". That is all the rule needs to spot a shared connection. Where the school forbids sharing, the answer is to follow the policy, not to defeat the counter.</p><p><i>VI: Một chặng thêm để lại dấu vân tay: 63 hay 127 nghĩa là \"có thứ đã định tuyến gói này trước khi tới tôi\". Luật chỉ cần thế để nhận ra mạng đang bị chia sẻ. Ở nơi trường cấm chia sẻ, cách đúng là theo chính sách, không phải lừa bộ đếm.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>TTL seen at the school gateway</p><p style=\"opacity:.75;font-size:.92em\"><i>TTL mà gateway của trường thấy</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Device"
+              },
+              {
+                "ma": "t",
+                "ten": "TTL seen",
+                "luaChon": [
+                  "64",
+                  "63",
+                  "128",
+                  "127"
+                ]
+              },
+              {
+                "ma": "x",
+                "ten": "Dropped?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "An Android phone browsing on the Wi-Fi itself"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "A Linux laptop behind that phone's hotspot"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "A Windows laptop behind that phone's hotspot"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "A Windows laptop on the Wi-Fi directly"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "64",
+              "r1.x": "no",
+              "r2.t": "63",
+              "r2.x": "yes",
+              "r3.t": "127",
+              "r3.x": "yes",
+              "r4.t": "128",
+              "r4.x": "no"
+            },
+            "giaiThich": "<p>One extra hop leaves a fingerprint: 63 or 127 means \"something routed this before it reached me\". That is all the rule needs to spot a shared connection. Where the school forbids sharing, the answer is to follow the policy, not to defeat the counter.</p><p><i>VI: Một chặng thêm để lại dấu vân tay: 63 hay 127 nghĩa là \"có thứ đã định tuyến gói này trước khi tới tôi\". Luật chỉ cần thế để nhận ra mạng đang bị chia sẻ. Ở nơi trường cấm chia sẻ, cách đúng là theo chính sách, không phải lừa bộ đếm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that the phone itself is not one hop away from itself — its own packets keep 64."
+        },
+        {
+          "loi": "Assuming every device starts at 64."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TTL",
+          "vi": "số chặng còn được đi"
+        },
+        {
+          "en": "hotspot",
+          "vi": "điểm phát chia sẻ mạng"
+        }
+      ]
+    },
+    {
+      "title": "Real-world 4 — Wi-Fi, SSH, VPN and the attacker's corners",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "network safety"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lab 14 R1, R3, R4 and R6 — the week in the dorm and at school.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab 14 R1, R3, R4 và R6 — tuần đầu ở ký túc xá và ở trường.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what each setting exposes, and to whom.|||Hỏi mỗi thiết lập phơi ra cái gì, cho ai.",
+        "Prove every claim with a command: ssh -G, a capture, a login test.|||Chứng minh mọi khẳng định bằng một lệnh: ssh -G, một bản bắt gói, một phép thử đăng nhập."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Real-world 4 — Wi-Fi, SSH, VPN and the attacker's corners\n\nAnswer in the answer panel (no code needed).\n\n1. You registered your laptop on the school portal, yet the Internet SSID blocks you. Your phone shows \"Private address: Fixed\". Why?Bạn đã đăng ký laptop trên cổng trường mà SSID có Internet vẫn chặn. Máy báo \"Private address: Fixed\". Vì sao?\n2. Your ~/.ssh/config must use port 993 at school and 22 at home. Where does the Match block go?~/.ssh/config phải dùng cổng 993 ở trường và 22 ở nhà. Khối Match đặt ở đâu?\n3. Your VPN works, but a capture on the school gateway still shows queries for every site you visit. What leaked?VPN đã chạy, nhưng bản bắt gói ở gateway trường vẫn thấy truy vấn cho mọi trang bạn vào. Cái gì bị rò?\n4. You start a SOCKS proxy with ssh -D 0.0.0.0:1080 on the shared Wi-Fi. What is the risk?Bạn mở proxy SOCKS bằng ssh -D 0.0.0.0:1080 trên Wi-Fi dùng chung. Rủi ro là gì?\n5. The new dorm router still accepts admin / admin. What does a roommate gain?Router mới ở ký túc xá vẫn nhận admin / admin. Bạn cùng phòng có được gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Real-world 4 — Wi-Fi, SSH, VPN and the attacker's corners — answer key\n\n1. You registered your laptop on the school portal, yet the Internet SSID blocks you. Your phone shows \"Private address: Fixed\". Why?Bạn đã đăng ký laptop trên cổng trường mà SSID có Internet vẫn chặn. Máy báo \"Private address: Fixed\". Vì sao?\n   Answer: d) Each SSID sees its own random MAC address\n   Private (randomised) MAC addresses are per network, so the MAC you registered is not the one SSID 2 sees. Turn it Off for the school SSID so the MAC you register is the MAC you use — the controller's table proved it in the lab.VI: Địa chỉ MAC riêng (ngẫu nhiên) là theo từng mạng, nên MAC bạn đăng ký không phải MAC mà SSID 2 thấy. Tắt nó (Off) cho SSID của trường để MAC bạn đăng ký là MAC bạn dùng — bảng của controller đã chứng minh trong lab.\n\n2. Your ~/.ssh/config must use port 993 at school and 22 at home. Where does the Match block go?~/.ssh/config phải dùng cổng 993 ở trường và 22 ở nhà. Khối Match đặt ở đâu?\n   Answer: c) Before the Host block, because the first value obtained wins\n   ssh takes the FIRST value it reads for each option, so a conditional Match must come first. Prove it with ssh -G vps | grep ^port on both networks.VI: ssh lấy giá trị ĐẦU TIÊN đọc được cho mỗi tuỳ chọn, nên khối Match có điều kiện phải đứng trước. Chứng minh bằng ssh -G vps | grep ^port ở cả hai mạng.\n\n3. Your VPN works, but a capture on the school gateway still shows queries for every site you visit. What leaked?VPN đã chạy, nhưng bản bắt gói ở gateway trường vẫn thấy truy vấn cho mọi trang bạn vào. Cái gì bị rò?\n   Answer: d) DNS queries, sent outside the tunnel\n   A DNS leak: traffic goes through the tunnel but name lookups do not. Point the resolver at one reached through the tunnel, then capture again to prove the leak is gone.VI: Rò DNS: lưu lượng đi qua đường hầm nhưng tra cứu tên thì không. Trỏ resolver về một máy đi qua đường hầm, rồi bắt gói lại để chứng minh đã hết rò.\n\n4. You start a SOCKS proxy with ssh -D 0.0.0.0:1080 on the shared Wi-Fi. What is the risk?Bạn mở proxy SOCKS bằng ssh -D 0.0.0.0:1080 trên Wi-Fi dùng chung. Rủi ro là gì?\n   Answer: a) Anyone on the same Wi-Fi can use your VPS through it\n   Binding to 0.0.0.0 offers the proxy to the whole network. Bind it to 127.0.0.1 so only your own laptop can use it — one of the three R6 risks of the lab.VI: Bind vào 0.0.0.0 là mở proxy cho cả mạng. Bind vào 127.0.0.1 để chỉ laptop của bạn dùng được — một trong ba rủi ro R6 của lab.\n\n5. The new dorm router still accepts admin / admin. What does a roommate gain?Router mới ở ký túc xá vẫn nhận admin / admin. Bạn cùng phòng có được gì?\n   Answer: d) Full control of DNS and port forwards\n   With the admin page a roommate can change DNS, open port forwards and see who is on the network. The lab's own login test returned 401 for two guesses and 200 for admin / admin. Change the default credentials on day one.VI: Vào được trang quản trị, bạn cùng phòng đổi được DNS, mở cổng và xem ai đang dùng mạng. Phép thử đăng nhập trong lab trả 401 cho hai lần đoán và 200 cho admin / admin. Đổi thông tin đăng nhập mặc định ngay ngày đầu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Each SSID sees its own random MAC address</p><p>Private (randomised) MAC addresses are per network, so the MAC you registered is not the one SSID 2 sees. Turn it Off for the school SSID so the MAC you register is the MAC you use — the controller's table proved it in the lab.</p><p><i>VI: Địa chỉ MAC riêng (ngẫu nhiên) là theo từng mạng, nên MAC bạn đăng ký không phải MAC mà SSID 2 thấy. Tắt nó (Off) cho SSID của trường để MAC bạn đăng ký là MAC bạn dùng — bảng của controller đã chứng minh trong lab.</i></p></li><li><p><b>c)</b> Before the Host block, because the first value obtained wins</p><p>ssh takes the FIRST value it reads for each option, so a conditional Match must come first. Prove it with ssh -G vps | grep ^port on both networks.</p><p><i>VI: ssh lấy giá trị ĐẦU TIÊN đọc được cho mỗi tuỳ chọn, nên khối Match có điều kiện phải đứng trước. Chứng minh bằng ssh -G vps | grep ^port ở cả hai mạng.</i></p></li><li><p><b>d)</b> DNS queries, sent outside the tunnel</p><p>A DNS leak: traffic goes through the tunnel but name lookups do not. Point the resolver at one reached through the tunnel, then capture again to prove the leak is gone.</p><p><i>VI: Rò DNS: lưu lượng đi qua đường hầm nhưng tra cứu tên thì không. Trỏ resolver về một máy đi qua đường hầm, rồi bắt gói lại để chứng minh đã hết rò.</i></p></li><li><p><b>a)</b> Anyone on the same Wi-Fi can use your VPS through it</p><p>Binding to 0.0.0.0 offers the proxy to the whole network. Bind it to 127.0.0.1 so only your own laptop can use it — one of the three R6 risks of the lab.</p><p><i>VI: Bind vào 0.0.0.0 là mở proxy cho cả mạng. Bind vào 127.0.0.1 để chỉ laptop của bạn dùng được — một trong ba rủi ro R6 của lab.</i></p></li><li><p><b>d)</b> Full control of DNS and port forwards</p><p>With the admin page a roommate can change DNS, open port forwards and see who is on the network. The lab's own login test returned 401 for two guesses and 200 for admin / admin. Change the default credentials on day one.</p><p><i>VI: Vào được trang quản trị, bạn cùng phòng đổi được DNS, mở cổng và xem ai đang dùng mạng. Phép thử đăng nhập trong lab trả 401 cho hai lần đoán và 200 cho admin / admin. Đổi thông tin đăng nhập mặc định ngay ngày đầu.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>You registered your laptop on the school portal, yet the Internet SSID blocks you. Your phone shows \"Private address: Fixed\". Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn đã đăng ký laptop trên cổng trường mà SSID có Internet vẫn chặn. Máy báo \"Private address: Fixed\". Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The portal only accepts Windows devices"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Fixed means the IP address is set wrongly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The registration expires after one minute"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Each SSID sees its own random MAC address"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Private (randomised) MAC addresses are per network, so the MAC you registered is not the one SSID 2 sees. Turn it Off for the school SSID so the MAC you register is the MAC you use — the controller's table proved it in the lab.</p><p><i>VI: Địa chỉ MAC riêng (ngẫu nhiên) là theo từng mạng, nên MAC bạn đăng ký không phải MAC mà SSID 2 thấy. Tắt nó (Off) cho SSID của trường để MAC bạn đăng ký là MAC bạn dùng — bảng của controller đã chứng minh trong lab.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Your ~/.ssh/config must use port 993 at school and 22 at home. Where does the Match block go?</p><p style=\"opacity:.75;font-size:.92em\"><i>~/.ssh/config phải dùng cổng 993 ở trường và 22 ở nhà. Khối Match đặt ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "After the Host block, so it can override it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "In a separate file that ssh reads last"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Before the Host block, because the first value obtained wins"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Anywhere — ssh always uses the last value"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>ssh takes the FIRST value it reads for each option, so a conditional Match must come first. Prove it with ssh -G vps | grep ^port on both networks.</p><p><i>VI: ssh lấy giá trị ĐẦU TIÊN đọc được cho mỗi tuỳ chọn, nên khối Match có điều kiện phải đứng trước. Chứng minh bằng ssh -G vps | grep ^port ở cả hai mạng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Your VPN works, but a capture on the school gateway still shows queries for every site you visit. What leaked?</p><p style=\"opacity:.75;font-size:.92em\"><i>VPN đã chạy, nhưng bản bắt gói ở gateway trường vẫn thấy truy vấn cho mọi trang bạn vào. Cái gì bị rò?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing: DNS is always encrypted"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The TLS certificates of every site"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The private key of the VPN"
+              },
+              {
+                "ma": "d",
+                "noiDung": "DNS queries, sent outside the tunnel"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A DNS leak: traffic goes through the tunnel but name lookups do not. Point the resolver at one reached through the tunnel, then capture again to prove the leak is gone.</p><p><i>VI: Rò DNS: lưu lượng đi qua đường hầm nhưng tra cứu tên thì không. Trỏ resolver về một máy đi qua đường hầm, rồi bắt gói lại để chứng minh đã hết rò.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>You start a SOCKS proxy with ssh -D 0.0.0.0:1080 on the shared Wi-Fi. What is the risk?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn mở proxy SOCKS bằng ssh -D 0.0.0.0:1080 trên Wi-Fi dùng chung. Rủi ro là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Anyone on the same Wi-Fi can use your VPS through it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It disables your SSH keys"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It slows down every website"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The proxy only works over IPv6"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Binding to 0.0.0.0 offers the proxy to the whole network. Bind it to 127.0.0.1 so only your own laptop can use it — one of the three R6 risks of the lab.</p><p><i>VI: Bind vào 0.0.0.0 là mở proxy cho cả mạng. Bind vào 127.0.0.1 để chỉ laptop của bạn dùng được — một trong ba rủi ro R6 của lab.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The new dorm router still accepts admin / admin. What does a roommate gain?</p><p style=\"opacity:.75;font-size:.92em\"><i>Router mới ở ký túc xá vẫn nhận admin / admin. Bạn cùng phòng có được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing without physical access to it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the Wi-Fi password, nothing else"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only a view of the speed graph"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Full control of DNS and port forwards"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>With the admin page a roommate can change DNS, open port forwards and see who is on the network. The lab's own login test returned 401 for two guesses and 200 for admin / admin. Change the default credentials on day one.</p><p><i>VI: Vào được trang quản trị, bạn cùng phòng đổi được DNS, mở cổng và xem ai đang dùng mạng. Phép thử đăng nhập trong lab trả 401 cho hai lần đoán và 200 cho admin / admin. Đổi thông tin đăng nhập mặc định ngay ngày đầu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the Match block after Host and wondering why it never applies.|||Đặt khối Match sau Host rồi thắc mắc vì sao nó không bao giờ có tác dụng."
+        },
+        {
+          "loi": "Binding tools to 0.0.0.0 on a network you do not control.|||Bind công cụ vào 0.0.0.0 trên một mạng bạn không kiểm soát."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "private MAC address",
+          "vi": "địa chỉ MAC riêng (ngẫu nhiên)"
+        },
+        {
+          "en": "DNS leak",
+          "vi": "rò DNS"
+        },
+        {
+          "en": "reverse tunnel",
+          "vi": "đường hầm ngược"
+        }
+      ]
+    }
+  ]
+}

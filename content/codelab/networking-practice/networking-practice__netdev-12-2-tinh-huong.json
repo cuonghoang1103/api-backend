@@ -1,0 +1,606 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-12-2-tinh-huong",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-12-2-tinh-huong"
+  },
+  "exercises": [
+    {
+      "title": "Interview 1 — \"Type a URL and press Enter\", in the right order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "URL to page"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lesson 12.1: walk the layers in order, then prove it with a measurement such as this real one:<pre>dns=0.000011  connect=0.020503  ttfb=0.040733  total=0.040777</pre></p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 12.1: đi qua các tầng theo thứ tự, rồi chứng minh bằng một phép đo như dòng thật này:<pre>dns=0.000011  connect=0.020503  ttfb=0.040733  total=0.040777</pre></p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A name before an address, an address before a connection.",
+        "TLS needs the TCP connection first."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview 1 — \"Type a URL and press Enter\", in the right order\n\nAnswer in the answer panel (no code needed).\n\n1. From the address bar to pixelsTừ thanh địa chỉ tới điểm ảnh\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview 1 — \"Type a URL and press Enter\", in the right order — answer key\n\n1. From the address bar to pixelsTừ thanh địa chỉ tới điểm ảnh\n   Answer: m1) DNS resolves the name (browser cache → OS → resolver → root/TLD/authoritative)  →  m2) TCP three-way handshake to the IP that came back  →  m4) TLS handshake (for https): certificate verified, keys agreed  →  m3) HTTP request travels, possibly through a CDN edge or load balancer, and the response comes back  →  m5) The browser parses and renders, fetching sub-resources over the same reused connection\n   dns= is the first stage, connect= the TCP handshake, ttfb= the server's time to first byte, total= everything. Saying which stages can be skipped — a warm DNS cache, keep-alive, a CDN hit — is what turns a recital into an answer.VI: dns= là chặng đầu, connect= là bắt tay TCP, ttfb= là thời gian tới byte đầu của server, total= là tất cả. Nói được chặng nào có thể bỏ qua — cache DNS còn ấm, keep-alive, CDN trúng cache — là thứ biến bài thuộc lòng thành một câu trả lời.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>dns= is the first stage, connect= the TCP handshake, ttfb= the server's time to first byte, total= everything. Saying which stages can be skipped — a warm DNS cache, keep-alive, a CDN hit — is what turns a recital into an answer.</p><p><i>VI: dns= là chặng đầu, connect= là bắt tay TCP, ttfb= là thời gian tới byte đầu của server, total= là tất cả. Nói được chặng nào có thể bỏ qua — cache DNS còn ấm, keep-alive, CDN trúng cache — là thứ biến bài thuộc lòng thành một câu trả lời.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>From the address bar to pixels</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ thanh địa chỉ tới điểm ảnh</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "DNS resolves the name (browser cache → OS → resolver → root/TLD/authoritative)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "TCP three-way handshake to the IP that came back"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "HTTP request travels, possibly through a CDN edge or load balancer, and the response comes back"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "TLS handshake (for https): certificate verified, keys agreed"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "The browser parses and renders, fetching sub-resources over the same reused connection"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m2",
+              "m4",
+              "m3",
+              "m5"
+            ],
+            "giaiThich": "<p>dns= is the first stage, connect= the TCP handshake, ttfb= the server's time to first byte, total= everything. Saying which stages can be skipped — a warm DNS cache, keep-alive, a CDN hit — is what turns a recital into an answer.</p><p><i>VI: dns= là chặng đầu, connect= là bắt tay TCP, ttfb= là thời gian tới byte đầu của server, total= là tất cả. Nói được chặng nào có thể bỏ qua — cache DNS còn ấm, keep-alive, CDN trúng cache — là thứ biến bài thuộc lòng thành một câu trả lời.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting with \"the browser sends an HTTP request\" and skipping DNS and TCP."
+        },
+        {
+          "loi": "Putting TLS before the TCP handshake."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TTFB",
+          "vi": "thời gian tới byte đầu"
+        }
+      ]
+    },
+    {
+      "title": "Interview 2 — Scenario rounds: symptom → first measurement → layer",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "scenario rounds"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lesson 12.2: the interviewer grades method, not luck. For each symptom pick the measurement you would run FIRST and the layer it usually lands in.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 12.2: người phỏng vấn chấm phương pháp, không chấm may mắn. Với mỗi triệu chứng chọn phép đo bạn chạy ĐẦU TIÊN và tầng nó thường rơi vào.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The symptom tells you where to measure, not what the answer is.",
+        "Read the status code before opening any log."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview 2 — Scenario rounds: symptom → first measurement → layer\n\nAnswer in the answer panel (no code needed).\n\n1. Three classic scenarios and two moreBa tình huống kinh điển và hai tình huống nữa\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview 2 — Scenario rounds: symptom → first measurement → layer — answer key\n\n1. Three classic scenarios and two moreBa tình huống kinh điển và hai tình huống nữa\n   - r1.m: curl -w from both regions and compare\n   - r1.l: path / routing\n   - r2.m: read the status code (502/503/504)\n   - r2.l: HTTP / application under load\n   - r3.m: openssl s_client: the chain the server sends\n   - r3.l: TLS\n   - r4.m: dig the name from the failing network\n   - r4.l: DNS\n   - r5.m: nc -zv to the port\n   - r5.l: transport / port\n   A large time_connect only in one region is distance or path; a high TTFB everywhere is the origin. Evening timeouts correlate with load — 504 (slow) vs 503 (no capacity) vs 502 (broken) point at different fixes. \"Some clients, not all\" is trust: a missing intermediate or an expired root on old devices. A name that resolves at home and not at school is the school's DNS. Local-only is a bind address or a firewall.VI: time_connect lớn chỉ ở một vùng là khoảng cách hay đường đi; TTFB cao ở mọi nơi là origin. Timeout buổi tối đi cùng tải — 504 (chậm), 503 (hết năng lực), 502 (hỏng) chỉ tới các cách sửa khác nhau. \"Vài client, không phải tất cả\" là chuyện niềm tin: thiếu trung gian hoặc gốc hết hạn trên máy cũ. Tên phân giải được ở nhà mà không ở trường là DNS của trường. Chỉ chạy cục bộ là địa chỉ bind hoặc tường lửa.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A large time_connect only in one region is distance or path; a high TTFB everywhere is the origin. Evening timeouts correlate with load — 504 (slow) vs 503 (no capacity) vs 502 (broken) point at different fixes. \"Some clients, not all\" is trust: a missing intermediate or an expired root on old devices. A name that resolves at home and not at school is the school's DNS. Local-only is a bind address or a firewall.</p><p><i>VI: time_connect lớn chỉ ở một vùng là khoảng cách hay đường đi; TTFB cao ở mọi nơi là origin. Timeout buổi tối đi cùng tải — 504 (chậm), 503 (hết năng lực), 502 (hỏng) chỉ tới các cách sửa khác nhau. \"Vài client, không phải tất cả\" là chuyện niềm tin: thiếu trung gian hoặc gốc hết hạn trên máy cũ. Tên phân giải được ở nhà mà không ở trường là DNS của trường. Chỉ chạy cục bộ là địa chỉ bind hoặc tường lửa.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Three classic scenarios and two more</p><p style=\"opacity:.75;font-size:.92em\"><i>Ba tình huống kinh điển và hai tình huống nữa</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Symptom"
+              },
+              {
+                "ma": "m",
+                "ten": "First measurement",
+                "luaChon": [
+                  "curl -w from both regions and compare",
+                  "read the status code (502/503/504)",
+                  "openssl s_client: the chain the server sends",
+                  "dig the name from the failing network",
+                  "nc -zv to the port"
+                ]
+              },
+              {
+                "ma": "l",
+                "ten": "Usual layer",
+                "luaChon": [
+                  "path / routing",
+                  "HTTP / application under load",
+                  "TLS",
+                  "DNS",
+                  "transport / port"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The page is slow only from Hanoi"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The API times out every evening"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Only old Android phones get certificate errors"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The site works at home but \"does not exist\" on the school Wi-Fi"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "A new service answers locally but not from the other server"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.m": "curl -w from both regions and compare",
+              "r1.l": "path / routing",
+              "r2.m": "read the status code (502/503/504)",
+              "r2.l": "HTTP / application under load",
+              "r3.m": "openssl s_client: the chain the server sends",
+              "r3.l": "TLS",
+              "r4.m": "dig the name from the failing network",
+              "r4.l": "DNS",
+              "r5.m": "nc -zv to the port",
+              "r5.l": "transport / port"
+            },
+            "giaiThich": "<p>A large time_connect only in one region is distance or path; a high TTFB everywhere is the origin. Evening timeouts correlate with load — 504 (slow) vs 503 (no capacity) vs 502 (broken) point at different fixes. \"Some clients, not all\" is trust: a missing intermediate or an expired root on old devices. A name that resolves at home and not at school is the school's DNS. Local-only is a bind address or a firewall.</p><p><i>VI: time_connect lớn chỉ ở một vùng là khoảng cách hay đường đi; TTFB cao ở mọi nơi là origin. Timeout buổi tối đi cùng tải — 504 (chậm), 503 (hết năng lực), 502 (hỏng) chỉ tới các cách sửa khác nhau. \"Vài client, không phải tất cả\" là chuyện niềm tin: thiếu trung gian hoặc gốc hết hạn trên máy cũ. Tên phân giải được ở nhà mà không ở trường là DNS của trường. Chỉ chạy cục bộ là địa chỉ bind hoặc tường lửa.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"It's probably the CDN\" before measuring anything."
+        },
+        {
+          "loi": "Blaming the database for evening timeouts without reading the code first."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "localise",
+          "vi": "khoanh vùng"
+        },
+        {
+          "en": "scenario round",
+          "vi": "vòng tình huống"
+        }
+      ]
+    },
+    {
+      "title": "Interview 3 — Write localise(samples, slowServerMs): path or origin?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "localisation",
+        "curl -w"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Scenario 1 of lesson 12.2 — \"slow only in one region\" — comes with a conclusion rule. You collected <code>curl -w</code> timings (in seconds) from several regions, like the real line above but per region (the multi-region numbers here are constructed for practice). Write <code>localise(samples, slowServerMs)</code> where <code>samples</code> is a list of <code>{ region, connect, ttfb }</code>:</p>\n<ol>\n<li>no samples ⇒ <code>{ verdict: \"no-data\", region: null }</code>;</li>\n<li>server time per sample = round((ttfb − connect) × 1000) ms. If the MEDIAN server time (sorted ascending, element at index floor(n/2)) is ≥ <code>slowServerMs</code> ⇒ <code>{ verdict: \"origin\", region: null }</code> — slow everywhere, the region is a red herring;</li>\n<li>otherwise, a region whose <code>connect</code> is ≥ 3 × the median connect of the OTHER regions is a path problem ⇒ <code>{ verdict: \"path\", region }</code> (if several, the one with the largest connect);</li>\n<li>otherwise <code>{ verdict: \"healthy\", region: null }</code>.</li>\n</ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tình huống 1 của bài 12.2 — \"chỉ chậm ở một vùng\" — đi kèm một quy tắc kết luận. Bạn thu số đo <code>curl -w</code> (tính bằng giây) từ nhiều vùng, giống dòng thật ở trên nhưng cho từng vùng (số liệu nhiều vùng ở đây được dựng để luyện tập). Viết <code>localise(samples, slowServerMs)</code> với <code>samples</code> là danh sách <code>{ region, connect, ttfb }</code>:</p>\n<ol>\n<li>không có mẫu ⇒ <code>{ verdict: \"no-data\", region: null }</code>;</li>\n<li>thời gian server của mỗi mẫu = round((ttfb − connect) × 1000) ms. Nếu TRUNG VỊ thời gian server (sắp tăng dần, phần tử ở chỉ số floor(n/2)) ≥ <code>slowServerMs</code> ⇒ <code>{ verdict: \"origin\", region: null }</code> — chậm ở mọi nơi, chuyện vùng chỉ là đánh lạc hướng;</li>\n<li>ngược lại, vùng nào có <code>connect</code> ≥ 3 × trung vị connect của CÁC VÙNG KHÁC là vấn đề đường đi ⇒ <code>{ verdict: \"path\", region }</code> (nhiều vùng thì chọn vùng connect lớn nhất);</li>\n<li>còn lại <code>{ verdict: \"healthy\", region: null }</code>.</li>\n</ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "localise([{\"region\":\"Singapore\",\"connect\":0.012,\"ttfb\":0.05},{\"region\":\"Tokyo\",\"connect\":0.03,\"ttfb\":0.071},{\"region\":\"Hanoi\",\"connect\":0.21,\"ttfb\":0.252}], 500)",
+          "output": "{\"verdict\":\"path\",\"region\":\"Hanoi\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compute server time first: a slow origin hides everything else.|||Tính thời gian server trước: origin chậm che hết mọi thứ khác.",
+        "For each region, the median connect of the OTHER regions is the baseline.|||Với mỗi vùng, trung vị connect của CÁC VÙNG KHÁC là mốc so sánh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function localise(samples, slowServerMs) {\n  return { verdict: \"healthy\", region: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function localise(samples, slowServerMs) {\n  if (!samples.length) return { verdict: 'no-data', region: null };\n  var server = samples.map(function (s) { return Math.round((s.ttfb - s.connect) * 1000); }); // ms the origin spent before the first byte\n  var sorted = server.slice().sort(function (a, b) { return a - b; });\n  var med = sorted[Math.floor(sorted.length / 2)];\n  if (med >= slowServerMs) return { verdict: 'origin', region: null };\n  var worst = null;\n  samples.forEach(function (s, i) {\n    var others = samples.filter(function (_, j) { return j !== i; }).map(function (o) { return o.connect; }).sort(function (a, b) { return a - b; });\n    var m = others.length ? others[Math.floor(others.length / 2)] : s.connect;\n    if (others.length && s.connect >= 3 * m && (!worst || s.connect > worst.connect)) worst = s;\n  });\n  return worst ? { verdict: 'path', region: worst.region } : { verdict: 'healthy', region: null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>connect is about one round trip, so it measures distance and path; ttfb − connect is the server. Separating the two is exactly the \"localise before you blame\" move interviewers look for, written as code.</p>",
+      "solutionExplanationHtmlVi": "<p>connect xấp xỉ một vòng khứ hồi, nên nó đo khoảng cách và đường đi; ttfb − connect là server. Tách hai thứ đó ra chính là động tác \"khoanh vùng trước khi đổ lỗi\" mà người phỏng vấn tìm, viết thành code.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: localise([{\"region\":\"Singapore\",\"connect\":0.012,\"ttfb\":0.05},{\"region\":\"Tokyo\",\"connect...",
+              "vi": "Ca 1"
+            },
+            "goi": "localise([{\"region\":\"Singapore\",\"connect\":0.012,\"ttfb\":0.05},{\"region\":\"Tokyo\",\"connect\":0.03,\"ttfb\":0.071},{\"region\":\"Hanoi\",\"connect\":0.21,\"ttfb\":0.252}], 500)",
+            "mongDoi": {
+              "verdict": "path",
+              "region": "Hanoi"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: localise([{\"region\":\"Singapore\",\"connect\":0.012,\"ttfb\":1.31},{\"region\":\"Tokyo\",\"connect...",
+              "vi": "Ca 2"
+            },
+            "goi": "localise([{\"region\":\"Singapore\",\"connect\":0.012,\"ttfb\":1.31},{\"region\":\"Tokyo\",\"connect\":0.031,\"ttfb\":1.352},{\"region\":\"Hanoi\",\"connect\":0.04,\"ttfb\":1.42}], 500)",
+            "mongDoi": {
+              "verdict": "origin",
+              "region": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "localise([{\"region\":\"Singapore\",\"connect\":0.012,\"ttfb\":0.05},{\"region\":\"Tokyo\",\"connect\":0.03,\"ttfb\":0.071},{\"region\":\"Hanoi\",\"connect\":0.045,\"ttfb\":0.09}], 500)",
+            "mongDoi": {
+              "verdict": "healthy",
+              "region": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "localise([], 500)",
+            "mongDoi": {
+              "verdict": "no-data",
+              "region": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "localise([{\"region\":\"A\",\"connect\":0.01,\"ttfb\":0.04},{\"region\":\"B\",\"connect\":0.09,\"ttfb\":0.13},{\"region\":\"C\",\"connect\":0.12,\"ttfb\":0.16},{\"region\":\"D\",\"connect\":0.011,\"ttfb\":0.045}], 500)",
+            "mongDoi": {
+              "verdict": "path",
+              "region": "C"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "localise([{\"region\":\"only\",\"connect\":0.3,\"ttfb\":0.35}], 500)",
+            "mongDoi": {
+              "verdict": "healthy",
+              "region": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Blaming the CDN for one slow region without comparing connect times.|||Đổ cho CDN về một vùng chậm mà không so thời gian connect."
+        },
+        {
+          "loi": "Comparing total times, which mixes the server with the path.|||So thời gian total, tức là trộn lẫn server với đường đi."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Interview 4 — Trade-offs, not definitions",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "interview answers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lesson 12.1: the answer that gets remembered names what each design fixed and what it costs.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 12.1: câu trả lời được nhớ là câu gọi tên mỗi thiết kế đã sửa gì và tốn gì.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Name what each design fixed and what it still costs.|||Gọi tên mỗi thiết kế đã sửa gì và vẫn tốn gì.",
+        "Back every claim with a measurement you have actually made.|||Mọi khẳng định nên có một phép đo bạn đã thật sự làm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview 4 — Trade-offs, not definitions\n\nAnswer in the answer panel (no code needed).\n\n1. Which answer to \"TCP vs UDP?\" sounds like experience?Câu trả lời nào cho \"TCP hay UDP?\" nghe như người có kinh nghiệm?\n2. What did HTTP/2 fix compared with HTTP/1.1?HTTP/2 đã sửa gì so với HTTP/1.1?\n3. Why does the handshake matter to a backend developer?Vì sao bắt tay lại quan trọng với lập trình viên backend?\n4. The interviewer says \"the site is down\". What is the strongest first move?Người phỏng vấn nói \"trang sập rồi\". Động tác đầu tiên mạnh nhất là gì?\n5. For a developer applying to backend roles, how does the course rate CCNA?Với một lập trình viên ứng tuyển backend, khoá học đánh giá CCNA thế nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview 4 — Trade-offs, not definitions — answer key\n\n1. Which answer to \"TCP vs UDP?\" sounds like experience?Câu trả lời nào cho \"TCP hay UDP?\" nghe như người có kinh nghiệm?\n   Answer: a) TCP pays a handshake for order; QUIC rebuilds that on UDP\n   A trade-off plus a consequence beats a dictionary entry: TCP pays a round trip and can head-of-line-block; UDP skips both and guarantees nothing, which is why QUIC rebuilds per-stream ordering on top of it.VI: Một đánh đổi kèm hệ quả thắng một mục từ điển: TCP trả một vòng khứ hồi và có thể nghẽn đầu hàng; UDP bỏ cả hai và không bảo đảm gì, nên QUIC dựng lại thứ tự theo từng luồng ở trên nó.\n\n2. What did HTTP/2 fix compared with HTTP/1.1?HTTP/2 đã sửa gì so với HTTP/1.1?\n   Answer: b) Many concurrent requests on one connection\n   HTTP/1.1 handles one request at a time per connection, so browsers opened about six. HTTP/2 multiplexes streams on one TCP connection — but a lost TCP packet still stalls all of them; HTTP/3 fixed that.VI: HTTP/1.1 xử lý mỗi lúc một request trên một kết nối, nên trình duyệt mở khoảng sáu kết nối. HTTP/2 ghép nhiều luồng trên một kết nối TCP — nhưng một gói TCP mất vẫn làm đứng tất cả; HTTP/3 mới sửa điều đó.\n\n3. Why does the handshake matter to a backend developer?Vì sao bắt tay lại quan trọng với lập trình viên backend?\n   Answer: a) A full round trip before any request\n   One RTT before the first byte, on every new connection — that is why pools and keep-alive exist, and why an RPC opening a fresh connection per call is slow from far away.VI: Một RTT trước byte đầu tiên, ở mỗi kết nối mới — đó là lý do có pool và keep-alive, và vì sao một RPC mở kết nối mới cho mỗi lần gọi lại chậm khi ở xa.\n\n4. The interviewer says \"the site is down\". What is the strongest first move?Người phỏng vấn nói \"trang sập rồi\". Động tác đầu tiên mạnh nhất là gì?\n   Answer: a) Ask who, where, since when — then measure\n   Restating the symptom precisely removes half the hypotheses; then each hypothesis gets the one command that confirms or kills it. Jumping to a cause looks lucky even when it is right.VI: Nói lại triệu chứng cho thật chính xác đã loại được nửa số giả thuyết; sau đó mỗi giả thuyết có một lệnh xác nhận hoặc bác bỏ nó. Nhảy ngay tới nguyên nhân trông như ăn may, kể cả khi đúng.\n\n5. For a developer applying to backend roles, how does the course rate CCNA?Với một lập trình viên ứng tuyển backend, khoá học đánh giá CCNA thế nào?\n   Answer: a) Useful knowledge, rarely required; measured projects say more\n   Lesson 12.3: certifications help for network/infra roles; for developers a project you can measure and explain (the Chapter 13 capstone) carries more weight in an interview.VI: Bài 12.3: chứng chỉ có ích cho vai trò mạng/hạ tầng; với lập trình viên, một dự án đo được và giải thích được (capstone Chương 13) có trọng lượng hơn trong phỏng vấn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> TCP pays a handshake for order; QUIC rebuilds that on UDP</p><p>A trade-off plus a consequence beats a dictionary entry: TCP pays a round trip and can head-of-line-block; UDP skips both and guarantees nothing, which is why QUIC rebuilds per-stream ordering on top of it.</p><p><i>VI: Một đánh đổi kèm hệ quả thắng một mục từ điển: TCP trả một vòng khứ hồi và có thể nghẽn đầu hàng; UDP bỏ cả hai và không bảo đảm gì, nên QUIC dựng lại thứ tự theo từng luồng ở trên nó.</i></p></li><li><p><b>b)</b> Many concurrent requests on one connection</p><p>HTTP/1.1 handles one request at a time per connection, so browsers opened about six. HTTP/2 multiplexes streams on one TCP connection — but a lost TCP packet still stalls all of them; HTTP/3 fixed that.</p><p><i>VI: HTTP/1.1 xử lý mỗi lúc một request trên một kết nối, nên trình duyệt mở khoảng sáu kết nối. HTTP/2 ghép nhiều luồng trên một kết nối TCP — nhưng một gói TCP mất vẫn làm đứng tất cả; HTTP/3 mới sửa điều đó.</i></p></li><li><p><b>a)</b> A full round trip before any request</p><p>One RTT before the first byte, on every new connection — that is why pools and keep-alive exist, and why an RPC opening a fresh connection per call is slow from far away.</p><p><i>VI: Một RTT trước byte đầu tiên, ở mỗi kết nối mới — đó là lý do có pool và keep-alive, và vì sao một RPC mở kết nối mới cho mỗi lần gọi lại chậm khi ở xa.</i></p></li><li><p><b>a)</b> Ask who, where, since when — then measure</p><p>Restating the symptom precisely removes half the hypotheses; then each hypothesis gets the one command that confirms or kills it. Jumping to a cause looks lucky even when it is right.</p><p><i>VI: Nói lại triệu chứng cho thật chính xác đã loại được nửa số giả thuyết; sau đó mỗi giả thuyết có một lệnh xác nhận hoặc bác bỏ nó. Nhảy ngay tới nguyên nhân trông như ăn may, kể cả khi đúng.</i></p></li><li><p><b>a)</b> Useful knowledge, rarely required; measured projects say more</p><p>Lesson 12.3: certifications help for network/infra roles; for developers a project you can measure and explain (the Chapter 13 capstone) carries more weight in an interview.</p><p><i>VI: Bài 12.3: chứng chỉ có ích cho vai trò mạng/hạ tầng; với lập trình viên, một dự án đo được và giải thích được (capstone Chương 13) có trọng lượng hơn trong phỏng vấn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which answer to \"TCP vs UDP?\" sounds like experience?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu trả lời nào cho \"TCP hay UDP?\" nghe như người có kinh nghiệm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "TCP pays a handshake for order; QUIC rebuilds that on UDP"
+              },
+              {
+                "ma": "b",
+                "noiDung": "TCP is for web pages, UDP is for games"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TCP is reliable and UDP is not"
+              },
+              {
+                "ma": "d",
+                "noiDung": "UDP is always faster than TCP"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A trade-off plus a consequence beats a dictionary entry: TCP pays a round trip and can head-of-line-block; UDP skips both and guarantees nothing, which is why QUIC rebuilds per-stream ordering on top of it.</p><p><i>VI: Một đánh đổi kèm hệ quả thắng một mục từ điển: TCP trả một vòng khứ hồi và có thể nghẽn đầu hàng; UDP bỏ cả hai và không bảo đảm gì, nên QUIC dựng lại thứ tự theo từng luồng ở trên nó.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What did HTTP/2 fix compared with HTTP/1.1?</p><p style=\"opacity:.75;font-size:.92em\"><i>HTTP/2 đã sửa gì so với HTTP/1.1?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DNS lookup time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Many concurrent requests on one connection"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TCP head-of-line blocking"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The TLS handshake round trip"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>HTTP/1.1 handles one request at a time per connection, so browsers opened about six. HTTP/2 multiplexes streams on one TCP connection — but a lost TCP packet still stalls all of them; HTTP/3 fixed that.</p><p><i>VI: HTTP/1.1 xử lý mỗi lúc một request trên một kết nối, nên trình duyệt mở khoảng sáu kết nối. HTTP/2 ghép nhiều luồng trên một kết nối TCP — nhưng một gói TCP mất vẫn làm đứng tất cả; HTTP/3 mới sửa điều đó.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does the handshake matter to a backend developer?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao bắt tay lại quan trọng với lập trình viên backend?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A full round trip before any request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It encrypts the request body"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is where the DNS name is resolved"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It chooses the HTTP version"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One RTT before the first byte, on every new connection — that is why pools and keep-alive exist, and why an RPC opening a fresh connection per call is slow from far away.</p><p><i>VI: Một RTT trước byte đầu tiên, ở mỗi kết nối mới — đó là lý do có pool và keep-alive, và vì sao một RPC mở kết nối mới cho mỗi lần gọi lại chậm khi ở xa.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The interviewer says \"the site is down\". What is the strongest first move?</p><p style=\"opacity:.75;font-size:.92em\"><i>Người phỏng vấn nói \"trang sập rồi\". Động tác đầu tiên mạnh nhất là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ask who, where, since when — then measure"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Say \"it is probably DNS\" straight away"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Suggest restarting all the servers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "List the seven layers of the OSI model"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Restating the symptom precisely removes half the hypotheses; then each hypothesis gets the one command that confirms or kills it. Jumping to a cause looks lucky even when it is right.</p><p><i>VI: Nói lại triệu chứng cho thật chính xác đã loại được nửa số giả thuyết; sau đó mỗi giả thuyết có một lệnh xác nhận hoặc bác bỏ nó. Nhảy ngay tới nguyên nhân trông như ăn may, kể cả khi đúng.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>For a developer applying to backend roles, how does the course rate CCNA?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với một lập trình viên ứng tuyển backend, khoá học đánh giá CCNA thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Useful knowledge, rarely required; measured projects say more"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Mandatory for every backend job"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only valid together with a cloud certificate"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Worthless for developers"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Lesson 12.3: certifications help for network/infra roles; for developers a project you can measure and explain (the Chapter 13 capstone) carries more weight in an interview.</p><p><i>VI: Bài 12.3: chứng chỉ có ích cho vai trò mạng/hạ tầng; với lập trình viên, một dự án đo được và giải thích được (capstone Chương 13) có trọng lượng hơn trong phỏng vấn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering with a definition when the question asks for a decision.|||Trả lời bằng định nghĩa trong khi câu hỏi đòi một quyết định."
+        },
+        {
+          "loi": "Saying \"newer HTTP is faster\" without saying why.|||Nói \"HTTP mới hơn thì nhanh hơn\" mà không nói vì sao."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi"
+        },
+        {
+          "en": "multiplexing",
+          "vi": "ghép kênh"
+        }
+      ]
+    }
+  ]
+}

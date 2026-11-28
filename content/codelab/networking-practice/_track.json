@@ -7,7 +7,7 @@
   "docsUrl": "https://hpbn.co/",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Networking for Developers (mạng máy tính cho lập trình viên, học từ số 0): mỗi bài học một bộ đề riêng từ dễ đến khó, đề tiếng Anh có bản tiếng Việt, dữ liệu lấy từ output CHẠY THẬT trong phòng lab Docker của khoá (curl -w, tcpdump, tshark -x, ip neigh, ss). Trắc nghiệm, sắp thứ tự, điền bảng để nắm khái niệm; bài khó là tự viết hàm từ gốc chạy thật trong trình duyệt — phân loại lỗi curl, tính thời gian từng chặng của một request, đếm byte UTF-8, đọc một frame Ethernet byte theo byte, mô phỏng switch học MAC, chọn socket nhận gói; Lab chương 1 mổ xẻ trọn một request của LabFlow ở hai phía router.",
+  "description": "Bộ luyện đi kèm khoá Networking for Developers (mạng máy tính cho lập trình viên, học từ số 0): mỗi bài học một bộ đề riêng từ dễ đến khó, đề tiếng Anh có bản tiếng Việt, dữ liệu lấy từ output CHẠY THẬT trong phòng lab Docker của khoá (curl -w, tcpdump, tshark -x, ip neigh, ss). Trắc nghiệm, sắp thứ tự, điền bảng để nắm khái niệm; bài khó là tự viết hàm từ gốc chạy thật trong trình duyệt — phân loại lỗi curl, tính thời gian từng chặng của một request, đếm byte UTF-8, đọc một frame Ethernet byte theo byte, mô phỏng switch học MAC, chọn socket nhận gói; Lab chương 1 mổ xẻ trọn một request của LabFlow ở hai phía router. Từ chương 4 tới 14 mỗi chương có một bộ luyện gắn bài Lab của chương (cũng từ output thật của lab): đọc một kết nối TCP và tính ngân sách cổng tạm, UDP/QUIC và Alt-Svc, chuỗi chứng chỉ và hạn dùng, khung HTTP/1.1 và IP thật sau proxy, khoá cache, bắt tay WebSocket (tự viết SHA-1), consistent hashing, đọc mtr và mã lỗi, khoanh vùng sự cố kiểu phỏng vấn, báo cáo sự cố, luật tường lửa của mạng trường và CGNAT.",
   "modules": [
     {
       "slug": "netdev-0-8-bat-dau-tai-day",
@@ -140,6 +140,72 @@
       "name": "Lab 3 — LabFlow’s DNS: audit, a server move and two incidents",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 3 — LabFlow's DNS: the toolkit behind the report"
+    },
+    {
+      "slug": "netdev-4-6-lab-tcp-labflow",
+      "name": "Lab 4 — Practice: reading and fixing TCP",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: TCP 1 — Label every packet of one real connection · TCP 2 — Write tcpSummary(text, client): read a capture like an engineer · TCP 3 — Write portBudget(range, timeWaitSec, rate): when does the batch job die? · TCP 4 — The Lab 4 incidents, read from real numbers"
+    },
+    {
+      "slug": "netdev-5-4-lab-udp-quic",
+      "name": "Lab 5 — Practice: UDP, QUIC and HTTP/3",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: UDP 1 — Send and forget, and what QUIC adds back · UDP 2 — TCP or UDP? Decide like Lab 5 did · UDP 3 — Write parseAltSvc(header): how a browser discovers HTTP/3 · UDP 4 — Write latestOnly(sent, arrivals): the receiver that UDP needs"
+    },
+    {
+      "slug": "netdev-6-5-lab-tls-labflow",
+      "name": "Lab 6 — Practice: certificates, chains and TLS errors",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: TLS 1 — Five real curl errors: cause and fix · TLS 2 — The TLS 1.3 handshake, in order · TLS 3 — Write chainCheck(text, trustedRoots): does the chain reach a root? · TLS 4 — Write certStatus(text, now, minDays): the expiry alarm · TLS 5 — What HTTPS hides, what it does not, and the shortcuts that hurt"
+    },
+    {
+      "slug": "netdev-7-6-lab-http-labflow",
+      "name": "Lab 7 — Practice: HTTP framing, headers and the real client IP",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: HTTP 1 — Write parseHttp(raw): read HTTP/1.1 off the wire · HTTP 2 — Which header changes which behaviour? · HTTP 3 — HTTP/2 and HTTP/3 on the wire · HTTP 4 — Write clientIp(xff, remoteAddr, trustedHops): fix the 429 bug"
+    },
+    {
+      "slug": "netdev-8-5-lab-cdn-labflow",
+      "name": "Lab 8 — Practice: cache keys, TTL and CDN limits",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: CDN 1 — Write edgeCache(requests, ttl, ignoreQuery): MISS, HIT, EXPIRED · CDN 2 — Read Cache-Control like the edge does · CDN 3 — The swallowed header, the timeout wall and the upload cap"
+    },
+    {
+      "slug": "netdev-9-5-lab-realtime-labflow",
+      "name": "Lab 9 — Practice: WebSocket handshake, backoff and realtime choices",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Realtime 1 — Write wsAccept(key): the WebSocket handshake by hand · Realtime 2 — Write backoffSchedule(baseMs, capMs, jitters): reconnect without a stampede · Realtime 3 — Polling, SSE, WebSocket or WebRTC? · Realtime 4 — Keeping long-lived connections alive at scale"
+    },
+    {
+      "slug": "netdev-10-5-lab-lb-labflow",
+      "name": "Lab 10 — Practice: consistent hashing, gateway codes and proxies",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: LB 1 — Write ringAssign(nodes, keys, vnodes): consistent hashing · LB 2 — Read the gateway code, name the broken side · LB 3 — L4 or L7, reverse or forward, and the retry trap · LB 4 — Take one backend out without dropping a request"
+    },
+    {
+      "slug": "netdev-11-5-lab-chan-doan",
+      "name": "Lab 11 — Practice: reading mtr, error codes and the layered checklist",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Diag 1 — Write mtrVerdict(report): real loss or a busy router? · Diag 2 — Write errorLayer(line): a log line names a layer · Diag 3 — The layered checklist, in order · Diag 4 — Pick the tool, read the number"
+    },
+    {
+      "slug": "netdev-12-2-tinh-huong",
+      "name": "12.2 Practice: classic questions and scenario rounds",
+      "level": "BEGINNER",
+      "description": "Luyện: Interview 1 — \"Type a URL and press Enter\", in the right order · Interview 2 — Scenario rounds: symptom → first measurement → layer · Interview 3 — Write localise(samples, slowServerMs): path or origin? · Interview 4 — Trade-offs, not definitions"
+    },
+    {
+      "slug": "netdev-13-4-co-y-lam-hong",
+      "name": "13.4 Practice: measure, optimise, break and report",
+      "level": "BEGINNER",
+      "description": "Luyện: Capstone 1 — What did each optimisation buy, in numbers? · Capstone 2 — Write incidentLayer(evidence): let the failing layer name itself · Capstone 3 — An incident report that prevents the next one · Capstone 4 — More failures to reason about"
+    },
+    {
+      "slug": "netdev-14-7-lab-mang-thuc-chien",
+      "name": "Lab 14 — Practice: school firewalls, CGNAT, TTL and safe tunnels",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Real-world 1 — Write firstMatch(rules, packet): which school rule blocked you? · Real-world 2 — Write homeReach(wanIp, seenIp): will a port forward ever work? · Real-world 3 — The TTL rule that spots a hotspot · Real-world 4 — Wi-Fi, SSH, VPN and the attacker's corners"
     }
   ]
 }

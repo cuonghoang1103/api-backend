@@ -1,0 +1,658 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-9-5-lab-realtime-labflow",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-9-5-lab-realtime-labflow"
+  },
+  "exercises": [
+    {
+      "title": "Realtime 1 — Write wsAccept(key): the WebSocket handshake by hand",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 40,
+      "points": 40,
+      "concepts": [
+        "WebSocket handshake",
+        "SHA-1",
+        "base64"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>A WebSocket starts as an HTTP request with <code>Upgrade: websocket</code> and a random <code>Sec-WebSocket-Key</code>. The server proves it understood by answering <code>101 Switching Protocols</code> with <code>Sec-WebSocket-Accept</code> = base64( SHA-1( key + \"258EAFA5-E914-47DA-95CA-C5AB0DC85B11\" ) ). Lab 9 sent the RFC's own sample key and got, for real:</p><pre>HTTP/1.1 101 Switching Protocols\nUpgrade: websocket\nConnection: Upgrade\nSec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=</pre><p>Write <code>wsAccept(key)</code> returning that string. The grader runs in a sandbox with <b>no</b> <code>crypto</code>, <code>Buffer</code> or <code>btoa</code>: implement SHA-1 (FIPS 180-4: pad with 0x80, zeros, the 64-bit bit length; 80 rounds per 64-byte block) and base64 yourself. The key is ASCII.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>WebSocket bắt đầu là một request HTTP có <code>Upgrade: websocket</code> và một <code>Sec-WebSocket-Key</code> ngẫu nhiên. Server chứng minh nó hiểu bằng cách trả <code>101 Switching Protocols</code> kèm <code>Sec-WebSocket-Accept</code> = base64( SHA-1( key + \"258EAFA5-E914-47DA-95CA-C5AB0DC85B11\" ) ). Lab 9 gửi đúng khoá mẫu của RFC và nhận được, thật:</p><pre>HTTP/1.1 101 Switching Protocols\nUpgrade: websocket\nConnection: Upgrade\nSec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=</pre><p>Viết <code>wsAccept(key)</code> trả về chuỗi đó. Máy chấm chạy trong hộp cát <b>không có</b> <code>crypto</code>, <code>Buffer</code> hay <code>btoa</code>: tự cài SHA-1 (FIPS 180-4: đệm 0x80, các số 0, độ dài 64 bit tính theo bit; 80 vòng cho mỗi khối 64 byte) và base64. Khoá là ASCII.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "wsAccept(\"dGhlIHNhbXBsZSBub25jZQ==\")",
+          "output": "\"s3pPLMBiTxaQ9kYGzzhZRbK+xOo=\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write sha1(bytes) returning 20 bytes, then base64(bytes); test SHA-1 on \"abc\" = a9993e36…|||Viết sha1(bytes) trả 20 byte, rồi base64(bytes); thử SHA-1 với \"abc\" = a9993e36…",
+        "Keep every 32-bit sum with | 0 and rotate with (x << n) | (x >>> (32 - n)).|||Giữ mọi tổng 32 bit bằng | 0 và xoay bằng (x << n) | (x >>> (32 - n)).",
+        "20 bytes is not a multiple of 3, so base64 ends with exactly one \"=\".|||20 byte không chia hết cho 3, nên base64 kết thúc bằng đúng một dấu \"=\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function wsAccept(key) {\n  // SHA-1 then base64 — no crypto, no Buffer, no btoa in the sandbox\n  return \"\";\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function wsAccept(key) {\n  var s = String(key) + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'; // the fixed GUID from RFC 6455\n  var bytes = [];\n  for (var i = 0; i < s.length; i++) bytes.push(s.charCodeAt(i) & 255); // the key is ASCII (base64)\n  // ── SHA-1 (FIPS 180-4) ──\n  var ml = bytes.length * 8;\n  bytes.push(0x80);\n  while (bytes.length % 64 !== 56) bytes.push(0);\n  for (var b = 7; b >= 0; b--) bytes.push(b >= 4 ? 0 : (ml >>> (b * 8)) & 255); // 64-bit big-endian length (fits in 32 bits here)\n  var h0 = 0x67452301, h1 = 0xEFCDAB89, h2 = 0x98BADCFE, h3 = 0x10325476, h4 = 0xC3D2E1F0;\n  var rotl = function (x, n) { return (x << n) | (x >>> (32 - n)); };\n  for (var off = 0; off < bytes.length; off += 64) {\n    var w = [];\n    for (var t = 0; t < 16; t++) w[t] = (bytes[off + 4 * t] << 24) | (bytes[off + 4 * t + 1] << 16) | (bytes[off + 4 * t + 2] << 8) | bytes[off + 4 * t + 3];\n    for (t = 16; t < 80; t++) w[t] = rotl(w[t - 3] ^ w[t - 8] ^ w[t - 14] ^ w[t - 16], 1);\n    var a = h0, bb = h1, c = h2, d = h3, e = h4;\n    for (t = 0; t < 80; t++) {\n      var f, k;\n      if (t < 20) { f = (bb & c) | (~bb & d); k = 0x5A827999; }\n      else if (t < 40) { f = bb ^ c ^ d; k = 0x6ED9EBA1; }\n      else if (t < 60) { f = (bb & c) | (bb & d) | (c & d); k = 0x8F1BBCDC; }\n      else { f = bb ^ c ^ d; k = 0xCA62C1D6; }\n      var tmp = (rotl(a, 5) + f + e + k + w[t]) | 0;\n      e = d; d = c; c = rotl(bb, 30); bb = a; a = tmp;\n    }\n    h0 = (h0 + a) | 0; h1 = (h1 + bb) | 0; h2 = (h2 + c) | 0; h3 = (h3 + d) | 0; h4 = (h4 + e) | 0;\n  }\n  var digest = [];\n  [h0, h1, h2, h3, h4].forEach(function (h) { digest.push((h >>> 24) & 255, (h >>> 16) & 255, (h >>> 8) & 255, h & 255); });\n  // ── base64 of the 20 raw bytes ──\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/', out = '';\n  for (var j = 0; j < digest.length; j += 3) {\n    var n = (digest[j] << 16) | ((digest[j + 1] || 0) << 8) | (digest[j + 2] || 0);\n    out += A[(n >>> 18) & 63] + A[(n >>> 12) & 63] + (j + 1 < digest.length ? A[(n >>> 6) & 63] : '=') + (j + 2 < digest.length ? A[n & 63] : '=');\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The accept value is not security; it proves the server speaks WebSocket and was not a confused HTTP cache replaying an old response. After the 101, the same TCP connection carries WebSocket frames instead of HTTP — which is why proxies must be configured to pass the Upgrade through.</p>",
+      "solutionExplanationHtmlVi": "<p>Giá trị accept không phải biện pháp an ninh; nó chứng minh server nói được WebSocket chứ không phải một cache HTTP lú lẫn đang phát lại phản hồi cũ. Sau mã 101, cùng kết nối TCP đó chở frame WebSocket thay cho HTTP — vì thế proxy phải được cấu hình cho Upgrade đi qua.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: the RFC 6455 sample key, as answered by the real lab server",
+              "vi": "Ca 1: khoá mẫu của RFC 6455, đúng như server lab thật trả lời"
+            },
+            "goi": "wsAccept(\"dGhlIHNhbXBsZSBub25jZQ==\")",
+            "mongDoi": "s3pPLMBiTxaQ9kYGzzhZRbK+xOo="
+          },
+          {
+            "moTa": {
+              "en": "Case 2: wsAccept(\"x3JJHMbDL1EzLkh9GBhXDw==\")",
+              "vi": "Ca 2"
+            },
+            "goi": "wsAccept(\"x3JJHMbDL1EzLkh9GBhXDw==\")",
+            "mongDoi": "HSmrc0sMlYUkAGmm5OPpG2HaGWk="
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "wsAccept(\"AQIDBAUGBwgJCgsMDQ4PEA==\")",
+            "mongDoi": "C/0nmHhBztSRGR1CwL6Tf4ZjwpY=",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "wsAccept(\"LabFlowBoard0000000000==\")",
+            "mongDoi": "EwKQbvD7lqymydL3Too//xhGWBs=",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "wsAccept(\"\")",
+            "mongDoi": "Kfh9QIsMVZcl6xEPYxPHzW8SZ8w=",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Base64-encoding the HEX string of the digest instead of the 20 raw bytes.|||Mã base64 chuỗi HEX của digest thay vì 20 byte thô."
+        },
+        {
+          "loi": "Decoding the client key from base64 first — the key is used as the literal ASCII text.|||Giải mã base64 khoá của client trước — khoá được dùng nguyên văn dạng chữ ASCII."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Realtime 2 — Write backoffSchedule(baseMs, capMs, jitters): reconnect without a stampede",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "exponential backoff",
+        "jitter"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>When a server restarts, every client reconnects. Lab 9's real schedule (base 1 s, doubling, cap 30 s, plus random jitter):</p><pre>try  base(ms)  +jitter(ms)  wait(ms)\n1    1000      174          1174\n2    2000      311          2311\n3    4000      1097         5097\n4    8000      1676         9676\n5    16000     3614         19614\n6    30000     6204         36204\n7    30000     4690         34690\n8    30000     1366         31366\n(10,000 clients reconnecting at once = 10,000 connections in one millisecond; backoff + jitter spreads them out)</pre><p>Write <code>backoffSchedule(baseMs, capMs, jitters)</code>: for attempt i (1, 2, 3…), <code>base</code> = min(capMs, baseMs × 2<sup>i−1</sup>) and <code>wait</code> = base + jitters[i−1]. Return one <code>{ attempt, base, wait }</code> per jitter value. The jitter is given so the result is deterministic.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi server khởi động lại, mọi client đều nối lại. Lịch thật của Lab 9 (gốc 1 giây, gấp đôi, trần 30 giây, cộng nhiễu ngẫu nhiên):</p><pre>try  base(ms)  +jitter(ms)  wait(ms)\n1    1000      174          1174\n2    2000      311          2311\n3    4000      1097         5097\n4    8000      1676         9676\n5    16000     3614         19614\n6    30000     6204         36204\n7    30000     4690         34690\n8    30000     1366         31366\n(10,000 clients reconnecting at once = 10,000 connections in one millisecond; backoff + jitter spreads them out)</pre><p>Viết <code>backoffSchedule(baseMs, capMs, jitters)</code>: với lần thử i (1, 2, 3…), <code>base</code> = min(capMs, baseMs × 2<sup>i−1</sup>) và <code>wait</code> = base + jitters[i−1]. Trả một <code>{ attempt, base, wait }</code> cho mỗi giá trị nhiễu. Nhiễu được cho sẵn để kết quả xác định.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "backoffSchedule(1000, 30000, [174,311,1097,1676,3614,6204,4690,1366])",
+          "output": "[{\"attempt\":1,\"base\":1000,\"wait\":1174},{\"attempt\":2,\"base\":2000,\"wait\":2311},{\"attempt\":3,\"base\":4000,\"wait\":5097},{\"attempt\":4,\"base\":8000,\"wait\":9676},{\"attempt\":5,\"base\":16000,\"wait\":19614},{\"attempt\":6,\"base\":30000,\"wait\":36204},{\"attempt\":7,\"base\":30000,\"wait\":34690},{\"attempt\":8,\"base\":30000,\"wait\":31366}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Math.pow(2, i) with i starting at 0 gives 1, 2, 4, 8…|||Math.pow(2, i) với i bắt đầu từ 0 cho 1, 2, 4, 8…",
+        "Apply the cap to the base BEFORE adding the jitter.|||Áp trần cho base TRƯỚC khi cộng nhiễu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function backoffSchedule(baseMs, capMs, jitters) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function backoffSchedule(baseMs, capMs, jitters) {\n  return jitters.map(function (j, i) {\n    var base = Math.min(capMs, baseMs * Math.pow(2, i)); // 1 s, 2 s, 4 s… capped\n    return { attempt: i + 1, base: base, wait: base + j };\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Exponential backoff spreads retries over time; jitter spreads them across clients. Without the second, every client that disconnected together comes back together and knocks the freshly started server over again — a thundering herd.</p>",
+      "solutionExplanationHtmlVi": "<p>Lùi theo hàm mũ trải các lần thử theo thời gian; nhiễu trải chúng ra giữa các client. Thiếu thứ hai, mọi client rớt cùng lúc sẽ quay lại cùng lúc và đánh sập luôn server vừa khởi động — hiện tượng bầy đàn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: the real jitters of Lab 9",
+              "vi": "Ca 1: các giá trị nhiễu thật của Lab 9"
+            },
+            "goi": "backoffSchedule(1000, 30000, [174,311,1097,1676,3614,6204,4690,1366])",
+            "mongDoi": [
+              {
+                "attempt": 1,
+                "base": 1000,
+                "wait": 1174
+              },
+              {
+                "attempt": 2,
+                "base": 2000,
+                "wait": 2311
+              },
+              {
+                "attempt": 3,
+                "base": 4000,
+                "wait": 5097
+              },
+              {
+                "attempt": 4,
+                "base": 8000,
+                "wait": 9676
+              },
+              {
+                "attempt": 5,
+                "base": 16000,
+                "wait": 19614
+              },
+              {
+                "attempt": 6,
+                "base": 30000,
+                "wait": 36204
+              },
+              {
+                "attempt": 7,
+                "base": 30000,
+                "wait": 34690
+              },
+              {
+                "attempt": 8,
+                "base": 30000,
+                "wait": 31366
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: backoffSchedule(500, 4000, [0,0,0,0,0])",
+              "vi": "Ca 2"
+            },
+            "goi": "backoffSchedule(500, 4000, [0,0,0,0,0])",
+            "mongDoi": [
+              {
+                "attempt": 1,
+                "base": 500,
+                "wait": 500
+              },
+              {
+                "attempt": 2,
+                "base": 1000,
+                "wait": 1000
+              },
+              {
+                "attempt": 3,
+                "base": 2000,
+                "wait": 2000
+              },
+              {
+                "attempt": 4,
+                "base": 4000,
+                "wait": 4000
+              },
+              {
+                "attempt": 5,
+                "base": 4000,
+                "wait": 4000
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "backoffSchedule(250, 1000, [10,20,30,40])",
+            "mongDoi": [
+              {
+                "attempt": 1,
+                "base": 250,
+                "wait": 260
+              },
+              {
+                "attempt": 2,
+                "base": 500,
+                "wait": 520
+              },
+              {
+                "attempt": 3,
+                "base": 1000,
+                "wait": 1030
+              },
+              {
+                "attempt": 4,
+                "base": 1000,
+                "wait": 1040
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "backoffSchedule(1000, 30000, [])",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Capping the final wait, which removes the jitter at the top and re-synchronises clients.|||Áp trần lên thời gian chờ cuối, làm mất nhiễu ở mức trần và khiến client đồng bộ trở lại."
+        },
+        {
+          "loi": "No jitter at all: 10,000 clients reconnect in the same millisecond after every restart.|||Không có nhiễu: 10.000 client nối lại trong cùng một mili giây sau mỗi lần khởi động lại."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Realtime 3 — Polling, SSE, WebSocket or WebRTC?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "realtime transports"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lesson 9.1's rule: one-way server→client fits Server-Sent Events, genuinely two-way fits a WebSocket, peer-to-peer media is WebRTC, and rare, non-urgent changes are fine with plain polling. Real SSE response headers from the lab:<pre>content-type: text/event-stream\ncache-control: no-cache\nx-accel-buffering: no</pre></p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quy tắc của bài 9.1: một chiều server→client hợp với Server-Sent Events, hai chiều thật sự hợp với WebSocket, media ngang hàng là WebRTC, còn thay đổi hiếm và không gấp thì polling thường là đủ. Header SSE thật từ lab:<pre>content-type: text/event-stream\ncache-control: no-cache\nx-accel-buffering: no</pre></p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: who talks — server only, or both sides?",
+        "An open connection costs a file descriptor and memory for every user, all day."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Realtime 3 — Polling, SSE, WebSocket or WebRTC?\n\nAnswer in the answer panel (no code needed).\n\n1. Pick the mechanismChọn cơ chế\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Realtime 3 — Polling, SSE, WebSocket or WebRTC? — answer key\n\n1. Pick the mechanismChọn cơ chế\n   - r1.m: SSE\n   - r2.m: SSE\n   - r3.m: WebSocket\n   - r4.m: WebRTC\n   - r5.m: polling\n   SSE is plain HTTP, reconnects by itself (retry:) and passes proxies — as long as buffering is off (X-Accel-Buffering: no). The whiteboard sends as much as it receives, so it needs a WebSocket. Media between two peers goes over WebRTC; your part is the signalling. An hourly figure does not justify a connection held open all day.VI: SSE là HTTP thường, tự nối lại (retry:) và đi qua proxy được — miễn là tắt đệm (X-Accel-Buffering: no). Bảng vẽ chung gửi đi nhiều như nhận về, nên cần WebSocket. Media giữa hai bên đi qua WebRTC; phần của bạn là signalling. Một con số đổi mỗi giờ không đáng để giữ một kết nối mở cả ngày.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SSE is plain HTTP, reconnects by itself (retry:) and passes proxies — as long as buffering is off (X-Accel-Buffering: no). The whiteboard sends as much as it receives, so it needs a WebSocket. Media between two peers goes over WebRTC; your part is the signalling. An hourly figure does not justify a connection held open all day.</p><p><i>VI: SSE là HTTP thường, tự nối lại (retry:) và đi qua proxy được — miễn là tắt đệm (X-Accel-Buffering: no). Bảng vẽ chung gửi đi nhiều như nhận về, nên cần WebSocket. Media giữa hai bên đi qua WebRTC; phần của bạn là signalling. Một con số đổi mỗi giờ không đáng để giữ một kết nối mở cả ngày.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Pick the mechanism</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn cơ chế</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Feature"
+              },
+              {
+                "ma": "m",
+                "ten": "Mechanism",
+                "luaChon": [
+                  "polling",
+                  "SSE",
+                  "WebSocket",
+                  "WebRTC"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "Live build log streamed to the browser"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "Notification badge for new comments"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "A shared whiteboard where everyone draws at once"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "f": "Video call between two students"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "f": "A dashboard figure that changes once an hour"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.m": "SSE",
+              "r2.m": "SSE",
+              "r3.m": "WebSocket",
+              "r4.m": "WebRTC",
+              "r5.m": "polling"
+            },
+            "giaiThich": "<p>SSE is plain HTTP, reconnects by itself (retry:) and passes proxies — as long as buffering is off (X-Accel-Buffering: no). The whiteboard sends as much as it receives, so it needs a WebSocket. Media between two peers goes over WebRTC; your part is the signalling. An hourly figure does not justify a connection held open all day.</p><p><i>VI: SSE là HTTP thường, tự nối lại (retry:) và đi qua proxy được — miễn là tắt đệm (X-Accel-Buffering: no). Bảng vẽ chung gửi đi nhiều như nhận về, nên cần WebSocket. Media giữa hai bên đi qua WebRTC; phần của bạn là signalling. Một con số đổi mỗi giờ không đáng để giữ một kết nối mở cả ngày.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing a WebSocket for a one-way notification stream."
+        },
+        {
+          "loi": "Forgetting X-Accel-Buffering: no, so nginx holds SSE events until its buffer fills."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Server-Sent Events",
+          "vi": "sự kiện do server đẩy"
+        },
+        {
+          "en": "signalling",
+          "vi": "kênh báo hiệu"
+        }
+      ]
+    },
+    {
+      "title": "Realtime 4 — Keeping long-lived connections alive at scale",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "scaling WebSockets",
+        "NAT traversal"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lessons 9.2–9.4: heartbeats, file descriptors, deploys and NAT traversal.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 9.2–9.4: nhịp tim, file descriptor, deploy và xuyên NAT.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Long-lived connections fail silently; heartbeats make the failure visible.|||Kết nối sống lâu hỏng trong im lặng; nhịp tim làm lỗi hiện ra.",
+        "Scale-out needs instances to share messages, not just users to stick.|||Mở rộng cần các instance chia sẻ tin nhắn, không chỉ người dùng bám một chỗ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Realtime 4 — Keeping long-lived connections alive at scale\n\nAnswer in the answer panel (no code needed).\n\n1. A WebSocket works for a few minutes on the office network, then silently freezes. Most likely cause?Một WebSocket chạy được vài phút trên mạng văn phòng rồi lặng lẽ đứng hình. Nguyên nhân nhiều khả năng nhất?\n2. Why does each instance need a high file-descriptor limit (ulimit -n)?Vì sao mỗi instance cần trần file descriptor (ulimit -n) cao?\n3. Users on instance A must receive messages published on instance B. What is the usual fix?Người dùng trên instance A phải nhận tin được đăng trên instance B. Cách sửa thường dùng là gì?\n4. How do you deploy a new version without cutting every live connection at once?Làm sao deploy bản mới mà không cắt mọi kết nối đang sống cùng lúc?\n5. In a WebRTC call, when is a TURN server needed?Trong cuộc gọi WebRTC, khi nào cần tới server TURN?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Realtime 4 — Keeping long-lived connections alive at scale — answer key\n\n1. A WebSocket works for a few minutes on the office network, then silently freezes. Most likely cause?Một WebSocket chạy được vài phút trên mạng văn phòng rồi lặng lẽ đứng hình. Nguyên nhân nhiều khả năng nhất?\n   Answer: a) A NAT or proxy dropped the idle connection; add ping/pong heartbeats\n   Middleboxes forget idle flows without telling either side. Application-level ping/pong frames every 20–30 s keep the entry alive and detect a dead link quickly.VI: Thiết bị trung gian quên luồng nhàn rỗi mà không báo bên nào. Frame ping/pong ở tầng ứng dụng mỗi 20–30 giây giữ mục đó sống và phát hiện đường chết nhanh.\n\n2. Why does each instance need a high file-descriptor limit (ulimit -n)?Vì sao mỗi instance cần trần file descriptor (ulimit -n) cao?\n   Answer: b) Every open connection is one socket, and each socket is one descriptor\n   Five SSE clients were five ESTABLISHED sockets in the lab. 50,000 users is 50,000 descriptors on that box, plus whatever the process already uses.VI: Năm client SSE là năm socket ESTABLISHED trong lab. 50.000 người dùng là 50.000 descriptor trên máy đó, cộng những gì tiến trình đã dùng sẵn.\n\n3. Users on instance A must receive messages published on instance B. What is the usual fix?Người dùng trên instance A phải nhận tin được đăng trên instance B. Cách sửa thường dùng là gì?\n   Answer: d) A shared pub/sub broker such as Redis\n   Sticky sessions keep a user on one instance but do not connect instances to each other. A broker fans every message out to all instances, each delivering to its own sockets.VI: Sticky session giữ một người trên một instance nhưng không nối các instance với nhau. Một broker phát mỗi tin tới mọi instance, mỗi instance giao cho các socket của riêng nó.\n\n4. How do you deploy a new version without cutting every live connection at once?Làm sao deploy bản mới mà không cắt mọi kết nối đang sống cùng lúc?\n   Answer: c) Drain and roll instances one at a time\n   Stop sending new connections to an instance, let its clients finish, restart it, then the next one. A rolling, draining deploy turns an outage into a brief reconnect, and backoff with jitter keeps the reconnect wave from overwhelming the new instances.VI: Ngừng đưa kết nối mới vào một instance, để client của nó xong việc, khởi động lại nó, rồi tới instance kế. Deploy cuốn chiếu có xả bớt biến một sự cố thành một lần nối lại ngắn, và lùi dần có nhiễu giữ cho làn sóng nối lại không đè bẹp instance mới.\n\n5. In a WebRTC call, when is a TURN server needed?Trong cuộc gọi WebRTC, khi nào cần tới server TURN?\n   Answer: a) When no direct path works, e.g. behind a symmetric NAT\n   STUN tells each peer its public mapping; ICE tries the candidates; TURN relays the media when nothing direct connects. The SDP exchange is the signalling you build yourself, usually over a WebSocket.VI: STUN cho mỗi bên biết ánh xạ công cộng của nó; ICE thử các ứng viên; TURN chuyển tiếp media khi không đường trực tiếp nào nối được. Trao đổi SDP là phần signalling bạn tự dựng, thường qua WebSocket.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> A NAT or proxy dropped the idle connection; add ping/pong heartbeats</p><p>Middleboxes forget idle flows without telling either side. Application-level ping/pong frames every 20–30 s keep the entry alive and detect a dead link quickly.</p><p><i>VI: Thiết bị trung gian quên luồng nhàn rỗi mà không báo bên nào. Frame ping/pong ở tầng ứng dụng mỗi 20–30 giây giữ mục đó sống và phát hiện đường chết nhanh.</i></p></li><li><p><b>b)</b> Every open connection is one socket, and each socket is one descriptor</p><p>Five SSE clients were five ESTABLISHED sockets in the lab. 50,000 users is 50,000 descriptors on that box, plus whatever the process already uses.</p><p><i>VI: Năm client SSE là năm socket ESTABLISHED trong lab. 50.000 người dùng là 50.000 descriptor trên máy đó, cộng những gì tiến trình đã dùng sẵn.</i></p></li><li><p><b>d)</b> A shared pub/sub broker such as Redis</p><p>Sticky sessions keep a user on one instance but do not connect instances to each other. A broker fans every message out to all instances, each delivering to its own sockets.</p><p><i>VI: Sticky session giữ một người trên một instance nhưng không nối các instance với nhau. Một broker phát mỗi tin tới mọi instance, mỗi instance giao cho các socket của riêng nó.</i></p></li><li><p><b>c)</b> Drain and roll instances one at a time</p><p>Stop sending new connections to an instance, let its clients finish, restart it, then the next one. A rolling, draining deploy turns an outage into a brief reconnect, and backoff with jitter keeps the reconnect wave from overwhelming the new instances.</p><p><i>VI: Ngừng đưa kết nối mới vào một instance, để client của nó xong việc, khởi động lại nó, rồi tới instance kế. Deploy cuốn chiếu có xả bớt biến một sự cố thành một lần nối lại ngắn, và lùi dần có nhiễu giữ cho làn sóng nối lại không đè bẹp instance mới.</i></p></li><li><p><b>a)</b> When no direct path works, e.g. behind a symmetric NAT</p><p>STUN tells each peer its public mapping; ICE tries the candidates; TURN relays the media when nothing direct connects. The SDP exchange is the signalling you build yourself, usually over a WebSocket.</p><p><i>VI: STUN cho mỗi bên biết ánh xạ công cộng của nó; ICE thử các ứng viên; TURN chuyển tiếp media khi không đường trực tiếp nào nối được. Trao đổi SDP là phần signalling bạn tự dựng, thường qua WebSocket.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A WebSocket works for a few minutes on the office network, then silently freezes. Most likely cause?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một WebSocket chạy được vài phút trên mạng văn phòng rồi lặng lẽ đứng hình. Nguyên nhân nhiều khả năng nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A NAT or proxy dropped the idle connection; add ping/pong heartbeats"
+              },
+              {
+                "ma": "b",
+                "noiDung": "TLS keys expire after five minutes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The server ran out of CPU"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The browser limits WebSockets to five minutes"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Middleboxes forget idle flows without telling either side. Application-level ping/pong frames every 20–30 s keep the entry alive and detect a dead link quickly.</p><p><i>VI: Thiết bị trung gian quên luồng nhàn rỗi mà không báo bên nào. Frame ping/pong ở tầng ứng dụng mỗi 20–30 giây giữ mục đó sống và phát hiện đường chết nhanh.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why does each instance need a high file-descriptor limit (ulimit -n)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao mỗi instance cần trần file descriptor (ulimit -n) cao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "WebSocket frames are written to temporary files"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Every open connection is one socket, and each socket is one descriptor"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TLS needs one descriptor per certificate"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The kernel opens a log file per user"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Five SSE clients were five ESTABLISHED sockets in the lab. 50,000 users is 50,000 descriptors on that box, plus whatever the process already uses.</p><p><i>VI: Năm client SSE là năm socket ESTABLISHED trong lab. 50.000 người dùng là 50.000 descriptor trên máy đó, cộng những gì tiến trình đã dùng sẵn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Users on instance A must receive messages published on instance B. What is the usual fix?</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng trên instance A phải nhận tin được đăng trên instance B. Cách sửa thường dùng là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Polling the database every 100 ms"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Sticky sessions on the balancer alone"
+              },
+              {
+                "ma": "c",
+                "noiDung": "One giant instance for everybody"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A shared pub/sub broker such as Redis"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Sticky sessions keep a user on one instance but do not connect instances to each other. A broker fans every message out to all instances, each delivering to its own sockets.</p><p><i>VI: Sticky session giữ một người trên một instance nhưng không nối các instance với nhau. Một broker phát mỗi tin tới mọi instance, mỗi instance giao cho các socket của riêng nó.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How do you deploy a new version without cutting every live connection at once?</p><p style=\"opacity:.75;font-size:.92em\"><i>Làm sao deploy bản mới mà không cắt mọi kết nối đang sống cùng lúc?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Restart every instance at the same moment"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Raise the heartbeat interval during deploys"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Drain and roll instances one at a time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Disable WebSockets for the whole deploy"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Stop sending new connections to an instance, let its clients finish, restart it, then the next one. A rolling, draining deploy turns an outage into a brief reconnect, and backoff with jitter keeps the reconnect wave from overwhelming the new instances.</p><p><i>VI: Ngừng đưa kết nối mới vào một instance, để client của nó xong việc, khởi động lại nó, rồi tới instance kế. Deploy cuốn chiếu có xả bớt biến một sự cố thành một lần nối lại ngắn, và lùi dần có nhiễu giữ cho làn sóng nối lại không đè bẹp instance mới.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>In a WebRTC call, when is a TURN server needed?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong cuộc gọi WebRTC, khi nào cần tới server TURN?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "When no direct path works, e.g. behind a symmetric NAT"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only to find the public IP address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To exchange the SDP offer and answer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Always, to encrypt the media"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>STUN tells each peer its public mapping; ICE tries the candidates; TURN relays the media when nothing direct connects. The SDP exchange is the signalling you build yourself, usually over a WebSocket.</p><p><i>VI: STUN cho mỗi bên biết ánh xạ công cộng của nó; ICE thử các ứng viên; TURN chuyển tiếp media khi không đường trực tiếp nào nối được. Trao đổi SDP là phần signalling bạn tự dựng, thường qua WebSocket.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Relying on TCP keepalive defaults (two hours) to detect a dead WebSocket.|||Dựa vào mặc định TCP keepalive (hai giờ) để phát hiện WebSocket chết."
+        },
+        {
+          "loi": "Thinking sticky sessions solve cross-instance broadcast.|||Tưởng sticky session giải được phát tin giữa các instance."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "heartbeat",
+          "vi": "nhịp tim"
+        },
+        {
+          "en": "drain",
+          "vi": "xả kết nối trước khi tắt"
+        },
+        {
+          "en": "TURN",
+          "vi": "máy chủ chuyển tiếp media"
+        }
+      ]
+    }
+  ]
+}

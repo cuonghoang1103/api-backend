@@ -70,7 +70,7 @@
     {"chu":"濃い","doc":"こい","nghia":"đậm vị","loai":"adj","cap":"N2","nhom":"Mùi vị & độ chín","viDu":"味が少し濃い。","viDuNghia":"Vị hơi đậm."},
     {"chu":"熱い","doc":"あつい","nghia":"nóng","loai":"adj","cap":"N5","nhom":"Mùi vị & độ chín","viDu":"このスープは熱いです。","viDuNghia":"Món súp này nóng.","anh":"hot-face"},
     {"chu":"冷たい","doc":"つめたい","nghia":"lạnh","loai":"adj","cap":"N5","nhom":"Mùi vị & độ chín","viDu":"冷たい水で顔を洗った。","viDuNghia":"Tôi rửa mặt bằng nước lạnh.","anh":"cold-face"},
-    {"chu":"温かい","doc":"あたたかい","nghia":"ấm, nóng vừa","loai":"adj","cap":"N5","nhom":"Mùi vị & độ chín","viDu":"温かいお茶を飲みたい。","viDuNghia":"Muốn uống trà ấm."},
+    {"chu":"温かい","doc":"あたたかい","nghia":"ấm, nóng vừa","loai":"adj","cap":"N5","nhom":"Mùi vị & độ chín","viDu":"温かいお茶を飲みたい。","viDuNghia":"Muốn uống trà ấm.","anh":"ai-tu-am-nong-vua-a0e4"},
     {"chu":"柔らかい","doc":"やわらかい","nghia":"mềm","loai":"adj","cap":"N5","nhom":"Mùi vị & độ chín","viDu":"肉が柔らかい。","viDuNghia":"Thịt mềm."},
     {"chu":"硬い","doc":"かたい","nghia":"cứng, dai","loai":"adj","cap":"N4","capUoc":true,"nhom":"Mùi vị & độ chín"},
     {"chu":"新鮮","doc":"しんせん","nghia":"tươi","loai":"adj","cap":"N5","nhom":"Mùi vị & độ chín","viDu":"この魚は新鮮です。","viDuNghia":"Con cá này rất tươi."},

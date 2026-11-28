@@ -1,6 +1,6 @@
 {"ma":"nha-hang","nn":"en","tu":[
     {"chu":"restaurant","doc":"/ˈrestrɒnt/","nghia":"nhà hàng","loai":"n","cap":"A1","nhom":"Vào quán & đặt bàn","viDu":"This restaurant is busy tonight.","viDuNghia":"Nhà hàng này tối nay đông khách.","anh":"fork-and-knife-with-plate"},
-    {"chu":"table","doc":"/ˈteɪ.bəl/","nghia":"bàn ăn","loai":"n","cap":"A1","capUoc":true,"nhom":"Vào quán & đặt bàn","viDu":"The users table has columns for name and email","viDuNghia":"Bảng users có các cột cho tên và email"},
+    {"chu":"table","doc":"/ˈteɪ.bəl/","nghia":"bàn ăn","loai":"n","cap":"A1","capUoc":true,"nhom":"Vào quán & đặt bàn","viDu":"The users table has columns for name and email","viDuNghia":"Bảng users có các cột cho tên và email","anh":"ai-tu-ban-an-3951"},
     {"chu":"table for two","doc":"/ˈteɪbəl fɔːr tuː/","nghia":"bàn cho hai người","loai":"phr","cap":"A2","nhom":"Vào quán & đặt bàn","viDu":"A table for two by the window, please.","viDuNghia":"Cho một bàn hai người cạnh cửa sổ."},
     {"chu":"reservation","doc":"/ˌrezərˈveɪʃn/","nghia":"việc đặt bàn","loai":"n","cap":"A2","nhom":"Vào quán & đặt bàn","viDu":"Do you have a reservation, sir?","viDuNghia":"Anh đã đặt phòng trước chưa ạ?"},
     {"chu":"book a table","nghia":"đặt bàn","loai":"phr","cap":"A2","capUoc":true,"nhom":"Vào quán & đặt bàn","viDu":"I'd like to book a table for Friday.","viDuNghia":"Tôi muốn đặt bàn vào thứ Sáu."},

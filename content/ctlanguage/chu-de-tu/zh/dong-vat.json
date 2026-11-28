@@ -9,7 +9,7 @@
     {"chu":"仓鼠","doc":"cāngshǔ","nghia":"chuột hamster","loai":"n","cap":"HSK5","capUoc":true,"nhom":"Thú cưng","viDu":"仓鼠喜欢晚上活动。","viDuNghia":"Chuột hamster thích hoạt động ban đêm.","anh":"hamster"},
     {"chu":"金鱼","doc":"jīnyú","nghia":"cá vàng","loai":"n","cap":"HSK4","capUoc":true,"nhom":"Thú cưng","viDu":"这条金鱼很漂亮。","viDuNghia":"Con cá vàng này rất đẹp.","anh":"tropical-fish"},
     {"chu":"养","doc":"yǎng","nghia":"nuôi","loai":"v","cap":"HSK3","nhom":"Thú cưng","viDu":"他们在农场养牛。","viDuNghia":"Họ nuôi bò ở nông trại."},
-    {"chu":"兽医","doc":"shòuyī","nghia":"bác sĩ thú y","loai":"n","cap":"HSK4","nhom":"Thú cưng","viDu":"村里的老兽医给生病的牛打了一针。","viDuNghia":"Vị bác sĩ thú y lão luyện trong làng đã tiêm cho con bò bệnh một mũi."},
+    {"chu":"兽医","doc":"shòuyī","nghia":"bác sĩ thú y","loai":"n","cap":"HSK4","nhom":"Thú cưng","viDu":"村里的老兽医给生病的牛打了一针。","viDuNghia":"Vị bác sĩ thú y lão luyện trong làng đã tiêm cho con bò bệnh một mũi.","anh":"ai-tu-bac-si-thu-y-d076"},
     {"chu":"狗粮","doc":"gǒuliáng","nghia":"thức ăn cho chó","loai":"n","cap":"HSK5","capUoc":true,"nhom":"Thú cưng","viDu":"狗粮快吃完了。","viDuNghia":"Thức ăn cho chó sắp hết rồi."},
     {"chu":"猫粮","doc":"māoliáng","nghia":"thức ăn cho mèo","loai":"n","cap":"HSK5","capUoc":true,"nhom":"Thú cưng"},
     {"chu":"遛狗","doc":"liù gǒu","nghia":"dắt chó đi dạo","loai":"v","cap":"HSK5","capUoc":true,"nhom":"Thú cưng","viDu":"我每天晚上遛狗。","viDuNghia":"Tối nào tôi cũng dắt chó đi dạo.","anh":"dog"},

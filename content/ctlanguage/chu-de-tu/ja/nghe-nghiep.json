@@ -19,7 +19,7 @@
     {"chu":"保育士","doc":"ほいくし","nghia":"giáo viên mầm non","loai":"n","cap":"N2","capUoc":true,"nhom":"Y tế & giáo dục","viDu":"姉は保育士です。","viDuNghia":"Chị tôi là giáo viên mầm non."},
     {"chu":"校長","doc":"こうちょう","nghia":"hiệu trưởng","loai":"n","cap":"N5","nhom":"Y tế & giáo dục","viDu":"校長先生が話しています。","viDuNghia":"Hiệu trưởng đang nói chuyện."},
     {"chu":"教授","doc":"きょうじゅ","nghia":"giáo sư","loai":"n","cap":"N5","nhom":"Y tế & giáo dục","viDu":"日本語の教授は優しいです。","viDuNghia":"Giáo sư tiếng Nhật rất dễ thương.","anh":"teacher"},
-    {"chu":"獣医","doc":"じゅうい","nghia":"bác sĩ thú y","loai":"n","cap":"N5","nhom":"Y tế & giáo dục","viDu":"獣医さんは動物が好きです。","viDuNghia":"Bác sĩ thú y thích động vật."},
+    {"chu":"獣医","doc":"じゅうい","nghia":"bác sĩ thú y","loai":"n","cap":"N5","nhom":"Y tế & giáo dục","viDu":"獣医さんは動物が好きです。","viDuNghia":"Bác sĩ thú y thích động vật.","anh":"ai-tu-bac-si-thu-y-d076"},
     {"chu":"研究者","doc":"けんきゅうしゃ","nghia":"nhà nghiên cứu","loai":"n","cap":"N5","nhom":"Y tế & giáo dục","viDu":"父は大学の研究者です。","viDuNghia":"Bố tôi là nhà nghiên cứu ở trường đại học.","anh":"scientist"},
     {"chu":"科学者","doc":"かがくしゃ","nghia":"nhà khoa học","loai":"n","cap":"N5","nhom":"Y tế & giáo dục","viDu":"友達のお父さんは科学者です。","viDuNghia":"Bố của bạn tôi là nhà khoa học.","anh":"scientist"},
     {"chu":"司書","doc":"ししょ","nghia":"thủ thư","loai":"n","cap":"N5","nhom":"Y tế & giáo dục","viDu":"図書館に司書さんがいます。","viDuNghia":"Thư viện có thủ thư.","anh":"books"},

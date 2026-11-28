@@ -44,7 +44,7 @@
     {"chu":"戴","doc":"dài","nghia":"đeo, đội","loai":"v","cap":"HSK4","nhom":"Phong cách","viDu":"她戴着一顶帽子。","viDuNghia":"Cô ấy đang đội một chiếc mũ."},
     {"chu":"服装","doc":"fúzhuāng","nghia":"trang phục","loai":"n","cap":"HSK4","nhom":"Phong cách","viDu":"这家店卖各种各样的服装。","viDuNghia":"Cửa hàng này bán đủ loại trang phục."},
     {"chu":"T恤","doc":"T xù","nghia":"áo thun","loai":"n","cap":"HSK3","nhom":"Phong cách","viDu":"我想买一件蓝色的T恤。","viDuNghia":"Tôi muốn mua một chiếc áo phông màu xanh dương.","anh":"t-shirt"},
-    {"chu":"衬衫","doc":"chènshān","nghia":"áo sơ mi","loai":"n","cap":"HSK3","capUoc":true,"nhom":"Phong cách","viDu":"爸爸买了一件白衬衫。","viDuNghia":"Bố mua một chiếc sơ mi trắng."},
+    {"chu":"衬衫","doc":"chènshān","nghia":"áo sơ mi","loai":"n","cap":"HSK3","capUoc":true,"nhom":"Phong cách","viDu":"爸爸买了一件白衬衫。","viDuNghia":"Bố mua một chiếc sơ mi trắng.","anh":"ai-tu-ao-so-mi-0d13"},
     {"chu":"牛仔裤","doc":"niúzǎikù","nghia":"quần jean","loai":"n","cap":"HSK4","nhom":"Phong cách","viDu":"这条牛仔裤很耐穿。","viDuNghia":"Chiếc quần jean này rất bền.","anh":"jeans"},
     {"chu":"外套","doc":"wàitào","nghia":"áo khoác","loai":"n","cap":"HSK3","nhom":"Phong cách","viDu":"外面很冷，你要穿外套。","viDuNghia":"Bên ngoài rất lạnh, bạn cần mặc áo khoác.","anh":"coat"},
     {"chu":"运动鞋","doc":"yùndòngxié","nghia":"giày thể thao","loai":"n","cap":"HSK3","nhom":"Phong cách","viDu":"我想买一双新的运动鞋。","viDuNghia":"Tôi muốn mua một đôi giày thể thao mới.","anh":"running-shoe"},

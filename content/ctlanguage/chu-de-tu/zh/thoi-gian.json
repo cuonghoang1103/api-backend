@@ -13,7 +13,7 @@
     {"chu":"整","doc":"zhěng","nghia":"tròn (giờ)","loai":"adj","cap":"HSK3","capUoc":true,"nhom":"Giờ giấc","viDu":"现在是八点整。","viDuNghia":"Bây giờ đúng 8 giờ."},
     {"chu":"整点","doc":"zhěngdiǎn","nghia":"giờ tròn","loai":"n","cap":"HSK3","capUoc":true,"nhom":"Giờ giấc","viDu":"现在八点整。","viDuNghia":"Bây giờ là đúng tám giờ."},
     {"chu":"刻","doc":"kè","nghia":"khắc (15 phút)","loai":"mw","cap":"HSK1","nhom":"Giờ giấc","viDu":"三点一刻。","viDuNghia":"Ba giờ mười lăm phút."},
-    {"chu":"一刻钟","doc":"yīkèzhōng","nghia":"15 phút","loai":"n","cap":"HSK1","nhom":"Giờ giấc"},
+    {"chu":"一刻钟","doc":"yīkèzhōng","nghia":"15 phút","loai":"n","cap":"HSK1","nhom":"Giờ giấc","anh":"ai-tu-15-phut-6664"},
     {"chu":"准时","doc":"zhǔnshí","nghia":"đúng giờ","loai":"adv","cap":"HSK3","nhom":"Giờ giấc","viDu":"明天请准时到公司。","viDuNghia":"Ngày mai hãy đến công ty đúng giờ."},
     {"chu":"闹钟","doc":"nàozhōng","nghia":"đồng hồ báo thức","loai":"n","cap":"HSK4","nhom":"Giờ giấc","viDu":"闹钟响了。","viDuNghia":"Đồng hồ báo thức reo rồi.","anh":"alarm-clock"},
     {"chu":"钟","doc":"zhōng","nghia":"đồng hồ","loai":"n","cap":"HSK1","nhom":"Giờ giấc","viDu":"墙上的钟慢了。","viDuNghia":"Đồng hồ trên tường chạy chậm rồi.","anh":"mantelpiece-clock"},

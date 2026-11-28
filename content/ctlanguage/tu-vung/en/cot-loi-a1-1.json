@@ -38,7 +38,8 @@
     "your (det)",
     "yours (pron)",
     "yourself (pron)"
-   ]
+   ],
+   "anh": "ai-tu-ban-anh-chi-cac-ban-6561"
   },
   {
    "chu": "he",
@@ -55,7 +56,8 @@
    "hoTu": [
     "him (pron)",
     "his (det)"
-   ]
+   ],
+   "anh": "ai-tu-anh-ay-ong-ay-no-856b"
   },
   {
    "chu": "she",
@@ -156,7 +158,8 @@
     "ask him",
     "tell him",
     "with him"
-   ]
+   ],
+   "anh": "ai-tu-anh-ay-ong-ay-fb66"
   },
   {
    "chu": "her",
@@ -370,7 +373,8 @@
    "hoTu": [
     "whose (det)",
     "whom (pron)"
-   ]
+   ],
+   "anh": "ai-tu-ai-141a"
   },
   {
    "chu": "which",
@@ -699,7 +703,8 @@
     "someone else",
     "someone like"
    ],
-   "ghiChu": "= somebody."
+   "ghiChu": "= somebody.",
+   "anh": "ai-tu-ai-do-mot-nguoi-nao-do-8acc"
   },
   {
    "chu": "somebody",
@@ -712,7 +717,8 @@
    "cumTu": [
     "somebody else",
     "somebody new"
-   ]
+   ],
+   "anh": "ai-tu-ai-do-fddb"
   },
   {
    "chu": "anyone",
@@ -1251,7 +1257,8 @@
     "by Friday",
     "by myself"
    ],
-   "ghiChu": "by Friday = muộn nhất là thứ Sáu (hạn chót)."
+   "ghiChu": "by Friday = muộn nhất là thứ Sáu (hạn chót).",
+   "anh": "ai-tu-bang-e4df"
   },
   {
    "chu": "during",

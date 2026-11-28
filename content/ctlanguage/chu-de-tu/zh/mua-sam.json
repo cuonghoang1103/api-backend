@@ -1,6 +1,6 @@
 {"ma":"mua-sam","nn":"zh","tu":[
     {"chu":"买","doc":"mǎi","nghia":"mua","loai":"v","cap":"HSK1","nhom":"Cửa hàng & chợ","viDu":"我想买一件衣服。","viDuNghia":"Tôi muốn mua một chiếc áo."},
-    {"chu":"卖","doc":"mài","nghia":"bán","loai":"v","cap":"HSK1","nhom":"Cửa hàng & chợ","viDu":"这家店卖水果。","viDuNghia":"Cửa hàng này bán hoa quả."},
+    {"chu":"卖","doc":"mài","nghia":"bán","loai":"v","cap":"HSK1","nhom":"Cửa hàng & chợ","viDu":"这家店卖水果。","viDuNghia":"Cửa hàng này bán hoa quả.","anh":"ai-tu-ban-a11f"},
     {"chu":"商店","doc":"shāngdiàn","nghia":"cửa hàng","loai":"n","cap":"HSK1","nhom":"Cửa hàng & chợ","viDu":"商店九点开门。","viDuNghia":"Cửa hàng 9 giờ mở cửa.","anh":"convenience-store"},
     {"chu":"超市","doc":"chāoshì","nghia":"siêu thị","loai":"n","cap":"HSK1","nhom":"Cửa hàng & chợ","viDu":"超市里人很多。","viDuNghia":"Trong siêu thị rất đông người.","anh":"shopping-cart"},
     {"chu":"市场","doc":"shìchǎng","nghia":"chợ","loai":"n","cap":"HSK3","nhom":"Cửa hàng & chợ","viDu":"菜市场的水果比较便宜。","viDuNghia":"Trái cây ở chợ khá rẻ."},

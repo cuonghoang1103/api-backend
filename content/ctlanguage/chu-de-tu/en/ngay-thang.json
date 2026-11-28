@@ -80,7 +80,7 @@
     {"chu":"appointment","doc":"/əˈpɔɪntmənt/","nghia":"lịch hẹn","loai":"n","cap":"A2","nhom":"Lịch hẹn & kế hoạch","viDu":"I have a dentist appointment on Friday.","viDuNghia":"Tôi có lịch hẹn nha sĩ vào thứ sáu."},
     {"chu":"meeting","doc":"/ˈmiːtɪŋ/","nghia":"cuộc họp","loai":"n","cap":"B1","nhom":"Lịch hẹn & kế hoạch","viDu":"The meeting is on Monday.","viDuNghia":"Cuộc họp diễn ra vào thứ hai."},
     {"chu":"schedule","doc":"/ˈʃedjuːl/","nghia":"lịch trình","loai":"n","cap":"A1","nhom":"Lịch hẹn & kế hoạch","viDu":"Check your schedule for next week.","viDuNghia":"Hãy xem lịch trình tuần sau của bạn."},
-    {"chu":"busy","doc":"/ˈbɪzi/","nghia":"bận","loai":"adj","cap":"A1","nhom":"Lịch hẹn & kế hoạch","viDu":"I'm busy on Tuesday.","viDuNghia":"Tôi bận vào thứ ba."},
+    {"chu":"busy","doc":"/ˈbɪzi/","nghia":"bận","loai":"adj","cap":"A1","nhom":"Lịch hẹn & kế hoạch","viDu":"I'm busy on Tuesday.","viDuNghia":"Tôi bận vào thứ ba.","anh":"ai-tu-ban-100a"},
     {"chu":"free","doc":"/friː/","nghia":"rảnh","loai":"adj","cap":"A1","capUoc":true,"nhom":"Lịch hẹn & kế hoạch","viDu":"Are you free this weekend?","viDuNghia":"Cuối tuần này bạn rảnh không?"},
     {"chu":"available","doc":"/əˈveɪləbl/","nghia":"có thời gian rảnh","loai":"adj","cap":"A2","nhom":"Lịch hẹn & kế hoạch","viDu":"She's available on Thursday afternoon.","viDuNghia":"Cô ấy rảnh chiều thứ năm."},
     {"chu":"on time","doc":"/ɒn taɪm/","nghia":"đúng giờ","loai":"phr","cap":"A1","nhom":"Lịch hẹn & kế hoạch","viDu":"Please come to school on time.","viDuNghia":"Hãy đến trường đúng giờ."},

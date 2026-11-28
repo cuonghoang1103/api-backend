@@ -1,7 +1,7 @@
 {"ma":"khoa-hoc","nn":"en","tu":[
     {"chu":"energy","nghia":"năng lượng","loai":"n","cap":"A2","capUoc":true,"nhom":"Vật lý & hoá học","viDu":"The sun provides energy.","viDuNghia":"Mặt Trời cung cấp năng lượng."},
-    {"chu":"light","doc":"/laɪt/","nghia":"ánh sáng","loai":"n","cap":"A1","nhom":"Vật lý & hoá học","viDu":"The dress is light blue.","viDuNghia":"Chiếc váy màu xanh nhạt."},
-    {"chu":"sound","doc":"/saʊnd/","nghia":"âm thanh","loai":"n","cap":"A1","nhom":"Vật lý & hoá học","viDu":"Sound travels through air.","viDuNghia":"Âm thanh truyền qua không khí."},
+    {"chu":"light","doc":"/laɪt/","nghia":"ánh sáng","loai":"n","cap":"A1","nhom":"Vật lý & hoá học","viDu":"The dress is light blue.","viDuNghia":"Chiếc váy màu xanh nhạt.","anh":"ai-tu-anh-sang-41c4"},
+    {"chu":"sound","doc":"/saʊnd/","nghia":"âm thanh","loai":"n","cap":"A1","nhom":"Vật lý & hoá học","viDu":"Sound travels through air.","viDuNghia":"Âm thanh truyền qua không khí.","anh":"ai-tu-am-thanh-10df"},
     {"chu":"heat","doc":"/hiːt/","nghia":"nhiệt","loai":"n","cap":"A2","nhom":"Vật lý & hoá học","viDu":"Heat the oil before frying the eggs.","viDuNghia":"Hãy làm nóng dầu trước khi chiên trứng."},
     {"chu":"temperature","doc":"/ˈtem.prə.tʃər/","nghia":"nhiệt độ","loai":"n","cap":"A2","capUoc":true,"nhom":"Vật lý & hoá học","viDu":"Measure the temperature of the water.","viDuNghia":"Đo nhiệt độ của nước.","anh":"thermometer"},
     {"chu":"electricity","doc":"/ɪˌlekˈtrɪs.ə.ti/","nghia":"điện","loai":"n","cap":"A2","capUoc":true,"nhom":"Vật lý & hoá học","viDu":"The machine needs electricity.","viDuNghia":"Máy này cần điện.","anh":"high-voltage"},

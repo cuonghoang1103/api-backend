@@ -1,7 +1,7 @@
 {"ma":"quan-he","nn":"zh","tu":[
-    {"chu":"朋友","doc":"péngyou","nghia":"bạn bè","loai":"n","cap":"HSK1","nhom":"Bạn bè","viDu":"他是我的好朋友。","viDuNghia":"Anh ấy là người bạn tốt của tôi."},
+    {"chu":"朋友","doc":"péngyou","nghia":"bạn bè","loai":"n","cap":"HSK1","nhom":"Bạn bè","viDu":"他是我的好朋友。","viDuNghia":"Anh ấy là người bạn tốt của tôi.","anh":"ai-tu-ban-be-d306"},
     {"chu":"好朋友","doc":"hǎo péngyou","nghia":"bạn thân","loai":"n","cap":"HSK1","capUoc":true,"nhom":"Bạn bè","viDu":"她是我的好朋友。","viDuNghia":"Cô ấy là bạn thân của tôi."},
-    {"chu":"同学","doc":"tóng xué","nghia":"bạn cùng lớp","loai":"n","cap":"HSK1","nhom":"Bạn bè","viDu":"我和同学一起去学校。","viDuNghia":"Tôi và bạn học cùng nhau đi đến trường."},
+    {"chu":"同学","doc":"tóng xué","nghia":"bạn cùng lớp","loai":"n","cap":"HSK1","nhom":"Bạn bè","viDu":"我和同学一起去学校。","viDuNghia":"Tôi và bạn học cùng nhau đi đến trường.","anh":"ai-tu-ban-cung-lop-c5c2"},
     {"chu":"同事","doc":"tóngshì","nghia":"đồng nghiệp","loai":"n","cap":"HSK1","nhom":"Bạn bè","viDu":"他是我爸爸的同事。","viDuNghia":"Anh ấy là đồng nghiệp của bố tôi."},
     {"chu":"交朋友","doc":"jiāo péngyou","nghia":"kết bạn","loai":"v","cap":"HSK2","capUoc":true,"nhom":"Bạn bè","viDu":"我想和你交朋友。","viDuNghia":"Tôi muốn kết bạn với bạn."},
     {"chu":"认识","doc":"rènshi","nghia":"quen biết","loai":"v","cap":"HSK1","nhom":"Bạn bè","viDu":"我们认识三年了。","viDuNghia":"Chúng tôi quen nhau ba năm rồi."},
@@ -32,7 +32,7 @@
     {"chu":"亲吻","doc":"qīnwěn","nghia":"hôn","loai":"v","cap":"HSK5","capUoc":true,"nhom":"Hẹn hò & tình yêu","anh":"kiss-mark"},
     {"chu":"温柔","doc":"wēnróu","nghia":"dịu dàng","loai":"adj","cap":"HSK4","nhom":"Hẹn hò & tình yêu","viDu":"妈妈说话的声音很温柔。","viDuNghia":"Giọng nói của mẹ rất dịu dàng."},
     {"chu":"体贴","doc":"tǐtiē","nghia":"chu đáo","loai":"adj","cap":"HSK4","nhom":"Hẹn hò & tình yêu","viDu":"她是一个很体贴的妻子，总是为家人着想。","viDuNghia":"Cô ấy là một người vợ rất chu đáo, luôn nghĩ cho gia đình."},
-    {"chu":"伴侣","doc":"bànlǚ","nghia":"bạn đời","loai":"n","cap":"HSK5","nhom":"Hẹn hò & tình yêu","viDu":"他找了一个志同道合的伴侣，一起创业。","viDuNghia":"Anh ấy tìm được một người bạn đời có cùng chí hướng, cùng nhau khởi nghiệp."},
+    {"chu":"伴侣","doc":"bànlǚ","nghia":"bạn đời","loai":"n","cap":"HSK5","nhom":"Hẹn hò & tình yêu","viDu":"他找了一个志同道合的伴侣，一起创业。","viDuNghia":"Anh ấy tìm được một người bạn đời có cùng chí hướng, cùng nhau khởi nghiệp.","anh":"ai-tu-ban-doi-d2e7"},
     {"chu":"结婚","doc":"jiéhūn","nghia":"kết hôn","loai":"v","cap":"HSK3","capUoc":true,"nhom":"Hẹn hò & tình yêu","viDu":"他们去年结婚了。","viDuNghia":"Họ kết hôn năm ngoái.","anh":"wedding"},
     {"chu":"恩爱","doc":"ēn'ài","nghia":"yêu thương hòa thuận","loai":"adj","cap":"HSK5","nhom":"Hẹn hò & tình yêu","viDu":"老两口恩恩爱爱地走过了五十年。","viDuNghia":"Cặp vợ chồng già đã yêu thương hòa thuận đi qua năm mươi năm."},
     {"chu":"分手","doc":"fēnshǒu","nghia":"chia tay","loai":"v","cap":"HSK4","nhom":"Hẹn hò & tình yêu","viDu":"他们分手三个月了。","viDuNghia":"Họ chia tay đã ba tháng rồi."},

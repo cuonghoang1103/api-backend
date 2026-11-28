@@ -45,7 +45,7 @@
     {"chu":"emergency","doc":"/ɪˈmɜːrdʒənsi/","nghia":"tình huống khẩn cấp","loai":"n","cap":"A2","nhom":"Cấp cứu","viDu":"Call 911 in an emergency.","viDuNghia":"Gọi 911 trong tình huống khẩn cấp.","anh":"sos-button"},
     {"chu":"ambulance","doc":"/ˈæmbjələns/","nghia":"xe cứu thương","loai":"n","cap":"A1","nhom":"Cấp cứu","viDu":"The ambulance comes quickly.","viDuNghia":"Xe cứu thương đến nhanh.","anh":"ambulance"},
     {"chu":"Call an ambulance!","nghia":"Gọi xe cứu thương đi!","loai":"phr","cap":"A2","capUoc":true,"nhom":"Cấp cứu","viDu":"Call an ambulance! She can't breathe.","viDuNghia":"Gọi xe cứu thương đi! Cô ấy không thở được."},
-    {"chu":"Are you okay?","doc":"/ɑː(r) juː ˈoʊkeɪ/","nghia":"Bạn có sao không?","loai":"phr","cap":"A1","nhom":"Cấp cứu","viDu":"You look sad. Are you okay?","viDuNghia":"Bạn trông buồn đấy. Bạn có sao không?"},
+    {"chu":"Are you okay?","doc":"/ɑː(r) juː ˈoʊkeɪ/","nghia":"Bạn có sao không?","loai":"phr","cap":"A1","nhom":"Cấp cứu","viDu":"You look sad. Are you okay?","viDuNghia":"Bạn trông buồn đấy. Bạn có sao không?","anh":"ai-tu-ban-co-sao-khong-2e2f"},
     {"chu":"breathe","doc":"/briːð/","nghia":"thở","loai":"v","cap":"A1","nhom":"Cấp cứu","viDu":"Try to breathe slowly.","viDuNghia":"Hãy cố thở chậm.","anh":"face-exhaling"},
     {"chu":"first aid","doc":"/fɜːrst eɪd/","nghia":"sơ cứu","loai":"n","cap":"A2","nhom":"Cấp cứu","viDu":"She gave first aid to the injured man.","viDuNghia":"Cô ấy đã sơ cấp cứu cho người đàn ông bị thương.","anh":"adhesive-bandage"},
     {"chu":"first-aid kit","doc":"/ˌfɜːst ˈeɪd kɪt/","nghia":"bộ sơ cứu","loai":"n","cap":"B1","nhom":"Cấp cứu","viDu":"Keep a first-aid kit in your car.","viDuNghia":"Hãy để một bộ dụng cụ sơ cứu trong xe của bạn.","anh":"adhesive-bandage"},

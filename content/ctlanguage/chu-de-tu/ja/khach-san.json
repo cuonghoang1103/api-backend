@@ -75,7 +75,7 @@
     {"chu":"すみません","doc":"すみません","nghia":"xin lỗi, cho tôi hỏi","loai":"intj","cap":"N5","nhom":"Yêu cầu & phàn nàn","viDu":"すみません、少しいいですか。","viDuNghia":"Xin lỗi, tôi hỏi chút được không?"},
     {"chu":"苦情","doc":"くじょう","nghia":"lời phàn nàn","loai":"n","cap":"N4","nhom":"Yêu cầu & phàn nàn","viDu":"隣の部屋がうるさいと苦情がありました。","viDuNghia":"Có khách phàn nàn phòng bên cạnh ồn."},
     {"chu":"うるさい","doc":"うるさい","nghia":"ồn ào","loai":"adj","cap":"N5","nhom":"Yêu cầu & phàn nàn","viDu":"隣の部屋がうるさいです。","viDuNghia":"Phòng bên cạnh ồn quá."},
-    {"chu":"汚い","doc":"きたない","nghia":"bẩn","loai":"adj","cap":"N4","nhom":"Yêu cầu & phàn nàn","viDu":"部屋が汚いです。","viDuNghia":"Phòng bẩn."},
+    {"chu":"汚い","doc":"きたない","nghia":"bẩn","loai":"adj","cap":"N4","nhom":"Yêu cầu & phàn nàn","viDu":"部屋が汚いです。","viDuNghia":"Phòng bẩn.","anh":"ai-tu-ban-137f"},
     {"chu":"暑い","doc":"あつい","nghia":"nóng","loai":"adj","cap":"N5","nhom":"Yêu cầu & phàn nàn","viDu":"ハノイの夏はとても暑いです。","viDuNghia":"Mùa hè ở Hà Nội rất nóng.","anh":"hot-face"},
     {"chu":"寒い","doc":"さむい","nghia":"lạnh","loai":"adj","cap":"N5","nhom":"Yêu cầu & phàn nàn","viDu":"今朝は寒かったですね。","viDuNghia":"Sáng nay lạnh nhỉ.","anh":"cold-face"},
     {"chu":"壊れる","doc":"こわれる","nghia":"bị hỏng","loai":"v","cap":"N4","nhom":"Yêu cầu & phàn nàn","viDu":"この機械は古すぎて、壊れやすいです。","viDuNghia":"Máy này quá cũ nên dễ bị hỏng."},

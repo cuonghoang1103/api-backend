@@ -21,7 +21,7 @@
     {"chu":"联系方式","doc":"liánxì fāngshì","nghia":"thông tin liên lạc","loai":"n","cap":"HSK4","capUoc":true,"nhom":"Hồ sơ & CV","viDu":"别忘了写联系方式。","viDuNghia":"Đừng quên ghi thông tin liên lạc."},
     {"chu":"电话号码","doc":"diànhuà hàomǎ","nghia":"số điện thoại","loai":"n","cap":"HSK3","nhom":"Hồ sơ & CV","viDu":"你的电话号码是多少？","viDuNghia":"Số điện thoại của bạn là bao nhiêu?"},
     {"chu":"电子邮箱","doc":"diànzǐ yóuxiāng","nghia":"địa chỉ email","loai":"n","cap":"HSK4","capUoc":true,"nhom":"Hồ sơ & CV","viDu":"请留下电子邮箱。","viDuNghia":"Vui lòng để lại địa chỉ email.","anh":"e-mail"},
-    {"chu":"照片","doc":"zhàopiàn","nghia":"ảnh","loai":"n","cap":"HSK1","nhom":"Hồ sơ & CV","viDu":"墙上有很多照片。","viDuNghia":"Trên tường có nhiều ảnh."},
+    {"chu":"照片","doc":"zhàopiàn","nghia":"ảnh","loai":"n","cap":"HSK1","nhom":"Hồ sơ & CV","viDu":"墙上有很多照片。","viDuNghia":"Trên tường có nhiều ảnh.","anh":"ai-tu-anh-df5b"},
     {"chu":"学历","doc":"xuélì","nghia":"trình độ học vấn","loai":"n","cap":"HSK4","nhom":"Hồ sơ & CV","viDu":"这个职位要求什么学历？","viDuNghia":"Vị trí này yêu cầu trình độ gì?"},
     {"chu":"教育背景","doc":"jiàoyù bèijǐng","nghia":"quá trình học tập","loai":"n","cap":"HSK5","capUoc":true,"nhom":"Hồ sơ & CV"},
     {"chu":"毕业","doc":"bìyè","nghia":"tốt nghiệp","loai":"v","cap":"HSK3","nhom":"Hồ sơ & CV","viDu":"我去年大学毕业。","viDuNghia":"Tôi tốt nghiệp đại học năm ngoái.","anh":"graduation-cap"},

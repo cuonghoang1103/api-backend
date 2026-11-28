@@ -30,7 +30,7 @@
     {"chu":"グループチャット","doc":"グループチャット","nghia":"nhóm trò chuyện","loai":"n","cap":"N3","capUoc":true,"nhom":"Nhắn tin & gọi","viDu":"グループチャットを作る。","viDuNghia":"tạo nhóm trò chuyện"},
     {"chu":"着信","doc":"ちゃくしん","nghia":"cuộc gọi đến","loai":"n","cap":"N5","nhom":"Nhắn tin & gọi","viDu":"着信があった。","viDuNghia":"Có cuộc gọi đến."},
     {"chu":"電話に出る","doc":"でんわにでる","nghia":"nghe máy","loai":"phr","cap":"N5","nhom":"Nhắn tin & gọi","viDu":"電話に出てください。","viDuNghia":"Hãy nghe máy điện thoại.","anh":"telephone-receiver"},
-    {"chu":"音声","doc":"おんせい","nghia":"âm thanh, giọng nói","loai":"n","cap":"N5","nhom":"Nhắn tin & gọi","viDu":"音声がありません。","viDuNghia":"Không có âm thanh."},
+    {"chu":"音声","doc":"おんせい","nghia":"âm thanh, giọng nói","loai":"n","cap":"N5","nhom":"Nhắn tin & gọi","viDu":"音声がありません。","viDuNghia":"Không có âm thanh.","anh":"ai-tu-am-thanh-giong-noi-4840"},
     {"chu":"マイク","doc":"マイク","nghia":"micrô","loai":"n","cap":"N5","nhom":"Nhắn tin & gọi","viDu":"マイクで話してください。","viDuNghia":"Hãy nói vào micrófono.","anh":"microphone"},
     {"chu":"スタンプ","doc":"スタンプ","nghia":"hình dán trong tin nhắn","loai":"n","cap":"N3","capUoc":true,"nhom":"Nhắn tin & gọi","viDu":"スタンプを送る。","viDuNghia":"gửi hình dán"},
     {"chu":"絵文字","doc":"えもじ","nghia":"biểu tượng cảm xúc","loai":"n","cap":"N3","capUoc":true,"nhom":"Nhắn tin & gọi","anh":"grinning-face"},

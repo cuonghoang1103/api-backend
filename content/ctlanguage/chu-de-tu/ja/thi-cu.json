@@ -1,6 +1,6 @@
 {"ma":"thi-cu","nn":"ja","tu":[
     {"chu":"試験","doc":"しけん","nghia":"kỳ thi","loai":"n","cap":"N5","nhom":"Kỳ thi","viDu":"試験は来週の火曜日です。","viDuNghia":"Kỳ thi vào thứ Ba tuần sau.","anh":"test-tube"},
-    {"chu":"テスト","doc":"テスト","nghia":"bài kiểm tra","loai":"n","cap":"N5","nhom":"Kỳ thi","viDu":"来週、数学のテストがあります。","viDuNghia":"Tuần sau có bài kiểm tra môn toán."},
+    {"chu":"テスト","doc":"テスト","nghia":"bài kiểm tra","loai":"n","cap":"N5","nhom":"Kỳ thi","viDu":"来週、数学のテストがあります。","viDuNghia":"Tuần sau có bài kiểm tra môn toán.","anh":"ai-tu-bai-kiem-tra-cbda"},
     {"chu":"問題","doc":"もんだい","nghia":"câu hỏi; đề bài","loai":"n","cap":"N5","nhom":"Kỳ thi","viDu":"この問題は難しいです。","viDuNghia":"Bài này khó.","anh":"red-question-mark"},
     {"chu":"試験を受ける","doc":"しけんをうける","nghia":"đi thi","loai":"phr","cap":"N4","capUoc":true,"nhom":"Kỳ thi","viDu":"明日、試験を受けます。","viDuNghia":"ngày mai tôi đi thi"},
     {"chu":"受験","doc":"じゅけん","nghia":"việc dự thi","loai":"n","cap":"N3","capUoc":true,"nhom":"Kỳ thi","viDu":"来年、大学を受験します。","viDuNghia":"năm sau tôi thi vào đại học"},
@@ -15,7 +15,7 @@
     {"chu":"面接","doc":"めんせつ","nghia":"phỏng vấn","loai":"n","cap":"N5","nhom":"Kỳ thi","viDu":"明日は面接があります。","viDuNghia":"ngày mai có buổi phỏng vấn"},
     {"chu":"模擬試験","doc":"もぎしけん","nghia":"kỳ thi thử","loai":"n","cap":"N2","capUoc":true,"nhom":"Kỳ thi"},
     {"chu":"過去問","doc":"かこもん","nghia":"đề thi các năm trước","loai":"n","cap":"N2","capUoc":true,"nhom":"Kỳ thi","viDu":"過去問を解いています。","viDuNghia":"tôi đang giải đề thi các năm trước"},
-    {"chu":"答案","doc":"とうあん","nghia":"bài làm thi","loai":"n","cap":"N5","nhom":"Kỳ thi","viDu":"答案を提出しました。","viDuNghia":"Tôi đã nộp bài thi."},
+    {"chu":"答案","doc":"とうあん","nghia":"bài làm thi","loai":"n","cap":"N5","nhom":"Kỳ thi","viDu":"答案を提出しました。","viDuNghia":"Tôi đã nộp bài thi.","anh":"ai-tu-bai-lam-thi-c959"},
     {"chu":"再試験","doc":"さいしけん","nghia":"kỳ thi lại","loai":"n","cap":"N3","nhom":"Kỳ thi","viDu":"再試験は 7月に 行われます。","viDuNghia":"Kỳ thi lại sẽ được tổ chức vào tháng 7."},
     {"chu":"試験官","doc":"しけんかん","nghia":"giám thị coi thi","loai":"n","cap":"N2","capUoc":true,"nhom":"Kỳ thi"},
     {"chu":"答え","doc":"こたえ","nghia":"đáp án","loai":"n","cap":"N5","nhom":"Điểm số & kết quả","viDu":"この問題の答えが分かりません。","viDuNghia":"Tôi không biết đáp án của bài này."},

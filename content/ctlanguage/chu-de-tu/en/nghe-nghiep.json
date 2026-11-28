@@ -19,7 +19,7 @@
     {"chu":"nurse","doc":"/nɜːrs/","nghia":"điều dưỡng","loai":"n","cap":"A1","nhom":"Y tế & giáo dục","viDu":"The nurse checked his temperature.","viDuNghia":"Điều dưỡng kiểm tra nhiệt độ của anh ấy.","anh":"health-worker"},
     {"chu":"teacher","doc":"/ˈtiːtʃər/","nghia":"giáo viên","loai":"n","cap":"A1","nhom":"Y tế & giáo dục","viDu":"My teacher explains things clearly.","viDuNghia":"Giáo viên của tôi giải thích rất rõ.","anh":"teacher"},
     {"chu":"dentist","doc":"/ˈdentɪst/","nghia":"nha sĩ","loai":"n","cap":"A1","nhom":"Y tế & giáo dục","viDu":"I have an appointment with the dentist.","viDuNghia":"Tôi có lịch hẹn với nha sĩ.","anh":"tooth"},
-    {"chu":"vet","doc":"/vet/","nghia":"bác sĩ thú y","loai":"n","cap":"A1","nhom":"Y tế & giáo dục","viDu":"We take our dog to the vet.","viDuNghia":"Chúng tôi đưa chó của mình đi khám bác sĩ thú y."},
+    {"chu":"vet","doc":"/vet/","nghia":"bác sĩ thú y","loai":"n","cap":"A1","nhom":"Y tế & giáo dục","viDu":"We take our dog to the vet.","viDuNghia":"Chúng tôi đưa chó của mình đi khám bác sĩ thú y.","anh":"ai-tu-bac-si-thu-y-d076"},
     {"chu":"pharmacist","doc":"/ˈfɑːməsɪst/","nghia":"dược sĩ","loai":"n","cap":"A1","nhom":"Y tế & giáo dục","viDu":"The pharmacist gives me medicine.","viDuNghia":"Dược sĩ đưa cho tôi thuốc.","anh":"pill"},
     {"chu":"librarian","doc":"/laɪˈbreəriən/","nghia":"thủ thư","loai":"n","cap":"A1","nhom":"Y tế & giáo dục","viDu":"The librarian helped me find this book.","viDuNghia":"Thủ thư đã giúp tôi tìm cuốn sách này.","anh":"books"},
     {"chu":"scientist","doc":"/ˈsaɪəntɪst/","nghia":"nhà khoa học","loai":"n","cap":"A1","nhom":"Y tế & giáo dục","viDu":"My brother wants to be a scientist.","viDuNghia":"Em trai tôi muốn trở thành nhà khoa học.","anh":"scientist"},

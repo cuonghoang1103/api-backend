@@ -5,7 +5,7 @@
     {"chu":"エネルギー","doc":"エネルギー","nghia":"năng lượng","loai":"n","cap":"N3","nhom":"Vật lý & hoá học","viDu":"新しいエネルギーを開発する必要がある。","viDuNghia":"Cần phát triển năng lượng mới."},
     {"chu":"電気","doc":"でんき","nghia":"điện","loai":"n","cap":"N5","nhom":"Vật lý & hoá học","viDu":"電気が流れる。","viDuNghia":"dòng điện chạy qua","anh":"high-voltage"},
     {"chu":"光","doc":"ひかり","nghia":"ánh sáng","loai":"n","cap":"N4","capUoc":true,"nhom":"Vật lý & hoá học","viDu":"光が差し込む。","viDuNghia":"ánh sáng chiếu vào","anh":"light-bulb"},
-    {"chu":"音","doc":"おと","nghia":"âm thanh","loai":"n","cap":"N4","nhom":"Vật lý & hoá học","viDu":"変な音が聞こえた。","viDuNghia":"Tôi nghe thấy một âm thanh lạ."},
+    {"chu":"音","doc":"おと","nghia":"âm thanh","loai":"n","cap":"N4","nhom":"Vật lý & hoá học","viDu":"変な音が聞こえた。","viDuNghia":"Tôi nghe thấy một âm thanh lạ.","anh":"ai-tu-am-thanh-10df"},
     {"chu":"熱","doc":"ねつ","nghia":"nhiệt","loai":"n","cap":"N5","nhom":"Vật lý & hoá học","viDu":"熱が伝わる。","viDuNghia":"nhiệt truyền đi"},
     {"chu":"温度","doc":"おんど","nghia":"nhiệt độ","loai":"n","cap":"N4","nhom":"Vật lý & hoá học","viDu":"温度を測る。","viDuNghia":"đo nhiệt độ","anh":"thermometer"},
     {"chu":"力","doc":"ちから","nghia":"lực","loai":"n","cap":"N4","capUoc":true,"nhom":"Vật lý & hoá học"},

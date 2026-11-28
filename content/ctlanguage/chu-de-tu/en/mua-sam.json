@@ -4,7 +4,7 @@
     {"chu":"market","doc":"/ˈmɑːkɪt/","nghia":"chợ","loai":"n","cap":"A1","nhom":"Cửa hàng & chợ","viDu":"I buy fish at the market.","viDuNghia":"Tôi mua cá ở chợ."},
     {"chu":"mall","doc":"/mɔːl/","nghia":"trung tâm mua sắm","loai":"n","cap":"A1","nhom":"Cửa hàng & chợ","viDu":"We went to the mall on Saturday.","viDuNghia":"Chúng tôi đã đi đến trung tâm mua sắm vào thứ Bảy.","anh":"department-store"},
     {"chu":"buy","doc":"/baɪ/","nghia":"mua","loai":"v","cap":"A1","nhom":"Cửa hàng & chợ","viDu":"I buy a book.","viDuNghia":"Tôi mua một cuốn sách."},
-    {"chu":"sell","doc":"/sel/","nghia":"bán","loai":"v","cap":"A1","nhom":"Cửa hàng & chợ","viDu":"She sells fruit.","viDuNghia":"Cô ấy bán trái cây."},
+    {"chu":"sell","doc":"/sel/","nghia":"bán","loai":"v","cap":"A1","nhom":"Cửa hàng & chợ","viDu":"She sells fruit.","viDuNghia":"Cô ấy bán trái cây.","anh":"ai-tu-ban-a11f"},
     {"chu":"customer","doc":"/ˈkʌstəmər/","nghia":"khách hàng","loai":"n","cap":"A1","nhom":"Cửa hàng & chợ","viDu":"The shop has many happy customers.","viDuNghia":"Cửa hàng có nhiều khách hàng hài lòng."},
     {"chu":"seller","doc":"/ˈselər/","nghia":"người bán","loai":"n","cap":"A1","nhom":"Cửa hàng & chợ","viDu":"Please contact the seller about the size.","viDuNghia":"Vui lòng liên hệ người bán về kích cỡ."},
     {"chu":"item","doc":"/ˈaɪtəm/","nghia":"món hàng","loai":"n","cap":"A1","nhom":"Cửa hàng & chợ","viDu":"How many items do you want to buy?","viDuNghia":"Bạn muốn mua bao nhiêu món?"},

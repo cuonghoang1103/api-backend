@@ -39,7 +39,7 @@
     {"chu":"冷","doc":"lěng","nghia":"lạnh","loai":"adj","cap":"HSK1","nhom":"Nhiệt độ & cảm giác","viDu":"北京的冬天很冷。","viDuNghia":"Mùa đông Bắc Kinh rất lạnh.","anh":"cold-face"},
     {"chu":"温度","doc":"wēndù","nghia":"nhiệt độ","loai":"n","cap":"HSK3","nhom":"Nhiệt độ & cảm giác","viDu":"今天的温度很低。","viDuNghia":"Nhiệt độ hôm nay rất thấp.","anh":"thermometer"},
     {"chu":"度","doc":"dù","nghia":"độ","loai":"mw","cap":"HSK1","nhom":"Nhiệt độ & cảm giác","viDu":"今天三十八度，太热了。","viDuNghia":"Hôm nay 38 độ, nóng quá."},
-    {"chu":"暖和","doc":"nuǎnhuo","nghia":"ấm áp","loai":"adj","cap":"HSK3","capUoc":true,"nhom":"Nhiệt độ & cảm giác","viDu":"春天天气很暖和。","viDuNghia":"Mùa xuân thời tiết rất ấm áp."},
+    {"chu":"暖和","doc":"nuǎnhuo","nghia":"ấm áp","loai":"adj","cap":"HSK3","capUoc":true,"nhom":"Nhiệt độ & cảm giác","viDu":"春天天气很暖和。","viDuNghia":"Mùa xuân thời tiết rất ấm áp.","anh":"ai-tu-am-ap-5be5"},
     {"chu":"凉快","doc":"liángkuai","nghia":"mát mẻ","loai":"adj","cap":"HSK1","nhom":"Nhiệt độ & cảm giác","viDu":"秋天很凉快，很舒服。","viDuNghia":"Mùa thu mát mẻ, rất dễ chịu."},
     {"chu":"闷","doc":"mèn","nghia":"oi bức","loai":"adj","cap":"HSK1","nhom":"Nhiệt độ & cảm giác","viDu":"今天天气很闷","viDuNghia":"Hôm nay thời tiết oi bức"},
     {"chu":"气温","doc":"qì wēn","nghia":"nhiệt độ không khí","loai":"n","cap":"HSK4","nhom":"Nhiệt độ & cảm giác","viDu":"今天的气温比昨天低很多。","viDuNghia":"Nhiệt độ hôm nay thấp hơn hôm qua rất nhiều.","anh":"thermometer"},

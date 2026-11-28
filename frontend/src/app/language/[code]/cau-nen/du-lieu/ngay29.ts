@@ -1,0 +1,148 @@
+import type { NgayCauNen } from '../kieu';
+
+const K1 = 'Tuần 1: be · this/my · there is · hiện tại đơn';
+const K2 = 'Tuần 2: do/does · Wh- · can · want/like/need';
+const K3 = 'Tuần 3: tiếp diễn · giới từ · was/were · quá khứ đơn';
+const K4 = 'Tuần 4: will/going to · have to/should · so sánh · lượng từ';
+const K5 = 'Tuần 5: lời đề nghị · hiện tại hoàn thành · từ nối · câu hỏi đuôi';
+const K6 = 'Tuần 6: công việc IT · email & chat';
+
+export const NGAY_29: NgayCauNen = {
+  n: 29,
+  ten: 'ÔN TỔNG 1–28',
+  mucTieu: 'Dịch được câu dài ghép hai, ba khung của cả khoá — chọn đúng thì, đúng trợ động từ, đúng từ nối — chuẩn bị cho bài kiểm tra cuối.',
+  on: true,
+  bai: {
+    y: [
+      'Câu dài thật ra là **hai câu ngắn + một từ nối**: I\'m studying right now **, so** I can\'t go out. — dịch từng vế theo khung đã học rồi ghép lại.',
+      '**Bước 1 — tìm mốc thời gian** (now, yesterday, tomorrow, for five years…) để chọn thì. **Bước 2 — tìm chủ ngữ** (he/she ⇒ -s, does, has). **Bước 3 — chọn từ nối** (and, but, so, because, if, when).',
+      'Ba lỗi lớn nhất của cả khoá: **thiếu be** (~~I tired~~) · **quên -s** (~~She work~~) · **sai thì khi có mốc** (~~Yesterday I go~~).',
+      'Nghe câu dài: đừng cố hiểu từng chữ — bắt **động từ chính** và **mốc thời gian** trước, phần còn lại sẽ tự rõ.',
+    ],
+    khung: [
+      { mau: K1, vi: 'Ngày 1–5' },
+      { mau: K2, vi: 'Ngày 6–10' },
+      { mau: K3, vi: 'Ngày 11–15' },
+      { mau: K4, vi: 'Ngày 16–20' },
+      { mau: K5, vi: 'Ngày 21–25' },
+      { mau: K6, vi: 'Ngày 26–28' },
+    ],
+    soSanh: [
+      { vi: 'Bây giờ tôi đang học bài nên không ra ngoài được.', tungChu: 'Now I studying so not go out can.', en: 'I\'m studying right now, so I can\'t go out.', viSao: 'Vế 1: am + V-ing (đang) · vế 2: can\'t + V · nối bằng so.' },
+      { vi: 'Tôi đã sống ở Sài Gòn được năm năm nhưng vẫn chưa quen kẹt xe.', tungChu: 'I live Saigon five years but still not familiar traffic jam.', en: 'I\'ve lived in Saigon for five years, but I\'m still not used to the traffic.', viSao: 'Tới nay ⇒ have + V3 + for · "quen với" = be used to + N.' },
+      { vi: 'Hôm qua em bị ốm nên không làm xong bài tập ạ.', tungChu: 'Yesterday I sick so I not finish homework.', en: 'I was sick yesterday, so I couldn\'t finish my homework.', viSao: 'Quá khứ: was + Adj · không thể (quá khứ) = couldn\'t.' },
+    ],
+    viDu: [
+      { en: 'I\'m a third-year student, and I\'m doing an internship at a software company.', vi: 'Tôi là sinh viên năm ba và đang thực tập ở một công ty phần mềm.' },
+      { en: 'If the weather is nice tomorrow, let\'s go to Vung Tau.', vi: 'Nếu mai trời đẹp, mình đi Vũng Tàu nhé.' },
+      { en: 'I\'ve sent my CV to three companies, but none of them have replied yet.', vi: 'Tôi đã gửi CV cho ba công ty nhưng chưa nơi nào trả lời.' },
+    ],
+    meo: ['Ôn bằng cách **tự nói to** từng câu tiếng Việt rồi dịch trước khi bấm nghe — sai cũng được, sai rồi sửa là cách nhớ lâu nhất.'],
+  },
+  nguPhap: [
+    { t: 'h', text: 'Bản đồ cả khoá: chọn thì theo mốc thời gian' },
+    {
+      t: 'table', head: ['Mốc / ý nghĩa', 'Thì', 'Khung', 'Ngày'],
+      rows: [
+        ['thói quen, sự thật', 'Hiện tại đơn', 'She **works** from home.', '4, 6'],
+        ['now, right now', 'Hiện tại tiếp diễn', 'I**\'m studying** right now.', '11'],
+        ['yesterday, last…, ago', 'Quá khứ đơn', 'I **fixed** the bug last night.', '13, 14'],
+        ['tomorrow, next…; quyết định ngay', 'will / going to', 'I**\'ll call** you. · I**\'m going to** graduate.', '16'],
+        ['ever, never, yet, for, since', 'Hiện tại hoàn thành', 'I**\'ve lived** here for five years.', '22'],
+      ],
+    },
+    {
+      t: 'table', head: ['Muốn nói', 'Khung', 'Ngày'],
+      rows: [
+        ['có thể / không thể', '**can / can\'t** + V', '8'],
+        ['phải / nên', '**have to / should** + V', '17'],
+        ['hơn / nhất', '**-er than / more … than / the -est**', '18'],
+        ['nhiều / ít / nào', '**many / much / a few / a little / any**', '19'],
+        ['nhờ / mời', '**Could you …? / Would you like …?**', '21'],
+        ['vì / nên / nhưng / nếu / khi', '**because / so / but / if / when**', '23'],
+        ['phải không?', '**…, isn\'t it? / don\'t you?**', '24'],
+      ],
+    },
+    { t: 'note', title: '10 lỗi cần soát trước bài kiểm tra cuối', items: ['~~I tired~~ → I**\'m** tired', '~~She work~~ → She work**s**', '~~I am student~~ → I\'m **a** student', '~~Yesterday I go~~ → Yesterday I **went**', '~~He don\'t~~ → He **doesn\'t**', '~~Where you live?~~ → Where **do** you live?', '~~more taller~~ → **taller**', '~~many money~~ → **much / a lot of** money', '~~If it will rain~~ → If it **rains**', '~~Because…, so…~~ → chỉ dùng **một** từ nối'] },
+  ],
+  tuVung: [
+    { w: 'third-year student', loai: 'n', vi: 'sinh viên năm ba', anh: 'student', ex: 'She\'s a third-year student.', exVi: 'Cô ấy là sinh viên năm ba.' },
+    { w: 'park', loai: 'v', vi: 'đỗ xe, gửi xe', anh: 'p-button', ex: 'You can park here.', exVi: 'Bạn đỗ xe ở đây được.' },
+    { w: 'run into', loai: 'phr', vi: 'tình cờ gặp', anh: 'people-hugging', ex: 'I ran into her at the mall.', exVi: 'Tôi tình cờ gặp cô ấy ở trung tâm thương mại.' },
+    { w: 'battery', loai: 'n', vi: 'pin', anh: 'low-battery', ex: 'My battery is almost dead.', exVi: 'Pin của tôi sắp hết.' },
+    { w: 'accidentally', loai: 'adv', vi: 'lỡ tay, vô tình', anh: 'face-with-open-eyes-and-hand-over-mouth', ex: 'I accidentally closed the tab.', exVi: 'Tôi lỡ tay đóng tab.' },
+    { w: 'be used to', loai: 'phr', vi: 'quen với', anh: 'relieved-face', ex: 'I\'m used to the noise.', exVi: 'Tôi quen tiếng ồn rồi.' },
+    { w: 'afraid of', loai: 'adj', vi: 'sợ', anh: 'fearful-face', ex: 'She\'s afraid of the dark.', exVi: 'Cô ấy sợ bóng tối.' },
+    { w: 'party', loai: 'n', vi: 'bữa tiệc', anh: 'party-popper', ex: 'The party starts at seven.', exVi: 'Bữa tiệc bắt đầu lúc bảy giờ.' },
+    { w: 'UI', loai: 'n', vi: 'giao diện người dùng', anh: 'artist-palette', ex: 'The new UI looks clean.', exVi: 'Giao diện mới trông gọn gàng.' },
+    { w: 'misunderstand', loai: 'v', vi: 'hiểu sai', anh: 'confused-face', ex: 'Sorry, I misunderstood you.', exVi: 'Xin lỗi, tôi hiểu sai ý bạn.' },
+    { w: 'client', loai: 'n', vi: 'khách hàng (dự án)', anh: 'man-office-worker', ex: 'The client wants a demo.', exVi: 'Khách hàng muốn xem demo.' },
+    { w: 'nervous', loai: 'adj', vi: 'hồi hộp, run', anh: 'anxious-face-with-sweat', ex: 'I always get nervous before exams.', exVi: 'Trước kỳ thi tôi lúc nào cũng run.' },
+  ],
+  hoiThoai: {
+    tieuDe: 'Phỏng vấn thực tập (ôn cả khoá)',
+    luot: [
+      { vai: 'A', ten: 'Người phỏng vấn', en: 'Can you tell me a little about yourself?', vi: 'Em giới thiệu một chút về bản thân được không?' },
+      { vai: 'B', ten: 'Khoa', en: 'Sure. I\'m a third-year student at FPT University, and I major in software engineering.', vi: 'Dạ. Em là sinh viên năm ba Đại học FPT, chuyên ngành kỹ thuật phần mềm.' },
+      { vai: 'A', ten: 'Người phỏng vấn', en: 'Have you ever worked on a real project?', vi: 'Em đã bao giờ làm dự án thật chưa?' },
+      { vai: 'B', ten: 'Khoa', en: 'Yes, I have. Last semester, my team built a booking app for a small cafe.', vi: 'Dạ có. Học kỳ trước nhóm em làm app đặt bàn cho một quán cà phê nhỏ.' },
+      { vai: 'A', ten: 'Người phỏng vấn', en: 'What was the hardest part?', vi: 'Phần nào khó nhất?' },
+      { vai: 'B', ten: 'Khoa', en: 'The payment feature. It was harder than I thought, but I learned a lot.', vi: 'Phần thanh toán ạ. Nó khó hơn em nghĩ, nhưng em học được rất nhiều.' },
+      { vai: 'A', ten: 'Người phỏng vấn', en: 'Great. If we offer you the job, when can you start?', vi: 'Tốt. Nếu công ty nhận, khi nào em bắt đầu được?' },
+      { vai: 'B', ten: 'Khoa', en: 'I can start next Monday. I\'m really excited about this opportunity.', vi: 'Em bắt đầu được từ thứ Hai tuần sau. Em rất mong có cơ hội này.' },
+    ],
+  },
+  viet: {
+    y: [
+      'Viết đoạn **giới thiệu bản thân dài 6 câu** dùng ít nhất **bốn thì khác nhau** — đây là đoạn bạn sẽ dùng lại khi phỏng vấn thực tập.',
+      'Nối các câu bằng **and, but, so, because** — tránh một chuỗi câu ngắn rời rạc.',
+      'Soát lần lượt 10 lỗi trong khung ngữ pháp phía trên, gạch từng lỗi khi đã kiểm.',
+    ],
+    chinhTa: ['~~univercity~~ → **university**', '~~experiance~~ → **experience**', '~~oportunity~~ → **opportunity**', '~~intership~~ → **internship**'],
+    de: 'Viết **6 câu** giới thiệu bản thân cho buổi phỏng vấn thực tập: bạn là ai (hiện tại đơn), đang làm gì (tiếp diễn), đã làm dự án gì (quá khứ / hoàn thành), sẽ làm gì (will / going to).',
+    mau: [
+      { en: 'My name is Khoa, and I\'m a third-year student at FPT University.', vi: 'Em tên Khoa, sinh viên năm ba Đại học FPT.' },
+      { en: 'I\'m learning React and Spring Boot right now.', vi: 'Hiện em đang học React và Spring Boot.' },
+      { en: 'Last semester, my team built a booking app for a cafe.', vi: 'Học kỳ trước nhóm em làm app đặt bàn cho một quán cà phê.' },
+      { en: 'I\'ve used Git and Docker in three projects.', vi: 'Em đã dùng Git và Docker trong ba dự án.' },
+      { en: 'I want to work at your company because I want to learn from real projects.', vi: 'Em muốn làm ở công ty vì em muốn học từ dự án thật.' },
+      { en: 'After I graduate, I\'m going to become a full-stack developer.', vi: 'Sau khi tốt nghiệp, em sẽ trở thành lập trình viên full-stack.' },
+    ],
+  },
+  cau: [
+    { id: 'cn29-01', vi: 'Tôi là sinh viên năm ba và đang thực tập ở một công ty phần mềm.', en: 'I\'m a third-year student, and I\'m doing an internship at a software company.', alt: ['I\'m a third-year student and I\'m interning at a software company.', 'I\'m a third-year student, and I\'m an intern at a software company.'], khung: K1 },
+    { id: 'cn29-02', vi: 'Phòng tôi nhỏ nhưng có một cửa sổ lớn.', en: 'My room is small, but there\'s a big window.', alt: ['My room is small, but it has a big window.'], khung: K1 },
+    { id: 'cn29-03', vi: 'Sáng nào tôi cũng dậy lúc sáu giờ và chạy bộ ba mươi phút.', en: 'Every morning I get up at six and jog for thirty minutes.', alt: ['I get up at six every morning and jog for thirty minutes.', 'Every morning I get up at six and go jogging for thirty minutes.'], khung: K1 },
+    { id: 'cn29-04', vi: 'Bạn có biết ở đây gửi xe chỗ nào không?', en: 'Do you know where I can park here?', alt: ['Do you know where I can park?', 'Do you know where the parking is?'], khung: K2 },
+    { id: 'cn29-05', vi: 'Tôi không biết bơi nhưng tôi muốn học.', en: 'I can\'t swim, but I want to learn.', alt: ['I can\'t swim, but I\'d like to learn.'], khung: K2 },
+    { id: 'cn29-06', vi: 'Bây giờ tôi đang học bài nên không ra ngoài được.', en: 'I\'m studying right now, so I can\'t go out.', alt: ['I\'m studying now, so I can\'t go out.'], khung: K3 },
+    { id: 'cn29-07', vi: 'Hôm qua tôi ở thư viện từ hai giờ đến sáu giờ.', en: 'Yesterday I was at the library from two to six.', alt: ['I was at the library from two to six yesterday.', 'Yesterday I was in the library from two to six.'], khung: K3 },
+    { id: 'cn29-08', vi: 'Tuần trước tôi tình cờ gặp cô giáo cũ ở siêu thị.', en: 'Last week I ran into my old teacher at the supermarket.', alt: ['I saw my old teacher at the supermarket last week.', 'Last week I met my old teacher at the supermarket.', 'I ran into my old teacher at the supermarket last week.'], khung: K3 },
+    { id: 'cn29-09', vi: 'Tối nay tôi sẽ gọi cho bố mẹ vì lâu rồi chưa gọi.', en: 'I\'ll call my parents tonight because I haven\'t called them in a while.', alt: ['I\'m going to call my parents tonight because I haven\'t called them for a while.', 'I\'ll call my parents tonight because I haven\'t called them for a while.'], khung: K4 + ' + ' + K5 },
+    { id: 'cn29-10', vi: 'Bạn nên ngủ sớm vì mai bạn phải dậy lúc năm giờ.', en: 'You should go to bed early because you have to get up at five tomorrow.', alt: ['You should sleep early because you have to get up at five tomorrow.'], khung: K4 },
+    { id: 'cn29-11', vi: 'Laptop mới của tôi nhẹ hơn và pin tốt hơn laptop cũ.', en: 'My new laptop is lighter and has a better battery than my old one.', alt: ['My new laptop is lighter and has better battery life than my old one.'], khung: K4 },
+    { id: 'cn29-12', vi: 'Đây là món ngon nhất tôi từng ăn.', en: 'This is the best food I\'ve ever had.', alt: ['This is the best food I\'ve ever eaten.', 'This is the best dish I\'ve ever had.'], khung: K4 + ' + ' + K5 },
+    { id: 'cn29-13', vi: 'Tủ lạnh hết trứng rồi, nên mình cần mua một ít.', en: 'There aren\'t any eggs in the fridge, so we need to buy some.', alt: ['There are no eggs in the fridge, so we need to buy some.', 'We\'re out of eggs, so we need to buy some.'], khung: K4 },
+    { id: 'cn29-14', vi: 'Thứ Sáu bạn có muốn đi ăn tối với nhóm mình không?', en: 'Would you like to have dinner with our team on Friday?', alt: ['Would you like to join our team for dinner on Friday?', 'Do you want to have dinner with our team on Friday?'], khung: K5 },
+    { id: 'cn29-15', vi: 'Phiền bạn gửi lại file đó được không? Mình lỡ xoá mất rồi.', en: 'Would you mind sending that file again? I accidentally deleted it.', alt: ['Could you send that file again? I accidentally deleted it.'], khung: K5 },
+    { id: 'cn29-16', vi: 'Tôi sống ở Sài Gòn được năm năm nhưng vẫn chưa quen kẹt xe.', en: 'I\'ve lived in Saigon for five years, but I\'m still not used to the traffic.', alt: ['I\'ve lived in Saigon for five years, but I still haven\'t gotten used to the traffic.'], khung: K5 },
+    { id: 'cn29-17', vi: 'Nếu mai trời đẹp, mình đi Vũng Tàu nhé.', en: 'If the weather is nice tomorrow, let\'s go to Vung Tau.', alt: ['Let\'s go to Vung Tau if the weather is nice tomorrow.'], khung: K5 },
+    { id: 'cn29-18', vi: 'Hồi nhỏ tôi sợ chó, nhưng giờ tôi nuôi hai con.', en: 'When I was a kid, I was afraid of dogs, but now I have two.', alt: ['When I was little, I was scared of dogs, but now I have two.', 'When I was a child, I was afraid of dogs, but now I have two.'], khung: K3 + ' + ' + K5 },
+    { id: 'cn29-19', vi: 'Bạn ăn ở quán đó rồi, phải không?', en: 'You\'ve eaten at that restaurant before, haven\'t you?', alt: ['You\'ve been to that restaurant before, haven\'t you?'], khung: K5 },
+    { id: 'cn29-20', vi: 'Tôi không thích dậy sớm, chị tôi cũng vậy.', en: 'I don\'t like getting up early, and neither does my sister.', alt: ['I don\'t like getting up early, and my sister doesn\'t either.'], khung: K2 + ' + ' + K5 },
+    { id: 'cn29-21', vi: 'Hôm qua em bị ốm nên không làm xong bài tập ạ.', en: 'I was sick yesterday, so I couldn\'t finish my homework.', alt: ['I was sick yesterday, so I didn\'t finish my homework.', 'Yesterday I was sick, so I couldn\'t finish my homework.'], khung: K3 + ' + ' + K5 },
+    { id: 'cn29-22', vi: 'Tối nay có bao nhiêu người đến dự tiệc?', en: 'How many people are coming to the party tonight?', alt: ['How many people will come to the party tonight?'], khung: K4 },
+    { id: 'cn29-23', vi: 'Đi thẳng khoảng hai trăm mét, quán cà phê ở bên tay trái.', en: 'Go straight for about two hundred meters. The cafe is on your left.', alt: ['Go straight for about 200 meters. The coffee shop is on your left.', 'Go straight for about two hundred meters, and the cafe is on your left.'], khung: K5 },
+    { id: 'cn29-24', vi: 'Tôi đã gửi CV cho ba công ty nhưng chưa nơi nào trả lời.', en: 'I\'ve sent my CV to three companies, but none of them have replied yet.', alt: ['I\'ve sent my CV to three companies, but no one has replied yet.', 'I sent my CV to three companies, but nobody has replied yet.'], khung: K5 },
+    { id: 'cn29-25', vi: 'Hôm qua em làm xong tính năng tìm kiếm, hôm nay em sẽ sửa giao diện.', en: 'Yesterday I finished the search feature, and today I\'ll fix the UI.', alt: ['Yesterday I finished the search feature. Today I\'m going to fix the UI.'], khung: K6 },
+    { id: 'cn29-26', vi: 'Lỗi chỉ xảy ra khi người dùng chưa đăng nhập.', en: 'The bug only happens when the user isn\'t logged in.', alt: ['The bug only happens when users aren\'t logged in.', 'This bug only happens when the user is not logged in.'], khung: K6 },
+    { id: 'cn29-27', vi: 'Cảm ơn anh đã giải thích, giờ em hiểu rồi.', en: 'Thanks for explaining. I understand now.', alt: ['Thank you for explaining. Now I understand.', 'Thanks for the explanation. I get it now.'], khung: K6 },
+    { id: 'cn29-28', vi: 'Em xin lỗi, em hiểu sai yêu cầu.', en: 'I\'m sorry, I misunderstood the requirement.', alt: ['Sorry, I misunderstood the requirement.'], khung: K6 },
+    { id: 'cn29-29', vi: 'Ngày nào tôi cũng học tiếng Anh để nói chuyện được với khách hàng nước ngoài.', en: 'I study English every day so that I can talk to foreign clients.', alt: ['I study English every day so I can talk to foreign clients.', 'I learn English every day so I can talk with foreign customers.'], khung: 'S + V … so that + S + can + V (để có thể)' },
+    { id: 'cn29-30', vi: 'Bạn làm ở đây bao lâu rồi?', en: 'How long have you worked here?', alt: ['How long have you been working here?'], khung: K5 },
+    { id: 'cn29-31', vi: 'Đừng lo, cần gì thì luôn có mình ở đây.', en: 'Don\'t worry. If you need anything, I\'m always here.', alt: ['Don\'t worry. I\'m always here if you need anything.'], khung: K5 },
+    { id: 'cn29-32', vi: 'Cái áo này đẹp nhưng đắt hơn tôi nghĩ.', en: 'This shirt is nice, but it\'s more expensive than I thought.', alt: ['This shirt looks nice, but it\'s more expensive than I expected.'], khung: K4 + ' + ' + K5 },
+    { id: 'cn29-33', vi: 'Lần đầu đi phỏng vấn, tôi run lắm.', en: 'The first time I went to an interview, I was really nervous.', alt: ['I was very nervous at my first interview.', 'The first time I had an interview, I was so nervous.'], khung: K3 },
+    { id: 'cn29-34', vi: 'Năm sau tôi sẽ tốt nghiệp và tìm một công việc tốt.', en: 'Next year I\'m going to graduate and find a good job.', alt: ['I\'ll graduate next year and find a good job.', 'Next year I\'ll graduate and look for a good job.'], khung: K4 },
+  ],
+};

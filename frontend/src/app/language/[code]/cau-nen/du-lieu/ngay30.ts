@@ -1,0 +1,151 @@
+import type { NgayCauNen } from '../kieu';
+
+const SANG = 'Buổi sáng — quá khứ đơn + thời gian (at six, for breakfast)';
+const TRUONG = 'Ở trường — have to · so sánh · lượng từ';
+const VIEC = 'Đi làm — hiện tại hoàn thành · standup · nhờ giúp';
+const TOI = 'Buổi tối — because / so / but · told + ai + to V';
+const MAI = 'Ngày mai — going to · if … will';
+const TONG = 'Tổng kết — can · so sánh với trước kia';
+
+export const NGAY_30: NgayCauNen = {
+  n: 30,
+  ten: 'KIỂM TRA CUỐI · Một ngày bằng tiếng Anh',
+  mucTieu: 'Kể trọn một ngày — từ lúc dậy, lên lớp, đi làm thêm, tới buổi tối và kế hoạch ngày mai — bằng 34 câu ghép mọi khung của khoá. Đạt ≥ 80% là xong lộ trình 1000 câu nền.',
+  on: true,
+  bai: {
+    y: [
+      'Bài kiểm tra cuối là **một câu chuyện liền mạch**: 34 câu theo thứ tự thời gian trong một ngày. Câu sau nối câu trước — dịch đúng thì là nhờ **nhớ mạch truyện**.',
+      'Chuyện kể về ngày **đã qua** ⇒ phần lớn dùng **quá khứ đơn** (got up, had, went). Chỉ đổi thì khi câu nói về **bây giờ** (I\'m a little nervous), **kết quả tới nay** (I\'ve learned) hay **ngày mai** (I\'m going to).',
+      'Kể lại lời người khác (mẹ dặn, thầy giao): **told + ai + (not) to V** — She told me **to go** to bed earlier. · I told her **not to worry**.',
+      'Làm bài: đọc câu Việt → **tìm mốc thời gian và chủ ngữ** → chọn khung → viết. Sai câu nào, bấm nghe và nói theo hai lần rồi làm lại.',
+    ],
+    khung: [
+      { mau: SANG, vi: 'câu 1–4' },
+      { mau: TRUONG, vi: 'câu 5–9' },
+      { mau: VIEC, vi: 'câu 10–16' },
+      { mau: TOI, vi: 'câu 17–28' },
+      { mau: MAI, vi: 'câu 29–31' },
+      { mau: TONG, vi: 'câu 32–34' },
+    ],
+    soSanh: [
+      { vi: 'Đường đông quá nên tôi đến trường muộn năm phút.', tungChu: 'Road very crowded so I come school late five minute.', en: 'The traffic was heavy, so I got to school five minutes late.', viSao: '"đường đông" = the traffic was heavy; đến nơi = got to; minutes số nhiều.' },
+      { vi: 'Mẹ dặn tôi nên ngủ sớm hơn.', tungChu: 'Mom tell me should sleep more early.', en: 'She told me I should go to bed earlier.', viSao: 'Chuyện đã qua ⇒ told; sớm hơn = earlier (không phải more early).' },
+      { vi: 'Một tháng trước tôi không nói được những câu này.', tungChu: 'One month before I can\'t say these sentence.', en: 'A month ago, I couldn\'t say these sentences.', viSao: '"… trước (tính từ bây giờ)" = ago; quá khứ của can\'t = couldn\'t.' },
+    ],
+    viDu: [
+      { en: 'My alarm went off at six, but I got up at six thirty.', vi: 'Báo thức reo lúc sáu giờ nhưng sáu rưỡi tôi mới dậy.' },
+      { en: 'I\'ve finished it, but there\'s still a small bug.', vi: 'Em làm xong rồi nhưng vẫn còn một lỗi nhỏ ạ.' },
+      { en: 'Now I can talk about my whole day in English.', vi: 'Giờ tôi có thể kể cả một ngày của mình bằng tiếng Anh.' },
+    ],
+    meo: [
+      'Xong lộ trình rồi: mỗi tối dành **5 phút kể lại ngày hôm nay bằng tiếng Anh** (nói to hoặc viết nhật ký). Phần "Ôn hôm nay" vẫn nhắc lại các câu bạn hay sai.',
+      'Bước tiếp theo: IELTS hoặc khoá Giao tiếp trên trang tiếng Anh — 1000 câu này là nền để đi tiếp.',
+    ],
+  },
+  nguPhap: [
+    { t: 'h', text: 'Một ngày — sáu chặng — các khung đã học' },
+    {
+      t: 'sodo', kind: 'timeline', title: 'Hôm qua → bây giờ → ngày mai',
+      marks: [
+        { from: -9, label: '6:30 — I got up', kieu: 'diem', mau: 1 },
+        { from: -7, to: -5, label: 'at school — I had class', kieu: 'doan', mau: 1 },
+        { from: -4, to: -2, label: 'at work — I fixed two bugs', kieu: 'doan', mau: 1 },
+        { from: 0, label: 'now — I\'m a little nervous', kieu: 'diem', mau: 2 },
+        { from: 5, label: 'tomorrow — I\'m going to present', kieu: 'diem', mau: 3 },
+      ],
+    },
+    {
+      t: 'table', head: ['Chặng', 'Khung chính', 'Câu mẫu'],
+      rows: [
+        ['Buổi sáng', 'quá khứ đơn + at / for', 'I **got up** **at** six thirty.'],
+        ['Ở trường', 'have to · so sánh', 'We **have to** submit it **by** the end of the month.'],
+        ['Đi làm', 'hiện tại hoàn thành · showed me how to', 'I**\'ve finished** it, **but** there\'s still a small bug.'],
+        ['Buổi tối', 'because · told + ai + to V', 'I **told** her **not to worry**.'],
+        ['Ngày mai', 'going to · if … will', '**If** I speak slowly, everyone **will** understand.'],
+        ['Tổng kết', 'couldn\'t → can', 'A month ago, I **couldn\'t** … Now I **can** …'],
+      ],
+    },
+    { t: 'note', title: 'Tiêu chí qua bài', items: ['Đạt **≥ 80%** (≥ 8/10 câu trong bài kiểm tra) ⇒ hoàn thành lộ trình.', 'Câu dịch đúng ý nhưng khác chữ vẫn được tính nếu nằm trong các cách nói đúng; không chắc thì bấm **Nhờ CuongMini xem câu**.', 'Câu sai sẽ vào "Ôn hôm nay" — ôn lại sau 1, 3, 7 ngày.'] },
+  ],
+  tuVung: [
+    { w: 'alarm', loai: 'n', vi: 'chuông báo thức', anh: 'alarm-clock', ex: 'I didn\'t hear my alarm.', exVi: 'Tôi không nghe thấy chuông báo thức.' },
+    { w: 'go off', loai: 'phr', vi: 'reo (chuông)', anh: 'bell', ex: 'The fire alarm went off.', exVi: 'Chuông báo cháy reo.' },
+    { w: 'get dressed', loai: 'phr', vi: 'thay quần áo', anh: 't-shirt', ex: 'Get dressed. We\'re late!', exVi: 'Thay đồ đi. Muộn rồi!' },
+    { w: 'heavy traffic', loai: 'n', vi: 'kẹt xe, đường đông', anh: 'automobile', ex: 'There\'s heavy traffic downtown.', exVi: 'Trung tâm đang kẹt xe.' },
+    { w: 'database', loai: 'n', vi: 'cơ sở dữ liệu', anh: 'card-index-dividers', ex: 'Our database is on the server.', exVi: 'Cơ sở dữ liệu nằm trên server.' },
+    { w: 'lunchtime', loai: 'n', vi: 'giờ ăn trưa', anh: 'bento-box', ex: 'See you at lunchtime.', exVi: 'Gặp lại lúc ăn trưa.' },
+    { w: 'startup', loai: 'n', vi: 'công ty khởi nghiệp', anh: 'rocket', ex: 'She works at a small startup.', exVi: 'Cô ấy làm ở một startup nhỏ.' },
+    { w: 'sign-up', loai: 'n', vi: 'đăng ký (tài khoản)', anh: 'identification-card', ex: 'The sign-up form is too long.', exVi: 'Mẫu đăng ký dài quá.' },
+    { w: 'stop by', loai: 'phr', vi: 'ghé qua', anh: 'convenience-store', ex: 'Stop by my office later.', exVi: 'Lát ghé phòng tôi nhé.' },
+    { w: 'roommate', loai: 'n', vi: 'bạn cùng phòng', anh: 'ai-dorm', ex: 'My roommate is from Hue.', exVi: 'Bạn cùng phòng tôi người Huế.' },
+    { w: 'vocabulary', loai: 'n', vi: 'từ vựng', anh: 'notebook', ex: 'I review vocabulary every night.', exVi: 'Tối nào tôi cũng ôn từ vựng.' },
+    { w: 'prepare', loai: 'v', vi: 'chuẩn bị', anh: 'clipboard', ex: 'I need to prepare my slides.', exVi: 'Tôi cần chuẩn bị slide.' },
+  ],
+  hoiThoai: {
+    tieuDe: 'Kể chuyện một ngày với bạn qua video call',
+    luot: [
+      { vai: 'A', ten: 'Sarah', en: 'Hey! How was your day?', vi: 'Chào! Hôm nay của cậu thế nào?' },
+      { vai: 'B', ten: 'Bảo', en: 'Long but fun! I had class in the morning and worked at the startup in the afternoon.', vi: 'Dài nhưng vui! Sáng tớ đi học, chiều làm ở startup.' },
+      { vai: 'A', ten: 'Sarah', en: 'Did you finish the sign-up feature?', vi: 'Cậu làm xong tính năng đăng ký chưa?' },
+      { vai: 'B', ten: 'Bảo', en: 'Yes, I did. There was a small bug, but my team lead showed me how to fix it.', vi: 'Xong rồi. Có một lỗi nhỏ nhưng trưởng nhóm chỉ tớ cách sửa.' },
+      { vai: 'A', ten: 'Sarah', en: 'Nice! What are you doing now?', vi: 'Hay đấy! Giờ cậu đang làm gì?' },
+      { vai: 'B', ten: 'Bảo', en: 'I\'m preparing for my presentation. It\'s my first one in English.', vi: 'Tớ đang chuẩn bị bài thuyết trình. Bài đầu tiên bằng tiếng Anh.' },
+      { vai: 'A', ten: 'Sarah', en: 'Don\'t worry. If you speak slowly and clearly, you\'ll be fine.', vi: 'Đừng lo. Nói chậm và rõ là ổn thôi.' },
+      { vai: 'B', ten: 'Bảo', en: 'Thanks! A month ago, I couldn\'t say all this in English.', vi: 'Cảm ơn! Một tháng trước tớ còn không nói được ngần này bằng tiếng Anh.' },
+    ],
+  },
+  viet: {
+    y: [
+      'Bài viết cuối khoá: **kể một ngày CỦA BẠN** theo đúng sáu chặng — sáng, trường, đi làm / học nhóm, tối, ngày mai, cảm nghĩ.',
+      'Đặt mốc thời gian ở đầu câu cho mạch rõ: **In the morning, … · At noon, … · After dinner, … · Tomorrow, …**',
+      'Đếm thì: ít nhất **quá khứ đơn, hiện tại tiếp diễn, hiện tại hoàn thành, going to** — mỗi thì một câu trở lên.',
+      'Viết xong, đọc to cả đoạn. Chỗ nào vấp khi đọc thường là chỗ câu chưa tự nhiên.',
+    ],
+    chinhTa: ['~~tommorow~~ → **tomorrow**', '~~untill~~ → **until**', '~~studyed~~ → **studied**', '~~beggining~~ → **beginning**'],
+    de: 'Viết **6–8 câu** kể ngày hôm nay của bạn (hoặc một ngày bình thường) bằng tiếng Anh, theo sáu chặng ở trên. Dán vào ô "Nhờ CuongMini xem câu" từng câu nếu muốn được chữa.',
+    mau: [
+      { en: 'This morning, I got up at six and had a quick breakfast.', vi: 'Sáng nay tôi dậy lúc sáu giờ và ăn sáng vội.' },
+      { en: 'I had two classes, and the second one was much harder than the first.', vi: 'Tôi có hai tiết, và tiết thứ hai khó hơn tiết đầu nhiều.' },
+      { en: 'In the afternoon, I worked on our group project in the library.', vi: 'Buổi chiều tôi làm dự án nhóm ở thư viện.' },
+      { en: 'I\'ve finished my part, so I feel relaxed now.', vi: 'Tôi đã làm xong phần của mình nên giờ thấy nhẹ nhõm.' },
+      { en: 'Tomorrow, I\'m going to meet my mentor at 9 a.m.', vi: 'Mai tôi sẽ gặp mentor lúc 9 giờ sáng.' },
+      { en: 'I\'m proud because I can write all this in English now.', vi: 'Tôi tự hào vì giờ đã viết được ngần này bằng tiếng Anh.' },
+    ],
+  },
+  cau: [
+    { id: 'cn30-01', vi: 'Báo thức reo lúc sáu giờ nhưng sáu rưỡi tôi mới dậy.', en: 'My alarm went off at six, but I got up at six thirty.', alt: ['My alarm rang at six, but I got up at 6:30.', 'My alarm went off at six, but I didn\'t get up until six thirty.'], khung: SANG },
+    { id: 'cn30-02', vi: 'Tôi đánh răng, rửa mặt rồi thay quần áo.', en: 'I brushed my teeth, washed my face, and got dressed.', alt: ['I brushed my teeth, washed my face, and then got dressed.'], khung: SANG },
+    { id: 'cn30-03', vi: 'Bữa sáng tôi ăn bánh mì trứng và uống cà phê sữa.', en: 'For breakfast, I had a banh mi with eggs and a milk coffee.', alt: ['I had a banh mi with eggs and a milk coffee for breakfast.', 'For breakfast, I had an egg banh mi and a coffee with milk.'], khung: SANG },
+    { id: 'cn30-04', vi: 'Đường đông quá nên tôi đến trường muộn năm phút.', en: 'The traffic was heavy, so I got to school five minutes late.', alt: ['There was a lot of traffic, so I was five minutes late for school.', 'The traffic was bad, so I got to school five minutes late.'], khung: SANG },
+    { id: 'cn30-05', vi: 'Tiết đầu tiên là môn Cơ sở dữ liệu.', en: 'The first class was Databases.', alt: ['My first class was Databases.', 'The first class was Database Systems.'], khung: TRUONG },
+    { id: 'cn30-06', vi: 'Thầy giao cho nhóm mình một bài tập lớn.', en: 'The teacher gave our group a big assignment.', alt: ['Our teacher gave our group a big assignment.', 'The teacher gave us a big group assignment.'], khung: TRUONG },
+    { id: 'cn30-07', vi: 'Chúng tôi phải nộp trước cuối tháng.', en: 'We have to submit it by the end of the month.', alt: ['We have to hand it in by the end of the month.', 'We need to submit it by the end of the month.'], khung: TRUONG },
+    { id: 'cn30-08', vi: 'Giờ nghỉ trưa, tôi ăn cơm với bạn ở căng tin.', en: 'At lunchtime, I had rice with my friends in the cafeteria.', alt: ['At lunch, I ate rice with my friends in the cafeteria.', 'During lunch break, I had rice with my friends at the canteen.'], khung: TRUONG },
+    { id: 'cn30-09', vi: 'Hôm nay căng tin đông hơn mọi khi.', en: 'The cafeteria was more crowded than usual today.', alt: ['The cafeteria was busier than usual today.'], khung: TRUONG },
+    { id: 'cn30-10', vi: 'Buổi chiều tôi đi làm thêm ở một công ty khởi nghiệp.', en: 'In the afternoon, I went to my part-time job at a startup.', alt: ['In the afternoon, I worked part-time at a startup.'], khung: VIEC },
+    { id: 'cn30-11', vi: 'Anh trưởng nhóm muốn xem tính năng đăng ký.', en: 'My team lead wanted to see the sign-up feature.', alt: ['The team lead wanted to see the sign-up feature.'], khung: VIEC },
+    { id: 'cn30-12', vi: 'Em làm xong rồi nhưng vẫn còn một lỗi nhỏ ạ.', en: 'I\'ve finished it, but there\'s still a small bug.', alt: ['It\'s done, but there\'s still a small bug.', 'I\'ve finished it, but there\'s still one small bug.'], khung: VIEC },
+    { id: 'cn30-13', vi: 'Anh ấy chỉ em cách sửa trong mười phút.', en: 'He showed me how to fix it in ten minutes.', khung: 'S + showed me how to + V' },
+    { id: 'cn30-14', vi: 'Sau đó em viết thêm vài test cho chắc.', en: 'After that, I wrote a few more tests to be safe.', alt: ['Then I wrote a few more tests just to be safe.', 'After that, I wrote some more tests to be sure.'], khung: VIEC },
+    { id: 'cn30-15', vi: 'Năm giờ, cả nhóm họp nhanh mười lăm phút.', en: 'At five, the whole team had a quick fifteen-minute meeting.', alt: ['At five, our team had a short fifteen-minute meeting.'], khung: VIEC },
+    { id: 'cn30-16', vi: 'Em cập nhật: hôm nay em sửa được hai lỗi, không vướng gì.', en: 'My update: I fixed two bugs today, and I have no blockers.', alt: ['Update: I fixed two bugs today. No blockers.', 'My update: I fixed two bugs today. No blockers.'], khung: VIEC },
+    { id: 'cn30-17', vi: 'Trên đường về, tôi ghé siêu thị mua ít trái cây.', en: 'On the way home, I stopped by the supermarket to buy some fruit.', alt: ['On my way home, I stopped at the supermarket to buy some fruit.'], khung: TOI },
+    { id: 'cn30-18', vi: 'Táo hôm nay rẻ hơn tuần trước.', en: 'Apples were cheaper today than last week.', alt: ['The apples were cheaper today than last week.'], khung: TOI },
+    { id: 'cn30-19', vi: 'Về đến nhà, tôi tắm rồi nấu bữa tối.', en: 'When I got home, I took a shower and cooked dinner.', alt: ['When I got home, I showered and made dinner.', 'After I got home, I took a shower and cooked dinner.'], khung: TOI },
+    { id: 'cn30-20', vi: 'Bạn cùng phòng rủ tôi xem bóng đá cùng.', en: 'My roommate asked me to watch soccer with him.', alt: ['My roommate invited me to watch soccer with him.', 'My roommate asked me to watch football with him.'], khung: 'S + asked / told + ai + to V' },
+    { id: 'cn30-21', vi: 'Nhưng tôi từ chối vì vẫn còn bài phải làm.', en: 'But I said no because I still had homework to do.', alt: ['But I said no because I still had work to do.', 'But I said no because I still had some homework.'], khung: TOI },
+    { id: 'cn30-22', vi: 'Tôi học từ vựng tiếng Anh ba mươi phút.', en: 'I studied English vocabulary for thirty minutes.', alt: ['I studied English words for thirty minutes.', 'I learned English vocabulary for thirty minutes.'], khung: TOI },
+    { id: 'cn30-23', vi: 'Hôm nay tôi đã học được mười từ mới.', en: 'Today I\'ve learned ten new words.', alt: ['I learned ten new words today.', 'I\'ve learned ten new words today.'], khung: 'S + have + V3 + today' },
+    { id: 'cn30-24', vi: 'Mẹ gọi điện hỏi tôi có khoẻ không.', en: 'My mom called to ask if I was okay.', alt: ['My mom called to ask how I was.', 'My mother called to ask if I was doing well.'], khung: 'called to ask if + S + was …' },
+    { id: 'cn30-25', vi: 'Tôi bảo mẹ đừng lo vì mọi thứ đều ổn.', en: 'I told her not to worry because everything was fine.', alt: ['I told her not to worry. Everything was fine.', 'I told my mom not to worry because everything was okay.'], khung: 'told + ai + not to V' },
+    { id: 'cn30-26', vi: 'Mẹ dặn tôi nên ngủ sớm hơn.', en: 'She told me I should go to bed earlier.', alt: ['She said I should sleep earlier.', 'She told me to go to bed earlier.'], khung: 'told me + (that) I should + V' },
+    { id: 'cn30-27', vi: 'Trước khi ngủ, tôi trả lời vài email công việc.', en: 'Before bed, I replied to a few work emails.', alt: ['Before going to bed, I answered a few work emails.', 'Before I went to bed, I replied to some work emails.'], khung: TOI },
+    { id: 'cn30-28', vi: 'Tôi đặt báo thức sáu giờ cho ngày mai.', en: 'I set my alarm for six tomorrow.', alt: ['I set an alarm for 6 a.m. tomorrow.', 'I set my alarm for six for tomorrow.'], khung: TOI },
+    { id: 'cn30-29', vi: 'Ngày mai tôi sẽ có bài thuyết trình đầu tiên bằng tiếng Anh.', en: 'Tomorrow I\'m going to give my first presentation in English.', alt: ['Tomorrow I\'ll give my first presentation in English.', 'I\'m giving my first presentation in English tomorrow.'], khung: MAI },
+    { id: 'cn30-30', vi: 'Tôi hơi run nhưng đã chuẩn bị kỹ.', en: 'I\'m a little nervous, but I\'ve prepared well.', alt: ['I\'m a bit nervous, but I\'ve prepared carefully.', 'I\'m a little nervous, but I\'m well prepared.'], khung: MAI },
+    { id: 'cn30-31', vi: 'Nếu tôi nói chậm và rõ, mọi người sẽ hiểu.', en: 'If I speak slowly and clearly, everyone will understand.', alt: ['If I speak slowly and clearly, people will understand.'], khung: MAI },
+    { id: 'cn30-32', vi: 'Hôm nay là một ngày dài nhưng vui.', en: 'Today was a long but fun day.', alt: ['It was a long but fun day.', 'Today was long, but it was fun.'], khung: TONG },
+    { id: 'cn30-33', vi: 'Một tháng trước tôi không nói được những câu này.', en: 'A month ago, I couldn\'t say these sentences.', alt: ['A month ago, I couldn\'t say any of these sentences.', 'One month ago, I couldn\'t say these sentences.'], khung: TONG, loi: '~~One month before~~ → ago' },
+    { id: 'cn30-34', vi: 'Giờ tôi có thể kể cả một ngày của mình bằng tiếng Anh.', en: 'Now I can talk about my whole day in English.', alt: ['Now I can describe my whole day in English.', 'Now I can tell you about my whole day in English.'], khung: TONG },
+  ],
+};

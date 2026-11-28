@@ -1,0 +1,150 @@
+import type { NgayCauNen } from '../kieu';
+
+const HAVE = 'S + have to / has to + V (phải)';
+const DONT = "S + don't / doesn't have to + V (không cần phải)";
+const SHOULD = 'S + should + V (nên)';
+const SHOULDNT = "S + shouldn't + V (không nên)";
+const Q = 'Do I have to + V? · Should I + V?';
+
+export const NGAY_17: NgayCauNen = {
+  n: 17,
+  ten: 'have to / should — phải, nên',
+  mucTieu: 'Nói việc bắt buộc và đưa lời khuyên: I have to go. You should rest. You don\'t have to pay. Should I buy this?',
+  bai: {
+    y: [
+      '**have to / has to + V** = **phải** (bắt buộc, do luật lệ, công việc, hoàn cảnh): I **have to** work late tonight. He **has to** get up at 5.',
+      '**should + V** = **nên** (lời khuyên, ý kiến): You **should** see a doctor. — nhẹ nhàng hơn have to rất nhiều.',
+      '**don\'t have to** = **không cần phải** (không bắt buộc) — KHÁC với **can\'t / mustn\'t** = **không được** (cấm).',
+      'Quá khứ của have to: **had to** (đã phải): I **had to** wait for an hour.',
+      'Câu hỏi: **Do I have to…?** (có bắt buộc không) · **Should I…?** (xin lời khuyên). Sau should không có to: ~~should to go~~.',
+    ],
+    khung: [
+      { mau: HAVE, vi: 'phải' },
+      { mau: DONT, vi: 'không cần phải' },
+      { mau: SHOULD, vi: 'nên' },
+      { mau: SHOULDNT, vi: 'không nên' },
+      { mau: Q, vi: 'có phải … không? / có nên … không?' },
+    ],
+    soSanh: [
+      { vi: 'Bạn nên nghỉ ngơi.', tungChu: 'You should to rest.', en: 'You should rest.', viSao: 'Sau should là động từ trần, không có to.' },
+      { vi: 'Anh ấy phải dậy lúc 5 giờ.', tungChu: 'He have to wake 5 hour.', en: 'He has to get up at 5.', viSao: 'He ⇒ has to; giờ ⇒ at.' },
+      { vi: 'Bạn không cần phải trả tiền.', tungChu: 'You must not pay.', en: 'You don\'t have to pay.', viSao: '"không cần" = don\'t have to; must not lại là "cấm trả" — nghĩa khác hẳn.' },
+    ],
+    viDu: [
+      { en: 'I have to go.', vi: 'Tôi phải đi rồi.' },
+      { en: 'You should rest.', vi: 'Bạn nên nghỉ ngơi.' },
+      { en: 'You don\'t have to pay.', vi: 'Bạn không cần phải trả tiền.' },
+      { en: 'Should I buy this?', vi: 'Mình có nên mua cái này không?' },
+    ],
+    meo: ['Xin lời khuyên ở chỗ làm cho lịch sự: **What do you think I should do?** (Anh/chị nghĩ em nên làm gì?)'],
+  },
+  nguPhap: [
+    { t: 'h', text: '1. Phải · không cần · nên · không nên' },
+    {
+      t: 'sodo', kind: 'compare', title: 'Mức độ bắt buộc',
+      cols: [
+        { title: '**have to** — phải', anh: 'alarm-clock', items: ['I **have to** go.', 'Students **have to** wear uniforms.'] },
+        { title: '**should** — nên', anh: 'light-bulb', items: ['You **should** rest.', 'You **should** back up your data.'] },
+        { title: '**don\'t have to** — không cần', anh: 'relieved-face', items: ['You **don\'t have to** pay.', 'She **doesn\'t have to** work on Saturdays.'] },
+      ],
+    },
+    { t: 'h', text: '2. Dạng câu' },
+    {
+      t: 'table', head: ['', 'have to', 'should'],
+      rows: [
+        ['Khẳng định', 'I **have to** / He **has to** go.', 'You **should** go.'],
+        ['Phủ định', 'I **don\'t have to** / He **doesn\'t have to** go.', 'You **shouldn\'t** go.'],
+        ['Câu hỏi', '**Do** I **have to** go? / **Does** he **have to** go?', '**Should** I go?'],
+        ['Quá khứ', 'I **had to** go.', '(I should have gone — học sau)'],
+      ],
+    },
+    {
+      t: 'sodo', kind: 'compare', title: '"không" nhưng hai nghĩa khác nhau',
+      cols: [
+        { title: '**don\'t have to** = không cần', items: ['You don\'t have to come. (đến cũng được, không đến cũng được)'] },
+        { title: '**can\'t / mustn\'t** = không được', items: ['You can\'t smoke here. (cấm)'] },
+      ],
+    },
+    { t: 'note', title: 'Lỗi người Việt hay mắc', items: ['~~You should to rest~~ → You should **rest**.', '~~He have to go~~ → He **has** to go.', '~~I must to go~~ → I **must** go / I **have to** go.', '~~You mustn\'t pay~~ (khi muốn nói "không cần trả") → You **don\'t have to** pay.'] },
+  ],
+  tuVung: [
+    { w: 'rest', loai: 'v/n', vi: 'nghỉ ngơi', anh: 'person-in-bed', ex: 'You need some rest.', exVi: 'Bạn cần nghỉ ngơi một chút.' },
+    { w: 'uniform', loai: 'n', vi: 'đồng phục', anh: 'ai-uniform', ex: 'Our uniform is blue.', exVi: 'Đồng phục của chúng tôi màu xanh.' },
+    { w: 'team lead', loai: 'n', vi: 'trưởng nhóm', anh: 'woman-office-worker', ex: 'Ask your team lead first.', exVi: 'Hỏi trưởng nhóm trước đã.' },
+    { w: 'submit', loai: 'v', vi: 'nộp (bài, đơn)', anh: 'outbox-tray', ex: 'Submit your report by Friday.', exVi: 'Nộp báo cáo trước thứ Sáu.' },
+    { w: 'midnight', loai: 'n', vi: 'nửa đêm', anh: 'twelve-oclock', ex: 'The store closes at midnight.', exVi: 'Cửa hàng đóng cửa lúc nửa đêm.' },
+    { w: 'exercise', loai: 'v/n', vi: 'tập thể dục', anh: 'person-lifting-weights', ex: 'I exercise three times a week.', exVi: 'Tôi tập thể dục ba lần một tuần.' },
+    { w: 'apologize', loai: 'v', vi: 'xin lỗi', anh: 'folded-hands', ex: 'He apologized to his friend.', exVi: 'Anh ấy xin lỗi bạn.' },
+    { w: 'save', loai: 'v', vi: 'tiết kiệm; lưu', anh: 'coin', ex: 'I\'m saving for a new laptop.', exVi: 'Tôi đang để dành mua laptop mới.' },
+    { w: 'pick up', loai: 'phr', vi: 'đón (ai); nhặt lên', anh: 'oncoming-taxi', ex: 'Can you pick me up at six?', exVi: 'Sáu giờ bạn đón mình được không?' },
+    { w: 'quit', loai: 'v', vi: 'bỏ, nghỉ (việc)', anh: 'person-running', ex: 'She quit her job last month.', exVi: 'Tháng trước cô ấy nghỉ việc.' },
+    { w: 'shift', loai: 'n', vi: 'ca làm việc', anh: 'factory-worker', ex: 'I work the morning shift.', exVi: 'Tôi làm ca sáng.' },
+    { w: 'documentation', loai: 'n', vi: 'tài liệu (kỹ thuật)', anh: 'bookmark-tabs', ex: 'Read the documentation first.', exVi: 'Đọc tài liệu trước đã.' },
+    { w: 'dish', loai: 'n', vi: 'món ăn; cái đĩa', anh: 'curry-rice', ex: 'This is my favorite dish.', exVi: 'Đây là món tôi thích nhất.' },
+    { w: 'back up', loai: 'phr', vi: 'sao lưu', anh: 'floppy-disk', ex: 'Back up your files every week.', exVi: 'Sao lưu file mỗi tuần.' },
+    { w: 'see a doctor', loai: 'phr', vi: 'đi khám bác sĩ', anh: 'stethoscope', ex: 'You should see a doctor.', exVi: 'Bạn nên đi khám.' },
+  ],
+  hoiThoai: {
+    tieuDe: 'Xin lời khuyên trước ngày đầu đi thực tập',
+    luot: [
+      { vai: 'A', ten: 'Khánh', en: 'I start my internship on Monday. Do I have to wear a suit?', vi: 'Thứ Hai em bắt đầu thực tập. Em có phải mặc vest không ạ?' },
+      { vai: 'B', ten: 'Chị Hạnh', en: 'No, you don\'t have to. Just wear a nice shirt.', vi: 'Không cần đâu. Mặc áo sơ mi gọn gàng là được.' },
+      { vai: 'A', ten: 'Khánh', en: 'Should I bring my own laptop?', vi: 'Em có nên mang laptop riêng không ạ?' },
+      { vai: 'B', ten: 'Chị Hạnh', en: 'Yes, you should. But you have to install the company VPN first.', vi: 'Nên mang. Nhưng em phải cài VPN của công ty trước.' },
+      { vai: 'A', ten: 'Khánh', en: 'What time do I have to be there?', vi: 'Em phải có mặt lúc mấy giờ ạ?' },
+      { vai: 'B', ten: 'Chị Hạnh', en: 'At 8:30. You shouldn\'t be late on the first day!', vi: '8 giờ 30. Ngày đầu tiên thì đừng đi muộn nhé!' },
+    ],
+  },
+  viet: {
+    y: [
+      'Viết lời khuyên cho bạn bè: mở bằng **I think you should…** cho mềm mỏng, kèm **lý do** (because…).',
+      'Viết nội quy: dùng **have to / don\'t have to / can\'t** — mỗi quy định một câu, đánh số.',
+      '**has to** cho he/she/it; **had to** cho quá khứ — soát lại từng câu.',
+    ],
+    chinhTa: ['~~shoud~~ / ~~shuold~~ → **should** (l câm)', '~~excercise~~ → **exercise**', '~~apologise~~ (Anh) / **apologize** (Mỹ)'],
+    de: 'Một người bạn sắp đi phỏng vấn thực tập. Viết **5 lời khuyên** (should / shouldn\'t) và **2 việc bắt buộc** (have to).',
+    mau: [
+      { en: 'You should read about the company first.', vi: 'Bạn nên tìm hiểu về công ty trước.' },
+      { en: 'You should practice your self-introduction.', vi: 'Bạn nên tập phần tự giới thiệu.' },
+      { en: 'You shouldn\'t be late.', vi: 'Bạn không nên đến muộn.' },
+      { en: 'You have to bring your CV and student ID.', vi: 'Bạn phải mang CV và thẻ sinh viên.' },
+      { en: 'You don\'t have to wear a suit.', vi: 'Bạn không cần mặc vest.' },
+    ],
+  },
+  cau: [
+    { id: 'cn17-01', vi: 'Tôi phải đi rồi.', en: 'I have to go.', alt: ['I\'ve got to go.', 'I gotta go.'], khung: HAVE },
+    { id: 'cn17-02', vi: 'Bạn nên nghỉ ngơi.', en: 'You should rest.', alt: ['You should get some rest.'], khung: SHOULD, loi: '~~You should to rest~~' },
+    { id: 'cn17-03', vi: 'Tối nay tôi phải làm thêm giờ.', en: 'I have to work late tonight.', alt: ['I have to work overtime tonight.'], khung: HAVE },
+    { id: 'cn17-04', vi: 'Anh ấy phải dậy lúc 5 giờ.', en: 'He has to get up at 5.', alt: ['He has to wake up at 5.', 'He has to get up at five o\'clock.'], khung: HAVE, loi: '~~He have to~~' },
+    { id: 'cn17-05', vi: 'Bạn không cần phải trả tiền.', en: 'You don\'t have to pay.', alt: ['You don\'t need to pay.'], khung: DONT },
+    { id: 'cn17-06', vi: 'Bạn không nên thức khuya.', en: 'You shouldn\'t stay up late.', khung: SHOULDNT, goi: 'thức khuya = stay up late' },
+    { id: 'cn17-07', vi: 'Tôi có phải mang laptop không?', en: 'Do I have to bring my laptop?', alt: ['Do I need to bring my laptop?', 'Do I have to bring a laptop?'], khung: Q },
+    { id: 'cn17-08', vi: 'Mình có nên mua cái này không?', en: 'Should I buy this?', alt: ['Should I buy this one?', 'Should I get this?'], khung: Q },
+    { id: 'cn17-09', vi: 'Sinh viên phải mặc đồng phục.', en: 'Students have to wear uniforms.', alt: ['Students must wear uniforms.', 'Students have to wear a uniform.'], khung: HAVE },
+    { id: 'cn17-10', vi: 'Bạn nên hỏi trưởng nhóm.', en: 'You should ask the team lead.', alt: ['You should ask your team lead.', 'You should ask the team leader.', 'You should ask your team leader.'], khung: SHOULD },
+    { id: 'cn17-11', vi: 'Chúng ta phải xong trước thứ Sáu.', en: 'We have to finish by Friday.', alt: ['We have to finish before Friday.', 'We need to finish by Friday.'], khung: HAVE, goi: 'hạn chót "trước/muộn nhất là" = by' },
+    { id: 'cn17-12', vi: 'Cô ấy không phải đi làm vào thứ Bảy.', en: 'She doesn\'t have to work on Saturdays.', alt: ['She doesn\'t have to work on Saturday.'], khung: DONT },
+    { id: 'cn17-13', vi: 'Bạn nên đi khám bác sĩ.', en: 'You should see a doctor.', alt: ['You should go to the doctor.', 'You should go see a doctor.'], khung: SHOULD },
+    { id: 'cn17-14', vi: 'Tôi phải nộp bài trước nửa đêm.', en: 'I have to submit it before midnight.', alt: ['I have to turn it in before midnight.', 'I have to submit my assignment before midnight.'], khung: HAVE },
+    { id: 'cn17-15', vi: 'Ở đây không được hút thuốc.', en: 'You can\'t smoke here.', alt: ['You\'re not allowed to smoke here.', 'You mustn\'t smoke here.', 'No smoking here.'], khung: "S + can't + V (cấm)" },
+    { id: 'cn17-16', vi: 'Chúng ta có nên báo sếp không?', en: 'Should we tell the boss?', alt: ['Should we tell our boss?'], khung: Q },
+    { id: 'cn17-17', vi: 'Bạn nên sao lưu dữ liệu thường xuyên.', en: 'You should back up your data regularly.', alt: ['You should back up your data often.'], khung: SHOULD },
+    { id: 'cn17-18', vi: 'Ba tháng tôi phải đổi mật khẩu một lần.', en: 'I have to change my password every three months.', khung: HAVE },
+    { id: 'cn17-19', vi: 'Bạn không nên dùng mật khẩu dễ đoán.', en: 'You shouldn\'t use easy passwords.', alt: ['You shouldn\'t use simple passwords.', 'You shouldn\'t use a simple password.', 'You shouldn\'t use weak passwords.'], khung: SHOULDNT },
+    { id: 'cn17-20', vi: 'Tôi phải học cho kỳ thi.', en: 'I have to study for the exam.', alt: ['I have to study for my exam.'], khung: HAVE },
+    { id: 'cn17-21', vi: 'Anh ấy nên tập thể dục nhiều hơn.', en: 'He should exercise more.', alt: ['He should work out more.', 'He should get more exercise.'], khung: SHOULD },
+    { id: 'cn17-22', vi: 'Hôm qua tôi phải đợi một tiếng.', en: 'I had to wait for an hour yesterday.', alt: ['Yesterday I had to wait for an hour.', 'I had to wait an hour yesterday.'], khung: 'S + had to + V (đã phải)' },
+    { id: 'cn17-23', vi: 'Bạn có phải làm ca đêm không?', en: 'Do you have to work night shifts?', alt: ['Do you have to work the night shift?'], khung: Q },
+    { id: 'cn17-24', vi: 'Mình nghĩ bạn nên xin lỗi.', en: 'I think you should apologize.', alt: ['I think you should say sorry.'], khung: 'I think + you should + V' },
+    { id: 'cn17-25', vi: 'Bạn không cần phải lo.', en: 'You don\'t have to worry.', alt: ['You don\'t need to worry.'], khung: DONT },
+    { id: 'cn17-26', vi: 'Tôi nên học tiếng Anh thế nào?', en: 'How should I learn English?', alt: ['How should I study English?'], khung: 'How + should + I + V?' },
+    { id: 'cn17-27', vi: 'Chúng ta phải tiết kiệm tiền.', en: 'We have to save money.', alt: ['We need to save money.'], khung: HAVE },
+    { id: 'cn17-28', vi: 'Bạn nên đọc kỹ tài liệu.', en: 'You should read the documentation carefully.', alt: ['You should read the docs carefully.', 'You should read the documents carefully.'], khung: SHOULD },
+    { id: 'cn17-29', vi: 'Tôi phải đi đón em gái.', en: 'I have to pick up my sister.', alt: ['I have to pick my sister up.', 'I have to go pick up my sister.'], khung: HAVE },
+    { id: 'cn17-30', vi: 'Mình có nên nghỉ việc không?', en: 'Should I quit my job?', khung: Q },
+    { id: 'cn17-31', vi: 'Hôm nay tôi không phải đi học.', en: 'I don\'t have to go to school today.', alt: ['I don\'t have class today.', 'I don\'t have to go to class today.'], khung: DONT },
+    { id: 'cn17-32', vi: 'Bạn nên thử món này.', en: 'You should try this dish.', alt: ['You should try this.', 'You should try this food.'], khung: SHOULD },
+    { id: 'cn17-33', vi: 'Tôi phải thừa nhận là bạn đúng.', en: 'I have to admit you\'re right.', alt: ['I have to admit that you\'re right.', 'I must admit you\'re right.'], khung: HAVE },
+    { id: 'cn17-34', vi: 'Chúng ta nên đi lúc mấy giờ?', en: 'What time should we leave?', alt: ['When should we leave?', 'What time should we go?'], khung: 'What time + should + we + V?' },
+  ],
+};

@@ -5,6 +5,13 @@
 > Ngắn gọn, mỗi mục 5 dòng. Mới nhất ở TRÊN. Bài học lớn về quy trình deploy vẫn nằm ở bảng
 > "Known Error Patterns" trong `CLAUDE.md` — sổ này gom MỌI lỗi, kể cả lỗi nhỏ.
 
+### 28/11/2026 — Video (giọng) — trailer PostgreSQL đọc bằng GIỌNG CŨ `cuong3` thay vì giọng mới `cuong8`
+- **Triệu chứng:** user nghe trailer: "sao dùng lại giọng cũ? giọng mới nhất đã train đâu?".
+- **Nguyên nhân:** lấy khuôn tệp việc từ `~/video-bai-giang/viec-web-9-5.json` (soạn thời giọng cũ, `ckpt: cuong3_giong.pt`, ref cũ); `doc.py:15` còn lùi về `cuong_giong_6000.pt` khi thiếu ckpt — không có gì chặn giọng cũ.
+- **Cách sửa:** `doc.py` chỉ nhận ckpt = `~/vbg-dp/giong/MO_HINH` (cuong8), khác ⇒ thoát mã 4, thiếu ⇒ dùng MO_HINH; cất 8 model cũ vào `~/f5-train/_giong-cu-khong-dung/`; đọc lại trailer bằng cuong8 (khuôn `viec-dbi-*.json`).
+- **Ảnh hưởng:** chỉ bản trailer thử (chưa lên web).
+- **Bài học:** không lấy "tệp việc bất kỳ" làm khuôn; công cụ phải chặn cấu hình đã ngừng dùng thay vì lùi êm về nó.
+
 ### 28/11/2026 — Deploy — build frontend ở máy nhà vỡ: `cau-nen-kiem.mts` đọc `scripts/hinh/fluent-catalog.json` ngoài `frontend/`
 - **Triệu chứng:** deploy 3b578501e dừng ở bước build máy nhà: `Error: ENOENT … open '/scripts/hinh/fluent-catalog.json'` (`frontend/scripts/cau-nen-kiem.mts:25`) trong `RUN npm run build` của `frontend/Dockerfile`; prod không bị đụng (dừng trước khi đẩy ảnh).
 - **Nguyên nhân:** bộ kiểm "1000 câu nền" gắn vào `prebuild` đọc danh mục ảnh ở GỐC repo (`../../scripts/hinh/`), nhưng ảnh Docker frontend chỉ có thư mục `frontend/` ⇒ trên Mac chạy xanh, trong Docker thì không có tệp.

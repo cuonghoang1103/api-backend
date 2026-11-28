@@ -1,0 +1,401 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-7-1-dinh-thuc-nghich-dao",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-7-1-dinh-thuc-nghich-dao"
+  },
+  "exercises": [
+    {
+      "title": "Determinants 1 — Properties",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "determinant properties"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Concept questions on determinants and invertibility.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về định thức và tính khả nghịch.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Row swaps flip the sign; scaling scales.",
+        "det(kA) = kⁿ det A for n × n."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Determinants 1 — Properties\n\nAnswer in the answer panel (no code needed).\n\n1. A square matrix A is invertible exactly when …Ma trận vuông A khả nghịch đúng khi …\n2. Swapping two rows of A changes det A by …Đổi chỗ hai hàng của A làm det A …\n3. det(AB) = …det(AB) = …\n4. A is 3 × 3 with det A = 2. det(2A) = …A cỡ 3 × 3 với det A = 2. det(2A) = …\n5. For A = [a b; c d] with ad − bc ≠ 0, A⁻¹ = …Với A = [a b; c d] và ad − bc ≠ 0, A⁻¹ = …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Determinants 1 — Properties — answer key\n\n1. A square matrix A is invertible exactly when …Ma trận vuông A khả nghịch đúng khi …\n   Answer: c) det A ≠ 0\n   det A = 0 means the columns are dependent and Ax = 0 has non-zero solutions.VI: det A = 0 nghĩa là các cột phụ thuộc và Ax = 0 có nghiệm khác 0.\n\n2. Swapping two rows of A changes det A by …Đổi chỗ hai hàng của A làm det A …\n   Answer: c) a factor −1\n   Adding a multiple of a row changes nothing; scaling a row by k multiplies det by k; a swap flips the sign.VI: Cộng bội của một hàng không đổi gì; nhân một hàng với k thì det nhân k; đổi chỗ thì đổi dấu.\n\n3. det(AB) = …det(AB) = …\n   Answer: d) det A · det B\n   The determinant is multiplicative; in general det(A + B) ≠ det A + det B.VI: Định thức có tính nhân; nói chung det(A + B) ≠ det A + det B.\n\n4. A is 3 × 3 with det A = 2. det(2A) = …A cỡ 3 × 3 với det A = 2. det(2A) = …\n   Answer: a) 16\n   Each of the 3 rows is scaled by 2: 2³ · 2 = 16.VI: Cả 3 hàng đều nhân 2: 2³ · 2 = 16.\n\n5. For A = [a b; c d] with ad − bc ≠ 0, A⁻¹ = …Với A = [a b; c d] và ad − bc ≠ 0, A⁻¹ = …\n   Answer: c) (1/(ad − bc))·[d −b; −c a]\n   Swap the diagonal, negate the off-diagonal, divide by the determinant.VI: Đổi chỗ đường chéo chính, đổi dấu đường chéo phụ, chia cho định thức.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> det A ≠ 0</p><p>det A = 0 means the columns are dependent and Ax = 0 has non-zero solutions.</p><p><i>VI: det A = 0 nghĩa là các cột phụ thuộc và Ax = 0 có nghiệm khác 0.</i></p></li><li><p><b>c)</b> a factor −1</p><p>Adding a multiple of a row changes nothing; scaling a row by k multiplies det by k; a swap flips the sign.</p><p><i>VI: Cộng bội của một hàng không đổi gì; nhân một hàng với k thì det nhân k; đổi chỗ thì đổi dấu.</i></p></li><li><p><b>d)</b> det A · det B</p><p>The determinant is multiplicative; in general det(A + B) ≠ det A + det B.</p><p><i>VI: Định thức có tính nhân; nói chung det(A + B) ≠ det A + det B.</i></p></li><li><p><b>a)</b> 16</p><p>Each of the 3 rows is scaled by 2: 2³ · 2 = 16.</p><p><i>VI: Cả 3 hàng đều nhân 2: 2³ · 2 = 16.</i></p></li><li><p><b>c)</b> (1/(ad − bc))·[d −b; −c a]</p><p>Swap the diagonal, negate the off-diagonal, divide by the determinant.</p><p><i>VI: Đổi chỗ đường chéo chính, đổi dấu đường chéo phụ, chia cho định thức.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A square matrix A is invertible exactly when …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ma trận vuông A khả nghịch đúng khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A is symmetric"
+              },
+              {
+                "ma": "b",
+                "noiDung": "det A = 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "det A ≠ 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A has no zero entry"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>det A = 0 means the columns are dependent and Ax = 0 has non-zero solutions.</p><p><i>VI: det A = 0 nghĩa là các cột phụ thuộc và Ax = 0 có nghiệm khác 0.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Swapping two rows of A changes det A by …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đổi chỗ hai hàng của A làm det A …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "setting it to 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a factor −1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a factor 2"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Adding a multiple of a row changes nothing; scaling a row by k multiplies det by k; a swap flips the sign.</p><p><i>VI: Cộng bội của một hàng không đổi gì; nhân một hàng với k thì det nhân k; đổi chỗ thì đổi dấu.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>det(AB) = …</p><p style=\"opacity:.75;font-size:.92em\"><i>det(AB) = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "det(A + B)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "det A + det B"
+              },
+              {
+                "ma": "c",
+                "noiDung": "det A − det B"
+              },
+              {
+                "ma": "d",
+                "noiDung": "det A · det B"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The determinant is multiplicative; in general det(A + B) ≠ det A + det B.</p><p><i>VI: Định thức có tính nhân; nói chung det(A + B) ≠ det A + det B.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A is 3 × 3 with det A = 2. det(2A) = …</p><p style=\"opacity:.75;font-size:.92em\"><i>A cỡ 3 × 3 với det A = 2. det(2A) = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "16"
+              },
+              {
+                "ma": "b",
+                "noiDung": "8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "6"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Each of the 3 rows is scaled by 2: 2³ · 2 = 16.</p><p><i>VI: Cả 3 hàng đều nhân 2: 2³ · 2 = 16.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>For A = [a b; c d] with ad − bc ≠ 0, A⁻¹ = …</p><p style=\"opacity:.75;font-size:.92em\"><i>Với A = [a b; c d] và ad − bc ≠ 0, A⁻¹ = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "(1/(ad − bc))·[a b; c d]"
+              },
+              {
+                "ma": "b",
+                "noiDung": "(ad − bc)·[d −b; −c a]"
+              },
+              {
+                "ma": "c",
+                "noiDung": "(1/(ad − bc))·[d −b; −c a]"
+              },
+              {
+                "ma": "d",
+                "noiDung": "[1/a 1/b; 1/c 1/d]"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Swap the diagonal, negate the off-diagonal, divide by the determinant.</p><p><i>VI: Đổi chỗ đường chéo chính, đổi dấu đường chéo phụ, chia cho định thức.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "det(2A) = 2·det A for a 3 × 3."
+        },
+        {
+          "loi": "Inverting entry by entry."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "determinant",
+          "vi": "định thức"
+        },
+        {
+          "en": "invertible",
+          "vi": "khả nghịch"
+        },
+        {
+          "en": "cofactor",
+          "vi": "phần bù đại số"
+        }
+      ]
+    },
+    {
+      "title": "Determinants 2 — Compute det and a 2 × 2 inverse",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "computing determinants"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p><b>Part A.</b> Compute each determinant (rows separated by \";\"). <b>Part B.</b> Give the entries of A⁻¹ for A = [4 7; 2 6] as decimals.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Phần A.</b> Tính mỗi định thức (các hàng cách nhau bằng \";\"). <b>Phần B.</b> Cho các phần tử của A⁻¹ với A = [4 7; 2 6] dưới dạng số thập phân.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Triangular ⇒ product of the diagonal.",
+        "Expand along the row or column with the most zeros."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Determinants 2 — Compute det and a 2 × 2 inverse\n\nAnswer in the answer panel (no code needed).\n\n1. DeterminantsĐịnh thức\n2. Inverse of A = [4 7; 2 6]Nghịch đảo của A = [4 7; 2 6]\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Determinants 2 — Compute det and a 2 × 2 inverse — answer key\n\n1. DeterminantsĐịnh thức\n   - r1.d: -14.00 / -14\n   - r2.d: 24.00 / 24\n   - r3.d: 24.00 / 24\n   - r4.d: 0.00 / 0\n   - r5.d: -9.00 / -9\n   det [3 8; 4 6] = -14; det [2 0 0; 0 3 0; 0 0 4] = 24; det [1 2 3; 0 4 5; 0 0 6] = 24; det [1 2 3; 4 5 6; 7 8 9] = 0; det [2 1 3; 0 −1 4; 1 2 0] = -9. Triangular or diagonal ⇒ product of the diagonal; in [1 2 3; 4 5 6; 7 8 9] row 3 − row 2 = row 2 − row 1, so the rows are dependent and det = 0.VI: det [3 8; 4 6] = -14; det [2 0 0; 0 3 0; 0 0 4] = 24; det [1 2 3; 0 4 5; 0 0 6] = 24; det [1 2 3; 4 5 6; 7 8 9] = 0; det [2 1 3; 0 −1 4; 1 2 0] = -9. Tam giác hoặc chéo ⇒ tích đường chéo; ở [1 2 3; 4 5 6; 7 8 9] hàng 3 − hàng 2 = hàng 2 − hàng 1, các hàng phụ thuộc nên det = 0.\n\n2. Inverse of A = [4 7; 2 6]Nghịch đảo của A = [4 7; 2 6]\n   - r1.x: 0.60 / 0.6\n   - r1.y: -0.70 / -0.7\n   - r2.x: -0.20 / -0.2\n   - r2.y: 0.40 / 0.4\n   det A = 4·6 − 7·2 = 10; A⁻¹ = (1/10)·[6 −7; −2 4] = [0.6 -0.7; -0.2 0.4]. Check: A·A⁻¹ = I.VI: det A = 4·6 − 7·2 = 10; A⁻¹ = (1/10)·[6 −7; −2 4] = [0.6 -0.7; -0.2 0.4]. Kiểm: A·A⁻¹ = I.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>det [3 8; 4 6] = -14; det [2 0 0; 0 3 0; 0 0 4] = 24; det [1 2 3; 0 4 5; 0 0 6] = 24; det [1 2 3; 4 5 6; 7 8 9] = 0; det [2 1 3; 0 −1 4; 1 2 0] = -9. Triangular or diagonal ⇒ product of the diagonal; in [1 2 3; 4 5 6; 7 8 9] row 3 − row 2 = row 2 − row 1, so the rows are dependent and det = 0.</p><p><i>VI: det [3 8; 4 6] = -14; det [2 0 0; 0 3 0; 0 0 4] = 24; det [1 2 3; 0 4 5; 0 0 6] = 24; det [1 2 3; 4 5 6; 7 8 9] = 0; det [2 1 3; 0 −1 4; 1 2 0] = -9. Tam giác hoặc chéo ⇒ tích đường chéo; ở [1 2 3; 4 5 6; 7 8 9] hàng 3 − hàng 2 = hàng 2 − hàng 1, các hàng phụ thuộc nên det = 0.</i></p><p>det A = 4·6 − 7·2 = 10; A⁻¹ = (1/10)·[6 −7; −2 4] = [0.6 -0.7; -0.2 0.4]. Check: A·A⁻¹ = I.</p><p><i>VI: det A = 4·6 − 7·2 = 10; A⁻¹ = (1/10)·[6 −7; −2 4] = [0.6 -0.7; -0.2 0.4]. Kiểm: A·A⁻¹ = I.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Determinants</p><p style=\"opacity:.75;font-size:.92em\"><i>Định thức</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Matrix"
+              },
+              {
+                "ma": "d",
+                "ten": "det"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "[3 8; 4 6]"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "[2 0 0; 0 3 0; 0 0 4]"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "[1 2 3; 0 4 5; 0 0 6]"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "[1 2 3; 4 5 6; 7 8 9]"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "m": "[2 1 3; 0 −1 4; 1 2 0]"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": [
+                "-14.00",
+                "-14"
+              ],
+              "r2.d": [
+                "24.00",
+                "24"
+              ],
+              "r3.d": [
+                "24.00",
+                "24"
+              ],
+              "r4.d": [
+                "0.00",
+                "0"
+              ],
+              "r5.d": [
+                "-9.00",
+                "-9"
+              ]
+            },
+            "giaiThich": "<p>det [3 8; 4 6] = -14; det [2 0 0; 0 3 0; 0 0 4] = 24; det [1 2 3; 0 4 5; 0 0 6] = 24; det [1 2 3; 4 5 6; 7 8 9] = 0; det [2 1 3; 0 −1 4; 1 2 0] = -9. Triangular or diagonal ⇒ product of the diagonal; in [1 2 3; 4 5 6; 7 8 9] row 3 − row 2 = row 2 − row 1, so the rows are dependent and det = 0.</p><p><i>VI: det [3 8; 4 6] = -14; det [2 0 0; 0 3 0; 0 0 4] = 24; det [1 2 3; 0 4 5; 0 0 6] = 24; det [1 2 3; 4 5 6; 7 8 9] = 0; det [2 1 3; 0 −1 4; 1 2 0] = -9. Tam giác hoặc chéo ⇒ tích đường chéo; ở [1 2 3; 4 5 6; 7 8 9] hàng 3 − hàng 2 = hàng 2 − hàng 1, các hàng phụ thuộc nên det = 0.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Inverse of A = [4 7; 2 6]</p><p style=\"opacity:.75;font-size:.92em\"><i>Nghịch đảo của A = [4 7; 2 6]</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Row"
+              },
+              {
+                "ma": "x",
+                "ten": "column 1"
+              },
+              {
+                "ma": "y",
+                "ten": "column 2"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "row 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "row 2"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.x": [
+                "0.60",
+                "0.6"
+              ],
+              "r1.y": [
+                "-0.70",
+                "-0.7"
+              ],
+              "r2.x": [
+                "-0.20",
+                "-0.2"
+              ],
+              "r2.y": [
+                "0.40",
+                "0.4"
+              ]
+            },
+            "giaiThich": "<p>det A = 4·6 − 7·2 = 10; A⁻¹ = (1/10)·[6 −7; −2 4] = [0.6 -0.7; -0.2 0.4]. Check: A·A⁻¹ = I.</p><p><i>VI: det A = 4·6 − 7·2 = 10; A⁻¹ = (1/10)·[6 −7; −2 4] = [0.6 -0.7; -0.2 0.4]. Kiểm: A·A⁻¹ = I.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the alternating signs in cofactor expansion."
+        },
+        {
+          "loi": "Computing ad + bc."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

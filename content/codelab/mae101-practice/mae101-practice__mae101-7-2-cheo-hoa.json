@@ -1,0 +1,431 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-7-2-cheo-hoa",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-7-2-cheo-hoa"
+  },
+  "exercises": [
+    {
+      "title": "Eigen 1 — Definitions and fast checks",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "eigenvalues"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Concept questions on eigenvalues and diagonalization.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về giá trị riêng và chéo hoá.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Characteristic equation, then (A − λI)v = 0.",
+        "Check with trace and determinant."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Eigen 1 — Definitions and fast checks\n\nAnswer in the answer panel (no code needed).\n\n1. v is an eigenvector of A with eigenvalue λ when …v là vector riêng của A ứng với giá trị riêng λ khi …\n2. Eigenvalues are the roots of …Giá trị riêng là nghiệm của …\n3. For a 2 × 2 matrix, λ₁ + λ₂ = … and λ₁·λ₂ = …Với ma trận 2 × 2, λ₁ + λ₂ = … và λ₁·λ₂ = …\n4. If A = PDP⁻¹ with D diagonal, then A¹⁰ = …Nếu A = PDP⁻¹ với D chéo thì A¹⁰ = …\n5. A 90° rotation matrix [0 −1; 1 0] has …Ma trận quay 90° [0 −1; 1 0] có …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Eigen 1 — Definitions and fast checks — answer key\n\n1. v is an eigenvector of A with eigenvalue λ when …v là vector riêng của A ứng với giá trị riêng λ khi …\n   Answer: a) Av = λv and v ≠ 0\n   The zero vector satisfies A·0 = λ·0 for every λ, so it is excluded by definition.VI: Vector 0 thoả A·0 = λ·0 với mọi λ, nên bị loại theo định nghĩa.\n\n2. Eigenvalues are the roots of …Giá trị riêng là nghiệm của …\n   Answer: b) det(A − λI) = 0\n   The characteristic equation; each root λ gives eigenvectors from (A − λI)v = 0.VI: Phương trình đặc trưng; mỗi nghiệm λ cho vector riêng từ (A − λI)v = 0.\n\n3. For a 2 × 2 matrix, λ₁ + λ₂ = … and λ₁·λ₂ = …Với ma trận 2 × 2, λ₁ + λ₂ = … và λ₁·λ₂ = …\n   Answer: b) trace(A) and det(A)\n   A quick check after solving the characteristic equation.VI: Một phép kiểm nhanh sau khi giải phương trình đặc trưng.\n\n4. If A = PDP⁻¹ with D diagonal, then A¹⁰ = …Nếu A = PDP⁻¹ với D chéo thì A¹⁰ = …\n   Answer: b) P D¹⁰ P⁻¹\n   The inner P⁻¹P pairs cancel; powering D just powers its diagonal entries.VI: Các cặp P⁻¹P bên trong triệt tiêu; luỹ thừa D chỉ là luỹ thừa các phần tử đường chéo.\n\n5. A 90° rotation matrix [0 −1; 1 0] has …Ma trận quay 90° [0 −1; 1 0] có …\n   Answer: d) no real eigenvalues (λ² + 1 = 0)\n   No real direction is only scaled by a rotation; the eigenvalues are ±i.VI: Không có phương thực nào chỉ bị co giãn bởi phép quay; giá trị riêng là ±i.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Av = λv and v ≠ 0</p><p>The zero vector satisfies A·0 = λ·0 for every λ, so it is excluded by definition.</p><p><i>VI: Vector 0 thoả A·0 = λ·0 với mọi λ, nên bị loại theo định nghĩa.</i></p></li><li><p><b>b)</b> det(A − λI) = 0</p><p>The characteristic equation; each root λ gives eigenvectors from (A − λI)v = 0.</p><p><i>VI: Phương trình đặc trưng; mỗi nghiệm λ cho vector riêng từ (A − λI)v = 0.</i></p></li><li><p><b>b)</b> trace(A) and det(A)</p><p>A quick check after solving the characteristic equation.</p><p><i>VI: Một phép kiểm nhanh sau khi giải phương trình đặc trưng.</i></p></li><li><p><b>b)</b> P D¹⁰ P⁻¹</p><p>The inner P⁻¹P pairs cancel; powering D just powers its diagonal entries.</p><p><i>VI: Các cặp P⁻¹P bên trong triệt tiêu; luỹ thừa D chỉ là luỹ thừa các phần tử đường chéo.</i></p></li><li><p><b>d)</b> no real eigenvalues (λ² + 1 = 0)</p><p>No real direction is only scaled by a rotation; the eigenvalues are ±i.</p><p><i>VI: Không có phương thực nào chỉ bị co giãn bởi phép quay; giá trị riêng là ±i.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>v is an eigenvector of A with eigenvalue λ when …</p><p style=\"opacity:.75;font-size:.92em\"><i>v là vector riêng của A ứng với giá trị riêng λ khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Av = λv and v ≠ 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Av = λ and v = 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "det(A) = λ"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Av = 0"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The zero vector satisfies A·0 = λ·0 for every λ, so it is excluded by definition.</p><p><i>VI: Vector 0 thoả A·0 = λ·0 với mọi λ, nên bị loại theo định nghĩa.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Eigenvalues are the roots of …</p><p style=\"opacity:.75;font-size:.92em\"><i>Giá trị riêng là nghiệm của …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "tr(A) = λ"
+              },
+              {
+                "ma": "b",
+                "noiDung": "det(A − λI) = 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A − λ = 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "det(A) = 0"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The characteristic equation; each root λ gives eigenvectors from (A − λI)v = 0.</p><p><i>VI: Phương trình đặc trưng; mỗi nghiệm λ cho vector riêng từ (A − λI)v = 0.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>For a 2 × 2 matrix, λ₁ + λ₂ = … and λ₁·λ₂ = …</p><p style=\"opacity:.75;font-size:.92em\"><i>Với ma trận 2 × 2, λ₁ + λ₂ = … và λ₁·λ₂ = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a·d and b·c"
+              },
+              {
+                "ma": "b",
+                "noiDung": "trace(A) and det(A)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "det(A) and trace(A)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0 and 1"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A quick check after solving the characteristic equation.</p><p><i>VI: Một phép kiểm nhanh sau khi giải phương trình đặc trưng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>If A = PDP⁻¹ with D diagonal, then A¹⁰ = …</p><p style=\"opacity:.75;font-size:.92em\"><i>Nếu A = PDP⁻¹ với D chéo thì A¹⁰ = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "10·PDP⁻¹"
+              },
+              {
+                "ma": "b",
+                "noiDung": "P D¹⁰ P⁻¹"
+              },
+              {
+                "ma": "c",
+                "noiDung": "P¹⁰ D P⁻¹⁰"
+              },
+              {
+                "ma": "d",
+                "noiDung": "D¹⁰"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The inner P⁻¹P pairs cancel; powering D just powers its diagonal entries.</p><p><i>VI: Các cặp P⁻¹P bên trong triệt tiêu; luỹ thừa D chỉ là luỹ thừa các phần tử đường chéo.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A 90° rotation matrix [0 −1; 1 0] has …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ma trận quay 90° [0 −1; 1 0] có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "eigenvalue 90"
+              },
+              {
+                "ma": "b",
+                "noiDung": "eigenvalues 1 and −1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "eigenvalue 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no real eigenvalues (λ² + 1 = 0)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>No real direction is only scaled by a rotation; the eigenvalues are ±i.</p><p><i>VI: Không có phương thực nào chỉ bị co giãn bởi phép quay; giá trị riêng là ±i.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Accepting v = 0 as an eigenvector."
+        },
+        {
+          "loi": "Mixing up trace and determinant."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "eigenvalue",
+          "vi": "giá trị riêng"
+        },
+        {
+          "en": "eigenvector",
+          "vi": "vector riêng"
+        },
+        {
+          "en": "characteristic equation",
+          "vi": "phương trình đặc trưng"
+        },
+        {
+          "en": "diagonalization",
+          "vi": "chéo hoá"
+        }
+      ]
+    },
+    {
+      "title": "Eigen 2 — Eigenvalues of 2 × 2 matrices",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "2 × 2 eigenvalues"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Give the trace, the determinant and the two eigenvalues (larger first) of each matrix.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho vết, định thức và hai giá trị riêng (lớn trước) của mỗi ma trận.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "λ² − (trace)λ + det = 0.",
+        "A diagonal matrix shows its eigenvalues."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Eigen 2 — Eigenvalues of 2 × 2 matrices\n\nAnswer in the answer panel (no code needed).\n\n1. EigenvaluesGiá trị riêng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Eigen 2 — Eigenvalues of 2 × 2 matrices — answer key\n\n1. EigenvaluesGiá trị riêng\n   - r1.t: 4.00 / 4\n   - r1.d: 3.00 / 3\n   - r1.l: 3.00 / 3\n   - r1.s: 1.00 / 1\n   - r2.t: 7.00 / 7\n   - r2.d: 10.00 / 10\n   - r2.l: 5.00 / 5\n   - r2.s: 2.00 / 2\n   - r3.t: 2.00 / 2\n   - r3.d: -3.00 / -3\n   - r3.l: 3.00 / 3\n   - r3.s: -1.00 / -1\n   - r4.t: 2.00 / 2\n   - r4.d: -3.00 / -3\n   - r4.l: 3.00 / 3\n   - r4.s: -1.00 / -1\n   - r5.t: 7.00 / 7\n   - r5.d: 6.00 / 6\n   - r5.l: 6.00 / 6\n   - r5.s: 1.00 / 1\n   [2 1; 1 2]: λ² − 4λ + 3 = 0 ⇒ 3, 1; [4 1; 2 3]: λ² − 7λ + 10 = 0 ⇒ 5, 2; [3 0; 0 −1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [1 2; 2 1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [5 4; 1 2]: λ² − 7λ + 6 = 0 ⇒ 6, 1. Check: λ₁ + λ₂ = trace, λ₁λ₂ = det.VI: [2 1; 1 2]: λ² − 4λ + 3 = 0 ⇒ 3, 1; [4 1; 2 3]: λ² − 7λ + 10 = 0 ⇒ 5, 2; [3 0; 0 −1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [1 2; 2 1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [5 4; 1 2]: λ² − 7λ + 6 = 0 ⇒ 6, 1. Kiểm: λ₁ + λ₂ = vết, λ₁λ₂ = định thức.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>[2 1; 1 2]: λ² − 4λ + 3 = 0 ⇒ 3, 1; [4 1; 2 3]: λ² − 7λ + 10 = 0 ⇒ 5, 2; [3 0; 0 −1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [1 2; 2 1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [5 4; 1 2]: λ² − 7λ + 6 = 0 ⇒ 6, 1. Check: λ₁ + λ₂ = trace, λ₁λ₂ = det.</p><p><i>VI: [2 1; 1 2]: λ² − 4λ + 3 = 0 ⇒ 3, 1; [4 1; 2 3]: λ² − 7λ + 10 = 0 ⇒ 5, 2; [3 0; 0 −1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [1 2; 2 1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [5 4; 1 2]: λ² − 7λ + 6 = 0 ⇒ 6, 1. Kiểm: λ₁ + λ₂ = vết, λ₁λ₂ = định thức.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Eigenvalues</p><p style=\"opacity:.75;font-size:.92em\"><i>Giá trị riêng</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Matrix"
+              },
+              {
+                "ma": "t",
+                "ten": "trace"
+              },
+              {
+                "ma": "d",
+                "ten": "det"
+              },
+              {
+                "ma": "l",
+                "ten": "λ₁ (larger)"
+              },
+              {
+                "ma": "s",
+                "ten": "λ₂"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "[2 1; 1 2]"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "[4 1; 2 3]"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "[3 0; 0 −1]"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "[1 2; 2 1]"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "m": "[5 4; 1 2]"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": [
+                "4.00",
+                "4"
+              ],
+              "r1.d": [
+                "3.00",
+                "3"
+              ],
+              "r1.l": [
+                "3.00",
+                "3"
+              ],
+              "r1.s": [
+                "1.00",
+                "1"
+              ],
+              "r2.t": [
+                "7.00",
+                "7"
+              ],
+              "r2.d": [
+                "10.00",
+                "10"
+              ],
+              "r2.l": [
+                "5.00",
+                "5"
+              ],
+              "r2.s": [
+                "2.00",
+                "2"
+              ],
+              "r3.t": [
+                "2.00",
+                "2"
+              ],
+              "r3.d": [
+                "-3.00",
+                "-3"
+              ],
+              "r3.l": [
+                "3.00",
+                "3"
+              ],
+              "r3.s": [
+                "-1.00",
+                "-1"
+              ],
+              "r4.t": [
+                "2.00",
+                "2"
+              ],
+              "r4.d": [
+                "-3.00",
+                "-3"
+              ],
+              "r4.l": [
+                "3.00",
+                "3"
+              ],
+              "r4.s": [
+                "-1.00",
+                "-1"
+              ],
+              "r5.t": [
+                "7.00",
+                "7"
+              ],
+              "r5.d": [
+                "6.00",
+                "6"
+              ],
+              "r5.l": [
+                "6.00",
+                "6"
+              ],
+              "r5.s": [
+                "1.00",
+                "1"
+              ]
+            },
+            "giaiThich": "<p>[2 1; 1 2]: λ² − 4λ + 3 = 0 ⇒ 3, 1; [4 1; 2 3]: λ² − 7λ + 10 = 0 ⇒ 5, 2; [3 0; 0 −1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [1 2; 2 1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [5 4; 1 2]: λ² − 7λ + 6 = 0 ⇒ 6, 1. Check: λ₁ + λ₂ = trace, λ₁λ₂ = det.</p><p><i>VI: [2 1; 1 2]: λ² − 4λ + 3 = 0 ⇒ 3, 1; [4 1; 2 3]: λ² − 7λ + 10 = 0 ⇒ 5, 2; [3 0; 0 −1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [1 2; 2 1]: λ² − 2λ + -3 = 0 ⇒ 3, -1; [5 4; 1 2]: λ² − 7λ + 6 = 0 ⇒ 6, 1. Kiểm: λ₁ + λ₂ = vết, λ₁λ₂ = định thức.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sign error: the middle term is −(trace)·λ."
+        },
+        {
+          "loi": "Reading the off-diagonal entries as eigenvalues."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trace",
+          "vi": "vết"
+        }
+      ]
+    }
+  ]
+}

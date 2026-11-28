@@ -1,0 +1,367 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-9-1-co-so-so-chieu",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-9-1-co-so-so-chieu"
+  },
+  "exercises": [
+    {
+      "title": "Vector spaces 1 — Span, independence, basis",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "basis",
+        "dimension"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Concept questions on the structure of vector spaces.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về cấu trúc không gian vector.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "More vectors than the dimension ⇒ dependent.",
+        "rank + nullity = number of columns."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Vector spaces 1 — Span, independence, basis\n\nAnswer in the answer panel (no code needed).\n\n1. A basis of a vector space is a set that is …Một cơ sở của không gian vector là tập …\n2. Which set is a subspace of R³?Tập nào là không gian con của R³?\n3. Four vectors in R³ are …Bốn vector trong R³ …\n4. A is 4 × 6 with rank 3. Its nullity is …A cỡ 4 × 6 có hạng 3. Số khuyết (nullity) của nó là …\n5. n vectors in Rⁿ placed as columns of A are independent exactly when …n vector trong Rⁿ đặt làm cột của A độc lập đúng khi …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Vector spaces 1 — Span, independence, basis — answer key\n\n1. A basis of a vector space is a set that is …Một cơ sở của không gian vector là tập …\n   Answer: b) linearly independent AND spans the space\n   Spanning gives \"enough\", independence gives \"not too many\"; the count is the dimension.VI: Sinh ra cho \"đủ\", độc lập cho \"không thừa\"; số phần tử là số chiều.\n\n2. Which set is a subspace of R³?Tập nào là không gian con của R³?\n   Answer: d) a plane through the origin\n   A subspace must contain 0 and be closed under addition and scaling.VI: Không gian con phải chứa 0 và đóng với phép cộng và nhân vô hướng.\n\n3. Four vectors in R³ are …Bốn vector trong R³ …\n   Answer: b) always linearly dependent\n   dim R³ = 3, so at most 3 vectors can be independent.VI: dim R³ = 3, nên nhiều nhất 3 vector độc lập được.\n\n4. A is 4 × 6 with rank 3. Its nullity is …A cỡ 4 × 6 có hạng 3. Số khuyết (nullity) của nó là …\n   Answer: a) 3\n   Rank–nullity: rank + nullity = number of columns = 6.VI: Hạng + số khuyết = số cột = 6.\n\n5. n vectors in Rⁿ placed as columns of A are independent exactly when …n vector trong Rⁿ đặt làm cột của A độc lập đúng khi …\n   Answer: c) det A ≠ 0\n   det ≠ 0 ⟺ rank n ⟺ the columns form a basis of Rⁿ.VI: det ≠ 0 ⟺ hạng n ⟺ các cột lập thành một cơ sở của Rⁿ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> linearly independent AND spans the space</p><p>Spanning gives \"enough\", independence gives \"not too many\"; the count is the dimension.</p><p><i>VI: Sinh ra cho \"đủ\", độc lập cho \"không thừa\"; số phần tử là số chiều.</i></p></li><li><p><b>d)</b> a plane through the origin</p><p>A subspace must contain 0 and be closed under addition and scaling.</p><p><i>VI: Không gian con phải chứa 0 và đóng với phép cộng và nhân vô hướng.</i></p></li><li><p><b>b)</b> always linearly dependent</p><p>dim R³ = 3, so at most 3 vectors can be independent.</p><p><i>VI: dim R³ = 3, nên nhiều nhất 3 vector độc lập được.</i></p></li><li><p><b>a)</b> 3</p><p>Rank–nullity: rank + nullity = number of columns = 6.</p><p><i>VI: Hạng + số khuyết = số cột = 6.</i></p></li><li><p><b>c)</b> det A ≠ 0</p><p>det ≠ 0 ⟺ rank n ⟺ the columns form a basis of Rⁿ.</p><p><i>VI: det ≠ 0 ⟺ hạng n ⟺ các cột lập thành một cơ sở của Rⁿ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A basis of a vector space is a set that is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một cơ sở của không gian vector là tập …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "linearly independent only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "linearly independent AND spans the space"
+              },
+              {
+                "ma": "c",
+                "noiDung": "made of unit vectors"
+              },
+              {
+                "ma": "d",
+                "noiDung": "spanning only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Spanning gives \"enough\", independence gives \"not too many\"; the count is the dimension.</p><p><i>VI: Sinh ra cho \"đủ\", độc lập cho \"không thừa\"; số phần tử là số chiều.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which set is a subspace of R³?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tập nào là không gian con của R³?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the unit sphere"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a plane not through the origin"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the first octant (x, y, z ≥ 0)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a plane through the origin"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A subspace must contain 0 and be closed under addition and scaling.</p><p><i>VI: Không gian con phải chứa 0 và đóng với phép cộng và nhân vô hướng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Four vectors in R³ are …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bốn vector trong R³ …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "always independent"
+              },
+              {
+                "ma": "b",
+                "noiDung": "always linearly dependent"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a basis of R³"
+              },
+              {
+                "ma": "d",
+                "noiDung": "never spanning"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>dim R³ = 3, so at most 3 vectors can be independent.</p><p><i>VI: dim R³ = 3, nên nhiều nhất 3 vector độc lập được.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A is 4 × 6 with rank 3. Its nullity is …</p><p style=\"opacity:.75;font-size:.92em\"><i>A cỡ 4 × 6 có hạng 3. Số khuyết (nullity) của nó là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3"
+              },
+              {
+                "ma": "b",
+                "noiDung": "4"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "6"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Rank–nullity: rank + nullity = number of columns = 6.</p><p><i>VI: Hạng + số khuyết = số cột = 6.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>n vectors in Rⁿ placed as columns of A are independent exactly when …</p><p style=\"opacity:.75;font-size:.92em\"><i>n vector trong Rⁿ đặt làm cột của A độc lập đúng khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "det A = 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A is symmetric"
+              },
+              {
+                "ma": "c",
+                "noiDung": "det A ≠ 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A has a zero row"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>det ≠ 0 ⟺ rank n ⟺ the columns form a basis of Rⁿ.</p><p><i>VI: det ≠ 0 ⟺ hạng n ⟺ các cột lập thành một cơ sở của Rⁿ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a shifted plane a subspace."
+        },
+        {
+          "loi": "Using rows instead of columns in rank–nullity."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "span",
+          "vi": "bao tuyến tính (span)"
+        },
+        {
+          "en": "linearly independent",
+          "vi": "độc lập tuyến tính"
+        },
+        {
+          "en": "basis",
+          "vi": "cơ sở"
+        },
+        {
+          "en": "dimension",
+          "vi": "số chiều"
+        },
+        {
+          "en": "nullity",
+          "vi": "số khuyết"
+        }
+      ]
+    },
+    {
+      "title": "Vector spaces 2 — Rank, independence and the dimension of the span",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "rank",
+        "span"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>For each set of vectors, give the rank of the matrix with these vectors as columns, whether the set is independent, and the dimension of its span.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi tập vector, cho hạng của ma trận có các vector đó làm cột, tập có độc lập không, và số chiều của không gian sinh.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Put the vectors as columns and row-reduce.",
+        "(1, 1, 2) = (1, 0, 1) + (0, 1, 1)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Vector spaces 2 — Rank, independence and the dimension of the span\n\nAnswer in the answer panel (no code needed).\n\n1. Independence and spanĐộc lập và không gian sinh\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Vector spaces 2 — Rank, independence and the dimension of the span — answer key\n\n1. Independence and spanĐộc lập và không gian sinh\n   - r1.r: 1\n   - r1.i: no\n   - r1.d: 1\n   - r2.r: 2\n   - r2.i: yes\n   - r2.d: 2\n   - r3.r: 2\n   - r3.i: no\n   - r3.d: 2\n   - r4.r: 3\n   - r4.i: yes\n   - r4.d: 3\n   - r5.r: 2\n   - r5.i: no\n   - r5.d: 2\n   (1, 2), (2, 4): rank 1 of 2 vectors; (1, 0), (1, 1): rank 2 of 2 vectors; (1, 0, 1), (0, 1, 1), (1, 1, 2): rank 2 of 3 vectors; (1, 0, 0), (1, 1, 0), (1, 1, 1): rank 3 of 3 vectors; (1, 2, 3), (2, 4, 6), (0, 1, 1), (1, 3, 4): rank 2 of 4 vectors. Independent ⟺ rank = number of vectors; dim span = rank.VI: (1, 2), (2, 4): hạng 1 trên 2 vector; (1, 0), (1, 1): hạng 2 trên 2 vector; (1, 0, 1), (0, 1, 1), (1, 1, 2): hạng 2 trên 3 vector; (1, 0, 0), (1, 1, 0), (1, 1, 1): hạng 3 trên 3 vector; (1, 2, 3), (2, 4, 6), (0, 1, 1), (1, 3, 4): hạng 2 trên 4 vector. Độc lập ⟺ hạng = số vector; số chiều không gian sinh = hạng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(1, 2), (2, 4): rank 1 of 2 vectors; (1, 0), (1, 1): rank 2 of 2 vectors; (1, 0, 1), (0, 1, 1), (1, 1, 2): rank 2 of 3 vectors; (1, 0, 0), (1, 1, 0), (1, 1, 1): rank 3 of 3 vectors; (1, 2, 3), (2, 4, 6), (0, 1, 1), (1, 3, 4): rank 2 of 4 vectors. Independent ⟺ rank = number of vectors; dim span = rank.</p><p><i>VI: (1, 2), (2, 4): hạng 1 trên 2 vector; (1, 0), (1, 1): hạng 2 trên 2 vector; (1, 0, 1), (0, 1, 1), (1, 1, 2): hạng 2 trên 3 vector; (1, 0, 0), (1, 1, 0), (1, 1, 1): hạng 3 trên 3 vector; (1, 2, 3), (2, 4, 6), (0, 1, 1), (1, 3, 4): hạng 2 trên 4 vector. Độc lập ⟺ hạng = số vector; số chiều không gian sinh = hạng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Independence and span</p><p style=\"opacity:.75;font-size:.92em\"><i>Độc lập và không gian sinh</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Vectors"
+              },
+              {
+                "ma": "r",
+                "ten": "rank"
+              },
+              {
+                "ma": "i",
+                "ten": "Independent?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              },
+              {
+                "ma": "d",
+                "ten": "dim span"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "(1, 2), (2, 4)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "(1, 0), (1, 1)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "(1, 0, 1), (0, 1, 1), (1, 1, 2)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "(1, 0, 0), (1, 1, 0), (1, 1, 1)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "(1, 2, 3), (2, 4, 6), (0, 1, 1), (1, 3, 4)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "1",
+              "r1.i": "no",
+              "r1.d": "1",
+              "r2.r": "2",
+              "r2.i": "yes",
+              "r2.d": "2",
+              "r3.r": "2",
+              "r3.i": "no",
+              "r3.d": "2",
+              "r4.r": "3",
+              "r4.i": "yes",
+              "r4.d": "3",
+              "r5.r": "2",
+              "r5.i": "no",
+              "r5.d": "2"
+            },
+            "giaiThich": "<p>(1, 2), (2, 4): rank 1 of 2 vectors; (1, 0), (1, 1): rank 2 of 2 vectors; (1, 0, 1), (0, 1, 1), (1, 1, 2): rank 2 of 3 vectors; (1, 0, 0), (1, 1, 0), (1, 1, 1): rank 3 of 3 vectors; (1, 2, 3), (2, 4, 6), (0, 1, 1), (1, 3, 4): rank 2 of 4 vectors. Independent ⟺ rank = number of vectors; dim span = rank.</p><p><i>VI: (1, 2), (2, 4): hạng 1 trên 2 vector; (1, 0), (1, 1): hạng 2 trên 2 vector; (1, 0, 1), (0, 1, 1), (1, 1, 2): hạng 2 trên 3 vector; (1, 0, 0), (1, 1, 0), (1, 1, 1): hạng 3 trên 3 vector; (1, 2, 3), (2, 4, 6), (0, 1, 1), (1, 3, 4): hạng 2 trên 4 vector. Độc lập ⟺ hạng = số vector; số chiều không gian sinh = hạng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Declaring a set independent because no vector is a multiple of another."
+        },
+        {
+          "loi": "Confusing the dimension of the span with the ambient dimension."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

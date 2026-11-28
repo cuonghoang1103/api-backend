@@ -1,0 +1,364 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-3-1-phan-tich-ham",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-3-1-phan-tich-ham"
+  },
+  "exercises": [
+    {
+      "title": "Function analysis 1 — The two tests",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "first and second derivative tests"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Read the shape of a function from its derivatives.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đọc hình dạng của hàm từ các đạo hàm.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "f′ → direction, f″ → curvature.",
+        "If f″(c) = 0, fall back to the sign of f′."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Function analysis 1 — The two tests\n\nAnswer in the answer panel (no code needed).\n\n1. f′ changes sign from + to − at a critical point c. Then c is …f′ đổi dấu từ + sang − tại điểm tới hạn c. Khi đó c là …\n2. f′(c) = 0 and f″(c) > 0. Then c is …f′(c) = 0 và f″(c) > 0. Khi đó c là …\n3. f(x) = x⁴ has f′(0) = f″(0) = 0. At x = 0, f has …f(x) = x⁴ có f′(0) = f″(0) = 0. Tại x = 0, f có …\n4. An inflection point is where …Điểm uốn là nơi …\n5. f′(x) > 0 on an interval means f is … theref′(x) > 0 trên một khoảng nghĩa là f … ở đó\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Function analysis 1 — The two tests — answer key\n\n1. f′ changes sign from + to − at a critical point c. Then c is …f′ đổi dấu từ + sang − tại điểm tới hạn c. Khi đó c là …\n   Answer: c) a local maximum\n   Rising then falling = a peak (first-derivative test).VI: Đi lên rồi đi xuống = một đỉnh (phép thử đạo hàm bậc một).\n\n2. f′(c) = 0 and f″(c) > 0. Then c is …f′(c) = 0 và f″(c) > 0. Khi đó c là …\n   Answer: b) a local minimum\n   Concave up (∪) at a flat point = a valley (second-derivative test).VI: Lõm lên (∪) tại điểm có tiếp tuyến nằm ngang = một đáy (phép thử đạo hàm bậc hai).\n\n3. f(x) = x⁴ has f′(0) = f″(0) = 0. At x = 0, f has …f(x) = x⁴ có f′(0) = f″(0) = 0. Tại x = 0, f có …\n   Answer: c) a minimum (found by the first-derivative test)\n   The second-derivative test is inconclusive when f″ = 0; f′ changes − → + at 0, so it is a minimum.VI: Phép thử bậc hai không kết luận được khi f″ = 0; f′ đổi − → + tại 0, nên đó là cực tiểu.\n\n4. An inflection point is where …Điểm uốn là nơi …\n   Answer: d) concavity changes\n   f″ changes sign there; f′ need not be 0 (x³ − 3x has its inflection at x = 0 where f′ = −3).VI: f″ đổi dấu tại đó; f′ không cần bằng 0 (x³ − 3x có điểm uốn tại x = 0 với f′ = −3).\n\n5. f′(x) > 0 on an interval means f is … theref′(x) > 0 trên một khoảng nghĩa là f … ở đó\n   Answer: c) increasing\n   The sign of f′ gives direction; the sign of f″ gives curvature.VI: Dấu của f′ cho chiều biến thiên; dấu của f″ cho độ cong.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> a local maximum</p><p>Rising then falling = a peak (first-derivative test).</p><p><i>VI: Đi lên rồi đi xuống = một đỉnh (phép thử đạo hàm bậc một).</i></p></li><li><p><b>b)</b> a local minimum</p><p>Concave up (∪) at a flat point = a valley (second-derivative test).</p><p><i>VI: Lõm lên (∪) tại điểm có tiếp tuyến nằm ngang = một đáy (phép thử đạo hàm bậc hai).</i></p></li><li><p><b>c)</b> a minimum (found by the first-derivative test)</p><p>The second-derivative test is inconclusive when f″ = 0; f′ changes − → + at 0, so it is a minimum.</p><p><i>VI: Phép thử bậc hai không kết luận được khi f″ = 0; f′ đổi − → + tại 0, nên đó là cực tiểu.</i></p></li><li><p><b>d)</b> concavity changes</p><p>f″ changes sign there; f′ need not be 0 (x³ − 3x has its inflection at x = 0 where f′ = −3).</p><p><i>VI: f″ đổi dấu tại đó; f′ không cần bằng 0 (x³ − 3x có điểm uốn tại x = 0 với f′ = −3).</i></p></li><li><p><b>c)</b> increasing</p><p>The sign of f′ gives direction; the sign of f″ gives curvature.</p><p><i>VI: Dấu của f′ cho chiều biến thiên; dấu của f″ cho độ cong.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>f′ changes sign from + to − at a critical point c. Then c is …</p><p style=\"opacity:.75;font-size:.92em\"><i>f′ đổi dấu từ + sang − tại điểm tới hạn c. Khi đó c là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an inflection point"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a local minimum"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a local maximum"
+              },
+              {
+                "ma": "d",
+                "noiDung": "neither"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Rising then falling = a peak (first-derivative test).</p><p><i>VI: Đi lên rồi đi xuống = một đỉnh (phép thử đạo hàm bậc một).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>f′(c) = 0 and f″(c) > 0. Then c is …</p><p style=\"opacity:.75;font-size:.92em\"><i>f′(c) = 0 và f″(c) > 0. Khi đó c là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "impossible to decide"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a local minimum"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a local maximum"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an inflection point"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Concave up (∪) at a flat point = a valley (second-derivative test).</p><p><i>VI: Lõm lên (∪) tại điểm có tiếp tuyến nằm ngang = một đáy (phép thử đạo hàm bậc hai).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>f(x) = x⁴ has f′(0) = f″(0) = 0. At x = 0, f has …</p><p style=\"opacity:.75;font-size:.92em\"><i>f(x) = x⁴ có f′(0) = f″(0) = 0. Tại x = 0, f có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an inflection point, because f″(0) = 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "no critical point, because the test fails"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a minimum (found by the first-derivative test)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a maximum, because x⁴ is even"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The second-derivative test is inconclusive when f″ = 0; f′ changes − → + at 0, so it is a minimum.</p><p><i>VI: Phép thử bậc hai không kết luận được khi f″ = 0; f′ đổi − → + tại 0, nên đó là cực tiểu.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>An inflection point is where …</p><p style=\"opacity:.75;font-size:.92em\"><i>Điểm uốn là nơi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "f′ = 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "f is undefined"
+              },
+              {
+                "ma": "c",
+                "noiDung": "f has a maximum"
+              },
+              {
+                "ma": "d",
+                "noiDung": "concavity changes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>f″ changes sign there; f′ need not be 0 (x³ − 3x has its inflection at x = 0 where f′ = −3).</p><p><i>VI: f″ đổi dấu tại đó; f′ không cần bằng 0 (x³ − 3x có điểm uốn tại x = 0 với f′ = −3).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>f′(x) &gt; 0 on an interval means f is … there</p><p style=\"opacity:.75;font-size:.92em\"><i>f′(x) &gt; 0 trên một khoảng nghĩa là f … ở đó</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "concave up"
+              },
+              {
+                "ma": "b",
+                "noiDung": "decreasing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "increasing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "constant"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The sign of f′ gives direction; the sign of f″ gives curvature.</p><p><i>VI: Dấu của f′ cho chiều biến thiên; dấu của f″ cho độ cong.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling every critical point an extremum."
+        },
+        {
+          "loi": "Requiring f′ = 0 at an inflection point."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "critical point",
+          "vi": "điểm tới hạn"
+        },
+        {
+          "en": "concave up / down",
+          "vi": "lõm lên / lồi xuống"
+        },
+        {
+          "en": "inflection point",
+          "vi": "điểm uốn"
+        }
+      ]
+    },
+    {
+      "title": "Function analysis 2 — Classify the critical points",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "classifying extrema"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>For each function and critical point x = c, give the type and the value f(c).</p><ul><li>f(x) = x³ − 3x</li><li>g(x) = x⁴ − 4x³ (g′ = 4x²(x − 3))</li><li>h(x) = x² − 6x + 5</li></ul><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi hàm và điểm tới hạn x = c, cho loại điểm và giá trị f(c).</p><ul><li>f(x) = x³ − 3x</li><li>g(x) = x⁴ − 4x³ (g′ = 4x²(x − 3))</li><li>h(x) = x² − 6x + 5</li></ul><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "x² never changes sign.",
+        "Compute the value by substitution into the original function."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Function analysis 2 — Classify the critical points\n\nAnswer in the answer panel (no code needed).\n\n1. Critical pointsĐiểm tới hạn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Function analysis 2 — Classify the critical points — answer key\n\n1. Critical pointsĐiểm tới hạn\n   - r1.t: max\n   - r1.v: 2.00 / 2\n   - r2.t: min\n   - r2.v: -2.00 / -2\n   - r3.t: neither\n   - r3.v: 0.00 / 0\n   - r4.t: min\n   - r4.v: -27.00 / -27\n   - r5.t: min\n   - r5.v: -4.00 / -4\n   f″ = 6x: f″(−1) = −6 < 0 (max, f = 2), f″(1) = 6 > 0 (min, f = −2). g′ = 4x²(x − 3) is negative on both sides of 0 (no sign change: neither) and changes − → + at 3 (min, g(3) = 81 − 108 = −27). h′ = 2x − 6, h(3) = 9 − 18 + 5 = −4.VI: f″ = 6x: f″(−1) = −6 < 0 (cực đại, f = 2), f″(1) = 6 > 0 (cực tiểu, f = −2). g′ = 4x²(x − 3) âm ở cả hai phía của 0 (không đổi dấu: không phải cực trị) và đổi − → + tại 3 (cực tiểu, g(3) = 81 − 108 = −27). h′ = 2x − 6, h(3) = 9 − 18 + 5 = −4.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>f″ = 6x: f″(−1) = −6 < 0 (max, f = 2), f″(1) = 6 > 0 (min, f = −2). g′ = 4x²(x − 3) is negative on both sides of 0 (no sign change: neither) and changes − → + at 3 (min, g(3) = 81 − 108 = −27). h′ = 2x − 6, h(3) = 9 − 18 + 5 = −4.</p><p><i>VI: f″ = 6x: f″(−1) = −6 < 0 (cực đại, f = 2), f″(1) = 6 > 0 (cực tiểu, f = −2). g′ = 4x²(x − 3) âm ở cả hai phía của 0 (không đổi dấu: không phải cực trị) và đổi − → + tại 3 (cực tiểu, g(3) = 81 − 108 = −27). h′ = 2x − 6, h(3) = 9 − 18 + 5 = −4.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Critical points</p><p style=\"opacity:.75;font-size:.92em\"><i>Điểm tới hạn</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Function, c"
+              },
+              {
+                "ma": "t",
+                "ten": "Type",
+                "luaChon": [
+                  "max",
+                  "min",
+                  "neither"
+                ]
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "f, c = −1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "f, c = 1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "g, c = 0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "g, c = 3"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "h, c = 3"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "max",
+              "r1.v": [
+                "2.00",
+                "2"
+              ],
+              "r2.t": "min",
+              "r2.v": [
+                "-2.00",
+                "-2"
+              ],
+              "r3.t": "neither",
+              "r3.v": [
+                "0.00",
+                "0"
+              ],
+              "r4.t": "min",
+              "r4.v": [
+                "-27.00",
+                "-27"
+              ],
+              "r5.t": "min",
+              "r5.v": [
+                "-4.00",
+                "-4"
+              ]
+            },
+            "giaiThich": "<p>f″ = 6x: f″(−1) = −6 < 0 (max, f = 2), f″(1) = 6 > 0 (min, f = −2). g′ = 4x²(x − 3) is negative on both sides of 0 (no sign change: neither) and changes − → + at 3 (min, g(3) = 81 − 108 = −27). h′ = 2x − 6, h(3) = 9 − 18 + 5 = −4.</p><p><i>VI: f″ = 6x: f″(−1) = −6 < 0 (cực đại, f = 2), f″(1) = 6 > 0 (cực tiểu, f = −2). g′ = 4x²(x − 3) âm ở cả hai phía của 0 (không đổi dấu: không phải cực trị) và đổi − → + tại 3 (cực tiểu, g(3) = 81 − 108 = −27). h′ = 2x − 6, h(3) = 9 − 18 + 5 = −4.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling x = 0 an extremum of g because g′(0) = 0."
+        },
+        {
+          "loi": "Substituting into f′ instead of f for the value."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

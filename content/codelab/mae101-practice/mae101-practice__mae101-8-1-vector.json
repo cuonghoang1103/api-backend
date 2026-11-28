@@ -1,0 +1,439 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-8-1-vector",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-8-1-vector"
+  },
+  "exercises": [
+    {
+      "title": "Vectors 1 — Dot and cross product",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "vectors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Concept questions on vectors.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về vector.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Dot → number, cross → vector.",
+        "Zero dot product ⇔ right angle."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Vectors 1 — Dot and cross product\n\nAnswer in the answer panel (no code needed).\n\n1. u · v = 0 (both non-zero) means u and v are …u · v = 0 (cả hai khác 0) nghĩa là u và v …\n2. The dot product of two vectors is …Tích vô hướng của hai vector là …\n3. u × v is …u × v là …\n4. |u| for u = (3, 4) is …|u| với u = (3, 4) là …\n5. The projection of u onto v has length …Hình chiếu của u lên v có độ dài …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Vectors 1 — Dot and cross product — answer key\n\n1. u · v = 0 (both non-zero) means u and v are …u · v = 0 (cả hai khác 0) nghĩa là u và v …\n   Answer: d) perpendicular (orthogonal)\n   u · v = |u||v|cos θ, so cos θ = 0 ⇒ θ = 90°.VI: u · v = |u||v|cos θ, nên cos θ = 0 ⇒ θ = 90°.\n\n2. The dot product of two vectors is …Tích vô hướng của hai vector là …\n   Answer: c) a number\n   The cross product (in R³) is the one that gives a vector.VI: Tích có hướng (trong R³) mới cho ra vector.\n\n3. u × v is …u × v là …\n   Answer: b) perpendicular to both u and v\n   Its direction follows the right-hand rule, its length is the area of the parallelogram, and v × u = −(u × v).VI: Hướng theo quy tắc bàn tay phải, độ dài là diện tích hình bình hành, và v × u = −(u × v).\n\n4. |u| for u = (3, 4) is …|u| với u = (3, 4) là …\n   Answer: c) 5\n   √(3² + 4²) = √25 = 5.VI: √(3² + 4²) = √25 = 5.\n\n5. The projection of u onto v has length …Hình chiếu của u lên v có độ dài …\n   Answer: b) |u · v| / |v|\n   proj_v u = (u · v / |v|²) v; its length is |u · v| / |v|.VI: proj_v u = (u · v / |v|²) v; độ dài của nó là |u · v| / |v|.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> perpendicular (orthogonal)</p><p>u · v = |u||v|cos θ, so cos θ = 0 ⇒ θ = 90°.</p><p><i>VI: u · v = |u||v|cos θ, nên cos θ = 0 ⇒ θ = 90°.</i></p></li><li><p><b>c)</b> a number</p><p>The cross product (in R³) is the one that gives a vector.</p><p><i>VI: Tích có hướng (trong R³) mới cho ra vector.</i></p></li><li><p><b>b)</b> perpendicular to both u and v</p><p>Its direction follows the right-hand rule, its length is the area of the parallelogram, and v × u = −(u × v).</p><p><i>VI: Hướng theo quy tắc bàn tay phải, độ dài là diện tích hình bình hành, và v × u = −(u × v).</i></p></li><li><p><b>c)</b> 5</p><p>√(3² + 4²) = √25 = 5.</p><p><i>VI: √(3² + 4²) = √25 = 5.</i></p></li><li><p><b>b)</b> |u · v| / |v|</p><p>proj_v u = (u · v / |v|²) v; its length is |u · v| / |v|.</p><p><i>VI: proj_v u = (u · v / |v|²) v; độ dài của nó là |u · v| / |v|.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>u · v = 0 (both non-zero) means u and v are …</p><p style=\"opacity:.75;font-size:.92em\"><i>u · v = 0 (cả hai khác 0) nghĩa là u và v …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "of equal length"
+              },
+              {
+                "ma": "b",
+                "noiDung": "equal"
+              },
+              {
+                "ma": "c",
+                "noiDung": "parallel"
+              },
+              {
+                "ma": "d",
+                "noiDung": "perpendicular (orthogonal)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>u · v = |u||v|cos θ, so cos θ = 0 ⇒ θ = 90°.</p><p><i>VI: u · v = |u||v|cos θ, nên cos θ = 0 ⇒ θ = 90°.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The dot product of two vectors is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tích vô hướng của hai vector là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a vector"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a matrix"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a number"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an angle"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The cross product (in R³) is the one that gives a vector.</p><p><i>VI: Tích có hướng (trong R³) mới cho ra vector.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>u × v is …</p><p style=\"opacity:.75;font-size:.92em\"><i>u × v là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "parallel to u"
+              },
+              {
+                "ma": "b",
+                "noiDung": "perpendicular to both u and v"
+              },
+              {
+                "ma": "c",
+                "noiDung": "equal to v × u"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a number"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Its direction follows the right-hand rule, its length is the area of the parallelogram, and v × u = −(u × v).</p><p><i>VI: Hướng theo quy tắc bàn tay phải, độ dài là diện tích hình bình hành, và v × u = −(u × v).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>|u| for u = (3, 4) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>|u| với u = (3, 4) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "7"
+              },
+              {
+                "ma": "b",
+                "noiDung": "12"
+              },
+              {
+                "ma": "c",
+                "noiDung": "5"
+              },
+              {
+                "ma": "d",
+                "noiDung": "25"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>√(3² + 4²) = √25 = 5.</p><p><i>VI: √(3² + 4²) = √25 = 5.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The projection of u onto v has length …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hình chiếu của u lên v có độ dài …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "|u| · |v|"
+              },
+              {
+                "ma": "b",
+                "noiDung": "|u · v| / |v|"
+              },
+              {
+                "ma": "c",
+                "noiDung": "|u × v|"
+              },
+              {
+                "ma": "d",
+                "noiDung": "u · v"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>proj_v u = (u · v / |v|²) v; its length is |u · v| / |v|.</p><p><i>VI: proj_v u = (u · v / |v|²) v; độ dài của nó là |u · v| / |v|.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating u × v = v × u."
+        },
+        {
+          "loi": "Forgetting the square root in the length."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dot product",
+          "vi": "tích vô hướng"
+        },
+        {
+          "en": "cross product",
+          "vi": "tích có hướng"
+        },
+        {
+          "en": "orthogonal",
+          "vi": "trực giao"
+        }
+      ]
+    },
+    {
+      "title": "Vectors 2 — Compute u · v, |u|, u × v and the angle",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "dot",
+        "cross",
+        "angle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>For each pair give u · v, |u| (2 decimals), the components of u × v, and the angle between u and v in degrees (2 decimals).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi cặp cho u · v, |u| (2 chữ số thập phân), các thành phần của u × v, và góc giữa u và v theo độ (2 chữ số thập phân).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Cross product: (u₂v₃ − u₃v₂, u₃v₁ − u₁v₃, u₁v₂ − u₂v₁).",
+        "θ = arccos(u · v / (|u||v|))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Vectors 2 — Compute u · v, |u|, u × v and the angle\n\nAnswer in the answer panel (no code needed).\n\n1. Vector computationsTính toán vector\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Vectors 2 — Compute u · v, |u|, u × v and the angle — answer key\n\n1. Vector computationsTính toán vector\n   - r1.d: 4.00 / 4\n   - r1.n: 3.00 / 3\n   - r1.x: 2.00 / 2\n   - r1.y: 3.00 / 3\n   - r1.z: -4.00 / -4\n   - r1.g: 53.40 / 53.4\n   - r2.d: 0.00 / 0\n   - r2.n: 5.00 / 5\n   - r2.x: -20.00 / -20\n   - r2.y: 0.00 / 0\n   - r2.z: 15.00 / 15\n   - r2.g: 90.00 / 90\n   - r3.d: 1.00 / 1\n   - r3.n: 1.41\n   - r3.x: 1.00 / 1\n   - r3.y: -1.00 / -1\n   - r3.z: -1.00 / -1\n   - r3.g: 60.00 / 60\n   - r4.d: -8.00 / -8\n   - r4.n: 3.74\n   - r4.x: -10.00 / -10\n   - r4.y: 7.00 / 7\n   - r4.z: 9.00 / 9\n   - r4.g: 117.81\n   (1, 2, 2)·(2, 0, 1) = 4, |u| = 3.00, u × v = (2, 3, −4), θ = 53.40°; (3, 0, 4)·(0, 5, 0) = 0, |u| = 5.00, u × v = (−20, 0, 15), θ = 90.00°; (1, 1, 0)·(1, 0, 1) = 1, |u| = 1.41, u × v = (1, −1, −1), θ = 60.00°; (2, −1, 3)·(1, 4, −2) = -8, |u| = 3.74, u × v = (−10, 7, 9), θ = 117.81°. cos θ = u · v / (|u||v|).VI: (1, 2, 2)·(2, 0, 1) = 4, |u| = 3.00, u × v = (2, 3, −4), θ = 53.40°; (3, 0, 4)·(0, 5, 0) = 0, |u| = 5.00, u × v = (−20, 0, 15), θ = 90.00°; (1, 1, 0)·(1, 0, 1) = 1, |u| = 1.41, u × v = (1, −1, −1), θ = 60.00°; (2, −1, 3)·(1, 4, −2) = -8, |u| = 3.74, u × v = (−10, 7, 9), θ = 117.81°. cos θ = u · v / (|u||v|).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(1, 2, 2)·(2, 0, 1) = 4, |u| = 3.00, u × v = (2, 3, −4), θ = 53.40°; (3, 0, 4)·(0, 5, 0) = 0, |u| = 5.00, u × v = (−20, 0, 15), θ = 90.00°; (1, 1, 0)·(1, 0, 1) = 1, |u| = 1.41, u × v = (1, −1, −1), θ = 60.00°; (2, −1, 3)·(1, 4, −2) = -8, |u| = 3.74, u × v = (−10, 7, 9), θ = 117.81°. cos θ = u · v / (|u||v|).</p><p><i>VI: (1, 2, 2)·(2, 0, 1) = 4, |u| = 3.00, u × v = (2, 3, −4), θ = 53.40°; (3, 0, 4)·(0, 5, 0) = 0, |u| = 5.00, u × v = (−20, 0, 15), θ = 90.00°; (1, 1, 0)·(1, 0, 1) = 1, |u| = 1.41, u × v = (1, −1, −1), θ = 60.00°; (2, −1, 3)·(1, 4, −2) = -8, |u| = 3.74, u × v = (−10, 7, 9), θ = 117.81°. cos θ = u · v / (|u||v|).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Vector computations</p><p style=\"opacity:.75;font-size:.92em\"><i>Tính toán vector</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "u ; v"
+              },
+              {
+                "ma": "d",
+                "ten": "u · v"
+              },
+              {
+                "ma": "n",
+                "ten": "|u|"
+              },
+              {
+                "ma": "x",
+                "ten": "(u × v)₁"
+              },
+              {
+                "ma": "y",
+                "ten": "(u × v)₂"
+              },
+              {
+                "ma": "z",
+                "ten": "(u × v)₃"
+              },
+              {
+                "ma": "g",
+                "ten": "angle (°)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "(1, 2, 2) ; (2, 0, 1)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "(3, 0, 4) ; (0, 5, 0)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "(1, 1, 0) ; (1, 0, 1)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "(2, −1, 3) ; (1, 4, −2)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": [
+                "4.00",
+                "4"
+              ],
+              "r1.n": [
+                "3.00",
+                "3"
+              ],
+              "r1.x": [
+                "2.00",
+                "2"
+              ],
+              "r1.y": [
+                "3.00",
+                "3"
+              ],
+              "r1.z": [
+                "-4.00",
+                "-4"
+              ],
+              "r1.g": [
+                "53.40",
+                "53.4"
+              ],
+              "r2.d": [
+                "0.00",
+                "0"
+              ],
+              "r2.n": [
+                "5.00",
+                "5"
+              ],
+              "r2.x": [
+                "-20.00",
+                "-20"
+              ],
+              "r2.y": [
+                "0.00",
+                "0"
+              ],
+              "r2.z": [
+                "15.00",
+                "15"
+              ],
+              "r2.g": [
+                "90.00",
+                "90"
+              ],
+              "r3.d": [
+                "1.00",
+                "1"
+              ],
+              "r3.n": [
+                "1.41"
+              ],
+              "r3.x": [
+                "1.00",
+                "1"
+              ],
+              "r3.y": [
+                "-1.00",
+                "-1"
+              ],
+              "r3.z": [
+                "-1.00",
+                "-1"
+              ],
+              "r3.g": [
+                "60.00",
+                "60"
+              ],
+              "r4.d": [
+                "-8.00",
+                "-8"
+              ],
+              "r4.n": [
+                "3.74"
+              ],
+              "r4.x": [
+                "-10.00",
+                "-10"
+              ],
+              "r4.y": [
+                "7.00",
+                "7"
+              ],
+              "r4.z": [
+                "9.00",
+                "9"
+              ],
+              "r4.g": [
+                "117.81"
+              ]
+            },
+            "giaiThich": "<p>(1, 2, 2)·(2, 0, 1) = 4, |u| = 3.00, u × v = (2, 3, −4), θ = 53.40°; (3, 0, 4)·(0, 5, 0) = 0, |u| = 5.00, u × v = (−20, 0, 15), θ = 90.00°; (1, 1, 0)·(1, 0, 1) = 1, |u| = 1.41, u × v = (1, −1, −1), θ = 60.00°; (2, −1, 3)·(1, 4, −2) = -8, |u| = 3.74, u × v = (−10, 7, 9), θ = 117.81°. cos θ = u · v / (|u||v|).</p><p><i>VI: (1, 2, 2)·(2, 0, 1) = 4, |u| = 3.00, u × v = (2, 3, −4), θ = 53.40°; (3, 0, 4)·(0, 5, 0) = 0, |u| = 5.00, u × v = (−20, 0, 15), θ = 90.00°; (1, 1, 0)·(1, 0, 1) = 1, |u| = 1.41, u × v = (1, −1, −1), θ = 60.00°; (2, −1, 3)·(1, 4, −2) = -8, |u| = 3.74, u × v = (−10, 7, 9), θ = 117.81°. cos θ = u · v / (|u||v|).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sign of the middle component of u × v."
+        },
+        {
+          "loi": "Giving the angle in radians."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

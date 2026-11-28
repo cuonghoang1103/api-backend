@@ -1,0 +1,510 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-5-1-khu-gauss",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-5-1-khu-gauss"
+  },
+  "exercises": [
+    {
+      "title": "Linear systems 1 — Row operations and solution count",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Gaussian elimination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Concept questions on Gaussian elimination.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về khử Gauss.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the last non-zero row carefully.",
+        "Count pivots versus unknowns."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linear systems 1 — Row operations and solution count\n\nAnswer in the answer panel (no code needed).\n\n1. Which is NOT an elementary row operation?Phép nào KHÔNG phải phép biến đổi sơ cấp trên hàng?\n2. An echelon form contains the row [0 0 0 | 5]. The system has …Dạng bậc thang có hàng [0 0 0 | 5]. Hệ có …\n3. A consistent system has 3 unknowns and only 2 pivots. It has …Một hệ có nghiệm, 3 ẩn và chỉ 2 pivot. Nó có …\n4. The rank of a matrix is …Hạng của một ma trận là …\n5. In RREF every pivot is …Trong dạng bậc thang rút gọn, mỗi pivot …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linear systems 1 — Row operations and solution count — answer key\n\n1. Which is NOT an elementary row operation?Phép nào KHÔNG phải phép biến đổi sơ cấp trên hàng?\n   Answer: b) multiplying a row by 0\n   Scaling must use a NON-ZERO constant, otherwise information is lost and the solution set changes.VI: Nhân một hàng phải với hằng số KHÁC 0, nếu không sẽ mất thông tin và tập nghiệm thay đổi.\n\n2. An echelon form contains the row [0 0 0 | 5]. The system has …Dạng bậc thang có hàng [0 0 0 | 5]. Hệ có …\n   Answer: a) no solution\n   That row reads 0 = 5 — inconsistent.VI: Hàng đó đọc là 0 = 5 — hệ vô nghiệm.\n\n3. A consistent system has 3 unknowns and only 2 pivots. It has …Một hệ có nghiệm, 3 ẩn và chỉ 2 pivot. Nó có …\n   Answer: b) infinitely many solutions (one free variable)\n   Unknowns − pivots = 1 free variable, which can take any value.VI: Số ẩn − số pivot = 1 biến tự do, nhận giá trị bất kỳ.\n\n4. The rank of a matrix is …Hạng của một ma trận là …\n   Answer: d) the number of pivots (non-zero rows) in an echelon form\n   Rouché–Capelli: Ax = b is consistent iff rank A = rank [A | b].VI: Rouché–Capelli: Ax = b có nghiệm khi và chỉ khi hạng A = hạng [A | b].\n\n5. In RREF every pivot is …Trong dạng bậc thang rút gọn, mỗi pivot …\n   Answer: b) 1, with zeros above and below it\n   RREF lets you read the solution off directly.VI: Dạng rút gọn cho đọc nghiệm trực tiếp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> multiplying a row by 0</p><p>Scaling must use a NON-ZERO constant, otherwise information is lost and the solution set changes.</p><p><i>VI: Nhân một hàng phải với hằng số KHÁC 0, nếu không sẽ mất thông tin và tập nghiệm thay đổi.</i></p></li><li><p><b>a)</b> no solution</p><p>That row reads 0 = 5 — inconsistent.</p><p><i>VI: Hàng đó đọc là 0 = 5 — hệ vô nghiệm.</i></p></li><li><p><b>b)</b> infinitely many solutions (one free variable)</p><p>Unknowns − pivots = 1 free variable, which can take any value.</p><p><i>VI: Số ẩn − số pivot = 1 biến tự do, nhận giá trị bất kỳ.</i></p></li><li><p><b>d)</b> the number of pivots (non-zero rows) in an echelon form</p><p>Rouché–Capelli: Ax = b is consistent iff rank A = rank [A | b].</p><p><i>VI: Rouché–Capelli: Ax = b có nghiệm khi và chỉ khi hạng A = hạng [A | b].</i></p></li><li><p><b>b)</b> 1, with zeros above and below it</p><p>RREF lets you read the solution off directly.</p><p><i>VI: Dạng rút gọn cho đọc nghiệm trực tiếp.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which is NOT an elementary row operation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phép nào KHÔNG phải phép biến đổi sơ cấp trên hàng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "adding 3 times one row to another"
+              },
+              {
+                "ma": "b",
+                "noiDung": "multiplying a row by 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "multiplying a row by −2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "swapping two rows"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Scaling must use a NON-ZERO constant, otherwise information is lost and the solution set changes.</p><p><i>VI: Nhân một hàng phải với hằng số KHÁC 0, nếu không sẽ mất thông tin và tập nghiệm thay đổi.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>An echelon form contains the row [0 0 0 | 5]. The system has …</p><p style=\"opacity:.75;font-size:.92em\"><i>Dạng bậc thang có hàng [0 0 0 | 5]. Hệ có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "no solution"
+              },
+              {
+                "ma": "b",
+                "noiDung": "infinitely many solutions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a unique solution"
+              },
+              {
+                "ma": "d",
+                "noiDung": "exactly 5 solutions"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>That row reads 0 = 5 — inconsistent.</p><p><i>VI: Hàng đó đọc là 0 = 5 — hệ vô nghiệm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A consistent system has 3 unknowns and only 2 pivots. It has …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một hệ có nghiệm, 3 ẩn và chỉ 2 pivot. Nó có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "no solution, since a pivot is missing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "infinitely many solutions (one free variable)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "exactly 2 solutions, one per pivot"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a unique solution, since it is consistent"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Unknowns − pivots = 1 free variable, which can take any value.</p><p><i>VI: Số ẩn − số pivot = 1 biến tự do, nhận giá trị bất kỳ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The rank of a matrix is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hạng của một ma trận là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the largest entry after elimination"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the number of zero rows in an echelon form"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the number of rows of the original matrix"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the number of pivots (non-zero rows) in an echelon form"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Rouché–Capelli: Ax = b is consistent iff rank A = rank [A | b].</p><p><i>VI: Rouché–Capelli: Ax = b có nghiệm khi và chỉ khi hạng A = hạng [A | b].</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>In RREF every pivot is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong dạng bậc thang rút gọn, mỗi pivot …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "any non-zero number"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1, with zeros above and below it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "followed by a zero row"
+              },
+              {
+                "ma": "d",
+                "noiDung": "on the last column"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>RREF lets you read the solution off directly.</p><p><i>VI: Dạng rút gọn cho đọc nghiệm trực tiếp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating a zero row [0 0 0 | 0] as \"no solution\"."
+        },
+        {
+          "loi": "Scaling a row by 0."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "augmented matrix",
+          "vi": "ma trận mở rộng"
+        },
+        {
+          "en": "pivot",
+          "vi": "phần tử trụ (pivot)"
+        },
+        {
+          "en": "row echelon form",
+          "vi": "dạng bậc thang"
+        },
+        {
+          "en": "rank",
+          "vi": "hạng"
+        }
+      ]
+    },
+    {
+      "title": "Linear systems 2 — Solve and classify",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "solution count",
+        "rank"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p><b>Part A.</b> Solve each system (unique solution). <b>Part B.</b> For each augmented matrix (already in echelon form) give the number of solutions and the rank of the coefficient matrix.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Phần A.</b> Giải mỗi hệ (nghiệm duy nhất). <b>Phần B.</b> Với mỗi ma trận mở rộng (đã ở dạng bậc thang) cho số nghiệm và hạng của ma trận hệ số.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Eliminate x from the second equation.",
+        "Count pivots in the coefficient part only for rank A."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linear systems 2 — Solve and classify\n\nAnswer in the answer panel (no code needed).\n\n1. SolveGiải\n2. ClassifyPhân loại\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linear systems 2 — Solve and classify — answer key\n\n1. SolveGiải\n   - r1.x: 1.00 / 1\n   - r1.y: 2.00 / 2\n   - r2.x: 1.00 / 1\n   - r2.y: 1.00 / 1\n   - r3.x: 7.00 / 7\n   - r3.y: 3.00 / 3\n   R2 → R2 − 3R1 gives −7y = −14 ⇒ y = 2, x = 1. Adding the two equations of the second gives 3x = 3 ⇒ x = 1, y = 1. Third: 2x = 14 ⇒ x = 7, y = 3.VI: R2 → R2 − 3R1 cho −7y = −14 ⇒ y = 2, x = 1. Cộng hai phương trình của hệ thứ hai cho 3x = 3 ⇒ x = 1, y = 1. Hệ thứ ba: 2x = 14 ⇒ x = 7, y = 3.\n\n2. ClassifyPhân loại\n   - r1.n: unique\n   - r1.r: 3\n   - r2.n: infinitely many\n   - r2.r: 2\n   - r3.n: none\n   - r3.r: 2\n   Three pivots in three unknowns: unique. A zero row 0 = 0 leaves a free variable: infinitely many (rank 2). 0 = 7 is inconsistent: none — rank A = 2 but rank [A | b] = 3.VI: Ba pivot với ba ẩn: duy nhất. Hàng 0 = 0 để lại một biến tự do: vô số nghiệm (hạng 2). 0 = 7 mâu thuẫn: vô nghiệm — hạng A = 2 nhưng hạng [A | b] = 3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>R2 → R2 − 3R1 gives −7y = −14 ⇒ y = 2, x = 1. Adding the two equations of the second gives 3x = 3 ⇒ x = 1, y = 1. Third: 2x = 14 ⇒ x = 7, y = 3.</p><p><i>VI: R2 → R2 − 3R1 cho −7y = −14 ⇒ y = 2, x = 1. Cộng hai phương trình của hệ thứ hai cho 3x = 3 ⇒ x = 1, y = 1. Hệ thứ ba: 2x = 14 ⇒ x = 7, y = 3.</i></p><p>Three pivots in three unknowns: unique. A zero row 0 = 0 leaves a free variable: infinitely many (rank 2). 0 = 7 is inconsistent: none — rank A = 2 but rank [A | b] = 3.</p><p><i>VI: Ba pivot với ba ẩn: duy nhất. Hàng 0 = 0 để lại một biến tự do: vô số nghiệm (hạng 2). 0 = 7 mâu thuẫn: vô nghiệm — hạng A = 2 nhưng hạng [A | b] = 3.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Solve</p><p style=\"opacity:.75;font-size:.92em\"><i>Giải</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "System"
+              },
+              {
+                "ma": "x",
+                "ten": "x"
+              },
+              {
+                "ma": "y",
+                "ten": "y"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "x + 2y = 5, 3x − y = 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "2x + y = 3, x − y = 0"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "x + y = 10, x − y = 4"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.x": [
+                "1.00",
+                "1"
+              ],
+              "r1.y": [
+                "2.00",
+                "2"
+              ],
+              "r2.x": [
+                "1.00",
+                "1"
+              ],
+              "r2.y": [
+                "1.00",
+                "1"
+              ],
+              "r3.x": [
+                "7.00",
+                "7"
+              ],
+              "r3.y": [
+                "3.00",
+                "3"
+              ]
+            },
+            "giaiThich": "<p>R2 → R2 − 3R1 gives −7y = −14 ⇒ y = 2, x = 1. Adding the two equations of the second gives 3x = 3 ⇒ x = 1, y = 1. Third: 2x = 14 ⇒ x = 7, y = 3.</p><p><i>VI: R2 → R2 − 3R1 cho −7y = −14 ⇒ y = 2, x = 1. Cộng hai phương trình của hệ thứ hai cho 3x = 3 ⇒ x = 1, y = 1. Hệ thứ ba: 2x = 14 ⇒ x = 7, y = 3.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Classify</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân loại</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Echelon form [A | b]"
+              },
+              {
+                "ma": "n",
+                "ten": "Solutions",
+                "luaChon": [
+                  "unique",
+                  "infinitely many",
+                  "none"
+                ]
+              },
+              {
+                "ma": "r",
+                "ten": "rank A"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "[1 2 3 | 4 ; 0 1 5 | 6 ; 0 0 1 | 2]"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "[1 2 3 | 4 ; 0 1 5 | 6 ; 0 0 0 | 0]"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "[1 2 3 | 4 ; 0 1 5 | 6 ; 0 0 0 | 7]"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "unique",
+              "r1.r": "3",
+              "r2.n": "infinitely many",
+              "r2.r": "2",
+              "r3.n": "none",
+              "r3.r": "2"
+            },
+            "giaiThich": "<p>Three pivots in three unknowns: unique. A zero row 0 = 0 leaves a free variable: infinitely many (rank 2). 0 = 7 is inconsistent: none — rank A = 2 but rank [A | b] = 3.</p><p><i>VI: Ba pivot với ba ẩn: duy nhất. Hàng 0 = 0 để lại một biến tự do: vô số nghiệm (hạng 2). 0 = 7 mâu thuẫn: vô nghiệm — hạng A = 2 nhưng hạng [A | b] = 3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the constant column when computing rank A."
+        },
+        {
+          "loi": "Calling 0 = 0 inconsistent."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "consistent",
+          "vi": "có nghiệm (tương thích)"
+        },
+        {
+          "en": "free variable",
+          "vi": "biến tự do"
+        }
+      ]
+    },
+    {
+      "title": "Linear systems 3 — Order the elimination",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "Gaussian elimination steps"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Order the steps of solving Ax = b by Gaussian elimination.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các bước giải Ax = b bằng khử Gauss.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Elimination goes top-down, substitution bottom-up.",
+        "Consistency is checked before solving."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linear systems 3 — Order the elimination\n\nAnswer in the answer panel (no code needed).\n\n1. StepsCác bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Linear systems 3 — Order the elimination — answer key\n\n1. StepsCác bước\n   Answer: m2) Write the augmented matrix [A | b]  →  m3) Use row operations to make zeros below each pivot  →  m1) Check the last rows for 0 = c (c ≠ 0)  →  m4) Back-substitute from the last pivot upwards\n   Set up, eliminate downwards, check consistency, then substitute back.VI: Lập ma trận, khử xuống dưới, kiểm tra tính có nghiệm, rồi thế ngược lên.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Set up, eliminate downwards, check consistency, then substitute back.</p><p><i>VI: Lập ma trận, khử xuống dưới, kiểm tra tính có nghiệm, rồi thế ngược lên.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Các bước</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Check the last rows for 0 = c (c ≠ 0)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Write the augmented matrix [A | b]"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Use row operations to make zeros below each pivot"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Back-substitute from the last pivot upwards"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m3",
+              "m1",
+              "m4"
+            ],
+            "giaiThich": "<p>Set up, eliminate downwards, check consistency, then substitute back.</p><p><i>VI: Lập ma trận, khử xuống dưới, kiểm tra tính có nghiệm, rồi thế ngược lên.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Back-substituting before checking for 0 = c."
+        },
+        {
+          "loi": "Eliminating above the pivots first."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "back substitution",
+          "vi": "thế ngược"
+        }
+      ]
+    }
+  ]
+}

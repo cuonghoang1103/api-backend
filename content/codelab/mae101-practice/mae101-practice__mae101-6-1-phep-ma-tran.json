@@ -1,0 +1,367 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-6-1-phep-ma-tran",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-6-1-phep-ma-tran"
+  },
+  "exercises": [
+    {
+      "title": "Matrices 1 — Sizes and the rules of the product",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "matrix product"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Concept questions on matrix algebra.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về đại số ma trận.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "(m × n)(n × p) = m × p.",
+        "Never assume AB = BA."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Matrices 1 — Sizes and the rules of the product\n\nAnswer in the answer panel (no code needed).\n\n1. A is 2 × 3 and B is 3 × 4. AB is …A cỡ 2 × 3 và B cỡ 3 × 4. AB có cỡ …\n2. For square matrices, in general AB …Với ma trận vuông, nói chung AB …\n3. (AB)ᵀ = …(AB)ᵀ = …\n4. The entry (AB)ᵢⱼ is …Phần tử (AB)ᵢⱼ là …\n5. The identity matrix I satisfies …Ma trận đơn vị I thoả …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Matrices 1 — Sizes and the rules of the product — answer key\n\n1. A is 2 × 3 and B is 3 × 4. AB is …A cỡ 2 × 3 và B cỡ 3 × 4. AB có cỡ …\n   Answer: b) 2 × 4\n   Inner sizes must match (3 = 3); the outer sizes give the result.VI: Cỡ trong phải khớp (3 = 3); cỡ ngoài cho kết quả.\n\n2. For square matrices, in general AB …Với ma trận vuông, nói chung AB …\n   Answer: c) ≠ BA\n   Matrix multiplication is not commutative; it is associative: (AB)C = A(BC).VI: Phép nhân ma trận không giao hoán; nó có tính kết hợp: (AB)C = A(BC).\n\n3. (AB)ᵀ = …(AB)ᵀ = …\n   Answer: c) BᵀAᵀ\n   The order reverses — the same \"socks and shoes\" rule as for inverses.VI: Thứ tự đảo ngược — giống quy tắc \"tất và giày\" của ma trận nghịch đảo.\n\n4. The entry (AB)ᵢⱼ is …Phần tử (AB)ᵢⱼ là …\n   Answer: c) row i of A · column j of B\n   A dot product of a row and a column. Entry-by-entry multiplication is a different operation.VI: Tích vô hướng của một hàng và một cột. Nhân từng phần tử là một phép khác.\n\n5. The identity matrix I satisfies …Ma trận đơn vị I thoả …\n   Answer: d) AI = IA = A for square A\n   1s on the diagonal, 0s elsewhere: the \"1\" of matrix multiplication.VI: Số 1 trên đường chéo, 0 ở chỗ khác: \"số 1\" của phép nhân ma trận.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 2 × 4</p><p>Inner sizes must match (3 = 3); the outer sizes give the result.</p><p><i>VI: Cỡ trong phải khớp (3 = 3); cỡ ngoài cho kết quả.</i></p></li><li><p><b>c)</b> ≠ BA</p><p>Matrix multiplication is not commutative; it is associative: (AB)C = A(BC).</p><p><i>VI: Phép nhân ma trận không giao hoán; nó có tính kết hợp: (AB)C = A(BC).</i></p></li><li><p><b>c)</b> BᵀAᵀ</p><p>The order reverses — the same \"socks and shoes\" rule as for inverses.</p><p><i>VI: Thứ tự đảo ngược — giống quy tắc \"tất và giày\" của ma trận nghịch đảo.</i></p></li><li><p><b>c)</b> row i of A · column j of B</p><p>A dot product of a row and a column. Entry-by-entry multiplication is a different operation.</p><p><i>VI: Tích vô hướng của một hàng và một cột. Nhân từng phần tử là một phép khác.</i></p></li><li><p><b>d)</b> AI = IA = A for square A</p><p>1s on the diagonal, 0s elsewhere: the \"1\" of matrix multiplication.</p><p><i>VI: Số 1 trên đường chéo, 0 ở chỗ khác: \"số 1\" của phép nhân ma trận.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A is 2 × 3 and B is 3 × 4. AB is …</p><p style=\"opacity:.75;font-size:.92em\"><i>A cỡ 2 × 3 và B cỡ 3 × 4. AB có cỡ …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "4 × 2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2 × 4"
+              },
+              {
+                "ma": "c",
+                "noiDung": "undefined"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3 × 3"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Inner sizes must match (3 = 3); the outer sizes give the result.</p><p><i>VI: Cỡ trong phải khớp (3 = 3); cỡ ngoài cho kết quả.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>For square matrices, in general AB …</p><p style=\"opacity:.75;font-size:.92em\"><i>Với ma trận vuông, nói chung AB …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "= BA"
+              },
+              {
+                "ma": "b",
+                "noiDung": "= 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "≠ BA"
+              },
+              {
+                "ma": "d",
+                "noiDung": "= A + B"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Matrix multiplication is not commutative; it is associative: (AB)C = A(BC).</p><p><i>VI: Phép nhân ma trận không giao hoán; nó có tính kết hợp: (AB)C = A(BC).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>(AB)ᵀ = …</p><p style=\"opacity:.75;font-size:.92em\"><i>(AB)ᵀ = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "BA"
+              },
+              {
+                "ma": "b",
+                "noiDung": "AᵀBᵀ"
+              },
+              {
+                "ma": "c",
+                "noiDung": "BᵀAᵀ"
+              },
+              {
+                "ma": "d",
+                "noiDung": "AB"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The order reverses — the same \"socks and shoes\" rule as for inverses.</p><p><i>VI: Thứ tự đảo ngược — giống quy tắc \"tất và giày\" của ma trận nghịch đảo.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The entry (AB)ᵢⱼ is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần tử (AB)ᵢⱼ là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "aᵢⱼ · bᵢⱼ"
+              },
+              {
+                "ma": "b",
+                "noiDung": "aᵢⱼ + bᵢⱼ"
+              },
+              {
+                "ma": "c",
+                "noiDung": "row i of A · column j of B"
+              },
+              {
+                "ma": "d",
+                "noiDung": "row i of B · column j of A"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A dot product of a row and a column. Entry-by-entry multiplication is a different operation.</p><p><i>VI: Tích vô hướng của một hàng và một cột. Nhân từng phần tử là một phép khác.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The identity matrix I satisfies …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ma trận đơn vị I thoả …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "AI = 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Iᵀ = −I"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A + I = A"
+              },
+              {
+                "ma": "d",
+                "noiDung": "AI = IA = A for square A"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>1s on the diagonal, 0s elsewhere: the \"1\" of matrix multiplication.</p><p><i>VI: Số 1 trên đường chéo, 0 ở chỗ khác: \"số 1\" của phép nhân ma trận.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Multiplying entry by entry."
+        },
+        {
+          "loi": "Writing (AB)ᵀ = AᵀBᵀ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transpose",
+          "vi": "chuyển vị"
+        },
+        {
+          "en": "identity matrix",
+          "vi": "ma trận đơn vị"
+        },
+        {
+          "en": "commutative",
+          "vi": "giao hoán"
+        }
+      ]
+    },
+    {
+      "title": "Matrices 2 — Compute AB, BA and Aᵀ",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "matrix arithmetic"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>A = [1 2; 3 4] and B = [0 1; 1 0] (rows separated by \";\"). Fill in the entries.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>A = [1 2; 3 4] và B = [0 1; 1 0] (các hàng cách nhau bằng \";\"). Điền các phần tử.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Entry (i, j) = row i · column j.",
+        "Multiplying by B on the right acts on columns."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Matrices 2 — Compute AB, BA and Aᵀ\n\nAnswer in the answer panel (no code needed).\n\n1. EntriesCác phần tử\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Matrices 2 — Compute AB, BA and Aᵀ — answer key\n\n1. EntriesCác phần tử\n   - r1.a: 2\n   - r1.b: 1\n   - r1.c: 4\n   - r1.d: 3\n   - r2.a: 3\n   - r2.b: 4\n   - r2.c: 1\n   - r2.d: 2\n   - r3.a: 1\n   - r3.b: 3\n   - r3.c: 2\n   - r3.d: 4\n   - r4.a: 1\n   - r4.b: 3\n   - r4.c: 4\n   - r4.d: 4\n   - r5.a: 2\n   - r5.b: 4\n   - r5.c: 6\n   - r5.d: 8\n   B swaps: AB swaps the COLUMNS of A ([2 1; 4 3]); BA swaps the ROWS ([3 4; 1 2]) — so AB ≠ BA. Aᵀ turns rows into columns. Sums and scalar multiples are entry by entry.VI: B là phép đổi chỗ: AB đổi CỘT của A ([2 1; 4 3]); BA đổi HÀNG ([3 4; 1 2]) — nên AB ≠ BA. Aᵀ biến hàng thành cột. Tổng và nhân vô hướng làm theo từng phần tử.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>B swaps: AB swaps the COLUMNS of A ([2 1; 4 3]); BA swaps the ROWS ([3 4; 1 2]) — so AB ≠ BA. Aᵀ turns rows into columns. Sums and scalar multiples are entry by entry.</p><p><i>VI: B là phép đổi chỗ: AB đổi CỘT của A ([2 1; 4 3]); BA đổi HÀNG ([3 4; 1 2]) — nên AB ≠ BA. Aᵀ biến hàng thành cột. Tổng và nhân vô hướng làm theo từng phần tử.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Entries</p><p style=\"opacity:.75;font-size:.92em\"><i>Các phần tử</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Matrix"
+              },
+              {
+                "ma": "a",
+                "ten": "(1,1)"
+              },
+              {
+                "ma": "b",
+                "ten": "(1,2)"
+              },
+              {
+                "ma": "c",
+                "ten": "(2,1)"
+              },
+              {
+                "ma": "d",
+                "ten": "(2,2)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "AB"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "BA"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "Aᵀ"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "A + B"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "m": "2A"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "2",
+              "r1.b": "1",
+              "r1.c": "4",
+              "r1.d": "3",
+              "r2.a": "3",
+              "r2.b": "4",
+              "r2.c": "1",
+              "r2.d": "2",
+              "r3.a": "1",
+              "r3.b": "3",
+              "r3.c": "2",
+              "r3.d": "4",
+              "r4.a": "1",
+              "r4.b": "3",
+              "r4.c": "4",
+              "r4.d": "4",
+              "r5.a": "2",
+              "r5.b": "4",
+              "r5.c": "6",
+              "r5.d": "8"
+            },
+            "giaiThich": "<p>B swaps: AB swaps the COLUMNS of A ([2 1; 4 3]); BA swaps the ROWS ([3 4; 1 2]) — so AB ≠ BA. Aᵀ turns rows into columns. Sums and scalar multiples are entry by entry.</p><p><i>VI: B là phép đổi chỗ: AB đổi CỘT của A ([2 1; 4 3]); BA đổi HÀNG ([3 4; 1 2]) — nên AB ≠ BA. Aᵀ biến hàng thành cột. Tổng và nhân vô hướng làm theo từng phần tử.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Computing BA when AB is asked."
+        },
+        {
+          "loi": "Transposing only the diagonal."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "permutation matrix",
+          "vi": "ma trận hoán vị"
+        }
+      ]
+    }
+  ]
+}

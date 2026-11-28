@@ -1,0 +1,370 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-2-2-quy-tac-dao-ham",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-2-2-quy-tac-dao-ham"
+  },
+  "exercises": [
+    {
+      "title": "Rules 1 — Product, quotient and chain rule",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "differentiation rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Pick the correct derivative.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn đạo hàm đúng.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Identify the outermost operation first.",
+        "For compositions multiply by the inner derivative."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules 1 — Product, quotient and chain rule\n\nAnswer in the answer panel (no code needed).\n\n1. (f·g)′ = …(f·g)′ = …\n2. (f/g)′ = …(f/g)′ = …\n3. d/dx (x² + 1)³ = …d/dx (x² + 1)³ = …\n4. d/dx e^(3x) = …d/dx e^(3x) = …\n5. d/dx ln(x² + 1) = …d/dx ln(x² + 1) = …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules 1 — Product, quotient and chain rule — answer key\n\n1. (f·g)′ = …(f·g)′ = …\n   Answer: b) f′g + fg′\n   Product rule. f′g′ is the most common wrong guess.VI: Quy tắc tích. f′g′ là cách đoán sai phổ biến nhất.\n\n2. (f/g)′ = …(f/g)′ = …\n   Answer: a) (f′g − fg′)/g²\n   Quotient rule: \"low d-high minus high d-low, over low squared\". The order of the subtraction matters.VI: Quy tắc thương: \"mẫu nhân đạo hàm tử trừ tử nhân đạo hàm mẫu, chia mẫu bình phương\". Thứ tự phép trừ là quan trọng.\n\n3. d/dx (x² + 1)³ = …d/dx (x² + 1)³ = …\n   Answer: a) 6x(x² + 1)²\n   Chain rule: 3(x² + 1)² times the inner derivative 2x.VI: Quy tắc chuỗi: 3(x² + 1)² nhân đạo hàm hàm trong 2x.\n\n4. d/dx e^(3x) = …d/dx e^(3x) = …\n   Answer: d) 3e^(3x)\n   eᵘ differentiates to eᵘ·u′, and u′ = 3. The power rule does not apply to exponentials.VI: eᵘ có đạo hàm eᵘ·u′, mà u′ = 3. Quy tắc luỹ thừa không áp dụng cho hàm mũ.\n\n5. d/dx ln(x² + 1) = …d/dx ln(x² + 1) = …\n   Answer: d) 2x/(x² + 1)\n   (ln u)′ = u′/u with u = x² + 1.VI: (ln u)′ = u′/u với u = x² + 1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> f′g + fg′</p><p>Product rule. f′g′ is the most common wrong guess.</p><p><i>VI: Quy tắc tích. f′g′ là cách đoán sai phổ biến nhất.</i></p></li><li><p><b>a)</b> (f′g − fg′)/g²</p><p>Quotient rule: \"low d-high minus high d-low, over low squared\". The order of the subtraction matters.</p><p><i>VI: Quy tắc thương: \"mẫu nhân đạo hàm tử trừ tử nhân đạo hàm mẫu, chia mẫu bình phương\". Thứ tự phép trừ là quan trọng.</i></p></li><li><p><b>a)</b> 6x(x² + 1)²</p><p>Chain rule: 3(x² + 1)² times the inner derivative 2x.</p><p><i>VI: Quy tắc chuỗi: 3(x² + 1)² nhân đạo hàm hàm trong 2x.</i></p></li><li><p><b>d)</b> 3e^(3x)</p><p>eᵘ differentiates to eᵘ·u′, and u′ = 3. The power rule does not apply to exponentials.</p><p><i>VI: eᵘ có đạo hàm eᵘ·u′, mà u′ = 3. Quy tắc luỹ thừa không áp dụng cho hàm mũ.</i></p></li><li><p><b>d)</b> 2x/(x² + 1)</p><p>(ln u)′ = u′/u with u = x² + 1.</p><p><i>VI: (ln u)′ = u′/u với u = x² + 1.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>(f·g)′ = …</p><p style=\"opacity:.75;font-size:.92em\"><i>(f·g)′ = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "(f′g − fg′)/g²"
+              },
+              {
+                "ma": "b",
+                "noiDung": "f′g + fg′"
+              },
+              {
+                "ma": "c",
+                "noiDung": "f′g − fg′"
+              },
+              {
+                "ma": "d",
+                "noiDung": "f′g′"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Product rule. f′g′ is the most common wrong guess.</p><p><i>VI: Quy tắc tích. f′g′ là cách đoán sai phổ biến nhất.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>(f/g)′ = …</p><p style=\"opacity:.75;font-size:.92em\"><i>(f/g)′ = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "(f′g − fg′)/g²"
+              },
+              {
+                "ma": "b",
+                "noiDung": "f′/g′"
+              },
+              {
+                "ma": "c",
+                "noiDung": "(f′g + fg′)/g²"
+              },
+              {
+                "ma": "d",
+                "noiDung": "(fg′ − f′g)/g²"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Quotient rule: \"low d-high minus high d-low, over low squared\". The order of the subtraction matters.</p><p><i>VI: Quy tắc thương: \"mẫu nhân đạo hàm tử trừ tử nhân đạo hàm mẫu, chia mẫu bình phương\". Thứ tự phép trừ là quan trọng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>d/dx (x² + 1)³ = …</p><p style=\"opacity:.75;font-size:.92em\"><i>d/dx (x² + 1)³ = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "6x(x² + 1)²"
+              },
+              {
+                "ma": "b",
+                "noiDung": "6x(x² + 1)³"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3(x² + 1)²"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3(2x)²"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Chain rule: 3(x² + 1)² times the inner derivative 2x.</p><p><i>VI: Quy tắc chuỗi: 3(x² + 1)² nhân đạo hàm hàm trong 2x.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>d/dx e^(3x) = …</p><p style=\"opacity:.75;font-size:.92em\"><i>d/dx e^(3x) = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3x·e^(3x − 1)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "e^(3x)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "e^3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3e^(3x)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>eᵘ differentiates to eᵘ·u′, and u′ = 3. The power rule does not apply to exponentials.</p><p><i>VI: eᵘ có đạo hàm eᵘ·u′, mà u′ = 3. Quy tắc luỹ thừa không áp dụng cho hàm mũ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>d/dx ln(x² + 1) = …</p><p style=\"opacity:.75;font-size:.92em\"><i>d/dx ln(x² + 1) = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1/(x² + 1)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2x·ln(x² + 1)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1/(2x)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2x/(x² + 1)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>(ln u)′ = u′/u with u = x² + 1.</p><p><i>VI: (ln u)′ = u′/u với u = x² + 1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the inner derivative in the chain rule."
+        },
+        {
+          "loi": "Swapping the terms of the quotient rule numerator."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product rule",
+          "vi": "quy tắc tích"
+        },
+        {
+          "en": "quotient rule",
+          "vi": "quy tắc thương"
+        },
+        {
+          "en": "chain rule",
+          "vi": "quy tắc hàm hợp (chuỗi)"
+        }
+      ]
+    },
+    {
+      "title": "Rules 2 — Evaluate f′ at a point",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "chain rule"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Differentiate, then evaluate at the given point. Write an integer or a decimal.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lấy đạo hàm rồi tính tại điểm cho sẵn. Ghi số nguyên hoặc số thập phân.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write f′ symbolically first, then substitute.",
+        "sin 0 = 0, cos 0 = 1, e⁰ = 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules 2 — Evaluate f′ at a point\n\nAnswer in the answer panel (no code needed).\n\n1. f′ at the pointf′ tại điểm cho sẵn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rules 2 — Evaluate f′ at a point — answer key\n\n1. f′ at the pointf′ tại điểm cho sẵn\n   - r1.v: 24.00 / 24\n   - r2.v: 1.00 / 1\n   - r3.v: 2.00 / 2\n   - r4.v: 1.00 / 1\n   - r5.v: 0.25 / 1/4\n   - r6.v: 3.00 / 3\n   - r7.v: 0.00 / 0\n   (x² + 1)³ at x = 1: f′ = 3·2²·2 → 24; x·eˣ at x = 0: f′ = (1 + x)eˣ → 1; sin(2x) at x = 0: f′ = 2cos(2x) → 2; ln(x² + 1) at x = 1: f′ = 2x/(x² + 1) → 1; x/(x + 1) at x = 1: f′ = 1/(x + 1)² → 0.25; e^(3x) at x = 0: f′ = 3e^(3x) → 3; x²·sin x at x = 0: f′ = 2x sin x + x² cos x → 0.VI: (x² + 1)³ at x = 1: f′ = 3·2²·2 → 24; x·eˣ at x = 0: f′ = (1 + x)eˣ → 1; sin(2x) at x = 0: f′ = 2cos(2x) → 2; ln(x² + 1) at x = 1: f′ = 2x/(x² + 1) → 1; x/(x + 1) at x = 1: f′ = 1/(x + 1)² → 0.25; e^(3x) at x = 0: f′ = 3e^(3x) → 3; x²·sin x at x = 0: f′ = 2x sin x + x² cos x → 0.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(x² + 1)³ at x = 1: f′ = 3·2²·2 → 24; x·eˣ at x = 0: f′ = (1 + x)eˣ → 1; sin(2x) at x = 0: f′ = 2cos(2x) → 2; ln(x² + 1) at x = 1: f′ = 2x/(x² + 1) → 1; x/(x + 1) at x = 1: f′ = 1/(x + 1)² → 0.25; e^(3x) at x = 0: f′ = 3e^(3x) → 3; x²·sin x at x = 0: f′ = 2x sin x + x² cos x → 0.</p><p><i>VI: (x² + 1)³ at x = 1: f′ = 3·2²·2 → 24; x·eˣ at x = 0: f′ = (1 + x)eˣ → 1; sin(2x) at x = 0: f′ = 2cos(2x) → 2; ln(x² + 1) at x = 1: f′ = 2x/(x² + 1) → 1; x/(x + 1) at x = 1: f′ = 1/(x + 1)² → 0.25; e^(3x) at x = 0: f′ = 3e^(3x) → 3; x²·sin x at x = 0: f′ = 2x sin x + x² cos x → 0.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>f′ at the point</p><p style=\"opacity:.75;font-size:.92em\"><i>f′ tại điểm cho sẵn</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Function and point"
+              },
+              {
+                "ma": "v",
+                "ten": "f'(point)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "(x² + 1)³ at x = 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "x·eˣ at x = 0"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "sin(2x) at x = 0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "f": "ln(x² + 1) at x = 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "f": "x/(x + 1) at x = 1"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "f": "e^(3x) at x = 0"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "f": "x²·sin x at x = 0"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": [
+                "24.00",
+                "24"
+              ],
+              "r2.v": [
+                "1.00",
+                "1"
+              ],
+              "r3.v": [
+                "2.00",
+                "2"
+              ],
+              "r4.v": [
+                "1.00",
+                "1"
+              ],
+              "r5.v": [
+                "0.25",
+                "1/4"
+              ],
+              "r6.v": [
+                "3.00",
+                "3"
+              ],
+              "r7.v": [
+                "0.00",
+                "0"
+              ]
+            },
+            "giaiThich": "<p>(x² + 1)³ at x = 1: f′ = 3·2²·2 → 24; x·eˣ at x = 0: f′ = (1 + x)eˣ → 1; sin(2x) at x = 0: f′ = 2cos(2x) → 2; ln(x² + 1) at x = 1: f′ = 2x/(x² + 1) → 1; x/(x + 1) at x = 1: f′ = 1/(x + 1)² → 0.25; e^(3x) at x = 0: f′ = 3e^(3x) → 3; x²·sin x at x = 0: f′ = 2x sin x + x² cos x → 0.</p><p><i>VI: (x² + 1)³ at x = 1: f′ = 3·2²·2 → 24; x·eˣ at x = 0: f′ = (1 + x)eˣ → 1; sin(2x) at x = 0: f′ = 2cos(2x) → 2; ln(x² + 1) at x = 1: f′ = 2x/(x² + 1) → 1; x/(x + 1) at x = 1: f′ = 1/(x + 1)² → 0.25; e^(3x) at x = 0: f′ = 3e^(3x) → 3; x²·sin x at x = 0: f′ = 2x sin x + x² cos x → 0.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Substituting before differentiating."
+        },
+        {
+          "loi": "Using (x + 1)/(x + 1)² instead of the quotient rule."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

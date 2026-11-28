@@ -5,6 +5,20 @@
 > Ngắn gọn, mỗi mục 5 dòng. Mới nhất ở TRÊN. Bài học lớn về quy trình deploy vẫn nằm ở bảng
 > "Known Error Patterns" trong `CLAUDE.md` — sổ này gom MỌI lỗi, kể cả lỗi nhỏ.
 
+### 28/11/2026 — Video (giọng) — từ khoá viết HOA bị đọc lắp: "RETURNS TABLE" ⇒ "ri ti ti bờ le"
+- **Triệu chứng:** user nghe video PostgreSQL `pg-12-1-2`: "RETURNS TABLE" đọc thành "ri ti ti bờ le"; Whisper nghe lại "orderize TBA", "RAISE EXCEPTION" ⇒ "Royce accept tone", "SECURITY DEFINER" ⇒ "Secretive Dinner".
+- **Nguyên nhân:** `~/Documents/video-bai-giang/giong/phienAmBai.ts › vietTat3` để NGUYÊN từ HOA có nguyên âm (≥ 4 chữ, hoặc 3 chữ ngoài danh sách đánh vần) ⇒ giọng cuong8 đọc chữ HOA như viết tắt, ra âm lạ.
+- **Cách sửa:** đo A/B cuong8 × 2 seed + Whisper (14 + 8 câu): chữ thường đúng 100%. Từ HOA ≥ 4 chữ (không thuộc HOA_DANH_VAN) ⇒ hạ thường; 3 chữ chỉ hạ khi thuộc danh sách trắng `TU_ANH_3` (GET/SET/NOT/AND/END/ROW…), viết tắt (AWS, DOM, DTO…) giữ đánh vần. Đọc lại giọng 72 tập DBI202 còn chờ render (cache theo câu ⇒ chỉ câu có chữ HOA đọc lại).
+- **Ảnh hưởng:** ~3.345 tập đã có giọng chứa từ HOA ≥ 4 chữ (OSG 227, SWR 219, PG 185, DBI 181…); làm lại dần theo ưu tiên user.
+- **Bài học:** luật "để nguyên từ tiếng Anh" phải đo cả chữ HOA lẫn chữ thường; Whisper chấm cả câu > 0,9 vẫn có thể lọt — soát riêng thuật ngữ viết HOA.
+
+### 28/11/2026 — Máy Mac — đĩa đầy 100% lần 2 trong ngày khi chạy 7 agent + vẽ ảnh song song
+- **Triệu chứng:** agent "1000 câu nền" và Dekiru dừng vì ENOSPC; 3 luồng vẽ ảnh `ve-ai.mts` chết ("agy không tạo tệp" rồi ENOSPC); `df` còn 1,3 GB.
+- **Nguyên nhân:** từ 44 GB trống sáng nay: `next dev`/`next build` + `node_modules` riêng (~1,5 GB/cây) trong worktree agent, DerivedData + 2 simulator của agent iOS, build CI của deploy-nha (CSDL/Redis tạm trong Docker), cache webpack Remotion.
+- **Cách sửa:** xoá `frontend/node_modules` của 5 worktree agent đã xong, cache Remotion > 6 giờ, `docker builder prune` (6,7 GB) ⇒ 15 GB; dặn agent không `next dev`/`build` (điều phối build một lần); vòng canh đĩa < 6 GB thì tự dừng vẽ ảnh.
+- **Ảnh hưởng:** agent tiếng Anh dừng ở Ngày 15/30; ~600 lượt vẽ ảnh hỏng (vẽ lại được, script bỏ qua ảnh đã có).
+- **Bài học:** chạy nhiều agent song song ⇒ mỗi agent dùng symlink `node_modules`, KHÔNG build riêng; có vòng canh đĩa trước khi mở việc nặng.
+
 ### 28/11/2026 — Video (hậu kỳ) — 18 tập "render ok" nhưng video thất lạc + 22 tập lỗi giọng + 12 tập lỗi render vì máy thuê vast đã trả
 - **Triệu chứng:** khoá Redis/Docker/GitHub Actions/React… kẹt 90–99% nhiều ngày: bài web thiếu video dù `hang-render-swt-xong.txt` ghi `ok` (13–14/11); Mac chỉ có `thong-tin.json` (`r2Url: null`), không có `video.mp4`; máy nhà không còn thư mục tập.
 - **Nguyên nhân:** tập render trên máy thuê (làn `linux-t*`/`u*`, đường dẫn `/root/Videos/…`) — máy trả trước khi kéo video về/đẩy R2, mà dòng `ok` vẫn nằm lại nên không ai render lại. Cùng gốc: 22 tập giọng LOI (`ssh vast7` chết giữa chừng 18–19/11) và 12 tập render LOI (lượt cuối chạy trên máy thuê) không ai làm lại.

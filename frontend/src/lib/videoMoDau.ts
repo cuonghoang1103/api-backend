@@ -4,7 +4,7 @@
  * Thêm khoá mới: tạo clip ⇒ đẩy R2 đúng đường dẫn ⇒ thêm slug vào đây.
  */
 const GOC = 'https://media.cuongthai.com/hoc/veo/mo-dau/';
-const CO_CLIP = new Set(['postgresql', 'introduction-to-databases', 'nodejs', 'docker', 'git', 'react']);
+const CO_CLIP = new Set(['postgresql', 'introduction-to-databases', 'nodejs', 'docker', 'git', 'react', 'spring-boot']);
 
 export function videoMoDau(slug: string): string | null {
   return CO_CLIP.has(slug) ? `${GOC}${slug}.mp4` : null;

@@ -283,3 +283,34 @@ slide như slide của cô: tranh to + mẫu câu + câu hỏi gọi phát biể
 Thêm `case N: return import('./baiN').then((m) => m.BAI_N);` vào `bai/index.ts` (người điều phối làm),
 rồi `npm run course:manifest`, `npx tsc --noEmit`. 🎬 Video giảng cho Bài 16+: làm sau khi chữ ổn
 (dự án video, gắn qua `videos.ts` như Bài 1–15).
+
+## 9. 🔁 Luyện câu 2 chiều + ✍️ Tập viết — Bài 1–10 (28/11/2026)
+
+Người học đã trượt JPD113/JPD123 nhiều lần, tập VIẾT TAY mỗi ngày trên iPad và muốn bấm vào câu để nghe rồi nói theo.
+Mỗi bài N (1–10) có thêm 2 mục ở nhóm ① (chèn ngay sau `bN-luyen-nho` bằng `chenLuyenCau()` — `bai/luyenCau.ts`,
+bộ nạp `index.ts` và `scripts/course-manifest.mts` gọi cùng hàm):
+
+- **`bN-luyen-cau`** (review): A. bảng **Mẫu câu** "người Việt nói ↔ người Nhật xếp" + sơ đồ 4 bước dịch + lỗi người Việt
+  hay mắc + nút 🔗 sang ngữ pháp / từ vựng gốc · B. khối **`luyenCau`** (Bài 1–7: 60–80 câu MỚI, Bài 8–10: ~50) · C. ôn
+  thi = nút 🔗 sang mục đã có (`bN-noi`, `bN-doc-to`, `bN-kiem-tra-noi/viet`, `b3-thi-thu-113-*`, `on113-*`,
+  `b7-thi-thu-123-*`, `cuoi-ky-*`) — KHÔNG làm lại.
+- **`bN-tap-viet`** (writing): `write` chữ Hán của lớp viết theo TỪ (`bN-tv-tu`) · `giayViet` chép câu mẫu (giấy ô
+  vuông, dòng tô chữ mờ + dòng tự viết, `bN-tv-chep`) · `giayViet` viết đoạn 3–5 câu theo đề + bài mẫu ẩn (`bN-tv-doan`).
+  Có nút 🖨️ in tờ luyện.
+- **`b3-thi-thu-viet-113`** (nhóm ④): 2 đề luyện VIẾT JPD113 (I đọc chữ Hán · II chọn chữ Hán · III trợ từ · IV từ vựng ·
+  V sắp câu · VI dịch viết tay · VII đọc hiểu · VIII viết đoạn).
+
+Khối mới (types.ts): `luyenCau` (nhat/LuyenCau.tsx — 6 tab: Việt→Nhật viết tay/gõ có chấm · Nhật→Việt chọn nghĩa ·
+nghe–chép · nói theo (CauPhatAm, Azure ja) · từ của bài (onTheData + Hán Việt + hình `luyenCauAnh.ts`) · danh sách / in;
+tiến độ localStorage `dekiru-luyencau-v1`, "đã thuộc" = đúng 2 lần liên tiếp, XP, chuỗi ngày, mục tiêu 20 câu/ngày) ·
+`giayViet` (nhat/GiayViet.tsx) · `moBai` (nút mở mục khác — sự kiện `sachhoc:mo-bai`, CoursePage chuyển bài).
+
+**Soạn câu** (`bai/luyenCauB13.ts` · `luyenCauB47.ts` · `luyenCauB810.ts`, khuôn `luyenCauDsl.ts`): DSL từ cách nhau dấu
+cách như jp113B12.ts — `nhom('P5 · …', [[vi, 'câu DSL', [cách viết khác]], …])`, romaji SINH TỰ ĐỘNG. **Chỉ chữ Hán của lớp
+đến bài đó** mới viết chữ Hán (còn lại kana, như tờ đề); số + đơn vị viết tách để máy chấm nhận cả "19さい": `{19|じゅうきゅう}{才|さい}`.
+Câu ngắn → dài, chỉ dùng từ / ngữ pháp đã học tới bài đó, câu MỚI (không trùng câu đã có ở các tệp bài khác).
+
+**Kiểm** (phải xanh trước khi nhận): `npm run dekiru:luyencau:kiem` (chữ Hán ngoài danh sách lớp, thiếu furigana, câu trùng
+trong bộ / trùng câu cũ, số câu mỗi bài, máy chấm nhận chính đáp án ở dạng chữ Hán + kana + romaji) ·
+`npm run dekiru:chamcau:test` (máy chấm câu `nhat/chamCau.ts`). Ảnh `ai-*` của tab Từ: prompt ở `scripts/hinh/ai/dekiru.json`
+(người điều phối chạy `scripts/hinh/ve-ai.mts`; ảnh chưa có thì thẻ tự ẩn ảnh).

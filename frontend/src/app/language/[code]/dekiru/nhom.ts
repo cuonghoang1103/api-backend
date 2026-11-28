@@ -13,7 +13,8 @@ import type { NhomMuc } from '@/components/sach-hoc/course';
 
 // Bài 16+ (tiếp sau sách, 09/11/2026): chữ Hán `bN-han-tu`, đọc hiểu `bN-doc` là phần cốt lõi; buổi học
 // `bN-buoi-K-…`; luyện thêm `bN-lt-…`; kiểm tra chặng / thi thử `bN-kiem-tra…` / `bN-thi-thu…`.
-const LOI = /^b\d+-(hoi-thoai|tu-vung|ngu-phap|han-lop|han-tu|nghe|doc|noi|viet|bai-tap|luyen-nho|doc-to|hinh-tu)$|^b0-/;
+// + 🔁 `bN-luyen-cau` / ✍️ `bN-tap-viet` (luyện câu 2 chiều + tập viết, Bài 1–10, 28/11/2026).
+const LOI = /^b\d+-(hoi-thoai|tu-vung|ngu-phap|han-lop|han-tu|nghe|doc|noi|viet|bai-tap|luyen-nho|luyen-cau|tap-viet|doc-to|hinh-tu)$|^b0-/;
 const BUOI_CO = /^(slot-|slide-tong-hop-|s113-|b\d+-buoi-)/;
 const LUYEN = /^(lt-|b\d+-lt-)/;
 const ON_THI = /^(bt-|on-giua-ky|chia-the-te-|b\d+-kiem-tra|b\d+-thi-thu)/;

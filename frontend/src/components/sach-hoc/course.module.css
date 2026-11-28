@@ -2091,3 +2091,15 @@
 .ghimChu { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .ghimChu b { font-size: 14.5px; font-weight: 800; letter-spacing: 0.01em; }
 .ghimChu small { font-size: 12px; opacity: 0.9; }
+
+/* 🔗 Khối moBai (28/11/2026): nút mở một mục khác của khoá — liên kết thay vì chép lại nội dung. */
+.moBai { margin: 14px 0 18px; display: flex; flex-direction: column; gap: 8px; }
+.moBaiTitle { font-size: 13px; font-weight: 700; color: var(--lh-ink-3); }
+.moBaiList { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.moBaiBtn {
+  font: inherit; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px;
+  border-radius: 12px; border: 1px solid var(--lh-line); background: var(--lh-surface); color: var(--lh-ink); min-height: 44px;
+}
+.moBaiBtn:hover { border-color: var(--lh-accent); background: var(--lh-accent-soft); }
+.moBaiBtn b { font-size: 14.5px; font-weight: 700; }
+.moBaiBtn small { font-size: 12.5px; color: var(--lh-ink-3); line-height: 1.4; }

@@ -99,6 +99,8 @@ export const MANIFEST: CourseManifest = {
       {"id":"b1-noi","kind":"speaking","title":"Luyện nói theo đề thi JPD113 — Bài 1","goal":"Tự giới thiệu trôi chảy, trả lời đủ câu mọi câu hỏi Bài 1 (có tranh + không tranh) và đọc to đoạn văn tự giới thiệu.","minutes":45,"ready":true},
       {"id":"b1-bai-tap","kind":"homework","title":"Bài tập về nhà — Bài 1","goal":"Tự viết, tự ghép và tự kiểm tra được mọi mẫu câu của Bài 1.","minutes":40,"ready":true},
       {"id":"b1-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 1 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 1: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
+      {"id":"b1-luyen-cau","kind":"review","title":"🔁 Luyện câu 2 chiều Bài 1 — Việt ⇄ Nhật · nghe–chép · nói theo (75 câu)","goal":"Tự viết và nói được 75 câu của Bài 1 (はじめまして — tự giới thiệu: tên, nước, nghề, tuổi, sinh nhật, sở thích) theo cả hai chiều: nhìn tiếng Việt viết ra tiếng Nhật đúng trợ từ, nghe tiếng Nhật hiểu nghĩa và chép lại.","minutes":30,"ready":true},
+      {"id":"b1-tap-viet","kind":"writing","title":"✍️ Tập viết Bài 1 — chữ Hán theo từ · chép câu · viết đoạn","goal":"Viết đúng thứ tự nét các từ có chữ Hán của lớp Bài 1, chép đúng câu mẫu và tự viết một đoạn 3–5 câu theo chủ đề はじめまして — tự giới thiệu: tên, nước, nghề, tuổi, sinh nhật, sở thích.","minutes":25,"ready":true},
       {"id":"s113-b1-00-doc-truoc","kind":"intro","title":"Bài 1 はじめまして — Đọc trước: bài này soạn theo khung lớp (không phải slide thật của cô) + lộ trình 6 buổi","goal":"Biết Bài 1 gồm những buổi nào, mỗi buổi học gì, làm gì để cuối bài tự giới thiệu được 30 giây không nhìn giấy.","minutes":15,"ready":true},
       {"id":"s113-b1-01-chao-hoi-ten","kind":"grammar","title":"Buổi 1 — はじめまして: chào lần đầu, nói tên, hỏi tên (theo khung lớp)","goal":"Chào đúng lần đầu gặp, nói \"Tôi là ___\", hỏi \"Tên bạn là gì?\" và đáp はい／いいえ — dùng đúng さん và N1 は N2 です.","minutes":40,"ready":true},
       {"id":"s113-b1-02-nuoc-nguoi","kind":"grammar","title":"Buổi 2 — お{国|くに}はどちらですか: tên nước, 〜人, hỏi quê, trả lời \"không phải\" (theo khung lớp)","goal":"Nói nước của mình, hỏi nước người khác bằng どちら, ghép 〜人, trả lời はい／いいえ và dùng じゃありません đúng.","minutes":45,"ready":true},
@@ -418,7 +420,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"s113-slide-b1-10-kiem-tra","title":"Kiểm tra cuối buổi — Slot 10","lessonId":"s113-slide-b1-slot-10-mo-kanji-on-bai-1","count":7},
       {"id":"s113-tong-hop-b1-kiem-tra","title":"Tự kiểm tra sau bộ tổng hợp Bài 1","lessonId":"slide-tong-hop-b1","count":6},
     ],
-    minutes: 1645,
+    minutes: 1700,
   },
   2: {
     lessons: [
@@ -432,6 +434,8 @@ export const MANIFEST: CourseManifest = {
       {"id":"b2-noi","kind":"speaking","title":"Luyện nói — câu hỏi thi JPD113 của Bài 2","goal":"Trả lời trọn câu, đúng trợ từ mọi câu hỏi Bài 2 trong đề thi nói (hỏi chỗ, hỏi giá, gọi món, của ai, xuất xứ, ～語で), và đọc to trôi chảy đoạn văn có giá tiền.","minutes":40,"ready":true},
       {"id":"b2-bai-tap","kind":"homework","title":"Bài tập về nhà — Bài 2 (có đáp án)","goal":"Tự dịch, chọn trợ từ, đọc giá và ghép câu Bài 2 không cần nhìn bài học.","minutes":40,"ready":true},
       {"id":"b2-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 2 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 2: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
+      {"id":"b2-luyen-cau","kind":"review","title":"🔁 Luyện câu 2 chiều Bài 2 — Việt ⇄ Nhật · nghe–chép · nói theo (68 câu)","goal":"Tự viết và nói được 68 câu của Bài 2 (どこですか・いくらですか — chỉ chỗ, chỉ đồ, hỏi giá, mua đồ, gọi món) theo cả hai chiều: nhìn tiếng Việt viết ra tiếng Nhật đúng trợ từ, nghe tiếng Nhật hiểu nghĩa và chép lại.","minutes":30,"ready":true},
+      {"id":"b2-tap-viet","kind":"writing","title":"✍️ Tập viết Bài 2 — chữ Hán theo từ · chép câu · viết đoạn","goal":"Viết đúng thứ tự nét các từ có chữ Hán của lớp Bài 2, chép đúng câu mẫu và tự viết một đoạn 3–5 câu theo chủ đề どこですか・いくらですか — chỉ chỗ, chỉ đồ, hỏi giá, mua đồ, gọi món.","minutes":25,"ready":true},
       {"id":"s113-b2-00-doc-truoc","kind":"intro","title":"Bài 2 どこですか・いくらですか — Đọc trước: bài này soạn theo khung lớp (không phải slide thật của cô) + lộ trình 6 buổi","goal":"Biết Bài 2 gồm những buổi nào, cần thuộc gì (82 từ, 9 ポイント, số và giá tiền) và làm gì để mua đồ, hỏi giá, gọi món bằng tiếng Nhật.","minutes":15,"ready":true},
       {"id":"s113-b2-01-noi-chon-toa-nha","kind":"grammar","title":"Buổi 1 — どこですか: chỉ nơi chốn, toà nhà mua sắm, tầng mấy (theo khung lớp)","goal":"Hỏi và chỉ chỗ bằng ここ/そこ/あそこ/どこ (và こちら…), nói tầng bằng 〜階, đọc tên các nơi trong toà nhà.","minutes":45,"ready":true},
       {"id":"s113-b2-02-do-vat-gan-xa","kind":"grammar","title":"Buổi 2 — これ・それ・あれ / この・その・あの: chỉ đồ vật, đồ dùng, đồ điện tử, quần áo (theo khung lớp)","goal":"Chỉ đồ vật gần/xa bằng これ/それ/あれ và この/その/あの + N, hỏi \"Đây là cái gì?\", biết tên 16 đồ vật thường gặp.","minutes":45,"ready":true},
@@ -815,7 +819,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"s113-slide-b2-15-kiem-tra","title":"Kiểm tra cuối buổi — Slot 15","lessonId":"s113-slide-b2-slot-15-kanji-so-on-bai-2","count":6},
       {"id":"s113-tong-hop-b2-kiem-tra","title":"Tự kiểm tra sau bộ tổng hợp Bài 2","lessonId":"slide-tong-hop-b2","count":6},
     ],
-    minutes: 1765,
+    minutes: 1820,
   },
   3: {
     lessons: [
@@ -829,6 +833,8 @@ export const MANIFEST: CourseManifest = {
       {"id":"b3-noi","kind":"speaking","title":"Luyện nói — câu hỏi thi Lesson 3","goal":"Trả lời trôi chảy, đủ câu, đúng trợ từ mọi câu hỏi Lesson 3 của đề thi nói JPD113 (giờ giấc, từ…đến…, ngày nghỉ, sinh hoạt hằng ngày) và đọc to được đoạn văn 100–110 chữ.","minutes":45,"ready":true},
       {"id":"b3-bai-tap","kind":"homework","title":"Bài tập — dịch, trợ từ, đọc giờ, ghép câu","goal":"Tự viết và nói được câu bài 3 không cần nhìn mẫu: dịch Việt→Nhật, chọn đúng trợ từ, đọc đúng giờ/ngày bất quy tắc.","minutes":40,"ready":true},
       {"id":"b3-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 3 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 3: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
+      {"id":"b3-luyen-cau","kind":"review","title":"🔁 Luyện câu 2 chiều Bài 3 — Việt ⇄ Nhật · nghe–chép · nói theo (66 câu)","goal":"Tự viết và nói được 66 câu của Bài 3 (スケジュール — giờ, thứ, ngày; một ngày của tôi; đi đâu, làm gì, ở đâu) theo cả hai chiều: nhìn tiếng Việt viết ra tiếng Nhật đúng trợ từ, nghe tiếng Nhật hiểu nghĩa và chép lại.","minutes":30,"ready":true},
+      {"id":"b3-tap-viet","kind":"writing","title":"✍️ Tập viết Bài 3 — chữ Hán theo từ · chép câu · viết đoạn","goal":"Viết đúng thứ tự nét các từ có chữ Hán của lớp Bài 3, chép đúng câu mẫu và tự viết một đoạn 3–5 câu theo chủ đề スケジュール — giờ, thứ, ngày; một ngày của tôi; đi đâu, làm gì, ở đâu.","minutes":25,"ready":true},
       {"id":"s113-b3-00-doc-truoc-lo-trinh","kind":"intro","title":"Buổi 0 — Đọc trước: Bài 3 スケジュール học thế nào, gồm 7 buổi (theo khung lớp)","goal":"Biết Bài 3 gồm những gì, 7 buổi theo thứ tự nào, ポイント 16–23 nằm ở buổi nào và thi nói JPD113 hỏi gì về Bài 3.","minutes":15,"ready":true},
       {"id":"s113-b3-01-doc-gio-hoi-gio-mo-cua","kind":"grammar","title":"Buổi 1 — Đọc giờ, phút và hỏi giờ mở cửa 何時から何時まで (theo khung lớp)","goal":"Đọc đúng giờ và phút (kể cả các số bất quy tắc), nói được 午前／午後, hỏi và trả lời \"mở từ mấy giờ đến mấy giờ\" bằng 〜から〜まで.","minutes":40,"ready":true},
       {"id":"s113-b3-02-thu-thang-ngay-lich-nam","kind":"grammar","title":"Buổi 2 — Thứ, tháng, ngày và lịch cả năm của trường いつからいつまで (theo khung lớp)","goal":"Đọc đúng thứ trong tuần, tháng và ngày (kể cả ngày bất quy tắc), hỏi–đáp về lịch trường/ngày nghỉ bằng いつ・何曜日・何月何日 và 〜から〜まで.","minutes":45,"ready":true},
@@ -866,6 +872,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"b3-buoi-slide-1","kind":"review","title":"📽️ Slide bài giảng Bài 3 (phần 1) — đọc giờ, thứ, 何時から何時まで","goal":"Theo slide, đọc được giờ – phút – thứ, hỏi và nói giờ mở cửa / ngày nghỉ (～から～まで).","minutes":30,"ready":true},
       {"id":"b3-buoi-slide-2","kind":"review","title":"📽️ Slide bài giảng Bài 3 (phần 2) — động từ ます／ません, へ (đi đâu), を (làm gì)","goal":"Theo slide, dùng được 14 động từ thể ます／ません, nói đi đâu (へ) và làm gì với cái gì (を) — ポイント 16–18.","minutes":30,"ready":true},
       {"id":"b3-buoi-slide-3","kind":"review","title":"📽️ Slide bài giảng Bài 3 (phần 3) — に・で・や～など・何も + mùa, sự kiện, chữ Hán","goal":"Theo slide, nói làm việc gì lúc mấy giờ (に), ở đâu (で), liệt kê (や～など), \"không … gì cả\" (何も／どこへも), kể một ngày; nhận mặt chữ Hán Bài 3.","minutes":35,"ready":true},
+      {"id":"b3-thi-thu-viet-113","kind":"review","title":"📝 Đề luyện VIẾT JPD113 (Bài 1–3) — 2 đề: chữ Hán · trợ từ · từ vựng · sắp câu · dịch viết tay · đọc · viết đoạn","goal":"Làm trọn phần viết của JPD113 trong 60 phút: đọc / chọn đúng chữ Hán của lớp Bài 1–3, chọn trợ từ, sắp câu, tự viết câu và đoạn văn có chữ Hán của lớp.","minutes":120,"ready":true},
     ],
     grammar: [
       "Chuẩn bị ① — Đọc giờ: ～{時|じ}・～{分|ふん}・～{時半|じはん}・{午前|ごぜん}／{午後|ごご}",
@@ -1174,8 +1181,20 @@ export const MANIFEST: CourseManifest = {
       {"id":"s113-slide-b3-18-kiem-tra","title":"Kiểm tra cuối buổi — Slot 18","lessonId":"s113-slide-b3-slot-18-de-moi-ngay-ni-ya-nanimo","count":6},
       {"id":"s113-slide-b3-19-kiem-tra","title":"Kiểm tra cuối buổi — Slot 19","lessonId":"s113-slide-b3-slot-19-kara-made-v-dokoemo-on-bai-3","count":6},
       {"id":"s113-tong-hop-b3-kiem-tra","title":"Tự kiểm tra sau bộ tổng hợp Bài 3","lessonId":"slide-tong-hop-b3","count":6},
+      {"id":"b3-tv113-a-doc-han","title":"I. Chọn cách đọc đúng của chữ Hán (8 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":8},
+      {"id":"b3-tv113-a-chon-han","title":"II. Chọn chữ Hán đúng (5 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":5},
+      {"id":"b3-tv113-a-tro-tu","title":"III. Điền trợ từ (8 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":8},
+      {"id":"b3-tv113-a-tu-vung","title":"IV. Từ vựng — chọn từ đúng (5 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":5},
+      {"id":"b3-tv113-a-sap-xep","title":"V. Sắp xếp thành câu đúng (5 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":5},
+      {"id":"b3-tv113-a-doc","title":"VII. Câu hỏi đọc hiểu (4 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":4},
+      {"id":"b3-tv113-b-doc-han","title":"I. Chọn cách đọc đúng của chữ Hán (8 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":8},
+      {"id":"b3-tv113-b-chon-han","title":"II. Chọn chữ Hán đúng (5 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":5},
+      {"id":"b3-tv113-b-tro-tu","title":"III. Điền trợ từ (8 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":8},
+      {"id":"b3-tv113-b-tu-vung","title":"IV. Từ vựng — chọn từ đúng (5 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":5},
+      {"id":"b3-tv113-b-sap-xep","title":"V. Sắp xếp thành câu đúng (5 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":5},
+      {"id":"b3-tv113-b-doc","title":"VII. Câu hỏi đọc hiểu (4 câu · 1 điểm/câu)","lessonId":"b3-thi-thu-viet-113","count":4},
     ],
-    minutes: 2120,
+    minutes: 2295,
   },
   4: {
     lessons: [
@@ -1189,6 +1208,8 @@ export const MANIFEST: CourseManifest = {
       {"id":"b4-noi","kind":"speaking","title":"Luyện nói — câu hỏi thi JPD về quê, thời tiết, món ăn","goal":"Trả lời trọn câu, đúng dạng tính từ mọi câu hỏi Bài 4 trong đề thi nói (quê ở đâu, đi bao lâu, nơi thế nào, có gì, thời tiết, món ăn), nói liền một đoạn giới thiệu quê mình, và đọc to trôi chảy đoạn văn có tính từ.","minutes":45,"ready":true},
       {"id":"b4-bai-tap","kind":"homework","title":"Bài tập về nhà — Bài 4 (có đáp án)","goal":"Tự dịch, chia tính từ, chọn trợ từ và ghép câu Bài 4 không cần nhìn bài học.","minutes":45,"ready":true},
       {"id":"b4-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 4 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 4: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
+      {"id":"b4-luyen-cau","kind":"review","title":"🔁 Luyện câu 2 chiều Bài 4 — Việt ⇄ Nhật · nghe–chép · nói theo (75 câu)","goal":"Tự viết và nói được 75 câu của Bài 4 (私の国・町 — tả thành phố, đất nước: tính từ, phương hướng, bao lâu, thời tiết, món ăn) theo cả hai chiều: nhìn tiếng Việt viết ra tiếng Nhật đúng trợ từ, nghe tiếng Nhật hiểu nghĩa và chép lại.","minutes":30,"ready":true},
+      {"id":"b4-tap-viet","kind":"writing","title":"✍️ Tập viết Bài 4 — chữ Hán theo từ · chép câu · viết đoạn","goal":"Viết đúng thứ tự nét các từ có chữ Hán của lớp Bài 4, chép đúng câu mẫu và tự viết một đoạn 3–5 câu theo chủ đề 私の国・町 — tả thành phố, đất nước: tính từ, phương hướng, bao lâu, thời tiết, món ăn.","minutes":25,"ready":true},
       {"id":"slot-01-l4-1-vi-tri-thoi-gian-di-duong","kind":"grammar","title":"Slot 1 — Bài 4.1 どこ: quê ở đâu, đi mất bao lâu (theo slide lớp JPD123)","goal":"Nói và hỏi được vị trí của thành phố/nước (東西南北・真ん中), thời gian và phương tiện đi đường (N1 から N2 まで N3 で ～くらい).","minutes":40,"ready":true},
       {"id":"slot-02-l4-2-tinh-tu-kanji-4","kind":"grammar","title":"Slot 2 — Bài 4.2 どんなところ？: tính từ い／な + chữ Hán Bài 4 (theo slide lớp JPD123)","goal":"Chia được tính từ い／な (khẳng định, phủ định, đứng trước danh từ), hỏi \"どんなところですか\", đọc 9 chữ Hán của Bài 4.","minutes":45,"ready":true},
       {"id":"slot-03-l4-2-tiep-l4-3-aru-soshite-ga-thoi-tiet","kind":"grammar","title":"Slot 3 — Ôn Kanji 4, Bài 4.2 tiếp (あります・そして・が) và Bài 4.3 mở đầu (thời tiết) — theo slide lớp JPD123","goal":"Nói được \"ở N1 có N2\" (に～が あります), nối câu bằng そして／が, và bắt đầu nói thời tiết: ですね · 月、A です · とても／すこし／あまり.","minutes":45,"ready":true},
@@ -1510,7 +1531,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"b4-kt-ngu","title":"III. Ngữ pháp Bài 4 — câu 21–35 (mỗi câu ghi ポイント cần ôn)","lessonId":"b4-kiem-tra-viet","count":15},
       {"id":"b4-kt-doc","title":"IV. Đọc hiểu — câu 36–40","lessonId":"b4-kiem-tra-viet","count":5},
     ],
-    minutes: 1485,
+    minutes: 1540,
   },
   5: {
     lessons: [
@@ -1524,6 +1545,8 @@ export const MANIFEST: CourseManifest = {
       {"id":"b5-noi","kind":"speaking","title":"Luyện nói — câu hỏi thi về ngày nghỉ, cuối tuần, sở thích, mong muốn","goal":"Trả lời trọn câu, đúng thì (quá khứ/hiện tại), đúng trợ từ mọi câu hỏi kiểu Bài 5 trong đề thi nói, kể được \"cuối tuần vừa rồi của tôi\" và đọc to trôi chảy đoạn văn kể chuyện quá khứ.","minutes":45,"ready":true},
       {"id":"b5-bai-tap","kind":"homework","title":"Bài tập về nhà — Bài 5 (có đáp án)","goal":"Tự dịch, chia quá khứ, chọn trợ từ và ghép câu Bài 5 không cần nhìn bài học.","minutes":45,"ready":true},
       {"id":"b5-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 5 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 5: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
+      {"id":"b5-luyen-cau","kind":"review","title":"🔁 Luyện câu 2 chiều Bài 5 — Việt ⇄ Nhật · nghe–chép · nói theo (69 câu)","goal":"Tự viết và nói được 69 câu của Bài 5 (休みの日 — kể ngày nghỉ: quá khứ, cảm tưởng, thích / muốn, đi để làm gì, vì sao) theo cả hai chiều: nhìn tiếng Việt viết ra tiếng Nhật đúng trợ từ, nghe tiếng Nhật hiểu nghĩa và chép lại.","minutes":30,"ready":true},
+      {"id":"b5-tap-viet","kind":"writing","title":"✍️ Tập viết Bài 5 — chữ Hán theo từ · chép câu · viết đoạn","goal":"Viết đúng thứ tự nét các từ có chữ Hán của lớp Bài 5, chép đúng câu mẫu và tự viết một đoạn 3–5 câu theo chủ đề 休みの日 — kể ngày nghỉ: quá khứ, cảm tưởng, thích / muốn, đi để làm gì, vì sao.","minutes":25,"ready":true},
       {"id":"slot-05-l5-1-qua-khu-dong-tu","kind":"grammar","title":"Slot 5 — Bài 5.1 週末: quá khứ động từ, どこか、と (theo slide lớp JPD123)","goal":"Kể và hỏi việc đã làm cuối tuần: Vました／Vませんでした, どこかへ～ましたか — どこ(へ)も～ませんでした, N(người)と V.","minutes":40,"ready":true},
       {"id":"slot-06-l5-1-tiep-l5-2-tro-tu-sorekara-qua-khu-tinh-tu","kind":"grammar","title":"Slot 6 — Bài 5.1 tiếp (ôn trợ từ, それから) và 5.2 mở đầu (quá khứ tính từ) — theo slide lớp JPD123","goal":"Dùng đúng trợ từ trong câu kể, nối hai việc bằng それから, hỏi どのくらい～ましたか, và chia quá khứ tính từ い／な và danh từ (bước đầu).","minutes":45,"ready":true},
       {"id":"slot-07-l5-2-tiep-doushite-kara","kind":"grammar","title":"Slot 7 — Bài 5.2 tiếp: どうでしたか, kể + cảm tưởng, どうして～から (theo slide lớp JPD123)","goal":"Hỏi và trả lời cảm tưởng (どうでしたか), kể việc kèm cảm tưởng/an ủi (たいへんでしたね), hỏi lý do và đáp bằng ～から.","minutes":40,"ready":true},
@@ -1892,7 +1915,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"b5-kt-ngu","title":"III. Ngữ pháp Bài 5 — câu 21–35 (mỗi câu ghi ポイント cần ôn)","lessonId":"b5-kiem-tra-viet","count":15},
       {"id":"b5-kt-doc","title":"IV. Đọc hiểu — câu 36–40","lessonId":"b5-kiem-tra-viet","count":5},
     ],
-    minutes: 1785,
+    minutes: 1840,
   },
   6: {
     lessons: [
@@ -1906,6 +1929,8 @@ export const MANIFEST: CourseManifest = {
       {"id":"b6-noi","kind":"speaking","title":"Luyện nói — câu hỏi thi về rủ, sở thích, so sánh, hẹn","goal":"Trả lời trọn câu, đúng trợ từ các câu hỏi thi liên quan Bài 6 (thích gì nhất, cái nào hơn, đã … chưa, có rảnh không, lời rủ), nhìn tranh poster/bảng giá mà trả lời, đóng vai rủ – từ chối – hẹn, và đọc to trôi chảy.","minutes":45,"ready":true},
       {"id":"b6-bai-tap","kind":"homework","title":"Bài tập về nhà — Bài 6 (có đáp án)","goal":"Tự dịch, đổi dạng câu, chọn trợ từ và ghép câu Bài 6 không cần nhìn bài học.","minutes":45,"ready":true},
       {"id":"b6-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 6 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 6: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
+      {"id":"b6-luyen-cau","kind":"review","title":"🔁 Luyện câu 2 chiều Bài 6 — Việt ⇄ Nhật · nghe–chép · nói theo (67 câu)","goal":"Tự viết và nói được 67 câu của Bài 6 (一緒に！ — rủ, nhận lời / từ chối, hẹn; có sự kiện; so sánh, nhất; đã … chưa) theo cả hai chiều: nhìn tiếng Việt viết ra tiếng Nhật đúng trợ từ, nghe tiếng Nhật hiểu nghĩa và chép lại.","minutes":30,"ready":true},
+      {"id":"b6-tap-viet","kind":"writing","title":"✍️ Tập viết Bài 6 — chữ Hán theo từ · chép câu · viết đoạn","goal":"Viết đúng thứ tự nét các từ có chữ Hán của lớp Bài 6, chép đúng câu mẫu và tự viết một đoạn 3–5 câu theo chủ đề 一緒に！ — rủ, nhận lời / từ chối, hẹn; có sự kiện; so sánh, nhất; đã … chưa.","minutes":25,"ready":true},
       {"id":"slot-10-on-kanji5-l6-1","kind":"review","title":"Slot 10 — Ôn Kanji bài 5 · mở Bài 6.1: rủ bạn (ませんか / ましょう / ～はちょっと)","goal":"Đọc lại 11 từ chữ Hán Bài 5 trên slide, rồi rủ bạn đi chơi, nhận lời hoặc từ chối khéo đúng như cô dạy ở slide チャレンジ 1–2.","minutes":45,"ready":true},
       {"id":"slot-11-test1-l6-1-tiep","kind":"grammar","title":"Slot 11 — Test 1 (Bài 4+5) · Bài 6.1 tiếp: ～で ～があります (sự kiện) · đếm ～枚 / ～つ","goal":"Nói được \"ở đâu có sự kiện gì\" (ポイント 51), phân biệt に/で với あります, và đếm vé/áo/ảnh bằng ～枚, đồ vật chung bằng ～つ (ポイント 52).","minutes":50,"ready":true},
       {"id":"slide-tong-hop-b6","kind":"review","title":"Slide tổng hợp từ vựng & ngữ pháp Bài 6 (bộ slide cô dùng ôn thi) — đi đúng thứ tự slide","goal":"Có trong tay \"bản tóm tắt thi\" của Bài 6 đúng như bộ slide tổng hợp của cô: 3 phần (rủ · so sánh · hẹn), từ vựng gom theo phần, và những ví dụ riêng của bộ slide này.","minutes":40,"ready":true},
@@ -2172,7 +2197,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"b6-kt-ngu","title":"III. Ngữ pháp Bài 6 — câu 21–35 (mỗi câu ghi ポイント cần ôn)","lessonId":"b6-kiem-tra-viet","count":15},
       {"id":"b6-kt-doc","title":"IV. Đọc hiểu — câu 36–40","lessonId":"b6-kiem-tra-viet","count":5},
     ],
-    minutes: 1520,
+    minutes: 1575,
   },
   7: {
     lessons: [
@@ -2186,6 +2211,8 @@ export const MANIFEST: CourseManifest = {
       {"id":"b7-noi","kind":"speaking","title":"Luyện nói — câu hỏi thi về vị trí, việc đang làm, nhờ vả, bữa tiệc","goal":"Trả lời trọn câu, đúng trợ từ các câu hỏi thi liên quan Bài 7 (sống ở đâu, gần nhà có gì, đang làm gì, ăn bằng gì, có hút thuốc không), nhìn tranh căn phòng / bữa tiệc / bản đồ mà nói vị trí và việc đang làm, đóng vai lạc đường – chuẩn bị tiệc, và đọc to trôi chảy.","minutes":45,"ready":true},
       {"id":"b7-bai-tap","kind":"homework","title":"Bài tập về nhà — Bài 7 (có đáp án)","goal":"Tự dịch, chia thể て, chọn trợ từ và ghép câu Bài 7 không cần nhìn bài học.","minutes":50,"ready":true},
       {"id":"b7-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 7 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 7: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
+      {"id":"b7-luyen-cau","kind":"review","title":"🔁 Luyện câu 2 chiều Bài 7 — Việt ⇄ Nhật · nghe–chép · nói theo (69 câu)","goal":"Tự viết và nói được 69 câu của Bài 7 (友達の家で — vị trí đồ vật / người, nhờ (〜てください), đang làm (〜ています), đề nghị giúp (〜ましょうか)) theo cả hai chiều: nhìn tiếng Việt viết ra tiếng Nhật đúng trợ từ, nghe tiếng Nhật hiểu nghĩa và chép lại.","minutes":30,"ready":true},
+      {"id":"b7-tap-viet","kind":"writing","title":"✍️ Tập viết Bài 7 — chữ Hán theo từ · chép câu · viết đoạn","goal":"Viết đúng thứ tự nét các từ có chữ Hán của lớp Bài 7, chép đúng câu mẫu và tự viết một đoạn 3–5 câu theo chủ đề 友達の家で — vị trí đồ vật / người, nhờ (〜てください), đang làm (〜ています), đề nghị giúp (〜ましょうか).","minutes":25,"ready":true},
       {"id":"slot-15-on-kanji6-l7-1","kind":"grammar","title":"Slot 15 — Ôn chữ Hán bài 6 · Bài 7.1「道がわかりません」: vị trí, あります/います, hỏi đường","goal":"Nói và hỏi vị trí đúng mẫu của cô: N1は N2に あります／います · N1に N2が あります／います + từ chỉ vị trí (ポイント 61–62).","minutes":55,"ready":true},
       {"id":"slide-tong-hop-b7","kind":"review","title":"Slide tổng hợp từ vựng & ngữ pháp Bài 7 (bộ slide cô dùng ôn thi) — đi đúng thứ tự slide","goal":"Có \"bản tóm tắt thi\" của Bài 7 đúng như bộ slide tổng hợp của cô: 3 phần (vị trí · chuẩn bị tiệc · vui tiệc), từ vựng gom theo phần và các ví dụ riêng của bộ này.","minutes":45,"ready":true},
       {"id":"slot-16-l7-2-chuan-bi-tiec","kind":"grammar","title":"Slot 16 — Bài 7.2「パーティーの準備」(1): chia nhóm động từ · thể て · ～て ください · trợ từ で","goal":"Chia được thể て của cả 3 nhóm theo bảng cô dạy, nhờ người khác làm việc bằng ～て ください, và nói \"bằng gì\" bằng trợ từ で (ポイント 63, 71).","minutes":65,"ready":true},
@@ -2588,7 +2615,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"b7-tt123-viet-b-dich-vn","title":"VIII-a. Dịch Việt → Nhật (4 câu) — gõ câu tiếng Nhật","lessonId":"b7-thi-thu-123-viet-b","count":4},
       {"id":"b7-tt123-viet-b-dich-jp","title":"VIII-b. Dịch Nhật → Việt (4 câu) — chọn nghĩa đúng","lessonId":"b7-thi-thu-123-viet-b","count":4},
     ],
-    minutes: 2535,
+    minutes: 2590,
   },
   8: {
     lessons: [
@@ -2602,6 +2629,8 @@ export const MANIFEST: CourseManifest = {
       {"id":"b8-noi","kind":"speaking","title":"Luyện nói — câu hỏi thi về gia đình, người thân, quà tặng","goal":"Trả lời trọn câu, đúng trợ từ các câu hỏi thi liên quan Bài 8 (sống ở đâu, với ai, nhà mấy người, bố mẹ làm gì, người đó thế nào, ai tặng gì), nhìn tranh gia đình / thẻ thông tin mà trả lời, đóng vai giới thiệu ảnh và bàn quà, và đọc to trôi chảy.","minutes":50,"ready":true},
       {"id":"b8-bai-tap","kind":"homework","title":"Bài tập về nhà — Bài 8 (có đáp án)","goal":"Tự dịch, đổi dạng câu, chọn trợ từ và động từ cho–nhận, ghép câu Bài 8 không cần nhìn bài học.","minutes":50,"ready":true},
       {"id":"b8-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 8 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 8: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
+      {"id":"b8-luyen-cau","kind":"review","title":"🔁 Luyện câu 2 chiều Bài 8 — Việt ⇄ Nhật · nghe–chép · nói theo (50 câu)","goal":"Tự viết và nói được 50 câu của Bài 8 (大切な人 — gia đình, tả người, cho – nhận quà) theo cả hai chiều: nhìn tiếng Việt viết ra tiếng Nhật đúng trợ từ, nghe tiếng Nhật hiểu nghĩa và chép lại.","minutes":30,"ready":true},
+      {"id":"b8-tap-viet","kind":"writing","title":"✍️ Tập viết Bài 8 — chữ Hán theo từ · chép câu · viết đoạn","goal":"Viết đúng thứ tự nét các từ có chữ Hán của lớp Bài 8, chép đúng câu mẫu và tự viết một đoạn 3–5 câu theo chủ đề 大切な人 — gia đình, tả người, cho – nhận quà.","minutes":25,"ready":true},
       {"id":"lt-b8-tu-vung","kind":"homework","title":"Luyện thêm Bài 8 · Từ vựng — nhận mặt → điền câu → dịch (3 mức, ~262 câu)","goal":"Nhớ chắc 84/84 từ của Bài 8 (gia đình mình / người khác, cơ thể, tính từ tả người, quà và động từ cho–nhận): nhìn từ biết nghĩa, nhớ từ từ nghĩa, điền đúng vào câu, dịch Việt → Nhật.","minutes":75,"ready":true},
       {"id":"lt-b8-chu-han","kind":"kanji","title":"Luyện thêm Bài 8 · Chữ Hán của lớp (父母兄弟姉妹子目口耳足長) — đọc · nghĩa · chọn chữ · đọc không furigana","goal":"Đọc đúng, hiểu nghĩa 12 chữ Hán Bài 8 (gia đình + cơ thể) và các từ ghép, phân biệt cách đọc của cùng một chữ (父 ちち/とう, 母 はは/かあ/ぼ, 兄 あに/にい/きょう…), chọn đúng chữ giữa các chữ na ná, đọc câu/đoạn không furigana như đề thi.","minutes":70,"ready":true},
       {"id":"lt-b8-np-1","kind":"homework","title":"Luyện thêm Bài 8 · Ngữ pháp 1 (ポイント 72, 73, 79, 80) — sống ở đâu · làm nghề gì · có mấy anh chị em · sống cùng mấy người (~114 câu)","goal":"Nói đúng nơi đang sống (N に 住んでいます), nghề nghiệp/việc làm lâu dài (N で V ています), có mấy anh chị em/con/thú cưng (N が ～人 います) và sống/đi cùng tổng cộng mấy người (～人で) — không nhầm に/で, không nhầm đọc số người.","minutes":75,"ready":true},
@@ -2838,7 +2867,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"b8-kt-ngu","title":"III. Ngữ pháp Bài 8 — câu 21–35 (mỗi câu ghi ポイント cần ôn)","lessonId":"b8-kiem-tra-viet","count":15},
       {"id":"b8-kt-doc","title":"IV. Đọc hiểu — câu 36–40","lessonId":"b8-kiem-tra-viet","count":5},
     ],
-    minutes: 1375,
+    minutes: 1430,
   },
   9: {
     lessons: [
@@ -2852,6 +2881,8 @@ export const MANIFEST: CourseManifest = {
       {"id":"b9-noi","kind":"speaking","title":"Luyện nói — câu hỏi thi về sở thích, làm được, cuối tuần, cách đi","goal":"Trả lời trọn câu, đúng trợ từ các câu hỏi thi liên quan Bài 9 (sở thích là gì, có hay làm không, bao lâu một lần, làm được không, ngày nghỉ làm gì, đi bằng cách nào), nhìn tranh lịch / poster / sơ đồ đường mà trả lời, đóng vai ở buổi giao lưu và đọc to trôi chảy.","minutes":45,"ready":true},
       {"id":"b9-bai-tap","kind":"homework","title":"Bài tập về nhà — Bài 9 (có đáp án)","goal":"Tự đổi động từ sang thể từ điển, dịch, nối câu bằng Vて, chọn trợ từ – phó từ – từ đếm và ghép câu Bài 9 không cần nhìn bài học.","minutes":50,"ready":true},
       {"id":"b9-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 9 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 9: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
+      {"id":"b9-luyen-cau","kind":"review","title":"🔁 Luyện câu 2 chiều Bài 9 — Việt ⇄ Nhật · nghe–chép · nói theo (51 câu)","goal":"Tự viết và nói được 51 câu của Bài 9 (好きなこと — sở thích bằng động từ, làm được gì, bao lâu bao nhiêu lần, thủ tục) theo cả hai chiều: nhìn tiếng Việt viết ra tiếng Nhật đúng trợ từ, nghe tiếng Nhật hiểu nghĩa và chép lại.","minutes":30,"ready":true},
+      {"id":"b9-tap-viet","kind":"writing","title":"✍️ Tập viết Bài 9 — chữ Hán theo từ · chép câu · viết đoạn","goal":"Viết đúng thứ tự nét các từ có chữ Hán của lớp Bài 9, chép đúng câu mẫu và tự viết một đoạn 3–5 câu theo chủ đề 好きなこと — sở thích bằng động từ, làm được gì, bao lâu bao nhiêu lần, thủ tục.","minutes":25,"ready":true},
       {"id":"lt-b9-tu-vung","kind":"homework","title":"Luyện thêm Bài 9 · Từ vựng — nhận mặt → điền câu → dịch (3 mức, ~219 câu)","goal":"Nhớ chắc 61/61 từ của Bài 9 (sở thích, từ đếm & khoảng thời gian, tần suất, lớp học/CLB, thủ tục, đi xe): nhìn từ biết nghĩa, nhớ từ từ nghĩa, điền đúng vào câu, dịch Việt → Nhật.","minutes":70,"ready":true},
       {"id":"lt-b9-chu-han","kind":"kanji","title":"Luyện thêm Bài 9 · Chữ Hán của lớp (泳乗習運転集描歌遊) — đọc · nghĩa · chọn chữ · đọc không furigana","goal":"Đọc đúng, hiểu nghĩa 9 chữ Hán Bài 9 (sở thích, khả năng) và các từ ghép (水泳, 運転, 自転車, 練習, 歌手…), phân biệt chữ na ná (泳/永/氷, 描/猫/書, 遊/旅/族…), đọc câu/đoạn không furigana như đề thi.","minutes":65,"ready":true},
       {"id":"lt-b9-the-tu-dien","kind":"homework","title":"Luyện thêm Bài 9 · Thể từ điển (辞書形) — nhận nhóm → chia → bẫy → gõ hàng loạt (~124 câu)","goal":"Đổi đúng thể ます → thể từ điển cho cả 3 nhóm (kể cả các bẫy 帰る・入る・切る là nhóm 1; 見る・起きる・降りる là nhóm 2; 来る đọc くる), rồi dùng thể từ điển trước こと trong câu.","minutes":70,"ready":true},
@@ -3071,7 +3102,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"b9-kt-ngu","title":"III. Ngữ pháp Bài 9 — câu 21–35 (mỗi câu ghi ポイント cần ôn)","lessonId":"b9-kiem-tra-viet","count":15},
       {"id":"b9-kt-doc","title":"IV. Đọc hiểu — câu 36–40","lessonId":"b9-kiem-tra-viet","count":5},
     ],
-    minutes: 1440,
+    minutes: 1495,
   },
   10: {
     lessons: [
@@ -3085,6 +3116,8 @@ export const MANIFEST: CourseManifest = {
       {"id":"b10-noi","kind":"speaking","title":"Luyện nói — câu hỏi thi về đã/chưa, làm được gì, nhìn thấy gì, xin phép, chỉ đường","goal":"Trả lời trọn câu, đúng trợ từ các câu hỏi thi liên quan Bài 10 (もう～ましたか, ～ことができますか, ～が見えますか, ～てもいいですか), nhìn tranh sở thú / biển báo / bản đồ mà trả lời, đóng vai chỉ đường và xin phép, và đọc to trôi chảy.","minutes":45,"ready":true},
       {"id":"b10-bai-tap","kind":"homework","title":"Bài tập về nhà — Bài 10 (có đáp án)","goal":"Tự chia thể ない, dịch, đổi dạng câu, chọn trợ từ – từ vựng – câu đáp và ghép câu Bài 10 không cần nhìn bài học.","minutes":50,"ready":true},
       {"id":"b10-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 10 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 10: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
+      {"id":"b10-luyen-cau","kind":"review","title":"🔁 Luyện câu 2 chiều Bài 10 — Việt ⇄ Nhật · nghe–chép · nói theo (50 câu)","goal":"Tự viết và nói được 50 câu của Bài 10 (バスツアー — xin phép, cấm, chỉ đường, nhìn thấy / nghe thấy, trở nên) theo cả hai chiều: nhìn tiếng Việt viết ra tiếng Nhật đúng trợ từ, nghe tiếng Nhật hiểu nghĩa và chép lại.","minutes":30,"ready":true},
+      {"id":"b10-tap-viet","kind":"writing","title":"✍️ Tập viết Bài 10 — chữ Hán theo từ · chép câu · viết đoạn","goal":"Viết đúng thứ tự nét các từ có chữ Hán của lớp Bài 10, chép đúng câu mẫu và tự viết một đoạn 3–5 câu theo chủ đề バスツアー — xin phép, cấm, chỉ đường, nhìn thấy / nghe thấy, trở nên.","minutes":25,"ready":true},
       {"id":"lt-b10-tu-vung","kind":"homework","title":"Luyện thêm Bài 10 · Từ vựng — nhận mặt → điền câu → dịch (3 mức, ~253 câu)","goal":"Nhớ chắc 70/70 từ của Bài 10 (chỉ đường, nghe–nhìn, nơi công cộng & lời nhắc, sở thú, cơ thể & cảm giác): nhìn từ biết nghĩa, nhớ từ từ nghĩa, điền đúng vào câu, dịch Việt → Nhật.","minutes":75,"ready":true},
       {"id":"lt-b10-chu-han","kind":"kanji","title":"Luyện thêm Bài 10 · Chữ Hán của lớp (右左立座歩待持近道橋危曲) — đọc · nghĩa · chọn chữ · đọc không furigana","goal":"Đọc đúng, hiểu nghĩa 12 chữ Hán Bài 10 (chỉ đường, đứng–ngồi, đi bộ, chờ, mang, gần, đường, cầu, nguy hiểm, rẽ) và các từ (右側, 左右, 散歩, 最近, 歩道橋…), phân biệt chữ na ná (右/石, 左/在, 待/持/時, 近/遠, 道/通, 曲/由…), đọc câu/đoạn không furigana như đề thi.","minutes":65,"ready":true},
       {"id":"lt-b10-the-nai","kind":"homework","title":"Luyện thêm Bài 10 · Thể ない (ナイ形) — nhận nhóm → chia → bẫy い→わ, 来ない → gõ hàng loạt (~148 câu)","goal":"Chia thể ない của mọi động từ đã học (thể ます → thể ない theo 3 nhóm), không mắc 4 bẫy (い → わ, 入る／帰る nhóm 1, 見る／起きる／借りる nhóm 2, 来ます → こない), và gắn được thể ない vào ～ないでください.","minutes":70,"ready":true},
@@ -3306,7 +3339,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"lt-b10-de-vi-b","title":"VI-b. Dịch Nhật → Việt","lessonId":"lt-b10-de-tong-hop","count":4},
       {"id":"b10-sach-ghep","title":"Nghe câu hỏi (tiếng Việt) → ghép câu trả lời tiếng Nhật","lessonId":"b10-sach","count":10},
     ],
-    minutes: 1400,
+    minutes: 1455,
   },
   11: {
     lessons: [

@@ -13,6 +13,8 @@
     "dekiru:onthe": "node --experimental-strip-types --no-warnings scripts/dekiru-on-the.mts",
     "dekiru:onthe:test": "node --experimental-strip-types --no-warnings --test src/components/sach-hoc/nhat/onThe.test.ts",
     "dekiru:chia:test": "node --experimental-strip-types --no-warnings --test src/components/sach-hoc/nhat/chia.test.ts",
+    "dekiru:chamcau:test": "node --experimental-strip-types --no-warnings --test src/components/sach-hoc/nhat/chamCau.test.ts",
+    "dekiru:luyencau:kiem": "node --experimental-strip-types --no-warnings scripts/kiem-luyen-cau.mts",
     "nav:test": "node --experimental-strip-types --no-warnings --import ./scripts/lib/nap-ts-alias.mjs --test src/components/layout/nav/navTree.test.ts",
     "start": "next start",
     "lint": "next lint"

@@ -5,9 +5,13 @@
 > Ngắn gọn, mỗi mục 5 dòng. Mới nhất ở TRÊN. Bài học lớn về quy trình deploy vẫn nằm ở bảng
 > "Known Error Patterns" trong `CLAUDE.md` — sổ này gom MỌI lỗi, kể cả lỗi nhỏ.
 
-Mẫu một mục:
+### 28/11/2026 — Deploy (bước 8) — prod đã tráo ảnh mới nhưng KHÔNG push main vì `npm test` đỏ ở `crm.db.test.ts`
+- **Triệu chứng:** deploy f0c19812a smoke-test sạch, rồi bước 8 báo `✗ npm test — HỎNG`: `phiếu đã thành dự án được giữ — 0 !== 1` (`src/routes/crm.db.test.ts:339`) ⇒ script bỏ push, origin/main tụt 5 commit.
+- **Nguyên nhân:** `npm test` (khác `test:work-db`) chạy các `*.db.test.ts` trên CSDL dev LOCAL của `.env` (localhost:5434), mà CSDL đó chưa áp migration mới `20261127150000_ctw_vai_dong` ⇒ `work_history.acting_role does not exist` (P2022) khi tạo dự án CT Work từ deal ⇒ phiếu không thành dự án. Mã không sai; CSDL tạm của `test:work-db` dựng từ migration nên xanh.
+- **Cách sửa:** `npx prisma migrate deploy` trên CSDL local ⇒ `crm.db.test.ts` xanh; deploy lượt kế (def43c3c7) push cả chuỗi.
+- **Ảnh hưởng:** production không sao (migration đã áp, chạy bản mới); chỉ GitHub tụt lại ~1 giờ.
+- **Bài học:** thêm migration ⇒ áp luôn vào CSDL dev local TRƯỚC khi deploy (bộ kiểm bước 8 dùng nó cho `npm test`); thấy P2022 "column does not exist" trong test thì nghĩ tới CSDL local thiếu migration trước khi nghi mã.
 
-```
 ### 27/11/2026 — Máy Mac — đĩa đầy 100% (còn 143 MB) ⇒ Postgres local chỉ đọc, Docker Desktop treo
 - **Triệu chứng:** test CSDL báo `could not open file "base/5/2601": Read-only file system`; `docker ps` treo; `df` /System/Volumes/Data còn 143 MiB.
 - **Nguyên nhân:** thư mục build `frontend/.next` (~12–13 GB/cây) nằm lại trong 7 worktree agent cũ `.claude/worktrees/agent-*` + cache webpack Remotion `video-bai-giang/node_modules/.cache/webpack` 8,5 GB; ổ ảo Docker.raw gặp lúc hết chỗ ⇒ VM chuyển chỉ đọc.
@@ -57,6 +61,9 @@ Mẫu một mục:
 - **Ảnh hưởng:** vài tập trễ render một–hai giờ; không tập nào lên web với âm tục.
 - **Bài học:** luật soát chữ phải nhắm đúng trường nguồn; trường do máy nghe sinh ra chỉ để chấm điểm, không phải nội dung (memory `feedback_phien_am_tranh_tu_tuc`: "bỏ trường nghe").
 
+Mẫu một mục (các mục THẬT nằm ở trên, mới nhất trên cùng):
+
+```
 ### dd/mm/yyyy — <khu vực> — <tên lỗi ngắn>
 - **Triệu chứng:** người dùng thấy gì
 - **Nguyên nhân:** gốc rễ thật (tệp:dòng nếu có)

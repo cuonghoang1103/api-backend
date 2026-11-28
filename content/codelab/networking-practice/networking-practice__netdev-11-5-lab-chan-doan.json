@@ -1,0 +1,633 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-11-5-lab-chan-doan",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-11-5-lab-chan-doan"
+  },
+  "exercises": [
+    {
+      "title": "Diag 1 — Write mtrVerdict(report): real loss or a busy router?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "mtr",
+        "packet loss"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>A real <code>mtr --report</code> from the Lab 11 client:</p><pre>Start: 2026-11-04T16:10:39+0700\nHOST: client                      Loss%   Snt   Last   Avg  Best  Wrst StDev\n  1.|-- 10.10.1.254                0.0%     3    0.2   0.5   0.2   0.8   0.3\n  2.|-- 10.10.2.20                 0.0%     3   23.2  22.0  20.7  23.2   1.2</pre><p>Lesson 11.3's rule: <b>loss that starts at a hop and continues downstream is a real problem there; loss at one hop that does not propagate is that router de-prioritising ICMP replies</b> — not a user-facing issue. Write <code>mtrVerdict(report)</code>: parse each hop line (<code>N.|-- host  Loss%  Snt  Last  Avg …</code>) and return:</p>\n<ul>\n<li><code>destLoss</code> — the loss % of the LAST hop (the destination), or <code>null</code> if there are no hop lines;</li>\n<li><code>lossStartsAt</code> — when destLoss &gt; 0: the number of the first hop of the unbroken run of lossy hops that reaches the end; otherwise <code>null</code>;</li>\n<li><code>ignored</code> — hop numbers that show loss but are NOT part of that run (ICMP de-prioritisation), ascending.</li>\n</ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một bản <code>mtr --report</code> thật từ máy client của Lab 11:</p><pre>Start: 2026-11-04T16:10:39+0700\nHOST: client                      Loss%   Snt   Last   Avg  Best  Wrst StDev\n  1.|-- 10.10.1.254                0.0%     3    0.2   0.5   0.2   0.8   0.3\n  2.|-- 10.10.2.20                 0.0%     3   23.2  22.0  20.7  23.2   1.2</pre><p>Quy tắc của bài 11.3: <b>mất gói bắt đầu ở một hop và kéo dài xuống các hop sau là vấn đề thật ở đó; mất gói ở một hop mà không lan xuống là router đó hạ ưu tiên việc trả lời ICMP</b> — không ảnh hưởng người dùng. Viết <code>mtrVerdict(report)</code>: đọc từng dòng hop (<code>N.|-- host  Loss%  Snt  Last  Avg …</code>) và trả về:</p>\n<ul>\n<li><code>destLoss</code> — % mất của hop CUỐI (đích), hoặc <code>null</code> nếu không có dòng hop nào;</li>\n<li><code>lossStartsAt</code> — khi destLoss &gt; 0: số của hop đầu tiên trong dãy hop mất gói liền mạch chạy tới cuối; ngược lại <code>null</code>;</li>\n<li><code>ignored</code> — số các hop có mất gói nhưng KHÔNG thuộc dãy đó (hạ ưu tiên ICMP), tăng dần.</li>\n</ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "mtrVerdict(\"Start: 2026-11-04T16:10:39+0700\\nHOST: client                      Loss%   Snt   Last   Avg  Best  Wrst StDev\\n  1.|-- 10.10.1.254                0.0%     3    0.2   0.5   0.2   0.8   0.3\\n  2.|-- 10.10.2.20                 0.0%     3   23.2  22.0  20.7  23.2   1.2\")",
+          "output": "{\"destLoss\":0,\"lossStartsAt\":null,\"ignored\":[]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One regex per hop line: number, host, loss, sent, last, avg.|||Một regex cho mỗi dòng hop: số, host, mất, đã gửi, last, avg.",
+        "Walk backwards from the last hop while loss > 0 to find where the run starts.|||Đi ngược từ hop cuối khi loss > 0 để tìm chỗ dãy bắt đầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function mtrVerdict(report) {\n  return { destLoss: null, lossStartsAt: null, ignored: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function mtrVerdict(report) {\n  var hops = [];\n  String(report).split('\\n').forEach(function (l) {\n    var m = /^\\s*(\\d+)\\.\\|--\\s+(\\S+)\\s+([\\d.]+)%\\s+\\d+\\s+[\\d.]+\\s+([\\d.]+)/.exec(l);\n    if (m) hops.push({ n: Number(m[1]), host: m[2], loss: Number(m[3]), avg: Number(m[4]) });\n  });\n  if (!hops.length) return { destLoss: null, lossStartsAt: null, ignored: [] };\n  var last = hops[hops.length - 1], start = null;\n  if (last.loss > 0) {\n    start = last.n;\n    for (var i = hops.length - 1; i >= 0 && hops[i].loss > 0; i--) start = hops[i].n; // loss that continues all the way to the end\n  }\n  var ignored = hops.filter(function (h) { return h.loss > 0 && (start === null || h.n < start); }).map(function (h) { return h.n; });\n  return { destLoss: last.loss, lossStartsAt: start, ignored: ignored };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Routers forward your packets in hardware but answer mtr's probes in software, at low priority. Only loss that the destination also sees affects users; where an unbroken lossy run begins is the hop to report — with the mtr report attached as evidence.</p>",
+      "solutionExplanationHtmlVi": "<p>Router chuyển gói của bạn bằng phần cứng nhưng trả lời gói thăm dò của mtr bằng phần mềm, với ưu tiên thấp. Chỉ mất gói mà chính đích cũng thấy mới ảnh hưởng người dùng; nơi dãy mất gói liền mạch bắt đầu là hop cần báo — đính kèm bản mtr làm bằng chứng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: the real Lab 11 path",
+              "vi": "Ca 1: đường đi thật của Lab 11"
+            },
+            "goi": "mtrVerdict(\"Start: 2026-11-04T16:10:39+0700\\nHOST: client                      Loss%   Snt   Last   Avg  Best  Wrst StDev\\n  1.|-- 10.10.1.254                0.0%     3    0.2   0.5   0.2   0.8   0.3\\n  2.|-- 10.10.2.20                 0.0%     3   23.2  22.0  20.7  23.2   1.2\")",
+            "mongDoi": {
+              "destLoss": 0,
+              "lossStartsAt": null,
+              "ignored": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: 60% at hop 3 only",
+              "vi": "Ca 2: 60% chỉ ở hop 3"
+            },
+            "goi": "mtrVerdict(\"HOST: laptop                      Loss%   Snt   Last   Avg  Best  Wrst StDev\\n  1.|-- 192.168.1.1                  0.0%    10     1.2    1.2    1.2    1.2   0.4\\n  2.|-- 100.64.0.1                   0.0%    10     8.5    8.5    8.5    8.5   0.4\\n  3.|-- 203.0.113.9                 60.0%    10    12.0   12.0   12.0   12.0   0.4\\n  4.|-- 198.51.100.1                 0.0%    10    14.1   14.1   14.1   14.1   0.4\\n  5.|-- 93.184.216.34                0.0%    10    15.3   15.3   15.3   15.3   0.4\")",
+            "mongDoi": {
+              "destLoss": 0,
+              "lossStartsAt": null,
+              "ignored": [
+                3
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "mtrVerdict(\"HOST: laptop                      Loss%   Snt   Last   Avg  Best  Wrst StDev\\n  1.|-- 192.168.1.1                  0.0%    10     1.1    1.1    1.1    1.1   0.4\\n  2.|-- 100.64.0.1                   0.0%    10     9.0    9.0    9.0    9.0   0.4\\n  3.|-- 203.0.113.9                 20.0%    10    48.0   48.0   48.0   48.0   0.4\\n  4.|-- 198.51.100.1                20.0%    10    52.2   52.2   52.2   52.2   0.4\\n  5.|-- 93.184.216.34               30.0%    10    55.8   55.8   55.8   55.8   0.4\")",
+            "mongDoi": {
+              "destLoss": 30,
+              "lossStartsAt": 3,
+              "ignored": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "mtrVerdict(\"HOST: laptop                      Loss%   Snt   Last   Avg  Best  Wrst StDev\\n  1.|-- 192.168.1.1                  0.0%    10     1.0    1.0    1.0    1.0   0.4\\n  2.|-- 100.64.0.1                  40.0%    10     7.9    7.9    7.9    7.9   0.4\\n  3.|-- 203.0.113.9                  0.0%    10    11.0   11.0   11.0   11.0   0.4\\n  4.|-- 198.51.100.1                10.0%    10    30.4   30.4   30.4   30.4   0.4\\n  5.|-- 93.184.216.34               10.0%    10    31.0   31.0   31.0   31.0   0.4\")",
+            "mongDoi": {
+              "destLoss": 10,
+              "lossStartsAt": 4,
+              "ignored": [
+                2
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "mtrVerdict(\"Start: 2026-11-04T16:10:39+0700\\n\")",
+            "mongDoi": {
+              "destLoss": null,
+              "lossStartsAt": null,
+              "ignored": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Opening a ticket with the ISP because one middle hop shows 60% loss while the destination shows 0%.|||Mở ticket với ISP vì một hop giữa báo mất 60% trong khi đích báo 0%."
+        },
+        {
+          "loi": "Blaming the first lossy hop even when the loss stops after it.|||Đổ cho hop mất gói đầu tiên dù sau đó không còn mất nữa."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Diag 2 — Write errorLayer(line): a log line names a layer",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "error codes",
+        "layered diagnosis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lesson 11.4b caused every common error on purpose; these are lines Node.js 22 really printed there:</p><pre>Error: getaddrinfo ENOTFOUND khong-co-that.invalid (code ENOTFOUND) sau 0.14 s\nError: connect ECONNREFUSED 127.0.0.1:41999 (code ECONNREFUSED) sau 0.01 s\nError: connect ETIMEDOUT 10.99.0.2:41000 (code ETIMEDOUT) sau 7.20 s\nError: read ECONNRESET (code ECONNRESET) sau 0.01 s\nError: socket hang up (code ECONNRESET) sau 0.01 s\nError: listen EADDRINUSE: address already in use :::41080</pre><p>Write <code>errorLayer(line)</code> returning <code>{ layer, meaning }</code>, testing in this order:</p>\n<ol>\n<li><code>EAI_AGAIN</code> ⇒ dns / \"the resolver could not be asked\"; <code>ENOTFOUND</code> or <code>UnknownHostException</code> ⇒ dns / \"no such name\"</li>\n<li><code>ECONNREFUSED</code> or <code>Connection refused</code> ⇒ port / \"nothing listening\"</li>\n<li><code>ETIMEDOUT</code>, <code>Connect timed out</code> or <code>UND_ERR_CONNECT_TIMEOUT</code> ⇒ path / \"no answer to the SYN\"</li>\n<li><code>ECONNRESET</code>, <code>socket hang up</code> or <code>Connection reset</code> ⇒ connection / \"the peer reset or closed\"</li>\n<li><code>EADDRINUSE</code> ⇒ local / \"the port is already taken\"</li>\n<li><code>Read timed out</code> ⇒ application / \"connected, the answer was too slow\"</li>\n<li>otherwise unknown / \"read the whole error\"</li>\n</ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 11.4b cố tình gây ra mọi lỗi thường gặp; đây là các dòng Node.js 22 thật sự in ra ở đó:</p><pre>Error: getaddrinfo ENOTFOUND khong-co-that.invalid (code ENOTFOUND) sau 0.14 s\nError: connect ECONNREFUSED 127.0.0.1:41999 (code ECONNREFUSED) sau 0.01 s\nError: connect ETIMEDOUT 10.99.0.2:41000 (code ETIMEDOUT) sau 7.20 s\nError: read ECONNRESET (code ECONNRESET) sau 0.01 s\nError: socket hang up (code ECONNRESET) sau 0.01 s\nError: listen EADDRINUSE: address already in use :::41080</pre><p>Viết <code>errorLayer(line)</code> trả về <code>{ layer, meaning }</code>, kiểm theo đúng thứ tự:</p>\n<ol>\n<li><code>EAI_AGAIN</code> ⇒ dns / \"the resolver could not be asked\"; <code>ENOTFOUND</code> hoặc <code>UnknownHostException</code> ⇒ dns / \"no such name\"</li>\n<li><code>ECONNREFUSED</code> hoặc <code>Connection refused</code> ⇒ port / \"nothing listening\"</li>\n<li><code>ETIMEDOUT</code>, <code>Connect timed out</code> hoặc <code>UND_ERR_CONNECT_TIMEOUT</code> ⇒ path / \"no answer to the SYN\"</li>\n<li><code>ECONNRESET</code>, <code>socket hang up</code> hoặc <code>Connection reset</code> ⇒ connection / \"the peer reset or closed\"</li>\n<li><code>EADDRINUSE</code> ⇒ local / \"the port is already taken\"</li>\n<li><code>Read timed out</code> ⇒ application / \"connected, the answer was too slow\"</li>\n<li>còn lại unknown / \"read the whole error\"</li>\n</ol>\n<p>Chuỗi <code>meaning</code> giữ nguyên tiếng Anh như trên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "errorLayer(\"Error: getaddrinfo ENOTFOUND khong-co-that.invalid (code ENOTFOUND) sau 0.14 s\")",
+          "output": "{\"layer\":\"dns\",\"meaning\":\"no such name\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Test the specific codes in the given order; EAI_AGAIN before ENOTFOUND.|||Kiểm các mã cụ thể theo đúng thứ tự; EAI_AGAIN trước ENOTFOUND.",
+        "\"socket hang up\" carries code ECONNRESET but its text is different — match both.|||\"socket hang up\" mang mã ECONNRESET nhưng chữ khác — khớp cả hai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function errorLayer(line) {\n  return { layer: \"unknown\", meaning: \"read the whole error\" };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function errorLayer(line) {\n  var l = String(line);\n  if (/EAI_AGAIN/.test(l)) return { layer: 'dns', meaning: 'the resolver could not be asked' };\n  if (/ENOTFOUND|UnknownHostException/.test(l)) return { layer: 'dns', meaning: 'no such name' };\n  if (/ECONNREFUSED|Connection refused/.test(l)) return { layer: 'port', meaning: 'nothing listening' };\n  if (/ETIMEDOUT|Connect timed out|UND_ERR_CONNECT_TIMEOUT/.test(l)) return { layer: 'path', meaning: 'no answer to the SYN' };\n  if (/ECONNRESET|socket hang up|Connection reset/.test(l)) return { layer: 'connection', meaning: 'the peer reset or closed' };\n  if (/EADDRINUSE/.test(l)) return { layer: 'local', meaning: 'the port is already taken' };\n  if (/Read timed out/.test(l)) return { layer: 'application', meaning: 'connected, the answer was too slow' };\n  return { layer: 'unknown', meaning: 'read the whole error' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every network error in a log is the operating system naming a layer: DNS, port, path, connection, or the application. Mapping the line to the layer tells you the one command to run next — getent hosts, ss -tlnp, nc -zv -w 3, a tcpdump for RST — instead of reading logs for an hour.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi lỗi mạng trong log là hệ điều hành đang gọi tên một tầng: DNS, cổng, đường đi, kết nối hay ứng dụng. Ghép dòng lỗi với tầng cho bạn biết đúng một lệnh cần chạy tiếp — getent hosts, ss -tlnp, nc -zv -w 3, một lần tcpdump bắt RST — thay vì đọc log cả giờ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: errorLayer(\"Error: getaddrinfo ENOTFOUND khong-co-that.invalid (code ENOTFOUND) sau 0.1...",
+              "vi": "Ca 1"
+            },
+            "goi": "errorLayer(\"Error: getaddrinfo ENOTFOUND khong-co-that.invalid (code ENOTFOUND) sau 0.14 s\")",
+            "mongDoi": {
+              "layer": "dns",
+              "meaning": "no such name"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: errorLayer(\"Error: connect ECONNREFUSED 127.0.0.1:41999 (code ECONNREFUSED) sau 0.01 s\")",
+              "vi": "Ca 2"
+            },
+            "goi": "errorLayer(\"Error: connect ECONNREFUSED 127.0.0.1:41999 (code ECONNREFUSED) sau 0.01 s\")",
+            "mongDoi": {
+              "layer": "port",
+              "meaning": "nothing listening"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: errorLayer(\"Error: connect ETIMEDOUT 10.99.0.2:41000 (code ETIMEDOUT) sau 7.20 s\")",
+              "vi": "Ca 3"
+            },
+            "goi": "errorLayer(\"Error: connect ETIMEDOUT 10.99.0.2:41000 (code ETIMEDOUT) sau 7.20 s\")",
+            "mongDoi": {
+              "layer": "path",
+              "meaning": "no answer to the SYN"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "errorLayer(\"Error: socket hang up (code ECONNRESET) sau 0.01 s\")",
+            "mongDoi": {
+              "layer": "connection",
+              "meaning": "the peer reset or closed"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "errorLayer(\"Error: listen EADDRINUSE: address already in use :::41080\")",
+            "mongDoi": {
+              "layer": "local",
+              "meaning": "the port is already taken"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "errorLayer(\"java.net.SocketTimeoutException: Read timed out\")",
+            "mongDoi": {
+              "layer": "application",
+              "meaning": "connected, the answer was too slow"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "errorLayer(\"Error: getaddrinfo EAI_AGAIN api.internal\")",
+            "mongDoi": {
+              "layer": "dns",
+              "meaning": "the resolver could not be asked"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "errorLayer(\"java.net.ConnectException: Connection refused\")",
+            "mongDoi": {
+              "layer": "port",
+              "meaning": "nothing listening"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "errorLayer(\"TypeError: fetch failed\")",
+            "mongDoi": {
+              "layer": "unknown",
+              "meaning": "read the whole error"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating ETIMEDOUT and ECONNREFUSED as the same \"cannot connect\" — one is silence (firewall DROP, wrong route), the other an instant answer (nothing listening).|||Coi ETIMEDOUT và ECONNREFUSED như nhau là \"không kết nối được\" — một cái là im lặng (tường lửa DROP, sai tuyến), cái kia là câu trả lời tức thì (không có gì nghe)."
+        },
+        {
+          "loi": "Stopping at \"fetch failed\": the useful code is in the error's cause.|||Dừng ở \"fetch failed\": mã hữu ích nằm trong cause của lỗi."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Diag 3 — The layered checklist, in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "diagnosis method"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lab 11 R4 walked the layers with one command each and stopped at the first failure. Put the commands in that order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab 11 R4 đi qua từng tầng, mỗi tầng một lệnh, và dừng ở chỗ hỏng đầu tiên. Xếp các lệnh theo đúng thứ tự đó.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bottom up: names and routes before ports, ports before TLS.",
+        "The application health check comes last."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Diag 3 — The layered checklist, in order\n\nAnswer in the answer panel (no code needed).\n\n1. Walk the layers, stop at the first failureĐi qua các tầng, dừng ở chỗ hỏng đầu tiên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Diag 3 — The layered checklist, in order — answer key\n\n1. Walk the layers, stop at the first failureĐi qua các tầng, dừng ở chỗ hỏng đầu tiên\n   Answer: m5) getent hosts NAME — does the name resolve?  →  m3) ip route get IP — which route and interface?  →  m6) nc -zv IP PORT — is the port open?  →  m4) openssl s_client -connect IP:443 — is TLS valid?  →  m1) curl -sI URL — which HTTP status?  →  m2) curl the app's health endpoint — does the application answer?\n   Each command assumes the layers below it are proven: name, route, port, TLS, HTTP, application. The first failing step is the fix; everything below it is already known good.VI: Mỗi lệnh giả định các tầng dưới đã được chứng minh: tên, tuyến, cổng, TLS, HTTP, ứng dụng. Bước hỏng đầu tiên là chỗ cần sửa; mọi thứ dưới nó đã chắc chắn tốt.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each command assumes the layers below it are proven: name, route, port, TLS, HTTP, application. The first failing step is the fix; everything below it is already known good.</p><p><i>VI: Mỗi lệnh giả định các tầng dưới đã được chứng minh: tên, tuyến, cổng, TLS, HTTP, ứng dụng. Bước hỏng đầu tiên là chỗ cần sửa; mọi thứ dưới nó đã chắc chắn tốt.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Walk the layers, stop at the first failure</p><p style=\"opacity:.75;font-size:.92em\"><i>Đi qua các tầng, dừng ở chỗ hỏng đầu tiên</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "curl -sI URL — which HTTP status?"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "curl the app's health endpoint — does the application answer?"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "ip route get IP — which route and interface?"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "openssl s_client -connect IP:443 — is TLS valid?"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "getent hosts NAME — does the name resolve?"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "nc -zv IP PORT — is the port open?"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m3",
+              "m6",
+              "m4",
+              "m1",
+              "m2"
+            ],
+            "giaiThich": "<p>Each command assumes the layers below it are proven: name, route, port, TLS, HTTP, application. The first failing step is the fix; everything below it is already known good.</p><p><i>VI: Mỗi lệnh giả định các tầng dưới đã được chứng minh: tên, tuyến, cổng, TLS, HTTP, ứng dụng. Bước hỏng đầu tiên là chỗ cần sửa; mọi thứ dưới nó đã chắc chắn tốt.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading application logs before checking that the port is even open."
+        },
+        {
+          "loi": "Re-testing layers that were already proven."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "layered checklist",
+          "vi": "bảng kiểm theo tầng"
+        }
+      ]
+    },
+    {
+      "title": "Diag 4 — Pick the tool, read the number",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "diagnostic tools"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lessons 11.1–11.3: capture, follow, measure.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 11.1–11.3: bắt gói, theo luồng, đo đạc.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Latency tools: ping, mtr, curl -w. Bandwidth tool: iperf3.|||Công cụ đo trễ: ping, mtr, curl -w. Công cụ đo băng thông: iperf3.",
+        "Refused = answer; timeout = silence.|||Refused = có trả lời; timeout = im lặng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Diag 4 — Pick the tool, read the number\n\nAnswer in the answer panel (no code needed).\n\n1. A server has no GUI and you need to see what arrives on port 80. Safest first step?Máy chủ không có giao diện và bạn cần xem thứ gì tới cổng 80. Bước đầu an toàn nhất?\n2. curl -w shows connect=0.020 s and ttfb=0.900 s. Where is the time going?curl -w cho connect=0.020 s và ttfb=0.900 s. Thời gian đi đâu?\n3. iperf3 reports about 289 Mbit/s and ping about 22 ms. Which number does a page with 30 sequential requests suffer from?iperf3 báo khoảng 289 Mbit/s và ping khoảng 22 ms. Một trang có 30 request tuần tự chịu ảnh hưởng của con số nào?\n4. In Wireshark, how do you read one request and its response as plain text?Trong Wireshark, làm sao đọc một request và phản hồi của nó dạng chữ?\n5. nc -zv to port 81 returns \"Connection refused\" immediately. What does that prove?nc -zv tới cổng 81 trả \"Connection refused\" ngay lập tức. Điều đó chứng minh gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Diag 4 — Pick the tool, read the number — answer key\n\n1. A server has no GUI and you need to see what arrives on port 80. Safest first step?Máy chủ không có giao diện và bạn cần xem thứ gì tới cổng 80. Bước đầu an toàn nhất?\n   Answer: a) tcpdump -i eth0 -n -c 200 -w /tmp/c.pcap port 80, then read the file\n   Filter, limit the count and write to a file, then read it offline (or in Wireshark on your laptop). Capture only on machines and networks you are responsible for.VI: Lọc, giới hạn số gói và ghi ra tệp, rồi đọc sau (hoặc mở bằng Wireshark trên laptop). Chỉ bắt gói trên máy và mạng bạn chịu trách nhiệm.\n\n2. curl -w shows connect=0.020 s and ttfb=0.900 s. Where is the time going?curl -w cho connect=0.020 s và ttfb=0.900 s. Thời gian đi đâu?\n   Answer: c) The server, before its first byte\n   connect is roughly one round trip; ttfb minus connect is the server thinking (plus TLS if any). A large gap there is an application or database question, not a network one.VI: connect xấp xỉ một vòng khứ hồi; ttfb trừ connect là thời gian server suy nghĩ (cộng TLS nếu có). Khoảng lớn ở đó là câu hỏi của ứng dụng hay cơ sở dữ liệu, không phải của mạng.\n\n3. iperf3 reports about 289 Mbit/s and ping about 22 ms. Which number does a page with 30 sequential requests suffer from?iperf3 báo khoảng 289 Mbit/s và ping khoảng 22 ms. Một trang có 30 request tuần tự chịu ảnh hưởng của con số nào?\n   Answer: a) The 22 ms round trip, thirty times over\n   Latency and bandwidth are different numbers. Sequential round trips multiply the RTT; the fix is fewer or closer round trips (keep-alive, HTTP/2, CDN), not a bigger pipe.VI: Độ trễ và băng thông là hai con số khác nhau. Các vòng khứ hồi tuần tự nhân RTT lên; cách sửa là ít vòng hơn hoặc gần hơn (keep-alive, HTTP/2, CDN), không phải ống to hơn.\n\n4. In Wireshark, how do you read one request and its response as plain text?Trong Wireshark, làm sao đọc một request và phản hồi của nó dạng chữ?\n   Answer: d) Follow → TCP Stream (tshark -z follow,tcp,ascii,N)\n   Following the stream reassembles every segment of one connection in order. For HTTPS you also need the session keys (SSLKEYLOGFILE), as in Chapter 6.VI: Theo luồng sẽ ráp mọi segment của một kết nối theo thứ tự. Với HTTPS bạn cần thêm khoá phiên (SSLKEYLOGFILE), như Chương 6.\n\n5. nc -zv to port 81 returns \"Connection refused\" immediately. What does that prove?nc -zv tới cổng 81 trả \"Connection refused\" ngay lập tức. Điều đó chứng minh gì?\n   Answer: c) The host is reachable; nothing listens on 81\n   A refusal is an answer (a RST). A firewall that drops gives silence and a timeout instead — opposite conclusions, opposite fixes.VI: Bị từ chối là một câu trả lời (gói RST). Tường lửa bỏ gói thì cho im lặng và hết giờ — kết luận ngược nhau, cách sửa ngược nhau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> tcpdump -i eth0 -n -c 200 -w /tmp/c.pcap port 80, then read the file</p><p>Filter, limit the count and write to a file, then read it offline (or in Wireshark on your laptop). Capture only on machines and networks you are responsible for.</p><p><i>VI: Lọc, giới hạn số gói và ghi ra tệp, rồi đọc sau (hoặc mở bằng Wireshark trên laptop). Chỉ bắt gói trên máy và mạng bạn chịu trách nhiệm.</i></p></li><li><p><b>c)</b> The server, before its first byte</p><p>connect is roughly one round trip; ttfb minus connect is the server thinking (plus TLS if any). A large gap there is an application or database question, not a network one.</p><p><i>VI: connect xấp xỉ một vòng khứ hồi; ttfb trừ connect là thời gian server suy nghĩ (cộng TLS nếu có). Khoảng lớn ở đó là câu hỏi của ứng dụng hay cơ sở dữ liệu, không phải của mạng.</i></p></li><li><p><b>a)</b> The 22 ms round trip, thirty times over</p><p>Latency and bandwidth are different numbers. Sequential round trips multiply the RTT; the fix is fewer or closer round trips (keep-alive, HTTP/2, CDN), not a bigger pipe.</p><p><i>VI: Độ trễ và băng thông là hai con số khác nhau. Các vòng khứ hồi tuần tự nhân RTT lên; cách sửa là ít vòng hơn hoặc gần hơn (keep-alive, HTTP/2, CDN), không phải ống to hơn.</i></p></li><li><p><b>d)</b> Follow → TCP Stream (tshark -z follow,tcp,ascii,N)</p><p>Following the stream reassembles every segment of one connection in order. For HTTPS you also need the session keys (SSLKEYLOGFILE), as in Chapter 6.</p><p><i>VI: Theo luồng sẽ ráp mọi segment của một kết nối theo thứ tự. Với HTTPS bạn cần thêm khoá phiên (SSLKEYLOGFILE), như Chương 6.</i></p></li><li><p><b>c)</b> The host is reachable; nothing listens on 81</p><p>A refusal is an answer (a RST). A firewall that drops gives silence and a timeout instead — opposite conclusions, opposite fixes.</p><p><i>VI: Bị từ chối là một câu trả lời (gói RST). Tường lửa bỏ gói thì cho im lặng và hết giờ — kết luận ngược nhau, cách sửa ngược nhau.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A server has no GUI and you need to see what arrives on port 80. Safest first step?</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy chủ không có giao diện và bạn cần xem thứ gì tới cổng 80. Bước đầu an toàn nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "tcpdump -i eth0 -n -c 200 -w /tmp/c.pcap port 80, then read the file"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Enable debug logging in nginx for a day"
+              },
+              {
+                "ma": "c",
+                "noiDung": "tcpdump with no filter until the disk fills"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Run Wireshark on the production server"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Filter, limit the count and write to a file, then read it offline (or in Wireshark on your laptop). Capture only on machines and networks you are responsible for.</p><p><i>VI: Lọc, giới hạn số gói và ghi ra tệp, rồi đọc sau (hoặc mở bằng Wireshark trên laptop). Chỉ bắt gói trên máy và mạng bạn chịu trách nhiệm.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>curl -w shows connect=0.020 s and ttfb=0.900 s. Where is the time going?</p><p style=\"opacity:.75;font-size:.92em\"><i>curl -w cho connect=0.020 s và ttfb=0.900 s. Thời gian đi đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The DNS lookup of the name"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The TCP handshake itself"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The server, before its first byte"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Downloading the response body"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>connect is roughly one round trip; ttfb minus connect is the server thinking (plus TLS if any). A large gap there is an application or database question, not a network one.</p><p><i>VI: connect xấp xỉ một vòng khứ hồi; ttfb trừ connect là thời gian server suy nghĩ (cộng TLS nếu có). Khoảng lớn ở đó là câu hỏi của ứng dụng hay cơ sở dữ liệu, không phải của mạng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>iperf3 reports about 289 Mbit/s and ping about 22 ms. Which number does a page with 30 sequential requests suffer from?</p><p style=\"opacity:.75;font-size:.92em\"><i>iperf3 báo khoảng 289 Mbit/s và ping khoảng 22 ms. Một trang có 30 request tuần tự chịu ảnh hưởng của con số nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The 22 ms round trip, thirty times over"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Neither: only packet loss matters"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Both of them, equally"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The 289 Mbit/s of bandwidth"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Latency and bandwidth are different numbers. Sequential round trips multiply the RTT; the fix is fewer or closer round trips (keep-alive, HTTP/2, CDN), not a bigger pipe.</p><p><i>VI: Độ trễ và băng thông là hai con số khác nhau. Các vòng khứ hồi tuần tự nhân RTT lên; cách sửa là ít vòng hơn hoặc gần hơn (keep-alive, HTTP/2, CDN), không phải ống to hơn.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>In Wireshark, how do you read one request and its response as plain text?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong Wireshark, làm sao đọc một request và phản hồi của nó dạng chữ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Capture → Options → Promiscuous mode"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Edit → Find Packet by MAC"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Statistics → Protocol Hierarchy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Follow → TCP Stream (tshark -z follow,tcp,ascii,N)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Following the stream reassembles every segment of one connection in order. For HTTPS you also need the session keys (SSLKEYLOGFILE), as in Chapter 6.</p><p><i>VI: Theo luồng sẽ ráp mọi segment của một kết nối theo thứ tự. Với HTTPS bạn cần thêm khoá phiên (SSLKEYLOGFILE), như Chương 6.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>nc -zv to port 81 returns \"Connection refused\" immediately. What does that prove?</p><p style=\"opacity:.75;font-size:.92em\"><i>nc -zv tới cổng 81 trả \"Connection refused\" ngay lập tức. Điều đó chứng minh gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A firewall dropped the packet"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DNS failed for that host"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The host is reachable; nothing listens on 81"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The route to the host is missing"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A refusal is an answer (a RST). A firewall that drops gives silence and a timeout instead — opposite conclusions, opposite fixes.</p><p><i>VI: Bị từ chối là một câu trả lời (gói RST). Tường lửa bỏ gói thì cho im lặng và hết giờ — kết luận ngược nhau, cách sửa ngược nhau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Buying bandwidth to fix a latency problem.|||Mua thêm băng thông để chữa vấn đề độ trễ."
+        },
+        {
+          "loi": "Running an unfiltered capture on a busy production box.|||Bắt gói không lọc trên máy production đang bận."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TTFB",
+          "vi": "thời gian tới byte đầu"
+        },
+        {
+          "en": "follow stream",
+          "vi": "theo luồng"
+        }
+      ]
+    }
+  ]
+}

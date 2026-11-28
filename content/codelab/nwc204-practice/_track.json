@@ -7,8 +7,26 @@
   "docsUrl": "https://www.netacad.com/courses/networking",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện môn NWC204 (Mạng máy tính, theo giáo trình Cisco CCNA ITN) bám dạng đề FE của trường — mỗi bài học một bộ đề từ dễ đến khó, con số trong đề do bộ mô phỏng tính bằng mã (nhị phân và AND, chia subnet và VLSM, CIDR và wildcard, IPv6, bảng định tuyến khớp tiền tố dài nhất, bảng MAC và VLAN, ARP, phân mảnh IP, CRC, bắt tay TCP và cửa sổ trượt, ACL, NAT/PAT, thời gian truyền); bài khó là viết hàm mô phỏng chạy thật trong trình duyệt; ba Lab (hoạch định địa chỉ, mô phỏng router, router biên ACL + PAT) và hai đề FE thi thử cuối môn.",
+  "description": "Bộ luyện môn NWC204 (Mạng máy tính, theo giáo trình Cisco CCNA ITN) bám dạng đề FE của trường — mỗi bài học một bộ đề từ dễ đến khó, con số trong đề do bộ mô phỏng tính bằng mã (nhị phân và AND, chia subnet và VLSM, CIDR và wildcard, IPv6, bảng định tuyến khớp tiền tố dài nhất, bảng MAC và VLAN, ARP, phân mảnh IP, CRC, bắt tay TCP và cửa sổ trượt, ACL, NAT/PAT, thời gian truyền); chương 1–2 (thành phần mạng, bốn con số băng thông/độ trễ, thang tự kiểm năm lệnh, chế độ IOS, làm cứng và lưu cấu hình switch — Lab 1.1), chương 9 (SSH, interface, default gateway) và chương 16 (thiết kế và gỡ lỗi một mạng nhỏ); bài khó là viết hàm mô phỏng chạy thật trong trình duyệt (chẩn đoán máy trạm, phiên IOS, soát cấu hình, đọc show ip interface brief, dự đoán ping của Lab 2.1); bốn Lab (hoạch định địa chỉ, mô phỏng router, Lab 2.1 switch + router, router biên ACL + PAT) và hai đề FE thi thử cuối môn.",
   "modules": [
+    {
+      "slug": "nwc204-1-1-networking-today",
+      "name": "1.1 Networking today: components, numbers and the self-check ladder",
+      "level": "BEGINNER",
+      "description": "Luyện: Today 1 — Name every box on the diagram · Today 2 — Bandwidth is not speed: name the number · Today 3 — The five commands, in the order that narrows fastest · Today 4 — Latency you cannot buy away · Today 5 — Write diagnoseHost(h): the decision table as code · Today 6 — Threats, defence in depth, and an AI that sounds sure"
+    },
+    {
+      "slug": "nwc204-2-1-ios-access-modes",
+      "name": "2.1 Into the device: access, IOS modes and command structure",
+      "level": "BEGINNER",
+      "description": "Luyện: IOS 1 — Three doors into a switch · IOS 2 — Read the prompt, know the mode · IOS 3 — Keywords, arguments and the three error messages · IOS 4 — Write iosSession(hostname, cmds): a mode simulator · IOS 5 — Traps from the lab room"
+    },
+    {
+      "slug": "nwc204-2-2-harden-save-verify",
+      "name": "2.2 Harden, save, address and verify: Lab 1.1",
+      "level": "BEGINNER",
+      "description": "Luyện: Save 1 — running-config, startup-config and the power cut · Save 2 — Write auditSwitch(text): find every security hole · Save 3 — Lab 1.1 in the order that cannot go wrong · Save 4 — Write ifaceVerdicts(text): read show ip interface brief · Save 5 — Read the ping, predict the failure"
+    },
     {
       "slug": "nwc204-3-1-protocols-and-models",
       "name": "3.1 Protocols and the OSI / TCP-IP models",
@@ -94,6 +112,18 @@
       "description": "Luyện: ARP 1 — Why two addresses and what ARP does · ARP 2 — Order the steps for a remote destination · ARP 3 — Headers on every link · ARP 4 — Write hopHeaders(src, routers, dst) · ARP 5 — Read the ARP table and symptoms"
     },
     {
+      "slug": "nwc204-9-1-router-initial-config",
+      "name": "9.1 Basic router configuration: SSH, interfaces, default gateway",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Router 1 — Initial settings that bite later · Router 2 — Turn SSH on, in the order IOS accepts · Router 3 — Symptom to cause to fix · Router 4 — Write sshMissing(dev): what stops SSH from working · Router 5 — The same job on Linux (★)"
+    },
+    {
+      "slug": "nwc204-9-lab-switch-router",
+      "name": "Lab 9 — Lab 2.1: build and break a switch-and-router network",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 2.1 A — Predict the symptom before you look · Lab 2.1 B — Write hostReach(host, target): what does the host do? · Lab 9 — Write labPing(net, from, to): the whole Lab 2.1 in code"
+    },
+    {
       "slug": "nwc204-10-1-ipv4-addressing",
       "name": "10.1 IPv4 address structure and types",
       "level": "INTERMEDIATE",
@@ -170,6 +200,18 @@
       "name": "Lab 15 — Edge router: ACL + PAT",
       "level": "ADVANCED",
       "description": "Luyện: Lab 15 — The edge router: outbound ACL then PAT"
+    },
+    {
+      "slug": "nwc204-16-1-small-network-design",
+      "name": "16.1 Build a small network: devices, addressing, QoS and redundancy",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Small 1 — The decisions before any cable is plugged in · Small 2 — Write portsNeeded(s): count before you buy · Small 3 — An addressing and traffic plan for one office · Small 4 — Growth, single points of failure, and the hidden incident"
+    },
+    {
+      "slug": "nwc204-16-2-verify-troubleshoot",
+      "name": "16.2 Verify and troubleshoot a small network",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Verify 1 — Walk the ladder from your own machine outwards · Verify 2 — Pick the method, and the command that answers · Verify 3 — Write probeVerdict(line): read the number, not the logs · Verify 4 — Troubleshooting scenarios, worked like an incident"
     },
     {
       "slug": "nwc204-20-fe-mock",

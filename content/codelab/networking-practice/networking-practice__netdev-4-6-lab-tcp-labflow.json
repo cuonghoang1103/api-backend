@@ -1,0 +1,704 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-4-6-lab-tcp-labflow",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-4-6-lab-tcp-labflow"
+  },
+  "exercises": [
+    {
+      "title": "TCP 1 — Label every packet of one real connection",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "TCP handshake",
+        "teardown"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>One <code>curl http://10.10.2.10/</code> from the Lab 4 client, captured for real (the router adds 25 ms on the way back, so one round trip is visible; TCP options trimmed for width):<pre>1793769988.336105 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [S], seq 3749331381, win 64240, length 0\n1793769988.361565 IP 10.10.2.10.80 &gt; 10.10.1.10.59942: Flags [S.], seq 4216899339, ack 3749331382, win 65160, length 0\n1793769988.361587 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [.], ack 1, win 63, length 0\n1793769988.361664 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [P.], seq 1:75, ack 1, win 63, length 74: HTTP: GET / HTTP/1.1\n1793769988.386933 IP 10.10.2.10.80 &gt; 10.10.1.10.59942: Flags [.], ack 75, win 64, length 0\n1793769988.386947 IP 10.10.2.10.80 &gt; 10.10.1.10.59942: Flags [P.], seq 1:169, ack 75, win 64, length 168: HTTP: HTTP/1.1 200 OK\n1793769988.386961 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [.], ack 169, win 63, length 0\n1793769988.387088 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [F.], seq 75, ack 169, win 63, length 0\n1793769988.412485 IP 10.10.2.10.80 &gt; 10.10.1.10.59942: Flags [F.], seq 169, ack 76, win 64, length 0\n1793769988.412512 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [.], ack 170, win 63, length 0</pre>Name the role of every packet.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một lần <code>curl http://10.10.2.10/</code> từ máy client của Lab 4, bắt gói thật (router thêm 25 ms chiều về nên thấy được một vòng khứ hồi; đã cắt phần option TCP cho gọn):<pre>1793769988.336105 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [S], seq 3749331381, win 64240, length 0\n1793769988.361565 IP 10.10.2.10.80 &gt; 10.10.1.10.59942: Flags [S.], seq 4216899339, ack 3749331382, win 65160, length 0\n1793769988.361587 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [.], ack 1, win 63, length 0\n1793769988.361664 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [P.], seq 1:75, ack 1, win 63, length 74: HTTP: GET / HTTP/1.1\n1793769988.386933 IP 10.10.2.10.80 &gt; 10.10.1.10.59942: Flags [.], ack 75, win 64, length 0\n1793769988.386947 IP 10.10.2.10.80 &gt; 10.10.1.10.59942: Flags [P.], seq 1:169, ack 75, win 64, length 168: HTTP: HTTP/1.1 200 OK\n1793769988.386961 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [.], ack 169, win 63, length 0\n1793769988.387088 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [F.], seq 75, ack 169, win 63, length 0\n1793769988.412485 IP 10.10.2.10.80 &gt; 10.10.1.10.59942: Flags [F.], seq 169, ack 76, win 64, length 0\n1793769988.412512 IP 10.10.1.10.59942 &gt; 10.10.2.10.80: Flags [.], ack 170, win 63, length 0</pre>Gọi tên vai trò của từng gói.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "[S] = SYN, [S.] = SYN + ACK, [P.] = data pushed with an ACK, [F.] = FIN with an ACK, [.] = a bare ACK.",
+        "Look at \"length\": a bare ACK has length 0; the request is 74 bytes and the response 168."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TCP 1 — Label every packet of one real connection\n\nAnswer in the answer panel (no code needed).\n\n1. Ten packets, ten rolesMười gói, mười vai trò\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TCP 1 — Label every packet of one real connection — answer key\n\n1. Ten packets, ten rolesMười gói, mười vai trò\n   - r1.r: SYN\n   - r2.r: SYN-ACK\n   - r3.r: handshake ACK\n   - r4.r: HTTP request\n   - r5.r: ACK of the request\n   - r6.r: HTTP response\n   - r7.r: ACK of the response\n   - r8.r: client FIN\n   - r9.r: server FIN\n   - r10.r: final ACK\n   Packets 1–3 are the three-way handshake (SYN, SYN-ACK 25 ms later — that gap is one round trip — then ACK). 4 carries the 74-byte GET, 5 acknowledges it, 6 carries the 168-byte response, 7 acknowledges that. 8–10 close: the client sends FIN first (it is the active closer, so TIME_WAIT will sit on the client), the server answers FIN, and the client sends the final ACK. Here the server's ACK of the client FIN is folded into its own FIN, so only three packets close instead of four.VI: Gói 1–3 là bắt tay ba bước (SYN, SYN-ACK 25 ms sau — khoảng đó là một vòng khứ hồi — rồi ACK). Gói 4 mang lệnh GET 74 byte, 5 xác nhận nó, 6 mang phản hồi 168 byte, 7 xác nhận phản hồi. 8–10 là đóng: client gửi FIN trước (nó là bên chủ động đóng, nên TIME_WAIT sẽ nằm ở client), server đáp FIN, client gửi ACK cuối. Ở đây ACK của server cho FIN của client được gộp luôn vào FIN của server, nên chỉ có ba gói đóng thay vì bốn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Packets 1–3 are the three-way handshake (SYN, SYN-ACK 25 ms later — that gap is one round trip — then ACK). 4 carries the 74-byte GET, 5 acknowledges it, 6 carries the 168-byte response, 7 acknowledges that. 8–10 close: the client sends FIN first (it is the active closer, so TIME_WAIT will sit on the client), the server answers FIN, and the client sends the final ACK. Here the server's ACK of the client FIN is folded into its own FIN, so only three packets close instead of four.</p><p><i>VI: Gói 1–3 là bắt tay ba bước (SYN, SYN-ACK 25 ms sau — khoảng đó là một vòng khứ hồi — rồi ACK). Gói 4 mang lệnh GET 74 byte, 5 xác nhận nó, 6 mang phản hồi 168 byte, 7 xác nhận phản hồi. 8–10 là đóng: client gửi FIN trước (nó là bên chủ động đóng, nên TIME_WAIT sẽ nằm ở client), server đáp FIN, client gửi ACK cuối. Ở đây ACK của server cho FIN của client được gộp luôn vào FIN của server, nên chỉ có ba gói đóng thay vì bốn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Ten packets, ten roles</p><p style=\"opacity:.75;font-size:.92em\"><i>Mười gói, mười vai trò</i></p>",
+            "cot": [
+              {
+                "ma": "n",
+                "ten": "#"
+              },
+              {
+                "ma": "f",
+                "ten": "Flags"
+              },
+              {
+                "ma": "r",
+                "ten": "Role",
+                "luaChon": [
+                  "SYN",
+                  "SYN-ACK",
+                  "handshake ACK",
+                  "HTTP request",
+                  "ACK of the request",
+                  "HTTP response",
+                  "ACK of the response",
+                  "client FIN",
+                  "server FIN",
+                  "final ACK"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "n": "1",
+                  "f": "[S]"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "n": "2",
+                  "f": "[S.]"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "n": "3",
+                  "f": "[.]"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "n": "4",
+                  "f": "[P.]"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "n": "5",
+                  "f": "[.]"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "n": "6",
+                  "f": "[P.]"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "n": "7",
+                  "f": "[.]"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "n": "8",
+                  "f": "[F.]"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "n": "9",
+                  "f": "[F.]"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "n": "10",
+                  "f": "[.]"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "SYN",
+              "r2.r": "SYN-ACK",
+              "r3.r": "handshake ACK",
+              "r4.r": "HTTP request",
+              "r5.r": "ACK of the request",
+              "r6.r": "HTTP response",
+              "r7.r": "ACK of the response",
+              "r8.r": "client FIN",
+              "r9.r": "server FIN",
+              "r10.r": "final ACK"
+            },
+            "giaiThich": "<p>Packets 1–3 are the three-way handshake (SYN, SYN-ACK 25 ms later — that gap is one round trip — then ACK). 4 carries the 74-byte GET, 5 acknowledges it, 6 carries the 168-byte response, 7 acknowledges that. 8–10 close: the client sends FIN first (it is the active closer, so TIME_WAIT will sit on the client), the server answers FIN, and the client sends the final ACK. Here the server's ACK of the client FIN is folded into its own FIN, so only three packets close instead of four.</p><p><i>VI: Gói 1–3 là bắt tay ba bước (SYN, SYN-ACK 25 ms sau — khoảng đó là một vòng khứ hồi — rồi ACK). Gói 4 mang lệnh GET 74 byte, 5 xác nhận nó, 6 mang phản hồi 168 byte, 7 xác nhận phản hồi. 8–10 là đóng: client gửi FIN trước (nó là bên chủ động đóng, nên TIME_WAIT sẽ nằm ở client), server đáp FIN, client gửi ACK cuối. Ở đây ACK của server cho FIN của client được gộp luôn vào FIN của server, nên chỉ có ba gói đóng thay vì bốn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling packet 5 the response — it has length 0; it only acknowledges the GET."
+        },
+        {
+          "loi": "Assuming the server always closes first; in this capture the client sends the first FIN."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "three-way handshake",
+          "vi": "bắt tay ba bước"
+        },
+        {
+          "en": "active closer",
+          "vi": "bên chủ động đóng"
+        }
+      ]
+    },
+    {
+      "title": "TCP 2 — Write tcpSummary(text, client): read a capture like an engineer",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "tcpdump",
+        "RTT",
+        "active close"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Write <code>tcpSummary(text, client)</code> for the output of <code>tcpdump -tt -nr file.pcap</code> (one line per packet, timestamp in seconds first). <code>client</code> is the client's IP. Return:</p>\n<ul>\n<li><code>packets</code> — the number of lines containing <code>Flags [</code>.</li>\n<li><code>rttMs</code> — time from the client's FIRST <code>[S]</code> to the server's first <code>[S.]</code>, in milliseconds rounded to 0.1 (<code>null</code> if either is missing). That gap is one round trip.</li>\n<li><code>requestBytes</code> / <code>responseBytes</code> — the sum of <code>length N</code> over packets sent by the client / by the other side.</li>\n<li><code>closedBy</code> — <code>\"client\"</code> or <code>\"server\"</code>: who sent the first packet whose flags contain <code>F</code>; <code>null</code> if nobody closed.</li>\n</ul>\n<p>An address in tcpdump is <code>ip.port</code> — the IP is everything before the LAST dot. The first sample is the real capture of Exercise 1.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>tcpSummary(text, client)</code> cho kết xuất của <code>tcpdump -tt -nr file.pcap</code> (mỗi gói một dòng, đầu dòng là mốc thời gian tính bằng giây). <code>client</code> là IP của client. Trả về:</p>\n<ul>\n<li><code>packets</code> — số dòng có chữ <code>Flags [</code>.</li>\n<li><code>rttMs</code> — thời gian từ <code>[S]</code> ĐẦU TIÊN của client tới <code>[S.]</code> đầu tiên của server, tính bằng mili giây, làm tròn 0,1 (<code>null</code> nếu thiếu một trong hai). Khoảng đó là một vòng khứ hồi.</li>\n<li><code>requestBytes</code> / <code>responseBytes</code> — tổng <code>length N</code> của các gói do client gửi / do bên kia gửi.</li>\n<li><code>closedBy</code> — <code>\"client\"</code> hoặc <code>\"server\"</code>: ai gửi gói ĐẦU TIÊN có cờ chứa <code>F</code>; <code>null</code> nếu không ai đóng.</li>\n</ul>\n<p>Địa chỉ trong tcpdump có dạng <code>ip.port</code> — IP là mọi thứ đứng trước dấu chấm CUỐI CÙNG. Ca mẫu đầu là bản bắt gói thật của Bài 1.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "tcpSummary(\"1793769988.336105 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [S], seq 3749331381, win 64240, options [mss 1460,sackOK,TS val 1930912787 ecr 0,nop,wscale 10], length 0\\n1793769988.361565 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [S.], seq 4216899339, ack 3749331382, win 65160, options [mss 1460,sackOK,TS val 3646496169 ecr 1930912787,nop,wscale 10], length 0\\n1793769988.361587 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 1, win 63, options [nop,nop,TS val 1930912813 ecr 3646496169], length 0\\n1793769988.361664 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [P.], seq 1:75, ack 1, win 63, options [nop,nop,TS val 1930912813 ecr 3646496169], length 74: HTTP: GET / HTTP/1.1\\n1793769988.386933 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [.], ack 75, win 64, options [nop,nop,TS val 3646496195 ecr 1930912813], length 0\\n1793769988.386947 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [P.], seq 1:169, ack 75, win 64, options [nop,nop,TS val 3646496195 ecr 1930912813], length 168: HTTP: HTTP/1.1 200 OK\\n1793769988.386961 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 169, win 63, options [nop,nop,TS val 1930912838 ecr 3646496195], length 0\\n1793769988.387088 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [F.], seq 75, ack 169, win 63, options [nop,nop,TS val 1930912838 ecr 3646496195], length 0\\n1793769988.412485 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [F.], seq 169, ack 76, win 64, options [nop,nop,TS val 3646496220 ecr 1930912838], length 0\\n1793769988.412512 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 170, win 63, options [nop,nop,TS val 1930912864 ecr 3646496220], length 0\", \"10.10.1.10\")",
+          "output": "{\"packets\":10,\"rttMs\":25.5,\"requestBytes\":74,\"responseBytes\":168,\"closedBy\":\"client\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One regular expression per line: timestamp, source, destination, flags, length.|||Một biểu thức chính quy cho mỗi dòng: mốc thời gian, nguồn, đích, cờ, độ dài.",
+        "src.slice(0, src.lastIndexOf(\".\")) is the IP; compare it with client.|||src.slice(0, src.lastIndexOf(\".\")) là IP; so nó với client.",
+        "Round to 0.1 ms with Math.round(seconds * 10000) / 10.|||Làm tròn 0,1 ms bằng Math.round(giây * 10000) / 10."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function tcpSummary(text, client) {\n  // parse each \"... IP a.b.c.d.port > e.f.g.h.port: Flags [..], ... length N\" line\n  return { packets: 0, rttMs: null, requestBytes: 0, responseBytes: 0, closedBy: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function tcpSummary(text, client) {\n  var lines = String(text).split('\\n').filter(function (l) { return / Flags \\[/.test(l); });\n  var tSyn = null, tSynAck = null, req = 0, resp = 0, closedBy = null;\n  lines.forEach(function (l) {\n    var m = /^(\\d+\\.\\d+) IP (\\S+) > (\\S+): Flags \\[([^\\]]*)\\].*length (\\d+)/.exec(l);\n    if (!m) return;\n    var t = Number(m[1]), src = m[2], flags = m[4], len = Number(m[5]);\n    var fromClient = src.lastIndexOf('.') > 0 && src.slice(0, src.lastIndexOf('.')) === client;\n    if (flags === 'S' && fromClient && tSyn === null) tSyn = t;\n    if (flags === 'S.' && !fromClient && tSynAck === null) tSynAck = t;\n    if (fromClient) req += len; else resp += len;\n    if (flags.indexOf('F') >= 0 && closedBy === null) closedBy = fromClient ? 'client' : 'server';\n  });\n  return {\n    packets: lines.length,\n    rttMs: tSyn !== null && tSynAck !== null ? Math.round((tSynAck - tSyn) * 10000) / 10 : null, // SYN → SYN-ACK, 0.1 ms\n    requestBytes: req,\n    responseBytes: resp,\n    closedBy: closedBy,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The SYN → SYN-ACK gap is the cleanest RTT measurement you will ever get, because the server answers it in the kernel without touching your application. Byte counts per direction and who closed first are the next two questions of every capture review: the first shows whether the payload is what you expect, the second tells you where TIME_WAIT will pile up.</p>",
+      "solutionExplanationHtmlVi": "<p>Khoảng SYN → SYN-ACK là phép đo RTT sạch nhất bạn có, vì server trả lời nó ngay trong nhân mà không đụng tới ứng dụng. Số byte mỗi chiều và ai đóng trước là hai câu hỏi tiếp theo của mọi lần đọc bản bắt gói: câu đầu cho biết nội dung có đúng như mong đợi, câu sau cho biết TIME_WAIT sẽ dồn về đâu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: tcpSummary(\"1793769988.336105 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [S], seq 37493...",
+              "vi": "Ca 1"
+            },
+            "goi": "tcpSummary(\"1793769988.336105 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [S], seq 3749331381, win 64240, options [mss 1460,sackOK,TS val 1930912787 ecr 0,nop,wscale 10], length 0\\n1793769988.361565 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [S.], seq 4216899339, ack 3749331382, win 65160, options [mss 1460,sackOK,TS val 3646496169 ecr 1930912787,nop,wscale 10], length 0\\n1793769988.361587 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 1, win 63, options [nop,nop,TS val 1930912813 ecr 3646496169], length 0\\n1793769988.361664 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [P.], seq 1:75, ack 1, win 63, options [nop,nop,TS val 1930912813 ecr 3646496169], length 74: HTTP: GET / HTTP/1.1\\n1793769988.386933 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [.], ack 75, win 64, options [nop,nop,TS val 3646496195 ecr 1930912813], length 0\\n1793769988.386947 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [P.], seq 1:169, ack 75, win 64, options [nop,nop,TS val 3646496195 ecr 1930912813], length 168: HTTP: HTTP/1.1 200 OK\\n1793769988.386961 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 169, win 63, options [nop,nop,TS val 1930912838 ecr 3646496195], length 0\\n1793769988.387088 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [F.], seq 75, ack 169, win 63, options [nop,nop,TS val 1930912838 ecr 3646496195], length 0\\n1793769988.412485 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [F.], seq 169, ack 76, win 64, options [nop,nop,TS val 3646496220 ecr 1930912838], length 0\\n1793769988.412512 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 170, win 63, options [nop,nop,TS val 1930912864 ecr 3646496220], length 0\", \"10.10.1.10\")",
+            "mongDoi": {
+              "packets": 10,
+              "rttMs": 25.5,
+              "requestBytes": 74,
+              "responseBytes": 168,
+              "closedBy": "client"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: tcpSummary(\"1793769988.336105 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [S], seq 37493...",
+              "vi": "Ca 2"
+            },
+            "goi": "tcpSummary(\"1793769988.336105 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [S], seq 3749331381, win 64240, options [mss 1460,sackOK,TS val 1930912787 ecr 0,nop,wscale 10], length 0\\n1793769988.361565 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [S.], seq 4216899339, ack 3749331382, win 65160, options [mss 1460,sackOK,TS val 3646496169 ecr 1930912787,nop,wscale 10], length 0\\n1793769988.361587 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 1, win 63, options [nop,nop,TS val 1930912813 ecr 3646496169], length 0\", \"10.10.1.10\")",
+            "mongDoi": {
+              "packets": 3,
+              "rttMs": 25.5,
+              "requestBytes": 0,
+              "responseBytes": 0,
+              "closedBy": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "tcpSummary(\"100.000000 IP 192.168.5.20.51000 > 93.184.216.34.443: Flags [S], seq 1, ack 1, win 64, length 0\\n100.081250 IP 93.184.216.34.443 > 192.168.5.20.51000: Flags [S.], seq 1, ack 1, win 64, length 0\\n100.081300 IP 192.168.5.20.51000 > 93.184.216.34.443: Flags [.], seq 1, ack 1, win 64, length 0\\n100.081400 IP 192.168.5.20.51000 > 93.184.216.34.443: Flags [P.], seq 1, ack 1, win 64, length 517\\n100.170000 IP 93.184.216.34.443 > 192.168.5.20.51000: Flags [P.], seq 1, ack 1, win 64, length 4096\\n105.170000 IP 93.184.216.34.443 > 192.168.5.20.51000: Flags [F.], seq 1, ack 1, win 64, length 0\\n105.170100 IP 192.168.5.20.51000 > 93.184.216.34.443: Flags [F.], seq 1, ack 1, win 64, length 0\\n105.250000 IP 93.184.216.34.443 > 192.168.5.20.51000: Flags [.], seq 1, ack 1, win 64, length 0\", \"192.168.5.20\")",
+            "mongDoi": {
+              "packets": 8,
+              "rttMs": 81.2,
+              "requestBytes": 517,
+              "responseBytes": 4096,
+              "closedBy": "server"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "tcpSummary(\"7.500000 IP 10.0.0.5.40000 > 10.0.0.9.5432: Flags [S], seq 1, ack 1, win 64, length 0\\n8.500000 IP 10.0.0.5.40000 > 10.0.0.9.5432: Flags [S], seq 1, ack 1, win 64, length 0\\n8.502000 IP 10.0.0.9.5432 > 10.0.0.5.40000: Flags [S.], seq 1, ack 1, win 64, length 0\\n8.502100 IP 10.0.0.5.40000 > 10.0.0.9.5432: Flags [.], seq 1, ack 1, win 64, length 0\", \"10.0.0.5\")",
+            "mongDoi": {
+              "packets": 4,
+              "rttMs": 1002,
+              "requestBytes": 0,
+              "responseBytes": 0,
+              "closedBy": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "tcpSummary(\"1793769988.336105 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [S], seq 3749331381, win 64240, options [mss 1460,sackOK,TS val 1930912787 ecr 0,nop,wscale 10], length 0\\n1793769988.361565 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [S.], seq 4216899339, ack 3749331382, win 65160, options [mss 1460,sackOK,TS val 3646496169 ecr 1930912787,nop,wscale 10], length 0\\n1793769988.361587 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 1, win 63, options [nop,nop,TS val 1930912813 ecr 3646496169], length 0\\n1793769988.361664 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [P.], seq 1:75, ack 1, win 63, options [nop,nop,TS val 1930912813 ecr 3646496169], length 74: HTTP: GET / HTTP/1.1\\n1793769988.386933 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [.], ack 75, win 64, options [nop,nop,TS val 3646496195 ecr 1930912813], length 0\\n1793769988.386947 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [P.], seq 1:169, ack 75, win 64, options [nop,nop,TS val 3646496195 ecr 1930912813], length 168: HTTP: HTTP/1.1 200 OK\\n1793769988.386961 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 169, win 63, options [nop,nop,TS val 1930912838 ecr 3646496195], length 0\\n1793769988.387088 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [F.], seq 75, ack 169, win 63, options [nop,nop,TS val 1930912838 ecr 3646496195], length 0\\n1793769988.412485 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [F.], seq 169, ack 76, win 64, options [nop,nop,TS val 3646496220 ecr 1930912838], length 0\\n1793769988.412512 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 170, win 63, options [nop,nop,TS val 1930912864 ecr 3646496220], length 0\", \"10.10.2.10\")",
+            "mongDoi": {
+              "packets": 10,
+              "rttMs": null,
+              "requestBytes": 168,
+              "responseBytes": 74,
+              "closedBy": "server"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "tcpSummary(\"\", \"10.10.1.10\")",
+            "mongDoi": {
+              "packets": 0,
+              "rttMs": null,
+              "requestBytes": 0,
+              "responseBytes": 0,
+              "closedBy": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking the second SYN in a retransmitted handshake: the RTT runs from the FIRST SYN, so a lost SYN shows up as one extra second.|||Lấy SYN thứ hai khi bắt tay bị gửi lại: RTT tính từ SYN ĐẦU TIÊN, nên SYN bị mất lộ ra thành thêm đúng một giây."
+        },
+        {
+          "loi": "Splitting the address on the first dot and comparing only \"10\".|||Tách địa chỉ ở dấu chấm đầu tiên và chỉ so được \"10\"."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "TCP 3 — Write portBudget(range, timeWaitSec, rate): when does the batch job die?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "TIME_WAIT",
+        "ephemeral ports"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lesson 4.4's batch job opens a NEW connection per request to the same <code>ip:port</code>. Each closed connection keeps its source port in TIME_WAIT on the active closer (the client) — about 60 s on Linux — so only so many new connections per second can exist before <code>cannot assign requested address</code>. The Lab 4 checker printed the real range: <code>32768 60999</code>.</p>\n<p>Write <code>portBudget(range, timeWaitSec, rate)</code>: <code>ports</code> = size of the inclusive range; <code>maxRate</code> = ports / timeWaitSec, rounded DOWN to 0.1; <code>exhausted</code> = rate &gt; maxRate; <code>secondsUntilExhausted</code> = floor(ports / rate) when exhausted, else <code>null</code> (a simplified model: every port taken once before the first one frees).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Job chạy lô ở bài 4.4 mở một kết nối MỚI cho mỗi request tới cùng một <code>ip:port</code>. Mỗi kết nối đã đóng giữ cổng nguồn của nó ở TIME_WAIT phía bên chủ động đóng (client) — khoảng 60 giây trên Linux — nên mỗi giây chỉ có được chừng ấy kết nối mới trước khi gặp <code>cannot assign requested address</code>. Bộ kiểm của Lab 4 in ra dải thật: <code>32768 60999</code>.</p>\n<p>Viết <code>portBudget(range, timeWaitSec, rate)</code>: <code>ports</code> = kích thước dải (tính cả hai đầu); <code>maxRate</code> = ports / timeWaitSec, làm tròn XUỐNG 0,1; <code>exhausted</code> = rate &gt; maxRate; <code>secondsUntilExhausted</code> = floor(ports / rate) khi cạn, ngược lại <code>null</code> (mô hình giản lược: mọi cổng bị dùng một lần trước khi cổng đầu tiên được nhả).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "portBudget([32768,60999], 60, 300)",
+          "output": "{\"ports\":28232,\"maxRate\":470.5,\"exhausted\":false,\"secondsUntilExhausted\":null}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Inclusive range: last − first + 1.|||Dải tính cả hai đầu: cuối − đầu + 1.",
+        "Round down to one decimal with Math.floor(x * 10) / 10.|||Làm tròn xuống một chữ số thập phân bằng Math.floor(x * 10) / 10."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function portBudget(range, timeWaitSec, rate) {\n  return { ports: 0, maxRate: 0, exhausted: false, secondsUntilExhausted: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function portBudget(range, timeWaitSec, rate) {\n  var ports = range[1] - range[0] + 1;\n  var maxRate = Math.floor(ports / timeWaitSec * 10) / 10; // new connections per second to ONE destination ip:port\n  return { ports: ports, maxRate: maxRate, exhausted: rate > maxRate, secondsUntilExhausted: rate > maxRate ? Math.floor(ports / rate) : null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>28,232 ports over 60 s is about 470 new connections per second to one destination — a number a busy batch job crosses easily. The arithmetic explains both symptoms of the lab: the failure (exit 45 on the fourth request with three ports) and the \"recovers by itself minutes later\" (ports leave TIME_WAIT). A pool removes the churn instead of moving the wall.</p>",
+      "solutionExplanationHtmlVi": "<p>28.232 cổng chia 60 giây là khoảng 470 kết nối mới mỗi giây tới một đích — con số mà một job chạy lô bận rộn vượt dễ dàng. Phép tính giải thích cả hai triệu chứng của lab: lỗi (exit 45 ở request thứ tư khi chỉ có ba cổng) và \"vài phút sau tự hết\" (cổng ra khỏi TIME_WAIT). Pool xoá sự xoay vòng đó thay vì dời bức tường đi chỗ khác.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: portBudget([32768,60999], 60, 300)",
+              "vi": "Ca 1"
+            },
+            "goi": "portBudget([32768,60999], 60, 300)",
+            "mongDoi": {
+              "ports": 28232,
+              "maxRate": 470.5,
+              "exhausted": false,
+              "secondsUntilExhausted": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: portBudget([32768,60999], 60, 1000)",
+              "vi": "Ca 2"
+            },
+            "goi": "portBudget([32768,60999], 60, 1000)",
+            "mongDoi": {
+              "ports": 28232,
+              "maxRate": 470.5,
+              "exhausted": true,
+              "secondsUntilExhausted": 28
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "portBudget([50010,50012], 60, 1)",
+            "mongDoi": {
+              "ports": 3,
+              "maxRate": 0,
+              "exhausted": true,
+              "secondsUntilExhausted": 3
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "portBudget([1024,65535], 60, 1000)",
+            "mongDoi": {
+              "ports": 64512,
+              "maxRate": 1075.2,
+              "exhausted": false,
+              "secondsUntilExhausted": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "portBudget([32768,60999], 30, 900)",
+            "mongDoi": {
+              "ports": 28232,
+              "maxRate": 941,
+              "exhausted": false,
+              "secondsUntilExhausted": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the +1, so the Lab 4 forced range of three ports looks like two.|||Quên +1, nên dải ép ba cổng của Lab 4 trông như chỉ có hai."
+        },
+        {
+          "loi": "Concluding \"raise the range\" is the fix — the real fix is a keep-alive pool so no new connection is needed.|||Kết luận cách sửa là \"nới dải cổng\" — cách sửa thật là pool keep-alive để khỏi cần kết nối mới."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "TCP 4 — The Lab 4 incidents, read from real numbers",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "TCP incidents"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real outputs from Lab 4: <pre>lần 1: cổng-nguồn 50010  exit=0\nlần 2: cổng-nguồn 50011  exit=0\nlần 3: cổng-nguồn 50012  exit=0\nlần 4: cổng-nguồn -1  exit=45\nlần 4: KHÔNG bind được cổng nguồn (exit 45)</pre> the hang test printed 133 s without a timeout and 2 s with <code>--connect-timeout 2</code>; and <pre>NODELAY=false: 57.2 ms mỗi giao dịch (trung bình 6 lần)\nNODELAY=true: 30.5 ms mỗi giao dịch (trung bình 6 lần)</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kết xuất thật của Lab 4: <pre>lần 1: cổng-nguồn 50010  exit=0\nlần 2: cổng-nguồn 50011  exit=0\nlần 3: cổng-nguồn 50012  exit=0\nlần 4: cổng-nguồn -1  exit=45\nlần 4: KHÔNG bind được cổng nguồn (exit 45)</pre> bài thử treo in 133 giây khi không đặt timeout và 2 giây khi có <code>--connect-timeout 2</code>; và <pre>NODELAY=false: 57.2 ms mỗi giao dịch (trung bình 6 lần)\nNODELAY=true: 30.5 ms mỗi giao dịch (trung bình 6 lần)</pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every incident names a TCP state or timer: TIME_WAIT, SYN retries, delayed ACK, idle timeout.|||Mỗi sự cố gọi tên một trạng thái hay bộ hẹn giờ của TCP: TIME_WAIT, gửi lại SYN, delayed ACK, idle timeout.",
+        "Ask which side closed first and which packet was never answered.|||Hỏi bên nào đóng trước và gói nào không bao giờ được trả lời."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TCP 4 — The Lab 4 incidents, read from real numbers\n\nAnswer in the answer panel (no code needed).\n\n1. Why did the fourth request fail with exit 45 when the job forced source ports 50010–50012?Vì sao request thứ tư hỏng với exit 45 khi job ép cổng nguồn 50010–50012?\n2. A dependency drops SYNs. Why did the request hang for 133 s with no timeout?Một dịch vụ phụ thuộc bỏ mọi SYN. Vì sao request treo 133 giây khi không có timeout?\n3. Why is the fix for that hang a CONNECT timeout rather than a read timeout?Vì sao cách sửa cho lần treo đó là CONNECT timeout chứ không phải read timeout?\n4. The RPC costs about 57 ms per transaction with Nagle on and about 30 ms with TCP_NODELAY on a 25 ms path. What caused the difference?RPC tốn khoảng 57 ms mỗi giao dịch khi bật Nagle và khoảng 30 ms khi có TCP_NODELAY trên đường trễ 25 ms. Điều gì gây ra chênh lệch?\n5. A rare ECONNRESET (1 in 1,000) appears after the API moves behind a load balancer. Which mismatch is the classic cause?Sau khi API chuyển ra sau load balancer, thỉnh thoảng (1/1.000) có ECONNRESET. Sự lệch nào là nguyên nhân kinh điển?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TCP 4 — The Lab 4 incidents, read from real numbers — answer key\n\n1. Why did the fourth request fail with exit 45 when the job forced source ports 50010–50012?Vì sao request thứ tư hỏng với exit 45 khi job ép cổng nguồn 50010–50012?\n   Answer: c) All three ports were still in TIME_WAIT on the client, which closed first\n   curl exit 45 is a local bind failure: no source port was free. The client was the active closer, so TIME_WAIT — and the locked ports — sit on the client for about a minute.VI: curl exit 45 là lỗi bind phía máy mình: không còn cổng nguồn nào trống. Client là bên chủ động đóng, nên TIME_WAIT — và các cổng bị khoá — nằm ở client khoảng một phút.\n\n2. A dependency drops SYNs. Why did the request hang for 133 s with no timeout?Một dịch vụ phụ thuộc bỏ mọi SYN. Vì sao request treo 133 giây khi không có timeout?\n   Answer: d) The kernel kept resending the SYN, backing off each time\n   No SYN-ACK ever arrives, so the kernel retries the SYN with doubling gaps (tcp_syn_retries) — about two minutes in total. A connect timeout of 2–3 s turns that into a fast, clear failure.VI: Không SYN-ACK nào về, nên nhân gửi lại SYN với khoảng cách gấp đôi dần (tcp_syn_retries) — tổng cộng khoảng hai phút. Một connect timeout 2–3 giây biến nó thành lỗi nhanh và rõ ràng.\n\n3. Why is the fix for that hang a CONNECT timeout rather than a read timeout?Vì sao cách sửa cho lần treo đó là CONNECT timeout chứ không phải read timeout?\n   Answer: c) The failure is in the handshake: no connection ever exists, so there is nothing to read from\n   A read timeout starts counting once the connection is up and a response is awaited. Here the SYN is never answered, so only a connect timeout bounds the wait.VI: Read timeout chỉ bắt đầu đếm khi kết nối đã lên và đang chờ phản hồi. Ở đây SYN không bao giờ được trả lời, nên chỉ connect timeout mới chặn được thời gian chờ.\n\n4. The RPC costs about 57 ms per transaction with Nagle on and about 30 ms with TCP_NODELAY on a 25 ms path. What caused the difference?RPC tốn khoảng 57 ms mỗi giao dịch khi bật Nagle và khoảng 30 ms khi có TCP_NODELAY trên đường trễ 25 ms. Điều gì gây ra chênh lệch?\n   Answer: c) Nagle waits for an ACK the receiver deliberately delays\n   Write-write-read: the second write waits for an ACK, and the receiver's delayed-ACK timer holds that ACK hoping to piggyback it. Fix: TCP_NODELAY on the socket, or send header and body in one write.VI: Ghi-ghi-đọc: lần ghi thứ hai chờ một ACK, còn bộ hẹn giờ delayed-ACK bên nhận giữ ACK đó lại để gửi kèm. Sửa: TCP_NODELAY trên socket, hoặc gửi header và body trong một lần ghi.\n\n5. A rare ECONNRESET (1 in 1,000) appears after the API moves behind a load balancer. Which mismatch is the classic cause?Sau khi API chuyển ra sau load balancer, thỉnh thoảng (1/1.000) có ECONNRESET. Sự lệch nào là nguyên nhân kinh điển?\n   Answer: d) Idle timeouts: the server closes before the balancer does\n   An idle keep-alive race: one side closes an idle connection at the moment the other reuses it. Make the server-side idle timeout longer than whatever sits in front of it, and retry idempotent requests once.VI: Một cuộc đua keep-alive nhàn rỗi: một bên đóng kết nối nhàn rỗi đúng lúc bên kia dùng lại nó. Đặt idle timeout phía server dài hơn thứ đứng trước nó, và thử lại một lần với request idempotent.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> All three ports were still in TIME_WAIT on the client, which closed first</p><p>curl exit 45 is a local bind failure: no source port was free. The client was the active closer, so TIME_WAIT — and the locked ports — sit on the client for about a minute.</p><p><i>VI: curl exit 45 là lỗi bind phía máy mình: không còn cổng nguồn nào trống. Client là bên chủ động đóng, nên TIME_WAIT — và các cổng bị khoá — nằm ở client khoảng một phút.</i></p></li><li><p><b>d)</b> The kernel kept resending the SYN, backing off each time</p><p>No SYN-ACK ever arrives, so the kernel retries the SYN with doubling gaps (tcp_syn_retries) — about two minutes in total. A connect timeout of 2–3 s turns that into a fast, clear failure.</p><p><i>VI: Không SYN-ACK nào về, nên nhân gửi lại SYN với khoảng cách gấp đôi dần (tcp_syn_retries) — tổng cộng khoảng hai phút. Một connect timeout 2–3 giây biến nó thành lỗi nhanh và rõ ràng.</i></p></li><li><p><b>c)</b> The failure is in the handshake: no connection ever exists, so there is nothing to read from</p><p>A read timeout starts counting once the connection is up and a response is awaited. Here the SYN is never answered, so only a connect timeout bounds the wait.</p><p><i>VI: Read timeout chỉ bắt đầu đếm khi kết nối đã lên và đang chờ phản hồi. Ở đây SYN không bao giờ được trả lời, nên chỉ connect timeout mới chặn được thời gian chờ.</i></p></li><li><p><b>c)</b> Nagle waits for an ACK the receiver deliberately delays</p><p>Write-write-read: the second write waits for an ACK, and the receiver's delayed-ACK timer holds that ACK hoping to piggyback it. Fix: TCP_NODELAY on the socket, or send header and body in one write.</p><p><i>VI: Ghi-ghi-đọc: lần ghi thứ hai chờ một ACK, còn bộ hẹn giờ delayed-ACK bên nhận giữ ACK đó lại để gửi kèm. Sửa: TCP_NODELAY trên socket, hoặc gửi header và body trong một lần ghi.</i></p></li><li><p><b>d)</b> Idle timeouts: the server closes before the balancer does</p><p>An idle keep-alive race: one side closes an idle connection at the moment the other reuses it. Make the server-side idle timeout longer than whatever sits in front of it, and retry idempotent requests once.</p><p><i>VI: Một cuộc đua keep-alive nhàn rỗi: một bên đóng kết nối nhàn rỗi đúng lúc bên kia dùng lại nó. Đặt idle timeout phía server dài hơn thứ đứng trước nó, và thử lại một lần với request idempotent.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why did the fourth request fail with exit 45 when the job forced source ports 50010–50012?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao request thứ tư hỏng với exit 45 khi job ép cổng nguồn 50010–50012?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The server refused a fourth connection from the same IP"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nginx limits each client to three connections"
+              },
+              {
+                "ma": "c",
+                "noiDung": "All three ports were still in TIME_WAIT on the client, which closed first"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The router dropped the fourth SYN"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>curl exit 45 is a local bind failure: no source port was free. The client was the active closer, so TIME_WAIT — and the locked ports — sit on the client for about a minute.</p><p><i>VI: curl exit 45 là lỗi bind phía máy mình: không còn cổng nguồn nào trống. Client là bên chủ động đóng, nên TIME_WAIT — và các cổng bị khoá — nằm ở client khoảng một phút.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A dependency drops SYNs. Why did the request hang for 133 s with no timeout?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một dịch vụ phụ thuộc bỏ mọi SYN. Vì sao request treo 133 giây khi không có timeout?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "curl was waiting for the HTTP response body"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DNS resolution kept retrying in the background"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The server sent a RST after two minutes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The kernel kept resending the SYN, backing off each time"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>No SYN-ACK ever arrives, so the kernel retries the SYN with doubling gaps (tcp_syn_retries) — about two minutes in total. A connect timeout of 2–3 s turns that into a fast, clear failure.</p><p><i>VI: Không SYN-ACK nào về, nên nhân gửi lại SYN với khoảng cách gấp đôi dần (tcp_syn_retries) — tổng cộng khoảng hai phút. Một connect timeout 2–3 giây biến nó thành lỗi nhanh và rõ ràng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is the fix for that hang a CONNECT timeout rather than a read timeout?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao cách sửa cho lần treo đó là CONNECT timeout chứ không phải read timeout?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A read timeout would retry the request twice"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Read timeouts are not supported by curl"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The failure is in the handshake: no connection ever exists, so there is nothing to read from"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Connect timeouts also cover DNS failures, which caused the hang"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A read timeout starts counting once the connection is up and a response is awaited. Here the SYN is never answered, so only a connect timeout bounds the wait.</p><p><i>VI: Read timeout chỉ bắt đầu đếm khi kết nối đã lên và đang chờ phản hồi. Ở đây SYN không bao giờ được trả lời, nên chỉ connect timeout mới chặn được thời gian chờ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The RPC costs about 57 ms per transaction with Nagle on and about 30 ms with TCP_NODELAY on a 25 ms path. What caused the difference?</p><p style=\"opacity:.75;font-size:.92em\"><i>RPC tốn khoảng 57 ms mỗi giao dịch khi bật Nagle và khoảng 30 ms khi có TCP_NODELAY trên đường trễ 25 ms. Điều gì gây ra chênh lệch?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "TCP_NODELAY doubles the bandwidth of the link"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nagle compresses the payload, which costs CPU time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nagle waits for an ACK the receiver deliberately delays"
+              },
+              {
+                "ma": "d",
+                "noiDung": "With TCP_NODELAY the handshake is skipped"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Write-write-read: the second write waits for an ACK, and the receiver's delayed-ACK timer holds that ACK hoping to piggyback it. Fix: TCP_NODELAY on the socket, or send header and body in one write.</p><p><i>VI: Ghi-ghi-đọc: lần ghi thứ hai chờ một ACK, còn bộ hẹn giờ delayed-ACK bên nhận giữ ACK đó lại để gửi kèm. Sửa: TCP_NODELAY trên socket, hoặc gửi header và body trong một lần ghi.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A rare ECONNRESET (1 in 1,000) appears after the API moves behind a load balancer. Which mismatch is the classic cause?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi API chuyển ra sau load balancer, thỉnh thoảng (1/1.000) có ECONNRESET. Sự lệch nào là nguyên nhân kinh điển?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The client pool has maxSockets set much too high"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The balancer uses round robin, not least connections"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TCP keepalive probes are sent only every two hours"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Idle timeouts: the server closes before the balancer does"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>An idle keep-alive race: one side closes an idle connection at the moment the other reuses it. Make the server-side idle timeout longer than whatever sits in front of it, and retry idempotent requests once.</p><p><i>VI: Một cuộc đua keep-alive nhàn rỗi: một bên đóng kết nối nhàn rỗi đúng lúc bên kia dùng lại nó. Đặt idle timeout phía server dài hơn thứ đứng trước nó, và thử lại một lần với request idempotent.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Blaming the server for exit 45 — the failure is a local bind on the client.|||Đổ lỗi cho server về exit 45 — lỗi là bind cục bộ ở client."
+        },
+        {
+          "loi": "Adding a read timeout to fix a dead dependency.|||Thêm read timeout để sửa một phụ thuộc đã chết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "connect timeout",
+          "vi": "thời gian chờ kết nối"
+        },
+        {
+          "en": "delayed ACK",
+          "vi": "ACK trì hoãn"
+        },
+        {
+          "en": "Nagle's algorithm",
+          "vi": "thuật toán Nagle"
+        }
+      ]
+    }
+  ]
+}

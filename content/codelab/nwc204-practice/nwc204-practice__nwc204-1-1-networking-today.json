@@ -1,0 +1,1135 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-1-1-networking-today",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-1-1-mang-la-gi-thanh-phan-to-po"
+  },
+  "exercises": [
+    {
+      "title": "Today 1 — Name every box on the diagram",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "network components",
+        "topology"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>The vocabulary of Lesson 1.1: end devices, intermediary devices, media, NIC, port and interface, physical and logical topology, LAN and WAN.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ vựng của bài 1.1: thiết bị đầu cuối, thiết bị trung gian, môi trường truyền, NIC, port và interface, tô-pô vật lý và logic, LAN và WAN.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "End device = data starts or ends there. Intermediary = data passes through.",
+        "Physical topology is about cables; logical topology is about addresses."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Today 1 — Name every box on the diagram\n\nAnswer in the answer panel (no code needed).\n\n1. Which of these is an INTERMEDIARY device?Thiết bị nào là thiết bị TRUNG GIAN?\n2. You configure an address on Gi0/1. In IOS terms you are configuring …Bạn đặt địa chỉ cho Gi0/1. Theo cách gọi của IOS, bạn đang cấu hình …\n3. Two PCs hang off the same switch, but one is 192.168.1.10/24 and the other 192.168.2.10/24. Which topology differs between them?Hai PC cắm cùng một switch, nhưng một máy là 192.168.1.10/24, máy kia 192.168.2.10/24. Tô-pô nào khác nhau giữa chúng?\n4. Ten hosts are cabled so that every host connects directly to every other host. How many cables is that?Mười máy được nối sao cho máy nào cũng cắm thẳng tới mọi máy khác. Tốn bao nhiêu sợi cáp?\n5. Which statement about the Internet is accurate?Câu nào về Internet là chính xác?\n6. A company makes some internal pages reachable to its suppliers over the Internet, behind a login. Cisco calls that an …Một công ty cho nhà cung cấp truy cập một số trang nội bộ qua Internet, có đăng nhập. Cisco gọi đó là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Today 1 — Name every box on the diagram — answer key\n\n1. Which of these is an INTERMEDIARY device?Thiết bị nào là thiết bị TRUNG GIAN?\n   Answer: a) A Wi-Fi access point\n   Intermediary devices move data and decide where it goes (switch, router, access point, firewall). The other three are places where data starts or ends — end devices.VI: Thiết bị trung gian chuyển dữ liệu và quyết định đường đi (switch, router, access point, tường lửa). Ba thứ còn lại là nơi dữ liệu bắt đầu hoặc kết thúc — thiết bị đầu cuối.\n\n2. You configure an address on Gi0/1. In IOS terms you are configuring …Bạn đặt địa chỉ cho Gi0/1. Theo cách gọi của IOS, bạn đang cấu hình …\n   Answer: c) an interface — the port as the software sees it\n   The port is the hole you plug a cable into; the interface is the same thing seen by software. Configuration always happens on the interface.VI: Port là cái lỗ để cắm cáp; interface là chính nó dưới con mắt phần mềm. Cấu hình luôn làm trên interface.\n\n3. Two PCs hang off the same switch, but one is 192.168.1.10/24 and the other 192.168.2.10/24. Which topology differs between them?Hai PC cắm cùng một switch, nhưng một máy là 192.168.1.10/24, máy kia 192.168.2.10/24. Tô-pô nào khác nhau giữa chúng?\n   Answer: d) The logical topology: they are in different networks although the cabling is shared\n   Physical topology is where the cables run — identical here. Logical topology is which addresses may talk to which — and these two are in different networks, so the link lights are green and they still cannot talk directly.VI: Tô-pô vật lý là cáp chạy ở đâu — ở đây giống hệt. Tô-pô logic là địa chỉ nào được nói với địa chỉ nào — hai máy này ở hai mạng khác nhau, nên đèn link xanh mà vẫn không nói chuyện trực tiếp được.\n\n4. Ten hosts are cabled so that every host connects directly to every other host. How many cables is that?Mười máy được nối sao cho máy nào cũng cắm thẳng tới mọi máy khác. Tốn bao nhiêu sợi cáp?\n   Answer: b) 45\n   A full mesh needs n(n−1)/2 links: 10 × 9 / 2 = 45, and 100 hosts would need 4,950. That growth is the reason intermediary devices exist — with one switch, adding a host costs one cable.VI: Lưới đầy đủ cần n(n−1)/2 đường nối: 10 × 9 / 2 = 45, còn 100 máy thì cần 4.950. Chính đà tăng đó là lý do thiết bị trung gian tồn tại — có một switch thì thêm một máy chỉ tốn một sợi cáp.\n\n5. Which statement about the Internet is accurate?Câu nào về Internet là chính xác?\n   Answer: c) It is a network of independently owned networks that agreed on IP and on how to hand traffic to each other\n   CQ1.1: a network of networks. Nobody owns all of it, which is why nobody can switch it off and nobody can guarantee it either.VI: CQ1.1: một mạng của các mạng. Không ai sở hữu toàn bộ, vì thế không ai tắt được nó và cũng không ai bảo đảm được nó.\n\n6. A company makes some internal pages reachable to its suppliers over the Internet, behind a login. Cisco calls that an …Một công ty cho nhà cung cấp truy cập một số trang nội bộ qua Internet, có đăng nhập. Cisco gọi đó là …\n   Answer: c) extranet\n   An intranet is for the organisation itself; an extranet extends a controlled part of it to outsiders such as suppliers and partners.VI: Intranet dành cho chính tổ chức; extranet mở một phần có kiểm soát của nó cho người ngoài như nhà cung cấp và đối tác.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> A Wi-Fi access point</p><p>Intermediary devices move data and decide where it goes (switch, router, access point, firewall). The other three are places where data starts or ends — end devices.</p><p><i>VI: Thiết bị trung gian chuyển dữ liệu và quyết định đường đi (switch, router, access point, tường lửa). Ba thứ còn lại là nơi dữ liệu bắt đầu hoặc kết thúc — thiết bị đầu cuối.</i></p></li><li><p><b>c)</b> an interface — the port as the software sees it</p><p>The port is the hole you plug a cable into; the interface is the same thing seen by software. Configuration always happens on the interface.</p><p><i>VI: Port là cái lỗ để cắm cáp; interface là chính nó dưới con mắt phần mềm. Cấu hình luôn làm trên interface.</i></p></li><li><p><b>d)</b> The logical topology: they are in different networks although the cabling is shared</p><p>Physical topology is where the cables run — identical here. Logical topology is which addresses may talk to which — and these two are in different networks, so the link lights are green and they still cannot talk directly.</p><p><i>VI: Tô-pô vật lý là cáp chạy ở đâu — ở đây giống hệt. Tô-pô logic là địa chỉ nào được nói với địa chỉ nào — hai máy này ở hai mạng khác nhau, nên đèn link xanh mà vẫn không nói chuyện trực tiếp được.</i></p></li><li><p><b>b)</b> 45</p><p>A full mesh needs n(n−1)/2 links: 10 × 9 / 2 = 45, and 100 hosts would need 4,950. That growth is the reason intermediary devices exist — with one switch, adding a host costs one cable.</p><p><i>VI: Lưới đầy đủ cần n(n−1)/2 đường nối: 10 × 9 / 2 = 45, còn 100 máy thì cần 4.950. Chính đà tăng đó là lý do thiết bị trung gian tồn tại — có một switch thì thêm một máy chỉ tốn một sợi cáp.</i></p></li><li><p><b>c)</b> It is a network of independently owned networks that agreed on IP and on how to hand traffic to each other</p><p>CQ1.1: a network of networks. Nobody owns all of it, which is why nobody can switch it off and nobody can guarantee it either.</p><p><i>VI: CQ1.1: một mạng của các mạng. Không ai sở hữu toàn bộ, vì thế không ai tắt được nó và cũng không ai bảo đảm được nó.</i></p></li><li><p><b>c)</b> extranet</p><p>An intranet is for the organisation itself; an extranet extends a controlled part of it to outsiders such as suppliers and partners.</p><p><i>VI: Intranet dành cho chính tổ chức; extranet mở một phần có kiểm soát của nó cho người ngoài như nhà cung cấp và đối tác.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which of these is an INTERMEDIARY device?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thiết bị nào là thiết bị TRUNG GIAN?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A Wi-Fi access point"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A network printer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A file server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An IP camera"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Intermediary devices move data and decide where it goes (switch, router, access point, firewall). The other three are places where data starts or ends — end devices.</p><p><i>VI: Thiết bị trung gian chuyển dữ liệu và quyết định đường đi (switch, router, access point, tường lửa). Ba thứ còn lại là nơi dữ liệu bắt đầu hoặc kết thúc — thiết bị đầu cuối.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>You configure an address on Gi0/1. In IOS terms you are configuring …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn đặt địa chỉ cho Gi0/1. Theo cách gọi của IOS, bạn đang cấu hình …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a port — the physical socket on the chassis"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a NIC — the card inside an end device"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an interface — the port as the software sees it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a medium — the copper that carries the signal"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The port is the hole you plug a cable into; the interface is the same thing seen by software. Configuration always happens on the interface.</p><p><i>VI: Port là cái lỗ để cắm cáp; interface là chính nó dưới con mắt phần mềm. Cấu hình luôn làm trên interface.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Two PCs hang off the same switch, but one is 192.168.1.10/24 and the other 192.168.2.10/24. Which topology differs between them?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai PC cắm cùng một switch, nhưng một máy là 192.168.1.10/24, máy kia 192.168.2.10/24. Tô-pô nào khác nhau giữa chúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Neither: one switch always means one network"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Both: a switch cannot carry two subnets on its ports"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The physical topology: they need separate cables to the router"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The logical topology: they are in different networks although the cabling is shared"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Physical topology is where the cables run — identical here. Logical topology is which addresses may talk to which — and these two are in different networks, so the link lights are green and they still cannot talk directly.</p><p><i>VI: Tô-pô vật lý là cáp chạy ở đâu — ở đây giống hệt. Tô-pô logic là địa chỉ nào được nói với địa chỉ nào — hai máy này ở hai mạng khác nhau, nên đèn link xanh mà vẫn không nói chuyện trực tiếp được.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Ten hosts are cabled so that every host connects directly to every other host. How many cables is that?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mười máy được nối sao cho máy nào cũng cắm thẳng tới mọi máy khác. Tốn bao nhiêu sợi cáp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "90"
+              },
+              {
+                "ma": "b",
+                "noiDung": "45"
+              },
+              {
+                "ma": "c",
+                "noiDung": "100"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A full mesh needs n(n−1)/2 links: 10 × 9 / 2 = 45, and 100 hosts would need 4,950. That growth is the reason intermediary devices exist — with one switch, adding a host costs one cable.</p><p><i>VI: Lưới đầy đủ cần n(n−1)/2 đường nối: 10 × 9 / 2 = 45, còn 100 máy thì cần 4.950. Chính đà tăng đó là lý do thiết bị trung gian tồn tại — có một switch thì thêm một máy chỉ tốn một sợi cáp.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which statement about the Internet is accurate?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu nào về Internet là chính xác?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is the set of web servers that answer on port 80 and 443"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is one very large LAN run by a single international operator"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is a network of independently owned networks that agreed on IP and on how to hand traffic to each other"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is a WAN owned jointly by the national telecom carriers"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>CQ1.1: a network of networks. Nobody owns all of it, which is why nobody can switch it off and nobody can guarantee it either.</p><p><i>VI: CQ1.1: một mạng của các mạng. Không ai sở hữu toàn bộ, vì thế không ai tắt được nó và cũng không ai bảo đảm được nó.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>A company makes some internal pages reachable to its suppliers over the Internet, behind a login. Cisco calls that an …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một công ty cho nhà cung cấp truy cập một số trang nội bộ qua Internet, có đăng nhập. Cisco gọi đó là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "internetwork"
+              },
+              {
+                "ma": "b",
+                "noiDung": "intranet"
+              },
+              {
+                "ma": "c",
+                "noiDung": "extranet"
+              },
+              {
+                "ma": "d",
+                "noiDung": "intermediary network"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>An intranet is for the organisation itself; an extranet extends a controlled part of it to outsiders such as suppliers and partners.</p><p><i>VI: Intranet dành cho chính tổ chức; extranet mở một phần có kiểm soát của nó cho người ngoài như nhà cung cấp và đối tác.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a printer or a camera an intermediary device because it is \"on the network\"."
+        },
+        {
+          "loi": "Assuming one switch means one network — the mask decides that, not the cabling."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "intermediary device",
+          "vi": "thiết bị trung gian"
+        },
+        {
+          "en": "logical topology",
+          "vi": "tô-pô logic"
+        },
+        {
+          "en": "extranet",
+          "vi": "mạng mở rộng cho đối tác"
+        }
+      ]
+    },
+    {
+      "title": "Today 2 — Bandwidth is not speed: name the number",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "bandwidth vs latency",
+        "reliable networks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Lesson 1.2 separates four numbers that are constantly confused, and four properties that define a reliable network. For each line, pick the one it describes.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 1.2 tách bốn con số hay bị lẫn nhất, và bốn tính chất làm nên một mạng tin cậy. Với mỗi dòng, chọn đúng thứ nó mô tả.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Rated vs measured vs useful: bandwidth, throughput, goodput.",
+        "A backup that kills voice is not a capacity problem; it is a priority problem."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Today 2 — Bandwidth is not speed: name the number\n\nAnswer in the answer panel (no code needed).\n\n1. Which number is it?Đó là con số nào?\n2. Which reliability property was missing?Thiếu tính chất tin cậy nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Today 2 — Bandwidth is not speed: name the number — answer key\n\n1. Which number is it?Đó là con số nào?\n   - r1.n: bandwidth\n   - r2.n: throughput\n   - r3.n: goodput\n   - r4.n: latency\n   - r5.n: jitter\n   Bandwidth is the rating and is never measured; throughput is the measurement; goodput is throughput minus overhead and is always the smallest; latency is time, independent of the other three; jitter is how much the latency varies — the number that ruins a call.VI: Băng thông là mức định danh, không bao giờ đo; thông lượng là phép đo; goodput là thông lượng trừ phần bọc, luôn nhỏ nhất; độ trễ là thời gian, độc lập với ba số kia; jitter là độ trễ dao động bao nhiêu — con số làm hỏng cuộc gọi.\n\n2. Which reliability property was missing?Thiếu tính chất tin cậy nào?\n   - r1.p: fault tolerance\n   - r2.p: quality of service\n   - r3.p: scalability\n   - r4.p: security\n   Each property answers one way networks fail: fault tolerance for a broken path, scalability for growth, QoS for congestion, security for attack. Naming the symptom with the property is what an examiner looks for.VI: Mỗi tính chất trả lời một kiểu mạng hỏng: chịu lỗi cho đường đứt, mở rộng cho tăng trưởng, QoS cho nghẽn, an toàn cho tấn công. Gọi tên được triệu chứng đi cùng tính chất là thứ giám khảo tìm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bandwidth is the rating and is never measured; throughput is the measurement; goodput is throughput minus overhead and is always the smallest; latency is time, independent of the other three; jitter is how much the latency varies — the number that ruins a call.</p><p><i>VI: Băng thông là mức định danh, không bao giờ đo; thông lượng là phép đo; goodput là thông lượng trừ phần bọc, luôn nhỏ nhất; độ trễ là thời gian, độc lập với ba số kia; jitter là độ trễ dao động bao nhiêu — con số làm hỏng cuộc gọi.</i></p><p>Each property answers one way networks fail: fault tolerance for a broken path, scalability for growth, QoS for congestion, security for attack. Naming the symptom with the property is what an examiner looks for.</p><p><i>VI: Mỗi tính chất trả lời một kiểu mạng hỏng: chịu lỗi cho đường đứt, mở rộng cho tăng trưởng, QoS cho nghẽn, an toàn cho tấn công. Gọi tên được triệu chứng đi cùng tính chất là thứ giám khảo tìm.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Which number is it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đó là con số nào?</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "n",
+                "ten": "Number",
+                "luaChon": [
+                  "bandwidth",
+                  "throughput",
+                  "goodput",
+                  "latency",
+                  "jitter"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The \"1 Gbps\" printed on your contract"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "What a speed test reports right now"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "What is left after headers and retransmissions — your own data"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Milliseconds reported by ping"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Ping varies between 40 ms and 400 ms; calls stutter"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "bandwidth",
+              "r2.n": "throughput",
+              "r3.n": "goodput",
+              "r4.n": "latency",
+              "r5.n": "jitter"
+            },
+            "giaiThich": "<p>Bandwidth is the rating and is never measured; throughput is the measurement; goodput is throughput minus overhead and is always the smallest; latency is time, independent of the other three; jitter is how much the latency varies — the number that ruins a call.</p><p><i>VI: Băng thông là mức định danh, không bao giờ đo; thông lượng là phép đo; goodput là thông lượng trừ phần bọc, luôn nhỏ nhất; độ trễ là thời gian, độc lập với ba số kia; jitter là độ trễ dao động bao nhiêu — con số làm hỏng cuộc gọi.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Which reliability property was missing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thiếu tính chất tin cậy nào?</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Incident"
+              },
+              {
+                "ma": "p",
+                "ten": "Property",
+                "luaChon": [
+                  "fault tolerance",
+                  "scalability",
+                  "quality of service",
+                  "security"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "One fibre was cut and the whole branch went offline"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The nightly backup makes the IP phones unusable"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Adding a second floor meant redesigning every subnet"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A visitor plugged into a live unused wall port and reached the servers"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": "fault tolerance",
+              "r2.p": "quality of service",
+              "r3.p": "scalability",
+              "r4.p": "security"
+            },
+            "giaiThich": "<p>Each property answers one way networks fail: fault tolerance for a broken path, scalability for growth, QoS for congestion, security for attack. Naming the symptom with the property is what an examiner looks for.</p><p><i>VI: Mỗi tính chất trả lời một kiểu mạng hỏng: chịu lỗi cho đường đứt, mở rộng cho tăng trưởng, QoS cho nghẽn, an toàn cho tấn công. Gọi tên được triệu chứng đi cùng tính chất là thứ giám khảo tìm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering \"bandwidth\" for anything that sounds like speed."
+        },
+        {
+          "loi": "Calling the backup-versus-phones incident a scalability problem."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "goodput",
+          "vi": "thông lượng hữu ích"
+        },
+        {
+          "en": "jitter",
+          "vi": "độ dao động trễ"
+        },
+        {
+          "en": "fault tolerance",
+          "vi": "chịu lỗi"
+        }
+      ]
+    },
+    {
+      "title": "Today 3 — The five commands, in the order that narrows fastest",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "troubleshooting order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Something stopped working and nobody is around to ask. Lesson 1.3 gives a fixed order of commands where each one rules out a whole class of causes. Put them in that order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Có gì đó ngừng chạy và không có ai để hỏi. Bài 1.3 cho một thứ tự lệnh cố định, mỗi lệnh loại được cả một nhóm nguyên nhân. Hãy xếp đúng thứ tự đó.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Each command assumes the previous one passed.",
+        "Names come last because a name needs DNS, and DNS needs the network."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Today 3 — The five commands, in the order that narrows fastest\n\nAnswer in the answer panel (no code needed).\n\n1. Bottom-up self-check of your own machineTự kiểm máy của mình từ dưới lên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Today 3 — The five commands, in the order that narrows fastest — answer key\n\n1. Bottom-up self-check of your own machineTự kiểm máy của mình từ dưới lên\n   Answer: m5) ip addr show — do I have an address, and is it the one I expect?  →  m2) ip route show — is there a \"default via\", and is that gateway local to me?  →  m4) ping 192.168.1.1 — can I reach my gateway?  →  m3) ping 1.1.1.1 — can I reach the outside by ADDRESS?  →  m1) ping google.com — and by NAME?\n   Address, then exit, then the exit itself, then the world by number, and only then by name. If step 4 works and step 5 fails, the network is fine and DNS is the problem — the single most valuable distinction in Module 1.VI: Địa chỉ, rồi lối ra, rồi chính lối ra, rồi thế giới bằng số, cuối cùng mới bằng tên. Nếu bước 4 chạy mà bước 5 hỏng, mạng vẫn tốt và DNS mới là vấn đề — phân biệt giá trị nhất của Module 1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Address, then exit, then the exit itself, then the world by number, and only then by name. If step 4 works and step 5 fails, the network is fine and DNS is the problem — the single most valuable distinction in Module 1.</p><p><i>VI: Địa chỉ, rồi lối ra, rồi chính lối ra, rồi thế giới bằng số, cuối cùng mới bằng tên. Nếu bước 4 chạy mà bước 5 hỏng, mạng vẫn tốt và DNS mới là vấn đề — phân biệt giá trị nhất của Module 1.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Bottom-up self-check of your own machine</p><p style=\"opacity:.75;font-size:.92em\"><i>Tự kiểm máy của mình từ dưới lên</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "ping google.com — and by NAME?"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "ip route show — is there a \"default via\", and is that gateway local to me?"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "ping 1.1.1.1 — can I reach the outside by ADDRESS?"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "ping 192.168.1.1 — can I reach my gateway?"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "ip addr show — do I have an address, and is it the one I expect?"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m2",
+              "m4",
+              "m3",
+              "m1"
+            ],
+            "giaiThich": "<p>Address, then exit, then the exit itself, then the world by number, and only then by name. If step 4 works and step 5 fails, the network is fine and DNS is the problem — the single most valuable distinction in Module 1.</p><p><i>VI: Địa chỉ, rồi lối ra, rồi chính lối ra, rồi thế giới bằng số, cuối cùng mới bằng tên. Nếu bước 4 chạy mà bước 5 hỏng, mạng vẫn tốt và DNS mới là vấn đề — phân biệt giá trị nhất của Module 1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting with ping google.com and spending twenty minutes on DNS when the cable is out."
+        },
+        {
+          "loi": "Pinging an Internet address before checking that you even have a default route."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "default route",
+          "vi": "tuyến mặc định"
+        },
+        {
+          "en": "bottom-up",
+          "vi": "từ dưới lên"
+        }
+      ]
+    },
+    {
+      "title": "Today 4 — Latency you cannot buy away",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "latency",
+        "propagation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Lesson 1.2: light in optical fibre needs about 5 ms per 1,000 km, and no contract changes that. Work the numbers.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 1.2: ánh sáng trong sợi quang cần khoảng 5 ms cho mỗi 1.000 km, và không hợp đồng nào đổi được điều đó. Hãy tính.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "5 ms per 1,000 km is ONE way. Ping is round trip.",
+        "Satellite: up AND down, at about 300,000 km/s."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Today 4 — Latency you cannot buy away\n\nAnswer in the answer panel (no code needed).\n\n1. A fibre path from Hanoi to a server is 2,000 km long. Ignoring queues and processing, what is the minimum ROUND-TRIP time?Đường cáp quang từ Hà Nội tới một máy chủ dài 2.000 km. Bỏ qua hàng đợi và xử lý, thời gian KHỨ HỒI tối thiểu là bao nhiêu?\n2. The office upgrades from 100 Mbps to 1 Gbps on the same 2,000 km path. What happens to that 20 ms floor?Văn phòng nâng từ 100 Mbps lên 1 Gbps trên cùng con đường 2.000 km. Mức sàn 20 ms thay đổi thế nào?\n3. A geostationary satellite orbits about 36,000 km up. A packet goes up to it and back down to the ground station once. Using the speed of light (about 300,000 km/s), what is that one trip?Vệ tinh địa tĩnh bay ở độ cao khoảng 36.000 km. Một gói đi lên vệ tinh rồi xuống trạm mặt đất một lần. Dùng tốc độ ánh sáng (khoảng 300.000 km/s), một chuyến đó mất bao lâu?\n4. Which application is fine on a 100 Mbps link with 300 ms latency?Ứng dụng nào vẫn ổn trên đường 100 Mbps với độ trễ 300 ms?\n5. Calls freeze every evening on a 1 Gbps cable link, while the neighbour on 100 Mbps fibre is fine. Which single measurement proves the cause fastest?Cuộc gọi đứng hình mỗi tối trên đường cáp đồng trục 1 Gbps, trong khi nhà hàng xóm dùng cáp quang 100 Mbps vẫn mượt. Phép đo nào chứng minh nguyên nhân nhanh nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Today 4 — Latency you cannot buy away — answer key\n\n1. A fibre path from Hanoi to a server is 2,000 km long. Ignoring queues and processing, what is the minimum ROUND-TRIP time?Đường cáp quang từ Hà Nội tới một máy chủ dài 2.000 km. Bỏ qua hàng đợi và xử lý, thời gian KHỨ HỒI tối thiểu là bao nhiêu?\n   Answer: b) 20 ms\n   One way: 2,000 km × 5 ms / 1,000 km = 10 ms. A ping measures there and back, so the floor is 20 ms whatever the bandwidth.VI: Một chiều: 2.000 km × 5 ms / 1.000 km = 10 ms. Ping đo cả đi lẫn về, nên mức sàn là 20 ms dù băng thông bao nhiêu.\n\n2. The office upgrades from 100 Mbps to 1 Gbps on the same 2,000 km path. What happens to that 20 ms floor?Văn phòng nâng từ 100 Mbps lên 1 Gbps trên cùng con đường 2.000 km. Mức sàn 20 ms thay đổi thế nào?\n   Answer: a) Nothing — the path is wider, not shorter\n   Bandwidth is how wide the pipe is; latency is how long it is. Widening the pipe makes a big file finish sooner and leaves the time to the first byte exactly where it was.VI: Băng thông là ống rộng bao nhiêu; độ trễ là ống dài bao nhiêu. Nới rộng ống làm file lớn xong sớm hơn và để nguyên thời gian tới byte đầu tiên.\n\n3. A geostationary satellite orbits about 36,000 km up. A packet goes up to it and back down to the ground station once. Using the speed of light (about 300,000 km/s), what is that one trip?Vệ tinh địa tĩnh bay ở độ cao khoảng 36.000 km. Một gói đi lên vệ tinh rồi xuống trạm mặt đất một lần. Dùng tốc độ ánh sáng (khoảng 300.000 km/s), một chuyến đó mất bao lâu?\n   Answer: a) About 240 ms\n   Up and down is 72,000 km; 72,000 / 300,000 s = 0.24 s. A request and its reply make two such trips, which is where the \"about half a second\" of satellite links comes from before anything else goes wrong.VI: Lên và xuống là 72.000 km; 72.000 / 300.000 giây = 0,24 giây. Yêu cầu và phản hồi là hai chuyến như vậy — đó là nguồn gốc \"khoảng nửa giây\" của đường vệ tinh, trước khi có trục trặc nào khác.\n\n4. Which application is fine on a 100 Mbps link with 300 ms latency?Ứng dụng nào vẫn ổn trên đường 100 Mbps với độ trễ 300 ms?\n   Answer: b) A nightly off-site backup\n   A backup only cares about throughput: once the stream starts, 300 ms of delay barely matters. Conversation, games and interactive typing need low and steady latency.VI: Sao lưu chỉ quan tâm thông lượng: luồng đã chạy thì 300 ms trễ gần như không sao. Nói chuyện, game và gõ lệnh tương tác cần độ trễ thấp và đều.\n\n5. Calls freeze every evening on a 1 Gbps cable link, while the neighbour on 100 Mbps fibre is fine. Which single measurement proves the cause fastest?Cuộc gọi đứng hình mỗi tối trên đường cáp đồng trục 1 Gbps, trong khi nhà hàng xóm dùng cáp quang 100 Mbps vẫn mượt. Phép đo nào chứng minh nguyên nhân nhanh nhất?\n   Answer: a) A continuous ping in the evening, reading how much the times vary\n   Cable is shared with the neighbourhood, so evening congestion shows up as jitter and loss. A ping run at the bad hour shows it; a speed test at noon measures the wrong hour and the wrong number.VI: Cáp đồng trục chia chung cả khu, nên nghẽn buổi tối hiện ra thành jitter và mất gói. Ping liên tục vào giờ tệ cho thấy ngay; speed test lúc trưa đo sai giờ và sai con số.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 20 ms</p><p>One way: 2,000 km × 5 ms / 1,000 km = 10 ms. A ping measures there and back, so the floor is 20 ms whatever the bandwidth.</p><p><i>VI: Một chiều: 2.000 km × 5 ms / 1.000 km = 10 ms. Ping đo cả đi lẫn về, nên mức sàn là 20 ms dù băng thông bao nhiêu.</i></p></li><li><p><b>a)</b> Nothing — the path is wider, not shorter</p><p>Bandwidth is how wide the pipe is; latency is how long it is. Widening the pipe makes a big file finish sooner and leaves the time to the first byte exactly where it was.</p><p><i>VI: Băng thông là ống rộng bao nhiêu; độ trễ là ống dài bao nhiêu. Nới rộng ống làm file lớn xong sớm hơn và để nguyên thời gian tới byte đầu tiên.</i></p></li><li><p><b>a)</b> About 240 ms</p><p>Up and down is 72,000 km; 72,000 / 300,000 s = 0.24 s. A request and its reply make two such trips, which is where the \"about half a second\" of satellite links comes from before anything else goes wrong.</p><p><i>VI: Lên và xuống là 72.000 km; 72.000 / 300.000 giây = 0,24 giây. Yêu cầu và phản hồi là hai chuyến như vậy — đó là nguồn gốc \"khoảng nửa giây\" của đường vệ tinh, trước khi có trục trặc nào khác.</i></p></li><li><p><b>b)</b> A nightly off-site backup</p><p>A backup only cares about throughput: once the stream starts, 300 ms of delay barely matters. Conversation, games and interactive typing need low and steady latency.</p><p><i>VI: Sao lưu chỉ quan tâm thông lượng: luồng đã chạy thì 300 ms trễ gần như không sao. Nói chuyện, game và gõ lệnh tương tác cần độ trễ thấp và đều.</i></p></li><li><p><b>a)</b> A continuous ping in the evening, reading how much the times vary</p><p>Cable is shared with the neighbourhood, so evening congestion shows up as jitter and loss. A ping run at the bad hour shows it; a speed test at noon measures the wrong hour and the wrong number.</p><p><i>VI: Cáp đồng trục chia chung cả khu, nên nghẽn buổi tối hiện ra thành jitter và mất gói. Ping liên tục vào giờ tệ cho thấy ngay; speed test lúc trưa đo sai giờ và sai con số.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A fibre path from Hanoi to a server is 2,000 km long. Ignoring queues and processing, what is the minimum ROUND-TRIP time?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đường cáp quang từ Hà Nội tới một máy chủ dài 2.000 km. Bỏ qua hàng đợi và xử lý, thời gian KHỨ HỒI tối thiểu là bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "40 ms"
+              },
+              {
+                "ma": "b",
+                "noiDung": "20 ms"
+              },
+              {
+                "ma": "c",
+                "noiDung": "5 ms"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10 ms"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>One way: 2,000 km × 5 ms / 1,000 km = 10 ms. A ping measures there and back, so the floor is 20 ms whatever the bandwidth.</p><p><i>VI: Một chiều: 2.000 km × 5 ms / 1.000 km = 10 ms. Ping đo cả đi lẫn về, nên mức sàn là 20 ms dù băng thông bao nhiêu.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The office upgrades from 100 Mbps to 1 Gbps on the same 2,000 km path. What happens to that 20 ms floor?</p><p style=\"opacity:.75;font-size:.92em\"><i>Văn phòng nâng từ 100 Mbps lên 1 Gbps trên cùng con đường 2.000 km. Mức sàn 20 ms thay đổi thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing — the path is wider, not shorter"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It drops to 2 ms because the link is ten times faster"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It drops to about 10 ms because only one direction is affected"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It rises because a faster link fills its buffers sooner"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Bandwidth is how wide the pipe is; latency is how long it is. Widening the pipe makes a big file finish sooner and leaves the time to the first byte exactly where it was.</p><p><i>VI: Băng thông là ống rộng bao nhiêu; độ trễ là ống dài bao nhiêu. Nới rộng ống làm file lớn xong sớm hơn và để nguyên thời gian tới byte đầu tiên.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A geostationary satellite orbits about 36,000 km up. A packet goes up to it and back down to the ground station once. Using the speed of light (about 300,000 km/s), what is that one trip?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vệ tinh địa tĩnh bay ở độ cao khoảng 36.000 km. Một gói đi lên vệ tinh rồi xuống trạm mặt đất một lần. Dùng tốc độ ánh sáng (khoảng 300.000 km/s), một chuyến đó mất bao lâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "About 240 ms"
+              },
+              {
+                "ma": "b",
+                "noiDung": "About 24 ms"
+              },
+              {
+                "ma": "c",
+                "noiDung": "About 120 ms"
+              },
+              {
+                "ma": "d",
+                "noiDung": "About 1.2 s"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Up and down is 72,000 km; 72,000 / 300,000 s = 0.24 s. A request and its reply make two such trips, which is where the \"about half a second\" of satellite links comes from before anything else goes wrong.</p><p><i>VI: Lên và xuống là 72.000 km; 72.000 / 300.000 giây = 0,24 giây. Yêu cầu và phản hồi là hai chuyến như vậy — đó là nguồn gốc \"khoảng nửa giây\" của đường vệ tinh, trước khi có trục trặc nào khác.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which application is fine on a 100 Mbps link with 300 ms latency?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ứng dụng nào vẫn ổn trên đường 100 Mbps với độ trễ 300 ms?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An online multiplayer game"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A nightly off-site backup"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An SSH session where someone types commands"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A video call between two offices"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A backup only cares about throughput: once the stream starts, 300 ms of delay barely matters. Conversation, games and interactive typing need low and steady latency.</p><p><i>VI: Sao lưu chỉ quan tâm thông lượng: luồng đã chạy thì 300 ms trễ gần như không sao. Nói chuyện, game và gõ lệnh tương tác cần độ trễ thấp và đều.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Calls freeze every evening on a 1 Gbps cable link, while the neighbour on 100 Mbps fibre is fine. Which single measurement proves the cause fastest?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cuộc gọi đứng hình mỗi tối trên đường cáp đồng trục 1 Gbps, trong khi nhà hàng xóm dùng cáp quang 100 Mbps vẫn mượt. Phép đo nào chứng minh nguyên nhân nhanh nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A continuous ping in the evening, reading how much the times vary"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Counting the devices connected to the Wi-Fi"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A speed test at noon"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Reading the plan speed printed on the bill"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Cable is shared with the neighbourhood, so evening congestion shows up as jitter and loss. A ping run at the bad hour shows it; a speed test at noon measures the wrong hour and the wrong number.</p><p><i>VI: Cáp đồng trục chia chung cả khu, nên nghẽn buổi tối hiện ra thành jitter và mất gói. Ping liên tục vào giờ tệ cho thấy ngay; speed test lúc trưa đo sai giờ và sai con số.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to double for the round trip."
+        },
+        {
+          "loi": "Believing a faster plan lowers the propagation delay."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "propagation delay",
+          "vi": "trễ lan truyền"
+        },
+        {
+          "en": "round-trip time",
+          "vi": "thời gian khứ hồi"
+        }
+      ]
+    },
+    {
+      "title": "Today 5 — Write diagnoseHost(h): the decision table as code",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "troubleshooting",
+        "AND with the mask",
+        "default gateway"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Lesson 1.3 ends with a decision table: whichever of the five checks fails FIRST tells you who owns the problem. Write <code>diagnoseHost(h)</code> where <code>h</code> is what you saw on a machine:</p>\n<ul>\n<li><code>inet</code> — the address with prefix from <code>ip addr show</code>, e.g. <code>\"192.168.1.10/24\"</code>, or <code>null</code> if there is no inet line.</li>\n<li><code>gateway</code> — the address after <code>default via</code> in <code>ip route show</code>, or <code>null</code>.</li>\n<li><code>pingGateway</code>, <code>pingIp</code>, <code>pingName</code> — booleans for <code>ping</code> to the gateway, to <code>1.1.1.1</code>, and to a domain name. A check that was not reached may be missing.</li>\n</ul>\n<p>Return exactly one of these, checking in this order:</p>\n<ol>\n<li><code>\"no-address\"</code> — no inet line (interface down, cable or driver).</li>\n<li><code>\"dhcp-failed\"</code> — the address starts with <code>169.254.</code>: DHCP never answered and the machine invented one.</li>\n<li><code>\"no-gateway\"</code> — no default route: the LAN works, everything outside fails.</li>\n<li><code>\"gateway-not-local\"</code> — the gateway is not in the host's own network by the host's own prefix (AND both with the mask).</li>\n<li><code>\"lan\"</code> — the gateway does not answer: wrong gateway, wrong mask, VLAN or switch port.</li>\n<li><code>\"upstream\"</code> — the gateway answers but <code>1.1.1.1</code> does not: the fault is beyond your network; <code>traceroute</code> says which hop.</li>\n<li><code>\"dns\"</code> — addresses work, names do not.</li>\n<li><code>\"application\"</code> — every check passed: the network did its job.</li>\n</ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 1.3 khép lại bằng một bảng quyết định: phép kiểm nào trong năm phép hỏng ĐẦU TIÊN thì cho biết sự cố là của ai. Viết <code>diagnoseHost(h)</code> với <code>h</code> là những gì bạn thấy trên một máy:</p>\n<ul>\n<li><code>inet</code> — địa chỉ kèm prefix từ <code>ip addr show</code>, ví dụ <code>\"192.168.1.10/24\"</code>, hoặc <code>null</code> nếu không có dòng inet.</li>\n<li><code>gateway</code> — địa chỉ sau <code>default via</code> trong <code>ip route show</code>, hoặc <code>null</code>.</li>\n<li><code>pingGateway</code>, <code>pingIp</code>, <code>pingName</code> — boolean cho <code>ping</code> tới gateway, tới <code>1.1.1.1</code>, và tới một tên miền. Phép kiểm chưa chạy tới có thể vắng.</li>\n</ul>\n<p>Trả đúng một trong các giá trị sau, kiểm theo thứ tự:</p>\n<ol>\n<li><code>\"no-address\"</code> — không có dòng inet (interface tắt, cáp hoặc driver).</li>\n<li><code>\"dhcp-failed\"</code> — địa chỉ bắt đầu bằng <code>169.254.</code>: DHCP không trả lời, máy tự bịa một địa chỉ.</li>\n<li><code>\"no-gateway\"</code> — không có tuyến mặc định: LAN chạy, mọi thứ bên ngoài hỏng.</li>\n<li><code>\"gateway-not-local\"</code> — gateway không nằm trong mạng của chính máy theo prefix của chính máy (AND cả hai với mặt nạ).</li>\n<li><code>\"lan\"</code> — gateway không trả lời: sai gateway, sai mặt nạ, VLAN hoặc cổng switch.</li>\n<li><code>\"upstream\"</code> — gateway trả lời nhưng <code>1.1.1.1</code> thì không: lỗi nằm ngoài mạng của bạn; <code>traceroute</code> chỉ ra chặng nào.</li>\n<li><code>\"dns\"</code> — địa chỉ chạy, tên thì không.</li>\n<li><code>\"application\"</code> — mọi phép kiểm đều qua: mạng đã làm xong việc của nó.</li>\n</ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "diagnoseHost({\"inet\":\"192.168.1.10/24\",\"gateway\":\"192.168.1.1\",\"pingGateway\":true,\"pingIp\":true,\"pingName\":false})",
+          "output": "\"dns\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Write the checks as a chain of early returns, in the order given — the order IS the method.",
+        "For the gateway test, turn both addresses into 32-bit numbers and compare (ip AND mask) with (gateway AND mask).",
+        "A /22 mask is 255.255.252.0: 172.16.4.20 and 172.16.7.254 are both in 172.16.4.0/22."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function diagnoseHost(h) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction diagnoseHost(h) {\n  function toInt(s) { var p = s.split('.'); return ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) >>> 0; }\n  // Step 1 — ip addr show: is there an address at all, and is it a self-assigned 169.254.x.x (DHCP never answered)?\n  if (!h.inet) return 'no-address';\n  var parts = h.inet.split('/'), ip = parts[0], len = +parts[1];\n  if (ip.indexOf('169.254.') === 0) return 'dhcp-failed';\n  // Step 2 — ip route show: is there a \"default via\", and is that gateway INSIDE my own network (the AND test)?\n  if (!h.gateway) return 'no-gateway';\n  var m = len === 0 ? 0 : (0xFFFFFFFF << (32 - len)) >>> 0;\n  if (((toInt(ip) & m) >>> 0) !== ((toInt(h.gateway) & m) >>> 0)) return 'gateway-not-local';\n  // Steps 3, 4, 5 — ping the gateway, ping an ADDRESS on the Internet, and only then ping a NAME.\n  if (!h.pingGateway) return 'lan';\n  if (!h.pingIp) return 'upstream';\n  if (!h.pingName) return 'dns';\n  return 'application';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each step only makes sense if the previous one passed, so the first failure names the owner: the machine itself, the local network, the provider, or DNS. The AND test for the gateway is the same test a host runs before every packet it sends.</p><p><i>VI: Mỗi bước chỉ có nghĩa khi bước trước đã qua, nên phép hỏng đầu tiên gọi tên người chịu trách nhiệm: chính cái máy, mạng nội bộ, nhà cung cấp, hay DNS. Phép AND cho gateway cũng chính là phép một máy trạm chạy trước mỗi gói nó gửi.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: diagnoseHost({\"inet\":\"192.168.1.10/24\",\"gateway\":\"192.168.1.1\",\"pingGateway\":true,\")",
+              "vi": "Ca 1"
+            },
+            "goi": "diagnoseHost({\"inet\":\"192.168.1.10/24\",\"gateway\":\"192.168.1.1\",\"pingGateway\":true,\"pingIp\":true,\"pingName\":false})",
+            "mongDoi": "dns"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: diagnoseHost({\"inet\":null,\"gateway\":null})",
+              "vi": "Ca 2"
+            },
+            "goi": "diagnoseHost({\"inet\":null,\"gateway\":null})",
+            "mongDoi": "no-address"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: diagnoseHost({\"inet\":\"169.254.31.7/16\",\"gateway\":null})",
+              "vi": "Ca 3"
+            },
+            "goi": "diagnoseHost({\"inet\":\"169.254.31.7/16\",\"gateway\":null})",
+            "mongDoi": "dhcp-failed"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "diagnoseHost({\"inet\":\"192.168.1.10/24\",\"gateway\":null})",
+            "mongDoi": "no-gateway",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "diagnoseHost({\"inet\":\"10.10.5.40/24\",\"gateway\":\"10.10.6.1\"})",
+            "mongDoi": "gateway-not-local",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "diagnoseHost({\"inet\":\"192.168.1.10/24\",\"gateway\":\"192.168.1.1\",\"pingGateway\":false})",
+            "mongDoi": "lan",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "diagnoseHost({\"inet\":\"192.168.1.10/24\",\"gateway\":\"192.168.1.1\",\"pingGateway\":true,\"pingIp\":false})",
+            "mongDoi": "upstream",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "diagnoseHost({\"inet\":\"192.168.1.10/24\",\"gateway\":\"192.168.1.1\",\"pingGateway\":true,\"pingIp\":true,\"pingName\":true})",
+            "mongDoi": "application",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "diagnoseHost({\"inet\":\"172.16.4.20/22\",\"gateway\":\"172.16.7.254\",\"pingGateway\":true,\"pingIp\":false})",
+            "mongDoi": "upstream",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "diagnoseHost({\"inet\":\"172.16.4.20/23\",\"gateway\":\"172.16.7.254\"})",
+            "mongDoi": "gateway-not-local",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "diagnoseHost({\"inet\":\"10.0.0.130/25\",\"gateway\":\"10.0.0.129\",\"pingGateway\":true,\"pingIp\":true,\"pingName\":false})",
+            "mongDoi": "dns",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "diagnoseHost({\"inet\":\"10.0.0.130/25\",\"gateway\":\"10.0.0.1\",\"pingGateway\":false})",
+            "mongDoi": "gateway-not-local",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking the pings before the address and route, so a missing gateway is reported as \"lan\"."
+        },
+        {
+          "loi": "Comparing the first three octets instead of applying the real prefix — wrong for /22, /23 and /25."
+        },
+        {
+          "loi": "Forgetting >>> 0, so a large address becomes a negative number and the comparison fails."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Today 6 — Threats, defence in depth, and an AI that sounds sure",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "network security",
+        "AI tools"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Lessons 1.2 and 1.3: security as layers, and the five-step method for using an AI assistant without being misled. Scenarios from real work.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 1.2 và 1.3: an toàn là nhiều lớp, và quy trình năm bước dùng trợ lý AI mà không bị dẫn sai. Tình huống lấy từ công việc thật.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Security is layers, not a product.",
+        "Evidence about your device comes from your device, never from generated text."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Today 6 — Threats, defence in depth, and an AI that sounds sure\n\nAnswer in the answer panel (no code needed).\n\n1. \"We have a firewall, so we are secure.\" A week later malware spreads inside the office from a personal laptop. What does this show?\"Chúng ta có tường lửa nên an toàn.\" Một tuần sau mã độc lây trong văn phòng từ một laptop cá nhân. Điều này cho thấy gì?\n2. Which threat is intended to stop authorised users from reaching a service, without anyone breaking in?Mối đe doạ nào nhằm khiến người dùng hợp lệ không truy cập được dịch vụ, mà không cần ai đột nhập?\n3. An AI assistant tells you to type \"interface vlan1/0\" on a Catalyst 2960 to set the management address. What should you do first?Trợ lý AI bảo bạn gõ \"interface vlan1/0\" trên Catalyst 2960 để đặt địa chỉ quản trị. Việc đầu tiên nên làm là gì?\n4. In the five-step AI method, which step is the one that turns an answer into knowledge?Trong quy trình năm bước dùng AI, bước nào biến một câu trả lời thành tri thức?\n5. A traceroute shows latency jumping at hop 6 and then returning to normal from hop 7 onwards. What does that mean?Traceroute cho thấy độ trễ vọt lên ở chặng 6 rồi trở lại bình thường từ chặng 7 trở đi. Nghĩa là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Today 6 — Threats, defence in depth, and an AI that sounds sure — answer key\n\n1. \"We have a firewall, so we are secure.\" A week later malware spreads inside the office from a personal laptop. What does this show?\"Chúng ta có tường lửa nên an toàn.\" Một tuần sau mã độc lây trong văn phòng từ một laptop cá nhân. Điều này cho thấy gì?\n   Answer: c) The firewall guards the edge; a device brought inside walks past it, so protection must be layered\n   Defence in depth: no single control is enough. BYOD devices start inside the perimeter, so endpoint protection, segmentation and updates have to exist behind the firewall too.VI: Phòng thủ nhiều lớp: không biện pháp đơn lẻ nào là đủ. Thiết bị cá nhân bắt đầu từ BÊN TRONG vành đai, nên bảo vệ thiết bị đầu cuối, phân đoạn mạng và cập nhật phải có cả phía sau tường lửa.\n\n2. Which threat is intended to stop authorised users from reaching a service, without anyone breaking in?Mối đe doạ nào nhằm khiến người dùng hợp lệ không truy cập được dịch vụ, mà không cần ai đột nhập?\n   Answer: a) Denial of service\n   Denial of service exhausts a resource — bandwidth, connections, CPU — so legitimate requests are crowded out. It succeeds without stealing a single credential.VI: Từ chối dịch vụ vắt cạn một tài nguyên — băng thông, kết nối, CPU — để yêu cầu hợp lệ bị chen mất chỗ. Nó thành công mà không cần trộm một tài khoản nào.\n\n3. An AI assistant tells you to type \"interface vlan1/0\" on a Catalyst 2960 to set the management address. What should you do first?Trợ lý AI bảo bạn gõ \"interface vlan1/0\" trên Catalyst 2960 để đặt địa chỉ quản trị. Việc đầu tiên nên làm là gì?\n   Answer: a) Ask the device itself: \"interface vlan ?\" in global configuration lists what it accepts\n   An SVI is \"interface vlan 1\"; slot/port numbering belongs to physical interfaces. The device is slow but never lies, so the context-sensitive help is the judge — the assistant proposes, the device decides.VI: SVI là \"interface vlan 1\"; đánh số slot/port là của interface vật lý. Thiết bị chậm nhưng không bao giờ nói dối, nên trợ giúp ngữ cảnh mới là trọng tài — trợ lý đề xuất, thiết bị phán quyết.\n\n4. In the five-step AI method, which step is the one that turns an answer into knowledge?Trong quy trình năm bước dùng AI, bước nào biến một câu trả lời thành tri thức?\n   Answer: b) Comparing the real output with the output you predicted\n   Prediction then comparison is the only step that produces evidence about YOUR network. The mismatch is the finding; the other steps only make that comparison possible and safe.VI: Dự đoán rồi đối chiếu là bước duy nhất tạo ra bằng chứng về mạng CỦA BẠN. Chỗ lệch chính là phát hiện; các bước khác chỉ giúp phép đối chiếu đó khả thi và an toàn.\n\n5. A traceroute shows latency jumping at hop 6 and then returning to normal from hop 7 onwards. What does that mean?Traceroute cho thấy độ trễ vọt lên ở chặng 6 rồi trở lại bình thường từ chặng 7 trở đi. Nghĩa là gì?\n   Answer: b) Router 6 is slow at answering traceroute itself; it is not where your traffic is delayed\n   Routers answer traceroute probes with low priority. A delay that does not carry on to later hops is that router being slow to reply, not a slow path. A jump that STAYS high from one hop on is where the problem starts.VI: Router trả lời gói thăm dò của traceroute với ưu tiên thấp. Độ trễ không kéo dài sang các chặng sau chỉ là router đó trả lời chậm, không phải đường chậm. Vọt lên và GIỮ cao từ một chặng trở đi mới là chỗ sự cố bắt đầu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> The firewall guards the edge; a device brought inside walks past it, so protection must be layered</p><p>Defence in depth: no single control is enough. BYOD devices start inside the perimeter, so endpoint protection, segmentation and updates have to exist behind the firewall too.</p><p><i>VI: Phòng thủ nhiều lớp: không biện pháp đơn lẻ nào là đủ. Thiết bị cá nhân bắt đầu từ BÊN TRONG vành đai, nên bảo vệ thiết bị đầu cuối, phân đoạn mạng và cập nhật phải có cả phía sau tường lửa.</i></p></li><li><p><b>a)</b> Denial of service</p><p>Denial of service exhausts a resource — bandwidth, connections, CPU — so legitimate requests are crowded out. It succeeds without stealing a single credential.</p><p><i>VI: Từ chối dịch vụ vắt cạn một tài nguyên — băng thông, kết nối, CPU — để yêu cầu hợp lệ bị chen mất chỗ. Nó thành công mà không cần trộm một tài khoản nào.</i></p></li><li><p><b>a)</b> Ask the device itself: \"interface vlan ?\" in global configuration lists what it accepts</p><p>An SVI is \"interface vlan 1\"; slot/port numbering belongs to physical interfaces. The device is slow but never lies, so the context-sensitive help is the judge — the assistant proposes, the device decides.</p><p><i>VI: SVI là \"interface vlan 1\"; đánh số slot/port là của interface vật lý. Thiết bị chậm nhưng không bao giờ nói dối, nên trợ giúp ngữ cảnh mới là trọng tài — trợ lý đề xuất, thiết bị phán quyết.</i></p></li><li><p><b>b)</b> Comparing the real output with the output you predicted</p><p>Prediction then comparison is the only step that produces evidence about YOUR network. The mismatch is the finding; the other steps only make that comparison possible and safe.</p><p><i>VI: Dự đoán rồi đối chiếu là bước duy nhất tạo ra bằng chứng về mạng CỦA BẠN. Chỗ lệch chính là phát hiện; các bước khác chỉ giúp phép đối chiếu đó khả thi và an toàn.</i></p></li><li><p><b>b)</b> Router 6 is slow at answering traceroute itself; it is not where your traffic is delayed</p><p>Routers answer traceroute probes with low priority. A delay that does not carry on to later hops is that router being slow to reply, not a slow path. A jump that STAYS high from one hop on is where the problem starts.</p><p><i>VI: Router trả lời gói thăm dò của traceroute với ưu tiên thấp. Độ trễ không kéo dài sang các chặng sau chỉ là router đó trả lời chậm, không phải đường chậm. Vọt lên và GIỮ cao từ một chặng trở đi mới là chỗ sự cố bắt đầu.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>\"We have a firewall, so we are secure.\" A week later malware spreads inside the office from a personal laptop. What does this show?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Chúng ta có tường lửa nên an toàn.\" Một tuần sau mã độc lây trong văn phòng từ một laptop cá nhân. Điều này cho thấy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Malware cannot cross a firewall, so it must have come through Wi-Fi"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Personal laptops are always infected, so the fix is to ban them"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The firewall guards the edge; a device brought inside walks past it, so protection must be layered"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The firewall was misconfigured and should have blocked the laptop"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Defence in depth: no single control is enough. BYOD devices start inside the perimeter, so endpoint protection, segmentation and updates have to exist behind the firewall too.</p><p><i>VI: Phòng thủ nhiều lớp: không biện pháp đơn lẻ nào là đủ. Thiết bị cá nhân bắt đầu từ BÊN TRONG vành đai, nên bảo vệ thiết bị đầu cuối, phân đoạn mạng và cập nhật phải có cả phía sau tường lửa.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which threat is intended to stop authorised users from reaching a service, without anyone breaking in?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mối đe doạ nào nhằm khiến người dùng hợp lệ không truy cập được dịch vụ, mà không cần ai đột nhập?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Denial of service"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Spyware"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Identity theft"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Data interception"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Denial of service exhausts a resource — bandwidth, connections, CPU — so legitimate requests are crowded out. It succeeds without stealing a single credential.</p><p><i>VI: Từ chối dịch vụ vắt cạn một tài nguyên — băng thông, kết nối, CPU — để yêu cầu hợp lệ bị chen mất chỗ. Nó thành công mà không cần trộm một tài khoản nào.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>An AI assistant tells you to type \"interface vlan1/0\" on a Catalyst 2960 to set the management address. What should you do first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trợ lý AI bảo bạn gõ \"interface vlan1/0\" trên Catalyst 2960 để đặt địa chỉ quản trị. Việc đầu tiên nên làm là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ask the device itself: \"interface vlan ?\" in global configuration lists what it accepts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Search a forum and use the most up-voted command"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Ask the assistant again until it gives the same answer twice"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Type it on the production switch; if it is wrong IOS will correct it"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>An SVI is \"interface vlan 1\"; slot/port numbering belongs to physical interfaces. The device is slow but never lies, so the context-sensitive help is the judge — the assistant proposes, the device decides.</p><p><i>VI: SVI là \"interface vlan 1\"; đánh số slot/port là của interface vật lý. Thiết bị chậm nhưng không bao giờ nói dối, nên trợ giúp ngữ cảnh mới là trọng tài — trợ lý đề xuất, thiết bị phán quyết.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>In the five-step AI method, which step is the one that turns an answer into knowledge?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong quy trình năm bước dùng AI, bước nào biến một câu trả lời thành tri thức?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Running it in Packet Tracer instead of on hardware"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Comparing the real output with the output you predicted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Asking for the reasoning before the command"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Giving the assistant the full topology"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Prediction then comparison is the only step that produces evidence about YOUR network. The mismatch is the finding; the other steps only make that comparison possible and safe.</p><p><i>VI: Dự đoán rồi đối chiếu là bước duy nhất tạo ra bằng chứng về mạng CỦA BẠN. Chỗ lệch chính là phát hiện; các bước khác chỉ giúp phép đối chiếu đó khả thi và an toàn.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A traceroute shows latency jumping at hop 6 and then returning to normal from hop 7 onwards. What does that mean?</p><p style=\"opacity:.75;font-size:.92em\"><i>Traceroute cho thấy độ trễ vọt lên ở chặng 6 rồi trở lại bình thường từ chặng 7 trở đi. Nghĩa là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Hop 7 is closer than hop 6, so the route is looping"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Router 6 is slow at answering traceroute itself; it is not where your traffic is delayed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The congestion starts at hop 6 and affects everything after it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Hop 6 is dropping packets, so the path is broken"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Routers answer traceroute probes with low priority. A delay that does not carry on to later hops is that router being slow to reply, not a slow path. A jump that STAYS high from one hop on is where the problem starts.</p><p><i>VI: Router trả lời gói thăm dò của traceroute với ưu tiên thấp. Độ trễ không kéo dài sang các chặng sau chỉ là router đó trả lời chậm, không phải đường chậm. Vọt lên và GIỮ cao từ một chặng trở đi mới là chỗ sự cố bắt đầu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating a firewall as the whole security plan."
+        },
+        {
+          "loi": "Accepting generated show output as if it were measured on your own equipment."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "defence in depth",
+          "vi": "phòng thủ nhiều lớp"
+        },
+        {
+          "en": "denial of service",
+          "vi": "từ chối dịch vụ"
+        },
+        {
+          "en": "hallucination",
+          "vi": "ảo giác của mô hình"
+        }
+      ]
+    }
+  ]
+}

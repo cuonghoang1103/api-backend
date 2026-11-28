@@ -1,0 +1,556 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-13-4-co-y-lam-hong",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-13-4-co-y-lam-hong"
+  },
+  "exercises": [
+    {
+      "title": "Capstone 1 — What did each optimisation buy, in numbers?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "optimisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lesson 13.3 measured before and after on the capstone stack, for real:<pre>dns=0.000012  connect=0.020245  ttfb=0.041926  total=0.090764  size=67092\nno-gzip 67092 bytes · gzip 1809 bytes\nedge cache MISS time=3.012403s · HIT time=0.000632s</pre>Compute the two ratios (one decimal place).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 13.3 đo trước và sau trên stack capstone, thật:<pre>dns=0.000012  connect=0.020245  ttfb=0.041926  total=0.090764  size=67092\nno-gzip 67092 bytes · gzip 1809 bytes\nedge cache MISS time=3.012403s · HIT time=0.000632s</pre>Tính hai tỉ lệ (một chữ số thập phân).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Divide the before by the after.",
+        "Round to one decimal place."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Capstone 1 — What did each optimisation buy, in numbers?\n\nAnswer in the answer panel (no code needed).\n\n1. Before ÷ afterTrước ÷ sau\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Capstone 1 — What did each optimisation buy, in numbers? — answer key\n\n1. Before ÷ afterTrước ÷ sau\n   - r1.r: 37.1 / 37,1\n   - r2.r: 4766.5 / 4766,5\n   67092 / 1809 ≈ 37.1× fewer bytes — text compresses extremely well, and fewer bytes is fewer round trips under slow start. 3.012403 / 0.000632 ≈ 4766.5× faster: a HIT never touches the 3-second origin. Both numbers came from measuring before and after; an optimisation without a before/after measurement is a guess.VI: 67092 / 1809 ≈ 37.1 lần ít byte hơn — văn bản nén cực tốt, và ít byte hơn là ít vòng khứ hồi hơn trong giai đoạn slow start. 3.012403 / 0.000632 ≈ 4766.5 lần nhanh hơn: một lần HIT không bao giờ chạm tới origin 3 giây. Cả hai con số đều đến từ việc đo trước và sau; tối ưu mà không có số đo trước/sau là phỏng đoán.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>67092 / 1809 ≈ 37.1× fewer bytes — text compresses extremely well, and fewer bytes is fewer round trips under slow start. 3.012403 / 0.000632 ≈ 4766.5× faster: a HIT never touches the 3-second origin. Both numbers came from measuring before and after; an optimisation without a before/after measurement is a guess.</p><p><i>VI: 67092 / 1809 ≈ 37.1 lần ít byte hơn — văn bản nén cực tốt, và ít byte hơn là ít vòng khứ hồi hơn trong giai đoạn slow start. 3.012403 / 0.000632 ≈ 4766.5 lần nhanh hơn: một lần HIT không bao giờ chạm tới origin 3 giây. Cả hai con số đều đến từ việc đo trước và sau; tối ưu mà không có số đo trước/sau là phỏng đoán.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Before ÷ after</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước ÷ sau</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Optimisation"
+              },
+              {
+                "ma": "r",
+                "ten": "Ratio (×)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "gzip: bytes without ÷ bytes with"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "edge cache: MISS time ÷ HIT time"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": [
+                "37.1",
+                "37,1"
+              ],
+              "r2.r": [
+                "4766.5",
+                "4766,5"
+              ]
+            },
+            "giaiThich": "<p>67092 / 1809 ≈ 37.1× fewer bytes — text compresses extremely well, and fewer bytes is fewer round trips under slow start. 3.012403 / 0.000632 ≈ 4766.5× faster: a HIT never touches the 3-second origin. Both numbers came from measuring before and after; an optimisation without a before/after measurement is a guess.</p><p><i>VI: 67092 / 1809 ≈ 37.1 lần ít byte hơn — văn bản nén cực tốt, và ít byte hơn là ít vòng khứ hồi hơn trong giai đoạn slow start. 3.012403 / 0.000632 ≈ 4766.5 lần nhanh hơn: một lần HIT không bao giờ chạm tới origin 3 giây. Cả hai con số đều đến từ việc đo trước và sau; tối ưu mà không có số đo trước/sau là phỏng đoán.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dividing after by before and reporting 0.0."
+        },
+        {
+          "loi": "Reporting the percentage saved instead of the ratio."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "before/after measurement",
+          "vi": "đo trước/sau"
+        }
+      ]
+    },
+    {
+      "title": "Capstone 2 — Write incidentLayer(evidence): let the failing layer name itself",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "layered diagnosis",
+        "incident report"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lesson 13.4 broke the capstone on purpose and read it back, for real:</p><pre>/timeout -&gt; 504\n/dead    -&gt; 502\nConnection to 10.10.2.10 8080 port [tcp/http-alt] succeeded!\nnc: connect to 10.10.2.10 port 8099 (tcp) failed: Connection refused</pre><p>Write <code>incidentLayer(evidence)</code>. <code>evidence</code> has <code>dns</code> (<code>\"ok\" | \"nxdomain\" | \"wrong-ip\"</code>), <code>port</code> (<code>\"open\" | \"refused\" | \"timeout\"</code>), <code>tls</code> (<code>\"ok\" | \"expired\" | \"chain\"</code>) and <code>http</code> (a status code). Check bottom-up and return the first failure as <code>{ layer, fix }</code>:</p>\n<ol>\n<li>dns nxdomain ⇒ dns / \"fix the DNS record\"; wrong-ip ⇒ dns / \"point the record at the right address\"</li>\n<li>port timeout ⇒ path / \"open the firewall / fix the route\"; refused ⇒ port / \"start the service or bind it to the right address\"</li>\n<li>tls expired ⇒ tls / \"renew the certificate\"; chain ⇒ tls / \"serve the full chain\"</li>\n<li>http 502 ⇒ upstream / \"bring the backend up\"; 504 ⇒ upstream / \"speed up the backend or move the work to a job\"; 503 ⇒ capacity / \"restore healthy capacity\"; 404 ⇒ deploy / \"deploy the build that mounts the route\"</li>\n<li>otherwise none / \"healthy\"</li>\n</ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 13.4 cố tình làm hỏng capstone rồi đọc lại, thật:</p><pre>/timeout -&gt; 504\n/dead    -&gt; 502\nConnection to 10.10.2.10 8080 port [tcp/http-alt] succeeded!\nnc: connect to 10.10.2.10 port 8099 (tcp) failed: Connection refused</pre><p>Viết <code>incidentLayer(evidence)</code>. <code>evidence</code> có <code>dns</code> (<code>\"ok\" | \"nxdomain\" | \"wrong-ip\"</code>), <code>port</code> (<code>\"open\" | \"refused\" | \"timeout\"</code>), <code>tls</code> (<code>\"ok\" | \"expired\" | \"chain\"</code>) và <code>http</code> (mã trạng thái). Kiểm từ dưới lên và trả lỗi đầu tiên dạng <code>{ layer, fix }</code> (chuỗi <code>fix</code> giữ nguyên tiếng Anh):</p>\n<ol>\n<li>dns nxdomain ⇒ dns / \"fix the DNS record\"; wrong-ip ⇒ dns / \"point the record at the right address\"</li>\n<li>port timeout ⇒ path / \"open the firewall / fix the route\"; refused ⇒ port / \"start the service or bind it to the right address\"</li>\n<li>tls expired ⇒ tls / \"renew the certificate\"; chain ⇒ tls / \"serve the full chain\"</li>\n<li>http 502 ⇒ upstream / \"bring the backend up\"; 504 ⇒ upstream / \"speed up the backend or move the work to a job\"; 503 ⇒ capacity / \"restore healthy capacity\"; 404 ⇒ deploy / \"deploy the build that mounts the route\"</li>\n<li>còn lại none / \"healthy\"</li>\n</ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "incidentLayer({\"dns\":\"ok\",\"port\":\"open\",\"tls\":\"ok\",\"http\":504})",
+          "output": "{\"layer\":\"upstream\",\"fix\":\"speed up the backend or move the work to a job\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One early return per failure, in the order given.|||Mỗi lỗi một lệnh return sớm, theo đúng thứ tự đã cho.",
+        "A broken lower layer makes the upper evidence meaningless — never look at http if the port is closed.|||Tầng dưới đã hỏng thì bằng chứng ở tầng trên vô nghĩa — đừng nhìn http khi cổng còn đóng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function incidentLayer(e) {\n  return { layer: \"none\", fix: \"healthy\" };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function incidentLayer(e) {\n  // Ask every layer bottom-up; the first one that fails names itself.\n  if (e.dns === 'nxdomain') return { layer: 'dns', fix: 'fix the DNS record' };\n  if (e.dns === 'wrong-ip') return { layer: 'dns', fix: 'point the record at the right address' };\n  if (e.port === 'timeout') return { layer: 'path', fix: 'open the firewall / fix the route' };\n  if (e.port === 'refused') return { layer: 'port', fix: 'start the service or bind it to the right address' };\n  if (e.tls === 'expired') return { layer: 'tls', fix: 'renew the certificate' };\n  if (e.tls === 'chain') return { layer: 'tls', fix: 'serve the full chain' };\n  if (e.http === 502) return { layer: 'upstream', fix: 'bring the backend up' };\n  if (e.http === 504) return { layer: 'upstream', fix: 'speed up the backend or move the work to a job' };\n  if (e.http === 503) return { layer: 'capacity', fix: 'restore healthy capacity' };\n  if (e.http === 404) return { layer: 'deploy', fix: 'deploy the build that mounts the route' };\n  return { layer: 'none', fix: 'healthy' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The layered method turns \"the site is down\" into one sentence with a cause: the first layer whose evidence is bad. Everything below it is proven good, everything above it is not worth reading yet. That sentence is the core of the incident report the lesson asks for.</p>",
+      "solutionExplanationHtmlVi": "<p>Phương pháp theo tầng biến \"trang sập rồi\" thành một câu có nguyên nhân: tầng đầu tiên có bằng chứng xấu. Mọi thứ dưới nó đã được chứng minh tốt, mọi thứ trên nó chưa đáng đọc. Câu đó là lõi của bản báo cáo sự cố mà bài học yêu cầu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: incidentLayer({\"dns\":\"ok\",\"port\":\"open\",\"tls\":\"ok\",\"http\":504})",
+              "vi": "Ca 1"
+            },
+            "goi": "incidentLayer({\"dns\":\"ok\",\"port\":\"open\",\"tls\":\"ok\",\"http\":504})",
+            "mongDoi": {
+              "layer": "upstream",
+              "fix": "speed up the backend or move the work to a job"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: incidentLayer({\"dns\":\"ok\",\"port\":\"open\",\"tls\":\"ok\",\"http\":502})",
+              "vi": "Ca 2"
+            },
+            "goi": "incidentLayer({\"dns\":\"ok\",\"port\":\"open\",\"tls\":\"ok\",\"http\":502})",
+            "mongDoi": {
+              "layer": "upstream",
+              "fix": "bring the backend up"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: incidentLayer({\"dns\":\"ok\",\"port\":\"refused\",\"tls\":\"ok\",\"http\":0})",
+              "vi": "Ca 3"
+            },
+            "goi": "incidentLayer({\"dns\":\"ok\",\"port\":\"refused\",\"tls\":\"ok\",\"http\":0})",
+            "mongDoi": {
+              "layer": "port",
+              "fix": "start the service or bind it to the right address"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "incidentLayer({\"dns\":\"nxdomain\",\"port\":\"timeout\",\"tls\":\"expired\",\"http\":0})",
+            "mongDoi": {
+              "layer": "dns",
+              "fix": "fix the DNS record"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "incidentLayer({\"dns\":\"ok\",\"port\":\"open\",\"tls\":\"chain\",\"http\":0})",
+            "mongDoi": {
+              "layer": "tls",
+              "fix": "serve the full chain"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "incidentLayer({\"dns\":\"ok\",\"port\":\"timeout\",\"tls\":\"ok\",\"http\":0})",
+            "mongDoi": {
+              "layer": "path",
+              "fix": "open the firewall / fix the route"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "incidentLayer({\"dns\":\"ok\",\"port\":\"open\",\"tls\":\"ok\",\"http\":404})",
+            "mongDoi": {
+              "layer": "deploy",
+              "fix": "deploy the build that mounts the route"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "incidentLayer({\"dns\":\"ok\",\"port\":\"open\",\"tls\":\"ok\",\"http\":200})",
+            "mongDoi": {
+              "layer": "none",
+              "fix": "healthy"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reporting the 404 when DNS already failed.|||Báo lỗi 404 trong khi DNS đã hỏng từ trước."
+        },
+        {
+          "loi": "Treating refused and timeout as the same port problem.|||Coi refused và timeout là cùng một lỗi cổng."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Capstone 3 — An incident report that prevents the next one",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "incident report"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lesson 13.4's deliverable. Put the sections of an incident report in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sản phẩm phải nộp của bài 13.4. Xếp các phần của một bản báo cáo sự cố theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Symptom before cause, cause before fix.",
+        "The last section looks forward, not back."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Capstone 3 — An incident report that prevents the next one\n\nAnswer in the answer panel (no code needed).\n\n1. Incident reportBáo cáo sự cố\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Capstone 3 — An incident report that prevents the next one — answer key\n\n1. Incident reportBáo cáo sự cố\n   Answer: m3) Symptom: who saw what, where, since when  →  m4) Diagnosis: the layer, and the measurement that pinned it  →  m2) Fix: what was changed, and the proof it worked  →  m1) Prevention: the alert, timeout or health check that catches it next time\n   A report that ends at the fix leaves the same failure waiting for the next on-call. The prevention line — \"add a TTFB alert\", \"move the slow report to a background job\" — is what makes it worth writing.VI: Bản báo cáo dừng ở cách sửa thì cùng lỗi đó vẫn chờ người trực tiếp theo. Dòng phòng ngừa — \"thêm cảnh báo TTFB\", \"chuyển báo cáo chậm sang job nền\" — mới là thứ khiến nó đáng viết.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A report that ends at the fix leaves the same failure waiting for the next on-call. The prevention line — \"add a TTFB alert\", \"move the slow report to a background job\" — is what makes it worth writing.</p><p><i>VI: Bản báo cáo dừng ở cách sửa thì cùng lỗi đó vẫn chờ người trực tiếp theo. Dòng phòng ngừa — \"thêm cảnh báo TTFB\", \"chuyển báo cáo chậm sang job nền\" — mới là thứ khiến nó đáng viết.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Incident report</p><p style=\"opacity:.75;font-size:.92em\"><i>Báo cáo sự cố</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Prevention: the alert, timeout or health check that catches it next time"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Fix: what was changed, and the proof it worked"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Symptom: who saw what, where, since when"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Diagnosis: the layer, and the measurement that pinned it"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m4",
+              "m2",
+              "m1"
+            ],
+            "giaiThich": "<p>A report that ends at the fix leaves the same failure waiting for the next on-call. The prevention line — \"add a TTFB alert\", \"move the slow report to a background job\" — is what makes it worth writing.</p><p><i>VI: Bản báo cáo dừng ở cách sửa thì cùng lỗi đó vẫn chờ người trực tiếp theo. Dòng phòng ngừa — \"thêm cảnh báo TTFB\", \"chuyển báo cáo chậm sang job nền\" — mới là thứ khiến nó đáng viết.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing the cause before the evidence that proves it."
+        },
+        {
+          "loi": "Ending the report at \"restarted the server\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "postmortem",
+          "vi": "báo cáo sau sự cố"
+        }
+      ]
+    },
+    {
+      "title": "Capstone 4 — More failures to reason about",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "failure modes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The failure modes of lesson 13.4 that the lab describes but does not run, plus the optimisations of 13.3.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các kiểu hỏng của bài 13.4 mà lab mô tả nhưng không chạy, cùng các tối ưu của bài 13.3.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask which layer each change touches.|||Hỏi mỗi thay đổi chạm vào tầng nào.",
+        "A soft failure degrades; a hard failure stops.|||Hỏng mềm làm chậm đi; hỏng cứng làm dừng hẳn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Capstone 4 — More failures to reason about\n\nAnswer in the answer panel (no code needed).\n\n1. After an office firewall change, HTTP/3 stops working but the site still loads. Which layer, and what next?Sau khi đổi tường lửa văn phòng, HTTP/3 ngừng chạy nhưng trang vẫn tải được. Tầng nào, và làm gì tiếp?\n2. TTFB climbs with concurrency until the edge returns 504. Where is the fix?TTFB tăng theo số người dùng đồng thời cho tới khi biên trả 504. Cách sửa nằm ở đâu?\n3. Keep-alive, gzip, edge caching and a CDN all help. What do they have in common?Keep-alive, gzip, cache ở biên và CDN đều giúp. Chúng có điểm chung gì?\n4. Why break your own stack on purpose?Vì sao nên tự tay làm hỏng stack của mình?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Capstone 4 — More failures to reason about — answer key\n\n1. After an office firewall change, HTTP/3 stops working but the site still loads. Which layer, and what next?Sau khi đổi tường lửa văn phòng, HTTP/3 ngừng chạy nhưng trang vẫn tải được. Tầng nào, và làm gì tiếp?\n   Answer: d) Transport: UDP 443 is blocked; allow it or accept HTTP/2\n   QUIC rides on UDP. A block there is a soft failure: browsers fall back to HTTP/2 over TCP, so the only symptom is \"h2 where we expected h3\".VI: QUIC chạy trên UDP. Chặn ở đó là hỏng mềm: trình duyệt lùi về HTTP/2 trên TCP, nên triệu chứng duy nhất là \"h2 ở chỗ đáng lẽ là h3\".\n\n2. TTFB climbs with concurrency until the edge returns 504. Where is the fix?TTFB tăng theo số người dùng đồng thời cho tới khi biên trả 504. Cách sửa nằm ở đâu?\n   Answer: a) Application: the slow query or missing capacity\n   504 says the backend is up but too slow; TTFB growing with load says it is the server's work. Fix the query, add capacity, or move the slow work to a background job.VI: 504 nói backend còn sống nhưng quá chậm; TTFB tăng theo tải nói đó là phần việc của server. Sửa truy vấn, thêm năng lực, hoặc chuyển việc chậm sang job nền.\n\n3. Keep-alive, gzip, edge caching and a CDN all help. What do they have in common?Keep-alive, gzip, cache ở biên và CDN đều giúp. Chúng có điểm chung gì?\n   Answer: b) Fewer round trips, fewer bytes, or a shorter path\n   Keep-alive removes handshakes, gzip removes bytes, a cache removes the trip to the origin, a CDN shortens the distance. Latency, not bandwidth, is usually what users feel.VI: Keep-alive bỏ bớt bắt tay, gzip bỏ bớt byte, cache bỏ chuyến đi tới origin, CDN rút ngắn khoảng cách. Thứ người dùng cảm thấy thường là độ trễ, không phải băng thông.\n\n4. Why break your own stack on purpose?Vì sao nên tự tay làm hỏng stack của mình?\n   Answer: a) So the first time you see a 502 is not at 2 a.m. in production\n   Inducing a failure with a known cause turns it into a shape you recognise in seconds. That is chaos engineering in miniature, and each induced failure should end with an alert that would have caught it.VI: Gây ra một lỗi có nguyên nhân đã biết biến nó thành một hình dạng bạn nhận ra trong vài giây. Đó là chaos engineering thu nhỏ, và mỗi lỗi tự gây ra nên kết thúc bằng một cảnh báo lẽ ra đã bắt được nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Transport: UDP 443 is blocked; allow it or accept HTTP/2</p><p>QUIC rides on UDP. A block there is a soft failure: browsers fall back to HTTP/2 over TCP, so the only symptom is \"h2 where we expected h3\".</p><p><i>VI: QUIC chạy trên UDP. Chặn ở đó là hỏng mềm: trình duyệt lùi về HTTP/2 trên TCP, nên triệu chứng duy nhất là \"h2 ở chỗ đáng lẽ là h3\".</i></p></li><li><p><b>a)</b> Application: the slow query or missing capacity</p><p>504 says the backend is up but too slow; TTFB growing with load says it is the server's work. Fix the query, add capacity, or move the slow work to a background job.</p><p><i>VI: 504 nói backend còn sống nhưng quá chậm; TTFB tăng theo tải nói đó là phần việc của server. Sửa truy vấn, thêm năng lực, hoặc chuyển việc chậm sang job nền.</i></p></li><li><p><b>b)</b> Fewer round trips, fewer bytes, or a shorter path</p><p>Keep-alive removes handshakes, gzip removes bytes, a cache removes the trip to the origin, a CDN shortens the distance. Latency, not bandwidth, is usually what users feel.</p><p><i>VI: Keep-alive bỏ bớt bắt tay, gzip bỏ bớt byte, cache bỏ chuyến đi tới origin, CDN rút ngắn khoảng cách. Thứ người dùng cảm thấy thường là độ trễ, không phải băng thông.</i></p></li><li><p><b>a)</b> So the first time you see a 502 is not at 2 a.m. in production</p><p>Inducing a failure with a known cause turns it into a shape you recognise in seconds. That is chaos engineering in miniature, and each induced failure should end with an alert that would have caught it.</p><p><i>VI: Gây ra một lỗi có nguyên nhân đã biết biến nó thành một hình dạng bạn nhận ra trong vài giây. Đó là chaos engineering thu nhỏ, và mỗi lỗi tự gây ra nên kết thúc bằng một cảnh báo lẽ ra đã bắt được nó.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>After an office firewall change, HTTP/3 stops working but the site still loads. Which layer, and what next?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi đổi tường lửa văn phòng, HTTP/3 ngừng chạy nhưng trang vẫn tải được. Tầng nào, và làm gì tiếp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Application: the code broke HTTP/3"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DNS: the record changed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TLS: the certificate expired"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Transport: UDP 443 is blocked; allow it or accept HTTP/2"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>QUIC rides on UDP. A block there is a soft failure: browsers fall back to HTTP/2 over TCP, so the only symptom is \"h2 where we expected h3\".</p><p><i>VI: QUIC chạy trên UDP. Chặn ở đó là hỏng mềm: trình duyệt lùi về HTTP/2 trên TCP, nên triệu chứng duy nhất là \"h2 ở chỗ đáng lẽ là h3\".</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>TTFB climbs with concurrency until the edge returns 504. Where is the fix?</p><p style=\"opacity:.75;font-size:.92em\"><i>TTFB tăng theo số người dùng đồng thời cho tới khi biên trả 504. Cách sửa nằm ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Application: the slow query or missing capacity"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The CDN cache rules"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The TCP congestion control algorithm"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The DNS TTL"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>504 says the backend is up but too slow; TTFB growing with load says it is the server's work. Fix the query, add capacity, or move the slow work to a background job.</p><p><i>VI: 504 nói backend còn sống nhưng quá chậm; TTFB tăng theo tải nói đó là phần việc của server. Sửa truy vấn, thêm năng lực, hoặc chuyển việc chậm sang job nền.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Keep-alive, gzip, edge caching and a CDN all help. What do they have in common?</p><p style=\"opacity:.75;font-size:.92em\"><i>Keep-alive, gzip, cache ở biên và CDN đều giúp. Chúng có điểm chung gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They all make the server CPU faster"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Fewer round trips, fewer bytes, or a shorter path"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They all reduce DNS lookups"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They all require HTTP/3"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Keep-alive removes handshakes, gzip removes bytes, a cache removes the trip to the origin, a CDN shortens the distance. Latency, not bandwidth, is usually what users feel.</p><p><i>VI: Keep-alive bỏ bớt bắt tay, gzip bỏ bớt byte, cache bỏ chuyến đi tới origin, CDN rút ngắn khoảng cách. Thứ người dùng cảm thấy thường là độ trễ, không phải băng thông.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why break your own stack on purpose?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao nên tự tay làm hỏng stack của mình?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "So the first time you see a 502 is not at 2 a.m. in production"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To test the CDN purge API"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because broken stacks deploy faster"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To lower the hosting bill"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Inducing a failure with a known cause turns it into a shape you recognise in seconds. That is chaos engineering in miniature, and each induced failure should end with an alert that would have caught it.</p><p><i>VI: Gây ra một lỗi có nguyên nhân đã biết biến nó thành một hình dạng bạn nhận ra trong vài giây. Đó là chaos engineering thu nhỏ, và mỗi lỗi tự gây ra nên kết thúc bằng một cảnh báo lẽ ra đã bắt được nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating a fallback to HTTP/2 as an outage.|||Coi việc lùi về HTTP/2 là sự cố sập."
+        },
+        {
+          "loi": "Raising the edge timeout to \"fix\" a slow query.|||Nâng timeout ở biên để \"sửa\" một truy vấn chậm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "chaos engineering",
+          "vi": "cố ý gây hỏng có kiểm soát"
+        },
+        {
+          "en": "soft failure",
+          "vi": "hỏng mềm"
+        }
+      ]
+    }
+  ]
+}

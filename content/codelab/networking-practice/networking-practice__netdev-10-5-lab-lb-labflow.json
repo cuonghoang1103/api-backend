@@ -1,0 +1,631 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-10-5-lab-lb-labflow",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-10-5-lab-lb-labflow"
+  },
+  "exercises": [
+    {
+      "title": "LB 1 — Write ringAssign(nodes, keys, vnodes): consistent hashing",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "consistent hashing",
+        "virtual nodes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lab 10 hashed on <code>?user=</code> so each user sticks to one backend — for real, <code>alice</code> always went to <code>be2</code> and <code>bob</code> to <code>be3</code>. Plain <code>hash % N</code> would move almost every user when a backend dies; a hash RING moves only the users of the dead one. Write <code>ringAssign(nodes, keys, vnodes)</code>:</p>\n<ol>\n<li>Hash function: FNV-1a 32-bit — start at <code>0x811c9dc5</code>; for each character <code>h ^= code; h = Math.imul(h, 0x01000193) &gt;&gt;&gt; 0</code> — then the MurmurHash3 finaliser so that similar names land far apart: <code>h ^= h&gt;&gt;&gt;16; h = Math.imul(h, 0x85ebca6b)&gt;&gt;&gt;0; h ^= h&gt;&gt;&gt;13; h = Math.imul(h, 0xc2b2ae35)&gt;&gt;&gt;0; h ^= h&gt;&gt;&gt;16</code> (keep it unsigned with <code>&gt;&gt;&gt; 0</code>).</li>\n<li>Each node gets <code>vnodes</code> points on the ring: <code>hash(node + \"#\" + v)</code> for v = 0…vnodes−1. Sort points by hash (ties: node name ascending).</li>\n<li>A key goes to the first point whose hash is ≥ hash(key); if none, wrap to the first point.</li>\n<li>Return an object key → node (<code>null</code> for every key if there are no nodes).</li>\n</ol>\n<p>(nginx uses a different hash, so the backend names here will not match the lab — the property you are building is what matters.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab 10 băm theo <code>?user=</code> để mỗi người dùng bám một backend — thật vậy, <code>alice</code> luôn về <code>be2</code> còn <code>bob</code> về <code>be3</code>. Kiểu <code>hash % N</code> thường sẽ dời gần như mọi người dùng khi một backend chết; một VÒNG băm chỉ dời người dùng của chính backend đó. Viết <code>ringAssign(nodes, keys, vnodes)</code>:</p>\n<ol>\n<li>Hàm băm: FNV-1a 32 bit — bắt đầu từ <code>0x811c9dc5</code>; với mỗi ký tự <code>h ^= mã; h = Math.imul(h, 0x01000193) &gt;&gt;&gt; 0</code> — rồi qua bước trộn cuối của MurmurHash3 để các tên giống nhau rơi xa nhau: <code>h ^= h&gt;&gt;&gt;16; h = Math.imul(h, 0x85ebca6b)&gt;&gt;&gt;0; h ^= h&gt;&gt;&gt;13; h = Math.imul(h, 0xc2b2ae35)&gt;&gt;&gt;0; h ^= h&gt;&gt;&gt;16</code> (giữ không dấu bằng <code>&gt;&gt;&gt; 0</code>).</li>\n<li>Mỗi node có <code>vnodes</code> điểm trên vòng: <code>hash(node + \"#\" + v)</code> với v = 0…vnodes−1. Sắp các điểm theo băm (bằng nhau thì theo tên node tăng dần).</li>\n<li>Một khoá thuộc về điểm đầu tiên có băm ≥ hash(khoá); không có thì vòng về điểm đầu tiên.</li>\n<li>Trả về object khoá → node (<code>null</code> cho mọi khoá nếu không có node nào).</li>\n</ol>\n<p>(nginx dùng hàm băm khác, nên tên backend ở đây sẽ không trùng với lab — thứ bạn đang dựng là TÍNH CHẤT.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "ringAssign([\"be1\",\"be2\",\"be3\"], [\"alice\",\"bob\",\"carol\",\"dave\",\"erin\",\"frank\",\"grace\",\"heidi\",\"ivan\",\"judy\"], 4)",
+          "output": "{\"alice\":\"be3\",\"bob\":\"be3\",\"carol\":\"be2\",\"dave\":\"be1\",\"erin\":\"be2\",\"frank\":\"be3\",\"grace\":\"be3\",\"heidi\":\"be2\",\"ivan\":\"be3\",\"judy\":\"be1\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build the ring once: an array of { h, node }, sorted.|||Dựng vòng một lần: mảng { h, node } đã sắp.",
+        "A linear scan for the first h ≥ key hash is fine for a few dozen points.|||Quét tuyến tính tìm h đầu tiên ≥ băm của khoá là đủ với vài chục điểm.",
+        "Compare Case 1 with Case 2: every user that changed node must have been on be2.|||So Ca 1 với Ca 2: mọi người dùng đổi node đều phải từng ở be2."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function ringAssign(nodes, keys, vnodes) {\n  var out = {};\n  keys.forEach(function (k, i) { out[k] = nodes[i % nodes.length]; });\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function ringAssign(nodes, keys, vnodes) {\n  function fnv(s) {\n    var h = 0x811c9dc5;\n    for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }\n    // finaliser (MurmurHash3 fmix32): spreads similar names such as \"be1#0\" / \"be1#1\" over the whole ring\n    h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b) >>> 0; h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35) >>> 0; h ^= h >>> 16;\n    return h >>> 0;\n  }\n  var ring = [];\n  nodes.forEach(function (n) { for (var v = 0; v < vnodes; v++) ring.push({ h: fnv(n + '#' + v), node: n }); });\n  ring.sort(function (a, b) { return a.h - b.h || (a.node < b.node ? -1 : 1); });\n  var out = {};\n  keys.forEach(function (k) {\n    if (!ring.length) { out[k] = null; return; }\n    var h = fnv(k), pick = ring[0]; // wrap around to the first point\n    for (var i = 0; i < ring.length; i++) if (ring[i].h >= h) { pick = ring[i]; break; } // first point clockwise\n    out[k] = pick.node;\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With a ring, removing a node hands only its arc to the next node clockwise; every other key stays put, so caches and sessions on the surviving backends stay warm. Virtual nodes spread each backend around the ring so the load stays even.</p>",
+      "solutionExplanationHtmlVi": "<p>Với vòng băm, bớt một node chỉ trao cung của nó cho node kế tiếp theo chiều kim đồng hồ; mọi khoá khác đứng yên, nên cache và phiên trên các backend còn sống vẫn \"ấm\". Node ảo rải mỗi backend quanh vòng để tải luôn đều.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: ringAssign([\"be1\",\"be2\",\"be3\"], [\"alice\",\"bob\",\"carol\",\"dave\",\"erin\",\"frank\",\"grace\",\"h...",
+              "vi": "Ca 1"
+            },
+            "goi": "ringAssign([\"be1\",\"be2\",\"be3\"], [\"alice\",\"bob\",\"carol\",\"dave\",\"erin\",\"frank\",\"grace\",\"heidi\",\"ivan\",\"judy\"], 4)",
+            "mongDoi": {
+              "alice": "be3",
+              "bob": "be3",
+              "carol": "be2",
+              "dave": "be1",
+              "erin": "be2",
+              "frank": "be3",
+              "grace": "be3",
+              "heidi": "be2",
+              "ivan": "be3",
+              "judy": "be1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: be2 died — only its users may move",
+              "vi": "Ca 2: be2 chết — chỉ người dùng của nó được phép dời"
+            },
+            "goi": "ringAssign([\"be1\",\"be3\"], [\"alice\",\"bob\",\"carol\",\"dave\",\"erin\",\"frank\",\"grace\",\"heidi\",\"ivan\",\"judy\"], 4)",
+            "mongDoi": {
+              "alice": "be3",
+              "bob": "be3",
+              "carol": "be1",
+              "dave": "be1",
+              "erin": "be3",
+              "frank": "be3",
+              "grace": "be3",
+              "heidi": "be1",
+              "ivan": "be3",
+              "judy": "be1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "ringAssign([\"be1\",\"be2\",\"be3\",\"be4\"], [\"alice\",\"bob\",\"carol\",\"dave\",\"erin\",\"frank\",\"grace\",\"heidi\",\"ivan\",\"judy\"], 16)",
+            "mongDoi": {
+              "alice": "be4",
+              "bob": "be4",
+              "carol": "be1",
+              "dave": "be2",
+              "erin": "be2",
+              "frank": "be1",
+              "grace": "be3",
+              "heidi": "be3",
+              "ivan": "be3",
+              "judy": "be3"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "ringAssign([\"only\"], [\"x\",\"y\"], 1)",
+            "mongDoi": {
+              "x": "only",
+              "y": "only"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "ringAssign([], [\"x\"], 4)",
+            "mongDoi": {
+              "x": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "ringAssign([\"a\",\"b\"], [\"k1\",\"k2\",\"k3\",\"k4\",\"k5\",\"k6\"], 1)",
+            "mongDoi": {
+              "k1": "a",
+              "k2": "a",
+              "k3": "a",
+              "k4": "a",
+              "k5": "b",
+              "k6": "b"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting >>> 0, so hashes become negative and the order breaks.|||Quên >>> 0, khiến băm thành số âm và thứ tự hỏng."
+        },
+        {
+          "loi": "Skipping the finaliser: raw FNV-1a of be1#0, be1#1… clusters, and one backend ends up with almost every key.|||Bỏ bước trộn cuối: FNV-1a thô của be1#0, be1#1… dồn cục, và một backend nhận gần hết khoá."
+        },
+        {
+          "loi": "Using key % nodes.length, which re-shuffles most keys when a node is removed.|||Dùng khoá % số node, khiến phần lớn khoá bị xáo lại khi bớt một node."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "LB 2 — Read the gateway code, name the broken side",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "gateway errors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lab 10 produced two of these for real:<pre>dead upstream (:8082) -&gt; 502\nslow backend 3s vs 1s timeout -&gt; 504</pre>Match every symptom to the code the proxy returns and the first thing to check.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab 10 tạo ra thật hai mã trong số này:<pre>dead upstream (:8082) -&gt; 502\nslow backend 3s vs 1s timeout -&gt; 504</pre>Ghép mỗi triệu chứng với mã proxy trả về và việc đầu tiên cần kiểm.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Too slow and absent are different failures.",
+        "524 is specific to Cloudflare."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# LB 2 — Read the gateway code, name the broken side\n\nAnswer in the answer panel (no code needed).\n\n1. Symptom → code → first checkTriệu chứng → mã → kiểm đầu tiên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# LB 2 — Read the gateway code, name the broken side — answer key\n\n1. Symptom → code → first checkTriệu chứng → mã → kiểm đầu tiên\n   - r1.c: 502\n   - r1.k: is the backend process running and listening?\n   - r2.c: 504\n   - r2.k: how long does the backend take (TTFB)?\n   - r3.c: 503\n   - r3.k: how many backends are healthy right now?\n   - r4.c: 524\n   - r4.k: does the request finish within the edge limit?\n   502 = the proxy could not get a valid answer (dead, crashed, wrong port); 504 = it connected but the answer was too slow; 503 = there was no healthy capacity to send it to; 524 = Cloudflare's own edge timeout. Reading the code first tells you which team and which log to open.VI: 502 = proxy không lấy được câu trả lời hợp lệ (chết, sập, sai cổng); 504 = đã nối được nhưng trả lời quá chậm; 503 = không còn năng lực khoẻ mạnh nào để gửi tới; 524 = timeout riêng ở biên của Cloudflare. Đọc mã trước cho bạn biết đội nào và log nào cần mở.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>502 = the proxy could not get a valid answer (dead, crashed, wrong port); 504 = it connected but the answer was too slow; 503 = there was no healthy capacity to send it to; 524 = Cloudflare's own edge timeout. Reading the code first tells you which team and which log to open.</p><p><i>VI: 502 = proxy không lấy được câu trả lời hợp lệ (chết, sập, sai cổng); 504 = đã nối được nhưng trả lời quá chậm; 503 = không còn năng lực khoẻ mạnh nào để gửi tới; 524 = timeout riêng ở biên của Cloudflare. Đọc mã trước cho bạn biết đội nào và log nào cần mở.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Symptom → code → first check</p><p style=\"opacity:.75;font-size:.92em\"><i>Triệu chứng → mã → kiểm đầu tiên</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation"
+              },
+              {
+                "ma": "c",
+                "ten": "Code",
+                "luaChon": [
+                  "502",
+                  "503",
+                  "504",
+                  "524"
+                ]
+              },
+              {
+                "ma": "k",
+                "ten": "First check",
+                "luaChon": [
+                  "is the backend process running and listening?",
+                  "how long does the backend take (TTFB)?",
+                  "how many backends are healthy right now?",
+                  "does the request finish within the edge limit?"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Nothing listens on the upstream port"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The backend takes 3 s, the proxy waits 1 s"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Every backend failed its health check"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Cloudflare waited about 100 s for the origin"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": "502",
+              "r1.k": "is the backend process running and listening?",
+              "r2.c": "504",
+              "r2.k": "how long does the backend take (TTFB)?",
+              "r3.c": "503",
+              "r3.k": "how many backends are healthy right now?",
+              "r4.c": "524",
+              "r4.k": "does the request finish within the edge limit?"
+            },
+            "giaiThich": "<p>502 = the proxy could not get a valid answer (dead, crashed, wrong port); 504 = it connected but the answer was too slow; 503 = there was no healthy capacity to send it to; 524 = Cloudflare's own edge timeout. Reading the code first tells you which team and which log to open.</p><p><i>VI: 502 = proxy không lấy được câu trả lời hợp lệ (chết, sập, sai cổng); 504 = đã nối được nhưng trả lời quá chậm; 503 = không còn năng lực khoẻ mạnh nào để gửi tới; 524 = timeout riêng ở biên của Cloudflare. Đọc mã trước cho bạn biết đội nào và log nào cần mở.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Restarting a healthy backend because of a 504 caused by a slow query."
+        },
+        {
+          "loi": "Calling every 5xx \"the server is down\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "upstream",
+          "vi": "máy phía sau proxy"
+        },
+        {
+          "en": "health check",
+          "vi": "kiểm tra sức khoẻ"
+        }
+      ]
+    },
+    {
+      "title": "LB 3 — L4 or L7, reverse or forward, and the retry trap",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "load balancing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real Lab 10 output: the same backend through an L7 proxy (nginx :8080) and an L4 forwarder (socat :9090): <pre>\"forwardedFor\":\"10.10.1.10\"\n\"forwardedFor\":null</pre> and six round-robin requests went be1 → be2 → be3 → be1 → be2 → be3.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kết xuất thật của Lab 10: cùng một backend qua proxy L7 (nginx :8080) và bộ chuyển tiếp L4 (socat :9090): <pre>\"forwardedFor\":\"10.10.1.10\"\n\"forwardedFor\":null</pre> và sáu request round robin đi be1 → be2 → be3 → be1 → be2 → be3.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "L4 = IPs and ports; L7 = HTTP.|||L4 = IP và cổng; L7 = HTTP.",
+        "Retries are only free for idempotent requests.|||Thử lại chỉ miễn phí với request idempotent."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# LB 3 — L4 or L7, reverse or forward, and the retry trap\n\nAnswer in the answer panel (no code needed).\n\n1. Why is forwardedFor null through the L4 forwarder?Vì sao forwardedFor là null khi đi qua bộ chuyển tiếp L4?\n2. A company filter that every employee's browser goes through is a …Bộ lọc công ty mà trình duyệt mọi nhân viên phải đi qua là một …\n3. The balancer retries a request on another backend when the first one fails. Which requests is that safe for?Bộ cân bằng thử lại request ở backend khác khi backend đầu hỏng. Với request nào thì việc đó an toàn?\n4. Round robin sent six requests be1 → be2 → be3 → be1 → be2 → be3. When does it behave badly?Round robin gửi sáu request be1 → be2 → be3 → be1 → be2 → be3. Khi nào nó hành xử tệ?\n5. A backend dies. How does the balancer stop sending it traffic?Một backend chết. Bộ cân bằng ngừng gửi lưu lượng cho nó bằng cách nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# LB 3 — L4 or L7, reverse or forward, and the retry trap — answer key\n\n1. Why is forwardedFor null through the L4 forwarder?Vì sao forwardedFor là null khi đi qua bộ chuyển tiếp L4?\n   Answer: b) L4 copies bytes without parsing HTTP, so it cannot add headers\n   An L7 proxy understands HTTP and can add X-Forwarded-For, route by path or terminate TLS; an L4 balancer sees only IPs and ports. To keep the client IP at L4 you need something like the PROXY protocol.VI: Proxy L7 hiểu HTTP nên thêm được X-Forwarded-For, định tuyến theo path hay kết thúc TLS; bộ cân bằng L4 chỉ thấy IP và cổng. Muốn giữ IP client ở L4 cần thứ như PROXY protocol.\n\n2. A company filter that every employee's browser goes through is a …Bộ lọc công ty mà trình duyệt mọi nhân viên phải đi qua là một …\n   Answer: b) forward proxy — it fronts the clients\n   Direction is the whole difference: a forward proxy acts for clients going out; a reverse proxy (nginx in Lab 10) acts for servers receiving traffic.VI: Hướng đi là toàn bộ khác biệt: forward proxy làm thay client đi ra ngoài; reverse proxy (nginx trong Lab 10) làm thay server nhận lưu lượng.\n\n3. The balancer retries a request on another backend when the first one fails. Which requests is that safe for?Bộ cân bằng thử lại request ở backend khác khi backend đầu hỏng. Với request nào thì việc đó an toàn?\n   Answer: b) Idempotent ones such as GET — not a POST that may already have run\n   If the first backend crashed after charging a card, retrying the POST charges it twice. Retry idempotent methods, or make writes idempotent with an idempotency key.VI: Nếu backend đầu sập sau khi đã trừ tiền thẻ, thử lại POST là trừ hai lần. Chỉ thử lại phương thức idempotent, hoặc làm thao tác ghi idempotent bằng idempotency key.\n\n4. Round robin sent six requests be1 → be2 → be3 → be1 → be2 → be3. When does it behave badly?Round robin gửi sáu request be1 → be2 → be3 → be1 → be2 → be3. Khi nào nó hành xử tệ?\n   Answer: c) When some requests cost far more than others\n   Round robin counts requests, not work. With uneven requests, least-connections or a latency-aware algorithm spreads load better.VI: Round robin đếm request, không đếm khối lượng việc. Khi request nặng nhẹ khác nhau, least-connections hoặc thuật toán theo độ trễ chia tải tốt hơn.\n\n5. A backend dies. How does the balancer stop sending it traffic?Một backend chết. Bộ cân bằng ngừng gửi lưu lượng cho nó bằng cách nào?\n   Answer: d) Health checks mark it down and skip it\n   After be2 was killed in the lab, only be1 and be3 answered: the failed attempt was retried and be2 left the pool. Health checks — active probes or passive failure counts — decide that, and they also decide when it comes back.VI: Sau khi be2 bị giết trong lab, chỉ be1 và be3 trả lời: lượt hỏng được thử lại và be2 rời khỏi pool. Health check — dò chủ động hoặc đếm lỗi thụ động — quyết định điều đó, và cũng quyết định khi nào nó quay lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> L4 copies bytes without parsing HTTP, so it cannot add headers</p><p>An L7 proxy understands HTTP and can add X-Forwarded-For, route by path or terminate TLS; an L4 balancer sees only IPs and ports. To keep the client IP at L4 you need something like the PROXY protocol.</p><p><i>VI: Proxy L7 hiểu HTTP nên thêm được X-Forwarded-For, định tuyến theo path hay kết thúc TLS; bộ cân bằng L4 chỉ thấy IP và cổng. Muốn giữ IP client ở L4 cần thứ như PROXY protocol.</i></p></li><li><p><b>b)</b> forward proxy — it fronts the clients</p><p>Direction is the whole difference: a forward proxy acts for clients going out; a reverse proxy (nginx in Lab 10) acts for servers receiving traffic.</p><p><i>VI: Hướng đi là toàn bộ khác biệt: forward proxy làm thay client đi ra ngoài; reverse proxy (nginx trong Lab 10) làm thay server nhận lưu lượng.</i></p></li><li><p><b>b)</b> Idempotent ones such as GET — not a POST that may already have run</p><p>If the first backend crashed after charging a card, retrying the POST charges it twice. Retry idempotent methods, or make writes idempotent with an idempotency key.</p><p><i>VI: Nếu backend đầu sập sau khi đã trừ tiền thẻ, thử lại POST là trừ hai lần. Chỉ thử lại phương thức idempotent, hoặc làm thao tác ghi idempotent bằng idempotency key.</i></p></li><li><p><b>c)</b> When some requests cost far more than others</p><p>Round robin counts requests, not work. With uneven requests, least-connections or a latency-aware algorithm spreads load better.</p><p><i>VI: Round robin đếm request, không đếm khối lượng việc. Khi request nặng nhẹ khác nhau, least-connections hoặc thuật toán theo độ trễ chia tải tốt hơn.</i></p></li><li><p><b>d)</b> Health checks mark it down and skip it</p><p>After be2 was killed in the lab, only be1 and be3 answered: the failed attempt was retried and be2 left the pool. Health checks — active probes or passive failure counts — decide that, and they also decide when it comes back.</p><p><i>VI: Sau khi be2 bị giết trong lab, chỉ be1 và be3 trả lời: lượt hỏng được thử lại và be2 rời khỏi pool. Health check — dò chủ động hoặc đếm lỗi thụ động — quyết định điều đó, và cũng quyết định khi nào nó quay lại.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why is forwardedFor null through the L4 forwarder?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao forwardedFor là null khi đi qua bộ chuyển tiếp L4?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "socat strips every header for security"
+              },
+              {
+                "ma": "b",
+                "noiDung": "L4 copies bytes without parsing HTTP, so it cannot add headers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The backend ignores headers on port 9090"
+              },
+              {
+                "ma": "d",
+                "noiDung": "L4 forwarders only work for UDP"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>An L7 proxy understands HTTP and can add X-Forwarded-For, route by path or terminate TLS; an L4 balancer sees only IPs and ports. To keep the client IP at L4 you need something like the PROXY protocol.</p><p><i>VI: Proxy L7 hiểu HTTP nên thêm được X-Forwarded-For, định tuyến theo path hay kết thúc TLS; bộ cân bằng L4 chỉ thấy IP và cổng. Muốn giữ IP client ở L4 cần thứ như PROXY protocol.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A company filter that every employee's browser goes through is a …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ lọc công ty mà trình duyệt mọi nhân viên phải đi qua là một …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "load balancer — it fronts the backends"
+              },
+              {
+                "ma": "b",
+                "noiDung": "forward proxy — it fronts the clients"
+              },
+              {
+                "ma": "c",
+                "noiDung": "CDN edge — it caches the origin"
+              },
+              {
+                "ma": "d",
+                "noiDung": "reverse proxy — it fronts the servers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Direction is the whole difference: a forward proxy acts for clients going out; a reverse proxy (nginx in Lab 10) acts for servers receiving traffic.</p><p><i>VI: Hướng đi là toàn bộ khác biệt: forward proxy làm thay client đi ra ngoài; reverse proxy (nginx trong Lab 10) làm thay server nhận lưu lượng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The balancer retries a request on another backend when the first one fails. Which requests is that safe for?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ cân bằng thử lại request ở backend khác khi backend đầu hỏng. Với request nào thì việc đó an toàn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only requests larger than 1 MB"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Idempotent ones such as GET — not a POST that may already have run"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only WebSocket upgrades"
+              },
+              {
+                "ma": "d",
+                "noiDung": "All requests, because the user never sees the retry"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>If the first backend crashed after charging a card, retrying the POST charges it twice. Retry idempotent methods, or make writes idempotent with an idempotency key.</p><p><i>VI: Nếu backend đầu sập sau khi đã trừ tiền thẻ, thử lại POST là trừ hai lần. Chỉ thử lại phương thức idempotent, hoặc làm thao tác ghi idempotent bằng idempotency key.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Round robin sent six requests be1 → be2 → be3 → be1 → be2 → be3. When does it behave badly?</p><p style=\"opacity:.75;font-size:.92em\"><i>Round robin gửi sáu request be1 → be2 → be3 → be1 → be2 → be3. Khi nào nó hành xử tệ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "When all backends run the same code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "When health checks are switched on"
+              },
+              {
+                "ma": "c",
+                "noiDung": "When some requests cost far more than others"
+              },
+              {
+                "ma": "d",
+                "noiDung": "When there are exactly three backends"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Round robin counts requests, not work. With uneven requests, least-connections or a latency-aware algorithm spreads load better.</p><p><i>VI: Round robin đếm request, không đếm khối lượng việc. Khi request nặng nhẹ khác nhau, least-connections hoặc thuật toán theo độ trễ chia tải tốt hơn.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A backend dies. How does the balancer stop sending it traffic?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một backend chết. Bộ cân bằng ngừng gửi lưu lượng cho nó bằng cách nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Each client stops choosing it by itself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DNS removes its record automatically"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The backend sends a goodbye packet first"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Health checks mark it down and skip it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>After be2 was killed in the lab, only be1 and be3 answered: the failed attempt was retried and be2 left the pool. Health checks — active probes or passive failure counts — decide that, and they also decide when it comes back.</p><p><i>VI: Sau khi be2 bị giết trong lab, chỉ be1 và be3 trả lời: lượt hỏng được thử lại và be2 rời khỏi pool. Health check — dò chủ động hoặc đếm lỗi thụ động — quyết định điều đó, và cũng quyết định khi nào nó quay lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting X-Forwarded-For from an L4 balancer.|||Chờ X-Forwarded-For từ bộ cân bằng L4."
+        },
+        {
+          "loi": "Enabling automatic retries for POST and double-charging customers.|||Bật tự động thử lại cho POST và trừ tiền khách hai lần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "L4 / L7",
+          "vi": "tầng 4 / tầng 7"
+        },
+        {
+          "en": "idempotent",
+          "vi": "lặp lại không đổi kết quả"
+        },
+        {
+          "en": "forward proxy",
+          "vi": "proxy chiều đi"
+        }
+      ]
+    },
+    {
+      "title": "LB 4 — Take one backend out without dropping a request",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "rolling deploy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Put the steps of a graceful removal of one backend behind the balancer in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các bước gỡ êm một backend khỏi sau bộ cân bằng theo đúng thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "No new work first; finish old work second.",
+        "Health check before traffic."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# LB 4 — Take one backend out without dropping a request\n\nAnswer in the answer panel (no code needed).\n\n1. Graceful drainXả êm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# LB 4 — Take one backend out without dropping a request — answer key\n\n1. Graceful drainXả êm\n   Answer: m3) Mark the backend as draining: the balancer sends it no NEW requests  →  m4) Wait for in-flight requests (and long-lived connections) to finish or time out  →  m5) Stop and upgrade the backend  →  m2) Start it and wait until its health check passes  →  m1) Put it back into the pool, then repeat for the next backend\n   Stopping first drops every in-flight request; re-adding before the health check passes sends users to a process that is not ready. Draining one backend at a time keeps the service up the whole time.VI: Dừng trước là làm rơi mọi request đang chạy; đưa lại trước khi health check qua là gửi người dùng tới một tiến trình chưa sẵn sàng. Xả từng backend một giữ dịch vụ sống suốt quá trình.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Stopping first drops every in-flight request; re-adding before the health check passes sends users to a process that is not ready. Draining one backend at a time keeps the service up the whole time.</p><p><i>VI: Dừng trước là làm rơi mọi request đang chạy; đưa lại trước khi health check qua là gửi người dùng tới một tiến trình chưa sẵn sàng. Xả từng backend một giữ dịch vụ sống suốt quá trình.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Graceful drain</p><p style=\"opacity:.75;font-size:.92em\"><i>Xả êm</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Put it back into the pool, then repeat for the next backend"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Start it and wait until its health check passes"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Mark the backend as draining: the balancer sends it no NEW requests"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Wait for in-flight requests (and long-lived connections) to finish or time out"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Stop and upgrade the backend"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m4",
+              "m5",
+              "m2",
+              "m1"
+            ],
+            "giaiThich": "<p>Stopping first drops every in-flight request; re-adding before the health check passes sends users to a process that is not ready. Draining one backend at a time keeps the service up the whole time.</p><p><i>VI: Dừng trước là làm rơi mọi request đang chạy; đưa lại trước khi health check qua là gửi người dùng tới một tiến trình chưa sẵn sàng. Xả từng backend một giữ dịch vụ sống suốt quá trình.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Killing the process and relying on retries to hide it."
+        },
+        {
+          "loi": "Re-adding the backend the moment the process starts."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "graceful shutdown",
+          "vi": "tắt êm"
+        }
+      ]
+    }
+  ]
+}

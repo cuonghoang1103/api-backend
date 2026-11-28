@@ -1,0 +1,687 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-16-2-verify-troubleshoot",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-16-2-kiem-chung-ra-lenh-va-go-loi-mang-nho"
+  },
+  "exercises": [
+    {
+      "title": "Verify 1 — Walk the ladder from your own machine outwards",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "verify connectivity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Lesson 16.2: each rung proves one more piece; the first rung that fails is where you look. Put the rungs in order, from the one that assumes the least.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 16.2: mỗi bậc chứng minh thêm một phần; bậc đầu tiên hỏng là chỗ cần nhìn. Xếp các bậc theo thứ tự, từ bậc giả định ít nhất.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loopback first: it involves no cable at all.",
+        "Names come last."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Verify 1 — Walk the ladder from your own machine outwards\n\nAnswer in the answer panel (no code needed).\n\n1. The verification ladderChiếc thang nghiệm thu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Verify 1 — Walk the ladder from your own machine outwards — answer key\n\n1. The verification ladderChiếc thang nghiệm thu\n   Answer: m1) ping 127.0.0.1 — the TCP/IP stack on this machine  →  m2) ping your own address — the NIC and its configuration  →  m5) ping the default gateway — the local network  →  m3) ping 8.8.8.8 — routing beyond your network, by address  →  m4) ping example.com — name resolution\n   Bottom-up: each rung only means something if the one below passed. If 8.8.8.8 works and example.com fails, the network is fine and DNS is broken; if the gateway fails, you cannot leave your LAN.VI: Từ dưới lên: mỗi bậc chỉ có nghĩa khi bậc dưới đã qua. Nếu 8.8.8.8 chạy mà example.com hỏng thì mạng vẫn tốt và DNS hỏng; nếu gateway hỏng thì bạn không ra khỏi LAN được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bottom-up: each rung only means something if the one below passed. If 8.8.8.8 works and example.com fails, the network is fine and DNS is broken; if the gateway fails, you cannot leave your LAN.</p><p><i>VI: Từ dưới lên: mỗi bậc chỉ có nghĩa khi bậc dưới đã qua. Nếu 8.8.8.8 chạy mà example.com hỏng thì mạng vẫn tốt và DNS hỏng; nếu gateway hỏng thì bạn không ra khỏi LAN được.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The verification ladder</p><p style=\"opacity:.75;font-size:.92em\"><i>Chiếc thang nghiệm thu</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "ping 127.0.0.1 — the TCP/IP stack on this machine"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "ping your own address — the NIC and its configuration"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "ping 8.8.8.8 — routing beyond your network, by address"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "ping example.com — name resolution"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "ping the default gateway — the local network"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m2",
+              "m5",
+              "m3",
+              "m4"
+            ],
+            "giaiThich": "<p>Bottom-up: each rung only means something if the one below passed. If 8.8.8.8 works and example.com fails, the network is fine and DNS is broken; if the gateway fails, you cannot leave your LAN.</p><p><i>VI: Từ dưới lên: mỗi bậc chỉ có nghĩa khi bậc dưới đã qua. Nếu 8.8.8.8 chạy mà example.com hỏng thì mạng vẫn tốt và DNS hỏng; nếu gateway hỏng thì bạn không ra khỏi LAN được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting with a name and blaming DNS for an unplugged cable."
+        },
+        {
+          "loi": "Re-testing a rung that was already proven."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "loopback",
+          "vi": "địa chỉ vòng lặp nội bộ"
+        }
+      ]
+    },
+    {
+      "title": "Verify 2 — Pick the method, and the command that answers",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "troubleshooting methodology"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Lesson 16.2 names three methods — bottom-up, top-down, divide-and-conquer — and the host and IOS commands that prove each layer. Fill both tables.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 16.2 gọi tên ba phương pháp — từ dưới lên, từ trên xuống, chia để trị — và các lệnh trên máy trạm và IOS chứng minh từng tầng. Điền cả hai bảng.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "How much is broken decides where you start.",
+        "Windows says tracert, Linux and IOS say traceroute."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Verify 2 — Pick the method, and the command that answers\n\nAnswer in the answer panel (no code needed).\n\n1. Which method fits the report?Phương pháp nào hợp với báo cáo?\n2. Which command answers the question?Lệnh nào trả lời câu hỏi?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Verify 2 — Pick the method, and the command that answers — answer key\n\n1. Which method fits the report?Phương pháp nào hợp với báo cáo?\n   - r1.m: bottom-up\n   - r2.m: top-down\n   - r3.m: divide-and-conquer\n   Whole site ⇒ assume nothing, start at layer 1. One application ⇒ start at layer 7, the lower layers are evidently working. One host while its neighbours work ⇒ layers 1–2 of the shared switch are already proven, so start at layer 3 with a ping to the gateway.VI: Cả một site ⇒ không giả định gì, bắt đầu từ tầng 1. Một ứng dụng ⇒ bắt đầu từ tầng 7, các tầng dưới rõ ràng đang chạy. Một máy hỏng trong khi hàng xóm vẫn chạy ⇒ tầng 1–2 của switch dùng chung đã được chứng minh, nên bắt đầu ở tầng 3 bằng ping tới gateway.\n\n2. Which command answers the question?Lệnh nào trả lời câu hỏi?\n   - r1.c: show cdp neighbors detail\n   - r2.c: show interfaces\n   - r3.c: ipconfig /all\n   - r4.c: tracert\n   - r5.c: show version\n   - r6.c: arp -a\n   CDP shows neighbours, show interfaces shows counters and errors, ipconfig /all shows every host setting, tracert is the Windows spelling of traceroute, show version has the uptime line, and arp -a lists the IP-to-MAC cache.VI: CDP cho thấy hàng xóm, show interfaces cho thấy bộ đếm và lỗi, ipconfig /all cho thấy mọi thiết lập của máy, tracert là cách viết traceroute trên Windows, show version có dòng uptime, còn arp -a liệt kê bộ đệm IP–MAC.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Whole site ⇒ assume nothing, start at layer 1. One application ⇒ start at layer 7, the lower layers are evidently working. One host while its neighbours work ⇒ layers 1–2 of the shared switch are already proven, so start at layer 3 with a ping to the gateway.</p><p><i>VI: Cả một site ⇒ không giả định gì, bắt đầu từ tầng 1. Một ứng dụng ⇒ bắt đầu từ tầng 7, các tầng dưới rõ ràng đang chạy. Một máy hỏng trong khi hàng xóm vẫn chạy ⇒ tầng 1–2 của switch dùng chung đã được chứng minh, nên bắt đầu ở tầng 3 bằng ping tới gateway.</i></p><p>CDP shows neighbours, show interfaces shows counters and errors, ipconfig /all shows every host setting, tracert is the Windows spelling of traceroute, show version has the uptime line, and arp -a lists the IP-to-MAC cache.</p><p><i>VI: CDP cho thấy hàng xóm, show interfaces cho thấy bộ đếm và lỗi, ipconfig /all cho thấy mọi thiết lập của máy, tracert là cách viết traceroute trên Windows, show version có dòng uptime, còn arp -a liệt kê bộ đệm IP–MAC.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Which method fits the report?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phương pháp nào hợp với báo cáo?</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Report"
+              },
+              {
+                "ma": "m",
+                "ten": "Method",
+                "luaChon": [
+                  "bottom-up",
+                  "top-down",
+                  "divide-and-conquer"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Everything at one whole site is down"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Only the accounting web app fails; mail and browsing work"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "One laptop reaches nothing outside; every other machine on the same switch is fine"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.m": "bottom-up",
+              "r2.m": "top-down",
+              "r3.m": "divide-and-conquer"
+            },
+            "giaiThich": "<p>Whole site ⇒ assume nothing, start at layer 1. One application ⇒ start at layer 7, the lower layers are evidently working. One host while its neighbours work ⇒ layers 1–2 of the shared switch are already proven, so start at layer 3 with a ping to the gateway.</p><p><i>VI: Cả một site ⇒ không giả định gì, bắt đầu từ tầng 1. Một ứng dụng ⇒ bắt đầu từ tầng 7, các tầng dưới rõ ràng đang chạy. Một máy hỏng trong khi hàng xóm vẫn chạy ⇒ tầng 1–2 của switch dùng chung đã được chứng minh, nên bắt đầu ở tầng 3 bằng ping tới gateway.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Which command answers the question?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lệnh nào trả lời câu hỏi?</i></p>",
+            "cot": [
+              {
+                "ma": "qq",
+                "ten": "Question"
+              },
+              {
+                "ma": "c",
+                "ten": "Command",
+                "luaChon": [
+                  "show cdp neighbors detail",
+                  "show interfaces",
+                  "ipconfig /all",
+                  "tracert",
+                  "show version",
+                  "arp -a"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "qq": "Which device and port is at the other end of this cable?"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "qq": "Are input errors or CRC errors climbing on this router port?"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "qq": "On Windows: address, mask, gateway, DNS and whether DHCP is on"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "qq": "On Windows: at which hop does the path stop?"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "qq": "Did this router reboot last night?"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "qq": "Has the PC learned the gateway's MAC address?"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": "show cdp neighbors detail",
+              "r2.c": "show interfaces",
+              "r3.c": "ipconfig /all",
+              "r4.c": "tracert",
+              "r5.c": "show version",
+              "r6.c": "arp -a"
+            },
+            "giaiThich": "<p>CDP shows neighbours, show interfaces shows counters and errors, ipconfig /all shows every host setting, tracert is the Windows spelling of traceroute, show version has the uptime line, and arp -a lists the IP-to-MAC cache.</p><p><i>VI: CDP cho thấy hàng xóm, show interfaces cho thấy bộ đếm và lỗi, ipconfig /all cho thấy mọi thiết lập của máy, tracert là cách viết traceroute trên Windows, show version có dòng uptime, còn arp -a liệt kê bộ đệm IP–MAC.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting bottom-up for a single broken application."
+        },
+        {
+          "loi": "Using show ip interface brief to look for error counters — it has none."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "divide-and-conquer",
+          "vi": "chia để trị"
+        },
+        {
+          "en": "CDP",
+          "vi": "giao thức khám phá thiết bị Cisco"
+        }
+      ]
+    },
+    {
+      "title": "Verify 3 — Write probeVerdict(line): read the number, not the logs",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "probing",
+        "refused vs filtered"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>The ★ part of Lesson 16.2 checks a path from the machine you are already on, reading one number or one line. Write <code>probeVerdict(line)</code>:</p>\n<ul>\n<li>A three-digit line is the status code printed by <code>curl -s -o /dev/null -w \"%{http_code}\\n\" URL</code>:\n  <code>000</code> ⇒ <code>\"no-answer\"</code> (no HTTP response at all);\n  <code>404</code> ⇒ <code>\"not-mounted\"</code>;\n  ≥ 500 ⇒ <code>\"server-error\"</code>;\n  below 400, or exactly 401 / 403 ⇒ <code>\"reachable\"</code> (the server answered: the path works; authentication is a separate question);\n  any other 4xx ⇒ <code>\"client-error\"</code>.</li>\n<li>Otherwise it is one line printed by <code>nc -vz HOST PORT</code>: a line containing <code>succeeded</code> or ending in <code>open</code> ⇒ <code>\"listening\"</code>; containing <code>refused</code> ⇒ <code>\"refused\"</code> (the machine answered at once: nothing listens on that port); containing <code>timed out</code> or <code>timeout</code> ⇒ <code>\"filtered\"</code> (nobody answered: something swallowed the packet).</li>\n<li>Anything else ⇒ <code>\"no-answer\"</code>. Ignore case for the nc words, and trim the line first.</li>\n</ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phần ★ của bài 16.2 kiểm một con đường ngay từ máy bạn đang ngồi, chỉ đọc một con số hoặc một dòng. Viết <code>probeVerdict(line)</code>:</p>\n<ul>\n<li>Dòng ba chữ số là mã trạng thái do <code>curl -s -o /dev/null -w \"%{http_code}\\n\" URL</code> in ra:\n  <code>000</code> ⇒ <code>\"no-answer\"</code> (không có phản hồi HTTP nào);\n  <code>404</code> ⇒ <code>\"not-mounted\"</code>;\n  ≥ 500 ⇒ <code>\"server-error\"</code>;\n  dưới 400, hoặc đúng 401 / 403 ⇒ <code>\"reachable\"</code> (máy chủ đã trả lời: đường đi tốt; xác thực là chuyện khác);\n  các 4xx còn lại ⇒ <code>\"client-error\"</code>.</li>\n<li>Nếu không, đó là một dòng do <code>nc -vz HOST PORT</code> in ra: có chữ <code>succeeded</code> hoặc kết thúc bằng <code>open</code> ⇒ <code>\"listening\"</code>; có chữ <code>refused</code> ⇒ <code>\"refused\"</code> (máy trả lời ngay: không có gì nghe ở cổng đó); có <code>timed out</code> hoặc <code>timeout</code> ⇒ <code>\"filtered\"</code> (không ai trả lời: có thứ đã nuốt gói).</li>\n<li>Mọi thứ khác ⇒ <code>\"no-answer\"</code>. Không phân biệt hoa thường với các chữ của nc, và cắt khoảng trắng hai đầu trước.</li>\n</ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "probeVerdict(\"401\")",
+          "output": "\"reachable\"",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Test /^\\d{3}$/ on the trimmed line first, then branch on the number.",
+        "Order the nc checks: success words, then refused, then timeout."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function probeVerdict(line) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction probeVerdict(line) {\n  var l = String(line).trim();\n  if (/^\\d{3}$/.test(l)) {\n    var n = +l;\n    if (n === 0) return 'no-answer';                          // curl prints 000 when no HTTP response came back at all\n    if (n === 404) return 'not-mounted';                      // the server answered: nothing is mounted at that path\n    if (n >= 500) return 'server-error';                      // the server answered and then failed\n    if (n < 400 || n === 401 || n === 403) return 'reachable'; // 2xx/3xx, and 401/403: the path works, auth is a separate question\n    return 'client-error';\n  }\n  if (/succeeded|open$/i.test(l)) return 'listening';\n  if (/refused/i.test(l)) return 'refused';                   // the machine answered at once: nothing listens on that port\n  if (/timed out|timeout/i.test(l)) return 'filtered';        // nobody answered: something swallowed the packet\n  return 'no-answer';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>404 means the server answered; a timeout means nothing did. Those lead to opposite next steps — check what is deployed versus check what is filtering — which is why the verdict matters more than the log.</p><p><i>VI: 404 nghĩa là máy chủ đã trả lời; hết giờ nghĩa là không ai trả lời. Hai thứ dẫn tới bước tiếp theo ngược nhau — kiểm thứ đang được deploy hay kiểm thứ đang chặn — nên phán quyết quan trọng hơn log.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: probeVerdict(\"401\")",
+              "vi": "Ca 1"
+            },
+            "goi": "probeVerdict(\"401\")",
+            "mongDoi": "reachable"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: probeVerdict(\"404\")",
+              "vi": "Ca 2"
+            },
+            "goi": "probeVerdict(\"404\")",
+            "mongDoi": "not-mounted"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: probeVerdict(\"200\")",
+              "vi": "Ca 3"
+            },
+            "goi": "probeVerdict(\"200\")",
+            "mongDoi": "reachable"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "probeVerdict(\"000\")",
+            "mongDoi": "no-answer",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "probeVerdict(\"502\")",
+            "mongDoi": "server-error",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "probeVerdict(\"Connection to 127.0.0.1 22 port [tcp/ssh] succeeded!\")",
+            "mongDoi": "listening",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "probeVerdict(\"nc: connect to 127.0.0.1 port 9 (tcp) failed: Connection refused\")",
+            "mongDoi": "refused",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "probeVerdict(\"nc: connect to 10.0.0.5 port 22 (tcp) failed: Connection timed out\")",
+            "mongDoi": "filtered",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "probeVerdict(\"  301  \")",
+            "mongDoi": "reachable",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "probeVerdict(\"429\")",
+            "mongDoi": "client-error",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "probeVerdict(\"403\")",
+            "mongDoi": "reachable",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "probeVerdict(\"10.0.0.5 22 (ssh) open\")",
+            "mongDoi": "listening",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 13",
+              "vi": "Ca ẩn 13"
+            },
+            "goi": "probeVerdict(\"something unexpected\")",
+            "mongDoi": "no-answer",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating 401 as a failure — it proves the request arrived and the route is mounted."
+        },
+        {
+          "loi": "Treating \"refused\" and \"timed out\" as the same failure: one is an answer, the other is silence."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Verify 4 — Troubleshooting scenarios, worked like an incident",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "troubleshooting scenarios"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>The scenarios of Lesson 16.2: say what is already ruled out before you touch anything.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các tình huống của bài 16.2: nói được cái gì đã bị loại trừ trước khi đụng vào bất cứ thứ gì.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every reading rules something out; say what before acting.",
+        "The cheapest question is the one that splits the problem in half."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Verify 4 — Troubleshooting scenarios, worked like an incident\n\nAnswer in the answer panel (no code needed).\n\n1. A router interface shows up / down. What has that ALREADY ruled out?Một interface router hiện up / down. Điều đó ĐÃ loại trừ cái gì?\n2. After up/down, show interfaces confirms nothing is being received. What is the NEXT command, and where do you type it?Sau up/down, show interfaces xác nhận không nhận được gì. Lệnh TIẾP THEO là gì, và gõ ở đâu?\n3. A user says \"the internet is down\". You may ask ONE question before touching anything. Which removes the most possibilities?Người dùng nói \"mất mạng rồi\". Bạn được hỏi MỘT câu trước khi đụng vào gì. Câu nào loại được nhiều khả năng nhất?\n4. You correct a hand-typed wrong gateway on one laptop and it works. What stops the next three incidents?Bạn sửa một gateway gõ tay sai trên một laptop và nó chạy. Điều gì ngăn ba sự cố tiếp theo?\n5. An hour into an incident, three engineers have each pinged the gateway and nobody knows what is ruled out. What would have prevented this?Một giờ sau khi sự cố bắt đầu, ba kỹ sư đều đã ping gateway và không ai biết cái gì đã bị loại trừ. Điều gì lẽ ra ngăn được chuyện này?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Verify 4 — Troubleshooting scenarios, worked like an incident — answer key\n\n1. A router interface shows up / down. What has that ALREADY ruled out?Một interface router hiện up / down. Điều đó ĐÃ loại trừ cái gì?\n   Answer: b) Layer 1: the cable, both ports and the optics\n   Status up means a signal is on the wire. What remains is layer 2: encapsulation mismatch, a missing clock rate, no keepalives, or a neighbour that is administratively down. Reseating the cable re-tests something already known.VI: Status up nghĩa là có tín hiệu trên dây. Còn lại là tầng 2: lệch encapsulation, thiếu clock rate, không có keepalive, hoặc thiết bị bên kia administratively down. Cắm lại cáp là đi thử lại thứ đã biết.\n\n2. After up/down, show interfaces confirms nothing is being received. What is the NEXT command, and where do you type it?Sau up/down, show interfaces xác nhận không nhận được gì. Lệnh TIẾP THEO là gì, và gõ ở đâu?\n   Answer: b) show cdp neighbors detail, then go to that neighbour\n   The evidence points across the cable, not along it: find which device and port are at the other end, then look at that device.VI: Bằng chứng chỉ sang bên kia sợi cáp, không phải dọc theo nó: tìm thiết bị và cổng ở đầu bên kia, rồi nhìn vào thiết bị đó.\n\n3. A user says \"the internet is down\". You may ask ONE question before touching anything. Which removes the most possibilities?Người dùng nói \"mất mạng rồi\". Bạn được hỏi MỘT câu trước khi đụng vào gì. Câu nào loại được nhiều khả năng nhất?\n   Answer: d) \"Is it only you, or everyone around you too?\"\n   \"Only me\" versus \"everyone\" splits the problem into a host fault and a shared-infrastructure fault in one answer, and it chooses your method. The cable question tests one component.VI: \"Chỉ mình tôi\" hay \"cả phòng\" chia đôi vấn đề thành lỗi một máy và lỗi hạ tầng dùng chung chỉ bằng một câu, và nó chọn luôn phương pháp. Câu về cáp chỉ kiểm một bộ phận.\n\n4. You correct a hand-typed wrong gateway on one laptop and it works. What stops the next three incidents?Bạn sửa một gateway gõ tay sai trên một laptop và nó chạy. Điều gì ngăn ba sự cố tiếp theo?\n   Answer: d) Asking why that laptop was static at all, and putting it back on DHCP\n   Fixing the host fixes today; fixing the reason fixes the pattern. Manual exceptions are where small networks rot.VI: Sửa máy là sửa hôm nay; sửa lý do là sửa cả khuôn mẫu. Ngoại lệ cấu hình tay là chỗ mạng nhỏ mục ruỗng.\n\n5. An hour into an incident, three engineers have each pinged the gateway and nobody knows what is ruled out. What would have prevented this?Một giờ sau khi sự cố bắt đầu, ba kỹ sư đều đã ping gateway và không ai biết cái gì đã bị loại trừ. Điều gì lẽ ra ngăn được chuyện này?\n   Answer: d) Naming the method and writing down each proven layer as it is proven\n   Prove one layer, write it down, never re-test it. That box is where every method in the lesson ends — it is the part that actually saves time.VI: Chứng minh một tầng, ghi lại, không bao giờ thử lại. Đó là ô mà mọi phương pháp trong bài đều dẫn tới — chính nó mới tiết kiệm thời gian.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Layer 1: the cable, both ports and the optics</p><p>Status up means a signal is on the wire. What remains is layer 2: encapsulation mismatch, a missing clock rate, no keepalives, or a neighbour that is administratively down. Reseating the cable re-tests something already known.</p><p><i>VI: Status up nghĩa là có tín hiệu trên dây. Còn lại là tầng 2: lệch encapsulation, thiếu clock rate, không có keepalive, hoặc thiết bị bên kia administratively down. Cắm lại cáp là đi thử lại thứ đã biết.</i></p></li><li><p><b>b)</b> show cdp neighbors detail, then go to that neighbour</p><p>The evidence points across the cable, not along it: find which device and port are at the other end, then look at that device.</p><p><i>VI: Bằng chứng chỉ sang bên kia sợi cáp, không phải dọc theo nó: tìm thiết bị và cổng ở đầu bên kia, rồi nhìn vào thiết bị đó.</i></p></li><li><p><b>d)</b> \"Is it only you, or everyone around you too?\"</p><p>\"Only me\" versus \"everyone\" splits the problem into a host fault and a shared-infrastructure fault in one answer, and it chooses your method. The cable question tests one component.</p><p><i>VI: \"Chỉ mình tôi\" hay \"cả phòng\" chia đôi vấn đề thành lỗi một máy và lỗi hạ tầng dùng chung chỉ bằng một câu, và nó chọn luôn phương pháp. Câu về cáp chỉ kiểm một bộ phận.</i></p></li><li><p><b>d)</b> Asking why that laptop was static at all, and putting it back on DHCP</p><p>Fixing the host fixes today; fixing the reason fixes the pattern. Manual exceptions are where small networks rot.</p><p><i>VI: Sửa máy là sửa hôm nay; sửa lý do là sửa cả khuôn mẫu. Ngoại lệ cấu hình tay là chỗ mạng nhỏ mục ruỗng.</i></p></li><li><p><b>d)</b> Naming the method and writing down each proven layer as it is proven</p><p>Prove one layer, write it down, never re-test it. That box is where every method in the lesson ends — it is the part that actually saves time.</p><p><i>VI: Chứng minh một tầng, ghi lại, không bao giờ thử lại. Đó là ô mà mọi phương pháp trong bài đều dẫn tới — chính nó mới tiết kiệm thời gian.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A router interface shows up / down. What has that ALREADY ruled out?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một interface router hiện up / down. Điều đó ĐÃ loại trừ cái gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing yet: up/down can mean anything at all"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Layer 1: the cable, both ports and the optics"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Layer 3: the IP address and the routing table"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the configuration of the far-end device"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Status up means a signal is on the wire. What remains is layer 2: encapsulation mismatch, a missing clock rate, no keepalives, or a neighbour that is administratively down. Reseating the cable re-tests something already known.</p><p><i>VI: Status up nghĩa là có tín hiệu trên dây. Còn lại là tầng 2: lệch encapsulation, thiếu clock rate, không có keepalive, hoặc thiết bị bên kia administratively down. Cắm lại cáp là đi thử lại thứ đã biết.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>After up/down, show interfaces confirms nothing is being received. What is the NEXT command, and where do you type it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau up/down, show interfaces xác nhận không nhận được gì. Lệnh TIẾP THEO là gì, và gõ ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "show ip route on this router to find the path"
+              },
+              {
+                "ma": "b",
+                "noiDung": "show cdp neighbors detail, then go to that neighbour"
+              },
+              {
+                "ma": "c",
+                "noiDung": "reload this router and watch the interface"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ping 8.8.8.8 from a PC on the same subnet"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The evidence points across the cable, not along it: find which device and port are at the other end, then look at that device.</p><p><i>VI: Bằng chứng chỉ sang bên kia sợi cáp, không phải dọc theo nó: tìm thiết bị và cổng ở đầu bên kia, rồi nhìn vào thiết bị đó.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A user says \"the internet is down\". You may ask ONE question before touching anything. Which removes the most possibilities?</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng nói \"mất mạng rồi\". Bạn được hỏi MỘT câu trước khi đụng vào gì. Câu nào loại được nhiều khả năng nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"Which browser are you using?\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"Is your cable plugged in?\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"Did you restart your computer?\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"Is it only you, or everyone around you too?\""
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>\"Only me\" versus \"everyone\" splits the problem into a host fault and a shared-infrastructure fault in one answer, and it chooses your method. The cable question tests one component.</p><p><i>VI: \"Chỉ mình tôi\" hay \"cả phòng\" chia đôi vấn đề thành lỗi một máy và lỗi hạ tầng dùng chung chỉ bằng một câu, và nó chọn luôn phương pháp. Câu về cáp chỉ kiểm một bộ phận.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>You correct a hand-typed wrong gateway on one laptop and it works. What stops the next three incidents?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn sửa một gateway gõ tay sai trên một laptop và nó chạy. Điều gì ngăn ba sự cố tiếp theo?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Writing the correct gateway on a sticky note on the laptop"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Disabling DHCP so every host is configured by hand"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Rebooting the router every morning"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Asking why that laptop was static at all, and putting it back on DHCP"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Fixing the host fixes today; fixing the reason fixes the pattern. Manual exceptions are where small networks rot.</p><p><i>VI: Sửa máy là sửa hôm nay; sửa lý do là sửa cả khuôn mẫu. Ngoại lệ cấu hình tay là chỗ mạng nhỏ mục ruỗng.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>An hour into an incident, three engineers have each pinged the gateway and nobody knows what is ruled out. What would have prevented this?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một giờ sau khi sự cố bắt đầu, ba kỹ sư đều đã ping gateway và không ai biết cái gì đã bị loại trừ. Điều gì lẽ ra ngăn được chuyện này?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Working faster with more parallel tests"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Restarting every device at once"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Letting the AI assistant decide which test to run"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Naming the method and writing down each proven layer as it is proven"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Prove one layer, write it down, never re-test it. That box is where every method in the lesson ends — it is the part that actually saves time.</p><p><i>VI: Chứng minh một tầng, ghi lại, không bao giờ thử lại. Đó là ô mà mọi phương pháp trong bài đều dẫn tới — chính nó mới tiết kiệm thời gian.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reseating a cable on an interface whose Status is already up."
+        },
+        {
+          "loi": "Fixing the symptom on one host and never asking why it happened."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "runbook",
+          "vi": "sổ tay xử lý sự cố"
+        },
+        {
+          "en": "ruled out",
+          "vi": "đã loại trừ"
+        }
+      ]
+    }
+  ]
+}

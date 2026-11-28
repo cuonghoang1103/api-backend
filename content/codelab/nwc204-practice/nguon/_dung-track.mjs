@@ -15,7 +15,7 @@ const rank = (m) => {
   return [ch, lab, sub];
 };
 mods.sort((a, b) => { const x = rank(a), y = rank(b); return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]; });
-const MUC = { 3: 'BEGINNER', 4: 'BEGINNER', 5: 'BEGINNER', 6: 'INTERMEDIATE', 7: 'INTERMEDIATE', 8: 'INTERMEDIATE', 10: 'INTERMEDIATE', 11: 'INTERMEDIATE', 12: 'INTERMEDIATE', 13: 'ADVANCED', 14: 'INTERMEDIATE', 15: 'ADVANCED', 20: 'ADVANCED' };
+const MUC = { 1: 'BEGINNER', 2: 'BEGINNER', 3: 'BEGINNER', 4: 'BEGINNER', 5: 'BEGINNER', 6: 'INTERMEDIATE', 7: 'INTERMEDIATE', 8: 'INTERMEDIATE', 9: 'INTERMEDIATE', 10: 'INTERMEDIATE', 11: 'INTERMEDIATE', 12: 'INTERMEDIATE', 13: 'ADVANCED', 14: 'INTERMEDIATE', 15: 'ADVANCED', 16: 'INTERMEDIATE', 20: 'ADVANCED' };
 const en = (t) => (typeof t === 'string' ? t : t.en);
 const track = {
   groupSlug: 'fptu',
@@ -26,7 +26,7 @@ const track = {
   docsUrl: 'https://www.netacad.com/courses/networking',
   status: 'PUBLISHED',
   level: 'BEGINNER',
-  description: 'Bộ luyện môn NWC204 (Mạng máy tính, theo giáo trình Cisco CCNA ITN) bám dạng đề FE của trường — mỗi bài học một bộ đề từ dễ đến khó, con số trong đề do bộ mô phỏng tính bằng mã (nhị phân và AND, chia subnet và VLSM, CIDR và wildcard, IPv6, bảng định tuyến khớp tiền tố dài nhất, bảng MAC và VLAN, ARP, phân mảnh IP, CRC, bắt tay TCP và cửa sổ trượt, ACL, NAT/PAT, thời gian truyền); bài khó là viết hàm mô phỏng chạy thật trong trình duyệt; ba Lab (hoạch định địa chỉ, mô phỏng router, router biên ACL + PAT) và hai đề FE thi thử cuối môn.',
+  description: 'Bộ luyện môn NWC204 (Mạng máy tính, theo giáo trình Cisco CCNA ITN) bám dạng đề FE của trường — mỗi bài học một bộ đề từ dễ đến khó, con số trong đề do bộ mô phỏng tính bằng mã (nhị phân và AND, chia subnet và VLSM, CIDR và wildcard, IPv6, bảng định tuyến khớp tiền tố dài nhất, bảng MAC và VLAN, ARP, phân mảnh IP, CRC, bắt tay TCP và cửa sổ trượt, ACL, NAT/PAT, thời gian truyền); chương 1–2 (thành phần mạng, bốn con số băng thông/độ trễ, thang tự kiểm năm lệnh, chế độ IOS, làm cứng và lưu cấu hình switch — Lab 1.1), chương 9 (SSH, interface, default gateway) và chương 16 (thiết kế và gỡ lỗi một mạng nhỏ); bài khó là viết hàm mô phỏng chạy thật trong trình duyệt (chẩn đoán máy trạm, phiên IOS, soát cấu hình, đọc show ip interface brief, dự đoán ping của Lab 2.1); bốn Lab (hoạch định địa chỉ, mô phỏng router, Lab 2.1 switch + router, router biên ACL + PAT) và hai đề FE thi thử cuối môn.',
   modules: mods.map((m) => ({
     slug: m.slug,
     name: m.ten,

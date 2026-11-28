@@ -1,0 +1,762 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-16-1-small-network-design",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-16-1-thiet-bi-giao-thuc-va-mo-rong-mang-nho"
+  },
+  "exercises": [
+    {
+      "title": "Small 1 — The decisions before any cable is plugged in",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "small network design"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Lesson 16.1: device selection, addressing, redundancy and documentation for a network one person can hold in their head.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 16.1: chọn thiết bị, đánh địa chỉ, dự phòng và tài liệu cho một mạng đủ nhỏ để một người nắm trọn trong đầu.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Static for things others look up; DHCP for things that look others up.",
+        "Redundancy only counts if the second path fails for different reasons."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Small 1 — The decisions before any cable is plugged in\n\nAnswer in the answer panel (no code needed).\n\n1. Which devices should have a static (or DHCP-reserved) address rather than one from the pool?Thiết bị nào nên có địa chỉ tĩnh (hoặc DHCP giữ chỗ) thay vì lấy từ pool?\n2. CQ19.2: which element of scaling a network involves identifying the physical and logical topologies?CQ19.2: yếu tố nào của việc mở rộng mạng liên quan tới xác định tô-pô vật lý và logic?\n3. CQ20.1: the only exit to the ISP is one router. What keeps connectivity if the router or its line fails?CQ20.1: lối ra duy nhất tới ISP là một router. Cái gì giữ được kết nối nếu router hoặc đường truyền hỏng?\n4. CQ20.2: which mechanism minimises latency for real-time streaming on a small network?CQ20.2: cơ chế nào giảm độ trễ cho luồng thời gian thực trên mạng nhỏ?\n5. Why is voice the traffic that changes the design, rather than file transfer?Vì sao thoại mới là lưu lượng làm thay đổi thiết kế, chứ không phải truyền tệp?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Small 1 — The decisions before any cable is plugged in — answer key\n\n1. Which devices should have a static (or DHCP-reserved) address rather than one from the pool?Thiết bị nào nên có địa chỉ tĩnh (hoặc DHCP giữ chỗ) thay vì lấy từ pool?\n   Answer: b) Router, switches, printer, camera and servers\n   A printer that comes back after a power cut with a new address breaks every driver pointing at the old one. Users' laptops are exactly what the pool is for.VI: Máy in bật lại sau mất điện với địa chỉ mới là làm hỏng mọi driver đang trỏ vào địa chỉ cũ. Laptop của người dùng mới đúng là thứ dành cho pool.\n\n2. CQ19.2: which element of scaling a network involves identifying the physical and logical topologies?CQ19.2: yếu tố nào của việc mở rộng mạng liên quan tới xác định tô-pô vật lý và logic?\n   Answer: a) Network documentation\n   Documentation comes first because every later decision is an argument about a diagram — and the two topologies are kept separately because they fail separately.VI: Tài liệu mạng đi trước vì mọi quyết định sau đều là một cuộc tranh luận quanh một sơ đồ — và hai tô-pô được ghi riêng vì chúng hỏng riêng.\n\n3. CQ20.1: the only exit to the ISP is one router. What keeps connectivity if the router or its line fails?CQ20.1: lối ra duy nhất tới ISP là một router. Cái gì giữ được kết nối nếu router hoặc đường truyền hỏng?\n   Answer: a) Redundancy — a second, independent path out\n   The word that does the work is independent: two routers sharing one line still share one failure. For a small office, \"none, accepted deliberately and written down, with a 4G hotspot as manual fallback\" is also a defensible answer.VI: Từ gánh cả câu là độc lập: hai router dùng chung một đường truyền vẫn chung một điểm hỏng. Với văn phòng nhỏ, \"không dự phòng, chấp nhận có chủ ý và ghi lại, với một điểm phát 4G làm phương án tay\" cũng là câu trả lời bảo vệ được.\n\n4. CQ20.2: which mechanism minimises latency for real-time streaming on a small network?CQ20.2: cơ chế nào giảm độ trễ cho luồng thời gian thực trên mạng nhỏ?\n   Answer: d) Quality of Service (QoS) where the queue forms\n   QoS creates no bandwidth; it only decides who waits. On an uncongested link it changes nothing by design — find where the queue forms first, prioritise second.VI: QoS không tạo ra băng thông; nó chỉ quyết định ai phải chờ. Trên đường không nghẽn thì theo thiết kế nó không đổi gì — tìm chỗ hàng đợi hình thành trước, ưu tiên sau.\n\n5. Why is voice the traffic that changes the design, rather than file transfer?Vì sao thoại mới là lưu lượng làm thay đổi thiết kế, chứ không phải truyền tệp?\n   Answer: a) A late voice packet has already missed its moment — it cannot be repaired by retrying\n   Elastic traffic (files, email, web) slows down and recovers. Real-time traffic has a deadline; that is why the switch must support QoS — and ideally PoE so phones do not each need a power brick.VI: Lưu lượng co giãn (tệp, email, web) chậm lại rồi hồi phục. Lưu lượng thời gian thực có hạn chót; vì thế switch phải hỗ trợ QoS — và tốt nhất có PoE để mỗi điện thoại khỏi cần một cục nguồn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Router, switches, printer, camera and servers</p><p>A printer that comes back after a power cut with a new address breaks every driver pointing at the old one. Users' laptops are exactly what the pool is for.</p><p><i>VI: Máy in bật lại sau mất điện với địa chỉ mới là làm hỏng mọi driver đang trỏ vào địa chỉ cũ. Laptop của người dùng mới đúng là thứ dành cho pool.</i></p></li><li><p><b>a)</b> Network documentation</p><p>Documentation comes first because every later decision is an argument about a diagram — and the two topologies are kept separately because they fail separately.</p><p><i>VI: Tài liệu mạng đi trước vì mọi quyết định sau đều là một cuộc tranh luận quanh một sơ đồ — và hai tô-pô được ghi riêng vì chúng hỏng riêng.</i></p></li><li><p><b>a)</b> Redundancy — a second, independent path out</p><p>The word that does the work is independent: two routers sharing one line still share one failure. For a small office, \"none, accepted deliberately and written down, with a 4G hotspot as manual fallback\" is also a defensible answer.</p><p><i>VI: Từ gánh cả câu là độc lập: hai router dùng chung một đường truyền vẫn chung một điểm hỏng. Với văn phòng nhỏ, \"không dự phòng, chấp nhận có chủ ý và ghi lại, với một điểm phát 4G làm phương án tay\" cũng là câu trả lời bảo vệ được.</i></p></li><li><p><b>d)</b> Quality of Service (QoS) where the queue forms</p><p>QoS creates no bandwidth; it only decides who waits. On an uncongested link it changes nothing by design — find where the queue forms first, prioritise second.</p><p><i>VI: QoS không tạo ra băng thông; nó chỉ quyết định ai phải chờ. Trên đường không nghẽn thì theo thiết kế nó không đổi gì — tìm chỗ hàng đợi hình thành trước, ưu tiên sau.</i></p></li><li><p><b>a)</b> A late voice packet has already missed its moment — it cannot be repaired by retrying</p><p>Elastic traffic (files, email, web) slows down and recovers. Real-time traffic has a deadline; that is why the switch must support QoS — and ideally PoE so phones do not each need a power brick.</p><p><i>VI: Lưu lượng co giãn (tệp, email, web) chậm lại rồi hồi phục. Lưu lượng thời gian thực có hạn chót; vì thế switch phải hỗ trợ QoS — và tốt nhất có PoE để mỗi điện thoại khỏi cần một cục nguồn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which devices should have a static (or DHCP-reserved) address rather than one from the pool?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thiết bị nào nên có địa chỉ tĩnh (hoặc DHCP giữ chỗ) thay vì lấy từ pool?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Guest phones, so each visitor can be traced"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Router, switches, printer, camera and servers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Laptops, because they move between meeting rooms"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None of them: DHCP handles every device better"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A printer that comes back after a power cut with a new address breaks every driver pointing at the old one. Users' laptops are exactly what the pool is for.</p><p><i>VI: Máy in bật lại sau mất điện với địa chỉ mới là làm hỏng mọi driver đang trỏ vào địa chỉ cũ. Laptop của người dùng mới đúng là thứ dành cho pool.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>CQ19.2: which element of scaling a network involves identifying the physical and logical topologies?</p><p style=\"opacity:.75;font-size:.92em\"><i>CQ19.2: yếu tố nào của việc mở rộng mạng liên quan tới xác định tô-pô vật lý và logic?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Network documentation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Traffic analysis"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Device inventory"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Protocol analysis"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Documentation comes first because every later decision is an argument about a diagram — and the two topologies are kept separately because they fail separately.</p><p><i>VI: Tài liệu mạng đi trước vì mọi quyết định sau đều là một cuộc tranh luận quanh một sơ đồ — và hai tô-pô được ghi riêng vì chúng hỏng riêng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>CQ20.1: the only exit to the ISP is one router. What keeps connectivity if the router or its line fails?</p><p style=\"opacity:.75;font-size:.92em\"><i>CQ20.1: lối ra duy nhất tới ISP là một router. Cái gì giữ được kết nối nếu router hoặc đường truyền hỏng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Redundancy — a second, independent path out"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A larger subnet mask on the LAN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "QoS on the existing router"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Saving the configuration more often"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The word that does the work is independent: two routers sharing one line still share one failure. For a small office, \"none, accepted deliberately and written down, with a 4G hotspot as manual fallback\" is also a defensible answer.</p><p><i>VI: Từ gánh cả câu là độc lập: hai router dùng chung một đường truyền vẫn chung một điểm hỏng. Với văn phòng nhỏ, \"không dự phòng, chấp nhận có chủ ý và ghi lại, với một điểm phát 4G làm phương án tay\" cũng là câu trả lời bảo vệ được.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>CQ20.2: which mechanism minimises latency for real-time streaming on a small network?</p><p style=\"opacity:.75;font-size:.92em\"><i>CQ20.2: cơ chế nào giảm độ trễ cho luồng thời gian thực trên mạng nhỏ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Port security on every access port"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A longer DHCP lease for every host"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A faster DNS server for every client"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Quality of Service (QoS) where the queue forms"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>QoS creates no bandwidth; it only decides who waits. On an uncongested link it changes nothing by design — find where the queue forms first, prioritise second.</p><p><i>VI: QoS không tạo ra băng thông; nó chỉ quyết định ai phải chờ. Trên đường không nghẽn thì theo thiết kế nó không đổi gì — tìm chỗ hàng đợi hình thành trước, ưu tiên sau.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why is voice the traffic that changes the design, rather than file transfer?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao thoại mới là lưu lượng làm thay đổi thiết kế, chứ không phải truyền tệp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A late voice packet has already missed its moment — it cannot be repaired by retrying"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Voice uses more bandwidth than any file transfer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "File transfers are always encrypted and voice is not"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Voice needs a public IP address on every phone"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Elastic traffic (files, email, web) slows down and recovers. Real-time traffic has a deadline; that is why the switch must support QoS — and ideally PoE so phones do not each need a power brick.</p><p><i>VI: Lưu lượng co giãn (tệp, email, web) chậm lại rồi hồi phục. Lưu lượng thời gian thực có hạn chót; vì thế switch phải hỗ trợ QoS — và tốt nhất có PoE để mỗi điện thoại khỏi cần một cục nguồn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the printer on DHCP."
+        },
+        {
+          "loi": "Thinking QoS adds bandwidth."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "single point of failure",
+          "vi": "điểm hỏng duy nhất"
+        },
+        {
+          "en": "PoE",
+          "vi": "cấp nguồn qua cáp mạng"
+        }
+      ]
+    },
+    {
+      "title": "Small 2 — Write portsNeeded(s): count before you buy",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "capacity planning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Trap 1 of Lesson 16.1 is buying for the headcount you have. Write <code>portsNeeded(s)</code> with <code>s = { users, printers, phones, cameras, aps, uplinks, phonePassThrough }</code> (all counts are for the size you plan for, not today):</p>\n<ul>\n<li>Every user, printer, camera, access point and uplink takes one switch port.</li>\n<li>IP phones take one port each — unless <code>phonePassThrough</code> is true: then a user's PC plugs into the back of the phone and the pair uses ONE port; only phones beyond the number of users (a lobby phone, say) need their own port.</li>\n<li>Return <code>{ ports, size }</code> where <code>size</code> is the smallest of 8, 16, 24, 48 that is ≥ <code>ports</code>, or <code>null</code> if more than 48 are needed.</li>\n</ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bẫy 1 của bài 16.1 là mua theo số người hiện có. Viết <code>portsNeeded(s)</code> với <code>s = { users, printers, phones, cameras, aps, uplinks, phonePassThrough }</code> (mọi con số là quy mô bạn tính trước, không phải hôm nay):</p>\n<ul>\n<li>Mỗi người dùng, máy in, camera, access point và đường uplink tốn một cổng switch.</li>\n<li>Điện thoại IP tốn mỗi cái một cổng — trừ khi <code>phonePassThrough</code> là true: khi đó PC của người dùng cắm vào sau lưng điện thoại và cả cặp tốn MỘT cổng; chỉ những điện thoại vượt quá số người dùng (ví dụ điện thoại ở sảnh) mới cần cổng riêng.</li>\n<li>Trả <code>{ ports, size }</code> với <code>size</code> là số nhỏ nhất trong 8, 16, 24, 48 mà ≥ <code>ports</code>, hoặc <code>null</code> nếu cần hơn 48.</li>\n</ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "portsNeeded({\"users\":25,\"printers\":1,\"phones\":3,\"cameras\":1,\"aps\":0,\"uplinks\":1,\"phonePassThrough\":false})",
+          "output": "{\"ports\":31,\"size\":48}",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Compute the phone ports separately: pass-through ⇒ max(0, phones − users).",
+        "Then pick the first standard size that fits."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function portsNeeded(s) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction portsNeeded(s) {\n  var phonePorts = s.phonePassThrough ? Math.max(0, s.phones - s.users) : s.phones;\n  var ports = s.users + phonePorts + s.printers + s.cameras + s.aps + s.uplinks;\n  var sizes = [8, 16, 24, 48], size = null;\n  for (var i = 0; i < sizes.length; i++) if (sizes[i] >= ports) { size = sizes[i]; break; }\n  return { ports: ports, size: size };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The port count is the decision everything else depends on: it decides the switch model, and a too-small switch becomes a daisy chain whose single uplink squeezes all traffic between the two halves of the office.</p><p><i>VI: Số cổng là quyết định mà mọi thứ khác phụ thuộc vào: nó quyết định đời switch, và một switch quá nhỏ sẽ thành chuỗi nối tiếp mà đường uplink duy nhất bóp nghẹt toàn bộ lưu lượng giữa hai nửa văn phòng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: portsNeeded({\"users\":25,\"printers\":1,\"phones\":3,\"cameras\":1,\"aps\":0,\"uplinks\":1,\"p)",
+              "vi": "Ca 1"
+            },
+            "goi": "portsNeeded({\"users\":25,\"printers\":1,\"phones\":3,\"cameras\":1,\"aps\":0,\"uplinks\":1,\"phonePassThrough\":false})",
+            "mongDoi": {
+              "ports": 31,
+              "size": 48
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: portsNeeded({\"users\":25,\"printers\":1,\"phones\":3,\"cameras\":1,\"aps\":0,\"uplinks\":1,\"p)",
+              "vi": "Ca 2"
+            },
+            "goi": "portsNeeded({\"users\":25,\"printers\":1,\"phones\":3,\"cameras\":1,\"aps\":0,\"uplinks\":1,\"phonePassThrough\":true})",
+            "mongDoi": {
+              "ports": 28,
+              "size": 48
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: portsNeeded({\"users\":12,\"printers\":1,\"phones\":0,\"cameras\":0,\"aps\":1,\"uplinks\":1,\"p)",
+              "vi": "Ca 3"
+            },
+            "goi": "portsNeeded({\"users\":12,\"printers\":1,\"phones\":0,\"cameras\":0,\"aps\":1,\"uplinks\":1,\"phonePassThrough\":false})",
+            "mongDoi": {
+              "ports": 15,
+              "size": 16
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "portsNeeded({\"users\":5,\"printers\":1,\"phones\":0,\"cameras\":0,\"aps\":0,\"uplinks\":1,\"phonePassThrough\":false})",
+            "mongDoi": {
+              "ports": 7,
+              "size": 8
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "portsNeeded({\"users\":20,\"printers\":2,\"phones\":22,\"cameras\":2,\"aps\":2,\"uplinks\":1,\"phonePassThrough\":true})",
+            "mongDoi": {
+              "ports": 29,
+              "size": 48
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "portsNeeded({\"users\":40,\"printers\":2,\"phones\":10,\"cameras\":4,\"aps\":3,\"uplinks\":2,\"phonePassThrough\":false})",
+            "mongDoi": {
+              "ports": 61,
+              "size": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "portsNeeded({\"users\":16,\"printers\":0,\"phones\":0,\"cameras\":0,\"aps\":0,\"uplinks\":0,\"phonePassThrough\":false})",
+            "mongDoi": {
+              "ports": 16,
+              "size": 16
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the uplink port to the router."
+        },
+        {
+          "loi": "Subtracting every phone when pass-through is on, even phones that have no PC behind them."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Small 3 — An addressing and traffic plan for one office",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "addressing plan",
+        "QoS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>The office of Lesson 16.1 uses 192.168.20.0/24, gateway 192.168.20.1: .1–.20 static for infrastructure, .100–.200 as the DHCP pool. Fill both tables.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Văn phòng của bài 16.1 dùng 192.168.20.0/24, gateway 192.168.20.1: .1–.20 tĩnh cho hạ tầng, .100–.200 làm pool DHCP. Điền cả hai bảng.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: does another machine need to find this one by address?",
+        "Ask: is a late packet still useful?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Small 3 — An addressing and traffic plan for one office\n\nAnswer in the answer panel (no code needed).\n\n1. Where does each device get its address?Mỗi thiết bị lấy địa chỉ từ đâu?\n2. Real-time or elastic? Prioritise it?Thời gian thực hay co giãn? Có ưu tiên không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Small 3 — An addressing and traffic plan for one office — answer key\n\n1. Where does each device get its address?Mỗi thiết bị lấy địa chỉ từ đâu?\n   - r1.a: static (.1–.20)\n   - r2.a: static (.1–.20)\n   - r3.a: static (.1–.20)\n   - r4.a: DHCP pool (.100–.200)\n   - r5.a: DHCP pool (.100–.200)\n   Infrastructure and anything other machines find by address is static; machines that only look others up take the pool. The gap between .20 and .100 lets either group grow without colliding.VI: Hạ tầng và mọi thứ máy khác tìm theo địa chỉ thì để tĩnh; máy chỉ đi tìm máy khác thì lấy từ pool. Khoảng trống giữa .20 và .100 cho phép mỗi nhóm lớn lên mà không đụng nhau.\n\n2. Real-time or elastic? Prioritise it?Thời gian thực hay co giãn? Có ưu tiên không?\n   - r1.k: real-time\n   - r1.p: yes\n   - r2.k: real-time\n   - r2.p: yes\n   - r3.k: elastic\n   - r3.p: no\n   - r4.k: elastic\n   - r4.p: no\n   Only traffic that cannot be repaired by waiting gets priority. Prioritising everything is prioritising nothing.VI: Chỉ lưu lượng không thể sửa bằng cách chờ mới được ưu tiên. Ưu tiên mọi thứ là không ưu tiên gì.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Infrastructure and anything other machines find by address is static; machines that only look others up take the pool. The gap between .20 and .100 lets either group grow without colliding.</p><p><i>VI: Hạ tầng và mọi thứ máy khác tìm theo địa chỉ thì để tĩnh; máy chỉ đi tìm máy khác thì lấy từ pool. Khoảng trống giữa .20 và .100 cho phép mỗi nhóm lớn lên mà không đụng nhau.</i></p><p>Only traffic that cannot be repaired by waiting gets priority. Prioritising everything is prioritising nothing.</p><p><i>VI: Chỉ lưu lượng không thể sửa bằng cách chờ mới được ưu tiên. Ưu tiên mọi thứ là không ưu tiên gì.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Where does each device get its address?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi thiết bị lấy địa chỉ từ đâu?</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Device"
+              },
+              {
+                "ma": "a",
+                "ten": "Addressing",
+                "luaChon": [
+                  "static (.1–.20)",
+                  "DHCP pool (.100–.200)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "Edge router"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "Network printer"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "Door camera"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "Staff laptops"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "A visitor's phone on Wi-Fi"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "static (.1–.20)",
+              "r2.a": "static (.1–.20)",
+              "r3.a": "static (.1–.20)",
+              "r4.a": "DHCP pool (.100–.200)",
+              "r5.a": "DHCP pool (.100–.200)"
+            },
+            "giaiThich": "<p>Infrastructure and anything other machines find by address is static; machines that only look others up take the pool. The gap between .20 and .100 lets either group grow without colliding.</p><p><i>VI: Hạ tầng và mọi thứ máy khác tìm theo địa chỉ thì để tĩnh; máy chỉ đi tìm máy khác thì lấy từ pool. Khoảng trống giữa .20 và .100 cho phép mỗi nhóm lớn lên mà không đụng nhau.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Real-time or elastic? Prioritise it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thời gian thực hay co giãn? Có ưu tiên không?</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Traffic"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "real-time",
+                  "elastic"
+                ]
+              },
+              {
+                "ma": "p",
+                "ten": "QoS priority",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "IP phone call"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Video meeting"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Nightly backup to the cloud"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "Email and file sharing"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.k": "real-time",
+              "r1.p": "yes",
+              "r2.k": "real-time",
+              "r2.p": "yes",
+              "r3.k": "elastic",
+              "r3.p": "no",
+              "r4.k": "elastic",
+              "r4.p": "no"
+            },
+            "giaiThich": "<p>Only traffic that cannot be repaired by waiting gets priority. Prioritising everything is prioritising nothing.</p><p><i>VI: Chỉ lưu lượng không thể sửa bằng cách chờ mới được ưu tiên. Ưu tiên mọi thứ là không ưu tiên gì.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the camera in the DHCP pool."
+        },
+        {
+          "loi": "Giving the backup priority because it is \"important\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DHCP reservation",
+          "vi": "giữ chỗ DHCP"
+        },
+        {
+          "en": "elastic traffic",
+          "vi": "lưu lượng co giãn"
+        }
+      ]
+    },
+    {
+      "title": "Small 4 — Growth, single points of failure, and the hidden incident",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "scaling",
+        "redundancy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Scaling scenarios from Lesson 16.1 and its ★ section, as they happen in small companies.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các tình huống mở rộng của bài 16.1 và phần ★, đúng như chúng xảy ra ở công ty nhỏ.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Most small-network incidents are design decisions made silently.",
+        "A risk you name is managed; a risk you discover is an outage."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Small 4 — Growth, single points of failure, and the hidden incident\n\nAnswer in the answer panel (no code needed).\n\n1. Eighteen months after opening, a second cheap switch is plugged into the first. Users say \"the network is slow in the afternoon\". Why?Mười tám tháng sau khi mở văn phòng, một switch rẻ thứ hai được cắm nối vào cái đầu. Người dùng kêu \"chiều nào mạng cũng chậm\". Vì sao?\n2. The single router dies. Nobody knows whether a spare exists, who the ISP contact is, or what the configuration was. What turned a four-hour outage into a two-day one?Router duy nhất chết. Không ai biết có máy dự phòng không, liên hệ ISP là ai, cấu hình thế nào. Cái gì biến bốn giờ mất mạng thành hai ngày?\n3. A new branch uses 10.8.0.0/16 for its LAN. Months later the company VPN is set up and some head-office servers become unreachable from the branch. Most likely cause?Chi nhánh mới dùng 10.8.0.0/16 cho LAN. Vài tháng sau VPN công ty được dựng và một số máy chủ ở trụ sở không tới được từ chi nhánh. Nguyên nhân nhiều khả năng nhất?\n4. QoS is configured, nothing measurable improves, and the team concludes the feature is broken. What is the more likely truth?Đã cấu hình QoS, không có gì cải thiện đo được, cả nhóm kết luận tính năng hỏng. Sự thật nhiều khả năng hơn là gì?\n5. ★ Your single-server Docker stack sits behind nginx. If nginx stops, every service is healthy and nothing is reachable. What is the cheapest real mitigation?★ Chồng Docker một máy của bạn nằm sau nginx. nginx dừng thì mọi dịch vụ vẫn khoẻ mà không gì tới được. Biện pháp thật sự rẻ nhất là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Small 4 — Growth, single points of failure, and the hidden incident — answer key\n\n1. Eighteen months after opening, a second cheap switch is plugged into the first. Users say \"the network is slow in the afternoon\". Why?Mười tám tháng sau khi mở văn phòng, một switch rẻ thứ hai được cắm nối vào cái đầu. Người dùng kêu \"chiều nào mạng cũng chậm\". Vì sao?\n   Answer: a) All traffic between the halves shares one uplink\n   A daisy chain turns one link into the bottleneck for everything crossing between the two halves — and the afternoon is when everyone is on it. Count ports for the growth you expect.VI: Nối chuỗi biến một đường thành nút cổ chai cho mọi thứ đi qua giữa hai nửa — và buổi chiều là lúc ai cũng dùng. Hãy đếm cổng theo mức tăng trưởng dự kiến.\n\n2. The single router dies. Nobody knows whether a spare exists, who the ISP contact is, or what the configuration was. What turned a four-hour outage into a two-day one?Router duy nhất chết. Không ai biết có máy dự phòng không, liên hệ ISP là ai, cấu hình thế nào. Cái gì biến bốn giờ mất mạng thành hai ngày?\n   Answer: c) The single point of failure was never written down\n   Accepting a risk is a legitimate decision. Not writing it down — spare, contact, saved configuration — is what makes the recovery slow.VI: Chấp nhận rủi ro là quyết định hợp lệ. Không ghi lại — máy dự phòng, liên hệ, cấu hình đã lưu — mới là thứ khiến khôi phục chậm.\n\n3. A new branch uses 10.8.0.0/16 for its LAN. Months later the company VPN is set up and some head-office servers become unreachable from the branch. Most likely cause?Chi nhánh mới dùng 10.8.0.0/16 cho LAN. Vài tháng sau VPN công ty được dựng và một số máy chủ ở trụ sở không tới được từ chi nhánh. Nguyên nhân nhiều khả năng nhất?\n   Answer: a) The branch range overlaps one used at head office\n   An overlapping private subnet makes hosts treat remote addresses as local — they ARP instead of routing. It is cheap to find on paper during design and expensive at 2 a.m.VI: Subnet riêng bị chồng khiến máy coi địa chỉ ở xa là cục bộ — chúng ARP thay vì định tuyến. Tìm ra trên giấy lúc thiết kế thì rẻ, tìm ra lúc 2 giờ sáng thì đắt.\n\n4. QoS is configured, nothing measurable improves, and the team concludes the feature is broken. What is the more likely truth?Đã cấu hình QoS, không có gì cải thiện đo được, cả nhóm kết luận tính năng hỏng. Sự thật nhiều khả năng hơn là gì?\n   Answer: a) The link was not congested, so there was no queue for QoS to reorder\n   QoS only decides who waits in a queue. No queue, nothing to decide. Measure where the queue forms — often the uplink to the ISP — before prioritising.VI: QoS chỉ quyết định ai phải chờ trong hàng đợi. Không có hàng đợi thì không có gì để quyết. Đo xem hàng đợi hình thành ở đâu — thường là đường lên ISP — trước khi ưu tiên.\n\n5. ★ Your single-server Docker stack sits behind nginx. If nginx stops, every service is healthy and nothing is reachable. What is the cheapest real mitigation?★ Chồng Docker một máy của bạn nằm sau nginx. nginx dừng thì mọi dịch vụ vẫn khoẻ mà không gì tới được. Biện pháp thật sự rẻ nhất là gì?\n   Answer: a) A restart policy plus a health check, so the single exit comes back fast — and the risk written down\n   nginx is the single exit point. A second proxy needs something in front to choose between them; for one server the honest answer is \"restart it fast\" — restart policy and health check — with the remaining risk named.VI: nginx là lối ra duy nhất. Proxy thứ hai cần một thứ đứng trước để chọn giữa chúng; với một máy chủ, câu trả lời thật là \"khởi động lại thật nhanh\" — restart policy và health check — kèm rủi ro còn lại được gọi tên.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> All traffic between the halves shares one uplink</p><p>A daisy chain turns one link into the bottleneck for everything crossing between the two halves — and the afternoon is when everyone is on it. Count ports for the growth you expect.</p><p><i>VI: Nối chuỗi biến một đường thành nút cổ chai cho mọi thứ đi qua giữa hai nửa — và buổi chiều là lúc ai cũng dùng. Hãy đếm cổng theo mức tăng trưởng dự kiến.</i></p></li><li><p><b>c)</b> The single point of failure was never written down</p><p>Accepting a risk is a legitimate decision. Not writing it down — spare, contact, saved configuration — is what makes the recovery slow.</p><p><i>VI: Chấp nhận rủi ro là quyết định hợp lệ. Không ghi lại — máy dự phòng, liên hệ, cấu hình đã lưu — mới là thứ khiến khôi phục chậm.</i></p></li><li><p><b>a)</b> The branch range overlaps one used at head office</p><p>An overlapping private subnet makes hosts treat remote addresses as local — they ARP instead of routing. It is cheap to find on paper during design and expensive at 2 a.m.</p><p><i>VI: Subnet riêng bị chồng khiến máy coi địa chỉ ở xa là cục bộ — chúng ARP thay vì định tuyến. Tìm ra trên giấy lúc thiết kế thì rẻ, tìm ra lúc 2 giờ sáng thì đắt.</i></p></li><li><p><b>a)</b> The link was not congested, so there was no queue for QoS to reorder</p><p>QoS only decides who waits in a queue. No queue, nothing to decide. Measure where the queue forms — often the uplink to the ISP — before prioritising.</p><p><i>VI: QoS chỉ quyết định ai phải chờ trong hàng đợi. Không có hàng đợi thì không có gì để quyết. Đo xem hàng đợi hình thành ở đâu — thường là đường lên ISP — trước khi ưu tiên.</i></p></li><li><p><b>a)</b> A restart policy plus a health check, so the single exit comes back fast — and the risk written down</p><p>nginx is the single exit point. A second proxy needs something in front to choose between them; for one server the honest answer is \"restart it fast\" — restart policy and health check — with the remaining risk named.</p><p><i>VI: nginx là lối ra duy nhất. Proxy thứ hai cần một thứ đứng trước để chọn giữa chúng; với một máy chủ, câu trả lời thật là \"khởi động lại thật nhanh\" — restart policy và health check — kèm rủi ro còn lại được gọi tên.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Eighteen months after opening, a second cheap switch is plugged into the first. Users say \"the network is slow in the afternoon\". Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mười tám tháng sau khi mở văn phòng, một switch rẻ thứ hai được cắm nối vào cái đầu. Người dùng kêu \"chiều nào mạng cũng chậm\". Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "All traffic between the halves shares one uplink"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Afternoon heat raises the resistance of the cables"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Two linked switches always cause a broadcast storm"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The second switch halves the size of the DHCP pool"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A daisy chain turns one link into the bottleneck for everything crossing between the two halves — and the afternoon is when everyone is on it. Count ports for the growth you expect.</p><p><i>VI: Nối chuỗi biến một đường thành nút cổ chai cho mọi thứ đi qua giữa hai nửa — và buổi chiều là lúc ai cũng dùng. Hãy đếm cổng theo mức tăng trưởng dự kiến.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The single router dies. Nobody knows whether a spare exists, who the ISP contact is, or what the configuration was. What turned a four-hour outage into a two-day one?</p><p style=\"opacity:.75;font-size:.92em\"><i>Router duy nhất chết. Không ai biết có máy dự phòng không, liên hệ ISP là ai, cấu hình thế nào. Cái gì biến bốn giờ mất mạng thành hai ngày?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Using a private address range"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Having only one router in the first place"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The single point of failure was never written down"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Not enabling QoS"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Accepting a risk is a legitimate decision. Not writing it down — spare, contact, saved configuration — is what makes the recovery slow.</p><p><i>VI: Chấp nhận rủi ro là quyết định hợp lệ. Không ghi lại — máy dự phòng, liên hệ, cấu hình đã lưu — mới là thứ khiến khôi phục chậm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A new branch uses 10.8.0.0/16 for its LAN. Months later the company VPN is set up and some head-office servers become unreachable from the branch. Most likely cause?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chi nhánh mới dùng 10.8.0.0/16 cho LAN. Vài tháng sau VPN công ty được dựng và một số máy chủ ở trụ sở không tới được từ chi nhánh. Nguyên nhân nhiều khả năng nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The branch range overlaps one used at head office"
+              },
+              {
+                "ma": "b",
+                "noiDung": "VPN tunnels cannot carry private IPv4 addresses"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A /16 network is too large for a router to route"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The branch router has no DNS server configured"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>An overlapping private subnet makes hosts treat remote addresses as local — they ARP instead of routing. It is cheap to find on paper during design and expensive at 2 a.m.</p><p><i>VI: Subnet riêng bị chồng khiến máy coi địa chỉ ở xa là cục bộ — chúng ARP thay vì định tuyến. Tìm ra trên giấy lúc thiết kế thì rẻ, tìm ra lúc 2 giờ sáng thì đắt.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>QoS is configured, nothing measurable improves, and the team concludes the feature is broken. What is the more likely truth?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đã cấu hình QoS, không có gì cải thiện đo được, cả nhóm kết luận tính năng hỏng. Sự thật nhiều khả năng hơn là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The link was not congested, so there was no queue for QoS to reorder"
+              },
+              {
+                "ma": "b",
+                "noiDung": "QoS needs a public IP address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "QoS must be enabled on every PC as well"
+              },
+              {
+                "ma": "d",
+                "noiDung": "QoS only works on fibre links"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>QoS only decides who waits in a queue. No queue, nothing to decide. Measure where the queue forms — often the uplink to the ISP — before prioritising.</p><p><i>VI: QoS chỉ quyết định ai phải chờ trong hàng đợi. Không có hàng đợi thì không có gì để quyết. Đo xem hàng đợi hình thành ở đâu — thường là đường lên ISP — trước khi ưu tiên.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>★ Your single-server Docker stack sits behind nginx. If nginx stops, every service is healthy and nothing is reachable. What is the cheapest real mitigation?</p><p style=\"opacity:.75;font-size:.92em\"><i>★ Chồng Docker một máy của bạn nằm sau nginx. nginx dừng thì mọi dịch vụ vẫn khoẻ mà không gì tới được. Biện pháp thật sự rẻ nhất là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A restart policy plus a health check, so the single exit comes back fast — and the risk written down"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Moving the database into the nginx container"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Turning off the firewall so services are reachable directly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A second nginx on the same machine with no health check"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>nginx is the single exit point. A second proxy needs something in front to choose between them; for one server the honest answer is \"restart it fast\" — restart policy and health check — with the remaining risk named.</p><p><i>VI: nginx là lối ra duy nhất. Proxy thứ hai cần một thứ đứng trước để chọn giữa chúng; với một máy chủ, câu trả lời thật là \"khởi động lại thật nhanh\" — restart policy và health check — kèm rủi ro còn lại được gọi tên.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Buying for today's headcount."
+        },
+        {
+          "loi": "Assuming two devices sharing one line are redundant."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "daisy chain",
+          "vi": "nối chuỗi"
+        },
+        {
+          "en": "overlapping subnets",
+          "vi": "subnet chồng lấn"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,688 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-7-6-lab-http-labflow",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-7-6-lab-http-labflow"
+  },
+  "exercises": [
+    {
+      "title": "HTTP 1 — Write parseHttp(raw): read HTTP/1.1 off the wire",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "HTTP/1.1 framing",
+        "chunked encoding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>HTTP/1.1 is text. This is the real response Lab 7 typed by hand with <code>nc</code> (line endings shown as <code>\\r</code>):</p><pre>HTTP/1.1 200 OK\\r\nServer: nginx/1.28.3\\r\nDate: Wed, 04 Nov 2026 07:25:15 GMT\\r\nContent-Type: text/html\\r\nContent-Length: 21\\r\nConnection: close\\r\n\\r\n&lt;h1&gt;LabFlow lab&lt;/h1&gt;</pre><p>Write <code>parseHttp(raw)</code> returning <code>{ version, status, reason, headers, body }</code>:</p>\n<ul>\n<li>The head ends at the first empty line (<code>\\r\\n\\r\\n</code>); the first line is <code>HTTP/1.1 200 OK</code> — <code>status</code> is a number.</li>\n<li>Header names are case-insensitive: store them lowercase. A repeated header is joined with <code>\", \"</code> (real clients keep <code>Set-Cookie</code> as a list instead — it is the one header that cannot be comma-joined; it does not appear here).</li>\n<li>Body: with <code>Transfer-Encoding: chunked</code>, decode it — each chunk is a hexadecimal size line, CRLF, that many bytes, CRLF; a size of <code>0</code> ends the body. Otherwise with <code>Content-Length</code>, take exactly that many characters. Otherwise take everything after the head.</li>\n</ul>\n<p>The second sample starts with the real chunked response of lesson 7.1; its second chunk and the terminating <code>0</code> chunk were reconstructed in the same format because the capture stopped after the first chunk.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>HTTP/1.1 là văn bản. Đây là phản hồi thật mà Lab 7 gõ tay bằng <code>nc</code> (ký tự xuống dòng hiện thành <code>\\r</code>):</p><pre>HTTP/1.1 200 OK\\r\nServer: nginx/1.28.3\\r\nDate: Wed, 04 Nov 2026 07:25:15 GMT\\r\nContent-Type: text/html\\r\nContent-Length: 21\\r\nConnection: close\\r\n\\r\n&lt;h1&gt;LabFlow lab&lt;/h1&gt;</pre><p>Viết <code>parseHttp(raw)</code> trả về <code>{ version, status, reason, headers, body }</code>:</p>\n<ul>\n<li>Phần đầu kết thúc ở dòng trống đầu tiên (<code>\\r\\n\\r\\n</code>); dòng đầu là <code>HTTP/1.1 200 OK</code> — <code>status</code> là số.</li>\n<li>Tên header không phân biệt hoa thường: lưu dạng chữ thường. Header lặp lại thì nối bằng <code>\", \"</code> (client thật giữ <code>Set-Cookie</code> thành danh sách — đó là header duy nhất không được nối bằng dấu phẩy; ở đây không có nó).</li>\n<li>Thân: có <code>Transfer-Encoding: chunked</code> thì giải mã — mỗi khúc là một dòng kích thước hệ 16, CRLF, đúng ngần ấy byte, CRLF; kích thước <code>0</code> kết thúc thân. Nếu không mà có <code>Content-Length</code> thì lấy đúng ngần ấy ký tự. Còn lại lấy mọi thứ sau phần đầu.</li>\n</ul>\n<p>Ca mẫu thứ hai bắt đầu bằng phản hồi chunked thật của bài 7.1; khúc thứ hai và khúc kết thúc <code>0</code> được dựng lại đúng khuôn vì bản ghi dừng sau khúc đầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseHttp(\"HTTP/1.1 200 OK\\r\\nServer: nginx/1.28.3\\r\\nDate: Wed, 04 Nov 2026 07:25:15 GMT\\r\\nContent-Type: text/html\\r\\nContent-Length: 21\\r\\nConnection: close\\r\\n\\r\\n<h1>LabFlow lab</h1>\")",
+          "output": "{\"version\":\"HTTP/1.1\",\"status\":200,\"reason\":\"OK\",\"headers\":{\"server\":\"nginx/1.28.3\",\"date\":\"Wed, 04 Nov 2026 07:25:15 GMT\",\"content-type\":\"text/html\",\"content-length\":\"21\",\"connection\":\"close\"},\"body\":\"<h1>LabFlow lab</h1>\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "indexOf(\"\\r\\n\\r\\n\") splits the head from the body; the head splits on \"\\r\\n\".|||indexOf(\"\\r\\n\\r\\n\") tách phần đầu khỏi thân; phần đầu tách theo \"\\r\\n\".",
+        "parseInt(sizeLine, 16) reads a chunk size; uppercase hex such as 1A is valid.|||parseInt(dòngKíchThước, 16) đọc kích thước khúc; hex chữ hoa như 1A vẫn hợp lệ.",
+        "After each chunk's data skip exactly two characters, the CRLF.|||Sau dữ liệu của mỗi khúc bỏ đúng hai ký tự, tức CRLF."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function parseHttp(raw) {\n  return { version: null, status: null, reason: null, headers: {}, body: \"\" };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function parseHttp(raw) {\n  var s = String(raw), cut = s.indexOf('\\r\\n\\r\\n');\n  var head = cut >= 0 ? s.slice(0, cut) : s, rest = cut >= 0 ? s.slice(cut + 4) : '';\n  var lines = head.split('\\r\\n'), first = /^(HTTP\\/[\\d.]+) (\\d{3}) ?(.*)$/.exec(lines[0]);\n  var headers = {};\n  lines.slice(1).forEach(function (l) {\n    var i = l.indexOf(':'); if (i < 0) return;\n    var k = l.slice(0, i).trim().toLowerCase(), v = l.slice(i + 1).trim();\n    headers[k] = headers[k] !== undefined ? headers[k] + ', ' + v : v; // repeated header ⇒ comma-joined\n  });\n  var body = rest;\n  if (/chunked/i.test(headers['transfer-encoding'] || '')) {\n    body = '';\n    for (;;) {\n      var e = rest.indexOf('\\r\\n'); if (e < 0) break;\n      var size = parseInt(rest.slice(0, e), 16); if (!(size > 0)) break; // the last chunk has size 0\n      body += rest.slice(e + 2, e + 2 + size);\n      rest = rest.slice(e + 2 + size + 2); // skip the data and its trailing CRLF\n    }\n  } else if (headers['content-length'] !== undefined) body = rest.slice(0, Number(headers['content-length']));\n  return { version: first ? first[1] : null, status: first ? Number(first[2]) : null, reason: first ? first[3] : null, headers: headers, body: body };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Content-Length or chunked framing is what lets one TCP connection carry many responses: without them a client would not know where one body ends and the next response begins. That is also why keep-alive (Chapter 4) works for HTTP/1.1 at all.</p>",
+      "solutionExplanationHtmlVi": "<p>Đóng khung bằng Content-Length hoặc chunked là thứ cho phép một kết nối TCP chở nhiều phản hồi: thiếu chúng client không biết thân này kết thúc ở đâu và phản hồi sau bắt đầu ở đâu. Đó cũng là lý do keep-alive (Chương 4) chạy được với HTTP/1.1.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: parseHttp(\"HTTP/1.1 200 OK\\r\\nServer: nginx/1.28.3\\r\\nDate: Wed, 04 Nov 2026 07:25:15 G...",
+              "vi": "Ca 1"
+            },
+            "goi": "parseHttp(\"HTTP/1.1 200 OK\\r\\nServer: nginx/1.28.3\\r\\nDate: Wed, 04 Nov 2026 07:25:15 GMT\\r\\nContent-Type: text/html\\r\\nContent-Length: 21\\r\\nConnection: close\\r\\n\\r\\n<h1>LabFlow lab</h1>\")",
+            "mongDoi": {
+              "version": "HTTP/1.1",
+              "status": 200,
+              "reason": "OK",
+              "headers": {
+                "server": "nginx/1.28.3",
+                "date": "Wed, 04 Nov 2026 07:25:15 GMT",
+                "content-type": "text/html",
+                "content-length": "21",
+                "connection": "close"
+              },
+              "body": "<h1>LabFlow lab</h1>"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: parseHttp(\"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nDate: Wed, 04 Nov 2026 07:25:...",
+              "vi": "Ca 2"
+            },
+            "goi": "parseHttp(\"HTTP/1.1 200 OK\\r\\nContent-Type: text/plain\\r\\nDate: Wed, 04 Nov 2026 07:25:16 GMT\\r\\nConnection: close\\r\\nTransfer-Encoding: chunked\\r\\n\\r\\n12\\r\\nkhuc-1 (gui ngay)\\n\\r\\n14\\r\\nkhuc-2 (sau 1 giay)\\n\\r\\n0\\r\\n\\r\\n\")",
+            "mongDoi": {
+              "version": "HTTP/1.1",
+              "status": 200,
+              "reason": "OK",
+              "headers": {
+                "content-type": "text/plain",
+                "date": "Wed, 04 Nov 2026 07:25:16 GMT",
+                "connection": "close",
+                "transfer-encoding": "chunked"
+              },
+              "body": "khuc-1 (gui ngay)\nkhuc-2 (sau 1 giay)\n"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "parseHttp(\"HTTP/1.1 304 Not Modified\\r\\nETag: \\\"6aeaddd3-25\\\"\\r\\nCache-Control: max-age=60\\r\\n\\r\\n\")",
+            "mongDoi": {
+              "version": "HTTP/1.1",
+              "status": 304,
+              "reason": "Not Modified",
+              "headers": {
+                "etag": "\"6aeaddd3-25\"",
+                "cache-control": "max-age=60"
+              },
+              "body": ""
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseHttp(\"HTTP/1.1 200 OK\\r\\nVary: Accept-Encoding\\r\\nvary: Origin\\r\\nContent-Length: 5\\r\\n\\r\\nhelloEXTRA\")",
+            "mongDoi": {
+              "version": "HTTP/1.1",
+              "status": 200,
+              "reason": "OK",
+              "headers": {
+                "vary": "Accept-Encoding, Origin",
+                "content-length": "5"
+              },
+              "body": "hello"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseHttp(\"HTTP/1.1 200 OK\\r\\nTransfer-Encoding: chunked\\r\\n\\r\\na\\r\\n0123456789\\r\\n1A\\r\\nabcdefghijklmnopqrstuvwxyz\\r\\n0\\r\\n\\r\\n\")",
+            "mongDoi": {
+              "version": "HTTP/1.1",
+              "status": 200,
+              "reason": "OK",
+              "headers": {
+                "transfer-encoding": "chunked"
+              },
+              "body": "0123456789abcdefghijklmnopqrstuvwxyz"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parseHttp(\"HTTP/1.0 502 Bad Gateway\\r\\nServer: nginx\\r\\n\\r\\n<html>bad gateway</html>\")",
+            "mongDoi": {
+              "version": "HTTP/1.0",
+              "status": 502,
+              "reason": "Bad Gateway",
+              "headers": {
+                "server": "nginx"
+              },
+              "body": "<html>bad gateway</html>"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the chunk size as decimal — \"12\" means eighteen bytes.|||Đọc kích thước khúc theo hệ 10 — \"12\" nghĩa là mười tám byte."
+        },
+        {
+          "loi": "Keeping the case of header names, so \"Vary\" and \"vary\" become two different keys.|||Giữ nguyên hoa thường của tên header, khiến \"Vary\" và \"vary\" thành hai khoá khác nhau."
+        },
+        {
+          "loi": "Ignoring Content-Length and returning the extra bytes of the next response on the same connection.|||Bỏ qua Content-Length và trả cả các byte thừa thuộc phản hồi kế tiếp trên cùng kết nối."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "HTTP 2 — Which header changes which behaviour?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "HTTP headers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lesson 7.4 measured every one of these in the lab (an ETag gave a 304, gzip shrank the body, HSTS forced HTTPS, a preflight returned the CORS headers). Match each header to what it controls and who acts on it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 7.4 đã đo từng header này trong lab (ETag cho ra 304, gzip làm thân nhỏ lại, HSTS ép HTTPS, preflight trả các header CORS). Ghép mỗi header với thứ nó điều khiển và bên hành động theo nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask who reads the header: a cache, the browser, or your server.",
+        "A 304 has no body: the client reuses its cached copy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# HTTP 2 — Which header changes which behaviour?\n\nAnswer in the answer panel (no code needed).\n\n1. Header → effect → enforced byHeader → tác dụng → ai thực thi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# HTTP 2 — Which header changes which behaviour? — answer key\n\n1. Header → effect → enforced byHeader → tác dụng → ai thực thi\n   - r1.e: how long a response may be reused\n   - r1.b: caches and browsers\n   - r2.e: lets the client revalidate and get 304\n   - r2.b: caches and browsers\n   - r3.e: the body is compressed\n   - r3.b: caches and browsers\n   - r4.e: which other origins may read the response\n   - r4.b: the browser only\n   - r5.e: always use HTTPS for this host\n   - r5.b: the browser only\n   - r6.e: the real client IP behind proxies\n   - r6.b: the server application\n   CORS and HSTS are instructions to the browser: curl ignores both, which is why \"it works with curl\" proves nothing about CORS. Caching headers are read by every cache on the path, including the CDN of Chapter 8. X-Forwarded-For is read by your own code — and only safely if you know how many proxies to trust (Exercise 4).VI: CORS và HSTS là chỉ dẫn cho trình duyệt: curl bỏ qua cả hai, nên \"chạy được bằng curl\" chẳng chứng minh gì về CORS. Header cache được mọi cache trên đường đọc, kể cả CDN ở Chương 8. X-Forwarded-For do chính code của bạn đọc — và chỉ an toàn khi bạn biết phải tin bao nhiêu proxy (Bài 4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CORS and HSTS are instructions to the browser: curl ignores both, which is why \"it works with curl\" proves nothing about CORS. Caching headers are read by every cache on the path, including the CDN of Chapter 8. X-Forwarded-For is read by your own code — and only safely if you know how many proxies to trust (Exercise 4).</p><p><i>VI: CORS và HSTS là chỉ dẫn cho trình duyệt: curl bỏ qua cả hai, nên \"chạy được bằng curl\" chẳng chứng minh gì về CORS. Header cache được mọi cache trên đường đọc, kể cả CDN ở Chương 8. X-Forwarded-For do chính code của bạn đọc — và chỉ an toàn khi bạn biết phải tin bao nhiêu proxy (Bài 4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Header → effect → enforced by</p><p style=\"opacity:.75;font-size:.92em\"><i>Header → tác dụng → ai thực thi</i></p>",
+            "cot": [
+              {
+                "ma": "h",
+                "ten": "Header"
+              },
+              {
+                "ma": "e",
+                "ten": "Effect",
+                "luaChon": [
+                  "how long a response may be reused",
+                  "lets the client revalidate and get 304",
+                  "the body is compressed",
+                  "which other origins may read the response",
+                  "always use HTTPS for this host",
+                  "the real client IP behind proxies"
+                ]
+              },
+              {
+                "ma": "b",
+                "ten": "Acted on by",
+                "luaChon": [
+                  "caches and browsers",
+                  "the browser only",
+                  "the server application"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "h": "Cache-Control: public, max-age=3600"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "h": "ETag / If-None-Match"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "h": "Content-Encoding: gzip"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "h": "Access-Control-Allow-Origin"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "h": "Strict-Transport-Security"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "h": "X-Forwarded-For"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.e": "how long a response may be reused",
+              "r1.b": "caches and browsers",
+              "r2.e": "lets the client revalidate and get 304",
+              "r2.b": "caches and browsers",
+              "r3.e": "the body is compressed",
+              "r3.b": "caches and browsers",
+              "r4.e": "which other origins may read the response",
+              "r4.b": "the browser only",
+              "r5.e": "always use HTTPS for this host",
+              "r5.b": "the browser only",
+              "r6.e": "the real client IP behind proxies",
+              "r6.b": "the server application"
+            },
+            "giaiThich": "<p>CORS and HSTS are instructions to the browser: curl ignores both, which is why \"it works with curl\" proves nothing about CORS. Caching headers are read by every cache on the path, including the CDN of Chapter 8. X-Forwarded-For is read by your own code — and only safely if you know how many proxies to trust (Exercise 4).</p><p><i>VI: CORS và HSTS là chỉ dẫn cho trình duyệt: curl bỏ qua cả hai, nên \"chạy được bằng curl\" chẳng chứng minh gì về CORS. Header cache được mọi cache trên đường đọc, kể cả CDN ở Chương 8. X-Forwarded-For do chính code của bạn đọc — và chỉ an toàn khi bạn biết phải tin bao nhiêu proxy (Bài 4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the server enforces CORS."
+        },
+        {
+          "loi": "Treating X-Forwarded-For as trustworthy input from the client."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "preflight",
+          "vi": "yêu cầu dò trước (OPTIONS)"
+        },
+        {
+          "en": "revalidation",
+          "vi": "kiểm lại bản cache"
+        }
+      ]
+    },
+    {
+      "title": "HTTP 3 — HTTP/2 and HTTP/3 on the wire",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "HTTP/2",
+        "HTTP/3"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Three requests on one HTTP/2 connection, decrypted with the session keys in Lab 7 (stream id, method, path, status):<pre>0,0,1\tGET\t/\t\n0,0,0,1\t\t\t200\n3\tGET\t/\t\n3,3\t\t\t200\n5\tGET\t/\t\n5,5\t\t\t200</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba yêu cầu trên một kết nối HTTP/2, giải mã bằng khoá phiên ở Lab 7 (stream id, method, path, status):<pre>0,0,1\tGET\t/\t\n0,0,0,1\t\t\t200\n3\tGET\t/\t\n3,3\t\t\t200\n5\tGET\t/\t\n5,5\t\t\t200</pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Odd = client, even = server.|||Lẻ = client, chẵn = server.",
+        "HTTP/2 fixed HOL blocking at the HTTP layer only.|||HTTP/2 chỉ sửa nghẽn đầu hàng ở tầng HTTP."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# HTTP 3 — HTTP/2 and HTTP/3 on the wire\n\nAnswer in the answer panel (no code needed).\n\n1. Why are the streams numbered 1, 3, 5?Vì sao các luồng được đánh số 1, 3, 5?\n2. How did client and server agree on HTTP/2 before sending any HTTP?Client và server thống nhất dùng HTTP/2 thế nào trước khi gửi câu HTTP nào?\n3. HTTP/2 multiplexes, yet one lost TCP packet still stalls every stream. Why?HTTP/2 ghép kênh, vậy mà một gói TCP bị mất vẫn làm mọi luồng đứng lại. Vì sao?\n4. What does HPACK do?HPACK làm gì?\n5. Why did browsers drop HTTP/2 server push?Vì sao trình duyệt bỏ server push của HTTP/2?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# HTTP 3 — HTTP/2 and HTTP/3 on the wire — answer key\n\n1. Why are the streams numbered 1, 3, 5?Vì sao các luồng được đánh số 1, 3, 5?\n   Answer: d) Client-initiated streams use odd numbers\n   In HTTP/2, streams opened by the client are odd, those opened by the server even; stream 0 is the connection itself. Three requests, three concurrent streams, one TCP connection.VI: Trong HTTP/2, luồng do client mở là số lẻ, do server mở là số chẵn; luồng 0 là chính kết nối. Ba yêu cầu, ba luồng song song, một kết nối TCP.\n\n2. How did client and server agree on HTTP/2 before sending any HTTP?Client và server thống nhất dùng HTTP/2 thế nào trước khi gửi câu HTTP nào?\n   Answer: a) ALPN inside the TLS handshake\n   curl offered h2,http/1.1 in the ClientHello and the server accepted h2 — no extra round trip. That is why HTTP/2 in browsers effectively requires TLS.VI: curl đưa ra h2,http/1.1 trong ClientHello và server nhận h2 — không tốn thêm vòng khứ hồi nào. Đó là lý do HTTP/2 trên trình duyệt thực tế đòi TLS.\n\n3. HTTP/2 multiplexes, yet one lost TCP packet still stalls every stream. Why?HTTP/2 ghép kênh, vậy mà một gói TCP bị mất vẫn làm mọi luồng đứng lại. Vì sao?\n   Answer: c) TCP must deliver bytes in order, so all streams wait\n   Head-of-line blocking moved from HTTP to TCP. HTTP/3 fixes it by running streams over QUIC, where a loss only stalls the stream it belongs to.VI: Nghẽn đầu hàng chuyển từ HTTP xuống TCP. HTTP/3 sửa bằng cách chạy luồng trên QUIC, nơi một gói mất chỉ làm đứng đúng luồng chứa nó.\n\n4. What does HPACK do?HPACK làm gì?\n   Answer: d) Compresses headers with static and dynamic tables of earlier values\n   Repeated headers (cookies, user-agent) shrink to small table indexes. HTTP/3 uses QPACK, adapted for out-of-order delivery.VI: Header lặp lại (cookie, user-agent) co lại thành các chỉ số bảng nhỏ. HTTP/3 dùng QPACK, được chỉnh cho việc tới không theo thứ tự.\n\n5. Why did browsers drop HTTP/2 server push?Vì sao trình duyệt bỏ server push của HTTP/2?\n   Answer: d) It often sent resources the browser already had cached, wasting bandwidth\n   The server could not know what was in the browser cache. Preload hints and 103 Early Hints replaced it.VI: Server không biết trong cache trình duyệt có gì. Gợi ý preload và 103 Early Hints đã thay thế nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Client-initiated streams use odd numbers</p><p>In HTTP/2, streams opened by the client are odd, those opened by the server even; stream 0 is the connection itself. Three requests, three concurrent streams, one TCP connection.</p><p><i>VI: Trong HTTP/2, luồng do client mở là số lẻ, do server mở là số chẵn; luồng 0 là chính kết nối. Ba yêu cầu, ba luồng song song, một kết nối TCP.</i></p></li><li><p><b>a)</b> ALPN inside the TLS handshake</p><p>curl offered h2,http/1.1 in the ClientHello and the server accepted h2 — no extra round trip. That is why HTTP/2 in browsers effectively requires TLS.</p><p><i>VI: curl đưa ra h2,http/1.1 trong ClientHello và server nhận h2 — không tốn thêm vòng khứ hồi nào. Đó là lý do HTTP/2 trên trình duyệt thực tế đòi TLS.</i></p></li><li><p><b>c)</b> TCP must deliver bytes in order, so all streams wait</p><p>Head-of-line blocking moved from HTTP to TCP. HTTP/3 fixes it by running streams over QUIC, where a loss only stalls the stream it belongs to.</p><p><i>VI: Nghẽn đầu hàng chuyển từ HTTP xuống TCP. HTTP/3 sửa bằng cách chạy luồng trên QUIC, nơi một gói mất chỉ làm đứng đúng luồng chứa nó.</i></p></li><li><p><b>d)</b> Compresses headers with static and dynamic tables of earlier values</p><p>Repeated headers (cookies, user-agent) shrink to small table indexes. HTTP/3 uses QPACK, adapted for out-of-order delivery.</p><p><i>VI: Header lặp lại (cookie, user-agent) co lại thành các chỉ số bảng nhỏ. HTTP/3 dùng QPACK, được chỉnh cho việc tới không theo thứ tự.</i></p></li><li><p><b>d)</b> It often sent resources the browser already had cached, wasting bandwidth</p><p>The server could not know what was in the browser cache. Preload hints and 103 Early Hints replaced it.</p><p><i>VI: Server không biết trong cache trình duyệt có gì. Gợi ý preload và 103 Early Hints đã thay thế nó.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why are the streams numbered 1, 3, 5?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao các luồng được đánh số 1, 3, 5?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Each request needs two streams"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Streams 2 and 4 were lost and retransmitted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nginx skips even numbers for push"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Client-initiated streams use odd numbers"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>In HTTP/2, streams opened by the client are odd, those opened by the server even; stream 0 is the connection itself. Three requests, three concurrent streams, one TCP connection.</p><p><i>VI: Trong HTTP/2, luồng do client mở là số lẻ, do server mở là số chẵn; luồng 0 là chính kết nối. Ba yêu cầu, ba luồng song song, một kết nối TCP.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>How did client and server agree on HTTP/2 before sending any HTTP?</p><p style=\"opacity:.75;font-size:.92em\"><i>Client và server thống nhất dùng HTTP/2 thế nào trước khi gửi câu HTTP nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ALPN inside the TLS handshake"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The client retried after a 426 status"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An HTTP/1.1 Upgrade header"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A DNS TXT record"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>curl offered h2,http/1.1 in the ClientHello and the server accepted h2 — no extra round trip. That is why HTTP/2 in browsers effectively requires TLS.</p><p><i>VI: curl đưa ra h2,http/1.1 trong ClientHello và server nhận h2 — không tốn thêm vòng khứ hồi nào. Đó là lý do HTTP/2 trên trình duyệt thực tế đòi TLS.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>HTTP/2 multiplexes, yet one lost TCP packet still stalls every stream. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>HTTP/2 ghép kênh, vậy mà một gói TCP bị mất vẫn làm mọi luồng đứng lại. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Stream priorities are reset after a loss"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The server closes the connection on loss"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TCP must deliver bytes in order, so all streams wait"
+              },
+              {
+                "ma": "d",
+                "noiDung": "HPACK must decode every header again"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Head-of-line blocking moved from HTTP to TCP. HTTP/3 fixes it by running streams over QUIC, where a loss only stalls the stream it belongs to.</p><p><i>VI: Nghẽn đầu hàng chuyển từ HTTP xuống TCP. HTTP/3 sửa bằng cách chạy luồng trên QUIC, nơi một gói mất chỉ làm đứng đúng luồng chứa nó.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>What does HPACK do?</p><p style=\"opacity:.75;font-size:.92em\"><i>HPACK làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Encrypts the body of each stream"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Pushes resources the client has not asked for"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Packs several images into one response"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Compresses headers with static and dynamic tables of earlier values"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Repeated headers (cookies, user-agent) shrink to small table indexes. HTTP/3 uses QPACK, adapted for out-of-order delivery.</p><p><i>VI: Header lặp lại (cookie, user-agent) co lại thành các chỉ số bảng nhỏ. HTTP/3 dùng QPACK, được chỉnh cho việc tới không theo thứ tự.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why did browsers drop HTTP/2 server push?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao trình duyệt bỏ server push của HTTP/2?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It was a security hole that leaked cookies"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It only worked over HTTP/3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It required WebSocket support"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It often sent resources the browser already had cached, wasting bandwidth"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The server could not know what was in the browser cache. Preload hints and 103 Early Hints replaced it.</p><p><i>VI: Server không biết trong cache trình duyệt có gì. Gợi ý preload và 103 Early Hints đã thay thế nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing HTTP/2 removed all head-of-line blocking.|||Tin rằng HTTP/2 đã xoá hết nghẽn đầu hàng."
+        },
+        {
+          "loi": "Expecting HTTP/2 to be negotiated by an Upgrade header in browsers.|||Chờ HTTP/2 được thương lượng bằng header Upgrade trên trình duyệt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stream",
+          "vi": "luồng"
+        },
+        {
+          "en": "multiplexing",
+          "vi": "ghép kênh"
+        },
+        {
+          "en": "HPACK",
+          "vi": "nén header của HTTP/2"
+        }
+      ]
+    },
+    {
+      "title": "HTTP 4 — Write clientIp(xff, remoteAddr, trustedHops): fix the 429 bug",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "X-Forwarded-For",
+        "trust proxy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lab 7's incident: a rate limiter banned every user at once because it keyed on the proxy's IP. The app's real view through one and two proxies:</p><pre>seenFrom 10.10.2.10:46256   forwardedFor \"10.10.1.10\"\nseenFrom 127.0.0.1:51672   forwardedFor \"10.10.1.10, 10.10.2.10\"</pre><p>Write <code>clientIp(xff, remoteAddr, trustedHops)</code>. Build the hop list = the comma-separated <code>X-Forwarded-For</code> entries (trimmed, empty ones dropped) followed by <code>remoteAddr</code> without its <code>:port</code>. Each proxy you run APPENDS the address it saw, so count <code>trustedHops</code> entries from the right and return the one just before them (index <code>length − 1 − trustedHops</code>, never below 0). <code>trustedHops = 0</code> means \"no proxy in front\": the TCP peer itself.</p>\n<p>Why from the right: a client can send its own fake <code>X-Forwarded-For</code>; only the entries added by your own proxies are trustworthy.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sự cố của Lab 7: bộ giới hạn tần suất cấm mọi người dùng cùng lúc vì nó lấy IP của proxy làm khoá. Góc nhìn thật của ứng dụng qua một và hai proxy:</p><pre>seenFrom 10.10.2.10:46256   forwardedFor \"10.10.1.10\"\nseenFrom 127.0.0.1:51672   forwardedFor \"10.10.1.10, 10.10.2.10\"</pre><p>Viết <code>clientIp(xff, remoteAddr, trustedHops)</code>. Dựng danh sách chặng = các mục của <code>X-Forwarded-For</code> tách theo dấu phẩy (cắt khoảng trắng, bỏ mục rỗng) rồi tới <code>remoteAddr</code> đã bỏ <code>:port</code>. Mỗi proxy của bạn NỐI THÊM địa chỉ nó thấy, nên đếm <code>trustedHops</code> mục từ bên phải và trả mục đứng ngay trước chúng (chỉ số <code>length − 1 − trustedHops</code>, không nhỏ hơn 0). <code>trustedHops = 0</code> nghĩa là \"không có proxy nào phía trước\": chính bên kết nối TCP.</p>\n<p>Vì sao đếm từ phải: client có thể tự gửi một <code>X-Forwarded-For</code> giả; chỉ các mục do chính proxy của bạn thêm vào mới đáng tin.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "clientIp(\"10.10.1.10\", \"10.10.2.10:46256\", 1)",
+          "output": "\"10.10.1.10\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split, trim, drop empty strings, then push the remote address without the port.|||Tách, cắt khoảng trắng, bỏ chuỗi rỗng, rồi thêm địa chỉ remote đã bỏ cổng.",
+        "The answer is hops[hops.length - 1 - trustedHops], clamped at 0.|||Đáp án là hops[hops.length - 1 - trustedHops], chặn dưới ở 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function clientIp(xff, remoteAddr, trustedHops) {\n  return remoteAddr;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function clientIp(xff, remoteAddr, trustedHops) {\n  var hops = String(xff || '').split(',').map(function (x) { return x.trim(); }).filter(function (x) { return x; });\n  hops.push(String(remoteAddr).replace(/:\\d+$/, '')); // the TCP peer, without its port\n  var i = hops.length - 1 - trustedHops; // skip the proxies we run ourselves, counting from the right\n  return hops[i < 0 ? 0 : i];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is exactly what Express's \"trust proxy = N\" does. Trust too few hops and every user shares the proxy's IP (the 429 incident); trust too many — or read the leftmost entry — and an attacker picks any IP they like, defeating rate limits and audit logs. Configure N to the real number of proxies, or read a header your edge sets and strips (CF-Connecting-IP).</p>",
+      "solutionExplanationHtmlVi": "<p>Đây đúng là việc \"trust proxy = N\" của Express làm. Tin quá ít chặng thì mọi người dùng chung IP của proxy (sự cố 429); tin quá nhiều — hoặc đọc mục ngoài cùng bên trái — thì kẻ tấn công tự chọn IP tuỳ thích, vô hiệu giới hạn tần suất lẫn nhật ký kiểm toán. Đặt N đúng bằng số proxy thật, hoặc đọc một header do edge của bạn đặt và xoá bản của client (CF-Connecting-IP).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: clientIp(\"10.10.1.10\", \"10.10.2.10:46256\", 1)",
+              "vi": "Ca 1"
+            },
+            "goi": "clientIp(\"10.10.1.10\", \"10.10.2.10:46256\", 1)",
+            "mongDoi": "10.10.1.10"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: clientIp(\"10.10.1.10, 10.10.2.10\", \"127.0.0.1:51672\", 2)",
+              "vi": "Ca 2"
+            },
+            "goi": "clientIp(\"10.10.1.10, 10.10.2.10\", \"127.0.0.1:51672\", 2)",
+            "mongDoi": "10.10.1.10"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: the bug — trusting nothing keys every user on the proxy",
+              "vi": "Ca 3: lỗi — không tin gì thì mọi người dùng chung khoá IP của proxy"
+            },
+            "goi": "clientIp(\"10.10.1.10\", \"10.10.2.10:46256\", 0)",
+            "mongDoi": "10.10.2.10"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: a spoofed X-Forwarded-For from the client",
+              "vi": "Ẩn: X-Forwarded-For giả do client tự gửi"
+            },
+            "goi": "clientIp(\"6.6.6.6, 10.10.1.10\", \"10.10.2.10:46256\", 1)",
+            "mongDoi": "10.10.1.10",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "clientIp(\"\", \"203.0.113.7:51000\", 1)",
+            "mongDoi": "203.0.113.7",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "clientIp(\" 198.51.100.4 ,, 172.16.0.2 \", \"10.0.0.1:443\", 2)",
+            "mongDoi": "198.51.100.4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "clientIp(\"198.51.100.4\", \"10.0.0.1:443\", 5)",
+            "mongDoi": "198.51.100.4",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking the FIRST X-Forwarded-For entry: that is the one a client can forge.|||Lấy mục ĐẦU TIÊN của X-Forwarded-For: đó chính là mục client có thể giả."
+        },
+        {
+          "loi": "Keying the limiter on remoteAddr behind a proxy, so one busy user bans everybody.|||Lấy remoteAddr làm khoá giới hạn khi đứng sau proxy, khiến một người dùng bận rộn làm cả hệ thống bị cấm."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -1,0 +1,758 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-5-4-lab-udp-quic",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-5-4-lab-udp-quic"
+  },
+  "exercises": [
+    {
+      "title": "UDP 1 — Send and forget, and what QUIC adds back",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "UDP",
+        "QUIC",
+        "HTTP/3 discovery"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lessons 5.1–5.3 and the real Lab 5 run: 20 datagrams over a path with 30% loss printed <code>client đã gửi 20 gói; đã nhận 12/20 gói</code>; with UDP 8443 dropped the site still answered <code>HTTP/2  mã 200</code>.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 5.1–5.3 và lần chạy thật của Lab 5: 20 datagram qua đường mất 30% in ra <code>client đã gửi 20 gói; đã nhận 12/20 gói</code>; khi UDP 8443 bị chặn, trang vẫn trả <code>HTTP/2  mã 200</code>.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "UDP: no setup, no delivery guarantee, no feedback.|||UDP: không thiết lập, không đảm bảo tới nơi, không phản hồi.",
+        "QUIC rebuilds reliability, ordering and encryption on top of UDP, in user space.|||QUIC dựng lại độ tin cậy, thứ tự và mã hoá trên UDP, ở không gian người dùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# UDP 1 — Send and forget, and what QUIC adds back\n\nAnswer in the answer panel (no code needed).\n\n1. A capture of one UDP echo shows three datagrams and no [S], [S.] or [.]. What does that prove?Bản bắt một lần echo UDP có ba datagram và không có [S], [S.] hay [.]. Điều đó chứng minh gì?\n2. 8 of the 20 datagrams were lost. How was the sender told?8 trong 20 datagram bị mất. Bên gửi được báo bằng cách nào?\n3. On the server, ss shows nginx listening on UDP 8443 as well as TCP 8443. What is the UDP listener?Trên server, ss cho thấy nginx nghe cả UDP 8443 lẫn TCP 8443. Listener UDP là gì?\n4. How does a browser first learn that a site supports HTTP/3?Lần đầu trình duyệt biết một trang hỗ trợ HTTP/3 bằng cách nào?\n5. An office firewall blocks UDP 443. What happens to users of an HTTP/3-enabled site?Tường lửa văn phòng chặn UDP 443. Người dùng của một trang đã bật HTTP/3 gặp gì?\n6. Which QUIC property keeps a download going when a phone moves from Wi-Fi to 4G?Tính chất nào của QUIC giữ được lượt tải khi điện thoại chuyển từ Wi-Fi sang 4G?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# UDP 1 — Send and forget, and what QUIC adds back — answer key\n\n1. A capture of one UDP echo shows three datagrams and no [S], [S.] or [.]. What does that prove?Bản bắt một lần echo UDP có ba datagram và không có [S], [S.] hay [.]. Điều đó chứng minh gì?\n   Answer: b) UDP has no connection setup: the first packet already carries data\n   There is no handshake to capture. That is UDP's whole bargain: zero setup cost, and no delivery, ordering or retransmission either.VI: Không có bắt tay nào để bắt. Đó chính là thoả thuận của UDP: không tốn chi phí thiết lập, đổi lại không đảm bảo tới nơi, đúng thứ tự hay gửi lại.\n\n2. 8 of the 20 datagrams were lost. How was the sender told?8 trong 20 datagram bị mất. Bên gửi được báo bằng cách nào?\n   Answer: b) It was not told at all; UDP is best effort\n   send() succeeds as soon as the datagram leaves the machine. Nothing comes back for a loss on the path — if the application cares, it must add sequence numbers or acknowledgements itself.VI: send() thành công ngay khi datagram rời máy. Không có gì quay về khi gói mất trên đường — nếu ứng dụng cần, nó phải tự thêm số thứ tự hoặc xác nhận.\n\n3. On the server, ss shows nginx listening on UDP 8443 as well as TCP 8443. What is the UDP listener?Trên server, ss cho thấy nginx nghe cả UDP 8443 lẫn TCP 8443. Listener UDP là gì?\n   Answer: c) The QUIC endpoint — the fingerprint of HTTP/3\n   HTTP/3 runs on QUIC, which runs on UDP. TCP 8443 serves HTTP/1.1 and HTTP/2 over TLS; the UDP socket is what makes HTTP/3 possible.VI: HTTP/3 chạy trên QUIC, còn QUIC chạy trên UDP. TCP 8443 phục vụ HTTP/1.1 và HTTP/2 qua TLS; socket UDP mới là thứ làm HTTP/3 khả thi.\n\n4. How does a browser first learn that a site supports HTTP/3?Lần đầu trình duyệt biết một trang hỗ trợ HTTP/3 bằng cách nào?\n   Answer: a) An Alt-Svc header on an HTTP/1.1 or HTTP/2 response (or a DNS HTTPS record)\n   The first visit usually uses TCP. The response advertises alt-svc: h3=\":443\"; ma=…, the browser remembers it for ma seconds and tries QUIC next time.VI: Lần ghé đầu thường dùng TCP. Phản hồi quảng cáo alt-svc: h3=\":443\"; ma=…, trình duyệt ghi nhớ trong ma giây và lần sau thử QUIC.\n\n5. An office firewall blocks UDP 443. What happens to users of an HTTP/3-enabled site?Tường lửa văn phòng chặn UDP 443. Người dùng của một trang đã bật HTTP/3 gặp gì?\n   Answer: a) They silently fall back to HTTP/2 over TCP: slower on lossy paths, never broken\n   QUIC failing is a soft failure: the browser keeps using TCP. The only visible clue is the Protocol column reading h2 where you expected h3 — which is how you detect it.VI: QUIC hỏng là hỏng mềm: trình duyệt tiếp tục dùng TCP. Dấu hiệu duy nhất thấy được là cột Protocol ghi h2 ở chỗ bạn chờ h3 — đó là cách phát hiện nó.\n\n6. Which QUIC property keeps a download going when a phone moves from Wi-Fi to 4G?Tính chất nào của QUIC giữ được lượt tải khi điện thoại chuyển từ Wi-Fi sang 4G?\n   Answer: d) Connection IDs instead of the IP/port four-tuple (connection migration)\n   A TCP connection is identified by the four-tuple, so a new IP kills it. QUIC identifies the connection by IDs carried in its packets, so it survives an address change.VI: Kết nối TCP được định danh bằng bộ bốn địa chỉ/cổng, nên đổi IP là chết. QUIC định danh kết nối bằng ID nằm trong gói, nên sống sót qua việc đổi địa chỉ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> UDP has no connection setup: the first packet already carries data</p><p>There is no handshake to capture. That is UDP's whole bargain: zero setup cost, and no delivery, ordering or retransmission either.</p><p><i>VI: Không có bắt tay nào để bắt. Đó chính là thoả thuận của UDP: không tốn chi phí thiết lập, đổi lại không đảm bảo tới nơi, đúng thứ tự hay gửi lại.</i></p></li><li><p><b>b)</b> It was not told at all; UDP is best effort</p><p>send() succeeds as soon as the datagram leaves the machine. Nothing comes back for a loss on the path — if the application cares, it must add sequence numbers or acknowledgements itself.</p><p><i>VI: send() thành công ngay khi datagram rời máy. Không có gì quay về khi gói mất trên đường — nếu ứng dụng cần, nó phải tự thêm số thứ tự hoặc xác nhận.</i></p></li><li><p><b>c)</b> The QUIC endpoint — the fingerprint of HTTP/3</p><p>HTTP/3 runs on QUIC, which runs on UDP. TCP 8443 serves HTTP/1.1 and HTTP/2 over TLS; the UDP socket is what makes HTTP/3 possible.</p><p><i>VI: HTTP/3 chạy trên QUIC, còn QUIC chạy trên UDP. TCP 8443 phục vụ HTTP/1.1 và HTTP/2 qua TLS; socket UDP mới là thứ làm HTTP/3 khả thi.</i></p></li><li><p><b>a)</b> An Alt-Svc header on an HTTP/1.1 or HTTP/2 response (or a DNS HTTPS record)</p><p>The first visit usually uses TCP. The response advertises alt-svc: h3=\":443\"; ma=…, the browser remembers it for ma seconds and tries QUIC next time.</p><p><i>VI: Lần ghé đầu thường dùng TCP. Phản hồi quảng cáo alt-svc: h3=\":443\"; ma=…, trình duyệt ghi nhớ trong ma giây và lần sau thử QUIC.</i></p></li><li><p><b>a)</b> They silently fall back to HTTP/2 over TCP: slower on lossy paths, never broken</p><p>QUIC failing is a soft failure: the browser keeps using TCP. The only visible clue is the Protocol column reading h2 where you expected h3 — which is how you detect it.</p><p><i>VI: QUIC hỏng là hỏng mềm: trình duyệt tiếp tục dùng TCP. Dấu hiệu duy nhất thấy được là cột Protocol ghi h2 ở chỗ bạn chờ h3 — đó là cách phát hiện nó.</i></p></li><li><p><b>d)</b> Connection IDs instead of the IP/port four-tuple (connection migration)</p><p>A TCP connection is identified by the four-tuple, so a new IP kills it. QUIC identifies the connection by IDs carried in its packets, so it survives an address change.</p><p><i>VI: Kết nối TCP được định danh bằng bộ bốn địa chỉ/cổng, nên đổi IP là chết. QUIC định danh kết nối bằng ID nằm trong gói, nên sống sót qua việc đổi địa chỉ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A capture of one UDP echo shows three datagrams and no [S], [S.] or [.]. What does that prove?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản bắt một lần echo UDP có ba datagram và không có [S], [S.] hay [.]. Điều đó chứng minh gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "UDP hides its handshake inside the first datagram"
+              },
+              {
+                "ma": "b",
+                "noiDung": "UDP has no connection setup: the first packet already carries data"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The capture filter dropped the TCP packets"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The handshake happened earlier and was not captured"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>There is no handshake to capture. That is UDP's whole bargain: zero setup cost, and no delivery, ordering or retransmission either.</p><p><i>VI: Không có bắt tay nào để bắt. Đó chính là thoả thuận của UDP: không tốn chi phí thiết lập, đổi lại không đảm bảo tới nơi, đúng thứ tự hay gửi lại.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>8 of the 20 datagrams were lost. How was the sender told?</p><p style=\"opacity:.75;font-size:.92em\"><i>8 trong 20 datagram bị mất. Bên gửi được báo bằng cách nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "By a negative ACK from the receiver"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It was not told at all; UDP is best effort"
+              },
+              {
+                "ma": "c",
+                "noiDung": "By an error returned from send()"
+              },
+              {
+                "ma": "d",
+                "noiDung": "By an ICMP message for each lost datagram"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>send() succeeds as soon as the datagram leaves the machine. Nothing comes back for a loss on the path — if the application cares, it must add sequence numbers or acknowledgements itself.</p><p><i>VI: send() thành công ngay khi datagram rời máy. Không có gì quay về khi gói mất trên đường — nếu ứng dụng cần, nó phải tự thêm số thứ tự hoặc xác nhận.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>On the server, ss shows nginx listening on UDP 8443 as well as TCP 8443. What is the UDP listener?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên server, ss cho thấy nginx nghe cả UDP 8443 lẫn TCP 8443. Listener UDP là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A DNS resolver built into nginx"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The HTTP/2 port; HTTP/2 runs over UDP"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The QUIC endpoint — the fingerprint of HTTP/3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A health-check port for the load balancer"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>HTTP/3 runs on QUIC, which runs on UDP. TCP 8443 serves HTTP/1.1 and HTTP/2 over TLS; the UDP socket is what makes HTTP/3 possible.</p><p><i>VI: HTTP/3 chạy trên QUIC, còn QUIC chạy trên UDP. TCP 8443 phục vụ HTTP/1.1 và HTTP/2 qua TLS; socket UDP mới là thứ làm HTTP/3 khả thi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How does a browser first learn that a site supports HTTP/3?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lần đầu trình duyệt biết một trang hỗ trợ HTTP/3 bằng cách nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An Alt-Svc header on an HTTP/1.1 or HTTP/2 response (or a DNS HTTPS record)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The server pushes an HTTP/3 upgrade frame"
+              },
+              {
+                "ma": "c",
+                "noiDung": "From the TLS certificate"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It sends a QUIC packet to every site it visits"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The first visit usually uses TCP. The response advertises alt-svc: h3=\":443\"; ma=…, the browser remembers it for ma seconds and tries QUIC next time.</p><p><i>VI: Lần ghé đầu thường dùng TCP. Phản hồi quảng cáo alt-svc: h3=\":443\"; ma=…, trình duyệt ghi nhớ trong ma giây và lần sau thử QUIC.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>An office firewall blocks UDP 443. What happens to users of an HTTP/3-enabled site?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tường lửa văn phòng chặn UDP 443. Người dùng của một trang đã bật HTTP/3 gặp gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They silently fall back to HTTP/2 over TCP: slower on lossy paths, never broken"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are downgraded to plain HTTP on port 80"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The site becomes unreachable until UDP is allowed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Browsers show a certificate warning"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>QUIC failing is a soft failure: the browser keeps using TCP. The only visible clue is the Protocol column reading h2 where you expected h3 — which is how you detect it.</p><p><i>VI: QUIC hỏng là hỏng mềm: trình duyệt tiếp tục dùng TCP. Dấu hiệu duy nhất thấy được là cột Protocol ghi h2 ở chỗ bạn chờ h3 — đó là cách phát hiện nó.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Which QUIC property keeps a download going when a phone moves from Wi-Fi to 4G?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tính chất nào của QUIC giữ được lượt tải khi điện thoại chuyển từ Wi-Fi sang 4G?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Larger initial congestion window"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Forward error correction on every packet"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Header compression with QPACK"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Connection IDs instead of the IP/port four-tuple (connection migration)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A TCP connection is identified by the four-tuple, so a new IP kills it. QUIC identifies the connection by IDs carried in its packets, so it survives an address change.</p><p><i>VI: Kết nối TCP được định danh bằng bộ bốn địa chỉ/cổng, nên đổi IP là chết. QUIC định danh kết nối bằng ID nằm trong gói, nên sống sót qua việc đổi địa chỉ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing a successful send() means the datagram arrived.|||Tin rằng send() thành công nghĩa là datagram đã tới."
+        },
+        {
+          "loi": "Treating blocked UDP 443 as an outage instead of a fallback.|||Coi UDP 443 bị chặn là sập dịch vụ thay vì một lần lùi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "best effort",
+          "vi": "cố gắng hết sức, không bảo đảm"
+        },
+        {
+          "en": "Alt-Svc",
+          "vi": "header quảng cáo dịch vụ thay thế"
+        },
+        {
+          "en": "connection migration",
+          "vi": "di trú kết nối"
+        }
+      ]
+    },
+    {
+      "title": "UDP 2 — TCP or UDP? Decide like Lab 5 did",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "transport choice"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>For each channel, choose the transport and the one property that decides it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi kênh, chọn tầng vận chuyển và đúng một tính chất quyết định lựa chọn đó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: is a late or lost piece still worth having?|||Hỏi: một mảnh tới muộn hoặc bị mất có còn đáng giữ không?",
+        "QUIC is reliable — it is not \"UDP with no guarantees\".|||QUIC có tin cậy — nó không phải \"UDP không bảo đảm gì\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# UDP 2 — TCP or UDP? Decide like Lab 5 did\n\nAnswer in the answer panel (no code needed).\n\n1. Pick the transportChọn tầng vận chuyển\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# UDP 2 — TCP or UDP? Decide like Lab 5 did — answer key\n\n1. Pick the transportChọn tầng vận chuyển\n   - r1.t: UDP\n   - r1.w: only the newest value matters\n   - r2.t: TCP\n   - r2.w: every byte must arrive, in order\n   - r3.t: UDP\n   - r3.w: late data is useless (real time)\n   - r4.t: QUIC (over UDP)\n   - r4.w: web traffic that should survive loss and network changes\n   - r5.t: TCP\n   - r5.w: every byte must arrive, in order\n   A dropped telemetry update is replaced by the next one, so recovering it is wasted work; a voice packet that arrives late has missed its moment. Files and query results must be complete and ordered — TCP. The web app wants reliability AND no head-of-line blocking AND migration, which is exactly what QUIC builds on UDP.VI: Một bản cập nhật telemetry bị mất sẽ được bản kế thay thế, nên khôi phục nó là phí công; một gói thoại tới muộn đã lỡ thời điểm. Tệp và kết quả truy vấn phải đủ và đúng thứ tự — TCP. Ứng dụng web cần tin cậy VÀ không nghẽn đầu hàng VÀ di trú kết nối, đúng thứ QUIC dựng trên UDP.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A dropped telemetry update is replaced by the next one, so recovering it is wasted work; a voice packet that arrives late has missed its moment. Files and query results must be complete and ordered — TCP. The web app wants reliability AND no head-of-line blocking AND migration, which is exactly what QUIC builds on UDP.</p><p><i>VI: Một bản cập nhật telemetry bị mất sẽ được bản kế thay thế, nên khôi phục nó là phí công; một gói thoại tới muộn đã lỡ thời điểm. Tệp và kết quả truy vấn phải đủ và đúng thứ tự — TCP. Ứng dụng web cần tin cậy VÀ không nghẽn đầu hàng VÀ di trú kết nối, đúng thứ QUIC dựng trên UDP.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Pick the transport</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn tầng vận chuyển</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Channel"
+              },
+              {
+                "ma": "t",
+                "ten": "Transport",
+                "luaChon": [
+                  "TCP",
+                  "UDP",
+                  "QUIC (over UDP)"
+                ]
+              },
+              {
+                "ma": "w",
+                "ten": "Deciding property",
+                "luaChon": [
+                  "every byte must arrive, in order",
+                  "only the newest value matters",
+                  "late data is useless (real time)",
+                  "web traffic that should survive loss and network changes"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Live sensor telemetry: a reading every 100 ms"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Uploading a 200 MB backup"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A voice call between two users"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The LabFlow web app on mobile networks"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "A database query and its result set"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "UDP",
+              "r1.w": "only the newest value matters",
+              "r2.t": "TCP",
+              "r2.w": "every byte must arrive, in order",
+              "r3.t": "UDP",
+              "r3.w": "late data is useless (real time)",
+              "r4.t": "QUIC (over UDP)",
+              "r4.w": "web traffic that should survive loss and network changes",
+              "r5.t": "TCP",
+              "r5.w": "every byte must arrive, in order"
+            },
+            "giaiThich": "<p>A dropped telemetry update is replaced by the next one, so recovering it is wasted work; a voice packet that arrives late has missed its moment. Files and query results must be complete and ordered — TCP. The web app wants reliability AND no head-of-line blocking AND migration, which is exactly what QUIC builds on UDP.</p><p><i>VI: Một bản cập nhật telemetry bị mất sẽ được bản kế thay thế, nên khôi phục nó là phí công; một gói thoại tới muộn đã lỡ thời điểm. Tệp và kết quả truy vấn phải đủ và đúng thứ tự — TCP. Ứng dụng web cần tin cậy VÀ không nghẽn đầu hàng VÀ di trú kết nối, đúng thứ QUIC dựng trên UDP.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing UDP for the backup \"because it is faster\".|||Chọn UDP cho bản sao lưu \"vì nó nhanh hơn\"."
+        },
+        {
+          "loi": "Calling QUIC unreliable because it runs on UDP.|||Gọi QUIC là không tin cậy vì nó chạy trên UDP."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "head-of-line blocking",
+          "vi": "nghẽn đầu hàng"
+        }
+      ]
+    },
+    {
+      "title": "UDP 3 — Write parseAltSvc(header): how a browser discovers HTTP/3",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "Alt-Svc",
+        "HTTP/3"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Two real headers measured from the course lab:</p><pre>alt-svc: h3=\":443\"; ma=86400\r\nalt-svc: h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000\r</pre><p>Write <code>parseAltSvc(header)</code> (RFC 7838). The input may or may not start with <code>alt-svc:</code> (any case). Return one <code>{ protocol, host, port, maxAge }</code> per comma-separated alternative, in order:</p>\n<ul>\n<li>the part before <code>=</code> is the protocol id (<code>h3</code>, <code>h3-29</code>…); the quoted value is <code>host:port</code> — an empty host means \"the same host\";</li>\n<li><code>ma=N</code> is the number of seconds the browser may remember it; if absent, the default is 86400 (24 hours);</li>\n<li>other parameters (e.g. <code>persist=1</code>) are ignored; the special value <code>clear</code> returns <code>[]</code>.</li>\n</ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai header thật đo từ phòng lab của khoá:</p><pre>alt-svc: h3=\":443\"; ma=86400\r\nalt-svc: h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000\r</pre><p>Viết <code>parseAltSvc(header)</code> (RFC 7838). Đầu vào có thể có hoặc không có tiền tố <code>alt-svc:</code> (hoa thường tuỳ ý). Trả về một <code>{ protocol, host, port, maxAge }</code> cho mỗi lựa chọn ngăn bởi dấu phẩy, theo thứ tự:</p>\n<ul>\n<li>phần trước dấu <code>=</code> là mã giao thức (<code>h3</code>, <code>h3-29</code>…); giá trị trong ngoặc kép là <code>host:port</code> — host rỗng nghĩa là \"chính host này\";</li>\n<li><code>ma=N</code> là số giây trình duyệt được phép ghi nhớ; vắng thì mặc định 86400 (24 giờ);</li>\n<li>tham số khác (ví dụ <code>persist=1</code>) bỏ qua; giá trị đặc biệt <code>clear</code> trả <code>[]</code>.</li>\n</ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseAltSvc(\"alt-svc: h3=\\\":443\\\"; ma=86400\\r\")",
+          "output": "[{\"protocol\":\"h3\",\"host\":\"\",\"port\":443,\"maxAge\":86400}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Strip the optional \"alt-svc:\" prefix, then split on \",\" and each entry on \";\".|||Bỏ tiền tố \"alt-svc:\" nếu có, rồi tách theo \",\" và mỗi mục theo \";\".",
+        "Split host and port at the LAST colon of the quoted value.|||Tách host và port ở dấu hai chấm CUỐI CÙNG của giá trị trong ngoặc kép."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function parseAltSvc(header) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function parseAltSvc(header) {\n  var v = String(header).replace(/^\\s*alt-svc\\s*:\\s*/i, '').trim();\n  if (!v || v.toLowerCase() === 'clear') return [];\n  return v.split(',').map(function (entry) {\n    var parts = entry.split(';').map(function (p) { return p.trim(); });\n    var m = /^([^=]+)=\"([^\"]*)\"$/.exec(parts[0]);\n    if (!m) return null;\n    var hp = m[2], i = hp.lastIndexOf(':');\n    var out = { protocol: m[1].trim(), host: hp.slice(0, i), port: Number(hp.slice(i + 1)), maxAge: 86400 }; // RFC 7838: default ma = 24 h\n    parts.slice(1).forEach(function (p) { var kv = p.split('='); if (kv[0].trim() === 'ma') out.maxAge = Number(kv[1]); });\n    return out;\n  }).filter(function (x) { return x; });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Alt-Svc is how HTTP/3 bootstraps itself: the first response over TCP tells the browser where QUIC is available and for how long to remember it. Google advertising both h3 and the older draft h3-29 is the real-world shape you will meet while clients upgrade.</p>",
+      "solutionExplanationHtmlVi": "<p>Alt-Svc là cách HTTP/3 tự khởi động: phản hồi đầu tiên qua TCP cho trình duyệt biết QUIC có ở đâu và được nhớ trong bao lâu. Google quảng cáo cả h3 lẫn bản nháp cũ h3-29 là hình dạng thực tế bạn sẽ gặp trong lúc client nâng cấp dần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: parseAltSvc(\"alt-svc: h3=\\\":443\\\"; ma=86400\\r\")",
+              "vi": "Ca 1"
+            },
+            "goi": "parseAltSvc(\"alt-svc: h3=\\\":443\\\"; ma=86400\\r\")",
+            "mongDoi": [
+              {
+                "protocol": "h3",
+                "host": "",
+                "port": 443,
+                "maxAge": 86400
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: parseAltSvc(\"alt-svc: h3=\\\":443\\\"; ma=2592000,h3-29=\\\":443\\\"; ma=2592000\\r\")",
+              "vi": "Ca 2"
+            },
+            "goi": "parseAltSvc(\"alt-svc: h3=\\\":443\\\"; ma=2592000,h3-29=\\\":443\\\"; ma=2592000\\r\")",
+            "mongDoi": [
+              {
+                "protocol": "h3",
+                "host": "",
+                "port": 443,
+                "maxAge": 2592000
+              },
+              {
+                "protocol": "h3-29",
+                "host": "",
+                "port": 443,
+                "maxAge": 2592000
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: parseAltSvc(\"h3=\\\":8443\\\"; ma=86400\")",
+              "vi": "Ca 3"
+            },
+            "goi": "parseAltSvc(\"h3=\\\":8443\\\"; ma=86400\")",
+            "mongDoi": [
+              {
+                "protocol": "h3",
+                "host": "",
+                "port": 8443,
+                "maxAge": 86400
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseAltSvc(\"Alt-Svc: h3=\\\"edge.example.net:443\\\"; ma=3600; persist=1\")",
+            "mongDoi": [
+              {
+                "protocol": "h3",
+                "host": "edge.example.net",
+                "port": 443,
+                "maxAge": 3600
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseAltSvc(\"alt-svc: h3=\\\":443\\\"\")",
+            "mongDoi": [
+              {
+                "protocol": "h3",
+                "host": "",
+                "port": 443,
+                "maxAge": 86400
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parseAltSvc(\"alt-svc: clear\")",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "parseAltSvc(\"h3=\\\":443\\\"; ma=60, h2=\\\"alt.example:8443\\\"; ma=120\")",
+            "mongDoi": [
+              {
+                "protocol": "h3",
+                "host": "",
+                "port": 443,
+                "maxAge": 60
+              },
+              {
+                "protocol": "h2",
+                "host": "alt.example",
+                "port": 8443,
+                "maxAge": 120
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the 24-hour default when ma is absent.|||Quên mặc định 24 giờ khi không có ma."
+        },
+        {
+          "loi": "Keeping the quotes in the host, or returning the port as a string.|||Giữ dấu ngoặc kép trong host, hoặc trả port dạng chuỗi."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "UDP 4 — Write latestOnly(sent, arrivals): the receiver that UDP needs",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "sequence numbers",
+        "reordering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lab 5's recommendation for telemetry is UDP <i>with an application-level sequence number</i>: the sender numbers its updates 1, 2, 3…, and the receiver keeps only updates that are newer than the last one it accepted. Write <code>latestOnly(sent, arrivals)</code> where <code>sent</code> is how many updates were sent (numbered 1..sent) and <code>arrivals</code> the sequence numbers in the order they reached the receiver (losses are missing; reordering and duplicates are possible). Return:</p>\n<ul>\n<li><code>received</code> — distinct sequence numbers that arrived; <code>lost</code> = sent − received; <code>lossPct</code> rounded to 0.1;</li>\n<li><code>missing</code> — the lost numbers, ascending;</li>\n<li><code>stale</code> — arrivals NOT accepted because they are not newer than the last accepted one (late or duplicate);</li>\n<li><code>accepted</code> — the accepted numbers in arrival order.</li>\n</ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khuyến nghị của Lab 5 cho telemetry là UDP <i>kèm số thứ tự ở tầng ứng dụng</i>: bên gửi đánh số các bản cập nhật 1, 2, 3…, bên nhận chỉ giữ bản mới hơn bản cuối cùng nó đã nhận. Viết <code>latestOnly(sent, arrivals)</code> với <code>sent</code> là số bản đã gửi (đánh số 1..sent) và <code>arrivals</code> là các số thứ tự theo thứ tự chúng tới bên nhận (gói mất thì vắng; có thể đảo thứ tự và trùng). Trả về:</p>\n<ul>\n<li><code>received</code> — số lượng số thứ tự KHÁC NHAU đã tới; <code>lost</code> = sent − received; <code>lossPct</code> làm tròn 0,1;</li>\n<li><code>missing</code> — các số bị mất, tăng dần;</li>\n<li><code>stale</code> — số lần tới KHÔNG được nhận vì không mới hơn bản cuối đã nhận (tới muộn hoặc trùng);</li>\n<li><code>accepted</code> — các số được nhận, theo thứ tự tới.</li>\n</ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "latestOnly(20, [1,2,4,5,7,8,10,13,14,16,18,20])",
+          "output": "{\"received\":12,\"lost\":8,\"lossPct\":40,\"missing\":[3,6,9,11,12,15,17,19],\"stale\":0,\"accepted\":[1,2,4,5,7,8,10,13,14,16,18,20]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Track \"last accepted\" as you walk the arrivals once.|||Theo dõi \"bản cuối đã nhận\" khi duyệt arrivals một lượt.",
+        "Count distinct numbers separately from accepted ones: a stale update still ARRIVED.|||Đếm số khác nhau tách riêng với số được nhận: bản cập nhật cũ vẫn ĐÃ TỚI."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function latestOnly(sent, arrivals) {\n  return { received: 0, lost: 0, lossPct: 0, missing: [], stale: 0, accepted: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function latestOnly(sent, arrivals) {\n  var seen = {}, accepted = [], stale = 0, last = 0, uniq = 0;\n  arrivals.forEach(function (seq) {\n    if (!seen[seq]) { seen[seq] = true; uniq++; }\n    if (seq > last) { accepted.push(seq); last = seq; } else stale++; // an older or duplicate update arriving late\n  });\n  var missing = [];\n  for (var s = 1; s <= sent; s++) if (!seen[s]) missing.push(s);\n  return { received: uniq, lost: sent - uniq, lossPct: Math.round((sent - uniq) / sent * 1000) / 10, missing: missing, stale: stale, accepted: accepted };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the first piece of what QUIC does for you: number everything so the receiver can tell loss from reordering. For \"newest value wins\" data you never retransmit — you just refuse to go backwards.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là mảnh đầu tiên của những gì QUIC làm hộ bạn: đánh số mọi thứ để bên nhận phân biệt được mất gói với đảo thứ tự. Với dữ liệu \"giá trị mới nhất thắng\", bạn không bao giờ gửi lại — chỉ cần từ chối đi lùi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: 12/20 arrived, like the real Lab 5 run",
+              "vi": "Ca 1: tới 12/20, như lần chạy thật của Lab 5"
+            },
+            "goi": "latestOnly(20, [1,2,4,5,7,8,10,13,14,16,18,20])",
+            "mongDoi": {
+              "received": 12,
+              "lost": 8,
+              "lossPct": 40,
+              "missing": [
+                3,
+                6,
+                9,
+                11,
+                12,
+                15,
+                17,
+                19
+              ],
+              "stale": 0,
+              "accepted": [
+                1,
+                2,
+                4,
+                5,
+                7,
+                8,
+                10,
+                13,
+                14,
+                16,
+                18,
+                20
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: latestOnly(5, [1,3,2,4,5])",
+              "vi": "Ca 2"
+            },
+            "goi": "latestOnly(5, [1,3,2,4,5])",
+            "mongDoi": {
+              "received": 5,
+              "lost": 0,
+              "lossPct": 0,
+              "missing": [],
+              "stale": 1,
+              "accepted": [
+                1,
+                3,
+                4,
+                5
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "latestOnly(6, [2,2,1,6,5,4])",
+            "mongDoi": {
+              "received": 5,
+              "lost": 1,
+              "lossPct": 16.7,
+              "missing": [
+                3
+              ],
+              "stale": 4,
+              "accepted": [
+                2,
+                6
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "latestOnly(3, [])",
+            "mongDoi": {
+              "received": 0,
+              "lost": 3,
+              "lossPct": 100,
+              "missing": [
+                1,
+                2,
+                3
+              ],
+              "stale": 0,
+              "accepted": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "latestOnly(4, [4,3,2,1])",
+            "mongDoi": {
+              "received": 4,
+              "lost": 0,
+              "lossPct": 0,
+              "missing": [],
+              "stale": 3,
+              "accepted": [
+                4
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating a reordered (stale) update as lost.|||Coi bản cập nhật tới sai thứ tự (cũ) là bị mất."
+        },
+        {
+          "loi": "Accepting an older value after a newer one, so the dashboard jumps backwards.|||Nhận một giá trị cũ sau khi đã nhận giá trị mới, khiến bảng điều khiển nhảy lùi."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

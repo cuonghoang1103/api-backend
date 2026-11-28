@@ -1,0 +1,769 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-6-5-lab-tls-labflow",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-6-5-lab-tls-labflow"
+  },
+  "exercises": [
+    {
+      "title": "TLS 1 — Five real curl errors: cause and fix",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "certificate errors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lab 6 served five broken certificates and recorded the first line curl printed each time:<pre>curl: (60) SSL certificate OpenSSL verify result: certificate has expired (10)\ncurl: (60) SSL: no alternative certificate subject name matches target hostname 'labflow.test'\ncurl: (60) SSL certificate OpenSSL verify result: self-signed certificate (18)\ncurl: (60) SSL certificate OpenSSL verify result: certificate is not yet valid (9)\ncurl: (60) SSL certificate OpenSSL verify result: unable to get local issuer certificate (20)</pre>Match each message to its cause and its fix.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab 6 lần lượt phục vụ năm chứng chỉ hỏng và ghi lại dòng đầu curl in ra mỗi lần:<pre>curl: (60) SSL certificate OpenSSL verify result: certificate has expired (10)\ncurl: (60) SSL: no alternative certificate subject name matches target hostname 'labflow.test'\ncurl: (60) SSL certificate OpenSSL verify result: self-signed certificate (18)\ncurl: (60) SSL certificate OpenSSL verify result: certificate is not yet valid (9)\ncurl: (60) SSL certificate OpenSSL verify result: unable to get local issuer certificate (20)</pre>Ghép mỗi thông điệp với nguyên nhân và cách sửa.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the text after the error code; the number 60 is the same for all of them.",
+        "Only one of the five can be fixed on the client without touching the server."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TLS 1 — Five real curl errors: cause and fix\n\nAnswer in the answer panel (no code needed).\n\n1. Message → cause → fixThông điệp → nguyên nhân → cách sửa\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TLS 1 — Five real curl errors: cause and fix — answer key\n\n1. Message → cause → fixThông điệp → nguyên nhân → cách sửa\n   - r1.k: the certificate expired\n   - r1.f: renew it and alert before expiry\n   - r2.k: the name is not in the SAN list\n   - r2.f: issue a certificate whose SAN covers the name\n   - r3.k: nobody trusted signed it\n   - r3.f: use a certificate from a trusted CA\n   - r4.k: the clock is behind the start date\n   - r4.f: fix the client's clock (NTP)\n   - r5.k: the server did not send the intermediate\n   - r5.f: serve the full chain (leaf + intermediate)\n   All five are curl exit 60 — the code only says \"verification failed\", the text says why. The last one is the partner incident of Lab 6: browsers fetch a missing intermediate through AIA and hide the bug, while curl, Java and monitoring fail. \"Not yet valid\" on one machine is almost always that machine's clock.VI: Cả năm đều là curl exit 60 — mã chỉ nói \"kiểm chứng thất bại\", phần chữ mới nói vì sao. Dòng cuối là sự cố đối tác của Lab 6: trình duyệt tự lấy trung gian còn thiếu qua AIA nên che mất lỗi, còn curl, Java và hệ giám sát thì hỏng. \"Not yet valid\" trên đúng một máy gần như luôn là đồng hồ của máy đó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>All five are curl exit 60 — the code only says \"verification failed\", the text says why. The last one is the partner incident of Lab 6: browsers fetch a missing intermediate through AIA and hide the bug, while curl, Java and monitoring fail. \"Not yet valid\" on one machine is almost always that machine's clock.</p><p><i>VI: Cả năm đều là curl exit 60 — mã chỉ nói \"kiểm chứng thất bại\", phần chữ mới nói vì sao. Dòng cuối là sự cố đối tác của Lab 6: trình duyệt tự lấy trung gian còn thiếu qua AIA nên che mất lỗi, còn curl, Java và hệ giám sát thì hỏng. \"Not yet valid\" trên đúng một máy gần như luôn là đồng hồ của máy đó.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Message → cause → fix</p><p style=\"opacity:.75;font-size:.92em\"><i>Thông điệp → nguyên nhân → cách sửa</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Message (shortened)"
+              },
+              {
+                "ma": "k",
+                "ten": "Cause",
+                "luaChon": [
+                  "the certificate expired",
+                  "the name is not in the SAN list",
+                  "nobody trusted signed it",
+                  "the clock is behind the start date",
+                  "the server did not send the intermediate"
+                ]
+              },
+              {
+                "ma": "f",
+                "ten": "Fix",
+                "luaChon": [
+                  "renew it and alert before expiry",
+                  "issue a certificate whose SAN covers the name",
+                  "use a certificate from a trusted CA",
+                  "fix the client's clock (NTP)",
+                  "serve the full chain (leaf + intermediate)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "certificate has expired (10)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "no alternative certificate subject name matches"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "self-signed certificate (18)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "certificate is not yet valid (9)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "m": "unable to get local issuer certificate (20)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.k": "the certificate expired",
+              "r1.f": "renew it and alert before expiry",
+              "r2.k": "the name is not in the SAN list",
+              "r2.f": "issue a certificate whose SAN covers the name",
+              "r3.k": "nobody trusted signed it",
+              "r3.f": "use a certificate from a trusted CA",
+              "r4.k": "the clock is behind the start date",
+              "r4.f": "fix the client's clock (NTP)",
+              "r5.k": "the server did not send the intermediate",
+              "r5.f": "serve the full chain (leaf + intermediate)"
+            },
+            "giaiThich": "<p>All five are curl exit 60 — the code only says \"verification failed\", the text says why. The last one is the partner incident of Lab 6: browsers fetch a missing intermediate through AIA and hide the bug, while curl, Java and monitoring fail. \"Not yet valid\" on one machine is almost always that machine's clock.</p><p><i>VI: Cả năm đều là curl exit 60 — mã chỉ nói \"kiểm chứng thất bại\", phần chữ mới nói vì sao. Dòng cuối là sự cố đối tác của Lab 6: trình duyệt tự lấy trung gian còn thiếu qua AIA nên che mất lỗi, còn curl, Java và hệ giám sát thì hỏng. \"Not yet valid\" trên đúng một máy gần như luôn là đồng hồ của máy đó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Fixing any of them with curl -k — that switches verification off, it does not fix anything."
+        },
+        {
+          "loi": "Renewing the certificate when the real problem is the missing intermediate."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SAN",
+          "vi": "danh sách tên hợp lệ của chứng chỉ"
+        },
+        {
+          "en": "intermediate CA",
+          "vi": "CA trung gian"
+        },
+        {
+          "en": "AIA",
+          "vi": "trường chỉ nơi tải chứng chỉ cấp trên"
+        }
+      ]
+    },
+    {
+      "title": "TLS 2 — The TLS 1.3 handshake, in order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "TLS 1.3 handshake"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The real handshake of Lab 6 ended like this:<pre>New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384\nProtocol: TLSv1.3\nALPN protocol: h2\nVerify return code: 0 (ok)</pre>Put the steps of a full TLS 1.3 handshake in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bắt tay thật của Lab 6 kết thúc thế này:<pre>New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384\nProtocol: TLSv1.3\nALPN protocol: h2\nVerify return code: 0 (ok)</pre>Xếp các bước của một lần bắt tay TLS 1.3 đầy đủ theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The key exchange happens in the first two messages.",
+        "The client checks the certificate before it sends Finished."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TLS 2 — The TLS 1.3 handshake, in order\n\nAnswer in the answer panel (no code needed).\n\n1. One round trip, then encrypted dataMột vòng khứ hồi, rồi dữ liệu đã mã hoá\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TLS 2 — The TLS 1.3 handshake, in order — answer key\n\n1. One round trip, then encrypted dataMột vòng khứ hồi, rồi dữ liệu đã mã hoá\n   Answer: m3) ClientHello: versions, ciphers, key share, SNI and ALPN (in cleartext)  →  m5) ServerHello: chosen cipher and the server's key share — both sides now derive the keys  →  m1) Encrypted from here: the server's Certificate and CertificateVerify  →  m4) Server Finished  →  m6) The client verifies the chain and the name, then sends its Finished  →  m2) Application data (the HTTP request) flows encrypted\n   TLS 1.3 sends the key share in the very first message, so the keys exist after ONE round trip and the certificate itself already travels encrypted. Only the ClientHello — including the SNI — is readable on the wire.VI: TLS 1.3 gửi key share ngay trong thông điệp đầu tiên, nên khoá có sau MỘT vòng khứ hồi và chính chứng chỉ đã đi dưới dạng mã hoá. Chỉ có ClientHello — kể cả SNI — là đọc được trên dây.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>TLS 1.3 sends the key share in the very first message, so the keys exist after ONE round trip and the certificate itself already travels encrypted. Only the ClientHello — including the SNI — is readable on the wire.</p><p><i>VI: TLS 1.3 gửi key share ngay trong thông điệp đầu tiên, nên khoá có sau MỘT vòng khứ hồi và chính chứng chỉ đã đi dưới dạng mã hoá. Chỉ có ClientHello — kể cả SNI — là đọc được trên dây.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>One round trip, then encrypted data</p><p style=\"opacity:.75;font-size:.92em\"><i>Một vòng khứ hồi, rồi dữ liệu đã mã hoá</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Encrypted from here: the server's Certificate and CertificateVerify"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Application data (the HTTP request) flows encrypted"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "ClientHello: versions, ciphers, key share, SNI and ALPN (in cleartext)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Server Finished"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "ServerHello: chosen cipher and the server's key share — both sides now derive the keys"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "The client verifies the chain and the name, then sends its Finished"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m5",
+              "m1",
+              "m4",
+              "m6",
+              "m2"
+            ],
+            "giaiThich": "<p>TLS 1.3 sends the key share in the very first message, so the keys exist after ONE round trip and the certificate itself already travels encrypted. Only the ClientHello — including the SNI — is readable on the wire.</p><p><i>VI: TLS 1.3 gửi key share ngay trong thông điệp đầu tiên, nên khoá có sau MỘT vòng khứ hồi và chính chứng chỉ đã đi dưới dạng mã hoá. Chỉ có ClientHello — kể cả SNI — là đọc được trên dây.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the certificate before ServerHello."
+        },
+        {
+          "loi": "Thinking TLS 1.3 needs two round trips like TLS 1.2."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "key share",
+          "vi": "phần trao đổi khoá"
+        },
+        {
+          "en": "ALPN",
+          "vi": "thương lượng giao thức tầng ứng dụng"
+        }
+      ]
+    },
+    {
+      "title": "TLS 3 — Write chainCheck(text, trustedRoots): does the chain reach a root?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "chain of trust"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The real chain LabFlow's server sent, read with <code>openssl s_client -showcerts | grep -E \" [si]:\"</code> (s = subject, i = issuer):</p><pre> 0 s:CN=labflow.test, O=LabFlow\n   i:CN=LabFlow Intermediate CA, O=LabFlow\n 1 s:CN=LabFlow Intermediate CA, O=LabFlow\n   i:CN=LabFlow Root CA, O=LabFlow</pre><p>Write <code>chainCheck(text, trustedRoots)</code>. Parse the certificates in order (a line <code>N s:…</code> starts certificate N; the next <code>i:…</code> line is its issuer). Then return <code>{ ok, depth, problem }</code>, checking in this order:</p>\n<ol>\n<li>no certificate ⇒ <code>{ ok: false, depth: 0, problem: \"no certificates\" }</code>;</li>\n<li>each certificate's issuer must be the subject of the NEXT one, else <code>problem: \"out of order at K\"</code> (K = index of the certificate whose issuer does not match);</li>\n<li>if the last certificate is self-signed (issuer = subject) and not in <code>trustedRoots</code> ⇒ <code>\"untrusted self-signed\"</code>;</li>\n<li>if the last certificate's issuer is in <code>trustedRoots</code> ⇒ <code>{ ok: true, problem: null }</code>; otherwise <code>\"missing issuer: &lt;issuer&gt;\"</code>.</li>\n</ol>\n<p><code>depth</code> is the number of certificates the server sent. A correct server never sends the root: the client already has it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chuỗi thật mà server của LabFlow gửi, đọc bằng <code>openssl s_client -showcerts | grep -E \" [si]:\"</code> (s = chủ thể, i = nơi cấp):</p><pre> 0 s:CN=labflow.test, O=LabFlow\n   i:CN=LabFlow Intermediate CA, O=LabFlow\n 1 s:CN=LabFlow Intermediate CA, O=LabFlow\n   i:CN=LabFlow Root CA, O=LabFlow</pre><p>Viết <code>chainCheck(text, trustedRoots)</code>. Đọc các chứng chỉ theo thứ tự (dòng <code>N s:…</code> mở chứng chỉ thứ N; dòng <code>i:…</code> kế tiếp là nơi cấp của nó). Rồi trả về <code>{ ok, depth, problem }</code>, kiểm theo thứ tự:</p>\n<ol>\n<li>không có chứng chỉ nào ⇒ <code>{ ok: false, depth: 0, problem: \"no certificates\" }</code>;</li>\n<li>nơi cấp của mỗi chứng chỉ phải là chủ thể của chứng chỉ KẾ TIẾP, không thì <code>problem: \"out of order at K\"</code> (K = chỉ số của chứng chỉ có nơi cấp không khớp);</li>\n<li>nếu chứng chỉ cuối là tự ký (nơi cấp = chủ thể) và không nằm trong <code>trustedRoots</code> ⇒ <code>\"untrusted self-signed\"</code>;</li>\n<li>nếu nơi cấp của chứng chỉ cuối nằm trong <code>trustedRoots</code> ⇒ <code>{ ok: true, problem: null }</code>; ngược lại <code>\"missing issuer: &lt;nơi cấp&gt;\"</code>.</li>\n</ol>\n<p><code>depth</code> là số chứng chỉ server đã gửi. Server đúng không bao giờ gửi gốc: client đã có sẵn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "chainCheck(\" 0 s:CN=labflow.test, O=LabFlow\\n   i:CN=LabFlow Intermediate CA, O=LabFlow\\n 1 s:CN=LabFlow Intermediate CA, O=LabFlow\\n   i:CN=LabFlow Root CA, O=LabFlow\", [\"CN=LabFlow Root CA, O=LabFlow\"])",
+          "output": "{\"ok\":true,\"depth\":2,\"problem\":null}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build an array of { subject, issuer } first, then check links pairwise.|||Dựng mảng { subject, issuer } trước, rồi kiểm từng cặp liên kết.",
+        "A root is self-signed: its issuer equals its subject.|||Gốc là tự ký: nơi cấp bằng chủ thể."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function chainCheck(text, trustedRoots) {\n  return { ok: false, depth: 0, problem: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function chainCheck(text, trustedRoots) {\n  var certs = [], cur = null;\n  String(text).split('\\n').forEach(function (l) {\n    var s = /^\\s*(\\d+)\\s+s:(.*)$/.exec(l), i = /^\\s*i:(.*)$/.exec(l);\n    if (s) { cur = { subject: s[2].trim(), issuer: null }; certs.push(cur); }\n    else if (i && cur) cur.issuer = i[1].trim();\n  });\n  if (!certs.length) return { ok: false, depth: 0, problem: 'no certificates' };\n  for (var k = 0; k + 1 < certs.length; k++) {\n    if (certs[k].issuer !== certs[k + 1].subject) return { ok: false, depth: certs.length, problem: 'out of order at ' + k };\n  }\n  var last = certs[certs.length - 1];\n  if (last.issuer === last.subject && trustedRoots.indexOf(last.subject) < 0) return { ok: false, depth: certs.length, problem: 'untrusted self-signed' };\n  if (trustedRoots.indexOf(last.issuer) >= 0) return { ok: true, depth: certs.length, problem: null };\n  return { ok: false, depth: certs.length, problem: 'missing issuer: ' + last.issuer };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trust is a path: leaf → intermediate → a root the client already holds. A server that sends only the leaf breaks that path for every client that does not repair it by itself, which is why the outage hit the partner and not the browser.</p>",
+      "solutionExplanationHtmlVi": "<p>Niềm tin là một con đường: lá → trung gian → một gốc client đã có sẵn. Server chỉ gửi lá là cắt đứt con đường đó với mọi client không tự sửa, nên sự cố đánh vào đối tác chứ không vào trình duyệt.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: chainCheck(\" 0 s:CN=labflow.test, O=LabFlow\\n   i:CN=LabFlow Intermediate CA, O=LabFlow...",
+              "vi": "Ca 1"
+            },
+            "goi": "chainCheck(\" 0 s:CN=labflow.test, O=LabFlow\\n   i:CN=LabFlow Intermediate CA, O=LabFlow\\n 1 s:CN=LabFlow Intermediate CA, O=LabFlow\\n   i:CN=LabFlow Root CA, O=LabFlow\", [\"CN=LabFlow Root CA, O=LabFlow\"])",
+            "mongDoi": {
+              "ok": true,
+              "depth": 2,
+              "problem": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: the leaf only — the Lab 6 partner incident",
+              "vi": "Ca 2: chỉ có lá — sự cố đối tác của Lab 6"
+            },
+            "goi": "chainCheck(\" 0 s:CN=labflow.test, O=LabFlow\\n   i:CN=LabFlow Intermediate CA, O=LabFlow\", [\"CN=LabFlow Root CA, O=LabFlow\"])",
+            "mongDoi": {
+              "ok": false,
+              "depth": 1,
+              "problem": "missing issuer: CN=LabFlow Intermediate CA, O=LabFlow"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "chainCheck(\" 0 s:CN=labflow.test, O=LabFlow\\n   i:CN=LabFlow Intermediate CA, O=LabFlow\\n 1 s:CN=LabFlow Intermediate CA, O=LabFlow\\n   i:CN=LabFlow Root CA, O=LabFlow\", [\"CN=Some Other Root\"])",
+            "mongDoi": {
+              "ok": false,
+              "depth": 2,
+              "problem": "missing issuer: CN=LabFlow Root CA, O=LabFlow"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "chainCheck(\" 0 s:CN=dev.local\\n   i:CN=dev.local\", [\"CN=LabFlow Root CA, O=LabFlow\"])",
+            "mongDoi": {
+              "ok": false,
+              "depth": 1,
+              "problem": "untrusted self-signed"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "chainCheck(\" 1 s:CN=LabFlow Intermediate CA, O=LabFlow\\n   i:CN=LabFlow Root CA, O=LabFlow\\n 0 s:CN=labflow.test, O=LabFlow\\n   i:CN=LabFlow Intermediate CA, O=LabFlow\", [\"CN=LabFlow Root CA, O=LabFlow\"])",
+            "mongDoi": {
+              "ok": false,
+              "depth": 2,
+              "problem": "out of order at 0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "chainCheck(\"\", [\"CN=LabFlow Root CA, O=LabFlow\"])",
+            "mongDoi": {
+              "ok": false,
+              "depth": 0,
+              "problem": "no certificates"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "chainCheck(\" 0 s:CN=api.example\\n   i:CN=LabFlow Intermediate CA, O=LabFlow\\n 1 s:CN=LabFlow Intermediate CA, O=LabFlow\\n   i:CN=LabFlow Root CA, O=LabFlow\\n 2 s:CN=LabFlow Root CA, O=LabFlow\\n   i:CN=LabFlow Root CA, O=LabFlow\", [\"CN=LabFlow Root CA, O=LabFlow\"])",
+            "mongDoi": {
+              "ok": true,
+              "depth": 3,
+              "problem": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Declaring the leaf-only chain fine because a browser accepts it — curl and Java do not fetch missing intermediates.|||Kết luận chuỗi chỉ có lá là ổn vì trình duyệt chấp nhận — curl và Java không tự đi lấy trung gian còn thiếu."
+        },
+        {
+          "loi": "Rejecting a chain that includes its (trusted) root — sending the root is wasteful, not wrong.|||Từ chối một chuỗi có kèm gốc (đáng tin) — gửi kèm gốc là thừa, không phải sai."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "TLS 4 — Write certStatus(text, now, minDays): the expiry alarm",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "certificate expiry",
+        "monitoring"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Expiry is the number-one HTTPS outage and the easiest to prevent. The real leaf of Lab 6:</p><pre>subject=CN=labflow.test, O=LabFlow\nissuer=CN=LabFlow Intermediate CA, O=LabFlow\nnotBefore=Nov  4 06:54:08 2026 GMT\nnotAfter=Feb  2 06:54:08 2027 GMT\nX509v3 Subject Alternative Name: \n    DNS:labflow.test, DNS:www.labflow.test</pre><p>Write <code>certStatus(text, nowIso, minDays)</code> for the output of <code>openssl x509 -noout -dates</code>: find the <code>notBefore=</code> and <code>notAfter=</code> lines (format <code>Mon  D HH:MM:SS YYYY GMT</code>, the day may be padded with a space), and return <code>{ status, daysLeft }</code>:</p>\n<ul><li><code>daysLeft</code> = whole days from <code>nowIso</code> to notAfter, rounded down (negative once expired);</li>\n<li><code>status</code>: <code>\"not-yet-valid\"</code> if now is before notBefore, <code>\"expired\"</code> if after notAfter, <code>\"renew-soon\"</code> if daysLeft &lt; minDays, else <code>\"ok\"</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hết hạn là sự cố HTTPS số một và cũng dễ phòng nhất. Chứng chỉ lá thật của Lab 6:</p><pre>subject=CN=labflow.test, O=LabFlow\nissuer=CN=LabFlow Intermediate CA, O=LabFlow\nnotBefore=Nov  4 06:54:08 2026 GMT\nnotAfter=Feb  2 06:54:08 2027 GMT\nX509v3 Subject Alternative Name: \n    DNS:labflow.test, DNS:www.labflow.test</pre><p>Viết <code>certStatus(text, nowIso, minDays)</code> cho kết xuất của <code>openssl x509 -noout -dates</code>: tìm dòng <code>notBefore=</code> và <code>notAfter=</code> (dạng <code>Mon  D HH:MM:SS YYYY GMT</code>, ngày có thể được đệm một dấu cách), rồi trả về <code>{ status, daysLeft }</code>:</p>\n<ul><li><code>daysLeft</code> = số ngày tròn từ <code>nowIso</code> tới notAfter, làm tròn xuống (âm khi đã hết hạn);</li>\n<li><code>status</code>: <code>\"not-yet-valid\"</code> nếu now trước notBefore, <code>\"expired\"</code> nếu sau notAfter, <code>\"renew-soon\"</code> nếu daysLeft &lt; minDays, còn lại <code>\"ok\"</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "certStatus(\"subject=CN=labflow.test, O=LabFlow\\nissuer=CN=LabFlow Intermediate CA, O=LabFlow\\nnotBefore=Nov  4 06:54:08 2026 GMT\\nnotAfter=Feb  2 06:54:08 2027 GMT\\nX509v3 Subject Alternative Name: \\n    DNS:labflow.test, DNS:www.labflow.test\", \"2026-11-20T00:00:00Z\", 20)",
+          "output": "{\"status\":\"ok\",\"daysLeft\":74}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split the date on whitespace: month, day, time, year — Date.UTC takes a 0-based month.|||Tách ngày theo khoảng trắng: tháng, ngày, giờ, năm — Date.UTC nhận tháng tính từ 0.",
+        "86,400,000 ms in a day; Math.floor gives \"whole days left\".|||86.400.000 ms một ngày; Math.floor cho ra \"số ngày tròn còn lại\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function certStatus(text, nowIso, minDays) {\n  return { status: \"ok\", daysLeft: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function certStatus(text, nowIso, minDays) {\n  var M = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };\n  function parse(s) { var w = s.trim().split(/\\s+/), t = w[2].split(':').map(Number); return Date.UTC(Number(w[3]), M[w[0]], Number(w[1]), t[0], t[1], t[2]); }\n  var nb = null, na = null;\n  String(text).split('\\n').forEach(function (l) {\n    var m = /^notBefore=(.*)$/.exec(l.trim()); if (m) nb = parse(m[1]);\n    var n = /^notAfter=(.*)$/.exec(l.trim()); if (n) na = parse(n[1]);\n  });\n  var now = Date.parse(nowIso);\n  var daysLeft = Math.floor((na - now) / 86400000);\n  var status = now < nb ? 'not-yet-valid' : now > na ? 'expired' : daysLeft < minDays ? 'renew-soon' : 'ok';\n  return { status: status, daysLeft: daysLeft };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lab 6's hardening list says \"alert ~20 days out\". This function is that alert: run it from cron against every hostname you own, and an expiry becomes a ticket three weeks early instead of an outage.</p>",
+      "solutionExplanationHtmlVi": "<p>Danh sách làm cứng của Lab 6 ghi \"cảnh báo trước khoảng 20 ngày\". Hàm này chính là lời cảnh báo đó: chạy nó bằng cron với mọi tên miền bạn quản lý, và chuyện hết hạn trở thành một ticket trước ba tuần thay vì một sự cố.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: certStatus(\"subject=CN=labflow.test, O=LabFlow\\nissuer=CN=LabFlow Intermediate CA, O=La...",
+              "vi": "Ca 1"
+            },
+            "goi": "certStatus(\"subject=CN=labflow.test, O=LabFlow\\nissuer=CN=LabFlow Intermediate CA, O=LabFlow\\nnotBefore=Nov  4 06:54:08 2026 GMT\\nnotAfter=Feb  2 06:54:08 2027 GMT\\nX509v3 Subject Alternative Name: \\n    DNS:labflow.test, DNS:www.labflow.test\", \"2026-11-20T00:00:00Z\", 20)",
+            "mongDoi": {
+              "status": "ok",
+              "daysLeft": 74
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: certStatus(\"subject=CN=labflow.test, O=LabFlow\\nissuer=CN=LabFlow Intermediate CA, O=La...",
+              "vi": "Ca 2"
+            },
+            "goi": "certStatus(\"subject=CN=labflow.test, O=LabFlow\\nissuer=CN=LabFlow Intermediate CA, O=LabFlow\\nnotBefore=Nov  4 06:54:08 2026 GMT\\nnotAfter=Feb  2 06:54:08 2027 GMT\\nX509v3 Subject Alternative Name: \\n    DNS:labflow.test, DNS:www.labflow.test\", \"2027-01-20T00:00:00Z\", 20)",
+            "mongDoi": {
+              "status": "renew-soon",
+              "daysLeft": 13
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "certStatus(\"subject=CN=labflow.test, O=LabFlow\\nissuer=CN=LabFlow Intermediate CA, O=LabFlow\\nnotBefore=Nov  4 06:54:08 2026 GMT\\nnotAfter=Feb  2 06:54:08 2027 GMT\\nX509v3 Subject Alternative Name: \\n    DNS:labflow.test, DNS:www.labflow.test\", \"2027-03-01T00:00:00Z\", 20)",
+            "mongDoi": {
+              "status": "expired",
+              "daysLeft": -27
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "certStatus(\"subject=CN=labflow.test, O=LabFlow\\nissuer=CN=LabFlow Intermediate CA, O=LabFlow\\nnotBefore=Nov  4 06:54:08 2026 GMT\\nnotAfter=Feb  2 06:54:08 2027 GMT\\nX509v3 Subject Alternative Name: \\n    DNS:labflow.test, DNS:www.labflow.test\", \"2026-11-01T00:00:00Z\", 20)",
+            "mongDoi": {
+              "status": "not-yet-valid",
+              "daysLeft": 93
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "certStatus(\"notBefore=Jan 15 00:00:00 2026 GMT\\nnotAfter=Apr 15 00:00:00 2026 GMT\", \"2026-03-27T12:00:00Z\", 20)",
+            "mongDoi": {
+              "status": "renew-soon",
+              "daysLeft": 18
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Splitting on single spaces and breaking on the padded day (\"Nov  4\").|||Tách theo đúng một dấu cách và vỡ ở ngày có đệm (\"Nov  4\")."
+        },
+        {
+          "loi": "Parsing in local time, so the answer shifts by the time zone.|||Đọc theo giờ địa phương, khiến đáp án lệch theo múi giờ."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "TLS 5 — What HTTPS hides, what it does not, and the shortcuts that hurt",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "TLS guarantees"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lessons 6.1–6.4 and the Lab 6 hardening list.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 6.1–6.4 và danh sách làm cứng của Lab 6.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "TLS guarantees confidentiality, integrity and authentication — authentication only if you verify.|||TLS bảo đảm bí mật, toàn vẹn và xác thực — xác thực chỉ khi bạn có kiểm chứng.",
+        "The ClientHello is the only cleartext part of a TLS 1.3 handshake.|||ClientHello là phần chữ rõ duy nhất của bắt tay TLS 1.3."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TLS 5 — What HTTPS hides, what it does not, and the shortcuts that hurt\n\nAnswer in the answer panel (no code needed).\n\n1. On a school network, what can the operator still see of your HTTPS visit to labflow.test?Trên mạng trường, người vận hành vẫn thấy được gì của lượt truy cập HTTPS tới labflow.test?\n2. A teammate \"fixes\" a TLS error in a script with curl -k. Why is that dangerous?Một đồng đội \"sửa\" lỗi TLS trong script bằng curl -k. Vì sao nguy hiểm?\n3. Cloudflare sits in front of the origin. Which SSL mode encrypts AND verifies the origin hop?Cloudflare đứng trước origin. Chế độ SSL nào vừa mã hoá VỪA kiểm chứng chặng tới origin?\n4. Why monitor Certificate Transparency logs (e.g. crt.sh) for your own domains?Vì sao nên theo dõi nhật ký Certificate Transparency (ví dụ crt.sh) cho chính tên miền của mình?\n5. An internal API must accept only calls from your own services, at the TLS layer. What is that called?Một API nội bộ chỉ được nhận lời gọi từ chính các dịch vụ của bạn, ngay ở tầng TLS. Cách đó gọi là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TLS 5 — What HTTPS hides, what it does not, and the shortcuts that hurt — answer key\n\n1. On a school network, what can the operator still see of your HTTPS visit to labflow.test?Trên mạng trường, người vận hành vẫn thấy được gì của lượt truy cập HTTPS tới labflow.test?\n   Answer: c) The domain name, from the SNI in the ClientHello\n   TLS encrypts the body, path, headers and cookies, but the SNI in the ClientHello is cleartext — the capture in Lab 6 shows it. That is exactly what SNI-based blocking reads.VI: TLS mã hoá body, path, header và cookie, nhưng SNI trong ClientHello là chữ rõ — bản bắt gói ở Lab 6 cho thấy. Đó đúng là thứ cơ chế chặn theo SNI đọc.\n\n2. A teammate \"fixes\" a TLS error in a script with curl -k. Why is that dangerous?Một đồng đội \"sửa\" lỗi TLS trong script bằng curl -k. Vì sao nguy hiểm?\n   Answer: a) Anyone on the path can now pose as the server\n   Encryption without authentication protects you from nobody in the middle: you encrypt your data to whoever answered. Fix the cause (chain, name, clock), never ship -k.VI: Mã hoá mà không xác thực thì không bảo vệ bạn khỏi kẻ đứng giữa nào: bạn mã hoá dữ liệu gửi cho bất kỳ ai trả lời. Sửa nguyên nhân (chuỗi, tên, đồng hồ), đừng bao giờ đưa -k lên production.\n\n3. Cloudflare sits in front of the origin. Which SSL mode encrypts AND verifies the origin hop?Cloudflare đứng trước origin. Chế độ SSL nào vừa mã hoá VỪA kiểm chứng chặng tới origin?\n   Answer: b) Full (strict)\n   Flexible leaves the origin hop in plain HTTP; Full encrypts it but accepts any certificate; Full (strict) requires a valid certificate on the origin.VI: Flexible để chặng tới origin là HTTP trần; Full mã hoá nhưng chấp nhận mọi chứng chỉ; Full (strict) đòi chứng chỉ hợp lệ trên origin.\n\n4. Why monitor Certificate Transparency logs (e.g. crt.sh) for your own domains?Vì sao nên theo dõi nhật ký Certificate Transparency (ví dụ crt.sh) cho chính tên miền của mình?\n   Answer: d) To spot a certificate issued for your name that you did not request\n   Public CAs log every certificate they issue. Watching the log catches mis-issuance or a forgotten subdomain early — the log is public, so attackers read it too.VI: Các CA công khai ghi mọi chứng chỉ họ cấp vào nhật ký. Theo dõi nó bắt được chứng chỉ cấp sai hoặc subdomain bị quên — nhật ký là công khai, nên kẻ tấn công cũng đọc nó.\n\n5. An internal API must accept only calls from your own services, at the TLS layer. What is that called?Một API nội bộ chỉ được nhận lời gọi từ chính các dịch vụ của bạn, ngay ở tầng TLS. Cách đó gọi là gì?\n   Answer: c) Mutual TLS (client certificates)\n   With mTLS (ssl_verify_client in nginx) a client without a valid certificate is rejected during the handshake, before any HTTP is spoken.VI: Với mTLS (ssl_verify_client trong nginx), client không có chứng chỉ hợp lệ bị từ chối ngay trong bắt tay, trước khi nói câu HTTP nào.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> The domain name, from the SNI in the ClientHello</p><p>TLS encrypts the body, path, headers and cookies, but the SNI in the ClientHello is cleartext — the capture in Lab 6 shows it. That is exactly what SNI-based blocking reads.</p><p><i>VI: TLS mã hoá body, path, header và cookie, nhưng SNI trong ClientHello là chữ rõ — bản bắt gói ở Lab 6 cho thấy. Đó đúng là thứ cơ chế chặn theo SNI đọc.</i></p></li><li><p><b>a)</b> Anyone on the path can now pose as the server</p><p>Encryption without authentication protects you from nobody in the middle: you encrypt your data to whoever answered. Fix the cause (chain, name, clock), never ship -k.</p><p><i>VI: Mã hoá mà không xác thực thì không bảo vệ bạn khỏi kẻ đứng giữa nào: bạn mã hoá dữ liệu gửi cho bất kỳ ai trả lời. Sửa nguyên nhân (chuỗi, tên, đồng hồ), đừng bao giờ đưa -k lên production.</i></p></li><li><p><b>b)</b> Full (strict)</p><p>Flexible leaves the origin hop in plain HTTP; Full encrypts it but accepts any certificate; Full (strict) requires a valid certificate on the origin.</p><p><i>VI: Flexible để chặng tới origin là HTTP trần; Full mã hoá nhưng chấp nhận mọi chứng chỉ; Full (strict) đòi chứng chỉ hợp lệ trên origin.</i></p></li><li><p><b>d)</b> To spot a certificate issued for your name that you did not request</p><p>Public CAs log every certificate they issue. Watching the log catches mis-issuance or a forgotten subdomain early — the log is public, so attackers read it too.</p><p><i>VI: Các CA công khai ghi mọi chứng chỉ họ cấp vào nhật ký. Theo dõi nó bắt được chứng chỉ cấp sai hoặc subdomain bị quên — nhật ký là công khai, nên kẻ tấn công cũng đọc nó.</i></p></li><li><p><b>c)</b> Mutual TLS (client certificates)</p><p>With mTLS (ssl_verify_client in nginx) a client without a valid certificate is rejected during the handshake, before any HTTP is spoken.</p><p><i>VI: Với mTLS (ssl_verify_client trong nginx), client không có chứng chỉ hợp lệ bị từ chối ngay trong bắt tay, trước khi nói câu HTTP nào.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>On a school network, what can the operator still see of your HTTPS visit to labflow.test?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên mạng trường, người vận hành vẫn thấy được gì của lượt truy cập HTTPS tới labflow.test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The full URL path and query"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The request body"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The domain name, from the SNI in the ClientHello"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Your session cookie"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>TLS encrypts the body, path, headers and cookies, but the SNI in the ClientHello is cleartext — the capture in Lab 6 shows it. That is exactly what SNI-based blocking reads.</p><p><i>VI: TLS mã hoá body, path, header và cookie, nhưng SNI trong ClientHello là chữ rõ — bản bắt gói ở Lab 6 cho thấy. Đó đúng là thứ cơ chế chặn theo SNI đọc.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A teammate \"fixes\" a TLS error in a script with curl -k. Why is that dangerous?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một đồng đội \"sửa\" lỗi TLS trong script bằng curl -k. Vì sao nguy hiểm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Anyone on the path can now pose as the server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It makes every request ten times slower"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It leaks the private key of the server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It downgrades the connection to TLS 1.0"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Encryption without authentication protects you from nobody in the middle: you encrypt your data to whoever answered. Fix the cause (chain, name, clock), never ship -k.</p><p><i>VI: Mã hoá mà không xác thực thì không bảo vệ bạn khỏi kẻ đứng giữa nào: bạn mã hoá dữ liệu gửi cho bất kỳ ai trả lời. Sửa nguyên nhân (chuỗi, tên, đồng hồ), đừng bao giờ đưa -k lên production.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Cloudflare sits in front of the origin. Which SSL mode encrypts AND verifies the origin hop?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cloudflare đứng trước origin. Chế độ SSL nào vừa mã hoá VỪA kiểm chứng chặng tới origin?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Flexible"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Full (strict)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Off"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Full"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Flexible leaves the origin hop in plain HTTP; Full encrypts it but accepts any certificate; Full (strict) requires a valid certificate on the origin.</p><p><i>VI: Flexible để chặng tới origin là HTTP trần; Full mã hoá nhưng chấp nhận mọi chứng chỉ; Full (strict) đòi chứng chỉ hợp lệ trên origin.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why monitor Certificate Transparency logs (e.g. crt.sh) for your own domains?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao nên theo dõi nhật ký Certificate Transparency (ví dụ crt.sh) cho chính tên miền của mình?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To hide your subdomains from search engines"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To speed up the TLS handshake"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To renew certificates automatically"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To spot a certificate issued for your name that you did not request"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Public CAs log every certificate they issue. Watching the log catches mis-issuance or a forgotten subdomain early — the log is public, so attackers read it too.</p><p><i>VI: Các CA công khai ghi mọi chứng chỉ họ cấp vào nhật ký. Theo dõi nó bắt được chứng chỉ cấp sai hoặc subdomain bị quên — nhật ký là công khai, nên kẻ tấn công cũng đọc nó.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>An internal API must accept only calls from your own services, at the TLS layer. What is that called?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một API nội bộ chỉ được nhận lời gọi từ chính các dịch vụ của bạn, ngay ở tầng TLS. Cách đó gọi là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "OCSP stapling on the server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "TLS session resumption"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Mutual TLS (client certificates)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "HTTP Strict Transport Security"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>With mTLS (ssl_verify_client in nginx) a client without a valid certificate is rejected during the handshake, before any HTTP is spoken.</p><p><i>VI: Với mTLS (ssl_verify_client trong nginx), client không có chứng chỉ hợp lệ bị từ chối ngay trong bắt tay, trước khi nói câu HTTP nào.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing HTTPS hides which site you visit.|||Tin rằng HTTPS giấu được bạn vào trang nào."
+        },
+        {
+          "loi": "Choosing Flexible because the padlock is green.|||Chọn Flexible vì ổ khoá vẫn xanh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SNI",
+          "vi": "chỉ định tên máy chủ"
+        },
+        {
+          "en": "mTLS",
+          "vi": "TLS hai chiều"
+        },
+        {
+          "en": "Certificate Transparency",
+          "vi": "nhật ký minh bạch chứng chỉ"
+        }
+      ]
+    }
+  ]
+}

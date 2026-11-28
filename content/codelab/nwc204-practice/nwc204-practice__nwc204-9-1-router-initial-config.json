@@ -1,0 +1,822 @@
+{
+  "trackSlug": "nwc204-practice",
+  "moduleSlug": "nwc204-9-1-router-initial-config",
+  "lesson": {
+    "course": "nwc204-computer-networking",
+    "slug": "nwc204-9-1-cau-hinh-khoi-dau-router"
+  },
+  "exercises": [
+    {
+      "title": "Router 1 — Initial settings that bite later",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "initial router configuration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Lesson 9.1: modes, passwords, and the commands whose absence you only discover after a power cut or an audit.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 9.1: chế độ, mật khẩu, và những lệnh mà thiếu chúng thì chỉ phát hiện ra sau một lần mất điện hoặc một lần kiểm toán.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "When a correct command is refused, read the prompt.",
+        "Never save a risky change before it is proven."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Router 1 — Initial settings that bite later\n\nAnswer in the answer panel (no code needed).\n\n1. \"ip address 192.168.1.1 255.255.255.0\" is rejected at R1(config)#. Why?\"ip address 192.168.1.1 255.255.255.0\" bị từ chối ở R1(config)#. Vì sao?\n2. Both \"enable password cisco\" and \"enable secret class\" are configured. What do you type at the Password: prompt after enable?Có cả \"enable password cisco\" lẫn \"enable secret class\". Sau enable, ở lời hỏi Password: bạn gõ gì?\n3. You must test a risky change on a remote router and could lock yourself out. Which single command turns a permanent lockout into a short outage?Bạn phải thử một thay đổi rủi ro trên router ở xa và có thể tự khoá mình ngoài. Lệnh nào biến một lần khoá vĩnh viễn thành một sự cố ngắn?\n4. show ip ssh reports \"SSH Disabled\". Which prerequisite do you check FIRST?show ip ssh báo \"SSH Disabled\". Điều kiện nào kiểm TRƯỚC TIÊN?\n5. transport input ssh is set on the vty lines, but they still say plain \"login\". What happens when you SSH in?Các dòng vty đã có transport input ssh nhưng vẫn ghi \"login\" trơn. Khi SSH vào thì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Router 1 — Initial settings that bite later — answer key\n\n1. \"ip address 192.168.1.1 255.255.255.0\" is rejected at R1(config)#. Why?\"ip address 192.168.1.1 255.255.255.0\" bị từ chối ở R1(config)#. Vì sao?\n   Answer: d) Wrong mode: it belongs under interface g0/0\n   The command is correct; the prompt is not. Reading the prompt before re-reading the syntax finds this in one second.VI: Câu lệnh đúng; dấu nhắc thì không. Đọc dấu nhắc trước khi đọc lại cú pháp là tìm ra trong một giây.\n\n2. Both \"enable password cisco\" and \"enable secret class\" are configured. What do you type at the Password: prompt after enable?Có cả \"enable password cisco\" lẫn \"enable secret class\". Sau enable, ở lời hỏi Password: bạn gõ gì?\n   Answer: b) class — enable secret takes precedence and the other line is ignored\n   When both exist, enable secret wins. Remove the decoy with no enable password: it misleads every reader and is a finding in any audit.VI: Khi có cả hai, enable secret thắng. Gỡ dòng mồi nhử bằng no enable password: nó đánh lừa mọi người đọc và là một phát hiện trong mọi lần kiểm toán.\n\n3. You must test a risky change on a remote router and could lock yourself out. Which single command turns a permanent lockout into a short outage?Bạn phải thử một thay đổi rủi ro trên router ở xa và có thể tự khoá mình ngoài. Lệnh nào biến một lần khoá vĩnh viễn thành một sự cố ngắn?\n   Answer: a) reload in 10 — then reload cancel once you are sure you still have access\n   reload in 10 schedules a reboot to the last saved configuration. If you lock yourself out, the router comes back by itself in ten minutes; if not, reload cancel. Do not save until the change is proven.VI: reload in 10 hẹn khởi động lại về cấu hình đã lưu gần nhất. Lỡ khoá mình ngoài thì mười phút sau router tự quay lại; không sao thì reload cancel. Đừng lưu cho tới khi thay đổi đã được chứng minh.\n\n4. show ip ssh reports \"SSH Disabled\". Which prerequisite do you check FIRST?show ip ssh báo \"SSH Disabled\". Điều kiện nào kiểm TRƯỚC TIÊN?\n   Answer: d) Whether an RSA key exists (show crypto key mypubkey rsa)\n   SSH turns on when a key exists, so a missing key is the usual reason. And the key itself can only be generated after a non-default hostname and an ip domain-name exist — it is named after the full domain name.VI: SSH bật khi có khoá, nên thiếu khoá là lý do thường gặp nhất. Mà khoá chỉ sinh được sau khi đã có hostname khác mặc định và ip domain-name — khoá được đặt tên theo tên miền đầy đủ.\n\n5. transport input ssh is set on the vty lines, but they still say plain \"login\". What happens when you SSH in?Các dòng vty đã có transport input ssh nhưng vẫn ghi \"login\" trơn. Khi SSH vào thì sao?\n   Answer: d) It fails: SSH needs login local and a username\n   SSH authenticates a user. login local makes the vty lines use the username database; plain login uses only the line password.VI: SSH xác thực một người dùng. login local khiến dòng vty dùng cơ sở dữ liệu tên người dùng; login trơn chỉ dùng mật khẩu của dòng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Wrong mode: it belongs under interface g0/0</p><p>The command is correct; the prompt is not. Reading the prompt before re-reading the syntax finds this in one second.</p><p><i>VI: Câu lệnh đúng; dấu nhắc thì không. Đọc dấu nhắc trước khi đọc lại cú pháp là tìm ra trong một giây.</i></p></li><li><p><b>b)</b> class — enable secret takes precedence and the other line is ignored</p><p>When both exist, enable secret wins. Remove the decoy with no enable password: it misleads every reader and is a finding in any audit.</p><p><i>VI: Khi có cả hai, enable secret thắng. Gỡ dòng mồi nhử bằng no enable password: nó đánh lừa mọi người đọc và là một phát hiện trong mọi lần kiểm toán.</i></p></li><li><p><b>a)</b> reload in 10 — then reload cancel once you are sure you still have access</p><p>reload in 10 schedules a reboot to the last saved configuration. If you lock yourself out, the router comes back by itself in ten minutes; if not, reload cancel. Do not save until the change is proven.</p><p><i>VI: reload in 10 hẹn khởi động lại về cấu hình đã lưu gần nhất. Lỡ khoá mình ngoài thì mười phút sau router tự quay lại; không sao thì reload cancel. Đừng lưu cho tới khi thay đổi đã được chứng minh.</i></p></li><li><p><b>d)</b> Whether an RSA key exists (show crypto key mypubkey rsa)</p><p>SSH turns on when a key exists, so a missing key is the usual reason. And the key itself can only be generated after a non-default hostname and an ip domain-name exist — it is named after the full domain name.</p><p><i>VI: SSH bật khi có khoá, nên thiếu khoá là lý do thường gặp nhất. Mà khoá chỉ sinh được sau khi đã có hostname khác mặc định và ip domain-name — khoá được đặt tên theo tên miền đầy đủ.</i></p></li><li><p><b>d)</b> It fails: SSH needs login local and a username</p><p>SSH authenticates a user. login local makes the vty lines use the username database; plain login uses only the line password.</p><p><i>VI: SSH xác thực một người dùng. login local khiến dòng vty dùng cơ sở dữ liệu tên người dùng; login trơn chỉ dùng mật khẩu của dòng.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>\"ip address 192.168.1.1 255.255.255.0\" is rejected at R1(config)#. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"ip address 192.168.1.1 255.255.255.0\" bị từ chối ở R1(config)#. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Routers accept addresses only in CIDR form"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The mask is missing its fourth octet"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The address is already used by the switch"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Wrong mode: it belongs under interface g0/0"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The command is correct; the prompt is not. Reading the prompt before re-reading the syntax finds this in one second.</p><p><i>VI: Câu lệnh đúng; dấu nhắc thì không. Đọc dấu nhắc trước khi đọc lại cú pháp là tìm ra trong một giây.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Both \"enable password cisco\" and \"enable secret class\" are configured. What do you type at the Password: prompt after enable?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có cả \"enable password cisco\" lẫn \"enable secret class\". Sau enable, ở lời hỏi Password: bạn gõ gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "cisco — the older command wins"
+              },
+              {
+                "ma": "b",
+                "noiDung": "class — enable secret takes precedence and the other line is ignored"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Either one works"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Neither: the conflict disables privileged EXEC"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>When both exist, enable secret wins. Remove the decoy with no enable password: it misleads every reader and is a finding in any audit.</p><p><i>VI: Khi có cả hai, enable secret thắng. Gỡ dòng mồi nhử bằng no enable password: nó đánh lừa mọi người đọc và là một phát hiện trong mọi lần kiểm toán.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>You must test a risky change on a remote router and could lock yourself out. Which single command turns a permanent lockout into a short outage?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn phải thử một thay đổi rủi ro trên router ở xa và có thể tự khoá mình ngoài. Lệnh nào biến một lần khoá vĩnh viễn thành một sự cố ngắn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "reload in 10 — then reload cancel once you are sure you still have access"
+              },
+              {
+                "ma": "b",
+                "noiDung": "service password-encryption"
+              },
+              {
+                "ma": "c",
+                "noiDung": "exec-timeout 10"
+              },
+              {
+                "ma": "d",
+                "noiDung": "copy running-config startup-config before the change"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>reload in 10 schedules a reboot to the last saved configuration. If you lock yourself out, the router comes back by itself in ten minutes; if not, reload cancel. Do not save until the change is proven.</p><p><i>VI: reload in 10 hẹn khởi động lại về cấu hình đã lưu gần nhất. Lỡ khoá mình ngoài thì mười phút sau router tự quay lại; không sao thì reload cancel. Đừng lưu cho tới khi thay đổi đã được chứng minh.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>show ip ssh reports \"SSH Disabled\". Which prerequisite do you check FIRST?</p><p style=\"opacity:.75;font-size:.92em\"><i>show ip ssh báo \"SSH Disabled\". Điều kiện nào kiểm TRƯỚC TIÊN?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Whether service password-encryption is on"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Whether the console line has logging synchronous"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Whether the banner motd is set"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Whether an RSA key exists (show crypto key mypubkey rsa)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>SSH turns on when a key exists, so a missing key is the usual reason. And the key itself can only be generated after a non-default hostname and an ip domain-name exist — it is named after the full domain name.</p><p><i>VI: SSH bật khi có khoá, nên thiếu khoá là lý do thường gặp nhất. Mà khoá chỉ sinh được sau khi đã có hostname khác mặc định và ip domain-name — khoá được đặt tên theo tên miền đầy đủ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>transport input ssh is set on the vty lines, but they still say plain \"login\". What happens when you SSH in?</p><p style=\"opacity:.75;font-size:.92em\"><i>Các dòng vty đã có transport input ssh nhưng vẫn ghi \"login\" trơn. Khi SSH vào thì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SSH uses the console password instead"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The router silently falls back to Telnet"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It works: SSH reuses the vty line password"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It fails: SSH needs login local and a username"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>SSH authenticates a user. login local makes the vty lines use the username database; plain login uses only the line password.</p><p><i>VI: SSH xác thực một người dùng. login local khiến dòng vty dùng cơ sở dữ liệu tên người dùng; login trơn chỉ dùng mật khẩu của dòng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Leaving enable password next to enable secret."
+        },
+        {
+          "loi": "Testing an access restriction over the only session you have."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "enable secret",
+          "vi": "mật khẩu đặc quyền (băm)"
+        },
+        {
+          "en": "login local",
+          "vi": "xác thực bằng tài khoản cục bộ"
+        }
+      ]
+    },
+    {
+      "title": "Router 2 — Turn SSH on, in the order IOS accepts",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "SSH configuration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Put these configuration steps in an order where every command is accepted the first time and nobody is locked out.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các bước cấu hình theo thứ tự mà lệnh nào cũng được chấp nhận ngay lần đầu và không ai bị khoá ngoài.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What is the key named after?",
+        "Create the account before you tell the lines to use accounts."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Router 2 — Turn SSH on, in the order IOS accepts\n\nAnswer in the answer panel (no code needed).\n\n1. Enabling SSH on a new routerBật SSH trên một router mới\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Router 2 — Turn SSH on, in the order IOS accepts — answer key\n\n1. Enabling SSH on a new routerBật SSH trên một router mới\n   Answer: m2) hostname R1  →  m5) ip domain-name lab.local  →  m3) crypto key generate rsa modulus 2048  →  m4) ip ssh version 2  →  m7) username admin secret (a strong password)  →  m6) line vty 0 4 → login local  →  m1) transport input ssh (still under line vty)\n   The key is named after R1.lab.local, so hostname and domain come first; version 2 needs an existing key; the user must exist BEFORE login local, otherwise the next login has no account to check against.VI: Khoá được đặt tên theo R1.lab.local nên hostname và domain phải có trước; version 2 cần khoá đã tồn tại; tài khoản phải có TRƯỚC login local, không thì lần đăng nhập sau chẳng có tài khoản nào để đối chiếu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The key is named after R1.lab.local, so hostname and domain come first; version 2 needs an existing key; the user must exist BEFORE login local, otherwise the next login has no account to check against.</p><p><i>VI: Khoá được đặt tên theo R1.lab.local nên hostname và domain phải có trước; version 2 cần khoá đã tồn tại; tài khoản phải có TRƯỚC login local, không thì lần đăng nhập sau chẳng có tài khoản nào để đối chiếu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Enabling SSH on a new router</p><p style=\"opacity:.75;font-size:.92em\"><i>Bật SSH trên một router mới</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "transport input ssh (still under line vty)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "hostname R1"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "crypto key generate rsa modulus 2048"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "ip ssh version 2"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "ip domain-name lab.local"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "line vty 0 4 → login local"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "username admin secret (a strong password)"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m5",
+              "m3",
+              "m4",
+              "m7",
+              "m6",
+              "m1"
+            ],
+            "giaiThich": "<p>The key is named after R1.lab.local, so hostname and domain come first; version 2 needs an existing key; the user must exist BEFORE login local, otherwise the next login has no account to check against.</p><p><i>VI: Khoá được đặt tên theo R1.lab.local nên hostname và domain phải có trước; version 2 cần khoá đã tồn tại; tài khoản phải có TRƯỚC login local, không thì lần đăng nhập sau chẳng có tài khoản nào để đối chiếu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Generating the key before setting the domain name, then retyping a correct command."
+        },
+        {
+          "loi": "Typing login local before any username exists and locking the next session out."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RSA key",
+          "vi": "khoá RSA"
+        },
+        {
+          "en": "FQDN",
+          "vi": "tên miền đầy đủ"
+        }
+      ]
+    },
+    {
+      "title": "Router 3 — Symptom to cause to fix",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "interface troubleshooting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Lesson 9.2: about five distinct ways to get an interface wrong, each with a recognisable symptom. Match each symptom to the layer and the fix.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 9.2: khoảng năm cách cấu hình sai một interface, mỗi cách một triệu chứng nhận ra được. Ghép mỗi triệu chứng với tầng và cách sửa.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read Status, then Protocol, then show ip route connected.",
+        "A router is not an end device — it does not use ip default-gateway."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Router 3 — Symptom to cause to fix\n\nAnswer in the answer panel (no code needed).\n\n1. Router interface symptomsTriệu chứng interface của router\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Router 3 — Symptom to cause to fix — answer key\n\n1. Router interface symptomsTriệu chứng interface của router\n   - r1.f: no shutdown\n   - r2.f: check cable, port, far device\n   - r3.f: clock rate on the DCE end / match encapsulation\n   - r4.f: put the address on the right interface\n   - r5.f: ip route 0.0.0.0 0.0.0.0 NEXT-HOP\n   Work top to bottom: admin down is a decision, down/down is layer 1, up/down is layer 2, and up/up without a connected route means the address landed on another interface (show run interface settles it). ip default-gateway is for devices that do not route; a router needs a default route, and IOS accepts the wrong command silently.VI: Đi từ trên xuống: admin down là một quyết định, down/down là tầng 1, up/down là tầng 2, còn up/up mà không có tuyến connected nghĩa là địa chỉ rơi vào interface khác (show run interface xử xong). ip default-gateway dành cho thiết bị không định tuyến; router cần default route, và IOS chấp nhận lệnh sai đó mà không báo gì.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Work top to bottom: admin down is a decision, down/down is layer 1, up/down is layer 2, and up/up without a connected route means the address landed on another interface (show run interface settles it). ip default-gateway is for devices that do not route; a router needs a default route, and IOS accepts the wrong command silently.</p><p><i>VI: Đi từ trên xuống: admin down là một quyết định, down/down là tầng 1, up/down là tầng 2, còn up/up mà không có tuyến connected nghĩa là địa chỉ rơi vào interface khác (show run interface xử xong). ip default-gateway dành cho thiết bị không định tuyến; router cần default route, và IOS chấp nhận lệnh sai đó mà không báo gì.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Router interface symptoms</p><p style=\"opacity:.75;font-size:.92em\"><i>Triệu chứng interface của router</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Symptom"
+              },
+              {
+                "ma": "f",
+                "ten": "Fix",
+                "luaChon": [
+                  "no shutdown",
+                  "check cable, port, far device",
+                  "clock rate on the DCE end / match encapsulation",
+                  "put the address on the right interface",
+                  "ip route 0.0.0.0 0.0.0.0 NEXT-HOP"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "G0/0/0 administratively down / down, everything else perfect"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "G0/0/1 down / down"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Serial0/1/0 up / down, survives every cable swap"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "G0/0/0 up / up with an address in show ip interface brief, but no C route for it"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "\"ip default-gateway 10.0.0.1\" typed on the router; traffic still goes nowhere"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.f": "no shutdown",
+              "r2.f": "check cable, port, far device",
+              "r3.f": "clock rate on the DCE end / match encapsulation",
+              "r4.f": "put the address on the right interface",
+              "r5.f": "ip route 0.0.0.0 0.0.0.0 NEXT-HOP"
+            },
+            "giaiThich": "<p>Work top to bottom: admin down is a decision, down/down is layer 1, up/down is layer 2, and up/up without a connected route means the address landed on another interface (show run interface settles it). ip default-gateway is for devices that do not route; a router needs a default route, and IOS accepts the wrong command silently.</p><p><i>VI: Đi từ trên xuống: admin down là một quyết định, down/down là tầng 1, up/down là tầng 2, còn up/up mà không có tuyến connected nghĩa là địa chỉ rơi vào interface khác (show run interface xử xong). ip default-gateway dành cho thiết bị không định tuyến; router cần default route, và IOS chấp nhận lệnh sai đó mà không báo gì.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Replacing the cable when Status already says up."
+        },
+        {
+          "loi": "Setting clock rate on the DTE end."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DCE",
+          "vi": "đầu cấp xung nhịp"
+        },
+        {
+          "en": "connected route",
+          "vi": "tuyến nối trực tiếp"
+        }
+      ]
+    },
+    {
+      "title": "Router 4 — Write sshMissing(dev): what stops SSH from working",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "SSH prerequisites"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>Write <code>sshMissing(dev)</code> that lists, <b>in this order</b>, everything that still prevents a proper SSH setup on an IOS device described by:</p>\n<pre>{ hostname, domain, rsaBits, sshVersion, users: [...], vtyLogin: 'local' | 'line' | null, vtyTransport: 'ssh' | 'all' | 'telnet' | null }</pre>\n<ol>\n<li><code>\"hostname\"</code> — hostname is empty, <code>\"Router\"</code> or <code>\"Switch\"</code> (the defaults).</li>\n<li><code>\"domain-name\"</code> — no <code>ip domain-name</code>.</li>\n<li><code>\"rsa-key\"</code> — no key (<code>rsaBits</code> is 0 or missing); otherwise <code>\"rsa-key-weak\"</code> if it is shorter than 2048 bits — 512 is still accepted by IOS and worthless.</li>\n<li><code>\"ssh-version-2\"</code> — <code>sshVersion</code> is not 2.</li>\n<li><code>\"username\"</code> — no local user.</li>\n<li><code>\"login-local\"</code> — the vty lines do not use <code>login local</code>.</li>\n<li><code>\"transport-ssh\"</code> — the vty lines do not say exactly <code>transport input ssh</code>.</li>\n</ol>\n<p>A fully correct device returns <code>[]</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>sshMissing(dev)</code> liệt kê, <b>theo đúng thứ tự này</b>, mọi thứ còn ngăn một cấu hình SSH đúng chuẩn trên thiết bị IOS được mô tả bởi:</p>\n<pre>{ hostname, domain, rsaBits, sshVersion, users: [...], vtyLogin: 'local' | 'line' | null, vtyTransport: 'ssh' | 'all' | 'telnet' | null }</pre>\n<ol>\n<li><code>\"hostname\"</code> — hostname rỗng, là <code>\"Router\"</code> hoặc <code>\"Switch\"</code> (giá trị mặc định).</li>\n<li><code>\"domain-name\"</code> — chưa có <code>ip domain-name</code>.</li>\n<li><code>\"rsa-key\"</code> — chưa có khoá (<code>rsaBits</code> bằng 0 hoặc vắng); nếu có mà ngắn hơn 2048 bit thì <code>\"rsa-key-weak\"</code> — 512 bit IOS vẫn nhận và vô giá trị.</li>\n<li><code>\"ssh-version-2\"</code> — <code>sshVersion</code> khác 2.</li>\n<li><code>\"username\"</code> — chưa có tài khoản cục bộ nào.</li>\n<li><code>\"login-local\"</code> — dòng vty không dùng <code>login local</code>.</li>\n<li><code>\"transport-ssh\"</code> — dòng vty không ghi đúng <code>transport input ssh</code>.</li>\n</ol>\n<p>Thiết bị cấu hình đúng hoàn toàn trả <code>[]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "sshMissing({\"hostname\":\"Router\",\"domain\":null,\"rsaBits\":0,\"sshVersion\":1,\"users\":[],\"vtyLogin\":\"line\",\"vtyTransport\":\"all\"})",
+          "output": "[\"hostname\",\"domain-name\",\"rsa-key\",\"ssh-version-2\",\"username\",\"login-local\",\"transport-ssh\"]",
+          "explanation": "First sample case.|||Ca mẫu đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Seven independent checks; push in the fixed order.",
+        "rsa-key and rsa-key-weak are exclusive: one or the other, never both."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function sshMissing(dev) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction sshMissing(dev) {\n  var out = [];\n  if (!dev.hostname || dev.hostname === 'Router' || dev.hostname === 'Switch') out.push('hostname');\n  if (!dev.domain) out.push('domain-name');\n  if (!dev.rsaBits) out.push('rsa-key'); else if (dev.rsaBits < 2048) out.push('rsa-key-weak');\n  if (dev.sshVersion !== 2) out.push('ssh-version-2');\n  if (!dev.users || !dev.users.length) out.push('username');\n  if (dev.vtyLogin !== 'local') out.push('login-local');\n  if (dev.vtyTransport !== 'ssh') out.push('transport-ssh');\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each missing piece produces its own confusing error on a real device, which is why a checklist in a fixed order beats retyping commands. The order also follows the dependency chain: no name and no domain means no key, and no user means login local locks everybody out.</p><p><i>VI: Mỗi mảnh còn thiếu gây ra một lỗi khó hiểu riêng trên thiết bị thật, nên một danh sách kiểm theo thứ tự cố định thắng việc gõ lại lệnh. Thứ tự đó cũng đi theo chuỗi phụ thuộc: không tên và không domain thì không có khoá, không có tài khoản thì login local khoá mọi người ở ngoài.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: sshMissing({\"hostname\":\"Router\",\"domain\":null,\"rsaBits\":0,\"sshVersion\":1,\"users\":)",
+              "vi": "Ca 1"
+            },
+            "goi": "sshMissing({\"hostname\":\"Router\",\"domain\":null,\"rsaBits\":0,\"sshVersion\":1,\"users\":[],\"vtyLogin\":\"line\",\"vtyTransport\":\"all\"})",
+            "mongDoi": [
+              "hostname",
+              "domain-name",
+              "rsa-key",
+              "ssh-version-2",
+              "username",
+              "login-local",
+              "transport-ssh"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: sshMissing({\"hostname\":\"R1\",\"domain\":\"lab.local\",\"rsaBits\":2048,\"sshVersion\":2,\"u)",
+              "vi": "Ca 2"
+            },
+            "goi": "sshMissing({\"hostname\":\"R1\",\"domain\":\"lab.local\",\"rsaBits\":2048,\"sshVersion\":2,\"users\":[\"admin\"],\"vtyLogin\":\"local\",\"vtyTransport\":\"ssh\"})",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Case 3: sshMissing({\"hostname\":\"R1\",\"domain\":\"lab.local\",\"rsaBits\":512,\"sshVersion\":2,\"us)",
+              "vi": "Ca 3"
+            },
+            "goi": "sshMissing({\"hostname\":\"R1\",\"domain\":\"lab.local\",\"rsaBits\":512,\"sshVersion\":2,\"users\":[\"admin\"],\"vtyLogin\":\"local\",\"vtyTransport\":\"all\"})",
+            "mongDoi": [
+              "rsa-key-weak",
+              "transport-ssh"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "sshMissing({\"hostname\":\"Switch\",\"domain\":\"corp.example\",\"rsaBits\":4096,\"sshVersion\":2,\"users\":[\"netops\"],\"vtyLogin\":null,\"vtyTransport\":\"ssh\"})",
+            "mongDoi": [
+              "hostname",
+              "login-local"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "sshMissing({\"hostname\":\"R2\",\"domain\":\"lab.local\",\"rsaBits\":1024,\"sshVersion\":1,\"users\":[\"a\",\"b\"],\"vtyLogin\":\"line\",\"vtyTransport\":\"telnet\"})",
+            "mongDoi": [
+              "rsa-key-weak",
+              "ssh-version-2",
+              "login-local",
+              "transport-ssh"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "sshMissing({\"hostname\":\"\",\"domain\":\"\",\"sshVersion\":2,\"users\":[\"admin\"],\"vtyLogin\":\"local\",\"vtyTransport\":null})",
+            "mongDoi": [
+              "hostname",
+              "domain-name",
+              "rsa-key",
+              "transport-ssh"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "sshMissing({\"hostname\":\"EDGE-R1\",\"domain\":\"branch.lab\",\"rsaBits\":2048,\"sshVersion\":2,\"users\":[],\"vtyLogin\":\"local\",\"vtyTransport\":\"ssh\"})",
+            "mongDoi": [
+              "username"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating \"all\" as fine because it includes ssh — it also accepts Telnet."
+        },
+        {
+          "loi": "Reporting rsa-key-weak for a device with no key at all."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Router 5 — The same job on Linux (★)",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "Linux networking"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nwc204"
+      ],
+      "problemHtml": "<p>The ★ sections of Lessons 9.1–9.2: the Linux equivalents, and the places where \"it returned 0\" does not mean \"it took effect\".</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the NWC204 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các phần ★ của bài 9.1–9.2: lệnh tương đương trên Linux, và những chỗ \"lệnh trả về 0\" không có nghĩa là \"đã có hiệu lực\".</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn NWC204, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Temporary versus permanent is the same split on IOS and Linux.",
+        "Verify what is in effect, not what you wrote."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Router 5 — The same job on Linux (★)\n\nAnswer in the answer panel (no code needed).\n\n1. The Linux equivalent of \"ip address 10.0.0.5 255.255.255.0\" + \"no shutdown\" + a default gateway 10.0.0.1 is …Lệnh Linux tương đương \"ip address 10.0.0.5 255.255.255.0\" + \"no shutdown\" + gateway mặc định 10.0.0.1 là …\n2. ip -br link shows eth1 as UP but without LOWER_UP. What does that mean?ip -br link cho thấy eth1 là UP nhưng không có LOWER_UP. Nghĩa là gì?\n3. You write PasswordAuthentication no into /etc/ssh/sshd_config.d/70-hardening.conf; sshd -t passes and reload returns 0, yet passwords still work. Why?Bạn ghi PasswordAuthentication no vào /etc/ssh/sshd_config.d/70-hardening.conf; sshd -t qua, reload trả 0, mà mật khẩu vẫn dùng được. Vì sao?\n4. cat /proc/sys/net/ipv4/ip_forward prints 1 on a laptop you never configured as a router. Most common reason?cat /proc/sys/net/ipv4/ip_forward in ra 1 trên một laptop bạn chưa từng cấu hình làm router. Lý do hay gặp nhất?\n5. \"I configured it and tested it, it definitely works.\" What one question do you ask?\"Tôi cấu hình rồi, thử rồi, chắc chắn chạy.\" Bạn hỏi đúng một câu gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Router 5 — The same job on Linux (★) — answer key\n\n1. The Linux equivalent of \"ip address 10.0.0.5 255.255.255.0\" + \"no shutdown\" + a default gateway 10.0.0.1 is …Lệnh Linux tương đương \"ip address 10.0.0.5 255.255.255.0\" + \"no shutdown\" + gateway mặc định 10.0.0.1 là …\n   Answer: a) ip addr add 10.0.0.5/24 dev eth0; ip link set eth0 up; ip route add default via 10.0.0.1\n   All three are temporary, like running-config. The permanent version goes in netplan or NetworkManager — Linux's copy run start.VI: Cả ba đều tạm thời, giống running-config. Bản vĩnh viễn nằm trong netplan hoặc NetworkManager — chính là copy run start của Linux.\n\n2. ip -br link shows eth1 as UP but without LOWER_UP. What does that mean?ip -br link cho thấy eth1 là UP nhưng không có LOWER_UP. Nghĩa là gì?\n   Answer: a) Enabled, but no carrier: nothing is connected\n   LOWER_UP is the true equivalent of Cisco's Status column: the physical carrier is present. UP alone is just the administrative state.VI: LOWER_UP mới là thứ tương đương cột Status của Cisco: có tín hiệu vật lý. Chỉ UP là trạng thái do quản trị đặt.\n\n3. You write PasswordAuthentication no into /etc/ssh/sshd_config.d/70-hardening.conf; sshd -t passes and reload returns 0, yet passwords still work. Why?Bạn ghi PasswordAuthentication no vào /etc/ssh/sshd_config.d/70-hardening.conf; sshd -t qua, reload trả 0, mà mật khẩu vẫn dùng được. Vì sao?\n   Answer: a) An earlier-sorting drop-in set it, and the first value wins\n   sshd_config uses the first value obtained, and the drop-in glob is read in alphabetical order. Name the file 01-…, and verify with sshd -T — what is in effect — not with cat of the file you just wrote.VI: sshd_config lấy giá trị đọc được ĐẦU TIÊN, và các tệp drop-in được đọc theo thứ tự chữ cái. Đặt tên tệp 01-…, rồi nghiệm thu bằng sshd -T — thứ đang có hiệu lực — chứ không bằng cat tệp vừa ghi.\n\n4. cat /proc/sys/net/ipv4/ip_forward prints 1 on a laptop you never configured as a router. Most common reason?cat /proc/sys/net/ipv4/ip_forward in ra 1 trên một laptop bạn chưa từng cấu hình làm router. Lý do hay gặp nhất?\n   Answer: d) Docker turned it on to route traffic for its containers\n   ip_forward = 1 makes the machine forward packets between interfaces — a router. Docker enables it so containers can reach the outside, which is worth knowing when you wonder why a laptop routes.VI: ip_forward = 1 khiến máy chuyển gói giữa các interface — tức là một router. Docker bật nó để container ra được bên ngoài, điều đáng biết khi bạn thắc mắc vì sao laptop lại định tuyến.\n\n5. \"I configured it and tested it, it definitely works.\" What one question do you ask?\"Tôi cấu hình rồi, thử rồi, chắc chắn chạy.\" Bạn hỏi đúng một câu gì?\n   Answer: b) Did you save it — will it survive a reboot?\n   Testing proves the running configuration and says nothing about the startup configuration. The gap is discovered at the worst moment: a power cut or an unattended restart at 3 a.m.VI: Thử chỉ chứng minh cấu hình đang chạy, không nói gì về cấu hình khởi động. Khoảng hở đó lộ ra vào lúc tệ nhất: mất điện, hoặc một lần khởi động lại không người trông lúc 3 giờ sáng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> ip addr add 10.0.0.5/24 dev eth0; ip link set eth0 up; ip route add default via 10.0.0.1</p><p>All three are temporary, like running-config. The permanent version goes in netplan or NetworkManager — Linux's copy run start.</p><p><i>VI: Cả ba đều tạm thời, giống running-config. Bản vĩnh viễn nằm trong netplan hoặc NetworkManager — chính là copy run start của Linux.</i></p></li><li><p><b>a)</b> Enabled, but no carrier: nothing is connected</p><p>LOWER_UP is the true equivalent of Cisco's Status column: the physical carrier is present. UP alone is just the administrative state.</p><p><i>VI: LOWER_UP mới là thứ tương đương cột Status của Cisco: có tín hiệu vật lý. Chỉ UP là trạng thái do quản trị đặt.</i></p></li><li><p><b>a)</b> An earlier-sorting drop-in set it, and the first value wins</p><p>sshd_config uses the first value obtained, and the drop-in glob is read in alphabetical order. Name the file 01-…, and verify with sshd -T — what is in effect — not with cat of the file you just wrote.</p><p><i>VI: sshd_config lấy giá trị đọc được ĐẦU TIÊN, và các tệp drop-in được đọc theo thứ tự chữ cái. Đặt tên tệp 01-…, rồi nghiệm thu bằng sshd -T — thứ đang có hiệu lực — chứ không bằng cat tệp vừa ghi.</i></p></li><li><p><b>d)</b> Docker turned it on to route traffic for its containers</p><p>ip_forward = 1 makes the machine forward packets between interfaces — a router. Docker enables it so containers can reach the outside, which is worth knowing when you wonder why a laptop routes.</p><p><i>VI: ip_forward = 1 khiến máy chuyển gói giữa các interface — tức là một router. Docker bật nó để container ra được bên ngoài, điều đáng biết khi bạn thắc mắc vì sao laptop lại định tuyến.</i></p></li><li><p><b>b)</b> Did you save it — will it survive a reboot?</p><p>Testing proves the running configuration and says nothing about the startup configuration. The gap is discovered at the worst moment: a power cut or an unattended restart at 3 a.m.</p><p><i>VI: Thử chỉ chứng minh cấu hình đang chạy, không nói gì về cấu hình khởi động. Khoảng hở đó lộ ra vào lúc tệ nhất: mất điện, hoặc một lần khởi động lại không người trông lúc 3 giờ sáng.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The Linux equivalent of \"ip address 10.0.0.5 255.255.255.0\" + \"no shutdown\" + a default gateway 10.0.0.1 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Lệnh Linux tương đương \"ip address 10.0.0.5 255.255.255.0\" + \"no shutdown\" + gateway mặc định 10.0.0.1 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ip addr add 10.0.0.5/24 dev eth0; ip link set eth0 up; ip route add default via 10.0.0.1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "netplan apply 10.0.0.5/24 gw 10.0.0.1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ip address set eth0 10.0.0.5/24 up; ip default-gateway 10.0.0.1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ifconfig eth0 10.0.0.5; ip link enable eth0; route gateway 10.0.0.1"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>All three are temporary, like running-config. The permanent version goes in netplan or NetworkManager — Linux's copy run start.</p><p><i>VI: Cả ba đều tạm thời, giống running-config. Bản vĩnh viễn nằm trong netplan hoặc NetworkManager — chính là copy run start của Linux.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>ip -br link shows eth1 as UP but without LOWER_UP. What does that mean?</p><p style=\"opacity:.75;font-size:.92em\"><i>ip -br link cho thấy eth1 là UP nhưng không có LOWER_UP. Nghĩa là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Enabled, but no carrier: nothing is connected"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The interface is up but has no IP address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The interface is administratively shut down"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The interface is fully up and passing traffic"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>LOWER_UP is the true equivalent of Cisco's Status column: the physical carrier is present. UP alone is just the administrative state.</p><p><i>VI: LOWER_UP mới là thứ tương đương cột Status của Cisco: có tín hiệu vật lý. Chỉ UP là trạng thái do quản trị đặt.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>You write PasswordAuthentication no into /etc/ssh/sshd_config.d/70-hardening.conf; sshd -t passes and reload returns 0, yet passwords still work. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn ghi PasswordAuthentication no vào /etc/ssh/sshd_config.d/70-hardening.conf; sshd -t qua, reload trả 0, mà mật khẩu vẫn dùng được. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An earlier-sorting drop-in set it, and the first value wins"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The new setting only applies after a full reboot"
+              },
+              {
+                "ma": "c",
+                "noiDung": "reload never re-reads the files in sshd_config.d"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PasswordAuthentication applies only to the root user"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>sshd_config uses the first value obtained, and the drop-in glob is read in alphabetical order. Name the file 01-…, and verify with sshd -T — what is in effect — not with cat of the file you just wrote.</p><p><i>VI: sshd_config lấy giá trị đọc được ĐẦU TIÊN, và các tệp drop-in được đọc theo thứ tự chữ cái. Đặt tên tệp 01-…, rồi nghiệm thu bằng sshd -T — thứ đang có hiệu lực — chứ không bằng cat tệp vừa ghi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>cat /proc/sys/net/ipv4/ip_forward prints 1 on a laptop you never configured as a router. Most common reason?</p><p style=\"opacity:.75;font-size:.92em\"><i>cat /proc/sys/net/ipv4/ip_forward in ra 1 trên một laptop bạn chưa từng cấu hình làm router. Lý do hay gặp nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It means the laptop has two IP addresses"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is the default on every Linux distribution"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The kernel enables forwarding whenever Wi-Fi is on"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Docker turned it on to route traffic for its containers"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>ip_forward = 1 makes the machine forward packets between interfaces — a router. Docker enables it so containers can reach the outside, which is worth knowing when you wonder why a laptop routes.</p><p><i>VI: ip_forward = 1 khiến máy chuyển gói giữa các interface — tức là một router. Docker bật nó để container ra được bên ngoài, điều đáng biết khi bạn thắc mắc vì sao laptop lại định tuyến.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>\"I configured it and tested it, it definitely works.\" What one question do you ask?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Tôi cấu hình rồi, thử rồi, chắc chắn chạy.\" Bạn hỏi đúng một câu gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Did you use the AI assistant?"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Did you save it — will it survive a reboot?"
+              },
+              {
+                "ma": "c",
+                "noiDung": "How long did the ping take?"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Which IOS version is it?"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Testing proves the running configuration and says nothing about the startup configuration. The gap is discovered at the worst moment: a power cut or an unattended restart at 3 a.m.</p><p><i>VI: Thử chỉ chứng minh cấu hình đang chạy, không nói gì về cấu hình khởi động. Khoảng hở đó lộ ra vào lúc tệ nhất: mất điện, hoặc một lần khởi động lại không người trông lúc 3 giờ sáng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a Linux change done after ip addr add."
+        },
+        {
+          "loi": "Checking a config file instead of the running daemon's effective settings."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "carrier",
+          "vi": "tín hiệu sóng mang"
+        },
+        {
+          "en": "drop-in file",
+          "vi": "tệp cấu hình bổ sung"
+        }
+      ]
+    }
+  ]
+}

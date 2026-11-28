@@ -18,6 +18,7 @@ import ch6 from './prj301/ch6.mjs';
 import ch7 from './prj301/ch7.mjs';
 import ch8 from './prj301/ch8.mjs';
 import ch10 from './prj301/ch10.mjs';
+import ch9Quiz from './prj301/ch9-quiz.mjs';
 import adv2 from './prj301/adv-quiz2.mjs';
 import adv4 from './prj301/adv-quiz4.mjs';
 import cs from './prj301/chuyen-sau.mjs';
@@ -3778,6 +3779,8 @@ input.addEventListener('input', () =&gt; {
 </div>
 `,
         },
+        /* ✍️ Quiz Chương 9 — viết tay, ./prj301/ch9-quiz.mjs (không do gen.mjs sinh) */
+        ch9Quiz,
       ],
     },
 

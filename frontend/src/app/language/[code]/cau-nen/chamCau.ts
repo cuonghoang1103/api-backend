@@ -39,6 +39,7 @@ export function chuanHoa(x: string): string {
     .replace(/[“”"«»]/g, ' ')
     .replace(/-/g, ' ')
     .replace(/\be mail/g, 'email')
+    .replace(/\bwi fi\b/g, 'wifi')
     .replace(/[.,!?;:()…–—]/g, ' ');
   for (const [re, thay] of VIET_TAT) t = t.replace(re, thay);
   return t

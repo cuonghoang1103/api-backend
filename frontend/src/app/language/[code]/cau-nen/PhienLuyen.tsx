@@ -67,7 +67,10 @@ export function PhienLuyen({ ds, kho, tieuDe, choGhep = true, onTraLoi, onXong, 
   const chonEv = (c: CheDoEV) => { setCdEv(c); try { localStorage.setItem(KEY_EV, c); } catch { /* bỏ qua */ } };
 
   const [danhSach, setDanhSach] = useState(ds);
-  useEffect(() => { setDanhSach(ds); setI(0); setKq([]); setCombo(0); }, [ds]);
+  // Chỉ làm lại từ đầu khi DANH SÁCH CÂU đổi thật — trang cha vẽ lại sau mỗi câu trả lời (tiến độ đổi) và tạo mảng mới.
+  const khoaDs = ds.map((m) => `${m.cau.id}:${m.kieu}`).join('|');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { setDanhSach(ds); setI(0); setKq([]); setCombo(0); }, [khoaDs]);
 
   if (!danhSach.length) return <div className={s.card}><div className={s.muted}>Không có câu nào ở đây.</div></div>;
 

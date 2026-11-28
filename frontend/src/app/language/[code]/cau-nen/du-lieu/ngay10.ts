@@ -1,0 +1,152 @@
+import type { NgayCauNen } from '../kieu';
+
+const DO = 'Do/Does + S + V …?';
+const WH = 'Wh- + do/does + S + V?';
+const CAN = 'Can + S + V …?';
+const WANT = 'Do you want + to V …?';
+const BE = 'Are/Is + S + Adj …?';
+
+export const NGAY_10: NgayCauNen = {
+  n: 10,
+  ten: 'ÔN 6–9 · Làm quen, hỏi chuyện',
+  mucTieu: 'Bắt chuyện và giữ được cuộc trò chuyện 3–5 phút với người mới quen: hỏi – trả lời có chi tiết – hỏi lại.',
+  on: true,
+  bai: {
+    y: [
+      'Bốn khung của chặng 2 đều là **câu hỏi và câu phủ định** — thứ người mất gốc sợ nhất. Hôm nay ghép chúng vào một tình huống: **làm quen**.',
+      'Chọn trợ động từ đầu câu: **be** (Are you free?) · **do / does** (Do you play sports?) · **can** (Can I sit here?) · từ hỏi Wh- đứng trước tất cả (Where do you…).',
+      'Bí quyết giữ cuộc trò chuyện: **trả lời + một chi tiết + hỏi lại**. "Do you like Hanoi?" → "Yes, I love the food. **What about you?**"',
+      'Đừng trả lời cụt "Yes." / "No." — người bản xứ sẽ tưởng bạn không muốn nói chuyện.',
+    ],
+    khung: [
+      { mau: DO, vi: 'Ngày 6 — có … không?' },
+      { mau: WH, vi: 'Ngày 7 — ở đâu / gì / khi nào…?' },
+      { mau: CAN, vi: 'Ngày 8 — được không?' },
+      { mau: WANT, vi: 'Ngày 9 — có muốn … không?' },
+    ],
+    soSanh: [
+      { vi: 'Bạn có hay đến đây không?', tungChu: 'You often come here or not?', en: 'Do you come here often?', viSao: 'Do lên đầu; often để cuối câu nghe tự nhiên.' },
+      { vi: 'Cho mình xin số điện thoại được không?', tungChu: 'Give me ask phone number can?', en: 'Can I have your phone number?', viSao: '"Cho mình xin" = Can I have …?' },
+      { vi: 'Bạn có muốn đi uống cà phê không?', tungChu: 'You want go drink coffee?', en: 'Do you want to get coffee?', viSao: 'Do + want + **to**; người Mỹ nói "get / grab coffee".' },
+    ],
+    viDu: [
+      { en: 'Do you come here often?', vi: 'Bạn có hay đến đây không?' },
+      { en: 'What do you usually do on weekends?', vi: 'Cuối tuần bạn thường làm gì?' },
+      { en: 'Can I sit here?', vi: 'Mình ngồi đây được không?' },
+      { en: 'Do you want to get coffee sometime?', vi: 'Hôm nào đi cà phê không?' },
+    ],
+    meo: ['Câu "phao cứu sinh" khi bí: **What about you?** · **Really? Tell me more.** · **That sounds fun!**'],
+  },
+  nguPhap: [
+    { t: 'h', text: '1. Câu hỏi bắt đầu bằng gì?' },
+    {
+      t: 'table', head: ['Sau chủ ngữ là…', 'Đầu câu hỏi', 'Ví dụ'],
+      rows: [
+        ['tính từ / danh từ / nơi chốn', '**Am / Is / Are**', '**Are** you free on Saturday?'],
+        ['động từ thường', '**Do / Does**', '**Do** you play any sports?'],
+        ['can + động từ', '**Can**', '**Can** you speak Vietnamese?'],
+        ['muốn hỏi thông tin', '**Wh- +** một trong ba cái trên', '**Where do** you work? **What can** I do?'],
+      ],
+    },
+    { t: 'h', text: '2. Công thức giữ cuộc trò chuyện' },
+    {
+      t: 'sodo', kind: 'flow', title: 'Hỏi → trả lời có chi tiết → hỏi lại',
+      steps: [
+        { label: 'Người kia hỏi', sub: 'Do you like Hanoi?' },
+        { label: 'Trả lời ngắn', sub: 'Yes, I do.' },
+        { label: '+ một chi tiết', sub: 'I love the street food.' },
+        { label: '+ hỏi lại', sub: 'What about you?' },
+      ],
+    },
+    {
+      t: 'sodo', kind: 'compare', title: 'Câu trả lời cụt vs câu trả lời mở',
+      cols: [
+        { title: '✗ Cụt — cuộc nói chuyện chết', items: ['Yes.', 'No.', 'Hanoi.'] },
+        { title: '✓ Mở — người kia muốn nói tiếp', items: ['Yes, I do. I play badminton every Sunday.', 'Not really, but I love music.', 'I\'m from Hanoi. Where are you from?'] },
+      ],
+    },
+    { t: 'note', title: 'Lỗi hay gặp khi làm quen', items: ['~~You can speak Vietnamese?~~ → **Can you** speak Vietnamese?', '~~Do you can…~~ → **Can you**…', '~~What you do on weekends?~~ → What **do** you do on weekends?', '~~Do you free?~~ → **Are** you free?'] },
+  ],
+  tuVung: [
+    { w: 'often', loai: 'adv', vi: 'thường, hay', anh: 'spiral-calendar', ex: 'I often study here.', exVi: 'Tôi hay học ở đây.' },
+    { w: 'recommend', loai: 'v', vi: 'gợi ý, giới thiệu', anh: 'thumbs-up', ex: 'Can you recommend a good book?', exVi: 'Bạn gợi ý một quyển sách hay được không?' },
+    { w: 'phone number', loai: 'n', vi: 'số điện thoại', anh: 'telephone-receiver', ex: 'What\'s your phone number?', exVi: 'Số điện thoại của bạn là gì?' },
+    { w: 'free', loai: 'adj', vi: 'rảnh; miễn phí', anh: 'relieved-face', ex: 'Are you free tonight?', exVi: 'Tối nay bạn rảnh không?' },
+    { w: 'sports', loai: 'n', vi: 'thể thao', anh: 'soccer-ball', ex: 'He plays a lot of sports.', exVi: 'Anh ấy chơi nhiều môn thể thao.' },
+    { w: 'directions', loai: 'n', vi: 'chỉ đường', anh: 'world-map', ex: 'Can you give me directions?', exVi: 'Bạn chỉ đường giúp tôi được không?' },
+    { w: 'photo', loai: 'n', vi: 'bức ảnh', anh: 'camera-with-flash', ex: 'Can I take a photo here?', exVi: 'Tôi chụp ảnh ở đây được không?' },
+    { w: 'city', loai: 'n', vi: 'thành phố', anh: 'cityscape', ex: 'Hanoi is a busy city.', exVi: 'Hà Nội là một thành phố nhộn nhịp.' },
+    { w: 'language exchange', loai: 'n', vi: 'trao đổi ngôn ngữ', anh: 'globe-showing-asia-australia', ex: 'We do a language exchange every Friday.', exVi: 'Thứ Sáu nào chúng tôi cũng trao đổi ngôn ngữ.' },
+    { w: 'seat', loai: 'n', vi: 'chỗ ngồi', anh: 'seat', ex: 'Is this seat taken?', exVi: 'Chỗ này có ai ngồi chưa?' },
+    { w: 'stay', loai: 'v', vi: 'ở lại, lưu trú', anh: 'hotel', ex: 'Where do you stay in Hanoi?', exVi: 'Ở Hà Nội bạn ở đâu?' },
+    { w: 'practice', loai: 'v', vi: 'luyện tập', anh: 'bullseye', ex: 'I practice English every night.', exVi: 'Tối nào tôi cũng luyện tiếng Anh.' },
+    { w: 'company', loai: 'n', vi: 'công ty', anh: 'office-building', ex: 'Her company is in District 1.', exVi: 'Công ty cô ấy ở Quận 1.' },
+    { w: 'the way', loai: 'n', vi: 'đường đi', anh: 'motorway', ex: 'Do you know the way to the station?', exVi: 'Bạn có biết đường ra ga không?' },
+    { w: 'later', loai: 'adv', vi: 'sau, lát nữa', anh: 'hourglass-done', ex: 'See you later!', exVi: 'Gặp lại sau nhé!' },
+  ],
+  hoiThoai: {
+    tieuDe: 'Bắt chuyện ở buổi giao lưu tiếng Anh',
+    luot: [
+      { vai: 'A', ten: 'Linh', en: 'Hi, is this seat taken?', vi: 'Chào bạn, chỗ này có ai ngồi chưa?' },
+      { vai: 'B', ten: 'Jake', en: 'No, go ahead. I\'m Jake.', vi: 'Chưa, bạn ngồi đi. Mình là Jake.' },
+      { vai: 'A', ten: 'Linh', en: 'I\'m Linh. Do you come here often?', vi: 'Mình là Linh. Bạn hay đến đây không?' },
+      { vai: 'B', ten: 'Jake', en: 'Every Friday. I want to practice my Vietnamese.', vi: 'Thứ Sáu nào cũng đến. Mình muốn luyện tiếng Việt.' },
+      { vai: 'A', ten: 'Linh', en: 'Really? Can you speak Vietnamese?', vi: 'Thật à? Bạn nói được tiếng Việt à?' },
+      { vai: 'B', ten: 'Jake', en: 'Just a little. What about you? Why do you come here?', vi: 'Một chút thôi. Còn bạn? Sao bạn đến đây?' },
+      { vai: 'A', ten: 'Linh', en: 'I need to improve my English for my internship.', vi: 'Mình cần cải thiện tiếng Anh để đi thực tập.' },
+      { vai: 'B', ten: 'Jake', en: 'Cool! Do you want to do a language exchange?', vi: 'Hay đấy! Bạn có muốn trao đổi ngôn ngữ không?' },
+    ],
+  },
+  viet: {
+    y: [
+      'Viết hội thoại: mỗi lượt một dòng, có **tên người nói** và dấu hai chấm: **Linh:** Hi, is this seat taken?',
+      'Mỗi câu hỏi một **dấu ?** — đọc lại và kiểm tra đầu câu: Are / Is / Do / Does / Can / Wh-.',
+      'Mỗi câu trả lời có **thêm một chi tiết** — không viết câu chỉ có Yes / No.',
+    ],
+    chinhTa: ['~~Wat~~ → **What** · ~~Wher~~ → **Where**', '**go ahead** (cứ tự nhiên) — hai chữ, không viết ~~goahead~~', '~~recomend~~ → **recommend** (một c, hai m)'],
+    de: 'Viết một **hội thoại 8 lượt** giữa bạn và một người nước ngoài mới quen ở quán cà phê: chào, hỏi quê, hỏi nghề / ngành học, sở thích, rủ đi cà phê, xin số điện thoại.',
+    mau: [
+      { en: 'Hi! Can I sit here?', vi: 'Chào! Mình ngồi đây được không?' },
+      { en: 'Sure. Where are you from?', vi: 'Được chứ. Bạn đến từ đâu?' },
+      { en: 'I\'m from Australia. Do you live here?', vi: 'Mình đến từ Úc. Bạn sống ở đây à?' },
+      { en: 'Yes, I do. I study IT here.', vi: 'Ừ. Mình học IT ở đây.' },
+      { en: 'Do you want to get coffee sometime?', vi: 'Hôm nào đi cà phê không?' },
+    ],
+  },
+  cau: [
+    { id: 'cn10-01', vi: 'Bạn có hay đến đây không?', en: 'Do you come here often?', alt: ['Do you often come here?'], khung: DO },
+    { id: 'cn10-02', vi: 'Bạn đến đây có việc gì thế?', en: 'What brings you here?', alt: ['Why are you here?', 'Why do you come here?'], khung: 'câu cố định' },
+    { id: 'cn10-03', vi: 'Bạn muốn ở Việt Nam bao lâu?', en: 'How long do you want to stay in Vietnam?', alt: ['How long do you plan to stay in Vietnam?'], khung: WH },
+    { id: 'cn10-04', vi: 'Bạn nói được tiếng Việt không?', en: 'Can you speak Vietnamese?', khung: CAN },
+    { id: 'cn10-05', vi: 'Chỉ một chút thôi.', en: 'Just a little.', alt: ['Only a little.', 'Just a bit.'], khung: 'câu trả lời ngắn' },
+    { id: 'cn10-06', vi: 'Bạn có thích Hà Nội không?', en: 'Do you like Hanoi?', khung: DO },
+    { id: 'cn10-07', vi: 'Bạn thích nhất điều gì ở Việt Nam?', en: 'What do you like most about Vietnam?', alt: ['What do you like best about Vietnam?'], khung: WH },
+    { id: 'cn10-08', vi: 'Bạn làm việc cho công ty nào?', en: 'Which company do you work for?', alt: ['What company do you work for?'], khung: WH },
+    { id: 'cn10-09', vi: 'Bạn có muốn ngồi cùng bọn mình không?', en: 'Do you want to sit with us?', alt: ['Do you want to join us?'], khung: WANT },
+    { id: 'cn10-10', vi: 'Mình ngồi đây được không?', en: 'Can I sit here?', khung: CAN },
+    { id: 'cn10-11', vi: 'Chỗ này có ai ngồi chưa?', en: 'Is this seat taken?', alt: ['Is anyone sitting here?', 'Is this seat free?'], khung: BE },
+    { id: 'cn10-12', vi: 'Cuối tuần bạn thường làm gì?', en: 'What do you usually do on weekends?', alt: ['What do you usually do on the weekend?', 'What do you usually do at weekends?'], khung: WH },
+    { id: 'cn10-13', vi: 'Mình thích chơi thể thao và xem phim.', en: 'I like playing sports and watching movies.', alt: ['I like to play sports and watch movies.'], khung: 'S + like + V-ing + and + V-ing' },
+    { id: 'cn10-14', vi: 'Bạn có chơi môn thể thao nào không?', en: 'Do you play any sports?', khung: DO },
+    { id: 'cn10-15', vi: 'Bạn có biết chỗ nào ăn ngon không?', en: 'Do you know any good places to eat?', alt: ['Do you know a good place to eat?'], khung: DO },
+    { id: 'cn10-16', vi: 'Bạn giới thiệu cho mình một quán được không?', en: 'Can you recommend a restaurant?', alt: ['Can you recommend a place?', 'Could you recommend a restaurant?', 'Can you recommend a good restaurant?'], khung: CAN },
+    { id: 'cn10-17', vi: 'Sao bạn nói tiếng Việt giỏi thế?', en: 'How do you speak Vietnamese so well?', khung: WH },
+    { id: 'cn10-18', vi: 'Mình muốn luyện nói tiếng Anh.', en: 'I want to practice speaking English.', alt: ['I want to practice my English.', 'I want to practice my spoken English.'], khung: 'S + want + to V' },
+    { id: 'cn10-19', vi: 'Mình trao đổi ngôn ngữ được không?', en: 'Can we do a language exchange?', khung: CAN },
+    { id: 'cn10-20', vi: 'Bạn có dùng Facebook không?', en: 'Are you on Facebook?', alt: ['Do you use Facebook?', 'Do you have Facebook?'], khung: BE },
+    { id: 'cn10-21', vi: 'Cho mình xin số điện thoại được không?', en: 'Can I have your phone number?', alt: ['Can I get your number?', 'Can I have your number?', 'Can I get your phone number?'], khung: CAN, loi: '"Cho mình xin" = Can I have …?' },
+    { id: 'cn10-22', vi: 'Thứ Bảy bạn có rảnh không?', en: 'Are you free on Saturday?', alt: ['Are you free this Saturday?'], khung: BE, loi: '~~Do you free~~ — free là tính từ ⇒ Are' },
+    { id: 'cn10-23', vi: 'Bạn có muốn đi uống cà phê không?', en: 'Do you want to get coffee?', alt: ['Do you want to grab a coffee?', 'Do you want to go for coffee?', 'Do you want to get some coffee?'], khung: WANT },
+    { id: 'cn10-24', vi: 'Mình không uống được cà phê.', en: 'I can\'t drink coffee.', khung: "S + can't + V" },
+    { id: 'cn10-25', vi: 'Vậy bạn thích uống gì?', en: 'So what do you like to drink?', alt: ['So what do you like drinking?', 'What do you like to drink?'], khung: WH },
+    { id: 'cn10-26', vi: 'Bạn làm việc mấy ngày một tuần?', en: 'How many days a week do you work?', khung: 'How many + N + do + S + V?' },
+    { id: 'cn10-27', vi: 'Anh ấy không biết đường.', en: 'He doesn\'t know the way.', khung: "S + doesn't + V" },
+    { id: 'cn10-28', vi: 'Bạn có cần mình chỉ đường không?', en: 'Do you need directions?', alt: ['Do you need help with directions?', 'Do you need me to show you the way?'], khung: DO },
+    { id: 'cn10-29', vi: 'Bạn có biết dùng Grab không?', en: 'Do you know how to use Grab?', alt: ['Can you use Grab?'], khung: 'Do you know how + to V?' },
+    { id: 'cn10-30', vi: 'Bạn có muốn mình chụp ảnh giúp không?', en: 'Do you want me to take a photo?', alt: ['Do you want me to take a picture?', 'Do you want me to take your picture?', 'Do you want me to take a photo for you?'], khung: 'Do you want me + to V?' },
+    { id: 'cn10-31', vi: 'Nói chuyện sau nhé.', en: 'Talk to you later.', alt: ['Talk later.', 'Talk to you soon.'], khung: 'câu cố định' },
+    { id: 'cn10-32', vi: 'Bạn đến từ thành phố nào?', en: 'Which city are you from?', alt: ['What city are you from?'], khung: 'Which + N + are + you + from?' },
+    { id: 'cn10-33', vi: 'Mình không biết nhiều về Canada.', en: 'I don\'t know much about Canada.', khung: "S + don't + V + much + about" },
+    { id: 'cn10-34', vi: 'Bạn dạy mình vài từ được không?', en: 'Can you teach me some words?', alt: ['Can you teach me a few words?'], khung: CAN },
+  ],
+};

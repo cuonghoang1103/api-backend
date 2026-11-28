@@ -8,6 +8,15 @@ import type { NgayCauNen } from '../kieu';
 export function napNgay(n: number): Promise<NgayCauNen> | null {
   switch (n) {
     case 1: return import('./ngay1').then((m) => m.NGAY_1);
+    case 2: return import('./ngay2').then((m) => m.NGAY_2);
+    case 3: return import('./ngay3').then((m) => m.NGAY_3);
+    case 4: return import('./ngay4').then((m) => m.NGAY_4);
+    case 5: return import('./ngay5').then((m) => m.NGAY_5);
+    case 6: return import('./ngay6').then((m) => m.NGAY_6);
+    case 7: return import('./ngay7').then((m) => m.NGAY_7);
+    case 8: return import('./ngay8').then((m) => m.NGAY_8);
+    case 9: return import('./ngay9').then((m) => m.NGAY_9);
+    case 10: return import('./ngay10').then((m) => m.NGAY_10);
     default: return null;
   }
 }

@@ -32,13 +32,15 @@ const AGY = path.join(os.homedir(), '.local/bin/agy');
 const KHOA = (s: string) => `hoc/hinh/${s}.webp`;
 
 const args = process.argv.slice(2);
-const coLa = args.filter((a) => a.startsWith('-') && !['--kiem', '--thu', '--nhom'].includes(a));
+const coLa = args.filter((a) => a.startsWith('-') && !['--kiem', '--thu', '--nhom', '--phan'].includes(a));
 if (coLa.length) {
   console.error(`Cờ lạ: ${coLa.join(' ')}\nDùng: --kiem · --thu <slug…> · --nhom <tên> · không cờ = vẽ + đẩy MỌI ảnh thiếu lên R2 THẬT`);
   process.exit(2);
 }
 const chiKiem = args.includes('--kiem');
 const nhom = args.includes('--nhom') ? args[args.indexOf('--nhom') + 1] : null;
+// --phan i/n: chạy n luồng song song, luồng i lấy mọi ảnh thứ k với k % n == i-1 (giữ thứ tự ưu tiên trong tệp).
+const [phanI, phanN] = args.includes('--phan') ? args[args.indexOf('--phan') + 1]!.split('/').map(Number) : [1, 1];
 
 const DIR = path.join(import.meta.dirname, 'ai');
 const P: Record<string, string> = {};
@@ -48,15 +50,16 @@ for (const f of readdirSync(DIR).filter((x) => x.endsWith('.json') && (!nhom || 
     P[k] = v;
   }
 }
-let ds = Object.keys(P).sort();
+let ds = Object.keys(P).filter((_, k) => k % phanN! === phanI! - 1); // giữ thứ tự khai trong tệp (cấp dễ trước)
 if (args[0] === '--thu') ds = args.slice(1).filter((s) => P[s] || (console.error(`✗ ${s} chưa khai prompt`), false));
 
-const thieu: string[] = [];
-for (const s of ds) if (!(await headObject(KHOA(s)))) thieu.push(s);
+const coSan = new Set<string>(); let iH = 0;
+await Promise.all(Array.from({ length: 16 }, async () => { while (iH < ds.length) { const s = ds[iH++]!; if (await headObject(KHOA(s))) coSan.add(s); } }));
+const thieu = ds.filter((s) => !coSan.has(s));
 console.log(`${ds.length} ảnh đã khai · ${ds.length - thieu.length} đã có trên R2 · ${thieu.length} còn thiếu`);
 if (chiKiem || !thieu.length) process.exit(0);
 
-const TAM = path.join(os.tmpdir(), `ve-ai-${process.pid}`);
+const TAM = path.join(os.tmpdir(), `ve-ai-${process.pid}`); console.log(`luồng ${phanI}/${phanN}`);
 let moi = 0;
 for (let i = 0; i < thieu.length; i += LO) {
   const lo = thieu.slice(i, i + LO);

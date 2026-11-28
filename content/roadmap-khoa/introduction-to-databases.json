@@ -1,0 +1,1321 @@
+{
+ "khoa": "introduction-to-databases",
+ "ten": "Database Systems",
+ "phienBan": 1,
+ "capNhat": "2026-11-28",
+ "nguon": "Antigravity (Gemini) soạn từ bài web gốc; Claude soát mẫu",
+ "chuong": {
+  "dbi202-bat-dau-tai-day": {
+   "hoc": "Định hướng tổng quan về CSDL, hệ quản trị DBMS, chuẩn đầu ra, cấu trúc điểm, điều kiện qua môn DBI202, đồng thời hướng dẫn cài đặt môi trường SQL Server, PostgreSQL và buổi thực hành CRUD đầu tiên.",
+   "lamDuoc": "Phân biệt được dữ liệu, CSDL và DBMS, lập kế hoạch học bám đúng điều kiện qua môn, cài và kết nối xong SQL Server hoặc PostgreSQL, rồi tự tạo bảng và chạy lệnh thêm, sửa, xoá, xem dữ liệu."
+  },
+  "dbi202-slide-dbi2-1": {
+   "hoc": "Nền tảng về dữ liệu, thông tin, CSDL, DBMS và hệ CSDL; hạn chế của lưu trữ tệp; kiến trúc ba mức ANSI-SPARC, các mô hình dữ liệu, thành phần bên trong DBMS và nhóm lệnh DDL, DML.",
+   "lamDuoc": "Phân biệt chính xác năm khái niệm nền tảng, giải thích lý do dùng DBMS thay tệp và trả lời trọn vẹn các câu hỏi CQ1.1–CQ1.3 cùng trắc nghiệm mở đầu môn."
+  },
+  "dbi202-slide-dbi3-1": {
+   "hoc": "Trình bày mô hình dữ liệu quan hệ (lược đồ, bộ, khoá, ràng buộc toàn vẹn) cùng đại số quan hệ trên tập hợp, trên túi và các phép mở rộng làm nền toán học cho SQL.",
+   "lamDuoc": "Đọc và kiểm tra lược đồ bảng với PK/FK, viết biểu thức đại số cho câu hỏi nghiệp vụ, tính số dòng từng phép và đối chiếu tương đương sang SQL trên SQL Server và PostgreSQL."
+  },
+  "dbi202-slide-dbi5-1": {
+   "hoc": "Hướng dẫn thiết kế CSDL mức cao bằng mô hình ER và UML: thực thể, thuộc tính, liên kết, bản số, thực thể yếu, phân cấp lớp con ISA và các luật chuyển sơ đồ sang bảng quan hệ.",
+   "lamDuoc": "Phân tích được mô tả nghiệp vụ để vẽ ERD chuẩn, chọn đúng chiến lược lưu lớp con và chuyển máy móc sơ đồ thành các câu lệnh CREATE TABLE chạy thật trên SQL Server."
+  },
+  "dbi202-slide-dbi4-1": {
+   "hoc": "Lý thuyết thiết kế CSDL quan hệ: phụ thuộc hàm, tiên đề Armstrong, bao đóng, tìm khoá, phủ tối thiểu, phân rã không mất mát, bảo toàn phụ thuộc và chuẩn hoá từ 1NF đến BCNF.",
+   "lamDuoc": "Tính được bao đóng, tìm đủ mọi khoá dự tuyển, xác định dạng chuẩn cao nhất và tách bảng về 3NF hoặc BCNF để loại bỏ dư thừa cùng các bất thường dữ liệu."
+  },
+  "dbi202-slide-dbi7-1": {
+   "hoc": "Định nghĩa lược đồ bằng SQL DDL trên SQL Server và đối chiếu PostgreSQL: ràng buộc toàn vẹn, chuỗi, LIKE, ngày giờ, logic ba trị NULL, kiểu dữ liệu, CREATE/ALTER/DROP TABLE và quy ước đặt tên.",
+   "lamDuoc": "Chuyển lược đồ quan hệ thành script CREATE TABLE đủ ràng buộc, chọn đúng kiểu dữ liệu, sửa hoặc xoá bảng đã có dữ liệu an toàn và xử lý trọn câu 1–2 đề thi PE."
+  },
+  "dbi202-slide-dbi7-3": {
+   "hoc": "Hệ thống hóa kỹ năng truy vấn và cập nhật dữ liệu SQL trên SQL Server (đối chiếu PostgreSQL): thứ tự thực thi 6 mệnh đề, mọi phép JOIN, GROUP BY/HAVING, truy vấn con và DML an toàn.",
+   "lamDuoc": "Viết thành thạo truy vấn SQL nhiều bảng, gom nhóm, truy vấn lồng và lệnh ghi dữ liệu an toàn theo chuẩn đề thi thực hành PE, đồng thời tránh các bẫy kinh điển về NULL và nối ngoài."
+  },
+  "dbi202-slide-dbi9-1": {
+   "hoc": "Đưa logic vào bên trong CSDL bằng T-SQL (biến, IF, CASE, WHILE, TRY…CATCH), View, Stored Procedure, Function, Trigger và Cursor trên SQL Server, kèm đối chiếu PL/pgSQL trên PostgreSQL.",
+   "lamDuoc": "Viết, chạy thử và tránh lỗi mất điểm khi tạo view, thủ tục, hàm, trigger nhiều dòng và chuyển vòng lặp cursor sang câu lệnh theo tập hợp đúng chuẩn đề PE."
+  },
+  "dbi202-slide-dbi8-1": {
+   "hoc": "Khám phá cơ chế vận hành CSDL thực tế: giao dịch, bốn tính chất ACID, bốn mức cô lập, chỉ mục gom cụm và không gom cụm, view, đọc kế hoạch thực thi và thói quen tối ưu truy vấn.",
+   "lamDuoc": "Viết được giao dịch an toàn kèm TRY...CATCH, thiết kế chỉ mục phù hợp, đọc kế hoạch thực thi để chẩn đoán truy vấn chậm và xử lý đúng view cập nhật được."
+  }
+ },
+ "bai": {
+  "dbi202-bat-dau-tai-day": {
+   "hoc": "Phân biệt dữ liệu với thông tin, lý do sổ tay và Excel không đủ dùng, khái niệm DBMS, mô hình quan hệ từ mốc Codd 1970, các thuật ngữ nền như SQL, ACID, ràng buộc, chuẩn hoá, ERD và sự cố GitLab 2017.",
+   "canBiet": "Không cần nền trước về cơ sở dữ liệu hay lập trình; chỉ cần quen thao tác máy tính và các ứng dụng quen thuộc hằng ngày.",
+   "lamDuoc": "Giải thích được vai trò của CSDL và DBMS, nhận diện những giới hạn của bảng tính khi dữ liệu lớn lên, và hình dung rõ lộ trình học DBI202 song song SQL Server với PostgreSQL.",
+   "ketHop": "Đọc tiếp hướng dẫn cài đặt kết nối và làm buổi thực hành tạo bảng đầu tiên để chạm máy thật, rồi xem thêm khoá PostgreSQL khi muốn mở rộng theo thực tế đi làm.",
+   "ketHopBai": [
+    "dbi202-cai-dat-ket-noi",
+    "dbi202-buoi-dau-tien",
+    "dbi202-csdl-dbms"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-cai-dat-ket-noi": {
+   "hoc": "Các bước cài SQL Server 2022 và SSMS trên Windows, chạy SQL Server qua Docker trên Mac, cài PostgreSQL cùng psql và pgAdmin, cấu hình tên server, xác thực, cổng, SSL và bảng tra cứu hơn 10 lỗi kết nối.",
+   "canBiet": "Cần phân biệt được DBMS là phần mềm máy chủ còn database là kho dữ liệu bên trong từ phần định hướng đầu tiên.",
+   "lamDuoc": "Cài đặt, khởi chạy dịch vụ, kết nối thành công tới SQL Server và PostgreSQL, xác nhận bằng SELECT @@VERSION và SELECT version(), đồng thời tự chẩn đoán lỗi sai instance hay chứng chỉ SSL.",
+   "ketHop": "Dùng ngay môi trường vừa cài để làm buổi thực hành tạo bảng đầu tiên; nếu dùng Mac hoặc muốn hiểu sâu container và PostgreSQL, xem thêm khoá Docker và PostgreSQL.",
+   "canBietBai": [
+    "dbi202-bat-dau-tai-day"
+   ],
+   "ketHopBai": [
+    "dbi202-buoi-dau-tien",
+    "dbi202-cai-dat"
+   ],
+   "ketHopKhoa": [
+    "docker",
+    "postgresql"
+   ]
+  },
+  "dbi202-buoi-dau-tien": {
+   "hoc": "Thực hành dựng CSDL QuanLyLop với hai bảng Lop và SinhVien song song T-SQL và PostgreSQL: CREATE DATABASE, CREATE TABLE (khoá chính, khoá ngoại, CHECK, NVARCHAR), cùng INSERT, SELECT, UPDATE, DELETE và bẫy quên WHERE.",
+   "canBiet": "Đã cài đặt và kết nối được SSMS với SQL Server hoặc psql với PostgreSQL để gõ và chạy lệnh trực tiếp trên máy.",
+   "lamDuoc": "Tự tay tạo được database và hai bảng cha-con có ràng buộc toàn vẹn, lưu đúng tiếng Việt có dấu bằng N'', thêm sửa xoá xem dữ liệu an toàn bằng WHERE và hoàn thành 5 bài tự làm cuối buổi.",
+   "ketHop": "Ôn kỹ lại khi sang chương SQL DDL và truy vấn nâng cao, đồng thời kết hợp khoá PostgreSQL để nắm chắc khác biệt giữa T-SQL và PostgreSQL.",
+   "canBietBai": [
+    "dbi202-cai-dat-ket-noi"
+   ],
+   "ketHopBai": [
+    "dbi202-sql-ddl",
+    "dbi202-select-join",
+    "dbi202-cap-nhat-du-lieu"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-slide-dbi1-1": {
+   "hoc": "Đi qua 5 slide mở đầu DBI_Introduction: thông tin môn học, 7 CLO theo syllabus, bảng đối chiếu số chương giữa slide trường với trang web, giáo trình Ullman & Widom và ví dụ tính ngưỡng điểm trượt.",
+   "canBiet": "Nên đọc phần định hướng mở đầu trước để quen các khái niệm CSDL, DBMS và SQL trước khi đối chiếu với bộ slide của trường.",
+   "lamDuoc": "Tra cứu đúng chương học trên web tương ứng từng bộ slide trên lớp, nắm rõ 7 chuẩn đầu ra sẽ bị kiểm tra và tính được điểm FE tối thiểu để không trượt ngưỡng.",
+   "ketHop": "Đọc liền bản đồ môn học và bảng điều kiện qua môn chi tiết ngay bên dưới, rồi áp dụng cách học theo slide cho Chương 1; kiến thức môn là nền cho PRJ301 và SWP391.",
+   "canBietBai": [
+    "dbi202-bat-dau-tai-day"
+   ],
+   "ketHopBai": [
+    "dbi202-gioi-thieu",
+    "dbi202-dieu-kien-qua-mon",
+    "dbi202-slide-dbi2-1"
+   ],
+   "ketHopKhoa": [
+    "java-web-application-development",
+    "software-development-project"
+   ]
+  },
+  "dbi202-gioi-thieu": {
+   "hoc": "Bức tranh toàn cảnh 8 chương DBI202 chia thành ba chặng: mô hình hóa và chuẩn hóa dữ liệu (chương 1–4), ngôn ngữ và lập trình SQL (chương 5–7), hiệu năng chỉ mục và giao dịch (chương 8) cùng track Code Lab.",
+   "canBiet": "Chỉ cần nắm ý tưởng chung về vai trò CSDL và cách đối chiếu slide trường ở các bài mở đầu trước đó.",
+   "lamDuoc": "Định vị được từng chủ đề đang học nằm ở chặng nào trong lộ trình từ thiết kế lược đồ đến truy vấn và tối ưu trên SQL Server, từ đó lên kế hoạch luyện tập hợp lý.",
+   "ketHop": "Xem tiếp cấu trúc điểm và điều kiện qua môn để phân bổ thời gian cho từng chặng, kết hợp mở Code Lab luyện truy vấn xuyên suốt từ Chương 1.",
+   "canBietBai": [
+    "dbi202-bat-dau-tai-day",
+    "dbi202-slide-dbi1-1"
+   ],
+   "ketHopBai": [
+    "dbi202-dieu-kien-qua-mon",
+    "dbi202-buoi-dau-tien",
+    "dbi202-csdl-dbms"
+   ]
+  },
+  "dbi202-dieu-kien-qua-mon": {
+   "hoc": "Quy định syllabus DBI202: thời lượng 150 giờ, trọng số năm cột điểm (Assignment 20%, Lab 10%, PE 30%, Progress Test 10%, FE 30%) và ba cửa qua môn gồm chuyên cần 80%, mọi cột quá trình lớn hơn 0 và FE tối thiểu 4.",
+   "canBiet": "Nên xem trước bản đồ môn học và phần slide giới thiệu để hiểu từng cột điểm kiểm tra nhóm kiến thức nào.",
+   "lamDuoc": "Tính chính xác được tình trạng qua môn, tránh các lỗi trượt oan vì bỏ một bài lab hay thiếu ngưỡng FE, và ưu tiên đúng 60% trọng số thực hành viết SQL.",
+   "ketHop": "Dùng kèm cẩm nang ôn thi thực hành PE 85 phút, ngân hàng câu hỏi vấn đáp theo CLO và đề thi PE mẫu ở cuối khoá để bám sát chuẩn đánh giá.",
+   "canBietBai": [
+    "dbi202-slide-dbi1-1",
+    "dbi202-gioi-thieu"
+   ],
+   "ketHopBai": [
+    "dbi202-on-pe",
+    "dbi202-ngan-hang-cau-hoi",
+    "dbi202-final-exam-pe"
+   ]
+  },
+  "dbi202-cai-dat": {
+   "hoc": "Checklist bốn bước thiết lập môi trường học chuẩn DBI202: cài Microsoft SQL Server bản Developer hoặc Express, cài SSMS, kết nối server cục bộ và chạy thử truy vấn đầu tiên kèm tài liệu trên Exp Hub.",
+   "canBiet": "Đã nắm tổng quan môn học và biết DBI202 thực hành trực tiếp trên môi trường Microsoft SQL Server.",
+   "lamDuoc": "Hoàn tất nhanh việc dựng môi trường SQL Server cùng SSMS trên máy cá nhân, kết nối được vào server cục bộ và sẵn sàng tạo database để thực hành.",
+   "ketHop": "Kết hợp tài liệu sửa lỗi kết nối chi tiết nếu gặp sự cố hoặc dùng macOS, sau đó làm ngay buổi thực hành dựng CSDL và sang phần thực hành Chương 1.",
+   "canBietBai": [
+    "dbi202-gioi-thieu"
+   ],
+   "ketHopBai": [
+    "dbi202-cai-dat-ket-noi",
+    "dbi202-buoi-dau-tien",
+    "dbi202-on-ch1"
+   ]
+  },
+  "dbi202-slide-dbi2-1": {
+   "hoc": "Định nghĩa dữ liệu, thông tin, CSDL, DBMS, hệ CSDL; 5 nhiệm vụ DBMS; lịch sử mô hình phân cấp, mạng, quan hệ (ví dụ bảng BOOK), NoSQL/NewSQL; kho dữ liệu, mediator; kiến trúc DBMS, DDL/DML và EXPLAIN.",
+   "canBiet": "Chỉ cần nắm tổng quan mục tiêu và lộ trình môn ở phần mở đầu, chưa cần biết viết SQL.",
+   "lamDuoc": "Phân biệt chuẩn năm thuật ngữ gốc tránh bẫy FE, nhận diện đúng DDL hay DML (kể cả TRUNCATE TABLE) và chỉ ra vai trò bộ biên dịch truy vấn cùng từng thành phần DBMS.",
+   "ketHop": "Học tiếp bài tóm gọn vai trò DBMS, sau đó tự luyện đáp án mẫu CQ1.1–CQ1.3 và làm bài trắc nghiệm cuối chương để khóa chặt thuật ngữ CLO1.",
+   "canBietBai": [
+    "dbi202-bat-dau-tai-day",
+    "dbi202-gioi-thieu"
+   ],
+   "ketHopBai": [
+    "dbi202-csdl-dbms",
+    "dbi202-on-ch1",
+    "dbi202-quiz-ch1"
+   ]
+  },
+  "dbi202-csdl-dbms": {
+   "hoc": "Hạn chế của lưu trữ bằng tệp; năm vai trò cốt lõi của DBMS (nhất quán, đồng thời, bảo mật, phục hồi, truy vấn SQL khai báo) và kiến trúc ba mức ANSI-SPARC tạo ra độc lập dữ liệu.",
+   "canBiet": "Đã nắm bộ từ vựng nền tảng phân biệt dữ liệu, CSDL, DBMS và hệ CSDL từ bộ slide mở đầu chương.",
+   "lamDuoc": "Giải thích được vì sao hệ thống phần mềm cần DBMS thay vì tệp thường, đồng thời phân tích được cách ba tầng vật lý, logic và ngoài giúp ứng dụng không vỡ khi đổi cấu trúc lưu trữ.",
+   "ketHop": "Áp dụng ngay vào tình huống file Excel ở bài thực hành CQ1.1–CQ1.3, kiểm tra lại bằng quiz chương và đào sâu kiến trúc nội bộ DBMS ở phần chuyên sâu sau này.",
+   "canBietBai": [
+    "dbi202-slide-dbi2-1"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch1",
+    "dbi202-quiz-ch1",
+    "dbi202-slide-cs2-1"
+   ]
+  },
+  "dbi202-on-ch1": {
+   "hoc": "Tám bài tập tình huống theo CQ1.1–CQ1.3 kèm đáp án mẫu (như bài toán điểm Excel), minh họa bằng 6 đoạn SQL chạy trên SQL Server (CHECK, PRIMARY KEY), 16 thuật ngữ Anh–Việt và tóm tắt 8 ý.",
+   "canBiet": "Cần học xong bộ slide Chapter 1 và bài vai trò DBMS cùng kiến trúc ba mức để tự trả lời trước khi mở đáp án mẫu.",
+   "lamDuoc": "Trình bày mạch lạc đáp án CQ1.1–CQ1.3 theo cấu trúc định nghĩa–ví dụ–hệ quả, đối chiếu vấn đề tệp thường với cơ chế DBMS và phân loại đúng lệnh DDL, DML cùng ba phần của mô hình dữ liệu.",
+   "ketHop": "Làm ngay quiz Chương 1 để kiểm tra độ chắc kiến thức, rồi chuyển sang Chương 2 về mô hình quan hệ; nếu muốn luyện thêm vấn đáp theo CLO thì xem ngân hàng câu hỏi ôn thi.",
+   "canBietBai": [
+    "dbi202-slide-dbi2-1",
+    "dbi202-csdl-dbms"
+   ],
+   "ketHopBai": [
+    "dbi202-quiz-ch1",
+    "dbi202-slide-dbi3-1",
+    "dbi202-ngan-hang-cau-hoi"
+   ]
+  },
+  "dbi202-quiz-ch1": {
+   "hoc": "Kiểm tra 10 câu phủ toàn bộ Chương 1: CSDL–DBMS–hệ CSDL, 5 nhiệm vụ DBMS, mô hình phân cấp và mạng, kho dữ liệu và mediator, thành phần DBMS, DDL/DML, giao dịch–ROLLBACK, mô hình dữ liệu và vai trò DBA.",
+   "canBiet": "Đã hoàn thành bộ slide Chapter 1, bài vai trò DBMS và phần thực hành CQ1.1–CQ1.3, đồng thời đọc hiểu được kết quả chạy SQL cơ bản.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững lý thuyết Chương 1 và đọc kết quả SQL xác nhận đáp án (2 câu thực tế), phát hiện sớm lỗ hổng khái niệm trước khi sang Chương 2.",
+   "ketHop": "Đọc kỹ giải thích ở từng câu sai, ôn lại bảng thuật ngữ ở bài 1.2 nếu còn nhầm DDL/DML hay thành phần DBMS, rồi bước sang Chương 2 về mô hình và đại số quan hệ.",
+   "canBietBai": [
+    "dbi202-slide-dbi2-1",
+    "dbi202-csdl-dbms",
+    "dbi202-on-ch1"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch1",
+    "dbi202-slide-dbi3-1"
+   ]
+  },
+  "dbi202-slide-dbi3-1": {
+   "hoc": "Giảng slide 1–11 Chapter 2: ba phần của mô hình dữ liệu, lược đồ và thể hiện, bậc và lực lượng, các loại khoá (ứng viên, chính, ngoại) trên CSDL Sailors/Boats/Reserves và bốn nhóm phép đại số.",
+   "canBiet": "Hiểu khái niệm CSDL, DBMS và đã biết tạo bảng cơ bản trong SQL Server hoặc PostgreSQL từ Chương 1 và buổi thực hành đầu.",
+   "lamDuoc": "Đọc đúng lược đồ quan hệ, phân biệt lược đồ với thể hiện, bậc với lực lượng, chỉ ra khoá chính và khoá ngoại, đồng thời gọi tên bốn nhóm phép đại số cùng câu SQL tương ứng.",
+   "ketHop": "Học tiếp bài 2.B để luyện từng phép toán cụ thể, củng cố bằng bài 2.1, bài thực hành 2.5 và tham khảo thêm khoá PostgreSQL khi chạy song song hai DBMS.",
+   "canBietBai": [
+    "dbi202-slide-dbi2-1",
+    "dbi202-buoi-dau-tien"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi3-2",
+    "dbi202-mo-hinh-quan-he",
+    "dbi202-on-ch2"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-slide-dbi3-2": {
+   "hoc": "Giảng slide 12–25 Chapter 2: hợp, giao, hiệu với điều kiện tương thích kiểu; chọn σ, chiếu π, tích Descartes, θ-join, nối tự nhiên, đổi tên ρ, cây biểu thức và bài tập PC/Laptop/Printer.",
+   "canBiet": "Nắm lược đồ quan hệ, thuộc tính, bộ và bốn nhóm phép đại số đã giới thiệu ở nửa đầu slide Chapter 2.",
+   "lamDuoc": "Tính được kết quả và đếm trước số dòng của ∪, ∩, −, σ, π, ×, θ-join, nối tự nhiên, dựng cây biểu thức cho câu hỏi tiếng Anh rồi chuyển sang câu SQL tương đương.",
+   "ketHop": "Đi tiếp bài 2.C để xem khác biệt tập và túi, luyện bài 1–5 ở bài thực hành 2.5, làm Quiz 1 và xem thêm khoá PostgreSQL cho cú pháp NATURAL JOIN.",
+   "canBietBai": [
+    "dbi202-slide-dbi3-1"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi6-1",
+    "dbi202-on-ch2",
+    "dbi202-quiz-1"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-slide-dbi6-1": {
+   "hoc": "Giảng slide 1–14 Chapter 5 tự học: vì sao DBMS dùng túi (đa tập), luật đếm n + m, MIN(n, m), MAX(0, n − m) cho ∪, ∩, −, các phép π, σ, ×, ⋈ trên túi và cách giả lập bản ALL bằng ROW_NUMBER ở SQL Server.",
+   "canBiet": "Thành thạo các phép đại số trên tập hợp (∪, ∩, −, σ, π, ×, ⋈) và cách đối chiếu sang SQL từ bài 2.B.",
+   "lamDuoc": "Tính chính xác số bản sao của từng dòng qua các phép đại số trên túi, dự đoán số dòng câu SQL trả về và phân biệt khi nào dùng DISTINCT, UNION ALL hay INTERSECT ALL/EXCEPT ALL.",
+   "ketHop": "Học tiếp bài 2.D cho sáu phép mở rộng, luyện bài 6–8 ở bài thực hành 2.5, làm Quiz 1 và tham khảo khoá PostgreSQL cho INTERSECT ALL và EXCEPT ALL.",
+   "canBietBai": [
+    "dbi202-slide-dbi3-2"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi6-2",
+    "dbi202-on-ch2",
+    "dbi202-quiz-1"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-slide-dbi6-2": {
+   "hoc": "Giảng slide 15–30 Chapter 5: sáu phép mở rộng gồm loại trùng δ, hàm gộp SUM/AVG/MIN/MAX/COUNT, nhóm γ (GROUP BY, HAVING), chiếu mở rộng, sắp xếp τ, nối ngoài và bẫy AVG trên cột INT ở SQL Server.",
+   "canBiet": "Hiểu ngữ nghĩa túi (giữ dòng trùng) từ bài 2.C, vì các phép đếm và cộng chỉ có nghĩa khi bản sao chưa bị loại bỏ.",
+   "lamDuoc": "Đọc được câu SELECT có JOIN, WHERE, GROUP BY, HAVING, ORDER BY như cây biểu thức, tránh bẫy chia nguyên ở AVG và đếm đúng số dòng treo trong phép nối ngoài.",
+   "ketHop": "Luyện các phép mở rộng ở bài 6–8 bài thực hành 2.5, làm Quiz 1, ghép với bài 6.3 về GROUP BY và đối chiếu thêm khoá PostgreSQL khi xử lý NULL.",
+   "canBietBai": [
+    "dbi202-slide-dbi6-1"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch2",
+    "dbi202-quiz-1",
+    "dbi202-group-by-subquery"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-mo-hinh-quan-he": {
+   "hoc": "Tóm gọn cốt lõi mô hình quan hệ: bảng, bản ghi, thuộc tính, khóa chính, khóa ngoại, toàn vẹn tham chiếu cùng phân cấp siêu khóa, khóa dự tuyển và lựa chọn giữa khóa tự nhiên với khóa nhân tạo.",
+   "canBiet": "Đã nắm vai trò của CSDL, DBMS ở Chương 1 và có thể đọc qua bài 2.A để quen ký hiệu lược đồ trước khi ôn cô đọng.",
+   "lamDuoc": "Phân biệt chính xác siêu khóa, khóa dự tuyển, khóa chính và khóa ngoại, đồng thời lập luận chọn được khóa nhân tạo hay tự nhiên khi thiết kế bảng.",
+   "ketHop": "Học liền bài 2.4 để đào sâu các chính sách toàn vẹn tham chiếu và chuyển sang bài 5.1 khi viết CREATE TABLE trong SQL.",
+   "canBietBai": [
+    "dbi202-csdl-dbms",
+    "dbi202-slide-dbi3-1"
+   ],
+   "ketHopBai": [
+    "dbi202-rang-buoc-quan-he",
+    "dbi202-quiz-1",
+    "dbi202-sql-ddl"
+   ]
+  },
+  "dbi202-dai-so-quan-he": {
+   "hoc": "Hệ thống hóa các phép đại số nền tảng σ, π, ⋈, ∪, ∩, −, ρ qua ví dụ truy vấn 3 bước (nối, lọc, chiếu), ánh xạ một-một sang SQL và giải thích khoảng cách tập hợp với túi.",
+   "canBiet": "Hiểu cấu trúc bảng, cột, khóa chính và khóa ngoại trong mô hình quan hệ từ bài 2.1 hoặc bộ slide 2.A–2.B.",
+   "lamDuoc": "Viết được biểu thức đại số quan hệ 3 bước cho câu hỏi truy vấn cơ bản và dịch tương đương sang câu lệnh SELECT, JOIN, WHERE trong SQL.",
+   "ketHop": "Học tiếp bài 2.3 để bổ sung nối ngoài và phép chia, rồi luyện giải đề ở bài thực hành 2.5 trước khi sang bài 6.1 viết SQL.",
+   "canBietBai": [
+    "dbi202-mo-hinh-quan-he",
+    "dbi202-slide-dbi3-2"
+   ],
+   "ketHopBai": [
+    "dbi202-dai-so-nang-cao",
+    "dbi202-on-ch2",
+    "dbi202-select-join"
+   ]
+  },
+  "dbi202-dai-so-nang-cao": {
+   "hoc": "Phân tích từng bước nối tự nhiên, θ-join, nối ngoài trái/phải/đầy đủ, phép chia ÷ cho câu hỏi 'với mọi', bẫy trùng tên cột của NATURAL JOIN và vai trò đại số trong bộ tối ưu truy vấn.",
+   "canBiet": "Đã nắm chắc các phép σ, π, ⋈ cơ bản và phép tập hợp từ bài 2.2 cùng các bài slide 2.B, 2.D.",
+   "lamDuoc": "Chọn đúng loại phép nối để giữ hoặc loại dòng không khớp, nhận diện khuôn phép chia để dịch sang NOT EXISTS kép và giải thích cách bộ tối ưu đẩy phép lọc xuống sớm.",
+   "ketHop": "Làm các bài nối và phép trừ trong bài thực hành 2.5, đồng thời ghép với bài 6.2 và 6.4 khi triển khai JOIN và NOT EXISTS trong SQL.",
+   "canBietBai": [
+    "dbi202-dai-so-quan-he",
+    "dbi202-slide-dbi6-2"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch2",
+    "dbi202-join-day-du",
+    "dbi202-truy-van-long"
+   ]
+  },
+  "dbi202-rang-buoc-quan-he": {
+   "hoc": "Trình bày bốn họ ràng buộc (khoá, tham chiếu, miền, tổng quát), cách viết khoá ngoại bằng phép trừ đại số, chính sách NO ACTION/CASCADE/SET NULL, bẫy SET NULL trên cột khoá và lợi ích tối ưu truy vấn.",
+   "canBiet": "Hiểu khoá chính, khoá ngoại, toàn vẹn tham chiếu ở bài 2.1 và phép chiếu, phép trừ trong bài 2.2.",
+   "lamDuoc": "Viết được điều kiện toàn vẹn tham chiếu bằng đại số để tìm dòng mồ côi, chọn đúng hành vi ON DELETE/ON UPDATE và tránh lỗi đặt SET NULL lên cột thuộc khoá chính.",
+   "ketHop": "Ôn chung với Quiz 1 để kiểm tra lý thuyết ràng buộc, rồi thực hành khai báo CHECK, FOREIGN KEY ở bài 5.3 và trigger ở bài 7.4.",
+   "canBietBai": [
+    "dbi202-mo-hinh-quan-he",
+    "dbi202-dai-so-quan-he"
+   ],
+   "ketHopBai": [
+    "dbi202-quiz-1",
+    "dbi202-rang-buoc-sql",
+    "dbi202-trigger-cursor"
+   ]
+  },
+  "dbi202-on-ch2": {
+   "hoc": "Cung cấp 8 bài tập dạng đề FPTU trên CSDL Student/Course/Enroll (5 bài đại số tập, 3 bài túi và phép mở rộng) có cài bẫy trùng tên và dòng treo, kèm 16 thuật ngữ Anh–Việt và tóm tắt 8 ý.",
+   "canBiet": "Đã học trọn các phép đại số trên tập, trên túi và phép mở rộng ở các bài 2.A–2.D hoặc 2.1–2.4 cùng môi trường chạy SQL.",
+   "lamDuoc": "Tự tay hoàn thành 8 biểu thức đại số kèm bảng kết quả trung gian từng bước và chạy đối chiếu thành công câu SQL tương đương trên SQL Server hoặc PostgreSQL.",
+   "ketHop": "Làm ngay Quiz 1 sau 3 câu tự kiểm tra cuối bài để chốt kiến thức trước Chương 3, kết hợp khoá PostgreSQL nếu bạn chạy bài tập trên psql hoặc DBeaver.",
+   "canBietBai": [
+    "dbi202-slide-dbi3-2",
+    "dbi202-slide-dbi6-2",
+    "dbi202-dai-so-nang-cao"
+   ],
+   "ketHopBai": [
+    "dbi202-quiz-1",
+    "dbi202-er-model"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-quiz-1": {
+   "hoc": "Kiểm tra 10 câu dạng FE/PT gồm bậc và lực lượng, khoá ngoại, đếm dòng cho tích Descartes, nối tự nhiên, θ-join, nối ngoài đầy đủ, chiếu tập/túi, hiệu túi, bẫy AVG trên INT và viết giao bằng hiệu.",
+   "canBiet": "Hoàn thành các bài slide 2.A–2.D, lý thuyết 2.1–2.4 và đã tự giải qua 8 bài tập của bài thực hành 2.5.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững mô hình quan hệ và đại số trên tập lẫn túi, đồng thời phát hiện sớm các bẫy đếm dòng và bẫy kiểu INT hay gặp ở bài thi PT/FE.",
+   "ketHop": "Nếu sai câu nào, quay lại đối chiếu bảng kết quả ở bài thực hành 2.5 hoặc bài slide tương ứng trước khi bước sang Chương 3 về mô hình ER.",
+   "canBietBai": [
+    "dbi202-slide-dbi3-1",
+    "dbi202-slide-dbi6-2",
+    "dbi202-on-ch2"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch2",
+    "dbi202-slide-dbi6-1",
+    "dbi202-slide-dbi5-1"
+   ]
+  },
+  "dbi202-slide-dbi5-1": {
+   "hoc": "Trình bày slide 1–18 về quy trình thiết kế CSDL 6 bước, ba mức dữ liệu, ký hiệu Chen và Crow's Foot, thực thể, liên kết, bản số, bốn loại thuộc tính, thực thể yếu và lớp con isa.",
+   "canBiet": "Cần nắm khái niệm bảng, khoá chính, khoá ngoại và ràng buộc cơ bản ở mô hình quan hệ trước khi học thiết kế mức cao.",
+   "lamDuoc": "Đọc mô tả nghiệp vụ để xác định đúng thực thể mạnh, thực thể yếu, thuộc tính dẫn xuất và dựng được ERD kèm 5 bảng như đề COMPANY.",
+   "ketHop": "Học tiếp bài 3.B để nắm luật chuyển từng ký hiệu sang bảng và làm xưởng ERD cùng bộ bài tập thực hành cuối chương để quen dạng câu 1 đề PE.",
+   "canBietBai": [
+    "dbi202-mo-hinh-quan-he",
+    "dbi202-rang-buoc-quan-he"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi5-2",
+    "dbi202-xuong-erd",
+    "dbi202-on-ch3"
+   ]
+  },
+  "dbi202-slide-dbi5-2": {
+   "hoc": "Hệ thống hoá slide 19–32 về luật chuyển từng cấu trúc ERD sang bảng: 1-1, 1-M, M-M, n ngôi, thuộc tính phức hợp và đa trị, phân cấp isa, kết tập và thực thể yếu trên SQL Server lẫn PostgreSQL.",
+   "canBiet": "Cần hiểu rõ các ký hiệu thực thể, liên kết, bản số, thực thể yếu và bốn loại thuộc tính từ phần slide 1–18.",
+   "lamDuoc": "Chuyển máy móc mọi cấu trúc ERD thành lược đồ quan hệ đúng số bảng, đúng khoá chính ghép, khoá ngoại và viết được câu CREATE TABLE chạy thật.",
+   "ketHop": "Đối chiếu thêm bài 3.4 bảy quy tắc, học tiếp bài 3.C về lớp con và làm bài thực hành 3.5 để tự kiểm số bảng, số cột và khoá ngoại.",
+   "canBietBai": [
+    "dbi202-slide-dbi5-1",
+    "dbi202-mo-hinh-quan-he"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi5-3",
+    "dbi202-er-to-relation",
+    "dbi202-on-ch3"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-slide-dbi5-3": {
+   "hoc": "Phân tích slide 33–53 về ba chiến lược chuyển phân cấp lớp con sang bảng (kiểu E/R, hướng đối tượng, dùng NULL) và sơ đồ lớp UML gồm bội số, liên kết tự thân, lớp liên kết, kết tập, hợp thành.",
+   "canBiet": "Cần nắm các luật chuyển cơ bản và hai cách lưu phân cấp isa ở phần slide 19–32 trước khi so sánh ba chiến lược tổng quát.",
+   "lamDuoc": "Tính được số bảng cho từng chiến lược lớp con, phân biệt ưu nhược khi nối bảng hay UNION và ánh xạ đúng bội số 0..1, 1..1 từ UML sang khoá ngoại.",
+   "ketHop": "Đọc thêm bài 3.3 để luyện chọn chiến lược theo bài thi, làm bài trắc nghiệm chương 3 và vận dụng ký hiệu UML khi học tiếp SWR302, SWD392.",
+   "canBietBai": [
+    "dbi202-slide-dbi5-1",
+    "dbi202-slide-dbi5-2"
+   ],
+   "ketHopBai": [
+    "dbi202-er-subclass",
+    "dbi202-on-ch3",
+    "dbi202-quiz-ch3"
+   ],
+   "ketHopKhoa": [
+    "software-requirements",
+    "software-architecture-and-design"
+   ]
+  },
+  "dbi202-er-model": {
+   "hoc": "Giới thiệu bốn khối dựng sơ đồ ER gồm thực thể, thuộc tính, liên kết, bản số 1:1, 1:N, N:M, cách tách liên kết N:M thành bảng trung gian cùng tổng quan thực thể yếu và phân cấp ISA.",
+   "canBiet": "Cần biết bảng, khoá chính và khoá ngoại trong mô hình quan hệ để hiểu cách sơ đồ ER ánh xạ xuống bảng.",
+   "lamDuoc": "Vẽ được sơ đồ ER cơ bản trên draw.io hoặc SSMS và tách đúng liên kết nhiều-nhiều thành bảng trung gian mang hai khoá ngoại.",
+   "ketHop": "Học nối tiếp bài 3.2 về các cấu trúc ER nâng cao và mở xưởng ERD để luyện nhận diện danh từ, động từ từ mô tả nghiệp vụ thật.",
+   "canBietBai": [
+    "dbi202-mo-hinh-quan-he",
+    "dbi202-slide-dbi5-1"
+   ],
+   "ketHopBai": [
+    "dbi202-er-nang-cao",
+    "dbi202-er-to-relation",
+    "dbi202-xuong-erd"
+   ]
+  },
+  "dbi202-er-nang-cao": {
+   "hoc": "Đào sâu bốn cấu trúc hay ra trong đề thi: thực thể yếu kèm khoá bộ phận và ON DELETE CASCADE, ràng buộc tham gia toàn bộ hay bộ phận, liên kết ba ngôi và thuộc tính đa trị, phức hợp, dẫn xuất.",
+   "canBiet": "Cần nắm vững thực thể mạnh, thuộc tính, liên kết hai ngôi và bản số 1:1, 1:N, N:M ở bài 3.1.",
+   "lamDuoc": "Phân biệt được khi nào phải dùng thực thể yếu hay liên kết ba ngôi, tránh lỗi nhét giá trị đa trị vào một cột và thiết kế đúng NOT NULL cho ràng buộc tham gia.",
+   "ketHop": "Kết hợp bài 3.4 để áp dụng trọn bộ quy tắc chuyển bảng, thực hành trong bài 3.5 và liên hệ sang bài 4.1 khi học dạng chuẩn 1NF.",
+   "canBietBai": [
+    "dbi202-er-model",
+    "dbi202-slide-dbi5-1"
+   ],
+   "ketHopBai": [
+    "dbi202-er-to-relation",
+    "dbi202-on-ch3",
+    "dbi202-chuan-hoa"
+   ]
+  },
+  "dbi202-er-subclass": {
+   "hoc": "Hướng dẫn chuyển phân cấp ISA sang bảng theo ba chiến lược gồm mỗi lớp con một bảng, mỗi lớp cụ thể một bảng và một bảng rộng kèm ràng buộc CHECK, cùng tiêu chí đánh đổi và bẫy khoá chính lớp con.",
+   "canBiet": "Cần hiểu sơ đồ ER, khoá ngoại và đã xem qua cách giới thiệu phân cấp lớp con ở bài 3.C hoặc 3.1.",
+   "lamDuoc": "Chọn đúng chiến lược lưu ISA dựa trên tính rời nhau, chồng lấn hay phủ toàn bộ và viết được CREATE TABLE giữ nguyên khoá kế thừa cho lớp con.",
+   "ketHop": "So sánh lại với ví dụ Movies ở bài 3.C, thực hành trên bài tập lớp con của bài 3.5 và liên hệ chiến lược kế thừa ORM khi học PRJ301.",
+   "canBietBai": [
+    "dbi202-er-model",
+    "dbi202-slide-dbi5-3"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi5-3",
+    "dbi202-on-ch3",
+    "dbi202-quiz-ch3"
+   ],
+   "ketHopKhoa": [
+    "java-web-application-development"
+   ]
+  },
+  "dbi202-er-to-relation": {
+   "hoc": "Trình bày bảy quy tắc chuyển ERD sang quan hệ (R1–R7), minh hoạ trọn vẹn trên lược đồ thư viện 6 bảng, thứ tự viết DDL theo phụ thuộc cha–con, xử lý vòng tham chiếu bằng ALTER TABLE và suy ngược ERD.",
+   "canBiet": "Cần nắm thực thể mạnh, thực thể yếu, thuộc tính đa trị, bản số và ràng buộc tham gia từ bài 3.1 và 3.2.",
+   "lamDuoc": "Chuyển được một ERD đầy đủ thành lược đồ quan hệ không thừa bảng cho quan hệ 1:N, viết CREATE TABLE đúng thứ tự phụ thuộc và đọc ngược lược đồ cũ ra ERD.",
+   "ketHop": "Luyện tay ngay trên 10 đề ở xưởng ERD và 7 bài thực hành của bài 3.5, rồi nối sang Chương 4 để kiểm tra lại bảng theo 1NF–BCNF.",
+   "canBietBai": [
+    "dbi202-er-model",
+    "dbi202-er-nang-cao",
+    "dbi202-slide-dbi5-2"
+   ],
+   "ketHopBai": [
+    "dbi202-xuong-erd",
+    "dbi202-on-ch3",
+    "dbi202-chuan-hoa"
+   ]
+  },
+  "dbi202-xuong-erd": {
+   "hoc": "Tổng hợp quy trình 7 bước, bảng đối chiếu ký hiệu Chen, Crow's Foot, UML, 10 đề nghiệp vụ tăng dần độ khó, 10 lỗi hay bị trừ điểm và ngân hàng hơn 30 câu hỏi vấn đáp kèm đáp án mẫu.",
+   "canBiet": "Cần nắm trọn các cấu trúc ER nâng cao, chiến lược lớp con và bảy quy tắc chuyển ERD sang bảng trước khi bước vào luyện đề.",
+   "lamDuoc": "Tự dựng trọn vẹn sản phẩm từ mô tả nghiệp vụ tới ERD và script CREATE TABLE chạy thật cho 10 bài toán thực tế, đồng thời trả lời chắc các câu hỏi vấn đáp bảo vệ sơ đồ.",
+   "ketHop": "Làm tiếp 7 đề chuẩn câu 1 PE ở bài 3.5, hoàn thành quiz chương 3 và quay lại ôn cùng ngân hàng vấn đáp trước kỳ thi PE, FE.",
+   "canBietBai": [
+    "dbi202-er-nang-cao",
+    "dbi202-er-subclass",
+    "dbi202-er-to-relation"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch3",
+    "dbi202-quiz-ch3",
+    "dbi202-ngan-hang-cau-hoi"
+   ]
+  },
+  "dbi202-on-ch3": {
+   "hoc": "Cung cấp 7 bài tập chuẩn dạng câu 1 đề PE phủ mọi cấu trúc ER từ 1-M, M-N, thực thể yếu, ba ngôi, lớp con đến liên kết đệ quy, kèm 20 thuật ngữ Anh–Việt và tóm tắt 8 ý cốt lõi.",
+   "canBiet": "Cần thuộc các luật chuyển ERD sang bảng ở bài 3.B hoặc 3.4 và đã cài sẵn SQL Server, SSMS để chạy kiểm chứng.",
+   "lamDuoc": "Tự sản xuất trọn bộ ERD, lược đồ quan hệ và script CREATE TABLE chạy thật trên SQL Server cho 7 đề nghiệp vụ, tự kiểm đúng số bảng, số cột và số khoá ngoại.",
+   "ketHop": "Làm ngay bài trắc nghiệm Chương 3 sau khi hoàn thành 7 bài và kết hợp bài 5.1 để đào sâu ràng buộc DDL cho kỳ thi PE.",
+   "canBietBai": [
+    "dbi202-er-to-relation",
+    "dbi202-xuong-erd",
+    "dbi202-cai-dat-ket-noi"
+   ],
+   "ketHopBai": [
+    "dbi202-quiz-ch3",
+    "dbi202-sql-ddl",
+    "dbi202-on-pe"
+   ]
+  },
+  "dbi202-quiz-ch3": {
+   "hoc": "Kiểm tra 10 câu về đếm bảng từ ERD, khoá thực thể yếu, liên kết ba ngôi có mũi tên, thuộc tính phức hợp và dẫn xuất, khoá ngoại 1-M, chiến lược lớp con, bội số UML, ON DELETE CASCADE và UNIQUE với NULL.",
+   "canBiet": "Cần hoàn thành các bài lý thuyết về ERD, luật chuyển bảng, lớp con, UML và phần thực hành Chương 3 trước khi làm bài.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững toàn bộ Chương 3, phát hiện kịp lỗ hổng về chuyển đổi ERD, UML hay bẫy SQL Server trước khi sang Chương 4.",
+   "ketHop": "Xem lại bài thực hành 3.5 hoặc xưởng ERD cho các câu làm sai, rồi tiếp tục Chương 4 và ôn tổng hợp ở Quiz 2.",
+   "canBietBai": [
+    "dbi202-slide-dbi5-3",
+    "dbi202-er-to-relation",
+    "dbi202-on-ch3"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch3",
+    "dbi202-chuan-hoa",
+    "dbi202-quiz-2"
+   ]
+  },
+  "dbi202-slide-dbi4-1": {
+   "hoc": "Đi qua slide 1–19 Chapter 3 về phụ thuộc hàm, khoá và siêu khoá, luật Armstrong, thuật toán bao đóng 3.7, phủ tối thiểu, chiếu FD theo thuật toán 3.12 và câu SQL kiểm FD trên dữ liệu thật.",
+   "canBiet": "Hiểu khái niệm quan hệ, thuộc tính, bộ, lược đồ, thể hiện, khoá trong mô hình quan hệ và phép chiếu của đại số quan hệ.",
+   "lamDuoc": "Kiểm tra được FD bằng SQL, tính X⁺ từng vòng bằng bảng, phân biệt khoá với siêu khoá, rút gọn phủ tối thiểu và tìm tập FD sau phép chiếu.",
+   "ketHop": "Học tiếp bài 4.B về bất thường và phân rã, đào sâu thuật toán tìm khoá ở bài 4.2, rồi luyện bài 1–3 trong phần thực hành chương 4.",
+   "canBietBai": [
+    "dbi202-mo-hinh-quan-he",
+    "dbi202-dai-so-quan-he"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi4-2",
+    "dbi202-bao-dong-tim-khoa",
+    "dbi202-on-ch4"
+   ]
+  },
+  "dbi202-slide-dbi4-2": {
+   "hoc": "Đi qua slide 20–38 Chapter 3 về dư thừa, bất thường cập nhật và xoá trên bảng Movies1, định nghĩa phân rã, mất thông tin sinh bộ giả, bảng chase, phụ thuộc bộ phận, bắc cầu và chuẩn 1NF, 2NF.",
+   "canBiet": "Nắm khái niệm phụ thuộc hàm, khoá, siêu khoá và cách tính bao đóng thuộc tính ở phần đầu Chapter 3.",
+   "lamDuoc": "Chỉ ra được ba loại bất thường bằng SQL, dùng bảng chase kiểm tra phép tách có mất thông tin không, nhận diện phụ thuộc bộ phận và giải thích bảng vi phạm 1NF hay 2NF.",
+   "ketHop": "Học nối tiếp bài 4.C để tách bảng sinh viên lên 2NF và kiểm 3NF, kết hợp đối chiếu phần phân rã ở bài 4.3 và bài tập chương 4.",
+   "canBietBai": [
+    "dbi202-slide-dbi4-1",
+    "dbi202-dai-so-quan-he"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi4-3",
+    "dbi202-phan-ra",
+    "dbi202-on-ch4"
+   ]
+  },
+  "dbi202-slide-dbi4-3": {
+   "hoc": "Đi qua slide 39–58 Chapter 3: tách bảng sinh viên thành STUDENT, SUBJECTS, RESULTS bằng T-SQL với khoá ngoại, bản số 1–nhiều, kiểm 2NF từng cột, định nghĩa 3NF và lỗi bắc cầu HouseName → HouseColor.",
+   "canBiet": "Hiểu quy tắc 1NF, 2NF, phụ thuộc bộ phận, phụ thuộc bắc cầu và cách tính bao đóng từ hai phần slide trước.",
+   "lamDuoc": "Tách được bảng vi phạm 2NF thành các bảng có khoá chính và khoá ngoại đúng phía nhiều, kiểm 2NF từng cột và phát hiện phụ thuộc bắc cầu vi phạm 3NF bằng bao đóng.",
+   "ketHop": "Học tiếp bài 4.D để sửa nốt lỗi 3NF sang HouseTable và học BCNF, đồng thời luyện xác định dạng chuẩn trong bài thực hành chương 4.",
+   "canBietBai": [
+    "dbi202-slide-dbi4-1",
+    "dbi202-slide-dbi4-2"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi4-4",
+    "dbi202-chuan-hoa",
+    "dbi202-on-ch4"
+   ]
+  },
+  "dbi202-slide-dbi4-4": {
+   "hoc": "Đi qua slide 59–73 Chapter 3: tách HouseTable đạt 3NF trên SQL Server, định nghĩa BCNF qua ví dụ Movies, so sánh 3NF với BCNF và chạy từng bước thuật toán phân rã BCNF, tổng hợp 3NF.",
+   "canBiet": "Nắm chuỗi tách bảng sinh viên về 2NF, phụ thuộc bắc cầu, phủ tối thiểu và cách kiểm bảng chase từ các bài slide trước.",
+   "lamDuoc": "Phân biệt được 3NF với BCNF, tự chạy từng bước thuật toán phân rã BCNF và tổng hợp 3NF, đồng thời kiểm tra lại tính không mất mát bằng bảng chase.",
+   "ketHop": "Ôn lại lý thuyết qua ví dụ mới ở các bài 4.1–4.4, giải trọn 8 bài tập ở bài thực hành 4.5 và kiểm tra bằng Quiz 2.",
+   "canBietBai": [
+    "dbi202-slide-dbi4-1",
+    "dbi202-slide-dbi4-2",
+    "dbi202-slide-dbi4-3"
+   ],
+   "ketHopBai": [
+    "dbi202-phan-ra",
+    "dbi202-on-ch4",
+    "dbi202-quiz-2"
+   ]
+  },
+  "dbi202-chuan-hoa": {
+   "hoc": "Hệ thống hoá phụ thuộc hàm, ba loại bất thường dữ liệu, tiêu chuẩn 1NF đến BCNF và chuẩn hoá từng bước bảng Enrollment từ 1NF lên 3NF, kèm lý do thực tế đôi khi dừng ở 3NF.",
+   "canBiet": "Hiểu khái niệm bảng, khoá chính, khoá dự tuyển và đã xem qua khung lý thuyết phụ thuộc hàm trong mô hình quan hệ.",
+   "lamDuoc": "Nhận diện được ba bất thường cập nhật, chèn, xoá và tách một bảng có khoá kép cùng phụ thuộc bắc cầu về 3NF hoặc BCNF đúng chuẩn.",
+   "ketHop": "Học tiếp bài 4.2 để biết cách tính khoá bằng thuật toán thay vì đoán, rồi thực hành chuẩn hoá đầy đủ ở bài 4.4 và 4.5.",
+   "canBietBai": [
+    "dbi202-mo-hinh-quan-he",
+    "dbi202-slide-dbi4-1"
+   ],
+   "ketHopBai": [
+    "dbi202-bao-dong-tim-khoa",
+    "dbi202-chuan-hoa-vi-du",
+    "dbi202-on-ch4"
+   ]
+  },
+  "dbi202-bao-dong-tim-khoa": {
+   "hoc": "Ba tiên đề Armstrong, các luật dẫn xuất, thuật toán lặp tính bao đóng X⁺, quy trình bốn bước tìm mọi khoá dự tuyển, kiểm tra tương đương hai tập FD và rút gọn phủ tối thiểu.",
+   "canBiet": "Hiểu phụ thuộc hàm, phân biệt thuộc tính khoá với không khoá và lý do cần tìm khoá trước khi kiểm dạng chuẩn.",
+   "lamDuoc": "Tính đúng X⁺ qua nhiều lượt mà không bỏ sót FD, tìm đủ mọi khoá dự tuyển của lược đồ, kiểm tra suy diễn FD và đối chiếu hai tập FD có tương đương hay không.",
+   "ketHop": "Áp dụng ngay kỹ thuật kiểm tương đương tập FD ở bài 4.3 và luyện tính bao đóng, tìm khoá, phủ tối thiểu trong bài 4.5 cùng Quiz 2.",
+   "canBietBai": [
+    "dbi202-slide-dbi4-1",
+    "dbi202-chuan-hoa"
+   ],
+   "ketHopBai": [
+    "dbi202-phan-ra",
+    "dbi202-on-ch4",
+    "dbi202-quiz-2"
+   ]
+  },
+  "dbi202-phan-ra": {
+   "hoc": "Hai tiêu chuẩn phân rã là nối không mất mát và bảo toàn phụ thuộc, hiện tượng sinh bộ giả, ca kinh điển BCNF làm mất FD nên dừng ở 3NF và đánh đổi phi chuẩn hoá có ghi chép.",
+   "canBiet": "Tính được bao đóng thuộc tính, kiểm tương đương hai tập FD và nắm định nghĩa 3NF, BCNF từ hai bài trước.",
+   "lamDuoc": "Kiểm tra được phép tách hai mảnh có mất thông tin hay không, xác minh bảo toàn phụ thuộc và chọn đúng lúc nên dừng ở 3NF thay vì ép BCNF.",
+   "ketHop": "Thực hành kiểm không mất mát trên bảng đơn hàng ở bài 4.4, luyện kiểm bảng chase ở bài 4.5 và củng cố qua Quiz 2.",
+   "canBietBai": [
+    "dbi202-chuan-hoa",
+    "dbi202-bao-dong-tim-khoa"
+   ],
+   "ketHopBai": [
+    "dbi202-chuan-hoa-vi-du",
+    "dbi202-on-ch4",
+    "dbi202-quiz-2"
+   ]
+  },
+  "dbi202-chuan-hoa-vi-du": {
+   "hoc": "Chuẩn hoá trọn vẹn bảng đơn hàng từ 0NF lên 1NF, 2NF, 3NF và BCNF: tách nhóm lặp, bỏ thuộc tính dẫn xuất, tách phụ thuộc bộ phận và bắc cầu, kiểm không mất mát và phân biệt ranh giới 4NF.",
+   "canBiet": "Nắm định nghĩa các dạng chuẩn 1NF đến BCNF, cách tìm khoá từ tập FD và điều kiện nối không mất mát.",
+   "lamDuoc": "Chuẩn hoá trọn quy trình một bảng nghiệp vụ từ 0NF lên BCNF, xác định đúng khoá chính, khoá ngoại và kiểm chứng từng bước tách không mất dữ liệu.",
+   "ketHop": "Tự làm lại bài 8 trên SQL Server ở bài thực hành 4.5, sau đó áp dụng tạo bảng DDL ở Chương 5 hoặc học sâu tiến hoá lược đồ ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-chuan-hoa",
+    "dbi202-bao-dong-tim-khoa",
+    "dbi202-phan-ra"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch4",
+    "dbi202-sql-ddl",
+    "dbi202-quiz-2"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-on-ch4": {
+   "hoc": "Ôn tổng hợp chương qua quy trình sáu bước làm bài thi, 24 thuật ngữ Anh–Việt, tám bài tập kiểu đề FPTU về bao đóng, khoá, phủ tối thiểu, dạng chuẩn, phân rã BCNF/3NF, bảng chase và dựng bảng trên SQL Server.",
+   "canBiet": "Đã học đủ lý thuyết phụ thuộc hàm, bao đóng, tìm khoá, các dạng chuẩn 1NF–BCNF và hai thuật toán phân rã của chương 4.",
+   "lamDuoc": "Hoàn thành được trọn bộ 8 bài giải từng vòng bằng bảng cho bao đóng, khoá, phủ tối thiểu, chase, phân rã BCNF/3NF và kịch bản SQL Server tạo lược đồ đơn hàng đạt 3NF.",
+   "ketHop": "Che lời giải để tự viết bảng từng bước trên giấy, rà các bẫy hay sai rồi làm ngay Quiz 2 và chuyển sang viết SQL DDL ở bài 5.1.",
+   "canBietBai": [
+    "dbi202-bao-dong-tim-khoa",
+    "dbi202-phan-ra",
+    "dbi202-chuan-hoa-vi-du"
+   ],
+   "ketHopBai": [
+    "dbi202-quiz-2",
+    "dbi202-sql-ddl",
+    "dbi202-final-exam-fe"
+   ]
+  },
+  "dbi202-quiz-2": {
+   "hoc": "Kiểm tra 10 câu trắc nghiệm kiểu FE/PT về bao đóng, tìm khoá, tiên đề Armstrong, phủ tối thiểu, dạng chuẩn, phân rã BCNF, nối mất thông tin và chuyển đổi ERD sang bảng.",
+   "canBiet": "Nắm vững quy tắc chuyển ERD sang quan hệ của chương 3 cùng toàn bộ kỹ thuật phụ thuộc hàm, khoá và chuẩn hoá ở chương 4.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm chắc chương 3 và chương 4 theo chuẩn câu hỏi FE/PT, phát hiện sớm các lỗi dễ nhầm như dừng bao đóng sớm hay mất thông tin khi nối.",
+   "ketHop": "Đọc kỹ giải thích từng phương án sai, quay lại luyện các dạng chưa chắc ở bài 4.5 và 3.5 trước khi sang Chương 5 SQL DDL hoặc ôn đề FE.",
+   "canBietBai": [
+    "dbi202-er-to-relation",
+    "dbi202-on-ch3",
+    "dbi202-on-ch4"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch4",
+    "dbi202-on-ch3",
+    "dbi202-final-exam-fe"
+   ]
+  },
+  "dbi202-slide-dbi7-1": {
+   "hoc": "Bám sát slide 1–14 (Chapter 6) trên CSDL FUHCompany: ánh xạ ERD sang bảng, bốn loại ràng buộc toàn vẹn, so sánh chuỗi và LIKE với %, _, ESCAPE, hằng ngày giờ, NULL cùng logic ba trị UNKNOWN và bẫy NOT IN.",
+   "canBiet": "Cần nắm mô hình quan hệ, các loại ràng buộc quan hệ, cách chuyển ERD sang bảng và đã cài xong SQL Server hoặc PostgreSQL để chạy thử câu lệnh.",
+   "lamDuoc": "Gọi đúng loại ràng buộc và từ khoá SQL tương ứng, viết được mẫu LIKE có ESCAPE, thao tác hằng ngày giờ, dùng IS NULL và giải thích được vì sao dòng biến mất khi gặp UNKNOWN hoặc NOT IN.",
+   "ketHop": "Học tiếp phần 2 bộ slide để viết lệnh DDL hoàn chỉnh, luyện bài tập NULL, LIKE và ngày ở bài thực hành chương, ôn lại bẫy NOT IN ở bài 6.4 và đối chiếu cú pháp với khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-rang-buoc-quan-he",
+    "dbi202-er-to-relation",
+    "dbi202-buoi-dau-tien"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi7-2",
+    "dbi202-on-ch5",
+    "dbi202-truy-van-long"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-slide-dbi7-2": {
+   "hoc": "Đi từng slide 15–21 (Chapter 6): các phương ngữ SQL (T-SQL, PL/SQL, PL/pgSQL), CREATE DATABASE và CREATE TABLE kèm ràng buộc mức cột, mức bảng, demo EmpManagement, ALTER/DROP TABLE và sơ đồ 7 bảng FUHCompany.",
+   "canBiet": "Cần nắm bốn loại ràng buộc toàn vẹn từ phần 1 bộ slide và biết cách chuyển ERD sang các bảng quan hệ có khoá chính, khoá ngoại.",
+   "lamDuoc": "Viết được CREATE TABLE đủ PRIMARY KEY, FOREIGN KEY, UNIQUE, CHECK, DEFAULT, NOT NULL, IDENTITY; sửa hoặc xoá cột và ràng buộc bằng ALTER và DROP đúng thứ tự, đồng thời dịch sang PostgreSQL.",
+   "ketHop": "Củng cố quy ước đặt tên ràng buộc ở bài 5.3, thực hành bộ 7 bài kiểu câu 1 đề PE ở bài 5.4, làm Quiz Chương 5 và mở rộng phần mô hình quan hệ ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi7-1",
+    "dbi202-er-to-relation"
+   ],
+   "ketHopBai": [
+    "dbi202-rang-buoc-sql",
+    "dbi202-on-ch5",
+    "dbi202-quiz-ch5"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-sql-ddl": {
+   "hoc": "Cú pháp CREATE TABLE biến lược đồ ER và chuẩn hoá thành bảng thật với PRIMARY KEY, FOREIGN KEY, NOT NULL, UNIQUE, CHECK, cùng hành động tham chiếu ON DELETE và ON UPDATE (CASCADE, SET NULL, NO ACTION).",
+   "canBiet": "Cần hiểu cách chuyển ERD sang bảng, vai trò khoá chính, khoá ngoại và lược đồ đã chuẩn hoá từ các chương trước.",
+   "lamDuoc": "Dựng được bảng SQL đầy đủ khoá và ràng buộc cơ bản, đồng thời chọn đúng hành động ON DELETE và ON UPDATE để tránh xoá nhầm dây chuyền dữ liệu liên quan.",
+   "ketHop": "Làm ngay Code Lab Schema Design & DDL, học tiếp bài chọn kiểu dữ liệu (5.2), bài cú pháp ràng buộc SQL Server (5.3) và luyện thêm ở bài thực hành chương.",
+   "canBietBai": [
+    "dbi202-er-to-relation",
+    "dbi202-chuan-hoa",
+    "dbi202-slide-dbi7-2"
+   ],
+   "ketHopBai": [
+    "dbi202-kieu-du-lieu",
+    "dbi202-rang-buoc-sql",
+    "dbi202-on-ch5"
+   ]
+  },
+  "dbi202-kieu-du-lieu": {
+   "hoc": "Phân tích kiểu chuỗi (CHAR, VARCHAR, NVARCHAR kèm tiền tố N cho tiếng Việt), số (DECIMAL thay FLOAT cho tiền, họ số nguyên), ngày giờ (DATE, DATETIME2, TIME, DATETIMEOFFSET), NULL và khoá tự tăng IDENTITY.",
+   "canBiet": "Cần nắm cấu trúc câu lệnh CREATE TABLE và ý nghĩa cơ bản của giá trị NULL từ các bài trước trong chương.",
+   "lamDuoc": "Chọn đúng kiểu dữ liệu ngay khi thiết kế để không mất dấu tiếng Việt, không lệch xu tiền bạc, tính toán đúng ngày giờ và hạn chế lỗi logic từ NULL.",
+   "ketHop": "Áp dụng ngay vào bài ràng buộc và ALTER TABLE (5.3), kiểm tra lại qua bài thực hành (5.4) cùng Quiz Chương 5 và đào sâu kiểu numeric, IDENTITY, múi giờ ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-sql-ddl",
+    "dbi202-slide-dbi7-1"
+   ],
+   "ketHopBai": [
+    "dbi202-rang-buoc-sql",
+    "dbi202-on-ch5",
+    "dbi202-quiz-ch5"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-rang-buoc-sql": {
+   "hoc": "Cú pháp SQL Server cho PK, FK, UNIQUE, CHECK, DEFAULT, quy ước đặt tên (pk_, fk_, uq_, ck_, df_), và quy trình ba bước dùng ALTER TABLE kèm GO để thêm cột NOT NULL hoặc ràng buộc lên bảng đã có dữ liệu.",
+   "canBiet": "Cần hiểu bản chất ràng buộc quan hệ (bài 2.4), cú pháp CREATE TABLE và các kiểu dữ liệu SQL Server ở hai bài liền trước.",
+   "lamDuoc": "Viết được bảng chuẩn chấm PE có ràng buộc đặt tên rõ ràng, chẩn đoán lỗi Msg 4901, 207, 245 khi ALTER bảng có dữ liệu và làm sạch dòng vi phạm trước khi thêm CHECK.",
+   "ketHop": "Thực hành ngay trên 7 bài tập DDL ở bài 5.4, tự kiểm tra với Quiz Chương 5 và xem cách chạy migration an toàn ngoài thực tế ở khoá PostgreSQL và Node.js.",
+   "canBietBai": [
+    "dbi202-rang-buoc-quan-he",
+    "dbi202-sql-ddl",
+    "dbi202-kieu-du-lieu"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch5",
+    "dbi202-quiz-ch5"
+   ],
+   "ketHopKhoa": [
+    "postgresql",
+    "nodejs"
+   ]
+  },
+  "dbi202-on-ch5": {
+   "hoc": "Bảy bài luyện chuẩn câu 1–2 đề PE: dựng 4 bảng bán hàng, chèn dòng sai thử ràng buộc, ALTER và DROP bảng có dữ liệu, bài NULL/LIKE/ngày và đề mini CLB, kèm 20 thuật ngữ cùng bảng đối chiếu T-SQL với PostgreSQL.",
+   "canBiet": "Cần học xong các bài CREATE TABLE, kiểu dữ liệu, quy ước đặt tên ràng buộc, ALTER TABLE và nắm sơ đồ FUHCompany từ các bài trước trong chương.",
+   "lamDuoc": "Hoàn thiện được bộ script SQL chạy thật cho 7 bài: tạo lược đồ đúng thứ tự cha–con, kiểm chứng lỗi từng ràng buộc, sửa và xoá bảng an toàn cùng lời giải đề mini có thực thể yếu và quan hệ M:N.",
+   "ketHop": "Tự viết và chạy thử trong SSMS 10–15 phút mỗi bài trước khi so lời giải, sau đó làm Quiz Chương 5, dùng lại thói quen làm bài khi ôn cẩm nang PE (9.1) và đối chiếu bản PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi7-2",
+    "dbi202-kieu-du-lieu",
+    "dbi202-rang-buoc-sql"
+   ],
+   "ketHopBai": [
+    "dbi202-quiz-ch5",
+    "dbi202-on-pe"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-quiz-ch5": {
+   "hoc": "Kiểm tra 10 câu toàn Chương 5: CHECK gặp NULL, bẫy NOT IN và logic ba trị, LIKE với _ và ESCAPE, thứ tự tạo bảng có khoá ngoại, hụt số IDENTITY, tiền tố N tiếng Việt, thêm cột NOT NULL và IDENTITY trên PostgreSQL.",
+   "canBiet": "Cần hoàn thành lý thuyết slide Chapter 6 (1–21), các bài kiểu dữ liệu, ràng buộc, ALTER TABLE và bộ bài thực hành của Chương 5.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững SQL DDL và ràng buộc toàn vẹn của Chương 5, phát hiện sớm các bẫy lý thuyết và cú pháp trước khi chuyển sang truy vấn SQL.",
+   "ketHop": "Đọc kỹ giải thích sau mỗi câu sai và quay lại bài 5.4 để vá lỗ hổng, sau đó chuyển sang Chương 6 và làm Quiz 3 tổng hợp DDL cùng truy vấn.",
+   "canBietBai": [
+    "dbi202-slide-dbi7-1",
+    "dbi202-rang-buoc-sql",
+    "dbi202-on-ch5"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch5",
+    "dbi202-slide-dbi7-3",
+    "dbi202-quiz-3"
+   ]
+  },
+  "dbi202-slide-dbi7-3": {
+   "hoc": "Thứ tự thực thi 6 bước FROM đến ORDER BY, các lệnh DML cơ bản, SELECT với ALL/DISTINCT/TOP, đặt bí danh, sắp xếp và nối hai bảng có cột trùng tên trên CSDL FUHCompany.",
+   "canBiet": "Cần đã dựng sẵn CSDL FUHCompany, nắm phép chọn và chiếu đại số quan hệ cùng cách viết điều kiện LIKE, ngày giờ và xử lý NULL ở Chương 5.",
+   "lamDuoc": "Đọc và viết được câu SELECT lọc, sắp xếp, nối hai bảng kèm tiền tố tránh nhầm cột trùng tên, và giải thích vì sao bí danh ở SELECT không dùng được trong WHERE.",
+   "ketHop": "Học nối tiếp sang slide 37–52 về tự nối và truy vấn con, thực hành lại trên FUHCompany ở bài 6.6 và đối chiếu cú pháp ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi7-1",
+    "dbi202-slide-dbi7-2",
+    "dbi202-slide-dbi3-2"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi7-4",
+    "dbi202-select-join",
+    "dbi202-on-ch6"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-slide-dbi7-4": {
+   "hoc": "Biến bộ và tự nối bảng với chính nó, các phép tập hợp UNION/INTERSECT/EXCEPT, truy vấn con vô hướng (=, =ANY, IN, lỗi 512) và toán tử EXISTS, ALL, ANY cùng so sánh bộ.",
+   "canBiet": "Cần nắm thứ tự thực thi câu SELECT, nối hai bảng với bí danh ở phần slide trước và kiến thức phép tập hợp trong đại số quan hệ.",
+   "lamDuoc": "Viết được câu tự nối qua biến bộ, chọn đúng phép tập hợp, tránh lỗi 512 và bẫy NOT IN gặp NULL, đồng thời dự đoán chính xác TRUE/FALSE của EXISTS, ANY, ALL kể cả tập rỗng.",
+   "ketHop": "Tiếp tục với phần truy vấn con tương quan và nối ngoài ở bài 6.C, củng cố chuyên sâu ở bài 6.4 và xem thêm bài 7.1 ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi7-3",
+    "dbi202-slide-dbi3-2"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi7-5",
+    "dbi202-truy-van-long",
+    "dbi202-on-ch6"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-slide-dbi7-5": {
+   "hoc": "Truy vấn con dùng IN, truy vấn con tương quan và luật phạm vi tên, truy vấn con trong FROM, CROSS/INNER/NATURAL JOIN, nối ngoài LEFT/RIGHT/FULL và loại bản trùng bằng DISTINCT.",
+   "canBiet": "Cần đã nắm biến bộ, truy vấn con cơ bản ở bài 6.B và khái niệm phép nối ngoài trong đại số quan hệ.",
+   "lamDuoc": "Phân biệt được truy vấn con tương quan hay không, đếm đúng số dòng qua tích và phép nối, giữ trọn dòng treo với OUTER JOIN mà không phá hỏng bằng WHERE, và dùng DISTINCT đúng chỗ.",
+   "ketHop": "Học tiếp phần cuối về hàm gộp và HAVING ở bài 6.D, so sánh trực quan 6 kiểu nối ở bài 6.2 và tham khảo thêm bài 4.3 của khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi7-4",
+    "dbi202-slide-dbi6-2"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi7-6",
+    "dbi202-join-day-du",
+    "dbi202-on-ch6"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-slide-dbi7-6": {
+   "hoc": "Phép tập hợp có ALL trên túi, năm hàm gộp SUM/AVG/MIN/MAX/COUNT, cơ chế gom nhóm GROUP BY, ứng xử của NULL trong phép gộp, phân biệt WHERE với HAVING và đủ 6 bước thực thi.",
+   "canBiet": "Cần nắm các phép nối, DISTINCT ở các phần slide 6.A–6.C và lý thuyết quan hệ dạng túi, phép gộp đại số ở Chương 2.",
+   "lamDuoc": "Viết đúng truy vấn GROUP BY và HAVING không vi phạm cột trong SELECT, phân biệt chính xác COUNT(*)/COUNT(cột)/COUNT(DISTINCT) và tính đúng kết quả khi có NULL hoặc tập rỗng.",
+   "ketHop": "Áp dụng ngay vào 8 bài thực hành kiểu đề PE ở bài 6.6, làm Quiz 3 để tự kiểm tra và đối chiếu cú pháp ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi7-5",
+    "dbi202-slide-dbi6-1",
+    "dbi202-slide-dbi6-2"
+   ],
+   "ketHopBai": [
+    "dbi202-group-by-subquery",
+    "dbi202-on-ch6",
+    "dbi202-quiz-3"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-select-join": {
+   "hoc": "Cấu trúc cốt lõi của truy vấn nhiều bảng gồm SELECT, WHERE, ORDER BY cùng INNER/LEFT/RIGHT JOIN, kèm phần mở rộng về ba thuật toán nối vật lý nested-loop, hash và merge join.",
+   "canBiet": "Cần hiểu cấu trúc bảng, khoá chính, khoá ngoại từ Chương 5 và nắm thứ tự thực thi truy vấn ở bài 6.A.",
+   "lamDuoc": "Viết được truy vấn lọc và nối nhiều bảng theo khoá khớp, chọn đúng kiểu nối cơ bản và bước đầu đọc execution plan bằng SET SHOWPLAN_ALL ON để hiểu hiệu năng nối.",
+   "ketHop": "Làm ngay Code Lab về Joins đi kèm, học tiếp bài 6.2 để so sánh đủ 6 phép nối trên cùng bộ dữ liệu, và xem lại phần kế hoạch thực thi ở Chương 8.",
+   "canBietBai": [
+    "dbi202-sql-ddl",
+    "dbi202-slide-dbi7-3"
+   ],
+   "ketHopBai": [
+    "dbi202-join-day-du",
+    "dbi202-on-ch6",
+    "dbi202-execution-plan"
+   ]
+  },
+  "dbi202-join-day-du": {
+   "hoc": "So sánh kết quả của đủ 6 phép nối INNER, LEFT, RIGHT, FULL, CROSS và SELF JOIN trên cùng dữ liệu, khuôn phản nối LEFT JOIN + IS NULL và bẫy đặt điều kiện lọc ở ON hay WHERE.",
+   "canBiet": "Cần đã nắm cú pháp SELECT, WHERE, JOIN cơ bản ở bài 6.1 và hiểu cách NULL hoạt động khi so sánh.",
+   "lamDuoc": "Chọn đúng trong 6 kiểu nối cho từng câu hỏi nghiệp vụ, viết nhanh khuôn tìm bản ghi chưa có liên kết và tránh biến LEFT JOIN thành INNER JOIN do đặt nhầm điều kiện vào WHERE.",
+   "ketHop": "Luyện các câu nối nhiều bảng và đếm cả 0 ở bài 6.6, mở rộng sang khoá PostgreSQL về chiến lược join và khoá Node.js để thấy bài toán quan hệ, bẫy N+1 với Prisma.",
+   "canBietBai": [
+    "dbi202-select-join",
+    "dbi202-slide-dbi7-5"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch6",
+    "dbi202-quiz-3",
+    "dbi202-group-by-subquery"
+   ],
+   "ketHopKhoa": [
+    "postgresql",
+    "nodejs"
+   ]
+  },
+  "dbi202-group-by-subquery": {
+   "hoc": "Gom nhóm bằng GROUP BY với các hàm COUNT/SUM/AVG, phân biệt WHERE và HAVING, lồng truy vấn con cơ bản và giới thiệu mở rộng về hàm cửa sổ OVER (PARTITION BY / ORDER BY).",
+   "canBiet": "Cần nắm truy vấn SELECT/WHERE/JOIN ở các bài trước và nền tảng hàm gộp, thứ tự thực thi ở bài 6.D.",
+   "lamDuoc": "Viết được truy vấn thống kê theo từng nhóm kèm điều kiện HAVING, so sánh bản ghi với giá trị tổng hợp qua truy vấn con và nhận diện tình huống cần hàm cửa sổ thay cho GROUP BY.",
+   "ketHop": "Thực hành ngay Code Lab Tổng hợp & truy vấn con, học tiếp bài 6.4 về truy vấn lồng nâng cao, bài chuyên sâu CS.5 và bài 6.2–6.4 ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-select-join",
+    "dbi202-slide-dbi7-6"
+   ],
+   "ketHopBai": [
+    "dbi202-truy-van-long",
+    "dbi202-on-ch6",
+    "dbi202-slide-cs5-1"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-truy-van-long": {
+   "hoc": "Phân biệt truy vấn con tương quan và không tương quan, bẫy NOT IN gặp NULL, toán tử ANY/ALL trên tập rỗng, khuôn phép chia bằng hai lớp NOT EXISTS hoặc đếm, và mở rộng CTE đệ quy.",
+   "canBiet": "Cần đã biết truy vấn con cơ bản, GROUP BY ở bài 6.3, hiểu phép chia đại số ở bài 2.3 và các toán tử tập hợp ở bài 6.B.",
+   "lamDuoc": "Chuyển được NOT IN nguy hiểm sang NOT EXISTS an toàn với NULL, viết chuẩn câu hỏi dạng với mọi bằng phép chia SQL và đoán đúng kết quả ANY/ALL khi tập con rỗng.",
+   "ketHop": "Luyện các câu NOT EXISTS, phép chia và truy vấn tương quan trong bài 6.6, làm Quiz 3 và đọc tiếp bài 7.2–7.4 ở khoá PostgreSQL cùng bài CS.5 về CTE.",
+   "canBietBai": [
+    "dbi202-group-by-subquery",
+    "dbi202-dai-so-nang-cao",
+    "dbi202-slide-dbi7-4"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch6",
+    "dbi202-quiz-3",
+    "dbi202-slide-cs5-1"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-cap-nhat-du-lieu": {
+   "hoc": "Cú pháp INSERT nhiều dòng có nêu tên cột, UPDATE kèm JOIN trên SQL Server, quy trình chạy thử trong BEGIN TRAN, phân biệt DELETE/TRUNCATE/DROP, TOP/OFFSET thay LIMIT và mô hình xoá mềm.",
+   "canBiet": "Cần nắm kiến thức JOIN ở bài 6.1–6.2, ràng buộc khoá ngoại ở Chương 5 và lệnh DML cơ bản từ bài 6.A.",
+   "lamDuoc": "Thực hiện được thao tác thêm, sửa có nối bảng và xoá dữ liệu an toàn qua bước SELECT kiểm tra và giao dịch, chọn đúng giữa DELETE, TRUNCATE, DROP và phân trang đúng chuẩn SQL Server.",
+   "ketHop": "Áp dụng kiến thức giao dịch ở Chương 8, tìm hiểu thiết kế xoá mềm ở bài CS.6 và học thêm RETURNING, UPSERT tại bài 4.1, 4.4 của khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-join-day-du",
+    "dbi202-rang-buoc-sql",
+    "dbi202-slide-dbi7-3"
+   ],
+   "ketHopBai": [
+    "dbi202-transaction-acid",
+    "dbi202-slide-cs6-1",
+    "dbi202-quiz-3"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-on-ch6": {
+   "hoc": "Lộ trình 5 bước giải đề PE 85 phút và 8 bài tập tăng dần trên FUHCompany phủ đủ lọc, nối 4 bảng, tự nối, phép chia, GROUP BY, TOP WITH TIES, đếm cả 0, kèm bảng T-SQL/PostgreSQL và 22 thuật ngữ.",
+   "canBiet": "Cần hoàn thành các bài lý thuyết 6.A–6.5 về JOIN, GROUP BY, truy vấn lồng và đã tạo sẵn CSDL FUHCompany từ bài 5.B trên SSMS hoặc Azure Data Studio.",
+   "lamDuoc": "Tự viết và chạy ra đúng bộ kết quả 8 bài truy vấn kiểu đề PE trên FUHCompany, đối chiếu chính xác số dòng đầu ra và nhận diện sớm các bẫy mất điểm khi đi thi thực hành.",
+   "ketHop": "Làm ngay Quiz 3 để chốt Chương 5–6, sau đó luyện tiếp cẩm nang thi thực hành ở bài 9.1, đề PE thật và đối chiếu cú pháp ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi7-2",
+    "dbi202-join-day-du",
+    "dbi202-truy-van-long"
+   ],
+   "ketHopBai": [
+    "dbi202-quiz-3",
+    "dbi202-on-pe",
+    "dbi202-pe1-sp26-chua-tron-de"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-quiz-3": {
+   "hoc": "Kiểm tra tổng hợp Chương 5–6 qua 10 câu kiểu FE/PT: thứ tự thực thi SELECT, NOT IN với NULL, LEFT JOIN đếm dòng, HAVING, TOP WITH TIES, > ALL trên tập rỗng, khoá ngoại khi xoá và ràng buộc CHECK.",
+   "canBiet": "Cần hoàn thành SQL DDL ở Chương 5, toàn bộ nội dung truy vấn SQL của Chương 6 và vượt qua phần tự kiểm tra cuối bài 6.6.",
+   "lamDuoc": "Tự đánh giá chính xác mức độ nắm vững SQL DDL và truy vấn SQL, đọc hiểu nhanh đầu ra của câu lệnh T-SQL và phát hiện kịp thời các bẫy lý thuyết hay gặp trong đề FE/PT.",
+   "ketHop": "Xem kỹ giải thích các câu làm sai, rà lại bài 6.6 nếu hổng phần truy vấn rồi chuyển sang Chương 7 về View, Procedure, Trigger hoặc cẩm nang ôn PE.",
+   "canBietBai": [
+    "dbi202-on-ch5",
+    "dbi202-on-ch6",
+    "dbi202-cap-nhat-du-lieu"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch6",
+    "dbi202-plsql",
+    "dbi202-on-pe"
+   ]
+  },
+  "dbi202-slide-dbi9-1": {
+   "hoc": "Cú pháp lập trình T-SQL trên sơ đồ FUHCompany: khai báo biến DECLARE/SET/SELECT, ép kiểu CAST/CONVERT, rẽ nhánh IF/CASE, vòng lặp WHILE, xử lý lỗi @@ERROR và TRY…CATCH, cùng chuẩn SQL/PSM và bản PL/pgSQL.",
+   "canBiet": "Nắm chắc 7 bảng của sơ đồ FUHCompany và cách viết truy vấn SELECT cùng lệnh INSERT, UPDATE, DELETE cơ bản ở các chương trước.",
+   "lamDuoc": "Viết được khối lệnh có biến, nhánh rẽ, vòng lặp, giao dịch TRY…CATCH để rollback khi lỗi, giải thích vì sao cần CAST khi PRINT và dịch lệnh SQL/PSM sang T-SQL hay PL/pgSQL.",
+   "ketHop": "Học nối tiếp phần thủ tục và hàm, luyện bài tập thực hành cuối chương, làm quiz Chương 7 và đối chiếu thêm khối DO, RAISE NOTICE ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi7-2",
+    "dbi202-cap-nhat-du-lieu"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi9-2",
+    "dbi202-on-ch7",
+    "dbi202-quiz-ch7"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-slide-dbi9-2": {
+   "hoc": "Kiến trúc ba tầng web – ứng dụng – CSDL, 5 lợi ích của stored procedure, cú pháp CREATE PROCEDURE với tham số mặc định và OUTPUT, hàm hệ thống cùng ba loại hàm người dùng trên SQL Server và PostgreSQL.",
+   "canBiet": "Cần nắm ngữ pháp T-SQL cơ bản gồm biến, IF, WHILE, TRY…CATCH và cấu trúc các bảng của CSDL FUHCompany từ phần slide trước.",
+   "lamDuoc": "Phân biệt đúng tầng xử lý nghiệp vụ, viết và gọi thủ tục có tham số OUTPUT bằng EXEC, đồng thời chọn đúng và gọi kèm dbo. cho hàm vô hướng hoặc hàm trả bảng.",
+   "ketHop": "Đọc thêm phần bẫy hiệu năng hàm vô hướng ở bài 7.3, làm bài thực hành FUHCompany và quiz chương, kết hợp đối chiếu với PRJ301 cùng khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi9-1"
+   ],
+   "ketHopBai": [
+    "dbi202-proc-function",
+    "dbi202-on-ch7",
+    "dbi202-quiz-ch7"
+   ],
+   "ketHopKhoa": [
+    "postgresql",
+    "java-web-application-development"
+   ]
+  },
+  "dbi202-slide-dbi9-3": {
+   "hoc": "Cơ chế sự kiện – điều kiện – hành động của trigger chuẩn SQL và T-SQL với RAISERROR, ROLLBACK, hai bảng ảo inserted/deleted, quy trình cursor đầy đủ và bản PL/pgSQL trên PostgreSQL.",
+   "canBiet": "Đã nắm biến, nhánh rẽ, vòng lặp, giao dịch trong T-SQL và cách đóng gói đối tượng lập trình trong CSDL từ hai phần slide trước.",
+   "lamDuoc": "Viết được trigger xử lý đúng câu lệnh nhiều dòng qua inserted/deleted, tránh lỗi quên ROLLBACK, triển khai đủ vòng đời cursor và viết lại bằng truy vấn theo tập hợp.",
+   "ketHop": "Xem thêm trigger kiểm toán ở bài 7.4, luyện bộ đề thực hành 7.5 trên FUHCompany, làm quiz chương và so sánh cơ chế NEW/OLD ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi9-1",
+    "dbi202-slide-dbi9-2"
+   ],
+   "ketHopBai": [
+    "dbi202-trigger-cursor",
+    "dbi202-on-ch7",
+    "dbi202-quiz-ch7"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-plsql": {
+   "hoc": "Bức tranh tổng quan về năm đối tượng lập trình trong CSDL (view, stored procedure, function, cursor, trigger) thuộc CLO6, kèm cơ chế bảng ảo inserted/deleted và trigger INSTEAD OF.",
+   "canBiet": "Cần thành thạo viết truy vấn SELECT có phép nối và các lệnh thay đổi dữ liệu INSERT, UPDATE, DELETE từ Chương 6.",
+   "lamDuoc": "Chọn đúng đối tượng lập trình phù hợp từng bài toán, viết được view cơ bản và giải thích vai trò của bảng ảo inserted/deleted cùng trigger INSTEAD OF.",
+   "ketHop": "Mở Code Lab luyện thủ tục, hàm và trigger đi kèm, rồi đi sâu từng đối tượng ở các bài 7.2, 7.3 và 7.4.",
+   "canBietBai": [
+    "dbi202-select-join",
+    "dbi202-cap-nhat-du-lieu"
+   ],
+   "ketHopBai": [
+    "dbi202-view",
+    "dbi202-proc-function",
+    "dbi202-trigger-cursor"
+   ]
+  },
+  "dbi202-view": {
+   "hoc": "Ba công dụng của view (đơn giản hoá, bảo mật, ổn định lược đồ), điều kiện cập nhật được qua view, mệnh đề WITH CHECK OPTION và đánh đổi đọc – ghi của view có chỉ mục WITH SCHEMABINDING.",
+   "canBiet": "Cần hiểu tổng quan đối tượng lập trình trong CSDL và viết thạo câu lệnh SELECT có JOIN, GROUP BY và điều kiện lọc.",
+   "lamDuoc": "Tạo được view bảo mật có WITH CHECK OPTION, xác định chính xác view nào cập nhật được và chọn đúng lúc cần view có chỉ mục thay cho view thường.",
+   "ketHop": "Đọc tiếp bài 7.4 về trigger INSTEAD OF cho view nhiều bảng, xem lại phần chỉ mục ở bài 8.B và học sâu materialized view ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-plsql",
+    "dbi202-select-join"
+   ],
+   "ketHopBai": [
+    "dbi202-trigger-cursor",
+    "dbi202-slide-dbi8-2"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-proc-function": {
+   "hoc": "Viết stored procedure hoàn chỉnh với SET NOCOUNT ON, tham số OUTPUT, mã RETURN, TRY…CATCH và giao dịch; bảng so sánh thủ tục với hàm, bẫy hiệu năng hàm vô hướng và cơ chế chống SQL injection.",
+   "canBiet": "Cần nắm cú pháp T-SQL, khái niệm thủ tục và hàm ở phần slide trước cùng thao tác cập nhật dữ liệu SQL cơ bản.",
+   "lamDuoc": "Viết được thủ tục an toàn chống SQL injection, chọn đúng giữa thủ tục và hàm, và tránh lỗi chậm truy vấn bằng cách thay hàm vô hướng trong WHERE bằng hàm trả bảng nội tuyến.",
+   "ketHop": "Thực hành tạo thủ tục và hàm ở bài 7.5, ôn giao dịch nguyên tử ở bài 8.3, làm quiz chương và mở rộng sang PreparedStatement (PRJ301) cùng PL/pgSQL ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi9-2",
+    "dbi202-plsql"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch7",
+    "dbi202-quiz-ch7",
+    "dbi202-transaction-acid"
+   ],
+   "ketHopKhoa": [
+    "postgresql",
+    "java-web-application-development"
+   ]
+  },
+  "dbi202-trigger-cursor": {
+   "hoc": "Cách dùng bảng ảo inserted/deleted viết trigger kiểm toán, phân biệt AFTER và INSTEAD OF, bẫy trigger chạy theo câu lệnh, vòng lặp cursor đối chiếu tư duy theo tập hợp và hướng thay thế bằng đọc nhật ký.",
+   "canBiet": "Cần nắm kiến thức cơ bản về trigger, cursor từ phần slide trước và cách tạo view nhiều bảng ở bài 7.2.",
+   "lamDuoc": "Viết được trigger kiểm toán và INSTEAD OF an toàn cho cập nhật nhiều dòng, phát hiện lỗi gán biến từ inserted và chuyển vòng lặp cursor sang một câu UPDATE theo tập hợp.",
+   "ketHop": "Luyện các bài trigger và cursor trên FUHCompany ở bài 7.5, làm quiz chương, rồi học sâu trigger ở khoá PostgreSQL và luồng sự kiện ở khoá Kafka.",
+   "canBietBai": [
+    "dbi202-slide-dbi9-3",
+    "dbi202-view"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch7",
+    "dbi202-quiz-ch7"
+   ],
+   "ketHopKhoa": [
+    "postgresql",
+    "kafka"
+   ]
+  },
+  "dbi202-on-ch7": {
+   "hoc": "Thực hành 7 bài lập trình kiểu đề PE trên FUHCompany (2 thủ tục, 2 hàm, 2 trigger, 1 cursor so với UPDATE theo tập hợp), 6 thói quen thi PE, bảng đối chiếu T-SQL – PostgreSQL, 20 thuật ngữ và tóm tắt 8 ý.",
+   "canBiet": "Cần học xong cú pháp T-SQL trên FUHCompany cùng cách viết thủ tục, hàm, trigger và cursor ở các bài trước trong chương.",
+   "lamDuoc": "Hoàn chỉnh và chạy thử được trên SSMS 7 script tạo thủ tục OUTPUT/TRY…CATCH, hàm vô hướng, hàm trả bảng, trigger kiểm tra lương/ghi nhật ký và câu UPDATE thay thế cursor mà không dính bẫy mất điểm PE.",
+   "ketHop": "Làm ngay quiz Chương 7 để kiểm tra độ chắc lý thuyết, ghép với cẩm nang PE và đề thi thực hành cuối kỳ, đồng thời đối chiếu bản PL/pgSQL ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi9-1",
+    "dbi202-proc-function",
+    "dbi202-trigger-cursor"
+   ],
+   "ketHopBai": [
+    "dbi202-quiz-ch7",
+    "dbi202-on-pe",
+    "dbi202-final-exam-pe"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-quiz-ch7": {
+   "hoc": "Kiểm tra 10 câu trắc nghiệm về T-SQL cơ bản (WHILE, @@ERROR, TRY…CATCH với giao dịch), thủ tục OUTPUT, giới hạn của hàm, trigger với inserted/deleted và NEW/OLD trên PostgreSQL, cùng vòng lặp cursor.",
+   "canBiet": "Cần hoàn thành các bài lý thuyết về thủ tục, hàm, trigger, cursor và đã luyện qua bộ bài thực hành Chương 7.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững lập trình CSDL Chương 7 và nhận ra ngay các bẫy hay mất điểm như quên ROLLBACK, quên OUTPUT, gán biến từ inserted hay đặt sai vị trí FETCH.",
+   "ketHop": "Câu nào sai thì xem lại lời giải và mục bẫy ở bài thực hành 7.5, rồi tiếp tục ôn tổng hợp qua Quiz 4 và cẩm nang thi thực hành PE.",
+   "canBietBai": [
+    "dbi202-proc-function",
+    "dbi202-trigger-cursor",
+    "dbi202-on-ch7"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch7",
+    "dbi202-quiz-4",
+    "dbi202-on-pe"
+   ]
+  },
+  "dbi202-slide-dbi8-1": {
+   "hoc": "Trình bày slide 1–21 Chapter 7: lý do cần giao dịch, tính nguyên tử qua chuyển tiền, BEGIN/COMMIT/ROLLBACK/SAVE TRAN, TRY...CATCH với XACT_STATE, ACID, giao dịch chỉ-đọc, dirty read và bốn mức cô lập.",
+   "canBiet": "Cần nắm thiết kế bảng, ràng buộc và viết truy vấn DML cùng khối TRY...CATCH cơ bản trong T-SQL trước khi gom nhiều lệnh thành giao dịch.",
+   "lamDuoc": "Viết được giao dịch tự huỷ đúng khi lỗi, phân biệt từng tính chất ACID, giải thích rò rỉ dirty read và xếp thứ tự bốn mức cô lập từ lỏng đến chặt.",
+   "ketHop": "Học tiếp phần 2 của bộ slide, đọc bản tóm gọn ACID ở 8.3, làm bài thực hành chuyển thưởng ở 8.4 và mở rộng MVCC sang khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-cap-nhat-du-lieu",
+    "dbi202-slide-dbi9-1"
+   ],
+   "ketHopBai": [
+    "dbi202-slide-dbi8-2",
+    "dbi202-transaction-acid",
+    "dbi202-on-ch8"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-slide-dbi8-2": {
+   "hoc": "Giảng slide 22–41 Chapter 7: chỉ mục clustered và nonclustered, INCLUDE, demo 30.000 dòng với SET STATISTICS PROFILE, CREATE/DROP VIEW, điều kiện view cập nhật được và 10 thói quen tối ưu truy vấn.",
+   "canBiet": "Cần nắm sơ đồ FUHCompany, truy vấn SELECT/JOIN và phần 1 bộ slide Chapter 7 về giao dịch trước khi chuyển sang chỉ mục và view.",
+   "lamDuoc": "Đoán được truy vấn chạy Seek hay Scan, viết và truy vấn view, xác định một INSERT qua view có hợp lệ không và áp dụng đúng các thói quen tối ưu.",
+   "ketHop": "Đào sâu cách đọc kế hoạch ở 8.2, thực hành bộ 7 bài kiểu PE ở 8.4, kiểm tra lại bằng Quiz 4 và xem EXPLAIN ANALYZE ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-slide-dbi8-1",
+    "dbi202-slide-dbi7-2",
+    "dbi202-view"
+   ],
+   "ketHopBai": [
+    "dbi202-execution-plan",
+    "dbi202-on-ch8",
+    "dbi202-quiz-4"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-chi-muc": {
+   "hoc": "Giải thích cơ chế B-tree rút tìm kiếm từ O(n) xuống O(log n), cú pháp CREATE INDEX, sự đánh đổi đọc nhanh và ghi chậm, cùng tổng quan ACID, ba bất thường đọc và bốn mức cô lập.",
+   "canBiet": "Cần biết viết truy vấn lọc WHERE, phép JOIN trên bảng quan hệ và cách chèn, sửa dữ liệu để hiểu chi phí cập nhật chỉ mục.",
+   "lamDuoc": "Chọn đúng cột lọc hoặc join cần đánh chỉ mục, giải thích vì sao không đánh mọi cột và gọi tên được ba bất thường đọc khi nới lỏng mức cô lập.",
+   "ketHop": "Luyện ngay Code Lab Chiến lược đánh chỉ mục, học tiếp phân loại chỉ mục và kế hoạch thực thi ở 8.2, hoặc xem B-tree và Index Scan ở khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-select-join",
+    "dbi202-cap-nhat-du-lieu",
+    "dbi202-slide-dbi8-2"
+   ],
+   "ketHopBai": [
+    "dbi202-execution-plan",
+    "dbi202-transaction-acid",
+    "dbi202-on-ch8"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-execution-plan": {
+   "hoc": "Phân biệt chỉ mục gom cụm và không gom cụm, chọn khoá clustered hẹp tăng dần, dùng INCLUDE tạo chỉ mục phủ tránh Key Lookup, quy tắc tiền tố trái nhất và đọc các toán tử kế hoạch thực thi trong SSMS.",
+   "canBiet": "Cần hiểu khái niệm chỉ mục, sự đánh đổi đọc và ghi từ 8.1 cùng cách khai báo PRIMARY KEY và truy vấn lọc khoảng.",
+   "lamDuoc": "Thiết kế đúng thứ tự cột cho chỉ mục ghép, khử Key Lookup bằng INCLUDE và mở Ctrl+M trong SSMS để chẩn đoán truy vấn đang Seek, Scan hay Sort.",
+   "ketHop": "Thực hành chứng minh chỉ mục trên bảng lớn ở 8.4, học sâu thêm chuyên đề CS.3, hoặc đối chiếu EXPLAIN ANALYZE ở khoá PostgreSQL và Node.js.",
+   "canBietBai": [
+    "dbi202-chi-muc",
+    "dbi202-slide-dbi8-2",
+    "dbi202-sql-ddl"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch8",
+    "dbi202-slide-cs3-2",
+    "dbi202-quiz-4"
+   ],
+   "ketHopKhoa": [
+    "postgresql",
+    "nodejs"
+   ]
+  },
+  "dbi202-transaction-acid": {
+   "hoc": "Hệ thống hoá BEGIN/COMMIT/ROLLBACK, bốn tính chất ACID kèm cơ chế, ba hiện tượng đọc bất thường, bảng bốn mức cô lập, bài toán đặt chỗ cuối cùng và nguyên nhân lẫn cách tránh deadlock lỗi 1205.",
+   "canBiet": "Cần nắm câu lệnh UPDATE có điều kiện, ràng buộc toàn vẹn và phần mở đầu giao dịch ở 8.A hoặc 8.1 trước khi xử lý tranh chấp đồng thời.",
+   "lamDuoc": "Chọn đúng mức cô lập cho từng tình huống, chữa tranh chấp cập nhật bằng UPDATE nguyên tử hoặc UPDLOCK và sắp xếp thứ tự truy cập bảng để tránh deadlock.",
+   "ketHop": "Làm bài thực hành giao dịch chuyển thưởng ở 8.4, xem chuyên đề đồng thời CS.4 và mở rộng sang khoá PostgreSQL hoặc ứng dụng API ở khoá Node.js.",
+   "canBietBai": [
+    "dbi202-slide-dbi8-1",
+    "dbi202-chi-muc",
+    "dbi202-cap-nhat-du-lieu"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch8",
+    "dbi202-slide-cs4-1",
+    "dbi202-quiz-4"
+   ],
+   "ketHopKhoa": [
+    "postgresql",
+    "nodejs"
+   ]
+  },
+  "dbi202-on-ch8": {
+   "hoc": "Luyện 7 bài tập kiểu PE về giao dịch TRY...CATCH, chỉ mục trên bảng lớn, chỉ mục ghép, view WITH CHECK OPTION, partial index và materialized view, kèm 20 thuật ngữ cùng bảng đối chiếu T-SQL và PostgreSQL.",
+   "canBiet": "Cần học xong lý thuyết giao dịch, chỉ mục, đọc kế hoạch và view ở các bài trước trong Chương 8 cùng cách viết stored procedure.",
+   "lamDuoc": "Viết được thủ tục chuyển thưởng có rollback sạch khi lỗi, dựng dữ liệu kiểm chứng Seek/Scan bằng SET STATISTICS PROFILE, tạo view kèm WITH CHECK OPTION và đối chiếu được sang PostgreSQL.",
+   "ketHop": "Tự viết script trước khi xem lời giải, chốt kiến thức bằng Quiz 4, luyện tiếp cẩm nang thi PE ở 9.1 và thực hành thêm trên khoá PostgreSQL.",
+   "canBietBai": [
+    "dbi202-execution-plan",
+    "dbi202-transaction-acid",
+    "dbi202-proc-function"
+   ],
+   "ketHopBai": [
+    "dbi202-quiz-4",
+    "dbi202-on-pe"
+   ],
+   "ketHopKhoa": [
+    "postgresql"
+   ]
+  },
+  "dbi202-quiz-4": {
+   "hoc": "Kiểm tra 10 câu trọng tâm Chương 8: ACID, tính nguyên tử, ROLLBACK, mức cô lập, XACT_STATE(), chỉ mục Seek hay Scan, hàm bọc cột chỉ mục, chỉ mục ghép, view cập nhật được và WITH CHECK OPTION.",
+   "canBiet": "Cần học hết bài slide, chỉ mục, kế hoạch thực thi, giao dịch ACID và làm xong bộ bài thực hành 8.4 trước khi làm kiểm tra.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững toàn bộ Chương 8, nhận ra lỗ hổng về mức cô lập, điều kiện dùng chỉ mục và luật cập nhật view qua giải thích từng câu.",
+   "ketHop": "Xem lại các câu sai ngay ở bài thực hành 8.4 hoặc bộ slide 8.A và 8.B, sau đó chuyển sang cụm ôn thi PE ở 9.1.",
+   "canBietBai": [
+    "dbi202-execution-plan",
+    "dbi202-transaction-acid",
+    "dbi202-on-ch8"
+   ],
+   "ketHopBai": [
+    "dbi202-on-ch8",
+    "dbi202-slide-dbi8-1",
+    "dbi202-on-pe"
+   ]
+  }
+ },
+ "khoaTen": {
+  "postgresql": "PostgreSQL",
+  "docker": "Docker",
+  "java-web-application-development": "PRJ301 · Java Web Application Development",
+  "software-development-project": "SWP391 · Software Development Project",
+  "software-requirements": "SWR302 · Software Requirements",
+  "software-architecture-and-design": "SWD392 · Software Architecture and Design",
+  "nodejs": "Node.js",
+  "kafka": "Apache Kafka"
+ }
+}

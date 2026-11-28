@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -21,6 +21,7 @@ import { getPrerequisites, hasAcknowledgedPrereq, acknowledgePrereq } from '@/li
 import { PrerequisiteModal, PrerequisiteBanner } from '@/components/courses/PrerequisiteGate';
 import CourseLabCard from '@/components/labs/CourseLabCard';
 import TienDoDuAn from '@/components/courses/du-an/TienDoDuAn';
+import SoDoKhoa from '@/components/courses/so-do/SoDoKhoa';
 import { tachGachDauDong, nenMotCot } from '@/lib/courseBlurb';
 import { CourseDescription } from '@/components/courses/CourseDescription';
 import { tachCauDai } from '@/lib/courseDescription';
@@ -370,6 +371,21 @@ export default function CourseDetailPage({ initialCourse = null }: { initialCour
     courseSuggestionsApi.count(slug).then((r) => { if (!huy) setSoGopY(r.data.data.tong); }).catch(() => {});
     return () => { huy = true; };
   }, [slug]);
+
+  // 🗺 Roadmap sơ đồ đầu khoá (28/11/2026): bài đã học (chỉ khi đã ghi danh) để tô tiến độ trên sơ đồ.
+  const [baiXong, setBaiXong] = useState<Set<number>>(() => new Set());
+  useEffect(() => {
+    if (!course?.id || !course.isEnrolled) return;
+    let huy = false;
+    coursesApi.getProgress(course.id)
+      .then((r) => {
+        const ds = (r.data?.data ?? []) as Array<{ lessonId: number; isCompleted?: boolean }>;
+        if (!huy) setBaiXong(new Set(ds.filter((p) => p.isCompleted).map((p) => p.lessonId)));
+      })
+      .catch(() => { /* không có tiến độ ⇒ sơ đồ vẫn vẽ, chỉ không tô */ });
+    return () => { huy = true; };
+  }, [course?.id, course?.isEnrolled]);
+  const laBaiXong = useCallback((id: number) => baiXong.has(id), [baiXong]);
 
   // ── Soft prerequisite gate. If this course assumes a foundation the learner
   // has not acknowledged yet, show the self-assessment modal once. Read
@@ -798,6 +814,25 @@ export default function CourseDetailPage({ initialCourse = null }: { initialCour
             </div>
           )}
         </header>
+
+        {/* 🗺 Roadmap sơ đồ (28/11/2026): tổng quan cả khoá kiểu roadmap.sh — bấm ô ⇒ học gì / cần biết trước /
+            làm được gì / kết hợp với + "Vào học" mở thẳng đúng bài. Khoá "Sắp ra mắt" chỉ có khung ⇒ không vẽ. */}
+        {!sapRaMat && sections.length > 0 && (
+          <SoDoKhoa
+            slug={course.slug}
+            sections={sections}
+            xong={laBaiXong}
+            lang={en ? 'en' : 'vi'}
+            yeuCau={requirementsList}
+            hocDuoc={whatYouLearnList}
+            nhanVao={vaoDuoc ? undefined : (en ? 'Enroll to start' : 'Đăng ký để học')}
+            onVaoHoc={(id) => {
+              if (vaoDuoc) { router.push(duongBai(id)); return; }
+              toast.info(en ? 'Enroll in the course to open this lesson' : 'Đăng ký khoá học để mở bài này');
+              void batDauHoc();
+            }}
+          />
+        )}
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-8">
           {/* ── Cột phải (điện thoại: lên trước) — đăng ký + "Khoá học này gồm" ── */}

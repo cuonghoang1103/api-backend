@@ -1,0 +1,923 @@
+{
+ "khoa": "nodejs",
+ "ten": "Node.js",
+ "phienBan": 1,
+ "capNhat": "2026-11-28",
+ "nguon": "Antigravity (Gemini) soạn từ bài web gốc; Claude soát mẫu",
+ "chuong": {
+  "nodejs-0-0-start-here-1": {
+   "hoc": "Giải thích vai trò của backend và Node.js, triết lý đo thực tế từ hệ thống production, bản đồ 18 chương, phương pháp học 5 bước, cài đặt Node 22 LTS và bức tranh dự án Notes API.",
+   "lamDuoc": "Hiểu đúng Node.js làm gì trên server, cài đặt xong môi trường bằng trình quản lý phiên bản và áp dụng vòng lặp học để bắt đầu xây dựng Notes API."
+  },
+  "nodejs-1-1-bien-pham-vi": {
+   "hoc": "Các khái niệm JavaScript cốt lõi dùng hằng ngày trong backend: phạm vi biến, closure, this, tham chiếu object, bất đồng bộ với Promise và async/await, cùng hệ module CommonJS và ES Modules.",
+   "lamDuoc": "Viết được mã JavaScript backend sạch bằng ES Modules, tránh các bẫy phổ biến về phạm vi, tham chiếu hay bất đồng bộ, và dựng trọn tầng miền nghiệp vụ thuần cho dự án cuối khoá."
+  },
+  "nodejs-2-1-runtime-la-gi": {
+   "hoc": "Mổ xẻ cấu trúc runtime Node.js gồm V8, libuv, lớp nối C++ và 6 pha của event loop, cùng hai hàng đợi ưu tiên, cách đo độ trễ khi chặn luồng và ba hướng tách việc nặng CPU.",
+   "lamDuoc": "Giải thích được thứ tự chạy bất đồng bộ, đo độ trễ event loop bằng số thật và đưa tác vụ nặng CPU sang worker thread hoặc chia nhỏ để dịch vụ không đứng hình."
+  },
+  "nodejs-3-1-path-fs": {
+   "hoc": "Các module lõi dựng sẵn trong Node.js gồm path, fs, Buffer, stream, EventEmitter và http, kèm các bẫy thực tế như path traversal, vỡ chữ UTF-8, cạn RAM hay rò rỉ listener.",
+   "lamDuoc": "Dựng được server HTTP thuần không framework biết đọc body dạng stream, lưu tệp bằng fs.promises, phát sự kiện bằng EventEmitter và hiểu rõ lớp nền dưới Express."
+  },
+  "nodejs-4-1-package-json": {
+   "hoc": "Cấu trúc package.json, npm scripts, quy tắc phiên bản semver, cơ chế ghim lockfile với npm ci và đánh giá an toàn chuỗi cung ứng trước khi cài gói.",
+   "lamDuoc": "Dựng được dự án Node sạch sẽ, tái lập đồng nhất trên mọi máy qua npm ci, ẩn bí mật bằng .gitignore và thẩm định phụ thuộc an toàn trước khi dùng."
+  },
+  "nodejs-5-1-tu-http-toi-express": {
+   "hoc": "Khám phá Express 5 nằm trên module http: định tuyến với params, query và Router, chuỗi middleware, xử lý lỗi tập trung và tổ chức Notes API theo tầng.",
+   "lamDuoc": "Dựng được REST API hoàn chỉnh bằng Express 5 với router tách theo tài nguyên, chuỗi middleware rõ thứ tự, error handler JSON thống nhất và tách app khỏi server."
+  },
+  "nodejs-7-1-ket-noi-va-pool": {
+   "hoc": "Chuyển Notes API từ RAM sang PostgreSQL bằng Prisma: kết nối và pool, lược đồ và migration, CRUD kèm transaction, bẫy N+1, chỉ mục qua EXPLAIN ANALYZE và giữ hợp đồng API trên dữ liệu thật.",
+   "lamDuoc": "Thiết kế được lược đồ và migration an toàn, thay thế tầng lưu trữ mà giữ nguyên router, chẩn đoán được lỗi N+1, đọc kế hoạch EXPLAIN ANALYZE và bảo vệ API trước lỗi trùng lặp hay ghi đè."
+  },
+  "nodejs-8-1-mat-khau-va-bam": {
+   "hoc": "Băm mật khẩu bằng argon2id, thiết kế cặp access và refresh token xoay vòng, dựng middleware xác thực phân quyền, chống CSRF, thu hồi phiên và chặn dò mật khẩu.",
+   "lamDuoc": "Xây dựng được luồng đăng ký, đăng nhập, phân quyền theo vai trò và quyền sở hữu trên người dùng thật, thay thế hoàn toàn hằng số AUTHOR_ID = 1 trong Notes API."
+  }
+ },
+ "bai": {
+  "nodejs-0-0-start-here-1": {
+   "hoc": "Phân biệt vai trò client và server trong chu trình request–response, lý do phải kiểm tra dữ liệu ở server, lịch sử Node.js với V8 và libuv, cùng ranh giới giữa Node, trình duyệt và framework.",
+   "canBiet": "Không cần nền trước về JavaScript, backend hay cơ sở dữ liệu; chỉ cần biết viết biến, vòng lặp và hàm ở một ngôn ngữ bất kỳ.",
+   "lamDuoc": "Giải thích được cách trình duyệt giao tiếp với backend, vì sao Node.js chạy được JavaScript ngoài trình duyệt và chọn đúng phần việc thuộc về server.",
+   "ketHop": "Đọc tiếp bài mở đầu thứ hai để nắm cách học và nối sang bài 0.1 để chạy thử máy chủ HTTP đầu tiên.",
+   "ketHopBai": [
+    "nodejs-0-0-start-here-2",
+    "nodejs-0-1-gioi-thieu"
+   ]
+  },
+  "nodejs-0-0-start-here-2": {
+   "hoc": "Trình bày triết lý ví dụ từ hệ thống production, quy tắc đo thực tế thay vì đoán trước các lỗi backend vô hình, lộ trình 6 giai đoạn 18 chương, thói quen tự chạy code và các hướng nghề nghiệp.",
+   "canBiet": "Cần hiểu khái niệm client, server và vai trò của Node.js từ bài mở đầu trước đó.",
+   "lamDuoc": "Hình dung rõ cấu trúc phụ thuộc giữa 6 giai đoạn, đặt tiêu chí đo lường thay vì chỉ thấy chạy được và định hướng mục tiêu nghề nghiệp phù hợp.",
+   "ketHop": "Xem tiếp bài 0.1 để nắm bản đồ chi tiết và bài 0.2 để áp dụng vòng lặp 5 bước vào từng buổi học.",
+   "canBietBai": [
+    "nodejs-0-0-start-here-1"
+   ],
+   "ketHopBai": [
+    "nodejs-0-1-gioi-thieu",
+    "nodejs-0-2-cach-hoc"
+   ]
+  },
+  "nodejs-0-1-gioi-thieu": {
+   "hoc": "Phân tích cấu trúc request và response HTTP qua server mẫu bằng http.createServer cùng lệnh curl -si, cơ chế V8, libuv và event loop không chặn, khái niệm bản LTS và bản đồ 18 chương.",
+   "canBiet": "Cần nắm khái niệm cơ bản về client, server và mục tiêu khoá học từ hai bài mở đầu; chưa vững HTML, JS, HTTP hay SQL thì nên bổ sung nền tảng web.",
+   "lamDuoc": "Đọc hiểu đủ ba phần của phản hồi HTTP từ curl, giải thích được vì sao một tiến trình Node.js xử lý được nhiều kết nối và định vị được vị trí từng chương.",
+   "ketHop": "Nối sang bài 0.3 để cài Node 22 chạy lại ví dụ server, bài 3.5 để tự dựng HTTP server đầy đủ và xem thêm khoá Nền tảng Lập trình Web nếu cần ôn nền.",
+   "canBietBai": [
+    "nodejs-0-0-start-here-1",
+    "nodejs-0-0-start-here-2"
+   ],
+   "ketHopBai": [
+    "nodejs-0-3-cai-dat",
+    "nodejs-2-2-event-loop",
+    "nodejs-3-5-http-server"
+   ],
+   "ketHopKhoa": [
+    "web-foundations"
+   ]
+  },
+  "nodejs-0-2-cach-hoc": {
+   "hoc": "Hướng dẫn vòng lặp 5 bước gồm đọc, gõ tay không copy-paste, cố ý phá code trong dự án nháp để học đọc lỗi, tự giải thích thành tiếng và luyện tập trên 16 module Code Lab.",
+   "canBiet": "Cần nắm bức tranh chung của khoá học và nguyên tắc tự chạy code từ các bài giới thiệu trước.",
+   "lamDuoc": "Áp dụng được quy trình 5 bước cho mỗi bài học, biết cố ý tạo lỗi như xoá await hay thiếu try/catch để rèn đọc thông báo lỗi và tự kiểm tra mức hiểu thật.",
+   "ketHop": "Thực hành ngay quy trình này khi cài máy ở bài 0.3, dựng dự án nháp ở bài 4.1, luyện song song Code Lab và tham khảo thêm khoá Nền tảng Lập trình Web.",
+   "canBietBai": [
+    "nodejs-0-0-start-here-2",
+    "nodejs-0-1-gioi-thieu"
+   ],
+   "ketHopBai": [
+    "nodejs-0-3-cai-dat",
+    "nodejs-4-1-package-json"
+   ],
+   "ketHopKhoa": [
+    "web-foundations"
+   ]
+  },
+  "nodejs-0-3-cai-dat": {
+   "hoc": "Hướng dẫn cài Node 22 LTS qua nvm, nvm-windows hoặc fnm, phân biệt bản LTS với major lẻ, xử lý lỗi nvm: command not found, kiểm tra bằng node -v, npm -v, dùng REPL, .nvmrc, engines và tiền tố node:.",
+   "canBiet": "Cần biết mở terminal cơ bản và nắm khái niệm phiên bản LTS cùng quy trình thực hành từ hai bài trước.",
+   "lamDuoc": "Cài đặt và chuyển đổi được nhiều phiên bản Node.js, xác minh đúng bản 22 LTS, ghim phiên bản cho từng dự án và chạy thử biểu thức trực tiếp trong REPL.",
+   "ketHop": "Tiếp tục bài 0.4 để khởi tạo cấu trúc dự án, nối sang bài 4.1 khi làm việc với package.json và xem khoá Nền tảng Lập trình Web nếu gặp lỗi PATH.",
+   "canBietBai": [
+    "nodejs-0-1-gioi-thieu",
+    "nodejs-0-2-cach-hoc"
+   ],
+   "ketHopBai": [
+    "nodejs-0-4-du-an",
+    "nodejs-4-1-package-json"
+   ],
+   "ketHopKhoa": [
+    "web-foundations"
+   ]
+  },
+  "nodejs-0-4-du-an": {
+   "hoc": "Giới thiệu dự án xuyên suốt Notes API, kiến trúc 4 tầng gồm HTTP, nghiệp vụ, dữ liệu và hạ tầng, lộ trình nâng cấp qua 18 chương, bố cục thư mục đích cùng cách dùng Git và .gitignore từ đầu.",
+   "canBiet": "Cần cài xong môi trường Node 22 LTS và nắm bản đồ 6 giai đoạn từ các bài trước trong chương mở đầu.",
+   "lamDuoc": "Phân định được trách nhiệm của 4 tầng trong Notes API, tổ chức thư mục tăng dần theo tính năng và thiết lập Git kèm .gitignore để không commit node_modules hay .env.",
+   "ketHop": "Bắt tay vào Chương 1 và Mốc dự án 1 để dựng miền nghiệp vụ đầu tiên; kết hợp khoá Git & GitHub và Nền tảng Lập trình Web để vững quy trình mã nguồn.",
+   "canBietBai": [
+    "nodejs-0-1-gioi-thieu",
+    "nodejs-0-3-cai-dat"
+   ],
+   "ketHopBai": [
+    "nodejs-1-1-bien-pham-vi",
+    "nodejs-moc-1",
+    "nodejs-5-5-notes-api"
+   ],
+   "ketHopKhoa": [
+    "web-foundations",
+    "git"
+   ]
+  },
+  "nodejs-1-1-bien-pham-vi": {
+   "hoc": "Phạm vi khối so với phạm vi hàm, cơ chế hoisting và Temporal Dead Zone, bẫy vòng lặp setTimeout với var, cùng lý do const chỉ chặn gán lại chứ không ngăn sửa nội dung object hay mảng.",
+   "canBiet": "Đã cài sẵn môi trường Node.js để chạy thử mã nguồn và quen cú pháp lập trình cơ bản như biến, điều kiện và vòng lặp.",
+   "lamDuoc": "Chọn đúng const hoặc let theo quy tắc hiện đại, giải thích và sửa được lỗi rò biến hay bug vòng lặp do var, nhận diện đúng lỗi TDZ và biết khi nào giá trị const vẫn thay đổi được.",
+   "ketHop": "Tự chạy thử bug vòng lặp var rồi sửa sang let, cố ý tạo lỗi TDZ, sau đó áp dụng quy tắc không dùng var vào Mốc dự án 1 và ôn lại qua bài kiểm tra chương 1.",
+   "canBietBai": [
+    "nodejs-0-3-cai-dat"
+   ],
+   "ketHopBai": [
+    "nodejs-1-2-ham-closure-this",
+    "nodejs-moc-1",
+    "nodejs-1-6-quiz"
+   ]
+  },
+  "nodejs-1-2-ham-closure-this": {
+   "hoc": "Cơ chế closure tạo trạng thái riêng tư không cần class và mẫu hàm tạo middleware kiểu requireRole, cùng quy tắc xác định this theo cách gọi, khác biệt giữa hàm thường với arrow function và bind, call, apply.",
+   "canBiet": "Nắm vững phạm vi lồng nhau và vòng đời biến let, const từ bài phạm vi trước đó để hiểu cách hàm giữ lại biến bên ngoài.",
+   "lamDuoc": "Viết được hàm tạo bộ đếm hay middleware giữ cấu hình riêng bằng closure, chẩn đoán lỗi mất this trong callback và sửa đúng bằng arrow function hoặc bind, call, apply.",
+   "ketHop": "Làm câu hỏi về closure và this trong bài kiểm tra chương 1, áp dụng mẫu middleware ở Chương 5 và xem thêm khoá Nền tảng Lập trình Web nếu muốn ôn sâu từ gốc.",
+   "canBietBai": [
+    "nodejs-1-1-bien-pham-vi"
+   ],
+   "ketHopBai": [
+    "nodejs-1-6-quiz",
+    "nodejs-5-3-middleware"
+   ],
+   "ketHopKhoa": [
+    "web-foundations"
+   ]
+  },
+  "nodejs-1-3-object-tham-chieu": {
+   "hoc": "Khác biệt giữa truyền theo giá trị trên stack và tham chiếu object trên heap, sao chép nông bằng spread so với sao chép sâu qua structuredClone, destructuring đọc dữ liệu, cùng toán tử ?. và ??.",
+   "canBiet": "Hiểu quy tắc const chỉ chặn gán lại chứ không chặn sửa bên trong object hoặc mảng ở bài phạm vi biến.",
+   "lamDuoc": "Phát hiện lỗi sửa bản sao làm hỏng bản gốc do sao chép nông, cập nhật object không mutate bằng spread, chọn đúng structuredClone khi cần chép sâu và đọc dữ liệu lồng an toàn với ?. và ??.",
+   "ketHop": "Thực hành mô hình hoá đối tượng không đột biến trạng thái chung trong Mốc dự án 1 và củng cố lại qua bài kiểm tra chương 1.",
+   "canBietBai": [
+    "nodejs-1-1-bien-pham-vi"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-1",
+    "nodejs-1-6-quiz"
+   ]
+  },
+  "nodejs-1-4-bat-dong-bo": {
+   "hoc": "Ba thế hệ xử lý chờ đợi gồm callback lỗi đứng đầu, Promise với ba trạng thái và async/await, vai trò của event loop, cùng các lỗi async như quên await, chạy tuần tự thay vì Promise.all và unhandled rejection.",
+   "canBiet": "Hiểu hàm callback và closure ở bài trước để nắm cách truyền hàm xử lý kết quả sau khi thao tác I/O hoàn tất.",
+   "lamDuoc": "Viết được luồng bất đồng bộ bằng async/await kèm try/catch đầy đủ, chạy song song tác vụ độc lập với Promise.all và chẩn đoán lỗi quên await hay unhandled rejection làm sập server.",
+   "ketHop": "Áp dụng viết hàm async đọc tệp JSON trong Mốc dự án 1, làm bài kiểm tra chương 1, học tiếp cơ chế event loop ở Chương 2, và tham khảo thêm khoá Nền tảng Web hoặc TypeScript.",
+   "canBietBai": [
+    "nodejs-1-2-ham-closure-this"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-1",
+    "nodejs-1-6-quiz",
+    "nodejs-2-2-event-loop"
+   ],
+   "ketHopKhoa": [
+    "web-foundations",
+    "typescript"
+   ]
+  },
+  "nodejs-1-5-module": {
+   "hoc": "So sánh CommonJS với ES Modules, cách Node nhận diện tệp qua .mjs, .cjs và package.json, named với default export, top-level await, cùng cách thay __dirname bằng import.meta.url hay import.meta.dirname.",
+   "canBiet": "Nắm phạm vi tệp ở bài đầu và cú pháp async/await ở bài trước để hiểu lý do module tách phạm vi và cơ chế top-level await.",
+   "lamDuoc": "Nhìn tệp xác định đúng hệ module, chọn ES Modules cho dự án mới, xử lý lỗi cú pháp khi trộn CJS với ESM và lấy đúng đường dẫn thư mục tệp trong ESM.",
+   "ketHop": "Tổ chức từng thực thể thành ES module trong Mốc dự án 1, ôn lại ở bài kiểm tra chương 1, đi sâu package.json ở Chương 4, và đối chiếu thêm với khoá Nền tảng Web hay TypeScript.",
+   "canBietBai": [
+    "nodejs-1-1-bien-pham-vi",
+    "nodejs-1-4-bat-dong-bo"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-1",
+    "nodejs-1-6-quiz",
+    "nodejs-4-1-package-json"
+   ],
+   "ketHopKhoa": [
+    "web-foundations",
+    "typescript"
+   ]
+  },
+  "nodejs-moc-1": {
+   "hoc": "Vận dụng toàn bộ JavaScript nền tảng để dựng tầng miền nghiệp vụ thuần không framework: tách thực thể thành ES module, viết luật nghiệp vụ bằng hàm thuần và đọc dữ liệu mẫu bất đồng bộ.",
+   "canBiet": "Đã chọn đề tài ở bài dự án xuyên suốt và nắm vững cách thiết kế object không đột biến, xử lý lỗi async/await cùng ES Modules ở các bài Chương 1.",
+   "lamDuoc": "Tạo ra repo hoàn chỉnh gồm README mô tả thực thể và luật nghiệp vụ, các module src/domain/*.js kiểm đầu vào kèm ít nhất 3 hàm thuần, hàm async đọc JSON có try/catch và script chạy thử in rõ kết quả nhận hay từ chối.",
+   "ketHop": "Nộp link repo cùng commit hoặc tag, làm tiếp bài kiểm tra chương 1 để rà soát lý thuyết, rồi phát triển nối tiếp sang Mốc dự án 2 ở Chương 2.",
+   "canBietBai": [
+    "nodejs-1-3-object-tham-chieu",
+    "nodejs-1-4-bat-dong-bo",
+    "nodejs-1-5-module"
+   ],
+   "ketHopBai": [
+    "nodejs-1-6-quiz",
+    "nodejs-moc-2"
+   ]
+  },
+  "nodejs-1-6-quiz": {
+   "hoc": "Tám câu hỏi xếp theo thứ tự năm bài của chương, kiểm tra kiến thức về biến và phạm vi, hàm với closure và this, object và tham chiếu, bất đồng bộ với Promise và async/await, cùng hệ module CommonJS và ES Modules.",
+   "canBiet": "Hoàn thành đủ năm bài học lý thuyết Chương 1 và nên làm xong Mốc dự án 1 để tự trả lời bằng trí nhớ thay vì tra cứu.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững toàn bộ JavaScript nền tảng cho backend với mục tiêu 7/8 câu đúng và khoanh vùng chính xác bài cần ôn lại nếu dưới 6/8.",
+   "ketHop": "Đối chiếu từng câu sai về đúng bài học tương ứng trong Chương 1 trước khi bước sang Chương 2 tìm hiểu bên trong Node.js runtime.",
+   "canBietBai": [
+    "nodejs-1-4-bat-dong-bo",
+    "nodejs-1-5-module",
+    "nodejs-moc-1"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-1",
+    "nodejs-2-1-runtime-la-gi"
+   ]
+  },
+  "nodejs-2-1-runtime-la-gi": {
+   "hoc": "Phân biệt ngôn ngữ, framework và runtime, mổ xẻ ba thành phần V8, libuv và lớp nối C++, làm rõ nghĩa thật của đơn luồng cùng hành trình một request đi qua libuv và thread pool.",
+   "canBiet": "Cần nắm cơ chế callback, Promise, async/await và cách dùng module trong Node.js từ chương 1.",
+   "lamDuoc": "Gọi tên đúng vai trò của V8, libuv và lớp nối C++, giải thích được đơn luồng nghĩa là gì và vì sao Node đọc được tệp, chạy tiến trình con còn trình duyệt thì cấm.",
+   "ketHop": "Học tiếp cấu trúc sáu pha event loop ở bài kế, làm kiểm tra chương 2 và đối chiếu với bài 1.1 của khoá SDN302 nếu bạn đang học song song.",
+   "canBietBai": [
+    "nodejs-1-4-bat-dong-bo",
+    "nodejs-1-5-module"
+   ],
+   "ketHopBai": [
+    "nodejs-2-2-event-loop",
+    "nodejs-2-6-quiz"
+   ],
+   "ketHopKhoa": [
+    "server-side-development-nodejs-express-mongodb"
+   ]
+  },
+  "nodejs-2-2-event-loop": {
+   "hoc": "Cơ chế vòng lặp sự kiện với sáu pha cố định (timers, pending, idle/prepare, poll, check, close), cuộc đua không tất định giữa setTimeout(0) với setImmediate và hiện tượng timer drift.",
+   "canBiet": "Cần nắm vai trò của V8, libuv trong runtime Node.js cùng khái niệm callback và Promise.",
+   "lamDuoc": "Dự đoán đúng pha thực thi của timer, I/O và setImmediate, tránh dựa vào setTimeout(0) ngoài I/O và giải thích vì sao timer luôn có thể nổ muộn.",
+   "ketHop": "Đi tiếp sang hai hàng đợi ưu tiên ở bài 2.3, áp dụng vào mốc dự án 2 và đối chiếu với event loop trình duyệt ở khoá Nền tảng Lập trình Web.",
+   "canBietBai": [
+    "nodejs-2-1-runtime-la-gi",
+    "nodejs-1-4-bat-dong-bo"
+   ],
+   "ketHopBai": [
+    "nodejs-2-3-microtask",
+    "nodejs-moc-2",
+    "nodejs-2-6-quiz"
+   ],
+   "ketHopKhoa": [
+    "web-foundations"
+   ]
+  },
+  "nodejs-2-3-microtask": {
+   "hoc": "Thứ tự ưu tiên đồng bộ, process.nextTick, microtask rồi mới tới pha kế tiếp, cơ chế rút cạn hoàn toàn gây bỏ đói vòng lặp và cách chọn giữa nextTick, queueMicrotask, await, setImmediate.",
+   "canBiet": "Cần hiểu sáu pha của event loop ở bài trước cùng cách hoạt động của Promise và async/await.",
+   "lamDuoc": "Xác định đúng thứ tự chạy giữa nextTick, Promise và timer, tái hiện được lỗi bỏ đói hàng đợi và tránh lạm dụng process.nextTick trong code ứng dụng.",
+   "ketHop": "Nối tiếp với bài đo độ trễ khi chặn event loop, làm bài kiểm tra chương 2 và so sánh phần microtask mở rộng so với bài 1.1 bên khoá SDN302.",
+   "canBietBai": [
+    "nodejs-2-2-event-loop",
+    "nodejs-1-4-bat-dong-bo"
+   ],
+   "ketHopBai": [
+    "nodejs-2-4-chan-event-loop",
+    "nodejs-2-6-quiz"
+   ],
+   "ketHopKhoa": [
+    "server-side-development-nodejs-express-mongodb"
+   ]
+  },
+  "nodejs-2-4-chan-event-loop": {
+   "hoc": "Thí nghiệm timer nhịp tim đo độ trễ event loop khi chạy tác vụ đồng bộ nặng, phân loại các nguồn gây chặn kể cả ReDoS từ regex quay lui và cơ chế thread pool ẩn của libuv.",
+   "canBiet": "Cần nắm kiến trúc đơn luồng cùng libuv và cách vận hành sáu pha của event loop.",
+   "lamDuoc": "Viết được phép đo độ trễ event loop, nhận diện đúng đoạn code chặn luồng chính như API Sync, JSON.parse lớn hay ReDoS và chẩn đoán nguyên nhân server đứng hình.",
+   "ketHop": "Học ngay các cách tách việc nặng ở bài 2.5, thực hành đo thực tế ở mốc dự án 2 và gặp lại phòng chống ReDoS ở bài 9.3.",
+   "canBietBai": [
+    "nodejs-2-1-runtime-la-gi",
+    "nodejs-2-2-event-loop"
+   ],
+   "ketHopBai": [
+    "nodejs-2-5-worker-threads",
+    "nodejs-moc-2",
+    "nodejs-9-3-dau-vao-doc-hai"
+   ]
+  },
+  "nodejs-2-5-worker-threads": {
+   "hoc": "Ba hướng xử lý tác vụ nặng CPU gồm worker_threads trao đổi qua postMessage, chia nhỏ bằng setImmediate và cluster nhiều tiến trình, kèm số đo chi phí khởi tạo, RAM và cái giá từng cách.",
+   "canBiet": "Cần nắm cách đo độ trễ event loop và nhận biết tác vụ nặng CPU làm chặn luồng chính từ bài trước.",
+   "lamDuoc": "Chuyển được tác vụ nặng CPU sang Worker mà không làm đơ vòng lặp chính và chọn đúng giữa worker thread, chia nhỏ, cluster hay đẩy sang tác vụ nền.",
+   "ketHop": "Áp dụng ngay vào mốc dự án 2, củng cố bằng bài kiểm tra chương 2 và mở rộng thêm sang hàng đợi ở bài 13.1 cùng cluster ở bài 16.4.",
+   "canBietBai": [
+    "nodejs-2-4-chan-event-loop",
+    "nodejs-2-2-event-loop"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-2",
+    "nodejs-2-6-quiz",
+    "nodejs-13-1-vi-sao-hang-doi"
+   ]
+  },
+  "nodejs-moc-2": {
+   "hoc": "Thực hành xác định tác vụ nặng CPU sát thực tế cho đề tài của bạn, viết script đo nhịp timer bị bỏ lỡ khi chạy trực tiếp rồi chuyển sang worker_threads và so sánh lại kết quả.",
+   "canBiet": "Cần đã chọn đề tài dự án, hoàn thành mốc 1 và nắm vững event loop, cách đo chặn luồng cùng worker_threads.",
+   "lamDuoc": "Tạo được commit nộp repo gồm hàm tác vụ nặng, worker tách biệt, script đo số nhịp timer bỏ lỡ trước và sau khi dời cùng bảng số đo và phân tích trong README.",
+   "ketHop": "Hoàn tất bài kiểm tra chương 2 để chốt lý thuyết và chuẩn bị bước sang xây server HTTP thuần ở mốc dự án 3.",
+   "canBietBai": [
+    "nodejs-2-2-event-loop",
+    "nodejs-2-4-chan-event-loop",
+    "nodejs-2-5-worker-threads"
+   ],
+   "ketHopBai": [
+    "nodejs-2-6-quiz",
+    "nodejs-moc-3"
+   ]
+  },
+  "nodejs-2-6-quiz": {
+   "hoc": "Tám câu hỏi kiểm tra toàn bộ chương 2 về kiến trúc runtime V8 và libuv, sáu pha event loop, thứ tự nextTick với microtask, đo chặn vòng lặp và cách tách tác vụ nặng CPU.",
+   "canBiet": "Cần hoàn thành năm bài lý thuyết chương 2 và tự chạy các thí nghiệm đo thứ tự thực thi cùng độ trễ.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững kiến trúc bên trong Node.js và phát hiện ngay thí nghiệm nào cần chạy lại trước khi sang chương 3.",
+   "ketHop": "Làm kèm mốc dự án 2 để kiểm chứng bằng code thật, rồi chuyển tiếp sang các module lõi bắt đầu từ path và fs.",
+   "canBietBai": [
+    "nodejs-2-2-event-loop",
+    "nodejs-2-3-microtask",
+    "nodejs-2-5-worker-threads"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-2",
+    "nodejs-3-1-path-fs"
+   ]
+  },
+  "nodejs-3-1-path-fs": {
+   "hoc": "Cách dùng node:path (join, resolve, extname, basename, parse), bẫy path traversal, ba kiểu API của node:fs (Sync, callback, fs.promises) và xử lý mã lỗi ENOENT thay vì kiểm tồn tại trước.",
+   "canBiet": "Cần nắm bất đồng bộ với Promise, async/await, cách import module và tác hại của việc chặn event loop trong Node.js.",
+   "lamDuoc": "Dựng được đường dẫn chạy đúng trên mọi hệ điều hành, chặn bẫy path traversal, chọn đúng fs.promises thay cho lời gọi Sync và bắt ENOENT an toàn.",
+   "ketHop": "Áp dụng ngay vào Mốc dự án 3 để lưu dữ liệu ra tệp JSON bằng fs/promises, rồi ôn lại qua bài kiểm tra chương 3.",
+   "canBietBai": [
+    "nodejs-1-4-bat-dong-bo",
+    "nodejs-1-5-module",
+    "nodejs-2-4-chan-event-loop"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-3",
+    "nodejs-3-6-quiz"
+   ]
+  },
+  "nodejs-3-2-buffer": {
+   "hoc": "Bản chất Buffer là khối byte thô ngoài heap V8, các encoding (utf8, hex, base64), khác biệt giữa str.length và Buffer.byteLength trong UTF-8 và lỗi vỡ chữ thành ký tự thay thế khi cắt sai ranh giới byte.",
+   "canBiet": "Cần nắm kiến thức cơ bản về chuỗi, mảng trong JavaScript và cách Node đọc dữ liệu từ tệp ở bài trước.",
+   "lamDuoc": "Tạo và đọc được Buffer bằng Buffer.from, tính đúng dung lượng byte của chuỗi tiếng Việt và tránh cắt đôi ký tự nhiều byte làm hỏng văn bản.",
+   "ketHop": "Học nối tiếp bài Stream (nơi mỗi mẩu dữ liệu là một Buffer), củng cố qua bài kiểm tra chương 3 và vận dụng lại khi kiểm tra magic bytes lúc upload file ở chương 10.",
+   "canBietBai": [
+    "nodejs-1-3-object-tham-chieu",
+    "nodejs-3-1-path-fs"
+   ],
+   "ketHopBai": [
+    "nodejs-3-3-stream",
+    "nodejs-3-6-quiz",
+    "nodejs-10-3-kiem-file-that"
+   ]
+  },
+  "nodejs-3-3-stream": {
+   "hoc": "Thí nghiệm so RAM giữa readFileSync và createReadStream trên tệp 348 MB, trần 2 GiB của một Buffer, bốn loại stream (Readable, Writable, Transform, Duplex), pipeline() và cơ chế backpressure.",
+   "canBiet": "Cần hiểu cách làm việc với tệp bằng module fs và khái niệm Buffer vì mỗi mẩu dữ liệu chảy qua stream là một Buffer.",
+   "lamDuoc": "Đo và giữ bộ nhớ đỉnh ổn định khi xử lý tệp lớn bằng stream, chọn đúng loại stream và nối chuỗi xử lý an toàn với pipeline() có bắt lỗi và dọn dẹp.",
+   "ketHop": "Thực hành đọc request body dạng stream và thử mục nâng cao xuất CSV bằng pipeline() ở Mốc dự án 3, sau đó ôn qua bài kiểm tra chương 3 và mở rộng ở bài nhận file multipart.",
+   "canBietBai": [
+    "nodejs-3-1-path-fs",
+    "nodejs-3-2-buffer"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-3",
+    "nodejs-3-6-quiz",
+    "nodejs-10-1-nhan-file-multipart"
+   ]
+  },
+  "nodejs-3-4-eventemitter": {
+   "hoc": "Mẫu publish/subscribe với .on, .once, .emit và off/removeListener, cơ chế emit() chạy đồng bộ làm chặn hoặc ném lỗi ngược về nơi gọi, sự kiện 'error' gây sập tiến trình và cảnh báo rò rỉ MaxListenersExceeded.",
+   "canBiet": "Cần hiểu cách hoạt động của event loop, tác hại của tác vụ đồng bộ chặn luồng và khái niệm stream phát sự kiện như data ở bài trước.",
+   "lamDuoc": "Thiết kế được lớp phát và nghe sự kiện gọn nhẹ, bắt sự kiện 'error' tránh sập server và phát hiện, gỡ bỏ listener dư để ngăn rò rỉ bộ nhớ.",
+   "ketHop": "Dùng ngay EventEmitter để phát và ghi log sự kiện nghiệp vụ trong Mốc dự án 3, đồng thời củng cố kiến thức qua bài kiểm tra chương 3.",
+   "canBietBai": [
+    "nodejs-2-4-chan-event-loop",
+    "nodejs-3-3-stream"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-3",
+    "nodejs-3-6-quiz"
+   ]
+  },
+  "nodejs-3-5-http-server": {
+   "hoc": "Dựng REST API bằng node:http và createServer, tự routing theo method và URL, gom body POST từ stream req, đọc byte thô HTTP/1.1 bằng nc và curl, đặt Content-Type và chỉ ra bốn nỗi khổ mà Express gỡ bớt.",
+   "canBiet": "Cần nắm khái niệm stream và EventEmitter vì req và res là stream phát sự kiện data, end trong quá trình nhận request và gửi response.",
+   "lamDuoc": "Viết được server HTTP thuần xử lý GET, POST và 404, tự gom và parse JSON body, kiểm thử bằng curl và giải thích rõ Express thay thế phần việc nào.",
+   "ketHop": "Làm ngay Mốc dự án 3 để xây API không framework cho đề tài của bạn, chuyển tiếp sang bài Từ http thuần tới Express ở chương 5 và xem thêm khoá Nền tảng Lập trình Web.",
+   "canBietBai": [
+    "nodejs-3-3-stream",
+    "nodejs-3-4-eventemitter"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-3",
+    "nodejs-3-6-quiz",
+    "nodejs-5-1-tu-http-toi-express"
+   ],
+   "ketHopKhoa": [
+    "web-foundations",
+    "server-side-development-nodejs-express-mongodb"
+   ]
+  },
+  "nodejs-moc-3": {
+   "hoc": "Ghép node:http, fs/promises, stream và EventEmitter để dựng bản server đầu tiên không framework cho đề tài dự án cá nhân, có thể mở rộng xuất CSV bằng pipeline() và giới hạn body 100 KB trả 413.",
+   "canBiet": "Cần hoàn thành các bài path và fs, stream, EventEmitter và server HTTP không dùng framework trong chương 3, cùng đề tài đã đăng ký từ Mốc 1–2.",
+   "lamDuoc": "Hoàn thiện được server node:http có GET/POST JSON, đọc body dạng stream, lưu bền vào tệp JSON, trả đúng 400/404, phát sự kiện ghi log và nộp repo kèm README có output curl -i.",
+   "ketHop": "Làm tiếp bài kiểm tra chương 3 để rà lại lý thuyết các module lõi, trước khi đóng gói dự án ở Mốc 4 và chuyển server này sang Express ở Mốc 5.",
+   "canBietBai": [
+    "nodejs-3-1-path-fs",
+    "nodejs-3-4-eventemitter",
+    "nodejs-3-5-http-server"
+   ],
+   "ketHopBai": [
+    "nodejs-3-6-quiz",
+    "nodejs-moc-4",
+    "nodejs-moc-5"
+   ]
+  },
+  "nodejs-3-6-quiz": {
+   "hoc": "Tám câu hỏi kiểm tra trọng tâm chương 3 về dựng đường dẫn bằng path, ba kiểu fs, mã hoá UTF-8 trong Buffer, stream và backpressure, sự kiện EventEmitter và server HTTP thuần.",
+   "canBiet": "Cần học xong các bài từ 3.1 đến 3.5 và tốt nhất đã hoàn thành Mốc dự án 3 để nhớ vững các bẫy thực tế khi dùng module lõi.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững sáu module lõi của Node.js và phát hiện sớm phần kiến thức còn hổng trước khi bước sang npm và Express.",
+   "ketHop": "Nếu trả lời sai câu nào, xem lại đúng bài lý thuyết tương ứng trong chương 3 hoặc kiểm chứng lại trên mã nguồn Mốc dự án 3 rồi chuyển sang chương 4.",
+   "canBietBai": [
+    "nodejs-3-3-stream",
+    "nodejs-3-5-http-server",
+    "nodejs-moc-3"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-3",
+    "nodejs-4-1-package-json"
+   ]
+  },
+  "nodejs-4-1-package-json": {
+   "hoc": "Cấu tạo tệp kê khai dự án từ npm init -y, thêm type module và engines cho Node >=22, phân biệt dependencies với devDependencies và cách đặt lệnh chạy bằng npm run, npm start, npm test.",
+   "canBiet": "Đã cài sẵn Node cùng npm trên máy và hiểu sự khác nhau giữa CommonJS với ES Modules để nắm tác dụng của trường type trong dự án.",
+   "lamDuoc": "Khởi tạo được tệp cấu hình chuẩn backend, xếp đúng gói vào dependencies hay devDependencies để tránh lỗi production và tạo được các script dev, start, test tự động.",
+   "ketHop": "Học tiếp cơ chế semver và lockfile, áp dụng ngay vào Mốc dự án 4 để chuẩn hoá repo và ôn lại bài Node và npm trong khoá Nền tảng Lập trình Web nếu cần.",
+   "canBietBai": [
+    "nodejs-0-3-cai-dat",
+    "nodejs-1-5-module"
+   ],
+   "ketHopBai": [
+    "nodejs-4-2-semver-lockfile",
+    "nodejs-moc-4",
+    "nodejs-4-4-quiz"
+   ],
+   "ketHopKhoa": [
+    "web-foundations"
+   ]
+  },
+  "nodejs-4-2-semver-lockfile": {
+   "hoc": "Cách đọc số phiên bản MAJOR.MINOR.PATCH, phạm vi cập nhật của ký hiệu ^, ~ hay ghim cứng qua npm view, vai trò ghim integrity hash của package-lock.json và khác biệt giữa npm install với npm ci.",
+   "canBiet": "Nắm cấu trúc package.json, cách khai báo dependencies và quy trình cài đặt gói cơ bản bằng npm.",
+   "lamDuoc": "Đọc đúng mọi dải phiên bản, chẩn đoán được lỗi lệch phiên bản giữa hai máy, tra được bản ghi ghim trong package-lock.json và dùng đúng npm ci khi build hoặc deploy.",
+   "ketHop": "Nối tiếp sang bài an toàn chuỗi cung ứng, thực hành commit lockfile kèm kiểm tra npm ci ở Mốc dự án 4 và ôn lại qua bài kiểm tra chương 4.",
+   "canBietBai": [
+    "nodejs-4-1-package-json"
+   ],
+   "ketHopBai": [
+    "nodejs-4-3-bao-mat-npm",
+    "nodejs-moc-4",
+    "nodejs-4-4-quiz"
+   ]
+  },
+  "nodejs-4-3-bao-mat-npm": {
+   "hoc": "Cây phụ thuộc bắc cầu qua npm ls --all, cách install script như postinstall chạy code ngay lúc cài, cờ --ignore-scripts, bẫy typosquatting và cách soi lỗ hổng với npm audit.",
+   "canBiet": "Biết cách khai báo phụ thuộc trong package.json và hiểu cơ chế cài gói theo phiên bản ghim trong package-lock.json.",
+   "lamDuoc": "Đếm được cây phụ thuộc bắc cầu, đọc hiểu cảnh báo npm audit và thẩm định được một gói về lượt tải, độ mới lẫn install script trước khi thêm vào dự án.",
+   "ketHop": "Áp dụng ngay vào Mốc dự án 4 để chạy npm audit và giải trình từng phụ thuộc trong README, làm quiz chương 4 và nối tiếp ở bài 9.4 về bí mật và phụ thuộc.",
+   "canBietBai": [
+    "nodejs-4-1-package-json",
+    "nodejs-4-2-semver-lockfile"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-4",
+    "nodejs-4-4-quiz",
+    "nodejs-9-4-bi-mat-va-phu-thuoc"
+   ]
+  },
+  "nodejs-moc-4": {
+   "hoc": "Chuẩn hoá repo thành dự án Node chạy được ngay sau khi clone: cấu hình package.json, commit package-lock.json, che .env và node_modules bằng .gitignore, tạo .env.example và soát npm audit.",
+   "canBiet": "Đã hoàn thành server từ Mốc dự án 3 và nắm vững package.json, npm scripts, semver, lockfile cùng cách thẩm định phụ thuộc trong chương 4.",
+   "lamDuoc": "Nộp được commit dự án sạch mà bản clone mới chạy npm ci && npm run check không lỗi, git check-ignore -v .env khớp luật bỏ qua và README giải thích đủ từng phụ thuộc kèm kết quả npm audit.",
+   "ketHop": "Làm bài kiểm tra chương 4 để chốt kiến thức, giữ thói quen npm run check trước khi sang Mốc dự án 5 với Express và ôn thêm khoá Git & GitHub nếu chưa quen .gitignore hay git hook.",
+   "canBietBai": [
+    "nodejs-4-1-package-json",
+    "nodejs-4-2-semver-lockfile",
+    "nodejs-4-3-bao-mat-npm"
+   ],
+   "ketHopBai": [
+    "nodejs-4-4-quiz",
+    "nodejs-moc-5"
+   ],
+   "ketHopKhoa": [
+    "git"
+   ]
+  },
+  "nodejs-4-4-quiz": {
+   "hoc": "Bảy câu hỏi kiểm tra trọng tâm chương 4 gồm package.json và npm scripts, quy tắc semver và lockfile xử lý lỗi lệch máy, cùng an toàn chuỗi cung ứng npm.",
+   "canBiet": "Đã học đủ ba bài lý thuyết của chương 4 về package.json, semver, lockfile và an toàn chuỗi cung ứng trước khi làm bài.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm chắc các nguyên tắc quản lý phụ thuộc, giữ dự án tái lập được và phát hiện lỗ hổng kiến thức cần xem lại trước khi sang chương 5.",
+   "ketHop": "Rà lại bài học tương ứng ở các câu trả lời sai, hoàn thiện Mốc dự án 4 để thực hành thật trên repo rồi chuyển sang bài 5.1 mở đầu chương Express.",
+   "canBietBai": [
+    "nodejs-4-1-package-json",
+    "nodejs-4-2-semver-lockfile",
+    "nodejs-4-3-bao-mat-npm"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-4",
+    "nodejs-5-1-tu-http-toi-express"
+   ]
+  },
+  "nodejs-5-1-tu-http-toi-express": {
+   "hoc": "So sánh bốn nỗi khổ của node:http thuần với Express 5, cách cài npm i express và đo 65 gói phụ thuộc, sự khác nhau giữa res.json và res.send cùng trang 404 tự động.",
+   "canBiet": "Cần hiểu cách dựng server bằng node:http thuần, biết dùng npm scripts và tư duy đánh giá kích thước, chuỗi cung ứng gói từ Chương 3 và 4.",
+   "lamDuoc": "Khởi tạo được ứng dụng Express 5 gọn hơn bản http thuần, phân biệt rõ Content-Type của res.json với res.send và giải thích khác biệt xử lý lỗi async ở Express 5.",
+   "ketHop": "Nên viết lại server http cũ sang Express rồi đếm số dòng, sau đó nối tiếp sang định tuyến, xử lý lỗi và áp dụng vào Mốc dự án 5.",
+   "canBietBai": [
+    "nodejs-3-5-http-server",
+    "nodejs-4-1-package-json",
+    "nodejs-4-3-bao-mat-npm"
+   ],
+   "ketHopBai": [
+    "nodejs-5-2-dinh-tuyen",
+    "nodejs-5-4-xu-ly-loi",
+    "nodejs-moc-5"
+   ]
+  },
+  "nodejs-5-2-dinh-tuyen": {
+   "hoc": "Giải phẫu route và quy tắc khớp đầu tiên thắng, đọc req.params dạng chuỗi kèm kiểm tra NaN, bẫy query string, bug thứ tự khai báo và tách file bằng express.Router().",
+   "canBiet": "Cần nắm cách khởi tạo app Express, khai báo route cơ bản và gửi phản hồi JSON từ bài mở đầu chương.",
+   "lamDuoc": "Tổ chức được mỗi tài nguyên thành một express.Router gắn qua app.use, tránh lỗi che route do thứ tự và kiểm tra an toàn dữ liệu từ params, query.",
+   "ketHop": "Thực hành gắn nhiều router trong Mốc dự án 5, làm quiz kiểm tra thứ tự route, và đối chiếu thêm REST params ở Nền tảng Web hoặc gõ kiểu handler ở TypeScript.",
+   "canBietBai": [
+    "nodejs-5-1-tu-http-toi-express"
+   ],
+   "ketHopBai": [
+    "nodejs-5-3-middleware",
+    "nodejs-moc-5",
+    "nodejs-5-6-quiz"
+   ],
+   "ketHopKhoa": [
+    "web-foundations",
+    "typescript"
+   ]
+  },
+  "nodejs-5-3-middleware": {
+   "hoc": "Cơ chế chuỗi middleware (req, res, next) chạy theo thứ tự đăng ký, ba cách kết thúc hợp lệ, express.json(), express.static(), logger đo thời gian và middleware theo phạm vi.",
+   "canBiet": "Cần nắm cách khai báo route, gắn Router bằng app.use và vòng đời request-response cơ bản trong Express.",
+   "lamDuoc": "Viết được middleware ghi log và chốt chặn theo phạm vi, chẩn đoán ngay nguyên nhân req.body bị undefined hoặc request bị treo do quên gọi next().",
+   "ketHop": "Nên cố ý bỏ quên next() và đổi thứ tự express.json() để thấy lỗi tận mắt, sau đó chuyển sang xử lý lỗi tập trung, làm Mốc dự án 5 và quiz cuối chương.",
+   "canBietBai": [
+    "nodejs-5-1-tu-http-toi-express",
+    "nodejs-5-2-dinh-tuyen"
+   ],
+   "ketHopBai": [
+    "nodejs-5-4-xu-ly-loi",
+    "nodejs-moc-5",
+    "nodejs-5-6-quiz"
+   ]
+  },
+  "nodejs-5-4-xu-ly-loi": {
+   "hoc": "Error middleware bốn tham số và bẫy viết thiếu next, lớp AppError mang mã HTTP và mã ổn định, handler 404 dạng JSON, cùng khác biệt bắt lỗi async giữa Express 4 và 5.",
+   "canBiet": "Cần hiểu chuỗi middleware và next(err) ở bài trước, cơ chế Promise/async-await, cùng bài học lỗi JSON.parse làm sập server ở bài 3.5.",
+   "lamDuoc": "Dựng được tầng xử lý lỗi tập trung trả JSON thống nhất, xử lý 404 đúng thứ tự, định nghĩa AppError và tránh lỗi treo request khi ném lỗi trong hàm async.",
+   "ketHop": "Áp dụng ngay AppError và error handler vào Notes API, Mốc dự án 5, luyện lại bằng quiz cuối chương và đối chiếu thêm bài xử lý lỗi Express ở khoá SDN302.",
+   "canBietBai": [
+    "nodejs-5-3-middleware",
+    "nodejs-3-5-http-server",
+    "nodejs-1-4-bat-dong-bo"
+   ],
+   "ketHopBai": [
+    "nodejs-5-5-notes-api",
+    "nodejs-moc-5",
+    "nodejs-5-6-quiz"
+   ],
+   "ketHopKhoa": [
+    "server-side-development-nodejs-express-mongodb"
+   ]
+  },
+  "nodejs-5-5-notes-api": {
+   "hoc": "Bố cục thư mục theo tầng cho Notes API năm route CRUD (index, app, routes, services, middleware), luật service không đụng req/res, tách app khỏi server và tắt mềm SIGTERM.",
+   "canBiet": "Cần nắm vững express.Router, chuỗi middleware, AppError và error handler tập trung đã học xuyên suốt Chương 5.",
+   "lamDuoc": "Ráp được API CRUD hoàn chỉnh phân tầng sạch, kiểm chứng bằng curl, xuất app tách khỏi listener để dễ kiểm thử và xử lý tắt mềm khi nhận SIGTERM.",
+   "ketHop": "Dùng đúng cấu trúc này cho Mốc dự án 5; thiết kế tách tầng sẽ nối thẳng tới bài đổi ruột sang PostgreSQL ở Chương 7, test supertest ở Chương 14 và phân lớp ở SDN302.",
+   "canBietBai": [
+    "nodejs-5-2-dinh-tuyen",
+    "nodejs-5-3-middleware",
+    "nodejs-5-4-xu-ly-loi"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-5",
+    "nodejs-7-3-crud-transaction",
+    "nodejs-14-3-supertest"
+   ],
+   "ketHopKhoa": [
+    "server-side-development-nodejs-express-mongodb"
+   ]
+  },
+  "nodejs-moc-5": {
+   "hoc": "Thực hành chuyển server Mốc 3 sang Express 5 cho đề tài riêng: tách src/app.js và src/server.js, tối thiểu hai express.Router, logger req.originalUrl và một dạng lỗi JSON duy nhất.",
+   "canBiet": "Cần hoàn thành mã nguồn dự án đến Mốc 4 và nắm chắc cách tổ chức router, middleware, xử lý lỗi tập trung cùng tách app khỏi server.",
+   "lamDuoc": "Nộp được commit Express 5 chạy thật: log đủ đường dẫn gốc, handler async không treo, trả cùng dạng { error: { code, message } } cho 404 lẫn 500 mà không lộ lỗi nội bộ.",
+   "ketHop": "Kiểm thử toàn bộ tuyến bằng curl theo tiêu chí đạt, làm quiz cuối chương để chốt kiến thức rồi chuẩn bị nền cho Mốc 6 và bài test supertest ở Chương 14.",
+   "canBietBai": [
+    "nodejs-moc-4",
+    "nodejs-5-4-xu-ly-loi",
+    "nodejs-5-5-notes-api"
+   ],
+   "ketHopBai": [
+    "nodejs-5-6-quiz",
+    "nodejs-moc-6",
+    "nodejs-14-3-supertest"
+   ]
+  },
+  "nodejs-5-6-quiz": {
+   "hoc": "Tám câu hỏi kiểm tra định tuyến, middleware, xử lý lỗi và cấu trúc Express: trọng tâm là thứ tự đăng ký và ba lỗi thực tế gồm request treo, body undefined và error handler sai số tham số.",
+   "canBiet": "Cần học xong các bài từ 5.1 đến 5.5 về Express, định tuyến, middleware, xử lý lỗi tập trung và cấu trúc Notes API.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững Chương 5, phát hiện ngay lỗ hổng về thứ tự thực thi và cách chẩn đoán lỗi Express trước khi sang thiết kế REST API.",
+   "ketHop": "Nếu trả lời sai câu nào, xem lại bài tương ứng cùng cấu trúc Notes API, hoàn thiện Mốc dự án 5 rồi chuyển sang Chương 6 về thiết kế REST API.",
+   "canBietBai": [
+    "nodejs-5-2-dinh-tuyen",
+    "nodejs-5-3-middleware",
+    "nodejs-5-4-xu-ly-loi"
+   ],
+   "ketHopBai": [
+    "nodejs-5-5-notes-api",
+    "nodejs-moc-5",
+    "nodejs-6-1-tai-nguyen-phuong-thuc"
+   ]
+  },
+  "nodejs-7-1-ket-noi-va-pool": {
+   "hoc": "Chứng minh dữ liệu RAM mất khi restart, giải thích lợi ích của PostgreSQL (WAL, ràng buộc), đo chi phí mở kết nối, cỡ pool, cold start và cách cài một PrismaClient chung cho mỗi tiến trình.",
+   "canBiet": "Cần nắm kiến trúc Notes API lưu trên Map từ chương 5, cách viết async/await và có PostgreSQL chạy trong Docker.",
+   "lamDuoc": "Cài được Prisma kết nối PostgreSQL qua Docker, tổ chức một PrismaClient dùng chung trong tiến trình và giải thích được vì sao pool quá lớn lại làm ngộp cơ sở dữ liệu.",
+   "ketHop": "Tự chạy phép đo mở kết nối và tạo tệp db dùng chung để nối thẳng sang bài lược đồ, đồng thời mở rộng thêm với khoá PostgreSQL và Prisma ORM.",
+   "canBietBai": [
+    "nodejs-5-5-notes-api"
+   ],
+   "ketHopBai": [
+    "nodejs-7-2-luoc-do-va-migration",
+    "nodejs-7-7-quiz"
+   ],
+   "ketHopKhoa": [
+    "postgresql",
+    "prisma-orm"
+   ]
+  },
+  "nodejs-7-2-luoc-do-va-migration": {
+   "hoc": "Viết lược đồ Prisma khai báo kèm các thuộc tính sinh SQL thật, phân biệt migrate dev với migrate deploy, theo dõi lịch sử migration, nhận diện drift và diễn tập khôi phục migration hỏng giữa chừng.",
+   "canBiet": "Cần có dự án Notes đã cài Prisma, biến DATABASE_URL trong tệp .env và PostgreSQL chạy sẵn từ bài kết nối và pool.",
+   "lamDuoc": "Thiết kế được schema với khoá chính, khoá ngoại và ràng buộc, đọc hiểu tệp SQL migration, chọn đúng lệnh chạy ở dev hay production và xử lý an toàn khi migration áp nửa chừng.",
+   "ketHop": "Áp dụng ngay vào Mốc dự án 7 để tạo schema và commit thư mục prisma/migrations, rồi ôn lại trong bài kiểm tra chương 7.",
+   "canBietBai": [
+    "nodejs-7-1-ket-noi-va-pool"
+   ],
+   "ketHopBai": [
+    "nodejs-7-3-crud-transaction",
+    "nodejs-moc-7",
+    "nodejs-7-7-quiz"
+   ],
+   "ketHopKhoa": [
+    "prisma-orm",
+    "postgresql"
+   ]
+  },
+  "nodejs-7-3-crud-transaction": {
+   "hoc": "Thay tầng lưu trữ của Notes API từ Map sang PostgreSQL qua 5 thao tác CRUD của Prisma, phân biệt các kiểu không tìm thấy (null, P2025, count 0), dùng createMany và chứng minh transaction cuộn ngược khi lỗi.",
+   "canBiet": "Cần có cấu trúc tách tầng router và service của Notes API chương 5 cùng các bảng dữ liệu đã migrate xong ở bài trước.",
+   "lamDuoc": "Viết lại được tầng service sang Prisma mà giữ nguyên router và mã trạng thái, chọn rõ cách báo thiếu bản ghi, gộp lệnh chèn bằng createMany và viết transaction ngắn gọn cuộn ngược an toàn.",
+   "ketHop": "Thực hành gói hành động nghiệp vụ chính vào một transaction trong Mốc dự án 7, đồng thời rèn thêm với bài kiểm tra chương 7.",
+   "canBietBai": [
+    "nodejs-5-5-notes-api",
+    "nodejs-7-2-luoc-do-va-migration"
+   ],
+   "ketHopBai": [
+    "nodejs-7-4-quan-he-va-n-plus-1",
+    "nodejs-moc-7",
+    "nodejs-7-7-quiz"
+   ],
+   "ketHopKhoa": [
+    "prisma-orm",
+    "postgresql"
+   ]
+  },
+  "nodejs-7-4-quan-he-va-n-plus-1": {
+   "hoc": "Làm việc với quan hệ một-nhiều, nhiều-nhiều và một-một trong Prisma qua include, select, some/every/none và _count; bật query log để soi SQL sinh ra và đo bẫy N+1 giữa 51 truy vấn với 2 truy vấn.",
+   "canBiet": "Cần nắm cách khai báo quan hệ khoá ngoại trong schema và các thao tác truy vấn CRUD cơ bản bằng Prisma từ hai bài trước.",
+   "lamDuoc": "Phát hiện và sửa được lỗi N+1 bằng include, select, Map hoặc groupBy, chọn đúng _count thay vì tải cả mảng con để đếm và giới hạn cột cần lấy nhằm tiết kiệm băng thông.",
+   "ketHop": "Bật query log ngay trong Mốc dự án 7 để bắt và sửa một truy vấn N+1, rồi học tiếp sang bài chỉ mục để tối ưu tốc độ truy vấn trên bảng lớn.",
+   "canBietBai": [
+    "nodejs-7-2-luoc-do-va-migration",
+    "nodejs-7-3-crud-transaction"
+   ],
+   "ketHopBai": [
+    "nodejs-7-5-chi-muc-va-explain",
+    "nodejs-moc-7",
+    "nodejs-7-7-quiz"
+   ],
+   "ketHopKhoa": [
+    "prisma-orm",
+    "postgresql"
+   ]
+  },
+  "nodejs-7-5-chi-muc-va-explain": {
+   "hoc": "Hiểu cơ chế chỉ mục B-tree và thứ tự cột trong chỉ mục tổ hợp, đọc kế hoạch EXPLAIN (ANALYZE, BUFFERS) từ trong ra ngoài để phân biệt Seq Scan với Index Scan, đo thuế ghi và nhận diện chỉ mục bị planner bỏ qua.",
+   "canBiet": "Cần hiểu cấu trúc bảng, khoá ngoại và các câu SQL mà Prisma gửi xuống PostgreSQL ở các bài trước trong chương.",
+   "lamDuoc": "Đọc hiểu được kế hoạch EXPLAIN ANALYZE kèm chỉ số Buffers, chọn đúng cột và thứ tự khi tạo chỉ mục, đo được chi phí ghi tăng thêm và tránh tạo chỉ mục thừa không được dùng.",
+   "ketHop": "Dán kết quả EXPLAIN ANALYZE trước và sau khi thêm chỉ mục vào README của Mốc dự án 7; có thể đào sâu thêm ở khoá PostgreSQL hoặc DBI202.",
+   "canBietBai": [
+    "nodejs-7-2-luoc-do-va-migration",
+    "nodejs-7-4-quan-he-va-n-plus-1"
+   ],
+   "ketHopBai": [
+    "nodejs-7-6-hop-dong-api-voi-du-lieu-that",
+    "nodejs-moc-7",
+    "nodejs-7-7-quiz"
+   ],
+   "ketHopKhoa": [
+    "postgresql",
+    "introduction-to-databases"
+   ]
+  },
+  "nodejs-7-6-hop-dong-api-voi-du-lieu-that": {
+   "hoc": "Đo phân trang cursor so với OFFSET sâu và count() trên bảng lớn, dịch lỗi P2002 của Prisma thành 409 thay vì kiểm trước rồi chèn, chặn lost update bằng cột version và chỉ ra rủi ro lộ bảng của $queryRawUnsafe.",
+   "canBiet": "Cần nắm hợp đồng phân trang, mã trạng thái 409 và chống ghi đè ở chương 6, cùng cách hoạt động của chỉ mục PostgreSQL ở bài trước.",
+   "lamDuoc": "Triển khai được phân trang cursor ổn định trên dữ liệu lớn, ánh xạ P2002 sang 409 Conflict, dùng cột version từ chối bản cập nhật lỗi thời và tránh lỗi SQL injection từ $queryRawUnsafe.",
+   "ketHop": "Áp dụng ánh xạ P2002 thành 409 ở phần nâng cao của Mốc dự án 7 và rà lại các con số thực đo qua bài kiểm tra chương 7.",
+   "canBietBai": [
+    "nodejs-6-4-phan-trang",
+    "nodejs-6-5-hop-dong-api",
+    "nodejs-7-5-chi-muc-va-explain"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-7",
+    "nodejs-7-7-quiz"
+   ],
+   "ketHopKhoa": [
+    "postgresql",
+    "prisma-orm"
+   ]
+  },
+  "nodejs-moc-7": {
+   "hoc": "Chuyển dự án cá nhân từ lưu tệp JSON sang PostgreSQL với Prisma gồm tối thiểu 3 model quan hệ, ràng buộc unique, thư mục migration, script seed, một transaction cho nghiệp vụ chính và chỉ mục có EXPLAIN ANALYZE.",
+   "canBiet": "Cần hoàn thiện Mốc dự án 6 và nắm trọn quy trình viết schema, chạy migration, viết transaction cùng cách đo EXPLAIN ANALYZE trong chương 7.",
+   "lamDuoc": "Bàn giao được phiên bản API chạy trên PostgreSQL sạch qua prisma migrate deploy và seed, vượt qua bài test curl mốc 6, giữ luật nghiệp vụ dưới hai request song song và có bằng chứng EXPLAIN trong README.",
+   "ketHop": "Làm thêm mục nâng cao sửa lỗi N+1 và ánh xạ P2002 thành 409, sau đó hoàn thành bài kiểm tra chương 7 trước khi bước sang Mốc dự án 8.",
+   "canBietBai": [
+    "nodejs-moc-6",
+    "nodejs-7-3-crud-transaction",
+    "nodejs-7-5-chi-muc-va-explain"
+   ],
+   "ketHopBai": [
+    "nodejs-7-7-quiz",
+    "nodejs-moc-8"
+   ],
+   "ketHopKhoa": [
+    "postgresql",
+    "prisma-orm"
+   ]
+  },
+  "nodejs-7-7-quiz": {
+   "hoc": "Kiểm tra tám câu dựa trên các phép đo thực tế của chương 7: kết nối và pool, lược đồ và migration, CRUD và transaction, quan hệ và bẫy N+1, chỉ mục với EXPLAIN ANALYZE, cùng phân trang cursor và kiểm soát tương tranh.",
+   "canBiet": "Cần học xong các bài từ 7.1 đến 7.6 và nắm được các kết quả đo thực tế của từng thí nghiệm trong chương.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững kiến thức PostgreSQL và Prisma trong chương 7, nhận diện ngay phần cần quay lại đọc khối kết quả đo trước khi sang chương xác thực.",
+   "ketHop": "Nên làm ngay sau khi hoàn tất Mốc dự án 7 để củng cố tư duy dựa trên số đo, rồi chuyển tiếp sang chương 8 về xác thực và phân quyền.",
+   "canBietBai": [
+    "nodejs-7-3-crud-transaction",
+    "nodejs-7-5-chi-muc-va-explain",
+    "nodejs-7-6-hop-dong-api-voi-du-lieu-that"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-7",
+    "nodejs-8-1-mat-khau-va-bam"
+   ]
+  },
+  "nodejs-8-1-mat-khau-va-bam": {
+   "hoc": "Mô hình mối đe doạ khi rò bảng User, bốn cách lưu mật khẩu sai, phép đo tốc độ và rainbow table, tham số argon2id theo OWASP, module password.mjs và chống dò tài khoản qua thời gian.",
+   "canBiet": "Cần nắm cách Notes API lưu dữ liệu bằng PostgreSQL ở chương 7 và tác động của tác vụ nặng CPU lên event loop.",
+   "lamDuoc": "Viết được lớp băm và kiểm mật khẩu bằng argon2id kèm muối, nâng cấp chuỗi băm cũ và giữ phản hồi đăng nhập đồng nhất để tránh rò email.",
+   "ketHop": "Nối tiếp với bài JWT để cấp token sau khi đăng nhập, áp dụng vào Mốc dự án 8 và đối chiếu thêm bài 7.4 của khoá Nền tảng Lập trình Web.",
+   "canBietBai": [
+    "nodejs-7-3-crud-transaction",
+    "nodejs-2-4-chan-event-loop"
+   ],
+   "ketHopBai": [
+    "nodejs-8-2-jwt-access-refresh",
+    "nodejs-moc-8",
+    "nodejs-8-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "web-foundations"
+   ]
+  },
+  "nodejs-8-2-jwt-access-refresh": {
+   "hoc": "Cấu trúc JWT ba phần, sự khác nhau giữa ký và mã hoá, ba đòn giả mạo token gồm sửa payload, decode không verify và alg: none, cùng cơ chế access token ngắn hạn kết hợp refresh token xoay vòng.",
+   "canBiet": "Cần hiểu luồng kiểm mật khẩu ở bài 8.1 và cách lưu dữ liệu xuống PostgreSQL ở chương 7 để theo dõi refresh token phía server.",
+   "lamDuoc": "Tự ký và verify JWT có ghim thuật toán, chặn được giả mạo token và dựng được luồng xoay vòng refresh token để phát hiện token bị đánh cắp.",
+   "ketHop": "Học tiếp middleware requireAuth ở bài 8.3, áp dụng cơ chế xoay vòng token vào Mốc dự án 8 và đối chiếu với mô hình session của khoá SDN302.",
+   "canBietBai": [
+    "nodejs-8-1-mat-khau-va-bam",
+    "nodejs-7-3-crud-transaction"
+   ],
+   "ketHopBai": [
+    "nodejs-8-3-requireauth-phan-quyen",
+    "nodejs-moc-8",
+    "nodejs-8-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "server-side-development-nodejs-express-mongodb"
+   ]
+  },
+  "nodejs-8-3-requireauth-phan-quyen": {
+   "hoc": "Cách tách bạch mã 401 và 403, viết middleware requireAuth đọc Bearer token hoặc cookie với đủ sáu nhánh lỗi, thứ tự gắn middleware, kiểm vai trò, bịt lỗ IDOR và thay AUTHOR_ID = 1 bằng req.user.id.",
+   "canBiet": "Cần nắm cách verify JWT ở bài 8.2, luồng chạy middleware trong Express ở chương 5 và quy ước mã trạng thái HTTP ở chương 6.",
+   "lamDuoc": "Dựng được middleware xác thực trả 401, kiểm vai trò trả 403 và kiểm quyền sở hữu tập trung để người dùng chỉ tác động được lên bản ghi của chính mình.",
+   "ketHop": "Học tiếp bài 8.4 để bảo vệ cookie access_token trước CSRF và hoàn thiện kiểm quyền sở hữu cùng hai vai trò trong Mốc dự án 8.",
+   "canBietBai": [
+    "nodejs-8-2-jwt-access-refresh",
+    "nodejs-5-3-middleware",
+    "nodejs-6-2-ma-trang-thai"
+   ],
+   "ketHopBai": [
+    "nodejs-8-4-cookie-csrf-thu-hoi",
+    "nodejs-moc-8",
+    "nodejs-8-5-quiz"
+   ]
+  },
+  "nodejs-8-4-cookie-csrf-thu-hoi": {
+   "hoc": "Đánh đổi giữa localStorage và cookie HttpOnly kiểm trên Chromium, các cờ HttpOnly, Secure, SameSite, thực nghiệm CSRF, thu hồi mọi phiên bằng tokenVersion và chặn tần suất đăng nhập sau proxy.",
+   "canBiet": "Cần nắm cấu trúc JWT, refresh token ở bài 8.2 và cách requireAuth đọc token, nạp người dùng từ cơ sở dữ liệu ở bài 8.3.",
+   "lamDuoc": "Chọn đúng nơi cất token theo ngữ cảnh, bật đủ cờ cookie chống XSS và CSRF, cài đặt đăng xuất mọi thiết bị bằng tokenVersion và cấu hình rate limiting cho route login.",
+   "ketHop": "Áp dụng ngay vào Mốc dự án 8, làm bài kiểm tra 8.5, đọc tiếp bài XSS ở chương 9 và xem thêm khoá Authentication cùng bài 7.2 của Nền tảng Lập trình Web.",
+   "canBietBai": [
+    "nodejs-8-2-jwt-access-refresh",
+    "nodejs-8-3-requireauth-phan-quyen"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-8",
+    "nodejs-8-5-quiz",
+    "nodejs-9-2-xss-va-sanitize"
+   ],
+   "ketHopKhoa": [
+    "authentication",
+    "web-foundations"
+   ]
+  },
+  "nodejs-moc-8": {
+   "hoc": "Thực hành ghép toàn bộ luồng xác thực và phân quyền vào đề tài cuối khoá: băm mật khẩu, access token ngắn hạn, refresh token xoay vòng trong cookie HttpOnly, phân vai trò và kiểm quyền sở hữu.",
+   "canBiet": "Cần hoàn thành cơ sở dữ liệu ở Mốc dự án 7 và nắm trọn bốn bài 8.1 đến 8.4 về băm mật khẩu, JWT xoay vòng, requireAuth và cookie HttpOnly.",
+   "lamDuoc": "Hoàn thiện và nộp commit dự án có đăng ký, đăng nhập, requireAuth trả 401, ít nhất hai vai trò trả 403, kiểm quyền sở hữu từng bản ghi kèm output curl chứng minh.",
+   "ketHop": "Làm tiếp bài kiểm tra 8.5 để rà lại lỗ hổng khái niệm rồi bước sang Mốc dự án 9 để tự tấn công và vá lại chính API vừa dựng.",
+   "canBietBai": [
+    "nodejs-moc-7",
+    "nodejs-8-3-requireauth-phan-quyen",
+    "nodejs-8-4-cookie-csrf-thu-hoi"
+   ],
+   "ketHopBai": [
+    "nodejs-8-5-quiz",
+    "nodejs-moc-9"
+   ]
+  },
+  "nodejs-8-5-quiz": {
+   "hoc": "Tám câu hỏi rà soát toàn bộ chương 8 gồm băm mật khẩu, cấu trúc và verify JWT, xoay vòng refresh token, phân biệt 401 và 403, kiểm quyền sở hữu, CSRF và thu hồi phiên.",
+   "canBiet": "Cần học xong bốn bài 8.1 đến 8.4 và nắm rõ các khối số đo cùng phản hồi HTTP thật dùng làm căn cứ cho từng câu hỏi.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững kiến thức xác thực và phân quyền của chương 8, đồng thời xác định đúng khối thực nghiệm cần xem lại khi làm sai.",
+   "ketHop": "Đối chiếu câu sai với kết quả chạy thật trong bài 8.1 đến 8.4, hoàn thiện Mốc dự án 8 rồi chuyển sang Chương 9 về bảo mật ứng dụng.",
+   "canBietBai": [
+    "nodejs-8-1-mat-khau-va-bam",
+    "nodejs-8-2-jwt-access-refresh",
+    "nodejs-8-4-cookie-csrf-thu-hoi"
+   ],
+   "ketHopBai": [
+    "nodejs-moc-8",
+    "nodejs-9-1-header-csp-cors"
+   ]
+  }
+ },
+ "khoaTen": {
+  "web-foundations": "Nền tảng Lập trình Web",
+  "git": "Git & GitHub",
+  "typescript": "TypeScript",
+  "server-side-development-nodejs-express-mongodb": "SDN302 · Server-Side Development with Node.js, Express & MongoDB",
+  "postgresql": "PostgreSQL",
+  "prisma-orm": "Prisma ORM",
+  "introduction-to-databases": "DBI202 · Database Systems",
+  "authentication": "Authentication"
+ }
+}

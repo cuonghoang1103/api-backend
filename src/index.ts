@@ -83,6 +83,7 @@ const friendRoutes = (await import(path.join(__dirname, 'routes', 'friend.routes
 const stickerRoutes = (await import(path.join(__dirname, 'routes', 'sticker.routes.js'))).default;
 const blogRoutes = (await import(path.join(__dirname, 'routes', 'blog.routes.js'))).default;
 const courseRoutes = (await import(path.join(__dirname, 'routes', 'course.routes.js'))).default;
+const roadmapKhoaRoutes = (await import(path.join(__dirname, 'routes', 'roadmapKhoa.routes.js'))).default;
 const paymentRoutes = (await import(path.join(__dirname, 'routes', 'payment.routes.js'))).default;
 const academyRoutes = (await import(path.join(__dirname, 'routes', 'academy.routes.js'))).default;
 const examRoutes = (await import(path.join(__dirname, 'routes', 'exam.routes.js'))).default;
@@ -620,6 +621,8 @@ app.use('/api/v1/tim-kiem', timKiemRoutes);
 app.use('/api/v1/friends', friendRoutes);
 app.use('/api/v1/stickers', stickerRoutes);
 app.use('/api/v1/blog', blogRoutes);
+// Roadmap sơ đồ đầu khoá (/:slug/roadmap) — TRƯỚC courseRoutes cho chắc thứ tự khớp tuyến.
+app.use('/api/v1/courses', roadmapKhoaRoutes);
 app.use('/api/v1/courses', courseRoutes);
 app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/academy', academyRoutes);

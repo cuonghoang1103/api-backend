@@ -1,0 +1,2190 @@
+{
+ "khoa": "object-oriented-programming",
+ "ten": "Object-Oriented Programming",
+ "phienBan": 1,
+ "capNhat": "2026-11-28",
+ "nguon": "Antigravity (Gemini) soạn từ bài web gốc; Claude soát mẫu",
+ "chuong": {
+  "pro192-tai-lieu-tham-khao": {
+   "hoc": "Tổng hợp sách chính theo syllabus (Core Java, Java SE 8 Spec, học liệu FLM), tài liệu Java 8 miễn phí, bộ công cụ JDK 8+ với NetBeans và lộ trình tự học bốn chặng.",
+   "lamDuoc": "Chọn đúng tài liệu tra cứu cú pháp và API Java 8, chuẩn bị đủ JDK với NetBeans, và sắp xếp kế hoạch tự học từ nền OOP tới bài quản lý theo menu."
+  },
+  "pro192-bat-dau-tai-day": {
+   "hoc": "Định hướng toàn diện trước khi vào slide: tư duy hướng đối tượng bằng Java, cấu trúc điểm và lộ trình 60 buổi, cài đặt song song JDK 8 và JDK 21 với NetBeans, viết lớp đầu tiên cùng tóm tắt 9 CLO và tài liệu môn.",
+   "lamDuoc": "Thiết lập được môi trường NetBeans biên dịch chuẩn Java 8 như phòng thi, lập kế hoạch học bám đề cương và tự viết, đóng gói chạy file jar cho lớp đối tượng đầu tiên."
+  },
+  "pro192-slide-pro1-1": {
+   "hoc": "Tư duy hướng đối tượng với bốn khái niệm trừu tượng, đóng gói, phân cấp, đa hình cùng nền tảng JVM, cú pháp Java cốt lõi, lớp bao, String, StringBuilder, Scanner và Collections/Arrays.",
+   "lamDuoc": "Biên dịch và chạy chương trình Java trên JDK 8, xử lý chuỗi, mảng, nhập liệu kiểm lỗi, sắp xếp bằng Comparator và hoàn thành danh mục sách console chuẩn LAB211."
+  },
+  "pro192-slide-pro7-1": {
+   "hoc": "Cơ chế bộ nhớ JVM (stack, heap, tham chiếu, thu gom rác), cách thiết kế lớp từ đề bài, khai báo trường, phương thức, constructor, từ khoá this, getter/setter và quy tắc truyền tham số theo giá trị trong Java.",
+   "lamDuoc": "Thiết kế và viết hoàn chỉnh lớp Java theo sơ đồ UML, khởi tạo đối tượng bằng new, lần theo trạng thái bộ nhớ để giải thích output và sửa đúng dữ liệu qua tham chiếu."
+  },
+  "pro192-slide-pro8-3": {
+   "hoc": "Tổ chức mã theo package, bốn mức truy cập của Java, varargs, che giấu dữ liệu bằng private cùng phương thức có kiểm soát và tư duy trừu tượng hoá giao diện.",
+   "lamDuoc": "Thiết kế được lớp tự bảo vệ bất biến dữ liệu, tránh rò rỉ tham chiếu từ getter, đoán đúng lỗi truy cập của javac và hoàn thiện tính năng kèm review mã trên CT Library."
+  },
+  "pro192-slide-pro9-1": {
+   "hoc": "Tái dùng cấu trúc lớp bằng kế thừa (extends, super, is-a/has-a, instanceof, ép kiểu) và chạy nhiều hành vi qua một kiểu cha bằng đa hình (nạp chồng, ghi đè, ràng buộc động).",
+   "lamDuoc": "Thiết kế được cây lớp cha–con chuẩn UML, viết đúng constructor và phương thức ghi đè trên JDK 8, xử lý danh sách nhiều lớp con không cần instanceof và giải được dạng câu 2 đề PE."
+  },
+  "pro192-slide-pro10-2": {
+   "hoc": "Trình bày cách định nghĩa hợp đồng hành vi qua lớp trừu tượng, interface, phương thức default và static của Java 8, lớp lồng và lớp ẩn danh. Phân biệt khi nào dùng abstract class và khi nào chọn interface.",
+   "lamDuoc": "Thiết kế được lớp trừu tượng và interface chuẩn JDK 8, giải được câu 4 cùng đề PE 10 điểm, đồng thời tách hợp đồng kho lưu trữ và chính sách phí trong CT Library."
+  },
+  "pro192-progress-test-1": {
+   "hoc": "Tổng ôn phần cốt lõi OOP từ Chương 1 đến Chương 5 (CLO1–7) gồm Java cơ bản, lớp và đối tượng, đóng gói, kế thừa, đa hình, abstract và interface qua bộ 20 câu dạng FE chạy đo trên JDK 8.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm chắc nền tảng OOP, nhận diện sớm các bẫy biên dịch và hành vi chạy thật trên JDK 8 trước kỳ kiểm tra trên lớp."
+  },
+  "pro192-slide-pro11-1": {
+   "hoc": "Cơ chế xử lý ngoại lệ trong Java: cây Throwable (checked, unchecked, Error), try-catch-finally, throw, throws, lan truyền ngoại lệ, đọc stack trace, try-with-resources và thiết kế ngoại lệ nghiệp vụ tự tạo.",
+   "lamDuoc": "Viết được chương trình Java bắt lỗi gọn gàng không sập khi nhập sai hay nạp qua pipe, thiết kế ngoại lệ checked phân tầng, đọc stack trace để gỡ lỗi và vượt qua các bẫy try-catch-finally của đề FE và PE."
+  },
+  "pro192-slide-pro12-1": {
+   "hoc": "Dùng mảng tham chiếu kiểu lớp cha quản lý tập đối tượng đa hình với các thao tác thêm, chèn, tìm, sửa, xoá, lọc, sắp xếp nhiều khoá bằng Comparable, Comparator và xử lý bẫy duyệt mảng.",
+   "lamDuoc": "Xây dựng được chương trình quản lý console hoàn chỉnh bằng mảng đối tượng theo mẫu menu, xử lý an toàn trường hợp biên khi chèn/xoá và giải chuẩn dạng câu 3 đề PE cùng bài quản lý LAB211."
+  },
+  "pro192-slide-pro13-1": {
+   "hoc": "Hệ thống hoá Java Collections Framework trên JDK 8 gồm List, Set, Map, generics, Iterator, hợp đồng equals/hashCode và Comparable/Comparator, kèm bài tập PE và Lab 8 trên CT Library.",
+   "lamDuoc": "Chọn đúng cấu trúc dữ liệu cho bài toán, viết được thao tác CRUD, sắp xếp và đếm gom nhóm an toàn mà tránh các bẫy mất phần tử hay lỗi lúc chạy."
+  },
+  "pro192-slide-pro14-1": {
+   "hoc": "Hệ thống hoá luồng vào/ra trong java.io, mã hoá Unicode/UTF-8, lớp File, đọc ghi tệp văn bản, tệp nhị phân, RandomAccessFile và tuần tự hoá đối tượng (Serializable) trên JDK 8.",
+   "lamDuoc": "Đọc ghi tệp văn bản UTF-8, tệp nhị phân và lưu nạp đối tượng an toàn với try-with-resources, xây dựng kho lưu trữ CSV sống qua lần tắt máy theo chuẩn PE và LAB211."
+  },
+  "pro192-lab211-cach-qua-review": {
+   "hoc": "Hướng dẫn quy trình qua review LAB211 (năm cửa, checklist 25 mục, lint.py, JDK 8) trên khung chung Note Management và giải trọn 6 bài thật từ P0011 đến P0073 theo đúng kiến trúc phân tầng.",
+   "lamDuoc": "Dựng và bảo vệ được bài LAB211 bằng Java 8 đúng kiến trúc controller giữ repository, vượt qua lint.py, checklist 25 mục, bộ phím test và các câu vấn đáp khi review."
+  },
+  "pro192-progress-test-2": {
+   "hoc": "Tổng ôn bốn mảng trọng tâm Chương 6–9 theo dạng đề thi cuối kỳ FE trên JDK 8: xử lý ngoại lệ, mảng đối tượng, Collections và đọc/ghi tệp.",
+   "lamDuoc": "Tự đánh giá mức nắm vững các chủ đề ngoại lệ, mảng đối tượng, Collections và I/O tệp, đồng thời nhận diện lỗ hổng kiến thức trước khi bước vào phần nâng cao và thi FE."
+  },
+  "pro192-n1-1-modern-java": {
+   "hoc": "Giới thiệu ba trụ cột Java hiện đại ngoài giáo trình PRO192 gồm lớp generic tự viết, biểu thức lambda và Stream API theo phong cách functional.",
+   "lamDuoc": "Viết được lớp generic an toàn kiểu, chuyển vòng lặp sang chuỗi xử lý dữ liệu bằng lambda và stream, đồng thời tự kiểm tra độ vững qua bài quiz."
+  },
+  "pro192-n2-1-solid": {
+   "hoc": "Năm nguyên tắc thiết kế SOLID và quy trình đọc hiểu, chạy đo lỗi trên JDK 8 rồi tái cấu trúc sáu bước một project Banking thực tế.",
+   "lamDuoc": "Áp dụng được tư duy SOLID để phân tách lớp gọn gàng, chỉ ra lỗi thiết kế có bằng chứng và tái cấu trúc hệ thống OOP theo nhiều tầng rõ ràng."
+  },
+  "pro192-slide-cs1-1": {
+   "hoc": "Phần chuyên sâu mở rộng từ Java 8 phòng thi lên Java 17 và 21 cho Spring Boot: generics, lambda, Stream API, Optional, record, sealed, hợp đồng đối tượng, JVM, DI, Maven, JUnit 5, SOLID, 6 mẫu GoF và đa luồng.",
+   "lamDuoc": "Viết được Java hiện đại an toàn kiểu và bất biến, chẩn đoán lỗi bộ nhớ trên JVM, tổ chức lớp theo SOLID và DI có test JUnit, áp dụng 6 mẫu thiết kế, xử lý đa luồng và sẵn sàng cho Spring Boot lẫn phỏng vấn."
+  },
+  "pro192-du-an-ct-library": {
+   "hoc": "Ghép 9 lab thành ứng dụng CT Library 1.0 theo đặc tả thực tế: luật mượn trả, phí phạt, khoá thẻ, dữ liệu 3 tệp CSV có dòng hỏng, kiến trúc chuẩn LAB211, bộ chấm 557 dòng và định hướng mở rộng.",
+   "lamDuoc": "Xây dựng và bàn giao ứng dụng quản lý thư viện hoàn chỉnh chạy JDK 8 đạt PASS 557/557 sau khi mở lại, đạt rubric 100 điểm và sẵn sàng bước vào bản thi có giờ 90 phút kiểu PE."
+  },
+  "pro192-final-exam-pe": {
+   "hoc": "Cấu trúc đánh giá chính thức của PE và FE theo syllabus, cùng bốn dạng đề PE phổ biến rút từ 19 đề Exam Room trên JDK 8 và NetBeans.",
+   "lamDuoc": "Lập kế hoạch ôn phủ 9 CLO cho FE, giải trọn bốn dạng câu hỏi PE trên JDK 8 và tránh các lỗi mất điểm hay gặp khi chấm tự động."
+  }
+ },
+ "bai": {
+  "pro192-tai-lieu-tham-khao": {
+   "hoc": "Liệt kê sách Core Java (Horstmann), đặc tả Java SE 8, học liệu FLM, dev.java, Java 8 API, hai kênh YouTube, công cụ JDK 8+ (javac, java) cùng NetBeans và lộ trình tự học bốn bước.",
+   "canBiet": "Không cần nền trước về Java hay lập trình hướng đối tượng; chỉ cần tài khoản FPTU để truy cập giáo trình và slide chính thức trên FLM.",
+   "lamDuoc": "Tra cứu đúng nguồn khi vướng cú pháp Java 8 hoặc API như String, ArrayList, HashMap, đồng thời xác định rõ công cụ cần cài và thứ tự luyện code theo từng chặng.",
+   "ketHop": "Đọc tiếp bài mở đầu lộ trình môn học, cài đặt JDK với NetBeans ngay rồi đối chiếu thêm mục Tài liệu, công cụ và cách học để bắt tay gõ thử ví dụ.",
+   "ketHopBai": [
+    "pro192-bat-dau-tai-day",
+    "pro192-cai-moi-truong",
+    "pro192-tai-lieu"
+   ]
+  },
+  "pro192-bat-dau-tai-day": {
+   "hoc": "So sánh lập trình thủ tục kiểu C với OOP qua ví dụ lớp Account giữ private balance, điểm mốc lịch sử Java (JDK 8 phòng thi, LTS 11–25), khác biệt Java hiện đại và cấu trúc các phần học trên web.",
+   "canBiet": "Không cần nền trước về Java hay OOP; chỉ cần nắm khái niệm hàm và mảng từ lập trình thủ tục kiểu C (PRF192) để thấy rõ lý do chuyển sang đối tượng.",
+   "lamDuoc": "Phân biệt được cách tổ chức dữ liệu theo đối tượng với code thủ tục, nhận diện được vai trò của Java 8 trong phòng thi và định vị được các chủ đề OOP trọng tâm cần dồn sức.",
+   "ketHop": "Đọc tiếp hướng dẫn phương pháp học, cài JDK 8 song song JDK 21 để tránh lỗi phiên bản như từ khoá var, và xem trước định hướng nối sang LAB211 cùng Spring Boot.",
+   "ketHopBai": [
+    "pro192-hoc-the-nao",
+    "pro192-cai-moi-truong",
+    "pro192-banking"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "spring-boot"
+   ]
+  },
+  "pro192-hoc-the-nao": {
+   "hoc": "Trình bày 5 cột điểm theo đề cương FLM 12038 (Assignment, 6 Lab, 2 Progress Test, PE 85 phút, FE 60 phút), bản đồ 60 buổi khớp 9 chương web, cấu trúc đề PE/FE, bẫy Locale.US và cách dùng AI không hại kỹ năng code.",
+   "canBiet": "Hiểu tổng quan PRO192 dạy gì và vì sao bài thi phòng máy chạy Java 8 từ phần định hướng mở đầu.",
+   "lamDuoc": "Lập được lịch tự học khoảng 7 giờ mỗi tuần bám đúng 60 buổi, tránh lỗi rớt môn vì điểm 0 ở cột on-going và ôn đúng trọng tâm cho PE lẫn FE trên Exam Room.",
+   "ketHop": "Đối chiếu với bảng điều kiện qua môn chính thức, chuẩn bị sớm lộ trình luyện PE và thực hành bộ đề FE có bấm giờ sau Chương 8.",
+   "canBietBai": [
+    "pro192-bat-dau-tai-day"
+   ],
+   "ketHopBai": [
+    "pro192-dieu-kien-qua-mon",
+    "pro192-final-exam-pe",
+    "pro192-final-exam-fe"
+   ]
+  },
+  "pro192-cai-moi-truong": {
+   "hoc": "Hướng dẫn cài song song JDK 8 (Temurin hoặc Zulu) và JDK 21 LTS với NetBeans 31 trên Windows và macOS, chỉnh PATH, JAVA_HOME, ép project biên dịch Java 8 và nhận diện lỗi var, List.of, UnsupportedClassVersionError.",
+   "canBiet": "Biết lý do phòng thi yêu cầu JDK 8 trong khi NetBeans bản mới cần JDK 21 trở lên.",
+   "lamDuoc": "Cài đặt và kiểm chứng được môi trường bằng java -version, javac -version, cấu hình NetBeans biên dịch chuẩn JDK 8 và tự khắc phục các lỗi PATH, netbeans_jdkhome hay sai phiên bản.",
+   "ketHop": "Kiểm tra ngay môi trường vừa cài bằng cách tạo project FirstOOP ở buổi thực hành đầu tiên và xem thêm phần giảng slide cài đặt để hiểu các link cũ của trường.",
+   "canBietBai": [
+    "pro192-bat-dau-tai-day"
+   ],
+   "ketHopBai": [
+    "pro192-buoi-dau-tien",
+    "pro192-slide-pro2-1",
+    "pro192-slide-pro3-2"
+   ],
+   "ketHopKhoa": [
+    "java-web-application-development",
+    "spring-boot"
+   ]
+  },
+  "pro192-buoi-dau-tien": {
+   "hoc": "Tạo project FirstOOP chuẩn Java 8 trên NetBeans, viết lớp Student (private field, 2 constructor, getter/setter kiểm tra dữ liệu, toString), nhập danh sách bằng Scanner, tránh bẫy nextInt và chạy java -jar kiểu PE.",
+   "canBiet": "Đã cài xong JDK 8, JDK 21 và NetBeans để tạo project biên dịch theo Source/Binary Format 1.8.",
+   "lamDuoc": "Tự viết được một lớp thực thể hoàn chỉnh kèm chương trình main nhập, lọc và tìm kiếm danh sách đối tượng, đồng thời đóng gói và chạy được file jar bằng lệnh java -jar.",
+   "ketHop": "Làm trọn ba bài tập nhỏ cuối trang rồi bước sang Chương 1 và Chương 2 để hiểu sâu constructor, đóng gói; đây cũng là khuôn mẫu quen thuộc cho LAB211 và entity trong Spring Boot.",
+   "canBietBai": [
+    "pro192-cai-moi-truong"
+   ],
+   "ketHopBai": [
+    "pro192-slide-pro1-1",
+    "pro192-slide-pro8-1",
+    "pro192-lab-1-danh-muc-sach"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "spring-boot"
+   ]
+  },
+  "pro192-slide-pro2-1": {
+   "hoc": "Rà soát 4 đường link trong slide cài đặt của trường (NetBeans 12.0, Oracle JDK 8, video NetBeans 8.2 và cập nhật Java), phân biệt JDK với JRE và chỉ rõ bẫy dùng tính năng Java 10+ như var hay List.of khi đi thi.",
+   "canBiet": "Đã đọc hướng dẫn cài môi trường thực tế hoặc nắm bối cảnh vì sao phòng thi vẫn chạy JDK 8.",
+   "lamDuoc": "Phân biệt được JDK với JRE, chọn đúng bản tải thay thế còn hỗ trợ (Temurin 8 và NetBeans 31) thay cho các link cũ trên slide và tránh cài nhầm bản chỉ có runtime.",
+   "ketHop": "Quay lại hướng dẫn cài môi trường để thực hiện đủ thao tác cho Windows hoặc macOS và đối chiếu tiếp phần công cụ JDK ở Chương 1.",
+   "canBietBai": [
+    "pro192-cai-moi-truong"
+   ],
+   "ketHopBai": [
+    "pro192-cai-moi-truong",
+    "pro192-slide-pro3-2"
+   ]
+  },
+  "pro192-gioi-thieu": {
+   "hoc": "Tóm tắt sự chuyển dịch từ lập trình thủ tục sang hướng đối tượng bằng Java, phác hoạ bản đồ 9 chương chính cùng phần nâng cao (Generics, lambda, SOLID) và vị trí của môn trước LAB211, PRJ301.",
+   "canBiet": "Có kiến thức lập trình cơ bản kiểu C từ PRF192 và đã nắm tổng quan ở phần mở đầu khoá.",
+   "lamDuoc": "Giải thích được vì sao hệ thống lớn cần tổ chức theo đối tượng thay vì hàm rời rạc và xác định được lộ trình kiến thức đi từ cú pháp Java tới chương trình hoàn chỉnh.",
+   "ketHop": "Xem tiếp điều kiện qua môn và 9 CLO để đối chiếu đầu ra, sau đó bắt đầu Chương 1 và gõ thử từng lớp nhỏ ngay trên NetBeans.",
+   "canBietBai": [
+    "pro192-bat-dau-tai-day"
+   ],
+   "ketHopBai": [
+    "pro192-dieu-kien-qua-mon",
+    "pro192-chuan-dau-ra",
+    "pro192-1-1-tu-duy-oo"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "java-web-application-development"
+   ]
+  },
+  "pro192-dieu-kien-qua-mon": {
+   "hoc": "Liệt kê thông số đề cương chính thức (3 tín chỉ, 150 giờ, tiên quyết PRF192), trọng số 5 cột điểm (Assignment 20%, Lab 10%, PE 30%, Progress Test 10%, FE 30%) và ba điều kiện bắt buộc để qua môn.",
+   "canBiet": "Đã nắm bức tranh tổng thể môn học và cách phân bổ buổi học trong học kỳ.",
+   "lamDuoc": "Tính được điểm tổng kết theo trọng số, kiểm soát được rủi ro trượt môn do vắng quá 20% hoặc dính điểm 0 ở cột on-going và hỏi rõ phương án đánh giá ngay buổi đầu.",
+   "ketHop": "Đọc kèm danh sách 9 chuẩn đầu ra để bám mục tiêu từng bài thi, đồng thời xem sớm cấu trúc bài PE và FE.",
+   "canBietBai": [
+    "pro192-hoc-the-nao",
+    "pro192-gioi-thieu"
+   ],
+   "ketHopBai": [
+    "pro192-chuan-dau-ra",
+    "pro192-final-exam-pe",
+    "pro192-final-exam-fe"
+   ]
+  },
+  "pro192-chuan-dau-ra": {
+   "hoc": "Hệ thống hoá 9 chuẩn đầu ra môn học từ CLO1 đến CLO9 và đối chiếu từng kỹ năng (cú pháp Java, 4 trụ cột OOP, abstract/interface, ngoại lệ, mảng đối tượng, collections, file stream) với đúng chương học.",
+   "canBiet": "Hiểu bản đồ 9 chương và cấu trúc các bài kiểm tra của môn học.",
+   "lamDuoc": "Dùng được bảng 9 CLO làm checklist ôn tập, rà soát nhanh kỹ năng nào còn yếu ở từng chương để tự viết chương trình nhỏ kiểm chứng trước Progress Test và kỳ thi.",
+   "ketHop": "Kết hợp với phần tài liệu và các mốc Progress Test 1, Progress Test 2 để tự kiểm tra tiến độ đạt CLO1–CLO9.",
+   "canBietBai": [
+    "pro192-gioi-thieu",
+    "pro192-dieu-kien-qua-mon"
+   ],
+   "ketHopBai": [
+    "pro192-tai-lieu",
+    "pro192-progress-test-1",
+    "pro192-progress-test-2"
+   ]
+  },
+  "pro192-tai-lieu": {
+   "hoc": "Giới thiệu 3 nguồn tài liệu chuẩn (Core Java của Cay Horstmann, Java 8 Specification, học liệu FU), bộ công cụ JDK 8+ với NetBeans và quy trình học OOP 4 bước gồm tách danh từ thành lớp, động từ thành phương thức.",
+   "canBiet": "Đã nắm mục tiêu môn học và 9 chuẩn đầu ra để biết cần tra cứu tài liệu cho phần nào.",
+   "lamDuoc": "Chọn đúng tài liệu tra cứu khi cần quy tắc Java 8 chuẩn xác và áp dụng được quy trình mô hình hoá danh từ, động từ để phác thảo lớp, trường và phương thức cho bài toán mới.",
+   "ketHop": "Kết hợp cài chuẩn môi trường theo hướng dẫn, luyện track Java Fundamentals trên CodeLab và chuyển sang Chương 1 cùng trang tài liệu tham khảo của khoá.",
+   "canBietBai": [
+    "pro192-chuan-dau-ra"
+   ],
+   "ketHopBai": [
+    "pro192-tai-lieu-tham-khao",
+    "pro192-cai-moi-truong",
+    "pro192-slide-pro1-1"
+   ]
+  },
+  "pro192-slide-pro1-1": {
+   "hoc": "Giải thích độ phức tạp phần mềm, cách chia bài toán theo hoạt động hay theo đối tượng cùng bốn nền tảng trừu tượng, đóng gói, phân cấp has-a/is-a-kind-of và đa hình qua ví dụ Java và UML.",
+   "canBiet": "Đã quen viết chương trình thủ tục cơ bản bằng C như ở PRF192 và nắm bản đồ môn học cùng cách cài JDK, IDE từ Mục 0.",
+   "lamDuoc": "Phân tích được danh từ thành lớp hay trường, phân biệt lớp với thể hiện, quan hệ has-a với kế thừa và đoán phương thức chạy khi đa hình.",
+   "ketHop": "Đọc kèm bản tóm tắt tư duy OO để hệ thống bốn trụ cột và làm quiz cuối chương nhằm chốt chắc các khái niệm nền.",
+   "canBietBai": [
+    "pro192-bat-dau-tai-day",
+    "pro192-cai-moi-truong"
+   ],
+   "ketHopBai": [
+    "pro192-1-1-tu-duy-oo",
+    "pro192-quiz-ch1"
+   ]
+  },
+  "pro192-slide-pro3-1": {
+   "hoc": "Lịch sử các bản JDK, 11 đặc điểm của Java, cơ chế biên dịch ra bytecode .class (CAFEBABE) chạy trên JVM, công cụ javac/javap, nền tảng JVM + API và biến PATH, CLASSPATH.",
+   "canBiet": "Đã cài sẵn JDK 8 cùng IDE ở Mục 0 và nắm ý tưởng ban đầu về lập trình hướng đối tượng.",
+   "lamDuoc": "Giải thích được vì sao Java độc lập nền tảng, kiểm tra bytecode bằng javap và cấu hình đúng biến môi trường PATH, CLASSPATH.",
+   "ketHop": "Học nối tiếp phần 2 bộ Getting Started để thực hành biên dịch, chạy chương trình đầu tiên và ôn lại cấu trúc Java cốt lõi.",
+   "canBietBai": [
+    "pro192-cai-moi-truong",
+    "pro192-slide-pro1-1"
+   ],
+   "ketHopBai": [
+    "pro192-slide-pro3-2",
+    "pro192-1-2-cu-phap-java"
+   ]
+  },
+  "pro192-slide-pro3-2": {
+   "hoc": "Tạo dự án NetBeans (src, build, nbproject), viết và chạy Hello World bằng IDE lẫn dòng lệnh java -cp và file BAT, giải phẫu hàm main và phân tích lỗi biên dịch, lỗi chạy trên JDK 8.",
+   "canBiet": "Đã nắm quy trình biên dịch bytecode qua javac/JVM ở phần trước và biết thao tác cơ bản trong NetBeans.",
+   "lamDuoc": "Tự tạo, biên dịch và chạy chương trình Java cả trong NetBeans lẫn dòng lệnh, đồng thời chẩn đoán nhanh các lỗi cú pháp và thiếu main.",
+   "ketHop": "Xem bản tóm tắt cú pháp Java cốt lõi để củng cố cấu trúc lớp, sau đó chuyển sang bài kiểu dữ liệu và toán tử.",
+   "canBietBai": [
+    "pro192-slide-pro3-1",
+    "pro192-buoi-dau-tien"
+   ],
+   "ketHopBai": [
+    "pro192-1-2-cu-phap-java",
+    "pro192-slide-pro4-1"
+   ]
+  },
+  "pro192-slide-pro4-1": {
+   "hoc": "Định danh, 8 kiểu nguyên thủy và tràn số, kiểu tham chiếu, mảng trên stack/heap, toán tử dịch bit >> và >>>, switch trên String, for-each, ép kiểu thu hẹp, phạm vi biến, Scanner và đối số main.",
+   "canBiet": "Đã biết tạo, biên dịch và chạy một lớp Java có hàm main trên JDK 8 cùng cú pháp điều khiển luồng cơ bản từ C.",
+   "lamDuoc": "Viết được chương trình nhập xuất bằng Scanner, xử lý mảng và toán tử đúng luật JDK 8, đồng thời tránh bẫy tràn số, ép kiểu và phạm vi biến.",
+   "ketHop": "Làm các bài thực hành nhập liệu, câu hỏi dịch bit và ép kiểu trong quiz chương 1 rồi học tiếp lớp bao ở bài sau.",
+   "canBietBai": [
+    "pro192-slide-pro3-2"
+   ],
+   "ketHopBai": [
+    "pro192-slide-pro5-1",
+    "pro192-on-ch1",
+    "pro192-quiz-ch1"
+   ]
+  },
+  "pro192-slide-pro5-1": {
+   "hoc": "Tám lớp bao (wrapper) bất biến và final, parse/valueOf/toBinaryString, lớp Math với ca làm tròn âm, bốn bẫy autoboxing/unboxing (đệm Integer 127/128, mở hộp null, remove) và lớp Character.",
+   "canBiet": "Đã phân biệt được 8 kiểu nguyên thủy với kiểu tham chiếu và nắm cú pháp cơ bản ở bài ngôn ngữ Java.",
+   "lamDuoc": "Dùng đúng lớp bao, Math và Character để phân loại ký tự kiểu PE, đồng thời chẩn đoán được lỗi == trên Integer, unboxing null và sai hàm remove.",
+   "ketHop": "Học nối tiếp phần String để ghép đủ kiến thức xử lý chuỗi, rồi luyện các bài đếm ký tự ở phần thực hành và câu đệm Integer trong quiz.",
+   "canBietBai": [
+    "pro192-slide-pro4-1"
+   ],
+   "ketHopBai": [
+    "pro192-slide-pro5-2",
+    "pro192-on-ch1",
+    "pro192-quiz-ch1"
+   ]
+  },
+  "pro192-slide-pro5-2": {
+   "hoc": "String bất biến, string pool, == với equals, các phương thức String và regex trong replaceAll/split, StringBuilder/StringBuffer, Scanner trên chuỗi hoặc tệp và định dạng bằng printf, DecimalFormat.",
+   "canBiet": "Đã nắm lớp bao, lớp Character ở phần trước và biết dùng mảng, vòng lặp cùng Scanner cơ bản.",
+   "lamDuoc": "Xử lý, tách, chuẩn hoá và định dạng chuỗi đúng chuẩn JDK 8 bằng String, StringBuilder, split và String.format cho các bài câu 4 PE.",
+   "ketHop": "Áp dụng ngay vào 7 bài thực hành câu 4 PE, làm Lab 1 chuẩn hoá tên sách và kiểm chứng bẫy string pool trong quiz chương 1.",
+   "canBietBai": [
+    "pro192-slide-pro5-1",
+    "pro192-slide-pro4-1"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch1",
+    "pro192-lab-1-danh-muc-sach",
+    "pro192-quiz-ch1"
+   ]
+  },
+  "pro192-slide-pro6-1": {
+   "hoc": "Lớp tiện ích static Collections và Arrays, Comparable với Comparator (ẩn danh, lambda, tránh tràn số khi trừ), binarySearch trả -(vị trí chèn)-1, Arrays.asList cố định kích thước và min/max/frequency/disjoint.",
+   "canBiet": "Đã quen mảng, lớp bao, phương thức compareTo của String và khái niệm danh sách động ArrayList.",
+   "lamDuoc": "Sắp xếp nhiều tiêu chí bằng Comparable hoặc Comparator, tìm nhị phân đúng điều kiện tiền sắp xếp và dùng thành thạo các hàm thao tác mảng, danh sách.",
+   "ketHop": "Thực hành sắp xếp và tìm kiếm qua bài ôn chương 1, áp dụng vào Lab 1 và xem trước yêu cầu sắp xếp danh sách ở khoá LAB211.",
+   "canBietBai": [
+    "pro192-slide-pro4-1",
+    "pro192-slide-pro5-2"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch1",
+    "pro192-lab-1-danh-muc-sach",
+    "pro192-quiz-ch1"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-1-1-tu-duy-oo": {
+   "hoc": "So sánh tư duy thủ tục ở C (struct và hàm tách rời) với hướng đối tượng trong Java, phân biệt lớp khuôn mẫu với thể hiện tạo bằng new qua ví dụ Student và giới thiệu bản đồ bốn trụ cột OOP.",
+   "canBiet": "Đã quen viết hàm và struct cơ bản bằng C; có thể dùng ngay làm bản tóm tắt ngắn sau bộ slide Introduction.",
+   "lamDuoc": "Phân biệt được lớp với đối tượng, gom đúng dữ liệu cùng hành vi vào một lớp đơn giản và định vị bốn trụ cột trong lộ trình PRO192.",
+   "ketHop": "Học tiếp bài cú pháp Java cốt lõi để viết chương trình hoàn chỉnh, rồi chuẩn bị cho Chương 2 về thiết kế trường, phương thức và constructor.",
+   "canBietBai": [
+    "pro192-slide-pro1-1"
+   ],
+   "ketHopBai": [
+    "pro192-1-2-cu-phap-java",
+    "pro192-2-1-lop-doi-tuong"
+   ]
+  },
+  "pro192-1-2-cu-phap-java": {
+   "hoc": "Cấu trúc một file Java với hàm main, bảng đối chiếu khác biệt giữa C và Java (lớp, tham chiếu, garbage collection, String, import), vòng for-each, ép kiểu tránh chia nguyên, .equals() và quy trình javac/JVM.",
+   "canBiet": "Đã hiểu khái niệm lớp và đối tượng ở bài trước cùng kiến thức điều khiển luồng cơ bản từ C.",
+   "lamDuoc": "Viết, biên dịch và chạy được chương trình Java cơ bản dùng mảng, vòng lặp tăng cường, ép kiểu đúng và so sánh String an toàn bằng .equals().",
+   "ketHop": "Luyện thêm trên Code Lab module Variables, Types & Operators ngay trên trình duyệt, sau đó làm phần thực hành và quiz chương 1.",
+   "canBietBai": [
+    "pro192-1-1-tu-duy-oo",
+    "pro192-slide-pro3-2"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch1",
+    "pro192-quiz-ch1"
+   ]
+  },
+  "pro192-on-ch1": {
+   "hoc": "Luyện 7 bài tập dạng câu 4 PE (IString, tách đường dẫn, đổi nhị phân) và khung menu nhập liệu LAB211 (parseInt kèm try/catch, regex matches, Comparator, String.format), kèm bảng thuật ngữ Anh-Việt.",
+   "canBiet": "Đã học xong kiểu dữ liệu, lớp bao, String/StringBuilder, Scanner và Collections/Arrays của Chương 1.",
+   "lamDuoc": "Hoàn chỉnh được 7 chương trình chạy đúng trên JDK 8 theo harness chấm tự động PE, xử lý chuỗi chuẩn từng ký tự và nhập liệu không sập.",
+   "ketHop": "Dùng ngay kỹ năng vừa luyện cho Lab 1 CT Library, làm quiz chương 1 và mở rộng sang luyện đề PE dạng 4 cùng hai khoá LAB211, CSD201.",
+   "canBietBai": [
+    "pro192-slide-pro4-1",
+    "pro192-slide-pro5-2",
+    "pro192-slide-pro6-1"
+   ],
+   "ketHopBai": [
+    "pro192-lab-1-danh-muc-sach",
+    "pro192-quiz-ch1",
+    "pro192-luyen-pe-4"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "data-structures-and-algorithms"
+   ]
+  },
+  "pro192-lab-1-danh-muc-sach": {
+   "hoc": "Thực hiện ticket CTL-1 trên starter 9 package chuẩn LAB211 với 5 hàm TODO: chuẩn hoá Title Case, kiểm chữ số ISBN-13, chặn trùng, tìm kiếm tên sách, sắp A-Z bằng Comparator và tránh bẫy ==, nextInt.",
+   "canBiet": "Đã thành thạo xử lý chuỗi, nhập liệu kiểm lỗi, Comparator ở Chương 1 và luyện qua các bài mẫu thực hành.",
+   "lamDuoc": "Bàn giao được ứng dụng console danh mục sách chạy JDK 8 đạt PASS 77/77 trên check.sh, 0 lỗi lint.py, không sập khi nhập sai và đủ 3 commit Git.",
+   "ketHop": "Chốt lại kiến thức bằng quiz chương 1, xem hướng dẫn qua review LAB211 rồi nối tiếp sang Lab 2 để tự thiết kế lớp Book và Member.",
+   "canBietBai": [
+    "pro192-slide-pro5-2",
+    "pro192-slide-pro6-1",
+    "pro192-on-ch1"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-ch1",
+    "pro192-lab-2-sach-va-thanh-vien",
+    "pro192-lab211-cach-qua-review"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "git"
+   ]
+  },
+  "pro192-quiz-ch1": {
+   "hoc": "Kiểm tra 10 câu dạng FE về kiểu nguyên thủy, ép kiểu (byte) 200, dịch bit >> và >>>, mảng, đệm Integer 127/128, string pool với ==, String bất biến, nối chuỗi và binarySearch khi thiếu khoá.",
+   "canBiet": "Đã hoàn thành các bài ngôn ngữ Java, lớp bao, String và lớp hỗ trợ Collections/Arrays của Chương 1.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững kiến thức Chương 1 và phát hiện kịp thời các bẫy đọc code kiểu đề FE trước khi sang Chương 2.",
+   "ketHop": "Câu nào sai hãy đối chiếu lại lời giải song ngữ, củng cố qua bài thực hành cùng Lab 1 để tạo đà cho bài thi cuối kỳ FE.",
+   "canBietBai": [
+    "pro192-slide-pro4-1",
+    "pro192-slide-pro5-2",
+    "pro192-slide-pro6-1"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch1",
+    "pro192-lab-1-danh-muc-sach",
+    "pro192-final-exam-fe"
+   ]
+  },
+  "pro192-slide-pro7-1": {
+   "hoc": "Phân biệt stack, heap và vùng nhớ HotSpot JDK 8 (Metaspace, Eden, Survivor, Old Gen), cách tham chiếu gọi phương thức và quy trình thu gom rác (GC), System.gc() đo thật bằng Runtime, WeakReference và -verbose:gc.",
+   "canBiet": "Cần nắm khái niệm JVM, kiểu nguyên thuỷ, mảng, phạm vi biến và cách dùng cơ bản lệnh new từ Chương 1.",
+   "lamDuoc": "Xác định được vị trí của biến cục bộ, đối tượng và trường static, nhận diện đúng thời điểm đối tượng thành rác và giải thích lỗi OutOfMemoryError, StackOverflowError.",
+   "ketHop": "Nên ghép cùng bài truyền tham số, bài thực hành tìm rác bằng WeakReference và quiz Chương 2 để nắm chắc mô hình tham chiếu khi đọc đề FE.",
+   "canBietBai": [
+    "pro192-slide-pro3-1",
+    "pro192-slide-pro4-1"
+   ],
+   "ketHopBai": [
+    "pro192-slide-pro8-2",
+    "pro192-on-ch2",
+    "pro192-quiz-ch2"
+   ]
+  },
+  "pro192-slide-pro8-1": {
+   "hoc": "Nguyên tắc đóng gói, cách tách lớp, trường, phương thức từ đề bài thành hộp UML, liên kết thấp, kết dính cao, cú pháp lớp, constructor, từ khoá this (soi bằng javap), chữ ký phương thức, getter/setter và bẫy input().",
+   "canBiet": "Cần hiểu mô hình bộ nhớ đối tượng ở bài trước cùng cách dùng String và Scanner từ Chương 1.",
+   "lamDuoc": "Chuyển được đề bài thành sơ đồ lớp UML, viết constructor dùng this.x = x, cài đặt setter có kiểm tra tránh NullPointerException và viết input() dùng chung một Scanner cho máy chấm PE.",
+   "ketHop": "Nên học nối tiếp phần 2 bộ slide Encapsulation, luyện viết lớp theo sơ đồ ở bài thực hành và áp dụng vào Lab 2 CT Library.",
+   "canBietBai": [
+    "pro192-slide-pro7-1",
+    "pro192-slide-pro5-2"
+   ],
+   "ketHopBai": [
+    "pro192-slide-pro8-2",
+    "pro192-on-ch2",
+    "pro192-lab-2-sach-va-thanh-vien"
+   ]
+  },
+  "pro192-slide-pro8-2": {
+   "hoc": "Quy tắc Java luôn truyền theo giá trị qua năm thí nghiệm chạy thật, ba bước của lệnh new (bytecode new/dup/invokespecial), constructor mặc định qua demo IntPoint1/IntPoint2 và thứ tự khởi tạo trường của đối tượng.",
+   "canBiet": "Cần nắm mô hình stack, heap, tham chiếu ở bài 2.A và cú pháp lớp, constructor, từ khoá this từ phần 1 bộ slide Encapsulation.",
+   "lamDuoc": "Đoán đúng biến nào bị thay đổi sau lời gọi phương thức, xử lý được lỗi javac khi mất constructor không tham số và lần đúng kết quả theo thứ tự giá trị 0, giá trị khởi đầu rồi thân constructor.",
+   "ketHop": "Nên làm bài tập lần theo bộ nhớ ở bài thực hành Chương 2, kiểm tra lại bằng quiz Chương 2 rồi học tiếp phần 3 bộ slide Encapsulation ở Chương 3.",
+   "canBietBai": [
+    "pro192-slide-pro7-1",
+    "pro192-slide-pro8-1"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch2",
+    "pro192-quiz-ch2",
+    "pro192-slide-pro8-3"
+   ]
+  },
+  "pro192-2-1-lop-doi-tuong": {
+   "hoc": "Cấu trúc chuẩn của một lớp gồm trường, constructor và phương thức qua ví dụ Student, Rectangle, cách nạp chồng constructor, phân biệt this.field với this(...), constructor mặc định và hai quan hệ đối tượng has-a, is-a.",
+   "canBiet": "Cần nắm cách hoạt động của lệnh new, constructor và từ khoá this đã giảng chi tiết trong hai bài slide Encapsulation trước đó.",
+   "lamDuoc": "Tự viết được lớp hoàn chỉnh, nạp chồng nhiều constructor uỷ thác bằng this(...) không lặp mã, khởi tạo nhiều đối tượng độc lập và nhận diện đúng quan hệ has-a, is-a.",
+   "ketHop": "Nên làm kèm bài trên CodeLab module OOP Fundamentals, thực hành 7 bài Chương 2, hoàn thành Lab 2 và chuẩn bị cho bài Kế thừa ở Chương 4.",
+   "canBietBai": [
+    "pro192-slide-pro8-1",
+    "pro192-slide-pro8-2"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch2",
+    "pro192-lab-2-sach-va-thanh-vien",
+    "pro192-4-1-ke-thua"
+   ]
+  },
+  "pro192-on-ch2": {
+   "hoc": "Bảy bài tập JDK 8 gồm viết lớp Laptop kiểu câu 1 PE, tìm rác, truyền tham trị, nối constructor bằng this(...) với bộ đếm static, đoán output che tên, lỗi == với equals và menu quản lý sinh viên, kèm 16 thuật ngữ.",
+   "canBiet": "Cần học xong mô hình bộ nhớ stack/heap, cách viết lớp, constructor, từ khoá this và truyền tham trị ở các bài 2.A đến 2.1.",
+   "lamDuoc": "Viết chuẩn lớp theo sơ đồ UML đạt đủ test case kiểu PE, lần giấy ra đúng đối tượng rác và output kiểu FE, đồng thời dựng được chương trình menu dùng một Scanner có kiểm tra dữ liệu.",
+   "ketHop": "Nên làm tiếp Lab 2 CT Library và quiz Chương 2, sau đó luyện thêm dạng 1 đề PE và áp dụng thói quen nhập liệu chuẩn sang khoá LAB211.",
+   "canBietBai": [
+    "pro192-slide-pro7-1",
+    "pro192-slide-pro8-1",
+    "pro192-slide-pro8-2"
+   ],
+   "ketHopBai": [
+    "pro192-lab-2-sach-va-thanh-vien",
+    "pro192-quiz-ch2",
+    "pro192-luyen-pe-1"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-lab-2-sach-va-thanh-vien": {
+   "hoc": "Thực hành chuẩn review LAB211 trên dự án CT Library: thiết kế lớp Book sáu trường và Member kiểu JavaBean với constructor, this(...), cấp mã B001/M001 ở repository không dùng static và cập nhật dữ liệu qua tham chiếu.",
+   "canBiet": "Cần hoàn thành Lab 1 để nắm cấu trúc chín package của CT Library cùng kiến thức lớp, constructor, this và tham chiếu của Chương 2.",
+   "lamDuoc": "Hoàn thiện được ứng dụng CT Library sáu mục menu có Book, Member, năm phép kiểm mới và cập nhật đúng số bản qua tham chiếu, đạt PASS 113/113 bộ chấm, sạch lint.py và biên dịch trên JDK 8.",
+   "ketHop": "Nên kiểm tra lại kiến thức bằng quiz Chương 2, nối tiếp lên Lab 3, xem thêm hướng dẫn qua review LAB211 và rèn tiếp ở khoá LAB211.",
+   "canBietBai": [
+    "pro192-lab-1-danh-muc-sach",
+    "pro192-2-1-lop-doi-tuong",
+    "pro192-on-ch2"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-ch2",
+    "pro192-lab-3-dong-goi-va-luat-du-lieu",
+    "pro192-lab211-cach-qua-review"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-quiz-ch2": {
+   "hoc": "Kiểm tra mười câu kiểu đề FE về stack và heap, bộ thu gom rác, truyền theo giá trị (int, mảng, StringBuilder), tham số che trường, constructor mặc định, thứ tự khởi tạo, chữ ký phương thức và == với equals.",
+   "canBiet": "Cần học xong toàn bộ lý thuyết bộ nhớ, lớp, constructor, truyền tham trị và hoàn thành bộ bài tập ôn Chương 2.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững Chương 2, phát hiện sớm các lỗ hổng về tham chiếu, khởi tạo đối tượng và bẫy đọc code thường gặp trong đề FE.",
+   "ketHop": "Nên làm sau khi hoàn thành bài thực hành và Lab 2, đồng thời dùng làm bước đệm trước Progress Test 1 và kỳ thi cuối kỳ FE.",
+   "canBietBai": [
+    "pro192-slide-pro7-1",
+    "pro192-slide-pro8-2",
+    "pro192-on-ch2"
+   ],
+   "ketHopBai": [
+    "pro192-lab-2-sach-va-thanh-vien",
+    "pro192-progress-test-1",
+    "pro192-final-exam-fe"
+   ]
+  },
+  "pro192-slide-pro8-3": {
+   "hoc": "Khái niệm package làm không gian tên, cách tạo và chạy lớp có package bằng java mypkg.PkgDemo, bốn mức truy cập đo bằng javac, super, varargs và thiết kế lại lớp SportCar tự giữ luật.",
+   "canBiet": "Nắm cách định nghĩa lớp, trường, phương thức, constructor và từ khoá this từ hai phần đầu bộ slide Encapsulation ở Chương 2.",
+   "lamDuoc": "Tạo và chạy được lớp nằm trong package không dính lỗi không tìm thấy main class, đoán đúng lỗi truy cập của javac, viết hàm varargs và chuyển đề bài thành lớp đóng gói chặt.",
+   "ketHop": "Đọc nhanh bản tóm gọn đóng gói và trừu tượng ở bài sau, rồi giải 6 bài tập thực hành JDK 8 và kiểm tra lại bằng quiz của chương.",
+   "canBietBai": [
+    "pro192-slide-pro8-1",
+    "pro192-slide-pro8-2"
+   ],
+   "ketHopBai": [
+    "pro192-3-1-dong-goi",
+    "pro192-on-ch3",
+    "pro192-quiz-ch3"
+   ]
+  },
+  "pro192-3-1-dong-goi": {
+   "hoc": "Tóm lược hai trụ cột đóng gói và trừu tượng qua ví dụ BankAccount dùng private và deposit kiểm tra điều kiện, bảng bốn mức truy cập và khái niệm bất biến với private final.",
+   "canBiet": "Hiểu cấu trúc lớp, trường, phương thức từ Chương 2 và chi tiết package cùng mức truy cập trong phần slide trước đó.",
+   "lamDuoc": "Phân biệt được đóng gói với trừu tượng, chọn đúng mức truy cập cho thành viên lớp và chặn dữ liệu không hợp lệ ngay tại lối vào của phương thức.",
+   "ketHop": "Luyện tay với 6 bài tập thực hành đóng gói, làm quiz cuối chương và nối tiếp phần trừu tượng đầy đủ ở Chương 5 với abstract class và interface.",
+   "canBietBai": [
+    "pro192-2-1-lop-doi-tuong",
+    "pro192-slide-pro8-3"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch3",
+    "pro192-quiz-ch3",
+    "pro192-5-1-abstract-interface"
+   ]
+  },
+  "pro192-on-ch3": {
+   "hoc": "Sáu bài tập JDK 8 gồm BankAccount không có setter số dư, đoán lỗi truy cập javac, đóng file jar hai package, varargs, vá rò rỉ danh sách qua getter và thiết kế lớp bãi đỗ xe kèm 14 thuật ngữ.",
+   "canBiet": "Nắm luật package, bốn mức truy cập, varargs và nguyên tắc bảo vệ bất biến dữ liệu từ hai bài lý thuyết trước trong chương.",
+   "lamDuoc": "Viết được lớp chuẩn đề PE không lộ setter nhạy cảm, trả bản sao hoặc danh sách chỉ đọc ở getter, đóng gói và chạy file jar bằng java -jar.",
+   "ketHop": "Áp dụng ngay vào Lab 3 trên dự án CT Library, làm quiz Chương 3 và tiếp tục dùng protected cùng super ở Chương 4.",
+   "canBietBai": [
+    "pro192-slide-pro8-3",
+    "pro192-3-1-dong-goi"
+   ],
+   "ketHopBai": [
+    "pro192-lab-3-dong-goi-va-luat-du-lieu",
+    "pro192-quiz-ch3",
+    "pro192-slide-pro9-1"
+   ]
+  },
+  "pro192-lab-3-dong-goi-va-luat-du-lieu": {
+   "hoc": "Tách kiểm tra định dạng năm hiện tại, regex email ở utils và kiểm trùng ở repository, xoá sách không cấp lại mã static, thống kê trên bản sao DTO và review sửa 6 lỗi PR bằng lint.py.",
+   "canBiet": "Hoàn thành cấu trúc lớp Book, Member ở Lab 2 và nắm chắc access modifier, phòng tránh rò rỉ getter cùng đóng gói từ các bài trước trong chương.",
+   "lamDuoc": "Hoàn thiện phiên bản Lab 3 của dự án CT Library từ chối đủ 10 dữ liệu sai, xoá và thống kê an toàn, sửa sạch 6 lỗi lint.py và vượt qua 176/176 test trên JDK 8.",
+   "ketHop": "Củng cố lý thuyết với quiz Chương 3, xem thêm hướng dẫn qua review LAB211 và chuẩn bị nền cho Lab 4 về kế thừa, đa hình.",
+   "canBietBai": [
+    "pro192-lab-2-sach-va-thanh-vien",
+    "pro192-on-ch3"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-ch3",
+    "pro192-lab211-cach-qua-review",
+    "pro192-lab-4-ke-thua-va-da-hinh"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-quiz-ch3": {
+   "hoc": "Kiểm tra 10 câu kiểu đề FE về thứ tự bốn mức truy cập, luật protected qua tham chiếu lớp cha khác package, vị trí khai báo và cách chạy package, cú pháp varargs, rò rỉ getter và demo Box/Rectangle.",
+   "canBiet": "Đã học phần slide Encapsulation 3/3, nắm khái niệm đóng gói và hoàn thành bộ bài tập thực hành Chương 3.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững Chương 3 và nhận diện sớm các bẫy truy cập, package, varargs hay rò rỉ dữ liệu thường gặp trong đề FE.",
+   "ketHop": "Đọc kỹ phần giải thích song ngữ sau mỗi câu sai, quay lại luyện thêm ở Lab 3 nếu còn vướng và sẵn sàng sang Chương 4 hoặc Progress Test 1.",
+   "canBietBai": [
+    "pro192-slide-pro8-3",
+    "pro192-3-1-dong-goi",
+    "pro192-on-ch3"
+   ],
+   "ketHopBai": [
+    "pro192-lab-3-dong-goi-va-luat-du-lieu",
+    "pro192-slide-pro9-1",
+    "pro192-progress-test-1"
+   ]
+  },
+  "pro192-slide-pro9-1": {
+   "hoc": "Trọn 17 slide Inheritance: quan hệ is-a và has-a bằng UML, tách lớp cha chung, bốn luật extends, super cho constructor và phương thức, che giấu static, instanceof và ép kiểu xuống trên JDK 8.",
+   "canBiet": "Cần vững cách tạo lớp với trường private, constructor, từ khoá this và mức truy cập từ Chương 2–3, cùng bốn trụ cột OOP ở Chương 1.",
+   "lamDuoc": "Phân biệt được khi nào dùng extends hay trường tham chiếu, viết đúng constructor gọi super(...), đọc được lỗi biên dịch và ép kiểu xuống an toàn tránh ClassCastException.",
+   "ketHop": "Học tiếp slide đa hình 4.B, làm bộ bài tập lớp SpecX ở 4.3 và luyện đề thật dạng 2 PE để thành thạo câu kế thừa ăn điểm.",
+   "canBietBai": [
+    "pro192-slide-pro1-1",
+    "pro192-slide-pro8-1",
+    "pro192-slide-pro8-3"
+   ],
+   "ketHopBai": [
+    "pro192-slide-pro10-1",
+    "pro192-on-ch4",
+    "pro192-luyen-pe-2"
+   ]
+  },
+  "pro192-slide-pro10-1": {
+   "hoc": "11 slide đầu bộ Polymorphism: nạp chồng chọn theo kiểu tĩnh (nới rộng trước đóng hộp), luật ghi đè với @Override, super.toString(), ràng buộc động (invokevirtual) và ba thứ không đa hình.",
+   "canBiet": "Cần nắm cây lớp cha–con, super, che giấu static và kiểu tĩnh/kiểu động ở bài slide Inheritance 4.A, cùng mức truy cập ở Chương 3.",
+   "lamDuoc": "Phân biệt được nạp chồng và ghi đè, đoán đúng bản phương thức được gọi lúc biên dịch hay lúc chạy, và giải thích được vì sao trường hay static không đa hình.",
+   "ketHop": "Thực hành đoán output kiểu FE ở bài 4.3, làm Quiz chương 4 để kiểm bẫy ghi đè, rồi học tiếp phần 2 bộ slide ở bài 5.A.",
+   "canBietBai": [
+    "pro192-slide-pro9-1",
+    "pro192-slide-pro8-3"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch4",
+    "pro192-quiz-ch4",
+    "pro192-slide-pro10-2"
+   ]
+  },
+  "pro192-4-1-ke-thua": {
+   "hoc": "Tóm gọn trụ cột kế thừa qua ví dụ Animal/Dog/Cat: extends, super, ghi đè @Override, kế thừa đơn, gốc java.lang.Object và vai trò từ khoá final ở lớp, phương thức, trường (CQ14.2).",
+   "canBiet": "Cần nắm trường, phương thức, constructor ở Chương 2 và đóng gói ở Chương 3; có thể xem trước slide 4.A nếu muốn học sâu từng quy tắc.",
+   "lamDuoc": "Viết được lớp con kế thừa lớp cha, gọi constructor cha bằng super, ghi đè phương thức đúng chuẩn và nêu chính xác tác dụng của final ở cả ba vị trí.",
+   "ketHop": "Luyện ngay module Inheritance, Polymorphism & Interfaces trên CodeLab, đọc tiếp bài Đa hình 4.2 và mở rộng sang interface ở bài 5.1.",
+   "canBietBai": [
+    "pro192-2-1-lop-doi-tuong",
+    "pro192-3-1-dong-goi",
+    "pro192-slide-pro9-1"
+   ],
+   "ketHopBai": [
+    "pro192-4-2-da-hinh",
+    "pro192-on-ch4",
+    "pro192-5-1-abstract-interface"
+   ]
+  },
+  "pro192-4-2-da-hinh": {
+   "hoc": "Tóm gọn đa hình qua mảng Animal[] chứa Dog và Cat: upcasting, dynamic dispatch chọn phương thức lúc chạy, và kiểm tra instanceof trước khi ép kiểu xuống trên JDK 8 (CQ9.2, CQ10.1).",
+   "canBiet": "Cần đã nắm lớp Animal, extends và ghi đè @Override ở bài 4.1; xem kèm slide 4.B để hiểu sâu cơ chế chọn phương thức của JVM.",
+   "lamDuoc": "Viết được vòng lặp xử lý nhiều lớp con qua kiểu cha chung mà không phải sửa khi thêm lớp mới, và ép kiểu xuống an toàn tránh ClassCastException trên JDK 8.",
+   "ketHop": "Áp dụng ngay vào Lab 4 CT Library để tính phí trễ không dùng instanceof, làm bài tập 4.3 và tự kiểm tra bằng Quiz chương 4.",
+   "canBietBai": [
+    "pro192-4-1-ke-thua",
+    "pro192-slide-pro10-1"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch4",
+    "pro192-lab-4-ke-thua-va-da-hinh",
+    "pro192-quiz-ch4"
+   ]
+  },
+  "pro192-on-ch4": {
+   "hoc": "Bảy bài tập chạy thật trên JDK 8 kèm 16 thuật ngữ và tóm tắt 8 ý: dựng Laptop/SpecLaptop và Ticket/VipTicket kiểu PE, menu ArrayList<Item>, đoán 6 output FE, sửa 7 lỗi javac, ép kiểu và sửa thiết kế.",
+   "canBiet": "Cần học xong lý thuyết kế thừa và đa hình ở hai bài slide 4.A, 4.B (hoặc 4.1, 4.2) và cài sẵn NetBeans với JDK 8 để tự làm trước khi xem lời giải.",
+   "lamDuoc": "Viết hoàn chỉnh được câu 2 PE (lớp X/SpecX) từ sơ đồ UML, dựng menu quản lý danh sách đa hình, sửa lỗi biên dịch kế thừa và đoán đúng output câu bẫy FE.",
+   "ketHop": "Bấm giờ 20 phút luyện thêm dạng 2 PE, làm Quiz chương 4 và áp dụng vào Lab 4 CT Library để chuẩn bị cho các bài menu LAB211.",
+   "canBietBai": [
+    "pro192-slide-pro9-1",
+    "pro192-slide-pro10-1",
+    "pro192-4-2-da-hinh"
+   ],
+   "ketHopBai": [
+    "pro192-lab-4-ke-thua-va-da-hinh",
+    "pro192-quiz-ch4",
+    "pro192-luyen-pe-2"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-lab-4-ke-thua-va-da-hinh": {
+   "hoc": "Mốc Lab 4 CT Library theo chuẩn review LAB211 (16 slide): thiết kế cây LibraryItem sang Book, Magazine, Dvd với constructor protected, ghi đè sáu phương thức, và xử lý các bẫy super, che giấu, ép kiểu.",
+   "canBiet": "Cần hoàn thành Lab 3 làm nền dự án và nắm chắc kế thừa, ghi đè, ràng buộc động ở hai bài slide 4.A và 4.B.",
+   "lamDuoc": "Hoàn thiện được mô-đun CT Library quản lý Book, Magazine, Dvd trong một ArrayList<LibraryItem> và tính phí trễ không dùng instanceof, vượt 199/199 test chấm kiểu PE và lint.py sạch.",
+   "ketHop": "Làm tiếp Quiz chương 4 để chốt lý thuyết, học Lab 5 chuyển LibraryItem sang abstract/interface và đối chiếu chuẩn review LAB211.",
+   "canBietBai": [
+    "pro192-lab-3-dong-goi-va-luat-du-lieu",
+    "pro192-slide-pro9-1",
+    "pro192-slide-pro10-1"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-ch4",
+    "pro192-lab-5-truu-tuong-va-interface",
+    "pro192-lab211-cach-qua-review"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-quiz-ch4": {
+   "hoc": "Kiểm tra 10 câu dạng FE trên JDK 8 về kế thừa và đa hình: thứ tự constructor, luật super(...), che giấu static, trường không đa hình, chọn bản nạp chồng, luật ghi đè quyền truy cập, private và ép kiểu.",
+   "canBiet": "Cần hoàn thành lý thuyết slide 4.A, 4.B và luyện đoán output ở bài thực hành 4.3 trước khi làm bài trắc nghiệm.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững Chương 4 và phát hiện sớm các lỗ hổng hay mất điểm trong câu trắc nghiệm đoán output của đề FE.",
+   "ketHop": "Đọc kỹ giải thích song ngữ cho từng câu sai, ôn lại phần tương ứng ở bài 4.3 và Lab 4 rồi chuyển sang Chương 5 (Abstract Class & Interface).",
+   "canBietBai": [
+    "pro192-slide-pro9-1",
+    "pro192-slide-pro10-1",
+    "pro192-on-ch4"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch4",
+    "pro192-lab-4-ke-thua-va-da-hinh",
+    "pro192-slide-pro10-2"
+   ]
+  },
+  "pro192-slide-pro10-2": {
+   "hoc": "Giải thích cấu tạo interface trên JDK 8 qua javap, phương thức default và static, xung đột trùng tên, lớp trừu tượng nhiều tầng, lớp lồng, lớp ẩn danh, lambda và adapter.",
+   "canBiet": "Nắm chắc kế thừa, ghi đè phương thức và ràng buộc động ở nửa đầu bộ slide Polymorphism cùng nền tảng lớp và đối tượng.",
+   "lamDuoc": "Viết được interface, lớp trừu tượng, lớp ẩn danh và lambda chuẩn JDK 8; đọc hiểu lỗi thiếu ghi đè phương thức trừu tượng và nhận diện tên file .class sinh ra.",
+   "ketHop": "Đọc tiếp bài tóm gọn abstract class và interface để chốt tiêu chí chọn lựa, rồi luyện 7 bài tập kiểu PE và hoàn thành Lab 5.",
+   "canBietBai": [
+    "pro192-slide-pro10-1",
+    "pro192-4-2-da-hinh"
+   ],
+   "ketHopBai": [
+    "pro192-5-1-abstract-interface",
+    "pro192-on-ch5",
+    "pro192-lab-5-truu-tuong-va-interface"
+   ]
+  },
+  "pro192-5-1-abstract-interface": {
+   "hoc": "Trình bày lớp trừu tượng qua Shape, Circle, Rectangle, interface qua Payable và Comparable<T>, phương thức default của Java 8 theo CQ13.3 và quy tắc chọn giữa is-a với can-do.",
+   "canBiet": "Hiểu kế thừa, đa hình và chi tiết cú pháp interface, lớp trừu tượng từ phần giảng slide của chương.",
+   "lamDuoc": "Chọn đúng giữa abstract class và interface cho từng bài toán, hiện thực đúng Comparable<T> mà không đè kiểu JDK và xử lý đối tượng đa hình qua kiểu trừu tượng.",
+   "ketHop": "Áp dụng ngay vào 7 bài thực hành chuẩn PE, nâng cấp CT Library ở Lab 5 và làm Quiz chương 5 để kiểm tra các bẫy lý thuyết.",
+   "canBietBai": [
+    "pro192-slide-pro10-2",
+    "pro192-4-1-ke-thua",
+    "pro192-4-2-da-hinh"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch5",
+    "pro192-lab-5-truu-tuong-va-interface",
+    "pro192-quiz-ch5"
+   ]
+  },
+  "pro192-on-ch5": {
+   "hoc": "Luyện 7 bài tập JDK 8 gồm đề PE 10 điểm, câu 4 hiện thực interface chuỗi, Menu trừu tượng kiểu template method, sắp xếp Comparable, Comparator, lambda, đoán output, lỗi biên dịch và 16 thuật ngữ.",
+   "canBiet": "Đã nắm cú pháp interface, lớp trừu tượng, lớp ẩn danh, lambda Java 8 và tiêu chí phân biệt is-a với can-do ở hai bài lý thuyết trước.",
+   "lamDuoc": "Hoàn thành trọn vẹn dạng đề PE 10 điểm và câu 4 xử lý chuỗi, sửa được lỗi Scanner trong menu trừu tượng, chẩn đoán đúng bẫy biên dịch và câu đoán output FE.",
+   "ketHop": "Tiếp tục làm Lab 5, Quiz chương 5 và bấm giờ giải thử Progress Test 1; kỹ năng dựng menu trừu tượng cũng dùng trực tiếp cho môn LAB211.",
+   "canBietBai": [
+    "pro192-slide-pro10-2",
+    "pro192-5-1-abstract-interface"
+   ],
+   "ketHopBai": [
+    "pro192-lab-5-truu-tuong-va-interface",
+    "pro192-quiz-ch5",
+    "pro192-progress-test-1"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-lab-5-truu-tuong-va-interface": {
+   "hoc": "Tái cấu trúc CT Library theo ticket review: chuyển LibraryItem thành abstract với 6 phương thức trừu tượng, tách IBookRepository, InMemoryBookRepository và chính sách phí IFeePolicy theo mẫu Strategy.",
+   "canBiet": "Hoàn thành cấu trúc kế thừa của Lab 4 và nắm vững cách viết, hiện thực lớp trừu tượng, interface cùng các lỗi biên dịch javac ở Chương 5.",
+   "lamDuoc": "Hoàn thiện mã nguồn CT Library đạt 163/163 test và sạch lint.py, với LibraryItem không thể khởi tạo trực tiếp, controller chỉ phụ thuộc interface và dễ mở rộng chính sách phí mới.",
+   "ketHop": "Làm Quiz chương 5 để chốt lý thuyết, rồi nối tiếp kiến trúc repository này sang Lab 6 và Lab 9 khi cắm kho tệp; chuẩn review khớp trực tiếp với môn LAB211.",
+   "canBietBai": [
+    "pro192-lab-4-ke-thua-va-da-hinh",
+    "pro192-5-1-abstract-interface",
+    "pro192-on-ch5"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-ch5",
+    "pro192-lab-6-ngoai-le-muon-tra",
+    "pro192-lab-9-luu-tep"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-quiz-ch5": {
+   "hoc": "Kiểm tra 10 câu dạng FE trên JDK 8 về hằng và static trong interface, quên public hay thiếu phương thức khi implements, constructor lớp trừu tượng, xung đột hai interface và lớp ẩn danh.",
+   "canBiet": "Đã học đủ lý thuyết interface, lớp trừu tượng, lớp ẩn danh và luyện qua các bài đoán output, tìm lỗi biên dịch của Chương 5.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững Chương 5, phát hiện nhanh các bẫy biên dịch và câu đoán output hay gặp trong đề FE trước khi làm Progress Test 1.",
+   "ketHop": "Xem lại giải thích song ngữ cho câu sai, rà lại bài thực hành hoặc Lab 5 nếu còn vướng, sau đó chuyển sang Progress Test 1 tổng ôn Chương 1–5.",
+   "canBietBai": [
+    "pro192-slide-pro10-2",
+    "pro192-5-1-abstract-interface",
+    "pro192-on-ch5"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch5",
+    "pro192-lab-5-truu-tuong-va-interface",
+    "pro192-progress-test-1"
+   ]
+  },
+  "pro192-progress-test-1": {
+   "hoc": "Kiểm tra 20 câu dạng FE phủ Chương 1–5 (CLO1–7) chạy đo trên JDK 8, gồm bẫy cú pháp, StringBuilder, static, constructor, đóng gói, super, nạp chồng, ghi đè, equals, abstract, interface và default method.",
+   "canBiet": "Cần học xong nền tảng Java và 4 trụ cột OOP từ Chương 1 đến Chương 5, nắm rõ kế thừa, đa hình, lớp trừu tượng, interface và cơ chế biên dịch JDK 8.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững cốt lõi OOP Chương 1–5, chẩn đoán chính xác lỗi biên dịch javac và đoán đúng kết quả thực thi trên JDK 8 cho các bẫy trắc nghiệm dạng FE.",
+   "ketHop": "Nên học thêm bài 6.1 về xử lý ngoại lệ vì phạm vi kiểm tra trên lớp có thể gồm phần này; đối chiếu kỹ giải thích song ngữ sau khi làm để chuẩn bị cho đề FE.",
+   "canBietBai": [
+    "pro192-4-1-ke-thua",
+    "pro192-4-2-da-hinh",
+    "pro192-5-1-abstract-interface"
+   ],
+   "ketHopBai": [
+    "pro192-6-1-ngoai-le",
+    "pro192-final-exam-fe"
+   ]
+  },
+  "pro192-slide-pro11-1": {
+   "hoc": "Cơ chế ngoại lệ qua 17 slide trên JDK 8: cây Throwable, try-catch-finally, thứ tự catch, multi-catch, finally với return và System.exit, throw, throws, try-with-resources và sửa vòng nhập số dùng một Scanner.",
+   "canBiet": "Nắm vững kế thừa lớp cha con, cách viết phương thức và thao tác nhập liệu cơ bản bằng Scanner trong Java.",
+   "lamDuoc": "Phân biệt được checked, unchecked và Error, đọc được stack trace để tìm dòng lỗi, đoán đúng output của try-catch-finally và viết hàm nhập số sống sót khi dữ liệu nạp qua pipe.",
+   "ketHop": "Mở kèm bộ slide Exception Handling của trường, sau đó luyện 6 bài tập kiểu PE, làm Lab 6 và liên hệ ứng dụng sang LAB211 cùng PRJ301.",
+   "canBietBai": [
+    "pro192-slide-pro5-2",
+    "pro192-4-1-ke-thua"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch6",
+    "pro192-lab-6-ngoai-le-muon-tra",
+    "pro192-quiz-ch6"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "java-web-application-development"
+   ]
+  },
+  "pro192-6-1-ngoai-le": {
+   "hoc": "Cấu trúc try, catch, finally để xử lý lỗi lúc chạy, phân biệt ngoại lệ checked và unchecked, tự ném lỗi bằng throw, mẫu bỏ qua dữ liệu sai trong vòng lặp và đóng tài nguyên tự động bằng try-with-resources.",
+   "canBiet": "Cú pháp Java cơ bản, vòng lặp, chuyển đổi chuỗi sang số và tổng quan cây ngoại lệ từ bài giảng slide liền trước.",
+   "lamDuoc": "Viết được khối try-catch-finally xử lý ArithmeticException và NumberFormatException mà không làm sập vòng lặp, tự phát ngoại lệ bằng throw và đóng tài nguyên AutoCloseable gọn gàng.",
+   "ketHop": "Luyện thêm trên CodeLab mục Exception Handling, I/O & Generics, làm bài thực hành Chương 6, Lab 6 và vận dụng lại try-with-resources ở Chương 9.",
+   "canBietBai": [
+    "pro192-slide-pro11-1"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch6",
+    "pro192-lab-6-ngoai-le-muon-tra",
+    "pro192-9-1-file-io"
+   ]
+  },
+  "pro192-on-ch6": {
+   "hoc": "Sáu bài tập JDK 8: tự tạo ngoại lệ checked tách tầng ném và bắt, xây lớp Inputter tránh đóng System.in, đoán output finally/return, gọi tên lỗi biên dịch, đọc stack trace có Caused by, sửa Banking và 14 thuật ngữ.",
+   "canBiet": "Nắm chắc cây Throwable, quy tắc thứ tự catch, throws, finally và cách đọc stack trace từ phần lý thuyết đầu chương.",
+   "lamDuoc": "Viết được ngoại lệ checked kiểu PE-ADV1 và lớp Inputter dùng lại cho LAB211, tránh bẫy đóng System.in qua pipe, đoán đúng câu hỏi FE và truy ra nguyên nhân gốc từ stack trace.",
+   "ketHop": "Áp dụng ngay vào Lab 6 của CT Library, làm Quiz chương 6 để chốt kiến thức và xem thêm bài phân tích Banking cùng khoá LAB211.",
+   "canBietBai": [
+    "pro192-slide-pro11-1",
+    "pro192-6-1-ngoai-le"
+   ],
+   "ketHopBai": [
+    "pro192-lab-6-ngoai-le-muon-tra",
+    "pro192-quiz-ch6",
+    "pro192-banking"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-lab-6-ngoai-le-muon-tra": {
+   "hoc": "Thiết kế họ ngoại lệ nghiệp vụ checked từ LibraryException và InvalidInputException giữ nguyên nhân gốc, ném ở repository/service và bắt ở controller, dùng try-with-resources cho Scanner và né 5 lỗi biên dịch hay gặp.",
+   "canBiet": "Hoàn thành Lab 5 của CT Library và nắm vững ngoại lệ checked tự tạo, quy tắc phân tầng ném bắt cùng các bẫy try-catch-finally.",
+   "lamDuoc": "Hoàn thiện năm TODO cho chức năng mượn và trả sách (menu 10, 11) không còn throws Exception hay catch rỗng, vượt 233/233 ca kiểm thử harness và chạy sạch lint.py theo chuẩn LAB211.",
+   "ketHop": "Làm xong thì chốt lý thuyết bằng Quiz chương 6, mở rộng tiếp sang Lab 7 và đối chiếu tiêu chuẩn chấm với bài hướng dẫn qua review LAB211.",
+   "canBietBai": [
+    "pro192-lab-5-truu-tuong-va-interface",
+    "pro192-slide-pro11-1",
+    "pro192-on-ch6"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-ch6",
+    "pro192-lab-7-danh-sach-doi-tuong",
+    "pro192-lab211-cach-qua-review"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-quiz-ch6": {
+   "hoc": "Kiểm tra 10 câu dạng FE trên JDK 8 về ngoại lệ checked và tự tạo, thứ tự catch cha con, return trước finally, throws, lan truyền qua finally, đọc stack trace, ngoại lệ trong catch và bẫy tạo mới Scanner qua pipe.",
+   "canBiet": "Hoàn thành lý thuyết slide, bài tập thực hành ôn chương và Lab 6 về xử lý ngoại lệ trong Java.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững toàn bộ Chương 6, nhận diện kịp thời các lỗ hổng về bẫy biên dịch và dự đoán output trước khi bước vào kỳ thi FE.",
+   "ketHop": "Xem kỹ giải thích song ngữ của các câu sai, ôn lại phần bẫy trong bài thực hành rồi chuyển sang Chương 7, Progress Test 2 và luyện đề FE.",
+   "canBietBai": [
+    "pro192-slide-pro11-1",
+    "pro192-on-ch6",
+    "pro192-lab-6-ngoai-le-muon-tra"
+   ],
+   "ketHopBai": [
+    "pro192-7-1-mang-doi-tuong",
+    "pro192-progress-test-2",
+    "pro192-final-exam-fe"
+   ]
+  },
+  "pro192-slide-pro12-1": {
+   "hoc": "Giải thích 16 slide case study cửa hàng đồ cổ (Item, Vase, Statue, Painting, ItemList) từ sơ đồ lớp, input() dùng chung một Scanner đến các thao tác CRUD, lọc, sắp xếp và sửa lỗi biên dịch, lỗi chạy thật trên JDK 8.",
+   "canBiet": "Cần nắm kế thừa, đa hình, interface và xử lý ngoại lệ khi nhập liệu từ Chương 4 đến Chương 6 để hiểu mảng tham chiếu kiểu lớp cha và ràng buộc dữ liệu.",
+   "lamDuoc": "Cài đặt được lớp danh sách trên mảng dùng một phần kèm menu chịu lỗi nhập, tránh được bẫy xoá khi mảng đầy, lọc sai loại, sắp xếp lỗi và trôi lệnh nextInt/nextLine.",
+   "ketHop": "Nên làm tiếp 6 bài thực hành Chương 7, Lab 7 trên CT Library và Quiz Chương 7 để áp dụng lại thao tác mảng cho câu 3 PE và bài quản lý LAB211.",
+   "canBietBai": [
+    "pro192-4-2-da-hinh",
+    "pro192-5-1-abstract-interface",
+    "pro192-6-1-ngoai-le"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch7",
+    "pro192-lab-7-danh-sach-doi-tuong",
+    "pro192-quiz-ch7"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-7-1-mang-doi-tuong": {
+   "hoc": "Khung chương trình quản lý console gồm mảng đối tượng, vòng lặp menu và tách mỗi hành động thành một phương thức, cùng mẫu duyệt tìm lớn nhất, tính trung bình, đếm lọc và sắp xếp bằng Arrays.sort với Comparator.",
+   "canBiet": "Cần biết tạo lớp, khởi tạo đối tượng, dùng mảng cơ bản và nắm khái niệm compareTo từ phần interface cũng như bài slide cửa hàng đồ cổ liền trước.",
+   "lamDuoc": "Viết được vòng lặp duyệt mảng đối tượng để tìm cực trị, thống kê tổng hợp, đếm theo điều kiện và sắp xếp mảng theo tiêu chí tuỳ chọn bằng Comparator.",
+   "ketHop": "Nên làm bài thực hành Chương 7 và Lab 7 để dựng đủ menu CRUD, sau đó học tiếp Chương 8 về Collections khi cần danh sách đổi kích thước động và nền sắp xếp cho CSD201.",
+   "canBietBai": [
+    "pro192-slide-pro12-1",
+    "pro192-2-1-lop-doi-tuong",
+    "pro192-5-1-abstract-interface"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch7",
+    "pro192-lab-7-danh-sach-doi-tuong",
+    "pro192-8-1-collections"
+   ],
+   "ketHopKhoa": [
+    "data-structures-and-algorithms"
+   ]
+  },
+  "pro192-on-ch7": {
+   "hoc": "Luyện 6 bài chạy thật trên JDK 8: chèn và xoá mảng dùng một phần, câu 3 PE (f1/f2/f3), đo 5 cách xoá khi đang lặp, quản lý sản phẩm LAB211, đoán 6 output kiểu FE và báo cáo đa hình, kèm 14 thuật ngữ.",
+   "canBiet": "Cần học xong case study cửa hàng đồ cổ và mẫu duyệt mảng đối tượng ở hai bài trước trong chương để tự cài đặt các thao tác trên mảng.",
+   "lamDuoc": "Viết được hàm chèn/xoá đúng chiều dịch phần tử, giải thành thạo câu 3 PE, chọn đúng cách xoá khi đang duyệt và dựng chương trình quản lý chuẩn LAB211.",
+   "ketHop": "Nên làm tiếp Lab 7 trên CT Library, ôn Quiz Chương 7 và luyện dạng câu 3 đề PE thật, đồng thời tạo nền trực tiếp cho CSD201 và LAB211.",
+   "canBietBai": [
+    "pro192-slide-pro12-1",
+    "pro192-7-1-mang-doi-tuong"
+   ],
+   "ketHopBai": [
+    "pro192-lab-7-danh-sach-doi-tuong",
+    "pro192-quiz-ch7",
+    "pro192-luyen-pe-3"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "data-structures-and-algorithms"
+   ]
+  },
+  "pro192-lab-7-danh-sach-doi-tuong": {
+   "hoc": "Thực hành trên 17 slide dự án CT Library: lọc đa hình bằng getItemType thay instanceof, sắp xếp 4 khoá với Comparator, khởi tạo mảng thống kê, xoá bằng duyệt ngược và phân tích 4 bẫy chạy thật trên JDK 8.",
+   "canBiet": "Cần hoàn thành Lab 6 của CT Library và nắm vững thao tác mảng, Comparator cùng quy tắc xoá khi đang duyệt từ các bài lý thuyết, thực hành Chương 7.",
+   "lamDuoc": "Hoàn thiện được 3 tính năng tìm nâng cao, thống kê theo loại và dọn kho trên CT Library, vượt qua 297/297 test chấm kiểu PE và đạt kiểm tra lint.py sạch.",
+   "ketHop": "Nên làm Quiz Chương 7 để củng cố phần lý thuyết, xem chuẩn review LAB211 để giữ thói quen code sạch rồi nâng cấp CT Library lên HashMap và TreeSet ở Lab 8.",
+   "canBietBai": [
+    "pro192-lab-6-ngoai-le-muon-tra",
+    "pro192-slide-pro12-1",
+    "pro192-on-ch7"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-ch7",
+    "pro192-lab-8-collections",
+    "pro192-lab211-cach-qua-review"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-quiz-ch7": {
+   "hoc": "Kiểm tra 10 câu dạng FE về mảng đối tượng: ô null mặc định, tham chiếu dùng chung, bản sao nông Arrays.copyOf, chèn/xoá mảng đầy, xoá vòng lặp tiến, sắp xếp có null, đa hình và bẫy nextInt/nextLine.",
+   "canBiet": "Cần học xong slide cửa hàng đồ cổ, 6 bài thực hành và Lab 7 của Chương 7 để đọc hiểu đúng hành vi bộ nhớ và kết quả chạy trên JDK 8.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững Chương 7, phát hiện nhanh lỗ hổng về tham chiếu mảng, dịch chuyển phần tử và bẫy đề thi FE trước khi sang Collections.",
+   "ketHop": "Nên xem lại bài thực hành Chương 7 nếu còn sai câu đoán output, rồi chuyển sang Chương 8 về Collections và dùng làm bước đệm cho Progress Test 2, thi FE.",
+   "canBietBai": [
+    "pro192-slide-pro12-1",
+    "pro192-on-ch7",
+    "pro192-lab-7-danh-sach-doi-tuong"
+   ],
+   "ketHopBai": [
+    "pro192-slide-pro13-1",
+    "pro192-progress-test-2",
+    "pro192-final-exam-fe"
+   ]
+  },
+  "pro192-slide-pro13-1": {
+   "hoc": "Khung Collections trên JDK 8, cây interface, generics so với kiểu thô, 13 phương thức Collection, họ List (ArrayList, LinkedList, Vector), Arrays.asList, Iterator và các bẫy remove hay ConcurrentModificationException.",
+   "canBiet": "Cần nắm interface, mảng đối tượng của Chương 7 và cách tổ chức lớp cơ bản để thấy lợi ích khi chuyển sang danh sách tự giãn kích thước.",
+   "lamDuoc": "Chọn đúng List, Set hay Map theo bài toán, phân biệt ArrayList với LinkedList, dùng generics bắt lỗi lúc biên dịch và xoá phần tử an toàn bằng Iterator.",
+   "ketHop": "Học tiếp phần 2 về Set và Map rồi giải bài f1/f2/f3 trên List; kiến thức này là nền cho bài quản lý LAB211 và cấu trúc bên trong ở CSD201.",
+   "canBietBai": [
+    "pro192-5-1-abstract-interface",
+    "pro192-7-1-mang-doi-tuong"
+   ],
+   "ketHopBai": [
+    "pro192-slide-pro13-2",
+    "pro192-on-ch8",
+    "pro192-quiz-ch8"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "data-structures-and-algorithms"
+   ]
+  },
+  "pro192-slide-pro13-2": {
+   "hoc": "HashSet, TreeSet, LinkedHashSet, NavigableSet, bảng băm và hợp đồng equals/hashCode, Comparable/Comparator (tránh tràn số phép trừ và rơi phần tử hoà), cùng HashMap và TreeMap trên JDK 8.",
+   "canBiet": "Cần hiểu khung Collections, generics, Iterator từ phần 1 và cách viết Comparator cơ bản cùng kỹ thuật ghi đè phương thức của Object.",
+   "lamDuoc": "Ghi đè khớp equals và hashCode, viết compareTo an toàn không mất phần tử trong TreeSet, đồng thời đếm, gom nhóm và tra cứu dữ liệu bằng HashMap hoặc TreeMap.",
+   "ketHop": "Thực hành săn lỗi equals/hashCode ở bài ôn Chương 8 và áp dụng HashSet, HashMap, TreeMap trực tiếp vào các TODO của Lab 8.",
+   "canBietBai": [
+    "pro192-slide-pro13-1",
+    "pro192-slide-pro6-1"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch8",
+    "pro192-lab-8-collections",
+    "pro192-quiz-ch8"
+   ]
+  },
+  "pro192-8-1-collections": {
+   "hoc": "Tóm gọn ba cấu trúc List (ArrayList), Set (HashSet) và Map (HashMap), cách dùng generics tránh ép kiểu, ví dụ kết hợp cả ba cùng lúc và hợp đồng equals/hashCode chống lọt bản trùng.",
+   "canBiet": "Cần hiểu hạn chế của mảng cố định ở Chương 7 và đã xem qua các slide về List, Set, Map để chốt nhanh tiêu chí lựa chọn.",
+   "lamDuoc": "Chọn nhanh ArrayList, HashSet hay HashMap cho tình huống cụ thể, khởi tạo với generics và giải thích đúng lý do phải ghi đè cả equals lẫn hashCode.",
+   "ketHop": "Làm thêm module Collections Framework & Data Structures trên CodeLab, rồi luyện bài ôn PE và quiz Chương 8; liên hệ tư duy chọn cấu trúc từ CSI104 và MAE101.",
+   "canBietBai": [
+    "pro192-7-1-mang-doi-tuong",
+    "pro192-slide-pro13-1",
+    "pro192-slide-pro13-2"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch8",
+    "pro192-quiz-ch8",
+    "pro192-lab-8-collections"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-computer-science",
+    "mathematics-for-engineering"
+   ]
+  },
+  "pro192-on-ch8": {
+   "hoc": "Giải 7 bài tập chạy thật trên JDK 8 gồm câu 3 PE (f1/f2/f3 trên List), lớp con ArrayList, Q1 dùng TreeMap/HashMap, menu quản lý sinh viên, săn lỗi hashCode, 6 lỗi biên dịch JDK 8 và 6 câu đoán output.",
+   "canBiet": "Cần hoàn thành hai bài slide Collections và bài tóm gọn List, Set, Map để nắm chắc Iterator, Comparator, equals/hashCode trước khi vào dạng đề thi.",
+   "lamDuoc": "Hiện thực được interface kiểu PE với Comparator và Iterator.remove, xây dựng menu CRUD kiểu LAB211, nhận diện lỗi biên dịch JDK 8 và đoán đúng output câu FE.",
+   "ketHop": "Làm ngay Quiz Chương 8 để chốt lý thuyết, áp dụng vào Lab 8 rồi luyện tiếp đề câu 3 PE thật và phong cách menu của môn LAB211.",
+   "canBietBai": [
+    "pro192-slide-pro13-1",
+    "pro192-slide-pro13-2",
+    "pro192-8-1-collections"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-ch8",
+    "pro192-lab-8-collections",
+    "pro192-luyen-pe-3"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-lab-8-collections": {
+   "hoc": "Hoàn thiện 5 TODO cho CT Library theo chuẩn review LAB211: dùng HashSet<Loan> với equals/hashCode, HashMap lịch sử mượn và tra thành viên, TreeMap báo cáo tác giả A-Z, đếm top 5 và tránh 5 bẫy chạy thật.",
+   "canBiet": "Cần xong nền CT Library ở Lab 7 và nắm chắc HashSet, HashMap, TreeMap, hợp đồng equals/hashCode cùng cách sắp xếp nhiều tiêu chí.",
+   "lamDuoc": "Xây dựng hoàn chỉnh chức năng từ chối mượn trùng, lưu lịch sử theo thành viên, báo cáo tác giả A-Z và top 5 tài liệu mượn nhiều nhất đạt PASS 588/588 test và sạch lint.py.",
+   "ketHop": "Làm Quiz Chương 8 để rà lại 5 bẫy cấu trúc băm và cây, sau đó nối tiếp Lab 9 lưu dữ liệu ra tệp và đối chiếu chuẩn review của LAB211.",
+   "canBietBai": [
+    "pro192-lab-7-danh-sach-doi-tuong",
+    "pro192-slide-pro13-2",
+    "pro192-on-ch8"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-ch8",
+    "pro192-lab-9-luu-tep",
+    "pro192-lab211-cach-qua-review"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-quiz-ch8": {
+   "hoc": "Kiểm tra 10 câu dạng FE chạy thật trên JDK 8 về List/Set/Map, remove(int) với remove(Object), Arrays.asList, equals thiếu hashCode, TreeSet, ConcurrentModificationException, TreeMap.values() và phần tử null.",
+   "canBiet": "Cần học xong hai phần slide Collections và bài thực hành Chương 8 để nắm vững hành vi thực tế của các cấu trúc dữ liệu trên JDK 8.",
+   "lamDuoc": "Tự đánh giá mức độ nắm chắc Chương 8, phát hiện nhanh các bẫy in output và lỗi biên dịch JDK 8 thường gặp trong đề thi FE PRO192.",
+   "ketHop": "Xem lại giải thích song ngữ sau khi nộp bài, rà lỗi ở bài ôn Chương 8 hoặc Lab 8 nếu còn sai, và dùng làm bước đệm trước kỳ thi FE.",
+   "canBietBai": [
+    "pro192-slide-pro13-1",
+    "pro192-slide-pro13-2",
+    "pro192-on-ch8"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch8",
+    "pro192-lab-8-collections",
+    "pro192-final-exam-fe"
+   ]
+  },
+  "pro192-slide-pro14-1": {
+   "hoc": "Giới thiệu khái niệm luồng, mã hoá ASCII/Unicode/UTF-8, bốn loại luồng trong java.io và lớp java.io.File (mkdir/mkdirs, renameTo, getCanonicalPath, list() cùng bẫy null và java.nio.file).",
+   "canBiet": "Cần nắm kiểu ký tự, chuỗi, nhập xuất cơ bản với Scanner trên System.in/System.out và cách xử lý ngoại lệ checked trong Java.",
+   "lamDuoc": "Phân biệt được bốn loại luồng, giải thích số byte UTF-8 và lỗi vỡ chữ tiếng Việt, kiểm tra, tạo, đổi tên, xoá và duyệt thư mục bằng java.io.File.",
+   "ketHop": "Học nối tiếp phần file văn bản và file nhị phân trong chương, rồi củng cố bằng quiz và thực hành nạp/lưu dữ liệu cho LAB211.",
+   "canBietBai": [
+    "pro192-slide-pro5-2",
+    "pro192-6-1-ngoai-le"
+   ],
+   "ketHopBai": [
+    "pro192-slide-pro14-2",
+    "pro192-slide-pro14-3",
+    "pro192-quiz-ch9"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-slide-pro14-2": {
+   "hoc": "Trình bày cây Reader/Writer, đọc ghi file văn bản (read, readLine, FileWriter, PrintWriter, cờ append), hai case study nhân viên và mặt hàng cùng cách đọc ghi UTF-8 đúng trên JDK 8.",
+   "canBiet": "Cần hiểu luồng, bảng mã UTF-8, lớp File ở phần 1, cùng try-with-resources và Collections để nạp danh sách đối tượng.",
+   "lamDuoc": "Đọc tách dòng văn bản thành đối tượng, ghi đè hoặc ghi nối an toàn với try-with-resources, tránh lỗi nhiều Scanner, quên close và sửa triệt để lỗi vỡ chữ tiếng Việt bằng UTF-8.",
+   "ketHop": "Làm tiếp bài thực hành file CSV và Lab 9 để dựng kho lưu trữ UTF-8 thật, sau đó rà lại bẫy bảng mã trong quiz chương.",
+   "canBietBai": [
+    "pro192-slide-pro14-1",
+    "pro192-6-1-ngoai-le",
+    "pro192-8-1-collections"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch9",
+    "pro192-lab-9-luu-tep",
+    "pro192-quiz-ch9"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-slide-pro14-3": {
+   "hoc": "Giảng file nhị phân, RandomAccessFile (seek, setLength, chế độ r/rw/rws/rwd), luồng byte mức thấp và DataInputStream/DataOutputStream, tuần tự hoá Serializable (transient, static, serialVersionUID) và case study sách.",
+   "canBiet": "Cần nắm bốn loại luồng ở phần 1, phân biệt được file văn bản ở phần 2 và hiểu ngoại lệ, vòng đời đối tượng, từ khoá static.",
+   "lamDuoc": "Chọn đúng lớp luồng cho từng dạng tệp, đọc ghi nhị phân và sửa tại chỗ bằng RandomAccessFile, lưu nạp danh sách đối tượng an toàn mà tránh bẫy EOFException, ghi nối và sai phiên bản.",
+   "ketHop": "Luyện bài tập lưu tài khoản Banking và bản ghi cỡ cố định ở phần thực hành chương, rồi kiểm tra các bẫy FE trong quiz.",
+   "canBietBai": [
+    "pro192-slide-pro14-1",
+    "pro192-slide-pro14-2",
+    "pro192-3-1-dong-goi"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch9",
+    "pro192-quiz-ch9",
+    "pro192-banking"
+   ]
+  },
+  "pro192-9-1-file-io": {
+   "hoc": "Tóm tắt luồng byte và luồng ký tự, cách ghi đọc tệp văn bản từng dòng với BufferedReader/BufferedWriter trong try-with-resources xử lý IOException, cùng cơ chế tuần tự hoá Serializable.",
+   "canBiet": "Cần nắm lớp, đối tượng, Collections và cách bắt ngoại lệ checked (try-catch, try-with-resources) ở Chương 6.",
+   "lamDuoc": "Viết được đoạn mã ghi và đọc lại bản ghi văn bản an toàn không rò rỉ tài nguyên, tách dòng dựng lại đối tượng và lưu nạp đối tượng bằng ObjectOutputStream/ObjectInputStream.",
+   "ketHop": "Thực hành ngay trên bộ bài tập PE/LAB211 và Lab 9 để áp dụng đọc ghi tệp thật, đồng thời tạo nền cho dữ liệu JSON ở môn PRJ301.",
+   "canBietBai": [
+    "pro192-6-1-ngoai-le",
+    "pro192-8-1-collections",
+    "pro192-slide-pro14-2"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch9",
+    "pro192-lab-9-luu-tep",
+    "pro192-quiz-ch9"
+   ],
+   "ketHopKhoa": [
+    "java-web-application-development"
+   ]
+  },
+  "pro192-on-ch9": {
+   "hoc": "Luyện bảy bài tập JDK 8 gồm khung Q1 đề PE (input.txt/output.txt), CSV UTF-8 kiểu LAB211, xử lý BOM và Collator, tuần tự hoá Banking (bẫy static), RandomAccessFile, lỗi biên dịch và đoán output.",
+   "canBiet": "Cần học xong cả ba phần slide luồng văn bản, nhị phân, tuần tự hoá trong chương cùng Collections và xử lý ngoại lệ.",
+   "lamDuoc": "Hoàn thiện trọn vẹn bảy bài thực hành gồm khung Q1.java chuẩn PE, chương trình quản lý CSV UTF-8, báo cáo tiếng Việt, lưu đối tượng, sửa bản ghi cố định và chẩn đoán nhanh lỗi file kiểu FE.",
+   "ketHop": "Áp dụng ngay vào Lab 9, làm quiz chương 9 và luyện tiếp đề PE đọc ghi file; kỹ thuật bản ghi cố định còn dùng lại ở CSD201.",
+   "canBietBai": [
+    "pro192-slide-pro14-2",
+    "pro192-slide-pro14-3",
+    "pro192-9-1-file-io"
+   ],
+   "ketHopBai": [
+    "pro192-lab-9-luu-tep",
+    "pro192-quiz-ch9",
+    "pro192-luyen-pe-4"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "data-structures-and-algorithms"
+   ]
+  },
+  "pro192-lab-9-luu-tep": {
+   "hoc": "Hướng dẫn hoàn thiện năm TODO xây dựng FileBookRepository đọc ghi data/books.csv UTF-8 có ngoặc kép, bỏ BOM, lọc dòng hỏng, ghi qua tệp tạm, uỷ quyền InMemoryBookRepository và đổi một dòng trong BookController.",
+   "canBiet": "Cần xong Lab 8 CT Library, nắm interface IBookRepository từ Lab 5, xử lý ngoại lệ và đọc ghi tệp văn bản UTF-8 ở Chương 9.",
+   "lamDuoc": "Xuất xưởng lớp FileBookRepository đạt 260/260 kiểm thử qua hai lần chạy tắt mở lại và sạch lint, giữ dữ liệu sách bền vững mà không sửa Main, sẵn sàng mở rộng sang LAB211.",
+   "ketHop": "Làm quiz Chương 9 rồi nối tiếp sang chuỗi LAB211 thực chiến và dự án cuối khoá CT Library 1.0; mẫu đổi repository bằng interface này cũng dùng trong Spring Boot.",
+   "canBietBai": [
+    "pro192-lab-8-collections",
+    "pro192-lab-5-truu-tuong-va-interface",
+    "pro192-slide-pro14-2"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-ch9",
+    "pro192-lab211-p0073-handy-expense",
+    "pro192-du-an-ct-library"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "spring-boot"
+   ]
+  },
+  "pro192-quiz-ch9": {
+   "hoc": "Kiểm tra mười câu dạng FE về lớp File, readLine, FileReader và bảng mã mặc định, FileWriter ghi đè/ghi nối, kích thước byte và chế độ rws của RandomAccessFile, static/transient, EOFException và biên dịch JDK 8.",
+   "canBiet": "Cần học xong ba phần slide I/O Streams và bài tập thực hành Chương 9 để nhớ rõ hành vi API và các bẫy hay gặp trên JDK 8.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững luồng I/O, bảng mã UTF-8, tệp nhị phân và tuần tự hoá, phát hiện sớm các lỗ hổng dễ mất điểm trước kỳ thi FE.",
+   "ketHop": "Nếu còn sai câu nào, xem lại phần thực hành Chương 9 và luyện tiếp Progress Test 2 cùng đề thi thử FE cuối khoá.",
+   "canBietBai": [
+    "pro192-slide-pro14-1",
+    "pro192-slide-pro14-2",
+    "pro192-slide-pro14-3"
+   ],
+   "ketHopBai": [
+    "pro192-on-ch9",
+    "pro192-progress-test-2",
+    "pro192-final-exam-fe"
+   ]
+  },
+  "pro192-lab211-cach-qua-review": {
+   "hoc": "Giải thích cách chấm 750 LOC, năm cửa review, tờ checklist 25 mục, lint.py và luật JDK 8 (ArrayList, tối đa 2 tham số, không System.exit) trên khung chung Note Management 10 tệp 8 package.",
+   "canBiet": "Đã cài JDK 8, NetBeans và nắm vững lớp, đóng gói, interface, ngoại lệ cùng ArrayList từ các chương PRO192 trước.",
+   "lamDuoc": "Tự dựng lại khung Note Management trong 30 phút bằng Java 8, vượt qua lint.py, điền đủ 25 mục checklist, debug từng bước bằng F7/F8 và trả lời đúng câu thầy hay hỏi.",
+   "ketHop": "Tự gõ lại dự án Note Management mẫu kèm harness test, sau đó áp trực tiếp bộ khung này vào bài P0011, P0021 và học song song khoá LAB211.",
+   "canBietBai": [
+    "pro192-cai-moi-truong",
+    "pro192-6-1-ngoai-le",
+    "pro192-8-1-collections"
+   ],
+   "ketHopBai": [
+    "pro192-lab211-p0011-change-base-number",
+    "pro192-lab211-p0021-student-management",
+    "pro192-du-an-ct-library"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-lab211-p0011-change-base-number": {
+   "hoc": "Hướng dẫn giải J1.S.P0011 với hai thuật toán tự viết qua thập phân (nhân dồn chặn tràn long, chia dư dùng StringBuilder), enum Base, Validation từng chữ số và tách CRUD khỏi service.",
+   "canBiet": "Nắm khung chung 8 package, checklist 25 mục ở bài mở đầu cùng thao tác String, StringBuilder và Scanner trên Java 8.",
+   "lamDuoc": "Hoàn thiện dự án đổi hệ cơ số BIN/DEC/HEX chuẩn JDK 8, controller giữ repository, vượt lint.py, chạy sạch phím test và giải thích được cách mở rộng thêm hệ 8.",
+   "ketHop": "Tự gõ lại dự án 12 tệp trong khoảng 2 giờ, chạy harness/input.txt và đối chiếu bản trước sửa để tránh lỗi đặt CRUD trong service trước khi sang P0021.",
+   "canBietBai": [
+    "pro192-lab211-cach-qua-review",
+    "pro192-slide-pro5-2"
+   ],
+   "ketHopBai": [
+    "pro192-lab211-p0021-student-management",
+    "pro192-progress-test-2"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-lab211-p0021-student-management": {
+   "hoc": "Xây dựng bài dài J1.L.P0021 gồm tạo 10 sinh viên, tìm và sắp xếp bằng Comparator, sửa hoặc xoá theo ID, báo cáo gom nhóm bằng LinkedHashMap và tách Student chứa danh sách Enrollment.",
+   "canBiet": "Đã quen khung tách tầng controller giữ repository từ P0011, đồng thời nắm ArrayList, Comparator và Map trong Java Collections.",
+   "lamDuoc": "Viết trọn dự án quản lý sinh viên 350 LOC chuẩn Java 8, vượt 54 phím test và lint.py, phân biệt rành mạch Comparator với Comparable và giải thích được vai trò của service.",
+   "ketHop": "Tự gõ lại dự án 13 tệp kèm bộ 54 phím test, ôn thêm Lab 8 về Collections và đối chiếu tiếp sang P0056 để giữ vững kỷ luật phân tầng.",
+   "canBietBai": [
+    "pro192-lab211-p0011-change-base-number",
+    "pro192-slide-pro6-1",
+    "pro192-8-1-collections"
+   ],
+   "ketHopBai": [
+    "pro192-lab211-p0056-worker-management",
+    "pro192-lab-8-collections",
+    "pro192-progress-test-2"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-lab211-p0056-worker-management": {
+   "hoc": "Soát lỗi một bài J1.S.P0056 đã pass (text block không chạy JDK 8, 115 lỗi lint.py, service giữ repo) rồi dựng lại bản sạch có quản lý công nhân, lịch sử tăng giảm lương và sắp theo mã.",
+   "canBiet": "Nắm chắc quy chuẩn review, kiến trúc controller giữ repository và cách sắp xếp danh sách bằng Comparator từ P0021.",
+   "lamDuoc": "Hoàn thiện dự án quản lý công nhân 14 tệp chuẩn JDK 8, chép đúng mức lương vào từng dòng lịch sử, chặn giảm lương âm, khớp ví dụ 1100/1500/1300 và sạch 25 mục checklist.",
+   "ketHop": "Tự gõ lại dự án kèm harness so khớp màn hình mong đợi, luyện trả lời câu hỏi về tên biến workerService rồi mang khuôn này áp sang P0073.",
+   "canBietBai": [
+    "pro192-lab211-cach-qua-review",
+    "pro192-lab211-p0021-student-management",
+    "pro192-slide-pro6-1"
+   ],
+   "ketHopBai": [
+    "pro192-lab211-p0070-ebank-login",
+    "pro192-lab211-p0073-handy-expense",
+    "pro192-progress-test-2"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-lab211-p0070-ebank-login": {
+   "hoc": "Dựng lại J1.S.P0070 sau review: đa ngôn ngữ bằng ResourceBundle và tệp .properties, regex tài khoản 10 số và mật khẩu 8–31 ký tự, captcha ngẫu nhiên kiểm bằng contains trước khi tra kho và bỏ service.",
+   "canBiet": "Đã quen khung LAB211 chuẩn Java 8, thao tác chuỗi, StringBuilder và kiểm dữ liệu nhập từ các bài trước trong chương.",
+   "lamDuoc": "Viết được chương trình đăng nhập Ebank 12 tệp Java và 2 tệp .properties sạch lint.py, tránh bẫy Preferences, không dùng System.exit và chạy đúng kịch bản đọc captcha.",
+   "ketHop": "Tự gõ lại dự án cùng hai tệp ngôn ngữ, chạy harness kiểm đủ luồng Anh/Việt rồi chuyển sang P0071 để luyện tiếp mô hình không có service.",
+   "canBietBai": [
+    "pro192-lab211-cach-qua-review",
+    "pro192-lab211-p0056-worker-management",
+    "pro192-slide-pro5-2"
+   ],
+   "ketHopBai": [
+    "pro192-lab211-p0071-task-management",
+    "pro192-progress-test-2"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-lab211-p0071-task-management": {
+   "hoc": "Giải J1.S.P0071 theo nhận xét review: bỏ tầng service bằng cách để TaskRepository tự kiểm ID, kiểm ngày dd-MM-yyyy hai chiều, kiểm giờ 8.0–17.5 bước 0.5, dùng %s tránh lỗi dấu phẩy và viết câu lỗi tiếng Việt cụ thể.",
+   "canBiet": "Hiểu mô hình không dùng service từ P0070, nắm khung checklist 25 mục và cách xử lý ngoại lệ, kiểm dữ liệu nhập trên Java 8.",
+   "lamDuoc": "Hoàn thiện ứng dụng quản lý task 11 tệp chuẩn JDK 8, tính Time bằng To trừ From, chặn ngày giả và chuỗi rỗng, không dùng Scanner static và đạt 99/99 bài kiểm thử tự động.",
+   "ketHop": "Tự gõ lại mã nguồn, chạy check.sh/check.bat với test harness 99 ca kiểm thử rồi sang P0073 để mở rộng sang bài có lưu tệp.",
+   "canBietBai": [
+    "pro192-lab211-cach-qua-review",
+    "pro192-lab211-p0070-ebank-login",
+    "pro192-6-1-ngoai-le"
+   ],
+   "ketHopBai": [
+    "pro192-lab211-p0073-handy-expense",
+    "pro192-progress-test-2"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-lab211-p0073-handy-expense": {
+   "hoc": "Xây dựng J1.S.P0073 có lưu tệp UTF-8 bền vững: Main đọc tệp, repository ghi lại sau mỗi thay đổi, tránh bẫy split(\"|\"), dùng Locale.ENGLISH và Locale.US, tính ID = lớn nhất + 1 và giữ service chỉ tính toán.",
+   "canBiet": "Đã thành thạo đọc ghi tệp UTF-8 ở chương 9 cùng khuôn tách tầng và cách sinh ID từ P0056 và P0071.",
+   "lamDuoc": "Hoàn thiện dự án quản lý chi tiêu 12 tệp chuẩn Java 8, giữ nguyên dữ liệu sau khi tắt mở lại, tính đúng Total và vượt qua 112/112 ca kiểm thử cùng lint.py.",
+   "ketHop": "Tự gõ lại dự án, chạy đủ hai lượt kiểm thử với expenses.txt, đối chiếu thêm Lab 9 lưu tệp rồi làm Progress Test 2 để tổng kết phần này.",
+   "canBietBai": [
+    "pro192-lab211-p0056-worker-management",
+    "pro192-lab211-p0071-task-management",
+    "pro192-9-1-file-io"
+   ],
+   "ketHopBai": [
+    "pro192-lab-9-luu-tep",
+    "pro192-progress-test-2",
+    "pro192-du-an-ct-library"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-progress-test-2": {
+   "hoc": "Kiểm tra 20 câu dạng FE trên JDK 8 phủ ngoại lệ (throws, multi-catch, try-with-resources), mảng đối tượng, Collections (HashMap, TreeSet, generics) và tệp (FileWriter, transient, DataOutputStream).",
+   "canBiet": "Nắm kiến thức Chương 6–9 gồm try-catch-finally, ném ngoại lệ, mảng đối tượng với Comparable, cấu trúc List/Set/Map dùng generics và cách đọc/ghi luồng tệp trong Java.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững Chương 6–9, đọc đoán đúng đầu ra JDK 8 và nhận diện nhanh lỗi biên dịch hay ngoại lệ như ArrayStoreException, NotSerializableException.",
+   "ketHop": "Đọc kỹ giải thích song ngữ sau mỗi câu sai để vá lỗ hổng, sau đó luyện tiếp với đề thi FE và áp dụng lại ngoại lệ, Collections, tệp vào dự án cuối khoá CT Library.",
+   "canBietBai": [
+    "pro192-6-1-ngoai-le",
+    "pro192-8-1-collections",
+    "pro192-9-1-file-io"
+   ],
+   "ketHopBai": [
+    "pro192-final-exam-fe",
+    "pro192-du-an-ct-library"
+   ]
+  },
+  "pro192-n1-1-modern-java": {
+   "hoc": "Trình bày cách viết lớp generic tự định nghĩa như Box<T>, hàm ẩn danh lambda và đường ống Stream API với filter, map, forEach theo phong cách functional thay cho vòng for truyền thống.",
+   "canBiet": "Cần nắm vững cách tạo lớp, đối tượng, dùng List và khái niệm generics cơ bản trong Java Collections, cùng nền tảng lập trình functional đã gặp ở CSI104.",
+   "lamDuoc": "Viết được lớp generic an toàn kiểu cho nhiều loại dữ liệu và thay thế vòng lặp lọc, biến đổi, in danh sách bằng chuỗi lambda kết hợp Stream API gọn gàng.",
+   "ketHop": "Làm ngay Quiz N1, luyện thêm module Multithreading, Lambda & Design Patterns trên CodeLab, rồi học sâu hơn ở CS.1, CS.2 để áp dụng mượt sang LAB211 và PRJ301.",
+   "canBietBai": [
+    "pro192-slide-pro13-1",
+    "pro192-8-1-collections"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-n1",
+    "pro192-slide-cs1-1",
+    "pro192-slide-cs2-1"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "java-web-application-development"
+   ]
+  },
+  "pro192-quiz-n1": {
+   "hoc": "Kiểm tra 8 câu có giải thích song ngữ về generics, lambda và Stream API: filter, map, collect, tính lười của stream, reduce, count, sắp xếp theo độ dài và lỗi Box<int> trên JDK 21.",
+   "canBiet": "Cần học xong bài N1.1 về lớp generic tự viết, biểu thức lambda và đường ống Stream API trước khi làm bài trắc nghiệm.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững chương Nâng cao 1, đọc đoán đúng đầu ra chuỗi stream và nhận diện các bẫy phổ biến như dùng kiểu nguyên thủy với generics.",
+   "ketHop": "Xem lại bài N1.1 ở những câu sai, rồi chuyển tiếp sang cụm chuyên sâu CS.1 và CS.2 nếu muốn đào sâu generics, wildcard, Stream API và Optional.",
+   "canBietBai": [
+    "pro192-n1-1-modern-java"
+   ],
+   "ketHopBai": [
+    "pro192-n1-1-modern-java",
+    "pro192-slide-cs1-1",
+    "pro192-slide-cs2-1"
+   ]
+  },
+  "pro192-n2-1-solid": {
+   "hoc": "Năm nguyên tắc SOLID (trách nhiệm đơn, mở/đóng, thay thế Liskov, tách interface, đảo ngược phụ thuộc) và thói quen ưu tiên kết hợp (has-a) hơn kế thừa sâu.",
+   "canBiet": "Nắm vững đóng gói, kế thừa, đa hình, interface và các trụ cột OOP đã học ở các chương cốt lõi trước đó.",
+   "lamDuoc": "Phân tích và chọn đúng cách tách lớp, giữ trường private, lập trình theo interface để mã nguồn dễ đọc, dễ sửa và dễ mở rộng.",
+   "ketHop": "Áp dụng ngay vào case study tái cấu trúc Banking và làm Quiz N2, hoặc đào sâu thêm ở chuyên đề SOLID nâng cao, khoá LAB211 và PRJ301.",
+   "canBietBai": [
+    "pro192-3-1-dong-goi",
+    "pro192-4-2-da-hinh",
+    "pro192-5-1-abstract-interface"
+   ],
+   "ketHopBai": [
+    "pro192-banking",
+    "pro192-quiz-n2",
+    "pro192-slide-cs7-1"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "java-web-application-development"
+   ]
+  },
+  "pro192-banking": {
+   "hoc": "Đọc hiểu project Banking (model, textview, Swing), vẽ sơ đồ lớp, chạy JDK 8 qua bàn phím và pipe để đo lỗi, rồi tái cấu trúc sáu bước theo tầng repository và service.",
+   "canBiet": "Hoàn thành nền tảng OOP từ Chương 2 đến Chương 9 (đóng gói, lớp lồng, ngoại lệ, collections, đọc/ghi tệp), bài thực hành Chương 6 và nguyên tắc SOLID.",
+   "lamDuoc": "Chẩn đoán được lỗi thiết kế có bằng chứng (Scanner lặp, setter hở, tiền double) và tái cấu trúc thành hệ thống phân tầng bất biến, tiêm phụ thuộc, lưu tệp.",
+   "ketHop": "Hoàn thành ba bài tập mở rộng trong bài, làm Quiz N2 để chốt bẫy thiết kế, rồi liên hệ sang thiết kế sẵn sàng Spring, khoá Spring Boot và đọc/refactor code cũ.",
+   "canBietBai": [
+    "pro192-n2-1-solid",
+    "pro192-on-ch6",
+    "pro192-9-1-file-io"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-n2",
+    "pro192-slide-cs6-1",
+    "pro192-du-an-ct-library"
+   ],
+   "ketHopKhoa": [
+    "spring-boot",
+    "doc-code-cu-va-refactor"
+   ]
+  },
+  "pro192-quiz-n2": {
+   "hoc": "Kiểm tra tám câu trắc nghiệm có giải thích song ngữ về năm nguyên tắc SOLID, interface kho lưu, sai số tiền kiểu double, setter public và dùng một Scanner.",
+   "canBiet": "Đã xem xong phần nguyên tắc thiết kế SOLID cơ bản và bài phân tích, tái cấu trúc project Banking trong chương Nâng cao 2.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững tư duy thiết kế SOLID và nhận diện nhanh các lỗi thiết kế điển hình trong case study Banking.",
+   "ketHop": "Xem lại lời giải từng câu sai trong bài N2.1 và N2.2, sau đó chuyển tiếp sang chuyên đề thiết kế sẵn sàng Spring, SOLID chuyên sâu hoặc dự án CT Library.",
+   "canBietBai": [
+    "pro192-n2-1-solid",
+    "pro192-banking"
+   ],
+   "ketHopBai": [
+    "pro192-slide-cs6-1",
+    "pro192-slide-cs7-1",
+    "pro192-du-an-ct-library"
+   ]
+  },
+  "pro192-slide-cs1-1": {
+   "hoc": "Tự viết lớp và phương thức generic, giới hạn T extends, tính bất biến của List so với mảng, wildcard ? extends và ? super theo nguyên tắc PECS, type erasure qua javap, bridge method và heap pollution.",
+   "canBiet": "Biết dùng List, Map với kiểu tham số, Comparable/Comparator và chạy lệnh javac, javap cơ bản ở các bài trước.",
+   "lamDuoc": "Viết được lớp và hàm generic có giới hạn kiểu, chọn đúng ? extends hay ? super theo PECS, đọc output javap giải thích các giới hạn của type erasure và nhận diện cảnh báo unchecked gây heap pollution.",
+   "ketHop": "Học tiếp phần hai về lambda để ghép generics với hàm bậc cao, làm 6 bài tập ôn và quiz của cụm này; nền trực tiếp cho Spring Boot.",
+   "canBietBai": [
+    "pro192-slide-pro13-1",
+    "pro192-slide-pro13-2",
+    "pro192-slide-pro3-2"
+   ],
+   "ketHopBai": [
+    "pro192-slide-cs1-2",
+    "pro192-cs1-on",
+    "pro192-quiz-cs1"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-slide-cs1-2": {
+   "hoc": "Functional interface và @FunctionalInterface, năm interface hàm chuẩn trong java.util.function, biên dịch lambda bằng invokedynamic, luật effectively final, bốn dạng method reference cùng bẫy và chuỗi Comparator.",
+   "canBiet": "Nắm generics, wildcard PECS ở phần đầu cụm này, cùng lớp ẩn danh và Comparator trong bộ sưu tập.",
+   "lamDuoc": "Chọn đúng Function, Predicate, Supplier, Consumer hay BiFunction, viết method reference tránh bẫy null và reversed(), sửa lỗi effectively final theo nhiều cách và đọc hiểu lambda trong Spring Boot.",
+   "ketHop": "Luyện ngay bộ bài tập ôn và quiz của cụm generics–lambda, rồi chuyển sang Stream API dùng lại trực tiếp các functional interface này.",
+   "canBietBai": [
+    "pro192-slide-cs1-1",
+    "pro192-slide-pro10-2",
+    "pro192-slide-pro13-2"
+   ],
+   "ketHopBai": [
+    "pro192-cs1-on",
+    "pro192-quiz-cs1",
+    "pro192-slide-cs2-1"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-cs1-on": {
+   "hoc": "Sáu bài thực hành chạy thật trên JDK 21: sửa hàm max generic cho LocalDate, viết hàm PECS dùng Predicate, săn heap pollution, đổi lớp ẩn danh sang lambda, sắp nhiều khoá tránh bẫy reversed() và dựng kho KhoNhoBo.",
+   "canBiet": "Đã học trọn hai phần slide về generics, PECS, type erasure, functional interface, method reference và Comparator.",
+   "lamDuoc": "Tự viết và biên dịch được hàm max chuẩn JDK, hàm sao chép theo PECS, chuỗi sắp xếp bốn khoá an toàn cho TreeSet và một kho generic kiểu JpaRepository cho các dự án Spring Boot.",
+   "ketHop": "Làm xong hãy kiểm tra lại mức nắm bằng quiz cùng cụm, sau đó sang Stream API để kết hợp lambda vào xử lý tập dữ liệu.",
+   "canBietBai": [
+    "pro192-slide-cs1-1",
+    "pro192-slide-cs1-2"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-cs1",
+    "pro192-slide-cs2-1"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-quiz-cs1": {
+   "hoc": "Mười câu trắc nghiệm kèm giải thích song ngữ kiểm tra bẫy reversed() trên Comparator, đọc ghi qua ? extends, type erasure với getClass, effectively final, method reference với null, PECS, Collections.copy và JDK 8.",
+   "canBiet": "Hoàn thành hai phần lý thuyết slide và bộ bài tập thực hành về generics và lambda.",
+   "lamDuoc": "Tự đánh giá được độ chắc kiến thức generics và lambda, phát hiện nhanh các bẫy biên dịch hoặc lỗi chạy ngầm trên cả JDK 8 lẫn JDK 21.",
+   "ketHop": "Câu nào đoán sai hãy mở lại bài tập ôn để chạy đối chiếu, rồi chuyển sang phần Stream API và Optional.",
+   "canBietBai": [
+    "pro192-slide-cs1-1",
+    "pro192-slide-cs1-2",
+    "pro192-cs1-on"
+   ],
+   "ketHopBai": [
+    "pro192-cs1-on",
+    "pro192-slide-cs2-1"
+   ]
+  },
+  "pro192-slide-cs2-1": {
+   "hoc": "Cấu trúc ba phần của pipeline stream, tính lười đo bằng peek, ngắt mạch, thao tác có trạng thái sorted và distinct, map so với flatMap, stream dùng một lần, bẫy peek với count, reduce và IntStream/DoubleStream.",
+   "canBiet": "Nắm lambda, method reference, Comparator cùng cách duyệt mảng đối tượng và List bằng vòng lặp ở các chương trước.",
+   "lamDuoc": "Viết lại được vòng lặp lọc–sắp–biến đổi thành pipeline stream, đoán đúng thứ tự thực thi qua peek và findFirst, viết reduce đúng cả khi song song và tính toán bằng stream nguyên thuỷ không đóng hộp.",
+   "ketHop": "Học tiếp phần hai về Collectors và Optional, làm bộ bài tập ôn và quiz của cụm này; rất hữu ích cho LAB211 và Spring Boot.",
+   "canBietBai": [
+    "pro192-slide-cs1-2",
+    "pro192-slide-pro12-1",
+    "pro192-slide-pro13-1"
+   ],
+   "ketHopBai": [
+    "pro192-slide-cs2-2",
+    "pro192-cs2-on",
+    "pro192-quiz-cs2"
+   ],
+   "ketHopKhoa": [
+    "spring-boot",
+    "oop-with-java-lab"
+   ]
+  },
+  "pro192-slide-cs2-2": {
+   "hoc": "Collectors như toMap có hàm gộp và map factory, groupingBy kèm collector hạ nguồn, partitioningBy, cách dùng Optional đúng và tránh get mù hay orElse tính ngay, rủi ro parallel stream và giới hạn API trên JDK 8.",
+   "canBiet": "Hiểu cơ chế pipeline, tính lười, ngắt mạch ở phần đầu cụm stream cùng HashMap và TreeSet.",
+   "lamDuoc": "Gom dữ liệu thành Map và báo cáo nhóm không bị trùng khoá, xử lý giá trị vắng bằng Optional an toàn, tránh lỗi trạng thái chung ở stream song song và viết lại câu PE bằng stream chạy đúng trên JDK 8.",
+   "ketHop": "Thực hành 7 bài tập ôn và làm quiz cùng cụm để vững pipeline; áp dụng trực tiếp khi chuyển đổi entity sang DTO trong Spring Boot.",
+   "canBietBai": [
+    "pro192-slide-cs2-1",
+    "pro192-slide-pro13-2"
+   ],
+   "ketHopBai": [
+    "pro192-cs2-on",
+    "pro192-quiz-cs2"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-cs2-on": {
+   "hoc": "Bảy bài thực hành chạy thật: đoán thứ tự pipeline có và không có sorted(), lập bảng điểm theo ngành, đọc CSV trùng mã bằng toMap, sửa ba lỗi Optional, giải câu 3 PE trên JDK 8, sửa lỗi parallel và tìm top 3 từ.",
+   "canBiet": "Đã học trọn hai phần slide về cơ chế pipeline, Collectors, Optional, stream song song và khác biệt JDK 8.",
+   "lamDuoc": "Tự xây dựng được các pipeline thống kê phức tạp, xử lý khoá trùng CSV, dùng Optional chuẩn, né lỗi gán lại tham số f3 trong PE và sửa lỗi trạng thái dùng chung trong stream song song.",
+   "ketHop": "Làm quiz kiểm tra của cụm stream ngay sau khi hoàn thành bài tập, đồng thời luyện lại bài f3 khi ôn thi thực hành PE.",
+   "canBietBai": [
+    "pro192-slide-cs2-1",
+    "pro192-slide-cs2-2"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-cs2",
+    "pro192-luyen-pe-3"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-quiz-cs2": {
+   "hoc": "Mười câu trắc nghiệm song ngữ kiểm tra pipeline thiếu thao tác kết thúc, thứ tự dọc, findFirst, toMap trùng khoá, tái dùng stream, groupingBy, partitioningBy, orElse với orElseGet, reduce song song và JDK 8.",
+   "canBiet": "Nắm vững cả hai phần slide và đã tự chạy 7 bài tập thực hành về Stream API và Optional.",
+   "lamDuoc": "Tự đánh giá được mức thành thạo Stream API và Optional, nhận ra nhanh các bẫy về tính lười, ngoại lệ lúc chạy và phương thức không có trên JDK 8.",
+   "ketHop": "Soát lại các câu sai trong bài tập ôn cùng cụm trước khi bước sang cụm Java 17–21 hiện đại.",
+   "canBietBai": [
+    "pro192-slide-cs2-1",
+    "pro192-slide-cs2-2",
+    "pro192-cs2-on"
+   ],
+   "ketHopBai": [
+    "pro192-cs2-on",
+    "pro192-slide-cs3-1"
+   ]
+  },
+  "pro192-slide-cs3-1": {
+   "hoc": "Lộ trình LTS Java 8 lên 17 và 21, preview, quy tắc và bảy chỗ cấm var, text block gọt thụt lề, switch expression có yield, enum mang trường và phương thức, record với compact constructor và bất biến nông.",
+   "canBiet": "Nắm cú pháp switch cổ điển, thiết kế lớp POJO, constructor, getter cùng equals và hashCode ở các chương cốt lõi.",
+   "lamDuoc": "Xác định được tính năng thuộc bản Java nào và có chạy ở phòng thi JDK 8 không, viết đúng var, text block, switch expression vét cạn enum và record có kiểm tra dữ liệu kèm sao chép phòng vệ.",
+   "ketHop": "Học tiếp phần hai về sealed interface, pattern matching và virtual threads, rồi thực hành trọn bộ bài tập ôn và quiz của cụm.",
+   "canBietBai": [
+    "pro192-slide-pro4-1",
+    "pro192-slide-pro8-1",
+    "pro192-slide-pro13-2"
+   ],
+   "ketHopBai": [
+    "pro192-slide-cs3-2",
+    "pro192-cs3-on",
+    "pro192-quiz-cs3"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-slide-cs3-2": {
+   "hoc": "Pattern matching cho instanceof, sealed interface, switch mẫu Java 21 có when và case null, record pattern lồng nhau, API String và SequencedCollection mới, virtual threads và cách viết lại về JDK 8.",
+   "canBiet": "Đã học phần một về record, switch expression và nắm rõ interface, kế thừa trong Java.",
+   "lamDuoc": "Mô hình hoá kết quả nghiệp vụ bằng sealed interface kết hợp record và switch vét cạn không cần default, dùng đúng virtual threads tránh ghim luồng hay pool hoá và viết lại code Java 21 về JDK 8 khi đi thi.",
+   "ketHop": "Làm 6 bài tập ôn và quiz của cụm Java 17–21, sau đó đào sâu hơn về luồng ảo ở cụm đa luồng cơ bản.",
+   "canBietBai": [
+    "pro192-slide-cs3-1",
+    "pro192-slide-pro10-2"
+   ],
+   "ketHopBai": [
+    "pro192-cs3-on",
+    "pro192-quiz-cs3",
+    "pro192-slide-cs8-2"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-cs3-on": {
+   "hoc": "Sáu bài thực hành chạy thật: đổi Student sang record có validate, thay mã số bằng enum và switch expression, tính phí trên sealed interface, dựng SQL/JSON bằng text block, ping 2.000 thiết bị luồng ảo và hạ về JDK 8.",
+   "canBiet": "Hoàn thành cả hai phần slide về Java 17–21 gồm var, text block, enum, record, sealed, pattern matching và virtual threads.",
+   "lamDuoc": "Tự viết được record bất biến có validate, xử lý mô hình thanh toán bằng sealed và record pattern, giới hạn đồng thời luồng ảo bằng Semaphore và chuyển đổi qua lại giữa Java 21 với JDK 8 phòng thi.",
+   "ketHop": "Làm quiz cùng cụm để chốt kiến thức và chuyển sang cụm hợp đồng đối tượng để hiểu sâu hơn về equals, hashCode và bất biến.",
+   "canBietBai": [
+    "pro192-slide-cs3-1",
+    "pro192-slide-cs3-2"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-cs3",
+    "pro192-slide-cs4-1"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-quiz-cs3": {
+   "hoc": "Mười câu trắc nghiệm song ngữ kiểm tra tương thích JDK 8 phòng thi, record trong HashSet, switch expression và yield, switch rơi xuống, giới hạn var, bất biến nông, kiểu con sealed, switch mẫu, luồng ảo và text block.",
+   "canBiet": "Đã học đủ hai phần lý thuyết slide và làm 6 bài tập ôn về tính năng Java 17–21.",
+   "lamDuoc": "Tự đánh giá được khả năng phân biệt cú pháp giữa JDK 8 với JDK 17–21 và phát hiện bẫy ở record, sealed, switch mẫu lẫn text block.",
+   "ketHop": "Ôn lại bài tập cụm này nếu còn nhầm về bất biến nông, rồi học tiếp cụm hợp đồng đối tượng và bất biến.",
+   "canBietBai": [
+    "pro192-slide-cs3-1",
+    "pro192-slide-cs3-2",
+    "pro192-cs3-on"
+   ],
+   "ketHopBai": [
+    "pro192-cs3-on",
+    "pro192-slide-cs4-1"
+   ]
+  },
+  "pro192-slide-cs4-1": {
+   "hoc": "Năm luật equals, lỗi nạp chồng equals, bẫy kế thừa Point/ColorPoint, hợp đồng hashCode với hệ số 31, khoá bị sửa trong HashSet/HashMap, compareTo với BigDecimal, toString đệ quy và Integer cache -128..127.",
+   "canBiet": "Nắm bảng băm HashSet, HashMap, Comparable ở chương Collections, bài săn lỗi chương 8 và cú pháp record.",
+   "lamDuoc": "Viết được equals và hashCode đúng chuẩn không phá hợp đồng khi kế thừa, giải thích vì sao khoá đổi giá trị bị lạc trong HashSet, tránh lệch giữa compareTo với equals và lý giải kết quả so sánh == trên Integer.",
+   "ketHop": "Học tiếp phần hai về lớp bất biến và xử lý tiền, sau đó làm 6 bài tập ôn và quiz của cụm này.",
+   "canBietBai": [
+    "pro192-slide-pro13-2",
+    "pro192-on-ch8",
+    "pro192-slide-cs3-1"
+   ],
+   "ketHopBai": [
+    "pro192-slide-cs4-2",
+    "pro192-cs4-on",
+    "pro192-quiz-cs4"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-slide-cs4-2": {
+   "hoc": "Năm luật lớp bất biến, sao chép phòng vệ vào và ra, phân biệt view unmodifiableList với bản sao List.copyOf, static factory và builder, Objects, xử lý tiền bằng BigDecimal hay long VND và entity JPA.",
+   "canBiet": "Đã hiểu hợp đồng equals, hashCode ở phần một, nắm record và từng xem bài phân tích Banking.",
+   "lamDuoc": "Thiết kế được lớp bất biến kín kẽ không rò tham chiếu, tạo đối tượng bằng static factory hoặc builder có kiểm tra, tính tiền chính xác với RoundingMode rõ ràng và viết equals/hashCode hợp lý cho entity JPA.",
+   "ketHop": "Thực hành 6 bài tập ôn và làm quiz cùng cụm để thành thạo lớp bất biến và tính toán tiền tệ cho dự án Spring Boot.",
+   "canBietBai": [
+    "pro192-slide-cs4-1",
+    "pro192-banking",
+    "pro192-slide-cs3-1"
+   ],
+   "ketHopBai": [
+    "pro192-cs4-on",
+    "pro192-quiz-cs4"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-cs4-on": {
+   "hoc": "Sáu bài thực hành chạy thật: săn lỗi MonHoc lệch equals/hashCode, xây hoá đơn bất biến chống bốn tấn công, so bốn list chỉ đọc, tính VAT 8% theo hai luật làm tròn, builder phiếu mượn và entity khoá tự nhiên.",
+   "canBiet": "Đã học trọn hai phần slide về hợp đồng đối tượng, bất biến, static factory, builder và BigDecimal.",
+   "lamDuoc": "Sửa được lỗi lệch equals/hashCode, thiết kế lớp bất biến chịu được sửa dữ liệu đầu vào lẫn đầu ra, tính VAT không lệch đồng và xây builder kiểm luật nhiều trường chạy tốt trên cả JDK 8 lẫn JDK 17+.",
+   "ketHop": "Làm quiz kiểm tra của cụm này ngay sau bài tập; ghi nhớ lỗi hashCode đổi được vì cụm JVM sau sẽ dùng nó để săn rò rỉ bộ nhớ.",
+   "canBietBai": [
+    "pro192-slide-cs4-1",
+    "pro192-slide-cs4-2"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-cs4",
+    "pro192-cs5-on"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-quiz-cs4": {
+   "hoc": "Mười câu trắc nghiệm song ngữ kiểm tra Integer cache, BigDecimal 2.0 và 2.00 trong HashSet và TreeSet, khoá đổi sau khi vào set, lỗi ColorPoint, view unmodifiableList, HALF_EVEN, bất biến, JDK 8 và Map khoá Long.",
+   "canBiet": "Hoàn thành hai phần lý thuyết slide và 6 bài tập ôn về hợp đồng đối tượng và bất biến.",
+   "lamDuoc": "Tự đánh giá được mức nắm hợp đồng equals, hashCode, compareTo, bất biến và tiền tệ, sẵn sàng trả lời nhóm câu hỏi phỏng vấn Java core gặp nhiều nhất.",
+   "ketHop": "Xem lại bài tập ôn ở những câu sai rồi tiếp tục sang cụm tìm hiểu bên trong JVM.",
+   "canBietBai": [
+    "pro192-slide-cs4-1",
+    "pro192-slide-cs4-2",
+    "pro192-cs4-on"
+   ],
+   "ketHopBai": [
+    "pro192-cs4-on",
+    "pro192-slide-cs5-1"
+   ]
+  },
+  "pro192-slide-cs5-1": {
+   "hoc": "Bytecode qua javap -c, năm lệnh invoke, ba bộ nạp lớp hỏi cha trước, thứ tự khởi tạo static/instance/constructor, nạp lười -Xlog:class+load, khung stack -Xss, thế hệ heap, Serial/Parallel/G1/ZGC và string pool.",
+   "canBiet": "Nắm nền tảng stack, heap, thu gom rác, công cụ javap và ràng buộc động ở các chương đầu.",
+   "lamDuoc": "Đọc được bytecode phương thức đơn giản và phân biệt năm lệnh invoke, đoán đúng thứ tự chạy khối static, đọc log -Xlog:gc, giải thích StackOverflowError theo -Xss và chọn được bộ thu gom rác phù hợp.",
+   "ketHop": "Học tiếp phần hai về rò rỉ bộ nhớ, JIT và container, rồi làm 6 bài tập thực hành và quiz cùng cụm.",
+   "canBietBai": [
+    "pro192-slide-pro7-1",
+    "pro192-slide-pro3-2",
+    "pro192-slide-pro10-1"
+   ],
+   "ketHopBai": [
+    "pro192-slide-cs5-2",
+    "pro192-cs5-on",
+    "pro192-quiz-cs5"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-slide-cs5-2": {
+   "hoc": "Gốc GC và vòng tham chiếu, săn rò rỉ cache static và listener bằng jcmd GC.class_histogram, các dạng OutOfMemoryError cùng heap dump, jps/jstat, JIT C1/C2, escape analysis, định cỡ heap container và Actuator.",
+   "canBiet": "Đã học phần đầu cụm JVM về bytecode, nạp lớp, stack, thế hệ heap và có nền quản lý bộ nhớ.",
+   "lamDuoc": "Chẩn đoán được rò rỉ bộ nhớ bằng jcmd, phân biệt OutOfMemoryError ở heap với Metaspace, đọc log PrintCompilation hiểu warm-up JIT và cấu hình MaxRAMPercentage cho ứng dụng Spring Boot chạy trong container.",
+   "ketHop": "Thực hành 6 bài tập ôn và làm quiz cùng cụm; kết hợp thêm kiến thức Docker và Spring Boot khi triển khai dịch vụ thực tế.",
+   "canBietBai": [
+    "pro192-slide-cs5-1",
+    "pro192-slide-pro7-1"
+   ],
+   "ketHopBai": [
+    "pro192-cs5-on",
+    "pro192-quiz-cs5"
+   ],
+   "ketHopKhoa": [
+    "spring-boot",
+    "docker"
+   ]
+  },
+  "pro192-cs5-on": {
+   "hoc": "Sáu bài thực hành chạy thật với JDK: đoán bytecode và cỡ khung bằng javap, đoán thứ tự khởi tạo có kế thừa, săn rò rỉ HashSet bằng jcmd, gọi tên năm lỗi bộ nhớ, đếm ngưỡng JIT C1/C2 và định cỡ heap container 1 GB.",
+   "canBiet": "Đã học trọn hai phần slide JVM và hiểu bẫy hashCode dùng trường đổi được ở cụm hợp đồng đối tượng.",
+   "lamDuoc": "Tự chạy được javap, jcmd và các cờ java để đọc kích thước khung stack, phát hiện lớp tăng bất thường do rò rỉ, nhận diện năm lỗi bộ nhớ và tính dung lượng heap hợp lý cho container.",
+   "ketHop": "Làm quiz kiểm tra của cụm JVM ngay sau bài tập; liên hệ thực tế khi chạy dịch vụ Java trong Docker.",
+   "canBietBai": [
+    "pro192-slide-cs5-1",
+    "pro192-slide-cs5-2",
+    "pro192-slide-cs4-1"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-cs5",
+    "pro192-slide-cs6-1"
+   ],
+   "ketHopKhoa": [
+    "docker",
+    "spring-boot"
+   ]
+  },
+  "pro192-quiz-cs5": {
+   "hoc": "Mười câu trắc nghiệm song ngữ kiểm tra khởi tạo lớp với hằng và static, string pool với intern, invokeinterface, OutOfMemoryError mảng và Metaspace, gốc GC, heap container 512 MB, PrintCompilation và escape analysis.",
+   "canBiet": "Hoàn thành hai phần lý thuyết slide và 6 bài tập thực hành về cơ chế bên trong JVM.",
+   "lamDuoc": "Tự đánh giá được mức hiểu cơ chế vận hành JVM, bộ thu gom rác, JIT và bộ nhớ trong container để tự tin trả lời câu hỏi phỏng vấn hệ thống.",
+   "ketHop": "Đối chiếu câu sai với bài tập ôn cùng cụm trước khi chuyển sang cụm thiết kế OO sẵn sàng cho Spring.",
+   "canBietBai": [
+    "pro192-slide-cs5-1",
+    "pro192-slide-cs5-2",
+    "pro192-cs5-on"
+   ],
+   "ketHopBai": [
+    "pro192-cs5-on",
+    "pro192-slide-cs6-1"
+   ]
+  },
+  "pro192-slide-cs6-1": {
+   "hoc": "Rủi ro kế thừa qua HashSet.addAll và cách bọc composition + forwarding, lập trình theo interface, DI bằng tay qua constructor đối chiếu Spring IoC, thiết kế exception theo tầng có mã lỗi và ghi log với JUL/SLF4J.",
+   "canBiet": "Nắm kế thừa, interface, xử lý ngoại lệ cơ bản ở các chương cốt lõi và nguyên lý thiết kế OO nền tảng.",
+   "lamDuoc": "Thay kế thừa dễ vỡ bằng composition, tái cấu trúc service từ tự new sang tiêm qua constructor để dễ test, dịch exception giữ nguyên nhân theo tầng và ghi log có mức độ qua SLF4J thay cho System.out.",
+   "ketHop": "Học tiếp phần hai về Maven, JUnit 5 và 40 câu phỏng vấn, làm bài tập ôn và quiz; liên kết chặt với Spring Boot và quản lý log.",
+   "canBietBai": [
+    "pro192-slide-pro9-1",
+    "pro192-slide-pro10-2",
+    "pro192-slide-pro11-1"
+   ],
+   "ketHopBai": [
+    "pro192-slide-cs6-2",
+    "pro192-cs6-on",
+    "pro192-quiz-cs6"
+   ],
+   "ketHopKhoa": [
+    "spring-boot",
+    "log-tu-a-den-z"
+   ]
+  },
+  "pro192-slide-cs6-2": {
+   "hoc": "Project Maven tối thiểu với pom.xml, phụ thuộc bắc cầu và vòng đời mvn package, viết test JUnit 5 + AssertJ theo Arrange–Act–Assert từ đỏ sang xanh, cùng khung ba nhịp cho 40 câu phỏng vấn Java core chia tám nhóm.",
+   "canBiet": "Đã học phần đầu về DI bằng tay và nắm tổng quan các cụm chuyên sâu trước về hợp đồng đối tượng và JVM.",
+   "lamDuoc": "Đọc hiểu pom.xml và vòng đời Maven, viết và chạy được unit test bằng JUnit 5 với AssertJ theo chuẩn AAA, đồng thời trả lời mạch lạc 40 câu phỏng vấn Java core kèm ví dụ đã kiểm chứng.",
+   "ketHop": "Làm bộ bài tập ôn và quiz của cụm này, luyện thêm kỹ năng kiểm thử và chuẩn bị phỏng vấn IT cho hành trình lên Spring Boot.",
+   "canBietBai": [
+    "pro192-slide-cs6-1",
+    "pro192-slide-cs4-1",
+    "pro192-slide-cs5-2"
+   ],
+   "ketHopBai": [
+    "pro192-cs6-on",
+    "pro192-quiz-cs6"
+   ],
+   "ketHopKhoa": [
+    "testing",
+    "interview-prep"
+   ]
+  },
+  "pro192-cs6-on": {
+   "hoc": "Sáu bài thực hành chạy thật: bọc lớp đếm ArrayList và HashSet, tiêm repository và Clock qua constructor, nhập CSV có mã lỗi, test biên trong main trên JDK 8, @ParameterizedTest bằng Maven và sáu câu đoán output.",
+   "canBiet": "Hoàn thành cả hai phần slide về composition, DI, thiết kế exception, logging, Maven, JUnit 5 và khung phỏng vấn.",
+   "lamDuoc": "Viết được lớp bọc kế thừa AbstractCollection, tách service dễ kiểm thử bằng constructor injection, chạy bảng test biên bằng Maven JUnit 5 đỏ rồi xanh và đoán chính xác các đoạn mã bẫy phỏng vấn.",
+   "ketHop": "Làm quiz cùng cụm để kiểm tra lại, sau đó học cụm SOLID và mẫu thiết kế để mở rộng năng lực tổ chức kiến trúc lớp.",
+   "canBietBai": [
+    "pro192-slide-cs6-1",
+    "pro192-slide-cs6-2"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-cs6",
+    "pro192-slide-cs7-1"
+   ],
+   "ketHopKhoa": [
+    "testing",
+    "spring-boot"
+   ]
+  },
+  "pro192-quiz-cs6": {
+   "hoc": "Mười câu trắc nghiệm song ngữ kiểm tra HashSet đếm sai, constructor injection, finally với return, mvn package, xoá trong for-each, checked exception trong lambda, SLF4J, orElse, JUnit và truyền tham chiếu.",
+   "canBiet": "Đã học đủ hai phần lý thuyết slide và làm trọn 6 bài tập ôn về thiết kế sẵn sàng Spring, Maven và JUnit.",
+   "lamDuoc": "Tự đánh giá được độ vững các thói quen thiết kế OO hiện đại, kiến thức Maven/JUnit và phản xạ tránh bẫy phỏng vấn Java core.",
+   "ketHop": "Xem lại bài tập ôn ở những mục còn lúng túng rồi bước sang cụm SOLID và 6 mẫu thiết kế GoF.",
+   "canBietBai": [
+    "pro192-slide-cs6-1",
+    "pro192-slide-cs6-2",
+    "pro192-cs6-on"
+   ],
+   "ketHopBai": [
+    "pro192-cs6-on",
+    "pro192-slide-cs7-1"
+   ],
+   "ketHopKhoa": [
+    "interview-prep"
+   ]
+  },
+  "pro192-slide-cs7-1": {
+   "hoc": "Năm nguyên lý SOLID đo thật trên CT Library: tách LibraryManager theo actor (SRP), thêm ALUMNI không sửa code cũ (OCP), tránh EBook và hình vuông phá LSP, tách interface béo (ISP), DIP, Spring và giới hạn YAGNI/KISS.",
+   "canBiet": "Đã học bản tóm tắt SOLID, composition và DI bằng tay ở cụm trước cùng cấu trúc CT Library ở Lab 5.",
+   "lamDuoc": "Nhận diện được vi phạm từng nguyên lý SOLID qua lỗi thực tế, tái cấu trúc lớp và interface đúng vai trò, nối được từng nguyên lý với Spring Boot và biết dừng đúng lúc tránh trừu tượng thừa.",
+   "ketHop": "Học tiếp phần hai về sáu mẫu thiết kế GoF, thực hành bài tập ôn và quiz của cụm; hữu ích cho kiến trúc phần mềm và Spring Boot.",
+   "canBietBai": [
+    "pro192-slide-cs6-1",
+    "pro192-n2-1-solid",
+    "pro192-lab-5-truu-tuong-va-interface"
+   ],
+   "ketHopBai": [
+    "pro192-slide-cs7-2",
+    "pro192-cs7-on",
+    "pro192-quiz-cs7"
+   ],
+   "ketHopKhoa": [
+    "spring-boot",
+    "software-architecture"
+   ]
+  },
+  "pro192-slide-cs7-2": {
+   "hoc": "Bản đồ 23 mẫu GoF và 6 mẫu đo trên CT Library cùng đối chiếu Spring: Strategy, Factory, Singleton với cuộc đua hai luồng và reflection, Builder, Observer đồng bộ, Template Method dạng callback và cách chọn mẫu.",
+   "canBiet": "Đã nắm năm nguyên lý SOLID ở phần đầu cùng lambda, Comparator, static factory và builder ở các cụm trước.",
+   "lamDuoc": "Chọn đúng và cài đặt được 6 mẫu GoF bằng Java thuần, viết singleton an toàn luồng, giữ bean Spring không trạng thái và nhận diện từng mẫu bên trong JDK lẫn Spring như Comparator, @EventListener hay JdbcTemplate.",
+   "ketHop": "Thực hành 6 bài tập ôn và làm quiz cùng cụm; xem tiếp cụm đa luồng để hiểu sâu cuộc đua ở singleton lười.",
+   "canBietBai": [
+    "pro192-slide-cs7-1",
+    "pro192-slide-cs1-2",
+    "pro192-slide-cs4-2"
+   ],
+   "ketHopBai": [
+    "pro192-cs7-on",
+    "pro192-quiz-cs7",
+    "pro192-slide-cs8-1"
+   ],
+   "ketHopKhoa": [
+    "spring-boot",
+    "software-architecture"
+   ]
+  },
+  "pro192-cs7-on": {
+   "hoc": "Sáu bài thực hành chạy thật: tách báo cáo quá hạn giữ nguyên output, sổ chính sách phí OCP, bọc Stack tránh lỗi Vector, builder báo đủ lỗi, sửa listener tự gỡ ném ConcurrentModificationException và Template Method.",
+   "canBiet": "Hoàn thành cả hai phần slide về năm nguyên lý SOLID và sáu mẫu thiết kế GoF trong Java và Spring.",
+   "lamDuoc": "Tái cấu trúc được lớp đa nhiệm không đổi hành vi, mở rộng chính sách mới mà không sửa code cũ, thiết kế lớp bọc đúng hợp đồng Liskov, xử lý an toàn vòng lặp Observer và chọn đúng mẫu theo bài toán.",
+   "ketHop": "Làm quiz kiểm tra cùng cụm rồi áp dụng tư duy tách lớp và mẫu thiết kế vào dự án cuối khoá CT Library 1.0.",
+   "canBietBai": [
+    "pro192-slide-cs7-1",
+    "pro192-slide-cs7-2"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-cs7",
+    "pro192-du-an-ct-library"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-quiz-cs7": {
+   "hoc": "Mười câu trắc nghiệm song ngữ kiểm tra OCP khi thêm thành viên, bẫy hình vuông và override ném lỗi theo LSP, interface béo ISP, chủ interface DIP, Strategy, static factory, holder singleton, Observer và Template Method.",
+   "canBiet": "Đã học đủ hai phần lý thuyết slide và làm trọn 6 bài tập tái cấu trúc về SOLID và 6 mẫu GoF.",
+   "lamDuoc": "Tự đánh giá được khả năng nhận diện vi phạm SOLID, phân biệt chính xác sáu mẫu thiết kế kinh điển và giải thích đánh đổi khi áp dụng.",
+   "ketHop": "Ôn lại bài tập cụm này nếu còn nhầm lẫn giữa các mẫu, rồi bước sang cụm cuối về đa luồng cơ bản.",
+   "canBietBai": [
+    "pro192-slide-cs7-1",
+    "pro192-slide-cs7-2",
+    "pro192-cs7-on"
+   ],
+   "ketHopBai": [
+    "pro192-cs7-on",
+    "pro192-slide-cs8-1"
+   ]
+  },
+  "pro192-slide-cs8-1": {
+   "hoc": "Stack riêng và heap chung, start() với run(), trạng thái luồng và interrupt, đo race condition trên count++ cùng javap, tái tạo bằng CyclicBarrier, sửa với synchronized, AtomicInteger, LongAdder, volatile và deadlock.",
+   "canBiet": "Nắm mô hình stack và heap, đọc bytecode bằng javap và đã thấy cuộc đua hai luồng ở ví dụ singleton lười.",
+   "lamDuoc": "Khởi động và dừng luồng lịch sự bằng interrupt, chứng minh và sửa được lỗi mất cập nhật bằng synchronized hoặc lớp atomic, biết phạm vi của volatile và nhận diện rồi phá vòng khoá gây deadlock.",
+   "ketHop": "Học tiếp phần hai về ExecutorService, CompletableFuture và đa luồng trong Spring, rồi làm 6 bài tập ôn và quiz cùng cụm.",
+   "canBietBai": [
+    "pro192-slide-pro7-1",
+    "pro192-slide-cs5-1",
+    "pro192-slide-cs7-2"
+   ],
+   "ketHopBai": [
+    "pro192-slide-cs8-2",
+    "pro192-cs8-on",
+    "pro192-quiz-cs8"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-slide-cs8-2": {
+   "hoc": "Bể luồng ExecutorService và shutdown, Callable, Future, invokeAll, ConcurrentHashMap và CopyOnWriteArrayList, CompletableFuture, luồng ảo Java 21, bean singleton Spring, ThreadLocal và bẫy SimpleDateFormat.",
+   "canBiet": "Đã nắm trạng thái luồng, race condition, synchronized, volatile ở phần một, cùng luồng ảo và singleton từ các cụm trước.",
+   "lamDuoc": "Chạy và tắt bể luồng đúng cách, chia nhỏ tính toán với invokeAll, chọn đúng collection an toàn luồng, phối hợp nhiều lời gọi song song có xử lý lỗi bằng CompletableFuture và giữ bean Spring an toàn dưới nhiều request.",
+   "ketHop": "Thực hành 6 bài tập ôn và làm quiz cuối chương để chốt trọn khối kiến thức đa luồng trước khi bước vào dự án Spring Boot.",
+   "canBietBai": [
+    "pro192-slide-cs8-1",
+    "pro192-slide-cs3-2",
+    "pro192-slide-cs7-2"
+   ],
+   "ketHopBai": [
+    "pro192-cs8-on",
+    "pro192-quiz-cs8"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-cs8-on": {
+   "hoc": "Sáu bài thực hành chạy thật: sửa đua tiền phạt bằng synchronized và AtomicLong, phá deadlock chuyển tiền theo id, quét 1 triệu lượt mượn bằng invokeAll, dashboard CompletableFuture, BlockingQueue và sáu câu đoán output.",
+   "canBiet": "Hoàn thành cả hai phần slide về luồng cơ bản, đồng bộ hoá, deadlock, ExecutorService, collection đồng thời và CompletableFuture.",
+   "lamDuoc": "Tái tạo và sửa được lỗi mất cập nhật lẫn deadlock, chia việc song song bằng bể luồng, ghép nhiều dịch vụ có timeout và fallback bằng CompletableFuture và tổ chức luồng sản xuất–tiêu thụ qua BlockingQueue.",
+   "ketHop": "Làm quiz kiểm tra của cụm đa luồng để khép lại chương chuyên sâu, sau đó tổng hợp kỹ năng vào dự án cuối khoá CT Library 1.0.",
+   "canBietBai": [
+    "pro192-slide-cs8-1",
+    "pro192-slide-cs8-2"
+   ],
+   "ketHopBai": [
+    "pro192-quiz-cs8",
+    "pro192-du-an-ct-library"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-quiz-cs8": {
+   "hoc": "Mười câu trắc nghiệm song ngữ kiểm tra start() với run(), lỗi count++, synchronized, giới hạn volatile, AtomicInteger, tránh deadlock, ExecutionException trong Future, quên shutdown, CompletableFuture và bean Spring.",
+   "canBiet": "Đã học đủ hai phần lý thuyết slide và làm trọn 6 bài tập thực hành về đa luồng cơ bản.",
+   "lamDuoc": "Tự đánh giá được mức nắm cơ chế đồng thời trong Java, tránh các bẫy phổ biến khi dùng bể luồng, Future và chia sẻ trạng thái trên server đa request.",
+   "ketHop": "Xem lại bài tập ôn ở những câu sai rồi chuyển sang làm dự án cuối khoá CT Library 1.0 hoặc tiếp tục học khoá Spring Boot.",
+   "canBietBai": [
+    "pro192-slide-cs8-1",
+    "pro192-slide-cs8-2",
+    "pro192-cs8-on"
+   ],
+   "ketHopBai": [
+    "pro192-cs8-on",
+    "pro192-du-an-ct-library"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-du-an-ct-library": {
+   "hoc": "Đọc đặc tả 7 user story, luật mượn 3/5 và hạn 14/7/3 ngày, phạt theo vai trò, khoá thẻ khi nợ trên 50.000đ; xem mẫu Strategy, LoanService, CSV chịu dòng hỏng, 8 TODO và cách nối sang CSD201, Spring Boot.",
+   "canBiet": "Nắm vững 9 lab CT Library trước đó, đặc biệt thiết kế interface kho và chính sách phí, ngoại lệ nghiệp vụ, Collections, đọc ghi CSV UTF-8 và bộ quy tắc review kiến trúc LAB211 trên JDK 8.",
+   "lamDuoc": "Hoàn thiện 8 TODO DA.1–DA.8 tạo ứng dụng CT Library 1.0 chạy JDK 8 với 3 báo cáo và 200 tài liệu, 300 thành viên, 2.000 lượt mượn; đạt PASS 557/557 qua 2 lần chạy, sạch lint.py và ít nhất 10 commit.",
+   "ketHop": "Làm tiếp đề thi có giờ 90 phút PRO192-DA1 và trắc nghiệm 50 câu PRO192-DA-FE1 trong Phòng thi để luyện nhịp PE/FE, rồi giữ nguyên bộ interface này khi học tiếp CSD201, PostgreSQL và Spring Boot.",
+   "canBietBai": [
+    "pro192-lab-5-truu-tuong-va-interface",
+    "pro192-lab-9-luu-tep",
+    "pro192-lab211-cach-qua-review"
+   ],
+   "ketHopBai": [
+    "pro192-final-exam-pe",
+    "pro192-final-exam-fe"
+   ],
+   "ketHopKhoa": [
+    "data-structures-and-algorithms",
+    "spring-boot"
+   ]
+  },
+  "pro192-final-exam-pe": {
+   "hoc": "Quy định syllabus về PE (85 phút, 30%, điều kiện lớn hơn 0), năm mảnh ghép điển hình của chương trình console theo CLO8 và cách luyện trên NetBeans với Java 8.",
+   "canBiet": "Cần nắm cấu trúc điểm môn học, đã cài NetBeans với JDK 8 và hoàn thành các bài OOP cốt lõi đến mảng đối tượng, ngoại lệ và tệp.",
+   "lamDuoc": "Dựng được khung CRUD bấm giờ trên NetBeans bằng cú pháp Java 8 chuẩn, xử lý nhập liệu an toàn và khớp đúng định dạng output yêu cầu.",
+   "ketHop": "Diễn tập ngay với bốn bài Luyện PE theo từng dạng đề thật và dùng dự án CT Library để rèn tốc độ gõ khung CRUD hoàn chỉnh.",
+   "canBietBai": [
+    "pro192-dieu-kien-qua-mon",
+    "pro192-cai-moi-truong",
+    "pro192-7-1-mang-doi-tuong"
+   ],
+   "ketHopBai": [
+    "pro192-luyen-pe-1",
+    "pro192-du-an-ct-library",
+    "pro192-final-exam-fe"
+   ]
+  },
+  "pro192-final-exam-fe": {
+   "hoc": "Quy định chính thức của FE theo syllabus (60 phút, 30%, cổng 4/10), phạm vi không công bố về format, lộ trình ôn 9 CLO và chiến thuật làm bài trong phòng thi.",
+   "canBiet": "Cần hiểu hệ thống 9 CLO, điều kiện qua môn và đã hoàn thành toàn bộ kiến thức lý thuyết từ Chương 1 đến Chương 9.",
+   "lamDuoc": "Lập được kế hoạch ôn tập phủ đủ 9 CLO theo đúng trọng tâm syllabus, trace code trên giấy chính xác ở phần ghi đè, finally và phân bổ tốt 60 phút thi.",
+   "ketHop": "Làm lại hai bài Progress Test cùng các bài quiz cuối chương để tự kiểm tra lỗ hổng từng CLO trước khi bước vào phòng thi.",
+   "canBietBai": [
+    "pro192-dieu-kien-qua-mon",
+    "pro192-chuan-dau-ra",
+    "pro192-progress-test-2"
+   ],
+   "ketHopBai": [
+    "pro192-progress-test-1",
+    "pro192-progress-test-2",
+    "pro192-final-exam-pe"
+   ]
+  },
+  "pro192-luyen-pe-1": {
+   "hoc": "Bản đồ 19 đề PE chia thành bốn dạng, cách máy chấm tự động và Main.class vận hành, khung giải câu 1 từ hộp UML trên ba đề thật cùng 13 lỗi mất điểm đo trên JDK 8.",
+   "canBiet": "Cần nắm cấu trúc thi PE, thiết kế lớp với trường, constructor, getter, setter và quy tắc đóng gói cơ bản ở Chương 2 và Chương 3.",
+   "lamDuoc": "Đọc được Main.class bằng javap -c, hoàn thành câu 1 từ hộp UML trong khoảng 12 phút trên JDK 8 và tránh các lỗi đặt tên, định dạng hay biên điều kiện.",
+   "ketHop": "Tiếp tục ngay với Luyện PE 2 cho câu kế thừa, xem thêm bài JUnit ở phần chuyên sâu và liên hệ cách chấm tự động sang môn LAB211 cùng kiểm thử phần mềm.",
+   "canBietBai": [
+    "pro192-final-exam-pe",
+    "pro192-2-1-lop-doi-tuong",
+    "pro192-3-1-dong-goi"
+   ],
+   "ketHopBai": [
+    "pro192-luyen-pe-2",
+    "pro192-on-ch2",
+    "pro192-slide-cs6-2"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "testing"
+   ]
+  },
+  "pro192-luyen-pe-2": {
+   "hoc": "Hai họ đề câu 2 (họ Spec với toString, setData, getValue và họ nghiệp vụ), cách soi ba test case bằng javap -c, giải ba đề thật và 13 lỗi mất điểm về kế thừa.",
+   "canBiet": "Cần nắm cách giải câu 1 từ hộp UML, cơ chế kế thừa, gọi super, ghi đè phương thức và đa hình đã học ở Chương 4.",
+   "lamDuoc": "Viết được lớp cha và lớp con đúng thứ tự tham số UML trong 20 phút, sửa dữ liệu qua getter/setter theo đúng vị trí chỉ số và tránh lỗi NoSuchMethodError.",
+   "ketHop": "Ôn thêm bài thực hành kế thừa Chương 4, chuyển sang Luyện PE 3 về danh sách đối tượng và liên hệ mô hình kế thừa BaseEntity khi học Spring Boot.",
+   "canBietBai": [
+    "pro192-luyen-pe-1",
+    "pro192-4-1-ke-thua",
+    "pro192-4-2-da-hinh"
+   ],
+   "ketHopBai": [
+    "pro192-luyen-pe-3",
+    "pro192-on-ch4",
+    "pro192-lab-4-ke-thua-va-da-hinh"
+   ],
+   "ketHopKhoa": [
+    "spring-boot"
+   ]
+  },
+  "pro192-luyen-pe-3": {
+   "hoc": "Hai dạng câu 3 (interface f1/f2/f3 trên List và lớp XxxList kế thừa ArrayList), kỹ thuật quét hai lượt, xoá tại chỗ, sắp xếp ổn định trên ba đề thật cùng 14 lỗi hay gặp.",
+   "canBiet": "Cần hoàn thành dạng kế thừa ở Luyện PE 2 và nắm chắc thao tác mảng đối tượng, ArrayList, Comparator trong Chương 7 và Chương 8.",
+   "lamDuoc": "Cài đặt được bộ hàm tìm, sửa, xoá tại chỗ và sắp xếp ổn định trong 25 phút mà không dính ConcurrentModificationException hay bỏ sót phần tử.",
+   "ketHop": "Luyện thêm bài thực hành Collections Chương 8, học tiếp Luyện PE 4 và nối tư duy lọc, sắp xếp sang cấu trúc dữ liệu CSD201 cùng truy vấn Spring Boot.",
+   "canBietBai": [
+    "pro192-luyen-pe-2",
+    "pro192-7-1-mang-doi-tuong",
+    "pro192-8-1-collections"
+   ],
+   "ketHopBai": [
+    "pro192-luyen-pe-4",
+    "pro192-on-ch8",
+    "pro192-lab-8-collections"
+   ],
+   "ketHopKhoa": [
+    "data-structures-and-algorithms",
+    "spring-boot"
+   ]
+  },
+  "pro192-luyen-pe-4": {
+   "hoc": "Dạng câu 4 hiện thực interface xử lý chuỗi (giải PE4, PE10) và đề một câu 10 điểm đọc input.txt ghi output.txt (giải trọn PE5), kèm 14 lỗi đo thật trên JDK 8.",
+   "canBiet": "Cần nắm các dạng PE trước, cách hiện thực interface ở Chương 5, thao tác String và đọc ghi tệp bằng Scanner, FileWriter ở Chương 9.",
+   "lamDuoc": "Xử lý được chuỗi đúng biên regex, bất biến và tách dữ liệu tệp Windows để ghi đúng output.txt trong bộ khung FIXED/@STUDENT mà không hỏng gói.",
+   "ketHop": "Ôn lại bài thực hành chuỗi Chương 1, tệp Chương 9 và quay về Luyện PE 1 bấm giờ trọn đề, tạo đà chuyển sang LAB211 và thiết kế controller Spring Boot.",
+   "canBietBai": [
+    "pro192-luyen-pe-3",
+    "pro192-5-1-abstract-interface",
+    "pro192-9-1-file-io"
+   ],
+   "ketHopBai": [
+    "pro192-luyen-pe-1",
+    "pro192-on-ch1",
+    "pro192-on-ch9"
+   ],
+   "ketHopKhoa": [
+    "oop-with-java-lab",
+    "spring-boot"
+   ]
+  }
+ },
+ "khoaTen": {
+  "oop-with-java-lab": "LAB211 · OOP with Java Lab",
+  "spring-boot": "Spring Boot",
+  "java-web-application-development": "PRJ301 · Java Web Application Development",
+  "data-structures-and-algorithms": "CSD201 · Data Structures and Algorithms",
+  "git": "Git & GitHub",
+  "introduction-to-computer-science": "CSI104 · Introduction to Computer Science",
+  "mathematics-for-engineering": "MAE101 · Mathematics for Engineering",
+  "doc-code-cu-va-refactor": "Legacy Code: Reading, Testing and Refactoring",
+  "docker": "Docker",
+  "log-tu-a-den-z": "Reading & Mastering Logs A–Z",
+  "testing": "Testing",
+  "interview-prep": "IT Interview Prep",
+  "software-architecture": "Software Architecture"
+ }
+}

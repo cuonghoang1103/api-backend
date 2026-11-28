@@ -2221,6 +2221,8 @@ export const coursesApi = {
 
   // ── Course-LEVEL documents (the fixed "Tài liệu" area) ──
   getCourseDocuments: (courseId: number) => api.get(`/courses/${courseId}/documents`),
+  // Roadmap sơ đồ đầu khoá (28/11/2026): 4 ý mỗi bài — content/roadmap-khoa/<slug>.json. null = khoá chưa có mô tả.
+  getCourseRoadmap: (slug: string) => api.get(`/courses/${encodeURIComponent(slug)}/roadmap`),
   addCourseDocumentLink: (courseId: number, title: string, url: string) =>
     api.post(`/courses/${courseId}/documents/link`, { title, url }),
   uploadCourseDocumentDirect: async (

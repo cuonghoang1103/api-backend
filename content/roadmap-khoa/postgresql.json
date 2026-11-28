@@ -1,0 +1,2152 @@
+{
+ "khoa": "postgresql",
+ "ten": "PostgreSQL",
+ "phienBan": 1,
+ "capNhat": "2026-11-28",
+ "nguon": "Antigravity (Gemini) soạn từ bài web gốc; Claude soát mẫu",
+ "chuong": {
+  "postgresql-0-1-gioi-thieu": {
+   "hoc": "Giới thiệu PostgreSQL 17, bản đồ toàn khoá, phương pháp học bằng cách gõ chạy thực tế, dựng máy chủ qua Docker cùng psql, mô hình client-server và đường tắt từ SQL Server/MySQL.",
+   "lamDuoc": "Dựng được PostgreSQL 17 bền vững bằng Docker, kết nối qua psql, chọn đúng lộ trình học và nắm vững mô hình tư duy máy chủ nói chuyện bằng SQL."
+  },
+  "postgresql-1-1-mo-hinh-quan-he": {
+   "hoc": "Mô hình quan hệ với bảng và khoá, bốn bảo đảm ACID qua thí nghiệm chạy thật, so sánh PostgreSQL với MySQL, SQLite và NoSQL, cùng 5 chặng dòng chảy truy vấn và lệnh EXPLAIN.",
+   "lamDuoc": "Giải thích được vì sao chọn PostgreSQL và mô hình quan hệ, đọc được kế hoạch EXPLAIN cơ bản, và hoàn thành bản kế hoạch thực thể cùng máy chủ Postgres chạy thật cho dự án."
+  },
+  "postgresql-2-1-so": {
+   "hoc": "Hệ thống kiểu dữ liệu cốt lõi của PostgreSQL gồm số nguyên, numeric, text, varchar, char, boolean, ngày giờ có múi giờ, cùng uuid, enum, array và jsonb kèm các cạm bẫy thực tế.",
+   "lamDuoc": "Chọn đúng kiểu dữ liệu có lý do cho từng cột trước khi tạo bảng, tránh lỗi sai số tiền bạc, lệch múi giờ và các bẫy lưu trữ khó sửa về sau."
+  },
+  "postgresql-3-1-khoa-chinh": {
+   "hoc": "Khoá chính, khoá ngoại với ba hành vi ON DELETE, ràng buộc cột (NOT NULL, DEFAULT, UNIQUE, CHECK), cột sinh, tiến hoá lược đồ bằng ALTER TABLE và tư duy chuẩn hoá.",
+   "lamDuoc": "Thiết kế được lược đồ nhiều bảng từ ERD, đặt đủ ràng buộc để PostgreSQL tự chặn dữ liệu sai và thay đổi cấu trúc bảng đang có dữ liệu một cách an toàn."
+  },
+  "postgresql-4-1-insert": {
+   "hoc": "Cách nạp dữ liệu hiệu quả với INSERT nhiều dòng, RETURNING, COPY và UPSERT, truy vấn một bảng qua SELECT, WHERE, ORDER BY, LIMIT/OFFSET, DISTINCT, cùng quy trình UPDATE và DELETE an toàn trong giao dịch.",
+   "lamDuoc": "Nạp được dữ liệu mẫu từ SQL và CSV không trùng lặp, viết đúng truy vấn lọc, sắp xếp và phân trang tránh bẫy NULL, đồng thời sửa và xoá dòng an toàn nhờ RETURNING và BEGIN/ROLLBACK."
+  },
+  "postgresql-5-1-inner-join": {
+   "hoc": "Kết hợp dữ liệu từ nhiều bảng qua INNER JOIN, các kiểu OUTER JOIN (LEFT, RIGHT, FULL), nối nhiều bảng, self-join và CROSS JOIN. Nhận diện các bẫy gây rơi dòng, nhân dòng (fan-out) hay lệch điều kiện ON và WHERE.",
+   "lamDuoc": "Viết được truy vấn nối nhiều bảng, anti-join và self-join cho các màn hình ứng dụng thật. Chẩn đoán và xử lý được lỗi nhân đôi dòng, đếm sai dòng đệm NULL và biến LEFT JOIN thành INNER JOIN."
+  },
+  "postgresql-6-1-ham-tong-hop": {
+   "hoc": "Tóm tắt nhiều dòng thành số liệu bằng COUNT, SUM, AVG, MIN, MAX, gom nhóm với GROUP BY, lọc hai tầng bằng WHERE, HAVING và FILTER, cùng cách tổng hợp trên JOIN không bị fan-out làm phồng số.",
+   "lamDuoc": "Viết được truy vấn báo cáo doanh thu, chỉ số dashboard theo tháng và danh mục trên nhiều bảng mà không dính bẫy NULL, sai độ mịn hay phồng số liệu do JOIN một-nhiều."
+  },
+  "postgresql-7-1-subquery": {
+   "hoc": "Truy vấn con vô hướng, IN/ANY/ALL, truy vấn con tương quan với EXISTS và bẫy NOT IN gặp NULL, CTE (WITH) tổng hợp trước khi join, cùng WITH RECURSIVE duyệt cây phân cấp.",
+   "lamDuoc": "Viết được truy vấn nhiều bước rõ ràng bằng subquery và CTE, tránh bẫy NOT IN với NULL và lỗi fan-out sum, đồng thời duyệt cây phân cấp hoặc sinh dãy bằng CTE đệ quy."
+  },
+  "postgresql-8-1-window-la-gi": {
+   "hoc": "Hàm cửa sổ trong PostgreSQL: OVER(), PARTITION BY, xếp hạng (ROW_NUMBER, RANK, DENSE_RANK), LAG/LEAD, tổng luỹ tiến, khung ROWS/RANGE/GROUPS, FIRST_VALUE, LAST_VALUE và NTILE.",
+   "lamDuoc": "Viết được truy vấn phân tích giữ nguyên từng dòng chi tiết: xếp hạng top-N mỗi nhóm, tính luỹ kế, so sánh kỳ trước và trung bình trượt trên dữ liệu thật."
+  },
+  "postgresql-9-1-chi-muc-la-gi": {
+   "hoc": "Giải thích cơ chế trang 8 kB, cây B-tree, EXPLAIN ANALYZE, chỉ mục tổ hợp và covering, các bẫy khiến chỉ mục bị bỏ qua, độ chọn lọc, partial index và các loại GIN, BRIN, GiST, Hash.",
+   "lamDuoc": "Thiết kế được bộ chỉ mục hợp lý từ truy vấn thực tế, đọc được plan để kiểm chứng tốc độ và tránh tạo chỉ mục thừa làm chậm thao tác ghi."
+  },
+  "postgresql-10-1-doc-explain": {
+   "hoc": "Giải phẫu EXPLAIN và EXPLAIN ANALYZE, ba chiến lược JOIN (Nested Loop, Hash, Merge), cách bộ lập kế hoạch dùng thống kê ước lượng số dòng, đọc BUFFERS và quy trình tinh chỉnh bốn bước.",
+   "lamDuoc": "Đọc được cây kế hoạch truy vấn, phát hiện ước lượng sai hay điểm nghẽn I/O, và tối ưu truy vấn chậm theo quy trình đo, sửa, đo lại có số liệu rõ ràng."
+  },
+  "postgresql-11-1-giao-dich": {
+   "hoc": "Cơ chế giao dịch nguyên tử (BEGIN/COMMIT/ROLLBACK, SAVEPOINT), MVCC, ba mức cô lập, khoá dòng, lost update và deadlock qua các kịch bản chạy song song trên hai phiên psql.",
+   "lamDuoc": "Thiết kế được giao dịch an toàn khi nhiều người ghi cùng lúc, chọn đúng mức cô lập, ngăn lost update bằng khoá hoặc câu lệnh nguyên tử và chẩn đoán được tắc nghẽn hay deadlock."
+  },
+  "postgresql-12-1-ham": {
+   "hoc": "Đưa logic vào trong cơ sở dữ liệu với hàm SQL và PL/pgSQL, ba mức volatility, trigger tự động hoá, view và materialized view, kèm nguyên tắc biết khi nào không nên dùng.",
+   "lamDuoc": "Viết được hàm và trigger an toàn, tổ chức truy vấn bằng view, chọn đúng materialized view kèm lịch làm mới và áp dụng vào luồng đặt hàng đồng thời."
+  },
+  "postgresql-13-1-jsonb": {
+   "hoc": "Cách dùng JSONB lưu thuộc tính linh hoạt, đánh chỉ mục ngược GIN cho @> và ?, tìm toàn văn bằng tsvector/tsquery có trọng số, và tìm gần đúng hay tăng tốc ILIKE '%...%' bằng pg_trgm.",
+   "lamDuoc": "Thiết kế được cột JSONB đúng chỗ kèm chỉ mục GIN, dựng ô tìm kiếm tiếng Việt không dấu biết xếp hạng và chịu lỗi chính tả ngay trong PostgreSQL."
+  },
+  "postgresql-14-1-gia-ket-noi": {
+   "hoc": "Chi phí thật của mỗi kết nối (mô hình tiến trình), connection pool trong app và PgBouncer, dọn rác MVCC bằng VACUUM/autovacuum, cùng các khung nhìn giám sát để giữ PostgreSQL vận hành ổn định.",
+   "lamDuoc": "Tính đúng ngân sách kết nối và cỡ pool, cấu hình autovacuum tránh bloat hay wraparound, và truy vết nhanh nguyên nhân hệ thống chậm bằng pg_stat_activity, pg_stat_statements."
+  },
+  "postgresql-15-1-pg-dump": {
+   "hoc": "Sao lưu logic bằng pg_dump và pg_restore, cơ chế WAL với khôi phục theo thời điểm PITR, dựng bản sao streaming và phân mảnh bảng bằng partitioning.",
+   "lamDuoc": "Thiết kế được quy trình sao lưu và diễn tập khôi phục, dựng bản sao đọc bằng pg_basebackup, xử lý failover cơ bản và chọn đúng thời điểm phân mảnh bảng lớn."
+  },
+  "postgresql-16-1-prisma-migration": {
+   "hoc": "Kết nối PostgreSQL với ứng dụng thật qua Prisma và migration, đọc lược đồ production 602 model, rà checklist trước khi ra mắt và chẩn đoán bốn sự cố production bằng thống kê.",
+   "lamDuoc": "Triển khai được migration không gián đoạn, đọc hiểu lược đồ lớn, soát sẵn sàng production, điều tra sự cố từ catalog và hoàn thiện API Node + Prisma chịu tải trên CT Shop."
+  },
+  "postgresql-17-1-bon-he-csdl": {
+   "hoc": "Đặt SQL Server, MySQL, PostgreSQL và MongoDB cạnh nhau trên cùng dữ liệu CT Shop: mô hình dữ liệu, giấy phép, khác biệt cú pháp và hành vi SQL, document so với JSONB và cách chọn hệ.",
+   "lamDuoc": "Phân biệt được bốn hệ cơ sở dữ liệu theo mô hình và hành vi thực tế, chuyển truy vấn giữa ba máy chủ SQL an toàn, chọn đúng giữa bảng, JSONB hay document và bảo vệ được quyết định kiến trúc."
+  },
+  "postgresql-pe1-chua-tron-de": {
+   "hoc": "Chữa trọn hai đề thực hành PE1, PE2, hai đề trắc nghiệm cuối khoá FE1, FE2 chạy thật trên PostgreSQL 17.11 kèm hướng dẫn hoàn thiện và bảo vệ dự án cuối khoá.",
+   "lamDuoc": "Tự chấm, sửa dứt điểm các bẫy SQL và vận hành hay sai khi thi, hoàn thiện repo dự án dựng lại được từ số 0 và bảo vệ thuyết phục trước hội đồng AI."
+  }
+ },
+ "bai": {
+  "postgresql-0-1-gioi-thieu": {
+   "hoc": "Giải thích vai trò lưu trữ bền vững của cơ sở dữ liệu, bốn bảo đảm của PostgreSQL, lịch sử từ Ingres đến bản 17, so sánh với MySQL/SQLite và tổng quan 17 chương, 9 lab cùng đề tài dự án.",
+   "canBiet": "Không cần nền trước về cơ sở dữ liệu hay SQL; chỉ cần làm quen cơ bản với máy tính và cách ứng dụng lưu dữ liệu.",
+   "lamDuoc": "Giải thích được vì sao chọn PostgreSQL 17, chọn đúng một trong hai đường học theo trình độ và đăng ký đề tài dự án cuối khoá phù hợp.",
+   "ketHop": "Xem tiếp bài hướng dẫn cách học, chọn đề tài dự án và mở track thực hành PostgreSQL trên Code Lab cùng tài liệu chính thức postgresql.org/docs.",
+   "ketHopBai": [
+    "postgresql-0-2-cach-hoc",
+    "postgresql-1-3-vs-alternatives"
+   ]
+  },
+  "postgresql-0-2-cach-hoc": {
+   "hoc": "Trình bày vòng học bốn bước dự đoán, chạy, so sánh và phá thử, bẫy đọc suông SQL như fan-out khi JOIN hay so sánh NULL, cách tra cú pháp thay vì học thuộc và vai trò của EXPLAIN ANALYZE.",
+   "canBiet": "Đã nắm tổng quan cấu trúc 17 chương và hai lộ trình học của khoá ở bài mở đầu.",
+   "lamDuoc": "Áp dụng được quy trình chạy kiểm chứng và đếm dòng trong psql để tự phát hiện sai lệch giữa dự đoán và kết quả, đồng thời xác định các chương có thể lướt.",
+   "ketHop": "Dựng ngay máy chủ thực hành ở bài cài đặt để gõ lại mọi truy vấn, luyện thêm trên Code Lab sau mỗi chương và học sâu phần tối ưu tại Chương 10.",
+   "canBietBai": [
+    "postgresql-0-1-gioi-thieu"
+   ],
+   "ketHopBai": [
+    "postgresql-0-3-cai-dat",
+    "postgresql-10-1-doc-explain"
+   ]
+  },
+  "postgresql-0-3-cai-dat": {
+   "hoc": "So sánh ba cách chạy PostgreSQL, dựng container postgres:17 trên cổng 5444 kèm volume bảo vệ dữ liệu, kiểm tra bằng docker ps/logs, kết nối psql và phân biệt máy chủ, cơ sở dữ liệu, schema, bảng.",
+   "canBiet": "Biết mở dòng lệnh cơ bản và đã nắm nguyên tắc gõ chạy trực tiếp trong psql ở bài trước.",
+   "lamDuoc": "Khởi chạy được PostgreSQL 17 bằng Docker không lo mất dữ liệu khi docker rm, kết nối bằng psql, xử lý lỗi thường gặp và chạy câu lệnh SQL đầu tiên.",
+   "ketHop": "Làm bước dựng cơ sở dữ liệu luyện tập trên Code Lab, tiếp nối bài mô hình tư duy và hoàn thiện Mốc dự án 1; có thể học kèm khoá Docker nếu muốn hiểu sâu container.",
+   "canBietBai": [
+    "postgresql-0-2-cach-hoc"
+   ],
+   "ketHopBai": [
+    "postgresql-0-4-mo-hinh",
+    "postgresql-moc-1"
+   ],
+   "ketHopKhoa": [
+    "docker"
+   ]
+  },
+  "postgresql-0-4-mo-hinh": {
+   "hoc": "Phân tích mô hình client-server qua TCP 5432, cơ chế mỗi kết nối một tiến trình backend với max_connections, tính khai báo của SQL, dự án Notes API và bẫy thiết kế bảng theo màn hình giao diện.",
+   "canBiet": "Đã dựng được máy chủ PostgreSQL 17 và biết kết nối chạy câu lệnh SQL qua psql.",
+   "lamDuoc": "Giải thích được nguyên nhân lỗi vượt max_connections, rủi ro SQL injection và định hình được bảng dữ liệu dựa trên thực thể nghiệp vụ thay vì bố cục màn hình.",
+   "ketHop": "Chuyển tiếp sang Chương 1 về mô hình quan hệ và dòng chảy truy vấn, đồng thời đối chiếu lại cơ chế giới hạn kết nối và pool khi học tới Chương 14.",
+   "canBietBai": [
+    "postgresql-0-3-cai-dat"
+   ],
+   "ketHopBai": [
+    "postgresql-1-1-mo-hinh-quan-he",
+    "postgresql-1-4-dong-chay-truy-van",
+    "postgresql-14-1-gia-ket-noi"
+   ]
+  },
+  "postgresql-0-5-tu-sql-server-mysql": {
+   "hoc": "Đối chiếu SQL Server 2022, MySQL 8.4 và PostgreSQL 17 trên cùng CSDL ctmini: phần chuẩn giữ nguyên, cú pháp đổi tên như TOP, ISNULL, OUTPUT và các bẫy hành vi về collation, chia nguyên, chuỗi rỗng.",
+   "canBiet": "Dành cho người đã viết SQL trên SQL Server (DBI202) hoặc MySQL và đã cài sẵn PostgreSQL 17 để tự chạy đối chiếu.",
+   "lamDuoc": "Chuyển đổi chính xác truy vấn T-SQL hoặc MySQL sang cú pháp PostgreSQL, né được các bẫy khác biệt hành vi và áp dụng lộ trình lướt Chương 1–7, tập trung Chương 8–17.",
+   "ketHop": "Thực hành trên Code Lab PostgreSQL, bắt đầu lướt Chương 1–7 và đào sâu so sánh đa hệ cơ sở dữ liệu ở Chương 17; liên hệ kiến thức nền từ khoá DBI202.",
+   "canBietBai": [
+    "postgresql-0-3-cai-dat",
+    "postgresql-0-4-mo-hinh"
+   ],
+   "ketHopBai": [
+    "postgresql-1-1-mo-hinh-quan-he",
+    "postgresql-17-2-cung-truy-van-ba-he"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-1-1-mo-hinh-quan-he": {
+   "hoc": "Cấu trúc bảng, dòng, cột, khoá chính, khoá ngoại, ERD và nguyên tắc lưu mỗi sự thật đúng một lần để tránh dữ liệu mâu thuẫn. Phân tích bẫy nhân bản cột cho đỡ phải JOIN.",
+   "canBiet": "Nắm mô hình tư duy máy chủ nói chuyện bằng SQL khai báo ở bài 0.4 và đã cài xong PostgreSQL với psql để tự chạy thử.",
+   "lamDuoc": "Tách được dữ liệu lặp sang các bảng liên kết qua khoá chính và khoá ngoại, tránh bẫy nhân bản cột sớm, và đọc hiểu cách JOIN ráp dòng.",
+   "ketHop": "Làm bài thực hành mô hình hai bảng trên Code Lab, áp dụng tách thực thể ngay ở Mốc dự án 1 và ôn nền tảng lý do cần CSDL ở khoá Nền tảng Lập trình Web.",
+   "canBietBai": [
+    "postgresql-0-4-mo-hinh",
+    "postgresql-0-3-cai-dat"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-1",
+    "postgresql-1-5-quiz",
+    "postgresql-3-2-khoa-ngoai"
+   ],
+   "ketHopKhoa": [
+    "web-foundations"
+   ]
+  },
+  "postgresql-1-2-acid": {
+   "hoc": "Bốn bảo đảm Atomicity, Consistency, Isolation, Durability qua thí nghiệm chuyển tiền bằng BEGIN, COMMIT, ROLLBACK và ràng buộc CHECK. Chỉ rõ bẫy đua đọc-rồi-ghi và cách chặn bằng UPDATE có điều kiện hay FOR UPDATE.",
+   "canBiet": "Hiểu cấu trúc bảng, dòng, cột và cách cơ sở dữ liệu cưỡng chế luật ở bài 1.1, cùng thao tác cơ bản trong psql.",
+   "lamDuoc": "Chứng minh được từng tính chất ACID bằng giao dịch thực tế, tránh dùng float cho tiền, và chọn được cách ngăn mất cập nhật khi hai phiên cùng trừ số dư.",
+   "ketHop": "Tự chạy bài thực hành chuyển tiền trên Code Lab, làm Kiểm tra Chương 1 và đối chiếu lý thuyết giao dịch nếu bạn đã học môn DBI202.",
+   "canBietBai": [
+    "postgresql-1-1-mo-hinh-quan-he",
+    "postgresql-0-3-cai-dat"
+   ],
+   "ketHopBai": [
+    "postgresql-1-5-quiz",
+    "postgresql-11-1-giao-dich",
+    "postgresql-11-3-muc-co-lap"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-1-3-vs-alternatives": {
+   "hoc": "So sánh thực tế giữa PostgreSQL, MySQL, SQLite và NoSQL qua phép thử chèn sai kiểu dữ liệu và ghi đồng thời. Nêu khung quyết định chọn hệ lưu trữ và bẫy tin mù quáng vào benchmark của người khác.",
+   "canBiet": "Nắm khái niệm bảng, ràng buộc và bảo đảm ACID từ bài 1.1 và 1.2 để hiểu vì sao độ nghiêm kiểu dữ liệu và khoá dòng tạo khác biệt.",
+   "lamDuoc": "Chọn đúng giữa PostgreSQL, SQLite, MySQL hoặc NoSQL dựa trên yêu cầu giao dịch, ghi đồng thời và truy vấn, đồng thời bảo vệ được lý do chọn mặc định Postgres.",
+   "ketHop": "Làm Kiểm tra Chương 1 để củng cố tiêu chí chọn hệ, sau đó nối tiếp với bài JSONB ở Chương 13, bài so sánh bốn hệ ở Chương 17 hoặc khoá MongoDB.",
+   "canBietBai": [
+    "postgresql-1-1-mo-hinh-quan-he",
+    "postgresql-1-2-acid"
+   ],
+   "ketHopBai": [
+    "postgresql-1-5-quiz",
+    "postgresql-13-1-jsonb",
+    "postgresql-17-1-bon-he-csdl"
+   ],
+   "ketHopKhoa": [
+    "mongodb"
+   ]
+  },
+  "postgresql-1-4-dong-chay-truy-van": {
+   "hoc": "Năm trạm một truy vấn đi qua: phân tích cú pháp, viết lại view, lập kế hoạch, thực thi và trả kết quả. Giới thiệu EXPLAIN, EXPLAIN ANALYZE và so sánh chi phí Seq Scan với dùng chỉ mục.",
+   "canBiet": "Nắm tư duy SQL khai báo ở bài 0.4 cùng kiến thức bảng và giao dịch cơ bản từ bài 1.1 và 1.2 để hiểu cách bọc EXPLAIN ANALYZE trong ROLLBACK.",
+   "lamDuoc": "Phân biệt được lỗi xảy ra ở chặng nào, chạy EXPLAIN và EXPLAIN ANALYZE an toàn, và nhận diện được khi nào Seq Scan trở thành điểm nghẽn cần chỉ mục.",
+   "ketHop": "Ôn lại qua Kiểm tra Chương 1, chuẩn bị nền cho Chương 9 về chỉ mục và Chương 10 về đọc plan chuyên sâu; xem thêm ứng dụng tối ưu truy vấn ở khoá Node.js.",
+   "canBietBai": [
+    "postgresql-0-4-mo-hinh",
+    "postgresql-1-1-mo-hinh-quan-he",
+    "postgresql-1-2-acid"
+   ],
+   "ketHopBai": [
+    "postgresql-1-5-quiz",
+    "postgresql-9-1-chi-muc-la-gi",
+    "postgresql-10-1-doc-explain"
+   ],
+   "ketHopKhoa": [
+    "nodejs"
+   ]
+  },
+  "postgresql-moc-1": {
+   "hoc": "Chuyển đề tài dự án thành bản thiết kế dữ liệu trên giấy và dựng môi trường chạy thật: xác định thực thể, thuộc tính, quan hệ 1–n hay n–n, bộ câu hỏi nghiệp vụ và khởi tạo CSDL trên PostgreSQL.",
+   "canBiet": "Đã chọn đề tài ở bài 0.1, cài đặt PostgreSQL cùng psql ở bài 0.3, và nắm cách tách thực thể, quan hệ từ bài 1.1.",
+   "lamDuoc": "Hoàn thiện được repo Git kèm README chứa ít nhất 5 thực thể, quan hệ, 5 câu hỏi nghiệp vụ, và một CSDL PostgreSQL chạy thật đã kết nối thành công bằng psql.",
+   "ketHop": "Nộp link commit cùng ảnh output psql, làm Kiểm tra Chương 1 rồi mang chính bản kế hoạch này sang Mốc dự án 2 để chọn kiểu dữ liệu; ôn thêm khoá Git và Docker nếu cần.",
+   "canBietBai": [
+    "postgresql-0-1-gioi-thieu",
+    "postgresql-0-3-cai-dat",
+    "postgresql-1-1-mo-hinh-quan-he"
+   ],
+   "ketHopBai": [
+    "postgresql-1-5-quiz",
+    "postgresql-moc-2"
+   ],
+   "ketHopKhoa": [
+    "git",
+    "docker"
+   ]
+  },
+  "postgresql-1-5-quiz": {
+   "hoc": "Tám câu hỏi rà soát toàn Chương 1 theo thứ tự: mô hình quan hệ và khoá, bốn bảo đảm ACID và MVCC, so sánh PostgreSQL với MySQL, SQLite, NoSQL, cùng dòng chảy truy vấn và đọc EXPLAIN.",
+   "canBiet": "Hoàn thành bốn bài học 1.1 đến 1.4 của Chương 1, đặc biệt nắm vững thí nghiệm ACID và cách đọc kế hoạch EXPLAIN.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững kiến thức Chương 1 với mục tiêu đạt tối thiểu 7/8 câu, phát hiện sớm lỗ hổng về ACID hoặc EXPLAIN trước khi sang Chương 2.",
+   "ketHop": "Trả lời bằng trí nhớ không mở ghi chú; nếu hổng câu nào thì quay lại bài tương ứng, rồi hoàn tất Mốc dự án 1 trước khi bước sang bài 2.1 về kiểu dữ liệu số.",
+   "canBietBai": [
+    "postgresql-1-1-mo-hinh-quan-he",
+    "postgresql-1-2-acid",
+    "postgresql-1-4-dong-chay-truy-van"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-1",
+    "postgresql-2-1-so"
+   ]
+  },
+  "postgresql-2-1-so": {
+   "hoc": "Họ số nguyên smallint, integer, bigint và cách PostgreSQL báo lỗi khi tràn số, cột tự tăng GENERATED ALWAYS AS IDENTITY thay cho serial, phép chia số nguyên và vì sao tiền phải dùng numeric thay vì float.",
+   "canBiet": "Biết chạy truy vấn SQL cơ bản trên PostgreSQL qua psql; người chuyển từ SQL Server hoặc MySQL nên xem trước bài đối chiếu 0.5.",
+   "lamDuoc": "Chọn đúng cỡ số nguyên phù hợp, khai báo khoá tự tăng bằng IDENTITY, tránh lỗi chia cắt phần thập phân và dùng numeric hoặc số nguyên cho mọi cột tiền tệ.",
+   "ketHop": "Chạy track Code Lab tái hiện lỗi trôi lệch của float rồi sửa bằng numeric, áp dụng vào Mốc dự án 2, làm Quiz 2.5 và đối chiếu phần kiểu số trong khoá DBI202.",
+   "canBietBai": [
+    "postgresql-0-3-cai-dat",
+    "postgresql-0-5-tu-sql-server-mysql"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-2",
+    "postgresql-2-5-quiz",
+    "postgresql-3-1-khoa-chinh"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-2-2-text": {
+   "hoc": "So sánh text, varchar(n) và char(n) về lưu trữ lẫn độ dài theo ký tự Unicode, bẫy ép kiểu ::varchar(n) âm thầm cắt chuỗi, bẫy char(n) đệm khoảng trắng, thói quen varchar(255) và so sánh phân biệt hoa thường.",
+   "canBiet": "Nắm cách PostgreSQL kiểm tra và từ chối giá trị sai kiểu từ bài 2.1; người quen SQL Server hoặc MySQL nên xem trước bài 0.5 để đổi thói quen NVARCHAR và varchar(255).",
+   "lamDuoc": "Chọn mặc định text thay vì varchar(255) theo thói quen, chỉ đặt varchar(n) khi có luật nghiệp vụ thật, tránh hoàn toàn char(n) và xử lý đúng so sánh chữ hoa thường hoặc citext.",
+   "ketHop": "Thực hành track Code Lab tái hiện lỗi đệm khoảng trắng cuối của char(n), vận dụng vào bảng kiểu cột ở Mốc dự án 2 và ôn lại qua Quiz 2.5.",
+   "canBietBai": [
+    "postgresql-2-1-so",
+    "postgresql-0-5-tu-sql-server-mysql"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-2",
+    "postgresql-2-5-quiz"
+   ]
+  },
+  "postgresql-2-3-ngay-gio": {
+   "hoc": "Kiểu boolean cùng logic ba giá trị với NULL, họ ngày giờ date, time, timestamp, timestamptz, interval, khác biệt giữa now() và clock_timestamp(), và vì sao sự kiện phải dùng timestamptz.",
+   "canBiet": "Nắm nguyên tắc chọn kiểu theo ngữ nghĩa dữ liệu từ các bài đầu Chương 2; người quen SQL Server hoặc MySQL nên xem trước bài 0.5.",
+   "lamDuoc": "Viết đúng điều kiện lọc boolean có NULL bằng IS NOT TRUE và IS NULL, tính toán ngày giờ bằng interval và mặc định chọn timestamptz để tránh lệch múi giờ.",
+   "ketHop": "Chạy Code Lab xem chuyển đổi timestamptz giữa hai múi giờ, áp dụng vào Mốc dự án 2, làm Quiz 2.5 và đối chiếu phần chọn kiểu thời gian ở khoá DBI202 và Node.js.",
+   "canBietBai": [
+    "postgresql-2-1-so",
+    "postgresql-2-2-text",
+    "postgresql-0-5-tu-sql-server-mysql"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-2",
+    "postgresql-2-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases",
+    "nodejs"
+   ]
+  },
+  "postgresql-2-4-uuid-enum-array-jsonb": {
+   "hoc": "Bốn kiểu đặc trưng của PostgreSQL gồm uuid với gen_random_uuid(), enum sắp xếp theo thứ tự khai báo, array và jsonb đánh chỉ mục GIN, cùng cạm bẫy dùng jsonb để né thiết kế lược đồ.",
+   "canBiet": "Hiểu khoá tự tăng bigint identity ở bài 2.1 và kiểu text ở bài 2.2 để cân nhắc đánh đổi khi chọn uuid, enum hay jsonb; xem thêm bài 0.5 nếu chuyển từ SQL Server.",
+   "lamDuoc": "Chọn đúng giữa bigint identity và uuid cho khoá chính, khai báo enum cho tập giá trị cố định, tránh lạm dụng jsonb và nâng các trường cần lọc hoặc join lên thành cột thật.",
+   "ketHop": "Áp dụng chọn uuid và enum vào Mốc dự án 2, củng cố bằng Quiz 2.5 và đào sâu truy vấn, chỉ mục GIN cho jsonb ở Chương 13.",
+   "canBietBai": [
+    "postgresql-2-1-so",
+    "postgresql-2-2-text",
+    "postgresql-0-5-tu-sql-server-mysql"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-2",
+    "postgresql-2-5-quiz",
+    "postgresql-13-1-jsonb"
+   ]
+  },
+  "postgresql-moc-2": {
+   "hoc": "Thực hành ấn định kiểu dữ liệu PostgreSQL cho toàn bộ cột của đề tài cuối khoá trước khi viết CREATE TABLE, kiểm chứng bằng truy vấn mẫu về numeric, timestamptz và enum.",
+   "canBiet": "Đã hoàn thành danh sách thực thể và cột ở Mốc dự án 1 cùng các nguyên tắc chọn kiểu số, chữ, ngày giờ, uuid và enum xuyên suốt Chương 2.",
+   "lamDuoc": "Hoàn thiện tệp docs/types.md ghi kiểu và lý do từng cột không dùng float cho tiền hay timestamp thiếu múi giờ, rồi nộp link repo kèm commit hoặc tag.",
+   "ketHop": "Làm tiếp Quiz 2.5 để rà lại lý thuyết kiểu dữ liệu, sau đó dùng chính bảng docs/types.md làm đầu vào cho Lab 1 và Mốc dự án 3 khi tạo bảng.",
+   "canBietBai": [
+    "postgresql-moc-1",
+    "postgresql-2-1-so",
+    "postgresql-2-3-ngay-gio"
+   ],
+   "ketHopBai": [
+    "postgresql-2-5-quiz",
+    "postgresql-lab-1-luoc-do-ct-shop",
+    "postgresql-moc-3"
+   ]
+  },
+  "postgresql-2-5-quiz": {
+   "hoc": "Tám câu hỏi rà lại toàn bộ Chương 2 gồm chọn kiểu số và tiền bằng numeric, text vs varchar vs char, timestamp vs timestamptz, cùng uuid, enum, array và jsonb.",
+   "canBiet": "Đã học đủ bốn bài 2.1 đến 2.4 của Chương 2 và nắm rõ hai quyết định cốt lõi: dùng numeric cho tiền và timestamptz cho khoảnh khắc.",
+   "lamDuoc": "Tự đánh giá mức độ nắm vững Chương 2 theo mục tiêu 7/8 câu và phát hiện kịp lỗ hổng dễ gây lỗi tiền bạc hoặc múi giờ trên production.",
+   "ketHop": "Rà lại các bài tương ứng với câu trả lời sai, hoàn tất Mốc dự án 2 trước khi sang Chương 3 học về khoá chính và thiết kế bảng.",
+   "canBietBai": [
+    "postgresql-2-1-so",
+    "postgresql-2-3-ngay-gio",
+    "postgresql-2-4-uuid-enum-array-jsonb"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-2",
+    "postgresql-3-1-khoa-chinh"
+   ]
+  },
+  "postgresql-3-1-khoa-chinh": {
+   "hoc": "Hai bảo đảm UNIQUE và NOT NULL cùng chỉ mục B-tree tự tạo của PRIMARY KEY, lỗi khi trùng hay thiếu khoá, khoá thay thế so với khoá tự nhiên, identity so với uuid và khoá chính tổ hợp cho bảng nối.",
+   "canBiet": "Nắm các kiểu số nguyên, text và UUID ở Chương 2 để chọn kiểu phù hợp cho cột khoá; người đã quen SQL Server hay MySQL có thể xem trước bài 0.5.",
+   "lamDuoc": "Chọn đúng khoá thay thế hay khoá tổ hợp cho từng bảng, tránh bẫy dùng email làm khoá chính và đọc hiểu thông báo lỗi vi phạm khoá chính của PostgreSQL.",
+   "ketHop": "Thực hành Code Lab dựng bảng nối với khoá chính tổ hợp, sau đó vận dụng vào Lab 1 CT Shop và đào sâu phần chỉ mục B-tree khi sang Chương 9.",
+   "canBietBai": [
+    "postgresql-2-1-so",
+    "postgresql-2-4-uuid-enum-array-jsonb"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-1-luoc-do-ct-shop",
+    "postgresql-3-5-quiz",
+    "postgresql-9-1-chi-muc-la-gi"
+   ]
+  },
+  "postgresql-3-2-khoa-ngoai": {
+   "hoc": "Mệnh đề REFERENCES ngăn dòng mồ côi và chặn xoá cha đang được trỏ, cách đọc ERD ký hiệu Crow's Foot, ba hành vi ON DELETE (RESTRICT, CASCADE, SET NULL) cùng bẫy chuỗi cascade và thiếu chỉ mục phía con.",
+   "canBiet": "Hiểu khoá chính và ràng buộc UNIQUE ở bài 3.1 vì cột đích của khoá ngoại bắt buộc phải là khoá chính hoặc UNIQUE có cùng kiểu dữ liệu.",
+   "lamDuoc": "Khai báo đúng khoá ngoại từ sơ đồ ERD, chọn hành vi ON DELETE phù hợp từng quan hệ, tránh lạm dụng CASCADE và nhận diện nguyên nhân xoá dòng cha bị chậm.",
+   "ketHop": "Chạy Code Lab so sánh ba hành vi ON DELETE cạnh nhau, áp dụng vào Lab 1 cùng Mốc dự án 3 và ôn thêm lý thuyết ERD ở khoá DBI202 nếu cần.",
+   "canBietBai": [
+    "postgresql-3-1-khoa-chinh"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-1-luoc-do-ct-shop",
+    "postgresql-moc-3",
+    "postgresql-3-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-3-3-rang-buoc-cot": {
+   "hoc": "Bốn ràng buộc NOT NULL, DEFAULT, UNIQUE (đơn, tổ hợp, có tên), CHECK và cột sinh tự động, kèm bẫy chuỗi rỗng với NOT NULL, nhiều NULL trong cột UNIQUE và cách quyết định luật nào đặt ở cơ sở dữ liệu.",
+   "canBiet": "Nắm các kiểu số, chữ, ngày giờ ở Chương 2 cùng khoá chính và khoá ngoại ở hai bài đầu Chương 3.",
+   "lamDuoc": "Viết được luật nghiệp vụ thành ràng buộc đặt tên rõ ràng, tạo cột sinh không bị lệch giá trị, mặc định dùng NOT NULL và đọc đúng thông báo lỗi khi dữ liệu bị từ chối.",
+   "ketHop": "Làm Code Lab cố tình phá từng ràng buộc để đọc lỗi thật, áp dụng vào Lab 1, Mốc dự án 3 và đối chiếu điểm khác biệt với SQL Server ở khoá DBI202.",
+   "canBietBai": [
+    "postgresql-3-1-khoa-chinh",
+    "postgresql-3-2-khoa-ngoai"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-1-luoc-do-ct-shop",
+    "postgresql-moc-3",
+    "postgresql-3-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-3-4-alter-chuan-hoa": {
+   "hoc": "Các lệnh ALTER TABLE trên bảng đã có dòng, công thức 3 bước thêm NOT NULL, NOT VALID kèm VALIDATE CONSTRAINT, phân biệt lệnh khoá bảng với lock_timeout và tư duy chuẩn hoá để mỗi sự thật nằm một chỗ.",
+   "canBiet": "Hiểu rõ khoá chính, khoá ngoại và các ràng buộc cột ở các bài 3.1 đến 3.3 để biết cấu trúc nào đang được chỉnh sửa.",
+   "lamDuoc": "Chỉnh sửa được lược đồ đang chạy an toàn mà ít khoá bảng, thêm ràng buộc lên bảng lớn không gây sập, nhận ra dị thường cập nhật và biết khi nào không nên chuẩn hoá.",
+   "ketHop": "Kiểm tra lại phần dị thường cập nhật ở Quiz 3.5, áp dụng vào Mốc dự án 3, xem phần thưởng của chuẩn hoá qua bài JOIN 5.1 và tham khảo lý thuyết BCNF ở khoá DBI202.",
+   "canBietBai": [
+    "postgresql-3-2-khoa-ngoai",
+    "postgresql-3-3-rang-buoc-cot"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-3",
+    "postgresql-3-5-quiz",
+    "postgresql-5-1-inner-join"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-lab-1-luoc-do-ct-shop": {
+   "hoc": "Cách dịch ERD 8 bảng, 10 quan hệ và 16 luật nghiệp vụ (R1–R16) của CT Shop thành lệnh CREATE TABLE theo đúng thứ tự tầng phụ thuộc, gồm bảng tự tham chiếu và quan hệ một-một qua FK kèm UNIQUE.",
+   "canBiet": "Đã cài container pgdemo ở bài 0.3 và nắm đủ khoá chính, khoá ngoại, ON DELETE cùng ràng buộc cột của Chương 3.",
+   "lamDuoc": "Hoàn thiện được lược đồ ctshop 8 bảng chạy lại được trên PostgreSQL, vượt qua tệp kiểm từ chối 23 dòng sai, đúng luật xoá và khớp dấu vân tay với bản chuẩn ctshop-schema.sql.",
+   "ketHop": "Dùng đúng tư duy chuyển luật nghiệp vụ thành ràng buộc cho Mốc dự án 3, rồi tiếp tục đổ dữ liệu cho lược đồ này ở Lab 2 và xử lý luật liên bảng ở Lab 6.",
+   "canBietBai": [
+    "postgresql-0-3-cai-dat",
+    "postgresql-3-2-khoa-ngoai",
+    "postgresql-3-3-rang-buoc-cot"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-3",
+    "postgresql-lab-2-nap-truy-van-ct-shop",
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop"
+   ]
+  },
+  "postgresql-moc-3": {
+   "hoc": "Cách hiện thực hoá thiết kế dữ liệu của đề tài cá nhân thành tệp migration có đầy đủ khoá và ràng buộc nghiệp vụ, đồng thời kiểm chứng khả năng chặn dữ liệu sai bằng lỗi thật từ PostgreSQL.",
+   "canBiet": "Đã chốt đề tài ở bài 0.1, chọn kiểu cột ở Mốc dự án 2 và hoàn thành kiến thức cùng Lab 1 của Chương 3.",
+   "lamDuoc": "Tạo được tệp migrations/001_schema.sql từ 5 bảng trở lên chạy sạch trên cơ sở dữ liệu trống bằng psql, kèm docs/constraints.md ghi lại 3 lệnh INSERT sai bị CHECK, UNIQUE và FK từ chối.",
+   "ketHop": "Ôn lại qua bài Quiz 3.5 để chắc chắn không bỏ sót bẫy ràng buộc, rồi tiếp tục nạp dữ liệu mẫu và viết truy vấn đầu tiên ở Mốc dự án 4.",
+   "canBietBai": [
+    "postgresql-0-1-gioi-thieu",
+    "postgresql-moc-2",
+    "postgresql-lab-1-luoc-do-ct-shop"
+   ],
+   "ketHopBai": [
+    "postgresql-3-5-quiz",
+    "postgresql-moc-4"
+   ]
+  },
+  "postgresql-3-5-quiz": {
+   "hoc": "Tám câu hỏi theo thứ tự bài trong chương về khoá chính, khoá ngoại cùng ba hành vi ON DELETE, ràng buộc cột, cột sinh, ALTER TABLE và nhận diện dị thường cập nhật khi chuẩn hoá.",
+   "canBiet": "Hoàn thành bốn bài lý thuyết từ 3.1 đến 3.4 và nên làm xong Lab 1 để trả lời bằng trí nhớ thay vì tra lại.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững toàn Chương 3 với mục tiêu 7/8 câu đúng, đặc biệt là phân biệt ba hành vi ON DELETE và phát hiện dị thường cập nhật.",
+   "ketHop": "Xem lại đúng bài tương ứng với câu làm sai, đối chiếu lại lược đồ ở Mốc dự án 3 trước khi chuyển sang Chương 4 về INSERT và truy vấn.",
+   "canBietBai": [
+    "postgresql-3-2-khoa-ngoai",
+    "postgresql-3-3-rang-buoc-cot",
+    "postgresql-3-4-alter-chuan-hoa"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-1-luoc-do-ct-shop",
+    "postgresql-moc-3",
+    "postgresql-4-1-insert"
+   ]
+  },
+  "postgresql-4-1-insert": {
+   "hoc": "Chèn nhiều dòng trong một lệnh, lấy lại id vừa sinh bằng RETURNING, dùng DEFAULT, nạp dữ liệu qua INSERT ... SELECT và COPY, cùng UPSERT với ON CONFLICT và cách tránh bẫy DO NOTHING nuốt lỗi.",
+   "canBiet": "Nắm cấu trúc bảng, khoá chính tự sinh và các ràng buộc NOT NULL, DEFAULT, UNIQUE từ Chương 3. Nếu chuyển từ SQL Server hoặc MySQL, nên xem trước bài 0.5.",
+   "lamDuoc": "Viết được lệnh INSERT nhiều dòng có danh sách cột rõ ràng, nhận lại giá trị vừa ghi bằng RETURNING, chọn đúng COPY khi nạp lớn và cấu hình ON CONFLICT chỉ rõ cột đích để không mất lỗi âm thầm.",
+   "ketHop": "Làm Track Code Lab dựng bảng note kèm bộ đếm UPSERT, rồi áp dụng ngay khi nạp CSV vào CT Shop ở Lab 2 và viết tệp seed.sql cho Mốc dự án 4.",
+   "canBietBai": [
+    "postgresql-3-1-khoa-chinh",
+    "postgresql-3-3-rang-buoc-cot",
+    "postgresql-0-5-tu-sql-server-mysql"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-2-nap-truy-van-ct-shop",
+    "postgresql-moc-4",
+    "postgresql-4-5-quiz"
+   ]
+  },
+  "postgresql-4-2-select-where": {
+   "hoc": "Phân biệt SELECT chọn cột tính toán và WHERE lọc dòng, rủi ro của SELECT *, thứ tự ưu tiên AND/OR, toán tử IN, BETWEEN, LIKE/ILIKE, thứ tự thực thi SQL và logic ba giá trị với bẫy NULL.",
+   "canBiet": "Đã tạo và nạp dữ liệu cho bảng note ở bài 4.1 cùng kiến thức cơ bản về kiểu chuỗi trong PostgreSQL. Người từng dùng SQL Server cần nhớ phép so sánh chuỗi phân biệt hoa thường và nối chuỗi bằng ||.",
+   "lamDuoc": "Viết được truy vấn chọn đúng cột cần thiết thay cho SELECT *, kết hợp ngoặc hợp lý cho AND/OR, lọc chuỗi bằng LIKE/ILIKE và xử lý đúng IS NULL để không làm rơi dòng âm thầm.",
+   "ketHop": "Thực hành Track Code Lab tái hiện bẫy <> với IS NULL trên bảng note, đối chiếu cách xử lý null ở khoá TypeScript và Nền tảng Lập trình Web, rồi luyện tiếp ở Lab 2.",
+   "canBietBai": [
+    "postgresql-4-1-insert",
+    "postgresql-2-2-text"
+   ],
+   "ketHopBai": [
+    "postgresql-4-3-order-limit-distinct",
+    "postgresql-lab-2-nap-truy-van-ct-shop",
+    "postgresql-4-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "typescript",
+    "web-foundations"
+   ]
+  },
+  "postgresql-4-3-order-limit-distinct": {
+   "hoc": "Sắp xếp nhiều khoá bằng ORDER BY cùng NULLS FIRST/NULLS LAST, lý do thiếu ORDER BY làm thứ tự bất định, phân trang LIMIT/OFFSET và keyset, bẫy khoá sắp không duy nhất, cùng DISTINCT và DISTINCT ON.",
+   "canBiet": "Nắm cách lọc dòng bằng SELECT/WHERE, thứ tự thực thi truy vấn và hành vi của NULL từ bài 4.2, cộng với vai trò định danh duy nhất của khoá chính.",
+   "lamDuoc": "Viết được truy vấn sắp xếp ổn định kết thúc bằng cột duy nhất như id, đặt vị trí NULL tường minh, triển khai phân trang keyset không lặp dòng và lấy bản ghi mới nhất mỗi nhóm bằng DISTINCT ON.",
+   "ketHop": "Hoàn thành Track Code Lab sắp xếp, phân trang và viết DISTINCT ON trên bảng note, đối chiếu benchmark phân trang ở khoá Node.js, rồi áp dụng trong Lab 2 và Mốc dự án 4.",
+   "canBietBai": [
+    "postgresql-4-2-select-where",
+    "postgresql-3-1-khoa-chinh"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-2-nap-truy-van-ct-shop",
+    "postgresql-moc-4",
+    "postgresql-4-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "nodejs"
+   ]
+  },
+  "postgresql-4-4-update-delete": {
+   "hoc": "Cách dùng UPDATE và DELETE kèm WHERE, RETURNING để kiểm tra số dòng tác động, nghi thức ghi an toàn với BEGIN/ROLLBACK, kiểm tra nguyên tử ngay trong WHERE, cùng UPDATE ... FROM, DELETE ... USING và xoá mềm.",
+   "canBiet": "Vững cách viết điều kiện lọc WHERE ở bài 4.2, cú pháp RETURNING ở bài 4.1 và khái niệm giao dịch ACID từ Chương 1 để hiểu cơ chế hoàn tác bằng ROLLBACK.",
+   "lamDuoc": "Thực hiện được quy trình sửa và xoá an toàn bằng cách xem trước với SELECT, bọc trong BEGIN/ROLLBACK, đọc thẻ số dòng với RETURNING và gộp điều kiện kiểm tra vào WHERE để tránh cập nhật sai.",
+   "ketHop": "Áp dụng ngay nghi thức ghi an toàn trong Lab 2, ôn lại qua Kiểm tra Chương 4 và xem mở rộng về giao dịch ở bài 11.1; có thể đối chiếu thêm ở DBI202 và Nền tảng Lập trình Web.",
+   "canBietBai": [
+    "postgresql-4-2-select-where",
+    "postgresql-4-1-insert",
+    "postgresql-1-2-acid"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-2-nap-truy-van-ct-shop",
+    "postgresql-4-5-quiz",
+    "postgresql-11-1-giao-dich"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases",
+    "web-foundations"
+   ]
+  },
+  "postgresql-lab-2-nap-truy-van-ct-shop": {
+   "hoc": "Thực hành trọn quy trình nạp dữ liệu thực tế cho CT Shop bằng INSERT nhiều dòng, RETURNING, lệnh \\copy từ CSV, UPSERT bảng giá qua ON CONFLICT/EXCLUDED, rồi giải 10 truy vấn một bảng và sửa dữ liệu trong BEGIN.",
+   "canBiet": "Hoàn thành bốn bài 4.1–4.4 về INSERT, SELECT/WHERE, phân trang, UPDATE/DELETE an toàn và quen cấu trúc lược đồ CT Shop từ Lab 1 cùng múi giờ ở Chương 2.",
+   "lamDuoc": "Tạo ra được cơ sở dữ liệu CT Shop đủ 12 danh mục, 50 sản phẩm, 300 khách, 2.000 đơn đúng khoá ngoại, xuất đủ 10 đáp án tránh bẫy NULL, BETWEEN và lặp trang, đồng thời sửa dữ liệu an toàn trong giao dịch.",
+   "ketHop": "Dùng đúng thói quen kiểm đếm dòng, xử lý khoảng ngày nửa mở và gói BEGIN từ bài thực hành này cho Mốc dự án 4, làm tiếp Kiểm tra Chương 4 rồi chuyển sang Lab 3 sau Chương 6.",
+   "canBietBai": [
+    "postgresql-lab-1-luoc-do-ct-shop",
+    "postgresql-4-1-insert",
+    "postgresql-4-4-update-delete"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-4",
+    "postgresql-4-5-quiz",
+    "postgresql-lab-3-bao-cao-doanh-thu-ct-shop"
+   ]
+  },
+  "postgresql-moc-4": {
+   "hoc": "Xây dựng bộ dữ liệu mẫu có quy mô và ca biên cho đề tài cuối khoá bằng generate_series, viết 6 truy vấn một bảng cơ bản và một lệnh UPSERT thực tế để kiểm chứng lược đồ đã thiết kế.",
+   "canBiet": "Đã hoàn thiện lược đồ kèm ràng buộc ở Mốc dự án 3 và thành thạo kỹ thuật nạp dữ liệu theo thứ tự cha con, ON CONFLICT và truy vấn một bảng từ Chương 4 và Lab 2.",
+   "lamDuoc": "Hoàn thành và nộp repo gồm tệp seed.sql sinh từ 1.000 dòng trở lên kèm ca biên chạy lại được từ đầu, tệp queries/04-basic.sql với 6 truy vấn kèm output thật, một lệnh UPSERT và bảng đếm dòng trong README.",
+   "ketHop": "Củng cố lại các bẫy truy vấn qua Kiểm tra Chương 4 ngay sau khi hoàn tất mốc, để sẵn bộ dữ liệu sạch cho các truy vấn JOIN trên từng màn hình ở Mốc dự án 5.",
+   "canBietBai": [
+    "postgresql-moc-3",
+    "postgresql-4-1-insert",
+    "postgresql-lab-2-nap-truy-van-ct-shop"
+   ],
+   "ketHopBai": [
+    "postgresql-4-5-quiz",
+    "postgresql-moc-5"
+   ]
+  },
+  "postgresql-4-5-quiz": {
+   "hoc": "Kiểm tra tám câu theo thứ tự bài về INSERT nhiều dòng, RETURNING và UPSERT, SELECT/WHERE cùng bẫy NULL, ORDER BY, LIMIT/OFFSET, DISTINCT, và quy trình UPDATE/DELETE an toàn.",
+   "canBiet": "Đã học xong bốn bài 4.1 đến 4.4 và nhớ rõ các cạm bẫy cốt lõi như so sánh với NULL trong WHERE hay chạy UPDATE/DELETE thiếu WHERE.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững Chương 4 với mục tiêu đạt tối thiểu 7/8 câu, phát hiện sớm lỗ hổng ở hai lỗi mất dữ liệu âm thầm về NULL và thiếu WHERE trước khi sang Chương 5.",
+   "ketHop": "Nếu sai câu nào, xem lại đúng bài tương ứng rồi củng cố bằng Lab 2 và Mốc dự án 4; khi đã vững thì chuyển thẳng sang bài 5.1 về INNER JOIN.",
+   "canBietBai": [
+    "postgresql-4-1-insert",
+    "postgresql-4-2-select-where",
+    "postgresql-4-4-update-delete"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-2-nap-truy-van-ct-shop",
+    "postgresql-moc-4",
+    "postgresql-5-1-inner-join"
+   ]
+  },
+  "postgresql-5-1-inner-join": {
+   "hoc": "Ghép hai bảng bằng INNER JOIN, đặt alias bảng và phân biệt ON với USING. Làm rõ thứ tự máy chủ ghép dòng trước khi SELECT, ba bẫy NATURAL JOIN, khoá không duy nhất, hoa/thường và cách Prisma include chạy.",
+   "canBiet": "Cần nắm khoá chính, khoá ngoại từ Chương 3 và viết truy vấn một bảng bằng SELECT, WHERE từ Chương 4. Người chuyển từ SQL Server hay MySQL nên xem trước bài 0.5.",
+   "lamDuoc": "Viết được truy vấn INNER JOIN có alias và điều kiện ON an toàn theo khoá duy nhất. Dự đoán trước số dòng kết quả, tránh bẫy NATURAL JOIN và phân biệt được JOIN trong SQL với truy vấn include của Prisma.",
+   "ketHop": "Chạy Track Code Lab nối note với tác giả ngay sau khi học, áp dụng vào mốc dự án 5 và học tiếp OUTER JOIN để không làm rơi dòng thiếu cặp. Đọc thêm bài 7.4 khoá Node.js nếu muốn thấy cách Prisma xử lý quan hệ.",
+   "canBietBai": [
+    "postgresql-3-2-khoa-ngoai",
+    "postgresql-4-2-select-where"
+   ],
+   "ketHopBai": [
+    "postgresql-5-2-outer-join",
+    "postgresql-moc-5",
+    "postgresql-5-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "nodejs",
+    "prisma-orm"
+   ]
+  },
+  "postgresql-5-2-outer-join": {
+   "hoc": "Giữ lại dòng không khớp bằng LEFT, RIGHT và FULL JOIN với phần đệm NULL, kết hợp COALESCE và count theo khoá phải. Trình bày mẫu anti-join bằng IS NULL, bẫy NOT IN và phân biệt đặt điều kiện lọc ở ON hay WHERE.",
+   "canBiet": "Cần hiểu cơ chế ghép cặp theo khoá của INNER JOIN ở bài 5.1, cũng như cách lọc giá trị NULL trong WHERE từ Chương 4.",
+   "lamDuoc": "Chọn đúng LEFT, RIGHT hoặc FULL JOIN để không làm rơi dữ liệu thiếu cặp và đếm đúng giá trị 0 bằng count(cột khoá). Viết được truy vấn anti-join tìm dòng mồ côi và đặt đúng bộ lọc phía tuỳ chọn vào mệnh đề ON.",
+   "ketHop": "Thực hành Track Code Lab về LEFT JOIN và anti-join, sau đó áp dụng cho mốc dự án 5 và ôn kỹ lại ở bài kiểm tra 5.5. Có thể đối chiếu thêm phần JOIN trong khoá DBI202 hoặc Nền tảng Lập trình Web.",
+   "canBietBai": [
+    "postgresql-5-1-inner-join",
+    "postgresql-4-2-select-where"
+   ],
+   "ketHopBai": [
+    "postgresql-5-4-cross-join-traps",
+    "postgresql-moc-5",
+    "postgresql-5-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases",
+    "web-foundations"
+   ]
+  },
+  "postgresql-5-3-multi-self-join": {
+   "hoc": "Nối chuỗi nhiều JOIN từ trái sang phải, dùng một bảng nhiều vai với alias riêng và tránh bẫy INNER sau LEFT. Dạy self-join bằng LEFT JOIN cho cây phân cấp, giới thiệu LATERAL và bác bỏ hiểu nhầm nhiều join thì chậm.",
+   "canBiet": "Cần nắm vững INNER JOIN, LEFT JOIN và cách đặt alias bảng từ hai bài 5.1 và 5.2 trước khi nối nhiều bảng liên tiếp.",
+   "lamDuoc": "Viết được truy vấn nối 3 bảng trở lên, bao gồm nối nhiều lần vào cùng một bảng qua alias rõ ràng. Xây dựng được self-join giữ đủ nút gốc cho dữ liệu phân cấp và nhận biết lỗi thiếu chỉ mục thay vì né tránh JOIN.",
+   "ketHop": "Làm Track Code Lab truy vấn bình luận 3 bảng và self-join nhân viên, áp vào mốc dự án 5 (kể cả phần nâng cao LATERAL). Về sau xem tiếp Chương 7 để đi cây nhiều tầng bằng CTE đệ quy và Chương 9 về chỉ mục.",
+   "canBietBai": [
+    "postgresql-5-1-inner-join",
+    "postgresql-5-2-outer-join"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-5",
+    "postgresql-7-4-recursive-cte",
+    "postgresql-9-1-chi-muc-la-gi"
+   ]
+  },
+  "postgresql-5-4-cross-join-traps": {
+   "hoc": "Dùng CROSS JOIN tường minh cùng generate_series để dựng khung báo cáo và ước lượng kích thước tích. Phân tích ba bẫy: cross join vô tình, nhân dòng fan-out làm sai SUM, lọc WHERE trên outer join và cách gỡ lỗi.",
+   "canBiet": "Cần nắm rõ INNER JOIN, LEFT JOIN và cách nối nhiều bảng từ các bài 5.1 đến 5.3 để hiểu cơ chế tạo dòng và phát hiện dòng bị nhân đôi.",
+   "lamDuoc": "Dùng đúng CROSS JOIN khi cần sinh đủ tổ hợp và ước lượng trước số dòng tránh treo truy vấn. Chẩn đoán được số liệu tổng bị phồng do fan-out bằng cách tách cú join trần và tránh làm hỏng LEFT JOIN bởi điều kiện WHERE.",
+   "ketHop": "Kiểm tra lại các bẫy này qua bài quiz 5.5 và áp dụng khi viết truy vấn mốc dự án 5. Học tiếp bài 6.4 và Chương 7 để biết cách tổng hợp phía nhiều trước rồi mới JOIN nhằm thuần hoá fan-out.",
+   "canBietBai": [
+    "postgresql-5-1-inner-join",
+    "postgresql-5-2-outer-join",
+    "postgresql-5-3-multi-self-join"
+   ],
+   "ketHopBai": [
+    "postgresql-5-5-quiz",
+    "postgresql-moc-5",
+    "postgresql-6-4-tong-hop-tren-join"
+   ]
+  },
+  "postgresql-moc-5": {
+   "hoc": "Viết tệp queries/05-joins.sql cho đề tài cá nhân: truy vấn JOIN 2–4 bảng cho từng màn hình danh sách và chi tiết, một LEFT JOIN hiện số 0, một anti-join và chú thích lý do chọn kiểu nối; tuỳ chọn thêm LATERAL.",
+   "canBiet": "Cần hoàn thành các bài học JOIN của Chương 5 cùng lược đồ và dữ liệu mẫu của đề tài cá nhân từ mốc dự án 1, 3 và 4.",
+   "lamDuoc": "Hoàn thiện bộ truy vấn SQL chạy thật kèm output cho mọi màn hình chính của dự án, bảo đảm hiển thị đúng dòng có số đếm 0, trả lời được câu hỏi chưa từng phát sinh và nộp commit/tag hoàn chỉnh lên repo.",
+   "ketHop": "Đọc kỹ 3 tầng gợi ý khi kiểm tra số dòng và bẫy ON/WHERE từ bài 5.4, sau đó làm bài kiểm tra 5.5 để chốt kiến thức Chương 5 trước khi sang mốc báo cáo của Chương 6.",
+   "canBietBai": [
+    "postgresql-moc-4",
+    "postgresql-5-2-outer-join",
+    "postgresql-5-3-multi-self-join"
+   ],
+   "ketHopBai": [
+    "postgresql-5-4-cross-join-traps",
+    "postgresql-5-5-quiz",
+    "postgresql-moc-6"
+   ]
+  },
+  "postgresql-5-5-quiz": {
+   "hoc": "Kiểm tra tám câu trắc nghiệm theo thứ tự bài trong Chương 5, bao gồm INNER vs OUTER JOIN, mẫu anti-join, self-join, CROSS JOIN, hiện tượng nhân dòng fan-out và bẫy đặt điều kiện ở ON hay WHERE.",
+   "canBiet": "Cần học xong toàn bộ bốn bài lý thuyết từ 5.1 đến 5.4 và nên thực hành qua mốc dự án 5 để trả lời bằng trí nhớ.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững kiến thức JOIN trong Chương 5 với mục tiêu đạt tối thiểu 7/8, đặc biệt rà soát hai lỗi dễ mắc nhất là chọn nhầm LEFT/INNER và đặt sai điều kiện lọc ON/WHERE.",
+   "ketHop": "Xem lại ngay bài 5.2 hoặc 5.4 nếu làm sai câu về outer join và fan-out, đồng thời củng cố bằng mốc dự án 5 và Lab 3 ở Chương 6 kết hợp JOIN với GROUP BY.",
+   "canBietBai": [
+    "postgresql-5-2-outer-join",
+    "postgresql-5-3-multi-self-join",
+    "postgresql-5-4-cross-join-traps"
+   ],
+   "ketHopBai": [
+    "postgresql-5-2-outer-join",
+    "postgresql-moc-5",
+    "postgresql-lab-3-bao-cao-doanh-thu-ct-shop"
+   ]
+  },
+  "postgresql-6-1-ham-tong-hop": {
+   "hoc": "Năm hàm COUNT, SUM, AVG, MIN, MAX gộp cả bảng thành một dòng, luật bỏ qua NULL, phân biệt COUNT(*), COUNT(cột) và COUNT(DISTINCT), trường hợp không có dòng nào và bẫy mẫu số của AVG.",
+   "canBiet": "Biết viết SELECT, lọc điều kiện với WHERE, dùng DISTINCT và hiểu giá trị NULL không phải số 0.",
+   "lamDuoc": "Tính được số đếm, tổng, trung bình chính xác trên toàn bảng, bọc COALESCE(SUM(x), 0) khi kết quả rỗng và chọn đúng giữa AVG(cột) hay AVG(COALESCE(cột, 0)).",
+   "ketHop": "Chạy Track Code Lab trên bảng note để thấy trực tiếp NULL bị bỏ qua, rồi nối sang bài GROUP BY để tách số liệu theo từng nhóm và kiểm tra lại ở quiz cuối chương.",
+   "canBietBai": [
+    "postgresql-4-2-select-where",
+    "postgresql-4-3-order-limit-distinct"
+   ],
+   "ketHopBai": [
+    "postgresql-6-2-group-by",
+    "postgresql-6-5-quiz"
+   ]
+  },
+  "postgresql-6-2-group-by": {
+   "hoc": "Cách GROUP BY chia dòng thành từng nhóm theo độ mịn (grain), luật mọi cột chọn phải được gom hoặc tổng hợp, gom nhiều cột, bẫy NULL thành một nhóm riêng và mở rộng với ROLLUP, GROUPING SETS, CUBE.",
+   "canBiet": "Nắm năm hàm tổng hợp, luật NULL ở bài trước và biết nối hai bảng cơ bản như note với app_user.",
+   "lamDuoc": "Xác định đúng độ mịn đầu ra trước khi gom nhóm, xử lý dứt điểm lỗi cột thiếu trong GROUP BY bằng cách sửa grain hoặc dùng string_agg, max thay vì thêm cột bừa bãi.",
+   "ketHop": "Làm Track Code Lab gom theo tác giả, tag và hai cột, áp dụng ngay ở Mốc dự án 6 và đối chiếu với phần SQL Server trong khoá DBI202 nếu đã học.",
+   "canBietBai": [
+    "postgresql-6-1-ham-tong-hop",
+    "postgresql-5-1-inner-join"
+   ],
+   "ketHopBai": [
+    "postgresql-6-3-having-filter",
+    "postgresql-moc-6",
+    "postgresql-6-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-6-3-having-filter": {
+   "hoc": "Phân biệt WHERE lọc dòng trước khi gom và HAVING lọc nhóm sau khi gom, thứ tự thực thi mệnh đề SQL, các bẫy đặt sai chỗ hay dùng alias trong HAVING, và mệnh đề FILTER cho tổng hợp có điều kiện.",
+   "canBiet": "Hiểu cách GROUP BY tạo nhóm từ các dòng và cách viết hàm COUNT, SUM, AVG trên từng nhóm.",
+   "lamDuoc": "Đặt đúng điều kiện vào WHERE hay HAVING để tránh lỗi và giảm số dòng cần gom, đồng thời viết được truy vấn tính nhiều chỉ số trên một dòng bằng FILTER.",
+   "ketHop": "Thực hành Track Code Lab dựng dashboard một dòng bằng FILTER, sau đó vận dụng vào Lab 3 CT Shop và làm quiz Chương 6 để kiểm tra lại cặp WHERE và HAVING.",
+   "canBietBai": [
+    "postgresql-6-1-ham-tong-hop",
+    "postgresql-6-2-group-by"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-3-bao-cao-doanh-thu-ct-shop",
+    "postgresql-moc-6",
+    "postgresql-6-5-quiz"
+   ]
+  },
+  "postgresql-6-4-tong-hop-tren-join": {
+   "hoc": "Cơ chế fan-out khi JOIN một-nhiều làm phồng COUNT và SUM, vì sao INNER JOIN làm mất nhóm có số 0, cách dùng LEFT JOIN kèm COUNT(cột) hay COUNT(DISTINCT), và bẫy vá lỗi khiến SUM bên cạnh vẫn sai.",
+   "canBiet": "Nắm OUTER JOIN, cạm bẫy nhân dòng của JOIN ở Chương 5 và cách tính hàm tổng hợp theo GROUP BY.",
+   "lamDuoc": "Phát hiện được số liệu bị phồng bằng cách kiểm tra dòng thô hoặc COUNT(*) cạnh SUM, giữ lại nhóm bằng 0 với LEFT JOIN và chữa đúng độ mịn bằng cách tổng hợp phía nhiều trước khi nối.",
+   "ketHop": "Áp dụng ngay trên dữ liệu tiền thật ở Lab 3 CT Shop, làm quiz Chương 6 và học tiếp bài truy vấn con ở Chương 7 để tổng hợp trước khi JOIN gọn gàng hơn.",
+   "canBietBai": [
+    "postgresql-5-2-outer-join",
+    "postgresql-5-4-cross-join-traps",
+    "postgresql-6-2-group-by"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-3-bao-cao-doanh-thu-ct-shop",
+    "postgresql-6-5-quiz",
+    "postgresql-7-1-subquery"
+   ]
+  },
+  "postgresql-lab-3-bao-cao-doanh-thu-ct-shop": {
+   "hoc": "Thực hành lập bộ báo cáo 9 tháng cho CT Shop với date_trunc, self-join 5 bảng, LEFT JOIN tìm khách chưa mua, HAVING lọc VIP, FILTER đo sức khoẻ đơn, sửa bẫy fan-out, chia số nguyên, múi giờ và Prisma $queryRaw.",
+   "canBiet": "Nắm JOIN nhiều bảng, self-join, GROUP BY, HAVING, FILTER, xử lý fan-out và đã quen lược đồ CT Shop từ Lab 1, Lab 2.",
+   "lamDuoc": "Xuất được bộ báo cáo đối chiếu khớp mốc R0 (713 thanh toán, 411.147.000 đ) gồm doanh thu theo tháng, danh mục gốc, khách chưa mua, danh sách VIP và tỉ lệ huỷ đơn không sai số do fan-out hay múi giờ.",
+   "ketHop": "Dùng quy trình kiểm chéo số liệu này để tự xây báo cáo ở Mốc dự án 6, chuẩn bị cho Lab 4 về tăng trưởng, và tham khảo thêm khoá Prisma ORM cho phần groupBy so với $queryRaw.",
+   "canBietBai": [
+    "postgresql-5-3-multi-self-join",
+    "postgresql-6-3-having-filter",
+    "postgresql-6-4-tong-hop-tren-join"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-6",
+    "postgresql-lab-4-cte-ham-cua-so-ct-shop",
+    "postgresql-6-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "prisma-orm"
+   ]
+  },
+  "postgresql-moc-6": {
+   "hoc": "Vận dụng toàn bộ kiến thức Chương 6 để thiết kế truy vấn báo cáo định kỳ cho đề tài dự án cá nhân, kết hợp GROUP BY, date_trunc đúng múi giờ, FILTER, HAVING và tuỳ chọn ROLLUP hoặc GROUPING SETS.",
+   "canBiet": "Đã hoàn thành Mốc dự án 5 với lược đồ và dữ liệu mẫu của đề tài, đồng thời nắm vững GROUP BY, HAVING, FILTER và quy trình đối chiếu ở Lab 3.",
+   "lamDuoc": "Hoàn thiện tệp queries/06-reports.sql gồm ít nhất 4 báo cáo có output chạy thật (đủ GROUP BY theo kỳ, FILTER, HAVING), tự tính tay khớp tổng tiền một nhóm và nộp commit lên repo.",
+   "ketHop": "Làm xong quiz Chương 6 để chốt chắc các bẫy tổng hợp, rồi sang Mốc dự án 7 để mở rộng sang các câu hỏi nhiều bước bằng truy vấn con và CTE.",
+   "canBietBai": [
+    "postgresql-moc-5",
+    "postgresql-6-3-having-filter",
+    "postgresql-lab-3-bao-cao-doanh-thu-ct-shop"
+   ],
+   "ketHopBai": [
+    "postgresql-6-5-quiz",
+    "postgresql-moc-7"
+   ]
+  },
+  "postgresql-6-5-quiz": {
+   "hoc": "Kiểm tra 8 câu theo thứ tự chương về hàm tổng hợp và luật NULL, GROUP BY cùng độ mịn, phân biệt HAVING với WHERE, mệnh đề FILTER và xử lý fan-out trên JOIN bằng COUNT(DISTINCT).",
+   "canBiet": "Đã học xong bốn bài lý thuyết từ 6.1 đến 6.4 về tổng hợp, gom nhóm, lọc hai tầng và fan-out.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững Chương 6 với mục tiêu từ 7/8 câu đúng, đặc biệt nhận diện chắc tay bẫy HAVING vs WHERE và lỗi phồng số do fan-out trước khi qua Chương 7.",
+   "ketHop": "Nếu sai câu nào hãy mở lại đúng bài tương ứng để xem phần bẫy, hoàn thành Lab 3 và Mốc dự án 6, rồi chuyển sang Chương 7 về truy vấn con.",
+   "canBietBai": [
+    "postgresql-6-1-ham-tong-hop",
+    "postgresql-6-3-having-filter",
+    "postgresql-6-4-tong-hop-tren-join"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-3-bao-cao-doanh-thu-ct-shop",
+    "postgresql-moc-6",
+    "postgresql-7-1-subquery"
+   ]
+  },
+  "postgresql-7-1-subquery": {
+   "hoc": "Subquery vô hướng trong SELECT và WHERE, quy tắc trả tối đa một giá trị, lọc tập động với IN, ANY, ALL, ba vị trí đặt truy vấn con và bẫy NOT IN khi gặp NULL.",
+   "canBiet": "Nắm chắc SELECT, WHERE, JOIN và hàm tổng hợp từ các chương trước để hiểu cách truy vấn bên trong sinh giá trị hoặc tập kết quả cho truy vấn ngoài.",
+   "lamDuoc": "Viết được truy vấn có ngưỡng lọc tự cập nhật theo dữ liệu bằng subquery vô hướng và IN, nhận diện sớm lỗi trả nhiều dòng và bẫy NOT IN với cột chứa NULL.",
+   "ketHop": "Làm Track Code Lab thực hành subquery vô hướng và IN trên bảng note, học tiếp bài 7.2 để xử lý triệt để bẫy NOT IN rồi ôn bằng kiểm tra Chương 7.",
+   "canBietBai": [
+    "postgresql-4-2-select-where",
+    "postgresql-6-1-ham-tong-hop",
+    "postgresql-6-2-group-by"
+   ],
+   "ketHopBai": [
+    "postgresql-7-2-correlated-exists",
+    "postgresql-moc-7",
+    "postgresql-7-5-quiz"
+   ]
+  },
+  "postgresql-7-2-correlated-exists": {
+   "hoc": "Phân biệt subquery tương quan với không tương quan, dùng EXISTS và NOT EXISTS thay cho COUNT(*) khi chỉ cần kiểm tra tồn tại, bẫy NOT IN gặp NULL cùng cách sửa và LATERAL.",
+   "canBiet": "Cần hiểu subquery chạy một lần ở bài 7.1 cùng phép JOIN và giá trị NULL trong WHERE để nắm cách truy vấn trong tham chiếu cột ngoài.",
+   "lamDuoc": "Phân biệt được subquery tương quan, viết được EXISTS và NOT EXISTS dừng sớm ở dòng khớp đầu tiên, và tránh lỗi báo cáo rỗng do NOT IN gặp NULL.",
+   "ketHop": "Chạy Track Code Lab đối chiếu EXISTS với bẫy NOT IN, áp dụng vào Mốc dự án 7, kiểm tra ở bài 7.5 và tham khảo thêm phần SQL tương ứng ở khoá DBI202.",
+   "canBietBai": [
+    "postgresql-7-1-subquery",
+    "postgresql-5-1-inner-join"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-7",
+    "postgresql-7-5-quiz",
+    "postgresql-7-3-cte"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-7-3-cte": {
+   "hoc": "Cú pháp WITH chia truy vấn thành nhiều bước có tên, tái sử dụng CTE, mẫu tổng hợp trước khi join để sửa lỗi fan-out sum, CTE ghi dữ liệu và cơ chế MATERIALIZED từ bản 12.",
+   "canBiet": "Cần nắm bài tổng hợp trên JOIN và vấn đề fan-out ở Chương 6 cùng kiến thức truy vấn con ở bài 7.1 để thấy lợi ích khi làm phẳng truy vấn bằng WITH.",
+   "lamDuoc": "Viết lại được truy vấn lồng phức tạp thành chuỗi CTE dễ đọc, xử lý triệt để lỗi fan-out sum bằng cách tổng hợp trước khi join và tránh lạm dụng MATERIALIZED.",
+   "ketHop": "Hoàn thành Track Code Lab sửa fan-out sum bằng CTE, thực hành trong Mốc dự án 7, Lab 4 và kết hợp EXPLAIN ở Chương 10 khi cần đo hiệu năng.",
+   "canBietBai": [
+    "postgresql-6-4-tong-hop-tren-join",
+    "postgresql-7-1-subquery"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-7",
+    "postgresql-lab-4-cte-ham-cua-so-ct-shop",
+    "postgresql-10-1-doc-explain"
+   ]
+  },
+  "postgresql-7-4-recursive-cte": {
+   "hoc": "Cấu trúc WITH RECURSIVE gồm anchor, UNION ALL và bước đệ quy để duyệt bảng tự tham chiếu, tính cấp bậc, dựng đường dẫn và chặn vòng lặp vô hạn bằng mảng path cùng giới hạn độ sâu.",
+   "canBiet": "Cần thành thạo cú pháp WITH ở bài 7.3, self-join ở Chương 5 và kiểu mảng cơ bản để theo dõi đường đi khi duyệt dữ liệu phân cấp.",
+   "lamDuoc": "Viết được truy vấn WITH RECURSIVE duyệt cây phân cấp nhiều tầng theo cả hai chiều, dựng đường dẫn từ gốc và đặt đủ hai lớp chặn chu trình để an toàn trên production.",
+   "ketHop": "Áp dụng ngay vào phần CTE đệ quy của Mốc dự án 7, củng cố bằng bài kiểm tra 7.5 rồi tiếp nối sang Chương 8 về hàm cửa sổ.",
+   "canBietBai": [
+    "postgresql-7-3-cte",
+    "postgresql-5-3-multi-self-join",
+    "postgresql-2-4-uuid-enum-array-jsonb"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-7",
+    "postgresql-7-5-quiz",
+    "postgresql-8-1-window-la-gi"
+   ]
+  },
+  "postgresql-moc-7": {
+   "hoc": "Thực hành trên đề tài dự án cá nhân: viết tệp queries/07-cte.sql gồm chuỗi WITH thay truy vấn lồng, truy vấn tương quan hoặc EXISTS có giải thích, và một CTE đệ quy có điểm dừng.",
+   "canBiet": "Cần hoàn thành trọn Chương 7 (7.1 đến 7.4) và đã có dữ liệu cùng các báo cáo cơ bản từ Mốc dự án 6 trên đề tài đã đăng ký ở bài 0.1.",
+   "lamDuoc": "Tạo được tệp queries/07-cte.sql chạy thật trên PostgreSQL, chứng minh bản CTE khớp kết quả bản lồng, giải thích được lý do dùng EXISTS và nộp commit kèm output CTE đệ quy.",
+   "ketHop": "Sau khi nộp commit và đối chiếu mục Đạt khi, làm bài kiểm tra 7.5 để chốt kiến thức và chuẩn bị kết hợp CTE với hàm cửa sổ ở Lab 4 và Mốc dự án 8.",
+   "canBietBai": [
+    "postgresql-7-2-correlated-exists",
+    "postgresql-7-3-cte",
+    "postgresql-7-4-recursive-cte"
+   ],
+   "ketHopBai": [
+    "postgresql-7-5-quiz",
+    "postgresql-lab-4-cte-ham-cua-so-ct-shop",
+    "postgresql-moc-8"
+   ]
+  },
+  "postgresql-7-5-quiz": {
+   "hoc": "Tám câu hỏi kiểm tra trí nhớ theo thứ tự chương: subquery vô hướng và IN, subquery tương quan với EXISTS, bẫy NULL của NOT IN, CTE sửa fan-out sum và CTE đệ quy.",
+   "canBiet": "Đã học xong bốn bài lý thuyết 7.1 đến 7.4 và ưu tiên hoàn thành các bài thực hành Code Lab cùng Mốc dự án 7 để tự trả lời không cần tra cứu.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững toàn bộ Chương 7 với mục tiêu tối thiểu 7/8 câu, phát hiện ngay lỗ hổng về bẫy NOT IN gặp NULL hay lỗi fan-out sum trước khi sang chương mới.",
+   "ketHop": "Ôn lại ngay bài 7.2 hoặc 7.3 nếu sai câu về NOT IN và fan-out sum, sau đó chuyển sang Chương 8 để học hàm cửa sổ và làm Lab 4 kết hợp CTE.",
+   "canBietBai": [
+    "postgresql-7-2-correlated-exists",
+    "postgresql-7-3-cte",
+    "postgresql-7-4-recursive-cte"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-7",
+    "postgresql-8-1-window-la-gi",
+    "postgresql-lab-4-cte-ham-cua-so-ct-shop"
+   ]
+  },
+  "postgresql-8-1-window-la-gi": {
+   "hoc": "Khác biệt giữa GROUP BY gộp dòng và OVER() giữ nguyên dòng, dùng PARTITION BY tính tổng hợp theo từng nhóm, thứ tự chạy sau WHERE/GROUP BY và bẫy nhầm PARTITION BY với GROUP BY.",
+   "canBiet": "Cần nắm hàm tổng hợp (SUM, COUNT, AVG), cách gom nhóm với GROUP BY và thứ tự lọc WHERE cơ bản.",
+   "lamDuoc": "Viết được truy vấn gắn tổng toàn cục hoặc tổng theo phân vùng cạnh từng dòng chi tiết và chọn đúng giữa GROUP BY với PARTITION BY.",
+   "ketHop": "Làm Code Lab thực hành OVER() và PARTITION BY trên bảng sale, sau đó học tiếp bài xếp hạng 8.2 và ôn lại qua kiểm tra 8.5.",
+   "canBietBai": [
+    "postgresql-6-1-ham-tong-hop",
+    "postgresql-6-2-group-by"
+   ],
+   "ketHopBai": [
+    "postgresql-8-2-ranking",
+    "postgresql-lab-4-cte-ham-cua-so-ct-shop",
+    "postgresql-8-5-quiz"
+   ]
+  },
+  "postgresql-8-2-ranking": {
+   "hoc": "Thêm ORDER BY vào OVER(), phân biệt ROW_NUMBER, RANK, DENSE_RANK khi đồng hạng, giới thiệu percent_rank, cume_dist, DISTINCT ON, mẫu top-N mỗi nhóm bằng CTE và bẫy thiếu khoá phá hoà.",
+   "canBiet": "Cần hiểu OVER() và PARTITION BY ở bài 8.1, cùng cách bọc truy vấn bằng CTE hoặc subquery để lọc kết quả.",
+   "lamDuoc": "Chọn đúng hàm xếp hạng cho trường hợp đồng hạng, viết được truy vấn top-N mỗi nhóm bằng CTE và luôn thêm khoá phá hoà duy nhất.",
+   "ketHop": "Thực hành Code Lab ba hàm xếp hạng có đồng hạng, rồi áp dụng mẫu top-N vào Lab 4 CT Shop và Mốc dự án 8.",
+   "canBietBai": [
+    "postgresql-8-1-window-la-gi",
+    "postgresql-7-3-cte"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-4-cte-ham-cua-so-ct-shop",
+    "postgresql-moc-8",
+    "postgresql-8-5-quiz"
+   ]
+  },
+  "postgresql-8-3-lag-running-total": {
+   "hoc": "Tổng luỹ tiến bằng SUM() OVER (ORDER BY ...), so sánh dòng trước/sau với LAG và LEAD, tính thay đổi phần trăm và khoảng cách ngày, FIRST_VALUE/LAST_VALUE cùng bẫy chuỗi thời gian có lỗ hổng.",
+   "canBiet": "Cần nắm OVER(), PARTITION BY, ORDER BY trong cửa sổ và cách dùng LEFT JOIN hay generate_series để lấp ngày trống.",
+   "lamDuoc": "Viết được cột doanh thu cộng dồn, so sánh kỳ này với kỳ trước bằng LAG/LEAD và xử lý chuỗi thời gian bị khuyết ngày bằng generate_series.",
+   "ketHop": "Làm Code Lab tổng luỹ tiến và LAG, học tiếp bài 8.4 để hiểu khung cửa sổ của LAST_VALUE, rồi thực hành trong Lab 4 và Mốc 8.",
+   "canBietBai": [
+    "postgresql-8-1-window-la-gi",
+    "postgresql-8-2-ranking",
+    "postgresql-5-4-cross-join-traps"
+   ],
+   "ketHopBai": [
+    "postgresql-8-4-frame-ntile",
+    "postgresql-lab-4-cte-ham-cua-so-ct-shop",
+    "postgresql-moc-8"
+   ]
+  },
+  "postgresql-8-4-frame-ntile": {
+   "hoc": "Cú pháp khung ROWS/RANGE/GROUPS BETWEEN, khung mặc định, trung bình trượt lùi và căn giữa, EXCLUDE, sửa LAST_VALUE bằng UNBOUNDED FOLLOWING, chia nhóm NTILE và bẫy sai lệch ở hai mép chuỗi.",
+   "canBiet": "Cần đã hiểu tổng luỹ tiến, tác động của ORDER BY trong OVER() và hành vi mặc định của LAST_VALUE ở bài 8.3.",
+   "lamDuoc": "Điều khiển chính xác khung cửa sổ để tính trung bình trượt trung thực ở hai mép, lấy đúng FIRST_VALUE/LAST_VALUE và chia phân vị bằng NTILE.",
+   "ketHop": "Vận dụng ngay ROWS vs RANGE trong Lab 4 CT Shop, thêm phần trung bình trượt nâng cao ở Mốc 8 và chốt kiến thức bằng kiểm tra 8.5.",
+   "canBietBai": [
+    "postgresql-8-3-lag-running-total",
+    "postgresql-8-2-ranking"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-4-cte-ham-cua-so-ct-shop",
+    "postgresql-moc-8",
+    "postgresql-8-5-quiz"
+   ]
+  },
+  "postgresql-lab-4-cte-ham-cua-so-ct-shop": {
+   "hoc": "Dựng bộ truy vấn bảng điều khiển tăng trưởng cho CT Shop gồm tăng trưởng MoM/YoY bằng LAG, lấp tuần trống với generate_series và NULLIF, luỹ kế ROWS vs RANGE, top 3 danh mục, tỷ trọng và cây WITH RECURSIVE.",
+   "canBiet": "Cần hoàn thành các bài hàm cửa sổ 8.1–8.4, nắm CTE đệ quy (7.4) và quen cấu trúc dữ liệu CT Shop từ Lab 3.",
+   "lamDuoc": "Hoàn thiện trọn bộ truy vấn bảng điều khiển tăng trưởng khớp số liệu kiểm chứng, tách đúng độ mịn bằng CTE trước khi tính cửa sổ và né được sáu bẫy phân tích thường gặp.",
+   "ketHop": "Áp dụng cùng mô hình CTE kết hợp cửa sổ vào Mốc dự án 8, làm bài kiểm tra 8.5 và chuẩn bị tối ưu tốc độ ở Lab 5 sau Chương 10.",
+   "canBietBai": [
+    "postgresql-8-4-frame-ntile",
+    "postgresql-7-4-recursive-cte",
+    "postgresql-lab-3-bao-cao-doanh-thu-ct-shop"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-8",
+    "postgresql-8-5-quiz",
+    "postgresql-lab-5-chi-muc-explain-ct-shop"
+   ]
+  },
+  "postgresql-moc-8": {
+   "hoc": "Xây dựng tệp queries/08-window.sql cho dự án cá nhân gồm truy vấn top-N mỗi nhóm (ROW_NUMBER/RANK), tổng cộng dồn theo thời gian, so sánh LAG/LEAD và tuỳ chọn trung bình trượt ROWS BETWEEN.",
+   "canBiet": "Cần nắm trọn kiến thức Chương 8 (8.1–8.4), đã hoàn thành Mốc dự án 7 và làm quen quy trình phân tích qua Lab 4.",
+   "lamDuoc": "Tạo và nộp được tệp queries/08-window.sql chạy ra đủ ba nhóm báo cáo cửa sổ, xử lý đồng hạng có chủ đích và kiểm khớp tổng luỹ kế cuối với SUM thường.",
+   "ketHop": "Đối chiếu cách viết và tự kiểm bẫy với Lab 4 CT Shop, sau đó làm kiểm tra 8.5 trước khi sang kế hoạch chỉ mục ở Mốc 9.",
+   "canBietBai": [
+    "postgresql-8-4-frame-ntile",
+    "postgresql-lab-4-cte-ham-cua-so-ct-shop",
+    "postgresql-moc-7"
+   ],
+   "ketHopBai": [
+    "postgresql-8-5-quiz",
+    "postgresql-moc-9"
+   ]
+  },
+  "postgresql-8-5-quiz": {
+   "hoc": "Tám câu kiểm tra kiến thức Chương 8 về OVER/PARTITION BY, ROW_NUMBER/RANK/DENSE_RANK, mẫu top-N với CTE, LAG/LEAD, tổng luỹ tiến, khung cửa sổ và NTILE.",
+   "canBiet": "Cần học xong bốn bài lý thuyết 8.1–8.4 và nhớ rõ sự khác nhau giữa cửa sổ với GROUP BY cũng như lý do WHERE không lọc được hàm cửa sổ.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững hàm cửa sổ với mục tiêu đạt tối thiểu 7/8 câu và nhận diện lỗ hổng kiến thức cần ôn lại.",
+   "ketHop": "Xem lại bài tương ứng nếu sai câu nào, củng cố qua Lab 4 và Mốc 8 rồi chuyển sang Chương 9 về chỉ mục.",
+   "canBietBai": [
+    "postgresql-8-1-window-la-gi",
+    "postgresql-8-2-ranking",
+    "postgresql-8-4-frame-ntile"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-4-cte-ham-cua-so-ct-shop",
+    "postgresql-moc-8",
+    "postgresql-9-1-chi-muc-la-gi"
+   ]
+  },
+  "postgresql-9-1-chi-muc-la-gi": {
+   "hoc": "Cơ chế lưu bảng theo trang 8 kB, đường đi của cây B-tree, sự khác nhau giữa Seq Scan và Index Scan, cách đọc EXPLAIN ANALYZE kèm BUFFERS và chi phí của chỉ mục không ai dùng.",
+   "canBiet": "Hiểu luồng xử lý truy vấn trong PostgreSQL và viết thành thạo câu lệnh SELECT kèm điều kiện lọc WHERE.",
+   "lamDuoc": "Tạo được chỉ mục B-tree, đọc được các chỉ số trong EXPLAIN ANALYZE và kiểm chứng truy vấn đã chuyển từ Seq Scan sang Index Scan bằng số trang đọc.",
+   "ketHop": "Thực hành Code Lab trên bảng 500.000 dòng, đối chiếu kiến thức chỉ mục từ DBI202, rồi làm mốc dự án 9 và học sâu hơn về plan ở Chương 10.",
+   "canBietBai": [
+    "postgresql-1-4-dong-chay-truy-van",
+    "postgresql-4-2-select-where"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-9",
+    "postgresql-9-5-quiz",
+    "postgresql-10-1-doc-explain"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-9-2-to-hop-covering": {
+   "hoc": "Cách chọn cột đánh chỉ mục kể cả khoá ngoại, chỉ mục tổ hợp theo luật tiền tố trái và bằng trước khoảng sau, cùng covering index với INCLUDE để đạt Index Only Scan.",
+   "canBiet": "Nắm cơ chế B-tree, đọc được EXPLAIN ANALYZE, cùng kiến thức về khoá ngoại và sắp xếp với ORDER BY, LIMIT.",
+   "lamDuoc": "Thiết kế đúng thứ tự cột cho chỉ mục tổ hợp để bỏ bước Sort, thêm cột INCLUDE hợp lý và kiểm chứng bằng EXPLAIN.",
+   "ketHop": "Làm Code Lab kiểm chứng luật tiền tố trái bằng EXPLAIN, áp dụng vào mốc dự án 9, Lab 5 trên CT Shop và liên hệ bài chỉ mục ghép ở DBI202.",
+   "canBietBai": [
+    "postgresql-9-1-chi-muc-la-gi",
+    "postgresql-3-2-khoa-ngoai",
+    "postgresql-4-3-order-limit-distinct"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-9",
+    "postgresql-9-5-quiz",
+    "postgresql-lab-5-chi-muc-explain-ct-shop"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-9-3-khong-dung-selectivity-partial": {
+   "hoc": "Các bẫy vô hiệu hoá chỉ mục như hàm bọc cột, ép kiểu và dấu % đầu chuỗi, expression index kèm ANALYZE, độ chọn lọc, partial index với bẫy tham số, chi phí ghi và CREATE INDEX CONCURRENTLY.",
+   "canBiet": "Hiểu hoạt động của B-tree, chỉ mục tổ hợp và biết đọc kế hoạch thực thi từ EXPLAIN ANALYZE.",
+   "lamDuoc": "Chẩn đoán được vì sao chỉ mục bị bỏ qua, viết lại truy vấn hoặc tạo expression và partial index đúng cách, đồng thời đánh giá chi phí ghi trước khi thêm chỉ mục.",
+   "ketHop": "Thử nghiệm Code Lab đổi plan giữa Seq Scan và Index Scan, áp partial index vào mốc dự án 9, xem tiếp thống kê ở Chương 10 và cách áp vào Node.js với Prisma.",
+   "canBietBai": [
+    "postgresql-9-1-chi-muc-la-gi",
+    "postgresql-9-2-to-hop-covering"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-9",
+    "postgresql-10-3-thong-ke-uoc-luong",
+    "postgresql-13-4-trigram"
+   ],
+   "ketHopKhoa": [
+    "nodejs",
+    "prisma-orm"
+   ]
+  },
+  "postgresql-9-4-loai-chi-muc": {
+   "hoc": "Cách chọn loại chỉ mục qua USING: B-tree, GIN cho jsonb và mảng gồm jsonb_ops và jsonb_path_ops, BRIN cho dữ liệu xếp tự nhiên, GiST cho khoảng và chồng lấn, Hash, UNIQUE cùng bẫy ghi chậm của GIN.",
+   "canBiet": "Nắm cơ chế B-tree, đã quen kiểu dữ liệu array, jsonb và ràng buộc UNIQUE trong PostgreSQL.",
+   "lamDuoc": "Chọn đúng loại chỉ mục cho từng kiểu dữ liệu và toán tử truy vấn, phân biệt jsonb_ops với jsonb_path_ops và tránh đặt GIN lên cột ghi tần suất cao.",
+   "ketHop": "Thử thêm GIN hoặc BRIN có đo đạc trong phần nâng cao của mốc dự án 9, làm bài kiểm tra Chương 9 rồi đào sâu tìm kiếm JSONB và toàn văn ở Chương 13.",
+   "canBietBai": [
+    "postgresql-9-1-chi-muc-la-gi",
+    "postgresql-2-4-uuid-enum-array-jsonb",
+    "postgresql-3-3-rang-buoc-cot"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-9",
+    "postgresql-9-5-quiz",
+    "postgresql-13-2-gin-jsonb"
+   ]
+  },
+  "postgresql-moc-9": {
+   "hoc": "Thực hành lập kế hoạch chỉ mục từ truy vấn thật của đề tài cá nhân: viết migrations/002_indexes.sql gồm chỉ mục ghép, partial hoặc unique index và đo EXPLAIN trước sau kèm ANALYZE.",
+   "canBiet": "Hoàn thành các bài về chỉ mục tổ hợp, partial index, loại chỉ mục và đã có lược đồ cùng truy vấn từ các mốc dự án trước.",
+   "lamDuoc": "Hoàn thiện tệp migrations/002_indexes.sql có chú thích truy vấn, chuyển được 2 truy vấn từ Seq Scan sang dùng chỉ mục trên EXPLAIN và nộp commit hoặc tag.",
+   "ketHop": "Củng cố bằng bài kiểm tra Chương 9, luyện thêm trên bộ dữ liệu lớn ở Lab 5 và nối tiếp sang mốc dự án 10 tối ưu truy vấn chậm nhất bằng EXPLAIN ANALYZE.",
+   "canBietBai": [
+    "postgresql-9-2-to-hop-covering",
+    "postgresql-9-3-khong-dung-selectivity-partial",
+    "postgresql-9-4-loai-chi-muc"
+   ],
+   "ketHopBai": [
+    "postgresql-9-5-quiz",
+    "postgresql-lab-5-chi-muc-explain-ct-shop",
+    "postgresql-moc-10"
+   ]
+  },
+  "postgresql-9-5-quiz": {
+   "hoc": "Ôn tập 8 câu trắc nghiệm về B-tree, EXPLAIN ANALYZE, chỉ mục tổ hợp và luật tiền tố trái, covering index, độ chọn lọc, partial index, chi phí ghi và các loại chỉ mục.",
+   "canBiet": "Đã học đủ 4 bài lý thuyết Chương 9 và nhớ nguyên tắc chọn cột tổ hợp cùng lý do bộ lập kế hoạch bỏ qua chỉ mục khi độ chọn lọc thấp.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững kiến thức Chương 9 với mục tiêu tối thiểu 7/8 câu và nhận ra lỗ hổng cần xem lại trước khi sang Chương 10.",
+   "ketHop": "Làm cùng mốc dự án 9 để áp lý thuyết vào đề tài thật, sau đó chuyển sang Chương 10 đọc sâu plan và thực hành Lab 5 trên một triệu đơn hàng.",
+   "canBietBai": [
+    "postgresql-9-2-to-hop-covering",
+    "postgresql-9-3-khong-dung-selectivity-partial",
+    "postgresql-9-4-loai-chi-muc"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-9",
+    "postgresql-10-1-doc-explain",
+    "postgresql-lab-5-chi-muc-explain-ct-shop"
+   ]
+  },
+  "postgresql-10-1-doc-explain": {
+   "hoc": "Phân biệt ước lượng của EXPLAIN (cost, rows, width) với số chạy thật của EXPLAIN ANALYZE (actual time, rows, loops), cách đọc cây kế hoạch từ trong ra ngoài và nhận diện nút chạy song song.",
+   "canBiet": "Cần nắm luồng xử lý truy vấn trong PostgreSQL và phân biệt cơ bản giữa Seq Scan với Index Scan từ Chương 9.",
+   "lamDuoc": "Đọc được kế hoạch nhiều tầng từ dưới lên, đối chiếu ước lượng với kết quả thật và xác định nhanh nhánh nào đang tốn thời gian.",
+   "ketHop": "Nối tiếp với bài chiến lược JOIN, bài thống kê ước lượng và quiz cuối chương; có thể đối chiếu thêm phần xem plan ở khoá DBI202 hoặc áp dụng vào API ở khoá Node.js.",
+   "canBietBai": [
+    "postgresql-1-4-dong-chay-truy-van",
+    "postgresql-9-1-chi-muc-la-gi"
+   ],
+   "ketHopBai": [
+    "postgresql-10-2-chien-luoc-join",
+    "postgresql-10-3-thong-ke-uoc-luong",
+    "postgresql-10-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases",
+    "nodejs"
+   ]
+  },
+  "postgresql-10-2-chien-luoc-join": {
+   "hoc": "Cơ chế và điều kiện chọn ba thuật toán Nested Loop, Hash Join (dùng bảng băm trong work_mem) và Merge Join, cùng tác động của việc thiếu chỉ mục khoá ngoại lên kế hoạch ghép bảng.",
+   "canBiet": "Cần đọc được cây kế hoạch EXPLAIN ANALYZE từ bài 10.1, nắm cách viết JOIN và nguyên lý chỉ mục B-tree.",
+   "lamDuoc": "Nhận diện được ba chiến lược JOIN trong plan, phát hiện Nested Loop có loops quá lớn và tối ưu bằng chỉ mục phù hợp thay vì đoán mò.",
+   "ketHop": "Thực hành Track Code Lab lật truy vấn qua cả ba chiến lược bằng planner knob, học tiếp bài thống kê 10.3 và luyện lại ở Lab 5, quiz cuối chương.",
+   "canBietBai": [
+    "postgresql-10-1-doc-explain",
+    "postgresql-5-1-inner-join",
+    "postgresql-9-1-chi-muc-la-gi"
+   ],
+   "ketHopBai": [
+    "postgresql-10-3-thong-ke-uoc-luong",
+    "postgresql-lab-5-chi-muc-explain-ct-shop",
+    "postgresql-10-5-quiz"
+   ]
+  },
+  "postgresql-10-3-thong-ke-uoc-luong": {
+   "hoc": "Cách ANALYZE lấy mẫu lưu vào pg_stats (n_distinct, MCV, histogram, correlation), nguyên nhân ước lượng sai do thống kê cũ hay cột tương quan, cách sửa bằng CREATE STATISTICS và bẫy nâng work_mem toàn cục.",
+   "canBiet": "Cần biết đọc số dòng ước lượng so với thực tế trong EXPLAIN ANALYZE và hiểu ước lượng sai làm lệch chiến lược JOIN ra sao.",
+   "lamDuoc": "Tra cứu được pg_stats để giải thích con số rows ước lượng, dùng ANALYZE và CREATE STATISTICS sửa plan sai, và chỉnh work_mem an toàn bằng SET LOCAL.",
+   "ketHop": "Làm Track Code Lab tái hiện lỗi cột tương quan với CREATE STATISTICS, sau đó học tiếp bài BUFFERS 10.4 và áp dụng lại trong Lab 5 cùng quiz.",
+   "canBietBai": [
+    "postgresql-10-1-doc-explain",
+    "postgresql-10-2-chien-luoc-join"
+   ],
+   "ketHopBai": [
+    "postgresql-10-4-buffers-tinh-chinh",
+    "postgresql-lab-5-chi-muc-explain-ct-shop",
+    "postgresql-10-5-quiz"
+   ]
+  },
+  "postgresql-10-4-buffers-tinh-chinh": {
+   "hoc": "Đọc EXPLAIN (ANALYZE, BUFFERS) phân biệt shared hit, shared read và temp read/written, tránh bẫy cache ấm, tìm câu chậm bằng pg_stat_statements, auto_explain và áp dụng quy trình tinh chỉnh bốn bước.",
+   "canBiet": "Cần nắm cách đọc EXPLAIN ANALYZE, thống kê ước lượng và kiến thức về chỉ mục tổ hợp, covering từ Chương 9.",
+   "lamDuoc": "Đo được lượng I/O thực qua số trang thay vì chỉ nhìn thời gian, phân biệt kết quả cache lạnh với ấm và tinh chỉnh truy vấn chậm có kỷ luật.",
+   "ketHop": "Áp dụng ngay quy trình bốn bước vào Lab 5 CT Shop một triệu đơn, Mốc dự án 10 và quiz cuối chương; tham khảo thêm khoá Prisma ORM khi tối ưu truy vấn từ ORM.",
+   "canBietBai": [
+    "postgresql-10-1-doc-explain",
+    "postgresql-10-3-thong-ke-uoc-luong",
+    "postgresql-9-2-to-hop-covering"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-5-chi-muc-explain-ct-shop",
+    "postgresql-moc-10",
+    "postgresql-10-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "prisma-orm"
+   ]
+  },
+  "postgresql-lab-5-chi-muc-explain-ct-shop": {
+   "hoc": "Thực chiến trên CT Shop 1 triệu đơn: rà khoá ngoại thiếu chỉ mục, dựng chỉ mục tổ hợp, covering INCLUDE, partial index bằng CONCURRENTLY, đo giá INSERT khi flash sale, rà idx_scan = 0 và kiểm tra Prisma @@index.",
+   "canBiet": "Cần nắm quy trình đọc EXPLAIN (ANALYZE, BUFFERS) ở bài 10.4 cùng kiến thức chỉ mục tổ hợp, covering, partial và BRIN của Chương 9.",
+   "lamDuoc": "Hoàn thành bộ báo cáo kế hoạch trước/sau kèm số trang, kích thước chỉ mục và chi phí INSERT cho năm vấn đề chậm trên cơ sở dữ liệu CT Shop 1 triệu đơn.",
+   "ketHop": "Dùng quy trình đo đạc vừa làm để triển khai Mốc dự án 10, làm quiz cuối chương và chuẩn bị cho Lab 6; kết hợp khoá Prisma ORM để tối ưu chỉ mục sinh từ schema.",
+   "canBietBai": [
+    "postgresql-10-4-buffers-tinh-chinh",
+    "postgresql-9-2-to-hop-covering",
+    "postgresql-9-3-khong-dung-selectivity-partial"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-10",
+    "postgresql-10-5-quiz",
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop"
+   ],
+   "ketHopKhoa": [
+    "prisma-orm"
+   ]
+  },
+  "postgresql-moc-10": {
+   "hoc": "Đo EXPLAIN (ANALYZE, BUFFERS) cho 3 truy vấn nặng nhất của dự án cá nhân, soi nút chậm và sai lệch ước lượng, sửa 1 câu rồi đo lại 3 lượt lấy trung vị; tuỳ chọn bật pg_stat_statements.",
+   "canBiet": "Cần hoàn thành Mốc dự án 9, nắm quy trình đọc EXPLAIN (ANALYZE, BUFFERS) ở bài 10.4 và cách đo trước/sau ở Lab 5.",
+   "lamDuoc": "Xuất được tệp docs/performance.md (kèm commit/tag trên repo) ghi 3 plan có chỉ rõ nút tốn thời gian nhất và minh chứng 1 truy vấn nhanh hơn rõ rệt trên cùng dữ liệu.",
+   "ketHop": "Làm thêm quiz Chương 10 để kiểm tra lại lý thuyết đọc plan trước khi bước sang Chương 11 và Mốc dự án 11 về giao dịch đồng thời.",
+   "canBietBai": [
+    "postgresql-10-4-buffers-tinh-chinh",
+    "postgresql-lab-5-chi-muc-explain-ct-shop",
+    "postgresql-moc-9"
+   ],
+   "ketHopBai": [
+    "postgresql-10-5-quiz",
+    "postgresql-moc-11"
+   ]
+  },
+  "postgresql-10-5-quiz": {
+   "hoc": "Kiểm tra tám câu theo bốn chủ đề của chương: đọc EXPLAIN/EXPLAIN ANALYZE, nhận diện ba chiến lược JOIN, thống kê ước lượng số dòng và đọc BUFFERS trong quy trình tinh chỉnh.",
+   "canBiet": "Cần học xong các bài 10.1 đến 10.4 về giải phẫu plan, chiến lược JOIN, thống kê pg_stats và đọc BUFFERS.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững Chương 10 (mục tiêu 7/8), đặc biệt ở kỹ năng soi sai lệch rows ước lượng và phát hiện Nested Loop có loops lớn.",
+   "ketHop": "Ôn lại bài tương ứng nếu chưa đạt 7/8, củng cố bằng Lab 5 và Mốc dự án 10, rồi chuyển sang Chương 11 về giao dịch và đồng thời.",
+   "canBietBai": [
+    "postgresql-10-1-doc-explain",
+    "postgresql-10-2-chien-luoc-join",
+    "postgresql-10-3-thong-ke-uoc-luong"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-5-chi-muc-explain-ct-shop",
+    "postgresql-moc-10",
+    "postgresql-11-1-giao-dich"
+   ]
+  },
+  "postgresql-11-1-giao-dich": {
+   "hoc": "Cơ chế autocommit, gom nhiều câu lệnh bằng BEGIN/COMMIT/ROLLBACK, xử lý trạng thái aborted bằng SAVEPOINT, khả năng rollback cả DDL và bẫy phiên ở trạng thái idle in transaction.",
+   "canBiet": "Hiểu khái niệm tính nguyên tử trong ACID, ràng buộc CHECK và cách viết câu lệnh UPDATE, DELETE cơ bản trên psql.",
+   "lamDuoc": "Bọc được các thao tác nhiều bước thành một đơn vị nguyên tử, hoàn tác sạch khi gặp lỗi, dùng SAVEPOINT đúng chỗ và tránh để treo giao dịch mở quá lâu.",
+   "ketHop": "Nối tiếp với bài MVCC để hiểu vì sao phiên khác vẫn đọc được dữ liệu khi giao dịch đang chạy, làm mốc dự án 11 và đối chiếu cách gọi giao dịch trong Node.js hoặc PRJ301.",
+   "canBietBai": [
+    "postgresql-1-2-acid",
+    "postgresql-3-3-rang-buoc-cot",
+    "postgresql-4-4-update-delete"
+   ],
+   "ketHopBai": [
+    "postgresql-11-2-mvcc",
+    "postgresql-moc-11",
+    "postgresql-11-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "nodejs",
+    "java-web-application-development"
+   ]
+  },
+  "postgresql-11-2-mvcc": {
+   "hoc": "Cơ chế lưu nhiều phiên bản dòng của MVCC qua các cột ẩn xmin, xmax, ctid và pageinspect, cách tạo snapshot, dead tuple gây phình bảng, VACUUM và bẫy giao dịch mở lâu chặn dọn dẹp.",
+   "canBiet": "Nắm cách mở, xác nhận và hoàn tác giao dịch trên hai phiên psql song song từ bài trước.",
+   "lamDuoc": "Giải thích được vì sao người đọc không chặn người ghi, quan sát chuỗi phiên bản dòng bằng ctid và dùng pg_stat_activity phát hiện giao dịch chạy dài đang ghim VACUUM.",
+   "ketHop": "Chạy nhánh Code Lab đo bảng phình rồi VACUUM, học tiếp bài mức cô lập để thấy thời điểm chụp snapshot và đào sâu phần dọn dẹp ở bài VACUUM, autovacuum và bloat.",
+   "canBietBai": [
+    "postgresql-11-1-giao-dich"
+   ],
+   "ketHopBai": [
+    "postgresql-11-3-muc-co-lap",
+    "postgresql-11-5-quiz",
+    "postgresql-14-3-vacuum-bloat"
+   ]
+  },
+  "postgresql-11-3-muc-co-lap": {
+   "hoc": "Ba mức cô lập Read Committed, Repeatable Read và Serializable, thời điểm lấy snapshot, bốn bất thường gồm dirty read, non-repeatable read, phantom, write skew cùng lỗi 40001 cần thử lại.",
+   "canBiet": "Hiểu giao dịch đa bước và cơ chế snapshot của MVCC để theo dõi dữ liệu nhìn thấy ở hai phiên song song.",
+   "lamDuoc": "Chọn đúng mức cô lập cho từng nghiệp vụ, phân biệt bất thường mỗi mức chặn được và thiết kế vòng thử lại khi dùng Serializable gặp lỗi 40001.",
+   "ketHop": "Thực hành nhánh Code Lab phá bất biến lịch trực, học tiếp bài khoá dòng để xử lý trường hợp đọc-ghi tách giao dịch, làm quiz cuối chương và đối chiếu phần ACID của DBI202.",
+   "canBietBai": [
+    "postgresql-11-1-giao-dich",
+    "postgresql-11-2-mvcc"
+   ],
+   "ketHopBai": [
+    "postgresql-11-4-khoa-deadlock",
+    "postgresql-moc-11",
+    "postgresql-11-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-11-4-khoa-deadlock": {
+   "hoc": "Khoá dòng khi ghi đồng thời, tra cứu chặn nhau bằng pg_blocking_pids và pg_locks, lỗi lost update và cách sửa bằng UPDATE nguyên tử hay SELECT ... FOR UPDATE, NOWAIT, lock_timeout, SKIP LOCKED và deadlock.",
+   "canBiet": "Nắm giao dịch, MVCC và lý do mức cô lập không sửa được khoảng hở giữa lần đọc và lần ghi qua ứng dụng.",
+   "lamDuoc": "Chẩn đoán được phiên đang chặn nhau, bịt lỗi lost update, dựng hàng đợi việc với SKIP LOCKED và ngăn deadlock bằng thứ tự khoá cố định.",
+   "ketHop": "Áp dụng ngay vào mốc dự án 11, làm bài kiểm tra Chương 11, thực hành tiếp Lab 6 đặt hàng an toàn và đối chiếu cách kiểm soát xung đột trong Node.js hoặc DBI202.",
+   "canBietBai": [
+    "postgresql-11-1-giao-dich",
+    "postgresql-11-2-mvcc",
+    "postgresql-11-3-muc-co-lap"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-11",
+    "postgresql-11-5-quiz",
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop"
+   ],
+   "ketHopKhoa": [
+    "nodejs",
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-moc-11": {
+   "hoc": "Thực hành chọn thao tác dễ hỏng khi đồng thời trong đề tài cá nhân, tái hiện lỗi trên hai phiên psql, bảo vệ bằng UNIQUE, exclusion, FOR UPDATE hoặc SERIALIZABLE và viết docs/concurrency.md.",
+   "canBiet": "Cần nắm viết giao dịch nguyên tử, chọn mức cô lập, khoá dòng, phòng deadlock và có sẵn lược đồ cơ sở dữ liệu dự án từ các mốc trước.",
+   "lamDuoc": "Hoàn thiện được thao tác then chốt chạy an toàn trong giao dịch, kèm log hai phiên psql chứng minh trước-sau, kiểm ROLLBACK sạch và tệp docs/concurrency.md giải thích đánh đổi trên repo.",
+   "ketHop": "Làm tiếp bài kiểm tra Chương 11 để rà soát lý thuyết, sau đó kết hợp kiến thức đồng thời này với hàm và trigger ở Lab 6 và mốc dự án 12.",
+   "canBietBai": [
+    "postgresql-11-1-giao-dich",
+    "postgresql-11-3-muc-co-lap",
+    "postgresql-11-4-khoa-deadlock"
+   ],
+   "ketHopBai": [
+    "postgresql-11-5-quiz",
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop",
+    "postgresql-moc-12"
+   ]
+  },
+  "postgresql-11-5-quiz": {
+   "hoc": "Kiểm tra tám câu theo thứ tự chương về giao dịch và trạng thái aborted, MVCC và dead tuple, ba mức cô lập kèm vòng thử lại cho SERIALIZABLE, lost update, SKIP LOCKED và deadlock.",
+   "canBiet": "Hoàn thành bốn bài lý thuyết Chương 11 từ giao dịch, MVCC, mức cô lập đến khoá dòng và deadlock.",
+   "lamDuoc": "Tự đánh giá được mức độ nắm vững kiến thức giao dịch và đồng thời, đặc biệt là nhận diện lỗi lost update âm thầm và yêu cầu viết vòng thử lại với SERIALIZABLE.",
+   "ketHop": "Nếu chưa đạt 7/8, ôn lại đúng bài tương ứng trước khi hoàn tất mốc dự án 11 hoặc bước sang Lab 6 đặt hàng an toàn ở Chương 12.",
+   "canBietBai": [
+    "postgresql-11-1-giao-dich",
+    "postgresql-11-3-muc-co-lap",
+    "postgresql-11-4-khoa-deadlock"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-11",
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop"
+   ]
+  },
+  "postgresql-12-1-ham": {
+   "hoc": "Cách viết hàm SQL thuần, hàm PL/pgSQL có biến và rẽ nhánh, procedure, SECURITY DEFINER, cùng ba mức VOLATILE, STABLE, IMMUTABLE ảnh hưởng tới nội tuyến và số lần gọi.",
+   "canBiet": "Thành thạo truy vấn SQL, hiểu cơ bản về chỉ mục và biết đọc kế hoạch truy vấn EXPLAIN để thấy khi nào hàm được nội tuyến.",
+   "lamDuoc": "Viết được hàm SQL và PL/pgSQL trả về đơn trị hoặc tập dòng, chọn đúng nhãn volatility để tránh dữ liệu sai và nhận biết khi nào không nên đưa logic vào hàm.",
+   "ketHop": "Chạy Code Lab đo số lần gọi 5 so với 1 qua RAISE NOTICE, áp dụng viết hàm place_order trong Lab 6 và đối chiếu với phần hàm lưu trữ của DBI202.",
+   "canBietBai": [
+    "postgresql-9-1-chi-muc-la-gi",
+    "postgresql-10-1-doc-explain"
+   ],
+   "ketHopBai": [
+    "postgresql-12-2-trigger",
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop",
+    "postgresql-moc-12"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-12-2-trigger": {
+   "hoc": "Cấu trúc hàm RETURNS trigger và CREATE TRIGGER, phân biệt BEFORE/AFTER, mức dòng/câu lệnh, biến NEW/OLD/TG_OP, bộ lọc WHEN, mẫu updated_at, nhật ký kiểm toán và bẫy trả NULL.",
+   "canBiet": "Nắm cách viết hàm PL/pgSQL ở bài 12.1 vì mọi trigger đều gắn với một hàm có kiểu trả về đặc biệt.",
+   "lamDuoc": "Dựng được trigger tự cập nhật updated_at và ghi kiểm toán, tránh bẫy BEFORE trả NULL nuốt dòng hay đệ quy, và chọn đúng chỗ chỉ nên dùng trigger cho bất biến dữ liệu.",
+   "ketHop": "Làm Code Lab tái hiện bảng kiểm toán và lỗi INSERT 0 0, rồi thực hành trigger ghi sổ kho ở Lab 6, hoàn thiện Mốc 12 và đối chiếu với DBI202.",
+   "canBietBai": [
+    "postgresql-12-1-ham"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop",
+    "postgresql-moc-12",
+    "postgresql-12-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases"
+   ]
+  },
+  "postgresql-12-3-view": {
+   "hoc": "CREATE VIEW lưu định nghĩa truy vấn không tốn đĩa và luôn tươi, cách bộ lập kế hoạch gộp view, ghi qua view với WITH CHECK OPTION và INSTEAD OF, phân quyền ẩn cột nhạy cảm cùng bẫy đổi cột và Prisma.",
+   "canBiet": "Biết viết JOIN, tổng hợp, CTE để đối chiếu phạm vi tái sử dụng, hiểu EXPLAIN và khái niệm trigger cho trường hợp INSTEAD OF.",
+   "lamDuoc": "Tạo được view che cột nhạy cảm làm ranh giới phân quyền, bật WITH CHECK OPTION chặn ghi sai phạm vi và tránh lỗi cannot drop columns from view khi đổi lược đồ.",
+   "ketHop": "Thử Code Lab ghi qua view và bắt lỗi WITH CHECK OPTION, học tiếp bài 12.4 về materialized view, áp dụng ở Lab 6, Mốc 12 và đối chiếu với DBI202, Prisma.",
+   "canBietBai": [
+    "postgresql-7-3-cte",
+    "postgresql-10-1-doc-explain",
+    "postgresql-12-2-trigger"
+   ],
+   "ketHopBai": [
+    "postgresql-12-4-materialized-view",
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop",
+    "postgresql-moc-12"
+   ],
+   "ketHopKhoa": [
+    "introduction-to-databases",
+    "prisma-orm"
+   ]
+  },
+  "postgresql-12-4-materialized-view": {
+   "hoc": "CREATE MATERIALIZED VIEW lưu kết quả trên đĩa để tăng tốc báo cáo, đánh đổi độ tươi lấy tốc độ, REFRESH thường vs CONCURRENTLY kèm unique index, WITH NO DATA, refreshed_at và bẫy quên lịch làm mới.",
+   "canBiet": "Hiểu view thường ở bài 12.3 để so sánh, nắm chỉ mục unique và cơ chế khoá trong giao dịch khi dữ liệu bị ghi đè.",
+   "lamDuoc": "Chọn đúng giữa view, materialized view và bảng tổng hợp do trigger nuôi, dựng được unique index để REFRESH CONCURRENTLY không chặn đọc và thiết kế lịch làm mới kèm mốc refreshed_at.",
+   "ketHop": "Thực hành Code Lab tái hiện lệch số cũ-mới và lỗi CONCURRENTLY, rồi dựng bảng xếp hạng bán chạy bằng matview trong Lab 6 và phần nâng cao của Mốc 12.",
+   "canBietBai": [
+    "postgresql-9-4-loai-chi-muc",
+    "postgresql-11-4-khoa-deadlock",
+    "postgresql-12-3-view"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop",
+    "postgresql-moc-12",
+    "postgresql-12-5-quiz"
+   ]
+  },
+  "postgresql-lab-6-dat-hang-an-toan-ct-shop": {
+   "hoc": "Thực hành kết hợp giao dịch, khoá ORDER BY id FOR UPDATE, hàm place_order và order_total, trigger ghi sổ kho và chặn thanh toán lệch, view doanh thu theo giờ Việt Nam, matview xếp hạng, deadlock và gọi qua Prisma.",
+   "canBiet": "Hoàn thành các bài 12.1 đến 12.4 và nắm giao dịch, cô lập, khoá dòng, deadlock ở Chương 11 cùng thao tác hai cửa sổ psql song song.",
+   "lamDuoc": "Hoàn thiện luồng đặt hàng CT Shop đưa sổ kho 48 sản phẩm về 0 lệch, chống bán quá tồn khi flash sale trên hai phiên psql, dựng view doanh thu đúng ngày và matview làm mới không chặn đọc.",
+   "ketHop": "Thử thêm ba thử thách cancel_order, đóng băng đơn và SECURITY DEFINER, rồi áp dụng mẫu tương tự vào Mốc 12, làm bài kiểm tra 12.5 và đối chiếu phần gọi giao dịch từ khoá Prisma ORM.",
+   "canBietBai": [
+    "postgresql-11-4-khoa-deadlock",
+    "postgresql-12-1-ham",
+    "postgresql-12-2-trigger"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-12",
+    "postgresql-12-5-quiz",
+    "postgresql-lab-7-jsonb-tim-kiem-ct-shop"
+   ],
+   "ketHopKhoa": [
+    "prisma-orm"
+   ]
+  },
+  "postgresql-moc-12": {
+   "hoc": "Áp dụng hàm, trigger và view vào đề tài cá nhân: duy trì updated_at hoặc bảng kiểm toán, thực thi luật vượt quá CHECK, rút gọn truy vấn màn hình bằng view và tuỳ chọn thêm materialized view.",
+   "canBiet": "Đã hoàn thành Mốc 11 trên repo dự án cá nhân và nắm cách viết hàm PL/pgSQL, trigger BEFORE/AFTER, view cùng materialized view trong Chương 12.",
+   "lamDuoc": "Nộp được commit chứa trigger tự cập nhật hoặc ghi lịch sử, hàm/trigger từ chối dữ liệu sai kèm log lỗi thật, và view thay thế cho truy vấn màn hình của đề tài.",
+   "ketHop": "Tham khảo cấu trúc hàm, trigger và view của Lab 6 trước khi code, rồi làm bài kiểm tra 12.5 để chốt kiến thức trước khi sang Mốc 13.",
+   "canBietBai": [
+    "postgresql-moc-11",
+    "postgresql-12-2-trigger",
+    "postgresql-12-3-view"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop",
+    "postgresql-12-5-quiz",
+    "postgresql-moc-13"
+   ]
+  },
+  "postgresql-12-5-quiz": {
+   "hoc": "Kiểm tra tám câu trắc nghiệm về hàm SQL và PL/pgSQL, nhãn volatility làm hỏng chỉ mục biểu thức, trigger BEFORE/AFTER trả NULL, IS DISTINCT FROM, view ghi được và materialized view.",
+   "canBiet": "Đã học đủ bốn bài 12.1 đến 12.4 về hàm, trigger, view và materialized view để tự trả lời bằng trí nhớ.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững toàn Chương 12 với mục tiêu 7/8 câu đúng và phát hiện kịp thời các lỗ hổng về volatility hay bẫy trigger BEFORE.",
+   "ketHop": "Câu nào sai thì xem lại đúng bài gốc và thực hành lại trong Lab 6 hoặc áp vào Mốc dự án 12 để ghi nhớ lâu.",
+   "canBietBai": [
+    "postgresql-12-1-ham",
+    "postgresql-12-2-trigger",
+    "postgresql-12-4-materialized-view"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop",
+    "postgresql-moc-12"
+   ]
+  },
+  "postgresql-13-1-jsonb": {
+   "hoc": "Khác biệt giữa json và jsonb, toán tử đọc ->, ->>, #>, #>>, hàm sửa và bẫy NULL, SQL/JSON path, JSON_TABLE trên PostgreSQL 17, cùng ranh giới giữa cột thật và JSONB.",
+   "canBiet": "Đã làm quen kiểu jsonb cơ bản ở Chương 2, nắm thiết kế bảng chuẩn hoá và hiểu cách bộ lập kế hoạch dùng thống kê ước lượng số dòng.",
+   "lamDuoc": "Chọn đúng jsonb thay json, truy xuất và sửa tài liệu không dính bẫy kiểu hay NULL, và quyết định chính xác trường nào nên tách thành cột riêng.",
+   "ketHop": "Thực hành Code Lab xem jsonb chuẩn hoá và thử bẫy ->/->>, học tiếp GIN để tăng tốc truy vấn, rồi áp dụng vào Lab 7 và đối chiếu thêm ở bài so sánh MongoDB.",
+   "canBietBai": [
+    "postgresql-2-4-uuid-enum-array-jsonb",
+    "postgresql-3-4-alter-chuan-hoa",
+    "postgresql-10-3-thong-ke-uoc-luong"
+   ],
+   "ketHopBai": [
+    "postgresql-13-2-gin-jsonb",
+    "postgresql-lab-7-jsonb-tim-kiem-ct-shop",
+    "postgresql-17-3-mongodb-vs-jsonb"
+   ]
+  },
+  "postgresql-13-2-gin-jsonb": {
+   "hoc": "Luật toán tử @> và ? (cùng jsonb_exists), cơ chế chỉ mục ngược GIN, so sánh jsonb_ops với jsonb_path_ops, ảnh hưởng độ chọn lọc và các bẫy GIN không hỗ trợ như so khoảng.",
+   "canBiet": "Nắm cấu trúc tài liệu JSONB ở bài trước, hiểu các loại chỉ mục trong PostgreSQL và biết đọc EXPLAIN để kiểm tra kế hoạch thực thi.",
+   "lamDuoc": "Viết được truy vấn @> và ? chuẩn xác, chọn đúng jsonb_ops hay jsonb_path_ops, và dùng EXPLAIN phát hiện truy vấn so khoảng cần chỉ mục biểu thức hoặc cột thật.",
+   "ketHop": "Chạy Code Lab dựng bảng 200.000 dòng đo truy vấn chọn lọc và diện rộng, luyện thêm trên Lab 7, Mốc 13 và đối chiếu bộ lọc JSON khi làm việc với Prisma.",
+   "canBietBai": [
+    "postgresql-13-1-jsonb",
+    "postgresql-9-4-loai-chi-muc",
+    "postgresql-10-1-doc-explain"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-7-jsonb-tim-kiem-ct-shop",
+    "postgresql-moc-13",
+    "postgresql-13-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "prisma-orm"
+   ]
+  },
+  "postgresql-13-3-full-text-search": {
+   "hoc": "Vì sao LIKE không thay được tìm kiếm, cơ chế tsvector, tsquery, @@, websearch_to_tsquery, cột GENERATED có trọng số kèm ts_rank và GIN, cùng cách xử lý tiếng Việt bằng simple và unaccent.",
+   "canBiet": "Biết cách tạo cột sinh GENERATED, hiểu vai trò của chỉ mục GIN và cách kiểm tra hiệu năng truy vấn trong PostgreSQL.",
+   "lamDuoc": "Dựng được cột tsvector truyền cấu hình tường minh có trọng số và chỉ mục GIN, phân tích truy vấn người dùng an toàn và xếp hạng kết quả tìm kiếm.",
+   "ketHop": "Làm Code Lab so sánh Seq Scan với GIN trên cột tsvector có trọng số, học tiếp trigram cho chuỗi ngắn, rồi ứng dụng vào Lab 7, Mốc 13 và khoá Search.",
+   "canBietBai": [
+    "postgresql-3-3-rang-buoc-cot",
+    "postgresql-9-4-loai-chi-muc",
+    "postgresql-13-2-gin-jsonb"
+   ],
+   "ketHopBai": [
+    "postgresql-13-4-trigram",
+    "postgresql-lab-7-jsonb-tim-kiem-ct-shop",
+    "postgresql-moc-13"
+   ],
+   "ketHopKhoa": [
+    "search-elasticsearch"
+   ]
+  },
+  "postgresql-13-4-trigram": {
+   "hoc": "Tiện ích pg_trgm cắt chuỗi thành cụm ba ký tự, similarity và word_similarity, toán tử % và <->, đánh chỉ mục gin_trgm_ops cho ILIKE '%...%', xử lý unaccent và bẫy kích thước trên văn bản dài.",
+   "canBiet": "Nắm tìm kiếm toàn văn và giới hạn của lexeme ở bài trước, hiểu chỉ mục GIN và biết dùng EXPLAIN để kiểm tra truy vấn có dùng chỉ mục hay không.",
+   "lamDuoc": "Dựng được tìm kiếm chịu lỗi chính tả, tăng tốc ILIKE có % ở đầu bằng gin_trgm_ops, và chọn đúng giữa B-tree, tsvector, trigram hay search engine riêng.",
+   "ketHop": "Thử Code Lab với truy vấn cố tình gõ sai và đo ILIKE trước sau khi đánh chỉ mục, rồi ghép với FTS trong Lab 7, ôn qua quiz 13.5 và mở rộng ở khoá Search.",
+   "canBietBai": [
+    "postgresql-13-3-full-text-search",
+    "postgresql-9-4-loai-chi-muc",
+    "postgresql-10-1-doc-explain"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-7-jsonb-tim-kiem-ct-shop",
+    "postgresql-13-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "search-elasticsearch"
+   ]
+  },
+  "postgresql-lab-7-jsonb-tim-kiem-ct-shop": {
+   "hoc": "Khảo sát và làm sạch 48 tài liệu JSON bẩn vào product.attrs bằng CHECK và hàm jsonb, lọc 60.000 tin đăng qua GIN jsonb_path_ops, xuất JSON_TABLE và dựng tìm kiếm không dấu chịu lỗi gõ.",
+   "canBiet": "Hoàn thành bốn bài lý thuyết Chương 13 về JSONB, GIN, tìm toàn văn và trigram, đồng thời nắm cách viết hàm và trigger ở Chương 12.",
+   "lamDuoc": "Hoàn thiện được lược đồ thông số sạch có ràng buộc CHECK, bảng phẳng xuất từ JSON_TABLE, bộ lọc @> dùng Bitmap Index Scan và hàm search_products gọi từ Prisma.",
+   "ketHop": "Thử thêm ba thử thách mở rộng cuối lab về facet và partial index, áp dụng vào Mốc 13, kiểm tra lại qua quiz 13.5 và theo dõi hệ quả bloat ở bài VACUUM.",
+   "canBietBai": [
+    "postgresql-13-2-gin-jsonb",
+    "postgresql-13-3-full-text-search",
+    "postgresql-13-4-trigram"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-13",
+    "postgresql-13-5-quiz",
+    "postgresql-14-3-vacuum-bloat"
+   ],
+   "ketHopKhoa": [
+    "prisma-orm",
+    "search-elasticsearch"
+   ]
+  },
+  "postgresql-moc-13": {
+   "hoc": "Áp dụng JSONB, chỉ mục GIN và tìm kiếm toàn văn tiếng Việt không dấu vào đề tài dự án cá nhân mà vẫn giữ nguyên phần lõi quan hệ cho các trường lọc hằng ngày.",
+   "canBiet": "Đã hoàn thành Mốc 12 trên kho mã dự án, nắm cách thiết kế JSONB kèm chỉ mục GIN và cách cấu hình tìm kiếm toàn văn với unaccent.",
+   "lamDuoc": "Nộp được commit kèm output chạy thật gồm một cột jsonb phần rìa có giải thích thiết kế, truy vấn @> dùng GIN, tìm kiếm không dấu và tuỳ chọn ts_rank, ts_headline.",
+   "ketHop": "Tham khảo cách tổ chức ở Lab 7 nếu cần đối chiếu, hoàn thành quiz 13.5 để chốt kiến thức chương trước khi sang Mốc 14 về pool kết nối.",
+   "canBietBai": [
+    "postgresql-moc-12",
+    "postgresql-13-2-gin-jsonb",
+    "postgresql-13-3-full-text-search"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-7-jsonb-tim-kiem-ct-shop",
+    "postgresql-13-5-quiz",
+    "postgresql-moc-14"
+   ]
+  },
+  "postgresql-13-5-quiz": {
+   "hoc": "Tám câu hỏi kiểm tra json và jsonb, toán tử -> và ->>, phép chứa @>, chỉ mục GIN cùng độ chọn lọc và bẫy so khoảng, tsvector có trọng số, và trigram cho ILIKE '%...%'.",
+   "canBiet": "Đã học đủ bốn bài 13.1 đến 13.4 về JSONB, chỉ mục GIN, tìm kiếm toàn văn và pg_trgm để trả lời trực tiếp bằng trí nhớ.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững Chương 13 (mục tiêu từ 7/8 câu), đặc biệt là ranh giới của GIN với truy vấn khoảng và vai trò của trigram.",
+   "ketHop": "Xem lại bài tương ứng với câu trả lời sai, rồi củng cố thực chiến bằng Lab 7 và Mốc dự án 13 trước khi bước sang Chương 14.",
+   "canBietBai": [
+    "postgresql-13-2-gin-jsonb",
+    "postgresql-13-3-full-text-search",
+    "postgresql-13-4-trigram"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-7-jsonb-tim-kiem-ct-shop",
+    "postgresql-moc-13"
+   ]
+  },
+  "postgresql-14-1-gia-ket-noi": {
+   "hoc": "Mô hình một tiến trình mỗi kết nối (postmaster fork backend, kiểm chứng bằng ps), chi phí RAM qua smaps_rollup và độ trễ mở kết nối, giới hạn max_connections cùng phép nhân làm cạn kết nối trên production.",
+   "canBiet": "Hiểu mô hình client-server của PostgreSQL và cách máy chủ tiếp nhận, xử lý truy vấn qua các thành phần nội bộ.",
+   "lamDuoc": "Đo được chi phí bộ nhớ và thời gian mở kết nối, giải thích được lỗi đầy max_connections và tính được ngân sách kết nối thay vì tăng giới hạn mù quáng.",
+   "ketHop": "Học nối sang bài pool và PgBouncer để giải bài toán khan hiếm kết nối, làm Mốc dự án 14, và xem cách áp dụng thực tế ở khoá Node.js và API Design.",
+   "canBietBai": [
+    "postgresql-0-4-mo-hinh",
+    "postgresql-1-4-dong-chay-truy-van"
+   ],
+   "ketHopBai": [
+    "postgresql-14-2-pool-pgbouncer",
+    "postgresql-moc-14",
+    "postgresql-14-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "nodejs",
+    "api-design"
+   ]
+  },
+  "postgresql-14-2-pool-pgbouncer": {
+   "hoc": "Cơ chế hàng đợi của connection pool, cách chỉnh connection_limit và pool_timeout trong Prisma (lỗi P2024), tiêu chí chọn cỡ pool, cùng ba chế độ của PgBouncer và các bẫy ở transaction mode.",
+   "canBiet": "Nắm rõ chi phí tiến trình, bộ nhớ của mỗi kết nối và giới hạn max_connections từ bài trước.",
+   "lamDuoc": "Chọn đúng kích thước pool tránh kẹt CPU, xử lý lỗi quá giờ P2024, quyết định khi nào cần thêm PgBouncer và tránh các tính năng hỏng ở chế độ transaction.",
+   "ketHop": "Thực hành cấu hình pool cho ứng dụng ở Mốc dự án 14, làm quiz cuối chương và đối chiếu thêm cách triển khai ở khoá Node.js hay PRJ301.",
+   "canBietBai": [
+    "postgresql-14-1-gia-ket-noi"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-14",
+    "postgresql-14-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "nodejs",
+    "java-web-application-development"
+   ]
+  },
+  "postgresql-14-3-vacuum-bloat": {
+   "hoc": "Nguyên nhân bloat ở bảng và chỉ mục (HOT vs non-HOT, fillfactor), khác biệt giữa VACUUM và VACUUM FULL (khoá ACCESS EXCLUSIVE, pg_repack), ngưỡng autovacuum 50 + 0,2×n, các yếu tố chặn xmin và nguy cơ wraparound.",
+   "canBiet": "Hiểu cơ chế MVCC để lại dead tuple khi UPDATE, trạng thái giao dịch giữ ảnh chụp cũ và khái niệm khoá trong PostgreSQL.",
+   "lamDuoc": "Viết được truy vấn đo bloat và age(datfrozenxid), tinh chỉnh tham số autovacuum cho bảng lớn, tránh khoá hệ thống với VACUUM FULL và nhận diện nguyên nhân chặn vacuum.",
+   "ketHop": "Làm Code Lab chỉnh autovacuum và tìm bloat, học tiếp bài giám sát để theo dõi các chỉ số này, hoàn thành quiz chương và lưu ý thêm phần replication slot ở Chương 15.",
+   "canBietBai": [
+    "postgresql-11-2-mvcc",
+    "postgresql-11-1-giao-dich",
+    "postgresql-11-4-khoa-deadlock"
+   ],
+   "ketHopBai": [
+    "postgresql-14-4-giam-sat",
+    "postgresql-14-5-quiz",
+    "postgresql-15-3-nhan-ban"
+   ]
+  },
+  "postgresql-14-4-giam-sat": {
+   "hoc": "Đọc pg_stat_activity (state, wait_event, pg_blocking_pids), dùng pg_cancel/terminate_backend, soi tổng thời gian ở pg_stat_statements, kiểm tra chỉ mục thừa ở pg_stat_user_indexes và cấu hình log, cảnh báo.",
+   "canBiet": "Nắm các khái niệm về tiến trình kết nối, pool, khoá giao dịch và autovacuum từ ba bài trước để hiểu ý nghĩa từng chỉ số.",
+   "lamDuoc": "Chẩn đoán được phiên đang chạy hay bị chặn khoá, ngắt truy vấn an toàn không dùng kill -9, xác định đúng câu SQL ăn tổng thời gian cao nhất và phát hiện chỉ mục không dùng.",
+   "ketHop": "Thực hành Code Lab tìm truy vấn đắt theo tổng thời gian, làm quiz cuối chương, áp dụng vào bài chẩn đoán sự cố Chương 16 và mở rộng với khoá Observability & Monitoring.",
+   "canBietBai": [
+    "postgresql-14-1-gia-ket-noi",
+    "postgresql-14-2-pool-pgbouncer",
+    "postgresql-14-3-vacuum-bloat"
+   ],
+   "ketHopBai": [
+    "postgresql-14-5-quiz",
+    "postgresql-16-3-checklist",
+    "postgresql-16-4-capstone"
+   ],
+   "ketHopKhoa": [
+    "observability-monitoring"
+   ]
+  },
+  "postgresql-moc-14": {
+   "hoc": "Thực hành nối ứng dụng vào cơ sở dữ liệu theo chuẩn production: khởi tạo pool dùng chung cho tiến trình, tham số hoá truy vấn ($1, $2), tách biến môi trường và phân quyền tối thiểu bằng CREATE ROLE/GRANT.",
+   "canBiet": "Hiểu giới hạn kết nối, cách cấu hình connection pool và đã có cơ sở dữ liệu đề tài cá nhân hoàn thiện tới Mốc dự án 13.",
+   "lamDuoc": "Xây dựng và nộp repo chứa script/API chạy 3 truy vấn có tham số qua pool, đọc cấu hình từ .env ngoài git, kèm role app chạy được tác vụ hợp lệ và bị báo permission denied khi DELETE/DROP.",
+   "ketHop": "Làm tiếp quiz cuối chương để rà lý thuyết vận hành, chuyển sang Mốc dự án 15 về sao lưu và tham khảo thêm khoá Node.js khi viết tầng truy cập dữ liệu.",
+   "canBietBai": [
+    "postgresql-14-1-gia-ket-noi",
+    "postgresql-14-2-pool-pgbouncer",
+    "postgresql-moc-13"
+   ],
+   "ketHopBai": [
+    "postgresql-14-5-quiz",
+    "postgresql-moc-15",
+    "postgresql-lab-9-capstone-node-prisma-ct-shop"
+   ],
+   "ketHopKhoa": [
+    "nodejs"
+   ]
+  },
+  "postgresql-14-5-quiz": {
+   "hoc": "Kiểm tra 8 câu theo đúng mạch chương: chi phí kết nối và max_connections, chọn cỡ pool và PgBouncer transaction mode, ngưỡng autovacuum cùng wraparound, và phân tích pg_stat_statements theo total_exec_time.",
+   "canBiet": "Hoàn thành trọn vẹn bốn bài học từ 14.1 đến 14.4 về kết nối, pool, VACUUM và các khung nhìn giám sát.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững kiến thức vận hành Chương 14 (mục tiêu 7/8 câu) và phát hiện sớm lỗ hổng trước khi sang Chương 15.",
+   "ketHop": "Ôn lại bài tương ứng nếu sai câu nào, hoàn tất Mốc dự án 14 để áp dụng vào code thật rồi chuyển sang Chương 15 về sao lưu và nhân bản.",
+   "canBietBai": [
+    "postgresql-14-1-gia-ket-noi",
+    "postgresql-14-3-vacuum-bloat",
+    "postgresql-14-4-giam-sat"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-14",
+    "postgresql-15-1-pg-dump",
+    "postgresql-16-4-capstone"
+   ]
+  },
+  "postgresql-15-1-pg-dump": {
+   "hoc": "So sánh sao lưu logic với vật lý, ba định dạng của pg_dump và lý do chọn custom, dùng pg_restore khôi phục từng phần, bốn cạm bẫy phổ biến và giới hạn ảnh chụp thời điểm.",
+   "canBiet": "Quen thao tác lệnh psql, cấu trúc schema, bảng, ràng buộc và kiến thức vận hành cơ bản ở chương trước.",
+   "lamDuoc": "Tạo được bản sao lưu bằng pg_dump định dạng custom, khôi phục chọn lọc bằng pg_restore, tránh lỗi giấu mã thoát ở shell và lập lịch diễn tập khôi phục định kỳ.",
+   "ketHop": "Làm nhánh Code Lab so kích thước ba định dạng và khôi phục một bảng, sau đó học tiếp WAL và PITR rồi thực hành ở Lab 8 và Mốc dự án 15.",
+   "canBietBai": [
+    "postgresql-0-3-cai-dat",
+    "postgresql-14-4-giam-sat"
+   ],
+   "ketHopBai": [
+    "postgresql-15-2-wal-pitr",
+    "postgresql-lab-8-sao-luu-nhan-ban-ct-shop",
+    "postgresql-moc-15"
+   ]
+  },
+  "postgresql-15-2-wal-pitr": {
+   "hoc": "Cơ chế ghi nhật ký WAL bảo đảm tính bền vững ACID, đọc LSN và segment 16 MB, cấu hình archive_mode để khôi phục theo thời điểm PITR, cùng bẫy replication slot làm đầy đĩa.",
+   "canBiet": "Hiểu khái niệm ACID, giao dịch và lý do sao lưu logic pg_dump ở bài trước không khôi phục được về đúng một giây.",
+   "lamDuoc": "Cấu hình được lưu trữ WAL và thực hiện khôi phục PITR, đọc độ lệch LSN và chặn sự cố đầy đĩa bằng max_slot_wal_keep_size cùng truy vấn giám sát pg_replication_slots.",
+   "ketHop": "Thực hành Code Lab theo dõi LSN và dựng archive_command, rồi nối sang bài nhân bản streaming dùng chính dòng WAL này và đối chiếu với khoá API Design.",
+   "canBietBai": [
+    "postgresql-1-2-acid",
+    "postgresql-15-1-pg-dump"
+   ],
+   "ketHopBai": [
+    "postgresql-15-3-nhan-ban",
+    "postgresql-lab-8-sao-luu-nhan-ban-ct-shop",
+    "postgresql-15-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "api-design"
+   ]
+  },
+  "postgresql-15-3-nhan-ban": {
+   "hoc": "Kiến trúc streaming replication với walsender và walreceiver, dựng standby bằng pg_basebackup, đọc độ trễ pg_stat_replication, async vs sync, failover pg_promote, split brain và nhân bản logic.",
+   "canBiet": "Nắm rõ WAL, LSN, replication slot từ bài trước và cơ chế VACUUM cùng bloat ở Chương 14 để hiểu đánh đổi của hot_standby_feedback.",
+   "lamDuoc": "Dựng được bản sao streaming bằng pg_basebackup, đo độ trễ nhân bản, thực hiện failover an toàn tránh split brain và định tuyến đọc hợp lý để giữ read-your-writes.",
+   "ketHop": "Chạy Code Lab dựng bản sao ở cổng thứ hai, sau đó làm trọn phần nhân bản, đo lag và failover trong Lab 8 cùng câu hỏi ôn tập ở cuối chương.",
+   "canBietBai": [
+    "postgresql-15-2-wal-pitr",
+    "postgresql-14-3-vacuum-bloat"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-8-sao-luu-nhan-ban-ct-shop",
+    "postgresql-moc-15",
+    "postgresql-15-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "docker"
+   ]
+  },
+  "postgresql-15-4-phan-manh": {
+   "hoc": "Phân mảnh khai báo RANGE, LIST, HASH, cơ chế partition pruning lúc lập kế hoạch và lúc chạy, thao tác DETACH và ATTACH, bẫy khoá chính, sharding với Citus và tiêu chí quyết định phân mảnh.",
+   "canBiet": "Nắm kiến thức chỉ mục ở Chương 9, đọc kế hoạch EXPLAIN ở Chương 10 và hiểu dead tuple từ bài VACUUM ở Chương 14.",
+   "lamDuoc": "Khai báo được bảng phân mảnh theo RANGE, kiểm chứng partition pruning bằng EXPLAIN, bỏ dữ liệu cũ bằng DROP thay cho DELETE và đánh giá đúng khi nào chưa cần phân mảnh.",
+   "ketHop": "Thực hành Code Lab so sánh tốc độ DROP mảnh với DELETE, rồi thử áp dụng phân vùng bảng lớn theo thời gian ở phần nâng cao của Mốc dự án 15.",
+   "canBietBai": [
+    "postgresql-9-1-chi-muc-la-gi",
+    "postgresql-10-1-doc-explain",
+    "postgresql-14-3-vacuum-bloat"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-15",
+    "postgresql-15-5-quiz"
+   ]
+  },
+  "postgresql-lab-8-sao-luu-nhan-ban-ct-shop": {
+   "hoc": "Thực hành quy trình chuẩn bị production cho CT Shop trên hai container: tạo role chỉ đọc ketoan, sao lưu và đối soát md5, cứu dữ liệu xoá nhầm, viết script chuẩn, dựng replica, đo lag và failover.",
+   "canBiet": "Hoàn thành các bài pg_dump, WAL và nhân bản streaming trong Chương 15, cùng kiến thức phân quyền tối thiểu ở Mốc dự án 14.",
+   "lamDuoc": "Tạo ra được bộ tài khoản chỉ đọc đạt ma trận has_table_privilege, bản khôi phục khớp dấu vân tay md5, script sao lưu kiểm lỗi nghiêm ngặt và bản sao streaming đo được độ trễ kèm failover bằng tay.",
+   "ketHop": "Dùng kết quả và quy trình kiểm chứng của lab này để làm Mốc dự án 15, sau đó đưa vào checklist production ở Chương 16 và capstone Node với Prisma.",
+   "canBietBai": [
+    "postgresql-15-1-pg-dump",
+    "postgresql-15-2-wal-pitr",
+    "postgresql-15-3-nhan-ban"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-15",
+    "postgresql-16-3-checklist",
+    "postgresql-lab-9-capstone-node-prisma-ct-shop"
+   ],
+   "ketHopKhoa": [
+    "docker",
+    "prisma-orm"
+   ]
+  },
+  "postgresql-moc-15": {
+   "hoc": "Áp dụng sao lưu định dạng custom và diễn tập khôi phục vào dự án cá nhân, kèm viết tài liệu hướng dẫn vận hành runbook và tuỳ chọn phân vùng hoặc dựng bản sao streaming.",
+   "canBiet": "Nắm vững pg_dump, pg_restore, pg_dumpall --roles-only từ bài 15.1 và đã có cơ sở dữ liệu dự án hoàn thiện qua Mốc 14.",
+   "lamDuoc": "Hoàn thiện được tệp scripts/backup.sh tạo bản dump có ngày, chứng minh khôi phục sang CSDL mới khớp số dòng mọi bảng và viết docs/runbook.md đủ rõ để đồng đội tự chạy.",
+   "ketHop": "Tham khảo kịch bản kiểm chứng ở Lab 8 khi viết script, chốt kiến thức bằng bài Kiểm tra Chương 15 và tiếp tục sang Mốc dự án 16.",
+   "canBietBai": [
+    "postgresql-15-1-pg-dump",
+    "postgresql-15-4-phan-manh",
+    "postgresql-moc-14"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-8-sao-luu-nhan-ban-ct-shop",
+    "postgresql-15-5-quiz",
+    "postgresql-moc-16"
+   ]
+  },
+  "postgresql-15-5-quiz": {
+   "hoc": "Kiểm tra tám câu về định dạng pg_dump, giới hạn sao lưu logic, WAL và PITR, replication slot bị bỏ rơi, bản sao chỉ đọc, độ trễ bất đồng bộ và phân mảnh bảng.",
+   "canBiet": "Đã học đủ bốn bài lý thuyết Chương 15 và thực hành sao lưu, nhân bản qua Lab 8 hoặc Mốc dự án 15.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững các nguyên tắc sống còn về sao lưu, khôi phục, nhân bản và phân mảnh trước khi bước sang Chương 16.",
+   "ketHop": "Ôn lại bài tương ứng nếu hụt mục tiêu 7 trên 8 câu, rồi kết hợp Lab 8, Mốc dự án 15 và chuyển tiếp sang checklist production ở Chương 16.",
+   "canBietBai": [
+    "postgresql-15-2-wal-pitr",
+    "postgresql-15-3-nhan-ban",
+    "postgresql-15-4-phan-manh"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-8-sao-luu-nhan-ban-ct-shop",
+    "postgresql-moc-15",
+    "postgresql-16-3-checklist"
+   ]
+  },
+  "postgresql-16-1-prisma-migration": {
+   "hoc": "Ánh xạ schema.prisma sang SQL thật, phân biệt migrate dev với migrate deploy, bảng _prisma_migrations, shadow database, lỗi P3006 và đổi bảng đang chạy bằng expand/contract, lock_timeout, CONCURRENTLY.",
+   "canBiet": "Đã nắm ALTER TABLE, ràng buộc khoá ngoại, chỉ mục tổ hợp, giao dịch và cơ chế khoá bảng, khoá dòng ở các chương trước.",
+   "lamDuoc": "Đọc và duyệt được file migration.sql sinh từ Prisma, đoán trước loại khoá bị giữ, xử lý migration lỗi và lập kế hoạch đổi bảng không làm dừng dịch vụ.",
+   "ketHop": "Làm Code Lab đọc migration đoán khoá, áp dụng expand/contract ở Lab 9 và Mốc dự án 16, kết hợp khoá Node.js và Prisma ORM.",
+   "canBietBai": [
+    "postgresql-3-4-alter-chuan-hoa",
+    "postgresql-9-2-to-hop-covering",
+    "postgresql-11-4-khoa-deadlock"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-9-capstone-node-prisma-ct-shop",
+    "postgresql-moc-16",
+    "postgresql-16-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "nodejs",
+    "prisma-orm"
+   ]
+  },
+  "postgresql-16-2-luoc-do-that": {
+   "hoc": "Đọc lược đồ production 602 model theo bốn bước từ một tính năng, tìm bảng trọng tâm qua pg_constraint, phát hiện khoá ngoại thiếu chỉ mục bằng seq_scan và đối chiếu schema.prisma với database thật.",
+   "canBiet": "Hiểu cách Prisma ánh xạ sang bảng, quan hệ và chỉ mục PostgreSQL, cùng kiến thức về khoá ngoại và chỉ mục tổ hợp.",
+   "lamDuoc": "Khám phá được lược đồ hàng trăm bảng không do mình viết, nhận diện bảng nóng dễ bị khoá khi migrate và truy vấn catalog tìm chỉ mục còn thiếu.",
+   "ketHop": "Chạy Code Lab truy vấn seq_scan tìm chỉ mục thiếu, nối sang Mốc dự án 16 để soát lược đồ dự án riêng và xem thêm hệ thống thật ở khoá Inside cuongthai.com.",
+   "canBietBai": [
+    "postgresql-16-1-prisma-migration",
+    "postgresql-3-2-khoa-ngoai",
+    "postgresql-9-2-to-hop-covering"
+   ],
+   "ketHopBai": [
+    "postgresql-16-3-checklist",
+    "postgresql-moc-16",
+    "postgresql-16-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "inside-cuongthai",
+    "prisma-orm"
+   ]
+  },
+  "postgresql-16-3-checklist": {
+   "hoc": "Mười mục soát production kèm lệnh kiểm chứng: diễn tập pg_restore, tính tổng pool dưới max_connections, đặt timeout bằng ALTER ROLE, quyền tối thiểu, quan trắc, autovacuum, migration an toàn và lịch chạy định kỳ.",
+   "canBiet": "Cần nền về giám sát, pool kết nối, autovacuum, sao lưu pg_dump và cơ chế khoá khi migration ở các chương 14, 15 và 16.1.",
+   "lamDuoc": "Chạy được script kiểm tra 12 mục trên cơ sở dữ liệu thật, phát hiện cấu hình dễ gây sập dịch vụ và lập lịch rà soát định kỳ cùng diễn tập khôi phục.",
+   "ketHop": "Thực hành Code Lab chạy toàn bộ script checklist, áp vào dự án riêng ở Mốc dự án 16 và kiểm chứng trên CT Shop ở Lab 9.",
+   "canBietBai": [
+    "postgresql-14-4-giam-sat",
+    "postgresql-15-1-pg-dump",
+    "postgresql-16-1-prisma-migration"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-9-capstone-node-prisma-ct-shop",
+    "postgresql-moc-16",
+    "postgresql-16-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "observability-monitoring",
+    "deploy-vps"
+   ]
+  },
+  "postgresql-16-4-capstone": {
+   "hoc": "Quy trình bốn bước điều tra bốn sự cố production: chụp nhanh 60 giây pg_stat_activity và pg_stat_statements, xử lý phiên idle in transaction chặn VACUUM, rò kết nối và lý do chỉ khởi động lại sau cùng.",
+   "canBiet": "Cần tổng hợp kiến thức về EXPLAIN, giao dịch, MVCC, VACUUM, pool kết nối, giám sát và nhân bản từ các chương trước.",
+   "lamDuoc": "Chẩn đoán được sự cố từ thống kê cơ sở dữ liệu trước khi đoán mò, giữ lại bằng chứng trong 60 giây, phân biệt pg_cancel_backend với pg_terminate_backend và chọn đúng hướng sửa.",
+   "ketHop": "Luyện Code Lab tái hiện và tự điều tra bốn sự cố, áp dụng vào Lab 9 trên CT Shop rồi làm bài kiểm tra 16.5; mở rộng thêm với khoá Incident Response.",
+   "canBietBai": [
+    "postgresql-14-3-vacuum-bloat",
+    "postgresql-14-4-giam-sat",
+    "postgresql-16-3-checklist"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-9-capstone-node-prisma-ct-shop",
+    "postgresql-16-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "incident-response",
+    "debug-co-phuong-phap"
+   ]
+  },
+  "postgresql-lab-9-capstone-node-prisma-ct-shop": {
+   "hoc": "Xây API Node + Prisma + Express trên CT Shop 302.000 đơn: tách role owner/app, baseline migration, sửa N+1, expand/contract, giao dịch chống deadlock, chỉ mục CONCURRENTLY, kiểm thử tích hợp và diễn tập khôi phục.",
+   "canBiet": "Cần nắm toàn bộ kỹ năng SQL từ các lab trước cùng Prisma migration, checklist production và quy trình chẩn đoán sự cố trong Chương 16.",
+   "lamDuoc": "Hoàn thiện được API CT Shop đạt 8 test tích hợp xanh, migrate diff rỗng, bán món cuối đúng một đơn, chịu 400/400 lượt thanh toán trên pool 5 và khôi phục khớp dữ liệu.",
+   "ketHop": "Nối sang Mốc dự án 16 và bài kiểm tra 16.5, luyện tiếp đề PE2; sau khoá có thể đóng gói app sang khoá Docker và đưa lên máy chủ với khoá Deploy lên VPS.",
+   "canBietBai": [
+    "postgresql-16-1-prisma-migration",
+    "postgresql-16-3-checklist",
+    "postgresql-16-4-capstone"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-16",
+    "postgresql-16-5-quiz",
+    "postgresql-pe2-chua-tron-de"
+   ],
+   "ketHopKhoa": [
+    "docker",
+    "deploy-vps"
+   ]
+  },
+  "postgresql-moc-16": {
+   "hoc": "Áp dụng soát production vào dự án cá nhân: chạy checklist của chương, truy vấn catalog tìm khoá ngoại thiếu chỉ mục và bảng thiếu khoá chính, nối migration từ repo app và thực hiện thay đổi mở rộng rồi thu gọn.",
+   "canBiet": "Cần hoàn thành các mốc dự án trước cùng kiến thức migration expand/contract, đọc catalog và checklist production ở Chương 16.",
+   "lamDuoc": "Nộp được commit dự án gồm báo cáo checklist kèm quyết định xử lý từng dòng, chuỗi migration dựng trọn lược đồ mới bằng một lệnh và một bước đổi lược đồ không gián đoạn.",
+   "ketHop": "Tham khảo cách tách migration và soát production từ Lab 9, hoàn tất kiểm tra 16.5 rồi chuyển sang Mốc dự án 17 để chốt quyết định kiến trúc.",
+   "canBietBai": [
+    "postgresql-16-1-prisma-migration",
+    "postgresql-16-3-checklist",
+    "postgresql-moc-15"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-9-capstone-node-prisma-ct-shop",
+    "postgresql-16-5-quiz",
+    "postgresql-moc-17"
+   ]
+  },
+  "postgresql-16-5-quiz": {
+   "hoc": "Tám câu hỏi tổng kết kiểm tra ánh xạ Prisma sang SQL, phân biệt migrate dev với migrate deploy, shadow database, cách đọc lược đồ production lớn và chẩn đoán bốn sự cố thực tế tích hợp kiến thức cả 16 chương.",
+   "canBiet": "Cần học xong các bài 16.1 đến 16.4 và nắm vững nền tảng giao dịch, chỉ mục, vận hành từ các chương trước.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững kiến thức production của Chương 16, phát hiện lỗ hổng liên chương và củng cố thói quen đo bằng pg_stat_activity, pg_stat_statements, EXPLAIN ANALYZE trước khi đoán.",
+   "ketHop": "Ôn lại bài tương ứng cho câu làm sai, thực hành trọn vẹn Lab 9 và Mốc dự án 16 rồi thử sức với đề thi trắc nghiệm cuối khoá FE1.",
+   "canBietBai": [
+    "postgresql-16-1-prisma-migration",
+    "postgresql-16-2-luoc-do-that",
+    "postgresql-16-4-capstone"
+   ],
+   "ketHopBai": [
+    "postgresql-lab-9-capstone-node-prisma-ct-shop",
+    "postgresql-moc-16",
+    "postgresql-fe1-chua-tron-de"
+   ]
+  },
+  "postgresql-17-1-bon-he-csdl": {
+   "hoc": "So sánh SQL Server, MySQL, PostgreSQL và MongoDB qua dòng thời gian 38 năm, hai hình dạng dữ liệu bảng và document (BSON/MQL), giấy phép sử dụng, và một đơn CT Shop chạy thật trên cả bốn máy chủ.",
+   "canBiet": "Hiểu mô hình bảng quan hệ, thao tác JOIN và tổng quan khác biệt ban đầu giữa PostgreSQL với MySQL, SQL Server và NoSQL từ phần đầu khoá.",
+   "lamDuoc": "Phân biệt được nguồn gốc, giấy phép và hình dạng lưu trữ của từng hệ, đọc hiểu cùng một đơn hàng dạng bảng lẫn document, tránh bẫy so thương hiệu thay vì so mô hình dữ liệu.",
+   "ketHop": "Học tiếp 17.2 và 17.3 để đối chiếu sâu cú pháp SQL, hành vi và document so với JSONB, rồi ôn nhanh bằng quiz 17.5; xem thêm khoá MongoDB hoặc kiến trúc thực tế cuongthai.com.",
+   "canBietBai": [
+    "postgresql-0-5-tu-sql-server-mysql",
+    "postgresql-1-3-vs-alternatives"
+   ],
+   "ketHopBai": [
+    "postgresql-17-2-cung-truy-van-ba-he",
+    "postgresql-17-3-mongodb-vs-jsonb",
+    "postgresql-17-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "mongodb",
+    "inside-cuongthai"
+   ]
+  },
+  "postgresql-17-2-cung-truy-van-ba-he": {
+   "hoc": "Chạy báo cáo doanh thu CT Shop trên SQL Server, MySQL và PostgreSQL để so cú pháp (TOP/LIMIT, định dạng ngày, đọc JSON), bốn hành vi đổi lặng lẽ (DDL giao dịch, cô lập, lưu JSON, upsert đốt id) và checklist chuyển hệ.",
+   "canBiet": "Đã nắm tổng quan bốn hệ ở 17.1, viết được JOIN, GROUP BY, upsert và hiểu giao dịch, MVCC, mức cô lập cùng kiểu JSONB trong PostgreSQL.",
+   "lamDuoc": "Chuyển đổi đúng cú pháp giữa T-SQL, MySQL và PostgreSQL, phát hiện được các sai khác hành vi không báo lỗi khi chuyển hệ và kiểm chứng báo cáo, migration hỏng lẫn tải đồng thời theo checklist.",
+   "ketHop": "Áp dụng ngay khi chuyển 3 truy vấn sang T-SQL hoặc MySQL ở mốc dự án 17, học tiếp 17.3 để so JSONB với document MongoDB và kiểm tra lại bằng quiz 17.5.",
+   "canBietBai": [
+    "postgresql-17-1-bon-he-csdl",
+    "postgresql-11-3-muc-co-lap",
+    "postgresql-13-1-jsonb"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-17",
+    "postgresql-17-3-mongodb-vs-jsonb",
+    "postgresql-17-5-quiz"
+   ]
+  },
+  "postgresql-17-3-mongodb-vs-jsonb": {
+   "hoc": "Lưu 2.000 đơn CT Shop theo bảng, document MongoDB và cột JSONB; đối chiếu MQL ($match, $unwind, $group) với toán tử JSONB (@>, ->, ->>), chỉ mục multikey và GIN, đo dung lượng và chi phí đổi dữ liệu dùng chung.",
+   "canBiet": "Nắm hình dạng bảng và document từ 17.1, biết cách lưu và truy vấn cột JSONB cùng chỉ mục GIN ở Chương 13; chưa từng dùng MongoDB vẫn theo được từ đầu.",
+   "lamDuoc": "Viết được truy vấn tương đương giữa MQL và SQL/JSONB, đánh giá được đánh đổi giữa đọc nhanh một tài liệu với chi phí cập nhật dữ liệu chép, và chọn đúng lúc nên dùng bảng, JSONB hay document.",
+   "ketHop": "Dùng jsonb_build_object dựng lại một màn hình ở mốc dự án 17, học tiếp 17.4 để ghép vào khung chọn hệ và ôn qua quiz 17.5; mở rộng thêm với khoá MongoDB hoặc môn SDN302.",
+   "canBietBai": [
+    "postgresql-13-1-jsonb",
+    "postgresql-13-2-gin-jsonb",
+    "postgresql-17-1-bon-he-csdl"
+   ],
+   "ketHopBai": [
+    "postgresql-17-4-chon-he-nao",
+    "postgresql-moc-17",
+    "postgresql-17-5-quiz"
+   ],
+   "ketHopKhoa": [
+    "mongodb",
+    "server-side-development-nodejs-express-mongodb"
+   ]
+  },
+  "postgresql-17-4-chon-he-nao": {
+   "hoc": "Trình bày sáu câu hỏi trước khi chọn hệ, bảng và cây quyết định cho các tình huống thực tế (SaaS, .NET, WordPress, log, phân tích) cùng hai ca cuongthai.com (Prisma) và LabFlow AI (Spring Boot).",
+   "canBiet": "Cần các dẫn chứng về mô hình, giấy phép, khác biệt hành vi SQL và đánh đổi giữa bảng, JSONB và document từ ba bài 17.1, 17.2 và 17.3.",
+   "lamDuoc": "Chọn đúng cơ sở dữ liệu theo hình dạng dữ liệu, câu hỏi truy vấn, đội ngũ và chi phí vận hành, đồng thời lập luận thuyết phục trước các tình huống bài tập và cuộc họp kỹ thuật.",
+   "ketHop": "Dùng ngay khung sáu câu hỏi để viết tài liệu ADR ở mốc dự án 17, chốt chương với quiz 17.5 và chuẩn bị bảo vệ dự án cuối khoá; tham khảo thêm khoá Inside cuongthai.com và Spring Boot.",
+   "canBietBai": [
+    "postgresql-17-1-bon-he-csdl",
+    "postgresql-17-2-cung-truy-van-ba-he",
+    "postgresql-17-3-mongodb-vs-jsonb"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-17",
+    "postgresql-17-5-quiz",
+    "postgresql-bao-ve-du-an"
+   ],
+   "ketHopKhoa": [
+    "inside-cuongthai",
+    "spring-boot"
+   ]
+  },
+  "postgresql-moc-17": {
+   "hoc": "Luyện cách bảo vệ lựa chọn cơ sở dữ liệu cho đề tài cá nhân bằng tài liệu ADR, đối chiếu cách trình bày một màn hình theo dạng dòng hay JSONB và chuyển đổi truy vấn sang phương ngữ SQL khác.",
+   "canBiet": "Cần hoàn thành kiến thức so sánh cú pháp SQL (17.2), JSONB với document (17.3), khung chọn hệ (17.4) và đã có lược đồ cùng truy vấn của đề tài đăng ký từ 0.1.",
+   "lamDuoc": "Tạo được docs/adr-001-database.md nêu bối cảnh, phương án và ít nhất 2 hệ quả đánh đổi, dựng 1 màn hình bằng jsonb_build_object so với dạng dòng và chuyển 3 truy vấn sang T-SQL hoặc MySQL kèm điểm khác.",
+   "ketHop": "Nộp link repo kèm commit/tag, làm tiếp quiz 17.5 để rà lại lý thuyết chương và dùng chính ADR này khi bảo vệ dự án cuối khoá; có thể thử thêm phần nâng cao với MongoDB và khoá Software Architecture.",
+   "canBietBai": [
+    "postgresql-17-2-cung-truy-van-ba-he",
+    "postgresql-17-3-mongodb-vs-jsonb",
+    "postgresql-17-4-chon-he-nao"
+   ],
+   "ketHopBai": [
+    "postgresql-17-5-quiz",
+    "postgresql-bao-ve-du-an"
+   ],
+   "ketHopKhoa": [
+    "mongodb",
+    "software-architecture"
+   ]
+  },
+  "postgresql-17-5-quiz": {
+   "hoc": "Mười câu trắc nghiệm kèm giải thích về bốn hệ cơ sở dữ liệu: mô hình bảng và document, giấy phép, DDL trong giao dịch, mức cô lập mặc định, upsert đốt id, JSONB và GIN, MQL đối chiếu SQL và cách chọn hệ.",
+   "canBiet": "Cần học xong toàn bộ bốn bài 17.1 đến 17.4 và nắm các kết quả thực nghiệm trên dữ liệu CT Shop giữa SQL Server, MySQL, PostgreSQL và MongoDB.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững kiến thức Chương 17 và nhận ra lỗ hổng còn sót ở từng phần lý thuyết hay hành vi giữa bốn hệ để ôn lại trước khi thi cuối khoá.",
+   "ketHop": "Hoàn tất mốc dự án 17 nếu chưa nộp, xem kỹ giải thích các câu làm sai rồi chuyển sang chữa đề thực hành PE1 và trắc nghiệm cuối khoá FE1.",
+   "canBietBai": [
+    "postgresql-17-2-cung-truy-van-ba-he",
+    "postgresql-17-3-mongodb-vs-jsonb",
+    "postgresql-17-4-chon-he-nao"
+   ],
+   "ketHopBai": [
+    "postgresql-moc-17",
+    "postgresql-fe1-chua-tron-de",
+    "postgresql-pe1-chua-tron-de"
+   ]
+  },
+  "postgresql-pe1-chua-tron-de": {
+   "hoc": "Phân tích và giải chi tiết 5 câu SQL (90 phút) trên 5 bảng nhỏ: OUTER JOIN + FILTER, CTE chống fan-out, xếp hạng có phá hoà, CTE đệ quy chặn vòng và rút giá trị đúng kiểu từ jsonb kèm bẫy sai và rubric.",
+   "canBiet": "Cần tự làm trước đề PE1 bấm giờ trong Phòng thi và nắm chắc LEFT JOIN, tổng hợp chống fan-out, xếp hạng hàm cửa sổ, CTE đệ quy và kiểu jsonb.",
+   "lamDuoc": "Viết được 5 truy vấn SQL khớp output mẫu đúng grain, né các bẫy như count(*) trên LEFT JOIN hay sắp chuỗi jsonb, và tự chấm bài theo rubric 10 điểm.",
+   "ketHop": "Đối chiếu lại bài 6.3, 8.2 hoặc 13.1 ở các câu mất điểm, sau đó làm tiếp đề PE2 để rèn truy vấn và tối ưu trên lược đồ CT Shop lớn hơn.",
+   "canBietBai": [
+    "postgresql-6-4-tong-hop-tren-join",
+    "postgresql-7-4-recursive-cte",
+    "postgresql-13-1-jsonb"
+   ],
+   "ketHopBai": [
+    "postgresql-pe2-chua-tron-de",
+    "postgresql-6-3-having-filter",
+    "postgresql-8-2-ranking"
+   ]
+  },
+  "postgresql-pe2-chua-tron-de": {
+   "hoc": "Giải chi tiết 10 câu SQL (120 phút) trên CT Shop: phân trang ổn định, múi giờ, fan-out, NOT EXISTS, jsonb, rank/lag, đệ quy, DDL + UPSERT + SAVEPOINT, trigger BEFORE và chứng minh chỉ mục bằng EXPLAIN.",
+   "canBiet": "Cần làm bấm giờ đề PE2 trong Phòng thi trước và nắm vững các bài lab CT Shop, đặc biệt là chỉ mục tổ hợp, EXPLAIN, giao dịch và trigger.",
+   "lamDuoc": "Hoàn thiện được 10 tệp Qn.sql khớp từng dòng output (kể cả lỗi chủ đích), chạy an toàn trong ROLLBACK và giải thích đúng quy tắc cột dẫn đầu.",
+   "ketHop": "Ôn lại bài 9.2 và 10.1 cho câu chứng minh chỉ mục, rồi làm tiếp đề FE2 để kiểm tra lý thuyết và tình huống thực tế trên cùng dữ liệu CT Shop.",
+   "canBietBai": [
+    "postgresql-pe1-chua-tron-de",
+    "postgresql-lab-5-chi-muc-explain-ct-shop",
+    "postgresql-lab-6-dat-hang-an-toan-ct-shop"
+   ],
+   "ketHopBai": [
+    "postgresql-fe2-chua-tron-de",
+    "postgresql-9-2-to-hop-covering",
+    "postgresql-10-1-doc-explain"
+   ]
+  },
+  "postgresql-fe1-chua-tron-de": {
+   "hoc": "Giải thích từng câu trong 50 câu trắc nghiệm (60 phút) phủ Mục 0 đến Chương 16: dịch Việt, từ vựng tiếng Anh, lý do đúng/sai của mọi đáp án và chạy kiểm chứng SQL, lỗi, plan trên PostgreSQL 17.11.",
+   "canBiet": "Cần tự bấm giờ làm đề FE1 trong Phòng thi trước và đã học qua toàn bộ Mục 0 cùng Chương 1 đến Chương 16 của khoá.",
+   "lamDuoc": "Tự đánh giá được mức nắm vững kiến thức từ SQL nền tảng đến vận hành, nhận diện đúng bẫy trắc nghiệm và khoanh vùng chính xác chương cần ôn lại.",
+   "ketHop": "Dùng bảng mục lục từng câu để quay lại đúng bài bị sai (như 14.3 về VACUUM hay 16.1 về Prisma), sau đó làm tiếp đề FE2 với 50 câu mới.",
+   "canBietBai": [
+    "postgresql-16-4-capstone",
+    "postgresql-pe1-chua-tron-de",
+    "postgresql-pe2-chua-tron-de"
+   ],
+   "ketHopBai": [
+    "postgresql-fe2-chua-tron-de",
+    "postgresql-14-3-vacuum-bloat",
+    "postgresql-16-1-prisma-migration"
+   ]
+  },
+  "postgresql-fe2-chua-tron-de": {
+   "hoc": "Phân tích 50 câu trắc nghiệm mới (60 phút) phủ Mục 0 đến Chương 17: giải thích song ngữ từng đáp án, đo thật trên CT Shop và chạy nhiều phiên psql song song cho các ca khoá và đồng thời.",
+   "canBiet": "Cần hoàn thành bài làm bấm giờ FE2 trong Phòng thi trước, đã học hết Chương 17 so sánh bốn hệ CSDL và đã rút kinh nghiệm từ đề FE1.",
+   "lamDuoc": "Tự đánh giá được năng lực tổng hợp cả 17 chương, phân biệt rành mạch hành vi đồng thời nhiều phiên, tinh chỉnh plan và khác biệt giữa các hệ CSDL.",
+   "ketHop": "Ôn lại các bài 17.2, 17.3 nếu hổng phần so sánh bốn hệ CSDL, rồi chuyển sang hoàn thiện và bảo vệ dự án cuối khoá.",
+   "canBietBai": [
+    "postgresql-fe1-chua-tron-de",
+    "postgresql-17-4-chon-he-nao",
+    "postgresql-17-5-quiz"
+   ],
+   "ketHopBai": [
+    "postgresql-bao-ve-du-an",
+    "postgresql-17-2-cung-truy-van-ba-he",
+    "postgresql-17-3-mongodb-vs-jsonb"
+   ]
+  },
+  "postgresql-bao-ve-du-an": {
+   "hoc": "Hướng dẫn rà soát checklist 17 mốc, bộ tài liệu docs/ và README, rubric chấm 10 điểm, các câu hỏi hội đồng hay gặp, bẫy lược đồ không dựng lại được và quy trình thi trong phòng bảo vệ AI.",
+   "canBiet": "Cần hoàn thiện các mốc dự án từ mốc 1 đến mốc 17, đặc biệt checklist production, bản ghi quyết định kiến trúc và kỹ năng thao tác trực tiếp bằng psql.",
+   "lamDuoc": "Nộp được repo gắn tag cuối dựng lại CSDL từ số 0 bằng migration và seed, mở sẵn hai phiên psql chứng minh đồng thời, giải thích mọi đánh đổi thiết kế và vượt qua phòng bảo vệ AI.",
+   "ketHop": "Đối chiếu lại bài 16.3 trước khi đóng tag, xem lại bài 17.4 để trả lời câu hỏi chọn PostgreSQL thay vì MongoDB, rồi sửa repo theo nhận xét của phòng bảo vệ AI.",
+   "canBietBai": [
+    "postgresql-moc-16",
+    "postgresql-moc-17",
+    "postgresql-pe2-chua-tron-de"
+   ],
+   "ketHopBai": [
+    "postgresql-16-3-checklist",
+    "postgresql-17-4-chon-he-nao",
+    "postgresql-fe2-chua-tron-de"
+   ]
+  }
+ },
+ "khoaTen": {
+  "docker": "Docker",
+  "introduction-to-databases": "DBI202 · Database Systems",
+  "web-foundations": "Nền tảng Lập trình Web",
+  "mongodb": "MongoDB",
+  "nodejs": "Node.js",
+  "git": "Git & GitHub",
+  "typescript": "TypeScript",
+  "prisma-orm": "Prisma ORM",
+  "java-web-application-development": "PRJ301 · Java Web Application Development",
+  "search-elasticsearch": "Search: Elasticsearch, OpenSearch & PostgreSQL Full-Text",
+  "api-design": "API & System Design",
+  "observability-monitoring": "Observability & Monitoring (Node.js trên VPS)",
+  "inside-cuongthai": "Inside cuongthai.com — a real production system",
+  "deploy-vps": "Deploy lên VPS",
+  "incident-response": "Incident Response & SRE On-call",
+  "debug-co-phuong-phap": "Debugging Methodically",
+  "server-side-development-nodejs-express-mongodb": "SDN302 · Server-Side Development with Node.js, Express & MongoDB",
+  "spring-boot": "Spring Boot",
+  "software-architecture": "Software Architecture"
+ }
+}

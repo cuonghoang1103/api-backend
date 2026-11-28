@@ -67,6 +67,14 @@ else {
     }
   }
 }
+// 28/11/2026: ảnh `ai-*` do Antigravity (gói Google Ultra) vẽ — khai prompt trong scripts/hinh/ai/*.json, đẩy bằng ve-ai.mts.
+const AI: Record<string, string> = {};
+for (const f of (await readdir(path.join(import.meta.dirname, 'ai')).catch(() => [])).filter((x) => x.endsWith('.json'))) {
+  Object.assign(AI, JSON.parse(await readFile(path.join(import.meta.dirname, 'ai', f), 'utf8')));
+}
+const laAi = [...slugs].filter((s) => s.startsWith('ai-') && !AI[s]);
+if (laAi.length) { console.error('✗ Ảnh ai-* chưa khai prompt trong scripts/hinh/ai/*.json:', laAi.join(', ')); process.exit(1); }
+for (const s of [...slugs]) if (s.startsWith('ai-')) slugs.delete(s); // ve-ai.mts lo phần này
 const la = [...slugs].filter((s) => !CAT.hinh[s]);
 console.log(`${slugs.size} hình được dùng · ${la.length} tên lạ`);
 if (la.length) { console.error('✗ Tên hình không có trong danh mục:', la.join(', ')); process.exit(1); }

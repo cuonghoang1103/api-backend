@@ -150,7 +150,7 @@ export default {
     'git-kd-8-lay-code-cua-ban': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-08-lay-code-cua-ban-7938eff7.mp4' }, defaultVideoTrack: 'VI'},
     'git-kd-9-loi-thuong-gap': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-09-loi-thuong-gap-429fc856.mp4' }, defaultVideoTrack: 'VI'},
     'git-kd-10-noi-ct-work': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-10-noi-ct-work-2f5aa55d.mp4' }, defaultVideoTrack: 'VI'},
-    'git-kd-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-00-slide-khoi-dong-nhanh-751b1960.mp4' }, defaultVideoTrack: 'VI'},
+    'git-kd-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-00-slide-khoi-dong-nhanh-287a358c.mp4' }, defaultVideoTrack: 'VI'},
     'git-18-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-00-slide-chuong-18-6dd48f83.mp4' }, defaultVideoTrack: 'VI'},
     'git-18-1-lo-commit-build': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-01-lo-commit-build-tron-28930533.mp4' }, defaultVideoTrack: 'VI'},
     'git-18-2-xung-dot-web-xml': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-02-xung-dot-web-xml-a359f042.mp4' }, defaultVideoTrack: 'VI'},

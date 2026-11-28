@@ -37,8 +37,8 @@ export default {
     'ga-1-0-slides': { yt: 'PG19_K1300A', credit: "DevTips Daily — Triggers & Events in GitHub Actions (push, pull_request, cron & more)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-01-slide-chuong-1-169ba826.mp4' }, defaultVideoTrack: 'VI'},
     'ga-1-1-la-yaml': { yt: '1uFVr15xDGg', credit: "TechWorld with Nana — Yaml Tutorial | Learn YAML in 18 mins", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-02-la-yaml-b7c0615f.mp4' }, defaultVideoTrack: 'VI'},
     'ga-1-2-kich-hoat': { yt: '3tC42nIui6A', credit: "Testing Mini Bytes — Part 3 - Workflow Triggers | Different Types of Triggers in Github Actions | Scheduling Workflow |" },
-    'ga-1-3-lich-cron': { yt: 'kh7piyS2XeE', credit: "Talking tech with Techielass — Schedule GitHub Actions Using Cron Expressions" },
-    'ga-1-4-merge-commit': { yt: 'z68feG_L4yE', credit: "OpenSSF — Securing Your GitHub Actions - Jaroslav Lobacevski, GitHub" },
+    'ga-1-3-lich-cron': { yt: 'kh7piyS2XeE', credit: "Talking tech with Techielass — Schedule GitHub Actions Using Cron Expressions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-04-lich-cron-72a62fba.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-1-4-merge-commit': { yt: 'z68feG_L4yE', credit: "OpenSSF — Securing Your GitHub Actions - Jaroslav Lobacevski, GitHub", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-05-merge-commit-b73ebb12.mp4' }, defaultVideoTrack: 'VI'},
     'ga-1-5-bo-loc': { yt: 'KF5GtYZUtys', credit: "Coding with Mat — Controlling When Pipeline Workflows Run with Triggers - Github Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-06-bo-loc-0267111f.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 2 — Job, runner, và những cỗ máy ngồi chờ ── */

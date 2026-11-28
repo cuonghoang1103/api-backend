@@ -45,7 +45,7 @@ export default {
 
     /* ── Chương 3 — Chuỗi, bộ đếm, bitmap, HyperLogLog ── */
     'rd-3-1-chuoi': { yt: 'Z1ep4LaDbDc', credit: 'Hustle With Aditya — Redis Tutorial for Beginners - 5 | Redis Data Types', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/03-chuoi-bo-dem-bitmap-hll/03-01-chuoi-58b39d23.mp4' }, defaultVideoTrack: 'VI'},            // Redis Tutorial for Beginners - 5 | Redis Data Types
-    'rd-3-2-bo-dem': { yt: 'oMPrWwH3oFg', credit: 'Very Academy — Redis | Using Strings as Counters: INCR, DECR' },           // Redis | Using Strings as Counters: INCR, DECR
+    'rd-3-2-bo-dem': { yt: 'oMPrWwH3oFg', credit: 'Very Academy — Redis | Using Strings as Counters: INCR, DECR', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/03-chuoi-bo-dem-bitmap-hll/03-02-bo-dem-f475d1bf.mp4' }, defaultVideoTrack: 'VI'},           // Redis | Using Strings as Counters: INCR, DECR
     'rd-3-3-bitmap': { yt: 'H604RKPS9SM', credit: 'Eric Tech — Learn Redis Data Structures w/ Redis Cloud | STRING, LIST, HASHES, SETS, SORTED SETS and MORE' },           // Learn Redis Data Structures w/ Redis Cloud | STRING, LIST, HASHES, SETS, SORTED SETS and MORE
     'rd-3-4-hyperloglog': { yt: 'MunL8nnwscQ', credit: 'Redis — Redis HyperLogLog Explained' },      // Redis HyperLogLog Explained
     'rd-3-5-gioi-han-tan-suat': { yt: 'YV4ePyW3DO8', credit: 'Redis — Rate limiting with Redis: An essential guide', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/03-chuoi-bo-dem-bitmap-hll/03-05-gioi-han-tan-suat-db93a54d.mp4' }, defaultVideoTrack: 'VI'},// Rate limiting with Redis: An essential guide

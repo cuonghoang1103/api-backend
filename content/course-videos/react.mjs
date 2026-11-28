@@ -30,13 +30,13 @@ export default {
     'rx-1-1-component': { yt: 'XUwzASyHr4Q', credit: "Web Dev Simplified — This One Line Of Code Catches React Bugs For You", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-02-component-la-ham-afc26ff5.mp4' }, defaultVideoTrack: 'VI'},
     'rx-1-2-props': { yt: 'KpA6oEaCHtk', credit: "Codevolution — React TypeScript Tutorial - 3 - Typing Props", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-03-props-va-kieu-4d3afae8.mp4' }, defaultVideoTrack: 'VI'},
     'rx-1-3-danh-sach': { yt: 'fGxKOmCuH5w', credit: "Cosden Solutions — React Keys and Lists - Complete Tutorial!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-04-danh-sach-va-key-1eadd8f7.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-1-4-chia-nho': { yt: 'YJPSR9dEQV8', credit: "codeSTACKr — 5 Steps to THINK in React and Easily Create a ReactJS App From Scratch! (Bonus: Tailwind CSS)" },
+    'rx-1-4-chia-nho': { yt: 'YJPSR9dEQV8', credit: "codeSTACKr — 5 Steps to THINK in React and Easily Create a ReactJS App From Scratch! (Bonus: Tailwind CSS)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-05-tu-duy-component-565a8d51.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 2 — State và sự kiện ── */
     'rx-2-0-slides': { yt: 'O6P86uwfdR0', credit: "Web Dev Simplified — Learn useState In 15 Minutes - React Hooks Explained", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-01-slide-chuong-2-d490202b.mp4' }, defaultVideoTrack: 'VI'},
     'rx-2-1-use-state': { yt: 'hjNExKVUHSw', credit: "Codevolution — React 19 Tutorial - 21 - State as a Snapshot", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-02-use-state-a8c21b6f.mp4' }, defaultVideoTrack: 'VI'},
     'rx-2-2-su-kien': { yt: 'peewECGtPCI', credit: "Codevolution — React 19 Tutorial - 15 - Event Handling", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-03-su-kien-b4102126.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-2-3-object-array': { yt: 'MCIfZlQlmSc', credit: "Codevolution — React 19 Tutorial - 24 - useState with Objects" },
+    'rx-2-3-object-array': { yt: 'MCIfZlQlmSc', credit: "Codevolution — React 19 Tutorial - 24 - useState with Objects", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-04-object-array-8b10d0c1.mp4' }, defaultVideoTrack: 'VI'},
     'rx-2-4-dat-state': { yt: 'YpjvL5SvVhM', credit: "Codevolution — React 19 Tutorial - 26 - Sharing State Between Components", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-05-dat-state-f1e23e22.mp4' }, defaultVideoTrack: 'VI'},
     'rx-2-5-man-hinh-bac-si': { yt: 'ZoayCCDHFiI', credit: "Dave Gray — Search Filter in React JS with Search Bar in React Example", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-06-man-hinh-bac-si-446cd3a5.mp4' }, defaultVideoTrack: 'VI'},
 

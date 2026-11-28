@@ -68,5 +68,6 @@ export default {
     'tst-10-5-lab-tdd-code-cu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-05-lab-10-tdd-code-cu-49df5b91.mp4' }, defaultVideoTrack: 'VI'},
     'tst-11-1-ke-hoach': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-01-ke-hoach-b9905f95.mp4' }, defaultVideoTrack: 'VI'},
     'tst-7-2-luong': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-02-luong-nguoi-dung-1ea6de82.mp4' }, defaultVideoTrack: 'VI'},
+    'tst-10b-1-collection-bien': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/testing/10b-postman-newman/10b-01-collection-bien-12cedf65.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

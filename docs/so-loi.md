@@ -5,6 +5,20 @@
 > Ngắn gọn, mỗi mục 5 dòng. Mới nhất ở TRÊN. Bài học lớn về quy trình deploy vẫn nằm ở bảng
 > "Known Error Patterns" trong `CLAUDE.md` — sổ này gom MỌI lỗi, kể cả lỗi nhỏ.
 
+### 28/11/2026 — Video (hậu kỳ) — 18 tập "render ok" nhưng video thất lạc + 22 tập lỗi giọng + 12 tập lỗi render vì máy thuê vast đã trả
+- **Triệu chứng:** khoá Redis/Docker/GitHub Actions/React… kẹt 90–99% nhiều ngày: bài web thiếu video dù `hang-render-swt-xong.txt` ghi `ok` (13–14/11); Mac chỉ có `thong-tin.json` (`r2Url: null`), không có `video.mp4`; máy nhà không còn thư mục tập.
+- **Nguyên nhân:** tập render trên máy thuê (làn `linux-t*`/`u*`, đường dẫn `/root/Videos/…`) — máy trả trước khi kéo video về/đẩy R2, mà dòng `ok` vẫn nằm lại nên không ai render lại. Cùng gốc: 22 tập giọng LOI (`ssh vast7` chết giữa chừng 18–19/11) và 12 tập render LOI (lượt cuối chạy trên máy thuê) không ai làm lại.
+- **Cách sửa:** đối chiếu "bài web thiếu video" ∩ "thong-tin không video, không r2Url" ⇒ 18 tập ⇒ `dp-lam-lai.sh <id> render`; 22 tập `dp-lam-lai.sh <id> giong`; 12 tập render lại (tập Docker 10-0 còn thiếu slide).
+- **Ảnh hưởng:** ~50 bài thiếu video suốt 1–2 tuần ở ~12 khoá gần xong; chặn đánh dấu DONE.
+- **Bài học:** trả máy thuê ⇒ đối chiếu MỌI tập `ok` của làn máy đó có video/r2Url chưa, gỡ dòng `ok` của tập chưa về; lượt kiểm định kỳ phải liệt kê cả LOI cũ (C/E) chứ không chỉ lỗi mới trong 4 giờ.
+
+### 28/11/2026 — Video (gắn web) — `xuat/gan-web.mts` bỏ CÂM chương có chữ cái (`10b-postman-newman`)
+- **Triệu chứng:** bài Postman `tst-10b-1-collection-bien` (khoá testing) đã lên R2 nhưng web không có video; gan-web báo ✓ "thêm 0 bài mới".
+- **Nguyên nhân:** `~/Documents/video-bai-giang/xuat/gan-web.mts:18–19` lọc chương `/^\d\d-/` và tập `/^(\d\d|l\d{3}|G\d+)-/` ⇒ `10b-…` không khớp, bị bỏ qua không cảnh báo.
+- **Cách sửa:** nhận `\d\d[a-z]?-` cho cả chương lẫn tập; chạy lại gan-web testing ⇒ +1 bài.
+- **Ảnh hưởng:** chương 10b của testing (và mọi chương chèn kiểu `NNx-`) không bao giờ lên web.
+- **Bài học:** bộ lọc tên thư mục phải báo những thư mục BỊ BỎ (đếm/in), không lọc im lặng — cùng họ lỗi 26/10 và 11/11 ở chính dòng này.
+
 ### 28/11/2026 — Deploy (bước 8) — prod đã tráo ảnh mới nhưng KHÔNG push main vì `npm test` đỏ ở `crm.db.test.ts`
 - **Triệu chứng:** deploy f0c19812a smoke-test sạch, rồi bước 8 báo `✗ npm test — HỎNG`: `phiếu đã thành dự án được giữ — 0 !== 1` (`src/routes/crm.db.test.ts:339`) ⇒ script bỏ push, origin/main tụt 5 commit.
 - **Nguyên nhân:** `npm test` (khác `test:work-db`) chạy các `*.db.test.ts` trên CSDL dev LOCAL của `.env` (localhost:5434), mà CSDL đó chưa áp migration mới `20261127150000_ctw_vai_dong` ⇒ `work_history.acting_role does not exist` (P2022) khi tạo dự án CT Work từ deal ⇒ phiếu không thành dự án. Mã không sai; CSDL tạm của `test:work-db` dựng từ migration nên xanh.

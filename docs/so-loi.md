@@ -5,6 +5,13 @@
 > Ngắn gọn, mỗi mục 5 dòng. Mới nhất ở TRÊN. Bài học lớn về quy trình deploy vẫn nằm ở bảng
 > "Known Error Patterns" trong `CLAUDE.md` — sổ này gom MỌI lỗi, kể cả lỗi nhỏ.
 
+### 28/11/2026 — Deploy — build frontend ở máy nhà vỡ: `cau-nen-kiem.mts` đọc `scripts/hinh/fluent-catalog.json` ngoài `frontend/`
+- **Triệu chứng:** deploy 3b578501e dừng ở bước build máy nhà: `Error: ENOENT … open '/scripts/hinh/fluent-catalog.json'` (`frontend/scripts/cau-nen-kiem.mts:25`) trong `RUN npm run build` của `frontend/Dockerfile`; prod không bị đụng (dừng trước khi đẩy ảnh).
+- **Nguyên nhân:** bộ kiểm "1000 câu nền" gắn vào `prebuild` đọc danh mục ảnh ở GỐC repo (`../../scripts/hinh/`), nhưng ảnh Docker frontend chỉ có thư mục `frontend/` ⇒ trên Mac chạy xanh, trong Docker thì không có tệp.
+- **Cách sửa:** không có danh mục thì bỏ qua kiểm tên ảnh (máy dev/CI vẫn kiểm đủ); thử cả bố cục giả Docker (chép `frontend/` ra thư mục tạm) — xanh.
+- **Ảnh hưởng:** chậm deploy ~20 phút, không ảnh hưởng người dùng.
+- **Bài học:** script trong `prebuild` của frontend chỉ được đọc tệp TRONG `frontend/`; `npm run build` trên Mac xanh không chứng minh build Docker xanh — thử bố cục chỉ-có-frontend trước khi gắn vào prebuild.
+
 ### 28/11/2026 — Video (giọng) — từ khoá viết HOA bị đọc lắp: "RETURNS TABLE" ⇒ "ri ti ti bờ le"
 - **Triệu chứng:** user nghe video PostgreSQL `pg-12-1-2`: "RETURNS TABLE" đọc thành "ri ti ti bờ le"; Whisper nghe lại "orderize TBA", "RAISE EXCEPTION" ⇒ "Royce accept tone", "SECURITY DEFINER" ⇒ "Secretive Dinner".
 - **Nguyên nhân:** `~/Documents/video-bai-giang/giong/phienAmBai.ts › vietTat3` để NGUYÊN từ HOA có nguyên âm (≥ 4 chữ, hoặc 3 chữ ngoài danh sách đánh vần) ⇒ giọng cuong8 đọc chữ HOA như viết tắt, ra âm lạ.

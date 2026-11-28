@@ -22,10 +22,15 @@ if (la.length) { console.error(`Cờ lạ: ${la.join(' ')} — dùng --nghiem / 
 const { MUC_LUC } = await import(pathToFileURL(join(DIR, 'muc-luc.ts')).href) as { MUC_LUC: { n: number; ten: string; soCau: number; anh: string }[] };
 const { chuanHoa, khop, dapAn, soTu8 } = await import(pathToFileURL(join(DIR, 'chamCau.ts')).href) as typeof import('../src/app/language/[code]/cau-nen/chamCau.ts');
 
-const CAT = JSON.parse(readFileSync(join(GOC, '..', '..', 'scripts/hinh/fluent-catalog.json'), 'utf8')).hinh as Record<string, string>;
+// Trong ảnh Docker (chỉ có frontend/) không có scripts/ ở gốc repo ⇒ BỎ QUA kiểm tên ảnh (máy dev/CI vẫn kiểm đủ).
+// 28/11: thiếu cái này làm vỡ build frontend ở máy nhà (ENOENT fluent-catalog.json).
+const CAT_FILE = join(GOC, '..', '..', 'scripts/hinh/fluent-catalog.json');
+const CO_DANH_MUC = existsSync(CAT_FILE);
+const CAT = (CO_DANH_MUC ? JSON.parse(readFileSync(CAT_FILE, 'utf8')).hinh : {}) as Record<string, string>;
 const AI: Record<string, string> = {};
 const AI_DIR = join(GOC, '..', '..', 'scripts/hinh/ai');
-for (const f of readdirSync(AI_DIR).filter((x) => x.endsWith('.json'))) Object.assign(AI, JSON.parse(readFileSync(join(AI_DIR, f), 'utf8')));
+if (CO_DANH_MUC) for (const f of readdirSync(AI_DIR).filter((x) => x.endsWith('.json'))) Object.assign(AI, JSON.parse(readFileSync(join(AI_DIR, f), 'utf8')));
+else console.warn('⚠ không thấy scripts/hinh/ ở gốc repo (build Docker) — bỏ qua kiểm tên ảnh');
 
 const EN_OK = /^[A-Za-z0-9 ,.'?!:;$%&()\-/]+$/;
 const KHOI_NP = new Set(['h', 'p', 'patterns', 'table', 'note', 'examples', 'recap', 'rule', 'sodo', 'hinh', 'canh']);
@@ -40,7 +45,7 @@ const kiemEn = (n: number, ten: string, en: string, cau = true) => {
   else if (cau && !/[.?!]$/.test(en)) bao(n, `${ten}: thiếu dấu câu cuối "${en}"`);
 };
 const kiemAnh = (n: number, anh: string | undefined, ten: string) => {
-  if (!anh) return;
+  if (!anh || !CO_DANH_MUC) return;
   if (anh.startsWith('ai-')) { if (!AI[anh]) bao(n, `${ten}: ảnh ${anh} chưa khai prompt trong scripts/hinh/ai/*.json`); }
   else if (!CAT[anh]) bao(n, `${ten}: ảnh "${anh}" không có trong fluent-catalog.json`);
 };

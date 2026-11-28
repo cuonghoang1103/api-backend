@@ -1,0 +1,121 @@
+{
+  "groupSlug": "fptu",
+  "slug": "mae101-practice",
+  "name": "MAE101 — Luyện tập",
+  "language": "javascript",
+  "color": "#0ea5e9",
+  "docsUrl": "https://openstax.org/details/books/calculus-volume-1",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện môn MAE101 (Toán cho kỹ thuật) bám bài học của môn và dạng đề FE của trường — mỗi bài học một bộ đề từ dễ đến khó: giới hạn và liên tục, đạo hàm và các quy tắc, khảo sát hàm và tối ưu, tích phân và kỹ thuật tích phân, khử Gauss và hạng, phép toán ma trận, định thức và nghịch đảo, giá trị riêng, vector, biến đổi tuyến tính, cơ sở và số chiều. Con số trong bảng do mã tính, không gõ tay; ba Lab viết hàm chạy thật trong trình duyệt (đạo hàm/tích phân đa thức và phương pháp Newton · định thức và giải Ax = b bằng khử Gauss · hạng và độc lập tuyến tính).",
+  "modules": [
+    {
+      "slug": "mae101-1-1-gioi-han",
+      "name": "1.1 What a limit is",
+      "level": "BEGINNER",
+      "description": "Luyện: Limits 1 — What a limit means · Limits 2 — Read one-sided limits from a piecewise function"
+    },
+    {
+      "slug": "mae101-1-2-tinh-gioi-han",
+      "name": "1.2 Computing limits",
+      "level": "BEGINNER",
+      "description": "Luyện: Computing limits 1 — Which move comes next? · Computing limits 2 — Seven limits from the lesson toolkit · Computing limits 3 — Order the steps for a 0/0 limit"
+    },
+    {
+      "slug": "mae101-2-1-dao-ham",
+      "name": "2.1 The derivative as a rate of change",
+      "level": "BEGINNER",
+      "description": "Luyện: Derivatives 1 — The definition and what it means · Derivatives 2 — Slope and point of the tangent"
+    },
+    {
+      "slug": "mae101-2-2-quy-tac-dao-ham",
+      "name": "2.2 Differentiation rules",
+      "level": "BEGINNER",
+      "description": "Luyện: Rules 1 — Product, quotient and chain rule · Rules 2 — Evaluate f′ at a point"
+    },
+    {
+      "slug": "mae101-3-1-phan-tich-ham",
+      "name": "3.1 Analysing a function",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Function analysis 1 — The two tests · Function analysis 2 — Classify the critical points"
+    },
+    {
+      "slug": "mae101-3-2-toi-uu",
+      "name": "3.2 Optimization & limits at infinity",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Optimization 1 — The method · Optimization 2 — Solve four small problems · Optimization 3 — Order the method"
+    },
+    {
+      "slug": "mae101-4-1-tich-phan",
+      "name": "4.1 The definite integral & the FTC",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Integrals 1 — Area, antiderivatives and the FTC · Integrals 2 — Evaluate six definite integrals"
+    },
+    {
+      "slug": "mae101-4-2-ky-thuat-tich-phan",
+      "name": "4.2 Integration techniques",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Techniques 1 — Substitution or by parts? · Techniques 2 — Five definite integrals"
+    },
+    {
+      "slug": "mae101-4-lab-giai-tich-so",
+      "name": "Lab 4 Calculus in code: derivative, integral, Newton",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Calculus lab 1 — Differentiate a polynomial · Calculus lab 2 — Definite integral of a polynomial (exact) · Calculus lab 3 — Newton's method for a root"
+    },
+    {
+      "slug": "mae101-5-1-khu-gauss",
+      "name": "5.1 Gaussian elimination",
+      "level": "BEGINNER",
+      "description": "Luyện: Linear systems 1 — Row operations and solution count · Linear systems 2 — Solve and classify · Linear systems 3 — Order the elimination"
+    },
+    {
+      "slug": "mae101-6-1-phep-ma-tran",
+      "name": "6.1 Matrix operations",
+      "level": "BEGINNER",
+      "description": "Luyện: Matrices 1 — Sizes and the rules of the product · Matrices 2 — Compute AB, BA and Aᵀ"
+    },
+    {
+      "slug": "mae101-7-1-dinh-thuc-nghich-dao",
+      "name": "7.1 Determinants & inverses",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Determinants 1 — Properties · Determinants 2 — Compute det and a 2 × 2 inverse"
+    },
+    {
+      "slug": "mae101-7-2-cheo-hoa",
+      "name": "7.2 Eigenvalues & diagonalization",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Eigen 1 — Definitions and fast checks · Eigen 2 — Eigenvalues of 2 × 2 matrices"
+    },
+    {
+      "slug": "mae101-7-lab-ma-tran",
+      "name": "Lab 7 Matrices in code: determinant and Ax = b",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Matrix lab 1 — Determinant by elimination · Matrix lab 2 — Solve Ax = b"
+    },
+    {
+      "slug": "mae101-8-1-vector",
+      "name": "8.1 Vectors in R² and R³",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Vectors 1 — Dot and cross product · Vectors 2 — Compute u · v, |u|, u × v and the angle"
+    },
+    {
+      "slug": "mae101-8-2-bien-doi-tuyen-tinh",
+      "name": "8.2 Linear transformations",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Transformations 1 — What makes a map linear · Transformations 2 — Apply and compose"
+    },
+    {
+      "slug": "mae101-9-1-co-so-so-chieu",
+      "name": "9.1 Subspaces, basis & dimension",
+      "level": "ADVANCED",
+      "description": "Luyện: Vector spaces 1 — Span, independence, basis · Vector spaces 2 — Rank, independence and the dimension of the span"
+    },
+    {
+      "slug": "mae101-9-lab-hang-ma-tran",
+      "name": "Lab 9 Rank and independence in code",
+      "level": "ADVANCED",
+      "description": "Luyện: Vector space lab 1 — The rank of a matrix · Vector space lab 2 — Are these vectors independent?"
+    }
+  ]
+}

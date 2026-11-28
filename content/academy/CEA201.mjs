@@ -45,6 +45,9 @@ import cs2SoHocSoNguyen from './cea201/cs2-so-hoc-so-nguyen.mjs';
 import cs3DauPhayDong from './cea201/cs3-dau-phay-dong-ieee754.mjs';
 import cs4KhoiDieuKhien from './cea201/cs4-khoi-dieu-khien-vi-chuong-trinh.mjs';
 import csQuiz from './cea201/cs-quiz.mjs';
+import marieQuiz from './cea201/marie-quiz.mjs';
+import nangCao2Quiz from './cea201/n2-quiz.mjs';
+import nangCao3Quiz from './cea201/n3-quiz.mjs';
 import { thuNgay } from '../_labs.mjs';
 
 export default {
@@ -2143,6 +2146,7 @@ ${thuNgay('vi', 'cpu', 'selfmod', 'Ý tưởng lớn của von Neumann có mặt
 </div>
 `,
         },
+        marieQuiz,
       ],
     },
     /* ══════════════════ NÂNG CAO 2 — CPU HIỆN ĐẠI ══════════════════ */
@@ -2188,6 +2192,7 @@ ${thuNgay('vi', 'cpu', 'selfmod', 'Ý tưởng lớn của von Neumann có mặt
 </div>
 `,
         },
+        nangCao2Quiz,
       ],
     },
     /* ══════════════════ NÂNG CAO 3 — BẢO MẬT CPU (CAPSTONE) ══════════════════ */
@@ -2235,6 +2240,7 @@ ${thuNgay('vi', 'cpu', 'selfmod', 'Ý tưởng lớn của von Neumann có mặt
 </div>
 `,
         },
+        nangCao3Quiz,
       ],
     },
     /* ⭐ Chuyên sâu — deck chính hãng KHÔNG nằm trong lịch 60 buổi: cea10, cea11, cea19 — ./cea201/cs*.mjs */

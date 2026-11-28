@@ -1,0 +1,469 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-1-2-tinh-gioi-han",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-1-2-tinh-gioi-han"
+  },
+  "exercises": [
+    {
+      "title": "Computing limits 1 — Which move comes next?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "limit techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Choose the right technique for each limit.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn đúng kỹ thuật cho từng giới hạn.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Always try substitution first.",
+        "If it gives 0/0, factor, rationalise or use L'Hôpital."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Computing limits 1 — Which move comes next?\n\nAnswer in the answer panel (no code needed).\n\n1. Direct substitution into (x² − 4)/(x − 2) at x = 2 gives 0/0. This means …Thế trực tiếp vào (x² − 4)/(x − 2) tại x = 2 ra 0/0. Điều đó nghĩa là …\n2. lim x→0 (√(x + 1) − 1)/x is best handled by …lim x→0 (√(x + 1) − 1)/x nên xử lý bằng …\n3. For a rational function as x → ∞ with deg(top) < deg(bottom), the limit is …Với hàm hữu tỉ khi x → ∞ và bậc tử < bậc mẫu, giới hạn là …\n4. Which of these is NOT an indeterminate form?Dạng nào sau đây KHÔNG phải dạng vô định?\n5. L'Hôpital's rule may be applied to lim f/g when …Quy tắc L'Hôpital được dùng cho lim f/g khi …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Computing limits 1 — Which move comes next? — answer key\n\n1. Direct substitution into (x² − 4)/(x − 2) at x = 2 gives 0/0. This means …Thế trực tiếp vào (x² − 4)/(x − 2) tại x = 2 ra 0/0. Điều đó nghĩa là …\n   Answer: c) the form is indeterminate: simplify first, then substitute\n   0/0 says nothing yet; factoring gives x + 2, so the limit is 4.VI: 0/0 chưa nói lên gì; phân tích ra x + 2, nên giới hạn là 4.\n\n2. lim x→0 (√(x + 1) − 1)/x is best handled by …lim x→0 (√(x + 1) − 1)/x nên xử lý bằng …\n   Answer: d) multiplying by the conjugate √(x + 1) + 1\n   The conjugate removes the root: the expression becomes 1/(√(x + 1) + 1) → 1/2.VI: Liên hợp khử căn: biểu thức thành 1/(√(x + 1) + 1) → 1/2.\n\n3. For a rational function as x → ∞ with deg(top) < deg(bottom), the limit is …Với hàm hữu tỉ khi x → ∞ và bậc tử < bậc mẫu, giới hạn là …\n   Answer: a) 0\n   The bottom grows faster. Equal degrees give the ratio of leading coefficients; a larger top degree gives ±∞.VI: Mẫu lớn nhanh hơn. Bậc bằng nhau cho tỉ số hệ số cao nhất; bậc tử lớn hơn cho ±∞.\n\n4. Which of these is NOT an indeterminate form?Dạng nào sau đây KHÔNG phải dạng vô định?\n   Answer: a) 1/0⁺ (it tends to +∞)\n   A non-zero number over something tending to 0⁺ is +∞ — determined. 0/0, ∞ − ∞, 0·∞, ∞/∞, 1^∞, 0⁰ and ∞⁰ are indeterminate.VI: Một số khác 0 chia cho thứ tiến về 0⁺ là +∞ — đã xác định. 0/0, ∞ − ∞, 0·∞, ∞/∞, 1^∞, 0⁰ và ∞⁰ là vô định.\n\n5. L'Hôpital's rule may be applied to lim f/g when …Quy tắc L'Hôpital được dùng cho lim f/g khi …\n   Answer: b) the form is 0/0 or ∞/∞\n   Only on 0/0 or ∞/∞; elsewhere it gives wrong answers. Example: lim x→0 sin x / x = lim cos x / 1 = 1.VI: Chỉ cho 0/0 hoặc ∞/∞; ngoài ra sẽ ra kết quả sai. Ví dụ: lim x→0 sin x / x = lim cos x / 1 = 1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> the form is indeterminate: simplify first, then substitute</p><p>0/0 says nothing yet; factoring gives x + 2, so the limit is 4.</p><p><i>VI: 0/0 chưa nói lên gì; phân tích ra x + 2, nên giới hạn là 4.</i></p></li><li><p><b>d)</b> multiplying by the conjugate √(x + 1) + 1</p><p>The conjugate removes the root: the expression becomes 1/(√(x + 1) + 1) → 1/2.</p><p><i>VI: Liên hợp khử căn: biểu thức thành 1/(√(x + 1) + 1) → 1/2.</i></p></li><li><p><b>a)</b> 0</p><p>The bottom grows faster. Equal degrees give the ratio of leading coefficients; a larger top degree gives ±∞.</p><p><i>VI: Mẫu lớn nhanh hơn. Bậc bằng nhau cho tỉ số hệ số cao nhất; bậc tử lớn hơn cho ±∞.</i></p></li><li><p><b>a)</b> 1/0⁺ (it tends to +∞)</p><p>A non-zero number over something tending to 0⁺ is +∞ — determined. 0/0, ∞ − ∞, 0·∞, ∞/∞, 1^∞, 0⁰ and ∞⁰ are indeterminate.</p><p><i>VI: Một số khác 0 chia cho thứ tiến về 0⁺ là +∞ — đã xác định. 0/0, ∞ − ∞, 0·∞, ∞/∞, 1^∞, 0⁰ và ∞⁰ là vô định.</i></p></li><li><p><b>b)</b> the form is 0/0 or ∞/∞</p><p>Only on 0/0 or ∞/∞; elsewhere it gives wrong answers. Example: lim x→0 sin x / x = lim cos x / 1 = 1.</p><p><i>VI: Chỉ cho 0/0 hoặc ∞/∞; ngoài ra sẽ ra kết quả sai. Ví dụ: lim x→0 sin x / x = lim cos x / 1 = 1.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Direct substitution into (x² − 4)/(x − 2) at x = 2 gives 0/0. This means …</p><p style=\"opacity:.75;font-size:.92em\"><i>Thế trực tiếp vào (x² − 4)/(x − 2) tại x = 2 ra 0/0. Điều đó nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the limit does not exist, because we divide by 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the limit is 1, because 0/0 cancels to 1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the form is indeterminate: simplify first, then substitute"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the limit is 0, because the numerator is 0"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>0/0 says nothing yet; factoring gives x + 2, so the limit is 4.</p><p><i>VI: 0/0 chưa nói lên gì; phân tích ra x + 2, nên giới hạn là 4.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>lim x→0 (√(x + 1) − 1)/x is best handled by …</p><p style=\"opacity:.75;font-size:.92em\"><i>lim x→0 (√(x + 1) − 1)/x nên xử lý bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "substituting x = 0 directly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the degree rule"
+              },
+              {
+                "ma": "c",
+                "noiDung": "splitting into one-sided limits"
+              },
+              {
+                "ma": "d",
+                "noiDung": "multiplying by the conjugate √(x + 1) + 1"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The conjugate removes the root: the expression becomes 1/(√(x + 1) + 1) → 1/2.</p><p><i>VI: Liên hợp khử căn: biểu thức thành 1/(√(x + 1) + 1) → 1/2.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>For a rational function as x → ∞ with deg(top) &lt; deg(bottom), the limit is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Với hàm hữu tỉ khi x → ∞ và bậc tử &lt; bậc mẫu, giới hạn là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "±∞"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the ratio of the leading coefficients"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The bottom grows faster. Equal degrees give the ratio of leading coefficients; a larger top degree gives ±∞.</p><p><i>VI: Mẫu lớn nhanh hơn. Bậc bằng nhau cho tỉ số hệ số cao nhất; bậc tử lớn hơn cho ±∞.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which of these is NOT an indeterminate form?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dạng nào sau đây KHÔNG phải dạng vô định?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1/0⁺ (it tends to +∞)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "∞ − ∞"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1^∞"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0/0"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A non-zero number over something tending to 0⁺ is +∞ — determined. 0/0, ∞ − ∞, 0·∞, ∞/∞, 1^∞, 0⁰ and ∞⁰ are indeterminate.</p><p><i>VI: Một số khác 0 chia cho thứ tiến về 0⁺ là +∞ — đã xác định. 0/0, ∞ − ∞, 0·∞, ∞/∞, 1^∞, 0⁰ và ∞⁰ là vô định.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>L'Hôpital's rule may be applied to lim f/g when …</p><p style=\"opacity:.75;font-size:.92em\"><i>Quy tắc L'Hôpital được dùng cho lim f/g khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the form is any fraction"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the form is 0/0 or ∞/∞"
+              },
+              {
+                "ma": "c",
+                "noiDung": "g(a) ≠ 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "f and g are polynomials of the same degree"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Only on 0/0 or ∞/∞; elsewhere it gives wrong answers. Example: lim x→0 sin x / x = lim cos x / 1 = 1.</p><p><i>VI: Chỉ cho 0/0 hoặc ∞/∞; ngoài ra sẽ ra kết quả sai. Ví dụ: lim x→0 sin x / x = lim cos x / 1 = 1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing \"0/0 = 0\" or \"0/0 = 1\"."
+        },
+        {
+          "loi": "Using L'Hôpital on a form that is not indeterminate."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "indeterminate form",
+          "vi": "dạng vô định"
+        },
+        {
+          "en": "conjugate",
+          "vi": "biểu thức liên hợp"
+        },
+        {
+          "en": "leading coefficient",
+          "vi": "hệ số cao nhất"
+        }
+      ]
+    },
+    {
+      "title": "Computing limits 2 — Seven limits from the lesson toolkit",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "limit computation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Compute each limit. Write an integer, or a decimal such as 0.5.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính mỗi giới hạn. Ghi số nguyên, hoặc số thập phân như 0.5.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Substitute; if 0/0 appears, simplify.",
+        "At infinity compare the highest powers."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Computing limits 2 — Seven limits from the lesson toolkit\n\nAnswer in the answer panel (no code needed).\n\n1. Compute the limitTính giới hạn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Computing limits 2 — Seven limits from the lesson toolkit — answer key\n\n1. Compute the limitTính giới hạn\n   - r1.v: 7.00 / 7\n   - r2.v: 4.00 / 4\n   - r3.v: 3.00 / 3\n   - r4.v: 0.5 / 1/2 / 0.50\n   - r5.v: 3.00 / 3\n   - r6.v: 0.00 / 0\n   - r7.v: 3.00 / 3\n   lim x→3 (2x + 1) = 7 (substitute); lim x→2 (x² − 4)/(x − 2) = 4 (factor (x − 2)(x + 2)); lim x→1 (x³ − 1)/(x − 1) = 3 (x³ − 1 = (x − 1)(x² + x + 1)); lim x→0 (√(x + 1) − 1)/x = 0.5 (conjugate); lim x→∞ (3x² + 1)/(x² − 5) = 3 (equal degrees: 3/1); lim x→∞ (2x + 5)/(x² − 1) = 0 (top degree smaller); lim x→0 sin(3x)/x = 3 (sin(3x)/(3x) → 1, times 3).VI: lim x→3 (2x + 1) = 7 (substitute); lim x→2 (x² − 4)/(x − 2) = 4 (factor (x − 2)(x + 2)); lim x→1 (x³ − 1)/(x − 1) = 3 (x³ − 1 = (x − 1)(x² + x + 1)); lim x→0 (√(x + 1) − 1)/x = 0.5 (conjugate); lim x→∞ (3x² + 1)/(x² − 5) = 3 (equal degrees: 3/1); lim x→∞ (2x + 5)/(x² − 1) = 0 (top degree smaller); lim x→0 sin(3x)/x = 3 (sin(3x)/(3x) → 1, times 3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>lim x→3 (2x + 1) = 7 (substitute); lim x→2 (x² − 4)/(x − 2) = 4 (factor (x − 2)(x + 2)); lim x→1 (x³ − 1)/(x − 1) = 3 (x³ − 1 = (x − 1)(x² + x + 1)); lim x→0 (√(x + 1) − 1)/x = 0.5 (conjugate); lim x→∞ (3x² + 1)/(x² − 5) = 3 (equal degrees: 3/1); lim x→∞ (2x + 5)/(x² − 1) = 0 (top degree smaller); lim x→0 sin(3x)/x = 3 (sin(3x)/(3x) → 1, times 3).</p><p><i>VI: lim x→3 (2x + 1) = 7 (substitute); lim x→2 (x² − 4)/(x − 2) = 4 (factor (x − 2)(x + 2)); lim x→1 (x³ − 1)/(x − 1) = 3 (x³ − 1 = (x − 1)(x² + x + 1)); lim x→0 (√(x + 1) − 1)/x = 0.5 (conjugate); lim x→∞ (3x² + 1)/(x² − 5) = 3 (equal degrees: 3/1); lim x→∞ (2x + 5)/(x² − 1) = 0 (top degree smaller); lim x→0 sin(3x)/x = 3 (sin(3x)/(3x) → 1, times 3).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Compute the limit</p><p style=\"opacity:.75;font-size:.92em\"><i>Tính giới hạn</i></p>",
+            "cot": [
+              {
+                "ma": "e",
+                "ten": "Limit"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "e": "lim x→3 (2x + 1)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "e": "lim x→2 (x² − 4)/(x − 2)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "e": "lim x→1 (x³ − 1)/(x − 1)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "e": "lim x→0 (√(x + 1) − 1)/x"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "e": "lim x→∞ (3x² + 1)/(x² − 5)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "e": "lim x→∞ (2x + 5)/(x² − 1)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "e": "lim x→0 sin(3x)/x"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": [
+                "7.00",
+                "7"
+              ],
+              "r2.v": [
+                "4.00",
+                "4"
+              ],
+              "r3.v": [
+                "3.00",
+                "3"
+              ],
+              "r4.v": [
+                "0.5",
+                "1/2",
+                "0.50"
+              ],
+              "r5.v": [
+                "3.00",
+                "3"
+              ],
+              "r6.v": [
+                "0.00",
+                "0"
+              ],
+              "r7.v": [
+                "3.00",
+                "3"
+              ]
+            },
+            "giaiThich": "<p>lim x→3 (2x + 1) = 7 (substitute); lim x→2 (x² − 4)/(x − 2) = 4 (factor (x − 2)(x + 2)); lim x→1 (x³ − 1)/(x − 1) = 3 (x³ − 1 = (x − 1)(x² + x + 1)); lim x→0 (√(x + 1) − 1)/x = 0.5 (conjugate); lim x→∞ (3x² + 1)/(x² − 5) = 3 (equal degrees: 3/1); lim x→∞ (2x + 5)/(x² − 1) = 0 (top degree smaller); lim x→0 sin(3x)/x = 3 (sin(3x)/(3x) → 1, times 3).</p><p><i>VI: lim x→3 (2x + 1) = 7 (substitute); lim x→2 (x² − 4)/(x − 2) = 4 (factor (x − 2)(x + 2)); lim x→1 (x³ − 1)/(x − 1) = 3 (x³ − 1 = (x − 1)(x² + x + 1)); lim x→0 (√(x + 1) − 1)/x = 0.5 (conjugate); lim x→∞ (3x² + 1)/(x² − 5) = 3 (equal degrees: 3/1); lim x→∞ (2x + 5)/(x² − 1) = 0 (top degree smaller); lim x→0 sin(3x)/x = 3 (sin(3x)/(3x) → 1, times 3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cancelling terms instead of factors."
+        },
+        {
+          "loi": "Forgetting the factor 3 in sin(3x)/x."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "limit at infinity",
+          "vi": "giới hạn ở vô cực"
+        }
+      ]
+    },
+    {
+      "title": "Computing limits 3 — Order the steps for a 0/0 limit",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "0/0 procedure"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Put the steps for lim x→2 (x² − 4)/(x − 2) in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các bước tính lim x→2 (x² − 4)/(x − 2) theo đúng thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The first step is always substitution.",
+        "Cancel only common factors."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Computing limits 3 — Order the steps for a 0/0 limit\n\nAnswer in the answer panel (no code needed).\n\n1. StepsCác bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Computing limits 3 — Order the steps for a 0/0 limit — answer key\n\n1. StepsCác bước\n   Answer: m1) Substitute x = 2 and get 0/0  →  m2) Factor the top: (x − 2)(x + 2)  →  m4) Cancel the common factor x − 2 (allowed because x ≠ 2)  →  m3) Substitute again: 2 + 2 = 4\n   Substitution first tells you whether simplifying is needed; the cancellation is valid because the limit never uses x = 2 itself.VI: Thế trước để biết có cần rút gọn không; rút gọn hợp lệ vì giới hạn không bao giờ dùng chính x = 2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Substitution first tells you whether simplifying is needed; the cancellation is valid because the limit never uses x = 2 itself.</p><p><i>VI: Thế trước để biết có cần rút gọn không; rút gọn hợp lệ vì giới hạn không bao giờ dùng chính x = 2.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Các bước</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Substitute x = 2 and get 0/0"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Factor the top: (x − 2)(x + 2)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Substitute again: 2 + 2 = 4"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Cancel the common factor x − 2 (allowed because x ≠ 2)"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m2",
+              "m4",
+              "m3"
+            ],
+            "giaiThich": "<p>Substitution first tells you whether simplifying is needed; the cancellation is valid because the limit never uses x = 2 itself.</p><p><i>VI: Thế trước để biết có cần rút gọn không; rút gọn hợp lệ vì giới hạn không bao giờ dùng chính x = 2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cancelling before checking the form."
+        },
+        {
+          "loi": "Stopping at 0/0."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

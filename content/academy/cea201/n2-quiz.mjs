@@ -1,0 +1,46 @@
+/**
+ * CEA201 · Quiz Nâng cao 2 — Bên trong một CPU hiện đại (N2.1: dự đoán nhánh, suy đoán, superscalar, out-of-order,
+ * đổi tên thanh ghi). 6 câu, nối với Chương 12 (pipeline, rẽ nhánh) và Chương 14 (ILP & superscalar).
+ * Đáp án rải: A (q4) · B ×2 (q1, q5) · C ×2 (q2, q6) · D (q3).
+ */
+export default {
+  title: 'Quiz — Advanced 2: inside a modern CPU|||Quiz — Nâng cao 2: bên trong một CPU hiện đại',
+  slug: 'cea201-quiz-nang-cao-2',
+  type: 'QUIZ',
+  description: 'Tự kiểm phần Nâng cao 2: vì sao pipeline cần đoán nhánh, đoán đúng/sai thì sao, và superscalar + out-of-order + đổi tên thanh ghi + suy đoán cùng nhau giữ nhân CPU bận rộn.',
+  quiz: {
+    timeLimitSeconds: 420,
+    questions: [
+      { id: 'q1', points: 1,
+        question: 'Why does a deep pipeline need branch prediction at all?|||Vì sao một pipeline sâu cần dự đoán nhánh?',
+        options: ['Because branches cannot be executed in a pipeline|||Vì lệnh rẽ nhánh không chạy được trong pipeline', 'It must keep fetching before it knows which way the branch goes|||Nó phải tiếp tục nạp lệnh trước khi biết nhánh đi hướng nào', 'To reduce the size of the cache|||Để giảm kích thước cache', 'To avoid register renaming|||Để tránh phải đổi tên thanh ghi'],
+        correctIndex: 1,
+        explanation: 'The branch outcome is known only some stages later, but the fetch stage must deliver an instruction every cycle to keep the pipeline full. Guessing and running ahead beats stalling every branch (Chapter 12 + N2.1).|||Kết quả của nhánh chỉ biết được vài tầng sau, trong khi tầng nạp phải đưa ra một lệnh mỗi chu kỳ để pipeline luôn đầy. Đoán rồi chạy trước tốt hơn là dừng ở mọi nhánh (Chương 12 + N2.1).' },
+      { id: 'q2', points: 1,
+        question: 'A loop runs 1,000 iterations. A predictor that says "taken" for its backward branch is right roughly…|||Một vòng lặp chạy 1.000 lần. Bộ đoán nói "nhảy" cho lệnh rẽ nhánh quay lui của nó đúng khoảng…',
+        options: ['50 % of the time|||50 % số lần', 'never, because the last iteration exits|||không lần nào, vì lần cuối thoát vòng', '999 times out of 1,000 — only the exit is wrong|||999 trên 1.000 lần — chỉ lần thoát là sai', 'only on the first iteration|||chỉ ở lần lặp đầu tiên'],
+        correctIndex: 2,
+        explanation: 'A loop branch is taken on every iteration except the last, which is why history-based predictors are so accurate on loops — modern predictors exceed 95 % overall (N2.1). Data-dependent branches inside the loop are the hard ones.|||Nhánh của vòng lặp nhảy ở mọi lần trừ lần cuối, nên bộ đoán dựa trên lịch sử rất chính xác với vòng lặp — bộ đoán hiện đại vượt 95 % tổng thể (N2.1). Cái khó là các nhánh phụ thuộc dữ liệu bên trong vòng.' },
+      { id: 'q3', points: 1,
+        question: 'The predictor guessed wrong. What does the CPU do with the work it did on the guessed path?|||Bộ đoán đoán sai. CPU làm gì với phần việc đã làm trên nhánh đoán?',
+        options: ['Commits it anyway, because it is already done|||Vẫn ghi nhận, vì đã làm xong rồi', 'Keeps it in a buffer for later|||Giữ trong bộ đệm để dùng sau', 'Raises an exception to the operating system|||Ném một ngoại lệ cho hệ điều hành', 'Flushes it and restarts from the correct path|||Xoá bỏ và chạy lại từ nhánh đúng'],
+        correctIndex: 3,
+        explanation: 'Speculative results are only committed after the branch is verified; on a misprediction they are discarded and fetching restarts on the right path. The cost — the lost cycles — grows with pipeline depth, which is why unpredictable branches in a hot loop can quietly halve performance.|||Kết quả suy đoán chỉ được ghi nhận sau khi nhánh được xác minh; đoán sai thì chúng bị vứt đi và việc nạp lệnh bắt đầu lại ở nhánh đúng. Cái giá — số chu kỳ mất — tăng theo độ sâu pipeline, nên nhánh khó đoán trong một vòng lặp nóng có thể âm thầm làm giảm nửa hiệu năng.' },
+      { id: 'q4', points: 1,
+        question: 'Which technique removes FALSE dependencies (write-after-read, write-after-write) between instructions?|||Kỹ thuật nào loại bỏ phụ thuộc GIẢ (ghi-sau-đọc, ghi-sau-ghi) giữa các lệnh?',
+        options: ['Register renaming|||Đổi tên thanh ghi', 'Branch prediction|||Dự đoán nhánh', 'A larger L1 cache|||Cache L1 lớn hơn', 'Raising the clock rate|||Tăng xung nhịp'],
+        correctIndex: 0,
+        explanation: 'WAR and WAW conflicts exist only because two instructions happen to reuse the same architectural register name. Mapping them to different physical registers removes the conflict, so out-of-order execution can run them in parallel (Chapter 14). True data dependencies (read-after-write) remain.|||Xung đột WAR và WAW tồn tại chỉ vì hai lệnh tình cờ dùng lại cùng một tên thanh ghi kiến trúc. Ánh xạ chúng sang thanh ghi vật lý khác nhau là hết xung đột, nên thực thi không theo thứ tự chạy chúng song song được (Chương 14). Phụ thuộc dữ liệu thật (đọc-sau-ghi) vẫn còn.' },
+      { id: 'q5', points: 1,
+        question: 'A "superscalar" core is one that…|||Một nhân "superscalar" là nhân…',
+        options: ['runs at a higher clock rate than a scalar core|||chạy xung nhịp cao hơn nhân vô hướng', 'can issue and execute several instructions per clock cycle|||có thể phát và thực thi nhiều lệnh trong một chu kỳ', 'has more than one core|||có nhiều hơn một nhân', 'executes vector instructions only|||chỉ thực thi lệnh vector'],
+        correctIndex: 1,
+        explanation: 'Superscalar means several parallel pipelines inside ONE core, fed from one instruction stream (instruction-level parallelism). Multicore is several cores (Chapter 15); clock rate and vector units are separate design choices.|||Superscalar nghĩa là nhiều pipeline song song bên trong MỘT nhân, nạp từ một luồng lệnh (song song mức lệnh). Đa nhân là nhiều nhân (Chương 15); xung nhịp và khối vector là những lựa chọn thiết kế khác.' },
+      { id: 'q6', points: 1,
+        question: 'A hot loop contains "if (data[i] > 128)" over random data and runs slowly. What change usually helps most?|||Một vòng lặp nóng chứa "if (data[i] > 128)" trên dữ liệu ngẫu nhiên và chạy chậm. Thay đổi nào thường giúp nhiều nhất?',
+        options: ['Adding more if statements|||Thêm nhiều lệnh if hơn', 'Disabling the cache|||Tắt cache', 'Making the branch predictable (e.g. sorted data) or branch-free|||Làm nhánh dễ đoán (vd dữ liệu đã sắp) hoặc bỏ hẳn nhánh', 'Using a single-cycle processor|||Dùng bộ xử lý một chu kỳ'],
+        correctIndex: 2,
+        explanation: 'On random data the predictor is right only about half the time, so the pipeline is flushed constantly. Sorted data makes the outcome predictable; arithmetic or conditional-move code removes the branch altogether. This is the "branch-friendly code" N2.1 mentions.|||Trên dữ liệu ngẫu nhiên bộ đoán chỉ đúng khoảng một nửa số lần, nên pipeline bị xả liên tục. Dữ liệu đã sắp khiến kết quả dễ đoán; viết bằng phép tính hoặc lệnh di chuyển có điều kiện thì bỏ hẳn được nhánh. Đó là "code thân thiện nhánh" mà N2.1 nhắc tới.' },
+    ],
+  },
+};

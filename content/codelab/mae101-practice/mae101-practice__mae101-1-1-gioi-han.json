@@ -1,0 +1,369 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-1-1-gioi-han",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-1-1-gioi-han"
+  },
+  "exercises": [
+    {
+      "title": "Limits 1 — What a limit means",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "limit",
+        "continuity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Concept questions on limits, one-sided limits and continuity.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về giới hạn, giới hạn một phía và tính liên tục.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Separate \"near a\" from \"at a\".",
+        "Check left and right separately when the formula changes at a."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Limits 1 — What a limit means\n\nAnswer in the answer panel (no code needed).\n\n1. lim x→a f(x) = L means …lim x→a f(x) = L nghĩa là …\n2. The two-sided limit at a exists exactly when …Giới hạn hai phía tại a tồn tại đúng khi …\n3. f is continuous at a when …f liên tục tại a khi …\n4. g(x) = (x² − 1)/(x − 1) at x = 1 is …g(x) = (x² − 1)/(x − 1) tại x = 1 là …\n5. As x → 0, 1/x² …Khi x → 0, 1/x² …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Limits 1 — What a limit means — answer key\n\n1. lim x→a f(x) = L means …lim x→a f(x) = L nghĩa là …\n   Answer: b) f(x) gets arbitrarily close to L as x gets close to a (x ≠ a)\n   A limit is about values NEAR a, never AT a: f(a) may be undefined or different.VI: Giới hạn nói về các giá trị GẦN a, không phải TẠI a: f(a) có thể không xác định hoặc khác L.\n\n2. The two-sided limit at a exists exactly when …Giới hạn hai phía tại a tồn tại đúng khi …\n   Answer: c) both one-sided limits exist and are equal\n   lim exists ⟺ lim x→a⁻ = lim x→a⁺ (both finite).VI: Tồn tại giới hạn ⟺ giới hạn trái = giới hạn phải (cả hai hữu hạn).\n\n3. f is continuous at a when …f liên tục tại a khi …\n   Answer: a) f(a) is defined, the limit exists, and lim x→a f(x) = f(a)\n   All three conditions are required; a \"hole\" fails the last one.VI: Cần đủ ba điều kiện; một \"lỗ thủng\" làm hỏng điều kiện cuối.\n\n4. g(x) = (x² − 1)/(x − 1) at x = 1 is …g(x) = (x² − 1)/(x − 1) tại x = 1 là …\n   Answer: a) undefined, yet lim x→1 g(x) = 2\n   For x ≠ 1, g(x) = x + 1, so the limit is 2 while g(1) is 0/0.VI: Với x ≠ 1, g(x) = x + 1, nên giới hạn là 2 trong khi g(1) là 0/0.\n\n5. As x → 0, 1/x² …Khi x → 0, 1/x² …\n   Answer: c) grows without bound (limit +∞)\n   x² is positive on both sides, so 1/x² → +∞ from both sides; it is 1/x that splits into −∞ and +∞.VI: x² dương ở cả hai phía nên 1/x² → +∞ từ cả hai phía; 1/x mới tách thành −∞ và +∞.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> f(x) gets arbitrarily close to L as x gets close to a (x ≠ a)</p><p>A limit is about values NEAR a, never AT a: f(a) may be undefined or different.</p><p><i>VI: Giới hạn nói về các giá trị GẦN a, không phải TẠI a: f(a) có thể không xác định hoặc khác L.</i></p></li><li><p><b>c)</b> both one-sided limits exist and are equal</p><p>lim exists ⟺ lim x→a⁻ = lim x→a⁺ (both finite).</p><p><i>VI: Tồn tại giới hạn ⟺ giới hạn trái = giới hạn phải (cả hai hữu hạn).</i></p></li><li><p><b>a)</b> f(a) is defined, the limit exists, and lim x→a f(x) = f(a)</p><p>All three conditions are required; a \"hole\" fails the last one.</p><p><i>VI: Cần đủ ba điều kiện; một \"lỗ thủng\" làm hỏng điều kiện cuối.</i></p></li><li><p><b>a)</b> undefined, yet lim x→1 g(x) = 2</p><p>For x ≠ 1, g(x) = x + 1, so the limit is 2 while g(1) is 0/0.</p><p><i>VI: Với x ≠ 1, g(x) = x + 1, nên giới hạn là 2 trong khi g(1) là 0/0.</i></p></li><li><p><b>c)</b> grows without bound (limit +∞)</p><p>x² is positive on both sides, so 1/x² → +∞ from both sides; it is 1/x that splits into −∞ and +∞.</p><p><i>VI: x² dương ở cả hai phía nên 1/x² → +∞ từ cả hai phía; 1/x mới tách thành −∞ và +∞.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>lim x→a f(x) = L means …</p><p style=\"opacity:.75;font-size:.92em\"><i>lim x→a f(x) = L nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "f(x) equals L exactly for every x in some interval around a"
+              },
+              {
+                "ma": "b",
+                "noiDung": "f(x) gets arbitrarily close to L as x gets close to a (x ≠ a)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "f(a) must be defined and equal to L, nothing more"
+              },
+              {
+                "ma": "d",
+                "noiDung": "L is the largest value that f takes on an interval around a"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A limit is about values NEAR a, never AT a: f(a) may be undefined or different.</p><p><i>VI: Giới hạn nói về các giá trị GẦN a, không phải TẠI a: f(a) có thể không xác định hoặc khác L.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The two-sided limit at a exists exactly when …</p><p style=\"opacity:.75;font-size:.92em\"><i>Giới hạn hai phía tại a tồn tại đúng khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "f is a polynomial"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the left-hand limit exists"
+              },
+              {
+                "ma": "c",
+                "noiDung": "both one-sided limits exist and are equal"
+              },
+              {
+                "ma": "d",
+                "noiDung": "f(a) is defined"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>lim exists ⟺ lim x→a⁻ = lim x→a⁺ (both finite).</p><p><i>VI: Tồn tại giới hạn ⟺ giới hạn trái = giới hạn phải (cả hai hữu hạn).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>f is continuous at a when …</p><p style=\"opacity:.75;font-size:.92em\"><i>f liên tục tại a khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "f(a) is defined, the limit exists, and lim x→a f(x) = f(a)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the limit at a exists"
+              },
+              {
+                "ma": "c",
+                "noiDung": "f has no vertical asymptote anywhere"
+              },
+              {
+                "ma": "d",
+                "noiDung": "f(a) is defined"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>All three conditions are required; a \"hole\" fails the last one.</p><p><i>VI: Cần đủ ba điều kiện; một \"lỗ thủng\" làm hỏng điều kiện cuối.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>g(x) = (x² − 1)/(x − 1) at x = 1 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>g(x) = (x² − 1)/(x − 1) tại x = 1 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "undefined, yet lim x→1 g(x) = 2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "undefined, and the limit does not exist"
+              },
+              {
+                "ma": "c",
+                "noiDung": "equal to 2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "equal to 0"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>For x ≠ 1, g(x) = x + 1, so the limit is 2 while g(1) is 0/0.</p><p><i>VI: Với x ≠ 1, g(x) = x + 1, nên giới hạn là 2 trong khi g(1) là 0/0.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>As x → 0, 1/x² …</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi x → 0, 1/x² …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "tends to 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "tends to 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "grows without bound (limit +∞)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "has left limit −∞ and right limit +∞"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>x² is positive on both sides, so 1/x² → +∞ from both sides; it is 1/x that splits into −∞ and +∞.</p><p><i>VI: x² dương ở cả hai phía nên 1/x² → +∞ từ cả hai phía; 1/x mới tách thành −∞ và +∞.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering f(a) when the question asks for the limit."
+        },
+        {
+          "loi": "Declaring a limit exists from one side only."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "one-sided limit",
+          "vi": "giới hạn một phía"
+        },
+        {
+          "en": "continuous",
+          "vi": "liên tục"
+        },
+        {
+          "en": "removable discontinuity",
+          "vi": "gián đoạn bỏ được"
+        }
+      ]
+    },
+    {
+      "title": "Limits 2 — Read one-sided limits from a piecewise function",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "one-sided limits"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>For each function give the left limit, the right limit, the two-sided limit (or DNE), the value at the point (or DNE) and whether it is continuous there.</p><ul><li>f(x) = x + 1 for x &lt; 1, f(1) = 3, f(x) = 2x for x &gt; 1 — at a = 1</li><li>g(x) = x² for x &lt; 2, g(x) = x + 2 for x ≥ 2 — at a = 2</li><li>h(x) = |x| / x — at a = 0</li></ul><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi hàm cho giới hạn trái, giới hạn phải, giới hạn hai phía (hoặc DNE), giá trị tại điểm đó (hoặc DNE) và có liên tục tại đó không.</p><ul><li>f(x) = x + 1 khi x &lt; 1, f(1) = 3, f(x) = 2x khi x &gt; 1 — tại a = 1</li><li>g(x) = x² khi x &lt; 2, g(x) = x + 2 khi x ≥ 2 — tại a = 2</li><li>h(x) = |x| / x — tại a = 0</li></ul><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Use the formula that applies on each side of a.",
+        "Continuity needs limit = value, not just \"both sides agree\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Limits 2 — Read one-sided limits from a piecewise function\n\nAnswer in the answer panel (no code needed).\n\n1. One-sided limits and continuity (write numbers, or DNE)Giới hạn một phía và liên tục (ghi số, hoặc DNE)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Limits 2 — Read one-sided limits from a piecewise function — answer key\n\n1. One-sided limits and continuity (write numbers, or DNE)Giới hạn một phía và liên tục (ghi số, hoặc DNE)\n   - r1.l: 2\n   - r1.r: 2\n   - r1.L: 2\n   - r1.v: 3\n   - r1.c: no\n   - r2.l: 4\n   - r2.r: 4\n   - r2.L: 4\n   - r2.v: 4\n   - r2.c: yes\n   - r3.l: -1\n   - r3.r: 1\n   - r3.L: DNE / dne\n   - r3.v: DNE / dne\n   - r3.c: no\n   f: both sides give 2 but f(1) = 3 — a removable discontinuity. g: 2² = 4 and 2 + 2 = 4, g(2) = 4 — continuous. h: −1 for x < 0 and +1 for x > 0, so the limit does not exist, and h(0) is 0/0.VI: f: hai phía cùng ra 2 nhưng f(1) = 3 — gián đoạn bỏ được. g: 2² = 4 và 2 + 2 = 4, g(2) = 4 — liên tục. h: −1 khi x < 0 và +1 khi x > 0, nên giới hạn không tồn tại, còn h(0) là 0/0.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>f: both sides give 2 but f(1) = 3 — a removable discontinuity. g: 2² = 4 and 2 + 2 = 4, g(2) = 4 — continuous. h: −1 for x < 0 and +1 for x > 0, so the limit does not exist, and h(0) is 0/0.</p><p><i>VI: f: hai phía cùng ra 2 nhưng f(1) = 3 — gián đoạn bỏ được. g: 2² = 4 và 2 + 2 = 4, g(2) = 4 — liên tục. h: −1 khi x < 0 và +1 khi x > 0, nên giới hạn không tồn tại, còn h(0) là 0/0.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>One-sided limits and continuity (write numbers, or DNE)</p><p style=\"opacity:.75;font-size:.92em\"><i>Giới hạn một phía và liên tục (ghi số, hoặc DNE)</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Function @ a"
+              },
+              {
+                "ma": "l",
+                "ten": "Left limit"
+              },
+              {
+                "ma": "r",
+                "ten": "Right limit"
+              },
+              {
+                "ma": "L",
+                "ten": "Limit"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              },
+              {
+                "ma": "c",
+                "ten": "Continuous?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "f @ 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "g @ 2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "h @ 0"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.l": "2",
+              "r1.r": "2",
+              "r1.L": "2",
+              "r1.v": "3",
+              "r1.c": "no",
+              "r2.l": "4",
+              "r2.r": "4",
+              "r2.L": "4",
+              "r2.v": "4",
+              "r2.c": "yes",
+              "r3.l": "-1",
+              "r3.r": "1",
+              "r3.L": [
+                "DNE",
+                "dne"
+              ],
+              "r3.v": [
+                "DNE",
+                "dne"
+              ],
+              "r3.c": "no"
+            },
+            "giaiThich": "<p>f: both sides give 2 but f(1) = 3 — a removable discontinuity. g: 2² = 4 and 2 + 2 = 4, g(2) = 4 — continuous. h: −1 for x < 0 and +1 for x > 0, so the limit does not exist, and h(0) is 0/0.</p><p><i>VI: f: hai phía cùng ra 2 nhưng f(1) = 3 — gián đoạn bỏ được. g: 2² = 4 và 2 + 2 = 4, g(2) = 4 — liên tục. h: −1 khi x < 0 và +1 khi x > 0, nên giới hạn không tồn tại, còn h(0) là 0/0.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the formula for x > a to compute the left limit."
+        },
+        {
+          "loi": "Calling f continuous because the limit exists."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "piecewise function",
+          "vi": "hàm từng khúc"
+        },
+        {
+          "en": "DNE (does not exist)",
+          "vi": "không tồn tại"
+        }
+      ]
+    }
+  ]
+}

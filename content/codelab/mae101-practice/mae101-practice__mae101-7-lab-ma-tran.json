@@ -1,0 +1,248 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-7-lab-ma-tran",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-7-1-dinh-thuc-nghich-dao"
+  },
+  "exercises": [
+    {
+      "title": "Matrix lab 1 — Determinant by elimination",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "determinant",
+        "elimination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Write <code>determinant(A)</code> for a square matrix (array of rows, n ≤ 6) using Gaussian elimination: reduce to upper-triangular form, flip the sign at every row swap, and multiply the diagonal. Do not modify A. Round to 6 decimals with <code>Math.round(d * 1e6) / 1e6</code>; a singular matrix returns 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Cofactor expansion is O(n!); elimination is O(n³).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>determinant(A)</code> cho ma trận vuông (mảng các hàng, n ≤ 6) bằng khử Gauss: đưa về tam giác trên, đổi dấu mỗi lần đổi hàng, rồi nhân đường chéo. Không sửa A. Làm tròn 6 chữ số bằng <code>Math.round(d * 1e6) / 1e6</code>; ma trận suy biến trả 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khai triển phần bù là O(n!); khử Gauss là O(n³).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "determinant([[2, 1, 3], [0, -1, 4], [1, 2, 0]])",
+          "output": "-9",
+          "explanation": "Same matrix as exercise 7.1: −9.|||Cùng ma trận với bài 7.1: −9."
+        }
+      ],
+      "hintsJson": [
+        "Copy the rows before eliminating.",
+        "Track the sign of every swap."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function determinant(A) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function determinant(A) {\n  // Khử về tam giác trên (chọn trụ có |giá trị| lớn nhất); đổi hàng ⇒ đổi dấu; det = tích đường chéo.\n  var n = A.length, M = A.map(function (r) { return r.slice(); }), det = 1;\n  for (var c = 0; c < n; c++) {\n    var p = c;\n    for (var r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r;\n    if (Math.abs(M[p][c]) < 1e-12) return 0;\n    if (p !== c) { var t = M[p]; M[p] = M[c]; M[c] = t; det = -det; }\n    det *= M[c][c];\n    for (var r2 = c + 1; r2 < n; r2++) {\n      var f = M[r2][c] / M[c][c];\n      for (var k = c; k < n; k++) M[r2][k] -= f * M[c][k];\n    }\n  }\n  var out = Math.round(det * 1e6) / 1e6;\n  return out === 0 ? 0 : out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Adding a multiple of one row to another leaves det unchanged and a swap negates it, so after elimination det A = ± (product of the pivots) — the property table of lesson 7.1 turned into an algorithm.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: determinant([[3,8],[4,6]])",
+              "vi": "Ca 1"
+            },
+            "goi": "determinant([[3,8],[4,6]])",
+            "mongDoi": -14
+          },
+          {
+            "moTa": {
+              "en": "Case 2: determinant([[2,1,3],[0,-1,4],[1,2,0]])",
+              "vi": "Ca 2"
+            },
+            "goi": "determinant([[2,1,3],[0,-1,4],[1,2,0]])",
+            "mongDoi": -9
+          },
+          {
+            "moTa": {
+              "en": "Case 3: determinant([[1,2,3],[4,5,6],[7,8,9]])",
+              "vi": "Ca 3"
+            },
+            "goi": "determinant([[1,2,3],[4,5,6],[7,8,9]])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "determinant([[0,1],[1,0]])",
+            "mongDoi": -1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "determinant([[2,0,1,3],[1,1,0,2],[0,3,1,1],[4,1,2,0]])",
+            "mongDoi": -32,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the sign flip on a row swap."
+        },
+        {
+          "loi": "Dividing by a zero pivot instead of swapping."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Matrix lab 2 — Solve Ax = b",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "Gaussian elimination",
+        "back substitution"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Write <code>solveLinear(A, b)</code>: solve the n × n system Ax = b by Gaussian elimination with partial pivoting and back-substitution. Return the solution as an array rounded to 6 decimals, or <code>null</code> if A is singular (no unique solution). Do not modify the inputs.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Partial pivoting: pick the row with the largest |entry| in the current column.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>solveLinear(A, b)</code>: giải hệ n × n Ax = b bằng khử Gauss có chọn trụ và thế ngược. Trả nghiệm dạng mảng làm tròn 6 chữ số, hoặc <code>null</code> nếu A suy biến (không có nghiệm duy nhất). Không sửa đầu vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chọn trụ: lấy hàng có |phần tử| lớn nhất ở cột đang xét.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "solveLinear([[1, 2], [3, -1]], [5, 1])",
+          "output": "[1,2]",
+          "explanation": "The system of lesson 5.1: x = 1, y = 2.|||Hệ của bài 5.1: x = 1, y = 2."
+        }
+      ],
+      "hintsJson": [
+        "Work on the augmented matrix.",
+        "Back-substitute from the last row up."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function solveLinear(A, b) {\n  return null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function solveLinear(A, b) {\n  // Khử Gauss có chọn trụ trên [A | b]; trụ ≈ 0 ⇒ hệ không có nghiệm duy nhất ⇒ null; rồi thế ngược.\n  var n = A.length, M = A.map(function (r, i) { return r.concat([b[i]]); });\n  for (var c = 0; c < n; c++) {\n    var p = c;\n    for (var r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r;\n    if (Math.abs(M[p][c]) < 1e-12) return null;\n    var t = M[p]; M[p] = M[c]; M[c] = t;\n    for (var r2 = c + 1; r2 < n; r2++) {\n      var f = M[r2][c] / M[c][c];\n      for (var k = c; k <= n; k++) M[r2][k] -= f * M[c][k];\n    }\n  }\n  var x = new Array(n);\n  for (var i = n - 1; i >= 0; i--) {\n    var s = M[i][n];\n    for (var j = i + 1; j < n; j++) s -= M[i][j] * x[j];\n    x[i] = s / M[i][i];\n  }\n  return x.map(function (v) { var o = Math.round(v * 1e6) / 1e6; return o === 0 ? 0 : o; });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Elimination makes the system upper-triangular without changing its solutions (elementary row operations), so the last equation has one unknown, the one above it two, and so on. A pivot that cannot be made non-zero means rank &lt; n.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: solveLinear([[1,2],[3,-1]], [5,1])",
+              "vi": "Ca 1"
+            },
+            "goi": "solveLinear([[1,2],[3,-1]], [5,1])",
+            "mongDoi": [
+              1,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: solveLinear([[0,1],[1,0]], [3,4])",
+              "vi": "Ca 2"
+            },
+            "goi": "solveLinear([[0,1],[1,0]], [3,4])",
+            "mongDoi": [
+              4,
+              3
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: solveLinear([[1,2],[2,4]], [3,6])",
+              "vi": "Ca 3"
+            },
+            "goi": "solveLinear([[1,2],[2,4]], [3,6])",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "solveLinear([[2,1,-1],[-3,-1,2],[-2,1,2]], [8,-11,-3])",
+            "mongDoi": [
+              2,
+              3,
+              -1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "solveLinear([[4,-2,1],[-2,4,-2],[1,-2,4]], [11,-16,17])",
+            "mongDoi": [
+              1,
+              -2,
+              3
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Not swapping when the pivot is 0."
+        },
+        {
+          "loi": "Forgetting to eliminate in the b column."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

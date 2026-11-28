@@ -1,0 +1,379 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-2-1-dao-ham",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-2-1-dao-ham"
+  },
+  "exercises": [
+    {
+      "title": "Derivatives 1 — The definition and what it means",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "derivative definition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Concept questions on the derivative.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về đạo hàm.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Derivative = limit of a difference quotient.",
+        "A corner or a jump kills differentiability."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Derivatives 1 — The definition and what it means\n\nAnswer in the answer panel (no code needed).\n\n1. f′(a) is defined as …f′(a) được định nghĩa là …\n2. Geometrically, f′(a) is …Về hình học, f′(a) là …\n3. Which statement is TRUE?Mệnh đề nào ĐÚNG?\n4. The tangent line to y = f(x) at x = a is …Tiếp tuyến của y = f(x) tại x = a là …\n5. s(t) = 5t² metres. The velocity at t = 2 s is …s(t) = 5t² mét. Vận tốc tại t = 2 s là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Derivatives 1 — The definition and what it means — answer key\n\n1. f′(a) is defined as …f′(a) được định nghĩa là …\n   Answer: c) lim h→0 [f(a + h) − f(a)] / h\n   The limit of the difference quotient: the slope of secants as they shrink to the tangent.VI: Giới hạn của tỉ sai phân: độ dốc của cát tuyến khi co lại thành tiếp tuyến.\n\n2. Geometrically, f′(a) is …Về hình học, f′(a) là …\n   Answer: d) the slope of the tangent line at x = a\n   Physically it is the instantaneous rate of change, e.g. velocity when f is position.VI: Về vật lý đó là tốc độ thay đổi tức thời, ví dụ vận tốc khi f là vị trí.\n\n3. Which statement is TRUE?Mệnh đề nào ĐÚNG?\n   Answer: d) Differentiable at a implies continuous at a\n   |x| is continuous at 0 but has a corner there, so no derivative: the converse fails.VI: |x| liên tục tại 0 nhưng có điểm góc ở đó nên không có đạo hàm: chiều ngược lại sai.\n\n4. The tangent line to y = f(x) at x = a is …Tiếp tuyến của y = f(x) tại x = a là …\n   Answer: d) y = f(a) + f′(a)(x − a)\n   Point–slope form: the line through the point of the curve at x = a, with slope equal to the derivative there.VI: Dạng điểm–hệ số góc: đường thẳng qua điểm của đồ thị tại x = a, có hệ số góc bằng đạo hàm tại đó.\n\n5. s(t) = 5t² metres. The velocity at t = 2 s is …s(t) = 5t² mét. Vận tốc tại t = 2 s là …\n   Answer: c) 20 m/s\n   v(t) = s′(t) = 10t, so v(2) = 20 m/s. 20 m is the position s(2), with the wrong unit.VI: v(t) = s′(t) = 10t, nên v(2) = 20 m/s. 20 m là vị trí s(2), sai đơn vị.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> lim h→0 [f(a + h) − f(a)] / h</p><p>The limit of the difference quotient: the slope of secants as they shrink to the tangent.</p><p><i>VI: Giới hạn của tỉ sai phân: độ dốc của cát tuyến khi co lại thành tiếp tuyến.</i></p></li><li><p><b>d)</b> the slope of the tangent line at x = a</p><p>Physically it is the instantaneous rate of change, e.g. velocity when f is position.</p><p><i>VI: Về vật lý đó là tốc độ thay đổi tức thời, ví dụ vận tốc khi f là vị trí.</i></p></li><li><p><b>d)</b> Differentiable at a implies continuous at a</p><p>|x| is continuous at 0 but has a corner there, so no derivative: the converse fails.</p><p><i>VI: |x| liên tục tại 0 nhưng có điểm góc ở đó nên không có đạo hàm: chiều ngược lại sai.</i></p></li><li><p><b>d)</b> y = f(a) + f′(a)(x − a)</p><p>Point–slope form: the line through the point of the curve at x = a, with slope equal to the derivative there.</p><p><i>VI: Dạng điểm–hệ số góc: đường thẳng qua điểm của đồ thị tại x = a, có hệ số góc bằng đạo hàm tại đó.</i></p></li><li><p><b>c)</b> 20 m/s</p><p>v(t) = s′(t) = 10t, so v(2) = 20 m/s. 20 m is the position s(2), with the wrong unit.</p><p><i>VI: v(t) = s′(t) = 10t, nên v(2) = 20 m/s. 20 m là vị trí s(2), sai đơn vị.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>f′(a) is defined as …</p><p style=\"opacity:.75;font-size:.92em\"><i>f′(a) được định nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "[f(a + h) − f(a)] / h for h = 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "f(a) / a"
+              },
+              {
+                "ma": "c",
+                "noiDung": "lim h→0 [f(a + h) − f(a)] / h"
+              },
+              {
+                "ma": "d",
+                "noiDung": "lim h→0 f(a + h)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The limit of the difference quotient: the slope of secants as they shrink to the tangent.</p><p><i>VI: Giới hạn của tỉ sai phân: độ dốc của cát tuyến khi co lại thành tiếp tuyến.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Geometrically, f′(a) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Về hình học, f′(a) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the area under f up to a"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the y-intercept of the tangent"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the value of f at a"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the slope of the tangent line at x = a"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Physically it is the instantaneous rate of change, e.g. velocity when f is position.</p><p><i>VI: Về vật lý đó là tốc độ thay đổi tức thời, ví dụ vận tốc khi f là vị trí.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which statement is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mệnh đề nào ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Every function is differentiable where it is defined"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Continuous at a implies differentiable at a"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A corner point has derivative 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Differentiable at a implies continuous at a"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>|x| is continuous at 0 but has a corner there, so no derivative: the converse fails.</p><p><i>VI: |x| liên tục tại 0 nhưng có điểm góc ở đó nên không có đạo hàm: chiều ngược lại sai.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The tangent line to y = f(x) at x = a is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiếp tuyến của y = f(x) tại x = a là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "y = f′(a) + f(a)x"
+              },
+              {
+                "ma": "b",
+                "noiDung": "y = f(a)(x − a)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "y = f′(a)x"
+              },
+              {
+                "ma": "d",
+                "noiDung": "y = f(a) + f′(a)(x − a)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Point–slope form: the line through the point of the curve at x = a, with slope equal to the derivative there.</p><p><i>VI: Dạng điểm–hệ số góc: đường thẳng qua điểm của đồ thị tại x = a, có hệ số góc bằng đạo hàm tại đó.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>s(t) = 5t² metres. The velocity at t = 2 s is …</p><p style=\"opacity:.75;font-size:.92em\"><i>s(t) = 5t² mét. Vận tốc tại t = 2 s là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "10 m/s"
+              },
+              {
+                "ma": "b",
+                "noiDung": "5 m/s"
+              },
+              {
+                "ma": "c",
+                "noiDung": "20 m/s"
+              },
+              {
+                "ma": "d",
+                "noiDung": "20 m"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>v(t) = s′(t) = 10t, so v(2) = 20 m/s. 20 m is the position s(2), with the wrong unit.</p><p><i>VI: v(t) = s′(t) = 10t, nên v(2) = 20 m/s. 20 m là vị trí s(2), sai đơn vị.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing f(a) with f′(a)."
+        },
+        {
+          "loi": "Believing continuity is enough for a derivative."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "difference quotient",
+          "vi": "tỉ sai phân"
+        },
+        {
+          "en": "tangent line",
+          "vi": "tiếp tuyến"
+        },
+        {
+          "en": "differentiable",
+          "vi": "khả vi"
+        }
+      ]
+    },
+    {
+      "title": "Derivatives 2 — Slope and point of the tangent",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "tangent slope"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>For each function give f′(a) and f(a). (Use the definition or the power rule.)</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi hàm cho f′(a) và f(a). (Dùng định nghĩa hoặc quy tắc luỹ thừa.)</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Power rule: d/dx xⁿ = n·xⁿ⁻¹ (also for n = −1 and n = 1/2).",
+        "f(a) is just substitution."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Derivatives 2 — Slope and point of the tangent\n\nAnswer in the answer panel (no code needed).\n\n1. f′(a) and f(a)f′(a) và f(a)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Derivatives 2 — Slope and point of the tangent — answer key\n\n1. f′(a) and f(a)f′(a) và f(a)\n   - r1.d: 6.00 / 6\n   - r1.v: 9.00 / 9\n   - r2.d: 12.00 / 12\n   - r2.v: 8.00 / 8\n   - r3.d: -0.25 / -1/4\n   - r3.v: 0.5 / 1/2\n   - r4.d: 0.25 / 1/4\n   - r4.v: 2.00 / 2\n   - r5.d: 3.00 / 3\n   - r5.v: 23.00 / 23\n   x² → 2x = 6, f = 9; x³ → 3x² = 12, f = 8; 1/x → −1/x² = −1/4, f = 1/2; √x → 1/(2√x) = 1/4, f = 2; 3x − 7 → 3, f = 23.VI: x² → 2x = 6, f = 9; x³ → 3x² = 12, f = 8; 1/x → −1/x² = −1/4, f = 1/2; √x → 1/(2√x) = 1/4, f = 2; 3x − 7 → 3, f = 23.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>x² → 2x = 6, f = 9; x³ → 3x² = 12, f = 8; 1/x → −1/x² = −1/4, f = 1/2; √x → 1/(2√x) = 1/4, f = 2; 3x − 7 → 3, f = 23.</p><p><i>VI: x² → 2x = 6, f = 9; x³ → 3x² = 12, f = 8; 1/x → −1/x² = −1/4, f = 1/2; √x → 1/(2√x) = 1/4, f = 2; 3x − 7 → 3, f = 23.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>f′(a) and f(a)</p><p style=\"opacity:.75;font-size:.92em\"><i>f′(a) và f(a)</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Function, point"
+              },
+              {
+                "ma": "d",
+                "ten": "f'(a)"
+              },
+              {
+                "ma": "v",
+                "ten": "f(a)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "f(x) = x², a = 3"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "f(x) = x³, a = 2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "f(x) = 1/x, a = 2"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "f": "f(x) = √x, a = 4"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "f": "f(x) = 3x − 7, a = 10"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": [
+                "6.00",
+                "6"
+              ],
+              "r1.v": [
+                "9.00",
+                "9"
+              ],
+              "r2.d": [
+                "12.00",
+                "12"
+              ],
+              "r2.v": [
+                "8.00",
+                "8"
+              ],
+              "r3.d": [
+                "-0.25",
+                "-1/4"
+              ],
+              "r3.v": [
+                "0.5",
+                "1/2"
+              ],
+              "r4.d": [
+                "0.25",
+                "1/4"
+              ],
+              "r4.v": [
+                "2.00",
+                "2"
+              ],
+              "r5.d": [
+                "3.00",
+                "3"
+              ],
+              "r5.v": [
+                "23.00",
+                "23"
+              ]
+            },
+            "giaiThich": "<p>x² → 2x = 6, f = 9; x³ → 3x² = 12, f = 8; 1/x → −1/x² = −1/4, f = 1/2; √x → 1/(2√x) = 1/4, f = 2; 3x − 7 → 3, f = 23.</p><p><i>VI: x² → 2x = 6, f = 9; x³ → 3x² = 12, f = 8; 1/x → −1/x² = −1/4, f = 1/2; √x → 1/(2√x) = 1/4, f = 2; 3x − 7 → 3, f = 23.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dropping the minus sign of −1/x²."
+        },
+        {
+          "loi": "Writing 1/√x instead of 1/(2√x)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "power rule",
+          "vi": "quy tắc luỹ thừa"
+        }
+      ]
+    }
+  ]
+}

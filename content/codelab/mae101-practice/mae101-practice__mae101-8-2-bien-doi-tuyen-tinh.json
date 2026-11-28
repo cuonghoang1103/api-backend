@@ -1,0 +1,393 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-8-2-bien-doi-tuyen-tinh",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-8-2-bien-doi-tuyen-tinh"
+  },
+  "exercises": [
+    {
+      "title": "Transformations 1 — What makes a map linear",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "linear maps"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Concept questions on linear transformations.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về biến đổi tuyến tính.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Linear ⇒ T(0) = 0.",
+        "Composition reads right to left."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transformations 1 — What makes a map linear\n\nAnswer in the answer panel (no code needed).\n\n1. T is linear when …T là tuyến tính khi …\n2. Column j of the matrix of T is …Cột j của ma trận của T là …\n3. \"Do B, then A\" is the single matrix …\"Làm B, rồi làm A\" là ma trận …\n4. Why can a 2 × 2 matrix not translate points of the plane?Vì sao ma trận 2 × 2 không tịnh tiến được các điểm trên mặt phẳng?\n5. [−1 0; 0 1] reflects the plane across …[−1 0; 0 1] lấy đối xứng mặt phẳng qua …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transformations 1 — What makes a map linear — answer key\n\n1. T is linear when …T là tuyến tính khi …\n   Answer: b) T(u + v) = T(u) + T(v) and T(kv) = kT(v)\n   Additivity and homogeneity; together they force T(0) = 0.VI: Tính cộng và tính thuần nhất; hai tính chất này buộc T(0) = 0.\n\n2. Column j of the matrix of T is …Cột j của ma trận của T là …\n   Answer: c) T(eⱼ), the image of the j-th unit vector\n   A = [T(e₁) | T(e₂) | …] — build the matrix from where the basis lands.VI: A = [T(e₁) | T(e₂) | …] — dựng ma trận từ nơi các vector cơ sở rơi vào.\n\n3. \"Do B, then A\" is the single matrix …\"Làm B, rồi làm A\" là ma trận …\n   Answer: a) AB\n   Matrices act on the vector on their right: A(Bv) = (AB)v — read right to left.VI: Ma trận tác động lên vector ở bên phải: A(Bv) = (AB)v — đọc từ phải sang trái.\n\n4. Why can a 2 × 2 matrix not translate points of the plane?Vì sao ma trận 2 × 2 không tịnh tiến được các điểm trên mặt phẳng?\n   Answer: c) A linear map always sends 0 to 0\n   T(0) = 0, so the origin cannot move; graphics adds a coordinate (homogeneous coordinates) and uses 3 × 3 matrices.VI: T(0) = 0 nên gốc toạ độ không di chuyển được; đồ hoạ thêm một toạ độ (toạ độ thuần nhất) và dùng ma trận 3 × 3.\n\n5. [−1 0; 0 1] reflects the plane across …[−1 0; 0 1] lấy đối xứng mặt phẳng qua …\n   Answer: b) the y-axis\n   (x, y) ↦ (−x, y): x changes sign, so the mirror is the y-axis.VI: (x, y) ↦ (−x, y): x đổi dấu, nên gương là trục y.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> T(u + v) = T(u) + T(v) and T(kv) = kT(v)</p><p>Additivity and homogeneity; together they force T(0) = 0.</p><p><i>VI: Tính cộng và tính thuần nhất; hai tính chất này buộc T(0) = 0.</i></p></li><li><p><b>c)</b> T(eⱼ), the image of the j-th unit vector</p><p>A = [T(e₁) | T(e₂) | …] — build the matrix from where the basis lands.</p><p><i>VI: A = [T(e₁) | T(e₂) | …] — dựng ma trận từ nơi các vector cơ sở rơi vào.</i></p></li><li><p><b>a)</b> AB</p><p>Matrices act on the vector on their right: A(Bv) = (AB)v — read right to left.</p><p><i>VI: Ma trận tác động lên vector ở bên phải: A(Bv) = (AB)v — đọc từ phải sang trái.</i></p></li><li><p><b>c)</b> A linear map always sends 0 to 0</p><p>T(0) = 0, so the origin cannot move; graphics adds a coordinate (homogeneous coordinates) and uses 3 × 3 matrices.</p><p><i>VI: T(0) = 0 nên gốc toạ độ không di chuyển được; đồ hoạ thêm một toạ độ (toạ độ thuần nhất) và dùng ma trận 3 × 3.</i></p></li><li><p><b>b)</b> the y-axis</p><p>(x, y) ↦ (−x, y): x changes sign, so the mirror is the y-axis.</p><p><i>VI: (x, y) ↦ (−x, y): x đổi dấu, nên gương là trục y.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>T is linear when …</p><p style=\"opacity:.75;font-size:.92em\"><i>T là tuyến tính khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "T(0) = 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "T(u + v) = T(u) + T(v) and T(kv) = kT(v)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "T maps lines to circles"
+              },
+              {
+                "ma": "d",
+                "noiDung": "T(u·v) = T(u)·T(v)"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Additivity and homogeneity; together they force T(0) = 0.</p><p><i>VI: Tính cộng và tính thuần nhất; hai tính chất này buộc T(0) = 0.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Column j of the matrix of T is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Cột j của ma trận của T là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the eigenvector of T"
+              },
+              {
+                "ma": "b",
+                "noiDung": "T applied to the zero vector"
+              },
+              {
+                "ma": "c",
+                "noiDung": "T(eⱼ), the image of the j-th unit vector"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the j-th row of T"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A = [T(e₁) | T(e₂) | …] — build the matrix from where the basis lands.</p><p><i>VI: A = [T(e₁) | T(e₂) | …] — dựng ma trận từ nơi các vector cơ sở rơi vào.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>\"Do B, then A\" is the single matrix …</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Làm B, rồi làm A\" là ma trận …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "AB"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A⁻¹B"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A + B"
+              },
+              {
+                "ma": "d",
+                "noiDung": "BA"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Matrices act on the vector on their right: A(Bv) = (AB)v — read right to left.</p><p><i>VI: Ma trận tác động lên vector ở bên phải: A(Bv) = (AB)v — đọc từ phải sang trái.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why can a 2 × 2 matrix not translate points of the plane?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao ma trận 2 × 2 không tịnh tiến được các điểm trên mặt phẳng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Translation needs complex numbers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Its determinant is always 1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A linear map always sends 0 to 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It can, with the right entries"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>T(0) = 0, so the origin cannot move; graphics adds a coordinate (homogeneous coordinates) and uses 3 × 3 matrices.</p><p><i>VI: T(0) = 0 nên gốc toạ độ không di chuyển được; đồ hoạ thêm một toạ độ (toạ độ thuần nhất) và dùng ma trận 3 × 3.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>[−1 0; 0 1] reflects the plane across …</p><p style=\"opacity:.75;font-size:.92em\"><i>[−1 0; 0 1] lấy đối xứng mặt phẳng qua …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the x-axis"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the y-axis"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the line y = x"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the origin"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>(x, y) ↦ (−x, y): x changes sign, so the mirror is the y-axis.</p><p><i>VI: (x, y) ↦ (−x, y): x đổi dấu, nên gương là trục y.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing BA for \"B then A\"."
+        },
+        {
+          "loi": "Building the matrix with images as rows."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "linear transformation",
+          "vi": "biến đổi tuyến tính"
+        },
+        {
+          "en": "composition",
+          "vi": "hợp thành"
+        },
+        {
+          "en": "homogeneous coordinates",
+          "vi": "toạ độ thuần nhất"
+        }
+      ]
+    },
+    {
+      "title": "Transformations 2 — Apply and compose",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "applying transformations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>R = [0 −1; 1 0], S = [2 0; 0 2], F = [−1 0; 0 1], H = [1 1; 0 1]. Give the image of each point.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>R = [0 −1; 1 0], S = [2 0; 0 2], F = [−1 0; 0 1], H = [1 1; 0 1]. Cho ảnh của mỗi điểm.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Row of the matrix · the point gives each coordinate.",
+        "For a product, apply the rightmost first."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transformations 2 — Apply and compose\n\nAnswer in the answer panel (no code needed).\n\n1. ImagesẢnh\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transformations 2 — Apply and compose — answer key\n\n1. ImagesẢnh\n   - r1.x: 0.00 / 0\n   - r1.y: 2.00 / 2\n   - r2.x: 2.00 / 2\n   - r2.y: 6.00 / 6\n   - r3.x: -4.00 / -4\n   - r3.y: -1.00 / -1\n   - r4.x: 5.00 / 5\n   - r4.y: 3.00 / 3\n   - r5.x: 0.00 / 0\n   - r5.y: 2.00 / 2\n   - r6.x: 2.00 / 2\n   - r6.y: 0.00 / 0\n   R (rotate 90°) · (2, 0) = (0, 2); S (scale 2) · (1, 3) = (2, 6); F (reflect in y-axis) · (4, −1) = (-4, -1); H (shear) · (2, 3) = (5, 3); R·S (scale, then rotate) · (1, 0) = (0, 2); S·F·R · (0, 1) = (2, 0). The rightmost matrix acts first.VI: R (rotate 90°) · (2, 0) = (0, 2); S (scale 2) · (1, 3) = (2, 6); F (reflect in y-axis) · (4, −1) = (-4, -1); H (shear) · (2, 3) = (5, 3); R·S (scale, then rotate) · (1, 0) = (0, 2); S·F·R · (0, 1) = (2, 0). Ma trận bên phải nhất tác động trước.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>R (rotate 90°) · (2, 0) = (0, 2); S (scale 2) · (1, 3) = (2, 6); F (reflect in y-axis) · (4, −1) = (-4, -1); H (shear) · (2, 3) = (5, 3); R·S (scale, then rotate) · (1, 0) = (0, 2); S·F·R · (0, 1) = (2, 0). The rightmost matrix acts first.</p><p><i>VI: R (rotate 90°) · (2, 0) = (0, 2); S (scale 2) · (1, 3) = (2, 6); F (reflect in y-axis) · (4, −1) = (-4, -1); H (shear) · (2, 3) = (5, 3); R·S (scale, then rotate) · (1, 0) = (0, 2); S·F·R · (0, 1) = (2, 0). Ma trận bên phải nhất tác động trước.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Images</p><p style=\"opacity:.75;font-size:.92em\"><i>Ảnh</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Transformation · point"
+              },
+              {
+                "ma": "x",
+                "ten": "x′"
+              },
+              {
+                "ma": "y",
+                "ten": "y′"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "R (rotate 90°) · (2, 0)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "S (scale 2) · (1, 3)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "F (reflect in y-axis) · (4, −1)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "H (shear) · (2, 3)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "R·S (scale, then rotate) · (1, 0)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "t": "S·F·R · (0, 1)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.x": [
+                "0.00",
+                "0"
+              ],
+              "r1.y": [
+                "2.00",
+                "2"
+              ],
+              "r2.x": [
+                "2.00",
+                "2"
+              ],
+              "r2.y": [
+                "6.00",
+                "6"
+              ],
+              "r3.x": [
+                "-4.00",
+                "-4"
+              ],
+              "r3.y": [
+                "-1.00",
+                "-1"
+              ],
+              "r4.x": [
+                "5.00",
+                "5"
+              ],
+              "r4.y": [
+                "3.00",
+                "3"
+              ],
+              "r5.x": [
+                "0.00",
+                "0"
+              ],
+              "r5.y": [
+                "2.00",
+                "2"
+              ],
+              "r6.x": [
+                "2.00",
+                "2"
+              ],
+              "r6.y": [
+                "0.00",
+                "0"
+              ]
+            },
+            "giaiThich": "<p>R (rotate 90°) · (2, 0) = (0, 2); S (scale 2) · (1, 3) = (2, 6); F (reflect in y-axis) · (4, −1) = (-4, -1); H (shear) · (2, 3) = (5, 3); R·S (scale, then rotate) · (1, 0) = (0, 2); S·F·R · (0, 1) = (2, 0). The rightmost matrix acts first.</p><p><i>VI: R (rotate 90°) · (2, 0) = (0, 2); S (scale 2) · (1, 3) = (2, 6); F (reflect in y-axis) · (4, −1) = (-4, -1); H (shear) · (2, 3) = (5, 3); R·S (scale, then rotate) · (1, 0) = (0, 2); S·F·R · (0, 1) = (2, 0). Ma trận bên phải nhất tác động trước.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Applying the left matrix first."
+        },
+        {
+          "loi": "Sign of the rotation (counter-clockwise is positive)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "shear",
+          "vi": "phép trượt"
+        }
+      ]
+    }
+  ]
+}

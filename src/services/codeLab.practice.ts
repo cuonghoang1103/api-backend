@@ -38,6 +38,8 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   'computer-organization-and-architecture': 'cea201-practice',
   // MAD101 (30/10/2026): logic, tập hợp, hàm, Big-O, số học, truy hồi, đếm, đồ thị, cây — content/codelab/mad101-practice (máy chấm choice/order/table/js).
   'discrete-mathematics': 'mad101-practice',
+  // MAE101 (28/11/2026): giới hạn, đạo hàm, tích phân, khử Gauss, ma trận, định thức, giá trị riêng, vector, hạng — content/codelab/mae101-practice (choice/order/table + 3 Lab viết hàm 'js').
+  'mathematics-for-engineering': 'mae101-practice',
   // NWC204 (30/10/2026): subnet/VLSM, CIDR, IPv6, bảng định tuyến, MAC/VLAN, TCP, ACL, NAT… — content/codelab/nwc204-practice (máy chấm choice/order/table/js).
   'nwc204-computer-networking': 'nwc204-practice',
   // Courses (01/11/2026): networking-for-developers (mô phỏng /net-lab, js/choice) · api-design (LabFlow API, js/module/choice).
@@ -84,6 +86,7 @@ export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
   { loai: 'academy', ma: 'OSG202', ten: 'Operating Systems', courseSlug: 'operating-systems', trackSlug: 'osg202-practice' },
   { loai: 'academy', ma: 'CEA201', ten: 'Computer Organization and Architecture', courseSlug: 'computer-organization-and-architecture', trackSlug: 'cea201-practice' },
   { loai: 'academy', ma: 'MAD101', ten: 'Discrete Mathematics', courseSlug: 'discrete-mathematics', trackSlug: 'mad101-practice' },
+  { loai: 'academy', ma: 'MAE101', ten: 'Mathematics for Engineering', courseSlug: 'mathematics-for-engineering', trackSlug: 'mae101-practice' },
   { loai: 'academy', ma: 'NWC204', ten: 'Computer Networking', courseSlug: 'nwc204-computer-networking', trackSlug: 'nwc204-practice' },
   { loai: 'academy', ma: 'SDN302', ten: 'Server-Side Development with NodeJS, Express, and MongoDB', courseSlug: 'server-side-development-nodejs-express-mongodb', trackSlug: 'server-side-development-nodejs-express-mongodb-practice' },
   { loai: 'course', ten: 'Nền tảng Web', courseSlug: 'web-foundations', trackSlug: 'web-foundations-practice' },
@@ -94,6 +97,7 @@ export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
   { loai: 'course', ten: 'Authentication', courseSlug: 'authentication', trackSlug: 'authentication-practice' },
   { loai: 'course', ten: 'PostgreSQL', courseSlug: 'postgresql', trackSlug: 'postgresql-practice' },
   { loai: 'course', ten: 'Node.js', courseSlug: 'nodejs', trackSlug: 'nodejs-practice' },
+  { loai: 'course', ten: 'Coding Interview Prep (DSA)', courseSlug: 'dsa-interview', trackSlug: 'dsa-interview-practice' },
 ] as MucDanhMuc[]);
 
 /** Track luyện tập của một khoá (bảng trên, không có thì `<courseSlug>-practice`). */

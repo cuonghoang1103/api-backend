@@ -1,0 +1,346 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-4-2-ky-thuat-tich-phan",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-4-2-ky-thuat-tich-phan"
+  },
+  "exercises": [
+    {
+      "title": "Techniques 1 — Substitution or by parts?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "integration techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Choose the technique and the right first step.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn kỹ thuật và bước đầu đúng.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Function + its derivative together ⇒ substitution.",
+        "Product of unlike factors ⇒ by parts, u by LIATE."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 1 — Substitution or by parts?\n\nAnswer in the answer panel (no code needed).\n\n1. For ∫ 2x(x² + 1)³ dx the right substitution is …Với ∫ 2x(x² + 1)³ dx, phép đổi biến đúng là …\n2. Integration by parts is ∫ u dv = …Tích phân từng phần là ∫ u dv = …\n3. By LIATE, in ∫ x·ln x dx you choose u = …Theo LIATE, trong ∫ x·ln x dx chọn u = …\n4. ∫ x·eˣ dx = …∫ x·eˣ dx = …\n5. In a DEFINITE integral by substitution, the cleanest habit is to …Trong tích phân XÁC ĐỊNH bằng đổi biến, thói quen gọn nhất là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 1 — Substitution or by parts? — answer key\n\n1. For ∫ 2x(x² + 1)³ dx the right substitution is …Với ∫ 2x(x² + 1)³ dx, phép đổi biến đúng là …\n   Answer: d) u = x² + 1, du = 2x dx\n   The inner function's derivative 2x is present, so the integral becomes ∫u³ du.VI: Đạo hàm 2x của hàm trong có sẵn, nên tích phân thành ∫u³ du.\n\n2. Integration by parts is ∫ u dv = …Tích phân từng phần là ∫ u dv = …\n   Answer: b) uv − ∫ v du\n   It is the product rule run backwards.VI: Đó là quy tắc tích chạy ngược.\n\n3. By LIATE, in ∫ x·ln x dx you choose u = …Theo LIATE, trong ∫ x·ln x dx chọn u = …\n   Answer: b) ln x\n   Logarithms come first in LIATE; ln x simplifies when differentiated (1/x).VI: Logarit đứng đầu trong LIATE; ln x đơn giản đi khi lấy đạo hàm (1/x).\n\n4. ∫ x·eˣ dx = …∫ x·eˣ dx = …\n   Answer: b) x·eˣ − eˣ + C\n   u = x, dv = eˣ dx ⇒ x·eˣ − ∫eˣ dx.VI: u = x, dv = eˣ dx ⇒ x·eˣ − ∫eˣ dx.\n\n5. In a DEFINITE integral by substitution, the cleanest habit is to …Trong tích phân XÁC ĐỊNH bằng đổi biến, thói quen gọn nhất là …\n   Answer: a) change the bounds to u and never return to x\n   Converting the bounds avoids back-substitution and sign mistakes (lesson 4.2, ★).VI: Đổi cận sang u giúp khỏi thế ngược và tránh sai dấu (bài 4.2, ★).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> u = x² + 1, du = 2x dx</p><p>The inner function's derivative 2x is present, so the integral becomes ∫u³ du.</p><p><i>VI: Đạo hàm 2x của hàm trong có sẵn, nên tích phân thành ∫u³ du.</i></p></li><li><p><b>b)</b> uv − ∫ v du</p><p>It is the product rule run backwards.</p><p><i>VI: Đó là quy tắc tích chạy ngược.</i></p></li><li><p><b>b)</b> ln x</p><p>Logarithms come first in LIATE; ln x simplifies when differentiated (1/x).</p><p><i>VI: Logarit đứng đầu trong LIATE; ln x đơn giản đi khi lấy đạo hàm (1/x).</i></p></li><li><p><b>b)</b> x·eˣ − eˣ + C</p><p>u = x, dv = eˣ dx ⇒ x·eˣ − ∫eˣ dx.</p><p><i>VI: u = x, dv = eˣ dx ⇒ x·eˣ − ∫eˣ dx.</i></p></li><li><p><b>a)</b> change the bounds to u and never return to x</p><p>Converting the bounds avoids back-substitution and sign mistakes (lesson 4.2, ★).</p><p><i>VI: Đổi cận sang u giúp khỏi thế ngược và tránh sai dấu (bài 4.2, ★).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>For ∫ 2x(x² + 1)³ dx the right substitution is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Với ∫ 2x(x² + 1)³ dx, phép đổi biến đúng là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "u = x³"
+              },
+              {
+                "ma": "b",
+                "noiDung": "u = 2x"
+              },
+              {
+                "ma": "c",
+                "noiDung": "u = (x² + 1)³"
+              },
+              {
+                "ma": "d",
+                "noiDung": "u = x² + 1, du = 2x dx"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The inner function's derivative 2x is present, so the integral becomes ∫u³ du.</p><p><i>VI: Đạo hàm 2x của hàm trong có sẵn, nên tích phân thành ∫u³ du.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Integration by parts is ∫ u dv = …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tích phân từng phần là ∫ u dv = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "u′v′"
+              },
+              {
+                "ma": "b",
+                "noiDung": "uv − ∫ v du"
+              },
+              {
+                "ma": "c",
+                "noiDung": "∫ u du · ∫ dv"
+              },
+              {
+                "ma": "d",
+                "noiDung": "uv + ∫ v du"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>It is the product rule run backwards.</p><p><i>VI: Đó là quy tắc tích chạy ngược.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>By LIATE, in ∫ x·ln x dx you choose u = …</p><p style=\"opacity:.75;font-size:.92em\"><i>Theo LIATE, trong ∫ x·ln x dx chọn u = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "x"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ln x"
+              },
+              {
+                "ma": "c",
+                "noiDung": "x·ln x"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Logarithms come first in LIATE; ln x simplifies when differentiated (1/x).</p><p><i>VI: Logarit đứng đầu trong LIATE; ln x đơn giản đi khi lấy đạo hàm (1/x).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>∫ x·eˣ dx = …</p><p style=\"opacity:.75;font-size:.92em\"><i>∫ x·eˣ dx = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "x·eˣ + eˣ + C"
+              },
+              {
+                "ma": "b",
+                "noiDung": "x·eˣ − eˣ + C"
+              },
+              {
+                "ma": "c",
+                "noiDung": "x²eˣ/2 + C"
+              },
+              {
+                "ma": "d",
+                "noiDung": "eˣ + C"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>u = x, dv = eˣ dx ⇒ x·eˣ − ∫eˣ dx.</p><p><i>VI: u = x, dv = eˣ dx ⇒ x·eˣ − ∫eˣ dx.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>In a DEFINITE integral by substitution, the cleanest habit is to …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong tích phân XÁC ĐỊNH bằng đổi biến, thói quen gọn nhất là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "change the bounds to u and never return to x"
+              },
+              {
+                "ma": "b",
+                "noiDung": "substitute twice"
+              },
+              {
+                "ma": "c",
+                "noiDung": "keep the x-bounds for the u-integral"
+              },
+              {
+                "ma": "d",
+                "noiDung": "drop the bounds and add C"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Converting the bounds avoids back-substitution and sign mistakes (lesson 4.2, ★).</p><p><i>VI: Đổi cận sang u giúp khỏi thế ngược và tránh sai dấu (bài 4.2, ★).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping x-bounds after substituting u."
+        },
+        {
+          "loi": "Choosing u = eˣ in ∫x·eˣ (it never simplifies)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "substitution",
+          "vi": "đổi biến"
+        },
+        {
+          "en": "integration by parts",
+          "vi": "tích phân từng phần"
+        }
+      ]
+    },
+    {
+      "title": "Techniques 2 — Five definite integrals",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "definite integrals by technique"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Evaluate. Write an integer, a fraction, or a decimal rounded to 2 digits (e ≈ 2.71828).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính. Ghi số nguyên, phân số, hoặc số thập phân làm tròn 2 chữ số (e ≈ 2,71828).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Change the bounds with the substitution.",
+        "By parts: u = x or u = ln x."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 2 — Five definite integrals\n\nAnswer in the answer panel (no code needed).\n\n1. Substitution and by partsĐổi biến và từng phần\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 2 — Five definite integrals — answer key\n\n1. Substitution and by partsĐổi biến và từng phần\n   - r1.v: 3.75 / 15/4\n   - r2.v: 1.00 / 1\n   - r3.v: 1.00 / 1\n   - r4.v: 0.50 / 0.5 / 1/2\n   - r5.v: 1.72\n   ∫₀¹ 2x(x² + 1)³ dx: u = x² + 1: ∫₁² u³ du = 15/4; ∫₀¹ x·eˣ dx: [x·eˣ − eˣ]₀¹ = 0 − (−1); ∫₁ᵉ ln x dx: [x ln x − x]₁ᵉ = 0 − (−1); ∫₀^(π/2) sin x · cos x dx: u = sin x: ∫₀¹ u du; ∫₀¹ 3x²·e^(x³) dx: u = x³: e − 1 ≈ 1.72.VI: ∫₀¹ 2x(x² + 1)³ dx: u = x² + 1: ∫₁² u³ du = 15/4; ∫₀¹ x·eˣ dx: [x·eˣ − eˣ]₀¹ = 0 − (−1); ∫₁ᵉ ln x dx: [x ln x − x]₁ᵉ = 0 − (−1); ∫₀^(π/2) sin x · cos x dx: u = sin x: ∫₀¹ u du; ∫₀¹ 3x²·e^(x³) dx: u = x³: e − 1 ≈ 1.72.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>∫₀¹ 2x(x² + 1)³ dx: u = x² + 1: ∫₁² u³ du = 15/4; ∫₀¹ x·eˣ dx: [x·eˣ − eˣ]₀¹ = 0 − (−1); ∫₁ᵉ ln x dx: [x ln x − x]₁ᵉ = 0 − (−1); ∫₀^(π/2) sin x · cos x dx: u = sin x: ∫₀¹ u du; ∫₀¹ 3x²·e^(x³) dx: u = x³: e − 1 ≈ 1.72.</p><p><i>VI: ∫₀¹ 2x(x² + 1)³ dx: u = x² + 1: ∫₁² u³ du = 15/4; ∫₀¹ x·eˣ dx: [x·eˣ − eˣ]₀¹ = 0 − (−1); ∫₁ᵉ ln x dx: [x ln x − x]₁ᵉ = 0 − (−1); ∫₀^(π/2) sin x · cos x dx: u = sin x: ∫₀¹ u du; ∫₀¹ 3x²·e^(x³) dx: u = x³: e − 1 ≈ 1.72.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Substitution and by parts</p><p style=\"opacity:.75;font-size:.92em\"><i>Đổi biến và từng phần</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "Integral"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "∫₀¹ 2x(x² + 1)³ dx"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "∫₀¹ x·eˣ dx"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "∫₁ᵉ ln x dx"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "∫₀^(π/2) sin x · cos x dx"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "∫₀¹ 3x²·e^(x³) dx"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": [
+                "3.75",
+                "15/4"
+              ],
+              "r2.v": [
+                "1.00",
+                "1"
+              ],
+              "r3.v": [
+                "1.00",
+                "1"
+              ],
+              "r4.v": [
+                "0.50",
+                "0.5",
+                "1/2"
+              ],
+              "r5.v": [
+                "1.72"
+              ]
+            },
+            "giaiThich": "<p>∫₀¹ 2x(x² + 1)³ dx: u = x² + 1: ∫₁² u³ du = 15/4; ∫₀¹ x·eˣ dx: [x·eˣ − eˣ]₀¹ = 0 − (−1); ∫₁ᵉ ln x dx: [x ln x − x]₁ᵉ = 0 − (−1); ∫₀^(π/2) sin x · cos x dx: u = sin x: ∫₀¹ u du; ∫₀¹ 3x²·e^(x³) dx: u = x³: e − 1 ≈ 1.72.</p><p><i>VI: ∫₀¹ 2x(x² + 1)³ dx: u = x² + 1: ∫₁² u³ du = 15/4; ∫₀¹ x·eˣ dx: [x·eˣ − eˣ]₀¹ = 0 − (−1); ∫₁ᵉ ln x dx: [x ln x − x]₁ᵉ = 0 − (−1); ∫₀^(π/2) sin x · cos x dx: u = sin x: ∫₀¹ u du; ∫₀¹ 3x²·e^(x³) dx: u = x³: e − 1 ≈ 1.72.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to evaluate the boundary term uv."
+        },
+        {
+          "loi": "Rounding e too early."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

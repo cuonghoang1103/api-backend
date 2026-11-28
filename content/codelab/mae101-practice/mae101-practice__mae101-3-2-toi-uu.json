@@ -1,0 +1,458 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-3-2-toi-uu",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-3-2-toi-uu"
+  },
+  "exercises": [
+    {
+      "title": "Optimization 1 — The method",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "optimization"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Questions on setting up and solving optimization problems.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về cách lập và giải bài toán tối ưu.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "One variable, one function, then f′ = 0.",
+        "Do not forget the endpoints."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Optimization 1 — The method\n\nAnswer in the answer panel (no code needed).\n\n1. To find the absolute max of a continuous f on [a, b] you compare f at …Để tìm giá trị lớn nhất của f liên tục trên [a, b], so f tại …\n2. A rectangle has perimeter 20. Its maximum area is …Một hình chữ nhật có chu vi 20. Diện tích lớn nhất là …\n3. The first step of a word optimization problem is …Bước đầu tiên của một bài tối ưu có lời là …\n4. lim x→∞ (5x³ − x)/(2x³ + 7) = …lim x→∞ (5x³ − x)/(2x³ + 7) = …\n5. For x > 0, the minimum of x + 1/x is …Với x > 0, giá trị nhỏ nhất của x + 1/x là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Optimization 1 — The method — answer key\n\n1. To find the absolute max of a continuous f on [a, b] you compare f at …Để tìm giá trị lớn nhất của f liên tục trên [a, b], so f tại …\n   Answer: a) the critical points inside (a, b) and the endpoints a, b\n   Closed-interval method: the maximum is at a critical point or at an endpoint.VI: Phương pháp khoảng đóng: giá trị lớn nhất nằm ở điểm tới hạn hoặc ở đầu mút.\n\n2. A rectangle has perimeter 20. Its maximum area is …Một hình chữ nhật có chu vi 20. Diện tích lớn nhất là …\n   Answer: c) 25 (a 5 × 5 square)\n   A(x) = x(10 − x), A′ = 10 − 2x = 0 at x = 5: area 25.VI: A(x) = x(10 − x), A′ = 10 − 2x = 0 tại x = 5: diện tích 25.\n\n3. The first step of a word optimization problem is …Bước đầu tiên của một bài tối ưu có lời là …\n   Answer: c) write the objective as a function of one variable via the constraint\n   Use the constraint to eliminate the extra variable, then optimise a one-variable function.VI: Dùng ràng buộc để khử biến thừa, rồi tối ưu một hàm một biến.\n\n4. lim x→∞ (5x³ − x)/(2x³ + 7) = …lim x→∞ (5x³ − x)/(2x³ + 7) = …\n   Answer: a) 5/2\n   Equal degrees: ratio of leading coefficients 5/2.VI: Bậc bằng nhau: tỉ số hệ số cao nhất 5/2.\n\n5. For x > 0, the minimum of x + 1/x is …Với x > 0, giá trị nhỏ nhất của x + 1/x là …\n   Answer: c) 2, at x = 1\n   f′ = 1 − 1/x² = 0 at x = 1 and f″ = 2/x³ > 0: minimum f(1) = 2.VI: f′ = 1 − 1/x² = 0 tại x = 1 và f″ = 2/x³ > 0: cực tiểu f(1) = 2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> the critical points inside (a, b) and the endpoints a, b</p><p>Closed-interval method: the maximum is at a critical point or at an endpoint.</p><p><i>VI: Phương pháp khoảng đóng: giá trị lớn nhất nằm ở điểm tới hạn hoặc ở đầu mút.</i></p></li><li><p><b>c)</b> 25 (a 5 × 5 square)</p><p>A(x) = x(10 − x), A′ = 10 − 2x = 0 at x = 5: area 25.</p><p><i>VI: A(x) = x(10 − x), A′ = 10 − 2x = 0 tại x = 5: diện tích 25.</i></p></li><li><p><b>c)</b> write the objective as a function of one variable via the constraint</p><p>Use the constraint to eliminate the extra variable, then optimise a one-variable function.</p><p><i>VI: Dùng ràng buộc để khử biến thừa, rồi tối ưu một hàm một biến.</i></p></li><li><p><b>a)</b> 5/2</p><p>Equal degrees: ratio of leading coefficients 5/2.</p><p><i>VI: Bậc bằng nhau: tỉ số hệ số cao nhất 5/2.</i></p></li><li><p><b>c)</b> 2, at x = 1</p><p>f′ = 1 − 1/x² = 0 at x = 1 and f″ = 2/x³ > 0: minimum f(1) = 2.</p><p><i>VI: f′ = 1 − 1/x² = 0 tại x = 1 và f″ = 2/x³ > 0: cực tiểu f(1) = 2.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>To find the absolute max of a continuous f on [a, b] you compare f at …</p><p style=\"opacity:.75;font-size:.92em\"><i>Để tìm giá trị lớn nhất của f liên tục trên [a, b], so f tại …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the critical points inside (a, b) and the endpoints a, b"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the critical points inside (a, b) only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the two endpoints a and b only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the midpoint (a + b)/2 and the endpoints"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Closed-interval method: the maximum is at a critical point or at an endpoint.</p><p><i>VI: Phương pháp khoảng đóng: giá trị lớn nhất nằm ở điểm tới hạn hoặc ở đầu mút.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A rectangle has perimeter 20. Its maximum area is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một hình chữ nhật có chu vi 20. Diện tích lớn nhất là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "100"
+              },
+              {
+                "ma": "b",
+                "noiDung": "20"
+              },
+              {
+                "ma": "c",
+                "noiDung": "25 (a 5 × 5 square)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "24 (a 4 × 6 rectangle)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A(x) = x(10 − x), A′ = 10 − 2x = 0 at x = 5: area 25.</p><p><i>VI: A(x) = x(10 − x), A′ = 10 − 2x = 0 tại x = 5: diện tích 25.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The first step of a word optimization problem is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bước đầu tiên của một bài tối ưu có lời là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "differentiate the constraint and set it to zero"
+              },
+              {
+                "ma": "b",
+                "noiDung": "set the quantity to optimise equal to 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "write the objective as a function of one variable via the constraint"
+              },
+              {
+                "ma": "d",
+                "noiDung": "draw the graph and read the highest point"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Use the constraint to eliminate the extra variable, then optimise a one-variable function.</p><p><i>VI: Dùng ràng buộc để khử biến thừa, rồi tối ưu một hàm một biến.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>lim x→∞ (5x³ − x)/(2x³ + 7) = …</p><p style=\"opacity:.75;font-size:.92em\"><i>lim x→∞ (5x³ − x)/(2x³ + 7) = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "5/2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "−1/7"
+              },
+              {
+                "ma": "c",
+                "noiDung": "∞"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Equal degrees: ratio of leading coefficients 5/2.</p><p><i>VI: Bậc bằng nhau: tỉ số hệ số cao nhất 5/2.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>For x &gt; 0, the minimum of x + 1/x is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Với x &gt; 0, giá trị nhỏ nhất của x + 1/x là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1, at x = 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0, at x = 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2, at x = 1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "there is no minimum"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>f′ = 1 − 1/x² = 0 at x = 1 and f″ = 2/x³ > 0: minimum f(1) = 2.</p><p><i>VI: f′ = 1 − 1/x² = 0 tại x = 1 và f″ = 2/x³ > 0: cực tiểu f(1) = 2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ignoring endpoints on a closed interval."
+        },
+        {
+          "loi": "Optimising the constraint instead of the objective."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "objective function",
+          "vi": "hàm mục tiêu"
+        },
+        {
+          "en": "constraint",
+          "vi": "ràng buộc"
+        },
+        {
+          "en": "closed interval method",
+          "vi": "phương pháp khoảng đóng"
+        }
+      ]
+    },
+    {
+      "title": "Optimization 2 — Solve four small problems",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "applied optimization"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<ol><li>Fence 100 m along three sides of a rectangle (the fourth side is a river). Maximise the area: give the side perpendicular to the river x and the area.</li><li>f(x) = x³ − 3x on [0, 2]: absolute max and min.</li><li>f(x) = x(10 − x): maximum value.</li><li>An open box from a 12 × 12 sheet by cutting squares of side x from the corners: the best x.</li></ol><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<ol><li>Rào 100 m ba cạnh của một hình chữ nhật (cạnh thứ tư là sông). Cực đại diện tích: cho cạnh vuông góc với sông x và diện tích.</li><li>f(x) = x³ − 3x trên [0, 2]: giá trị lớn nhất và nhỏ nhất.</li><li>f(x) = x(10 − x): giá trị lớn nhất.</li><li>Hộp không nắp từ tấm 12 × 12 bằng cách cắt bốn hình vuông cạnh x ở góc: x tốt nhất.</li></ol><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the objective in one variable.",
+        "Check the endpoints in problem 2."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Optimization 2 — Solve four small problems\n\nAnswer in the answer panel (no code needed).\n\n1. AnswersĐáp số\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Optimization 2 — Solve four small problems — answer key\n\n1. AnswersĐáp số\n   - r1.v: 25.00 / 25\n   - r2.v: 1250.00 / 1250\n   - r3.v: 2.00 / 2\n   - r4.v: -2.00 / -2\n   - r5.v: 25.00 / 25\n   - r6.v: 2.00 / 2\n   1) A = x(100 − 2x), A′ = 100 − 4x = 0 ⇒ x = 25, A = 25·50 = 1250. 2) f′ = 3x² − 3 = 0 ⇒ x = 1 in [0, 2]; f(0) = 0, f(1) = −2, f(2) = 2 ⇒ max 2, min −2. 3) vertex at x = 5: 25. 4) V = x(12 − 2x)², V′ = (12 − 2x)(12 − 6x) = 0 ⇒ x = 2 (x = 6 gives V = 0).VI: 1) A = x(100 − 2x), A′ = 100 − 4x = 0 ⇒ x = 25, A = 25·50 = 1250. 2) f′ = 3x² − 3 = 0 ⇒ x = 1 thuộc [0, 2]; f(0) = 0, f(1) = −2, f(2) = 2 ⇒ lớn nhất 2, nhỏ nhất −2. 3) đỉnh tại x = 5: 25. 4) V = x(12 − 2x)², V′ = (12 − 2x)(12 − 6x) = 0 ⇒ x = 2 (x = 6 cho V = 0).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1) A = x(100 − 2x), A′ = 100 − 4x = 0 ⇒ x = 25, A = 25·50 = 1250. 2) f′ = 3x² − 3 = 0 ⇒ x = 1 in [0, 2]; f(0) = 0, f(1) = −2, f(2) = 2 ⇒ max 2, min −2. 3) vertex at x = 5: 25. 4) V = x(12 − 2x)², V′ = (12 − 2x)(12 − 6x) = 0 ⇒ x = 2 (x = 6 gives V = 0).</p><p><i>VI: 1) A = x(100 − 2x), A′ = 100 − 4x = 0 ⇒ x = 25, A = 25·50 = 1250. 2) f′ = 3x² − 3 = 0 ⇒ x = 1 thuộc [0, 2]; f(0) = 0, f(1) = −2, f(2) = 2 ⇒ lớn nhất 2, nhỏ nhất −2. 3) đỉnh tại x = 5: 25. 4) V = x(12 − 2x)², V′ = (12 − 2x)(12 − 6x) = 0 ⇒ x = 2 (x = 6 cho V = 0).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Answers</p><p style=\"opacity:.75;font-size:.92em\"><i>Đáp số</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "1. x (m)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "1. max area (m²)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "2. max on [0, 2]"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "2. min on [0, 2]"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "3. max of x(10 − x)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "p": "4. best x"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": [
+                "25.00",
+                "25"
+              ],
+              "r2.v": [
+                "1250.00",
+                "1250"
+              ],
+              "r3.v": [
+                "2.00",
+                "2"
+              ],
+              "r4.v": [
+                "-2.00",
+                "-2"
+              ],
+              "r5.v": [
+                "25.00",
+                "25"
+              ],
+              "r6.v": [
+                "2.00",
+                "2"
+              ]
+            },
+            "giaiThich": "<p>1) A = x(100 − 2x), A′ = 100 − 4x = 0 ⇒ x = 25, A = 25·50 = 1250. 2) f′ = 3x² − 3 = 0 ⇒ x = 1 in [0, 2]; f(0) = 0, f(1) = −2, f(2) = 2 ⇒ max 2, min −2. 3) vertex at x = 5: 25. 4) V = x(12 − 2x)², V′ = (12 − 2x)(12 − 6x) = 0 ⇒ x = 2 (x = 6 gives V = 0).</p><p><i>VI: 1) A = x(100 − 2x), A′ = 100 − 4x = 0 ⇒ x = 25, A = 25·50 = 1250. 2) f′ = 3x² − 3 = 0 ⇒ x = 1 thuộc [0, 2]; f(0) = 0, f(1) = −2, f(2) = 2 ⇒ lớn nhất 2, nhỏ nhất −2. 3) đỉnh tại x = 5: 25. 4) V = x(12 − 2x)², V′ = (12 − 2x)(12 − 6x) = 0 ⇒ x = 2 (x = 6 cho V = 0).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reporting the critical point x = 1 as the maximum in problem 2."
+        },
+        {
+          "loi": "Taking x = 6 in problem 4."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Optimization 3 — Order the method",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "optimization method"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Order the steps of solving an applied optimization problem.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAE101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp xếp các bước giải một bài tối ưu ứng dụng.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAE101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Setting up comes before calculus.",
+        "Verification comes before the answer."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Optimization 3 — Order the method\n\nAnswer in the answer panel (no code needed).\n\n1. StepsCác bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Optimization 3 — Order the method — answer key\n\n1. StepsCác bước\n   Answer: m1) Name the variables and the quantity to optimise  →  m5) Use the constraint to write it as a function of one variable  →  m3) Find the critical points (f′ = 0) in the allowed domain  →  m4) Compare with the endpoints / use the second-derivative test  →  m2) Answer the question in its units\n   Set up, reduce to one variable, differentiate, verify, interpret.VI: Lập bài, đưa về một biến, lấy đạo hàm, kiểm tra, diễn giải.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Set up, reduce to one variable, differentiate, verify, interpret.</p><p><i>VI: Lập bài, đưa về một biến, lấy đạo hàm, kiểm tra, diễn giải.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Các bước</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Name the variables and the quantity to optimise"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Answer the question in its units"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Find the critical points (f′ = 0) in the allowed domain"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Compare with the endpoints / use the second-derivative test"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Use the constraint to write it as a function of one variable"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m5",
+              "m3",
+              "m4",
+              "m2"
+            ],
+            "giaiThich": "<p>Set up, reduce to one variable, differentiate, verify, interpret.</p><p><i>VI: Lập bài, đưa về một biến, lấy đạo hàm, kiểm tra, diễn giải.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Differentiating before eliminating the second variable."
+        },
+        {
+          "loi": "Stopping at f′ = 0 without checking."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

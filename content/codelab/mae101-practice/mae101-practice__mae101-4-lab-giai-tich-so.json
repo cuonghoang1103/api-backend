@@ -1,0 +1,360 @@
+{
+  "trackSlug": "mae101-practice",
+  "moduleSlug": "mae101-4-lab-giai-tich-so",
+  "lesson": {
+    "course": "mathematics-for-engineering",
+    "slug": "mae101-4-2-ky-thuat-tich-phan"
+  },
+  "exercises": [
+    {
+      "title": "Calculus lab 1 — Differentiate a polynomial",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "power rule"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>A polynomial is given by its coefficients in increasing degree: <code>[c0, c1, c2, …]</code> means c0 + c1·x + c2·x² + …. Write <code>polyDerivative(c)</code> returning the coefficients of its derivative in the same format. The derivative of a constant is <code>[0]</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Power rule term by term: d/dx (cₖxᵏ) = k·cₖ·xᵏ⁻¹.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một đa thức cho bằng hệ số theo bậc tăng dần: <code>[c0, c1, c2, …]</code> nghĩa là c0 + c1·x + c2·x² + …. Viết <code>polyDerivative(c)</code> trả hệ số của đạo hàm cùng định dạng. Đạo hàm của hằng số là <code>[0]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Quy tắc luỹ thừa từng hạng tử: d/dx (cₖxᵏ) = k·cₖ·xᵏ⁻¹.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "polyDerivative([5, -3, 0, 2])",
+          "output": "[-3,0,6]",
+          "explanation": "5 − 3x + 2x³ → −3 + 6x².|||5 − 3x + 2x³ → −3 + 6x²."
+        }
+      ],
+      "hintsJson": [
+        "Skip index 0 (the constant).",
+        "Multiply each coefficient by its index."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function polyDerivative(c) {\n  return c;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function polyDerivative(c) {\n  // d/dx Σ cₖ xᵏ = Σ k·cₖ xᵏ⁻¹  — bỏ hằng số; đạo hàm của hằng là [0].\n  var out = [];\n  for (var k = 1; k < c.length; k++) out.push(k * c[k]);\n  return out.length ? out : [0];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The derivative is linear, so it acts term by term; the constant term vanishes and every other coefficient is multiplied by its exponent and shifted down one degree.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: polyDerivative([5,-3,0,2])",
+              "vi": "Ca 1"
+            },
+            "goi": "polyDerivative([5,-3,0,2])",
+            "mongDoi": [
+              -3,
+              0,
+              6
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: polyDerivative([7])",
+              "vi": "Ca 2"
+            },
+            "goi": "polyDerivative([7])",
+            "mongDoi": [
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: polyDerivative([0,1])",
+              "vi": "Ca 3"
+            },
+            "goi": "polyDerivative([0,1])",
+            "mongDoi": [
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "polyDerivative([1,1,1,1,1])",
+            "mongDoi": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "polyDerivative([0,0,3])",
+            "mongDoi": [
+              0,
+              6
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning an empty array for a constant."
+        },
+        {
+          "loi": "Keeping the constant term."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Calculus lab 2 — Definite integral of a polynomial (exact)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "FTC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Write <code>polyIntegral(c, a, b)</code> returning ∫ₐᵇ p(x) dx exactly by the Fundamental Theorem (antiderivative evaluated at the bounds), rounded to 9 decimal places with <code>Math.round(s * 1e9) / 1e9</code>. If a &gt; b the result is negative, as the theorem says.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Antiderivative of cₖxᵏ is cₖxᵏ⁺¹/(k + 1).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>polyIntegral(c, a, b)</code> trả ∫ₐᵇ p(x) dx chính xác bằng định lý cơ bản (nguyên hàm tính tại hai cận), làm tròn 9 chữ số thập phân bằng <code>Math.round(s * 1e9) / 1e9</code>. Nếu a &gt; b thì kết quả âm, đúng như định lý.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nguyên hàm của cₖxᵏ là cₖxᵏ⁺¹/(k + 1).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "polyIntegral([1, 2], 0, 2)",
+          "output": "6",
+          "explanation": "∫₀² (1 + 2x) dx = [x + x²]₀² = 6.|||∫₀² (1 + 2x) dx = [x + x²]₀² = 6."
+        }
+      ],
+      "hintsJson": [
+        "Sum the contribution of every coefficient.",
+        "Use Math.pow(b, k + 1) − Math.pow(a, k + 1)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function polyIntegral(c, a, b) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function polyIntegral(c, a, b) {\n  // ∫ₐᵇ Σ cₖ xᵏ dx = Σ cₖ (b^(k+1) − a^(k+1)) / (k + 1)  — định lý cơ bản của giải tích.\n  var s = 0;\n  for (var k = 0; k < c.length; k++) s += c[k] * (Math.pow(b, k + 1) - Math.pow(a, k + 1)) / (k + 1);\n  return Math.round(s * 1e9) / 1e9;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>F(x) = Σ cₖxᵏ⁺¹/(k + 1) is an antiderivative, and the integral is F(b) − F(a). Rounding removes floating-point noise such as 0.33333333333333337.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: polyIntegral([1,2], 0, 2)",
+              "vi": "Ca 1"
+            },
+            "goi": "polyIntegral([1,2], 0, 2)",
+            "mongDoi": 6
+          },
+          {
+            "moTa": {
+              "en": "Case 2: polyIntegral([0,0,1], 0, 1)",
+              "vi": "Ca 2"
+            },
+            "goi": "polyIntegral([0,0,1], 0, 1)",
+            "mongDoi": 0.333333333
+          },
+          {
+            "moTa": {
+              "en": "Case 3: polyIntegral([0,-2,1], 0, 3)",
+              "vi": "Ca 3"
+            },
+            "goi": "polyIntegral([0,-2,1], 0, 3)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "polyIntegral([0,0,0,1], -1, 1)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "polyIntegral([3,0,1], 2, -1)",
+            "mongDoi": -12,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dividing by k instead of k + 1."
+        },
+        {
+          "loi": "Swapping a and b."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Calculus lab 3 — Newton's method for a root",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "Newton's method",
+        "tangent line"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mae101"
+      ],
+      "problemHtml": "<p>Write <code>newtonRoot(c, x0, steps)</code>: start at x0 and apply Newton's update xₙ₊₁ = xₙ − p(xₙ)/p′(xₙ) exactly <code>steps</code> times, then return x rounded to 9 decimals. If p′(xₙ) = 0 at some step, return <code>null</code> (the tangent is horizontal). Evaluate the polynomial with Horner's rule.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Newton uses the tangent line at xₙ: its x-intercept is the next guess.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>newtonRoot(c, x0, steps)</code>: bắt đầu từ x0 và áp phép cập nhật Newton xₙ₊₁ = xₙ − p(xₙ)/p′(xₙ) đúng <code>steps</code> lần, rồi trả x làm tròn 9 chữ số. Nếu p′(xₙ) = 0 ở bước nào thì trả <code>null</code> (tiếp tuyến nằm ngang). Tính giá trị đa thức bằng sơ đồ Horner.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Newton dùng tiếp tuyến tại xₙ: giao điểm của nó với trục x là lần đoán sau.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "newtonRoot([-2, 0, 1], 1, 5)",
+          "output": "1.414213562",
+          "explanation": "x² − 2 = 0 from 1: 1.5, 1.41667, 1.414216… → √2.|||x² − 2 = 0 từ 1: 1,5; 1,41667; 1,414216… → √2."
+        }
+      ],
+      "hintsJson": [
+        "Compute p′ coefficients once (lab 1).",
+        "Check p′(x) === 0 before dividing."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function newtonRoot(c, x0, steps) {\n  return x0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function newtonRoot(c, x0, steps) {\n  // xₙ₊₁ = xₙ − p(xₙ)/p′(xₙ); dừng sớm nếu p′ = 0 (trả về null).\n  function val(cs, x) { var s = 0; for (var k = cs.length - 1; k >= 0; k--) s = s * x + cs[k]; return s; }\n  var d = [];\n  for (var k = 1; k < c.length; k++) d.push(k * c[k]);\n  var x = x0;\n  for (var i = 0; i < steps; i++) {\n    var dv = val(d, x);\n    if (dv === 0) return null;\n    x = x - val(c, x) / dv;\n  }\n  return Math.round(x * 1e9) / 1e9;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each step replaces the curve by its tangent line (Chapter 2) and jumps to where that line crosses zero; near a simple root the number of correct digits roughly doubles each step.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: newtonRoot([-2,0,1], 1, 5)",
+              "vi": "Ca 1"
+            },
+            "goi": "newtonRoot([-2,0,1], 1, 5)",
+            "mongDoi": 1.414213562
+          },
+          {
+            "moTa": {
+              "en": "Case 2: newtonRoot([-1,0,0,1], 2, 6)",
+              "vi": "Ca 2"
+            },
+            "goi": "newtonRoot([-1,0,0,1], 2, 6)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Case 3: newtonRoot([1,0,1], 0, 3)",
+              "vi": "Ca 3"
+            },
+            "goi": "newtonRoot([1,0,1], 0, 3)",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "newtonRoot([-5,0,1], 3, 6)",
+            "mongDoi": 2.236067977,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "newtonRoot([6,-5,1], 0, 8)",
+            "mongDoi": 2,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running steps + 1 or steps − 1 iterations."
+        },
+        {
+          "loi": "Dividing by zero instead of returning null."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -365,6 +365,16 @@ export default function LanguageHomePage() {
             )}
             {code === 'en' && (
               <StartCard
+                href="/language/en/cau-nen"
+                icon={<Languages size={22} strokeWidth={1.75} />}
+                title="1000 câu nền · dịch 2 chiều"
+                desc="Mất gốc? 30 ngày, 1000+ câu Việt ↔ Anh: mỗi ngày một khung câu, nghe – nhắc – dịch – viết tay – ôn lặp, hết dịch từng chữ"
+                from="#f97316"
+                to="#ec4899"
+              />
+            )}
+            {code === 'en' && (
+              <StartCard
                 href="/language/en/giao-tiep"
                 icon={<MessagesSquare size={22} strokeWidth={1.75} />}
                 title="Tiếng Anh giao tiếp"

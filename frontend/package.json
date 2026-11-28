@@ -11,6 +11,7 @@
     "dekiru:kanji": "node --experimental-strip-types --no-warnings scripts/dekiru-kanji-index.mts",
     "sach-hoc:xuat": "node --experimental-strip-types --no-warnings --import ./scripts/lib/nap-ts-alias.mjs scripts/sach-hoc-xuat.mts",
     "dekiru:onthe": "node --experimental-strip-types --no-warnings scripts/dekiru-on-the.mts",
+    "cau-nen:kiem": "node --experimental-strip-types --no-warnings scripts/cau-nen-kiem.mts",
     "dekiru:onthe:test": "node --experimental-strip-types --no-warnings --test src/components/sach-hoc/nhat/onThe.test.ts",
     "dekiru:chia:test": "node --experimental-strip-types --no-warnings --test src/components/sach-hoc/nhat/chia.test.ts",
     "nav:test": "node --experimental-strip-types --no-warnings --import ./scripts/lib/nap-ts-alias.mjs --test src/components/layout/nav/navTree.test.ts",

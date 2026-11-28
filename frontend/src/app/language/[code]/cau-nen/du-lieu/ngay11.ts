@@ -1,0 +1,156 @@
+import type { NgayCauNen } from '../kieu';
+
+const ING = 'S + am/is/are + V-ing';
+const NOT = "S + am not / isn't / aren't + V-ing";
+const Q = 'Am/Is/Are + S + V-ing?';
+const WH = 'Wh- + am/is/are + S + V-ing?';
+
+export const NGAY_11: NgayCauNen = {
+  n: 11,
+  ten: 'Hiện tại tiếp diễn — đang làm gì',
+  mucTieu: 'Nói việc đang diễn ra ngay lúc này và dạo gần đây: I\'m working on it. What are you doing? It\'s raining.',
+  bai: {
+    y: [
+      'Tiếng Việt chỉ cần thêm "**đang**". Tiếng Anh cần **hai mảnh**: **am / is / are + V-ing**. Thiếu be là sai: ~~I working~~.',
+      'Dùng khi: (1) việc **đang diễn ra ngay lúc nói** (It\'s raining) · (2) việc **dạo này, tạm thời** (I\'m learning Python these days) · (3) **kế hoạch đã hẹn** (I\'m meeting Lan tonight).',
+      'Phủ định: **isn\'t / aren\'t / am not + V-ing** · Câu hỏi: **Are you + V-ing?** · Hỏi thông tin: **What are you doing?**',
+      'Động từ chỉ **trạng thái** (know, like, want, need, understand, have = sở hữu) **không** dùng -ing dù tiếng Việt có "đang": ~~I\'m knowing~~ → I know.',
+      'So với hiện tại đơn (Ngày 4): **I work** = thói quen; **I\'m working** = đang làm lúc này.',
+    ],
+    khung: [
+      { mau: ING, vi: '… đang …' },
+      { mau: NOT, vi: '… không đang …' },
+      { mau: Q, vi: '… có đang … không?' },
+      { mau: WH, vi: '… đang … gì / đâu?' },
+    ],
+    soSanh: [
+      { vi: 'Tôi đang đợi xe buýt.', tungChu: 'I waiting bus.', en: 'I\'m waiting for the bus.', viSao: 'Thiếu am; "đợi ai/cái gì" = wait **for**.' },
+      { vi: 'Bạn đang làm gì vậy?', tungChu: 'You doing what?', en: 'What are you doing?', viSao: 'What lên đầu, are trước you.' },
+      { vi: 'Trời đang mưa.', tungChu: 'Sky is raining.', en: 'It\'s raining.', viSao: '"Trời" = It (như Ngày 1), không dịch là sky.' },
+    ],
+    viDu: [
+      { en: 'I\'m working on it.', vi: 'Tôi đang xử lý việc đó.' },
+      { en: 'What are you doing?', vi: 'Bạn đang làm gì vậy?' },
+      { en: 'It\'s raining outside.', vi: 'Ngoài trời đang mưa.' },
+      { en: 'We\'re testing a new feature.', vi: 'Chúng tôi đang thử nghiệm một tính năng mới.' },
+    ],
+    meo: ['Gặp chữ "đang" ⇒ nghĩ ngay **be + -ing**. Nhưng trước khi thêm -ing hỏi lại: động từ này có phải **know / like / want / need / understand** không?'],
+  },
+  nguPhap: [
+    { t: 'h', text: '1. Ba dạng' },
+    {
+      t: 'table', head: ['', 'Ví dụ'],
+      rows: [
+        ['Khẳng định', 'I**\'m** work**ing**. · She**\'s** talk**ing**. · They**\'re** eat**ing**.'],
+        ['Phủ định', 'I**\'m not** watch**ing** TV. · He **isn\'t** answer**ing**.'],
+        ['Câu hỏi', '**Are** you listen**ing**? · **Is** it rain**ing**?'],
+        ['Hỏi thông tin', 'What **are** you do**ing**? · Where **are** you go**ing**?'],
+      ],
+    },
+    { t: 'h', text: '2. Đang làm hay làm thường xuyên?' },
+    {
+      t: 'sodo', kind: 'timeline', title: 'I work from home (thói quen) · I\'m working right now (đang)',
+      marks: [
+        { from: -9, to: 9, label: 'I work from home (mỗi ngày)', kieu: 'lap', mau: 2 },
+        { from: -1, to: 1, label: 'I\'m working (ngay lúc này)', kieu: 'doan', mau: 1 },
+      ],
+    },
+    {
+      t: 'table', head: ['Thêm -ing', 'Ví dụ'],
+      rows: [
+        ['Thường: + ing', 'work → work**ing** · read → read**ing**'],
+        ['Tận cùng e câm: bỏ e', 'make → mak**ing** · write → writ**ing**'],
+        ['1 nguyên âm + 1 phụ âm (âm nhấn): gấp đôi', 'run → ru**nn**ing · get → ge**tt**ing · sit → si**tt**ing'],
+        ['-ie → -ying', 'lie → l**ying** · die → d**ying**'],
+      ],
+    },
+    {
+      t: 'sodo', kind: 'compare', title: 'Động từ KHÔNG dùng -ing',
+      cols: [
+        { title: '✗ Sai', items: ['~~I\'m knowing~~', '~~She\'s wanting a coffee~~', '~~I\'m understanding~~'] },
+        { title: '✓ Đúng', items: ['I **know**.', 'She **wants** a coffee.', 'I **understand**.'] },
+      ],
+    },
+    { t: 'note', title: 'Lỗi người Việt hay mắc', items: ['~~I working~~ → I**\'m** working.', '~~She is cook~~ → She is cook**ing**.', '~~I\'m waiting the bus~~ → I\'m waiting **for** the bus.', '~~I\'m finding my phone~~ → I\'m **looking for** my phone (đang tìm).'] },
+  ],
+  tuVung: [
+    { w: 'rain', loai: 'v/n', vi: 'mưa', anh: 'cloud-with-rain', ex: 'It\'s raining hard.', exVi: 'Trời đang mưa to.' },
+    { w: 'wait for', loai: 'phr', vi: 'đợi, chờ (ai, cái gì)', anh: 'bus-stop', ex: 'Who are you waiting for?', exVi: 'Bạn đang đợi ai?' },
+    { w: 'look for', loai: 'phr', vi: 'tìm (đang đi tìm)', anh: 'magnifying-glass-tilted-right', ex: 'I\'m looking for a job.', exVi: 'Tôi đang tìm việc.' },
+    { w: 'download', loai: 'v', vi: 'tải về', anh: 'inbox-tray', ex: 'The file is downloading.', exVi: 'File đang tải về.' },
+    { w: 'load', loai: 'v', vi: '(trang, ứng dụng) tải, nạp', anh: 'ai-loading-screen', ex: 'The page is still loading.', exVi: 'Trang vẫn đang tải.' },
+    { w: 'wear', loai: 'v', vi: 'mặc, đeo', anh: 't-shirt', ex: 'He\'s wearing glasses today.', exVi: 'Hôm nay anh ấy đeo kính.' },
+    { w: 'drive', loai: 'v', vi: 'lái (ô tô)', anh: 'automobile', ex: 'Don\'t text while you\'re driving.', exVi: 'Đừng nhắn tin khi đang lái xe.' },
+    { w: 'project', loai: 'n', vi: 'dự án, đồ án', anh: 'clipboard', ex: 'Our project is going well.', exVi: 'Dự án của chúng tôi đang tiến triển tốt.' },
+    { w: 'feature', loai: 'n', vi: 'tính năng', anh: 'puzzle-piece', ex: 'This feature is new.', exVi: 'Tính năng này mới.' },
+    { w: 'test', loai: 'v', vi: 'kiểm thử', anh: 'bug', ex: 'We\'re testing the app now.', exVi: 'Chúng tôi đang kiểm thử ứng dụng.' },
+    { w: 'laugh', loai: 'v', vi: 'cười (thành tiếng)', anh: 'rolling-on-the-floor-laughing', ex: 'Everyone is laughing.', exVi: 'Mọi người đang cười.' },
+    { w: 'bark', loai: 'v', vi: '(chó) sủa', anh: 'dog', ex: 'Why is the dog barking?', exVi: 'Sao con chó đang sủa?' },
+    { w: 'right now', loai: 'phr', vi: 'ngay bây giờ', anh: 'stopwatch', ex: 'I\'m busy right now.', exVi: 'Ngay bây giờ tôi đang bận.' },
+    { w: 'these days', loai: 'phr', vi: 'dạo này', anh: 'calendar', ex: 'What are you reading these days?', exVi: 'Dạo này bạn đang đọc gì?' },
+    { w: 'price', loai: 'n', vi: 'giá', anh: 'label', ex: 'Prices are going up.', exVi: 'Giá cả đang tăng.' },
+  ],
+  hoiThoai: {
+    tieuDe: 'Gọi điện cho bạn cùng nhóm đồ án',
+    luot: [
+      { vai: 'A', ten: 'Quân', en: 'Hey, what are you doing right now?', vi: 'Ê, giờ cậu đang làm gì đấy?' },
+      { vai: 'B', ten: 'Thảo', en: 'I\'m working on our slides. Why?', vi: 'Mình đang làm slide cho nhóm. Sao thế?' },
+      { vai: 'A', ten: 'Quân', en: 'The demo isn\'t working. The page is still loading.', vi: 'Bản demo không chạy. Trang cứ tải mãi.' },
+      { vai: 'B', ten: 'Thảo', en: 'Is the server running?', vi: 'Server có đang chạy không?' },
+      { vai: 'A', ten: 'Quân', en: 'Yes, but it\'s running really slowly.', vi: 'Có, nhưng chạy chậm lắm.' },
+      { vai: 'B', ten: 'Thảo', en: 'Okay, I\'m opening my laptop. Give me five minutes.', vi: 'Ok, mình đang mở laptop. Cho mình năm phút.' },
+    ],
+  },
+  viet: {
+    y: [
+      'Mỗi câu "đang" phải có **đủ hai mảnh**: am/is/are **và** V-ing. Gạch chân cả hai khi soát bài.',
+      'Cẩn thận chính tả -ing: bỏ e câm, gấp đôi phụ âm (xem bảng).',
+      'Tả một bức ảnh / một khung cảnh: dùng **There is / are…** để giới thiệu người, rồi **He\'s / She\'s + V-ing** để tả họ đang làm gì.',
+    ],
+    chinhTa: ['~~writting~~ → **writing** · ~~comming~~ → **coming** (bỏ e, không gấp đôi)', '~~runing~~ → **running** · ~~siting~~ → **sitting** (gấp đôi)', '~~studing~~ → **studying** (giữ y)'],
+    de: 'Tưởng tượng bạn đang ở một quán cà phê. Viết 5 câu tả **mọi người xung quanh đang làm gì** (There\'s a man… He\'s…).',
+    mau: [
+      { en: 'I\'m sitting in a small coffee shop.', vi: 'Mình đang ngồi trong một quán cà phê nhỏ.' },
+      { en: 'There\'s a girl next to me. She\'s reading a book.', vi: 'Cạnh mình có một cô gái. Cô ấy đang đọc sách.' },
+      { en: 'Two men are talking about football.', vi: 'Hai người đàn ông đang nói chuyện về bóng đá.' },
+      { en: 'The barista is making coffee.', vi: 'Anh pha chế đang pha cà phê.' },
+      { en: 'Outside, it\'s raining.', vi: 'Bên ngoài trời đang mưa.' },
+    ],
+  },
+  cau: [
+    { id: 'cn11-01', vi: 'Tôi đang xử lý việc đó.', en: 'I\'m working on it.', khung: ING, goi: 'xử lý, làm (việc gì) = work on' },
+    { id: 'cn11-02', vi: 'Bạn đang làm gì vậy?', en: 'What are you doing?', khung: WH, loi: '~~You doing what?~~' },
+    { id: 'cn11-03', vi: 'Cô ấy đang nói chuyện điện thoại.', en: 'She\'s talking on the phone.', alt: ['She\'s on the phone.'], khung: ING },
+    { id: 'cn11-04', vi: 'Trời đang mưa.', en: 'It\'s raining.', khung: ING, loi: '~~Sky is raining~~' },
+    { id: 'cn11-05', vi: 'Chúng tôi đang họp.', en: 'We\'re in a meeting.', alt: ['We\'re having a meeting.'], khung: ING },
+    { id: 'cn11-06', vi: 'Tôi đang đợi xe buýt.', en: 'I\'m waiting for the bus.', khung: ING, loi: '~~I\'m waiting the bus~~ — wait **for**' },
+    { id: 'cn11-07', vi: 'Anh ấy đang sửa lỗi đăng nhập.', en: 'He\'s fixing the login bug.', alt: ['He\'s fixing the login issue.'], khung: ING },
+    { id: 'cn11-08', vi: 'Họ đang ăn trưa.', en: 'They\'re having lunch.', alt: ['They\'re eating lunch.'], khung: ING },
+    { id: 'cn11-09', vi: 'Bạn có đang nghe không đấy?', en: 'Are you listening?', khung: Q },
+    { id: 'cn11-10', vi: 'Tôi không xem TV, tôi đang học.', en: 'I\'m not watching TV. I\'m studying.', khung: NOT },
+    { id: 'cn11-11', vi: 'Em gái tôi đang ngủ.', en: 'My sister is sleeping.', alt: ['My little sister is sleeping.', 'My younger sister is sleeping.', 'My sister is asleep.'], khung: ING },
+    { id: 'cn11-12', vi: 'Dạo này tôi đang học Python.', en: 'I\'m learning Python these days.', alt: ['These days I\'m learning Python.', 'I\'m learning Python right now.'], khung: ING, goi: 'việc tạm thời, dạo này ⇒ tiếp diễn' },
+    { id: 'cn11-13', vi: 'Ứng dụng đang tải.', en: 'The app is loading.', khung: ING },
+    { id: 'cn11-14', vi: 'Mọi người đang đợi bạn.', en: 'Everyone is waiting for you.', alt: ['Everybody is waiting for you.'], khung: ING, loi: 'everyone đi với **is** (số ít)' },
+    { id: 'cn11-15', vi: 'Bạn đang đi đâu đấy?', en: 'Where are you going?', khung: WH },
+    { id: 'cn11-16', vi: 'Tôi đang trên đường đến.', en: 'I\'m on my way.', alt: ['I\'m coming.', 'I\'m on my way there.'], khung: 'câu cố định' },
+    { id: 'cn11-17', vi: 'Tôi đang tìm điện thoại.', en: 'I\'m looking for my phone.', khung: ING, loi: '~~I\'m finding~~ — đang tìm = look for' },
+    { id: 'cn11-18', vi: 'Cô ấy đang mặc áo đỏ.', en: 'She\'s wearing a red shirt.', alt: ['She\'s wearing a red top.'], khung: ING },
+    { id: 'cn11-19', vi: 'Server đang chạy chậm.', en: 'The server is running slowly.', alt: ['The server is running slow.', 'The server is slow right now.'], khung: ING },
+    { id: 'cn11-20', vi: 'Chúng tôi đang làm một dự án mới.', en: 'We\'re working on a new project.', khung: ING },
+    { id: 'cn11-21', vi: 'Anh ấy không nghe máy vì đang lái xe.', en: 'He isn\'t answering because he\'s driving.', khung: NOT + ' + because + …' },
+    { id: 'cn11-22', vi: 'Bạn có đang dùng máy in không?', en: 'Are you using the printer?', khung: Q },
+    { id: 'cn11-23', vi: 'Tôi đang tải file về.', en: 'I\'m downloading the file.', khung: ING },
+    { id: 'cn11-24', vi: 'Giá nhà đang tăng.', en: 'House prices are going up.', alt: ['House prices are rising.', 'Housing prices are going up.'], khung: ING },
+    { id: 'cn11-25', vi: 'Nhóm tôi đang kiểm thử tính năng mới.', en: 'My team is testing a new feature.', alt: ['Our team is testing a new feature.', 'My team is testing the new feature.', 'Our team is testing the new feature.'], khung: ING },
+    { id: 'cn11-26', vi: 'Có ai đang dùng phòng họp không?', en: 'Is anyone using the meeting room?', alt: ['Is someone using the meeting room?'], khung: Q },
+    { id: 'cn11-27', vi: 'Tôi chỉ xem thôi (ở cửa hàng).', en: 'I\'m just looking.', alt: ['I\'m just browsing.', 'Just looking, thanks.'], khung: ING },
+    { id: 'cn11-28', vi: 'Con chó đang sủa.', en: 'The dog is barking.', khung: ING },
+    { id: 'cn11-29', vi: 'Tối nay tôi gặp bạn bè (đã hẹn trước).', en: 'I\'m meeting my friends tonight.', alt: ['I\'m meeting friends tonight.', 'I\'m seeing my friends tonight.'], khung: ING + ' (kế hoạch đã hẹn)' },
+    { id: 'cn11-30', vi: 'Bạn đang nói về cái gì?', en: 'What are you talking about?', khung: WH },
+    { id: 'cn11-31', vi: 'Tôi đang cố gắng hết sức.', en: 'I\'m doing my best.', alt: ['I\'m trying my best.'], khung: ING },
+    { id: 'cn11-32', vi: 'Mẹ tôi đang nấu bữa tối.', en: 'My mom is cooking dinner.', alt: ['My mother is cooking dinner.', 'My mom is making dinner.'], khung: ING },
+    { id: 'cn11-33', vi: 'Sao bạn lại cười?', en: 'Why are you laughing?', khung: WH },
+    { id: 'cn11-34', vi: 'Tôi không hiểu bạn đang nói gì.', en: 'I don\'t understand what you\'re saying.', khung: "I don't understand + what + S + am/is/are + V-ing", loi: '~~I\'m not understanding~~ — understand không dùng -ing' },
+  ],
+};

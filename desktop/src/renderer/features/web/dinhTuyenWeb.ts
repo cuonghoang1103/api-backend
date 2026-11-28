@@ -58,6 +58,8 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/language/:code/roleplay', nap: () => import('@/app/language/[code]/roleplay/page') },
   // Tiếng Anh giao tiếp (24/11/2026) — khoá sach-hoc riêng (stage giaotiep1), 30 ngày A2 → B2.
   { mau: '/language/:code/giao-tiep', nap: () => import('@/app/language/[code]/giao-tiep/page') },
+  // 1000 câu nền — dịch 2 chiều (28/11/2026): 30 ngày cho người mất gốc; ?ngay=N / ?on=1 / ?in=1 qua kho truy vấn của shim.
+  { mau: '/language/:code/cau-nen', nap: () => import('@/app/language/[code]/cau-nen/page') },
   { mau: '/language/:code/stats', nap: () => import('@/app/language/[code]/stats/page') },
   { mau: '/language/:code/translate', nap: () => import('@/app/language/[code]/translate/page') },
   { mau: '/language/:code/vocab', nap: () => import('@/app/language/[code]/vocab/page') },

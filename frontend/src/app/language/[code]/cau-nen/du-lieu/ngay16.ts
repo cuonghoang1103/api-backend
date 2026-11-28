@@ -1,0 +1,148 @@
+import type { NgayCauNen } from '../kieu';
+
+const WILL = "S + will ('ll) + V (quyết định ngay, hứa, đoán)";
+const GOING = 'S + am/is/are + going to + V (kế hoạch, dấu hiệu)';
+const WONT = "S + won't + V";
+const Q = 'Will + S + V? · Are you going to + V?';
+
+export const NGAY_16: NgayCauNen = {
+  n: 16,
+  ten: 'Tương lai: will / be going to',
+  mucTieu: 'Hứa, quyết định ngay, nói kế hoạch: I\'ll call you back. I\'m going to do an internship next year. It\'s going to rain.',
+  bai: {
+    y: [
+      'Tiếng Việt chỉ thêm "**sẽ**", "**định**", "**sắp**". Tiếng Anh có hai cách chính: **will + V** và **be going to + V**.',
+      '**will (\'ll)**: quyết định **ngay lúc nói** (I\'ll take this one), **hứa / đề nghị** (I\'ll call you back), **đoán** (I think he\'ll agree).',
+      '**be going to**: **kế hoạch đã có từ trước** (I\'m going to buy a new phone) và **dấu hiệu rõ trước mắt** (Look at the clouds — it\'s going to rain).',
+      'Sau will và going to là **động từ nguyên mẫu**: ~~will to go~~, ~~going to went~~. Phủ định: **won\'t** = will not.',
+      'Kế hoạch đã hẹn giờ giấc cụ thể còn dùng hiện tại tiếp diễn (Ngày 11): They**\'re getting** married in October.',
+    ],
+    khung: [
+      { mau: WILL, vi: 'sẽ (ngay bây giờ quyết định / hứa)' },
+      { mau: GOING, vi: 'định, sắp (đã lên kế hoạch)' },
+      { mau: WONT, vi: 'sẽ không' },
+      { mau: Q, vi: 'có … không?' },
+    ],
+    soSanh: [
+      { vi: 'Tôi sẽ gọi lại cho bạn.', tungChu: 'I will call back you.', en: 'I\'ll call you back.', viSao: 'Người (you) đứng giữa call và back.' },
+      { vi: 'Năm sau tôi định đi thực tập.', tungChu: 'Next year I intend go intern.', en: 'I\'m going to do an internship next year.', viSao: '"định" (kế hoạch) = be going to; "đi thực tập" = do an internship.' },
+      { vi: 'Ngày mai tôi đi Đà Lạt.', tungChu: 'Tomorrow I go Da Lat.', en: 'I\'m going to Da Lat tomorrow.', viSao: 'Việc tương lai không dùng hiện tại đơn như tiếng Việt; dùng going to / tiếp diễn.' },
+    ],
+    viDu: [
+      { en: 'I\'ll call you back.', vi: 'Tôi sẽ gọi lại cho bạn.' },
+      { en: 'I\'m going to do an internship next year.', vi: 'Năm sau tôi định đi thực tập.' },
+      { en: 'It\'s going to rain.', vi: 'Trời sắp mưa.' },
+      { en: 'Don\'t worry, everything will be fine.', vi: 'Đừng lo, mọi chuyện sẽ ổn thôi.' },
+    ],
+    meo: ['Ở chỗ làm, câu cứu nguy khi chưa biết trả lời: **I\'ll check and let you know.** (Tôi sẽ kiểm tra rồi báo lại.)'],
+  },
+  nguPhap: [
+    { t: 'h', text: '1. will hay going to?' },
+    {
+      t: 'sodo', kind: 'compare', title: 'Quyết định lúc nói vs. kế hoạch có sẵn',
+      cols: [
+        { title: '**will** — vừa nghĩ ra, hứa, đoán', anh: 'light-bulb', items: ['The phone is ringing. — I**\'ll** get it.', 'I**\'ll** send you the file right away.', 'I think he**\'ll** agree.'] },
+        { title: '**going to** — đã định, có dấu hiệu', anh: 'spiral-notepad', items: ['I**\'m going to** buy a new phone. (đã để dành tiền)', 'Look at those clouds. It**\'s going to** rain.', 'We**\'re going to** launch the app next month.'] },
+      ],
+    },
+    { t: 'h', text: '2. Dạng câu' },
+    {
+      t: 'table', head: ['', 'will', 'be going to'],
+      rows: [
+        ['Khẳng định', 'I**\'ll** help you.', 'I**\'m going to** help you.'],
+        ['Phủ định', 'I **won\'t** forget.', 'I**\'m not going to** forget.'],
+        ['Câu hỏi', '**Will** you come?', '**Are** you **going to** come?'],
+        ['Từ hay đi kèm', 'I think · probably · maybe', 'next week · this weekend · soon'],
+      ],
+    },
+    {
+      t: 'sodo', kind: 'timeline', title: 'Tương lai',
+      marks: [
+        { from: 0, label: 'bây giờ: "I\'ll check."', kieu: 'diem', mau: 1 },
+        { from: 3, label: 'tomorrow — I\'m going to Da Lat', kieu: 'diem', mau: 2 },
+        { from: 7, label: 'next year — I\'m going to do an internship', kieu: 'diem', mau: 3 },
+      ],
+    },
+    { t: 'note', title: 'Lỗi người Việt hay mắc', items: ['~~I will to go~~ → I will **go**.', '~~I going to study~~ → I**\'m** going to study.', '~~Tomorrow I go to Da Lat~~ → I**\'m going** to Da Lat tomorrow.', '~~I will call back you~~ → I\'ll call **you back**.'] },
+  ],
+  tuVung: [
+    { w: 'tomorrow', loai: 'adv', vi: 'ngày mai', anh: 'calendar', ex: 'See you tomorrow!', exVi: 'Mai gặp nhé!' },
+    { w: 'plan', loai: 'n/v', vi: 'kế hoạch; dự định', anh: 'spiral-notepad', ex: 'What are your plans for Tet?', exVi: 'Tết bạn có kế hoạch gì?' },
+    { w: 'launch', loai: 'v', vi: 'ra mắt (sản phẩm)', anh: 'rocket', ex: 'They\'re launching a new app.', exVi: 'Họ sắp ra mắt một ứng dụng mới.' },
+    { w: 'internship', loai: 'n', vi: 'kỳ thực tập', anh: 'briefcase', ex: 'My internship starts in January.', exVi: 'Kỳ thực tập của tôi bắt đầu vào tháng Một.' },
+    { w: 'degree', loai: 'n', vi: 'bằng (đại học, thạc sĩ)', anh: 'scroll', ex: 'She has a master\'s degree.', exVi: 'Cô ấy có bằng thạc sĩ.' },
+    { w: 'get married', loai: 'phr', vi: 'kết hôn', anh: 'ring', ex: 'They got married last year.', exVi: 'Năm ngoái họ kết hôn.' },
+    { w: 'worry', loai: 'v', vi: 'lo lắng', anh: 'worried-face', ex: 'Don\'t worry about it.', exVi: 'Đừng lo chuyện đó.' },
+    { w: 'probably', loai: 'adv', vi: 'có lẽ, chắc là', anh: 'balance-scale', ex: 'It will probably rain.', exVi: 'Có lẽ trời sẽ mưa.' },
+    { w: 'let someone know', loai: 'phr', vi: 'báo cho ai biết', anh: 'bell', ex: 'Let me know when you\'re free.', exVi: 'Rảnh thì báo mình nhé.' },
+    { w: 'text', loai: 'v', vi: 'nhắn tin', anh: 'mobile-phone-with-arrow', ex: 'I\'ll text you later.', exVi: 'Lát mình nhắn cho bạn.' },
+    { w: 'agree', loai: 'v', vi: 'đồng ý', anh: 'ok-hand', ex: 'I agree with you.', exVi: 'Tôi đồng ý với bạn.' },
+    { w: 'deadline', loai: 'n', vi: 'hạn chót', anh: 'hourglass-done', ex: 'The deadline is next Monday.', exVi: 'Hạn chót là thứ Hai tới.' },
+    { w: 'fall', loai: 'v', vi: 'ngã, rơi', anh: 'ai-slip-fall', ex: 'Be careful, you\'ll fall!', exVi: 'Cẩn thận, ngã bây giờ!' },
+    { w: 'die (battery)', loai: 'v', vi: '(pin) hết, sập nguồn', anh: 'low-battery', ex: 'My phone is about to die.', exVi: 'Điện thoại tôi sắp hết pin.' },
+    { w: 'promise', loai: 'v/n', vi: 'hứa; lời hứa', anh: 'crossed-fingers', ex: 'I promise I\'ll be on time.', exVi: 'Tôi hứa sẽ đúng giờ.' },
+  ],
+  hoiThoai: {
+    tieuDe: 'Lên kế hoạch kỳ nghỉ Tết',
+    luot: [
+      { vai: 'A', ten: 'Vân', en: 'What are you going to do for Tet?', vi: 'Tết này bạn định làm gì?' },
+      { vai: 'B', ten: 'Bảo', en: 'I\'m going to visit my grandparents in Hue.', vi: 'Mình định về Huế thăm ông bà.' },
+      { vai: 'A', ten: 'Vân', en: 'Nice! Are you going to take the train?', vi: 'Hay quá! Bạn đi tàu à?' },
+      { vai: 'B', ten: 'Bảo', en: 'Maybe. The tickets are expensive. I\'ll check tonight.', vi: 'Chắc vậy. Vé đắt lắm. Tối nay mình sẽ xem.' },
+      { vai: 'A', ten: 'Vân', en: 'My cousin works at the station. I\'ll ask him for you.', vi: 'Anh họ mình làm ở ga. Mình sẽ hỏi giúp bạn.' },
+      { vai: 'B', ten: 'Bảo', en: 'Really? Thanks! I\'ll buy you a coffee.', vi: 'Thật à? Cảm ơn nhé! Mình sẽ mời bạn cà phê.' },
+    ],
+  },
+  viet: {
+    y: [
+      '**I\'ll / you\'ll / we\'ll** có dấu nháy; **won\'t** là dạng rút gọn của will not (không phải ~~willn\'t~~).',
+      'Viết kế hoạch: mỗi câu có **mốc thời gian tương lai** (next week, this summer, after graduation) — thường đặt cuối câu.',
+      'Viết lời hứa / mục tiêu: dùng **will**; viết dự định đã sẵn: dùng **going to**.',
+    ],
+    chinhTa: ['~~gonna~~ chỉ dùng khi nói / nhắn tin thân mật — trong bài viết dùng **going to**', '~~tomorow~~ → **tomorrow**', '~~intership~~ → **internship**'],
+    de: 'Viết 5 câu về **kế hoạch năm tới** của bạn (going to) và **2 lời hứa với chính mình** (I will…).',
+    mau: [
+      { en: 'Next year is going to be a big year for me.', vi: 'Năm sau sẽ là một năm quan trọng với mình.' },
+      { en: 'I\'m going to do an internship at a software company.', vi: 'Mình định đi thực tập ở một công ty phần mềm.' },
+      { en: 'I\'m also going to take an English course.', vi: 'Mình cũng định học một khoá tiếng Anh.' },
+      { en: 'I will practice speaking every day.', vi: 'Mình sẽ luyện nói mỗi ngày.' },
+      { en: 'I won\'t give up.', vi: 'Mình sẽ không bỏ cuộc.' },
+    ],
+  },
+  cau: [
+    { id: 'cn16-01', vi: 'Tôi sẽ gọi lại cho bạn.', en: 'I\'ll call you back.', khung: WILL, loi: '~~I will call back you~~' },
+    { id: 'cn16-02', vi: 'Tôi định học thạc sĩ.', en: 'I\'m going to do a master\'s degree.', alt: ['I\'m going to study for a master\'s degree.', 'I\'m going to get a master\'s degree.'], khung: GOING },
+    { id: 'cn16-03', vi: 'Ngày mai trời sẽ mưa.', en: 'It\'s going to rain tomorrow.', alt: ['It will rain tomorrow.'], khung: GOING },
+    { id: 'cn16-04', vi: 'Tôi sẽ gửi file cho bạn ngay.', en: 'I\'ll send you the file right away.', alt: ['I\'ll send the file to you right away.', 'I\'ll send you the file now.'], khung: WILL },
+    { id: 'cn16-05', vi: 'Cuối tuần này bạn định làm gì?', en: 'What are you going to do this weekend?', alt: ['What will you do this weekend?', 'What are you doing this weekend?'], khung: Q },
+    { id: 'cn16-06', vi: 'Tôi sẽ không quên đâu.', en: 'I won\'t forget.', khung: WONT },
+    { id: 'cn16-07', vi: 'Tháng sau chúng tôi sẽ ra mắt ứng dụng.', en: 'We\'re going to launch the app next month.', alt: ['We\'ll launch the app next month.', 'We\'re launching the app next month.'], khung: GOING },
+    { id: 'cn16-08', vi: 'Bạn có đến bữa tiệc không?', en: 'Are you coming to the party?', alt: ['Are you going to come to the party?', 'Will you come to the party?'], khung: Q },
+    { id: 'cn16-09', vi: 'Để tôi giúp bạn.', en: 'I\'ll help you.', alt: ['Let me help you.'], khung: WILL + ' — đề nghị' },
+    { id: 'cn16-10', vi: 'Tôi nghĩ anh ấy sẽ đồng ý.', en: 'I think he\'ll agree.', alt: ['I think he will say yes.'], khung: 'I think + S + will + V' },
+    { id: 'cn16-11', vi: 'Năm sau tôi sẽ đi thực tập.', en: 'I\'m going to do an internship next year.', alt: ['I\'ll do an internship next year.', 'Next year I\'m going to do an internship.'], khung: GOING },
+    { id: 'cn16-12', vi: 'Tôi sẽ không đến muộn nữa.', en: 'I won\'t be late again.', khung: WONT },
+    { id: 'cn16-13', vi: 'Cẩn thận! Bạn sắp ngã kìa!', en: 'Watch out! You\'re going to fall!', alt: ['Be careful! You\'re going to fall!'], khung: GOING + ' — dấu hiệu' },
+    { id: 'cn16-14', vi: 'Tôi lấy cái này.', en: 'I\'ll take this one.', alt: ['I\'ll take it.', 'I\'ll take this.'], khung: WILL + ' — quyết định ngay' },
+    { id: 'cn16-15', vi: 'Mấy giờ bạn về nhà?', en: 'What time will you be home?', alt: ['What time are you coming home?', 'When will you be home?'], khung: Q },
+    { id: 'cn16-16', vi: 'Họ sẽ cưới vào tháng Mười.', en: 'They\'re getting married in October.', alt: ['They\'re going to get married in October.', 'They will get married in October.'], khung: 'S + am/is/are + V-ing (kế hoạch có ngày)' },
+    { id: 'cn16-17', vi: 'Đến nơi tôi sẽ nhắn cho bạn.', en: 'I\'ll text you when I get there.', alt: ['I\'ll message you when I get there.', 'I\'ll text you when I arrive.'], khung: WILL + ' + when + hiện tại đơn', loi: '~~when I will get there~~ — sau when dùng hiện tại' },
+    { id: 'cn16-18', vi: 'Đừng lo, mọi chuyện sẽ ổn thôi.', en: 'Don\'t worry, everything will be fine.', alt: ['Don\'t worry, everything will be okay.', 'Don\'t worry. Everything is going to be fine.', 'Don\'t worry, everything\'s going to be okay.'], khung: WILL },
+    { id: 'cn16-19', vi: 'Tôi định mua một cái điện thoại mới.', en: 'I\'m going to buy a new phone.', khung: GOING },
+    { id: 'cn16-20', vi: 'Chúng ta sắp trễ hạn mất rồi.', en: 'We\'re going to miss the deadline.', khung: GOING + ' — dấu hiệu' },
+    { id: 'cn16-21', vi: 'Bạn sẽ ở lại bao lâu?', en: 'How long will you stay?', alt: ['How long are you going to stay?', 'How long are you staying?'], khung: Q },
+    { id: 'cn16-22', vi: 'Có lẽ tôi sẽ ở nhà.', en: 'I\'ll probably stay home.', alt: ['Maybe I\'ll stay home.', 'I\'ll probably stay at home.'], khung: WILL, loi: 'probably đứng SAU will: I\'ll **probably** stay' },
+    { id: 'cn16-23', vi: 'Tôi sẽ kiểm tra rồi báo lại cho bạn.', en: 'I\'ll check and let you know.', alt: ['I\'ll check again and let you know.', 'I\'ll double-check and let you know.'], khung: WILL },
+    { id: 'cn16-24', vi: 'Cuộc họp sẽ không lâu đâu.', en: 'The meeting won\'t take long.', alt: ['The meeting won\'t be long.'], khung: WONT },
+    { id: 'cn16-25', vi: 'Tốt nghiệp xong bạn sẽ làm gì?', en: 'What are you going to do after you graduate?', alt: ['What will you do after you graduate?', 'What are you going to do after graduation?'], khung: Q },
+    { id: 'cn16-26', vi: 'Tôi sẽ cố gắng hơn.', en: 'I\'ll try harder.', khung: WILL },
+    { id: 'cn16-27', vi: 'Năm nay tôi sẽ học tiếng Anh mỗi ngày.', en: 'This year I\'m going to study English every day.', alt: ['I\'m going to study English every day this year.', 'I will study English every day this year.'], khung: GOING },
+    { id: 'cn16-28', vi: 'Điện thoại sắp hết pin rồi.', en: 'My phone is about to die.', alt: ['My phone is going to die.', 'My phone is dying.'], khung: 'S + is + about to + V (sắp)' },
+    { id: 'cn16-29', vi: 'Mai tôi sẽ đến sớm.', en: 'I\'ll come early tomorrow.', alt: ['I\'ll be there early tomorrow.', 'Tomorrow I\'ll come early.'], khung: WILL },
+    { id: 'cn16-30', vi: 'Bạn giúp tôi nhé?', en: 'Will you help me?', khung: Q },
+    { id: 'cn16-31', vi: 'Tôi sẽ không bao giờ làm thế.', en: 'I\'ll never do that.', alt: ['I will never do that again.'], khung: "S + will never + V" },
+    { id: 'cn16-32', vi: 'Chúng ta sẽ gặp lại nhau chứ?', en: 'Will we see each other again?', khung: Q },
+    { id: 'cn16-33', vi: 'Tôi nghĩ hôm nay trời sẽ không mưa.', en: 'I don\'t think it\'ll rain today.', khung: "I don't think + S + will + V", loi: 'Người Mỹ phủ định ở think: ~~I think it won\'t rain~~ nghe kém tự nhiên' },
+    { id: 'cn16-34', vi: 'Tôi sẽ đặt xe Grab cho bạn.', en: 'I\'ll book a Grab for you.', alt: ['I\'ll get you a Grab.', 'I\'ll order a Grab for you.'], khung: WILL },
+  ],
+};

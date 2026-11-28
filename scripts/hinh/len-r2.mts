@@ -36,6 +36,7 @@ const THU_MUC = [
   'frontend/src/app/language/[code]/ielts/tap-5/ngay', // IELTS Tập 5 (24/11/2026): ngày t5dN
   'frontend/src/app/language/[code]/ielts/tap-5', // IELTS Tập 5: data.ts (Mở đầu) + tracuu.ts
   'frontend/src/app/language/[code]/giao-tiep/ngay', // Tiếng Anh giao tiếp (24/11/2026): canh, hinh cử chỉ, vocab.anh
+  'frontend/src/app/language/[code]/cau-nen/du-lieu', // 1000 câu nền (28/11/2026): tuVung.anh (Fluent + ai-*, prompt ở ai/cau-nen.json)
 ];
 export const KHOA = (slug: string) => `hoc/hinh/${slug}.webp`;
 

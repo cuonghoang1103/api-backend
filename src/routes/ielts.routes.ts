@@ -18,6 +18,7 @@ import { validate } from '../middleware/validate.js';
 import type { ApiResponse } from '../types/index.js';
 import * as svc from '../services/ielts/ielts.service.js';
 import { hoiVeChu, chamBaiViet, CAC_Y } from '../services/ielts/hoiAI.service.js';
+import { chamDich } from '../services/ielts/chamDich.service.js';
 import { dungDe, nopDe, lichSuThi } from '../services/ielts/deThi.service.js';
 import { chamBaiNoi } from '../services/ielts/chamNoi.service.js';
 import { chamPhatAm } from '../services/ielts/phatAm.service.js';
@@ -79,6 +80,19 @@ router.post('/ai/hoi',
   validate,
   async (req, res: Response<ApiResponse>, next) => {
     try { ok(res, await hoiVeChu(uid(req), req.body)); } catch (e) { next(e); }
+  });
+
+/**
+ * "Nhờ CuongMini xem câu của mình" — lộ trình 1000 câu nền (/language/en/cau-nen): chấm MỘT câu dịch
+ * Việt ↔ Anh không khớp câu mẫu. Trần dùng = trần AI chung của người dùng (llmComplete).
+ */
+router.post('/ai/cham-dich',
+  body('vi').isString().isLength({ min: 1, max: 300 }),
+  body('bai').isString().isLength({ min: 1, max: 400 }).withMessage('Câu trả lời 1–400 ký tự'),
+  body('mau').isArray({ min: 1, max: 6 }),
+  validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await chamDich(uid(req), req.body)); } catch (e) { next(e); }
   });
 
 /** Chấm bài viết theo 4 tiêu chí IELTS. */

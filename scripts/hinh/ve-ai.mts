@@ -12,7 +12,7 @@
  *   npx tsx scripts/hinh/ve-ai.mts --nhom cau-nen    # chỉ một tệp nhóm
  *
  * Chạy trên Mac (cần `~/.local/bin/agy` đã đăng nhập). Vẽ theo lô 8 ảnh/lượt agy (đỡ tốn lượt gọi);
- * ảnh lỗi/thiếu thì lượt sau tự vẽ lại. Hết hạn mức (RESOURCE_EXHAUSTED) ⇒ dừng, chạy lại sau.
+ * ảnh lỗi/thiếu thì lượt sau tự vẽ lại. Hết hạn mức (RESOURCE_EXHAUSTED) ⇒ CHỜ tới giờ hồi (đọc "Resets in …", mặc định 30 phút) rồi vẽ lại đúng lô đó.
  */
 import 'dotenv/config';
 import { execFileSync } from 'node:child_process';
@@ -74,7 +74,13 @@ for (let i = 0; i < thieu.length; i += LO) {
       '--print-timeout', '1800s', '--output-format', 'json'], { cwd: TAM, stdio: ['ignore', 'pipe', 'pipe'], timeout: 2_000_000, maxBuffer: 64 << 20 });
   } catch (e: any) {
     const msg = String(e?.stdout ?? '') + String(e?.stderr ?? '');
-    if (msg.includes('RESOURCE_EXHAUSTED')) { console.error('⏸ hết hạn mức Antigravity — chạy lại sau'); break; }
+    if (msg.includes('RESOURCE_EXHAUSTED')) {
+      const m = /Resets in ([0-9hms]+)/.exec(msg)?.[1] ?? '';
+      const giay = (+(/(\d+)h/.exec(m)?.[1] ?? 0)) * 3600 + (+(/(\d+)m/.exec(m)?.[1] ?? 0)) * 60 + 300 || 1800;
+      console.error(`⏸ hết hạn mức Antigravity — chờ ${Math.round(giay / 60)} phút rồi vẽ lại lô này`);
+      await new Promise((r) => setTimeout(r, giay * 1000));
+      i -= LO; continue;
+    }
     console.error(`✗ lô ${i / LO + 1}: agy lỗi (${String(e?.message ?? e).slice(0, 160)}) — ảnh có sẵn trong lô vẫn được đẩy`);
   }
   for (const s of lo) {

@@ -1,0 +1,152 @@
+import type { NgayCauNen } from '../kieu';
+
+const WAS = 'I/He/She/It + was + Adj/N/nơi chốn';
+const WERE = 'You/We/They + were + …';
+const NOT = "S + wasn't / weren't + …";
+const Q = 'Was/Were + S + …? · Wh- + was/were + S?';
+const THERE = 'There was / There were + N';
+
+export const NGAY_13: NgayCauNen = {
+  n: 13,
+  ten: 'Quá khứ của be: was / were',
+  mucTieu: 'Kể lại trạng thái trong quá khứ: I was sick yesterday. Where were you last night? The test was really hard.',
+  bai: {
+    y: [
+      'Tiếng Việt không đổi động từ theo thời gian — chỉ thêm "**hôm qua**", "**hồi đó**", "**đã**". Tiếng Anh **đổi chính động từ**: am / is → **was**, are → **were**.',
+      '**I / he / she / it / một người** → **was** · **you / we / they / nhiều** → **were**.',
+      'Phủ định: **wasn\'t / weren\'t** · Câu hỏi: **Was / Were** lên đầu: **Were** you at home?',
+      '**There was / There were** = "đã có…": There **were** a lot of people at the party.',
+      'Từ chỉ quá khứ: **yesterday · last night / last week / last year · two days ago · then · as a child**.',
+    ],
+    khung: [
+      { mau: WAS, vi: 'Tôi / anh ấy … đã (là) …' },
+      { mau: WERE, vi: 'Bạn / chúng tôi / họ … đã (là) …' },
+      { mau: NOT, vi: 'đã không …' },
+      { mau: Q, vi: 'có … không? / ở đâu?' },
+      { mau: THERE, vi: 'đã có …' },
+    ],
+    soSanh: [
+      { vi: 'Hôm qua tôi bị ốm.', tungChu: 'Yesterday I sick.', en: 'I was sick yesterday.', viSao: 'Thiếu động từ; quá khứ của am là was.' },
+      { vi: 'Tối qua bạn ở đâu?', tungChu: 'Last night you where?', en: 'Where were you last night?', viSao: 'Where lên đầu, were trước you; thời gian để cuối.' },
+      { vi: 'Bữa tiệc có nhiều người.', tungChu: 'Party have many people.', en: 'There were a lot of people at the party.', viSao: '"có" = there + were (quá khứ, nhiều người).' },
+    ],
+    viDu: [
+      { en: 'I was sick yesterday.', vi: 'Hôm qua tôi bị ốm.' },
+      { en: 'Where were you last night?', vi: 'Tối qua bạn ở đâu?' },
+      { en: 'The test was really hard.', vi: 'Bài kiểm tra rất khó.' },
+      { en: 'There were a lot of people at the party.', vi: 'Bữa tiệc có rất nhiều người.' },
+    ],
+    meo: ['Thấy **yesterday / last / ago** trong câu ⇒ động từ phải lùi về quá khứ. Câu không có hành động ⇒ **was / were**.'],
+  },
+  nguPhap: [
+    { t: 'h', text: '1. Hiện tại → quá khứ của be' },
+    {
+      t: 'table', head: ['Chủ ngữ', 'Hiện tại', 'Quá khứ', 'Ví dụ'],
+      rows: [
+        ['I', 'am', '**was**', 'I **was** tired.'],
+        ['He / She / It', 'is', '**was**', 'It **was** cold.'],
+        ['You / We / They', 'are', '**were**', 'They **were** late.'],
+        ['There + một / nhiều', 'is / are', '**was / were**', 'There **was** a bug. There **were** two bugs.'],
+      ],
+    },
+    { t: 'h', text: '2. Khi nào?' },
+    {
+      t: 'sodo', kind: 'timeline', title: 'Đã xong, nằm hẳn trong quá khứ',
+      marks: [
+        { from: -6, label: 'last week — I was busy', kieu: 'diem', mau: 1 },
+        { from: -2, label: 'yesterday — I was sick', kieu: 'diem', mau: 3 },
+        { from: 0, label: 'now — I\'m fine', kieu: 'diem', mau: 2 },
+      ],
+    },
+    {
+      t: 'table', head: ['Từ chỉ thời gian quá khứ', 'Ví dụ'],
+      rows: [
+        ['yesterday · yesterday morning', 'I was at home yesterday morning.'],
+        ['last + night / week / month / year', 'We were in Da Lat last week.'],
+        ['… ago', 'She was here ten minutes ago.'],
+        ['then · at that time · as a child', 'I was very shy as a child.'],
+      ],
+    },
+    { t: 'note', title: 'Lỗi người Việt hay mắc', items: ['~~Yesterday I sick~~ → I **was** sick yesterday.', '~~They was late~~ → They **were** late.', '~~Did you tired?~~ → **Were** you tired?', '~~last day~~ → **yesterday**'] },
+  ],
+  tuVung: [
+    { w: 'yesterday', loai: 'adv', vi: 'hôm qua', anh: 'tear-off-calendar', ex: 'Where were you yesterday?', exVi: 'Hôm qua bạn ở đâu?' },
+    { w: 'last night', loai: 'phr', vi: 'tối qua, đêm qua', anh: 'night-with-stars', ex: 'Last night was fun.', exVi: 'Tối qua vui thật.' },
+    { w: 'party', loai: 'n', vi: 'bữa tiệc', anh: 'confetti-ball', ex: 'The party was great.', exVi: 'Bữa tiệc thật tuyệt.' },
+    { w: 'trip', loai: 'n', vi: 'chuyến đi', anh: 'luggage', ex: 'How was your trip?', exVi: 'Chuyến đi của bạn thế nào?' },
+    { w: 'weather', loai: 'n', vi: 'thời tiết', anh: 'sun-behind-cloud', ex: 'The weather was perfect.', exVi: 'Thời tiết thật lý tưởng.' },
+    { w: 'delicious', loai: 'adj', vi: 'ngon', anh: 'steaming-bowl', ex: 'The pho was delicious.', exVi: 'Phở ngon tuyệt.' },
+    { w: 'flight', loai: 'n', vi: 'chuyến bay', anh: 'airplane-arrival', ex: 'My flight was late.', exVi: 'Chuyến bay của tôi bị trễ.' },
+    { w: 'sick', loai: 'adj', vi: 'ốm', anh: 'face-with-thermometer', ex: 'She was sick last week.', exVi: 'Tuần trước cô ấy bị ốm.' },
+    { w: 'shy', loai: 'adj', vi: 'nhút nhát', anh: 'flushed-face', ex: 'He was shy at first.', exVi: 'Lúc đầu anh ấy nhút nhát.' },
+    { w: 'nervous', loai: 'adj', vi: 'hồi hộp, lo lắng', anh: 'anxious-face-with-sweat', ex: 'I was so nervous.', exVi: 'Tôi đã rất hồi hộp.' },
+    { w: 'interview', loai: 'n', vi: 'buổi phỏng vấn', anh: 'ai-interview', ex: 'The interview was short.', exVi: 'Buổi phỏng vấn ngắn.' },
+    { w: 'presentation', loai: 'n', vi: 'bài thuyết trình', anh: 'ai-presentation', ex: 'Her presentation was clear.', exVi: 'Bài thuyết trình của cô ấy rất rõ ràng.' },
+    { w: 'classmate', loai: 'n', vi: 'bạn cùng lớp', anh: 'ai-classmates', ex: 'We were classmates.', exVi: 'Chúng tôi từng là bạn cùng lớp.' },
+    { w: 'absent', loai: 'adj', vi: 'vắng mặt', anh: 'ai-empty-desk', ex: 'Three students were absent.', exVi: 'Ba sinh viên vắng mặt.' },
+    { w: 'ago', loai: 'adv', vi: 'cách đây, trước', anh: 'hourglass-done', ex: 'He was here an hour ago.', exVi: 'Anh ấy ở đây một tiếng trước.' },
+  ],
+  hoiThoai: {
+    tieuDe: 'Thứ Hai đầu tuần ở văn phòng',
+    luot: [
+      { vai: 'A', ten: 'Jenny', en: 'Hi Duc! How was your weekend?', vi: 'Chào Đức! Cuối tuần của em thế nào?' },
+      { vai: 'B', ten: 'Đức', en: 'It was great. I was in Ha Long Bay with my family.', vi: 'Tuyệt lắm ạ. Em đi Hạ Long với gia đình.' },
+      { vai: 'A', ten: 'Jenny', en: 'Wow! Was the weather nice?', vi: 'Ồ! Thời tiết đẹp không?' },
+      { vai: 'B', ten: 'Đức', en: 'Yes, it was sunny, but there were so many tourists.', vi: 'Đẹp ạ, nắng nhưng mà khách du lịch đông quá.' },
+      { vai: 'A', ten: 'Jenny', en: 'Were the hotels expensive?', vi: 'Khách sạn có đắt không?' },
+      { vai: 'B', ten: 'Đức', en: 'No, they weren\'t. Our room was cheap and clean.', vi: 'Không ạ. Phòng của bọn em rẻ mà sạch.' },
+    ],
+  },
+  viet: {
+    y: [
+      'Viết về một ngày đã qua: mở bằng **mốc thời gian** (Last Saturday, …) rồi kể trạng thái bằng was / were.',
+      'Sau mốc thời gian ở đầu câu có **dấu phẩy**: Last Saturday**,** I was in Da Lat.',
+      'Soát mọi chủ ngữ số nhiều (we, they, my parents) ⇒ **were**.',
+    ],
+    chinhTa: ['~~wasnt~~ / ~~werent~~ → **wasn\'t / weren\'t**', '~~yesterdey~~ → **yesterday**', '~~delicous~~ → **delicious** (-cious)'],
+    de: 'Viết 5 câu về **chuyến đi hoặc bữa tiệc gần nhất** của bạn: ở đâu, thời tiết, đồ ăn, có nhiều người không, bạn cảm thấy thế nào.',
+    mau: [
+      { en: 'Last month, I was in Da Lat with my friends.', vi: 'Tháng trước mình đi Đà Lạt với bạn bè.' },
+      { en: 'The weather was cool and beautiful.', vi: 'Thời tiết mát và đẹp.' },
+      { en: 'There were a lot of flowers everywhere.', vi: 'Chỗ nào cũng có rất nhiều hoa.' },
+      { en: 'The food was cheap and delicious.', vi: 'Đồ ăn rẻ và ngon.' },
+      { en: 'It was a wonderful trip.', vi: 'Đó là một chuyến đi tuyệt vời.' },
+    ],
+  },
+  cau: [
+    { id: 'cn13-01', vi: 'Hôm qua tôi bị ốm.', en: 'I was sick yesterday.', alt: ['Yesterday I was sick.'], khung: WAS, loi: '~~Yesterday I sick~~' },
+    { id: 'cn13-02', vi: 'Tối qua bạn ở đâu?', en: 'Where were you last night?', khung: Q },
+    { id: 'cn13-03', vi: 'Bài kiểm tra rất khó.', en: 'The test was really hard.', alt: ['The test was very hard.', 'The test was very difficult.', 'The test was really difficult.'], khung: WAS },
+    { id: 'cn13-04', vi: 'Họ không ở nhà.', en: 'They weren\'t at home.', alt: ['They weren\'t home.'], khung: NOT },
+    { id: 'cn13-05', vi: 'Bộ phim có hay không?', en: 'Was the movie good?', alt: ['Was the film good?'], khung: Q },
+    { id: 'cn13-06', vi: 'Sau chuyến đi tôi rất mệt.', en: 'I was very tired after the trip.', alt: ['I was really tired after the trip.'], khung: WAS },
+    { id: 'cn13-07', vi: 'Hôm qua thời tiết đẹp.', en: 'The weather was nice yesterday.', alt: ['The weather was beautiful yesterday.', 'Yesterday the weather was nice.'], khung: WAS },
+    { id: 'cn13-08', vi: 'Cuộc họp kéo dài hai tiếng.', en: 'The meeting was two hours long.', alt: ['The meeting lasted two hours.'], khung: WAS },
+    { id: 'cn13-09', vi: 'Bữa tiệc có rất nhiều người.', en: 'There were a lot of people at the party.', alt: ['There were many people at the party.', 'There were so many people at the party.'], khung: THERE },
+    { id: 'cn13-10', vi: 'Server đã gặp sự cố.', en: 'There was a problem with the server.', alt: ['There was an issue with the server.'], khung: THERE },
+    { id: 'cn13-11', vi: 'Lúc đó tôi mới mười tám tuổi.', en: 'I was only eighteen then.', alt: ['I was only eighteen at the time.', 'I was just eighteen at the time.'], khung: WAS },
+    { id: 'cn13-12', vi: 'Hôm thứ Hai bạn có đi học không?', en: 'Were you in class on Monday?', alt: ['Were you at school on Monday?'], khung: Q },
+    { id: 'cn13-13', vi: 'Không, mình không có ở đó.', en: 'No, I wasn\'t there.', khung: NOT },
+    { id: 'cn13-14', vi: 'Hôm qua cửa hàng đóng cửa.', en: 'The store was closed yesterday.', alt: ['The shop was closed yesterday.'], khung: WAS },
+    { id: 'cn13-15', vi: 'Đồ ăn rất ngon.', en: 'The food was delicious.', alt: ['The food was really good.', 'The food was great.'], khung: WAS },
+    { id: 'cn13-16', vi: 'Tuần trước chúng tôi rất bận.', en: 'We were really busy last week.', alt: ['We were very busy last week.', 'Last week we were really busy.'], khung: WERE },
+    { id: 'cn13-17', vi: 'Ông tôi từng là thầy giáo.', en: 'My grandfather was a teacher.', alt: ['My grandpa was a teacher.'], khung: WAS },
+    { id: 'cn13-18', vi: 'Phòng khách sạn sạch sẽ.', en: 'The hotel room was clean.', khung: WAS },
+    { id: 'cn13-19', vi: 'Sao hôm qua bạn vắng mặt?', en: 'Why were you absent yesterday?', alt: ['Why weren\'t you here yesterday?'], khung: Q },
+    { id: 'cn13-20', vi: 'Xin lỗi vì lúc nãy mình đến muộn.', en: 'Sorry I was late.', alt: ['I\'m sorry I was late.', 'Sorry for being late.'], khung: WAS },
+    { id: 'cn13-21', vi: 'Hồi nhỏ tôi rất nhút nhát.', en: 'I was very shy as a child.', alt: ['I was really shy as a kid.', 'I was very shy when I was a kid.', 'I was very shy as a kid.'], khung: WAS },
+    { id: 'cn13-22', vi: 'Chuyến bay bị hoãn.', en: 'The flight was delayed.', khung: 'S + was + V3 (bị …)' },
+    { id: 'cn13-23', vi: 'Bài thuyết trình của bạn rất tuyệt.', en: 'Your presentation was great.', alt: ['Your presentation was amazing.', 'Your presentation was excellent.'], khung: WAS },
+    { id: 'cn13-24', vi: 'Lúc 8 giờ tối qua bạn ở đâu?', en: 'Where were you at 8 last night?', khung: Q },
+    { id: 'cn13-25', vi: 'Văn phòng không có ai.', en: 'There was nobody in the office.', alt: ['Nobody was in the office.', 'There was no one in the office.'], khung: THERE },
+    { id: 'cn13-26', vi: 'Cái áo đó có đắt không?', en: 'Was that shirt expensive?', khung: Q },
+    { id: 'cn13-27', vi: 'Năm ngoái tôi là sinh viên năm hai.', en: 'I was a second-year student last year.', alt: ['Last year I was a second-year student.'], khung: WAS },
+    { id: 'cn13-28', vi: 'Wi-Fi ở khách sạn chập chờn.', en: 'The Wi-Fi at the hotel wasn\'t stable.', alt: ['The hotel Wi-Fi wasn\'t stable.', 'The Wi-Fi at the hotel was unstable.', 'The hotel Wi-Fi was really bad.'], khung: NOT },
+    { id: 'cn13-29', vi: 'Hồi cấp ba chúng tôi học cùng lớp.', en: 'We were classmates in high school.', khung: WERE },
+    { id: 'cn13-30', vi: 'Hôm qua trời nóng kinh khủng.', en: 'It was so hot yesterday.', alt: ['It was really hot yesterday.', 'It was terribly hot yesterday.', 'It was extremely hot yesterday.'], khung: WAS },
+    { id: 'cn13-31', vi: 'Bố mẹ tôi rất vui.', en: 'My parents were very happy.', alt: ['My parents were really happy.'], khung: WERE },
+    { id: 'cn13-32', vi: 'Câu hỏi đó không dễ.', en: 'That question wasn\'t easy.', khung: NOT },
+    { id: 'cn13-33', vi: 'Trước buổi phỏng vấn bạn có hồi hộp không?', en: 'Were you nervous before the interview?', khung: Q },
+    { id: 'cn13-34', vi: 'Hôm nay là một ngày dài.', en: 'It was a long day.', alt: ['Today was a long day.'], khung: WAS, goi: 'nói lúc cuối ngày ⇒ dùng was (ngày đã qua)' },
+  ],
+};

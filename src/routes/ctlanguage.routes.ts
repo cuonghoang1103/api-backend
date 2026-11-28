@@ -14,6 +14,7 @@ import { logger } from '../utils/logger.js';
 import { isProEffective } from '../services/pro.service.js';
 import type { ApiResponse } from '../types/index.js';
 import { docHoSo, luuHoSo } from '../services/ctlanguage/hoSo.js';
+import { layCauNen } from '../services/ctlanguage/cauNen.js';
 import { chiTiet, chuCuaNgay, chuHan, deTroChoi, goiOffline, theoBoThu, tra, vietTay } from '../services/ctlanguage/tuDien.js';
 import {
   baoCao, boChan, btvChon, chan, chiTietBai, chonHayNhat, dangBai, danhMuc, dsBai, dsBaiCuaNguoi, dsDaChan, khoaXem, luuBai, suaBai,
@@ -186,6 +187,16 @@ router.get('/cong-dong/:nn', gioiHanTra, optionalAuth, async (req: Request, res:
     const truoc = req.query.truoc ? idSo(String(req.query.truoc)) : undefined;
     const { tab, q, loai, the, tu } = req.query;
     res.json({ success: true, data: await dsBai(req.params.nn, req.userId ?? null, truoc, Number(req.query.gioiHan ?? 20), { tab, q, loai, the, tu }) });
+  } catch (e) { next(e); }
+});
+
+// Câu nền (28/11/2026) — "1000 câu nền" EN + "Luyện câu Dekiru Bài 1–10" JA cho app iOS. Công khai (khách học được), PHẢI
+// đứng trước `authenticate` (đo: tuyến chưa có trả 401 ⇒ app ẩn mục). ?nn=en|ja [&ngay=N | &bai=N].
+router.get('/cau-nen', gioiHanTra, (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const so = req.query.ngay ?? req.query.bai;
+    res.set('Cache-Control', 'public, max-age=3600');
+    res.json({ success: true, data: layCauNen(String(req.query.nn ?? ''), so === undefined ? undefined : Number(so)) });
   } catch (e) { next(e); }
 });
 

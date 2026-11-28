@@ -142,7 +142,7 @@ export type Block =
   | SoDo;
 
 /** Một câu của khối `luyenCau`. `ja` có furigana `{漢字|かな}`; `alt` = cách viết khác cũng đúng; `np` = mẫu câu (nhãn lọc). */
-export type CauLuyen = { vi: string; ja: string; ro: string; alt?: string[]; np?: string; goi?: string };
+export type CauLuyen = { vi: string; ja: string; ro: string; alt?: string[]; np?: string; goi?: string; /** Các từ của câu (theo DSL, có ruby) — app iOS dùng làm mảnh "xếp câu" (28/11). */ tu?: string[] };
 
 /**
  * 🧭 Sơ đồ minh hoạ (12/11/2026 — "bài học có sơ đồ cho dễ học"), vẽ bằng SVG/CSS, theo nền sáng/tối:

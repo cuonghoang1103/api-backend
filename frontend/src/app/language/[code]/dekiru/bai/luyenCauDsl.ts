@@ -106,7 +106,7 @@ export const E = (s: string, vi: string): Ex => ({ en: J(s), ro: R(s), vi });
 export type C = [vi: string, dsl: string, alt?: string[], goi?: string];
 /** Một nhóm câu cùng mẫu câu `np` (nhãn lọc hiện trong khối). Câu xếp NGẮN → DÀI trong mỗi bài. */
 export const nhom = (np: string, ds: C[]): CauLuyen[] =>
-  ds.map(([vi, dsl, alt, goi]) => ({ vi, ja: J(dsl), ro: R(dsl), np, ...(alt?.length ? { alt: alt.map(J) } : {}), ...(goi ? { goi } : {}) }));
+  ds.map(([vi, dsl, alt, goi]) => ({ vi, ja: J(dsl), ro: R(dsl), np, tu: toks(dsl).map((t) => tok(t)[0]), ...(alt?.length ? { alt: alt.map(J) } : {}), ...(goi ? { goi } : {}) }));
 
 /* ══════════════ dựng 2 mục của một bài ══════════════ */
 

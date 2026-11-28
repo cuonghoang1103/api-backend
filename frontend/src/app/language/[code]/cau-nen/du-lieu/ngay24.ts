@@ -1,0 +1,170 @@
+import type { NgayCauNen } from '../kieu';
+
+const BE = 'S + be …, isn\'t / aren\'t + S? · S + isn\'t …, is + S?';
+const DO = 'S + V …, don\'t / doesn\'t / didn\'t + S? · S + don\'t + V …, do + S?';
+const AUX = 'S + can / will / have …, can\'t / won\'t / haven\'t + S?';
+const SHORT = 'Câu hỏi? + Yes, S + trợ động từ. / No, S + trợ động từ + n\'t.';
+const SO = 'So + trợ động từ + I. (cũng vậy) · Neither + trợ động từ + I. (cũng không)';
+const THINK = 'I think so. · I don\'t think so. · I hope so. · I guess so.';
+
+export const NGAY_24: NgayCauNen = {
+  n: 24,
+  ten: 'Câu hỏi đuôi & câu trả lời ngắn',
+  mucTieu: 'Hỏi lại cho chắc (It\'s late, isn\'t it?), trả lời gọn như người bản xứ (Yes, I do. No, I haven\'t.) và đồng tình (So do I. Neither do I.).',
+  bai: {
+    y: [
+      'Tiếng Việt thêm "**phải không? / nhỉ? / đúng không?**" vào cuối. Tiếng Anh thêm **câu hỏi đuôi** = trợ động từ + đại từ, và **đảo dấu**: câu khẳng định ⇒ đuôi phủ định, câu phủ định ⇒ đuôi khẳng định.',
+      'Chọn trợ động từ theo động từ chính: **be** ⇒ is/are/was · động từ thường ⇒ **do/does/did** · can, will, have ⇒ giữ nguyên: You **can** swim, **can\'t** you?',
+      'Trả lời ngắn = **Yes/No + chủ ngữ + trợ động từ**, KHÔNG lặp lại cả câu và KHÔNG chỉ nói "Yes": Do you like it? — **Yes, I do.** Have you finished? — **No, I haven\'t.**',
+      'Đồng tình: "mình cũng vậy" = **So do I / So am I / Me too** · "mình cũng không" = **Neither do I / Me neither**.',
+      'Đáp gọn ý kiến: **I think so** (mình nghĩ vậy) · **I don\'t think so** · **I hope so** · **I guess so**.',
+    ],
+    khung: [
+      { mau: BE, vi: '… phải không? (với be)' },
+      { mau: DO, vi: '… đúng không? (với động từ thường)' },
+      { mau: AUX, vi: '… nhỉ? (với can / will / have)' },
+      { mau: SHORT, vi: 'Có. / Không. (trả lời ngắn)' },
+      { mau: SO, vi: 'mình cũng vậy / mình cũng không' },
+      { mau: THINK, vi: 'mình nghĩ vậy / không nghĩ vậy / hy vọng vậy' },
+    ],
+    soSanh: [
+      { vi: 'Muộn rồi, phải không?', tungChu: 'It\'s late, right or not?', en: 'It\'s late, isn\'t it?', viSao: 'Câu khẳng định với is ⇒ đuôi isn\'t it.' },
+      { vi: 'Bạn thích cà phê, đúng không?', tungChu: 'You like coffee, isn\'t it?', en: 'You like coffee, don\'t you?', viSao: 'Động từ thường (like) ⇒ mượn do; chủ ngữ you ⇒ don\'t you.' },
+      { vi: 'Bạn có thích không? — Có.', tungChu: 'Do you like it? — Yes, I like.', en: 'Do you like it? Yes, I do.', viSao: 'Trả lời ngắn lặp lại trợ động từ (do), không lặp động từ chính.' },
+      { vi: 'Mình cũng không thích.', tungChu: 'I also don\'t like.', en: 'Neither do I.', viSao: 'Đồng tình với câu phủ định ⇒ Neither do I / Me neither.' },
+    ],
+    viDu: [
+      { en: 'It\'s late, isn\'t it?', vi: 'Muộn rồi, phải không?' },
+      { en: 'You like coffee, don\'t you?', vi: 'Bạn thích cà phê, đúng không?' },
+      { en: 'Have you finished? No, I haven\'t.', vi: 'Bạn xong chưa? — Chưa.' },
+      { en: 'I\'m tired. So am I.', vi: 'Mình mệt quá. — Mình cũng vậy.' },
+    ],
+    meo: [
+      'Nói chuyện hằng ngày người Mỹ hay dùng đuôi **right?** cho nhanh: You\'re coming, **right?** — dễ và luôn đúng, nhưng vẫn nên học đuôi chuẩn để nghe hiểu.',
+      'Giọng **xuống** ở đuôi = mình gần như chắc, chỉ muốn người kia đồng ý · giọng **lên** = mình thật sự hỏi.',
+    ],
+  },
+  nguPhap: [
+    { t: 'h', text: '1. Cách làm câu hỏi đuôi' },
+    {
+      t: 'sodo', kind: 'flow', title: 'Ba bước',
+      steps: [
+        { label: 'Tìm trợ động từ', sub: 'is · do · can · have · will' },
+        { label: 'Đảo dấu', sub: 'khẳng định ⇒ n\'t · phủ định ⇒ không n\'t' },
+        { label: 'Đổi chủ ngữ ra đại từ', sub: 'my brother ⇒ he · the app ⇒ it' },
+      ],
+    },
+    {
+      t: 'table', head: ['Câu chính', 'Đuôi', 'Ví dụ'],
+      rows: [
+        ['be (khẳng định)', '**isn\'t / aren\'t / wasn\'t** + S?', 'It\'s cold, **isn\'t it**?'],
+        ['be (phủ định)', '**is / are / was** + S?', 'She isn\'t Vietnamese, **is she**?'],
+        ['động từ thường hiện tại', '**don\'t / doesn\'t** + S?', 'He works here, **doesn\'t he**?'],
+        ['động từ thường quá khứ', '**didn\'t** + S?', 'You met her, **didn\'t you**?'],
+        ['can / will / have', '**can\'t / won\'t / haven\'t** + S?', 'You\'ll come, **won\'t you**?'],
+        ['Let\'s …', '**shall we**?', 'Let\'s go, **shall we**?'],
+      ],
+    },
+    { t: 'h', text: '2. Trả lời ngắn & đồng tình' },
+    {
+      t: 'table', head: ['Câu hỏi / câu nói', 'Có / Đồng ý', 'Không'],
+      rows: [
+        ['Do you like it?', '**Yes, I do.**', '**No, I don\'t.**'],
+        ['Are you tired?', '**Yes, I am.**', '**No, I\'m not.**'],
+        ['Have you finished?', '**Yes, I have.**', '**No, I haven\'t.** / **Not yet.**'],
+        ['I like K-pop.', '**So do I.** / **Me too.**', '(không thích) **I don\'t.**'],
+        ['I\'m hungry.', '**So am I.** / **Me too.**', '**I\'m not.**'],
+        ['I don\'t like spicy food.', '**Neither do I.** / **Me neither.**', '(thích) **I do.**'],
+      ],
+    },
+    {
+      t: 'sodo', kind: 'compare', title: 'Trả lời câu hỏi PHỦ ĐỊNH — ngược với tiếng Việt',
+      cols: [
+        { title: 'Tiếng Việt: "Bạn không đi à?" — "**Ừ**, không đi."', anh: 'thinking-face', items: ['Ừ = đồng ý với người hỏi'] },
+        { title: 'Tiếng Anh: "You aren\'t going?" — "**No**, I\'m not."', anh: 'red-exclamation-mark', items: ['Yes/No theo SỰ THẬT: không đi ⇒ **No**', 'đi ⇒ **Yes, I am.**'] },
+      ],
+    },
+    { t: 'note', title: 'Lỗi người Việt hay mắc', items: ['~~You like coffee, isn\'t it?~~ → **don\'t you**', '~~He works here, isn\'t he?~~ → **doesn\'t he**', 'Trả lời "Yes" cho câu "You don\'t eat meat, do you?" khi mình KHÔNG ăn → nói **No, I don\'t.**', '~~Me too~~ sau câu phủ định → **Me neither**', '~~Yes, I like.~~ → **Yes, I do.**'] },
+  ],
+  tuVung: [
+    { w: 'right', loai: 'adj', vi: 'đúng; bên phải', anh: 'check-mark', ex: 'Your answer is right.', exVi: 'Câu trả lời của bạn đúng.' },
+    { w: 'wrong', loai: 'adj', vi: 'sai', anh: 'cross-mark', ex: 'Sorry, wrong number.', exVi: 'Xin lỗi, nhầm số rồi.' },
+    { w: 'guess', loai: 'v', vi: 'đoán', anh: 'crystal-ball', ex: 'Guess who called me.', exVi: 'Đoán xem ai gọi cho mình.' },
+    { w: 'hope', loai: 'v', vi: 'hy vọng', anh: 'crossed-fingers', ex: 'I hope you feel better.', exVi: 'Mong bạn sớm khoẻ.' },
+    { w: 'mind', loai: 'v', vi: 'phiền, bận tâm', anh: 'thinking-face', ex: 'I don\'t mind waiting.', exVi: 'Tôi không ngại đợi.' },
+    { w: 'push', loai: 'v', vi: 'đẩy (code lên)', anh: 'up-arrow', ex: 'Push your code before lunch.', exVi: 'Đẩy code lên trước giờ trưa nhé.' },
+    { w: 'move', loai: 'v', vi: 'chuyển (nhà)', anh: 'delivery-truck', ex: 'We moved last month.', exVi: 'Tháng trước chúng tôi chuyển nhà.' },
+    { w: 'swim', loai: 'v', vi: 'bơi', anh: 'person-swimming', ex: 'I swim every Sunday.', exVi: 'Chủ nhật nào tôi cũng đi bơi.' },
+    { w: 'meat', loai: 'n', vi: 'thịt', anh: 'cut-of-meat', ex: 'This meat is fresh.', exVi: 'Thịt này tươi.' },
+    { w: 'presentation', loai: 'n', vi: 'bài thuyết trình', anh: 'ai-presentation', ex: 'My presentation is on Monday.', exVi: 'Thứ Hai tôi thuyết trình.' },
+    { w: 'dinner', loai: 'n', vi: 'bữa tối', anh: 'spaghetti', ex: 'Dinner is ready!', exVi: 'Cơm tối xong rồi!' },
+    { w: 'correct', loai: 'adj', vi: 'chính xác', anh: 'check-box-with-check', ex: 'Is this correct?', exVi: 'Cái này chính xác chưa?' },
+    { w: 'agree', loai: 'v', vi: 'đồng ý', anh: 'handshake', ex: 'I agree with you.', exVi: 'Mình đồng ý với bạn.' },
+    { w: 'actually', loai: 'adv', vi: 'thật ra', anh: 'face-with-monocle', ex: 'Actually, I\'m from Hue.', exVi: 'Thật ra tôi người Huế.' },
+    { w: 'of course', loai: 'phr', vi: 'tất nhiên', anh: 'thumbs-up', ex: 'Of course you can.', exVi: 'Tất nhiên là được.' },
+  ],
+  hoiThoai: {
+    tieuDe: 'Làm quen với bạn cùng phòng mới',
+    luot: [
+      { vai: 'A', ten: 'Long', en: 'You\'re the new guy in room 204, aren\'t you?', vi: 'Cậu là người mới ở phòng 204, phải không?' },
+      { vai: 'B', ten: 'Đạt', en: 'Yes, I am. I just moved here.', vi: 'Ừ, đúng rồi. Mình mới chuyển đến.' },
+      { vai: 'A', ten: 'Long', en: 'You study software engineering, don\'t you?', vi: 'Cậu học kỹ thuật phần mềm, đúng không?' },
+      { vai: 'B', ten: 'Đạt', en: 'Yes, I do. You do too, right?', vi: 'Ừ. Cậu cũng thế đúng không?' },
+      { vai: 'A', ten: 'Long', en: 'No, I don\'t. I study graphic design. Do you play games?', vi: 'Không, mình học thiết kế đồ hoạ. Cậu có chơi game không?' },
+      { vai: 'B', ten: 'Đạt', en: 'Not really. I don\'t have much time.', vi: 'Không nhiều lắm. Mình không có mấy thời gian.' },
+      { vai: 'A', ten: 'Long', en: 'Neither do I. Let\'s get some food, shall we?', vi: 'Mình cũng vậy. Đi ăn gì đi nhỉ?' },
+    ],
+  },
+  viet: {
+    y: [
+      'Câu hỏi đuôi viết **dấu phẩy** trước đuôi và **dấu hỏi** ở cuối: It\'s late**,** isn\'t it**?**',
+      'Trong tin nhắn, trả lời ngắn vẫn viết đủ: **Yes, I do.** — không chỉ "Yes" (nghe cụt).',
+      'Viết đoạn hội thoại: mỗi lượt một dòng, có tên người nói và dấu hai chấm.',
+    ],
+    chinhTa: ['~~is\'nt~~ → **isn\'t** (dấu nháy thay chữ o)', '~~dont~~ → **don\'t**', '~~nither~~ → **neither**', '~~Yes I do~~ → **Yes, I do.** (phẩy sau Yes)'],
+    de: 'Viết **một đoạn chat 6 lượt** với một người bạn mới quen: dùng ít nhất 2 câu hỏi đuôi, 2 câu trả lời ngắn và 1 câu So / Neither.',
+    mau: [
+      { en: 'Hi! You\'re in my English class, aren\'t you?', vi: 'Chào! Bạn học chung lớp tiếng Anh với mình, phải không?' },
+      { en: 'Yes, I am. You sit near the window, don\'t you?', vi: 'Ừ. Bạn ngồi gần cửa sổ đúng không?' },
+      { en: 'Yes, I do. Do you like the teacher?', vi: 'Ừ. Bạn có thích cô giáo không?' },
+      { en: 'Yes, I do. She\'s really funny.', vi: 'Có. Cô vui tính lắm.' },
+      { en: 'I don\'t like the homework, though. Neither do I!', vi: 'Nhưng mình không thích bài tập về nhà. — Mình cũng không!' },
+    ],
+  },
+  cau: [
+    { id: 'cn24-01', vi: 'Muộn rồi, phải không?', en: 'It\'s late, isn\'t it?', alt: ['It\'s getting late, isn\'t it?'], khung: BE },
+    { id: 'cn24-02', vi: 'Bạn là sinh viên FPT, phải không?', en: 'You\'re an FPT student, aren\'t you?', alt: ['You\'re a student at FPT, aren\'t you?', 'You\'re an FPT student, right?'], khung: BE, goi: 'FPT đọc "ef" ⇒ an' },
+    { id: 'cn24-03', vi: 'Hôm nay lạnh nhỉ?', en: 'It\'s cold today, isn\'t it?', alt: ['It\'s cold today, right?'], khung: BE },
+    { id: 'cn24-04', vi: 'Cô ấy không phải người Việt, phải không?', en: 'She isn\'t Vietnamese, is she?', khung: BE },
+    { id: 'cn24-05', vi: 'Bạn thích cà phê, đúng không?', en: 'You like coffee, don\'t you?', alt: ['You like coffee, right?'], khung: DO, loi: '~~You like coffee, isn\'t it?~~' },
+    { id: 'cn24-06', vi: 'Anh ấy làm ở Viettel, đúng không?', en: 'He works at Viettel, doesn\'t he?', alt: ['He works for Viettel, doesn\'t he?'], khung: DO },
+    { id: 'cn24-07', vi: 'Bạn không ăn thịt, phải không?', en: 'You don\'t eat meat, do you?', khung: DO },
+    { id: 'cn24-08', vi: 'Hôm qua bạn gặp cô ấy, đúng không?', en: 'You met her yesterday, didn\'t you?', alt: ['You saw her yesterday, didn\'t you?'], khung: DO },
+    { id: 'cn24-09', vi: 'Bạn bơi được, phải không?', en: 'You can swim, can\'t you?', khung: AUX },
+    { id: 'cn24-10', vi: 'Bạn sẽ đến, đúng không?', en: 'You\'ll come, won\'t you?', alt: ['You\'re coming, aren\'t you?', 'You\'re coming, right?'], khung: AUX },
+    { id: 'cn24-11', vi: 'Họ chưa đến, phải không?', en: 'They haven\'t arrived yet, have they?', alt: ['They haven\'t arrived, have they?', 'They haven\'t come yet, have they?'], khung: AUX },
+    { id: 'cn24-12', vi: 'Bạn có thích tiếng Anh không? – Có.', en: 'Do you like English? Yes, I do.', khung: SHORT, loi: '~~Yes, I like.~~' },
+    { id: 'cn24-13', vi: 'Bạn mệt à? – Không, mình không mệt.', en: 'Are you tired? No, I\'m not.', khung: SHORT },
+    { id: 'cn24-14', vi: 'Bạn làm xong chưa? – Rồi.', en: 'Have you finished? Yes, I have.', alt: ['Are you done? Yes, I am.'], khung: SHORT },
+    { id: 'cn24-15', vi: 'Anh ấy có đến không? – Không.', en: 'Is he coming? No, he isn\'t.', khung: SHORT },
+    { id: 'cn24-16', vi: 'Bạn gọi cho cô ấy chưa? – Chưa.', en: 'Did you call her? No, I didn\'t.', alt: ['Did you call her? Not yet.', 'Have you called her? No, I haven\'t.', 'Have you called her? Not yet.'], khung: SHORT },
+    { id: 'cn24-17', vi: 'Bạn biết bơi không? – Biết.', en: 'Can you swim? Yes, I can.', khung: SHORT },
+    { id: 'cn24-18', vi: 'Mình cũng thích.', en: 'So do I.', alt: ['Me too.', 'I do too.'], khung: SO },
+    { id: 'cn24-19', vi: 'Mình cũng không thích.', en: 'Neither do I.', alt: ['Me neither.', 'I don\'t either.'], khung: SO, loi: '~~Me too~~ sau câu phủ định' },
+    { id: 'cn24-20', vi: 'Mình cũng mệt.', en: 'So am I.', alt: ['Me too.', 'I am too.'], khung: SO, goi: 'câu trước dùng be ⇒ So am I' },
+    { id: 'cn24-21', vi: 'Câu trả lời này đúng, phải không?', en: 'This answer is right, isn\'t it?', alt: ['This answer is correct, isn\'t it?', 'This is right, isn\'t it?'], khung: BE },
+    { id: 'cn24-22', vi: 'Hôm nay thứ Sáu rồi, phải không?', en: 'Today is Friday, isn\'t it?', alt: ['It\'s Friday today, isn\'t it?', 'It\'s Friday, isn\'t it?'], khung: BE },
+    { id: 'cn24-23', vi: 'Bạn chưa ăn tối, phải không?', en: 'You haven\'t had dinner yet, have you?', alt: ['You haven\'t eaten dinner yet, have you?', 'You haven\'t had dinner, have you?'], khung: AUX },
+    { id: 'cn24-24', vi: 'Bài thuyết trình hay quá nhỉ?', en: 'That was a great presentation, wasn\'t it?', alt: ['The presentation was great, wasn\'t it?'], khung: BE },
+    { id: 'cn24-25', vi: 'Hôm nay mình không có họp, đúng không?', en: 'We don\'t have a meeting today, do we?', alt: ['There\'s no meeting today, is there?', 'We don\'t have a meeting today, right?'], khung: DO },
+    { id: 'cn24-26', vi: 'Bạn đẩy code lên rồi, phải không?', en: 'You\'ve pushed the code, haven\'t you?', alt: ['You pushed the code, didn\'t you?', 'You\'ve already pushed the code, haven\'t you?'], khung: AUX },
+    { id: 'cn24-27', vi: 'Lỗi này khó sửa nhỉ?', en: 'This bug is hard to fix, isn\'t it?', alt: ['This bug is difficult to fix, isn\'t it?'], khung: BE },
+    { id: 'cn24-28', vi: 'Mình đi nhé?', en: 'Let\'s go, shall we?', khung: 'Let\'s + V, shall we?' },
+    { id: 'cn24-29', vi: 'Bạn không phiền chứ?', en: 'You don\'t mind, do you?', khung: DO },
+    { id: 'cn24-30', vi: 'Đúng vậy.', en: 'That\'s right.', alt: ['That\'s true.', 'Exactly.', 'That\'s correct.'], khung: 'That\'s + right / true.' },
+    { id: 'cn24-31', vi: 'Mình nghĩ là không.', en: 'I don\'t think so.', khung: THINK, loi: '~~I think not so~~' },
+    { id: 'cn24-32', vi: 'Mình hy vọng vậy.', en: 'I hope so.', khung: THINK },
+    { id: 'cn24-33', vi: 'Chắc vậy.', en: 'I guess so.', alt: ['I think so.', 'Probably.'], khung: THINK },
+    { id: 'cn24-34', vi: 'Bạn mới chuyển đến đây, đúng không?', en: 'You just moved here, didn\'t you?', alt: ['You\'ve just moved here, haven\'t you?', 'You recently moved here, didn\'t you?', 'You just moved here, right?'], khung: DO },
+  ],
+};

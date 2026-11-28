@@ -1,0 +1,166 @@
+import type { NgayCauNen } from '../kieu';
+
+const STAND = 'Yesterday I + V2 … · Today I\'m going to / I\'ll + V … · No blockers.';
+const ON = 'I\'m working on + N · I\'m about + số% done';
+const BLOCK = 'I\'m blocked on / stuck on + N · I\'m waiting for + N + to V';
+const EST = 'This will take about + thời gian · I\'ll try to finish it by + ngày';
+const MEET = 'Let\'s + V … · Let me + V … · Can everyone + V …?';
+const OPIN = 'I think we should + V · I agree with … · Do you mean …?';
+const ASK = 'How\'s + N + going? · What\'s the status of + N?';
+
+export const NGAY_26: NgayCauNen = {
+  n: 26,
+  ten: 'Thực tập IT (1): họp & daily standup',
+  mucTieu: 'Báo cáo 30 giây trong buổi standup (hôm qua · hôm nay · vướng gì), ước lượng thời gian, nêu ý kiến và điều phối một cuộc họp ngắn bằng tiếng Anh.',
+  bai: {
+    y: [
+      'Daily standup trả lời đúng **3 câu**: hôm qua làm gì (**quá khứ đơn**: Yesterday I finished…) · hôm nay làm gì (**going to / will**: Today I\'m going to…) · có vướng không (**No blockers.** / **I\'m blocked on …**).',
+      'Đang làm dở: **I\'m working on** + việc (KHÔNG nói ~~I\'m doing ticket~~). Tiến độ: **I\'m about 80% done.**',
+      'Ước lượng, hứa hạn: **This will probably take about two days.** · **I\'ll try to finish it by Thursday.** — hạn chót dùng **by**, không dùng ~~until~~.',
+      'Nêu ý kiến mềm mỏng: **I think we should …** · đồng ý: **I agree with …** · hỏi lại cho rõ: **Do you mean …?** · nghe sót: **Sorry, I didn\'t catch that.**',
+      'Điều phối: **Let\'s get started.** · **Who wants to go first?** · **Let me share my screen.** · **That\'s all for today.**',
+    ],
+    khung: [
+      { mau: STAND, vi: 'báo cáo standup 3 phần' },
+      { mau: ON, vi: 'đang làm / tiến độ' },
+      { mau: BLOCK, vi: 'đang vướng / đang đợi' },
+      { mau: EST, vi: 'ước lượng thời gian, hạn' },
+      { mau: ASK, vi: 'hỏi tiến độ' },
+      { mau: OPIN, vi: 'nêu ý kiến, đồng ý, hỏi lại' },
+      { mau: MEET, vi: 'điều phối cuộc họp' },
+    ],
+    soSanh: [
+      { vi: 'Em đang làm ticket 142.', tungChu: 'I\'m doing ticket 142.', en: 'I\'m working on ticket 142.', viSao: '"làm (một việc dở dang)" trong công việc = work on.' },
+      { vi: 'Em sẽ cố xong trước thứ Năm.', tungChu: 'I will try finish until Thursday.', en: 'I\'ll try to finish it by Thursday.', viSao: 'try + to V; hạn chót "muộn nhất là" = by (until = kéo dài tới).' },
+      { vi: 'Mình bàn chuyện này sau buổi họp nhé.', tungChu: 'Let\'s discuss about this after meeting.', en: 'Let\'s discuss this after the meeting.', viSao: 'discuss KHÔNG có about; the meeting (cuộc họp cụ thể).' },
+      { vi: 'Em không bị vướng gì.', tungChu: 'I don\'t have problem anything.', en: 'No blockers.', viSao: 'Câu cửa miệng của standup — ngắn, chuẩn.' },
+    ],
+    viDu: [
+      { en: 'Yesterday I finished the login page.', vi: 'Hôm qua em làm xong trang đăng nhập.' },
+      { en: 'Today I\'m going to write unit tests for it.', vi: 'Hôm nay em sẽ viết unit test cho nó.' },
+      { en: 'No blockers.', vi: 'Em không vướng gì.' },
+      { en: 'I\'m blocked on the payment API.', vi: 'Em đang bị vướng ở phần API thanh toán.' },
+    ],
+    meo: [
+      'Standup không phải lúc giải thích chi tiết — **mỗi người 30–60 giây**. Vấn đề dài thì nói **Let\'s take this offline.** (bàn riêng sau).',
+      'Tập trước ở nhà: mỗi tối nói to 3 câu standup về việc học của chính mình — Yesterday I studied…, Today I\'m going to…, I\'m stuck on…',
+    ],
+  },
+  nguPhap: [
+    { t: 'h', text: '1. Báo cáo standup: ba thì trong 30 giây' },
+    {
+      t: 'sodo', kind: 'flow', title: 'Một lượt standup',
+      steps: [
+        { label: 'Hôm qua — quá khứ đơn', sub: 'Yesterday I finished the login page.' },
+        { label: 'Hôm nay — going to / will', sub: 'Today I\'m going to write tests.' },
+        { label: 'Vướng — hiện tại', sub: 'No blockers. / I\'m blocked on the API.' },
+      ],
+    },
+    {
+      t: 'table', head: ['Muốn nói', 'Câu mẫu'],
+      rows: [
+        ['đang làm', 'I\'m **working on** ticket 142.'],
+        ['tiến độ', 'I\'m **about 80% done**.'],
+        ['ước lượng', 'This will **probably take about** two days.'],
+        ['hạn', 'I\'ll try to finish it **by** Thursday.'],
+        ['đang đợi người khác', 'I\'m **waiting for** the backend team **to** fix the API.'],
+        ['không kịp', 'I don\'t think we can **make the deadline**.'],
+      ],
+    },
+    { t: 'h', text: '2. Câu cửa miệng trong cuộc họp' },
+    {
+      t: 'table', head: ['Lúc', 'Câu', 'Nghĩa'],
+      rows: [
+        ['Mở đầu', 'Let\'s get started. · Who wants to go first?', 'Bắt đầu nhé · Ai nói trước?'],
+        ['Chia sẻ', 'Let me share my screen. · Can everyone see my screen?', 'Em chia sẻ màn hình · Mọi người thấy chưa?'],
+        ['Hỏi lại', 'Sorry, I didn\'t catch that. · Do you mean …?', 'Em nghe sót · Ý anh là …?'],
+        ['Ý kiến', 'I think we should … · I agree with …', 'Em nghĩ mình nên … · Em đồng ý với …'],
+        ['Nhận việc', 'I can take that. · I\'ll take notes.', 'Em nhận · Em ghi biên bản'],
+        ['Kết thúc', 'That\'s all for today. · I\'ll send everyone a summary.', 'Hôm nay vậy thôi · Em gửi tóm tắt'],
+      ],
+    },
+    { t: 'note', title: 'Lỗi người Việt hay mắc', items: ['~~I\'m doing ticket 142~~ → I\'m **working on** ticket 142', '~~discuss about~~ → **discuss** (không about)', '~~finish until Thursday~~ → finish **by** Thursday', '~~I try finish~~ → I\'ll **try to** finish', '~~Can you hear clearly me?~~ → Can you hear me **clearly**?'] },
+  ],
+  tuVung: [
+    { w: 'standup', loai: 'n', vi: 'họp đứng hằng ngày', anh: 'busts-in-silhouette', ex: 'Our standup is at 9:15.', exVi: 'Standup của nhóm lúc 9 giờ 15.' },
+    { w: 'blocker', loai: 'n', vi: 'điều đang cản trở', anh: 'no-entry', ex: 'Do you have any blockers?', exVi: 'Có gì đang vướng không?' },
+    { w: 'ticket', loai: 'n', vi: 'phiếu việc (Jira…)', anh: 'ticket', ex: 'Please create a ticket for it.', exVi: 'Tạo ticket cho việc đó nhé.' },
+    { w: 'sprint', loai: 'n', vi: 'chu kỳ làm việc 1–2 tuần', anh: 'stopwatch', ex: 'This sprint ends on Friday.', exVi: 'Sprint này kết thúc thứ Sáu.' },
+    { w: 'estimate', loai: 'v/n', vi: 'ước lượng', anh: 'triangular-ruler', ex: 'Can you estimate this task?', exVi: 'Em ước lượng việc này được không?' },
+    { w: 'status', loai: 'n', vi: 'tình trạng', anh: 'bar-chart', ex: 'The ticket is still in progress.', exVi: 'Ticket vẫn đang được làm.' },
+    { w: 'demo', loai: 'v/n', vi: 'trình diễn sản phẩm', anh: 'desktop-computer', ex: 'The demo went well.', exVi: 'Buổi demo suôn sẻ.' },
+    { w: 'staging', loai: 'n', vi: 'môi trường thử trước khi lên thật', anh: 'construction', ex: 'Test it on staging first.', exVi: 'Thử trên staging trước đã.' },
+    { w: 'branch', loai: 'n', vi: 'nhánh (git)', anh: 'evergreen-tree', ex: 'Create a new branch.', exVi: 'Tạo nhánh mới đi.' },
+    { w: 'merge', loai: 'v', vi: 'gộp (code)', anh: 'linked-paperclips', ex: 'Don\'t merge it yet.', exVi: 'Đừng gộp vội.' },
+    { w: 'deploy', loai: 'v', vi: 'triển khai (lên server)', anh: 'satellite', ex: 'We deploy every Tuesday.', exVi: 'Thứ Ba nào chúng tôi cũng deploy.' },
+    { w: 'requirement', loai: 'n', vi: 'yêu cầu (phần mềm)', anh: 'scroll', ex: 'The requirements changed again.', exVi: 'Yêu cầu lại đổi rồi.' },
+    { w: 'notes', loai: 'n', vi: 'ghi chép, biên bản', anh: 'spiral-notepad', ex: 'Who\'s taking notes?', exVi: 'Ai ghi biên bản?' },
+    { w: 'summary', loai: 'n', vi: 'bản tóm tắt', anh: 'page-with-curl', ex: 'Here\'s a short summary.', exVi: 'Đây là bản tóm tắt ngắn.' },
+    { w: 'unit test', loai: 'n', vi: 'kiểm thử đơn vị', anh: 'microscope', ex: 'All unit tests passed.', exVi: 'Mọi unit test đều qua.' },
+    { w: 'stuck', loai: 'adj', vi: 'bị kẹt, bí', anh: 'face-with-spiral-eyes', ex: 'I\'m stuck on this question.', exVi: 'Tôi bí câu này.' },
+  ],
+  hoiThoai: {
+    tieuDe: 'Daily standup đầu tuần của nhóm thực tập',
+    luot: [
+      { vai: 'A', ten: 'Anh Hùng (lead)', en: 'Morning, everyone. Let\'s get started. Who wants to go first?', vi: 'Chào cả nhà. Bắt đầu nhé. Ai nói trước?' },
+      { vai: 'B', ten: 'Linh', en: 'I can go. Yesterday I finished the login page.', vi: 'Em nói trước ạ. Hôm qua em làm xong trang đăng nhập.' },
+      { vai: 'B', ten: 'Linh', en: 'Today I\'m going to write unit tests for it. No blockers.', vi: 'Hôm nay em sẽ viết unit test cho nó. Em không vướng gì.' },
+      { vai: 'A', ten: 'Anh Hùng (lead)', en: 'Great. How\'s the payment feature going, Duc?', vi: 'Tốt. Tính năng thanh toán thế nào rồi Đức?' },
+      { vai: 'B', ten: 'Đức', en: 'I\'m about 60% done, but I\'m blocked on the payment API.', vi: 'Em xong khoảng 60%, nhưng đang vướng API thanh toán.' },
+      { vai: 'B', ten: 'Đức', en: 'I\'m waiting for the backend team to fix it.', vi: 'Em đang đợi team backend sửa.' },
+      { vai: 'A', ten: 'Anh Hùng (lead)', en: 'Okay, let\'s discuss this after the meeting. Thanks, everyone. That\'s all for today.', vi: 'Được, bàn sau buổi họp nhé. Cảm ơn mọi người, hôm nay vậy thôi.' },
+    ],
+  },
+  viet: {
+    y: [
+      'Viết standup vào kênh chat của nhóm theo **3 dòng**: **Yesterday:** … · **Today:** … · **Blockers:** … — gạch đầu dòng, câu ngắn.',
+      'Mỗi dòng bắt đầu bằng **động từ đúng thì**: finished / fixed (hôm qua) · will / going to (hôm nay).',
+      'Ghi mã ticket, tên nhánh đúng như trong hệ thống (TICKET-142, feature/login) — không dịch.',
+    ],
+    chinhTa: ['~~I\'m working in ticket~~ → **working on**', '~~sumary~~ → **summary**', '~~requirment~~ → **requirement**', '~~merg~~ → **merge**'],
+    de: 'Viết **bản standup 3 phần** của bạn hôm nay (về việc học hoặc dự án nhóm), rồi thêm **1 câu ước lượng** và **1 câu nhờ giúp**.',
+    mau: [
+      { en: 'Yesterday: I finished the database design for our project.', vi: 'Hôm qua: em làm xong thiết kế CSDL cho dự án.' },
+      { en: 'Today: I\'m going to build the product list API.', vi: 'Hôm nay: em sẽ làm API danh sách sản phẩm.' },
+      { en: 'Blockers: I\'m stuck on the login with Google.', vi: 'Vướng: em đang bí phần đăng nhập bằng Google.' },
+      { en: 'The API will probably take about two days.', vi: 'API chắc mất khoảng hai ngày.' },
+      { en: 'Could someone help me with Google login this afternoon?', vi: 'Chiều nay có ai giúp em phần đăng nhập Google được không?' },
+    ],
+  },
+  cau: [
+    { id: 'cn26-01', vi: 'Hôm qua em làm xong trang đăng nhập.', en: 'Yesterday I finished the login page.', alt: ['I finished the login page yesterday.'], khung: STAND },
+    { id: 'cn26-02', vi: 'Hôm nay em sẽ viết unit test cho nó.', en: 'Today I\'m going to write unit tests for it.', alt: ['Today I\'ll write unit tests for it.', 'Today I\'m writing unit tests for it.'], khung: STAND },
+    { id: 'cn26-03', vi: 'Em không vướng gì.', en: 'No blockers.', alt: ['I don\'t have any blockers.', 'I have no blockers.'], khung: STAND },
+    { id: 'cn26-04', vi: 'Em đang bị vướng ở phần API thanh toán.', en: 'I\'m blocked on the payment API.', alt: ['I\'m stuck on the payment API.'], khung: BLOCK },
+    { id: 'cn26-05', vi: 'Em đang đợi team backend sửa API.', en: 'I\'m waiting for the backend team to fix the API.', khung: BLOCK },
+    { id: 'cn26-06', vi: 'Em đang làm ticket 142.', en: 'I\'m working on ticket 142.', alt: ['I\'m working on ticket number 142.'], khung: ON, loi: '~~I\'m doing ticket 142~~' },
+    { id: 'cn26-07', vi: 'Việc này chắc mất khoảng hai ngày.', en: 'This will probably take about two days.', alt: ['It\'ll probably take about two days.', 'This should take about two days.'], khung: EST },
+    { id: 'cn26-08', vi: 'Em làm được khoảng 80% rồi.', en: 'I\'m about 80% done.', alt: ['It\'s about 80% done.', 'I\'ve done about 80% of it.'], khung: ON },
+    { id: 'cn26-09', vi: 'Em sẽ cố xong trước thứ Năm.', en: 'I\'ll try to finish it by Thursday.', alt: ['I\'ll try to finish by Thursday.', 'I\'ll try to get it done by Thursday.'], khung: EST, loi: '~~until Thursday~~ → by Thursday' },
+    { id: 'cn26-10', vi: 'Tính năng đó tiến triển thế nào rồi?', en: 'How\'s the feature going?', alt: ['How\'s the feature coming along?'], khung: ASK },
+    { id: 'cn26-11', vi: 'Ticket này đang ở trạng thái nào?', en: 'What\'s the status of this ticket?', alt: ['What\'s the status on this ticket?'], khung: ASK },
+    { id: 'cn26-12', vi: 'Mình bắt đầu họp nhé.', en: 'Let\'s start the meeting.', alt: ['Let\'s get started.', 'Let\'s begin the meeting.'], khung: MEET },
+    { id: 'cn26-13', vi: 'Ai muốn nói trước?', en: 'Who wants to go first?', alt: ['Who would like to go first?'], khung: 'Who wants to + V?' },
+    { id: 'cn26-14', vi: 'Em xin cập nhật nhanh ạ.', en: 'Just a quick update from me.', alt: ['Here\'s a quick update.', 'I have a quick update.'], khung: 'Just a quick update …' },
+    { id: 'cn26-15', vi: 'Em nghe sót, anh nhắc lại được không ạ?', en: 'Sorry, I didn\'t catch that. Could you repeat it?', alt: ['Sorry, I didn\'t catch that. Can you say it again?', 'Sorry, I didn\'t catch that. Could you say it again?'], khung: 'Sorry, I didn\'t catch that. + Could you …?', goi: 'nghe sót = didn\'t catch' },
+    { id: 'cn26-16', vi: 'Em có câu hỏi về yêu cầu này.', en: 'I have a question about this requirement.', khung: 'I have a question about + N' },
+    { id: 'cn26-17', vi: 'Ý anh là mình nên dùng Redis à?', en: 'Do you mean we should use Redis?', alt: ['So you mean we should use Redis?', 'You mean we should use Redis?'], khung: OPIN },
+    { id: 'cn26-18', vi: 'Em đồng ý với anh Hùng.', en: 'I agree with Hung.', alt: ['I agree with Mr. Hung.'], khung: OPIN, loi: '~~I am agree~~ → I agree' },
+    { id: 'cn26-19', vi: 'Em nghĩ mình nên chia nhỏ task này.', en: 'I think we should split this task into smaller ones.', alt: ['I think we should break this task down.', 'I think we should break this task into smaller tasks.', 'I think we should split this task.'], khung: OPIN },
+    { id: 'cn26-20', vi: 'Mình bàn chuyện này sau buổi họp nhé.', en: 'Let\'s discuss this after the meeting.', alt: ['Let\'s talk about this after the meeting.', 'Let\'s take this offline.'], khung: MEET, loi: '~~discuss about~~' },
+    { id: 'cn26-21', vi: 'Để em chia sẻ màn hình.', en: 'Let me share my screen.', alt: ['I\'ll share my screen.'], khung: MEET },
+    { id: 'cn26-22', vi: 'Mọi người thấy màn hình của em chưa ạ?', en: 'Can everyone see my screen?', alt: ['Can you all see my screen?', 'Can everybody see my screen?'], khung: MEET },
+    { id: 'cn26-23', vi: 'Em sẽ demo tính năng mới.', en: 'I\'m going to demo the new feature.', alt: ['I\'ll demo the new feature.', 'I\'m going to show you the new feature.'], khung: STAND },
+    { id: 'cn26-24', vi: 'Bản build đã lên staging rồi.', en: 'The build is on staging now.', alt: ['The build is now on staging.', 'The new build is on staging.', 'The build has been deployed to staging.'], khung: 'S + be + on staging' },
+    { id: 'cn26-25', vi: 'Em đã merge PR vào nhánh develop.', en: 'I merged the PR into the develop branch.', alt: ['I\'ve merged the PR into the develop branch.', 'I merged the pull request into develop.', 'I merged the PR into develop.'], khung: 'S + merged + N + into + nhánh' },
+    { id: 'cn26-26', vi: 'Sprint này mình còn năm ticket.', en: 'We have five tickets left in this sprint.', alt: ['There are five tickets left in this sprint.'], khung: 'have + số + N + left (còn lại)' },
+    { id: 'cn26-27', vi: 'Em nghĩ mình không kịp hạn.', en: 'I don\'t think we can make the deadline.', alt: ['I don\'t think we\'ll make the deadline.', 'I don\'t think we can meet the deadline.'], khung: 'I don\'t think + S + can + V', goi: 'kịp hạn = make / meet the deadline' },
+    { id: 'cn26-28', vi: 'Mình cần thêm thời gian để test.', en: 'We need more time for testing.', alt: ['We need more time to test.', 'We need more time to test it.'], khung: 'need more time + for V-ing / to V' },
+    { id: 'cn26-29', vi: 'Em sẽ ghi biên bản cuộc họp.', en: 'I\'ll take notes.', alt: ['I\'ll take the meeting notes.', 'I\'ll write the meeting notes.'], khung: 'I\'ll + V (nhận việc ngay)' },
+    { id: 'cn26-30', vi: 'Ai sẽ phụ trách việc này?', en: 'Who\'s going to take care of this?', alt: ['Who will handle this?', 'Who\'s responsible for this?', 'Who\'s in charge of this?'], khung: 'Who\'s going to + V?' },
+    { id: 'cn26-31', vi: 'Em nhận việc đó ạ.', en: 'I can take that.', alt: ['I\'ll take it.', 'I can take care of that.', 'I\'ll handle it.'], khung: 'I can / I\'ll + take …' },
+    { id: 'cn26-32', vi: 'Họp xong em sẽ gửi tóm tắt cho mọi người.', en: 'I\'ll send everyone a summary after the meeting.', alt: ['I\'ll send a summary to everyone after the meeting.', 'After the meeting, I\'ll send everyone a summary.'], khung: 'I\'ll + send + ai + N + after …' },
+    { id: 'cn26-33', vi: 'Mai mình họp lại lúc 9 giờ nhé.', en: 'Let\'s meet again tomorrow at 9.', alt: ['Let\'s meet again at 9 tomorrow.', 'Let\'s have another meeting tomorrow at 9.'], khung: MEET },
+    { id: 'cn26-34', vi: 'Cảm ơn mọi người, hôm nay vậy thôi.', en: 'Thanks, everyone. That\'s all for today.', alt: ['Thank you, everyone. That\'s all for today.', 'Thanks, everyone. That\'s it for today.'], khung: 'That\'s all for today.' },
+  ],
+};

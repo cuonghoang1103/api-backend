@@ -22,7 +22,7 @@ import { PrerequisiteModal, PrerequisiteBanner } from '@/components/courses/Prer
 import CourseLabCard from '@/components/labs/CourseLabCard';
 import TienDoDuAn from '@/components/courses/du-an/TienDoDuAn';
 import SoDoKhoa from '@/components/courses/so-do/SoDoKhoa';
-import { videoMoDau } from '@/lib/videoMoDau';
+import { phimKhoa } from '@/lib/videoMoDau';
 import { tachGachDauDong, nenMotCot } from '@/lib/courseBlurb';
 import { CourseDescription } from '@/components/courses/CourseDescription';
 import { tachCauDai } from '@/lib/courseDescription';
@@ -816,20 +816,23 @@ export default function CourseDetailPage({ initialCourse = null }: { initialCour
           )}
         </header>
 
-        {/* 🎬 Clip mở đầu 8 s (Veo, 28/11/2026) — tự phát không tiếng, lặp; giảm chuyển động ⇒ không tự phát. */}
-        {videoMoDau(course.slug) && (
-          <div className="mt-6 overflow-hidden rounded-2xl border border-darkborder/40 bg-black shadow-lg">
+        {/* 🎬 Phim giới thiệu khoá (28/11/2026) — 2–5 phút, có tiếng ⇒ không tự phát, chỉ tải khi bấm. */}
+        {phimKhoa(course.slug) && (
+          <figure className="mt-6 overflow-hidden rounded-2xl border border-darkborder/40 bg-black shadow-lg">
             <video
-              src={videoMoDau(course.slug)!}
-              className="block aspect-video w-full object-cover motion-reduce:hidden"
-              autoPlay
-              muted
-              loop
+              src={phimKhoa(course.slug)!.src}
+              poster={phimKhoa(course.slug)!.poster}
+              className="block aspect-video w-full bg-black"
+              controls
               playsInline
-              preload="metadata"
-              aria-label={en ? 'Course opening clip' : 'Clip mở đầu khoá học'}
+              preload="none"
+              aria-label={en ? 'Course introduction film' : 'Phim giới thiệu khoá học'}
             />
-          </div>
+            <figcaption className="flex flex-wrap items-center justify-between gap-2 px-4 py-2 text-xs text-gray-400">
+              <span>🎬 {en ? `Course film · ${phimKhoa(course.slug)!.phut} min` : `Phim giới thiệu khoá · ${phimKhoa(course.slug)!.phut} phút`}</span>
+              <span>{en ? 'Real measurements · AI-illustrated scenes' : 'Số liệu đo thật · cảnh minh hoạ bằng AI'}</span>
+            </figcaption>
+          </figure>
         )}
 
         {/* 🗺 Roadmap sơ đồ (28/11/2026): tổng quan cả khoá kiểu roadmap.sh — bấm ô ⇒ học gì / cần biết trước /
